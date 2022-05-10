@@ -2,206 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57678521D06
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:51:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47ACD521D03
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344946AbiEJOz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45564 "EHLO
+        id S1345008AbiEJOzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344963AbiEJOzB (ORCPT
+        with ESMTP id S1344831AbiEJOy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:55:01 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1465C316669;
-        Tue, 10 May 2022 07:15:29 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 70B2412FC;
-        Tue, 10 May 2022 07:15:29 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.1.67])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8B6AD3F73D;
+        Tue, 10 May 2022 10:54:59 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903CC31665F
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 07:15:27 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id o69so15981036pjo.3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 07:15:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Gbt0dQE6hjicFcO+8NOWUYbo4+AYvhvISpo6fy0h7us=;
+        b=LXNxKGJlahyUgiXOfqkryAQyceDMXZBUHOBIu3YBuV3QCd4OuWyiEq2pUymYaclMxZ
+         zfRXd6qGjRH9H4o2hTAgj25+jyxhMOBGzgVi+kiCNRxq/cPNL4xoQ3bfipbbREYxBOBM
+         inOJ6pNhEtQ+BuBTbPMlMnttIbWOpFyyCWQRFoqBmgdp01P7eAqM9I2ORT9JLkXpc/Hl
+         piMgho7G226vixsWegnvNyvyEjrA5lCvdUJ3dut0LlMNS4ADHEgDzckpV8i8kobSje/1
+         2h4H7F5LIjWchywYmwhd/6UDUAUo/Qnw3GvKLe24L+yXrqy8Jxp4qf2Cjgk/953Mb7PM
+         6I+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Gbt0dQE6hjicFcO+8NOWUYbo4+AYvhvISpo6fy0h7us=;
+        b=tQGZvy5EXVzNq9pJO2NOBBd7Z3MXQSEKmv+I+YPiLgglPh0oyiTlGbf+lBs2W08On9
+         erYxWpSvTGNFqUTI+Dk43X0De25jr+7Y2Nvkr7HTR0Hy0JWbaWDsygWP87UOjJbMLaZB
+         cBlG5/kn9UxSqRESroMTet5ybaP8ye4r2vh570f7Jdm2vK6tuPya8URN9ZoGK7ub5W6l
+         jn+Lo3Op/Y8VvVRKjMk3cnREMUOCtsXjMY5XoP7DyJtYkPjLCeZyqi5F2XdExgWUbNIP
+         Kh2u7wDf3SPhhBvYibj0SbBfI91vmC1Uy64IokD/E9R/s6slo3nnHQ9aDcpXXAkS+TfD
+         0jng==
+X-Gm-Message-State: AOAM530caX6GDfxciMX/SHVt2ig+26KkBmyIWTKVwojFsEcELb8eMjyM
+        nUMI+6r4+99D89Ogiu7xfBksPQ==
+X-Google-Smtp-Source: ABdhPJwTCodcB53/XV23AXgSa9OttM/zTr3s+gLPrisR9kO/A3m/E1DWsrUQBNzepFatX0+LwZssAw==
+X-Received: by 2002:a17:90b:1b44:b0:1dc:315f:4510 with SMTP id nv4-20020a17090b1b4400b001dc315f4510mr250908pjb.28.1652192126871;
+        Tue, 10 May 2022 07:15:26 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id i6-20020a17090332c600b0015e8d4eb261sm2173135plr.171.2022.05.10.07.15.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 10 May 2022 07:15:25 -0700 (PDT)
-Date:   Tue, 10 May 2022 15:15:11 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     maz@kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org,
-        Octavian Purdila <octavian.purdila@nxp.com>,
-        linux-kernel@vger.kernel.org, aou@eecs.berkeley.edu,
-        catalin.marinas@arm.com, deanbo422@gmail.com, green.hu@gmail.com,
-        guoren@kernel.org, jonas@southpole.se, kernelfans@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
-        nickhu@andestech.com, palmer@dabbelt.com, paul.walmsley@sifive.com,
-        shorne@gmail.com, stefan.kristiansson@saunalahti.fi,
-        tglx@linutronix.de, tsbogend@alpha.franken.de, vgupta@kernel.org,
-        vladimir.murzin@arm.com, will@kernel.org
-Subject: Re: [PATCH v2 17/17] irq: remove handle_domain_{irq,nmi}()
-Message-ID: <Ynpzb5L53iGex14D@FVFF77S0Q05N>
-References: <20211026092504.27071-1-mark.rutland@arm.com>
- <20211026092504.27071-18-mark.rutland@arm.com>
- <20220506203242.GA1855@wunner.de>
- <YnjWvbzn8ox+f2Y2@FVFF77S0Q05N>
- <20220510121320.GA3020@wunner.de>
+Date:   Tue, 10 May 2022 14:15:22 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Wanpeng Li <kernellwp@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>
+Subject: Re: [PATCH] KVM: LAPIC: Narrow down the timer fastpath to
+ tscdeadline timer
+Message-ID: <YnpzetR/B3nXVJxu@google.com>
+References: <1651830457-11284-1-git-send-email-wanpengli@tencent.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220510121320.GA3020@wunner.de>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1651830457-11284-1-git-send-email-wanpengli@tencent.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 02:13:20PM +0200, Lukas Wunner wrote:
-> On Mon, May 09, 2022 at 09:54:21AM +0100, Mark Rutland wrote:
-> > On Fri, May 06, 2022 at 10:32:42PM +0200, Lukas Wunner wrote:
-> > > On Tue, Oct 26, 2021 at 10:25:04AM +0100, Mark Rutland wrote:
-> > > >  int generic_handle_domain_irq(struct irq_domain *domain, unsigned int hwirq)
-> > > >  {
-> > > > +	WARN_ON_ONCE(!in_irq());
-> > > >  	return handle_irq_desc(irq_resolve_mapping(domain, hwirq));
-> > > >  }
-> > > >  EXPORT_SYMBOL_GPL(generic_handle_domain_irq);
-> > > 
-> > > Why isn't the WARN_ON_ONCE() conditional on handle_enforce_irqctx()?
-> > > (See handle_irq_desc() and c16816acd086.)
-> > 
-> > I did this for consistency with the in_nmi() check in
-> > generic_handle_domain_nmi(); I was unaware of commit c16816acd086 and
-> > IRQD_HANDLE_ENFORCE_IRQCTX.
+On Fri, May 06, 2022, Wanpeng Li wrote:
+> From: Wanpeng Li <wanpengli@tencent.com>
 > 
-> Actually, since you're mentioning the in_nmi() check, I suspect
-> there's another problem here:
-> 
-> generic_handle_domain_nmi() warns if !in_nmi(), then calls down 
-> to handle_irq_desc() which warns if !in_hardirq().  Doesn't this
-> cause a false-positive !in_hardirq() warning for a NMI on GIC/GICv3?
+> The original timer fastpath is developed for tscdeadline timer, however,
+> the apic timer periodic/oneshot mode which is emulated by vmx preemption
+> timer goes to preemption timer vmexit fastpath quietly, let's leave the 
+> complex recompute periodic timer's target expiration and restart apic 
+> timer to the slowpath vm-exit. Narrow down the timer fastpath to tscdeadline
+> timer mode.
 
-I agree that doesn't look right.
+Why?  I get that the original intention was only to handle deadline mode, but
+that doesn't mean using it for other modes is inherently flawed/problematic.  KVM
+also uses a fastpath for starting the deadline timer on MSR write, i.e. KVM eats
+the cost of starting the timer in the fastpath no matter what, and
+advance_periodic_target_expiration() isn't _that_ complex.
 
-> The only driver calling request_nmi() or request_percpu_nmi() is
-> drivers/perf/arm_pmu.c.  So that's the only one affected.
-> You may want to test if that driver indeed exhibits such a
-> false-positive warning since c16816acd086.
+> Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+> ---
+>  arch/x86/kvm/lapic.c   |  6 ++++++
+>  arch/x86/kvm/lapic.h   |  1 +
+>  arch/x86/kvm/vmx/vmx.c | 14 +++++++++++---
+>  3 files changed, 18 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index 137c3a2f5180..3e6cb2bf56dc 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -2459,6 +2459,12 @@ static bool lapic_is_periodic(struct kvm_lapic *apic)
+>  	return apic_lvtt_period(apic);
+>  }
+>  
+> +bool lapic_is_tscdeadline(struct kvm_lapic *apic)
+> +{
+> +	return apic_lvtt_tscdeadline(apic);
+> +}
+> +EXPORT_SYMBOL_GPL(lapic_is_tscdeadline);
+> +
+>  int apic_has_pending_timer(struct kvm_vcpu *vcpu)
+>  {
+>  	struct kvm_lapic *apic = vcpu->arch.apic;
+> diff --git a/arch/x86/kvm/lapic.h b/arch/x86/kvm/lapic.h
+> index 4e4f8a22754f..6e1b2f349237 100644
+> --- a/arch/x86/kvm/lapic.h
+> +++ b/arch/x86/kvm/lapic.h
+> @@ -241,6 +241,7 @@ void kvm_lapic_expired_hv_timer(struct kvm_vcpu *vcpu);
+>  bool kvm_lapic_hv_timer_in_use(struct kvm_vcpu *vcpu);
+>  void kvm_lapic_restart_hv_timer(struct kvm_vcpu *vcpu);
+>  bool kvm_can_use_hv_timer(struct kvm_vcpu *vcpu);
+> +bool lapic_is_tscdeadline(struct kvm_lapic *apic);
+>  
+>  static inline enum lapic_mode kvm_apic_mode(u64 apic_base)
+>  {
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index bb09fc9a7e55..2a8f4253df35 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -5713,22 +5713,30 @@ static int handle_pml_full(struct kvm_vcpu *vcpu)
+>  	return 1;
+>  }
+>  
+> -static fastpath_t handle_fastpath_preemption_timer(struct kvm_vcpu *vcpu)
+> +static bool __handle_preemption_timer(struct kvm_vcpu *vcpu)
+>  {
+>  	struct vcpu_vmx *vmx = to_vmx(vcpu);
+>  
+>  	if (!vmx->req_immediate_exit &&
+>  	    !unlikely(vmx->loaded_vmcs->hv_timer_soft_disabled)) {
+>  		kvm_lapic_expired_hv_timer(vcpu);
+> -		return EXIT_FASTPATH_REENTER_GUEST;
+> +		return true;
+>  	}
+>  
+> +	return false;
 
-In testing with v5.18-rc5, I can't see that going wrong.
+It's a bit odd for the non-fastpath case, but I'd prefer to return fastpath_t
+instead of a bool from the inner helper, e.g.
 
-I also hacked the following in:
+static fastpath_t __handle_preemption_timer(struct kvm_vcpu *vcpu)
+{
+	struct vcpu_vmx *vmx = to_vmx(vcpu);
 
--------->8--------
-diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
-index 939d21cd55c38..3c85608a8779f 100644
---- a/kernel/irq/irqdesc.c
-+++ b/kernel/irq/irqdesc.c
-@@ -718,6 +718,7 @@ EXPORT_SYMBOL_GPL(generic_handle_domain_irq);
- int generic_handle_domain_nmi(struct irq_domain *domain, unsigned int hwirq)
- {
-        WARN_ON_ONCE(!in_nmi());
-+       WARN_ON_ONCE(!in_hardirq());
-        return handle_irq_desc(irq_resolve_mapping(domain, hwirq));
- }
- #endif
--------->8--------
+	if (!vmx->req_immediate_exit &&
+	    !unlikely(vmx->loaded_vmcs->hv_timer_soft_disabled)) {
+		kvm_lapic_expired_hv_timer(vcpu);
+		return EXIT_FASTPATH_REENTER_GUEST;
+	}
 
-... and that never fired, which doesn't seem right.
+	return EXIT_FASTPATH_NONE;
+}
 
-I also see some other problems which may or may not be related (lockdep
-tracking gone wrong, which could indicate a more general failure to track irq
-state correctly). I'll go dig into that...
+static fastpath_t handle_fastpath_preemption_timer(struct kvm_vcpu *vcpu)
+{
+	if (lapic_is_tscdeadline(vcpu->arch.apic)
+		return __handle_preemption_timer(vcpu))
 
-> > > I believe the above change causes a regression in drivers/gpio/gpio-dln2.c
-> > > such that a gratuitous WARN splat is now emitted.
-> > 
-> > Do you mean you beleive that from inspection, or are you actually seeing this
-> > go wrong in practice?
-> > 
-> > If it's the latter, are you able to give a copy of the dmesg splat?
-> 
-> For gpio-dln2.c, I believe it from inspection.
-> 
-> For smsc95xx.c, I'm actually seeing it go wrong in practice,
-> unedited dmesg splat is included below FWIW.
-
-Thanks; having the trace makes this much easier to analyse.
-
-Mark.
-
-> That's with the following series applied on top of current net-next:
-> https://lore.kernel.org/netdev/cover.1651574194.git.lukas@wunner.de/
-> 
-> You need to remove the __irq_enter_raw() in patch [5/7] of that series
-> to actually see the WARN splat.  I used it to work around your
-> WARN_ON_ONCE() and that's what Marc took exception to.
-> 
-> With gpio-dln2.c, the call stack looks like this:
-> 
->   dln2_rx()                         # drivers/mfd/dln2.c
->     dln2_run_event_callbacks()
->       dln2_gpio_event()             # drivers/gpio/gpio-dln2.c
->         generic_handle_domain_irq()
-> 
-> That's basically the same as the callstack for smsc95xx.c below.
-> Interrupts are disabled in dln2_rx() via spin_lock_irqsave(),
-> but there isn't an __irq_enter_raw() anywhere to be seen
-> and that would be necessary to avoid the false-positive
-> WARN splat in generic_handle_domain_irq().
-> 
-> Thanks,
-> 
-> Lukas
-> 
-> -- >8 --
-> 
-> [ 1227.718928] WARNING: CPU: 3 PID: 75 at kernel/irq/irqdesc.c:702 generic_handle_domain_irq+0x88/0x94
-> [ 1227.718951] Modules linked in: sha256_generic cfg80211 rfkill 8021q garp stp llc ax88796b asix raspberrypi_hwmon bcm2835_codec(C) bcm2835_v4l2(C) bcm2835_isp(C) v4l2_mem2mem bcm2835_mmal_vchiq(C) snd_bcm2835(C) vc_sm_cma(C) videobuf2_dma_contig videobuf2_vmalloc snd_pcm videobuf2_memops videobuf2_v4l2 videobuf2_common snd_timer snd videodev mc micrel ks8851_spi ks8851_common uio_pdrv_genirq uio eeprom_93cx6 piControl(O) ad5446 ti_dac082s085 mcp320x iio_mux mux_gpio mux_core fixed gpio_74x164 spi_bcm2835aux spi_bcm2835 gpio_max3191x crc8 industrialio i2c_dev ip_tables x_tables ipv6
-> [ 1227.719076] CPU: 3 PID: 75 Comm: irq/89-dwc_otg_ Tainted: G         C O      5.17.0-rt15-v7+ #2
-> [ 1227.719084] Hardware name: BCM2835
-> [ 1227.719087] Backtrace: 
-> [ 1227.719091]  dump_backtrace from show_stack+0x20/0x24
-> [ 1227.719106]  r7:00000009 r6:00000080 r5:80d25844 r4:60000093
-> [ 1227.719109]  show_stack from dump_stack_lvl+0x74/0x9c
-> [ 1227.719120]  dump_stack_lvl from dump_stack+0x18/0x1c
-> [ 1227.719134]  r7:00000009 r6:801957f4 r5:000002be r4:80d1e8ac
-> [ 1227.719137]  dump_stack from __warn+0xdc/0x190
-> [ 1227.719148]  __warn from warn_slowpath_fmt+0x70/0xcc
-> [ 1227.719161]  r8:00000009 r7:801957f4 r6:000002be r5:80d1e8ac r4:00000000
-> [ 1227.719163]  warn_slowpath_fmt from generic_handle_domain_irq+0x88/0x94
-> [ 1227.719177]  r8:81e87600 r7:00000000 r6:81d28000 r5:00000000 r4:81d4be00
-> [ 1227.719179]  generic_handle_domain_irq from smsc95xx_status+0x54/0xb0
-> [ 1227.719195]  r7:00000000 r6:00008000 r5:81f28640 r4:60000013
-> [ 1227.719197]  smsc95xx_status from intr_complete+0x80/0x84
-> [ 1227.719213]  r9:81d40a00 r8:00000001 r7:00000000 r6:00000000 r5:81f28640 r4:81d4bd80
-> [ 1227.719216]  intr_complete from __usb_hcd_giveback_urb+0xa4/0x12c
-> [ 1227.719229]  r5:815b3000 r4:81d4bd80
-> [ 1227.719232]  __usb_hcd_giveback_urb from usb_hcd_giveback_urb+0x118/0x11c
-> [ 1227.719245]  r7:811498e0 r6:81d4bd80 r5:81682000 r4:815b3000
-> [ 1227.719248]  usb_hcd_giveback_urb from completion_tasklet_func+0x7c/0xc8
-> [ 1227.719262]  r7:811498e0 r6:81d4bd80 r5:81682000 r4:8639f800
-> [ 1227.719264]  completion_tasklet_func from tasklet_callback+0x20/0x24
-> [ 1227.719277]  r6:80f8d140 r5:b6b5c330 r4:00000000
-> [ 1227.719279]  tasklet_callback from tasklet_action_common.constprop.0+0x148/0x220
-> [ 1227.719288]  tasklet_action_common.constprop.0 from tasklet_hi_action+0x28/0x30
-> [ 1227.719301]  r10:81d28000 r9:00000001 r8:00000000 r7:811498e0 r6:00000000 r5:00000001
-> [ 1227.719304]  r4:81003080
-> [ 1227.719306]  tasklet_hi_action from __do_softirq+0x154/0x3e8
-> [ 1227.719316]  __do_softirq from __local_bh_enable_ip+0x12c/0x1a8
-> [ 1227.719328]  r10:801970b0 r9:80f85320 r8:00000001 r7:00000000 r6:00000001 r5:00000100
-> [ 1227.719332]  r4:40000013
-> [ 1227.719334]  __local_bh_enable_ip from irq_forced_thread_fn+0x7c/0xac
-> [ 1227.719347]  r9:81d40ac0 r8:814f3c00 r7:00000001 r6:00000001 r5:814f3c00 r4:81d40ac0
-> [ 1227.719350]  irq_forced_thread_fn from irq_thread+0x16c/0x228
-> [ 1227.719363]  r7:00000001 r6:81d40ae4 r5:81d28000 r4:00000000
-> [ 1227.719365]  irq_thread from kthread+0x100/0x140
-> [ 1227.719380]  r10:00000000 r9:8154fbfc r8:81d43000 r7:81d40ac0 r6:80196dcc r5:81d40b00
-> [ 1227.719383]  r4:81d28000
-> [ 1227.719386]  kthread from ret_from_fork+0x14/0x34
-> [ 1227.719394] Exception stack(0x81777fb0 to 0x81777ff8)
-> [ 1227.719401] 7fa0:                                     00000000 00000000 00000000 00000000
-> [ 1227.719408] 7fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-> [ 1227.719414] 7fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-> [ 1227.719422]  r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:8014a6c8 r4:81d40b00
-> [ 1227.719425] ---[ end trace 0000000000000000 ]---
+	return EXIT_FASTPATH_NONE;
+}

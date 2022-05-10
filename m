@@ -2,116 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 966025209EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 02:18:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92EB2520A14
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 02:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232553AbiEJAV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 20:21:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
+        id S232684AbiEJAWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 20:22:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233504AbiEJAVM (ORCPT
+        with ESMTP id S232821AbiEJAWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 20:21:12 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AA1170F17
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 17:17:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652141834; x=1683677834;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=a8IXJEjfdoFWo9cZvtCHD4lzXZbfvKNjZNtuqD2Q3mo=;
-  b=bTxzhaBxusB3xVhdStf985wMNz+/CJXS/I38NzcoSRKZ2Nysb/pV0T6a
-   Co6Y4FVpZgenOvH0bzTCxRAYImI6br/7FipfwGMQ0OQFf4/Pb3a/RNmMI
-   H4PUlmt9grjhfkCr2IDeU4JxQv2FLluU4my3fGLx2w3ao5iO224oDWuVc
-   dv8uobA8W1/QYr8MygY91blw9AVF5XV6+G5dyQ/wDHNhgoh8KAWaLHWWh
-   WX7CJMklfHhCTEgIyH2qpRxDgUcCEIkzvqG3g1nj7sWbsrdnoDcAZeoS3
-   03Tm2RxuGLtVSfVGJFw5yNQsK8wFxE1VBhB/zFxE1b/DCPYQnaBqNEvhO
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="249109273"
-X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="249109273"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 17:17:13 -0700
-X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="602207049"
-Received: from akothari-mobl1.amr.corp.intel.com (HELO [10.209.16.133]) ([10.209.16.133])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 17:17:12 -0700
-Message-ID: <261b8dc3-eb78-1c24-48f7-de6505e14c76@linux.intel.com>
-Date:   Mon, 9 May 2022 17:17:12 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.7.0
-Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-References: <20220503012721.ok7fbvxmnvsr6qny@box.shutemov.name>
- <58d07b2d-cef5-17ed-9c57-e12fe5665e04@intel.com>
- <40ccd0f0-35a1-5aa7-9e51-25ab196d79e5@linux.intel.com>
- <2ed5c9cc316950a5a47ee714715b7980f358a140.camel@intel.com>
- <ab17102c-0cb7-87d3-3494-969866d64573@linux.intel.com>
- <d53696f85ada39a91a3685c61d177c582810772e.camel@intel.com>
- <d63d2774-c44d-27da-74b6-550935a196fd@intel.com>
- <dca06ffa36abe9989f0a7abaeafc83c1a7250651.camel@intel.com>
- <20220507004236.5p5dyksftge7wwr3@black.fi.intel.com>
- <45d184273f1950320843f6696eb3071f7d354fd3.camel@intel.com>
- <20220509120927.7rg6v5pyc3f4pxsh@box.shutemov.name>
- <75d4755c9a376df2e98a267e10e60da3bd178b17.camel@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <75d4755c9a376df2e98a267e10e60da3bd178b17.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 9 May 2022 20:22:13 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F9328AB8E
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 17:18:17 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id u25-20020aa78499000000b0050d328e2f6bso5403535pfn.7
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 17:18:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=lnkTQgV2qrh+gbf1Aosc572kZFary2TCuRopidnSrV8=;
+        b=d3LuCLf1mIYQIzpgHBzDoUhfEHYYUvqpEwKWTaFOdzLJDYWqm5AIYG8Tj/K5vteAik
+         E9hQ+7NyOYyPX+waN8rITfqFYQRyrPwYocl7eA45c3urlEl27usL1NwHjkxP8BUt7Xhx
+         6nAZgsYBz4wgmnl+O08B4FrW/92oLEm2VE+KGsjX+MQ+JjHzWte+h1lcPZ60gbP4/+nO
+         6cgkK2W8754PZG/RAC7tmrYeJh+73GOqo1NfAP5OLX89RLBCsOLX8l2IwqmB+EHuu5h8
+         Jt1Hf1OLhE4+AjFPxR+D8yCd5aZtG78LZIyZvaZDM0tPqWFVALIqmrIIkcsmvB4V5vBz
+         JuOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=lnkTQgV2qrh+gbf1Aosc572kZFary2TCuRopidnSrV8=;
+        b=RjWbfGd76MNTbJCdULizA7hvh1EZ46GaT0JxTXq9rg0v1pg6mEFStpbCKhrp1Y80DU
+         b0l8LpohPQ/6/Yc6MxgLRGmeKFLfrI/19XpS5VPmYel+YgtxqKqNrBQUaYvbnzf/NbER
+         AG27XUhgMH/smfQhy9Ky4ofko2XLqer3vw7LuzAuzEHHmokXF3TMpqVEOJhC/K2Pux0a
+         nAGFwcmHJtDFs+E6S0ftjF6JhZVzgrSbNHtc9bLyYE7MeD9TTvyWLJoRj3x2sKp/whSh
+         Too7NsyrFJdpwM1ePcDU/GXPztjmT2qQ74y2YDlgX6uybOETHOEdPJ962g6dQNGWdAcV
+         aY7Q==
+X-Gm-Message-State: AOAM532gXBbqA4iQbcDleMbQdQqYyae7k5NxK+0AZAOEGnron0GfOPXF
+        s2gc7sFwUYsqgwSI+O/TCFYVi121qU6Jwpqg
+X-Google-Smtp-Source: ABdhPJwlRd2oDc7VlqrmSym6yiJH6uIZ5kWoeSe0XeAIWHiU8RTlTIUjQNGslcIlw9n4Cf0oExdUP/3WBSny7D1e
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a17:902:ecc7:b0:15e:8685:77d with SMTP
+ id a7-20020a170902ecc700b0015e8685077dmr18756887plh.20.1652141896585; Mon, 09
+ May 2022 17:18:16 -0700 (PDT)
+Date:   Tue, 10 May 2022 00:17:58 +0000
+Message-Id: <20220510001807.4132027-1-yosryahmed@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
+Subject: [RFC PATCH bpf-next 0/9] bpf: cgroup hierarchical stats collection
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>
+Cc:     Stanislav Fomichev <sdf@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, cgroups@vger.kernel.org,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series allows for using bpf to collect hierarchical cgroup
+stats efficiently by integrating with the rstat framework. The rstat
+framework provides an efficient way to collect cgroup stats and
+propagate them through the cgroup hierarchy.
+
+The last patch is a selftest that demonastrates the entire workflow.
+The workflow consists of:
+- bpf programs that collect per-cpu per-cgroup stats (tracing progs).
+- bpf rstat flusher that contains the logic for aggregating stats
+  across cpus and across the cgroup hierarchy.
+- bpf cgroup_iter responsible for outputting the stats to userspace
+  through reading a file in bpffs.
+
+The first 3 patches include the new bpf rstat flusher program type and
+the needed support in rstat code and libbpf. The rstat flusher program
+is a callback that the rstat framework makes to bpf when a stat flush is
+ongoing, similar to the css_rstat_flush() callback that rstat makes to
+cgroup controllers. Each callback is parameterized by a (cgroup, cpu)
+pair that has been updated. The program contains the logic for
+aggregating the stats across cpus and across the cgroup hierarchy.
+These programs can be attached to any cgroup subsystem, not only the
+ones that implement the css_rstat_flush() callback in the kernel. This
+gives bpf programs more flexibility, and more isolation from the kernel
+implementation.
+
+The following 2 patches add necessary helpers for the stats collection
+workflow. Helpers that call into cgroup_rstat_updated() and
+cgroup_rstat_flush() are added to allow bpf programs collecting stats to
+tell the rstat framework that a cgroup has been updated, and to allow
+bpf programs outputting stats to tell the rstat framework to flush the
+stats before they are displayed to the user. An additional
+bpf_map_lookup_percpu_elem is introduced to allow rstat flusher programs
+to access percpu stats of the cpu being flushed.
+
+The following 3 patches add the cgroup_iter program type (v2). This was
+originally introduced by Hao as a part of a different series [1].
+Their usecase is better showcased as part of this patch series. We also
+make cgroup_get_from_id() cgroup v1 friendly to allow cgroup_iter programs
+to display stats for cgroup v1 as well. This small change makes the
+entire workflow cgroup v1 friendly without any other dedicated changes.
+
+The final patch is a selftest demonstrating the entire workflow with a
+set of bpf programs that collect per-cgroup latency of memcg reclaim.
+
+[1]https://lore.kernel.org/lkml/20220225234339.2386398-9-haoluo@google.com/
 
 
-On 5/9/22 4:54 PM, Kai Huang wrote:
-> And I suggested before, we can allocate a default size buffer (i.e. 4 pages),
-> which is large enough to cover all requests for now, during driver
-> initialization.  This avoids IOCTL time conversion.  We should still have code
-> in the IOCTL to check the request buffer size and when it is larger than the
-> default, the old should be freed a larger one should be allocated.  But for now
-> this code path will never happen.
-> 
-> Btw above is based on assumption that we don't support concurrent IOCTLs.  This
-> version Sathya somehow changed to support concurrent IOCTLs but this was a
-> surprise as I thought we somehow agreed we don't need to support this.
+Hao Luo (2):
+  cgroup: Add cgroup_put() in !CONFIG_CGROUPS case
+  bpf: Introduce cgroup iter
 
-Yes. Initially, I did not want to add this support to keep the code
-simple. But recent changes (to handle cases like, cleanup the VMM
-owned page after user prematurely ends the current request, and to
-support VMAP model) already made the code complicated. With current
-framework changes, since it is easy to extend the code to support
-concurrent GetQuote requests, I have just enabled this support.
+Yosry Ahmed (7):
+  bpf: introduce CGROUP_SUBSYS_RSTAT program type
+  cgroup: bpf: flush bpf stats on rstat flush
+  libbpf: Add support for rstat progs and links
+  bpf: add bpf rstat helpers
+  bpf: add bpf_map_lookup_percpu_elem() helper
+  cgroup: add v1 support to cgroup_get_from_id()
+  bpf: add a selftest for cgroup hierarchical stats collection
 
-
-> 
-> Anyway, now I don't have strong opinion here.  To me alloc_pages() +
-> set_memory_decrypted() is also fine (seems AMD is using this anyway).   Will let
-> Dave to decide.
+ include/linux/bpf-cgroup-subsys.h             |  35 ++
+ include/linux/bpf.h                           |   4 +
+ include/linux/bpf_types.h                     |   2 +
+ include/linux/cgroup-defs.h                   |   4 +
+ include/linux/cgroup.h                        |   5 +
+ include/uapi/linux/bpf.h                      |  45 +++
+ kernel/bpf/Makefile                           |   3 +-
+ kernel/bpf/arraymap.c                         |  11 +-
+ kernel/bpf/cgroup_iter.c                      | 148 ++++++++
+ kernel/bpf/cgroup_subsys.c                    | 212 +++++++++++
+ kernel/bpf/hashtab.c                          |  25 +-
+ kernel/bpf/helpers.c                          |  56 +++
+ kernel/bpf/syscall.c                          |   6 +
+ kernel/bpf/verifier.c                         |   6 +
+ kernel/cgroup/cgroup.c                        |  16 +-
+ kernel/cgroup/rstat.c                         |  11 +
+ scripts/bpf_doc.py                            |   2 +
+ tools/include/uapi/linux/bpf.h                |  45 +++
+ tools/lib/bpf/bpf.c                           |   3 +
+ tools/lib/bpf/bpf.h                           |   3 +
+ tools/lib/bpf/libbpf.c                        |  35 ++
+ tools/lib/bpf/libbpf.h                        |   3 +
+ tools/lib/bpf/libbpf.map                      |   1 +
+ .../test_cgroup_hierarchical_stats.c          | 335 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/bpf_iter.h  |   7 +
+ .../selftests/bpf/progs/cgroup_vmscan.c       | 211 +++++++++++
+ 26 files changed, 1212 insertions(+), 22 deletions(-)
+ create mode 100644 include/linux/bpf-cgroup-subsys.h
+ create mode 100644 kernel/bpf/cgroup_iter.c
+ create mode 100644 kernel/bpf/cgroup_subsys.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_cgroup_hierarchical_stats.c
+ create mode 100644 tools/testing/selftests/bpf/progs/cgroup_vmscan.c
 
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.36.0.512.ge40c2bad7a-goog
+

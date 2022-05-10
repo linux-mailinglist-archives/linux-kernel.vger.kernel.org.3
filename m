@@ -2,91 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 881A3521AC2
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9978B5219B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:48:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243096AbiEJODw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
+        id S243897AbiEJNup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:50:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244615AbiEJNmC (ORCPT
+        with ESMTP id S243090AbiEJNc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:42:02 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6962CE21B
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:30:20 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id dk23so32976957ejb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:30:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=EYtYwlz2KPXmVu+njbcewGhC8fMqY+Dy5OCbzouBYQo=;
-        b=XFUvOxgiQR78YUbV8REgK2ViRkKX7EkAyva7X50Xa6UHoA2pLqEhgl+Ynmz6Tfs4qb
-         HWg8aiTvL4kJ4qTzR+sNRQ81J8qANDBoncI0vy+viOXojJzRNFVPYlk6CiOPpq4ytdQF
-         RqYsJjgbUbry87AasVKZ56V00bYF+Ng47N1ra0iu68fcQPAJM4pTzzP3Kz0JYX3T0Mu6
-         eE/JQ+h4kvRxp8u94q77tQlzKsEebcYIm2oidjYM29Bb0N9vuf0s2oPGa6RuCv2+iiq0
-         EMwAb8f5af1DHTWsghLWc75BF8J6luPYlrO1PMkfmHGvIUqRsjSrwYX0qjkQmAI4H5NX
-         qN3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=EYtYwlz2KPXmVu+njbcewGhC8fMqY+Dy5OCbzouBYQo=;
-        b=Nwm7MEPNAs8UiV75PJQqU4cKAALza4T5p/0n0bWltYvKTBsKyYizVbG22Ovwk1Enfa
-         5+iDAiXt9o1V/ww4uglVWWPe5/K7XdXjnLfGZKw/ehJMvq7OiVlKAss0WvChPUFcHuJV
-         UW3BmKAkLr9pwRAr1S0tbidCnk+ynv2EIZE3SYCGxXi2mru+TeDHZcE2nCJKx8QrEklN
-         m7KALlyWcyWNrMO0iv1DcI/CfHObhY5QdOxZ2yd6UXesRI50WjqCp0zSEZ3zi8uwjn1V
-         DK9XNVK3+pMUljWBberAMjsFFCOkByDFfgIMPY12ouoYSBUXdNDEDl9ePiz6QK48hVGT
-         qwdw==
-X-Gm-Message-State: AOAM533YWe0Yvv+nTQU6DzBs0pqoMPF9TxxjmW6eHBaBA7GIlOPHUooO
-        mvPCpvCIbG3nXAvFBsDNWQOHQQ==
-X-Google-Smtp-Source: ABdhPJz51i+DK9WKBMW2jvke8/AQ9bcDkq6DkUeG6a37vidtAoW3AWZAjecAM/UEy4O6QPtfASKGIQ==
-X-Received: by 2002:a17:907:80c8:b0:6f4:3177:a0c9 with SMTP id io8-20020a17090780c800b006f43177a0c9mr20879712ejc.188.1652189416932;
-        Tue, 10 May 2022 06:30:16 -0700 (PDT)
-Received: from [192.168.0.252] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id yl26-20020a17090693fa00b006f3ef214de2sm6121263ejb.72.2022.05.10.06.30.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 06:30:16 -0700 (PDT)
-Message-ID: <8f814e9f-2060-7361-8d36-4a34f2aece1a@linaro.org>
-Date:   Tue, 10 May 2022 15:30:15 +0200
+        Tue, 10 May 2022 09:32:56 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1972375C7;
+        Tue, 10 May 2022 06:24:17 -0700 (PDT)
+Received: from kwepemi500021.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KyJbB2pSbzGpbC;
+        Tue, 10 May 2022 21:21:26 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ kwepemi500021.china.huawei.com (7.221.188.245) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 10 May 2022 21:24:14 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
+ (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 10 May
+ 2022 21:24:13 +0800
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+To:     <axboe@kernel.dk>, <hch@lst.de>, <torvalds@linux-foundation.org>,
+        <mingo@redhat.com>, <viro@zeniv.linux.org.uk>
+CC:     <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yukuai3@huawei.com>
+Subject: [PATCH v3 1/1] =?UTF-8?q?fs-writeback:=20writeback=5Fsb=5Finodes?= =?UTF-8?q?=EF=BC=9ARecalculate=20'wrote'=20according=20skipped=20pages?=
+Date:   Tue, 10 May 2022 21:38:05 +0800
+Message-ID: <20220510133805.1988292-1-chengzhihao1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3 1/4] media: dt-bindings: ov5675: document YAML binding
-Content-Language: en-US
-To:     Quentin Schulz <foss+kernel@0leil.net>
-Cc:     shawnx.tu@intel.com, mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Quentin Schulz <quentin.schulz@theobroma-systems.com>
-References: <20220509143226.531117-1-foss+kernel@0leil.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220509143226.531117-1-foss+kernel@0leil.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/05/2022 16:32, Quentin Schulz wrote:
-> From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-> 
-> This patch adds documentation of device tree in YAML schema for the
-> OV5675 CMOS image sensor from Omnivision.
-> 
-> Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Commit 505a666ee3fc ("writeback: plug writeback in wb_writeback() and
+writeback_inodes_wb()") has us holding a plug during wb_writeback, which
+may cause a potential ABBA dead lock:
 
+    wb_writeback		fat_file_fsync
+blk_start_plug(&plug)
+for (;;) {
+  iter i-1: some reqs have been added into plug->mq_list  // LOCK A
+  iter i:
+    progress = __writeback_inodes_wb(wb, work)
+    . writeback_sb_inodes // fat's bdev
+    .   __writeback_single_inode
+    .   . generic_writepages
+    .   .   __block_write_full_page
+    .   .   . . 	    __generic_file_fsync
+    .   .   . . 	      sync_inode_metadata
+    .   .   . . 	        writeback_single_inode
+    .   .   . . 		  __writeback_single_inode
+    .   .   . . 		    fat_write_inode
+    .   .   . . 		      __fat_write_inode
+    .   .   . . 		        sync_dirty_buffer	// fat's bdev
+    .   .   . . 			  lock_buffer(bh)	// LOCK B
+    .   .   . . 			    submit_bh
+    .   .   . . 			      blk_mq_get_tag	// LOCK A
+    .   .   . trylock_buffer(bh)  // LOCK B
+    .   .   .   redirty_page_for_writepage
+    .   .   .     wbc->pages_skipped++
+    .   .   --wbc->nr_to_write
+    .   wrote += write_chunk - wbc.nr_to_write  // wrote > 0
+    .   requeue_inode
+    .     redirty_tail_locked
+    if (progress)    // progress > 0
+      continue;
+  iter i+1:
+      queue_io
+      // similar process with iter i, infinite for-loop !
+}
+blk_finish_plug(&plug)   // flush plug won't be called
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Above process triggers a hungtask like:
+[  399.044861] INFO: task bb:2607 blocked for more than 30 seconds.
+[  399.046824]       Not tainted 5.18.0-rc1-00005-gefae4d9eb6a2-dirty
+[  399.051539] task:bb              state:D stack:    0 pid: 2607 ppid:
+2426 flags:0x00004000
+[  399.051556] Call Trace:
+[  399.051570]  __schedule+0x480/0x1050
+[  399.051592]  schedule+0x92/0x1a0
+[  399.051602]  io_schedule+0x22/0x50
+[  399.051613]  blk_mq_get_tag+0x1d3/0x3c0
+[  399.051640]  __blk_mq_alloc_requests+0x21d/0x3f0
+[  399.051657]  blk_mq_submit_bio+0x68d/0xca0
+[  399.051674]  __submit_bio+0x1b5/0x2d0
+[  399.051708]  submit_bio_noacct+0x34e/0x720
+[  399.051718]  submit_bio+0x3b/0x150
+[  399.051725]  submit_bh_wbc+0x161/0x230
+[  399.051734]  __sync_dirty_buffer+0xd1/0x420
+[  399.051744]  sync_dirty_buffer+0x17/0x20
+[  399.051750]  __fat_write_inode+0x289/0x310
+[  399.051766]  fat_write_inode+0x2a/0xa0
+[  399.051783]  __writeback_single_inode+0x53c/0x6f0
+[  399.051795]  writeback_single_inode+0x145/0x200
+[  399.051803]  sync_inode_metadata+0x45/0x70
+[  399.051856]  __generic_file_fsync+0xa3/0x150
+[  399.051880]  fat_file_fsync+0x1d/0x80
+[  399.051895]  vfs_fsync_range+0x40/0xb0
+[  399.051929]  __x64_sys_fsync+0x18/0x30
 
+In my test, 'need_resched()' (which is imported by 590dca3a71 "fs-writeback:
+unplug before cond_resched in writeback_sb_inodes") in function
+'writeback_sb_inodes()' seldom comes true, unless cond_resched() is deleted
+from write_cache_pages().
 
-Best regards,
-Krzysztof
+Fix it by correcting wrote number according number of skipped pages
+in writeback_sb_inodes().
+
+Goto Link to find a reproducer.
+
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215837
+Cc: stable@vger.kernel.org # v4.3
+Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+---
+v2->v3:
+  Don't update 'work->nr_pages' (This variable means how many pages
+  to be processed).
+ fs/fs-writeback.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
+index 591fe9cf1659..b20b70de9143 100644
+--- a/fs/fs-writeback.c
++++ b/fs/fs-writeback.c
+@@ -1775,11 +1775,12 @@ static long writeback_sb_inodes(struct super_block *sb,
+ 	};
+ 	unsigned long start_time = jiffies;
+ 	long write_chunk;
+-	long wrote = 0;  /* count both pages and inodes */
++	long total_wrote = 0;  /* count both pages and inodes */
+ 
+ 	while (!list_empty(&wb->b_io)) {
+ 		struct inode *inode = wb_inode(wb->b_io.prev);
+ 		struct bdi_writeback *tmp_wb;
++		long wrote;
+ 
+ 		if (inode->i_sb != sb) {
+ 			if (work->sb) {
+@@ -1855,7 +1856,9 @@ static long writeback_sb_inodes(struct super_block *sb,
+ 
+ 		wbc_detach_inode(&wbc);
+ 		work->nr_pages -= write_chunk - wbc.nr_to_write;
+-		wrote += write_chunk - wbc.nr_to_write;
++		wrote = write_chunk - wbc.nr_to_write - wbc.pages_skipped;
++		wrote = wrote < 0 ? 0 : wrote;
++		total_wrote += wrote;
+ 
+ 		if (need_resched()) {
+ 			/*
+@@ -1877,7 +1880,7 @@ static long writeback_sb_inodes(struct super_block *sb,
+ 		tmp_wb = inode_to_wb_and_lock_list(inode);
+ 		spin_lock(&inode->i_lock);
+ 		if (!(inode->i_state & I_DIRTY_ALL))
+-			wrote++;
++			total_wrote++;
+ 		requeue_inode(inode, tmp_wb, &wbc);
+ 		inode_sync_complete(inode);
+ 		spin_unlock(&inode->i_lock);
+@@ -1891,14 +1894,14 @@ static long writeback_sb_inodes(struct super_block *sb,
+ 		 * bail out to wb_writeback() often enough to check
+ 		 * background threshold and other termination conditions.
+ 		 */
+-		if (wrote) {
++		if (total_wrote) {
+ 			if (time_is_before_jiffies(start_time + HZ / 10UL))
+ 				break;
+ 			if (work->nr_pages <= 0)
+ 				break;
+ 		}
+ 	}
+-	return wrote;
++	return total_wrote;
+ }
+ 
+ static long __writeback_inodes_wb(struct bdi_writeback *wb,
+-- 
+2.31.1
+

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2F9E5218E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 069FD5216F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:18:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244069AbiEJNlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50500 "EHLO
+        id S242635AbiEJNU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243898AbiEJN1f (ORCPT
+        with ESMTP id S242580AbiEJNSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:27:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAE92C182B;
-        Tue, 10 May 2022 06:20:44 -0700 (PDT)
+        Tue, 10 May 2022 09:18:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9DC8D6B8;
+        Tue, 10 May 2022 06:13:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5C5EDB81CF8;
-        Tue, 10 May 2022 13:20:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9276C385C2;
-        Tue, 10 May 2022 13:20:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50E0B615F4;
+        Tue, 10 May 2022 13:13:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5342BC385A6;
+        Tue, 10 May 2022 13:13:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188842;
-        bh=uWNfTbyVD20wguGhW1RfOtpw8PG/VpQ0yqM5YEg8S1A=;
+        s=korg; t=1652188390;
+        bh=6TDfajJ8pBMh+JcLy099ip64RR+pHVaqJxecjE9Erfk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YX+Bg6y0QSCZcQ62oORtesNgHwqaCTCQeIvbAf+yddqdc4bYfLD/MDszME8d4AjrQ
-         G5B+tvZByLqhdmytEwkHaP7ptLuz9BKAQK7Fo4Jog8exH5f21lN2PGc4kDYYMlMwwU
-         lUux9pGUprTh+EJlya7WDX3kvoEikQao4ZKFElz4=
+        b=C3Esn4YaopTMGj9XsJrymli5ue1EaqJ8PTrbprbOcr1xkILmOEy66w3NGpg+Kqa+v
+         H4VR21tIVVdmoxemYHLt26pZRiYDnfbsv5RCFXy8Ne39m9hF6GWWyGiVsX1GzuA5vr
+         /DabRFjCUG0/ErwODUW4q8yRHW2oxKz5ppGiHwYs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "wanghai (M)" <wanghai38@huawei.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-Subject: [PATCH 4.19 62/88] Revert "SUNRPC: attempt AF_LOCAL connect on setup"
+        stable@vger.kernel.org, Sascha Hauer <sha@pengutronix.de>,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 4.9 57/66] ASoC: dmaengine: Restore NULL prepare_slave_config() callback
 Date:   Tue, 10 May 2022 15:07:47 +0200
-Message-Id: <20220510130735.542425319@linuxfoundation.org>
+Message-Id: <20220510130731.437972817@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
-References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
+References: <20220510130729.762341544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
 
-commit a3d0562d4dc039bca39445e1cddde7951662e17d upstream.
+commit 660564fc9a92a893a14f255be434f7ea0b967901 upstream.
 
-This reverts commit 7073ea8799a8cf73db60270986f14e4aae20fa80.
+As pointed out by Sascha Hauer, this patch changes:
+if (pmc->config && !pcm->config->prepare_slave_config)
+        <do nothing>
+to:
+if (pmc->config && !pcm->config->prepare_slave_config)
+        snd_dmaengine_pcm_prepare_slave_config()
 
-We must not try to connect the socket while the transport is under
-construction, because the mechanisms to safely tear it down are not in
-place. As the code stands, we end up leaking the sockets on a connection
-error.
+This breaks the drivers that do not need a call to
+dmaengine_slave_config(). Drivers that still need to call
+snd_dmaengine_pcm_prepare_slave_config(), but have a NULL
+pcm->config->prepare_slave_config should use
+snd_dmaengine_pcm_prepare_slave_config() as their prepare_slave_config
+callback.
 
-Reported-by: wanghai (M) <wanghai38@huawei.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Fixes: 9a1e13440a4f ("ASoC: dmaengine: do not use a NULL prepare_slave_config() callback")
+Reported-by: Sascha Hauer <sha@pengutronix.de>
+Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+Link: https://lore.kernel.org/r/20220421125403.2180824-1-codrin.ciubotariu@microchip.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/sunrpc/xprtsock.c |    3 ---
- 1 file changed, 3 deletions(-)
+ sound/soc/soc-generic-dmaengine-pcm.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/net/sunrpc/xprtsock.c
-+++ b/net/sunrpc/xprtsock.c
-@@ -2974,9 +2974,6 @@ static struct rpc_xprt *xs_setup_local(s
- 		}
- 		xprt_set_bound(xprt);
- 		xs_format_peer_addresses(xprt, "local", RPCBIND_NETID_LOCAL);
--		ret = ERR_PTR(xs_local_setup_socket(transport));
--		if (ret)
--			goto out_err;
- 		break;
- 	default:
- 		ret = ERR_PTR(-EAFNOSUPPORT);
+--- a/sound/soc/soc-generic-dmaengine-pcm.c
++++ b/sound/soc/soc-generic-dmaengine-pcm.c
+@@ -98,10 +98,10 @@ static int dmaengine_pcm_hw_params(struc
+ 
+ 	memset(&slave_config, 0, sizeof(slave_config));
+ 
+-	if (pcm->config && pcm->config->prepare_slave_config)
+-		prepare_slave_config = pcm->config->prepare_slave_config;
+-	else
++	if (!pcm->config)
+ 		prepare_slave_config = snd_dmaengine_pcm_prepare_slave_config;
++	else
++		prepare_slave_config = pcm->config->prepare_slave_config;
+ 
+ 	if (prepare_slave_config) {
+ 		ret = prepare_slave_config(substream, params, &slave_config);
 
 

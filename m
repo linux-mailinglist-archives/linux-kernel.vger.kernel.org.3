@@ -2,117 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513CE520D01
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 06:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07AB7520D04
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 06:39:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236343AbiEJEl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 00:41:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35570 "EHLO
+        id S236371AbiEJEmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 00:42:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232590AbiEJEly (ORCPT
+        with ESMTP id S232590AbiEJEmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 00:41:54 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8A975214;
-        Mon,  9 May 2022 21:37:58 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id v10so13672436pgl.11;
-        Mon, 09 May 2022 21:37:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=sKl5pNCwJXU7WqvT/LDmg67nZYMXHrw3gGTNE00KDiM=;
-        b=YePOexK84CQ26EIabu9A5b/dbFhTTZfpTaQ9ubxq1XtqEoLg3vJG5MoS27rmCWDTos
-         QdVx/dA4Gn6rzw8xAYF+fnnaO2t00OFrbbLXBrEVi5toVKZ0x8MFvY8LMcKaeOjy+LlY
-         txxRSWSM/8MSlK4nm2MEXKXNESUA7m9BiT7HbEzuKSA5m4YEUvGIS+QeBI50gKpaP33d
-         9SLIk8stQK7Gu2mytwvcrQY4TrI8je+YG+dXa0CL0YRwg92qBJu43lC2Mc6Gbs5o+WMe
-         Jv+wl1g0+xdRzyFJZcUpjhNH2bv9IdKSj872B0vVOF4t0pc6WAl5JmaM3MliwGo5uGqw
-         f0SQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=sKl5pNCwJXU7WqvT/LDmg67nZYMXHrw3gGTNE00KDiM=;
-        b=uIi5Fjb8wAP6TX2cpsstYm4DyYAe0ZMJ+HRJkP/eMegGBzK1Kh+OhDjaI8Jt+8MsnD
-         Cw+hextevFtn7gNz/6HlXGGfeJIhUymyfq2QLfeyLlgjKYEKhw90pQsfLneMPTVsnoq3
-         1qUS0Maya1gtMZ/glgU8UkJMJCylSnDdQum2tRAaT82VACJwhHZ58TaAlKU9eNh95XRP
-         526G6x+RbineqAvJ3YRm9Rnj7EfVoLatb+PgLeT5LXiPVztzrFaJrHThcH8w6fIy71dz
-         FQrsmJQt5K3J/bMjo+OhvcBm+zgTx09SJubZlP265C5RerBpNHuqFYTQ6NI0JyATnLad
-         tVvQ==
-X-Gm-Message-State: AOAM531eyalcVEIuRmSDUJvZkEsNQ3crCChCDpH4gahUMfDiyM77uudT
-        NDzvLVmKaaEbjurdKH/cOWg=
-X-Google-Smtp-Source: ABdhPJxf8HyqGkQnaloAnkZ5hnwQl0PRFEqFWflgOFMeNq7L2seaOFZiS7nRWqVRztzEuTFZ5gcFBw==
-X-Received: by 2002:a63:3e44:0:b0:3c3:dabd:eb03 with SMTP id l65-20020a633e44000000b003c3dabdeb03mr15260729pga.15.1652157478224;
-        Mon, 09 May 2022 21:37:58 -0700 (PDT)
-Received: from [192.168.255.10] ([203.205.141.83])
-        by smtp.gmail.com with ESMTPSA id 67-20020a621946000000b0050dc7628190sm9570550pfz.106.2022.05.09.21.37.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 21:37:57 -0700 (PDT)
-Message-ID: <f3a7fc7c-959e-9f7f-b6f7-25f51b4caed6@gmail.com>
-Date:   Tue, 10 May 2022 12:37:53 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH V2 2/3] KVM: x86/pmu: Don't pre-set the pmu->global_ctrl
- when refreshing
-Content-Language: en-US
-From:   Like Xu <like.xu.linux@gmail.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Jim Mattson <jmattson@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        Tue, 10 May 2022 00:42:39 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D37E575214
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 21:38:43 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A28512FC;
+        Mon,  9 May 2022 21:38:43 -0700 (PDT)
+Received: from a077893.arm.com (unknown [10.163.34.190])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 921D33F66F;
+        Mon,  9 May 2022 21:38:33 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     steve.capper@arm.com,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
         linux-kernel@vger.kernel.org
-References: <20220509102204.62389-1-likexu@tencent.com>
- <20220509102204.62389-2-likexu@tencent.com>
-In-Reply-To: <20220509102204.62389-2-likexu@tencent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: [PATCH] arm64/hugetlb: Drop TLB flush from get_clear_flush()
+Date:   Tue, 10 May 2022 10:09:30 +0530
+Message-Id: <20220510043930.2410985-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+This drops now redundant TLB flush in get_clear_flush() which is no longer
+required after recent commit 697a1d44af8b ("tlb: hugetlb: Add more sizes to
+tlb_remove_huge_tlb_entry"). It also renames this function i.e dropping off
+'_flush' and replacing it with '__contig' as appropriate.
 
-Assigning a value to pmu->global_ctrl just to set the value of
-pmu->global_ctrl_mask in a more readable way leaves a side effect of
-not conforming to the specification. The value is reset to zero on
-Power up and Reset but keeps unchanged on INIT, like an ordinary MSR.
-
-Signed-off-by: Like Xu <likexu@tencent.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
-v1 -> v2 Changelog:
-- Explicitly add parentheses around;
+This applies on v5.18-rc6
 
-  arch/x86/kvm/vmx/pmu_intel.c | 5 ++---
-  1 file changed, 2 insertions(+), 3 deletions(-)
+ arch/arm64/mm/hugetlbpage.c | 16 +++++-----------
+ 1 file changed, 5 insertions(+), 11 deletions(-)
 
-diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-index cff03baf8921..7945e97db0af 100644
---- a/arch/x86/kvm/vmx/pmu_intel.c
-+++ b/arch/x86/kvm/vmx/pmu_intel.c
-@@ -525,9 +525,8 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
-          setup_fixed_pmc_eventsel(pmu);
-      }
-
--    pmu->global_ctrl = ((1ull << pmu->nr_arch_gp_counters) - 1) |
--        (((1ull << pmu->nr_arch_fixed_counters) - 1) << INTEL_PMC_IDX_FIXED);
--    pmu->global_ctrl_mask = ~pmu->global_ctrl;
-+    pmu->global_ctrl_mask = ~(((1ull << pmu->nr_arch_gp_counters) - 1) |
-+        (((1ull << pmu->nr_arch_fixed_counters) - 1) << INTEL_PMC_IDX_FIXED));
-      pmu->global_ovf_ctrl_mask = pmu->global_ctrl_mask
-              & ~(MSR_CORE_PERF_GLOBAL_OVF_CTRL_OVF_BUF |
-                  MSR_CORE_PERF_GLOBAL_OVF_CTRL_COND_CHGD);
+diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
+index cbace1c9e137..749435b01a89 100644
+--- a/arch/arm64/mm/hugetlbpage.c
++++ b/arch/arm64/mm/hugetlbpage.c
+@@ -166,15 +166,14 @@ static inline int num_contig_ptes(unsigned long size, size_t *pgsize)
+  *
+  * This helper performs the break step.
+  */
+-static pte_t get_clear_flush(struct mm_struct *mm,
++static pte_t get_clear_contig(struct mm_struct *mm,
+ 			     unsigned long addr,
+ 			     pte_t *ptep,
+ 			     unsigned long pgsize,
+ 			     unsigned long ncontig)
+ {
+ 	pte_t orig_pte = huge_ptep_get(ptep);
+-	bool valid = pte_valid(orig_pte);
+-	unsigned long i, saddr = addr;
++	unsigned long i;
+ 
+ 	for (i = 0; i < ncontig; i++, addr += pgsize, ptep++) {
+ 		pte_t pte = ptep_get_and_clear(mm, addr, ptep);
+@@ -190,11 +189,6 @@ static pte_t get_clear_flush(struct mm_struct *mm,
+ 		if (pte_young(pte))
+ 			orig_pte = pte_mkyoung(orig_pte);
+ 	}
+-
+-	if (valid) {
+-		struct vm_area_struct vma = TLB_FLUSH_VMA(mm, 0);
+-		flush_tlb_range(&vma, saddr, addr);
+-	}
+ 	return orig_pte;
+ }
+ 
+@@ -392,7 +386,7 @@ pte_t huge_ptep_get_and_clear(struct mm_struct *mm,
+ 
+ 	ncontig = find_num_contig(mm, addr, ptep, &pgsize);
+ 
+-	return get_clear_flush(mm, addr, ptep, pgsize, ncontig);
++	return get_clear_contig(mm, addr, ptep, pgsize, ncontig);
+ }
+ 
+ /*
+@@ -443,7 +437,7 @@ int huge_ptep_set_access_flags(struct vm_area_struct *vma,
+ 	if (!__cont_access_flags_changed(ptep, pte, ncontig))
+ 		return 0;
+ 
+-	orig_pte = get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
++	orig_pte = get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
+ 
+ 	/* Make sure we don't lose the dirty or young state */
+ 	if (pte_dirty(orig_pte))
+@@ -476,7 +470,7 @@ void huge_ptep_set_wrprotect(struct mm_struct *mm,
+ 	ncontig = find_num_contig(mm, addr, ptep, &pgsize);
+ 	dpfn = pgsize >> PAGE_SHIFT;
+ 
+-	pte = get_clear_flush(mm, addr, ptep, pgsize, ncontig);
++	pte = get_clear_contig(mm, addr, ptep, pgsize, ncontig);
+ 	pte = pte_wrprotect(pte);
+ 
+ 	hugeprot = pte_pgprot(pte);
 -- 
-2.36.1
-
-
+2.20.1
 

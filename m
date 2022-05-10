@@ -2,222 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74ED852216C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33DB3522172
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347522AbiEJQm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 12:42:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36396 "EHLO
+        id S1345644AbiEJQow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 12:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347518AbiEJQmP (ORCPT
+        with ESMTP id S1345425AbiEJQoq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 12:42:15 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5155C64A
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 09:38:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652200697; x=1683736697;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9QWyfcw1CMut7JXAtG+goqqFdsSUhSb0SnAONXDHiow=;
-  b=UWbdTO3H9qXclVshK+1oY2IjiuPw3acXWEZmnw50DoM1O2LtVRVBPPDc
-   gBwXsbyWxncwtwDppUb74bkG4DIe4nMHOP4U4bTqR3a4j2OHWI79yjkgg
-   4hmIlJYtjbjwl4LqL83md5PuFcOvIaSOS0zcQFxjdu1j/MdGP9Mhf2oDu
-   h+vYP3AjMBKmht8dgULsL0V/DR7ksfEn9jS8axN7zf/FMypZ/p/AHSfzu
-   YXyL3UFnRguNywv3x+w2uzNjk7TTG1VbCL5M50z2+hap6GJx0AlXuujAo
-   5+04nYwc/4lO5aPt9L+DY9OVE622xq1o+0KgBwajt6T5T4+hqo3Mvxvvg
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="249961864"
-X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="249961864"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 09:38:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="602546828"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 10 May 2022 09:38:15 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1noSsI-000I8Q-KM;
-        Tue, 10 May 2022 16:38:14 +0000
-Date:   Wed, 11 May 2022 00:37:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Chen Yu <yu.c.chen@intel.com>, linux-kernel@vger.kernel.org
-Subject: [yu-chen-surf:sis 1/1] kernel/sched/fair.c:9317:12: warning:
- comparison of distinct pointer types ('typeof (0) *' (aka 'int *') and
- 'typeof ((nr_llc * y) / (1L << 10)) *' (aka 'long *'))
-Message-ID: <202205110033.NNmqSG7c-lkp@intel.com>
+        Tue, 10 May 2022 12:44:46 -0400
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9A81D1;
+        Tue, 10 May 2022 09:40:46 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id w187so31737721ybe.2;
+        Tue, 10 May 2022 09:40:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HGoPv6W6CM1DO2fVfWosWDd56IU/7LHJWw4c0lAvJA4=;
+        b=yvBxknRisfq9swtcJocG9WwgmwooxJe6idDXOi2tI8fOyvot1EKmcFjT0dNEhVZp5n
+         E3LjGBZMcNHU3/WJowDxKT+B2en26WHwCa2F0FiTMWRbl1X55Z2lFXrZ/eThuNIopJwj
+         OfEC9vSZKYXVmTFe0ecTzlGIoZHW0Eb/rdWuTYvsXBFxqoaLwqrrOxVgCny4JJBt3dU6
+         f23mg5ew95hLH7ADPwqwkFbAP1+fIuevRj7BIeT9UrYtNmKroaVMrr5GkTYpXBEtYWRt
+         VqFNTe0J7wzR25YK217KAHOb1zDsLMrJbEsuy/pm8hEtXAoZEun2CYIpWEGllovRZM4l
+         saug==
+X-Gm-Message-State: AOAM532n3Erpei054ayZqrj/QtkyEcjCtwYAU0EeUwhz+pkuJpV3c/aI
+        9zK6GwmFGRdJmVj6UjlCCvl5lZqFN11N5Q2HGHY=
+X-Google-Smtp-Source: ABdhPJzt3lisSBKrlknwiaLfEFImDorjTjrExik21oVqLt+AIUyKLfyONbcQGpvGYBEJhAuq1ttlOmXUi1pCjBPmYjQ=
+X-Received: by 2002:a25:da84:0:b0:648:423e:57b0 with SMTP id
+ n126-20020a25da84000000b00648423e57b0mr18644611ybf.137.1652200845998; Tue, 10
+ May 2022 09:40:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220506122052.659129-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20220506122052.659129-1-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 10 May 2022 18:40:34 +0200
+Message-ID: <CAJZ5v0h5ZvB2yQz3m5Z149jCMvNhzwt_a76tm5bVK8VzC5YY9A@mail.gmail.com>
+Subject: Re: [PATCH] thermal: int340x: Mode setting with new OS handshake
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/yu-chen-surf/linux.git sis
-head:   e99eab1b5fbda9474ad4fe9074983f2d2169923b
-commit: e99eab1b5fbda9474ad4fe9074983f2d2169923b [1/1] sched/fair: Introduce SIS_UTIL to search idle CPU based on sum of util_avg
-config: arm-milbeaut_m10v_defconfig (https://download.01.org/0day-ci/archive/20220511/202205110033.NNmqSG7c-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/yu-chen-surf/linux/commit/e99eab1b5fbda9474ad4fe9074983f2d2169923b
-        git remote add yu-chen-surf https://github.com/yu-chen-surf/linux.git
-        git fetch --no-tags yu-chen-surf sis
-        git checkout e99eab1b5fbda9474ad4fe9074983f2d2169923b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash kernel/sched/
+On Fri, May 6, 2022 at 2:21 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> With the new OS handshake introduced with the commit: "c7ff29763989
+> ("thermal: int340x: Update OS policy capability handshake")",
+> thermal zone mode "enabled" doesn't work in the same way as the legacy
+> handshake. The mode "enabled" fails with -EINVAL using new handshake.
+>
+> To address this issue, when the new OS UUID mask is set:
+> - When mode is "enabled", return 0 as the firmware already has the
+> latest policy mask.
+> - When mode is "disabled", update the firmware with UUID mask of zero.
+> In this way firmware can take control of the thermal control. Also
+> reset the OS UUID mask. This allows user space to update with new
+> set of policies.
+>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: stable@vger.kernel.org
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+It would be good to have a Fixes tag for this one.
 
-All warnings (new ones prefixed by >>):
-
-   kernel/sched/fair.c:5530:6: warning: no previous prototype for function 'init_cfs_bandwidth' [-Wmissing-prototypes]
-   void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
-        ^
-   kernel/sched/fair.c:5530:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
-   ^
-   static 
->> kernel/sched/fair.c:9317:12: warning: comparison of distinct pointer types ('typeof (0) *' (aka 'int *') and 'typeof ((nr_llc * y) / (1L << 10)) *' (aka 'long *')) [-Wcompare-distinct-pointer-types]
-           nr_scan = max(0, (nr_llc * y) / SCHED_CAPACITY_SCALE);
-                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:52:19: note: expanded from macro 'max'
-   #define max(x, y)       __careful_cmp(x, y, >)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   kernel/sched/fair.c:10704:6: warning: no previous prototype for function 'nohz_balance_enter_idle' [-Wmissing-prototypes]
-   void nohz_balance_enter_idle(int cpu)
-        ^
-   kernel/sched/fair.c:10704:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void nohz_balance_enter_idle(int cpu)
-   ^
-   static 
-   kernel/sched/fair.c:11826:6: warning: no previous prototype for function 'free_fair_sched_group' [-Wmissing-prototypes]
-   void free_fair_sched_group(struct task_group *tg) { }
-        ^
-   kernel/sched/fair.c:11826:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void free_fair_sched_group(struct task_group *tg) { }
-   ^
-   static 
-   kernel/sched/fair.c:11828:5: warning: no previous prototype for function 'alloc_fair_sched_group' [-Wmissing-prototypes]
-   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
-       ^
-   kernel/sched/fair.c:11828:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
-   ^
-   static 
-   kernel/sched/fair.c:11833:6: warning: no previous prototype for function 'online_fair_sched_group' [-Wmissing-prototypes]
-   void online_fair_sched_group(struct task_group *tg) { }
-        ^
-   kernel/sched/fair.c:11833:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void online_fair_sched_group(struct task_group *tg) { }
-   ^
-   static 
-   kernel/sched/fair.c:11835:6: warning: no previous prototype for function 'unregister_fair_sched_group' [-Wmissing-prototypes]
-   void unregister_fair_sched_group(struct task_group *tg) { }
-        ^
-   kernel/sched/fair.c:11835:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void unregister_fair_sched_group(struct task_group *tg) { }
-   ^
-   static 
-   kernel/sched/fair.c:507:20: warning: unused function 'list_del_leaf_cfs_rq' [-Wunused-function]
-   static inline void list_del_leaf_cfs_rq(struct cfs_rq *cfs_rq)
-                      ^
-   kernel/sched/fair.c:528:19: warning: unused function 'tg_is_idle' [-Wunused-function]
-   static inline int tg_is_idle(struct task_group *tg)
-                     ^
-   kernel/sched/fair.c:5511:20: warning: unused function 'sync_throttle' [-Wunused-function]
-   static inline void sync_throttle(struct task_group *tg, int cpu) {}
-                      ^
-   kernel/sched/fair.c:5536:37: warning: unused function 'tg_cfs_bandwidth' [-Wunused-function]
-   static inline struct cfs_bandwidth *tg_cfs_bandwidth(struct task_group *tg)
-                                       ^
-   kernel/sched/fair.c:5540:20: warning: unused function 'destroy_cfs_bandwidth' [-Wunused-function]
-   static inline void destroy_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
-                      ^
-   12 warnings generated.
-
-
-vim +9317 kernel/sched/fair.c
-
-  9267	
-  9268	static inline void update_idle_cpu_scan(struct lb_env *env,
-  9269						unsigned long sum_util)
-  9270	{
-  9271		struct sched_domain_shared *sd_share;
-  9272		int nr_scan, nr_llc, x, y;
-  9273	
-  9274		if (!sched_feat(SIS_UTIL))
-  9275			return;
-  9276		/*
-  9277		 * Update the number of CPUs to scan in LLC domain, which could
-  9278		 * be used as a hint in select_idle_cpu(). The update of this hint
-  9279		 * occurs during periodic load balancing, rather than frequent
-  9280		 * newidle balance.
-  9281		 */
-  9282		nr_llc = per_cpu(sd_llc_size, env->dst_cpu);
-  9283		if (env->idle == CPU_NEWLY_IDLE ||
-  9284		    env->sd->span_weight != nr_llc)
-  9285			return;
-  9286	
-  9287		sd_share = rcu_dereference(per_cpu(sd_llc_shared, env->dst_cpu));
-  9288		if (!sd_share)
-  9289			return;
-  9290	
-  9291		/*
-  9292		 * The number of CPUs to search drops as sum_util increases, when
-  9293		 * sum_util hits 85% or above, the scan stops.
-  9294		 * The reason to choose 85% as the threshold is because this is the
-  9295		 * imbalance_pct(117) when a LLC sched group is overloaded.
-  9296		 *
-  9297		 * let y = 1 - (x/0.85)^2                                         [1]
-  9298		 *
-  9299		 * y is the ratio of CPUs to be scanned in the LLC
-  9300		 * domain, x is the ratio of sum_util compared to the
-  9301		 * CPU capacity:
-  9302		 *
-  9303		 * x = sum_util / (nr_llc * SCHED_CAPACITY_SCALE)                 [2]
-  9304		 *
-  9305		 * Scale x by SCHED_CAPACITY_SCALE and [2] becomes:
-  9306		 *
-  9307		 * x = sum_util / nr_llc                                          [3]
-  9308		 *
-  9309		 * and [1] becomes:
-  9310		 *
-  9311		 * y = (SCHED_CAPACITY_SCALE - (x*x)/740) / SCHED_CAPACITY_SCALE  [4]
-  9312		 *
-  9313		 * then the number of CPUs to scan is nr_scan = nr_llc * y
-  9314		 */
-  9315		x = sum_util / nr_llc;
-  9316		y = SCHED_CAPACITY_SCALE - (x * x) / 740;
-> 9317		nr_scan = max(0, (nr_llc * y) / SCHED_CAPACITY_SCALE);
-  9318		WRITE_ONCE(sd_share->nr_idle_scan, nr_scan);
-  9319	}
-  9320	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+>  .../intel/int340x_thermal/int3400_thermal.c   | 48 ++++++++++++-------
+>  1 file changed, 32 insertions(+), 16 deletions(-)
+>
+> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> index d97f496bab9b..1061728ad5a9 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> @@ -194,12 +194,31 @@ static int int3400_thermal_run_osc(acpi_handle handle, char *uuid_str, int *enab
+>         return result;
+>  }
+>
+> +static int set_os_uuid_mask(struct int3400_thermal_priv *priv, u32 mask)
+> +{
+> +       int cap = 0;
+> +
+> +       /*
+> +        * Capability bits:
+> +        * Bit 0: set to 1 to indicate DPTF is active
+> +        * Bi1 1: set to 1 to active cooling is supported by user space daemon
+> +        * Bit 2: set to 1 to passive cooling is supported by user space daemon
+> +        * Bit 3: set to 1 to critical trip is handled by user space daemon
+> +        */
+> +       if (mask)
+> +               cap = ((priv->os_uuid_mask << 1) | 0x01);
+> +
+> +       return int3400_thermal_run_osc(priv->adev->handle,
+> +                                      "b23ba85d-c8b7-3542-88de-8de2ffcfd698",
+> +                                      &cap);
+> +}
+> +
+>  static ssize_t current_uuid_store(struct device *dev,
+>                                   struct device_attribute *attr,
+>                                   const char *buf, size_t count)
+>  {
+>         struct int3400_thermal_priv *priv = dev_get_drvdata(dev);
+> -       int i;
+> +       int ret, i;
+>
+>         for (i = 0; i < INT3400_THERMAL_MAXIMUM_UUID; ++i) {
+>                 if (!strncmp(buf, int3400_thermal_uuids[i],
+> @@ -231,19 +250,7 @@ static ssize_t current_uuid_store(struct device *dev,
+>         }
+>
+>         if (priv->os_uuid_mask) {
+> -               int cap, ret;
+> -
+> -               /*
+> -                * Capability bits:
+> -                * Bit 0: set to 1 to indicate DPTF is active
+> -                * Bi1 1: set to 1 to active cooling is supported by user space daemon
+> -                * Bit 2: set to 1 to passive cooling is supported by user space daemon
+> -                * Bit 3: set to 1 to critical trip is handled by user space daemon
+> -                */
+> -               cap = ((priv->os_uuid_mask << 1) | 0x01);
+> -               ret = int3400_thermal_run_osc(priv->adev->handle,
+> -                                             "b23ba85d-c8b7-3542-88de-8de2ffcfd698",
+> -                                             &cap);
+> +               ret = set_os_uuid_mask(priv, priv->os_uuid_mask);
+>                 if (ret)
+>                         return ret;
+>         }
+> @@ -469,17 +476,26 @@ static int int3400_thermal_change_mode(struct thermal_zone_device *thermal,
+>         if (mode != thermal->mode) {
+>                 int enabled;
+>
+> +               enabled = (mode == THERMAL_DEVICE_ENABLED);
+> +
+> +               if (priv->os_uuid_mask) {
+> +                       if (!enabled) {
+> +                               priv->os_uuid_mask = 0;
+> +                               result = set_os_uuid_mask(priv, priv->os_uuid_mask);
+> +                       }
+> +                       goto eval_odvp;
+> +               }
+> +
+>                 if (priv->current_uuid_index < 0 ||
+>                     priv->current_uuid_index >= INT3400_THERMAL_MAXIMUM_UUID)
+>                         return -EINVAL;
+>
+> -               enabled = (mode == THERMAL_DEVICE_ENABLED);
+>                 result = int3400_thermal_run_osc(priv->adev->handle,
+>                                                  int3400_thermal_uuids[priv->current_uuid_index],
+>                                                  &enabled);
+>         }
+>
+> -
+> +eval_odvp:
+>         evaluate_odvp(priv);
+>
+>         return result;
+> --
+> 2.31.1
+>

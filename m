@@ -2,408 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73CCF520DCF
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 08:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7346520DD9
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 08:24:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237285AbiEJG1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 02:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34966 "EHLO
+        id S232837AbiEJG2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 02:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237058AbiEJG1C (ORCPT
+        with ESMTP id S237141AbiEJG15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 02:27:02 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE5744B1F7
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 23:22:13 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id c11so22244966wrn.8
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 23:22:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dvdc0yM6cPnBiwGvW8GWeZiOFv2E/kXOJ9QvUKMsgs0=;
-        b=ZhEnTOrG9nTskdTWATmoxwySk3Z8SweNw4H+Z7R7wYvsR0IcDdQ1+FX1Y2dFbG6oxC
-         QDTfomq4qbfQqYfR9hTOVnyP0od2RrLHBVW2llNsiATGRlch9/PoHr6oZZsMxRCN4jl6
-         15v1FaBWp22iGc67POdBnDMjlX70G62OAlsfv8RFsXIlDYP8EWQBM61ycpOweY9UmosU
-         /HIwYghn8RUiMXrzaflNPKMyFHCeio/0dL/OyEpt6eQQKpcfW6qsmcHOehrfg08qHrNt
-         hRFGwCMLFzmoj//CSlW9EfPwHfuXXRdEvp0EppttGRqA84+z4zh1tf4kjQ2Xf6gshM5+
-         SazA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dvdc0yM6cPnBiwGvW8GWeZiOFv2E/kXOJ9QvUKMsgs0=;
-        b=uM9cjBYgFv0BChS1MXvZMCj7Z/q8nL3bgUxoiyroD6PPUg46jtB/Ifldk4BxBLP7Aw
-         r8KcMMLNaI05YNgraax5eixCtzFd5Qw1saTfjFhvQCde2r6Z3dFd5yACiT4bYW8Q5JyA
-         CRs1iJtBq3Pj04FpEv0XqSPwmoB2m5NHLcD/waguMgIT+1Y/VGJoPdL85lnD9iZe5yd4
-         EqGRHFPG5ou6Dbxnx6sJgmXFrkDVeCdQrDQvdQGY0FfubsGOjXLhNOLEZjIL3L0SvCFp
-         dHPO8xj337Z0p9VPWlHzx/twZ2ACnLBOsJiM2EV3W7DYuQpILUV/vGDP0EqbIFsDtCTJ
-         Siyw==
-X-Gm-Message-State: AOAM533pZUajE9VKSpqr8jRyNzSbm/Vrl0oZyAtxV9h999ESrJNZbMWQ
-        9XDUVFyURMaYpyTbonWK4KHWQSk6O4FsC5kemBQXGBeOiLg=
-X-Google-Smtp-Source: ABdhPJzYZqCsHfrGxVVOEpBI62Ysdf7Ss6RBm7mA8c6RUdwDDaI1Q1s+oh/u3mt7M38+A7NojZTOrQNVNfM2VkyM5RY=
-X-Received: by 2002:a5d:4806:0:b0:20a:da03:711b with SMTP id
- l6-20020a5d4806000000b0020ada03711bmr16839042wrq.395.1652163732007; Mon, 09
- May 2022 23:22:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220509204909.2464496-1-dlatypov@google.com>
-In-Reply-To: <20220509204909.2464496-1-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 10 May 2022 14:22:00 +0800
-Message-ID: <CABVgOSnwFe18Em327c3bx7z0A9VfujbjdKgofoSRafFOsOjfwQ@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: misc cleanups
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+        Tue, 10 May 2022 02:27:57 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022D82B5CE0
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 23:23:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652163818; x=1683699818;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=zmcOn+vAeSefIMXH0HwiPs/zqiGy3MSOs5uQ9EEbAc8=;
+  b=IzdPARdSY7xAqna4eUhisPOux3Ht6Xnvg1Lv5g/XBPrVils/dI7/4/4p
+   AOCRKAFWPBUqLNSzptU7uvf6Wt7kwmh8QHY/ZOKVvSIMYPIkMtki/pQt0
+   2Qjv/cbLaP5nBx9Djb/gQDH4EVvENwSEKLuzjc4FcfYm7k/JMTyvtDkmm
+   KJEvvAKxXdVWDFV72HjgpNueyTF8feIMqP98YBAOcxfhMNx294Ca0vi3e
+   R4QiKem+EMv5FacrNGwCNt5gFMfICz6nvGuVNrhv7GZAFPZ09dH/X3A0E
+   fa92a6K2+XTco95ade8mOoI5J5jDmTEsQKu2RLh/HeLwPeUKrDWAuRVD3
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="355703689"
+X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
+   d="scan'208";a="355703689"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 23:23:35 -0700
+X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
+   d="scan'208";a="519600498"
+Received: from sijieyux-mobl3.ccr.corp.intel.com ([10.254.212.195])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 23:23:31 -0700
+Message-ID: <37dac785a08e3a341bf05d9ee35f19718ce83d26.camel@intel.com>
+Subject: Re: [mm/page_alloc] f26b3fa046: netperf.Throughput_Mbps -18.0%
+ regression
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     Mel Gorman <mgorman@techsingularity.net>,
+        kernel test robot <oliver.sang@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        lkp@intel.com, feng.tang@intel.com, zhengjun.xing@linux.intel.com,
+        fengwei.yin@intel.com
+Date:   Tue, 10 May 2022 14:23:28 +0800
+In-Reply-To: <c11ae803-cea7-8b7f-9992-2f640c90f104@intel.com>
+References: <20220420013526.GB14333@xsang-OptiPlex-9020>
+         <YmvMDyx05UoPFtQy@ziqianlu-desk1>
+         <bd3db4de223a010d1e06013e93b09879fc9b36a8.camel@intel.com>
+         <YnURx04+hE0sQ3v3@ziqianlu-desk1>
+         <7d20a9543f69523cfda280e3f5ab17d68db037ab.camel@intel.com>
+         <YnXnLuYjmEWdVyBP@ziqianlu-desk1>
+         <ae763d63e50d14650c5762103d113934412bef57.camel@intel.com>
+         <ba83270a-4f37-7d5a-b37a-0b7a6df5f5b4@intel.com>
+         <d13688d1483e9d87ec477292893f2916832b3bdc.camel@intel.com>
+         <c11ae803-cea7-8b7f-9992-2f640c90f104@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.38.3-1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 4:49 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> This primarily comes from running pylint over kunit tool code and
-> ignoring some warnings we don't care about.
-> If we ever got a fully clean setup, we could add this to run_checks.py,
-> but we're not there yet.
->
-> Fix things like
-> * Drop unused imports
-> * check `is None`, not `== None` (see PEP 8)
-> * remove redundant parens around returns
-> * remove redundant `else` / convert `elif` to `if` where appropriate
+On Tue, 2022-05-10 at 11:43 +0800, Aaron Lu wrote:
+> On 5/7/2022 3:44 PM, ying.huang@intel.com wrote:
+> > On Sat, 2022-05-07 at 15:31 +0800, Aaron Lu wrote:
+> 
+> ... ...
+> 
+> > > 
+> > > I thought the overhead of changing the cache line from "shared" to
+> > > "own"/"modify" is pretty cheap.
+> > 
+> > This is the read/write pattern of cache ping-pong.  Although it should
+> > be cheaper than the write/write pattern of cache ping-pong in theory, we
+> > have gotten sevious regression for that before.
+> > 
+> 
+> Can you point me to the regression report? I would like to take a look,
+> thanks.
 
-Personally, I find the explicit 'elif' much more readable in most of
-these cases, but if we're annoying a linter, I guess we should change
-them...
+Sure.
 
-> * rename make_arch_qemuconfig() param to base_kunitconfig (this is the
->   name used in the subclass, and it's a better one)
-> * kunit_tool_test: check the exit code for SystemExit (could be 0)
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
+https://lore.kernel.org/all/1425108604.10337.84.camel@linux.intel.com/
 
-All of these changes seem correct to me, even if I'm not sure I'd
-bother with most of them if they weren't causing pylint to show
-errors.
+> > > Also, this is the same case as the Skylake desktop machine, why it is a
+> > > gain there but a loss here? 
+> > 
+> > I guess the reason is the private cache size.  The size of the private
+> > L2 cache of SKL server is much larger than that of SKL client (1MB vs.
+> > 256KB).  So there's much more core-2-core traffic on SKL server.
+> > 
+> 
+> It could be. The 256KiB L2 in Skylake desktop can only store 8 order-3
+> pages and that means the allocator side may have a higher chance of
+> reusing a page that is evicted from the free cpu's L2 cache than the
+> server machine, whose L2 can store 40 order-3 pages.
+> 
+> I can do more tests using different high for the two machines:
+> 1) high=0, this is the case when page reuse is the extreme. core-2-core
+> transfer should be the most. This is the behavior of this bisected commit.
+> 2) high=L2_size, this is the case when page reuse is fewer compared to
+> the above case, core-2-core should still be the majority.
+> 3) high=2 times of L2_size and smaller than llc size, this is the case
+> when cache reuse is further reduced, and when the page is indeed reused,
+> it shouldn't cause core-2-core transfer but can benefit from llc.
+> 4) high>llc_size, this is the case when page reuse is the least and when
+> page is indeed reused, it is likely not in the entire cache hierarchy.
+> This is the behavior of this bisected commit's parent commit for the
+> Skylake desktop machine.
+> 
+> I expect case 3) should give us the best performance and 1) or 4) is the
+> worst for this testcase.
+> 
+> case 4) is difficult to test on the server machine due to the cap of
+> pcp->high which is affected by the low watermark of the zone. The server
+> machine has 128 cpus but only 128G memory, which makes the pcp->high
+> capped at 421, while llc size is 40MiB and that translates to a page
+> number of 12288.
+> > 
 
-Given that apparently it does, though, I'm okay with it going through.
-(I'll just grumble quietly in my corner. :-))
+Sounds good to me.
 
-Reviewed-by: David Gow <davidgow@google.com>
+Best Regards,
+Huang, Ying
 
--- David
+> > > Is it that this "overhead" is much greater
+> > > in server machine to the extent that it is even better to use a totally
+> > > cold page than a hot one?
+> > 
+> > Yes.  And I think the private cache size matters here.  And after being
+> > evicted from the private cache (L1/L2), the cache lines of the reused
+> > pages will go to shared cache (L3), that will help performance.
+> > 
+> 
+> Sounds reasonable.
+> 
+> > > If so, it seems to suggest we should avoid
+> > > cache reuse in server machine unless the two CPUs happens to be two
+> > > hyperthreads of the same core.
+> > 
+> > Yes.  I think so.
 
-> Note: this patch only applies cleanly on top of https://lore.kernel.org/linux-kselftest/20220426173334.3871399-3-dlatypov@google.com
-> ---
->  tools/testing/kunit/kunit.py           |  9 +++----
->  tools/testing/kunit/kunit_config.py    | 12 ++++-----
->  tools/testing/kunit/kunit_json.py      |  5 +---
->  tools/testing/kunit/kunit_kernel.py    | 10 +++----
->  tools/testing/kunit/kunit_parser.py    | 37 ++++++++++++--------------
->  tools/testing/kunit/kunit_tool_test.py | 10 ++++---
->  tools/testing/kunit/run_checks.py      |  2 +-
->  7 files changed, 39 insertions(+), 46 deletions(-)
->
-> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index 6dc710d3996b..13bd72e47da8 100755
-> --- a/tools/testing/kunit/kunit.py
-> +++ b/tools/testing/kunit/kunit.py
-> @@ -124,7 +124,7 @@ def _list_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest)
->         lines.pop()
->
->         # Filter out any extraneous non-test output that might have gotten mixed in.
-> -       return [l for l in lines if re.match('^[^\s.]+\.[^\s.]+$', l)]
-> +       return [l for l in lines if re.match(r'^[^\s.]+\.[^\s.]+$', l)]
->
->  def _suites_from_test_list(tests: List[str]) -> List[str]:
->         """Extracts all the suites from an ordered list of tests."""
-> @@ -188,8 +188,7 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
->  def _map_to_overall_status(test_status: kunit_parser.TestStatus) -> KunitStatus:
->         if test_status in (kunit_parser.TestStatus.SUCCESS, kunit_parser.TestStatus.SKIPPED):
->                 return KunitStatus.SUCCESS
-> -       else:
-> -               return KunitStatus.TEST_FAILURE
-> +       return KunitStatus.TEST_FAILURE
->
->  def parse_tests(request: KunitParseRequest, metadata: kunit_json.Metadata, input_data: Iterable[str]) -> Tuple[KunitResult, kunit_parser.Test]:
->         parse_start = time.time()
-> @@ -353,7 +352,7 @@ def add_exec_opts(parser) -> None:
->                             'a non-hermetic test, one that might pass/fail based on '
->                             'what ran before it.',
->                             type=str,
-> -                           choices=['suite', 'test']),
-> +                           choices=['suite', 'test'])
->
->  def add_parse_opts(parser) -> None:
->         parser.add_argument('--raw_output', help='If set don\'t format output from kernel. '
-> @@ -497,7 +496,7 @@ def main(argv, linux=None):
->                 if result.status != KunitStatus.SUCCESS:
->                         sys.exit(1)
->         elif cli_args.subcommand == 'parse':
-> -               if cli_args.file == None:
-> +               if cli_args.file is None:
->                         sys.stdin.reconfigure(errors='backslashreplace')  # pytype: disable=attribute-error
->                         kunit_output = sys.stdin
->                 else:
-> diff --git a/tools/testing/kunit/kunit_config.py b/tools/testing/kunit/kunit_config.py
-> index ca33e4b7bcc5..75a8dc1683d4 100644
-> --- a/tools/testing/kunit/kunit_config.py
-> +++ b/tools/testing/kunit/kunit_config.py
-> @@ -20,16 +20,15 @@ class KconfigEntry:
->
->         def __str__(self) -> str:
->                 if self.value == 'n':
-> -                       return r'# CONFIG_%s is not set' % (self.name)
-> -               else:
-> -                       return r'CONFIG_%s=%s' % (self.name, self.value)
-> +                       return f'# CONFIG_{self.name} is not set'
-> +               return f'CONFIG_{self.name}={self.value}'
->
->
->  class KconfigParseError(Exception):
->         """Error parsing Kconfig defconfig or .config."""
->
->
-> -class Kconfig(object):
-> +class Kconfig:
->         """Represents defconfig or .config specified using the Kconfig language."""
->
->         def __init__(self) -> None:
-> @@ -49,7 +48,7 @@ class Kconfig(object):
->                                 if a.value == 'n':
->                                         continue
->                                 return False
-> -                       elif a.value != b:
-> +                       if a.value != b:
->                                 return False
->                 return True
->
-> @@ -91,6 +90,5 @@ def parse_from_string(blob: str) -> Kconfig:
->
->                 if line[0] == '#':
->                         continue
-> -               else:
-> -                       raise KconfigParseError('Failed to parse: ' + line)
-> +               raise KconfigParseError('Failed to parse: ' + line)
->         return kconfig
-> diff --git a/tools/testing/kunit/kunit_json.py b/tools/testing/kunit/kunit_json.py
-> index 1212423fe6bc..10ff65689dd8 100644
-> --- a/tools/testing/kunit/kunit_json.py
-> +++ b/tools/testing/kunit/kunit_json.py
-> @@ -8,12 +8,9 @@
->
->  from dataclasses import dataclass
->  import json
-> -import os
-> -
-> -import kunit_parser
-> +from typing import Any, Dict
->
->  from kunit_parser import Test, TestStatus
-> -from typing import Any, Dict
->
->  @dataclass
->  class Metadata:
-> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-> index 483f78e15ce9..93446a2b6414 100644
-> --- a/tools/testing/kunit/kunit_kernel.py
-> +++ b/tools/testing/kunit/kunit_kernel.py
-> @@ -37,7 +37,7 @@ class BuildError(Exception):
->         """Represents an error trying to build the Linux kernel."""
->
->
-> -class LinuxSourceTreeOperations(object):
-> +class LinuxSourceTreeOperations:
->         """An abstraction over command line operations performed on a source tree."""
->
->         def __init__(self, linux_arch: str, cross_compile: Optional[str]):
-> @@ -52,7 +52,7 @@ class LinuxSourceTreeOperations(object):
->                 except subprocess.CalledProcessError as e:
->                         raise ConfigError(e.output.decode())
->
-> -       def make_arch_qemuconfig(self, kconfig: kunit_config.Kconfig) -> None:
-> +       def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) -> None:
->                 pass
->
->         def make_allyesconfig(self, build_dir: str, make_options) -> None:
-> @@ -180,7 +180,7 @@ def get_source_tree_ops(arch: str, cross_compile: Optional[str]) -> LinuxSourceT
->         config_path = os.path.join(QEMU_CONFIGS_DIR, arch + '.py')
->         if arch == 'um':
->                 return LinuxSourceTreeOperationsUml(cross_compile=cross_compile)
-> -       elif os.path.isfile(config_path):
-> +       if os.path.isfile(config_path):
->                 return get_source_tree_ops_from_qemu_config(config_path, cross_compile)[1]
->
->         options = [f[:-3] for f in os.listdir(QEMU_CONFIGS_DIR) if f.endswith('.py')]
-> @@ -211,7 +211,7 @@ def get_source_tree_ops_from_qemu_config(config_path: str,
->         return params.linux_arch, LinuxSourceTreeOperationsQemu(
->                         params, cross_compile=cross_compile)
->
-> -class LinuxSourceTree(object):
-> +class LinuxSourceTree:
->         """Represents a Linux kernel source tree with KUnit tests."""
->
->         def __init__(
-> @@ -366,6 +366,6 @@ class LinuxSourceTree(object):
->                         waiter.join()
->                         subprocess.call(['stty', 'sane'])
->
-> -       def signal_handler(self, sig, frame) -> None:
-> +       def signal_handler(self, unused_sig, unused_frame) -> None:
->                 logging.error('Build interruption occurred. Cleaning console.')
->                 subprocess.call(['stty', 'sane'])
-> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-> index d56d530fab24..5c90842d7017 100644
-> --- a/tools/testing/kunit/kunit_parser.py
-> +++ b/tools/testing/kunit/kunit_parser.py
-> @@ -15,10 +15,9 @@ import sys
->
->  import datetime
->  from enum import Enum, auto
-> -from functools import reduce
->  from typing import Iterable, Iterator, List, Optional, Tuple
->
-> -class Test(object):
-> +class Test:
->         """
->         A class to represent a test parsed from KTAP results. All KTAP
->         results within a test log are stored in a main Test object as
-> @@ -126,17 +125,16 @@ class TestCounts:
->                 """
->                 if self.total() == 0:
->                         return TestStatus.NO_TESTS
-> -               elif self.crashed:
-> +               if self.crashed:
->                         # Crashes should take priority.
->                         return TestStatus.TEST_CRASHED
-> -               elif self.failed:
-> +               if self.failed:
->                         return TestStatus.FAILURE
-> -               elif self.passed:
-> +               if self.passed:
->                         # No failures or crashes, looks good!
->                         return TestStatus.SUCCESS
-> -               else:
-> -                       # We have only skipped tests.
-> -                       return TestStatus.SKIPPED
-> +               # We have only skipped tests.
-> +               return TestStatus.SKIPPED
->
->         def add_status(self, status: TestStatus) -> None:
->                 """Increments the count for `status`."""
-> @@ -381,7 +379,7 @@ def peek_test_name_match(lines: LineStream, test: Test) -> bool:
->         if not match:
->                 return False
->         name = match.group(4)
-> -       return (name == test.name)
-> +       return name == test.name
->
->  def parse_test_result(lines: LineStream, test: Test,
->                         expected_num: int) -> bool:
-> @@ -553,17 +551,16 @@ def format_test_result(test: Test) -> str:
->         String containing formatted test result
->         """
->         if test.status == TestStatus.SUCCESS:
-> -               return (green('[PASSED] ') + test.name)
-> -       elif test.status == TestStatus.SKIPPED:
-> -               return (yellow('[SKIPPED] ') + test.name)
-> -       elif test.status == TestStatus.NO_TESTS:
-> -               return (yellow('[NO TESTS RUN] ') + test.name)
-> -       elif test.status == TestStatus.TEST_CRASHED:
-> -               print_log(test.log)
-> -               return (red('[CRASHED] ') + test.name)
-> -       else:
-> +               return green('[PASSED] ') + test.name
-> +       if test.status == TestStatus.SKIPPED:
-> +               return yellow('[SKIPPED] ') + test.name
-> +       if test.status == TestStatus.NO_TESTS:
-> +               return yellow('[NO TESTS RUN] ') + test.name
-> +       if test.status == TestStatus.TEST_CRASHED:
->                 print_log(test.log)
-> -               return (red('[FAILED] ') + test.name)
-> +               return red('[CRASHED] ') + test.name
-> +       print_log(test.log)
-> +       return red('[FAILED] ') + test.name
->
->  def print_test_result(test: Test) -> None:
->         """
-> @@ -607,7 +604,7 @@ def print_summary_line(test: Test) -> None:
->         """
->         if test.status == TestStatus.SUCCESS:
->                 color = green
-> -       elif test.status == TestStatus.SKIPPED or test.status == TestStatus.NO_TESTS:
-> +       elif test.status in (TestStatus.SKIPPED, TestStatus.NO_TESTS):
->                 color = yellow
->         else:
->                 color = red
-> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> index 1200e451c418..d2ab24f736f8 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -251,8 +251,8 @@ class KUnitParserTest(unittest.TestCase):
->
->         def test_ignores_hyphen(self):
->                 hyphen_log = test_data_path('test_strip_hyphen.log')
-> -               file = open(hyphen_log)
-> -               result = kunit_parser.parse_run_tests(file.readlines())
-> +               with open(hyphen_log) as file:
-> +                       result = kunit_parser.parse_run_tests(file.readlines())
->
->                 # A skipped test does not fail the whole suite.
->                 self.assertEqual(
-> @@ -347,7 +347,7 @@ class LineStreamTest(unittest.TestCase):
->                 called_times = 0
->                 def generator():
->                         nonlocal called_times
-> -                       for i in range(1,5):
-> +                       for _ in range(1,5):
->                                 called_times += 1
->                                 yield called_times, str(called_times)
->
-> @@ -553,7 +553,8 @@ class KUnitMainTest(unittest.TestCase):
->         def test_exec_no_tests(self):
->                 self.linux_source_mock.run_kernel = mock.Mock(return_value=['TAP version 14', '1..0'])
->                 with self.assertRaises(SystemExit) as e:
-> -                 kunit.main(['run'], self.linux_source_mock)
-> +                       kunit.main(['run'], self.linux_source_mock)
-> +               self.assertEqual(e.exception.code, 1)
->                 self.linux_source_mock.run_kernel.assert_called_once_with(
->                         args=None, build_dir='.kunit', filter_glob='', timeout=300)
->                 self.print_mock.assert_any_call(StrContains(' 0 tests run!'))
-> @@ -588,6 +589,7 @@ class KUnitMainTest(unittest.TestCase):
->                 self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
->                 with self.assertRaises(SystemExit) as e:
->                         kunit.main(['run', '--raw_output=invalid'], self.linux_source_mock)
-> +               self.assertNotEqual(e.exception.code, 0)
->
->         def test_run_raw_output_does_not_take_positional_args(self):
->                 # --raw_output is a string flag, but we don't want it to consume
-> diff --git a/tools/testing/kunit/run_checks.py b/tools/testing/kunit/run_checks.py
-> index 13d854afca9d..066e6f938f6d 100755
-> --- a/tools/testing/kunit/run_checks.py
-> +++ b/tools/testing/kunit/run_checks.py
-> @@ -14,7 +14,7 @@ import shutil
->  import subprocess
->  import sys
->  import textwrap
-> -from typing import Dict, List, Sequence, Tuple
-> +from typing import Dict, List, Sequence
->
->  ABS_TOOL_PATH = os.path.abspath(os.path.dirname(__file__))
->  TIMEOUT = datetime.timedelta(minutes=5).total_seconds()
-> --
-> 2.36.0.512.ge40c2bad7a-goog
->
+

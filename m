@@ -2,117 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A61E522455
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 576CB522457
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349062AbiEJSqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 14:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51788 "EHLO
+        id S240303AbiEJStH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 14:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349220AbiEJSq2 (ORCPT
+        with ESMTP id S1349156AbiEJSrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 14:46:28 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91AD518B34;
-        Tue, 10 May 2022 11:45:49 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id n8so17550343plh.1;
-        Tue, 10 May 2022 11:45:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QcmVbQMJdfUcOk6mFPVNXkZt9bGV2i5Pf6lVs2tBzVA=;
-        b=bqoGmmeD2eU6J99z/Cgc1jne4RgQpPHqrHsn7nRf2qGdxNoZDNh+phWWtcjNahz+vS
-         2wzLLe0k7L5MgwOmXV4u8/e8bmA8y+KMxpTTK99CMER/yylrAfLNCrqM9pBf4i8UPd7F
-         x01rnWDdO+g2G5i63rBkpou6zn2e8F2IVVB5UC2Jw0+9aTu1xi5qjBcJ3hsflIlrPT7D
-         Fr1W3f5vuXq3n3FeAS3U9rxOJGPOC01ANdO9TUcgKDyYhKd+50y7a7itYHn4PBVJVHuC
-         VJlXsJyHAWPwf/exDBl0ViOp0cw4dcXe1tEtFWNk1LNpx6jxtPpqSnV/GN0vySoL0GbS
-         QV9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=QcmVbQMJdfUcOk6mFPVNXkZt9bGV2i5Pf6lVs2tBzVA=;
-        b=d7rBX3oj2UXQw5op9+YslQFwDVQpTcDKv7wd65IOucGy0eilLiawDuCfYvawtILMqs
-         sXOG61Bv+hg/oWtFn9jXVPv32dbh9L9YY4w9fT1Npoj886qrV1EwkYyBxrydV5/Bav6B
-         RCV8nx4AqehIui573NE/643eXs3KJzVm5Cx2AyUboL8Ok+VdlV0iv7jKHPcSDSXyQJaR
-         FQTgfB1YhgBcZ7VEze/IinhDip3SF0y+aDXzqCtXfSM2UYhMhut73hMopMlURmbfWQ5k
-         aW+Bp2CSL7c6sHhh0lyyndYoEU/VfIV4nGnXdN9+vMsuBgPMp91Ks+ezZyfqMabK0q6G
-         Qujw==
-X-Gm-Message-State: AOAM531xhKKmyJpoomxArpM+Z3dZusE8kMyGSa1IfG8cvekg1X02RYQ9
-        nTTxmM+vuQFFYkck3/64lCs=
-X-Google-Smtp-Source: ABdhPJzeiJHpXyGWeMyPwywIJfNtJuhkuj9PeElHaoIQmiZg/wqFKE7FFfFomIYdVMAGygq+gTnBKg==
-X-Received: by 2002:a17:903:1247:b0:156:25b4:4206 with SMTP id u7-20020a170903124700b0015625b44206mr22221552plh.146.1652208348998;
-        Tue, 10 May 2022 11:45:48 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::4:6c64])
-        by smtp.gmail.com with ESMTPSA id az4-20020a170902a58400b0015ee1797c7asm2410584plb.113.2022.05.10.11.45.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 11:45:48 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 10 May 2022 08:45:47 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, cgroups@vger.kernel.org
-Subject: Re: [RFC PATCH bpf-next 2/9] cgroup: bpf: flush bpf stats on rstat
- flush
-Message-ID: <Ynqy20FjoCIqHZ1M@slm.duckdns.org>
-References: <20220510001807.4132027-1-yosryahmed@google.com>
- <20220510001807.4132027-3-yosryahmed@google.com>
+        Tue, 10 May 2022 14:47:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E6F1488BF
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 11:47:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652208426;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lDaf3WbpWZER89SWe3+3un2eTu5W4KfGxQhX3Ozl0ck=;
+        b=gj4lhj9EmMcwSE3d9fgxqAbxJTiQGQoYK0znMA7AEc7ojB0iGLj9wlmP513nBOmBkhmoWF
+        rnNz6DWXM/dLv6777YLd7ZYkGKz1LiN7JTB6rhhk4ATnTNXNrYaKZtCmKIl8RsvC6R6rTP
+        fTlkfXXqfBHcjm8LJZ9Kj3/3aLHEyG8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-5-Rr2WiEDLMQCstKY51qfaRw-1; Tue, 10 May 2022 14:47:03 -0400
+X-MC-Unique: Rr2WiEDLMQCstKY51qfaRw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D9AF8811E7A;
+        Tue, 10 May 2022 18:47:02 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 33974401E74;
+        Tue, 10 May 2022 18:47:02 +0000 (UTC)
+Message-ID: <56474c28-e62a-36b1-257b-9e5ffb11b0e2@redhat.com>
+Date:   Tue, 10 May 2022 14:47:02 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220510001807.4132027-3-yosryahmed@google.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [mm/page_alloc] f26b3fa046: netperf.Throughput_Mbps -18.0%
+ regression
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "ying.huang@intel.com" <ying.huang@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>
+Cc:     Aaron Lu <aaron.lu@intel.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        kernel test robot <oliver.sang@intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        kernel test robot <lkp@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        fengwei.yin@intel.com
+References: <20220420013526.GB14333@xsang-OptiPlex-9020>
+ <YmvMDyx05UoPFtQy@ziqianlu-desk1>
+ <bd3db4de223a010d1e06013e93b09879fc9b36a8.camel@intel.com>
+ <YnURx04+hE0sQ3v3@ziqianlu-desk1>
+ <7d20a9543f69523cfda280e3f5ab17d68db037ab.camel@intel.com>
+ <YnXnLuYjmEWdVyBP@ziqianlu-desk1>
+ <ae763d63e50d14650c5762103d113934412bef57.camel@intel.com>
+ <ba83270a-4f37-7d5a-b37a-0b7a6df5f5b4@intel.com>
+ <d13688d1483e9d87ec477292893f2916832b3bdc.camel@intel.com>
+ <c11ae803-cea7-8b7f-9992-2f640c90f104@intel.com>
+ <37dac785a08e3a341bf05d9ee35f19718ce83d26.camel@intel.com>
+ <CAHk-=wjguW5nxjagV99GHvc_-E_7mSg+LMvGtFjJ9LUSx4Skig@mail.gmail.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <CAHk-=wjguW5nxjagV99GHvc_-E_7mSg+LMvGtFjJ9LUSx4Skig@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 12:18:00AM +0000, Yosry Ahmed wrote:
-> When a cgroup is popped from the rstat updated tree, subsystems rstat
-> flushers are run through the css_rstat_flush() callback. Also run bpf
-> flushers for all subsystems that have at least one bpf rstat flusher
-> attached, and are enabled for this cgroup.
-> 
-> A list of subsystems that have attached rstat flushers is maintained to
-> avoid looping through all subsystems for all cpus for every cgroup that
-> is being popped from the updated tree. Since we introduce a lock here to
-> protect this list, also use it to protect rstat_flushers lists inside
-> each subsystem (since they both need to locked together anyway), and get
-> read of the locks in struct cgroup_subsys_bpf.
-> 
-> rstat flushers are run for any enabled subsystem that has flushers
-> attached, even if it does not subscribe to css flushing through
-> css_rstat_flush(). This gives flexibility for bpf programs to collect
-> stats for any subsystem, regardless of the implementation changes in the
-> kernel.
+On 5/10/22 14:05, Linus Torvalds wrote:
+> [ Adding locking people in case they have any input ]
+>
+> On Mon, May 9, 2022 at 11:23 PM ying.huang@intel.com
+> <ying.huang@intel.com> wrote:
+>>> Can you point me to the regression report? I would like to take a look,
+>>> thanks.
+>> https://lore.kernel.org/all/1425108604.10337.84.camel@linux.intel.com/
+> Hmm.
+>
+> That explanation looks believable, except that our qspinlocks
+> shouldn't be spinning on the lock itself, but spinning on the mcs node
+> it inserts into the lock.
+>
+> Or so I believed before I looked closer at the code again (it's been years).
+>
+> It turns out we spin on the lock itself if we're the "head waiter". So
+> somebody is always spinning.
+>
+> That's a bit unfortunate for this workload, I guess.
+>
+> I think from a pure lock standpoint, it's the right thing to do (no
+> unnecessary bouncing, with the lock releaser doing just one write, and
+> the head waiter spinning on it is doing the right thing).
+>
+> But I think this is an example of where you end up having that
+> spinning on the lock possibly then being a disturbance on the other
+> fields around the lock.
+>
+> I wonder if Waiman / PeterZ / Will have any comments on that. Maybe
+> that "spin on the lock itself" is just fundamentally the only correct
+> thing, but since my initial reaction was "no, we're spinning on the
+> mcs node", maybe that would be _possible_?
+>
+> We do have a lot of those spinlocks embedded in other data structures
+> cases. And if "somebody else is waiting for the lock" contends badly
+> with "the lock holder is doing a lot of writes close to the lock",
+> then that's not great.
 
-Yeah, again, the fact that these things are associated with a speicfic
-subsystem feels a bit jarring to me. Let's get that resolved first.
+Qspinlock still has one head waiter spinning on the lock. This is much 
+better than the original ticket spinlock where there will be n waiters 
+spinning on the lock. That is the cost of a cheap unlock. There is no 
+way to eliminate all lock spinning unless we use MCS lock directly which 
+will require a change in locking API as well as more expensive unlock.
 
-Thanks.
+Cheers,
+Longman
 
--- 
-tejun

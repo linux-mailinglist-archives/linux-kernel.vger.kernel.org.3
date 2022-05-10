@@ -2,76 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D16FA52240F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:31:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F30FD522416
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348987AbiEJSbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 14:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
+        id S1348963AbiEJSc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 14:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348947AbiEJSbN (ORCPT
+        with ESMTP id S1348808AbiEJScX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 14:31:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820D04477E;
-        Tue, 10 May 2022 11:31:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 10 May 2022 14:32:23 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1994E38A;
+        Tue, 10 May 2022 11:32:21 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 209E260C6E;
-        Tue, 10 May 2022 18:31:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 84BC3C385C2;
-        Tue, 10 May 2022 18:31:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652207470;
-        bh=3wbzCdPUumedt6nbcJr9g77t66aOTyWH8eo5PuqqxVE=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=nqWLoZl9vJr1KxzD/0pITSLnadScln1XYcfvJHAZIQbRzFZxyNXF2qdq9rvW4fOIW
-         uWwyzEKfuS1sZJz4aDKYnJDuwu8A/MgS68uHevLpg4tRWFGBQv59Qepf/OyI9/K/BK
-         mbV2ktT12rRdF6G/jLDk93cZ4PXsTALmgR1AJR6cn+cyHfm1Aap003PMESq3Vk0XxJ
-         n9Xr2DzVrvHX4/aZO+1RR/lLPSFGvV1Q5XoHeMo2IK/mF8C3XascdfRVEjm/xxltcq
-         O3pvzzErxiUcIvG0c3SD/V7G9QoJyuTkgx97IPKlTOTKKy/93Bkora1oVyUiCc+OSQ
-         +cll+nIMUHuew==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 70595F0392D;
-        Tue, 10 May 2022 18:31:10 +0000 (UTC)
-Subject: Re: [GIT PULL] virtio: last minute fixup
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220510082351-mutt-send-email-mst@kernel.org>
-References: <20220510082351-mutt-send-email-mst@kernel.org>
-X-PR-Tracked-List-Id: <kvm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220510082351-mutt-send-email-mst@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
-X-PR-Tracked-Commit-Id: 7ff960a6fe399fdcbca6159063684671ae57eee9
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: feb9c5e19e913b53cb536a7aa7c9f20107bb51ec
-Message-Id: <165220747045.23919.144863447335101428.pr-tracker-bot@kernel.org>
-Date:   Tue, 10 May 2022 18:31:10 +0000
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mie@igel.co.jp, mst@redhat.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1E0DA1EC0354;
+        Tue, 10 May 2022 20:32:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1652207536;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=YwlI4SOdaCiIF2T0fRasnf3pb0Dz0W+PbTJT112BTbI=;
+        b=qtivRA6UZ8N6glsgC7YCH4Cm2zMMzUrDPR5yH/pAfaBCOygYNvflOfciVP7oT8Np8O/88W
+        CgzdPyC6lZl0zGjd536DXox2BLwQQZXRDAB0JHlgjwISgp0GqwOGue4hyBNWd+iqwogCc/
+        /bYQ0+dDaSjuHp0NUl7USPvcr5qTq8s=
+Date:   Tue, 10 May 2022 20:32:23 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv5 08/12] x86/mm: Provide helpers for unaccepted memory
+Message-ID: <Ynqvtyjp77ywiI6f@zn.tnic>
+References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
+ <20220425033934.68551-9-kirill.shutemov@linux.intel.com>
+ <YnJfhiiHn+48H2vb@zn.tnic>
+ <20220506161359.4j5j5fxrw53fdbyr@box.shutemov.name>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220506161359.4j5j5fxrw53fdbyr@box.shutemov.name>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 10 May 2022 08:23:51 -0400:
+On Fri, May 06, 2022 at 07:13:59PM +0300, Kirill A. Shutemov wrote:
+> Failure to accept the memory is fatal. Why pretend it is not?
+> 
+> For TDX it will result in a crash on the first access. Prolonging the
+> suffering just make it harder to understand what happened.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
+Ok then. Does that panic message contain enough info so that the
+acceptance failure can be debugged?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/feb9c5e19e913b53cb536a7aa7c9f20107bb51ec
+Just "Cannot accept memory" doesn't seem very helpful to me...
 
-Thank you!
+> That's true. Note also that the check is inherently racy. Other CPU can
+> get the range or subrange accepted just after spin_unlock().
+> 
+> The check indicates that accept_memory() has to be called on the range
+> before first access.
+> 
+> Do you have problem with a name? Maybe has_unaccepted_memory()?
+
+I have a problem with the definition of this function, what it is
+supposed to do and how it is supposed to be used.
+
+Right now, it looks weird and strange: is it supposed to check for *all*
+in-between (start, end)? It doesn't, atm, so what's the meaning of
+@start and @end then at all?
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

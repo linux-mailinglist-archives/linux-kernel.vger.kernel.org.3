@@ -2,94 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53D665223B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D62255223B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:16:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348800AbiEJSTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 14:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
+        id S242757AbiEJSUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 14:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348890AbiEJSTn (ORCPT
+        with ESMTP id S1348900AbiEJSTn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 10 May 2022 14:19:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E062B52C6;
-        Tue, 10 May 2022 11:15:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CAA961AFD;
-        Tue, 10 May 2022 18:15:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F883C385A6;
-        Tue, 10 May 2022 18:15:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652206511;
-        bh=VIBVcwjyo7mXs7/cLCcqyRqJzfOhOX/AHUyka9JqqoU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XE0o0SfLqqhE0ZDyvHRMT2rMu5YLOworrGQsrzJcfr19s2br+nteuT0lXarYoNzK8
-         JxtMiFEbwBwFH6kAazlK+38ADbpncT1bRow6NIBFyzX6LzJBmYyAOKbRQDPIxgmXfM
-         /QiFrPpONgTtA+EHOjAu4sHbUWAl5NtDm1CzYvRWyiF6Td5DaM9MhG7LpwLl92vMwY
-         G/lkj1ep+/lhMVrY6pjJeODBPJnoozNypQ3fakMFLp/jkrynyL3sZp/IcvF3SCWPOO
-         fPJdWxkiKq9VH1iNU0VLUCR1fuViKAMMFPTqnOa+sFq9JAZrdiD9u0EyTH7m+yT6y7
-         /9qitzTNayXMA==
-Date:   Tue, 10 May 2022 19:15:04 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     madvenka@linux.microsoft.com
-Cc:     mark.rutland@arm.com, jpoimboe@redhat.com, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
-        linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v14 1/7] arm64: Split unwind_init()
-Message-ID: <YnqrqI/Xdq9RMwoc@sirena.org.uk>
-References: <f460a35f88195413bcf7305e5083480aab3ca858>
- <20220413140528.3815-1-madvenka@linux.microsoft.com>
- <20220413140528.3815-2-madvenka@linux.microsoft.com>
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE141F35F0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 11:15:20 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id n10so5476198pjh.5
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 11:15:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=xVJHepNq93ePmAbCv1LHbdOWJcqWYQh8v11fr0KUdVw=;
+        b=HgSsKBi5k0fBFVaRT3c2wk58w2JULl54e+PSGu26qGqlTVFrSRSJ+FiH0YYse/uYz/
+         kFpkwW2bbWhl17NGTC7wwsarTerdi0j2KLG1CbweEHhWeGZMbV7d23wd2afwmwZtiHAG
+         SEzwGc5cLSToV22krmEZGW894USkUbUaear+hT+1TthF1rFLJ2hYw/6ZMItew4TG/OmL
+         R5GLLmt1wiiR/om+VyBo4wDTww5AKRYH+Y2PM3hy4t5sOCHZXhjMbgfKG5EpLXoiG2Yn
+         KAD15eEkk8vnI0Flz0HICOlPpt9019Z+MyoPkOR7VhoFm2kSvURMOU7rUe02Mj2rruEj
+         WcwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=xVJHepNq93ePmAbCv1LHbdOWJcqWYQh8v11fr0KUdVw=;
+        b=Lef6u6hUkhwnd+Sdl25nlbkg76xSPPYznwtSe58oieqAfklpr01rZtqUziqkAD89Ki
+         /Ei6XkcnQP+BDrqdKKIPAoKaBtp/e9ya7a6hk6nbFGf931Umt67H/QHKT7RpMELTVaV+
+         LVQV6m4w8MMDyE9PoaMvEccg1yOu7Ara7lloOq0H7w7Vkn8kn4SPidXHw+7DenZeBDD4
+         uesfqRiAzVDNUCzq8Y9S7OV3dyj/MSGJS9/wjPrrMM50P2dAVL0hH8uySxRiQQtEBm8i
+         iGrBY5/8wodNL+5Awev8D+HlNiedu8090mt9GL0Sp7Wi8iw+4yqbNMafeBp7Lt/Tguor
+         etZA==
+X-Gm-Message-State: AOAM533RDa0Bi6n7uK0NPxRiY5nr173ER6TPGhdlc/J3PzKFTow+2mk4
+        WzX974fas2752kaiw5VCRr3+b4YNVEzfKYMXL2A=
+X-Google-Smtp-Source: ABdhPJz4jXQJ/UD8MhuVFwYpgm8f2BOv5bvc9n7ZRcoJ2zIZZov8kWaETwlfELbSqEOglVth1S/HxQgeZDTe/PMkqNY=
+X-Received: by 2002:a17:903:2002:b0:15c:686f:da1a with SMTP id
+ s2-20020a170903200200b0015c686fda1amr21568109pla.30.1652206519258; Tue, 10
+ May 2022 11:15:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="S1gfJnV9doaxbnA7"
-Content-Disposition: inline
-In-Reply-To: <20220413140528.3815-2-madvenka@linux.microsoft.com>
-X-Cookie: I've read SEVEN MILLION books!!
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a10:8ecf:0:0:0:0 with HTTP; Tue, 10 May 2022 11:15:18
+ -0700 (PDT)
+Reply-To: lilywilliam989@gmail.com
+From:   Lily William <ysani0298@gmail.com>
+Date:   Tue, 10 May 2022 10:15:18 -0800
+Message-ID: <CAENZtnV9z=ZUsmPoF=qibmvDNeogKiQdqh+HYDj_ryZ3JX2p7w@mail.gmail.com>
+Subject: Hi Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:102b listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [lilywilliam989[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [ysani0298[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ysani0298[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+-- 
+Hi Dear,
 
---S1gfJnV9doaxbnA7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+My name is Lily William, I am from the United States of America. It's my
+pleasure to contact you for a new and special friendship. I will be glad to
+see your reply so we can get to know each other better.
 
-On Wed, Apr 13, 2022 at 09:05:22AM -0500, madvenka@linux.microsoft.com wrot=
-e:
-> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
->=20
-> unwind_init() is currently a single function that initializes all of the
-> unwind state. Split it into the following functions and call them
-> appropriately:
-
-Reviewed-by: Mark Brown <broonie@kernel.org>
-
---S1gfJnV9doaxbnA7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJ6q6cACgkQJNaLcl1U
-h9Bg9AgAgl+At82Yt7N4YFfo4vqhuLFjD/f8TsuKv01xPB7ZGnlmbPsWJg+9l7h/
-FukrNbDpta6SMamILiT9VfsPoxpKaukQXNeNKfDmshGimH8rXVLzITIwRt3+2sE6
-+fyIUvrWnGLUYmW3FMgAMXvZ5eGypo3YTA5IknFQLfD5pOQbgMUO2rucC9ncDd6P
-//T4rX9KbzJOEL89CSApDP8yihbSEDjbrHQAgL8yHz8QBaiXix3Kn4jdvqF58vf0
-OilJ7GZeO3a8x6mUaO6l8oX+h1vWwlcb0DXrxb046XN3GDv3sTMnQLy9N/+F6npK
-6HWk/mEdAedGpbJZaWxpq/Y9jR8HPg==
-=iN7k
------END PGP SIGNATURE-----
-
---S1gfJnV9doaxbnA7--
+Yours
+Lily

@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C580952188A
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E841521988
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244539AbiEJNhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:37:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
+        id S243619AbiEJNtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243677AbiEJN1Q (ORCPT
+        with ESMTP id S243808AbiEJNcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:27:16 -0400
+        Tue, 10 May 2022 09:32:15 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFCE23BB68;
-        Tue, 10 May 2022 06:20:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596A82CE21B;
+        Tue, 10 May 2022 06:22:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EFF361718;
-        Tue, 10 May 2022 13:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77157C385C2;
-        Tue, 10 May 2022 13:20:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA447616E8;
+        Tue, 10 May 2022 13:22:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00E7AC385C2;
+        Tue, 10 May 2022 13:22:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188816;
-        bh=Uxla52M27+0qSzgfL2qiyHT91PQLi/q28UXlL77YfxI=;
+        s=korg; t=1652188937;
+        bh=ryGuLZuTVvELjmOAxyFYd+KsX+jKUysPaiqjQMBv6xg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z7Ladz9hJHRgRqGjowHcxdTqULWWUnYBxB4uFogHfjgmYaK+Bou0Zj1KQk42ff6wd
-         0rDmOOIoCbeHltKdJ5ucxViZwqbdDuJzY6FeBepVMNBm0oWjw7Yaq8TfeYHFFUZo1F
-         ct/kN/ibKY9ABEgEpOAIxrri0S0tAdut1IJF+IbE=
+        b=NfeZMt7I1Kw/RX+KMO4eZHThjTo6LBfU5P4IiHeAF5iNviDnhZH9+rOXdELc2shKS
+         a6WDWH60uXrg7xqMbAsjHd2STS2PiNYK39LxuLKT3/XxzYrIO7AU5uX+prYpsr6jwQ
+         qypNxp+i70itNQbK/ARvUf2ZpwYhhuHiHsfRmHW4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH 4.19 54/88] tty: n_gsm: fix wrong command retry handling
+        stable@vger.kernel.org, Thomas Pfaff <tpfaff@pcs.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>
+Subject: [PATCH 5.4 10/52] genirq: Synchronize interrupt thread startup
 Date:   Tue, 10 May 2022 15:07:39 +0200
-Message-Id: <20220510130735.314933416@linuxfoundation.org>
+Message-Id: <20220510130730.159096997@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
-References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
+References: <20220510130729.852544477@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,66 +55,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+From: Thomas Pfaff <tpfaff@pcs.com>
 
-commit d0bcdffcad5a22f202e3bf37190c0dd8c080ea92 upstream.
+commit 8707898e22fd665bc1d7b18b809be4b56ce25bdd upstream.
 
-n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
-See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
-The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
-the newer 27.010 here. Chapter 5.7.3 states that the valid range for the
-maximum number of retransmissions (N2) is from 0 to 255 (both including).
-gsm_config() fails to limit this range correctly. Furthermore,
-gsm_control_retransmit() handles this number incorrectly by performing
-N2 - 1 retransmission attempts. Setting N2 to zero results in more than 255
-retransmission attempts.
-Fix the range check in gsm_config() and the value handling in
-gsm_control_send() and gsm_control_retransmit() to comply with 3GPP 27.010.
+A kernel hang can be observed when running setserial in a loop on a kernel
+with force threaded interrupts. The sequence of events is:
 
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+   setserial
+     open("/dev/ttyXXX")
+       request_irq()
+     do_stuff()
+      -> serial interrupt
+         -> wake(irq_thread)
+	      desc->threads_active++;
+     close()
+       free_irq()
+         kthread_stop(irq_thread)
+     synchronize_irq() <- hangs because desc->threads_active != 0
+
+The thread is created in request_irq() and woken up, but does not get on a
+CPU to reach the actual thread function, which would handle the pending
+wake-up. kthread_stop() sets the should stop condition which makes the
+thread immediately exit, which in turn leaves the stale threads_active
+count around.
+
+This problem was introduced with commit 519cc8652b3a, which addressed a
+interrupt sharing issue in the PCIe code.
+
+Before that commit free_irq() invoked synchronize_irq(), which waits for
+the hard interrupt handler and also for associated threads to complete.
+
+To address the PCIe issue synchronize_irq() was replaced with
+__synchronize_hardirq(), which only waits for the hard interrupt handler to
+complete, but not for threaded handlers.
+
+This was done under the assumption, that the interrupt thread already
+reached the thread function and waits for a wake-up, which is guaranteed to
+be handled before acting on the stop condition. The problematic case, that
+the thread would not reach the thread function, was obviously overlooked.
+
+Make sure that the interrupt thread is really started and reaches
+thread_fn() before returning from __setup_irq().
+
+This utilizes the existing wait queue in the interrupt descriptor. The
+wait queue is unused for non-shared interrupts. For shared interrupts the
+usage might cause a spurious wake-up of a waiter in synchronize_irq() or the
+completion of a threaded handler might cause a spurious wake-up of the
+waiter for the ready flag. Both are harmless and have no functional impact.
+
+[ tglx: Amended changelog ]
+
+Fixes: 519cc8652b3a ("genirq: Synchronize only with single thread on free_irq()")
+Signed-off-by: Thomas Pfaff <tpfaff@pcs.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Marc Zyngier <maz@kernel.org>
 Cc: stable@vger.kernel.org
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-Link: https://lore.kernel.org/r/20220414094225.4527-11-daniel.starke@siemens.com
+Link: https://lore.kernel.org/r/552fe7b4-9224-b183-bb87-a8f36d335690@pcs.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/n_gsm.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ kernel/irq/internals.h |    2 ++
+ kernel/irq/irqdesc.c   |    2 ++
+ kernel/irq/manage.c    |   39 +++++++++++++++++++++++++++++----------
+ 3 files changed, 33 insertions(+), 10 deletions(-)
 
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -1329,7 +1329,6 @@ static void gsm_control_retransmit(struc
- 	spin_lock_irqsave(&gsm->control_lock, flags);
- 	ctrl = gsm->pending_cmd;
- 	if (ctrl) {
--		gsm->cretries--;
- 		if (gsm->cretries == 0) {
- 			gsm->pending_cmd = NULL;
- 			ctrl->error = -ETIMEDOUT;
-@@ -1338,6 +1337,7 @@ static void gsm_control_retransmit(struc
- 			wake_up(&gsm->event);
- 			return;
- 		}
-+		gsm->cretries--;
- 		gsm_control_transmit(gsm, ctrl);
- 		mod_timer(&gsm->t2_timer, jiffies + gsm->t2 * HZ / 100);
+--- a/kernel/irq/internals.h
++++ b/kernel/irq/internals.h
+@@ -29,12 +29,14 @@ extern struct irqaction chained_action;
+  * IRQTF_WARNED    - warning "IRQ_WAKE_THREAD w/o thread_fn" has been printed
+  * IRQTF_AFFINITY  - irq thread is requested to adjust affinity
+  * IRQTF_FORCED_THREAD  - irq action is force threaded
++ * IRQTF_READY     - signals that irq thread is ready
+  */
+ enum {
+ 	IRQTF_RUNTHREAD,
+ 	IRQTF_WARNED,
+ 	IRQTF_AFFINITY,
+ 	IRQTF_FORCED_THREAD,
++	IRQTF_READY,
+ };
+ 
+ /*
+--- a/kernel/irq/irqdesc.c
++++ b/kernel/irq/irqdesc.c
+@@ -405,6 +405,7 @@ static struct irq_desc *alloc_desc(int i
+ 	lockdep_set_class(&desc->lock, &irq_desc_lock_class);
+ 	mutex_init(&desc->request_mutex);
+ 	init_rcu_head(&desc->rcu);
++	init_waitqueue_head(&desc->wait_for_threads);
+ 
+ 	desc_set_defaults(irq, desc, node, affinity, owner);
+ 	irqd_set(&desc->irq_data, flags);
+@@ -573,6 +574,7 @@ int __init early_irq_init(void)
+ 		raw_spin_lock_init(&desc[i].lock);
+ 		lockdep_set_class(&desc[i].lock, &irq_desc_lock_class);
+ 		mutex_init(&desc[i].request_mutex);
++		init_waitqueue_head(&desc[i].wait_for_threads);
+ 		desc_set_defaults(i, &desc[i], node, NULL, NULL);
  	}
-@@ -1378,7 +1378,7 @@ retry:
+ 	return arch_early_irq_init();
+--- a/kernel/irq/manage.c
++++ b/kernel/irq/manage.c
+@@ -1103,6 +1103,31 @@ static void irq_wake_secondary(struct ir
+ }
  
- 	/* If DLCI0 is in ADM mode skip retries, it won't respond */
- 	if (gsm->dlci[0]->mode == DLCI_MODE_ADM)
--		gsm->cretries = 1;
-+		gsm->cretries = 0;
- 	else
- 		gsm->cretries = gsm->n2;
+ /*
++ * Internal function to notify that a interrupt thread is ready.
++ */
++static void irq_thread_set_ready(struct irq_desc *desc,
++				 struct irqaction *action)
++{
++	set_bit(IRQTF_READY, &action->thread_flags);
++	wake_up(&desc->wait_for_threads);
++}
++
++/*
++ * Internal function to wake up a interrupt thread and wait until it is
++ * ready.
++ */
++static void wake_up_and_wait_for_irq_thread_ready(struct irq_desc *desc,
++						  struct irqaction *action)
++{
++	if (!action || !action->thread)
++		return;
++
++	wake_up_process(action->thread);
++	wait_event(desc->wait_for_threads,
++		   test_bit(IRQTF_READY, &action->thread_flags));
++}
++
++/*
+  * Interrupt handler thread
+  */
+ static int irq_thread(void *data)
+@@ -1113,6 +1138,8 @@ static int irq_thread(void *data)
+ 	irqreturn_t (*handler_fn)(struct irq_desc *desc,
+ 			struct irqaction *action);
  
-@@ -2517,7 +2517,7 @@ static int gsmld_config(struct tty_struc
- 	/* Check the MRU/MTU range looks sane */
- 	if (c->mru > MAX_MRU || c->mtu > MAX_MTU || c->mru < 8 || c->mtu < 8)
- 		return -EINVAL;
--	if (c->n2 < 3)
-+	if (c->n2 > 255)
- 		return -EINVAL;
- 	if (c->encapsulation > 1)	/* Basic, advanced, no I */
- 		return -EINVAL;
++	irq_thread_set_ready(desc, action);
++
+ 	if (force_irqthreads && test_bit(IRQTF_FORCED_THREAD,
+ 					&action->thread_flags))
+ 		handler_fn = irq_forced_thread_fn;
+@@ -1541,8 +1568,6 @@ __setup_irq(unsigned int irq, struct irq
+ 	}
+ 
+ 	if (!shared) {
+-		init_waitqueue_head(&desc->wait_for_threads);
+-
+ 		/* Setup the type (level, edge polarity) if configured: */
+ 		if (new->flags & IRQF_TRIGGER_MASK) {
+ 			ret = __irq_set_trigger(desc,
+@@ -1632,14 +1657,8 @@ __setup_irq(unsigned int irq, struct irq
+ 
+ 	irq_setup_timings(desc, new);
+ 
+-	/*
+-	 * Strictly no need to wake it up, but hung_task complains
+-	 * when no hard interrupt wakes the thread up.
+-	 */
+-	if (new->thread)
+-		wake_up_process(new->thread);
+-	if (new->secondary)
+-		wake_up_process(new->secondary->thread);
++	wake_up_and_wait_for_irq_thread_ready(desc, new);
++	wake_up_and_wait_for_irq_thread_ready(desc, new->secondary);
+ 
+ 	register_irq_proc(irq, desc);
+ 	new->dir = NULL;
 
 

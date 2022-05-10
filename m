@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3240D521A5F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF8745216E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245106AbiEJN5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45700 "EHLO
+        id S242569AbiEJNUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245118AbiEJNic (ORCPT
+        with ESMTP id S242523AbiEJNSc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:38:32 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC46245611;
-        Tue, 10 May 2022 06:27:10 -0700 (PDT)
+        Tue, 10 May 2022 09:18:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBA560AA3;
+        Tue, 10 May 2022 06:13:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E0F57CE1EDE;
-        Tue, 10 May 2022 13:27:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE414C385C6;
-        Tue, 10 May 2022 13:27:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46967B81DA3;
+        Tue, 10 May 2022 13:13:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9472CC385A6;
+        Tue, 10 May 2022 13:13:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189227;
-        bh=IWBx+5sO3Vp2iBsahPhayhdg6TUAZM8E8BQ3PDzgWgI=;
+        s=korg; t=1652188384;
+        bh=Nfz6zpMbbUxf74e5+rOO/C5sHyZZWyuK0ySQn8EgPfM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o1j2iIujho08PF6DqqogWkkKeGYkFitKx+FgCxlo5ZtYvIR6FBP3tPU/QMUj3UXGt
-         IIcvv7dCVU2s+Uoo960eXhCp3voMAXvjInZVmMy74oKydzesRBu9HagFeBj5/VH4D2
-         pS6j8GYhxSOHh4oWs6iuLBpG3ZTo66zSapvPSztI=
+        b=sAs5jKzgu6/3w6CHJVtt1T9nQQWJvGP4fe+ecU8o1byJ5Dba9wYL8K5ktBQkhd5EV
+         Nj3NGi/7Ll3XoXTnfz//59ab0y2lTlSLHp3Vhy7s4ZPM3bpyE+RjLzwalLMc1T8pi1
+         E1nWZfk9vMTTHLBYyhVSiB49bkbt/ZEUjGOlqUgY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        Andreas Larsson <andreas@gaisler.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5.10 26/70] can: grcan: grcan_close(): fix deadlock
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH 4.9 55/66] NFC: netlink: fix sleep in atomic bug when firmware download timeout
 Date:   Tue, 10 May 2022 15:07:45 +0200
-Message-Id: <20220510130733.634427211@linuxfoundation.org>
+Message-Id: <20220510130731.379769655@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
-References: <20220510130732.861729621@linuxfoundation.org>
+In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
+References: <20220510130729.762341544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,52 +57,63 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Duoming Zhou <duoming@zju.edu.cn>
 
-commit 47f070a63e735bcc8d481de31be1b5a1aa62b31c upstream.
+commit 4071bf121d59944d5cd2238de0642f3d7995a997 upstream.
 
-There are deadlocks caused by del_timer_sync(&priv->hang_timer) and
-del_timer_sync(&priv->rr_timer) in grcan_close(), one of the deadlocks
-are shown below:
+There are sleep in atomic bug that could cause kernel panic during
+firmware download process. The root cause is that nlmsg_new with
+GFP_KERNEL parameter is called in fw_dnld_timeout which is a timer
+handler. The call trace is shown below:
 
-   (Thread 1)              |      (Thread 2)
-                           | grcan_reset_timer()
-grcan_close()              |  mod_timer()
- spin_lock_irqsave() //(1) |  (wait a time)
- ...                       | grcan_initiate_running_reset()
- del_timer_sync()          |  spin_lock_irqsave() //(2)
- (wait timer to stop)      |  ...
+BUG: sleeping function called from invalid context at include/linux/sched/mm.h:265
+Call Trace:
+kmem_cache_alloc_node
+__alloc_skb
+nfc_genl_fw_download_done
+call_timer_fn
+__run_timers.part.0
+run_timer_softirq
+__do_softirq
+...
 
-We hold priv->lock in position (1) of thread 1 and use
-del_timer_sync() to wait timer to stop, but timer handler also need
-priv->lock in position (2) of thread 2. As a result, grcan_close()
-will block forever.
+The nlmsg_new with GFP_KERNEL parameter may sleep during memory
+allocation process, and the timer handler is run as the result of
+a "software interrupt" that should not call any other function
+that could sleep.
 
-This patch extracts del_timer_sync() from the protection of
-spin_lock_irqsave(), which could let timer handler to obtain the
-needed lock.
+This patch changes allocation mode of netlink message from GFP_KERNEL
+to GFP_ATOMIC in order to prevent sleep in atomic bug. The GFP_ATOMIC
+flag makes memory allocation operation could be used in atomic context.
 
-Link: https://lore.kernel.org/all/20220425042400.66517-1-duoming@zju.edu.cn
-Fixes: 6cec9b07fe6a ("can: grcan: Add device driver for GRCAN and GRHCAN cores")
-Cc: stable@vger.kernel.org
+Fixes: 9674da8759df ("NFC: Add firmware upload netlink command")
+Fixes: 9ea7187c53f6 ("NFC: netlink: Rename CMD_FW_UPLOAD to CMD_FW_DOWNLOAD")
 Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Reviewed-by: Andreas Larsson <andreas@gaisler.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20220504055847.38026-1-duoming@zju.edu.cn
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/grcan.c |    2 ++
- 1 file changed, 2 insertions(+)
+ net/nfc/netlink.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/net/can/grcan.c
-+++ b/drivers/net/can/grcan.c
-@@ -1113,8 +1113,10 @@ static int grcan_close(struct net_device
+--- a/net/nfc/netlink.c
++++ b/net/nfc/netlink.c
+@@ -1254,7 +1254,7 @@ int nfc_genl_fw_download_done(struct nfc
+ 	struct sk_buff *msg;
+ 	void *hdr;
  
- 	priv->closing = true;
- 	if (priv->need_txbug_workaround) {
-+		spin_unlock_irqrestore(&priv->lock, flags);
- 		del_timer_sync(&priv->hang_timer);
- 		del_timer_sync(&priv->rr_timer);
-+		spin_lock_irqsave(&priv->lock, flags);
- 	}
- 	netif_stop_queue(dev);
- 	grcan_stop_hardware(dev);
+-	msg = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_KERNEL);
++	msg = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_ATOMIC);
+ 	if (!msg)
+ 		return -ENOMEM;
+ 
+@@ -1270,7 +1270,7 @@ int nfc_genl_fw_download_done(struct nfc
+ 
+ 	genlmsg_end(msg, hdr);
+ 
+-	genlmsg_multicast(&nfc_genl_family, msg, 0, 0, GFP_KERNEL);
++	genlmsg_multicast(&nfc_genl_family, msg, 0, 0, GFP_ATOMIC);
+ 
+ 	return 0;
+ 
 
 

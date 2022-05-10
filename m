@@ -2,402 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D0352152D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B841521532
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241711AbiEJM05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 08:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53856 "EHLO
+        id S241718AbiEJM1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 08:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241328AbiEJM0z (ORCPT
+        with ESMTP id S241260AbiEJM13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 08:26:55 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06AB014085B;
-        Tue, 10 May 2022 05:22:58 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id a11so14801343pff.1;
-        Tue, 10 May 2022 05:22:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jUn/XcQte1+YKQ1/fBhkzirtoSXJDM63v5+XTC+eQm8=;
-        b=DgtMpAac3k9bfyxUkQ6yRKX0pzlJa5x4fa4kUJl+yBH99MPF6kVeu2kxzlxvxEtWZ9
-         Fwv6R/VcgPw8vFGs1cbczhgTWYF04byFteIyx7UnEC3o9X3knDLD8FDLEJDPCF4uDB9r
-         CifR8+keWO5thkPklRZUaYQeTZMPbG0ywGE5ngydFyp2d7Oq4HOrKC/SP/eBk3qt0PAJ
-         tgUL821Mzd7bxzrrEjYDm0kYMo8cr63lmMToUdv1049vCiHrJX+Rma2BVoLOEy+AXocB
-         GZBQDYA1x8jEZRY2g1Gez9UdVaxri4PsUa63rniW0LOHKczOIpUnSdzOk5HSdPxkuPDV
-         rIsw==
+        Tue, 10 May 2022 08:27:29 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D279C1D8100
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:23:31 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id i66-20020a6bb845000000b00657bac76fb4so11724791iof.15
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:23:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jUn/XcQte1+YKQ1/fBhkzirtoSXJDM63v5+XTC+eQm8=;
-        b=CHBklOjMWs/XCGnL6Fs26Qa58gb2YDTh3Gm7MNhCI3VwLdqKYUf/+ZegUpPq7UAFS0
-         6LU+0GBFQeRkEI8k0yuYoAyv7/g4mDkF4lm9kZzQOeyD9MyUiVZa2jV42BmqFXBVh0cl
-         tsQJrjSvolUk5uwSJcJiNvwGoVbzYXVl5aLQKwWZIydEmxUZM3QFRw/rc+pUbJbsrdTu
-         JKATL98I0fICDmQtXTGNyXCFA0ubzCm6VyEYs9eGAbyATo81/UML8GLD3k6gfg11I3p/
-         UXf0XxKmpqnnq1AP0lNC70v6jnWmrMHOpa04V3VWJJ6/QJHg6VUz6303aXe70yYqr8DS
-         0qfQ==
-X-Gm-Message-State: AOAM531+X9VCVq9+SzAAbW+UIGsemA/nGlojR5zEZpvPOLFI5ZFoLiyq
-        x6VanvbgkOo2ql/afMRBjN0=
-X-Google-Smtp-Source: ABdhPJweXFhfBJqeaVe+SM3WqT/JZKv8g8j9/WxM40wkMl68vI+rdjzS3DRIq5y5/Wdbmk2nrzvJZg==
-X-Received: by 2002:a05:6a00:ad0:b0:50a:51b3:1e3d with SMTP id c16-20020a056a000ad000b0050a51b31e3dmr20491133pfl.18.1652185377453;
-        Tue, 10 May 2022 05:22:57 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id ik19-20020a170902ab1300b0015e8d4eb297sm1827946plb.225.2022.05.10.05.22.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 05:22:57 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: xu.xin16@zte.com.cn
-To:     akpm@linux-foundation.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, corbet@lwn.net, xu xin <xu.xin16@zte.com.cn>,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        wangyong <wang.yong12@zte.com.cn>,
-        Yunkai Zhang <zhang.yunkai@zte.com.cn>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: [PATCH v6] mm/ksm: introduce ksm_force for each process
-Date:   Tue, 10 May 2022 12:22:42 +0000
-Message-Id: <20220510122242.1380536-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=W8DHTnkIg5xv85W4z5i1vdRhAPL3p1evrQjuyNH3oC0=;
+        b=NfTBlZ9t5oFr1HqW/mlOBuop1LRlab0ZaI8IesIjHC6X3TuORUZuy9oD/MZPcZhOBp
+         TeZYccAuVME5CUpHYYsZEHlfTIBJOcril46B51PMOvmuuAtMWXq/Eh+ViooMxVatI2w2
+         ewfXnCsx3Sdolbq3M23A3fhYHp8/unaQPwQp1xcCM+bADvlm0XTrKgGlqDQ4ljXop1Lu
+         eYDLCpNRkU6VaLjDHN9uZgpC5Bfb4k7ZqTzWkg6FFwF2Zvd2KViJU5Ws6Bx2zx79583T
+         pO3wiqOuLjAlGua+Mue70rHEE4WYvmHV7WFy/noVF4vFcT0pjZooV6GYxNCsJoGGmkgi
+         gJOQ==
+X-Gm-Message-State: AOAM530Qh4wwch+ijKogon3FRFMDn6rytQ8aLEa0hkuSihoscbZ17zKB
+        CVjmosNgyZO7ueUcItVxw9ct3zau7dfsmzl+/u5caH2jVEh7
+X-Google-Smtp-Source: ABdhPJwiJGhUw+XxELhWptiQvwaKdCyzbzh2zcG/dTEtWlgIsbnKTZDImqCgOZhli0EoJDNjvwQXCUdxg2hWuQX3c5/yY4sRw/mO
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:94cf:0:b0:657:24c1:bb7f with SMTP id
+ y15-20020a5d94cf000000b0065724c1bb7fmr8622265ior.195.1652185411263; Tue, 10
+ May 2022 05:23:31 -0700 (PDT)
+Date:   Tue, 10 May 2022 05:23:31 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008a9fbb05dea76400@google.com>
+Subject: [syzbot] linux-next boot error: general protection fault in task_nr_scan_windows
+From:   syzbot <syzbot+6cd5f4ca7f8b40a599d0@syzkaller.appspotmail.com>
+To:     fweisbec@gmail.com, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, mingo@kernel.org, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xu xin <xu.xin16@zte.com.cn>
+Hello,
 
-To use KSM, we have to explicitly call madvise() in application code,
-which means installed apps on OS needs to be uninstall and source code
-needs to be modified. It is inconvenient.
+syzbot found the following issue on:
 
-In order to change this situation, We add a new proc file ksm_force
-under /proc/<pid>/ to support turning on/off KSM scanning of a
-process's mm dynamically.
+HEAD commit:    ab38272e9973 Add linux-next specific files for 20220509
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=129555fef00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=90245b9bee07a551
+dashboard link: https://syzkaller.appspot.com/bug?extid=6cd5f4ca7f8b40a599d0
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-If ksm_force is set to 1, force all anonymous and 'qualified' VMAs
-of this mm to be involved in KSM scanning without explicitly calling
-madvise to mark VMA as MADV_MERGEABLE. But It is effective only when
-the klob of /sys/kernel/mm/ksm/run is set as 1.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6cd5f4ca7f8b40a599d0@syzkaller.appspotmail.com
 
-If ksm_force is set to 0, cancel the feature of ksm_force of this
-process (fallback to the default state) and unmerge those merged pages
-belonging to VMAs which is not madvised as MADV_MERGEABLE of this process,
-but still leave MADV_MERGEABLE areas merged.
+general protection fault, probably for non-canonical address 0xdffffc000000007e: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x00000000000003f0-0x00000000000003f7]
+CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.18.0-rc6-next-20220509-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:arch_atomic64_read arch/x86/include/asm/atomic64_64.h:22 [inline]
+RIP: 0010:arch_atomic_long_read include/linux/atomic/atomic-long.h:29 [inline]
+RIP: 0010:atomic_long_read include/linux/atomic/atomic-instrumented.h:1266 [inline]
+RIP: 0010:get_mm_counter include/linux/mm.h:1996 [inline]
+RIP: 0010:get_mm_rss include/linux/mm.h:2049 [inline]
+RIP: 0010:task_nr_scan_windows.isra.0+0x37/0x120 kernel/sched/fair.c:1123
+Code: 03 00 00 55 48 89 fd 4c 89 e7 53 8b 1d b2 51 72 0a e8 ad 98 72 00 4c 89 e2 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 c1 e3 08 <80> 3c 02 00 0f 85 b9 00 00 00 48 8b 85 f0 03 00 00 41 bc 00 00 00
+RSP: 0000:ffffc900001f0ca8 EFLAGS: 00010006
+RAX: dffffc0000000000 RBX: 0000000000010000 RCX: ffffffff81544473
+RDX: 000000000000007e RSI: 0000000000000008 RDI: 00000000000003f0
+RBP: 0000000000000000 R08: 0000000000000000 R09: 00000000000003f8
+R10: ffffffff816a7235 R11: 0000000000000000 R12: 00000000000003f0
+R13: 00000000000003e8 R14: 000000003bfc8a1b R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 000000000ba8e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ task_scan_min kernel/sched/fair.c:1144 [inline]
+ task_scan_start+0x6c/0x400 kernel/sched/fair.c:1150
+ task_tick_numa kernel/sched/fair.c:2944 [inline]
+ task_tick_fair+0xaeb/0xef0 kernel/sched/fair.c:11186
+ scheduler_tick+0x20a/0x5e0 kernel/sched/core.c:5380
+ update_process_times+0x191/0x200 kernel/time/timer.c:1816
+ tick_sched_handle+0x9b/0x180 kernel/time/tick-sched.c:243
+ tick_sched_timer+0xee/0x120 kernel/time/tick-sched.c:1481
+ __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
+ __hrtimer_run_queues+0x1c0/0xe50 kernel/time/hrtimer.c:1749
+ hrtimer_interrupt+0x31c/0x790 kernel/time/hrtimer.c:1811
+ local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1095 [inline]
+ __sysvec_apic_timer_interrupt+0x146/0x530 arch/x86/kernel/apic/apic.c:1112
+ sysvec_apic_timer_interrupt+0x8e/0xc0 arch/x86/kernel/apic/apic.c:1106
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1b/0x20 arch/x86/include/asm/idtentry.h:649
+RIP: 0010:clear_page_erms+0x7/0x10 arch/x86/lib/clear_page_64.S:49
+Code: 48 89 47 18 48 89 47 20 48 89 47 28 48 89 47 30 48 89 47 38 48 8d 7f 40 75 d9 90 c3 0f 1f 80 00 00 00 00 b9 00 10 00 00 31 c0 <f3> aa c3 cc cc cc cc cc cc 41 57 41 56 41 55 41 54 55 53 48 89 fb
+RSP: 0000:ffffc900000676f8 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000a40
+RDX: ffffea00005c1140 RSI: ffff888000000000 RDI: ffff8880170455c0
+RBP: ffffea00005c1100 R08: 0000160000000000 R09: ffffea00005c1200
+R10: fffff940000b8226 R11: 0000000000000001 R12: 0000000000000002
+R13: 0000000000000004 R14: 0000000000000000 R15: 0000000000000001
+ clear_page arch/x86/include/asm/page_64.h:50 [inline]
+ clear_highpage include/linux/highmem.h:217 [inline]
+ kernel_init_free_pages mm/page_alloc.c:1283 [inline]
+ post_alloc_hook+0x269/0x300 mm/page_alloc.c:2419
+ prep_new_page mm/page_alloc.c:2431 [inline]
+ get_page_from_freelist+0xba2/0x3e00 mm/page_alloc.c:4172
+ __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5393
+ alloc_page_interleave+0x1e/0x200 mm/mempolicy.c:2105
+ alloc_pages+0x2b1/0x310 mm/mempolicy.c:2267
+ alloc_slab_page mm/slub.c:1797 [inline]
+ allocate_slab+0x26c/0x3c0 mm/slub.c:1942
+ new_slab mm/slub.c:2002 [inline]
+ ___slab_alloc+0x985/0xd90 mm/slub.c:3002
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3089
+ slab_alloc_node mm/slub.c:3180 [inline]
+ slab_alloc mm/slub.c:3222 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3229 [inline]
+ kmem_cache_alloc_lru+0x504/0x720 mm/slub.c:3246
+ alloc_inode_sb include/linux/fs.h:2950 [inline]
+ alloc_inode+0x168/0x230 fs/inode.c:262
+ new_inode_pseudo fs/inode.c:1018 [inline]
+ new_inode+0x27/0x2f0 fs/inode.c:1047
+ tracefs_get_inode+0x1a/0x130 fs/tracefs/inode.c:132
+ tracefs_create_file+0xe8/0x600 fs/tracefs/inode.c:483
+ trace_create_file+0x2f/0x50 kernel/trace/trace.c:8824
+ event_create_dir+0xaea/0x1320 kernel/trace/trace_events.c:2445
+ __trace_early_add_event_dirs+0x7e/0xf0 kernel/trace/trace_events.c:3478
+ early_event_add_tracer kernel/trace/trace_events.c:3645 [inline]
+ event_trace_init+0x9e/0x113 kernel/trace/trace_events.c:3805
+ tracer_init_tracefs+0xf9/0x457 kernel/trace/trace.c:9722
+ do_one_initcall+0x103/0x650 init/main.c:1301
+ do_initcall_level init/main.c:1376 [inline]
+ do_initcalls init/main.c:1392 [inline]
+ do_basic_setup init/main.c:1411 [inline]
+ kernel_init_freeable+0x6b1/0x73a init/main.c:1618
+ kernel_init+0x1a/0x1d0 init/main.c:1507
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:arch_atomic64_read arch/x86/include/asm/atomic64_64.h:22 [inline]
+RIP: 0010:arch_atomic_long_read include/linux/atomic/atomic-long.h:29 [inline]
+RIP: 0010:atomic_long_read include/linux/atomic/atomic-instrumented.h:1266 [inline]
+RIP: 0010:get_mm_counter include/linux/mm.h:1996 [inline]
+RIP: 0010:get_mm_rss include/linux/mm.h:2049 [inline]
+RIP: 0010:task_nr_scan_windows.isra.0+0x37/0x120 kernel/sched/fair.c:1123
+Code: 03 00 00 55 48 89 fd 4c 89 e7 53 8b 1d b2 51 72 0a e8 ad 98 72 00 4c 89 e2 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 c1 e3 08 <80> 3c 02 00 0f 85 b9 00 00 00 48 8b 85 f0 03 00 00 41 bc 00 00 00
+RSP: 0000:ffffc900001f0ca8 EFLAGS: 00010006
+RAX: dffffc0000000000 RBX: 0000000000010000 RCX: ffffffff81544473
+RDX: 000000000000007e RSI: 0000000000000008 RDI: 00000000000003f0
+RBP: 0000000000000000 R08: 0000000000000000 R09: 00000000000003f8
+R10: ffffffff816a7235 R11: 0000000000000000 R12: 00000000000003f0
+R13: 00000000000003e8 R14: 000000003bfc8a1b R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 000000000ba8e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	03 00                	add    (%rax),%eax
+   2:	00 55 48             	add    %dl,0x48(%rbp)
+   5:	89 fd                	mov    %edi,%ebp
+   7:	4c 89 e7             	mov    %r12,%rdi
+   a:	53                   	push   %rbx
+   b:	8b 1d b2 51 72 0a    	mov    0xa7251b2(%rip),%ebx        # 0xa7251c3
+  11:	e8 ad 98 72 00       	callq  0x7298c3
+  16:	4c 89 e2             	mov    %r12,%rdx
+  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  20:	fc ff df
+  23:	48 c1 ea 03          	shr    $0x3,%rdx
+  27:	c1 e3 08             	shl    $0x8,%ebx
+* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+  2e:	0f 85 b9 00 00 00    	jne    0xed
+  34:	48 8b 85 f0 03 00 00 	mov    0x3f0(%rbp),%rax
+  3b:	41                   	rex.B
+  3c:	bc                   	.byte 0xbc
+  3d:	00 00                	add    %al,(%rax)
 
-Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
-Reviewed-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
-Reviewed-by: wangyong <wang.yong12@zte.com.cn>
-Reviewed-by: Yunkai Zhang <zhang.yunkai@zte.com.cn>
-Suggested-by: Matthew Wilcox <willy@infradead.org>
+
 ---
-v6:
-- modify the way of "return"
-- remove unnecessary words in Documentation/admin-guide/mm/ksm.rst
-- add additional notes to "set 0 to ksm_force" in Documentation/../ksm.rst
-and Documentation/../proc.rst
-v5:
-- fix typos in Documentation/filesystem/proc.rst
-v4:
-- fix typos in commit log
-- add interface descriptions under Documentation/
-v3:
-- fix compile error of mm/ksm.c
-v2:
-- fix a spelling error in commit log.
-- remove a redundant condition check in ksm_force_write().
----
- Documentation/admin-guide/mm/ksm.rst | 19 +++++-
- Documentation/filesystems/proc.rst   | 17 +++++
- fs/proc/base.c                       | 93 ++++++++++++++++++++++++++++
- include/linux/mm_types.h             |  9 +++
- mm/ksm.c                             | 32 +++++++++-
- 5 files changed, 167 insertions(+), 3 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/Documentation/admin-guide/mm/ksm.rst b/Documentation/admin-guide/mm/ksm.rst
-index b244f0202a03..8cabc2504005 100644
---- a/Documentation/admin-guide/mm/ksm.rst
-+++ b/Documentation/admin-guide/mm/ksm.rst
-@@ -32,7 +32,7 @@ are swapped back in: ksmd must rediscover their identity and merge again).
- Controlling KSM with madvise
- ============================
- 
--KSM only operates on those areas of address space which an application
-+KSM can operates on those areas of address space which an application
- has advised to be likely candidates for merging, by using the madvise(2)
- system call::
- 
-@@ -70,6 +70,23 @@ Applications should be considerate in their use of MADV_MERGEABLE,
- restricting its use to areas likely to benefit.  KSM's scans may use a lot
- of processing power: some installations will disable KSM for that reason.
- 
-+Controlling KSM with procfs
-+===========================
-+
-+KSM can also operate on anonymous areas of address space of those processes's
-+knob ``/proc/<pid>/ksm_force`` is on, even if app codes doesn't call madvise()
-+explicitly to advise specific areas as MADV_MERGEABLE.
-+
-+You can set ksm_force to 1 to force all anonymous and qualified VMAs of
-+this process to be involved in KSM scanning.
-+	e.g. ``echo 1 > /proc/<pid>/ksm_force``
-+
-+You can also set ksm_force to 0 to cancel that force feature of this process
-+and unmerge those merged pages which belongs to those VMAs not marked as
-+MADV_MERGEABLE of this process. But that still leave those pages belonging to
-+VMAs marked as MADV_MERGEABLE merged (fallback to the default state).
-+	e.g. ``echo 0 > /proc/<pid>/ksm_force``
-+
- .. _ksm_sysfs:
- 
- KSM daemon sysfs interface
-diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-index 061744c436d9..8890b8b457a4 100644
---- a/Documentation/filesystems/proc.rst
-+++ b/Documentation/filesystems/proc.rst
-@@ -47,6 +47,7 @@ fixes/update part 1.1  Stefani Seibold <stefani@seibold.net>    June 9 2009
-   3.10  /proc/<pid>/timerslack_ns - Task timerslack value
-   3.11	/proc/<pid>/patch_state - Livepatch patch operation state
-   3.12	/proc/<pid>/arch_status - Task architecture specific information
-+  3.13	/proc/<pid>/ksm_force - Setting of mandatory involvement in KSM
- 
-   4	Configuring procfs
-   4.1	Mount options
-@@ -2176,6 +2177,22 @@ AVX512_elapsed_ms
-   the task is unlikely an AVX512 user, but depends on the workload and the
-   scheduling scenario, it also could be a false negative mentioned above.
- 
-+3.13	/proc/<pid>/ksm_force - Setting of mandatory involvement in KSM
-+-----------------------------------------------------------------------
-+When CONFIG_KSM is enabled, this file can be used to specify if this
-+process's anonymous memory can be involved in KSM scanning without app codes
-+explicitly calling madvise to mark memory address as MADV_MERGEABLE.
-+
-+If writing 1 to this file, the kernel will force all anonymous and qualified
-+memory to be involved in KSM scanning without explicitly calling madvise to
-+mark memory address as MADV_MERGEABLE. But that is effective only when the
-+klob of '/sys/kernel/mm/ksm/run' is set as 1.
-+
-+If writing 0 to this file, the mandatory KSM feature of this process's will
-+be cancelled and unmerge those merged pages which belongs to those areas not
-+marked as MADV_MERGEABLE of this process, but leave those pages belonging to
-+areas marked as MADV_MERGEABLE merged (fallback to the default state).
-+
- Chapter 4: Configuring procfs
- =============================
- 
-diff --git a/fs/proc/base.c b/fs/proc/base.c
-index 8dfa36a99c74..d60f7342f79e 100644
---- a/fs/proc/base.c
-+++ b/fs/proc/base.c
-@@ -96,6 +96,7 @@
- #include <linux/time_namespace.h>
- #include <linux/resctrl.h>
- #include <linux/cn_proc.h>
-+#include <linux/ksm.h>
- #include <trace/events/oom.h>
- #include "internal.h"
- #include "fd.h"
-@@ -3168,6 +3169,96 @@ static int proc_pid_ksm_merging_pages(struct seq_file *m, struct pid_namespace *
- 
- 	return 0;
- }
-+
-+static ssize_t ksm_force_read(struct file *file, char __user *buf, size_t count,
-+				loff_t *ppos)
-+{
-+	struct task_struct *task;
-+	struct mm_struct *mm;
-+	char buffer[PROC_NUMBUF];
-+	ssize_t len;
-+	int ret;
-+
-+	task = get_proc_task(file_inode(file));
-+	if (!task)
-+		return -ESRCH;
-+
-+	mm = get_task_mm(task);
-+	ret = 0;
-+	if (mm) {
-+		len = snprintf(buffer, sizeof(buffer), "%d\n", mm->ksm_force);
-+		ret =  simple_read_from_buffer(buf, count, ppos, buffer, len);
-+		mmput(mm);
-+	}
-+
-+	return ret;
-+}
-+
-+static ssize_t ksm_force_write(struct file *file, const char __user *buf,
-+				size_t count, loff_t *ppos)
-+{
-+	struct task_struct *task;
-+	struct mm_struct *mm;
-+	char buffer[PROC_NUMBUF];
-+	int force;
-+	int err = 0;
-+
-+	memset(buffer, 0, sizeof(buffer));
-+	if (count > sizeof(buffer) - 1)
-+		count = sizeof(buffer) - 1;
-+	if (copy_from_user(buffer, buf, count))
-+		return -EFAULT;
-+
-+	err = kstrtoint(strstrip(buffer), 0, &force);
-+	if (err)
-+		return err;
-+
-+	if (force != 0 && force != 1)
-+		return -EINVAL;
-+
-+	task = get_proc_task(file_inode(file));
-+	if (!task)
-+		return -ESRCH;
-+
-+	mm = get_task_mm(task);
-+	if (!mm)
-+		goto out_put_task;
-+
-+	if (mm->ksm_force != force) {
-+		if (mmap_write_lock_killable(mm)) {
-+			err = -EINTR;
-+			goto out_mmput;
-+		}
-+
-+		if (force == 0)
-+			mm->ksm_force = force;
-+		else {
-+			/*
-+			 * Force anonymous pages of this mm to be involved in KSM merging
-+			 * without explicitly calling madvise.
-+			 */
-+			if (!test_bit(MMF_VM_MERGEABLE, &mm->flags))
-+				err = __ksm_enter(mm);
-+			if (!err)
-+				mm->ksm_force = force;
-+		}
-+
-+		mmap_write_unlock(mm);
-+	}
-+
-+out_mmput:
-+	mmput(mm);
-+out_put_task:
-+	put_task_struct(task);
-+
-+	return err < 0 ? err : count;
-+}
-+
-+static const struct file_operations proc_pid_ksm_force_operations = {
-+	.read		= ksm_force_read,
-+	.write		= ksm_force_write,
-+	.llseek		= generic_file_llseek,
-+};
- #endif /* CONFIG_KSM */
- 
- #ifdef CONFIG_STACKLEAK_METRICS
-@@ -3303,6 +3394,7 @@ static const struct pid_entry tgid_base_stuff[] = {
- #endif
- #ifdef CONFIG_KSM
- 	ONE("ksm_merging_pages",  S_IRUSR, proc_pid_ksm_merging_pages),
-+	REG("ksm_force", S_IRUSR|S_IWUSR, proc_pid_ksm_force_operations),
- #endif
- };
- 
-@@ -3639,6 +3731,7 @@ static const struct pid_entry tid_base_stuff[] = {
- #endif
- #ifdef CONFIG_KSM
- 	ONE("ksm_merging_pages",  S_IRUSR, proc_pid_ksm_merging_pages),
-+	REG("ksm_force", S_IRUSR|S_IWUSR, proc_pid_ksm_force_operations),
- #endif
- };
- 
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index b34ff2cdbc4f..1b1592c2f5cf 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -661,6 +661,15 @@ struct mm_struct {
- 		 * merging.
- 		 */
- 		unsigned long ksm_merging_pages;
-+		/*
-+		 * If true, force anonymous pages of this mm to be involved in KSM
-+		 * merging without explicitly calling madvise. It is effctive only
-+		 * when the klob of '/sys/kernel/mm/ksm/run' is set as 1. If false,
-+		 * cancel the feature of ksm_force of this process and unmerge
-+		 * those merged pages which is not madvised as MERGEABLE of this
-+		 * process, but leave MERGEABLE areas merged.
-+		 */
-+		bool ksm_force;
- #endif
- 	} __randomize_layout;
- 
-diff --git a/mm/ksm.c b/mm/ksm.c
-index 38360285497a..c9f672dcc72e 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -334,6 +334,34 @@ static void __init ksm_slab_free(void)
- 	mm_slot_cache = NULL;
- }
- 
-+/* Check if vma is qualified for ksmd scanning */
-+static bool ksm_vma_check(struct vm_area_struct *vma)
-+{
-+	unsigned long vm_flags = vma->vm_flags;
-+
-+	if (!(vma->vm_flags & VM_MERGEABLE) && !(vma->vm_mm->ksm_force))
-+		return false;
-+
-+	if (vm_flags & (VM_SHARED	| VM_MAYSHARE	|
-+			VM_PFNMAP	| VM_IO | VM_DONTEXPAND |
-+			VM_HUGETLB	| VM_MIXEDMAP))
-+		return false;       /* just ignore this vma*/
-+
-+	if (vma_is_dax(vma))
-+		return false;
-+
-+#ifdef VM_SAO
-+	if (vm_flags & VM_SAO)
-+		return false;
-+#endif
-+#ifdef VM_SPARC_ADI
-+	if (vm_flags & VM_SPARC_ADI)
-+		return false;
-+#endif
-+
-+	return true;
-+}
-+
- static __always_inline bool is_stable_node_chain(struct stable_node *chain)
- {
- 	return chain->rmap_hlist_len == STABLE_NODE_CHAIN;
-@@ -523,7 +551,7 @@ static struct vm_area_struct *find_mergeable_vma(struct mm_struct *mm,
- 	if (ksm_test_exit(mm))
- 		return NULL;
- 	vma = vma_lookup(mm, addr);
--	if (!vma || !(vma->vm_flags & VM_MERGEABLE) || !vma->anon_vma)
-+	if (!vma || !ksm_vma_check(vma) || !vma->anon_vma)
- 		return NULL;
- 	return vma;
- }
-@@ -2297,7 +2325,7 @@ static struct rmap_item *scan_get_next_rmap_item(struct page **page)
- 		vma = find_vma(mm, ksm_scan.address);
- 
- 	for (; vma; vma = vma->vm_next) {
--		if (!(vma->vm_flags & VM_MERGEABLE))
-+		if (!ksm_vma_check(vma))
- 			continue;
- 		if (ksm_scan.address < vma->vm_start)
- 			ksm_scan.address = vma->vm_start;
--- 
-2.25.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

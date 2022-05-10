@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B615217DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F9E5218E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:39:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242948AbiEJN3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
+        id S244069AbiEJNlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242878AbiEJNWj (ORCPT
+        with ESMTP id S243898AbiEJN1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:22:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4381A29DE;
-        Tue, 10 May 2022 06:16:57 -0700 (PDT)
+        Tue, 10 May 2022 09:27:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAE92C182B;
+        Tue, 10 May 2022 06:20:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EC42EB81D7A;
-        Tue, 10 May 2022 13:16:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 590ECC385C6;
-        Tue, 10 May 2022 13:16:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5C5EDB81CF8;
+        Tue, 10 May 2022 13:20:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9276C385C2;
+        Tue, 10 May 2022 13:20:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188602;
-        bh=7ni6v9EcwTeRnymZXJCe2F2vv9mVcGy9VAalwjR/0ls=;
+        s=korg; t=1652188842;
+        bh=uWNfTbyVD20wguGhW1RfOtpw8PG/VpQ0yqM5YEg8S1A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G9itMwvt8im3pN8BvabH2mjS981tB854PiDgRejri6Vj+hj8HX5mXLGkhUrU1Dlpo
-         TYbFzre/5E+s3cnWuFDqs3Cg+nQ7HhlPFwpJLfyZMnHWASC4uGjMN81wsO81Wuro19
-         xSNFUBAceeaQZXjRUKjWs0A6wEL+Dt3jh6qcXJ3g=
+        b=YX+Bg6y0QSCZcQ62oORtesNgHwqaCTCQeIvbAf+yddqdc4bYfLD/MDszME8d4AjrQ
+         G5B+tvZByLqhdmytEwkHaP7ptLuz9BKAQK7Fo4Jog8exH5f21lN2PGc4kDYYMlMwwU
+         lUux9pGUprTh+EJlya7WDX3kvoEikQao4ZKFElz4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>
-Subject: [PATCH 4.14 61/78] ASoC: wm8958: Fix change notifications for DSP controls
+        stable@vger.kernel.org, "wanghai (M)" <wanghai38@huawei.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Subject: [PATCH 4.19 62/88] Revert "SUNRPC: attempt AF_LOCAL connect on setup"
 Date:   Tue, 10 May 2022 15:07:47 +0200
-Message-Id: <20220510130734.338358207@linuxfoundation.org>
+Message-Id: <20220510130735.542425319@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
-References: <20220510130732.522479698@linuxfoundation.org>
+In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
+References: <20220510130733.735278074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,61 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-commit b4f5c6b2e52b27462c0599e64e96e53b58438de1 upstream.
+commit a3d0562d4dc039bca39445e1cddde7951662e17d upstream.
 
-The WM8958 DSP controls all return 0 on successful write, not a boolean
-value indicating if the write changed the value of the control. Fix this
-by returning 1 after a change, there is already a check at the start of
-each put() that skips the function in the case that there is no change.
+This reverts commit 7073ea8799a8cf73db60270986f14e4aae20fa80.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220416125408.197440-1-broonie@kernel.org
+We must not try to connect the socket while the transport is under
+construction, because the mechanisms to safely tear it down are not in
+place. As the code stands, we end up leaking the sockets on a connection
+error.
+
+Reported-by: wanghai (M) <wanghai38@huawei.com>
 Cc: stable@vger.kernel.org
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/wm8958-dsp2.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ net/sunrpc/xprtsock.c |    3 ---
+ 1 file changed, 3 deletions(-)
 
---- a/sound/soc/codecs/wm8958-dsp2.c
-+++ b/sound/soc/codecs/wm8958-dsp2.c
-@@ -533,7 +533,7 @@ static int wm8958_mbc_put(struct snd_kco
- 
- 	wm8958_dsp_apply(codec, mbc, wm8994->mbc_ena[mbc]);
- 
--	return 0;
-+	return 1;
- }
- 
- #define WM8958_MBC_SWITCH(xname, xval) {\
-@@ -659,7 +659,7 @@ static int wm8958_vss_put(struct snd_kco
- 
- 	wm8958_dsp_apply(codec, vss, wm8994->vss_ena[vss]);
- 
--	return 0;
-+	return 1;
- }
- 
- 
-@@ -733,7 +733,7 @@ static int wm8958_hpf_put(struct snd_kco
- 
- 	wm8958_dsp_apply(codec, hpf % 3, ucontrol->value.integer.value[0]);
- 
--	return 0;
-+	return 1;
- }
- 
- #define WM8958_HPF_SWITCH(xname, xval) {\
-@@ -827,7 +827,7 @@ static int wm8958_enh_eq_put(struct snd_
- 
- 	wm8958_dsp_apply(codec, eq, ucontrol->value.integer.value[0]);
- 
--	return 0;
-+	return 1;
- }
- 
- #define WM8958_ENH_EQ_SWITCH(xname, xval) {\
+--- a/net/sunrpc/xprtsock.c
++++ b/net/sunrpc/xprtsock.c
+@@ -2974,9 +2974,6 @@ static struct rpc_xprt *xs_setup_local(s
+ 		}
+ 		xprt_set_bound(xprt);
+ 		xs_format_peer_addresses(xprt, "local", RPCBIND_NETID_LOCAL);
+-		ret = ERR_PTR(xs_local_setup_socket(transport));
+-		if (ret)
+-			goto out_err;
+ 		break;
+ 	default:
+ 		ret = ERR_PTR(-EAFNOSUPPORT);
 
 

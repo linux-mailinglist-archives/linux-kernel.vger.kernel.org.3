@@ -2,172 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8DC9521E6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 235CB521E39
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242525AbiEJP2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 11:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
+        id S243225AbiEJP1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 11:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346065AbiEJP07 (ORCPT
+        with ESMTP id S1345684AbiEJP10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:26:59 -0400
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648802016C6;
-        Tue, 10 May 2022 08:14:32 -0700 (PDT)
-Received: by mail-qt1-f181.google.com with SMTP id x9so13749681qts.6;
-        Tue, 10 May 2022 08:14:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Vz1eJzNwX0qqlgjKghzI8UdnpqFW4v/yeEdgJ7aBooc=;
-        b=d9g9CtWKsOGR7z5n/x33vnbuP8nImZ5VYEHaN+wmNX+xmzA0AG2Lj17Hhzmp9v/r4e
-         kxWsxCd5aYsDBrvrtYcbR+h177R5jZ5eutBwK5x9W069WlEDrT41+UMymuBWmDRrHZ4n
-         jufFg8l+Mi0QydGUJQev5YUn+CPnXkUBuQXCPh6qklp4s4NAndRDzRRRHQuxgP8j0If4
-         2hlVlyocbw+OjjnQPLEbGR2Sc13/kRheMBasfRZykqLljY6WTyM1vFcBS6DaY4sEypcT
-         wL1PV79eAiJY8va8OUlarZXKbY4H5R6nbtrEdHDhua/aO4g9KczjbFnGbLxjmVAZVDS8
-         ISTA==
-X-Gm-Message-State: AOAM533anAxpbCuPpkPilS7mwGw/khHj0B8sPG6fxG9xGXJcAXt0fG1r
-        CEC6zp6Iu3Xx4ImJB4k234xIzpIuU75Z6w==
-X-Google-Smtp-Source: ABdhPJzVNRRGRMkmw0kwAOgsedCsn5kkgcEeQ+MUFnOmBdpkRZfK+cpnisqt1Z+Az080srveVc8RTQ==
-X-Received: by 2002:ac8:5bd5:0:b0:2f3:b654:694d with SMTP id b21-20020ac85bd5000000b002f3b654694dmr19934873qtb.435.1652195671013;
-        Tue, 10 May 2022 08:14:31 -0700 (PDT)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id h191-20020a379ec8000000b0069fc347ef5dsm8536086qke.74.2022.05.10.08.14.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 08:14:30 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id v59so31246334ybi.12;
-        Tue, 10 May 2022 08:14:30 -0700 (PDT)
-X-Received: by 2002:a05:6902:120e:b0:634:6f29:6b84 with SMTP id
- s14-20020a056902120e00b006346f296b84mr19243837ybu.604.1652195669937; Tue, 10
- May 2022 08:14:29 -0700 (PDT)
+        Tue, 10 May 2022 11:27:26 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C5EFC4;
+        Tue, 10 May 2022 08:17:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652195858; x=1683731858;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=n+IMnOFQ96I6mX1bgHpYEfGAC36nuqLi9egMYIgnSiU=;
+  b=WrA+DXv6PMrvgowk0mIiDlBInd9UCz90OA2fUcUnnbJchOJgMi1l9Ydr
+   qGo1vw8SKddpVdGb4eGes1PF7EbAji+uzIXB1U9XHcaAfG/oG3/qOYEww
+   8v0vjkvEp5cK/gpcGzLnusW0MR/Muae27aHJi5FXmwO7LmZrYqDihB0+h
+   fcvNvZ4YX9xIQtpSU2Ns/F2EJPF8NKz5uTJ3b8Hd8kYdrYh+2eqb+WfES
+   9TWV2ACxq/x1n4lM/uh701FpJaFfiNNIyKTcUmFg7t2ELYhFgQiXJEMAi
+   zrb6fMIA9yxwlRg3o5802h/NsdDk5JGBQJ1H0FPlAJWVS4RFiqxKGYBfx
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="269541484"
+X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
+   d="scan'208";a="269541484"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 08:17:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
+   d="scan'208";a="541817698"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 10 May 2022 08:17:31 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 6A964512; Tue, 10 May 2022 18:15:16 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tony Luck <tony.luck@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?q?=C5=81ukasz=20Bartosik?= <lb@semihalf.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>
+Subject: [PATCH v5 0/8] platform/x86: introduce p2sb_bar() helper
+Date:   Tue, 10 May 2022 18:14:43 +0300
+Message-Id: <20220510151451.85561-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220505193143.31826-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220505193143.31826-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220505193143.31826-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 10 May 2022 17:14:18 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVajeFy++etApUrZC4_sgFCPH76xOOb93rQWsz42i3EVg@mail.gmail.com>
-Message-ID: <CAMuHMdVajeFy++etApUrZC4_sgFCPH76xOOb93rQWsz42i3EVg@mail.gmail.com>
-Subject: Re: [RFC PATCH 4/4] clk: renesas: r9a07g043: Add support for RZ/Five SoC
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+There are a few users and at least one more is coming (*1) that would
+like to utilize P2SB mechanism of hiding and unhiding a device from
+the PCI configuration space.
 
-On Thu, May 5, 2022 at 9:32 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Add minimal clock and resets entries required to boot RZ/Five SoC.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Here is the series to consolidate p2sb handling code for existing users
+and provide a generic way for new comer(s).
 
-Thanks for your patch!
+It also includes a patch to enable GPIO controllers on Apollo Lake
+when it's used with ABL bootloader w/o ACPI support (*2).
 
-I'm only commenting on the actual clock/reset definitions, as I expect
-the structure of this file to change...
+The patch that brings the helper ("platform/x86/intel: Add Primary to
+Sideband (P2SB) bridge support") has a commit message that sheds a light
+on what the P2SB is and why this is needed.
 
-> --- a/drivers/clk/renesas/r9a07g043-cpg.c
-> +++ b/drivers/clk/renesas/r9a07g043-cpg.c
-> @@ -151,7 +151,7 @@ static const struct {
->  static const struct {
->         struct rzg2l_mod_clk common[54];
->  #ifdef CONFIG_RISCV
-> -       struct rzg2l_mod_clk rzfive[0];
-> +       struct rzg2l_mod_clk rzfive[2];
->  #else
->         struct rzg2l_mod_clk rzg2ul[3];
->  #endif
-> @@ -268,6 +268,10 @@ static const struct {
->         },
->  #ifdef CONFIG_RISCV
->         .rzfive = {
-> +               DEF_MOD("iax45_pclk",   R9A07G043_IAX45_PCLK, R9A07G043_CLK_P2,
-> +                                       0x518, 0),
-> +               DEF_MOD("iax45_clk",    R9A07G043_IAX45_CLK, R9A07G043_CLK_P1,
-> +                                       0x518, 1),
+The changes made in v5 do not change the main idea and the functionality
+in a big scale. What we need is probably one more retest done by Henning
+(*3). I hope to have it merged to v5.19-rc1 that Siemens can develop
+their changes based on this series (*4).
 
-OK.
+I have tested this on Apollo Lake platform (I'm able to see SPI NOR and
+since we have an ACPI device for GPIO I do not see any attempts to recreate
+one).
 
-Note that the register offset and bits for the IAX45 block on riscv
-are exactly the same as for the IA55 block on arm64.  Hence it
-would be an option to use the exact same values in the DT binding
-definitions for R9A07G043_IAX45_(P)CLK and R9A07G043_IA55_(P)CLK,
-and avoid the #ifdefs and duplicated DEF_MOD() entries here.
+*1) One in this series, and one is a recent merge of the Simatic IPC drivers
+*2) This patch can be postponed as Lee hasn't given his tag yet.
+*3) Henning gave his tag and I dared to used it even against changed patch 1
+*4) The changes were posted in between of v4 and v5 of this series, but need
+    more work.
 
-I'm undecided what's the best option...
+Taking into account the *2) the series is ready to be merged via PDx86 tree.
 
->         },
->  #else
->         .rzg2ul = {
-> @@ -284,7 +288,7 @@ static const struct {
->  static const struct {
->         struct rzg2l_reset common[42];
->  #ifdef CONFIG_RISCV
-> -       struct rzg2l_reset rzfive[0];
-> +       struct rzg2l_reset rzfive[1];
->  #else
->         struct rzg2l_reset rzg2ul[3];
->  #endif
-> @@ -335,6 +339,7 @@ static const struct {
->         },
->  #ifdef CONFIG_RISCV
->         .rzfive = {
-> +               DEF_RST(R9A07G043_IAX45_RESETN, 0x818, 0),
+Changes in v5:
+- rewritten patch 1 to use pci_scan_single_device() (Lukas, Bjorn)
+- rebased patch 2 on top of the new Intel SPI NOR codebase
+- fixed a potential bug and rewritten resource filling in patch 5 (Lee)
+- added many different tags in a few patches (Jean, Wolfram, Henning)
 
-Same for R9A07G043_IAX45_RESETN and R9A07G043_IAA55_RESETN.
+Changes in v4:
+- added tag to the entire series (Hans)
+- added tag to pin control patch (Mika)
+- dropped PCI core changes (PCI core doesn't want modifications to be made)
+- as a consequence of the above merged necessary bits into p2sb.c
+- added a check that p2sb is really hidden (Hans)
+- added EDAC patches (reviewed by maintainer internally)
 
->         },
->  #else
->         .rzg2ul = {
-> @@ -345,16 +350,27 @@ static const struct {
->  #endif
->  };
->
-> +#ifdef CONFIG_RISCV
-> +static const unsigned int r9a07g043_crit_mod_clks[] __initconst = {
-> +       MOD_CLK_BASE + R9A07G043_IAX45_CLK,
-> +       MOD_CLK_BASE + R9A07G043_DMAC_ACLK,
-> +};
-> +#else
->  static const unsigned int r9a07g043_crit_mod_clks[] __initconst = {
->         MOD_CLK_BASE + R9A07G043_GIC600_GICCLK,
->         MOD_CLK_BASE + R9A07G043_IA55_CLK,
->         MOD_CLK_BASE + R9A07G043_DMAC_ACLK,
->  };
-> +#endif
+Changes in v3:
+- resent with cover letter
 
-Please keep a single r9a07g043_crit_mod_clks[] array, and protect the
-entries inside by #ifdef CONFIG_ARM64 or CONFIG_RISCV.
+Changes in v2:
+- added parentheses around bus in macros (Joe)
+- added tag (Jean)
+- fixed indentation and wrapping in the header (Christoph)
+- moved out of PCI realm to PDx86 as the best common denominator (Bjorn)
+- added a verbose commit message to explain P2SB thingy (Bjorn)
+- converted first parameter from pci_dev to pci_bus
+- made first two parameters (bus and devfn) optional (Henning, Lee)
+- added Intel pin control patch to the series (Henning, Mika)
+- fixed English style in the commit message of one of MFD patch (Lee)
+- added tags to my MFD LPC ICH patches (Lee)
+- used consistently (c) (Lee)
+- made indexing for MFD cell and resource arrays (Lee)
+- fixed the resource size in i801 (Jean)
 
-Gr{oetje,eeting}s,
+Andy Shevchenko (6):
+  pinctrl: intel: Check against matching data instead of ACPI companion
+  mfd: lpc_ich: Factor out lpc_ich_enable_spi_write()
+  mfd: lpc_ich: Switch to generic p2sb_bar()
+  i2c: i801: convert to use common P2SB accessor
+  EDAC, pnd2: Use proper I/O accessors and address space annotation
+  EDAC, pnd2: convert to use common P2SB accessor
 
-                        Geert
+Jonathan Yong (1):
+  platform/x86/intel: Add Primary to Sideband (P2SB) bridge support
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Tan Jui Nee (1):
+  mfd: lpc_ich: Add support for pinctrl in non-ACPI system
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+ drivers/edac/Kconfig                   |   1 +
+ drivers/edac/pnd2_edac.c               |  62 +++-------
+ drivers/i2c/busses/Kconfig             |   1 +
+ drivers/i2c/busses/i2c-i801.c          |  39 ++----
+ drivers/mfd/Kconfig                    |   1 +
+ drivers/mfd/lpc_ich.c                  | 161 +++++++++++++++++++------
+ drivers/pinctrl/intel/pinctrl-intel.c  |  14 +--
+ drivers/platform/x86/intel/Kconfig     |  12 ++
+ drivers/platform/x86/intel/Makefile    |   2 +
+ drivers/platform/x86/intel/p2sb.c      | 133 ++++++++++++++++++++
+ include/linux/platform_data/x86/p2sb.h |  28 +++++
+ 11 files changed, 338 insertions(+), 116 deletions(-)
+ create mode 100644 drivers/platform/x86/intel/p2sb.c
+ create mode 100644 include/linux/platform_data/x86/p2sb.h
+
+
+base-commit: 3bf222d317a20170ee17f082626c1e0f83537e13
+-- 
+2.35.1
+

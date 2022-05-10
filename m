@@ -2,82 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DABB52274D
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 01:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFAF5522752
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 01:04:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237576AbiEJXAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 19:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48292 "EHLO
+        id S237643AbiEJXDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 19:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231931AbiEJXAP (ORCPT
+        with ESMTP id S231931AbiEJXDw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 19:00:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA439BAFB
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 16:00:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 24CE461743
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 23:00:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7988EC385D1;
-        Tue, 10 May 2022 23:00:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652223613;
-        bh=vQk/tlyARgZHNELY8paWFui+GUv2OmVVZzpuEgTWJnc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=CvOFhFdtbwbVJsUZnLyB/7+BH6OtsL8E8KNHsFimZFtdAxzYCipupRdZnkW773Gj2
-         70IV8O2UBIbcGREO7PCvdoNUls8voZSMm0KBUNWJ0xMVP289EVl6fD6TvujdETc4Po
-         3uZrDt5B7DWHWGihZFM9smuie9CHt/E4GlyaE7OJZyQWwIay+o2bbfk9G0dY49sOPW
-         1aDxhCh1ehX2oUSOtbU/3K7AjCjksKbvIKuMylnfmjx6D0Sx9Vp+77mGZkoQ1wfoii
-         BeSubHAN5mv+8jzjLVoZN+GJMThCsMK2q+aTnMmSWAVRw+hMExI3ez7YZ+Ad2VWhGT
-         wc4j1g2oAn3mQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5BBC0F03930;
-        Tue, 10 May 2022 23:00:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 10 May 2022 19:03:52 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11168994E4;
+        Tue, 10 May 2022 16:03:52 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id h13so699172qvh.0;
+        Tue, 10 May 2022 16:03:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4CWgQ7c6/so/TrZFvbwKiAbSDiJmPs4rDdHHcrJQtFY=;
+        b=YRQ5V62GTRb10bX8N3+J8kh/1ZwJZL1FpEBKWVJYhMlGjneANpvKqhPlQ1a7EiO3vX
+         gF72VMSHkCNicG9RpMtX1FOk2F2cw/0ekzKKzpASenfOHL2GeOEK0LCFHKNz39OgnMnZ
+         FRr4lv2lEZGeq4WO2FUNps1VgdiPL23cQpJzwwoeCRY6b8Xad5FV2PkKNkY2tuVF2fW1
+         uSNS3K7J4eJopwOuo6emOXzAjesxUPQ3DiHtpP+TlnAT1dlsBoR8Bopg3GCkHxUVw9aC
+         vtY+hMTjmu3CKmh+pAFVu1V4NpHkPIIpkIdDsGWmI6hokKOB1txXxuvAI5XLDoYnJhbj
+         vI3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4CWgQ7c6/so/TrZFvbwKiAbSDiJmPs4rDdHHcrJQtFY=;
+        b=dD43bhrMcDeuquG8qXnSHK0CpKNRL6DEPERms/IrDoLPOgUZMfP1D4Rs5F/030u2U2
+         uUtcSxMmUco/uRR7CED4aC2RG3Y+IEVlURk6R24wXYEjXXUAUPOTl8u4y+igDmEabf6G
+         nFAzdggrAAeJIAzMES6CNH2YnqKUjGbd3MMjhjEv8tewJ57mkKfd9fILnDdrjOMop3Tw
+         GRvBGAGLCbv2/ITUtItNaCTGKXLYktGl+nclBnz3PwNj2IZs+pIFOXC5zq7DLLFls1R8
+         MA3uJBpcw46FAG2J8kAuIOM6VwJOb+bU2DstDmVXscFHF+BDEnOL7gfNnQu3SwSLvWHl
+         bO8Q==
+X-Gm-Message-State: AOAM530DZLpzHWsdedGTVhfHEAVoO1XDsbRHmbGeJ1od0Gdna+yvSgos
+        eqAsOe4lhhB+5e5FaEhIUw==
+X-Google-Smtp-Source: ABdhPJxv0CW8oYBzduzbC6FQyXdJZdYmqQx7/b3pW9+LHlMx6EM5cQPG9vCAGt1DxHb0IdgcU+4QwA==
+X-Received: by 2002:ad4:594f:0:b0:45a:8f92:7a2e with SMTP id eo15-20020ad4594f000000b0045a8f927a2emr20340711qvb.28.1652223831205;
+        Tue, 10 May 2022 16:03:51 -0700 (PDT)
+Received: from bytedance (ec2-52-72-174-210.compute-1.amazonaws.com. [52.72.174.210])
+        by smtp.gmail.com with ESMTPSA id s11-20020ac8528b000000b002f39b99f684sm173738qtn.30.2022.05.10.16.03.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 16:03:50 -0700 (PDT)
+Date:   Tue, 10 May 2022 16:03:47 -0700
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Eric Dumazet <eric.dumazet@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Peilin Ye <peilin.ye@bytedance.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
+Subject: Re: [PATCH RFC v1 net-next 0/4] net: Qdisc backpressure
+ infrastructure
+Message-ID: <20220510230347.GA11152@bytedance>
+References: <cover.1651800598.git.peilin.ye@bytedance.com>
+ <2dbd5e38-b748-0c16-5b8b-b32bc0cc43b0@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] platform/chrome: cros_ec_typec: Check for EC driver
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <165222361336.23551.5993886315130688709.git-patchwork-notify@kernel.org>
-Date:   Tue, 10 May 2022 23:00:13 +0000
-References: <20220404041101.6276-1-akihiko.odaki@gmail.com>
-In-Reply-To: <20220404041101.6276-1-akihiko.odaki@gmail.com>
-To:     Akihiko Odaki <akihiko.odaki@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
-        pmalani@chromium.org, bleung@chromium.org, groeck@chromium.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2dbd5e38-b748-0c16-5b8b-b32bc0cc43b0@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Eric,
 
-This patch was applied to chrome-platform/linux.git (for-kernelci)
-by Prashant Malani <pmalani@chromium.org>:
-
-On Mon,  4 Apr 2022 13:11:01 +0900 you wrote:
-> The EC driver may not be initialized when cros_typec_probe is called,
-> particulary when CONFIG_CROS_EC_CHARDEV=m.
+On Mon, May 09, 2022 at 08:26:27PM -0700, Eric Dumazet wrote:
+> On 5/6/22 12:43, Peilin Ye wrote:
+> > From: Peilin Ye <peilin.ye@bytedance.com>
+> > 
+> > Hi all,
+> > 
+> > Currently sockets (especially UDP ones) can drop a lot of skbs at TC
+> > egress when rate limited by shaper Qdiscs like HTB.  This experimental
+> > patchset tries to improve this by introducing a backpressure mechanism, so
+> > that sockets are temporarily throttled when they "send too much".
+> > 
+> > For now it takes care of TBF, HTB and CBQ, for UDP and TCP sockets.  Any
+> > comments, suggestions would be much appreciated.  Thanks!
 > 
-> Signed-off-by: Akihiko Odaki <akihiko.odaki@gmail.com>
-> ---
->  drivers/platform/chrome/cros_ec_typec.c | 3 +++
->  1 file changed, 3 insertions(+)
+> This very much looks like trying to solve an old problem to me.
+> 
+> If you were using EDT model, a simple eBPF program could get rid of the
+> HTB/TBF qdisc
+> 
+> and you could use MQ+FQ as the packet schedulers, with the true multiqueue
+> sharding.
+> 
+> FQ provides fairness, so a flow can not anymore consume all the qdisc limit.
 
-Here is the summary with links:
-  - platform/chrome: cros_ec_typec: Check for EC driver
-    https://git.kernel.org/chrome-platform/c/7464ff8bf2d7
+This RFC tries to solve the "when UDP starts to drop (whether because of
+per-flow or per-Qdisc limit), it drops a lot" issue described in [I] of
+the cover letter; its main goal is not to improve fairness.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> (If your UDP sockets send packets all over the place (not connected
+> sockets),
+> 
+> then the eBPF can also be used to rate limit them)
 
+I was able to reproduce the same issue using EDT: default sch_fq
+flow_limit (100 packets), with a 1 Gbit/sec rate limit.  Now if I run
+this:
+
+  $ iperf -u -c 1.2.3.4 -p 5678 -l 3K -i 0.5 -t 30 -b 3g
+
+  [ ID] Interval       Transfer     Bandwidth
+  [  3]  0.0- 0.5 sec   137 MBytes  2.29 Gbits/sec
+  [  3]  0.5- 1.0 sec   142 MBytes  2.38 Gbits/sec
+  [  3]  1.0- 1.5 sec   117 MBytes  1.96 Gbits/sec
+  [  3]  1.5- 2.0 sec   105 MBytes  1.77 Gbits/sec
+  [  3]  2.0- 2.5 sec   132 MBytes  2.22 Gbits/sec
+  <...>                             ^^^^^^^^^^^^^^
+
+On average it tries to send 2.31 Gbits per second, dropping 56.71% of
+the traffic:
+
+  $ tc -s qdisc show dev eth0
+  <...>
+  qdisc fq 5: parent 1:4 limit 10000p flow_limit 100p buckets 1024 orphan_mask 1023 quantum 18030 initial_quantum 90150 low_rate_threshold 550Kbit refill_delay 40.0ms
+   Sent 16356556 bytes 14159 pkt (dropped 2814461, overlimits 0 requeues 0)
+                                  ^^^^^^^^^^^^^^^
+
+This RFC does not cover EDT though, since it does not use Qdisc watchdog
+or friends.
+
+Thanks,
+Peilin Ye
 

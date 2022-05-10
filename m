@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2144E5216C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D46E2521A4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241153AbiEJNSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:18:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
+        id S244409AbiEJNzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242391AbiEJNQV (ORCPT
+        with ESMTP id S244583AbiEJNhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:16:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0585B3BA50;
-        Tue, 10 May 2022 06:12:17 -0700 (PDT)
+        Tue, 10 May 2022 09:37:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA9C4E38F;
+        Tue, 10 May 2022 06:25:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E86B3B81D7C;
-        Tue, 10 May 2022 13:12:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47E57C385A6;
-        Tue, 10 May 2022 13:12:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AB746B81DA0;
+        Tue, 10 May 2022 13:25:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 165EFC385C2;
+        Tue, 10 May 2022 13:25:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188328;
-        bh=DTYGiQibFjQbW48302hwHbwMliOqVVdWPpqKDMKBL5E=;
+        s=korg; t=1652189153;
+        bh=tVb7z9u2sLIB2f6SBSfo+pEfL244KEv53cuYpUEUuUI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JDQgQz/A675x9x60u8PmYXEeqK5qucvCjy5Mry+sCcTxWMTA9i9oUmzd+zlMHdPPS
-         mrKH/wsl6Hd1j8cs849fQwAryGSri+TKUXGUk5yZZQ/tW/JHKQn/VLQedML34PsUrA
-         WO6CdZzlmtqT2hYnARnoRMlOy2psvkjGp6oMEjMk=
+        b=bbCycOoVxLFp67Y/Riay8+Rex1MrExak8+mUiDcXaoaoVnPsxX/Tb/M/d1Hj4LauI
+         byPQrU11RfaLwqPPtuqlUZE0Svl8d0G8j7zAaBQrbaS2kjrerd579IrU+Cttrb3GLe
+         prQ3JOqNgFJLIhjktkNFrLvWA4IwCuoH1sXpg/co=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH 4.9 38/66] tty: n_gsm: fix insufficient txframe size
+        stable@vger.kernel.org, David Stevens <stevensd@chromium.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>
+Subject: [PATCH 5.10 09/70] iommu/vt-d: Calculate mask for non-aligned flushes
 Date:   Tue, 10 May 2022 15:07:28 +0200
-Message-Id: <20220510130730.886473117@linuxfoundation.org>
+Message-Id: <20220510130733.137603691@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
-References: <20220510130729.762341544@linuxfoundation.org>
+In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
+References: <20220510130732.861729621@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,52 +56,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+From: David Stevens <stevensd@chromium.org>
 
-commit 535bf600de75a859698892ee873521a48d289ec1 upstream.
+commit 59bf3557cf2f8a469a554aea1e3d2c8e72a579f7 upstream.
 
-n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
-See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
-The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
-the newer 27.010 here. Chapter 5.7.2 states that the maximum frame size
-(N1) refers to the length of the information field (i.e. user payload).
-However, 'txframe' stores the whole frame including frame header, checksum
-and start/end flags. We also need to consider the byte stuffing overhead.
-Define constant for the protocol overhead and adjust the 'txframe' size
-calculation accordingly to reserve enough space for a complete mux frame
-including byte stuffing for advanced option mode. Note that no byte
-stuffing is applied to the start and end flag.
-Also use MAX_MTU instead of MAX_MRU as this buffer is used for data
-transmission.
+Calculate the appropriate mask for non-size-aligned page selective
+invalidation. Since psi uses the mask value to mask out the lower order
+bits of the target address, properly flushing the iotlb requires using a
+mask value such that [pfn, pfn+pages) all lie within the flushed
+size-aligned region.  This is not normally an issue because iova.c
+always allocates iovas that are aligned to their size. However, iovas
+which come from other sources (e.g. userspace via VFIO) may not be
+aligned.
 
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+To properly flush the IOTLB, both the start and end pfns need to be
+equal after applying the mask. That means that the most efficient mask
+to use is the index of the lowest bit that is equal where all higher
+bits are also equal. For example, if pfn=0x17f and pages=3, then
+end_pfn=0x181, so the smallest mask we can use is 8. Any differences
+above the highest bit of pages are due to carrying, so by xnor'ing pfn
+and end_pfn and then masking out the lower order bits based on pages, we
+get 0xffffff00, where the first set bit is the mask we want to use.
+
+Fixes: 6fe1010d6d9c ("vfio/type1: DMA unmap chunking")
 Cc: stable@vger.kernel.org
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-Link: https://lore.kernel.org/r/20220414094225.4527-8-daniel.starke@siemens.com
+Signed-off-by: David Stevens <stevensd@chromium.org>
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Link: https://lore.kernel.org/r/20220401022430.1262215-1-stevensd@google.com
+Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+Link: https://lore.kernel.org/r/20220410013533.3959168-2-baolu.lu@linux.intel.com
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/n_gsm.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/iommu/intel/iommu.c |   27 ++++++++++++++++++++++++---
+ 1 file changed, 24 insertions(+), 3 deletions(-)
 
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -84,6 +84,8 @@ module_param(debug, int, 0600);
-  */
- #define MAX_MRU 1500
- #define MAX_MTU 1500
-+/* SOF, ADDR, CTRL, LEN1, LEN2, ..., FCS, EOF */
-+#define PROT_OVERHEAD 7
- #define	GSM_NET_TX_TIMEOUT (HZ*10)
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -1626,7 +1626,8 @@ static void iommu_flush_iotlb_psi(struct
+ 				  unsigned long pfn, unsigned int pages,
+ 				  int ih, int map)
+ {
+-	unsigned int mask = ilog2(__roundup_pow_of_two(pages));
++	unsigned int aligned_pages = __roundup_pow_of_two(pages);
++	unsigned int mask = ilog2(aligned_pages);
+ 	uint64_t addr = (uint64_t)pfn << VTD_PAGE_SHIFT;
+ 	u16 did = domain->iommu_did[iommu->seq_id];
  
- /**
-@@ -2199,7 +2201,7 @@ static struct gsm_mux *gsm_alloc_mux(voi
- 		kfree(gsm);
- 		return NULL;
- 	}
--	gsm->txframe = kmalloc(2 * MAX_MRU + 2, GFP_KERNEL);
-+	gsm->txframe = kmalloc(2 * (MAX_MTU + PROT_OVERHEAD - 1), GFP_KERNEL);
- 	if (gsm->txframe == NULL) {
- 		kfree(gsm->buf);
- 		kfree(gsm);
+@@ -1638,10 +1639,30 @@ static void iommu_flush_iotlb_psi(struct
+ 	if (domain_use_first_level(domain)) {
+ 		domain_flush_piotlb(iommu, domain, addr, pages, ih);
+ 	} else {
++		unsigned long bitmask = aligned_pages - 1;
++
++		/*
++		 * PSI masks the low order bits of the base address. If the
++		 * address isn't aligned to the mask, then compute a mask value
++		 * needed to ensure the target range is flushed.
++		 */
++		if (unlikely(bitmask & pfn)) {
++			unsigned long end_pfn = pfn + pages - 1, shared_bits;
++
++			/*
++			 * Since end_pfn <= pfn + bitmask, the only way bits
++			 * higher than bitmask can differ in pfn and end_pfn is
++			 * by carrying. This means after masking out bitmask,
++			 * high bits starting with the first set bit in
++			 * shared_bits are all equal in both pfn and end_pfn.
++			 */
++			shared_bits = ~(pfn ^ end_pfn) & ~bitmask;
++			mask = shared_bits ? __ffs(shared_bits) : BITS_PER_LONG;
++		}
++
+ 		/*
+ 		 * Fallback to domain selective flush if no PSI support or
+-		 * the size is too big. PSI requires page size to be 2 ^ x,
+-		 * and the base address is naturally aligned to the size.
++		 * the size is too big.
+ 		 */
+ 		if (!cap_pgsel_inv(iommu->cap) ||
+ 		    mask > cap_max_amask_val(iommu->cap))
 
 

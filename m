@@ -2,157 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9459652140A
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 656D9521407
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241169AbiEJLnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 07:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58018 "EHLO
+        id S237245AbiEJLmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 07:42:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241142AbiEJLmx (ORCPT
+        with ESMTP id S241124AbiEJLmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 07:42:53 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FCB2415F3
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 04:38:52 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24AA88Qm017836;
-        Tue, 10 May 2022 11:38:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=me9LNv8Y4xpK6K0YUs/VaQRXYM8MnWuLPxbS1JSaCU4=;
- b=AZUwU0vW7PIBl8pn+K8ZGkkN6ll4LQJqBkLw+ZFbr+LEDzBtHjGFrv26A8AVOEKhlE0o
- 2f4ypgjaUH1WflbeCo75PnYn58S48Yo0CqAenyiQF7VPAPaiWfT0J+anawnkCux89Dvh
- aqoCPFNZ/cvVjHzMRb3do6TvZnxHPfQY9s7SQsT3hsyYQ7MyxXc+d5BYygM5S3DWeVlq
- ZJkRU1yut5iR7zr8Qgv/+9Sfg2+DP6ZCDKTmXDyUgC5rEwO+I5VfMpVe/wrfYbR0cGRR
- kvrOAYRznvQdsnFge52hnyOa6Bi+p+KxcVKIFU5ZXzLJNfXWp8gS0p91MeEb4d0+Ecvv NQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fymx0jr1q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 May 2022 11:38:37 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24ABZw1N016475;
-        Tue, 10 May 2022 11:38:37 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fymx0jr13-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 May 2022 11:38:37 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24ABH86b018742;
-        Tue, 10 May 2022 11:38:35 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma05wdc.us.ibm.com with ESMTP id 3fwgd9vp81-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 May 2022 11:38:35 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24ABcZFu24379850
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 10 May 2022 11:38:35 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1EC6D12405A;
-        Tue, 10 May 2022 11:38:35 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8EBF8124054;
-        Tue, 10 May 2022 11:38:28 +0000 (GMT)
-Received: from skywalker.linux.ibm.com (unknown [9.43.24.223])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 10 May 2022 11:38:28 +0000 (GMT)
-X-Mailer: emacs 29.0.50 (via feedmail 11-beta-1 I)
-From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-To:     Alistair Popple <apopple@nvidia.com>, Wei Xu <weixugc@google.com>
-Cc:     Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Greg Thelen <gthelen@google.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Michal Hocko <mhocko@kernel.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>
-Subject: Re: RFC: Memory Tiering Kernel Interfaces
-In-Reply-To: <875ymerl81.fsf@nvdebian.thelocal>
-References: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
- <CAHbLzkq1YXXLMiREpGnzhJjPssu4WpSsnkTmrLJ=hAEhZVUr9w@mail.gmail.com>
- <CAAPL-u-r2Pc_MaHQmKKNH_icAa_fH1COWb5qSPpr8xffREQ_cQ@mail.gmail.com>
- <87tua3h5r1.fsf@nvdebian.thelocal>
- <CAAPL-u-0HwL6p1SA73LPfFyywG55QqE9O+q=83fhShoJAVVxyQ@mail.gmail.com>
- <875ymerl81.fsf@nvdebian.thelocal>
-Date:   Tue, 10 May 2022 17:08:26 +0530
-Message-ID: <87fslhhb2l.fsf@linux.ibm.com>
+        Tue, 10 May 2022 07:42:42 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC8124EA05;
+        Tue, 10 May 2022 04:38:43 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id E799F21C06;
+        Tue, 10 May 2022 11:38:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652182721; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QjxQbnD6WUcAB5XSGPbhgiXq5Z1nB8h07eo4ZkZ4QC8=;
+        b=ux1OKlKPpQAZrqb3VSx/+cdnKv+z0GMrb7Vrl4wT7av9mwtdsYHmGTFl15YLILBNoNipDu
+        zhzvyNUQ0tVf4I8bosAIddNvm3hk9CLYxTFt2W7RQIuTrmM1G9742/mw3JpxDF9W//N0xh
+        4YsR4kO61TX2TGUrgE/V7TAnZzSnJsg=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id F0AB42C141;
+        Tue, 10 May 2022 11:38:39 +0000 (UTC)
+Date:   Tue, 10 May 2022 13:38:39 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Evan Green <evgreen@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com,
+        kexec@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Jonathan Corbet <corbet@lwn.net>, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de,
+        Kees Cook <keescook@chromium.org>, luto@kernel.org,
+        mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org,
+        peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, Alan Stern <stern@rowland.harvard.edu>,
+        Thomas Gleixner <tglx@linutronix.de>, vgoyal@redhat.com,
+        vkuznets@redhat.com, Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        David Gow <davidgow@google.com>,
+        Julius Werner <jwerner@chromium.org>
+Subject: Re: [PATCH 04/30] firmware: google: Convert regular spinlock into
+ trylock on panic path
+Message-ID: <YnpOv4hAPV4b+6v4@alley>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-5-gpiccoli@igalia.com>
+ <CAE=gft5Pq25L4KFoPWbftkPF-JN1ex2yws77mMJ4GQnn9W0L2g@mail.gmail.com>
+ <adcf6d0e-c37c-6ede-479e-29959d03d8c0@igalia.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: oyyZh7JwVYEaZ5I-CZ9zW5n4UakADTq1
-X-Proofpoint-GUID: r15FvQ0tpc82jz2Sx0KqfczjX0VwwDOi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-10_01,2022-05-10_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 clxscore=1011 mlxscore=0 adultscore=0 bulkscore=0
- suspectscore=0 mlxlogscore=999 spamscore=0 malwarescore=0
- lowpriorityscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2202240000 definitions=main-2205100052
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <adcf6d0e-c37c-6ede-479e-29959d03d8c0@igalia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alistair Popple <apopple@nvidia.com> writes:
+On Tue 2022-05-03 16:12:09, Guilherme G. Piccoli wrote:
+> On 03/05/2022 15:03, Evan Green wrote:
+> > [...]
+> > gsmi_shutdown_reason() is a common function called in other scenarios
+> > as well, like reboot and thermal trip, where it may still make sense
+> > to wait to acquire a spinlock. Maybe we should add a parameter to
+> > gsmi_shutdown_reason() so that you can get your change on panic, but
+> > we don't convert other callbacks into try-fail scenarios causing us to
+> > miss logs.
+> > 
+> 
+> Hi Evan, thanks for your feedback, much appreciated!
+> What I've done in other cases like this was to have a helper checking
+> the spinlock in the panic notifier - if we can acquire that, go ahead
+> but if not, bail out. For a proper example of an implementation, check
+> patch 13 of the series:
+> https://lore.kernel.org/lkml/20220427224924.592546-14-gpiccoli@igalia.com/ .
+> 
+> Do you agree with that, or prefer really a parameter in
+> gsmi_shutdown_reason() ? I'll follow your choice =)
 
-> Wei Xu <weixugc@google.com> writes:
->
->> On Thu, May 5, 2022 at 5:19 PM Alistair Popple <apopple@nvidia.com> wrote:
->>>
->>> Wei Xu <weixugc@google.com> writes:
->>>
->>> [...]
->>>
->>> >> >
->>> >> >
->>> >> > Tiering Hierarchy Initialization
->>> >> > `=============================='
->>> >> >
->>> >> > By default, all memory nodes are in the top tier (N_TOPTIER_MEMORY).
->>> >> >
->>> >> > A device driver can remove its memory nodes from the top tier, e.g.
->>> >> > a dax driver can remove PMEM nodes from the top tier.
->>> >>
->>> >> With the topology built by firmware we should not need this.
->>>
->>> I agree that in an ideal world the hierarchy should be built by firmware based
->>> on something like the HMAT. But I also think being able to override this will be
->>> useful in getting there. Therefore a way of overriding the generated hierarchy
->>> would be good, either via sysfs or kernel boot parameter if we don't want to
->>> commit to a particular user interface now.
->>>
->>> However I'm less sure letting device-drivers override this is a good idea. How
->>> for example would a GPU driver make sure it's node is in the top tier? By moving
->>> every node that the driver does not know about out of N_TOPTIER_MEMORY? That
->>> could get messy if say there were two drivers both of which wanted their node to
->>> be in the top tier.
->>
->> The suggestion is to allow a device driver to opt out its memory
->> devices from the top-tier, not the other way around.
->
-> So how would demotion work in the case of accelerators then? In that
-> case we would want GPU memory to demote to DRAM, but that won't happen
-> if both DRAM and GPU memory are in N_TOPTIER_MEMORY and it seems the
-> only override available with this proposal would move GPU memory into a
-> lower tier, which is the opposite of what's needed there.
+I see two more alternative solutions:
 
-How about we do 3 tiers now. dax kmem devices can be registered to
-tier 3. By default all numa nodes can be registered at tier 2 and HBM or
-GPU can be enabled to register at tier 1. ?
+1st variant is a trick already used in console write() callbacks.
+They do trylock() when oops_in_progress is set. They remember
+the result to prevent double unlock when printing Oops messages and
+the system will try to continue working. For example:
 
--aneesh
+pl011_console_write(struct console *co, const char *s, unsigned int count)
+{
+[...]
+	int locked = 1;
+[...]
+	if (uap->port.sysrq)
+		locked = 0;
+	else if (oops_in_progress)
+		locked = spin_trylock(&uap->port.lock);
+	else
+		spin_lock(&uap->port.lock);
+
+[...]
+
+	if (locked)
+		spin_unlock(&uap->port.lock);
+}
+
+
+2nd variant is to check panic_cpu variable. It is used in printk.c.
+We might move the function to panic.h:
+
+static bool panic_in_progress(void)
+{
+	return unlikely(atomic_read(&panic_cpu) != PANIC_CPU_INVALID);
+}
+
+and then do:
+
+	if (panic_in_progress()) {
+		...
+
+
+> > Though thinking more about it, is this really a Good Change (TM)? The
+> > spinlock itself already disables interrupts, meaning the only case
+> > where this change makes a difference is if the panic happens from
+> > within the function that grabbed the spinlock (in which case the
+> > callback is also likely to panic), or in an NMI that panics within
+> > that window.
+
+As already mentioned in the other reply, panic() sometimes stops
+the other CPUs using NMI, for example, see kdump_nmi_shootdown_cpus().
+
+Another situation is when the CPU using the lock ends in some
+infinite loop because something went wrong. The system is in
+an unpredictable state during panic().
+
+I am not sure if this is possible with the code under gsmi_dev.lock
+but such things really happen during panic() in other subsystems.
+Using trylock in the panic() code path is a good practice.
+
+Best Regards,
+Petr

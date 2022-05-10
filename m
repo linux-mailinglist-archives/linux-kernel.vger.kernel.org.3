@@ -2,185 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBDD3521245
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D3BA52124F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239914AbiEJKh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 06:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
+        id S239814AbiEJKlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 06:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239896AbiEJKhy (ORCPT
+        with ESMTP id S239932AbiEJKlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 06:37:54 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936EF20823C;
-        Tue, 10 May 2022 03:33:56 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KyDsq61dSz4ySZ;
-        Tue, 10 May 2022 20:33:51 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ozlabs.org;
-        s=201707; t=1652178835;
-        bh=LJAf2AB1VtWHbZhDAsR4IEpdZbINpfdn2dVKJ0sy5IQ=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
-        b=kYFx1nfb2EUvjtiID8tV81UOsPKrtZHfED1JwLdsbeC0LrMwPF0jz00ssWWVRghc8
-         rZOyzs8BkiSlRrBS3hKSv4nKaG9ps855Ae1DHTjIIh2EQxOGw739UOuielkWR+3cAj
-         tC5wyIDBVyxmX5s8kp06Im50OfWiHmnUn6MDWl0uWCBIwWdfjRY5L35FjDUpPRC6No
-         PKzb58lnw2/YcpQXLnDMM0YRa68+J8WjbZNLgIVOxEDngu6V/4WpT29CLL5xMycxiu
-         dayLr/eKoFsQHWFCa7+2iZLj2m4plAhGxtedmxGWY5RZLsMcA2b++H16vMXUWFYlpH
-         xhrRv4Jog1kIA==
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
-Subject: Re: [PATCH] KVM: PPC: Book3S PR: Enable MSR_DR for
- switch_mmu_context()
-From:   Matt Evans <matt@ozlabs.org>
-In-Reply-To: <20220509202355.13985-1-graf@amazon.com>
-Date:   Tue, 10 May 2022 11:33:45 +0100
-Cc:     kvm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Mackerras <paulus@samba.org>,
-        Ben Herrenschmitt <benh@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, stable@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <5CBF19EB-F2DA-4DBA-9BD0-D38E3A3F959A@ozlabs.org>
-References: <20220509202355.13985-1-graf@amazon.com>
-To:     Alexander Graf <graf@amazon.com>
-X-Mailer: Apple Mail (2.3654.120.0.1.13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 10 May 2022 06:41:06 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FB92618E4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:37:08 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id bv19so32051233ejb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:37:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=75/C7h5CNsbW/VVYm2sKiusOMpu9/WpRRE2yjuNNA7Y=;
+        b=mx5dQxDx0ZCxnBFMxuie5AkL72AsDS45domPNjZ/menpLr7TtONaLqhcO3BBJZCAiw
+         fbzrTyl/BaFfLnoney01gyPd88c/7JTL5ibgAtas2kuAcHlN+yq0bEKRHV4V3MW3E+iL
+         4NqM88T61dV8HudyVqQuq6uv3CYTaXkk/GdxvJQS56S0drI07ug3dwN3yKI1lQWnQ3gz
+         LFJ5FMAcThL38AsM+TY1vwNF6TlKe6SUQXoukCGRbmgW4hrChBkqea6DZ3XxkkkCWI61
+         nFlysVi1tfYVVUdnl5DTJkq17vWDQ4Eno0yi3TRLAk4w7lgAdVJkuzrUtKe3u/7W8tT6
+         tasw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=75/C7h5CNsbW/VVYm2sKiusOMpu9/WpRRE2yjuNNA7Y=;
+        b=4X/zrHF1JjMZ0OqCFaZsQoTaPsHCT0X7muSjKgwLMj6MXxHXAqPWiPqhQL2AEo4NM9
+         IoeKB/r0FjCetUUuK1Ybi4JAmSvQpWizUXEC/pfvXvbD+8BlRXBF377px44AmbBjpG87
+         U5dZK/QBBbWdk1hm+/OfSHBi7RPHnX3E5zuNR0md/aMld+xonDwvoQYOD9uqQZq9JBX/
+         6/4HFlrqkOyrTOgFzXMm8ffH5wAxVo5qzDUTrKlfN65mqsJqs6LNA0vGKxUyJbaPBIkq
+         mI0aI4NfzBnVn66US9Fqw2uHUxGZeqW8aOAN52EvE4V2nzht6n5bmiHXgDjs/+ezRbfl
+         3+Rw==
+X-Gm-Message-State: AOAM531zabl3aCYG/nKCc/yNnxx/5VrQUDXmJFpCbiPnor6T/g7AxFPU
+        DctPJ2Fe9CCp1Vy0Mj87A/4Teg==
+X-Google-Smtp-Source: ABdhPJwTRNAmvlaJMRk0SNOUSPmD2ohyEdjxYr4vHijwfhtSm7X6ktPpLVAZZ/7kBhdWdOvLAz0QQw==
+X-Received: by 2002:a17:907:6092:b0:6fa:7951:e26 with SMTP id ht18-20020a170907609200b006fa79510e26mr8537235ejc.734.1652179026740;
+        Tue, 10 May 2022 03:37:06 -0700 (PDT)
+Received: from [192.168.0.251] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id hv7-20020a17090760c700b006f3ef214e15sm5983621ejc.123.2022.05.10.03.37.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 03:37:06 -0700 (PDT)
+Message-ID: <88a0543f-e717-4228-4842-aa69cd7faaf8@linaro.org>
+Date:   Tue, 10 May 2022 12:37:04 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 3/4] dt-bindings: mux: Add lan966 flexcom mux
+ controller
+Content-Language: en-US
+To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        krzysztof.kozlowski+dt@linaro.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        peda@axentia.se
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, lee.jones@linaro.org,
+        linux@armlinux.org.uk, Manohar.Puri@microchip.com,
+        UNGLinuxDriver@microchip.com
+References: <20220509084920.14529-1-kavyasree.kotagiri@microchip.com>
+ <20220509084920.14529-4-kavyasree.kotagiri@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220509084920.14529-4-kavyasree.kotagiri@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alex,
-
-> On 9 May 2022, at 21:23, Alexander Graf <graf@amazon.com> wrote:
->=20
-> Commit 863771a28e27 ("powerpc/32s: Convert switch_mmu_context() to C")
-> moved the switch_mmu_context() to C. While in principle a good idea, =
-it
-> meant that the function now uses the stack. The stack is not =
-accessible
-> from real mode though.
->=20
-> So to keep calling the function, let's turn on MSR_DR while we call =
-it.
-> That way, all pointer references to the stack are handled virtually.
->=20
-> Reported-by: Matt Evans <matt@ozlabs.org>
-> Fixes: 863771a28e27 ("powerpc/32s: Convert switch_mmu_context() to C")
-> Signed-off-by: Alexander Graf <graf@amazon.com>
-> Cc: stable@vger.kernel.org
-
-Many thanks - this addresses the issue I saw, and has been...
-
-Tested-by: Matt Evans <matt@ozlabs.org>
-
-...on a G4 host.  One comment though:
-
-> =E2=80=94
-> arch/powerpc/kvm/book3s_32_sr.S | 20 +++++++++++++++-----
-> 1 file changed, 15 insertions(+), 5 deletions(-)
->=20
-> diff --git a/arch/powerpc/kvm/book3s_32_sr.S =
-b/arch/powerpc/kvm/book3s_32_sr.S
-> index e3ab9df6cf19..bd4f798f7a46 100644
-> --- a/arch/powerpc/kvm/book3s_32_sr.S
-> +++ b/arch/powerpc/kvm/book3s_32_sr.S
-> @@ -122,11 +122,21 @@
->=20
-> 	/* 0x0 - 0xb */
->=20
-> -	/* 'current->mm' needs to be in r4 */
-> -	tophys(r4, r2)
-> -	lwz	r4, MM(r4)
-> -	tophys(r4, r4)
-> -	/* This only clobbers r0, r3, r4 and r5 */
-> +	/* switch_mmu_context() needs paging, let's enable it */
-> +	mfmsr   r9
-> +	ori     r11, r9, MSR_DR
-> +	mtmsr   r11
-> +	sync
+On 09/05/2022 10:49, Kavyasree Kotagiri wrote:
+> This adds DT bindings documentation for lan966 flexcom
+> mux controller.
+> 
+> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+> ---
+>  .../mux/microchip,lan966-flx-mux.yaml         | 51 +++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mux/microchip,lan966-flx-mux.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mux/microchip,lan966-flx-mux.yaml b/Documentation/devicetree/bindings/mux/microchip,lan966-flx-mux.yaml
+> new file mode 100644
+> index 000000000000..63147a2e8f3a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mux/microchip,lan966-flx-mux.yaml
+> @@ -0,0 +1,51 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mux/microchip,lan966-flx-mux.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +	/* Calling switch_mmu_context(<inv>, current->mm, <inv>); */
-> +	lwz	r4, MM(r2)
-> 	bl	switch_mmu_context
+> +title: Microchip Lan966 Flexcom multiplexer bindings
 
-Of the volatile registers, I believe r12 is still valuable here and =
-would need to be preserved.
-(I can=E2=80=99t spot any others but would defer to your judgement =
-here.)
+s/bindings//
 
-For example:
-
-diff --git a/arch/powerpc/kvm/book3s_32_sr.S =
-b/arch/powerpc/kvm/book3s_32_sr.S
-index e3ab9df6cf19..41fc9ca12d38 100644
---- a/arch/powerpc/kvm/book3s_32_sr.S
-+++ b/arch/powerpc/kvm/book3s_32_sr.S
-@@ -122,11 +122,23 @@
-=20
- 	/* 0x0 - 0xb */
-=20
--	/* 'current->mm' needs to be in r4 */
--	tophys(r4, r2)
--	lwz	r4, MM(r4)
--	tophys(r4, r4)
--	/* This only clobbers r0, r3, r4 and r5 */
-+	/* switch_mmu_context() needs paging, let's enable it */
-+	mfmsr   r9
-+	ori     r11, r9, MSR_DR
-+	mtmsr   r11
-+	sync
-+
-+	SAVE_GPR(12, r1)
-+	/* Calling switch_mmu_context(<inv>, current->mm, <inv>); */
-+	lwz	r4, MM(r2)
- 	bl	switch_mmu_context
-+	REST_GPR(12, r1)
-+
-+	/* Disable paging again */
-+	mfmsr   r9
-+	li      r6, MSR_DR
-+	andc    r9, r9, r6
-+	mtmsr	r9
-+	sync
-=20
- .endm
-
-
-Matt
-
->=20
-> +	/* Disable paging again */
-> +	mfmsr   r9
-> +	li      r6, MSR_DR
-> +	andc    r9, r9, r6
-> +	mtmsr	r9
-> +	sync
 > +
-> .endm
-> --=20
-> 2.28.0.394.ge197136389
->=20
->=20
->=20
->=20
-> Amazon Development Center Germany GmbH
-> Krausenstr. 38
-> 10117 Berlin
-> Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
-> Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
-> Sitz: Berlin
-> Ust-ID: DE 289 237 879
->=20
->=20
->=20
+> +maintainers:
+> +  - Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+> +
+> +description: |+
 
+No need for |+
+
+> +  The Microchip Lan966 have 5 Flexcoms. Each flexcom has 2 chip-selects
+> +  when operating in USART and SPI modes.
+> +  Each chip select of each flexcom can be mapped to 21 flexcom shared pins.
+> +  Define register offset and pin number to map a flexcom chip-select
+> +  to flexcom shared pin.
+> +
+> +allOf:
+> +  - $ref: /schemas/mux/mux-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: microchip,lan966-flx-mux
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  '#mux-control-cells':
+> +    const: 1
+> +
+> +  mux-offset-pin:
+> +    description: an array of register offset and flexcom shared pin(0-20).
+
+This does not look like generic property, so you need vendor prefix and
+type/ref.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - '#mux-control-cells'
+> +  - mux-offset-pin
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    mux: mux-controller@e2004168 {
+> +        compatible = "microchip,lan966-flx-mux";
+> +        reg = <0xe2004168 0x8>;
+> +        #mux-control-cells = <1>;
+> +        mux-offset-pin = <0x18 9>; /* 0: flx3 cs0 offset, pin-9 */
+> +    };
+> +...
+
+
+Best regards,
+Krzysztof

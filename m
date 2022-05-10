@@ -2,71 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F37D4521D09
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37451521D2E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345139AbiEJOzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44754 "EHLO
+        id S1345033AbiEJOz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345197AbiEJOzS (ORCPT
+        with ESMTP id S1344639AbiEJOzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:55:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B43496AA;
-        Tue, 10 May 2022 07:16:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 10 May 2022 10:55:41 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879D1186CE;
+        Tue, 10 May 2022 07:16:13 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 932901F896;
+        Tue, 10 May 2022 14:16:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652192171; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=A8/NZJeBAhTKLHLb3PoAvlXD/AvbEgaBaR5HXaRNdkM=;
+        b=BeTzacf3mS4VoGHK6i1jVn2p93FIleajbiX/lqLZYQzEPT5BuEThdtby46ST2AJUboj/I/
+        VqEG9r83Q4xijGW9lCE2hweKm6E7raa+vKstZ+w2OtTvG5P31Un3HT5rf7nvpJdK7CHBFy
+        VZPQPYk1mnBdJ3vUcDiFbXkwBcjlkRU=
+Received: from suse.cz (unknown [10.100.208.146])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BAAC061679;
-        Tue, 10 May 2022 14:16:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 728F2C385C9;
-        Tue, 10 May 2022 14:16:01 +0000 (UTC)
-Date:   Tue, 10 May 2022 10:16:00 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     kernel test robot <lkp@intel.com>, Ingo Molnar <mingo@redhat.com>,
-        kbuild-all@lists.01.org, Shakeel Butt <shakeelb@google.com>,
-        kernel@openvz.org, linux-kernel@vger.kernel.org,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux-foundation.org>
-Subject: Re: [PATCH] percpu: improve percpu_alloc_percpu event trace
-Message-ID: <20220510101600.48529d5e@gandalf.local.home>
-In-Reply-To: <6e68298c-7cdd-9984-215e-7e6fb3d03fe8@openvz.org>
-References: <8d627f02-183f-c4e7-7c15-77b2b438536b@openvz.org>
-        <202205070420.aAhuqpYk-lkp@intel.com>
-        <e1c09bbb-2c58-a986-c704-1db538da905a@openvz.org>
-        <20220509170605.2eb7637e@gandalf.local.home>
-        <6e68298c-7cdd-9984-215e-7e6fb3d03fe8@openvz.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by relay2.suse.de (Postfix) with ESMTPS id 01C5F2C141;
+        Tue, 10 May 2022 14:16:09 +0000 (UTC)
+Date:   Tue, 10 May 2022 16:16:06 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>, rth@gcc.gnu.org,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        bhe@redhat.com, kexec@lists.infradead.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org
+Subject: Re: [PATCH 10/30] alpha: Clean-up the panic notifier code
+Message-ID: <YnpzpkfuwzJYbPYj@alley>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-11-gpiccoli@igalia.com>
+ <f6def662-5742-b3a8-544f-bf15c636d83d@igalia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f6def662-5742-b3a8-544f-bf15c636d83d@igalia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 May 2022 07:22:02 +0300
-Vasily Averin <vvs@openvz.org> wrote:
+On Mon 2022-05-09 11:13:17, Guilherme G. Piccoli wrote:
+> On 27/04/2022 19:49, Guilherme G. Piccoli wrote:
+> > The alpha panic notifier has some code issues, not following
+> > the conventions of other notifiers. Also, it might halt the
+> > machine but still it is set to run as early as possible, which
+> > doesn't seem to be a good idea.
 
-> ... and when  __def_gfpflag_names() traslates them to unsigned long
-> 
->        {(unsigned long)GFP_DMA,                "GFP_DMA"},             \
->        {(unsigned long)__GFP_HIGHMEM,          "__GFP_HIGHMEM"},       \
->        {(unsigned long)GFP_DMA32,              "GFP_DMA32"},           \
-> 
-> ... it leads to sparse warnings bacuse type gfp_t was declared as 'bitwise'
+Yeah, it is pretty strange behavior.
 
-Ah' it's the printing of the flag bits. Got it.
+I looked into the history. This notifier was added into the alpha code
+in 2.4.0-test2pre2. In this historic code, the default panic() code
+either rebooted after a timeout or ended in a infinite loop. There
+was not crasdump at that times.
 
--- Steve
+The notifier allowed to change the behavior. There were 3 notifiers:
+
+   + mips and mips64 ended with blinking in panic()
+   + alpha did __halt() in this srm case
+
+They both still do this. I guess that it is some historic behavior
+that people using these architectures are used to.
+
+Anyway, it makes sense to do this as the last notifier after
+dumping other information.
+
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+
+Best Regards,
+Petr

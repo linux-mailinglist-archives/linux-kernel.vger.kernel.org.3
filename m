@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 032C95219A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50831521973
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240210AbiEJNuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48758 "EHLO
+        id S244987AbiEJNrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243435AbiEJNa4 (ORCPT
+        with ESMTP id S243574AbiEJNbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:30:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7272C2C7A77;
-        Tue, 10 May 2022 06:21:37 -0700 (PDT)
+        Tue, 10 May 2022 09:31:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9695D2C818C;
+        Tue, 10 May 2022 06:21:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7987061663;
-        Tue, 10 May 2022 13:21:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89B24C385C9;
-        Tue, 10 May 2022 13:21:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E5F33B81B32;
+        Tue, 10 May 2022 13:21:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D13CC385A6;
+        Tue, 10 May 2022 13:21:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188894;
-        bh=WCI11bdAGF3EREfpmGf7G6RtuJWIfLFDZarkLZWOsS0=;
+        s=korg; t=1652188897;
+        bh=m22VRSCGvY02pwAlVUge53me6XQ+HmqDRyiwK3/LdSs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DCmgZE6zY3YDNDoQpnFT6j0atRnWn4K1geToFA5kBjN1B1On/l1iEZbTmvheL6j/p
-         QhDGG+zY3RJan1DOSDIhcyBe/OP+Z9xux+8r+eaCiQaqiyzKzdsYelFIWy2NIybuF0
-         XQEKv0h1hni2hHlDyi8fzmF5ZztNP06H2hSOeBHs=
+        b=xhbwz5dmxvqF2LY6qbh+99gVIokgDSwQto2hxql9RT4//miJvbFTpGZH6Y7P5ish+
+         6FWxK/gQlYt2wc+b2rvnIjvxPjOPAzxBnP2+i/RsctFIxPtJIqjgsRPxNwr0VnGbhi
+         dDQYgX3NRWDCgE2HGFkeywbrgJNnPHeKtQqn2d1U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.19 83/88] tcp: make sure treq->af_specific is initialized
-Date:   Tue, 10 May 2022 15:08:08 +0200
-Message-Id: <20220510130736.143634816@linuxfoundation.org>
+        stable@vger.kernel.org, Jiazi Li <lijiazi@xiaomi.com>,
+        Mike Snitzer <snitzer@redhat.com>,
+        Mikulas Patocka <mpatocka@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>
+Subject: [PATCH 4.19 84/88] dm: fix mempool NULL pointer race when completing IO
+Date:   Tue, 10 May 2022 15:08:09 +0200
+Message-Id: <20220510130736.172498139@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
 References: <20220510130733.735278074@linuxfoundation.org>
@@ -55,143 +56,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Jiazi Li <jqqlijiazi@gmail.com>
 
-commit ba5a4fdd63ae0c575707030db0b634b160baddd7 upstream.
+commit d208b89401e073de986dc891037c5a668f5d5d95 upstream.
 
-syzbot complained about a recent change in TCP stack,
-hitting a NULL pointer [1]
+dm_io_dec_pending() calls end_io_acct() first and will then dec md
+in-flight pending count. But if a task is swapping DM table at same
+time this can result in a crash due to mempool->elements being NULL:
 
-tcp request sockets have an af_specific pointer, which
-was used before the blamed change only for SYNACK generation
-in non SYNCOOKIE mode.
+task1                             task2
+do_resume
+ ->do_suspend
+  ->dm_wait_for_completion
+                                  bio_endio
+				   ->clone_endio
+				    ->dm_io_dec_pending
+				     ->end_io_acct
+				      ->wakeup task1
+ ->dm_swap_table
+  ->__bind
+   ->__bind_mempools
+    ->bioset_exit
+     ->mempool_exit
+                                     ->free_io
 
-tcp requests sockets momentarily created when third packet
-coming from client in SYNCOOKIE mode were not using
-treq->af_specific.
+[ 67.330330] Unable to handle kernel NULL pointer dereference at
+virtual address 0000000000000000
+......
+[ 67.330494] pstate: 80400085 (Nzcv daIf +PAN -UAO)
+[ 67.330510] pc : mempool_free+0x70/0xa0
+[ 67.330515] lr : mempool_free+0x4c/0xa0
+[ 67.330520] sp : ffffff8008013b20
+[ 67.330524] x29: ffffff8008013b20 x28: 0000000000000004
+[ 67.330530] x27: ffffffa8c2ff40a0 x26: 00000000ffff1cc8
+[ 67.330535] x25: 0000000000000000 x24: ffffffdada34c800
+[ 67.330541] x23: 0000000000000000 x22: ffffffdada34c800
+[ 67.330547] x21: 00000000ffff1cc8 x20: ffffffd9a1304d80
+[ 67.330552] x19: ffffffdada34c970 x18: 000000b312625d9c
+[ 67.330558] x17: 00000000002dcfbf x16: 00000000000006dd
+[ 67.330563] x15: 000000000093b41e x14: 0000000000000010
+[ 67.330569] x13: 0000000000007f7a x12: 0000000034155555
+[ 67.330574] x11: 0000000000000001 x10: 0000000000000001
+[ 67.330579] x9 : 0000000000000000 x8 : 0000000000000000
+[ 67.330585] x7 : 0000000000000000 x6 : ffffff80148b5c1a
+[ 67.330590] x5 : ffffff8008013ae0 x4 : 0000000000000001
+[ 67.330596] x3 : ffffff80080139c8 x2 : ffffff801083bab8
+[ 67.330601] x1 : 0000000000000000 x0 : ffffffdada34c970
+[ 67.330609] Call trace:
+[ 67.330616] mempool_free+0x70/0xa0
+[ 67.330627] bio_put+0xf8/0x110
+[ 67.330638] dec_pending+0x13c/0x230
+[ 67.330644] clone_endio+0x90/0x180
+[ 67.330649] bio_endio+0x198/0x1b8
+[ 67.330655] dec_pending+0x190/0x230
+[ 67.330660] clone_endio+0x90/0x180
+[ 67.330665] bio_endio+0x198/0x1b8
+[ 67.330673] blk_update_request+0x214/0x428
+[ 67.330683] scsi_end_request+0x2c/0x300
+[ 67.330688] scsi_io_completion+0xa0/0x710
+[ 67.330695] scsi_finish_command+0xd8/0x110
+[ 67.330700] scsi_softirq_done+0x114/0x148
+[ 67.330708] blk_done_softirq+0x74/0xd0
+[ 67.330716] __do_softirq+0x18c/0x374
+[ 67.330724] irq_exit+0xb4/0xb8
+[ 67.330732] __handle_domain_irq+0x84/0xc0
+[ 67.330737] gic_handle_irq+0x148/0x1b0
+[ 67.330744] el1_irq+0xe8/0x190
+[ 67.330753] lpm_cpuidle_enter+0x4f8/0x538
+[ 67.330759] cpuidle_enter_state+0x1fc/0x398
+[ 67.330764] cpuidle_enter+0x18/0x20
+[ 67.330772] do_idle+0x1b4/0x290
+[ 67.330778] cpu_startup_entry+0x20/0x28
+[ 67.330786] secondary_start_kernel+0x160/0x170
 
-Make sure this field is populated, in the same way normal
-TCP requests sockets do in tcp_conn_request().
+Fix this by:
+1) Establishing pointers to 'struct dm_io' members in
+dm_io_dec_pending() so that they may be passed into end_io_acct()
+_after_ free_io() is called.
+2) Moving end_io_acct() after free_io().
 
-[1]
-TCP: request_sock_TCPv6: Possible SYN flooding on port 20002. Sending cookies.  Check SNMP counters.
-general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-CPU: 1 PID: 3695 Comm: syz-executor864 Not tainted 5.18.0-rc3-syzkaller-00224-g5fd1fe4807f9 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:tcp_create_openreq_child+0xe16/0x16b0 net/ipv4/tcp_minisocks.c:534
-Code: 48 c1 ea 03 80 3c 02 00 0f 85 e5 07 00 00 4c 8b b3 28 01 00 00 48 b8 00 00 00 00 00 fc ff df 49 8d 7e 08 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 c9 07 00 00 48 8b 3c 24 48 89 de 41 ff 56 08 48
-RSP: 0018:ffffc90000de0588 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: ffff888076490330 RCX: 0000000000000100
-RDX: 0000000000000001 RSI: ffffffff87d67ff0 RDI: 0000000000000008
-RBP: ffff88806ee1c7f8 R08: 0000000000000000 R09: 0000000000000000
-R10: ffffffff87d67f00 R11: 0000000000000000 R12: ffff88806ee1bfc0
-R13: ffff88801b0e0368 R14: 0000000000000000 R15: 0000000000000000
-FS:  00007f517fe58700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffcead76960 CR3: 000000006f97b000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <IRQ>
- tcp_v6_syn_recv_sock+0x199/0x23b0 net/ipv6/tcp_ipv6.c:1267
- tcp_get_cookie_sock+0xc9/0x850 net/ipv4/syncookies.c:207
- cookie_v6_check+0x15c3/0x2340 net/ipv6/syncookies.c:258
- tcp_v6_cookie_check net/ipv6/tcp_ipv6.c:1131 [inline]
- tcp_v6_do_rcv+0x1148/0x13b0 net/ipv6/tcp_ipv6.c:1486
- tcp_v6_rcv+0x3305/0x3840 net/ipv6/tcp_ipv6.c:1725
- ip6_protocol_deliver_rcu+0x2e9/0x1900 net/ipv6/ip6_input.c:422
- ip6_input_finish+0x14c/0x2c0 net/ipv6/ip6_input.c:464
- NF_HOOK include/linux/netfilter.h:307 [inline]
- NF_HOOK include/linux/netfilter.h:301 [inline]
- ip6_input+0x9c/0xd0 net/ipv6/ip6_input.c:473
- dst_input include/net/dst.h:461 [inline]
- ip6_rcv_finish net/ipv6/ip6_input.c:76 [inline]
- NF_HOOK include/linux/netfilter.h:307 [inline]
- NF_HOOK include/linux/netfilter.h:301 [inline]
- ipv6_rcv+0x27f/0x3b0 net/ipv6/ip6_input.c:297
- __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5405
- __netif_receive_skb+0x24/0x1b0 net/core/dev.c:5519
- process_backlog+0x3a0/0x7c0 net/core/dev.c:5847
- __napi_poll+0xb3/0x6e0 net/core/dev.c:6413
- napi_poll net/core/dev.c:6480 [inline]
- net_rx_action+0x8ec/0xc60 net/core/dev.c:6567
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
- invoke_softirq kernel/softirq.c:432 [inline]
- __irq_exit_rcu+0x123/0x180 kernel/softirq.c:637
- irq_exit_rcu+0x5/0x20 kernel/softirq.c:649
- sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1097
-
-Fixes: 5b0b9e4c2c89 ("tcp: md5: incorrect tcp_header_len for incoming connections")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Francesco Ruggeri <fruggeri@arista.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-[fruggeri: Account for backport conflicts from 35b2c3211609 and 6fc8c827dd4f]
-Signed-off-by: Francesco Ruggeri <fruggeri@arista.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Jiazi Li <lijiazi@xiaomi.com>
+Signed-off-by: Mike Snitzer <snitzer@redhat.com>
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Reviewed-by: Mike Snitzer <snitzer@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/tcp.h     |    5 +++++
- net/ipv4/syncookies.c |    1 +
- net/ipv4/tcp_ipv4.c   |    2 +-
- net/ipv6/syncookies.c |    1 +
- net/ipv6/tcp_ipv6.c   |    2 +-
- 5 files changed, 9 insertions(+), 2 deletions(-)
+ drivers/md/dm.c |   17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -1939,6 +1939,11 @@ struct tcp_request_sock_ops {
- 			   enum tcp_synack_type synack_type);
- };
+--- a/drivers/md/dm.c
++++ b/drivers/md/dm.c
+@@ -631,21 +631,20 @@ static void start_io_acct(struct dm_io *
+ 				    false, 0, &io->stats_aux);
+ }
  
-+extern const struct tcp_request_sock_ops tcp_request_sock_ipv4_ops;
-+#if IS_ENABLED(CONFIG_IPV6)
-+extern const struct tcp_request_sock_ops tcp_request_sock_ipv6_ops;
-+#endif
-+
- #ifdef CONFIG_SYN_COOKIES
- static inline __u32 cookie_init_sequence(const struct tcp_request_sock_ops *ops,
- 					 const struct sock *sk, struct sk_buff *skb,
---- a/net/ipv4/syncookies.c
-+++ b/net/ipv4/syncookies.c
-@@ -337,6 +337,7 @@ struct sock *cookie_v4_check(struct sock
+-static void end_io_acct(struct dm_io *io)
++static void end_io_acct(struct mapped_device *md, struct bio *bio,
++			unsigned long start_time, struct dm_stats_aux *stats_aux)
+ {
+-	struct mapped_device *md = io->md;
+-	struct bio *bio = io->orig_bio;
+-	unsigned long duration = jiffies - io->start_time;
++	unsigned long duration = jiffies - start_time;
+ 	int pending;
+ 	int rw = bio_data_dir(bio);
  
- 	ireq = inet_rsk(req);
- 	treq = tcp_rsk(req);
-+	treq->af_specific	= &tcp_request_sock_ipv4_ops;
- 	treq->rcv_isn		= ntohl(th->seq) - 1;
- 	treq->snt_isn		= cookie;
- 	treq->ts_off		= 0;
---- a/net/ipv4/tcp_ipv4.c
-+++ b/net/ipv4/tcp_ipv4.c
-@@ -1372,7 +1372,7 @@ struct request_sock_ops tcp_request_sock
- 	.syn_ack_timeout =	tcp_syn_ack_timeout,
- };
+ 	generic_end_io_acct(md->queue, bio_op(bio), &dm_disk(md)->part0,
+-			    io->start_time);
++			    start_time);
  
--static const struct tcp_request_sock_ops tcp_request_sock_ipv4_ops = {
-+const struct tcp_request_sock_ops tcp_request_sock_ipv4_ops = {
- 	.mss_clamp	=	TCP_MSS_DEFAULT,
- #ifdef CONFIG_TCP_MD5SIG
- 	.req_md5_lookup	=	tcp_v4_md5_lookup,
---- a/net/ipv6/syncookies.c
-+++ b/net/ipv6/syncookies.c
-@@ -181,6 +181,7 @@ struct sock *cookie_v6_check(struct sock
+ 	if (unlikely(dm_stats_used(&md->stats)))
+ 		dm_stats_account_io(&md->stats, bio_data_dir(bio),
+ 				    bio->bi_iter.bi_sector, bio_sectors(bio),
+-				    true, duration, &io->stats_aux);
++				    true, duration, stats_aux);
  
- 	ireq = inet_rsk(req);
- 	treq = tcp_rsk(req);
-+	treq->af_specific = &tcp_request_sock_ipv6_ops;
- 	treq->tfo_listener = false;
+ 	/*
+ 	 * After this is decremented the bio must not be touched if it is
+@@ -872,6 +871,8 @@ static void dec_pending(struct dm_io *io
+ 	blk_status_t io_error;
+ 	struct bio *bio;
+ 	struct mapped_device *md = io->md;
++	unsigned long start_time = 0;
++	struct dm_stats_aux stats_aux;
  
- 	if (security_inet_conn_request(sk, skb, req))
---- a/net/ipv6/tcp_ipv6.c
-+++ b/net/ipv6/tcp_ipv6.c
-@@ -789,7 +789,7 @@ struct request_sock_ops tcp6_request_soc
- 	.syn_ack_timeout =	tcp_syn_ack_timeout,
- };
+ 	/* Push-back supersedes any I/O errors */
+ 	if (unlikely(error)) {
+@@ -898,8 +899,10 @@ static void dec_pending(struct dm_io *io
  
--static const struct tcp_request_sock_ops tcp_request_sock_ipv6_ops = {
-+const struct tcp_request_sock_ops tcp_request_sock_ipv6_ops = {
- 	.mss_clamp	=	IPV6_MIN_MTU - sizeof(struct tcphdr) -
- 				sizeof(struct ipv6hdr),
- #ifdef CONFIG_TCP_MD5SIG
+ 		io_error = io->status;
+ 		bio = io->orig_bio;
+-		end_io_acct(io);
++		start_time = io->start_time;
++		stats_aux = io->stats_aux;
+ 		free_io(md, io);
++		end_io_acct(md, bio, start_time, &stats_aux);
+ 
+ 		if (io_error == BLK_STS_DM_REQUEUE)
+ 			return;
 
 

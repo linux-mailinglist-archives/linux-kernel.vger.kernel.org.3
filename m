@@ -2,53 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB203521779
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA111521A3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243175AbiEJN0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45948 "EHLO
+        id S244526AbiEJNye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243563AbiEJNWE (ORCPT
+        with ESMTP id S244393AbiEJNhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:22:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21AD852530;
-        Tue, 10 May 2022 06:16:19 -0700 (PDT)
+        Tue, 10 May 2022 09:37:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6A162CEA;
+        Tue, 10 May 2022 06:25:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61129615DD;
-        Tue, 10 May 2022 13:16:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46067C385C2;
-        Tue, 10 May 2022 13:16:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C93C61765;
+        Tue, 10 May 2022 13:25:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6123BC385C6;
+        Tue, 10 May 2022 13:25:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188578;
-        bh=NI3jWGh0Qcgl5TwhM/Wovh4SvdT7Ryx5lfnD/o7tqM0=;
+        s=korg; t=1652189125;
+        bh=YpKJBiYbIBRLNkiHda5QMm3L+zXhaJseWyql1maFGDA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SDqhUEr/oQnDm5DaF5bGz7DGmNKODtQrM3uZUcZslQLL/rwEchuRykshZ9cKNkNQM
-         osRn17TUjJsHPtu8eifKN/saxCHRAOuLqoarP2s88Fui5GoPLHPwaU8akzihes20un
-         1++speVEOW6xLjtlTISmZPqHSfiT9nUUag/G5440=
+        b=JSFwWGUMu/jfZ7JNBsI4UZZwuCmNKUYvDd0pAbovh3u1iGmoJhFdpfP77VtHZKJzq
+         qbZModR1fZnmUAXUei2kPy8aq7815YRXppKIuVtDl6aQsEbDdRomTbF6Cs792nHIh5
+         /AvwxezReycOKPHq0c9ieQoahFmp/ErpzcplKDYw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Hillf Danton <hdanton@sina.com>,
-        syzbot+0dc4444774d419e916c8@syzkaller.appspotmail.com,
-        Emil Velikov <emil.velikov@collabora.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Sean Paul <seanpaul@chromium.org>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Eric Anholt <eric@anholt.net>, Sam Ravnborg <sam@ravnborg.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Ovidiu Panait <ovidiu.panait@windriver.com>
-Subject: [PATCH 4.14 53/78] drm/vgem: Close use-after-free race in vgem_gem_create
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>
+Subject: [PATCH 5.10 20/70] ASoC: meson: Fix event generation for G12A tohdmi mux
 Date:   Tue, 10 May 2022 15:07:39 +0200
-Message-Id: <20220510130734.108704531@linuxfoundation.org>
+Message-Id: <20220510130733.458973298@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
-References: <20220510130732.522479698@linuxfoundation.org>
+In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
+References: <20220510130732.861729621@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -63,74 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Vetter <daniel.vetter@ffwll.ch>
+From: Mark Brown <broonie@kernel.org>
 
-commit 4b848f20eda5974020f043ca14bacf7a7e634fc8 upstream.
+commit 12131008fc13ff7f7690d170b7a8f72d24fd7d1e upstream.
 
-There's two references floating around here (for the object reference,
-not the handle_count reference, that's a different thing):
+The G12A tohdmi has a custom put() operation which returns 0 when the value
+of the mux changes, meaning that events are not generated for userspace.
+Change to return 1 in this case, the function returns early in the case
+where there is no change.
 
-- The temporary reference held by vgem_gem_create, acquired by
-  creating the object and released by calling
-  drm_gem_object_put_unlocked.
-
-- The reference held by the object handle, created by
-  drm_gem_handle_create. This one generally outlives the function,
-  except if a 2nd thread races with a GEM_CLOSE ioctl call.
-
-So usually everything is correct, except in that race case, where the
-access to gem_object->size could be looking at freed data already.
-Which again isn't a real problem (userspace shot its feet off already
-with the race, we could return garbage), but maybe someone can exploit
-this as an information leak.
-
-Cc: Dan Carpenter <dan.carpenter@oracle.com>
-Cc: Hillf Danton <hdanton@sina.com>
-Reported-by: syzbot+0dc4444774d419e916c8@syzkaller.appspotmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Jerome Brunet <jbrunet@baylibre.com>
+Link: https://lore.kernel.org/r/20220421123803.292063-4-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Cc: stable@vger.kernel.org
-Cc: Emil Velikov <emil.velikov@collabora.com>
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: Sean Paul <seanpaul@chromium.org>
-Cc: Chris Wilson <chris@chris-wilson.co.uk>
-Cc: Eric Anholt <eric@anholt.net>
-Cc: Sam Ravnborg <sam@ravnborg.org>
-Cc: Rob Clark <robdclark@chromium.org>
-Reviewed-by: Chris Wilson <chris@chris-wilson.co.uk>
-Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20200202132133.1891846-1-daniel.vetter@ffwll.ch
-[OP: backport to 4.19: adjusted DRM_DEBUG() -> DRM_DEBUG_DRIVER()]
-Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
 ---
- drivers/gpu/drm/vgem/vgem_drv.c |    9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ sound/soc/meson/g12a-tohdmitx.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/vgem/vgem_drv.c
-+++ b/drivers/gpu/drm/vgem/vgem_drv.c
-@@ -190,9 +190,10 @@ static struct drm_gem_object *vgem_gem_c
- 		return ERR_CAST(obj);
+--- a/sound/soc/meson/g12a-tohdmitx.c
++++ b/sound/soc/meson/g12a-tohdmitx.c
+@@ -67,7 +67,7 @@ static int g12a_tohdmitx_i2s_mux_put_enu
  
- 	ret = drm_gem_handle_create(file, &obj->base, handle);
--	drm_gem_object_put_unlocked(&obj->base);
--	if (ret)
-+	if (ret) {
-+		drm_gem_object_put_unlocked(&obj->base);
- 		return ERR_PTR(ret);
-+	}
+ 	snd_soc_dapm_mux_update_power(dapm, kcontrol, mux, e, NULL);
  
- 	return &obj->base;
+-	return 0;
++	return 1;
  }
-@@ -215,7 +216,9 @@ static int vgem_gem_dumb_create(struct d
- 	args->size = gem_object->size;
- 	args->pitch = pitch;
  
--	DRM_DEBUG_DRIVER("Created object of size %lld\n", size);
-+	drm_gem_object_put_unlocked(gem_object);
-+
-+	DRM_DEBUG_DRIVER("Created object of size %llu\n", args->size);
- 
- 	return 0;
- }
+ static SOC_ENUM_SINGLE_DECL(g12a_tohdmitx_i2s_mux_enum, TOHDMITX_CTRL0,
 
 

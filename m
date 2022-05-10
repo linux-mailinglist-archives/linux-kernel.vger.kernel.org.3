@@ -2,102 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CBD9522592
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F1052259A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231750AbiEJUfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 16:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
+        id S229511AbiEJUmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 16:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiEJUfA (ORCPT
+        with ESMTP id S236481AbiEJUl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 16:35:00 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C06E166898;
-        Tue, 10 May 2022 13:34:59 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-2fb965b34easo693977b3.1;
-        Tue, 10 May 2022 13:34:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mOqaTjkCFCgM5f1lVX6xovUQRBRtPNlk9IhOikeuQsU=;
-        b=e6Qj1JXV1RcOtmCFTlKdcpj8Zodefpq/nyiOWt8wTkWgF5SOxB71c47flNRRwLvibw
-         gLegr683+PLeeR/wm1o6QcaaCCmwk5Z1LQ8U+ZMAXx9VuddJ2WH4cMXa7Ds46WRXfwia
-         ycFnXZnxh01/ZdxxO5l/prRV5d2vA9iCynslpQixgPNaElSrwdVHE7foCEJOGSXNz2TN
-         4cBKg6qMce29ASHzF9L37tCJPMsm+wGxM8DJqiDNOPXKvYzJa+8KAxQofqgklV0hlTnz
-         OI31hpSwTLtV8S6or51Q0CvlAopFHDbA9qq/UN//1C8T3l+33+BV2t7S+WqO94bnv6B9
-         ErWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mOqaTjkCFCgM5f1lVX6xovUQRBRtPNlk9IhOikeuQsU=;
-        b=6QgVHfOBpZB9cnOlSDit+dTueXYOjW+PYbl1a0L+ZDSCAgLmJEKxpE2pmZ7gr0qHjz
-         TDmAsEQTAwO0/FTF0A5+ZdEcMCcA+1P74FW3fbJTwu/Vs38tMnX19iSDFsRheikIanzR
-         aae1DckCmfeSZ3t0ixupjB+ySOdoohHqBtEKRDGfARdvgL+FVpTl5kMs9LGHGtK7CyDU
-         kZuCll+HAqwm43c+dVB3E+eU2hMNF0y8bulQzW2kromGdUIXsaR9FQvJN0UHR3e1xMPN
-         7z1XpH6N7ryMUHFQ+nAi1ftZo/WHcaL7pRI1og25Yiv266VZEi0bE9vkSKjNkl/0APdS
-         wxrQ==
-X-Gm-Message-State: AOAM530ynckeutcyQBbzxUEUHc14K0VD9CvTPvjiiTM9j8QSUnK0JxXb
-        zBNMfhJcTfraW+H38dpvprWkCRLXkcmadFi6nFo=
-X-Google-Smtp-Source: ABdhPJxLli407szPqhh4GzJpHiOoYmJ6y/3dUelcbAu8IjmlU1gPxx1E561uKHvq/mCxCVbx+FQbRIf6D5B6B98NjA4=
-X-Received: by 2002:a81:2006:0:b0:2f8:1e04:5e56 with SMTP id
- g6-20020a812006000000b002f81e045e56mr21996707ywg.39.1652214897574; Tue, 10
- May 2022 13:34:57 -0700 (PDT)
+        Tue, 10 May 2022 16:41:58 -0400
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A08527E8;
+        Tue, 10 May 2022 13:41:52 -0700 (PDT)
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id 404B979C; Tue, 10 May 2022 15:41:51 -0500 (CDT)
+Date:   Tue, 10 May 2022 15:41:51 -0500
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        jpenumak@redhat.com, John Johansen <john.johansen@canonical.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Micah Morton <mortonm@chromium.org>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Subject: Re: [PATCH v12 01/26] securityfs: rework dentry creation
+Message-ID: <20220510204151.GA12935@mail.hallyn.com>
+References: <20220420140633.753772-1-stefanb@linux.ibm.com>
+ <20220420140633.753772-2-stefanb@linux.ibm.com>
+ <20220509195414.GA30894@mail.hallyn.com>
+ <20220510102525.hlt2rm3k3hg5r6gg@wittgenstein>
+ <20220510141025.GA7290@mail.hallyn.com>
+ <20220510155107.srxifzuqfstvet2f@wittgenstein>
 MIME-Version: 1.0
-References: <20220510130733.735278074@linuxfoundation.org>
-In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Tue, 10 May 2022 21:34:21 +0100
-Message-ID: <CADVatmOK41UB0dNQim7h5LwL3DaG4RWQ8zMge9WKn18c_jJa=w@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/88] 4.19.242-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220510155107.srxifzuqfstvet2f@wittgenstein>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Tue, May 10, 2022 at 05:51:07PM +0200, Christian Brauner wrote:
+> On Tue, May 10, 2022 at 09:10:25AM -0500, Serge Hallyn wrote:
+> > On Tue, May 10, 2022 at 12:25:25PM +0200, Christian Brauner wrote:
+> > > On Mon, May 09, 2022 at 02:54:14PM -0500, Serge Hallyn wrote:
+> > > > On Wed, Apr 20, 2022 at 10:06:08AM -0400, Stefan Berger wrote:
+> > > > > From: Christian Brauner <brauner@kernel.org>
+> > > > > 
+> > > > > When securityfs creates a new file or directory via
+> > > > > securityfs_create_dentry() it will take an additional reference on the
+> > > > > newly created dentry after it has attached the new inode to the new
+> > > > > dentry and added it to the hashqueues.
+> > > > > If we contrast this with debugfs which has the same underlying logic as
+> > > > > securityfs. It uses a similar pairing as securityfs. Where securityfs
+> > > > > has the securityfs_create_dentry() and securityfs_remove() pairing,
+> > > > > debugfs has the __debugfs_create_file() and debugfs_remove() pairing.
+> > > > > 
+> > > > > In contrast to securityfs, debugfs doesn't take an additional reference
+> > > > > on the newly created dentry in __debugfs_create_file() which would need
+> > > > > to be put in debugfs_remove().
+> > > > > 
+> > > > > The additional dget() isn't a problem per se. In the current
+> > > > > implementation of securityfs each created dentry pins the filesystem via
+> > > > 
+> > > > Is 'via' an extra word here or is there a missing word?
+> > > > 
+> > > > I'll delay the rest of my response as the missing word may answer my
+> > > > remaining question :)
+> > > 
+> > > It can be both. It should either be removed or it should be followed by
+> > > "securityfs_create_dentry()". securityfs_create_dentry() takes two
+> > > references one in lookup_one_len() and another one explicitly via
+> > > dget(). The latter one isn't needed. Some of that has been covered in an
+> > > earlier thread:
+> > > https://lore.kernel.org/lkml/20220105101815.ldsm4s5yx7pmuiil@wittgenstein
+> > 
+> > Yes, I saw that two references were being taken.  And near as I can tell,
+> > the second one was never being dropped.  So if you tell me that before this
+> > patch the dentries are never freed, then I'm happy.  Otherwise, I'm
+> > bothered the fact that no matching dput is being deleted in the code (to
+> > match the extra dget being removed).  So where is the code where the final
+> > dput was happening, and is it the d_delete() you're adding which is making
+> > it so that that dput won't be called now?
+> 
+> * So consider mounting securityfs _without this patch applied_:
+> 
+>   mount -t securityfs /sfs
+>   
+>   and assume we only have a single user that creates a file "foo" via
+>   
+>   securityfs_create_file()
+>   {
+>   	lookup_one_len();	// first dget()
+>   	dget();			// second dget()
+>   }
+>   
+>   now assume that user at some point calls
+>   
+>   void securityfs_remove()
+>   {
+>   	if (d_is_dir(dentry))
+>   		simple_rmdir(dir, dentry);	// first dput()
+>   	else
+>   		simple_unlink(dir, dentry);	// first dput()
+>   	dput(dentry);				// second dput()
+>   }
+> 
+> * Now consider mounting securityfs _with this patch applied_:
+> 
+>   securityfs_create_file()
+>   {
+>   	lookup_one_len();	// first dget()
+>   }
+>   
+>   void securityfs_remove()
+>   {
+>   	dget();					// second dget() 
+>   	if (d_is_dir(dentry))
+>   		simple_rmdir(dir, dentry);	// first dput()
+>   	else
+>   		simple_unlink(dir, dentry);	// first dput()
+>   	dput(dentry);				// second dput()
+>   }
 
-On Tue, May 10, 2022 at 2:18 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.19.242 release.
-> There are 88 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
-> Anything received after that time might be too late.
+Thanks, I get it now
 
-Just some initial report for you,
-
-I just moved to gcc-12 and many mips builds are failing with errors like:
-arch/mips/lantiq/prom.c: In function 'plat_mem_setup':
-arch/mips/lantiq/prom.c:82:30: error: comparison between two arrays
-[-Werror=array-compare]
-   82 |         else if (__dtb_start != __dtb_end)
-
-It will need d422c6c0644b ("MIPS: Use address-of operator on section
-symbols")  for all branches upto v5.10-stable.
-
-
--- 
-Regards
-Sudip
+Reviewed-by: Serge Hallyn <serge@hallyn.com>

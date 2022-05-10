@@ -2,255 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 984A152144C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:53:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F42B52144E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241290AbiEJL50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 07:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52322 "EHLO
+        id S241296AbiEJL5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 07:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbiEJL5Y (ORCPT
+        with ESMTP id S241307AbiEJL5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 07:57:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938E327F111;
-        Tue, 10 May 2022 04:53:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 47908B81A0A;
-        Tue, 10 May 2022 11:53:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D9E7C385A6;
-        Tue, 10 May 2022 11:53:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652183604;
-        bh=X1QVwFClp9JxInrjSYxI0mlCNQbr24dNo7/S+95efN8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=syghnmj5lzHfIY+E5v4jJE0hutUfRYSXUe1UD9qXPiNu62ZV8BYEt7Ia1EkeeLDCx
-         pq7Uflq901Qrs9jnDOhQlWOjY3FAeP4SlQHwiWDs7D0gBnt35Xsmpl4WY8TZcLvOEf
-         xZqguXt1m8t14Y94scKtgonMzmagKqsm0crte2di4LsGzos3h2SsRYZewWCrfIElYl
-         NhUVaQDq6soEaHe40x80rNFogPlV4Se5aEFRSCPOP1NLvCeHXqJpMD4XkSKhttQpn7
-         AXOQyBkcQij/Kt/rbopkC+0AN5i36i6tMlDxCY7V6doaXUpNfZK8Rhz86L9ONXhfYu
-         9UqXGFdNjabzA==
-Date:   Tue, 10 May 2022 13:53:16 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     linux-fsdevel@vger.kernel.org, Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Karel Zak <kzak@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
-Message-ID: <20220510115316.acr6gl5ayqszada6@wittgenstein>
-References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
- <20220509124815.vb7d2xj5idhb2wq6@wittgenstein>
- <CAJfpegveWaS5pR3O1c_7qLnaEDWwa8oi26x2v_CwDXB_sir1tg@mail.gmail.com>
+        Tue, 10 May 2022 07:57:39 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2089.outbound.protection.outlook.com [40.107.223.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF240284921;
+        Tue, 10 May 2022 04:53:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FuQh11Fd4dKmMjOEGtIsmReJuGww1rKT2ytEbZpZbB/9zrWYAdA7jqAxub22iMN32LLr3rXxCWUDoseuyom5KcNuhJYmlry/mIebwmlGjlaLOu1V+CzFMJh76ybXd4+wCyGw+Ovnbz2u5mzfF++1HC7ilqnrBRXgr/Z874a2di3yJGtb5eq6s9iHsX19L3oIHdDQ9RjCiD+tBZv95ubJva/VlQnCC9PbtSRjLk17C8sCDM8z6e49A0iLw/vidTC8Ia6akxq9VgeOtMHRCdHklQY2Q+nYDgeY3a0BpuezPQoS7GmHHwo58NxI/Cxqk3rC3oHPGBdbEu/sqrFiemH3Yg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=omMlwAnhCTchfOtvdyouvQJqAbnZMVJ/q7HvgFzSMBk=;
+ b=HybK6U+bmR8LM6rfKVp7gV1MdeqibFcH6VKmnmrs+n+BXE27UeiHrsPw3RJRpIR5dD1jGZYGmCyebfdnVp2kHWpJ5jnKj4iB7hpHO/ankhqMuV3XOqhBodTZqbnXjSgQSfLvzoh/U/qX1nNjIBU9QfcQ+hkKDSW8TE9dAQrxPhFXxYpf3yhvG9xw2FoJRvKCVWz95ceV6LtuNnpaOdhFM+QlbTWO58VJygv7oe6xCtd/TWqZARqVRW5GPoefklya3yr55ekED0Qo4JBSdRNk3hnqwzJAhz/TT1Eicx+b0gN+3RuhuLGuDrOiloaru30PqjHvj/OQiJO5iMkrMy4rMg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=omMlwAnhCTchfOtvdyouvQJqAbnZMVJ/q7HvgFzSMBk=;
+ b=DhWcNQVfKVS6nmpiGMl6+/C9+UdL5zo4BCSs2Ux4Rk242IWM8YvQeq1NT1/Y7vBOBrau6UR5yuGApZ8tpkqlowB1+5b5GUH6HCv+Kx7IZNW55vvWHQHzkNzrXZfe9esS1TRgIK2/BQRvyWjVx2f6ZfpNEK3kDJqDIJseP7a64JA=
+Received: from DM6PR02MB6635.namprd02.prod.outlook.com (2603:10b6:5:221::18)
+ by DM6PR02MB4091.namprd02.prod.outlook.com (2603:10b6:5:9f::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.18; Tue, 10 May
+ 2022 11:53:37 +0000
+Received: from DM6PR02MB6635.namprd02.prod.outlook.com
+ ([fe80::a525:6e3a:42d5:255b]) by DM6PR02MB6635.namprd02.prod.outlook.com
+ ([fe80::a525:6e3a:42d5:255b%3]) with mapi id 15.20.5227.023; Tue, 10 May 2022
+ 11:53:37 +0000
+From:   Shubhrajyoti Datta <shubhraj@xilinx.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        Michal Simek <michals@xilinx.com>,
+        "jirislaby@kernel.org" <jirislaby@kernel.org>,
+        git <git@xilinx.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 3/7] tty: xilinx_uartps: Add check for runtime_get_sync
+ calls
+Thread-Topic: [PATCH 3/7] tty: xilinx_uartps: Add check for runtime_get_sync
+ calls
+Thread-Index: AQHYW6ErQ7FqpGCLDU6R47eTuYGS760QzEKAgAdEs0A=
+Date:   Tue, 10 May 2022 11:53:36 +0000
+Message-ID: <DM6PR02MB6635C3E7DEBAAA146D3DF440AAC99@DM6PR02MB6635.namprd02.prod.outlook.com>
+References: <20220429081422.3630070-1-shubhrajyoti.datta@xilinx.com>
+ <20220429081422.3630070-4-shubhrajyoti.datta@xilinx.com>
+ <YnQ4lxfJUGe4TyFi@kroah.com>
+In-Reply-To: <YnQ4lxfJUGe4TyFi@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=xilinx.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 19fa14a6-be48-4157-a673-08da327bb7a9
+x-ms-traffictypediagnostic: DM6PR02MB4091:EE_
+x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
+x-microsoft-antispam-prvs: <DM6PR02MB40916B2A18C84E46B321157DAAC99@DM6PR02MB4091.namprd02.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: QgptYQHJWY8JkPcg5q3537M5x0weCJ1X047V1pfOfR9nvpDKfp0zYy9RtTp2RbCany8mOxgq/G4aZGtE+FydyC/UwA7lJuvjbNU/m7tO8OevGD20E19cAiZ0cYVr8D3Vrsdwj7nBMriVtQvICUdq1hX7wMJ1UzdZpjsPaNECcpV2tBFGZRigmXrmFWUsHeD7sOFfI15ACaChcMv36hA4sGxcTQgrHMY8cP4AT2UK9iuQVaABpZfpJYCUz3SvjhQ1aj9WD+0dcoa58lRNwI3aYZ7J5WEhGgMK8WM28zapJsXUAnzU4ejAFSXSm9IP8xmZmi1tG9tpixps7M2kHxlhyct3wag1xEp7H0s37Kv3rlAAsRa+EAeE6GZElN3TV9TaQ97ARxaP2JD8MVDIEa58OcylrScw8Fh27+VUH79Jz3TzuJZDEy/qewkRguAcNaqXmqOx9469i6OFdLmNC2WxAZgsRp5fCGYuu56XcLt0jPX/zcDufS3xAD9K4Y1YulFPycvnTwfynRRNGlLD7ZrpNCyDlcf0KsjwIEppWDhE+nC4L37wxLX1Uqz4ojwY1I81IJBCQj15yPvfIO8zgOtNWv7s5wZp+4t+1mZEGa3YUPd6YvsDpmOre6VuCXjQJU4u1Hb8aQ3R/aKMGUUMI1K3pM3AdeNcfWRK7/pZdsf+ConGdOrql7PyoA5IfVa4eXKnayWGfklogCCEg/s8TzkjMg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR02MB6635.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(33656002)(86362001)(122000001)(83380400001)(55016003)(38100700002)(38070700005)(71200400001)(9686003)(26005)(8676002)(76116006)(7696005)(4326008)(66556008)(64756008)(66476007)(66446008)(66946007)(186003)(6506007)(8936002)(508600001)(53546011)(5660300002)(316002)(54906003)(6916009)(52536014)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?qtdlUNjh4Oj7sHDwXeqIN68QPRFgqaDUwqG8evoZPEfI9TY18RlWrw5Ho5a1?=
+ =?us-ascii?Q?SYdMv5zc7S4iQYVgATwTBc89pynnDbMey2qbGn44qUuubqLxqK1HzM5SPtnB?=
+ =?us-ascii?Q?APDXA69fQfXNnoQgCsu/cyWWp+p4nWRdbhGdk5dxsYERkH+EUHNtMJ2KouA1?=
+ =?us-ascii?Q?IWssJZpJRPiAWLPHA3QJPDKlrglzLr5oymebhQfzjY1RwKvambWIcek4hyoe?=
+ =?us-ascii?Q?jkESAH4TOeOoPpQ8loXCfNxKs8U7k23sInu4skXaSsKlivlzBuClpBzLqLKU?=
+ =?us-ascii?Q?mUuC942TG/C2zHVvustBqMApIb1lswoCkkpNO4HdTh4kcAxKxPDgOBnNVs8R?=
+ =?us-ascii?Q?RRZmE6cFBcqZJKiBXufnyiFM4lxxzDwT2JpQCLZT6vFbS7T+RkMSR7jJFWNC?=
+ =?us-ascii?Q?+BqB482Eivmy3SD7DvdTeiFTU3RdylwXXlWDFo6TlIF2fndE14yNhcqbdrV2?=
+ =?us-ascii?Q?M7ClUe976shL4LqSJlhTYHl+XQWus1Sy0ljbQOc+8avLCRJh96tPIqg1rVDk?=
+ =?us-ascii?Q?kWPA+qujCaxFPlQ+MMJXXc2R66AWdQtvJGE/p7oVHGONUeOy71V8hMM8pqzz?=
+ =?us-ascii?Q?mP9INpE5oAWDDbIZXSymijHhHcpUOEC5dsJuS5rjnK+aOY2K+/t2Hwu0/zl0?=
+ =?us-ascii?Q?J6Si0peG1q6AxVTsys0FgoT/kpnvLsqDjxhXtTFg0iBZHi0Of4dcJRJU9teJ?=
+ =?us-ascii?Q?j7k3A82PdG/z0MOY2RR0IQWAdd31qMc3Oa8Y3JtHvQIPzO3C/AOTQAULQMkl?=
+ =?us-ascii?Q?ahyWf9s8kylpCNhI4QwWJUUL1ZoHi4eyd+RVOXAJmSdi998ioglY9HpX4uMJ?=
+ =?us-ascii?Q?obt+QvjLTcYP6ROAQaFJaibS3MXwqPQAwZXUKEwnOTaarJEsWW7JJ9v1uL7A?=
+ =?us-ascii?Q?b7/i5BRsExdZ6CaZs8VJzqJJBV2/z2Nn/F1c3+GDharnhTd1dye+pOnK9QCJ?=
+ =?us-ascii?Q?GWRLQKv5Tig2BvawoOLoSrD7ypG8lAjZdP1joEwLYGc9t9WEwQAykHnLA7nE?=
+ =?us-ascii?Q?jCOVV/aBYD3e8WHDu2DxFD5gA9Wd31WdyyJ4aK686JawvOC3K6dYX9PyMAvu?=
+ =?us-ascii?Q?pvCI+TIMGFgRlywCUE5LDfqxmgcAzx8VHcVWqCMJ52vEF6PwSXvI2v+0JHyf?=
+ =?us-ascii?Q?ddokOis/Ib9FOW3Jzp7oPblTXZepCwhlYWDHU3TORlZ2AivvfIHlvW/Jlv1i?=
+ =?us-ascii?Q?fm1sSMXOSkVp+KBtxdb+o5z22gaHUNnFUlSn4jxxJIitXnmWgL2WCB2Qpew7?=
+ =?us-ascii?Q?EwT4Cw+t2nMp4/1WhO0BqoYoyWPRD6MuGBSrnikTOI2yqR20PlUigmjD/VoX?=
+ =?us-ascii?Q?y0t5vcec4thNqDRXAVCiXa3WHVU4HxnvmlJTPXi8O9GVSh0Y8YAGGo9joCZX?=
+ =?us-ascii?Q?ByaS7C9kGtt4KvEQ0gILMjocd/+iqV78NivWXD8K9AjbMdmATjt4ZBKKrQ77?=
+ =?us-ascii?Q?oUsucFsBzR51CKyI6ouYDlOsPjheTotZuNkua0+m2fiYJ9qga2iJ2i/U0Loe?=
+ =?us-ascii?Q?qC6TErEjrwzUft5rqBnGYtnLqZhLDaIoNOsgszGEBFcUq5Ot4WWr1siQOtak?=
+ =?us-ascii?Q?RnO2YFcLakbbJHuTdZu7uDantUaG4l3PrtSlncNt+MgNRhgVTnkizoG4gDZy?=
+ =?us-ascii?Q?TihKuhCo2o53QkUiMKV/IfWE5MLvtjN88QqarrVQwP5y2HK+NjamhpIicVfG?=
+ =?us-ascii?Q?SJ4OYTPUbuJ7dij3ltBe594/77dQRy8CPAG2Pf4lhrxIvoseKNYOgviZwmZ+?=
+ =?us-ascii?Q?Hvk53qfOLA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJfpegveWaS5pR3O1c_7qLnaEDWwa8oi26x2v_CwDXB_sir1tg@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR02MB6635.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 19fa14a6-be48-4157-a673-08da327bb7a9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 May 2022 11:53:36.8812
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jw3gJuaoHdD09yBrt7GupNK2dQFrWs+barVtC8J+nM54JlD5WPyjYz3r/WWbncN5OajujbIOESuoSnYfXGPfqw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB4091
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 05:49:04AM +0200, Miklos Szeredi wrote:
-> On Mon, 9 May 2022 at 14:48, Christian Brauner <brauner@kernel.org> wrote:
-> 
-> > One comment about this. We really need to have this interface support
-> > giving us mount options like "relatime" back in numeric form (I assume
-> > this will be possible.). It is royally annoying having to maintain a
-> > mapping table in userspace just to do:
+
+
+> -----Original Message-----
+> From: Greg KH <gregkh@linuxfoundation.org>
+> Sent: Friday, May 6, 2022 2:21 AM
+> To: Shubhrajyoti Datta <shubhraj@xilinx.com>
+> Cc: linux-serial@vger.kernel.org; Michal Simek <michals@xilinx.com>;
+> jirislaby@kernel.org; git <git@xilinx.com>; linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH 3/7] tty: xilinx_uartps: Add check for runtime_get_sy=
+nc calls
+>=20
+> On Fri, Apr 29, 2022 at 01:44:18PM +0530, Shubhrajyoti Datta wrote:
+> > Add a check for the return value of runtime get_sync calls.
 > >
-> > relatime -> MS_RELATIME/MOUNT_ATTR_RELATIME
-> > ro       -> MS_RDONLY/MOUNT_ATTR_RDONLY
+> > Addresses-Coverity: Event check_return.
+> > Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> > ---
+> >  drivers/tty/serial/xilinx_uartps.c | 6 +++++-
+> >  1 file changed, 5 insertions(+), 1 deletion(-)
 > >
-> > A library shouldn't be required to use this interface. Conservative
-> > low-level software that keeps its shared library dependencies minimal
-> > will need to be able to use that interface without having to go to an
-> > external library that transforms text-based output to binary form (Which
-> > I'm very sure will need to happen if we go with a text-based
-> > interface.).
-> 
-> Agreed.
-> 
-> >   This pattern of requesting the size first by passing empty arguments,
-> >   then allocating the buffer and then passing down that buffer to
-> >   retrieve that value is really annoying to use and error prone (I do
-> >   of course understand why it exists.).
-> >
-> >   For real xattrs it's not that bad because we can assume that these
-> >   values don't change often and so the race window between
-> >   getxattr(GET_SIZE) and getxattr(GET_VALUES) often doesn't matter. But
-> >   fwiw, the post > pre check doesn't exist for no reason; we do indeed
-> >   hit that race.
-> 
-> That code is wrong.  Changing xattr size is explicitly documented in
+> > diff --git a/drivers/tty/serial/xilinx_uartps.c
+> > b/drivers/tty/serial/xilinx_uartps.c
+> > index 8f15fe24a0eb..868f4e587263 100644
+> > --- a/drivers/tty/serial/xilinx_uartps.c
+> > +++ b/drivers/tty/serial/xilinx_uartps.c
+> > @@ -1100,13 +1100,17 @@ static void cdns_uart_poll_put_char(struct
+> > uart_port *port, unsigned char c)  static void cdns_uart_pm(struct uart=
+_port
+> *port, unsigned int state,
+> >  		   unsigned int oldstate)
+> >  {
+> > +	int ret;
+> > +
+> >  	switch (state) {
+> >  	case UART_PM_STATE_OFF:
+> >  		pm_runtime_mark_last_busy(port->dev);
+> >  		pm_runtime_put_autosuspend(port->dev);
+> >  		break;
+> >  	default:
+> > -		pm_runtime_get_sync(port->dev);
+> > +		ret =3D pm_runtime_get_sync(port->dev);
+> > +		if (ret < 0)
+> > +			dev_err(port->dev, "Failed to enable clocks\n");
+>=20
+> So you just ignore the error?  SHouldn't you propagate it back upward?
 
-When recursively changing the ownership of a filesystem tree for a
-container some xattrs will need to be updated as well.
+The cdns_uart_pm is void so we cannot propagate it upward.
 
-For example, if I have files with POSIX ACLs set which store {g,u}ids
-then the ACL needs to be updated to store the {g,u}id mapped to the
-container so the container can interpret them when started.
-
-That is a rather sensitive operation with loads of potentials for bugs.
-So if a POSIX ACL changes beneath the chowning daemon they must be
-conservative because it means that there's concurrent modfication or
-possibly an attack going on.
-
-In general, I feel it's a bit easy to judge the code is wrong without
-looking at the concrete scenario.
-
-I'm also unsure how the manpage implies it's not an error condition.
-Afaict, it only implies that the caller needs to handle the case where
-the xattr changes. Whether or not that's an error is up to the caller to
-decide. If the caller expects to be the sole user of a specific
-filesystems then a changing xattr in between should probably be an error
-condition.
-
-But I think we're starting to go on a detour.
-
-> the man page as a non-error condition:
-> 
->        If size is specified as zero, these calls return the  current  size  of
->        the  named extended attribute (and leave value unchanged).  This can be
->        used to determine the size of the buffer that should be supplied  in  a
->        subsequent  call.   (But, bear in mind that there is a possibility that
->        the attribute value may change between the two calls,  so  that  it  is
->        still necessary to check the return status from the second call.)
-> 
-> >
-> >   In addition, it is costly having to call getxattr() twice. Again, for
-> >   retrieving xattrs it often doesn't matter because it's not a super
-> >   common operation but for mount and other info it might matter.
-> 
-> You don't *have* to retrieve the size, it's perfectly valid to e.g.
-> start with a fixed buffer size and double the size until the result
-> fits.
-
-Yes, I understand and accept that. I'm just not fond of such APIs.
-
-> 
-> > * Would it be possible to support binary output with this interface?
-> >   I really think users would love to have an interfact where they can
-> >   get a struct with binary info back.
-> 
-> I think that's bad taste.   fsinfo(2) had the same issue.  As well as
-> mount(2) which still interprets the last argument as a binary blob in
-> certain cases (nfs is one I know of).
-
-In the same vein I could argue it's bad taste that everything gets
-returned as a string. But I do agree that binary blobs through void
-pointers aren't elegant.
-
-I just worry that if we have an interface and there's a legitimate
-subset of users that would be well served by a simple struct for e.g.,
-mount properties any attempt to get something like this in the form of a
-separate system call will be shut down with the argument that we already
-have an interface for this.
-
-So I'd compromise if we have your/any other interface return binary
-blobs. But of course I'd be equally happy if we'd at least expose basic
-mount information in the form of a separate system call.
-
-> 
-> >   Especially for some information at least. I'd really love to have a
-> >   way go get a struct mount_info or whatever back that gives me all the
-> >   details about a mount encompassed in a single struct.
-> 
-> If we want that, then can do a new syscall with that specific struct
-> as an argument.
-
-Ok, that sounds good to me.
-
-> 
-> >   Callers like systemd will have to parse text and will end up
-> >   converting everything from text into binary anyway; especially for
-> >   mount information. So giving them an option for this out of the box
-> >   would be quite good.
-> 
-> What exactly are the attributes that systemd requires?
-
-We keep a repo with ideas for (kernel) extensions - we should probably
-publish that somewhere - but the list we used for a prototype roughly
-contains:
-
-* mount flags MOUNT_ATTR_RDONLY etc.
-* time flags MOUNT_ATTR_RELATIME etc. (could probably be combined with
-  mount flags. We missed the opportunity to make them proper enums
-  separate from other mount flags imho.)
-* propagation "flags" (MS_SHARED)
-* peer group
-* mnt_id of the mount
-* mnt_id of the mount's parent
-* owning userns
-
-There's a bit more advanced stuff systemd would really want but which I
-think is misplaced in a mountinfo system call including:
-* list of primary and auxiliary block device major/minor
-* diskseq value of those device nodes (This is a new block device
-  feature we added that allows preventing device recycling issues when
-  e.g. removing usb devices very quickly and is needed for udev.)
-* uuid/fsid
-* feature flags (O_TMPFILE, RENAME_EXCHANGE supported etc.)
-
-> 
-> >   Interfaces like statx aim to be as fast as possible because we exptect
-> >   them to be called quite often. Retrieving mount info is quite costly
-> >   and is done quite often as well. Maybe not for all software but for a
-> >   lot of low-level software. Especially when starting services in
-> >   systemd a lot of mount parsing happens similar when starting
-> >   containers in runtimes.
-> 
-> Was there ever a test patch for systemd using fsinfo(2)?  I think not.
-> 
-> Until systemd people start to reengineer the mount handing to allow
-> for retrieving a single mount instead of the complete mount table we
-> will never know where the performance bottleneck lies.
-
-I defer to Ian and Karel to answer that. Both did work to prove that
-point triggered by one of your objections to fsinfo() iirc. Karel's
-commits at least are here:
-https://github.com/util-linux/util-linux/tree/topic/fsinfo
-
-> 
-> >
-> > * If we decide to go forward with this interface - and I think I
-> >   mentioned this in the lsfmm session - could we please at least add a
-> >   new system call? It really feels wrong to retrieve mount and other
-> >   information through the xattr interfaces. They aren't really xattrs.
-> 
-> I'd argue with that statement.  These are most definitely attributes.
-> As for being extended, we'd just extended the xattr interface...
-
-I just have a really hard time understanding how this belongs into the
-(f)getxattr() system call family and why it would be a big deal to just
-make this a separate system call.
-
-I saw that Dave has a long mail on the history of all this so maybe
-that'll help me. I hope I get around to reading it in detail today.
-
-> 
-> Naming aside... imagine that read(2) has always been used to retrieve
-> disk data, would you say that reading data from proc feels wrong?
-> And in hindsight, would a new syscall for the purpose make any sense?
-
-I think past interface decisions don't need to always inform future
-interface decisions.
-And fwiw, yes. Imho, there's stuff in proc that should indeed have been
-covered by a dedicated system call instead of a read-like interface.
+>=20
+> thanks,
+>=20
+> greg k-h

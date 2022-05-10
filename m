@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF2E1521BA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D737521BA4
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343757AbiEJOTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
+        id S1343537AbiEJOTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343561AbiEJNsO (ORCPT
+        with ESMTP id S1343560AbiEJNsO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 10 May 2022 09:48:14 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB3E2A9745;
-        Tue, 10 May 2022 06:36:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB582B1652;
+        Tue, 10 May 2022 06:36:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F976B81DA8;
-        Tue, 10 May 2022 13:36:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E96F7C385C2;
-        Tue, 10 May 2022 13:36:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A7FC8B81DB0;
+        Tue, 10 May 2022 13:36:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FE0EC385A6;
+        Tue, 10 May 2022 13:36:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189762;
-        bh=g5UBZp+2USPIn2FEpaOg28GOitSo7hEN7Gzi6GiXqv8=;
+        s=korg; t=1652189765;
+        bh=bZJsAhefE7TmQsxHE4HZUSdcOMaxLZwLBWLG/XeVUpY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YitJqT77Vh+UfbFjnWVBfrE5GdBQuYKGjiPt4dE85rG9+dCjzDEQ0pgOUkYgD9nq1
-         31aVs519JKmz+vIJTO9QzLHv5hKaRAsABLlpJyISmUnBCvM2cKjOY9FLXIy0XAY72S
-         Rl9UlA9uESTbPlg+LFFNrHRCrQNt4+AVQ5JyOLbU=
+        b=BF1kO9crXbGvl9Nk3ZPRuL+AxAAbWTjLbrQhDqD7mUHDEXRMxZ4LM1lZC9SSIdUY/
+         qXIe1RMC32h6g7jQxHyOPuHcLPa4s+HGu6J+cMCwT3AvJCzV6u9nC8GNX5WwnjaY/K
+         X8cot39tk23BCEY3+JVUOM1vQaXi8FXr4AwMXjJc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nick Kossifidis <mick@ics.forth.gr>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH 5.17 020/140] RISC-V: relocate DTB if its outside memory region
-Date:   Tue, 10 May 2022 15:06:50 +0200
-Message-Id: <20220510130742.188465469@linuxfoundation.org>
+        stable@vger.kernel.org, Zev Weiss <zev@bewilderbeest.net>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 5.17 021/140] hwmon: (pmbus) delta-ahe50dc-fan: work around hardware quirk
+Date:   Tue, 10 May 2022 15:06:51 +0200
+Message-Id: <20220510130742.216781277@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
 References: <20220510130741.600270947@linuxfoundation.org>
@@ -55,59 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nick Kossifidis <mick@ics.forth.gr>
+From: Zev Weiss <zev@bewilderbeest.net>
 
-commit c6fe81191bd74f7e6ae9ce96a4837df9485f3ab8 upstream.
+commit 08da09f028043fed9653331ae75bc310411f72e6 upstream.
 
-In case the DTB provided by the bootloader/BootROM is before the kernel
-image or outside /memory, we won't be able to access it through the
-linear mapping, and get a segfault on setup_arch(). Currently OpenSBI
-relocates DTB but that's not always the case (e.g. if FW_JUMP_FDT_ADDR
-is not specified), and it's also not the most portable approach since
-the default FW_JUMP_FDT_ADDR of the generic platform relocates the DTB
-at a specific offset that may not be available. To avoid this situation
-copy DTB so that it's visible through the linear mapping.
+CLEAR_FAULTS commands can apparently sometimes trigger catastrophic
+power output glitches on the ahe-50dc, so block them from being sent
+at all.
 
-Signed-off-by: Nick Kossifidis <mick@ics.forth.gr>
-Link: https://lore.kernel.org/r/20220322132839.3653682-1-mick@ics.forth.gr
-Tested-by: Conor Dooley <conor.dooley@microchip.com>
-Fixes: f105aa940e78 ("riscv: add BUILTIN_DTB support for MMU-enabled targets")
+Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
 Cc: stable@vger.kernel.org
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Link: https://lore.kernel.org/r/20220427035109.3819-1-zev@bewilderbeest.net
+Fixes: d387d88ed045 ("hwmon: (pmbus) Add Delta AHE-50DC fan control module driver")
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/riscv/mm/init.c |   21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+ drivers/hwmon/pmbus/delta-ahe50dc-fan.c |   16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -206,8 +206,25 @@ static void __init setup_bootmem(void)
- 	 * early_init_fdt_reserve_self() since __pa() does
- 	 * not work for DTB pointers that are fixmap addresses
- 	 */
--	if (!IS_ENABLED(CONFIG_BUILTIN_DTB))
--		memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va));
-+	if (!IS_ENABLED(CONFIG_BUILTIN_DTB)) {
-+		/*
-+		 * In case the DTB is not located in a memory region we won't
-+		 * be able to locate it later on via the linear mapping and
-+		 * get a segfault when accessing it via __va(dtb_early_pa).
-+		 * To avoid this situation copy DTB to a memory region.
-+		 * Note that memblock_phys_alloc will also reserve DTB region.
-+		 */
-+		if (!memblock_is_memory(dtb_early_pa)) {
-+			size_t fdt_size = fdt_totalsize(dtb_early_va);
-+			phys_addr_t new_dtb_early_pa = memblock_phys_alloc(fdt_size, PAGE_SIZE);
-+			void *new_dtb_early_va = early_memremap(new_dtb_early_pa, fdt_size);
-+
-+			memcpy(new_dtb_early_va, dtb_early_va, fdt_size);
-+			early_memunmap(new_dtb_early_va, fdt_size);
-+			_dtb_early_pa = new_dtb_early_pa;
-+		} else
-+			memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va));
-+	}
+--- a/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
++++ b/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
+@@ -14,6 +14,21 @@
  
- 	early_init_fdt_scan_reserved_mem();
- 	dma_contiguous_reserve(dma32_phys_limit);
+ #define AHE50DC_PMBUS_READ_TEMP4 0xd0
+ 
++static int ahe50dc_fan_write_byte(struct i2c_client *client, int page, u8 value)
++{
++	/*
++	 * The CLEAR_FAULTS operation seems to sometimes (unpredictably, perhaps
++	 * 5% of the time or so) trigger a problematic phenomenon in which the
++	 * fan speeds surge momentarily and at least some (perhaps all?) of the
++	 * system's power outputs experience a glitch.
++	 *
++	 * However, according to Delta it should be OK to simply not send any
++	 * CLEAR_FAULTS commands (the device doesn't seem to be capable of
++	 * reporting any faults anyway), so just blackhole them unconditionally.
++	 */
++	return value == PMBUS_CLEAR_FAULTS ? -EOPNOTSUPP : -ENODATA;
++}
++
+ static int ahe50dc_fan_read_word_data(struct i2c_client *client, int page, int phase, int reg)
+ {
+ 	/* temp1 in (virtual) page 1 is remapped to mfr-specific temp4 */
+@@ -68,6 +83,7 @@ static struct pmbus_driver_info ahe50dc_
+ 		PMBUS_HAVE_VIN | PMBUS_HAVE_FAN12 | PMBUS_HAVE_FAN34 |
+ 		PMBUS_HAVE_STATUS_FAN12 | PMBUS_HAVE_STATUS_FAN34 | PMBUS_PAGE_VIRTUAL,
+ 	.func[1] = PMBUS_HAVE_TEMP | PMBUS_PAGE_VIRTUAL,
++	.write_byte = ahe50dc_fan_write_byte,
+ 	.read_word_data = ahe50dc_fan_read_word_data,
+ };
+ 
 
 

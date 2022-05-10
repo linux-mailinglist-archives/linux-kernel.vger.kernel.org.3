@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 816305212D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 606DC5212DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240528AbiEJK6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 06:58:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40256 "EHLO
+        id S240543AbiEJK6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 06:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240719AbiEJK4b (ORCPT
+        with ESMTP id S240918AbiEJK4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 06:56:31 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86079186DE;
-        Tue, 10 May 2022 03:50:48 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id iq10so15560899pjb.0;
-        Tue, 10 May 2022 03:50:48 -0700 (PDT)
+        Tue, 10 May 2022 06:56:44 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2409B49CB6;
+        Tue, 10 May 2022 03:51:18 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id j6so14603756pfe.13;
+        Tue, 10 May 2022 03:51:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=keKvWn4skwJEPMKYt8IdlL6/BT3R30J+5SJ0HpwYsbQ=;
-        b=TLnk/k5j02FJEO5ZPqpBonxx06Y7/UvAiW/xGg7q6jDc4KaST8vdQ4Q25FmZDW7WqS
-         K21JUSYFOYIOaDVDu8Crv1GFf6zy50NK+HXnFNXGVzrtMNMmRzagXJyPgFPiTmZVNVnF
-         ISDrXzbsIHZ2rUuFf223/A74htDcQlhsNa3n6kwhcIYwmAAgswojAC1Yt3VYNxO8LxUk
-         DjJtOi7+StxGiXqQZ/YXFac2ZLfHy3capQgHv9yBLeg0/EESiyN7riHf17B425YTmYLv
-         jvRi+TCDNVEMbPLbn5yzpD0flnwRAqRMNSAhx5yD9ODSrov1L6e4SAsW0c/JEA3zQ6hc
-         nVIA==
+        bh=hAHq/Z/cN7zV+XdkiKU02nzI59eCs7rRP6xEiwk+ttM=;
+        b=omAx8HgDVZ/N16gcZs7NwcDCejSq3mv/wK0bmHiwGOCdpzpFBaEL9oJp59J3TefASW
+         VWqJ5eXPMLZnfGvy0rwgMy4XQE9RfeaNHByd00RzEW2DkNQpAaR3GjcNk0tGp1a3/Ouk
+         1X/mczkeIzuYf6tOdlntClgX3cBujoyE7N7zUJ51QQ19aneUoH/m5gkR3Na4QHyhaJud
+         1olm5tqo7xBbVvuFZtgJGn7jjstObBrJ+7bWaPFYOXiFj7DSs8fMCTHu6peNEuGhx7z9
+         22a+0pheq7GEFUAgaXhizFz6bMHBHIuwhCHgrhINnuCMAGLn1UHz6vJ33DIUopRD/5g8
+         gCmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=keKvWn4skwJEPMKYt8IdlL6/BT3R30J+5SJ0HpwYsbQ=;
-        b=2n5DzpdLERo7heek0Og1DICFj4/KdLN17dLRSMB07ocmTtQ+g9siNuzogGLFTJZMgx
-         6NvtWMFmpnjdTCpLVAYxW12jBycXax417po15XF/D5iLngzp1dQgyVPoCP0mkp6/qg/E
-         dGbZbB26W4Ihnpfbt5eBPzgmE+r3JQ4z2LCJjWhaBt1/TeO3T8fGdYLP6Xd9h8sVLZh1
-         R93YqPR2qJosyVgzvtBulnSA5s5TcVT2/EXq0ytxGQyiGhBQbEVhRVP1ie3ARIKRFDfE
-         VmQkXxx5Y6CJpdiBpOmsBxIlfz+RoKThy2J47s9svYKXmVlYi9TSPPx/RKZwJdExMRfX
-         zOSA==
-X-Gm-Message-State: AOAM531D8XPKmX2dtoQQeFGYv04lNfRIRMU+StCfGve+uxd2ebCEfHOg
-        SKOp2cTD/TIB5v7n3f6dX9MaIx/9eAQ=
-X-Google-Smtp-Source: ABdhPJwcd9lTvldg1q7fXnHFTXYXLMY8RnJM+oKWHCngh5ehFgNLm1Af1QZ7z0E8AbSuNdsmwXc4sg==
-X-Received: by 2002:a17:902:c602:b0:15f:2a36:ab03 with SMTP id r2-20020a170902c60200b0015f2a36ab03mr1396101plr.99.1652179842196;
-        Tue, 10 May 2022 03:50:42 -0700 (PDT)
+        bh=hAHq/Z/cN7zV+XdkiKU02nzI59eCs7rRP6xEiwk+ttM=;
+        b=uqDOQ1D+20DLacIvGOOyQwgcrRFfTdsP8vItO8XfUbxNBY0BB+e8Xr3nbJt92Wr1q6
+         ejrpJ2C90i2QJOb3YhPjcLo0Nii1vJeBRdWBfJpPiVqq69B+uvVvvVRaLtSBUXU7QPqT
+         JkKsQohNXfAr3iHNwM/0qeYRhKmvokiS5oK0d+N9kQgQ9QeVrOtwCm/F8dk2bthXnkJ5
+         kcik1miDrj+GNsMHOpk8rpaUx7PtyxVT+GTbdoZb0KSlguULBtz3M+56at7LyVyQkvZY
+         N96qmXkDPF6cRVt4kZZKfnDdEsWLTNJlgy5EW7uhDDF1jqJdlzVQlQgWLZIoMXKemTwQ
+         s4Zw==
+X-Gm-Message-State: AOAM530mPWb+w4bf4T8ugpSW8jhXB8FbTJCf7BNDzT4dnlnHbGXDRv/W
+        Hvh6veAk/0FyTOVNzNulUDE=
+X-Google-Smtp-Source: ABdhPJy+fryPMGgXljHO9c+vcQpQNMh6ymww+rTFw9yfICLO78dc6yMkKnygW8lA+g2+4HS1DnAojw==
+X-Received: by 2002:a62:4e90:0:b0:505:fa47:b611 with SMTP id c138-20020a624e90000000b00505fa47b611mr19933137pfb.65.1652179877328;
+        Tue, 10 May 2022 03:51:17 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id m2-20020a17090aab0200b001cd4c118b07sm1534895pjq.16.2022.05.10.03.50.40
+        by smtp.gmail.com with ESMTPSA id cq21-20020a056a00331500b0050dc76281e0sm10249669pfb.186.2022.05.10.03.51.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 03:50:41 -0700 (PDT)
+        Tue, 10 May 2022 03:51:17 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     corentin.chary@gmail.com
-Cc:     hdegoede@redhat.com, markgross@kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     brking@us.ibm.com
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] samsung-laptop: use kobj_to_dev()
-Date:   Tue, 10 May 2022 10:50:38 +0000
-Message-Id: <20220510105038.1351743-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] [SCSI] ipr: use kobj_to_dev()
+Date:   Tue, 10 May 2022 10:51:13 +0000
+Message-Id: <20220510105113.1351891-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -78,22 +78,58 @@ Use kobj_to_dev() instead of open-coding it.
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- drivers/platform/x86/samsung-laptop.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/ipr.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/platform/x86/samsung-laptop.c b/drivers/platform/x86/samsung-laptop.c
-index 19f6b456234f..c187dcdf82f0 100644
---- a/drivers/platform/x86/samsung-laptop.c
-+++ b/drivers/platform/x86/samsung-laptop.c
-@@ -1208,7 +1208,7 @@ static int __init samsung_backlight_init(struct samsung_laptop *samsung)
- static umode_t samsung_sysfs_is_visible(struct kobject *kobj,
- 					struct attribute *attr, int idx)
+diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
+index 353cf47db79c..256ec6d08c16 100644
+--- a/drivers/scsi/ipr.c
++++ b/drivers/scsi/ipr.c
+@@ -3456,7 +3456,7 @@ static ssize_t ipr_read_trace(struct file *filp, struct kobject *kobj,
+ 			      struct bin_attribute *bin_attr,
+ 			      char *buf, loff_t off, size_t count)
  {
 -	struct device *dev = container_of(kobj, struct device, kobj);
 +	struct device *dev = kobj_to_dev(kobj);
- 	struct samsung_laptop *samsung = dev_get_drvdata(dev);
- 	bool ok = true;
- 
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct ipr_ioa_cfg *ioa_cfg = (struct ipr_ioa_cfg *)shost->hostdata;
+ 	unsigned long lock_flags = 0;
+@@ -4182,7 +4182,7 @@ static ssize_t ipr_read_async_err_log(struct file *filep, struct kobject *kobj,
+ 				struct bin_attribute *bin_attr, char *buf,
+ 				loff_t off, size_t count)
+ {
+-	struct device *cdev = container_of(kobj, struct device, kobj);
++	struct device *cdev = kobj_to_dev(kobj);
+ 	struct Scsi_Host *shost = class_to_shost(cdev);
+ 	struct ipr_ioa_cfg *ioa_cfg = (struct ipr_ioa_cfg *)shost->hostdata;
+ 	struct ipr_hostrcb *hostrcb;
+@@ -4206,7 +4206,7 @@ static ssize_t ipr_next_async_err_log(struct file *filep, struct kobject *kobj,
+ 				struct bin_attribute *bin_attr, char *buf,
+ 				loff_t off, size_t count)
+ {
+-	struct device *cdev = container_of(kobj, struct device, kobj);
++	struct device *cdev = kobj_to_dev(kobj);
+ 	struct Scsi_Host *shost = class_to_shost(cdev);
+ 	struct ipr_ioa_cfg *ioa_cfg = (struct ipr_ioa_cfg *)shost->hostdata;
+ 	struct ipr_hostrcb *hostrcb;
+@@ -4267,7 +4267,7 @@ static ssize_t ipr_read_dump(struct file *filp, struct kobject *kobj,
+ 			     struct bin_attribute *bin_attr,
+ 			     char *buf, loff_t off, size_t count)
+ {
+-	struct device *cdev = container_of(kobj, struct device, kobj);
++	struct device *cdev = kobj_to_dev(kobj);
+ 	struct Scsi_Host *shost = class_to_shost(cdev);
+ 	struct ipr_ioa_cfg *ioa_cfg = (struct ipr_ioa_cfg *)shost->hostdata;
+ 	struct ipr_dump *dump;
+@@ -4456,7 +4456,7 @@ static ssize_t ipr_write_dump(struct file *filp, struct kobject *kobj,
+ 			      struct bin_attribute *bin_attr,
+ 			      char *buf, loff_t off, size_t count)
+ {
+-	struct device *cdev = container_of(kobj, struct device, kobj);
++	struct device *cdev = kobj_to_dev(kobj);
+ 	struct Scsi_Host *shost = class_to_shost(cdev);
+ 	struct ipr_ioa_cfg *ioa_cfg = (struct ipr_ioa_cfg *)shost->hostdata;
+ 	int rc;
 -- 
 2.25.1
 

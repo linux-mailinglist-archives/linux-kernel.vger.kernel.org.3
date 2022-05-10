@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E0F52177B
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:23:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8AE15216C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243207AbiEJN0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60652 "EHLO
+        id S238007AbiEJNSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:18:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243578AbiEJNWM (ORCPT
+        with ESMTP id S242386AbiEJNQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:22:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D66056768;
-        Tue, 10 May 2022 06:16:28 -0700 (PDT)
+        Tue, 10 May 2022 09:16:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CD539B84;
+        Tue, 10 May 2022 06:12:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B109EB81D7A;
-        Tue, 10 May 2022 13:15:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAE53C385A6;
-        Tue, 10 May 2022 13:15:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C260BB81D7A;
+        Tue, 10 May 2022 13:12:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34DFCC385A6;
+        Tue, 10 May 2022 13:12:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188547;
-        bh=O726eevFd4aa9bv4B67BLbuQbMjvTTVMMcyh219BVxE=;
+        s=korg; t=1652188334;
+        bh=oNEVOACShz5Vg5qpBKriSDBye5th5s4kFjJ7D1n5L+Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U2mq2JCWT2frtWWGagREk2iw4pUIKH2aU4bKe8zeJHn2R5PGdaAIMFbnGOpv926YK
-         NIXYegdV1KwjDuB0mLF8QkXUTkYOYqAIU6Fz4Ux/rt/VeRK74YJPAHZNOpIACEZRsc
-         lbsLZtMpEYenSPP11F7ZQ545kSARO5DDiFyiefzs=
+        b=UdYOzoL58QTszpDg19u3761+IpaN+pGds6zawdY6LYpnT4mvJ2T+b8WzCNYetcEZB
+         bvbtyxVW/KyOaULXaPR9kl+Wdle+e3cDV5Tc2b6nzTqzapgyn72qMMJRv+XNf78qsS
+         umlySUIqylyhCYkHxX+4H0Qmdcgb+Ah+T2aD7oBg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 44/78] drivers: net: hippi: Fix deadlock in rr_close()
+        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH 4.9 40/66] tty: n_gsm: fix wrong command retry handling
 Date:   Tue, 10 May 2022 15:07:30 +0200
-Message-Id: <20220510130733.839982828@linuxfoundation.org>
+Message-Id: <20220510130730.943978056@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
-References: <20220510130732.522479698@linuxfoundation.org>
+In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
+References: <20220510130729.762341544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,53 +53,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Daniel Starke <daniel.starke@siemens.com>
 
-[ Upstream commit bc6de2878429e85c1f1afaa566f7b5abb2243eef ]
+commit d0bcdffcad5a22f202e3bf37190c0dd8c080ea92 upstream.
 
-There is a deadlock in rr_close(), which is shown below:
+n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
+See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
+The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
+the newer 27.010 here. Chapter 5.7.3 states that the valid range for the
+maximum number of retransmissions (N2) is from 0 to 255 (both including).
+gsm_config() fails to limit this range correctly. Furthermore,
+gsm_control_retransmit() handles this number incorrectly by performing
+N2 - 1 retransmission attempts. Setting N2 to zero results in more than 255
+retransmission attempts.
+Fix the range check in gsm_config() and the value handling in
+gsm_control_send() and gsm_control_retransmit() to comply with 3GPP 27.010.
 
-   (Thread 1)                |      (Thread 2)
-                             | rr_open()
-rr_close()                   |  add_timer()
- spin_lock_irqsave() //(1)   |  (wait a time)
- ...                         | rr_timer()
- del_timer_sync()            |  spin_lock_irqsave() //(2)
- (wait timer to stop)        |  ...
-
-We hold rrpriv->lock in position (1) of thread 1 and
-use del_timer_sync() to wait timer to stop, but timer handler
-also need rrpriv->lock in position (2) of thread 2.
-As a result, rr_close() will block forever.
-
-This patch extracts del_timer_sync() from the protection of
-spin_lock_irqsave(), which could let timer handler to obtain
-the needed lock.
-
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Link: https://lore.kernel.org/r/20220417125519.82618-1-duoming@zju.edu.cn
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+Link: https://lore.kernel.org/r/20220414094225.4527-11-daniel.starke@siemens.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/hippi/rrunner.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/tty/n_gsm.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/hippi/rrunner.c b/drivers/net/hippi/rrunner.c
-index 40ef4aeb0ef0..3a73ac03fb2b 100644
---- a/drivers/net/hippi/rrunner.c
-+++ b/drivers/net/hippi/rrunner.c
-@@ -1354,7 +1354,9 @@ static int rr_close(struct net_device *dev)
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -1345,7 +1345,6 @@ static void gsm_control_retransmit(unsig
+ 	spin_lock_irqsave(&gsm->control_lock, flags);
+ 	ctrl = gsm->pending_cmd;
+ 	if (ctrl) {
+-		gsm->cretries--;
+ 		if (gsm->cretries == 0) {
+ 			gsm->pending_cmd = NULL;
+ 			ctrl->error = -ETIMEDOUT;
+@@ -1354,6 +1353,7 @@ static void gsm_control_retransmit(unsig
+ 			wake_up(&gsm->event);
+ 			return;
+ 		}
++		gsm->cretries--;
+ 		gsm_control_transmit(gsm, ctrl);
+ 		mod_timer(&gsm->t2_timer, jiffies + gsm->t2 * HZ / 100);
+ 	}
+@@ -1394,7 +1394,7 @@ retry:
  
- 	rrpriv->fw_running = 0;
+ 	/* If DLCI0 is in ADM mode skip retries, it won't respond */
+ 	if (gsm->dlci[0]->mode == DLCI_MODE_ADM)
+-		gsm->cretries = 1;
++		gsm->cretries = 0;
+ 	else
+ 		gsm->cretries = gsm->n2;
  
-+	spin_unlock_irqrestore(&rrpriv->lock, flags);
- 	del_timer_sync(&rrpriv->timer);
-+	spin_lock_irqsave(&rrpriv->lock, flags);
- 
- 	writel(0, &regs->TxPi);
- 	writel(0, &regs->IpRxPi);
--- 
-2.35.1
-
+@@ -2519,7 +2519,7 @@ static int gsmld_config(struct tty_struc
+ 	/* Check the MRU/MTU range looks sane */
+ 	if (c->mru > MAX_MRU || c->mtu > MAX_MTU || c->mru < 8 || c->mtu < 8)
+ 		return -EINVAL;
+-	if (c->n2 < 3)
++	if (c->n2 > 255)
+ 		return -EINVAL;
+ 	if (c->encapsulation > 1)	/* Basic, advanced, no I */
+ 		return -EINVAL;
 
 

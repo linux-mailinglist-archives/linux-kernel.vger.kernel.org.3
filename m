@@ -2,90 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 009E0520B51
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 04:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7320520B55
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 04:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234831AbiEJCi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 22:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37074 "EHLO
+        id S234854AbiEJCkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 22:40:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233119AbiEJCiY (ORCPT
+        with ESMTP id S234844AbiEJCkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 22:38:24 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119F5238D45;
-        Mon,  9 May 2022 19:34:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652150069; x=1683686069;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=aG59bpzcw7VuXqVqyNvwTDxFVLD9poJVez6/A6PWsf4=;
-  b=fdlBYOrIS5ZpaAIcUcyIoCv17+CT5RoaISYb1i29fqrW8KQ/N6jnJMSi
-   sS/7bFA2g46dgVnfw1du8NBkL1YG3pV6MmIOGpeWaQQB6DMPjuJbY/ol1
-   MALS9IlAFHyazdQIXIw3160bDsBkXWAKLiwa2va6K8w0Bxu5AECSipLpW
-   hA4qTQUvSD2jbJGdxTU0pCdwwCSrueCT58qCubw3LkeLTfhziUAntHOyG
-   f4GB2B+y7xTaHZQ6cmn+Q8U1aXZfurYxR9+TkORQoR5tqc13PdJY3Rnyg
-   pIuwumkHItce4yBEdQnXfAcSF29Z6mdF7DdPr1cuyG70Pi7VQggqPQDUK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="266825596"
-X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
-   d="scan'208";a="266825596"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 19:34:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
-   d="scan'208";a="570460804"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga007.fm.intel.com with ESMTP; 09 May 2022 19:34:28 -0700
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     hdegoede@redhat.com, markgross@kernel.org
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] tools/power/x86/intel-speed-select: Display error on turbo mode disabled
-Date:   Mon,  9 May 2022 19:34:21 -0700
-Message-Id: <20220510023421.3930540-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.31.1
+        Mon, 9 May 2022 22:40:16 -0400
+Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2341224BD7;
+        Mon,  9 May 2022 19:36:18 -0700 (PDT)
+Received: from SHSend.spreadtrum.com (shmbx04.spreadtrum.com [10.0.1.214])
+        by SHSQR01.spreadtrum.com with ESMTPS id 24A2ZHmq016228
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
+        Tue, 10 May 2022 10:35:17 +0800 (CST)
+        (envelope-from Jing.Xia@unisoc.com)
+Received: from bj08259pcu.spreadtrum.com (10.0.74.59) by
+ shmbx04.spreadtrum.com (10.0.1.214) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Tue, 10 May 2022 10:35:17 +0800
+From:   Jing Xia <jing.xia@unisoc.com>
+To:     <viro@zeniv.linux.org.uk>
+CC:     <jack@suse.cz>, <hch@lst.de>, <jing.xia@unisoc.com>,
+        <jing.xia.mail@gmail.com>, <stable@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH V2] writeback: Avoid skipping inode writeback
+Date:   Tue, 10 May 2022 10:35:14 +0800
+Message-ID: <20220510023514.27399-1-jing.xia@unisoc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.0.74.59]
+X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
+ shmbx04.spreadtrum.com (10.0.1.214)
+X-MAIL: SHSQR01.spreadtrum.com 24A2ZHmq016228
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For Intel SST turbo-freq feature to be enabled, the turbo mode on the
-platform must be enabled also. If turbo mode is disabled, display error
-while enabling turbo-freq feature.
+We have run into an issue that a task gets stuck in
+balance_dirty_pages_ratelimited() when perform I/O stress testing.
+The reason we observed is that an I_DIRTY_PAGES inode with lots
+of dirty pages is in b_dirty_time list and standard background
+writeback cannot writeback the inode.
+After studing the relevant code, the following scenario may lead
+to the issue:
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+task1                                   task2
+-----                                   -----
+fuse_flush
+ write_inode_now //in b_dirty_time
+  writeback_single_inode
+   __writeback_single_inode
+                                 fuse_write_end
+                                  filemap_dirty_folio
+                                   __xa_set_mark:PAGECACHE_TAG_DIRTY
+    lock inode->i_lock
+    if mapping tagged PAGECACHE_TAG_DIRTY
+    inode->i_state |= I_DIRTY_PAGES
+    unlock inode->i_lock
+                                   __mark_inode_dirty:I_DIRTY_PAGES
+                                      lock inode->i_lock
+                                      -was dirty,inode stays in
+                                      -b_dirty_time
+                                      unlock inode->i_lock
+
+   if(!(inode->i_state & I_DIRTY_All))
+      -not true,so nothing done
+
+This patch moves the dirty inode to b_dirty list when the inode
+currently is not queued in b_io or b_more_io list at the end of
+writeback_single_inode.
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+CC: stable@vger.kernel.org
+Fixes: 0ae45f63d4ef ("vfs: add support for a lazytime mount option")
+Signed-off-by: Jing Xia <jing.xia@unisoc.com>
 ---
-Since this is a trivial patch, I am not sending a PULL request.
+ fs/fs-writeback.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- tools/power/x86/intel-speed-select/isst-config.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/tools/power/x86/intel-speed-select/isst-config.c b/tools/power/x86/intel-speed-select/isst-config.c
-index 060390e88e37..9d35614995ee 100644
---- a/tools/power/x86/intel-speed-select/isst-config.c
-+++ b/tools/power/x86/intel-speed-select/isst-config.c
-@@ -1892,6 +1892,12 @@ static void set_fact_for_cpu(int cpu, void *arg1, void *arg2, void *arg3,
- 	int ret;
- 	int status = *(int *)arg4;
- 
-+	if (status && no_turbo()) {
-+		isst_display_error_info_message(1, "Turbo mode is disabled", 0, 0);
-+		ret = -1;
-+		goto disp_results;
-+	}
+diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
+index 591fe9cf1659..1fae0196292a 100644
+--- a/fs/fs-writeback.c
++++ b/fs/fs-writeback.c
+@@ -1712,6 +1712,10 @@ static int writeback_single_inode(struct inode *inode,
+ 	 */
+ 	if (!(inode->i_state & I_DIRTY_ALL))
+ 		inode_cgwb_move_to_attached(inode, wb);
++	else if (!(inode->i_state & I_SYNC_QUEUED) &&
++		 (inode->i_state & I_DIRTY))
++		redirty_tail_locked(inode, wb);
 +
- 	ret = isst_get_ctdp_levels(cpu, &pkg_dev);
- 	if (ret) {
- 		isst_display_error_info_message(1, "Failed to get number of levels", 0, 0);
+ 	spin_unlock(&wb->list_lock);
+ 	inode_sync_complete(inode);
+ out:
 -- 
-2.35.1
+2.17.1
 

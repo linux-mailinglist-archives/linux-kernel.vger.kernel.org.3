@@ -2,61 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFF8B5211B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DC505211CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239534AbiEJKKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 06:10:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
+        id S239585AbiEJKMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 06:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231929AbiEJKKF (ORCPT
+        with ESMTP id S229956AbiEJKMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 06:10:05 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F75E16D118;
-        Tue, 10 May 2022 03:06:08 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id C296621889;
-        Tue, 10 May 2022 10:06:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1652177166; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ytZlP7vVK+dBIlmkee79MIPsVpRUqqEBBWJPXxxXFVw=;
-        b=TS7kb4CQdw0UWYaKL1F2HZbsoWfdeqZyokWrx2/pzmLN9JCLD3JWTv3x/0jtZxgRZMELPS
-        oIFCC1Z4s0ixxjqnQ+cctz6PFleszxO4hln0/8rTP5V7fTCj9YJP7Ns1+/jeV39lNuCa5r
-        GUEun9eWj5S6mKcgP7yqN4lcV7qwgvo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1652177166;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ytZlP7vVK+dBIlmkee79MIPsVpRUqqEBBWJPXxxXFVw=;
-        b=wDevVj6IjhWv9uRasThN3fVEL8j47oLzjDzyCNS440VR+lnJV5Z6cO6VUeD6tXLEfuD3qP
-        IFHcc4+Del9EThBQ==
-Received: from quack3.suse.cz (unknown [10.163.28.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 6EFE92C141;
-        Tue, 10 May 2022 10:06:06 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 20527A062A; Tue, 10 May 2022 12:06:06 +0200 (CEST)
-Date:   Tue, 10 May 2022 12:06:06 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Jing Xia <jing.xia@unisoc.com>
-Cc:     viro@zeniv.linux.org.uk, jack@suse.cz, hch@lst.de,
-        jing.xia.mail@gmail.com, stable@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] writeback: Avoid skipping inode writeback
-Message-ID: <20220510100606.qqiiti2i3axfusnh@quack3.lan>
-References: <20220510023514.27399-1-jing.xia@unisoc.com>
+        Tue, 10 May 2022 06:12:41 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF250185C85;
+        Tue, 10 May 2022 03:08:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652177325; x=1683713325;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FEwpRe0W3NxiPGNEO5T4Th0jnvzANcK4YMMXxjuh76U=;
+  b=kdq2FPsxM+RaYtG5iEDFtNXz54S01iJiIlrCh1nBn0X12zn5Um5blB/K
+   Ic1xOCJvVhPdUNf/cPTfplnHCQaD1mQtzURC44mAO6VTt9MI8en/GIwx0
+   NxB/DQNMKTNvgL/ZAHy11T5AksMUI94w5hs0uDMrW/Dsb10EhVfH7LNSt
+   TcNMuEmWtkfc7C6G3Bahh5PRVBIU5yugpJigRqbLYPO5dKi5+XTcTNjW+
+   lHDz2gy34PV2cejasf5fNQxr4/499MllCGtrH7WngPOO3dogbPIJzhq+A
+   sgzQy+Pjm/FQvyHZD9JGfttZ6cZhRfPD3gx20zrNCG9AsGadJjoBNbaY3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="269464879"
+X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
+   d="scan'208";a="269464879"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 03:08:35 -0700
+X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
+   d="scan'208";a="570605764"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 03:08:29 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1noMn3-00EI7L-0j;
+        Tue, 10 May 2022 13:08:25 +0300
+Date:   Tue, 10 May 2022 13:08:24 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tyrone Ting <warp5tw@gmail.com>
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
+        wsa@kernel.org, jarkko.nikula@linux.intel.com,
+        semen.protsenko@linaro.org, sven@svenpeter.dev, jie.deng@intel.com,
+        jsd@semihalf.com, lukas.bulwahn@gmail.com, olof@lixom.net,
+        arnd@arndb.de, tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/9] i2c: npcm: Change the way of getting GCR regmap
+Message-ID: <Yno5mJMi/3dZyjNz@smile.fi.intel.com>
+References: <20220510091654.8498-1-warp5tw@gmail.com>
+ <20220510091654.8498-3-warp5tw@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220510023514.27399-1-jing.xia@unisoc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <20220510091654.8498-3-warp5tw@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,74 +74,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 10-05-22 10:35:14, Jing Xia wrote:
-> We have run into an issue that a task gets stuck in
-> balance_dirty_pages_ratelimited() when perform I/O stress testing.
-> The reason we observed is that an I_DIRTY_PAGES inode with lots
-> of dirty pages is in b_dirty_time list and standard background
-> writeback cannot writeback the inode.
-> After studing the relevant code, the following scenario may lead
-> to the issue:
+On Tue, May 10, 2022 at 05:16:47PM +0800, Tyrone Ting wrote:
+> From: Tali Perry <tali.perry1@gmail.com>
 > 
-> task1                                   task2
-> -----                                   -----
-> fuse_flush
->  write_inode_now //in b_dirty_time
->   writeback_single_inode
->    __writeback_single_inode
->                                  fuse_write_end
->                                   filemap_dirty_folio
->                                    __xa_set_mark:PAGECACHE_TAG_DIRTY
->     lock inode->i_lock
->     if mapping tagged PAGECACHE_TAG_DIRTY
->     inode->i_state |= I_DIRTY_PAGES
->     unlock inode->i_lock
->                                    __mark_inode_dirty:I_DIRTY_PAGES
->                                       lock inode->i_lock
->                                       -was dirty,inode stays in
->                                       -b_dirty_time
->                                       unlock inode->i_lock
-> 
->    if(!(inode->i_state & I_DIRTY_All))
->       -not true,so nothing done
-> 
-> This patch moves the dirty inode to b_dirty list when the inode
-> currently is not queued in b_io or b_more_io list at the end of
-> writeback_single_inode.
-> 
-> Reviewed-by: Jan Kara <jack@suse.cz>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> CC: stable@vger.kernel.org
-> Fixes: 0ae45f63d4ef ("vfs: add support for a lazytime mount option")
-> Signed-off-by: Jing Xia <jing.xia@unisoc.com>
+> Change the way of getting NPCM system manager reigster (GCR)
+> and still maintain the old mechanism as a fallback if getting
+> nuvoton,sys-mgr fails while working with the legacy devicetree
+> file.
 
-Thanks. I've queued the patch to my tree and will push it to Linus tomorrow
-or so.
+...
 
-								Honza
+> @@ -2236,6 +2236,7 @@ static int npcm_i2c_probe_bus(struct platform_device *pdev)
+>  	static struct regmap *clk_regmap;
+>  	int irq;
+>  	int ret;
+> +	struct device_node *np = pdev->dev.of_node;
 
-> ---
->  fs/fs-writeback.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
-> index 591fe9cf1659..1fae0196292a 100644
-> --- a/fs/fs-writeback.c
-> +++ b/fs/fs-writeback.c
-> @@ -1712,6 +1712,10 @@ static int writeback_single_inode(struct inode *inode,
->  	 */
->  	if (!(inode->i_state & I_DIRTY_ALL))
->  		inode_cgwb_move_to_attached(inode, wb);
-> +	else if (!(inode->i_state & I_SYNC_QUEUED) &&
-> +		 (inode->i_state & I_DIRTY))
-> +		redirty_tail_locked(inode, wb);
-> +
->  	spin_unlock(&wb->list_lock);
->  	inode_sync_complete(inode);
->  out:
-> -- 
-> 2.17.1
-> 
+Can we keep "longer line first" order?
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+With Best Regards,
+Andy Shevchenko
+
+

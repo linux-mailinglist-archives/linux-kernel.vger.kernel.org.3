@@ -2,233 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04FB3520C67
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 05:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9413E520C6C
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 05:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232560AbiEJDwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 23:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53162 "EHLO
+        id S233749AbiEJDxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 23:53:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231199AbiEJDwG (ORCPT
+        with ESMTP id S232210AbiEJDxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 23:52:06 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22654F9EF
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 20:48:05 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id y41so9055287pfw.12
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 20:48:05 -0700 (PDT)
+        Mon, 9 May 2022 23:53:16 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8893ED33
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 20:49:18 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id p4so18490718edx.0
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 20:49:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WwAC7yJmQyf0urXxiRrxQbFHiuNL5jbhDc4jex67OW4=;
-        b=bZHSJ7bpkl4sSuvW6mgl1I7nbbBfYx8MmE4fDYj0YNLtudrKynpdKr6QEbVDD9Aku7
-         +lzGDsawCKQaHAvrWPKcZLCxQaCN0NzNz4g36sHzK2XrxG9ifgnZMEoGEifX9f6kOek9
-         +CAie9y1101MRdqr+KufppR9BmcT9c342MFfWejKFKACEfsMD9CvkpxUqYBRs/LLmXve
-         PfeqjwhMCkN0N8TOYDq1K5BbqFgvL9pa5lxblkiEvSuYtMc26a3IVoqe9wUnjwQGHX5m
-         9wGi3o4znFUdECTJ3L3Zpof0j1AyTUIjES45k7/AUqouZjKaJqIYGXtLlSQ7VP4DssyV
-         fU7g==
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=csH2b0yln8VJjIPZKUY8Qo0Oj23Oo4VsNy+UnhWpwO0=;
+        b=oYECvY6qXcMfackrkGXaEF2Uh8uHzvWghh2G/m/tPRNi9b9hcdKAzXapnkBfurvbuY
+         cQk/LXQg4Z0ssHXJbTax12Vpmb8NOErMzH+BaeZdW79uWkpm8VtbWCTuTP6+XBtrszqm
+         My2e+l5cAmZyvF0loTH1IJeyRjko0Bh2atekA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WwAC7yJmQyf0urXxiRrxQbFHiuNL5jbhDc4jex67OW4=;
-        b=OAj4Ea/50imVNFDDZqltgBxvgLrrV7ZQHK6Hf5JLAJ56nxUdGVN4/YOtmWdOX4EBrn
-         HIIuvUT9HG5wlLpj0WG9s+V8Lnahg9Nw7E0TDzLHvHmV+liqDnHseX28txMSK42FqBF/
-         4oPkDSuy9DxIMTW2+SeAvcDL15BYWmpGtb+T7zMhgV+vCNjdHV+0CA/VHiz6ftGk2F9Q
-         cJxq1MOr6tjpGJ6JWReRVX8QpbYDZC06MrmxDdO1ji+mShwWoWaoEbxXRCK0xUfhR82y
-         ZY2BUvPRqYWz166cJoZmfp8V6Jwq1kelV6WdmFk1ofXIrB/wOZnIDyN0R+ctklEov5Lk
-         8usw==
-X-Gm-Message-State: AOAM530LhKxLB7+0tbLCBmgVPlSXmlMVUAqCKYaohOSW9+zF4otlfR78
-        G5jphzDEZmroMot628gAYGbLyQ==
-X-Google-Smtp-Source: ABdhPJze/shPQuA0kzNOEmJipModZI0YI/vymQS2NKqCkqkUdo6hfyc+q4MB5shOw9M55p8HIrYGTw==
-X-Received: by 2002:a63:1d50:0:b0:3c2:9152:5966 with SMTP id d16-20020a631d50000000b003c291525966mr15181661pgm.525.1652154485226;
-        Mon, 09 May 2022 20:48:05 -0700 (PDT)
-Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id y16-20020a63b510000000b003c6ab6ba06csm3731640pge.79.2022.05.09.20.48.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 20:48:04 -0700 (PDT)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     tj@kernel.org, axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com, songmuchun@bytedance.com,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH] blk-iocost: combine local_stat and desc_stat to stat
-Date:   Tue, 10 May 2022 11:47:57 +0800
-Message-Id: <20220510034757.21761-1-zhouchengming@bytedance.com>
-X-Mailer: git-send-email 2.35.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=csH2b0yln8VJjIPZKUY8Qo0Oj23Oo4VsNy+UnhWpwO0=;
+        b=XsfWnVgTn4snQdirKqo/MBsWp2Qu/kftX9d1mHyevDS5ffQyJxj2BP9sqRItH90iPd
+         QpjS6RK1LS8ZUHnG9Z9hV8P/+hh9LFpqzXcq+CNwzdGKaXqP4Iyak6DEOmV4PMyGiv2Q
+         HfN3S//sFx1mwcGW/6PoEMncgwf6YXiELRIKsX8QQenh3s0hA+tVEzbb2Oqxi2Pb9sYE
+         l7CfBfduQ4TGR97bxeopNZoJMqYKuUj6STSTbyl/uvSkq2qVZbaVpr3iZUDWebcsK4H8
+         Dn6IlBjfLEY4Mfs2S1GiD7hpU8pRIB5keS3sUxOddrISi6VnZ8iomxsMSsNn2vb0SGP8
+         hG4Q==
+X-Gm-Message-State: AOAM531Ngjnb4Re1IBkmNosLu3FG4GzzcyGVEWCMwn3rCtBTWrvGgVCs
+        Prt8nsc7ghsNDLOZpVKZIfgfd/EUH+iA9Ie/q4AFSNdY4zspzpJF
+X-Google-Smtp-Source: ABdhPJwob4/gCvx9CBCx7p8HvSC7iJaxs4G3456S0eeE4V5/ze1040Hv+xp4UizOuDERM7sfMDPdbXRTbaFZ5ah5tNU=
+X-Received: by 2002:a05:6402:5ca:b0:423:f330:f574 with SMTP id
+ n10-20020a05640205ca00b00423f330f574mr20595539edx.116.1652154556554; Mon, 09
+ May 2022 20:49:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com> <20220509124815.vb7d2xj5idhb2wq6@wittgenstein>
+In-Reply-To: <20220509124815.vb7d2xj5idhb2wq6@wittgenstein>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Tue, 10 May 2022 05:49:04 +0200
+Message-ID: <CAJfpegveWaS5pR3O1c_7qLnaEDWwa8oi26x2v_CwDXB_sir1tg@mail.gmail.com>
+Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org, Dave Chinner <david@fromorbit.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Karel Zak <kzak@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we flush usage, wait, indebt stat in iocg_flush_stat(), we use
-local_stat and desc_stat, which has no point since the leaf iocg
-only has local_stat and the inner iocg only has desc_stat. Also
-we don't need to flush percpu abs_vusage for these inner iocgs.
+On Mon, 9 May 2022 at 14:48, Christian Brauner <brauner@kernel.org> wrote:
 
-This patch combine local_stat and desc_stat to stat, only flush
-percpu abs_vusage for active leaf iocgs, then build inner walk
-list to propagate.
+> One comment about this. We really need to have this interface support
+> giving us mount options like "relatime" back in numeric form (I assume
+> this will be possible.). It is royally annoying having to maintain a
+> mapping table in userspace just to do:
+>
+> relatime -> MS_RELATIME/MOUNT_ATTR_RELATIME
+> ro       -> MS_RDONLY/MOUNT_ATTR_RDONLY
+>
+> A library shouldn't be required to use this interface. Conservative
+> low-level software that keeps its shared library dependencies minimal
+> will need to be able to use that interface without having to go to an
+> external library that transforms text-based output to binary form (Which
+> I'm very sure will need to happen if we go with a text-based
+> interface.).
 
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
----
- block/blk-iocost.c | 71 +++++++++++++++++++++-------------------------
- 1 file changed, 32 insertions(+), 39 deletions(-)
+Agreed.
 
-diff --git a/block/blk-iocost.c b/block/blk-iocost.c
-index 9bd670999d0a..9c1982d42d65 100644
---- a/block/blk-iocost.c
-+++ b/block/blk-iocost.c
-@@ -533,8 +533,7 @@ struct ioc_gq {
- 
- 	/* statistics */
- 	struct iocg_pcpu_stat __percpu	*pcpu_stat;
--	struct iocg_stat		local_stat;
--	struct iocg_stat		desc_stat;
-+	struct iocg_stat		stat;
- 	struct iocg_stat		last_stat;
- 	u64				last_stat_abs_vusage;
- 	u64				usage_delta_us;
-@@ -1371,7 +1370,7 @@ static bool iocg_kick_delay(struct ioc_gq *iocg, struct ioc_now *now)
- 		return true;
- 	} else {
- 		if (iocg->indelay_since) {
--			iocg->local_stat.indelay_us += now->now - iocg->indelay_since;
-+			iocg->stat.indelay_us += now->now - iocg->indelay_since;
- 			iocg->indelay_since = 0;
- 		}
- 		iocg->delay = 0;
-@@ -1419,7 +1418,7 @@ static void iocg_pay_debt(struct ioc_gq *iocg, u64 abs_vpay,
- 
- 	/* if debt is paid in full, restore inuse */
- 	if (!iocg->abs_vdebt) {
--		iocg->local_stat.indebt_us += now->now - iocg->indebt_since;
-+		iocg->stat.indebt_us += now->now - iocg->indebt_since;
- 		iocg->indebt_since = 0;
- 
- 		propagate_weights(iocg, iocg->active, iocg->last_inuse,
-@@ -1513,7 +1512,7 @@ static void iocg_kick_waitq(struct ioc_gq *iocg, bool pay_debt,
- 
- 	if (!waitqueue_active(&iocg->waitq)) {
- 		if (iocg->wait_since) {
--			iocg->local_stat.wait_us += now->now - iocg->wait_since;
-+			iocg->stat.wait_us += now->now - iocg->wait_since;
- 			iocg->wait_since = 0;
- 		}
- 		return;
-@@ -1641,11 +1640,30 @@ static void iocg_build_inner_walk(struct ioc_gq *iocg,
- 	}
- }
- 
-+/* propagate the deltas to the parent */
-+static void iocg_flush_stat_upward(struct ioc_gq *iocg)
-+{
-+	if (iocg->level > 0) {
-+		struct iocg_stat *parent_stat =
-+			&iocg->ancestors[iocg->level - 1]->stat;
-+
-+		parent_stat->usage_us +=
-+			iocg->stat.usage_us - iocg->last_stat.usage_us;
-+		parent_stat->wait_us +=
-+			iocg->stat.wait_us - iocg->last_stat.wait_us;
-+		parent_stat->indebt_us +=
-+			iocg->stat.indebt_us - iocg->last_stat.indebt_us;
-+		parent_stat->indelay_us +=
-+			iocg->stat.indelay_us - iocg->last_stat.indelay_us;
-+	}
-+
-+	iocg->last_stat = iocg->stat;
-+}
-+
- /* collect per-cpu counters and propagate the deltas to the parent */
--static void iocg_flush_stat_one(struct ioc_gq *iocg, struct ioc_now *now)
-+static void iocg_flush_stat_leaf(struct ioc_gq *iocg, struct ioc_now *now)
- {
- 	struct ioc *ioc = iocg->ioc;
--	struct iocg_stat new_stat;
- 	u64 abs_vusage = 0;
- 	u64 vusage_delta;
- 	int cpu;
-@@ -1661,34 +1679,9 @@ static void iocg_flush_stat_one(struct ioc_gq *iocg, struct ioc_now *now)
- 	iocg->last_stat_abs_vusage = abs_vusage;
- 
- 	iocg->usage_delta_us = div64_u64(vusage_delta, ioc->vtime_base_rate);
--	iocg->local_stat.usage_us += iocg->usage_delta_us;
--
--	/* propagate upwards */
--	new_stat.usage_us =
--		iocg->local_stat.usage_us + iocg->desc_stat.usage_us;
--	new_stat.wait_us =
--		iocg->local_stat.wait_us + iocg->desc_stat.wait_us;
--	new_stat.indebt_us =
--		iocg->local_stat.indebt_us + iocg->desc_stat.indebt_us;
--	new_stat.indelay_us =
--		iocg->local_stat.indelay_us + iocg->desc_stat.indelay_us;
--
--	/* propagate the deltas to the parent */
--	if (iocg->level > 0) {
--		struct iocg_stat *parent_stat =
--			&iocg->ancestors[iocg->level - 1]->desc_stat;
--
--		parent_stat->usage_us +=
--			new_stat.usage_us - iocg->last_stat.usage_us;
--		parent_stat->wait_us +=
--			new_stat.wait_us - iocg->last_stat.wait_us;
--		parent_stat->indebt_us +=
--			new_stat.indebt_us - iocg->last_stat.indebt_us;
--		parent_stat->indelay_us +=
--			new_stat.indelay_us - iocg->last_stat.indelay_us;
--	}
-+	iocg->stat.usage_us += iocg->usage_delta_us;
- 
--	iocg->last_stat = new_stat;
-+	iocg_flush_stat_upward(iocg);
- }
- 
- /* get stat counters ready for reading on all active iocgs */
-@@ -1699,13 +1692,13 @@ static void iocg_flush_stat(struct list_head *target_iocgs, struct ioc_now *now)
- 
- 	/* flush leaves and build inner node walk list */
- 	list_for_each_entry(iocg, target_iocgs, active_list) {
--		iocg_flush_stat_one(iocg, now);
-+		iocg_flush_stat_leaf(iocg, now);
- 		iocg_build_inner_walk(iocg, &inner_walk);
- 	}
- 
- 	/* keep flushing upwards by walking the inner list backwards */
- 	list_for_each_entry_safe_reverse(iocg, tiocg, &inner_walk, walk_list) {
--		iocg_flush_stat_one(iocg, now);
-+		iocg_flush_stat_upward(iocg);
- 		list_del_init(&iocg->walk_list);
- 	}
- }
-@@ -2152,16 +2145,16 @@ static int ioc_check_iocgs(struct ioc *ioc, struct ioc_now *now)
- 
- 		/* flush wait and indebt stat deltas */
- 		if (iocg->wait_since) {
--			iocg->local_stat.wait_us += now->now - iocg->wait_since;
-+			iocg->stat.wait_us += now->now - iocg->wait_since;
- 			iocg->wait_since = now->now;
- 		}
- 		if (iocg->indebt_since) {
--			iocg->local_stat.indebt_us +=
-+			iocg->stat.indebt_us +=
- 				now->now - iocg->indebt_since;
- 			iocg->indebt_since = now->now;
- 		}
- 		if (iocg->indelay_since) {
--			iocg->local_stat.indelay_us +=
-+			iocg->stat.indelay_us +=
- 				now->now - iocg->indelay_since;
- 			iocg->indelay_since = now->now;
- 		}
--- 
-2.36.0
+>   This pattern of requesting the size first by passing empty arguments,
+>   then allocating the buffer and then passing down that buffer to
+>   retrieve that value is really annoying to use and error prone (I do
+>   of course understand why it exists.).
+>
+>   For real xattrs it's not that bad because we can assume that these
+>   values don't change often and so the race window between
+>   getxattr(GET_SIZE) and getxattr(GET_VALUES) often doesn't matter. But
+>   fwiw, the post > pre check doesn't exist for no reason; we do indeed
+>   hit that race.
 
+That code is wrong.  Changing xattr size is explicitly documented in
+the man page as a non-error condition:
+
+       If size is specified as zero, these calls return the  current  size  of
+       the  named extended attribute (and leave value unchanged).  This can be
+       used to determine the size of the buffer that should be supplied  in  a
+       subsequent  call.   (But, bear in mind that there is a possibility that
+       the attribute value may change between the two calls,  so  that  it  is
+       still necessary to check the return status from the second call.)
+
+>
+>   In addition, it is costly having to call getxattr() twice. Again, for
+>   retrieving xattrs it often doesn't matter because it's not a super
+>   common operation but for mount and other info it might matter.
+
+You don't *have* to retrieve the size, it's perfectly valid to e.g.
+start with a fixed buffer size and double the size until the result
+fits.
+
+> * Would it be possible to support binary output with this interface?
+>   I really think users would love to have an interfact where they can
+>   get a struct with binary info back.
+
+I think that's bad taste.   fsinfo(2) had the same issue.  As well as
+mount(2) which still interprets the last argument as a binary blob in
+certain cases (nfs is one I know of).
+
+>   Especially for some information at least. I'd really love to have a
+>   way go get a struct mount_info or whatever back that gives me all the
+>   details about a mount encompassed in a single struct.
+
+If we want that, then can do a new syscall with that specific struct
+as an argument.
+
+>   Callers like systemd will have to parse text and will end up
+>   converting everything from text into binary anyway; especially for
+>   mount information. So giving them an option for this out of the box
+>   would be quite good.
+
+What exactly are the attributes that systemd requires?
+
+>   Interfaces like statx aim to be as fast as possible because we exptect
+>   them to be called quite often. Retrieving mount info is quite costly
+>   and is done quite often as well. Maybe not for all software but for a
+>   lot of low-level software. Especially when starting services in
+>   systemd a lot of mount parsing happens similar when starting
+>   containers in runtimes.
+
+Was there ever a test patch for systemd using fsinfo(2)?  I think not.
+
+Until systemd people start to reengineer the mount handing to allow
+for retrieving a single mount instead of the complete mount table we
+will never know where the performance bottleneck lies.
+
+>
+> * If we decide to go forward with this interface - and I think I
+>   mentioned this in the lsfmm session - could we please at least add a
+>   new system call? It really feels wrong to retrieve mount and other
+>   information through the xattr interfaces. They aren't really xattrs.
+
+I'd argue with that statement.  These are most definitely attributes.
+As for being extended, we'd just extended the xattr interface...
+
+Naming aside... imagine that read(2) has always been used to retrieve
+disk data, would you say that reading data from proc feels wrong?
+And in hindsight, would a new syscall for the purpose make any sense?
+
+Thanks,
+Miklos

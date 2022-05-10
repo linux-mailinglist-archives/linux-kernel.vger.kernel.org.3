@@ -2,114 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF715211A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB35521167
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 11:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239446AbiEJKFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 06:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
+        id S239055AbiEJJwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 05:52:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239236AbiEJKFf (ORCPT
+        with ESMTP id S239222AbiEJJwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 06:05:35 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852465C67E
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:01:38 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id c11so16285373plg.13
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:01:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dKd6PeE6IoUKq5eCY4sziXe/k6yepX5DHoIEP3vKroI=;
-        b=p6Q9lZbwn2txxQit8nNlpATWOpBAOzcZa8fKxyWqZAa/9+k1fNNzSiiu2QwKypIGJ+
-         1LI375tPYG6AGJXq23nOIZ8fmx9Do4c20ehHoypDJ5L/9RbWK9KMd/p2qbkMNw2K6INC
-         Hzc6WD0QdebWx3Rp20yoyLfWXgwHEg0JGxnS/c+xuTQyXofTj6noo6Q1nJiU4WbYg+I3
-         4W8R/y1ThaRCLOXONMwD7oTG2Yh5QJlpmxxr216c0Q0aSBXAz09rSQ5FEG4uLazteNkS
-         ww+qVAhJzS8pLLC6gG8V7TqhcFV5W73wys74hRXZ/i63B+mkHc3mkEbe6O+OiXnDEsiN
-         bI5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dKd6PeE6IoUKq5eCY4sziXe/k6yepX5DHoIEP3vKroI=;
-        b=ooZsas1P+kNQAlVBsCyAqU2Z9AOxZPJAQSj4bL4FPTOOwnS5oJMm1HK5GyMj5ikfz9
-         3We67ENwn0AU8LQAiAVjzCSngyBZG2Vpa5AF8EwqeEWT/V1Dpm6Dwhdyf5sV0GHQ3EJx
-         Di40yNQG/hDhQ+1GH5Rr8sj6b/LHfA5Fn+E2eyVVmmu4LuP05TMePgsBFHf+SaP0SJQZ
-         4pSipgNNHqF9dZ52NzFhBkNeER9T9NxijH8JiPx0siHTx3EDT5m++AINMbmhH79LHxzT
-         ulXcZ4YPeNowNfgj6UAQXO5dmrwl0jtiSf6IM3W4Nz9uBoByhHDi9rFs+x8REU2+E/eA
-         4dkw==
-X-Gm-Message-State: AOAM532cVF3DuAI/TEcCo6kXnDw0mhf8czHDvYU8RX/fpi064FruY/BM
-        II0WbxgWCMMI4/ChuXoHFyU=
-X-Google-Smtp-Source: ABdhPJwhBlOh8c5+Do3yO77gT/Bb4S3/knIx47b5lw6oc/UX26n0E7WAAoaKPg5Ya/cfRKW2qBV9RQ==
-X-Received: by 2002:a17:90b:3a8b:b0:1dc:4eb4:1f2a with SMTP id om11-20020a17090b3a8b00b001dc4eb41f2amr30991656pjb.50.1652176897983;
-        Tue, 10 May 2022 03:01:37 -0700 (PDT)
-Received: from hyeyoo ([114.29.24.243])
-        by smtp.gmail.com with ESMTPSA id a14-20020aa794ae000000b0050dc7628153sm10413812pfl.45.2022.05.10.03.01.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 03:01:37 -0700 (PDT)
-Date:   Tue, 10 May 2022 19:01:32 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH] MAINTAINERS: add myself as reviewer for slab
-Message-ID: <Yno3/I/lBeQTNJ7A@hyeyoo>
-References: <20220507073506.241963-1-42.hyeyoo@gmail.com>
- <42799bd1-2c5a-d2ae-65a4-76e7de4f68a3@suse.cz>
+        Tue, 10 May 2022 05:52:33 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA81238D6E;
+        Tue, 10 May 2022 02:48:36 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KyCs31yzDzhZ2n;
+        Tue, 10 May 2022 17:48:07 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by canpemm500010.china.huawei.com
+ (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 10 May
+ 2022 17:48:34 +0800
+From:   Ye Bin <yebin10@huawei.com>
+To:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>,
+        Ye Bin <yebin10@huawei.com>
+Subject: [PATCH -next v2] ext4: fix bug_on in ext4_writepages
+Date:   Tue, 10 May 2022 18:02:28 +0800
+Message-ID: <20220510100228.1172227-1-yebin10@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <42799bd1-2c5a-d2ae-65a4-76e7de4f68a3@suse.cz>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 10:09:24AM +0200, Vlastimil Babka wrote:
-> On 5/7/22 09:35, Hyeonggon Yoo wrote:
-> > Recently I was involved in slab subsystem (reviewing struct slab,
-> > SLUB debugfs and etc). I would like to help maintainers and people
-> > working on slab allocators by reviewing and testing their work.
-> > 
-> > Let me be Cc'd on patches related to slab.
-> > 
-> > Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> 
-> Added to slab tree, thanks for your efforts!
->
+we got issue as follows:
+EXT4-fs error (device loop0): ext4_mb_generate_buddy:1141: group 0, block bitmap and bg descriptor inconsistent: 25 vs 31513 free cls
+------------[ cut here ]------------
+kernel BUG at fs/ext4/inode.c:2708!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
+CPU: 2 PID: 2147 Comm: rep Not tainted 5.18.0-rc2-next-20220413+ #155
+RIP: 0010:ext4_writepages+0x1977/0x1c10
+RSP: 0018:ffff88811d3e7880 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffff88811c098000
+RDX: 0000000000000000 RSI: ffff88811c098000 RDI: 0000000000000002
+RBP: ffff888128140f50 R08: ffffffffb1ff6387 R09: 0000000000000000
+R10: 0000000000000007 R11: ffffed10250281ea R12: 0000000000000001
+R13: 00000000000000a4 R14: ffff88811d3e7bb8 R15: ffff888128141028
+FS:  00007f443aed9740(0000) GS:ffff8883aef00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020007200 CR3: 000000011c2a4000 CR4: 00000000000006e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ do_writepages+0x130/0x3a0
+ filemap_fdatawrite_wbc+0x83/0xa0
+ filemap_flush+0xab/0xe0
+ ext4_alloc_da_blocks+0x51/0x120
+ __ext4_ioctl+0x1534/0x3210
+ __x64_sys_ioctl+0x12c/0x170
+ do_syscall_64+0x3b/0x90
 
-Thanks Vlastimil, you are so thoughtful and nice.
-I enjoy working with you ;-)
+It may happen as follows:
+1. write inline_data inode
+vfs_write
+  new_sync_write
+    ext4_file_write_iter
+      ext4_buffered_write_iter
+        generic_perform_write
+          ext4_da_write_begin
+            ext4_da_write_inline_data_begin -> If inline data size too
+            small will allocate block to write, then mapping will has
+            dirty page
+                ext4_da_convert_inline_data_to_extent ->clear EXT4_STATE_MAY_INLINE_DATA
+2. fallocate
+do_vfs_ioctl
+  ioctl_preallocate
+    vfs_fallocate
+      ext4_fallocate
+        ext4_convert_inline_data
+          ext4_convert_inline_data_nolock
+            ext4_map_blocks -> fail will goto restore data
+            ext4_restore_inline_data
+              ext4_create_inline_data
+              ext4_write_inline_data
+              ext4_set_inode_state -> set inode EXT4_STATE_MAY_INLINE_DATA
+3. writepages
+__ext4_ioctl
+  ext4_alloc_da_blocks
+    filemap_flush
+      filemap_fdatawrite_wbc
+        do_writepages
+          ext4_writepages
+            if (ext4_has_inline_data(inode))
+              BUG_ON(ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA))
 
-> > ---
-> >  MAINTAINERS | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index edc96cdb85e8..c21e6221513f 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -18103,6 +18103,7 @@ M:	Joonsoo Kim <iamjoonsoo.kim@lge.com>
-> >  M:	Andrew Morton <akpm@linux-foundation.org>
-> >  M:	Vlastimil Babka <vbabka@suse.cz>
-> >  R:	Roman Gushchin <roman.gushchin@linux.dev>
-> > +R:	Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> >  L:	linux-mm@kvack.org
-> >  S:	Maintained
-> >  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git
-> 
+The root cause of this issue is we destory inline data until call ext4_writepages
+under delay allocation mode. But there maybe already covert from inline to extent.
+To solved this issue, we call filemap_flush firstly.
 
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+---
+ fs/ext4/inline.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
+index 6d253edebf9f..130ed5d83734 100644
+--- a/fs/ext4/inline.c
++++ b/fs/ext4/inline.c
+@@ -2002,6 +2002,14 @@ int ext4_convert_inline_data(struct inode *inode)
+ 	if (!ext4_has_inline_data(inode)) {
+ 		ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
+ 		return 0;
++	} else if (test_opt(inode->i_sb, DELALLOC) && !S_ISDIR(inode->i_mode)) {
++		error = filemap_flush(inode->i_mapping);
++		if (error)
++			return error;
++		if (!ext4_has_inline_data(inode)) {
++			ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
++			return 0;
++		}
+ 	}
+ 
+ 	needed_blocks = ext4_writepage_trans_blocks(inode);
 -- 
-Thanks,
-Hyeonggon
+2.31.1
+

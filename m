@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AEB6521C03
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A57E6521BD8
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:19:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245472AbiEJOZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52712 "EHLO
+        id S245019AbiEJOXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243906AbiEJNwx (ORCPT
+        with ESMTP id S244656AbiEJNqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:52:53 -0400
+        Tue, 10 May 2022 09:46:54 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9692992DB;
-        Tue, 10 May 2022 06:38:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B336F16ABE2;
+        Tue, 10 May 2022 06:31:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DA726188F;
-        Tue, 10 May 2022 13:38:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80C80C385C2;
-        Tue, 10 May 2022 13:38:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5EFFC6188A;
+        Tue, 10 May 2022 13:31:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E269C385C6;
+        Tue, 10 May 2022 13:31:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189896;
-        bh=ZHYzabtid5rGR1vUHabUw8fvas6K2SQA2jyLWJ7U7ig=;
+        s=korg; t=1652189507;
+        bh=SPKHJzcgJ56VPE5cKV3jdHlDmRXxnFUXxwWYSwBiLF0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GE4nzintz7gPBbsJ2NP1BRXy3lrgubtVllmi1FWmZGtVPctYtvTLJ1a0jM//PBGtD
-         p90dR/OnQrCdi0VkPuZZZJTPYB6wK95M/IJZHCqu+bSm4zT58kpWDzA+Totsoj0Src
-         iK480xRRG5Cjt9UBDxET/XacsVnFkABDsfIJ9jyI=
+        b=Lk7fScRz7OLQIMOFiljw+WqAZ/nH4ZdxumD+KaIptsX4nup497HKAjZROtMDPj8y6
+         pNFLWLsvoD0U1GgvQRu/AYvom+HB9a5dJVURNmLZLsUO3X1UOHPCiKqEoFQxZQPJ24
+         i6Z2wp7INUs8XbwCRF7maLi+vLjaTaos4SmoBH24=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Moshe Tal <moshet@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: [PATCH 5.17 063/140] net/mlx5e: Fix trust state reset in reload
-Date:   Tue, 10 May 2022 15:07:33 +0200
-Message-Id: <20220510130743.421684759@linuxfoundation.org>
+        stable@vger.kernel.org, Qiao Ma <mqaio@linux.alibaba.com>,
+        Xunlei Pang <xlpang@linux.alibaba.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 072/135] hinic: fix bug of wq out of bound access
+Date:   Tue, 10 May 2022 15:07:34 +0200
+Message-Id: <20220510130742.478072326@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,44 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Moshe Tal <moshet@nvidia.com>
+From: Qiao Ma <mqaio@linux.alibaba.com>
 
-commit b781bff882d16175277ca129c382886cb4c74a2c upstream.
+commit 52b2abef450a78e25d485ac61e32f4ce86a87701 upstream.
 
-Setting dscp2prio during the driver reload can cause dcb ieee app list to
-be not empty after the reload finish and as a result to a conflict between
-the priority trust state reported by the app and the state in the device
-register.
+If wq has only one page, we need to check wqe rolling over page by
+compare end_idx and curr_idx, and then copy wqe to shadow wqe to
+avoid out of bound access.
+This work has been done in hinic_get_wqe, but missed for hinic_read_wqe.
+This patch fixes it, and removes unnecessary MASKED_WQE_IDX().
 
-Reset the dcb ieee app list on initialization in case this is
-conflicting with the register status.
-
-Fixes: 2a5e7a1344f4 ("net/mlx5e: Add dcbnl dscp to priority support")
-Signed-off-by: Moshe Tal <moshet@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Fixes: 7dd29ee12865 ("hinic: add sriov feature support")
+Signed-off-by: Qiao Ma <mqaio@linux.alibaba.com>
+Reviewed-by: Xunlei Pang <xlpang@linux.alibaba.com>
+Link: https://lore.kernel.org/r/282817b0e1ae2e28fdf3ed8271a04e77f57bf42e.1651148587.git.mqaio@linux.alibaba.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en_dcbnl.c |   10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_dcbnl.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_dcbnl.c
-@@ -1198,6 +1198,16 @@ static int mlx5e_trust_initialize(struct
- 	if (err)
- 		return err;
+--- a/drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c
+@@ -772,7 +772,7 @@ struct hinic_hw_wqe *hinic_get_wqe(struc
+ 	/* If we only have one page, still need to get shadown wqe when
+ 	 * wqe rolling-over page
+ 	 */
+-	if (curr_pg != end_pg || MASKED_WQE_IDX(wq, end_prod_idx) < *prod_idx) {
++	if (curr_pg != end_pg || end_prod_idx < *prod_idx) {
+ 		void *shadow_addr = &wq->shadow_wqe[curr_pg * wq->max_wqe_size];
  
-+	if (priv->dcbx_dp.trust_state == MLX5_QPTS_TRUST_PCP && priv->dcbx.dscp_app_cnt) {
-+		/*
-+		 * Align the driver state with the register state.
-+		 * Temporary state change is required to enable the app list reset.
-+		 */
-+		priv->dcbx_dp.trust_state = MLX5_QPTS_TRUST_DSCP;
-+		mlx5e_dcbnl_delete_app(priv);
-+		priv->dcbx_dp.trust_state = MLX5_QPTS_TRUST_PCP;
-+	}
-+
- 	mlx5e_params_calc_trust_tx_min_inline_mode(priv->mdev, &priv->channels.params,
- 						   priv->dcbx_dp.trust_state);
+ 		copy_wqe_to_shadow(wq, shadow_addr, num_wqebbs, *prod_idx);
+@@ -842,7 +842,10 @@ struct hinic_hw_wqe *hinic_read_wqe(stru
  
+ 	*cons_idx = curr_cons_idx;
+ 
+-	if (curr_pg != end_pg) {
++	/* If we only have one page, still need to get shadown wqe when
++	 * wqe rolling-over page
++	 */
++	if (curr_pg != end_pg || end_cons_idx < curr_cons_idx) {
+ 		void *shadow_addr = &wq->shadow_wqe[curr_pg * wq->max_wqe_size];
+ 
+ 		copy_wqe_to_shadow(wq, shadow_addr, num_wqebbs, *cons_idx);
 
 

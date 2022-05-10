@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E860521916
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F02521954
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243997AbiEJNnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
+        id S244434AbiEJNqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243378AbiEJNam (ORCPT
+        with ESMTP id S243923AbiEJNcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:30:42 -0400
+        Tue, 10 May 2022 09:32:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750812C511A;
-        Tue, 10 May 2022 06:21:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D051994A0;
+        Tue, 10 May 2022 06:23:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1555F616D0;
-        Tue, 10 May 2022 13:21:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2103AC385A6;
-        Tue, 10 May 2022 13:21:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D293960C1C;
+        Tue, 10 May 2022 13:23:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E547CC385C2;
+        Tue, 10 May 2022 13:23:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188886;
-        bh=NmlfjBAVVEP/vw+cxYqZN4npXt02El+JYjH9uacL4go=;
+        s=korg; t=1652189020;
+        bh=Q2Wg0f11Q6IIlcPJ/b7UtaXwtP9iKWdEGB/4BG3k6bo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DQCh7XtIEUUU3dr4s85wAprRgDQqiIQ69jkKAiucbhSIPYiU6QM8MeP2GRWVqOOqT
-         weD2q6Pz5cB+ah6nxohD3QiA0ciGNJBr6piuZjlDxmWDPc7440d7JbLb+qOXeKpUmN
-         66B5h0eG9do6ErMVA5LmiwrBUtM+9IoimhWqek3k=
+        b=TvC1qpoDgLJ1LoR2VKnJoMsoqlIE6BHd04PUXFg+rNJqlBCEKg7u3XmrsOKLlQhMK
+         4i3qaJYHAjiS4aGUlnuRCH1YCSJ5MyZgTwe7TTKfFNDC/XxY+iuV+1kGp63jJR+1RC
+         Iqe7RezwR0wlCK9B6UEwnuRnuw5hR69/vNS+AfgY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vasant Hegde <vasant.hegde@amd.com>,
-        Sandipan Das <sandipan.das@amd.com>,
+        stable@vger.kernel.org, Marcelo Tosatti <mtosatti@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 81/88] kvm: x86/cpuid: Only provide CPUID leaf 0xA if host has architectural PMU
+Subject: [PATCH 5.4 37/52] x86/kvm: Preserve BSP MSR_KVM_POLL_CONTROL across suspend/resume
 Date:   Tue, 10 May 2022 15:08:06 +0200
-Message-Id: <20220510130736.084725368@linuxfoundation.org>
+Message-Id: <20220510130730.936138964@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
-References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
+References: <20220510130729.852544477@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +56,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sandipan Das <sandipan.das@amd.com>
+From: Wanpeng Li <wanpengli@tencent.com>
 
-[ Upstream commit 5a1bde46f98b893cda6122b00e94c0c40a6ead3c ]
+[ Upstream commit 0361bdfddca20c8855ea3bdbbbc9c999912b10ff ]
 
-On some x86 processors, CPUID leaf 0xA provides information
-on Architectural Performance Monitoring features. It
-advertises a PMU version which Qemu uses to determine the
-availability of additional MSRs to manage the PMCs.
+MSR_KVM_POLL_CONTROL is cleared on reset, thus reverting guests to
+host-side polling after suspend/resume.  Non-bootstrap CPUs are
+restored correctly by the haltpoll driver because they are hot-unplugged
+during suspend and hot-plugged during resume; however, the BSP
+is not hotpluggable and remains in host-sde polling mode after
+the guest resume.  The makes the guest pay for the cost of vmexits
+every time the guest enters idle.
 
-Upon receiving a KVM_GET_SUPPORTED_CPUID ioctl request for
-the same, the kernel constructs return values based on the
-x86_pmu_capability irrespective of the vendor.
+Fix it by recording BSP's haltpoll state and resuming it during guest
+resume.
 
-This leaf and the additional MSRs are not supported on AMD
-and Hygon processors. If AMD PerfMonV2 is detected, the PMU
-version is set to 2 and guest startup breaks because of an
-attempt to access a non-existent MSR. Return zeros to avoid
-this.
-
-Fixes: a6c06ed1a60a ("KVM: Expose the architectural performance monitoring CPUID leaf")
-Reported-by: Vasant Hegde <vasant.hegde@amd.com>
-Signed-off-by: Sandipan Das <sandipan.das@amd.com>
-Message-Id: <3fef83d9c2b2f7516e8ff50d60851f29a4bcb716.1651058600.git.sandipan.das@amd.com>
+Cc: Marcelo Tosatti <mtosatti@redhat.com>
+Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+Message-Id: <1650267752-46796-1-git-send-email-wanpengli@tencent.com>
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/cpuid.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/x86/kernel/kvm.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 097eef712cdc..0489ffc3dfe5 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -532,6 +532,11 @@ static inline int __do_cpuid_ent(struct kvm_cpuid_entry2 *entry, u32 function,
- 		union cpuid10_eax eax;
- 		union cpuid10_edx edx;
+diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
+index 408b51aba293..f582dda8dd34 100644
+--- a/arch/x86/kernel/kvm.c
++++ b/arch/x86/kernel/kvm.c
+@@ -59,6 +59,7 @@ static DEFINE_PER_CPU_DECRYPTED(struct kvm_vcpu_pv_apf_data, apf_reason) __align
+ DEFINE_PER_CPU_DECRYPTED(struct kvm_steal_time, steal_time) __aligned(64) __visible;
+ static int has_steal_clock = 0;
  
-+		if (!static_cpu_has(X86_FEATURE_ARCH_PERFMON)) {
-+			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
-+			break;
-+		}
++static int has_guest_poll = 0;
+ /*
+  * No need for any "IO delay" on KVM
+  */
+@@ -584,14 +585,26 @@ static int kvm_cpu_down_prepare(unsigned int cpu)
+ 
+ static int kvm_suspend(void)
+ {
++	u64 val = 0;
 +
- 		perf_get_x86_pmu_capability(&cap);
+ 	kvm_guest_cpu_offline(false);
  
- 		/*
++#ifdef CONFIG_ARCH_CPUIDLE_HALTPOLL
++	if (kvm_para_has_feature(KVM_FEATURE_POLL_CONTROL))
++		rdmsrl(MSR_KVM_POLL_CONTROL, val);
++	has_guest_poll = !(val & 1);
++#endif
+ 	return 0;
+ }
+ 
+ static void kvm_resume(void)
+ {
+ 	kvm_cpu_online(raw_smp_processor_id());
++
++#ifdef CONFIG_ARCH_CPUIDLE_HALTPOLL
++	if (kvm_para_has_feature(KVM_FEATURE_POLL_CONTROL) && has_guest_poll)
++		wrmsrl(MSR_KVM_POLL_CONTROL, 0);
++#endif
+ }
+ 
+ static struct syscore_ops kvm_syscore_ops = {
 -- 
 2.35.1
 

@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABA51521B84
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D28E521B9A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244856AbiEJOPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50734 "EHLO
+        id S245647AbiEJOSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245711AbiEJNsH (ORCPT
+        with ESMTP id S1343550AbiEJNsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:48:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46B52A975B;
-        Tue, 10 May 2022 06:36:16 -0700 (PDT)
+        Tue, 10 May 2022 09:48:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE252B09D4;
+        Tue, 10 May 2022 06:36:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A72F1B81DB2;
-        Tue, 10 May 2022 13:36:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 107AAC385C2;
-        Tue, 10 May 2022 13:35:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF46C618AF;
+        Tue, 10 May 2022 13:36:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA789C385A6;
+        Tue, 10 May 2022 13:36:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189759;
-        bh=lr/NUffgJ5GFBk69yG43Atq4uEX7MxnvVMYzJipYg/c=;
+        s=korg; t=1652189793;
+        bh=NKaUkUPhvYFyVUYBOa93qXmG/LU5ZJShTPNmiqc4ywQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iQ/Bv3NbjE+A0wx/NmJ8jsefkgZOtizwQLXTTQf33V2nIF1xce4aInksHQwmqwsDo
-         jCIWmiAT3+yE0lCH4tuHqhkYe/dX03JttYAkVL5Z5btWaN6Ulc3Xge77YUfgJpJEG4
-         tX0inieIx5aXTUZlxnrpGoyl7N+MiCn2kQncpNo8=
+        b=jHi8u8ODStqJI7WEiQGe6DMYj/xts8dYSlhIInOFmacv5gJbEDtfqkdPBk/XESWzc
+         BIQib24K+YyvzNdMgtzVli17Ya4umn7bEl/J57R6LZOOSMckKuW/iYdifs3DOTpxON
+         zDHZXOAxznFdnT35xYv6kTaezKalLjOHoEvFbi0U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joe Wiese <jwiese@rackspace.com>,
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
         Corey Minyard <cminyard@mvista.com>
-Subject: [PATCH 5.17 002/140] ipmi: When handling send message responses, dont process the message
-Date:   Tue, 10 May 2022 15:06:32 +0200
-Message-Id: <20220510130741.672481054@linuxfoundation.org>
+Subject: [PATCH 5.17 003/140] ipmi:ipmi_ipmb: Fix null-ptr-deref in ipmi_unregister_smi()
+Date:   Tue, 10 May 2022 15:06:33 +0200
+Message-Id: <20220510130741.701329627@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
 References: <20220510130741.600270947@linuxfoundation.org>
@@ -56,35 +57,68 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Corey Minyard <cminyard@mvista.com>
 
-commit 3d092ef09303e615707dc5755cf0e29b4df7555f upstream.
+commit 9cc3aac42566a0021e0ab7c4e9b31667ad75b1e3 upstream.
 
-A chunk was dropped when the code handling send messages was rewritten.
-Those messages shouldn't be processed normally, they are just an
-indication that the message was successfully sent and the timers should
-be started for the real response that should be coming later.
+KASAN report null-ptr-deref as follows:
 
-Add back in the missing chunk to just discard the message and go on.
+KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+RIP: 0010:ipmi_unregister_smi+0x7d/0xd50 drivers/char/ipmi/ipmi_msghandler.c:3680
+Call Trace:
+ ipmi_ipmb_remove+0x138/0x1a0 drivers/char/ipmi/ipmi_ipmb.c:443
+ ipmi_ipmb_probe+0x409/0xda1 drivers/char/ipmi/ipmi_ipmb.c:548
+ i2c_device_probe+0x959/0xac0 drivers/i2c/i2c-core-base.c:563
+ really_probe+0x3f3/0xa70 drivers/base/dd.c:541
 
-Fixes: 059747c245f0 ("ipmi: Add support for IPMB direct messages")
-Reported-by: Joe Wiese <jwiese@rackspace.com>
-Cc: stable@vger.kernel.org # v5.16+
+In ipmi_ipmb_probe(), 'iidev->intf' is not set before
+ipmi_register_smi() success.  And in the error handling case,
+ipmi_ipmb_remove() is called to release resources, ipmi_unregister_smi()
+is called without check 'iidev->intf', this will cause KASAN
+null-ptr-deref issue.
+
+General kernel style is to allow NULL to be passed into unregister
+calls, so fix it that way.  This allows a NULL check to be removed in
+other code.
+
+Fixes: 57c9e3c9a374 ("ipmi:ipmi_ipmb: Unregister the SMI on remove")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Cc: stable@vger.kernel.org # v5.17+
+Cc: Wei Yongjun <weiyongjun1@huawei.com>
 Signed-off-by: Corey Minyard <cminyard@mvista.com>
-Tested-by: Joe Wiese <jwiese@rackspace.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/ipmi/ipmi_msghandler.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/char/ipmi/ipmi_msghandler.c |    5 ++++-
+ drivers/char/ipmi/ipmi_si_intf.c    |    5 +----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
 --- a/drivers/char/ipmi/ipmi_msghandler.c
 +++ b/drivers/char/ipmi/ipmi_msghandler.c
-@@ -4518,6 +4518,8 @@ return_unspecified:
- 		} else
- 			/* The message was sent, start the timer. */
- 			intf_start_seq_timer(intf, msg->msgid);
-+		requeue = 0;
-+		goto out;
- 	} else if (((msg->rsp[0] >> 2) != ((msg->data[0] >> 2) | 1))
- 		   || (msg->rsp[1] != msg->data[1])) {
- 		/*
+@@ -3677,8 +3677,11 @@ static void cleanup_smi_msgs(struct ipmi
+ void ipmi_unregister_smi(struct ipmi_smi *intf)
+ {
+ 	struct ipmi_smi_watcher *w;
+-	int intf_num = intf->intf_num, index;
++	int intf_num, index;
+ 
++	if (!intf)
++		return;
++	intf_num = intf->intf_num;
+ 	mutex_lock(&ipmi_interfaces_mutex);
+ 	intf->intf_num = -1;
+ 	intf->in_shutdown = true;
+--- a/drivers/char/ipmi/ipmi_si_intf.c
++++ b/drivers/char/ipmi/ipmi_si_intf.c
+@@ -2220,10 +2220,7 @@ static void cleanup_one_si(struct smi_in
+ 		return;
+ 
+ 	list_del(&smi_info->link);
+-
+-	if (smi_info->intf)
+-		ipmi_unregister_smi(smi_info->intf);
+-
++	ipmi_unregister_smi(smi_info->intf);
+ 	kfree(smi_info);
+ }
+ 
 
 

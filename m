@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C05B5217AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D41CD521689
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:12:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243031AbiEJN2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:28:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37728 "EHLO
+        id S242378AbiEJNPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243037AbiEJNVV (ORCPT
+        with ESMTP id S242326AbiEJNPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:21:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415D853B6C;
-        Tue, 10 May 2022 06:14:40 -0700 (PDT)
+        Tue, 10 May 2022 09:15:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83433DDD9;
+        Tue, 10 May 2022 06:11:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 25FD6615FA;
-        Tue, 10 May 2022 13:14:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38C68C385A6;
-        Tue, 10 May 2022 13:14:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 434CCB81DA0;
+        Tue, 10 May 2022 13:11:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B9D6C385C2;
+        Tue, 10 May 2022 13:11:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188479;
-        bh=R5zxNH/6ea6tY49yUZgBAJKjIXrIpEJh7MaPAFq5tNc=;
+        s=korg; t=1652188267;
+        bh=wIUgrLEUksX9+NwqoM4BF9drXj5Mvgc4IuLnlnE4xjA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZZXvfXqqpo+bKnfFBpnKbiemNlUO3xylD1GTDta4y+7OuqKYCJswY9KrNr/Z2lKUI
-         Pi7lbBeFIetezGeJSaa15anxoWfM6LuMAFviyYu7zoWb2X0Iqaniuga/gfsKI9A2Ey
-         Z+tm/C40j3RY2irDmzfaB/vDSbasTReiXsRa5ehc=
+        b=bBktyjuw1dDL7j2ZeiQnmrbV0kAZAaqenGQoUlZ5aENFOYHhMHaBHLt7uN+YvWSNO
+         HTiJhctnL0NoDXIc9JlJcT7Bbrnlsbv/kkeh0osen1gfdgcFlOiO7fY3OYO4/UkoTe
+         ODjA8CcYpBPTxUSRVREfEdj8HAocVNYMKkccKS0I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, "Maciej W. Rozycki" <macro@orcam.me.uk>,
         Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH 4.14 21/78] serial: 8250: Also set sticky MCR bits in console restoration
+Subject: [PATCH 4.9 17/66] serial: 8250: Also set sticky MCR bits in console restoration
 Date:   Tue, 10 May 2022 15:07:07 +0200
-Message-Id: <20220510130733.157855699@linuxfoundation.org>
+Message-Id: <20220510130730.270859477@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
-References: <20220510130732.522479698@linuxfoundation.org>
+In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
+References: <20220510130729.762341544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,7 +47,7 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,7 +76,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/tty/serial/8250/8250_port.c
 +++ b/drivers/tty/serial/8250/8250_port.c
-@@ -3240,7 +3240,7 @@ static void serial8250_console_restore(s
+@@ -3150,7 +3150,7 @@ static void serial8250_console_restore(s
  
  	serial8250_set_divisor(port, baud, quot, frac);
  	serial_port_out(port, UART_LCR, up->lcr);

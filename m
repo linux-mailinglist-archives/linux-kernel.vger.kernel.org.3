@@ -2,111 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D30B521C58
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E9A521C57
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344406AbiEJOe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44978 "EHLO
+        id S1344438AbiEJOfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245270AbiEJOJ0 (ORCPT
+        with ESMTP id S245481AbiEJOJ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:09:26 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0BC7658
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:43:46 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id c14so14987346pfn.2
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:43:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=no4knFj2QkkG24w5BpGtHthRtUO1MTUEciG91xe028g=;
-        b=fTLJckD+LdKD21kXVmiJtp60Iev8s/1LA8KcxKZqvHWZt7LbRid5lQbpzOVFixyRXr
-         6c/SwjoaijWHCa/cY11vzsye30v95o28+AKDT9eb5rYsxBcX744c4SCq0nnH50Vptu6c
-         OpXcz3VbtQnJ9BdmNn5OyRBrspO7m6Hc+3PzVFhbrKuhnAEofJABBFoU0Nfo4nBhAckN
-         57+R+5GIZT/KIob/+juDeGfCbhwUvXqF8/ugGVejcy4wfHysUBRMAZjXcvayfsFee8pT
-         5ocBjrR5QgsGbfjWCD4I/IUhu4iAM+5Gad4aEIO4+gjq7ZkI+pATFyfYiom9Zsme11JS
-         Hs/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=no4knFj2QkkG24w5BpGtHthRtUO1MTUEciG91xe028g=;
-        b=eXHEkF243KSTRTV9dwrhBkOCP8X0YVoWDpZrHvXCrQQnfEEfv0kdcUCDP0La+z5uhd
-         xH8+AkWRN9W17Rr22ixWUI6DSHaXbbjCgzNniAeirsnupz4mDYHMa9q9BiLvF42Uu+09
-         Ik1NNGn62KdjpJDPB+hkA8g4z2cytq3LpUJ7JovHf34dz6lubmIpmY8JW3ebaGCiM3h3
-         4VsNCvqfUPGYMAHaTtF8cREDhXDN74eQwJQVnFNAPXL8Yz1iA++G2JIWyCVb6k0//b24
-         uqE/rkXQ4v42DTv0TUXArXKiQsx28/VICmAG3LCQH/5+kY3Uxkjzp2P65A9wL+RkFKBI
-         eTDw==
-X-Gm-Message-State: AOAM533cZ8NNQ9XowfaqCyKg3Tr1bvNRs8rZDT3p6sexqrJVFx24Ps6C
-        KpMKFzooRlaHsNN/nHVvPgo95Q==
-X-Google-Smtp-Source: ABdhPJyOopUd0tEn4NWLvw+TLQgnEqGNe3teQaVnB3OwAvTVYOpo3ul4fVGXJ+cPKtzzJYqEczgAAw==
-X-Received: by 2002:a63:d504:0:b0:3c6:ab6b:fd2b with SMTP id c4-20020a63d504000000b003c6ab6bfd2bmr9333333pgg.437.1652190225544;
-        Tue, 10 May 2022 06:43:45 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id o20-20020a635a14000000b003c5e836eddasm10175398pgb.94.2022.05.10.06.43.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 06:43:45 -0700 (PDT)
-Date:   Tue, 10 May 2022 13:43:41 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Wanpeng Li <kernellwp@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>
-Subject: Re: [PATCH] KVM: LAPIC: Disarm LAPIC timer includes pending timer
- around TSC deadline switch
-Message-ID: <YnpsDSDqU5oNK3bQ@google.com>
-References: <1652175386-31587-1-git-send-email-wanpengli@tencent.com>
+        Tue, 10 May 2022 10:09:27 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C76D326EC;
+        Tue, 10 May 2022 06:44:39 -0700 (PDT)
+Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KyK2d3mmXz67xBy;
+        Tue, 10 May 2022 21:41:45 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 10 May 2022 15:44:36 +0200
+Received: from [10.47.91.186] (10.47.91.186) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.24; Tue, 10 May
+ 2022 14:44:36 +0100
+Message-ID: <9ede7211-ae58-5cd4-4cf6-74c1f508f1a6@huawei.com>
+Date:   Tue, 10 May 2022 14:44:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1652175386-31587-1-git-send-email-wanpengli@tencent.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+From:   John Garry <john.garry@huawei.com>
+Subject: Re: [RFC PATCH 0/2] sbitmap: NUMA node spreading
+To:     Jens Axboe <axboe@kernel.dk>, <linux-block@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>
+References: <1652181274-136198-1-git-send-email-john.garry@huawei.com>
+ <1afd2c01-69b3-ab8f-6bfe-118e3e56001c@kernel.dk>
+In-Reply-To: <1afd2c01-69b3-ab8f-6bfe-118e3e56001c@kernel.dk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.91.186]
+X-ClientProxiedBy: lhreml705-chm.china.huawei.com (10.201.108.54) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022, Wanpeng Li wrote:
-> From: Wanpeng Li <wanpengli@tencent.com>
-> 
-> The timer is disarmed when switching between TSC deadline and other modes, 
-> however, the pending timer is still in-flight, so let's accurately set 
-> everything to a disarmed state.
-> 
-> Fixes: 4427593258 (KVM: x86: thoroughly disarm LAPIC timer around TSC deadline switch)
-> Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
-> ---
->  arch/x86/kvm/lapic.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> index 66b0eb0bda94..0274d17d91c2 100644
-> --- a/arch/x86/kvm/lapic.c
-> +++ b/arch/x86/kvm/lapic.c
-> @@ -1562,6 +1562,7 @@ static void apic_update_lvtt(struct kvm_lapic *apic)
->  			kvm_lapic_set_reg(apic, APIC_TMICT, 0);
->  			apic->lapic_timer.period = 0;
->  			apic->lapic_timer.tscdeadline = 0;
-> +			atomic_set(&apic->lapic_timer.pending, 0);
+On 10/05/2022 13:50, Jens Axboe wrote:
+>> fio config:
+>> bs=4096, iodepth=128, numjobs=10, cpus_allowed_policy=split, rw=read,
+>> ioscheduler=none
+>>
+>> Before:
+>> 7130K
+>>
+>> After:
+>> 7630K
+>>
+>> So a +7% IOPS gain.
 
-What about doing this in cancel_apic_timer()?  That seems to be a more natural
-place to clear pending.  It's somewhat redundant since the other two callers of
-cancel_apic_timer() start the timer immediately after, i.e. clear pending anyways,
-but IMO it's odd to leave pending set when canceling the timer.
+Thanks for having a look.
 
->  		}
->  		apic->lapic_timer.timer_mode = timer_mode;
->  		limit_periodic_timer_frequency(apic);
-> -- 
-> 2.25.1
+> What does the comparison run on a non-NUMA non-shared queue look like?
+> Because I bet it'd be slower.
+
+I could test more to get a solid result for that.
+
 > 
+> To be honest, I don't like this approach at all. It makes the normal
+> case quite a bit slower by having an extra layer of indirection for the
+> word, that's quite a bit of extra cost.
+
+Yes, there is the extra load. I would hope that there would be a low 
+cost, but I agree that we still want to avoid it. So prob no point in 
+testing this more.
+
+> It doesn't seem like a good
+> approach for the issue, as it pessimizes the normal fast case.
+> 
+> Spreading the memory out does probably make sense, but we need to retain
+> the fast normal case. Making sbitmap support both, selected at init
+> time, would be far more likely to be acceptable imho.
+
+I wanted to keep the code changes minimal for an initial RFC to test the 
+water.
+
+My original approach did not introduce the extra load for normal path 
+and had some init time selection for a normal word map vs numa word map, 
+but the code grew and became somewhat unmanageable. I'll revisit it to 
+see how to improve that.
+
+Cheers,
+john

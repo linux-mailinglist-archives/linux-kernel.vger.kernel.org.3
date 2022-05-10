@@ -2,136 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF888520A7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 03:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC6E0520A80
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 03:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234088AbiEJBJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 21:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33166 "EHLO
+        id S233668AbiEJBLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 21:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233260AbiEJBJJ (ORCPT
+        with ESMTP id S233131AbiEJBLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 21:09:09 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00BC3297405
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 18:05:11 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id o12-20020a1c4d0c000000b00393fbe2973dso468823wmh.2
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 18:05:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KWU2Ie7CLoGUJm4eKIboU9cuPF4R+pcVY2OmQlQkvqM=;
-        b=otwm5O7b+Cs+c/aJt5BGIr83OuJhOFQ+EMC0G8wlyaaPZowgDFt4HzUfoBEvfjN2aY
-         Yv4/Jg9DgzI5XFWIElJz9Tb7HhvTQRjoc+y5rrgMW7Rn9cwKP24ucRVlHfh88sRpAFZH
-         fKMYCJT4wx/aqhlflEQ3xcCLS5OeGO3gaVMUkhVwQDLhzrERSs2lTGN9YrRdp+Mmo2yr
-         mdfz0IqlWT0mzXP+aoCd4SAADN0+/Jz7sk3mKoI01VjDPDte/svmeTmqEWlT5AYyc5zF
-         7ZKdydGd3+TR7wyMLg6FCEOlo5vZ/+/NRZYm1D0tOaODkAV90tX/5L9EAl8JwyblQd4C
-         /JIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KWU2Ie7CLoGUJm4eKIboU9cuPF4R+pcVY2OmQlQkvqM=;
-        b=6qPUSnplqHZz51yz2LQlM+n8b1rBSmWu/q2VyD7hv78+4UAW9w1KFF68d1MsHH2rPi
-         cjqYoTioW7NdzbKXC4K5wCsc6lxpkZTaFcMx09aX/zS8Ws03qD21CwfHz16s4E5rWjL5
-         MM6njZdD98p/eKQh/MvTSWl74Vtm9GYLFwfOGY/MKOCgmX6fISrpY+nF+b2MJgJPPWIC
-         IL0tsS5GTl1Dua8YjTkk25psKSQu5WbA/No1G45uX1TIM4eFFTIbGC7/2bsMS2qDK5ds
-         r+5V/+qcuRNsbCALTPQ7I/Ex/4Mxotpe4LB+4T43/EuxpOpioLgVjVkvsxMtSwub42Sc
-         yvcw==
-X-Gm-Message-State: AOAM530YZoJd5R0UGaN3S7EMoavBcJuc7o7z2mQmO3nwxOj51ytQA6dv
-        fIBxb7PbrvzznH/wDbWHDw1lmj0LwsLB/iThycQC+A==
-X-Google-Smtp-Source: ABdhPJxsM1M7GsdDp/lB/ItrtIwDET4ES/Y6Q0ul+CoEnC+3p/f+ETtL6JGwXfvrKvj4KjxP5g910tnq2NWXWh4sLVw=
-X-Received: by 2002:a05:600c:4ecc:b0:394:790d:5f69 with SMTP id
- g12-20020a05600c4ecc00b00394790d5f69mr19448042wmq.196.1652144710286; Mon, 09
- May 2022 18:05:10 -0700 (PDT)
+        Mon, 9 May 2022 21:11:19 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam07on2079.outbound.protection.outlook.com [40.107.95.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82C17DAA2
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 18:07:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aN00QmFi9TabjWJxgOa20kxSOgc8WSjQq7EZ9EDP1lCEZsZu8R1uW0jfCvn5mywHb+TZ8ShtQWfBXAZDldoAZp8457MAHW5m6Muf6xBT87AoZcqoEYTBGzBRT9czEk+h6K0I3ngzaaOu86Imet/F3cNXwfTRIIrD/jYCmNii/SAQTVugXEpwO4exXIFHl5WEgxNXX4JMXMJ8BuZdqAvFCEEaiZxCOxtcG9x9IZJd3LapUOVOlWI+/Ly/hFGOB3besTN2i7RDSNR20lMSBMZQTnQ0jvbXgPnHFiZP1DwdHaEv+voKMZR37m2ZulZcPkoI5kN0yRAyx+w07FKtzfmnPg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ACpxfg1n2PpxiRRKl8ut436I/zkvSArArqixZH0z9Y4=;
+ b=CzM0GAvmNwWyvZow7ehOez447MXV43rFN4G5rFQSjJKjgglPbI/anQSNcUH0Q9WlMpnib/j503M0eMUa3EVCxc4rF5xZA7lWWkBJmJa/QVQnrtPH/kOpEKPNw9gOTbcW5hL0zaLBcS8bsDAJPhe7OQQsubXuqzCRocyfBb4vb0qW+MUEs5wjSOE8kALkbWyiJ5G4C0EMTnrsojG+RBeXZOUVarRRRFLzjdGDrb76U2zhLVjAOPolLUbHZZIUqdOEvvxGmNPZmO5pYroBWx9bQyVr5XZiQ/outGkWAOQFi/jY51Uw1HFAQ15UQBo27ogXp6o3uQrm6bmpLO4JpKr+HQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ACpxfg1n2PpxiRRKl8ut436I/zkvSArArqixZH0z9Y4=;
+ b=k8+nfwbycbKMFeRDc/j1mFuJDUQtjnyZ8dUygjgxi5tEV/FRyDOQC58kg2YGgRp4nFsjqMUHwqM9JV+gihUkcMgPPLwXhiWash3M3wAQRsHw/MV6bfK1Tj9v+jaG/gk7b/MzsuOpBp30HwOLUGMKCW8pY54uwyFog/NsDjKUvoatRZWUgIbF0WP+zbU4lAy0qn9Ajmhl+WsynCHFf6XnbjHDlFHIPsdtjedBEO20HD//MRc43sC66SVzZud3QDLsjbUUZ1R1E2nxLx/U1ShnDzTCa+adV0uWBU7c+ZGKKtTh4gNmNKPw4yPCz+OIV2VBNkh8WFX1iS/7UggMnIUmAA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB3823.namprd12.prod.outlook.com (2603:10b6:208:168::26)
+ by BL1PR12MB5205.namprd12.prod.outlook.com (2603:10b6:208:308::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.18; Tue, 10 May
+ 2022 01:07:22 +0000
+Received: from MN2PR12MB3823.namprd12.prod.outlook.com
+ ([fe80::920:970d:6f94:1f10]) by MN2PR12MB3823.namprd12.prod.outlook.com
+ ([fe80::920:970d:6f94:1f10%4]) with mapi id 15.20.5227.023; Tue, 10 May 2022
+ 01:07:22 +0000
+From:   Zi Yan <ziy@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Eric Ren <renzhengeek@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH v11 0/6] Use pageblock_order for cma and
+ alloc_contig_range alignment.
+Date:   Mon, 09 May 2022 21:07:20 -0400
+X-Mailer: MailMate (1.14r5883)
+Message-ID: <7F381222-1C5C-4CBD-B29F-BBE0305231AD@nvidia.com>
+In-Reply-To: <20220509180356.24ff0403cf3ffc3fd01ffe98@linux-foundation.org>
+References: <20220425143118.2850746-1-zi.yan@sent.com>
+ <20220509180356.24ff0403cf3ffc3fd01ffe98@linux-foundation.org>
+Content-Type: multipart/signed;
+ boundary="=_MailMate_0746441A-D90C-40BC-8CC5-DA2826820A8E_=";
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+X-ClientProxiedBy: MN2PR07CA0023.namprd07.prod.outlook.com
+ (2603:10b6:208:1a0::33) To MN2PR12MB3823.namprd12.prod.outlook.com
+ (2603:10b6:208:168::26)
 MIME-Version: 1.0
-References: <20220507024840.42662-1-zhoufeng.zf@bytedance.com> <CAEf4BzZD5q2j229_gL_nDFse2v=k2Ea0nfguH+sOA2O1Nm5sQw@mail.gmail.com>
-In-Reply-To: <CAEf4BzZD5q2j229_gL_nDFse2v=k2Ea0nfguH+sOA2O1Nm5sQw@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Mon, 9 May 2022 18:04:34 -0700
-Message-ID: <CAJD7tkbd8qA-4goUCVW6Tf0xGpj2OSBXncpWhrWFn5y010oBMw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: add bpf_map_lookup_percpu_elem for percpu map
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Feng zhou <zhoufeng.zf@bytedance.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joanne Koong <joannekoong@fb.com>,
-        Geliang Tang <geliang.tang@suse.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        duanxiongchun@bytedance.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        Dongdong Wang <wangdongdong.6@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        zhouchengming@bytedance.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0cb7472d-2ef0-448f-d331-08da3221700f
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5205:EE_
+X-Microsoft-Antispam-PRVS: <BL1PR12MB520550FC6E08CD26BF3199A3C2C99@BL1PR12MB5205.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VXA8v1KFjfedHavBup3GZc56GsUrFw+k1kdmuZW4hOrotwtDiDVF8RJUN21RxaAU11yxjzN+ocPBfC1LXfC+IOyCPXB/2q9+qdbhjjTi90S/CQ63TUnuCyngm7F7qXlRt/gjpoQ9cfMF7J9/FKl7vINKnjRaIWWlTIYfvxTTMmBokNXDlDWDl2fPmtZD0PMEzivH5oHvcErAos7kkSrhKB/DGvbOlxXTT2iRmOFUDmPopbfwlG4xHsdrEw8TzkCHKku7//qUgrw8+aLvKOSyYfp0m6X9vG1dTEofaN+Bh810F4n5jNY+CZ0kdJxLAeotq5YwXB/NeAekk6fR3qleiklPvdmR+V3Ka7D2aj8A1QEdyUY8pSOWRWfmU9K6cho6BHtwnj8ACpZ0+h5Ecp50RlMIzMVAUuuJDWVDUtuJ9SwuMoctDh9BiKthf5lc9EaP9aarWmXCSSSQifn1E8+lZ4uw63tpGIWrfSgdwT0vhJpLIGWAKf8l6xWGWqQ/5CGCGHReBg7yJo9351UE2oShE0uN5PiuhamO9KW/0TcNV2GrxgoLJt0C7bCdEmaTXyUs+Bvwve39oKkFCaDUbH2ZeetA6NTNKQtNe/XJx2zI8yAfUc14BhT1Br2k9BjcIudh4t4stJoTRyAyt7+KvZPIDLRx699uI2oPjp6zXBmIW7nf6ywuaXzKf1zO8bNG7Mo6BZuy2rQ4aGRuFcmdyI+1cYQdq8e8k+WrOOpqoLkfzpP+s/SUCGxnBCs2HTBWXi4RL6zPU/1IDr1Ba+vOJYOzA0T3NcVjCN29Vo+qVqS3W3QynCoF1rKInnYpSygcnp5GotZ9g7W21mbmi2T8UXNVt8JafJNbuPMu3103JPUUss4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3823.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(6512007)(8676002)(4326008)(2616005)(6506007)(2906002)(53546011)(8936002)(508600001)(6486002)(966005)(38100700002)(7416002)(66476007)(86362001)(235185007)(5660300002)(36756003)(54906003)(83380400001)(186003)(21480400003)(33656002)(66556008)(316002)(6916009)(66946007)(72826004)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0MDctm95XYdyTvHgFKAIfcvUkJ9SSKUk+bxOEsx+iO/DT1TEUESyqTW2vX3O?=
+ =?us-ascii?Q?aMJTZ7SIBRf+LtDujsxcfHI9vjez7scB2JUUL8HbIq88J6jAyaY7nhGxvPd+?=
+ =?us-ascii?Q?M2Fe8vKhAxea62Qm3aY5UqZPX5Sih6BdfEYW1ndszmnkryNpBC3qeuzHqlOl?=
+ =?us-ascii?Q?3UBtA9cipy//Z+z+jMvcyY5JW7HBDPG0+WrHGjsvd5REaJ95i/dYbP0xUaYf?=
+ =?us-ascii?Q?eTthZTWEYTCeMDY6AXVNnx7foyoRYhndt15k1nH6HMZdBjZlrg8Sy9Ne/jtt?=
+ =?us-ascii?Q?rZ/UPBGuy5D4CtFVjcVt1GTzrM2A77w+g/4WZu6B1F9OvTgVppZeJu7kT0GO?=
+ =?us-ascii?Q?//vmf9rCSK24VAZOAvvTuEI/zrmuxcuP0GIulIMVoO7C9EzEGZTyhb0CB3fr?=
+ =?us-ascii?Q?74f+93/Gsnfw3kzKr1FJnsXSj2TQ5jCLyaKy6BuO3HU6IbuBEcinjAKn1iDP?=
+ =?us-ascii?Q?KwqijyGbsRqDXz6dTGOwuVBihS+YA/iWpc3oBTkuDRXrXNaBqP+Y/aeIL7tl?=
+ =?us-ascii?Q?C34nkL9fuO5sQcUUwQBCO4PL/DOcf30JxPS/OsfmIGrTNOmFTfy3kkCLRsR7?=
+ =?us-ascii?Q?wkhuaNcrV/2o0tO+PjLN/8OPTi3ASEXJdNz+EEnP0HAU1GvkbEErnom9UgpF?=
+ =?us-ascii?Q?K+0pOD7NReLcYBy30Gc6tedMoWC86DVwHWDgH0L5s6ef4PjUBZffyF7jvCX0?=
+ =?us-ascii?Q?UFAhrCV5X5J8Wfhr6zDUjUHIF2tLwp20HEfoloRBd0df8tQl+1BhoDkAUTvf?=
+ =?us-ascii?Q?o8sUSEYYD/F9MMmu0/vZQvK/RF13rcl2+z/6XwQXkFYI//tUPCeN09wMXZ+t?=
+ =?us-ascii?Q?NNvh93qYwm/vScAHIWgFLeX4osm+PiAlAJVDt6lttHdsNxsHqvHsYRXF5Jnc?=
+ =?us-ascii?Q?6RELnA5HKdWq1oqRcOQzcEictJXx+5/CQSwBQliNkiuPoVcBWJdVDO2yIVHq?=
+ =?us-ascii?Q?FefICL8vs0c3SEjARdYEB8CA7seqNjqF5iKCQf1YTYCWYsL5Lmnry8hQs08N?=
+ =?us-ascii?Q?rdPc2eiKRtfwWE7sObDW9OGTBj4LbddTPvdiOftvhI+ACtTFA0d/ccUmnyFJ?=
+ =?us-ascii?Q?it1TjQFfa5LYGOoXoVOFyP3282MtS0zeYepJNhU2GcLgccyiCtzFWj8fkEuX?=
+ =?us-ascii?Q?UX/ekDu17gpikm51fL0DqmNc+1D5P42Wry0GaAsm9ZXUksSqkpg4wUjL0awM?=
+ =?us-ascii?Q?1Y5Cmy7KalDsjZta6cD/Nu2IYsQYGioXk5GuOHectdEf08Q/dipayFp8b7l4?=
+ =?us-ascii?Q?Nwbun8JRPckdsvMAkQcREGrK2Qgb7MnTp9Gk/zr2uSwNS6APboQLeZMFwTOW?=
+ =?us-ascii?Q?cjOt/ZaiVryBFZ2KWWu2eCUnXnOpAm/7s5uq3nN8xrw6ndvccJyyjOhkGCP6?=
+ =?us-ascii?Q?DezHfTPMjlOesWx/HJDB2CXcg50H2/VtOQRiPTAr5eTgIpA1Rq/F52WuW3Lc?=
+ =?us-ascii?Q?Q+mKQNNVGffe6xL9sS6b17eB0poDHnLlLhGo9Tecjsi4dt0cpC/ZJ1+kcPMt?=
+ =?us-ascii?Q?ClQ1I+x3atBLPNc33uQ1LU5nnVrAqvKIestmruE8sRdxs9xKAjlH53SsayNH?=
+ =?us-ascii?Q?aZbbzhoVmz6pegmezaG0z0rSu/iYkdNhJpDdEbYoesOU40fcJzJ64tLCCdyd?=
+ =?us-ascii?Q?+1bialtEE3tYIGBRJjxIufCMCZDvDhAYEzZAHce7J9C25eAOS6nDfc1sLRIJ?=
+ =?us-ascii?Q?UTXyB+AKi/78iCRHQ+6544GjN0e7JNfw0Mfc/84gbkaqUvFH4xYOH3CEXMPN?=
+ =?us-ascii?Q?bn85PzTd4Q=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0cb7472d-2ef0-448f-d331-08da3221700f
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3823.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2022 01:07:22.5334
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iZyjche5Sm1PPVnCNUtprgZq7Km2l1FsRcDgope4E/ZLS9J7OGmDCt0Lw3bfsEpe
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5205
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 9, 2022 at 5:34 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Fri, May 6, 2022 at 7:49 PM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
-> >
-> > From: Feng Zhou <zhoufeng.zf@bytedance.com>
-> >
-> > Trace some functions, such as enqueue_task_fair, need to access the
-> > corresponding cpu, not the current cpu, and bpf_map_lookup_elem percpu map
-> > cannot do it. So add bpf_map_lookup_percpu_elem to accomplish it for
-> > percpu_array_map, percpu_hash_map, lru_percpu_hash_map.
-> >
-> > The implementation method is relatively simple, refer to the implementation
-> > method of map_lookup_elem of percpu map, increase the parameters of cpu, and
-> > obtain it according to the specified cpu.
-> >
->
-> I don't think it's safe in general to access per-cpu data from another
-> CPU. I'd suggest just having either a ARRAY_OF_MAPS or adding CPU ID
-> as part of the key, if you need such a custom access pattern.
+--=_MailMate_0746441A-D90C-40BC-8CC5-DA2826820A8E_=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-I actually just sent an RFC patch series containing a similar patch
-for the exact same purpose. There are instances in the kernel where
-per-cpu data is accessed from other cpus (e.g.
-mem_cgroup_css_rstat_flush()). I believe, like any other variable,
-percpu data can be safe or not safe to access, based on the access
-pattern. It is up to the user to coordinate accesses to the variable.
+On 9 May 2022, at 21:03, Andrew Morton wrote:
 
-For example, in my use case, one of the accessors only reads percpu
-values of different cpus, so it should be safe. If a user accesses
-percpu data of another cpu without guaranteeing safety, they corrupt
-their own data. I understand that the main purpose of percpu data is
-lockless (and therefore fast) access, but in some use cases the user
-may be able to safely (and locklessly) access the data concurrently.
+> On Mon, 25 Apr 2022 10:31:12 -0400 Zi Yan <zi.yan@sent.com> wrote:
+>
+>> This patchset tries to remove the MAX_ORDER-1 alignment requirement fo=
+r CMA
+>> and alloc_contig_range(). It prepares for my upcoming changes to make
+>> MAX_ORDER adjustable at boot time[1].
+>
+> I'm thinking this looks ready to be merged into mm-stable later this we=
+ek, for
+> the 5.19-rc1 merge window.
+>
+> I believe the build error at
+> https://lkml.kernel.org/r/CA+G9fYveMF-NU-rvrsbaora2g2QWxrkF7AWViuDrJyN9=
+mNScJg@mail.gmail.com
+> was addressed in ARM?
+
+Right. The warning is caused by CONFIG_ARM64_SME=3Dy not this patchset,
+see https://lore.kernel.org/all/YnGrbEt3oBBTly7u@qian/.
 
 >
-> > Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
-> > ---
-> >  include/linux/bpf.h            |  2 ++
-> >  include/uapi/linux/bpf.h       |  9 +++++++++
-> >  kernel/bpf/arraymap.c          | 15 +++++++++++++++
-> >  kernel/bpf/core.c              |  1 +
-> >  kernel/bpf/hashtab.c           | 32 ++++++++++++++++++++++++++++++++
-> >  kernel/bpf/helpers.c           | 18 ++++++++++++++++++
-> >  kernel/bpf/verifier.c          | 17 +++++++++++++++--
-> >  kernel/trace/bpf_trace.c       |  2 ++
-> >  tools/include/uapi/linux/bpf.h |  9 +++++++++
-> >  9 files changed, 103 insertions(+), 2 deletions(-)
-> >
->
-> [...]
+> I have one -fix to be squashed,
+> https://git.kernel.org/pub/scm/linux/kernel/git/akpm/25-new.git/tree/pa=
+tches/mm-make-alloc_contig_range-work-at-pageblock-granularity-fix.patch
+
+Yes. Thanks.
+
+--
+Best Regards,
+Yan, Zi
+
+--=_MailMate_0746441A-D90C-40BC-8CC5-DA2826820A8E_=
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJDBAEBCgAtFiEEh7yFAW3gwjwQ4C9anbJR82th+ooFAmJ5usgPHHppeUBudmlk
+aWEuY29tAAoJEJ2yUfNrYfqKOU8P/jsC0OKEhFGlRCZhfcj9u2Tmst2xv7hd8/VY
+sFXiBqb55eadDrVOqbRw+KlUqOQrGOnS3px06LWljhaCrGlfxiMyIIY49D7mEehP
+dsS2k2fwdY8f0+1KzWrDf0iGYgka+usrVFjadirVi0wZ6zHHblFmvzegDSonTFkr
+nYMLZlILgRe89Ow8xnioPHt5Ha5qCY4Io1VcLgoJhNZnFo47U5Lo+wSEbP/KIHFA
+NoI0bmw0fQN79xUkAtF2f12CKhwxv9FBPV9bxYtPzrMRXTBnfWQUSv3ZKbYzlmSA
+CJK78slQu9dzO+7kxy+GANBAbg1whLYIERtbcmtVt+DrWfg75VZjeAsbV8gisWhG
+RQ9+FnHkkL+odpmPto90wHczD5TypmKwynC1k1NoHdhnKNQ5YPZeIuGoj8TIFhob
+d7y/f754iL7IXtiPj1dNW8DNKPeg7wJnpfNnaO0DcOFMZnuoQdBo28nw0AbVJ6Ew
+9bwFwSOLfj4IcU+d909gRtPs34KmIey9c0EcTQrcEAdBItNwKcvPDEW/OdsCzwqh
+3UzEw2de96kJJFGlT8jl8yclrSnxHvajEpozyEIkNVo8LKwUF6ymsNuRrdX2y5rV
+aXagbRRuFHfGxRZHaBc7V2yXr9oGFtQ2pC0EkVX0nSKItQaF6lJHR3Jbp5iaTufx
+FCVh6a5E
+=t+xN
+-----END PGP SIGNATURE-----
+
+--=_MailMate_0746441A-D90C-40BC-8CC5-DA2826820A8E_=--

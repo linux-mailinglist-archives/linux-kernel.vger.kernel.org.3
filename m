@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E75F521C32
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:29:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBAAE521BBB
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344675AbiEJObf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
+        id S242788AbiEJOUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244622AbiEJOEp (ORCPT
+        with ESMTP id S245044AbiEJNrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:04:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBF7980A0;
-        Tue, 10 May 2022 06:40:43 -0700 (PDT)
+        Tue, 10 May 2022 09:47:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D259B120A3;
+        Tue, 10 May 2022 06:34:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77CFBB81038;
-        Tue, 10 May 2022 13:40:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7D83C385A6;
-        Tue, 10 May 2022 13:40:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 96EF6B81DA8;
+        Tue, 10 May 2022 13:34:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1759EC385C2;
+        Tue, 10 May 2022 13:34:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652190041;
-        bh=JLqwSEOcIWigLI0SHDOYihooy4qv25j0tvogRuqMs6s=;
+        s=korg; t=1652189651;
+        bh=wll0cJ1ahHvP9gMDkiUTO7YI5zBwB6BsN+qEMF3iJkU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UE8JDWbGJJ8vpHBk74xaTUIlbk4faL+d+xNcFzevtaz3cT7dUQBMWdWiSZcKnAumv
-         7lymna1gxr5GTSh7gSLYPRglSTML5Jt7A9re2Q+SHri7MuoXp3hjAXlkBu2//XN7Fa
-         2RB5jH7avqGg/s+VE4qZT1dgUf4FF7yZ15QN472o=
+        b=cUiSq2qHNLzm+RTcnUo/UksDYzqvIsWcZMJP4LoelPHFreELF9RhWLhbv8/lWfE1v
+         dyPn/uFJ6U2GnzQu2c45DKfc9OXK5USKLfTTdyg0mhmYLdYiAFb84RMaqB3FwQqSLa
+         tK/mU2pjy4b2NtcwtUq4B4DjiVuWdKqX5RWn5Rvo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
-        Junxiao Chang <junxiao.chang@intel.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 109/140] fbdev: Make fb_release() return -ENODEV if fbdev was unregistered
-Date:   Tue, 10 May 2022 15:08:19 +0200
-Message-Id: <20220510130744.720335167@linuxfoundation.org>
+        stable@vger.kernel.org, pali@kernel.org,
+        =?UTF-8?q?Marek=20Beh=FAn?= <kabel@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Subject: [PATCH 5.15 118/135] PCI: aardvark: Rewrite IRQ code to chained IRQ handler
+Date:   Tue, 10 May 2022 15:08:20 +0200
+Message-Id: <20220510130743.784430674@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,53 +55,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Javier Martinez Canillas <javierm@redhat.com>
+From: Pali Rohár <pali@kernel.org>
 
-[ Upstream commit aafa025c76dcc7d1a8c8f0bdefcbe4eb480b2f6a ]
+commit 1571d67dc190e50c6c56e8f88cdc39f7cc53166e upstream.
 
-A reference to the framebuffer device struct fb_info is stored in the file
-private data, but this reference could no longer be valid and must not be
-accessed directly. Instead, the file_fb_info() accessor function must be
-used since it does sanity checking to make sure that the fb_info is valid.
+Rewrite the code to use irq_set_chained_handler_and_data() handler with
+chained_irq_enter() and chained_irq_exit() processing instead of using
+devm_request_irq().
 
-This can happen for example if the registered framebuffer device is for a
-driver that just uses a framebuffer provided by the system firmware. In
-that case, the fbdev core would unregister the framebuffer device when a
-real video driver is probed and ask to remove conflicting framebuffers.
+advk_pcie_irq_handler() reads IRQ status bits and calls other functions
+based on which bits are set. These functions then read its own IRQ status
+bits and calls other aardvark functions based on these bits. Finally
+generic_handle_domain_irq() with translated linux IRQ numbers are called.
 
-The bug has been present for a long time but commit 27599aacbaef ("fbdev:
-Hot-unplug firmware fb devices on forced removal") unmasked it since the
-fbdev core started unregistering the framebuffers' devices associated.
-
-Fixes: 27599aacbaef ("fbdev: Hot-unplug firmware fb devices on forced removal")
-Reported-by: Maxime Ripard <maxime@cerno.tech>
-Reported-by: Junxiao Chang <junxiao.chang@intel.com>
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220502135014.377945-1-javierm@redhat.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/r/20220110015018.26359-5-kabel@kernel.org
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/video/fbdev/core/fbmem.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/pci/controller/pci-aardvark.c |   48 ++++++++++++++++++----------------
+ 1 file changed, 26 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
-index 00f0f282e7a1..10a9369c9dea 100644
---- a/drivers/video/fbdev/core/fbmem.c
-+++ b/drivers/video/fbdev/core/fbmem.c
-@@ -1438,7 +1438,10 @@ fb_release(struct inode *inode, struct file *file)
- __acquires(&info->lock)
- __releases(&info->lock)
- {
--	struct fb_info * const info = file->private_data;
-+	struct fb_info * const info = file_fb_info(file);
-+
-+	if (!info)
-+		return -ENODEV;
+--- a/drivers/pci/controller/pci-aardvark.c
++++ b/drivers/pci/controller/pci-aardvark.c
+@@ -268,6 +268,7 @@ struct advk_pcie {
+ 		u32 actions;
+ 	} wins[OB_WIN_COUNT];
+ 	u8 wins_count;
++	int irq;
+ 	struct irq_domain *irq_domain;
+ 	struct irq_chip irq_chip;
+ 	raw_spinlock_t irq_lock;
+@@ -1432,21 +1433,26 @@ static void advk_pcie_handle_int(struct
+ 	}
+ }
  
- 	lock_fb_info(info);
- 	if (info->fbops->fb_release)
--- 
-2.35.1
-
+-static irqreturn_t advk_pcie_irq_handler(int irq, void *arg)
++static void advk_pcie_irq_handler(struct irq_desc *desc)
+ {
+-	struct advk_pcie *pcie = arg;
+-	u32 status;
++	struct advk_pcie *pcie = irq_desc_get_handler_data(desc);
++	struct irq_chip *chip = irq_desc_get_chip(desc);
++	u32 val, mask, status;
+ 
+-	status = advk_readl(pcie, HOST_CTRL_INT_STATUS_REG);
+-	if (!(status & PCIE_IRQ_CORE_INT))
+-		return IRQ_NONE;
++	chained_irq_enter(chip, desc);
+ 
+-	advk_pcie_handle_int(pcie);
++	val = advk_readl(pcie, HOST_CTRL_INT_STATUS_REG);
++	mask = advk_readl(pcie, HOST_CTRL_INT_MASK_REG);
++	status = val & ((~mask) & PCIE_IRQ_ALL_MASK);
+ 
+-	/* Clear interrupt */
+-	advk_writel(pcie, PCIE_IRQ_CORE_INT, HOST_CTRL_INT_STATUS_REG);
++	if (status & PCIE_IRQ_CORE_INT) {
++		advk_pcie_handle_int(pcie);
+ 
+-	return IRQ_HANDLED;
++		/* Clear interrupt */
++		advk_writel(pcie, PCIE_IRQ_CORE_INT, HOST_CTRL_INT_STATUS_REG);
++	}
++
++	chained_irq_exit(chip, desc);
+ }
+ 
+ static void __maybe_unused advk_pcie_disable_phy(struct advk_pcie *pcie)
+@@ -1513,7 +1519,7 @@ static int advk_pcie_probe(struct platfo
+ 	struct advk_pcie *pcie;
+ 	struct pci_host_bridge *bridge;
+ 	struct resource_entry *entry;
+-	int ret, irq;
++	int ret;
+ 
+ 	bridge = devm_pci_alloc_host_bridge(dev, sizeof(struct advk_pcie));
+ 	if (!bridge)
+@@ -1599,17 +1605,9 @@ static int advk_pcie_probe(struct platfo
+ 	if (IS_ERR(pcie->base))
+ 		return PTR_ERR(pcie->base);
+ 
+-	irq = platform_get_irq(pdev, 0);
+-	if (irq < 0)
+-		return irq;
+-
+-	ret = devm_request_irq(dev, irq, advk_pcie_irq_handler,
+-			       IRQF_SHARED | IRQF_NO_THREAD, "advk-pcie",
+-			       pcie);
+-	if (ret) {
+-		dev_err(dev, "Failed to register interrupt\n");
+-		return ret;
+-	}
++	pcie->irq = platform_get_irq(pdev, 0);
++	if (pcie->irq < 0)
++		return pcie->irq;
+ 
+ 	pcie->reset_gpio = devm_gpiod_get_from_of_node(dev, dev->of_node,
+ 						       "reset-gpios", 0,
+@@ -1658,11 +1656,14 @@ static int advk_pcie_probe(struct platfo
+ 		return ret;
+ 	}
+ 
++	irq_set_chained_handler_and_data(pcie->irq, advk_pcie_irq_handler, pcie);
++
+ 	bridge->sysdata = pcie;
+ 	bridge->ops = &advk_pcie_ops;
+ 
+ 	ret = pci_host_probe(bridge);
+ 	if (ret < 0) {
++		irq_set_chained_handler_and_data(pcie->irq, NULL, NULL);
+ 		advk_pcie_remove_msi_irq_domain(pcie);
+ 		advk_pcie_remove_irq_domain(pcie);
+ 		return ret;
+@@ -1710,6 +1711,9 @@ static int advk_pcie_remove(struct platf
+ 	advk_writel(pcie, PCIE_ISR1_ALL_MASK, PCIE_ISR1_REG);
+ 	advk_writel(pcie, PCIE_IRQ_ALL_MASK, HOST_CTRL_INT_STATUS_REG);
+ 
++	/* Remove IRQ handler */
++	irq_set_chained_handler_and_data(pcie->irq, NULL, NULL);
++
+ 	/* Remove IRQ domains */
+ 	advk_pcie_remove_msi_irq_domain(pcie);
+ 	advk_pcie_remove_irq_domain(pcie);
 
 

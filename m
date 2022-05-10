@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5566F521C3A
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:29:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B62521B5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344755AbiEJObs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43068 "EHLO
+        id S245055AbiEJOOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:14:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242960AbiEJOFw (ORCPT
+        with ESMTP id S245047AbiEJNrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:05:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D012E1830;
-        Tue, 10 May 2022 06:40:52 -0700 (PDT)
+        Tue, 10 May 2022 09:47:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F383443D2;
+        Tue, 10 May 2022 06:34:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 20970B81038;
-        Tue, 10 May 2022 13:40:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFE01C385A6;
-        Tue, 10 May 2022 13:40:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C283DB81DA2;
+        Tue, 10 May 2022 13:34:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FC7CC385A6;
+        Tue, 10 May 2022 13:34:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652190049;
-        bh=Mlz60deRt36HdXJ7XN/igo+0gnVNPamU0Zlo9kbZ+Ss=;
+        s=korg; t=1652189657;
+        bh=jFnAKTcpZKMOoreHyThA4h5lT/C6YV3XwTgRFXYjlzc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TevuN/KiGMwxP5XpVf5ienSCEMN/XwCgaJXkYUHmdGpSVXzcHv7jh1zlEa14l3SZc
-         klm4aYeoEC8I+471aUL4iHQaSd9FIBo/HxmlRTrIdGbUNzLMGb9QT265fS/ZvJ53w6
-         pYtTaeb3fxj4Oy7zPB4FKamuZEzvqBJBvgi4yHko=
+        b=QZnyJH92HWkG65qYPBis6NcWy8XGo+AqYD+P/K4V0FjbaL8WPylE/BE4alsu8WgOQ
+         9QffPeaMrl/babuceg9lG6EMrjrOgcjqDHvRK9RVU/rhrloIk+WUS7Kc+7e2yRaEnF
+         rcK10/n0ZM5qRTadJN7h0urS97Yv9puljza81nQA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+cfafed3bb76d3e37581b@syzkaller.appspotmail.com,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 112/140] KVM: VMX: Exit to userspace if vCPU has injected exception and invalid state
+        stable@vger.kernel.org, pali@kernel.org,
+        =?UTF-8?q?Marek=20Beh=FAn?= <kabel@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Subject: [PATCH 5.15 120/135] PCI: aardvark: Make MSI irq_chip structures static driver structures
 Date:   Tue, 10 May 2022 15:08:22 +0200
-Message-Id: <20220510130744.805207869@linuxfoundation.org>
+Message-Id: <20220510130743.840323275@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,46 +55,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: "Marek Behún" <kabel@kernel.org>
 
-[ Upstream commit 053d2290c0307e3642e75e0185ddadf084dc36c1 ]
+commit c3cb8e51839adc0aaef478c47665443d02f5aa07 upstream.
 
-Exit to userspace with an emulation error if KVM encounters an injected
-exception with invalid guest state, in addition to the existing check of
-bailing if there's a pending exception (KVM doesn't support emulating
-exceptions except when emulating real mode via vm86).
+In [1] it was agreed that we should use struct irq_chip as a global
+static struct in the driver. Even though the structure currently
+contains a dynamic member (parent_device), In [2] the plans to kill it
+and make the structure completely static were set out.
 
-In theory, KVM should never get to such a situation as KVM is supposed to
-exit to userspace before injecting an exception with invalid guest state.
-But in practice, userspace can intervene and manually inject an exception
-and/or stuff registers to force invalid guest state while a previously
-injected exception is awaiting reinjection.
+Convert Aardvark's priv->msi_bottom_irq_chip and priv->msi_irq_chip to
+static driver structure.
 
-Fixes: fc4fad79fc3d ("KVM: VMX: Reject KVM_RUN if emulation is required with pending exception")
-Reported-by: syzbot+cfafed3bb76d3e37581b@syzkaller.appspotmail.com
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Message-Id: <20220502221850.131873-1-seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+[1] https://lore.kernel.org/linux-pci/877dbcvngf.wl-maz@kernel.org/
+[2] https://lore.kernel.org/linux-pci/874k6gvkhz.wl-maz@kernel.org/
+
+Link: https://lore.kernel.org/r/20220110015018.26359-7-kabel@kernel.org
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/vmx/vmx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pci/controller/pci-aardvark.c |   26 ++++++++++++--------------
+ 1 file changed, 12 insertions(+), 14 deletions(-)
 
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index ef63cfd57029..267d6dc4b818 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -5473,7 +5473,7 @@ static bool vmx_emulation_required_with_pending_exception(struct kvm_vcpu *vcpu)
- 	struct vcpu_vmx *vmx = to_vmx(vcpu);
- 
- 	return vmx->emulation_required && !vmx->rmode.vm86_active &&
--	       vcpu->arch.exception.pending;
-+	       (vcpu->arch.exception.pending || vcpu->arch.exception.injected);
+--- a/drivers/pci/controller/pci-aardvark.c
++++ b/drivers/pci/controller/pci-aardvark.c
+@@ -274,8 +274,6 @@ struct advk_pcie {
+ 	raw_spinlock_t irq_lock;
+ 	struct irq_domain *msi_domain;
+ 	struct irq_domain *msi_inner_domain;
+-	struct irq_chip msi_bottom_irq_chip;
+-	struct irq_chip msi_irq_chip;
+ 	struct msi_domain_info msi_domain_info;
+ 	DECLARE_BITMAP(msi_used, MSI_IRQ_NUM);
+ 	struct mutex msi_used_lock;
+@@ -1194,6 +1192,12 @@ static int advk_msi_set_affinity(struct
+ 	return -EINVAL;
  }
  
- static int handle_invalid_guest_state(struct kvm_vcpu *vcpu)
--- 
-2.35.1
-
++static struct irq_chip advk_msi_bottom_irq_chip = {
++	.name			= "MSI",
++	.irq_compose_msi_msg	= advk_msi_irq_compose_msi_msg,
++	.irq_set_affinity	= advk_msi_set_affinity,
++};
++
+ static int advk_msi_irq_domain_alloc(struct irq_domain *domain,
+ 				     unsigned int virq,
+ 				     unsigned int nr_irqs, void *args)
+@@ -1210,7 +1214,7 @@ static int advk_msi_irq_domain_alloc(str
+ 
+ 	for (i = 0; i < nr_irqs; i++)
+ 		irq_domain_set_info(domain, virq + i, hwirq + i,
+-				    &pcie->msi_bottom_irq_chip,
++				    &advk_msi_bottom_irq_chip,
+ 				    domain->host_data, handle_simple_irq,
+ 				    NULL, NULL);
+ 
+@@ -1280,29 +1284,23 @@ static const struct irq_domain_ops advk_
+ 	.xlate = irq_domain_xlate_onecell,
+ };
+ 
++static struct irq_chip advk_msi_irq_chip = {
++	.name = "advk-MSI",
++};
++
+ static int advk_pcie_init_msi_irq_domain(struct advk_pcie *pcie)
+ {
+ 	struct device *dev = &pcie->pdev->dev;
+ 	struct device_node *node = dev->of_node;
+-	struct irq_chip *bottom_ic, *msi_ic;
+ 	struct msi_domain_info *msi_di;
+ 	phys_addr_t msi_msg_phys;
+ 
+ 	mutex_init(&pcie->msi_used_lock);
+ 
+-	bottom_ic = &pcie->msi_bottom_irq_chip;
+-
+-	bottom_ic->name = "MSI";
+-	bottom_ic->irq_compose_msi_msg = advk_msi_irq_compose_msi_msg;
+-	bottom_ic->irq_set_affinity = advk_msi_set_affinity;
+-
+-	msi_ic = &pcie->msi_irq_chip;
+-	msi_ic->name = "advk-MSI";
+-
+ 	msi_di = &pcie->msi_domain_info;
+ 	msi_di->flags = MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS |
+ 		MSI_FLAG_MULTI_PCI_MSI;
+-	msi_di->chip = msi_ic;
++	msi_di->chip = &advk_msi_irq_chip;
+ 
+ 	msi_msg_phys = virt_to_phys(&pcie->msi_msg);
+ 
 
 

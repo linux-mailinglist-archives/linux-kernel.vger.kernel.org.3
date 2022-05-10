@@ -2,86 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ADBA521006
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 10:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF2D3521008
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 10:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238214AbiEJIya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 04:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
+        id S238234AbiEJIzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 04:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238219AbiEJIy0 (ORCPT
+        with ESMTP id S238229AbiEJIyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 04:54:26 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9C21BE11C;
-        Tue, 10 May 2022 01:50:28 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 1C95621C48;
-        Tue, 10 May 2022 08:50:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1652172627; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=g0IURHOoAl2M6zCSLpyMPT18KFdqoUyeDPjl0hJ99tg=;
-        b=nLVA7wXSOSmDcJjrIZeUUMxWxxpiP0nwODbF4958MwRUSWet8guWCinq5YDZjQad6yjaFm
-        j3aERjfh/aBvj60qmsCodmh/zjytI4jwSfKiCXNu5yLrQbgOUcWmb4xT7/+5ygozUP6cuc
-        syzRP7zhCBSu0k0+grf4xqUTpi4gx1Q=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1652172627;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=g0IURHOoAl2M6zCSLpyMPT18KFdqoUyeDPjl0hJ99tg=;
-        b=z9DI44p53W1bZCp1BY3XPA9xEmfmRmtEKhOc3Itu7hqfRNTDv+NP7jv/aOrF619jtWwP9L
-        StJ1YBtzv96wskCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E255C13AC1;
-        Tue, 10 May 2022 08:50:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8XU3NlInemKCHgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 10 May 2022 08:50:26 +0000
-Message-ID: <71ebd5f7-64d0-510a-6f1b-29921fca19fa@suse.de>
-Date:   Tue, 10 May 2022 10:50:26 +0200
+        Tue, 10 May 2022 04:54:52 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2557722523
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 01:50:52 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id l11-20020a17090a49cb00b001d923a9ca99so1582874pjm.1
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 01:50:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=23XI7omNPu4Ww2mwP5OeT/CtOKTWQPLI279EMdZEl8I=;
+        b=pAkf0vZXQUl7z39Mvm0va/etmp8fu6PH9u8QnPryN0wiLXCnJABlTzMSyA1vX3ufsd
+         1NwpI4qHxfOjcijIcVJhXTnUyNexYug0j+ElYm4cIsoghJ+NFodEYzmqMIg0iwGq2sOh
+         IYMUG6mCbzmWSWr8F3zuIh+27WF/B7hQV9+aanx16CvGGbq1sbVmxt2FWWKhkPyBRTMV
+         OOSaopJdw6cqzqBOvlc8kWKvGJgjUxBC0+BdcA1Brs2jH982g/uKojUD9UdUhgYG6592
+         aS6U2Mze/PcfS32raLNpyKL1T3xq+CMGvh8nDeryMuuriTKiCsqcFlW2+78zx13+QcCl
+         baYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=23XI7omNPu4Ww2mwP5OeT/CtOKTWQPLI279EMdZEl8I=;
+        b=U/HKgV8Z9iDgMcWmhuXKAv60XM1wBeBALXDEg7TmnZM0w4EjSnshdKIb6t4xdnRvD+
+         sttEPEza2HS5Ne4Xj7M1Gb09SYDqzQUHu428WLUmsFjBKlBfIKqQdC0fo2CBlehZPYmE
+         9JkTJn8aNT/mBZVtQBYiMowmCp7ajzsZp1EvK/iLvr+vjgzpzfru3Lkm2fhauU2KWx1F
+         l5PAik+8XtSDQzhM/CZYQoczNRljGCo1+hFM32L0pRWCE2eA1hxZiXtFBT1e+/6ALjcP
+         OUm0cRM4jp1JdbsdVcc12XbM5C27ZyelwWW8bz1mPR28TPTSdFNh+qqEkaLbLLU6JD48
+         rYfQ==
+X-Gm-Message-State: AOAM530hK55naD2VphIrfSxBFCV1faAkuc/w5VSFtNImJbzARWQ4ULLz
+        j00nsl0ALIx9AsKATl3s0yK3DnZ0N+IXrQ==
+X-Google-Smtp-Source: ABdhPJwXvUI+FMSIeZJnNlTMMqe93GAbMnaxp4pldVeXwi/DjAEPWwiYdnWfkXRdlr5EKGrPbXGY8Q==
+X-Received: by 2002:a17:902:8501:b0:15f:173:40e1 with SMTP id bj1-20020a170902850100b0015f017340e1mr12562515plb.74.1652172652504;
+        Tue, 10 May 2022 01:50:52 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id q65-20020a17090a4fc700b001daac75511esm1230698pjh.51.2022.05.10.01.50.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 01:50:52 -0700 (PDT)
+Date:   Tue, 10 May 2022 14:20:50 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Jiabing Wan <wanjiabing@vivo.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>,
+        Jia-Wei Chang <jia-wei.chang@mediatek.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] cpufreq: mediatek: Fix potential deadlock problem in
+ mtk_cpufreq_set_target
+Message-ID: <20220510085050.tza6rjvdkjsrhrjv@vireshk-i7>
+References: <20220510080136.11950-1-wanjiabing@vivo.com>
+ <20220510081232.4u25qgryszzqblho@vireshk-i7>
+ <61a4b23f-9740-6fb4-abd0-640d3353e788@vivo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v3 1/4] fbdev: Prevent possible use-after-free in
- fb_release()
-Content-Language: en-US
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-fbdev@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
-        Daniel Vetter <daniel.vetter@intel.com>
-References: <20220505215947.364694-1-javierm@redhat.com>
- <20220505220413.365977-1-javierm@redhat.com>
- <753d0350-42dc-389b-b10b-4533ddcf32ac@intel.com>
- <1f788b8f-0bea-1818-349e-b1bc907bf251@redhat.com>
- <a339df59-9e00-c7cb-e33d-2ac626443639@intel.com>
- <3b7fe4fe-fdec-cef2-4e0e-309d9dc4a8af@redhat.com>
- <b5ab1c49-04e7-36c3-677d-2989b79e50ca@suse.de>
- <2bf27b09-0896-1849-254f-d5b19abdc892@redhat.com>
- <fc3e8a40-664f-07ae-7474-c0412a1ab1b5@intel.com>
- <1c36d431-d5c0-7278-c9e0-61867e9dc174@redhat.com>
- <79aaea41-5dab-f896-ab3d-d6bc9a5de615@suse.de>
- <2d8d8583-3a39-b826-dd83-ba5bc4c5b082@redhat.com>
- <7ffd92d7-9c07-fa9c-dc95-9e82719fd237@suse.de>
-In-Reply-To: <7ffd92d7-9c07-fa9c-dc95-9e82719fd237@suse.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------MHXgXaeQmCiuyyM80xVQxmIp"
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <61a4b23f-9740-6fb4-abd0-640d3353e788@vivo.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -90,92 +82,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------MHXgXaeQmCiuyyM80xVQxmIp
-Content-Type: multipart/mixed; boundary="------------5nhp0O6fvenQ2qVUPU9Pw2Og";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- Andrzej Hajda <andrzej.hajda@intel.com>, linux-kernel@vger.kernel.org
-Cc: linux-fbdev@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
- Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
- Daniel Vetter <daniel.vetter@intel.com>
-Message-ID: <71ebd5f7-64d0-510a-6f1b-29921fca19fa@suse.de>
-Subject: Re: [PATCH v3 1/4] fbdev: Prevent possible use-after-free in
- fb_release()
-References: <20220505215947.364694-1-javierm@redhat.com>
- <20220505220413.365977-1-javierm@redhat.com>
- <753d0350-42dc-389b-b10b-4533ddcf32ac@intel.com>
- <1f788b8f-0bea-1818-349e-b1bc907bf251@redhat.com>
- <a339df59-9e00-c7cb-e33d-2ac626443639@intel.com>
- <3b7fe4fe-fdec-cef2-4e0e-309d9dc4a8af@redhat.com>
- <b5ab1c49-04e7-36c3-677d-2989b79e50ca@suse.de>
- <2bf27b09-0896-1849-254f-d5b19abdc892@redhat.com>
- <fc3e8a40-664f-07ae-7474-c0412a1ab1b5@intel.com>
- <1c36d431-d5c0-7278-c9e0-61867e9dc174@redhat.com>
- <79aaea41-5dab-f896-ab3d-d6bc9a5de615@suse.de>
- <2d8d8583-3a39-b826-dd83-ba5bc4c5b082@redhat.com>
- <7ffd92d7-9c07-fa9c-dc95-9e82719fd237@suse.de>
-In-Reply-To: <7ffd92d7-9c07-fa9c-dc95-9e82719fd237@suse.de>
+On 10-05-22, 16:26, Jiabing Wan wrote:
+> Hi, Viresh Kumar
+> 
+> On 2022/5/10 16:12, Viresh Kumar wrote:
+> > On 10-05-22, 16:01, Wan Jiabing wrote:
+> > > Fix following coccichek error:
+> > > ./drivers/cpufreq/mediatek-cpufreq.c:199:2-8: preceding lock on line
+> > > ./drivers/cpufreq/mediatek-cpufreq.c:208:2-8: preceding lock on line
+> > > 
+> > > mutex_lock is acquired but not released before return.
+> > > Use 'goto out' to help releasing the mutex_lock.
+> > > 
+> > > Fixes: c210063b40ac ("cupful: mediatek: Add opp notification support")
+> > cupful ??
+> 
+> Sorry for the typo...
 
---------------5nhp0O6fvenQ2qVUPU9Pw2Og
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Did you write this line by hand or generate it with Git ? There shouldn't be a
+typo here.
 
-SGkNCg0KQW0gMTAuMDUuMjIgdW0gMTA6Mzcgc2NocmllYiBUaG9tYXMgWmltbWVybWFubjoN
-Ci4uLg0KPj4+DQo+Pj4gWW91IGhhdmUgdG8gZ28gdGhyb3VnaCBhbGwgRFJNIGRyaXZlcnMg
-dGhhdCBjYWxsIGRybV9mYl9oZWxwZXJfZmluaSgpDQo+Pj4gYW5kIG1ha2Ugc3VyZSB0aGF0
-IHRoZXkgZnJlZSBmYl9pbmZvLiBGb3IgZXhhbXBsZSBhcm1hZGEgYXBwZWFycyB0byBiZQ0K
-Pj4+IGxlYWtpbmcgbm93LiBbMV0NCj4+Pg0KPj4NCj4+IEJ1dCBzaG91bGRuJ3QgZmJfaW5m
-byBiZSBmcmVlZCB3aGVuIHVucmVnaXN0ZXJfZnJhbWVidWZmZXIoKSBpcyBjYWxsZWQNCj4+
-IHRocm91Z2ggZHJtX2Rldl91bnJlZ2lzdGVyKCkgPyBBRkFJQ1QgdGhlIGNhbGwgY2hhaW4g
-aXMgdGhlIGZvbGxvd2luZzoNCj4+DQo+PiBkcm1fcHV0X2RldigpDQo+PiDCoMKgIGRybV9k
-ZXZfdW5yZWdpc3RlcigpDQo+PiDCoMKgwqDCoCBkcm1fY2xpZW50X2Rldl91bnJlZ2lzdGVy
-KCkNCj4+IMKgwqDCoMKgwqDCoCBkcm1fZmJkZXZfY2xpZW50X3VucmVnaXN0ZXIoKQ0KPj4g
-wqDCoMKgwqDCoMKgwqDCoCBkcm1fZmJfaGVscGVyX3VucmVnaXN0ZXJfZmJpKCkNCj4+IMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIHVucmVnaXN0ZXJfZnJhbWVidWZmZXIoKQ0KPj4gwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIGRvX3VucmVnaXN0ZXJfZnJhbWVidWZmZXIoKQ0KPj4gwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBwdXRfZmJfaW5mbygpDQo+PiDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBkcm1fZmJkZXZfZmJfZGVzdHJveSgpDQo+PiDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZnJhbWVidWZmZXJfcmVsZWFzZSgp
-DQo+Pg0KPj4gd2hpY2ggaXMgdGhlIHJlYXNvbiB3aHkgSSBiZWxpZXZlIHRoYXQgZHJtX2Zi
-X2hlbHBlcl9maW5pKCkgc2hvdWxkIGJlDQo+PiBhbiBpbnRlcm5hbCBzdGF0aWMgZnVuY3Rp
-b24gYW5kIG9ubHkgY2FsbGVkIGZyb20gZHJtX2ZiZGV2X2ZiX2Rlc3Ryb3koKS4NCj4+DQo+
-PiBEcml2ZXJzIHNob3VsZG4ndCByZWFsbHkgZXhwbGljaXRseSBjYWxsIHRoaXMgaGVscGVy
-IGluIG15IG9waW5pb24uDQoNCk9uZSBtb3JlIHN0dXBpZCBxdWVzdGlvbjogZG9lcyBhcm1h
-ZGEgYWN0dWFsbHkgdXNlIA0KZHJtX2ZiZGV2X2ZiX2Rlc3Ryb3koKT8gSXQncyBzdXBwb3Nl
-ZCB0byBiZSBhIGNhbGxiYWNrIGZvciBzdHJ1Y3QgDQpmYl9vcHMuIEFybWFkYSB1c2VzIGl0
-J3Mgb3duIGluc3RhbmNlIG9mIGZiX29wcywgd2hpY2ggYXBwYXJlbnRseSANCmRvZXNuJ3Qg
-Y29udGFpbiBmYl9kZXN0cm95LiBbMV0NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KWzFd
-IA0KaHR0cHM6Ly9lbGl4aXIuYm9vdGxpbi5jb20vbGludXgvdjUuMTcuNi9zb3VyY2UvZHJp
-dmVycy9ncHUvZHJtL2FybWFkYS9hcm1hZGFfZmJkZXYuYyNMMTkNCg0KDQo+IA0KPiBUaGFu
-a3MuwqAgVGhhdCBtYWtlcyBzZW5zZS4NCj4gDQo+IEJlc3QgcmVnYXJkcw0KPiBUaG9tYXMN
-Cj4gDQo+IA0KPj4NCj4gDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERy
-aXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0K
-TWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBB
-RyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
+> By the way, is this patch correct?
+> 
+> I am not sure whether it should return with the mutex_lock.
+> But IMO, it should release the lock before return.
 
---------------5nhp0O6fvenQ2qVUPU9Pw2Og--
+Yes, we need to release the lock.
 
---------------MHXgXaeQmCiuyyM80xVQxmIp
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJ6J1IFAwAAAAAACgkQlh/E3EQov+Dn
-5g//cMbWLTZEQV4oKwTt8ao+7B/mNzQcuFG5Uof78v/C9yNDIxy/pHsS/Th/crWYY4UzkICgUlpx
-tijFv0Muidxtweo+BYCJvvMQKOVQOtDzyhEqdRF2vtXKWgqEg60kR2FXeEwJDh4g3Js2aId1Fypv
-Ad2dHTAQwNZaZnp2CMBeSdVPL6Kk54gzLYGYls8UsUppohfNAg1/1su+vsmdu4pLLS9Ub5nhN29q
-x8IbnGajaMkV5vq3UuqrQFKQDp5pHrX78J6TFsbw9tIRPVaN3oFSqlsL9+L44KwxE8pcOEO+w9km
-9CqmA2C1AAxMpB6joXJ2MB6adV5cUXK1mvEdjEQn17PCzG0EaU8LIMjNKCtzQ88pzFybuRAx9Vpo
-HOWfmIgIsK8sJhgp3PzSVToZ9xGc5Vc7YWajbQ3Elj3SCWmiyxr7azCvRRC6qvRk5gAf8Y3p7oBm
-dRdg20teD16JMPxFhU1ArOfJhtfRBWoWiAMBMmNaRQMIo2I2QVRsANuwpr5HDaCmjfbmGTU+co7+
-WWUMZI8kTWdfJaq+4VafFN90IDTTdALS+Hn73GMU+y6lZlgI4lVuZSj79vlkWCKSHzzAKP3LDX/M
-aVVwwOUi9JgFaX/vdUzYYZTy/JOY56VCN4alnPLVh4JZ49sZt4RIcmmJwE6DI+VmZ4RuUCzvU2kq
-EbE=
-=7eHO
------END PGP SIGNATURE-----
-
---------------MHXgXaeQmCiuyyM80xVQxmIp--
+-- 
+viresh

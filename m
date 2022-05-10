@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF59E521740
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:21:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79407521AEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242938AbiEJNWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
+        id S244824AbiEJOF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241546AbiEJNUx (ORCPT
+        with ESMTP id S243632AbiEJNmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:20:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AABD2BA99F;
-        Tue, 10 May 2022 06:13:41 -0700 (PDT)
+        Tue, 10 May 2022 09:42:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C1F46B1F;
+        Tue, 10 May 2022 06:30:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8621E61574;
-        Tue, 10 May 2022 13:13:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97C41C385C2;
-        Tue, 10 May 2022 13:13:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7DFE8B81D24;
+        Tue, 10 May 2022 13:30:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8CBBC385A6;
+        Tue, 10 May 2022 13:30:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188421;
-        bh=LaDG7CapcarKnFOEKMZMJPT3w1lOlsP0oILBZQfjazE=;
+        s=korg; t=1652189452;
+        bh=KROBn0sVKqejLhXC5hNUtuLqTsLA0EpNTTg+h0Jc3Nc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=keR0KxHlIZRniJmEPvjCDDYQ63tIfR0bK4iTcw+Yf3AQ4nniwL2jhRtK5DDXPnWKZ
-         L2PZhpUXS/YJIK8vmBjkoyjj0+fnW99Afa074rR1H3QRUOEDMTQ/wUIudN90HSflyQ
-         MdnqnmDsmzXmFHc2/oGcI/PLzKEi+GEd+BK7CX1w=
+        b=XwU9qx0kXZlE8phq+qcIqSspQ4gb0LeMgtSs7cJ6P9gjVaYmAi3plhB9zMaNuYyJV
+         FCKVphv8jD4dFu8FIgl/OI2R01IA70hU5DrDerXEJklMCsUNXZPB89hzTmQQz79ede
+         w2Z+H39crTLXN7nt1tv4Izy4vvwKeRQ4sBHlEdBI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peilin Ye <peilin.ye@bytedance.com>,
-        William Tu <u9012063@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 28/66] ip_gre: Make o_seqno start from 0 in native mode
+        stable@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Cheng Xu <chengyou@linux.alibaba.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH 5.15 056/135] RDMA/siw: Fix a condition race issue in MPA request processing
 Date:   Tue, 10 May 2022 15:07:18 +0200
-Message-Id: <20220510130730.590531468@linuxfoundation.org>
+Message-Id: <20220510130742.013033917@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
-References: <20220510130729.762341544@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +56,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+From: Cheng Xu <chengyou@linux.alibaba.com>
 
-[ Upstream commit ff827beb706ed719c766acf36449801ded0c17fc ]
+commit ef91271c65c12d36e4c2b61c61d4849fb6d11aa0 upstream.
 
-For GRE and GRETAP devices, currently o_seqno starts from 1 in native
-mode.  According to RFC 2890 2.2., "The first datagram is sent with a
-sequence number of 0."  Fix it.
+The calling of siw_cm_upcall and detaching new_cep with its listen_cep
+should be atomistic semantics. Otherwise siw_reject may be called in a
+temporary state, e,g, siw_cm_upcall is called but the new_cep->listen_cep
+has not being cleared.
 
-It is worth mentioning that o_seqno already starts from 0 in collect_md
-mode, see gre_fb_xmit(), where tunnel->o_seqno is passed to
-gre_build_header() before getting incremented.
+This fixes a WARN:
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
-Acked-by: William Tu <u9012063@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+  WARNING: CPU: 7 PID: 201 at drivers/infiniband/sw/siw/siw_cm.c:255 siw_cep_put+0x125/0x130 [siw]
+  CPU: 2 PID: 201 Comm: kworker/u16:22 Kdump: loaded Tainted: G            E     5.17.0-rc7 #1
+  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+  Workqueue: iw_cm_wq cm_work_handler [iw_cm]
+  RIP: 0010:siw_cep_put+0x125/0x130 [siw]
+  Call Trace:
+   <TASK>
+   siw_reject+0xac/0x180 [siw]
+   iw_cm_reject+0x68/0xc0 [iw_cm]
+   cm_work_handler+0x59d/0xe20 [iw_cm]
+   process_one_work+0x1e2/0x3b0
+   worker_thread+0x50/0x3a0
+   ? rescuer_thread+0x390/0x390
+   kthread+0xe5/0x110
+   ? kthread_complete_and_exit+0x20/0x20
+   ret_from_fork+0x1f/0x30
+   </TASK>
+
+Fixes: 6c52fdc244b5 ("rdma/siw: connection management")
+Link: https://lore.kernel.org/r/d528d83466c44687f3872eadcb8c184528b2e2d4.1650526554.git.chengyou@linux.alibaba.com
+Reported-by: Luis Chamberlain <mcgrof@kernel.org>
+Reviewed-by: Bernard Metzler <bmt@zurich.ibm.com>
+Signed-off-by: Cheng Xu <chengyou@linux.alibaba.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/ip_gre.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/infiniband/sw/siw/siw_cm.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/net/ipv4/ip_gre.c b/net/ipv4/ip_gre.c
-index fe1801d9f059..eec225c637f0 100644
---- a/net/ipv4/ip_gre.c
-+++ b/net/ipv4/ip_gre.c
-@@ -339,14 +339,12 @@ static void __gre_xmit(struct sk_buff *skb, struct net_device *dev,
- 		       __be16 proto)
- {
- 	struct ip_tunnel *tunnel = netdev_priv(dev);
+--- a/drivers/infiniband/sw/siw/siw_cm.c
++++ b/drivers/infiniband/sw/siw/siw_cm.c
+@@ -968,14 +968,15 @@ static void siw_accept_newconn(struct si
+ 
+ 		siw_cep_set_inuse(new_cep);
+ 		rv = siw_proc_mpareq(new_cep);
+-		siw_cep_set_free(new_cep);
 -
--	if (tunnel->parms.o_flags & TUNNEL_SEQ)
--		tunnel->o_seqno++;
-+	__be16 flags = tunnel->parms.o_flags;
+ 		if (rv != -EAGAIN) {
+ 			siw_cep_put(cep);
+ 			new_cep->listen_cep = NULL;
+-			if (rv)
++			if (rv) {
++				siw_cep_set_free(new_cep);
+ 				goto error;
++			}
+ 		}
++		siw_cep_set_free(new_cep);
+ 	}
+ 	return;
  
- 	/* Push GRE header. */
- 	gre_build_header(skb, tunnel->tun_hlen,
--			 tunnel->parms.o_flags, proto, tunnel->parms.o_key,
--			 htonl(tunnel->o_seqno));
-+			 flags, proto, tunnel->parms.o_key,
-+			 (flags & TUNNEL_SEQ) ? htonl(tunnel->o_seqno++) : 0);
- 
- 	ip_tunnel_xmit(skb, dev, tnl_params, tnl_params->protocol);
- }
--- 
-2.35.1
-
 
 

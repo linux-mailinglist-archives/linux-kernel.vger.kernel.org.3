@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10B65521962
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04BA05218FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:39:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243894AbiEJNtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56342 "EHLO
+        id S243778AbiEJNlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243813AbiEJNcP (ORCPT
+        with ESMTP id S243693AbiEJN1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:32:15 -0400
+        Tue, 10 May 2022 09:27:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6372D12A2;
-        Tue, 10 May 2022 06:22:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A082E25D111;
+        Tue, 10 May 2022 06:20:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F7C26172E;
-        Tue, 10 May 2022 13:22:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD5ABC385C2;
-        Tue, 10 May 2022 13:22:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39B786165A;
+        Tue, 10 May 2022 13:20:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48DFCC385A6;
+        Tue, 10 May 2022 13:20:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188940;
-        bh=2HnKUKKeygCNULEDLTGebDWd/Upf5P086EXE4P6TmGo=;
+        s=korg; t=1652188819;
+        bh=sN5HR7f9AJoRolKAArwQTOKUueVNLwfQy/wUH8Trtu8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F87FujuiBRuprFfXBTMc5cgAGIEfCEmrgmygCOmsz6+prsuK3ywDVZGBupEz8wk0/
-         wD5kNyh+P1MV020edcb5xnYGGqUDojUL8t8t2UTm+T+PumEvfX2iOrThUGybQBCkbV
-         ziK39B1KRShdzFFBxr82BBNKYzTv/aUuQ8rarT70=
+        b=1u+t7QMRhMxyIBZmSzfUqsMQV2i2rlwSHHVXEkXrCsP/Uhs7EPnByEOjcvDbSm2CX
+         +DVbQDyW1tDIYCmjSTEU5Mpv7Q6NAqUyql1FBc6faXubkySVFbMlUnHz5IxnLYD6wf
+         VVt1SGUM6088/ib4NpgZb81bLPnrGr5uONE4Hs2w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-Subject: [PATCH 5.4 11/52] ASoC: da7219: Fix change notifications for tone generator frequency
+        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH 4.19 55/88] tty: n_gsm: fix wrong command frame length field encoding
 Date:   Tue, 10 May 2022 15:07:40 +0200
-Message-Id: <20220510130730.188549006@linuxfoundation.org>
+Message-Id: <20220510130735.343311933@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
-References: <20220510130729.852544477@linuxfoundation.org>
+In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
+References: <20220510130733.735278074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,58 +53,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Daniel Starke <daniel.starke@siemens.com>
 
-commit 08ef48404965cfef99343d6bbbcf75b88c74aa0e upstream.
+commit 398867f59f956985f4c324f173eff7b946e14bd8 upstream.
 
-The tone generator frequency control just returns 0 on successful write,
-not a boolean value indicating if there was a change or not.  Compare
-what was written with the value that was there previously so that
-notifications are generated appropriately when the value changes.
+n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
+See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
+The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
+the newer 27.010 here. Chapter 5.4.6.1 states that each command frame shall
+be made up from type, length and value. Looking for example in chapter
+5.4.6.3.5 at the description for the encoding of a flow control on command
+it becomes obvious, that the type and length field is always present
+whereas the value may be zero bytes long. The current implementation omits
+the length field if the value is not present. This is wrong.
+Correct this by always sending the length in gsm_control_transmit().
+So far only the modem status command (MSC) has included a value and encoded
+its length directly. Therefore, also change gsmtty_modem_update().
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Reviewed-by: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
 Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220420133437.569229-1-broonie@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+Link: https://lore.kernel.org/r/20220414094225.4527-12-daniel.starke@siemens.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/da7219.c |   14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ drivers/tty/n_gsm.c |   23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
 
---- a/sound/soc/codecs/da7219.c
-+++ b/sound/soc/codecs/da7219.c
-@@ -446,7 +446,7 @@ static int da7219_tonegen_freq_put(struc
- 	struct soc_mixer_control *mixer_ctrl =
- 		(struct soc_mixer_control *) kcontrol->private_value;
- 	unsigned int reg = mixer_ctrl->reg;
--	__le16 val;
-+	__le16 val_new, val_old;
- 	int ret;
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -1302,11 +1302,12 @@ static void gsm_control_response(struct
  
- 	/*
-@@ -454,13 +454,19 @@ static int da7219_tonegen_freq_put(struc
- 	 * Therefore we need to convert to little endian here to align with
- 	 * HW registers.
- 	 */
--	val = cpu_to_le16(ucontrol->value.integer.value[0]);
-+	val_new = cpu_to_le16(ucontrol->value.integer.value[0]);
- 
- 	mutex_lock(&da7219->ctrl_lock);
--	ret = regmap_raw_write(da7219->regmap, reg, &val, sizeof(val));
-+	ret = regmap_raw_read(da7219->regmap, reg, &val_old, sizeof(val_old));
-+	if (ret == 0 && (val_old != val_new))
-+		ret = regmap_raw_write(da7219->regmap, reg,
-+				&val_new, sizeof(val_new));
- 	mutex_unlock(&da7219->ctrl_lock);
- 
--	return ret;
-+	if (ret < 0)
-+		return ret;
-+
-+	return val_old != val_new;
+ static void gsm_control_transmit(struct gsm_mux *gsm, struct gsm_control *ctrl)
+ {
+-	struct gsm_msg *msg = gsm_data_alloc(gsm, 0, ctrl->len + 1, gsm->ftype);
++	struct gsm_msg *msg = gsm_data_alloc(gsm, 0, ctrl->len + 2, gsm->ftype);
+ 	if (msg == NULL)
+ 		return;
+-	msg->data[0] = (ctrl->cmd << 1) | 2 | EA;	/* command */
+-	memcpy(msg->data + 1, ctrl->data, ctrl->len);
++	msg->data[0] = (ctrl->cmd << 1) | CR | EA;	/* command */
++	msg->data[1] = (ctrl->len << 1) | EA;
++	memcpy(msg->data + 2, ctrl->data, ctrl->len);
+ 	gsm_data_queue(gsm->dlci[0], msg);
  }
  
+@@ -2860,19 +2861,17 @@ static struct tty_ldisc_ops tty_ldisc_pa
  
+ static int gsmtty_modem_update(struct gsm_dlci *dlci, u8 brk)
+ {
+-	u8 modembits[5];
++	u8 modembits[3];
+ 	struct gsm_control *ctrl;
+ 	int len = 2;
+ 
+-	if (brk)
++	modembits[0] = (dlci->addr << 2) | 2 | EA;  /* DLCI, Valid, EA */
++	modembits[1] = (gsm_encode_modem(dlci) << 1) | EA;
++	if (brk) {
++		modembits[2] = (brk << 4) | 2 | EA; /* Length, Break, EA */
+ 		len++;
+-
+-	modembits[0] = len << 1 | EA;		/* Data bytes */
+-	modembits[1] = dlci->addr << 2 | 3;	/* DLCI, EA, 1 */
+-	modembits[2] = gsm_encode_modem(dlci) << 1 | EA;
+-	if (brk)
+-		modembits[3] = brk << 4 | 2 | EA;	/* Valid, EA */
+-	ctrl = gsm_control_send(dlci->gsm, CMD_MSC, modembits, len + 1);
++	}
++	ctrl = gsm_control_send(dlci->gsm, CMD_MSC, modembits, len);
+ 	if (ctrl == NULL)
+ 		return -ENOMEM;
+ 	return gsm_control_wait(dlci->gsm, ctrl);
 
 

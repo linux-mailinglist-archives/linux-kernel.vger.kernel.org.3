@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0237521960
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6C2521A66
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245104AbiEJNrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40202 "EHLO
+        id S242486AbiEJOAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243933AbiEJNcW (ORCPT
+        with ESMTP id S245068AbiEJNi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:32:22 -0400
+        Tue, 10 May 2022 09:38:28 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C50919FB1A;
-        Tue, 10 May 2022 06:23:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE211C764C;
+        Tue, 10 May 2022 06:27:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC7AC6170D;
-        Tue, 10 May 2022 13:23:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AACB9C385A6;
-        Tue, 10 May 2022 13:23:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 254C360C1C;
+        Tue, 10 May 2022 13:27:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EBA2C385C2;
+        Tue, 10 May 2022 13:26:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189032;
-        bh=2kP0nBChukhPRmIYqoOARegqxQkdDopPMuLmHoxJaWI=;
+        s=korg; t=1652189220;
+        bh=FxIhdZqIw91pbHMbO5gwTOdjHrJnWK2rh0Rb9gXuISc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D9+iNOzBb+xXhW0uj24endkr5isqlN81l436GEB3hssWYGrWnhsBL73M1uCQz4fcq
-         ZZGqIAuvAUpjBdrqe2NOskIFQdFJpanLLJ+VcsViyjzTG16XzUkdDDcQhcsApbgcPt
-         cgDD2uhZddefTmDQyirwTRPNYHA6vWQEw8MShMKA=
+        b=YcZn49jzG8LR0MJXP6XXHn9X6kvspPzxz4YfDT8E8FG3HEQfCTze3NlQMOYEoaFcQ
+         l8WrgMM0bXXLy5Ka1rhBEXwhq8moQ+E79zi+zfhjY1yg1OOgOnXeUWPWMGngzPsDXE
+         zA5o3uVfpiSyNc/e9oBpLUfYmp5mD4W3ZkU24Zj4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Haimin Zhang <tcs.kernel@gmail.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Nobel Barakat <nobelbarakat@google.com>
-Subject: [PATCH 5.4 40/52] block-map: add __GFP_ZERO flag for alloc_page in function bio_copy_kern
-Date:   Tue, 10 May 2022 15:08:09 +0200
-Message-Id: <20220510130731.025055387@linuxfoundation.org>
+        stable@vger.kernel.org, Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH 5.10 51/70] selftests: mirror_gre_bridge_1q: Avoid changing PVID while interface is operational
+Date:   Tue, 10 May 2022 15:08:10 +0200
+Message-Id: <20220510130734.355010102@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
-References: <20220510130729.852544477@linuxfoundation.org>
+In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
+References: <20220510130732.861729621@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haimin Zhang <tcs.kernel@gmail.com>
+From: Ido Schimmel <idosch@nvidia.com>
 
-commit cc8f7fe1f5eab010191aa4570f27641876fa1267 upstream.
+commit 3122257c02afd9f199a8fc84ae981e1fc4958532 upstream.
 
-Add __GFP_ZERO flag for alloc_page in function bio_copy_kern to initialize
-the buffer of a bio.
+In emulated environments, the bridge ports enslaved to br1 get a carrier
+before changing br1's PVID. This means that by the time the PVID is
+changed, br1 is already operational and configured with an IPv6
+link-local address.
 
-Signed-off-by: Haimin Zhang <tcs.kernel@gmail.com>
-Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220216084038.15635-1-tcs.kernel@gmail.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-[nobelbarakat: Backported to 5.4: Manually added __GFP_ZERO flag]
-Signed-off-by: Nobel Barakat <nobelbarakat@google.com>
+When the test is run with netdevs registered by mlxsw, changing the PVID
+is vetoed, as changing the VID associated with an existing L3 interface
+is forbidden. This restriction is similar to the 8021q driver's
+restriction of changing the VID of an existing interface.
+
+Fix this by taking br1 down and bringing it back up when it is fully
+configured.
+
+With this fix, the test reliably passes on top of both the SW and HW
+data paths (emulated or not).
+
+Fixes: 239e754af854 ("selftests: forwarding: Test mirror-to-gretap w/ UL 802.1q")
+Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+Reviewed-by: Petr Machata <petrm@nvidia.com>
+Link: https://lore.kernel.org/r/20220502084507.364774-1-idosch@nvidia.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/bio.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/net/forwarding/mirror_gre_bridge_1q.sh |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/block/bio.c
-+++ b/block/bio.c
-@@ -1627,7 +1627,7 @@ struct bio *bio_copy_kern(struct request
- 		if (bytes > len)
- 			bytes = len;
+--- a/tools/testing/selftests/net/forwarding/mirror_gre_bridge_1q.sh
++++ b/tools/testing/selftests/net/forwarding/mirror_gre_bridge_1q.sh
+@@ -61,9 +61,12 @@ setup_prepare()
  
--		page = alloc_page(q->bounce_gfp | gfp_mask);
-+		page = alloc_page(q->bounce_gfp | __GFP_ZERO | gfp_mask);
- 		if (!page)
- 			goto cleanup;
+ 	vrf_prepare
+ 	mirror_gre_topo_create
++	# Avoid changing br1's PVID while it is operational as a L3 interface.
++	ip link set dev br1 down
+ 
+ 	ip link set dev $swp3 master br1
+ 	bridge vlan add dev br1 vid 555 pvid untagged self
++	ip link set dev br1 up
+ 	ip address add dev br1 192.0.2.129/28
+ 	ip address add dev br1 2001:db8:2::1/64
  
 
 

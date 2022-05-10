@@ -2,58 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C8B252271B
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 00:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA2A522736
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 00:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237299AbiEJWqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 18:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51588 "EHLO
+        id S229737AbiEJWuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 18:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237290AbiEJWqb (ORCPT
+        with ESMTP id S232630AbiEJWuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 18:46:31 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E904218FEF;
-        Tue, 10 May 2022 15:46:28 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 1AE3D9200C4; Wed, 11 May 2022 00:46:26 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 18A549200C1;
-        Tue, 10 May 2022 23:46:26 +0100 (BST)
-Date:   Tue, 10 May 2022 23:46:26 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-cc:     Greg KH <greg@kroah.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the tty tree
-In-Reply-To: <20220511075804.79c5b697@canb.auug.org.au>
-Message-ID: <alpine.DEB.2.21.2205102341030.52331@angie.orcam.me.uk>
-References: <20220511075804.79c5b697@canb.auug.org.au>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Tue, 10 May 2022 18:50:13 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEF724DC54
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 15:50:11 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id kk28so621472qvb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 15:50:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5pgf2LC4mfZtxmKKitMud+Oy12RPGcU3F46iHWGsadA=;
+        b=ekAQBJLQ0g2H+FUmFV5f70dwdMJlmpMe43UT4QIXA58jzQ7eDTurlQUHhbMjmFXgUn
+         iSvHyXVOpjYMsk92HbvRZQl8ByOek4TmP4dutBYmWmysLSp+0lz8VY73TGj93QW0TK/I
+         wFDu3nWggMxUUhT25DqnrpkQRHcZyfZQlsTbTl94c/g9RyI7z/yYTSrr78bkYPz4zPE6
+         iY4Bp9up41gXopOTZgVvz0svbTi1cJwop5wCmJ5rigsS40iOXz4jYN10Zh1qCwptI9S1
+         NrCYR94Zlax6XmK+bd61BAf+16YQeV+dhN2Bpph/aIHzuhFyMVqWf35ODyxRjEeOQHST
+         hZVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5pgf2LC4mfZtxmKKitMud+Oy12RPGcU3F46iHWGsadA=;
+        b=QhtwVxJUJQ0ctE5z8Ln3Gs0AY7ySSi29RZnqrSvliWAyrsBP71JbCmwcQJLIamu+/3
+         J0gjnBev+WP9kRF0T7el+M+WgBnSARCmPTgPg5wjCpYNp9/vpZ608xS8O4u3AbsIV+zJ
+         15dFK/bC/1FBh0yiyzwILOkqAY5P46FGR1X5u6wock4xF/rYUnTc8xqrXcxHnYQyJpp2
+         k3rZhdqEb2h8X+FoFhWU0Y39dDaYlnOr9jevWLWFHxoju9xBSMguwLCzJgFuhS9Yg9ss
+         7WokX4nqG1rPoqH7z28YYmKof+aM9GQFVnM3Vo8lT3J+ILJn+N1jmKzhTM0x87b59c7i
+         1WAg==
+X-Gm-Message-State: AOAM533sefsjSe8QbCcBRznPIQ6b6zvKM/mZ68uyQGR0WEkQyOA+Z5K1
+        apenes4CDa4y+i0+gf6tBMfgzA+c4adMnjwS7K79dg==
+X-Google-Smtp-Source: ABdhPJzAFn9/jIPprW6IL+T0z4v5PPLX/63yNDyYNQ0qdZ3QxvFVYV7PhbjIoCNQF1WFZkNWMTKoVzPSeNUYybVJQSc=
+X-Received: by 2002:ad4:4753:0:b0:456:34db:614b with SMTP id
+ c19-20020ad44753000000b0045634db614bmr19945189qvx.17.1652223010267; Tue, 10
+ May 2022 15:50:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220510001807.4132027-1-yosryahmed@google.com>
+ <20220510001807.4132027-9-yosryahmed@google.com> <Ynq04gC1l7C2tx6o@slm.duckdns.org>
+ <CA+khW7girnNwap1ABN1a4XuvkEEnmkztTV+fsuC3MsxNeB08Yg@mail.gmail.com> <YnriMPYyOP9ibskc@slm.duckdns.org>
+In-Reply-To: <YnriMPYyOP9ibskc@slm.duckdns.org>
+From:   Hao Luo <haoluo@google.com>
+Date:   Tue, 10 May 2022 15:49:59 -0700
+Message-ID: <CA+khW7gUdZQq77jO2_A6rvE6f+HV=sGfBVGvAmazGPvwudE0RQ@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 8/9] bpf: Introduce cgroup iter
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 May 2022, Stephen Rothwell wrote:
+On Tue, May 10, 2022 at 3:07 PM Tejun Heo <tj@kernel.org> wrote:
+>
+> Hello,
+>
+> On Tue, May 10, 2022 at 02:12:16PM -0700, Hao Luo wrote:
+> > > Is there a reason why this can't be a proper iterator which supports
+> > > lseek64() to locate a specific cgroup?
+> > >
+> >
+> > There are two reasons:
+> >
+> > - Bpf_iter assumes no_llseek. I haven't looked closely on why this is
+> > so and whether we can add its support.
+> >
+> > - Second, the name 'iter' in this patch is misleading. What this patch
+> > really does is reusing the functionality of dumping in bpf_iter.
+> > 'Dumper' is a better name. We want to create one file in bpffs for
+> > each cgroup. We are essentially just iterating a set of one single
+> > element.
+>
+> I see. I'm just shooting in the dark without context but at least in
+> principle there's no reason why cgroups wouldn't be iterable, so it might be
+> something worth at least thinking about before baking in the interface.
+>
 
-> After merging the tty tree, yesterday's linux-next build (htmldocs) produced
-> these warnings:
+Yep. Conceptually there should be no problem to iterate cgroups in the
+system. It may be better to have two independent bpf objects: bpf_iter
+and bpf_dumper. In our use case, we want bpf_dumper, which just
+exports data out through fs interface.
 
- Umm, sorry about that.  I wasn't even aware files under Documentation/ 
-are meant to be processed somehow other than through eyeballs nowadays!
-
- I'll see how to fix the file up and will make the necessary corrections, 
-but how shall I post the update?  A replacement patch or an incremental 
-change?
-
- Thanks for letting me know.
-
-  Maciej
+Hao

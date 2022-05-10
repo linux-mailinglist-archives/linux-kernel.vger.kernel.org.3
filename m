@@ -2,41 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F50A521BA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B52ED521BEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:21:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245653AbiEJOTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:19:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50622 "EHLO
+        id S1343589AbiEJOYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244227AbiEJNtm (ORCPT
+        with ESMTP id S243724AbiEJNww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:49:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409D073562;
-        Tue, 10 May 2022 06:37:31 -0700 (PDT)
+        Tue, 10 May 2022 09:52:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454A4663FD;
+        Tue, 10 May 2022 06:38:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53991618A6;
-        Tue, 10 May 2022 13:37:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D7CDC385C2;
-        Tue, 10 May 2022 13:37:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E437BB81DA8;
+        Tue, 10 May 2022 13:37:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B6BBC385C2;
+        Tue, 10 May 2022 13:37:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189833;
-        bh=qeRM6FQzBbEvCNb4O/cYvgcYLA+zC9ijzGkyG9hloSQ=;
+        s=korg; t=1652189836;
+        bh=WTnl3+B6yRLPj0eRn2sUYYRUVNpckkYKXc79sNWkQus=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WM6l59SqV6Aess7Y/5XN8UiokLKWCAEE9QHxrlEpf7KdBcLR9WNfj2aZbVmaiTDoT
-         alI7gl+dhXcNR9YYSLt9zb+ZoIYH4FRbURMl9GjpmnKdqfbTIYs6IfEBMnOrvW78lG
-         DV2bvFmsy5xUikE1S59x/yyHgvsxNrsRNI9Uu42M=
+        b=WTgooY4m3Ik/m0UMCHM/36ffJDtHZG9jdlu8Knqqpqp7JegKHBO3A89O09uUUUKhq
+         WpWK+iX4JNkZfGOCs0l7jLKrnWi4E71nupoL7we+LM1zaCwDMG1woo12ELlMO1iA/o
+         12XjPWTi5NiRBEg0+4E/SRsIplZVko6U8/gHE4NY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>
-Subject: [PATCH 5.17 006/140] Revert "parisc: Mark sched_clock unstable only if clocks are not syncronized"
-Date:   Tue, 10 May 2022 15:06:36 +0200
-Message-Id: <20220510130741.788784661@linuxfoundation.org>
+        stable@vger.kernel.org, Helge Deller <deller@gmx.de>
+Subject: [PATCH 5.17 007/140] parisc: Merge model and model name into one line in /proc/cpuinfo
+Date:   Tue, 10 May 2022 15:06:37 +0200
+Message-Id: <20220510130741.817380046@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
 References: <20220510130741.600270947@linuxfoundation.org>
@@ -56,54 +55,30 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Helge Deller <deller@gmx.de>
 
-commit 7962c0896429af2a0e00ec6bc15d992536453b2d upstream.
+commit 5b89966bc96a06f6ad65f64ae4b0461918fcc9d3 upstream.
 
-This reverts commit d97180ad68bdb7ee10f327205a649bc2f558741d.
-
-It triggers RCU stalls at boot with a 32-bit kernel.
+The Linux tool "lscpu" shows the double amount of CPUs if we have
+"model" and "model name" in two different lines in /proc/cpuinfo.
+This change combines the model and the model name into one line.
 
 Signed-off-by: Helge Deller <deller@gmx.de>
-Noticed-by: John David Anglin <dave.anglin@bell.net>
-Cc: stable@vger.kernel.org # v5.15+
+Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/parisc/kernel/setup.c |    2 ++
- arch/parisc/kernel/time.c  |    7 ++++---
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ arch/parisc/kernel/processor.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/arch/parisc/kernel/setup.c
-+++ b/arch/parisc/kernel/setup.c
-@@ -161,6 +161,8 @@ void __init setup_arch(char **cmdline_p)
- #ifdef CONFIG_PA11
- 	dma_ops_init();
- #endif
-+
-+	clear_sched_clock_stable();
- }
- 
- /*
---- a/arch/parisc/kernel/time.c
-+++ b/arch/parisc/kernel/time.c
-@@ -265,9 +265,6 @@ static int __init init_cr16_clocksource(
- 			    (cpu0_loc == per_cpu(cpu_data, cpu).cpu_loc))
- 				continue;
- 
--			/* mark sched_clock unstable */
--			clear_sched_clock_stable();
--
- 			clocksource_cr16.name = "cr16_unstable";
- 			clocksource_cr16.flags = CLOCK_SOURCE_UNSTABLE;
- 			clocksource_cr16.rating = 0;
-@@ -275,6 +272,10 @@ static int __init init_cr16_clocksource(
+--- a/arch/parisc/kernel/processor.c
++++ b/arch/parisc/kernel/processor.c
+@@ -418,8 +418,7 @@ show_cpuinfo (struct seq_file *m, void *
  		}
- 	}
+ 		seq_printf(m, " (0x%02lx)\n", boot_cpu_data.pdc.capabilities);
  
-+	/* XXX: We may want to mark sched_clock stable here if cr16 clocks are
-+	 *	in sync:
-+	 *	(clocksource_cr16.flags == CLOCK_SOURCE_IS_CONTINUOUS) */
-+
- 	/* register at clocksource framework */
- 	clocksource_register_hz(&clocksource_cr16,
- 		100 * PAGE0->mem_10msec);
+-		seq_printf(m, "model\t\t: %s\n"
+-				"model name\t: %s\n",
++		seq_printf(m, "model\t\t: %s - %s\n",
+ 				 boot_cpu_data.pdc.sys_model_name,
+ 				 cpuinfo->dev ?
+ 				 cpuinfo->dev->name : "Unknown");
 
 

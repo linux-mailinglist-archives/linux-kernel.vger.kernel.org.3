@@ -2,98 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D455E520E1C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 08:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C00520E2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 08:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237360AbiEJGxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 02:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50606 "EHLO
+        id S237373AbiEJG4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 02:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236920AbiEJGx3 (ORCPT
+        with ESMTP id S235052AbiEJG4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 02:53:29 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E43C2AC0EB;
-        Mon,  9 May 2022 23:49:31 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 70FFD80EE;
-        Tue, 10 May 2022 06:46:00 +0000 (UTC)
-Date:   Tue, 10 May 2022 09:49:29 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Drew Fustini <dfustini@baylibre.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Dave Gerlach <d-gerlach@ti.com>, linux-omap@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: dmtimer: ack pending interrupt during suspend on am335x/am437x?
-Message-ID: <YnoK+XQiargRGUy/@atomide.com>
-References: <YniiqM0S+hwsGFni@x1>
+        Tue, 10 May 2022 02:56:49 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C77F1A80B;
+        Mon,  9 May 2022 23:52:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652165572; x=1683701572;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QSQrQETYh/pxV8qAHgktpIdb0RFfKPYxj6UqNQftZ3k=;
+  b=ZTeJxjpSvZB8BNzu7kwQP+9KQVcJkeQrkdSybwEqVZsMEFv4Ho2VXSvt
+   7vsYvFZsr+k2QQPXE+wDEWW7rdDbHTaeK/dmFMjwZwvQr1UZPvZrXUvDU
+   +GSLk5cMWASvOT15YkYsIMzF19h2hR5rV8Gt42CvgvRzxW61F4PQ7ICmv
+   NO92GqyOJ4NH50rsGo3IV5CkCS9Iew+WR+prm37AN7g4Zm8aliCr+H5ey
+   jy47aV7UQ5gSSy7ni8UgkqvuZRH/XTMWPg/qtgMeAYt+ozkMPl61HzV6O
+   LNrF7M7PSYno67KPcXCZ0l2AmCMK9gFST1sP2O5nVg2IOFU6HOali5sEB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="256821506"
+X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
+   d="scan'208";a="256821506"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 23:52:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
+   d="scan'208";a="552658004"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 09 May 2022 23:52:48 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1noJjk-000HQo-6Z;
+        Tue, 10 May 2022 06:52:48 +0000
+Date:   Tue, 10 May 2022 14:51:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sebastian Ene <sebastianene@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, maz@kernel.org, will@kernel.org,
+        qperret@google.com, Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Ene <sebastianene@google.com>
+Subject: Re: [PATCH v5 2/2] misc: Add a mechanism to detect stalls on guest
+ vCPUs
+Message-ID: <202205101453.rxj6blmH-lkp@intel.com>
+References: <20220509091103.2220604-3-sebastianene@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YniiqM0S+hwsGFni@x1>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220509091103.2220604-3-sebastianene@google.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Drew Fustini <dfustini@baylibre.com> [220509 05:07]:
-> Hello Daniel, Tony suggested I mail you along with the list to get
-> feedback. I'm attempting to upstream these two patches [1][2] from
-> ti-linux-5.4.y for arch/arm/mach-omap2/timer.c:
-> 96f4c6e2ba8a ("ARM: OMAP2+: timer: Ack pending interrupt during suspend")
-> 7ae7dd5f8272 ("ARM: OMAP2+: timer: Extend pending interrupt ACK for gic")
-> 
-> On the TI AM335x and AM437x SoCs, it is possible for a late interrupt to
-> be generated which will cause a suspend failure. The first patch makes
-> omap_clkevt_idle() ack the irq both in the timer peripheral register
-> and in the interrupt controller to avoid the issue.
-> 
-> On AM437x only, the GIC cannot be directly acked using only the irqchip
-> calls. To workaround that, the second patch maps the GIC_CPU_BASE and
-> reads the GIC_CPU_INTACK register before calling irq_eoi to properly ack
-> the late timer interrupts that show up during suspend.
-> 
-> However, Tony removed most of arch/arm/mach-omap2/timer.c with:
-> 2ee04b88547a ("ARM: OMAP2+: Drop old timer code for dmtimer and 32k counter")
-> 
-> The timers are now implemented in drivers/clocksource/timer-ti-dm.c and
-> drivers/clocksource/timer-ti-dm-systimer.c. The function
-> dmtimer_clocksource_suspend() disables the dmtimer and clock but does
-> not ack any interrupts.
-> 
-> Tony suggested the right place to ack the interrupt during suspend is
-> in CPU_CLUSTER_PM_ENTER inside omap_timer_context_notifier().
-> 
-> Do you think that would be an acceptable approach?
+Hi Sebastian,
 
-Based on what we chatted on irc yesterday, I'd suggest try resetting the
-clockevent on suspend first for am3/4 at omap_clockevent_idle() and see if
-that takes care of the issue. If it's the timer hardware blocking the
-deeper idle states, this should work, and GIC will lose it's context
-on system suspend anyways.
+Thank you for the patch! Yet something to improve:
 
-If there's still a pending interrupt status blocking deeper idle
-states for system suspend after clockevent reset, then maybe the related
-interrupt controller(s) should clear/reset the state for context lossy
-suspend for CPU_CLUSTER_PM_ENTER for system suspend.
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on char-misc/char-misc-testing soc/for-next v5.18-rc6 next-20220509]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Looks like for GIC we have gic_dist_save() being called but it does not
-seem to clear anything for system suspend.
+url:    https://github.com/intel-lab-lkp/linux/commits/Sebastian-Ene/Detect-stalls-on-guest-vCPUS/20220509-174959
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220510/202205101453.rxj6blmH-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d3152372fdd19448b32806c0bffd78d8729d02e4
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Sebastian-Ene/Detect-stalls-on-guest-vCPUS/20220509-174959
+        git checkout d3152372fdd19448b32806c0bffd78d8729d02e4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/misc/
 
-For runtime PM, we don't want to clear any pending interrupts on
-CPU_CLUSTER_PM_ENTER :)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Seems like a system suspend/resume test loop should be first run to
-trigger the issue and see what is still missing.
+All errors (new ones prefixed by >>):
 
-Regards,
-
-Tony
+   In file included from include/linux/device/driver.h:21,
+                    from include/linux/device.h:32,
+                    from include/linux/node.h:18,
+                    from include/linux/cpu.h:17,
+                    from drivers/misc/vcpu_stall_detector.c:6:
+>> drivers/misc/vcpu_stall_detector.c:203:25: error: 'vcpu_stall_detector_of_match' undeclared here (not in a function); did you mean 'vcpu_stall_detect_of_match'?
+     203 | MODULE_DEVICE_TABLE(of, vcpu_stall_detector_of_match);
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/module.h:244:15: note: in definition of macro 'MODULE_DEVICE_TABLE'
+     244 | extern typeof(name) __mod_##type##__##name##_device_table               \
+         |               ^~~~
+>> include/linux/module.h:244:21: error: '__mod_of__vcpu_stall_detector_of_match_device_table' aliased to undefined symbol 'vcpu_stall_detector_of_match'
+     244 | extern typeof(name) __mod_##type##__##name##_device_table               \
+         |                     ^~~~~~
+   drivers/misc/vcpu_stall_detector.c:203:1: note: in expansion of macro 'MODULE_DEVICE_TABLE'
+     203 | MODULE_DEVICE_TABLE(of, vcpu_stall_detector_of_match);
+         | ^~~~~~~~~~~~~~~~~~~
 
 
-> [1] https://git.ti.com/cgit/ti-linux-kernel/ti-linux-kernel/commit/?h=ti-linux-5.4.y&id=96f4c6e2ba8a
-> [2] https://git.ti.com/cgit/ti-linux-kernel/ti-linux-kernel/commit/?h=ti-linux-5.4.y&id=7ae7dd5f8272
+vim +203 drivers/misc/vcpu_stall_detector.c
+
+   202	
+ > 203	MODULE_DEVICE_TABLE(of, vcpu_stall_detector_of_match);
+   204	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

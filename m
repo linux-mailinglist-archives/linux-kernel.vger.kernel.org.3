@@ -2,73 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C61C0522442
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:42:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9AC0522444
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348513AbiEJSmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 14:42:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41540 "EHLO
+        id S1349038AbiEJSmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 14:42:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234291AbiEJSmJ (ORCPT
+        with ESMTP id S243004AbiEJSmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 14:42:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 573B525F7A5
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 11:42:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652208125;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=My8Rl7ea47B+HwUMWyal7bJCbA6soPVSA7SmTGeFXV4=;
-        b=i8lY2zo5GTykQHnfFjcCLWqMClGpzGj3ydC/URkbNpsGfOZQ4wPqONhD5TIRAXvbAsfS6p
-        qTjWPVPQnIaTJNICcIR+2hw6/pTd/1TM2wLRdviCqukqDMwMf3s49hkGwdPwPth1TzMdMA
-        ssfcN04sNVETEoKwSnyx/n5b/t3Y0JM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-62-gTJ2yLWsM_Ot9w76UMdo3Q-1; Tue, 10 May 2022 14:42:02 -0400
-X-MC-Unique: gTJ2yLWsM_Ot9w76UMdo3Q-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 10 May 2022 14:42:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2DF268669;
+        Tue, 10 May 2022 11:42:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 96F7A185A7BA;
-        Tue, 10 May 2022 18:42:01 +0000 (UTC)
-Received: from asgard.redhat.com (unknown [10.36.110.5])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2036515230D2;
-        Tue, 10 May 2022 18:41:57 +0000 (UTC)
-Date:   Tue, 10 May 2022 20:41:55 +0200
-From:   Eugene Syromiatnikov <esyr@redhat.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf] bpf_trace: bail out from
- bpf_kprobe_multi_link_attach when in compat
-Message-ID: <20220510184155.GA8295@asgard.redhat.com>
-References: <20220506142148.GA24802@asgard.redhat.com>
- <CAADnVQKNkEX-caBjozegRaOb67g1HNOHn1e-enRk_s-7Gtt=gg@mail.gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 81C74B81F8E;
+        Tue, 10 May 2022 18:42:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C043CC385C2;
+        Tue, 10 May 2022 18:42:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652208135;
+        bh=v9assGn8KJvRcYSGGwT4yY/3QErO+MifFnTskNJEOJs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DOiuH0NVr/M/+D5cGKtA0J1jPwNc7Q8iGoTIHw/Md93ZJ9xbOK2Ywccrswpf+c1dl
+         eKMzThtVr/hgf5FfUOj7+nCl8EARsp8oJ+Q6SwDhDrxMyEP+r0RPy+WlaoX9t7VNOC
+         llRIBpGK6tQ1GrdjtW081wS+TpLpCLyYg/qvj4C0JAnTlwr0/QtIbSprwj7+MO4S7d
+         h6byhmIWcZdfbOZzTEESvxHVQcl9rXmuxi5hq3HkhG5oMY0/tVZWe/Uw3lcG3Tc/QG
+         TtFuJKiVDAwisMzTPzG0YlDePMN/CkoBZ8qh2L+ljj0ClNXh1RMpumcWP2GgOGWQSr
+         jpyz2ShXwNNFg==
+Date:   Tue, 10 May 2022 11:42:13 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Rik van Riel <riel@fb.com>
+Cc:     "song@kernel.org" <song@kernel.org>,
+        "joe.lawrence@redhat.com" <joe.lawrence@redhat.com>,
+        Song Liu <songliubraving@fb.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        Kernel Team <Kernel-team@fb.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>
+Subject: Re: [RFC] sched,livepatch: call klp_try_switch_task in __cond_resched
+Message-ID: <20220510184213.l3gjweeleyg7obca@treble>
+References: <20220507174628.2086373-1-song@kernel.org>
+ <YnkuFrm1YR46OFx/@alley>
+ <9C7DF147-5112-42E7-9F7C-7159EFDFB766@fb.com>
+ <YnoawYtoCSvrK7lb@alley>
+ <3a9bfb4a52b715bd8739d8834409c9549ec7f22f.camel@fb.com>
+ <YnqIcw+dYsWz/w7g@alley>
+ <6bf85ff908377508a5f5bcc7c4e75d598b96f388.camel@fb.com>
+ <20220510165244.ikfh64ertnvodxb4@treble>
+ <1bd15361edfd4db9fc9271d35e7bbe5edad1b87a.camel@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQKNkEX-caBjozegRaOb67g1HNOHn1e-enRk_s-7Gtt=gg@mail.gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <1bd15361edfd4db9fc9271d35e7bbe5edad1b87a.camel@fb.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,50 +72,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 11:10:35AM -0700, Alexei Starovoitov wrote:
-> On Fri, May 6, 2022 at 7:22 AM Eugene Syromiatnikov <esyr@redhat.com> wrote:
-> >
-> > Since bpf_kprobe_multi_link_attach doesn't support 32-bit kernels
-> > for whatever reason,
-> 
-> Jiri,
-> why did you add this restriction?
-> 
-> > having it enabled for compat processes on 64-bit
-> > kernels makes even less sense due to discrepances in the type sizes
-> > that it does not handle.
-> 
-> I don't follow this logic.
-> bpf progs are always 64-bit. Even when user space is 32-bit.
-> Jiri's check is for the kernel.
+On Tue, May 10, 2022 at 06:07:00PM +0000, Rik van Riel wrote:
+> On Tue, 2022-05-10 at 09:52 -0700, Josh Poimboeuf wrote:
+> > On Tue, May 10, 2022 at 04:07:42PM +0000, Rik van Riel wrote:
+> > > > 
+> > > Now I wonder if we could just hook up a preempt notifier
+> > > for kernel live patches. All the distro kernels already
+> > > need the preempt notifier for KVM, anyway...
+> > > 
+> > 
+> > I wouldn't be opposed to that, but how does it solve this problem? 
+> > If
+> > as Peter said cond_resched() can be a NOP, then preemption would have
+> > to
+> > be from an interrupt, in which case frame pointers aren't reliable.
+> > 
+> The systems where we are seeing problems do not, as far
+> as I know, throw softlockup errors, so the kworker
+> threads that fail to transition to the new KLP version
+> are sleeping and getting scheduled out at times.
 
-The interface as defined (and implemented in libbpf) expects arrays of userspace
-pointers to be passed (for example, syms points to an array of userspace
-pointers—character strings; same goes for addrs, but with generic userspace
-pointers) without regard to possible difference in the pointer size in case
-of compat userspace.
+Are they sleeping due to an explicit call to cond_resched()?
 
-> > Fixes: 0dcac272540613d4 ("bpf: Add multi kprobe link")
-> > Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
-> > ---
-> >  kernel/trace/bpf_trace.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > index d8553f4..9560af6 100644
-> > --- a/kernel/trace/bpf_trace.c
-> > +++ b/kernel/trace/bpf_trace.c
-> > @@ -2410,7 +2410,7 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
-> >         int err;
-> >
-> >         /* no support for 32bit archs yet */
-> > -       if (sizeof(u64) != sizeof(void *))
-> > +       if (sizeof(u64) != sizeof(void *) || in_compat_syscall())
-> >                 return -EOPNOTSUPP;
-> >
-> >         if (prog->expected_attach_type != BPF_TRACE_KPROBE_MULTI)
-> > --
-> > 2.1.4
-> >
-> 
+> A KLP transition preempt notifier would help those
+> kernel threads transition to the new KLP version at
+> any time they reschedule.
 
+... unless cond_resched() is a no-op due to CONFIG_PREEMPT?
+
+> How much it will help is hard to predict, but I should
+> be able to get results from a fairly large sample size
+> of systems within a few weeks :)
+
+As Peter said, keep in mind that we will need to fix other cases beyond
+Facebook, i.e., CONFIG_PREEMPT combined with non-x86 arches which don't
+have ORC so they can't reliably unwind from an IRQ.
+
+-- 
+Josh

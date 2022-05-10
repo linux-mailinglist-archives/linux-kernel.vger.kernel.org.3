@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B594521BE0
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA93F521BE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245432AbiEJOXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:23:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45310 "EHLO
+        id S240679AbiEJOYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240679AbiEJNwg (ORCPT
+        with ESMTP id S244588AbiEJNqw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:52:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7299B29B807;
-        Tue, 10 May 2022 06:38:11 -0700 (PDT)
+        Tue, 10 May 2022 09:46:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5142F02B;
+        Tue, 10 May 2022 06:31:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 31A486193C;
-        Tue, 10 May 2022 13:38:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41E8DC385A6;
-        Tue, 10 May 2022 13:38:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 285C3617F5;
+        Tue, 10 May 2022 13:31:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A368C385C6;
+        Tue, 10 May 2022 13:31:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189889;
-        bh=JAHRXEIWY8lxKD+wFjsb89waQRDNc35/078AmjBzWLA=;
+        s=korg; t=1652189498;
+        bh=9CSoLroFbSTvPx0vay7I1wRnNOPAKHtc8NonX8gn7hQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jUZOg+bQFcqeiIAYTu8E4uPiewTXrZtuUPB9d3ZP4JLPEiS4Ob/HkJJ9HC5gkqrhn
-         soHBrGrfFzv1e/ZZ3rRUa4YJNuUs562WwOo93EvMSPzpJ+rRJvusf7V5XJfgNfgSh2
-         1pmM0iRtXVG/D1LMl+BGWk60xYLX74ugsj23/sUs=
+        b=JOl2800hP5u9q+Ul+32poFop2XMDG9iASKvZqYm4oDp3oM1GTtZrkQRqLDmeQWAFE
+         OAoGKfxPaTai+fxTp2Jn+T/eNd7BJ4DUAqxX5gHmuA64F69Mq99IZWYxgxBFMUQcCh
+         ylBVyTDDiL32KVIu9G6bwZNxeTDg1sCx0mEMKcqs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Joerg Roedel <jroedel@suse.de>
-Subject: [PATCH 5.17 061/140] iommu/vt-d: Drop stop marker messages
+        stable@vger.kernel.org, Carlos Llamas <cmllamas@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH 5.15 069/135] selftests/net: so_txtime: usage(): fix documentation of default clock
 Date:   Tue, 10 May 2022 15:07:31 +0200
-Message-Id: <20220510130743.363788473@linuxfoundation.org>
+Message-Id: <20220510130742.391269927@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lu Baolu <baolu.lu@linux.intel.com>
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-commit da8669ff41fa31573375c9a4180f5c080677204b upstream.
+commit f5c2174a3775491e890ce285df52f5715fbef875 upstream.
 
-The page fault handling framework in the IOMMU core explicitly states
-that it doesn't handle PCI PASID Stop Marker and the IOMMU drivers must
-discard them before reporting faults. This handles Stop Marker messages
-in prq_event_thread() before reporting events to the core.
+The program uses CLOCK_TAI as default clock since it was added to the
+Linux repo. In commit:
+| 040806343bb4 ("selftests/net: so_txtime multi-host support")
+a help text stating the wrong default clock was added.
 
-The VT-d driver explicitly drains the pending page requests when a CPU
-page table (represented by a mm struct) is unbound from a PASID according
-to the procedures defined in the VT-d spec. The Stop Marker messages do
-not need a response. Hence, it is safe to drop the Stop Marker messages
-silently if any of them is found in the page request queue.
+This patch fixes the help text.
 
-Fixes: d5b9e4bfe0d88 ("iommu/vt-d: Report prq to io-pgfault framework")
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Reviewed-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Link: https://lore.kernel.org/r/20220421113558.3504874-1-baolu.lu@linux.intel.com
-Link: https://lore.kernel.org/r/20220423082330.3897867-2-baolu.lu@linux.intel.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Fixes: 040806343bb4 ("selftests/net: so_txtime multi-host support")
+Cc: Carlos Llamas <cmllamas@google.com>
+Cc: Willem de Bruijn <willemb@google.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Acked-by: Willem de Bruijn <willemb@google.com>
+Reviewed-by: Carlos Llamas <cmllamas@google.com>
+Link: https://lore.kernel.org/r/20220502094638.1921702-3-mkl@pengutronix.de
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iommu/intel/svm.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/net/so_txtime.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/iommu/intel/svm.c
-+++ b/drivers/iommu/intel/svm.c
-@@ -956,6 +956,10 @@ bad_req:
- 			goto bad_req;
- 		}
- 
-+		/* Drop Stop Marker message. No need for a response. */
-+		if (unlikely(req->lpig && !req->rd_req && !req->wr_req))
-+			goto prq_advance;
-+
- 		if (!svm || svm->pasid != req->pasid) {
- 			/*
- 			 * It can't go away, because the driver is not permitted
+--- a/tools/testing/selftests/net/so_txtime.c
++++ b/tools/testing/selftests/net/so_txtime.c
+@@ -421,7 +421,7 @@ static void usage(const char *progname)
+ 			"Options:\n"
+ 			"  -4            only IPv4\n"
+ 			"  -6            only IPv6\n"
+-			"  -c <clock>    monotonic (default) or tai\n"
++			"  -c <clock>    monotonic or tai (default)\n"
+ 			"  -D <addr>     destination IP address (server)\n"
+ 			"  -S <addr>     source IP address (client)\n"
+ 			"  -r            run rx mode\n"
 
 

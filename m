@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D14DF521C24
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4503521B43
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:06:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344952AbiEJOcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:32:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
+        id S1343758AbiEJOKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343955AbiEJOHW (ORCPT
+        with ESMTP id S244955AbiEJNrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:07:22 -0400
+        Tue, 10 May 2022 09:47:08 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52DEC1C06F9;
-        Tue, 10 May 2022 06:41:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1640A35DE6;
+        Tue, 10 May 2022 06:32:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58414B81DA0;
-        Tue, 10 May 2022 13:41:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96661C385C2;
-        Tue, 10 May 2022 13:41:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2CB9FB81D24;
+        Tue, 10 May 2022 13:32:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F196C385C2;
+        Tue, 10 May 2022 13:32:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652190087;
-        bh=CvPKW8GRBCllmv1GPycQLudYR03UIUxGKRWDVAVIx0o=;
+        s=korg; t=1652189576;
+        bh=68/j1f2siY5vbwja/tKj5PvdogndN7w1f7F6F5vMHDk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DCqEiWCfUHvirdim/9hnItvKbN74fG9ukZHwNoFon3/3vFqwSn1aRghOkR0S1EaOE
-         Hj1JGvnPa3YD8pb3qAwUvAHQG10+bkCsbC5wovdKmV3VxsAlICRkVTLqUGgGy11ciS
-         mwWEs0hkNZkYIvFvL3W6OwE8t0sw69RB1c3ibYG4=
+        b=J4ptrCC5dsXh/0GNvDpTS8GaYQFaX1KA1nOxFwu83tFNg5VjBdcYwiy3ke/Wabdmk
+         EW701hRs8XZU/3qGXt1M9EV6Z9fNYncQ/PIavf4BbkPZlgSDUntFSQ5qHos7AxhIIS
+         PqLFoqTyOMEDJrQmzJSu0AGeoxoXf0G+Kx1HsGKM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Niels Dossche <dossche.niels@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.17 087/140] net: mdio: Fix ENOMEM return value in BCM6368 mux bus controller
-Date:   Tue, 10 May 2022 15:07:57 +0200
-Message-Id: <20220510130744.098673105@linuxfoundation.org>
+        stable@vger.kernel.org, Marcelo Tosatti <mtosatti@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 096/135] x86/kvm: Preserve BSP MSR_KVM_POLL_CONTROL across suspend/resume
+Date:   Tue, 10 May 2022 15:07:58 +0200
+Message-Id: <20220510130743.163561108@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +56,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niels Dossche <dossche.niels@gmail.com>
+From: Wanpeng Li <wanpengli@tencent.com>
 
-commit e87f66b38e66dffdec9daa9f8f0eb044e9a62e3b upstream.
+[ Upstream commit 0361bdfddca20c8855ea3bdbbbc9c999912b10ff ]
 
-Error values inside the probe function must be < 0. The ENOMEM return
-value has the wrong sign: it is positive instead of negative.
-Add a minus sign.
+MSR_KVM_POLL_CONTROL is cleared on reset, thus reverting guests to
+host-side polling after suspend/resume.  Non-bootstrap CPUs are
+restored correctly by the haltpoll driver because they are hot-unplugged
+during suspend and hot-plugged during resume; however, the BSP
+is not hotpluggable and remains in host-sde polling mode after
+the guest resume.  The makes the guest pay for the cost of vmexits
+every time the guest enters idle.
 
-Fixes: e239756717b5 ("net: mdio: Add BCM6368 MDIO mux bus controller")
-Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Link: https://lore.kernel.org/r/20220428211931.8130-1-dossche.niels@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fix it by recording BSP's haltpoll state and resuming it during guest
+resume.
+
+Cc: Marcelo Tosatti <mtosatti@redhat.com>
+Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+Message-Id: <1650267752-46796-1-git-send-email-wanpengli@tencent.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/mdio/mdio-mux-bcm6368.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/kernel/kvm.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
---- a/drivers/net/mdio/mdio-mux-bcm6368.c
-+++ b/drivers/net/mdio/mdio-mux-bcm6368.c
-@@ -115,7 +115,7 @@ static int bcm6368_mdiomux_probe(struct
- 	md->mii_bus = devm_mdiobus_alloc(&pdev->dev);
- 	if (!md->mii_bus) {
- 		dev_err(&pdev->dev, "mdiomux bus alloc failed\n");
--		return ENOMEM;
-+		return -ENOMEM;
- 	}
+diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
+index bd7b65081eb0..d36b58e705b6 100644
+--- a/arch/x86/kernel/kvm.c
++++ b/arch/x86/kernel/kvm.c
+@@ -66,6 +66,7 @@ static DEFINE_PER_CPU_DECRYPTED(struct kvm_vcpu_pv_apf_data, apf_reason) __align
+ DEFINE_PER_CPU_DECRYPTED(struct kvm_steal_time, steal_time) __aligned(64) __visible;
+ static int has_steal_clock = 0;
  
- 	bus = md->mii_bus;
++static int has_guest_poll = 0;
+ /*
+  * No need for any "IO delay" on KVM
+  */
+@@ -650,14 +651,26 @@ static int kvm_cpu_down_prepare(unsigned int cpu)
+ 
+ static int kvm_suspend(void)
+ {
++	u64 val = 0;
++
+ 	kvm_guest_cpu_offline(false);
+ 
++#ifdef CONFIG_ARCH_CPUIDLE_HALTPOLL
++	if (kvm_para_has_feature(KVM_FEATURE_POLL_CONTROL))
++		rdmsrl(MSR_KVM_POLL_CONTROL, val);
++	has_guest_poll = !(val & 1);
++#endif
+ 	return 0;
+ }
+ 
+ static void kvm_resume(void)
+ {
+ 	kvm_cpu_online(raw_smp_processor_id());
++
++#ifdef CONFIG_ARCH_CPUIDLE_HALTPOLL
++	if (kvm_para_has_feature(KVM_FEATURE_POLL_CONTROL) && has_guest_poll)
++		wrmsrl(MSR_KVM_POLL_CONTROL, 0);
++#endif
+ }
+ 
+ static struct syscore_ops kvm_syscore_ops = {
+-- 
+2.35.1
+
 
 

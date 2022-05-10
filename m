@@ -2,43 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 745805218F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6575219FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242146AbiEJNkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50554 "EHLO
+        id S244220AbiEJNwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243585AbiEJN1H (ORCPT
+        with ESMTP id S243822AbiEJNgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:27:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED6D238D69;
-        Tue, 10 May 2022 06:20:05 -0700 (PDT)
+        Tue, 10 May 2022 09:36:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6218539B83;
+        Tue, 10 May 2022 06:25:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D3D27B81D0D;
-        Tue, 10 May 2022 13:20:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 319FCC385C2;
-        Tue, 10 May 2022 13:20:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9592B61765;
+        Tue, 10 May 2022 13:25:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86E49C385A6;
+        Tue, 10 May 2022 13:25:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188802;
-        bh=6+rjE9zh4GATjXkM46Hk/BnlVF8MeLJ7vpypB9Ynn/I=;
+        s=korg; t=1652189108;
+        bh=+Oi6KKHNjdO5u5QuK+P3rCqkmTPpCAXvw+YXjytcrj8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ryu2HmD627E+CjrCpRh4hcK7wEoMrNoFP1EgslCouwWZG5LWtpJ7GuNZJPtc78qcW
-         NV23eFqeUsP7cwC29lk14MuwN6c2ZdAN5oXD4lAc/gKk2VN9naJ71zKlKrlQver5sB
-         sK66ip1jOMvYrdEndLxPtu0bVgeJN0fw+gjbeqt4=
+        b=k+PHqAIY79u+Hs+fhr+CCe5EAZO1R12U1j9dzde4rDg1GKd4NwKp2chwWM9nhEfWd
+         GXn7m/Bn8oQ7eLIJ9RhDRRpZmnQOLCmp8lnJOeySnyFWNEv/6A1uQxDX3lVrU63aJA
+         12bhNPv+aiX5wubO7E00igKZTnppJRoc8zsKvnxw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH 4.19 49/88] tty: n_gsm: fix wrong signal octet encoding in convergence layer type 2
+        stable@vger.kernel.org,
+        "Ong, Boon Leong" <boon.leong.ong@intel.com>,
+        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
+        Wong Vee Khee <vee.khee.wong@linux.intel.com>,
+        Tan Tee Min <tee.min.tan@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>, Ong@vger.kernel.org
+Subject: [PATCH 5.10 15/70] net: stmmac: disable Split Header (SPH) for Intel platforms
 Date:   Tue, 10 May 2022 15:07:34 +0200
-Message-Id: <20220510130735.173693857@linuxfoundation.org>
+Message-Id: <20220510130733.313519300@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
-References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
+References: <20220510130732.861729621@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,40 +58,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+From: Tan Tee Min <tee.min.tan@linux.intel.com>
 
-commit 06d5afd4d640eea67f5623e76cd5fc03359b7f3c upstream.
+commit 47f753c1108e287edb3e27fad8a7511a9d55578e upstream.
 
-n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
-See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
-The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
-the newer 27.010 here. Chapter 5.5.2 describes that the signal octet in
-convergence layer type 2 can be either one or two bytes. The length is
-encoded in the EA bit. This is set 1 for the last byte in the sequence.
-gsmtty_modem_update() handles this correctly but gsm_dlci_data_output()
-fails to set EA to 1. There is no case in which we encode two signal octets
-as there is no case in which we send out a break signal.
-Therefore, always set the EA bit to 1 for the signal octet to fix this.
+Based on DesignWare Ethernet QoS datasheet, we are seeing the limitation
+of Split Header (SPH) feature is not supported for Ipv4 fragmented packet.
+This SPH limitation will cause ping failure when the packets size exceed
+the MTU size. For example, the issue happens once the basic ping packet
+size is larger than the configured MTU size and the data is lost inside
+the fragmented packet, replaced by zeros/corrupted values, and leads to
+ping fail.
 
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
-Cc: stable@vger.kernel.org
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-Link: https://lore.kernel.org/r/20220414094225.4527-5-daniel.starke@siemens.com
+So, disable the Split Header for Intel platforms.
+
+v2: Add fixes tag in commit message.
+
+Fixes: 67afd6d1cfdf("net: stmmac: Add Split Header support and enable it in XGMAC cores")
+Cc: <stable@vger.kernel.org> # 5.10.x
+Suggested-by: Ong, Boon Leong <boon.leong.ong@intel.com>
+Signed-off-by: Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>
+Signed-off-by: Wong Vee Khee <vee.khee.wong@linux.intel.com>
+Signed-off-by: Tan Tee Min <tee.min.tan@linux.intel.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/n_gsm.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c |    1 +
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c |    2 +-
+ include/linux/stmmac.h                            |    1 +
+ 3 files changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -823,7 +823,7 @@ static int gsm_dlci_data_output(struct g
- 			break;
- 		case 2:	/* Unstructed with modem bits.
- 		Always one byte as we never send inline break data */
--			*dp++ = gsm_encode_modem(dlci);
-+			*dp++ = (gsm_encode_modem(dlci) << 1) | EA;
- 			break;
- 		}
- 		WARN_ON(kfifo_out_locked(dlci->fifo, dp , len, &dlci->lock) != len);
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
+@@ -243,6 +243,7 @@ static int intel_mgbe_common_data(struct
+ 	plat->has_gmac4 = 1;
+ 	plat->force_sf_dma_mode = 0;
+ 	plat->tso_en = 1;
++	plat->sph_disable = 1;
+ 
+ 	plat->rx_sched_algorithm = MTL_RX_ALGORITHM_SP;
+ 
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -5046,7 +5046,7 @@ int stmmac_dvr_probe(struct device *devi
+ 		dev_info(priv->device, "TSO feature enabled\n");
+ 	}
+ 
+-	if (priv->dma_cap.sphen) {
++	if (priv->dma_cap.sphen && !priv->plat->sph_disable) {
+ 		ndev->hw_features |= NETIF_F_GRO;
+ 		priv->sph = true;
+ 		dev_info(priv->device, "SPH feature enabled\n");
+--- a/include/linux/stmmac.h
++++ b/include/linux/stmmac.h
+@@ -203,5 +203,6 @@ struct plat_stmmacenet_data {
+ 	bool vlan_fail_q_en;
+ 	u8 vlan_fail_q;
+ 	unsigned int eee_usecs_rate;
++	bool sph_disable;
+ };
+ #endif
 
 

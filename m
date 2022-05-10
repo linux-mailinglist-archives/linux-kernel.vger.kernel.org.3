@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F443521C31
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A277521C33
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344625AbiEJObX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:31:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
+        id S1344575AbiEJObN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244708AbiEJODa (ORCPT
+        with ESMTP id S242506AbiEJOEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:03:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03BED2E07EB;
-        Tue, 10 May 2022 06:40:32 -0700 (PDT)
+        Tue, 10 May 2022 10:04:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16CE98085;
+        Tue, 10 May 2022 06:40:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2723F6195F;
-        Tue, 10 May 2022 13:40:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BD8BC385C9;
-        Tue, 10 May 2022 13:40:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 49C8CB81D24;
+        Tue, 10 May 2022 13:40:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD728C385A6;
+        Tue, 10 May 2022 13:40:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652190031;
-        bh=tFBjLhkyPHG2we+mnumSh33pt05zBmr0pMSY5dq+rXU=;
+        s=korg; t=1652190035;
+        bh=pzdjDdykdV0GuijjeSO1zMlMsGhcfnxWnN7/tA5VIEk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IPQMyBv247qjbgth9TO3d18sP5U3q71EI4HPZ2GMiehKOeHdEdea/2leDgqU6+drT
-         cS3QJcqyCuQ88ztYwDCjeAuY/JwESTds3jHmfoI7Qe5CFznxl3TDtBdezM4mut+sAl
-         mfOsYtVyxFSSHW268E6jYKQHr1mlJxnFzVIiGiHE=
+        b=PRfirbS7dlvxxuR2AlLczhDWiJz1qIrRo7sx9dT0lq4hxxxQ2YXx9AVOA3JOrxh0d
+         XPYmY4m5oxIOyHw4AgFvjB4Ux2FcRpkqB43JkRd9Ya5Alx3Sn3JGaVm0magykMNv7G
+         7Fg8l0llsRhTvCBpfShkUZ9JRHrFBhZvWmRI4up0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Baruch Siach <baruch@tkos.co.il>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
+        stable@vger.kernel.org,
+        syzbot <syzbot+694120e1002c117747ed@syzkaller.appspotmail.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 106/140] gpio: mvebu: drop pwm base assignment
-Date:   Tue, 10 May 2022 15:08:16 +0200
-Message-Id: <20220510130744.635445874@linuxfoundation.org>
+Subject: [PATCH 5.17 107/140] net: rds: acquire refcount on TCP sockets
+Date:   Tue, 10 May 2022 15:08:17 +0200
+Message-Id: <20220510130744.664750864@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
 References: <20220510130741.600270947@linuxfoundation.org>
@@ -58,43 +57,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baruch Siach <baruch@tkos.co.il>
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 
-[ Upstream commit e5f6e5d554ac274f9c8ba60078103d0425b93c19 ]
+[ Upstream commit 3a58f13a881ed351198ffab4cf9953cf19d2ab3a ]
 
-pwmchip_add() unconditionally assigns the base ID dynamically. Commit
-f9a8ee8c8bcd1 ("pwm: Always allocate PWM chip base ID dynamically")
-dropped all base assignment from drivers under drivers/pwm/. It missed
-this driver. Fix that.
+syzbot is reporting use-after-free read in tcp_retransmit_timer() [1],
+for TCP socket used by RDS is accessing sock_net() without acquiring a
+refcount on net namespace. Since TCP's retransmission can happen after
+a process which created net namespace terminated, we need to explicitly
+acquire a refcount.
 
-Fixes: f9a8ee8c8bcd1 ("pwm: Always allocate PWM chip base ID dynamically")
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Reviewed-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Link: https://syzkaller.appspot.com/bug?extid=694120e1002c117747ed [1]
+Reported-by: syzbot <syzbot+694120e1002c117747ed@syzkaller.appspotmail.com>
+Fixes: 26abe14379f8e2fa ("net: Modify sk_alloc to not reference count the netns of kernel sockets.")
+Fixes: 8a68173691f03661 ("net: sk_clone_lock() should only do get_net() if the parent is not a kernel socket")
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Tested-by: syzbot <syzbot+694120e1002c117747ed@syzkaller.appspotmail.com>
+Link: https://lore.kernel.org/r/a5fb1fc4-2284-3359-f6a0-e4e390239d7b@I-love.SAKURA.ne.jp
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpio/gpio-mvebu.c | 7 -------
- 1 file changed, 7 deletions(-)
+ net/rds/tcp.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/gpio/gpio-mvebu.c b/drivers/gpio/gpio-mvebu.c
-index 4c1f9e1091b7..a2c8dd329b31 100644
---- a/drivers/gpio/gpio-mvebu.c
-+++ b/drivers/gpio/gpio-mvebu.c
-@@ -871,13 +871,6 @@ static int mvebu_pwm_probe(struct platform_device *pdev,
- 	mvpwm->chip.dev = dev;
- 	mvpwm->chip.ops = &mvebu_pwm_ops;
- 	mvpwm->chip.npwm = mvchip->chip.ngpio;
--	/*
--	 * There may already be some PWM allocated, so we can't force
--	 * mvpwm->chip.base to a fixed point like mvchip->chip.base.
--	 * So, we let pwmchip_add() do the numbering and take the next free
--	 * region.
--	 */
--	mvpwm->chip.base = -1;
+diff --git a/net/rds/tcp.c b/net/rds/tcp.c
+index 5327d130c4b5..2f638f8b7b1e 100644
+--- a/net/rds/tcp.c
++++ b/net/rds/tcp.c
+@@ -495,6 +495,14 @@ void rds_tcp_tune(struct socket *sock)
  
- 	spin_lock_init(&mvpwm->lock);
- 
+ 	tcp_sock_set_nodelay(sock->sk);
+ 	lock_sock(sk);
++	/* TCP timer functions might access net namespace even after
++	 * a process which created this net namespace terminated.
++	 */
++	if (!sk->sk_net_refcnt) {
++		sk->sk_net_refcnt = 1;
++		get_net_track(net, &sk->ns_tracker, GFP_KERNEL);
++		sock_inuse_add(net, 1);
++	}
+ 	if (rtn->sndbuf_size > 0) {
+ 		sk->sk_sndbuf = rtn->sndbuf_size;
+ 		sk->sk_userlocks |= SOCK_SNDBUF_LOCK;
 -- 
 2.35.1
 

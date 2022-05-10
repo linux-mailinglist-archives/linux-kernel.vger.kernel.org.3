@@ -2,147 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 787F8520BB4
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 05:06:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9DA7520BB6
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 05:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235140AbiEJDKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 23:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
+        id S235189AbiEJDLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 23:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233370AbiEJDKF (ORCPT
+        with ESMTP id S234844AbiEJDLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 23:10:05 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B17517DF;
-        Mon,  9 May 2022 20:06:04 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ky2x30FVWz4xTX;
-        Tue, 10 May 2022 13:05:58 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1652151959;
-        bh=A1G4GSy0V0Cm3Vv6oTLpnNeT8n3BdkJrtvfBTJhZVvU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=THo5jTMknwC2YJqQqOtZXL6T+1rf9QmtFPiTct8ZZdpI59+drAPL5AorOp1LKHLKy
-         JnTQQKPIL7T6q3Ap24FUh8usOomM6WP7qtNiJk2YLApnZmPleKCEv5S4cNpYlBCp2U
-         tkPMBb+4M5cYCoRcQ2lhZ0oNU1xRhNAJQfKmc+klawbxmUE1SoFDnhr4q9ucFZxoyM
-         RdCO5zh7Dr+Bu6WKY9AqA9izlwwqffAaSRam2/UUJP2RDZgOOB8UkhkViIGR5p7K+J
-         P6p7S+Haym1wXfki77fv0f2NE3pXDUOGo8xC72coNmKSpFJT5EQxya7N+ib0bbQ+zm
-         1uJIOQrYCGAVg==
-Date:   Tue, 10 May 2022 13:05:56 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Taehee Yoo <ap420073@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the net-next tree
-Message-ID: <20220510130556.52598fe2@canb.auug.org.au>
+        Mon, 9 May 2022 23:11:19 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4566200F54;
+        Mon,  9 May 2022 20:07:22 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id s14so15609581plk.8;
+        Mon, 09 May 2022 20:07:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:reply-to:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=eyb6HE0aStupgdY5e1T3X6/fpQLUuJk/A7MCfbx8it0=;
+        b=WAuXlFov5rxE53WVcRZLApGiCFyRF7LhHaC7fZmHhqVWfxb/xkpI33YIvGUh594l33
+         KWn5cKehBBbnw/LBOU59yNJ6Z0KoT1kBWPr8qTvZau/wI/XckGhSzeHXCvrHyL5fLBzD
+         zd4qYishGbUGqebip/6dDGzzL1ImMQqL0WGTJKOPSVboiL1WjUPACAHy9KpbCocWWoeK
+         3pmwvIlYGG4vO8WAnHGg9QsxwICIf7XhJyKwNI9EISOUvxTfole9rclv0Tas0qSrFKgz
+         9jQFWbBd+rxAWOn5YEAZRBwsFNNNWNQn8W4MkpdwlisIpSaT+H+YkOVAJ6JH7qFwQadT
+         2yWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:reply-to
+         :subject:content-language:to:cc:references:from:organization
+         :in-reply-to:content-transfer-encoding;
+        bh=eyb6HE0aStupgdY5e1T3X6/fpQLUuJk/A7MCfbx8it0=;
+        b=LXWD49Jve4W/1ZvMHWPNR1Vnmu4YE6N4L3pyo85CxxSRkv90m14N/uAOqw70OidN8z
+         fRyrK03NDZC/p0h1Wh1ZsTQszdyiehGHp0FNq8J+agq/PbnR/2kypeZnZHmt53BBvdML
+         2QnOdAu7+STu/MrQ/q2FCp6jH02RHiaHflytIkVgdhhl/iuxOEUCmVfA5bIVnadMvO3s
+         b5A7mwALshOL5QMmk7ZVVEM5CdWqOxGSuKOTfOVIO/XmjDnKqM/NAczfI9iwSjXElIK1
+         qvAM98Fg12bKMbf1V5JZ2/6YEWVZYeJkCDPDOPGmNNAmqi79ZJ1GlqARs/0v4tDd3Urv
+         YfQA==
+X-Gm-Message-State: AOAM533QOUOtvP5sKI1TEQQoAGmNM+wh96dUd2TqPu1/1Kb8jecRGt+2
+        cNm+1OKdts4iT4U+oZe3Dt4=
+X-Google-Smtp-Source: ABdhPJyvTuAE2lqBQDTIpJPUYkLP0W1nBRHHGgimK7qiGCE3o7KbKoH9b6m9bDMfK9bNd1ene+5LZg==
+X-Received: by 2002:a17:90a:db51:b0:1dc:9da2:793b with SMTP id u17-20020a17090adb5100b001dc9da2793bmr28972739pjx.77.1652152042333;
+        Mon, 09 May 2022 20:07:22 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:6:8000::78? ([2404:f801:9000:18:efed::78])
+        by smtp.gmail.com with ESMTPSA id n1-20020a170902d2c100b0015eafc485c8sm606664plc.289.2022.05.09.20.07.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 20:07:21 -0700 (PDT)
+Message-ID: <24726c1c-42a8-e2f2-2222-0676c8a3869f@gmail.com>
+Date:   Tue, 10 May 2022 11:07:13 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/S5P4vjS+eFW2D4is1FV5ZOw";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Reply-To: tiala@microsoft.com
+Subject: Re: [PATCH] x86/Hyper-V: Add SEV negotiate protocol support in
+ Isolation VM
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, brijesh.singh@amd.com, venu.busireddy@oracle.com,
+        michael.roth@amd.com, Tianyu.Lan@microsoft.com,
+        thomas.lendacky@amd.com, jroedel@suse.de,
+        michael.h.kelley@microsoft.com, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, vkuznets@redhat.com,
+        parri.andrea@gmail.com
+References: <20220505131502.402259-1-ltykernel@gmail.com>
+ <YnmaSB2WCJwqaZae@zn.tnic>
+From:   Tianyu Lan <ltykernel@gmail.com>
+Organization: Microsft
+In-Reply-To: <YnmaSB2WCJwqaZae@zn.tnic>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/S5P4vjS+eFW2D4is1FV5ZOw
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 5/10/2022 6:48 AM, Borislav Petkov wrote:
+> On Thu, May 05, 2022 at 09:15:02AM -0400, Tianyu Lan wrote:
+>> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
+>>
+>> Hyper-V Isolation VM code uses sev_es_ghcb_hv_call() to read/write MSR
+>> via GHCB page. The SEV-ES guest should negotiate GHCB version before
+>> reading/writing MSR via GHCB page.
+> 
+> Why is that?
+> 
+>> Expose sev_es_negotiate_protocol() and sev_es_terminate() from AMD SEV
+>> code
+> 
+> Yeah, you keep wanting to expose random SEV-specific code and when we
+> go and change it in the future, you'll come complaining that we broke
+> hyperv.
+> 
+> I think it might be a lot better if you implement your own functions:
+> for example, looking at sev_es_negotiate_protocol() - it uses only
+> primitives which you can use because, well, VMGEXIT() is simply a
+> wrapper around the asm insn and sev_es_wr_ghcb_msr() is simply writing
+> into the MSR.
+> 
+> Ditto for sev_es_terminate().
+> 
+> And sev_es_ghcb_hv_call() too, for that matter. You can define your own.
+> 
+> IOW, you're much better off using those primitives and creating your own
+> functions than picking out random SEV-functions and then us breaking
+> your isolation VM stuff.
+> 
 
-Hi all,
+OK. I got it. Thanks for your suggestion.
 
-After merging the net-next tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
-
-drivers/net/ethernet/sfc/ptp.c:2191:35: error: 'efx_copy_channel' undeclare=
-d here (not in a function); did you mean 'efx_ptp_channel'?
- 2191 |         .copy                   =3D efx_copy_channel,
-      |                                   ^~~~~~~~~~~~~~~~
-      |                                   efx_ptp_channel
-
-Caused by commit
-
-  54fccfdd7c66 ("sfc: efx_default_channel_type APIs can be static")
-
-interacting with commit
-
-  49e6123c65da ("net: sfc: fix memory leak due to ptp channel")
-
-from the net tree.
-
-I have added the following merge fix patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 10 May 2022 12:56:18 +1000
-Subject: [PATCH] fix up for "net: sfc: fix memory leak due to ptp channel"
-
-This is a partial revert of
-
-  54fccfdd7c66 ("sfc: efx_default_channel_type APIs can be static")
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/net/ethernet/sfc/efx_channels.c | 1 -
- drivers/net/ethernet/sfc/efx_channels.h | 1 +
- 2 files changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/sfc/efx_channels.c b/drivers/net/ethernet=
-/sfc/efx_channels.c
-index ec913f62790b..79df636d6df8 100644
---- a/drivers/net/ethernet/sfc/efx_channels.c
-+++ b/drivers/net/ethernet/sfc/efx_channels.c
-@@ -598,7 +598,6 @@ void efx_fini_channels(struct efx_nic *efx)
- /* Allocate and initialise a channel structure, copying parameters
-  * (but not resources) from an old channel structure.
-  */
--static
- struct efx_channel *efx_copy_channel(const struct efx_channel *old_channel)
- {
- 	struct efx_rx_queue *rx_queue;
-diff --git a/drivers/net/ethernet/sfc/efx_channels.h b/drivers/net/ethernet=
-/sfc/efx_channels.h
-index 64abb99a56b8..46b702648721 100644
---- a/drivers/net/ethernet/sfc/efx_channels.h
-+++ b/drivers/net/ethernet/sfc/efx_channels.h
-@@ -39,6 +39,7 @@ int efx_set_channels(struct efx_nic *efx);
- void efx_remove_channel(struct efx_channel *channel);
- void efx_remove_channels(struct efx_nic *efx);
- void efx_fini_channels(struct efx_nic *efx);
-+struct efx_channel *efx_copy_channel(const struct efx_channel *old_channel=
-);
- void efx_start_channels(struct efx_nic *efx);
- void efx_stop_channels(struct efx_nic *efx);
-=20
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/S5P4vjS+eFW2D4is1FV5ZOw
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ51pUACgkQAVBC80lX
-0GzvHwf9EXy4w+uGpo0tk+2WihFJ/UZdyu+oOvJ7oTwzstQeXxhGeVKmVEy4PQHB
-ZH8eGfJkOB7STfEWjndNAKeTBJcd6zuOVNZIj9Wtyylrh4CbI8YZS4tqxLvwVbFp
-UvtZAbxTIzbjq7BQls/I4Xa3O5XB4XMj3KZE2W+ZSm3XYAVlhJkQwnylbReg8PeK
-6InMQkZ4mHjkn2AerjPUkAHMn8uC1vNNJcU/9ctl2NVhaaGk19z5P1RqXJATpO70
-dysS0c2OeWuDpL876/FO1fqVnEgc2wCqV/vgHsxkeCUXvQq87aCR8IyPCWlYfG0P
-Y9ufcIfmk5IMIe1PezKD6N1O+AQZvA==
-=7VI9
------END PGP SIGNATURE-----
-
---Sig_/S5P4vjS+eFW2D4is1FV5ZOw--

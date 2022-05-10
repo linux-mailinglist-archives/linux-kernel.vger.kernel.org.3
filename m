@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E014521C3F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF41E521C2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245531AbiEJOaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43918 "EHLO
+        id S1344198AbiEJOaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243931AbiEJOAp (ORCPT
+        with ESMTP id S243915AbiEJOAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 10 May 2022 10:00:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FF037015;
-        Tue, 10 May 2022 06:39:59 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9322DE58A;
+        Tue, 10 May 2022 06:40:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BC6B5B81DB8;
-        Tue, 10 May 2022 13:39:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30088C385A6;
-        Tue, 10 May 2022 13:39:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41BD7617E4;
+        Tue, 10 May 2022 13:40:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4311DC385C6;
+        Tue, 10 May 2022 13:39:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189996;
-        bh=P7kj9ewvd1CowtM7h8+FySFHobYb6HPBwxgsuhHBZXk=;
+        s=korg; t=1652189999;
+        bh=X0ixFeNEvURfQKTkFaXnL+ELjrFBVzXxY/dWtVPiXhY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jtKjPZeH3g3IouuNME4/as/j3AP9MNk15catm0pNZMgt6P6n2sJw5c+Xq2G8U5h5s
-         EdJLOr3B9QN9aLJQWfJsK6cqVtTCdsiVVSBJ/ixmKlr4lDWAqRrOkZ65tH2Gg26/sk
-         7MtVHiazhJPMJwYwYYJ3DV84x+2XhE0dgU3wsvIc=
+        b=xOe/q7B3Z55x7d9z0HdaOt7suPOx0BE5FIuOvzwgbLk5N8SEAYykXGZplkFqEBzT5
+         xDU41GnfUQBi//Ng53TWJUa22YYHAi4q2wCugjjHdBpQqj+hLch/5EvzqLxulM8xLV
+         D2G6Y37kWc/Doc96MQLY8Oju+VWYZ4VQvfeSf2l0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Taehee Yoo <ap420073@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.17 096/140] mld: respect RCU rules in ip6_mc_source() and ip6_mc_msfilter()
-Date:   Tue, 10 May 2022 15:08:06 +0200
-Message-Id: <20220510130744.352198061@linuxfoundation.org>
+        stable@vger.kernel.org, Marc Dionne <marc.dionne@auristor.com>,
+        David Howells <dhowells@redhat.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        Vadim Fedorenko <vfedorenko@novek.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-afs@lists.infradead.org
+Subject: [PATCH 5.17 097/140] rxrpc: Enable IPv6 checksums on transport socket
+Date:   Tue, 10 May 2022 15:08:07 +0200
+Message-Id: <20220510130744.380429390@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
 References: <20220510130741.600270947@linuxfoundation.org>
@@ -55,59 +58,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: David Howells <dhowells@redhat.com>
 
-commit a9384a4c1d250cb40cebf50e41459426d160b08e upstream.
+commit 39cb9faa5d46d0d0694f4b594ef905f517600c8e upstream.
 
-Whenever RCU protected list replaces an object,
-the pointer to the new object needs to be updated
-_before_ the call to kfree_rcu() or call_rcu()
+AF_RXRPC doesn't currently enable IPv6 UDP Tx checksums on the transport
+socket it opens and the checksums in the packets it generates end up 0.
 
-Also ip6_mc_msfilter() needs to update the pointer
-before releasing the mc_lock mutex.
+It probably should also enable IPv6 UDP Rx checksums and IPv4 UDP
+checksums.  The latter only seem to be applied if the socket family is
+AF_INET and don't seem to apply if it's AF_INET6.  IPv4 packets from an
+IPv6 socket seem to have checksums anyway.
 
-Note that linux-5.13 was supporting kfree_rcu(NULL, rcu),
-so this fix does not need the conditional test I was
-forced to use in the equivalent patch for IPv4.
+What seems to have happened is that the inet_inv_convert_csum() call didn't
+get converted to the appropriate udp_port_cfg parameters - and
+udp_sock_create() disables checksums unless explicitly told not too.
 
-Fixes: 882ba1f73c06 ("mld: convert ipv6_mc_socklist->sflist to RCU")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Taehee Yoo <ap420073@gmail.com>
+Fix this by enabling the three udp_port_cfg checksum options.
+
+Fixes: 1a9b86c9fd95 ("rxrpc: use udp tunnel APIs instead of open code in rxrpc_open_socket")
+Reported-by: Marc Dionne <marc.dionne@auristor.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Reviewed-by: Xin Long <lucien.xin@gmail.com>
+Reviewed-by: Marc Dionne <marc.dionne@auristor.com>
+cc: Vadim Fedorenko <vfedorenko@novek.ru>
+cc: David S. Miller <davem@davemloft.net>
+cc: linux-afs@lists.infradead.org
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv6/mcast.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ net/rxrpc/local_object.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/net/ipv6/mcast.c
-+++ b/net/ipv6/mcast.c
-@@ -460,10 +460,10 @@ int ip6_mc_source(int add, int omode, st
- 				newpsl->sl_addr[i] = psl->sl_addr[i];
- 			atomic_sub(struct_size(psl, sl_addr, psl->sl_max),
- 				   &sk->sk_omem_alloc);
--			kfree_rcu(psl, rcu);
- 		}
-+		rcu_assign_pointer(pmc->sflist, newpsl);
-+		kfree_rcu(psl, rcu);
- 		psl = newpsl;
--		rcu_assign_pointer(pmc->sflist, psl);
- 	}
- 	rv = 1;	/* > 0 for insert logic below if sl_count is 0 */
- 	for (i = 0; i < psl->sl_count; i++) {
-@@ -565,12 +565,12 @@ int ip6_mc_msfilter(struct sock *sk, str
- 			       psl->sl_count, psl->sl_addr, 0);
- 		atomic_sub(struct_size(psl, sl_addr, psl->sl_max),
- 			   &sk->sk_omem_alloc);
--		kfree_rcu(psl, rcu);
+--- a/net/rxrpc/local_object.c
++++ b/net/rxrpc/local_object.c
+@@ -117,6 +117,7 @@ static int rxrpc_open_socket(struct rxrp
+ 	       local, srx->transport_type, srx->transport.family);
+ 
+ 	udp_conf.family = srx->transport.family;
++	udp_conf.use_udp_checksums = true;
+ 	if (udp_conf.family == AF_INET) {
+ 		udp_conf.local_ip = srx->transport.sin.sin_addr;
+ 		udp_conf.local_udp_port = srx->transport.sin.sin_port;
+@@ -124,6 +125,8 @@ static int rxrpc_open_socket(struct rxrp
  	} else {
- 		ip6_mc_del_src(idev, group, pmc->sfmode, 0, NULL, 0);
+ 		udp_conf.local_ip6 = srx->transport.sin6.sin6_addr;
+ 		udp_conf.local_udp_port = srx->transport.sin6.sin6_port;
++		udp_conf.use_udp6_tx_checksums = true;
++		udp_conf.use_udp6_rx_checksums = true;
+ #endif
  	}
--	mutex_unlock(&idev->mc_lock);
- 	rcu_assign_pointer(pmc->sflist, newpsl);
-+	mutex_unlock(&idev->mc_lock);
-+	kfree_rcu(psl, rcu);
- 	pmc->sfmode = gsf->gf_fmode;
- 	err = 0;
- done:
+ 	ret = udp_sock_create(net, &udp_conf, &local->socket);
 
 

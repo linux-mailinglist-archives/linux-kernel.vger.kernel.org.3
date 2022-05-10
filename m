@@ -2,129 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F117F521EBD
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:30:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F645521EC8
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:31:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345625AbiEJPeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 11:34:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50602 "EHLO
+        id S1345637AbiEJPfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 11:35:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345657AbiEJPeW (ORCPT
+        with ESMTP id S1345763AbiEJPeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:34:22 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31CF3B009;
-        Tue, 10 May 2022 08:28:44 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id BDCE21F8C1;
-        Tue, 10 May 2022 15:28:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652196522; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=e4wukkdgHyYEEL082h2+8MXPywOa6STdjbSVdRIKUGE=;
-        b=rR4mS/+oT4jH07pNjBmARAg7zdRtaoeIif/UACNxEBTH30BjG7Bppc3qvkDfJRoCh4TawW
-        6luoRejPAMFZr+z9Kvz9iubCA5AxZw1bIiLsMXPqeMDKaF9ra8TkGI7FOIFKW72kOoldt+
-        xkdV40YW6dtF4zTHXKWuKX4kUttIYC0=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 913582C141;
-        Tue, 10 May 2022 15:28:41 +0000 (UTC)
-Date:   Tue, 10 May 2022 17:28:40 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Brian Norris <computersforpeace@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH 15/30] bus: brcmstb_gisb: Clean-up panic/die notifiers
-Message-ID: <YnqEqDnMfUgC4dM6@alley>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-16-gpiccoli@igalia.com>
+        Tue, 10 May 2022 11:34:36 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06F52F8
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:29:48 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id n8so12993971qke.11
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:29:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FOe0QpIsq707T7oDbRf/pCSk/0RB38He1yJY5ChwDp8=;
+        b=aIpZsyJf5arHu4Vr+y4gUngRQHnYs8ayU/4r6iHRz9x7KLZYtVJa7rzJAZVGmnN4Z3
+         fYqgefyNWghW0QllgfeEfAYaJuJVbjjrbIfAvLTM4KICsEiX8VT2m1BDJ8eqgfANQddd
+         1SS/KGzOfRACH29I2AkLAFUy9+7ibARRraCxVzuWayfHm0AhiyPNOL5p7+fFQSkziMaw
+         BZjovDcs3K6cvmWvNL+GRHlhtldCWF65/b1GyAeIX0vlNUFoIWQUAfKs9JOeCPMCv7SX
+         fy8df3gGpt6SG3JJ1yFO8DlhdGXLeMqt/Rawi0Dv+Z0qXe4nlEgaBobxeUeHzK86LEh/
+         NJoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FOe0QpIsq707T7oDbRf/pCSk/0RB38He1yJY5ChwDp8=;
+        b=wuYQWmjui3f54kOqXgXAppJeS4JHgpDEXj94MJ/DdQ9KnhmoRUUUIHLH41ATNRh6+i
+         ZM6wmgML71BdTXfsNR3bXfX6XjgOQvmhQGWMQ4a6rGWGA5BJEfnPDe4iVF7YNQCKhN/4
+         5u49wt4RStSaU6pzsFEuCLNsZGn+ORq3UlCSDXutBq7b2Fn4AAEkIOTzHeEwuj8hcm69
+         eGZZQ3M7KuEnvIwjnzdbzYdUR22BXwqdQJondfCgY+1retQ0eSyQFvl6eW8s//MtS8Jx
+         Ikp1h4JMzHMx5NsgE4h2P9Ue8xzBr+LjTC7OWzFEB4/Bkqf5UdRCmgZWvz4Cj26bcbls
+         ln+Q==
+X-Gm-Message-State: AOAM531KDvhuKwpLFnYxz2/0tktf2GIbe8576AjB+gFzKbxUldQJvxl0
+        blxoz5yInLFoI3ookZGNSe3PnA==
+X-Google-Smtp-Source: ABdhPJz7P4w38kJJscJ6fsGKxsfaMwr8NNE5cJTqRO1jGuOjYPzOH30aSGiRTwfV4Gye4m4oDorByg==
+X-Received: by 2002:a05:620a:cd7:b0:69f:b1a7:d1eb with SMTP id b23-20020a05620a0cd700b0069fb1a7d1ebmr15562058qkj.5.1652196588031;
+        Tue, 10 May 2022 08:29:48 -0700 (PDT)
+Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
+        by smtp.gmail.com with ESMTPSA id l1-20020ae9f001000000b0069fd35d2abcsm8811440qkg.112.2022.05.10.08.29.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 08:29:47 -0700 (PDT)
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Minchan Kim <minchan@kernel.org>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com
+Subject: [PATCH v2 0/6] zswap: accounting & cgroup control
+Date:   Tue, 10 May 2022 11:28:41 -0400
+Message-Id: <20220510152847.230957-1-hannes@cmpxchg.org>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220427224924.592546-16-gpiccoli@igalia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-04-27 19:49:09, Guilherme G. Piccoli wrote:
-> This patch improves the panic/die notifiers in this driver by
-> making use of a passed "id" instead of comparing pointer
-> address; also, it removes an useless prototype declaration
-> and unnecessary header inclusion.
-> 
-> This is part of a panic notifiers refactor - this notifier in
-> the future will be moved to a new list, that encompass the
-> information notifiers only.
-> 
-> --- a/drivers/bus/brcmstb_gisb.c
-> +++ b/drivers/bus/brcmstb_gisb.c
-> @@ -347,25 +346,14 @@ static irqreturn_t brcmstb_gisb_bp_handler(int irq, void *dev_id)
->  /*
->   * Dump out gisb errors on die or panic.
->   */
-> -static int dump_gisb_error(struct notifier_block *self, unsigned long v,
-> -			   void *p);
-> -
-> -static struct notifier_block gisb_die_notifier = {
-> -	.notifier_call = dump_gisb_error,
-> -};
-> -
-> -static struct notifier_block gisb_panic_notifier = {
-> -	.notifier_call = dump_gisb_error,
-> -};
-> -
->  static int dump_gisb_error(struct notifier_block *self, unsigned long v,
->  			   void *p)
->  {
->  	struct brcmstb_gisb_arb_device *gdev;
-> -	const char *reason = "panic";
-> +	const char *reason = "die";
->  
-> -	if (self == &gisb_die_notifier)
-> -		reason = "die";
-> +	if (v == PANIC_NOTIFIER)
-> +		reason = "panic";
+Changelog
 
-IMHO, the check of the @self parameter was the proper solution.
+- Refresh and update meminfo documentation (Andrew)
+- Discussions around stat sharing opportunities with zram. But agreed
+  that zswap is a cache and zram a backend that could theoretically be
+  stacked, so they need to be understandable separately. (Minchan)
 
-"gisb_die_notifier" list uses @val from enum die_val.
-"gisb_panic_notifier" list uses @val from enum panic_notifier_val.
+Overview
 
-These are unrelated types. It might easily break when
-someone defines the same constant also in enum die_val.
+Zswap can consume nearly a quarter of RAM in the default
+configuration, yet it's neither listed in /proc/meminfo, nor is it
+accounted and manageable on a per-cgroup basis.
 
-Best Regards,
-Petr
+This makes reasoning about the memory situation on a host in general
+rather difficult. On shared/cgrouped hosts, the consequences are
+worse. First, workloads can escape memory containment and cause
+resource priority inversions: a lo-pri group can fill the global zswap
+pool and force a hi-pri group out to disk. Second, not all workloads
+benefit from zswap equally. Some even suffer when memory contents
+compress poorly, and are better off going to disk swap directly. On a
+host with mixed workloads, it's currently not possible to enable zswap
+for one workload but not for the other.
+
+This series implements the missing global accounting as well as cgroup
+tracking & control for zswap backing memory:
+
+- Patch 1 refreshes the very out-of-date meminfo documentation in
+  Documentation/filesystems/proc.rst.
+
+- Patches 2-4 clean up related and adjacent options in Kconfig. Not
+  actual dependencies, just things I noticed during development.
+
+- Patch 5 adds meminfo and vmstat coverage for zswap consumption and
+  activity.
+
+- Patch 6 implements per-cgroup tracking & control of zswap memory.
+
+Based on v5.18-rc4-mmots-2022-04-26-19-34-5-g5e1fdb02de7a.
+
+ Documentation/admin-guide/cgroup-v2.rst |  21 ++
+ Documentation/filesystems/proc.rst      | 161 +++++----
+ drivers/block/zram/Kconfig              |   3 +-
+ fs/proc/meminfo.c                       |   7 +
+ include/linux/memcontrol.h              |  54 +++
+ include/linux/swap.h                    |   5 +
+ include/linux/vm_event_item.h           |   4 +
+ init/Kconfig                            | 123 -------
+ mm/Kconfig                              | 523 +++++++++++++++++++-----------
+ mm/memcontrol.c                         | 196 ++++++++++-
+ mm/vmstat.c                             |   4 +
+ mm/zswap.c                              |  50 ++-
+ 12 files changed, 753 insertions(+), 398 deletions(-)
+
+

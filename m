@@ -2,273 +2,343 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC882521C36
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2EE521C2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344236AbiEJOaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36444 "EHLO
+        id S1344600AbiEJObR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244218AbiEJOAp (ORCPT
+        with ESMTP id S245263AbiEJODa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:00:45 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FBC1D80B5
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:40:00 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id B51DE1F44554
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652189998;
-        bh=r3pPUGPwLNEbfal2RDsuPZ2yRvUiz7/4tgNyGhzyZZw=;
-        h=Date:Subject:To:References:From:Cc:In-Reply-To:From;
-        b=gZpQi8fm9DuqnUmEZvgvUBPyze0eF1ggB1dbM+X4ixAPvcxG6bEcO1VURLtzKqHPJ
-         b4XE5zFm+Bx1eEz+OB8MV6WKknJ1Stik5PwBczwqMYoxKilFHX+55yQx8dIyE8Xg03
-         mrLpdQeMZsA4bV5HjnXoabJluRcH0qowngPqeYjuhBx4w9Idb9bBVFK8TYF+7uZyUr
-         iQASP7uUaC0uZISzjxi93IEodJsHBpnr4vF/xh5BvoC3WrYSe/mbOFKf8n2264ROWZ
-         grqfD6WtBPzPOmlWZomudxodXlyT3/4eUw6At+oxxlJ0xgUO3IhmGKd2Mst1CKzdvF
-         cP2SAJ1Y1ZqcQ==
-Message-ID: <4d08b382-0076-1ea2-b565-893d50b453cb@collabora.com>
-Date:   Tue, 10 May 2022 16:39:53 +0300
+        Tue, 10 May 2022 10:03:30 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDC82E07E9
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:40:32 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id p4so20086228edx.0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:40:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=UFf0N9Ca4Qmqrak9sBs2frjC8lzk6TgQKWf5Bl7P6Yg=;
+        b=d9fLDIwfwlCuY3t/N6rLucvF1aLQty2zVdgx3pkwjYK3886Fq2BnwQHRmg62I2mD2/
+         Wx/hWeq2NhgAk9k5Yx0iubaZOFpRxeqq5SxZHUjlJHKUsbujbGZqc8Ocabv/qgxbWc2b
+         M5U3Bm0LdN0AEVOb9/+sVY5fE0B/EQO6U7JF5ij3oOe7dPZbT579CyjqhrEJA9tSo2Pc
+         niIPE+kg66njFy2S7/EMxv8I3NM+zcM7cTz8D3M2xSBk8hy15glIh+Yy28g9+rEWXB5h
+         aJoB0+zhp7GJkmWOhvc+nDHtQR849nuRjul4f+onkxrFhy1dpI0u3b12A/yt4UksBHl9
+         oumg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=UFf0N9Ca4Qmqrak9sBs2frjC8lzk6TgQKWf5Bl7P6Yg=;
+        b=5WUf38+lpIBGqgoYJbj+JqtIqOPv1y+AIl8UaOB9ZTVNirdeMG56ue7MscEtEYy/SU
+         p9updlETnijeYNJ0mBf7usccE5YSSznj0ZsDDmuB+FwXv4M428Li/TALysiZyGN+TTBs
+         m+N5ToqCsje2/CbxmpZwpQv5L8+drFx8xm52e0YErHoSazonYt4AhFiwgstL5w/1ZKzr
+         aflC9vbBV52uVjobgV6HlYfIMY5FjT4JmdoXyY5CLrAZmdEMqwhQFqOHAGZcIj0untrM
+         kCOEJ5i2OEnukdziMLBsCiuVpSUenGTp2InxD8VEYr92cGmoSMGH29nbugb6ztykTD5S
+         DsDQ==
+X-Gm-Message-State: AOAM531/o8I3D2fnMYYjuo1gFZT8025NCehQAzE6P6YL+bSdbku6ULxd
+        l4+6mGjWVMonIgG2N8PwOFYMnw==
+X-Google-Smtp-Source: ABdhPJzlINYlos9kx0GGFowhHM5QoQEOKdw97M9BYqERgWbcRq6bRjf1GD/nFl/ustJe4YTUop2hPw==
+X-Received: by 2002:a50:9511:0:b0:428:7acf:99b9 with SMTP id u17-20020a509511000000b004287acf99b9mr17622666eda.338.1652190030916;
+        Tue, 10 May 2022 06:40:30 -0700 (PDT)
+Received: from [192.168.0.253] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id i18-20020a170906a29200b006fa9384a0b5sm1199959ejz.61.2022.05.10.06.40.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 06:40:30 -0700 (PDT)
+Message-ID: <6db35313-5dcd-c9f2-724c-d157a835c9fc@linaro.org>
+Date:   Tue, 10 May 2022 15:40:29 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v4 10/15] drm/shmem-helper: Take reservation lock instead
- of drm_gem_shmem locks
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] dt-bindings: gpio: gpio-mvebu: convert txt binding to
+ YAML
 Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-References: <20220417223707.157113-1-dmitry.osipenko@collabora.com>
- <20220417223707.157113-11-dmitry.osipenko@collabora.com>
- <248083d2-b8f2-a4d7-099d-70a7e7859c11@suse.de>
- <d9e7bec1-fffb-e0c4-8659-ef3ce2c31280@collabora.com>
- <YmlYHNlcmNMfOeyy@phenom.ffwll.local>
- <8f932ab0-bb72-8fea-4078-dc59e9164bd4@collabora.com>
- <YnI3lE0TxLfZaQjE@phenom.ffwll.local>
- <01506516-ab2f-cb6e-7507-f2a3295efb59@collabora.com>
- <YnOHAh9I1ds4+1J+@phenom.ffwll.local>
- <83e68918-68de-c0c6-6f9b-e94d34b19383@collabora.com>
- <YnkaUk0mZNuPsZ5r@phenom.ffwll.local>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Daniel Stone <daniel@fooishbar.org>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-In-Reply-To: <YnkaUk0mZNuPsZ5r@phenom.ffwll.local>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org
+References: <20220510094404.1020307-1-chris.packham@alliedtelesis.co.nz>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220510094404.1020307-1-chris.packham@alliedtelesis.co.nz>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/22 16:42, Daniel Vetter wrote:
-> On Fri, May 06, 2022 at 01:49:12AM +0300, Dmitry Osipenko wrote:
->> On 5/5/22 11:12, Daniel Vetter wrote:
->>> On Wed, May 04, 2022 at 06:56:09PM +0300, Dmitry Osipenko wrote:
->>>> On 5/4/22 11:21, Daniel Vetter wrote:
->>>> ...
->>>>>>> - Maybe also do what you suggest and keep a separate lock for this, but
->>>>>>>   the fundamental issue is that this doesn't really work - if you share
->>>>>>>   buffers both ways with two drivers using shmem helpers, then the
->>>>>>>   ordering of this vmap_count_mutex vs dma_resv_lock is inconsistent and
->>>>>>>   you can get some nice deadlocks. So not a great approach (and also the
->>>>>>>   reason why we really need to get everyone to move towards dma_resv_lock
->>>>>>>   as _the_ buffer object lock, since otherwise we'll never get a
->>>>>>>   consistent lock nesting hierarchy).
->>>>>>
->>>>>> The separate locks should work okay because it will be always the
->>>>>> exporter that takes the dma_resv_lock. But I agree that it's less ideal
->>>>>> than defining the new rules for dma-bufs since sometime you will take
->>>>>> the resv lock and sometime not, potentially hiding bugs related to lockings.
->>>>>
->>>>> That's the issue, some importers need to take the dma_resv_lock for
->>>>> dma_buf_vmap too (e.g. to first nail the buffer in place when it's a
->>>>> dynamic memory manager). In practice it'll work as well as what we have
->>>>> currently, which is similarly inconsistent, except with per-driver locks
->>>>> instead of shared locks from shmem helpers or dma-buf, so less obvious
->>>>> that things are inconsistent.
->>>>>
->>>>> So yeah if it's too messy maybe the approach is to have a separate lock
->>>>> for vmap for now, land things, and then fix up dma_buf_vmap in a follow up
->>>>> series.
->>>>
->>>> The amdgpu driver was the fist who introduced the concept of movable
->>>> memory for dma-bufs. Now we want to support it for DRM SHMEM too. For
->>>> both amdgpu ttm and shmem drivers we will want to hold the reservation
->>>> lock when we're touching moveable buffers. The current way of denoting
->>>> that dma-buf is movable is to implement the pin/unpin callbacks of the
->>>> dma-buf ops, should be doable for shmem.
->>>
->>> Hm that sounds like a bridge too far? I don't think we want to start
->>> adding moveable dma-bufs for shmem, thus far at least no one asked for
->>> that. Goal here is just to streamline the locking a bit and align across
->>> all the different ways of doing buffers in drm.
->>>
->>> Or do you mean something else and I'm just completely lost?
->>
->> I'm talking about aligning DRM locks with the dma-buf locks. The problem
->> is that the convention of dma-bufs isn't specified yet. In particular
->> there is no convention for the mapping operations.
->>
->> If we want to switch vmapping of shmem to use reservation lock, then
->> somebody will have to hold this lock for dma_buf_vmap() and the locking
->> convention needs to be specified firmly.
+On 10/05/2022 11:44, Chris Packham wrote:
+> Convert the existing device tree binding to YAML format.
 > 
-> Ah yes that makes sense.
+> The old binding listed the interrupt-controller and related properties
+> as required but there are sufficiently many existing usages without it
+> that the YAML binding does not make the interrupt properties required.
 > 
->> In case of dynamic buffers, we will also need to specify whether
->> dma_buf_vmap() should imply the implicit pinning by exporter or the
->> buffer must be pinned explicitly by importer before dma_buf_vmap() is
->> invoked.
->>
->> Perhaps I indeed shouldn't care about this for this patchset. The
->> complete locking model of dma-bufs must be specified first.
+> The offset and marvell,pwm-offset properties weren't in the old binding
+> and are added to the YAML binding. The offset property is required when
+> the marvell,armada-8k-gpio compatible is used.
 > 
-> Hm I thought vmap is meant to pin itself, and not rely on any other
-> pinning done already. And from a quick look through the long call chain
-> for amd (which is currently the only driver supporting dynamic dma-buf)
-> that seems to be the case.
-
-The vmapping behaviour is implementation-defined until it's documented
-explicitly, IMO.
-
-> But yeah the locking isn't specificied yet, and that makes it a bit a mess
-> :-(
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+>  .../devicetree/bindings/gpio/gpio-mvebu.txt   |  93 -----------
+>  .../devicetree/bindings/gpio/gpio-mvebu.yaml  | 147 ++++++++++++++++++
+>  MAINTAINERS                                   |   2 +-
+>  3 files changed, 148 insertions(+), 94 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-mvebu.txt
+>  create mode 100644 Documentation/devicetree/bindings/gpio/gpio-mvebu.yaml
 > 
->>>> A day ago I found that mapping of imported dma-bufs is broken at least
->>>> for the Tegra DRM driver (and likely for others too) because driver
->>>> doesn't assume that anyone will try to mmap imported buffer and just
->>>> doesn't handle this case at all, so we're getting a hard lockup on
->>>> touching mapped memory because we're mapping something else than the
->>>> dma-buf.
->>>
->>> Huh that sounds bad, how does this happen? Pretty much all pieces of
->>> dma-buf (cpu vmap, userspace mmap, heck even dma_buf_attach) are optional
->>> or at least can fail for various reasons. So exporters not providing mmap
->>> support is fine, but importers then dying is not.
->>
->> Those drivers that die don't have userspace that uses dma-bufs
->> extensively. I noticed it only because was looking at this code too much
->> for the last days.
->>
->> Drivers that don't die either map imported BOs properly or don't allow
->> mapping at all.
-> 
-> Ah yeah driver bugs as explanation makes sense :-/
-> 
->>>> My plan is to move the dma-buf management code to the level of DRM core
->>>> and make it aware of the reservation locks for the dynamic dma-bufs.
->>>> This way we will get the proper locking for dma-bufs and fix mapping of
->>>> imported dma-bufs for Tegra and other drivers.
->>>
->>> So maybe we're completely talking past each another, or coffee is not
->>> working here on my end, but I've no idea what you mean.
->>>
->>> We do have some helpers for taking care of the dma_resv_lock dance, and
->>> Christian König has an rfc patch set to maybe unify this further. But that
->>> should be fairly orthogonal to reworking shmem (it might help a bit with
->>> reworking shmem though).
->>
->> The reservation lock itself doesn't help much shmem, IMO. It should help
->> only in the context of dynamic dma-bufs and today we don't have a need
->> in the dynamic shmem dma-bufs.
->>
->> You were talking about making DRM locks consistent with dma-buf locks,
->> so I thought that yours main point of making use of reservation locks
->> for shmem is to prepare to the new locking scheme.
->>
->> I wanted to try to specify the dma-buf locking convention for mapping
->> operations because it's missing right now and it should affect how DRM
->> should take the reservation locks, but this is not easy to do as I see now.
->>
->> Could you please point at the Christian's RFC patch? He posted too many
->> patches, can't find it :) I'm curious to take a look.
-> 
-> https://lore.kernel.org/dri-devel/20220504074739.2231-1-christian.koenig@amd.com/
-> 
-> Wrt this patch series here I'm wondering whether we could do an interim
-> solution that side-steps the dma_buf_vmap mess.
-> 
-> - in shmem helpers pin any vmapped buffer (it's how dma-buf works too),
->   and that pinning would be done under dma_resv_lock (like with other
->   drivers using dma_resv_lock for bo protection)
-> 
-> - switch over everything else except vmap code to dma_resv_lock, but leave
->   vmap locking as-is
-> 
-> - shrinker then only needs to trylock dma_resv_trylock in the shrinker,
->   which can check for pinned buffer and that's good enough to exclude
->   vmap'ed buffer. And it avoids mixing the vmap locking into the new
->   shrinker code and driver interfaces.
-> 
-> This still leaves the vmap locking mess as-is, but I think that's a mess
-> that's orthogonal to shrinker work.
-> 
-> Thoughts?
+> diff --git a/Documentation/devicetree/bindings/gpio/gpio-mvebu.txt b/Documentation/devicetree/bindings/gpio/gpio-mvebu.txt
+> deleted file mode 100644
+> index 0fc6700ed800..000000000000
+> --- a/Documentation/devicetree/bindings/gpio/gpio-mvebu.txt
+> +++ /dev/null
+> @@ -1,93 +0,0 @@
+> -* Marvell EBU GPIO controller
+> -
+> -Required properties:
+> -
+> -- compatible : Should be "marvell,orion-gpio", "marvell,mv78200-gpio",
+> -  "marvell,armadaxp-gpio" or "marvell,armada-8k-gpio".
+> -
+> -    "marvell,orion-gpio" should be used for Orion, Kirkwood, Dove,
+> -    Discovery (except MV78200) and Armada 370. "marvell,mv78200-gpio"
+> -    should be used for the Discovery MV78200.
+> -
+> -    "marvel,armadaxp-gpio" should be used for all Armada XP SoCs
+> -    (MV78230, MV78260, MV78460).
+> -
+> -    "marvell,armada-8k-gpio" should be used for the Armada 7K and 8K
+> -    SoCs (either from AP or CP), see
+> -    Documentation/devicetree/bindings/arm/marvell/ap80x-system-controller.txt
+> -    for specific details about the offset property.
+> -
+> -- reg: Address and length of the register set for the device. Only one
+> -  entry is expected, except for the "marvell,armadaxp-gpio" variant
+> -  for which two entries are expected: one for the general registers,
+> -  one for the per-cpu registers. Not used for marvell,armada-8k-gpio.
+> -
+> -- interrupts: The list of interrupts that are used for all the pins
+> -  managed by this GPIO bank. There can be more than one interrupt
+> -  (example: 1 interrupt per 8 pins on Armada XP, which means 4
+> -  interrupts per bank of 32 GPIOs).
+> -
+> -- interrupt-controller: identifies the node as an interrupt controller
+> -
+> -- #interrupt-cells: specifies the number of cells needed to encode an
+> -  interrupt source. Should be two.
+> -  The first cell is the GPIO number.
+> -  The second cell is used to specify flags:
+> -    bits[3:0] trigger type and level flags:
+> -      1 = low-to-high edge triggered.
+> -      2 = high-to-low edge triggered.
+> -      4 = active high level-sensitive.
+> -      8 = active low level-sensitive.
+> -
+> -- gpio-controller: marks the device node as a gpio controller
+> -
+> -- ngpios: number of GPIOs this controller has
+> -
+> -- #gpio-cells: Should be two. The first cell is the pin number. The
+> -  second cell is reserved for flags, unused at the moment.
+> -
+> -Optional properties:
+> -
+> -In order to use the GPIO lines in PWM mode, some additional optional
+> -properties are required.
+> -
+> -- compatible: Must contain "marvell,armada-370-gpio"
+> -
+> -- reg: an additional register set is needed, for the GPIO Blink
+> -  Counter on/off registers.
+> -
+> -- reg-names: Must contain an entry "pwm" corresponding to the
+> -  additional register range needed for PWM operation.
+> -
+> -- #pwm-cells: Should be two. The first cell is the GPIO line number. The
+> -  second cell is the period in nanoseconds.
+> -
+> -- clocks: Must be a phandle to the clock for the GPIO controller.
+> -
+> -Example:
+> -
+> -		gpio0: gpio@d0018100 {
+> -			compatible = "marvell,armadaxp-gpio";
+> -			reg = <0xd0018100 0x40>,
+> -			    <0xd0018800 0x30>;
+> -			ngpios = <32>;
+> -			gpio-controller;
+> -			#gpio-cells = <2>;
+> -			interrupt-controller;
+> -			#interrupt-cells = <2>;
+> -			interrupts = <16>, <17>, <18>, <19>;
+> -		};
+> -
+> -		gpio1: gpio@18140 {
+> -			compatible = "marvell,armada-370-gpio";
+> -			reg = <0x18140 0x40>, <0x181c8 0x08>;
+> -			reg-names = "gpio", "pwm";
+> -			ngpios = <17>;
+> -			gpio-controller;
+> -			#gpio-cells = <2>;
+> -			#pwm-cells = <2>;
+> -			interrupt-controller;
+> -			#interrupt-cells = <2>;
+> -			interrupts = <87>, <88>, <89>;
+> -			clocks = <&coreclk 0>;
+> -		};
+> diff --git a/Documentation/devicetree/bindings/gpio/gpio-mvebu.yaml b/Documentation/devicetree/bindings/gpio/gpio-mvebu.yaml
+> new file mode 100644
+> index 000000000000..84b72e506526
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/gpio/gpio-mvebu.yaml
+> @@ -0,0 +1,147 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/gpio/gpio-mvebu.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Marvell EBU GPIO controller
+> +
+> +maintainers:
+> +  - Thierry Reding <thierry.reding@gmail.com>
+> +  - Lee Jones <lee.jones@linaro.org>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - marvell,orion-gpio
+> +          - marvell,mv78200-gpio
+> +          - marvell,armada-370-gpio
 
-Since vmapping implies implicit pinning, we can't use a separate lock in
-drm_gem_shmem_vmap() because we need to protect the
-drm_gem_shmem_get_pages(), which is invoked by drm_gem_shmem_vmap() to
-pin the pages and requires the dma_resv_lock to be locked.
+It's expected to have orion fallback, so this does not look correct.
 
-Hence the problem is:
+> +          - marvell,armadaxp-gpio
+> +          - marvell,armada-8k-gpio
+> +      - items:
+> +          - const: marvell,armada-370-gpio
+> +          - const: marvell,orion-gpio
+> +
+> +    description: |
+> +      "marvell,orion-gpio" should be used for Orion, Kirkwood, Dove, Discovery
+> +      (except MV78200) and Armada 370. "marvell,mv78200-gpio" should be used
+> +      for the Discovery MV78200.
+> +
+> +      "marvel,armadaxp-gpio" should be used for all Armada XP SoCs (MV78230,
+> +      MV78260, MV78460).
+> +
+> +      "marvell,armada-8k-gpio" should be used for the Armada 7K and 8K SoCs
+> +      (either from AP or CP), see
+> +      Documentation/devicetree/bindings/arm/marvell/ap80x-system-controller.txt
+> +      for specific details about the offset property.
 
-1. If dma-buf importer holds the dma_resv_lock and invokes
-dma_buf_vmap() -> drm_gem_shmem_vmap(), then drm_gem_shmem_vmap() shall
-not take the dma_resv_lock.
+Why having the description? The usage should be obvious from the schema,
+so what is so special here?
 
-2. Since dma-buf locking convention isn't specified, we can't assume
-that dma-buf importer holds the dma_resv_lock around dma_buf_vmap().
+> +
+> +  reg:
+> +    description: |
+> +      Address and length of the register set for the device. Only one entry
+> +      is expected, except for the "marvell,armadaxp-gpio" variant for which
+> +      two entries are expected: one for the general registers, one for the
+> +      per-cpu registers. 
 
-The possible solutions are:
+This needs also entry in allOf with per-variant constraints.
 
-1. Specify the dma_resv_lock convention for dma-bufs and make all
-drivers to follow it.
+> Not used for marvell,armada-8k-gpio.
+> +
+> +      An additional register set is needed, for the GPIO Blink
+> +      Counter on/off registers.
+> +    minItems: 1
+> +    maxItems: 2
 
-2. Make only DRM drivers to hold dma_resv_lock around dma_buf_vmap().
-Other non-DRM drivers will get the lockdep warning.
+PWM? the "reg" above was saying about per-cpu registers, so this is
+confusing. I understand old bindings wrote it like that, so maybe it
+should be fixed now.
 
-3. Make drm_gem_shmem_vmap() to take the dma_resv_lock and get deadlock
-if dma-buf importer holds the lock.
+Anyway, you need to describe the items and then apply constraints in allOf.
 
-...
+> +
+> +  reg-names:
+> +    description:
+> +      Must contain an entry "pwm" corresponding to the
+> +      additional register range needed for PWM operation.
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  offset:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: Offset in the register map for the gpio registers (in bytes)
+> +
+> +  interrupts:
+> +    description: |
+> +      The list of interrupts that are used for all the pins managed by this
+> +      GPIO bank. There can be more than one interrupt (example: 1 interrupt
+> +      per 8 pins on Armada XP, which means 4 interrupts per bank of 32
+> +      GPIOs).
+> +    minItems: 1
+> +    maxItems: 4
+> +
+> +  interrupt-controller: true
+> +
+> +  "#interrupt-cells":
+> +    const: 2
+> +
+> +  gpio-controller: true
+> +
+> +  ngpios:
+> +    description:
+> +      number of GPIOs this controller has
 
-There are actually very few drivers in kernel that use dma_buf_vmap()
-[1], so perhaps it's not really a big deal to first try to define the
-locking and pinning convention for the dma-bufs? At least for
-dma_buf_vmap()? Let me try to do this.
+Skip description, it's obvious from generic bindings.
 
-[1] https://elixir.bootlin.com/linux/v5.18-rc6/C/ident/dma_buf_vmap
+> +    minimum: 1
+> +    maximum: 32
+> +
+> +  "#gpio-cells":
+> +    const: 2
+> +
+> +  marvell,pwm-offset:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: Offset in the register map for the pwm registers (in bytes)
 
-I envision that the extra dma_resv_locks for dma-bufs potentially may
-create unnecessary bottlenecks for some drivers if locking isn't really
-necessary by a specific driver, so drivers will need to keep this in
-mind. On the other hand, I don't think that any of the today's drivers
-will notice the additional resv locks in practice.
+It's the same as offset. Why allowing both? Isn't one deprecated?
 
--- 
+> +
+> +  "#pwm-cells":
+> +    description:
+> +      The first cell is the GPIO line number. The second cell is the period
+> +      in nanoseconds.
+> +    const: 2
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 2
+
+This should be strictly defined, either here or per variant.
+
+> +
+> +required:
+> +  - compatible
+> +  - gpio-controller
+> +  - ngpios
+> +  - "#gpio-cells"
+> +
+> +if:
+
+Within allOf please.
+
 Best regards,
-Dmitry
+Krzysztof

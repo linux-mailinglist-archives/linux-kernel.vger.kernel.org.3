@@ -2,155 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A28A6520FBF
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 10:30:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67AE0520FC5
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 10:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238032AbiEJIet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 04:34:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
+        id S238039AbiEJIjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 04:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232322AbiEJIer (ORCPT
+        with ESMTP id S232173AbiEJIjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 04:34:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAE372F03D
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 01:30:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652171448;
+        Tue, 10 May 2022 04:39:02 -0400
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675481BD73A;
+        Tue, 10 May 2022 01:35:03 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id F0FD620000B;
+        Tue, 10 May 2022 08:34:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1652171702;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1m42YOS6adkVOttPvzzPcpB4bdLVq0RFj4rgcIuwmIE=;
-        b=goZPeP17u9qT3qm+qQj//FDuxEpAl7t68g+stlH4Rv+K0oZCAAx+fifJVhtR162AWQz5Io
-        cDu919LRUj8PiSGRL3tGycC6qSzp61WovzHvJHwMTjJDRW1GiL4YKxdYf7Uzm2b0IszzAt
-        QxjLwOmrzlytsPJNCtVkGAg8mVlcYSE=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-568-aqFLj3G4MgWNs_fQ0ku7YQ-1; Tue, 10 May 2022 04:30:47 -0400
-X-MC-Unique: aqFLj3G4MgWNs_fQ0ku7YQ-1
-Received: by mail-wm1-f71.google.com with SMTP id 205-20020a1c02d6000000b003928cd3853aso924883wmc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 01:30:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1m42YOS6adkVOttPvzzPcpB4bdLVq0RFj4rgcIuwmIE=;
-        b=DAnUKh0GthNLCVn7TogJuGKBd1KOuduW6/kkjucayBGk2UIGoUWrxmf9J1HHTer/zp
-         Tt+UTKlFA1rVQW4Xcyv5f8MgDzUFVVQ7CEMqcCBRXFF6x/KvamtPe9ddDfsW6nJDBF3t
-         gGgySiWOXT3WCi+HjsdvprZk92a4QWjsRSzXUsVhsFog6SMqZbLd+srMVmsjjqSFH/Tt
-         llUCRVKecnmtDwMWfDcuQzuxtqdn+4FdkjMoaIdOO3lY0xJXcGGtrZRk5I389y6XMZpf
-         2ZSIIEMFDxxyTgYAbBjwrPmzszhGn9msSMigwYV6PRpsWurnA0G8edgcm4CS/McyJa8v
-         iCrg==
-X-Gm-Message-State: AOAM533Ck6j1PmNTVrReMcPOx0HWXxINXPKKs31ypTCtOUM3awcAqZEd
-        OZS5xGPAP6QhoYOxx/jKjpBxN7OD/ma4T0kmlwjZMYND6KuwtHCN2Eba+36djat2o10MvcTbHOI
-        VJwknuoaIeLiC4uJ7kZMjzu9e
-X-Received: by 2002:a5d:4703:0:b0:20a:ce3c:7528 with SMTP id y3-20020a5d4703000000b0020ace3c7528mr17564141wrq.688.1652171445795;
-        Tue, 10 May 2022 01:30:45 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwoBMj8kXDsvsfO4i+XkAgVG6qM0AfXiyKEYB6N5jwKUXVSznUhS5NktRYArBUXsTfI3Cbm7g==
-X-Received: by 2002:a5d:4703:0:b0:20a:ce3c:7528 with SMTP id y3-20020a5d4703000000b0020ace3c7528mr17564116wrq.688.1652171445454;
-        Tue, 10 May 2022 01:30:45 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id l29-20020a05600c1d1d00b003942a244f53sm1816260wms.44.2022.05.10.01.30.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 01:30:45 -0700 (PDT)
-Message-ID: <2d8d8583-3a39-b826-dd83-ba5bc4c5b082@redhat.com>
-Date:   Tue, 10 May 2022 10:30:44 +0200
+        bh=Kh7DYyBInXTh3sG9c4M0Sk5M7gxxMdC14JimjF3W+Nw=;
+        b=dtIs2wdRF3USwu7B0gKSjyiiiOIhdk93PWxVGVtb0s0ZA2Oj+ue41m2ONpp6FHPijz8N1V
+        99NyKykZg3IccFuBnOuLRb75PsaB+la/ibdKXLR8OEDvQOeDHutZBk9BpBpDzD0XKRIvjj
+        1t9v3+qyhvfW9R8oKPwb8DphwAQhjqmY8nM1TNm2Z2cHYEZ9hW6KbvpxsJMCpmC277GMRf
+        olQp/zD9+orxRJdMQtFO8s6qcLdPlS6GWzbqeqa7jsog9zq+1jTtNwDlM8BrvehF29/kxq
+        DZmF3+aODL7Ji+Vd0qJ+OEKNrRGiJbQ9MgkxTA54PHKFn+61/KXqlAynCwnRLQ==
+Date:   Tue, 10 May 2022 10:34:58 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
+        Jean-Pierre Geslin <jean-pierre.geslin@non.se.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>
+Subject: Re: [PATCH net-next v4 06/12] net: dsa: rzn1-a5psw: add Renesas
+ RZ/N1 advanced 5 port switch driver
+Message-ID: <20220510103458.381aaee2@xps-bootlin>
+In-Reply-To: <20220509160813.stfqb4c2houmfn2g@skbuf>
+References: <20220509131900.7840-1-clement.leger@bootlin.com>
+        <20220509131900.7840-7-clement.leger@bootlin.com>
+        <20220509160813.stfqb4c2houmfn2g@skbuf>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v3 1/4] fbdev: Prevent possible use-after-free in
- fb_release()
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-fbdev@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
-        Daniel Vetter <daniel.vetter@intel.com>
-References: <20220505215947.364694-1-javierm@redhat.com>
- <20220505220413.365977-1-javierm@redhat.com>
- <753d0350-42dc-389b-b10b-4533ddcf32ac@intel.com>
- <1f788b8f-0bea-1818-349e-b1bc907bf251@redhat.com>
- <a339df59-9e00-c7cb-e33d-2ac626443639@intel.com>
- <3b7fe4fe-fdec-cef2-4e0e-309d9dc4a8af@redhat.com>
- <b5ab1c49-04e7-36c3-677d-2989b79e50ca@suse.de>
- <2bf27b09-0896-1849-254f-d5b19abdc892@redhat.com>
- <fc3e8a40-664f-07ae-7474-c0412a1ab1b5@intel.com>
- <1c36d431-d5c0-7278-c9e0-61867e9dc174@redhat.com>
- <79aaea41-5dab-f896-ab3d-d6bc9a5de615@suse.de>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <79aaea41-5dab-f896-ab3d-d6bc9a5de615@suse.de>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Thomas,
+Le Mon, 9 May 2022 19:08:13 +0300,
+Vladimir Oltean <olteanv@gmail.com> a =C3=A9crit :
 
-On 5/10/22 10:04, Thomas Zimmermann wrote:
-> Hi
-> 
-> Am 10.05.22 um 00:42 schrieb Javier Martinez Canillas:
->> On 5/10/22 00:22, Andrzej Hajda wrote:
->>
->> [snip]
->>
->>>>    static void drm_fbdev_fb_destroy(struct fb_info *info)
->>>>    {
->>>> +       if (info->cmap.len)
->>>> +               fb_dealloc_cmap(&info->cmap);
->>>> +
->>>>           drm_fbdev_release(info->par);
->>>> +       framebuffer_release(info);
->>>
->>> I would put drm_fbdev_release at the beginning - it cancels workers
->>> which could expect cmap to be still valid.
->>>
->>
->> Indeed, you are correct again. [0] is the final version of the patch I've
->> but don't have an i915 test machine to give it a try. I'll test tomorrow
->> on my test systems to verify that it doesn't cause any regressions since
->> with other DRM drivers.
-> 
-> You have to go through all DRM drivers that call drm_fb_helper_fini() 
-> and make sure that they free fb_info. For example armada appears to be 
-> leaking now. [1]
->
+> On Mon, May 09, 2022 at 03:18:54PM +0200, Cl=C3=A9ment L=C3=A9ger wrote:
+> > Add Renesas RZ/N1 advanced 5 port switch driver. This switch
+> > handles 5 ports including 1 CPU management port. A MDIO bus is also
+> > exposed by this switch and allows to communicate with PHYs
+> > connected to the ports. Each switch port (except for the CPU
+> > management ports) is connected to the MII converter.
+> >=20
+> > This driver includes basic bridging support, more support will be
+> > added later (vlan, etc).
+> >=20
+> > Suggested-by: Jean-Pierre Geslin <jean-pierre.geslin@non.se.com>
+> > Suggested-by: Phil Edworthy <phil.edworthy@renesas.com>
+> > Signed-off-by: Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com>
+> > ---
+> > +static int a5psw_port_bridge_join(struct dsa_switch *ds, int port,
+> > +				  struct dsa_bridge bridge,
+> > +				  bool *tx_fwd_offload,
+> > +				  struct netlink_ext_ack *extack)
+> > +{
+> > +	struct a5psw *a5psw =3D ds->priv;
+> > +
+> > +	/* We only support 1 bridge device */
+> > +	if (a5psw->br_dev && bridge.dev !=3D a5psw->br_dev) {
+> > +		NL_SET_ERR_MSG_MOD(extack,
+> > +				   "Forwarding offload supported
+> > for a single bridge"); =20
+>=20
+> I don't think I saw the dsa_slave_changeupper() patch that avoids
+> overwriting the extack when dsa_port_bridge_join() returns
+> -EOPNOTSUPP.
 
-But shouldn't fb_info be freed when unregister_framebuffer() is called
-through drm_dev_unregister() ? AFAICT the call chain is the following:
+Ok, I did not understood that dsa_slave_changeupper() *did* needed to
+be modified. I'll do that.
 
-drm_put_dev()
-  drm_dev_unregister()
-    drm_client_dev_unregister()
-      drm_fbdev_client_unregister()
-        drm_fb_helper_unregister_fbi()
-          unregister_framebuffer()
-            do_unregister_framebuffer()
-              put_fb_info()
-                drm_fbdev_fb_destroy()
-                  framebuffer_release()
+>=20
+> > +		return -EOPNOTSUPP;
+> > +	}
+> > +
+> > +	a5psw->br_dev =3D bridge.dev;
+> > +	a5psw_flooding_set_resolution(a5psw, port, true);
+> > +	a5psw_port_mgmtfwd_set(a5psw, port, false);
+> > +
+> > +	return 0; =20
+>=20
+> By the way, does this switch pass
+> tools/testing/selftests/drivers/net/dsa/no_forwarding.sh?
 
-which is the reason why I believe that drm_fb_helper_fini() should be
-an internal static function and only called from drm_fbdev_fb_destroy().
+Unfortunately, the board I have only has 2 ports availables and thus, I
+can only test one bridge or two separated ports at a time... I *should*
+receive a 4 ports one in a near future but that not yet sure.
 
-Drivers shouldn't really explicitly call this helper in my opinion.
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
 

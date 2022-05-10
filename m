@@ -2,136 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 749485225F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:59:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B5DB522600
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 23:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232185AbiEJU7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 16:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46256 "EHLO
+        id S232505AbiEJVCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 17:02:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiEJU7i (ORCPT
+        with ESMTP id S235548AbiEJVBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 16:59:38 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F34266F3F
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:59:38 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2f7d621d1caso193554637b3.11
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:59:38 -0700 (PDT)
+        Tue, 10 May 2022 17:01:36 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6861FA6E34;
+        Tue, 10 May 2022 14:01:35 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id x88so330886pjj.1;
+        Tue, 10 May 2022 14:01:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=G/q1rnQgMaznZ39ohQawlR0ZCKw+W7Y1nNqJrW+4o7o=;
-        b=CALL3wkEY3b86p74iYDdbhQTNr+tfRN+V98GpzavNOy6JN9bP1wPMlvHcih2J5MHMc
-         8UGV/cPauPf41smjoWpJxvopoB6PaFtAoOLgCpClh6zk3izJT46mVl3grrPpDC8EDDeY
-         Bx6n/EGn3sDgVj9MIcL7s0E82t1JbVt9MggqOzhw3XYkYzw75HFiblNjqMFBj0RJTfrg
-         plh1lz39Zr+P/736TPlKm6vNE2zQTSW7iRYz1ysagi0v5o4Sm/wzrCY+zuc2Tm8rVz7/
-         QXM70R2/dAzJJoJ2DxyfEpQes++QZ+l2WknycT53cdHFtC2V7dTCZwQCGb6DLFccDyHL
-         r2tg==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=j3rcz6qVNZi20/uUbB9766ZMC6kcEWw22DciqK9/zDQ=;
+        b=M5ccWIy7d+bh8DqBj2aI3HFZZKskE0cwfDgQq3SKLrVgdAEFxXFPBkEBMgJ4qngmA2
+         6H8woKrDHM1reouusOvd4aPscHfCRI6hEodeZJsd4D6vPzWpj+/ESYcRIaKuxdIo+A+Q
+         REO2UUrR8BzAZBYQDBIpzFkYPdqzj+joI8K38ONynFtD+rXLjCemnJJiB6b4CFMkjshY
+         CYR1R/+q+MdBzjd4wFuiVS17ecBinIwmowmWql+VGUH65xm+Uu8/uHde/uKwZ03XLtU1
+         905SUSDqeXRgRwg7ZHM6aBsoRSIR0O+RAeQn1ZgTa7JGGDNCVlqjo9fhIzsr4tSQQYUz
+         Sx6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=G/q1rnQgMaznZ39ohQawlR0ZCKw+W7Y1nNqJrW+4o7o=;
-        b=RmvKcL+hQF3pnzF8+9/c/8sxHfIkGn0B6F6Y7t2NrVc87RH6yypCpTtdoZQWPhaS14
-         MgbQQdYjKFcJfFbqsJEx2JMQaupwES/NhcYZmN+D9ZWUHQFVBE0B0PszuBwZ7Ivca9da
-         F0Nv/KNru+UZUpiS5bhocQj6pgQY6I/RlBZi/6y4C7dqQkJ0cnwYwVq0cI/DbAcHFhZD
-         KXrSGIEFrAnLHznZpcpcEwRi8ku2RE1Xh2k6EZlr3Ur8RCIvj0KA8WSB3QnROPWw6/bS
-         lgDD3U1yaOqD9uHAum2UtEoaSUITjyKwaaE3JOM6LVBOHERp9h6eLNGHISCuGZfww73p
-         TO6Q==
-X-Gm-Message-State: AOAM531VsIWFHzvZ1IF3kgHxVK3pTOrKU0CoKKSHqm1xiajnwZE3ecdx
-        pXXKrYFWidIom+sFHrAGuO7wIofBFnQB3MY51APKuw==
-X-Google-Smtp-Source: ABdhPJwBQdouaCTQjdwS7J9yFY1kM4uCTbuDjL2AFdvllvzNydU7sRdMGZkZEeIDKL8Y59rkE1t1nwb9SMkkRXYb+5c=
-X-Received: by 2002:a81:6cc3:0:b0:2f7:cc1f:b52d with SMTP id
- h186-20020a816cc3000000b002f7cc1fb52dmr21862524ywc.293.1652216377129; Tue, 10
- May 2022 13:59:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220510030014.3842475-1-surenb@google.com> <20220510030014.3842475-2-surenb@google.com>
- <YnpjNyrdqT/QxBPI@dhcp22.suse.cz> <CAJuCfpEt9SSrELZzfmcqJ7JL_nEzWGz-YE9GRUZTjU5unqQjQg@mail.gmail.com>
- <YnrQ11iou9bwN9tY@dhcp22.suse.cz>
-In-Reply-To: <YnrQ11iou9bwN9tY@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 10 May 2022 13:59:26 -0700
-Message-ID: <CAJuCfpGw0nfxwY0pLMW9P4fhV7qKf3DejDgH+19Bj+v30-r4pQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] mm: drop oom code from exit_mmap
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=j3rcz6qVNZi20/uUbB9766ZMC6kcEWw22DciqK9/zDQ=;
+        b=PuKCPaS0HAsSgcgGWarDJAeAuq/XZCODbc8Y8ueM9uOubhSOSuc2+yJsirFQ9Q/9H2
+         dbMPqAWwzqJSV+J3HgK1VY+ZChtMU/KchCUCnROPvmwljKmCUzWlGPPdiqtIYOFv9UIx
+         jqFBeZknXRQtjtJp2eKiTUETqqJeIa+SZBC6zZsMAFu95wDG1OOC+FQxakRQ6yQxfdiR
+         qxsd1j/Xi1GfBjLV5sCXBhT+yCzlrw+CtE2wVtrjofUvY0APfFPKh8XBJGNw0ELOEwpX
+         bR21oPc/Wo6VdsMC6QCN9RNJ52TBKAAG/wrMB38chIpGu050hnnQyu8uoeLAlUkUN68j
+         WDGw==
+X-Gm-Message-State: AOAM531m4bsLk/SaREZ7hMrUtGmAu1rpb18G2gWnYVHAYrvKW0xlcvy5
+        KgJYCHU4MU/RC1eQe3BRjwI=
+X-Google-Smtp-Source: ABdhPJy9jdEXmmo87FTb0xRrE+zHyYpgKETtEix579sUr19jNrUhpmBxb5moGjeyn6lcojK04HS9pw==
+X-Received: by 2002:a17:902:ce02:b0:153:bd65:5c0e with SMTP id k2-20020a170902ce0200b00153bd655c0emr22083797plg.160.1652216494792;
+        Tue, 10 May 2022 14:01:34 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:6c64])
+        by smtp.gmail.com with ESMTPSA id j4-20020a632304000000b003c15f7f2914sm162632pgj.24.2022.05.10.14.01.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 14:01:34 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 10 May 2022 11:01:32 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <guro@fb.com>, Minchan Kim <minchan@kernel.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jann Horn <jannh@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>,
         Shakeel Butt <shakeelb@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>, shuah@kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
-        kernel-team <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        cgroups@vger.kernel.org
+Subject: Re: [RFC PATCH bpf-next 1/9] bpf: introduce CGROUP_SUBSYS_RSTAT
+ program type
+Message-ID: <YnrSrKFTBn3IyUfa@slm.duckdns.org>
+References: <20220510001807.4132027-1-yosryahmed@google.com>
+ <20220510001807.4132027-2-yosryahmed@google.com>
+ <Ynqyh+K1tMyNCTUW@slm.duckdns.org>
+ <CAJD7tkZVXJY3s2k8M4pcq+eJVD+aX=iMDiDKtdE=j0_q+UWQzA@mail.gmail.com>
+ <YnrEDfZs1kuB1gu5@slm.duckdns.org>
+ <CAJD7tkahC1e-_K0xJMu-xXwd8WNVzYDRgJFua9=JhNRq7b+G8A@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJD7tkahC1e-_K0xJMu-xXwd8WNVzYDRgJFua9=JhNRq7b+G8A@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 1:53 PM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Tue 10-05-22 09:31:50, Suren Baghdasaryan wrote:
-> > On Tue, May 10, 2022 at 6:06 AM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Mon 09-05-22 20:00:13, Suren Baghdasaryan wrote:
-> > > > With the oom-killer being able to operate on locked pages, exit_mmap
-> > > > does not need to ensure that oom_reap_task_mm is done before it can
-> > > > proceed. Instead it can rely on mmap_lock write lock to prevent
-> > > > oom-killer from operating on the vma tree while it's freeing page
-> > > > tables. exit_mmap can hold mmap_lock read lock when unmapping vmas
-> > > > and then take mmap_lock write lock before freeing page tables.
-> > >
-> > > The changelog is rather light on nasty details which might be good but
-> > > for the sake of our future us let's be more verbose so that we do not
-> > > have to reinvent the prior history each time we are looking into this
-> > > code. I would go with something like this instead:
-> > > "
-> > > The primary reason to invoke the oom reaper from the exit_mmap path used
-> > > to be a prevention of an excessive oom killing if the oom victim exit
-> > > races with the oom reaper (see 212925802454 ("mm: oom: let oom_reap_task
-> > > and exit_mmap run concurrently") for more details. The invocation has
-> > > moved around since then because of the interaction with the munlock
-> > > logic but the underlying reason has remained the same (see 27ae357fa82b
-> > > ("mm, oom: fix concurrent munlock and oom reaper unmap, v3").
-> > >
-> > > Munlock code is no longer a problem since a213e5cf71cb ("mm/munlock:
-> > > delete munlock_vma_pages_all(), allow oomreap") and there shouldn't be
-> > > any blocking operation before the memory is unmapped by exit_mmap so
-> > > the oom reaper invocation can be dropped. The unmapping part can be done
-> > > with the non-exclusive mmap_sem and the exclusive one is only required
-> > > when page tables are freed.
-> > >
-> > > Remove the oom_reaper from exit_mmap which will make the code easier to
-> > > read. This is really unlikely to make any observable difference although
-> > > some microbenchmarks could benefit from one less branch that needs to be
-> > > evaluated even though it almost never is true.
-> > > "
-> >
-> > Looks great! Thanks for collecting all the history. Will update the description.
->
-> Please make sure you double check the story. This is mostly my
-> recollection and brief reading through the said commits. I might
-> misremember here and there.
+Hello,
 
-Will do. Thanks!
+On Tue, May 10, 2022 at 01:43:46PM -0700, Yosry Ahmed wrote:
+> I assume if we do this optimization, and have separate updated lists
+> for controllers, we will still have a "core" updated list that is not
+> tied to any controller. Is this correct?
 
-> --
-> Michal Hocko
-> SUSE Labs
+Or we can create a dedicated updated list for the bpf progs, or even
+multiple for groups of them and so on.
+
+> If yes, then we can make the interface controller-agnostic (a global
+> list of BPF flushers). If we do the optimization later, we tie BPF
+> stats to the "core" updated list. We can even extend the userland
+> interface then to allow for controller-specific BPF stats if found
+> useful.
+
+We'll need that anyway as cpustats are tied to the cgroup themselves rather
+than the cpu controller.
+
+> If not, and there will only be controller-specific updated lists then,
+> then we might need to maintain a "core" updated list just for the sake
+> of BPF programs, which I don't think would be favorable.
+
+If needed, that's fine actually.
+
+> What do you think? Either-way, I will try to document our discussion
+> outcome in the commit message (and maybe the code), so that
+> if-and-when this optimization is made, we can come back to it.
+
+So, the main focus is keeping the userspace interface as simple as possible
+and solving performance issues on the rstat side. If we need however many
+updated lists to do that, that's all fine. FWIW, the experience up until now
+has been consistent with the assumptions that the current implementation
+makes and I haven't seen real any world cases where the shared updated list
+are problematic.
+
+Thanks.
+
+-- 
+tejun

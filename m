@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 889F75217F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE02521A8D
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243322AbiEJNaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58028 "EHLO
+        id S1343573AbiEJN7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:59:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243716AbiEJNWU (ORCPT
+        with ESMTP id S245180AbiEJNih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:22:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985C7134E15;
-        Tue, 10 May 2022 06:16:45 -0700 (PDT)
+        Tue, 10 May 2022 09:38:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C718C2670B5;
+        Tue, 10 May 2022 06:28:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 534C7616D0;
-        Tue, 10 May 2022 13:16:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FB45C385D8;
-        Tue, 10 May 2022 13:16:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 647FE60B12;
+        Tue, 10 May 2022 13:28:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71D15C385C2;
+        Tue, 10 May 2022 13:28:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188584;
-        bh=aVuH+MV+446GnglHFZUuaSvVDT1o8j9Oc6/CrUI0p00=;
+        s=korg; t=1652189291;
+        bh=YFMiPN3l9Oyq2ed9fTRIzlo7Xd7Djs77hjfpETWPvtk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bPTfDkyB6UWziItKV/7mqtlfaDhp1xAtBoKRq5d8Iq+tTtkIMK5GlnfySe+0fKkpY
-         0l6kxW4NxDVnhN87T2PFJfpDfCSUmm+nc04zFrF7WC8gEb/TjKutQun/7oeFmLeKUM
-         Dq+RuuU/HSm5Z5wIUYq1YFRjLnFfx83U4ZmI170U=
+        b=WsVQLtbbI9eDYeeldXJkXb4cpq/Kyq2gREuhsGoTN7+brvyZGiW1dr3PHCEjDxdNR
+         TGRsJ8TuAWCd2dmU6dWWI9Nlz7hI3lzWXRgd3V2uJO4So7KWSBI7yvgm5pTwj9D7VZ
+         9yVq88XEIwvcEDeJWwl7TQiu8Ywj+o8orQG89+w8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Helge Deller <deller@gmx.de>
-Subject: [PATCH 4.14 55/78] parisc: Merge model and model name into one line in /proc/cpuinfo
-Date:   Tue, 10 May 2022 15:07:41 +0200
-Message-Id: <20220510130734.167169023@linuxfoundation.org>
+        stable@vger.kernel.org, Stefan Haberland <sth@linux.ibm.com>,
+        Jan Hoeppner <hoeppner@linux.ibm.com>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.10 23/70] s390/dasd: prevent double format of tracks for ESE devices
+Date:   Tue, 10 May 2022 15:07:42 +0200
+Message-Id: <20220510130733.546385272@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
-References: <20220510130732.522479698@linuxfoundation.org>
+In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
+References: <20220510130732.861729621@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,32 +55,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: Stefan Haberland <sth@linux.ibm.com>
 
-commit 5b89966bc96a06f6ad65f64ae4b0461918fcc9d3 upstream.
+commit 71f3871657370dbbaf942a1c758f64e49a36c70f upstream.
 
-The Linux tool "lscpu" shows the double amount of CPUs if we have
-"model" and "model name" in two different lines in /proc/cpuinfo.
-This change combines the model and the model name into one line.
+For ESE devices we get an error for write operations on an unformatted
+track. Afterwards the track will be formatted and the IO operation
+restarted.
+When using alias devices a track might be accessed by multiple requests
+simultaneously and there is a race window that a track gets formatted
+twice resulting in data loss.
 
-Signed-off-by: Helge Deller <deller@gmx.de>
-Cc: stable@vger.kernel.org
+Prevent this by remembering the amount of formatted tracks when starting
+a request and comparing this number before actually formatting a track
+on the fly. If the number has changed there is a chance that the current
+track was finally formatted in between. As a result do not format the
+track and restart the current IO to check.
+
+The number of formatted tracks does not match the overall number of
+formatted tracks on the device and it might wrap around but this is no
+problem. It is only needed to recognize that a track has been formatted at
+all in between.
+
+Fixes: 5e2b17e712cf ("s390/dasd: Add dynamic formatting support for ESE volumes")
+Cc: stable@vger.kernel.org # 5.3+
+Signed-off-by: Stefan Haberland <sth@linux.ibm.com>
+Reviewed-by: Jan Hoeppner <hoeppner@linux.ibm.com>
+Link: https://lore.kernel.org/r/20220505141733.1989450-3-sth@linux.ibm.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/parisc/kernel/processor.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/s390/block/dasd.c      |    7 +++++++
+ drivers/s390/block/dasd_eckd.c |   19 +++++++++++++++++--
+ drivers/s390/block/dasd_int.h  |    2 ++
+ 3 files changed, 26 insertions(+), 2 deletions(-)
 
---- a/arch/parisc/kernel/processor.c
-+++ b/arch/parisc/kernel/processor.c
-@@ -408,8 +408,7 @@ show_cpuinfo (struct seq_file *m, void *
- 		}
- 		seq_printf(m, " (0x%02lx)\n", boot_cpu_data.pdc.capabilities);
+--- a/drivers/s390/block/dasd.c
++++ b/drivers/s390/block/dasd.c
+@@ -1462,6 +1462,13 @@ int dasd_start_IO(struct dasd_ccw_req *c
+ 		if (!cqr->lpm)
+ 			cqr->lpm = dasd_path_get_opm(device);
+ 	}
++	/*
++	 * remember the amount of formatted tracks to prevent double format on
++	 * ESE devices
++	 */
++	if (cqr->block)
++		cqr->trkcount = atomic_read(&cqr->block->trkcount);
++
+ 	if (cqr->cpmode == 1) {
+ 		rc = ccw_device_tm_start(device->cdev, cqr->cpaddr,
+ 					 (long) cqr, cqr->lpm);
+--- a/drivers/s390/block/dasd_eckd.c
++++ b/drivers/s390/block/dasd_eckd.c
+@@ -3026,13 +3026,24 @@ static int dasd_eckd_format_device(struc
+ }
  
--		seq_printf(m, "model\t\t: %s\n"
--				"model name\t: %s\n",
-+		seq_printf(m, "model\t\t: %s - %s\n",
- 				 boot_cpu_data.pdc.sys_model_name,
- 				 cpuinfo->dev ?
- 				 cpuinfo->dev->name : "Unknown");
+ static bool test_and_set_format_track(struct dasd_format_entry *to_format,
+-				      struct dasd_block *block)
++				      struct dasd_ccw_req *cqr)
+ {
++	struct dasd_block *block = cqr->block;
+ 	struct dasd_format_entry *format;
+ 	unsigned long flags;
+ 	bool rc = false;
+ 
+ 	spin_lock_irqsave(&block->format_lock, flags);
++	if (cqr->trkcount != atomic_read(&block->trkcount)) {
++		/*
++		 * The number of formatted tracks has changed after request
++		 * start and we can not tell if the current track was involved.
++		 * To avoid data corruption treat it as if the current track is
++		 * involved
++		 */
++		rc = true;
++		goto out;
++	}
+ 	list_for_each_entry(format, &block->format_list, list) {
+ 		if (format->track == to_format->track) {
+ 			rc = true;
+@@ -3052,6 +3063,7 @@ static void clear_format_track(struct da
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&block->format_lock, flags);
++	atomic_inc(&block->trkcount);
+ 	list_del_init(&format->list);
+ 	spin_unlock_irqrestore(&block->format_lock, flags);
+ }
+@@ -3113,8 +3125,11 @@ dasd_eckd_ese_format(struct dasd_device
+ 	}
+ 	format->track = curr_trk;
+ 	/* test if track is already in formatting by another thread */
+-	if (test_and_set_format_track(format, block))
++	if (test_and_set_format_track(format, cqr)) {
++		/* this is no real error so do not count down retries */
++		cqr->retries++;
+ 		return ERR_PTR(-EEXIST);
++	}
+ 
+ 	fdata.start_unit = curr_trk;
+ 	fdata.stop_unit = curr_trk;
+--- a/drivers/s390/block/dasd_int.h
++++ b/drivers/s390/block/dasd_int.h
+@@ -188,6 +188,7 @@ struct dasd_ccw_req {
+ 	void (*callback)(struct dasd_ccw_req *, void *data);
+ 	void *callback_data;
+ 	unsigned int proc_bytes;	/* bytes for partial completion */
++	unsigned int trkcount;		/* count formatted tracks */
+ };
+ 
+ /*
+@@ -575,6 +576,7 @@ struct dasd_block {
+ 
+ 	struct list_head format_list;
+ 	spinlock_t format_lock;
++	atomic_t trkcount;
+ };
+ 
+ struct dasd_attention_data {
 
 

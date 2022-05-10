@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 746E7522556
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:17:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B2552255B
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbiEJURi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 16:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37546 "EHLO
+        id S231969AbiEJUVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 16:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiEJURh (ORCPT
+        with ESMTP id S231924AbiEJUUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 16:17:37 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324FF1BEAB
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:17:36 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id n18so17762213plg.5
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:17:36 -0700 (PDT)
+        Tue, 10 May 2022 16:20:53 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF61A20822E
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:20:49 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d22so17739044plr.9
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:20:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=poInoMRDMAyFPERzf3TuvkYoli3B3ZRtvFA2DZ7+QuU=;
-        b=Aw23TlWZZS2FnRrrRBhkwOsxgQKqGm7shosIK0f+LI427MQZf64fMzusuz0qIhkZNq
-         XicMBtimef3MJHKtSLZgYdhZXi1/qHc/18YKBBvqNisN9gNXJJHrSAL45wTZNs0eaBh7
-         0cLG+ymeAFvqkzeg2LPc/VqjYftu6Ru5X60r0=
+        bh=VPY+BPFQANz3gDy7cqE3RCNN6lWRUXJ8ern2JoTstfU=;
+        b=jXJ6JFzMblllvK795NI3FvQqpQcwPkVl0bVhyMK3o6LmyhiyVnc9pM+SKsWNtbwkrb
+         vXm0gGlSLp7eTZ8a3YevY+oHmXKB8W/ilZrxw5RUlRCGLC2N3HG9SVP/c97aedgjRwhp
+         wWaIxviwceQPsCLv0sWmrBE0Tj9PqDc3LgbWs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=poInoMRDMAyFPERzf3TuvkYoli3B3ZRtvFA2DZ7+QuU=;
-        b=4i85nVHc2wp7dXgFhrqjOqyeySg7H3lowXL1DfFiM4RJ9/r0uMoGMrTYSNGU37L+Xr
-         rEabkQeOJlS9ONlMOfBVdymUAOZ1Bhfr8Jf6Od5UUrf19b4pb734zkEJOKEnO219xACB
-         5u2RYuChsui4/HNGWsPCstwqSagsKJ3koJa76iqYcH6TEUODtonezDUSGxmXkfby5BG3
-         1s2ewIcL3xWK9EB7drizlMlXv98Szh+lO/M0J7NSfTcYezrpoPvEmKnYDbRDXB+kmcIn
-         1C19cTWu9VlMExnFsrDbEyTVpEqFDcChfFGQSXi9i2Or6x1iCeSepiFIbAbZT53+LVTy
-         7g1g==
-X-Gm-Message-State: AOAM530Kn5qZmPEZDOdXEYKZAJ+W0jdJ7U3V/wKnEX6IjbU7ZqYDB+H5
-        Ew4ejeYxWdlLmBeZM00FstOFSg==
-X-Google-Smtp-Source: ABdhPJxmq6Ox83jEddwu6Xv+2Ce/pOzQwMQlLEyL1SMHKmCZ2WXcEocBB0aVaO3xFdpIm8MAxoNm8Q==
-X-Received: by 2002:a17:903:40c3:b0:15e:9d4a:5d24 with SMTP id t3-20020a17090340c300b0015e9d4a5d24mr21927232pld.77.1652213855736;
-        Tue, 10 May 2022 13:17:35 -0700 (PDT)
+        bh=VPY+BPFQANz3gDy7cqE3RCNN6lWRUXJ8ern2JoTstfU=;
+        b=0yupmZWdfOUYysICp4SixvWlWYLAuWwFgPsMleDI5YJgc6nK9Bx9T2RaHyOs9Vqu33
+         vnjcooikQcGS253Qn/5bhOJARr3aTO+AohErl1y9g+LLzmdqII01aTW1kfyptnY418bS
+         0BeoYnZwIfY7EiqYjx/r5X6vU6+LqHFUCyH3b/0CtsNtY7q8df4DmxjR2RI5edauZsvD
+         BnW3qGMglM6ytaXhwwEtq3NcA1l+aroXJua8G1DWsLjzVossC70gnCz6SmqPqHCyXroD
+         +kendQXHI09UCN6If2pCjE/4BxKdLyqxBPTCvj0f+9jpADJ/Q3JTtdd7qdG1J8MDZy9Q
+         qD+Q==
+X-Gm-Message-State: AOAM530cLfOcQ0otTB5haCFZno9b1nRMHeMmt28S2yMteOQ+22ytNbrO
+        b7aHHIBURvcEjmJpOsWkBJnarg==
+X-Google-Smtp-Source: ABdhPJxDdK9krQAGRnUj2ALxtk0356084bzaUSCApoi5YQd/8+Z41ynrHVmWGvv4Q3NHHnQBRhfzLA==
+X-Received: by 2002:a17:90b:4b01:b0:1dc:7405:dd62 with SMTP id lx1-20020a17090b4b0100b001dc7405dd62mr1604206pjb.160.1652214049398;
+        Tue, 10 May 2022 13:20:49 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id g10-20020aa7818a000000b0050dc76281a6sm11126456pfi.128.2022.05.10.13.17.35
+        by smtp.gmail.com with ESMTPSA id y11-20020a17090a644b00b001d95cdb62d4sm2256217pjm.33.2022.05.10.13.20.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 13:17:35 -0700 (PDT)
-Date:   Tue, 10 May 2022 13:17:34 -0700
+        Tue, 10 May 2022 13:20:48 -0700 (PDT)
+Date:   Tue, 10 May 2022 13:20:48 -0700
 From:   Kees Cook <keescook@chromium.org>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V10 08/44] Documentation/pkeys: Add initial PKS
- documentation
-Message-ID: <202205101316.C611115CC3@keescook>
-References: <20220419170649.1022246-1-ira.weiny@intel.com>
- <20220419170649.1022246-9-ira.weiny@intel.com>
- <202205091501.132944B2C7@keescook>
- <YnqeYBzvatHL1XYZ@iweiny-desk3>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Du Cheng <ducheng2@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        William Kucharski <william.kucharski@oracle.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] niu: Add "overloaded" struct page union member
+Message-ID: <202205101318.4980180F9@keescook>
+References: <20220509222334.3544344-1-keescook@chromium.org>
+ <YnoT+cBTNnPzzg8H@infradead.org>
+ <202205100849.58D2C81@keescook>
+ <YnqgjVoMDu5v9PNG@casper.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YnqeYBzvatHL1XYZ@iweiny-desk3>
+In-Reply-To: <YnqgjVoMDu5v9PNG@casper.infradead.org>
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -76,13 +79,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 10:18:24AM -0700, Ira Weiny wrote:
-> Both Rick and I have been able to run with the following options to qemu:
+On Tue, May 10, 2022 at 06:27:41PM +0100, Matthew Wilcox wrote:
+> On Tue, May 10, 2022 at 08:50:47AM -0700, Kees Cook wrote:
+> > On Tue, May 10, 2022 at 12:27:53AM -0700, Christoph Hellwig wrote:
+> > > On Mon, May 09, 2022 at 03:23:33PM -0700, Kees Cook wrote:
+> > > > The randstruct GCC plugin gets upset when it sees struct addresspace
+> > > > (which is randomized) being assigned to a struct page (which is not
+> > > > randomized):
+> > > 
+> > > Well, the right fix here is to remove this abuse from the driver, not
+> > > to legitimize it as part of a "driver" patch touching a core mm header
+> > 
+> > Right, I didn't expect anyone to like the new "overloaded" member.
+> > Mainly I'd just like to understand how niu _should_ be fixed. Is using
+> > the "private" member the correct thing here?
 > 
-> qemu-system-x86_64 ... -machine accel=tcg -cpu qemu64,+pks ...
+> Well ... no.  We're not entirely set up yet to go to the good answer
+> that means we don't have to touch this driver again, and yet we're also
+> in a situation where we'll need to touch this driver at some point in
+> order to get rid of the way it abuses struct page before we can get to
+> our good place.
+> 
+> The eventual good answer is that we declare a driver-private memdesc
+> variant that has a ->link, ->base ->refcount and ->pfn (maybe it has more
+> than that; I'd have to really understand this driver to be completely
+> certain about what it needs).  Or perhaps there's a better way to handle
+> driver-allocated memory for this kind of networking card that this driver
+> should be converted to use.
+> 
+> I haven't looked into this case deeply enough to have strong thoughts
+> about how we should handle it, both now and in the glorious future.
 
-Ah-ha! Thank you; this works for me. :) I can confirm the tests run as
-expected. :)
+Okay, in the meantime, I'll just add a casting wrapper with a big
+comment to explain what I understand about it with some pointers back to
+this and prior threads. :)
+
+Thanks!
 
 -- 
 Kees Cook

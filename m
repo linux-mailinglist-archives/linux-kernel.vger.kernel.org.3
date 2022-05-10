@@ -2,74 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A3A5225F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 749485225F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiEJU5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 16:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38054 "EHLO
+        id S232185AbiEJU7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 16:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiEJU5f (ORCPT
+        with ESMTP id S229593AbiEJU7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 16:57:35 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB80822BC8
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:57:33 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id c1-20020a17090a558100b001dca2694f23so187394pji.3
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:57:33 -0700 (PDT)
+        Tue, 10 May 2022 16:59:38 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F34266F3F
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:59:38 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2f7d621d1caso193554637b3.11
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:59:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qEwSLaBnufvf0B/G9DnjVyMhvQQtp6PRHTVxLgDlPK8=;
-        b=JZZc8nkB/4Su4yIh1M5akAXPXMXUy7OMtkUi17Z4U6q8imKFEnTV2ldgRsbBiWHbOc
-         OXkC8mulfoTXZNJgg7dy8ejG6nYNpAntJzw/UJ+ZREiXKr9wDqUzvSrnqoqdQxyFobaM
-         R+HM0meqwbmtR1sWL0MDTYxA0VK0lzS8IXVh8=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=G/q1rnQgMaznZ39ohQawlR0ZCKw+W7Y1nNqJrW+4o7o=;
+        b=CALL3wkEY3b86p74iYDdbhQTNr+tfRN+V98GpzavNOy6JN9bP1wPMlvHcih2J5MHMc
+         8UGV/cPauPf41smjoWpJxvopoB6PaFtAoOLgCpClh6zk3izJT46mVl3grrPpDC8EDDeY
+         Bx6n/EGn3sDgVj9MIcL7s0E82t1JbVt9MggqOzhw3XYkYzw75HFiblNjqMFBj0RJTfrg
+         plh1lz39Zr+P/736TPlKm6vNE2zQTSW7iRYz1ysagi0v5o4Sm/wzrCY+zuc2Tm8rVz7/
+         QXM70R2/dAzJJoJ2DxyfEpQes++QZ+l2WknycT53cdHFtC2V7dTCZwQCGb6DLFccDyHL
+         r2tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qEwSLaBnufvf0B/G9DnjVyMhvQQtp6PRHTVxLgDlPK8=;
-        b=ldH1rtjDh5/TLcSwPWxHaMnvLKNNQiFsy4O0AQvvwULPhWBoeWv7JAjK9x2vhoyWiP
-         myi2B5P+PeQXGiQcHEYEl9q0y+OlVkUkpFvh+nEmhiI6zbckjqaO5eK1NW0ETHDNOazh
-         cTVPgrcynQ1nlz3Y+L10lRFM/2LI6XioY3dXycUXEV2EC+1YOjAJJzbZL/cM8fBxtkKl
-         IUtk7bog5cqQkEbc+kWrNHTES7TjfnotN07m5SZP31lIVPwXVU4c/9qUvcCIEjX+KFWu
-         cha78T4kzjxmOpFqatzUjHoWxxpjEk3xHNAXtw4EmFFHeAxIrA37QJIFHXgU5uOD69bl
-         flYA==
-X-Gm-Message-State: AOAM532lcD8xSfv4Att4lObkI64OuvjQ4rFyF+Wry75ba3Cl1Z2dAfmQ
-        9fmP10LXtn1NkfqJQ470UJUDUw==
-X-Google-Smtp-Source: ABdhPJzq6QFou00wiYYBUDT4UWIfcPJViSah6uRx1sl8Xa88lUVgHIvT844SOrOHnYuyyCgBDE0x7w==
-X-Received: by 2002:a17:902:a583:b0:15d:197b:9259 with SMTP id az3-20020a170902a58300b0015d197b9259mr22529041plb.51.1652216253338;
-        Tue, 10 May 2022 13:57:33 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u3-20020a170903108300b0015ee9bb2a38sm72477pld.72.2022.05.10.13.57.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 13:57:33 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Du Cheng <ducheng2@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] niu: Silence randstruct warnings
-Date:   Tue, 10 May 2022 13:57:29 -0700
-Message-Id: <20220510205729.3574400-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=G/q1rnQgMaznZ39ohQawlR0ZCKw+W7Y1nNqJrW+4o7o=;
+        b=RmvKcL+hQF3pnzF8+9/c/8sxHfIkGn0B6F6Y7t2NrVc87RH6yypCpTtdoZQWPhaS14
+         MgbQQdYjKFcJfFbqsJEx2JMQaupwES/NhcYZmN+D9ZWUHQFVBE0B0PszuBwZ7Ivca9da
+         F0Nv/KNru+UZUpiS5bhocQj6pgQY6I/RlBZi/6y4C7dqQkJ0cnwYwVq0cI/DbAcHFhZD
+         KXrSGIEFrAnLHznZpcpcEwRi8ku2RE1Xh2k6EZlr3Ur8RCIvj0KA8WSB3QnROPWw6/bS
+         lgDD3U1yaOqD9uHAum2UtEoaSUITjyKwaaE3JOM6LVBOHERp9h6eLNGHISCuGZfww73p
+         TO6Q==
+X-Gm-Message-State: AOAM531VsIWFHzvZ1IF3kgHxVK3pTOrKU0CoKKSHqm1xiajnwZE3ecdx
+        pXXKrYFWidIom+sFHrAGuO7wIofBFnQB3MY51APKuw==
+X-Google-Smtp-Source: ABdhPJwBQdouaCTQjdwS7J9yFY1kM4uCTbuDjL2AFdvllvzNydU7sRdMGZkZEeIDKL8Y59rkE1t1nwb9SMkkRXYb+5c=
+X-Received: by 2002:a81:6cc3:0:b0:2f7:cc1f:b52d with SMTP id
+ h186-20020a816cc3000000b002f7cc1fb52dmr21862524ywc.293.1652216377129; Tue, 10
+ May 2022 13:59:37 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6424; h=from:subject; bh=qjuk20AT1lvrR1lDg81FqCODCnq2+tj+/Y7wwEnRQa8=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBietG4dsJ9H5fxphZwsMR3iDSJzvX3mPa4VHlCGvUH hideMGiJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYnrRuAAKCRCJcvTf3G3AJtleD/ 9zyb+fsiOw5Yfe5VTpCrrjyUdaIkIJl/vUPO3MSulEMU1Unng7KrEqQmJgAJM5WTUcAh7cTjNpY1q7 8+KeeGAO0KfG+t8kYQEEZRsOTCpFxnS4/oaFATHvLKVmZr83K0Yev/T2Ks6sActMbiWmsoo1mWhbJP ZMxlvaAFuKNEW9EjhNwKggoufIHyZcrx55WZFm5FF5HWQpa8sHQswEfZEQdK9raFdLCfMrBUfEEYbu UvlGalUlLC0Eg3kxD8/3HoqiKYvY9oQLdo8jnYGX7iqtwpQdXs9Y45aRQXDg7N55W9cOSut7I2kIMZ luOU+ygvT7MzXWj4Lo2ixe8ZwX7v+Hff8CLqdCpozXqoYiUYH6RzrJbX2ltMwpR4NNhsUsi7YznAT9 2Q0DKZZAjkGQq6c13DiqXaBQjRDAXhpPiUY0jNRi6l6FzxS3jqz9Zxrx2W7QYHGga4BpIc1LVgb5aT Kd04io55f66UaqZWMPDUw6dt02EdrN21KLLjlJUYMBus1KJR5LomjDBIhtphXZSh6+fD5cmFPZO8ZM k8JpuL3zTs+wcdSc4JdrsoELDqoR1K2PmCqX5eiS5GGfDobMFeJkx0lD8QY13R9yGukQrPhbcIcSG8 m7ViudNhHRmgfEdMjUJn0Ws8ouESfaGkchCFruYPxZ8TwyMWXHnsMqOb/7dw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20220510030014.3842475-1-surenb@google.com> <20220510030014.3842475-2-surenb@google.com>
+ <YnpjNyrdqT/QxBPI@dhcp22.suse.cz> <CAJuCfpEt9SSrELZzfmcqJ7JL_nEzWGz-YE9GRUZTjU5unqQjQg@mail.gmail.com>
+ <YnrQ11iou9bwN9tY@dhcp22.suse.cz>
+In-Reply-To: <YnrQ11iou9bwN9tY@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 10 May 2022 13:59:26 -0700
+Message-ID: <CAJuCfpGw0nfxwY0pLMW9P4fhV7qKf3DejDgH+19Bj+v30-r4pQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] mm: drop oom code from exit_mmap
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <guro@fb.com>, Minchan Kim <minchan@kernel.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jann Horn <jannh@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>, shuah@kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
+        kernel-team <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,173 +85,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clang randstruct gets upset when it sees struct addresspace (which is
-randomized) being assigned to a struct page (which is not randomized):
+On Tue, May 10, 2022 at 1:53 PM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Tue 10-05-22 09:31:50, Suren Baghdasaryan wrote:
+> > On Tue, May 10, 2022 at 6:06 AM Michal Hocko <mhocko@suse.com> wrote:
+> > >
+> > > On Mon 09-05-22 20:00:13, Suren Baghdasaryan wrote:
+> > > > With the oom-killer being able to operate on locked pages, exit_mmap
+> > > > does not need to ensure that oom_reap_task_mm is done before it can
+> > > > proceed. Instead it can rely on mmap_lock write lock to prevent
+> > > > oom-killer from operating on the vma tree while it's freeing page
+> > > > tables. exit_mmap can hold mmap_lock read lock when unmapping vmas
+> > > > and then take mmap_lock write lock before freeing page tables.
+> > >
+> > > The changelog is rather light on nasty details which might be good but
+> > > for the sake of our future us let's be more verbose so that we do not
+> > > have to reinvent the prior history each time we are looking into this
+> > > code. I would go with something like this instead:
+> > > "
+> > > The primary reason to invoke the oom reaper from the exit_mmap path used
+> > > to be a prevention of an excessive oom killing if the oom victim exit
+> > > races with the oom reaper (see 212925802454 ("mm: oom: let oom_reap_task
+> > > and exit_mmap run concurrently") for more details. The invocation has
+> > > moved around since then because of the interaction with the munlock
+> > > logic but the underlying reason has remained the same (see 27ae357fa82b
+> > > ("mm, oom: fix concurrent munlock and oom reaper unmap, v3").
+> > >
+> > > Munlock code is no longer a problem since a213e5cf71cb ("mm/munlock:
+> > > delete munlock_vma_pages_all(), allow oomreap") and there shouldn't be
+> > > any blocking operation before the memory is unmapped by exit_mmap so
+> > > the oom reaper invocation can be dropped. The unmapping part can be done
+> > > with the non-exclusive mmap_sem and the exclusive one is only required
+> > > when page tables are freed.
+> > >
+> > > Remove the oom_reaper from exit_mmap which will make the code easier to
+> > > read. This is really unlikely to make any observable difference although
+> > > some microbenchmarks could benefit from one less branch that needs to be
+> > > evaluated even though it almost never is true.
+> > > "
+> >
+> > Looks great! Thanks for collecting all the history. Will update the description.
+>
+> Please make sure you double check the story. This is mostly my
+> recollection and brief reading through the said commits. I might
+> misremember here and there.
 
-drivers/net/ethernet/sun/niu.c:3385:12: error: casting from randomized structure pointer type 'struct address_space *' to 'struct page *'
-                        *link = (struct page *) page->mapping;
-                                ^
+Will do. Thanks!
 
-It looks like niu.c is looking for an in-line place to chain its allocated
-pages together and is overloading the "mapping" member, as it is unused.
-This is very non-standard, and is expected to be cleaned up in the
-future[1], but there is no "correct" way to handle it today.
-
-No meaningful machine code changes result after this change, and source
-readability is improved.
-
-Drop the randstruct exception now that there is no "confusing" cross-type
-assignment.
-
-[1] https://lore.kernel.org/lkml/YnqgjVoMDu5v9PNG@casper.infradead.org/
-
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc: Christoph Hellwig <hch@infradead.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Du Cheng <ducheng2@gmail.com>
-Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: William Kucharski <william.kucharski@oracle.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: netdev@vger.kernel.org
-Cc: linux-mm@kvack.org
-Cc: linux-hardening@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-earlier version: https://lore.kernel.org/lkml/20220509222334.3544344-1-keescook@chromium.org/
----
- drivers/net/ethernet/sun/niu.c                | 41 ++++++++++++++-----
- scripts/gcc-plugins/randomize_layout_plugin.c |  2 -
- 2 files changed, 31 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/net/ethernet/sun/niu.c b/drivers/net/ethernet/sun/niu.c
-index 42460c0885fc..df70df29deea 100644
---- a/drivers/net/ethernet/sun/niu.c
-+++ b/drivers/net/ethernet/sun/niu.c
-@@ -35,6 +35,25 @@
- 
- #include "niu.h"
- 
-+/* This driver wants to store a link to a "next page" within the
-+ * page struct itself by overloading the content of the "mapping"
-+ * member. This is not expected by the page API, but does currently
-+ * work. However, the randstruct plugin gets very bothered by this
-+ * case because "mapping" (struct address_space) is randomized, so
-+ * casts to/from it trigger warnings. Hide this by way of a union,
-+ * to create a typed alias of "mapping", since that's how it is
-+ * actually being used here.
-+ */
-+union niu_page {
-+	struct page page;
-+	struct {
-+		unsigned long __flags;	/* unused alias of "flags" */
-+		struct list_head __lru;	/* unused alias of "lru" */
-+		struct page *next;	/* alias of "mapping" */
-+	};
-+};
-+#define niu_next_page(p)	container_of(p, union niu_page, page)->next
-+
- #define DRV_MODULE_NAME		"niu"
- #define DRV_MODULE_VERSION	"1.1"
- #define DRV_MODULE_RELDATE	"Apr 22, 2010"
-@@ -3283,7 +3302,7 @@ static struct page *niu_find_rxpage(struct rx_ring_info *rp, u64 addr,
- 
- 	addr &= PAGE_MASK;
- 	pp = &rp->rxhash[h];
--	for (; (p = *pp) != NULL; pp = (struct page **) &p->mapping) {
-+	for (; (p = *pp) != NULL; pp = &niu_next_page(p)) {
- 		if (p->index == addr) {
- 			*link = pp;
- 			goto found;
-@@ -3300,7 +3319,7 @@ static void niu_hash_page(struct rx_ring_info *rp, struct page *page, u64 base)
- 	unsigned int h = niu_hash_rxaddr(rp, base);
- 
- 	page->index = base;
--	page->mapping = (struct address_space *) rp->rxhash[h];
-+	niu_next_page(page) = rp->rxhash[h];
- 	rp->rxhash[h] = page;
- }
- 
-@@ -3382,11 +3401,11 @@ static int niu_rx_pkt_ignore(struct niu *np, struct rx_ring_info *rp)
- 		rcr_size = rp->rbr_sizes[(val & RCR_ENTRY_PKTBUFSZ) >>
- 					 RCR_ENTRY_PKTBUFSZ_SHIFT];
- 		if ((page->index + PAGE_SIZE) - rcr_size == addr) {
--			*link = (struct page *) page->mapping;
-+			*link = niu_next_page(page);
- 			np->ops->unmap_page(np->device, page->index,
- 					    PAGE_SIZE, DMA_FROM_DEVICE);
- 			page->index = 0;
--			page->mapping = NULL;
-+			niu_next_page(page) = NULL;
- 			__free_page(page);
- 			rp->rbr_refill_pending++;
- 		}
-@@ -3451,11 +3470,11 @@ static int niu_process_rx_pkt(struct napi_struct *napi, struct niu *np,
- 
- 		niu_rx_skb_append(skb, page, off, append_size, rcr_size);
- 		if ((page->index + rp->rbr_block_size) - rcr_size == addr) {
--			*link = (struct page *) page->mapping;
-+			*link = niu_next_page(page);
- 			np->ops->unmap_page(np->device, page->index,
- 					    PAGE_SIZE, DMA_FROM_DEVICE);
- 			page->index = 0;
--			page->mapping = NULL;
-+			niu_next_page(page) = NULL;
- 			rp->rbr_refill_pending++;
- 		} else
- 			get_page(page);
-@@ -3518,13 +3537,13 @@ static void niu_rbr_free(struct niu *np, struct rx_ring_info *rp)
- 
- 		page = rp->rxhash[i];
- 		while (page) {
--			struct page *next = (struct page *) page->mapping;
-+			struct page *next = niu_next_page(page);
- 			u64 base = page->index;
- 
- 			np->ops->unmap_page(np->device, base, PAGE_SIZE,
- 					    DMA_FROM_DEVICE);
- 			page->index = 0;
--			page->mapping = NULL;
-+			niu_next_page(page) = NULL;
- 
- 			__free_page(page);
- 
-@@ -6440,8 +6459,7 @@ static void niu_reset_buffers(struct niu *np)
- 
- 				page = rp->rxhash[j];
- 				while (page) {
--					struct page *next =
--						(struct page *) page->mapping;
-+					struct page *next = niu_next_page(page);
- 					u64 base = page->index;
- 					base = base >> RBR_DESCR_ADDR_SHIFT;
- 					rp->rbr[k++] = cpu_to_le32(base);
-@@ -10176,6 +10194,9 @@ static int __init niu_init(void)
- 
- 	BUILD_BUG_ON(PAGE_SIZE < 4 * 1024);
- 
-+	BUILD_BUG_ON(offsetof(struct page, mapping) !=
-+		     offsetof(union niu_page, next));
-+
- 	niu_debug = netif_msg_init(debug, NIU_MSG_DEFAULT);
- 
- #ifdef CONFIG_SPARC64
-diff --git a/scripts/gcc-plugins/randomize_layout_plugin.c b/scripts/gcc-plugins/randomize_layout_plugin.c
-index 727512eebb3b..38a8cf90f611 100644
---- a/scripts/gcc-plugins/randomize_layout_plugin.c
-+++ b/scripts/gcc-plugins/randomize_layout_plugin.c
-@@ -46,8 +46,6 @@ struct whitelist_entry {
- };
- 
- static const struct whitelist_entry whitelist[] = {
--	/* NIU overloads mapping with page struct */
--	{ "drivers/net/ethernet/sun/niu.c", "page", "address_space" },
- 	/* unix_skb_parms via UNIXCB() buffer */
- 	{ "net/unix/af_unix.c", "unix_skb_parms", "char" },
- 	{ }
--- 
-2.32.0
-
+> --
+> Michal Hocko
+> SUSE Labs

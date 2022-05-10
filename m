@@ -2,128 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 040F1520F6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 10:06:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6F7520F70
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 10:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237805AbiEJIKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 04:10:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37168 "EHLO
+        id S237816AbiEJIMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 04:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237544AbiEJIKb (ORCPT
+        with ESMTP id S237864AbiEJIK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 04:10:31 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09E14EF47
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 01:06:30 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id gh6so31376715ejb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 01:06:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7tI2Ml7ymhbWng6Ez1TG6evxVbSct1ixRwoWt6dfoEI=;
-        b=oOtcyxbZmxrFKBqSMFucrSkIORwsCB93eB0KfRaZL/Ssg7HjwooAEun4ESX1HaypIV
-         sGJtZpHRV3J2QlxJP18LmXH/tBA6RmH0h240ugbELvxEDH4OpX1uBZPuiAw6GS63Et6Q
-         8ds5+bFHu9ehHJK2ihuUN4MDVDqC+5TMjxprI=
+        Tue, 10 May 2022 04:10:58 -0400
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB41D249887;
+        Tue, 10 May 2022 01:06:55 -0700 (PDT)
+Received: by mail-qk1-f178.google.com with SMTP id c1so12653151qkf.13;
+        Tue, 10 May 2022 01:06:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=7tI2Ml7ymhbWng6Ez1TG6evxVbSct1ixRwoWt6dfoEI=;
-        b=lGtBobgaaoJ53fIXJmhtqJgtTvYI3YJ7J/KCjTHMtgCFbpMKni4AzF4UAkqQ+pXjia
-         rPSnFpyj/km1UoYTizC4XR6YeZdzCvZkBpAikhrhhWgU6cPN+O4Ofh9Rx2cD6mYyzcaM
-         vcsIo6mWW8OsKC52c0A7ItPUphYTTzq1Us9ejcpixOqEnPLbsTXyNUzZCrIFkXsjG9zH
-         OU+c3bKat9EIZPf3jEISZvEtdtOSDlkdN76S27bwWEKcgzqnf5RIFemRk8XNayXRJ5uH
-         8Cb+eCx7/DpZYz5mtLMASQGUVNRuAwAy5HzhBXMWHHPOg/YLI6z3cBEtcfCSpLCwPGiU
-         wXxw==
-X-Gm-Message-State: AOAM531pgVyTRuZMQqDieeaFqO9RlhOk5NwCw+MRbjRohg2VCmYuG/e7
-        8M/Ovsmg20PccTIyo1G5uJxUNDI8Gp5L94qUYTfmFQ==
-X-Google-Smtp-Source: ABdhPJyaRY4zF9W3N5Owubw7wkii9tMo2zI4ulE85zYHRZIlQZtO1rU1FeijvcrIuKANKfUiFH8XX2WkOoqwrAZjOn8=
-X-Received: by 2002:a17:907:62aa:b0:6e0:f208:b869 with SMTP id
- nd42-20020a17090762aa00b006e0f208b869mr18501699ejc.270.1652169989025; Tue, 10
- May 2022 01:06:29 -0700 (PDT)
+        bh=hrwbYVMfyZKLGnIKNlCKVv1V4tt6GbLeMklP2rm/UpI=;
+        b=AIIBiz8JIbGH3wqpbmLY7XDGxWc1SqAQjR9yr4t4biow36QLK4mlREUTIgv6BjeOkA
+         FRaxl0/POIYsFS5yjVIexPOXnC9J1v0HufivUS0HP+wCgE3TWybjMECOXgPTKzpVf2U1
+         XYdjHJV7qTieJBmbhN3O1QaLwhEksN/ld3admgYb8uqd3z0gj0CKqi+LcSDDSgzamZ/G
+         /jtraUwroTcZlzAP4749Hf6DxMF6P6bH4IgnX/5zeFRNMHQ463HTPbIPuVHooFmz/Ih8
+         fr5EaWwPmcs8HSN0+vW9e0QgizV/WFNDeTaMR3UUksR+JXJ199hqO8xYBfiDzTXAZ/RE
+         /WdQ==
+X-Gm-Message-State: AOAM533d2oFlXLoS88SlxUKZCpuggGf+LiF7sN/BCS6hatc1j4lgJyIE
+        ZGqjU7fEaZyPxyaMbPtuNRwZphYyY9U2rw==
+X-Google-Smtp-Source: ABdhPJwJ3QMqzoGF9MAZVYiv3WWBcfzCUMMBdpPiK/nuc3ZWk95NUngNO6kSTuualJOYf2aq593OPQ==
+X-Received: by 2002:a05:620a:4150:b0:6a0:81cc:7e78 with SMTP id k16-20020a05620a415000b006a081cc7e78mr6851089qko.98.1652170014518;
+        Tue, 10 May 2022 01:06:54 -0700 (PDT)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id q71-20020a37a74a000000b0069fcc501851sm8175683qke.78.2022.05.10.01.06.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 01:06:54 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-2ec42eae76bso170522147b3.10;
+        Tue, 10 May 2022 01:06:53 -0700 (PDT)
+X-Received: by 2002:a81:234b:0:b0:2f8:4082:bbd3 with SMTP id
+ j72-20020a81234b000000b002f84082bbd3mr18054436ywj.47.1652170013606; Tue, 10
+ May 2022 01:06:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com> <20220509124815.vb7d2xj5idhb2wq6@wittgenstein>
- <CAJfpegveWaS5pR3O1c_7qLnaEDWwa8oi26x2v_CwDXB_sir1tg@mail.gmail.com> <8ab7f51cf18ba62e3f5bfdf5d9933895413f4806.camel@themaw.net>
-In-Reply-To: <8ab7f51cf18ba62e3f5bfdf5d9933895413f4806.camel@themaw.net>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Tue, 10 May 2022 10:06:17 +0200
-Message-ID: <CAJfpegv3MCHMzur9R+K+yZC3Z_Wmbq3=pQwuQ=+kQSrihg0c9g@mail.gmail.com>
-Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
-To:     Ian Kent <raven@themaw.net>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, Dave Chinner <david@fromorbit.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Karel Zak <kzak@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
+References: <2b7d411b4a7913335082c858cb0d63b9e4bf7c5b.1652103920.git.geert+renesas@glider.be>
+ <20fd1a74-c0f5-d8e9-4903-b74c185d5aa3@kernel.org> <CAMuHMdVXHSnOOnn3jchezQc+bsPYTnSPuw_rOe+pyskAVaQGnQ@mail.gmail.com>
+ <22ed864d-8d71-7042-4d55-2b0b65d4d281@kernel.org>
+In-Reply-To: <22ed864d-8d71-7042-4d55-2b0b65d4d281@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 10 May 2022 10:06:42 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVFHeJvXAfb-Q1WGvDEuKTeVx-3fmmPu18Ci2yoNinMuA@mail.gmail.com>
+Message-ID: <CAMuHMdVFHeJvXAfb-Q1WGvDEuKTeVx-3fmmPu18Ci2yoNinMuA@mail.gmail.com>
+Subject: Re: [PATCH] memory: OMAP_GPMC should depend on ARCH_OMAP2PLUS || ARCH_K3
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Tony Lindgren <tony@atomide.com>,
+        "open list:TI ETHERNET SWITCH DRIVER (CPSW)" 
+        <linux-omap@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 May 2022 at 06:27, Ian Kent <raven@themaw.net> wrote:
+Hi Roger,
 
-> > Was there ever a test patch for systemd using fsinfo(2)?  I think
-> > not.
->
-> Mmm ... I'm hurt you didn't pay any attention to what I did on this
-> during the original fsinfo() discussions.
+On Tue, May 10, 2022 at 9:40 AM Roger Quadros <rogerq@kernel.org> wrote:
+> On 10/05/2022 10:30, Geert Uytterhoeven wrote:
+> > On Tue, May 10, 2022 at 9:22 AM Roger Quadros <rogerq@kernel.org> wrote:
+> >> On 09/05/2022 16:48, Geert Uytterhoeven wrote:
+> >>> The Texas Instruments OMAP General Purpose Memory Controller (GPMC) is
+> >>> only present on TI OMAP2/3/4/5, AM33xx, AM43x, DRA7xx, TI81xx, and K3
+> >>> SoCs.  Hence add a dependency on ARCH_OMAP2PLUS || ARCH_K3, to prevent
+> >>> asking the user about this driver when configuring a kernel without
+> >>> OMAP2+ or K3 SoC family support.
+> >>>
+> >>> Fixes: be34f45f0d4aa91c ("memory: omap-gpmc: Make OMAP_GPMC config visible and selectable")
+> >>> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-I can't find anything related to this in my mailbox.  Maybe you
-mentioned it at some point, but I have not been involved with the
-actual systemd changes.  So not meant to belittle your work at all.
+> Could you please also add ARCH_KEYSTONE in the 'depends on' list
+> as some SoCs in that architecture do have the GPMC block.
 
-> > Until systemd people start to reengineer the mount handing to allow
-> > for retrieving a single mount instead of the complete mount table we
-> > will never know where the performance bottleneck lies.
->
-> We didn't need the systemd people to do this only review and contribute
-> to the pr for the change and eventually merge it.
->
-> What I did on this showed that using fsinfo() allone about halved the
-> CPU overhead (from around 4 processes using about 80%) and once the
-> mount notifications was added too it went down to well under 10% per
-> process. The problem here was systemd is quite good at servicing events
-> and reducing event processing overhead meant more events would then be
-> processed. Utilizing the mount notifications queueing was the key to
-> improving this and that was what I was about to work on at the end.
->
-> But everything stopped before the work was complete.
->
-> As I said above it's been a long time since I looked at the systemd
-> work and it definitely was a WIP so "what you see is what you get"
-> at https://github.com/raven-au/systemd/commits/. It looks like the
-> place to look to get some idea of what was being done is branch
-> notifications-devel or notifications-rfc-pr. Also note that this
-> uses the libmount fsinfo() infrastrucure that was done by Karal Zak
-> (and a tiny bit by me) at the time.
+Are you sure? AFAICS, none of the Keystone DTS files have device
+nodes that are compatible with the match list in the omap-gpmc driver.
 
-Looks great as a first step.
+Or perhaps the GPMC support still has to be added to the Keystone
+DTS files (and or driver)?
 
-What do you mean by "Utilizing the mount notifications queueing"?
+Gr{oetje,eeting}s,
 
-Do you mean batching of notifications?   I think that's a very
-important issue: processing each individual notifcation may not make
-sense when there are lots of them.  For example, doing ceate
-mount+remote mount in a loop a million times will result in two
-million notification messages (with high likelyhood of queue
-overflow), but in the end the mount table will end up being the
-same...
+                        Geert
 
-Thanks,
-Miklos
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

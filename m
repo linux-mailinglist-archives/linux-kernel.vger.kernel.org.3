@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 084D3521BE3
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E94AD521BF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243395AbiEJOYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40046 "EHLO
+        id S1343783AbiEJOZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244928AbiEJNvc (ORCPT
+        with ESMTP id S244205AbiEJNwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:51:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F36299573;
-        Tue, 10 May 2022 06:38:04 -0700 (PDT)
+        Tue, 10 May 2022 09:52:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002736C0DD;
+        Tue, 10 May 2022 06:38:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18F5C618C8;
-        Tue, 10 May 2022 13:37:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BCB7C385C2;
-        Tue, 10 May 2022 13:37:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1239B81DB3;
+        Tue, 10 May 2022 13:37:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4825CC385C6;
+        Tue, 10 May 2022 13:37:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189867;
-        bh=kbIMyA20MLb5r88e4+yEMtTP3fJ10IDe37wFkR1I50g=;
+        s=korg; t=1652189870;
+        bh=zlEMjjuzr3mcxVhnutTM6/09TaldW+hL/6Nh9t7O0Zk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uOAPBJGWNK/Fqf7Z8H83PVGRCc3096YZ/C1YWQuUxBF7E5K4HoHkV8c1hQpRWAGqJ
-         +n4c9D3OsPSnF/ETF2jKy7DV0hTJEQ0VpPk8HEGHZc4EIJ9wd3ugzKGj/HVv35sORr
-         tEEnoSniqD2pnycKboPNqUOz8xvEhDtWQ5ViGPxM=
+        b=axOW4MCfOow57M4lgEo+SwzK19qsF/43NZd8x1sB82LLQGf8ViKwvIQVtSvlv4APt
+         aEBHIXsbTDC/UKJSS72BrKtgNvLVDaVw/sfpuINiENbWae6Q+/2sxbm9bsLzV5vEIT
+         O4unf5XyaKHC9FqkW5uqs6sCJy2gz/unVfCG92xY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Armin Wolf <W_Armin@gmx.de>, Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 5.17 055/140] hwmon: (adt7470) Fix warning on module removal
-Date:   Tue, 10 May 2022 15:07:25 +0200
-Message-Id: <20220510130743.193221985@linuxfoundation.org>
+        stable@vger.kernel.org, Adam Wujek <dev_public@wujek.eu>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 5.17 056/140] hwmon: (pmbus) disable PEC if not enabled
+Date:   Tue, 10 May 2022 15:07:26 +0200
+Message-Id: <20220510130743.221225564@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
 References: <20220510130741.600270947@linuxfoundation.org>
@@ -54,57 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Armin Wolf <W_Armin@gmx.de>
+From: Adam Wujek <dev_public@wujek.eu>
 
-commit 7b2666ce445c700b8dcee994da44ddcf050a0842 upstream.
+commit 75d2b2b06bd8407d03a3f126bc8b95eb356906c7 upstream.
 
-When removing the adt7470 module, a warning might be printed:
+Explicitly disable PEC when the client does not support it.
+The problematic scenario is the following. A device with enabled PEC
+support is up and running and a kernel driver is loaded.
+Then the driver is unloaded (or device unbound), the HW device
+is reconfigured externally (e.g. by i2cset) to advertise itself as not
+supporting PEC. Without a new code, at the second load of the driver
+(or bind) the "flags" variable is not updated to avoid PEC usage. As a
+consequence the further communication with the device is done with
+the PEC enabled, which is wrong and may fail.
 
-do not call blocking ops when !TASK_RUNNING; state=1
-set at [<ffffffffa006052b>] adt7470_update_thread+0x7b/0x130 [adt7470]
+The implementation first disable the I2C_CLIENT_PEC flag, then the old
+code enable it if needed.
 
-This happens because adt7470_update_thread() can leave the kthread in
-TASK_INTERRUPTIBLE state when the kthread is being stopped before
-the call of set_current_state(). Since kthread_exit() might sleep in
-exit_signals(), the warning is printed.
-Fix that by using schedule_timeout_interruptible() and removing
-the call of set_current_state().
-This causes TASK_INTERRUPTIBLE to be set after kthread_should_stop()
-which might cause the kthread to exit.
-
-Reported-by: Zheyu Ma <zheyuma97@gmail.com>
-Fixes: 93cacfd41f82 (hwmon: (adt7470) Allow faster removal)
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-Tested-by: Zheyu Ma <zheyuma97@gmail.com>
-Link: https://lore.kernel.org/r/20220407101312.13331-1-W_Armin@gmx.de
+Fixes: 4e5418f787ec ("hwmon: (pmbus_core) Check adapter PEC support")
+Signed-off-by: Adam Wujek <dev_public@wujek.eu>
+Link: https://lore.kernel.org/r/20220420145059.431061-1-dev_public@wujek.eu
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hwmon/adt7470.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/hwmon/pmbus/pmbus_core.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/hwmon/adt7470.c
-+++ b/drivers/hwmon/adt7470.c
-@@ -19,6 +19,7 @@
- #include <linux/log2.h>
- #include <linux/kthread.h>
- #include <linux/regmap.h>
-+#include <linux/sched.h>
- #include <linux/slab.h>
- #include <linux/util_macros.h>
- 
-@@ -294,11 +295,10 @@ static int adt7470_update_thread(void *p
- 		adt7470_read_temperatures(data);
- 		mutex_unlock(&data->lock);
- 
--		set_current_state(TASK_INTERRUPTIBLE);
- 		if (kthread_should_stop())
- 			break;
- 
--		schedule_timeout(msecs_to_jiffies(data->auto_update_interval));
-+		schedule_timeout_interruptible(msecs_to_jiffies(data->auto_update_interval));
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -2326,6 +2326,9 @@ static int pmbus_init_common(struct i2c_
+ 		data->has_status_word = true;
  	}
  
- 	return 0;
++	/* Make sure PEC is disabled, will be enabled later if needed */
++	client->flags &= ~I2C_CLIENT_PEC;
++
+ 	/* Enable PEC if the controller and bus supports it */
+ 	if (!(data->flags & PMBUS_NO_CAPABILITY)) {
+ 		ret = i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
 
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96BFA521A8C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E1F52190C
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343816AbiEJOCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55166 "EHLO
+        id S241317AbiEJNnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244842AbiEJNiI (ORCPT
+        with ESMTP id S242086AbiEJN3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:38:08 -0400
+        Tue, 10 May 2022 09:29:15 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C863861624;
-        Tue, 10 May 2022 06:26:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7764449FAC;
+        Tue, 10 May 2022 06:21:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C039DB81D24;
-        Tue, 10 May 2022 13:26:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E70D8C385A6;
-        Tue, 10 May 2022 13:26:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F7EAB81038;
+        Tue, 10 May 2022 13:21:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2188C385A6;
+        Tue, 10 May 2022 13:21:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189184;
-        bh=DHz9FBVHZk9j/KZCg+ljNfPo6VkSfiVP4tnwrZI+KG0=;
+        s=korg; t=1652188867;
+        bh=Ym8GxnnVBZBQ9TUgzbGFvGfJY+zRyIlodEKpAVlkL4o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kRkfB3VlDeUJZtf83UBqYZU/2qCgmDuINn2F65h44b8aAB1b6Rdx8FgsRK2CuU5vj
-         4wdkcDJRpdVg9UEohwzqwFTGcUri24DR8IEtURZttp2ic1nQwmrb353q0LI+sFUKVp
-         /ZhCnQHI1haMq607u2MIxa6ESmUpPKmdkPk22OTc=
+        b=R2u4rOw1J1BCb0iZbJo4D65R6KdzDOLdH3rGkwlHgoiuwUN7TZvujDHm/K07XBvSZ
+         HVtveP2ghbb2zAha5HJdBVB5H14kIi/fsZ4P88vOZOIldHhEdwHiMjIX9SHsBYqQ4E
+         HUoB+gp7a0tQ9xI80DBMCyOjsJhJ/MsRdaSDy8yE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Zhang <markzhang@nvidia.com>,
-        Maor Gottlieb <maorg@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: [PATCH 5.10 40/70] net/mlx5e: Fix the calling of update_buffer_lossy() API
+        stable@vger.kernel.org, Sascha Hauer <sha@pengutronix.de>,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 4.19 74/88] ASoC: dmaengine: Restore NULL prepare_slave_config() callback
 Date:   Tue, 10 May 2022 15:07:59 +0200
-Message-Id: <20220510130734.036026407@linuxfoundation.org>
+Message-Id: <20220510130735.882469436@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
-References: <20220510130732.861729621@linuxfoundation.org>
+In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
+References: <20220510130733.735278074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,33 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Zhang <markzhang@nvidia.com>
+From: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
 
-commit c4d963a588a6e7c4ef31160e80697ae8e5a47746 upstream.
+commit 660564fc9a92a893a14f255be434f7ea0b967901 upstream.
 
-The arguments of update_buffer_lossy() is in a wrong order. Fix it.
+As pointed out by Sascha Hauer, this patch changes:
+if (pmc->config && !pcm->config->prepare_slave_config)
+        <do nothing>
+to:
+if (pmc->config && !pcm->config->prepare_slave_config)
+        snd_dmaengine_pcm_prepare_slave_config()
 
-Fixes: 88b3d5c90e96 ("net/mlx5e: Fix port buffers cell size value")
-Signed-off-by: Mark Zhang <markzhang@nvidia.com>
-Reviewed-by: Maor Gottlieb <maorg@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+This breaks the drivers that do not need a call to
+dmaengine_slave_config(). Drivers that still need to call
+snd_dmaengine_pcm_prepare_slave_config(), but have a NULL
+pcm->config->prepare_slave_config should use
+snd_dmaengine_pcm_prepare_slave_config() as their prepare_slave_config
+callback.
+
+Fixes: 9a1e13440a4f ("ASoC: dmaengine: do not use a NULL prepare_slave_config() callback")
+Reported-by: Sascha Hauer <sha@pengutronix.de>
+Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+Link: https://lore.kernel.org/r/20220421125403.2180824-1-codrin.ciubotariu@microchip.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en/port_buffer.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ sound/soc/soc-generic-dmaengine-pcm.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/port_buffer.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/port_buffer.c
-@@ -309,8 +309,8 @@ int mlx5e_port_manual_buffer_config(stru
- 		if (err)
- 			return err;
+--- a/sound/soc/soc-generic-dmaengine-pcm.c
++++ b/sound/soc/soc-generic-dmaengine-pcm.c
+@@ -91,10 +91,10 @@ static int dmaengine_pcm_hw_params(struc
  
--		err = update_buffer_lossy(max_mtu, curr_pfc_en, prio2buffer, port_buff_cell_sz,
--					  xoff, &port_buffer, &update_buffer);
-+		err = update_buffer_lossy(max_mtu, curr_pfc_en, prio2buffer, xoff,
-+					  port_buff_cell_sz, &port_buffer, &update_buffer);
- 		if (err)
- 			return err;
- 	}
+ 	memset(&slave_config, 0, sizeof(slave_config));
+ 
+-	if (pcm->config && pcm->config->prepare_slave_config)
+-		prepare_slave_config = pcm->config->prepare_slave_config;
+-	else
++	if (!pcm->config)
+ 		prepare_slave_config = snd_dmaengine_pcm_prepare_slave_config;
++	else
++		prepare_slave_config = pcm->config->prepare_slave_config;
+ 
+ 	if (prepare_slave_config) {
+ 		ret = prepare_slave_config(substream, params, &slave_config);
 
 

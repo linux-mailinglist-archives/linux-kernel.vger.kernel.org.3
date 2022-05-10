@@ -2,167 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2D0521A60
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 327B752166E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245649AbiEJN6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56518 "EHLO
+        id S242236AbiEJNMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245189AbiEJNih (ORCPT
+        with ESMTP id S232399AbiEJNMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:38:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6856E268223;
-        Tue, 10 May 2022 06:28:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 10 May 2022 09:12:44 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CADB53B4B;
+        Tue, 10 May 2022 06:08:47 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 135981F8C6;
+        Tue, 10 May 2022 13:08:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652188126; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xlPWteioqpYFvjBcQYKo/BjcXYvQ08uXCEUWe/iKqPY=;
+        b=TuCts4P+EE3p3zrQm1PgFJRWle2LN4YZoD/6JoUp3GDg63Afgh7ym4cx60kFrRSy/CWLuS
+        CKcpXUOOWehKX5RakYb0xHGPRJyO681F/AMagaFzy66vJq5oq34A9a1hUYuCtw42CKatIJ
+        JMzaCRhLpyX9bP97aNysVdCxuJhMVqc=
+Received: from suse.cz (unknown [10.100.201.86])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B3B8B81D24;
-        Tue, 10 May 2022 13:28:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BB60C385A6;
-        Tue, 10 May 2022 13:28:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189300;
-        bh=/Nq8sOMYYkVW91fUqgNO+MrVS7wvcRikl8+thWTEhm4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zDMcKjokllCtwW+BBtVmR62bHQg0NaUQhzGlOosIyJkPbCpfuypBOGVOLk7I7C+2A
-         wHlyW3E4M9lwnTYA/zOlNWKqSw6PKSTYb8CkvekLpIsjxZ+TEfdIqmeHdTMuD7zzkm
-         8PPxaRgV5F44P82qC8ZXSiZMIrR+5NpL9vCjltx0=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ricky Wu <ricky_wu@realtek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Christian Loehle <cloehle@hyperstone.com>
-Subject: [PATCH 5.10 70/70] mmc: rtsx: add 74 Clocks in power on flow
-Date:   Tue, 10 May 2022 15:08:29 +0200
-Message-Id: <20220510130734.913421890@linuxfoundation.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
-References: <20220510130732.861729621@linuxfoundation.org>
-User-Agent: quilt/0.66
+        by relay2.suse.de (Postfix) with ESMTPS id C66D62C141;
+        Tue, 10 May 2022 13:08:45 +0000 (UTC)
+Date:   Tue, 10 May 2022 15:08:45 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, rientjes@google.com,
+        willy@infradead.org, hannes@cmpxchg.org, guro@fb.com,
+        minchan@kernel.org, kirill@shutemov.name, aarcange@redhat.com,
+        brauner@kernel.org, hch@infradead.org, oleg@redhat.com,
+        david@redhat.com, jannh@google.com, shakeelb@google.com,
+        peterx@redhat.com, jhubbard@nvidia.com, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 3/3] mm: delete unused MMF_OOM_VICTIM flag
+Message-ID: <Ynpj3TsPcWVL7K7F@dhcp22.suse.cz>
+References: <20220510030014.3842475-1-surenb@google.com>
+ <20220510030014.3842475-3-surenb@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220510030014.3842475-3-surenb@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ricky WU <ricky_wu@realtek.com>
+On Mon 09-05-22 20:00:14, Suren Baghdasaryan wrote:
+> With the last usage of MMF_OOM_VICTIM in exit_mmap gone, this flag is
+> now unused and can be removed.
+> 
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 
-commit 1f311c94aabdb419c28e3147bcc8ab89269f1a7e upstream.
+LGTM
+Acked-by: Michal Hocko <mhocko@suse.com>
 
-SD spec definition:
-"Host provides at least 74 Clocks before issuing first command"
-After 1ms for the voltage stable then start issuing the Clock signals
+One question below
+[...]
+> diff --git a/include/linux/sched/coredump.h b/include/linux/sched/coredump.h
+> index 4d9e3a656875..746f6cb07a20 100644
+> --- a/include/linux/sched/coredump.h
+> +++ b/include/linux/sched/coredump.h
+> @@ -70,7 +70,6 @@ static inline int get_dumpable(struct mm_struct *mm)
+>  #define MMF_UNSTABLE		22	/* mm is unstable for copy_from_user */
+>  #define MMF_HUGE_ZERO_PAGE	23      /* mm has ever used the global huge zero page */
+>  #define MMF_DISABLE_THP		24	/* disable THP for all VMAs */
+> -#define MMF_OOM_VICTIM		25	/* mm is the oom victim */
+>  #define MMF_OOM_REAP_QUEUED	26	/* mm was queued for oom_reaper */
+>  #define MMF_MULTIPROCESS	27	/* mm is shared between processes */
 
-if POWER STATE is
-MMC_POWER_OFF to MMC_POWER_UP to issue Clock signal to card
-MMC_POWER_UP to MMC_POWER_ON to stop issuing signal to card
+Have you consider renumbering the follow up flags so that we do not have
+holes in there. Nothing really important but it can confuse somebody in
+the future.
 
-Signed-off-by: Ricky Wu <ricky_wu@realtek.com>
-Link: https://lore.kernel.org/r/1badf10aba764191a1a752edcbf90389@realtek.com
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/mmc/host/rtsx_pci_sdmmc.c |   31 +++++++++++++++++++++----------
- 1 file changed, 21 insertions(+), 10 deletions(-)
-
---- a/drivers/mmc/host/rtsx_pci_sdmmc.c
-+++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
-@@ -37,10 +37,7 @@ struct realtek_pci_sdmmc {
- 	bool			double_clk;
- 	bool			eject;
- 	bool			initial_mode;
--	int			power_state;
--#define SDMMC_POWER_ON		1
--#define SDMMC_POWER_OFF		0
--
-+	int			prev_power_state;
- 	int			sg_count;
- 	s32			cookie;
- 	int			cookie_sg_count;
-@@ -902,14 +899,21 @@ static int sd_set_bus_width(struct realt
- 	return err;
- }
- 
--static int sd_power_on(struct realtek_pci_sdmmc *host)
-+static int sd_power_on(struct realtek_pci_sdmmc *host, unsigned char power_mode)
- {
- 	struct rtsx_pcr *pcr = host->pcr;
- 	int err;
- 
--	if (host->power_state == SDMMC_POWER_ON)
-+	if (host->prev_power_state == MMC_POWER_ON)
- 		return 0;
- 
-+	if (host->prev_power_state == MMC_POWER_UP) {
-+		rtsx_pci_write_register(pcr, SD_BUS_STAT, SD_CLK_TOGGLE_EN, 0);
-+		goto finish;
-+	}
-+
-+	msleep(100);
-+
- 	rtsx_pci_init_cmd(pcr);
- 	rtsx_pci_add_cmd(pcr, WRITE_REG_CMD, CARD_SELECT, 0x07, SD_MOD_SEL);
- 	rtsx_pci_add_cmd(pcr, WRITE_REG_CMD, CARD_SHARE_MODE,
-@@ -928,11 +932,17 @@ static int sd_power_on(struct realtek_pc
- 	if (err < 0)
- 		return err;
- 
-+	mdelay(1);
-+
- 	err = rtsx_pci_write_register(pcr, CARD_OE, SD_OUTPUT_EN, SD_OUTPUT_EN);
- 	if (err < 0)
- 		return err;
- 
--	host->power_state = SDMMC_POWER_ON;
-+	/* send at least 74 clocks */
-+	rtsx_pci_write_register(pcr, SD_BUS_STAT, SD_CLK_TOGGLE_EN, SD_CLK_TOGGLE_EN);
-+
-+finish:
-+	host->prev_power_state = power_mode;
- 	return 0;
- }
- 
-@@ -941,7 +951,7 @@ static int sd_power_off(struct realtek_p
- 	struct rtsx_pcr *pcr = host->pcr;
- 	int err;
- 
--	host->power_state = SDMMC_POWER_OFF;
-+	host->prev_power_state = MMC_POWER_OFF;
- 
- 	rtsx_pci_init_cmd(pcr);
- 
-@@ -967,7 +977,7 @@ static int sd_set_power_mode(struct real
- 	if (power_mode == MMC_POWER_OFF)
- 		err = sd_power_off(host);
- 	else
--		err = sd_power_on(host);
-+		err = sd_power_on(host, power_mode);
- 
- 	return err;
- }
-@@ -1404,10 +1414,11 @@ static int rtsx_pci_sdmmc_drv_probe(stru
- 
- 	host = mmc_priv(mmc);
- 	host->pcr = pcr;
-+	mmc->ios.power_delay_ms = 5;
- 	host->mmc = mmc;
- 	host->pdev = pdev;
- 	host->cookie = -1;
--	host->power_state = SDMMC_POWER_OFF;
-+	host->prev_power_state = MMC_POWER_OFF;
- 	INIT_WORK(&host->work, sd_request);
- 	platform_set_drvdata(pdev, host);
- 	pcr->slots[RTSX_SD_CARD].p_dev = pdev;
-
-
+-- 
+Michal Hocko
+SUSE Labs

@@ -2,133 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C524520FBD
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 10:30:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A28A6520FBF
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 10:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238028AbiEJIeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 04:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44236 "EHLO
+        id S238032AbiEJIet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 04:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232322AbiEJIeN (ORCPT
+        with ESMTP id S232322AbiEJIer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 04:34:13 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820B829ED09
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 01:30:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=TTENNFCykIlGX5I1SANVsjlmSxazMvN7qT6l0FxP4zo=; b=DkfMt6y3V2vQFrYxlPhKFbAvFz
-        yRr78p2FfXgWB1MJHE4KL+foutcIZdrEyQY8rOFY2Zly5l/jArg9sH0VIXijWWqXfUBID8NVi+ZZF
-        EgdqGpdsexbK6gBevXYRPB6yA5CBFD60yYGW+6+2HkLt/rZe6JDXmWbNSXVAfOmT57BIipUTb4kFB
-        DJb4uwiTFKSDngoCs9DrHnpJ7zWq0y6cpp4MkhWWA6cOiuLS2aHFkPG1AMasvETQ61lTB1chXF910
-        a+IRA0JllXg1nEmEWPWNOSt43qfzt0OhTaAKYyQimKMUUGSRFGzXA5HVHs7H1DbxzwLfzcC/Ab6p8
-        gxmG4inw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1noLFW-004FIj-UF; Tue, 10 May 2022 08:29:43 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id AB882981011; Tue, 10 May 2022 10:29:40 +0200 (CEST)
-Date:   Tue, 10 May 2022 10:29:40 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Qais Yousef <qais.yousef@arm.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Delyan Kratunov <delyank@fb.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
-        "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "mingo@kernel.org" <mingo@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "Kenta.Tada@sony.com" <Kenta.Tada@sony.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "bristot@redhat.com" <bristot@redhat.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "legion@kernel.org" <legion@kernel.org>,
-        "adharmap@quicinc.com" <adharmap@quicinc.com>,
-        "valentin.schneider@arm.com" <valentin.schneider@arm.com>,
-        "ed.tsai@mediatek.com" <ed.tsai@mediatek.com>,
-        "juri.lelli@redhat.com" <juri.lelli@redhat.com>
-Subject: Re: [PATCH] sched/tracing: append prev_state to tp args instead
-Message-ID: <20220510082940.GA100765@worktop.programming.kicks-ass.net>
-References: <056e9bb0d0e3fc20572d42db7386face1d0665d6.camel@fb.com>
- <CAADnVQKsah4aka-LJ+X+5XHHESKbbw36D8fXTLqcYp2io3PN_w@mail.gmail.com>
- <YmflVPQlwpiBuxRc@hirez.programming.kicks-ass.net>
- <20220426140959.op6u5m7id57aq7yc@wubuntu>
- <CAEf4BzaoL5HVc8U16kz7m--RiPhBwuLt8ZGZppwfxV85AXXrcw@mail.gmail.com>
- <20220427103458.ecnqtaj3af63625h@wubuntu>
- <CAEf4BzYc3f2-9hvuGL_mTO8qNxZjdQn8AabEb-N6Q7XjmEQQ1A@mail.gmail.com>
- <20220428100235.sqoxunbylqk2surk@wubuntu>
- <CAEf4BzaEo+dxSRJZHQiXYrj-a3_B-eODZUxGh3HrnPjquMYFXQ@mail.gmail.com>
- <20220510070122.GJ76023@worktop.programming.kicks-ass.net>
+        Tue, 10 May 2022 04:34:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAE372F03D
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 01:30:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652171448;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1m42YOS6adkVOttPvzzPcpB4bdLVq0RFj4rgcIuwmIE=;
+        b=goZPeP17u9qT3qm+qQj//FDuxEpAl7t68g+stlH4Rv+K0oZCAAx+fifJVhtR162AWQz5Io
+        cDu919LRUj8PiSGRL3tGycC6qSzp61WovzHvJHwMTjJDRW1GiL4YKxdYf7Uzm2b0IszzAt
+        QxjLwOmrzlytsPJNCtVkGAg8mVlcYSE=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-568-aqFLj3G4MgWNs_fQ0ku7YQ-1; Tue, 10 May 2022 04:30:47 -0400
+X-MC-Unique: aqFLj3G4MgWNs_fQ0ku7YQ-1
+Received: by mail-wm1-f71.google.com with SMTP id 205-20020a1c02d6000000b003928cd3853aso924883wmc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 01:30:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1m42YOS6adkVOttPvzzPcpB4bdLVq0RFj4rgcIuwmIE=;
+        b=DAnUKh0GthNLCVn7TogJuGKBd1KOuduW6/kkjucayBGk2UIGoUWrxmf9J1HHTer/zp
+         Tt+UTKlFA1rVQW4Xcyv5f8MgDzUFVVQ7CEMqcCBRXFF6x/KvamtPe9ddDfsW6nJDBF3t
+         gGgySiWOXT3WCi+HjsdvprZk92a4QWjsRSzXUsVhsFog6SMqZbLd+srMVmsjjqSFH/Tt
+         llUCRVKecnmtDwMWfDcuQzuxtqdn+4FdkjMoaIdOO3lY0xJXcGGtrZRk5I389y6XMZpf
+         2ZSIIEMFDxxyTgYAbBjwrPmzszhGn9msSMigwYV6PRpsWurnA0G8edgcm4CS/McyJa8v
+         iCrg==
+X-Gm-Message-State: AOAM533Ck6j1PmNTVrReMcPOx0HWXxINXPKKs31ypTCtOUM3awcAqZEd
+        OZS5xGPAP6QhoYOxx/jKjpBxN7OD/ma4T0kmlwjZMYND6KuwtHCN2Eba+36djat2o10MvcTbHOI
+        VJwknuoaIeLiC4uJ7kZMjzu9e
+X-Received: by 2002:a5d:4703:0:b0:20a:ce3c:7528 with SMTP id y3-20020a5d4703000000b0020ace3c7528mr17564141wrq.688.1652171445795;
+        Tue, 10 May 2022 01:30:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwoBMj8kXDsvsfO4i+XkAgVG6qM0AfXiyKEYB6N5jwKUXVSznUhS5NktRYArBUXsTfI3Cbm7g==
+X-Received: by 2002:a5d:4703:0:b0:20a:ce3c:7528 with SMTP id y3-20020a5d4703000000b0020ace3c7528mr17564116wrq.688.1652171445454;
+        Tue, 10 May 2022 01:30:45 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id l29-20020a05600c1d1d00b003942a244f53sm1816260wms.44.2022.05.10.01.30.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 01:30:45 -0700 (PDT)
+Message-ID: <2d8d8583-3a39-b826-dd83-ba5bc4c5b082@redhat.com>
+Date:   Tue, 10 May 2022 10:30:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220510070122.GJ76023@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 1/4] fbdev: Prevent possible use-after-free in
+ fb_release()
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-fbdev@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
+        Daniel Vetter <daniel.vetter@intel.com>
+References: <20220505215947.364694-1-javierm@redhat.com>
+ <20220505220413.365977-1-javierm@redhat.com>
+ <753d0350-42dc-389b-b10b-4533ddcf32ac@intel.com>
+ <1f788b8f-0bea-1818-349e-b1bc907bf251@redhat.com>
+ <a339df59-9e00-c7cb-e33d-2ac626443639@intel.com>
+ <3b7fe4fe-fdec-cef2-4e0e-309d9dc4a8af@redhat.com>
+ <b5ab1c49-04e7-36c3-677d-2989b79e50ca@suse.de>
+ <2bf27b09-0896-1849-254f-d5b19abdc892@redhat.com>
+ <fc3e8a40-664f-07ae-7474-c0412a1ab1b5@intel.com>
+ <1c36d431-d5c0-7278-c9e0-61867e9dc174@redhat.com>
+ <79aaea41-5dab-f896-ab3d-d6bc9a5de615@suse.de>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <79aaea41-5dab-f896-ab3d-d6bc9a5de615@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 09:01:22AM +0200, Peter Zijlstra wrote:
-> On Mon, May 09, 2022 at 12:32:31PM -0700, Andrii Nakryiko wrote:
-> > So can this patch be applied, please, or it's a hard no?
-> 
-> Sorry; I got distracted with other work. I'll grudingly apply the patch.
+Hello Thomas,
 
-  gcc-11-i386-allmodconfig [15:35]  FAILED
-  | In file included from ../include/trace/define_custom_trace.h:55,
-  |                  from ../samples/trace_events/trace_custom_sched.h:96,
-  |                  from ../samples/trace_events/trace_custom_sched.c:24:
-  | ../samples/trace_events/./trace_custom_sched.h: In function ‘ftrace_test_custom_probe_sched_switch’:
-  | ../include/trace/trace_custom_events.h:178:42: error: passing argument 1 of ‘check_trace_callback_type_sched_switch’ from incompatible pointer type [-Werror=incompatible-pointer-types]
-  |   178 |         check_trace_callback_type_##call(trace_custom_event_raw_event_##template); \
-  |       |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  |       |                                          |
-  |       |                                          void (*)(void *, bool,  unsigned int,  struct task_struct *, struct task_struct *) {aka void (*)(void *, _Bool,  unsigned int,  struct task_struct *, struct task_struct *)}
-  | ../include/trace/trace_custom_events.h:34:9: note: in expansion of macro ‘DEFINE_CUSTOM_EVENT’
-  |    34 |         DEFINE_CUSTOM_EVENT(name, name, PARAMS(proto), PARAMS(args));
-  |       |         ^~~~~~~~~~~~~~~~~~~
-  | ../samples/trace_events/./trace_custom_sched.h:21:1: note: in expansion of macro ‘TRACE_CUSTOM_EVENT’
-  |    21 | TRACE_CUSTOM_EVENT(sched_switch,
-  |       | ^~~~~~~~~~~~~~~~~~
-  | In file included from ../include/linux/trace_events.h:11,
-  |                  from ../samples/trace_events/trace_custom_sched.c:10:
-  | ../include/linux/tracepoint.h:279:49: note: expected ‘void (*)(void *, bool,  struct task_struct *, struct task_struct *, unsigned int)’ {aka ‘void (*)(void *, _Bool,  struct task_struct *, struct task_struct *, unsigned int)’} but argument is of type ‘void (*)(void *, bool,  unsigned int,  struct task_struct *, struct task_struct *)’ {aka ‘void (*)(void *, _Bool,  unsigned int,  struct task_struct *, struct task_struct *)’}
-  |   279 |         check_trace_callback_type_##name(void (*cb)(data_proto))        \
-  |       |                                          ~~~~~~~^~~~~~~~~~~~~~~
-  | ../include/linux/tracepoint.h:419:9: note: in expansion of macro ‘__DECLARE_TRACE’
-  |   419 |         __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),              \
-  |       |         ^~~~~~~~~~~~~~~
-  | ../include/linux/tracepoint.h:553:9: note: in expansion of macro ‘DECLARE_TRACE’
-  |   553 |         DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-  |       |         ^~~~~~~~~~~~~
-  | ../include/trace/events/sched.h:222:1: note: in expansion of macro ‘TRACE_EVENT’
-  |   222 | TRACE_EVENT(sched_switch,
-  |       | ^~~~~~~~~~~
-  | cc1: some warnings being treated as errors
-  | make[3]: *** [../scripts/Makefile.build:292: samples/trace_events/trace_custom_sched.o] Error 1
-  | make[3]: *** Waiting for unfinished jobs....
-  | make[2]: *** [../scripts/Makefile.build:555: samples/trace_events] Error 2
-  | make[1]: *** [/opt/buildbot/linux-2.6/Makefile:1834: samples] Error 2
-  | make[1]: *** Waiting for unfinished jobs....
-  | make: *** [Makefile:219: __sub-make] Error 2
-  `----
+On 5/10/22 10:04, Thomas Zimmermann wrote:
+> Hi
+> 
+> Am 10.05.22 um 00:42 schrieb Javier Martinez Canillas:
+>> On 5/10/22 00:22, Andrzej Hajda wrote:
+>>
+>> [snip]
+>>
+>>>>    static void drm_fbdev_fb_destroy(struct fb_info *info)
+>>>>    {
+>>>> +       if (info->cmap.len)
+>>>> +               fb_dealloc_cmap(&info->cmap);
+>>>> +
+>>>>           drm_fbdev_release(info->par);
+>>>> +       framebuffer_release(info);
+>>>
+>>> I would put drm_fbdev_release at the beginning - it cancels workers
+>>> which could expect cmap to be still valid.
+>>>
+>>
+>> Indeed, you are correct again. [0] is the final version of the patch I've
+>> but don't have an i915 test machine to give it a try. I'll test tomorrow
+>> on my test systems to verify that it doesn't cause any regressions since
+>> with other DRM drivers.
+> 
+> You have to go through all DRM drivers that call drm_fb_helper_fini() 
+> and make sure that they free fb_info. For example armada appears to be 
+> leaking now. [1]
+>
+
+But shouldn't fb_info be freed when unregister_framebuffer() is called
+through drm_dev_unregister() ? AFAICT the call chain is the following:
+
+drm_put_dev()
+  drm_dev_unregister()
+    drm_client_dev_unregister()
+      drm_fbdev_client_unregister()
+        drm_fb_helper_unregister_fbi()
+          unregister_framebuffer()
+            do_unregister_framebuffer()
+              put_fb_info()
+                drm_fbdev_fb_destroy()
+                  framebuffer_release()
+
+which is the reason why I believe that drm_fb_helper_fini() should be
+an internal static function and only called from drm_fbdev_fb_destroy().
+
+Drivers shouldn't really explicitly call this helper in my opinion.
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

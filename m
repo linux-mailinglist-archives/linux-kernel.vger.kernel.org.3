@@ -2,174 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263045223D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2E45223FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349029AbiEJS1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 14:27:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
+        id S1348866AbiEJS17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 14:27:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348902AbiEJS0X (ORCPT
+        with ESMTP id S235397AbiEJS1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 14:26:23 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A635950B08;
-        Tue, 10 May 2022 11:22:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652206944; x=1683742944;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=sSmQP3uhDLR96PsowzYCDVSU0HDCkoGesSibvvpbnN8=;
-  b=hz0+L91/mag6bEQ396ibYjw9w3L+XLhS5Ne60aDeMfb+gdqGDlDUCdWQ
-   0HWhUkTz2Is6DPzbp0C3AP0oOpQruqbZsAIIgYhXIKPj6gG/NUYTNCZI1
-   1xSR3uvLaVfnpighI5jru4L85pLjSvDs/NEl35zaW6Xfca686dhE7YDCK
-   0VvIQDBGNxOZuHfaG0RA+A93KkNcTFhzfOh4zWh+s8HV3E7+B++xNmXiD
-   icm0BCzOohcW/DFKgMJfHN/ltEG/ikpLu2P/wSoQFz3QFhmawWci04cQI
-   5a4cqgczArUHsNTSZDlO7pZZu1K9w/gmc1RfNUwuiwxCtlQveD4nV9RhG
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="355891446"
-X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="355891446"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 11:22:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="636072237"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga004.fm.intel.com with ESMTP; 10 May 2022 11:22:24 -0700
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: [UPDATE][PATCH] thermal: int340x: Mode setting with new OS handshake
-Date:   Tue, 10 May 2022 11:22:21 -0700
-Message-Id: <20220510182221.3990256-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 10 May 2022 14:27:34 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC7318FF29
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 11:23:34 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id z2so33052658ejj.3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 11:23:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=I6+6daxf9DBR/wq5NboOShmKyA8J0iaTzHPVTMkgH10=;
+        b=QHCsBsCmgpbSZbkfqS1Oo1MUQeuhlP1ZsLgzzMnXdAdig3V1zAvrj5IKC7nbum8dEY
+         peXnK6zU/RodBxXQ4H3AQrDQdldz0aOJKB0erOEm9K95Tw69V2izzp5jd0jPewdxCHR+
+         ZzsEDjnTue1e20m7A4AngmpfO54XUJd2CWRSA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I6+6daxf9DBR/wq5NboOShmKyA8J0iaTzHPVTMkgH10=;
+        b=OuZRmwSp6F7OkozR+N0cwpYIQq8ZgwkcelFciMhs+kL6glMZHiHIbJF/FoZJ9NwASn
+         NbCLJ4WRi4xTmnogALxgBcmidQTpg9nncJ2RjBoiJ1H4d3+zWjw8dTi2rMZdqlDTCeTv
+         ErGSJRn7SekYP4o5k8VX8ZlPf3vAYxJGeh+X2m3osbXDJpDwQAdMXl6toGDtZXPn2eLg
+         kJQknHJYzsephcoPumhl0mmokVrYeWXdvjrf1ttFhLdym3CePQ8W5kmx1ZXWokt2RvrP
+         P8OWUqvhBSAkPZlgYcUmBAInUCxs2ICElKpi1fSd0CMJ9H5JtXWlCBJaKTKkT4MnxOWp
+         Iy3g==
+X-Gm-Message-State: AOAM532FTDfof2DuITXO6Feq+Ite+OHDjt2oFDS5vAhpIRdjDF5m1KPW
+        nA15Ud+h5ys8AMWy1haY8e6uuTvRPNPfRlnIo28=
+X-Google-Smtp-Source: ABdhPJyWM0z/rEYSjXOkTlsVLQN1kW8TrEYKpkeye7NuC6g96CCsiwZ1vIrZhttcyERMjA5KNJG3aQ==
+X-Received: by 2002:a17:907:2da9:b0:6f8:6104:659 with SMTP id gt41-20020a1709072da900b006f861040659mr15399478ejc.556.1652207008570;
+        Tue, 10 May 2022 11:23:28 -0700 (PDT)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id p16-20020a170906615000b006f3ef214e5fsm7959ejl.197.2022.05.10.11.23.27
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 11:23:27 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id v12so24921280wrv.10
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 11:23:27 -0700 (PDT)
+X-Received: by 2002:adf:dfc8:0:b0:20a:d256:5b5c with SMTP id
+ q8-20020adfdfc8000000b0020ad2565b5cmr19494972wrn.97.1652207007228; Tue, 10
+ May 2022 11:23:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220510082351-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220510082351-mutt-send-email-mst@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 10 May 2022 11:23:11 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjPR+bj7P1O=MAQWXp0Mx2hHuNQ1acn6gS+mRo_kbo5Lg@mail.gmail.com>
+Message-ID: <CAHk-=wjPR+bj7P1O=MAQWXp0Mx2hHuNQ1acn6gS+mRo_kbo5Lg@mail.gmail.com>
+Subject: Re: [GIT PULL] virtio: last minute fixup
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     KVM list <kvm@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        mie@igel.co.jp
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the new OS handshake introduced with the commit: "c7ff29763989
-("thermal: int340x: Update OS policy capability handshake")",
-thermal zone mode "enabled" doesn't work in the same way as the legacy
-handshake. The mode "enabled" fails with -EINVAL using new handshake.
+On Tue, May 10, 2022 at 5:24 AM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> A last minute fixup of the transitional ID numbers.
+> Important to get these right - if users start to depend on the
+> wrong ones they are very hard to fix.
 
-To address this issue, when the new OS UUID mask is set:
-- When mode is "enabled", return 0 as the firmware already has the
-latest policy mask.
-- When mode is "disabled", update the firmware with UUID mask of zero.
-In this way firmware can take control of the thermal control. Also
-reset the OS UUID mask. This allows user space to update with new
-set of policies.
+Hmm. I've pulled this, but those numbers aren't exactly "new".
 
-Fixes: c7ff29763989 ("thermal: int340x: Update OS policy capability handshake")
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: stable@vger.kernel.org
----
-update:
-Added Fixes tag
+They've been that way since 5.14, so what makes you think people
+haven't already started depending on them?
 
- .../intel/int340x_thermal/int3400_thermal.c   | 48 ++++++++++++-------
- 1 file changed, 32 insertions(+), 16 deletions(-)
+And - once again - I want to complain about the "Link:" in that commit.
 
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index d97f496bab9b..1061728ad5a9 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -194,12 +194,31 @@ static int int3400_thermal_run_osc(acpi_handle handle, char *uuid_str, int *enab
- 	return result;
- }
- 
-+static int set_os_uuid_mask(struct int3400_thermal_priv *priv, u32 mask)
-+{
-+	int cap = 0;
-+
-+	/*
-+	 * Capability bits:
-+	 * Bit 0: set to 1 to indicate DPTF is active
-+	 * Bi1 1: set to 1 to active cooling is supported by user space daemon
-+	 * Bit 2: set to 1 to passive cooling is supported by user space daemon
-+	 * Bit 3: set to 1 to critical trip is handled by user space daemon
-+	 */
-+	if (mask)
-+		cap = ((priv->os_uuid_mask << 1) | 0x01);
-+
-+	return int3400_thermal_run_osc(priv->adev->handle,
-+				       "b23ba85d-c8b7-3542-88de-8de2ffcfd698",
-+				       &cap);
-+}
-+
- static ssize_t current_uuid_store(struct device *dev,
- 				  struct device_attribute *attr,
- 				  const char *buf, size_t count)
- {
- 	struct int3400_thermal_priv *priv = dev_get_drvdata(dev);
--	int i;
-+	int ret, i;
- 
- 	for (i = 0; i < INT3400_THERMAL_MAXIMUM_UUID; ++i) {
- 		if (!strncmp(buf, int3400_thermal_uuids[i],
-@@ -231,19 +250,7 @@ static ssize_t current_uuid_store(struct device *dev,
- 	}
- 
- 	if (priv->os_uuid_mask) {
--		int cap, ret;
--
--		/*
--		 * Capability bits:
--		 * Bit 0: set to 1 to indicate DPTF is active
--		 * Bi1 1: set to 1 to active cooling is supported by user space daemon
--		 * Bit 2: set to 1 to passive cooling is supported by user space daemon
--		 * Bit 3: set to 1 to critical trip is handled by user space daemon
--		 */
--		cap = ((priv->os_uuid_mask << 1) | 0x01);
--		ret = int3400_thermal_run_osc(priv->adev->handle,
--					      "b23ba85d-c8b7-3542-88de-8de2ffcfd698",
--					      &cap);
-+		ret = set_os_uuid_mask(priv, priv->os_uuid_mask);
- 		if (ret)
- 			return ret;
- 	}
-@@ -469,17 +476,26 @@ static int int3400_thermal_change_mode(struct thermal_zone_device *thermal,
- 	if (mode != thermal->mode) {
- 		int enabled;
- 
-+		enabled = (mode == THERMAL_DEVICE_ENABLED);
-+
-+		if (priv->os_uuid_mask) {
-+			if (!enabled) {
-+				priv->os_uuid_mask = 0;
-+				result = set_os_uuid_mask(priv, priv->os_uuid_mask);
-+			}
-+			goto eval_odvp;
-+		}
-+
- 		if (priv->current_uuid_index < 0 ||
- 		    priv->current_uuid_index >= INT3400_THERMAL_MAXIMUM_UUID)
- 			return -EINVAL;
- 
--		enabled = (mode == THERMAL_DEVICE_ENABLED);
- 		result = int3400_thermal_run_osc(priv->adev->handle,
- 						 int3400_thermal_uuids[priv->current_uuid_index],
- 						 &enabled);
- 	}
- 
--
-+eval_odvp:
- 	evaluate_odvp(priv);
- 
- 	return result;
--- 
-2.31.1
+It points to a completely useless patch submission. It doesn't point
+to anything useful at all.
 
+I think it's a disease that likely comes from "b4", and people decided
+that "hey, I can use the -l parameter to add that Link: field", and it
+looks better that way.
+
+And then they add it all the time, whether it makes any sense or not.
+
+I've mainly noticed it with the -tip tree, but maybe that's just
+because I've happened to look at it.
+
+I really hate those worthless links that basically add zero actual
+information to the commit.
+
+The "Link" field is for _useful_ links. Not "let's add a link just
+because we can".
+
+                           Linus

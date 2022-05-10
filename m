@@ -2,95 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90CFC5215C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 308CC5215CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241972AbiEJMt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 08:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52344 "EHLO
+        id S232677AbiEJMuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 08:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241975AbiEJMtu (ORCPT
+        with ESMTP id S236527AbiEJMud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 08:49:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 06FD037038
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:45:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652186751;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OHedlp3XgvvvmR96eUT2A7KFNCgoAcFZOekYnqMAIR0=;
-        b=Vj37IWHpUEYDZsyCzSotWTOW0CDgyHEozOnulXROhU+MqzDZOBGi4/dzEP7f4MY5LTyr+0
-        bthywaRoN8bZIlXEhMGWKGRpv0ZLnGgA445IA//jFFPXdamNJp8NAhe9hUqzjiyKi3c44D
-        WTjoJqxs9vXwJtxgHsv5tYjR/ZL41iQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-556-p3o-IMlRPjOSxJC9pFCAqQ-1; Tue, 10 May 2022 08:45:45 -0400
-X-MC-Unique: p3o-IMlRPjOSxJC9pFCAqQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 82FF38002BF;
-        Tue, 10 May 2022 12:45:44 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.39.192.113])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E3BCC43F70C;
-        Tue, 10 May 2022 12:45:40 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        linux-fsdevel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        Karel Zak <kzak@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
-References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
-        <20220509124815.vb7d2xj5idhb2wq6@wittgenstein>
-        <20220510005533.GA2306852@dread.disaster.area>
-Date:   Tue, 10 May 2022 14:45:39 +0200
-In-Reply-To: <20220510005533.GA2306852@dread.disaster.area> (Dave Chinner's
-        message of "Tue, 10 May 2022 10:55:33 +1000")
-Message-ID: <87bkw5d098.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        Tue, 10 May 2022 08:50:33 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A909E5293;
+        Tue, 10 May 2022 05:46:36 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 6EB751F4198D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652186792;
+        bh=+xFxCucJWWtb43xJt9JV4bBlZQLYnNsYtFFdf0v6JvY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=EWr7A6fCbxjvxIJmYEHOty2p7MGW8MXul4Z71n2qRmh7shjPIeTr1QiTlAVeSTput
+         SCHAkqjlcgTyc5T5FJm26xhwF+Ry1vMfuSVOSPPHlGIbcohBujXjWKPZkfr/pRF2f0
+         109zi5LipeG8ydMHHubYVvjqbdQEAO1uwEwHBr5uXcd9+r66zJkFvRXF6bSbMa9BlU
+         s/fZfCly2sAs4XqC1+m/6gNLkDsW5uwZVK/a+9mKqHd6jc1iFneI/9fyUuRqPGvv/s
+         3PmpoCSf1oVqcvoDbdx5DCsaK3XU4/FOESIPy884NcvG7lxk6kRLb//GEn4dcTnuYX
+         1XccN83PA8geQ==
+Message-ID: <b13b019f-f766-60df-3764-d375f64ea7d3@collabora.com>
+Date:   Tue, 10 May 2022 14:46:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] Revert "serial: 8250_mtk: Make sure to select the right
+ FEATURE_SEL"
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        matthias.bgg@gmail.com, zhiyong.tao@mediatek.com,
+        colin.king@intel.com, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wenst@chromium.org
+References: <20220510122620.150342-1-angelogioacchino.delregno@collabora.com>
+ <YnpeYGbo7JJK0lDk@sirena.org.uk>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <YnpeYGbo7JJK0lDk@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Dave Chinner:
+Il 10/05/22 14:45, Mark Brown ha scritto:
+> On Tue, May 10, 2022 at 02:26:20PM +0200, AngeloGioacchino Del Regno wrote:
+>> It was found that some MediaTek SoCs are incompatible with this
+>> change. Also, this register was mistakenly understood as it was
+>> related to the 16550A register layout selection but, at least
+>> on some IPs, if not all, it's related to something else unknown.
+>>
+>> This reverts commit 6f81fdded0d024c7d4084d434764f30bca1cd6b1.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+> 
+> Reported-by: "kernelci.org bot" <bot@kernelci.org>
 
-> IOWs, what Linux really needs is a listxattr2() syscall that works
-> the same way that getdents/XFS_IOC_ATTRLIST_BY_HANDLE work. With the
-> list function returning value sizes and being able to iterate
-> effectively, every problem that listxattr() causes goes away.
 
-getdents has issues of its own because it's unspecified what happens if
-the list of entries is modified during iteration.  Few file systems add
-another tree just to guarantee stable iteration.
+Sorry for missing this tag, and also I'm sorry for the noise.
 
-Maybe that's different for xattrs because they are supposed to be small
-and can just be snapshotted with a full copy?
-
-Thanks,
-Florian
-
+Regards,
+Angelo

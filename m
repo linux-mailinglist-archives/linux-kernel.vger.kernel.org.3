@@ -2,78 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E5C520DE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 08:32:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C927F520DF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 08:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237141AbiEJGgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 02:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
+        id S237181AbiEJGoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 02:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237123AbiEJGgb (ORCPT
+        with ESMTP id S232116AbiEJGoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 02:36:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88F172265DE
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 23:32:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652164353;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a3h5h7vFFNlEkouniwaXqhbwXvv2DW4g4x627EWieto=;
-        b=OiUwloX2ZgjGQ72MHKT6JrdAoLZ8Z0c+W/JQTET+mxhDvkr/0/N0Dq1Kuqi1v5L4C3adUP
-        37tVCvwF6zsdrcsw3UjbXWqBYqKwgIw46G02tk8gHJnnVdJ2h+reExa1tsIdwDuu1zni1c
-        H9QsDN/bvu5HFd+Xw47uToQJ7N+HW5E=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-267-miO6wHJWN--cceZldgnQfw-1; Tue, 10 May 2022 02:32:32 -0400
-X-MC-Unique: miO6wHJWN--cceZldgnQfw-1
-Received: by mail-qt1-f197.google.com with SMTP id d8-20020a05622a05c800b002f3bb450e94so12312762qtb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 23:32:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=a3h5h7vFFNlEkouniwaXqhbwXvv2DW4g4x627EWieto=;
-        b=i1imLcXpclFmJ7Qm2BzNV590Gm3LvD03qvDaPsfRxjNFNGK2dk8tffmJ/bTRzyvY9T
-         +DpkAOlZGsMSztTBRQEBmoN/e446CwnYqG0cG88Obx1PsBiYaMLrmyDB1QGmmsTNs3n0
-         H+aMoEmA3I2ykDVL8fX8+MYHNXPOfOlzQc/Iz3Md6LnuGPVArmEl7qb7QgYx2kk+TpsB
-         PiTUPYU8DTI6vy4d6WBf7ML1nqHfFI0UN76JsVfkroxOcQvzpo1oi9o6ciVnCxMwLYAn
-         UeS6i1Lxsw9dlyyn5lVI8BPoStf5+VuVML74yGNDWBKeJu9x4kmMisXhe+7xcnDQ4nA6
-         r0jg==
-X-Gm-Message-State: AOAM531b9Rb6PTdTGNnfA+hrtLaidNXXFN5fM7SFHRXrD7TAWiSNQOXr
-        wPZxfWzPzFiS4UbV/PisVu9cL3haatqHFN+EZlTYMHfk/xbRFlIo6OcqoM1hXWG0RznVaT9mCEv
-        ALV2cRFayf1EpJ/1knWV6fua1
-X-Received: by 2002:a05:620a:71a:b0:6a0:15d6:60cc with SMTP id 26-20020a05620a071a00b006a015d660ccmr14022726qkc.413.1652164351027;
-        Mon, 09 May 2022 23:32:31 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyCznRrStrZANhqjTjRkWY2UTyw291k+9lD6DNcirlWqCKs5lhcy8i5x30DpJuXS3vWIlTlQg==
-X-Received: by 2002:a05:620a:71a:b0:6a0:15d6:60cc with SMTP id 26-20020a05620a071a00b006a015d660ccmr14022721qkc.413.1652164350778;
-        Mon, 09 May 2022 23:32:30 -0700 (PDT)
-Received: from zlang-mailbox ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id c65-20020a379a44000000b0069fc13ce1eesm8315164qke.31.2022.05.09.23.32.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 23:32:30 -0700 (PDT)
-Date:   Tue, 10 May 2022 14:32:23 +0800
-From:   Zorro Lang <zlang@redhat.com>
-To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     fstests@vger.kernel.org, riteshh@linux.ibm.com,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] common/rc: Modify _require_batched_discard to improve
- test coverage
-Message-ID: <20220510063223.dogoows5t7cxpnul@zlang-mailbox>
-Mail-Followup-To: Ojaswin Mujoo <ojaswin@linux.ibm.com>,
-        fstests@vger.kernel.org, riteshh@linux.ibm.com,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220401055713.634842-1-ojaswin@linux.ibm.com>
+        Tue, 10 May 2022 02:44:09 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD97321935A
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 23:40:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652164812; x=1683700812;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nYSTBbKJ5UwtwVRbrqVsql8056l5ynL+ozUldG6Uhgg=;
+  b=YSPLQ6qVWesUgWUf7+nIvPbVk87PEhFf8JotBcZ9EBT7ZS4u9U1ca2tv
+   +MO7pvTIOHMtVuh1TsIO/u/wm5MC+qsiRpwRNiPRZ8zmRhY+ijJYNWX/R
+   DMMHslqp5cVwBdKXJHa6kCeC6mUwCGSX2e8IonoFQuDV8ud0BA5/VBg/p
+   Dw2p24O2jNYKsmEPO6GxzUq2qEnyWrSp175FpCBTJ0gzYNWYdwfND9iTA
+   aP6JbIb2S5+V2Y9jP7GNUBMDxXJs+dhPQv7cXtDlHU1hPnh2CLcrP4hNM
+   P9NwnFF01P7bIJONvVv6YsLSgJbBzUfVWip+AcVBBPRN9qBZDSGiykfIM
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="251327923"
+X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
+   d="scan'208";a="251327923"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 23:40:12 -0700
+X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
+   d="scan'208";a="519605030"
+Received: from sijieyux-mobl3.ccr.corp.intel.com (HELO yhuang6-mobl1.ccr.corp.intel.com) ([10.254.212.195])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 23:40:08 -0700
+From:   Huang Ying <ying.huang@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Huang Ying <ying.huang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Rik van Riel <riel@surriel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
+        Wei Xu <weixugc@google.com>, osalvador <osalvador@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Zhong Jiang <zhongjiang-ali@linux.alibaba.com>
+Subject: [PATCH -V2 0/3 RESEND] memory tiering: hot page selection
+Date:   Tue, 10 May 2022 14:39:55 +0800
+Message-Id: <20220510063958.86985-1-ying.huang@intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220401055713.634842-1-ojaswin@linux.ibm.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,62 +66,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 11:27:13AM +0530, Ojaswin Mujoo wrote:
-> A recent ext4 patch discussed [1] that some devices (eg LVMs) can
-> have a discard granularity as big as 42MB which makes it larger
-> than the group size of ext4 FS with 1k BS. This causes the FITRIM
-> IOCTL to fail on filesystems like ext4.
-> 
-> This case was not correctly handle by "_require_batched_discard" as
-> it incorrectly interpreted the FITRIM failure as fs not supporting
-> the IOCTL. This caused the tests like generic/260 to incorectly
-> report "not run" instead of "failed" in case of large discard
-> granularity.
-> 
-> Fix "_require_batched_discard" to use a more accurate method
-> to determine if discard is supported.
-> 
-> [1] commit 173b6e383d2
->     ext4: avoid trim error on fs with small groups
-> 
-> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-> ---
->  common/rc | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/common/rc b/common/rc
-> index e2d3d72a..97386342 100644
-> --- a/common/rc
-> +++ b/common/rc
-> @@ -3858,7 +3858,13 @@ _require_batched_discard()
->  		exit 1
->  	fi
->  	_require_fstrim
-> -	$FSTRIM_PROG $1 > /dev/null 2>&1 || _notrun "FITRIM not supported on $1"
-> +
-> +	$FSTRIM_PROG $1 2>&1 | grep -q "not supported"
-> +	RET=$?
+To optimize page placement in a memory tiering system with NUMA
+balancing, the hot pages in the slow memory node need to be
+identified.  Essentially, the original NUMA balancing implementation
+selects the mostly recently accessed (MRU) pages to promote.  But this
+isn't a perfect algorithm to identify the hot pages.  Because the
+pages with quite low access frequency may be accessed eventually given
+the NUMA balancing page table scanning period could be quite long
+(e.g. 60 seconds).  So in this patchset, we implement a new hot page
+identification algorithm based on the latency between NUMA balancing
+page table scanning and hint page fault.  Which is a kind of mostly
+frequently accessed (MFU) algorithm.
 
-Better to use global variable carefully in common functions, if it's not
-necessary, I'd recommend using "local ret" at here.
+In NUMA balancing memory tiering mode, if there are hot pages in slow
+memory node and cold pages in fast memory node, we need to
+promote/demote hot/cold pages between the fast and cold memory nodes.
 
-From my experience, the *quiet (-q)* grep does "exit_on_match" directly,
-it won't wait the write process, if the write process is still writing but
-the grep has exited, then it'll cause broken pipe, and the write process
-exit with failure.
+A choice is to promote/demote as fast as possible.  But the CPU cycles
+and memory bandwidth consumed by the high promoting/demoting
+throughput will hurt the latency of some workload because of accessing
+inflating and slow memory bandwidth contention.
 
-It doesn't always happend, it depends. So I'd like to use "${PIPESTATUS[1]}"
-or write it as 'grep -q "not supported" <($FSTRIM_PROG $1 2>&1)', to make sure
-we just care about the "grep" result.
+A way to resolve this issue is to restrict the max promoting/demoting
+throughput.  It will take longer to finish the promoting/demoting.
+But the workload latency will be better.  This is implemented in this
+patchset as the page promotion rate limit mechanism.
 
-> +	if [ "$RET" = "0" ]
-> +	then
-> +		_notrun "FITRIM not supported on $1"
-> +	fi
->  }
->  
->  _require_dumpe2fs()
-> -- 
-> 2.27.0
-> 
+The promotion hot threshold is workload and system configuration
+dependent.  So in this patchset, a method to adjust the hot threshold
+automatically is implemented.  The basic idea is to control the number
+of the candidate promotion pages to match the promotion rate limit.
 
+We used the pmbench memory accessing benchmark tested the patchset on
+a 2-socket server system with DRAM and PMEM installed.  The test
+results are as follows,
+
+		pmbench score		promote rate
+		 (accesses/s)			MB/s
+		-------------		------------
+base		  146887704.1		       725.6
+hot selection     165695601.2		       544.0
+rate limit	  162814569.8		       165.2
+auto adjustment	  170495294.0                  136.9
+
+From the results above,
+
+With hot page selection patch [1/3], the pmbench score increases about
+12.8%, and promote rate (overhead) decreases about 25.0%, compared with
+base kernel.
+
+With rate limit patch [2/3], pmbench score decreases about 1.7%, and
+promote rate decreases about 69.6%, compared with hot page selection
+patch.
+
+With threshold auto adjustment patch [3/3], pmbench score increases
+about 4.7%, and promote rate decrease about 17.1%, compared with rate
+limit patch.
+
+Changelog:
+
+v2:
+
+- Added ABI document for promote rate limit per Andrew's comments.  Thanks!
+
+- Added function comments when necessary per Andrew's comments.
+
+- Address other comments from Andrew Morton.
+
+Best Regards,
+Huang, Ying

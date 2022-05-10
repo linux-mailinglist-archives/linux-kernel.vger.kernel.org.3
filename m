@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2BF85216DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51DFD52175D
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242667AbiEJNUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
+        id S242854AbiEJNZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242570AbiEJNRi (ORCPT
+        with ESMTP id S243289AbiEJNVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:17:38 -0400
+        Tue, 10 May 2022 09:21:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8040F54BFA;
-        Tue, 10 May 2022 06:12:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6D42C336B;
+        Tue, 10 May 2022 06:15:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E486A6163C;
-        Tue, 10 May 2022 13:12:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0309DC385C2;
-        Tue, 10 May 2022 13:12:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F33DF6123F;
+        Tue, 10 May 2022 13:15:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AD81C385A6;
+        Tue, 10 May 2022 13:15:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188376;
-        bh=T7RLLRF+WnGxdF5U/uDdWdVdC42qAGpkSOv5yV9pbIw=;
+        s=korg; t=1652188510;
+        bh=lwwCpzWHUUhleWMxpvTZOhW5QOtkJCzvcj55PnUh7gQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Yu0wmP1JLhP7C7Mdkbs08PynwE1i0ptLuaBNti1mGDQph+GQNFzUWFwr7NlR1fw/k
-         alqSPZOU1JkR5gXT8Gdt/ciKmgHB9gPi13W+pV4Up2eyOj+l986yV8cg+kKm+4obH5
-         jl3m1AJyC7HlPxsneqyHWlOdxIkkMa4yws3HLgMA=
+        b=gm2NPsmSCHIa0wRmEqkkChzl/h0xVa2vyQ4hBKW82/I/wx9/MUM6UDh0gJYt3R9/+
+         wlBo7l/dRw+KQ+UfgkNlsKH2PuEJs1RTYVXnhm7GtjommHe/z+5qyUVb2TWTD1Munh
+         B5TNR+eZCStmGEhPe9yYT1SW7aPaqUC8srEiEaTA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        stable@vger.kernel.org, "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Tony Lindgren <tony@atomide.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 26/66] mtd: rawnand: Fix return value check of wait_for_completion_timeout
+Subject: [PATCH 4.14 30/78] ARM: dts: Fix mmc order for omap3-gta04
 Date:   Tue, 10 May 2022 15:07:16 +0200
-Message-Id: <20220510130730.532084656@linuxfoundation.org>
+Message-Id: <20220510130733.427851952@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
-References: <20220510130729.762341544@linuxfoundation.org>
+In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
+References: <20220510130732.522479698@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,82 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: H. Nikolaus Schaller <hns@goldelico.com>
 
-[ Upstream commit 084c16ab423a8890121b902b405823bfec5b4365 ]
+[ Upstream commit 09269dd050094593fc747f2a5853d189fefcb6b5 ]
 
-wait_for_completion_timeout() returns unsigned long not int.
-It returns 0 if timed out, and positive if completed.
-The check for <= 0 is ambiguous and should be == 0 here
-indicating timeout which is the only error case.
+Commit a1ebdb374199 ("ARM: dts: Fix swapped mmc order for omap3")
+introduces general mmc aliases. Let's tailor them to the need
+of the GTA04 board which does not make use of mmc2 and mmc3 interfaces.
 
-Fixes: 83738d87e3a0 ("mtd: sh_flctl: Add DMA capabilty")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20220412083435.29254-1-linmq006@gmail.com
+Fixes: a1ebdb374199 ("ARM: dts: Fix swapped mmc order for omap3")
+Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+Message-Id: <dc9173ee3d391d9e92b7ab8ed4f84b29f0a21c83.1646744420.git.hns@goldelico.com>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/nand/sh_flctl.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ arch/arm/boot/dts/omap3-gta04.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/mtd/nand/sh_flctl.c b/drivers/mtd/nand/sh_flctl.c
-index 31f98acdba07..17e15bd05442 100644
---- a/drivers/mtd/nand/sh_flctl.c
-+++ b/drivers/mtd/nand/sh_flctl.c
-@@ -399,7 +399,8 @@ static int flctl_dma_fifo0_transfer(struct sh_flctl *flctl, unsigned long *buf,
- 	dma_addr_t dma_addr;
- 	dma_cookie_t cookie;
- 	uint32_t reg;
--	int ret;
-+	int ret = 0;
-+	unsigned long time_left;
+diff --git a/arch/arm/boot/dts/omap3-gta04.dtsi b/arch/arm/boot/dts/omap3-gta04.dtsi
+index ee028aa663fa..312267724033 100644
+--- a/arch/arm/boot/dts/omap3-gta04.dtsi
++++ b/arch/arm/boot/dts/omap3-gta04.dtsi
+@@ -29,6 +29,8 @@ memory@80000000 {
+ 	aliases {
+ 		display0 = &lcd;
+ 		display1 = &tv0;
++		/delete-property/ mmc2;
++		/delete-property/ mmc3;
+ 	};
  
- 	if (dir == DMA_FROM_DEVICE) {
- 		chan = flctl->chan_fifo0_rx;
-@@ -440,13 +441,14 @@ static int flctl_dma_fifo0_transfer(struct sh_flctl *flctl, unsigned long *buf,
- 		goto out;
- 	}
- 
--	ret =
-+	time_left =
- 	wait_for_completion_timeout(&flctl->dma_complete,
- 				msecs_to_jiffies(3000));
- 
--	if (ret <= 0) {
-+	if (time_left == 0) {
- 		dmaengine_terminate_all(chan);
- 		dev_err(&flctl->pdev->dev, "wait_for_completion_timeout\n");
-+		ret = -ETIMEDOUT;
- 	}
- 
- out:
-@@ -456,7 +458,7 @@ static int flctl_dma_fifo0_transfer(struct sh_flctl *flctl, unsigned long *buf,
- 
- 	dma_unmap_single(chan->device->dev, dma_addr, len, dir);
- 
--	/* ret > 0 is success */
-+	/* ret == 0 is success */
- 	return ret;
- }
- 
-@@ -480,7 +482,7 @@ static void read_fiforeg(struct sh_flctl *flctl, int rlen, int offset)
- 
- 	/* initiate DMA transfer */
- 	if (flctl->chan_fifo0_rx && rlen >= 32 &&
--		flctl_dma_fifo0_transfer(flctl, buf, rlen, DMA_FROM_DEVICE) > 0)
-+		!flctl_dma_fifo0_transfer(flctl, buf, rlen, DMA_FROM_DEVICE))
- 			goto convert;	/* DMA success */
- 
- 	/* do polling transfer */
-@@ -539,7 +541,7 @@ static void write_ec_fiforeg(struct sh_flctl *flctl, int rlen,
- 
- 	/* initiate DMA transfer */
- 	if (flctl->chan_fifo0_tx && rlen >= 32 &&
--		flctl_dma_fifo0_transfer(flctl, buf, rlen, DMA_TO_DEVICE) > 0)
-+		!flctl_dma_fifo0_transfer(flctl, buf, rlen, DMA_TO_DEVICE))
- 			return;	/* DMA success */
- 
- 	/* do polling transfer */
+ 	gpio-keys {
 -- 
 2.35.1
 

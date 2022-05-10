@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1B552254E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C8F852254F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231372AbiEJUOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 16:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
+        id S233920AbiEJUOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 16:14:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbiEJUOE (ORCPT
+        with ESMTP id S232241AbiEJUOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 16:14:04 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6712F1A82E
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:14:03 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id p12so159774pfn.0
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:14:03 -0700 (PDT)
+        Tue, 10 May 2022 16:14:05 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953411ADA5
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:14:04 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id v11so112891pff.6
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:14:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DUzehr5/WVjL8qU2Hhmc4z1UOFK/igoFfwz7SYv3SuU=;
-        b=FK/uP2sqm4PA+iTuTOw9AHlnxLeLvs/2DmFJjZLlevCJ0Os/8Ujbb3/YC/pvOZsdOy
-         EGV440Vp4/1/E6YECIBaKnkqtGYVEHdAKOM5nB8H5VCLOQxC/guqkvRpnPOucq1azu5G
-         H3sTB/LkQLnn/UUjLSL3LzZCHo8Z82aa5CLxU=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=EzCqYX0EcAnW/iCkUeOk0GkKHb4Fvl7h4vQ2bns/5yY=;
+        b=VzIZvP9gugPrAqVQj0bxx18Ci/S+CaP2uu85Y+I5aOI77mqgMrm5dZNZjJp8NYjIOI
+         1CmHD5JR7I0ggMm1UwplHAK5Yh91KeSFU/Z4fBj0Ond/7+hB6KsN09KHMrp6hm9Pl+GK
+         eF5M/vQmR1H7M19aaM1tgKgkEeHjyyi2pjuIg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DUzehr5/WVjL8qU2Hhmc4z1UOFK/igoFfwz7SYv3SuU=;
-        b=A0G9X+IeOo/nGL6BydtJnz19/GCmbWIiIxIRXkCt67XUzb4whmqHfVeGv4QCNb4giZ
-         wuzLya0SmyScMJO5UG/jh1bYwpyi1RQvGQXaLGCmfAvn9J/VdpcclSbgAOf8OFy7EkUy
-         /vmp223MKtHDhK7LBuzfp5XN1CgX6ao7O5KG10/gHsir0JElpWEtcQOOav7TUSLFif8/
-         EEcLy7S65mHRR3MIq9LbBojTKTvBuq2ZyU33zCFUtYchfOyzWEzge1lJBsA72bkfvgVj
-         HlD2pjl23fWFeic6SlVAG6H7CQyEj4J95/XmMoNsIeZpGFNbyNo0Nlf0n8p0hDvA/GxM
-         YmAg==
-X-Gm-Message-State: AOAM532OzeNLR5jJPcbpHEnG8P1xxl/4dLs+VLP8kFiljWQKWBj8fSiy
-        YBYNvKJQDwwkCV5U7hKQY1g5AQ==
-X-Google-Smtp-Source: ABdhPJw1DnT71ONYuAfGck1I9ifq2RpS3pd461/n3OJS5+buAJwc493OLPwnPeGsVXsyy6glR2bqxA==
-X-Received: by 2002:a62:1d09:0:b0:50d:fa91:a4c5 with SMTP id d9-20020a621d09000000b0050dfa91a4c5mr22174472pfd.25.1652213642912;
-        Tue, 10 May 2022 13:14:02 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=EzCqYX0EcAnW/iCkUeOk0GkKHb4Fvl7h4vQ2bns/5yY=;
+        b=gE+uRs8BwYpBd5QbpcksmijDxjkCzT46i2fQcvAYvc5hywFzKFacuAxLxMUMZZPRTp
+         6PoA0N8D6wGXg3X/ltgpk3e9tLJSZxWY2bQhc+KBW+LlDU4I0p5BrbmhD4uv+DyK3Y99
+         eV1GaEFLEIXSau2+8kXPNuFZRML1WC+z7vDpdE+rWpAcbEt4C5c2LUofNedn2vvJYDla
+         L6txs/AhmDTlwRkcdlj8W1L5RCU/niwVRN7a3mxbv2zsFHXvC4Le6oHpUPvGdfGje0De
+         CzWELaQybDQdyxKFAa49IObF9wZ02U2c+l8GQb/JnTG1vweIgH8YvToXZbOKw7hKqA7I
+         pxTw==
+X-Gm-Message-State: AOAM533+3doRVFpa/IyWePBUpRGnRr7gQI1UykSauaoGQoUCVj7+Lrjz
+        IBEwJg3BEmcWFEWtDMjTRQv6jw==
+X-Google-Smtp-Source: ABdhPJyTD+9hTeZ+4Lyf3CqPIny6pCSqUrlEzkAKzzbRIGD7qEh75gbouGsB+MWgDJmc/eEA7sTYYw==
+X-Received: by 2002:a63:184c:0:b0:3c5:fd55:1e9e with SMTP id 12-20020a63184c000000b003c5fd551e9emr17872032pgy.315.1652213644106;
+        Tue, 10 May 2022 13:14:04 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:6f08:624c:c762:d238])
-        by smtp.gmail.com with ESMTPSA id h8-20020a170902704800b0015e8d4eb247sm26605plt.145.2022.05.10.13.14.01
+        by smtp.gmail.com with ESMTPSA id h8-20020a170902704800b0015e8d4eb247sm26605plt.145.2022.05.10.13.14.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 13:14:02 -0700 (PDT)
+        Tue, 10 May 2022 13:14:03 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     dri-devel@lists.freedesktop.org
 Cc:     quic_khsieh@quicinc.com, dmitry.baryshkov@linaro.org,
@@ -58,173 +58,135 @@ Cc:     quic_khsieh@quicinc.com, dmitry.baryshkov@linaro.org,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] drm/probe-helper: Add helper for drm_helper_probe_single_connector_modes()
-Date:   Tue, 10 May 2022 13:13:33 -0700
-Message-Id: <20220510131309.v2.1.I2dd93486c6952bd52f2020904de0133970d11b29@changeid>
+Subject: [PATCH v2 2/2] drm/probe-helper: For DP, add 640x480 if all other modes are bad
+Date:   Tue, 10 May 2022 13:13:34 -0700
+Message-Id: <20220510131309.v2.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid>
 X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
+In-Reply-To: <20220510131309.v2.1.I2dd93486c6952bd52f2020904de0133970d11b29@changeid>
+References: <20220510131309.v2.1.I2dd93486c6952bd52f2020904de0133970d11b29@changeid>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The drm_helper_probe_single_connector_modes() is a bit long. Let's
-break a chunk off to update and validate modes. This helps avoid one
-goto and also will allow us to more easily call the helper a second
-time in a future patch without adding looping or another goto.
+As per Displayport spec section 5.2.1.2 ("Video Timing Format") says
+that all detachable sinks shall support 640x480 @60Hz as a fail safe
+mode.
 
-This change is intended to be a no-op change--just code movement.
+A DP compliance test expected us to utilize the above fact when all
+modes it presented to the DP source were not achievable. It presented
+only modes that would be achievable with more lanes and/or higher
+speeds than we had available and expected that when we couldn't do
+that then we'd fall back to 640x480 even though it didn't advertise
+this size.
+
+In order to pass the compliance test (and also support any users who
+might fall into a similar situation with their display), we need to
+add 640x480 into the list of modes. However, we don't want to add
+640x480 all the time. Despite the fact that the DP spec says all sinks
+_shall support_ 640x480, they're not guaranteed to support it
+_well_. Continuing to read the spec you can see that the display is
+not required to really treat 640x480 equal to all the other modes. It
+doesn't need to scale or anything--just display the pixels somehow for
+failsafe purposes. It should also be noted that it's not hard to find
+a display hooked up via DisplayPort that _doesn't_ support 640x480 at
+all. The HP ZR30w screen I'm sitting in front of has a native DP port
+and doesn't work at 640x480. I also plugged in a tiny 800x480 HDMI
+display via a DP to HDMI adapter and that screen definitely doesn't
+support 640x480.
+
+As a compromise solution, let's only add the 640x480 mode if:
+* We're on DP.
+* All other modes have been pruned.
+
+This acknowledges that 640x480 might not be the best mode to use but,
+since sinks are _supposed_ to support it, we will at least fall back
+to it if there's nothing else.
+
+Note that we _don't_ add higher resolution modes like 1024x768 in this
+case. We only add those modes for a failed EDID read where we have no
+idea what's going on. In the case where we've pruned all modes then
+instead we only want 640x480 which is the only defined "Fail Safe"
+resolution.
+
+This patch originated in response to Kuogee Hsieh's patch [1].
+
+[1] https://lore.kernel.org/r/1650671124-14030-1-git-send-email-quic_khsieh@quicinc.com
 
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Tested-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
 Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
 
 Changes in v2:
 - Two underscores for __drm_helper_update_and_validate().
 - Return err and use WARN_ON instead of returning a bool.
 
- drivers/gpu/drm/drm_probe_helper.c | 107 ++++++++++++++++-------------
- 1 file changed, 61 insertions(+), 46 deletions(-)
+ drivers/gpu/drm/drm_probe_helper.c | 28 +++++++++++++++++++++++-----
+ 1 file changed, 23 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_probe_helper.c
-index 682359512996..ff3dd9a5da70 100644
+index ff3dd9a5da70..871b3d19a153 100644
 --- a/drivers/gpu/drm/drm_probe_helper.c
 +++ b/drivers/gpu/drm/drm_probe_helper.c
-@@ -354,6 +354,61 @@ drm_helper_probe_detect(struct drm_connector *connector,
- }
- EXPORT_SYMBOL(drm_helper_probe_detect);
- 
-+static int __drm_helper_update_and_validate(struct drm_connector *connector,
-+					    uint32_t maxX, uint32_t maxY,
-+					    struct drm_modeset_acquire_ctx *ctx)
-+{
-+	struct drm_device *dev = connector->dev;
-+	struct drm_display_mode *mode;
-+	int mode_flags = 0;
-+	int ret;
-+
-+	drm_connector_list_update(connector);
-+
-+	if (connector->interlace_allowed)
-+		mode_flags |= DRM_MODE_FLAG_INTERLACE;
-+	if (connector->doublescan_allowed)
-+		mode_flags |= DRM_MODE_FLAG_DBLSCAN;
-+	if (connector->stereo_allowed)
-+		mode_flags |= DRM_MODE_FLAG_3D_MASK;
-+
-+	list_for_each_entry(mode, &connector->modes, head) {
-+		if (mode->status != MODE_OK)
-+			continue;
-+
-+		mode->status = drm_mode_validate_driver(dev, mode);
-+		if (mode->status != MODE_OK)
-+			continue;
-+
-+		mode->status = drm_mode_validate_size(mode, maxX, maxY);
-+		if (mode->status != MODE_OK)
-+			continue;
-+
-+		mode->status = drm_mode_validate_flag(mode, mode_flags);
-+		if (mode->status != MODE_OK)
-+			continue;
-+
-+		ret = drm_mode_validate_pipeline(mode, connector, ctx,
-+						 &mode->status);
-+		if (ret) {
-+			drm_dbg_kms(dev,
-+				    "drm_mode_validate_pipeline failed: %d\n",
-+				    ret);
-+
-+			if (drm_WARN_ON_ONCE(dev, ret != -EDEADLK))
-+				mode->status = MODE_ERROR;
-+			else
-+				return -EDEADLK;
-+		}
-+
-+		if (mode->status != MODE_OK)
-+			continue;
-+		mode->status = drm_mode_validate_ycbcr420(mode, connector);
-+	}
-+
-+	return 0;
-+}
-+
- /**
-  * drm_helper_probe_single_connector_modes - get complete set of display modes
-  * @connector: connector to probe
-@@ -421,7 +476,6 @@ int drm_helper_probe_single_connector_modes(struct drm_connector *connector,
+@@ -476,7 +476,6 @@ int drm_helper_probe_single_connector_modes(struct drm_connector *connector,
  	const struct drm_connector_helper_funcs *connector_funcs =
  		connector->helper_private;
  	int count = 0, ret;
--	int mode_flags = 0;
- 	bool verbose_prune = true;
+-	bool verbose_prune = true;
  	enum drm_connector_status old_status;
  	struct drm_modeset_acquire_ctx ctx;
-@@ -519,52 +573,13 @@ int drm_helper_probe_single_connector_modes(struct drm_connector *connector,
- 			   connector->status == connector_status_unknown))
- 		count = drm_add_modes_noedid(connector, 1024, 768);
- 	count += drm_helper_probe_add_cmdline_mode(connector);
--	if (count == 0)
+ 
+@@ -556,8 +555,8 @@ int drm_helper_probe_single_connector_modes(struct drm_connector *connector,
+ 		DRM_DEBUG_KMS("[CONNECTOR:%d:%s] disconnected\n",
+ 			connector->base.id, connector->name);
+ 		drm_connector_update_edid_property(connector, NULL);
+-		verbose_prune = false;
 -		goto prune;
--
--	drm_connector_list_update(connector);
--
--	if (connector->interlace_allowed)
--		mode_flags |= DRM_MODE_FLAG_INTERLACE;
--	if (connector->doublescan_allowed)
--		mode_flags |= DRM_MODE_FLAG_DBLSCAN;
--	if (connector->stereo_allowed)
--		mode_flags |= DRM_MODE_FLAG_3D_MASK;
--
--	list_for_each_entry(mode, &connector->modes, head) {
--		if (mode->status != MODE_OK)
--			continue;
--
--		mode->status = drm_mode_validate_driver(dev, mode);
--		if (mode->status != MODE_OK)
--			continue;
--
--		mode->status = drm_mode_validate_size(mode, maxX, maxY);
--		if (mode->status != MODE_OK)
--			continue;
--
--		mode->status = drm_mode_validate_flag(mode, mode_flags);
--		if (mode->status != MODE_OK)
--			continue;
--
--		ret = drm_mode_validate_pipeline(mode, connector, &ctx,
--						 &mode->status);
--		if (ret) {
--			drm_dbg_kms(dev,
--				    "drm_mode_validate_pipeline failed: %d\n",
--				    ret);
--
--			if (drm_WARN_ON_ONCE(dev, ret != -EDEADLK)) {
--				mode->status = MODE_ERROR;
--			} else {
--				drm_modeset_backoff(&ctx);
--				goto retry;
--			}
-+	if (count != 0) {
++		drm_mode_prune_invalid(dev, &connector->modes, false);
++		goto exit;
+ 	}
+ 
+ 	count = (*connector_funcs->get_modes)(connector);
+@@ -582,9 +581,28 @@ int drm_helper_probe_single_connector_modes(struct drm_connector *connector,
+ 		WARN_ON(ret);
+ 	}
+ 
+-prune:
+-	drm_mode_prune_invalid(dev, &connector->modes, verbose_prune);
++	drm_mode_prune_invalid(dev, &connector->modes, true);
+ 
++	/*
++	 * Displayport spec section 5.2.1.2 ("Video Timing Format") says that
++	 * all detachable sinks shall support 640x480 @60Hz as a fail safe
++	 * mode. If all modes were pruned, perhaps because they need more
++	 * lanes or a higher pixel clock than available, at least try to add
++	 * in 640x480.
++	 */
++	if (list_empty(&connector->modes) &&
++	    connector->connector_type == DRM_MODE_CONNECTOR_DisplayPort) {
++		count = drm_add_modes_noedid(connector, 640, 480);
 +		ret = __drm_helper_update_and_validate(connector, maxX, maxY, &ctx);
 +		if (ret == -EDEADLK) {
 +			drm_modeset_backoff(&ctx);
 +			goto retry;
- 		}
--
--		if (mode->status != MODE_OK)
--			continue;
--		mode->status = drm_mode_validate_ycbcr420(mode, connector);
++		}
 +		WARN_ON(ret);
- 	}
++		drm_mode_prune_invalid(dev, &connector->modes, true);
++	}
++
++exit:
+ 	drm_modeset_drop_locks(&ctx);
+ 	drm_modeset_acquire_fini(&ctx);
  
- prune:
 -- 
 2.36.0.550.gb090851708-goog
 

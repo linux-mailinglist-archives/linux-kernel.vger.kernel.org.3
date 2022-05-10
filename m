@@ -2,99 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC7945222F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90A9B5222F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348332AbiEJRnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 13:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38006 "EHLO
+        id S1348337AbiEJRoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 13:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245615AbiEJRnn (ORCPT
+        with ESMTP id S1348324AbiEJRoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 13:43:43 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C295E296BD5;
-        Tue, 10 May 2022 10:39:45 -0700 (PDT)
+        Tue, 10 May 2022 13:44:01 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A022C07F7
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:40:03 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id v10so15190958pgl.11
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:40:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652204386; x=1683740386;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=FkyvDe+lg/6UUzc3a3RX0uzSgZKO1lAGbr6Xu1sBYnI=;
-  b=kQMsueoNZK5SbvPlsCBOIoNIMgo0Sos82mEJNrLRT2dUBnbl26HCQ8M1
-   tAImu4APL3OuCOfA7VD1M/UzJoADMERNT2K62DD53EWD03Q4w4DEoVmRT
-   8mqBhqt29gmwXu7K/tGMQhHsiOS7ioq7Vdol3OpeI0T1QhpGCfzUvrQV5
-   4=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 10 May 2022 10:39:45 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 10:39:45 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 10 May 2022 10:39:45 -0700
-Received: from [10.38.241.82] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 10 May
- 2022 10:39:42 -0700
-Message-ID: <e205565a-e0f5-dca2-a287-a829056d9601@quicinc.com>
-Date:   Tue, 10 May 2022 10:39:40 -0700
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bI5Wq4fYlgvsn7ewbzWHly8tO9mGqbvCrFEIK0Y2ebs=;
+        b=e5Mb3fqlcxp0+sOSIOk4vaheuaR9HaV9MHrJRei2FFux8gDFiodvmlTJTekCbXiQQc
+         97J347DqjHwSB4tG7pHiS3X4lv9MpyeiEpj/RqML+2aIlzJhZHh7YtYp/fBjNIbJ1JLT
+         3+GUoZWGaam3/6347gI2+VM95JzZL2GCK6ORY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bI5Wq4fYlgvsn7ewbzWHly8tO9mGqbvCrFEIK0Y2ebs=;
+        b=6FORwvDy2F2FYDQaypUQpqOTQpZF7rdn4/hd7hB0Uhl1rxssoUXS3PW3oSfuGjDcrT
+         7xCNSP+2OocnUYjKScrhds8/+l5qKUS8RoMPI70fGcGQwF+b1kp/dnClPpKWADfY/o/A
+         AhukguWF7Sz3GLWRqulxsUotykbaucm+2I3ICmvmgCuTKHUM2tim8lHd3VmyJ69Jowfq
+         mi9ViowvHzMvO21HGusxMZjuArNVTfkCGvyJfuWPsc4WPcPkIyABH1UsnQvBRNkIDIns
+         EFgs9/mXSa3JAx+wLWPm9m2fL2rPgpTBxY3roLQDzoACBmW/N51dU3U6M2JBGBs6uG4f
+         8dYQ==
+X-Gm-Message-State: AOAM533uycC4JfdRjKJcNKDeM1KAAMRke69PmkJeAz98uUdkFcIqDRS+
+        u8JAJBwr7+l7akTFz4kfgSoNAw==
+X-Google-Smtp-Source: ABdhPJy15+8IPlBIEr4dYQNJE6VnAZvUJHrYDeaifFeufVvGKJ5NH2dVjeWnYfU91kcN+93OOnk3aA==
+X-Received: by 2002:a05:6a02:206:b0:399:3c9:f465 with SMTP id bh6-20020a056a02020600b0039903c9f465mr18317973pgb.388.1652204403260;
+        Tue, 10 May 2022 10:40:03 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y8-20020a1709029b8800b0015e8d4eb1c7sm2384766plp.17.2022.05.10.10.40.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 10:40:03 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] randomize_kstack: Improve docs on requirements/rationale
+Date:   Tue, 10 May 2022 10:40:00 -0700
+Message-Id: <20220510174000.3561471-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] drm/msm: Fix fb plane offset calculation
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>, <dri-devel@lists.freedesktop.org>
-CC:     Rob Clark <robdclark@chromium.org>,
-        David Airlie <airlied@linux.ie>,
-        <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Sean Paul <sean@poorly.run>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <freedreno@lists.freedesktop.org>
-References: <20220510165216.3577068-1-robdclark@gmail.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20220510165216.3577068-1-robdclark@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2628; h=from:subject; bh=sZN8G42EsIJgCeEnSvfbE1A7fV6oYv2zKuE4eX87/5Q=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBieqNvKvEtsGycbnfDYZgwscE04dNz1ZnWfsUOBV2M v3G7FymJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYnqjbwAKCRCJcvTf3G3AJlZ5D/ 453wnLZtcnR75TpA77v/tQNIQAUGLEb28/qoQfN1PPcNzQpftVXTWKQh/w8iPdAoTGWENhpg6cfsA2 5n1k2a0Anbbx5tXTJmqzQ8nfLs3DroNuJjITxnfv+W9qy8jmMKI5miSMnSChxtwfEyCftUi7239C55 Ug4QQ9f77eS+P8tVhDpt5C5tB/QMuaBtsvf1we/QvVWqdva7GCXdSv1G8FtJ3nbaH/uBeqHJxl8R3u y4QpY0+0WMvoQAa2JSUUpZ2efp3AwoEvC1Pe0Vto4KjvDds7fFgWC+y7TiI48A7F7MGTMRO6Rs5cJ9 Xd5v34+sL3uawSsZAy+CLaEHIF2IA4TZrUuATV+xOwHK0wrqjuTj2L3bCw9jvpModNiMcQOxhn+znK ymw5psLQXZFFYNLErnaiYEcAk2cAKPTl5Wu6GxuU/doevQ8goZVEr4hNcUE+VU3ffx+PVT9fHo1Bc9 5bDXxP+qgaBYt/arcdmlE+uSB8fknovvfubURpf/TgOixV/DObHVz85Rhqez7BhuYr2cH+CZqWWBM2 RrPEj8JP2n/66TLb58QnbBjwOTGRN7+IyDyUN85iZ1NQ8o39xDnVBcI/gto/Wjt4a1pArTzbCqOg4Y sA+L0HVET6MZJeWK3cMpvIT1GP1QNjxGGjD7uZtA3wl9kzfb5xI84cQc9S5Q==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There were some recent questions about where and why to use the
+random_kstack routines when applying them to new architectures[1].
+Update the header comments to reflect the design choices for the
+routines.
 
+[1] https://lore.kernel.org/lkml/1652173338.7bltwybi0c.astroid@bobo.none
 
-On 5/10/2022 9:52 AM, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
-> 
-> The offset got dropped by accident.
-> 
-> Fixes: d413e6f97134 ("drm/msm: Drop msm_gem_iova()")
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/msm_fb.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/msm_fb.c b/drivers/gpu/drm/msm/msm_fb.c
-> index 362775ae50af..4269da268a4a 100644
-> --- a/drivers/gpu/drm/msm/msm_fb.c
-> +++ b/drivers/gpu/drm/msm/msm_fb.c
-> @@ -118,7 +118,7 @@ uint32_t msm_framebuffer_iova(struct drm_framebuffer *fb,
->   		struct msm_gem_address_space *aspace, int plane)
->   {
->   	struct msm_framebuffer *msm_fb = to_msm_framebuffer(fb);
-> -	return msm_fb->iova[plane];
-> +	return msm_fb->iova[plane] + fb->offsets[plane];
->   }
->   
->   struct drm_gem_object *msm_framebuffer_bo(struct drm_framebuffer *fb, int plane)
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Xiu Jianfeng <xiujianfeng@huawei.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ include/linux/randomize_kstack.h | 27 ++++++++++++++++++++++++---
+ 1 file changed, 24 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/randomize_kstack.h b/include/linux/randomize_kstack.h
+index 1468caf001c0..5d868505a94e 100644
+--- a/include/linux/randomize_kstack.h
++++ b/include/linux/randomize_kstack.h
+@@ -40,10 +40,14 @@ DECLARE_PER_CPU(u32, kstack_offset);
+  */
+ #define KSTACK_OFFSET_MAX(x)	((x) & 0x3FF)
+ 
+-/*
+- * These macros must be used during syscall entry when interrupts and
++/**
++ * add_random_kstack_offset - Increase stack utilization by previously
++ *			      chosen random offset
++ *
++ * This should be used in the syscall entry path when interrupts and
+  * preempt are disabled, and after user registers have been stored to
+- * the stack.
++ * the stack. For testing the resulting entropy, please see:
++ * tools/testing/selftests/lkdtm/stack-entropy.sh
+  */
+ #define add_random_kstack_offset() do {					\
+ 	if (static_branch_maybe(CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT,	\
+@@ -55,6 +59,23 @@ DECLARE_PER_CPU(u32, kstack_offset);
+ 	}								\
+ } while (0)
+ 
++/**
++ * choose_random_kstack_offset - Choose the random offset for the next
++ *				 add_random_kstack_offset()
++ *
++ * This should only be used during syscall exit when interrupts and
++ * preempt are disabled. This position in the syscall flow is done to
++ * frustrate attacks from userspace attempting to learn the next offset:
++ * - Maximize the timing uncertainty visible from userspace: if the
++ *   offset is chosen at syscall entry, userspace has much more control
++ *   over the timing between choosing offsets. "How long will we be in
++ *   kernel mode?" tends to be more difficult to predict than "how long
++ *   will we be in user mode?"
++ * - Reduce the lifetime of the new offset sitting in memory during
++ *   kernel mode execution. Exposure of "thread-local" memory content
++ *   (e.g. current, percpu, etc) tends to be easier than arbitrary
++ *   location memory exposure.
++ */
+ #define choose_random_kstack_offset(rand) do {				\
+ 	if (static_branch_maybe(CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT,	\
+ 				&randomize_kstack_offset)) {		\
+-- 
+2.32.0
+

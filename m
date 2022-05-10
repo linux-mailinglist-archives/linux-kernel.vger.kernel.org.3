@@ -2,178 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2EB5213E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 834FE5213EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241078AbiEJLkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 07:40:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
+        id S241102AbiEJLkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 07:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241086AbiEJLkI (ORCPT
+        with ESMTP id S241105AbiEJLkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 07:40:08 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D8D2A5E75C
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 04:36:10 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 955B611FB;
-        Tue, 10 May 2022 04:36:10 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.1.67])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 297F43F66F;
-        Tue, 10 May 2022 04:36:09 -0700 (PDT)
-Date:   Tue, 10 May 2022 12:36:05 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Alexander Popov <alex.popov@linux.com>
-Cc:     linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org,
-        catalin.marinas@arm.com, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, luto@kernel.org, will@kernel.org
-Subject: Re: [PATCH v2 01/13] arm64: stackleak: fix current_top_of_stack()
-Message-ID: <YnpOJX4SNmFvCogw@FVFF77S0Q05N>
-References: <20220427173128.2603085-1-mark.rutland@arm.com>
- <20220427173128.2603085-2-mark.rutland@arm.com>
- <3d65baac-93b6-7f21-1bf6-9b17d1fce843@linux.com>
+        Tue, 10 May 2022 07:40:24 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D63B18995A;
+        Tue, 10 May 2022 04:36:23 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id m6so18178837iob.4;
+        Tue, 10 May 2022 04:36:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4EZpR3qbj2OiB8Rs7HNB/ykkYoIogT5opUzlrLNV8YI=;
+        b=VoJKpqMfxxTPHvVta4VrHB92nXtrqsdoFMCKO72GGQiiTNlssKn+AXRFv2R0zA/qJl
+         ctxf5yvCTzchX0hBX89nV/pbn8AMQXcZyobufzGfOBQSZx6nhMaYwA+R8ZttLsdM8Xl+
+         rpydufKYD/6bVeUkxjjhLcjOQR0qGg0c2UaMnbMITS+RV4LBbE8poluGb/ji6ozV4ggX
+         2ZOwstsWV1YYyBdttQncwLva3BWyKTcGbQP+6PrGtjhkepSKztq/WSV1uGa3OR1zPmHp
+         fWEbAq+8c6Bu4dtUV2ivF9jPrKCiNZQT0HzmRt0DR1EBUHs6Rmtmvgahn+B8mMcFvjaB
+         CbRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4EZpR3qbj2OiB8Rs7HNB/ykkYoIogT5opUzlrLNV8YI=;
+        b=xAaRcOLEjXYF8ZIctQZuKRNbZn8skkklilc3NYRN/mlxAeVWmKan3DI33EaAwHnzLp
+         xfdWt8V1rO9cWRd6926JmVlmwkA/rm7H8oT+dYF0v/L5xyB+ucbFBsLFTcQhphWKmNqF
+         fCLm8vDKWmAw7bqIcqXlM9WhJ1NKtDz7Tc3PB8i2t2t1+pAmjSpKoXLPoDVXaSwRKvDe
+         0Y0EUSy47rpAzk+Oyup8Q8yE4oJp2xAdwbM9xeFPyY+01Kw/qQwy7uj/kK8SxOSnXvEz
+         6nfcYkgdOoo5YfSvi0qaYOFfjfcSqANtJcjaGRsk0lUf5YQ6wrXwoAuGquN1/r0MO921
+         GysQ==
+X-Gm-Message-State: AOAM531tgx6cHsW8QamPo789rckrvnVJ/9lCJkC8JO4wGImhriSqwyGR
+        S3WeMC5/YmkPtQ+9hgFu2+kR5Vn+TGHi29FKI+s=
+X-Google-Smtp-Source: ABdhPJxse48OZESZFthVDv8nUynrMkvM0JCiuRjG7/tN4zNaiseDCEGjt9o4QzkyV4Z20WHbORCpQublLG3V37jZ2Dg=
+X-Received: by 2002:a02:8624:0:b0:32b:397d:eeb1 with SMTP id
+ e33-20020a028624000000b0032b397deeb1mr9940559jai.264.1652182582955; Tue, 10
+ May 2022 04:36:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3d65baac-93b6-7f21-1bf6-9b17d1fce843@linux.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220507052451.12890-1-ojeda@kernel.org> <CABVgOSm5S2=QYnHJ+B0JbYtFYKBDRZiOhE5YMKKUKZU56d17HQ@mail.gmail.com>
+ <CANiq72=0ft6+QLbdwWD6cLm4FhWfv53GSg6HKEwxQ-q2N-UkOw@mail.gmail.com> <CABVgOSkrvfvA7Ay4GC5wg64S1gibvm5_U5VGBog3sw4_UFo8Cg@mail.gmail.com>
+In-Reply-To: <CABVgOSkrvfvA7Ay4GC5wg64S1gibvm5_U5VGBog3sw4_UFo8Cg@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 10 May 2022 13:36:11 +0200
+Message-ID: <CANiq72mcvKDW6qO=1PzYR_U0tAwVLyCWFZjFVLL81znWDSYq7A@mail.gmail.com>
+Subject: Re: [PATCH v6 00/23] Rust support
+To:     David Gow <davidgow@google.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux <rust-for-linux@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        live-patching@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 08, 2022 at 08:24:38PM +0300, Alexander Popov wrote:
-> Hi Mark!
-> 
-> On 27.04.2022 20:31, Mark Rutland wrote:
-> > Due to some historical confusion, arm64's current_top_of_stack() isn't
-> > what the stackleak code expects. This could in theory result in a number
-> > of problems, and practically results in an unnecessary performance hit.
-> > We can avoid this by aligning the arm64 implementation with the x86
-> > implementation.
-> > 
-> > The arm64 implementation of current_top_of_stack() was added
-> > specifically for stackleak in commit:
-> > 
-> >    0b3e336601b82c6a ("arm64: Add support for STACKLEAK gcc plugin")
-> > 
-> > This was intended to be equivalent to the x86 implementation, but the
-> > implementation, semantics, and performance characteristics differ
-> > wildly:
-> > 
-> > * On x86, current_top_of_stack() returns the top of the current task's
-> >    task stack, regardless of which stack is in active use.
-> > 
-> >    The implementation accesses a percpu variable which the x86 entry code
-> >    maintains, and returns the location immediately above the pt_regs on
-> >    the task stack (above which x86 has some padding).
-> > 
-> > * On arm64 current_top_of_stack() returns the top of the stack in active
-> >    use (i.e. the one which is currently being used).
-> > 
-> >    The implementation checks the SP against a number of
-> >    potentially-accessible stacks, and will BUG() if no stack is found.
-> 
-> As I could understand, for arm64, calling stackleak_erase() not from the
-> thread stack would bring troubles because current_top_of_stack() would
-> return an unexpected address from a foreign stack. Is this correct?
+Hi David,
 
-Yes.
+On Tue, May 10, 2022 at 6:45 AM David Gow <davidgow@google.com> wrote:
+>
+> I've just sent out a pull request to get this working under UML as
+> well, which would simplify running these further:
+> https://github.com/Rust-for-Linux/linux/pull/766
 
-> But this bug doesn't happen because arm64 always calls stackleak_erase()
-> from the current thread stack. Right?
+Thanks a lot!
 
-Yes.
+> Yeah, these are all fair points: particularly for small doctests.
+>
+> Maybe having an optional name, which more significant tests could use
+> to override the file:line names? That could be useful for a few of the
+> larger, more often referenced tests.
 
-> > The core stackleak_erase() code determines the upper bound of stack to
-> > erase with:
-> > 
-> > | if (on_thread_stack())
-> > |         boundary = current_stack_pointer;
-> > | else
-> > |         boundary = current_top_of_stack();
-> > 
-> > On arm64 stackleak_erase() is always called on a task stack, and
-> > on_thread_stack() should always be true. On x86, stackleak_erase() is
-> > mostly called on a trampoline stack, and is sometimes called on a task
-> > stack.
-> > 
-> > Currently, this results in a lot of unnecessary code being generated for
-> > arm64 for the impossible !on_thread_stack() case. Some of this is
-> > inlined, bloating stackleak_erase(), while portions of this are left
-> > out-of-line and permitted to be instrumented (which would be a
-> > functional problem if that code were reachable).
-> 
-> Sorry, I didn't understand this part about instrumentation. Could you
-> elaborate please?
+Sounds reasonable. I can add support for that.
 
-Portions of the code are regular .text, and are subject to instrumentation by
-KASAN/UBSAN/KCOV, ftrace, etc, where the compiler will (implicitly) insert
-calls to out-of-line instrumentation callbacks. Some (but not all) of those are
-disabled in the Makefile. For example, ftrace instrumentation is possible.
+> Ugh: it's a bit ugly either way. I suspect that file:line is still
+> probably better, if only because we need some way of looking up the
+> test in the code if it fails. I'd hate for people to be randomly
+> hashing bits of just to find out what test is failing.
 
-Generally, the instrumentation callbacks expect to run with a full kernel
-environment (e.g. with RCU watching, IRQ tracing state correct), but at the
-time stackleak_erase() is called, this is not the case. so those could go wrong
-and corrupt state.
+One redeeming quality is that the assertion prints the line/file
+number in the generated file, so it would still be possible to check
+where it came from:
 
-Additionally, since those calls are added implicitly by the compiler, they can
-manipulate state at arbitrary points throughout the function where we might not
-expect it (e.g. changing current->lowest_stack).
+    [13:13:43] # rust_kernel_doctest_str_rs_somehash: ASSERTION FAILED
+at rust/doctests_kernel_generated.rs:2209
+    [13:13:43] Expected 2 > 3 to be true, but is false
+    [13:13:43] not ok 43 - rust_kernel_doctest_str_rs_somehash
+    [13:13:43] [FAILED] rust_kernel_doctest_str_rs_somehash
 
-The general stance is that we should use noinstr to disable instrumentation,
-and anything that needs to be inlined into noinstr needs to be marked with
-__always_inline (which is guaranteed to either inline or cause a compile-time
-error if it is not possible to inline).
+Another alternative is to keep the file:line information around
+without embedding it into the test name, e.g. in a TAP comment or a
+mapping file (which `kunit.py` could read).
 
-This patch reworks things to avoid the potential problems; as per the commit
-message I don't beleive anything goes wrong in practice today.
+But, yeah, before doing hashes or things like that, I would just go
+for simplicity and keep things as they are unless some use case really
+needs doctests to be stable.
 
-Thanks,
-Mark.
+> Oops: I missed that (one of the issues with testing this on a
+> different machine which had a rust toolchain). Looks good to me.
+>
+> Ah: I didn't realise the plan was always to have crate-specific
+> suites, and possibly to split things up.
+>
+> The KTAP output specification does actually support arbitrary nesting
+> (though KUnit itself doesn't at the moment), which would potentially
+> be an option if (e.g.) providing the complete module nesting made
+> sense. I'm not convinced that'd make things easier to read, though.
 
-> > As a first step towards improving this, this patch aligns arm64's
-> > implementation of current_top_of_stack() with x86's, always returning
-> > the top of the current task's stack. With GCC 11.1.0 this results in the
-> > bulk of the unnecessary code being removed, including all of the
-> > out-of-line instrumentable code.
-> > 
-> > While I don't believe there's a functional problem in practice I've
-> > marked this as a fix since the semantic was clearly wrong, the fix
-> > itself is simple, and other code might rely upon this in future.
-> > 
-> > Fixes: 0b3e336601b82c6a ("arm64: Add support for STACKLEAK gcc plugin")
-> > Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-> > Cc: Alexander Popov <alex.popov@linux.com>
-> > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > Cc: Andy Lutomirski <luto@kernel.org>
-> > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > Cc: Kees Cook <keescook@chromium.org>
-> > Cc: Will Deacon <will@kernel.org>
-> > ---
-> >   arch/arm64/include/asm/processor.h | 10 ++++------
-> >   1 file changed, 4 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
-> > index 73e38d9a540ce..6b1a12c23fe77 100644
-> > --- a/arch/arm64/include/asm/processor.h
-> > +++ b/arch/arm64/include/asm/processor.h
-> > @@ -381,12 +381,10 @@ long get_tagged_addr_ctrl(struct task_struct *task);
-> >    * of header definitions for the use of task_stack_page.
-> >    */
-> > -#define current_top_of_stack()								\
-> > -({											\
-> > -	struct stack_info _info;							\
-> > -	BUG_ON(!on_accessible_stack(current, current_stack_pointer, 1, &_info));	\
-> > -	_info.high;									\
-> > -})
-> > +/*
-> > + * The top of the current task's task stack
-> > + */
-> > +#define current_top_of_stack()	((unsigned long)current->stack + THREAD_SIZE)
-> >   #define on_thread_stack()	(on_task_stack(current, current_stack_pointer, 1, NULL))
-> >   #endif /* __ASSEMBLY__ */
-> 
+That is useful to know in case we need it, thanks!
+
+Cheers,
+Miguel

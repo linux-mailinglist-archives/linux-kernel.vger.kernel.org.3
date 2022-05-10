@@ -2,58 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF5B4520EC1
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A29D9520E91
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236020AbiEJHkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 03:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57186 "EHLO
+        id S236635AbiEJHiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 03:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240151AbiEJHSx (ORCPT
+        with ESMTP id S240717AbiEJHXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 03:18:53 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDDE2992C3
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 00:14:54 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id i11so7052664ybq.9
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 00:14:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=zH66pFJDkZ1HOEqqc9deO5rWvxbXbeVm/jZJlJAb3ZM=;
-        b=JI4/46W0SmXlBajA2jdSbBcKv7/qUwhqfEmwodozi+lypUYA2YzKdfX9DWTbHj4asI
-         0qXmTNLaDI0ts7jBR8p31VIZ4P+QlI5ADOOZUp4LxfNjHKlbSxcYaVJrDxlxVIj5VCce
-         6eLEzzSD2pFV6tHP1vwXo4Z25D3Jt80zpaFLKc4kS651rVShFgEcjR86J7akwE4OJ5+B
-         ZNKeeFBxoxf2feeiG4EmHTMs+vZbL2sQ7O0rRJAODEV3Dy2GEPM/fmRHfooQ6ursn3rr
-         CNJdDmDk+bLvfo4r/fjSovnWcyLi0VTUCMriYdgCR/mXEqM+hTcyOpZtHSHkfwwn2+Xc
-         dycQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=zH66pFJDkZ1HOEqqc9deO5rWvxbXbeVm/jZJlJAb3ZM=;
-        b=VuOnfok/zASUphWk1gbrO0O815x9JSqGYstoBf6D+tZ7TfTR3Il49hobKbzGB6tOC3
-         e8JulMNW57Ed/GJWV1G06RIJZSMiG5oFHrOVBK22UeKOrjIY9tk6KjYSbg/dC1OsjFCl
-         FmAU+IBRJKEWMZ+CuhFEMIiv4jpitZ+nZ3v0AHPfTfgpvpZ+YAYsBhGw8fYC84iWK8PI
-         0rRNEsG4ZQe00J/xQ5CKnZWuwIv3eeuLfQ8p5WnyIeFTOv2fqdf2OhvTFowtKvqhwFZy
-         8ksBCyggsg4Vx85JW5EwygSM/U+gtNpHuXG3aLXwzj6TZQJjkpivqyI6PGfHRlcdpB70
-         Seqg==
-X-Gm-Message-State: AOAM530S4WUGv6lFfOYvvw8RqUPclgC9sSgc7Sc86eUBXhKFYZ9knv5z
-        QjxJulCs/HhNPj0j8UjRH0p1LjZ28tlibhRN+bzJjPb68nM=
-X-Google-Smtp-Source: ABdhPJxqyluTn+dW0xXkCrs3+GYZ2zj6BUVtG6u3JBwCFG5zbNS9Yt3xWMJnzBk1tEDiNK0zcNZ1N64E47elnnWvF3U=
-X-Received: by 2002:a05:6902:124d:b0:649:2a55:18a with SMTP id
- t13-20020a056902124d00b006492a55018amr16766765ybu.155.1652166893685; Tue, 10
- May 2022 00:14:53 -0700 (PDT)
+        Tue, 10 May 2022 03:23:25 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7BE2A2F64
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 00:19:28 -0700 (PDT)
+Received: from mail-yb1-f176.google.com ([209.85.219.176]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1McGtA-1oMZVK2YCi-00chkz for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022
+ 09:19:26 +0200
+Received: by mail-yb1-f176.google.com with SMTP id y76so29117775ybe.1
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 00:19:26 -0700 (PDT)
+X-Gm-Message-State: AOAM531j0TDz7FVCWWMghVhjpobxBI/x0N+Xl6GODTtAMJQusGvNRxwd
+        PpBe2xWc87asteU8ab0MN1nEGXjI9Rixj+XAmQU=
+X-Google-Smtp-Source: ABdhPJza4f0QhmQzTg58jggkDu1vDGQMJs7cvbYtkMs5nxfP9mAAZBo3PvjTDeok3vcEVeaushFvqJrbb0bhcjB/e7w=
+X-Received: by 2002:a25:cdc7:0:b0:648:f57d:c0ed with SMTP id
+ d190-20020a25cdc7000000b00648f57dc0edmr16568783ybf.480.1652167165347; Tue, 10
+ May 2022 00:19:25 -0700 (PDT)
 MIME-Version: 1.0
-From:   butt3rflyh4ck <butterflyhuangxx@gmail.com>
-Date:   Tue, 10 May 2022 15:14:42 +0800
-Message-ID: <CAFcO6XNpj6e+OGba30usr_miODhbhmqk7vh3ymU+NLoe2HBqFA@mail.gmail.com>
-Subject: A slab-out-of-bounds Write when invoke udf_write_fi via ioctl
-To:     jack@suse.com
-Cc:     LKML <linux-kernel@vger.kernel.org>
+References: <20220506192957.24889-1-nick.hawkins@hpe.com>
+In-Reply-To: <20220506192957.24889-1-nick.hawkins@hpe.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 10 May 2022 09:19:08 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a045Di_zRomezeah0ZoSGPw0Z6YoYkZtoxx1qOXAtKbbw@mail.gmail.com>
+Message-ID: <CAK8P3a045Di_zRomezeah0ZoSGPw0Z6YoYkZtoxx1qOXAtKbbw@mail.gmail.com>
+Subject: Re: [PATCH v1] ARM: A9: Add ARM ERRATA 764319 workaround
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Joel Stanley <joel@jms.id.au>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Provags-ID: V03:K1:OkaZ/VeV6oj2o7zYpYg+2p7jXbvXRdKVjj3PfMMgohbSezc6Aqh
+ sAMcd4xoSGQgXzflOuB4GGUAtOG60Qwcpn8r1shyNLsWoGxPXm3k7u0T2lwNjtPY4nJqIFL
+ 9vdBeNIm4CseBNIZ/SqUc654B+MwyFWDUNalAaoUlcLeGU8GBM1GUVSXs5qLT1qV5/Tv/aD
+ 6AYebLwxlrSJMfxVrMXvw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:erJObXgwuAs=:io1B8OlgqAF6c4V6ewAwoG
+ tYlywWWdHDzV0ue9VkUO1a8heDv1Q8sELy2ehKAS0tvFjVAcqE8kFcJu/5X/hRACCh4yxDLkf
+ ZiMNWpChTYCqcwZTxki6aEAw3VZzfUvfiPUHMipDsz1nlwFAfY5tMT61j8B9bOmX3iCn/Nlo2
+ bF/kAvla3AT00FhOrrYi3XUHf2KKwbQ1XedDdxk1xpRXKR06b176YBSUmMSJpOKaVdPby7jkZ
+ z+dNbe4Jh/akUI5fxNBei4RNjxsbjGsQHDTNuj0rVmI/I89bl5iZP2lqiJECj/faa8gE9H/+P
+ GtCDb/iXHYUtqvu79cKV3bwDfaaAqKKfM96mbSIN+8H0P53CJm3e3Do2AeoShEms/TGyU8VDZ
+ yq4kmAkgj83SYNdKnHnUmxT+E28fgroj2YyA9hjIja+mXsVKFx50hm90ERJsHu2493MfoMh+R
+ OdEZDknykQSzM4sdJYzLFi3G7wy0FUmGdiVURqskwZx/KuTaWjn5pV7yAUyYjAzB2py6D7ymt
+ CBGT5oOMiGSDd4gZhDfORgLQxaIANE0620Mb1BMNn2Rv+W0SVKzplbt1cP8V3LW0BbfgPsQDV
+ DszzOns0CyhEt4HXspl+F6O4JOOmS1m6LT98ILQsOSk1KV0aXBkG/sNHNwS/6Aem6dt/CFXWw
+ Sjq8D7nRbajI9c7WMJJdsRPoVLFSx1gp9lxXXeVTDD3GBSSuP3zx9CTiJbHeizf6lef2Lbs+b
+ uloj5kDXJoJHUazdjdHVCSFMgJUYvtFv5k7tpp1zxL1Dh35D22wZzn5HawFz/MG+nPGRC/qtP
+ bJtimYtqrot7m8Ci6qLFWV/hEEbljdi4zjLyMp5wxoKEjJxN6U=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,180 +70,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, if mounts a malicious udf image,  there is a slab out of bounds
-write  bug when a user invokes udf_write_fi via ioctl.
-I have reproduced it in the latest kernel.
+On Fri, May 6, 2022 at 9:29 PM <nick.hawkins@hpe.com> wrote:
+>
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+>
+> Enable the workaround for the 764319 Cortex A-9 erratum.
+> CP14 read accesses to the DBGPRSR and DBGOSLSR registers generate an
+> unexpected Undefined Instruction exception when the DBGSWENABLE external
+> pin is set to 0, even when the CP14 accesses are performed from a
+> privileged mode. The work around catches the exception in a way
+> the kernel does not stop execution with the use of undef_hook. This
+> has been found to effect the HPE GXP SoC.
+>
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> ---
+>  arch/arm/Kconfig                | 11 +++++++++++
+>  arch/arm/kernel/hw_breakpoint.c | 26 ++++++++++++++++++++++++++
+>  2 files changed, 37 insertions(+)
+>
+> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+> index 13f77eec7c40..6944adfb0fae 100644
+> --- a/arch/arm/Kconfig
+> +++ b/arch/arm/Kconfig
+> @@ -974,6 +974,17 @@ config ARM_ERRATA_764369
+>           relevant cache maintenance functions and sets a specific bit
+>           in the diagnostic control register of the SCU.
+>
+> +config ARM_ERRATA_764319
+> +       bool "ARM errata: Read to DBGPRSR and DBGOSLSR may generate Undefined instruction"
+> +       depends on CPU_V7
+> +       help
+> +         This option enables the workaround for the 764319 Cortex A-9 erratum.
+> +         CP14 read accesses to the DBGPRSR and DBGOSLSR registers generate an
+> +         unexpected Undefined Instruction exception when the DBGSWENABLE
+> +         external pin is set to 0, even when the CP14 accesses are performed
+> +         from a privileged mode. This work around catches the exception in a
+> +         way the kernel does not stop execution.
+> +
+>  config ARM_ERRATA_775420
+>         bool "ARM errata: A data cache maintenance operation which aborts, might lead to deadlock"
+>         depends on CPU_V7
+> diff --git a/arch/arm/kernel/hw_breakpoint.c b/arch/arm/kernel/hw_breakpoint.c
+> index b1423fb130ea..c41a8436a796 100644
+> --- a/arch/arm/kernel/hw_breakpoint.c
+> +++ b/arch/arm/kernel/hw_breakpoint.c
+> @@ -941,6 +941,23 @@ static int hw_breakpoint_pending(unsigned long addr, unsigned int fsr,
+>         return ret;
+>  }
+>
+> +#ifdef CONFIG_ARM_ERRATA_764319
+> +int oslsr_fault;
+> +
+> +static int debug_oslsr_trap(struct pt_regs *regs, unsigned int instr)
+> +{
+> +       oslsr_fault = 1;
+> +       instruction_pointer(regs) += 4;
+> +       return 0;
+> +}
+> +
+> +static struct undef_hook debug_oslsr_hook = {
+> +       .instr_mask  = 0xffffffff,
+> +       .instr_val = 0xee115e91,
+> +       .fn = debug_oslsr_trap,
+> +};
+> +#endif
+> +
 
-##smaple analyse
-the function call chains:
-do_sys_open
-    --->do_sys_openat2
-       --->do_filp_open
-          --->path_openat
-              --->open_last_lookups
-                 --->lookup_open
-                     --->udf_add_nondir
-                        --->udf_add_entry
+Hi Nick,
 
-There would traverse to get a `fi` in the function udf_add_entry.
-```
-if (dinfo->i_alloc_type == ICBTAG_FLAG_AD_IN_ICB) {   [1]
-         block = dinfo->i_location.logicalBlockNum;
-         fi = (struct fileIdentDesc *)
-           (dinfo->i_data + fibh->soffset -
-             udf_ext0_offset(dir) +
-              dinfo->i_lenEAttr);
-             [2]
-} else {
-          block = eloc.logicalBlockNum +
-              ((elen - 1) >>
-            dir->i_sb->s_blocksize_bits);
-            fi = (struct fileIdentDesc *)
-                 (fibh->sbh->b_data + fibh->soffset);
-}
-```
-[1] if dinfo->i_alloc_type is ICBTAG_FLAG_AD_IN_ICB, [2] it  would
-calculate an offset as `fi`,
-through the debugger, the `fi` is as below:
-```
- p/x *(struct fileIdentDesc*)fi
-$24 = {
-  descTag = {
-    tagIdent = 0x2f70,
-    descVersion = 0xea55,
-    tagChecksum = 0xcd,
-    reserved = 0x66,
-    tagSerialNum = 0x511f,
-    descCRC = 0x5a9c,
-    descCRCLength = 0x5142,
-    tagLocation = 0x373ce06a
-  },
-  fileVersionNum = 0x3139,
-  fileCharacteristics = 0xf6,
-  lengthFileIdent = 0x7e,
-  icb = {
-    extLength = 0x6059792,
-    extLocation = {
-      logicalBlockNum = 0x73886466,
-      partitionReferenceNum = 0x7cc6
-    },
-    impUse = {0x3c, 0xcc, 0x4a, 0xed, 0xdc, 0xfb}
-  },
-  lengthOfImpUse = 0x1a6a,
-  impUse = 0xffff888019ca716a
-}
-```
-These data are wrong and all data are part of  udf image mounted.
-Then next it would invoke function udf_write_fi to write fileident into `fi`.
-```
-if (fileident) {
-      if (adinicb || (offset + lfi < 0)) {
-          memcpy(udf_get_fi_ident(sfi), fileident, lfi);   [3]
-} else if (offset >= 0) {
-          memcpy(fibh->ebh->b_data + offset, fileident, lfi);
-} else {
-          memcpy(udf_get_fi_ident(sfi), fileident, -offset);
-          memcpy(fibh->ebh->b_data, fileident - offset,
-                  lfi + offset);
-       }
-}
-```
-The fileident was controlled by user. `sfi` is `fi`, the memcpy
-function is called to copy the data, so an out-of-bounds write occurs
+This seems a bit more complex than necessary. Can't you just use a custom
+inline asm with an ex_table entry to catch the fault? Have a look at
+__get_user_asm() for an example.
 
-##reproduce
-CONFIG_KASAN is opened.
-[   27.437559][ T4631] loop0: detected capacity change from 0 to 5376
-[   27.440865][ T4631] UDF-fs: warning (device loop0): udf_load_vrs:
-No anchor found
-[   27.441638][ T4631] UDF-fs: Scanning with blocksize 512 failed
-[   27.444203][ T4631] UDF-fs: INFO Mounting volume 'LinuxUDF',
-timestamp 2020/09/19 18:44 (1000)
-[   27.462341][ T4631]
-==================================================================
-[   27.463081][ T4631] BUG: KASAN: slab-out-of-bounds in
-udf_write_fi+0x353/0x1170
-[   27.463778][ T4631] Write of size 165 at addr ffff888014fe5c98 by
-task udf_write_fi1/4631
-[   27.464524][ T4631]
-[   27.464736][ T4631] CPU: 0 PID: 4631 Comm: udf_write_fi1 Not
-tainted 5.18.0-rc5-00028-ga7391ad35724 #47
-[   27.465598][ T4631] Hardware name: QEMU Standard PC (i440FX + PIIX,
-1996), BIOS 1.14.0-2 04/01/2014
-[   27.466427][ T4631] Call Trace:
-[   27.466721][ T4631]  <TASK>
-[   27.466990][ T4631]  dump_stack_lvl+0x11c/0x1b4
-[   27.467416][ T4631]  print_address_description.constprop.0.cold+0xeb/0x48f
-[   27.468051][ T4631]  ? udf_write_fi+0x353/0x1170
-[   27.468481][ T4631]  kasan_report.cold+0xf4/0x1c6
-[   27.468914][ T4631]  ? udf_get_fileident+0x271/0x2d0
-[   27.469371][ T4631]  ? udf_write_fi+0x353/0x1170
-[   27.469801][ T4631]  kasan_check_range+0x13d/0x180
-[   27.470246][ T4631]  memcpy+0x39/0x60
-[   27.470588][ T4631]  udf_write_fi+0x353/0x1170
-[   27.470998][ T4631]  ? udf_new_tag+0x1fd/0x3c0
-[   27.471412][ T4631]  udf_add_entry+0x10c7/0x24d0
-[   27.471822][ T4631]  ? udf_write_fi+0x1170/0x1170
-[   27.472218][ T4631]  ? __mark_inode_dirty+0x76a/0xb00
-[   27.472643][ T4631]  ? lock_downgrade+0x810/0x810
-[   27.473045][ T4631]  udf_add_nondir+0xf8/0x410
-[   27.473424][ T4631]  ? udf_rename+0x1050/0x1050
-[   27.473806][ T4631]  ? userns_owner+0x30/0x30
-[   27.474177][ T4631]  ? rcu_read_lock_sched_held+0x3a/0xa0
-[   27.474628][ T4631]  ? __mark_inode_dirty+0x5f8/0xb00
-[   27.475051][ T4631]  ? udf_get_parent+0x1c0/0x1c0
-[   27.475455][ T4631]  lookup_open.isra.0+0xec3/0x1760
-[   27.475876][ T4631]  ? lock_release+0x890/0x890
-[   27.476273][ T4631]  ? path_lookupat+0x6b0/0x6b0
-[   27.476670][ T4631]  ? __mnt_want_write+0x184/0x260
-[   27.477107][ T4631]  path_openat+0x7d5/0x2360
-[   27.477480][ T4631]  ? lookup_open.isra.0+0x1760/0x1760
-[   27.477915][ T4631]  ? lockdep_hardirqs_on_prepare+0x430/0x430
-[   27.478412][ T4631]  ? lockdep_hardirqs_on_prepare+0x430/0x430
-[   27.478901][ T4631]  do_filp_open+0x199/0x3d0
-[   27.479271][ T4631]  ? find_held_lock+0x2d/0x110
-[   27.479663][ T4631]  ? may_open_dev+0xd0/0xd0
-[   27.480036][ T4631]  ? rwlock_bug.part.0+0x90/0x90
-[   27.480429][ T4631]  ? _raw_spin_unlock+0x24/0x40
-[   27.480825][ T4631]  ? alloc_fd+0x1ef/0x560
-[   27.481173][ T4631]  ? getname_flags.part.0+0x89/0x440
-[   27.481602][ T4631]  do_sys_openat2+0x11e/0x3f0
-[   27.481978][ T4631]  ? build_open_flags+0x490/0x490
-[   27.482384][ T4631]  ? lock_downgrade+0x810/0x810
-[   27.482777][ T4631]  __x64_sys_openat+0x11b/0x1d0
-[   27.483188][ T4631]  ? __ia32_sys_open+0x190/0x190
-[   27.483594][ T4631]  ? lockdep_hardirqs_on_prepare+0x22b/0x430
-[   27.484177][ T4631]  ? syscall_enter_from_user_mode+0x21/0x80
-[   27.484890][ T4631]  ? lockdep_hardirqs_on+0x8b/0x110
-[   27.485538][ T4631]  do_syscall_64+0x35/0xb0
-[   27.486095][ T4631]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   27.486692][ T4631] RIP: 0033:0x44914d
-[   27.487019][ T4631] Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3
-0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b
-4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff 8
-[   27.488797][ T4631] RSP: 002b:00007ffc787d2f68 EFLAGS: 00000246
-ORIG_RAX: 0000000000000101
-[   27.489518][ T4631] RAX: ffffffffffffffda RBX: 0000000000400540
-RCX: 000000000044914d
-[   27.490179][ T4631] RDX: 0000000000000040 RSI: 0000000020000140
-RDI: 0000000000000005
-[   27.490825][ T4631] RBP: 00007ffc787d2f80 R08: 0000000020000170
-R09: 0000000000000000
-[   27.491469][ T4631] R10: 0000000000000000 R11: 0000000000000246
-R12: 0000000000404dd0
-[   27.492125][ T4631] R13: 0000000000000000 R14: 00000000004c0018
-R15: 0000000000400540
-
-If needed a reproduce, I can provided to you.
-
-
-
-
-Regards,
-   butt3rflyh4ck.
-
-
-
-
--- 
-Active Defense Lab of Venustech
+       Arnd

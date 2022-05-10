@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79407521AEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:01:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 336A1521901
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:39:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244824AbiEJOF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53458 "EHLO
+        id S244284AbiEJNlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243632AbiEJNmg (ORCPT
+        with ESMTP id S243246AbiEJN0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:42:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C1F46B1F;
-        Tue, 10 May 2022 06:30:55 -0700 (PDT)
+        Tue, 10 May 2022 09:26:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAC72317D5;
+        Tue, 10 May 2022 06:19:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7DFE8B81D24;
-        Tue, 10 May 2022 13:30:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8CBBC385A6;
-        Tue, 10 May 2022 13:30:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F070661665;
+        Tue, 10 May 2022 13:19:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0984DC385C2;
+        Tue, 10 May 2022 13:19:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189452;
-        bh=KROBn0sVKqejLhXC5hNUtuLqTsLA0EpNTTg+h0Jc3Nc=;
+        s=korg; t=1652188752;
+        bh=7QJDgg4sfkmypf0Qd7Xo9nYtMAuC3p7KgxsYAL5z3QI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XwU9qx0kXZlE8phq+qcIqSspQ4gb0LeMgtSs7cJ6P9gjVaYmAi3plhB9zMaNuYyJV
-         FCKVphv8jD4dFu8FIgl/OI2R01IA70hU5DrDerXEJklMCsUNXZPB89hzTmQQz79ede
-         w2Z+H39crTLXN7nt1tv4Izy4vvwKeRQ4sBHlEdBI=
+        b=eFWStOnhkuznbzJ7SfP5P2BDM+i4qKRLp13n4IcZMEVW60LzQaKh6Le0tDF25lXj5
+         9T8q6apHiYZYoBGvj92HlSQl8kplq/nAk35ehMSvslJEzrm0ioyj3gePc7NtAAJDkz
+         snNA3ewKZe/NLYORXs67RWl9dD29NgMbnxxH5kN4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Cheng Xu <chengyou@linux.alibaba.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 5.15 056/135] RDMA/siw: Fix a condition race issue in MPA request processing
+        stable@vger.kernel.org, Ying Xu <yinxu@redhat.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 33/88] sctp: check asoc strreset_chunk in sctp_generate_reconf_event
 Date:   Tue, 10 May 2022 15:07:18 +0200
-Message-Id: <20220510130742.013033917@linuxfoundation.org>
+Message-Id: <20220510130734.707839964@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
+References: <20220510130733.735278074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,66 +57,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cheng Xu <chengyou@linux.alibaba.com>
+From: Xin Long <lucien.xin@gmail.com>
 
-commit ef91271c65c12d36e4c2b61c61d4849fb6d11aa0 upstream.
+[ Upstream commit 165e3e17fe8fe6a8aab319bc6e631a2e23b9a857 ]
 
-The calling of siw_cm_upcall and detaching new_cep with its listen_cep
-should be atomistic semantics. Otherwise siw_reject may be called in a
-temporary state, e,g, siw_cm_upcall is called but the new_cep->listen_cep
-has not being cleared.
+A null pointer reference issue can be triggered when the response of a
+stream reconf request arrives after the timer is triggered, such as:
 
-This fixes a WARN:
+  send Incoming SSN Reset Request --->
+  CPU0:
+   reconf timer is triggered,
+   go to the handler code before hold sk lock
+                            <--- reply with Outgoing SSN Reset Request
+  CPU1:
+   process Outgoing SSN Reset Request,
+   and set asoc->strreset_chunk to NULL
+  CPU0:
+   continue the handler code, hold sk lock,
+   and try to hold asoc->strreset_chunk, crash!
 
-  WARNING: CPU: 7 PID: 201 at drivers/infiniband/sw/siw/siw_cm.c:255 siw_cep_put+0x125/0x130 [siw]
-  CPU: 2 PID: 201 Comm: kworker/u16:22 Kdump: loaded Tainted: G            E     5.17.0-rc7 #1
-  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
-  Workqueue: iw_cm_wq cm_work_handler [iw_cm]
-  RIP: 0010:siw_cep_put+0x125/0x130 [siw]
-  Call Trace:
-   <TASK>
-   siw_reject+0xac/0x180 [siw]
-   iw_cm_reject+0x68/0xc0 [iw_cm]
-   cm_work_handler+0x59d/0xe20 [iw_cm]
-   process_one_work+0x1e2/0x3b0
-   worker_thread+0x50/0x3a0
-   ? rescuer_thread+0x390/0x390
-   kthread+0xe5/0x110
-   ? kthread_complete_and_exit+0x20/0x20
-   ret_from_fork+0x1f/0x30
-   </TASK>
+In Ying Xu's testing, the call trace is:
 
-Fixes: 6c52fdc244b5 ("rdma/siw: connection management")
-Link: https://lore.kernel.org/r/d528d83466c44687f3872eadcb8c184528b2e2d4.1650526554.git.chengyou@linux.alibaba.com
-Reported-by: Luis Chamberlain <mcgrof@kernel.org>
-Reviewed-by: Bernard Metzler <bmt@zurich.ibm.com>
-Signed-off-by: Cheng Xu <chengyou@linux.alibaba.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  [ ] BUG: kernel NULL pointer dereference, address: 0000000000000010
+  [ ] RIP: 0010:sctp_chunk_hold+0xe/0x40 [sctp]
+  [ ] Call Trace:
+  [ ]  <IRQ>
+  [ ]  sctp_sf_send_reconf+0x2c/0x100 [sctp]
+  [ ]  sctp_do_sm+0xa4/0x220 [sctp]
+  [ ]  sctp_generate_reconf_event+0xbd/0xe0 [sctp]
+  [ ]  call_timer_fn+0x26/0x130
+
+This patch is to fix it by returning from the timer handler if asoc
+strreset_chunk is already set to NULL.
+
+Fixes: 7b9438de0cd4 ("sctp: add stream reconf timer")
+Reported-by: Ying Xu <yinxu@redhat.com>
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/sw/siw/siw_cm.c |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ net/sctp/sm_sideeffect.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/infiniband/sw/siw/siw_cm.c
-+++ b/drivers/infiniband/sw/siw/siw_cm.c
-@@ -968,14 +968,15 @@ static void siw_accept_newconn(struct si
- 
- 		siw_cep_set_inuse(new_cep);
- 		rv = siw_proc_mpareq(new_cep);
--		siw_cep_set_free(new_cep);
--
- 		if (rv != -EAGAIN) {
- 			siw_cep_put(cep);
- 			new_cep->listen_cep = NULL;
--			if (rv)
-+			if (rv) {
-+				siw_cep_set_free(new_cep);
- 				goto error;
-+			}
- 		}
-+		siw_cep_set_free(new_cep);
+diff --git a/net/sctp/sm_sideeffect.c b/net/sctp/sm_sideeffect.c
+index 2a94240eac36..82d96441e64d 100644
+--- a/net/sctp/sm_sideeffect.c
++++ b/net/sctp/sm_sideeffect.c
+@@ -473,6 +473,10 @@ void sctp_generate_reconf_event(struct timer_list *t)
+ 		goto out_unlock;
  	}
- 	return;
  
++	/* This happens when the response arrives after the timer is triggered. */
++	if (!asoc->strreset_chunk)
++		goto out_unlock;
++
+ 	error = sctp_do_sm(net, SCTP_EVENT_T_TIMEOUT,
+ 			   SCTP_ST_TIMEOUT(SCTP_EVENT_TIMEOUT_RECONF),
+ 			   asoc->state, asoc->ep, asoc,
+-- 
+2.35.1
+
 
 

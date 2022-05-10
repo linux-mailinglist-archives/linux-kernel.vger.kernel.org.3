@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3770521963
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E860521916
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244740AbiEJNq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
+        id S243997AbiEJNnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243920AbiEJNcV (ORCPT
+        with ESMTP id S243378AbiEJNam (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:32:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0853418E85A;
-        Tue, 10 May 2022 06:23:40 -0700 (PDT)
+        Tue, 10 May 2022 09:30:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750812C511A;
+        Tue, 10 May 2022 06:21:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A67B5B81D7A;
-        Tue, 10 May 2022 13:23:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F00EBC385C2;
-        Tue, 10 May 2022 13:23:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1555F616D0;
+        Tue, 10 May 2022 13:21:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2103AC385A6;
+        Tue, 10 May 2022 13:21:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189017;
-        bh=D1VXFo6qqlH4lFnwkcS9ZYjsRWKKgtRlc0OfHs2aT0k=;
+        s=korg; t=1652188886;
+        bh=NmlfjBAVVEP/vw+cxYqZN4npXt02El+JYjH9uacL4go=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rOnNV5LvnYmExN9Tu0+KdxmeUB65Bjjz9nKPzIYjO9NLvhO5pTyt4Dtg8cM5vty3m
-         Rnrl88SuB9X87+eJ1FDsY4yZk15/6Xi6345tToW3Kmf4L3T4y9kkZq88Jdla5tDzT/
-         OEbfI08xtRYwS6G71Kj/l3pcQ69f5A5l/b250qtA=
+        b=DQCh7XtIEUUU3dr4s85wAprRgDQqiIQ69jkKAiucbhSIPYiU6QM8MeP2GRWVqOOqT
+         weD2q6Pz5cB+ah6nxohD3QiA0ciGNJBr6piuZjlDxmWDPc7440d7JbLb+qOXeKpUmN
+         66B5h0eG9do6ErMVA5LmiwrBUtM+9IoimhWqek3k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +36,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sandipan Das <sandipan.das@amd.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 36/52] kvm: x86/cpuid: Only provide CPUID leaf 0xA if host has architectural PMU
-Date:   Tue, 10 May 2022 15:08:05 +0200
-Message-Id: <20220510130730.907553249@linuxfoundation.org>
+Subject: [PATCH 4.19 81/88] kvm: x86/cpuid: Only provide CPUID leaf 0xA if host has architectural PMU
+Date:   Tue, 10 May 2022 15:08:06 +0200
+Message-Id: <20220510130736.084725368@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
-References: <20220510130729.852544477@linuxfoundation.org>
+In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
+References: <20220510130733.735278074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -86,10 +86,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 insertions(+)
 
 diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 6a8db8eb0e94..62c7f771a7cf 100644
+index 097eef712cdc..0489ffc3dfe5 100644
 --- a/arch/x86/kvm/cpuid.c
 +++ b/arch/x86/kvm/cpuid.c
-@@ -592,6 +592,11 @@ static inline int __do_cpuid_func(struct kvm_cpuid_entry2 *entry, u32 function,
+@@ -532,6 +532,11 @@ static inline int __do_cpuid_ent(struct kvm_cpuid_entry2 *entry, u32 function,
  		union cpuid10_eax eax;
  		union cpuid10_edx edx;
  

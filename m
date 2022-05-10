@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 417C35216DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7BF521976
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242660AbiEJNU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
+        id S243867AbiEJNsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242559AbiEJNRU (ORCPT
+        with ESMTP id S243829AbiEJNcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:17:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9079740927;
-        Tue, 10 May 2022 06:12:54 -0700 (PDT)
+        Tue, 10 May 2022 09:32:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C792D2E19;
+        Tue, 10 May 2022 06:22:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CF8E615DD;
-        Tue, 10 May 2022 13:12:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AE76C385A6;
-        Tue, 10 May 2022 13:12:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BBBC3B81CF8;
+        Tue, 10 May 2022 13:22:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37F57C385CB;
+        Tue, 10 May 2022 13:22:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188373;
-        bh=iXVVI4US+Q041s1HhJh5ERMO/BF9bJSOGPx+QLMsC9s=;
+        s=korg; t=1652188945;
+        bh=ebxO7ea5uZ2L1ow0f2EsBUE2+tEllM6tW5beIpHMgIw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EHo4/0O+exXbYpR87y5DNZShm9b4jNSoVcMEawoS+cCySAytqcjFLMahL7uTZ06KK
-         NIlzvrXNHPaOgqxWqM+7UL6QBlsv4LlaJKlTANd+DWnq2L7wSFZT0NGw8exqGvN1GQ
-         O+BXLqYkdUEHAuwpzOr6CRpM+EmOBpmwwM3C6pJg=
+        b=zYKRvNXLfgRoGoKZjKN2ebP+VjZWvb0K6l5ADwlwJkx+c6L7OgJYBuscxLzjvTkyd
+         4ndyWJqJzosyyHEbjPANgvddybXu+CkgUWP/n6PBKDXZqrYP3qbbjoR6IL5n8acVPO
+         fvEXyD2iGvUH6WdXGWsa5fwDafS1ZH/Tdi7lHUqQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Hellstrom <daniel@gaisler.com>,
-        Andreas Larsson <andreas@gaisler.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 4.9 52/66] can: grcan: use ofdev->dev when allocating DMA memory
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>
+Subject: [PATCH 5.4 13/52] ASoC: meson: Fix event generation for G12A tohdmi mux
 Date:   Tue, 10 May 2022 15:07:42 +0200
-Message-Id: <20220510130731.293111525@linuxfoundation.org>
+Message-Id: <20220510130730.246649329@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
-References: <20220510130729.762341544@linuxfoundation.org>
+In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
+References: <20220510130729.852544477@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,63 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Hellstrom <daniel@gaisler.com>
+From: Mark Brown <broonie@kernel.org>
 
-commit 101da4268626b00d16356a6bf284d66e44c46ff9 upstream.
+commit 12131008fc13ff7f7690d170b7a8f72d24fd7d1e upstream.
 
-Use the device of the device tree node should be rather than the
-device of the struct net_device when allocating DMA buffers.
+The G12A tohdmi has a custom put() operation which returns 0 when the value
+of the mux changes, meaning that events are not generated for userspace.
+Change to return 1 in this case, the function returns early in the case
+where there is no change.
 
-The driver got away with it on sparc32 until commit 53b7670e5735
-("sparc: factor the dma coherent mapping into helper") after which the
-driver oopses.
-
-Fixes: 6cec9b07fe6a ("can: grcan: Add device driver for GRCAN and GRHCAN cores")
-Link: https://lore.kernel.org/all/20220429084656.29788-2-andreas@gaisler.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Jerome Brunet <jbrunet@baylibre.com>
+Link: https://lore.kernel.org/r/20220421123803.292063-4-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Cc: stable@vger.kernel.org
-Signed-off-by: Daniel Hellstrom <daniel@gaisler.com>
-Signed-off-by: Andreas Larsson <andreas@gaisler.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/grcan.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ sound/soc/meson/g12a-tohdmitx.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/can/grcan.c
-+++ b/drivers/net/can/grcan.c
-@@ -252,6 +252,7 @@ struct grcan_device_config {
- struct grcan_priv {
- 	struct can_priv can;	/* must be the first member */
- 	struct net_device *dev;
-+	struct device *ofdev_dev;
- 	struct napi_struct napi;
+--- a/sound/soc/meson/g12a-tohdmitx.c
++++ b/sound/soc/meson/g12a-tohdmitx.c
+@@ -127,7 +127,7 @@ static int g12a_tohdmitx_i2s_mux_put_enu
  
- 	struct grcan_registers __iomem *regs;	/* ioremap'ed registers */
-@@ -928,7 +929,7 @@ static void grcan_free_dma_buffers(struc
- 	struct grcan_priv *priv = netdev_priv(dev);
- 	struct grcan_dma *dma = &priv->dma;
+ 	snd_soc_dapm_mux_update_power(dapm, kcontrol, mux, e, NULL);
  
--	dma_free_coherent(&dev->dev, dma->base_size, dma->base_buf,
-+	dma_free_coherent(priv->ofdev_dev, dma->base_size, dma->base_buf,
- 			  dma->base_handle);
- 	memset(dma, 0, sizeof(*dma));
+-	return 0;
++	return 1;
  }
-@@ -953,7 +954,7 @@ static int grcan_allocate_dma_buffers(st
  
- 	/* Extra GRCAN_BUFFER_ALIGNMENT to allow for alignment */
- 	dma->base_size = lsize + ssize + GRCAN_BUFFER_ALIGNMENT;
--	dma->base_buf = dma_alloc_coherent(&dev->dev,
-+	dma->base_buf = dma_alloc_coherent(priv->ofdev_dev,
- 					   dma->base_size,
- 					   &dma->base_handle,
- 					   GFP_KERNEL);
-@@ -1606,6 +1607,7 @@ static int grcan_setup_netdev(struct pla
- 	memcpy(&priv->config, &grcan_module_config,
- 	       sizeof(struct grcan_device_config));
- 	priv->dev = dev;
-+	priv->ofdev_dev = &ofdev->dev;
- 	priv->regs = base;
- 	priv->can.bittiming_const = &grcan_bittiming_const;
- 	priv->can.do_set_bittiming = grcan_set_bittiming;
+ static const struct snd_kcontrol_new g12a_tohdmitx_i2s_mux =
 
 

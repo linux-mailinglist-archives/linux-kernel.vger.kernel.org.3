@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F5E521989
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1ECD521997
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:46:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244321AbiEJNqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:46:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46982 "EHLO
+        id S240146AbiEJNtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243877AbiEJNcT (ORCPT
+        with ESMTP id S243765AbiEJNcN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:32:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9152214CA0C;
-        Tue, 10 May 2022 06:23:04 -0700 (PDT)
+        Tue, 10 May 2022 09:32:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F59E2CE21D;
+        Tue, 10 May 2022 06:22:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 512F6B81DA5;
-        Tue, 10 May 2022 13:23:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90AD0C385C2;
-        Tue, 10 May 2022 13:23:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5A916165A;
+        Tue, 10 May 2022 13:22:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B44F6C385C2;
+        Tue, 10 May 2022 13:21:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188982;
-        bh=RRkK3PGwP3zmeyLRDB3rhf1tmnLcW9G0dse4hLzQCwk=;
+        s=korg; t=1652188920;
+        bh=iXVVI4US+Q041s1HhJh5ERMO/BF9bJSOGPx+QLMsC9s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ixYxJPfZXKh1jy7Tf8w3NCwNdccH70HVCZXoZiCMupN597yodOHZU9kc+z+hT1zVD
-         X+Tl6K6HL4X9DkyO4e5ADr6+1xrGPf3QWA2eIXP7p3n/ne1eAxBHas2oP2BgF6UKuy
-         MMn3gR46fGbhsdzLDac7iq9JOgPXOxuyaswSS1gM=
+        b=jdSAmKXKJ4XWRk1ViTIEDzw0bXW7ZIb27xa/+qifwA9lM8hGb+2imyKdYLbO+Z0Ld
+         4eRyKEbVdtkhonhHLIwzvDYe2K3uyAJdidEKEbh93RxQql0BeNl5NJA0gWPCA3DfK8
+         Df2DLSTskFPmZPbfYJ6oml0GcnNoR0IJ/A2kMloU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Cheng Xu <chengyou@linux.alibaba.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 5.4 25/52] RDMA/siw: Fix a condition race issue in MPA request processing
+        stable@vger.kernel.org, Daniel Hellstrom <daniel@gaisler.com>,
+        Andreas Larsson <andreas@gaisler.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 4.19 69/88] can: grcan: use ofdev->dev when allocating DMA memory
 Date:   Tue, 10 May 2022 15:07:54 +0200
-Message-Id: <20220510130730.589217408@linuxfoundation.org>
+Message-Id: <20220510130735.739737967@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
-References: <20220510130729.852544477@linuxfoundation.org>
+In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
+References: <20220510130733.735278074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,66 +55,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cheng Xu <chengyou@linux.alibaba.com>
+From: Daniel Hellstrom <daniel@gaisler.com>
 
-commit ef91271c65c12d36e4c2b61c61d4849fb6d11aa0 upstream.
+commit 101da4268626b00d16356a6bf284d66e44c46ff9 upstream.
 
-The calling of siw_cm_upcall and detaching new_cep with its listen_cep
-should be atomistic semantics. Otherwise siw_reject may be called in a
-temporary state, e,g, siw_cm_upcall is called but the new_cep->listen_cep
-has not being cleared.
+Use the device of the device tree node should be rather than the
+device of the struct net_device when allocating DMA buffers.
 
-This fixes a WARN:
+The driver got away with it on sparc32 until commit 53b7670e5735
+("sparc: factor the dma coherent mapping into helper") after which the
+driver oopses.
 
-  WARNING: CPU: 7 PID: 201 at drivers/infiniband/sw/siw/siw_cm.c:255 siw_cep_put+0x125/0x130 [siw]
-  CPU: 2 PID: 201 Comm: kworker/u16:22 Kdump: loaded Tainted: G            E     5.17.0-rc7 #1
-  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
-  Workqueue: iw_cm_wq cm_work_handler [iw_cm]
-  RIP: 0010:siw_cep_put+0x125/0x130 [siw]
-  Call Trace:
-   <TASK>
-   siw_reject+0xac/0x180 [siw]
-   iw_cm_reject+0x68/0xc0 [iw_cm]
-   cm_work_handler+0x59d/0xe20 [iw_cm]
-   process_one_work+0x1e2/0x3b0
-   worker_thread+0x50/0x3a0
-   ? rescuer_thread+0x390/0x390
-   kthread+0xe5/0x110
-   ? kthread_complete_and_exit+0x20/0x20
-   ret_from_fork+0x1f/0x30
-   </TASK>
-
-Fixes: 6c52fdc244b5 ("rdma/siw: connection management")
-Link: https://lore.kernel.org/r/d528d83466c44687f3872eadcb8c184528b2e2d4.1650526554.git.chengyou@linux.alibaba.com
-Reported-by: Luis Chamberlain <mcgrof@kernel.org>
-Reviewed-by: Bernard Metzler <bmt@zurich.ibm.com>
-Signed-off-by: Cheng Xu <chengyou@linux.alibaba.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Fixes: 6cec9b07fe6a ("can: grcan: Add device driver for GRCAN and GRHCAN cores")
+Link: https://lore.kernel.org/all/20220429084656.29788-2-andreas@gaisler.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Hellstrom <daniel@gaisler.com>
+Signed-off-by: Andreas Larsson <andreas@gaisler.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/sw/siw/siw_cm.c |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/net/can/grcan.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/drivers/infiniband/sw/siw/siw_cm.c
-+++ b/drivers/infiniband/sw/siw/siw_cm.c
-@@ -976,14 +976,15 @@ static void siw_accept_newconn(struct si
+--- a/drivers/net/can/grcan.c
++++ b/drivers/net/can/grcan.c
+@@ -252,6 +252,7 @@ struct grcan_device_config {
+ struct grcan_priv {
+ 	struct can_priv can;	/* must be the first member */
+ 	struct net_device *dev;
++	struct device *ofdev_dev;
+ 	struct napi_struct napi;
  
- 		siw_cep_set_inuse(new_cep);
- 		rv = siw_proc_mpareq(new_cep);
--		siw_cep_set_free(new_cep);
--
- 		if (rv != -EAGAIN) {
- 			siw_cep_put(cep);
- 			new_cep->listen_cep = NULL;
--			if (rv)
-+			if (rv) {
-+				siw_cep_set_free(new_cep);
- 				goto error;
-+			}
- 		}
-+		siw_cep_set_free(new_cep);
- 	}
- 	return;
+ 	struct grcan_registers __iomem *regs;	/* ioremap'ed registers */
+@@ -928,7 +929,7 @@ static void grcan_free_dma_buffers(struc
+ 	struct grcan_priv *priv = netdev_priv(dev);
+ 	struct grcan_dma *dma = &priv->dma;
  
+-	dma_free_coherent(&dev->dev, dma->base_size, dma->base_buf,
++	dma_free_coherent(priv->ofdev_dev, dma->base_size, dma->base_buf,
+ 			  dma->base_handle);
+ 	memset(dma, 0, sizeof(*dma));
+ }
+@@ -953,7 +954,7 @@ static int grcan_allocate_dma_buffers(st
+ 
+ 	/* Extra GRCAN_BUFFER_ALIGNMENT to allow for alignment */
+ 	dma->base_size = lsize + ssize + GRCAN_BUFFER_ALIGNMENT;
+-	dma->base_buf = dma_alloc_coherent(&dev->dev,
++	dma->base_buf = dma_alloc_coherent(priv->ofdev_dev,
+ 					   dma->base_size,
+ 					   &dma->base_handle,
+ 					   GFP_KERNEL);
+@@ -1606,6 +1607,7 @@ static int grcan_setup_netdev(struct pla
+ 	memcpy(&priv->config, &grcan_module_config,
+ 	       sizeof(struct grcan_device_config));
+ 	priv->dev = dev;
++	priv->ofdev_dev = &ofdev->dev;
+ 	priv->regs = base;
+ 	priv->can.bittiming_const = &grcan_bittiming_const;
+ 	priv->can.do_set_bittiming = grcan_set_bittiming;
 
 

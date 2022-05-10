@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EA3A521B57
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50DEF521C27
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244543AbiEJOKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47208 "EHLO
+        id S1344063AbiEJOao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245016AbiEJNrL (ORCPT
+        with ESMTP id S244806AbiEJOBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:47:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A9F62200;
-        Tue, 10 May 2022 06:33:34 -0700 (PDT)
+        Tue, 10 May 2022 10:01:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3342DE5A3;
+        Tue, 10 May 2022 06:40:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C4C5615C8;
-        Tue, 10 May 2022 13:33:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BD2BC385C2;
-        Tue, 10 May 2022 13:33:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D76C7B81D24;
+        Tue, 10 May 2022 13:40:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49AE1C36AEA;
+        Tue, 10 May 2022 13:40:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189613;
-        bh=SYhf9Y/s6CCh/yxYZDBxoiBR/iAMVK98G+WsVzlPuas=;
+        s=korg; t=1652190005;
+        bh=XgOyfwY09cKOKNRpN4Ehrh0m6E4OuJybLh6K6uDvmp0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KHbGoRrLZyC0KhuB4adk0so1/PIei1CCTx7+TlLKlvJAxGGAkJVsxsh6NZn4eJ3qN
-         7AaOOvzHRtyzFuv3B+LS66oV9YarZDSPJdWy/eRksAR2GhAlrfI93sQNAv6hwQYhCZ
-         qeRz+0vpkyCOr1Os/KSQCSl14FsGdGd3Dsm9q5XA=
+        b=HFcQMLo5mC31tmslDvswKo2hAHdR887qesWIz0MTGwYlJot5LvZlv0zcwkPGYnfhC
+         kNENpWbCLDuClVxWVKrXGcrmz3cpxcVYmFPFirQfHTFpT+ApxITVLCmeO4xjHYTQei
+         vTpSGW62TdJbLYCyy+b5IifMFubEqQGgSPbpF/QI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, pali@kernel.org,
-        =?UTF-8?q?Marek=20Beh=FAn?= <kabel@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Subject: [PATCH 5.15 107/135] PCI: pci-bridge-emul: Add definitions for missing capabilities registers
+        stable@vger.kernel.org, Hector Martin <marcan@marcan.st>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH 5.17 099/140] dt-bindings: pci: apple,pcie: Drop max-link-speed from example
 Date:   Tue, 10 May 2022 15:08:09 +0200
-Message-Id: <20220510130743.476584426@linuxfoundation.org>
+Message-Id: <20220510130744.437692269@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,75 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Hector Martin <marcan@marcan.st>
 
-commit 8ea673a8b30b4a32516b8adabb15e2a68ff02ec8 upstream.
+commit 5dc4630426511f641b7ac44fc550b8e21eafb237 upstream.
 
-pci-bridge-emul driver already allocates buffer for capabilities up to the
-PCI_EXP_SLTSTA2 register, but does not define bit access behavior for these
-registers. Add these missing definitions.
+We no longer use these since 111659c2a570 (and they never worked
+anyway); drop them from the example to avoid confusion.
 
-Link: https://lore.kernel.org/r/20211130172913.9727-3-kabel@kernel.org
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Signed-off-by: Marek Behún <kabel@kernel.org>
+Fixes: 111659c2a570 ("arm64: dts: apple: t8103: Remove PCIe max-link-speed properties")
+Signed-off-by: Hector Martin <marcan@marcan.st>
+Reviewed-by: Alyssa Rosenzweig <alyssa@rosenzweig.io>
+Signed-off-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/20220502091308.28233-1-marcan@marcan.st
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/pci-bridge-emul.c |   43 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ Documentation/devicetree/bindings/pci/apple,pcie.yaml | 3 ---
+ 1 file changed, 3 deletions(-)
 
---- a/drivers/pci/pci-bridge-emul.c
-+++ b/drivers/pci/pci-bridge-emul.c
-@@ -270,6 +270,49 @@ struct pci_bridge_reg_behavior pcie_cap_
- 		.ro = GENMASK(15, 0) | PCI_EXP_RTSTA_PENDING,
- 		.w1c = PCI_EXP_RTSTA_PME,
- 	},
-+
-+	[PCI_EXP_DEVCAP2 / 4] = {
-+		/*
-+		 * Device capabilities 2 register has reserved bits [30:27].
-+		 * Also bits [26:24] are reserved for non-upstream ports.
-+		 */
-+		.ro = BIT(31) | GENMASK(23, 0),
-+	},
-+
-+	[PCI_EXP_DEVCTL2 / 4] = {
-+		/*
-+		 * Device control 2 register is RW. Bit 11 is reserved for
-+		 * non-upstream ports.
-+		 *
-+		 * Device status 2 register is reserved.
-+		 */
-+		.rw = GENMASK(15, 12) | GENMASK(10, 0),
-+	},
-+
-+	[PCI_EXP_LNKCAP2 / 4] = {
-+		/* Link capabilities 2 register has reserved bits [30:25] and 0. */
-+		.ro = BIT(31) | GENMASK(24, 1),
-+	},
-+
-+	[PCI_EXP_LNKCTL2 / 4] = {
-+		/*
-+		 * Link control 2 register is RW.
-+		 *
-+		 * Link status 2 register has bits 5, 15 W1C;
-+		 * bits 10, 11 reserved and others are RO.
-+		 */
-+		.rw = GENMASK(15, 0),
-+		.w1c = (BIT(15) | BIT(5)) << 16,
-+		.ro = (GENMASK(14, 12) | GENMASK(9, 6) | GENMASK(4, 0)) << 16,
-+	},
-+
-+	[PCI_EXP_SLTCAP2 / 4] = {
-+		/* Slot capabilities 2 register is reserved. */
-+	},
-+
-+	[PCI_EXP_SLTCTL2 / 4] = {
-+		/* Both Slot control 2 and Slot status 2 registers are reserved. */
-+	},
- };
+diff --git a/Documentation/devicetree/bindings/pci/apple,pcie.yaml b/Documentation/devicetree/bindings/pci/apple,pcie.yaml
+index 7f01e15fc81c..daf602ac0d0f 100644
+--- a/Documentation/devicetree/bindings/pci/apple,pcie.yaml
++++ b/Documentation/devicetree/bindings/pci/apple,pcie.yaml
+@@ -142,7 +142,6 @@ examples:
+           device_type = "pci";
+           reg = <0x0 0x0 0x0 0x0 0x0>;
+           reset-gpios = <&pinctrl_ap 152 0>;
+-          max-link-speed = <2>;
  
- /*
+           #address-cells = <3>;
+           #size-cells = <2>;
+@@ -153,7 +152,6 @@ examples:
+           device_type = "pci";
+           reg = <0x800 0x0 0x0 0x0 0x0>;
+           reset-gpios = <&pinctrl_ap 153 0>;
+-          max-link-speed = <2>;
+ 
+           #address-cells = <3>;
+           #size-cells = <2>;
+@@ -164,7 +162,6 @@ examples:
+           device_type = "pci";
+           reg = <0x1000 0x0 0x0 0x0 0x0>;
+           reset-gpios = <&pinctrl_ap 33 0>;
+-          max-link-speed = <1>;
+ 
+           #address-cells = <3>;
+           #size-cells = <2>;
+-- 
+2.36.1
+
 
 

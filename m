@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59830521A6C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F713521A85
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245755AbiEJN6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55166 "EHLO
+        id S1343651AbiEJN7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245213AbiEJNij (ORCPT
+        with ESMTP id S245232AbiEJNik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:38:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2842254FB3;
-        Tue, 10 May 2022 06:28:53 -0700 (PDT)
+        Tue, 10 May 2022 09:38:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002561A811B;
+        Tue, 10 May 2022 06:28:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A351560B12;
-        Tue, 10 May 2022 13:28:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95F28C385A6;
-        Tue, 10 May 2022 13:28:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39989B81D24;
+        Tue, 10 May 2022 13:28:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0A68C2BBE4;
+        Tue, 10 May 2022 13:28:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189332;
-        bh=FQdv7igAHs4SnnQcV16g0/g66iR1BYYDbYDRj5V0wak=;
+        s=korg; t=1652189335;
+        bh=AL52ttcBAs7NqVJFaNwvadAqz1DHpx4qIemg1e63Ats=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uRjYLRCtHn341ef+h2LiYP+ONwKOdu0bYDMjrqwk6ezK/8iPnDSoJiYTsvBilTscA
-         FYdgdu2VvPt6cwFag474s6ZdwbfnHfQ940IslLqN8fcv4V2x7FENz/VagJBd1TH3Cc
-         B78NLnwmFTsT/mDINtAJimdqjVOohc6prQxSrFnA=
+        b=xjjjSwkKIsgMke79+nrZakQttHl4yrYPApik8S+tNyziSBVZUto/y2CR6AXjMagWL
+         yCIf+urMFQH5itkogCb6jxiwp9HgRiBm3ueUG2R6L1M4gidG+zyrhx6rjO6UuD4nr3
+         l8xkQfwUhDSpjImr5aViEa1kzv3oxCtfXf+R4iHU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH 5.15 017/135] timekeeping: Mark NMI safe time accessors as notrace
-Date:   Tue, 10 May 2022 15:06:39 +0200
-Message-Id: <20220510130740.893192806@linuxfoundation.org>
+        stable@vger.kernel.org, Chengfeng Ye <cyeaa@connect.ust.hk>,
+        Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 018/135] firewire: fix potential uaf in outbound_phy_packet_callback()
+Date:   Tue, 10 May 2022 15:06:40 +0200
+Message-Id: <20220510130740.921261705@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
 References: <20220510130740.392653815@linuxfoundation.org>
@@ -55,45 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kurt Kanzenbach <kurt@linutronix.de>
+From: Chengfeng Ye <cyeaa@connect.ust.hk>
 
-commit 2c33d775ef4c25c0e1e1cc0fd5496d02f76bfa20 upstream.
+commit b7c81f80246fac44077166f3e07103affe6db8ff upstream.
 
-Mark the CLOCK_MONOTONIC fast time accessors as notrace. These functions are
-used in tracing to retrieve timestamps, so they should not recurse.
+&e->event and e point to the same address, and &e->event could
+be freed in queue_event. So there is a potential uaf issue if
+we dereference e after calling queue_event(). Fix this by adding
+a temporary variable to maintain e->client in advance, this can
+avoid the potential uaf issue.
 
-Fixes: 4498e7467e9e ("time: Parametrize all tk_fast_mono users")
-Fixes: f09cb9a1808e ("time: Introduce tk_fast_raw")
-Reported-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Kurt Kanzenbach <kurt@linutronix.de>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220426175338.3807ca4f@gandalf.local.home/
-Link: https://lore.kernel.org/r/20220428062432.61063-1-kurt@linutronix.de
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Chengfeng Ye <cyeaa@connect.ust.hk>
+Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Link: https://lore.kernel.org/r/20220409041243.603210-2-o-takashi@sakamocchi.jp
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/time/timekeeping.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/firewire/core-cdev.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/kernel/time/timekeeping.c
-+++ b/kernel/time/timekeeping.c
-@@ -482,7 +482,7 @@ static __always_inline u64 __ktime_get_f
-  * of the following timestamps. Callers need to be aware of that and
-  * deal with it.
-  */
--u64 ktime_get_mono_fast_ns(void)
-+u64 notrace ktime_get_mono_fast_ns(void)
+--- a/drivers/firewire/core-cdev.c
++++ b/drivers/firewire/core-cdev.c
+@@ -1480,6 +1480,7 @@ static void outbound_phy_packet_callback
  {
- 	return __ktime_get_fast_ns(&tk_fast_mono);
+ 	struct outbound_phy_packet_event *e =
+ 		container_of(packet, struct outbound_phy_packet_event, p);
++	struct client *e_client;
+ 
+ 	switch (status) {
+ 	/* expected: */
+@@ -1496,9 +1497,10 @@ static void outbound_phy_packet_callback
+ 	}
+ 	e->phy_packet.data[0] = packet->timestamp;
+ 
++	e_client = e->client;
+ 	queue_event(e->client, &e->event, &e->phy_packet,
+ 		    sizeof(e->phy_packet) + e->phy_packet.length, NULL, 0);
+-	client_put(e->client);
++	client_put(e_client);
  }
-@@ -494,7 +494,7 @@ EXPORT_SYMBOL_GPL(ktime_get_mono_fast_ns
-  * Contrary to ktime_get_mono_fast_ns() this is always correct because the
-  * conversion factor is not affected by NTP/PTP correction.
-  */
--u64 ktime_get_raw_fast_ns(void)
-+u64 notrace ktime_get_raw_fast_ns(void)
- {
- 	return __ktime_get_fast_ns(&tk_fast_raw);
- }
+ 
+ static int ioctl_send_phy_packet(struct client *client, union ioctl_arg *arg)
 
 

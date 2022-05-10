@@ -2,89 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68214520E92
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 259E6520E63
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237595AbiEJHie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 03:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49756 "EHLO
+        id S241627AbiEJHex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 03:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240961AbiEJH0X (ORCPT
+        with ESMTP id S240965AbiEJH0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 03:26:23 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0081439833;
-        Tue, 10 May 2022 00:22:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=FceqXWmZ8bGiO02Mvg6pdY1ldbGSoSPohpsyX45vO1Q=; b=PTQeh3EJrJwHtiCSpNamFAZgC6
-        83sJi4KjX/0Gvl/8L8xcZ8gPFuwQRjdsPc1Td9wEgHybaAKZfVyRIQV7n2Wz4Gz+qtVKxNJPyM+dI
-        tuOLvFSK5ZDxokgb9UtY7RG6kwhhfSQlLUaSTWj9mtK1nt4YvV1PkVE9cBdcYzv0BMreiPS8cO3xi
-        Imj2ANqt5qo9i6W8ossHkyJa1r3qNBIepPVby+8iBsdLgZ23LRYSHDQY7ps9kfdBuIndzRC3tujJ7
-        7ENOzxSVrnsLe7CIztnla2DICFiuG7w/9P2MBHZNOUMc8x+Y7iT4+vFHv9xOGSmdUJo0+ljY3sKvf
-        Xj27w8gQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1noKCB-000Kdp-AF; Tue, 10 May 2022 07:22:11 +0000
-Date:   Tue, 10 May 2022 00:22:11 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Thomas Petazzoni <thomas.petazonni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH 0/3] add dynamic PCI device of_node creation for overlay
-Message-ID: <YnoSowR8qbrYc6DL@infradead.org>
-References: <20220427094502.456111-1-clement.leger@bootlin.com>
- <96db62bb-18be-f44a-6f53-05b22319f23a@gmail.com>
- <20220509141634.16158c38@xps-bootlin>
- <f9b0cbf1-dde2-ff97-cca0-5d2895734f91@gmail.com>
- <20220509180917.0f0ae851@xps-bootlin>
- <YnlIs312R4Temgu3@smile.fi.intel.com>
- <b476913d-896d-309c-f304-3ab37b81b4a9@gmail.com>
- <CAHp75VedNAG4EqPkCp-mCSUNJiKPNgaJEtsHQkWimyaYh0Nueg@mail.gmail.com>
+        Tue, 10 May 2022 03:26:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55363A5D7;
+        Tue, 10 May 2022 00:22:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E0D2B81A0A;
+        Tue, 10 May 2022 07:22:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2F7AC385A6;
+        Tue, 10 May 2022 07:22:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652167343;
+        bh=7K3MJOtEcuHFbzjGMBK9G/czvkGrWXEYQvzkmmVBkhQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kZWStkvFA8dnpda13YuPiWGK0wi+F3QMo+0rLC4WwxoXWbBokY9OOoBlHQk5hoX6H
+         9Ev58O9/bLrAXY12Cp+Zy0Fqxwhr2JFzkFkd5C4K2WzSiLpUWI5R7c+l9FTvQ1V3BN
+         W74dn3lvc5yAgBieYb9QwIO9r0d4vlpc/L/qbIs0KkAVctuDVdMQGa1unzI3GJHOAU
+         hOJfC70rggZj7Q+1r3OGZaEVGpb+4eUjFQoTmZzwymFGdocaVeuXngtRtXylCyBLkq
+         AQfI43pXdyN4PA1DaXOCo/EBp9j7xa0gMelyDi7lLpS6lbBwHob9TKQ1gDQxT7wt/g
+         z79lkfNH5V6BA==
+Message-ID: <20fd1a74-c0f5-d8e9-4903-b74c185d5aa3@kernel.org>
+Date:   Tue, 10 May 2022 10:22:18 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75VedNAG4EqPkCp-mCSUNJiKPNgaJEtsHQkWimyaYh0Nueg@mail.gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] memory: OMAP_GPMC should depend on ARCH_OMAP2PLUS ||
+ ARCH_K3
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <2b7d411b4a7913335082c858cb0d63b9e4bf7c5b.1652103920.git.geert+renesas@glider.be>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <2b7d411b4a7913335082c858cb0d63b9e4bf7c5b.1652103920.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 10:40:12PM +0200, Andy Shevchenko wrote:
-> > hotpluggable card?  Do the systems that you anticipate plugging the
-> > card into support hotplug?
-> 
-> Any PCIe card is potentially hotpluggable (seems nobody actually cares
-> in 90%+ drivers in the Linux kernel). But what I have heard in a
-> thread (not this one IIRC) is that the card may have pluggable modules
-> and it would be nice to change configuration and notify OS somehow. I
-> might be mistaken if it's the case here or not.
+Hi Geert,
 
-Well.  M.2 for example is not hotpluggable, as are soldered on BGA
-devices or a lot of not quite PCIe devices that actually sit on CPUs
-or shipset components.  But for all but the last category an upstream
-bridge could still be hot plugged, so not supporting it in drivers is
-indeed generally speaking a bad idea.
+On 09/05/2022 16:48, Geert Uytterhoeven wrote:
+> The Texas Instruments OMAP General Purpose Memory Controller (GPMC) is
+> only present on TI OMAP2/3/4/5, AM33xx, AM43x, DRA7xx, TI81xx, and K3
+> SoCs.  Hence add a dependency on ARCH_OMAP2PLUS || ARCH_K3, to prevent
+> asking the user about this driver when configuring a kernel without
+> OMAP2+ or K3 SoC family support.
+> 
+> Fixes: be34f45f0d4aa91c ("memory: omap-gpmc: Make OMAP_GPMC config visible and selectable")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  drivers/memory/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/memory/Kconfig b/drivers/memory/Kconfig
+> index b7800b37af78a996..f00757912e2e4c1e 100644
+> --- a/drivers/memory/Kconfig
+> +++ b/drivers/memory/Kconfig
+> @@ -105,6 +105,7 @@ config TI_EMIF
+>  config OMAP_GPMC
+>  	tristate "Texas Instruments OMAP SoC GPMC driver"
+>  	depends on OF_ADDRESS
+> +	depends on ARCH_OMAP2PLUS || ARCH_K3 || COMPILE_TEST
+>  	select GPIOLIB
+>  	help
+>  	  This driver is for the General Purpose Memory Controller (GPMC)
+
+Is there any possibility that CONFIG_IRQ_DOMAIN is not set while both
+OF_ADDRESS and COMPILE_TEST are set?
+
+That particular case will lead to build failures.
+
+e.g.
+https://krzk.eu/#/builders/63/builds/162
+
+cheers,
+-roger

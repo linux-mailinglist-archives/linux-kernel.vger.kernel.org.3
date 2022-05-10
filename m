@@ -2,204 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E4DE5227C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 01:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 613B95227C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 01:46:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234512AbiEJXlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 19:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48814 "EHLO
+        id S238450AbiEJXp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 19:45:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238569AbiEJXlN (ORCPT
+        with ESMTP id S238430AbiEJXpu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 19:41:13 -0400
-Received: from lgeamrelo11.lge.com (lgeamrelo12.lge.com [156.147.23.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B6D18522CC
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 16:41:08 -0700 (PDT)
-Received: from unknown (HELO lgeamrelo04.lge.com) (156.147.1.127)
-        by 156.147.23.52 with ESMTP; 11 May 2022 08:41:07 +0900
-X-Original-SENDERIP: 156.147.1.127
-X-Original-MAILFROM: byungchul.park@lge.com
-Received: from unknown (HELO X58A-UD3R) (10.177.244.38)
-        by 156.147.1.127 with ESMTP; 11 May 2022 08:41:07 +0900
-X-Original-SENDERIP: 10.177.244.38
-X-Original-MAILFROM: byungchul.park@lge.com
-Date:   Wed, 11 May 2022 08:39:29 +0900
-From:   Byungchul Park <byungchul.park@lge.com>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
-        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
-        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-        chris@chris-wilson.co.uk, duyuyang@gmail.com,
-        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
-        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
-        gregkh@linuxfoundation.org, kernel-team@lge.com,
-        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
-        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
-        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
-        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
-        ngupta@vflare.org, linux-block@vger.kernel.org,
-        paolo.valente@linaro.org, josef@toxicpanda.com,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
-        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
-        dri-devel@lists.freedesktop.org, airlied@linux.ie,
-        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
-        hamohammed.sa@gmail.com
-Subject: Re: [PATCH RFC v6 00/21] DEPT(Dependency Tracker)
-Message-ID: <20220510233929.GB18445@X58A-UD3R>
-References: <CAHk-=whnPePcffsNQM+YSHMGttLXvpf8LbBQ8P7HEdqFXaV7Lg@mail.gmail.com>
- <1651795895-8641-1-git-send-email-byungchul.park@lge.com>
- <YnYd0hd+yTvVQxm5@hyeyoo>
- <20220509001637.GA6047@X58A-UD3R>
- <YnpJ9Mtf+pjx4JYm@hyeyoo>
+        Tue, 10 May 2022 19:45:50 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFB0BCB8;
+        Tue, 10 May 2022 16:45:48 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id bo5so504317pfb.4;
+        Tue, 10 May 2022 16:45:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=BK8T3gjdK2roy+ApoukjEKkczl2YkXzC5XGidh4vu68=;
+        b=IaZbJCKi3P+x1DPMKKxJ9ht+8zgO35UqmV0ieKRiY29ti3DVq4/cHolNSWogcKjMoR
+         LPjAb6theVAl8O89PIxKFcpTdNnHoeA77vGVEu/gCWoHis50uG5phXBiGwqtnKmeHWfG
+         QCDJVfQp/5CUuK/jgTSVtepIEdLYjLo2v0ieO0fXLmcY6osCPFgRxXUzxscAHwlJ7GWI
+         bG8WPqBcoc7O2Z7qFpFzUDu7BthXEcoo41Mm1AsxgNFRuZxfOY4rwFXpXNAPMvBCWpec
+         o/itJpQvDxPMRMLEYhMkDUNm6WGTBbk5x3lGn+1rhga4LnoQXWzv3FgQ7C05DOKTjT1m
+         HoHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=BK8T3gjdK2roy+ApoukjEKkczl2YkXzC5XGidh4vu68=;
+        b=inQtkH3/PwkuCN1fgOLEsR4Nht8DAhIAv5HjQQxhR4Q7Mz1N5mvYm1fcIgWiPPRcJV
+         UrhwFbAZGKemEbAnSJw3D1zBgvExt8CuDiBbRIPnyR1b4h2wt89wrMbYyf/A28EILDyA
+         C58qvCsfUm9vC+Zfp7mPURLEA/fZtJtYH/sAjm8lDPYwZnfWSQv32qejfgJrFrHgbnUE
+         WtZhuBfK65dgcuYCbu7Bpusy7d3hwyCtQPJmPNNMgpTyg/PdUNesN+VXBBvwWozcz3Re
+         GaTR1NksrF0P9JimLk/c3cTrc31FOa4T2owNIAsgfJ99NNgM+cteT6nzm8aX4OpYGi5j
+         0kgQ==
+X-Gm-Message-State: AOAM531oVxbIScqcCKCvgYC3sndiPoSjg3hp5/KYgldHqW3v6kCBBQCq
+        mqIir7FY9l5pybzmAc+CgpNFO53nu4o=
+X-Google-Smtp-Source: ABdhPJwfw+X6CZliWaQWkQxeiaZ/PJ/sMBDXx2t1TsIVNkwteuolcWnhHY6lwMWLfrI19xaJ+n/ztQ==
+X-Received: by 2002:a63:2b01:0:b0:3c2:4b0b:e1c6 with SMTP id r1-20020a632b01000000b003c24b0be1c6mr18365845pgr.288.1652226347694;
+        Tue, 10 May 2022 16:45:47 -0700 (PDT)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id i7-20020a170902c94700b0015edcdea308sm176645pla.233.2022.05.10.16.45.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 16:45:47 -0700 (PDT)
+Message-ID: <5986752a-1c2a-5d64-f91d-58b1e6decd17@gmail.com>
+Date:   Wed, 11 May 2022 08:45:43 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnpJ9Mtf+pjx4JYm@hyeyoo>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: [PATCH net-next v2] docs: ctucanfd: Use 'kernel-figure' directive
+ instead of 'figure'
+Content-Language: en-US
+From:   Akira Yokosawa <akiyks@gmail.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Pavel Pisa <pisa@cmp.felk.cvut.cz>
+Cc:     Martin Jerabek <martin.jerabek01@gmail.com>,
+        Ondrej Ille <ondrej.ille@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <05d491d4-c498-9bab-7085-9c892b636d68@gmail.com>
+In-Reply-To: <05d491d4-c498-9bab-7085-9c892b636d68@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 08:18:12PM +0900, Hyeonggon Yoo wrote:
-> On Mon, May 09, 2022 at 09:16:37AM +0900, Byungchul Park wrote:
-> > On Sat, May 07, 2022 at 04:20:50PM +0900, Hyeonggon Yoo wrote:
-> > > On Fri, May 06, 2022 at 09:11:35AM +0900, Byungchul Park wrote:
-> > > > Linus wrote:
-> > > > >
-> > > > > On Wed, May 4, 2022 at 1:19 AM Byungchul Park <byungchul.park@lge.com> wrote:
-> > > > > >
-> > > > > > Hi Linus and folks,
-> > > > > >
-> > > > > > I've been developing a tool for detecting deadlock possibilities by
-> > > > > > tracking wait/event rather than lock(?) acquisition order to try to
-> > > > > > cover all synchonization machanisms.
-> > > > > 
-> > > > > So what is the actual status of reports these days?
-> > > > > 
-> > > > > Last time I looked at some reports, it gave a lot of false positives
-> > > > > due to mis-understanding prepare_to_sleep().
-> > > > 
-> > > > Yes, it was. I handled the case in the following way:
-> > > > 
-> > > > 1. Stage the wait at prepare_to_sleep(), which might be used at commit.
-> > > >    Which has yet to be an actual wait that Dept considers.
-> > > > 2. If the condition for sleep is true, the wait will be committed at
-> > > >    __schedule(). The wait becomes an actual one that Dept considers.
-> > > > 3. If the condition is false and the task gets back to TASK_RUNNING,
-> > > >    clean(=reset) the staged wait.
-> > > > 
-> > > > That way, Dept only works with what actually hits to __schedule() for
-> > > > the waits through sleep.
-> > > > 
-> > > > > For this all to make sense, it would need to not have false positives
-> > > > > (or at least a very small number of them together with a way to sanely
-> > > > 
-> > > > Yes. I agree with you. I got rid of them that way I described above.
-> > > >
-> > > 
-> > > IMHO DEPT should not report what lockdep allows (Not talking about
-> > 
-> > No.
-> > 
-> > > wait events). I mean lockdep allows some kind of nested locks but
-> > > DEPT reports them.
-> > 
-> > You have already asked exactly same question in another thread of
-> > LKML. That time I answered to it but let me explain it again.
-> > 
-> > ---
-> > 
-> > CASE 1.
-> > 
-> >    lock L with depth n
-> >    lock_nested L' with depth n + 1
-> >    ...
-> >    unlock L'
-> >    unlock L
-> > 
-> > This case is allowed by Lockdep.
-> > This case is allowed by DEPT cuz it's not a deadlock.
-> > 
-> > CASE 2.
-> > 
-> >    lock L with depth n
-> >    lock A
-> >    lock_nested L' with depth n + 1
-> >    ...
-> >    unlock L'
-> >    unlock A
-> >    unlock L
-> > 
-> > This case is allowed by Lockdep.
-> > This case is *NOT* allowed by DEPT cuz it's a *DEADLOCK*.
-> >
-> 
-> Yeah, in previous threads we discussed this [1]
-> 
-> And the case was:
-> 	scan_mutex -> object_lock -> kmemleak_lock -> object_lock
-> And dept reported:
-> 	object_lock -> kmemleak_lock, kmemleak_lock -> object_lock as
-> 	deadlock.
-> 
-> But IIUC - What DEPT reported happens only under scan_mutex and
-> It is not simple just not to take them because the object can be removed from the
-> list and freed while scanning via kmemleak_free() without kmemleak_lock and object_lock.
+Two issues were observed in the ReST doc added by commit c3a0addefbde
+("docs: ctucanfd: CTU CAN FD open-source IP core documentation.")
+with Sphinx versions 2.4.4 and 4.5.0.
 
-That should be one of the following order:
+The plain "figure" directive broke "make pdfdocs" due to a missing
+PDF figure.  For conversion of SVG -> PDF to work, the "kernel-figure"
+directive, which is an extension for kernel documentation, should
+be used instead.
 
-1. kmemleak_lock -> object_lock -> object_lock(nested)
-2. object_lock -> object_lock(nested) -> kmemleak_lock
+The directive of "code:: raw" causes a warning from both
+"make htmldocs" and "make pdfdocs", which reads:
 
-> Just I'm still not sure that someone will fix the warning in the future - even if the
-> locking rule is not good - if it will not cause a real deadlock.
+    [...]/can/ctu/ctucanfd-driver.rst:75: WARNING: Pygments lexer name
+    'raw' is not known
 
-There's more important thing than making code just work for now. For
-example, maintainance, communcation via code between current developers
-and potential new commers in the future and so on.
+A plain literal-block marker should suffice where no syntax
+highlighting is intended.
 
-At least, a comment describing why the wrong order in the code is safe
-should be added. I wouldn't allow the current order in the code if I
-were the maintainer.
+Fix the issues by using suitable directive and marker.
 
-	Byungchul
+Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+Fixes: c3a0addefbde ("docs: ctucanfd: CTU CAN FD open-source IP core docu=
+mentation.")
+Acked-by: Pavel Pisa <pisa@cmp.felk.cvut.cz>
+Cc: Martin Jerabek <martin.jerabek01@gmail.com>
+Cc: Ondrej Ille <ondrej.ille@gmail.com>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+Changes in v1 -> v2
+ - no change in diff
+ - added explicit Sphinx versions the issues were observed
+ - picked Pavel's Acked-by
 
-> > ---
-> > 
-> > The following scenario would explain why CASE 2 is problematic.
-> > 
-> >    THREAD X			THREAD Y
-> > 
-> >    lock L with depth n
-> > 				lock L' with depth n
-> >    lock A
-> > 				lock A
-> >    lock_nested L' with depth n + 1
-> > 				lock_nested L'' with depth n + 1
-> >    ...				...
-> >    unlock L'			unlock L''
-> >    unlock A			unlock A
-> >    unlock L			unlock L'
-> > 
-> > Yes. I need to check if the report you shared with me is a true one, but
-> > it's not because DEPT doesn't work with *_nested() APIs.
-> >
-> 
-> Sorry, It was not right just to say DEPT doesn't work with _nested() APIs.
-> 
-> > 	Byungchul
-> 
-> [1] https://lore.kernel.org/lkml/20220304002809.GA6112@X58A-UD3R/
-> 
-> -- 
-> Thanks,
-> Hyeonggon
+--
+ .../networking/device_drivers/can/ctu/ctucanfd-driver.rst     | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/networking/device_drivers/can/ctu/ctucanfd-dri=
+ver.rst b/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver=
+=2Erst
+index 2fde5551e756..40c92ea272af 100644
+--- a/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst=
+
++++ b/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst=
+
+@@ -72,7 +72,7 @@ it is reachable (on which bus it resides) and its confi=
+guration =E2=80=93
+ registers address, interrupts and so on. An example of such a device
+ tree is given in .
+=20
+-.. code:: raw
++::
+=20
+            / {
+                /* ... */
+@@ -451,7 +451,7 @@ the FIFO is maintained, together with priority rotati=
+on, is depicted in
+=20
+ |
+=20
+-.. figure:: fsm_txt_buffer_user.svg
++.. kernel-figure:: fsm_txt_buffer_user.svg
+=20
+    TX Buffer states with possible transitions
+=20
+--=20
+2.25.1
+
+

@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B825216CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3DE5219F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242538AbiEJNSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35738 "EHLO
+        id S243389AbiEJNwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242363AbiEJNQW (ORCPT
+        with ESMTP id S243730AbiEJNgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:16:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613633B28E;
-        Tue, 10 May 2022 06:12:18 -0700 (PDT)
+        Tue, 10 May 2022 09:36:05 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989DE2609D0;
+        Tue, 10 May 2022 06:25:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2307C615C5;
-        Tue, 10 May 2022 13:12:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15AD0C385A6;
-        Tue, 10 May 2022 13:12:16 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5AE8CCE1EF3;
+        Tue, 10 May 2022 13:25:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DA9BC385A6;
+        Tue, 10 May 2022 13:24:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188337;
-        bh=8JvN64c//PXkttIcM+5aexIhz/lgA8OH0a3ITB3MlFA=;
+        s=korg; t=1652189098;
+        bh=AL52ttcBAs7NqVJFaNwvadAqz1DHpx4qIemg1e63Ats=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JKj4OoI9wGVD5e3KkDs2DwaGvdWVBanAZytdRtiDljrPlQs1DcHj2T9xG35beKgYr
-         g/0FrnIoqdjdtdkEWW+aiaVT8fpQ0+NgdxRx7oiG70+2zhLkGU7Y9AfDnCu3UVBwd4
-         Camb1Hgo62kbaBrmSliWdoNLnQlj5jivEL+O629Y=
+        b=nTK7KQRhQrzcGEp4dq08c6GhlL8YT9Dg/baQPWDx34myAkuLb+iiDLUf88/6l+lkF
+         0pWdruXktT2ouE1FZBAX95193JkKqBHCeg4uKDPRJ7n6w3tb4lcMewnjUcjZ/GQIIH
+         Y6yANcURAbaj1rYo+rtp3Q6RFgDmViOHUs1QF/Bo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH 4.9 41/66] tty: n_gsm: fix wrong command frame length field encoding
+        stable@vger.kernel.org, Chengfeng Ye <cyeaa@connect.ust.hk>,
+        Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.10 12/70] firewire: fix potential uaf in outbound_phy_packet_callback()
 Date:   Tue, 10 May 2022 15:07:31 +0200
-Message-Id: <20220510130730.972589341@linuxfoundation.org>
+Message-Id: <20220510130733.228165921@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
-References: <20220510130729.762341544@linuxfoundation.org>
+In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
+References: <20220510130732.861729621@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,76 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+From: Chengfeng Ye <cyeaa@connect.ust.hk>
 
-commit 398867f59f956985f4c324f173eff7b946e14bd8 upstream.
+commit b7c81f80246fac44077166f3e07103affe6db8ff upstream.
 
-n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
-See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
-The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
-the newer 27.010 here. Chapter 5.4.6.1 states that each command frame shall
-be made up from type, length and value. Looking for example in chapter
-5.4.6.3.5 at the description for the encoding of a flow control on command
-it becomes obvious, that the type and length field is always present
-whereas the value may be zero bytes long. The current implementation omits
-the length field if the value is not present. This is wrong.
-Correct this by always sending the length in gsm_control_transmit().
-So far only the modem status command (MSC) has included a value and encoded
-its length directly. Therefore, also change gsmtty_modem_update().
+&e->event and e point to the same address, and &e->event could
+be freed in queue_event. So there is a potential uaf issue if
+we dereference e after calling queue_event(). Fix this by adding
+a temporary variable to maintain e->client in advance, this can
+avoid the potential uaf issue.
 
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
-Cc: stable@vger.kernel.org
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-Link: https://lore.kernel.org/r/20220414094225.4527-12-daniel.starke@siemens.com
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Chengfeng Ye <cyeaa@connect.ust.hk>
+Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Link: https://lore.kernel.org/r/20220409041243.603210-2-o-takashi@sakamocchi.jp
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/n_gsm.c |   23 +++++++++++------------
- 1 file changed, 11 insertions(+), 12 deletions(-)
+ drivers/firewire/core-cdev.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -1318,11 +1318,12 @@ static void gsm_control_response(struct
- 
- static void gsm_control_transmit(struct gsm_mux *gsm, struct gsm_control *ctrl)
+--- a/drivers/firewire/core-cdev.c
++++ b/drivers/firewire/core-cdev.c
+@@ -1480,6 +1480,7 @@ static void outbound_phy_packet_callback
  {
--	struct gsm_msg *msg = gsm_data_alloc(gsm, 0, ctrl->len + 1, gsm->ftype);
-+	struct gsm_msg *msg = gsm_data_alloc(gsm, 0, ctrl->len + 2, gsm->ftype);
- 	if (msg == NULL)
- 		return;
--	msg->data[0] = (ctrl->cmd << 1) | 2 | EA;	/* command */
--	memcpy(msg->data + 1, ctrl->data, ctrl->len);
-+	msg->data[0] = (ctrl->cmd << 1) | CR | EA;	/* command */
-+	msg->data[1] = (ctrl->len << 1) | EA;
-+	memcpy(msg->data + 2, ctrl->data, ctrl->len);
- 	gsm_data_queue(gsm->dlci[0], msg);
+ 	struct outbound_phy_packet_event *e =
+ 		container_of(packet, struct outbound_phy_packet_event, p);
++	struct client *e_client;
+ 
+ 	switch (status) {
+ 	/* expected: */
+@@ -1496,9 +1497,10 @@ static void outbound_phy_packet_callback
+ 	}
+ 	e->phy_packet.data[0] = packet->timestamp;
+ 
++	e_client = e->client;
+ 	queue_event(e->client, &e->event, &e->phy_packet,
+ 		    sizeof(e->phy_packet) + e->phy_packet.length, NULL, 0);
+-	client_put(e->client);
++	client_put(e_client);
  }
  
-@@ -2864,19 +2865,17 @@ static struct tty_ldisc_ops tty_ldisc_pa
- 
- static int gsmtty_modem_update(struct gsm_dlci *dlci, u8 brk)
- {
--	u8 modembits[5];
-+	u8 modembits[3];
- 	struct gsm_control *ctrl;
- 	int len = 2;
- 
--	if (brk)
-+	modembits[0] = (dlci->addr << 2) | 2 | EA;  /* DLCI, Valid, EA */
-+	modembits[1] = (gsm_encode_modem(dlci) << 1) | EA;
-+	if (brk) {
-+		modembits[2] = (brk << 4) | 2 | EA; /* Length, Break, EA */
- 		len++;
--
--	modembits[0] = len << 1 | EA;		/* Data bytes */
--	modembits[1] = dlci->addr << 2 | 3;	/* DLCI, EA, 1 */
--	modembits[2] = gsm_encode_modem(dlci) << 1 | EA;
--	if (brk)
--		modembits[3] = brk << 4 | 2 | EA;	/* Valid, EA */
--	ctrl = gsm_control_send(dlci->gsm, CMD_MSC, modembits, len + 1);
-+	}
-+	ctrl = gsm_control_send(dlci->gsm, CMD_MSC, modembits, len);
- 	if (ctrl == NULL)
- 		return -ENOMEM;
- 	return gsm_control_wait(dlci->gsm, ctrl);
+ static int ioctl_send_phy_packet(struct client *client, union ioctl_arg *arg)
 
 

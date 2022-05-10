@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35C44521A88
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F28521855
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244668AbiEJN4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56608 "EHLO
+        id S241920AbiEJNet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244927AbiEJNiQ (ORCPT
+        with ESMTP id S242901AbiEJNZQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:38:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D20B1737B1;
-        Tue, 10 May 2022 06:26:40 -0700 (PDT)
+        Tue, 10 May 2022 09:25:16 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B737DB1D2;
+        Tue, 10 May 2022 06:17:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08D4F6170D;
-        Tue, 10 May 2022 13:26:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AA80C385CB;
-        Tue, 10 May 2022 13:26:38 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 36B21CE1EE2;
+        Tue, 10 May 2022 13:17:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FE09C385C2;
+        Tue, 10 May 2022 13:17:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189199;
-        bh=D8r2jFoTEUVlsyCv66uIxzQz4KMltHDjNuYGVD5H6EE=;
+        s=korg; t=1652188671;
+        bh=467C2HkfQ6VpmjdBiPKWp3XCWnFwQxZ8dcLM2EMpRqU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gld/VLoWvEY26mu/aoeFOsiyl4oTLHHRN4/zwHm1H6N2dTP93fCMavxUq6s0fcKPy
-         vw2NXWkUv+x2TuO+oqr10es0AY5cc9owj4mjjy58nwJuIBBllZ4dBt/Qq1Y3sovNi8
-         H94O1C+4qWaoqGJ7QUC0DNbUlXIfnSfIteHMgBCs=
+        b=lsB+6A28u2j11umB8iExcgdPzM8nn42UdLF9Rg+HaUjLpGQ/QxZlrt9UOXjgDq5MK
+         KkR1vb/HzgR54gt1JdDsgqubbRZ4HKwjx88AZN/GUmoanopq+T0AHIOYg2r4z0PPkq
+         xjshStzwPngVIrj4ODI8B1III0yMHj3CUIIpb6wM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-Subject: [PATCH 5.10 44/70] NFSv4: Dont invalidate inode attributes on delegation return
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Subject: [PATCH 4.14 77/78] PCI: aardvark: Clear all MSIs at setup
 Date:   Tue, 10 May 2022 15:08:03 +0200
-Message-Id: <20220510130734.150568877@linuxfoundation.org>
+Message-Id: <20220510130734.806683402@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
-References: <20220510130732.861729621@linuxfoundation.org>
+In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
+References: <20220510130732.522479698@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,51 +56,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Pali Rohár <pali@kernel.org>
 
-commit 00c94ebec5925593c0377b941289224469e72ac7 upstream.
+commit 7d8dc1f7cd007a7ce94c5b4c20d63a8b8d6d7751 upstream.
 
-There is no need to declare attributes such as the ctime, mtime and
-block size invalid when we're just returning a delegation, so it is
-inappropriate to call nfs_post_op_update_inode_force_wcc().
-Instead, just call nfs_refresh_inode() after faking up the change
-attribute. We know that the GETATTR op occurs before the DELEGRETURN, so
-we are safe when doing this.
+We already clear all the other interrupts (ISR0, ISR1, HOST_CTRL_INT).
 
-Fixes: 0bc2c9b4dca9 ("NFSv4: Don't discard the attributes returned by asynchronous DELEGRETURN")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Define a new macro PCIE_MSI_ALL_MASK and do the same clearing for MSIs,
+to ensure that we don't start receiving spurious interrupts.
+
+Use this new mask in advk_pcie_handle_msi();
+
+Link: https://lore.kernel.org/r/20211130172913.9727-5-kabel@kernel.org
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Marek Behún <kabel@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfs/nfs4proc.c |   12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/pci/host/pci-aardvark.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/fs/nfs/nfs4proc.c
-+++ b/fs/nfs/nfs4proc.c
-@@ -369,6 +369,14 @@ static void nfs4_setup_readdir(u64 cooki
- 	kunmap_atomic(start);
- }
+--- a/drivers/pci/host/pci-aardvark.c
++++ b/drivers/pci/host/pci-aardvark.c
+@@ -104,6 +104,7 @@
+ #define PCIE_MSI_ADDR_HIGH_REG			(CONTROL_BASE_ADDR + 0x54)
+ #define PCIE_MSI_STATUS_REG			(CONTROL_BASE_ADDR + 0x58)
+ #define PCIE_MSI_MASK_REG			(CONTROL_BASE_ADDR + 0x5C)
++#define     PCIE_MSI_ALL_MASK			GENMASK(31, 0)
+ #define PCIE_MSI_PAYLOAD_REG			(CONTROL_BASE_ADDR + 0x9C)
+ #define     PCIE_MSI_DATA_MASK			GENMASK(15, 0)
  
-+static void nfs4_fattr_set_prechange(struct nfs_fattr *fattr, u64 version)
-+{
-+	if (!(fattr->valid & NFS_ATTR_FATTR_PRECHANGE)) {
-+		fattr->pre_change_attr = version;
-+		fattr->valid |= NFS_ATTR_FATTR_PRECHANGE;
-+	}
-+}
-+
- static void nfs4_test_and_free_stateid(struct nfs_server *server,
- 		nfs4_stateid *stateid,
- 		const struct cred *cred)
-@@ -6464,7 +6472,9 @@ static void nfs4_delegreturn_release(voi
- 		pnfs_roc_release(&data->lr.arg, &data->lr.res,
- 				 data->res.lr_ret);
- 	if (inode) {
--		nfs_post_op_update_inode_force_wcc(inode, &data->fattr);
-+		nfs4_fattr_set_prechange(&data->fattr,
-+					 inode_peek_iversion_raw(inode));
-+		nfs_refresh_inode(inode, &data->fattr);
- 		nfs_iput_and_deactive(inode);
- 	}
- 	kfree(calldata);
+@@ -490,6 +491,7 @@ static void advk_pcie_setup_hw(struct ad
+ 	advk_writel(pcie, reg, PCIE_CORE_CTRL2_REG);
+ 
+ 	/* Clear all interrupts */
++	advk_writel(pcie, PCIE_MSI_ALL_MASK, PCIE_MSI_STATUS_REG);
+ 	advk_writel(pcie, PCIE_ISR0_ALL_MASK, PCIE_ISR0_REG);
+ 	advk_writel(pcie, PCIE_ISR1_ALL_MASK, PCIE_ISR1_REG);
+ 	advk_writel(pcie, PCIE_IRQ_ALL_MASK, HOST_CTRL_INT_STATUS_REG);
+@@ -502,7 +504,7 @@ static void advk_pcie_setup_hw(struct ad
+ 	advk_writel(pcie, PCIE_ISR1_ALL_MASK, PCIE_ISR1_MASK_REG);
+ 
+ 	/* Unmask all MSI's */
+-	advk_writel(pcie, 0, PCIE_MSI_MASK_REG);
++	advk_writel(pcie, ~(u32)PCIE_MSI_ALL_MASK, PCIE_MSI_MASK_REG);
+ 
+ 	/* Enable summary interrupt for GIC SPI source */
+ 	reg = PCIE_IRQ_ALL_MASK & (~PCIE_IRQ_ENABLE_INTS_MASK);
+@@ -1038,7 +1040,7 @@ static void advk_pcie_handle_msi(struct
+ 
+ 	msi_mask = advk_readl(pcie, PCIE_MSI_MASK_REG);
+ 	msi_val = advk_readl(pcie, PCIE_MSI_STATUS_REG);
+-	msi_status = msi_val & ~msi_mask;
++	msi_status = msi_val & ((~msi_mask) & PCIE_MSI_ALL_MASK);
+ 
+ 	for (msi_idx = 0; msi_idx < MSI_IRQ_NUM; msi_idx++) {
+ 		if (!(BIT(msi_idx) & msi_status))
 
 

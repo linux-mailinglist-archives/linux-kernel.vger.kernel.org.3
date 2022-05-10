@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A1C521ADB
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EE23521825
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242693AbiEJOCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44114 "EHLO
+        id S243376AbiEJNda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245485AbiEJNjB (ORCPT
+        with ESMTP id S242989AbiEJNZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:39:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE5123677A;
-        Tue, 10 May 2022 06:29:20 -0700 (PDT)
+        Tue, 10 May 2022 09:25:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511A122D609;
+        Tue, 10 May 2022 06:18:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30D3661824;
-        Tue, 10 May 2022 13:29:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FEB7C385CB;
-        Tue, 10 May 2022 13:29:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C37BCB81CE7;
+        Tue, 10 May 2022 13:18:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20DDDC385C2;
+        Tue, 10 May 2022 13:18:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189359;
-        bh=/G7G98mOkb3wMCY7W2ZwgXvwNVhR/tDRGLVkEvO0kr0=;
+        s=korg; t=1652188710;
+        bh=nO0HsBH97IIxsOjMZu1jbvvi+Us0BjRufFBiwIiqmSw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b/7w+ZWlarW/Cg6f+IdiaIVMjzY+FWijTilmXUAehpMmmgL5ghmRenxiAXy50J6Qb
-         z7atzJfQKlRfXijcZ2JRXULSSIZe3K8v35AtQRER3S1bBKwLfW9DIMl7sefQg5Lidy
-         5K9dXPszDjWtDQClgg4niWgRgcVBbJEqIKpPHTDI=
+        b=rWrf7/dmN4Vvg53n+f+8FH6xYJICaG70AuCPicWTFXFM3FzJUW/siGffduOj6d2KS
+         HF7XDgIOhjXnxdDDVeVRdDx8Pm0K71QaBWLbLZuYfQ+bN8b3u13iZsEHN8e/zZ9ToZ
+         40FhT+yO4y50ytqeTS1irte+sNoiD/zpYylPqdM4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>
-Subject: [PATCH 5.15 025/135] ASoC: meson: Fix event generation for AUI ACODEC mux
+        stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH 4.19 02/88] USB: quirks: add a Realtek card reader
 Date:   Tue, 10 May 2022 15:06:47 +0200
-Message-Id: <20220510130741.123163139@linuxfoundation.org>
+Message-Id: <20220510130733.808760233@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
+References: <20220510130733.735278074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +53,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Oliver Neukum <oneukum@suse.com>
 
-commit 2e3a0d1bfa95b54333f7add3e50e288769373873 upstream.
+commit 2a7ccf6bb6f147f64c025ad68f4255d8e1e0ce6d upstream.
 
-The AIU ACODEC has a custom put() operation which returns 0 when the value
-of the mux changes, meaning that events are not generated for userspace.
-Change to return 1 in this case, the function returns early in the case
-where there is no change.
+This device is reported to stall when enummerated.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Reviewed-by: Jerome Brunet <jbrunet@baylibre.com>
-Link: https://lore.kernel.org/r/20220421123803.292063-2-broonie@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Cc: stable@vger.kernel.org
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Link: https://lore.kernel.org/r/20220414110209.30924-1-oneukum@suse.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/meson/aiu-acodec-ctrl.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/core/quirks.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/sound/soc/meson/aiu-acodec-ctrl.c
-+++ b/sound/soc/meson/aiu-acodec-ctrl.c
-@@ -58,7 +58,7 @@ static int aiu_acodec_ctrl_mux_put_enum(
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -404,6 +404,9 @@ static const struct usb_device_id usb_qu
+ 	{ USB_DEVICE(0x0b05, 0x17e0), .driver_info =
+ 			USB_QUIRK_IGNORE_REMOTE_WAKEUP },
  
- 	snd_soc_dapm_mux_update_power(dapm, kcontrol, mux, e, NULL);
- 
--	return 0;
-+	return 1;
- }
- 
- static SOC_ENUM_SINGLE_DECL(aiu_acodec_ctrl_mux_enum, AIU_ACODEC_CTRL,
++	/* Realtek Semiconductor Corp. Mass Storage Device (Multicard Reader)*/
++	{ USB_DEVICE(0x0bda, 0x0151), .driver_info = USB_QUIRK_CONFIG_INTF_STRINGS },
++
+ 	/* Realtek hub in Dell WD19 (Type-C) */
+ 	{ USB_DEVICE(0x0bda, 0x0487), .driver_info = USB_QUIRK_NO_LPM },
+ 	{ USB_DEVICE(0x0bda, 0x5487), .driver_info = USB_QUIRK_RESET_RESUME },
 
 

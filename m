@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0511952176C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B5E152197E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242946AbiEJNZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60630 "EHLO
+        id S240829AbiEJNpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243400AbiEJNVv (ORCPT
+        with ESMTP id S243861AbiEJNcT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:21:51 -0400
+        Tue, 10 May 2022 09:32:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07111473BD;
-        Tue, 10 May 2022 06:15:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4058E54FB3;
+        Tue, 10 May 2022 06:22:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A9CB61668;
-        Tue, 10 May 2022 13:15:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A61DEC385C2;
-        Tue, 10 May 2022 13:15:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D1F7A6170D;
+        Tue, 10 May 2022 13:22:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E24C2C385C2;
+        Tue, 10 May 2022 13:22:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188550;
-        bh=91cH3L1VOAhw76ePh5Cx8T4GAcal67FgrHUFzd3Uz3w=;
+        s=korg; t=1652188965;
+        bh=NZhQevZcqdnSmjHIeiRhCKNQNiuW3X6d3Bp6k7e4zGc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yNYqBn/cYqfd+i6WRoCVdjW4GDNI9dNf+rlyVMksymzrHQfdHUOHT3g18pjU3k+sr
-         TsIlc24DYXYZ/cWt+OnUfipsiH3zJhLbT4cCFg63ypAr0WvIW6tg9Ah9Y7pPjZqFat
-         jy6kz1UiR7lnsIK3vvb/Tzv+UtAT80p+rQ2lWuL4=
+        b=qU4ujZiip+CJy28JjNIlNs8xp8Va5fW/NaVdfkvAGbRHcjUdkBa2EuvYcCDoseGhM
+         tGjvTR0jFPfIrGdL8oJAPFrre5I2AVUPO3rrIExXkjJD6m7RrMMJxgcZXvGRfhXmxI
+         rSzYRVsGCW6zpHCbNJQQpDB7fcSvgpQq+jiNEyUo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Kyle D. Pelton" <kyle.d.pelton@intel.com>,
-        Borislav Petkov <bp@suse.de>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Subject: [PATCH 4.14 45/78] x86/cpu: Load microcode during restore_processor_state()
+        stable@vger.kernel.org, Helge Deller <deller@gmx.de>
+Subject: [PATCH 5.4 02/52] parisc: Merge model and model name into one line in /proc/cpuinfo
 Date:   Tue, 10 May 2022 15:07:31 +0200
-Message-Id: <20220510130733.869269749@linuxfoundation.org>
+Message-Id: <20220510130729.927786022@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
-References: <20220510130732.522479698@linuxfoundation.org>
+In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
+References: <20220510130729.852544477@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,119 +53,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+From: Helge Deller <deller@gmx.de>
 
-commit f9e14dbbd454581061c736bf70bf5cbb15ac927c upstream.
+commit 5b89966bc96a06f6ad65f64ae4b0461918fcc9d3 upstream.
 
-When resuming from system sleep state, restore_processor_state()
-restores the boot CPU MSRs. These MSRs could be emulated by microcode.
-If microcode is not loaded yet, writing to emulated MSRs leads to
-unchecked MSR access error:
+The Linux tool "lscpu" shows the double amount of CPUs if we have
+"model" and "model name" in two different lines in /proc/cpuinfo.
+This change combines the model and the model name into one line.
 
-  ...
-  PM: Calling lapic_suspend+0x0/0x210
-  unchecked MSR access error: WRMSR to 0x10f (tried to write 0x0...0) at rIP: ... (native_write_msr)
-  Call Trace:
-    <TASK>
-    ? restore_processor_state
-    x86_acpi_suspend_lowlevel
-    acpi_suspend_enter
-    suspend_devices_and_enter
-    pm_suspend.cold
-    state_store
-    kobj_attr_store
-    sysfs_kf_write
-    kernfs_fop_write_iter
-    new_sync_write
-    vfs_write
-    ksys_write
-    __x64_sys_write
-    do_syscall_64
-    entry_SYSCALL_64_after_hwframe
-   RIP: 0033:0x7fda13c260a7
-
-To ensure microcode emulated MSRs are available for restoration, load
-the microcode on the boot CPU before restoring these MSRs.
-
-  [ Pawan: write commit message and productize it. ]
-
-Fixes: e2a1256b17b1 ("x86/speculation: Restore speculation related MSRs during S3 resume")
-Reported-by: Kyle D. Pelton <kyle.d.pelton@intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Tested-by: Kyle D. Pelton <kyle.d.pelton@intel.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Cc: stable@vger.kernel.org
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215841
-Link: https://lore.kernel.org/r/4350dfbf785cd482d3fafa72b2b49c83102df3ce.1650386317.git.pawan.kumar.gupta@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/microcode.h     |    2 ++
- arch/x86/kernel/cpu/microcode/core.c |    6 +++---
- arch/x86/power/cpu.c                 |    8 ++++++++
- 3 files changed, 13 insertions(+), 3 deletions(-)
+ arch/parisc/kernel/processor.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/arch/x86/include/asm/microcode.h
-+++ b/arch/x86/include/asm/microcode.h
-@@ -147,11 +147,13 @@ extern void load_ucode_ap(void);
- void reload_early_microcode(void);
- extern bool get_builtin_firmware(struct cpio_data *cd, const char *name);
- extern bool initrd_gone;
-+void microcode_bsp_resume(void);
- #else
- static inline int __init microcode_init(void)			{ return 0; };
- static inline void __init load_ucode_bsp(void)			{ }
- static inline void load_ucode_ap(void)				{ }
- static inline void reload_early_microcode(void)			{ }
-+static inline void microcode_bsp_resume(void)			{ }
- static inline bool
- get_builtin_firmware(struct cpio_data *cd, const char *name)	{ return false; }
- #endif
---- a/arch/x86/kernel/cpu/microcode/core.c
-+++ b/arch/x86/kernel/cpu/microcode/core.c
-@@ -773,9 +773,9 @@ static struct subsys_interface mc_cpu_in
- };
+--- a/arch/parisc/kernel/processor.c
++++ b/arch/parisc/kernel/processor.c
+@@ -419,8 +419,7 @@ show_cpuinfo (struct seq_file *m, void *
+ 		}
+ 		seq_printf(m, " (0x%02lx)\n", boot_cpu_data.pdc.capabilities);
  
- /**
-- * mc_bp_resume - Update boot CPU microcode during resume.
-+ * microcode_bsp_resume - Update boot CPU microcode during resume.
-  */
--static void mc_bp_resume(void)
-+void microcode_bsp_resume(void)
- {
- 	int cpu = smp_processor_id();
- 	struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
-@@ -787,7 +787,7 @@ static void mc_bp_resume(void)
- }
- 
- static struct syscore_ops mc_syscore_ops = {
--	.resume			= mc_bp_resume,
-+	.resume			= microcode_bsp_resume,
- };
- 
- static int mc_cpu_starting(unsigned int cpu)
---- a/arch/x86/power/cpu.c
-+++ b/arch/x86/power/cpu.c
-@@ -26,6 +26,7 @@
- #include <asm/cpu.h>
- #include <asm/mmu_context.h>
- #include <asm/cpu_device_id.h>
-+#include <asm/microcode.h>
- 
- #ifdef CONFIG_X86_32
- __visible unsigned long saved_context_ebx;
-@@ -268,6 +269,13 @@ static void notrace __restore_processor_
- 	x86_platform.restore_sched_clock_state();
- 	mtrr_bp_restore();
- 	perf_restore_debug_store();
-+
-+	microcode_bsp_resume();
-+
-+	/*
-+	 * This needs to happen after the microcode has been updated upon resume
-+	 * because some of the MSRs are "emulated" in microcode.
-+	 */
- 	msr_restore_context(ctxt);
- }
- 
+-		seq_printf(m, "model\t\t: %s\n"
+-				"model name\t: %s\n",
++		seq_printf(m, "model\t\t: %s - %s\n",
+ 				 boot_cpu_data.pdc.sys_model_name,
+ 				 cpuinfo->dev ?
+ 				 cpuinfo->dev->name : "Unknown");
 
 

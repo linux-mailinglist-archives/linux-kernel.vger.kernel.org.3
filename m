@@ -2,85 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09938520A98
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 03:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B8F520A9F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 03:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234133AbiEJBXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 21:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57886 "EHLO
+        id S234252AbiEJB0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 21:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiEJBXW (ORCPT
+        with ESMTP id S234153AbiEJB0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 21:23:22 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF3020F74F;
-        Mon,  9 May 2022 18:19:26 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Ky0Xk5hTkz1JBxm;
-        Tue, 10 May 2022 09:18:14 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 10 May 2022 09:19:25 +0800
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 10 May 2022 09:19:24 +0800
-Subject: Re: [PATCH] media: camss: csid: fix wrong size passed to
- devm_kmalloc_array()
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-media@vger.kernel.org>
-CC:     <mchehab@kernel.org>, <hverkuil-cisco@xs4all.nl>,
-        <robert.foss@linaro.org>, <bryan.odonoghue@linaro.org>,
-        <vladimir.zapolskiy@linaro.org>
-References: <20220509140439.1361352-1-yangyingliang@huawei.com>
-Message-ID: <ae190d9c-160d-7d3d-6a57-a50655b36a73@huawei.com>
-Date:   Tue, 10 May 2022 09:19:23 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Mon, 9 May 2022 21:26:00 -0400
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A3525E9;
+        Mon,  9 May 2022 18:22:04 -0700 (PDT)
+Received: by mail-pj1-f54.google.com with SMTP id qe3-20020a17090b4f8300b001dc24e4da73so740257pjb.1;
+        Mon, 09 May 2022 18:22:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UbbErnk4URiyhDcgHPYh2QePDGVMcd5mePLEmIA+Vog=;
+        b=Iu2i349IulMWOLGqOZSiPtzMZi3jl8ufOkn//nui20VHCRcD/4O7hMPG6+2RMQqMkp
+         ZV3OEjN8kDuAm6bfbzvclSZ0wRNAIwqBm/K5Tkt6tXDKfgA9uQO2iwJqxtE782uIb3UB
+         gmuNkg2SXoE+Mu8asZ/lf4kWc3Iajp2TmALTJEqKLyWpvo1i1v+pYMujIarElkxsNe6r
+         uTYT3u4otIV9UZYCsX1eCDenHa1qGdFrAoP3PtJngueGCbPAcwgOOFtQy/P9mZhCQdKC
+         SGP3dBumnr/wzKwD+eVICgwBPBJTbvjKeFfdYy5mkAKjv3ItNLIr051E8UaeR1iV1nOQ
+         J92w==
+X-Gm-Message-State: AOAM533x9yBY61/QkVFr1P6hRBjj/VGqX5KCx8wDi8RDXMMPf4ScFYcJ
+        0wYJGIYYAjtX/nzQDtx+Ncw=
+X-Google-Smtp-Source: ABdhPJzcWbH06lL3gp2KEEweSQjSbSld50Abyzk7g2naibSYcflCmRKeuJA15E1QHkKb+DgHm2NXJA==
+X-Received: by 2002:a17:90b:3b81:b0:1dc:32ac:a66b with SMTP id pc1-20020a17090b3b8100b001dc32aca66bmr20577182pjb.49.1652145724182;
+        Mon, 09 May 2022 18:22:04 -0700 (PDT)
+Received: from sultan-box.localdomain ([204.152.216.102])
+        by smtp.gmail.com with ESMTPSA id be12-20020a056a001f0c00b0050dc76281basm9376105pfb.148.2022.05.09.18.22.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 18:22:03 -0700 (PDT)
+Date:   Mon, 9 May 2022 18:22:01 -0700
+From:   Sultan Alsawaf <sultan@kerneltoast.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     stable@vger.kernel.org, Minchan Kim <minchan@kernel.org>,
+        Nitin Gupta <ngupta@vflare.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] zsmalloc: Fix races between asynchronous zspage free and
+ page migration
+Message-ID: <Ynm+OZrEOynVY4Ts@sultan-box.localdomain>
+References: <20220509024703.243847-1-sultan@kerneltoast.com>
+ <20220509170632.fec2f56ad9f640329330b9de@linux-foundation.org>
 MIME-Version: 1.0
-In-Reply-To: <20220509140439.1361352-1-yangyingliang@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220509170632.fec2f56ad9f640329330b9de@linux-foundation.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I made a mistake, this patch was sent twice, please ignore this patch.
+On Mon, May 09, 2022 at 05:06:32PM -0700, Andrew Morton wrote:
+> Why not simply lock_page() here?  The get_page() alone won't protect
+> from all the dire consequences which you have identified?
 
-Thanks,
-Yang
-On 2022/5/9 22:04, Yang Yingliang wrote:
-> 'supplies' is a pointer, the real size of struct regulator_bulk_data
-> should be pass to devm_kmalloc_array().
->
-> Fixes: 0d8140179715 ("media: camss: Add regulator_bulk support")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->   drivers/media/platform/qcom/camss/camss-csid.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
-> index f993f349b66b..80628801cf09 100644
-> --- a/drivers/media/platform/qcom/camss/camss-csid.c
-> +++ b/drivers/media/platform/qcom/camss/camss-csid.c
-> @@ -666,7 +666,7 @@ int msm_csid_subdev_init(struct camss *camss, struct csid_device *csid,
->   	if (csid->num_supplies) {
->   		csid->supplies = devm_kmalloc_array(camss->dev,
->   						    csid->num_supplies,
-> -						    sizeof(csid->supplies),
-> +						    sizeof(*csid->supplies),
->   						    GFP_KERNEL);
->   		if (!csid->supplies)
->   			return -ENOMEM;
+Hi,
+
+My reasoning is that if the page migrated, then we've got the last reference
+to it anyway and there's no point in locking. But more importantly, we'd still
+need to take migrate_read_lock() again in order to verify whether or not the
+page migrated because of data races stemming from replace_sub_page(), so I don't
+think there's much to gain by using lock_page(). When any of the pages in the
+zspage migrates, the entire page list is reconstructed and every page's private
+storage is rewritten. I had drafted another change that fixes the data races by
+trimming out all of that redundant work done in replace_sub_page(), but I wanted
+to keep this patch small to make it easier to review and easier to backport.
+
+Sultan

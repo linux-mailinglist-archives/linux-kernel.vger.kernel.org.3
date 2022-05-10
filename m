@@ -2,63 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87FB4522658
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 23:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B50052265C
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 23:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235066AbiEJVdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 17:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47938 "EHLO
+        id S235232AbiEJVde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 17:33:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbiEJVdF (ORCPT
+        with ESMTP id S231445AbiEJVdc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 17:33:05 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA1617D3B6;
-        Tue, 10 May 2022 14:33:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652218384; x=1683754384;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YMJJgS27sPJWQJF1uRrLqJzfA+lf5sUiF1JUG3CJdfA=;
-  b=PcuLcmK2cXofNBbWtg9pLCEKQrB48OqgbSfrDCqTsgxIWZHj3NI6rCkb
-   MrqgXcpgJpFYA+Fm1D8nUVNKsxa/pdrnnZs80gLbRjVsr0OlqWQiy8tCQ
-   WGEXYdpBxkdnSvSyMlUUr7F49sFOQtmBOJ2cjcJLExjN6HqtLeQRxruUj
-   ZSdsikYZWWv29x/t57nzsLwelW39gkQwJZCqEGqFu2t1VTtZjgFVEqNrT
-   EQwhGb0LDa9reEcJT2/aEK5+GO9dOkWr6JMbhWEtemELYfwcfjcnkh1Lo
-   zK+QPAzNWvhPaNFyM0jZb3Up3x6V6FiNFsQW1Rf8MTwz7c6QgIIwt0JW0
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="355935372"
-X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
-   d="scan'208";a="355935372"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 14:33:04 -0700
-X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
-   d="scan'208";a="814187125"
-Received: from ticela-or-037.amr.corp.intel.com (HELO localhost) ([10.209.191.163])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 14:33:03 -0700
-Date:   Tue, 10 May 2022 14:33:03 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH V10 14/44] mm/pkeys: Introduce pks_set_readwrite()
-Message-ID: <YnraD8URWxWtaltF@iweiny-desk3>
-References: <20220419170649.1022246-1-ira.weiny@intel.com>
- <20220419170649.1022246-15-ira.weiny@intel.com>
- <202205091304.434A9B45@keescook>
+        Tue, 10 May 2022 17:33:32 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E9018430F;
+        Tue, 10 May 2022 14:33:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652218411; x=1683754411;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=arXQR9RA80tLXKmu33RYWppSPN+xDoh5MJosgwaWAgw=;
+  b=rglOEs1KzzVKVEwFLsnXGQwirZ7gqI2Olfp0vFvIJ0H/0C+KMOSmhzO6
+   kmSqhPOhWt2Z9YATDQwn2ZQihPu4cHvPAd0rxq3Cze/L7mH2ZkEX5N17h
+   nNu2AlYbKBsn0kvmtxyg6Vj27n/F1wr1ukXfMj0QuyXLiMs1VdgbwfOBz
+   E=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 10 May 2022 14:33:30 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 14:33:30 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 10 May 2022 14:33:29 -0700
+Received: from [10.38.241.82] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 10 May
+ 2022 14:33:26 -0700
+Message-ID: <685a547b-175e-68db-a5f6-0e85dacd075a@quicinc.com>
+Date:   Tue, 10 May 2022 14:33:24 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202205091304.434A9B45@keescook>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [RFC PATCH] drm/edid: drm_add_modes_noedid() should set lowest
+ resolution as preferred
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>
+CC:     Jani Nikula <jani.nikula@linux.intel.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        "David Airlie" <airlied@linux.ie>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
+        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220426132121.RFC.1.I31ec454f8d4ffce51a7708a8092f8a6f9c929092@changeid>
+ <CAD=FV=XViHtOoQH3fm4yoRcUAkLkf0Wf4zPXUH0Zq5_09tZmjw@mail.gmail.com>
+ <874k22lxmh.fsf@intel.com> <8ea03441-b835-f5db-5cc3-85e5330dfe3f@quicinc.com>
+ <CAD=FV=UBTEAQD+49xwFM4UdzD2dqQ7WkpNYtO=JRTJwfRWo1Yg@mail.gmail.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <CAD=FV=UBTEAQD+49xwFM4UdzD2dqQ7WkpNYtO=JRTJwfRWo1Yg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,187 +80,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 02:38:38PM -0700, Kees Cook wrote:
-> On Tue, Apr 19, 2022 at 10:06:19AM -0700, ira.weiny@intel.com wrote:
-> > From: Ira Weiny <ira.weiny@intel.com>
-> > 
-> > When kernel code needs access to a PKS protected page they will need to
-> > change the protections for the pkey to Read/Write.
+Hi Doug
+
+On 5/10/2022 1:53 PM, Doug Anderson wrote:
+> Hi,
 > 
-> I'm excited to have this infrastructure available! It'll finally give us
-> the "write rarely" infrastructure we've needed:
-> https://github.com/KSPP/linux/issues/130
-
-Thanks!
-
-[snip]
-
-> >  
-> > @@ -275,4 +276,34 @@ void pks_setup(void)
-> >  	cr4_set_bits(X86_CR4_PKS);
-> >  }
-> >  
-> > +/*
-> > + * Do not call this directly, see pks_set*().
-> > + *
-> > + * @pkey: Key for the domain to change
-> > + * @protection: protection bits to be used
-> > + *
-> > + * Protection utilizes the same protection bits specified for User pkeys
-> > + *     PKEY_DISABLE_ACCESS
-> > + *     PKEY_DISABLE_WRITE
-> > + *
-> > + */
-> > +void pks_update_protection(u8 pkey, u8 protection)
+> On Fri, May 6, 2022 at 9:33 AM Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
+>>
+>> Hi Jani
+>>
+>> On 5/6/2022 4:16 AM, Jani Nikula wrote:
+>>> On Thu, 05 May 2022, Doug Anderson <dianders@chromium.org> wrote:
+>>>> Ville,
+>>>>
+>>>> On Tue, Apr 26, 2022 at 1:21 PM Douglas Anderson <dianders@chromium.org> wrote:
+>>>>>
+>>>>> If we're unable to read the EDID for a display because it's corrupt /
+>>>>> bogus / invalid then we'll add a set of standard modes for the
+>>>>> display. When userspace looks at these modes it doesn't really have a
+>>>>> good concept for which mode to pick and it'll likely pick the highest
+>>>>> resolution one by default. That's probably not ideal because the modes
+>>>>> were purely guesses on the part of the Linux kernel.
+>>>>>
+>>>>> Let's instead set 640x480 as the "preferred" mode when we have no EDID.
+>>>>>
+>>>>> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+>>>>> ---
+>>>>>
+>>>>>    drivers/gpu/drm/drm_edid.c | 9 +++++++++
+>>>>>    1 file changed, 9 insertions(+)
+>>>>
+>>>> Someone suggested that you might have an opinion on this patch and
+>>>> another one I posted recently [1]. Do you have any thoughts on it?
+>>>> Just to be clear: I'm hoping to land _both_ this patch and [1]. If you
+>>>> don't have an opinion, that's OK too.
+>>>>
+>>>> [1] https://lore.kernel.org/r/20220426114627.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid
+>>>
+>>> There are a number of drivers with combos:
+>>>
+>>>        drm_add_modes_noedid()
+>>>        drm_set_preferred_mode()
+>>>
+>>> which I think would be affected by the change. Perhaps you should just
+>>> call drm_set_preferred_mode() in your referenced patch?
 > 
-> For better security, I think this should be a static inline, not a
-> callable (i.e. as a non-inline it could be the target of a control
-> flow attack).
-
-Good point!  I'll move this to asm/pks.h.
-
+> I'm going to do that and I think it works out pretty well. Patch is at:
 > 
-> > +{
-> > +	u32 pkrs;
-> > +
-> > +	if (!cpu_feature_enabled(X86_FEATURE_PKS))
-> > +		return;
-> > +
-> > +	if (WARN_ON_ONCE(pkey >= PKS_KEY_MAX))
-> > +		return;
+> https://lore.kernel.org/r/20220510135101.v2.1.I31ec454f8d4ffce51a7708a8092f8a6f9c929092@changeid
 > 
-> I think this should enforce arguments being __builtin_constant_p(). i.e.
-> making sure that all callers of pks_update_protection() are using a
-> compile-time constant value. That makes it so that the caller location
-> and key become hard-coded (i.e. further reduction in risk to becoming a
-> control-flow gadget: the inlining of a const value means no arguments
-> any more). For example:
 > 
-> 	BUILD_BUG_ON(!__builtin_constant_p(pkey));
-> 	BUILD_BUG_ON(!__builtin_constant_p(protection));
-
-Sounds reasonable.
-
+>> So it seems like many drivers handle the !edid case within their
+>> respective get_modes() call which probably is because they know the max
+>> capability of their connector and because they know which mode should be
+>> set as preferred. But at the same time, perhaps the code below which
+>> handles the count == 0 case should be changed like below to make sure we
+>> are within the max_width/height of the connector (to handle the first
+>> condition)?
+>>
+>> diff --git a/drivers/gpu/drm/drm_probe_helper.c
+>> b/drivers/gpu/drm/drm_probe_helper.c
+>> index 682359512996..6eb89d90777b 100644
+>> --- a/drivers/gpu/drm/drm_probe_helper.c
+>> +++ b/drivers/gpu/drm/drm_probe_helper.c
+>> @@ -517,7 +517,8 @@ int drm_helper_probe_single_connector_modes(struct
+>> drm_connector *connector,
+>>
+>>           if (count == 0 && (connector->status ==
+>> connector_status_connected ||
+>>                              connector->status == connector_status_unknown))
+>> -               count = drm_add_modes_noedid(connector, 1024, 768);
+>> +               count = drm_add_modes_noedid(connector,
+>> connector->dev->mode_config.max_width,
+>> +                               connector->dev->mode_config.max_height);
+>>           count += drm_helper_probe_add_cmdline_mode(connector);
+>>           if (count == 0)
+>>                   goto prune;
+>>
+>>
+>>> Alternatively, perhaps drm_set_preferred_mode() should erase the
+>>> previous preferred mode(s) if it finds a matching new preferred mode.
+>>>
+>>
+>> But still yes, even if we change it like above perhaps for other non-DP
+>> cases its still better to allow individual drivers to pick their
+>> preferred modes.
+>>
+>> If we call drm_set_preferred_mode() in the referenced patch, it will not
+>> address the no EDID cases because the patch comes into picture when
+>> there was a EDID with some modes but not with 640x480.
 > 
-> (I think the test code will need some tweaking, but it should be
-> possible to adjust it.)
-
-I'll figure it out.
-
+> I'm not sure I understand the above paragraph. I think the "there's an
+> EDID but no 640x480" is handled by my other patch [1]. Here we're only
+> worried about the "no EDID" case, right?
 > 
-> > +
-> > +	pkrs = current->thread.pkrs;
-> > +	current->thread.pkrs = pkey_update_pkval(pkrs, pkey,
-> > +						 protection);
-> > +	preempt_disable();
-> > +	pks_write_pkrs(current->thread.pkrs);
-> > +	preempt_enable();
-> 
-> To resist cross-thread attacks, please:
-> 
-> - make pkey_update_pkval() also an inline
-> - use the pkrs variable directly and store it back only after the write
-> 
-> For example:
-> 
-> 	preempt_disable();
-> 	pkrs = pkey_update_pkval(current->thread.pkrs,
-> 				 pkey, protection);
-> 	pks_write_pkrs(pkrs);
-> 	current->thread.pkrs = pkrs;
-> 	preempt_enable();
-> 
-> This means that the pkey/protection relationship always lives in a
-> CPU-local register and cannot be manipulated by another CPU before the
-> msr write completes.
+Yes, there are two fixes which have been done (OR have to be done).
 
-Yes this sounds good.  Thanks for the tip.
+1) Case when EDID read failed and count of modes was 0.
 
-> Better yet would be:
-> 
-> 	preempt_disable();
-> 	rdmsrl(MSR_IA32_PKRS, pkrs);
-> 	pkrs = pkey_update_pkval(pkrs, pkey, protection);
-> 	pks_write_pkrs(pkrs);
-> 	current->thread.pkrs = pkrs;
-> 	preempt_enable();
-> 
-> Then cross-thread attacks cannot corrupt the _other_ PKS keys (i.e.
-> write the desired changes to target's current->thread.kprs and trigger
-> an update to a different pkey, resulting in flushing the attacker's
-> changes to that CPU's pkey state.
+Here the DRM framework was already adding 640x480@60fps. The fix we had 
+to make was making 640x480@60fps as the preferred mode. Which is what 
+your current patch aims at addressing.
 
-Unfortunately I don't think this entirely prevents an attack through the
-thread.pkrs value.  thread.pkrs has to be used to set the MSR when a thread is
-scheduled.  Therefore the rdmsrl above will by definition pick up the
-thread.pkrs but from an earlier time.
+https://lore.kernel.org/all/20220510135101.v2.1.I31ec454f8d4ffce51a7708a8092f8a6f9c929092@changeid/
 
-I'm not opposed to doing this as I think it does reduce the time window of such
-an attack but I wanted to mention it.  Especially since I specifically avoided
-ever reading the MSR to improve performance.
+So I thought the suggestion which Jani was giving was to call 
+drm_set_preferred_mode() on the referenced patch which was:
 
-I'm going to run some tests.  Perhaps the MSR read is not that big of a deal
-and I can convince myself that the performance diff is negligible.
+https://lore.kernel.org/all/20220510131309.v2.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid/
 
-> 
-> > +/**
-> > + * pks_set_readwrite() - Make the domain Read/Write
-> > + * @pkey: the pkey for which the access should change.
-> > + *
-> > + * Allow all access, read and write, to the domain specified by pkey.  This is
-> > + * not a global update and only affects the current running thread.
-> > + */
-> > +static inline void pks_set_readwrite(u8 pkey)
-> > +{
-> > +	pks_update_protection(pkey, PKEY_READ_WRITE);
-> > +}
-> 
-> While adding these, can you please also add pks_set_nowrite()? This
-> will be needed for protecting writes to memory that should be otherwise
-> readable.
+So that would not have fixed this case.
 
-I have a patch to add pks_set_readonly() but I was advised to not send it
-because this series does not include a use case for it.  (PMEM does not need
-it.)
+Perhaps, I misunderstood the patch which was being referenced?
 
-Dave, Dan?  Are you ok adding that back?
+2) Case where there were other modes, which got filtered out and in the 
+end no modes were left and we had to end up adding 640x480.
 
-Kees would you prefer pks_set_nowrite() as a name?
+No need to set the preferred mode in this case as this would have been 
+the only mode in the list ( so becomes preferred by default ).
+
+Thats this change
+
+https://lore.kernel.org/all/20220426114627.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid/
+
+I agree with combination of these 2 it should work.
+
+
 
 > 
-> With these changes it should be possible to protect the kernel's page
-> table entries from "stray" writes. :)
-
-Yes, Rick has done some great work in that area.
-
-Ira
-
+>> So i think the second proposal is a good one. It will cover existing
+>> users of drm_set_preferred_mode() as typically its called after
+>> drm_add_modes_noedid() which means the existing users want to "override"
+>> their preferred mode.
 > 
-> -Kees
+> I looked at this, and I'm pretty sure that we can't clear the
+> preferred modes. It looks like it's possible for there to be more than
+> one preferred mode and I'm worried about borking that up.
 > 
-> > +
-> > +#else /* !CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS */
-> > +
-> > +static inline void pks_set_readwrite(u8 pkey) {}
-> > +
-> > +#endif /* CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS */
-> > +
-> > +#endif /* _LINUX_PKS_H */
-> > diff --git a/include/uapi/asm-generic/mman-common.h b/include/uapi/asm-generic/mman-common.h
-> > index 6c1aa92a92e4..f179544bd33a 100644
-> > --- a/include/uapi/asm-generic/mman-common.h
-> > +++ b/include/uapi/asm-generic/mman-common.h
-> > @@ -80,6 +80,7 @@
-> >  /* compatibility flags */
-> >  #define MAP_FILE	0
-> >  
-> > +#define PKEY_READ_WRITE		0x0
-> >  #define PKEY_DISABLE_ACCESS	0x1
-> >  #define PKEY_DISABLE_WRITE	0x2
-> >  #define PKEY_ACCESS_MASK	(PKEY_DISABLE_ACCESS |\
-> > -- 
-> > 2.35.1
-> > 
+> [1] https://lore.kernel.org/r/20220510131309.v2.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid
 > 
-> -- 
-> Kees Cook
+> -Doug

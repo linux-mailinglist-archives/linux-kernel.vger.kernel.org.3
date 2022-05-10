@@ -2,108 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01CEF5215C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90CFC5215C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241933AbiEJMth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 08:49:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51242 "EHLO
+        id S241972AbiEJMt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 08:49:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241948AbiEJMte (ORCPT
+        with ESMTP id S241975AbiEJMtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 08:49:34 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251035521B
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:45:34 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id j6so14840858pfe.13
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:45:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=81CmoXK8W2fMc2E/XpNylErNEPWG7PeFWSGfTvENHek=;
-        b=BuizLo0eMVf1CFKzq5z5mJXXTCdmsbZnthwaSpGZvyOinz0zK1oVrwY+RjDSbz0lsj
-         W4/gcD2GsatA2CltDPm42940C9Zx8OlEiXWEDruJeUP+scX4B4Dn/BR45LSBkgx0ha/1
-         1lof9Sxe/0+TSOSmg+ZbSpzVPPfdI8D1n/IK23ovFovWMObnth4tWgSXWT44+EFOD5cw
-         YRdLOnhCKKUDhjj1PBpvvrU/SLEYIvonvF8JuhoBcVkVWvziCCxnA6XbN07WU1oTTJuX
-         9N9BICkQtsDiH2S5IvrqAAzmp2SqDTXhUfx7lB75VtVwJ+wJsJW+JGZukF4rewQyhJ7E
-         HF3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=81CmoXK8W2fMc2E/XpNylErNEPWG7PeFWSGfTvENHek=;
-        b=txhSv/RDXigZlA7HHP5M14Vo8m613v2a58xdtL+bqGOHmaeHGYYpwzKaKCGE63K66O
-         eQwR9JBt7TZdAGm0BZZQTM6H/dQ1i2lPmzbQo9uiKuvZqNk8ZphH6JFg4feIWi1dd3pV
-         sfEaqH0IEPZ+Ji/1OKaBO0/JBfYMdW+ErZWisR+IsBNKacDQ9JF2JUaAYl7QYxAV4kZ5
-         Mt8l0SWV7xS4oRdCNb2O6kHVVAc0sc6/XzQ8KkA4DZyKSlOow+/MQlkskl/+XZj50cur
-         v8Zxg0q1Hm7gWFJMAOBm94ULtUXiUPzAtv4e0+Tn0r74J7ZBQqt/gGn6BZT/wlrHo/7H
-         7W9Q==
-X-Gm-Message-State: AOAM532hQM1YHYeDi9CIootIhoi89nfwdjwJEtdq4Aney7wq+terxAZj
-        qfGDgec8RDfDFMClaJC+wggUrg==
-X-Google-Smtp-Source: ABdhPJww7Eg4/Zxst2GZrQrVNwauUtpxNCsfNjZ19FUR133ytWOXTk+q1xGx0v1s2BhN+B7mV7yS+A==
-X-Received: by 2002:a63:2c8a:0:b0:3aa:86ea:f2c9 with SMTP id s132-20020a632c8a000000b003aa86eaf2c9mr16916062pgs.46.1652186733527;
-        Tue, 10 May 2022 05:45:33 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id q187-20020a632ac4000000b003c14af5063fsm10345438pgq.87.2022.05.10.05.45.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 05:45:32 -0700 (PDT)
-Message-ID: <0e1b3d10-ae79-f987-187e-58109441ccee@kernel.dk>
-Date:   Tue, 10 May 2022 06:45:31 -0600
+        Tue, 10 May 2022 08:49:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 06FD037038
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:45:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652186751;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OHedlp3XgvvvmR96eUT2A7KFNCgoAcFZOekYnqMAIR0=;
+        b=Vj37IWHpUEYDZsyCzSotWTOW0CDgyHEozOnulXROhU+MqzDZOBGi4/dzEP7f4MY5LTyr+0
+        bthywaRoN8bZIlXEhMGWKGRpv0ZLnGgA445IA//jFFPXdamNJp8NAhe9hUqzjiyKi3c44D
+        WTjoJqxs9vXwJtxgHsv5tYjR/ZL41iQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-556-p3o-IMlRPjOSxJC9pFCAqQ-1; Tue, 10 May 2022 08:45:45 -0400
+X-MC-Unique: p3o-IMlRPjOSxJC9pFCAqQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 82FF38002BF;
+        Tue, 10 May 2022 12:45:44 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.192.113])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E3BCC43F70C;
+        Tue, 10 May 2022 12:45:40 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        linux-fsdevel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        Karel Zak <kzak@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
+References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
+        <20220509124815.vb7d2xj5idhb2wq6@wittgenstein>
+        <20220510005533.GA2306852@dread.disaster.area>
+Date:   Tue, 10 May 2022 14:45:39 +0200
+In-Reply-To: <20220510005533.GA2306852@dread.disaster.area> (Dave Chinner's
+        message of "Tue, 10 May 2022 10:55:33 +1000")
+Message-ID: <87bkw5d098.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [syzbot] KASAN: use-after-free Read in bio_poll
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>
-Cc:     syzbot <syzbot+99938118dfd9e1b0741a@syzkaller.appspotmail.com>,
-        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, john.fastabend@gmail.com, kafai@fb.com,
-        kpsingh@kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com
-References: <00000000000029572505de968021@google.com>
- <a72282ef-650c-143b-4b88-5185009c3ec2@kernel.dk> <YnmuRuO4yplt8p/p@T590>
- <20220510055039.GA10576@lst.de>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220510055039.GA10576@lst.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/22 11:50 PM, Christoph Hellwig wrote:
-> On Tue, May 10, 2022 at 08:13:58AM +0800, Ming Lei wrote:
->>> Guys, should we just queue:
->>>
->>> ommit 9650b453a3d4b1b8ed4ea8bcb9b40109608d1faf
->>> Author: Ming Lei <ming.lei@redhat.com>
->>> Date:   Wed Apr 20 22:31:10 2022 +0800
->>>
->>>     block: ignore RWF_HIPRI hint for sync dio
->>>
->>> up for 5.18 and stable?
->>
->> I am fine with merging to 5.18 & stable.
-> 
-> I'm fine, too.  But are we sure this actually is one and the same
-> issue?  Otherwise I'll try to find some time to feed it to syzbot
-> first.
+* Dave Chinner:
 
-I re-wrote the reproducer a bit and can reproduce it, so I can certainly
-test a backport. But yes, I was skeptical on this being the same issue
-too. My initial reaction was that this is likely due to the bio being
-"downgraded" from polled to IRQ driven, and hence completes without an
-extra reference before the bio_poll() is done on it. Which is not the
-issue described in the referenced commit.
+> IOWs, what Linux really needs is a listxattr2() syscall that works
+> the same way that getdents/XFS_IOC_ATTRLIST_BY_HANDLE work. With the
+> list function returning value sizes and being able to iterate
+> effectively, every problem that listxattr() causes goes away.
 
--- 
-Jens Axboe
+getdents has issues of its own because it's unspecified what happens if
+the list of entries is modified during iteration.  Few file systems add
+another tree just to guarantee stable iteration.
+
+Maybe that's different for xattrs because they are supposed to be small
+and can just be snapshotted with a full copy?
+
+Thanks,
+Florian
 

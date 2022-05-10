@@ -2,105 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF3252211D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1049522121
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:23:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347365AbiEJQ0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 12:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55354 "EHLO
+        id S1347318AbiEJQ13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 12:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347373AbiEJQ0R (ORCPT
+        with ESMTP id S237625AbiEJQ1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 12:26:17 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7255A2CE0F;
-        Tue, 10 May 2022 09:22:20 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id p12so15376351pfn.0;
-        Tue, 10 May 2022 09:22:20 -0700 (PDT)
+        Tue, 10 May 2022 12:27:23 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2C2A0BFC;
+        Tue, 10 May 2022 09:23:23 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id j4so30243869lfh.8;
+        Tue, 10 May 2022 09:23:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wDcu7cYJsfVy9NZ2SD6dApJl14bL51Onqrh/Ptthpp4=;
-        b=KtpfJ91v3P2mWa1pFoDdeyhatEDDR/W5ra/i0ENEI9u5JfpBbEkgMnILHew3y5n8XW
-         wmkWwbqSITv+DZL2stLCETXImSeJre2g0PBrO7m2kJpjJDZM/cHKcTeiJQ535cuvnSts
-         yeSr4PtvCDcBzSClfw158sUHyEy4/S5kOIv6TfLK1rgt0U9aXCcTn67a63fuJFoZRp7U
-         DN8TvroE7haUpGanCpuCr0XGI4sZpRZuhUjGo4jsnsCalulYj8DjCvSGGRaUllRC0UMd
-         XGDP9zXqOOaZ70DiBJSusiz3le6VuryU4WTES6Qe78jTddIPl8rPtyuU0yLNDW/GY5e1
-         fAYA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=lE9M1LT3yKC1XMSzyFOtlSmz+JiIYT6pQw3EYMoZJec=;
+        b=UHgfWbsTrNXXX6mF1ThS2P4I3clamg5/10H18jPoQOT8ICcwCcR2ohxK4nQBIv1lmN
+         PX2uPGYkEabwoJ4clEomc62ZzxHhv+n7Q1sB/pl1yJqzpgQoNbAGwxfsB+G1aGLtsHHC
+         hi3MNnhRMcIHD7h0eRxAWUbwd1VH91Nfq2zf86XZ8IHKAjc/YPsiL/yPV+im9nYg9wQ7
+         U4FuD5PnDqnnNTtWWm5XPGM9bpndelYfMlcOqXHaLC4vjTHbwLhRT6b6Pb8vjQ7Y90o+
+         nAMP5zRsVS0zsAVI9uKgzQEpuZegbm3RT2qIg9SkHWUlFX9tM+ZD6XjXH+ZB9a72V7Fh
+         /kHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wDcu7cYJsfVy9NZ2SD6dApJl14bL51Onqrh/Ptthpp4=;
-        b=equs28Q6AyBAhBKK9R8HQMS1Nzc+JL34wWXUkaNONUFmWKLX346j0wJiKmZKcUClEs
-         gJY1Tk1keKxaypNnNrbsOS3xQlkZwUPoBqJ8DYHqv90fUxUJ3zRdtESh9e6tVW83V88E
-         87G+bwQx+J+3oqVcqtSYXw4gTaTOlOhHylZgtaMAX51xLnDESZTVVm2l1iBMW2yIEoC7
-         z5Xw5yYZ9YIpmEnRGd0b5iy5en3fP0vr7Dt0oo6oW7ibyZ3SL3PzORza2rIDtUrq7aF2
-         Q/3y6cdmhdEhtetmE+aJvQx9DhfSmT4d6NTJmxXVkQdcvnGlL1s6JFYrGuIlw9i8/Get
-         E5CA==
-X-Gm-Message-State: AOAM532FBGuX53SayymfyaiJUhsVNU1UL/Ba3lI65bvBSRw7SoJPUMXs
-        rWGXQC/dCvnfisady+fq4xg=
-X-Google-Smtp-Source: ABdhPJznDioIYRZQ6kHDdNYT91FyrGUHdUILDV/CzrKwzLNPJTKRVK/u+ya1aX7C4x75oENByjA8Ww==
-X-Received: by 2002:a63:a18:0:b0:3c6:12b1:a8d0 with SMTP id 24-20020a630a18000000b003c612b1a8d0mr17519099pgk.534.1652199739898;
-        Tue, 10 May 2022 09:22:19 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id bb10-20020a170902bc8a00b0015e8d4eb1f9sm2274457plb.67.2022.05.10.09.22.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 09:22:19 -0700 (PDT)
-Message-ID: <67a3c327-80c7-bdb2-1add-89e5a3dc781f@gmail.com>
-Date:   Tue, 10 May 2022 09:22:11 -0700
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=lE9M1LT3yKC1XMSzyFOtlSmz+JiIYT6pQw3EYMoZJec=;
+        b=IrtudqCezAcRTDC9NeeXXP5Z0KCupJuKm0Z+woKS8+6Hr7bh+ZsV6LVB+Ab/zy2U2J
+         JC6beqc1tVf8mlbxQRjPFkshk4bdEaXE8spDwH6H/DFM2P9FwvWEwtOrgezLpEHyIQ0h
+         nAzKTAOMixqBvm6aPdcFc5pfvImjVSWFCusYz49bwUFlRI+omx+kf20uc9UO0QRDYqeP
+         D6vRq3+ohfgM1imgrN8ROOmR91SVsMlC8Aw88PdJoZAp1giSmq/5ox0cB5Dxb5maAfWg
+         wPeOSlfFlXOFA5WyF8g5UyFEc6Oed3DH7/9YMbt0Z4Ot8sKByoi2j4KDMLQCWYLvM0af
+         ELgg==
+X-Gm-Message-State: AOAM530F8noeFhryBAL2bgSKWOcE2tQRtVJ4uyEe6JchM3LCwONh4bh7
+        A8e+LGl3bbynr8aOEy7DcPc=
+X-Google-Smtp-Source: ABdhPJwfQ0dQeA8YbZQyqC6JBjPo56fJ0/mD8aAtBAuEVrVNRrN152j/YvTuQrWeK3ZE6QkDtxHmmw==
+X-Received: by 2002:a19:f706:0:b0:473:9e36:79de with SMTP id z6-20020a19f706000000b004739e3679demr17272138lfe.35.1652199801284;
+        Tue, 10 May 2022 09:23:21 -0700 (PDT)
+Received: from vmu1804.lan ([2a06:a003:501a:a7ce::887])
+        by smtp.googlemail.com with ESMTPSA id k19-20020a2eb753000000b0024f501aa770sm2217089ljo.134.2022.05.10.09.23.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 09:23:20 -0700 (PDT)
+From:   Mikhail Zhilkin <csharper2005@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Karim <Karimdplay@gmail.com>, M <x1@disroot.org>,
+        Mikhail Zhilkin <csharper2005@gmail.com>
+Subject: [PATCH v4 1/3] dt-bindings: Add Sercomm (Suzhou) Corporation vendor prefix
+Date:   Tue, 10 May 2022 16:23:14 +0000
+Message-Id: <20220510162314.20810-1-csharper2005@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220510161641.20655-1-csharper2005@gmail.com>
+References: <20220510161641.20655-1-csharper2005@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH net-next v4 12/12] MAINTAINERS: add Renesas RZ/N1 switch
- related driver entry
-Content-Language: en-US
-To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?Q?Miqu=c3=a8l_Raynal?= <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-References: <20220509131900.7840-1-clement.leger@bootlin.com>
- <20220509131900.7840-13-clement.leger@bootlin.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220509131900.7840-13-clement.leger@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/22 06:19, Clément Léger wrote:
-> After contributing the drivers, volunteer for maintenance and add
-> myself as the maintainer for Renesas RZ/N1 switch related drivers.
-> 
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+Add "sercomm" vendor prefix for "Sercomm (Suzhou) Corporation".
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Company website:
+Link: https://www.sercomm.com/
+
+Signed-off-by: Mikhail Zhilkin <csharper2005@gmail.com>
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 01430973ecec..65ff22364fb3 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -1082,6 +1082,8 @@ patternProperties:
+     description: Sensirion AG
+   "^sensortek,.*":
+     description: Sensortek Technology Corporation
++  "^sercomm,.*":
++    description: Sercomm (Suzhou) Corporation
+   "^sff,.*":
+     description: Small Form Factor Committee
+   "^sgd,.*":
 -- 
-Florian
+2.25.1
+

@@ -2,101 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F1D521D7B
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:05:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D60521D7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:05:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345507AbiEJPJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 11:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
+        id S1345348AbiEJPJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 11:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345615AbiEJPIv (ORCPT
+        with ESMTP id S1345617AbiEJPIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 10 May 2022 11:08:51 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307132E6A9;
-        Tue, 10 May 2022 07:38:29 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652193507;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=w3ElTKcPgRcfhSXCODsdQ9SYsvPTENqPkhqSJjkaUnk=;
-        b=2FSm4oOqMOc7u7DOArxh7vypRuFLzQJ4f5e7uumNWZk1I+wP6rN1Z+BamxxgNm/HkkJ8dS
-        jbuzVvdMTYuHKMYIdn3pJkzvOHvrtKjxkW5KQCOiLLd87+XgT1YCNZ7cZ3D75oQSIjPAbJ
-        3MI6F+cGiQbGDDLe0QmgNkbGSBVbUVM5Is/ozOGVwpE47NGGUx6NXo3tJweiXw1f2yIHV9
-        f3oKOyk0z/V2PomejDHplZTRKP9rSVl69cpaHnnuluzzxUokX3JCs5rygHZql3fiIvNDkg
-        QQKtbUKUOoW1hWOjc4Wij3nCbiFffRmPCss0ja1b96xfU7R1+MpTAUbvCEhisA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652193507;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=w3ElTKcPgRcfhSXCODsdQ9SYsvPTENqPkhqSJjkaUnk=;
-        b=uPf15/pRgDbttbexXqULpEddKepYTDu4nFjxb45VjXxHv5/WFbZRbyE2QG0KSbWW24RYCN
-        +ZKev2VYi08SYNDg==
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-arch@vger.kernel.org
-Cc:     Tejun Heo <tj@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Al Viro <viro@ZenIV.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        stable@vger.kernel.org,
-        =?utf-8?B?0JzQsNC60YHQuNC8INCa0YPRgtGP0LLQuNC9?= 
-        <maximkabox13@gmail.com>
-Subject: Re: [PATCH 1/7] kthread: Don't allocate kthread_struct for init and
- umh
-In-Reply-To: <20220506141512.516114-1-ebiederm@xmission.com>
-References: <87mtfu4up3.fsf@email.froward.int.ebiederm.org>
- <20220506141512.516114-1-ebiederm@xmission.com>
-Date:   Tue, 10 May 2022 16:38:27 +0200
-Message-ID: <87fslhpi58.ffs@tglx>
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4CE64CC
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 07:39:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652193561; x=1683729561;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ddsexfesqVNdGpsCecUl34q/BH165I6eLFsFrzxutNg=;
+  b=JMOjsN4NNa9LcLnMVux0pKEAVpayu7gdYXWF9H1oS3ylPQdLYPocJ/kH
+   +hHlYOzSDzirmEAJbm6cdbg6JQM+crQiSXHHYrgRTsiQVPl/ttu9u8xm9
+   hNEtsIuqmlkXEXAQdBYixZfqSNs23VQ+DmXyuaDGqZKsjmt2ArQh6FmUK
+   zHgCGhB3JhVnixLXA67aUKF4cWR5Zzoah8ou8UflH6u4JgRk3xGpbYuLd
+   m6XUEfDlzn00duQGq1UxT9ytwJVZkqJuTBzI6adnotsgXOSwQujSIhfEp
+   qPf31t1QgWJOruul7CvQrw5svFnBt14PM8Uhl40tmRAaPhQEavHo4mEDx
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="269329552"
+X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
+   d="scan'208";a="269329552"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 07:39:20 -0700
+X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
+   d="scan'208";a="541803920"
+Received: from mnazari-mobl.amr.corp.intel.com (HELO [10.209.1.152]) ([10.209.1.152])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 07:39:19 -0700
+Message-ID: <8c2735ac-0335-6e2a-8341-8266d5d13c30@intel.com>
+Date:   Tue, 10 May 2022 07:39:30 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] x86/mm/cpa: set PAGE_KERNEL in __set_pages_p()
+Content-Language: en-US
+To:     Tom Lendacky <thomas.lendacky@amd.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        linux-kernel@vger.kernel.org
+References: <20220506051940.156952-1-42.hyeyoo@gmail.com>
+ <56f89895-601e-44c9-bda4-5fae6782e27e@amd.com> <YnpTHMvOO/pLJQ+l@hyeyoo>
+ <5fe161cb-6c55-6c4d-c208-16c77e115d3f@amd.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <5fe161cb-6c55-6c4d-c208-16c77e115d3f@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 06 2022 at 09:15, Eric W. Biederman wrote:
->  	 * the init task will end up wanting to create kthreads, which, if
->  	 * we schedule it before we create kthreadd, will OOPS.
->  	 */
-> -	pid = kernel_thread(kernel_init, NULL, CLONE_FS);
-> +	pid = user_mode_thread(kernel_init, NULL, CLONE_FS);
+On 5/10/22 06:35, Tom Lendacky wrote:
+> I'm wondering if adding a specific helper that takes a boolean to
+> indicate whether to set the global flag would be best. I'll let some of
+> the MM maintainers comment about that.
 
-So init does not have PF_KTHREAD set anymore, which causes this to go
-sideways with a NULL pointer dereference in get_mm_counter() on next:
+First of all, I'm not positive that _PAGE_BIT_PROTNONE is ever used for
+kernel mappings.  This would all get a lot easier if we decided that
+_PAGE_BIT_PROTNONE is only for userspace mappings and we don't have to
+worry about it when _PAGE_USER is clear.
 
- get_mm_counter include/linux/mm.h:1996 [inline]
- get_mm_rss include/linux/mm.h:2049 [inline]
- task_nr_scan_windows.isra.0+0x23/0x120 kernel/sched/fair.c:1123
- task_scan_min kernel/sched/fair.c:1144 [inline]
- task_scan_start+0x6c/0x400 kernel/sched/fair.c:1150
- task_tick_numa kernel/sched/fair.c:2944 [inline]
- task_tick_fair+0xaeb/0xef0 kernel/sched/fair.c:11186
- scheduler_tick+0x20a/0x5e0 kernel/sched/core.c:5380
+Second, the number of places that do these
+__set_pages_p()/__set_pages_np() pairs is pretty limited.  Some of them
+are *quite* unambiguous over whether they are dealing with the direct map:
 
- https://lore.kernel.org/lkml/0000000000008a9fbb05dea76400@google.com
+> int set_direct_map_invalid_noflush(struct page *page)
+> {
+>         return __set_pages_np(page, 1);
+> }
+> 
+> int set_direct_map_default_noflush(struct page *page)
+> {
+>         return __set_pages_p(page, 1);
+> }
 
-because the fence in task_tick_numa():
+which would make it patently obvious whether __set_pages_p() should
+restore the global bit.  That would have been a problem in the "old" PTI
+days where _some_ of the direct map was exposed to Meltdown.  I don't
+think we have any of those mappings left, though.  They're all aliases
+like text and cpu_entry_area.
 
- 	if ((curr->flags & (PF_EXITING | PF_KTHREAD)) || work->next != work)
-		return;
-
-is not longer sufficient. It needs also to bail if !curr->mm.
-
-I'm worried that there are more of these issues lurking. Haven't looked
-yet.
-
-Thanks,
-
-        tglx
+It would be nice if someone could look into unraveling
+_PAGE_BIT_PROTNONE.  We could even probably move it to another bit for
+kernel mappings if we actually need it (I'm not convinced we do).

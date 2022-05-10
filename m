@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4458521A81
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B195219C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:48:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343737AbiEJN7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
+        id S244657AbiEJNvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:51:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245158AbiEJNif (ORCPT
+        with ESMTP id S243336AbiEJNdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:38:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEE1261953;
-        Tue, 10 May 2022 06:27:37 -0700 (PDT)
+        Tue, 10 May 2022 09:33:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F922380E2;
+        Tue, 10 May 2022 06:24:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2FCCCB81DA9;
-        Tue, 10 May 2022 13:27:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79D49C385A6;
-        Tue, 10 May 2022 13:27:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD0CDB81DB1;
+        Tue, 10 May 2022 13:24:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 499B3C385C9;
+        Tue, 10 May 2022 13:24:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189254;
-        bh=dhkW1ASMyZWLN/zK5ccMxBpm7mwVmOaNbaYYAvXnbn4=;
+        s=korg; t=1652189056;
+        bh=p66mXbbVKTuTCV9wvWvuCcAImiMsmy9tH8s+oB4xHXE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JxzFxJdA0wfqRpemUkzZi/dp27p7iSABKRVb74eYCh+fd2FrSxvnFlB1mqnjvLmvj
-         Fp3Ld5leSJx9IvLu5bXyr1lcEEjOcrwI51Rmw8fGYj6uiBvu0KkDCa6u2PfRuRmd1t
-         f5M+8j+U+pi8PfjF5Kxh7/g+IiNLVm6WEizH0pUM=
+        b=Di9MqFst3LMVDOP/gg3pOd7KhKTklTRGFWavhGeE4QcpZZ7WLG6EYd7z9nMWMQkvJ
+         4eVVrsGHGlIw8VyOtDEEEfjIIRM6XkatoVxVmXeC/MmPJlEi9vYeNJiUtUyIAvsKg6
+         4UB5ouLoo6rsMyRPTOR7PA8LiiCf5HyDhr7zr5R8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chao Gao <chao.gao@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 61/70] KVM: x86: Do not change ICR on write to APIC_SELF_IPI
+        stable@vger.kernel.org,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Subject: [PATCH 5.4 51/52] PCI: aardvark: Fix reading MSI interrupt number
 Date:   Tue, 10 May 2022 15:08:20 +0200
-Message-Id: <20220510130734.653510441@linuxfoundation.org>
+Message-Id: <20220510130731.345785180@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
-References: <20220510130732.861729621@linuxfoundation.org>
+In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
+References: <20220510130729.852544477@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +56,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Bonzini <pbonzini@redhat.com>
+From: Pali Rohár <pali@kernel.org>
 
-[ Upstream commit d22a81b304a27fca6124174a8e842e826c193466 ]
+commit 805dfc18dd3d4dd97a987d4406593b5a225b1253 upstream.
 
-Emulating writes to SELF_IPI with a write to ICR has an unwanted side effect:
-the value of ICR in vAPIC page gets changed.  The lists SELF_IPI as write-only,
-with no associated MMIO offset, so any write should have no visible side
-effect in the vAPIC page.
+In advk_pcie_handle_msi() it is expected that when bit i in the W1C
+register PCIE_MSI_STATUS_REG is cleared, the PCIE_MSI_PAYLOAD_REG is
+updated to contain the MSI number corresponding to index i.
 
-Reported-by: Chao Gao <chao.gao@intel.com>
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Experiments show that this is not so, and instead PCIE_MSI_PAYLOAD_REG
+always contains the number of the last received MSI, overall.
+
+Do not read PCIE_MSI_PAYLOAD_REG register for determining MSI interrupt
+number. Since Aardvark already forbids more than 32 interrupts and uses
+own allocated hwirq numbers, the msi_idx already corresponds to the
+received MSI number.
+
+Link: https://lore.kernel.org/r/20220110015018.26359-3-kabel@kernel.org
+Fixes: 8c39d710363c ("PCI: aardvark: Add Aardvark PCI host controller driver")
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/lapic.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/pci/controller/pci-aardvark.c |   10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index de11149e28e0..e45ebf0870b6 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -2106,10 +2106,9 @@ int kvm_lapic_reg_write(struct kvm_lapic *apic, u32 reg, u32 val)
- 		break;
+--- a/drivers/pci/controller/pci-aardvark.c
++++ b/drivers/pci/controller/pci-aardvark.c
+@@ -1372,7 +1372,7 @@ static void advk_pcie_remove_irq_domain(
+ static void advk_pcie_handle_msi(struct advk_pcie *pcie)
+ {
+ 	u32 msi_val, msi_mask, msi_status, msi_idx;
+-	u16 msi_data;
++	int virq;
  
- 	case APIC_SELF_IPI:
--		if (apic_x2apic_mode(apic)) {
--			kvm_lapic_reg_write(apic, APIC_ICR,
--					    APIC_DEST_SELF | (val & APIC_VECTOR_MASK));
--		} else
-+		if (apic_x2apic_mode(apic))
-+			kvm_apic_send_ipi(apic, APIC_DEST_SELF | (val & APIC_VECTOR_MASK), 0);
-+		else
- 			ret = 1;
- 		break;
- 	default:
--- 
-2.35.1
-
+ 	msi_mask = advk_readl(pcie, PCIE_MSI_MASK_REG);
+ 	msi_val = advk_readl(pcie, PCIE_MSI_STATUS_REG);
+@@ -1382,13 +1382,9 @@ static void advk_pcie_handle_msi(struct
+ 		if (!(BIT(msi_idx) & msi_status))
+ 			continue;
+ 
+-		/*
+-		 * msi_idx contains bits [4:0] of the msi_data and msi_data
+-		 * contains 16bit MSI interrupt number
+-		 */
+ 		advk_writel(pcie, BIT(msi_idx), PCIE_MSI_STATUS_REG);
+-		msi_data = advk_readl(pcie, PCIE_MSI_PAYLOAD_REG) & PCIE_MSI_DATA_MASK;
+-		generic_handle_irq(msi_data);
++		virq = irq_find_mapping(pcie->msi_inner_domain, msi_idx);
++		generic_handle_irq(virq);
+ 	}
+ 
+ 	advk_writel(pcie, PCIE_ISR0_MSI_INT_PENDING,
 
 

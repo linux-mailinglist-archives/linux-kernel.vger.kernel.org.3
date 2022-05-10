@@ -2,184 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF145211B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 264795211B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:05:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239518AbiEJKJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 06:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47220 "EHLO
+        id S239528AbiEJKJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 06:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239487AbiEJKJG (ORCPT
+        with ESMTP id S235558AbiEJKJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 06:09:06 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C7D2AACD3;
-        Tue, 10 May 2022 03:05:08 -0700 (PDT)
-X-UUID: 97949dcf59e342528875487229659511-20220510
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:91b56daf-122c-4884-8ab3-0f66a8d86018,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:456045b3-56b5-4c9e-8d83-0070b288eb6a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 97949dcf59e342528875487229659511-20220510
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1646658976; Tue, 10 May 2022 18:05:04 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 10 May 2022 18:05:02 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 10 May 2022 18:05:02 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 10 May 2022 18:05:02 +0800
-Message-ID: <2f88f72b957e73787686dfd131dac3a11a4c4341.camel@mediatek.com>
-Subject: Re: [PATCH v2] usb: typec: tcpci_mt6360: Update for BMC PHY setting
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     cy_huang <u0084500@gmail.com>, <linux@roeck-us.net>,
-        <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>,
-        <matthias.bgg@gmail.com>
-CC:     <cy_huang@richtek.com>, <bryan_huang@richtek.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Fabien Parent" <fparent@baylibre.com>,
-        stable <stable@vger.kernel.org>,
-        Bear Wang <bear.wang@mediatek.com>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Pablo Sun <pablo.sun@mediatek.com>
-Date:   Tue, 10 May 2022 18:05:02 +0800
-In-Reply-To: <1652159580-30959-1-git-send-email-u0084500@gmail.com>
-References: <1652159580-30959-1-git-send-email-u0084500@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 10 May 2022 06:09:32 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A465E2AACF3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:05:26 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id a21so19372169edb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:05:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=mTe6rsF1WlocKfWRCIawejpNJl6lRYSIlYxDz8jltlQ=;
+        b=Qi36duAyE1gOy8psvq42cYXYElISnLMfmmvYA/hLUTKndbkzCBSXHHrwmO2vC4IXty
+         mNLKeL8yTsRFqYz3GlewAQHpYkuBf6TkqndAkVrlj58Uswz5C6x68M90rzV8Rl/k0xBB
+         XIUWLODiXpYDmeRbvvFYZWLUTwLjS9E4TGMKMi+0ubTH0bh0oSZu07ZzlUBO0cX70XZE
+         xbASZkoJHfITt9mihYckrGw7gHP5RSU9mUM/TGEsCmYylLrM+63UCdIA3a3FX1KS5Gid
+         cpzhTmO2HW8153KJNeOL7hueg183zv0r66E0NGtz9qmZYkARKuGLLabD8coaK+1+zmMC
+         S6hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=mTe6rsF1WlocKfWRCIawejpNJl6lRYSIlYxDz8jltlQ=;
+        b=4GOGUgozyVFuGZuQ0zwYYN9sxcET86127bwBrHbGOI3/X6L1FMu2nGA1tE7pnbdsi7
+         uoKmaOAz7qcs+ZdKO3kk6ijI35s4rOLL4Fi7EL42J4lAE5rvQTDHJYs0Js4LfALDy7dE
+         3wpzqhkn5MnCQ0jF6IGGp2CkW08dPaoIb28BE4zDwpvkZ1JOWlOATihgUI1aKMSI7y4H
+         mViinb0lXL5uKkrhP32C/xa1DftRK+XuswqceQcZy5cfR7Q6C/0jQR550klTAPOPU/aB
+         2AUvNgTkhTvDaUFHteXLdPWfBluiKg02KmmFeZzPt4QOGv5Ds29MFXbP7QYTFilaR7Xr
+         FqAg==
+X-Gm-Message-State: AOAM530GusTYmIoOHdqGK5olCeh62oNAFQSFtg4GWH2SqoVUS6Q5ZgSU
+        K5bb+wCWy2hVzPxxEcDuxqOykNLtn+qKGlGVqLQ=
+X-Google-Smtp-Source: ABdhPJxkBG5oyHSAwqBnc8yNP9xdB3DAaj9s6SxBer/ptLcSgcCVTbrKi2AqoZIY1J0m8uxlWruVTbXulzDNS+ftVbY=
+X-Received: by 2002:a05:6402:1d90:b0:425:dd36:447c with SMTP id
+ dk16-20020a0564021d9000b00425dd36447cmr22402658edb.347.1652177124853; Tue, 10
+ May 2022 03:05:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Reply-To: zahirikeen@gmail.com
+Sender: www.ups.usa01@gmail.com
+Received: by 2002:a17:906:1189:0:0:0:0 with HTTP; Tue, 10 May 2022 03:05:23
+ -0700 (PDT)
+From:   Zahiri Keen <zahirikeen2@gmail.com>
+Date:   Tue, 10 May 2022 12:05:23 +0200
+X-Google-Sender-Auth: ZjrciUjQFrD9BnHsS-hOeGEOKkA
+Message-ID: <CABpS9gZAXj3bEbstv+AFUPZpSi+VxQK0hs=V_=9BhYaG1ERffw@mail.gmail.com>
+Subject: I Need Your Assistance.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:542 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4997]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [www.ups.usa01[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [zahirikeen2[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.5 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-05-10 at 13:13 +0800, cy_huang wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
-> 
-> Update MT6360 BMC PHY Tx/Rx setting for the compatibility.
-> 
-> Macpaul reported this CtoDP cable attention message cannot be
-> received from
-> MT6360 TCPC. But actually, attention message really sent from UFP_D
-> device.
-> 
-> After RD's comment, there may be BMC PHY Tx/Rx setting causes this
-> issue.
-> 
-> Below's the detailed TCPM log and DP attention message didn't
-> received from 6360
-> TCPCI.
-> [ 1206.367775] Identity: 0000:0000.0000
-> [ 1206.416570] Alternate mode 0: SVID 0xff01, VDO 1: 0x00000405
-> [ 1206.447378] AMS DFP_TO_UFP_ENTER_MODE start
-> [ 1206.447383] PD TX, header: 0x1d6f
-> [ 1206.449393] PD TX complete, status: 0
-> [ 1206.454110] PD RX, header: 0x184f [1]
-> [ 1206.456867] Rx VDM cmd 0xff018144 type 1 cmd 4 len 1
-> [ 1206.456872] AMS DFP_TO_UFP_ENTER_MODE finished
-> [ 1206.456873] cc:=4
-> [ 1206.473100] AMS STRUCTURED_VDMS start
-> [ 1206.473103] PD TX, header: 0x2f6f
-> [ 1206.475397] PD TX complete, status: 0
-> [ 1206.480442] PD RX, header: 0x2a4f [1]
-> [ 1206.483145] Rx VDM cmd 0xff018150 type 1 cmd 16 len 2
-> [ 1206.483150] AMS STRUCTURED_VDMS finished
-> [ 1206.483151] cc:=4
-> [ 1206.505643] AMS STRUCTURED_VDMS start
-> [ 1206.505646] PD TX, header: 0x216f
-> [ 1206.507933] PD TX complete, status: 0
-> [ 1206.512664] PD RX, header: 0x1c4f [1]
-> [ 1206.515456] Rx VDM cmd 0xff018151 type 1 cmd 17 len 1
-> [ 1206.515460] AMS STRUCTURED_VDMS finished
-> [ 1206.515461] cc:=4
-> 
-> Fixes: e1aefcdd394fd ("usb typec: mt6360: Add support for mt6360
-> Type-C driver")
-> Reported-by: Macpaul Lin <macpaul.lin@mediatek.com>
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> Cc: stable <stable@vger.kernel.org>
-> ---
->  drivers/usb/typec/tcpm/tcpci_mt6360.c | 26
-> ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c
-> b/drivers/usb/typec/tcpm/tcpci_mt6360.c
-> index f1bd9e0..8a952ea 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
-> @@ -15,6 +15,9 @@
->  
->  #include "tcpci.h"
->  
-> +#define MT6360_REG_PHYCTRL1	0x80
-> +#define MT6360_REG_PHYCTRL3	0x82
-> +#define MT6360_REG_PHYCTRL7	0x86
->  #define MT6360_REG_VCONNCTRL1	0x8C
->  #define MT6360_REG_MODECTRL2	0x8F
->  #define MT6360_REG_SWRESET	0xA0
-> @@ -22,6 +25,8 @@
->  #define MT6360_REG_DRPCTRL1	0xA2
->  #define MT6360_REG_DRPCTRL2	0xA3
->  #define MT6360_REG_I2CTORST	0xBF
-> +#define MT6360_REG_PHYCTRL11	0xCA
-> +#define MT6360_REG_RXCTRL1	0xCE
->  #define MT6360_REG_RXCTRL2	0xCF
->  #define MT6360_REG_CTDCTRL2	0xEC
->  
-> @@ -106,6 +111,27 @@ static int mt6360_tcpc_init(struct tcpci *tcpci,
-> struct tcpci_data *tdata)
->  	if (ret)
->  		return ret;
->  
-> +	/* BMC PHY */
-> +	ret = mt6360_tcpc_write16(regmap, MT6360_REG_PHYCTRL1, 0x3A70);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_write(regmap, MT6360_REG_PHYCTRL3,  0x82);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_write(regmap, MT6360_REG_PHYCTRL7, 0x36);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = mt6360_tcpc_write16(regmap, MT6360_REG_PHYCTRL11,
-> 0x3C60);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_write(regmap, MT6360_REG_RXCTRL1, 0xE8);
-> +	if (ret)
-> +		return ret;
-> +
->  	/* Set shipping mode off, AUTOIDLE on */
->  	return regmap_write(regmap, MT6360_REG_MODECTRL2, 0x7A);
->  }
+Good Day,
 
-Thanks for helping me to fix this issue.
+I know this email might come to you as a surprise because is coming
+from someone you haven=E2=80=99t met with before.
 
-Tested-by: Macpaul Lin <macpaul.lin@mediatek.com>
+I am Mr. Zahiri Keen, the bank manager with BOA bank i contact you for
+a deal relating to the funds which are in my position I shall furnish
+you with more detail once your response.
 
 Regards,
-Macpaul Lin
-
+Mr.Zahiri

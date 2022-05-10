@@ -2,86 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D29E7521CAB
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D8C2521CA8
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344908AbiEJOpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46734 "EHLO
+        id S243734AbiEJOpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344327AbiEJOof (ORCPT
+        with ESMTP id S1344591AbiEJOog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:44:35 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813171A6ADB
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 07:02:39 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 6CE0222238;
-        Tue, 10 May 2022 16:02:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1652191357;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=MAMluAWKintqA1HsqZ0+rRZBUqhaKw3r86HTFWznY5U=;
-        b=B+iUHM3+LJwbo8pibqOVNP85Fc6l9auZlcceatGQKKTPcUdKaJ3qaOGzX4YBq6JPmLuljJ
-        uPdR01FK54X07X3OAwJ0u4tpzNjcstxhisR2sgY0uA8gqxzhBMzjf/MXwFUEhvPhV0FxaW
-        aXIrBzEaVGNFvu6gDFyfj4ouv3SiouQ=
-From:   Michael Walle <michael@walle.cc>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH 0/2] introduce SNOR_ID3()
-Date:   Tue, 10 May 2022 16:02:30 +0200
-Message-Id: <20220510140232.3519184-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
+        Tue, 10 May 2022 10:44:36 -0400
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584141D813F;
+        Tue, 10 May 2022 07:02:45 -0700 (PDT)
+Received: by mail-qt1-f172.google.com with SMTP id h3so13557165qtn.4;
+        Tue, 10 May 2022 07:02:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Eo4bvoP53C2MoW6V75kNM+g38FmbVeaQf6g2Gfg1ZIw=;
+        b=w9HN3UC6in9VO+I9lJ2TZ4RNLV7Qh2vqRUn9l6ZOU9Suj7HfwDxbslU91D2aGo/sNA
+         qBMW+/2kCEHO3avNzENtmJcm1+Sb4W/pQanR102Sdtfbna2pxoX/ISv4Ug0154IYq4Nj
+         Eg5iXxgcBGlL4NAbengjSzlUBxBltwmCOSdTJP6Y6uI64krdC9WgYLWhbQJrRl9GX3Rl
+         teWcgEYZvZMLudq7pR/Be11TveT/5iZGC0ggjVJKfU7NwSxZRe+RECfmUoKHsgVtL9dg
+         zFopbTek21PurBvLgN6ubMjLe3QCE2ihQqwNT9v2IQYmapCkDvNe76gcVg+ecdRH4DWV
+         WFlQ==
+X-Gm-Message-State: AOAM533di2dewDb5fyUXsEYfYFtmu79usIGIyBA4L1Sm7GHiR05KwaFP
+        0mL5LUyKtYRVzZNj0aYtRj7eZ+IVSLO+FA==
+X-Google-Smtp-Source: ABdhPJwhZWgXKzEZNlxRqwe1qWNt5FrI4bOzM8l7JcsE4GLFOcxOk1BC1zHhNZldQ7CbmAAKW+QBmw==
+X-Received: by 2002:a05:622a:c4:b0:2f3:e383:7386 with SMTP id p4-20020a05622a00c400b002f3e3837386mr3255652qtw.521.1652191364329;
+        Tue, 10 May 2022 07:02:44 -0700 (PDT)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id j11-20020a05620a288b00b0069fcebf9c0asm9386809qkp.37.2022.05.10.07.02.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 07:02:43 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id r1so4180428ybo.7;
+        Tue, 10 May 2022 07:02:43 -0700 (PDT)
+X-Received: by 2002:a05:6902:905:b0:64a:2089:f487 with SMTP id
+ bu5-20020a056902090500b0064a2089f487mr18143399ybb.202.1652191363172; Tue, 10
+ May 2022 07:02:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220505193143.31826-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220505193143.31826-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220505193143.31826-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 10 May 2022 16:02:31 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX0egGvyu94-=tJdvW0=q6Y==ZNkexCJpnmrNJezuiqDw@mail.gmail.com>
+Message-ID: <CAMuHMdX0egGvyu94-=tJdvW0=q6Y==ZNkexCJpnmrNJezuiqDw@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/4] dt-bindings: clock: r9a07g043-cpg: Add Renesas
+ RZ/Five CPG Clock and Reset Definitions
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For support which rely solely on the SFDP data, all we need to know is its
-JEDEC ID. All further information should be fetched from SFDP. For this,
-introduce a SNOR_ID3() macro which should be used for all new flashes with
-SFDP.
+Hi Prabhakar,
 
-The dropped information are page size, number of sectors and sector size.
-The number of sectors (together with sector size) is only used to calculate
-the total flash size. In case of SFDP, this is read from there. The sector
-size is also used to select a proper erase opcode. We can just keep that
-one zero and the selection algorithm will select the same erase opcode;
-that is the opcode for the largest erase size (which is btw rather odd..).
-The page size is also taken from SFDP. There is one exception: older SFDP
-tables. These doesn't contain this data. So if there will be flashes with
-that, we should assume some sane value.
+Thanks for your patch!
 
-Shaik, could you please re-test your w25q512nwm support with this patch. I
-read through the SFDP data and it should behave exactly the same as before.
+On Thu, May 5, 2022 at 9:32 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Renesas RZ/Five SoC has almost the same clock structure compared to the
+> Renesas RZ/G2UL SoC, re-use the r9a07g043-cpg.h header file and just
+> ammend the RZ/Five CPG clock and reset definitions.
 
-Michael Walle (2):
-  mtd: spi-nor: introduce SNOR_ID3()
-  mtd: spi-nor: winbond: use SNOR_ID3() for w25q512nwm
+amend
 
- drivers/mtd/spi-nor/core.c    | 7 +++++--
- drivers/mtd/spi-nor/core.h    | 9 +++++++++
- drivers/mtd/spi-nor/winbond.c | 3 +--
- 3 files changed, 15 insertions(+), 4 deletions(-)
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
--- 
-2.30.2
+> --- a/include/dt-bindings/clock/r9a07g043-cpg.h
+> +++ b/include/dt-bindings/clock/r9a07g043-cpg.h
+> @@ -108,6 +108,15 @@
+>  #define R9A07G043_ADC_ADCLK            76
+>  #define R9A07G043_ADC_PCLK             77
+>  #define R9A07G043_TSU_PCLK             78
+> +#define R9A07G043_NCEPLDM_DM_CLK       79      /* RZ/Five Only */
 
+While NCEPLDM_DM_CLK is listed in the clock list spreadsheet, its
+control bit is not documented.
+
+> +#define R9A07G043_NCEPLDM_ACLK         80      /* RZ/Five Only */
+> +#define R9A07G043_NCEPLDM_TCK          81      /* RZ/Five Only */
+
+While NCEPLDM_TCK is listed in the clock list spreadsheet, its
+control bit is not documented.
+
+The rest LGTM, so with the above clarified
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

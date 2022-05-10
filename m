@@ -2,98 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12441520CF9
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 06:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 513CE520D01
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 06:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235223AbiEJEi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 00:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49186 "EHLO
+        id S236343AbiEJEl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 00:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232590AbiEJEiS (ORCPT
+        with ESMTP id S232590AbiEJEly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 00:38:18 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C08F2AF0
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 21:34:23 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1noHZY-0007q2-KZ; Tue, 10 May 2022 06:34:08 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1noHZW-0007VY-K5; Tue, 10 May 2022 06:34:06 +0200
-Date:   Tue, 10 May 2022 06:34:06 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
-Cc:     Robin van der Gracht <robin@protonic.nl>, kernel@pengutronix.de,
-        linux-can@vger.kernel.org, Oleksij Rempel <linux@rempel-privat.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
-        kbuild test robot <lkp@intel.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND 0/2] j1939: make sure that sent DAT/CTL frames are
- marked as TX
-Message-ID: <20220510043406.GB10669@pengutronix.de>
-References: <20220509170746.29893-1-devid.filoni@egluetechnologies.com>
+        Tue, 10 May 2022 00:41:54 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8A975214;
+        Mon,  9 May 2022 21:37:58 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id v10so13672436pgl.11;
+        Mon, 09 May 2022 21:37:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=sKl5pNCwJXU7WqvT/LDmg67nZYMXHrw3gGTNE00KDiM=;
+        b=YePOexK84CQ26EIabu9A5b/dbFhTTZfpTaQ9ubxq1XtqEoLg3vJG5MoS27rmCWDTos
+         QdVx/dA4Gn6rzw8xAYF+fnnaO2t00OFrbbLXBrEVi5toVKZ0x8MFvY8LMcKaeOjy+LlY
+         txxRSWSM/8MSlK4nm2MEXKXNESUA7m9BiT7HbEzuKSA5m4YEUvGIS+QeBI50gKpaP33d
+         9SLIk8stQK7Gu2mytwvcrQY4TrI8je+YG+dXa0CL0YRwg92qBJu43lC2Mc6Gbs5o+WMe
+         Jv+wl1g0+xdRzyFJZcUpjhNH2bv9IdKSj872B0vVOF4t0pc6WAl5JmaM3MliwGo5uGqw
+         f0SQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=sKl5pNCwJXU7WqvT/LDmg67nZYMXHrw3gGTNE00KDiM=;
+        b=uIi5Fjb8wAP6TX2cpsstYm4DyYAe0ZMJ+HRJkP/eMegGBzK1Kh+OhDjaI8Jt+8MsnD
+         Cw+hextevFtn7gNz/6HlXGGfeJIhUymyfq2QLfeyLlgjKYEKhw90pQsfLneMPTVsnoq3
+         1qUS0Maya1gtMZ/glgU8UkJMJCylSnDdQum2tRAaT82VACJwhHZ58TaAlKU9eNh95XRP
+         526G6x+RbineqAvJ3YRm9Rnj7EfVoLatb+PgLeT5LXiPVztzrFaJrHThcH8w6fIy71dz
+         FQrsmJQt5K3J/bMjo+OhvcBm+zgTx09SJubZlP265C5RerBpNHuqFYTQ6NI0JyATnLad
+         tVvQ==
+X-Gm-Message-State: AOAM531eyalcVEIuRmSDUJvZkEsNQ3crCChCDpH4gahUMfDiyM77uudT
+        NDzvLVmKaaEbjurdKH/cOWg=
+X-Google-Smtp-Source: ABdhPJxf8HyqGkQnaloAnkZ5hnwQl0PRFEqFWflgOFMeNq7L2seaOFZiS7nRWqVRztzEuTFZ5gcFBw==
+X-Received: by 2002:a63:3e44:0:b0:3c3:dabd:eb03 with SMTP id l65-20020a633e44000000b003c3dabdeb03mr15260729pga.15.1652157478224;
+        Mon, 09 May 2022 21:37:58 -0700 (PDT)
+Received: from [192.168.255.10] ([203.205.141.83])
+        by smtp.gmail.com with ESMTPSA id 67-20020a621946000000b0050dc7628190sm9570550pfz.106.2022.05.09.21.37.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 21:37:57 -0700 (PDT)
+Message-ID: <f3a7fc7c-959e-9f7f-b6f7-25f51b4caed6@gmail.com>
+Date:   Tue, 10 May 2022 12:37:53 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220509170746.29893-1-devid.filoni@egluetechnologies.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 06:26:17 up 40 days, 16:55, 62 users,  load average: 0.10, 0.09,
- 0.09
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [PATCH V2 2/3] KVM: x86/pmu: Don't pre-set the pmu->global_ctrl
+ when refreshing
+Content-Language: en-US
+From:   Like Xu <like.xu.linux@gmail.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220509102204.62389-1-likexu@tencent.com>
+ <20220509102204.62389-2-likexu@tencent.com>
+In-Reply-To: <20220509102204.62389-2-likexu@tencent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Devid,
+From: Like Xu <likexu@tencent.com>
 
-On Mon, May 09, 2022 at 07:07:44PM +0200, Devid Antonio Filoni wrote:
-> Hello,
-> 
-> If candump -x is used to dump CAN bus traffic on an interface while a J1939
-> socket is sending multi-packet messages, then the DAT and CTL frames
-> show up as RX instead of TX.
-> 
-> This patch series sets to generated struct sk_buff the owning struct sock
-> pointer so that the MSG_DONTROUTE flag can be set by recv functions.
-> 
-> I'm not sure that j1939_session_skb_get is needed, I think that session->sk
-> could be directly passed as can_skb_set_owner parameter. This patch
-> is based on j1939_simple_txnext function which uses j1939_session_skb_get.
-> I can provide an additional patch to remove the calls to
-> j1939_session_skb_get function if you think they are not needed.
+Assigning a value to pmu->global_ctrl just to set the value of
+pmu->global_ctrl_mask in a more readable way leaves a side effect of
+not conforming to the specification. The value is reset to zero on
+Power up and Reset but keeps unchanged on INIT, like an ordinary MSR.
 
-Thank you for your patches. By testing it I noticed that there is a memory
-leak in current kernel and it seems to be even worse after this patches.
-Found by this test:
-https://github.com/linux-can/can-tests/blob/master/j1939/run_all.sh#L13
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+v1 -> v2 Changelog:
+- Explicitly add parentheses around;
 
-Can you please investigate it (or wait until I get time to do it).
+  arch/x86/kvm/vmx/pmu_intel.c | 5 ++---
+  1 file changed, 2 insertions(+), 3 deletions(-)
 
-Regards,
-Oleksij
+diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+index cff03baf8921..7945e97db0af 100644
+--- a/arch/x86/kvm/vmx/pmu_intel.c
++++ b/arch/x86/kvm/vmx/pmu_intel.c
+@@ -525,9 +525,8 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+          setup_fixed_pmc_eventsel(pmu);
+      }
+
+-    pmu->global_ctrl = ((1ull << pmu->nr_arch_gp_counters) - 1) |
+-        (((1ull << pmu->nr_arch_fixed_counters) - 1) << INTEL_PMC_IDX_FIXED);
+-    pmu->global_ctrl_mask = ~pmu->global_ctrl;
++    pmu->global_ctrl_mask = ~(((1ull << pmu->nr_arch_gp_counters) - 1) |
++        (((1ull << pmu->nr_arch_fixed_counters) - 1) << INTEL_PMC_IDX_FIXED));
+      pmu->global_ovf_ctrl_mask = pmu->global_ctrl_mask
+              & ~(MSR_CORE_PERF_GLOBAL_OVF_CTRL_OVF_BUF |
+                  MSR_CORE_PERF_GLOBAL_OVF_CTRL_COND_CHGD);
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.36.1
+
+
+

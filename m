@@ -2,106 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D60BA522321
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F48522326
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:50:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348412AbiEJRxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 13:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49086 "EHLO
+        id S1348432AbiEJRyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 13:54:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343670AbiEJRxP (ORCPT
+        with ESMTP id S1348430AbiEJRy2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 13:53:15 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83D85C665
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:49:13 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-edeb6c3642so19195637fac.3
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:49:13 -0700 (PDT)
+        Tue, 10 May 2022 13:54:28 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A844A2A0A51;
+        Tue, 10 May 2022 10:50:25 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so2787407pjq.2;
+        Tue, 10 May 2022 10:50:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=gShKOlubHINbHrOYmWIYwvsPJWlFhoQwvEzs2MtNzRg=;
-        b=T5cs+amiki7PVXGowH5NWaY6htj9jBPAfR5Ql4Gbvfa/gT2wjf7YYfXcKilCrDpUvH
-         oFVlQQCrZIDrE1Rt19Bd6/mVis5oYTO4QpY3HnMWwuHYFQjbFTyNquuI8A4LFUJe9qg4
-         q0zt9D4azDhEnwgIrQocAgIJXEJEibsgPdUBs=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=SL+3kZQSymIuY6Sv2yjNu/Jrfavvd+SrTWjiXXxHp/A=;
+        b=OVG6yz5tN35i8g1xtRjAJjxhTUq37pumiwJFKZBiwq8cD5nzdxA5pB7pM/IUegaAy+
+         Az+6gfAiCCgWVFXIoRh2Tgpaxg+bF71cquRenT8WSQtV1TJi+IEgw0jdYsnJAIb215fM
+         VqTJg98UAZZf3PfTtiYZt7J98HOAUKvezjHJ5XA4MN9d96zsfBVCxQSjEceo7PR2z5uh
+         9B1Pbil2DSWaSgW25rWNw6Zpll+3KnaDEruf07bziFEjbvU12j7pb0gp344AiRSpVxwt
+         vh4NmRnPvWooeCPOiLgOgD2E0gSUPA70Bte+jVYBGmL1qt2ZmdQcuxlIvb508huYbTRY
+         2IDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=gShKOlubHINbHrOYmWIYwvsPJWlFhoQwvEzs2MtNzRg=;
-        b=eeF9O55DPADQNNWXrojYt7AXlAeHecNdLV97ZUTNfSXHSfq9mzxkBfhWdLSWAr4AkW
-         LlczOoToGxH06sAY1ui69Ipr3fPGriinztBsbN7U73QV2tlnNaCNbvlLlpkWRoRpJRo/
-         /2YjiTawrSZAuorbVfSmG66J/odCgfh5qxQMeIux3FGCEA5xDrrkr9IWYWcowdVAkRNm
-         y5komx4cqoBdfISODMLA/ThmEveKIOsTZQMrdVXagVMvavX4i7xVdPJmk2JueNrRF7Zp
-         M9q+uVhEr43mF7WNBCPovz4HXkNaKgq+mA7mbSTkdOpZ4Y4oKDmgay61mK/d0tCVlpYb
-         jXdA==
-X-Gm-Message-State: AOAM533uk68hfL0hTqLTuNBhV1Izxu1AAqziZEDX34+ViweJ2p5LTQjx
-        T36T/Vdc0ba+q5vCaKXCyywAiXsoI0wDSMUB8/WtpQ==
-X-Google-Smtp-Source: ABdhPJx+X9wiv0k0bhwUJ1wj5I72zRTSe1VIdfpE5kV9YTXYRxqPOTSQ0ocQrq3IFa4KzxVLEepf2VQxRWhddTx57zQ=
-X-Received: by 2002:a05:6870:40c1:b0:ed:9a12:3f95 with SMTP id
- l1-20020a05687040c100b000ed9a123f95mr691361oal.193.1652204951523; Tue, 10 May
- 2022 10:49:11 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 10 May 2022 10:49:11 -0700
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SL+3kZQSymIuY6Sv2yjNu/Jrfavvd+SrTWjiXXxHp/A=;
+        b=aI6jDahYPmejsNVW6VgXDO/aa1BdSGed7T8f61jd/n7hfqTHmFsDyHJRmNPjRRgp5v
+         KCJZ8Sipc9qIZfaoo82en+aPUxNcga23nGQFGQtOWu6vqHQ5BWQwyDM2ou7oNgpWm17p
+         owNSSprDAS3ZwQMcXV8WleOHUsCDGBRjjUOlbAgYXAKQl1qChqiA4gQaB6gpApGWuHq/
+         V5O2d0EA+4DJW+xdAHtPNU7rFNLoAPq5qWDWRgdGaJJKwD3/zXB6ROYJ2lSzPXnNC1Gy
+         JDYkaD3Gjl8bgVX6uJ8c7HrLOVhtH/3X79D8SYwP7Lu5q6aJWUgTcfNTcXRuo7WtZF3U
+         mqAQ==
+X-Gm-Message-State: AOAM53265IqAXOILLMiNZlYZ50OcdsKFL1vB1OoM+wqftTAmvzSifJym
+        w9xnBRmURTqiXDMH2Ggzwkw=
+X-Google-Smtp-Source: ABdhPJwDMwPXxGsFXuIgIiu3zRgJju2/puIYwz9rMCwDLqNERscDJYAugIv/qqREvuboooAfg1e/Kw==
+X-Received: by 2002:a17:90a:2e83:b0:1da:3273:53ab with SMTP id r3-20020a17090a2e8300b001da327353abmr1084287pjd.14.1652205024722;
+        Tue, 10 May 2022 10:50:24 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id y16-20020a62f250000000b0050dc76281b4sm11380472pfl.142.2022.05.10.10.50.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 10:50:23 -0700 (PDT)
+Message-ID: <811527ed-c9fc-b964-61bf-28a96ded56de@gmail.com>
+Date:   Tue, 10 May 2022 10:50:19 -0700
 MIME-Version: 1.0
-In-Reply-To: <20220505104024.v4.3.I0977b1a08830d0caa8bfb1bdedb4ecceac709a7f@changeid>
-References: <20220505104024.v4.1.Id769ddc5dbf570ccb511db96da59f97d08f75a9c@changeid>
- <20220505104024.v4.3.I0977b1a08830d0caa8bfb1bdedb4ecceac709a7f@changeid>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Tue, 10 May 2022 10:49:11 -0700
-Message-ID: <CAE-0n533+C2npNy2-GtoP=TSg6_pGjxhFSK9HBn_ByoEe3D_hw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/5] arm64: dts: qcom: sc7180: Add quackingstick dts files
-To:     "Joseph S. Barrera III" <joebar@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 5.15 000/135] 5.15.39-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220510130740.392653815@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Joseph S. Barrera III (2022-05-05 10:41:14)
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-quackingstick.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-quackingstick.dtsi
-> new file mode 100644
-> index 000000000000..e0c0ab748ca7
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-quackingstick.dtsi
-> @@ -0,0 +1,324 @@
-[...]
-> +
-> +&camcc {
-> +       status = "okay";
-> +};
-> +
-> +&dsi0 {
-> +
+On 5/10/22 06:06, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.39 release.
+> There are 135 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.39-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Nitpick: Drop newline here
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-> +       panel: panel@0 {
-
-Please add the same comment here.
-
-> +               reg = <0>;
-> +               enable-gpios = <&tlmm 87 GPIO_ACTIVE_HIGH>;
-> +               pinctrl-names = "default";
-> +               pinctrl-0 = <&lcd_rst>;
-> +               avdd-supply = <&ppvar_lcd>;
-> +               pp1800-supply = <&v1p8_disp>;
-> +               pp3300-supply = <&pp3300_dx_edp>;
-> +               backlight = <&backlight>;
-> +               rotation = <270>;
-> +
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

@@ -2,164 +2,1085 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06F1F520AE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 03:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF7B520AEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 03:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234390AbiEJB7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 21:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35854 "EHLO
+        id S234407AbiEJCBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 22:01:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232491AbiEJB7p (ORCPT
+        with ESMTP id S229805AbiEJCBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 21:59:45 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2112.outbound.protection.outlook.com [40.107.215.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CAC517DF;
-        Mon,  9 May 2022 18:55:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L756/A9dUm9pQk6nLZm+ROlzKpUy1ps/tdqCNKG7VYofVWH2+CcUPBp74fLxP2SxolFgvcPthDHNWlDUxNNDtbgI7M7VTnfU06szz8hJV6SYyW1dXxnVsY4dy5zxJMFpovD+dhbetBcIldhYklQeppjHFsIAyta5dsvT233gceDs5RcaRpjEGvoRtQNTqY1viCDYSc4A8FJQebPg65wlb/TM0bstzwIWtzeJdOIGukw0uBE2/qqDSV1UjKKYT5pfoLkmPZNdrHAMGM8zvN9KTGU5kohlXGTJtNBdXyWCsjM3HuzZYc0EIb14Oy49SdlQX5qtdrIKmMOQ4tVbdzc7Vg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uchmF/jquSUA/PwF1zVAwTBD92RdFQ51gdQ3o8Yl3iU=;
- b=epSR5GpE3eUUkTFWr0qsGejDOxsZ1sIXFz22UG46pCqx9kyTduQNoEKCg33VbdwWYBqFtOitzld6D6o0uwEfOOKurkmVI+TlKx4/CI/E1yS0fpSb5Ka5NuNsOvXy9A196wdya4xI0vjGQbvTgKGpZs2iJt3lwFwpgPl89CI54izGtb4CeMXAT5IkPCwVMep4+P+0VXVv4e238368r2jg/3LV2tIiGegUOrQQi0SGQGHVDlsBYHq4ZJ1ISCwKxpOjL2RJuwDf+89bV3z336EtjkxssXVdQ29i9RmiVSJpAhHDqe9Wl/uHFFMBNfAd45W6BhEgSOzF0EWzT4VTzObYsg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uchmF/jquSUA/PwF1zVAwTBD92RdFQ51gdQ3o8Yl3iU=;
- b=gjVO9vRAsbDyM1ZgLHjUWtK8uk3i3lxIoudwgdjw2OSC2NCcOQH0mn1j9uO7AoR4Yzjx+45DzDKEgeAZ9wKdI8U13rfItffJGRKXPtfSdDkOCkNQfo6Noc2QXNjzNHcPyBksF1BESFCjCUTxiy3FqoPOK6D2AP6+xegtb5WR7gs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
- SG2PR06MB3160.apcprd06.prod.outlook.com (2603:1096:4:72::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5227.21; Tue, 10 May 2022 01:55:44 +0000
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::4591:4f3e:f951:6c8c]) by SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::4591:4f3e:f951:6c8c%7]) with mapi id 15.20.5227.022; Tue, 10 May 2022
- 01:55:43 +0000
-From:   Wan Jiabing <wanjiabing@vivo.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Wan Jiabing <wanjiabing@vivo.com>
-Subject: [PATCH v3 net] net: phy: micrel: Fix incorrect variable type in micrel
-Date:   Tue, 10 May 2022 09:55:21 +0800
-Message-Id: <20220510015521.2542096-1-wanjiabing@vivo.com>
-X-Mailer: git-send-email 2.36.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR04CA0080.apcprd04.prod.outlook.com
- (2603:1096:202:15::24) To SG2PR06MB3367.apcprd06.prod.outlook.com
- (2603:1096:4:78::19)
+        Mon, 9 May 2022 22:01:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C79F210896
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 18:57:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652147865;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kUUEz2pAXQVg+5sQaIQGhN2sXaTDf4Sorfrm6N1iRwk=;
+        b=WrHOSVegTWFGxJov7zw81xWWVGG0OV3WBlD9nvZgpGfdcZSoTZIKzHFG9EMd2owyybHwDv
+        GKk8I/HArwrvTrX9R635RkDq/5ctEYeW0OEyqnH3mETpIG1GDPaB4mJOC5clWQyUvgAlXa
+        eYneB6ypRNAxKA/L2RtFWlfUyOKg79U=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-630-1lO6GwPlNB-D6zklHsOMlw-1; Mon, 09 May 2022 21:57:42 -0400
+X-MC-Unique: 1lO6GwPlNB-D6zklHsOMlw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 88F5229AB41C;
+        Tue, 10 May 2022 01:57:41 +0000 (UTC)
+Received: from T590 (ovpn-8-16.pek2.redhat.com [10.72.8.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 40AE7554A37;
+        Tue, 10 May 2022 01:57:34 +0000 (UTC)
+Date:   Tue, 10 May 2022 09:57:29 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Gabriel Krisman Bertazi <krisman@collabora.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+Subject: Re: [RFC PATCH] ubd: add io_uring based userspace block driver
+Message-ID: <YnnGia6W7iDNcVSm@T590>
+References: <20220509092312.254354-1-ming.lei@redhat.com>
+ <87h75ylp2s.fsf@collabora.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9836dc9d-dcc5-4517-b9cb-08da32283131
-X-MS-TrafficTypeDiagnostic: SG2PR06MB3160:EE_
-X-Microsoft-Antispam-PRVS: <SG2PR06MB316076A9FDF602DC4DDE6BCEABC99@SG2PR06MB3160.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iRHQo0Pn+ls6qBW2b0yoRJRr8FPIIyF4jD9cMydtLtClRWaM9aXqO2qDTkqJsltWSo3FAjBupbMNJ1tQ8KnIAChCWAwNCKWowRGE/hPQAbsmXe8umzkd/nCRsPdDkhcex6dDgYff6lYma6nO7GqPXagAY7Pxlk56g3PeAOpT0P5J8s8QYMQlHOrYcrtPJ1f0BSLq9m6PwKQFTB3ChGTSRhxNP4KwSEIjaWo7W+pZKojy9fv2qz6wq9ERAJiE6TnWENVVPdkxb+6Xk9Y4J1ETWP0xDB0nCDjTbVKq0Sks1BBoQjlNj0AS+ntH7keKubZqpJuS5VpFiiW0mJpPX2ILvqyJkwKnURlNvAaacVaTHZAhex2Evz1ddA03BzLWHaQ8RN6C9/o5SjoHtf3Qu9VVuj6EYNaf9nIOZL5xxcGKzdNr1B1pWDu7vJz9j90NnfluCB5khg+3Nr/tI80ShN+zvevczeMRDOh36bi3a4yVQdWpM0uz3HO9fDjQItJoVzjraazdQO4OBjTnjikD2DlANMziSmd3E8nhHQGqbHa72Tt1QLQu7fwl6slTBL+qn8BUtpxU54tXqDxJtTPy2jTJTEkZ5fKX+77RyyE1WledUpbHKVj7o0mzerJdGJQxpJSumMzKhwfEMapn/wvHRaRmhvHgcoRA5MpwvYGjWwOBjzA+l5P6XqSEqOLUwQRpB3nWtYr80djyai3r/0sc5kzkVg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(52116002)(6506007)(316002)(1076003)(6666004)(36756003)(6486002)(66946007)(7416002)(8936002)(186003)(2906002)(107886003)(2616005)(5660300002)(83380400001)(8676002)(4326008)(6512007)(26005)(508600001)(66476007)(66556008)(86362001)(110136005)(38100700002)(38350700002)(921005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?99pfK45AXwYUY6PvH5GZu4qrsJkTnjIZXHpUjNoouXE93oK2sZ5Wj7T5sC2D?=
- =?us-ascii?Q?ULXQqXx4LX56tzHUI/gAubHkLUdCsru9CyMuoTmcZjsR0m9g/oSI3LV53Noc?=
- =?us-ascii?Q?MIUl54oRaUnOZ1QFOMEkfzwVaIBRRSAJbink0OFhlC3uQJ/ugZPXbRwd7y+K?=
- =?us-ascii?Q?b0uPD+uEuF0qXCdAF3xSTspR1Wg1+iOMQ5GkOj29e4GZSB9R6WwX5ey/dviM?=
- =?us-ascii?Q?uSdFm/WvjCDmkAlSVATsjbXDKVqNKzdONDi1/epsCpIIQwvUHdxNp6lqLP2Q?=
- =?us-ascii?Q?Y6Jqia9VHvzThvG+VX6XNPjXIJhObu7Ax1qvKBlqpVtV3xZE/8v2kFrec13E?=
- =?us-ascii?Q?8G3aKxbd8WFPka3Q6Cb6V5yUhYWhk2pCSBwDt9hgzbieg+dNHNujeg4xPCpv?=
- =?us-ascii?Q?GasjjFroNNAVIyE4L4oSIFSg0UNIxD8pNcOxRll3jL1t2NV0kyddPLmRI67l?=
- =?us-ascii?Q?X7zq/uZ7W+x3jHjs1mN/KDQEi7AcAxMrkcOHQvPyzGgiQrBmy0oSLZAeDHWO?=
- =?us-ascii?Q?Le7xO4RvfqU6obMI0dkWJQAc0hnpL/euwvkcSEVv0CoDRXSDfIzPLnXHA6I6?=
- =?us-ascii?Q?MpQ6r1ocpPIUzDyW7H+Bb3R6wwrAYejAgcksXU6eXISAeSVQQsZ4CLevtd0d?=
- =?us-ascii?Q?166VkDC9OWxCwD+Al9HBhbB8FBG4Wbt2+eAEVeAjyDeffOX3lsy4biAaUSO6?=
- =?us-ascii?Q?87zSt1/WwNZAwO5kc8unj7UnmKHAGHLPD6urc+9DS3zQAqMHWks51H4HWZ1f?=
- =?us-ascii?Q?nvO2c00IQvXOjDLYajbjNWQDK4XEYjgcIdvbclT1AGpGPN8MVvPJs7WLY7jw?=
- =?us-ascii?Q?7XNiAwQoqAl5VvfsGA+BHT8ZsAcbXVh3ndJYGm175bgD0hLp96HP1yaFriKc?=
- =?us-ascii?Q?25k28YSCYuherM6aspo4bZ6yZKiDaU2gLJjbhtYkZjqpM6puTctWBM+DbAZa?=
- =?us-ascii?Q?ae3FqMLph+nvxKOeR0X7aBny6JRf/MtJADusl/D1yReNVKEJow5+uC/NXLC2?=
- =?us-ascii?Q?b6BUiIMMt6gdHDRWmODaSyCl7kmw2hQYb902AJD9XS1dgLh552jUocDdRVr4?=
- =?us-ascii?Q?gLARxBsxDQib//Cjgip4ypWb5OlWiRQ8nE+HNF8MO7uuZkyv6W3IreRJj/4h?=
- =?us-ascii?Q?DQX6PUp1eCKfcYvYoO9eBRw02wyLwCYADazIhSuLfayNTpVWJqFm/Yugu0TM?=
- =?us-ascii?Q?gd1bkREKQJNmNh4ANBVjX2fyRr53xvSo6MDTS+Q5wBTyCR7EKuGuPXprnLsU?=
- =?us-ascii?Q?63xFYJJ8QcQ6wdC7a14mqbmTcVx7b03wGVDBSQILtc1fvDLaWrKlx1hIKrAv?=
- =?us-ascii?Q?2ddKdEeHXINWcLu9W0MsXW4VySm+01Y9RE1l28w6D9PSSnWzxJqMHI32eU4n?=
- =?us-ascii?Q?6koSpHGR+uqcg1ZlXlenN6S/h/EAZQLgCvmdty5h4g2W2OT75kEvK4VYe8LN?=
- =?us-ascii?Q?hj3Xpvy+mA58nL8ZGIY4QpBiDj9XxpszowVzKxTAMYpf7tzPgrmyX8yXQR0r?=
- =?us-ascii?Q?//sZLsGiGP1YRZXySr2jwe/AbJ8YAIuJEORYKoRhKXzKHWWpkQ2YlVctTXbo?=
- =?us-ascii?Q?NB54qpiz9VeLtggWZBhJdIp0g2A20F3VKj6zFCA2xP2Uk9elbS9LE22InRHG?=
- =?us-ascii?Q?179nGsTfgFKvNvT8OpCxW++NjuUiAdoYLwhUej/9rPNrIBwmPVLIaE3Ix5Gr?=
- =?us-ascii?Q?jJZ8yGCoLWlNDr0Q1IbGDQdY8f1tRuZrmvqJlISYxy1+TZNsF1vc9fVbGAFu?=
- =?us-ascii?Q?NLAKte6nsg=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9836dc9d-dcc5-4517-b9cb-08da32283131
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2022 01:55:43.4894
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6HJPcLFKdxcqPE92ZlTppUKrSVudqksWxp52ZshMctpx5HTiQ+P7Gftmw3pAJ/3TMbwZKxRSGttbe+Vlhuk5Fw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB3160
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87h75ylp2s.fsf@collabora.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In lanphy_read_page_reg, calling __phy_read() might return a negative
-error code. Use 'int' to check the error code.
+On Mon, May 09, 2022 at 11:10:03AM -0400, Gabriel Krisman Bertazi wrote:
+> Ming Lei <ming.lei@redhat.com> writes:
+> 
+> > This is the driver part of userspace block driver(ubd driver), the other
+> > part is userspace daemon part(ubdsrv)[1].
+> >
+> > The two parts communicate by io_uring's IORING_OP_URING_CMD with one
+> > shared cmd buffer for storing io command, and the buffer is read only for
+> > ubdsrv, each io command is indexed by io request tag directly, and
+> > is written by ubd driver.
+> >
+> > For example, when one READ io request is submitted to ubd block driver, ubd
+> > driver stores the io command into cmd buffer first, then completes one
+> > IORING_OP_URING_CMD for notifying ubdsrv, and the URING_CMD is issued to
+> > ubd driver beforehand by ubdsrv for getting notification of any new io request,
+> > and each URING_CMD is associated with one io request by tag.
+> >
+> > After ubdsrv gets the io command, it translates and handles the ubd io
+> > request, such as, for the ubd-loop target, ubdsrv translates the request
+> > into same request on another file or disk, like the kernel loop block
+> > driver. In ubdsrv's implementation, the io is still handled by io_uring,
+> > and share same ring with IORING_OP_URING_CMD command. When the target io
+> > request is done, the same IORING_OP_URING_CMD is issued to ubd driver for
+> > both committing io request result and getting future notification of new
+> > io request.
+> >
+> > Another thing done by ubd driver is to copy data between kernel io
+> > request and ubdsrv's io buffer:
+> >
+> > 1) before ubsrv handles WRITE request, copy the request's data into
+> > ubdsrv's userspace io buffer, so that ubdsrv can handle the write
+> > request
+> >
+> > 2) after ubsrv handles READ request, copy ubdsrv's userspace io buffer
+> > into this READ request, then ubd driver can complete the READ request
+> >
+> > Zero copy may be switched if mm is ready to support it.
+> >
+> > ubd driver doesn't handle any logic of the specific user space driver,
+> > so it should be small/simple enough.
+> >
+> > [1] ubdsrv
+> > https://github.com/ming1/ubdsrv/commits/devel
+> >
+> > Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> > ---
+> >  drivers/block/Kconfig        |    7 +
+> >  drivers/block/Makefile       |    2 +
+> >  drivers/block/ubd_drv.c      | 1193 ++++++++++++++++++++++++++++++++++
+> >  include/uapi/linux/ubd_cmd.h |  167 +++++
+> >  4 files changed, 1369 insertions(+)
+> >  create mode 100644 drivers/block/ubd_drv.c
+> >  create mode 100644 include/uapi/linux/ubd_cmd.h
+> >
+> > diff --git a/drivers/block/Kconfig b/drivers/block/Kconfig
+> > index fdb81f2794cd..3893ccd82e8a 100644
+> > --- a/drivers/block/Kconfig
+> > +++ b/drivers/block/Kconfig
+> > @@ -408,6 +408,13 @@ config BLK_DEV_RBD
+> >  
+> >  	  If unsure, say N.
+> >  
+> > +config BLK_DEV_USER_BLK_DRV
+> > +	bool "Userspace block driver"
+> > +	select IO_URING
+> > +	default y
+> > +	help
+> > +          io uring based userspace block driver.
+> > +
+> >  source "drivers/block/rnbd/Kconfig"
+> >  
+> >  endif # BLK_DEV
+> > diff --git a/drivers/block/Makefile b/drivers/block/Makefile
+> > index 934a9c7c3a7c..effff34babd9 100644
+> > --- a/drivers/block/Makefile
+> > +++ b/drivers/block/Makefile
+> > @@ -39,4 +39,6 @@ obj-$(CONFIG_BLK_DEV_RNBD)	+= rnbd/
+> >  
+> >  obj-$(CONFIG_BLK_DEV_NULL_BLK)	+= null_blk/
+> >  
+> > +obj-$(CONFIG_BLK_DEV_USER_BLK_DRV)			+= ubd_drv.o
+> > +
+> >  swim_mod-y	:= swim.o swim_asm.o
+> > diff --git a/drivers/block/ubd_drv.c b/drivers/block/ubd_drv.c
+> > new file mode 100644
+> > index 000000000000..9eba7ee17aff
+> > --- /dev/null
+> > +++ b/drivers/block/ubd_drv.c
+> 
+> Hi Ming,
+> 
+> Thank you very much for sending it.
+> 
+> Given the interest in working on it from a bunch of people, I'd
+> appreciate if we consider putting the code into drivers/staging as soon
+> as possible, and let us work on the same code base to consolidate the
+> protocol there, instead of taking too long to push to drivers/block.
+> 
+> One initial concern is that UBD is already the name for storage device
+> exposed by User Mode Linux.  A rename would avoid future confusion.
 
-Fixes: 7c2dcfa295b1 ("net: phy: micrel: Add support for LAN8804 PHY")
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
----
-Changelog:
-v2:
-- Add a 'Fixes' tag.
-v3:
-- Fix a typo in subject line.
----
- drivers/net/phy/micrel.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+I saw that, do you have any suggested name?
 
-diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
-index a06661c07ca8..c34a93403d1e 100644
---- a/drivers/net/phy/micrel.c
-+++ b/drivers/net/phy/micrel.c
-@@ -1959,7 +1959,7 @@ static int ksz886x_cable_test_get_status(struct phy_device *phydev,
- 
- static int lanphy_read_page_reg(struct phy_device *phydev, int page, u32 addr)
- {
--	u32 data;
-+	int data;
- 
- 	phy_lock_mdio_bus(phydev);
- 	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL, page);
-@@ -2660,8 +2660,7 @@ static int lan8804_config_init(struct phy_device *phydev)
- 
- static irqreturn_t lan8814_handle_interrupt(struct phy_device *phydev)
- {
--	u16 tsu_irq_status;
--	int irq_status;
-+	int irq_status, tsu_irq_status;
- 
- 	irq_status = phy_read(phydev, LAN8814_INTS);
- 	if (irq_status > 0 && (irq_status & LAN8814_INT_LINK))
--- 
-2.36.0
+Also, another 'UBD' driver(arch/um/drivers/ubd_kern.c) is only for UML
+arch, so the two should be in two worlds except ubd server/driver is
+used on UML arch, :-) So looks not one big issue.
+
+> 
+> > @@ -0,0 +1,1193 @@
+> > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > +/*
+> > + * Userspace block device - block device which IO is handled from userspace
+> > + *
+> > + * Take full use of io_uring passthrough command for communicating with
+> > + * ubd userspace daemon(ubdsrvd) for handling basic IO request.
+> > + *
+> > + * Copyright 2022 Ming Lei <ming.lei@redhat.com>
+> > + *
+> > + * (part of code stolen from loop.c)
+> > + */
+> > +#include <linux/module.h>
+> > +#include <linux/moduleparam.h>
+> > +#include <linux/sched.h>
+> > +#include <linux/fs.h>
+> > +#include <linux/pagemap.h>
+> > +#include <linux/file.h>
+> > +#include <linux/stat.h>
+> > +#include <linux/errno.h>
+> > +#include <linux/major.h>
+> > +#include <linux/wait.h>
+> > +#include <linux/blkdev.h>
+> > +#include <linux/init.h>
+> > +#include <linux/swap.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/compat.h>
+> > +#include <linux/mutex.h>
+> > +#include <linux/writeback.h>
+> > +#include <linux/completion.h>
+> > +#include <linux/highmem.h>
+> > +#include <linux/sysfs.h>
+> > +#include <linux/miscdevice.h>
+> > +#include <linux/falloc.h>
+> > +#include <linux/uio.h>
+> > +#include <linux/ioprio.h>
+> > +#include <linux/sched/mm.h>
+> > +#include <linux/uaccess.h>
+> > +#include <linux/cdev.h>
+> > +#include <linux/io_uring.h>
+> > +#include <linux/blk-mq.h>
+> > +#include <linux/delay.h>
+> > +#include <linux/mm.h>
+> > +#include <asm/page.h>
+> > +#include <linux/task_work.h>
+> > +#include <uapi/linux/ubd_cmd.h>
+> > +
+> > +#define UBD_MINORS		(1U << MINORBITS)
+> > +
+> > +struct ubd_abort_work {
+> > +	struct ubd_device *ub;
+> > +	unsigned int q_id;
+> > +	struct work_struct work;
+> > +};
+> > +
+> > +struct ubd_rq_data {
+> > +	struct callback_head work;
+> > +};
+> > +
+> > +/* io cmd is active: sqe cmd is received, and its cqe isn't done */
+> > +#define UBD_IO_FLAG_ACTIVE	0x01
+> > +
+> > +/*
+> > + * FETCH io cmd is completed via cqe, and the io cmd is being handled by
+> > + * ubdsrv, and not committed yet
+> > + */
+> > +#define UBD_IO_FLAG_OWNED_BY_SRV 0x02
+> > +
+> > +struct ubd_io {
+> > +	/* userspace buffer address from io cmd */
+> > +	__u64	addr;
+> > +	unsigned int flags;
+> > +	unsigned int res;
+> > +
+> > +	struct io_uring_cmd *cmd;
+> > +};
+> > +
+> > +struct ubd_queue {
+> > +	int q_id;
+> > +	int q_depth;
+> > +
+> > +	struct task_struct	*ubq_daemon;
+> > +	char *io_cmd_buf;
+> > +
+> > +	unsigned long io_addr;	/* mapped vm address */
+> > +	unsigned int max_io_sz;
+> > +	bool aborted;
+> > +	struct ubd_io ios[0];
+> > +};
+> > +
+> > +struct ubd_device {
+> > +	struct gendisk		*ub_disk;
+> > +	struct request_queue	*ub_queue;
+> > +
+> > +	char	*__queues;
+> > +
+> > +	unsigned short  queue_size;
+> > +	unsigned short  bs_shift;
+> > +	unsigned int nr_aborted_queues;
+> > +	struct ubdsrv_ctrl_dev_info	dev_info;
+> > +
+> > +	struct blk_mq_tag_set	tag_set;
+> > +
+> > +	struct cdev		cdev;
+> > +	struct device		cdev_dev;
+> > +
+> > +	atomic_t		ch_open_cnt;
+> > +	int			ub_number;
+> > +
+> > +	struct mutex		mutex;
+> > +};
+> > +
+> > +static dev_t ubd_chr_devt;
+> > +static struct class *ubd_chr_class;
+> > +
+> > +static DEFINE_IDR(ubd_index_idr);
+> > +static DEFINE_MUTEX(ubd_ctl_mutex);
+> > +
+> > +static struct miscdevice ubd_misc;
+> > +
+> > +static inline struct ubd_queue *ubd_get_queue(struct ubd_device *dev, int qid)
+> > +{
+> > +       return (struct ubd_queue *)&(dev->__queues[qid * dev->queue_size]);
+> > +}
+> > +
+> > +static inline bool ubd_rq_need_copy(struct request *rq)
+> > +{
+> > +	return rq->bio && bio_has_data(rq->bio);
+> > +}
+> > +
+> > +static inline struct ubdsrv_io_desc *ubd_get_iod(struct ubd_queue *ubq, int tag)
+> > +{
+> > +	return (struct ubdsrv_io_desc *)
+> > +		&(ubq->io_cmd_buf[tag * sizeof(struct ubdsrv_io_desc)]);
+> > +}
+> > +
+> > +static inline char *ubd_queue_cmd_buf(struct ubd_device *ub, int q_id)
+> > +{
+> > +	return ubd_get_queue(ub, q_id)->io_cmd_buf;
+> > +}
+> > +
+> > +static inline int ubd_queue_cmd_buf_size(struct ubd_device *ub, int q_id)
+> > +{
+> > +	struct ubd_queue *ubq = ubd_get_queue(ub, q_id);
+> > +
+> > +	return round_up(ubq->q_depth * sizeof(struct ubdsrv_io_desc), PAGE_SIZE);
+> > +}
+> > +
+> > +static int ubd_open(struct block_device *bdev, fmode_t mode)
+> > +{
+> > +	return 0;
+> > +}
+> > +
+> > +static void ubd_release(struct gendisk *disk, fmode_t mode)
+> > +{
+> > +}
+> > +
+> > +static const struct block_device_operations ub_fops = {
+> > +	.owner =	THIS_MODULE,
+> > +	.open =		ubd_open,
+> > +	.release =	ubd_release,
+> > +};
+> > +
+> > +#define UBD_MAX_PIN_PAGES	32
+> > +
+> > +static void ubd_release_pages(struct ubd_device *ub, struct page **pages,
+> > +		int nr_pages)
+> > +{
+> > +	int i;
+> > +
+> > +	for (i = 0; i < nr_pages; i++)
+> > +		put_page(pages[i]);
+> > +}
+> > +
+> > +static int ubd_pin_user_pages(struct ubd_device *ub, u64 start_vm,
+> > +		struct page **pages, unsigned int nr_pages, bool to_rq)
+> > +{
+> > +	unsigned int gup_flags = to_rq ? 0 : FOLL_WRITE;
+> > +
+> > +	return get_user_pages_fast(start_vm, nr_pages, gup_flags, pages);
+> > +}
+> > +
+> > +static inline unsigned ubd_copy_bv(struct bio_vec *bv, void **bv_addr,
+> > +		void *pg_addr, unsigned int *pg_off,
+> > +		unsigned int *pg_len, bool to_bv)
+> > +{
+> > +	unsigned len = min_t(unsigned, bv->bv_len, *pg_len);
+> > +
+> > +	if (*bv_addr == NULL)
+> > +		*bv_addr = kmap_local_page(bv->bv_page);
+> > +
+> > +	if (to_bv)
+> > +		memcpy(*bv_addr + bv->bv_offset, pg_addr + *pg_off, len);
+> > +	else
+> > +		memcpy(pg_addr + *pg_off, *bv_addr + bv->bv_offset, len);
+> > +
+> > +	bv->bv_offset += len;
+> > +	bv->bv_len -= len;
+> > +	*pg_off += len;
+> > +	*pg_len -= len;
+> > +
+> > +	if (!bv->bv_len) {
+> > +		kunmap_local(*bv_addr);
+> > +		*bv_addr = NULL;
+> > +	}
+> > +
+> > +	return len;
+> > +}
+> > +
+> > +/* copy rq pages to ubdsrv vm address pointed by io->addr */
+> > +static int ubd_copy_pages(struct ubd_device *ub, struct request *rq)
+> > +{
+> > +	struct ubd_queue *ubq = rq->mq_hctx->driver_data;
+> > +	struct ubd_io *io = &ubq->ios[rq->tag];
+> > +	struct page *pgs[UBD_MAX_PIN_PAGES];
+> > +	const bool to_rq = !op_is_write(rq->cmd_flags);
+> > +	struct req_iterator req_iter;
+> > +	struct bio_vec bv;
+> > +	unsigned long start = io->addr, left = rq->__data_len;
+> > +	unsigned int idx = 0, pg_len = 0, pg_off = 0;
+> > +	int nr_pin = 0;
+> > +	void *pg_addr = NULL;
+> > +	struct page *curr = NULL;
+> > +
+> > +	rq_for_each_segment(bv, rq, req_iter) {
+> > +		unsigned len, bv_off = bv.bv_offset, bv_len = bv.bv_len;
+> > +		void *bv_addr = NULL;
+> > +
+> > +refill:
+> > +		if (pg_len == 0) {
+> > +			unsigned int off = 0;
+> > +
+> > +			if (pg_addr) {
+> > +				kunmap_local(pg_addr);
+> > +				if (!to_rq)
+> > +					set_page_dirty_lock(curr);
+> > +				pg_addr = NULL;
+> > +			}
+> > +
+> > +			/* refill pages */
+> > +			if (idx >= nr_pin) {
+> > +				unsigned int max_pages;
+> > +
+> > +				ubd_release_pages(ub, pgs, nr_pin);
+> > +
+> > +				off = start & (PAGE_SIZE - 1);
+> > +				max_pages = round_up(off + left, PAGE_SIZE);
+> > +				nr_pin = min_t(unsigned, UBD_MAX_PIN_PAGES, max_pages);
+> > +				nr_pin = ubd_pin_user_pages(ub, start, pgs,
+> > +						nr_pin, to_rq);
+> > +				if (nr_pin <= 0)
+> > +					return -EINVAL;
+> > +				idx = 0;
+> > +			}
+> > +			pg_off = off;
+> > +			pg_len = min(PAGE_SIZE - off, left);
+> > +			off = 0;
+> > +			curr = pgs[idx++];
+> > +			pg_addr = kmap_local_page(curr);
+> > +		}
+> > +
+> > +		len = ubd_copy_bv(&bv, &bv_addr, pg_addr, &pg_off, &pg_len,
+> > +				to_rq);
+> > +		/* either one of the two has been consumed */
+> > +		WARN_ON_ONCE(bv.bv_len && pg_len);
+> > +		start += len;
+> > +		left -= len;
+> > +
+> > +		/* overflow */
+> > +		WARN_ON_ONCE(left > rq->__data_len);
+> > +		WARN_ON_ONCE(bv.bv_len > bv_len);
+> > +		if (bv.bv_len)
+> > +			goto refill;
+> > +
+> > +		bv.bv_len = bv_len;
+> > +		bv.bv_offset = bv_off;
+> > +	}
+> > +	if (pg_addr) {
+> > +		kunmap_local(pg_addr);
+> > +		if (!to_rq)
+> > +			set_page_dirty_lock(curr);
+> > +	}
+> > +	ubd_release_pages(ub, pgs, nr_pin);
+> > +
+> > +	WARN_ON_ONCE(left != 0);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +#define UBD_REMAP_BATCH	32
+> > +
+> > +static int ubd_map_io(struct ubd_device *ub, struct request *req)
+> > +{
+> > +	/*
+> > +	 * no zero copy, we delay copy WRITE request data into ubdsrv
+> > +	 * context via task_work_add and the big benefit is that pinning
+> > +	 * pages in current context is pretty fast, see ubd_pin_user_pages
+> > +	 */
+> > +	if (!op_is_write(req->cmd_flags) || !ubd_rq_need_copy(req))
+> > +		return 0;
+> > +
+> > +	/* convert to data copy in current context */
+> > +	return ubd_copy_pages(ub, req);
+> > +}
+> > +
+> > +static int ubd_unmap_io(struct request *req)
+> > +{
+> > +	struct ubd_device *ub = req->q->queuedata;
+> > +
+> > +	if (!op_is_write(req->cmd_flags) && ubd_rq_need_copy(req))
+> > +		return ubd_copy_pages(ub, req);
+> > +	return 0;
+> > +}
+> > +
+> > +static inline unsigned int ubd_req_build_flags(struct request *req)
+> > +{
+> > +	unsigned flags = 0;
+> > +
+> > +	if (req->cmd_flags & REQ_FAILFAST_DEV)
+> > +		flags |= UBD_IO_F_FAILFAST_DEV;
+> > +
+> > +	if (req->cmd_flags & REQ_FAILFAST_TRANSPORT)
+> > +		flags |= UBD_IO_F_FAILFAST_TRANSPORT;
+> > +
+> > +	if (req->cmd_flags & REQ_FAILFAST_DRIVER)
+> > +		flags |= UBD_IO_F_FAILFAST_DRIVER;
+> > +
+> > +	if (req->cmd_flags & REQ_META)
+> > +		flags |= UBD_IO_F_META;
+> > +
+> > +	if (req->cmd_flags & REQ_INTEGRITY)
+> > +		flags |= UBD_IO_F_INTEGRITY;
+> > +
+> > +	if (req->cmd_flags & REQ_FUA)
+> > +		flags |= UBD_IO_F_FUA;
+> > +
+> > +	if (req->cmd_flags & REQ_PREFLUSH)
+> > +		flags |= UBD_IO_F_PREFLUSH;
+> > +
+> > +	if (req->cmd_flags & REQ_NOUNMAP)
+> > +		flags |= UBD_IO_F_NOUNMAP;
+> > +
+> > +	if (req->cmd_flags & REQ_SWAP)
+> > +		flags |= UBD_IO_F_SWAP;
+> > +
+> > +	return flags;
+> > +}
+> > +
+> > +static int ubd_setup_iod(struct ubd_queue *ubq, struct request *req)
+> > +{
+> > +	struct ubdsrv_io_desc *iod = ubd_get_iod(ubq, req->tag);
+> > +	struct ubd_io *io = &ubq->ios[req->tag];
+> > +	u32 ubd_op;
+> > +
+> > +	switch (req_op(req)) {
+> > +	case REQ_OP_READ:
+> > +		ubd_op = UBD_IO_OP_READ;
+> > +		break;
+> > +	case REQ_OP_WRITE:
+> > +		ubd_op = UBD_IO_OP_WRITE;
+> > +		break;
+> > +	case REQ_OP_FLUSH:
+> > +		ubd_op = UBD_IO_OP_FLUSH;
+> > +		break;
+> > +	case REQ_OP_DISCARD:
+> > +		ubd_op = UBD_IO_OP_DISCARD;
+> > +		break;
+> > +	case REQ_OP_WRITE_ZEROES:
+> > +		ubd_op = UBD_IO_OP_WRITE_ZEROES;
+> > +		break;
+> > +	default:
+> > +		return BLK_STS_IOERR;
+> > +	}
+> > +
+> > +	/* need to translate since kernel may change */
+> > +	iod->op_flags = ubd_op | ubd_req_build_flags(req);
+> > +	iod->tag_blocks = req->tag | (blk_rq_sectors(req) << 12);
+> > +	iod->start_block = blk_rq_pos(req);
+> > +	iod->addr = io->addr;
+> > +
+> > +	return BLK_STS_OK;
+> > +}
+> > +
+> > +static blk_status_t ubd_queue_rq(struct blk_mq_hw_ctx *hctx,
+> > +		const struct blk_mq_queue_data *bd)
+> > +{
+> > +	struct ubd_queue *ubq = hctx->driver_data;
+> > +	struct request *rq = bd->rq;
+> > +	struct ubd_io *io = &ubq->ios[rq->tag];
+> > +	struct ubd_rq_data *data = blk_mq_rq_to_pdu(rq);
+> > +	blk_status_t res;
+> > +
+> > +	if (ubq->aborted)
+> > +		return BLK_STS_IOERR;
+> > +
+> > +	/* this io cmd slot isn't active, so have to fail this io */
+> > +	if (WARN_ON_ONCE(!(io->flags & UBD_IO_FLAG_ACTIVE)))
+> > +		return BLK_STS_IOERR;
+> > +
+> > +	/* fill iod to slot in io cmd buffer */
+> > +	res = ubd_setup_iod(ubq, rq);
+> > +	if (res != BLK_STS_OK)
+> > +		return BLK_STS_IOERR;
+> > +
+> > +	blk_mq_start_request(bd->rq);
+> > +
+> > +	/* mark this cmd owned by ubdsrv */
+> > +	io->flags |= UBD_IO_FLAG_OWNED_BY_SRV;
+> > +
+> > +	/*
+> > +	 * clear ACTIVE since we are done with this sqe/cmd slot
+> > +	 *
+> > +	 * We can only accept io cmd in case of being not active.
+> > +	 */
+> > +	io->flags &= ~UBD_IO_FLAG_ACTIVE;
+> > +
+> > +	/*
+> > +	 * run data copy in task work context for WRITE, and complete io_uring
+> > +	 * cmd there too.
+> > +	 *
+> > +	 * This way should improve batching, meantime pinning pages in current
+> > +	 * context is pretty fast.
+> > +	 */
+> > +	task_work_add(ubq->ubq_daemon, &data->work, TWA_SIGNAL);
+> > +
+> > +	return BLK_STS_OK;
+> > +}
+> > +
+> > +static void ubd_complete_rq(struct request *req)
+> > +{
+> > +	struct ubd_queue *ubq = req->mq_hctx->driver_data;
+> > +	struct ubd_io *io = &ubq->ios[req->tag];
+> > +
+> > +	/* for READ request, writing data in iod->addr to rq buffers */
+> > +	ubd_unmap_io(req);
+> > +
+> > +	blk_mq_end_request(req, io->res);
+> > +}
+> > +
+> > +static void ubd_rq_task_work_fn(struct callback_head *work)
+> > +{
+> > +	struct ubd_rq_data *data = container_of(work,
+> > +			struct ubd_rq_data, work);
+> > +	struct request *req = blk_mq_rq_from_pdu(data);
+> > +	struct ubd_queue *ubq = req->mq_hctx->driver_data;
+> > +	struct ubd_io *io = &ubq->ios[req->tag];
+> > +	struct ubd_device *ub = req->q->queuedata;
+> > +	int ret = UBD_IO_RES_OK;
+> > +
+> > +	if (ubd_map_io(ub, req))
+> > +		ret = UBD_IO_RES_DATA_BAD;
+> > +
+> > +	pr_devel("%s: complete: cmd op %d, tag %d ret %x io_flags %x, addr %llx\n",
+> > +			__func__, io->cmd->cmd_op, req->tag, ret, io->flags,
+> > +			ubd_get_iod(ubq, req->tag)->addr);
+> > +	/* tell ubdsrv one io request is coming */
+> > +	io_uring_cmd_done(io->cmd, ret, 0);
+> > +}
+> > +
+> > +static int ubd_init_hctx(struct blk_mq_hw_ctx *hctx, void *driver_data,
+> > +		unsigned int hctx_idx)
+> > +{
+> > +	struct ubd_device *ub = hctx->queue->queuedata;
+> > +	struct ubd_queue *ubq = ubd_get_queue(ub, hctx->queue_num);
+> > +
+> > +	hctx->driver_data = ubq;
+> > +	return 0;
+> > +}
+> > +
+> > +static int ubd_init_rq(struct blk_mq_tag_set *set, struct request *req,
+> > +		unsigned int hctx_idx, unsigned int numa_node)
+> > +{
+> > +	struct ubd_rq_data *data = blk_mq_rq_to_pdu(req);
+> > +
+> > +	init_task_work(&data->work, ubd_rq_task_work_fn);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static const struct blk_mq_ops ubd_mq_ops = {
+> > +	.queue_rq       = ubd_queue_rq,
+> > +	.init_hctx	= ubd_init_hctx,
+> > +	.init_request	= ubd_init_rq,
+> > +};
+> > +
+> > +static int ubd_ch_open(struct inode *inode, struct file *filp)
+> > +{
+> > +	struct ubd_device *ub = container_of(inode->i_cdev,
+> > +			struct ubd_device, cdev);
+> > +
+> > +	if (atomic_cmpxchg(&ub->ch_open_cnt, 0, 1) == 0) {
+> > +		filp->private_data = ub;
+> > +		return 0;
+> > +	}
+> > +	return -EBUSY;
+> > +}
+> > +
+> > +static int ubd_ch_release(struct inode *inode, struct file *filp)
+> > +{
+> > +	struct ubd_device *ub = filp->private_data;
+> > +
+> > +	while (atomic_cmpxchg(&ub->ch_open_cnt, 1, 0) != 1)
+> > +		cpu_relax();
+> > +
+> > +	filp->private_data = NULL;
+> > +	return 0;
+> > +}
+> > +
+> > +/* map pre-allocated per-queue cmd buffer to ubdsrv daemon */
+> > +static int ubd_ch_mmap(struct file *filp, struct vm_area_struct *vma)
+> > +{
+> > +	struct ubd_device *ub = filp->private_data;
+> > +	size_t sz = vma->vm_end - vma->vm_start;
+> > +	unsigned max_sz = UBD_MAX_QUEUE_DEPTH * sizeof(struct ubdsrv_io_desc);
+> > +	unsigned long pfn, end;
+> > +	int q_id;
+> > +
+> > +	end = UBDSRV_CMD_BUF_OFFSET + ub->dev_info.nr_hw_queues * max_sz;
+> > +	if (vma->vm_pgoff < UBDSRV_CMD_BUF_OFFSET || vma->vm_pgoff >= end)
+> > +		return -EINVAL;
+> > +
+> > +	q_id = (vma->vm_pgoff - UBDSRV_CMD_BUF_OFFSET) / max_sz;
+> > +
+> > +	if (sz != ubd_queue_cmd_buf_size(ub, q_id))
+> > +		return -EINVAL;
+> > +
+> > +	pfn = virt_to_phys(ubd_queue_cmd_buf(ub, q_id)) >> PAGE_SHIFT;
+> > +	return remap_pfn_range(vma, vma->vm_start, pfn, sz, vma->vm_page_prot);
+> > +}
+> > +
+> > +static void ubd_commit_completion(struct ubd_device *ub,
+> > +		struct ubdsrv_io_cmd *ub_cmd)
+> > +{
+> > +	u32 qid = ub_cmd->q_id, tag = ub_cmd->tag;
+> > +	struct ubd_queue *ubq = ubd_get_queue(ub, qid);
+> > +	struct ubd_io *io = &ubq->ios[tag];
+> > +	struct request *req;
+> > +
+> > +	/* now this cmd slot is owned by nbd driver */
+> > +	io->flags &= ~UBD_IO_FLAG_OWNED_BY_SRV;
+> > +	io->res = ub_cmd->result;
+> > +
+> > +	/* find the io request and complete */
+> > +	req = blk_mq_tag_to_rq(ub->tag_set.tags[qid], ub_cmd->tag);
+> > +
+> > +	if (req && likely(!blk_should_fake_timeout(req->q)))
+> > +		ubd_complete_rq(req);
+> > +}
+> > +
+> > +/* has to be called disk is dead or frozen */
+> > +static int ubd_abort_queue(struct ubd_device *ub, int qid)
+> > +{
+> > +	int ret = UBD_IO_RES_ABORT;
+> > +	struct ubd_queue *q = ubd_get_queue(ub, qid);
+> > +	int i;
+> > +
+> > +	for (i = 0; i < q->q_depth; i++) {
+> > +		struct ubd_io *io = &q->ios[i];
+> > +
+> > +		if (io->flags & UBD_IO_FLAG_ACTIVE) {
+> > +			io->flags &= ~UBD_IO_FLAG_ACTIVE;
+> > +			io_uring_cmd_done(io->cmd, ret, 0);
+> > +		}
+> > +	}
+> > +	q->ubq_daemon = NULL;
+> > +	return 0;
+> > +}
+> > +
+> > +static void ubd_abort_work_fn(struct work_struct *work)
+> > +{
+> > +	struct ubd_abort_work *abort_work =
+> > +		container_of(work, struct ubd_abort_work, work);
+> > +	struct ubd_device *ub = abort_work->ub;
+> > +	struct ubd_queue *ubq = ubd_get_queue(ub, abort_work->q_id);
+> > +
+> > +	blk_mq_freeze_queue(ub->ub_queue);
+> > +	mutex_lock(&ub->mutex);
+> > +	if (!ubq->aborted) {
+> > +		ubq->aborted = true;
+> > +		ubd_abort_queue(ub, abort_work->q_id);
+> > +		ub->nr_aborted_queues++;
+> > +	}
+> > +	mutex_unlock(&ub->mutex);
+> > +	blk_mq_unfreeze_queue(ub->ub_queue);
+> > +
+> > +	mutex_lock(&ub->mutex);
+> > +	if (ub->nr_aborted_queues == ub->dev_info.nr_hw_queues) {
+> > +		if (disk_live(ub->ub_disk))
+> > +			del_gendisk(ub->ub_disk);
+> > +	}
+> > +	mutex_unlock(&ub->mutex);
+> > +
+> > +	kfree(abort_work);
+> > +}
+> > +
+> > +static int ubd_ch_uring_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags)
+> > +{
+> > +	struct ubdsrv_io_cmd *ub_cmd = (struct ubdsrv_io_cmd *)cmd->cmd;
+> > +	struct ubd_device *ub = cmd->file->private_data;
+> > +	struct ubd_queue *ubq;
+> > +	struct ubd_io *io;
+> > +	u32 cmd_op = cmd->cmd_op;
+> > +	unsigned tag = ub_cmd->tag;
+> > +	int ret = UBD_IO_RES_INVALID_SQE;
+> > +
+> > +	pr_devel("%s: receieved: cmd op %d, tag %d, queue %d\n",
+> > +			__func__, cmd->cmd_op, tag, ub_cmd->q_id);
+> > +
+> > +	if (!(issue_flags & IO_URING_F_SQE128))
+> > +		goto out;
+> > +
+> > +	if (cmd_op == UBD_IO_ABORT_QUEUE) {
+> > +		struct ubd_abort_work *work = kzalloc(sizeof(*work),
+> > +				GFP_KERNEL);
+> > +		if (!work)
+> > +			goto out;
+> > +
+> > +		INIT_WORK(&work->work, ubd_abort_work_fn);
+> > +		work->ub = ub;
+> > +		work->q_id = ub_cmd->q_id;
+> > +
+> > +		schedule_work(&work->work);
+> > +		ret = UBD_IO_RES_OK;
+> > +		goto out_done;
+> > +	}
+> > +
+> > +	ubq = ubd_get_queue(ub, ub_cmd->q_id);
+> > +	if (WARN_ON_ONCE(tag >= ubq->q_depth))
+> > +		goto out;
+> > +
+> > +	io = &ubq->ios[tag];
+> > +
+> > +	/* there is pending io cmd, something must be wrong */
+> > +	if (io->flags & UBD_IO_FLAG_ACTIVE) {
+> > +		ret = UBD_IO_RES_BUSY;
+> > +		goto out;
+> > +	}
+> > +
+> > +	switch (cmd_op) {
+> > +	case UBD_IO_FETCH_REQ:
+> > +		/* FETCH_REQ is only issued when starting device */
+> > +		mutex_lock(&ub->mutex);
+> > +		if (!ubq->ubq_daemon)
+> > +			ubq->ubq_daemon = current;
+> 
+> I find it slightly weird to set ubq_daemon per-request.  It would cause
+
+It is per-queue, so each ubd_daemon can handle any IO from this blk-mq of ubd driver
+with same qid, and each ubd_daemon has its own io_uring for handling io command or
+even IO request.
+
+> weird corruptions if a buggy thread sends a FETCH_REQ to the wrong q_id
+
+If one buggy thread sends wrong command, we should fail the io_uring command,
+will fix the issue.
+
+> after another request in-flight has already set ubq_daemon.  I was also
+> working on MQ and I was thinking of dropping the q_id field from the
+> io_uring command, implying it from the fd that was opened.  Then, I let
+
+With q_id field, we can validate if it is one expected command on this
+queue.
+
+> each thread reopen the char device to configure a new queue:
+> 
+>  fd = open("/dev/ubdc0", O_RDWR);   // Connects to a new queue
+> 
+> fd is closed with fork/exec.
+
+Not sure it can be done in this way, /dev/ubdc0 is device wide
+controller, and one device/disk has multiple queue.
+
+Also MQ has been ready for use, please test the ubdsrv pointed by link
+in the comment log, and see if it works for you.
+
+> 
+> > +static int ubd_ctrl_start_dev(struct ubd_device *ub, struct io_uring_cmd *cmd)
+> > +{
+> > +	struct ubdsrv_ctrl_dev_info *info = (struct ubdsrv_ctrl_dev_info *)cmd->cmd;
+> > +	int ret = -EINVAL;
+> > +	unsigned long end = jiffies + 3 * HZ;
+> > +
+> > +	if (info->ubdsrv_pid <= 0)
+> > +		return -1;
+> > +
+> > +	mutex_lock(&ub->mutex);
+> > +
+> > +	ub->dev_info.ubdsrv_pid = info->ubdsrv_pid;
+> > +	if (disk_live(ub->ub_disk))
+> > +		goto unlock;
+> > +	while (time_before(jiffies, end)) {
+> > +		if (ubd_io_ready(ub)) {
+> > +			ret = 0;
+> > +			break;
+> > +		}
+> > +		msleep(100);
+> > +	}
+> 
+> This timer is quite weird, in my opinion.  Shouldn't we fail start_dev
+> and let userspace retry the command at a later time?
+
+Yeah, we can start dev in retry style, but ubdsrv part will become
+a bit complicated. Since it is a one-shot admin command, it is fine
+to wait in this way IMO.
+
+Or per-queue completion can be used here, then we can replace the random
+wait with wait_for_completion_killable() on each queue here, are you
+fine with this way?
+
+> 
+> > + unlock:
+> > +	mutex_unlock(&ub->mutex);
+> > +	pr_devel("%s: device io ready %d\n", __func__, !ret);
+> > +
+> > +	if (ret == 0)
+> > +		ret = add_disk(ub->ub_disk);
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static inline void ubd_dump(struct io_uring_cmd *cmd)
+> > +{
+> > +#ifdef DEBUG
+> > +	struct ubdsrv_ctrl_dev_info *info =
+> > +		(struct ubdsrv_ctrl_dev_info *)cmd->cmd;
+> > +
+> > +	printk("%s: cmd_op %x, dev id %d flags %llx\n", __func__,
+> > +			cmd->cmd_op, info->dev_id, info->flags);
+> > +
+> > +	printk("\t nr_hw_queues %d queue_depth %d block size %d dev_capacity %lld\n",
+> > +			info->nr_hw_queues, info->queue_depth,
+> > +			info->block_size, info->dev_blocks);
+> > +#endif
+> > +}
+> 
+> Maybe pr_debug or tracepoint?
+
+OK, will switch to pr_debug.
+
+tracepoint usually has to be stable, and I'd suggest to not add it
+until ubd driver is merged.
+
+> 
+> > +MODULE_AUTHOR("Ming Lei <ming.lei@redhat.com>");
+> > +MODULE_LICENSE("GPL");
+> > diff --git a/include/uapi/linux/ubd_cmd.h b/include/uapi/linux/ubd_cmd.h
+> > new file mode 100644
+> > index 000000000000..8ecea6aa9cfe
+> > --- /dev/null
+> > +++ b/include/uapi/linux/ubd_cmd.h
+> > @@ -0,0 +1,167 @@
+> > +#ifndef USER_BLK_DRV_CMD_INC_H
+> > +#define USER_BLK_DRV_CMD_INC_H
+> > +
+> > +/* ubd server command definition */
+> > +
+> > +/* CMD result code */
+> > +#define UBD_CTRL_CMD_RES_OK		0
+> > +#define UBD_CTRL_CMD_RES_FAILED		-1
+> > +
+> > +/*
+> > + * Admin commands, issued by ubd server, and handled by ubd driver.
+> > + */
+> > +#define	UBD_CMD_SET_DEV_INFO	0x01
+> > +#define	UBD_CMD_GET_DEV_INFO	0x02
+> > +#define	UBD_CMD_ADD_DEV		0x04
+> > +#define	UBD_CMD_DEL_DEV		0x05
+> > +#define	UBD_CMD_START_DEV	0x06
+> > +#define	UBD_CMD_STOP_DEV	0x07
+> > +
+> > +/*
+> > + * IO commands, issued by ubd server, and handled by ubd driver.
+> > + *
+> > + * FETCH_REQ: issued via sqe(URING_CMD) beforehand for fetching IO request
+> > + *      from ubd driver, should be issued only when starting device. After
+> > + *      the associated cqe is returned, request's tag can be retrieved via
+> > + *      cqe->userdata.
+> > + *
+> > + * COMMIT_AND_FETCH_REQ: issued via sqe(URING_CMD) after ubdserver handled
+> > + *      this IO request, request's handling result is committed to ubd
+> > + *      driver, meantime FETCH_REQ is piggyback, and FETCH_REQ has to be
+> > + *      handled before completing io request.
+> > + *
+> > + * COMMIT_REQ: issued via sqe(URING_CMD) after ubdserver handled this IO
+> > + *      request, request's handling result is committed to ubd driver.
+> > + *
+> > + * ABORT_QUEUE: issued via sqe(URING_CMD) and abort all active commands,
+> > + * 	meantime ubdserver can't issue any FETCH_REQ commands
+> > + */
+> > +#define	UBD_IO_FETCH_REQ		0x20
+> > +#define	UBD_IO_COMMIT_AND_FETCH_REQ	0x21
+> > +#define	UBD_IO_COMMIT_REQ		0x22
+> > +#define	UBD_IO_ABORT_QUEUE		0x23
+> > +
+> > +#define UBD_IO_RES_OK			0x01
+> > +#define UBD_IO_RES_INVALID_SQE		0x5f
+> > +#define UBD_IO_RES_INVALID_TAG		0x5e
+> > +#define UBD_IO_RES_INVALID_QUEUE	0x5d
+> > +#define UBD_IO_RES_BUSY			0x5c
+> > +#define UBD_IO_RES_DUP_FETCH		0x5b
+> > +#define UBD_IO_RES_UNEXPECTED_CMD	0x5a
+> > +#define UBD_IO_RES_DATA_BAD		0x59
+> > +
+> > +/* only ABORT means that no re-fetch */
+> > +#define UBD_IO_RES_ABORT		0x59
+> > +
+> > +#define UBDSRV_CMD_BUF_OFFSET	0
+> > +#define UBDSRV_IO_BUF_OFFSET	0x80000000
+> > +
+> > +/* tag bit is 12bit, so at most 4096 IOs for each queue */
+> > +#define UBD_MAX_QUEUE_DEPTH	4096
+> > +
+> > +/*
+> > + * zero copy requires 4k block size, and can remap ubd driver's io
+> > + * request into ubdsrv's vm space
+> > + */
+> > +#define UBD_F_SUPPORT_ZERO_COPY	0
+> > +
+> > +struct ubdsrv_ctrl_dev_info {
+> > +	__u16	nr_hw_queues;
+> > +	__u16	queue_depth;
+> > +	__u16	block_size;
+> > +	__u16	state;
+> > +
+> > +	__u32	rq_max_blocks;
+> > +	__u32	dev_id;
+> > +
+> > +	__u64   dev_blocks;
+> > +	__u64	flags;
+> > +
+> > +	/*
+> > +	 * Only valid for READ kind of ctrl command, and driver can
+> > +	 * get the userspace buffer address here, then write data
+> > +	 * into this buffer.
+> > +	 *
+> > +	 * And the buffer has to be inside one single page.
+> > +	 */
+> > +	__u64	addr;
+> > +	__u32	len;
+> > +	__s32	ubdsrv_pid;
+> > +	__u64	reserved0[2];
+> > +};
+> 
+> I was about to send you a patch to simplify the interface for
+> different commands.  My plan was to avoid passing parts of the structure for
+> commands that don't use it, considering the limit of io_uring cmd length.
+> 
+>  struct ubdsrv_ctrl_dev_info {
+>        __u32   dev_id;
+>        union {
+> 
+>                char raw[28]; /* Maximum size for iouring_command */
+> 
+>                struct {
+>                        __u32   rq_max_blocks;
+>                        __s32   ubdsrv_pid;
+> 
+>                        __u16   nr_hw_queues;
+>                        __u16   queue_depth;
+>                        __u16   block_size;
+>                        __u16   state;
+> 
+>                        __u64   dev_blocks;
+>                        __u64   flags;
+>                }, /* UBD_CMD_ADD_DEV */
+> 
+>                struct {
+>                        __u64   addr;
+>                        __u32   len;
+>                } /* CMD_GET_DEV_INFO */
+>        }
+>  };
+> 
+> What do you think?
+
+'ubd add' command needs output buffer too:
+
+1) if -1 dev_id is passed in, one valid device id need to be passed back
+via the buffer
+
+2) ubdsrv has to update some parameters and pass them back, such as too
+big nr_hw_queues, or unaligned rq_max_blocks,...
+
+If you worry that dev_info may be run out of SQE128 in future, one ideal
+way is to always pass dev_info in/out as one userspace buffer. Meantime we
+extend it to 128byte, so far it is defined as 64bytes. Now only
+UBD_CMD_STOP_DEV needn't the dev_info buffer.
+
+Also we need to add comment on ubdsrv_ctrl_dev_info wrt. which fields
+are IN or OUT or both.
+
+> 
+> in addition, I think UBD_CMD_ADD_DEV should embed an extra protocol
+> version field, for future extension.
+
+Yeah, that was in my mind too, just not getting exact way for how to
+use the version number. Also one 64 bit flags have been there for
+extending in future, seems not see need on version number.
+
+UBD_CMD_ADD_DEV can be thought as one negotiation procedure, after
+it is returned, ubd drv will update flags to reflect features the
+driver supports, most or all should be new commands or new fields
+in ubdsrv_ctrl_dev_info.
+
+Also the principle is to let ubd driver focus on io command communication
+and data copy, and let userspace part handle all logics, so in future
+there shouldn't too much extension on interface between userspace and ubd
+kernel driver.
+
+
+Thanks,
+Ming
 

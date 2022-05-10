@@ -2,222 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 748E1521676
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A1D5216A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242252AbiEJNNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55512 "EHLO
+        id S237846AbiEJNRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242245AbiEJNN0 (ORCPT
+        with ESMTP id S242432AbiEJNQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:13:26 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55B753B4B
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:09:26 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id z2so31263311ejj.3
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:09:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=GY+8CojCMdOqBSOFBIYghZE3p4uLJiwb7g8ImRgX/dU=;
-        b=qLsqWbFt7LCQx0MaLfgYA2s8hsAyOOpVW5rh9DzwWbCQLNbIGdXf+F5JAY+grnNJgF
-         sBb+zqwdE6bmq3okeUZuIzZcXNrdkJXOXN+krDKNhSROug7uv2bkRgdVwR8cANiD9kk9
-         BLfNHSChZRjoUi6DlTO96a5lvuqCRTd36KWMWg3SESso0kbRMIFxUgPqiB3VTABTkQwW
-         137KeyzjeGxXgJh1BBCMMJxYMNpzVQT5QI8bPIWcGLxEv6TjCxvjpmjZcxB6sZU+2Rsu
-         HVwaN8RSnozbhzp3UBfq4nG6jZLC8bbH4yImCfFr6ChuFmcx5MUDpvqyVKF1VYgZGdLl
-         7uvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=GY+8CojCMdOqBSOFBIYghZE3p4uLJiwb7g8ImRgX/dU=;
-        b=eC2Zja3p9sq+0QY81exT9JPb0N7wDdSv4RkNjT8tp2MXP0ls0Bp9DbdZviUgpXYLOW
-         saOWwV7p0ewzLPWUXgBjI9PW3TbsKBcpgPkClKX/iy4RhOXKl6NjNS1EoqM2EprIEB31
-         5tqO+878ZfCfjAqE+53ojDXjQLzTdykfKHxRj5Wsce3ty9eiFPd3tRQRsbHBKvgU2sCf
-         qc3b2WXH8seIlfgim2NYMEYy+cG+Yw8wyUl9m32DGu46LZbSFpxH8iYT2HvABrE/2e0D
-         bYPxLTwWPVN1+TbJ5XDndEVLwki5lv1eTVvjIcqRs6myyNhSiuhQQDswLXxggCILrW2q
-         OotA==
-X-Gm-Message-State: AOAM5320akcZfo0S1RVs1qULOy6pLkYoiCYLGZgETZeNvGVlgGzqxkeR
-        CsAq3np5RwIPW53CxzOOduwenw==
-X-Google-Smtp-Source: ABdhPJyeV9V1iJhHLhwfC6K1BZ5EadKgzzBkTD1pVb1eEmEusgki6rRs5oqhoRfmG7wEJ9obJwywHg==
-X-Received: by 2002:a17:907:7d92:b0:6fd:bd33:f00f with SMTP id oz18-20020a1709077d9200b006fdbd33f00fmr1956321ejc.467.1652188165022;
-        Tue, 10 May 2022 06:09:25 -0700 (PDT)
-Received: from [192.168.0.252] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id jy15-20020a170907762f00b006f3ef214e54sm6055980ejc.186.2022.05.10.06.09.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 06:09:23 -0700 (PDT)
-Message-ID: <1e533194-7047-8342-b426-f607fddbfaa3@linaro.org>
-Date:   Tue, 10 May 2022 15:09:20 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Tue, 10 May 2022 09:16:00 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2055.outbound.protection.outlook.com [40.107.94.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8383C4B5;
+        Tue, 10 May 2022 06:11:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gJKx+zIUGI2A2wJo13+pAaiKp1vJ7LK6onIBhAEUmiS65VjVG0wfR0ztcZMrlqhUJpq2Xf51MhrbmldCaFiDOkB7tK4C+S0wy9jWsufQUK/vc4V4Yz/tH8TAzwWTM1jJ3o2T90ihkS2c1mPt393BpWRB+jSH3P7rxRVWZo0LifWKOeYUTDyrqlNadrBotXDRB63EID3DpXuZdZ6kRTmuomPDLbBuX2QXPKta+O4DZYbbnIWc4mB2QLUOpqcANWuz+8/saxjGA1VbMCZGe/rmHfkQXmGNzX2N2fqWf3mK7Ay7d4axP03sLjhqWpp4+6DNaxQBCOqVS42si8ARzBxbsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FI/pwYLqHWuWsEAhBA0/Cy2yG24Pn1hzjmezjRxPyxM=;
+ b=LXwGTcFP70Ni32ipQ8/VpL/mpPkNtB0EOWAJM8/6reozPPSbpHrnkoeFaIPYXSLl4OofM0nWiI0xkZGJ2/aIS8//pYcYlTKva3WcxlXf4e7Swaru2GF6mGrb+/z5d1mdZ4UIGGsNl87v7AlMgAfrpkI5e3RNVG8T3PY6mc4AJVqTw55LnAHe3AQibq7qg4VzxYAnNip0oSFFwQPP3F96i2SU5L5dKxRTE/nF5sCGea3fjZO2Ko4HogD7v2BBgnM1B5PTC+JKXBReoBxY8sRAEtpjn0jbSW4F4xIMtwPSEVFdGvAkpiUYZZZGfcyB8NtPVN0eLPOrMqLqFzhsJvw+aA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FI/pwYLqHWuWsEAhBA0/Cy2yG24Pn1hzjmezjRxPyxM=;
+ b=hRxDGxCIh0IcM8RRXbKJw86Uwao6JF+Xu3Dgs/B8hNQB55P/jm4LGGR3DoYWbV6H5fNvHEjEBY9kCwFVIa2EQ4tjA+/3YlxhwFak5DmDBQ/hvu5YSAP/RNwG0MkKD04x2cvjACwUSJCMNwTjasdLRSwNWwt/KUBHl8FBrwROzTI=
+Received: from MW4PR03CA0157.namprd03.prod.outlook.com (2603:10b6:303:8d::12)
+ by CY4PR12MB1157.namprd12.prod.outlook.com (2603:10b6:903:3b::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.23; Tue, 10 May
+ 2022 13:11:36 +0000
+Received: from CO1NAM11FT029.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8d:cafe::bf) by MW4PR03CA0157.outlook.office365.com
+ (2603:10b6:303:8d::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.21 via Frontend
+ Transport; Tue, 10 May 2022 13:11:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT029.mail.protection.outlook.com (10.13.174.214) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5227.15 via Frontend Transport; Tue, 10 May 2022 13:11:36 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 10 May
+ 2022 08:11:33 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     <mario.limonciello@amd.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
-References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
- <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
- <20220425072710.v6gwo4gu3aouezg4@vireshk-i7>
- <dea39b1f-0091-2690-7f07-108d07ef9f3c@linaro.org>
- <20220510044053.ykn6ygnbeokhzrsa@vireshk-i7>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220510044053.ykn6ygnbeokhzrsa@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        "Len Brown" <lenb@kernel.org>,
+        "open list:ACPI" <linux-acpi@vger.kernel.org>,
+        "open list" <linux-kernel@vger.kernel.org>
+CC:     Jian-Hong Pan <jhp@endlessos.org>
+Subject: [PATCH] ACPI: PM: Block ASUS B1400CEAE from suspend to idle by default
+Date:   Tue, 10 May 2022 08:11:36 -0500
+Message-ID: <20220510131136.1103-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c929dfdb-f0ec-4c0b-7321-08da32869d10
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1157:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR12MB11572B5902D29299D832BEBFE2C99@CY4PR12MB1157.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OWddaeDpdWTK9Zk0R7ll4vIg4YtHiaG9mv5odu9DHnEBNp8OBzmNMNTmw63NyyzVL0zHqSKr2kBNyaRVObUUSyVsM4WR9xDm5y8WvrVGMB8DL33JRosxFlPQ9Vq04s/NMb5P3nneWprFvXHMCkOsE0zLGqo29AW1b3zk9SLLXUDhtROwP22fJp68CogwNsquonz/raoN4trfq5XNiaPbGt6Fo/9W76hj46T5nPxjrDlmKyX6mLP4DujrkBxwzo+Anyc0J+Q0tgUaZApVmBIeeBSasXoM4Hxb6x+J+7jRcDP/jmqztmRcwdi+kziiKOpZmTL54AT1kAxuYpZEcLmMheuTEroFSQdbC/9EFa4QlRv/VHTBxbEaYIeyfTxb0RMvYsjyF/S7ZsmISE8yeNiFgpLkKQDkXZs0jZ8qgpcDmo0gZ+aaNUzh4L9t+0ZOg17iF23t+5dALBC95BuLfrnK5MfNf2kr1b+GBEVvuXVKHf1OnnzgMwcp3aQrrp37bDlNAqS3yhqhQrF6+llaLXEjVa4Qw2tA0hWaIDz15Ux/EY5MzWv0vBehcwFaCosSrh1ST0gnGkV3I8n9RQMEODhZuz+fviaaRLh9muE8wcgPL3TWYxbKSylzeOb+jxL4NyXX/rObLRu+AJ6zr5qseTEefD22lP8NNjww3AvmdrqZOhl7SzNTejdM2Cuy6EdHps4KBA7E8O6RFCt/6fKOwEUB6lFnyYtT2Wbdbw83PpEWJ2ktWxWpDO8ikOPYCeE/QTUWRFBHimwxJqKxcEeidwnquPI+MyD8navcr2sAZifbXCI=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(36756003)(508600001)(36860700001)(5660300002)(44832011)(8936002)(4326008)(70586007)(70206006)(356005)(8676002)(82310400005)(83380400001)(2906002)(316002)(15650500001)(26005)(1076003)(2616005)(966005)(86362001)(16526019)(110136005)(40460700003)(81166007)(426003)(47076005)(336012)(186003)(7696005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2022 13:11:36.6579
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c929dfdb-f0ec-4c0b-7321-08da32869d10
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT029.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1157
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/05/2022 06:40, Viresh Kumar wrote:
-> On 09-05-22, 12:38, Krzysztof Kozlowski wrote:
->> On 25/04/2022 09:27, Viresh Kumar wrote:
->>> This is tricky as the OPP core can't really assume the order in which the clocks
->>> needs to be programmed. We had the same problem with multiple regulators and the
->>> same is left for drivers to do via the custom-api.
->>>
->>> Either we can take the same route here, and let platforms add their own OPP
->>> drivers which can handle this, Or hide this all behind a basic device clock's
->>> driver, which you get with clk_get(dev, NULL).
->>
->> For my use case, the order of scaling will be the same as in previous
->> implementation, because UFS drivers just got bunch of clocks with
->> freq-table-hz property and were scaling in DT order.
->>
->> If drivers need something better, they can always provide custom-opp
->> thus replacing my method. My implementation here does not restrict them.
->>
->> For the drivers where the order does not matter, why forcing each driver
->> to provide its own implementation of clock scaling? Isn't shared generic
->> PM OPP code a way to remove code duplication?
-> 
-> Code duplication is a good argument and I am in favor of avoiding it,
-> but nevertheless this shouldn't be something which platforms can pick
-> by mistake, just because they didn't go through core code. In other
-> words, this shouldn't be the default behavior of the core.
-> 
-> If we want, core can provide a helper to get rid of the duplication
-> though, but the user explicitly needs to use it.
+ASUS B1400CEAE fails to resume from suspend to idle by default.  This was
+bisected back to commit df4f9bc4fb9c ("nvme-pci: add support for ACPI
+StorageD3Enable property") but this is a red herring to the problem.
 
-OK, that sounds like a solution.
+Before this commit the system wasn't getting into deepest sleep state.
+Presumably this commit is allowing entry into deepest sleep state as
+advertised by firmware, but there are some other problems related to
+the wakeup.
 
-> 
->>>> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
->>>
->>>> +static int _generic_set_opp_clks_only(struct device *dev,
->>>> +				      struct opp_table *opp_table,
->>>> +				      struct dev_pm_opp *opp)
->>>> +{
->>>> +	int i, ret;
->>>> +
->>>> +	if (!opp_table->clks)
->>>> +		return 0;
->>>> +
->>>> +	for (i = 0; i < opp_table->clk_count; i++) {
->>>> +		if (opp->rates[i]) {
->>>
->>> This should mean that we can disable that clock and it isn't required.
->>
->> No, it does not mean that. The DT might provide several clocks which
->> only some are important for frequency scaling. All others just need to
->> be enabled.
->>
->> Maybe you prefer to skip getting such clocks in PM OPP?
-> 
-> They shouldn't reach the OPP core then. What will the OPP core do if a
-> clock has a value for one OPP and not the other ?
+As it is confirmed the system works properly with S3, set the default for
+this system to S3.
 
-That would be the same mistake as providing one voltage as 0 or with
-something outside of a spec (but still within regulators min/max).
-Mistakes in DTS create undesirable behavior and this part is no different.
+Reported-by: Jian-Hong Pan <jhp@endlessos.org>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215742
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+ drivers/acpi/sleep.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-However I understand your point - since the driver provides the list of
-clocks to OPP, it should not provide ones which are irrelevant.
+diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
+index c992e57b2c79..3147702710af 100644
+--- a/drivers/acpi/sleep.c
++++ b/drivers/acpi/sleep.c
+@@ -373,6 +373,18 @@ static const struct dmi_system_id acpisleep_dmi_table[] __initconst = {
+ 		DMI_MATCH(DMI_PRODUCT_NAME, "20GGA00L00"),
+ 		},
+ 	},
++	/*
++	 * ASUS B1400CEAE hangs on resume from suspend (see
++	 * https://bugzilla.kernel.org/show_bug.cgi?id=215742).
++	 */
++	{
++	.callback = init_default_s3,
++	.ident = "ASUS B1400CEAE",
++	.matches = {
++		DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
++		DMI_MATCH(DMI_PRODUCT_NAME, "ASUS EXPERTBOOK B1400CEAE"),
++		},
++	},
+ 	{},
+ };
+ 
+-- 
+2.34.1
 
-> 
->>>> @@ -969,8 +1008,8 @@ static void _find_current_opp(struct device *dev, struct opp_table *opp_table)
->>>
->>> I think this routine breaks as soon as we add support for multiple clocks.
->>> clks[0]'s frequency can be same for multiple OPPs and this won't get you the
->>> right OPP then.
->>
->> I don't think so and this was raised also by Stephen - only the first
->> clock is considered the one used for all PM OPP frequency operations,
->> like get ceil/floor.
-> 
-> IMHO, this is broken by design. I can easily see that someone wants to
-> have few variants of all other frequencies for the same frequency of
-> the so called "main" clock, i.e. multiple OPPs with same "main" freq
-> value.  I don't think we can mark the clocks "main" or otherwise as
-> easily for every platform.
-> 
-> Stephen, any inputs on this ?
-
-In such case, matching opps by frequency would be a quite different API.
-The drivers can use now:
-https://github.com/krzk/linux/commit/ebc31798494fcc66389ae409dce6d9489c16156a#diff-b6370444c32afa2e55d9b6150f355ba6f4d20c5ed5da5399ea8295d323de8267R1200
-
-If you assume that this frequency can be used for multiple OPPs, then
-the API should be different. Something like:
-int dev_pm_opp_set_rate(struct device *dev, unsigned long *target_freqs,
-                        size_t num_freqs);
-
-Finding right opp for given frequencies would be also quite much more
-complicated task. Not a simple ceil/floor search by one frequency.
-
-I don't need that use-case and my implementation does not prevent anyone
-from implementing it in the future. IOW, why developing now complex
-solution which no one currently needs? If anyone needs such scaling by
-multiple-frequencies, the PM OPP can be reworked/extended/improved again.
-
-Additionally let me point also that my implementation targets not a
-specific one driver, but actually entire subsystem of drivers - all UFS
-drivers.
-
-> 
->> The assumption (which might need better documentation) is that first
->> clock frequency is the main one:
->> 1. It is still in opp->rate field, so it is used everywhere when OPPs
->> are compared/checked for rates.
->> 1. Usually is used also in opp-table nodes names.
->>
->> The logical explanation is that devices has some main operating
->> frequency, e.g. the core clock, and this determines the performance. In
->> the same time such device might not be able to scale this one core clock
->> independently from others, therefore this set of patches.
-> 
-> I understand what you are saying, but I can feel that it will break or
-> will force bad bug-fixes into the core at a later point of time.
-> 
-> I think it would be better to take it slowly and see how it goes. Lets
-> first add support for the OPP core to parse and store this data and
-> then we can add support to use it, or at least do all this in separate
-> patches so they are easier to review/apply.
-
-Sure, I'll split the patch to smaller chunks.
-
-Best regards,
-Krzysztof

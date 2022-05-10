@@ -2,98 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A4F5226D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 00:29:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3605226D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 00:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236410AbiEJW2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 18:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48280 "EHLO
+        id S236500AbiEJW2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 18:28:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230481AbiEJW2j (ORCPT
+        with ESMTP id S236439AbiEJW2m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 18:28:39 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CED506C5;
+        Tue, 10 May 2022 18:28:42 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA475506E7
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 15:28:39 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id s14so103115plk.8
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 15:28:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:content-language:to:from:cc
+         :subject:content-transfer-encoding;
+        bh=wfPHY8O5lpAXCbOKekK8DfHBJ0WH0D1/nUeEmSt+v20=;
+        b=z5+JwAqr5bItL7ZbzMQ0W/I1TkosIfL+BkwL9FvGWgGcgnRvYA+kho8sI0uuZtmw9h
+         U1Dp4jz+YgVu4PrYB6U/nDairICKgp5B3qMmk4w3AIJYGHOkX5tlgWDKpwGZyxYoKYB0
+         XZXHciGVY9/EeycnNPX2f4n+VkHfUs1chM6hTUDjM3QqUDSrsWrez0WBPQByjRJrNP1b
+         A9E2gxwFAUVTDsGl6T68iL/kwe4ATYBVTcC5s3wdF/bNNmBVS/+md+OJ5frlqd8BEuI5
+         BCffEznNIWLl1pF7aD9F170mFMM4IscmjQ5D2GAw310i2gP8cQIDyWCjVZ+X9hASxRcM
+         V8kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:from:cc:subject:content-transfer-encoding;
+        bh=wfPHY8O5lpAXCbOKekK8DfHBJ0WH0D1/nUeEmSt+v20=;
+        b=NOJsVgoECYKAtrUtFYHeF+6D3s/rD/IaNJOumFlBGOwWRJr/d+Rz2l71Ea07quUtOJ
+         3cuTsg5V9ca7xErbBPyW3G5l4mnAu60nSOifIyfKYM3RSpoyCUAaahMMCGapW/BbOGGz
+         t7a06fic4wjO6x5AgG+wGB10IvIPc8DxrUpt9vrJev+wbLmPN63jyS5kQKqrwwSjuYoD
+         eX/Rm0Tui5tc8g2tJRay824CchsYvNclU55S3QbW5pqZlo8UquF+fgGmPWDbz82vdd8N
+         w3JqSbeCkgP5SBwMUUNr5rP5kLiXu8INVo03y67DABfbhkffu7TUqalBBffTKhhAOgKS
+         BCVw==
+X-Gm-Message-State: AOAM532ovvLyT/rt1IRoHIAcoRkNXhKcOxYruGOJ2Ylad0mtB0JvCAYe
+        x0sNLAm29aqevEzwWkR62nEw/I4JE6UsKQ==
+X-Google-Smtp-Source: ABdhPJxIlNn2Wj+2MuilRsO5BYUSZc7ybzcGHgfGbJI6n2IvJXDB35OlIpH+/GbDFCpAVdmq0z7RPA==
+X-Received: by 2002:a17:90a:8914:b0:1dc:20c0:40f4 with SMTP id u20-20020a17090a891400b001dc20c040f4mr2016927pjn.11.1652221719446;
+        Tue, 10 May 2022 15:28:39 -0700 (PDT)
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id mz18-20020a17090b379200b001dcc0cb262asm197584pjb.17.2022.05.10.15.28.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Tue, 10 May 2022 15:28:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652221718; x=1683757718;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=IfCJqds3yAbFKum7I8VqgabqC1CZEGfw83VIQGi4iPo=;
-  b=bfHex7zjinGQRfC/JTJPj6VVxs9fLH75lSqDkE6GuUlMyYgZ+QeJZXZ+
-   QZYDkvl6MLeg1j+45UgsbiPGYjlhsY1qhXGDjhVgyo7fCTPUlMd5f6tp/
-   0aGzTIi799QK0DOJVaDfbEGBkPnyNZBreXISwqj3H3c7P8+dR52u0aIlG
-   rsW+5ulhsCKlxn/AtbwOJewjGVzjgG0KivzrCQ2/gTyWkga1M+WsXjNtc
-   /dWdfw+69IfJskph75uAKaN3eArFty/Aa8msEVNmtNGfd3bSAgy3Cm2yo
-   3B7IB5kVYUBTcEMOMa7WWVljr43UAdv8ztUKrAlVbqsy+A82e8PAiyIlw
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="268360481"
-X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
-   d="scan'208";a="268360481"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 15:28:38 -0700
-X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
-   d="scan'208";a="895082686"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 15:28:38 -0700
-Date:   Tue, 10 May 2022 15:28:38 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Rob Herring <robh@kernel.org>
-cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        dinguyen@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org
-Subject: Re: [PATCH v4 3/3] arm64: dts: intel: add device tree for n6000
-In-Reply-To: <20220510192201.GB2427587-robh@kernel.org>
-Message-ID: <alpine.DEB.2.22.394.2205101526590.885823@rhweight-WRK1>
-References: <20220508142624.491045-1-matthew.gerlach@linux.intel.com> <20220508142624.491045-4-matthew.gerlach@linux.intel.com> <eee2d4f6-703d-d3bb-3949-493f9d65f676@linaro.org> <alpine.DEB.2.22.394.2205100717170.612063@rhweight-WRK1>
- <20220510192201.GB2427587-robh@kernel.org>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+Message-ID: <49ac1697-5235-ca2e-2738-f0399c26d718@linaro.org>
+Date:   Tue, 10 May 2022 15:28:38 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-US
+To:     linux-ext4@vger.kernel.org
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>, linux-fsdevel@vger.kernel.org
+Subject: kernel BUG in ext4_writepages
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
+Syzbot found another BUG in ext4_writepages [1].
+This time it complains about inode with inline data.
+C reproducer can be found here [2]
+I was able to trigger it on 5.18.0-rc6
 
+[1] https://syzkaller.appspot.com/bug?id=a1e89d09bbbcbd5c4cb45db230ee28c822953984
+[2] https://syzkaller.appspot.com/text?tag=ReproC&x=129da6caf00000
 
-On Tue, 10 May 2022, Rob Herring wrote:
-
-> On Tue, May 10, 2022 at 07:17:59AM -0700, matthew.gerlach@linux.intel.com wrote:
->>
->>
->> On Mon, 9 May 2022, Krzysztof Kozlowski wrote:
->>
->>> On 08/05/2022 16:26, matthew.gerlach@linux.intel.com wrote:
->>>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>>>
->>>> Add a device tree for the n6000 instantiation of Agilex
->>>> Hard Processor System (HPS).
->>>>
->>>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>>
->>>
->>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>
->> Hi Kryzysztof,
->>
->> Thanks for the Acked-by.  I will add your tag to a v5 patch set submission.
->
-> Before I commented, why would there be a v5? TBC, you don't need to
-> resend just to add tags. The tools (b4, PW) do this for us. But when you
-> do send another version you need to add the tags as the tools don't look
-> at prior versions.
-
-Thank you for the clarification.
-
-Matthew
->
-> Rob
->
+-- 
+Thanks,
+Tadeusz

@@ -2,132 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1FA45223D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:24:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 263045223D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348913AbiEJS1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 14:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57626 "EHLO
+        id S1349029AbiEJS1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 14:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348898AbiEJS0W (ORCPT
+        with ESMTP id S1348902AbiEJS0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 14:26:22 -0400
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2D32EA0D;
-        Tue, 10 May 2022 11:22:23 -0700 (PDT)
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-deb9295679so19290915fac.6;
-        Tue, 10 May 2022 11:22:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5eaxIUkfRDs5zSochol4WtIm5357tYweJMGDFI2u4pU=;
-        b=SJlJeaDlw/oBMPbofFuPwipw/4tK+Sp/NHRp8uayvLyQaRpYNqMGha1LedZlot9OkV
-         cnCW3+MF1FYyWpdmvduWXoEL/5caoGHyCVxceqd1ZEXZpLTyiqCGREUORjgE226s7/Mg
-         xyaS2dFfIjmvdn8ZjF/nV9CpKfysbONKdDVS5PJr5H7opdWykSXU0CAgDwIqCLDHLBBs
-         xjDsv/rSlOfoPrx4Hkzmf3spZBrjaGxlqV1KGs/Qcc+Ny754Rl5WkgGKYi2M3I2XO1mA
-         hfwKwrjo0RkdJlds7YeXALloiebengy3sZViL6GCjmknyWG93aGr7pX9WU7OdPmb8gNE
-         7H/w==
-X-Gm-Message-State: AOAM530jDgbR+miSYhWENSdppcUABP58nXCdzNvafSunhFeAR0tCNAmx
-        S9UqLv7wEA5/mDykHSHMfg==
-X-Google-Smtp-Source: ABdhPJzS4rbTDp32QJIoRssqYEpMJ/7t5ksogGydtS0hdk3+FTzqaG5lGb+rFO7ig2cCi/AXJcUl8Q==
-X-Received: by 2002:a05:6870:e613:b0:ec:6564:c7c9 with SMTP id q19-20020a056870e61300b000ec6564c7c9mr787852oag.230.1652206942446;
-        Tue, 10 May 2022 11:22:22 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id k2-20020a056870570200b000edae17a8cesm5974143oap.3.2022.05.10.11.22.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 11:22:21 -0700 (PDT)
-Received: (nullmailer pid 2332088 invoked by uid 1000);
-        Tue, 10 May 2022 18:22:21 -0000
-Date:   Tue, 10 May 2022 13:22:21 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>
-Cc:     linux-stm32@st-md-mailman.stormreply.com,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: clock: stm32mp1: adapt example for
- "st,stm32mp1-rcc-secure"
-Message-ID: <YnqtXa+NhVUH0oyi@robh.at.kernel.org>
-References: <20220509134658.16267-1-alexandre.torgue@foss.st.com>
- <1652123805.754133.27398.nullmailer@robh.at.kernel.org>
- <ddd5d5b2-32a5-6464-80a6-0054c376dd96@foss.st.com>
- <Ynp9Pu+ZqjaBu8ne@robh.at.kernel.org>
- <b64e6662-5fd2-5223-1e25-15217d75d06a@foss.st.com>
+        Tue, 10 May 2022 14:26:23 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A635950B08;
+        Tue, 10 May 2022 11:22:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652206944; x=1683742944;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sSmQP3uhDLR96PsowzYCDVSU0HDCkoGesSibvvpbnN8=;
+  b=hz0+L91/mag6bEQ396ibYjw9w3L+XLhS5Ne60aDeMfb+gdqGDlDUCdWQ
+   0HWhUkTz2Is6DPzbp0C3AP0oOpQruqbZsAIIgYhXIKPj6gG/NUYTNCZI1
+   1xSR3uvLaVfnpighI5jru4L85pLjSvDs/NEl35zaW6Xfca686dhE7YDCK
+   0VvIQDBGNxOZuHfaG0RA+A93KkNcTFhzfOh4zWh+s8HV3E7+B++xNmXiD
+   icm0BCzOohcW/DFKgMJfHN/ltEG/ikpLu2P/wSoQFz3QFhmawWci04cQI
+   5a4cqgczArUHsNTSZDlO7pZZu1K9w/gmc1RfNUwuiwxCtlQveD4nV9RhG
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="355891446"
+X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
+   d="scan'208";a="355891446"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 11:22:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
+   d="scan'208";a="636072237"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga004.fm.intel.com with ESMTP; 10 May 2022 11:22:24 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        stable@vger.kernel.org
+Subject: [UPDATE][PATCH] thermal: int340x: Mode setting with new OS handshake
+Date:   Tue, 10 May 2022 11:22:21 -0700
+Message-Id: <20220510182221.3990256-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b64e6662-5fd2-5223-1e25-15217d75d06a@foss.st.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 06:44:19PM +0200, Alexandre TORGUE wrote:
-> Hi Rob
-> 
-> On 5/10/22 16:57, Rob Herring wrote:
-> > On Tue, May 10, 2022 at 09:47:05AM +0200, Alexandre TORGUE wrote:
-> > > Hi Rob
-> > > 
-> > > On 5/9/22 21:16, Rob Herring wrote:
-> > > > On Mon, 09 May 2022 15:46:58 +0200, Alexandre Torgue wrote:
-> > > > > For "st,stm32mp1-rcc-secure" schema, clocks and clock-names entries are now
-> > > > > required properties.
-> > > > > 
-> > > > > Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> > > > > 
-> > > > 
-> > > > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> > > > on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> > > > 
-> > > > yamllint warnings/errors:
-> > > > 
-> > > > dtschema/dtc warnings/errors:
-> > > > Error: Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.example.dts:27.33-34 syntax error
-> > > > FATAL ERROR: Unable to parse input tree
-> > > > make[1]: *** [scripts/Makefile.lib:364: Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.example.dtb] Error 1
-> > > > make[1]: *** Waiting for unfinished jobs....
-> > > > make: *** [Makefile:1401: dt_binding_check] Error 2
-> > > > 
-> > > > doc reference errors (make refcheckdocs):
-> > > > 
-> > > > See https://patchwork.ozlabs.org/patch/
-> > > > 
-> > > > This check can fail if there are any dependencies. The base for a patch
-> > > > series is generally the most recent rc1.
-> > > > 
-> > > > If you already ran 'make dt_binding_check' and didn't see the above
-> > > > error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> > > > date:
-> > > > 
-> > > > pip3 install dtschema --upgrade
-> > > > 
-> > > > Please check and re-submit.
-> > > > 
-> > > 
-> > > I just updated dtschema and yamllint seems to be well installed. I don't see
-> > > the see above. I wrote this patch on top of my stm32-next tree. Do I have to
-> > > send it directly to arm-soc in order to be merged on top of my latest
-> > > pull-request ?
-> > 
-> > That appears to be header related AFAICT. Maybe you have header changes
-> > in your tree. The issue this is fixing is in your tree, so it should be
-> > applied there.
-> 
-> Ah yes! CK_SCMIxxx have changed in my tree (merged in arm-soc tree) and this
-> patch is done on top of this change. So has to be applied in arm-soc.
-> So I just have to send it directly to Arnd and arm-soc ?
+With the new OS handshake introduced with the commit: "c7ff29763989
+("thermal: int340x: Update OS policy capability handshake")",
+thermal zone mode "enabled" doesn't work in the same way as the legacy
+handshake. The mode "enabled" fails with -EINVAL using new handshake.
 
-If you don't have a fixes branch for them (or one that will be pulled 
-soonish), then yes.
+To address this issue, when the new OS UUID mask is set:
+- When mode is "enabled", return 0 as the firmware already has the
+latest policy mask.
+- When mode is "disabled", update the firmware with UUID mask of zero.
+In this way firmware can take control of the thermal control. Also
+reset the OS UUID mask. This allows user space to update with new
+set of policies.
 
-Rob
+Fixes: c7ff29763989 ("thermal: int340x: Update OS policy capability handshake")
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: stable@vger.kernel.org
+---
+update:
+Added Fixes tag
+
+ .../intel/int340x_thermal/int3400_thermal.c   | 48 ++++++++++++-------
+ 1 file changed, 32 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+index d97f496bab9b..1061728ad5a9 100644
+--- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
++++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+@@ -194,12 +194,31 @@ static int int3400_thermal_run_osc(acpi_handle handle, char *uuid_str, int *enab
+ 	return result;
+ }
+ 
++static int set_os_uuid_mask(struct int3400_thermal_priv *priv, u32 mask)
++{
++	int cap = 0;
++
++	/*
++	 * Capability bits:
++	 * Bit 0: set to 1 to indicate DPTF is active
++	 * Bi1 1: set to 1 to active cooling is supported by user space daemon
++	 * Bit 2: set to 1 to passive cooling is supported by user space daemon
++	 * Bit 3: set to 1 to critical trip is handled by user space daemon
++	 */
++	if (mask)
++		cap = ((priv->os_uuid_mask << 1) | 0x01);
++
++	return int3400_thermal_run_osc(priv->adev->handle,
++				       "b23ba85d-c8b7-3542-88de-8de2ffcfd698",
++				       &cap);
++}
++
+ static ssize_t current_uuid_store(struct device *dev,
+ 				  struct device_attribute *attr,
+ 				  const char *buf, size_t count)
+ {
+ 	struct int3400_thermal_priv *priv = dev_get_drvdata(dev);
+-	int i;
++	int ret, i;
+ 
+ 	for (i = 0; i < INT3400_THERMAL_MAXIMUM_UUID; ++i) {
+ 		if (!strncmp(buf, int3400_thermal_uuids[i],
+@@ -231,19 +250,7 @@ static ssize_t current_uuid_store(struct device *dev,
+ 	}
+ 
+ 	if (priv->os_uuid_mask) {
+-		int cap, ret;
+-
+-		/*
+-		 * Capability bits:
+-		 * Bit 0: set to 1 to indicate DPTF is active
+-		 * Bi1 1: set to 1 to active cooling is supported by user space daemon
+-		 * Bit 2: set to 1 to passive cooling is supported by user space daemon
+-		 * Bit 3: set to 1 to critical trip is handled by user space daemon
+-		 */
+-		cap = ((priv->os_uuid_mask << 1) | 0x01);
+-		ret = int3400_thermal_run_osc(priv->adev->handle,
+-					      "b23ba85d-c8b7-3542-88de-8de2ffcfd698",
+-					      &cap);
++		ret = set_os_uuid_mask(priv, priv->os_uuid_mask);
+ 		if (ret)
+ 			return ret;
+ 	}
+@@ -469,17 +476,26 @@ static int int3400_thermal_change_mode(struct thermal_zone_device *thermal,
+ 	if (mode != thermal->mode) {
+ 		int enabled;
+ 
++		enabled = (mode == THERMAL_DEVICE_ENABLED);
++
++		if (priv->os_uuid_mask) {
++			if (!enabled) {
++				priv->os_uuid_mask = 0;
++				result = set_os_uuid_mask(priv, priv->os_uuid_mask);
++			}
++			goto eval_odvp;
++		}
++
+ 		if (priv->current_uuid_index < 0 ||
+ 		    priv->current_uuid_index >= INT3400_THERMAL_MAXIMUM_UUID)
+ 			return -EINVAL;
+ 
+-		enabled = (mode == THERMAL_DEVICE_ENABLED);
+ 		result = int3400_thermal_run_osc(priv->adev->handle,
+ 						 int3400_thermal_uuids[priv->current_uuid_index],
+ 						 &enabled);
+ 	}
+ 
+-
++eval_odvp:
+ 	evaluate_odvp(priv);
+ 
+ 	return result;
+-- 
+2.31.1
+

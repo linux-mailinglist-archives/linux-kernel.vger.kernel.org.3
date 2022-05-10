@@ -2,170 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 222D1520A59
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 02:45:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C41520A5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 02:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233876AbiEJAtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 20:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46716 "EHLO
+        id S233011AbiEJAuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 20:50:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233011AbiEJAtC (ORCPT
+        with ESMTP id S229991AbiEJAuD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 20:49:02 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110C2201388
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 17:45:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652143507; x=1683679507;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GeIgOnwBjoETAQHmucQ7R/kDKLxgAt3Z9vGZ1wlwYj8=;
-  b=c/xi6+ETSAtGAN2uKSkTE3DSij7YnCZB7wCpRpDRUVwxB5wErMgVSmCr
-   Yrwvso6nUPmqk45HuejkLHdbtwcF6XMGHlJpg7zpvKDcjYIxpN4ck2/g5
-   z5p62kG1G2WJTIfErKG6Cb7JhrtkQJSlL+DdY3YC3EntslOZjRuuPswPs
-   uEVthPALwkpwlLDN7OtTwuAM8BQwJzu//chEiQtkS8MgnAS0hUa8V05wr
-   KE6cbhSmZUZIb+CiXKaazlNl1+OASYjJjWBl8snkpo2jGA8qMMt7SS2Td
-   xTT4C0lq2PUf9sbq+S6fzjvW3Rvmbe4xN+mdfPI4KViarQ4OjGgD6fQXq
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="269146724"
-X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="269146724"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 17:45:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="657382336"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 09 May 2022 17:45:04 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1noDzs-000H44-38;
-        Tue, 10 May 2022 00:45:04 +0000
-Date:   Tue, 10 May 2022 08:44:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [avpatel:riscv_kvm_aia_v1 34/35] arch/riscv/kvm/aia_aplic.c:264:6:
- warning: variable 'inject' is used uninitialized whenever 'if' condition is
- true
-Message-ID: <202205100811.BAMM4bPO-lkp@intel.com>
+        Mon, 9 May 2022 20:50:03 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FAA72380CC
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 17:46:02 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id CF1761F9EF;
+        Tue, 10 May 2022 00:46:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1652143560; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CtMQXVZDrYDub2elu5mYBR/xnlKkD34z85QlnnWHBJE=;
+        b=FXY11OxPVLDYqHQzuMY59q4TCVfC7yzyWSH1yeNLJFpRxpSa8dhwob1xPdf1uOWH3onGI9
+        DeS3f4mzjbSdaPYz+mATUc+Pe/8LmX/Q13uZdWEzqiH9lT+wf06bnhDe5fbfB82s7fL1do
+        SI7IidNC6s9xQnuhks07IrMpag1bO6o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1652143560;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CtMQXVZDrYDub2elu5mYBR/xnlKkD34z85QlnnWHBJE=;
+        b=+cXAQWYZjnP/LmKKet27Ult+XaSpd+yjQVIMlwlnGxRrorlBEeLqSE7b9BFAaOw0BqrAkd
+        v2sTeS/J5aI93BBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3429F13A76;
+        Tue, 10 May 2022 00:45:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 8AvuN8S1eWJvagAAMHmgww
+        (envelope-from <neilb@suse.de>); Tue, 10 May 2022 00:45:56 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Miaohe Lin" <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, vbabka@suse.cz,
+        dhowells@redhat.com, apopple@nvidia.com, david@redhat.com,
+        surenb@google.com, peterx@redhat.com, naoya.horiguchi@nec.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linmiaohe@huawei.com
+Subject: Re: [PATCH 11/15] mm/swap: add helper swap_offset_available()
+In-reply-to: <20220509131416.17553-12-linmiaohe@huawei.com>
+References: <20220509131416.17553-1-linmiaohe@huawei.com>,
+ <20220509131416.17553-12-linmiaohe@huawei.com>
+Date:   Tue, 10 May 2022 10:45:54 +1000
+Message-id: <165214355418.14782.13896859043718755300@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
-head:   2622f5aa2f4ccb93fdd771e7503ca364c6a290d4
-commit: cd81051cd1fc8eeb4629c0f3b71cf570e4a7d436 [34/35] RISC-V: KVM: Add in-kernel emulation of AIA APLIC
-config: riscv-randconfig-r004-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100811.BAMM4bPO-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/avpatel/linux/commit/cd81051cd1fc8eeb4629c0f3b71cf570e4a7d436
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_kvm_aia_v1
-        git checkout cd81051cd1fc8eeb4629c0f3b71cf570e4a7d436
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+On Mon, 09 May 2022, Miaohe Lin wrote:
+> Add helper swap_offset_available() to remove some duplicated codes.
+> Minor readability improvement.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I don't think that putting the spin_lock() inside the inline helper is
+good for readability.
+If the function was called
+   swap_offset_available_and_locked()
 
-All warnings (new ones prefixed by >>):
+it might be ok.  Otherwise I would rather the spin_lock() was called
+when the function returned true.
 
->> arch/riscv/kvm/aia_aplic.c:264:6: warning: variable 'inject' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:303:6: note: uninitialized use occurs here
-           if (inject)
-               ^~~~~~
-   arch/riscv/kvm/aia_aplic.c:264:2: note: remove the 'if' if its condition is always false
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:252:13: note: initialize the variable 'inject' to silence this warning
-           bool inject, ie;
-                      ^
-                       = 0
-   1 warning generated.
+Thanks,
+NeilBrown
 
-
-vim +264 arch/riscv/kvm/aia_aplic.c
-
-   248	
-   249	int kvm_riscv_aia_aplic_inject(struct kvm *kvm, u32 source, bool level)
-   250	{
-   251		u32 target;
-   252		bool inject, ie;
-   253		unsigned long flags;
-   254		struct aplic_irq *irqd;
-   255		struct aplic *aplic = kvm->arch.aia.aplic_state;
-   256	
-   257		if (!aplic || !source || (aplic->nr_irqs <= source))
-   258			return -ENODEV;
-   259		irqd = &aplic->irqs[source];
-   260		ie = (aplic->domaincfg & APLIC_DOMAINCFG_IE) ? true : false;
-   261	
-   262		raw_spin_lock_irqsave(&irqd->lock, flags);
-   263	
- > 264		if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-   265			goto skip_unlock;
-   266	
-   267		switch (irqd->sourcecfg & APLIC_SOURCECFG_SM_MASK) {
-   268		case APLIC_SOURCECFG_SM_EDGE_RISE:
-   269			if (level && !(irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   270			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   271				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   272			break;
-   273		case APLIC_SOURCECFG_SM_EDGE_FALL:
-   274			if (!level && (irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   275			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   276				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   277			break;
-   278		case APLIC_SOURCECFG_SM_LEVEL_HIGH:
-   279			if (level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   280				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   281			break;
-   282		case APLIC_SOURCECFG_SM_LEVEL_LOW:
-   283			if (!level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   284				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   285			break;
-   286		}
-   287	
-   288		if (level)
-   289			irqd->state |= APLIC_IRQ_STATE_INPUT;
-   290		else
-   291			irqd->state &= ~APLIC_IRQ_STATE_INPUT;
-   292	
-   293		inject = false;
-   294		target = irqd->target;
-   295		if (ie && (irqd->state & APLIC_IRQ_STATE_ENPEND)) {
-   296			irqd->state &= ~APLIC_IRQ_STATE_PENDING;
-   297			inject = true;
-   298		}
-   299	
-   300	skip_unlock:
-   301		raw_spin_unlock_irqrestore(&irqd->lock, flags);
-   302	
-   303		if (inject)
-   304			aplic_inject_msi(kvm, source, target);
-   305	
-   306		return 0;
-   307	}
-   308	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>=20
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  mm/swapfile.c | 33 +++++++++++++++++----------------
+>  1 file changed, 17 insertions(+), 16 deletions(-)
+>=20
+> diff --git a/mm/swapfile.c b/mm/swapfile.c
+> index c90298a0561a..d5d3e2d03d28 100644
+> --- a/mm/swapfile.c
+> +++ b/mm/swapfile.c
+> @@ -776,6 +776,21 @@ static void set_cluster_next(struct swap_info_struct *=
+si, unsigned long next)
+>  	this_cpu_write(*si->cluster_next_cpu, next);
+>  }
+> =20
+> +static inline bool swap_offset_available(struct swap_info_struct *si, unsi=
+gned long offset)
+> +{
+> +	if (data_race(!si->swap_map[offset])) {
+> +		spin_lock(&si->lock);
+> +		return true;
+> +	}
+> +
+> +	if (vm_swap_full() && READ_ONCE(si->swap_map[offset]) =3D=3D SWAP_HAS_CAC=
+HE) {
+> +		spin_lock(&si->lock);
+> +		return true;
+> +	}
+> +
+> +	return false;
+> +}
+> +
+>  static int scan_swap_map_slots(struct swap_info_struct *si,
+>  			       unsigned char usage, int nr,
+>  			       swp_entry_t slots[])
+> @@ -953,15 +968,8 @@ static int scan_swap_map_slots(struct swap_info_struct=
+ *si,
+>  scan:
+>  	spin_unlock(&si->lock);
+>  	while (++offset <=3D READ_ONCE(si->highest_bit)) {
+> -		if (data_race(!si->swap_map[offset])) {
+> -			spin_lock(&si->lock);
+> +		if (swap_offset_available(si, offset))
+>  			goto checks;
+> -		}
+> -		if (vm_swap_full() &&
+> -		    READ_ONCE(si->swap_map[offset]) =3D=3D SWAP_HAS_CACHE) {
+> -			spin_lock(&si->lock);
+> -			goto checks;
+> -		}
+>  		if (unlikely(--latency_ration < 0)) {
+>  			cond_resched();
+>  			latency_ration =3D LATENCY_LIMIT;
+> @@ -970,15 +978,8 @@ static int scan_swap_map_slots(struct swap_info_struct=
+ *si,
+>  	}
+>  	offset =3D si->lowest_bit;
+>  	while (offset < scan_base) {
+> -		if (data_race(!si->swap_map[offset])) {
+> -			spin_lock(&si->lock);
+> +		if (swap_offset_available(si, offset))
+>  			goto checks;
+> -		}
+> -		if (vm_swap_full() &&
+> -		    READ_ONCE(si->swap_map[offset]) =3D=3D SWAP_HAS_CACHE) {
+> -			spin_lock(&si->lock);
+> -			goto checks;
+> -		}
+>  		if (unlikely(--latency_ration < 0)) {
+>  			cond_resched();
+>  			latency_ration =3D LATENCY_LIMIT;
+> --=20
+> 2.23.0
+>=20
+>=20

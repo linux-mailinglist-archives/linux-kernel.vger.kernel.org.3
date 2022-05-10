@@ -2,54 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 904F4520C72
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 05:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40AC9520C75
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 05:53:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234313AbiEJDyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 23:54:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34062 "EHLO
+        id S235267AbiEJD5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 23:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231679AbiEJDyu (ORCPT
+        with ESMTP id S231679AbiEJD47 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 23:54:50 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C1825EE;
-        Mon,  9 May 2022 20:50:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652154649; x=1683690649;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=nbv7UmfdXbcrW16GgE7aK/oiYQcXbQEJkwqMj9eP0Gk=;
-  b=VN66fcUAuPw9/X30HQc+PRR5L9T5PszsN4qaW3da7zwQSGb/mRJCwDbH
-   1S7kuTEbKa5ynqqt4eEjIALDqO33K8I+oBHgPQrmajVCyV5jpfVqXNR44
-   AY/jAVx/IPJuOgarMjxZpJguUVUgznfJI+c2yVK+ghHIWw/ketP7neKVS
-   zvlBZrfpoAlq4Niua/fSrLSKC+wBjsAN6lmaM1VYllS1Q8wGZUqWoZA99
-   Z0zf16LOWYE3azd8lGtUfR8ybfNJNoSdyn/GPEGXuCbRGGss26WEjPSr5
-   WXeJzQWl+8gOaIT5sc912Idq4lim2GcD2VfDSn8SVZ53b56F//mCl+xqY
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="266837547"
-X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
-   d="scan'208";a="266837547"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 20:50:49 -0700
-X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
-   d="scan'208";a="602270857"
-Received: from embargo.jf.intel.com ([10.165.9.183])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 20:50:48 -0700
-From:   Yang Weijiang <weijiang.yang@intel.com>
-To:     pbonzini@redhat.com
-Cc:     likexu@tencent.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Yang Weijiang <weijiang.yang@intel.com>
-Subject: [PATCH] KVM: selftests: x86: Skip unsupported test when Arch LBR is available
-Date:   Mon,  9 May 2022 23:50:28 -0400
-Message-Id: <20220510035028.21042-1-weijiang.yang@intel.com>
-X-Mailer: git-send-email 2.27.0
+        Mon, 9 May 2022 23:56:59 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E91E1B1769
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 20:53:03 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id iq10so14829771pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 20:53:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=hReiOX69+mv1pt6YxzVEwJ7YYc7NAuaNgWxYK9q0lF0=;
+        b=hWkL9E8kxRiwqYY6H1zR3E4Ao35pOjmTLDahP9HsOSAAEO8AcGr18Auk0HSWSJnA6w
+         jDfwBY5QFS3lb5jC0nMSOKMoZzYNU3MS/9wKyGZRS8gg9cJsWFPY3x7pgzsC0cIRjXCg
+         wv02jmEtgmar1TooIC9jIKSBEgW67TA6rEqpqAF3wbo49/OC64AU5Q732J3c26aZ0t8h
+         GLNWshGu3Pgn89fmyrjydJFhPe3AI3rDDn+V9Um/f+oRLHNkEG45M46E8bCOJ98TXRcU
+         RWwanft6968Jv6o/Mzk4QRLwmN8BvFP6Wj1lC4PZDVV/XZYvFQBHaTYwNgtpRu/kWcmC
+         E4wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=hReiOX69+mv1pt6YxzVEwJ7YYc7NAuaNgWxYK9q0lF0=;
+        b=Sj9sVHlbgEVQO96GVpcCwM20wW0shtJZbdtSMIBg/xA6HeZRPSzxXb8eUD1Ukgss+e
+         MHF1jfDkJ8AGaVCxZOzJThkPOYu4WPAOoKlObeoKo9me3QyR6i8Wn+osmH8gD3+4Nom+
+         l10DIxNd0RUUbWIFJq2DTCvZvMIuDlOcRAgxzkTwizlkJnUTR56bku4I5pLShHBIFibr
+         BWIf7xnzkI3TUoa2y7YSF4SWhXRMxp8o2sbp6U+bpAQgnyhIWT4k40Vl098/1yG9uQgk
+         SHZhyo7ujxAdwWHkkqVOL7Mi0qeq5HzFo/OjrAujnNQwQ+iJm+loGnUoyZ8+bcd+s92n
+         0+rQ==
+X-Gm-Message-State: AOAM531NeWtZ5c7q2+FMv069hcSP4F2u4B5PKNWw2ypyCBH4mXxCrEyw
+        QjZRtEmlhhH2OSJhm2u0whCvgMsy9nI2pw==
+X-Google-Smtp-Source: ABdhPJwyQo7aFq8SBKDox+aj6XJZyLun7T1NIGI4CSdhc4FLlzaDDjeN4zlr6cier4x5dr68hdydjg==
+X-Received: by 2002:a17:90a:e2cb:b0:1da:35d6:3a08 with SMTP id fr11-20020a17090ae2cb00b001da35d63a08mr29482199pjb.223.1652154783083;
+        Mon, 09 May 2022 20:53:03 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id s13-20020a17090302cd00b0015f186be48asm737847plk.36.2022.05.09.20.53.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 20:53:02 -0700 (PDT)
+Date:   Tue, 10 May 2022 09:22:59 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: fix race on cpufreq online
+Message-ID: <20220510035259.5ep52sgahd2a6rie@vireshk-i7>
+References: <20220420191541.99528-1-schspa@gmail.com>
+ <20220509035746.aeggm4cut2ewcmmk@vireshk-i7>
+ <CAMA88ToT5Jx1xM20X0DPv9S7hyQY2DuvO0TY6VLJxSwty3PfVw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMA88ToT5Jx1xM20X0DPv9S7hyQY2DuvO0TY6VLJxSwty3PfVw@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,54 +73,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Arch LBR capable platforms, LBR_FMT in perf capability msr is 0x3f,
-so skip invalid format test if it's running on these platforms.
-Opportunistically change the file name to reflect the tests actually
-carried out.
+On 09-05-22, 23:06, Schspa Shi wrote:
+> I am very sorry for this oversight.
 
-Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
----
- tools/testing/selftests/kvm/Makefile                     | 2 +-
- .../x86_64/{vmx_pmu_msrs_test.c => vmx_pmu_caps_test.c}  | 9 +++++++--
- 2 files changed, 8 insertions(+), 3 deletions(-)
- rename tools/testing/selftests/kvm/x86_64/{vmx_pmu_msrs_test.c => vmx_pmu_caps_test.c} (88%)
+No issues, I am partly to blame for not reviewing it as well.
 
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 681b173aa87c..9a1a84803b01 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -81,7 +81,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/xapic_state_test
- TEST_GEN_PROGS_x86_64 += x86_64/xss_msr_test
- TEST_GEN_PROGS_x86_64 += x86_64/debug_regs
- TEST_GEN_PROGS_x86_64 += x86_64/tsc_msrs_test
--TEST_GEN_PROGS_x86_64 += x86_64/vmx_pmu_msrs_test
-+TEST_GEN_PROGS_x86_64 += x86_64/vmx_pmu_caps_test
- TEST_GEN_PROGS_x86_64 += x86_64/xen_shinfo_test
- TEST_GEN_PROGS_x86_64 += x86_64/xen_vmcall_test
- TEST_GEN_PROGS_x86_64 += x86_64/sev_migrate_tests
-diff --git a/tools/testing/selftests/kvm/x86_64/vmx_pmu_msrs_test.c b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
-similarity index 88%
-rename from tools/testing/selftests/kvm/x86_64/vmx_pmu_msrs_test.c
-rename to tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
-index 2454a1f2ca0c..977c268a6ad4 100644
---- a/tools/testing/selftests/kvm/x86_64/vmx_pmu_msrs_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
-@@ -107,8 +107,13 @@ int main(int argc, char *argv[])
- 	ASSERT_EQ(vcpu_get_msr(vm, VCPU_ID, MSR_IA32_PERF_CAPABILITIES), (u64)host_cap.lbr_format);
- 
- 	/* testcase 3, check invalid LBR format is rejected */
--	ret = _vcpu_set_msr(vm, 0, MSR_IA32_PERF_CAPABILITIES, PMU_CAP_LBR_FMT);
--	TEST_ASSERT(ret == 0, "Bad PERF_CAPABILITIES didn't fail.");
-+	/* Note, on Arch LBR capable platforms, LBR_FMT in perf capability msr is 0x3f,
-+	 * so skip below test if running on these platforms. */
-+	if (host_cap.lbr_format != PMU_CAP_LBR_FMT) {
-+		ret = _vcpu_set_msr(vm, 0, MSR_IA32_PERF_CAPABILITIES, PMU_CAP_LBR_FMT);
-+		TEST_ASSERT(ret == 0, "Bad PERF_CAPABILITIES didn't fail.");
-+	}
- 
-+	printf("Completed pmu capability tests successfully.\n");
- 	kvm_vm_free(vm);
- }
+> To fix this issue, there is no need to move cpufreq_driver->exit(policy)
+> and cpufreq_driver->offline(policy) to inside of &policy->rwsem.
+> I made this change because they are inside of &policy->rwsem write lock
+> at cpufreq_offline. I think we should keep offline & exit call inside of
+> policy->rwsem for better symmetry.
+> 
+> static int cpufreq_offline(unsigned int cpu)
+> {
+>         ...
+>         down_write(&policy->rwsem);
+>     ...
+>         /*
+>          * Perform the ->offline() during light-weight tear-down, as
+>          * that allows fast recovery when the CPU comes back.
+>          */
+>         if (cpufreq_driver->offline) {
+>                 cpufreq_driver->offline(policy);
+>         } else if (cpufreq_driver->exit) {
+>                 cpufreq_driver->exit(policy);
+>                 policy->freq_table = NULL;
+>         }
+> 
+> unlock:
+>         up_write(&policy->rwsem);
+>         return 0;
+> }
+> 
+> > The very first thing we need to do now is revert this patch. Lemme
+> > send a patch for that and you can send a fresh fix over that once you
+> > have a stable fix.
+> 
+> For the next version of the stable fix, I'd be willing to keep exit and
+> offline calls inside of policy->rwsem. But it's OK for me to keep offline
+> & exit calls outside of policy->rwsem.
+
+Just send a patch with whatever you think is the right fix and lets
+take it from there.
+
 -- 
-2.27.0
-
+viresh

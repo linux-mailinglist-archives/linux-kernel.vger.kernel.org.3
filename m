@@ -2,221 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B50052265C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 23:33:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D12A0522663
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 23:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235232AbiEJVde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 17:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
+        id S235087AbiEJVdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 17:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbiEJVdc (ORCPT
+        with ESMTP id S235245AbiEJVdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 17:33:32 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E9018430F;
-        Tue, 10 May 2022 14:33:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652218411; x=1683754411;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=arXQR9RA80tLXKmu33RYWppSPN+xDoh5MJosgwaWAgw=;
-  b=rglOEs1KzzVKVEwFLsnXGQwirZ7gqI2Olfp0vFvIJ0H/0C+KMOSmhzO6
-   kmSqhPOhWt2Z9YATDQwn2ZQihPu4cHvPAd0rxq3Cze/L7mH2ZkEX5N17h
-   nNu2AlYbKBsn0kvmtxyg6Vj27n/F1wr1ukXfMj0QuyXLiMs1VdgbwfOBz
-   E=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 10 May 2022 14:33:30 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 14:33:30 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 10 May 2022 14:33:29 -0700
-Received: from [10.38.241.82] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 10 May
- 2022 14:33:26 -0700
-Message-ID: <685a547b-175e-68db-a5f6-0e85dacd075a@quicinc.com>
-Date:   Tue, 10 May 2022 14:33:24 -0700
+        Tue, 10 May 2022 17:33:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 106EF187055
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 14:33:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652218418;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HLGf+NuJ1hkzNkgtKj/5di7e25KMw+geo5HNi0Tx2nk=;
+        b=IllTouDeDWyuuii3FEw/SFS7SbKUxuI/KRe6yxmzPM69f+BEphvzmS2hIA5dopj/KYSem2
+        nOseFtDds5Zf5IIOlLVw/4wH3vsT8RJVGPNZNjymO7uX3ZT/G1EgA9h6SDaIyylfAySbp6
+        5Bg4L92hvfvwwKCQi32PfLajPr6gK/A=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-191-pAoZ7ypeNgSzguRMQTVt8w-1; Tue, 10 May 2022 17:33:36 -0400
+X-MC-Unique: pAoZ7ypeNgSzguRMQTVt8w-1
+Received: by mail-qk1-f197.google.com with SMTP id c8-20020a05620a268800b0069c0f1b3206so285722qkp.18
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 14:33:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=HLGf+NuJ1hkzNkgtKj/5di7e25KMw+geo5HNi0Tx2nk=;
+        b=ydFKQ35/7t4pjF20QV1UOkqjysBz3qmWre9L5qpfI/Nn0XsfwJUTIBlm0YBxZR+lxf
+         WCWZhyDRx7FIkk70rXLcpXjz+B1f5EKl3+1kyL5aEERrs23jM75G0JoZV0fFtCGi+Cwu
+         ckNyQ1BVKS3beUxvwS9zo9oCmgd09PjZn6vU8cRSYfVQB8wCWqFgQHSjD3CjUnEaRJHy
+         mMU3tFYqifw4A0S+e8Q3BirvBo9ATJR6de7wM3Ite1Odd3Y5JepuTCS38AH4V3iOyehk
+         iLJ/EPq+spoGsL/Lc3OQiAa5tc9qmd/ig8zGd905AbJheyKD2ZXsj2beXtlBo2Rf8HEq
+         BI8Q==
+X-Gm-Message-State: AOAM530a3U0NGaTh8ZMlBp59KMwuL8ie4ScKvx7w5FDym8nnZRkC61hR
+        9x2r2ogb2d7SvIzKSHVeHIEOYabcv1KWam/ReunsxuQ911yW9TFnDHWPjWTmWLrK04OJp7GywjU
+        m86mcGPKgxQllJcchmzYysR8D
+X-Received: by 2002:ac8:5745:0:b0:2f3:e231:bc12 with SMTP id 5-20020ac85745000000b002f3e231bc12mr5525729qtx.291.1652218416250;
+        Tue, 10 May 2022 14:33:36 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzCqYVgaYDvYJ1YgN8Xi0ySx91V66DHix7zN4MtUt1dANUAWaEB9Mt7T3gVjhpX2VPgo7Umrw==
+X-Received: by 2002:ac8:5745:0:b0:2f3:e231:bc12 with SMTP id 5-20020ac85745000000b002f3e231bc12mr5525702qtx.291.1652218416011;
+        Tue, 10 May 2022 14:33:36 -0700 (PDT)
+Received: from m8.users.ipa.redhat.com (cpe-158-222-141-151.nyc.res.rr.com. [158.222.141.151])
+        by smtp.gmail.com with ESMTPSA id z21-20020ac87115000000b002f39b99f6adsm43257qto.71.2022.05.10.14.33.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 14:33:35 -0700 (PDT)
+Message-ID: <5b63a8a37b415db66ffe6b660859e3900c054909.camel@redhat.com>
+Subject: Re: is "premature next" a real world rng concern, or just an
+ academic exercise?
+From:   Simo Sorce <simo@redhat.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>, dodis@cs.nyu.edu,
+        tytso@mit.edu, nadiah@cs.ucsd.edu, noahsd@gmail.com,
+        tessaro@cs.washington.edu, torvalds@linux-foundation.org,
+        jeanphilippe.aumasson@gmail.com, jann@thejh.net,
+        keescook@chromium.org, gregkh@linuxfoundation.org,
+        peter@cryptojedi.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, "D. J. Bernstein" <djb@cr.yp.to>
+Date:   Tue, 10 May 2022 17:33:34 -0400
+In-Reply-To: <YnrGYMyEL8qPMRGt@zx2c4.com>
+References: <YmlMGx6+uigkGiZ0@zx2c4.com> <Ym3ZM1P+uYYABtRm@mit.edu>
+         <Ym5sICj5iBMn2w/E@zx2c4.com>
+         <CAMvzKsiA52Si=PzOJXYwGSA1WUz-1S0A8cpgRJWDzpMkfFbX+Q@mail.gmail.com>
+         <CAMvzKsiMY_+8HZqeFqD3tR65a3-JB0LG=+0jBBy1zF4GanrsGA@mail.gmail.com>
+         <YnqDC25iR8mcL3XB@zx2c4.com> <20220510185123.80607.qmail@cr.yp.to>
+         <YnrGYMyEL8qPMRGt@zx2c4.com>
+Organization: Red Hat
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [RFC PATCH] drm/edid: drm_add_modes_noedid() should set lowest
- resolution as preferred
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>
-CC:     Jani Nikula <jani.nikula@linux.intel.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        "David Airlie" <airlied@linux.ie>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220426132121.RFC.1.I31ec454f8d4ffce51a7708a8092f8a6f9c929092@changeid>
- <CAD=FV=XViHtOoQH3fm4yoRcUAkLkf0Wf4zPXUH0Zq5_09tZmjw@mail.gmail.com>
- <874k22lxmh.fsf@intel.com> <8ea03441-b835-f5db-5cc3-85e5330dfe3f@quicinc.com>
- <CAD=FV=UBTEAQD+49xwFM4UdzD2dqQ7WkpNYtO=JRTJwfRWo1Yg@mail.gmail.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <CAD=FV=UBTEAQD+49xwFM4UdzD2dqQ7WkpNYtO=JRTJwfRWo1Yg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Doug
+On Tue, 2022-05-10 at 22:09 +0200, Jason A. Donenfeld wrote:
+> For 5.19 (or at this point, more likely 5.20), there's a userspace
+> notifier in store, maybe, if I can figure out how to do it right.
+> There's a pretty bikesheddy thread here on what shape that interface
+> should take: https://lore.kernel.org/lkml/YnA5CUJKvqmXJxf2@zx2c4.com/
+> But basically there are some details about how an async interface should
+> work, and what the virtual hardware future, if any, looks like for a
+> memory mapped race-free polling interface. Plus some considerations on
+> how much we should care etc.
 
-On 5/10/2022 1:53 PM, Doug Anderson wrote:
-> Hi,
-> 
-> On Fri, May 6, 2022 at 9:33 AM Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
->>
->> Hi Jani
->>
->> On 5/6/2022 4:16 AM, Jani Nikula wrote:
->>> On Thu, 05 May 2022, Doug Anderson <dianders@chromium.org> wrote:
->>>> Ville,
->>>>
->>>> On Tue, Apr 26, 2022 at 1:21 PM Douglas Anderson <dianders@chromium.org> wrote:
->>>>>
->>>>> If we're unable to read the EDID for a display because it's corrupt /
->>>>> bogus / invalid then we'll add a set of standard modes for the
->>>>> display. When userspace looks at these modes it doesn't really have a
->>>>> good concept for which mode to pick and it'll likely pick the highest
->>>>> resolution one by default. That's probably not ideal because the modes
->>>>> were purely guesses on the part of the Linux kernel.
->>>>>
->>>>> Let's instead set 640x480 as the "preferred" mode when we have no EDID.
->>>>>
->>>>> Signed-off-by: Douglas Anderson <dianders@chromium.org>
->>>>> ---
->>>>>
->>>>>    drivers/gpu/drm/drm_edid.c | 9 +++++++++
->>>>>    1 file changed, 9 insertions(+)
->>>>
->>>> Someone suggested that you might have an opinion on this patch and
->>>> another one I posted recently [1]. Do you have any thoughts on it?
->>>> Just to be clear: I'm hoping to land _both_ this patch and [1]. If you
->>>> don't have an opinion, that's OK too.
->>>>
->>>> [1] https://lore.kernel.org/r/20220426114627.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid
->>>
->>> There are a number of drivers with combos:
->>>
->>>        drm_add_modes_noedid()
->>>        drm_set_preferred_mode()
->>>
->>> which I think would be affected by the change. Perhaps you should just
->>> call drm_set_preferred_mode() in your referenced patch?
-> 
-> I'm going to do that and I think it works out pretty well. Patch is at:
-> 
-> https://lore.kernel.org/r/20220510135101.v2.1.I31ec454f8d4ffce51a7708a8092f8a6f9c929092@changeid
-> 
-> 
->> So it seems like many drivers handle the !edid case within their
->> respective get_modes() call which probably is because they know the max
->> capability of their connector and because they know which mode should be
->> set as preferred. But at the same time, perhaps the code below which
->> handles the count == 0 case should be changed like below to make sure we
->> are within the max_width/height of the connector (to handle the first
->> condition)?
->>
->> diff --git a/drivers/gpu/drm/drm_probe_helper.c
->> b/drivers/gpu/drm/drm_probe_helper.c
->> index 682359512996..6eb89d90777b 100644
->> --- a/drivers/gpu/drm/drm_probe_helper.c
->> +++ b/drivers/gpu/drm/drm_probe_helper.c
->> @@ -517,7 +517,8 @@ int drm_helper_probe_single_connector_modes(struct
->> drm_connector *connector,
->>
->>           if (count == 0 && (connector->status ==
->> connector_status_connected ||
->>                              connector->status == connector_status_unknown))
->> -               count = drm_add_modes_noedid(connector, 1024, 768);
->> +               count = drm_add_modes_noedid(connector,
->> connector->dev->mode_config.max_width,
->> +                               connector->dev->mode_config.max_height);
->>           count += drm_helper_probe_add_cmdline_mode(connector);
->>           if (count == 0)
->>                   goto prune;
->>
->>
->>> Alternatively, perhaps drm_set_preferred_mode() should erase the
->>> previous preferred mode(s) if it finds a matching new preferred mode.
->>>
->>
->> But still yes, even if we change it like above perhaps for other non-DP
->> cases its still better to allow individual drivers to pick their
->> preferred modes.
->>
->> If we call drm_set_preferred_mode() in the referenced patch, it will not
->> address the no EDID cases because the patch comes into picture when
->> there was a EDID with some modes but not with 640x480.
-> 
-> I'm not sure I understand the above paragraph. I think the "there's an
-> EDID but no 640x480" is handled by my other patch [1]. Here we're only
-> worried about the "no EDID" case, right?
-> 
-Yes, there are two fixes which have been done (OR have to be done).
+Perhaps it might be simpler to add an "epoch" number or similar exposed
+via something like a vDSO that proper user space implementations can
+then check before returning numbers from PRNGs and will immediately
+reseed from /dev/random if it ever changes (rare event).
 
-1) Case when EDID read failed and count of modes was 0.
+It is much simpler to poll for this information in user space crypto
+libraries than using notifications of any kind given libraries are
+generally not in full control of what the process does.
 
-Here the DRM framework was already adding 640x480@60fps. The fix we had 
-to make was making 640x480@60fps as the preferred mode. Which is what 
-your current patch aims at addressing.
+This needs to be polled fast as well, because the whole point of
+initializing a PRNG in the library is that asking /dev/urandom all the
+time is too slow (due to context switches and syscall overhead), so
+anything that would require a context switch in order to pull data from
+the PRNG would not really fly.
 
-https://lore.kernel.org/all/20220510135101.v2.1.I31ec454f8d4ffce51a7708a8092f8a6f9c929092@changeid/
+Note that a generic "epoch" exposed via vDSO would be useful beyond
+RNGs, as it would be usable by any other user space that needs to know
+that "I have been cloned and I need to do something now" and would be
+able to use it immediately w/o the kernel needing to grow any other
+specific interface for it.
 
-So I thought the suggestion which Jani was giving was to call 
-drm_set_preferred_mode() on the referenced patch which was:
+HTH.
+Simo.
 
-https://lore.kernel.org/all/20220510131309.v2.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid/
-
-So that would not have fixed this case.
-
-Perhaps, I misunderstood the patch which was being referenced?
-
-2) Case where there were other modes, which got filtered out and in the 
-end no modes were left and we had to end up adding 640x480.
-
-No need to set the preferred mode in this case as this would have been 
-the only mode in the list ( so becomes preferred by default ).
-
-Thats this change
-
-https://lore.kernel.org/all/20220426114627.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid/
-
-I agree with combination of these 2 it should work.
+-- 
+Simo Sorce
+RHEL Crypto Team
+Red Hat, Inc
 
 
 
-> 
->> So i think the second proposal is a good one. It will cover existing
->> users of drm_set_preferred_mode() as typically its called after
->> drm_add_modes_noedid() which means the existing users want to "override"
->> their preferred mode.
-> 
-> I looked at this, and I'm pretty sure that we can't clear the
-> preferred modes. It looks like it's possible for there to be more than
-> one preferred mode and I'm worried about borking that up.
-> 
-> [1] https://lore.kernel.org/r/20220510131309.v2.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid
-> 
-> -Doug

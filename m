@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 027E2521BC4
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71567521C1B
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:26:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344135AbiEJOVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
+        id S1344215AbiEJOaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:30:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245019AbiEJNrL (ORCPT
+        with ESMTP id S244605AbiEJOC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:47:11 -0400
+        Tue, 10 May 2022 10:02:27 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2CB62202;
-        Tue, 10 May 2022 06:33:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3656E2DE5AC;
+        Tue, 10 May 2022 06:40:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0348DB81D24;
-        Tue, 10 May 2022 13:33:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D70BC385C2;
-        Tue, 10 May 2022 13:33:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD8F5B81DCD;
+        Tue, 10 May 2022 13:40:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CC9EC385A6;
+        Tue, 10 May 2022 13:40:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189619;
-        bh=Zln97j9H1I8Z09SIbIVmdjKM1SrYl6edsUlxjnppf8g=;
+        s=korg; t=1652190014;
+        bh=sv2hjGyjBcuJdU2vhkrhCU7EMqqYtp/aYPxVnvsQjCE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kMhLlMDcQFd8msCRhUa0eUV73NY32hknloZ1WZ8EHtY4rD+PxY61ZAz1eGt9nqq0x
-         Y2DHIF4dj5012wgAJWBAWtYOw7uO1DfAibI4Pv8BFuzRk2Kv/MTG+gPEltmAdkpPvD
-         77mY32w/hOMJxPSFwEcweXS0Zp51AE65AWtSXgcY=
+        b=eGNL870TQwHTle/l0b1c3AYZL1v8DMmOToKxCXiqQ+HZMcTZD49V2fqocwaXQxx2E
+         /SccFWWmuARrCIykD5a3OkY91YA4KjT9E8KhIItdyVXMP8frZA/BUARKHXHTMJvEda
+         jPMxS7nTFBPUJUBKIxDE9pwGgnadvhwmd9Kl6HoQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, pali@kernel.org,
-        =?UTF-8?q?Marek=20Beh=FAn?= <kabel@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Subject: [PATCH 5.15 109/135] PCI: aardvark: Clear all MSIs at setup
-Date:   Tue, 10 May 2022 15:08:11 +0200
-Message-Id: <20220510130743.532917884@linuxfoundation.org>
+        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.17 102/140] selftests: ocelot: tc_flower_chains: specify conform-exceed action for policer
+Date:   Tue, 10 May 2022 15:08:12 +0200
+Message-Id: <20220510130744.521684188@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,62 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-commit 7d8dc1f7cd007a7ce94c5b4c20d63a8b8d6d7751 upstream.
+commit 5a7c5f70c743c6cf32b44b05bd6b19d4ad82f49d upstream.
 
-We already clear all the other interrupts (ISR0, ISR1, HOST_CTRL_INT).
+As discussed here with Ido Schimmel:
+https://patchwork.kernel.org/project/netdevbpf/patch/20220224102908.5255-2-jianbol@nvidia.com/
 
-Define a new macro PCIE_MSI_ALL_MASK and do the same clearing for MSIs,
-to ensure that we don't start receiving spurious interrupts.
+the default conform-exceed action is "reclassify", for a reason we don't
+really understand.
 
-Use this new mask in advk_pcie_handle_msi();
+The point is that hardware can't offload that police action, so not
+specifying "conform-exceed" was always wrong, even though the command
+used to work in hardware (but not in software) until the kernel started
+adding validation for it.
 
-Link: https://lore.kernel.org/r/20211130172913.9727-5-kabel@kernel.org
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Signed-off-by: Marek Behún <kabel@kernel.org>
+Fix the command used by the selftest by making the policer drop on
+exceed, and pass the packet to the next action (goto) on conform.
+
+Fixes: 8cd6b020b644 ("selftests: ocelot: add some example VCAP IS1, IS2 and ES0 tc offloads")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+Link: https://lore.kernel.org/r/20220503121428.842906-1-vladimir.oltean@nxp.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/controller/pci-aardvark.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ tools/testing/selftests/drivers/net/ocelot/tc_flower_chains.sh |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/pci/controller/pci-aardvark.c
-+++ b/drivers/pci/controller/pci-aardvark.c
-@@ -115,6 +115,7 @@
- #define PCIE_MSI_ADDR_HIGH_REG			(CONTROL_BASE_ADDR + 0x54)
- #define PCIE_MSI_STATUS_REG			(CONTROL_BASE_ADDR + 0x58)
- #define PCIE_MSI_MASK_REG			(CONTROL_BASE_ADDR + 0x5C)
-+#define     PCIE_MSI_ALL_MASK			GENMASK(31, 0)
- #define PCIE_MSI_PAYLOAD_REG			(CONTROL_BASE_ADDR + 0x9C)
- #define     PCIE_MSI_DATA_MASK			GENMASK(15, 0)
+--- a/tools/testing/selftests/drivers/net/ocelot/tc_flower_chains.sh
++++ b/tools/testing/selftests/drivers/net/ocelot/tc_flower_chains.sh
+@@ -190,7 +190,7 @@ setup_prepare()
  
-@@ -570,6 +571,7 @@ static void advk_pcie_setup_hw(struct ad
- 	advk_writel(pcie, reg, PCIE_CORE_CTRL2_REG);
+ 	tc filter add dev $eth0 ingress chain $(IS2 0 0) pref 1 \
+ 		protocol ipv4 flower skip_sw ip_proto udp dst_port 5201 \
+-		action police rate 50mbit burst 64k \
++		action police rate 50mbit burst 64k conform-exceed drop/pipe \
+ 		action goto chain $(IS2 1 0)
+ }
  
- 	/* Clear all interrupts */
-+	advk_writel(pcie, PCIE_MSI_ALL_MASK, PCIE_MSI_STATUS_REG);
- 	advk_writel(pcie, PCIE_ISR0_ALL_MASK, PCIE_ISR0_REG);
- 	advk_writel(pcie, PCIE_ISR1_ALL_MASK, PCIE_ISR1_REG);
- 	advk_writel(pcie, PCIE_IRQ_ALL_MASK, HOST_CTRL_INT_STATUS_REG);
-@@ -582,7 +584,7 @@ static void advk_pcie_setup_hw(struct ad
- 	advk_writel(pcie, PCIE_ISR1_ALL_MASK, PCIE_ISR1_MASK_REG);
- 
- 	/* Unmask all MSIs */
--	advk_writel(pcie, 0, PCIE_MSI_MASK_REG);
-+	advk_writel(pcie, ~(u32)PCIE_MSI_ALL_MASK, PCIE_MSI_MASK_REG);
- 
- 	/* Enable summary interrupt for GIC SPI source */
- 	reg = PCIE_IRQ_ALL_MASK & (~PCIE_IRQ_ENABLE_INTS_MASK);
-@@ -1389,7 +1391,7 @@ static void advk_pcie_handle_msi(struct
- 
- 	msi_mask = advk_readl(pcie, PCIE_MSI_MASK_REG);
- 	msi_val = advk_readl(pcie, PCIE_MSI_STATUS_REG);
--	msi_status = msi_val & ~msi_mask;
-+	msi_status = msi_val & ((~msi_mask) & PCIE_MSI_ALL_MASK);
- 
- 	for (msi_idx = 0; msi_idx < MSI_IRQ_NUM; msi_idx++) {
- 		if (!(BIT(msi_idx) & msi_status))
 
 

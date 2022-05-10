@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98E3521C18
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE996521BCE
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245345AbiEJO3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47258 "EHLO
+        id S1344346AbiEJOVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244252AbiEJOAI (ORCPT
+        with ESMTP id S244998AbiEJNrK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:00:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDA02DE585;
-        Tue, 10 May 2022 06:39:51 -0700 (PDT)
+        Tue, 10 May 2022 09:47:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5E039833;
+        Tue, 10 May 2022 06:33:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F367961950;
-        Tue, 10 May 2022 13:39:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5CF7C385C2;
-        Tue, 10 May 2022 13:39:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7268EB81D24;
+        Tue, 10 May 2022 13:33:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDF72C385A6;
+        Tue, 10 May 2022 13:33:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189990;
-        bh=VPmGLYyoid+7Hr0o4liQyLBaeJin3XuWlLByWtnfuCo=;
+        s=korg; t=1652189601;
+        bh=ZPX7+Rri4XQY1fUgTPvv/Qn+qiJcSUxHBUSmocYYkfo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B84EGzG5iUUR5+SWN8kD3XgdjxZrqUB1vCIQ8kBqVzoqszAwDINqrf71VrWWV28Kl
-         mGI4iXzN69rr9/Kwks2yRj6F5mSm+g8/+QhU16Vza2M1py6F3T9ghcb1Zza9kRS6Bf
-         iZkoYlNVb7ECLKzXfdtApW/z9Lv/jpDPnJNh3cF4=
+        b=FUSLljfkT954RTbOkZ+y3+BLCFVT9EGUDKoGJEoH4VZ0B88QygQaQOCPwKinYHF5i
+         fMHIC71T9IWNDkYsVlLB1nPyslOH9irwa3zW/NiIx4BREcqf/3lMvfSPG9fhKmIC5Y
+         qmPIdbxVM5xW/IV/KLEQbxrLveBzvQtjE0Kh1EVA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qiao Ma <mqaio@linux.alibaba.com>,
-        Xunlei Pang <xlpang@linux.alibaba.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.17 094/140] hinic: fix bug of wq out of bound access
-Date:   Tue, 10 May 2022 15:08:04 +0200
-Message-Id: <20220510130744.296900716@linuxfoundation.org>
+        stable@vger.kernel.org, Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>
+Subject: [PATCH 5.15 103/135] Revert "parisc: Mark sched_clock unstable only if clocks are not syncronized"
+Date:   Tue, 10 May 2022 15:08:05 +0200
+Message-Id: <20220510130743.362197225@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +54,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qiao Ma <mqaio@linux.alibaba.com>
+From: Helge Deller <deller@gmx.de>
 
-commit 52b2abef450a78e25d485ac61e32f4ce86a87701 upstream.
+commit 7962c0896429af2a0e00ec6bc15d992536453b2d upstream.
 
-If wq has only one page, we need to check wqe rolling over page by
-compare end_idx and curr_idx, and then copy wqe to shadow wqe to
-avoid out of bound access.
-This work has been done in hinic_get_wqe, but missed for hinic_read_wqe.
-This patch fixes it, and removes unnecessary MASKED_WQE_IDX().
+This reverts commit d97180ad68bdb7ee10f327205a649bc2f558741d.
 
-Fixes: 7dd29ee12865 ("hinic: add sriov feature support")
-Signed-off-by: Qiao Ma <mqaio@linux.alibaba.com>
-Reviewed-by: Xunlei Pang <xlpang@linux.alibaba.com>
-Link: https://lore.kernel.org/r/282817b0e1ae2e28fdf3ed8271a04e77f57bf42e.1651148587.git.mqaio@linux.alibaba.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+It triggers RCU stalls at boot with a 32-bit kernel.
+
+Signed-off-by: Helge Deller <deller@gmx.de>
+Noticed-by: John David Anglin <dave.anglin@bell.net>
+Cc: stable@vger.kernel.org # v5.15+
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ arch/parisc/kernel/setup.c |    2 ++
+ arch/parisc/kernel/time.c  |    6 +-----
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
---- a/drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c
-@@ -771,7 +771,7 @@ struct hinic_hw_wqe *hinic_get_wqe(struc
- 	/* If we only have one page, still need to get shadown wqe when
- 	 * wqe rolling-over page
+--- a/arch/parisc/kernel/setup.c
++++ b/arch/parisc/kernel/setup.c
+@@ -150,6 +150,8 @@ void __init setup_arch(char **cmdline_p)
+ #ifdef CONFIG_PA11
+ 	dma_ops_init();
+ #endif
++
++	clear_sched_clock_stable();
+ }
+ 
+ /*
+--- a/arch/parisc/kernel/time.c
++++ b/arch/parisc/kernel/time.c
+@@ -249,13 +249,9 @@ void __init time_init(void)
+ static int __init init_cr16_clocksource(void)
+ {
+ 	/*
+-	 * The cr16 interval timers are not syncronized across CPUs, even if
+-	 * they share the same socket.
++	 * The cr16 interval timers are not synchronized across CPUs.
  	 */
--	if (curr_pg != end_pg || MASKED_WQE_IDX(wq, end_prod_idx) < *prod_idx) {
-+	if (curr_pg != end_pg || end_prod_idx < *prod_idx) {
- 		void *shadow_addr = &wq->shadow_wqe[curr_pg * wq->max_wqe_size];
- 
- 		copy_wqe_to_shadow(wq, shadow_addr, num_wqebbs, *prod_idx);
-@@ -841,7 +841,10 @@ struct hinic_hw_wqe *hinic_read_wqe(stru
- 
- 	*cons_idx = curr_cons_idx;
- 
--	if (curr_pg != end_pg) {
-+	/* If we only have one page, still need to get shadown wqe when
-+	 * wqe rolling-over page
-+	 */
-+	if (curr_pg != end_pg || end_cons_idx < curr_cons_idx) {
- 		void *shadow_addr = &wq->shadow_wqe[curr_pg * wq->max_wqe_size];
- 
- 		copy_wqe_to_shadow(wq, shadow_addr, num_wqebbs, *cons_idx);
+ 	if (num_online_cpus() > 1 && !running_on_qemu) {
+-		/* mark sched_clock unstable */
+-		clear_sched_clock_stable();
+-
+ 		clocksource_cr16.name = "cr16_unstable";
+ 		clocksource_cr16.flags = CLOCK_SOURCE_UNSTABLE;
+ 		clocksource_cr16.rating = 0;
 
 

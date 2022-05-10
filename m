@@ -2,63 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE75A521239
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:28:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C617B521236
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239868AbiEJKc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 06:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44834 "EHLO
+        id S239852AbiEJKcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 06:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239866AbiEJKcY (ORCPT
+        with ESMTP id S239649AbiEJKcO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 06:32:24 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67868201C0D
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:28:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652178507; x=1683714507;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pQwU2i6bceyAoTP/CIS30qvH7Mv3G1PJylMz6rT+0vI=;
-  b=KEMNhdAyAAq/XSIHMTSHffx/z+9wA/Ty9emWNgwpN5S5tAOFPZ2kytAJ
-   MDHQ6kxSXV13nG0ua/HAMHG5u/KgL7CxKG5QhqSw6cUd+HGViarmnDxa7
-   rejKY1iNgobvMZtkIz+ZNc/lzbxC17TO0AvBkgXsnDZZ0jNEMe61PELvm
-   qReIgt2hpdVWYRQeyitv7ZQLfzXXsZcCnO/nSEnTA4hA8yjQ3+dB8VSdt
-   Dc4DRUA/NOt46GMUs0406Vv16LvuDiLWH+Q2GAsLbzcjGdpJuBg5V5xEU
-   VlpSsEJ0XepKd+nSVR7FM3DejOFZWjVhtQvDXPV2S1l5QwJru3UB1mZEj
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="332364882"
-X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="332364882"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 03:28:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="710965058"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 10 May 2022 03:28:24 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1noN6O-000Hhn-Bw;
-        Tue, 10 May 2022 10:28:24 +0000
-Date:   Tue, 10 May 2022 18:27:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Haneen Mohammed <hamohammed.sa@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Sean Paul <seanpaul@chromium.org>,
-        =?iso-8859-1?Q?St=E9phane?= Marchesin <marcheu@chromium.org>,
-        "Kristian H. Kristensen" <hoegsberg@chromium.org>
-Subject: [jsarha:topic/cros-sof-v4.19 1170/6555]
- drivers/gpu/drm/vkms/vkms_drv.h:23:18: warning: 'vkms_cursor_formats'
- defined but not used
-Message-ID: <202205101800.K4r0yQWF-lkp@intel.com>
+        Tue, 10 May 2022 06:32:14 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B451E3EFC
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:28:17 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id p4so19468973edx.0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:28:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=qB8tiSg9orpGv2oafVz+zb1jhV1wE750MfA0k2QQW9s=;
+        b=rhth6SprFuXZRw9NUufEJzMkPofYa5+szGIs98AV0GVIbzsAA24w4QbdhAH0k6tNsm
+         G9lbp93Qgq5wQy0+CFXT1fi5iMuYA4Cm9U/PxSd8amtshY1+WWPg3Zsj2ouQqfzpm3cT
+         kgoHRoMvtjtr0hTCFuXrxFMAPcuVScNYCBHjhvwd+K12WtE868Zm28gTKB0PPjcHEMOT
+         ul8LCqkXub36kGTu/xSmxsHDmFJH+vm3u7mGVS7NKOKyYshFVlM324rzPLNV2dHsG+Oh
+         n0LVc+nwWpXvQhRwZyGWvq87SlHXW6mR5MmehPz78ndf2YvXFubXASGRbD0PBKSD9hJO
+         nEiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qB8tiSg9orpGv2oafVz+zb1jhV1wE750MfA0k2QQW9s=;
+        b=pwPD5R5wXAILhhgoBxzCUo4Gn3hg8Wx0raTyn1J9g7yZyqoLK32302IO8gHDI2YEPW
+         uyx9+zTb/iVimcOuZNIGVH10I7tGsqIBDfqIcyHpgAyCABL/054GrbapvoVSaxOyp0cH
+         yMBMkCgTF3DkSGygXWgiyHWXZOUJGwxrfktCH7VFJ0ozZC8Lph0a8zZhid+CN/F21geW
+         mrEvQd429swfMep8RWDpZVzp+D8E+2kj+YBSQXJ0w1Zf94IpC29kYYIDt57YASi2aRLP
+         3GrlN3drcFkDtmkk6/+twS5SZV9zC35TfPbWxewMlCVvmti3aL65YTY+Ltaz6WgsiNwK
+         VAGQ==
+X-Gm-Message-State: AOAM531p4H/15/3+jHvs83OUVQJ+ytPWlcw0F4mqhbZ0lcwlMG9P1OvS
+        PZC+IHBXbRvH1+/QEnrFwb1gUw==
+X-Google-Smtp-Source: ABdhPJw5CAaM7D9q3+CFzPibPNCbcA7gMgHTzab1tVA8q065CZ3vhqKEUGpu1+K0yDXGbet+UCoR+w==
+X-Received: by 2002:a50:ed13:0:b0:426:4939:45a9 with SMTP id j19-20020a50ed13000000b00426493945a9mr22748001eds.303.1652178495995;
+        Tue, 10 May 2022 03:28:15 -0700 (PDT)
+Received: from [192.168.0.251] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id qr48-20020a1709068cb000b006f3ef214e13sm6051348ejc.121.2022.05.10.03.28.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 03:28:15 -0700 (PDT)
+Message-ID: <1c3fd336-1450-9b68-df81-2f01cc2ba32f@linaro.org>
+Date:   Tue, 10 May 2022 12:28:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 1/3] dt-bindings: mediatek: add vdosys1 RDMA definition
+ for mt8195
+Content-Language: en-US
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>
+Cc:     "airlied@linux.ie" <airlied@linux.ie>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= 
+        <Jason-JH.Lin@mediatek.com>,
+        =?UTF-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+References: <20220509044302.27878-1-rex-bc.chen@mediatek.com>
+ <20220509044302.27878-2-rex-bc.chen@mediatek.com>
+ <a5c9e7ad-c4b5-e757-cd6d-f79de47d1ff3@linaro.org>
+ <fbbbc7e6a951bdde648ddd896f1fa163dafa16f1.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <fbbbc7e6a951bdde648ddd896f1fa163dafa16f1.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,83 +97,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jsarha/linux topic/cros-sof-v4.19
-head:   d7a3e91d8d16d1ef8653deec5a1fffc4de034a0c
-commit: ad949a53c5680265ac89dff6003c02178891e079 [1170/6555] UPSTREAM: drm/vkms: Add cursor plane support
-config: i386-randconfig-a001-20220509 (https://download.01.org/0day-ci/archive/20220510/202205101800.K4r0yQWF-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/jsarha/linux/commit/ad949a53c5680265ac89dff6003c02178891e079
-        git remote add jsarha https://github.com/jsarha/linux
-        git fetch --no-tags jsarha topic/cros-sof-v4.19
-        git checkout ad949a53c5680265ac89dff6003c02178891e079
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/
+On 09/05/2022 10:45, Rex-BC Chen wrote:
+>>> +    soc {
+>>> +        #address-cells = <2>;
+>>> +        #size-cells = <2>;
+>>> +
+>>> +        vdo1_rdma0: mdp-rdma@1c104000 {
+>>
+>> Generic node name. dma-controller (if it does not conflict with
+>> dma-common.yaml schema)?
+> 
+> We don't understand what dma-controller you are referring to? Can you
+> help explain more? Thanks!
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Use a generic node name, as Devicetree spec asks:
+"The name of a node should be somewhat generic, reflecting the function
+of the device and not its precise programming
 
-All warnings (new ones prefixed by >>):
+model. If appropriate, the name should be one of the following choices:"
 
-   In file included from drivers/gpu/drm/vkms/vkms_drv.c:8:
-   include/linux/module.h:134:13: warning: 'init_module' specifies less restrictive attribute than its target 'vkms_init': 'cold' [-Wmissing-attributes]
-     134 |         int init_module(void) __attribute__((alias(#initfn)));
-         |             ^~~~~~~~~~~
-   drivers/gpu/drm/vkms/vkms_drv.c:151:1: note: in expansion of macro 'module_init'
-     151 | module_init(vkms_init);
-         | ^~~~~~~~~~~
-   drivers/gpu/drm/vkms/vkms_drv.c:90:19: note: 'init_module' target declared here
-      90 | static int __init vkms_init(void)
-         |                   ^~~~~~~~~
-   In file included from drivers/gpu/drm/vkms/vkms_drv.c:8:
-   include/linux/module.h:140:14: warning: 'cleanup_module' specifies less restrictive attribute than its target 'vkms_exit': 'cold' [-Wmissing-attributes]
-     140 |         void cleanup_module(void) __attribute__((alias(#exitfn)));
-         |              ^~~~~~~~~~~~~~
-   drivers/gpu/drm/vkms/vkms_drv.c:152:1: note: in expansion of macro 'module_exit'
-     152 | module_exit(vkms_exit);
-         | ^~~~~~~~~~~
-   drivers/gpu/drm/vkms/vkms_drv.c:138:20: note: 'cleanup_module' target declared here
-     138 | static void __exit vkms_exit(void)
-         |                    ^~~~~~~~~
-   In file included from drivers/gpu/drm/vkms/vkms_drv.c:14:
->> drivers/gpu/drm/vkms/vkms_drv.h:23:18: warning: 'vkms_cursor_formats' defined but not used [-Wunused-const-variable=]
-      23 | static const u32 vkms_cursor_formats[] = {
-         |                  ^~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/vkms/vkms_drv.h:19:18: warning: 'vkms_formats' defined but not used [-Wunused-const-variable=]
-      19 | static const u32 vkms_formats[] = {
-         |                  ^~~~~~~~~~~~
---
-   In file included from drivers/gpu/drm/vkms/vkms_output.c:9:
->> drivers/gpu/drm/vkms/vkms_drv.h:23:18: warning: 'vkms_cursor_formats' defined but not used [-Wunused-const-variable=]
-      23 | static const u32 vkms_cursor_formats[] = {
-         |                  ^~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/vkms/vkms_drv.h:19:18: warning: 'vkms_formats' defined but not used [-Wunused-const-variable=]
-      19 | static const u32 vkms_formats[] = {
-         |                  ^~~~~~~~~~~~
---
-   drivers/gpu/drm/vkms/vkms_crtc.c: In function 'vkms_vblank_simulate':
-   drivers/gpu/drm/vkms/vkms_crtc.c:47:13: warning: variable 'ret_overrun' set but not used [-Wunused-but-set-variable]
-      47 |         int ret_overrun;
-         |             ^~~~~~~~~~~
-   In file included from drivers/gpu/drm/vkms/vkms_crtc.c:9:
-   At top level:
->> drivers/gpu/drm/vkms/vkms_drv.h:23:18: warning: 'vkms_cursor_formats' defined but not used [-Wunused-const-variable=]
-      23 | static const u32 vkms_cursor_formats[] = {
-         |                  ^~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/vkms/vkms_drv.h:19:18: warning: 'vkms_formats' defined but not used [-Wunused-const-variable=]
-      19 | static const u32 vkms_formats[] = {
-         |                  ^~~~~~~~~~~~
+I proposed dma-controller, but feel free to find better generic node name.
 
-
-vim +/vkms_cursor_formats +23 drivers/gpu/drm/vkms/vkms_drv.h
-
-    22	
-  > 23	static const u32 vkms_cursor_formats[] = {
-    24		DRM_FORMAT_ARGB8888,
-    25	};
-    26	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Krzysztof

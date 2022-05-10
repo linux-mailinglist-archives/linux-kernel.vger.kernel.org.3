@@ -2,91 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87C952116E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 11:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11C01521173
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 11:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239322AbiEJJyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 05:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53614 "EHLO
+        id S239328AbiEJJzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 05:55:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239300AbiEJJyK (ORCPT
+        with ESMTP id S239323AbiEJJzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 05:54:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97B42A18BD;
-        Tue, 10 May 2022 02:50:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A39461469;
-        Tue, 10 May 2022 09:50:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7ED27C385C8;
-        Tue, 10 May 2022 09:50:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652176212;
-        bh=H6NMXPkJDcWXHo7oQQZT0n+rj3So1Vt3NIL3g1YcJgk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=jEHU9K6ACpbRgDExuX1pAZ7LVQ01YW50DEFFrwgHkKfFE73UHj/egV3NAAewkal7V
-         2cvfIzy8iKFZO/9vv8pUzkx1e6f+Gkilb7mFVPX1UoOuucdvb1hvJTiYZ/aLx822zv
-         tU6PzfdbG6driMiShEONePTI5xvoSdWh0ayEwnGB5myJoYfO9tb6q4BCoE3e9iWqRV
-         /JQ/F0ezsS4eqMudFTLwO90SIvvI2dOC1yId6TabdVUwyqoGb9W7o25clbyKAs1sKN
-         pE8FKmIZRdEDKhzCNhARqOmZkKm4qpGVTARXWrn2XJ1cIzPBd1a8X822476+Rc1pqO
-         wf/yhu1UtUu9g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 49256E8DCCE;
-        Tue, 10 May 2022 09:50:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 10 May 2022 05:55:13 -0400
+Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3699728E13;
+        Tue, 10 May 2022 02:51:13 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
+ (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Tue, 10 May
+ 2022 17:51:11 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Tue, 10 May
+ 2022 17:51:11 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+CC:     Haowen Bai <baihaowen@meizu.com>, <linux-ia64@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] ia64: mca: Drop redundant spinlock initialization
+Date:   Tue, 10 May 2022 17:51:09 +0800
+Message-ID: <1652176269-4165-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v11 0/2] This is a patch series for Ethernet driver
- of Sunplus SP7021 SoC.
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165217621229.17405.4440742282604327822.git-patchwork-notify@kernel.org>
-Date:   Tue, 10 May 2022 09:50:12 +0000
-References: <1652004800-3212-1-git-send-email-wellslutw@gmail.com>
-In-Reply-To: <1652004800-3212-1-git-send-email-wellslutw@gmail.com>
-To:     Wells Lu <wellslutw@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, robh+dt@kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
-        pabeni@redhat.com, krzk+dt@kernel.org, roopa@nvidia.com,
-        andrew@lunn.ch, edumazet@google.com, wells.lu@sunplus.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+mlogbuf_rlock has declared and initialized by DEFINE_SPINLOCK,
+so we don't need to spin_lock_init again, drop it.
 
-This series was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+---
+ arch/ia64/kernel/mca.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-On Sun,  8 May 2022 18:13:18 +0800 you wrote:
-> Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
-> many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
-> etc.) into a single chip. It is designed for industrial control
-> applications.
-> 
-> Refer to:
-> https://sunplus.atlassian.net/wiki/spaces/doc/overview
-> https://tibbo.com/store/plus1.html
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,v11,1/2] devicetree: bindings: net: Add bindings doc for Sunplus SP7021.
-    https://git.kernel.org/netdev/net-next/c/0cfeca62b56a
-  - [net-next,v11,2/2] net: ethernet: Add driver for Sunplus SP7021
-    https://git.kernel.org/netdev/net-next/c/fd3040b9394c
-
-You are awesome, thank you!
+diff --git a/arch/ia64/kernel/mca.c b/arch/ia64/kernel/mca.c
+index e628a88607bb..c62a66710ad6 100644
+--- a/arch/ia64/kernel/mca.c
++++ b/arch/ia64/kernel/mca.c
+@@ -290,7 +290,6 @@ static void ia64_mlogbuf_finish(int wait)
+ {
+ 	BREAK_LOGLEVEL(console_loglevel);
+ 
+-	spin_lock_init(&mlogbuf_rlock);
+ 	ia64_mlogbuf_dump();
+ 	printk(KERN_EMERG "mlogbuf_finish: printing switched to urgent mode, "
+ 		"MCA/INIT might be dodgy or fail.\n");
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.7.4
 

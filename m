@@ -2,119 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E2A521D98
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:08:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B5A521DA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243456AbiEJPMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 11:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51732 "EHLO
+        id S1345404AbiEJPM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 11:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346052AbiEJPLr (ORCPT
+        with ESMTP id S1346080AbiEJPLt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:11:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A138724EA05
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 07:44:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EA458617D9
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 14:44:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DF37C385C2;
-        Tue, 10 May 2022 14:44:47 +0000 (UTC)
-Date:   Tue, 10 May 2022 10:44:46 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        cj.chengjian@huawei.com, huawei.libin@huawei.com,
-        xiexiuqi@huawei.com, liwei391@huawei.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        catalin.marinas@arm.com, will@kernel.org, zengshun.wu@outlook.com,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [RFC PATCH -next v2 3/4] arm64/ftrace: support dynamically
- allocated trampolines
-Message-ID: <20220510104446.6d23b596@gandalf.local.home>
-In-Reply-To: <20220510181012.d5cba23a2547f14d14f016b9@kernel.org>
-References: <YmFXrBG5AmX3+4f8@lakrids>
-        <20220421100639.03c0d123@gandalf.local.home>
-        <YmF0xYpTMoWOIl00@lakrids>
-        <20220421114201.21228eeb@gandalf.local.home>
-        <YmGF/OpIhAF8YeVq@lakrids>
-        <20220421130648.56b21951@gandalf.local.home>
-        <YmJ/l4vJoEpFt68l@FVFF77S0Q05N>
-        <20220422114541.34d71ad9@gandalf.local.home>
-        <YmLlmaXF00hPkOID@lakrids>
-        <20220426174749.b5372c5769af7bf901649a05@kernel.org>
-        <YnJUTuOIX9YoJq23@FVFF77S0Q05N>
-        <20220505121538.04773ac98e2a8ba17f675d39@kernel.org>
-        <20220509142203.6c4f2913@gandalf.local.home>
-        <20220510181012.d5cba23a2547f14d14f016b9@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 10 May 2022 11:11:49 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A8125BA46
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 07:44:59 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id x88so4521105pjj.1
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 07:44:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=J+j65+g15fCsV+Woqx6SguatojsTFMU+fypv/4RCtgE=;
+        b=UTKi9sbH4ZRyjDc/7lHYfVs9p+QExxFt9/+sbFXNine0VCZsiYBonNCzQr9PVXDNu9
+         QWx7xX/dW3O0HVOK8KbAOsU0vj7r1WZj64aBaM42JQrWhvHplMFMlet/XWgeCe+fBX1M
+         5/obDfisv/+8zQrzGAaXXgJovXZmvJPru63YyrKVxAY/He8u9DhzcDaIfLqwezGoPfCs
+         Mt1bVCF6ZEdokq17J2DgC5oXLJTxjhB6jqeQ4DlifycFKhjIQ/WvF6CK0l2BQKFhniHg
+         KnklIDO0Qq3yf1Y46nZtjYBZ9wcmnYlIZO62+aWAcG+vWvJbv9+tNUccgFmHuE7mM/hB
+         pWow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=J+j65+g15fCsV+Woqx6SguatojsTFMU+fypv/4RCtgE=;
+        b=W3KBHT54SsNKPQTL5762lgULicn9vaZftaHddHi/eY/uKj1AKMdhUMvOzPMzb1LFUe
+         O5w/ZIXDAXzXz9msBVSj1a+7UGAIMQ5SqeMs76RRGdjprIKrFTGpVvCsxVX3Hqozgia2
+         PrP4qu2fwqmmgRcQEffQTkQbP69HUuRhedq2tYURzd1kCxdmo6oLNmZ0UmMMH0hmwaDc
+         WogNEi6f6Zq3rqr60MYONDQlk1lSi+ZiR9d0aCaQU15p+bKZhNaRVkGKFiB/AmHyoHeq
+         As2oGejjwU4EpEuXJU9m3DV/3NFEJQZ/z1HoS4lFtI4U8foHQHqg5Y73r1Os346F4JqC
+         Hmzg==
+X-Gm-Message-State: AOAM533ZSSxcd/fpia4mDR2ojlBmOYR1jHMoZv0C7WeniuN6U4UdeO7A
+        c5BZ2dy5faxCx8PrkgkewixgNg==
+X-Google-Smtp-Source: ABdhPJzNdRCklFLDmwhjIZK4nIKrvpEW7TlAilVB41p7zRwaLd6gMiqaPsg66tubxXerZRc5n5Z5XA==
+X-Received: by 2002:a17:903:2312:b0:15e:a6c8:a313 with SMTP id d18-20020a170903231200b0015ea6c8a313mr20952499plh.122.1652193898495;
+        Tue, 10 May 2022 07:44:58 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id k22-20020a170902761600b0015e8d4eb1d4sm2181590pll.30.2022.05.10.07.44.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 07:44:57 -0700 (PDT)
+Date:   Tue, 10 May 2022 14:44:54 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Jon Kohler <jon@nutanix.com>, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Balbir Singh <sblbir@amazon.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH v3] x86/speculation, KVM: only IBPB for
+ switch_mm_always_ibpb on vCPU load
+Message-ID: <Ynp6ZoQUwtlWPI0Z@google.com>
+References: <645E4ED5-F6EE-4F8F-A990-81F19ED82BFA@nutanix.com>
+ <Ymw9UZDpXym2vXJs@zn.tnic>
+ <YmxKqpWFvdUv+GwJ@google.com>
+ <YmxRnwSUBIkOIjLA@zn.tnic>
+ <Ymxf2Jnmz5y4CHFN@google.com>
+ <YmxlHBsxcIy8uYaB@zn.tnic>
+ <YmxzdAbzJkvjXSAU@google.com>
+ <Ym0GcKhPZxkcMCYp@zn.tnic>
+ <4E46337F-79CB-4ADA-B8C0-009E7500EDF8@nutanix.com>
+ <Ym1fGZIs6K7T6h3n@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Ym1fGZIs6K7T6h3n@zn.tnic>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 May 2022 18:10:12 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
-
-> >
-> > This was suggested by both Peter Zijlstra and Thomas Gleixner when I
-> > introduced FTRACE_WITH_ARGS, where all functions can now get the arguments
-> > from fregs, but not the full pt_regs.  
+On Sat, Apr 30, 2022, Borislav Petkov wrote:
+> On Sat, Apr 30, 2022 at 02:50:35PM +0000, Jon Kohler wrote:
+> > This is 100% a fair ask, I appreciate the diligence, as we’ve all been there
+> > on the ‘other side’ of changes to complex areas and spend hours digging on
+> > git history, LKML threads, SDM/APM, and other sources trying to derive
+> > why the heck something is the way it is.
 > 
-> Hmm, I thought the ftrace_get_regs() is the all-or-nothing interface, or
-> is there any way to get the arguments from fregs?
-
-Not yet generically. But that can easily be added. If you look at x86 live
-patching, since it is arch specific, it just took the regs parameter
-directly, knowing that the args were already set up. That is, ftrace_regs is
-just a wrapper around pt_regs with just the regs for the arguments and stack
-initialized. If you get regs from ftrace_get_regs(fregs) it will return
-NULL if it wasn't full set of regs. But we can add generic functions to get
-the parameters.
-
-That is, we can create a ftrace_get_kernel_argument() function that takes
-fregs instead of pt_regs, and produce the same thing as
-regs_get_kernel_argument().
-
-x86 live kernel patching has this:
-
-arch/x86/include/asm/ftrace.h:
-
- #define ftrace_instruction_pointer_set(fregs, _ip)     \
-       do { (fregs)->regs.ip = (_ip); } while (0)
-
-
-arch/x86/include/asm/livepatch.h:
-
- static inline void klp_arch_set_pc(struct ftrace_regs *fregs, unsigned long ip)
- {
-        ftrace_instruction_pointer_set(fregs, ip);
- }
-
-Where fregs is not a full set of regs.
-
+> Yap, that's basically proving my point and why I want stuff to be
+> properly documented so that the question "why was it done this way" can
+> always be answered satisfactorily.
 > 
-> > If a ftrace_ops has the REGS flag set
-> > (using ftrace_regs_caller), the ftrace_get_regs(fregs) will return the
-> > pt_regs, or it will return NULL if ftrace_regs_caller was not used.
+> > AFAIK, the KVM IBPB is avoided when switching in between vCPUs
+> > belonging to the same vmcs/vmcb (i.e. the same guest), e.g. you could 
+> > have one VM highly oversubscribed to the host and you wouldn’t see
+> > either the KVM IBPB or the switch_mm IBPB. All good. 
 > > 
-> > This way the same parameter can provide full pt_regs or a subset, and have
-> > an generic interface to tell the difference.  
+> > Reference vmx_vcpu_load_vmcs() and svm_vcpu_load() and the 
+> > conditionals prior to the barrier.
 > 
-> If it can provide a partial (subset of) pt_regs, that could be good for me
-> too, since at least kprobe-events on ftrace can check the traced register
-> is in the subset or not and reject it if it doesn't saved.
+> So this is where something's still missing.
+> 
+> > However, the pain ramps up when you have a bunch of separate guests,
+> > especially with a small amount of vCPUs per guest, so the switching is more
+> > likely to be in between completely separate guests.
+> 
+> If the guests are completely separate, then it should fall into the
+> switch_mm() case.
+> 
+> Unless it has something to do with, as I looked at the SVM side of
+> things, the VMCBs:
+> 
+> 	if (sd->current_vmcb != svm->vmcb) {
+> 
+> So it is not only different guests but also within the same guest and
+> when the VMCB of the vCPU is not the current one.
 
-That's exactly the use case for ftrace_regs.
+Yep.
 
--- Steve
+> But then if VMCB of the vCPU is not the current, per-CPU VMCB, then that
+> CPU ran another guest so in order for that other guest to attack the
+> current guest, then its branch pred should be flushed.
+
+That CPU ran a different _vCPU_, whether or not it ran a different guest, i.e. a
+different security domain, is unknown.
+
+> But I'm likely missing a virt aspect here so I'd let Sean explain what
+> the rules are...
+
+I don't think you're missing anything.  I think the original 15d45071523d ("KVM/x86:
+Add IBPB support") was simply wrong.
+
+As I see it:
+
+  1. If the vCPUs belong to the same VM, they are in the same security domain and
+     do not need an IPBP.
+
+  2. If the vCPUs belong to different VMs, and each VM is in its own mm_struct,
+     defer to switch_mm_irqs_off() to handle IBPB as an mm switch is guaranteed to
+     occur prior to loading a vCPU belonging to a different VMs.
+ 
+  3. If the vCPUs belong to different VMs, but multiple VMs share an mm_struct,
+     then the security benefits of an IBPB when switching vCPUs are dubious, at best.
+
+If we only consider #1 and #2, then KVM doesn't need an IBPB, period.
+
+#3 is the only one that's a grey area.  I have no objection to omitting IBPB entirely
+even in that case, because none of us can identify any tangible value in doing so.

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 533AE52196C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86A8E52191F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244277AbiEJNp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40110 "EHLO
+        id S242049AbiEJNnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:43:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243890AbiEJNcU (ORCPT
+        with ESMTP id S242818AbiEJN3K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:32:20 -0400
+        Tue, 10 May 2022 09:29:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94DE1177898;
-        Tue, 10 May 2022 06:23:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A5C46B0C;
+        Tue, 10 May 2022 06:21:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F45561769;
-        Tue, 10 May 2022 13:23:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15824C385C2;
-        Tue, 10 May 2022 13:23:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FFED616E8;
+        Tue, 10 May 2022 13:21:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39068C385C2;
+        Tue, 10 May 2022 13:21:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188994;
-        bh=FxIhdZqIw91pbHMbO5gwTOdjHrJnWK2rh0Rb9gXuISc=;
+        s=korg; t=1652188864;
+        bh=beJbuLc5DeQE1QzkilhzXFk8FrAnqajPtypHf3GrpYA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dU1HsL/zdxZNvVWTQWHejnYRbr5fB30XZnubBqzWVrGh2dOz2BGGSUULUiqTJQQpZ
-         8p/dxjgQHr/k0CiPR2h+lpp5FHcB4qmbkUuKozwGWBGAQD1DCfR9ZcLYu03+15QxvK
-         PQoauegljEkJjZnS0JC+xyZzff1torP3CEfMLSSQ=
+        b=wjKVtdN5Zjo9wLgWKLNXQ4QjlwrqokrJKIBMDe++328VQU6NVvnEBu28UxCJ/Qmma
+         CAyP8GctF7hu5XxgSXhY1+VFWjE9GJwDgT+oayL5FMInnA+WCuJrJWurJek9k0ZBII
+         tAn1ZX4RhDKqoujMVHVON6dcekTQSW28WRK28bJE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH 5.4 29/52] selftests: mirror_gre_bridge_1q: Avoid changing PVID while interface is operational
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Armin Wolf <W_Armin@gmx.de>, Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 4.19 73/88] hwmon: (adt7470) Fix warning on module removal
 Date:   Tue, 10 May 2022 15:07:58 +0200
-Message-Id: <20220510130730.706939275@linuxfoundation.org>
+Message-Id: <20220510130735.853547233@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
-References: <20220510130729.852544477@linuxfoundation.org>
+In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
+References: <20220510130733.735278074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +54,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ido Schimmel <idosch@nvidia.com>
+From: Armin Wolf <W_Armin@gmx.de>
 
-commit 3122257c02afd9f199a8fc84ae981e1fc4958532 upstream.
+commit 7b2666ce445c700b8dcee994da44ddcf050a0842 upstream.
 
-In emulated environments, the bridge ports enslaved to br1 get a carrier
-before changing br1's PVID. This means that by the time the PVID is
-changed, br1 is already operational and configured with an IPv6
-link-local address.
+When removing the adt7470 module, a warning might be printed:
 
-When the test is run with netdevs registered by mlxsw, changing the PVID
-is vetoed, as changing the VID associated with an existing L3 interface
-is forbidden. This restriction is similar to the 8021q driver's
-restriction of changing the VID of an existing interface.
+do not call blocking ops when !TASK_RUNNING; state=1
+set at [<ffffffffa006052b>] adt7470_update_thread+0x7b/0x130 [adt7470]
 
-Fix this by taking br1 down and bringing it back up when it is fully
-configured.
+This happens because adt7470_update_thread() can leave the kthread in
+TASK_INTERRUPTIBLE state when the kthread is being stopped before
+the call of set_current_state(). Since kthread_exit() might sleep in
+exit_signals(), the warning is printed.
+Fix that by using schedule_timeout_interruptible() and removing
+the call of set_current_state().
+This causes TASK_INTERRUPTIBLE to be set after kthread_should_stop()
+which might cause the kthread to exit.
 
-With this fix, the test reliably passes on top of both the SW and HW
-data paths (emulated or not).
-
-Fixes: 239e754af854 ("selftests: forwarding: Test mirror-to-gretap w/ UL 802.1q")
-Signed-off-by: Ido Schimmel <idosch@nvidia.com>
-Reviewed-by: Petr Machata <petrm@nvidia.com>
-Link: https://lore.kernel.org/r/20220502084507.364774-1-idosch@nvidia.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Reported-by: Zheyu Ma <zheyuma97@gmail.com>
+Fixes: 93cacfd41f82 (hwmon: (adt7470) Allow faster removal)
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+Tested-by: Zheyu Ma <zheyuma97@gmail.com>
+Link: https://lore.kernel.org/r/20220407101312.13331-1-W_Armin@gmx.de
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/net/forwarding/mirror_gre_bridge_1q.sh |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/hwmon/adt7470.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/tools/testing/selftests/net/forwarding/mirror_gre_bridge_1q.sh
-+++ b/tools/testing/selftests/net/forwarding/mirror_gre_bridge_1q.sh
-@@ -61,9 +61,12 @@ setup_prepare()
+--- a/drivers/hwmon/adt7470.c
++++ b/drivers/hwmon/adt7470.c
+@@ -33,6 +33,7 @@
+ #include <linux/kthread.h>
+ #include <linux/slab.h>
+ #include <linux/util_macros.h>
++#include <linux/sched.h>
  
- 	vrf_prepare
- 	mirror_gre_topo_create
-+	# Avoid changing br1's PVID while it is operational as a L3 interface.
-+	ip link set dev br1 down
+ /* Addresses to scan */
+ static const unsigned short normal_i2c[] = { 0x2C, 0x2E, 0x2F, I2C_CLIENT_END };
+@@ -273,11 +274,10 @@ static int adt7470_update_thread(void *p
+ 		adt7470_read_temperatures(client, data);
+ 		mutex_unlock(&data->lock);
  
- 	ip link set dev $swp3 master br1
- 	bridge vlan add dev br1 vid 555 pvid untagged self
-+	ip link set dev br1 up
- 	ip address add dev br1 192.0.2.129/28
- 	ip address add dev br1 2001:db8:2::1/64
+-		set_current_state(TASK_INTERRUPTIBLE);
+ 		if (kthread_should_stop())
+ 			break;
  
+-		schedule_timeout(msecs_to_jiffies(data->auto_update_interval));
++		schedule_timeout_interruptible(msecs_to_jiffies(data->auto_update_interval));
+ 	}
+ 
+ 	return 0;
 
 

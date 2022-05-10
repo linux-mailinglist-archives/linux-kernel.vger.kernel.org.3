@@ -2,86 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A660522469
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:54:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B88952246B
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343831AbiEJSyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 14:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58178 "EHLO
+        id S1349088AbiEJSzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 14:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233830AbiEJSy3 (ORCPT
+        with ESMTP id S237099AbiEJSzV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 14:54:29 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAE312EA0B;
-        Tue, 10 May 2022 11:54:29 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id l11so9793524pgt.13;
-        Tue, 10 May 2022 11:54:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Se915aO2vPjgqlRAWsxAyLIac4mNleYAwasmX9ThcTs=;
-        b=qtKjfeAFfdWJmrcdiDBx3H9tdAengHKNuMfJ+52+dCHfb2fEN26tHa4yctHK9itWCi
-         /S7QNeU9Mg40uShLcIXkEmMQBAcSgSG8JD7arS1Sehk7BvdL17T/fc4ATxuX9eqVVo3M
-         5O0f9kenrSlerNMDKS+0efpEqXLaaxeNoAK3sb+ffui7C7i2Sh8tJUX66ZhJOL6H1JWb
-         cVEKHijbwtuXVvjBKUXvamEFrR0+KFcejFT4sK0xPlHJRPzLSrEI7qex90z2uxymQT3f
-         qY6M3x9dVrSQwXQJ89W7tNLpS467f62pp4xJkrmjfsjuLND+Utd1muiCbeJuVeU4BgDw
-         wiug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=Se915aO2vPjgqlRAWsxAyLIac4mNleYAwasmX9ThcTs=;
-        b=Yjyw7v5N+iUZjL44wJ1lVodEQTyTU7xxIvqq+EZMsZ80kuO6Th9NReVIyQGmbrQfv5
-         Q21+VM7mZ51ZjMNGxwFUu45Z25qLE2F22pPTuFeqOGz8PwPvjOh/H0CMY4nUfvbIVe1M
-         ESOUrnWBVArz+vZFEIp0TC412qmFLO6zKlDaC88Hi+HtcnGCyE/eftym5GXcaqR61rPR
-         bJv6VP00o5hDsdjZl7qHYitQ7WqD4qgJh1GVp695mpT19tB/RXmVA4Nl++79Jy71OUO4
-         1bFXL53oBaMzO1760gW039lt3Oj7QRc+zxMHLlONIkkXUB8rk+ssIvAUqx51jJVyneyd
-         H+hg==
-X-Gm-Message-State: AOAM533SR8R+R28qjmBghAvsYalOD77rEKh1wKqcPBF9bHebZbLHUuGy
-        WfWY7P4zWYmRCfrRztB4fio=
-X-Google-Smtp-Source: ABdhPJweJ4qdfrx2+kzhEognD0PEYcgHg++Dtst9d97jC8SFSQp0MTMLH8RZ38mnOn0Ip+guLs6JoQ==
-X-Received: by 2002:aa7:83c2:0:b0:505:723f:6ace with SMTP id j2-20020aa783c2000000b00505723f6acemr21710594pfn.86.1652208868419;
-        Tue, 10 May 2022 11:54:28 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::4:6c64])
-        by smtp.gmail.com with ESMTPSA id r22-20020a170903021600b0015e8d4eb22csm2431432plh.118.2022.05.10.11.54.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 11:54:27 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 10 May 2022 08:54:26 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, cgroups@vger.kernel.org
-Subject: Re: [RFC PATCH bpf-next 8/9] bpf: Introduce cgroup iter
-Message-ID: <Ynq04gC1l7C2tx6o@slm.duckdns.org>
-References: <20220510001807.4132027-1-yosryahmed@google.com>
- <20220510001807.4132027-9-yosryahmed@google.com>
+        Tue, 10 May 2022 14:55:21 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DF612EA0B
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 11:55:20 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24AIFd7x013308;
+        Tue, 10 May 2022 18:54:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=zj+ciaKGYskhPPR9+F46t3cZTHZTJSZYUcobdcGfY+c=;
+ b=GdqPf84pDuoWF/mb8XaEXHAXHpL2lymIqptlQCzRzbMJnB/vXkT5KmefvjMGYolibVjn
+ QFgN4pRa/Pd2lfn/KQh/YUEjmjfhQwG8sdh9I18vLnimL0twg9cE2I9APyIhnte0xFDa
+ LH/BOUVP87rrbwyXG8lC/+JUaiudbWe4c/SrmSsaMfSXRHahJICZT9XdFyjsY6kqn6Ao
+ R+es308b7tnxjWV1N7qYx30dPsKhh48q5NdJt2eyV6V5u8EWIJbI/W0CsPNRSyrRAVZi
+ woQIm84gCryidwFlGsX1RkEPdGBRoaWwieiTIwc0CcG7negrctCJimcU0NjqDGdmRani Og== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fyw628rgh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 May 2022 18:54:54 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24AIiuI6022838;
+        Tue, 10 May 2022 18:54:54 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fyw628rg4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 May 2022 18:54:54 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24AId58f016614;
+        Tue, 10 May 2022 18:54:52 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma03wdc.us.ibm.com with ESMTP id 3fwgd9f1p3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 May 2022 18:54:52 +0000
+Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24AIsqP733030520
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 10 May 2022 18:54:52 GMT
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2449D13605E;
+        Tue, 10 May 2022 18:54:52 +0000 (GMT)
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 38ED9136059;
+        Tue, 10 May 2022 18:54:50 +0000 (GMT)
+Received: from [9.160.170.88] (unknown [9.160.170.88])
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 10 May 2022 18:54:50 +0000 (GMT)
+Message-ID: <08d9470c-20db-52b8-7015-84f0ed29ad0c@linux.ibm.com>
+Date:   Tue, 10 May 2022 11:54:49 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220510001807.4132027-9-yosryahmed@google.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] powerpc/eeh: Drop redundant spinlock initialization
+Content-Language: en-US
+To:     Haowen Bai <baihaowen@meizu.com>,
+        Russell Currey <ruscur@russell.cc>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <1652176394-4331-1-git-send-email-baihaowen@meizu.com>
+From:   Tyrel Datwyler <tyreld@linux.ibm.com>
+In-Reply-To: <1652176394-4331-1-git-send-email-baihaowen@meizu.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: ZDWTDKdbQcJ5VCuhPJargC0sHL62Pyj_
+X-Proofpoint-GUID: oOxcxjEcoqwPVorQ5dp9o_-uGRqKN_hi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-10_05,2022-05-10_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ spamscore=0 lowpriorityscore=0 malwarescore=0 mlxlogscore=875 mlxscore=0
+ impostorscore=0 priorityscore=1501 adultscore=0 clxscore=1011 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205100079
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,21 +98,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Tue, May 10, 2022 at 12:18:06AM +0000, Yosry Ahmed wrote:
-> From: Hao Luo <haoluo@google.com>
+On 5/10/22 02:53, Haowen Bai wrote:
+> slot_errbuf_lock has declared and initialized by DEFINE_SPINLOCK,
+> so we don't need to spin_lock_init again, drop it.
 > 
-> Introduce a new type of iter prog: cgroup. Unlike other bpf_iter, this
-> iter doesn't iterate a set of kernel objects. Instead, it is supposed to
-> be parameterized by a cgroup id and prints only that cgroup. So one
-> needs to specify a target cgroup id when attaching this iter. The target
-> cgroup's state can be read out via a link of this iter.
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> ---
+>  arch/powerpc/platforms/pseries/eeh_pseries.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/arch/powerpc/platforms/pseries/eeh_pseries.c b/arch/powerpc/platforms/pseries/eeh_pseries.c
+> index f9af879c0222..77b476093e06 100644
+> --- a/arch/powerpc/platforms/pseries/eeh_pseries.c
+> +++ b/arch/powerpc/platforms/pseries/eeh_pseries.c
+> @@ -848,7 +848,6 @@ static int __init eeh_pseries_init(void)
+>  	}
+> 
+>  	/* Initialize error log lock and size */
 
-Is there a reason why this can't be a proper iterator which supports
-lseek64() to locate a specific cgroup?
+Update the comment, or just drop it entirely?
 
-Thanks.
+-Tyrel
 
--- 
-tejun
+> -	spin_lock_init(&slot_errbuf_lock);
+>  	eeh_error_buf_size = rtas_token("rtas-error-log-max");
+>  	if (eeh_error_buf_size == RTAS_UNKNOWN_SERVICE) {
+>  		pr_info("%s: unknown EEH error log size\n",
+

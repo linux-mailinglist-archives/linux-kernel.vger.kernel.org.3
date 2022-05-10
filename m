@@ -2,189 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C7735224B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 21:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC0F5224BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 21:26:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238045AbiEJTZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 15:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
+        id S233071AbiEJT0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 15:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233955AbiEJTZu (ORCPT
+        with ESMTP id S231279AbiEJT0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 15:25:50 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E5A26FA62;
-        Tue, 10 May 2022 12:25:48 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id j10-20020a17090a94ca00b001dd2131159aso2852665pjw.0;
-        Tue, 10 May 2022 12:25:48 -0700 (PDT)
+        Tue, 10 May 2022 15:26:45 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF13275FE;
+        Tue, 10 May 2022 12:26:43 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id bx33so11173173ljb.12;
+        Tue, 10 May 2022 12:26:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yMEahIlZJnX2qJHRkWVg84giIMfL6Y07yKJTD4dXB+w=;
-        b=Xzcsc1mLMNPTCdNaf1Djr8YqMPmcC3uj0nMVv4+EsTkDK91NwRdqQiTAxakLP3pMCj
-         eMCsaklblgnZ5lUnJErcy1VchQ3HGrB/0gUnUPLhQF0YVqF2I+PLikpjVNsj5/Aad+lX
-         xhEKH4HNVqI7/TCf4g4uawz4v7s6/u0VChDnQFWcVceSPhFtCOgoENlexFipoVgrZv6q
-         VQNIOBh8KXoTZpBtA7WJy8DdQjzkSi8AmrGTkW6Jq1IVFZp0613I3I4fwJsg63CExV6e
-         eqHRycV/UkXUZ+n/rk7gSEJ2UgjEyO+/51usz4TE0QhRFLehItkKjI6fR7/myGhIFMh5
-         UAcg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to;
+        bh=IUXybCQUFThKdCNEqN5u9zMW6VV3o+zaDhphqPVtzo8=;
+        b=GJiUDAVFBm8/v4Pn2aadjp0NPycBhyOo0ctyC1pNS0SOqCZWjjhr5LiNTZcdd98w2S
+         XNBHrFj2ET0d6jxaxK4enAkRMMAK7Lc+mhaqdZlPHoQAGdXR2/M2NUqcv6ghQGYUcuB8
+         JzOZ8iMiYPTBZNGchii4do93tDHOpVyX4G91WihBMkVjlMRmISkOPT/+9Tp+7AUZSKuf
+         yIMPiNJ/8D2dde3YSIXnnHvqxduwyy0gjuuqsC42BkvbdNUccjuKm3lnR3k/JucJ5BCA
+         nLHQmwaZ/waN/y4EpTPMr5NOWX8ys/2+QZNba/T/XoXj3F6MxhfkhMRLIpPaE0cHB8C9
+         YOLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yMEahIlZJnX2qJHRkWVg84giIMfL6Y07yKJTD4dXB+w=;
-        b=LA06It6ybq8UK0HF/XACdi+ocag9Bi+R67ZnWGwgkjvo7tBdm8Owhut2iTURY0LJ3z
-         nlXTDdajzWu7tZBnxjps27Dq0yFS0LBKFVUenDX8bawYhuifZnV3i3eBDSFYVQ5BjtfL
-         ZlVEr8SU1orQo1ssndLXQ/xP4ML5BdUVRgUYaJ9Dd5jpLtTAo606WJTz4m4G46ytzRe3
-         mmYMr+hGGlwNu5NiffUKPafMm5LpBCIrOY0AdwSoskEufHWzC3eNyPHGYjZlo0xI6TKM
-         vyKYD7WR+pdrQ591SoPmANJA5UIyaKWqvImy97LFvhn6/r/uiuHUXs5LSJlhZnXMYCk4
-         UBXA==
-X-Gm-Message-State: AOAM532Y7eghCZDxeI6o5Y+xHGzRROsJkD/D7/ZTMegVTbPMNBObbFXs
-        h3BAIggjuoJ0ipIcbjtuPZhAPNkupmY+7P3MIkg=
-X-Google-Smtp-Source: ABdhPJyFJGBMBEJyMlqEm7L9jqhfh1Y3xS2u11ojgQUvUMdqPAQdjdzEINUAC22Whn0cRtR66FXEuz/4zGvxQi9hCGQ=
-X-Received: by 2002:a17:903:32c6:b0:15e:c1cc:2405 with SMTP id
- i6-20020a17090332c600b0015ec1cc2405mr22473563plr.117.1652210747881; Tue, 10
- May 2022 12:25:47 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to;
+        bh=IUXybCQUFThKdCNEqN5u9zMW6VV3o+zaDhphqPVtzo8=;
+        b=CEUVaB7VNaX6gun3fDXZddEa7lH2DoxURQayUUzVUJz/AoFYkhYCS47VXhkDOETD5E
+         M8l+cqd6knBqpiXPYUMLRKHWW6FWsZDRwULB/c/2IwseWoOrOwaFUBeWW7rtEjhKY4pW
+         MoSlROFAmua7R/zc1gaY8ZS/CkRd+jC8nqmReVlQPkhMuJYtm9G7/D+Ds51jR++sD3mm
+         1xA2M8OKPMhKlJK/YmNWSe8GQlWqapjZQVqbQcV6Gps5RjMgkrZFSpU03qQKjTRgqDEs
+         KsSQNm+Y3LOLowr1ShXWFRwDcqyQ2ZfPwvp4jxmjQim9O1LBfev7CKJCVy7E+rx1riij
+         X9oA==
+X-Gm-Message-State: AOAM532Rpa36G44CfyH+6la8q4e/B/5mr2ePla7aT63MomN/iKYy7HTU
+        jGhS5OUwMTYpBYP+UGWBKbI=
+X-Google-Smtp-Source: ABdhPJxr2WAYgRg0U2eGs1fFi6+EcLHo41RGad+yO9G8CudIIkNazwG/Ix2borZTefQxXlS0V5VpyQ==
+X-Received: by 2002:a2e:a7cd:0:b0:24f:548f:e20a with SMTP id x13-20020a2ea7cd000000b0024f548fe20amr15275783ljp.227.1652210801501;
+        Tue, 10 May 2022 12:26:41 -0700 (PDT)
+Received: from [192.168.1.11] ([217.117.245.216])
+        by smtp.gmail.com with ESMTPSA id bu37-20020a05651216a500b0047255d210f0sm2383061lfb.31.2022.05.10.12.26.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 12:26:40 -0700 (PDT)
+Message-ID: <426f6965-152c-6d59-90e0-34fe3cd208ee@gmail.com>
+Date:   Tue, 10 May 2022 22:26:38 +0300
 MIME-Version: 1.0
-References: <20220404200250.321455-1-shy828301@gmail.com> <627a71f8-e879-69a5-ceb3-fc8d29d2f7f1@suse.cz>
- <CAHbLzkrZb6r1r6xFaEFvvJzwvVgDgeZWfjhq-SFu_mQZ0j5tTQ@mail.gmail.com> <0da1c63b-5cc3-7fc9-1fb4-fdc385539bbc@suse.cz>
-In-Reply-To: <0da1c63b-5cc3-7fc9-1fb4-fdc385539bbc@suse.cz>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Tue, 10 May 2022 12:25:35 -0700
-Message-ID: <CAHbLzkq188TOkUw5uawq81LHoxfdKSHeu3UiVvx=ZMo_o9GWMA@mail.gmail.com>
-Subject: Re: [v3 PATCH 0/8] Make khugepaged collapse readonly FS THP more consistent
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Song Liu <songliubraving@fb.com>,
-        Rik van Riel <riel@surriel.com>,
-        Matthew Wilcox <willy@infradead.org>, Zi Yan <ziy@nvidia.com>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 1/2] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
+Content-Language: en-US
+To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>,
+        ath9k-devel@qca.qualcomm.com, kvalo@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, linville@tuxdriver.com
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+03110230a11411024147@syzkaller.appspotmail.com,
+        syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
+References: <80962aae265995d1cdb724f5362c556d494c7566.1644265120.git.paskripkin@gmail.com>
+ <87h799a007.fsf@toke.dk> <6f0615da-aa0b-df8e-589c-f5caf09d3449@gmail.com>
+ <5fd22dda-01d6-cfae-3458-cb3fa23eb84d@I-love.SAKURA.ne.jp>
+ <3cb712d9-c6be-94b7-6135-10b0eabba341@gmail.com>
+ <d9e6cf88-4f19-bd50-3d73-e2aee1caefa4@I-love.SAKURA.ne.jp>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <d9e6cf88-4f19-bd50-3d73-e2aee1caefa4@I-love.SAKURA.ne.jp>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------BATau5CkBXWcUclrZmbO8r5K"
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 12:35 AM Vlastimil Babka <vbabka@suse.cz> wrote:
->
-> On 5/9/22 22:34, Yang Shi wrote:
-> > On Mon, May 9, 2022 at 9:05 AM Vlastimil Babka <vbabka@suse.cz> wrote:
-> >>
-> >> On 4/4/22 22:02, Yang Shi wrote:
-> >> >  include/linux/huge_mm.h        | 14 ++++++++++++
-> >> >  include/linux/khugepaged.h     | 59 ++++++++++++---------------------------------------
-> >> >  include/linux/sched/coredump.h |  3 ++-
-> >> >  kernel/fork.c                  |  4 +---
-> >> >  mm/huge_memory.c               | 15 ++++---------
-> >> >  mm/khugepaged.c                | 76 +++++++++++++++++++++++++++++++++++++-----------------------------
-> >> >  mm/mmap.c                      | 14 ++++++++----
-> >> >  mm/shmem.c                     | 12 -----------
-> >> >  8 files changed, 88 insertions(+), 109 deletions(-)
-> >>
-> >> Resending my general feedback from mm-commits thread to include the
-> >> public ML's:
-> >>
-> >> There's modestly less lines in the end, some duplicate code removed,
-> >> special casing in shmem.c removed, that's all good as it is. Also patch 8/8
-> >> become quite boring in v3, no need to change individual filesystems and also
-> >> no hook in fault path, just the common mmap path. So I would just handle
-> >> patch 6 differently as I just replied to it, and acked the rest.
-> >>
-> >> That said it's still unfortunately rather a mess of functions that have
-> >> similar names. transhuge_vma_enabled(vma). hugepage_vma_check(vma),
-> >> transparent_hugepage_active(vma), transhuge_vma_suitable(vma, addr)?
-> >> So maybe still some space for further cleanups. But the series is fine as it
-> >> is so we don't have to wait for it now.
-> >
-> > Yeah, I agree that we do have a lot thp checks. Will find some time to
-> > look into it deeper later.
->
-> Thanks.
->
-> >>
-> >> We could also consider that the tracking of which mm is to be scanned is
-> >> modelled after ksm which has its own madvise flag, but also no "always"
-> >> mode. What if for THP we only tracked actual THP madvised mm's, and in
-> >> "always" mode just scanned all vm's, would that allow ripping out some code
-> >> perhaps, while not adding too many unnecessary scans? If some processes are
-> >
-> > Do you mean add all mm(s) to the scan list unconditionally? I don't
-> > think it will scale.
->
-> It might be interesting to find out how many mm's (percentage of all mm's)
-> are typically in the list with "always" enabled. I wouldn't be surprised if
-> it was nearly all of them. Having at least one large enough anonymous area
-> sounds like something all processes would have these days?
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------BATau5CkBXWcUclrZmbO8r5K
+Content-Type: multipart/mixed; boundary="------------k6UaX4vPIZFyDG04TTJwV9Li";
+ protected-headers="v1"
+From: Pavel Skripkin <paskripkin@gmail.com>
+To: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+ =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>,
+ ath9k-devel@qca.qualcomm.com, kvalo@kernel.org, davem@davemloft.net,
+ kuba@kernel.org, linville@tuxdriver.com
+Cc: linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ syzbot+03110230a11411024147@syzkaller.appspotmail.com,
+ syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
+Message-ID: <426f6965-152c-6d59-90e0-34fe3cd208ee@gmail.com>
+Subject: Re: [PATCH v3 1/2] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
+References: <80962aae265995d1cdb724f5362c556d494c7566.1644265120.git.paskripkin@gmail.com>
+ <87h799a007.fsf@toke.dk> <6f0615da-aa0b-df8e-589c-f5caf09d3449@gmail.com>
+ <5fd22dda-01d6-cfae-3458-cb3fa23eb84d@I-love.SAKURA.ne.jp>
+ <3cb712d9-c6be-94b7-6135-10b0eabba341@gmail.com>
+ <d9e6cf88-4f19-bd50-3d73-e2aee1caefa4@I-love.SAKURA.ne.jp>
+In-Reply-To: <d9e6cf88-4f19-bd50-3d73-e2aee1caefa4@I-love.SAKURA.ne.jp>
 
-Just did a simple test on my Fedora VM with "always", which is almost idle.
+--------------k6UaX4vPIZFyDG04TTJwV9Li
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-The number of user processes (excluding kernel thread) is:
-[yangs@localhost ~]$ ps -aux --no-headers | awk '{if ($5 > 0) print $5}' | wc -l
-113
+SGkgVGV0c3VvLA0KDQpPbiA1LzYvMjIgMDI6MzEsIFRldHN1byBIYW5kYSB3cm90ZToNCj4g
+T24gMjAyMi8wNS8wNiA0OjA5LCBQYXZlbCBTa3JpcGtpbiB3cm90ZToNCj4+Pj4gQW5kIHdl
+IGNhbiBtZWV0IE5VTEwgZGVmZXIgZXZlbiBpZiB3ZSBsZWF2ZSBkcnZfcHJpdiA9IHByaXYg
+aW5pdGlhbGl6YXRpb24NCj4+Pj4gb24gaXQncyBwbGFjZS4NCj4+Pg0KPj4+IEkgZGlkbid0
+IGNhdGNoIHRoZSBsb2NhdGlvbi4gQXMgbG9uZyBhcyAiaHRjX2hhbmRsZS0+ZHJ2X3ByaXYg
+PSBwcml2OyIgaXMgZG9uZQ0KPj4+IGJlZm9yZSBjb21wbGV0ZV9hbGwoJmhpZl9kZXYtPmZ3
+X2RvbmUpIGlzIGRvbmUsIGlzIHNvbWV0aGluZyB3cm9uZz8NCj4+Pg0KPj4gDQo+PiBJIGRv
+bid0IHJlYWxseSByZW1lbWJlciB3aHkgSSBzYWlkIHRoYXQsIGJ1dCBsb29rcyBsaWtlIEkg
+anVzdCBoYXZlbid0IG9wZW5lZCBjYWxsYmFja3MnIGNvZGUuDQo+IA0KPiBPSy4gVGhlbiwg
+d2h5IG5vdCBhY2NlcHQgUGF2ZWwncyBwYXRjaD8NCg0KQXMgeW91IG1pZ2h0IGV4cGVjdCwg
+SSBoYXZlIHNhbWUgcXVlc3Rpb24uIFRoaXMgc2VyaWVzIGlzIHVuZGVyIHJldmlldyANCmZv
+ciBsaWtlIDctOCBtb250aHMuDQoNCkkgaGF2ZSBubyBhdGg5IGRldmljZSwgc28gSSBjYW4n
+dCB0ZXN0IGl0IG9uIHJlYWwgaHcsIHNvIHNvbWVib2R5IGVsc2UgDQpzaG91bGQgZG8gaXQg
+Zm9yIG1lLiBJdCdzIHJlcXVpcmVtZW50IHRvIGdldCBwYXRjaCBhY2NlcHRlZC4NCg0KDQoN
+CldpdGggcmVnYXJkcywNClBhdmVsIFNrcmlwa2luDQo=
 
-The number of mm on khugepaged scan list counted by a simple drgn
-script is 56. The below is the drgn script:
->>> i = 0
->>> mm_list = prog['khugepaged_scan'].mm_head.address_of_()
->>> for mm in list_for_each(mm_list):
-...     i = i + 1
-...
->>> print(i)
+--------------k6UaX4vPIZFyDG04TTJwV9Li--
 
-So 50% processes on the list. For busy machines, the percentage may be
-higher. And the most big enough processes (with large anon mapping)
-should be on the list.
+--------------BATau5CkBXWcUclrZmbO8r5K
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
->
-> >> being scanned without any effect, maybe track success separately, and scan
-> >> them less frequently etc. That could be ultimately more efficinet than
-> >> painfully tracking just *eligibility* for scanning in "always" mode?
-> >
-> > Sounds like we need a couple of different lists, for example, inactive
-> > and active? And promote or demote mm(s) between the two lists? TBH I
-> > don't see too many benefits at the moment. Or I misunderstood you?
->
-> Yeah, something like that. It would of course require finding out whether
-> khugepaged is consuming too much cpu uselessly these days while not
-> processing fast enough mm's where it succeeds more.
+-----BEGIN PGP SIGNATURE-----
 
-Yeah, currently we don't have such statistics at mm or vma
-granularity. But we may be able to get some stats by some
-post-processing with trace events.
+wsF5BAABCAAjFiEER3XL3TplLQE8Qi40bk1w61LbBA0FAmJ6vG4FAwAAAAAACgkQbk1w61LbBA1E
+Zg/8CwLw9k6BaW1V2yplq/GbSphq8z/IO+Wruh6yhU8dlBbKlPVi/kAMyH73nDfPMRaSvd8ddbYP
+AawqoZ5DdMKuSAHAu0Ttsq3QNoeXM6j0cEGp2QaWeVGLzP1tUSr0/rZ/ISCQ9AgMT4wu5w5DFZgp
+7yoBesT+SxvBPN82ldOiUvOt46IBSRGx2rNhVeHLTClerjtEnjYAUEB44GyiMj614sdYHrcMld7B
+qjUTo0gMAPaUM6wZfxJZgHHDt+o+57+YEaWYfm+UvY/jSTVI/c+1j5CgZ2cyH/4yp0hEhvVCW6KT
+yLGJJgvv4elspCi6YQ5YRO3SrCZMHHzjO2FQLhHNtApJU6xbpottVeeGhWNct/7Ry1jujcZ/gblh
+tP9dSZcjIvjErtFIiTvcmY7oot9dKlpuEnz/ygDbikR6kOl97LVtQ1tbsJn2IvcGowuTm90nNw+P
+Lbkiq+A2Kmy6jjgYdTipHAMjTufvzMS7AvzyqKZy/4iTRqBHghF3VYUhAjQ4T+SxgKhjYn94eF3p
+9vBVxm4dh3gIZTSN6g+BVlHd5y86eHJivJ2HrEx8S/7SVbP58c6a34ABVc9Yo370XqB5m83TS+Oa
+ePp4OmoiA4amCKsMLt/hyxIv6x1xT+o1IIkGUQKwEpDVE0+P31+mogoSdw/CA2ZkD8ptF3PlgnAg
+JJE=
+=ZEPX
+-----END PGP SIGNATURE-----
 
->
-> >>
-> >> Even more radical thing to consider (maybe that's a LSF/MM level topic, too
-> >> bad :) is that we scan pagetables in ksm, khugepaged, numa balancing, soon
-> >> in MGLRU, and I probably forgot something else. Maybe time to think about
-> >> unifying those scanners?
-> >
-> > We do have pagewalk (walk_page_range()) which is used by a couple of
-> > mm stuff, for example, mlock, mempolicy, mprotect, etc. I'm not sure
-> > whether it is feasible for khugepaged, ksm, etc, or not since I didn't
-> > look that hard. But I agree it should be worth looking at.
->
-> pagewalk is a framework to simplify writing code that processes page tables
-> for a given one-off task, yeah. But this would be something a bit different,
-> e.g. a kernel thread that does the sum of what khugepaged/ksm/etc do. Numa
-> balancing uses task_work instead of kthread so that would require
-> consideration on which mechanism the unified daemon would use.
-
-Aha, OK, you mean consolidate khugepaged, ksmd, etc into one kthread.
-TBH I don't know whether that will work out or not. Maybe the first
-step is to use the same page table walk framework for all of them?
-
->
-> >>
-> >>
->
+--------------BATau5CkBXWcUclrZmbO8r5K--

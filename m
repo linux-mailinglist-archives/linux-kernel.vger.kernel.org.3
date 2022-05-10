@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 240635217E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 898C252196F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243294AbiEJNaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
+        id S1343748AbiEJNsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242879AbiEJNWj (ORCPT
+        with ESMTP id S243868AbiEJNcT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:22:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C7819FB03;
-        Tue, 10 May 2022 06:16:56 -0700 (PDT)
+        Tue, 10 May 2022 09:32:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D85142809;
+        Tue, 10 May 2022 06:22:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3442B6165A;
-        Tue, 10 May 2022 13:16:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 486B5C385C9;
-        Tue, 10 May 2022 13:16:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57D3261763;
+        Tue, 10 May 2022 13:22:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62E3BC385C2;
+        Tue, 10 May 2022 13:22:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188614;
-        bh=PLBcffHUTxEwDYZ2I2HzXLMI033QZq0mU5i+o1QVl8o=;
+        s=korg; t=1652188970;
+        bh=tUBIoF9N6X0NiJbBCmDtbiWMfzpX2+Dhrt4Z/jqBemM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=InLX1GgHU1XLSBf6rPiRrOzffV7JTdWwie6LSBe0DG+j9FQOV0ex6bqDlkXOwRsEB
-         xXC5m5xs83dKFoHa/xT2/XwlR32KZEYoCintbJx7KY22DPp6b6qwFRP2jGC+cRk/Ve
-         l1WSwtNHy5QZhA2NG4Xd/ETckajRVIIIbulllivs=
+        b=zA+UFecsuBlGZgMm3rF4JwxIZaqGCHXQNAjL0B3SGwMf7SHDHtamOGGrqtLq00s4W
+         ibO2v3vLjz6zItogZq1YHeZnBGzam/aYEB1fMEcNlUlKO7XQttgJoOrqd37xidajjn
+         /hSk2GVJCCHziLVGNMMU0FsKe0WCcVYZHaStYpNE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
         "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.14 64/78] nfc: replace improper check device_is_registered() in netlink related functions
+Subject: [PATCH 5.4 21/52] nfc: nfcmrvl: main: reorder destructive operations in nfcmrvl_nci_unregister_dev to avoid bugs
 Date:   Tue, 10 May 2022 15:07:50 +0200
-Message-Id: <20220510130734.427117291@linuxfoundation.org>
+Message-Id: <20220510130730.473905363@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
-References: <20220510130732.522479698@linuxfoundation.org>
+In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
+References: <20220510130729.852544477@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,170 +56,111 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Duoming Zhou <duoming@zju.edu.cn>
 
-commit da5c0f119203ad9728920456a0f52a6d850c01cd upstream.
+commit d270453a0d9ec10bb8a802a142fb1b3601a83098 upstream.
 
-The device_is_registered() in nfc core is used to check whether
-nfc device is registered in netlink related functions such as
-nfc_fw_download(), nfc_dev_up() and so on. Although device_is_registered()
-is protected by device_lock, there is still a race condition between
-device_del() and device_is_registered(). The root cause is that
-kobject_del() in device_del() is not protected by device_lock.
+There are destructive operations such as nfcmrvl_fw_dnld_abort and
+gpio_free in nfcmrvl_nci_unregister_dev. The resources such as firmware,
+gpio and so on could be destructed while the upper layer functions such as
+nfcmrvl_fw_dnld_start and nfcmrvl_nci_recv_frame is executing, which leads
+to double-free, use-after-free and null-ptr-deref bugs.
 
-   (cleanup task)         |     (netlink task)
-                          |
-nfc_unregister_device     | nfc_fw_download
- device_del               |  device_lock
-  ...                     |   if (!device_is_registered)//(1)
-  kobject_del//(2)        |   ...
- ...                      |  device_unlock
+There are three situations that could lead to double-free bugs.
 
-The device_is_registered() returns the value of state_in_sysfs and
-the state_in_sysfs is set to zero in kobject_del(). If we pass check in
-position (1), then set zero in position (2). As a result, the check
-in position (1) is useless.
+The first situation is shown below:
 
-This patch uses bool variable instead of device_is_registered() to judge
-whether the nfc device is registered, which is well synchronized.
+   (Thread 1)                 |      (Thread 2)
+nfcmrvl_fw_dnld_start         |
+ ...                          |  nfcmrvl_nci_unregister_dev
+ release_firmware()           |   nfcmrvl_fw_dnld_abort
+  kfree(fw) //(1)             |    fw_dnld_over
+                              |     release_firmware
+  ...                         |      kfree(fw) //(2)
+                              |     ...
 
-Fixes: 3e256b8f8dfa ("NFC: add nfc subsystem core")
+The second situation is shown below:
+
+   (Thread 1)                 |      (Thread 2)
+nfcmrvl_fw_dnld_start         |
+ ...                          |
+ mod_timer                    |
+ (wait a time)                |
+ fw_dnld_timeout              |  nfcmrvl_nci_unregister_dev
+   fw_dnld_over               |   nfcmrvl_fw_dnld_abort
+    release_firmware          |    fw_dnld_over
+     kfree(fw) //(1)          |     release_firmware
+     ...                      |      kfree(fw) //(2)
+
+The third situation is shown below:
+
+       (Thread 1)               |       (Thread 2)
+nfcmrvl_nci_recv_frame          |
+ if(..->fw_download_in_progress)|
+  nfcmrvl_fw_dnld_recv_frame    |
+   queue_work                   |
+                                |
+fw_dnld_rx_work                 | nfcmrvl_nci_unregister_dev
+ fw_dnld_over                   |  nfcmrvl_fw_dnld_abort
+  release_firmware              |   fw_dnld_over
+   kfree(fw) //(1)              |    release_firmware
+                                |     kfree(fw) //(2)
+
+The firmware struct is deallocated in position (1) and deallocated
+in position (2) again.
+
+The crash trace triggered by POC is like below:
+
+BUG: KASAN: double-free or invalid-free in fw_dnld_over
+Call Trace:
+  kfree
+  fw_dnld_over
+  nfcmrvl_nci_unregister_dev
+  nci_uart_tty_close
+  tty_ldisc_kill
+  tty_ldisc_hangup
+  __tty_hangup.part.0
+  tty_release
+  ...
+
+What's more, there are also use-after-free and null-ptr-deref bugs
+in nfcmrvl_fw_dnld_start. If we deallocate firmware struct, gpio or
+set null to the members of priv->fw_dnld in nfcmrvl_nci_unregister_dev,
+then, we dereference firmware, gpio or the members of priv->fw_dnld in
+nfcmrvl_fw_dnld_start, the UAF or NPD bugs will happen.
+
+This patch reorders destructive operations after nci_unregister_device
+in order to synchronize between cleanup routine and firmware download
+routine.
+
+The nci_unregister_device is well synchronized. If the device is
+detaching, the firmware download routine will goto error. If firmware
+download routine is executing, nci_unregister_device will wait until
+firmware download routine is finished.
+
+Fixes: 3194c6870158 ("NFC: nfcmrvl: add firmware download support")
 Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/nfc/core.c |   29 ++++++++++++++---------------
- 1 file changed, 14 insertions(+), 15 deletions(-)
+ drivers/nfc/nfcmrvl/main.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/nfc/core.c
-+++ b/net/nfc/core.c
-@@ -50,7 +50,7 @@ int nfc_fw_download(struct nfc_dev *dev,
+--- a/drivers/nfc/nfcmrvl/main.c
++++ b/drivers/nfc/nfcmrvl/main.c
+@@ -194,6 +194,7 @@ void nfcmrvl_nci_unregister_dev(struct n
+ {
+ 	struct nci_dev *ndev = priv->ndev;
  
- 	device_lock(&dev->dev);
++	nci_unregister_device(ndev);
+ 	if (priv->ndev->nfc_dev->fw_download_in_progress)
+ 		nfcmrvl_fw_dnld_abort(priv);
  
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -106,7 +106,7 @@ int nfc_dev_up(struct nfc_dev *dev)
+@@ -202,7 +203,6 @@ void nfcmrvl_nci_unregister_dev(struct n
+ 	if (gpio_is_valid(priv->config.reset_n_io))
+ 		gpio_free(priv->config.reset_n_io);
  
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -154,7 +154,7 @@ int nfc_dev_down(struct nfc_dev *dev)
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -218,7 +218,7 @@ int nfc_start_poll(struct nfc_dev *dev,
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -257,7 +257,7 @@ int nfc_stop_poll(struct nfc_dev *dev)
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -302,7 +302,7 @@ int nfc_dep_link_up(struct nfc_dev *dev,
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -346,7 +346,7 @@ int nfc_dep_link_down(struct nfc_dev *de
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -412,7 +412,7 @@ int nfc_activate_target(struct nfc_dev *
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -458,7 +458,7 @@ int nfc_deactivate_target(struct nfc_dev
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -505,7 +505,7 @@ int nfc_data_exchange(struct nfc_dev *de
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		kfree_skb(skb);
- 		goto error;
-@@ -562,7 +562,7 @@ int nfc_enable_se(struct nfc_dev *dev, u
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -611,7 +611,7 @@ int nfc_disable_se(struct nfc_dev *dev,
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -1142,6 +1142,7 @@ int nfc_register_device(struct nfc_dev *
- 			dev->rfkill = NULL;
- 		}
- 	}
-+	dev->shutting_down = false;
- 	device_unlock(&dev->dev);
- 
- 	rc = nfc_genl_device_added(dev);
-@@ -1174,12 +1175,10 @@ void nfc_unregister_device(struct nfc_de
- 		rfkill_unregister(dev->rfkill);
- 		rfkill_destroy(dev->rfkill);
- 	}
-+	dev->shutting_down = true;
- 	device_unlock(&dev->dev);
- 
- 	if (dev->ops->check_presence) {
--		device_lock(&dev->dev);
--		dev->shutting_down = true;
--		device_unlock(&dev->dev);
- 		del_timer_sync(&dev->check_pres_timer);
- 		cancel_work_sync(&dev->check_pres_work);
- 	}
+-	nci_unregister_device(ndev);
+ 	nci_free_device(ndev);
+ 	kfree(priv);
+ }
 
 

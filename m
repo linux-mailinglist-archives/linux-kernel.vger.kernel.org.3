@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D7E5217EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B4252194F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243350AbiEJNa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
+        id S244136AbiEJNpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243074AbiEJNWy (ORCPT
+        with ESMTP id S243798AbiEJNcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:22:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C7B52E73;
-        Tue, 10 May 2022 06:17:06 -0700 (PDT)
+        Tue, 10 May 2022 09:32:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FA52CFE8E;
+        Tue, 10 May 2022 06:22:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EB73CB81CE7;
-        Tue, 10 May 2022 13:16:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BCDBC385C6;
-        Tue, 10 May 2022 13:16:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AD5C61663;
+        Tue, 10 May 2022 13:22:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 502ACC385A6;
+        Tue, 10 May 2022 13:22:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188608;
-        bh=2SQP/iK9dFo1azXQPmUtMwnMxA2HAIdd4EY0EdaBOnI=;
+        s=korg; t=1652188931;
+        bh=lyBqSR0EnOVA8i/cJ7U1vjDXnqHAh9OtfQbsNi3k8Ys=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uA8dnf9xHnREbTcvJOrBbKeLj/NsO96SZ9l8lExRdgjVF+UHSJ1dyoub2g+z+QQty
-         epo7M/nqDCL9obu9s0rMdDCH4Ty5GH5HcATHUHyViwbSNaVirdSl57lTLjF7OFpHk+
-         IGusFEY/ix3lAH8zkwoL92+TDtEyBEa4ctWHQ/os=
+        b=ezj1ElVrWjSYPRkmFikVOGG3wgU3OJxWBY9E8r9E05kfxn+m6jILM2Kgf479HezGm
+         eXOLoRcBQZ9Igr2zTJpUw4hgzDEmbJIFZaTgYR/e/+neZs+hcTEA4FB60BeOC1WyBj
+         YSBjZdsB+e4LX53rqiSbxbmxy87mOBsqSmqH/m5g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        Andreas Larsson <andreas@gaisler.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 4.14 62/78] can: grcan: grcan_close(): fix deadlock
+        stable@vger.kernel.org, Chengfeng Ye <cyeaa@connect.ust.hk>,
+        Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.19 63/88] firewire: fix potential uaf in outbound_phy_packet_callback()
 Date:   Tue, 10 May 2022 15:07:48 +0200
-Message-Id: <20220510130734.367303060@linuxfoundation.org>
+Message-Id: <20220510130735.571310602@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
-References: <20220510130732.522479698@linuxfoundation.org>
+In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
+References: <20220510130733.735278074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Chengfeng Ye <cyeaa@connect.ust.hk>
 
-commit 47f070a63e735bcc8d481de31be1b5a1aa62b31c upstream.
+commit b7c81f80246fac44077166f3e07103affe6db8ff upstream.
 
-There are deadlocks caused by del_timer_sync(&priv->hang_timer) and
-del_timer_sync(&priv->rr_timer) in grcan_close(), one of the deadlocks
-are shown below:
+&e->event and e point to the same address, and &e->event could
+be freed in queue_event. So there is a potential uaf issue if
+we dereference e after calling queue_event(). Fix this by adding
+a temporary variable to maintain e->client in advance, this can
+avoid the potential uaf issue.
 
-   (Thread 1)              |      (Thread 2)
-                           | grcan_reset_timer()
-grcan_close()              |  mod_timer()
- spin_lock_irqsave() //(1) |  (wait a time)
- ...                       | grcan_initiate_running_reset()
- del_timer_sync()          |  spin_lock_irqsave() //(2)
- (wait timer to stop)      |  ...
-
-We hold priv->lock in position (1) of thread 1 and use
-del_timer_sync() to wait timer to stop, but timer handler also need
-priv->lock in position (2) of thread 2. As a result, grcan_close()
-will block forever.
-
-This patch extracts del_timer_sync() from the protection of
-spin_lock_irqsave(), which could let timer handler to obtain the
-needed lock.
-
-Link: https://lore.kernel.org/all/20220425042400.66517-1-duoming@zju.edu.cn
-Fixes: 6cec9b07fe6a ("can: grcan: Add device driver for GRCAN and GRHCAN cores")
-Cc: stable@vger.kernel.org
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Reviewed-by: Andreas Larsson <andreas@gaisler.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Chengfeng Ye <cyeaa@connect.ust.hk>
+Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Link: https://lore.kernel.org/r/20220409041243.603210-2-o-takashi@sakamocchi.jp
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/grcan.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/firewire/core-cdev.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/net/can/grcan.c
-+++ b/drivers/net/can/grcan.c
-@@ -1117,8 +1117,10 @@ static int grcan_close(struct net_device
+--- a/drivers/firewire/core-cdev.c
++++ b/drivers/firewire/core-cdev.c
+@@ -1495,6 +1495,7 @@ static void outbound_phy_packet_callback
+ {
+ 	struct outbound_phy_packet_event *e =
+ 		container_of(packet, struct outbound_phy_packet_event, p);
++	struct client *e_client;
  
- 	priv->closing = true;
- 	if (priv->need_txbug_workaround) {
-+		spin_unlock_irqrestore(&priv->lock, flags);
- 		del_timer_sync(&priv->hang_timer);
- 		del_timer_sync(&priv->rr_timer);
-+		spin_lock_irqsave(&priv->lock, flags);
+ 	switch (status) {
+ 	/* expected: */
+@@ -1511,9 +1512,10 @@ static void outbound_phy_packet_callback
  	}
- 	netif_stop_queue(dev);
- 	grcan_stop_hardware(dev);
+ 	e->phy_packet.data[0] = packet->timestamp;
+ 
++	e_client = e->client;
+ 	queue_event(e->client, &e->event, &e->phy_packet,
+ 		    sizeof(e->phy_packet) + e->phy_packet.length, NULL, 0);
+-	client_put(e->client);
++	client_put(e_client);
+ }
+ 
+ static int ioctl_send_phy_packet(struct client *client, union ioctl_arg *arg)
 
 

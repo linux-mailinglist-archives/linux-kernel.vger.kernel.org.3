@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81677521BE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B19521BF4
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343994AbiEJOYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:24:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39690 "EHLO
+        id S1344324AbiEJO0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244890AbiEJNv2 (ORCPT
+        with ESMTP id S244350AbiEJNwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:51:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E08F2992DF;
-        Tue, 10 May 2022 06:38:01 -0700 (PDT)
+        Tue, 10 May 2022 09:52:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCCD7A80C;
+        Tue, 10 May 2022 06:38:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1068C618BB;
-        Tue, 10 May 2022 13:37:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C284C385C9;
-        Tue, 10 May 2022 13:37:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 51C44615C8;
+        Tue, 10 May 2022 13:38:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54BA8C385C6;
+        Tue, 10 May 2022 13:38:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189848;
-        bh=ECmiXNGYewi08JxQt1hFdaf6p24m2pojk7/YQtqMICE=;
+        s=korg; t=1652189883;
+        bh=1Cs4CGR/T9aWauJL6iNFtwdxt8Jg/kB7NldSroRV47k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C5JgzXpfBCfgBvvTkBvZZSdHBYORGb+qW6Rqo7i34CodqoNKAed8Nhop4dshYZ0fq
-         aPDeDFL/jp73+AUnCfM+U/EiJgTep2cs2NHiVAWH++lCWWnSiZ7vSUXE+wRk6hbC8U
-         7lAQA8NmoSjuTP2kQH/pMgKoYBDYSPXqaiPngdhs=
+        b=PCYo8yz5KE09ntmr3Jef+1UKr/IPN4WNM7RXt7IH0F2xdSmQuUauN8b23fdsPkMJl
+         dAZtaEYCjVcfTXHrYQ2WyhKNjM7w1yxodhMzc3JlS/tEIPHHoUd3oC95iX0xYUcD4M
+         OtPjAaSJYrcmKl2BusKr6mmJrIhBkPV1TmoRHtZE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Stefan Haberland <sth@linux.ibm.com>,
         Jan Hoeppner <hoeppner@linux.ibm.com>,
         Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.17 041/140] s390/dasd: fix data corruption for ESE devices
-Date:   Tue, 10 May 2022 15:07:11 +0200
-Message-Id: <20220510130742.793578666@linuxfoundation.org>
+Subject: [PATCH 5.17 042/140] s390/dasd: prevent double format of tracks for ESE devices
+Date:   Tue, 10 May 2022 15:07:12 +0200
+Message-Id: <20220510130742.823129293@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
 References: <20220510130741.600270947@linuxfoundation.org>
@@ -57,93 +57,121 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Stefan Haberland <sth@linux.ibm.com>
 
-commit 5b53a405e4658580e1faf7c217db3f55a21ba849 upstream.
+commit 71f3871657370dbbaf942a1c758f64e49a36c70f upstream.
 
-For ESE devices we get an error when accessing an unformatted track.
-The handling of this error will return zero data for read requests and
-format the track on demand before writing to it. To do this the code needs
-to distinguish between read and write requests. This is done with data from
-the blocklayer request. A pointer to the blocklayer request is stored in
-the CQR.
+For ESE devices we get an error for write operations on an unformatted
+track. Afterwards the track will be formatted and the IO operation
+restarted.
+When using alias devices a track might be accessed by multiple requests
+simultaneously and there is a race window that a track gets formatted
+twice resulting in data loss.
 
-If there is an error on the device an ERP request is built to do error
-recovery. While the ERP request is mostly a copy of the original CQR the
-pointer to the blocklayer request is not copied to not accidentally pass
-it back to the blocklayer without cleanup.
+Prevent this by remembering the amount of formatted tracks when starting
+a request and comparing this number before actually formatting a track
+on the fly. If the number has changed there is a chance that the current
+track was finally formatted in between. As a result do not format the
+track and restart the current IO to check.
 
-This leads to the error that during ESE handling after an ERP request was
-built it is not possible to determine the IO direction. This leads to the
-formatting of a track for read requests which might in turn lead to data
-corruption.
+The number of formatted tracks does not match the overall number of
+formatted tracks on the device and it might wrap around but this is no
+problem. It is only needed to recognize that a track has been formatted at
+all in between.
 
 Fixes: 5e2b17e712cf ("s390/dasd: Add dynamic formatting support for ESE volumes")
 Cc: stable@vger.kernel.org # 5.3+
 Signed-off-by: Stefan Haberland <sth@linux.ibm.com>
 Reviewed-by: Jan Hoeppner <hoeppner@linux.ibm.com>
-Link: https://lore.kernel.org/r/20220505141733.1989450-2-sth@linux.ibm.com
+Link: https://lore.kernel.org/r/20220505141733.1989450-3-sth@linux.ibm.com
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/s390/block/dasd.c      |    8 +++++++-
- drivers/s390/block/dasd_eckd.c |    2 +-
- drivers/s390/block/dasd_int.h  |   12 ++++++++++++
- 3 files changed, 20 insertions(+), 2 deletions(-)
+ drivers/s390/block/dasd.c      |    7 +++++++
+ drivers/s390/block/dasd_eckd.c |   19 +++++++++++++++++--
+ drivers/s390/block/dasd_int.h  |    2 ++
+ 3 files changed, 26 insertions(+), 2 deletions(-)
 
 --- a/drivers/s390/block/dasd.c
 +++ b/drivers/s390/block/dasd.c
-@@ -1639,6 +1639,7 @@ void dasd_int_handler(struct ccw_device
- 	unsigned long now;
- 	int nrf_suppressed = 0;
- 	int fp_suppressed = 0;
-+	struct request *req;
- 	u8 *sense = NULL;
- 	int expires;
- 
-@@ -1739,7 +1740,12 @@ void dasd_int_handler(struct ccw_device
+@@ -1422,6 +1422,13 @@ int dasd_start_IO(struct dasd_ccw_req *c
+ 		if (!cqr->lpm)
+ 			cqr->lpm = dasd_path_get_opm(device);
  	}
- 
- 	if (dasd_ese_needs_format(cqr->block, irb)) {
--		if (rq_data_dir((struct request *)cqr->callback_data) == READ) {
-+		req = dasd_get_callback_data(cqr);
-+		if (!req) {
-+			cqr->status = DASD_CQR_ERROR;
-+			return;
-+		}
-+		if (rq_data_dir(req) == READ) {
- 			device->discipline->ese_read(cqr, irb);
- 			cqr->status = DASD_CQR_SUCCESS;
- 			cqr->stopclk = now;
++	/*
++	 * remember the amount of formatted tracks to prevent double format on
++	 * ESE devices
++	 */
++	if (cqr->block)
++		cqr->trkcount = atomic_read(&cqr->block->trkcount);
++
+ 	if (cqr->cpmode == 1) {
+ 		rc = ccw_device_tm_start(device->cdev, cqr->cpaddr,
+ 					 (long) cqr, cqr->lpm);
 --- a/drivers/s390/block/dasd_eckd.c
 +++ b/drivers/s390/block/dasd_eckd.c
-@@ -3145,7 +3145,7 @@ dasd_eckd_ese_format(struct dasd_device
- 	sector_t curr_trk;
- 	int rc;
- 
--	req = cqr->callback_data;
-+	req = dasd_get_callback_data(cqr);
- 	block = cqr->block;
- 	base = block->base;
- 	private = base->private;
---- a/drivers/s390/block/dasd_int.h
-+++ b/drivers/s390/block/dasd_int.h
-@@ -757,6 +757,18 @@ dasd_check_blocksize(int bsize)
- 	return 0;
+@@ -3083,13 +3083,24 @@ static int dasd_eckd_format_device(struc
  }
  
-+/*
-+ * return the callback data of the original request in case there are
-+ * ERP requests build on top of it
-+ */
-+static inline void *dasd_get_callback_data(struct dasd_ccw_req *cqr)
-+{
-+	while (cqr->refers)
-+		cqr = cqr->refers;
-+
-+	return cqr->callback_data;
-+}
-+
- /* externals in dasd.c */
- #define DASD_PROFILE_OFF	 0
- #define DASD_PROFILE_ON 	 1
+ static bool test_and_set_format_track(struct dasd_format_entry *to_format,
+-				      struct dasd_block *block)
++				      struct dasd_ccw_req *cqr)
+ {
++	struct dasd_block *block = cqr->block;
+ 	struct dasd_format_entry *format;
+ 	unsigned long flags;
+ 	bool rc = false;
+ 
+ 	spin_lock_irqsave(&block->format_lock, flags);
++	if (cqr->trkcount != atomic_read(&block->trkcount)) {
++		/*
++		 * The number of formatted tracks has changed after request
++		 * start and we can not tell if the current track was involved.
++		 * To avoid data corruption treat it as if the current track is
++		 * involved
++		 */
++		rc = true;
++		goto out;
++	}
+ 	list_for_each_entry(format, &block->format_list, list) {
+ 		if (format->track == to_format->track) {
+ 			rc = true;
+@@ -3109,6 +3120,7 @@ static void clear_format_track(struct da
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&block->format_lock, flags);
++	atomic_inc(&block->trkcount);
+ 	list_del_init(&format->list);
+ 	spin_unlock_irqrestore(&block->format_lock, flags);
+ }
+@@ -3170,8 +3182,11 @@ dasd_eckd_ese_format(struct dasd_device
+ 	}
+ 	format->track = curr_trk;
+ 	/* test if track is already in formatting by another thread */
+-	if (test_and_set_format_track(format, block))
++	if (test_and_set_format_track(format, cqr)) {
++		/* this is no real error so do not count down retries */
++		cqr->retries++;
+ 		return ERR_PTR(-EEXIST);
++	}
+ 
+ 	fdata.start_unit = curr_trk;
+ 	fdata.stop_unit = curr_trk;
+--- a/drivers/s390/block/dasd_int.h
++++ b/drivers/s390/block/dasd_int.h
+@@ -188,6 +188,7 @@ struct dasd_ccw_req {
+ 	void (*callback)(struct dasd_ccw_req *, void *data);
+ 	void *callback_data;
+ 	unsigned int proc_bytes;	/* bytes for partial completion */
++	unsigned int trkcount;		/* count formatted tracks */
+ };
+ 
+ /*
+@@ -611,6 +612,7 @@ struct dasd_block {
+ 
+ 	struct list_head format_list;
+ 	spinlock_t format_lock;
++	atomic_t trkcount;
+ };
+ 
+ struct dasd_attention_data {
 
 

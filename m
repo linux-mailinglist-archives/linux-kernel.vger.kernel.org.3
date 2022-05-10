@@ -2,159 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A43645225DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA735225E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbiEJUwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 16:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46448 "EHLO
+        id S232091AbiEJUxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 16:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233558AbiEJUvK (ORCPT
+        with ESMTP id S229728AbiEJUxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 16:51:10 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85891EC44
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:51:08 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id l18so198037ejc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:51:08 -0700 (PDT)
+        Tue, 10 May 2022 16:53:07 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FC551E56
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:53:06 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id x12so15592479pgj.7
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:53:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=07qwqsAAhiC9sDvaZsU6xwGVxsO0fmMFnxDhX9hrYBA=;
-        b=bqXRLwxylUn4QAcf4WHpGkbZGtJHF87z6qz1NC+vTFWJmCNkkb/VYX0RWoq8sNRCRs
-         UhgsBkHviAYQ8jy97pu6wSjLK4fAIXU0Pa+u/ICOV+ZwOADrHfqFBTsAUszKFYQqSSUa
-         IkDBuoDAeJuBBk/SUk4xe0ILEpih87FQ4lgDY3YSVBKnVzNRlIaaU3BhtYVVGjkguiOG
-         tQsnZurrmX+urpmpiO6v3O1KIIMqAekjkwO0UvvakeUItH8Y3hbLVW2wXdXmYrVYu8Ir
-         g1xoOLPgsAYc0iDaUx4jXtV/k3BA/pbzaTTkyn/w5yvgNH/Xwbb4NXEKF7I1xri7z1tA
-         fJLQ==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+HZZAVCUgB4PR5HOSv738zuWZd6viwdct4jZ4FZSIU0=;
+        b=oWmYD10TXbpQiIJ/xzCl7IxKeJeRGHnNIYoe2NzGF8Z40b9A089yZu2d/GnlCuSqdo
+         q6ZIKf55c1K3Q602V8ZhCPmbryBHAVSR29GFjetx8dPxfxwpeelua5Oe9dNh49PzFRnz
+         msgXH2br9qxGT5GVAPoL2u6hWcb2Le2llWrms=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=07qwqsAAhiC9sDvaZsU6xwGVxsO0fmMFnxDhX9hrYBA=;
-        b=MfvKX70Feo9QxKqF9RlJqRjtpajB5xtdierqOmXl9i0WllAA2kRnkVT//xcQHfzicH
-         fvqrzRNbpjbCxJ5j0d6M96nKIlbUPa5N9IoH8GRgFZKwZMkDyWpANRWFqEluPDXquzUW
-         +govPadH3D2If0SU76viUtIPEvtnyJniyjWdMzPe/31WuNK7D5FTTM3mgQNlTMv8yTBc
-         OQfehbM2GH/QvRYy7Lvu+kCbCd9h2T0qIASVgKM+TApbSSWv78EG+Z+kHl3BrlO5ziKO
-         Lbx16wcDJ7mrRcdh/A/f5DiwhTgbEtNd2SbRy/vI0HNtTxldlouEZR6jCZVe06Jv7sLJ
-         jSaQ==
-X-Gm-Message-State: AOAM5336ZogOCwkjtVco88rClfXFkiy8dey+72N80yynYqLxPewRL8c0
-        OMldD2ATQBY9SBBfo1/Zy6Cn1NBybv7lnXZve+3/CQ==
-X-Google-Smtp-Source: ABdhPJwhL/4CkSXVPA2XHHYCdllLQ6hwa5YKD0kcAt631RefW8hZez9vAB0UXDYjWTwqdd+KwKRFwK9YSASiuofY6Rg=
-X-Received: by 2002:a17:906:44b:b0:6f8:d325:bb84 with SMTP id
- e11-20020a170906044b00b006f8d325bb84mr15188978eja.174.1652215866988; Tue, 10
- May 2022 13:51:06 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+HZZAVCUgB4PR5HOSv738zuWZd6viwdct4jZ4FZSIU0=;
+        b=zaHvWK9yqUyWMXK1OBqIuhPixkx/xCluM31oICWK00bF4ovvW1jpfrU+kYNj4xLKbW
+         //jz4x12vE6LGAfubYxw1J+o+RzNRqFIPgFPHWphrjiMvk+IeUbmHDD/Zt3KLdvZdAjf
+         5TkDPVhRx3pMFEIY0ooQ5ZmoVvxzqusyCM9AuGsq0uujXu9GqiZFuQd8HpCvfhBKSmIO
+         PXvMZiCesG4G3jZX/vSGvatWciJ/6es8LrBeNP7wC8Hefatw/5Zzh+gW07z7hNmi/dHF
+         hEmY37nv+Xakzoo9doT758POJ1RRpjx4I7S6uaDd/g3sUEC9ZFBCT/vneXsn42AfuVs4
+         AcBQ==
+X-Gm-Message-State: AOAM533AjBZnHA0WafTJ3LYr6iPen+ktLC3Rah7GGF3GoxppP3Mgo+Q/
+        oe9bgr68XhOyuAjuXinYDsJ9bQ==
+X-Google-Smtp-Source: ABdhPJx51SH/5x8d1+7L4D8y1N7o70vXFdfzujmC9MaUWLZcKl14rafYh/2Xs1SSzWyvWcqe2COx9Q==
+X-Received: by 2002:a62:d0c5:0:b0:50d:a467:3cc8 with SMTP id p188-20020a62d0c5000000b0050da4673cc8mr22146677pfg.81.1652215985737;
+        Tue, 10 May 2022 13:53:05 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:6f08:624c:c762:d238])
+        by smtp.gmail.com with ESMTPSA id lr10-20020a17090b4b8a00b001d2edf4b513sm92975pjb.56.2022.05.10.13.53.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 13:53:05 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     dri-devel@lists.freedesktop.org
+Cc:     quic_abhinavk@quicinc.com, robdclark@gmail.com,
+        swboyd@chromium.org, quic_aravindh@quicinc.com,
+        ville.syrjala@linux.intel.com, tzimmermann@suse.de,
+        linux-arm-msm@vger.kernel.org, jani.nikula@linux.intel.com,
+        quic_sbillaka@quicinc.com, dmitry.baryshkov@linaro.org,
+        freedreno@lists.freedesktop.org, quic_khsieh@quicinc.com,
+        Douglas Anderson <dianders@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] drm/probe-helper: Default to 640x480 if no EDID
+Date:   Tue, 10 May 2022 13:51:11 -0700
+Message-Id: <20220510135101.v2.1.I31ec454f8d4ffce51a7708a8092f8a6f9c929092@changeid>
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
 MIME-Version: 1.0
-References: <20210303175235.3308220-1-bgeffon@google.com> <20210323182520.2712101-1-bgeffon@google.com>
- <20210323182520.2712101-4-bgeffon@google.com> <9c0b4b2a-3678-186a-072a-280628e5da02@gmail.com>
- <CADyq12wc9=dt5V=YEr+U9JLP1VObG_UOsGaQUDH88WAZH-4Txg@mail.gmail.com>
-In-Reply-To: <CADyq12wc9=dt5V=YEr+U9JLP1VObG_UOsGaQUDH88WAZH-4Txg@mail.gmail.com>
-From:   Brian Geffon <bgeffon@google.com>
-Date:   Tue, 10 May 2022 16:50:31 -0400
-Message-ID: <CADyq12yxbFB=XinWpkpJjNmoNPrXQS6mgy+aCYu8bd9hZQLakg@mail.gmail.com>
-Subject: Re: [PATCH] mremap.2: MREMAP_DONTUNMAP to reflect to supported mappings
-To:     "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Sonny Rao <sonnyrao@google.com>,
-        Minchan Kim <minchan@kernel.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Dmitry Safonov <dima@arista.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 26, 2021 at 2:08 PM Brian Geffon <bgeffon@google.com> wrote:
->
-> Hi Alex,
-> It has not landed yet, it's currently in Andrew's mm tree. I can reach
-> out again when it makes it into Linus' tree.
->
-> Brian
->
->
-> On Thu, Mar 25, 2021 at 2:34 PM Alejandro Colomar (man-pages)
-> <alx.manpages@gmail.com> wrote:
-> >
-> > Hello Brian,
-> >
-> > Is this already merged in Linux?  I guess not, as I've seen a patch of
-> > yous for the kernel, right?
+If we're unable to read the EDID for a display because it's corrupt /
+bogus / invalid then we'll add a set of standard modes for the
+display. When userspace looks at these modes it doesn't really have a
+good concept for which mode to pick and it'll likely pick the highest
+resolution one by default. That's probably not ideal because the modes
+were purely guesses on the part of the Linux kernel.
 
-Hi Alex,
-This change has been in since 5.13 as commit
-a4609387859f0281951f5e476d9f76d7fb9ab321, I apologize I forgot to
-update you about the man page change after it landed.
+Let's instead set 640x480 as the "preferred" mode when we have no EDID.
 
-Brian
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+Note that this is the second of two related and similar-sounding but
+different patches. See also ("drm/probe-helper: For DP, add 640x480 if
+all other modes are bad") [1]. I'm hoping to land _both_ of the
+patches since they address different issues. This patch addresses the
+case of a corrupt EDID and having 640x480 be the default in the
+"guessed" modes. The other patch handles the case where the EDID
+_isn't_ corrupt but all the modes listed can't be made with the
+existing situations. The two patches can land in either order.
 
-> >
-> > Thanks,
-> >
-> > Alex
-> >
-> > On 3/23/21 7:25 PM, Brian Geffon wrote:
-> > > mremap(2) now supports MREMAP_DONTUNMAP with mapping types other
-> > > than private anonymous.
-> > >
-> > > Signed-off-by: Brian Geffon <bgeffon@google.com>
-> > > ---
-> > >   man2/mremap.2 | 13 ++-----------
-> > >   1 file changed, 2 insertions(+), 11 deletions(-)
-> > >
-> > > diff --git a/man2/mremap.2 b/man2/mremap.2
-> > > index 3ed0c0c0a..72acbc111 100644
-> > > --- a/man2/mremap.2
-> > > +++ b/man2/mremap.2
-> > > @@ -118,16 +118,6 @@ This flag, which must be used in conjunction with
-> > >   remaps a mapping to a new address but does not unmap the mapping at
-> > >   .IR old_address .
-> > >   .IP
-> > > -The
-> > > -.B MREMAP_DONTUNMAP
-> > > -flag can be used only with private anonymous mappings
-> > > -(see the description of
-> > > -.BR MAP_PRIVATE
-> > > -and
-> > > -.BR MAP_ANONYMOUS
-> > > -in
-> > > -.BR mmap (2)).
-> > > -.IP
-> > >   After completion,
-> > >   any access to the range specified by
-> > >   .IR old_address
-> > > @@ -227,7 +217,8 @@ was specified, but one or more pages in the range specified by
-> > >   .IR old_address
-> > >   and
-> > >   .IR old_size
-> > > -were not private anonymous;
-> > > +were part of a special mapping or the mapping is one that
-> > > +does not support merging or expanding;
-> > >   .IP *
-> > >   .B MREMAP_DONTUNMAP
-> > >   was specified and
-> > >
-> >
-> > --
-> > Alejandro Colomar
-> > Linux man-pages comaintainer; https://www.kernel.org/doc/man-pages/
-> > http://www.alejandro-colomar.es/
+Also note that I didn't carry any Tested-by / Reviewed-by tags since
+the patch is now quite different.
+
+[1] https://lore.kernel.org/r/20220510131309.v2.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid
+
+Changes in v2:
+- Don't modify drm_add_modes_noedid() 'cause that'll break others
+- Set 640x480 as preferred in drm_helper_probe_single_connector_modes()
+
+ drivers/gpu/drm/drm_probe_helper.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_probe_helper.c
+index 682359512996..1fbb9a8c315c 100644
+--- a/drivers/gpu/drm/drm_probe_helper.c
++++ b/drivers/gpu/drm/drm_probe_helper.c
+@@ -516,8 +516,17 @@ int drm_helper_probe_single_connector_modes(struct drm_connector *connector,
+ 		count = drm_add_override_edid_modes(connector);
+ 
+ 	if (count == 0 && (connector->status == connector_status_connected ||
+-			   connector->status == connector_status_unknown))
++			   connector->status == connector_status_unknown)) {
+ 		count = drm_add_modes_noedid(connector, 1024, 768);
++
++		/*
++		 * Give userspace a hint that we don't have a lot of confidence
++		 * in these modes (we totally guessed) by marking 640x480 as
++		 * preferred. This is low clock rate and incredibly common as
++		 * a failsafe mode.
++		 */
++		drm_set_preferred_mode(connector, 640, 480);
++	}
+ 	count += drm_helper_probe_add_cmdline_mode(connector);
+ 	if (count == 0)
+ 		goto prune;
+-- 
+2.36.0.550.gb090851708-goog
+

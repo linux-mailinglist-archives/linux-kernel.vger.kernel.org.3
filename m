@@ -2,65 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D1B9520BEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 05:22:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFCCD520BF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 05:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235311AbiEJD0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 23:26:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
+        id S235347AbiEJD1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 23:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235331AbiEJDZz (ORCPT
+        with ESMTP id S230358AbiEJD1c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 23:25:55 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C013B54B;
-        Mon,  9 May 2022 20:21:56 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1noGR9-00BsaV-Qa; Tue, 10 May 2022 13:21:25 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Tue, 10 May 2022 11:21:24 +0800
-Date:   Tue, 10 May 2022 11:21:24 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Breno =?iso-8859-1?Q?Leit=E3o?= <leitao@debian.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Paulo Flabiano Smorigo <pfsmorigo@gmail.com>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] crypto: vmx - Fix build error
-Message-ID: <YnnaNATPjAtDREub@gondor.apana.org.au>
-References: <20220507052244.1426765-1-masahiroy@kernel.org>
+        Mon, 9 May 2022 23:27:32 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9343E54F95;
+        Mon,  9 May 2022 20:23:34 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R951e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=tonylu@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VCofv7V_1652153011;
+Received: from localhost(mailfrom:tonylu@linux.alibaba.com fp:SMTPD_---0VCofv7V_1652153011)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 10 May 2022 11:23:32 +0800
+Date:   Tue, 10 May 2022 11:23:30 +0800
+From:   Tony Lu <tonylu@linux.alibaba.com>
+To:     Guangguan Wang <guangguan.wang@linux.alibaba.com>
+Cc:     kgraul@linux.ibm.com, davem@davemloft.net, kuba@kernel.org,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 1/2] net/smc: non blocking recvmsg() return -EAGAIN
+ when no data and signal_pending
+Message-ID: <YnnaskOKyCqN4o6i@TonyMac-Alibaba>
+Reply-To: Tony Lu <tonylu@linux.alibaba.com>
+References: <20220509115837.94911-1-guangguan.wang@linux.alibaba.com>
+ <20220509115837.94911-2-guangguan.wang@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220507052244.1426765-1-masahiroy@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220509115837.94911-2-guangguan.wang@linux.alibaba.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 07, 2022 at 02:22:43PM +0900, Masahiro Yamada wrote:
-> When I refactored this Makefile, I accidentally changed the CONFIG
-> option.
-> 
-> Fixes: b52455a73db9 ("crypto: vmx - Align the short log with Makefile cleanups")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
-> 
->  drivers/crypto/vmx/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, May 09, 2022 at 07:58:36PM +0800, Guangguan Wang wrote:
+> Non blocking sendmsg will return -EAGAIN when any signal pending
+> and no send space left, while non blocking recvmsg return -EINTR
+> when signal pending and no data received. This may makes confused.
+> As TCP returns -EAGAIN in the conditions descriped above. Align the
 
-Patch applied.  Thanks.
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+A little typo descriped -> described.
+
+> behavior of smc with TCP.
+
+I also agree with the behavior of aligning TCP.
+ 
+Fixes tag is preferred:
+
+Fixes: 846e344eb722 ("net/smc: add receive timeout check")
+
+> Signed-off-by: Guangguan Wang <guangguan.wang@linux.alibaba.com>
+
+Reviewed-by: Tony Lu <tonylu@linux.alibaba.com>
+
+Thanks,
+Tony Lu
+
+> ---
+>  net/smc/smc_rx.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/net/smc/smc_rx.c b/net/smc/smc_rx.c
+> index 51e8eb2933ff..338b9ef806e8 100644
+> --- a/net/smc/smc_rx.c
+> +++ b/net/smc/smc_rx.c
+> @@ -355,12 +355,12 @@ int smc_rx_recvmsg(struct smc_sock *smc, struct msghdr *msg,
+>  				}
+>  				break;
+>  			}
+> +			if (!timeo)
+> +				return -EAGAIN;
+>  			if (signal_pending(current)) {
+>  				read_done = sock_intr_errno(timeo);
+>  				break;
+>  			}
+> -			if (!timeo)
+> -				return -EAGAIN;
+>  		}
+>  
+>  		if (!smc_rx_data_available(conn)) {
+> -- 
+> 2.24.3 (Apple Git-128)

@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 436875223E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB815223E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348177AbiEJS33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 14:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39686 "EHLO
+        id S1348858AbiEJS0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 14:26:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236729AbiEJS3Y (ORCPT
+        with ESMTP id S1348849AbiEJSZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 14:29:24 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD362A76B4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 11:25:26 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id d5so24974748wrb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 11:25:26 -0700 (PDT)
+        Tue, 10 May 2022 14:25:57 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1856F5373E
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 11:25:54 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id e24so24981727wrc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 11:25:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=i/K+z4FbavDUp9taCkfXpbx13rVcW3GTSvwjLfREXAU=;
-        b=Tty5wMz7Ghu646JswlNLX+XwgMjXTrtdIAnTGLzWswd7pJqjghhee9uTTrSBkA1mS5
-         TASpWLvrSWJ0o/VmKB1zZ2EKL7bj0qTC3lvVRuamF3i9rZ6kaQX5QDmWCn9TRCB5uXkV
-         r8gOHaTXenDSj1D57niaR5CpxS9xrrcL40YA8vpjqNI+g1gL5pCdsCqYcSLce1I6fc3z
-         kWNzuDcKIBDb+SwqrxV9F0c+DchRf6wXrjkpR+hTKigiASG8TQ/T4toShl24UGOGYEeY
-         ZEnNjV6vVbfPH9Mde3cglN60wQIz6IJ5FIeBa8eN2oVUv11BpQol0cmvcrU6FhcjdmJZ
-         DX4A==
+        bh=yHb/t4sJWtaUrfKkQwH3/sfbd07PYe3PiYuK/lpKKSM=;
+        b=XF0oB5IuvA6vJGEyZOrGfxGamHtbVLL4rlc9UC4pYza1Scg0lYG1lQjzP2+uF4mYKg
+         k5SqANXoXiMKqwfOjo/kCTJ1wE2u5Oh0t5b3zwwBN12RRjqZg2eGmMtC3vO29ME5jttc
+         u8/DTuiEBDHhQ3IT3Tvh+OgaSJhVvk4AxYOiHIHpE+HqpB/QvLCevvw26Hs3WYNOUuT8
+         UOHVIWJy37iQItWWuiSHZ2v0tMF5ao8PrVU9FwmB+Edemgi4WxwESF85LNNfolrVn0C0
+         BS5Fyo4ODK6JUclQ/DNpWR7V60B/ysAFObHrRLJmgpUAivLmKv3mmULFcV+xH5hnIiyS
+         zx2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=i/K+z4FbavDUp9taCkfXpbx13rVcW3GTSvwjLfREXAU=;
-        b=5z9SmtLRslT6/RDcnMmxFZZh6SQ27vxizL0jkDGsInCXaDYycSYbfmyhyM2m6FXNyd
-         Y9FWxBXyW0TeJCv7h1FzV0+2Ni06iem3MX5nz+MECtI+drDPjeZthTYMWit4zvhq4VAn
-         9oz96Umv+tSqYXDXrOGoiW1ilXicH/Nl6tcnLVaU7q/Do2s9/Fu0gVji5e3pIXAtz3SC
-         vjtko5FaSPNwFsNdH5ifLDinEsr+z8CsgYuPW1GHmr7iPJRLsRRGr1Rob6ohcZZpwQr1
-         01RfYQ3BLiFVp/3yjS1EItZd5Xz7xv5hoMyxZfgyfagAJWsEtKzNY9G+zxraoVH6gblP
-         ePGw==
-X-Gm-Message-State: AOAM533MI/Jr+uOUFXcwfJ51Tb/bS43KQEKtyB4tRmJLbNQCUsREbLgC
-        wu13TywlrxWCqUvB4VsNbPwdAJs0EXK/Yy6yg8IP6w==
-X-Google-Smtp-Source: ABdhPJyzA6ZqMl9aS9nV7QUKqV1oRP2aghQEHWBX7a2slUyqZ51MHrel4plITu1M0/TnH8bx25zFuopsJMSrkMAFd0g=
-X-Received: by 2002:a5d:630d:0:b0:20a:e1a3:8018 with SMTP id
- i13-20020a5d630d000000b0020ae1a38018mr19695063wru.489.1652207124680; Tue, 10
- May 2022 11:25:24 -0700 (PDT)
+        bh=yHb/t4sJWtaUrfKkQwH3/sfbd07PYe3PiYuK/lpKKSM=;
+        b=vh8TN5hXqFM1kUi//qqXfhbV7CYMBm/fsKpR+ZrbUuA/sFG+EykUtyaD1T/Lq47yaM
+         TJrP7Ku1Y40HWajUQOTmocg3+2Y8NibOKz3camy0NvoEVjjxybyduf/PvbqBfZ46/x6W
+         sIwi80Z7s3dLdi1eBGbKEpDL68BEceDoHXSnkSdfk2b/K9iOGOHhyUVotvJJm0bjj8uS
+         w+3pYCZ4WzwHms4ov46tiwdCoLvdLvcYs0musMcAjviCCiRUFIFL32MeElJOqmUZJDbH
+         wYi36FHh/PnG7RCmCVb5HAbem+xmp8bNXdkc9qEcP9Dvfdy9ucmPVcsmfPQzeCK0WlJF
+         RXXQ==
+X-Gm-Message-State: AOAM533KVk97r7jbaamleshdykamotBlvDZxEbZMjd+7EDRjYjjQj1pX
+        a+QBJH96BcTVOakSOqkCC1tNCfdcn108y+HSAU8Ayg==
+X-Google-Smtp-Source: ABdhPJwgIj7vziuYge7EQKcTCuMZUyByhn/rKEmnyQnFeLeWkydhYLQUs4H82FaqklGewSSKA0AQYRbJD/88/K0apEs=
+X-Received: by 2002:a5d:564c:0:b0:20a:d53c:70e3 with SMTP id
+ j12-20020a5d564c000000b0020ad53c70e3mr20132500wrw.0.1652207152934; Tue, 10
+ May 2022 11:25:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220510001807.4132027-1-yosryahmed@google.com> <20220510001807.4132027-9-yosryahmed@google.com>
-In-Reply-To: <20220510001807.4132027-9-yosryahmed@google.com>
+References: <20220510001807.4132027-1-yosryahmed@google.com> <20220510001807.4132027-8-yosryahmed@google.com>
+In-Reply-To: <20220510001807.4132027-8-yosryahmed@google.com>
 From:   Hao Luo <haoluo@google.com>
-Date:   Tue, 10 May 2022 11:25:13 -0700
-Message-ID: <CA+khW7i1Pcc9_bfxVhtzGQkevmodie7=M-57ScMqUyw5U=KW4A@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 8/9] bpf: Introduce cgroup iter
+Date:   Tue, 10 May 2022 11:25:42 -0700
+Message-ID: <CA+khW7hbHEEv9JsSCRj5ko=rA2ZorimkpyCCKD=7usv+fTfMNg@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 7/9] cgroup: Add cgroup_put() in
+ !CONFIG_CGROUPS case
 To:     Yosry Ahmed <yosryahmed@google.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -87,35 +88,23 @@ On Mon, May 9, 2022 at 5:18 PM Yosry Ahmed <yosryahmed@google.com> wrote:
 >
 > From: Hao Luo <haoluo@google.com>
 >
-> Introduce a new type of iter prog: cgroup. Unlike other bpf_iter, this
-> iter doesn't iterate a set of kernel objects. Instead, it is supposed to
-> be parameterized by a cgroup id and prints only that cgroup. So one
-> needs to specify a target cgroup id when attaching this iter. The target
-> cgroup's state can be read out via a link of this iter.
+> There is already a cgroup_get_from_id() in the !CONFIG_CGROUPS case,
+> let's have a matching cgroup_put() in !CONFIG_CGROUPS too.
 >
 > Signed-off-by: Hao Luo <haoluo@google.com>
 > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 > ---
->  include/linux/bpf.h            |   2 +
->  include/uapi/linux/bpf.h       |   6 ++
->  kernel/bpf/Makefile            |   2 +-
->  kernel/bpf/cgroup_iter.c       | 148 +++++++++++++++++++++++++++++++++
->  tools/include/uapi/linux/bpf.h |   6 ++
->  5 files changed, 163 insertions(+), 1 deletion(-)
->  create mode 100644 kernel/bpf/cgroup_iter.c
+>  include/linux/cgroup.h | 3 +++
+>  1 file changed, 3 insertions(+)
 >
+> diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
+> index 5408c74d5c44..4f1d8febb9fd 100644
+> --- a/include/linux/cgroup.h
+> +++ b/include/linux/cgroup.h
+[...]
+> +
+> +static inline struct cgroup *cgroup_put(void)
+> +{}
 
-Thanks Yosry for posting this patch! Dear reviewers, this is v2 of the
-cgroup_iter change I sent previously at
-
-https://lore.kernel.org/bpf/20220225234339.2386398-9-haoluo@google.com/
-
-v1 - > v2:
-- Getting the cgroup's reference at the time at attaching, instead of
-at the time when iterating. (Yonghong) (context [1])
-- Remove .init_seq_private and .fini_seq_private callbacks for
-cgroup_iter. They are not needed now. (Yonghong)
-
-[1] https://lore.kernel.org/bpf/f780fc3a-dbc2-986c-d5a0-6b0ef1c4311f@fb.com/
-
-Hao
+Sorry Yosry, the return type and parameter type are mixed up. I will
+fix it and send you an updated version.

@@ -2,124 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D7C5210B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 11:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D9EF5210C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 11:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238643AbiEJJY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 05:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49710 "EHLO
+        id S238693AbiEJJ1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 05:27:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238662AbiEJJYv (ORCPT
+        with ESMTP id S231559AbiEJJ1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 05:24:51 -0400
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D6C54021
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 02:20:54 -0700 (PDT)
-Received: by mail-qv1-f46.google.com with SMTP id h13so12237999qvh.0
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 02:20:54 -0700 (PDT)
+        Tue, 10 May 2022 05:27:49 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3814261FB5;
+        Tue, 10 May 2022 02:23:52 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id r192so9987170pgr.6;
+        Tue, 10 May 2022 02:23:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=fwW2OYuCO6BhpQG4lw7eWWD08MPxOosZgKs5DxeLyvA=;
+        b=hWPUeHvR3zpON8ZPC/lKtq0fanM+o0ugkon8UlyAhjUGmZs1koZpOiu0VCMmhaLuGk
+         7T4+s9zvHcKPasPMIBCtk6BaM9UksEYVLxcJaUGII3K8yyhNRUihuMhxtwe5aC9r+aRF
+         wsCmegdX1UBUqGML+xijNAl3GR2L21G3tRyk83nppRYurFz+d+Nlf9Ujyj3GWFZ70d4/
+         D46WoxCZQjymB98uRNiOqk8xn5bB/2ykF6QGHOfQAASYjnbt1w2LkRFcw0Ixw6e+SgZ2
+         daP3LwUh5WIDSKk6wVOxspZxC4ClUHs1cHsCVJlV/QyWiK+nAhnGyo3fkxa6x3OJKT9t
+         fYZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9uxcc/DTzovoffJ13PVN0mid4IVz9jbn3TyqnUZaKPk=;
-        b=6Ialmy3L8GOUAg5sMNy7gNMor67JlaWmEWCHVDFdxzrBXkEr6OxyDd4Nqsp2Wi0CFG
-         2sOEvvlMReLT4d1CtgzKpCdPZit7BOx5KabUsx+QLCwZIFZEtYeSbKrUqprQd/F/ThcA
-         AJANKZHXqky7UwnLMR4WYNZBv+TuHXnrKfDanDtFt47YTgVmDjsj/Aq/xjpKxt2/THIe
-         23ASn+eYJzU7gNC5cEbrKtv+4XHxFAKVUQUfdIAi4QArxCgQjk5AwJNUAyK4SGlIU0jq
-         NWI3qsaeHboDRVB4pTSZE4xB7WWgfUmOJA4FQsFLt3w7jP7C0GpsOn1TY9FqdaKLoD9U
-         8zZQ==
-X-Gm-Message-State: AOAM530XhbdTaRjyok+s9nOCYfEkHnQaARdZgbLrsMMgKmo26nfHpTlc
-        8oXDupuyad3p9rMNu8vNckA66V8GS9tAbQ==
-X-Google-Smtp-Source: ABdhPJwhl8iaqR9nwyVCpSEuE5v3Y59PcPDYWygo7ZPmL0l2AcLAyYsKHFG2iEsBgxcFN1n+hvM9SQ==
-X-Received: by 2002:a05:6214:2389:b0:435:ba04:8f18 with SMTP id fw9-20020a056214238900b00435ba048f18mr17173181qvb.4.1652174453405;
-        Tue, 10 May 2022 02:20:53 -0700 (PDT)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id k5-20020a05620a07e500b0069fc13ce1ecsm7947254qkk.29.2022.05.10.02.20.52
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 02:20:52 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id v59so29536555ybi.12
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 02:20:52 -0700 (PDT)
-X-Received: by 2002:a05:6902:389:b0:633:31c1:d0f7 with SMTP id
- f9-20020a056902038900b0063331c1d0f7mr16519213ybs.543.1652174451905; Tue, 10
- May 2022 02:20:51 -0700 (PDT)
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=fwW2OYuCO6BhpQG4lw7eWWD08MPxOosZgKs5DxeLyvA=;
+        b=neb/Vl0QxcyQEeloDRLbcTTX71BNCRFm9gEDJzLf/+JVog4M6QeNKs+dcMTOwG6/rH
+         ppyYqgz8YVNoDJGZO6l/hETjpj0/46aTu0/k/J+hbtZOZ1+R/saxreW1HJF4h1SK1530
+         DVAtNum83hhCOJV1BACAOyaGCjUvyrqrPkBiQJyV539B73kylA5MZCcfXsoJvDwJcQHY
+         XSNlhB+gj0SnUY5JeRO/n8D8Oe103AaSVa6s5yjtFbROoZY9538cKKGICmDH9q+PpGXn
+         enrrm4L709W3AciZQpCBVfE+YBVZG1OZEDKHc2BCP59+JhSF1Jg5GBek2jRIcY1pojdc
+         DEUA==
+X-Gm-Message-State: AOAM530XaVUDNoW2FLK5M3CxVcwzlhL3kFplhv4+ZxBl8h8CCBiR+Agx
+        /pl9mWpwskhHnv9Xc61F+2w=
+X-Google-Smtp-Source: ABdhPJzZ50IWH7+3XmC5UqtlB581OSBYhLhdUb6/3oKLtPmKiLL0upHCitWsK3a8ztxxgwu4OFjp4w==
+X-Received: by 2002:a63:4459:0:b0:39d:3808:7c84 with SMTP id t25-20020a634459000000b0039d38087c84mr16250090pgk.130.1652174632424;
+        Tue, 10 May 2022 02:23:52 -0700 (PDT)
+Received: from localhost (193-116-127-232.tpgi.com.au. [193.116.127.232])
+        by smtp.gmail.com with ESMTPSA id 196-20020a6300cd000000b003c14af5060dsm10093971pga.37.2022.05.10.02.23.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 02:23:51 -0700 (PDT)
+Date:   Tue, 10 May 2022 19:23:46 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH -next] powerpc: add support for syscall stack
+ randomization
+To:     benh@kernel.crashing.org, christophe.leroy@csgroup.eu,
+        mark.rutland@arm.com, mpe@ellerman.id.au, paulus@samba.org,
+        tglx@linutronix.de, Xiu Jianfeng <xiujianfeng@huawei.com>
+Cc:     linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+References: <20220505111932.228814-1-xiujianfeng@huawei.com>
+In-Reply-To: <20220505111932.228814-1-xiujianfeng@huawei.com>
 MIME-Version: 1.0
-References: <df002b0ff3cb89954d5a2c39a5dd8528d45771f3.1652103603.git.geert+renesas@glider.be>
- <20220510091502.GA27219@willie-the-truck>
-In-Reply-To: <20220510091502.GA27219@willie-the-truck>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 10 May 2022 11:20:40 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVyjZzuNTrinRddt=nRDU-=tb+vgweemaOpG6QWsKC=JQ@mail.gmail.com>
-Message-ID: <CAMuHMdVyjZzuNTrinRddt=nRDU-=tb+vgweemaOpG6QWsKC=JQ@mail.gmail.com>
-Subject: Re: [PATCH] arm64: ARM Scalable Matrix Extension is ARMv9-A
-To:     Will Deacon <will@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Message-Id: <1652173338.7bltwybi0c.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Will,
+Excerpts from Xiu Jianfeng's message of May 5, 2022 9:19 pm:
+> Add support for adding a random offset to the stack while handling
+> syscalls. This patch uses mftb() instead of get_random_int() for better
+> performance.
 
-On Tue, May 10, 2022 at 11:15 AM Will Deacon <will@kernel.org> wrote:
-> On Mon, May 09, 2022 at 03:40:30PM +0200, Geert Uytterhoeven wrote:
-> > The help text for the config option to enable support for the ARM
-> > Scalable Matrix Extension does not mention the specification baseline
-> > for this extension.  Make it clear this is an extension for the ARMv9-A
-> > architecture, so users know when it is safe to disable this option,
-> > which is enabled by default.
-> >
-> > Fixes: a1f4ccd25cc25625 ("arm64/sme: Provide Kconfig for SME")
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Hey, very nice.
 
-> > --- a/arch/arm64/Kconfig
-> > +++ b/arch/arm64/Kconfig
-> > @@ -1964,9 +1964,9 @@ config ARM64_SME
-> >       default y
-> >       depends on ARM64_SVE
-> >       help
-> > -       The Scalable Matrix Extension (SME) is an extension to the AArch64
-> > -       execution state which utilises a substantial subset of the SVE
-> > -       instruction set, together with the addition of new architectural
-> > +       The Scalable Matrix Extension (SME) is an ARMv9-A extension to the
-> > +       AArch64 execution state which utilises a substantial subset of the
-> > +       SVE instruction set, together with the addition of new architectural
->
-> Why is this useful information? The v9 vs v8 distinction is purely a
+>=20
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> ---
+>  arch/powerpc/Kconfig            | 1 +
+>  arch/powerpc/kernel/interrupt.c | 3 +++
+>  2 files changed, 4 insertions(+)
+>=20
+> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+> index 5fc9153927ac..7e04c9f80cbc 100644
+> --- a/arch/powerpc/Kconfig
+> +++ b/arch/powerpc/Kconfig
+> @@ -192,6 +192,7 @@ config PPC
+>  	select HAVE_ARCH_KASAN			if PPC32 && PPC_PAGE_SHIFT <=3D 14
+>  	select HAVE_ARCH_KASAN_VMALLOC		if PPC32 && PPC_PAGE_SHIFT <=3D 14
+>  	select HAVE_ARCH_KFENCE			if PPC_BOOK3S_32 || PPC_8xx || 40x
+> +	select HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
+>  	select HAVE_ARCH_KGDB
+>  	select HAVE_ARCH_MMAP_RND_BITS
+>  	select HAVE_ARCH_MMAP_RND_COMPAT_BITS	if COMPAT
+> diff --git a/arch/powerpc/kernel/interrupt.c b/arch/powerpc/kernel/interr=
+upt.c
+> index 784ea3289c84..459385769721 100644
+> --- a/arch/powerpc/kernel/interrupt.c
+> +++ b/arch/powerpc/kernel/interrupt.c
+> @@ -4,6 +4,7 @@
+>  #include <linux/err.h>
+>  #include <linux/compat.h>
+>  #include <linux/sched/debug.h> /* for show_regs */
+> +#include <linux/randomize_kstack.h>
+> =20
+>  #include <asm/kup.h>
+>  #include <asm/cputime.h>
+> @@ -82,6 +83,7 @@ notrace long system_call_exception(long r3, long r4, lo=
+ng r5,
+> =20
+>  	kuap_lock();
+> =20
+> +	add_random_kstack_offset();
+>  	regs->orig_gpr3 =3D r3;
+> =20
+>  	if (IS_ENABLED(CONFIG_PPC_IRQ_SOFT_MASK_DEBUG))
 
-Because I tend to disable support for extensions that are not present
-in Renesas SoCs in the (local) renesas_defconfig.
-If it's ARMv9, I know it's not present in e.g. Cortex-A57 or A-76.
+This looks like the right place. I wonder why other interrupts don't
+get the same treatment. Userspace can induce the kernel to take a=20
+synchronous interrupt, or wait for async ones. Smaller surface area=20
+maybe but certain instruction emulation for example could result in
+significant logic that depends on user state. Anyway that's for
+hardening gurus to ponder.
 
-> marketing thing, so I'd be _very_ wary of drawing any technical conclusions
-> based on that, especially as Arm have a track record for "backporting"
-> features into older CPUs if there is demand for it. Do you know what the
-> toolchains have done here? (i.e. is there march=armv9-a or can you do
-> march=armv8-a+sme or something else?).
+> @@ -405,6 +407,7 @@ interrupt_exit_user_prepare_main(unsigned long ret, s=
+truct pt_regs *regs)
+> =20
+>  	/* Restore user access locks last */
+>  	kuap_user_restore(regs);
+> +	choose_random_kstack_offset(mftb() & 0xFF);
+> =20
+>  	return ret;
+>  }
 
-I have no idea.  This option doesn't seem to control any compiler
-flags?
+So this seems to be what x86 and s390 do, but why are we choosing a
+new offset for every interrupt when it's only used on a syscall?
+I would rather you do what arm64 does and just choose the offset
+at the end of system_call_exception.
 
-> Having said all that, we do already have the Kconfig menu entries for "Armv8.x
-> architectural features", so adding one for "Armv9" would be consistent with
-> that if you really want it.
+I wonder why the choose is separated from the add? I guess it's to
+avoid a data dependency for stack access on an expensive random
+function, so that makes sense (a comment would be nice in the
+generic code).
 
-Gr{oetje,eeting}s,
+I don't actually know if mftb() is cheaper here than a RNG. It
+may not be conditioned all that well either. I would be tempted
+to measure. 64-bit *may* be able to use a bit more than 256
+bytes of stack too -- we have 16 byte alignment minimum so this
+gives only 4 bits of randomness AFAIKS.
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks,
+Nick

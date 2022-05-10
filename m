@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9071B521C15
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30B2A521B07
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245376AbiEJO3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:29:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43422 "EHLO
+        id S1344267AbiEJOHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343696AbiEJN7a (ORCPT
+        with ESMTP id S244239AbiEJNpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:59:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F94C3F8BB;
-        Tue, 10 May 2022 06:39:40 -0700 (PDT)
+        Tue, 10 May 2022 09:45:38 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5629137C;
+        Tue, 10 May 2022 06:31:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5DE44B81DB8;
-        Tue, 10 May 2022 13:39:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A37A2C385A6;
-        Tue, 10 May 2022 13:39:37 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DBD75CE1EDE;
+        Tue, 10 May 2022 13:30:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3DD3C385C2;
+        Tue, 10 May 2022 13:30:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189978;
-        bh=Weyb4TA3ATTSARhzD42JJKD7YbniFgc7Mc8OARMLrug=;
+        s=korg; t=1652189458;
+        bh=vmU4qBASEUpfgc/BCPgOm30brd4+MRNEFxdubd5lS4s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y/94IhYi2b55KzWwrZNRV5VDb6H4GGQFb7iAgwxm42w2//aVUKELzo5I6CIYMyxaZ
-         TxIM7pdlwjh6aJqjuq7iMgBxeKbDAVsiZUHBLWK2E3HcNwYpSwOrd+YbjDYPqi3af/
-         Wrupw4ynrHDSeEv9XT2cXFppy17eA2tYkx4NPDHY=
+        b=ls0fT2i50tvpTM4eQQ9yyI/HSSOWj4P14i2NpwM+9ASMIgQLmKsPBbTwZOuCGt05l
+         sANAlHEKeO1IHdCdNtvtM00iVK3/YtUyhSu7Af0f2fyptyEROhdQ0GQRkInZ71bk1S
+         eE5xUA3v7BiFAoTFZj9GRjjZ22LBx+AkTy2ilG8E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andreas Larsson <andreas@gaisler.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5.17 049/140] can: grcan: only use the NAPI poll budget for RX
+        stable@vger.kernel.org,
+        Tatyana Nikolova <tatyana.e.nikolova@intel.com>,
+        Shiraz Saleem <shiraz.saleem@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH 5.15 057/135] RDMA/irdma: Flush iWARP QP if modified to ERR from RTR state
 Date:   Tue, 10 May 2022 15:07:19 +0200
-Message-Id: <20220510130743.022031810@linuxfoundation.org>
+Message-Id: <20220510130742.041305605@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,87 +56,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andreas Larsson <andreas@gaisler.com>
+From: Tatyana Nikolova <tatyana.e.nikolova@intel.com>
 
-commit 2873d4d52f7c52d60b316ba6c47bd7122b5a9861 upstream.
+commit 7b8943b821bafab492f43aafbd006b57c6b65845 upstream.
 
-The previous split budget between TX and RX made it return not using
-the entire budget but at the same time not having calling called
-napi_complete. This sometimes led to the poll to not be called, and at
-the same time having TX and RX interrupts disabled resulting in the
-driver getting stuck.
+When connection establishment fails in iWARP mode, an app can drain the
+QPs and hang because flush isn't issued when the QP is modified from RTR
+state to error. Issue a flush in this case using function
+irdma_cm_disconn().
 
-Fixes: 6cec9b07fe6a ("can: grcan: Add device driver for GRCAN and GRHCAN cores")
-Link: https://lore.kernel.org/all/20220429084656.29788-4-andreas@gaisler.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Andreas Larsson <andreas@gaisler.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Update irdma_cm_disconn() to do flush when cm_id is NULL, which is the
+case when the QP is in RTR state and there is an error in the connection
+establishment.
+
+Fixes: b48c24c2d710 ("RDMA/irdma: Implement device supported verb APIs")
+Link: https://lore.kernel.org/r/20220425181703.1634-2-shiraz.saleem@intel.com
+Signed-off-by: Tatyana Nikolova <tatyana.e.nikolova@intel.com>
+Signed-off-by: Shiraz Saleem <shiraz.saleem@intel.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/grcan.c |   22 +++++++---------------
- 1 file changed, 7 insertions(+), 15 deletions(-)
+ drivers/infiniband/hw/irdma/cm.c    |   16 +++++-----------
+ drivers/infiniband/hw/irdma/verbs.c |    4 ++--
+ 2 files changed, 7 insertions(+), 13 deletions(-)
 
---- a/drivers/net/can/grcan.c
-+++ b/drivers/net/can/grcan.c
-@@ -1125,7 +1125,7 @@ static int grcan_close(struct net_device
- 	return 0;
- }
- 
--static int grcan_transmit_catch_up(struct net_device *dev, int budget)
-+static void grcan_transmit_catch_up(struct net_device *dev)
- {
- 	struct grcan_priv *priv = netdev_priv(dev);
- 	unsigned long flags;
-@@ -1133,7 +1133,7 @@ static int grcan_transmit_catch_up(struc
- 
- 	spin_lock_irqsave(&priv->lock, flags);
- 
--	work_done = catch_up_echo_skb(dev, budget, true);
-+	work_done = catch_up_echo_skb(dev, -1, true);
- 	if (work_done) {
- 		if (!priv->resetting && !priv->closing &&
- 		    !(priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY))
-@@ -1147,8 +1147,6 @@ static int grcan_transmit_catch_up(struc
+--- a/drivers/infiniband/hw/irdma/cm.c
++++ b/drivers/infiniband/hw/irdma/cm.c
+@@ -3465,12 +3465,6 @@ static void irdma_cm_disconn_true(struct
  	}
  
- 	spin_unlock_irqrestore(&priv->lock, flags);
+ 	cm_id = iwqp->cm_id;
+-	/* make sure we havent already closed this connection */
+-	if (!cm_id) {
+-		spin_unlock_irqrestore(&iwqp->lock, flags);
+-		return;
+-	}
 -
--	return work_done;
- }
- 
- static int grcan_receive(struct net_device *dev, int budget)
-@@ -1230,19 +1228,13 @@ static int grcan_poll(struct napi_struct
- 	struct net_device *dev = priv->dev;
- 	struct grcan_registers __iomem *regs = priv->regs;
- 	unsigned long flags;
--	int tx_work_done, rx_work_done;
--	int rx_budget = budget / 2;
--	int tx_budget = budget - rx_budget;
-+	int work_done;
- 
--	/* Half of the budget for receiving messages */
--	rx_work_done = grcan_receive(dev, rx_budget);
-+	work_done = grcan_receive(dev, budget);
- 
--	/* Half of the budget for transmitting messages as that can trigger echo
--	 * frames being received
--	 */
--	tx_work_done = grcan_transmit_catch_up(dev, tx_budget);
-+	grcan_transmit_catch_up(dev);
- 
--	if (rx_work_done < rx_budget && tx_work_done < tx_budget) {
-+	if (work_done < budget) {
- 		napi_complete(napi);
- 
- 		/* Guarantee no interference with a running reset that otherwise
-@@ -1259,7 +1251,7 @@ static int grcan_poll(struct napi_struct
- 		spin_unlock_irqrestore(&priv->lock, flags);
+ 	original_hw_tcp_state = iwqp->hw_tcp_state;
+ 	original_ibqp_state = iwqp->ibqp_state;
+ 	last_ae = iwqp->last_aeq;
+@@ -3492,11 +3486,11 @@ static void irdma_cm_disconn_true(struct
+ 			disconn_status = -ECONNRESET;
  	}
  
--	return rx_work_done + tx_work_done;
-+	return work_done;
- }
+-	if ((original_hw_tcp_state == IRDMA_TCP_STATE_CLOSED ||
+-	     original_hw_tcp_state == IRDMA_TCP_STATE_TIME_WAIT ||
+-	     last_ae == IRDMA_AE_RDMAP_ROE_BAD_LLP_CLOSE ||
+-	     last_ae == IRDMA_AE_BAD_CLOSE ||
+-	     last_ae == IRDMA_AE_LLP_CONNECTION_RESET || iwdev->rf->reset)) {
++	if (original_hw_tcp_state == IRDMA_TCP_STATE_CLOSED ||
++	    original_hw_tcp_state == IRDMA_TCP_STATE_TIME_WAIT ||
++	    last_ae == IRDMA_AE_RDMAP_ROE_BAD_LLP_CLOSE ||
++	    last_ae == IRDMA_AE_BAD_CLOSE ||
++	    last_ae == IRDMA_AE_LLP_CONNECTION_RESET || iwdev->rf->reset || !cm_id) {
+ 		issue_close = 1;
+ 		iwqp->cm_id = NULL;
+ 		qp->term_flags = 0;
+--- a/drivers/infiniband/hw/irdma/verbs.c
++++ b/drivers/infiniband/hw/irdma/verbs.c
+@@ -1617,13 +1617,13 @@ int irdma_modify_qp(struct ib_qp *ibqp,
  
- /* Work tx bug by waiting while for the risky situation to clear. If that fails,
+ 	if (issue_modify_qp && iwqp->ibqp_state > IB_QPS_RTS) {
+ 		if (dont_wait) {
+-			if (iwqp->cm_id && iwqp->hw_tcp_state) {
++			if (iwqp->hw_tcp_state) {
+ 				spin_lock_irqsave(&iwqp->lock, flags);
+ 				iwqp->hw_tcp_state = IRDMA_TCP_STATE_CLOSED;
+ 				iwqp->last_aeq = IRDMA_AE_RESET_SENT;
+ 				spin_unlock_irqrestore(&iwqp->lock, flags);
+-				irdma_cm_disconn(iwqp);
+ 			}
++			irdma_cm_disconn(iwqp);
+ 		} else {
+ 			int close_timer_started;
+ 
 
 

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D44D521967
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:46:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52B615217DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:25:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343920AbiEJNsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:48:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44900 "EHLO
+        id S242948AbiEJN3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243849AbiEJNcS (ORCPT
+        with ESMTP id S242878AbiEJNWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:32:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6098A22EA74;
-        Tue, 10 May 2022 06:22:40 -0700 (PDT)
+        Tue, 10 May 2022 09:22:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4381A29DE;
+        Tue, 10 May 2022 06:16:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F0D9F6170D;
-        Tue, 10 May 2022 13:22:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07D91C385C2;
-        Tue, 10 May 2022 13:22:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC42EB81D7A;
+        Tue, 10 May 2022 13:16:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 590ECC385C6;
+        Tue, 10 May 2022 13:16:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188959;
-        bh=IWBx+5sO3Vp2iBsahPhayhdg6TUAZM8E8BQ3PDzgWgI=;
+        s=korg; t=1652188602;
+        bh=7ni6v9EcwTeRnymZXJCe2F2vv9mVcGy9VAalwjR/0ls=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=acgM7P5couVN3WC84/PUakJt9AUYYvBpLu/U4+wCDLTTWLTnK+csVteQM7YL4YbbE
-         Y0GD9FZVjpnRJ0bnpXOnPkZTSNEPg/yhlx4tyiTMDf2huk7LfokZAklPLj9rvhDURX
-         gDDZDNSIE0VME0IitKDcQN6TdWHwGOxKFkYuV56c=
+        b=G9itMwvt8im3pN8BvabH2mjS981tB854PiDgRejri6Vj+hj8HX5mXLGkhUrU1Dlpo
+         TYbFzre/5E+s3cnWuFDqs3Cg+nQ7HhlPFwpJLfyZMnHWASC4uGjMN81wsO81Wuro19
+         xSNFUBAceeaQZXjRUKjWs0A6wEL+Dt3jh6qcXJ3g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        Andreas Larsson <andreas@gaisler.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5.4 18/52] can: grcan: grcan_close(): fix deadlock
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>
+Subject: [PATCH 4.14 61/78] ASoC: wm8958: Fix change notifications for DSP controls
 Date:   Tue, 10 May 2022 15:07:47 +0200
-Message-Id: <20220510130730.389893254@linuxfoundation.org>
+Message-Id: <20220510130734.338358207@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
-References: <20220510130729.852544477@linuxfoundation.org>
+In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
+References: <20220510130732.522479698@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +54,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Mark Brown <broonie@kernel.org>
 
-commit 47f070a63e735bcc8d481de31be1b5a1aa62b31c upstream.
+commit b4f5c6b2e52b27462c0599e64e96e53b58438de1 upstream.
 
-There are deadlocks caused by del_timer_sync(&priv->hang_timer) and
-del_timer_sync(&priv->rr_timer) in grcan_close(), one of the deadlocks
-are shown below:
+The WM8958 DSP controls all return 0 on successful write, not a boolean
+value indicating if the write changed the value of the control. Fix this
+by returning 1 after a change, there is already a check at the start of
+each put() that skips the function in the case that there is no change.
 
-   (Thread 1)              |      (Thread 2)
-                           | grcan_reset_timer()
-grcan_close()              |  mod_timer()
- spin_lock_irqsave() //(1) |  (wait a time)
- ...                       | grcan_initiate_running_reset()
- del_timer_sync()          |  spin_lock_irqsave() //(2)
- (wait timer to stop)      |  ...
-
-We hold priv->lock in position (1) of thread 1 and use
-del_timer_sync() to wait timer to stop, but timer handler also need
-priv->lock in position (2) of thread 2. As a result, grcan_close()
-will block forever.
-
-This patch extracts del_timer_sync() from the protection of
-spin_lock_irqsave(), which could let timer handler to obtain the
-needed lock.
-
-Link: https://lore.kernel.org/all/20220425042400.66517-1-duoming@zju.edu.cn
-Fixes: 6cec9b07fe6a ("can: grcan: Add device driver for GRCAN and GRHCAN cores")
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Link: https://lore.kernel.org/r/20220416125408.197440-1-broonie@kernel.org
 Cc: stable@vger.kernel.org
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Reviewed-by: Andreas Larsson <andreas@gaisler.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/grcan.c |    2 ++
- 1 file changed, 2 insertions(+)
+ sound/soc/codecs/wm8958-dsp2.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/drivers/net/can/grcan.c
-+++ b/drivers/net/can/grcan.c
-@@ -1113,8 +1113,10 @@ static int grcan_close(struct net_device
+--- a/sound/soc/codecs/wm8958-dsp2.c
++++ b/sound/soc/codecs/wm8958-dsp2.c
+@@ -533,7 +533,7 @@ static int wm8958_mbc_put(struct snd_kco
  
- 	priv->closing = true;
- 	if (priv->need_txbug_workaround) {
-+		spin_unlock_irqrestore(&priv->lock, flags);
- 		del_timer_sync(&priv->hang_timer);
- 		del_timer_sync(&priv->rr_timer);
-+		spin_lock_irqsave(&priv->lock, flags);
- 	}
- 	netif_stop_queue(dev);
- 	grcan_stop_hardware(dev);
+ 	wm8958_dsp_apply(codec, mbc, wm8994->mbc_ena[mbc]);
+ 
+-	return 0;
++	return 1;
+ }
+ 
+ #define WM8958_MBC_SWITCH(xname, xval) {\
+@@ -659,7 +659,7 @@ static int wm8958_vss_put(struct snd_kco
+ 
+ 	wm8958_dsp_apply(codec, vss, wm8994->vss_ena[vss]);
+ 
+-	return 0;
++	return 1;
+ }
+ 
+ 
+@@ -733,7 +733,7 @@ static int wm8958_hpf_put(struct snd_kco
+ 
+ 	wm8958_dsp_apply(codec, hpf % 3, ucontrol->value.integer.value[0]);
+ 
+-	return 0;
++	return 1;
+ }
+ 
+ #define WM8958_HPF_SWITCH(xname, xval) {\
+@@ -827,7 +827,7 @@ static int wm8958_enh_eq_put(struct snd_
+ 
+ 	wm8958_dsp_apply(codec, eq, ucontrol->value.integer.value[0]);
+ 
+-	return 0;
++	return 1;
+ }
+ 
+ #define WM8958_ENH_EQ_SWITCH(xname, xval) {\
 
 

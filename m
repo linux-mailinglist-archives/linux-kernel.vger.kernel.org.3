@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DBB152196A
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:46:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC80F5217F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:28:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344036AbiEJNst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43228 "EHLO
+        id S243589AbiEJNbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:31:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243837AbiEJNcR (ORCPT
+        with ESMTP id S242720AbiEJNW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:32:17 -0400
+        Tue, 10 May 2022 09:22:27 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2552D2E39;
-        Tue, 10 May 2022 06:22:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDE71632A7;
+        Tue, 10 May 2022 06:16:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D1EEB81D7A;
-        Tue, 10 May 2022 13:22:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAF03C385A6;
-        Tue, 10 May 2022 13:22:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C170FB81DA7;
+        Tue, 10 May 2022 13:16:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 166E6C385C9;
+        Tue, 10 May 2022 13:16:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188951;
-        bh=YFMiPN3l9Oyq2ed9fTRIzlo7Xd7Djs77hjfpETWPvtk=;
+        s=korg; t=1652188593;
+        bh=lyBqSR0EnOVA8i/cJ7U1vjDXnqHAh9OtfQbsNi3k8Ys=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2ZVB42fGKSST1wb4BxTq5P/u7THAGR7708PH8VwMg0DXJll8P3aS56hpJO8WYooIR
-         pykPHpc4ndv3JTuZqXzUHt4mFZlGatcHa5cbYiEJBUrY1tcEDHC1eR9nHFFR748BpT
-         TH8AXiX5LUK9H831tyUmQXKa7Os/XIiLtXK7ZiRU=
+        b=aFozMqH3v16zvI+2cPOdl8+Zk+AvZIumItKiOJ/erGYn4uqivycC/AY6g8D1pbVq2
+         4EoaZtNmG5MK20ulPjjjOLe8oQ8XVXLvQrOzj5n/B1PEMLWKmZb30w16VqgYIoTinG
+         ZeRcueKjv8RhxBxn1tc6LC4OIWyl2znJQlrKRJn0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefan Haberland <sth@linux.ibm.com>,
-        Jan Hoeppner <hoeppner@linux.ibm.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.4 15/52] s390/dasd: prevent double format of tracks for ESE devices
+        stable@vger.kernel.org, Chengfeng Ye <cyeaa@connect.ust.hk>,
+        Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.14 58/78] firewire: fix potential uaf in outbound_phy_packet_callback()
 Date:   Tue, 10 May 2022 15:07:44 +0200
-Message-Id: <20220510130730.303946309@linuxfoundation.org>
+Message-Id: <20220510130734.251438789@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
-References: <20220510130729.852544477@linuxfoundation.org>
+In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
+References: <20220510130732.522479698@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,123 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Haberland <sth@linux.ibm.com>
+From: Chengfeng Ye <cyeaa@connect.ust.hk>
 
-commit 71f3871657370dbbaf942a1c758f64e49a36c70f upstream.
+commit b7c81f80246fac44077166f3e07103affe6db8ff upstream.
 
-For ESE devices we get an error for write operations on an unformatted
-track. Afterwards the track will be formatted and the IO operation
-restarted.
-When using alias devices a track might be accessed by multiple requests
-simultaneously and there is a race window that a track gets formatted
-twice resulting in data loss.
+&e->event and e point to the same address, and &e->event could
+be freed in queue_event. So there is a potential uaf issue if
+we dereference e after calling queue_event(). Fix this by adding
+a temporary variable to maintain e->client in advance, this can
+avoid the potential uaf issue.
 
-Prevent this by remembering the amount of formatted tracks when starting
-a request and comparing this number before actually formatting a track
-on the fly. If the number has changed there is a chance that the current
-track was finally formatted in between. As a result do not format the
-track and restart the current IO to check.
-
-The number of formatted tracks does not match the overall number of
-formatted tracks on the device and it might wrap around but this is no
-problem. It is only needed to recognize that a track has been formatted at
-all in between.
-
-Fixes: 5e2b17e712cf ("s390/dasd: Add dynamic formatting support for ESE volumes")
-Cc: stable@vger.kernel.org # 5.3+
-Signed-off-by: Stefan Haberland <sth@linux.ibm.com>
-Reviewed-by: Jan Hoeppner <hoeppner@linux.ibm.com>
-Link: https://lore.kernel.org/r/20220505141733.1989450-3-sth@linux.ibm.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Chengfeng Ye <cyeaa@connect.ust.hk>
+Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Link: https://lore.kernel.org/r/20220409041243.603210-2-o-takashi@sakamocchi.jp
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/s390/block/dasd.c      |    7 +++++++
- drivers/s390/block/dasd_eckd.c |   19 +++++++++++++++++--
- drivers/s390/block/dasd_int.h  |    2 ++
- 3 files changed, 26 insertions(+), 2 deletions(-)
+ drivers/firewire/core-cdev.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/s390/block/dasd.c
-+++ b/drivers/s390/block/dasd.c
-@@ -1462,6 +1462,13 @@ int dasd_start_IO(struct dasd_ccw_req *c
- 		if (!cqr->lpm)
- 			cqr->lpm = dasd_path_get_opm(device);
- 	}
-+	/*
-+	 * remember the amount of formatted tracks to prevent double format on
-+	 * ESE devices
-+	 */
-+	if (cqr->block)
-+		cqr->trkcount = atomic_read(&cqr->block->trkcount);
-+
- 	if (cqr->cpmode == 1) {
- 		rc = ccw_device_tm_start(device->cdev, cqr->cpaddr,
- 					 (long) cqr, cqr->lpm);
---- a/drivers/s390/block/dasd_eckd.c
-+++ b/drivers/s390/block/dasd_eckd.c
-@@ -3026,13 +3026,24 @@ static int dasd_eckd_format_device(struc
- }
- 
- static bool test_and_set_format_track(struct dasd_format_entry *to_format,
--				      struct dasd_block *block)
-+				      struct dasd_ccw_req *cqr)
+--- a/drivers/firewire/core-cdev.c
++++ b/drivers/firewire/core-cdev.c
+@@ -1495,6 +1495,7 @@ static void outbound_phy_packet_callback
  {
-+	struct dasd_block *block = cqr->block;
- 	struct dasd_format_entry *format;
- 	unsigned long flags;
- 	bool rc = false;
+ 	struct outbound_phy_packet_event *e =
+ 		container_of(packet, struct outbound_phy_packet_event, p);
++	struct client *e_client;
  
- 	spin_lock_irqsave(&block->format_lock, flags);
-+	if (cqr->trkcount != atomic_read(&block->trkcount)) {
-+		/*
-+		 * The number of formatted tracks has changed after request
-+		 * start and we can not tell if the current track was involved.
-+		 * To avoid data corruption treat it as if the current track is
-+		 * involved
-+		 */
-+		rc = true;
-+		goto out;
-+	}
- 	list_for_each_entry(format, &block->format_list, list) {
- 		if (format->track == to_format->track) {
- 			rc = true;
-@@ -3052,6 +3063,7 @@ static void clear_format_track(struct da
- 	unsigned long flags;
- 
- 	spin_lock_irqsave(&block->format_lock, flags);
-+	atomic_inc(&block->trkcount);
- 	list_del_init(&format->list);
- 	spin_unlock_irqrestore(&block->format_lock, flags);
- }
-@@ -3113,8 +3125,11 @@ dasd_eckd_ese_format(struct dasd_device
+ 	switch (status) {
+ 	/* expected: */
+@@ -1511,9 +1512,10 @@ static void outbound_phy_packet_callback
  	}
- 	format->track = curr_trk;
- 	/* test if track is already in formatting by another thread */
--	if (test_and_set_format_track(format, block))
-+	if (test_and_set_format_track(format, cqr)) {
-+		/* this is no real error so do not count down retries */
-+		cqr->retries++;
- 		return ERR_PTR(-EEXIST);
-+	}
+ 	e->phy_packet.data[0] = packet->timestamp;
  
- 	fdata.start_unit = curr_trk;
- 	fdata.stop_unit = curr_trk;
---- a/drivers/s390/block/dasd_int.h
-+++ b/drivers/s390/block/dasd_int.h
-@@ -188,6 +188,7 @@ struct dasd_ccw_req {
- 	void (*callback)(struct dasd_ccw_req *, void *data);
- 	void *callback_data;
- 	unsigned int proc_bytes;	/* bytes for partial completion */
-+	unsigned int trkcount;		/* count formatted tracks */
- };
++	e_client = e->client;
+ 	queue_event(e->client, &e->event, &e->phy_packet,
+ 		    sizeof(e->phy_packet) + e->phy_packet.length, NULL, 0);
+-	client_put(e->client);
++	client_put(e_client);
+ }
  
- /*
-@@ -575,6 +576,7 @@ struct dasd_block {
- 
- 	struct list_head format_list;
- 	spinlock_t format_lock;
-+	atomic_t trkcount;
- };
- 
- struct dasd_attention_data {
+ static int ioctl_send_phy_packet(struct client *client, union ioctl_arg *arg)
 
 

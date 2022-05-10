@@ -2,51 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B041552167D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B11521782
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242273AbiEJNOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
+        id S243124AbiEJNZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235563AbiEJNOr (ORCPT
+        with ESMTP id S243343AbiEJNVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:14:47 -0400
+        Tue, 10 May 2022 09:21:48 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3556DE8F;
-        Tue, 10 May 2022 06:10:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5E8369F7;
+        Tue, 10 May 2022 06:15:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83483B81D7C;
-        Tue, 10 May 2022 13:10:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A571CC385C2;
-        Tue, 10 May 2022 13:10:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8072CB81CE7;
+        Tue, 10 May 2022 13:15:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7F96C385C6;
+        Tue, 10 May 2022 13:15:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188243;
-        bh=U5+FmEaWhhVakEBQ0TGM8mSVymqqCpM+PuY9LZVZOBY=;
+        s=korg; t=1652188519;
+        bh=oc6DGHxk7tBm4fTtD+Nku+wgVy/bLOm9h6z8z3yKvNM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MtxSMJttT6Q1RqnefoDLKcA04LPV8ixDP4YYzmjBiN3jmgS/Xe0A8GteKb+BR9itE
-         lTrsta0esC/jsIh8g7cSffyiVwfini0lOiN85KCx5SkJGsY/ynt2vB+N0boncU+Hiu
-         gjBzkNe9fwVzbk6vPmafJybKiYRskLjO8s6AVyxA=
+        b=mD15IfMlaAXfSVfiVF0ONId0jwZEBAp+Fhdx68+ys1OTIG09dA804XaxaHbFAtuRW
+         rvlplY2h9JQJB/tsNOsUJ1Wr14X1So2QqA7FZ1RoQGijYIuoYxgADVodUVlCWFya6m
+         bu5FsT4JUXkZKIxTqfaPjFxm1rEwR8gVSipZrY/0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Minh Yuan <yuanmingbuaa@gmail.com>,
-        syzbot+8e8958586909d62b6840@syzkaller.appspotmail.com,
-        cruise k <cruise4k@gmail.com>, Kyungtae Kim <kt0755@gmail.com>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Denis Efremov <efremov@linux.com>, Willy Tarreau <w@1wt.eu>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 4.9 01/66] floppy: disable FDRAWCMD by default
+        stable@vger.kernel.org, Pavel Machek <pavel@denx.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 05/78] Revert "net: ethernet: stmmac: fix altr_tse_pcs function when using a fixed-link"
 Date:   Tue, 10 May 2022 15:06:51 +0200
-Message-Id: <20220510130729.806574432@linuxfoundation.org>
+Message-Id: <20220510130732.686866474@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
-References: <20220510130729.762341544@linuxfoundation.org>
+In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
+References: <20220510130732.522479698@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -60,141 +56,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Willy Tarreau <w@1wt.eu>
+This reverts commit 75e105d068cb98e43a6bb6b196fc006da52f9ee5 which is
+commit a6aaa00324240967272b451bfa772547bd576ee6 upstream.
 
-commit 233087ca063686964a53c829d547c7571e3f67bf upstream.
+Pavel reports that it causes boot issues, so revert it for now.
 
-Minh Yuan reported a concurrency use-after-free issue in the floppy code
-between raw_cmd_ioctl and seek_interrupt.
-
-[ It turns out this has been around, and that others have reported the
-  KASAN splats over the years, but Minh Yuan had a reproducer for it and
-  so gets primary credit for reporting it for this fix   - Linus ]
-
-The problem is, this driver tends to break very easily and nowadays,
-nobody is expected to use FDRAWCMD anyway since it was used to
-manipulate non-standard formats.  The risk of breaking the driver is
-higher than the risk presented by this race, and accessing the device
-requires privileges anyway.
-
-Let's just add a config option to completely disable this ioctl and
-leave it disabled by default.  Distros shouldn't use it, and only those
-running on antique hardware might need to enable it.
-
-Link: https://lore.kernel.org/all/000000000000b71cdd05d703f6bf@google.com/
-Link: https://lore.kernel.org/lkml/CAKcFiNC=MfYVW-Jt9A3=FPJpTwCD2PL_ULNCpsCVE5s8ZeBQgQ@mail.gmail.com
-Link: https://lore.kernel.org/all/CAEAjamu1FRhz6StCe_55XY5s389ZP_xmCF69k987En+1z53=eg@mail.gmail.com
-Reported-by: Minh Yuan <yuanmingbuaa@gmail.com>
-Reported-by: syzbot+8e8958586909d62b6840@syzkaller.appspotmail.com
-Reported-by: cruise k <cruise4k@gmail.com>
-Reported-by: Kyungtae Kim <kt0755@gmail.com>
-Suggested-by: Linus Torvalds <torvalds@linuxfoundation.org>
-Tested-by: Denis Efremov <efremov@linux.com>
-Signed-off-by: Willy Tarreau <w@1wt.eu>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Link: https://lore.kernel.org/r/20220429074341.GB1423@amd
+Reported-by: Pavel Machek <pavel@denx.de>
+Cc: Dinh Nguyen <dinguyen@kernel.org>
+Cc: David S. Miller <davem@davemloft.net>
+Cc: Sasha Levin <sashal@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/block/Kconfig  |   16 ++++++++++++++++
- drivers/block/floppy.c |   43 ++++++++++++++++++++++++++++++++-----------
- 2 files changed, 48 insertions(+), 11 deletions(-)
+ drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c  |    8 ++++++++
+ drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h  |    4 ----
+ drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c |   13 ++++++++-----
+ 3 files changed, 16 insertions(+), 9 deletions(-)
 
---- a/drivers/block/Kconfig
-+++ b/drivers/block/Kconfig
-@@ -33,6 +33,22 @@ config BLK_DEV_FD
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called floppy.
+--- a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c
++++ b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c
+@@ -68,6 +68,10 @@
+ #define TSE_PCS_USE_SGMII_ENA				BIT(0)
+ #define TSE_PCS_IF_USE_SGMII				0x03
  
-+config BLK_DEV_FD_RAWCMD
-+	bool "Support for raw floppy disk commands (DEPRECATED)"
-+	depends on BLK_DEV_FD
-+	help
-+	  If you want to use actual physical floppies and expect to do
-+	  special low-level hardware accesses to them (access and use
-+	  non-standard formats, for example), then enable this.
++#define SGMII_ADAPTER_CTRL_REG				0x00
++#define SGMII_ADAPTER_DISABLE				0x0001
++#define SGMII_ADAPTER_ENABLE				0x0000
 +
-+	  Note that the code enabled by this option is rarely used and
-+	  might be unstable or insecure, and distros should not enable it.
+ #define AUTONEGO_LINK_TIMER				20
+ 
+ static int tse_pcs_reset(void __iomem *base, struct tse_pcs *pcs)
+@@ -211,8 +215,12 @@ void tse_pcs_fix_mac_speed(struct tse_pc
+ 			   unsigned int speed)
+ {
+ 	void __iomem *tse_pcs_base = pcs->tse_pcs_base;
++	void __iomem *sgmii_adapter_base = pcs->sgmii_adapter_base;
+ 	u32 val;
+ 
++	writew(SGMII_ADAPTER_ENABLE,
++	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
 +
-+	  Note: FDRAWCMD is deprecated and will be removed from the kernel
-+	  in the near future.
+ 	pcs->autoneg = phy_dev->autoneg;
+ 
+ 	if (phy_dev->autoneg == AUTONEG_ENABLE) {
+--- a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h
++++ b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h
+@@ -21,10 +21,6 @@
+ #include <linux/phy.h>
+ #include <linux/timer.h>
+ 
+-#define SGMII_ADAPTER_CTRL_REG		0x00
+-#define SGMII_ADAPTER_ENABLE		0x0000
+-#define SGMII_ADAPTER_DISABLE		0x0001
+-
+ struct tse_pcs {
+ 	struct device *dev;
+ 	void __iomem *tse_pcs_base;
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
+@@ -29,6 +29,9 @@
+ 
+ #include "altr_tse_pcs.h"
+ 
++#define SGMII_ADAPTER_CTRL_REG                          0x00
++#define SGMII_ADAPTER_DISABLE                           0x0001
 +
-+	  If unsure, say N.
-+
- config AMIGA_FLOPPY
- 	tristate "Amiga floppy support"
- 	depends on AMIGA
---- a/drivers/block/floppy.c
-+++ b/drivers/block/floppy.c
-@@ -3016,6 +3016,8 @@ static const char *drive_name(int type,
- 		return "(null)";
+ #define SYSMGR_EMACGRP_CTRL_PHYSEL_ENUM_GMII_MII 0x0
+ #define SYSMGR_EMACGRP_CTRL_PHYSEL_ENUM_RGMII 0x1
+ #define SYSMGR_EMACGRP_CTRL_PHYSEL_ENUM_RMII 0x2
+@@ -62,14 +65,16 @@ static void socfpga_dwmac_fix_mac_speed(
+ {
+ 	struct socfpga_dwmac *dwmac = (struct socfpga_dwmac *)priv;
+ 	void __iomem *splitter_base = dwmac->splitter_base;
++	void __iomem *tse_pcs_base = dwmac->pcs.tse_pcs_base;
+ 	void __iomem *sgmii_adapter_base = dwmac->pcs.sgmii_adapter_base;
+ 	struct device *dev = dwmac->dev;
+ 	struct net_device *ndev = dev_get_drvdata(dev);
+ 	struct phy_device *phy_dev = ndev->phydev;
+ 	u32 val;
+ 
+-	writew(SGMII_ADAPTER_DISABLE,
+-	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
++	if ((tse_pcs_base) && (sgmii_adapter_base))
++		writew(SGMII_ADAPTER_DISABLE,
++		       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
+ 
+ 	if (splitter_base) {
+ 		val = readl(splitter_base + EMAC_SPLITTER_CTRL_REG);
+@@ -91,9 +96,7 @@ static void socfpga_dwmac_fix_mac_speed(
+ 		writel(val, splitter_base + EMAC_SPLITTER_CTRL_REG);
+ 	}
+ 
+-	writew(SGMII_ADAPTER_ENABLE,
+-	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
+-	if (phy_dev)
++	if (tse_pcs_base && sgmii_adapter_base)
+ 		tse_pcs_fix_mac_speed(&dwmac->pcs, phy_dev, speed);
  }
  
-+#ifdef CONFIG_BLK_DEV_FD_RAWCMD
-+
- /* raw commands */
- static void raw_cmd_done(int flag)
- {
-@@ -3227,6 +3229,35 @@ static int raw_cmd_ioctl(int cmd, void _
- 	return ret;
- }
- 
-+static int floppy_raw_cmd_ioctl(int type, int drive, int cmd,
-+				void __user *param)
-+{
-+	int ret;
-+
-+	pr_warn_once("Note: FDRAWCMD is deprecated and will be removed from the kernel in the near future.\n");
-+
-+	if (type)
-+		return -EINVAL;
-+	if (lock_fdc(drive))
-+		return -EINTR;
-+	set_floppy(drive);
-+	ret = raw_cmd_ioctl(cmd, param);
-+	if (ret == -EINTR)
-+		return -EINTR;
-+	process_fd_request();
-+	return ret;
-+}
-+
-+#else /* CONFIG_BLK_DEV_FD_RAWCMD */
-+
-+static int floppy_raw_cmd_ioctl(int type, int drive, int cmd,
-+				void __user *param)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+#endif
-+
- static int invalidate_drive(struct block_device *bdev)
- {
- 	/* invalidate the buffer track to force a reread */
-@@ -3414,7 +3445,6 @@ static int fd_locked_ioctl(struct block_
- {
- 	int drive = (long)bdev->bd_disk->private_data;
- 	int type = ITYPE(UDRS->fd_device);
--	int i;
- 	int ret;
- 	int size;
- 	union inparam {
-@@ -3565,16 +3595,7 @@ static int fd_locked_ioctl(struct block_
- 		outparam = UDRWE;
- 		break;
- 	case FDRAWCMD:
--		if (type)
--			return -EINVAL;
--		if (lock_fdc(drive))
--			return -EINTR;
--		set_floppy(drive);
--		i = raw_cmd_ioctl(cmd, (void __user *)param);
--		if (i == -EINTR)
--			return -EINTR;
--		process_fd_request();
--		return i;
-+		return floppy_raw_cmd_ioctl(type, drive, cmd, (void __user *)param);
- 	case FDTWADDLE:
- 		if (lock_fdc(drive))
- 			return -EINTR;
 
 

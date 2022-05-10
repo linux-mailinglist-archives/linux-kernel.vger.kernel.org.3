@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8745216E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4EB25217D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242569AbiEJNUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:20:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38652 "EHLO
+        id S243021AbiEJN3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242523AbiEJNSc (ORCPT
+        with ESMTP id S243652AbiEJNWQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:18:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBA560AA3;
-        Tue, 10 May 2022 06:13:07 -0700 (PDT)
+        Tue, 10 May 2022 09:22:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8887A8CDB9;
+        Tue, 10 May 2022 06:16:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 46967B81DA3;
-        Tue, 10 May 2022 13:13:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9472CC385A6;
-        Tue, 10 May 2022 13:13:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68CEA615F8;
+        Tue, 10 May 2022 13:16:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72969C385C6;
+        Tue, 10 May 2022 13:16:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188384;
-        bh=Nfz6zpMbbUxf74e5+rOO/C5sHyZZWyuK0ySQn8EgPfM=;
+        s=korg; t=1652188596;
+        bh=0w0xQr+Pu/llxYWRbwOnMuOVCGxAkws6yzESbdnf+gk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sAs5jKzgu6/3w6CHJVtt1T9nQQWJvGP4fe+ecU8o1byJ5Dba9wYL8K5ktBQkhd5EV
-         Nj3NGi/7Ll3XoXTnfz//59ab0y2lTlSLHp3Vhy7s4ZPM3bpyE+RjLzwalLMc1T8pi1
-         E1nWZfk9vMTTHLBYyhVSiB49bkbt/ZEUjGOlqUgY=
+        b=fXBJznsgb9MbeIuuPLPQIJGffDgvTAWImECTNoUWG6TVDPrIk4cDSD2JSh5n02QUL
+         +5khG9a78BS+H63rxQd3qLPOF1XCYwo2W3SVTwTQ7WW7fjTuZ/1oVe+UPEV/X6JHMW
+         +8LaJT4ykojb3CalOI+GrroFlOldagQRsU0WYCZY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH 4.9 55/66] NFC: netlink: fix sleep in atomic bug when firmware download timeout
+        stable@vger.kernel.org, Jakob Koschel <jakobkoschel@gmail.com>,
+        Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.14 59/78] firewire: remove check of list iterator against head past the loop body
 Date:   Tue, 10 May 2022 15:07:45 +0200
-Message-Id: <20220510130731.379769655@linuxfoundation.org>
+Message-Id: <20220510130734.280568671@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
-References: <20220510130729.762341544@linuxfoundation.org>
+In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
+References: <20220510130732.522479698@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,65 +55,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Jakob Koschel <jakobkoschel@gmail.com>
 
-commit 4071bf121d59944d5cd2238de0642f3d7995a997 upstream.
+commit 9423973869bd4632ffe669f950510c49296656e0 upstream.
 
-There are sleep in atomic bug that could cause kernel panic during
-firmware download process. The root cause is that nlmsg_new with
-GFP_KERNEL parameter is called in fw_dnld_timeout which is a timer
-handler. The call trace is shown below:
+When list_for_each_entry() completes the iteration over the whole list
+without breaking the loop, the iterator value will be a bogus pointer
+computed based on the head element.
 
-BUG: sleeping function called from invalid context at include/linux/sched/mm.h:265
-Call Trace:
-kmem_cache_alloc_node
-__alloc_skb
-nfc_genl_fw_download_done
-call_timer_fn
-__run_timers.part.0
-run_timer_softirq
-__do_softirq
-...
+While it is safe to use the pointer to determine if it was computed
+based on the head element, either with list_entry_is_head() or
+&pos->member == head, using the iterator variable after the loop should
+be avoided.
 
-The nlmsg_new with GFP_KERNEL parameter may sleep during memory
-allocation process, and the timer handler is run as the result of
-a "software interrupt" that should not call any other function
-that could sleep.
+In preparation to limit the scope of a list iterator to the list
+traversal loop, use a dedicated pointer to point to the found element [1].
 
-This patch changes allocation mode of netlink message from GFP_KERNEL
-to GFP_ATOMIC in order to prevent sleep in atomic bug. The GFP_ATOMIC
-flag makes memory allocation operation could be used in atomic context.
-
-Fixes: 9674da8759df ("NFC: Add firmware upload netlink command")
-Fixes: 9ea7187c53f6 ("NFC: netlink: Rename CMD_FW_UPLOAD to CMD_FW_DOWNLOAD")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20220504055847.38026-1-duoming@zju.edu.cn
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Link: https://lore.kernel.org/r/20220409041243.603210-3-o-takashi@sakamocchi.jp
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/nfc/netlink.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/firewire/core-transaction.c |   30 ++++++++++++++++--------------
+ drivers/firewire/sbp2.c             |   13 +++++++------
+ 2 files changed, 23 insertions(+), 20 deletions(-)
 
---- a/net/nfc/netlink.c
-+++ b/net/nfc/netlink.c
-@@ -1254,7 +1254,7 @@ int nfc_genl_fw_download_done(struct nfc
- 	struct sk_buff *msg;
- 	void *hdr;
+--- a/drivers/firewire/core-transaction.c
++++ b/drivers/firewire/core-transaction.c
+@@ -86,24 +86,25 @@ static int try_cancel_split_timeout(stru
+ static int close_transaction(struct fw_transaction *transaction,
+ 			     struct fw_card *card, int rcode)
+ {
+-	struct fw_transaction *t;
++	struct fw_transaction *t = NULL, *iter;
+ 	unsigned long flags;
  
--	msg = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_KERNEL);
-+	msg = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_ATOMIC);
- 	if (!msg)
- 		return -ENOMEM;
+ 	spin_lock_irqsave(&card->lock, flags);
+-	list_for_each_entry(t, &card->transaction_list, link) {
+-		if (t == transaction) {
+-			if (!try_cancel_split_timeout(t)) {
++	list_for_each_entry(iter, &card->transaction_list, link) {
++		if (iter == transaction) {
++			if (!try_cancel_split_timeout(iter)) {
+ 				spin_unlock_irqrestore(&card->lock, flags);
+ 				goto timed_out;
+ 			}
+-			list_del_init(&t->link);
+-			card->tlabel_mask &= ~(1ULL << t->tlabel);
++			list_del_init(&iter->link);
++			card->tlabel_mask &= ~(1ULL << iter->tlabel);
++			t = iter;
+ 			break;
+ 		}
+ 	}
+ 	spin_unlock_irqrestore(&card->lock, flags);
  
-@@ -1270,7 +1270,7 @@ int nfc_genl_fw_download_done(struct nfc
+-	if (&t->link != &card->transaction_list) {
++	if (t) {
+ 		t->callback(card, rcode, NULL, 0, t->callback_data);
+ 		return 0;
+ 	}
+@@ -938,7 +939,7 @@ EXPORT_SYMBOL(fw_core_handle_request);
  
- 	genlmsg_end(msg, hdr);
+ void fw_core_handle_response(struct fw_card *card, struct fw_packet *p)
+ {
+-	struct fw_transaction *t;
++	struct fw_transaction *t = NULL, *iter;
+ 	unsigned long flags;
+ 	u32 *data;
+ 	size_t data_length;
+@@ -950,20 +951,21 @@ void fw_core_handle_response(struct fw_c
+ 	rcode	= HEADER_GET_RCODE(p->header[1]);
  
--	genlmsg_multicast(&nfc_genl_family, msg, 0, 0, GFP_KERNEL);
-+	genlmsg_multicast(&nfc_genl_family, msg, 0, 0, GFP_ATOMIC);
+ 	spin_lock_irqsave(&card->lock, flags);
+-	list_for_each_entry(t, &card->transaction_list, link) {
+-		if (t->node_id == source && t->tlabel == tlabel) {
+-			if (!try_cancel_split_timeout(t)) {
++	list_for_each_entry(iter, &card->transaction_list, link) {
++		if (iter->node_id == source && iter->tlabel == tlabel) {
++			if (!try_cancel_split_timeout(iter)) {
+ 				spin_unlock_irqrestore(&card->lock, flags);
+ 				goto timed_out;
+ 			}
+-			list_del_init(&t->link);
+-			card->tlabel_mask &= ~(1ULL << t->tlabel);
++			list_del_init(&iter->link);
++			card->tlabel_mask &= ~(1ULL << iter->tlabel);
++			t = iter;
+ 			break;
+ 		}
+ 	}
+ 	spin_unlock_irqrestore(&card->lock, flags);
  
- 	return 0;
+-	if (&t->link == &card->transaction_list) {
++	if (!t) {
+  timed_out:
+ 		fw_notice(card, "unsolicited response (source %x, tlabel %x)\n",
+ 			  source, tlabel);
+--- a/drivers/firewire/sbp2.c
++++ b/drivers/firewire/sbp2.c
+@@ -421,7 +421,7 @@ static void sbp2_status_write(struct fw_
+ 			      void *payload, size_t length, void *callback_data)
+ {
+ 	struct sbp2_logical_unit *lu = callback_data;
+-	struct sbp2_orb *orb;
++	struct sbp2_orb *orb = NULL, *iter;
+ 	struct sbp2_status status;
+ 	unsigned long flags;
  
+@@ -446,17 +446,18 @@ static void sbp2_status_write(struct fw_
+ 
+ 	/* Lookup the orb corresponding to this status write. */
+ 	spin_lock_irqsave(&lu->tgt->lock, flags);
+-	list_for_each_entry(orb, &lu->orb_list, link) {
++	list_for_each_entry(iter, &lu->orb_list, link) {
+ 		if (STATUS_GET_ORB_HIGH(status) == 0 &&
+-		    STATUS_GET_ORB_LOW(status) == orb->request_bus) {
+-			orb->rcode = RCODE_COMPLETE;
+-			list_del(&orb->link);
++		    STATUS_GET_ORB_LOW(status) == iter->request_bus) {
++			iter->rcode = RCODE_COMPLETE;
++			list_del(&iter->link);
++			orb = iter;
+ 			break;
+ 		}
+ 	}
+ 	spin_unlock_irqrestore(&lu->tgt->lock, flags);
+ 
+-	if (&orb->link != &lu->orb_list) {
++	if (orb) {
+ 		orb->callback(orb, &status);
+ 		kref_put(&orb->kref, free_orb); /* orb callback reference */
+ 	} else {
 
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50DEF521C27
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7481C521BD2
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:19:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344063AbiEJOao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50198 "EHLO
+        id S244870AbiEJOWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:22:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244806AbiEJOBW (ORCPT
+        with ESMTP id S245017AbiEJNrL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:01:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3342DE5A3;
-        Tue, 10 May 2022 06:40:08 -0700 (PDT)
+        Tue, 10 May 2022 09:47:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995D733A3A;
+        Tue, 10 May 2022 06:33:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D76C7B81D24;
-        Tue, 10 May 2022 13:40:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49AE1C36AEA;
-        Tue, 10 May 2022 13:40:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36A446165A;
+        Tue, 10 May 2022 13:33:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BE7CC385A6;
+        Tue, 10 May 2022 13:33:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652190005;
-        bh=XgOyfwY09cKOKNRpN4Ehrh0m6E4OuJybLh6K6uDvmp0=;
+        s=korg; t=1652189616;
+        bh=hjjv61DLIoqcqHa+NvNQrQWmKG8KvV2OuvoF3AMYuYM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HFcQMLo5mC31tmslDvswKo2hAHdR887qesWIz0MTGwYlJot5LvZlv0zcwkPGYnfhC
-         kNENpWbCLDuClVxWVKrXGcrmz3cpxcVYmFPFirQfHTFpT+ApxITVLCmeO4xjHYTQei
-         vTpSGW62TdJbLYCyy+b5IifMFubEqQGgSPbpF/QI=
+        b=OI8mgexDFWzYzX2FcYucZhkrmRJRP+lmtP+Z91TosjZlOwRjspOVrZTupvOc/eETD
+         HBfdWYh9pDd4LwVYrM/5WRfSthIGBR0S2od/D8ugEnxMaGe9akvOf7ZqsKRTzVEI4Q
+         UmsrvwCODbVMv+cAQljd9RLHNf5VKs0rMRoCIbT8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH 5.17 099/140] dt-bindings: pci: apple,pcie: Drop max-link-speed from example
-Date:   Tue, 10 May 2022 15:08:09 +0200
-Message-Id: <20220510130744.437692269@linuxfoundation.org>
+        stable@vger.kernel.org, pali@kernel.org,
+        =?UTF-8?q?Marek=20Beh=FAn?= <kabel@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Subject: [PATCH 5.15 108/135] PCI: aardvark: Add support for DEVCAP2, DEVCTL2, LNKCAP2 and LNKCTL2 registers on emulated bridge
+Date:   Tue, 10 May 2022 15:08:10 +0200
+Message-Id: <20220510130743.505102002@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,53 +55,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hector Martin <marcan@marcan.st>
+From: Pali Rohár <pali@kernel.org>
 
-commit 5dc4630426511f641b7ac44fc550b8e21eafb237 upstream.
+commit 1d3e170344dff2cef8827db6c09909b78cbc11d7 upstream.
 
-We no longer use these since 111659c2a570 (and they never worked
-anyway); drop them from the example to avoid confusion.
+PCI aardvark hardware supports access to DEVCAP2, DEVCTL2, LNKCAP2 and
+LNKCTL2 configuration registers of PCIe core via PCIE_CORE_PCIEXP_CAP.
+Export them via emulated software root bridge.
 
-Fixes: 111659c2a570 ("arm64: dts: apple: t8103: Remove PCIe max-link-speed properties")
-Signed-off-by: Hector Martin <marcan@marcan.st>
-Reviewed-by: Alyssa Rosenzweig <alyssa@rosenzweig.io>
-Signed-off-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/20220502091308.28233-1-marcan@marcan.st
+Link: https://lore.kernel.org/r/20211130172913.9727-4-kabel@kernel.org
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Marek Behún <kabel@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/devicetree/bindings/pci/apple,pcie.yaml | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/pci/controller/pci-aardvark.c |   15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pci/apple,pcie.yaml b/Documentation/devicetree/bindings/pci/apple,pcie.yaml
-index 7f01e15fc81c..daf602ac0d0f 100644
---- a/Documentation/devicetree/bindings/pci/apple,pcie.yaml
-+++ b/Documentation/devicetree/bindings/pci/apple,pcie.yaml
-@@ -142,7 +142,6 @@ examples:
-           device_type = "pci";
-           reg = <0x0 0x0 0x0 0x0 0x0>;
-           reset-gpios = <&pinctrl_ap 152 0>;
--          max-link-speed = <2>;
+--- a/drivers/pci/controller/pci-aardvark.c
++++ b/drivers/pci/controller/pci-aardvark.c
+@@ -876,8 +876,13 @@ advk_pci_bridge_emul_pcie_conf_read(stru
  
-           #address-cells = <3>;
-           #size-cells = <2>;
-@@ -153,7 +152,6 @@ examples:
-           device_type = "pci";
-           reg = <0x800 0x0 0x0 0x0 0x0>;
-           reset-gpios = <&pinctrl_ap 153 0>;
--          max-link-speed = <2>;
+ 	case PCI_EXP_DEVCAP:
+ 	case PCI_EXP_DEVCTL:
++	case PCI_EXP_DEVCAP2:
++	case PCI_EXP_DEVCTL2:
++	case PCI_EXP_LNKCAP2:
++	case PCI_EXP_LNKCTL2:
+ 		*value = advk_readl(pcie, PCIE_CORE_PCIEXP_CAP + reg);
+ 		return PCI_BRIDGE_EMUL_HANDLED;
++
+ 	default:
+ 		return PCI_BRIDGE_EMUL_NOT_HANDLED;
+ 	}
+@@ -891,10 +896,6 @@ advk_pci_bridge_emul_pcie_conf_write(str
+ 	struct advk_pcie *pcie = bridge->data;
  
-           #address-cells = <3>;
-           #size-cells = <2>;
-@@ -164,7 +162,6 @@ examples:
-           device_type = "pci";
-           reg = <0x1000 0x0 0x0 0x0 0x0>;
-           reset-gpios = <&pinctrl_ap 33 0>;
--          max-link-speed = <1>;
+ 	switch (reg) {
+-	case PCI_EXP_DEVCTL:
+-		advk_writel(pcie, new, PCIE_CORE_PCIEXP_CAP + reg);
+-		break;
+-
+ 	case PCI_EXP_LNKCTL:
+ 		advk_writel(pcie, new, PCIE_CORE_PCIEXP_CAP + reg);
+ 		if (new & PCI_EXP_LNKCTL_RL)
+@@ -916,6 +917,12 @@ advk_pci_bridge_emul_pcie_conf_write(str
+ 		advk_writel(pcie, new, PCIE_ISR0_REG);
+ 		break;
  
-           #address-cells = <3>;
-           #size-cells = <2>;
--- 
-2.36.1
-
++	case PCI_EXP_DEVCTL:
++	case PCI_EXP_DEVCTL2:
++	case PCI_EXP_LNKCTL2:
++		advk_writel(pcie, new, PCIE_CORE_PCIEXP_CAP + reg);
++		break;
++
+ 	default:
+ 		break;
+ 	}
 
 

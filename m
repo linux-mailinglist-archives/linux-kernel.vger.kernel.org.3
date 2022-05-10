@@ -2,89 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97159520AAC
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 03:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 890E6520AB6
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 03:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234227AbiEJBct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 21:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60040 "EHLO
+        id S234266AbiEJBgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 21:36:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231250AbiEJBcs (ORCPT
+        with ESMTP id S234229AbiEJBgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 21:32:48 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C664828202F
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 18:28:52 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id m23so19097175ljb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 18:28:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KvsYgset45myBW8qA4NZQkt2vsRPsWbkOZTPZ8B0QZs=;
-        b=EJOcwMNhJhZ5IsTE/SrqEyOG5DXsWPDja6JwALHOzhsywHYbKQfw/yAL1WPXwHr8Oq
-         PtBWNPli66lh/BLwgJ9RITIj9y61VbJQItVH58HAsfRMXdMOiAAWo69fPdIo+55RVm5r
-         rrN93WjCILcdpaVFwbK4ochwIDbMVqJQaLrzNZ1btEdbnlTEPzjJmWjI7GN1dbdvZTkx
-         TsQOL7eHqN6VOc35W4SJgeqVtcS++l2vHczg5UwUoSVCJMIJZmeu4Ur/5vsEP/OV4zPn
-         mMBwBe7o/iiNW6fySALgeIXM2wcioj1jV2t+vWSLDQ1eTBk0HLFG/YkCvHly6om3nVJ/
-         SX7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KvsYgset45myBW8qA4NZQkt2vsRPsWbkOZTPZ8B0QZs=;
-        b=isqb07/vFd8qnECrKC0yHSADLeIANskmNLU5xv3SuSRgraI5B9MkNDICRVgBCushkS
-         y++1Ut1MXD4+Sf6WW0h+fm82DANpO7IvVIjeK9DwxRX9O6WZQq1eWPun3fLBF1VqiEbV
-         4Kx42xCUzdqB+7ghiUZexifMSaCoznXqFwjok1eU0SfOOhleLe+uumQ0X3QiW5eDvh30
-         MmZZuK4ZEP1OoUHLmp9r8bGA3AnU3FlU+c8a5XBaHNvCnzpd/aj54549mjgnSz5HlLHJ
-         xTjuBryM6+JnUZTQXuhA/ZOoX3XLCfZEevLTUJdlMJi+WxXDz8x/EcWGT7tKNv55D+vn
-         mUmQ==
-X-Gm-Message-State: AOAM530hq4oGCUFG9/Zrrq+MHtDezJHCx0p3QpnyVvlqd/aOweem4SuI
-        DHrHe16ZQk/CFnFkX4Fnj1DU4kp7NsUSnjwq
-X-Google-Smtp-Source: ABdhPJwqvBmGPTHTUUieU71G7SakyCdLYM2OuHn7lGWU7+9YrHtQfGQgAp3pviejLtX6pl5FP/Q/mA==
-X-Received: by 2002:a05:651c:a09:b0:250:628a:e7d0 with SMTP id k9-20020a05651c0a0900b00250628ae7d0mr12506962ljq.66.1652146131132;
-        Mon, 09 May 2022 18:28:51 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id l26-20020ac24a9a000000b0047255d21130sm2115301lfp.95.2022.05.09.18.28.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 18:28:50 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id A08D6104ADF; Tue, 10 May 2022 04:30:38 +0300 (+03)
-Date:   Tue, 10 May 2022 04:30:38 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
-Message-ID: <20220510013038.ggubvsrwf7pyoamk@box.shutemov.name>
-References: <40ccd0f0-35a1-5aa7-9e51-25ab196d79e5@linux.intel.com>
- <2ed5c9cc316950a5a47ee714715b7980f358a140.camel@intel.com>
- <ab17102c-0cb7-87d3-3494-969866d64573@linux.intel.com>
- <d53696f85ada39a91a3685c61d177c582810772e.camel@intel.com>
- <d63d2774-c44d-27da-74b6-550935a196fd@intel.com>
- <dca06ffa36abe9989f0a7abaeafc83c1a7250651.camel@intel.com>
- <20220507004236.5p5dyksftge7wwr3@black.fi.intel.com>
- <45d184273f1950320843f6696eb3071f7d354fd3.camel@intel.com>
- <20220509120927.7rg6v5pyc3f4pxsh@box.shutemov.name>
- <75d4755c9a376df2e98a267e10e60da3bd178b17.camel@intel.com>
+        Mon, 9 May 2022 21:36:19 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B369286FCE;
+        Mon,  9 May 2022 18:32:22 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 24A1WFPx029254
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 9 May 2022 21:32:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1652146337; bh=kNxC32quScbCpNyL/wTfsRZfYUcVDoGEmAnwF+CO/RI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=QxJmGfW7e1IqMYLGQvzKg6+7ZkT0OwGyjZIbR34a/I8eBprlhA99gR0O0BEp3S9Ri
+         QSxzKJONeuCwz07zjjnp7xXUyxbrw2mbXLk0OH60YANQzrSVgVJF5eD+RBMAgsUUWA
+         T4G0Ty0kWJ5uuh0PXPt33QGdcwH53U3XMtVJjXWc8ULr3+AvIz6Pgz0xZXQIBzluR2
+         CIrOokyPfzdv2U5lw9a5ZDaB9QcvNSQAyRc/2bz9cP7uvQJlW99OnxvoL7KA5YnM+l
+         HDoK6memNQg7ocJ1IS4F2j1RZyXyb9B99SqHCgp+0Poku2gzFpHznTQ3ugVllQKfHb
+         ErvwvUo9JMGBw==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 5B4DC15C3F0A; Mon,  9 May 2022 21:32:15 -0400 (EDT)
+Date:   Mon, 9 May 2022 21:32:15 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Byungchul Park <byungchul.park@lge.com>
+Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
+        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, willy@infradead.org,
+        david@fromorbit.com, amir73il@gmail.com, bfields@fieldses.org,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
+        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        hamohammed.sa@gmail.com, 42.hyeyoo@gmail.com
+Subject: Re: [PATCH RFC v6 00/21] DEPT(Dependency Tracker)
+Message-ID: <YnnAnzPFZZte/UR8@mit.edu>
+References: <1651652269-15342-1-git-send-email-byungchul.park@lge.com>
+ <YnmCE2iwa0MSqocr@mit.edu>
+ <YnmVgVQ7usoXnJ1N@mit.edu>
+ <20220510003213.GD6047@X58A-UD3R>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <75d4755c9a376df2e98a267e10e60da3bd178b17.camel@intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+In-Reply-To: <20220510003213.GD6047@X58A-UD3R>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,29 +76,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 11:54:12AM +1200, Kai Huang wrote:
-> On Mon, 2022-05-09 at 15:09 +0300, Kirill A. Shutemov wrote:
-> > On Mon, May 09, 2022 at 03:37:22PM +1200, Kai Huang wrote:
-> > > On Sat, 2022-05-07 at 03:42 +0300, Kirill A. Shutemov wrote:
-> > > > On Fri, May 06, 2022 at 12:11:03PM +1200, Kai Huang wrote:
-> > > > > Kirill, what's your opinion?
-> > > > 
-> > > > I said before that I think DMA API is the right tool here.
-> > > > 
-> > > > Speculation about future of DMA in TDX is irrelevant here. If semantics
-> > > > change we will need to re-evaluate all users. VirtIO uses DMA API and it
-> > > > is conceptually the same use-case: communicate with the host.
-> > > 
-> > > Virtio is designed for device driver to use, so it's fine to use DMA API. And
-> > > real DMA can happen to the virtio DMA buffers.  Attestation doesn't have such
-> > > assumption.
-> > 
-> > Whether attestation driver uses struct device is implementation detail.
-> > I don't see what is you point.
-> 
-> No real DMA is involved in attestation.
+On Tue, May 10, 2022 at 09:32:13AM +0900, Byungchul Park wrote:
+> Yes, right. DEPT has never been optimized. It rather turns on
+> CONFIG_LOCKDEP and even CONFIG_PROVE_LOCKING when CONFIG_DEPT gets on
+> because of porting issue. I have no choice but to rely on those to
+> develop DEPT out of tree. Of course, that's what I don't like.
 
-As with VirtIO. So what?
+Sure, but blaming the overhead on unnecessary CONFIG_PROVE_LOCKING
+overhead can explain only a tiny fraction of the slowdown.  Consider:
+if time to first test (time to boot the kernel, setup the test
+environment, figure out which tests to run, etc.) is 12 seconds w/o
+LOCKDEP, 49 seconds with LOCKDEP/PROVE_LOCKING and 602 seconds with
+DEPT, you can really only blame 37 seconds out of the 602 seconds of
+DEPT on unnecessary PROVE_LOCKING overhead.
 
--- 
- Kirill A. Shutemov
+So let's assume we can get rid of all of the PROVE_LOCKING overhead.
+We're still talking about 12 seconds for time-to-first test without
+any lock debugging, versus ** 565 ** seconds for time-to-first test
+with DEPT.  That's a factor of 47x for DEPT sans LOCKDEP overhead,
+compared to a 4x overhead for PROVE_LOCKING.
+
+> Plus, for now, I'm focusing on removing false positives. Once it's
+> considered settled down, I will work on performance optimizaition. But
+> it should still keep relying on Lockdep CONFIGs and adding additional
+> overhead on it until DEPT can be developed in the tree.
+
+Well, please take a look at the false positive which I reported.  I
+suspect that in order to fix that particular false positive, we'll
+either need to have a way to disable DEPT on waiting on all page/folio
+dirty bits, or it will need to treat pages from different inodes
+and/or address spaces as being entirely separate classes, instead of
+collapsing all inode dirty bits, and all of various inode's mutexes
+(such as ext4's i_data_sem) as being part of a single object class.
+
+> DEPT is tracking way more objects than Lockdep so it's inevitable to be
+> slower, but let me try to make it have the similar performance to
+> Lockdep.
+
+In order to eliminate some of these false positives, I suspect it's
+going to increase the number of object classes that DEPT will need to
+track even *more*.  At which point, the cost/benefit of DEPT may get
+called into question, especially if all of the false positives can't
+be suppressed.
+
+					- Ted

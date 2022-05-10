@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84905521C40
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55871521BCF
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345320AbiEJOcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:32:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49768 "EHLO
+        id S1344299AbiEJOVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344181AbiEJOHl (ORCPT
+        with ESMTP id S244978AbiEJNrK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:07:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF2A1FB2DD;
-        Tue, 10 May 2022 06:41:49 -0700 (PDT)
+        Tue, 10 May 2022 09:47:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F94E2380E5;
+        Tue, 10 May 2022 06:33:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D07DB81DC3;
-        Tue, 10 May 2022 13:41:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B38F6C385A6;
-        Tue, 10 May 2022 13:41:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFCCC6182F;
+        Tue, 10 May 2022 13:33:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE998C385A6;
+        Tue, 10 May 2022 13:33:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652190107;
-        bh=+DguFpqd5mrtoufd9LyO5xc8nY3J2jiiYBm9Iwa9yZk=;
+        s=korg; t=1652189586;
+        bh=nt4Jl+T/r56aML4HwP1tjND6t2tSipFlS5Q/81Noaz0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f+hxl9lsunnd/0teFmDSN9k2vFBo1bOwOWq0Torf6Dkgr2kfTielbMWz+ktmTBKmR
-         s4NMqAEYcnbzYJHL/ekXtHERDwe5ULwA8Ljc9TlBYf4KbixIN5FQJpGdU376i4vU/+
-         dZvg5F++IozDtO3BXqKcILd1FkC5HhfV0Pwd0A7s=
+        b=1nTZlDdt0vVD9IjdDTL4EtmR99YopGjh8XCw4z/FW1VlVVw0qxZ354p2YQ4f+rNrx
+         74YqwV4EFmUsS6lwv/7yk9rbVBBdqmSgOBQzbHXK5eyf4TWAHGuOoAbPqUyjLmOenk
+         s+f9SVReLfsGJEmn7GJ6fky65UYgtLYexxqxdQbo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Shravya Kumbham <shravya.kumbham@xilinx.com>,
-        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH 5.17 090/140] net: emaclite: Add error handling for of_address_to_resource()
-Date:   Tue, 10 May 2022 15:08:00 +0200
-Message-Id: <20220510130744.183496358@linuxfoundation.org>
+        stable@vger.kernel.org, Aili Yao <yaoaili@kingsoft.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 099/135] KVM: LAPIC: Enable timer posted-interrupt only when mwait/hlt is advertised
+Date:   Tue, 10 May 2022 15:08:01 +0200
+Message-Id: <20220510130743.249028835@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,77 +57,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shravya Kumbham <shravya.kumbham@xilinx.com>
+From: Wanpeng Li <wanpengli@tencent.com>
 
-commit 7a6bc33ab54923d325d9a1747ec9652c4361ebd1 upstream.
+[ Upstream commit 1714a4eb6fb0cb79f182873cd011a8ed60ac65e8 ]
 
-check the return value of of_address_to_resource() and also add
-missing of_node_put() for np and npp nodes.
+As commit 0c5f81dad46 ("KVM: LAPIC: Inject timer interrupt via posted
+interrupt") mentioned that the host admin should well tune the guest
+setup, so that vCPUs are placed on isolated pCPUs, and with several pCPUs
+surplus for *busy* housekeeping.  In this setup, it is preferrable to
+disable mwait/hlt/pause vmexits to keep the vCPUs in non-root mode.
 
-Fixes: e0a3bc65448c ("net: emaclite: Support multiple phys connected to one MDIO bus")
-Addresses-Coverity: Event check_return value.
-Signed-off-by: Shravya Kumbham <shravya.kumbham@xilinx.com>
-Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+However, if only some guests isolated and others not, they would not
+have any benefit from posted timer interrupts, and at the same time lose
+VMX preemption timer fast paths because kvm_can_post_timer_interrupt()
+returns true and therefore forces kvm_can_use_hv_timer() to false.
+
+By guaranteeing that posted-interrupt timer is only used if MWAIT or
+HLT are done without vmexit, KVM can make a better choice and use the
+VMX preemption timer and the corresponding fast paths.
+
+Reported-by: Aili Yao <yaoaili@kingsoft.com>
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+Cc: Aili Yao <yaoaili@kingsoft.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+Message-Id: <1643112538-36743-1-git-send-email-wanpengli@tencent.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/xilinx/xilinx_emaclite.c |   15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ arch/x86/kvm/lapic.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/xilinx/xilinx_emaclite.c
-+++ b/drivers/net/ethernet/xilinx/xilinx_emaclite.c
-@@ -823,10 +823,10 @@ static int xemaclite_mdio_write(struct m
- static int xemaclite_mdio_setup(struct net_local *lp, struct device *dev)
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index 83d1743a1dd0..493d636e6231 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -113,7 +113,8 @@ static inline u32 kvm_x2apic_id(struct kvm_lapic *apic)
+ 
+ static bool kvm_can_post_timer_interrupt(struct kvm_vcpu *vcpu)
  {
- 	struct mii_bus *bus;
--	int rc;
- 	struct resource res;
- 	struct device_node *np = of_get_parent(lp->phy_node);
- 	struct device_node *npp;
-+	int rc, ret;
+-	return pi_inject_timer && kvm_vcpu_apicv_active(vcpu);
++	return pi_inject_timer && kvm_vcpu_apicv_active(vcpu) &&
++		(kvm_mwait_in_guest(vcpu->kvm) || kvm_hlt_in_guest(vcpu->kvm));
+ }
  
- 	/* Don't register the MDIO bus if the phy_node or its parent node
- 	 * can't be found.
-@@ -836,8 +836,14 @@ static int xemaclite_mdio_setup(struct n
- 		return -ENODEV;
- 	}
- 	npp = of_get_parent(np);
--
--	of_address_to_resource(npp, 0, &res);
-+	ret = of_address_to_resource(npp, 0, &res);
-+	of_node_put(npp);
-+	if (ret) {
-+		dev_err(dev, "%s resource error!\n",
-+			dev->of_node->full_name);
-+		of_node_put(np);
-+		return ret;
-+	}
- 	if (lp->ndev->mem_start != res.start) {
- 		struct phy_device *phydev;
- 		phydev = of_phy_find_device(lp->phy_node);
-@@ -846,6 +852,7 @@ static int xemaclite_mdio_setup(struct n
- 				 "MDIO of the phy is not registered yet\n");
- 		else
- 			put_device(&phydev->mdio.dev);
-+		of_node_put(np);
- 		return 0;
- 	}
- 
-@@ -858,6 +865,7 @@ static int xemaclite_mdio_setup(struct n
- 	bus = mdiobus_alloc();
- 	if (!bus) {
- 		dev_err(dev, "Failed to allocate mdiobus\n");
-+		of_node_put(np);
- 		return -ENOMEM;
- 	}
- 
-@@ -870,6 +878,7 @@ static int xemaclite_mdio_setup(struct n
- 	bus->parent = dev;
- 
- 	rc = of_mdiobus_register(bus, np);
-+	of_node_put(np);
- 	if (rc) {
- 		dev_err(dev, "Failed to register mdio bus.\n");
- 		goto err_register;
+ bool kvm_can_use_hv_timer(struct kvm_vcpu *vcpu)
+-- 
+2.35.1
+
 
 

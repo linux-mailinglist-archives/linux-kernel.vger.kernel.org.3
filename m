@@ -2,226 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FD4F522309
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0ED52230B
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346581AbiEJRrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 13:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
+        id S1348376AbiEJRsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 13:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241938AbiEJRrm (ORCPT
+        with ESMTP id S1344641AbiEJRsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 13:47:42 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478A6267C0C;
-        Tue, 10 May 2022 10:43:44 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id EA9DF1F8C6;
-        Tue, 10 May 2022 17:43:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652204622; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=u1whn4lbU6iVVflTZcVGrO43VdILAmiKvJmX0VyooKo=;
-        b=MGKHbxCeHphlHKb4O8pw0mUgVlGBvE/udt9yYT5XSXjFAViZaUhM99PfoAdSQqPaGswXyF
-        Y5tmVVRjt3whErQQNDqDMNCmjEYAHz7dQPvG3ur4lGFo6+2ZZSaXikho387KG2m1BDY84b
-        aY1Pxop+HSelwIr3m8X26Ice7l9tYKI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A60C913AC1;
-        Tue, 10 May 2022 17:43:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id rf3CJk6kemLFIgAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Tue, 10 May 2022 17:43:42 +0000
-Date:   Tue, 10 May 2022 19:43:41 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        David Vernet <void@manifault.com>, tj@kernel.org,
-        roman.gushchin@linux.dev, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, cgroups@vger.kernel.org, mhocko@kernel.org,
-        shakeelb@google.com, kernel-team@fb.com,
-        Richard Palethorpe <rpalethorpe@suse.com>,
-        Chris Down <chris@chrisdown.name>
-Subject: Re: [PATCH v2 2/5] cgroup: Account for memory_recursiveprot in
- test_memcg_low()
-Message-ID: <20220510174341.GC24172@blackbody.suse.cz>
-References: <20220423155619.3669555-1-void@manifault.com>
- <20220423155619.3669555-3-void@manifault.com>
- <20220427140928.GD9823@blackbody.suse.cz>
- <20220429010333.5rt2jwpiumnbuapf@dev0025.ash9.facebook.com>
- <20220429092620.GA23621@blackbody.suse.cz>
- <20220506164015.fsdsuv226nhllos5@dev0025.ash9.facebook.com>
- <Ynkum8DeJIAtGi9y@cmpxchg.org>
- <20220509174424.e43e695ffe0f7333c187fba8@linux-foundation.org>
+        Tue, 10 May 2022 13:48:45 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 69A742C181D
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:44:47 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 30D6D12FC;
+        Tue, 10 May 2022 10:44:47 -0700 (PDT)
+Received: from [10.57.4.48] (unknown [10.57.4.48])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0F45B3F73D;
+        Tue, 10 May 2022 10:44:44 -0700 (PDT)
+Message-ID: <37357c86-bab7-d0c7-88d0-ace63ccdb6c8@arm.com>
+Date:   Tue, 10 May 2022 18:44:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220509174424.e43e695ffe0f7333c187fba8@linux-foundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] sched: Take thermal pressure into account when determine
+ rt fits capacity
+Content-Language: en-US
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     Xuewen Yan <xuewen.yan@unisoc.com>, dietmar.eggemann@arm.com,
+        rafael@kernel.org, viresh.kumar@linaro.org, mingo@redhat.com,
+        peterz@infradead.org, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, linux-kernel@vger.kernel.org,
+        di.shen@unisoc.com, Xuewen Yan <xuewen.yan94@gmail.com>
+References: <20220421161509.asz25zmh25eurgrk@airbuntu>
+ <CAB8ipk_rZnwDrMaY-zJxR3pByYWD1XOP2waCgU9DZzQNpCN2zA@mail.gmail.com>
+ <20220425161209.ydugtrs3b7gyy3kk@airbuntu>
+ <CAB8ipk9hZXDcTV3hakRV+dE5dwKtg-Ka93WZ60ds0=4ErN1-0w@mail.gmail.com>
+ <20220426092142.lppfj5eqgt3d24nb@airbuntu>
+ <CAB8ipk_tM8WhZOLwURkqyi5XDSNJ=twOg1Zub=dsTB_b9N9BRg@mail.gmail.com>
+ <20220427105844.otru4yohja4s23ye@wubuntu>
+ <CAB8ipk-QAE2_J_kpUVRcq-4KJ0cSGc1JT2oQhdzvrjDu25HsRQ@mail.gmail.com>
+ <20220503144352.lxduzhl6jq6xdhw2@airbuntu>
+ <CAB8ipk--Y8HxetcmUhBmtWq6Mmd726QmDbcbibGLERJw_PUqkQ@mail.gmail.com>
+ <20220510145625.t5py7atlhgojsfyf@wubuntu>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220510145625.t5py7atlhgojsfyf@wubuntu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello all.
-
-On Mon, May 09, 2022 at 05:44:24PM -0700, Andrew Morton <akpm@linux-foundation.org> wrote:
-> So I think we're OK with [2/5] now.  Unless there be objections, I'll
-> be looking to get this series into mm-stable later this week.
-
-I'm sorry, I think the current form of the test reveals an unexpected
-behavior of reclaim and silencing the test is not the way to go.
-Although, I may be convinced that my understanding is wrong.
 
 
-On Mon, May 09, 2022 at 11:09:15AM -0400, Johannes Weiner <hannes@cmpxchg.org> wrote:
-> My understanding of the issue you're raising, Michal, is that
-> protected siblings start with current > low, then get reclaimed
-> slightly too much and end up with current < low. This results in a
-> tiny bit of float that then gets assigned to the low=0 sibling; 
+On 5/10/22 15:56, Qais Yousef wrote:
+> Hi Xuewen
+> 
+> On 05/09/22 10:29, Xuewen Yan wrote:
+> 
+> [...]
+> 
+>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+>>> index a68482d66535..44c7c2598d87 100644
+>>> --- a/kernel/sched/fair.c
+>>> +++ b/kernel/sched/fair.c
+>>> @@ -8399,16 +8399,37 @@ static unsigned long scale_rt_capacity(int cpu)
+>>>
+>>>   static void update_cpu_capacity(struct sched_domain *sd, int cpu)
+>>>   {
+>>> +       unsigned long capacity_orig = arch_scale_cpu_capacity(cpu);
+>>>          unsigned long capacity = scale_rt_capacity(cpu);
+>>>          struct sched_group *sdg = sd->groups;
+>>> +       struct rq *rq = cpu_rq(cpu);
+>>>
+>>> -       cpu_rq(cpu)->cpu_capacity_orig = arch_scale_cpu_capacity(cpu);
+>>> +       rq->cpu_capacity_orig = capacity_orig;
+>>>
+>>>          if (!capacity)
+>>>                  capacity = 1;
+>>>
+>>> -       cpu_rq(cpu)->cpu_capacity = capacity;
+>>> -       trace_sched_cpu_capacity_tp(cpu_rq(cpu));
+>>> +       rq->cpu_capacity = capacity;
+>>> +       trace_sched_cpu_capacity_tp(rq);
+>>> +
+>>> +       if (static_branch_unlikely(&sched_asym_cpucapacity)) {
+>>> +               unsigned long inv_cap = capacity_orig - thermal_load_avg(rq);
+>>
+>> Indeed, I prefer arch_thermal_pressure here, because the
+>> thermal_load_avg would change over time,
+>> but the inv_cap's update period may could not keep up with his changes.
+> 
+> If that's what works for you, I think that's fine. Vincent, Lukasz you okay
+> with that?
 
-Up until here, we're on the same page.
+To properly answer this question we probably have to analyze the timings
+and this update path - how often it is actually called. Keep in mind
+we are going to solve CPU capacity inversion for RT class, which
+contains latency sensitive tasks. In this approach the information
+about HW status is coming from this CFS load balance path.
+What if that load balance is not called that often as RT might require?
+What if there is a light load on CPUs, but GPU caused them to throttle,
+reducing capacity by a decent chunk e.g. 50%?
+That would translate to some RT periodic task which takes 2ms every
+8ms to take 4ms, while maybe on other less power hungry CPU it could
+take 3ms.
 
-> when that sibling gets reclaimed regardless, it sees a low event.
-> Correct me if I missed a detail or nuance here.
+The usage of thermal_load_avg() in the scale_rt_capacity() looks OK
+for the CFS, but might not be from the RT class point of view.
+The RT class might want to realize faster that CPUs have changed the
+capacity.
+Maybe it's OK with that patch [1] and boot config shifter=-5, but in
+default boot config for shifter=0 we can suffer for hundreds of ms
+running on lower capacity cpu (which is quite high number of frames
+nowadays).
 
-Here, I'd like to stress that the event itself is just a messenger (whom
-my original RFC patch attempted to get rid of). The problem is that if
-the sibling with recursive protection is active enough to claim it, it's
-effectively stolen from the passive sibling. See the comparison of
-'precious' vs 'victim' in [1].
+Without a research and experiments data I'm afraid this is too
+big step to make, with this CFS load balance path.
 
-> But unused float going to siblings is intentional. This is documented
-> in point 3 in the comment above effective_protection(): if you use
-> less than you're legitimately claiming, the float goes to your
-> siblings.
+> 
+>>
+>>> +
+>>> +               rq->cpu_capacity_inverted = 0;
+>>> +
+>>> +               for_each_possible_cpu(cpu) {
+>>> +                       unsigned long cap = arch_scale_cpu_capacity(cpu);
+>>> +
+>>> +                       if (capacity_orig <= cap)
+>>> +                               continue;
 
-The problem is how the unused protection came to be (voluntarily not
-consumed vs reclaimed).
+The search loop here assumes that other CPUs (fortunately not in the
+same freq domain) don't suffer due to reduced capacity. This might be
+not true - when we have ~1 Watt budget for all CPUs in the system and
+single big core can use 3-4W at max or single mid core ~1.2W.
 
-> So the problem doesn't seem to be with low accounting and
-> event generation, but rather it's simply overreclaim.
+>>> +
+>>> +                       if (cap > inv_cap) {
+>>> +                               rq->cpu_capacity_inverted = inv_cap;
+>>> +                               break;
+>>> +                       }
+>>> +               }
+>>> +
+>>> +       }
+>>>
+>>>          sdg->sgc->capacity = capacity;
+>>>          sdg->sgc->min_capacity = capacity;
+>>> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+>>> index 8dccb34eb190..bfe84c870bf9 100644
+>>> --- a/kernel/sched/sched.h
+>>> +++ b/kernel/sched/sched.h
+>>> @@ -992,6 +992,7 @@ struct rq {
+>>>
+>>>          unsigned long           cpu_capacity;
+>>>          unsigned long           cpu_capacity_orig;
+>>> +       unsigned long           cpu_capacity_inverted;
+>>>
+>>>          struct callback_head    *balance_callback;
+>>>
+>>> @@ -2807,6 +2808,11 @@ static inline unsigned long capacity_orig_of(int cpu)
+>>>          return cpu_rq(cpu)->cpu_capacity_orig;
+>>>   }
+>>>
+>>> +static inline unsigned long cpu_in_capacity_inversion(int cpu)
+>>> +{
+>>> +       return cpu_rq(cpu)->cpu_capacity_inverted;
+>>> +}
+>>> +
+>>>   /**
+>>>    * enum cpu_util_type - CPU utilization type
+>>>    * @FREQUENCY_UTIL:    Utilization used to select frequency
+>>>
+>>>
+>>> --->8---
+>>
+>> The patch is amazing for me, and the complexity is not too high. Would
+>> you please push the patch?
+>> I think the idea is yours, I don't want to use it as my patch v2.
+> 
+> I'd be happy to add a commit message so that you can include it in your v2.
+> 
+> First, I'd like to hear from Vincent and Lukasz they're happy with this
+> approach.
+> 
+> I've been trying to think how we can do this generically but can't find an
+> alternative to the extra loop or additional fallback_cpu_mask. Maybe the mask
+> is okay if we protect it with sched_asymmetric_cpucapacity static key..
+> 
 
-Exactly.
+I'm sorry Qais, I see that you are trying to bring this
+real-CPU-capacity information into RT, but the source and quality of
+this information IMO might matter. I cannot help you w/o experiment
+results of your proposed approach.
 
-> It's conceivable to make reclaim more precise and then tighten up the
-> test. But right now, David's patch looks correct to me.
+Regards,
+Lukasz
 
-The obvious fix is at the end of this message, it resolves the case I
-posted earlier (with memory_recursiveprot), however, it "breaks"
-memory.events:low accounting inside recursive children, hence I'm not
-considering it finished. (I may elaborate on the breaking case if
-interested, I also need to look more into that myself).
-
-
-On Fri, May 06, 2022 at 09:40:15AM -0700, David Vernet <void@manifault.com> wrote:
-> If you look at how much memory A/B/E gets at the end of the reclaim,
-> it's still far less than 1MB (though should it be 0?).
-
-This selftest has two ±equal workloads in siblings, however, if their
-activity varies, it can end up even opposite (the example [1]).
-
-> This definitely sounds to me like a useful testcase to add, and I'm
-> happy to do so in a follow-on patch. If we added this, do you think
-> we need to keep the check for memory.low events for the memory.low ==
-> 0 child in the overcommit testcase?
-
-I think it's still useful, to check the behavior when inherited vs
-explicit siblings coexist under protected parent.
-Actually, the second case of all siblings having the inherited
-(implicit) protection is also interesting (it seems that's that I'm
-seeing in my tests with the attached patch).
-
-+Cc: Chris, who reasoned about the SWAP_CLUSTER_MAX rounding vs too high
-priority (too low numerically IIUC) [2].
-
-Michal
-
-[1] https://lore.kernel.org/r/20220325103118.GC2828@blackbody.suse.cz/
-[2] https://lore.kernel.org/all/20190128214213.GB15349@chrisdown.name/
-
---- 8< ---
-From e18caf7a5a1b0f39185fbdc11e4034def42cde88 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
-Date: Tue, 10 May 2022 18:48:31 +0200
-Subject: [RFC PATCH] mm: memcg: Do not overreclaim SWAP_CLUSTER_MAX from
- protected memcg
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-This was observed with memcontrol selftest/new LTP test but can be also
-reproduced in simplified setup of two siblings:
-
-	`parent .low=50M
-	  ` s1	.low=50M  .current=50M+ε
-	  ` s2  .low=0M   .current=50M
-
-The expectation is that s2/memory.events:low will be zero under outer
-reclaimer since no protection should be given to cgroup s2 (even with
-memory_recursiveprot).
-
-However, this does not happen. The apparent reason is that when s1 is
-considered for (proportional) reclaim the scanned proportion is rounded
-up to SWAP_CLUSTER_MAX and slightly over-proportional amount is
-reclaimed. Consequently, when the effective low value of s2 is
-calculated, it observes unclaimed parent's protection from s1
-(ε-SWAP_CLUSTER_MAX in theory) and effectively appropriates it.
-
-What is worse, when the sibling s2 has more (memory) greedy workload, it
-can repeatedly "steal" the protection from s1 and the distribution ends
-up with s1 mostly reclaimed despite explicit prioritization over s2.
-
-Simply fix it by _not_ rounding up to SWAP_CLUSTER_MAX. This would have
-saved us ~5 levels of reclaim priority. I.e. we may be reclaiming from
-protected memcgs at relatively low priority _without_ counting any
-memory.events:low (due to overreclaim). Now, if the moderated scan is
-not enough, we must bring priority to zero to open protected reserves.
-And that's correct, we want to be explicit when reclaiming those.
-
-
-Fixes: 8a931f801340 ("mm: memcontrol: recursive memory.low protection")
-Fixes: 9783aa9917f8 ("mm, memcg: proportional memory.{low,min} reclaim")
-Reported-by: Richard Palethorpe <rpalethorpe@suse.com>
-Link: https://lore.kernel.org/all/20220321101429.3703-1-rpalethorpe@suse.com/
-Signed-off-by: Michal Koutný <mkoutny@suse.com>
----
- mm/vmscan.c | 7 -------
- 1 file changed, 7 deletions(-)
-
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 1678802e03e7..cd760842b9ad 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -2798,13 +2798,6 @@ static void get_scan_count(struct lruvec *lruvec, struct scan_control *sc,
- 
- 			scan = lruvec_size - lruvec_size * protection /
- 				(cgroup_size + 1);
--
--			/*
--			 * Minimally target SWAP_CLUSTER_MAX pages to keep
--			 * reclaim moving forwards, avoiding decrementing
--			 * sc->priority further than desirable.
--			 */
--			scan = max(scan, SWAP_CLUSTER_MAX);
- 		} else {
- 			scan = lruvec_size;
- 		}
--- 
-2.35.3
-
-
+[1] https://lore.kernel.org/lkml/20220429091245.12423-1-lukasz.luba@arm.com/

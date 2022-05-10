@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEEB3521B64
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA4A521C30
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245132AbiEJOOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56324 "EHLO
+        id S1344832AbiEJOcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:32:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245051AbiEJNrO (ORCPT
+        with ESMTP id S245625AbiEJOHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:47:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D1753721;
-        Tue, 10 May 2022 06:34:27 -0700 (PDT)
+        Tue, 10 May 2022 10:07:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1803D22B3A2;
+        Tue, 10 May 2022 06:41:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7ECC4615C8;
-        Tue, 10 May 2022 13:34:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76C54C385C2;
-        Tue, 10 May 2022 13:34:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA6336194D;
+        Tue, 10 May 2022 13:40:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB5AFC385C2;
+        Tue, 10 May 2022 13:40:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189666;
-        bh=lWDqtZn1zApgd4b8DIxAbib9ISctmXC4BxgeLLwc1Gs=;
+        s=korg; t=1652190059;
+        bh=vq6a1fG3vO1KR35Jg16mN5QOD1teXM12MIU7i8SU6zk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U0QBxRGetMsmycg8cYZjD3hIkoTvXFk/o43IszBsm9TS2noBiIoSHWW3MxOcgE/nE
-         ZjXbjXXma8pC9+9dWvB4o5k8Y8G6QdUv9FK9TD8zCWmxBGSdS3aox57Pc3F/eQjyAW
-         7IDHIZx4x2y2NMNcuiqESwpfpPytZvPeRhqSIHRM=
+        b=RwJtJZzmEtnODs9TPi3HF6i5cCdMAKqtzHNcsgvRxYD05SNt+SVH9z3feBaXDe9rQ
+         D+e8Afw+k8kHlNPxRXUyP4Id5oktUHI2RNs4X5OfIPZ5eQp4/PDKfxljsgNWGUqEll
+         8Jj77L3+r6boX1C3zB9NS0qcGp8w1Cs6IQIQdUxg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, pali@kernel.org,
-        =?UTF-8?q?Marek=20Beh=FAn?= <kabel@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Subject: [PATCH 5.15 122/135] PCI: aardvark: Use dev_fwnode() instead of of_node_to_fwnode(dev->of_node)
+        stable@vger.kernel.org, Thomas Huth <thuth@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 114/140] KVM: selftests: Silence compiler warning in the kvm_page_table_test
 Date:   Tue, 10 May 2022 15:08:24 +0200
-Message-Id: <20220510130743.895929647@linuxfoundation.org>
+Message-Id: <20220510130744.866749157@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +56,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Marek Behún" <kabel@kernel.org>
+From: Thomas Huth <thuth@redhat.com>
 
-commit 222af78532fa299cd9b1008e49c347b7f5a45c17 upstream.
+[ Upstream commit 266a19a0bc4fbfab4d981a47640ca98972a01865 ]
 
-Use simple
-  dev_fwnode(dev)
-instead of
-  struct device_node *node = dev->of_node;
-  of_node_to_fwnode(node)
-especially since the node variable is not used elsewhere in the function.
+When compiling kvm_page_table_test.c, I get this compiler warning
+with gcc 11.2:
 
-Link: https://lore.kernel.org/r/20220110015018.26359-9-kabel@kernel.org
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+kvm_page_table_test.c: In function 'pre_init_before_test':
+../../../../tools/include/linux/kernel.h:44:24: warning: comparison of
+ distinct pointer types lacks a cast
+   44 |         (void) (&_max1 == &_max2);              \
+      |                        ^~
+kvm_page_table_test.c:281:21: note: in expansion of macro 'max'
+  281 |         alignment = max(0x100000, alignment);
+      |                     ^~~
+
+Fix it by adjusting the type of the absolute value.
+
+Signed-off-by: Thomas Huth <thuth@redhat.com>
+Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Message-Id: <20220414103031.565037-1-thuth@redhat.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/pci-aardvark.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ tools/testing/selftests/kvm/kvm_page_table_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/pci/controller/pci-aardvark.c
-+++ b/drivers/pci/controller/pci-aardvark.c
-@@ -1296,7 +1296,6 @@ static struct msi_domain_info advk_msi_d
- static int advk_pcie_init_msi_irq_domain(struct advk_pcie *pcie)
- {
- 	struct device *dev = &pcie->pdev->dev;
--	struct device_node *node = dev->of_node;
- 	phys_addr_t msi_msg_phys;
+diff --git a/tools/testing/selftests/kvm/kvm_page_table_test.c b/tools/testing/selftests/kvm/kvm_page_table_test.c
+index ba1fdc3dcf4a..2c4a7563a4f8 100644
+--- a/tools/testing/selftests/kvm/kvm_page_table_test.c
++++ b/tools/testing/selftests/kvm/kvm_page_table_test.c
+@@ -278,7 +278,7 @@ static struct kvm_vm *pre_init_before_test(enum vm_guest_mode mode, void *arg)
+ 	else
+ 		guest_test_phys_mem = p->phys_offset;
+ #ifdef __s390x__
+-	alignment = max(0x100000, alignment);
++	alignment = max(0x100000UL, alignment);
+ #endif
+ 	guest_test_phys_mem = align_down(guest_test_phys_mem, alignment);
  
- 	mutex_init(&pcie->msi_used_lock);
-@@ -1315,7 +1314,7 @@ static int advk_pcie_init_msi_irq_domain
- 		return -ENOMEM;
- 
- 	pcie->msi_domain =
--		pci_msi_create_irq_domain(of_node_to_fwnode(node),
-+		pci_msi_create_irq_domain(dev_fwnode(dev),
- 					  &advk_msi_domain_info,
- 					  pcie->msi_inner_domain);
- 	if (!pcie->msi_domain) {
+-- 
+2.35.1
+
 
 

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C3252185A
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:31:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D02521AA6
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241902AbiEJNfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
+        id S232613AbiEJODE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:03:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242872AbiEJNZQ (ORCPT
+        with ESMTP id S244532AbiEJNhs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:25:16 -0400
+        Tue, 10 May 2022 09:37:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB03148316;
-        Tue, 10 May 2022 06:17:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B2EB7F3;
+        Tue, 10 May 2022 06:25:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 67F196123F;
-        Tue, 10 May 2022 13:17:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78003C385A6;
-        Tue, 10 May 2022 13:17:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 193626170D;
+        Tue, 10 May 2022 13:25:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25939C385C2;
+        Tue, 10 May 2022 13:25:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188665;
-        bh=IahD/UGbAtp5D8KEjlB7ZHxiAoNcd+ZHPnhmK08V4LI=;
+        s=korg; t=1652189150;
+        bh=+s4ngMBxOytcXovP8uK7iv8qXRfC12Uas4BGp8mGNzo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FQHUzD0xEQiv6Hupxj/Afy9gCL/qQkRJe6fnieelz+VUhyNvvmfOq6fYjkewmdGpY
-         hVmK9IMQrwAxLieCDHKZINViUbDF5OJv1++Nfg4o79dbRDkVu748hZGJCLNCOX9fxP
-         Vh9aJuE1zEEoaWSBkBqgmiJF5etKn3AIsVIF3Z94=
+        b=T2HJx0xX9egFxW9YnCqESd3/G06r9CbPZLQFIUwt10UT5/X8je7L5FqpDR4A6cmnG
+         Fp+B+9tcROPMkyomCkMcALPkU6gBXE36SDoE3jjIcJqL9ObZwwfT9rLsCEza7iLZA2
+         xn2FSHsDz4/mb87LnguID1ZlGU8fZ9uquRLa4cLA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 41/78] ASoC: wm8731: Disable the regulator when probing fails
+        stable@vger.kernel.org, Kyle Huey <me@kylehuey.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.10 08/70] KVM: x86/svm: Account for family 17h event renumberings in amd_pmc_perf_hw_id
 Date:   Tue, 10 May 2022 15:07:27 +0200
-Message-Id: <20220510130733.751427333@linuxfoundation.org>
+Message-Id: <20220510130733.107273459@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
-References: <20220510130732.522479698@linuxfoundation.org>
+In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
+References: <20220510130732.861729621@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,90 +54,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheyu Ma <zheyuma97@gmail.com>
+From: Kyle Huey <me@kylehuey.com>
 
-[ Upstream commit 92ccbf17eeacf510cf1eed9c252d9332ca24f02d ]
+commit 5eb849322d7f7ae9d5c587c7bc3b4f7c6872cd2f upstream.
 
-When the driver fails during probing, the driver should disable the
-regulator, not just handle it in wm8731_hw_init().
+Zen renumbered some of the performance counters that correspond to the
+well known events in perf_hw_id. This code in KVM was never updated for
+that, so guest that attempt to use counters on Zen that correspond to the
+pre-Zen perf_hw_id values will silently receive the wrong values.
 
-The following log reveals it:
+This has been observed in the wild with rr[0] when running in Zen 3
+guests. rr uses the retired conditional branch counter 00d1 which is
+incorrectly recognized by KVM as PERF_COUNT_HW_STALLED_CYCLES_BACKEND.
 
-[   17.812483] WARNING: CPU: 1 PID: 364 at drivers/regulator/core.c:2257 _regulator_put+0x3ec/0x4e0
-[   17.815958] RIP: 0010:_regulator_put+0x3ec/0x4e0
-[   17.824467] Call Trace:
-[   17.824774]  <TASK>
-[   17.825040]  regulator_bulk_free+0x82/0xe0
-[   17.825514]  devres_release_group+0x319/0x3d0
-[   17.825882]  i2c_device_probe+0x766/0x940
-[   17.829198]  i2c_register_driver+0xb5/0x130
+[0] https://rr-project.org/
 
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-Link: https://lore.kernel.org/r/20220405121038.4094051-1-zheyuma97@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Kyle Huey <me@kylehuey.com>
+Message-Id: <20220503050136.86298-1-khuey@kylehuey.com>
+Cc: stable@vger.kernel.org
+[Check guest family, not host. - Paolo]
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/wm8731.c | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ arch/x86/kvm/svm/pmu.c |   28 +++++++++++++++++++++++++---
+ 1 file changed, 25 insertions(+), 3 deletions(-)
 
-diff --git a/sound/soc/codecs/wm8731.c b/sound/soc/codecs/wm8731.c
-index 4f9a1eb28120..abe5e77ba171 100644
---- a/sound/soc/codecs/wm8731.c
-+++ b/sound/soc/codecs/wm8731.c
-@@ -604,7 +604,7 @@ static int wm8731_hw_init(struct device *dev, struct wm8731_priv *wm8731)
- 	ret = wm8731_reset(wm8731->regmap);
- 	if (ret < 0) {
- 		dev_err(dev, "Failed to issue reset: %d\n", ret);
--		goto err_regulator_enable;
-+		goto err;
- 	}
+--- a/arch/x86/kvm/svm/pmu.c
++++ b/arch/x86/kvm/svm/pmu.c
+@@ -44,6 +44,22 @@ static struct kvm_event_hw_type_mapping
+ 	[7] = { 0xd1, 0x00, PERF_COUNT_HW_STALLED_CYCLES_BACKEND },
+ };
  
- 	/* Clear POWEROFF, keep everything else disabled */
-@@ -621,10 +621,7 @@ static int wm8731_hw_init(struct device *dev, struct wm8731_priv *wm8731)
++/* duplicated from amd_f17h_perfmon_event_map. */
++static struct kvm_event_hw_type_mapping amd_f17h_event_mapping[] = {
++	[0] = { 0x76, 0x00, PERF_COUNT_HW_CPU_CYCLES },
++	[1] = { 0xc0, 0x00, PERF_COUNT_HW_INSTRUCTIONS },
++	[2] = { 0x60, 0xff, PERF_COUNT_HW_CACHE_REFERENCES },
++	[3] = { 0x64, 0x09, PERF_COUNT_HW_CACHE_MISSES },
++	[4] = { 0xc2, 0x00, PERF_COUNT_HW_BRANCH_INSTRUCTIONS },
++	[5] = { 0xc3, 0x00, PERF_COUNT_HW_BRANCH_MISSES },
++	[6] = { 0x87, 0x02, PERF_COUNT_HW_STALLED_CYCLES_FRONTEND },
++	[7] = { 0x87, 0x01, PERF_COUNT_HW_STALLED_CYCLES_BACKEND },
++};
++
++/* amd_pmc_perf_hw_id depends on these being the same size */
++static_assert(ARRAY_SIZE(amd_event_mapping) ==
++	     ARRAY_SIZE(amd_f17h_event_mapping));
++
+ static unsigned int get_msr_base(struct kvm_pmu *pmu, enum pmu_type type)
+ {
+ 	struct kvm_vcpu *vcpu = pmu_to_vcpu(pmu);
+@@ -128,19 +144,25 @@ static inline struct kvm_pmc *get_gp_pmc
  
- 	regcache_mark_dirty(wm8731->regmap);
+ static unsigned int amd_pmc_perf_hw_id(struct kvm_pmc *pmc)
+ {
++	struct kvm_event_hw_type_mapping *event_mapping;
+ 	u8 event_select = pmc->eventsel & ARCH_PERFMON_EVENTSEL_EVENT;
+ 	u8 unit_mask = (pmc->eventsel & ARCH_PERFMON_EVENTSEL_UMASK) >> 8;
+ 	int i;
  
--err_regulator_enable:
--	/* Regulators will be enabled by bias management */
--	regulator_bulk_disable(ARRAY_SIZE(wm8731->supplies), wm8731->supplies);
--
-+err:
- 	return ret;
++	if (guest_cpuid_family(pmc->vcpu) >= 0x17)
++		event_mapping = amd_f17h_event_mapping;
++	else
++		event_mapping = amd_event_mapping;
++
+ 	for (i = 0; i < ARRAY_SIZE(amd_event_mapping); i++)
+-		if (amd_event_mapping[i].eventsel == event_select
+-		    && amd_event_mapping[i].unit_mask == unit_mask)
++		if (event_mapping[i].eventsel == event_select
++		    && event_mapping[i].unit_mask == unit_mask)
+ 			break;
+ 
+ 	if (i == ARRAY_SIZE(amd_event_mapping))
+ 		return PERF_COUNT_HW_MAX;
+ 
+-	return amd_event_mapping[i].event_type;
++	return event_mapping[i].event_type;
  }
  
-@@ -768,21 +765,27 @@ static int wm8731_i2c_probe(struct i2c_client *i2c,
- 		ret = PTR_ERR(wm8731->regmap);
- 		dev_err(&i2c->dev, "Failed to allocate register map: %d\n",
- 			ret);
--		return ret;
-+		goto err_regulator_enable;
- 	}
- 
- 	ret = wm8731_hw_init(&i2c->dev, wm8731);
- 	if (ret != 0)
--		return ret;
-+		goto err_regulator_enable;
- 
- 	ret = snd_soc_register_codec(&i2c->dev,
- 			&soc_codec_dev_wm8731, &wm8731_dai, 1);
- 	if (ret != 0) {
- 		dev_err(&i2c->dev, "Failed to register CODEC: %d\n", ret);
--		return ret;
-+		goto err_regulator_enable;
- 	}
- 
- 	return 0;
-+
-+err_regulator_enable:
-+	/* Regulators will be enabled by bias management */
-+	regulator_bulk_disable(ARRAY_SIZE(wm8731->supplies), wm8731->supplies);
-+
-+	return ret;
- }
- 
- static int wm8731_i2c_remove(struct i2c_client *client)
--- 
-2.35.1
-
+ /* return PERF_COUNT_HW_MAX as AMD doesn't have fixed events */
 
 

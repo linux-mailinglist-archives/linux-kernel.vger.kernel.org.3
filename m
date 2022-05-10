@@ -2,226 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C3B52199C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37AFC5219D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:48:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235799AbiEJNt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
+        id S244916AbiEJNvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:51:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243724AbiEJNcJ (ORCPT
+        with ESMTP id S243494AbiEJNeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:32:09 -0400
-Received: from mail.avm.de (mail.avm.de [IPv6:2001:bf0:244:244::94])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102282CCD02;
-        Tue, 10 May 2022 06:21:53 -0700 (PDT)
-Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
-        by mail.avm.de (Postfix) with ESMTPS;
-        Tue, 10 May 2022 15:21:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
-        t=1652188910; bh=ArbPQjrdfcivZcwPMW1Fg1VSNd1S7aBpYNWcRI+uFAA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XJv4OQXOv1WqA/egsRnFOJw5NUsuSb7Wze6oCS8mK/CG/c9FOuPgJze8tgpspUosO
-         efAEvCU6NslqstuPTBd0Hvj2MMcUAgkJ9Znfoa16YmrtP3xpmIwThrT53wA867ZqF2
-         QWPBXf61e/kuf2EwfUSiXk863g/MQmbNXcTYmvWQ=
-Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
-        by mail-auth.avm.de (Postfix) with ESMTPA id E883281C9E;
-        Tue, 10 May 2022 15:21:48 +0200 (CEST)
-Received: by buildd.core.avm.de (Postfix, from userid 1000)
-        id DD22418149E; Tue, 10 May 2022 15:21:48 +0200 (CEST)
-Date:   Tue, 10 May 2022 15:21:48 +0200
-From:   Nicolas Schier <n.schier@avm.de>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] kbuild: factor out the common installation code into
- scripts/install.sh
-Message-ID: <Ynpm7HS6OcpJntve@buildd.core.avm.de>
-References: <20220503024716.76666-1-masahiroy@kernel.org>
- <Yno4m91/H65yX4T1@buildd.core.avm.de>
- <CAK7LNASDZz4osNX3HgzrK7KVQ0C4uEGOBjbmCfTsBG25jOieXA@mail.gmail.com>
+        Tue, 10 May 2022 09:34:31 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2065.outbound.protection.outlook.com [40.107.93.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4492167C6;
+        Tue, 10 May 2022 06:24:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WAw4CvoAwo1ow7e70E7//snOvR0Bh9/YHaaIkbZz0Pf0SfbHOAanWF0EWg8s+Xw/hk82nXizfDUbY5qT3U9a7t6v/WrJ5soqTR70NkgFWqFXzcl/2NBMdZvCDYFBXVwOaOyTM62MiNLXEUItcV3OE1UNkSME9MFm2R3a2XnSyiAfYn/P86V7bzWr+IdQLISJ1jJWgszghheD9ACmuHcLcuvPbTWlgRmd8FrCzpY+tAFvmz6hAGPUOMzjKQ7jOp9umQ5bU/T1AcyNBrYLMqB2U83rG6hs+CbqIkyqZ7gjXzeoZFQKQD3aeaHa2X1OsJiRBMte3/DHN+OoygwIUUK7XQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SbPp/G0z9eckZCBY7k+NTTa5p8w0ttTFmEIj6pZG17s=;
+ b=EnhlzWSzCKxgZA6dFJgXBJfZQi+8P8LNhxND8AcMVF+eu2uZDIge4YbGm/FBZ6qBDbUNm6+8A5M1QbaGE6L09pSbEf2UMQDMNkm96J84RPnwWKOdjm+IQ6g0WO62WQu/pkOj0PrTy2E4HJ3CtmI5K2SkboEeVzW9jdq5fJW5vLgRiQlLOo7abmJQslCrkpT2EmgrkMbd5hc0g6sfSVV2DFxOxmPIpXdzUjKOD68hekpGMI9fkGHwWOVOeqSlSA6a03Q/TnjYOMDz8pi2twHtH/VwjvOv+b4qWjZLYYgNYQ66nCP8O3WoHYZb18ILkVYRqMbTEbnc8HhzBMN8BIDV9Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=rowland.harvard.edu
+ smtp.mailfrom=xilinx.com; dmarc=pass (p=none sp=none pct=100) action=none
+ header.from=xilinx.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SbPp/G0z9eckZCBY7k+NTTa5p8w0ttTFmEIj6pZG17s=;
+ b=TOOprcRtyPzNT1CfhV6hCQKXh7GHneDof0gex7D9U3UDcJTL3yH9Xw7GIyzNId+ClBVttFnyd9HT+xHJpXw8yQgb6IR1bRGuacdzGpNSjMpgPOvlPRN/Io7mGSVmbUiKyxP0LVERo50VqvPLfE0k+5SFqGda5ggGuu+KCTsWWMQ=
+Received: from DS7PR03CA0346.namprd03.prod.outlook.com (2603:10b6:8:55::9) by
+ SN4PR0201MB3581.namprd02.prod.outlook.com (2603:10b6:803:4b::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.20; Tue, 10 May
+ 2022 13:24:27 +0000
+Received: from DM3NAM02FT057.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:8:55:cafe::7e) by DS7PR03CA0346.outlook.office365.com
+ (2603:10b6:8:55::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.21 via Frontend
+ Transport; Tue, 10 May 2022 13:24:27 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT057.mail.protection.outlook.com (10.13.5.64) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5227.15 via Frontend Transport; Tue, 10 May 2022 13:24:27 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Tue, 10 May 2022 06:24:26 -0700
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Tue, 10 May 2022 06:24:26 -0700
+Envelope-to: git@xilinx.com,
+ stern@rowland.harvard.edu,
+ gregkh@linuxfoundation.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org
+Received: from [10.140.6.18] (port=52642 helo=xhdlakshmis40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <piyush.mehta@xilinx.com>)
+        id 1noPqj-0003Ws-H8; Tue, 10 May 2022 06:24:25 -0700
+From:   Piyush Mehta <piyush.mehta@xilinx.com>
+To:     <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
+        <michal.simek@xilinx.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <linux-usb@vger.kernel.org>, <git@xilinx.com>,
+        <sivadur@xilinx.com>, Piyush Mehta <piyush.mehta@xilinx.com>
+Subject: [PATCH] usb: host: ehci-xilinx: Fix quoted string split across lines
+Date:   Tue, 10 May 2022 18:52:52 +0530
+Message-ID: <20220510132252.26001-1-piyush.mehta@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAK7LNASDZz4osNX3HgzrK7KVQ0C4uEGOBjbmCfTsBG25jOieXA@mail.gmail.com>
-X-purgate-ID: 149429::1652188909-0000038B-8E522ED6/0/0
-X-purgate-type: clean
-X-purgate-size: 6429
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
-X-purgate: clean
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 18ba1155-f05e-4c7d-7331-08da32886832
+X-MS-TrafficTypeDiagnostic: SN4PR0201MB3581:EE_
+X-Microsoft-Antispam-PRVS: <SN4PR0201MB3581A3E3EE16175B7CEC20E4D4C99@SN4PR0201MB3581.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0WYcNUgNskVNPOVphpDGIF9x5lsyZnu7d6WIeqWLJ0klCu9iPzOXDIYbMTCIrZqgvynpmeWd+4YAnVScm9bJdKE3tlMqhJzmLjaUr6PxKofC0/trjbk9qAqDG4S9urppECIYUW2Tzx1FgnDmb1bs2tRI07TmRAY9B5n71SiX0RycSwnMhnb1UklLOWjwqX1YMtOLuRagj0fFU99hAli6MjZ8ge/CYrUxsiXXriHQ16fs+j1OtONXzCtzYT39vAtOUrB0jOxyC7G+2cd9RvzL5P1gEVnBa+FaX7vSt2w3hxhXAWq8IaQ6sce9RQyquRPvTPfllScrt/fGqrweBpZkO9ozuImRK3OgnGxIoArAMPJlmy9Uj6nAA417uPjas/5t/jZabr4YhcXeKnharOqTO4LHtiDIth2dB1KoyrEMNUXecxOmVPACLKGnx2DmSjN2ydGZZsVG101R3Tl71dbIjoZgdBr+m8KYegGICY4iR5rkFQWXFX826/wtDQKcPgtCJgkOFuKLLLtq4SZyRk3WAlYQwpnMIMsyCG0llxuN45SQX0YNnpdCL2Qha7MN8VN77yRrdOoUnMdSdeUF6P366h2h8ZrkEQCuTrcsQGYv7AFHCTqxqOoLW7Tz5l14XhRP4ZqJFcbsAAeHSbaiYMrp06LDNdIHAP6X+Ds11/1WEvfWCZ9mIYeLKHUptjp2taZGC41S+Ov7vK+5xuNfYRuNyMNKlALYn9l5VkVQN4CUfvc=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(70586007)(4326008)(83380400001)(107886003)(8676002)(70206006)(40460700003)(5660300002)(26005)(44832011)(2906002)(356005)(2616005)(508600001)(36860700001)(9786002)(6666004)(8936002)(186003)(110136005)(47076005)(36756003)(54906003)(336012)(7696005)(82310400005)(426003)(7636003)(1076003)(316002)(102446001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2022 13:24:27.0486
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 18ba1155-f05e-4c7d-7331-08da32886832
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT057.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR0201MB3581
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 09:56:45PM +0900, Masahiro Yamada wrote:
-> On Tue, May 10, 2022 at 7:04 PM Nicolas Schier <n.schier@avm.de> wrote:
-> >
-> > On Tue,  3 May 2022 11:47 +0900 Masahiro Yamada wrote:
-> > > Many architectures have similar install.sh scripts.
-> > >
-> > > The first half is really generic; verifies that the kernel image and
-> > > System.map exist, then executes ~/bin/${INSTALLKERNEL} or
-> > > /sbin/${INSTALLKERNEL} if available.
-> > >
-> > > The second half is kind of arch-specific. It just copies the kernel image
-> > > and System.map to the destination, but the code is slightly different.
-> > >
-> > > This patch factors out the generic part into scripts/install.sh.
-> > >
-> > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > > ---
-> > >
-> > > Changes in v2:
-> > >   - Move the installkernel parameters to scripts/install.sh
-> > >
-> > >  Makefile                     |  3 ++-
-> > >  arch/arm/Makefile            |  4 ++--
-> > >  arch/arm/boot/install.sh     | 21 ------------------
-> > >  arch/arm64/Makefile          |  6 ++----
-> > >  arch/arm64/boot/install.sh   | 21 ------------------
-> > >  arch/ia64/Makefile           |  3 ++-
-> > >  arch/ia64/install.sh         | 10 ---------
-> > >  arch/m68k/Makefile           |  3 ++-
-> > >  arch/m68k/install.sh         | 22 -------------------
-> > >  arch/nios2/Makefile          |  3 +--
-> > >  arch/nios2/boot/install.sh   | 22 -------------------
-> > >  arch/parisc/Makefile         | 11 +++++-----
-> > >  arch/parisc/install.sh       | 28 ------------------------
-> > >  arch/powerpc/Makefile        |  3 +--
-> > >  arch/powerpc/boot/install.sh | 23 --------------------
-> > >  arch/riscv/Makefile          |  7 +++---
-> > >  arch/riscv/boot/install.sh   | 21 ------------------
-> > >  arch/s390/Makefile           |  3 +--
-> > >  arch/s390/boot/install.sh    |  6 ------
-> > >  arch/sparc/Makefile          |  3 +--
-> > >  arch/sparc/boot/install.sh   | 22 -------------------
-> > >  arch/x86/Makefile            |  3 +--
-> > >  arch/x86/boot/install.sh     | 22 -------------------
-> > >  scripts/install.sh           | 41 ++++++++++++++++++++++++++++++++++++
-> > >  24 files changed, 64 insertions(+), 247 deletions(-)
-> > >  mode change 100644 => 100755 arch/arm/boot/install.sh
-> > >  mode change 100644 => 100755 arch/arm64/boot/install.sh
-> > >  mode change 100644 => 100755 arch/ia64/install.sh
-> > >  mode change 100644 => 100755 arch/m68k/install.sh
-> > >  mode change 100644 => 100755 arch/nios2/boot/install.sh
-> > >  mode change 100644 => 100755 arch/parisc/install.sh
-> > >  mode change 100644 => 100755 arch/powerpc/boot/install.sh
-> > >  mode change 100644 => 100755 arch/riscv/boot/install.sh
-> > >  mode change 100644 => 100755 arch/s390/boot/install.sh
-> > >  mode change 100644 => 100755 arch/sparc/boot/install.sh
-> > >  mode change 100644 => 100755 arch/x86/boot/install.sh
-> > >  create mode 100755 scripts/install.sh
-> > >
-> > > diff --git a/Makefile b/Makefile
-> > > index 9a60f732bb3c..154c32af8805 100644
-> > > --- a/Makefile
-> > > +++ b/Makefile
-> > > @@ -1298,7 +1298,8 @@ scripts_unifdef: scripts_basic
-> > >  # to this Makefile to build and install external modules.
-> > >  # Cancel sub_make_done so that options such as M=, V=, etc. are parsed.
-> > >
-> > > -install: sub_make_done :=
-> > > +quiet_cmd_install = INSTALL $(INSTALL_PATH)
-> > > +      cmd_install = unset sub_make_done; $(srctree)/scripts/install.sh
-> >
-> > This is the third 'cmd_install' in the tree; might it be better to take
-> > a more unique name (e.g. cmd_installkernel) to prevent confusion?
-> 
-> If this is confusing, we can rename the ones in
-> scripts/Makefile.{modinst,headersinst}.
-> 
-> This command name matches the build target ("make install"), so
-> I believe this name is good.
-> 
-> 
-> 
-> >
-> > For me, it would have been more clear, if we'd also move the default
-> > KBUILD_IMAGE definition here (similar to the corresponding part in
-> > arch/parisc/Makefile):
-> >
-> > zinstall: KBUILD_IMAGE := $(boot)/Image.gz
-> >
-> > ($(KBUILD_IMAGE) seems not to be used anywhere else in arch/arm64/
-> > tree; but I haven't checked in depth.)
-> 
-> 
-> KBUILD_IMAGE is _indirectly_ used to specify
-> the kernel image for package builds.    [1]
-> 
-> This target returns the value IMAGE_BUILD.   [2]
-> 
-> 
-> $(KBUILD_IMAGE) is definitely used for arm64.
-> 
-> [1]: https://github.com/torvalds/linux/blob/v5.17/scripts/package/builddeb#L150
-> [2]: https://github.com/torvalds/linux/blob/v5.17/Makefile#L1943
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> > > diff --git a/arch/parisc/Makefile b/arch/parisc/Makefile
-> > > index 7583fc39ab2d..aca1710fd658 100644
-> > > --- a/arch/parisc/Makefile
-> > > +++ b/arch/parisc/Makefile
-> > > @@ -184,12 +184,11 @@ vdso_install:
-> > >       $(Q)$(MAKE) $(build)=arch/parisc/kernel/vdso $@
-> > >       $(if $(CONFIG_COMPAT_VDSO), \
-> > >               $(Q)$(MAKE) $(build)=arch/parisc/kernel/vdso32 $@)
-> > > -install:
-> > > -     $(CONFIG_SHELL) $(srctree)/arch/parisc/install.sh \
-> > > -                     $(KERNELRELEASE) vmlinux System.map "$(INSTALL_PATH)"
-> > > -zinstall:
-> > > -     $(CONFIG_SHELL) $(srctree)/arch/parisc/install.sh \
-> > > -                     $(KERNELRELEASE) vmlinuz System.map "$(INSTALL_PATH)"
-> > > +
-> > > +install: KBUILD_IMAGE := vmlinux
-> > > +zinstall: KBUILD_IMAGE := vmlinuz
-> >
-> > Does this make the KBUILD_IMAGE definition in line 19 obsolete and
-> > unused?
-> 
-> 
-> As I said above for arm64, KBUILD_IMAGE is used for package builds.
-> 
-> If you delete line 19, it will change the behavior.
-> (fall back to the global default [3])
-> 
-> 
-> [3]: https://github.com/torvalds/linux/blob/v5.17/Makefile#L1059
-> 
-> 
-> 
-> 
-> 
-> > > diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
-> > > index eb541e730d3c..45a9caa37b4e 100644
-> > > --- a/arch/powerpc/Makefile
-> > > +++ b/arch/powerpc/Makefile
-> > > @@ -408,8 +408,7 @@ endef
-> > >
-> > >  PHONY += install
-> > >  install:
-> >
-> > I can't find a KBUILD_IMAGE definition in arch/powerpc/Makefile.
-> > Should it be set here as a target-specific varibable, too?
-> 
-> 
-> Right, powerpc does not define KBUILD_IMAGE explicitly.
-> It falls back to [3].
-> 
+This patch resolves checkpatch warnings for xilinx EHCI driver.
 
-Thanks for all those illuming clarifications, I have nothing more to ask.
+Addressed warnings:
 
-Reviewed-by: Nicolas Schier <n.schier@avm.de>
+WARNING: quoted string split across lines
+50: FILE: drivers/usb/host/ehci-xilinx-of.c:50:
++			"The USB host controller does not support full speed "
++			"nor low speed devices\n");
+
+WARNING: quoted string split across lines
+53: FILE: drivers/usb/host/ehci-xilinx-of.c:53:
++			"You can reconfigure the host controller to have "
++			"full speed support\n");
+
+Signed-off-by: Piyush Mehta <piyush.mehta@xilinx.com>
+---
+ drivers/usb/host/ehci-xilinx-of.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/host/ehci-xilinx-of.c b/drivers/usb/host/ehci-xilinx-of.c
+index 67a6ee8..13386c9 100644
+--- a/drivers/usb/host/ehci-xilinx-of.c
++++ b/drivers/usb/host/ehci-xilinx-of.c
+@@ -46,11 +46,9 @@ static int ehci_xilinx_port_handed_over(struct usb_hcd *hcd, int portnum)
+ 		dev_warn(hcd->self.controller,
+ 			"Maybe your device is not a high speed device?\n");
+ 		dev_warn(hcd->self.controller,
+-			"The USB host controller does not support full speed "
+-			"nor low speed devices\n");
++			"The USB host controller does not support full speed nor low speed devices\n");
+ 		dev_warn(hcd->self.controller,
+-			"You can reconfigure the host controller to have "
+-			"full speed support\n");
++			"You can reconfigure the host controller to have full speed support\n");
+ 	}
+ 
+ 	return 0;
+-- 
+2.7.4
+

@@ -2,103 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ABA15221CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E5705221CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347717AbiEJQ4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 12:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54142 "EHLO
+        id S1347728AbiEJQ44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 12:56:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347708AbiEJQ4f (ORCPT
+        with ESMTP id S1347707AbiEJQ4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 12:56:35 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EBB27D004;
-        Tue, 10 May 2022 09:52:38 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id gh6so34243176ejb.0;
-        Tue, 10 May 2022 09:52:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9xQwPtQrBfYT0IuemJx5F5so+crXxKK0HLvlBxjKC0s=;
-        b=Okxteym8CaF/RHkBfO6Cp/WIgRcGbMBTJWIdNmMU19vXsWaAS8Z9L5ircpFp6VDy1S
-         u10DkF0PLDeKl0gv5ijUtxkdcF6bG192cWFecvN8MBUJG7Gf6mTiy5C5HhKL4yKu+y7C
-         fuY6AdEp9N1XEYZGCa4lJVnIb7TNode2Iu5C1xlRmg0nS7mbu3qxTeimBa81215XyjFo
-         QElNUXkGIvL4YkC8lKNY8VCKfeTD0cAqUcjHZxtS/9ZzoiyeCWdvf6MDRaohKXFJocJ4
-         hgsSm0nftb8Eh1JEkwsZlH1sB4qIgwF0i7eJAzKg0c4C7PNz0ybEYElL1dvCdzxHrOvq
-         D4Aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9xQwPtQrBfYT0IuemJx5F5so+crXxKK0HLvlBxjKC0s=;
-        b=rJtN0WqRo/Rj5T1Nka5GFZ4sNedW6en3vj1uqMFa+Lqf23/PelyMjINSkfzhwE589Y
-         FZKgmeL8kFjSHZmgw9tZO5r/fjEaCdvOYuT9hOLv1jaBKqb/FyNB2zfgehxCdsxE1apj
-         MFXbTBBkzRcr2vGz9nWxfTgxwOn/E4gQEoAhg1tPj++X6WQVGp5Rl0/zOFgriRC8AAMD
-         7sgt6RbhEzRtFY9KTY+e0aS+dlICtbkuHLDDet3uQh3iD+KCxRxCpW2JWCLH6Zl+vYqe
-         vyb6uebQdYFoFHVoCsYhtIdPai7QIGiEHHPm2c6a7v8950Ufavy/EIU95zK7lXAODuDm
-         hI7A==
-X-Gm-Message-State: AOAM533/8dSDltKmROr4cP52PEOXXsXkKJHrCHSQ20Xq5bu8cJUxPc9i
-        hn3SlTTwimo4ZwYw+AaMIfA=
-X-Google-Smtp-Source: ABdhPJxZw7qCY5xAugBz1OmSZd7IfwPIm4rayHyJ2D2Dl9oe0PTmAbGz9w3tCVGoNe698i+vy9lkAw==
-X-Received: by 2002:a17:907:d88:b0:6f5:1321:37ed with SMTP id go8-20020a1709070d8800b006f5132137edmr20817558ejc.67.1652201556379;
-        Tue, 10 May 2022 09:52:36 -0700 (PDT)
-Received: from skbuf ([188.25.160.86])
-        by smtp.gmail.com with ESMTPSA id a21-20020a170906685500b006f3ef214dffsm6221861ejs.101.2022.05.10.09.52.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 09:52:35 -0700 (PDT)
-Date:   Tue, 10 May 2022 19:52:33 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Felix Fietkau <nbd@nbd.name>
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: dsa: tag_mtk: add padding for tx packets
-Message-ID: <20220510165233.yahsznxxb5yq6rai@skbuf>
-References: <20220510094014.68440-1-nbd@nbd.name>
- <20220510123724.i2xqepc56z4eouh2@skbuf>
- <5959946d-1d34-49b9-1abe-9f9299cc194e@nbd.name>
+        Tue, 10 May 2022 12:56:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F7727E3E7;
+        Tue, 10 May 2022 09:52:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C2EF0B81E6F;
+        Tue, 10 May 2022 16:52:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C331C385C9;
+        Tue, 10 May 2022 16:52:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652201566;
+        bh=gOv/6M6fxAvAGRiLfh4MAxrmUxOE18lSG6X5RxF3Cbs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VgqgWZ+rw3KKzHV8X9AqpTE0mS+vuLT4wrKmevMO5m3+BrZY8Gy682PcC9HY+SgRQ
+         YcKu+CMNXtWBtti+PkI4i6QUC4KGwu8m72FlN7QnD12bXtuRMnsDF3nDh6Md5TQdxO
+         rfGjKN9YUzjIYiJd3DIkSYkjjmwUg+BrbWDaiECaDhcO8VWCgpi3G+bTlUMxo42EQd
+         S+MNfucozgVRRtJr9SCr0jBSM4tmdZFqvOLZyNmI3se8gbneU0PM7qAEGt8RAulb0/
+         JAtAIuyQl5JcMu9mkxgbnOmjz38qk0Q3XKoBkGTX69XMWrp54M+QBoMFTGDVI2AL5w
+         ng2WHS7tnFyLA==
+Date:   Tue, 10 May 2022 09:52:44 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Rik van Riel <riel@fb.com>
+Cc:     "pmladek@suse.com" <pmladek@suse.com>,
+        "song@kernel.org" <song@kernel.org>,
+        "joe.lawrence@redhat.com" <joe.lawrence@redhat.com>,
+        Song Liu <songliubraving@fb.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        Kernel Team <Kernel-team@fb.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC] sched,livepatch: call klp_try_switch_task in __cond_resched
+Message-ID: <20220510165244.ikfh64ertnvodxb4@treble>
+References: <20220507174628.2086373-1-song@kernel.org>
+ <YnkuFrm1YR46OFx/@alley>
+ <9C7DF147-5112-42E7-9F7C-7159EFDFB766@fb.com>
+ <YnoawYtoCSvrK7lb@alley>
+ <3a9bfb4a52b715bd8739d8834409c9549ec7f22f.camel@fb.com>
+ <YnqIcw+dYsWz/w7g@alley>
+ <6bf85ff908377508a5f5bcc7c4e75d598b96f388.camel@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <5959946d-1d34-49b9-1abe-9f9299cc194e@nbd.name>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <6bf85ff908377508a5f5bcc7c4e75d598b96f388.camel@fb.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 04:52:16PM +0200, Felix Fietkau wrote:
-> 
-> On 10.05.22 14:37, Vladimir Oltean wrote:
-> > On Tue, May 10, 2022 at 11:40:13AM +0200, Felix Fietkau wrote:
-> > > Padding for transmitted packets needs to account for the special tag.
-> > > With not enough padding, garbage bytes are inserted by the switch at the
-> > > end of small packets.
+On Tue, May 10, 2022 at 04:07:42PM +0000, Rik van Riel wrote:
+> On Tue, 2022-05-10 at 17:44 +0200, Petr Mladek wrote:
+> > On Tue 2022-05-10 13:33:13, Rik van Riel wrote:
+> > > On Tue, 2022-05-10 at 09:56 +0200, Petr Mladek wrote:
+> > > 
 > > 
-> > I don't think padding bytes are guaranteed to be zeroes. Aren't they
-> > discarded? What is the issue?
-> With the broken padding, ARP requests are silently discarded on the receiver
-> side in my test. Adding the padding explicitly fixes the issue.
+> > > I think the best approach for us might be to just track what
+> > > is causing the transition failures, and send in trivial patches
+> > > to make the outer loop in such kernel threads do the same KLP
+> > > transition the idle task already does.
+> > 
+> > I am afraid that is a way to hell. We might end up in doing
+> > really crazy things if we want to complete the transition
+> > in one minute.
+> > 
+> Now I wonder if we could just hook up a preempt notifier
+> for kernel live patches. All the distro kernels already
+> need the preempt notifier for KVM, anyway...
 > 
-> - Felix
+> Is it crazy? Maybe a little.
+> 
+> Is it self contained, and something that could be done
+> without inserting any extra code into a hot path while
+> not in the middle of a KLP transition? Yes.
+> 
+> I'd be happy to come up with a patch that does that,
+> unless anybody has good reasons I should not :)
 
-Ok, I'm not going to complain too much about the patch, but I'm still
-curious where are the so-called "broken" packets discarded.
-I think the receiving MAC should be passing up to software a buffer
-without the extra padding beyond the L2 payload length (at least that's
-the behavior I'm familiar with).
+I wouldn't be opposed to that, but how does it solve this problem?  If
+as Peter said cond_resched() can be a NOP, then preemption would have to
+be from an interrupt, in which case frame pointers aren't reliable.
+
+-- 
+Josh

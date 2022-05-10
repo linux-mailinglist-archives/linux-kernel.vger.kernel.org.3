@@ -2,160 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7CBD5222ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7945222F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348321AbiEJRnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 13:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36334 "EHLO
+        id S1348332AbiEJRnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 13:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245615AbiEJRnR (ORCPT
+        with ESMTP id S245615AbiEJRnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 13:43:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAE52764D2;
-        Tue, 10 May 2022 10:39:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C5B1B619E2;
-        Tue, 10 May 2022 17:39:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1EDAC385A6;
-        Tue, 10 May 2022 17:39:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652204358;
-        bh=cpGX1kgRy3el9acV31jAE9GzbuFSlL1gBzdae8nD62I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vMvrTdgU9As8GpHkd4gSyW+f0NV7kjDPvAMFPdLV7HI2a70KGkYNieWz0su6D0oxZ
-         4OZOgkNt6xTFX+i2jEswPW5kAxqkUXuyxHrFSWb/K1gyQAVaEm8w3gXs4ydSfXJGBE
-         GVlP9CBymHgdFkF4/OWYOu3dC7nSUzvh0WbmeyIYAI7rgaHwSnlM5CeAQv1XL5qQvj
-         rO/gPYQlf0rTJQXpdvjTvkMyskqfRmm7afbz20GTwQQHcTjONqZZwgl/M8TnL9RO8S
-         MFuhcvU/HVPy45tNmaXJS0BiJx136K8GRrolB82foWpZuJiD3DXsQMpHt06kvnYyIn
-         APJb4NK1GPAlQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id EFF16400B1; Tue, 10 May 2022 14:39:14 -0300 (-03)
-Date:   Tue, 10 May 2022 14:39:14 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH] perf annotate: Add --percent-limit option
-Message-ID: <YnqjQmgXebK4itXj@kernel.org>
-References: <20220502232015.697243-1-namhyung@kernel.org>
+        Tue, 10 May 2022 13:43:43 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C295E296BD5;
+        Tue, 10 May 2022 10:39:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652204386; x=1683740386;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=FkyvDe+lg/6UUzc3a3RX0uzSgZKO1lAGbr6Xu1sBYnI=;
+  b=kQMsueoNZK5SbvPlsCBOIoNIMgo0Sos82mEJNrLRT2dUBnbl26HCQ8M1
+   tAImu4APL3OuCOfA7VD1M/UzJoADMERNT2K62DD53EWD03Q4w4DEoVmRT
+   8mqBhqt29gmwXu7K/tGMQhHsiOS7ioq7Vdol3OpeI0T1QhpGCfzUvrQV5
+   4=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 10 May 2022 10:39:45 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 10:39:45 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 10 May 2022 10:39:45 -0700
+Received: from [10.38.241.82] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 10 May
+ 2022 10:39:42 -0700
+Message-ID: <e205565a-e0f5-dca2-a287-a829056d9601@quicinc.com>
+Date:   Tue, 10 May 2022 10:39:40 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220502232015.697243-1-namhyung@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] drm/msm: Fix fb plane offset calculation
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>, <dri-devel@lists.freedesktop.org>
+CC:     Rob Clark <robdclark@chromium.org>,
+        David Airlie <airlied@linux.ie>,
+        <linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Sean Paul <sean@poorly.run>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <freedreno@lists.freedesktop.org>
+References: <20220510165216.3577068-1-robdclark@gmail.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20220510165216.3577068-1-robdclark@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, May 02, 2022 at 04:20:15PM -0700, Namhyung Kim escreveu:
-> Like in perf report and perf top, Add this option to limit the number
-> of functions it displays based on the overhead value in percent.
+
+
+On 5/10/2022 9:52 AM, Rob Clark wrote:
+> From: Rob Clark <robdclark@chromium.org>
 > 
-> This affects only stdio and stdio2 output modes.  Without this, it
-> shows very long disassembly lines for every function in the data
-> file.  If users don't want this behavior, they can set a value in
-> percent to suppress that.
-
-Thanks, applied.
-
-- Arnaldo
-
- 
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> The offset got dropped by accident.
+> 
+> Fixes: d413e6f97134 ("drm/msm: Drop msm_gem_iova()")
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
 > ---
->  tools/perf/Documentation/perf-annotate.txt |  5 +++++
->  tools/perf/builtin-annotate.c              | 24 ++++++++++++++++++++++
->  2 files changed, 29 insertions(+)
+>   drivers/gpu/drm/msm/msm_fb.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/tools/perf/Documentation/perf-annotate.txt b/tools/perf/Documentation/perf-annotate.txt
-> index 33c2521cba4a..18fcc52809fb 100644
-> --- a/tools/perf/Documentation/perf-annotate.txt
-> +++ b/tools/perf/Documentation/perf-annotate.txt
-> @@ -147,6 +147,11 @@ include::itrace.txt[]
->  	The period/hits keywords set the base the percentage is computed
->  	on - the samples period or the number of samples (hits).
->  
-> +--percent-limit::
-> +	Do not show functions which have an overhead under that percent on
-> +	stdio or stdio2 (Default: 0).  Note that this is about selection of
-> +	functions to display, not about lines within the function.
-> +
->  SEE ALSO
->  --------
->  linkperf:perf-record[1], linkperf:perf-report[1]
-> diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
-> index e65dc380be15..2ffe071dbcff 100644
-> --- a/tools/perf/builtin-annotate.c
-> +++ b/tools/perf/builtin-annotate.c
-> @@ -54,6 +54,7 @@ struct perf_annotate {
->  	bool	   skip_missing;
->  	bool	   has_br_stack;
->  	bool	   group_set;
-> +	float	   min_percent;
->  	const char *sym_hist_filter;
->  	const char *cpu_list;
->  	DECLARE_BITMAP(cpu_bitmap, MAX_NR_CPUS);
-> @@ -324,6 +325,17 @@ static void hists__find_annotations(struct hists *hists,
->  		    (strcmp(he->ms.sym->name, ann->sym_hist_filter) != 0))
->  			goto find_next;
->  
-> +		if (ann->min_percent) {
-> +			float percent = 0;
-> +			u64 total = hists__total_period(hists);
-> +
-> +			if (total)
-> +				percent = 100.0 * he->stat.period / total;
-> +
-> +			if (percent < ann->min_percent)
-> +				goto find_next;
-> +		}
-> +
->  		notes = symbol__annotation(he->ms.sym);
->  		if (notes->src == NULL) {
->  find_next:
-> @@ -457,6 +469,16 @@ static int __cmd_annotate(struct perf_annotate *ann)
->  	return ret;
->  }
->  
-> +static int parse_percent_limit(const struct option *opt, const char *str,
-> +			       int unset __maybe_unused)
-> +{
-> +	struct perf_annotate *ann = opt->value;
-> +	double pcnt = strtof(str, NULL);
-> +
-> +	ann->min_percent = pcnt;
-> +	return 0;
-> +}
-> +
->  static const char * const annotate_usage[] = {
->  	"perf annotate [<options>]",
->  	NULL
-> @@ -557,6 +579,8 @@ int cmd_annotate(int argc, const char **argv)
->  	OPT_CALLBACK(0, "percent-type", &annotate.opts, "local-period",
->  		     "Set percent type local/global-period/hits",
->  		     annotate_parse_percent_type),
-> +	OPT_CALLBACK(0, "percent-limit", &annotate, "percent",
-> +		     "Don't show entries under that percent", parse_percent_limit),
->  	OPT_CALLBACK_OPTARG(0, "itrace", &itrace_synth_opts, NULL, "opts",
->  			    "Instruction Tracing options\n" ITRACE_HELP,
->  			    itrace_parse_synth_opts),
-> -- 
-> 2.36.0.464.gb9c8b46e94-goog
-
--- 
-
-- Arnaldo
+> diff --git a/drivers/gpu/drm/msm/msm_fb.c b/drivers/gpu/drm/msm/msm_fb.c
+> index 362775ae50af..4269da268a4a 100644
+> --- a/drivers/gpu/drm/msm/msm_fb.c
+> +++ b/drivers/gpu/drm/msm/msm_fb.c
+> @@ -118,7 +118,7 @@ uint32_t msm_framebuffer_iova(struct drm_framebuffer *fb,
+>   		struct msm_gem_address_space *aspace, int plane)
+>   {
+>   	struct msm_framebuffer *msm_fb = to_msm_framebuffer(fb);
+> -	return msm_fb->iova[plane];
+> +	return msm_fb->iova[plane] + fb->offsets[plane];
+>   }
+>   
+>   struct drm_gem_object *msm_framebuffer_bo(struct drm_framebuffer *fb, int plane)

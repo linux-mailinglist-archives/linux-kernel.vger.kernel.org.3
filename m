@@ -2,149 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D385226EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 00:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D296C5226F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 00:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236750AbiEJWfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 18:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42182 "EHLO
+        id S236884AbiEJWfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 18:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiEJWf1 (ORCPT
+        with ESMTP id S229594AbiEJWfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 18:35:27 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E4454180;
-        Tue, 10 May 2022 15:35:26 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id a15-20020a17090ad80f00b001dc2e23ad84so3169470pjv.4;
-        Tue, 10 May 2022 15:35:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iYf8+0BM+nZESEiOImBjsOdYHgGG/iLfKQrj/8qf7rA=;
-        b=YZmXj+oWML4GDMo1EQd1cGPNRTin0KiSIBmHWoG6suNlLeXmjJBdewWHfJF+Uj4I1D
-         qtjuJ3SAtF1QaXb8vt91KjCEmmqXNS6Mmg01VlrXCiyVSjrUKUERm9REZM/Tpa8DYo8p
-         Go4BiOwi6wywh776otZ6RoL6/luSTUr2+Wnavg9Z7oidP5XdOfrT6UJOpUR4bUCYj/EZ
-         O2pnPWBs5CRROSfloEEZ4IX47360DB6msOuNtM5gvEdsa+ZisKbf5Kio6nenwWKkNOJg
-         1ui0oMKH2nf24n48kgEdtOoyYX6VhGLnKtbF8CP1/hQh9ZM4/SfglrZdXHDYkZJ54up2
-         l3MA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iYf8+0BM+nZESEiOImBjsOdYHgGG/iLfKQrj/8qf7rA=;
-        b=EDpJIaEMzMW9grmnUG6LrU6wMbmpZWkLsYqJVFN4Gc7HbT+pY4RoIy2CTXwqjDO/dP
-         jvkQ7tK6NspAmGEoAMY1IjmbifzqkLBW0XYRdh6/IcqflPOVBUNA54cMprtAbUbZXGbg
-         B/MvJxanzvAuWyS/hXcialdAyhgtIgKu7FVoj30XBuZYPoVeoG5iOaNMsiWV8Aku/O4s
-         fEPYzEMOf7fXdNiPw1aeYMApiQzc1C9a5ev9dR7JEX6S3dytvsU2Hzp+wFqu4SO0LGtN
-         wmk1/hQhsAQYZX6ZQVO+IUfyCvWgV9N5E3aRehMkPJf9h2Z1AN5iVk0QsjV9FI24ilwo
-         /HiA==
-X-Gm-Message-State: AOAM532mRX0sXp/TevF51UP08T0sVjCVrLiQFDXar1P3pcqstvSXL2ld
-        KSBQPM/FtrjeI+g/MfFsoxW+A08dbDenjIrplHw=
-X-Google-Smtp-Source: ABdhPJyh5t+bk2Eu+iP0jde1ku+eqTCWsVCDbFvUnejEWS8YDaqj7z3ufCWJqg274m8z7C1bobG9DHlAoCZJaUofVK8=
-X-Received: by 2002:a17:90b:1b52:b0:1dc:54ea:ac00 with SMTP id
- nv18-20020a17090b1b5200b001dc54eaac00mr2061327pjb.99.1652222125619; Tue, 10
- May 2022 15:35:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220510203222.24246-1-shy828301@gmail.com> <20220510203222.24246-7-shy828301@gmail.com>
- <20220510140545.5dd9d3145b53cb7e226c236a@linux-foundation.org>
-In-Reply-To: <20220510140545.5dd9d3145b53cb7e226c236a@linux-foundation.org>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Tue, 10 May 2022 15:35:13 -0700
-Message-ID: <CAHbLzkrxzLs4Ye9oPLJU_xNYBC7SGs_r0q9mznXFmKuaFPmHGw@mail.gmail.com>
-Subject: Re: [v4 PATCH 6/8] mm: khugepaged: make hugepage_vma_check() non-static
+        Tue, 10 May 2022 18:35:47 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D1225EA9;
+        Tue, 10 May 2022 15:35:45 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KyXtl2fHXz4xZv;
+        Wed, 11 May 2022 08:35:43 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1652222144;
+        bh=hAFdnxfAhd6kOyVXWXqiYjo4AJfDV8jTaKFwXbxdwMQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UCjVbNwkydBwhDIPOre8rvXszwgrjCPe4GjNfx53mFsIwZ19lSek1fys7GkTYNw4a
+         DUmKMUsx0HRUzYtfh+2ue2LQOJy9mC+6sGq+Dm+Ra2qcuQPUsjohrm8ZRnOe0urRG3
+         KhYc9WBZQZAHIakGlhE+ubVrRJOVmwYqBljCh7w6ncIbgVvjgioYPsHuncEo1kYzPV
+         w3+dvlodEmpRHw/MjGP7PVknBm8c18n07rVM0ClMOMn7YxdQGh1WbCpVD3ALGyVnZu
+         mURi76wMxpcviKOys9UqnI7fndZKseWXfvwHmJ8RFl+h+wblwa1dvOtYPRg3EBpiG1
+         bLklTD5j2/YQg==
+Date:   Wed, 11 May 2022 08:35:42 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Song Liu <songliubraving@fb.com>,
-        Rik van Riel <riel@surriel.com>,
-        Matthew Wilcox <willy@infradead.org>, Zi Yan <ziy@nvidia.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Linux MM <linux-mm@kvack.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
+        Joel Savitz <jsavitz@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the akpm tree with the mm-hotfixes
+ tree
+Message-ID: <20220511083542.7f175f4b@canb.auug.org.au>
+In-Reply-To: <20220510095608.41b0f63a41a5e7f76c1fa187@linux-foundation.org>
+References: <20220510223530.67d9a27f@canb.auug.org.au>
+        <20220510095608.41b0f63a41a5e7f76c1fa187@linux-foundation.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/jsFKKXh8dxuH.v0PlMuWMoS";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 2:05 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Tue, 10 May 2022 13:32:20 -0700 Yang Shi <shy828301@gmail.com> wrote:
->
-> > The hugepage_vma_check() could be reused by khugepaged_enter() and
-> > khugepaged_enter_vma_merge(), but it is static in khugepaged.c.
-> > Make it non-static and declare it in khugepaged.h.
-> >
-> > ..
-> >
-> > @@ -508,20 +508,13 @@ void __khugepaged_enter(struct mm_struct *mm)
-> >  void khugepaged_enter_vma_merge(struct vm_area_struct *vma,
-> >                              unsigned long vm_flags)
-> >  {
-> > -     unsigned long hstart, hend;
-> > -
-> > -     /*
-> > -      * khugepaged only supports read-only files for non-shmem files.
-> > -      * khugepaged does not yet work on special mappings. And
-> > -      * file-private shmem THP is not supported.
-> > -      */
-> > -     if (!hugepage_vma_check(vma, vm_flags))
-> > -             return;
-> > -
-> > -     hstart = (vma->vm_start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK;
-> > -     hend = vma->vm_end & HPAGE_PMD_MASK;
-> > -     if (hstart < hend)
-> > -             khugepaged_enter(vma, vm_flags);
-> > +     if (!test_bit(MMF_VM_HUGEPAGE, &vma->vm_mm->flags) &&
-> > +         khugepaged_enabled() &&
-> > +         (((vma->vm_start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK) <
-> > +          (vma->vm_end & HPAGE_PMD_MASK))) {
->
-> Reviewing these bounds-checking tests is so hard :(  Can we simplify?
+--Sig_/jsFKKXh8dxuH.v0PlMuWMoS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yeah, I think they can be moved into a helper with a more descriptive name.
+Hi Andrew,
 
+On Tue, 10 May 2022 09:56:08 -0700 Andrew Morton <akpm@linux-foundation.org=
+> wrote:
 >
-> > +             if (hugepage_vma_check(vma, vm_flags))
-> > +                     __khugepaged_enter(vma->vm_mm);
-> > +     }
-> >  }
->
-> void khugepaged_enter_vma(struct vm_area_struct *vma,
->                           unsigned long vm_flags)
-> {
->         if (test_bit(MMF_VM_HUGEPAGE, &vma->vm_mm->flags))
->                 return;
->         if (!khugepaged_enabled())
->                 return;
->         if (round_up(vma->vm_start, HPAGE_PMD_SIZE) >=
->                         (vma->vm_end & HPAGE_PMD_MASK))
->                 return;         /* vma is too small */
->         if (!hugepage_vma_check(vma, vm_flags))
->                 return;
->         __khugepaged_enter(vma->vm_mm);
-> }
->
->
-> Also, it might be slightly faster to have checked MMF_VM_HUGEPAGE
-> before khugepaged_enabled(), but it looks odd.  And it might be slower,
-> too - more pointer chasing.
+> On Tue, 10 May 2022 22:35:30 +1000 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+>=20
+> > Today's linux-next merge of the akpm tree got a conflict in:
+> >=20
+> >   tools/testing/selftests/vm/Makefile
+> >=20
+> > between commit:
+> >=20
+> >   e33ebf536f3e ("selftests: vm: Makefile: rename TARGETS to VMTARGETS")
+> >=20
+> > from the mm-hotfixes tree and patch:
+> >=20
+> >   "kselftest/vm: override TARGETS from arguments"
+> >=20
+> > from the akpm tree. =20
+>=20
+> Thanks.  Let's just drop
+> kselftest-vm-override-targets-from-arguments.patch for now - a new
+> version is in the works.
 
-I think most configurations have always or madvise mode set
-(khugepaged_enabled() return true), so having checked MMF_VM_HUGEPAGE
-before khugepaged_enabled() seems slightly better, but anyway it
-should not have measurable effect IMHO.
+OK, done.
 
->
-> I wish someone would document hugepage_vma_check().
+--=20
+Cheers,
+Stephen Rothwell
 
-I will clean up all the stuff further in a new patchset, for example,
-trying to consolidate all the different
-hugepage_suitable/enabled/active checks.
+--Sig_/jsFKKXh8dxuH.v0PlMuWMoS
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ66L4ACgkQAVBC80lX
+0Gx5zAgAk8fwlcEaVHDPJaInajjlax/pHzCRMrmLcmYkxstNf4UUouAa0W2m9ZMe
+Pu7//3/ytzhTFXBGGKiAFcCcLwAxYATqqtQgt16HFV9JnUDPGWT3bwnkq5hSqEWz
+d3/T0Ldyrnit9PNWNx7eXFQAI0UxLnBCVjsbMv3k3WDIJasj/0pnv4FfFyIS1Wiq
+ix2GWXIbkVjHs3Q6+mS1598gLSlpeu8OKtuYgk6yzHZ37O0N11tei3fXRwBzcMxo
+sIW4P5kFiDBMDa+Pd6twnUwQFMrUT9LlpJQz6chWxvZnYZ1Yoh/UN9MrHFDjHZjX
+4ltnK2vAVrigMyCbXF95KtpayLW/rg==
+=lxw9
+-----END PGP SIGNATURE-----
+
+--Sig_/jsFKKXh8dxuH.v0PlMuWMoS--

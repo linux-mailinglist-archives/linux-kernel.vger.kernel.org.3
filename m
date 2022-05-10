@@ -2,51 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76AD1521BB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABA51521B84
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343950AbiEJOT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47226 "EHLO
+        id S244856AbiEJOPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:15:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245144AbiEJNr0 (ORCPT
+        with ESMTP id S245711AbiEJNsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:47:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560CB2C13CB;
-        Tue, 10 May 2022 06:35:27 -0700 (PDT)
+        Tue, 10 May 2022 09:48:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46B52A975B;
+        Tue, 10 May 2022 06:36:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D7172618A0;
-        Tue, 10 May 2022 13:35:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D84E9C385A6;
-        Tue, 10 May 2022 13:35:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A72F1B81DB2;
+        Tue, 10 May 2022 13:36:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 107AAC385C2;
+        Tue, 10 May 2022 13:35:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189726;
-        bh=/avtzuZvfnMi1NnIu7uKKrjB03sJRY+GFZrwoZkIdA4=;
+        s=korg; t=1652189759;
+        bh=lr/NUffgJ5GFBk69yG43Atq4uEX7MxnvVMYzJipYg/c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1+3Bcslfp2vl5Ycev8DQ5k/6ogIVZdy33DMSHSGOHwsXOamhkfhWvy3TdRLKbbC6E
-         1d0WPvWqYVeYK3qvTo5TCnQs7wci2gSKKWOvmfyaCeYBKrSU+X06ea2VwVuL/60XFH
-         O2mV2dbLrqCYHpdMkrImzuAdaCmvIaehSvjnJgpQ=
+        b=iQ/Bv3NbjE+A0wx/NmJ8jsefkgZOtizwQLXTTQf33V2nIF1xce4aInksHQwmqwsDo
+         jCIWmiAT3+yE0lCH4tuHqhkYe/dX03JttYAkVL5Z5btWaN6Ulc3Xge77YUfgJpJEG4
+         tX0inieIx5aXTUZlxnrpGoyl7N+MiCn2kQncpNo8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ondrej Mosnacek <omosnace@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Subject: [PATCH 5.17 001/140] pci_irq_vector() cant be used in atomic context any longer. This conflicts with the usage of this function in nic_mbx_intr_handler(). =?UTF-8?q?age=20of=20this=20function=20in=20nic=5Fmbx=5Fintr=5Fhandler().?=
-Date:   Tue, 10 May 2022 15:06:31 +0200
-Message-Id: <20220510130741.644300046@linuxfoundation.org>
+        stable@vger.kernel.org, Joe Wiese <jwiese@rackspace.com>,
+        Corey Minyard <cminyard@mvista.com>
+Subject: [PATCH 5.17 002/140] ipmi: When handling send message responses, dont process the message
+Date:   Tue, 10 May 2022 15:06:32 +0200
+Message-Id: <20220510130741.672481054@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
 References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -60,83 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+From: Corey Minyard <cminyard@mvista.com>
 
-commit 6b292a04c694573a302686323fe15b1c7e673e5b upstream.
+commit 3d092ef09303e615707dc5755cf0e29b4df7555f upstream.
 
-Cache the Linux interrupt numbers in struct nicpf and use that cache in the
-interrupt handler to select the mailbox.
+A chunk was dropped when the code handling send messages was rewritten.
+Those messages shouldn't be processed normally, they are just an
+indication that the message was successfully sent and the timers should
+be started for the real response that should be coming later.
 
-Fixes: 495c66aca3da ("genirq/msi: Convert to new functions")
-Reported-by: Ondrej Mosnacek <omosnace@redhat.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Sunil Goutham <sgoutham@marvell.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org
-Cc: stable@vger.kernel.org
-Link: https://bugzilla.redhat.com/show_bug.cgi?id=2041772
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Add back in the missing chunk to just discard the message and go on.
+
+Fixes: 059747c245f0 ("ipmi: Add support for IPMB direct messages")
+Reported-by: Joe Wiese <jwiese@rackspace.com>
+Cc: stable@vger.kernel.org # v5.16+
+Signed-off-by: Corey Minyard <cminyard@mvista.com>
+Tested-by: Joe Wiese <jwiese@rackspace.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/cavium/thunder/nic_main.c |   16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/char/ipmi/ipmi_msghandler.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/net/ethernet/cavium/thunder/nic_main.c
-+++ b/drivers/net/ethernet/cavium/thunder/nic_main.c
-@@ -59,7 +59,7 @@ struct nicpf {
- 
- 	/* MSI-X */
- 	u8			num_vec;
--	bool			irq_allocated[NIC_PF_MSIX_VECTORS];
-+	unsigned int		irq_allocated[NIC_PF_MSIX_VECTORS];
- 	char			irq_name[NIC_PF_MSIX_VECTORS][20];
- };
- 
-@@ -1150,7 +1150,7 @@ static irqreturn_t nic_mbx_intr_handler(
- 	u64 intr;
- 	u8  vf;
- 
--	if (irq == pci_irq_vector(nic->pdev, NIC_PF_INTR_ID_MBOX0))
-+	if (irq == nic->irq_allocated[NIC_PF_INTR_ID_MBOX0])
- 		mbx = 0;
- 	else
- 		mbx = 1;
-@@ -1176,14 +1176,14 @@ static void nic_free_all_interrupts(stru
- 
- 	for (irq = 0; irq < nic->num_vec; irq++) {
- 		if (nic->irq_allocated[irq])
--			free_irq(pci_irq_vector(nic->pdev, irq), nic);
--		nic->irq_allocated[irq] = false;
-+			free_irq(nic->irq_allocated[irq], nic);
-+		nic->irq_allocated[irq] = 0;
- 	}
- }
- 
- static int nic_register_interrupts(struct nicpf *nic)
- {
--	int i, ret;
-+	int i, ret, irq;
- 	nic->num_vec = pci_msix_vec_count(nic->pdev);
- 
- 	/* Enable MSI-X */
-@@ -1201,13 +1201,13 @@ static int nic_register_interrupts(struc
- 		sprintf(nic->irq_name[i],
- 			"NICPF Mbox%d", (i - NIC_PF_INTR_ID_MBOX0));
- 
--		ret = request_irq(pci_irq_vector(nic->pdev, i),
--				  nic_mbx_intr_handler, 0,
-+		irq = pci_irq_vector(nic->pdev, i);
-+		ret = request_irq(irq, nic_mbx_intr_handler, 0,
- 				  nic->irq_name[i], nic);
- 		if (ret)
- 			goto fail;
- 
--		nic->irq_allocated[i] = true;
-+		nic->irq_allocated[i] = irq;
- 	}
- 
- 	/* Enable mailbox interrupt */
+--- a/drivers/char/ipmi/ipmi_msghandler.c
++++ b/drivers/char/ipmi/ipmi_msghandler.c
+@@ -4518,6 +4518,8 @@ return_unspecified:
+ 		} else
+ 			/* The message was sent, start the timer. */
+ 			intf_start_seq_timer(intf, msg->msgid);
++		requeue = 0;
++		goto out;
+ 	} else if (((msg->rsp[0] >> 2) != ((msg->data[0] >> 2) | 1))
+ 		   || (msg->rsp[1] != msg->data[1])) {
+ 		/*
 
 

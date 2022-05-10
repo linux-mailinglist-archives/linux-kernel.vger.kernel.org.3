@@ -2,93 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FDF9520EBB
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6097F520E8B
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235195AbiEJHju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 03:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38528 "EHLO
+        id S238557AbiEJHhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 03:37:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238166AbiEJHFu (ORCPT
+        with ESMTP id S238134AbiEJHFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 03:05:50 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C354C781
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 00:01:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=85t7aYjeyWnH4beg74cgdp5nu+h6AOQI65xsJkLJM3c=; b=qhOda218/0ojztTiUUOZC+HaTa
-        iDYh1V5D3ZOa/qLdZJfSMv+UUAdH6cX38aBTptOztKolbz0uylbIm56mL8E0aFxIzkFy7AD45a29v
-        j8cOnWPnQl/TxAkwmf4hWdKsAZ/KDtop1E/T9DlrtTRL57L0C7C0NdGIdHR/2QDAJzk+dwXTGRqtO
-        0HsPglcLLJRKq8i6khxyVFB9DlZO8/Yj7woqQz225gwqKdIXo2qUqTG922oRvtSz/tQVTxlKTu2nE
-        AD3Q2gzOOQgx7DB5WQ8kP4j6xyYtZ/A9lpHMNgC7we7lsPGc9elxiZyi/fanPjkgEvCGlTUW6Htga
-        //8xY+pA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1noJs3-00ClRd-D6; Tue, 10 May 2022 07:01:23 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C5974981010; Tue, 10 May 2022 09:01:22 +0200 (CEST)
-Date:   Tue, 10 May 2022 09:01:22 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Qais Yousef <qais.yousef@arm.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Delyan Kratunov <delyank@fb.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
-        "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "mingo@kernel.org" <mingo@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "Kenta.Tada@sony.com" <Kenta.Tada@sony.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "bristot@redhat.com" <bristot@redhat.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "legion@kernel.org" <legion@kernel.org>,
-        "adharmap@quicinc.com" <adharmap@quicinc.com>,
-        "valentin.schneider@arm.com" <valentin.schneider@arm.com>,
-        "ed.tsai@mediatek.com" <ed.tsai@mediatek.com>,
-        "juri.lelli@redhat.com" <juri.lelli@redhat.com>
-Subject: Re: [PATCH] sched/tracing: append prev_state to tp args instead
-Message-ID: <20220510070122.GJ76023@worktop.programming.kicks-ass.net>
-References: <20220422110903.GW2731@worktop.programming.kicks-ass.net>
- <056e9bb0d0e3fc20572d42db7386face1d0665d6.camel@fb.com>
- <CAADnVQKsah4aka-LJ+X+5XHHESKbbw36D8fXTLqcYp2io3PN_w@mail.gmail.com>
- <YmflVPQlwpiBuxRc@hirez.programming.kicks-ass.net>
- <20220426140959.op6u5m7id57aq7yc@wubuntu>
- <CAEf4BzaoL5HVc8U16kz7m--RiPhBwuLt8ZGZppwfxV85AXXrcw@mail.gmail.com>
- <20220427103458.ecnqtaj3af63625h@wubuntu>
- <CAEf4BzYc3f2-9hvuGL_mTO8qNxZjdQn8AabEb-N6Q7XjmEQQ1A@mail.gmail.com>
- <20220428100235.sqoxunbylqk2surk@wubuntu>
- <CAEf4BzaEo+dxSRJZHQiXYrj-a3_B-eODZUxGh3HrnPjquMYFXQ@mail.gmail.com>
+        Tue, 10 May 2022 03:05:39 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47A52D1FF;
+        Tue, 10 May 2022 00:01:42 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d22so15934405plr.9;
+        Tue, 10 May 2022 00:01:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2bJfSI26+416H0cEFrU+Zj4BNqCl1B3sTgbKXFNXPmU=;
+        b=pH2kT7ap04SLVR0W2AufymCpw+0zDuir2vcSkD2zlgTbXoFv0I+hvEUmzHBhC0yVbP
+         bdCggCJk5d0N5vDSecMBSjkZmXMh/23fwOUvUlkEe7O11UP0qAlo6ZwGAYPdqiccZCZk
+         MGRU/GGJvh6X7CKhSQ7cG/RkMGSktmXYIVGWNr2sP9FU233uyKPK30EOLEa0t9T4c7XZ
+         2KLXjuqccEWbyT7XS0np1ZM/Xaz/3UuYYyKrhkUO4/pCVpHhenPI3VAlx5enizuLYPiZ
+         T00J+LS3BZpJ0jIiGwN9p8SXonfgYg74PtzMDhkkCIca+QBS3SWW9aZyn0e1s8J4gUu5
+         ckvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2bJfSI26+416H0cEFrU+Zj4BNqCl1B3sTgbKXFNXPmU=;
+        b=SZHNhBspEU0szhnnGwN5IZz7K/nwgJE+63NCZuCwkeNzYOQ7Ew+NYQ98xTFQsiIzWY
+         OSOHSs98TnfxxVjUj6gwqlD6vmN8TPJZwS9b4faO/5mV1v3eTZ8Ydj6IQnvwMIRTHjii
+         /MwKhg5WCgb/3OTAvDtyickVbvBVVBptdlN2+rk02HU6tBEGxnZqIvEesrsCXyfD07t6
+         42EnTWLtI0yR4a6Ad5auISE3Xb++qH6gAQcjhAB5BHpFAiUwJQBsSQgPykdVIahDJgzM
+         lTZeOg6yHWGNg5SMLAe+2sGw09erMGwwYNq/7IMeBk+4gqdxZsBCmYDnYvCKc2p2Ti6J
+         cAew==
+X-Gm-Message-State: AOAM530XBhliuUs7fra5X2etVETK16e1bqYXMZiXSi4g9CsyxO3wePb4
+        SPka+7e6U17yzQB43HmKCxyQj1KLvp77sIkU7H4=
+X-Google-Smtp-Source: ABdhPJyDmgLmJ+UkJgAmBSmdDMtmzjuyKFW/3yG342AEob6jkHlqPUT3Il3Ejn0ZEYkPLKl3+UiO/aPNPRmvT8azFCs=
+X-Received: by 2002:a17:902:6f16:b0:15e:f719:34ec with SMTP id
+ w22-20020a1709026f1600b0015ef71934ecmr15720145plk.166.1652166102198; Tue, 10
+ May 2022 00:01:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzaEo+dxSRJZHQiXYrj-a3_B-eODZUxGh3HrnPjquMYFXQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220509134629.440965-1-Qing-wu.Li@leica-geosystems.com.cn> <20220509134629.440965-5-Qing-wu.Li@leica-geosystems.com.cn>
+In-Reply-To: <20220509134629.440965-5-Qing-wu.Li@leica-geosystems.com.cn>
+From:   Alexandru Ardelean <ardeleanalex@gmail.com>
+Date:   Tue, 10 May 2022 10:01:31 +0300
+Message-ID: <CA+U=Dsp_vvANuXUwjKC-6g8daBOCFargRZ0r=AbkCwG9KifgHA@mail.gmail.com>
+Subject: Re: [PATCH V1 4/5] iio: accel: bmi088: Make it possible to config scales.
+To:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        mchehab+huawei@kernel.org, linux-iio <linux-iio@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 12:32:31PM -0700, Andrii Nakryiko wrote:
-> So can this patch be applied, please, or it's a hard no?
+On Mon, May 9, 2022 at 4:46 PM LI Qingwu
+<Qing-wu.Li@leica-geosystems.com.cn> wrote:
+>
+> All the sensors can set the scales by writing the range register 0x41,
+> The current driver has no interface to configure it.
+> The commit adds the interface for config the scales.
 
-Sorry; I got distracted with other work. I'll grudingly apply the patch.
+With the warnings fixed:
 
-Thanks!
+
+Reviewed-by: Alexandru Ardelean <ardeleanalex@gmail.com>
+
+
+>
+> Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+> ---
+>  drivers/iio/accel/bmi088-accel-core.c | 32 +++++++++++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>
+> diff --git a/drivers/iio/accel/bmi088-accel-core.c b/drivers/iio/accel/bmi088-accel-core.c
+> index 44cbe098c093..7c78cfb321ee 100644
+> --- a/drivers/iio/accel/bmi088-accel-core.c
+> +++ b/drivers/iio/accel/bmi088-accel-core.c
+> @@ -237,6 +237,23 @@ static int bmi088_accel_set_sample_freq(struct bmi088_accel_data *data, int val)
+>                                   BMI088_ACCEL_MODE_ODR_MASK, regval);
+>  }
+>
+> +static int bmi088_accel_set_scale(struct bmi088_accel_data *data, int val, int val2)
+> +{
+> +       unsigned int i;
+> +       int ret;
+> +       int reg;
+> +
+> +       for (i = 0; i < 4; i++)
+> +               if (val == data->chip_info->scale_table[i][0] &&
+> +                   val2 == data->chip_info->scale_table[i][1])
+> +                       break;
+> +
+> +       if (i >= 4)
+> +               return -EINVAL;
+> +
+> +       return regmap_write(data->regmap, BMI088_ACCEL_REG_ACC_RANGE, i);
+> +}
+> +
+>  static int bmi088_accel_get_temp(struct bmi088_accel_data *data, int *val)
+>  {
+>         int ret;
+> @@ -368,7 +385,13 @@ static int bmi088_accel_read_avail(struct iio_dev *indio_dev,
+>                              const int **vals, int *type, int *length,
+>                              long mask)
+>  {
+> +       struct bmi088_accel_data *data = iio_priv(indio_dev);
+>         switch (mask) {
+> +       case IIO_CHAN_INFO_SCALE:
+> +               *vals = (const int *)data->chip_info->scale_table;
+> +               *length = 8;
+> +               *type = IIO_VAL_INT_PLUS_MICRO;
+> +               return IIO_AVAIL_LIST;
+>         case IIO_CHAN_INFO_SAMP_FREQ:
+>                 *type = IIO_VAL_INT_PLUS_MICRO;
+>                 *vals = bmi088_sample_freqs;
+> @@ -388,6 +411,14 @@ static int bmi088_accel_write_raw(struct iio_dev *indio_dev,
+>         int ret;
+>
+>         switch (mask) {
+> +       case IIO_CHAN_INFO_SCALE:
+> +               ret = pm_runtime_resume_and_get(dev);
+> +               if (ret)
+> +                       return ret;
+> +               ret = bmi088_accel_set_scale(data, val, val2);
+> +               pm_runtime_mark_last_busy(dev);
+> +               pm_runtime_put_autosuspend(dev);
+> +               return ret;
+>         case IIO_CHAN_INFO_SAMP_FREQ:
+>                 ret = pm_runtime_resume_and_get(dev);
+>                 if (ret)
+> @@ -410,6 +441,7 @@ static int bmi088_accel_write_raw(struct iio_dev *indio_dev,
+>         .info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE) | \
+>                                 BIT(IIO_CHAN_INFO_SAMP_FREQ), \
+>         .info_mask_shared_by_type_available = BIT(IIO_CHAN_INFO_SAMP_FREQ), \
+> +                               BIT(IIO_CHAN_INFO_SCALE ), \
+>         .scan_index = AXIS_##_axis, \
+>  }
+>
+> --
+> 2.25.1
+>

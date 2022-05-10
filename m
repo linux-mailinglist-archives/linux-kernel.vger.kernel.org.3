@@ -2,68 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 481B8521409
+	by mail.lfdr.de (Postfix) with ESMTP id 9459652140A
 	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:39:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241150AbiEJLnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 07:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
+        id S241169AbiEJLnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 07:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237437AbiEJLmp (ORCPT
+        with ESMTP id S241142AbiEJLmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 07:42:45 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF271E2504
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 04:38:47 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so1804396pju.2
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 04:38:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=iMgJwS/SggrAADYtwStHw4r+a8CzDYa93UU0RlRB13g=;
-        b=3hTdSoIkC2wRYFxclkOTIEfKDuHd679neMiuzW0MVKwy/2dUw4jCgZrwkoXVxijeqX
-         wKkZnJ2HlrlRZveXZFSfFamIKk930Qa/rsBwrSp8opG+0hTqaYdJz2uURK6HunNd9EpL
-         CJ/MDH+YvqvKGWYdVhb/NnapPZXJ39cf3LqO2h+TSso1wQxjXURQTxdl0shRMdkrQCYN
-         rUM8YYI1cxOsjSyPRjM7EsyvkUnBnvV8Noubu128CSzAbexi4VbNisa1bOC8jZMGaI5V
-         /NIQgh+jjKPYnU6RYqkjoRwf3bEdO28VwYzKZnn0ap/EtUx66bIvMPvfq0rfSH/vlmD/
-         v3MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=iMgJwS/SggrAADYtwStHw4r+a8CzDYa93UU0RlRB13g=;
-        b=tjTw5vDkno1IHI6ZmkSAs7/7m6J+O2iYIyKsQTy64+5IDmJdeQGIXv28GWVssrFG1Z
-         8ZvzsONDAx1hXEx+eoV5+zRG2RgseRj31YeU0RPb9j11SnesWypWA3co1m+of5hlMhVV
-         3szBHJ1BPtk9g44wmKc5ojD/tf4OJ/xYwifE7Rc1PjVuMpUc3Eyz84rKLqzJ0JzmVrkJ
-         PRufRVLISyDCtDkWRozpeNiEhyPbIQQpBPEMDja14OfZfpHgpHfNKEcv8LQzT5ZqEkf7
-         4msVnkLwXrYqAq3OkHC/JhJNr3t1WxSFxNsM7+o0uTcj0aqLmef5Mvk/xS1Zit+N0Vc7
-         A3lg==
-X-Gm-Message-State: AOAM531CRRs4sKKx9f98ORU5rNsWnBO7XcFZgN70CxH503Ig4rwISpwO
-        t+m6cbZU/gOEvCXR9Smd3+32Pg==
-X-Google-Smtp-Source: ABdhPJyn1xpQSL4/aHEcqOu8DmLsiNNCgfFUxwGhA8F+nSWNWQEYSr6bp/PUhnPPxKPL4kTdLYzEcw==
-X-Received: by 2002:a17:90b:17c3:b0:1dc:3f12:1dbc with SMTP id me3-20020a17090b17c300b001dc3f121dbcmr22651999pjb.169.1652182727333;
-        Tue, 10 May 2022 04:38:47 -0700 (PDT)
-Received: from C02DW0BEMD6R.bytedance.net ([139.177.225.242])
-        by smtp.gmail.com with ESMTPSA id bj7-20020a170902850700b0015e8d4eb20bsm1800645plb.85.2022.05.10.04.38.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 04:38:46 -0700 (PDT)
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-To:     akinobu.mita@gmail.com, akpm@linux-foundation.org, vbabka@suse.cz,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        rostedt@goodmis.org
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: [PATCH 2/2] tty: fix deadlock caused by calling printk() under tty_port->lock
-Date:   Tue, 10 May 2022 19:38:09 +0800
-Message-Id: <20220510113809.80626-2-zhengqi.arch@bytedance.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
-In-Reply-To: <20220510113809.80626-1-zhengqi.arch@bytedance.com>
-References: <20220510113809.80626-1-zhengqi.arch@bytedance.com>
+        Tue, 10 May 2022 07:42:53 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FCB2415F3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 04:38:52 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24AA88Qm017836;
+        Tue, 10 May 2022 11:38:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=me9LNv8Y4xpK6K0YUs/VaQRXYM8MnWuLPxbS1JSaCU4=;
+ b=AZUwU0vW7PIBl8pn+K8ZGkkN6ll4LQJqBkLw+ZFbr+LEDzBtHjGFrv26A8AVOEKhlE0o
+ 2f4ypgjaUH1WflbeCo75PnYn58S48Yo0CqAenyiQF7VPAPaiWfT0J+anawnkCux89Dvh
+ aqoCPFNZ/cvVjHzMRb3do6TvZnxHPfQY9s7SQsT3hsyYQ7MyxXc+d5BYygM5S3DWeVlq
+ ZJkRU1yut5iR7zr8Qgv/+9Sfg2+DP6ZCDKTmXDyUgC5rEwO+I5VfMpVe/wrfYbR0cGRR
+ kvrOAYRznvQdsnFge52hnyOa6Bi+p+KxcVKIFU5ZXzLJNfXWp8gS0p91MeEb4d0+Ecvv NQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fymx0jr1q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 May 2022 11:38:37 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24ABZw1N016475;
+        Tue, 10 May 2022 11:38:37 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fymx0jr13-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 May 2022 11:38:37 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24ABH86b018742;
+        Tue, 10 May 2022 11:38:35 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma05wdc.us.ibm.com with ESMTP id 3fwgd9vp81-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 May 2022 11:38:35 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24ABcZFu24379850
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 10 May 2022 11:38:35 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1EC6D12405A;
+        Tue, 10 May 2022 11:38:35 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8EBF8124054;
+        Tue, 10 May 2022 11:38:28 +0000 (GMT)
+Received: from skywalker.linux.ibm.com (unknown [9.43.24.223])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 10 May 2022 11:38:28 +0000 (GMT)
+X-Mailer: emacs 29.0.50 (via feedmail 11-beta-1 I)
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+To:     Alistair Popple <apopple@nvidia.com>, Wei Xu <weixugc@google.com>
+Cc:     Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Greg Thelen <gthelen@google.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Michal Hocko <mhocko@kernel.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>
+Subject: Re: RFC: Memory Tiering Kernel Interfaces
+In-Reply-To: <875ymerl81.fsf@nvdebian.thelocal>
+References: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
+ <CAHbLzkq1YXXLMiREpGnzhJjPssu4WpSsnkTmrLJ=hAEhZVUr9w@mail.gmail.com>
+ <CAAPL-u-r2Pc_MaHQmKKNH_icAa_fH1COWb5qSPpr8xffREQ_cQ@mail.gmail.com>
+ <87tua3h5r1.fsf@nvdebian.thelocal>
+ <CAAPL-u-0HwL6p1SA73LPfFyywG55QqE9O+q=83fhShoJAVVxyQ@mail.gmail.com>
+ <875ymerl81.fsf@nvdebian.thelocal>
+Date:   Tue, 10 May 2022 17:08:26 +0530
+Message-ID: <87fslhhb2l.fsf@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: oyyZh7JwVYEaZ5I-CZ9zW5n4UakADTq1
+X-Proofpoint-GUID: r15FvQ0tpc82jz2Sx0KqfczjX0VwwDOi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-10_01,2022-05-10_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 clxscore=1011 mlxscore=0 adultscore=0 bulkscore=0
+ suspectscore=0 mlxlogscore=999 spamscore=0 malwarescore=0
+ lowpriorityscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2205100052
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,146 +108,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pty_write() invokes kmalloc() which may invoke a normal printk() to
-print failure message. This can cause a deadlock in the scenario reported
-by syz-bot below:
+Alistair Popple <apopple@nvidia.com> writes:
 
-       CPU0              CPU1                    CPU2
-       ----              ----                    ----
-                         lock(console_owner);
-                                                 lock(&port_lock_key);
-  lock(&port->lock);
-                         lock(&port_lock_key);
-                                                 lock(&port->lock);
-  lock(console_owner);
+> Wei Xu <weixugc@google.com> writes:
+>
+>> On Thu, May 5, 2022 at 5:19 PM Alistair Popple <apopple@nvidia.com> wrote:
+>>>
+>>> Wei Xu <weixugc@google.com> writes:
+>>>
+>>> [...]
+>>>
+>>> >> >
+>>> >> >
+>>> >> > Tiering Hierarchy Initialization
+>>> >> > `=============================='
+>>> >> >
+>>> >> > By default, all memory nodes are in the top tier (N_TOPTIER_MEMORY).
+>>> >> >
+>>> >> > A device driver can remove its memory nodes from the top tier, e.g.
+>>> >> > a dax driver can remove PMEM nodes from the top tier.
+>>> >>
+>>> >> With the topology built by firmware we should not need this.
+>>>
+>>> I agree that in an ideal world the hierarchy should be built by firmware based
+>>> on something like the HMAT. But I also think being able to override this will be
+>>> useful in getting there. Therefore a way of overriding the generated hierarchy
+>>> would be good, either via sysfs or kernel boot parameter if we don't want to
+>>> commit to a particular user interface now.
+>>>
+>>> However I'm less sure letting device-drivers override this is a good idea. How
+>>> for example would a GPU driver make sure it's node is in the top tier? By moving
+>>> every node that the driver does not know about out of N_TOPTIER_MEMORY? That
+>>> could get messy if say there were two drivers both of which wanted their node to
+>>> be in the top tier.
+>>
+>> The suggestion is to allow a device driver to opt out its memory
+>> devices from the top-tier, not the other way around.
+>
+> So how would demotion work in the case of accelerators then? In that
+> case we would want GPU memory to demote to DRAM, but that won't happen
+> if both DRAM and GPU memory are in N_TOPTIER_MEMORY and it seems the
+> only override available with this proposal would move GPU memory into a
+> lower tier, which is the opposite of what's needed there.
 
-As commit dbdda842fe96 ("printk: Add console owner and waiter logic to
-load balance console writes") said, such deadlock can be prevented by
-using printk_deferred() in kmalloc() (which is invoked in the section
-guarded by the port->lock). But there are too many printk() on the
-kmalloc() path, and kmalloc() can be called from anywhere, so changing
-printk() to printk_deferred() is too complicated and inelegant.
+How about we do 3 tiers now. dax kmem devices can be registered to
+tier 3. By default all numa nodes can be registered at tier 2 and HBM or
+GPU can be enabled to register at tier 1. ?
 
-Therefore, this patch chooses to specify __GFP_NOWARN to kmalloc(), so
-that printk() will not be called, and this deadlock problem can be avoided.
-
-Syz-bot reported the following lockdep error:
-
-======================================================
-WARNING: possible circular locking dependency detected
-5.4.143-00237-g08ccc19a-dirty #10 Not tainted
-------------------------------------------------------
-syz-executor.4/29420 is trying to acquire lock:
-ffffffff8aedb2a0 (console_owner){....}-{0:0}, at: console_trylock_spinning kernel/printk/printk.c:1752 [inline]
-ffffffff8aedb2a0 (console_owner){....}-{0:0}, at: vprintk_emit+0x2ca/0x470 kernel/printk/printk.c:2023
-
-but task is already holding lock:
-ffff8880119c9158 (&port->lock){-.-.}-{2:2}, at: pty_write+0xf4/0x1f0 drivers/tty/pty.c:120
-
-which lock already depends on the new lock.
-
-the existing dependency chain (in reverse order) is:
-
--> #2 (&port->lock){-.-.}-{2:2}:
-       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-       _raw_spin_lock_irqsave+0x35/0x50 kernel/locking/spinlock.c:159
-       tty_port_tty_get drivers/tty/tty_port.c:288 [inline]          		<-- lock(&port->lock);
-       tty_port_default_wakeup+0x1d/0xb0 drivers/tty/tty_port.c:47
-       serial8250_tx_chars+0x530/0xa80 drivers/tty/serial/8250/8250_port.c:1767
-       serial8250_handle_irq.part.0+0x31f/0x3d0 drivers/tty/serial/8250/8250_port.c:1854
-       serial8250_handle_irq drivers/tty/serial/8250/8250_port.c:1827 [inline] 	<-- lock(&port_lock_key);
-       serial8250_default_handle_irq+0xb2/0x220 drivers/tty/serial/8250/8250_port.c:1870
-       serial8250_interrupt+0xfd/0x200 drivers/tty/serial/8250/8250_core.c:126
-       __handle_irq_event_percpu+0x109/0xa50 kernel/irq/handle.c:156
-       handle_irq_event_percpu+0x76/0x170 kernel/irq/handle.c:196
-       handle_irq_event+0xa1/0x130 kernel/irq/handle.c:213
-       handle_edge_irq+0x261/0xd00 kernel/irq/chip.c:833
-       generic_handle_irq_desc include/linux/irqdesc.h:156 [inline]
-       do_IRQ+0xf2/0x2e0 arch/x86/kernel/irq.c:250
-       ret_from_intr+0x0/0x19
-       native_safe_halt arch/x86/include/asm/irqflags.h:60 [inline]
-       arch_safe_halt arch/x86/include/asm/irqflags.h:103 [inline]
-       default_idle+0x2c/0x1a0 arch/x86/kernel/process.c:572
-       cpuidle_idle_call kernel/sched/idle.c:184 [inline]
-       do_idle+0x44c/0x590 kernel/sched/idle.c:294
-       cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:386
-       start_secondary+0x2d1/0x3e0 arch/x86/kernel/smpboot.c:264
-       secondary_startup_64+0xa4/0xb0 arch/x86/kernel/head_64.S:241
-
--> #1 (&port_lock_key){-.-.}-{2:2}:
-       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-       _raw_spin_lock_irqsave+0x35/0x50 kernel/locking/spinlock.c:159
-       serial8250_console_write+0x184/0xa40 drivers/tty/serial/8250/8250_port.c:3198
-										<-- lock(&port_lock_key);
-       call_console_drivers kernel/printk/printk.c:1819 [inline]
-       console_unlock+0x8cb/0xd00 kernel/printk/printk.c:2504
-       vprintk_emit+0x1b5/0x470 kernel/printk/printk.c:2024			<-- lock(console_owner);
-       vprintk_func+0x8d/0x250 kernel/printk/printk_safe.c:394
-       printk+0xba/0xed kernel/printk/printk.c:2084
-       register_console+0x8b3/0xc10 kernel/printk/printk.c:2829
-       univ8250_console_init+0x3a/0x46 drivers/tty/serial/8250/8250_core.c:681
-       console_init+0x49d/0x6d3 kernel/printk/printk.c:2915
-       start_kernel+0x5e9/0x879 init/main.c:713
-       secondary_startup_64+0xa4/0xb0 arch/x86/kernel/head_64.S:241
-
--> #0 (console_owner){....}-{0:0}:
-       check_prev_add kernel/locking/lockdep.c:2600 [inline]
-       check_prevs_add kernel/locking/lockdep.c:2705 [inline]
-       validate_chain kernel/locking/lockdep.c:3095 [inline]
-       __lock_acquire+0x27e6/0x4cc0 kernel/locking/lockdep.c:4200
-       lock_acquire+0x127/0x340 kernel/locking/lockdep.c:4734
-       console_trylock_spinning kernel/printk/printk.c:1773 [inline]		<-- lock(console_owner);
-       vprintk_emit+0x307/0x470 kernel/printk/printk.c:2023
-       vprintk_func+0x8d/0x250 kernel/printk/printk_safe.c:394
-       printk+0xba/0xed kernel/printk/printk.c:2084
-       fail_dump lib/fault-inject.c:45 [inline]
-       should_fail+0x67b/0x7c0 lib/fault-inject.c:144
-       __should_failslab+0x152/0x1c0 mm/failslab.c:33
-       should_failslab+0x5/0x10 mm/slab_common.c:1224
-       slab_pre_alloc_hook mm/slab.h:468 [inline]
-       slab_alloc_node mm/slub.c:2723 [inline]
-       slab_alloc mm/slub.c:2807 [inline]
-       __kmalloc+0x72/0x300 mm/slub.c:3871
-       kmalloc include/linux/slab.h:582 [inline]
-       tty_buffer_alloc+0x23f/0x2a0 drivers/tty/tty_buffer.c:175
-       __tty_buffer_request_room+0x156/0x2a0 drivers/tty/tty_buffer.c:273
-       tty_insert_flip_string_fixed_flag+0x93/0x250 drivers/tty/tty_buffer.c:318
-       tty_insert_flip_string include/linux/tty_flip.h:37 [inline]
-       pty_write+0x126/0x1f0 drivers/tty/pty.c:122				<-- lock(&port->lock);
-       n_tty_write+0xa7a/0xfc0 drivers/tty/n_tty.c:2356
-       do_tty_write drivers/tty/tty_io.c:961 [inline]
-       tty_write+0x512/0x930 drivers/tty/tty_io.c:1045
-       __vfs_write+0x76/0x100 fs/read_write.c:494
-       vfs_write+0x268/0x5c0 fs/read_write.c:558
-       ksys_write+0x12d/0x250 fs/read_write.c:611
-       do_syscall_64+0xd7/0x380 arch/x86/entry/common.c:291
-       entry_SYSCALL_64_after_hwframe+0x49/0xbe
-
-other info that might help us debug this:
-
-Chain exists of:
-  console_owner --> &port_lock_key --> &port->lock
-
-Fixes: b6da31b2c07c ("tty: Fix data race in tty_insert_flip_string_fixed_flag")
-Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
----
- drivers/tty/tty_buffer.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/tty/tty_buffer.c b/drivers/tty/tty_buffer.c
-index 646510476c30..bfa431a8e690 100644
---- a/drivers/tty/tty_buffer.c
-+++ b/drivers/tty/tty_buffer.c
-@@ -175,7 +175,8 @@ static struct tty_buffer *tty_buffer_alloc(struct tty_port *port, size_t size)
- 	 */
- 	if (atomic_read(&port->buf.mem_used) > port->buf.mem_limit)
- 		return NULL;
--	p = kmalloc(sizeof(struct tty_buffer) + 2 * size, GFP_ATOMIC);
-+	p = kmalloc(sizeof(struct tty_buffer) + 2 * size,
-+		    GFP_ATOMIC | __GFP_NOWARN);
- 	if (p == NULL)
- 		return NULL;
- 
--- 
-2.20.1
-
+-aneesh

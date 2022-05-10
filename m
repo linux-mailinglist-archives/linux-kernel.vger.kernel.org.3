@@ -2,126 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B1D520AF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 04:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34251520AFA
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 04:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234497AbiEJCHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 22:07:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
+        id S234517AbiEJCKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 22:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbiEJCHo (ORCPT
+        with ESMTP id S234505AbiEJCKL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 22:07:44 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4BA210B94;
-        Mon,  9 May 2022 19:03:48 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Ky1V31sFpzGpdn;
-        Tue, 10 May 2022 10:00:59 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 10 May 2022 10:03:46 +0800
-CC:     <yangyicong@hisilicon.com>, <weidong.huang@huawei.com>
-Subject: Re: [PATCH] pci: avoid dead lock between device reset and sriov
- disable
-To:     Jay Zhou <jianjay.zhou@huawei.com>, <linux-pci@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>,
-        <alex.williamson@redhat.com>
-References: <20220404062539.1710-1-jianjay.zhou@huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <0b146b52-054d-4f89-961a-65f29037e172@huawei.com>
-Date:   Tue, 10 May 2022 10:03:46 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Mon, 9 May 2022 22:10:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7959E3190C
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 19:06:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652148372;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1+7DKJlYnVWlLlv05GdYL70k7bNZ4ECrKaTftEIR5dg=;
+        b=A/hn0IDYavP0NCsk3JG9gDugV13/IV1uULRRjcuGqTBYLmBmikZCpop9OHyGo/2NFxHbgD
+        OI8gNCwgAGQoVbOo8VcONioYiZ053Nrr+/JE0CDR+2DF/8Sj9FFomxHXhCQCqGLr5jkRHo
+        n81lWkM0aSCtevAqXqmX8Bf5VS5VpJg=
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
+ [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-661-8c5F1zBKMyaAFe2v_B3fyg-1; Mon, 09 May 2022 22:06:11 -0400
+X-MC-Unique: 8c5F1zBKMyaAFe2v_B3fyg-1
+Received: by mail-lj1-f198.google.com with SMTP id e3-20020a2e9303000000b00249765c005cso4661439ljh.17
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 19:06:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1+7DKJlYnVWlLlv05GdYL70k7bNZ4ECrKaTftEIR5dg=;
+        b=pgcEyubzWeSWGX4mj7UpGDEnL9pCgfPNnyDJyUV2txGOYbOE+vd+hNg+nbq50fYS9z
+         liw4lzCqvcy9T15mFyYJMvoPc05Iy7QDDF6bu47nMdv/KCUxPMk1LdZBpTYbm2Yx4oeP
+         +OKT7sYHP6QvJ/6gynA+sbxfHioeCLo6E3SphsbMdXNtaAhtXDm+vRf1J4UMgCokcI2k
+         +FHv/Twj3CdykTzhYO0vhsTYLv9qMPrYc9XyRBZ/W+c0T7e33NnDuRDmajPltcUcPDwk
+         drWMG2gXPFOl7pzGxXXtUZ/65qvGvQ21tQskOZyxnx2lNDeRcQ8hr/xYfBS1OUIIkrGd
+         HXTg==
+X-Gm-Message-State: AOAM532JQxQHFPDHcIVNyeYAVwH1vh0HLFaxw1/lLkWOyZc2a8WT6jf+
+        Pi93caSxtIffkjSiloC/iIO+DEm8VfBaWU/SOEmbN/MVAjMYh0xLWYygcncPcU6Gz8SWLyWf1Wf
+        maWak0Zd7o7VGysojhMNC4jKFuvyHPUV2jyuC8uUl
+X-Received: by 2002:a05:6512:1291:b0:473:b522:ef58 with SMTP id u17-20020a056512129100b00473b522ef58mr14663348lfs.190.1652148369341;
+        Mon, 09 May 2022 19:06:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyqm9wM4Q4M/oBxtLuElylO6DH3m6+GFVYHnDAHl4WJIlpMcpnYNKA34plV6IrXxJfBaTuguqI4UMAX70BJRQI=
+X-Received: by 2002:a05:6512:1291:b0:473:b522:ef58 with SMTP id
+ u17-20020a056512129100b00473b522ef58mr14663333lfs.190.1652148369130; Mon, 09
+ May 2022 19:06:09 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220404062539.1710-1-jianjay.zhou@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220509131432.16568-1-tangbin@cmss.chinamobile.com>
+In-Reply-To: <20220509131432.16568-1-tangbin@cmss.chinamobile.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 10 May 2022 10:05:58 +0800
+Message-ID: <CACGkMEtVZ7MA5ZU8rogJYRvuD6D0Zm1Dg_LKXJ2NmPhJ6Smi-A@mail.gmail.com>
+Subject: Re: [PATCH] virtio_net: Remove unused case in virtio_skb_set_hash()
+To:     Tang Bin <tangbin@cmss.chinamobile.com>
+Cc:     mst <mst@redhat.com>, davem <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/4 14:25, Jay Zhou wrote:
-> Call trace of PF SRIOV disable:
-> sriov_numvfs_store
->   device_lock <----------------- (1) get the device lock
->     ->sriov_configure # e.g. vfio_pci_sriov_configure
->       sriov_disable
->         pci_cfg_access_lock <--- (4) wait dev->block_cfg_access to be 0
-> 
-> Call trace of PF reset:
-> reset_store
->   pci_reset_function
->     pci_dev_lock
->       pci_cfg_access_lock <----- (2) set dev->block_cfg_access = 1
->       device_lock <------------- (3) want to get the device lock
-> 
-> These two oprations would wait for each other forever if the
-> code execution sequence is (1)(2)(3)(4).
-> 
-> Let's get the device lock and then the config access lock in
-> pci_dev_lock().
-> 
-> Signed-off-by: Jay Zhou <jianjay.zhou@huawei.com>
-
-The patch looks good to me,
-
-Reviewed-by: Yicong Yang <yangyicong@hisilicon.com>
-
-I met the same problem and tried to fix it in the same way. It's worth to be merged if somebody meets
-the same problem again.
-https://lore.kernel.org/linux-pci/1583489997-17156-1-git-send-email-yangyicong@hisilicon.com/
-
+On Mon, May 9, 2022 at 9:17 PM Tang Bin <tangbin@cmss.chinamobile.com> wrote:
+>
+> In this function, "VIRTIO_NET_HASH_REPORT_NONE" is included
+> in "default", so it canbe removed.
+>
+> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
 > ---
->  drivers/pci/pci.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index 9ecce435fb3f..61a6db1d21f6 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -5103,19 +5103,19 @@ static int pci_reset_bus_function(struct pci_dev *dev, bool probe)
->  
->  void pci_dev_lock(struct pci_dev *dev)
->  {
-> -	pci_cfg_access_lock(dev);
->  	/* block PM suspend, driver probe, etc. */
->  	device_lock(&dev->dev);
-> +	pci_cfg_access_lock(dev);
->  }
->  EXPORT_SYMBOL_GPL(pci_dev_lock);
->  
->  /* Return 1 on successful lock, 0 on contention */
->  int pci_dev_trylock(struct pci_dev *dev)
->  {
-> -	if (pci_cfg_access_trylock(dev)) {
-> -		if (device_trylock(&dev->dev))
-> +	if (device_trylock(&dev->dev)) {
-> +		if (pci_cfg_access_trylock(dev))
->  			return 1;
-> -		pci_cfg_access_unlock(dev);
-> +		device_unlock(&dev->dev);
->  	}
->  
->  	return 0;
-> @@ -5124,8 +5124,8 @@ EXPORT_SYMBOL_GPL(pci_dev_trylock);
->  
->  void pci_dev_unlock(struct pci_dev *dev)
->  {
-> -	device_unlock(&dev->dev);
->  	pci_cfg_access_unlock(dev);
-> +	device_unlock(&dev->dev);
->  }
->  EXPORT_SYMBOL_GPL(pci_dev_unlock);
->  
-> 
+>  drivers/net/virtio_net.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 87838cbe3..b3e5d8637 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -1172,7 +1172,6 @@ static void virtio_skb_set_hash(const struct virtio_net_hdr_v1_hash *hdr_hash,
+>         case VIRTIO_NET_HASH_REPORT_IPv6_EX:
+>                 rss_hash_type = PKT_HASH_TYPE_L3;
+>                 break;
+> -       case VIRTIO_NET_HASH_REPORT_NONE:
+>         default:
+>                 rss_hash_type = PKT_HASH_TYPE_NONE;
+
+I wonder if we need to do things in the reverse. Warn for default and
+only set NONE when it's NONE?
+
+Thanks
+
+>         }
+> --
+> 2.20.1.windows.1
+>
+>
+>
+

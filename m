@@ -2,127 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0CD521D42
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:56:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02542521D47
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345343AbiEJPAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 11:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
+        id S1345090AbiEJPBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 11:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345197AbiEJPAf (ORCPT
+        with ESMTP id S1345205AbiEJPAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:00:35 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEF61271B7
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 07:22:15 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id x88so4464588pjj.1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 07:22:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=96fSaQwSEKdzhJug6s/ISEl8NYk3c2RDSas8DqlcA5w=;
-        b=g574joSyahf6XWUX/Lnob9ZLo6UrKXwHHmmJyn3M7gflnngYL0fXMZ1GNnLQlZNRnO
-         lk1H5/5/wVOIblC31ckvcokOutL/YExJkjcuVR3T2aK7vXTFv5WsT2sm9GnRnSlUwAJL
-         GIXZOHO5Rk8fbMXWLU/J8pwIFvck+ueAanIhtgjqHd90RDfeuHLW5zqqUefkfxGxXWdQ
-         Yr2E5nzKPeusenjIgtCSSq6YxaNo97VjySQmB21ZsX7DbJSOQynOuVzf49YfJJhkCQVS
-         7sh9FDYfv60HN0muf43DXOEQ7EI1i4Qkdr0Dq7qcDTmuP6SDwupLx+btugKqr0WD9g9p
-         1iwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=96fSaQwSEKdzhJug6s/ISEl8NYk3c2RDSas8DqlcA5w=;
-        b=77aJjPkR5yTsazI8pd3zSgQlsnsaIcLE2yD32fhDLX+tB9GF0nXqLt6kZL+FbLi6l5
-         XbyFBbKvRu9GPyLqIOszXBPFdXF+hqN50spO13ycoM957BsNIciHAVGd/P6fsCsYXDxG
-         SwXs6uoKMEolCBsswmrnRXglJjOMkfVIwlBnfnDThZtGgKkIFOOrBDFvmGLbpdtj+Eux
-         ATVkE9ObqNrt5DUi3q2zgyupMLaaqIMxhjPEaPNLl8V/LAqc3KxBkM3X2E4usqrqGmP1
-         uCCHI5TMBzEdDSp1lfaJSUVi6gJCymgUax5rh3sz3zVcmv3H+UJsc0CAE+kFWvtbUGF4
-         MxYQ==
-X-Gm-Message-State: AOAM532KlKVZwNDjAb73fwigc15D5AW3dQYzOxCcl/UH5TwOSd3GYrDK
-        E38kW25PiImdxw5prcxe7grAxw==
-X-Google-Smtp-Source: ABdhPJx7PsVQomRvckqYDAybqAGOiMLH95hlWgarTNYXO+eMC+95JlU0QlBLIWIa984tkMCt6p0LIg==
-X-Received: by 2002:a17:90b:3e84:b0:1dc:5942:af0e with SMTP id rj4-20020a17090b3e8400b001dc5942af0emr235327pjb.61.1652192535114;
-        Tue, 10 May 2022 07:22:15 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id p6-20020a170902bd0600b0015e8d4eb265sm2088260pls.175.2022.05.10.07.22.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 07:22:14 -0700 (PDT)
-Date:   Tue, 10 May 2022 14:22:11 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jon Kohler <jon@nutanix.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Balbir Singh <sblbir@amazon.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH v3] x86/speculation, KVM: only IBPB for
- switch_mm_always_ibpb on vCPU load
-Message-ID: <Ynp1E73OZtXudLUH@google.com>
-References: <YmwZYEGtJn3qs0j4@zn.tnic>
- <645E4ED5-F6EE-4F8F-A990-81F19ED82BFA@nutanix.com>
- <Ymw9UZDpXym2vXJs@zn.tnic>
- <YmxKqpWFvdUv+GwJ@google.com>
- <YmxRnwSUBIkOIjLA@zn.tnic>
- <Ymxf2Jnmz5y4CHFN@google.com>
- <YmxlHBsxcIy8uYaB@zn.tnic>
- <YmxzdAbzJkvjXSAU@google.com>
- <Ym0GcKhPZxkcMCYp@zn.tnic>
- <4E46337F-79CB-4ADA-B8C0-009E7500EDF8@nutanix.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Tue, 10 May 2022 11:00:39 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2093.outbound.protection.outlook.com [40.107.255.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B86173356;
+        Tue, 10 May 2022 07:23:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iSVFot9fbyVk2kxB4Qsx2rcKLTSg5mxpuj4xnp7AybjA7RONFRO9LrpdcHyH+VPXNzw6+Z1pDIFc26wGKD3qck+OsU6cllQBFHDVh+2KK+RXVwXDiHhzz0T33yBUfoWylsxSqlPPvFeJqWahN4tQeUqPRCitALwjIwvHITW8VGjGgBdHafNGR9lb6jBTYN/2I03aL2Vo+4Xrb11MI11AzCgU9fG1sxVIxhQUQq1kIJEVWmdyouA+nZ5Grt2gnlxaxSdEv01ilVPVu24BXU9Gu9pNVx9Jm5UnnuXyM0Uy1G+G2k3ol/9iVZDsVov/rRAQAS32YZ7E7WDl5eXEdQkCgA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZHP0ObP+ohnHA57G2i5wBjCghCtWVCrzKqv/Q6fMWvA=;
+ b=W2zoJxmMBOv8/3wND83i+47LM3eXPNcf+AVmAzG4N0iXJwqcmwLWT9u/340LGXdK5hkDnBCYmzJ76I7Y9YuSDaFD3Ret/U4vT5Iw00oIVdNNRi48m3Z0ftFYAIVdFWy59m7BO76bEUXqAGsQgLuJ/BZJFhnX/bp9ktbhvuIm25BZ4xkefsbW3vHUVDu4u9QZOnyIbXZWNqq8YDzgnMTljwSyoyQSzJVbEtxvhGjamsKuhCb14ecavd4QNe0GonRRtYnSuqU0w40ZMyjjAQqavVUroQ6Xr8h1wyH0fxz4ZfBMZ0uoj2p+wjwqGWgPFxXgK3vsPYPwimfO2DX7XsFhdQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZHP0ObP+ohnHA57G2i5wBjCghCtWVCrzKqv/Q6fMWvA=;
+ b=PqKelzSK0B74uZrH5JwcqiaG71m9wRvcUI9+0D3OkCvuMI7b+BdnYco37LV8ICHQmK/n81NoGqT0LMlthDPY34h5u7QoioUP4QBgQS6L+VkK3bytpQxoRbuXgU5EBT4aF1+ubblalZR8q5RtZlFZfpIg322QrEfKDzrOI4wn9GM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
+ PSAPR06MB4056.apcprd06.prod.outlook.com (2603:1096:301:3f::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5227.21; Tue, 10 May 2022 14:22:59 +0000
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::4591:4f3e:f951:6c8c]) by SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::4591:4f3e:f951:6c8c%7]) with mapi id 15.20.5227.022; Tue, 10 May 2022
+ 14:22:59 +0000
+From:   Wan Jiabing <wanjiabing@vivo.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        Antoine Tenart <atenart@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 net] net: phy: mscc: Add error check when __phy_read() failed
+Date:   Tue, 10 May 2022 22:22:45 +0800
+Message-Id: <20220510142247.16071-1-wanjiabing@vivo.com>
+X-Mailer: git-send-email 2.35.1
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <4E46337F-79CB-4ADA-B8C0-009E7500EDF8@nutanix.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR02CA0196.apcprd02.prod.outlook.com
+ (2603:1096:201:21::32) To SG2PR06MB3367.apcprd06.prod.outlook.com
+ (2603:1096:4:78::19)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f6cf24ce-7b85-43dd-22f3-08da329094cd
+X-MS-TrafficTypeDiagnostic: PSAPR06MB4056:EE_
+X-Microsoft-Antispam-PRVS: <PSAPR06MB405667E34BC52F3210FBB2CDABC99@PSAPR06MB4056.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Xqy8EW+BnxBB+zz48MAtFjIPidHUyeT7W//gxBtyKb8CLcCJZRWfvFRIlRmDEBvg28QrXPmXmj5obUJjyhCE5Ek8TJ5BR6gY9JZ4kY6iuzmTnmYWaVAvb2t/HbqzchHePnBSuN14vP9TaYPdrJgmZCKYOyKT3glxk1xSsesYRH4oXeo1PqnBI+ZZuTSrKXfh0X6gPwu63VRk5xidLcMScPDLsIcnHzb94RFGQEmlFnahcs8KdClfw9TSakCu1hPPNsGXmkpaGkzFbu6y4wmH9btr9sPrlQ5+CjTf8noDQNXFScKLbQePOjEykKOA7lX5kB6Tn0kG8Cesa+XPSLOlN6wQRLqReXuuDcx8un4/blDDWWc/uk4/+qUAB+ztO3Cw9vaUSBk/UGi8xJjT8oYg+ADiwmAP3bBiUunNfUO2Syy3SOlwgvxQ71LtjMZXk0TlPTpUA9OpQOHpUT8+KAMzsMQyzR6uprJrNnxC96FbKTAhTRbuqMeM77usxVG7EQUXV6NcWMFrwjI9tQtjZyW0Yp7K3MyRm/0DQZfAVVJeBJ8ROc/49VtrYEUMuiFdhEvExBctLnlxtjyIByP5BajGBWFzkgDRWlqdKi4zSgSU4Z8oS8qyl9Lqn1nLwBHENY1a89hWqUd0syOsmu788MPbzS9DxzzL/t2iPO7J7fhcB+758Ss8RRtiS/QluNY/MbETZ7jluwXZ8+L05k3Smn57nPSyPmcgVkz6m5HOAJ0GvqE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(2616005)(66946007)(66476007)(66556008)(8676002)(83380400001)(1076003)(508600001)(86362001)(6666004)(6512007)(26005)(6486002)(6506007)(316002)(110136005)(52116002)(7416002)(921005)(2906002)(36756003)(5660300002)(38100700002)(38350700002)(8936002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?olXXya/mmu0N9W7hkE4P+KrRFeb3OM1BV12vsiGcYk90sR/uKj6wRjZz8sLk?=
+ =?us-ascii?Q?m0GubB0digv7u/TrG/CAclLgM4LuZ1DyC8nxwDgNxpV4lFVUUmh35C10kLQh?=
+ =?us-ascii?Q?PT1lcjhUzC5ZafowaaUtqeb2yNqIuLVqkXHuM7gfJwiwcJkQtqOzfKSAirMx?=
+ =?us-ascii?Q?JwlioF/QdrhaN1vQ43vxSWql+jVdb7HDstwQ5p9ouQh7nf4k6OCqrj6Q9+gM?=
+ =?us-ascii?Q?VP2f4f/lAcMKHntjx3ECVHPbm7eRn1zAircZwqE1yscSPDipmMUI5LyGOG7r?=
+ =?us-ascii?Q?OIb8+je017gF2MkKpBoscDH1KLE5jsPcwbruqqmB3TRzQ4gxQI0SFb8W5yv/?=
+ =?us-ascii?Q?Ey4QNsTQjDHvLXvjaKelMm3JnoePj+Ry5sU+zJyhA6YfHDp18HuuPvR8S6p6?=
+ =?us-ascii?Q?mr0mTNKHfxhAVAcg/jvf2Aq4esT4PKFaupCKt1sy1+K2ec1/nkdj+IZN8HM0?=
+ =?us-ascii?Q?K7gS/h5xIZLK1wATryoHUILyaFRAOYVdD+ebojOM/WmRNjX3KdmQjEXaBrFy?=
+ =?us-ascii?Q?8g8CYNwsTRx6o7fw8nHL0vDLY7YWwrY5+HsH4tiS3lEF0+blXa8zgAvZjeWN?=
+ =?us-ascii?Q?xRiYGjfd9prTfLjOTe6Pgf4v8xJk7fDUOzH+l4/YzralpnGK5Mha/fFpi9NV?=
+ =?us-ascii?Q?f1PuyOhgRGlmpDYlHh5qHmu8ISr7iw03haYBwA80VmlnulGRyLrYWlG758W3?=
+ =?us-ascii?Q?LZpzuYkYj36xt2wEBViArbuescvddH0BlAatXRWbuZSYxJEFPiNBbTzTgrRH?=
+ =?us-ascii?Q?KF6LN9xtgZHO0adO2MveRksIF0vzRIzFYte+LNktvWtvszjSARDLVwuhrGrA?=
+ =?us-ascii?Q?LIuWSGZQ7SR0LnRwflDkDDpQR5ruw97D9sJwa53QQ+UO6PSXlweMVuMKrMJB?=
+ =?us-ascii?Q?TH2Fkft6T29+daZZbF5gJChIEo6VDVppYPO2PoEuA1JqmezkYO3Au9UPs29v?=
+ =?us-ascii?Q?e0+3FKQhxB7MYdr8NHRDJPbjM7ftAddRkLs1ggpXxw8R43gWfxwmaESk3iAa?=
+ =?us-ascii?Q?G+lTHr9r2yhsQCVfXZRafCZej/z5+dmlIiuRKahdXGeYRrz3H1WiY7/VqBS7?=
+ =?us-ascii?Q?fjgytqDys6H/geO513naSllSWVOTUVdXNc69ar5NGNfDhRyAfEwoy0TEg2FA?=
+ =?us-ascii?Q?DK/v05BoC09ETrFcYmueQ22JFTaesEtQGKNxMFD4Z8sHB7SduAK8O0ueU3qx?=
+ =?us-ascii?Q?8n93ylgqZWjyy6Tx8ncCRqc6ziwJNIJyVN4JcV9w3cLQJN4sCBEVVg6vjfmy?=
+ =?us-ascii?Q?nI9Z6SixoVJx8SZafqzEaaCsedmOaWblFuQI+ZWR3jkhB+SImE9lzw22kRXd?=
+ =?us-ascii?Q?px6wdVNA+/cIkQZxd2llk7BxODJqyXR/RYxCfzlME0oOXxPTgPDXb11dTz7X?=
+ =?us-ascii?Q?tf9HYkktvltL1lLIz5lr/3UZ/9t3Lt3DX6ot/W2KfrEA03p+NPIpT/FNCu+4?=
+ =?us-ascii?Q?CXYUCofNcsEevHGOe0QXDfBMolaNQL+zLxKimRN7YSjfNb/40Ej+hBd6/4OI?=
+ =?us-ascii?Q?gfaG6KUo1LdC+a0eL71by3aXKVrAIZM4Gm2zk1utf9MNbncdIzSpLVYvVmzo?=
+ =?us-ascii?Q?sMgT1wEPzCfZf8snyUysm1Mqj48//fy7fFqcQkwR6R9a3j7VQZH1X5m2ahSm?=
+ =?us-ascii?Q?BG8iCz8OmGebNmYrRyaemJpo7PUOqhbyoER46pdauVezdphmeDZZEZYtV7dp?=
+ =?us-ascii?Q?NlbtwoK2tp2YmmCs8u6L8HAtQxFJah61hJ7kzWyfiv6L8gyZFTzVySsCVkgV?=
+ =?us-ascii?Q?mTb7t+aU6g=3D=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f6cf24ce-7b85-43dd-22f3-08da329094cd
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2022 14:22:58.1528
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dVCVCNx/oVLEXQ+6TmhZvKh64I4n4VkFRpGLucDpnPpdYLZwGFibGEDiOWsFNccajzWulhWdKkD5TPMudJwi1Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR06MB4056
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 30, 2022, Jon Kohler wrote:
-> 
-> > On Apr 30, 2022, at 5:50 AM, Borislav Petkov <bp@alien8.de> wrote:
-> > So let me try to understand this use case: you have a guest and a bunch
-> > of vCPUs which belong to it. And that guest gets switched between those
-> > vCPUs and KVM does IBPB flushes between those vCPUs.
-> > 
-> > So either I'm missing something - which is possible - but if not, that
-> > "protection" doesn't make any sense - it is all within the same guest!
-> > So that existing behavior was silly to begin with so we might just as
-> > well kill it.
-> 
-> Close, its not 1 guest with a bunch of vCPU, its a bunch of guests with
-> a small amount of vCPUs, thats the small nuance here, which is one of 
-> the reasons why this was hard to see from the beginning. 
-> 
-> AFAIK, the KVM IBPB is avoided when switching in between vCPUs
-> belonging to the same vmcs/vmcb (i.e. the same guest), e.g. you could 
-> have one VM highly oversubscribed to the host and you wouldn’t see
-> either the KVM IBPB or the switch_mm IBPB. All good. 
+Calling __phy_read() might return a negative error code. Use 'int'
+to declare variables which call __phy_read() and also add error check
+for them.
 
-No, KVM does not avoid IBPB when switching between vCPUs in a single VM.  Every
-vCPU has a separate VMCS/VMCB, and so the scenario described above where a single
-VM has a bunch of vCPUs running on a limited set of logical CPUs will emit IBPB
-on every single switch.
+The numerous callers of vsc8584_macsec_phy_read() don't expect it to
+fail. So don't return the error code from __phy_read(), but also don't
+return random values if it does fail.
+
+Fixes: fa164e40c53b ("net: phy: mscc: split the driver into separate files")
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+---
+Changelog:
+v2:
+- Sort variable declaration and add a detailed comment.
+---
+ drivers/net/phy/mscc/mscc_macsec.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/phy/mscc/mscc_macsec.c b/drivers/net/phy/mscc/mscc_macsec.c
+index b7b2521c73fb..58ad11a697b6 100644
+--- a/drivers/net/phy/mscc/mscc_macsec.c
++++ b/drivers/net/phy/mscc/mscc_macsec.c
+@@ -22,9 +22,9 @@
+ static u32 vsc8584_macsec_phy_read(struct phy_device *phydev,
+ 				   enum macsec_bank bank, u32 reg)
+ {
+-	u32 val, val_l = 0, val_h = 0;
++	int rc, val, val_l, val_h;
+ 	unsigned long deadline;
+-	int rc;
++	u32 ret = 0;
+ 
+ 	rc = phy_select_page(phydev, MSCC_PHY_PAGE_MACSEC);
+ 	if (rc < 0)
+@@ -47,15 +47,20 @@ static u32 vsc8584_macsec_phy_read(struct phy_device *phydev,
+ 	deadline = jiffies + msecs_to_jiffies(PROC_CMD_NCOMPLETED_TIMEOUT_MS);
+ 	do {
+ 		val = __phy_read(phydev, MSCC_EXT_PAGE_MACSEC_19);
++		if (val < 0)
++			goto failed;
+ 	} while (time_before(jiffies, deadline) && !(val & MSCC_PHY_MACSEC_19_CMD));
+ 
+ 	val_l = __phy_read(phydev, MSCC_EXT_PAGE_MACSEC_17);
+ 	val_h = __phy_read(phydev, MSCC_EXT_PAGE_MACSEC_18);
+ 
++	if (val_l > 0 && val_h > 0)
++		ret = (val_h << 16) | val_l;
++
+ failed:
+ 	phy_restore_page(phydev, rc, rc);
+ 
+-	return (val_h << 16) | val_l;
++	return ret;
+ }
+ 
+ static void vsc8584_macsec_phy_write(struct phy_device *phydev,
+-- 
+2.35.1
+

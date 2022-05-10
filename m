@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A719D521A89
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0303C5216EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245344AbiEJOBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
+        id S242835AbiEJNVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245160AbiEJNif (ORCPT
+        with ESMTP id S242557AbiEJNSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:38:35 -0400
+        Tue, 10 May 2022 09:18:34 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D484226266E;
-        Tue, 10 May 2022 06:27:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C514D7DE21;
+        Tue, 10 May 2022 06:13:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A895B81DA8;
-        Tue, 10 May 2022 13:27:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9997CC385A6;
-        Tue, 10 May 2022 13:27:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 490A2B81CE7;
+        Tue, 10 May 2022 13:13:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BB26C385C9;
+        Tue, 10 May 2022 13:13:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189261;
-        bh=arbyPiAbdTcFiXGN12PlCAgCG+susy9IbWNZhb1R+Hs=;
+        s=korg; t=1652188387;
+        bh=beJbuLc5DeQE1QzkilhzXFk8FrAnqajPtypHf3GrpYA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pnZJmGpcDikHpvVlhLQYvBdMSsj3BmSY2c6vmp2ptzv8yZDPkx4gsUhiNZ586m8X/
-         IFZq9LsbCoIsf7ZYi6OmBS2x7bEHvMXRPudAVJUsd0oGz4JJdU7CMhpvSD87PArmNi
-         0qhLJwIaq79we/2NQ0PDR6lJKLEJRQt43314hkf4=
+        b=q0ZIIVFXFfm1L382MjfVWcpwHH3f6OEqkhDRd8QZ4x02DSXiKx4lwl4ZkPQU9bF58
+         KiiJdIH4xo7UrYWfWQX50/wPznhOHRbSX5vVVbdTe1vRm/PEyfp0Xin7BYsxUhGzQ+
+         3EY7MdQS/YKw2JEyXn2ftBDIEi7xyxWvAEtH62Yo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5.10 27/70] can: isotp: remove re-binding of bound socket
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Armin Wolf <W_Armin@gmx.de>, Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 4.9 56/66] hwmon: (adt7470) Fix warning on module removal
 Date:   Tue, 10 May 2022 15:07:46 +0200
-Message-Id: <20220510130733.665257760@linuxfoundation.org>
+Message-Id: <20220510130731.408091772@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
-References: <20220510130732.861729621@linuxfoundation.org>
+In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
+References: <20220510130729.762341544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,74 +54,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Hartkopp <socketcan@hartkopp.net>
+From: Armin Wolf <W_Armin@gmx.de>
 
-commit 72ed3ee9fa0b461ad086403a8b5336154bd82234 upstream.
+commit 7b2666ce445c700b8dcee994da44ddcf050a0842 upstream.
 
-As a carry over from the CAN_RAW socket (which allows to change the CAN
-interface while mantaining the filter setup) the re-binding of the
-CAN_ISOTP socket needs to take care about CAN ID address information and
-subscriptions. It turned out that this feature is so limited (e.g. the
-sockopts remain fix) that it finally has never been needed/used.
+When removing the adt7470 module, a warning might be printed:
 
-In opposite to the stateless CAN_RAW socket the switching of the CAN ID
-subscriptions might additionally lead to an interrupted ongoing PDU
-reception. So better remove this unneeded complexity.
+do not call blocking ops when !TASK_RUNNING; state=1
+set at [<ffffffffa006052b>] adt7470_update_thread+0x7b/0x130 [adt7470]
 
-Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
-Link: https://lore.kernel.org/all/20220422082337.1676-1-socketcan@hartkopp.net
-Cc: stable@vger.kernel.org
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+This happens because adt7470_update_thread() can leave the kthread in
+TASK_INTERRUPTIBLE state when the kthread is being stopped before
+the call of set_current_state(). Since kthread_exit() might sleep in
+exit_signals(), the warning is printed.
+Fix that by using schedule_timeout_interruptible() and removing
+the call of set_current_state().
+This causes TASK_INTERRUPTIBLE to be set after kthread_should_stop()
+which might cause the kthread to exit.
+
+Reported-by: Zheyu Ma <zheyuma97@gmail.com>
+Fixes: 93cacfd41f82 (hwmon: (adt7470) Allow faster removal)
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+Tested-by: Zheyu Ma <zheyuma97@gmail.com>
+Link: https://lore.kernel.org/r/20220407101312.13331-1-W_Armin@gmx.de
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/can/isotp.c |   22 +++++-----------------
- 1 file changed, 5 insertions(+), 17 deletions(-)
+ drivers/hwmon/adt7470.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -1144,6 +1144,11 @@ static int isotp_bind(struct socket *soc
+--- a/drivers/hwmon/adt7470.c
++++ b/drivers/hwmon/adt7470.c
+@@ -33,6 +33,7 @@
+ #include <linux/kthread.h>
+ #include <linux/slab.h>
+ #include <linux/util_macros.h>
++#include <linux/sched.h>
  
- 	lock_sock(sk);
+ /* Addresses to scan */
+ static const unsigned short normal_i2c[] = { 0x2C, 0x2E, 0x2F, I2C_CLIENT_END };
+@@ -273,11 +274,10 @@ static int adt7470_update_thread(void *p
+ 		adt7470_read_temperatures(client, data);
+ 		mutex_unlock(&data->lock);
  
-+	if (so->bound) {
-+		err = -EINVAL;
-+		goto out;
-+	}
-+
- 	/* do not register frame reception for functional addressing */
- 	if (so->opt.flags & CAN_ISOTP_SF_BROADCAST)
- 		do_rx_reg = 0;
-@@ -1154,10 +1159,6 @@ static int isotp_bind(struct socket *soc
- 		goto out;
+-		set_current_state(TASK_INTERRUPTIBLE);
+ 		if (kthread_should_stop())
+ 			break;
+ 
+-		schedule_timeout(msecs_to_jiffies(data->auto_update_interval));
++		schedule_timeout_interruptible(msecs_to_jiffies(data->auto_update_interval));
  	}
  
--	if (so->bound && addr->can_ifindex == so->ifindex &&
--	    rx_id == so->rxid && tx_id == so->txid)
--		goto out;
--
- 	dev = dev_get_by_index(net, addr->can_ifindex);
- 	if (!dev) {
- 		err = -ENODEV;
-@@ -1184,19 +1185,6 @@ static int isotp_bind(struct socket *soc
- 
- 	dev_put(dev);
- 
--	if (so->bound && do_rx_reg) {
--		/* unregister old filter */
--		if (so->ifindex) {
--			dev = dev_get_by_index(net, so->ifindex);
--			if (dev) {
--				can_rx_unregister(net, dev, so->rxid,
--						  SINGLE_MASK(so->rxid),
--						  isotp_rcv, sk);
--				dev_put(dev);
--			}
--		}
--	}
--
- 	/* switch to new settings */
- 	so->ifindex = ifindex;
- 	so->rxid = rx_id;
+ 	return 0;
 
 

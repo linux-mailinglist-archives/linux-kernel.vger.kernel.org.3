@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B13E521A86
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C8D5219A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:46:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245023AbiEJN5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55166 "EHLO
+        id S244446AbiEJNuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245122AbiEJNid (ORCPT
+        with ESMTP id S243451AbiEJNa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:38:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F84245795;
-        Tue, 10 May 2022 06:27:13 -0700 (PDT)
+        Tue, 10 May 2022 09:30:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE972CC115;
+        Tue, 10 May 2022 06:21:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4304B81DA2;
-        Tue, 10 May 2022 13:27:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05924C385C2;
-        Tue, 10 May 2022 13:27:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D1934616E8;
+        Tue, 10 May 2022 13:21:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE530C385C2;
+        Tue, 10 May 2022 13:21:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189230;
-        bh=3HnBQ7RhhvY/fdtAei+Bol5vyNmEEQsKf84c57Q1evE=;
+        s=korg; t=1652188906;
+        bh=WL0sRRztelCduyY75GlVCGuknG1Ttv5FgWb8a90+HXY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lT8MaNmPRWSqtFr4gX9tfvmriOGqFt4WfFCzW00oPBGfzH2RLRCi9+f66YE2/6xiL
-         YszKSHph94dRNSJyfELV5t1uS8QZJtRVi3BxMFg7aDSGfp3qUxB4raCcwV6VA8sVJ0
-         oz1qpN02JwBvOuwlq1eFQwZ4o9TrFZNzq20H8oRQ=
+        b=NBMJcKNKQZbFfJHTC8fRDMZ8l3kiHvlOv2Pj4VEaEXCS/8WDFOWbBxuIGeKkTi8dQ
+         2ABuKjopwomxLkieC4t9brqCtejyaDJsEVveFXRmQGE30aTJIlTBxy2nPTqjLUUEMd
+         pWMFTgGSI0Udsu0buLJWUBY4hJQXENS+ytHpNcHQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Andy Gospodarek <andrew.gospodarek@broadcom.com>,
-        Michael Chan <michael.chan@broadcom.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 53/70] bnxt_en: Fix unnecessary dropping of RX packets
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Subject: [PATCH 4.19 87/88] PCI: aardvark: Fix reading MSI interrupt number
 Date:   Tue, 10 May 2022 15:08:12 +0200
-Message-Id: <20220510130734.414249197@linuxfoundation.org>
+Message-Id: <20220510130736.258414984@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
-References: <20220510130732.861729621@linuxfoundation.org>
+In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
+References: <20220510130733.735278074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,44 +56,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Chan <michael.chan@broadcom.com>
+From: Pali Rohár <pali@kernel.org>
 
-commit 195af57914d15229186658ed26dab24b9ada4122 upstream.
+commit 805dfc18dd3d4dd97a987d4406593b5a225b1253 upstream.
 
-In bnxt_poll_p5(), we first check cpr->has_more_work.  If it is true,
-we are in NAPI polling mode and we will call __bnxt_poll_cqs() to
-continue polling.  It is possible to exhanust the budget again when
-__bnxt_poll_cqs() returns.
+In advk_pcie_handle_msi() it is expected that when bit i in the W1C
+register PCIE_MSI_STATUS_REG is cleared, the PCIE_MSI_PAYLOAD_REG is
+updated to contain the MSI number corresponding to index i.
 
-We then enter the main while loop to check for new entries in the NQ.
-If we had previously exhausted the NAPI budget, we may call
-__bnxt_poll_work() to process an RX entry with zero budget.  This will
-cause packets to be dropped unnecessarily, thinking that we are in the
-netpoll path.  Fix it by breaking out of the while loop if we need
-to process an RX NQ entry with no budget left.  We will then exit
-NAPI and stay in polling mode.
+Experiments show that this is not so, and instead PCIE_MSI_PAYLOAD_REG
+always contains the number of the last received MSI, overall.
 
-Fixes: 389a877a3b20 ("bnxt_en: Process the NQ under NAPI continuous polling.")
-Reviewed-by: Andy Gospodarek <andrew.gospodarek@broadcom.com>
-Signed-off-by: Michael Chan <michael.chan@broadcom.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Do not read PCIE_MSI_PAYLOAD_REG register for determining MSI interrupt
+number. Since Aardvark already forbids more than 32 interrupts and uses
+own allocated hwirq numbers, the msi_idx already corresponds to the
+received MSI number.
+
+Link: https://lore.kernel.org/r/20220110015018.26359-3-kabel@kernel.org
+Fixes: 8c39d710363c ("PCI: aardvark: Add Aardvark PCI host controller driver")
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Marek Behún <kabel@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/broadcom/bnxt/bnxt.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/pci/controller/pci-aardvark.c |   10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -2575,6 +2575,10 @@ static int bnxt_poll_p5(struct napi_stru
- 			u32 idx = le32_to_cpu(nqcmp->cq_handle_low);
- 			struct bnxt_cp_ring_info *cpr2;
+--- a/drivers/pci/controller/pci-aardvark.c
++++ b/drivers/pci/controller/pci-aardvark.c
+@@ -1035,7 +1035,7 @@ static void advk_pcie_remove_irq_domain(
+ static void advk_pcie_handle_msi(struct advk_pcie *pcie)
+ {
+ 	u32 msi_val, msi_mask, msi_status, msi_idx;
+-	u16 msi_data;
++	int virq;
  
-+			/* No more budget for RX work */
-+			if (budget && work_done >= budget && idx == BNXT_RX_HDL)
-+				break;
-+
- 			cpr2 = cpr->cp_ring_arr[idx];
- 			work_done += __bnxt_poll_work(bp, cpr2,
- 						      budget - work_done);
+ 	msi_mask = advk_readl(pcie, PCIE_MSI_MASK_REG);
+ 	msi_val = advk_readl(pcie, PCIE_MSI_STATUS_REG);
+@@ -1045,13 +1045,9 @@ static void advk_pcie_handle_msi(struct
+ 		if (!(BIT(msi_idx) & msi_status))
+ 			continue;
+ 
+-		/*
+-		 * msi_idx contains bits [4:0] of the msi_data and msi_data
+-		 * contains 16bit MSI interrupt number
+-		 */
+ 		advk_writel(pcie, BIT(msi_idx), PCIE_MSI_STATUS_REG);
+-		msi_data = advk_readl(pcie, PCIE_MSI_PAYLOAD_REG) & PCIE_MSI_DATA_MASK;
+-		generic_handle_irq(msi_data);
++		virq = irq_find_mapping(pcie->msi_inner_domain, msi_idx);
++		generic_handle_irq(virq);
+ 	}
+ 
+ 	advk_writel(pcie, PCIE_ISR0_MSI_INT_PENDING,
 
 

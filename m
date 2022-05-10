@@ -2,191 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C2315225E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 033355225ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232599AbiEJUyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 16:54:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56812 "EHLO
+        id S233558AbiEJUyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 16:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiEJUyG (ORCPT
+        with ESMTP id S232586AbiEJUyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 16:54:06 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21DFD231CB5
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:54:05 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id ks9so253554ejb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:54:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ztZp3U2l6hqvTD2+MJlZoHDiQdWoIYQvaGE8e6p4ip4=;
-        b=npgdfB7ICEKnoahuzW9AM7wqnGmzxTA0armBndcv2WnzxipFQH3l2o1BkNutsuKIjo
-         PEizIjYEL/eXATkpMXxtht5LS3oeX9odrx9HgtVUa9vWSIq2abNI0Fd82UAgH8oRMNFC
-         0Och3P5s8gH2H0r/KkktR6LhIc2zgyXfLb2YE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ztZp3U2l6hqvTD2+MJlZoHDiQdWoIYQvaGE8e6p4ip4=;
-        b=55aBVtAKFMN9Q0QJ+4q67XTjy4EexN9uikRmdBB+UKcYBI+lgTV/5tX6mll6W40+g4
-         7vWmAvpVNZWcFugY1/Aq28Tlx6eKTgF3JzaCEpvuxzpYL9aZj3tx9kKpA/udBXgv4BQ1
-         Zl+tVl1DJ+tEtxwmwLymaireD/9wFihahQqv8LE5WjUUireOGGEiI4sMSEmme2jLbowu
-         CKxe/TT85Jd02IaThgvft2dqQQGxOc+5JY7nfL3aixCarGc4QZmTkFKJNv/pD8dOevZt
-         bkEC0vwGW0nl/CdU0m0dQHHjwZJtjCxjR7oCpjRlhaiKLnPDOeuBFZQkWdL1KLjUsDq6
-         hJAA==
-X-Gm-Message-State: AOAM5305ia/GObG3Ul6bJlCgqlTZ/e0frZIoMca8usISQQwThs5BpUpN
-        g4m853fSxFWeZsbCTPoWgBOv0wjVFiiWtYOJ
-X-Google-Smtp-Source: ABdhPJyDZ62IwCV0SsCJyd1Kfb8wlofPqcaWLdcHbBw4JUOrI7mjkPeiz5/JvnUymVlLTTZng7DxCg==
-X-Received: by 2002:a17:907:629c:b0:6e1:6ad:5dd8 with SMTP id nd28-20020a170907629c00b006e106ad5dd8mr20330316ejc.641.1652216043199;
-        Tue, 10 May 2022 13:54:03 -0700 (PDT)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
-        by smtp.gmail.com with ESMTPSA id i23-20020a1709064ed700b006f3ef214e52sm132951ejv.184.2022.05.10.13.54.02
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 13:54:02 -0700 (PDT)
-Received: by mail-wr1-f41.google.com with SMTP id t6so267138wra.4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:54:02 -0700 (PDT)
-X-Received: by 2002:a05:6000:2c1:b0:20c:5e37:3ed1 with SMTP id
- o1-20020a05600002c100b0020c5e373ed1mr19537800wry.342.1652216041708; Tue, 10
- May 2022 13:54:01 -0700 (PDT)
+        Tue, 10 May 2022 16:54:36 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9574925A78A
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:54:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652216075; x=1683752075;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=sWidDDlaxXBpIrGdGBuJPNof+cMW68Ey+lvsFm+Kw04=;
+  b=hp3QPprPCxKh9RD+lWj+NrMRGW4Isx7F1AXBsKwLjlPWs+T+6ml0WoYk
+   Gno8+WIkGblYrd88vKZjtsH4Mx05gZR3+FQkITSRqNABSqK6Df5bjKLE+
+   wKtdy4m47NtDdMJp0L4WR/UUFJlzlMWfoCfxYnF9f3C9SMSburC7BsPFS
+   wEBMRenwxYQ0kAOf0dPu1Mn7swEG9+5sxchOmU8jQuINhH32cc4dz1kFs
+   qRv17HM3rJyqUkUqpABtKlIE3uc8d734l8CRJ0TDnZKkW+uvkQcLNTY/1
+   qZ+BKgh3XhxiaKPdmuUUW0Az+69qzJrgC5h2RWjAW7CLN0q/5l7JAxXHQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="251549769"
+X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
+   d="scan'208";a="251549769"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 13:54:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
+   d="scan'208";a="593753531"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 10 May 2022 13:54:33 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1noWsK-000IMu-Ca;
+        Tue, 10 May 2022 20:54:32 +0000
+Date:   Wed, 11 May 2022 04:54:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>
+Subject: [akpm-mm:mm-unstable 175/431] mm/madvise.c:632:8: error: call to
+ undeclared function 'is_swapin_error_entry'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202205110431.fazG1wsY-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220426132121.RFC.1.I31ec454f8d4ffce51a7708a8092f8a6f9c929092@changeid>
- <CAD=FV=XViHtOoQH3fm4yoRcUAkLkf0Wf4zPXUH0Zq5_09tZmjw@mail.gmail.com>
- <874k22lxmh.fsf@intel.com> <8ea03441-b835-f5db-5cc3-85e5330dfe3f@quicinc.com>
-In-Reply-To: <8ea03441-b835-f5db-5cc3-85e5330dfe3f@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 10 May 2022 13:53:48 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UBTEAQD+49xwFM4UdzD2dqQ7WkpNYtO=JRTJwfRWo1Yg@mail.gmail.com>
-Message-ID: <CAD=FV=UBTEAQD+49xwFM4UdzD2dqQ7WkpNYtO=JRTJwfRWo1Yg@mail.gmail.com>
-Subject: Re: [RFC PATCH] drm/edid: drm_add_modes_noedid() should set lowest
- resolution as preferred
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+head:   584a50635cc1deee2eeab5a17dfdcf9db7add21b
+commit: 8296b60c4ec05505344455818a30cb2774304acd [175/431] mm/madvise: free hwpoison and swapin error entry in madvise_free_pte_range
+config: arm-randconfig-r015-20220509 (https://download.01.org/0day-ci/archive/20220511/202205110431.fazG1wsY-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?id=8296b60c4ec05505344455818a30cb2774304acd
+        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
+        git fetch --no-tags akpm-mm mm-unstable
+        git checkout 8296b60c4ec05505344455818a30cb2774304acd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-On Fri, May 6, 2022 at 9:33 AM Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
->
-> Hi Jani
->
-> On 5/6/2022 4:16 AM, Jani Nikula wrote:
-> > On Thu, 05 May 2022, Doug Anderson <dianders@chromium.org> wrote:
-> >> Ville,
-> >>
-> >> On Tue, Apr 26, 2022 at 1:21 PM Douglas Anderson <dianders@chromium.org> wrote:
-> >>>
-> >>> If we're unable to read the EDID for a display because it's corrupt /
-> >>> bogus / invalid then we'll add a set of standard modes for the
-> >>> display. When userspace looks at these modes it doesn't really have a
-> >>> good concept for which mode to pick and it'll likely pick the highest
-> >>> resolution one by default. That's probably not ideal because the modes
-> >>> were purely guesses on the part of the Linux kernel.
-> >>>
-> >>> Let's instead set 640x480 as the "preferred" mode when we have no EDID.
-> >>>
-> >>> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> >>> ---
-> >>>
-> >>>   drivers/gpu/drm/drm_edid.c | 9 +++++++++
-> >>>   1 file changed, 9 insertions(+)
-> >>
-> >> Someone suggested that you might have an opinion on this patch and
-> >> another one I posted recently [1]. Do you have any thoughts on it?
-> >> Just to be clear: I'm hoping to land _both_ this patch and [1]. If you
-> >> don't have an opinion, that's OK too.
-> >>
-> >> [1] https://lore.kernel.org/r/20220426114627.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid
-> >
-> > There are a number of drivers with combos:
-> >
-> >       drm_add_modes_noedid()
-> >       drm_set_preferred_mode()
-> >
-> > which I think would be affected by the change. Perhaps you should just
-> > call drm_set_preferred_mode() in your referenced patch?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I'm going to do that and I think it works out pretty well. Patch is at:
+Note: the akpm-mm/mm-unstable HEAD 584a50635cc1deee2eeab5a17dfdcf9db7add21b builds fine.
+      It only hurts bisectability.
 
-https://lore.kernel.org/r/20220510135101.v2.1.I31ec454f8d4ffce51a7708a8092f8a6f9c929092@changeid
+All errors (new ones prefixed by >>):
+
+>> mm/madvise.c:632:8: error: call to undeclared function 'is_swapin_error_entry'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                      is_swapin_error_entry(entry)) {
+                                      ^
+   1 error generated.
 
 
-> So it seems like many drivers handle the !edid case within their
-> respective get_modes() call which probably is because they know the max
-> capability of their connector and because they know which mode should be
-> set as preferred. But at the same time, perhaps the code below which
-> handles the count == 0 case should be changed like below to make sure we
-> are within the max_width/height of the connector (to handle the first
-> condition)?
->
-> diff --git a/drivers/gpu/drm/drm_probe_helper.c
-> b/drivers/gpu/drm/drm_probe_helper.c
-> index 682359512996..6eb89d90777b 100644
-> --- a/drivers/gpu/drm/drm_probe_helper.c
-> +++ b/drivers/gpu/drm/drm_probe_helper.c
-> @@ -517,7 +517,8 @@ int drm_helper_probe_single_connector_modes(struct
-> drm_connector *connector,
->
->          if (count == 0 && (connector->status ==
-> connector_status_connected ||
->                             connector->status == connector_status_unknown))
-> -               count = drm_add_modes_noedid(connector, 1024, 768);
-> +               count = drm_add_modes_noedid(connector,
-> connector->dev->mode_config.max_width,
-> +                               connector->dev->mode_config.max_height);
->          count += drm_helper_probe_add_cmdline_mode(connector);
->          if (count == 0)
->                  goto prune;
->
->
-> > Alternatively, perhaps drm_set_preferred_mode() should erase the
-> > previous preferred mode(s) if it finds a matching new preferred mode.
-> >
->
-> But still yes, even if we change it like above perhaps for other non-DP
-> cases its still better to allow individual drivers to pick their
-> preferred modes.
->
-> If we call drm_set_preferred_mode() in the referenced patch, it will not
-> address the no EDID cases because the patch comes into picture when
-> there was a EDID with some modes but not with 640x480.
+vim +/is_swapin_error_entry +632 mm/madvise.c
 
-I'm not sure I understand the above paragraph. I think the "there's an
-EDID but no 640x480" is handled by my other patch [1]. Here we're only
-worried about the "no EDID" case, right?
+   587	
+   588	static int madvise_free_pte_range(pmd_t *pmd, unsigned long addr,
+   589					unsigned long end, struct mm_walk *walk)
+   590	
+   591	{
+   592		struct mmu_gather *tlb = walk->private;
+   593		struct mm_struct *mm = tlb->mm;
+   594		struct vm_area_struct *vma = walk->vma;
+   595		spinlock_t *ptl;
+   596		pte_t *orig_pte, *pte, ptent;
+   597		struct page *page;
+   598		int nr_swap = 0;
+   599		unsigned long next;
+   600	
+   601		next = pmd_addr_end(addr, end);
+   602		if (pmd_trans_huge(*pmd))
+   603			if (madvise_free_huge_pmd(tlb, vma, pmd, addr, next))
+   604				goto next;
+   605	
+   606		if (pmd_trans_unstable(pmd))
+   607			return 0;
+   608	
+   609		tlb_change_page_size(tlb, PAGE_SIZE);
+   610		orig_pte = pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
+   611		flush_tlb_batched_pending(mm);
+   612		arch_enter_lazy_mmu_mode();
+   613		for (; addr != end; pte++, addr += PAGE_SIZE) {
+   614			ptent = *pte;
+   615	
+   616			if (pte_none(ptent))
+   617				continue;
+   618			/*
+   619			 * If the pte has swp_entry, just clear page table to
+   620			 * prevent swap-in which is more expensive rather than
+   621			 * (page allocation + zeroing).
+   622			 */
+   623			if (!pte_present(ptent)) {
+   624				swp_entry_t entry;
+   625	
+   626				entry = pte_to_swp_entry(ptent);
+   627				if (!non_swap_entry(entry)) {
+   628					nr_swap--;
+   629					free_swap_and_cache(entry);
+   630					pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
+   631				} else if (is_hwpoison_entry(entry) ||
+ > 632					   is_swapin_error_entry(entry)) {
+   633					pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
+   634				}
+   635				continue;
+   636			}
+   637	
+   638			page = vm_normal_page(vma, addr, ptent);
+   639			if (!page)
+   640				continue;
+   641	
+   642			/*
+   643			 * If pmd isn't transhuge but the page is THP and
+   644			 * is owned by only this process, split it and
+   645			 * deactivate all pages.
+   646			 */
+   647			if (PageTransCompound(page)) {
+   648				if (page_mapcount(page) != 1)
+   649					goto out;
+   650				get_page(page);
+   651				if (!trylock_page(page)) {
+   652					put_page(page);
+   653					goto out;
+   654				}
+   655				pte_unmap_unlock(orig_pte, ptl);
+   656				if (split_huge_page(page)) {
+   657					unlock_page(page);
+   658					put_page(page);
+   659					orig_pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
+   660					goto out;
+   661				}
+   662				unlock_page(page);
+   663				put_page(page);
+   664				orig_pte = pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
+   665				pte--;
+   666				addr -= PAGE_SIZE;
+   667				continue;
+   668			}
+   669	
+   670			VM_BUG_ON_PAGE(PageTransCompound(page), page);
+   671	
+   672			if (PageSwapCache(page) || PageDirty(page)) {
+   673				if (!trylock_page(page))
+   674					continue;
+   675				/*
+   676				 * If page is shared with others, we couldn't clear
+   677				 * PG_dirty of the page.
+   678				 */
+   679				if (page_mapcount(page) != 1) {
+   680					unlock_page(page);
+   681					continue;
+   682				}
+   683	
+   684				if (PageSwapCache(page) && !try_to_free_swap(page)) {
+   685					unlock_page(page);
+   686					continue;
+   687				}
+   688	
+   689				ClearPageDirty(page);
+   690				unlock_page(page);
+   691			}
+   692	
+   693			if (pte_young(ptent) || pte_dirty(ptent)) {
+   694				/*
+   695				 * Some of architecture(ex, PPC) don't update TLB
+   696				 * with set_pte_at and tlb_remove_tlb_entry so for
+   697				 * the portability, remap the pte with old|clean
+   698				 * after pte clearing.
+   699				 */
+   700				ptent = ptep_get_and_clear_full(mm, addr, pte,
+   701								tlb->fullmm);
+   702	
+   703				ptent = pte_mkold(ptent);
+   704				ptent = pte_mkclean(ptent);
+   705				set_pte_at(mm, addr, pte, ptent);
+   706				tlb_remove_tlb_entry(tlb, pte, addr);
+   707			}
+   708			mark_page_lazyfree(page);
+   709		}
+   710	out:
+   711		if (nr_swap) {
+   712			if (current->mm == mm)
+   713				sync_mm_rss(mm);
+   714	
+   715			add_mm_counter(mm, MM_SWAPENTS, nr_swap);
+   716		}
+   717		arch_leave_lazy_mmu_mode();
+   718		pte_unmap_unlock(orig_pte, ptl);
+   719		cond_resched();
+   720	next:
+   721		return 0;
+   722	}
+   723	
 
-
-> So i think the second proposal is a good one. It will cover existing
-> users of drm_set_preferred_mode() as typically its called after
-> drm_add_modes_noedid() which means the existing users want to "override"
-> their preferred mode.
-
-I looked at this, and I'm pretty sure that we can't clear the
-preferred modes. It looks like it's possible for there to be more than
-one preferred mode and I'm worried about borking that up.
-
-[1] https://lore.kernel.org/r/20220510131309.v2.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid
-
--Doug
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

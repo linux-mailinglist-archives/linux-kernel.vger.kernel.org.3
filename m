@@ -2,103 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 323525215EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A6B5215F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242036AbiEJMzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 08:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40028 "EHLO
+        id S242048AbiEJMzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 08:55:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242043AbiEJMzE (ORCPT
+        with ESMTP id S242059AbiEJMzK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 08:55:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF2EB2B94EE
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:50:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652187030;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xkxzad1cbht/jlusqrH8a1D+QFGOt7FrMJEjOw9H5po=;
-        b=HHHf8Isqc8ai/eA1nvXoycUo6wYw6T0TOWn5/O9tuX/YnrRGyzkr+wn0abuAND8kawzkC9
-        R7+WJFqnjWlDzOIuumrruUXLnbAQtW2NiJCexkc2XKNxXl6Asv5DbRylRTqcYtbXz+HZcZ
-        fN7VAMzEliLQPWBxnSxlETBL5ZCQJ6M=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-210-Isfs8HFjNPW5aaZjgDRhpA-1; Tue, 10 May 2022 08:50:20 -0400
-X-MC-Unique: Isfs8HFjNPW5aaZjgDRhpA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1F3C71C06910;
-        Tue, 10 May 2022 12:50:19 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.37.67])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 483D714C1D4D;
-        Tue, 10 May 2022 12:50:16 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20220509074028.74954-3-jefflexu@linux.alibaba.com>
-References: <20220509074028.74954-3-jefflexu@linux.alibaba.com> <20220509074028.74954-1-jefflexu@linux.alibaba.com>
-To:     Jeffle Xu <jefflexu@linux.alibaba.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
-        yinxin.x@bytedance.com, zhangjiachen.jaycee@bytedance.com,
-        zhujia.zj@bytedance.com
-Subject: Re: [PATCH v11 02/22] cachefiles: notify the user daemon when looking up cookie
+        Tue, 10 May 2022 08:55:10 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DE351DE57D
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:50:38 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id qe3-20020a17090b4f8300b001dc24e4da73so1662896pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:50:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fzxrrRn7cvywNO0Eg0g8MebJNrUAMkIxCPWEMLe1ccY=;
+        b=Knxf+25kcpEt1lD1GjOJabs6ZQCKEJQ1n2FOsMOb8tgxCcfH/p+ESdNWzCoSL1+JZf
+         GJeXvj2N86c0tABjp6OcRXyDPuRRZH4Yl4mxe8CZCRmHyA7Ih6t82i+FRuPur6OIsTKs
+         N+Dv4oCnBx00eIAA2ZFDmqu2KaLd8ravhRD89bEV8ZA/N73jpbgm1KkcJqJ8hwIMU52U
+         KNFtaLh4+J6omGoToE9+9ufHGmSdB9xDT/7pp8dUUM2EWRnB/+j/68PY42brWlMwKkQF
+         xvzRor0v+R8WiTFLbSeykXRu6H3uQo+Q5NcjcJfGoIJOYL28BR6tHhL4YMI1qSed5GRa
+         8Pug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fzxrrRn7cvywNO0Eg0g8MebJNrUAMkIxCPWEMLe1ccY=;
+        b=KaFG0G6HV/NuvygrNMNe1bjFBvOhwo/+Sb4RQW+XpQqPFhjMqnQpTT3fVxTlN7XAL2
+         QSUVxddX4gXuJQ5GeW4P9Ab4pTZlSqUoQWFVFJRd+vdx9VM84EUNkLgQeomUDEK5GGl1
+         EgrqqN8HAfiGnMP2xV8XMZgId63oEU5EhE8TunWv+Mipov2M6Y2YG/F/F1QvAXydTJKL
+         F0gI/quFQ4Y3gJ3rV4a54Vi57zxSLOUnrc08QQbuWQO96jlFkSzS+Wxk1qSV5OWysmaD
+         eF0y7WFMFd4XJPhk3th+HHjXJs0YRW8qlQpC+q0I49wFDq3J6zhRDysYZt0LrHVzfTMX
+         PKpw==
+X-Gm-Message-State: AOAM531i+fvv/NXjvmI8f+VnNGk4muABIStkaK6AORI1BYhJ2tlvctOW
+        DrMi17fspVPhknZTnPinZR2yFg==
+X-Google-Smtp-Source: ABdhPJz9xpmarjEYY69KKbBo6OrTUj6+f98YhVpTCwrY6O0JPMtCCCwu9m5ErVPx4i80Fdv6IHt7dg==
+X-Received: by 2002:a17:902:9887:b0:151:6e1c:7082 with SMTP id s7-20020a170902988700b001516e1c7082mr20228734plp.162.1652187037457;
+        Tue, 10 May 2022 05:50:37 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id ot17-20020a17090b3b5100b001dc4d22c0a7sm1719430pjb.10.2022.05.10.05.50.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 05:50:37 -0700 (PDT)
+Message-ID: <1afd2c01-69b3-ab8f-6bfe-118e3e56001c@kernel.dk>
+Date:   Tue, 10 May 2022 06:50:35 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3509080.1652187015.1@warthog.procyon.org.uk>
-Date:   Tue, 10 May 2022 13:50:15 +0100
-Message-ID: <3509081.1652187015@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [RFC PATCH 0/2] sbitmap: NUMA node spreading
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>, linux-block@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+References: <1652181274-136198-1-git-send-email-john.garry@huawei.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <1652181274-136198-1-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeffle Xu <jefflexu@linux.alibaba.com> wrote:
+On 5/10/22 5:14 AM, John Garry wrote:
+> Hi Jens, guys,
+> 
+> I am sending this as an RFC to see if there is any future in it or ideas
+> on how to make better. I also need to improve some items (as mentioned in
+> 2/2 commit message) and test a lot more.
+> 
+> The general idea is that we change from allocating a single array of
+> sbitmap words to allocating an sub-array per NUMA node. And then each CPU
+> in that node is hinted to use that sub-array
+> 
+> Initial performance looks decent.
+> 
+> Some figures:
+> System: 4-nodes (with memory on all nodes), 128 CPUs
+> 
+> null blk config block:
+> 20 devs, submit_queues=NR_CPUS, shared_tags, shared_tag_bitmap,
+> hw_queue_depth=256
+> 
+> fio config:
+> bs=4096, iodepth=128, numjobs=10, cpus_allowed_policy=split, rw=read,
+> ioscheduler=none
+> 
+> Before:
+> 7130K
+> 
+> After:
+> 7630K
+> 
+> So a +7% IOPS gain.
 
-> Fscache/CacheFiles used to serve as a local cache for a remote
-> networking fs. A new on-demand read mode will be introduced for
-> CacheFiles, which can boost the scenario where on-demand read semantics
-> are needed, e.g. container image distribution.
-> 
-> The essential difference between these two modes is seen when a cache
-> miss occurs: In the original mode, the netfs will fetch the data from
-> the remote server and then write it to the cache file; in on-demand
-> read mode, fetching the data and writing it into the cache is delegated
-> to a user daemon.
-> 
-> As the first step, notify the user daemon when looking up cookie. In
-> this case, an anonymous fd is sent to the user daemon, through which the
-> user daemon can write the fetched data to the cache file. Since the user
-> daemon may move the anonymous fd around, e.g. through dup(), an object
-> ID uniquely identifying the cache file is also attached.
-> 
-> Also add one advisory flag (FSCACHE_ADV_WANT_CACHE_SIZE) suggesting that
-> the cache file size shall be retrieved at runtime. This helps the
-> scenario where one cache file contains multiple netfs files, e.g. for
-> the purpose of deduplication. In this case, netfs itself has no idea the
-> size of the cache file, whilst the user daemon should give the hint on
-> it.
-> 
-> Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
+What does the comparison run on a non-NUMA non-shared queue look like?
+Because I bet it'd be slower.
 
-Acked-by: David Howells <dhowells@redhat.com>
+To be honest, I don't like this approach at all. It makes the normal
+case quite a bit slower by having an extra layer of indirection for the
+word, that's quite a bit of extra cost. It doesn't seem like a good
+approach for the issue, as it pessimizes the normal fast case.
+
+Spreading the memory out does probably make sense, but we need to retain
+the fast normal case. Making sbitmap support both, selected at init
+time, would be far more likely to be acceptable imho.
+
+-- 
+Jens Axboe
 

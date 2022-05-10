@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A29521AFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 467E3521C11
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245518AbiEJOG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:06:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53226 "EHLO
+        id S242979AbiEJO2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243499AbiEJNmd (ORCPT
+        with ESMTP id S245531AbiEJN6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:42:33 -0400
+        Tue, 10 May 2022 09:58:00 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9DF31908;
-        Tue, 10 May 2022 06:30:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168C18B0B8;
+        Tue, 10 May 2022 06:39:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 54AFFB81DAB;
-        Tue, 10 May 2022 13:30:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FB9EC385C9;
-        Tue, 10 May 2022 13:30:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD66CB81DC2;
+        Tue, 10 May 2022 13:39:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21114C385A6;
+        Tue, 10 May 2022 13:39:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189446;
-        bh=S6iESqWsvrhbvbkUTioFW+6EaW8QdM0/2OaPIP0PLMY=;
+        s=korg; t=1652189968;
+        bh=ZS4YX0gYWuUArXMDi1K/gNPON1wBSM2zlX0d9VfYLWk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ghDX50oPwo/UEfevOgg6nf1FaKGPosw2M4btrXqnbkoT4pD2GqEvPd10Gu6655+yg
-         B+aGngth4VMrx8JFd3O4AuXn5c6f4FBxreizL+jIN4KdO+aNZg0FCxU66YNF1ky+6d
-         I8YBK6apSIs5gQUttdsqNOGJSTsHh40B9S8C/vJk=
+        b=FqM4/exug2zj0F5SeOvRLTWVPBSC17XIiO78jbQFYwZU9EuE4NWRtpLCsKHUvIdAV
+         ztF7Bc7YMgfhVPbhZ2KFan77+FgqSKrYkmiNrXKfz8M5CJCqkxvD5MYy5ld2NavYDu
+         V0SN0vMnlWMG+eDBDbkfxlpSyPSV69ExH8toTEC8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: [PATCH 5.15 054/135] selftests/seccomp: Dont call read() on TTY from background pgrp
+        stable@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 5.17 046/140] can: isotp: remove re-binding of bound socket
 Date:   Tue, 10 May 2022 15:07:16 +0200
-Message-Id: <20220510130741.955512439@linuxfoundation.org>
+Message-Id: <20220510130742.939072513@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,73 +54,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jann Horn <jannh@google.com>
+From: Oliver Hartkopp <socketcan@hartkopp.net>
 
-commit 2bfed7d2ffa5d86c462d3e2067f2832eaf8c04c7 upstream.
+commit 72ed3ee9fa0b461ad086403a8b5336154bd82234 upstream.
 
-Since commit 92d25637a3a4 ("kselftest: signal all child processes"), tests
-are executed in background process groups. This means that trying to read
-from stdin now throws SIGTTIN when stdin is a TTY, which breaks some
-seccomp selftests that try to use read(0, NULL, 0) as a dummy syscall.
+As a carry over from the CAN_RAW socket (which allows to change the CAN
+interface while mantaining the filter setup) the re-binding of the
+CAN_ISOTP socket needs to take care about CAN ID address information and
+subscriptions. It turned out that this feature is so limited (e.g. the
+sockopts remain fix) that it finally has never been needed/used.
 
-The simplest way to fix that is probably to just use -1 instead of 0 as
-the dummy read()'s FD.
+In opposite to the stateless CAN_RAW socket the switching of the CAN ID
+subscriptions might additionally lead to an interrupted ongoing PDU
+reception. So better remove this unneeded complexity.
 
-Fixes: 92d25637a3a4 ("kselftest: signal all child processes")
-Signed-off-by: Jann Horn <jannh@google.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20220319010011.1374622-1-jannh@google.com
+Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
+Link: https://lore.kernel.org/all/20220422082337.1676-1-socketcan@hartkopp.net
+Cc: stable@vger.kernel.org
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/seccomp/seccomp_bpf.c |   10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ net/can/isotp.c |   22 +++++-----------------
+ 1 file changed, 5 insertions(+), 17 deletions(-)
 
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -955,7 +955,7 @@ TEST(ERRNO_valid)
- 	ASSERT_EQ(0, ret);
+--- a/net/can/isotp.c
++++ b/net/can/isotp.c
+@@ -1146,6 +1146,11 @@ static int isotp_bind(struct socket *soc
  
- 	EXPECT_EQ(parent, syscall(__NR_getppid));
--	EXPECT_EQ(-1, read(0, NULL, 0));
-+	EXPECT_EQ(-1, read(-1, NULL, 0));
- 	EXPECT_EQ(E2BIG, errno);
- }
+ 	lock_sock(sk);
  
-@@ -974,7 +974,7 @@ TEST(ERRNO_zero)
++	if (so->bound) {
++		err = -EINVAL;
++		goto out;
++	}
++
+ 	/* do not register frame reception for functional addressing */
+ 	if (so->opt.flags & CAN_ISOTP_SF_BROADCAST)
+ 		do_rx_reg = 0;
+@@ -1156,10 +1161,6 @@ static int isotp_bind(struct socket *soc
+ 		goto out;
+ 	}
  
- 	EXPECT_EQ(parent, syscall(__NR_getppid));
- 	/* "errno" of 0 is ok. */
--	EXPECT_EQ(0, read(0, NULL, 0));
-+	EXPECT_EQ(0, read(-1, NULL, 0));
- }
+-	if (so->bound && addr->can_ifindex == so->ifindex &&
+-	    rx_id == so->rxid && tx_id == so->txid)
+-		goto out;
+-
+ 	dev = dev_get_by_index(net, addr->can_ifindex);
+ 	if (!dev) {
+ 		err = -ENODEV;
+@@ -1186,19 +1187,6 @@ static int isotp_bind(struct socket *soc
  
- /*
-@@ -995,7 +995,7 @@ TEST(ERRNO_capped)
- 	ASSERT_EQ(0, ret);
+ 	dev_put(dev);
  
- 	EXPECT_EQ(parent, syscall(__NR_getppid));
--	EXPECT_EQ(-1, read(0, NULL, 0));
-+	EXPECT_EQ(-1, read(-1, NULL, 0));
- 	EXPECT_EQ(4095, errno);
- }
- 
-@@ -1026,7 +1026,7 @@ TEST(ERRNO_order)
- 	ASSERT_EQ(0, ret);
- 
- 	EXPECT_EQ(parent, syscall(__NR_getppid));
--	EXPECT_EQ(-1, read(0, NULL, 0));
-+	EXPECT_EQ(-1, read(-1, NULL, 0));
- 	EXPECT_EQ(12, errno);
- }
- 
-@@ -2579,7 +2579,7 @@ void *tsync_sibling(void *data)
- 	ret = prctl(PR_GET_NO_NEW_PRIVS, 0, 0, 0, 0);
- 	if (!ret)
- 		return (void *)SIBLING_EXIT_NEWPRIVS;
--	read(0, NULL, 0);
-+	read(-1, NULL, 0);
- 	return (void *)SIBLING_EXIT_UNKILLED;
- }
- 
+-	if (so->bound && do_rx_reg) {
+-		/* unregister old filter */
+-		if (so->ifindex) {
+-			dev = dev_get_by_index(net, so->ifindex);
+-			if (dev) {
+-				can_rx_unregister(net, dev, so->rxid,
+-						  SINGLE_MASK(so->rxid),
+-						  isotp_rcv, sk);
+-				dev_put(dev);
+-			}
+-		}
+-	}
+-
+ 	/* switch to new settings */
+ 	so->ifindex = ifindex;
+ 	so->rxid = rx_id;
 
 

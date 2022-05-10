@@ -2,126 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3337B52207F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2895652208D
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346959AbiEJQDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 12:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49670 "EHLO
+        id S240397AbiEJQE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 12:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346723AbiEJP6m (ORCPT
+        with ESMTP id S1346995AbiEJQBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:58:42 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0425113F1D7
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:51:36 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id j10-20020a17090a94ca00b001dd2131159aso2399441pjw.0
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:51:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PqrBku7yWCns4CXdaKkexOpRPKx78T35A2SXeO5Nj2E=;
-        b=H+qXQc4zr8F6UfoAgbi5D//b4XzaqZVmA+b7sInWlNzEN6NONMtGhp4uLT3EhXky0B
-         F2ykJK18cz68RmJacrLVeTIKJsx2twiKIDeaoobGkT13lMMLzxjonor+gFOXjuv2eiFf
-         alcejIWCmMvJy5lI8HJ2nUM36sWK7biyf10tQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PqrBku7yWCns4CXdaKkexOpRPKx78T35A2SXeO5Nj2E=;
-        b=2iYsZGiPm9ndk+mhRzzX8puv8dWGOw5N1+iJWL6l3vF1WPrSXJsi9TqKlk9yj6MoRQ
-         MYVP2nIL1r37q3ggAZfWGT5l8AKeiQL3m4JdpeE8oZW2eQhrALbZ4eYjeWVjTntXCfal
-         L4rAm0elUL/RebvcML2p4B/7mF/WALAKjMrPZld43siCeDb0yP1sZhRpv7iQKcNo3TM1
-         djBwS1BfM8W5L8FIimgGLXiNEMupF2h6gbudeFHVmvwqdm4YGd2ygHShtI3EDhk2yLX6
-         nGjuhg1JSu+7SCFLh70Q5mUNo1M8Fa/FmkYOLSskHDUyPMLaqYOqhhPmxDlCmFab4NAV
-         rq6Q==
-X-Gm-Message-State: AOAM531wNmMjE4qWgf0IB9O1GTfjlHDOkjBW6mGvb3j+nRQbfmFBo+1p
-        PpsDAEMVgjqFjQ9j6UF202p78w==
-X-Google-Smtp-Source: ABdhPJybt3dgYr6zy6CHWp80A2YhHDeIy7tSmCq53SNr13/QWthE/HGjzW3UCKvVi/6K+DIgnBx5KQ==
-X-Received: by 2002:a17:902:b412:b0:15e:dc07:4c14 with SMTP id x18-20020a170902b41200b0015edc074c14mr21368892plr.99.1652197895085;
-        Tue, 10 May 2022 08:51:35 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 67-20020a621946000000b0050dc7628190sm10963364pfz.106.2022.05.10.08.51.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 08:51:34 -0700 (PDT)
-Date:   Tue, 10 May 2022 08:51:34 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Andreas Gruenbacher <agruenba@redhat.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Bob Peterson <rpeterso@redhat.com>,
-        kernel test robot <lkp@intel.com>,
-        Bill Wendling <morbo@google.com>,
-        cluster-devel <cluster-devel@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Steven Whitehouse <swhiteho@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] gfs2: Use container_of() for gfs2_glock(aspace)
-Message-ID: <202205100851.663310B@keescook>
-References: <20220508100630.2642320-1-keescook@chromium.org>
- <YnoQmuPgK9c5V8ZC@infradead.org>
- <CAHc6FU5VfS9yNe0yH_sfOt04rvii6T_NMq7kp+32HZa5XQDtEA@mail.gmail.com>
+        Tue, 10 May 2022 12:01:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B358B3CA52;
+        Tue, 10 May 2022 08:53:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4284961673;
+        Tue, 10 May 2022 15:53:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C17F4C385A6;
+        Tue, 10 May 2022 15:53:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652198019;
+        bh=9pgUcC73MMhE3nPFiSsB/Zp0JFryDLtpwGsW8VKXMIc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u7AzoJ/Wk3+3/R2dR6hL3nO2cRTFVkpejdusu1cWWqVxNKpzc9Vy/meXirezGrwZi
+         J0ZEbm2n4fxpjjgMY/pmT/vd2Mfu9pcKIxWKj95uWzWf40AodLu8S0c6nIM19gJ0Tw
+         kSXcRleqg5eBZ5f/7ks7y1nufYS4P6+8qpjb9XOe0fmD6kocBMMPPBx+gDCifjtF1z
+         2Zp/8QdJFjY+q9EAns9A3uZUD9ZctwxPKJN+UbTg8PKs6esQzU2pPpusSbNwm8Am3L
+         tgGo6JPSNRMoETWilBHweh5lLCuzXFJFNFzTyG3qS4ZYm5/zyhCRYffXVvbjjgP0Br
+         uc7+JMwnO6kow==
+Date:   Tue, 10 May 2022 17:53:32 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     linux-fsdevel@vger.kernel.org, Dave Chinner <david@fromorbit.com>,
+        Theodore Ts'o <tytso@mit.edu>, Karel Zak <kzak@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
+Message-ID: <20220510155332.3zm5nycl7nmuxgdx@wittgenstein>
+References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
+ <20220509124815.vb7d2xj5idhb2wq6@wittgenstein>
+ <CAJfpegveWaS5pR3O1c_7qLnaEDWwa8oi26x2v_CwDXB_sir1tg@mail.gmail.com>
+ <20220510115316.acr6gl5ayqszada6@wittgenstein>
+ <CAJfpegtVgyumJiFM_ujjuRTjg07vwOd4h9AT+mbh+n1Qn-LqqA@mail.gmail.com>
+ <20220510141932.lth3bryefbl6ykny@wittgenstein>
+ <CAJfpegt94fP-_eDAk=_C=24ahCtjQ4vhh8Xg+SrZbwPHs1waLA@mail.gmail.com>
+ <20220510153050.cgbt3wezbvf2jfnb@wittgenstein>
+ <CAJfpegu8d2VQ+WjfmUJ6g7YBPJsYUABt0jG5ByVh-dMt_waV8A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAHc6FU5VfS9yNe0yH_sfOt04rvii6T_NMq7kp+32HZa5XQDtEA@mail.gmail.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAJfpegu8d2VQ+WjfmUJ6g7YBPJsYUABt0jG5ByVh-dMt_waV8A@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 01:13:31PM +0200, Andreas Gruenbacher wrote:
-> Kees and Christoph,
+On Tue, May 10, 2022 at 05:47:13PM +0200, Miklos Szeredi wrote:
+> On Tue, 10 May 2022 at 17:30, Christian Brauner <brauner@kernel.org> wrote:
 > 
-> thanks for the patch and review.
+> > But now we're in the process of extending the *xattr() calls to operate
+> > on mounts and filesystems so an additional getfsattr() (or another name)
+> > is not fragmentation imho. And I definitely don't think this would
+> > qualify as "crazy".
 > 
-> On Tue, May 10, 2022 at 9:29 AM Christoph Hellwig <hch@infradead.org> wrote:
-> > > +/* gfs2_glock_get(), "glock" must be first. */
-> > > +struct glock_aspace {
-> > > +     struct gfs2_glock       glock;
-> > > +     struct address_space    mapping;
-> > > +};
-> >
-> > Why does glock need to be first?  The whole point of using container_of
-> > is that we don't have to make that assumption.
+> In that spirit st_dev does not belong in struct stat, because that is
+> the property of the block device, not the inode.
 > 
-> Just needs to be cleaned up in gfs2_glock_get() and
-> gfs2_glock_dealloc() as well. I'll do that when applying the patch.
-> 
-> > >  static inline struct address_space *gfs2_glock2aspace(struct gfs2_glock *gl)
-> > >  {
-> > >       if (gl->gl_ops->go_flags & GLOF_ASPACE)
-> > > -             return (struct address_space *)(gl + 1);
-> > > +             return &(container_of(gl, struct glock_aspace, glock)->mapping);
-> >
-> > Do we even need the braces here?
-> 
-> Will use a local variable here, as suggested below.
-> 
-> > >       struct inode *inode = mapping->host;
-> > >       if (mapping->a_ops == &gfs2_meta_aops)
-> > > -             return (((struct gfs2_glock *)mapping) - 1)->gl_name.ln_sbd;
-> > > +             return container_of(mapping, struct glock_aspace, mapping)->glock.gl_name.ln_sbd;
-> >
-> > A local variable would be really nice for the reader here to decompose
-> > this a bit:
-> >
-> >                 struct glock_aspace *a =
-> >                         container_of(mapping, struct glock_aspace, mapping);
-> >
-> >                 return a->glock.gl_name.ln_sbd;
-> 
-> Yes.
+> But I feel we are going round in circles, lets please not get hung up
+> on this issue.  Linus will have the final word on which variant (if
+> either) is going to go in.
 
-Thanks! So I should leave this with you to arrange, or should I send an
-updated patch?
-
--- 
-Kees Cook
+Well yes, I'm obviously not going to be d*ck about it and go around
+NAKing it just because I didn't get my favorite name but I at least
+want to register my strong opposition to the current "unification"
+approach loud and clear. :)

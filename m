@@ -2,197 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E30BF5213BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D21D85213BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241022AbiEJLcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 07:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43888 "EHLO
+        id S241021AbiEJLc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 07:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240994AbiEJLb4 (ORCPT
+        with ESMTP id S241018AbiEJLcI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 07:31:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2AF08237B96
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 04:27:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652182078;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NBBnb2I2NKEOa24s2priljbXubiGaWfTmbEUyqlIXqU=;
-        b=Mr7nN2cjLu1vronnICIapd1mPe39OKFy3wsx6JfZoyMqIWR/iHgteFcv3JtxICPvTUUPZF
-        rAw2ps8+VfiRnEFzBojeQLjqTPDoc4eE52hyCoIQdaUXZiuGG0qmVh9wuVX+MJi3RcA4Uq
-        MgO2VzYIUeJ9F/T0n77IpyjT79X4IKg=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-669--24z1fYkNj2QIvbExi_Ryg-1; Tue, 10 May 2022 07:27:57 -0400
-X-MC-Unique: -24z1fYkNj2QIvbExi_Ryg-1
-Received: by mail-wm1-f71.google.com with SMTP id v191-20020a1cacc8000000b0038ce818d2efso5159741wme.1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 04:27:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NBBnb2I2NKEOa24s2priljbXubiGaWfTmbEUyqlIXqU=;
-        b=arMWToJufTgAj8+Ot3szFP1REzW8X/wEwcFoPJCh9yPX6dyb4wTKPaJI+YSXxLMhO4
-         LGfdenlhMOnGo6La1INXKAY33zXFKvdR1XZxMP6ylK2PYdScinUsLoWvSFGIVwtJDlc+
-         tOl0N5niL8xlqZYBVCOQJIfmQWoyiQdONRZ35q/DwWCHzjfqoZ4rwl7BKb/IvmR8MWXP
-         +dO5MwWE92fLQcw3S8Zd6RF7xVrM5trrm4LpBpT4tVYqblIVa+V1Z8a2hXceJj1TqZZp
-         scbG9SK8Vgu+SGqNXDQr6SY5uNme/f9sjd8fmRSMkCSNG2DQeDbS83XpGQV1MY8bybOK
-         90aQ==
-X-Gm-Message-State: AOAM533Aw+K6oG7OJgPgFwLme4HoIj07rjH+QtAQrtBSceKG+yaAg3pw
-        L2drHcUR4v4Z1fjdPPPfggpgIO4ObBPV24/obJoJNdyNm+0Mmi6BcdJKL5dYbvdZrZ0Ze+G1phM
-        D1v9lUoQMy4vMKcdNBHSx2DaN
-X-Received: by 2002:adf:d1e2:0:b0:20c:7012:47c3 with SMTP id g2-20020adfd1e2000000b0020c701247c3mr18327086wrd.631.1652182075784;
-        Tue, 10 May 2022 04:27:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwnvYdgZfzsuO6nkuqGaiNO3U1dm9Ph0Vrt/DPepxKDYsE4pJN5El85U8fk2uFunwTZ9CLMlA==
-X-Received: by 2002:adf:d1e2:0:b0:20c:7012:47c3 with SMTP id g2-20020adfd1e2000000b0020c701247c3mr18327073wrd.631.1652182075584;
-        Tue, 10 May 2022 04:27:55 -0700 (PDT)
-Received: from redhat.com ([2.55.130.230])
-        by smtp.gmail.com with ESMTPSA id c17-20020a056000105100b0020c5253d8ccsm13448149wrx.24.2022.05.10.04.27.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 04:27:55 -0700 (PDT)
-Date:   Tue, 10 May 2022 07:27:51 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de,
-        peterz@infradead.org, paulmck@kernel.org, maz@kernel.org,
-        pasic@linux.ibm.com, cohuck@redhat.com, eperezma@redhat.com,
-        lulu@redhat.com, sgarzare@redhat.com, xuanzhuo@linux.alibaba.com
-Subject: Re: [PATCH V4 6/9] virtio-ccw: implement synchronize_cbs()
-Message-ID: <20220510072451-mutt-send-email-mst@kernel.org>
-References: <20220507071954.14455-1-jasowang@redhat.com>
- <20220507071954.14455-7-jasowang@redhat.com>
+        Tue, 10 May 2022 07:32:08 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333A224F0CC
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 04:28:07 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1noO1z-0003eV-DR; Tue, 10 May 2022 13:27:55 +0200
+Message-ID: <ff841fdc-4db7-7a3d-8caf-d0cddd0dfa31@leemhuis.info>
+Date:   Tue, 10 May 2022 13:27:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220507071954.14455-7-jasowang@redhat.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Link: tag and links to submission and reports (was: Re: [GIT pull]
+ core/urgent for v5.18-rc6)
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Zhangfei Gao <zhangfei.gao@foxmail.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Dave Hansen <dave.hansen@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>
+References: <165201148069.536527.1960632033331546251.tglx@xen13>
+ <CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1652182088;cbc44195;
+X-HE-SMSGID: 1noO1z-0003eV-DR
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 07, 2022 at 03:19:51PM +0800, Jason Wang wrote:
-> This patch tries to implement the synchronize_cbs() for ccw. For the
-> vring_interrupt() that is called via virtio_airq_handler(), the
-> synchronization is simply done via the airq_info's lock. For the
-> vring_interrupt() that is called via virtio_ccw_int_handler(), a per
-> device spinlock for irq is introduced ans used in the synchronization
-> method.
+On 08.05.22 20:00, Linus Torvalds wrote:
+> On Sun, May 8, 2022 at 5:05 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+>>
+>> A single bugfix for the PASID management code, which freed the PASID too
+>> early. The PASID needs to be tied to the mm lifetime, not to the address
+>> space lifetime.
 > 
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Halil Pasic <pasic@linux.ibm.com>
-> Cc: Cornelia Huck <cohuck@redhat.com>
-> Signed-off-by: Jason Wang <jasowang@redhat.com>
-> ---
->  drivers/s390/virtio/virtio_ccw.c | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
-> 
-> diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
-> index d35e7a3f7067..001e1f0e6037 100644
-> --- a/drivers/s390/virtio/virtio_ccw.c
-> +++ b/drivers/s390/virtio/virtio_ccw.c
-> @@ -62,6 +62,7 @@ struct virtio_ccw_device {
->  	unsigned int revision; /* Transport revision */
->  	wait_queue_head_t wait_q;
->  	spinlock_t lock;
-> +	rwlock_t irq_lock;
->  	struct mutex io_lock; /* Serializes I/O requests */
->  	struct list_head virtqueues;
->  	bool is_thinint;
-> @@ -984,6 +985,27 @@ static const char *virtio_ccw_bus_name(struct virtio_device *vdev)
->  	return dev_name(&vcdev->cdev->dev);
->  }
->  
-> +static void virtio_ccw_synchronize_cbs(struct virtio_device *vdev)
-> +{
-> +	struct virtio_ccw_device *vcdev = to_vc_device(vdev);
-> +	struct airq_info *info = vcdev->airq_info;
-> +
-> +	if (info) {
-> +		/*
-> +		 * Synchronize with the vring_interrupt() with airq indicator
-> +		 */
-> +		write_lock(&info->lock);
-> +		write_unlock(&info->lock);
-> +	} else {
-> +		/*
-> +		 * Synchronize with the vring_interrupt() called by
-> +		 * virtio_ccw_int_handler().
-> +		 */
-> +		write_lock(&vcdev->irq_lock);
-> +		write_unlock(&vcdev->irq_lock);
-> +	}
-> +}
-> +
->  static const struct virtio_config_ops virtio_ccw_config_ops = {
->  	.get_features = virtio_ccw_get_features,
->  	.finalize_features = virtio_ccw_finalize_features,
-> @@ -995,6 +1017,7 @@ static const struct virtio_config_ops virtio_ccw_config_ops = {
->  	.find_vqs = virtio_ccw_find_vqs,
->  	.del_vqs = virtio_ccw_del_vqs,
->  	.bus_name = virtio_ccw_bus_name,
-> +	.synchronize_cbs = virtio_ccw_synchronize_cbs,
->  };
->  
->  
-> @@ -1079,6 +1102,7 @@ static void virtio_ccw_int_handler(struct ccw_device *cdev,
->  {
->  	__u32 activity = intparm & VIRTIO_CCW_INTPARM_MASK;
->  	struct virtio_ccw_device *vcdev = dev_get_drvdata(&cdev->dev);
-> +	unsigned long flags;
->  	int i;
->  	struct virtqueue *vq;
->  
-> @@ -1106,6 +1130,7 @@ static void virtio_ccw_int_handler(struct ccw_device *cdev,
->  			vcdev->err = -EIO;
->  	}
->  	virtio_ccw_check_activity(vcdev, activity);
-> +	read_lock_irqsave(&vcdev->irq_lock, flags);
->  	for_each_set_bit(i, indicators(vcdev),
->  			 sizeof(*indicators(vcdev)) * BITS_PER_BYTE) {
->  		/* The bit clear must happen before the vring kick. */
+> So I have to once more complain about the -tip tree "Link:" usage.
 
-Cornelia sent a lockdep trace on this.
+Many thx for reminding people about the tag.  FWIW, that's a problem in
+a lot or subsystems and makes my regression tracking efforts hard, as my
+tracking bot relies on the 'Link:' tag. If it's missing I thus have to
+manually search if patches were posted or committed to fix a regression,
+which makes the tracking hard and annoying. :-/
 
-Basically I think this gets the irqsave/restore logic wrong.
-It attempts to disable irqs in the handler (which is an interrupt
-anyway).
-And it does not disable irqs in the synchronize_cbs.
+> Again, the commit has a link to the patch *submission*, which is
+> almost entirely useless. There's no link to the actual problem the
+> patch fixes.
 
-As a result in interrupt might try to take a read lock while
-.synchronize_cbs has the writer lock, resulting in a deadlock.
+It seems quite a few developers are under the impressions that "Link:"
+is just for the patch submission and not to be used for other things.
+That's why some people invented other tags. I see "BugLink" quite often
+these days, but there are also other tags in use (some drm people used
+"References:" for a while).
 
-I think you want regular read_lock + write_lock_irq.
+Do we care? Should we try to clean this up while making things a bit
+more straight forward at the same time by making it more obvious what a
+link is actually about? I once suggested we use something like
+* "Submitted:" or "Posted:" for the patch submission
+* "Reported:" or "BugLink:" for any reports that lead to the
 
+That would leave "Link:" ambiguous and usable for anything else (and b4
+likely could be fixed easily to set a different tag; but sure, there
+would be a transition period).
 
-> @@ -1114,6 +1139,7 @@ static void virtio_ccw_int_handler(struct ccw_device *cdev,
->  		vq = virtio_ccw_vq_by_ind(vcdev, i);
->  		vring_interrupt(0, vq);
->  	}
-> +	read_unlock_irqrestore(&vcdev->irq_lock, flags);
->  	if (test_bit(0, indicators2(vcdev))) {
->  		virtio_config_changed(&vcdev->vdev);
->  		clear_bit(0, indicators2(vcdev));
-> @@ -1284,6 +1310,7 @@ static int virtio_ccw_online(struct ccw_device *cdev)
->  	init_waitqueue_head(&vcdev->wait_q);
->  	INIT_LIST_HEAD(&vcdev->virtqueues);
->  	spin_lock_init(&vcdev->lock);
-> +	rwlock_init(&vcdev->irq_lock);
->  	mutex_init(&vcdev->io_lock);
->  
->  	spin_lock_irqsave(get_ccwdev_lock(cdev), flags);
-> -- 
-> 2.25.1
+But there was not much feedback on the idea. Do you think I should pick
+up this again? Or is this something I should bring up during this years
+kernel summit?
 
+> [...]
+> Put another way: I can see that
+>     Reported-by: Zhangfei Gao <zhangfei.gao@foxmail.com>
+
+With a "Reported:" tag like mentioned above we could stop using
+"Reported-by:" if we wanted to reduce the overhead (or make it
+optional). But OTOH I guess it's a bad idea, as having this in there
+will motivate some people to submit reports. And is good for stats reg.
+syzbot and 0-day (but I guess those could be generated from proper
+links, too).
+
+BTW: Documentation/process/5.Posting.rst states '''Be careful in the
+addition of tags to your patches: only Cc: is appropriate for addition
+without the explicit permission of the person named.''' Is that actually
+true? A lot of people seem to set "Reported-by:" without getting
+explicit permission. If that is fine I'd prepare a patch to fix the docs.
+
+Ciao, Thorsten

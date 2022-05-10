@@ -2,462 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D55CA5210B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 11:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25142521095
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 11:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238688AbiEJJZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 05:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
+        id S238618AbiEJJWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 05:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238598AbiEJJZC (ORCPT
+        with ESMTP id S238627AbiEJJV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 05:25:02 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663B77306F;
-        Tue, 10 May 2022 02:21:05 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id x23so14432110pff.9;
-        Tue, 10 May 2022 02:21:05 -0700 (PDT)
+        Tue, 10 May 2022 05:21:56 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam08on2079.outbound.protection.outlook.com [40.107.102.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788DF20D246
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 02:17:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a6gAIiPqz1f0FWd8wk4Ujv/YattMjEj801ze7QeZrhkxd8UHsLjCDvkyAFqmdHydAiQ/M5px0nzJ2HIuRsqnrlqjF/lx7gxbGL5Y5NEHBN5mkLv2d8B/9NK34t1cmROhsbU00VWO7CM+1OM3KeM16D/oLhSuSuGirrAR9Kb0D7zmkhsTNVJg4w3hr2nvnf8bI1GwrtLhqrQVRr0XnyNvQpffFl3rZ+1Gb3PNG+jXvZpbnPSbAzUntvrgzzDnejv+FYLZaFINQvlaXaA+3LCVe1nvyQjXwSU0mXUkILAex3iGROOqVLm/ACM4ilRYyWQtDd+Xs/WgESAPZm8DimY4AQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SPfK1yP5gce34nT8LELdyslHHU1NmlPA295HjMthpLw=;
+ b=lukQ0vZRwMU+WrhqzEPjIg8czrqlLOVhuy0RoVO/Rfk5yyarFoFUgpEefiCe5feeAOk/lqBsP0QmfPXDH1QN8NJXBpjXXc8dNT3zBmifiebqhUwQx967k1IxS//LX5ANr25ToiMVKFpKOkJlonfBCsdIb18Fvr7/vXlr1l1nHYBZWtaTKdEK1fwaReNSnOmIZ2Jw3m5Ikw8St7NwRSCv3t7N224fdpt+5apKHzMzsCvXuW4lr7dUCk6WUxtkrR5VPjwu/auA7M2OnWMJ22bu4JWnrcm5huLj2VjPtuG1NPsXmD2prRvk3B2Kntr9XBDprLY0wa1JtEFPLItzYVyL+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=YWsz/Is+10tlbL0C0vChcP/jzEgAiggFZkHtnIfVDN0=;
-        b=GZaBOpUYn006AtjPi/EFltOU7OpEA6b38n6WLafj1iBd8R0lzqXz8zlQw1OlKitECu
-         +9/4th0c8ZFm2zowWx9JtHRMfC1gH76NGtKgPoma49yMBex5bAWnypHoc+JYrI2Q7fVy
-         Wayb+w6lZbJQKJA1m6N7V6Iray2taP+xLJEAQoxAL74u1U8N337L7zVCOJ64SnP1N464
-         89Icx9tYdZIpYmRVutI9QlMwrlu7rkW8xUTnrVKLXhQ8CMSssFj2ta0AynXBAQxTzj7L
-         E4HxuCp5WcjruiELcw6qfiMAwg1HAhKNI5GZK1NKF+1OPRN4VkO5NIUasB5Az5lIQHT5
-         lD1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=YWsz/Is+10tlbL0C0vChcP/jzEgAiggFZkHtnIfVDN0=;
-        b=JZqidDK/R4q3Tqd6jabnIpl+HpFAvG4pYrxcRlqkqgPGFUI6inOm65php70yaFdcbc
-         LknzFfdiB7oSXmRJrqcrH5k3kIZhcjEVhBWg8TqUU2A0SnQpIyfpSgkNkbesIDHdANX4
-         6HiJH78qB6ubnAqRcBM3RyKOprNo1ujzww4Jn/i1pjgz8n7KJr5BnNFpc4Ewrngxbejm
-         Wu5XTmQsV6lKFV3FXFiLRjdp7+kePTovGWIQeYslXC2jNFniO5To13vMZvkSnLnyXVXK
-         1ecyu/A7EVQFhu1DQm59Xw5lNkgveToiQg/U5B/7bDZFW4Qce9t4ZTa1aGvwEsihCKJt
-         7Yng==
-X-Gm-Message-State: AOAM533YBY81t0O3WpGsexDu/LN60WoJStnKPffSX8oCbSV+UkC9b8Ve
-        R9cWPtuP/r2cdNFcs9dreQ==
-X-Google-Smtp-Source: ABdhPJwCjywP0DUQ8yju2x2K8IYfvSy2/Mgi7xpXRbHsrB0E9xFtwo4i4LyTPSMIY/b2vkHWgwHnjg==
-X-Received: by 2002:a62:3881:0:b0:4b0:b1c:6fd9 with SMTP id f123-20020a623881000000b004b00b1c6fd9mr1104775pfa.27.1652174464679;
-        Tue, 10 May 2022 02:21:04 -0700 (PDT)
-Received: from localhost (2001-b011-7010-358e-c990-a8c9-85a7-1d3e.dynamic-ip6.hinet.net. [2001:b011:7010:358e:c990:a8c9:85a7:1d3e])
-        by smtp.gmail.com with ESMTPSA id g11-20020aa79dcb000000b0050dc7628188sm10429420pfq.98.2022.05.10.02.19.07
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 10 May 2022 02:21:04 -0700 (PDT)
-From:   Tyrone Ting <warp5tw@gmail.com>
-To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
-        wsa@kernel.org, andriy.shevchenko@linux.intel.com,
-        jarkko.nikula@linux.intel.com, semen.protsenko@linaro.org,
-        sven@svenpeter.dev, jie.deng@intel.com, jsd@semihalf.com,
-        lukas.bulwahn@gmail.com, olof@lixom.net, arnd@arndb.de,
-        warp5tw@gmail.com, tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
-        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        kfting@nuvoton.com
-Cc:     openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 9/9] i2c: npcm: Support NPCM845
-Date:   Tue, 10 May 2022 17:16:54 +0800
-Message-Id: <20220510091654.8498-10-warp5tw@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220510091654.8498-1-warp5tw@gmail.com>
-References: <20220510091654.8498-1-warp5tw@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SPfK1yP5gce34nT8LELdyslHHU1NmlPA295HjMthpLw=;
+ b=LlYDKr6/3NiINZOL1Qs7IBYCJ2BpdDyV2mm8sxjYRPa036EoZS+2mAXATlZvYWVDFC8VYB/K/Zu5IR0PndxtuQUEzvYw1f/a1uIysXRBIp9igEqcfZ7wFzO+CHYAxbhAq1rkHNETL1hsCUAzM4EzH7maRC0mw1AGRnbDaIjeuh0=
+Received: from SA1PR02MB8560.namprd02.prod.outlook.com (2603:10b6:806:1fb::24)
+ by BN0PR02MB8222.namprd02.prod.outlook.com (2603:10b6:408:154::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.20; Tue, 10 May
+ 2022 09:17:53 +0000
+Received: from SA1PR02MB8560.namprd02.prod.outlook.com
+ ([fe80::94f0:32be:367b:1798]) by SA1PR02MB8560.namprd02.prod.outlook.com
+ ([fe80::94f0:32be:367b:1798%7]) with mapi id 15.20.5227.023; Tue, 10 May 2022
+ 09:17:53 +0000
+From:   Radhey Shyam Pandey <radheys@xilinx.com>
+To:     Nicholas Graumann <nick.graumann@gmail.com>,
+        Appana Durga Kedareswara Rao <appanad@xilinx.com>,
+        Harini Katakam <harinik@xilinx.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Michal Simek <michals@xilinx.com>,
+        Appana Durga Kedareswara Rao <appanad@xilinx.com>
+CC:     "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v3] dmaengine: xilinx_dma: Free descriptor lists in order
+Thread-Topic: [PATCH v3] dmaengine: xilinx_dma: Free descriptor lists in order
+Thread-Index: AQHYTa0RTWwUJ64q2kGA8hfT/ly+Ca0YASdw
+Date:   Tue, 10 May 2022 09:17:53 +0000
+Message-ID: <SA1PR02MB8560D82039C9EA89E2914D3EC7C99@SA1PR02MB8560.namprd02.prod.outlook.com>
+References: <20220411140348.30252-1-nick.graumann@gmail.com>
+In-Reply-To: <20220411140348.30252-1-nick.graumann@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=xilinx.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 290912f4-48cb-4e06-6bc1-08da3265f66b
+x-ms-traffictypediagnostic: BN0PR02MB8222:EE_
+x-microsoft-antispam-prvs: <BN0PR02MB822288C46D2029378B1DEDB9C7C99@BN0PR02MB8222.namprd02.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /JQH/71cJdutf5RAfWarij2C+Vw8C4VN5AsSFW4IyvkPWKosavcwXYt7TI9I3PLPGilXP1sXTZciQx2I1i+6eg81qTc+VVyrd5OZgSUE+5VXePgsPsY6WnKkU8v6fwtdxF/FSywPqrdUuCqYWgXGQq9PK8Z3yZc37vORs0uREXUiFGFkApspIy8+sm4q73C9ounQaWKi834yAkQBHEPDs7/AaKxw2TAn6Et6VvLYUqSXcRVHg2dI1CIcjqxibCG8asrYrM+YENbtrcHis922VyR7REoX8u/V6c181BRgxVJbSi602Ius7ExCMb5r3s9vy/VnYxwa6CDg/A41vx6Qwgn0d78Bh6BZtRbtC0NFJnPzN0CFHaf0HqDJ5GIdFX53iM5NwF14a4WmT4l3KBR1p2Kt1v8yPiGK5id4b1tKgfkwIy0HbxHfKRibVBKrmDjm/86sltHWBJmNmdY/oJOZEZUBaRR3tzSqYGHFWccqU2R7HW8K+RjoCgVxHK9DCHU8BBr6kRiIiYDjXUeXHnuLcTg6ChFeZ+gZbtKXnNRZPfe9lTKde3cr2AFcv19WXS4xA2fOGfMgoImF810C1UeA4KRPObnJQ72XmWIv8Kb+dfHWy3GgwE9hIExzpcLDS/XEprhkacXClzIV9dARgl1Sqr6BUMOswWBtYnnBhjRGIstKpVUpE101SEBE49lksczRMiKI/QLeRqzuJ9y8GtZZ0g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR02MB8560.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66476007)(54906003)(66946007)(4326008)(38070700005)(86362001)(8676002)(52536014)(66446008)(8936002)(110136005)(6636002)(316002)(64756008)(6506007)(53546011)(9686003)(122000001)(7696005)(26005)(71200400001)(76116006)(2906002)(38100700002)(508600001)(83380400001)(33656002)(55016003)(186003)(5660300002)(66556008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?GsNi3SES1bK5LOOhX4Wc7reniN58OsQTPRpNEli+ncRL+N98x/HbxVXvN6Mo?=
+ =?us-ascii?Q?ly88HrH54zxUcWXzKkZF6tjvwpuDfPfvl1kHYTncbsowLlA2tA8iiaUF+PIo?=
+ =?us-ascii?Q?VVnlF/Z/j7pDVWbLc2PVwogMVaZAkigfzNIDiN5ghyB6R+FDlRePldzYARZy?=
+ =?us-ascii?Q?nIsWeTDc02C+RRwC1NiON/1p3GXG1ZWQsjdTIo58VcO4ZpAIU2u42Llo7tuA?=
+ =?us-ascii?Q?2YORPS8bz0GY6ajTO1DAHRr1z71K7zqKT0trzOa42CwarcnqHYtVDLKxwgth?=
+ =?us-ascii?Q?y0ObjrmkPhSBvxdqrzWTSn/rjwHW+JW/36KbIDd/fcdVBch9AkulEHIa0TvG?=
+ =?us-ascii?Q?wadiO3hHdZb8oqaWqc/0pmjBWI7dxM9sdYvT3E6TuUgPwTl2KzwH/NS143mv?=
+ =?us-ascii?Q?EwouR7Em0p9172kzHyKIWp9R7Q4aNwJV0JykrZtBupKm7vntWw3+rCNIfp6E?=
+ =?us-ascii?Q?+t/sHSpK4/+CTcIr5rCXc3Q7jgwJfGPCccZrvoFjfo/k3/zT6+GvRV8UbFjA?=
+ =?us-ascii?Q?1V9ce5EeGQX//4Hw5iod1so1eKeYHVnAtrZReTFaGvYJaRvs5aI3ahj4/Kpb?=
+ =?us-ascii?Q?RJyqTe2pp7YYVVuOI5n8zca4sKF/ZSo2VaDoHH0qtWzD+FejQ4B5y6rlrtGG?=
+ =?us-ascii?Q?7xJ/r6Lh/Vjgw1f/U2oM8GNOgjSBtoQy8n2OjPFP3mYZDvxOL6ntURKhobmO?=
+ =?us-ascii?Q?+kPdtCUhCqY1g9wLuMp+e1tcGoczu5hc8/WY7T/660MZBYOSKX3FAbeKp1Jb?=
+ =?us-ascii?Q?hqo6al/Jm7eO286SGUytrQhDogm7+NBof60f9I1/vqprVP91Y6oPgGAItcy8?=
+ =?us-ascii?Q?ltxTZ97V3v0GuFOJHKjB1rB1eqSIRizhqFaKAozVLw1lTAx+jjgw16FIT3Rz?=
+ =?us-ascii?Q?YyPpj0wuUYktCjtiCwFQYV1D+yxGLr1DrGDQYk5I5zZRdZQ2GNk85EU8Dk/I?=
+ =?us-ascii?Q?LGIdDxWyfA7Km8oXXCtbAymupHw4wfXZvJA+SnsGYm6/lWovCb+h/SZ29dsc?=
+ =?us-ascii?Q?RKR+K7gfi+8FYoj8lQ6Y1bt0txNvhhTZIdfO3p1zHLwmZoDrPP18SB74NvEh?=
+ =?us-ascii?Q?ck/hhjHWrr0nqyJBgdG5OiE3WkH2gemD4ceTQpLCoCFPt2dew7qhVsz9+fDb?=
+ =?us-ascii?Q?z1kgxAaHNM7KYWbKCABJ5aaKtIDNimJK4+i2BNnRNhnA+NiATyIQw1Us9n4e?=
+ =?us-ascii?Q?YG27tMiBcAw3bDCtajEhjmWD116VaFBn+dqFEh+TOpHG3GBuaKYVnKsG9W3I?=
+ =?us-ascii?Q?hEu88jLM0/HLXP7W66AdFuQg/8APYemN8W6MXunPZ1DFMP/DjMADpcIVXMYE?=
+ =?us-ascii?Q?luZRJoK+RwpC3S/zRPW9wk3empvj4MObNfbcTcjjMmit2Z0ERN9/M/ZnuHjA?=
+ =?us-ascii?Q?TLSBeUnX1yXuF7KE4/KdE0NHHTeuNmPBWMytcsWGEBWvH3Rjxa4erIUsXwIm?=
+ =?us-ascii?Q?5Gf7URkrTHTTXGWOcB4TBLn7w3NZTfnRp0LKd0UAjCw+M+jYud384aisGiPX?=
+ =?us-ascii?Q?MKBXAKlaXGPa9GaU96jRU0Zhs+Vk6A9Hgrh7KTQQjYk6TH7ZHLOTEAIScYFV?=
+ =?us-ascii?Q?DU03jHybzY7us8UVltziBOG6LQ/zHvht+RP9cjhrIVRMb3DPsKxYk9I0roXR?=
+ =?us-ascii?Q?l0SpSZbazLeM4/oy+JAero502xV4oAm/WPqSf2CoO2NeNbIbk7i0Cpcb9hT1?=
+ =?us-ascii?Q?XVJ/1XUKctQrilhCG72P+407n52ALP8NU/+fhDCDJB3SjS/RTNvT9x7WqiEE?=
+ =?us-ascii?Q?d9ibJkNwug=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR02MB8560.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 290912f4-48cb-4e06-6bc1-08da3265f66b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 May 2022 09:17:53.3511
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: sSR6I03k3RtyYsqF72Yeq1jAJWx4urcebBwAQ1fqxsZF6hzo75K2OsVuOUgCUYRmD8XZ2XLVEi7kWYzug4Bo4A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR02MB8222
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tyrone Ting <kfting@nuvoton.com>
+> -----Original Message-----
+> From: Nicholas Graumann <nick.graumann@gmail.com>
+> Sent: Monday, April 11, 2022 7:34 PM
+> To: Radhey Shyam Pandey <radheys@xilinx.com>; Appana Durga Kedareswara
+> Rao <appanad@xilinx.com>; Harini Katakam <harinik@xilinx.com>; Vinod
+> Koul <vkoul@kernel.org>; Michal Simek <michals@xilinx.com>; Appana Durga
+> Kedareswara Rao <appanad@xilinx.com>
+> Cc: Nicholas Graumann <nick.graumann@gmail.com>;
+> dmaengine@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+> kernel@vger.kernel.org
+> Subject: [PATCH v3] dmaengine: xilinx_dma: Free descriptor lists in order
+>=20
 
-Add NPCM8XX I2C support.
-The NPCM8XX uses a similar i2c module as NPCM7XX.
-The internal HW FIFO is larger in NPCM8XX.
+Minor nit - It's first version. I think we need to spin a new version fixin=
+g it?
 
-Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
----
- drivers/i2c/busses/Kconfig       |   8 +--
- drivers/i2c/busses/Makefile      |   2 +-
- drivers/i2c/busses/i2c-npcm7xx.c | 114 +++++++++++++++++++------------
- 3 files changed, 76 insertions(+), 48 deletions(-)
+> If xilinx_dma_terminate_all is called while the AXI DMA is active, the fo=
+llowing
+> error messages might be seen upon restarting the DMA:
+>=20
+> [   72.556254] xilinx_dma_irq_handler: Channel d053cb5b has errors 10, cd=
+r
+> 2c049f80 tdr 2c04a000
+> [   72.557370] xilinx_dma_irq_handler: Channel d053cb5b has errors 100, c=
+dr
+> 2c049f80 tdr 2c049f80
+>=20
+> From then on the AXI DMA won't process any more descriptors until the DMA
+> channel is released and requested again.
+>=20
+> The following sequence of events is what causes this to happen:
+>=20
+> 1. Some descriptors are prepared with xilinx_dma_tx_submit (so they get
+>    added to pending_list).
+> 2. The DMA is kicked off via call to xilinx_dma_tx_submit (the
+>    descriptors are moved to active_list).
+> 3. While the transfer is active, another descriptor is prepared with
+>    xilinx_dma_tx_submit (so it goes onto the pending_list) 4. Before the
+> transfers complete, xilinx_dma_terminate_all is called.
+>    That function resets the channel then calls
+>    xilinx_dma_free_descriptors to free the descriptors.
+>=20
+> At that point, pending_list contains a descriptor that is newer (and thus=
+ farther
+> down the chain of descriptors) than the descriptors prepared in (1). Howe=
+ver,
+> it gets placed onto the free_seg_list before the older descriptors. From =
+then
+> on, the next pointers are no longer valid because the order of the descri=
+ptors
+> in free_seg_list does not match the order in which the descriptors were
+> allocated.
+>=20
+> To remedy this, the descriptor lists need to be freed in order from oldes=
+t to
+> newest, otherwise segments could be added to the free segment list in a
+> different order than they were created. This is not an issue for VDMA nor
+> CDMA because the driver does not maintain a list of descriptors to free.
+>=20
+> Fixes: c0bba3a99f07 ("dmaengine: vdma: Add Support for Xilinx AXI Direct
+> Memory Access Engine")
+> Signed-off-by: Nicholas Graumann <nick.graumann@gmail.com>
+> Reviewed-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Reviewed-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index a1bae59208e3..b1d7069dd377 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -838,13 +838,13 @@ config I2C_NOMADIK
- 	  I2C interface from ST-Ericsson's Nomadik and Ux500 architectures,
- 	  as well as the STA2X11 PCIe I/O HUB.
- 
--config I2C_NPCM7XX
-+config I2C_NPCM
- 	tristate "Nuvoton I2C Controller"
--	depends on ARCH_NPCM7XX || COMPILE_TEST
-+	depends on ARCH_NPCM || COMPILE_TEST
- 	help
- 	  If you say yes to this option, support will be included for the
--	  Nuvoton I2C controller, which is available on the NPCM7xx BMC
--	  controller.
-+	  Nuvoton I2C controller, which is available on the NPCM BMC
-+	  controllers.
- 	  Driver can also support slave mode (select I2C_SLAVE).
- 
- config I2C_OCORES
-diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
-index 479f60e4ee3d..b0a10e5d9ee9 100644
---- a/drivers/i2c/busses/Makefile
-+++ b/drivers/i2c/busses/Makefile
-@@ -84,7 +84,7 @@ obj-$(CONFIG_I2C_MT7621)	+= i2c-mt7621.o
- obj-$(CONFIG_I2C_MV64XXX)	+= i2c-mv64xxx.o
- obj-$(CONFIG_I2C_MXS)		+= i2c-mxs.o
- obj-$(CONFIG_I2C_NOMADIK)	+= i2c-nomadik.o
--obj-$(CONFIG_I2C_NPCM7XX)	+= i2c-npcm7xx.o
-+obj-$(CONFIG_I2C_NPCM)		+= i2c-npcm7xx.o
- obj-$(CONFIG_I2C_OCORES)	+= i2c-ocores.o
- obj-$(CONFIG_I2C_OMAP)		+= i2c-omap.o
- obj-$(CONFIG_I2C_OWL)		+= i2c-owl.o
-diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
-index 29d8a44b23c4..415a24df78e9 100644
---- a/drivers/i2c/busses/i2c-npcm7xx.c
-+++ b/drivers/i2c/busses/i2c-npcm7xx.c
-@@ -17,6 +17,7 @@
- #include <linux/mfd/syscon.h>
- #include <linux/module.h>
- #include <linux/of.h>
-+#include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
- 
-@@ -91,7 +92,6 @@ enum i2c_addr {
- 
- /* init register and default value required to enable module */
- #define NPCM_I2CSEGCTL			0xE4
--#define NPCM_I2CSEGCTL_INIT_VAL		0x0333F000
- 
- /* Common regs */
- #define NPCM_I2CSDA			0x00
-@@ -228,8 +228,7 @@ static const int npcm_i2caddr[I2C_NUM_OWN_ADDR] = {
- #define NPCM_I2CFIF_CTS_CLR_FIFO	BIT(6)
- #define NPCM_I2CFIF_CTS_SLVRSTR		BIT(7)
- 
--/* NPCM_I2CTXF_CTL reg fields */
--#define NPCM_I2CTXF_CTL_TX_THR		GENMASK(4, 0)
-+/* NPCM_I2CTXF_CTL reg field */
- #define NPCM_I2CTXF_CTL_THR_TXIE	BIT(6)
- 
- /* NPCM_I2CT_OUT reg fields */
-@@ -238,22 +237,18 @@ static const int npcm_i2caddr[I2C_NUM_OWN_ADDR] = {
- #define NPCM_I2CT_OUT_T_OUTST		BIT(7)
- 
- /* NPCM_I2CTXF_STS reg fields */
--#define NPCM_I2CTXF_STS_TX_BYTES	GENMASK(4, 0)
- #define NPCM_I2CTXF_STS_TX_THST		BIT(6)
- 
- /* NPCM_I2CRXF_STS reg fields */
--#define NPCM_I2CRXF_STS_RX_BYTES	GENMASK(4, 0)
- #define NPCM_I2CRXF_STS_RX_THST		BIT(6)
- 
- /* NPCM_I2CFIF_CTL reg fields */
- #define NPCM_I2CFIF_CTL_FIFO_EN		BIT(4)
- 
- /* NPCM_I2CRXF_CTL reg fields */
--#define NPCM_I2CRXF_CTL_RX_THR		GENMASK(4, 0)
--#define NPCM_I2CRXF_CTL_LAST_PEC	BIT(5)
- #define NPCM_I2CRXF_CTL_THR_RXIE	BIT(6)
- 
--#define I2C_HW_FIFO_SIZE		16
-+#define MAX_I2C_HW_FIFO_SIZE		32
- 
- /* I2C_VER reg fields */
- #define I2C_VER_VERSION			GENMASK(6, 0)
-@@ -270,11 +265,36 @@ static const int npcm_i2caddr[I2C_NUM_OWN_ADDR] = {
- #define I2C_FREQ_MIN_HZ			10000
- #define I2C_FREQ_MAX_HZ			I2C_MAX_FAST_MODE_PLUS_FREQ
- 
-+struct npcm_i2c_data {
-+	u8 fifo_size;
-+	u32 segctl_init_val;
-+	u8 txf_sts_tx_bytes;
-+	u8 rxf_sts_rx_bytes;
-+	u8 rxf_ctl_last_pec;
-+};
-+
-+static const struct npcm_i2c_data npxm7xx_i2c_data = {
-+	.fifo_size = 16,
-+	.segctl_init_val = 0x0333F000,
-+	.txf_sts_tx_bytes = GENMASK(4, 0),
-+	.rxf_sts_rx_bytes = GENMASK(4, 0),
-+	.rxf_ctl_last_pec = BIT(5),
-+};
-+
-+static const struct npcm_i2c_data npxm8xx_i2c_data = {
-+	.fifo_size = 32,
-+	.segctl_init_val = 0x9333F000,
-+	.txf_sts_tx_bytes = GENMASK(5, 0),
-+	.rxf_sts_rx_bytes = GENMASK(5, 0),
-+	.rxf_ctl_last_pec = BIT(7),
-+};
-+
- /* Status of one I2C module */
- struct npcm_i2c {
- 	struct i2c_adapter adap;
- 	struct device *dev;
- 	unsigned char __iomem *reg;
-+	const struct npcm_i2c_data *data;
- 	spinlock_t lock;   /* IRQ synchronization */
- 	struct completion cmd_complete;
- 	int cmd_err;
-@@ -307,8 +327,8 @@ struct npcm_i2c {
- 	int slv_rd_ind;
- 	int slv_wr_size;
- 	int slv_wr_ind;
--	u8 slv_rd_buf[I2C_HW_FIFO_SIZE];
--	u8 slv_wr_buf[I2C_HW_FIFO_SIZE];
-+	u8 slv_rd_buf[MAX_I2C_HW_FIFO_SIZE];
-+	u8 slv_wr_buf[MAX_I2C_HW_FIFO_SIZE];
- #endif
- 	struct dentry *debugfs; /* debugfs device directory */
- 	u64 ber_cnt;
-@@ -441,7 +461,7 @@ static inline bool npcm_i2c_tx_fifo_empty(struct npcm_i2c *bus)
- 
- 	tx_fifo_sts = ioread8(bus->reg + NPCM_I2CTXF_STS);
- 	/* check if TX FIFO is not empty */
--	if ((tx_fifo_sts & NPCM_I2CTXF_STS_TX_BYTES) == 0)
-+	if ((tx_fifo_sts & bus->data->txf_sts_tx_bytes) == 0)
- 		return false;
- 
- 	/* check if TX FIFO status bit is set: */
-@@ -454,7 +474,7 @@ static inline bool npcm_i2c_rx_fifo_full(struct npcm_i2c *bus)
- 
- 	rx_fifo_sts = ioread8(bus->reg + NPCM_I2CRXF_STS);
- 	/* check if RX FIFO is not empty: */
--	if ((rx_fifo_sts & NPCM_I2CRXF_STS_RX_BYTES) == 0)
-+	if ((rx_fifo_sts & bus->data->rxf_sts_rx_bytes) == 0)
- 		return false;
- 
- 	/* check if rx fifo full status is set: */
-@@ -743,11 +763,11 @@ static void npcm_i2c_callback(struct npcm_i2c *bus,
- static u8 npcm_i2c_fifo_usage(struct npcm_i2c *bus)
- {
- 	if (bus->operation == I2C_WRITE_OPER)
--		return FIELD_GET(NPCM_I2CTXF_STS_TX_BYTES,
--				 ioread8(bus->reg + NPCM_I2CTXF_STS));
-+		return (bus->data->txf_sts_tx_bytes &
-+			ioread8(bus->reg + NPCM_I2CTXF_STS));
- 	if (bus->operation == I2C_READ_OPER)
--		return FIELD_GET(NPCM_I2CRXF_STS_RX_BYTES,
--				 ioread8(bus->reg + NPCM_I2CRXF_STS));
-+		return (bus->data->rxf_sts_rx_bytes &
-+			ioread8(bus->reg + NPCM_I2CRXF_STS));
- 	return 0;
- }
- 
-@@ -759,13 +779,13 @@ static void npcm_i2c_write_to_fifo_master(struct npcm_i2c *bus, u16 max_bytes)
- 	 * Fill the FIFO, while the FIFO is not full and there are more bytes
- 	 * to write
- 	 */
--	size_free_fifo = I2C_HW_FIFO_SIZE - npcm_i2c_fifo_usage(bus);
-+	size_free_fifo = bus->data->fifo_size - npcm_i2c_fifo_usage(bus);
- 	while (max_bytes-- && size_free_fifo) {
- 		if (bus->wr_ind < bus->wr_size)
- 			npcm_i2c_wr_byte(bus, bus->wr_buf[bus->wr_ind++]);
- 		else
- 			npcm_i2c_wr_byte(bus, 0xFF);
--		size_free_fifo = I2C_HW_FIFO_SIZE - npcm_i2c_fifo_usage(bus);
-+		size_free_fifo = bus->data->fifo_size - npcm_i2c_fifo_usage(bus);
- 	}
- }
- 
-@@ -786,11 +806,11 @@ static void npcm_i2c_set_fifo(struct npcm_i2c *bus, int nread, int nwrite)
- 
- 	/* configure RX FIFO */
- 	if (nread > 0) {
--		rxf_ctl = min_t(int, nread, I2C_HW_FIFO_SIZE);
-+		rxf_ctl = min_t(int, nread, bus->data->fifo_size);
- 
- 		/* set LAST bit. if LAST is set next FIFO packet is nacked */
--		if (nread <= I2C_HW_FIFO_SIZE)
--			rxf_ctl |= NPCM_I2CRXF_CTL_LAST_PEC;
-+		if (nread <= bus->data->fifo_size)
-+			rxf_ctl |= bus->data->rxf_ctl_last_pec;
- 
- 		/*
- 		 * if we are about to read the first byte in blk rd mode,
-@@ -808,9 +828,9 @@ static void npcm_i2c_set_fifo(struct npcm_i2c *bus, int nread, int nwrite)
- 
- 	/* configure TX FIFO */
- 	if (nwrite > 0) {
--		if (nwrite > I2C_HW_FIFO_SIZE)
-+		if (nwrite > bus->data->fifo_size)
- 			/* data to send is more then FIFO size. */
--			iowrite8(I2C_HW_FIFO_SIZE, bus->reg + NPCM_I2CTXF_CTL);
-+			iowrite8(bus->data->fifo_size, bus->reg + NPCM_I2CTXF_CTL);
- 		else
- 			iowrite8(nwrite, bus->reg + NPCM_I2CTXF_CTL);
- 
-@@ -879,13 +899,13 @@ static void npcm_i2c_write_fifo_slave(struct npcm_i2c *bus, u16 max_bytes)
- 	npcm_i2c_clear_fifo_int(bus);
- 	npcm_i2c_clear_tx_fifo(bus);
- 	iowrite8(0, bus->reg + NPCM_I2CTXF_CTL);
--	while (max_bytes-- && I2C_HW_FIFO_SIZE != npcm_i2c_fifo_usage(bus)) {
-+	while (max_bytes-- && bus->data->fifo_size != npcm_i2c_fifo_usage(bus)) {
- 		if (bus->slv_wr_size <= 0)
- 			break;
--		bus->slv_wr_ind = bus->slv_wr_ind % I2C_HW_FIFO_SIZE;
-+		bus->slv_wr_ind = bus->slv_wr_ind & (bus->data->fifo_size - 1);
- 		npcm_i2c_wr_byte(bus, bus->slv_wr_buf[bus->slv_wr_ind]);
- 		bus->slv_wr_ind++;
--		bus->slv_wr_ind = bus->slv_wr_ind % I2C_HW_FIFO_SIZE;
-+		bus->slv_wr_ind = bus->slv_wr_ind & (bus->data->fifo_size - 1);
- 		bus->slv_wr_size--;
- 	}
- }
-@@ -900,7 +920,7 @@ static void npcm_i2c_read_fifo_slave(struct npcm_i2c *bus, u8 bytes_in_fifo)
- 	while (bytes_in_fifo--) {
- 		data = npcm_i2c_rd_byte(bus);
- 
--		bus->slv_rd_ind = bus->slv_rd_ind % I2C_HW_FIFO_SIZE;
-+		bus->slv_rd_ind = bus->slv_rd_ind & (bus->data->fifo_size - 1);
- 		bus->slv_rd_buf[bus->slv_rd_ind] = data;
- 		bus->slv_rd_ind++;
- 
-@@ -918,8 +938,8 @@ static int npcm_i2c_slave_get_wr_buf(struct npcm_i2c *bus)
- 	int ret = bus->slv_wr_ind;
- 
- 	/* fill a cyclic buffer */
--	for (i = 0; i < I2C_HW_FIFO_SIZE; i++) {
--		if (bus->slv_wr_size >= I2C_HW_FIFO_SIZE)
-+	for (i = 0; i < bus->data->fifo_size; i++) {
-+		if (bus->slv_wr_size >= bus->data->fifo_size)
- 			break;
- 		if (bus->state == I2C_SLAVE_MATCH) {
- 			i2c_slave_event(bus->slave, I2C_SLAVE_READ_REQUESTED, &value);
-@@ -927,11 +947,11 @@ static int npcm_i2c_slave_get_wr_buf(struct npcm_i2c *bus)
- 		} else {
- 			i2c_slave_event(bus->slave, I2C_SLAVE_READ_PROCESSED, &value);
- 		}
--		ind = (bus->slv_wr_ind + bus->slv_wr_size) % I2C_HW_FIFO_SIZE;
-+		ind = (bus->slv_wr_ind + bus->slv_wr_size) & (bus->data->fifo_size - 1);
- 		bus->slv_wr_buf[ind] = value;
- 		bus->slv_wr_size++;
- 	}
--	return I2C_HW_FIFO_SIZE - ret;
-+	return bus->data->fifo_size - ret;
- }
- 
- static void npcm_i2c_slave_send_rd_buf(struct npcm_i2c *bus)
-@@ -966,7 +986,7 @@ static void npcm_i2c_slave_receive(struct npcm_i2c *bus, u16 nread,
- 	bus->slv_rd_ind = 0;
- 
- 	iowrite8(0, bus->reg + NPCM_I2CTXF_CTL);
--	iowrite8(I2C_HW_FIFO_SIZE, bus->reg + NPCM_I2CRXF_CTL);
-+	iowrite8(bus->data->fifo_size, bus->reg + NPCM_I2CRXF_CTL);
- 	npcm_i2c_clear_tx_fifo(bus);
- 	npcm_i2c_clear_rx_fifo(bus);
- }
-@@ -999,12 +1019,12 @@ static void npcm_i2c_slave_wr_buf_sync(struct npcm_i2c *bus)
- {
- 	int left_in_fifo;
- 
--	left_in_fifo = FIELD_GET(NPCM_I2CTXF_STS_TX_BYTES,
--				 ioread8(bus->reg + NPCM_I2CTXF_STS));
-+	left_in_fifo = bus->data->txf_sts_tx_bytes &
-+			ioread8(bus->reg + NPCM_I2CTXF_STS);
- 
- 	/* fifo already full: */
--	if (left_in_fifo >= I2C_HW_FIFO_SIZE ||
--	    bus->slv_wr_size >= I2C_HW_FIFO_SIZE)
-+	if (left_in_fifo >= bus->data->fifo_size ||
-+	    bus->slv_wr_size >= bus->data->fifo_size)
- 		return;
- 
- 	/* update the wr fifo index back to the untransmitted bytes: */
-@@ -1012,7 +1032,7 @@ static void npcm_i2c_slave_wr_buf_sync(struct npcm_i2c *bus)
- 	bus->slv_wr_size = bus->slv_wr_size + left_in_fifo;
- 
- 	if (bus->slv_wr_ind < 0)
--		bus->slv_wr_ind += I2C_HW_FIFO_SIZE;
-+		bus->slv_wr_ind += bus->data->fifo_size;
- }
- 
- static void npcm_i2c_slave_rd_wr(struct npcm_i2c *bus)
-@@ -1158,7 +1178,7 @@ static irqreturn_t npcm_i2c_int_slave_handler(struct npcm_i2c *bus)
- 		npcm_i2c_clear_rx_fifo(bus);
- 		npcm_i2c_clear_tx_fifo(bus);
- 		iowrite8(0, bus->reg + NPCM_I2CTXF_CTL);
--		iowrite8(I2C_HW_FIFO_SIZE, bus->reg + NPCM_I2CRXF_CTL);
-+		iowrite8(bus->data->fifo_size, bus->reg + NPCM_I2CRXF_CTL);
- 		if (NPCM_I2CST_XMIT & i2cst) {
- 			bus->operation = I2C_WRITE_OPER;
- 		} else {
-@@ -1319,8 +1339,8 @@ static void npcm_i2c_master_fifo_read(struct npcm_i2c *bus)
- 	 * read == FIFO Size + C (where C < FIFO Size)then first read C bytes
- 	 * and in the next int we read rest of the data.
- 	 */
--	if (rcount < (2 * I2C_HW_FIFO_SIZE) && rcount > I2C_HW_FIFO_SIZE)
--		fifo_bytes = rcount - I2C_HW_FIFO_SIZE;
-+	if (rcount < (2 * bus->data->fifo_size) && rcount > bus->data->fifo_size)
-+		fifo_bytes = rcount - bus->data->fifo_size;
- 
- 	if (rcount <= fifo_bytes) {
- 		/* last bytes are about to be read - end of tx */
-@@ -2200,7 +2220,7 @@ static int npcm_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
- 	 * It cannot be cleared without resetting the module.
- 	 */
- 	else if (bus->cmd_err &&
--		 (NPCM_I2CRXF_CTL_LAST_PEC & ioread8(bus->reg + NPCM_I2CRXF_CTL)))
-+		 (bus->data->rxf_ctl_last_pec & ioread8(bus->reg + NPCM_I2CRXF_CTL)))
- 		npcm_i2c_reset(bus);
- 
- 	/* after any xfer, successful or not, stall and EOB must be disabled */
-@@ -2271,6 +2291,7 @@ static int npcm_i2c_probe_bus(struct platform_device *pdev)
- 	struct i2c_adapter *adap;
- 	struct clk *i2c_clk;
- 	static struct regmap *gcr_regmap;
-+	struct device *dev = &pdev->dev;
- 	int irq;
- 	int ret;
- 	struct device_node *np = pdev->dev.of_node;
-@@ -2281,6 +2302,12 @@ static int npcm_i2c_probe_bus(struct platform_device *pdev)
- 
- 	bus->dev = &pdev->dev;
- 
-+	bus->data = of_device_get_match_data(dev);
-+	if (!bus->data) {
-+		dev_err(dev, "OF data missing\n");
-+		return -EINVAL;
-+	}
-+
- 	bus->num = of_alias_get_id(pdev->dev.of_node, "i2c");
- 	/* core clk must be acquired to calculate module timing settings */
- 	i2c_clk = devm_clk_get(&pdev->dev, NULL);
-@@ -2294,7 +2321,7 @@ static int npcm_i2c_probe_bus(struct platform_device *pdev)
- 
- 	if (IS_ERR(gcr_regmap))
- 		return PTR_ERR(gcr_regmap);
--	regmap_write(gcr_regmap, NPCM_I2CSEGCTL, NPCM_I2CSEGCTL_INIT_VAL);
-+	regmap_write(gcr_regmap, NPCM_I2CSEGCTL, bus->data->segctl_init_val);
- 
- 	bus->reg = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(bus->reg))
-@@ -2356,7 +2383,8 @@ static int npcm_i2c_remove_bus(struct platform_device *pdev)
- }
- 
- static const struct of_device_id npcm_i2c_bus_of_table[] = {
--	{ .compatible = "nuvoton,npcm750-i2c", },
-+	{ .compatible = "nuvoton,npcm750-i2c", .data = &npxm7xx_i2c_data },
-+	{ .compatible = "nuvoton,npcm845-i2c", .data = &npxm8xx_i2c_data },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, npcm_i2c_bus_of_table);
--- 
-2.17.1
+> ---
+>  drivers/dma/xilinx/xilinx_dma.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/dma/xilinx/xilinx_dma.c b/drivers/dma/xilinx/xilinx_=
+dma.c
+> index 3ff9fa3d8cd5..3b435449cd0c 100644
+> --- a/drivers/dma/xilinx/xilinx_dma.c
+> +++ b/drivers/dma/xilinx/xilinx_dma.c
+> @@ -884,9 +884,13 @@ static void xilinx_dma_free_descriptors(struct
+> xilinx_dma_chan *chan)
+>=20
+>  	spin_lock_irqsave(&chan->lock, flags);
+>=20
+> -	xilinx_dma_free_desc_list(chan, &chan->pending_list);
+> +	/*
+> +	 * Descriptor lists must be freed from oldest to newest so that the
+> +	 * order of free_seg_list is maintained.
+> +	 */
+>  	xilinx_dma_free_desc_list(chan, &chan->done_list);
+>  	xilinx_dma_free_desc_list(chan, &chan->active_list);
+> +	xilinx_dma_free_desc_list(chan, &chan->pending_list);
+>=20
+>  	spin_unlock_irqrestore(&chan->lock, flags);  }
+> --
+> 2.35.1
 

@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 606DC5212DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78FDF5212DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:55:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240543AbiEJK6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 06:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
+        id S240421AbiEJK6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 06:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240918AbiEJK4o (ORCPT
+        with ESMTP id S240034AbiEJK62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 06:56:44 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2409B49CB6;
-        Tue, 10 May 2022 03:51:18 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id j6so14603756pfe.13;
-        Tue, 10 May 2022 03:51:17 -0700 (PDT)
+        Tue, 10 May 2022 06:58:28 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210124FC6D;
+        Tue, 10 May 2022 03:51:50 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id n10so4458946pjh.5;
+        Tue, 10 May 2022 03:51:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=hAHq/Z/cN7zV+XdkiKU02nzI59eCs7rRP6xEiwk+ttM=;
-        b=omAx8HgDVZ/N16gcZs7NwcDCejSq3mv/wK0bmHiwGOCdpzpFBaEL9oJp59J3TefASW
-         VWqJ5eXPMLZnfGvy0rwgMy4XQE9RfeaNHByd00RzEW2DkNQpAaR3GjcNk0tGp1a3/Ouk
-         1X/mczkeIzuYf6tOdlntClgX3cBujoyE7N7zUJ51QQ19aneUoH/m5gkR3Na4QHyhaJud
-         1olm5tqo7xBbVvuFZtgJGn7jjstObBrJ+7bWaPFYOXiFj7DSs8fMCTHu6peNEuGhx7z9
-         22a+0pheq7GEFUAgaXhizFz6bMHBHIuwhCHgrhINnuCMAGLn1UHz6vJ33DIUopRD/5g8
-         gCmQ==
+        bh=eCsMj0d1/H3KDoAfroxIa4b76PXDccyfi+yCHTDyPoE=;
+        b=CtJrbRkdYLd2m75y3KnT1llgVR0TrXUGgcfjKnerzLytO3KhE+tKJrXpMCdL73JkrV
+         wAE/cO12OX9q8ZV1cNOS2d1PVJ3Qq6lwn2BevdYI7dWmfYZ2/oqbSVU++K8smSj58FPP
+         qH2VzrXI9m/8h87/7bLOVM9SJ/Z9Qi1/Vg02c9t+/YE5MskdJQkY7Yv27xiblP6N0kXP
+         TG6LEgZiozrbLNKeR8paleRjAh4a35//96uGyg2aupHR9sl3JIWgl3G7DgaAYcn7yoVu
+         aMcsAfjp+U4rmcJo3ncmyakDkU9nWPvBVkGpPNnXlLE+sUg0xrn3ZP5fFh2UEWYFW7Qe
+         yjHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=hAHq/Z/cN7zV+XdkiKU02nzI59eCs7rRP6xEiwk+ttM=;
-        b=uqDOQ1D+20DLacIvGOOyQwgcrRFfTdsP8vItO8XfUbxNBY0BB+e8Xr3nbJt92Wr1q6
-         ejrpJ2C90i2QJOb3YhPjcLo0Nii1vJeBRdWBfJpPiVqq69B+uvVvvVRaLtSBUXU7QPqT
-         JkKsQohNXfAr3iHNwM/0qeYRhKmvokiS5oK0d+N9kQgQ9QeVrOtwCm/F8dk2bthXnkJ5
-         kcik1miDrj+GNsMHOpk8rpaUx7PtyxVT+GTbdoZb0KSlguULBtz3M+56at7LyVyQkvZY
-         N96qmXkDPF6cRVt4kZZKfnDdEsWLTNJlgy5EW7uhDDF1jqJdlzVQlQgWLZIoMXKemTwQ
-         s4Zw==
-X-Gm-Message-State: AOAM530mPWb+w4bf4T8ugpSW8jhXB8FbTJCf7BNDzT4dnlnHbGXDRv/W
-        Hvh6veAk/0FyTOVNzNulUDE=
-X-Google-Smtp-Source: ABdhPJy+fryPMGgXljHO9c+vcQpQNMh6ymww+rTFw9yfICLO78dc6yMkKnygW8lA+g2+4HS1DnAojw==
-X-Received: by 2002:a62:4e90:0:b0:505:fa47:b611 with SMTP id c138-20020a624e90000000b00505fa47b611mr19933137pfb.65.1652179877328;
-        Tue, 10 May 2022 03:51:17 -0700 (PDT)
+        bh=eCsMj0d1/H3KDoAfroxIa4b76PXDccyfi+yCHTDyPoE=;
+        b=nyw9qC0QGpBG1qp7yi6s9pHz7lMpeigzY639MYZL6hnxK5nNm6Fzwjmzg714w9vRC1
+         UYO0mMVq4O7jKQqajkd5JF+qIR77+CnoulgDRhnsgGRBTgStoZRvxac7OLOkRLLWtYNd
+         zrePeTLzB3OJcxU5qqbvlRoQN7EMUJmhW3Huc48R4qZYyVe/20dfnKRIq6/rrG+65hut
+         2WB0Bn8RtVgWectZ05Nlw9+fDrirGBml9eCIfO8PFouqGZrm1CfYZnUElisuSuUwus2l
+         8M3mVxMmgWylWmhnp+DOtvuPa8bDDKEx5UOyzMPF6cGKHXJH5TXKWV98wLv7qnMCQY2t
+         VvQA==
+X-Gm-Message-State: AOAM530eylbINopiecyeAtkmZZRHgbRRBGt+oNG/+9MpPNnCkl65Y7gY
+        +zFiTcIEzz4dMgJNp16xgdU=
+X-Google-Smtp-Source: ABdhPJwkdiCGUU+XM88WpYZnDkq5K9ncI89i87n9dQBbbP43hghm580ctBP9FYiQdGdVRcOiq1UP3w==
+X-Received: by 2002:a17:903:1d1:b0:15e:9607:d4c9 with SMTP id e17-20020a17090301d100b0015e9607d4c9mr20156470plh.41.1652179909689;
+        Tue, 10 May 2022 03:51:49 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id cq21-20020a056a00331500b0050dc76281e0sm10249669pfb.186.2022.05.10.03.51.15
+        by smtp.gmail.com with ESMTPSA id r9-20020a056a00216900b0050dc7628195sm10288927pff.111.2022.05.10.03.51.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 03:51:17 -0700 (PDT)
+        Tue, 10 May 2022 03:51:49 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     brking@us.ibm.com
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
+To:     james.smart@broadcom.com
+Cc:     dick.kennedy@broadcom.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] [SCSI] ipr: use kobj_to_dev()
-Date:   Tue, 10 May 2022 10:51:13 +0000
-Message-Id: <20220510105113.1351891-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] lpfc: use kobj_to_dev()
+Date:   Tue, 10 May 2022 10:51:45 +0000
+Message-Id: <20220510105145.1352030-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -78,58 +78,41 @@ Use kobj_to_dev() instead of open-coding it.
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- drivers/scsi/ipr.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/scsi/lpfc/lpfc_attr.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
-index 353cf47db79c..256ec6d08c16 100644
---- a/drivers/scsi/ipr.c
-+++ b/drivers/scsi/ipr.c
-@@ -3456,7 +3456,7 @@ static ssize_t ipr_read_trace(struct file *filp, struct kobject *kobj,
- 			      struct bin_attribute *bin_attr,
- 			      char *buf, loff_t off, size_t count)
+diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
+index 3caaa7c4af48..97f87155c1bd 100644
+--- a/drivers/scsi/lpfc/lpfc_attr.c
++++ b/drivers/scsi/lpfc/lpfc_attr.c
+@@ -4376,8 +4376,7 @@ sysfs_drvr_stat_data_read(struct file *filp, struct kobject *kobj,
+ 		struct bin_attribute *bin_attr,
+ 		char *buf, loff_t off, size_t count)
  {
+-	struct device *dev = container_of(kobj, struct device,
+-		kobj);
++	struct device *dev = kobj_to_dev(kobj);
+ 	struct Scsi_Host  *shost = class_to_shost(dev);
+ 	struct lpfc_vport *vport = (struct lpfc_vport *) shost->hostdata;
+ 	struct lpfc_hba   *phba = vport->phba;
+@@ -6396,7 +6395,7 @@ sysfs_ctlreg_write(struct file *filp, struct kobject *kobj,
+ 		   char *buf, loff_t off, size_t count)
+ {
+ 	size_t buf_off;
 -	struct device *dev = container_of(kobj, struct device, kobj);
 +	struct device *dev = kobj_to_dev(kobj);
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct ipr_ioa_cfg *ioa_cfg = (struct ipr_ioa_cfg *)shost->hostdata;
- 	unsigned long lock_flags = 0;
-@@ -4182,7 +4182,7 @@ static ssize_t ipr_read_async_err_log(struct file *filep, struct kobject *kobj,
- 				struct bin_attribute *bin_attr, char *buf,
- 				loff_t off, size_t count)
+ 	struct Scsi_Host  *shost = class_to_shost(dev);
+ 	struct lpfc_vport *vport = (struct lpfc_vport *) shost->hostdata;
+ 	struct lpfc_hba   *phba = vport->phba;
+@@ -6456,7 +6455,7 @@ sysfs_ctlreg_read(struct file *filp, struct kobject *kobj,
  {
--	struct device *cdev = container_of(kobj, struct device, kobj);
-+	struct device *cdev = kobj_to_dev(kobj);
- 	struct Scsi_Host *shost = class_to_shost(cdev);
- 	struct ipr_ioa_cfg *ioa_cfg = (struct ipr_ioa_cfg *)shost->hostdata;
- 	struct ipr_hostrcb *hostrcb;
-@@ -4206,7 +4206,7 @@ static ssize_t ipr_next_async_err_log(struct file *filep, struct kobject *kobj,
- 				struct bin_attribute *bin_attr, char *buf,
- 				loff_t off, size_t count)
- {
--	struct device *cdev = container_of(kobj, struct device, kobj);
-+	struct device *cdev = kobj_to_dev(kobj);
- 	struct Scsi_Host *shost = class_to_shost(cdev);
- 	struct ipr_ioa_cfg *ioa_cfg = (struct ipr_ioa_cfg *)shost->hostdata;
- 	struct ipr_hostrcb *hostrcb;
-@@ -4267,7 +4267,7 @@ static ssize_t ipr_read_dump(struct file *filp, struct kobject *kobj,
- 			     struct bin_attribute *bin_attr,
- 			     char *buf, loff_t off, size_t count)
- {
--	struct device *cdev = container_of(kobj, struct device, kobj);
-+	struct device *cdev = kobj_to_dev(kobj);
- 	struct Scsi_Host *shost = class_to_shost(cdev);
- 	struct ipr_ioa_cfg *ioa_cfg = (struct ipr_ioa_cfg *)shost->hostdata;
- 	struct ipr_dump *dump;
-@@ -4456,7 +4456,7 @@ static ssize_t ipr_write_dump(struct file *filp, struct kobject *kobj,
- 			      struct bin_attribute *bin_attr,
- 			      char *buf, loff_t off, size_t count)
- {
--	struct device *cdev = container_of(kobj, struct device, kobj);
-+	struct device *cdev = kobj_to_dev(kobj);
- 	struct Scsi_Host *shost = class_to_shost(cdev);
- 	struct ipr_ioa_cfg *ioa_cfg = (struct ipr_ioa_cfg *)shost->hostdata;
- 	int rc;
+ 	size_t buf_off;
+ 	uint32_t * tmp_ptr;
+-	struct device *dev = container_of(kobj, struct device, kobj);
++	struct device *dev = kobj_to_dev(kobj);
+ 	struct Scsi_Host  *shost = class_to_shost(dev);
+ 	struct lpfc_vport *vport = (struct lpfc_vport *) shost->hostdata;
+ 	struct lpfc_hba   *phba = vport->phba;
 -- 
 2.25.1
 

@@ -2,96 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 817B15222E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A525222EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:38:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348302AbiEJRlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 13:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55816 "EHLO
+        id S1348288AbiEJRmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 13:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348336AbiEJRlJ (ORCPT
+        with ESMTP id S1348268AbiEJRmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 13:41:09 -0400
-Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A82D59947
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:37:10 -0700 (PDT)
-Received: by mail-oo1-xc35.google.com with SMTP id f6-20020a4ace86000000b0035f083d2216so3447960oos.4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:37:10 -0700 (PDT)
+        Tue, 10 May 2022 13:42:08 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF066668B
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:38:06 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id u3so24818381wrg.3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:38:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kimSJUw+1y3TWVKZKDRg/9WkCe2sjm3zwO8CY1sBvJw=;
-        b=Q7c4aBhrqyZYYcQ7Qg84ae7RwvmJky/It4UGx3GRBGfnUWmV5ZtPh8iVP5W5vybGib
-         K6qus722UFzQ9Jg+S6JyxMV9SY8pYuXjLpRjQjnv1shYXGCMWC5fPOVZpc69DF1/Guw3
-         scJLUXwjyRk5MiI6UBlkXKiyBLsI6lZ6AReoQ=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ZZMSgeH50EgZ2k2CW9lxM/Z3t0UYa8S+CXFtKaa9+OI=;
+        b=cnCBj0bGQFR5XYbDWXn0VlW306SuJCKc7MGdSWpl7NR783sSAeQ1WTW7RNtiRazkQl
+         yCjh1YUcnuogZEkVuwkgximSRoU6hD56sVsrxBLE3h2W/8RHz2F6LIcsGpkhILIRE+tf
+         OelGPH5OGxf7zoIbxVHqfndGpTMPxhd4Xl34XdQMY1d3Fkh59mcPKwWSaiEbN/17rqAg
+         J+GzjbB5PsHd2Xp1pLE1otBR2asi6OTMLfPN79fxPM7H9THW9R9K9VSOFFkLYhRoTu6f
+         99d+5uiCDLwEFjUgFh2a/5Nc1aW4i1JgTjY3J8v7xHTh/2xczWPN7T7wntYfu4XUEXa6
+         /Knw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=kimSJUw+1y3TWVKZKDRg/9WkCe2sjm3zwO8CY1sBvJw=;
-        b=6tl3VmCT5NSEQ9gjJKIrEDvD6PivLrRj1qG/7fCE4TNJ0SZje5YKxEJRfYaO4Ss7+s
-         sR3pGPSh09AMJ983x62XKnElnDH+Ir9gHP21UTrKCoEtJ/HcfvHP19bYs7i2tX0BBDjh
-         qDbcNgd2KiN9SBkxBrltSSQYmFvEDootWBQyICywy2PMbgPm02iycB6Eym676k8k43XC
-         omQsFGI6kstfBdhX/i/9EJWhAPg7QDB3IgUCJ2cpsowL0Dhz1I7Tgzhf/YXE5frqYF/z
-         GGA9f70dPPVbEBlO6I3usyDQwpjjI0lUfQ0xRWQ3eliSQC+LqAA9yXTjzo9JWZyRN7GN
-         bqbg==
-X-Gm-Message-State: AOAM533PTmlwdSHJXhnslbfFYLe3g7Epm2pkk9VdNvZ0eIGVcq0lmWAu
-        XIBwqHR2jRXRGydOi5UwgLZp3A==
-X-Google-Smtp-Source: ABdhPJy618OqAHTNYEB7Ht4AIljGWcZGcbRjXKXUWC0+tAvVjj9cleCBbxEWWKuaa3Cl/znWOfmqyQ==
-X-Received: by 2002:a9d:1295:0:b0:605:fecb:3a68 with SMTP id g21-20020a9d1295000000b00605fecb3a68mr8341169otg.295.1652204229470;
-        Tue, 10 May 2022 10:37:09 -0700 (PDT)
-Received: from fedora64.linuxtx.org (104-189-158-32.lightspeed.rcsntx.sbcglobal.net. [104.189.158.32])
-        by smtp.gmail.com with ESMTPSA id 17-20020aca1211000000b0032603df9d24sm5478412ois.47.2022.05.10.10.37.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 10:37:08 -0700 (PDT)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Date:   Tue, 10 May 2022 12:37:07 -0500
-From:   Justin Forbes <jforbes@fedoraproject.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.17 000/140] 5.17.7-rc1 review
-Message-ID: <Ynqiw777zgkZUVVU@fedora64.linuxtx.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZZMSgeH50EgZ2k2CW9lxM/Z3t0UYa8S+CXFtKaa9+OI=;
+        b=Lv1kd8QhqbmmustPxfuSvwRygwy/kvR3Q57c3/hWPbGDbdKv2odArAhSMifo+gEbv1
+         zECDCg3GuqNn826Ca+cnN8axfgmX4c94t+Rpe8b2ExL+Rt6CIU2hw8HZsmNtKZ+UWKXP
+         a+9zSR7tsbGcVMIshD5CE/DbSRIZzKY/0WiU/912J/3p98ttz657s5kE5M2+5ED2yzcx
+         BSqOCWDCSfPePScIIdYdzsYmr2GXrGKdSqnDvQGc0DAO+LwTwA/DCdbkul7DwGS9NiyU
+         qo8rdYIOdC4RHSEMUC8laf24g5TcTPCXXLvZ+HEXibySv/I+8tKpbWGU5GDsvNm/GsKM
+         /mxg==
+X-Gm-Message-State: AOAM532iVzMp7uaYIcyQRoUETm8kLBID1yqdhkT99Jvlgs3Fgqhffc14
+        +1/hH/Z2pB/PnYCB+pxBWJI/Qg==
+X-Google-Smtp-Source: ABdhPJxtGfvXTi8r9vPKDMdTNxnGRRp4Om2umX7iejByqOHJISwdnTIoxYwzFrqbbehOzo/+LkP0uA==
+X-Received: by 2002:a5d:4401:0:b0:20a:d6e8:2c0e with SMTP id z1-20020a5d4401000000b0020ad6e82c0emr19463097wrq.168.1652204284966;
+        Tue, 10 May 2022 10:38:04 -0700 (PDT)
+Received: from [192.168.1.41] (176-182-171-101.abo.bbox.fr. [176.182.171.101])
+        by smtp.googlemail.com with ESMTPSA id n10-20020a5d67ca000000b0020c5253d8cfsm17271569wrw.27.2022.05.10.10.38.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 10:38:04 -0700 (PDT)
+Message-ID: <76e12c64-9e87-d407-0676-3fa2955c3680@linaro.org>
+Date:   Tue, 10 May 2022 19:38:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v6 4/4] thermal: k3_j72xx_bandgap: Add the bandgap driver
+ support
+Content-Language: en-US
+To:     "J, KEERTHY" <j-keerthy@ti.com>, robh+dt@kernel.org,
+        rui.zhang@intel.com, amitk@kernel.org, kristo@kernel.org,
+        vigneshr@ti.com, krzysztof.kozlowski@linaro.org
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220427064635.24898-1-j-keerthy@ti.com>
+ <20220427064635.24898-5-j-keerthy@ti.com>
+ <78a3cc4d-8ce4-0dae-2f4e-7522a0a3aa0b@ti.com>
+ <d94ea6b0-e138-951d-5405-375255104adb@linaro.org>
+ <ffafc50e-9adb-9d66-3d1f-4ebc9f91f47d@ti.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <ffafc50e-9adb-9d66-3d1f-4ebc9f91f47d@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 03:06:30PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.17.7 release.
-> There are 140 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 10/05/2022 19:17, J, KEERTHY wrote:
 > 
-> Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.7-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
 
-Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+[ ... ]
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+> Hi Daniel,
+> 
+> Patch 1 & 4 i.e Documentation patch and driver patch can be picked by 
+> you. I believe Vignesh will take the dts patches.
+
+Will you send a V7 with Krzysztof comments fixed ?
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

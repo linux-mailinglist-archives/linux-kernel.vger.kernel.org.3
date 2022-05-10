@@ -2,142 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AAEF5221BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7A495221C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347695AbiEJQzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 12:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48840 "EHLO
+        id S1347703AbiEJQ4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 12:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347685AbiEJQzT (ORCPT
+        with ESMTP id S237279AbiEJQ4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 12:55:19 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E484162118;
-        Tue, 10 May 2022 09:51:20 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24AFJjbp026754;
-        Tue, 10 May 2022 16:50:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=MtEUdrFg5vVjbNQCS/BU2XYQmsKHTDxuTJJMpHB118M=;
- b=eT/g0iwRdTnHQeQijJOg2K/U6rbI2tmCnru3jZ1b2HoQR077MWSjm296OHocij0et23e
- w7HT+xEliTu60ZSC95uUdfT2n85pQunzIzI2SkmIFNzwJSPf076wXcG0MKsl5HKPAg86
- GbaVpX7+143ggcNMLo/j2RX2JLLf4gMUzxUN7yLBN5a3MZzRg+JkMvfhUMPKILXnLpBW
- V7egPydqAQwrq6RkmyLgqQrRyqBgQxVz8RJJB8YjhZlVno9CCmBfaAj9VgUCeKhq5ZBY
- 6yxW1bDrBBWmthmIqnm+8Cx5l8DWjzcK1qDAlC8blLG9PLcUahToPsNnbgng4ZMptObt 7w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fytkkt5sv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 May 2022 16:50:44 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24AGTFMC001381;
-        Tue, 10 May 2022 16:50:43 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fytkkt5sc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 May 2022 16:50:43 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24AGT47v027915;
-        Tue, 10 May 2022 16:50:42 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma01wdc.us.ibm.com with ESMTP id 3fwgd96b1f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 May 2022 16:50:42 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24AGof3f61342026
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 10 May 2022 16:50:41 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 67F9E124055;
-        Tue, 10 May 2022 16:50:41 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 033AD124058;
-        Tue, 10 May 2022 16:50:41 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 10 May 2022 16:50:40 +0000 (GMT)
-Message-ID: <c76f52d9-07eb-39dd-dad4-43b108696539@linux.ibm.com>
-Date:   Tue, 10 May 2022 12:50:40 -0400
+        Tue, 10 May 2022 12:56:20 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D7D27D003;
+        Tue, 10 May 2022 09:52:20 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id x18so17261454plg.6;
+        Tue, 10 May 2022 09:52:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GlbUvuuWywK7r9IASaNCIAQVNurd9YpTqewxFeLD4Rs=;
+        b=eAksJ5ZwCS6JUF2s47IELsBUbuSOqioFvb6MBBDzupqY9v71HGtPALLBQdHly+Q4Fh
+         DShJbrjkSQIb7jykbW/iyKoL2t8zf5ENw/mG8nt94ygLj8ongvXhTPpdzRtPsoY7kJ6V
+         mX8KaQXsxzDiE18YMgbJgBvw2Ctwrd9I2WbpQuIXTFnvUoJjYPAxdkyBUVboE9ts76AJ
+         FacBL5YkyyFO+PSjs0yjsiTjP3Yz0NIQJOhkouL8zuRxNzedFRafbtFdMgOYXfkGGFRo
+         77GAI3ARWhvuQ0JxQ/XQ4G3SyOR3ZyVLzm6N19EwoHIHz9egltmUj6Up+YZTV8ukpIE1
+         nVhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GlbUvuuWywK7r9IASaNCIAQVNurd9YpTqewxFeLD4Rs=;
+        b=InKB3fd/DCWATGkVdlJF+j/WznoAxG1QtVeQa+eGvDqFYYa3W6F6um59DVTCGUF3cP
+         4GyqmWt3NmKR7YBM0mbx6rCE2sYT078MZDOEyLkOUFIWoZR8fzwWadNs6003kOTRR5TQ
+         yRbx01ojNkynHncnkXmWNrdbHZL6fI2x79ZKizfaC3V1sLJkRdh4wM9n28FJI1VQsIQC
+         Gc+t7hMVWBb1TtuO33zxVaySypjCzWg26Kkcd06B6+oD/VuGy7zI/Qyy8Bq4IYtzKkkc
+         wiWzJ8uXdjlUxQhi5jgf+Zo3cPwq7YuUNpnBj4mJnmnFhd74EIQ0d1/eJ851gaWUqfCh
+         VD0A==
+X-Gm-Message-State: AOAM531l9agauWbZ0DjwTkFZYsSPNQbQKI9Fd+8qEzFD1djtWudlisPW
+        O1Wdw0sI3b89vURxNB28jPQ=
+X-Google-Smtp-Source: ABdhPJwmOOWFZJFiV5ZPMNAWyXasCIh2GiEs5APeA0AQgt/pqcBNlctje9oW1aHg3VNdud72TsDotQ==
+X-Received: by 2002:a17:902:d4ce:b0:15e:90f8:216c with SMTP id o14-20020a170902d4ce00b0015e90f8216cmr22171600plg.65.1652201539771;
+        Tue, 10 May 2022 09:52:19 -0700 (PDT)
+Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
+        by smtp.gmail.com with ESMTPSA id n10-20020a170903110a00b0015e8d4eb20fsm2296636plh.89.2022.05.10.09.52.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 09:52:18 -0700 (PDT)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@chromium.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] drm/msm: Fix fb plane offset calculation
+Date:   Tue, 10 May 2022 09:52:16 -0700
+Message-Id: <20220510165216.3577068-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v12 01/26] securityfs: rework dentry creation
-Content-Language: en-US
-To:     Christian Brauner <brauner@kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        christian.brauner@ubuntu.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        jpenumak@redhat.com, John Johansen <john.johansen@canonical.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Micah Morton <mortonm@chromium.org>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-References: <20220420140633.753772-1-stefanb@linux.ibm.com>
- <20220420140633.753772-2-stefanb@linux.ibm.com>
- <20220509195414.GA30894@mail.hallyn.com>
- <20220510102525.hlt2rm3k3hg5r6gg@wittgenstein>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220510102525.hlt2rm3k3hg5r6gg@wittgenstein>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: rm2ZvGlia5ghHqQtREAD3mTlCv2558Ga
-X-Proofpoint-GUID: FwZzpy1yN5E-3p3du-KT6wkIbBSpD0C3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-10_04,2022-05-10_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- lowpriorityscore=0 phishscore=0 suspectscore=0 adultscore=0 clxscore=1011
- impostorscore=0 mlxlogscore=803 bulkscore=0 priorityscore=1501 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205100072
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Rob Clark <robdclark@chromium.org>
 
+The offset got dropped by accident.
 
-On 5/10/22 06:25, Christian Brauner wrote:
-> On Mon, May 09, 2022 at 02:54:14PM -0500, Serge Hallyn wrote:
->> On Wed, Apr 20, 2022 at 10:06:08AM -0400, Stefan Berger wrote:
->>> From: Christian Brauner <brauner@kernel.org>
->>>
->>> When securityfs creates a new file or directory via
->>> securityfs_create_dentry() it will take an additional reference on the
->>> newly created dentry after it has attached the new inode to the new
->>> dentry and added it to the hashqueues.
->>> If we contrast this with debugfs which has the same underlying logic as
->>> securityfs. It uses a similar pairing as securityfs. Where securityfs
->>> has the securityfs_create_dentry() and securityfs_remove() pairing,
->>> debugfs has the __debugfs_create_file() and debugfs_remove() pairing.
->>>
->>> In contrast to securityfs, debugfs doesn't take an additional reference
->>> on the newly created dentry in __debugfs_create_file() which would need
->>> to be put in debugfs_remove().
->>>
->>> The additional dget() isn't a problem per se. In the current
->>> implementation of securityfs each created dentry pins the filesystem via
->>
->> Is 'via' an extra word here or is there a missing word?
->>
->> I'll delay the rest of my response as the missing word may answer my
->> remaining question :)
-> 
-> It can be both. It should either be removed or it should be followed by
-> "securityfs_create_dentry()". securityfs_create_dentry() takes two
+Fixes: d413e6f97134 ("drm/msm: Drop msm_gem_iova()")
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+ drivers/gpu/drm/msm/msm_fb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I am adding "securityfs_create_dentry()" to the text.
+diff --git a/drivers/gpu/drm/msm/msm_fb.c b/drivers/gpu/drm/msm/msm_fb.c
+index 362775ae50af..4269da268a4a 100644
+--- a/drivers/gpu/drm/msm/msm_fb.c
++++ b/drivers/gpu/drm/msm/msm_fb.c
+@@ -118,7 +118,7 @@ uint32_t msm_framebuffer_iova(struct drm_framebuffer *fb,
+ 		struct msm_gem_address_space *aspace, int plane)
+ {
+ 	struct msm_framebuffer *msm_fb = to_msm_framebuffer(fb);
+-	return msm_fb->iova[plane];
++	return msm_fb->iova[plane] + fb->offsets[plane];
+ }
+ 
+ struct drm_gem_object *msm_framebuffer_bo(struct drm_framebuffer *fb, int plane)
+-- 
+2.35.1
+

@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F1052191E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96FAF521699
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243081AbiEJNmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50554 "EHLO
+        id S242399AbiEJNQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:16:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243973AbiEJN1p (ORCPT
+        with ESMTP id S242370AbiEJNPh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:27:45 -0400
+        Tue, 10 May 2022 09:15:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A040A17058;
-        Tue, 10 May 2022 06:20:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6F044A0C;
+        Tue, 10 May 2022 06:11:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C5EF61768;
-        Tue, 10 May 2022 13:20:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EFD6C385A6;
-        Tue, 10 May 2022 13:20:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28519615F4;
+        Tue, 10 May 2022 13:11:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31C76C385C6;
+        Tue, 10 May 2022 13:11:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188850;
-        bh=yLrBDSoik5lYxYHt4/zuvrMAWSDosPSALRSAGfIGK3E=;
+        s=korg; t=1652188282;
+        bh=vnTXKHoW+s1UCoDCJYnUiMkurm5wSeldRpOsZ741LXw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HBzuHFFxnik+6LPJJJ5lERA9vl94FwetTD+La0dFRt9b9arwBntn7YsUAy/4QEbi3
-         u1HMaUEgr3JdOW19uRaQVkumD6XqPvC29rmgF5hxR6PBo0K0+RHdcgyPmQZu1P8M4e
-         F9/EyVH96KhGe5wRe1uXVdMAvFmltxfQX7t78pDQ=
+        b=2DUZ7Q7RGyiDdlgg1B1OkK7b/GX4ZidaeynLXiXZMKicS5awAJdIDQm3HMkWVCMFf
+         Nw3FfFlpzNCK+khbsrs+R1n7YSuq7AwyjBe+XC/7JB9zBLPvOhTsfzu+JvY8kV1MAC
+         Mjnl2CVHIQuOAM+wzyFxBCJ1jWCuqQfBEz2LlKMM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 26/88] phy: samsung: exynos5250-sata: fix missing device put in probe error paths
+        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 21/66] ARM: dts: imx6qdl-apalis: Fix sgtl5000 detection issue
 Date:   Tue, 10 May 2022 15:07:11 +0200
-Message-Id: <20220510130734.506299687@linuxfoundation.org>
+Message-Id: <20220510130730.383346503@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
-References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
+References: <20220510130729.762341544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,74 +57,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Fabio Estevam <festevam@gmail.com>
 
-[ Upstream commit 5c8402c4db45dd55c2c93c8d730f5dfa7c78a702 ]
+[ Upstream commit fa51e1dc4b91375bc18349663a52395ad585bd3c ]
 
-The actions of of_find_i2c_device_by_node() in probe function should be
-reversed in error paths by putting the reference to obtained device.
+On a custom carrier board with a i.MX6Q Apalis SoM, the sgtl5000 codec
+on the SoM is often not detected and the following error message is
+seen when the sgtl5000 driver tries to read the ID register:
 
-Fixes: bcff4cba41bc ("PHY: Exynos: Add Exynos5250 SATA PHY driver")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-Link: https://lore.kernel.org/r/20220407091857.230386-2-krzysztof.kozlowski@linaro.org
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+sgtl5000 1-000a: Error reading chip id -6
+
+The reason for the error is that the MCLK clock is not provided
+early enough.
+
+Fix the problem by describing the MCLK pinctrl inside the codec
+node instead of placing it inside the audmux pinctrl group.
+
+With this change applied the sgtl5000 is always detected on every boot.
+
+Fixes: 693e3ffaae5a ("ARM: dts: imx6: Add support for Toradex Apalis iMX6Q/D SoM")
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Reviewed-by: Tim Harvey <tharvey@gateworks.com>
+Acked-by: Max Krummenacher <max.krummenacher@toradex.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/phy/samsung/phy-exynos5250-sata.c | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+ arch/arm/boot/dts/imx6qdl-apalis.dtsi | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/phy/samsung/phy-exynos5250-sata.c b/drivers/phy/samsung/phy-exynos5250-sata.c
-index 7960c69d09a6..2c39d2fd3cd8 100644
---- a/drivers/phy/samsung/phy-exynos5250-sata.c
-+++ b/drivers/phy/samsung/phy-exynos5250-sata.c
-@@ -202,20 +202,21 @@ static int exynos_sata_phy_probe(struct platform_device *pdev)
- 	sata_phy->phyclk = devm_clk_get(dev, "sata_phyctrl");
- 	if (IS_ERR(sata_phy->phyclk)) {
- 		dev_err(dev, "failed to get clk for PHY\n");
--		return PTR_ERR(sata_phy->phyclk);
-+		ret = PTR_ERR(sata_phy->phyclk);
-+		goto put_dev;
- 	}
+diff --git a/arch/arm/boot/dts/imx6qdl-apalis.dtsi b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
+index 99e323b57261..cbe7b0dcb6eb 100644
+--- a/arch/arm/boot/dts/imx6qdl-apalis.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
+@@ -324,6 +324,8 @@ vgen6_reg: vgen6 {
+ 	codec: sgtl5000@0a {
+ 		compatible = "fsl,sgtl5000";
+ 		reg = <0x0a>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_sgtl5000>;
+ 		clocks = <&clks IMX6QDL_CLK_CKO>;
+ 		VDDA-supply = <&reg_2p5v>;
+ 		VDDIO-supply = <&reg_3p3v>;
+@@ -550,8 +552,6 @@ MX6QDL_PAD_DISP0_DAT20__AUD4_TXC	0x130b0
+ 			MX6QDL_PAD_DISP0_DAT21__AUD4_TXD	0x130b0
+ 			MX6QDL_PAD_DISP0_DAT22__AUD4_TXFS	0x130b0
+ 			MX6QDL_PAD_DISP0_DAT23__AUD4_RXD	0x130b0
+-			/* SGTL5000 sys_mclk */
+-			MX6QDL_PAD_GPIO_5__CCM_CLKO1		0x130b0
+ 		>;
+ 	};
  
- 	ret = clk_prepare_enable(sata_phy->phyclk);
- 	if (ret < 0) {
- 		dev_err(dev, "failed to enable source clk\n");
--		return ret;
-+		goto put_dev;
- 	}
+@@ -812,6 +812,12 @@ MX6QDL_PAD_NANDF_CS1__GPIO6_IO14 0x000b0
+ 		>;
+ 	};
  
- 	sata_phy->phy = devm_phy_create(dev, NULL, &exynos_sata_phy_ops);
- 	if (IS_ERR(sata_phy->phy)) {
--		clk_disable_unprepare(sata_phy->phyclk);
- 		dev_err(dev, "failed to create PHY\n");
--		return PTR_ERR(sata_phy->phy);
-+		ret = PTR_ERR(sata_phy->phy);
-+		goto clk_disable;
- 	}
- 
- 	phy_set_drvdata(sata_phy->phy, sata_phy);
-@@ -223,11 +224,18 @@ static int exynos_sata_phy_probe(struct platform_device *pdev)
- 	phy_provider = devm_of_phy_provider_register(dev,
- 					of_phy_simple_xlate);
- 	if (IS_ERR(phy_provider)) {
--		clk_disable_unprepare(sata_phy->phyclk);
--		return PTR_ERR(phy_provider);
-+		ret = PTR_ERR(phy_provider);
-+		goto clk_disable;
- 	}
- 
- 	return 0;
++	pinctrl_sgtl5000: sgtl5000grp {
++		fsl,pins = <
++			MX6QDL_PAD_GPIO_5__CCM_CLKO1	0x130b0
++		>;
++	};
 +
-+clk_disable:
-+	clk_disable_unprepare(sata_phy->phyclk);
-+put_dev:
-+	put_device(&sata_phy->client->dev);
-+
-+	return ret;
- }
- 
- static const struct of_device_id exynos_sata_phy_of_match[] = {
+ 	pinctrl_spdif: spdifgrp {
+ 		fsl,pins = <
+ 			MX6QDL_PAD_GPIO_16__SPDIF_IN  0x1b0b0
 -- 
 2.35.1
 

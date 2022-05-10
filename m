@@ -2,73 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 582F1521F30
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFAB5521F2D
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346631AbiEJPmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 11:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
+        id S1346072AbiEJPmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 11:42:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346052AbiEJPjj (ORCPT
+        with ESMTP id S1346524AbiEJPlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:39:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B8BA1FC2E1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:35:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652196905;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KAUYAL6xtEy1vEbUJu56EBQK32UGZSvLvF0XFVQ8Fq4=;
-        b=DoXrFovRS9kJlp57qar/7n7/NRrnGMg2/bzIj2StihSFoUQ02GPK9TbIROgZuoawFWcxmD
-        sksl0+XNyanqn2S5teRsGv4ifWBBQNO0VNdel17iUfUkhihD5MqLcldZKLnRHDTu+Ll87c
-        RNF6dyyrLuvKaAl2YgLlxDL3XeFZoeE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-135-0inn2KGNM_GDY5x2WVygpg-1; Tue, 10 May 2022 11:35:03 -0400
-X-MC-Unique: 0inn2KGNM_GDY5x2WVygpg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 10 May 2022 11:41:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A5D1E3268;
+        Tue, 10 May 2022 08:37:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B03B6811E75;
-        Tue, 10 May 2022 15:34:59 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.98])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 8B237403579A;
-        Tue, 10 May 2022 15:34:54 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Tue, 10 May 2022 17:34:59 +0200 (CEST)
-Date:   Tue, 10 May 2022 17:34:53 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
-Subject: Re: [PATCH v4 10/12] ptrace: Don't change __state
-Message-ID: <20220510153452.GA23707@redhat.com>
-References: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
- <20220505182645.497868-10-ebiederm@xmission.com>
- <20220510142202.GB23277@redhat.com>
- <87ee11wh6b.fsf@email.froward.int.ebiederm.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3BAC6118C;
+        Tue, 10 May 2022 15:36:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD5D6C385C2;
+        Tue, 10 May 2022 15:36:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652197019;
+        bh=xOvOmO4LHzDhTL1j0y0XP3wn2GNGaiwfVWhzZ9JGiS0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=lBQPOBGi4cXhelaxU9z63kS/K4UheW9ikuiHI8yNsj485ecd034VXk7R6lnWXgMbb
+         WlwXbeTIBFLSacERGvFC3Msn8N+KsDgIb2lfD73RJCkcEIlO3jYrQIDgI162nWdHhU
+         rx/V65Ch1v1jSdDlGIefuQ4Ua/zmuYMAwKU3+mErYjCxHyNFQbwQLGjDUMPRfnkvux
+         +zMe0BghH3lVSyBRiW+qSrYdAKOBl194LQd/Jv2XBefpxLvW7DqMeoeLhnJ0i9VmIM
+         L/VFOQrGkeiz8QrH39q8Esfup+qH41wWyOlhKO6oOTneTlxOrmeqeh2mBlDF6H6vyw
+         VE5vLIDj/HKCw==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Dongliang Mu <dzm91@hust.edu.cn>
+Cc:     Ping-Ke Shih <pkshih@realtek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: rtlwifi: Use pr_warn_once instead of WARN_ONCE
+In-Reply-To: <20220510092503.1546698-1-dzm91@hust.edu.cn> (Dongliang Mu's
+        message of "Tue, 10 May 2022 17:25:03 +0800")
+References: <20220510092503.1546698-1-dzm91@hust.edu.cn>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Date:   Tue, 10 May 2022 18:36:51 +0300
+Message-ID: <87ee118kmk.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87ee11wh6b.fsf@email.froward.int.ebiederm.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,30 +61,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/10, Eric W. Biederman wrote:
+Dongliang Mu <dzm91@hust.edu.cn> writes:
+
+> From: Dongliang Mu <mudongliangabcd@gmail.com>
 >
-> > But I still think that a lockless
-> >
-> > 	if (!(task->jobctl & JOBCTL_PTRACE_FROZEN))
-> > 		return;
-> >
-> > check at the start of ptrace_unfreeze_traced() makes sense to avoid
-> > lock_task_sighand() if possible.
-> >
-> > And ptrace_resume() can probably clear JOBCTL_PTRACE_FROZEN along with
-> > JOBCTL_TRACED to make this optimization work better. The same for
-> > ptrace_signal_wake_up().
+> This memory allocation failure can be triggered by fault injection or
+> high pressure testing, resulting a WARN.
 >
-> What do you have that suggests that taking siglock there is a problem?
+> Fix this by replacing WARN with pr_warn_once.
+>
+> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> ---
+>  drivers/net/wireless/realtek/rtlwifi/usb.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/wireless/realtek/rtlwifi/usb.c b/drivers/net/wireless/realtek/rtlwifi/usb.c
+> index 86a236873254..acb0c15e9748 100644
+> --- a/drivers/net/wireless/realtek/rtlwifi/usb.c
+> +++ b/drivers/net/wireless/realtek/rtlwifi/usb.c
+> @@ -1014,7 +1014,7 @@ int rtl_usb_probe(struct usb_interface *intf,
+>  	hw = ieee80211_alloc_hw(sizeof(struct rtl_priv) +
+>  				sizeof(struct rtl_usb_priv), &rtl_ops);
+>  	if (!hw) {
+> -		WARN_ONCE(true, "rtl_usb: ieee80211 alloc failed\n");
+> +		pr_warn_once("rtl_usb: ieee80211 alloc failed\n");
+>  		return -ENOMEM;
+>  	}
+>  	rtlpriv = hw->priv;
 
-Not necessarily a problem, but this optimization is free. If the tracee
-was resumed, it can compete for siglock with debugger.
+I think we should warn every time ieee80211_alloc_hw() fails, it's
+called only once per device initialisation, so pr_warn() is more
+approriate.
 
-> What you propose will definitely work as an incremental change, and
-> in an incremental change we can explain why doing the stupid simple
-> thing is not good enough.
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-OK.
-
-Oleg.
-
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

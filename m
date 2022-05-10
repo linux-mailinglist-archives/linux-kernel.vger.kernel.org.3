@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B859521953
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B075D521A5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244635AbiEJNqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56342 "EHLO
+        id S244894AbiEJN4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:56:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243919AbiEJNcV (ORCPT
+        with ESMTP id S245010AbiEJNiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:32:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B51D54;
-        Tue, 10 May 2022 06:23:45 -0700 (PDT)
+        Tue, 10 May 2022 09:38:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42AA98F44;
+        Tue, 10 May 2022 06:26:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75BBFB81D7A;
-        Tue, 10 May 2022 13:23:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBDEEC385C2;
-        Tue, 10 May 2022 13:23:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22C1C61820;
+        Tue, 10 May 2022 13:26:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F279C385A6;
+        Tue, 10 May 2022 13:26:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189023;
-        bh=qS9yeF5Z4kqyQaN+jkF6ZO2qnwVTEewgiRMJ/qCZUY4=;
+        s=korg; t=1652189211;
+        bh=f6/fAM20VGRb4U0ansRcxlQekxwjGuCT/6+lSGaEZz0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vsuvJgX+iw44plVfiOEzFKvkjDcRTjxBPRhLoav92kG21ydBkCBmJJGWxys/BmvNb
-         KTy7Hw/dhGdqvLEmYNNEuzlFcRWrTEZpH1U2BKHBmsQWym8DLD7Ax6MEjTyLulT/JK
-         aozR6Cs+KgUR6RRcIHlmoNnNXkGrO1dY+u7J8OI0=
+        b=f0Gu6chCp4sTlO6Wq/tA9E1oXn8KAa/Q0Uk2/3EVW7LMvZ9DRzKaXmI1erysbuUZe
+         wDWtxyTqYvOhMmlJaRVjdg6hGeMIJ2VxhHtUN4ao15G2XXbGo3Od4mNjOo1VOQsyQh
+         gDnRuBsXW08h2YJh88600mjGI3jNxcXtniGKd8BE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aili Yao <yaoaili@kingsoft.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 38/52] KVM: LAPIC: Enable timer posted-interrupt only when mwait/hlt is advertised
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.10 48/70] net: cpsw: add missing of_node_put() in cpsw_probe_dt()
 Date:   Tue, 10 May 2022 15:08:07 +0200
-Message-Id: <20220510130730.967514649@linuxfoundation.org>
+Message-Id: <20220510130734.266836554@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
-References: <20220510130729.852544477@linuxfoundation.org>
+In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
+References: <20220510130732.861729621@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,53 +54,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wanpeng Li <wanpengli@tencent.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit 1714a4eb6fb0cb79f182873cd011a8ed60ac65e8 ]
+commit 95098d5ac2551769807031444e55a0da5d4f0952 upstream.
 
-As commit 0c5f81dad46 ("KVM: LAPIC: Inject timer interrupt via posted
-interrupt") mentioned that the host admin should well tune the guest
-setup, so that vCPUs are placed on isolated pCPUs, and with several pCPUs
-surplus for *busy* housekeeping.  In this setup, it is preferrable to
-disable mwait/hlt/pause vmexits to keep the vCPUs in non-root mode.
+'tmp_node' need be put before returning from cpsw_probe_dt(),
+so add missing of_node_put() in error path.
 
-However, if only some guests isolated and others not, they would not
-have any benefit from posted timer interrupts, and at the same time lose
-VMX preemption timer fast paths because kvm_can_post_timer_interrupt()
-returns true and therefore forces kvm_can_use_hv_timer() to false.
-
-By guaranteeing that posted-interrupt timer is only used if MWAIT or
-HLT are done without vmexit, KVM can make a better choice and use the
-VMX preemption timer and the corresponding fast paths.
-
-Reported-by: Aili Yao <yaoaili@kingsoft.com>
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-Cc: Aili Yao <yaoaili@kingsoft.com>
-Cc: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
-Message-Id: <1643112538-36743-1-git-send-email-wanpengli@tencent.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: ed3525eda4c4 ("net: ethernet: ti: introduce cpsw switchdev based driver part 1 - dual-emac")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/lapic.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/ti/cpsw_new.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index afe3b8e61514..3696b4de9d99 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -118,7 +118,8 @@ static inline u32 kvm_x2apic_id(struct kvm_lapic *apic)
+--- a/drivers/net/ethernet/ti/cpsw_new.c
++++ b/drivers/net/ethernet/ti/cpsw_new.c
+@@ -1255,8 +1255,10 @@ static int cpsw_probe_dt(struct cpsw_com
+ 	data->slave_data = devm_kcalloc(dev, CPSW_SLAVE_PORTS_NUM,
+ 					sizeof(struct cpsw_slave_data),
+ 					GFP_KERNEL);
+-	if (!data->slave_data)
++	if (!data->slave_data) {
++		of_node_put(tmp_node);
+ 		return -ENOMEM;
++	}
  
- bool kvm_can_post_timer_interrupt(struct kvm_vcpu *vcpu)
- {
--	return pi_inject_timer && kvm_vcpu_apicv_active(vcpu);
-+	return pi_inject_timer && kvm_vcpu_apicv_active(vcpu) &&
-+		(kvm_mwait_in_guest(vcpu->kvm) || kvm_hlt_in_guest(vcpu->kvm));
+ 	/* Populate all the child nodes here...
+ 	 */
+@@ -1353,6 +1355,7 @@ static int cpsw_probe_dt(struct cpsw_com
+ 
+ err_node_put:
+ 	of_node_put(port_np);
++	of_node_put(tmp_node);
+ 	return ret;
  }
- EXPORT_SYMBOL_GPL(kvm_can_post_timer_interrupt);
  
--- 
-2.35.1
-
 
 

@@ -2,178 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91DF7521DA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A23B521DE6
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:15:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345512AbiEJPMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 11:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50244 "EHLO
+        id S1345103AbiEJPTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 11:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346097AbiEJPLu (ORCPT
+        with ESMTP id S1345121AbiEJPSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:11:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99072A18A4;
-        Tue, 10 May 2022 07:45:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2A781B81DB5;
-        Tue, 10 May 2022 14:45:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEDB6C385C9;
-        Tue, 10 May 2022 14:45:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652193901;
-        bh=FigDUgbnzGZnaUshxGGnPmztjq2HwG7NbActxSZrPfw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VLCIXi7fuXLQhi/lZX7peub4KDAYbkC5t3ITAGtli7uY52BeAkRiBNNCMludeKthz
-         /P1GSVNtfZd93JBoFbCNXSN3UOTTvCNPzgprUH5eVZHhWJwjno8fncPaEbvEYdaBH2
-         7h60GofoYkK/cmXi2N3oJN9pIZQeLw1a6NTqoHDVo2JWZYPId0bFq7lh3IsYgw1UrX
-         psJpeY2EWwBvpzMPZbL6+bI8a3+6jyspqx3jRaBjR+dn9f2ZtwmYtIlC0ND6NcdUyf
-         q8CRnG17lUuJKvdkZjs3i8z2A4bNh5vwHEmF1ScqL/M25Go4n/scNPWpq5xHMfKgcT
-         dVI99c2Fpj7AQ==
-Date:   Tue, 10 May 2022 09:54:15 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2][next] x86/mm/pgtable: Fix -Wstringop-overflow warnings
-Message-ID: <20220510145415.GA8111@embeddedor>
-References: <20220509194541.GA91598@embeddedor>
- <202205091251.5703DE2@keescook>
- <20220509205056.GA109715@embeddedor>
- <202205091351.6E0BA523@keescook>
- <20220510141202.GA6878@embeddedor>
+        Tue, 10 May 2022 11:18:54 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22CF1F617
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 07:55:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652194542; x=1683730542;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ETtsOjDWqOVH6W0WZ13Jpu4HR4pk+sMHooCemDirA3s=;
+  b=kwvpNNloNt7aXGeaIxB0vIZAO++DTda4J1O2K9vcEOSlhPbCTpT2/uu9
+   myiF5JzsbQ+Oppo7qHzYHzgB3wzxoO6RbgaB2RIMHbOO09OwdG7CEFFFM
+   9EbUIMj4YqXuzEuQbnU8JNLcRCn77Umj7H3xdhfdMhP8ZwzbmRmc1X7lO
+   hmtVoITOGJmUFlq1gSfVBXXBG7YMVLgvF9AX71ZEct+3YLpkH9nBJrq8h
+   gwQqmP/pwPccbDlzpdv+oPaTxla50dAEAD11E6BAeznSruk7bh3vbjv4r
+   hXcJRuGcBWwqTkbLvkLlSpr0e3XcTY+XYNBDLtUDJ/jDiID+L6rIQP9bo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="329994033"
+X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
+   d="scan'208";a="329994033"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 07:55:42 -0700
+X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
+   d="scan'208";a="593550195"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.35.3])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 07:55:39 -0700
+Message-ID: <0cde1030-e9e5-8688-d98d-6f5f8b2cde27@intel.com>
+Date:   Tue, 10 May 2022 17:55:34 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220510141202.GA6878@embeddedor>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.8.1
+Subject: Re: [PATCH V2 13/23] perf evlist: Add evlist__add_dummy_on_all_cpus()
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
+References: <20220506122601.367589-1-adrian.hunter@intel.com>
+ <20220506122601.367589-14-adrian.hunter@intel.com>
+ <CAP-5=fV3SWDb8uTsUmdkweRrO9t9OZXzP=9GWqKxTYn0bdfriw@mail.gmail.com>
+ <078c3b3a-9976-9ee4-0cd2-11ff6599dbd2@intel.com>
+ <CAP-5=fWWHeFN1UeyFU=HS39kQNXHcu74JTdOmw0Nar_ztFG-uw@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CAP-5=fWWHeFN1UeyFU=HS39kQNXHcu74JTdOmw0Nar_ztFG-uw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 09:12:02AM -0500, Gustavo A. R. Silva wrote:
-> > > > > --- a/arch/x86/mm/pgtable.c
-> > > > > +++ b/arch/x86/mm/pgtable.c
-> > > > > @@ -434,14 +434,18 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
-> > > > >  
-> > > > >  	mm->pgd = pgd;
-> > > > >  
-> > > > > -	if (preallocate_pmds(mm, pmds, PREALLOCATED_PMDS) != 0)
-> > > > > -		goto out_free_pgd;
-> > > > > +	if (MAX_PREALLOCATED_PMDS != 0 && MAX_PREALLOCATED_USER_PMDS != 0) {
-> > > > > +		if (preallocate_pmds(mm, pmds, PREALLOCATED_PMDS) != 0)
-> > > > > +			goto out_free_pgd;
-> > > > >  
-> > > > > -	if (preallocate_pmds(mm, u_pmds, PREALLOCATED_USER_PMDS) != 0)
-> > > > > -		goto out_free_pmds;
-> > > > > +		if (preallocate_pmds(mm, u_pmds, PREALLOCATED_USER_PMDS) != 0)
-> > > > > +			goto out_free_pmds;
-> > > > >  
-> > > > > -	if (paravirt_pgd_alloc(mm) != 0)
-> > > > > -		goto out_free_user_pmds;
-> > > > > +		if (paravirt_pgd_alloc(mm) != 0)
-> > > > > +			goto out_free_user_pmds;
-> > > > > +	} else {
-> > > > > +		goto out_free_pgd;
-> > > > 
-> > > > The "all 0" case shouldn't be a failure mode; it should just skip the
-> > > > preallocate_pmds() calls.
-> > > 
-> > > Do you mean something like this:
-> > > 
-> > > diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
-> > > index f16059e9a85e..4dae168408f1 100644
-> > > --- a/arch/x86/mm/pgtable.c
-> > > +++ b/arch/x86/mm/pgtable.c
-> > > @@ -434,11 +434,13 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
-> > > 
-> > >         mm->pgd = pgd;
-> > > 
-> > > -       if (preallocate_pmds(mm, pmds, PREALLOCATED_PMDS) != 0)
-> > > -               goto out_free_pgd;
-> > > +       if (MAX_PREALLOCATED_PMDS != 0 && MAX_PREALLOCATED_USER_PMDS != 0) {
-> > > +               if (preallocate_pmds(mm, pmds, PREALLOCATED_PMDS) != 0)
-> > > +                       goto out_free_pgd;
-> > > 
-> > > -       if (preallocate_pmds(mm, u_pmds, PREALLOCATED_USER_PMDS) != 0)
-> > > -               goto out_free_pmds;
-> > > +               if (preallocate_pmds(mm, u_pmds, PREALLOCATED_USER_PMDS) != 0)
-> > > +                       goto out_free_pmds;
-> > > +       }
-> > > 
-> > >         if (paravirt_pgd_alloc(mm) != 0)
-> > >                 goto out_free_user_pmds;
-> > > 
-> > > It seems that the above is not enough, because we have the same issue
-> > > when calling pgd_prepopulate_pmd(), pgd_prepopulate_user_pmd() and
-> > > free_pmds():
-> > > 
-> > >   CC      arch/x86/mm/pgtable.o
-> > > arch/x86/mm/pgtable.c: In function 'pgd_alloc':
-> > > arch/x86/mm/pgtable.c:464:9: warning: 'free_pmds' accessing 8 bytes in a region of size 0 [-Wstringop-overflow=]
-> > >   464 |         free_pmds(mm, u_pmds, PREALLOCATED_USER_PMDS);
-> > >       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > 
-> > Ugh. Perhaps just marking both preallocate_pmds() and free_pmds() as
-> > inline is enough to let the compiler "see" everything correctly?
+On 6/05/22 18:35, Ian Rogers wrote:
+> On Fri, May 6, 2022 at 8:08 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>
+>> On 6/05/22 16:47, Ian Rogers wrote:
+>>> On Fri, May 6, 2022 at 5:26 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>>>
+>>>> Add evlist__add_dummy_on_all_cpus() to enable creating a system-wide dummy
+>>>> event that sets up the system-wide maps before map propagation.
+>>>>
+>>>> For convenience, add evlist__add_aux_dummy() so that the logic can be used
+>>>> whether or not the event needs to be system-wide.
+>>>>
+>>>> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+>>>> ---
+>>>>  tools/perf/util/evlist.c | 40 ++++++++++++++++++++++++++++++++++++++++
+>>>>  tools/perf/util/evlist.h |  5 +++++
+>>>>  2 files changed, 45 insertions(+)
+>>>>
+>>>> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+>>>> index 78c47cbafbc2..c16bd4836314 100644
+>>>> --- a/tools/perf/util/evlist.c
+>>>> +++ b/tools/perf/util/evlist.c
+>>>> @@ -264,6 +264,46 @@ int evlist__add_dummy(struct evlist *evlist)
+>>>>         return 0;
+>>>>  }
+>>>>
+>>>> +static void evlist__add_on_all_cpus(struct evlist *evlist, struct evsel *evsel)
+>>>> +{
+>>>> +       evsel->core.system_wide = true;
+>>>> +
+>>>> +       /* All CPUs */
+>>>> +       perf_cpu_map__put(evsel->core.own_cpus);
+>>>> +       evsel->core.own_cpus = perf_cpu_map__new(NULL);
+>>>> +       perf_cpu_map__put(evsel->core.cpus);
+>>>> +       evsel->core.cpus = perf_cpu_map__get(evsel->core.own_cpus);
+>>>> +
+>>>> +       /* No threads */
+>>>> +       perf_thread_map__put(evsel->core.threads);
+>>>> +       evsel->core.threads = perf_thread_map__new_dummy();
+>>>> +
+>>>> +       evlist__add(evlist, evsel);
+>>>> +}
+>>>> +
+>>>> +struct evsel *evlist__add_aux_dummy(struct evlist *evlist, bool system_wide)
+>>>> +{
+>>>> +       struct evsel *evsel = evlist__dummy_event(evlist);
+>>>> +
+>>>> +       if (!evsel)
+>>>> +               return NULL;
+>>>> +
+>>>> +       evsel->core.attr.exclude_kernel = 1;
+>>>> +       evsel->core.attr.exclude_guest = 1;
+>>>> +       evsel->core.attr.exclude_hv = 1;
+>>>> +       evsel->core.attr.freq = 0;
+>>>> +       evsel->core.attr.sample_period = 1;
+>>>> +       evsel->no_aux_samples = true;
+>>>> +       evsel->name = strdup("dummy:u");
+>>>> +
+>>>> +       if (system_wide)
+>>>> +               evlist__add_on_all_cpus(evlist, evsel);
+>>>> +       else
+>>>> +               evlist__add(evlist, evsel);
+>>>> +
+>>>> +       return evsel;
+>>>> +}
+>>>> +
+>>>>  static int evlist__add_attrs(struct evlist *evlist, struct perf_event_attr *attrs, size_t nr_attrs)
+>>>>  {
+>>>>         struct evsel *evsel, *n;
+>>>> diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
+>>>> index 4062f5aebfc1..1bde9ccf4e7d 100644
+>>>> --- a/tools/perf/util/evlist.h
+>>>> +++ b/tools/perf/util/evlist.h
+>>>> @@ -114,6 +114,11 @@ int arch_evlist__add_default_attrs(struct evlist *evlist);
+>>>>  struct evsel *arch_evlist__leader(struct list_head *list);
+>>>>
+>>>>  int evlist__add_dummy(struct evlist *evlist);
+>>>> +struct evsel *evlist__add_aux_dummy(struct evlist *evlist, bool system_wide);
+>>>> +static inline struct evsel *evlist__add_dummy_on_all_cpus(struct evlist *evlist)
+>>>
+>>> Sorry to be a language lawyer. What I hope to clean up with CPU maps is that:
+>>>
+>>> empty == dummy == any CPU
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/lib/perf/cpumap.c?h=perf/core#n279
+>>>
+>>> Given every CPU map should be empty or contain any CPU then it seems
+>>> they all meet the definition of empty - so something is wrong.
+>>
+>> Nothing is wrong.  I am not against clarifying things, but stop assuming
+>> natural language has to mean anything exactly.  That is what computer
+>> languages are for.
+>>
+>> Sometimes more abstract language is used, precisely to stop people
+>> making assumptions about the details.
+>>
+>>>
+>>> The cpu map here is explicitly opened so that it gets all online CPUs:
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/lib/perf/cpumap.c?h=perf/core#n174
+>>>
+>>> From:
+>>> https://github.com/torvalds/linux/blob/master/Documentation/admin-guide/cputopology.rst
+>>> there are example topologies like:
+>>> kernel_max: 31
+>>>    offline: 2,4-31,32-63
+>>>     online: 0-1,3
+>>>   possible: 0-31
+>>>    present: 0-31
+>>>
+>>> all_cpus could mean the union of offline and online CPUs, possible
+>>> CPUs or present CPUs. You are saying that in the perf code all_cpus
+>>> should be the same as all online cpus as only those CPUs are valid
+>>> with perf_event_open. That's true but offline CPUs can be made online.
+>>> If that happens here then the dummy events will have a CPU map that
+>>> rather than being for all CPUs will be for all online CPUs at the
+>>> point it was opened. Having online in the function name I think
+>>> captures the time dependent nature of this - but if you think that's
+>>> too much could we add a comment?
+>>
+>> If you ask me it does the exact opposite.  The function of the code
+>> is to put the event on all CPUS without having to know the details
+>> of: well actually perf doesn't automagically retain or restore events
+>> across enabling or disabling CPUs so in fact we deal only in online
+>> CPUs.
 > 
-> It doesn't seem to work... however, the following piece of code implies
-> that pmds and u_pmds should be first preallocated through preallocate_pmds(),
-> which cannot happen if (MAX_PREALLOCATED_PMDS != 0 && MAX_PREALLOCATED_USER_PMDS != 0)
+> But 'any CPU' (-1) could map to an offline CPU brought online. Calling
+> this function twice could also result in this behavior. Via the
+> topology documentation we have language to describe exactly the
+> scenario that's happening and I'd prefer not to muddy that by making
+> all and online synonyms.
 
-I wanted to say: which cannot happen if MAX_PREALLOCATED_PMDS == 0 && MAX_PREALLOCATED_USER_PMDS == 0
+In this case the caller wants all CPUs, not online CPUs.  The detail
+that we can't trace offline CPUs that become online is not relevant
+to the caller.  Why would the caller call a function limited to online
+CPUs when that is not what the caller wants.
 
 > 
-> 448         /*
-> 449          * Make sure that pre-populating the pmds is atomic with
-> 450          * respect to anything walking the pgd_list, so that they
-> 451          * never see a partially populated pgd.
-> 452          */
-> 453         spin_lock(&pgd_lock);
-> 454
-> 455         pgd_ctor(mm, pgd);
-> 456         pgd_prepopulate_pmd(mm, pgd, pmds);
-> 457         pgd_prepopulate_user_pmd(mm, pgd, u_pmds);
-> 458
-> 459         spin_unlock(&pgd_lock);
-> 460
-> 461         return pgd;
+>>> too much could we add a comment? I'm trying to avoid a situation, like
+>>> with the CPU map code, where all and online are interchangeable
+>>> leading to the code being unnecessarily confusing unless you read
+>>> every line.
+>>
+>> It is normal to have to read the details of code, and, in my
+>> experience at least, normal for the code not to work exactly the
+>> way I'd imagined.
 > 
-> So, my question here is why do you think the "all 0" case should only skip the
-> preallocate_pmds() calls and not the pgd_prepopulate_pmd() calls too?
-> 
-> > 
-> > Otherwise, they'll likely each need the same check that was added to
-> > pgd_prepopulate_pmd() ages ago for a similar situation...
-> 
-> uhm... that doesn't seem to have an impact nowadays, or at least now
-> Wstringop-overflow sees the problem first, because now the issue is
-> detected at the moment of passing the arguments to the the function
-> and not when actually executing the function?
-> 
-> otherwise, I think we wouldn't see this error:
-> 
-> arch/x86/mm/pgtable.c:454:9: warning: 'pgd_prepopulate_pmd' accessing 8 bytes in a region of size 0 [-Wstringop-overflow=]
->   454 |         pgd_prepopulate_pmd(mm, pgd, pmds);
->       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> arch/x86/mm/pgtable.c:454:9: note: referencing argument 3 of type 'pmd_t *[0]'
-> arch/x86/mm/pgtable.c:296:13: note: in a call to function 'pgd_prepopulate_pmd'
->   296 | static void pgd_prepopulate_pmd(struct mm_struct *mm, pgd_t *pgd, pmd_t *pmds[])
->       |             ^~~~~~~~~~~~~~~~~~~
-> 
+> :-) The problem is that we all need to work with abstractions at some
+> point, abstraction is pretty much the whole point of computer science.
+> We need to fix CPU maps empty function, it is just a fundamental level
+> of contradiction. As with the CPU map index being often mistaken for
+> the CPU leading to bugs and crashes, I suspect remedying empty will
+> fix existing and future bugs. With function naming the point is to be
+> short and succinct, but also to be intention revealing for the sake of
+> abstraction. Yes you need to read the code, but as with CPU map empty
+> even that isn't enough and trying to infer behavior from usage can be
+> a long and painful process.
 
-Thanks
---
-Gustavo
+You seem to be insisting that the function be named for its
+implementation (i.e. offline CPUs are not supported) not its
+purpose (trace system wide).
+
+I can only suggest we go back to the original name, because the
+function has *nothing* to do with whether or not perf supports
+tracing per-cpu contexts on offline CPUs that become online.
+
+> 
+> Thanks,
+> Ian
+> 
+>>>
+>>> Thanks,
+>>> Ian
+>>>
+>>>> +{
+>>>> +       return evlist__add_aux_dummy(evlist, true);
+>>>> +}
+>>>>
+>>>>  int evlist__add_sb_event(struct evlist *evlist, struct perf_event_attr *attr,
+>>>>                          evsel__sb_cb_t cb, void *data);
+>>>> --
+>>>> 2.25.1
+>>>>
+>>
+

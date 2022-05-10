@@ -2,122 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CB3F521888
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95DBD521876
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241026AbiEJNfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50074 "EHLO
+        id S243714AbiEJNgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:36:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243036AbiEJNZ1 (ORCPT
+        with ESMTP id S243095AbiEJNZa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:25:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F3E722EA63
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:18:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652188716;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sHy0F7ac22uwKEpSKuZcvo5GcFLWTTOIEdgJB67ZhmA=;
-        b=QHwd05NJ7mXnRXGDaIgyrVpxkOrrPrEJFcO/gonXlxP3h0zcbhY3qL0FpMVVVv80Iq1DTS
-        kAQWWctPpFapEnllCMWEoEhKE3ZDUCkeB+dv5NC3p55e13UcsX+lTY4lklFfTvPptjcIRJ
-        +vWtd/9Et+Yf+fGCRCqbvdrf2+P06p8=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-631-82-I38puMuyShLbuglGmaw-1; Tue, 10 May 2022 09:18:35 -0400
-X-MC-Unique: 82-I38puMuyShLbuglGmaw-1
-Received: by mail-wm1-f72.google.com with SMTP id g3-20020a7bc4c3000000b0039409519611so5260029wmk.9
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:18:35 -0700 (PDT)
+        Tue, 10 May 2022 09:25:30 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1327197F66
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:18:53 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id z19so19976978edx.9
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:18:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bQPxzjuthC5W7FG0xtvK97qut8WhgOZVs5QGqQcukzE=;
+        b=Ib9QQhXrM+AZHVuN39H0Gj+04jz1DkFcq6dfa7Ts+bfu4GOpgy7EP6e6+/Bu+c3z2N
+         ENIb0CkTl5epcS7kuHzNgbY6Ckx3XymenJ9LEcP3JjqiswNfAYZSUESSCTojwaYl0Ys8
+         Wby5SNlVrBFWql2lFfQTzdFuqaK5lVdg5fmGk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=sHy0F7ac22uwKEpSKuZcvo5GcFLWTTOIEdgJB67ZhmA=;
-        b=WKp/UMukfJUQtrJHdEJ+P/V95M0r9UpMCTerbnwBGA/dzW2nb91x2QVrWoUzPjS/CM
-         L1sKEqoZbvnF/0YkX+XkwgrGCJ9zTTMa2VarJwHDxsVjGOUAhaXEjZ6TFoN8a07p34H9
-         4kSEiX7Jy4IUaJpGrlIHGDcMH1MshSYrDi8alm6/wh6nt79trmH+tz9ZDKFdYl1feLcg
-         bqrKJJli1wHsNnEblXtXBN52LyLUjwqAek1W66GfqOsmkSpwlFHpDW03Oada3W5Vbmlh
-         CJRyLPOJ2u1iaz6dVE9NOLtqXwLo+KUsNcnkwDJhTncniYP/lyd80CXW6u/2U6b5r9TG
-         nGUg==
-X-Gm-Message-State: AOAM533RPUsrSEhAnHTJBwHJSWc0C1P3/M4qKI1FwRX9teLlz8ocdq41
-        /zAXsqcsjZx9b6FZxST8M1VGpvDroKmqg6uVitqChaArMZsDAQy+tYx41NeXkMr9Pk8G1gzQkOZ
-        7IgY31sACrxDovMSQrXrfFRdg
-X-Received: by 2002:a05:600c:5105:b0:394:7d22:aa93 with SMTP id o5-20020a05600c510500b003947d22aa93mr19997762wms.107.1652188714168;
-        Tue, 10 May 2022 06:18:34 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzJhqj/rclE960FiMWEPu/ABEdzf1gL2hi5Dp98G//UB2PCflcGTO2OPYlMduSsRS0sioEd9g==
-X-Received: by 2002:a05:600c:5105:b0:394:7d22:aa93 with SMTP id o5-20020a05600c510500b003947d22aa93mr19997736wms.107.1652188713913;
-        Tue, 10 May 2022 06:18:33 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-113-89.dyn.eolo.it. [146.241.113.89])
-        by smtp.gmail.com with ESMTPSA id c2-20020a5d5282000000b0020c5253d8e0sm14119404wrv.44.2022.05.10.06.18.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 06:18:33 -0700 (PDT)
-Message-ID: <21ee77073341cd2b5e0109be5da61d8e981ea50d.camel@redhat.com>
-Subject: Re: [PATCH] net: macb: Disable macb pad and fcs for fragmented
- packets
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Harini Katakam <harini.katakam@xilinx.com>,
-        nicolas.ferre@microchip.com, davem@davemloft.net,
-        claudiu.beznea@microchip.com, kuba@kernel.org, dumazet@google.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        michal.simek@xilinx.com, harinikatakamlinux@gmail.com,
-        radhey.shyam.pandey@xilinx.com
-Date:   Tue, 10 May 2022 15:18:32 +0200
-In-Reply-To: <20220509121513.30549-1-harini.katakam@xilinx.com>
-References: <20220509121513.30549-1-harini.katakam@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bQPxzjuthC5W7FG0xtvK97qut8WhgOZVs5QGqQcukzE=;
+        b=WOqC8auErpCAgK/SLj4tLXCKBikW7jcingNuoEzquqj93uuPQsBqqgAvjYZzaMSLoh
+         42YXJ6LItCJ0FRXon7Uhpw36cWhkmnZDaeD56JQ/ZIT6pOTzaiMxVumUSk0hWJ0iPyug
+         RoPMUV/9d2NiS2L2a7rKPPHuFyL2lPi2g5Dc6LSBcjoZ3D42Lvkg64U3Ixam8npXy/TQ
+         f3IRyTWfOHjkjIOLx2tdfAqLGJbLceuVg+TW3GVjCUPs9uaNqvYH0iZBpi7G+wbwT0Uo
+         RTCS1wBRExNGyi8p7anA6Ynp2zwwZJsiBQnU+AcQuhKuEnt/RLNWFSpPZIPtfVFm8uEG
+         boNw==
+X-Gm-Message-State: AOAM531C8yQCfUvg0atVwZ0LbNzFH/S538EEcqj8TFblZIV1Q0ytoLxn
+        R68trcyHcfjOtaV1vEFOJVi3FeZYAirkBkXKKsmArA==
+X-Google-Smtp-Source: ABdhPJwczgUPDxe7i5EFoi7djB0qfa6gmDtEieMpp4Tpi/GlN71wFMNkosjsi+Nmytcb6euO0hRwtO0GNWPw30McobE=
+X-Received: by 2002:a05:6402:f08:b0:428:53c1:a867 with SMTP id
+ i8-20020a0564020f0800b0042853c1a867mr23374997eda.224.1652188732583; Tue, 10
+ May 2022 06:18:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com> <20220509124815.vb7d2xj5idhb2wq6@wittgenstein>
+ <CAJfpegveWaS5pR3O1c_7qLnaEDWwa8oi26x2v_CwDXB_sir1tg@mail.gmail.com>
+ <20220510115316.acr6gl5ayqszada6@wittgenstein> <CAJfpegtVgyumJiFM_ujjuRTjg07vwOd4h9AT+mbh+n1Qn-LqqA@mail.gmail.com>
+In-Reply-To: <CAJfpegtVgyumJiFM_ujjuRTjg07vwOd4h9AT+mbh+n1Qn-LqqA@mail.gmail.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Tue, 10 May 2022 15:18:40 +0200
+Message-ID: <CAJfpegvBoYABebN2GD=ecu4gUsPZgiTksK6S8d3MA-1r1NgmMA@mail.gmail.com>
+Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org, Dave Chinner <david@fromorbit.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Karel Zak <kzak@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-05-09 at 17:45 +0530, Harini Katakam wrote:
-> data_len in skbuff represents bytes resident in fragment lists or
-> unmapped page buffers. For such packets, when data_len is non-zero,
-> skb_put cannot be used - this will throw a kernel bug. Hence do not
-> use macb_pad_and_fcs for such fragments.
-> 
-> Signed-off-by: Harini Katakam <harini.katakam@xilinx.com>
-> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
-> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+On Tue, 10 May 2022 at 15:15, Miklos Szeredi <miklos@szeredi.hu> wrote:
+>
+> On Tue, 10 May 2022 at 13:53, Christian Brauner <brauner@kernel.org> wrote:
+>
+> > > What exactly are the attributes that systemd requires?
+> >
+> > We keep a repo with ideas for (kernel) extensions - we should probably
+> > publish that somewhere - but the list we used for a prototype roughly
+> > contains:
+> >
+> > * mount flags MOUNT_ATTR_RDONLY etc.
+> > * time flags MOUNT_ATTR_RELATIME etc. (could probably be combined with
+> >   mount flags. We missed the opportunity to make them proper enums
+> >   separate from other mount flags imho.)
+> > * propagation "flags" (MS_SHARED)
+> > * peer group
+> > * mnt_id of the mount
+> > * mnt_id of the mount's parent
+> > * owning userns
+>
+> Sounds good thus far.   And hey, we don't even need a new syscall:
+> statx(2) could handle these fine.
 
-This looks like a fix suitable for the net tree. Please add a relevant
-'Fixes' tag.
+Oh, we need this indexed with a mount id, which statx can't do.  So
+indeed, a new syscall may be the best choice.
 
-> ---
->  drivers/net/ethernet/cadence/macb_main.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-> index 6434e74c04f1..0b03305ad6a0 100644
-> --- a/drivers/net/ethernet/cadence/macb_main.c
-> +++ b/drivers/net/ethernet/cadence/macb_main.c
-> @@ -1995,7 +1995,8 @@ static unsigned int macb_tx_map(struct macb *bp,
->  			ctrl |= MACB_BF(TX_LSO, lso_ctrl);
->  			ctrl |= MACB_BF(TX_TCP_SEQ_SRC, seq_ctrl);
->  			if ((bp->dev->features & NETIF_F_HW_CSUM) &&
-> -			    skb->ip_summed != CHECKSUM_PARTIAL && !lso_ctrl)
-> +			    skb->ip_summed != CHECKSUM_PARTIAL && !lso_ctrl &&
-> +			    (skb->data_len == 0))
->  				ctrl |= MACB_BIT(TX_NOCRC);
->  		} else
->  			/* Only set MSS/MFS on payload descriptors
-
-This chunk looks unrelated to the commit message ?!? only the next one
-looks relevant.
-
-Thanks.
-
-Paolo
-
+Thanks,
+Miklos

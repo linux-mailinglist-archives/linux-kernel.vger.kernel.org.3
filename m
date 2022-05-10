@@ -2,60 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7652652247C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 21:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47361522482
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 21:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349090AbiEJTFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 15:05:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
+        id S232113AbiEJTHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 15:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbiEJTFH (ORCPT
+        with ESMTP id S242243AbiEJTHJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 15:05:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED92E2CC96
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 12:05:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95E52B81ECF
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 19:05:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ACE5C385A6;
-        Tue, 10 May 2022 19:05:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1652209503;
-        bh=yO7+tb2XdVxOhMmF9pM1uzVbDf3lGsjr7VLS4TD8Kf0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gHd+nCV5Ns7YEXXTH27UZDREBKyw9P+AZTvF3tw57sa0eqDKUGnY6yYEhpvdRIu3g
-         t4DD+XOX5K8Of2xTAt4eMxbzNJEXV9gwuZrVnnB7rm594BBa6rNRAfrSzb6ww/x7Jt
-         AO/oWSXq5hqvRLyWaIHNcucyCuFUV41MB5q9KuhY=
-Date:   Tue, 10 May 2022 12:05:01 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Hugh Dickins <hughd@google.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Subject: Re: [PATCH v8 00/23] userfaultfd-wp: Support shmem and hugetlbfs
-Message-Id: <20220510120501.8d6663d18080c20e545ab078@linux-foundation.org>
-In-Reply-To: <20220405014646.13522-1-peterx@redhat.com>
-References: <20220405014646.13522-1-peterx@redhat.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Tue, 10 May 2022 15:07:09 -0400
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916A995DE7
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 12:07:08 -0700 (PDT)
+Received: from pps.filterd (m0134420.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24AJ4gjm012605;
+        Tue, 10 May 2022 19:06:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=pps0720;
+ bh=mhRPpgk7nWGY4A6HlKhZOSFnmi/jRL/Ly0+izj8z7nE=;
+ b=aaZc3yZ8lNcPA4E73g1YxILRVqX2LrzMhD0NdW9qfxANqC+gAj5BGBmYGWtWE8ChO/2e
+ VG+Vaf6z2LKVf1mYp3ic8y4/x57XAL13d+8E8AsA+yPnd1o3ZIrlgvr80ZRttYiI2kCc
+ k8cm+AFw8vVpstT6VM5s04xdypi2nae4oicptWgvKmLAudS58niBKUDwy34c6aBqEMJs
+ wMpVPcSA4y46jCByCq6PyaBbvnIPTtbm1E1nbZAzvxnG29OudrHv/3c75uyT6vrHD+V2
+ pYkDwqE0zTiw7sAWtu1UBv+sTmmia3HgBdpSu7zOdytfT6IXJVxqsZvjQWSPn61sqs0W Mw== 
+Received: from g4t3427.houston.hpe.com (g4t3427.houston.hpe.com [15.241.140.73])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3fypmkvf42-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 May 2022 19:06:41 +0000
+Received: from g9t2301.houston.hpecorp.net (g9t2301.houston.hpecorp.net [16.220.97.129])
+        by g4t3427.houston.hpe.com (Postfix) with ESMTP id 1393C5E;
+        Tue, 10 May 2022 19:06:40 +0000 (UTC)
+Received: from swahl-home.5wahls.com (unknown [10.207.233.204])
+        by g9t2301.houston.hpecorp.net (Postfix) with ESMTP id 028D04B;
+        Tue, 10 May 2022 19:06:37 +0000 (UTC)
+Date:   Tue, 10 May 2022 14:06:37 -0500
+From:   Steve Wahl <steve.wahl@hpe.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     Steve Wahl <steve.wahl@hpe.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Baolu Lu <baolu.lu@linux.intel.com>,
+        "Rodel, Jorg" <jroedel@suse.de>,
+        Kyung Min Park <kyung.min.park@intel.com>,
+        Will Deacon <will@kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        Mike Travis <mike.travis@hpe.com>,
+        Dimitri Sivanich <sivanich@hpe.com>,
+        "Anderson, Russ" <russ.anderson@hpe.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] iommu/vt-d: Increase DMAR_UNITS_SUPPORTED
+Message-ID: <Ynq3vRhBWZxImPC0@swahl-home.5wahls.com>
+References: <20220505194658.246121-1-steve.wahl@hpe.com>
+ <e2afd89c-b1cf-9fde-4ce2-4be3c1fdaf07@linux.intel.com>
+ <BN9PR11MB5276F4D5F8AD33293233B9AB8CC59@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <636a680eb85aded76dd765ba297347ceadc3d1a4.camel@infradead.org>
+ <BL1PR11MB5271099D98542F8A3F877D4E8CC59@BL1PR11MB5271.namprd11.prod.outlook.com>
+ <YnU+GuPGiFcBXQJg@swahl-home.5wahls.com>
+ <BN9PR11MB52769C9F1BD67185A51F16C28CC99@BN9PR11MB5276.namprd11.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <BN9PR11MB52769C9F1BD67185A51F16C28CC99@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-Proofpoint-ORIG-GUID: X1gW75lflYtXFEMHNsqGoidFXE8ifggL
+X-Proofpoint-GUID: X1gW75lflYtXFEMHNsqGoidFXE8ifggL
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-10_06,2022-05-10_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ bulkscore=0 phishscore=0 spamscore=0 mlxlogscore=999 suspectscore=0
+ impostorscore=0 adultscore=0 lowpriorityscore=0 priorityscore=1501
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205100081
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,23 +86,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  4 Apr 2022 21:46:23 -0400 Peter Xu <peterx@redhat.com> wrote:
+On Tue, May 10, 2022 at 01:16:26AM +0000, Tian, Kevin wrote:
+> > From: Steve Wahl <steve.wahl@hpe.com>
+> > Sent: Friday, May 6, 2022 11:26 PM
+> > 
+> > On Fri, May 06, 2022 at 08:12:11AM +0000, Tian, Kevin wrote:
+> > > > From: David Woodhouse <dwmw2@infradead.org>
+> > > > Sent: Friday, May 6, 2022 3:17 PM
+> > > >
+> > > > On Fri, 2022-05-06 at 06:49 +0000, Tian, Kevin wrote:
+> > > > > > From: Baolu Lu <baolu.lu@linux.intel.com>
+> > > > > >
+> > > > > > > --- a/include/linux/dmar.h
+> > > > > > > +++ b/include/linux/dmar.h
+> > > > > > > @@ -19,7 +19,7 @@
+> > > > > > >   struct acpi_dmar_header;
+> > > > > > >
+> > > > > > >   #ifdef	CONFIG_X86
+> > > > > > > -# define	DMAR_UNITS_SUPPORTED	MAX_IO_APICS
+> > > > > > > +# define	DMAR_UNITS_SUPPORTED	640
+> > > > > > >   #else
+> > > > > > >   # define	DMAR_UNITS_SUPPORTED	64
+> > > > > > >   #endif
+> > > > >
+> > > > > ... is it necessary to permanently do 10x increase which wastes memory
+> > > > > on most platforms which won't have such need.
+> > > >
+> > > > I was just looking at that. It mostly adds about 3½ KiB to each struct
+> > > > dmar_domain.
+> > > >
+> > > > I think the only actual static array is the dmar_seq_ids bitmap which
+> > > > grows to 640 *bits* which is fairly negligible, and the main growth is
+> > > > that it adds about 3½ KiB to each struct dmar_domain for the
+> > > > iommu_refcnt[] and iommu_did[] arrays.
+> > >
+> > > Thanks for the quick experiment! though the added material is
+> > > negligible it's cleaner to me if having a way to configure it as
+> > > discussed below.
+> > >
+> > > >
+> > > > > Does it make more sense to have a configurable approach similar to
+> > > > > CONFIG_NR_CPUS? or even better can we just replace those static
+> > > > > arrays with dynamic allocation so removing this restriction
+> > > > > completely?
+> > > >
+> > > > Hotplug makes that fun, but I suppose you only need to grow the array
+> > > > in a given struct dmar_domain if you actually add a device to it that's
+> > > > behind a newly added IOMMU. I don't know if the complexity of making it
+> > > > fully dynamic is worth it though. We could make it a config option,
+> > > > and/or a command line option (perhaps automatically derived from
+> > > > CONFIG_NR_CPUS).
+> > >
+> > > either config option or command line option is OK to me. Probably
+> > > the former is simpler given no need to dynamically expand the
+> > > static array. btw though deriving from CONFIG_NR_CPUS could work
+> > > in this case it is unclear why tying the two together is necessary in
+> > > concept, e.g. is there guarantee that the number of IOMMUs must
+> > > be smaller than the number of CPUs in a platform?
+> > >
+> > > >
+> > > > If it wasn't for hotplug, I think we'd know the right number by the
+> > > > time we actually need it anyway, wouldn't we? Can we have a heuristic
+> > > > for how many DMAR units are likely to be hotplugged? Is it as simple as
+> > > > the ratio of present to not-yet-present CPUs in MADT?
+> > >
+> > > Probably. But I don't have enough knowledge on DMAR hotplug to
+> > > judge (e.g. whether it's strictly tied to CPU hotplug and if yes whether
+> > > there could be multiple IOMMUs hotplugged together with a CPU
+> > > socket)...
+> > >
+> > > Thanks
+> > > Kevin
+> > 
+> > Would anyone be more comfortable if we only increase the limit where
+> > MAXSMP is set?
+> > 
+> > i.e.
+> > 
+> > #if defined(CONFIG_X86) && defined(CONFIG_MAXSMP)
+> > # define	DMAR_UNITS_SUPPORTED	640
+> > #elif defined(CONFIG_X86)
+> > # define	DMAR_UNITS_SUPPORTED	MAX_IO_APICS
+> > #else
+> > # define	DMAR_UNITS_SUPPORTED	64
+> > #endif
+> > 
+> > Thank you all for your time looking at this.
+> > 
+> 
+> This works for your own configuration but it's unclear whether other
+> MAXSMP platforms have the exact same requirements (different
+> number of sockets, different ratio of #iommus/#sockets, etc.). In any
+> case since we are at it having a generic way to extend it makes more
+> sense to me.
 
-> This is v8 of the series to add shmem+hugetlbfs support for userfaultfd
-> write protection.
+So, to be clear, what you would like to see would be Kconfig entries
+to create a config option, say "NR_DMARS", set up so the default is:
 
-I think we've finished tossing this patchset around, so I plan to feed
-it into mm-stable later this week.
+     MAXSMP?  640
+     X86_64?  128
+     X86_32?  64
+     other    64
 
-A few -fixes were added:
+And DMAR_UNITS_SUPPORTED gets removed, and everywhere it was used we
+use CONFIG_NR_DMARS in its place?
 
-https://git.kernel.org/pub/scm/linux/kernel/git/akpm/25-new.git/tree/patches/mm-introduce-pte_marker-swap-entry-fix.patch
-https://git.kernel.org/pub/scm/linux/kernel/git/akpm/25-new.git/tree/patches/mm-teach-core-mm-about-pte-markers-fix.patch
-https://git.kernel.org/pub/scm/linux/kernel/git/akpm/25-new.git/tree/patches/mm-check-against-orig_pte-for-finish_fault-fix.patch
-https://git.kernel.org/pub/scm/linux/kernel/git/akpm/25-new.git/tree/patches/mm-check-against-orig_pte-for-finish_fault-fix-checkpatch-fixes.patch
-https://git.kernel.org/pub/scm/linux/kernel/git/akpm/25-new.git/tree/patches/mm-uffd-pte_marker_uffd_wp-fix.patch
-https://git.kernel.org/pub/scm/linux/kernel/git/akpm/25-new.git/tree/patches/mm-hugetlb-only-drop-uffd-wp-special-pte-if-required-fix.patch
-https://git.kernel.org/pub/scm/linux/kernel/git/akpm/25-new.git/tree/patches/mm-hugetlb-only-drop-uffd-wp-special-pte-if-required-fix-fix.patch
-https://git.kernel.org/pub/scm/linux/kernel/git/akpm/25-new.git/tree/patches/mm-shmem-handle-uffd-wp-during-fork-fix.patch
-https://git.kernel.org/pub/scm/linux/kernel/git/akpm/25-new.git/tree/patches/mm-enable-pte-markers-by-default-fix.patch
+I can give that a shot but wanted to confirm this is what you'd want
+first.
 
+Thanks,
+
+--> Steve
+
+-- 
+Steve Wahl, Hewlett Packard Enterprise

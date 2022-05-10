@@ -2,149 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 613B95227C6
+	by mail.lfdr.de (Postfix) with ESMTP id 69D625227C7
 	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 01:46:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238450AbiEJXp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 19:45:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
+        id S238564AbiEJXqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 19:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238430AbiEJXpu (ORCPT
+        with ESMTP id S238462AbiEJXp4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 19:45:50 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFB0BCB8;
-        Tue, 10 May 2022 16:45:48 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id bo5so504317pfb.4;
-        Tue, 10 May 2022 16:45:48 -0700 (PDT)
+        Tue, 10 May 2022 19:45:56 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC27B28716
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 16:45:55 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id w17-20020a17090a529100b001db302efed6so504651pjh.4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 16:45:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=BK8T3gjdK2roy+ApoukjEKkczl2YkXzC5XGidh4vu68=;
-        b=IaZbJCKi3P+x1DPMKKxJ9ht+8zgO35UqmV0ieKRiY29ti3DVq4/cHolNSWogcKjMoR
-         LPjAb6theVAl8O89PIxKFcpTdNnHoeA77vGVEu/gCWoHis50uG5phXBiGwqtnKmeHWfG
-         QCDJVfQp/5CUuK/jgTSVtepIEdLYjLo2v0ieO0fXLmcY6osCPFgRxXUzxscAHwlJ7GWI
-         bG8WPqBcoc7O2Z7qFpFzUDu7BthXEcoo41Mm1AsxgNFRuZxfOY4rwFXpXNAPMvBCWpec
-         o/itJpQvDxPMRMLEYhMkDUNm6WGTBbk5x3lGn+1rhga4LnoQXWzv3FgQ7C05DOKTjT1m
-         HoHw==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=QoqmhoJVijxJEwqA6DH3wPhDIm10VpX5UsNvXVMmXaw=;
+        b=CZaKyY51AyEq0wEP49YMgPJQn7JQeY/jnsqcUl4i6IKFgfdtTE3Hn8aD+P3ovp1tKT
+         Se7jJ6ELuMBQol0V8Y+hy5iia9eRuGm/BhbHPvqMJOhjmRf4PWDYPmnPyF/i5SlTU9o1
+         FgFS9q7alymdBOHPZ0025vQoTCX59MhS/gNrFwWM+KmWqgu/T/qjXTpgRRQc5TIn6oPc
+         q4fhyzjwrnA8llH+ALICTvBIRmkT8EZja0ZAOLRyDbD36XpoHVbqfUN3HPhb8wCFmHi3
+         IgCA+9GBww59wUku55apPIa7HKFjCQAsfB2IsSBB4VG3IFZ9TgOp5Pi5g4PbsR7OLwBo
+         FH3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=BK8T3gjdK2roy+ApoukjEKkczl2YkXzC5XGidh4vu68=;
-        b=inQtkH3/PwkuCN1fgOLEsR4Nht8DAhIAv5HjQQxhR4Q7Mz1N5mvYm1fcIgWiPPRcJV
-         UrhwFbAZGKemEbAnSJw3D1zBgvExt8CuDiBbRIPnyR1b4h2wt89wrMbYyf/A28EILDyA
-         C58qvCsfUm9vC+Zfp7mPURLEA/fZtJtYH/sAjm8lDPYwZnfWSQv32qejfgJrFrHgbnUE
-         WtZhuBfK65dgcuYCbu7Bpusy7d3hwyCtQPJmPNNMgpTyg/PdUNesN+VXBBvwWozcz3Re
-         GaTR1NksrF0P9JimLk/c3cTrc31FOa4T2owNIAsgfJ99NNgM+cteT6nzm8aX4OpYGi5j
-         0kgQ==
-X-Gm-Message-State: AOAM531oVxbIScqcCKCvgYC3sndiPoSjg3hp5/KYgldHqW3v6kCBBQCq
-        mqIir7FY9l5pybzmAc+CgpNFO53nu4o=
-X-Google-Smtp-Source: ABdhPJwfw+X6CZliWaQWkQxeiaZ/PJ/sMBDXx2t1TsIVNkwteuolcWnhHY6lwMWLfrI19xaJ+n/ztQ==
-X-Received: by 2002:a63:2b01:0:b0:3c2:4b0b:e1c6 with SMTP id r1-20020a632b01000000b003c24b0be1c6mr18365845pgr.288.1652226347694;
-        Tue, 10 May 2022 16:45:47 -0700 (PDT)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id i7-20020a170902c94700b0015edcdea308sm176645pla.233.2022.05.10.16.45.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 16:45:47 -0700 (PDT)
-Message-ID: <5986752a-1c2a-5d64-f91d-58b1e6decd17@gmail.com>
-Date:   Wed, 11 May 2022 08:45:43 +0900
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=QoqmhoJVijxJEwqA6DH3wPhDIm10VpX5UsNvXVMmXaw=;
+        b=K2IL+dc6/8u92jQJ9/YIKqnLG1SAoUecRkyl/Q3NWCkhdM5lhiWXb86TFKwkrTyeXx
+         SAx+yJ3OWXPbjz3osyrqXyLntkj95+a/DRoBJ6pqOItHyM3JTmb2RgZewjEjlhSDda74
+         ej+Gx4DIt0v4NXwTG3gLFM/ZU5nDXaI/HYdR6BBdkf5erm9T/KzOx7FBQZwmSUpVUmMO
+         ib//RQjHY39L/zpvctkt95jxRwfKi1bJKeL3LFmtorU86bByxa6JYlVRXYprAAOSjboe
+         uOW78ucpvwzGP3FXFouT2i9mqR6FMVqeMgOSzUtiTR19MbPbWJh2RfJDqrnuW98eYqDB
+         Ejig==
+X-Gm-Message-State: AOAM530EB1ia2ozDAd2VA6XWoxwwFlmKhpfW/w2YyEijs+lBfJxKm38m
+        3/NXBUaS5goP2n0meQNvq/b+BQ==
+X-Google-Smtp-Source: ABdhPJx/WVHQXojCsdNzfIEY9IGkVQnnK/pBHDnL2wt68lS7jDgOHsrhTO/9FLmQSAktIOY4VL0TPA==
+X-Received: by 2002:a17:902:864b:b0:15e:f9e0:20ca with SMTP id y11-20020a170902864b00b0015ef9e020camr16873731plt.122.1652226355057;
+        Tue, 10 May 2022 16:45:55 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id d14-20020a621d0e000000b0050dc76281b0sm107617pfd.138.2022.05.10.16.45.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 16:45:54 -0700 (PDT)
+Date:   Tue, 10 May 2022 23:45:51 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Shannon Zhao <shannon.zhao@linux.alibaba.com>
+Cc:     kvm@vger.kernel.org, pbonzini@redhat.com,
+        linux-kernel@vger.kernel.org, yijunzhu@linux.alibaba.com
+Subject: Re: [PATCH] KVM: SVM: Set HWCR[TscFreqSel] to host's value
+Message-ID: <Ynr5L7+OJ23tEowC@google.com>
+References: <1652169227-38383-1-git-send-email-shannon.zhao@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: [PATCH net-next v2] docs: ctucanfd: Use 'kernel-figure' directive
- instead of 'figure'
-Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Pavel Pisa <pisa@cmp.felk.cvut.cz>
-Cc:     Martin Jerabek <martin.jerabek01@gmail.com>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <05d491d4-c498-9bab-7085-9c892b636d68@gmail.com>
-In-Reply-To: <05d491d4-c498-9bab-7085-9c892b636d68@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1652169227-38383-1-git-send-email-shannon.zhao@linux.alibaba.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Two issues were observed in the ReST doc added by commit c3a0addefbde
-("docs: ctucanfd: CTU CAN FD open-source IP core documentation.")
-with Sphinx versions 2.4.4 and 4.5.0.
+On Tue, May 10, 2022, Shannon Zhao wrote:
+> KVM sets CPUID.80000007H:EDX[8] to 1, but not set HWCR[TscFreqSel].
+> This will cause guest kernel printing below log on AMD platform even
+> though the hardware TSC exactly counts with P0 frequency.
+> "[Firmware Bug]: TSC doesn't count with P0 frequency!"
+> 
+> Fix it by setting HWCR[TscFreqSel] to host's value to indicate whether
+> the TSC increments at the P0 frequency.
 
-The plain "figure" directive broke "make pdfdocs" due to a missing
-PDF figure.  For conversion of SVG -> PDF to work, the "kernel-figure"
-directive, which is an extension for kernel documentation, should
-be used instead.
+I don't think this is safe.  The APM says
 
-The directive of "code:: raw" causes a warning from both
-"make htmldocs" and "make pdfdocs", which reads:
+  Some HWCR bits are implementation specific, and are described in the BIOS and
+  Kernel Developer’s Guide (BKDG) or Processor Programming Reference Manual
+  applicable to your product. Implementation specific HWCR bits are not listed below.
 
-    [...]/can/ctu/ctucanfd-driver.rst:75: WARNING: Pygments lexer name
-    'raw' is not known
+and then omits bit 24.  One thought to handle this would be to let userspace
+write all the non-architectural bits, then userspace can set the magic,
+non-architectural bits based on CPUID and vCPU FMS.
 
-A plain literal-block marker should suffice where no syntax
-highlighting is intended.
+> Signed-off-by: Shannon Zhao <shannon.zhao@linux.alibaba.com>
+> ---
+>  arch/x86/kvm/svm/svm.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 7e45d03..fb4bb51 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -1139,6 +1139,11 @@ static void __svm_vcpu_reset(struct kvm_vcpu *vcpu)
+>  	svm_init_osvw(vcpu);
+>  	vcpu->arch.microcode_version = 0x01000065;
+>  	svm->tsc_ratio_msr = kvm_default_tsc_scaling_ratio;
+> +	/* 
+> +	 * TSC frequency select is HWCR[24], set it to host's value to indicate
 
-Fix the issues by using suitable directive and marker.
+This really should get a #define in msr-index.h, but maybe that's "impossible"
+because it's not an architectural bit.
 
-Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-Fixes: c3a0addefbde ("docs: ctucanfd: CTU CAN FD open-source IP core docu=
-mentation.")
-Acked-by: Pavel Pisa <pisa@cmp.felk.cvut.cz>
-Cc: Martin Jerabek <martin.jerabek01@gmail.com>
-Cc: Ondrej Ille <ondrej.ille@gmail.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>
----
-Changes in v1 -> v2
- - no change in diff
- - added explicit Sphinx versions the issues were observed
- - picked Pavel's Acked-by
+> +	 * whether the TSC increments at the P0 frequency. 
+> +	 */
+> +	vcpu->arch.msr_hwcr = native_read_msr(MSR_K7_HWCR) & BIT_ULL(24);
 
---
- .../networking/device_drivers/can/ctu/ctucanfd-driver.rst     | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This will break live save/restore, a.k.a. live migration.  KVM doesn't allow
+writes to MSR_K7_HWCR to set anything other than bit 18, even if the write comes
+from userspace.
 
-diff --git a/Documentation/networking/device_drivers/can/ctu/ctucanfd-dri=
-ver.rst b/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver=
-=2Erst
-index 2fde5551e756..40c92ea272af 100644
---- a/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst=
-
-+++ b/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst=
-
-@@ -72,7 +72,7 @@ it is reachable (on which bus it resides) and its confi=
-guration =E2=80=93
- registers address, interrupts and so on. An example of such a device
- tree is given in .
-=20
--.. code:: raw
-+::
-=20
-            / {
-                /* ... */
-@@ -451,7 +451,7 @@ the FIFO is maintained, together with priority rotati=
-on, is depicted in
-=20
- |
-=20
--.. figure:: fsm_txt_buffer_user.svg
-+.. kernel-figure:: fsm_txt_buffer_user.svg
-=20
-    TX Buffer states with possible transitions
-=20
---=20
-2.25.1
-
-
+>  
+>  	if (sev_es_guest(vcpu->kvm))
+>  		sev_es_vcpu_reset(svm);
+> -- 
+> 1.8.3.1
+> 

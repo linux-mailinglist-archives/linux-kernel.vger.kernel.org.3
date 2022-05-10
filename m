@@ -2,185 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9B352244C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2798B52244F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349086AbiEJSop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 14:44:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50884 "EHLO
+        id S240720AbiEJSpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 14:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349078AbiEJSol (ORCPT
+        with ESMTP id S1349061AbiEJSov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 14:44:41 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A66652BD236
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 11:44:39 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7A5B012FC;
-        Tue, 10 May 2022 11:44:39 -0700 (PDT)
-Received: from wubuntu (unknown [10.57.65.151])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D42A23F5A1;
-        Tue, 10 May 2022 11:44:37 -0700 (PDT)
-Date:   Tue, 10 May 2022 19:44:36 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Xuewen Yan <xuewen.yan@unisoc.com>, dietmar.eggemann@arm.com,
-        rafael@kernel.org, viresh.kumar@linaro.org, mingo@redhat.com,
-        peterz@infradead.org, vincent.guittot@linaro.org,
-        rostedt@goodmis.org, linux-kernel@vger.kernel.org,
-        di.shen@unisoc.com, Xuewen Yan <xuewen.yan94@gmail.com>
-Subject: Re: [PATCH] sched: Take thermal pressure into account when determine
- rt fits capacity
-Message-ID: <20220510184436.fdgzzcfqqevinx5p@wubuntu>
-References: <20220425161209.ydugtrs3b7gyy3kk@airbuntu>
- <CAB8ipk9hZXDcTV3hakRV+dE5dwKtg-Ka93WZ60ds0=4ErN1-0w@mail.gmail.com>
- <20220426092142.lppfj5eqgt3d24nb@airbuntu>
- <CAB8ipk_tM8WhZOLwURkqyi5XDSNJ=twOg1Zub=dsTB_b9N9BRg@mail.gmail.com>
- <20220427105844.otru4yohja4s23ye@wubuntu>
- <CAB8ipk-QAE2_J_kpUVRcq-4KJ0cSGc1JT2oQhdzvrjDu25HsRQ@mail.gmail.com>
- <20220503144352.lxduzhl6jq6xdhw2@airbuntu>
- <CAB8ipk--Y8HxetcmUhBmtWq6Mmd726QmDbcbibGLERJw_PUqkQ@mail.gmail.com>
- <20220510145625.t5py7atlhgojsfyf@wubuntu>
- <37357c86-bab7-d0c7-88d0-ace63ccdb6c8@arm.com>
+        Tue, 10 May 2022 14:44:51 -0400
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D062BE527;
+        Tue, 10 May 2022 11:44:46 -0700 (PDT)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-e93bbb54f9so15280fac.12;
+        Tue, 10 May 2022 11:44:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MPXufwJAh41IRd4r3GKaRJRRh2QCesjvbaZhsgLi68g=;
+        b=yQD1eRiI8T1IS9ZyzRoroZl3NnOIq+UY/Ksu5aDDiQ6+kb6rBbQS6op7ln3NaXgpOf
+         zNgMGdSLT/ExGHjTBPnN2vT1od8TeNsN2PmOcnggBFtCbJX5eXreQlLOABKZqVUCNW3m
+         I55MTcQopFebiHvlJQ9V/qJ80yI5+sqZ9DJvy+21s8QkAJ1uWtUQErkF5DDQnc2jb4en
+         VrRlQ01V3fKKf121hgBuSwfbQ4XijBQQQWHns5S+iqnIdsLmHExk6BTymEdXXatXpEo+
+         +5JhXa/NTGcGT/9GuHQ82oc3BEXvRFhHLpC6FxGHTFBUWTpEq+/uNzJZ3OTFxFRRFpnn
+         7edA==
+X-Gm-Message-State: AOAM532OfN5VgA1RI0KHvSBGiHbEPGsszZZjYNCdeOQe6fi+qn1ZLja3
+        CVpScUjM0Hoaqs/XOQF52w==
+X-Google-Smtp-Source: ABdhPJzEeQ30XaAC+XdOP/iCCrqRWxt4H+g5o3r0bi8VUx/PK0GuMt+t8NV0yPKGTMCLEYpNeWLYhQ==
+X-Received: by 2002:a05:6870:80cb:b0:ed:aaeb:27e0 with SMTP id r11-20020a05687080cb00b000edaaeb27e0mr883725oab.187.1652208285415;
+        Tue, 10 May 2022 11:44:45 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b7-20020aca1b07000000b0032698578409sm4324592oib.38.2022.05.10.11.44.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 11:44:44 -0700 (PDT)
+Received: (nullmailer pid 2376194 invoked by uid 1000);
+        Tue, 10 May 2022 18:44:43 -0000
+Date:   Tue, 10 May 2022 13:44:43 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Frank Wunderlich <linux@fw-web.de>
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Greg Ungerer <gerg@kernel.org>,
+        =?iso-8859-1?Q?Ren=E9?= van Dorst <opensource@vdorst.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Subject: Re: [PATCH v3 1/6] dt-bindings: net: dsa: convert binding for
+ mediatek switches
+Message-ID: <YnqymzCbabEjV7GQ@robh.at.kernel.org>
+References: <20220507170440.64005-1-linux@fw-web.de>
+ <20220507170440.64005-2-linux@fw-web.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <37357c86-bab7-d0c7-88d0-ace63ccdb6c8@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220507170440.64005-2-linux@fw-web.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/10/22 18:44, Lukasz Luba wrote:
-
-[...]
-
-> To properly answer this question we probably have to analyze the timings
-> and this update path - how often it is actually called. Keep in mind
-> we are going to solve CPU capacity inversion for RT class, which
-> contains latency sensitive tasks. In this approach the information
-
-This was an attempt for a generic inversion detection. We update
-rq->cpu_capacity which is used by capacity_of() in the same path.
-
-I didn't feel brave to write a quick patch in the topology code, but we can
-certainly do the detection there in topology_update_thermal_pressure().
-
-> about HW status is coming from this CFS load balance path.
-> What if that load balance is not called that often as RT might require?
-> What if there is a light load on CPUs, but GPU caused them to throttle,
-> reducing capacity by a decent chunk e.g. 50%?
-> That would translate to some RT periodic task which takes 2ms every
-> 8ms to take 4ms, while maybe on other less power hungry CPU it could
-> take 3ms.
+On Sat, May 07, 2022 at 07:04:35PM +0200, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
 > 
-> The usage of thermal_load_avg() in the scale_rt_capacity() looks OK
-> for the CFS, but might not be from the RT class point of view.
-> The RT class might want to realize faster that CPUs have changed the
-> capacity.
-> Maybe it's OK with that patch [1] and boot config shifter=-5, but in
-> default boot config for shifter=0 we can suffer for hundreds of ms
-> running on lower capacity cpu (which is quite high number of frames
-> nowadays).
+> Convert txt binding to yaml binding for Mediatek switches.
 > 
-> Without a research and experiments data I'm afraid this is too
-> big step to make, with this CFS load balance path.
-
-I think Xuewen didn't want to use thermal_load_avg(), and that's the question
-I deferred.
-
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+> v3:
+> - include standalone patch in mt7530 series
+> - drop some descriptions (gpio-cells,reset-gpios,reset-names)
+> - drop | from descriptions
+> - move patternProperties above allOf
 > 
-> > 
-> > > 
-> > > > +
-> > > > +               rq->cpu_capacity_inverted = 0;
-> > > > +
-> > > > +               for_each_possible_cpu(cpu) {
-> > > > +                       unsigned long cap = arch_scale_cpu_capacity(cpu);
-> > > > +
-> > > > +                       if (capacity_orig <= cap)
-> > > > +                               continue;
+> v2:
+> - rename mediatek.yaml => mediatek,mt7530.yaml
+> - drop "boolean" in description
+> - drop description for interrupt-properties
+> - drop #interrupt-cells as requirement
+> - example: eth=>ethernet,mdio0=>mdio,comment indention
+> - replace 0 by GPIO_ACTIVE_HIGH in first example
+> - use port(s)-pattern from dsa.yaml
+> - adress/size-cells not added to required because this
+>   is defined at mdio-level inc current dts , not switch level
+> ---
+>  .../bindings/net/dsa/mediatek,mt7530.yaml     | 423 ++++++++++++++++++
+>  .../devicetree/bindings/net/dsa/mt7530.txt    | 327 --------------
+>  2 files changed, 423 insertions(+), 327 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/net/dsa/mt7530.txt
 > 
-> The search loop here assumes that other CPUs (fortunately not in the
-> same freq domain) don't suffer due to reduced capacity. This might be
-> not true - when we have ~1 Watt budget for all CPUs in the system and
-> single big core can use 3-4W at max or single mid core ~1.2W.
+> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> new file mode 100644
+> index 000000000000..a7696d1b4a8c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> @@ -0,0 +1,423 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/dsa/mediatek,mt7530.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Mediatek MT7530 Ethernet switch
+> +
+> +maintainers:
+> +  - Sean Wang <sean.wang@mediatek.com>
+> +  - Landen Chao <Landen.Chao@mediatek.com>
+> +  - DENG Qingfang <dqfext@gmail.com>
+> +
+> +description: |
+> +  Port 5 of mt7530 and mt7621 switch is muxed between:
+> +  1. GMAC5: GMAC5 can interface with another external MAC or PHY.
+> +  2. PHY of port 0 or port 4: PHY interfaces with an external MAC like 2nd GMAC
+> +     of the SOC. Used in many setups where port 0/4 becomes the WAN port.
+> +     Note: On a MT7621 SOC with integrated switch: 2nd GMAC can only connected to
+> +       GMAC5 when the gpios for RGMII2 (GPIO 22-33) are not used and not
+> +       connected to external component!
+> +
+> +  Port 5 modes/configurations:
+> +  1. Port 5 is disabled and isolated: An external phy can interface to the 2nd
+> +     GMAC of the SOC.
+> +     In the case of a build-in MT7530 switch, port 5 shares the RGMII bus with 2nd
+> +     GMAC and an optional external phy. Mind the GPIO/pinctl settings of the SOC!
+> +  2. Port 5 is muxed to PHY of port 0/4: Port 0/4 interfaces with 2nd GMAC.
+> +     It is a simple MAC to PHY interface, port 5 needs to be setup for xMII mode
+> +     and RGMII delay.
+> +  3. Port 5 is muxed to GMAC5 and can interface to an external phy.
+> +     Port 5 becomes an extra switch port.
+> +     Only works on platform where external phy TX<->RX lines are swapped.
+> +     Like in the Ubiquiti ER-X-SFP.
+> +  4. Port 5 is muxed to GMAC5 and interfaces with the 2nd GAMC as 2nd CPU port.
+> +     Currently a 2nd CPU port is not supported by DSA code.
+> +
+> +  Depending on how the external PHY is wired:
+> +  1. normal: The PHY can only connect to 2nd GMAC but not to the switch
+> +  2. swapped: RGMII TX, RX are swapped; external phy interface with the switch as
+> +     a ethernet port. But can't interface to the 2nd GMAC.
+> +
+> +    Based on the DT the port 5 mode is configured.
+> +
+> +  Driver tries to lookup the phy-handle of the 2nd GMAC of the master device.
+> +  When phy-handle matches PHY of port 0 or 4 then port 5 set-up as mode 2.
+> +  phy-mode must be set, see also example 2 below!
+> +  * mt7621: phy-mode = "rgmii-txid";
+> +  * mt7623: phy-mode = "rgmii";
+> +
+> +  CPU-Ports need a phy-mode property:
+> +    Allowed values on mt7530 and mt7621:
+> +      - "rgmii"
+> +      - "trgmii"
+> +    On mt7531:
+> +      - "1000base-x"
+> +      - "2500base-x"
+> +      - "sgmii"
+> +
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt7530
+> +      - mediatek,mt7531
+> +      - mediatek,mt7621
+> +
 
-I defined capacity inversion against capacity_orig. IMHO that's the sensible
-definition to make.
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
 
-Would be good to hear more/other suggestions.
+I don't see any child nodes with addresses, so these can be removed.
 
-> 
-> > > > +
-> > > > +                       if (cap > inv_cap) {
-> > > > +                               rq->cpu_capacity_inverted = inv_cap;
-> > > > +                               break;
-> > > > +                       }
-> > > > +               }
-> > > > +
-> > > > +       }
-> > > > 
-> > > >          sdg->sgc->capacity = capacity;
-> > > >          sdg->sgc->min_capacity = capacity;
-> > > > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> > > > index 8dccb34eb190..bfe84c870bf9 100644
-> > > > --- a/kernel/sched/sched.h
-> > > > +++ b/kernel/sched/sched.h
-> > > > @@ -992,6 +992,7 @@ struct rq {
-> > > > 
-> > > >          unsigned long           cpu_capacity;
-> > > >          unsigned long           cpu_capacity_orig;
-> > > > +       unsigned long           cpu_capacity_inverted;
-> > > > 
-> > > >          struct callback_head    *balance_callback;
-> > > > 
-> > > > @@ -2807,6 +2808,11 @@ static inline unsigned long capacity_orig_of(int cpu)
-> > > >          return cpu_rq(cpu)->cpu_capacity_orig;
-> > > >   }
-> > > > 
-> > > > +static inline unsigned long cpu_in_capacity_inversion(int cpu)
-> > > > +{
-> > > > +       return cpu_rq(cpu)->cpu_capacity_inverted;
-> > > > +}
-> > > > +
-> > > >   /**
-> > > >    * enum cpu_util_type - CPU utilization type
-> > > >    * @FREQUENCY_UTIL:    Utilization used to select frequency
-> > > > 
-> > > > 
-> > > > --->8---
-> > > 
-> > > The patch is amazing for me, and the complexity is not too high. Would
-> > > you please push the patch?
-> > > I think the idea is yours, I don't want to use it as my patch v2.
-> > 
-> > I'd be happy to add a commit message so that you can include it in your v2.
-> > 
-> > First, I'd like to hear from Vincent and Lukasz they're happy with this
-> > approach.
-> > 
-> > I've been trying to think how we can do this generically but can't find an
-> > alternative to the extra loop or additional fallback_cpu_mask. Maybe the mask
-> > is okay if we protect it with sched_asymmetric_cpucapacity static key..
-> > 
-> 
-> I'm sorry Qais, I see that you are trying to bring this
-> real-CPU-capacity information into RT, but the source and quality of
-> this information IMO might matter. I cannot help you w/o experiment
-> results of your proposed approach.
+> +
+> +  core-supply:
+> +    description:
+> +      Phandle to the regulator node necessary for the core power.
+> +
+> +  "#gpio-cells":
+> +    const: 2
+> +
+> +  gpio-controller:
+> +    type: boolean
+> +    description:
+> +      if defined, MT7530's LED controller will run on GPIO mode.
+> +
+> +  "#interrupt-cells":
+> +    const: 1
+> +
+> +  interrupt-controller:
+> +    type: boolean
 
-The question I was posing here is whether to handle thermal only in inversion
-case as I was suggesting or do better. We are still trickling through the
-details, but first, I wanted to make sure there's no objection to this
-direction (detect inversion and bail out in rt_task_fits_capacity() for cpus in
-capacity inversion).
+Already has a type. Just:
 
-Cheers
+interrupt-controller: true
 
---
-Qais Yousef
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  io-supply:
+> +    description:
+> +      Phandle to the regulator node necessary for the I/O power.
+> +      See Documentation/devicetree/bindings/regulator/mt6323-regulator.txt
+> +      for details for the regulator setup on these boards.
+> +
+> +  mediatek,mcm:
+> +    type: boolean
+> +    description:
+> +      if defined, indicates that either MT7530 is the part on multi-chip
+> +      module belong to MT7623A has or the remotely standalone chip as the
+> +      function MT7623N reference board provided for.
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +
+> +  reset-names:
+> +    const: mcm
+> +
+> +  resets:
+> +    description:
+> +      Phandle pointing to the system reset controller with line index for
+> +      the ethsys.
+> +    maxItems: 1
+> +
+> +patternProperties:
+> +  "^(ethernet-)?ports$":
+> +    type: object
+
+       additionalProperties: false
+
+> +
+> +    patternProperties:
+> +      "^(ethernet-)?port@[0-9]+$":
+> +        type: object
+> +        description: Ethernet switch ports
+> +
+> +        unevaluatedProperties: false
+> +
+> +        properties:
+> +          reg:
+> +            description:
+> +              Port address described must be 5 or 6 for CPU port and from 0
+> +              to 5 for user ports.
+> +
+> +        allOf:
+> +          - $ref: dsa-port.yaml#
+> +          - if:
+> +              properties:
+> +                label:
+> +                  items:
+> +                    - const: cpu
+> +            then:
+> +              required:
+> +                - reg
+> +                - phy-mode
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +allOf:
+> +  - $ref: "dsa.yaml#"
+> +  - if:
+> +      required:
+> +        - mediatek,mcm
+> +    then:
+> +      required:
+> +        - resets
+> +        - reset-names
+> +    else:
+> +      required:
+> +        - reset-gpios
+> +
+> +  - if:
+> +      required:
+> +        - interrupt-controller
+> +    then:
+> +      required:
+> +        - interrupts
+
+This can be expressed as:
+
+dependencies:
+  interrupt-controller: [ interrupts ]
+    
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          items:
+> +            - const: mediatek,mt7530
+> +    then:
+> +      required:
+> +        - core-supply
+> +        - io-supply
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    mdio {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        switch@0 {
+> +            compatible = "mediatek,mt7530";
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +            reg = <0>;
+> +
+> +            core-supply = <&mt6323_vpa_reg>;
+> +            io-supply = <&mt6323_vemc3v3_reg>;
+> +            reset-gpios = <&pio 33 GPIO_ACTIVE_HIGH>;
+> +
+> +            ports {
+
+Use the preferred form: ethernet-ports
+
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +                port@0 {
+

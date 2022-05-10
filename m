@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08234521911
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 592F2521A94
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244185AbiEJNne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
+        id S244580AbiEJNzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242973AbiEJN3n (ORCPT
+        with ESMTP id S244855AbiEJNiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:29:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB46F56416;
-        Tue, 10 May 2022 06:21:17 -0700 (PDT)
+        Tue, 10 May 2022 09:38:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAA26D4CA;
+        Tue, 10 May 2022 06:26:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C4BE61761;
-        Tue, 10 May 2022 13:21:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ACEDC385C6;
-        Tue, 10 May 2022 13:21:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AD8B1B81DA9;
+        Tue, 10 May 2022 13:26:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14E0EC385C2;
+        Tue, 10 May 2022 13:26:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188873;
-        bh=/8F670taQclENz0qzSApJEtsYRmSdHV0+LAvMGqYgiA=;
+        s=korg; t=1652189190;
+        bh=/pxfULk7hU6DIw/b2kQ1JQq9ZuRhMqqC4/KdmYm/oPU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GSDtevDz0Q8BmIMzWzg8S3tr3H8Uo6dH00fentw560sPVtods3V73t7XIOXzxnZGD
-         EsRQI2Bs6SL0mS1nO857CeLVw4AaoADqD2SS7o3UVqV1TTMYYsGFa/plRsujCa+A/Y
-         Oil0U2/h2DLgVbFM9Yrl200EZIBOeRjWLejE0gMo=
+        b=XTk1P73H93NTPxeMP9J+s/XTaBniYChls2kWi9pe3FiRSAet9PpvMmh2LSREjft7w
+         WYjKdAy6JRxjUXisEt+RalD59NmWVvmSCkoxzxlotFYb5fLooqdSdUafMEnFe90VVw
+         AsQkUcgMwA+rjwY6mQGuEvVjH/JgUDUNRyCvhqe0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Shravya Kumbham <shravya.kumbham@xilinx.com>,
-        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH 4.19 76/88] net: emaclite: Add error handling for of_address_to_resource()
+        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH 5.10 42/70] selftests/seccomp: Dont call read() on TTY from background pgrp
 Date:   Tue, 10 May 2022 15:08:01 +0200
-Message-Id: <20220510130735.937653041@linuxfoundation.org>
+Message-Id: <20220510130734.091625379@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
-References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
+References: <20220510130732.861729621@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,77 +54,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shravya Kumbham <shravya.kumbham@xilinx.com>
+From: Jann Horn <jannh@google.com>
 
-commit 7a6bc33ab54923d325d9a1747ec9652c4361ebd1 upstream.
+commit 2bfed7d2ffa5d86c462d3e2067f2832eaf8c04c7 upstream.
 
-check the return value of of_address_to_resource() and also add
-missing of_node_put() for np and npp nodes.
+Since commit 92d25637a3a4 ("kselftest: signal all child processes"), tests
+are executed in background process groups. This means that trying to read
+from stdin now throws SIGTTIN when stdin is a TTY, which breaks some
+seccomp selftests that try to use read(0, NULL, 0) as a dummy syscall.
 
-Fixes: e0a3bc65448c ("net: emaclite: Support multiple phys connected to one MDIO bus")
-Addresses-Coverity: Event check_return value.
-Signed-off-by: Shravya Kumbham <shravya.kumbham@xilinx.com>
-Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+The simplest way to fix that is probably to just use -1 instead of 0 as
+the dummy read()'s FD.
+
+Fixes: 92d25637a3a4 ("kselftest: signal all child processes")
+Signed-off-by: Jann Horn <jannh@google.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20220319010011.1374622-1-jannh@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/xilinx/xilinx_emaclite.c |   15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ tools/testing/selftests/seccomp/seccomp_bpf.c |   10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
---- a/drivers/net/ethernet/xilinx/xilinx_emaclite.c
-+++ b/drivers/net/ethernet/xilinx/xilinx_emaclite.c
-@@ -827,10 +827,10 @@ static int xemaclite_mdio_write(struct m
- static int xemaclite_mdio_setup(struct net_local *lp, struct device *dev)
- {
- 	struct mii_bus *bus;
--	int rc;
- 	struct resource res;
- 	struct device_node *np = of_get_parent(lp->phy_node);
- 	struct device_node *npp;
-+	int rc, ret;
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -951,7 +951,7 @@ TEST(ERRNO_valid)
+ 	ASSERT_EQ(0, ret);
  
- 	/* Don't register the MDIO bus if the phy_node or its parent node
- 	 * can't be found.
-@@ -840,8 +840,14 @@ static int xemaclite_mdio_setup(struct n
- 		return -ENODEV;
- 	}
- 	npp = of_get_parent(np);
--
--	of_address_to_resource(npp, 0, &res);
-+	ret = of_address_to_resource(npp, 0, &res);
-+	of_node_put(npp);
-+	if (ret) {
-+		dev_err(dev, "%s resource error!\n",
-+			dev->of_node->full_name);
-+		of_node_put(np);
-+		return ret;
-+	}
- 	if (lp->ndev->mem_start != res.start) {
- 		struct phy_device *phydev;
- 		phydev = of_phy_find_device(lp->phy_node);
-@@ -850,6 +856,7 @@ static int xemaclite_mdio_setup(struct n
- 				 "MDIO of the phy is not registered yet\n");
- 		else
- 			put_device(&phydev->mdio.dev);
-+		of_node_put(np);
- 		return 0;
- 	}
+ 	EXPECT_EQ(parent, syscall(__NR_getppid));
+-	EXPECT_EQ(-1, read(0, NULL, 0));
++	EXPECT_EQ(-1, read(-1, NULL, 0));
+ 	EXPECT_EQ(E2BIG, errno);
+ }
  
-@@ -862,6 +869,7 @@ static int xemaclite_mdio_setup(struct n
- 	bus = mdiobus_alloc();
- 	if (!bus) {
- 		dev_err(dev, "Failed to allocate mdiobus\n");
-+		of_node_put(np);
- 		return -ENOMEM;
- 	}
+@@ -970,7 +970,7 @@ TEST(ERRNO_zero)
  
-@@ -874,6 +882,7 @@ static int xemaclite_mdio_setup(struct n
- 	bus->parent = dev;
+ 	EXPECT_EQ(parent, syscall(__NR_getppid));
+ 	/* "errno" of 0 is ok. */
+-	EXPECT_EQ(0, read(0, NULL, 0));
++	EXPECT_EQ(0, read(-1, NULL, 0));
+ }
  
- 	rc = of_mdiobus_register(bus, np);
-+	of_node_put(np);
- 	if (rc) {
- 		dev_err(dev, "Failed to register mdio bus.\n");
- 		goto err_register;
+ /*
+@@ -991,7 +991,7 @@ TEST(ERRNO_capped)
+ 	ASSERT_EQ(0, ret);
+ 
+ 	EXPECT_EQ(parent, syscall(__NR_getppid));
+-	EXPECT_EQ(-1, read(0, NULL, 0));
++	EXPECT_EQ(-1, read(-1, NULL, 0));
+ 	EXPECT_EQ(4095, errno);
+ }
+ 
+@@ -1022,7 +1022,7 @@ TEST(ERRNO_order)
+ 	ASSERT_EQ(0, ret);
+ 
+ 	EXPECT_EQ(parent, syscall(__NR_getppid));
+-	EXPECT_EQ(-1, read(0, NULL, 0));
++	EXPECT_EQ(-1, read(-1, NULL, 0));
+ 	EXPECT_EQ(12, errno);
+ }
+ 
+@@ -2575,7 +2575,7 @@ void *tsync_sibling(void *data)
+ 	ret = prctl(PR_GET_NO_NEW_PRIVS, 0, 0, 0, 0);
+ 	if (!ret)
+ 		return (void *)SIBLING_EXIT_NEWPRIVS;
+-	read(0, NULL, 0);
++	read(-1, NULL, 0);
+ 	return (void *)SIBLING_EXIT_UNKILLED;
+ }
+ 
 
 

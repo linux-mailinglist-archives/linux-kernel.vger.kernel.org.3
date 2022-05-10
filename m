@@ -2,131 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C00520E2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 08:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31648520E2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 08:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237373AbiEJG4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 02:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33844 "EHLO
+        id S237412AbiEJG5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 02:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235052AbiEJG4t (ORCPT
+        with ESMTP id S235052AbiEJG5m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 02:56:49 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C77F1A80B;
-        Mon,  9 May 2022 23:52:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652165572; x=1683701572;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QSQrQETYh/pxV8qAHgktpIdb0RFfKPYxj6UqNQftZ3k=;
-  b=ZTeJxjpSvZB8BNzu7kwQP+9KQVcJkeQrkdSybwEqVZsMEFv4Ho2VXSvt
-   7vsYvFZsr+k2QQPXE+wDEWW7rdDbHTaeK/dmFMjwZwvQr1UZPvZrXUvDU
-   +GSLk5cMWASvOT15YkYsIMzF19h2hR5rV8Gt42CvgvRzxW61F4PQ7ICmv
-   NO92GqyOJ4NH50rsGo3IV5CkCS9Iew+WR+prm37AN7g4Zm8aliCr+H5ey
-   jy47aV7UQ5gSSy7ni8UgkqvuZRH/XTMWPg/qtgMeAYt+ozkMPl61HzV6O
-   LNrF7M7PSYno67KPcXCZ0l2AmCMK9gFST1sP2O5nVg2IOFU6HOali5sEB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="256821506"
-X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
-   d="scan'208";a="256821506"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 23:52:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
-   d="scan'208";a="552658004"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 09 May 2022 23:52:48 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1noJjk-000HQo-6Z;
-        Tue, 10 May 2022 06:52:48 +0000
-Date:   Tue, 10 May 2022 14:51:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sebastian Ene <sebastianene@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, maz@kernel.org, will@kernel.org,
-        qperret@google.com, Guenter Roeck <linux@roeck-us.net>,
-        Sebastian Ene <sebastianene@google.com>
-Subject: Re: [PATCH v5 2/2] misc: Add a mechanism to detect stalls on guest
- vCPUs
-Message-ID: <202205101453.rxj6blmH-lkp@intel.com>
-References: <20220509091103.2220604-3-sebastianene@google.com>
+        Tue, 10 May 2022 02:57:42 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EB756235
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 23:53:45 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Ky7wb5SJ4zGpXV;
+        Tue, 10 May 2022 14:50:55 +0800 (CST)
+Received: from M910t (10.110.54.157) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 10 May
+ 2022 14:53:42 +0800
+Date:   Tue, 10 May 2022 14:53:36 +0800
+From:   Changbin Du <changbin.du@huawei.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Steven Rostedt <rostedt@goodmis.org>
+CC:     <changbin.du@huawei.com>, <hw.huiwang@huawei.com>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>, <codegen-riscv@discourse.llvm.org>,
+        <llvmproject@discourse.llvm.org>
+Subject: riscv: llvm-compiler: calling convention violation: temporary
+ register $t2 is used to pass the ninth function parameter
+Message-ID: <20220510065336.hlfjrc25ajed5zj4@M910t>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220509091103.2220604-3-sebastianene@google.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.110.54.157]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian,
+[This is a resent to correct llvm mailist.]
 
-Thank you for the patch! Yet something to improve:
+Hello, folks,
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on char-misc/char-misc-testing soc/for-next v5.18-rc6 next-20220509]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Recently I encountered a kernel crash problem when using ftrace with 'perf ftrace'
+command on risc-v kernel built with llvm.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sebastian-Ene/Detect-stalls-on-guest-vCPUS/20220509-174959
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220510/202205101453.rxj6blmH-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d3152372fdd19448b32806c0bffd78d8729d02e4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sebastian-Ene/Detect-stalls-on-guest-vCPUS/20220509-174959
-        git checkout d3152372fdd19448b32806c0bffd78d8729d02e4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/misc/
+This crash only exists on llvm build, not reproducable with GCC. So I hope llvm
+guys can take a look :)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The llvm versions I have tried are llvm-13.0.0 and mainline (commit 102bc634cb
+("[runtime] Build compiler-rt with --unwindlib=none")).
 
-All errors (new ones prefixed by >>):
+[  612.947887][  T496] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000001
+[  613.050789][  T496] Hardware name: riscv-virtio,qemu (DT)
+[  613.087976][  T496] epc : __find_rr_leaf+0x128/0x220
+[  613.107493][  T496]  ra : return_to_handler+0x22/0x24
+[  613.125322][  T496] epc : ffffffff80a1915a ra : ffffffff80009506 sp : ff20000011e43860
+[  613.150124][  T496]  gp : ffffffff81812f40 tp : ff6000008bb01580 t0 : ff600000806cf0f0
+[  613.173657][  T496]  t1 : 000000000001b29a t2 : 0000000000000001 s0 : ff20000011e43920
+[  613.187311][  T496]  s1 : ff600000848c2a00 a0 : 0000000000000002 a1 : 0000000000000002
+[  613.202731][  T496]  a2 : fffffffffffffffd a3 : ff6000009d287000 a4 : 00000000000002c0
+[  613.213723][  T496]  a5 : ff6000009d259b40 a6 : ffffffffffffff9c a7 : ffffffffffffffff
+[  613.226648][  T496]  s2 : 0000000000000001 s3 : ff20000011e439d8 s4 : ffffffff8160d140
+[  613.246571][  T496]  s5 : 0000000000000002 s6 : 0000000000000000 s7 : 0000000000000000
+[  613.264681][  T496]  s8 : 0000000000000064 s9 : 0000000000000000 s10: 0000000000400000
+[  613.277999][  T496]  s11: ff600000848c2aa8 t3 : 0000000000000290 t4 : 00000000004002c0
+[  613.303729][  T496]  t5 : 00000000ffffffff t6 : ff6000009d2872d0
+[  613.322145][  T496] status: 0000000200000120 badaddr: 0000000000000001 cause: 000000000000000d
+[  613.346228][  T496] [<ffffffff80a12526>] ip6_pol_route+0xb6/0x602
+[  613.365722][  T496] [<ffffffff80a1321a>] ip6_pol_route_output+0x2c/0x34
+[  613.386374][  T496] [<ffffffff80a1c028>] fib6_rule_lookup+0x36/0xa0
+[  613.401865][  T496] [<ffffffff80a131da>] ip6_route_output_flags_noref+0xd6/0xea
+[  613.412776][  T496] [<ffffffff80a13274>] ip6_route_output_flags+0x52/0xd4
+[  613.432013][  T496] [<ffffffff809ffb3a>] ip6_dst_lookup_tail+0x68/0x23a
+[  613.456198][  T496] [<ffffffff809ffec6>] ip6_sk_dst_lookup_flow+0x132/0x1cc
+[  613.513174][  T496] [<ffffffff80003cd8>] ret_from_syscall+0x0/0x2
+[  613.518973][  T496] [<ffffffff800094e4>] return_to_handler+0x0/0x24
+[  613.563961][  T496] Kernel panic - not syncing: Fatal exception
+[  613.572278][  T496] SMP: stopping secondary CPUs
+[  613.587449][  T496] ---[ end Kernel panic - not syncing: Fatal exception ]---
 
-   In file included from include/linux/device/driver.h:21,
-                    from include/linux/device.h:32,
-                    from include/linux/node.h:18,
-                    from include/linux/cpu.h:17,
-                    from drivers/misc/vcpu_stall_detector.c:6:
->> drivers/misc/vcpu_stall_detector.c:203:25: error: 'vcpu_stall_detector_of_match' undeclared here (not in a function); did you mean 'vcpu_stall_detect_of_match'?
-     203 | MODULE_DEVICE_TABLE(of, vcpu_stall_detector_of_match);
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/module.h:244:15: note: in definition of macro 'MODULE_DEVICE_TABLE'
-     244 | extern typeof(name) __mod_##type##__##name##_device_table               \
-         |               ^~~~
->> include/linux/module.h:244:21: error: '__mod_of__vcpu_stall_detector_of_match_device_table' aliased to undefined symbol 'vcpu_stall_detector_of_match'
-     244 | extern typeof(name) __mod_##type##__##name##_device_table               \
-         |                     ^~~~~~
-   drivers/misc/vcpu_stall_detector.c:203:1: note: in expansion of macro 'MODULE_DEVICE_TABLE'
-     203 | MODULE_DEVICE_TABLE(of, vcpu_stall_detector_of_match);
-         | ^~~~~~~~~~~~~~~~~~~
+The crash happened when dereferencing the point 'mpri' at route.c:758.
 
+(gdb) l *__find_rr_leaf+0x128
+0xffffffff809da9c4 is in __find_rr_leaf (net/ipv6/route.c:758).
+753
+754             if (strict & RT6_LOOKUP_F_REACHABLE)
+755                     rt6_probe(nh);
+756
+757             /* note that m can be RT6_NUD_FAIL_PROBE at this point */
+758             if (m > *mpri) {
+759                     *do_rr = match_do_rr;
+760                     *mpri = m;
+761                     rc = true;
+762             }
 
-vim +203 drivers/misc/vcpu_stall_detector.c
+Adding some logs, I found the problem. The ninth passed parameter of function
+__find_rr_leaf() which is the address of local variable 'mpri', is changed to
+value '0x1' when inside the function __find_rr_leaf.
+Here is the code snippet and full link
+https://github.com/torvalds/linux/blob/9cb7c013420f98fa6fd12fc6a5dc055170c108db/net/ipv6/route.c.
 
-   202	
- > 203	MODULE_DEVICE_TABLE(of, vcpu_stall_detector_of_match);
-   204	
+static void find_rr_leaf(struct fib6_node *fn, struct fib6_info *leaf,
+			 struct fib6_info *rr_head, int oif, int strict,
+			 bool *do_rr, struct fib6_result *res)
+{
+	u32 metric = rr_head->fib6_metric;
+	struct fib6_info *cont = NULL;
+	int mpri = -1;
+
+	__find_rr_leaf(rr_head, NULL, metric, res, &cont,
+		       oif, strict, do_rr, &mpri);
+	...
+}
+
+Then debugging with gdb, I found this probably is a compiler bug. We can see the
+local function __find_rr_leaf() is not optimized out and the compiler generates
+a local symbol for it. The find_rr_leaf() (inlined by fib6_table_lookup) invokes
+this function with 'jalr' instruction.
+
+(gdb) disassemble fib6_table_lookup
+Dump of assembler code for function fib6_table_lookup:
+   [snip]
+   0xffffffff80a1240e <+412>:   beqz    a1,0xffffffff80a12436 <fib6_table_lookup+452>
+   0xffffffff80a12410 <+414>:   slli    a1,s9,0x20
+   0xffffffff80a12414 <+418>:   srli    a1,a1,0x20
+   0xffffffff80a12416 <+420>:   sext.w  a2,a1
+   0xffffffff80a1241a <+424>:   addi    a7,s0,-125
+   0xffffffff80a1241e <+428>:   addi    t2,s0,-124
+   0xffffffff80a12422 <+432>:   li      a1,0
+   0xffffffff80a12424 <+434>:   mv      a3,s10
+   0xffffffff80a12426 <+436>:   li      a4,0
+   0xffffffff80a12428 <+438>:   ld      a5,-152(s0)
+   0xffffffff80a1242c <+442>:   mv      a6,s8
+   0xffffffff80a1242e <+444>:   auipc   ra,0x7
+   0xffffffff80a12432 <+448>:   jalr    -686(ra) # 0xffffffff80a19180 <__find_rr_leaf>
+   [snip]
+
+And at line route.c:758, the value of point 'mpri' is stored in temporary register
+$t2 and $s3 (copied from $t2).
+
+(gdb) info scope __find_rr_leaf
+[snip]
+Symbol mpri is multi-location:
+  Base address 0xffffffff80a10564  Range 0xffffffff80a19190-0xffffffff80a191ae: a variable in $t2
+  Range 0xffffffff80a191c0-0xffffffff80a191d6: a variable in $s3
+  Range 0xffffffff80a19200-0xffffffff80a19208: a variable in $s3
+  Range 0xffffffff80a1921e-0xffffffff80a192fe: a variable in $s3
+  Range 0xffffffff80a1930a-0xffffffff80a19356: a variable in $s3
+
+Let's see when register $t2 is corrupted with single-step mode. Obviously, register
+$t2 is changed by mcount function ftrace_caller(). This is why the bug happens
+to ftrace.
+
+Dump of assembler code for function __find_rr_leaf:
+   0xffffffff80a19180 <+0>:     sd      ra,-8(sp)   #  $t2 = 0xff200000120db7b4
+   0xffffffff80a19184 <+4>:     auipc   ra,0xff5f1
+   0xffffffff80a19188 <+8>:     jalr    -1744(ra) # 0xffffffff80009ab4 <ftrace_caller> #  $t2 = 0xff200000120db7b4
+=> 0xffffffff80a1918c <+12>:    ld      ra,-8(sp)    #  $t2 = 0x1, bug, $t2 is corrupted!!
+   0xffffffff80a19190 <+16>:    addi    sp,sp,-176
+   [snip]
+
+So now we can come to a conclusion. The generated local function __find_rr_leaf()
+violates the risc-v calling convention and leads to the panic. It should use stack
+but *not* temporary register $t2 to pass the ninth parameter! It's okay if the
+callsite can take care of local symbol callees, but the Function Instrumentation
+features should be considerated carefully.
+
+For comparison, here is the result from gcc (9.2.0):
+(gdb) info scope __find_rr_leaf
+[snip]
+Symbol mpri is a complex DWARF expression:
+     0: DW_OP_fbreg 0, length 8.
+
+I also built a simple test function with 9 parameters by clang and same cflags,
+but cannot reproduce it. Maybe it is conditional?
+
+Simple test code:
+__attribute__ ((noinline))
+void test_func(int *a, int *b, int *c, int *d, int *e, int *f, int *g, int *h, int *i)
+{
+        printf("__find_rr_leaf: %d\n", *i);
+}
+
+int main(void)
+{
+        int a,b,c,d,e,f,g,h,i = 100;
+
+        test_func(&a,&b,&c,&d,&e,&f,&g,&h,&i);
+        return 0;
+}
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+Changbin Du

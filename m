@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373EF521BF0
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD15521B01
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344425AbiEJO0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39690 "EHLO
+        id S1343772AbiEJOHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244470AbiEJNx4 (ORCPT
+        with ESMTP id S244124AbiEJNgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:53:56 -0400
+        Tue, 10 May 2022 09:36:51 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611E42A0A41;
-        Tue, 10 May 2022 06:38:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725452D9ED5;
+        Tue, 10 May 2022 06:25:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03003615C8;
-        Tue, 10 May 2022 13:38:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6DD3C385C2;
-        Tue, 10 May 2022 13:38:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AF4C61767;
+        Tue, 10 May 2022 13:25:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46789C385A6;
+        Tue, 10 May 2022 13:25:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189905;
-        bh=CZCbhfw3omaRJXhOwD3hj63Q4L75/COhbyLBzDbWWxk=;
+        s=korg; t=1652189113;
+        bh=2HnKUKKeygCNULEDLTGebDWd/Upf5P086EXE4P6TmGo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vhNqLmQfBiWaFOb9RqbcWklPP3VhLdgl5Azskqu0HLK/FMVk7Y5dIcW+k4eohsQUg
-         bEgBn6RxbhT+AdSUV2hhHRDKa3tMdRljiJwQiw4+o9jKu11XLVwaMhnF3lW0re85dI
-         req+GoI5Rr0vIverNEey2YUNY6e2vLBu5OUrhUMQ=
+        b=UMefxCXfdDoy5SVdDHbjuAoiuhMmrzbtXUM9YtSn05LjfItGsXbcr0Ylrq9GsG1D4
+         nmK8PNqAIxcNsjuY+R0YNKKN9IxnqjwwuOQFnRoPa+bDJq4nOkEtYllTxcrvj0k3rQ
+         JjVdmguSrFo280CPgZ8iUEy8+R7VYC2CvyuIYBzw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vlad Buslov <vladbu@nvidia.com>,
-        Maor Dickman <maord@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: [PATCH 5.17 066/140] net/mlx5e: Dont match double-vlan packets if cvlan is not set
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+Subject: [PATCH 5.10 17/70] ASoC: da7219: Fix change notifications for tone generator frequency
 Date:   Tue, 10 May 2022 15:07:36 +0200
-Message-Id: <20220510130743.507125417@linuxfoundation.org>
+Message-Id: <20220510130733.370742040@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
+References: <20220510130732.861729621@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +54,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vlad Buslov <vladbu@nvidia.com>
+From: Mark Brown <broonie@kernel.org>
 
-commit ada09af92e621ab500dd80a16d1d0299a18a1180 upstream.
+commit 08ef48404965cfef99343d6bbbcf75b88c74aa0e upstream.
 
-Currently, match VLAN rule also matches packets that have multiple VLAN
-headers. This behavior is similar to buggy flower classifier behavior that
-has recently been fixed. Fix the issue by matching on
-outer_second_cvlan_tag with value 0 which will cause the HW to verify the
-packet doesn't contain second vlan header.
+The tone generator frequency control just returns 0 on successful write,
+not a boolean value indicating if there was a change or not.  Compare
+what was written with the value that was there previously so that
+notifications are generated appropriately when the value changes.
 
-Fixes: 699e96ddf47f ("net/mlx5e: Support offloading tc double vlan headers match")
-Signed-off-by: Vlad Buslov <vladbu@nvidia.com>
-Reviewed-by: Maor Dickman <maord@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220420133437.569229-1-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en_tc.c |   11 +++++++++++
- 1 file changed, 11 insertions(+)
+ sound/soc/codecs/da7219.c |   14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-@@ -2355,6 +2355,17 @@ static int __parse_cls_flower(struct mlx
- 				 match.key->vlan_priority);
+--- a/sound/soc/codecs/da7219.c
++++ b/sound/soc/codecs/da7219.c
+@@ -446,7 +446,7 @@ static int da7219_tonegen_freq_put(struc
+ 	struct soc_mixer_control *mixer_ctrl =
+ 		(struct soc_mixer_control *) kcontrol->private_value;
+ 	unsigned int reg = mixer_ctrl->reg;
+-	__le16 val;
++	__le16 val_new, val_old;
+ 	int ret;
  
- 			*match_level = MLX5_MATCH_L2;
+ 	/*
+@@ -454,13 +454,19 @@ static int da7219_tonegen_freq_put(struc
+ 	 * Therefore we need to convert to little endian here to align with
+ 	 * HW registers.
+ 	 */
+-	val = cpu_to_le16(ucontrol->value.integer.value[0]);
++	val_new = cpu_to_le16(ucontrol->value.integer.value[0]);
+ 
+ 	mutex_lock(&da7219->ctrl_lock);
+-	ret = regmap_raw_write(da7219->regmap, reg, &val, sizeof(val));
++	ret = regmap_raw_read(da7219->regmap, reg, &val_old, sizeof(val_old));
++	if (ret == 0 && (val_old != val_new))
++		ret = regmap_raw_write(da7219->regmap, reg,
++				&val_new, sizeof(val_new));
+ 	mutex_unlock(&da7219->ctrl_lock);
+ 
+-	return ret;
++	if (ret < 0)
++		return ret;
 +
-+			if (!flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_CVLAN) &&
-+			    match.mask->vlan_eth_type &&
-+			    MLX5_CAP_FLOWTABLE_TYPE(priv->mdev,
-+						    ft_field_support.outer_second_vid,
-+						    fs_type)) {
-+				MLX5_SET(fte_match_set_misc, misc_c,
-+					 outer_second_cvlan_tag, 1);
-+				spec->match_criteria_enable |=
-+					MLX5_MATCH_MISC_PARAMETERS;
-+			}
- 		}
- 	} else if (*match_level != MLX5_MATCH_NONE) {
- 		/* cvlan_tag enabled in match criteria and
++	return val_old != val_new;
+ }
+ 
+ 
 
 

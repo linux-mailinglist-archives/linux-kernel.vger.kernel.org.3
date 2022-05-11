@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E88523077
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 094B8523072
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241357AbiEKKMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 06:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58754 "EHLO
+        id S241977AbiEKKM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 06:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241058AbiEKKM3 (ORCPT
+        with ESMTP id S241325AbiEKKM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 11 May 2022 06:12:29 -0400
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DC321A94C;
-        Wed, 11 May 2022 03:12:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2309A21935A;
+        Wed, 11 May 2022 03:12:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652263928; x=1683799928;
+  t=1652263933; x=1683799933;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=EiPw22QBwiYjNZhy2MWCDoPUZBiGSzJ5rdmbTiN1S3Y=;
-  b=cBJYkzUlChLNcWP0qkzZ/s+Ep5pRhC8ofmZxv0bPyiU4uDlw9/g8UuXB
-   rh3xEWkVoV7CU8A1CBfNR0GzOSngtbF5T9wVuJ+3O2XGmZ8UwlsyT6Xkl
-   vIPUTUFNcI9S3nZpuZgIU7EBJXjLIIM0+8bDR5SNeTWTtt01tkYp1gJwX
-   TycnB+jdSTlpHsZz2F/PE9JLiQarwpT6u1tBb9BhJBwGbUVkERu3js9kt
-   IKgr8O0zLfHBmMS8xL/eNL9nFtOerccsqlaXT4OE//4Kv4yURWGsQLsYL
-   f+TfieCZ1ZCTw/uiROBoRvIYpgSE5y/Fv6G5RIzzsRXYFfZ7FZxL7RPFR
+  bh=F2ZGQHsx6x/fGntuee5Dt0BhAfm+/Hlzd1YGdP2vArk=;
+  b=CqpVF3cw1vUDTQpRJLdkMd32AiL/4rYB39vil5RLkML6uDaCVWK4lobg
+   kNhuvYJ70ETd0SLspoOs/b2DPGDJzF8YJF6PiElXL1TQT3NW1VXAYGnPA
+   CnLYZQoGKusU8d+np3ZL0dw1d3YDZoHi+shVEL0EFHfVUwyYJ5LIp4oxW
+   nAlepbiFaHRHbBG9aZ4946+j3V0P65kNFgkwLd77EskgCTXAx9z6eGYxS
+   GfEagPi6LPkH6S9Sn2AnKq69XRisbTk20LEPIJuujNv29myKAeQgP7HIR
+   mzpFHYJ7u1XI8WnZoMeGPOE+Gq+9n4vbqfmGYkMN2AM1HqNKTIBSrYbOG
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="250184346"
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="250184352"
 X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
-   d="scan'208";a="250184346"
+   d="scan'208";a="250184352"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 03:12:08 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 03:12:12 -0700
 X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
-   d="scan'208";a="594049651"
+   d="scan'208";a="594049671"
 Received: from meliyahx-mobl2.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.32.210])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 03:12:06 -0700
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 03:12:10 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 4/5] serial: fsl_lpuart: Remove unnecessary clearing for CRTSCTS
-Date:   Wed, 11 May 2022 13:11:38 +0300
-Message-Id: <20220511101139.5306-5-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 5/5] serial: jsm: Use B0 instead of 0
+Date:   Wed, 11 May 2022 13:11:39 +0300
+Message-Id: <20220511101139.5306-6-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220511101139.5306-1-ilpo.jarvinen@linux.intel.com>
 References: <20220511101139.5306-1-ilpo.jarvinen@linux.intel.com>
@@ -60,36 +60,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-if (termios->c_cflag & CRTSCTS) guarantees that CRTSCTS is not ever set
-in the else block so clearing it is unnecessary.
-
-While at it, remove also one pair of extra parenthesis.
+Use B0 to check zero baudrate rather than literal 0.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- drivers/tty/serial/fsl_lpuart.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/tty/serial/jsm/jsm_cls.c | 2 +-
+ drivers/tty/serial/jsm/jsm_neo.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index 75b3c36c13bc..d3bb46cb7185 100644
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -2110,12 +2110,10 @@ lpuart32_set_termios(struct uart_port *port, struct ktermios *termios,
- 	if (sport->port.rs485.flags & SER_RS485_ENABLED)
- 		termios->c_cflag &= ~CRTSCTS;
+diff --git a/drivers/tty/serial/jsm/jsm_cls.c b/drivers/tty/serial/jsm/jsm_cls.c
+index 046b624e5f71..ca05e84a7c90 100644
+--- a/drivers/tty/serial/jsm/jsm_cls.c
++++ b/drivers/tty/serial/jsm/jsm_cls.c
+@@ -689,7 +689,7 @@ static void cls_param(struct jsm_channel *ch)
+ 	/*
+ 	 * If baud rate is zero, flush queues, and set mval to drop DTR.
+ 	 */
+-	if ((ch->ch_c_cflag & (CBAUD)) == 0) {
++	if ((ch->ch_c_cflag & (CBAUD)) == B0) {
+ 		ch->ch_r_head = 0;
+ 		ch->ch_r_tail = 0;
+ 		ch->ch_e_head = 0;
+diff --git a/drivers/tty/serial/jsm/jsm_neo.c b/drivers/tty/serial/jsm/jsm_neo.c
+index 0cf586c10688..95bebf2a73d3 100644
+--- a/drivers/tty/serial/jsm/jsm_neo.c
++++ b/drivers/tty/serial/jsm/jsm_neo.c
+@@ -938,7 +938,7 @@ static void neo_param(struct jsm_channel *ch)
+ 	/*
+ 	 * If baud rate is zero, flush queues, and set mval to drop DTR.
+ 	 */
+-	if ((ch->ch_c_cflag & (CBAUD)) == 0) {
++	if ((ch->ch_c_cflag & (CBAUD)) == B0) {
+ 		ch->ch_r_head = ch->ch_r_tail = 0;
+ 		ch->ch_e_head = ch->ch_e_tail = 0;
  
--	if (termios->c_cflag & CRTSCTS) {
--		modem |= (UARTMODIR_RXRTSE | UARTMODIR_TXCTSE);
--	} else {
--		termios->c_cflag &= ~CRTSCTS;
-+	if (termios->c_cflag & CRTSCTS)
-+		modem |= UARTMODIR_RXRTSE | UARTMODIR_TXCTSE;
-+	else
- 		modem &= ~(UARTMODIR_RXRTSE | UARTMODIR_TXCTSE);
--	}
- 
- 	if (termios->c_cflag & CSTOPB)
- 		bd |= UARTBAUD_SBNS;
 -- 
 2.30.2
 

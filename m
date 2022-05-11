@@ -2,83 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A23965236EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7C55236ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245688AbiEKPQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
+        id S245685AbiEKPRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245657AbiEKPQl (ORCPT
+        with ESMTP id S244927AbiEKPRE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:16:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B12CE20793F
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:16:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652282198;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=C8tAHsUaXeH5aIreYrSE446zf4Y+7VPnOdSUL2jWESc=;
-        b=UMHMJkYkb/r8N6bs98WVRdU0R6T8xrGwIzAF0PIR2cF6JB0lmGfs0GPYabxd0WaSgbpN2x
-        tu7+Thb3ULo2Gm88KKr5ro39ocqffezwiXa9yckfVZr99t7jC9uGhqeuqoHrZ7Y69Y4aNR
-        LnPwV6EXFjL6/kkx/e0N+Mstc6cFUJI=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-662-XyVfF8vtN02BPUzMMxBJDQ-1; Wed, 11 May 2022 11:16:37 -0400
-X-MC-Unique: XyVfF8vtN02BPUzMMxBJDQ-1
-Received: by mail-ed1-f69.google.com with SMTP id ch28-20020a0564021bdc00b00425cb227ab4so1531508edb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:16:36 -0700 (PDT)
+        Wed, 11 May 2022 11:17:04 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E30F1F9A3F
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:17:01 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id be20so2898057edb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:17:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=mJWH/lfuqaU5M9ClCLXzwM3OtS13pgUbIbBqib9/b5Q=;
+        b=ddJhLrfYUIgcxyKQaBI/0k415nx1UNPNu98YhvgC0QlOY0Ocgejj86nL2/rEb0bAn9
+         c40Yx3zPRL28IYuLwUjNLLft35OstKwrmM1bYiJS/ZqFPkRcJtw4MJBo83nyKMYzUqDS
+         qV0lGZKiLfZRCZMFLb5Ng9Qa+IAi04kOv5+cudFwOhDVUjd4mC9stNMAqP60/Y31f2oY
+         4azTzrSqzsYxT1GynXLkRdUKqN8WX1sQqqK5qxqLOMSWKVeQ3FQDcEO2pDnsqqpoY1GL
+         kiHTYB6eyaV3HXxFPi2MidsBU/g+yN4NFoKHXHgVFoAiokwxrrPKlC5DmjDlLnG05rGU
+         YBIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=C8tAHsUaXeH5aIreYrSE446zf4Y+7VPnOdSUL2jWESc=;
-        b=RyuNP72AcvRdRLIuoe3Bje6wy/9cINg1ByBKsnQGN4wROFv6YVrMNbOJmRDVxKLWxP
-         XC8P2gMIix7YK4R8icr2OJ/P56vwhOiShLuC1DOmQ1DJlhG36i5XjOh3IFuoNpocBL4Q
-         Xtko4BNwQG20Zi108iuwTjI7ft7I4ncjBJ7gZzS/lG5lGHsCzgJ7bWfOz8vHPV6tLUbw
-         7/YpQM3tXRRycVxojSWSku3d3WjeHwBIE38SH5jl1CQkOHjp+2m+h19kn6VSOOtCtV8j
-         fQZFOMYQfVFPmy+B+NRK+EIl9tcLXvOBUlMj/XXFk5RXb2ED4MFPawOaj48Ya4cTFacd
-         XgpA==
-X-Gm-Message-State: AOAM533uIg5rxAhuXCp4Yd6NrE/eM3wlFYzPFnGjNP5hUBLRiju7ZSEB
-        fJZAcZ7ZimOpdl9uTs7exjAVsTiSDfS6bohZaklS54qhwihiyLv8U1Nz8xfaT2QKYxyohNA4ce/
-        nJXOcqQhK4qfPoTuOiODmPZm7
-X-Received: by 2002:a17:906:12d3:b0:6f5:18a2:176d with SMTP id l19-20020a17090612d300b006f518a2176dmr24604261ejb.474.1652282195839;
-        Wed, 11 May 2022 08:16:35 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzalPzBW9scyTGP9Q/0WkNxbU8XCq0kzYWjoozZOJHhRlViijcXgZrS+QybEUs+6GrMAmCjOQ==
-X-Received: by 2002:a17:906:12d3:b0:6f5:18a2:176d with SMTP id l19-20020a17090612d300b006f518a2176dmr24604212ejb.474.1652282195328;
-        Wed, 11 May 2022 08:16:35 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id lz6-20020a170906fb0600b006f3ef214db5sm1128878ejb.27.2022.05.11.08.16.34
+        bh=mJWH/lfuqaU5M9ClCLXzwM3OtS13pgUbIbBqib9/b5Q=;
+        b=LWFWcKvn4V3JAum1WWrIWrtQz7i9UrW6qwWvGTEcpe6OqVpNaKfsSlzwmPt830W4GJ
+         It4TfrKrpTmXloD4nYMjjbGHh4HIDAw/dV64ZAxptxeiQqrFbNU9wT8VXcOMR29IVRsm
+         vWYXcrrbZ1AD6GZsLoAJV08+NqpCJQfsBjjfjjLOuRVo/MoJS2qQHgijn8tdVYK3j122
+         zZwnonD4hlunA01aQo1JUh4mGU1ZIEAEQx5E2JR0kSEKBkO+o1u40xll4UXlzq8hLET5
+         IWFKcq6cguywviYgpywbbdO9Yr6qJFogXlL1lLzzSCBQUQCITMebHYq2d4EdSmL5fGCn
+         y4QQ==
+X-Gm-Message-State: AOAM5307KCX2cACAnBmU7ioOsaIjvcUMa5GY+CAB9wbWZhkZZYXrlyQF
+        kwlnMCuCo0xkX/KGSMb+Tbzrcg==
+X-Google-Smtp-Source: ABdhPJyf1gmEybUdj3DMvkaOP9NhT9SQ+0nnD2P+TaFDr2QIgSiYzka959iRA8NSpHNx7pCTN/VgTQ==
+X-Received: by 2002:a50:a6c8:0:b0:428:5b3a:6c99 with SMTP id f8-20020a50a6c8000000b004285b3a6c99mr28532674edc.222.1652282219761;
+        Wed, 11 May 2022 08:16:59 -0700 (PDT)
+Received: from [192.168.0.154] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id bw6-20020a170906c1c600b006f3ef214dc7sm1123249ejb.45.2022.05.11.08.16.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 08:16:34 -0700 (PDT)
-Message-ID: <0fd2b4d0-e219-2e47-dd39-f73076e1eb9a@redhat.com>
-Date:   Wed, 11 May 2022 17:16:33 +0200
+        Wed, 11 May 2022 08:16:59 -0700 (PDT)
+Message-ID: <53da6771-b7cf-3050-abee-33d78c2ada7f@linaro.org>
+Date:   Wed, 11 May 2022 17:16:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 1/2] platform/x86: asus-wmi: Update unknown code message
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v4 1/3] dt-bindings: nvmem: mediatek: Convert efuse
+ binding to YAML
 Content-Language: en-US
-To:     Luca Stefani <luca.stefani.ge1@gmail.com>
-Cc:     Corentin Chary <corentin.chary@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        "open list:ASUS NOTEBOOKS AND EEEPC ACPI/WMI EXTRAS DRIVERS" 
-        <acpi4asus-user@lists.sourceforge.net>,
-        "open list:ASUS NOTEBOOKS AND EEEPC ACPI/WMI EXTRAS DRIVERS" 
-        <platform-driver-x86@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220506122536.113566-1-luca.stefani.ge1@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220506122536.113566-1-luca.stefani.ge1@gmail.com>
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Lala Lin <lala.lin@mediatek.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>
+References: <20220510132637.5864-1-allen-kh.cheng@mediatek.com>
+ <20220510132637.5864-2-allen-kh.cheng@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220510132637.5864-2-allen-kh.cheng@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,49 +83,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 5/6/22 14:25, Luca Stefani wrote:
-> Prepend 0x to the actual key code to specify it
-> is already an hex value
+On 10/05/2022 15:26, Allen-KH Cheng wrote:
+> Convert MediaTek eFuse devicetree binding to YAML.
 > 
-> Signed-off-by: Luca Stefani <luca.stefani.ge1@gmail.com>
-
-Thank you for your patch-series, I've applied the series to my
-review-hans branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-
-
-
-
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
 > ---
->  drivers/platform/x86/asus-wmi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../bindings/nvmem/mediatek,efuse.yaml        | 57 +++++++++++++++++++
+>  .../devicetree/bindings/nvmem/mtk-efuse.txt   | 43 --------------
+>  2 files changed, 57 insertions(+), 43 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
 > 
-> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
-> index 0e7fbed8a50d..35fe9641ba9b 100644
-> --- a/drivers/platform/x86/asus-wmi.c
-> +++ b/drivers/platform/x86/asus-wmi.c
-> @@ -3114,7 +3114,7 @@ static void asus_wmi_handle_event_code(int code, struct asus_wmi *asus)
->  
->  	if (!sparse_keymap_report_event(asus->inputdev, code,
->  					key_value, autorelease))
-> -		pr_info("Unknown key %x pressed\n", code);
-> +		pr_info("Unknown key code 0x%x\n", code);
->  }
->  
->  static void asus_wmi_notify(u32 value, void *context)
+> diff --git a/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
+> new file mode 100644
+> index 000000000000..529f5888d93f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
+> @@ -0,0 +1,57 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/nvmem/mediatek,efuse.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek eFuse
+> +
+> +maintainers:
+> +  - Lala Lin <lala.lin@mediatek.com>
+> +  - Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> +
+> +allOf:
+> +  - $ref: "nvmem.yaml#"
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - mediatek,mt8173-efuse
+> +          - mediatek,efuse
+> +        description:
+> +          Only mt8173 SoC-specific compatible with generic fallback should be
+> +          used
 
+I don't see changes here after our v2 discussion. In the past several
+comments were not implemented in new versions (filename, title). So this
+is one more case where you receive a comment and send a next version
+without implementing it.
+
+Can you please focus on the received comments and not loose pieces of them?
+
+https://lore.kernel.org/all/0169c4ac-fdce-29b7-553a-14dc7df532d1@linaro.org/
+
+Best regards,
+Krzysztof

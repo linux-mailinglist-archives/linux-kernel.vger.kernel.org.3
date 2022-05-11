@@ -2,89 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C10CC52346C
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:38:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB55A52346E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239536AbiEKNio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
+        id S243934AbiEKNiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:38:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbiEKNim (ORCPT
+        with ESMTP id S240106AbiEKNio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:38:42 -0400
-Received: from srv6.fidu.org (srv6.fidu.org [IPv6:2a01:4f8:231:de0::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11C31AD58D
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:38:36 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by srv6.fidu.org (Postfix) with ESMTP id AAB45C80099;
-        Wed, 11 May 2022 15:38:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        tuxedocomputers.com; h=content-transfer-encoding:mime-version
-        :x-mailer:message-id:date:date:subject:subject:from:from; s=
-        default; t=1652276314; x=1654090715; bh=MYL1LmTlRpJ0WAPUXcs7LtIL
-        FO4VLHwdu72ZeSokLGo=; b=U9MgXW3u7fhkbJ7cVgT/X0f3iNEOQ+YzVSHb2FWU
-        WgvoEjFzp70Ttz8gZIFCH0+3gKcFaJBVji0xdZ7GYaLpX/6vC3kY2XyU0dN25Lv7
-        kv0T94UvOWYUVJjaGtIS4DyqABVywBteCEiNygR5keh9gUqqu1yTPrIEK1iO3Mfb
-        EfU=
-X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
-Received: from srv6.fidu.org ([127.0.0.1])
-        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10026)
-        with LMTP id hdpoaOfmz9Hs; Wed, 11 May 2022 15:38:34 +0200 (CEST)
-Received: from wsembach-tuxedo.fritz.box (host-212-18-30-247.customer.m-online.net [212.18.30.247])
-        (Authenticated sender: wse@tuxedocomputers.com)
-        by srv6.fidu.org (Postfix) with ESMTPA id B639FC80090;
-        Wed, 11 May 2022 15:38:33 +0200 (CEST)
-From:   Werner Sembach <wse@tuxedocomputers.com>
-To:     perex@perex.cz, tiwai@suse.com, kai.vehmanen@linux.intel.com,
-        pierre-louis.bossart@linux.intel.com, imre.deak@intel.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ALSA: hda/intel: Add quirk for TongFang devices with pop noise
-Date:   Wed, 11 May 2022 15:38:28 +0200
-Message-Id: <20220511133828.13724-1-wse@tuxedocomputers.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Wed, 11 May 2022 09:38:44 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BA81AD58D;
+        Wed, 11 May 2022 06:38:42 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so2117397pjq.2;
+        Wed, 11 May 2022 06:38:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=jsRV8EvMOtUfJsgLKEp/CDjMrcTGRjbK7SqrPRT4roE=;
+        b=hqvlJxq9PAR5+noe0CxheCXcFPfVtVGDqaiEGYE94YokujbrehQTT7oHQ74ftn3YaA
+         7yHJwGUtm76af2ozPbSrExtHWwQXisy2UFTIGtQ3yn6PmKZ/yUWONEt8YZz6FFevGwf0
+         AI3+I1mE51loi5LF4VH2qJxFHmz1ZiI+YgrQTmqPOEoJxTje7cC54RLotlocuQoi95C8
+         vxchaX4SaqvDP5cuB6MKfCR8HCu82At6+MEBYocGMUAXMePgdPPBF7oYmR/XNQCAIQDn
+         SCpVc7epYS8pZhvVKlw/dBDiMcqkzUGqv4L+ae/+E6hqqZ1WU3/CdJVMPnotLAN9OqM7
+         ZUXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=jsRV8EvMOtUfJsgLKEp/CDjMrcTGRjbK7SqrPRT4roE=;
+        b=THI0aA1gjHcgnsHiy6A+xpDbw0VKyCF6RCppk4KjHYz1t7ov/bF/NQCn6FoHKrcE+B
+         BPlOOnVqtbscc9gAkKi7QIOkqukoHwj0zQ7Jw9zj2AuyrzXVXmmaFSBp4vVZ5zZFoQXF
+         ujk9GbkYUaY7k++bLH45TL9RQpTlMAuilSOOoEEhc+Q+p8ZWd7gZHTSua3Hpxeem78Gr
+         Mcpkj9gJU+c1DLFVYXXihDTsmzb2KnNxcGfErRCOmKYwYNBz1rK12O5F+y4fuAWdw/pe
+         6DH7E1LeAl6OR6IPlzn/RaNUiodlA2baq7DS8cTe+1gz5YInNRHKJgkQa7/HX+lXa/QI
+         +2TQ==
+X-Gm-Message-State: AOAM533QLk0CrYH1Kzsk4CzFw9gOlCWAkOOBZl3CKgNTRs4QAuBipDv3
+        qSHxHROxl8V2fvASWsXeJRIFSC++0/g=
+X-Google-Smtp-Source: ABdhPJwULSrhzjwC/+BV5fbgbTH6ZuoGqYYe6vbv/Km2fOQjL7ReimWM7jPlbXKrI1f+3pTPQvuL+w==
+X-Received: by 2002:a17:90b:1251:b0:1d7:f7ae:9f1 with SMTP id gx17-20020a17090b125100b001d7f7ae09f1mr5439092pjb.65.1652276322266;
+        Wed, 11 May 2022 06:38:42 -0700 (PDT)
+Received: from carrot.localdomain (i58-89-48-88.s42.a014.ap.plala.or.jp. [58.89.48.88])
+        by smtp.gmail.com with ESMTPSA id k11-20020aa792cb000000b0050dc76281b3sm1793275pfa.141.2022.05.11.06.38.38
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 11 May 2022 06:38:40 -0700 (PDT)
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-nilfs <linux-nilfs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH] nilfs2: Fix some kernel-doc comments
+Date:   Wed, 11 May 2022 22:38:36 +0900
+Message-Id: <1652276316-7791-1-git-send-email-konishi.ryusuke@gmail.com>
+X-Mailer: git-send-email 1.8.3.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When audio stops playing and sometimes when it starts playing, there is an
-audible "pop" noise when using headphones on most Tongfang GMxMxxx,
-GKxNxxx, GMxZxxx, GMxTxxx, and GMxAxxx devices.
+From: Yang Li <yang.lee@linux.alibaba.com>
 
-Disabling power saving for the Realtek codec fixes this noise. Presumably
-it is triggered on some power event in the audio circuit.
+The description of @flags in nilfs_dirty_inode() kernel-doc
+comment is missing, and some functions had kernel-doc that
+used a hash instead of a colon to separate the parameter
+name from the one line description.
 
-Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-Cc: stable@vger.kernel.org
+Fix them to remove some warnings found by running scripts/kernel-doc,
+which is caused by using 'make W=1'.
+
+fs/nilfs2/inode.c:73: warning: Function parameter or member 'inode' not
+described in 'nilfs_get_block'
+fs/nilfs2/inode.c:73: warning: Function parameter or member 'blkoff' not
+described in 'nilfs_get_block'
+fs/nilfs2/inode.c:73: warning: Function parameter or member 'bh_result'
+not described in 'nilfs_get_block'
+fs/nilfs2/inode.c:73: warning: Function parameter or member 'create' not
+described in 'nilfs_get_block'
+fs/nilfs2/inode.c:145: warning: Function parameter or member 'file' not
+described in 'nilfs_readpage'
+fs/nilfs2/inode.c:145: warning: Function parameter or member 'page' not
+described in 'nilfs_readpage'
+fs/nilfs2/inode.c:968: warning: Function parameter or member 'flags' not
+described in 'nilfs_dirty_inode'
+
+Link: https://lkml.kernel.org/r/20220324024215.63479-1-yang.lee@linux.alibaba.com
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
 ---
- sound/pci/hda/hda_intel.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ fs/nilfs2/inode.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/sound/pci/hda/hda_intel.c b/sound/pci/hda/hda_intel.c
-index 0a83eb6b88b1f..8a1088e057ec0 100644
---- a/sound/pci/hda/hda_intel.c
-+++ b/sound/pci/hda/hda_intel.c
-@@ -2201,6 +2201,13 @@ static const struct snd_pci_quirk power_save_denylist[] = {
- 	SND_PCI_QUIRK(0x17aa, 0x36a7, "Lenovo C50 All in one", 0),
- 	/* https://bugs.launchpad.net/bugs/1821663 */
- 	SND_PCI_QUIRK(0x1631, 0xe017, "Packard Bell NEC IMEDIA 5204", 0),
-+	/* Several TongFang barebones making popping sounds */
-+	SND_PCI_QUIRK(0x1d05, 0x1096, "TongFang GMxMxxx", 0),
-+	SND_PCI_QUIRK(0x1d05, 0x1100, "TongFang GKxNxxx", 0),
-+	SND_PCI_QUIRK(0x1d05, 0x1111, "TongFang GMxZxxx", 0),
-+	SND_PCI_QUIRK(0x1d05, 0x1129, "TongFang GMxZxxx", 0),
-+	SND_PCI_QUIRK(0x1d05, 0x1147, "TongFang GMxTxxx", 0),
-+	SND_PCI_QUIRK(0x1d05, 0x121b, "TongFang GMxAxxx", 0),
- 	{}
- };
- #endif /* CONFIG_PM */
+diff --git a/fs/nilfs2/inode.c b/fs/nilfs2/inode.c
+index 6045cea21f52..6a00cf324cbd 100644
+--- a/fs/nilfs2/inode.c
++++ b/fs/nilfs2/inode.c
+@@ -63,10 +63,10 @@ void nilfs_inode_sub_blocks(struct inode *inode, int n)
+ 
+ /**
+  * nilfs_get_block() - get a file block on the filesystem (callback function)
+- * @inode - inode struct of the target file
+- * @blkoff - file block number
+- * @bh_result - buffer head to be mapped on
+- * @create - indicate whether allocating the block or not when it has not
++ * @inode: inode struct of the target file
++ * @blkoff: file block number
++ * @bh_result: buffer head to be mapped on
++ * @create: indicate whether allocating the block or not when it has not
+  *      been allocated yet.
+  *
+  * This function does not issue actual read request of the specified data
+@@ -142,8 +142,8 @@ int nilfs_get_block(struct inode *inode, sector_t blkoff,
+ /**
+  * nilfs_readpage() - implement readpage() method of nilfs_aops {}
+  * address_space_operations.
+- * @file - file struct of the file to be read
+- * @page - the page to be read
++ * @file: file struct of the file to be read
++ * @page: the page to be read
+  */
+ static int nilfs_readpage(struct file *file, struct page *page)
+ {
+@@ -1088,6 +1088,7 @@ int __nilfs_mark_inode_dirty(struct inode *inode, int flags)
+ /**
+  * nilfs_dirty_inode - reflect changes on given inode to an inode block.
+  * @inode: inode of the file to be registered.
++ * @flags: flags to determine the dirty state of the inode
+  *
+  * nilfs_dirty_inode() loads a inode block containing the specified
+  * @inode and copies data from a nilfs_inode to a corresponding inode
 -- 
-2.25.1
+1.8.3.1
 

@@ -2,176 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0206E523111
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D5F523114
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:59:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235699AbiEKK55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 06:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
+        id S238171AbiEKK7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 06:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233492AbiEKK5q (ORCPT
+        with ESMTP id S231222AbiEKK7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 06:57:46 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61184666A
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:57:44 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id c11so1489755plg.13
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:57:44 -0700 (PDT)
+        Wed, 11 May 2022 06:59:19 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE9B16C5EA
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:59:17 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id m23so2141755ljc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:59:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fZDRUrJcoddOI9LUx9R90auFEIMbtfXtE02emcq85vQ=;
-        b=HzBNa9AB2P7wZpUPFsvLZ9f9YvBiLg8bA6EUO/OBrBxIMx/Bv4yQuojU1EpBcvijO3
-         P9o2RA2brlait7uMo2aEzeFwI0xmcRkL/odlVQHvtctPmP9rD++t6c41SjbhdcLll+jZ
-         Nta+CNL77iBe4TQEz21newKCgKl36svd5J9i+XS+2EhxeGvEyTakkPny1keUiEid6Ud/
-         XadIJVSMbScKOe3xiU8j29nTzURvw9o/QiGqhLvjOfEwyrHRCKxMKhasCpLt1t/EIoQ7
-         mPrJ4eOFfMZabag7NOvE6kwsK3fpovxR/sMiW3FlWjqi6oBr21GymliUDxm1gYDtC0F/
-         jR7g==
+        d=rasmusvillemoes.dk; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=vEImwAt+hQscgP/wRyfuHbE14MDXXeZYgodcfZ9QQ08=;
+        b=f/G2nhb/TigMYF4+t+iiwPFSHTmuzT1r3R4TfSbvMZDiC2MHQ7Kq/E+NMTloS0RxN7
+         afcffjTDe8hoNb5eC6Us0Rd6qMDpd3O6BwuMgeSS48slcojiPOaZ1uAiPs+QF2mhdlEN
+         OF85P1xmLCIuuHfNPWrm07DxTXujLldNF7pS4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fZDRUrJcoddOI9LUx9R90auFEIMbtfXtE02emcq85vQ=;
-        b=7HnwmD+fnue0NiLQHK320trp6YYt52v/nGdkXy1IzZ97ylhbjFr2Hbh22m2uYHdP3h
-         7QpnKPlRVC9ygxiZkK62ITw2e48Ii8ChchqeRu21G4d/c6Yh7OFSsIm6/DXoQWYffkGF
-         WFqzwVIlEVJ3i8N8WxbYC9dAofUmVyN4CylmOdYRa62twLm2K0mhpg7JVKRPN5wuaAjU
-         eEJKgDfAVyUMBa7OdFG4/FAlRy54yZJr/PkvBY4zXptWoij8X161a4suvsX1KjaXQb/l
-         1eeTfZ8+834OOJrlegSgdmRQZq9LcUiGaYiptz5KedW0GeAmUCRfzIj3Tpmxcm2Ptfvy
-         uGEA==
-X-Gm-Message-State: AOAM53082sJSq8wVp5E4PrSGhllnpGO8t0253gRfI6LQNRXuw8pOxUD9
-        rSFxK73IgxknQsIAh8MWDSymQw==
-X-Google-Smtp-Source: ABdhPJwC3JvY0yyZZKqrx8zPPlaVt1UAUQt4RbPa3XOwHux0ofuAsp5Ax5zrWKm72QJgrbiYRp7Ncw==
-X-Received: by 2002:a17:90b:4acb:b0:1dc:32dd:d51e with SMTP id mh11-20020a17090b4acb00b001dc32ddd51emr4653614pjb.5.1652266664222;
-        Wed, 11 May 2022 03:57:44 -0700 (PDT)
-Received: from localhost ([139.177.225.234])
-        by smtp.gmail.com with ESMTPSA id y64-20020a623243000000b0050dc7628195sm1396596pfy.111.2022.05.11.03.57.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 03:57:43 -0700 (PDT)
-Date:   Wed, 11 May 2022 18:57:32 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     corbet@lwn.net, akpm@linux-foundation.org, mcgrof@kernel.org,
-        keescook@chromium.org, yzaikin@google.com, osalvador@suse.de,
-        david@redhat.com, masahiroy@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        duanxiongchun@bytedance.com, smuchun@gmail.com
-Subject: Re: [PATCH v10 4/4] mm: hugetlb_vmemmap: add
- hugetlb_optimize_vmemmap sysctl
-Message-ID: <YnuWnFbb8xExKfdk@FVFYT0MHHV2J.usts.net>
-References: <20220509062703.64249-1-songmuchun@bytedance.com>
- <20220509062703.64249-5-songmuchun@bytedance.com>
- <970166e0-f70e-dd2a-c764-af23a8425f87@oracle.com>
- <9d64809f-db8c-0a3e-1ae9-d4a8ab79041e@oracle.com>
- <YnuF1c5fMOzJnNfD@FVFYT0MHHV2J.usts.net>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vEImwAt+hQscgP/wRyfuHbE14MDXXeZYgodcfZ9QQ08=;
+        b=VzeNxk0C7L1tdaIxCFutpwJZWkKwfDiGJG9qZOaTj9Ig4gv2vtvkYUUB9L6XqnOMLq
+         5ts5GRNlxs3I4mUkDan+zSnuJ/X3ZwpgHFu3kF1dpqTUetl8Ng6XBGtsGZ0KMXOMyn7Y
+         AgCNTGcd15ic+W0yBukbpYNuyDl6CzQ6k1zbwn2zxpSjHL5zQPT55qcoak7c5MIrl0+j
+         xd8vsterFk2fXHsmOmotPrNj3MMUzqKCL7CBonJvVrrlMMxgi9DP9bWo1ndB/LxuNVwD
+         oy+F3sMCHEApFpjl5+f4j+kLLp0tE6gEOLFkAgwc/v9Y7s+1li+eg7g7fMeF4slwYZ9C
+         gykQ==
+X-Gm-Message-State: AOAM531hDkCtLfDV2AlRTZUON0t9uGAKmZdgbgJqex/vIgc/NkvactCQ
+        tLJjQxyTvPIP1E5Y2mfNEjrP8w==
+X-Google-Smtp-Source: ABdhPJww7as86B4tUSK0D325ZdW4iuBHY6nS83dzEcw9NR/6qi//VLal9WNQPaFi315AUAx0bj4hQQ==
+X-Received: by 2002:a2e:5305:0:b0:250:9bd1:af51 with SMTP id h5-20020a2e5305000000b002509bd1af51mr16885842ljb.383.1652266756022;
+        Wed, 11 May 2022 03:59:16 -0700 (PDT)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id m22-20020a05651202f600b0047255d211c0sm223017lfq.239.2022.05.11.03.59.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 03:59:15 -0700 (PDT)
+Message-ID: <9682c6f3-bc48-9ad1-4011-dfe1532e7491@rasmusvillemoes.dk>
+Date:   Wed, 11 May 2022 12:59:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnuF1c5fMOzJnNfD@FVFYT0MHHV2J.usts.net>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 08/22] bitops: introduce MANY_BITS() macro
+Content-Language: en-US
+To:     Yury Norov <yury.norov@gmail.com>,
+        David Laight <David.Laight@aculab.com>
+Cc:     'Alexei Starovoitov' <alexei.starovoitov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joe Perches <joe@perches.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Nicolas Palix <nicolas.palix@imag.fr>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Chris Zankel <chris@zankel.net>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>
+References: <20220510154750.212913-1-yury.norov@gmail.com>
+ <20220510154750.212913-9-yury.norov@gmail.com>
+ <CAADnVQKcX2xEWCHu-DX0Cy_mvCL6E0aE_BF1Wo+U-vy_Bi2-3w@mail.gmail.com>
+ <3be064fe804845e4aeaca8b1d45ddf0a@AcuMS.aculab.com>
+ <Ynq43wlPezrRzur8@yury-laptop>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <Ynq43wlPezrRzur8@yury-laptop>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 05:45:57PM +0800, Muchun Song wrote:
-> On Tue, May 10, 2022 at 05:39:40PM -0700, Mike Kravetz wrote:
-> > On 5/10/22 14:30, Mike Kravetz wrote:
-> > > On 5/8/22 23:27, Muchun Song wrote:
-> > >> diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
-> > >> index 029fb7e26504..917112661b5c 100644
-> > >> --- a/include/linux/memory_hotplug.h
-> > >> +++ b/include/linux/memory_hotplug.h
-> > >> @@ -351,4 +351,13 @@ void arch_remove_linear_mapping(u64 start, u64 size);
-> > >>  extern bool mhp_supports_memmap_on_memory(unsigned long size);
-> > >>  #endif /* CONFIG_MEMORY_HOTPLUG */
-> > >>  
-> > >> +#ifdef CONFIG_MHP_MEMMAP_ON_MEMORY
-> > >> +bool mhp_memmap_on_memory(void);
-> > >> +#else
-> > >> +static inline bool mhp_memmap_on_memory(void)
-> > >> +{
-> > >> +	return false;
-> > >> +}
-> > >> +#endif
-> > >> +
-> > >>  #endif /* __LINUX_MEMORY_HOTPLUG_H */
-> > >> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> > >> index 8605d7eb7f5c..86158eb9da70 100644
-> > >> --- a/mm/hugetlb.c
-> > >> +++ b/mm/hugetlb.c
-> > >> @@ -1617,6 +1617,9 @@ static DECLARE_WORK(free_hpage_work, free_hpage_workfn);
-> > >>  
-> > >>  static inline void flush_free_hpage_work(struct hstate *h)
-> > >>  {
-> > >> +	if (!hugetlb_optimize_vmemmap_enabled())
-> > >> +		return;
-> > >> +
-> > > 
-> > > Hi Muchun,
-> > > 
-> > > In v9 I was suggesting that we may be able to eliminate the static_branch_inc/dec from the vmemmap free/alloc paths.  With this patch
-> > > I believe hugetlb_optimize_vmemmap_enabled() is really checking
-> > > 'has hugetlb vmemmap optimization been enabled' OR 'are there still vmemmap
-> > > optimized hugetlb pages in the system'.  That may be confusing.
-> > > 
-> > 
-> > Sorry, I forgot about the use of hugetlb_optimize_vmemmap_enabled in
-> > page_fixed_fake_head.  We need to know if there are any vmemmap optimized
-> > hugetlb pages in the system in this performance sensitive path.  So,
-> > static_branch_inc/dec is indeed a good idea.
-> >
-> 
-> Agree.
-> 
-> > Please disregard my attempt below at removing static_branch_inc/dec.
-> > 
-> > I still find the name hugetlb_optimize_vmemmap_enabled a bit confusing as
-> > it tests two conditions (enabled and pages in use).
-> >
-> 
-> Right. It tests two conditions.
-> 
-> > You have already 'open coded' just the check for enabled in the routine
-> > hugetlb_vmemmap_free with:
-> > 
-> > 	READ_ONCE(vmemmap_optimize_mode) == VMEMMAP_OPTIMIZE_OFF
-> > 
-> > How about having hugetlb_optimize_vmemmap_enabled() just check
-> > vmemmap_optimize_mode in a manner like above?  Then rename
-> 
-> I'm wondering is it necessary to do this? vmemmap_optimize_mode
-> is a internal state in hugetlb_vmemmap.c, at leaset now there is
-> no outside users who care about this.  Open-coding may be not
-> an issue (I guess)?  If one day someone cares it, maybe it it
-> the time to do this and rename hugetlb_optimize_vmemmap_enabled()?
-> I'm not against doing this, just expressing some of my thoughts.
-> What do you think, Mike?
-> 
-> > hugetlb_optimize_vmemmap_enabled to something like:
-> > hugetlb_optimized_vmemmap_possible().  Sorry, I can think if a great name.
-> > 
-> 
-> At least I cannot come up with an appropriate name.
-> hugetlb_optimize_vmemmap_may_enabled()? It's not easy to come
-> up with a good name.
->
+On 10/05/2022 21.11, Yury Norov wrote:
 
-Instead of renaming, how about remove hugetlb_optimize_vmemmap_enabled()
-directly?  I found there are only two places (mm/memory_hotplug.c and
-arch/arm64/mm/flush.c) except include/linux/page-flags.h where use this
-helper.
+> Another thing is that despite __attribute__(const), gcc sometimes doesn't
+> recognize it as constant expression, 
 
-In arch/arm64/mm/flush.c, we could replace it with
+An ICE, Integer Constant Expression, is a C language thing.
+__attribute__(const) has nothing to do with that, and no use of that
+attribute is ever gonna convince gcc to treat an expression containing a
+function call as an ICE [C++ is of course a whole different story].
 
-  if (PageHuge(page) && HPageVmemmapOptimized(compound_head(page)))
+The __attribute__(const) on a static inline function is utterly
+pointless, the compiler can certainly see for itself that the function
+has no side effects and that the expression can be CSE'ed.
 
-In mm/memory_hotplug.c, I have a plan to remove it as well (I'll
-post them out after this patch merged).
+All that aside, please drop that MANY_BITS thing. It will not make any
+code any easier to read (MANY, is that four or five? or is it "more than
+half the bit width"?). The n&(n-1) pattern is a well-known idiom, I
+expect anybody hacking on an OS kernel to recognize
 
-Finally, there is no outside users of it, we could remove it and squash
-it into page_fixed_fake_head(). What do you think this, Mike?
-
+Rasmus

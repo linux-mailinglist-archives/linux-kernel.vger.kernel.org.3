@@ -2,81 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD02D522BBA
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 07:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8880522BBE
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 07:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238620AbiEKFcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 01:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46262 "EHLO
+        id S232770AbiEKFdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 01:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiEKFcM (ORCPT
+        with ESMTP id S229532AbiEKFdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 01:32:12 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9925A1D0E0;
-        Tue, 10 May 2022 22:32:10 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 3EE253200958;
-        Wed, 11 May 2022 01:32:07 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Wed, 11 May 2022 01:32:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1652247126; x=1652333526; bh=QqiWjdgXow
-        1Gr1FgSKtpsEjOWoGYjEoKm4LJaqxtXFc=; b=MroINcgE/mOl9bRaitB3C7IUg0
-        TTe5ch1j+jROCjp9Dh9OHm1GQFsQu/b7Fba1utdqlji3BxHk2LnQ0ZeoBXet6ZDs
-        +iF1a2s2qkxAe9Fk2ttJl/03jJs973I7K2/9Iqo4m7vDTebqYPEdA4x5eACz99ok
-        e6iTSl6/sQRcn6M2IcWYI93A0vIZwdNhSZ1diWgaZMPDVlOv1La8MZRDaoKRDd1Q
-        ur3JPIBo3l7DsiiIRLho2EBT8FdRt7GGgzdJzJh5rKuaPs70+DAtzFYKuwHIo+jG
-        Ph9/N5NG01BYw33AcVOPYxpP2+PQivyWvT63QcVFuyKhXnwKptsumQkOjWKw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1652247126; x=
-        1652333526; bh=QqiWjdgXow1Gr1FgSKtpsEjOWoGYjEoKm4LJaqxtXFc=; b=o
-        yUh4AmxkqM/0NaLDH5WSzGM3Zz/LfTJ9civsecTmovFXtPYBN1GmTc1tyK3bbzTJ
-        Wl6whsC7405J63ruIXZQpb3WVj+vany00lZSSZQVDjHR5EVKP2v5Prw8n4CdNMwG
-        RoTUpK8oJdlz15z4PjGCwWoFrNJMnjoZG519jNI0dHFC0quvaFKO6eV44zU+OnNp
-        cyIGuOqFV8Zuy+Hw1Fkb0NCtClbJguxH7bnyJvX8yzO5lrDes7t/NBtAHdq566wN
-        nOdCCI48peHXsfmi88DZB67Gvi/IP/bGnGsoBWXjumylKb4ihGh5MGaSQIGapBM3
-        zcmuvZQlP0kOuUcvYP0KQ==
-X-ME-Sender: <xms:Vkp7YlJOTtMIA0GjlRdU3XBWEHrMJpf4uLgy4_B3kiYCezgLu5Ev-g>
-    <xme:Vkp7YhIhQ-puP6hfLsv-urgVbppwU2yX28jlulwOtKa59c0TzKCEKwRTrRQQuQCWY
-    djIwyAN6uhYCw>
-X-ME-Received: <xmr:Vkp7YtuYQx7S5yI-Ld5a_riz-jBDnCGHv90yMAWZJw4c7-cYXbCvjMZsz83PxK0drDgl2CXV5RtuqBylFSG0r6oi2WpIj8Pq>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgeeggdelgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvve
-    dvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:Vkp7YmZD5LYK3ga4LY42UNVgRlwIvO9gk50olXIWJprZc7vwqQL-gQ>
-    <xmx:Vkp7YsYaCsYj8Ff5rrptou009Daa9ogfmLM9j8cuI7KPhw73EWLmhg>
-    <xmx:Vkp7YqDmyUn5atrgz1TqunmBHpGW-aBEQZLdp7bVyGOu5K432zBisg>
-    <xmx:Vkp7YhPsEywn1sX4nGl2lZ3PERMT_dkd3MxCzs4aZ_WgMCpHi_Twjw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 11 May 2022 01:32:05 -0400 (EDT)
-Date:   Wed, 11 May 2022 07:32:02 +0200
-From:   Greg KH <greg@kroah.com>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the tty tree
-Message-ID: <YntKUn8AZKpLbBTp@kroah.com>
-References: <20220511075804.79c5b697@canb.auug.org.au>
- <alpine.DEB.2.21.2205102341030.52331@angie.orcam.me.uk>
+        Wed, 11 May 2022 01:33:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89FA93DA54;
+        Tue, 10 May 2022 22:33:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D0DB616D7;
+        Wed, 11 May 2022 05:33:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C883C385DB;
+        Wed, 11 May 2022 05:33:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652247187;
+        bh=NGoQcJ+iAsisQ8f+zssQ2YRnfJafdWbUwxc1jht6wNA=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=cSB4IaOnU68YF8oFv+bQqP4IiBCvoQJF27pXbBm7YR5F/jxe0zMv0GrC4hE762vYm
+         7gfBSxFgQbWdZFr8p8ItlLSTB/wp0t/3HdlhAGWAgm+kLV65+9BSXyXEqckrr4Aqxr
+         PjKGBj44lQ4pQLMBHlgT0SF+Wfcc0ZU+wmhyCOGSQXQYep4MbrbM2Ou4qu/4ejNupQ
+         nbYUTTDtq/84GOzULUkRBSbd1qXrBNp7igdsmsNtansWVvzghdS6xWu9qKjfhLbNQH
+         CcLFkW+EB3lJFozt1YMFSMHoV6hTI4jj9Bl2ZJFKHvnYpycUuTTWj1yQLoODaXFUFf
+         iJOtghB0hljoA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2205102341030.52331@angie.orcam.me.uk>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v6] wfx: use container_of() to get vif
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20220506170046.GA1297231@jaehee-ThinkPad-X1-Extreme>
+References: <20220506170046.GA1297231@jaehee-ThinkPad-X1-Extreme>
+To:     Jaehee Park <jhpark1013@gmail.com>
+Cc:     =?iso-8859-1?q?J=E9r=F4me?= Pouiller <jerome.pouiller@silabs.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        outreachy@lists.linux.dev, Jaehee Park <jhpark1013@gmail.com>,
+        Stefano Brivio <sbrivio@redhat.com>
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <165224718272.19198.8867712647289084011.kvalo@kernel.org>
+Date:   Wed, 11 May 2022 05:33:04 +0000 (UTC)
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,21 +61,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 11:46:26PM +0100, Maciej W. Rozycki wrote:
-> On Wed, 11 May 2022, Stephen Rothwell wrote:
-> 
-> > After merging the tty tree, yesterday's linux-next build (htmldocs) produced
-> > these warnings:
-> 
->  Umm, sorry about that.  I wasn't even aware files under Documentation/ 
-> are meant to be processed somehow other than through eyeballs nowadays!
-> 
->  I'll see how to fix the file up and will make the necessary corrections, 
-> but how shall I post the update?  A replacement patch or an incremental 
-> change?
+Jaehee Park <jhpark1013@gmail.com> wrote:
 
-Incremental change as I can't rebase my tree.
+> Currently, upon virtual interface creation, wfx_add_interface() stores
+> a reference to the corresponding struct ieee80211_vif in private data,
+> for later usage. This is not needed when using the container_of
+> construct. This construct already has all the info it needs to retrieve
+> the reference to the corresponding struct from the offset that is
+> already available, inherent in container_of(), between its type and
+> member inputs (struct ieee80211_vif and drv_priv, respectively).
+> Remove vif (which was previously storing the reference to the struct
+> ieee80211_vif) from the struct wfx_vif, define a function
+> wvif_to_vif(wvif) for container_of(), and replace all wvif->vif with
+> the newly defined container_of construct.
+> 
+> Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
 
-thanks,
+Patch applied to wireless-next.git, thanks.
 
-greg k-h
+2c33360bce6a wfx: use container_of() to get vif
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20220506170046.GA1297231@jaehee-ThinkPad-X1-Extreme/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+

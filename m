@@ -2,62 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 673885231E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5125231D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240401AbiEKLfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 07:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
+        id S237363AbiEKLfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 07:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239248AbiEKLfV (ORCPT
+        with ESMTP id S240197AbiEKLfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 07:35:21 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94319237B8B;
-        Wed, 11 May 2022 04:35:20 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id bs17so2070911qkb.0;
-        Wed, 11 May 2022 04:35:20 -0700 (PDT)
+        Wed, 11 May 2022 07:35:24 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A63721A959;
+        Wed, 11 May 2022 04:35:22 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id j6so2010600qkp.9;
+        Wed, 11 May 2022 04:35:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fIWpbH8Qkfx6CtZf98GRcpag46QLNFxJDLii79V6Ww4=;
-        b=iwUFlCXpNjAisVEfnwmlAdOatVcSnAwwbuVcsltGQ/5e2qlxjuvMvHFH0zjH653Mbe
-         P10WcoYwALsqMADv3kofz5Iv36VCkh+MBGhmZIVf+tfXY4c6t/nPYMTWollwMNTd8SA1
-         axrtWIBOwW4r+pvlA76424OgOCu0uMq70lLVLEb+qqhnND16vEEjQS5J1IpkudyWrFy4
-         5TlJT9hljT5a5CrhxTLXnu0mHPi/Gd9oa/44/w52HsA6upKYCtvyhYOLlUSUSNn9AO6J
-         FrVO5m0S9T8BVuuyUXNKoMtg808X7troFbx1f36TKqFRqd8P4T0doH2AqrtBrlJleTDW
-         O5Ww==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=g2dieohjKJl3LRE3v0qEPyCNFBVg0n7LQ+TeFcHI+fU=;
+        b=JLISchbWbGmgePFdtjCGDZEIifvBjm7I2Nx32rbSTcMIy3DXwdp6bvLxRowwcaRGxn
+         MuqAjFikGzI5MArfUMGNkFDB+2+X8SsHbDKXrl8Fqa30LF75JxCBJ8GG1VPyzPS06YVW
+         tO7s4D+AXuTZ/j5s1wNiCeSD5QxVE049VdGgxLTsiX4lP39Zc75M9ThwMYfc2FqEMS5W
+         H5BND9luFZHGweAfMY/+GtFaHv+XJLxB4G3cQcLx1qNK/TQ2Wqvz15ZRRT5vCgumwZCD
+         7sqo8XL54qD2EHxiQN0K2Ik1MFb1jFKgtuwC2ZQI4Y6AQYBW7RW2vIeKZ0l+FxsaPKcB
+         rotw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fIWpbH8Qkfx6CtZf98GRcpag46QLNFxJDLii79V6Ww4=;
-        b=Ekv6pEGrRM9z70wvcLuRA3Cvnk1EQmeuCj49tW3am/hNaxf57DsWzPseZaYTx/4nUw
-         cj8gWUzNgfxXfwEE6uH8ZT/b+2iDKOKZ/IgySRmEK7pzAFAZrnQqkfPkpLyQK9WrznMP
-         /qIlbb9G2OBoBNWaaZgOdgKnjwgD+jzA/hyFseDKX0Dcxs01XVQBcblVxaQYoFI41PgO
-         l1FcVgJxch5DID34r9L3Vt+I52n1POeC9WCeF+JDN2H2Ut64AZaC6ARapHlKB9pPoDC+
-         uixd3Bi/eEVxy2u5v+lUkwWQ8kkuRVz4V3D8kDFt9y4BOJ/F0ErhdKCECQG0J727pvnx
-         6hRA==
-X-Gm-Message-State: AOAM532G3RBVHtOfosO2uW3o4IPVtQ4uXTAICtzhQMvkNcYweyHNzqJt
-        4jZ95FwsvJxlyWJkGqHdP+bcL167cHZ9nA==
-X-Google-Smtp-Source: ABdhPJzmxu38yPKnQkUR29DXmgeEH2Q7/lQoPhE5QKvfpHBeWFD/QSRUEnuuqI6W5KyHPA4iWJ4xBw==
-X-Received: by 2002:a05:620a:254e:b0:680:a307:8a33 with SMTP id s14-20020a05620a254e00b00680a3078a33mr18549892qko.304.1652268919643;
-        Wed, 11 May 2022 04:35:19 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=g2dieohjKJl3LRE3v0qEPyCNFBVg0n7LQ+TeFcHI+fU=;
+        b=7dFHtxztu/5ExIFlNejTmqdMOI0EFXXV94HDYBfreE5LVuNVjOBBR36jPYa/ruA8iJ
+         y8yqJ2H0Md+cV8iZo3lNrAKxc7cJVrsaoE5ujNR1Z0I9HcEJOh0Jui2dwZeyeIw30ecx
+         gHOb1X2Untv+H6LnjDcYgYrNLYNJEIv2+UM/kJoKR2KPTw4vQGG0jIR2Jo/JKIMulv9N
+         RkUn9olmCh79PKQlN+XEE6ngBX9vLdk1z6z4/zFpG8LJPbIWyjrPQFxCmfGHTr38Qh93
+         BJE/1LLpL3lvz71MBVq+9VQVqQOwUKn5zCF6ZU5M1A3N3pf+6W+DWlb9+QpohsxozZg6
+         2F3g==
+X-Gm-Message-State: AOAM5329F9LFHK3sHSClS4+a32dXkIi1qNFWNvvNxWy2GKWRxb1Csb63
+        PtTqIgon++adnH05mte8A9E=
+X-Google-Smtp-Source: ABdhPJzL+T1CaXI7PLHaqwNmp5VdAf/xHGHpPqT6b/rkgiogHkmm9AYlEj1W+JT7TF0qhCvUdXzqqA==
+X-Received: by 2002:a37:9ace:0:b0:69f:b424:25b4 with SMTP id c197-20020a379ace000000b0069fb42425b4mr18428024qke.250.1652268920787;
+        Wed, 11 May 2022 04:35:20 -0700 (PDT)
 Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
-        by smtp.gmail.com with ESMTPSA id bw26-20020a05622a099a00b002f39b99f6basm953377qtb.84.2022.05.11.04.35.19
+        by smtp.gmail.com with ESMTPSA id bw26-20020a05622a099a00b002f39b99f6basm953377qtb.84.2022.05.11.04.35.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 04:35:19 -0700 (PDT)
+        Wed, 11 May 2022 04:35:20 -0700 (PDT)
 From:   Peter Geis <pgwipeout@gmail.com>
-To:     linux-rockchip@lists.infradead.org
+To:     linux-rockchip@lists.infradead.org,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
 Cc:     Heiko Stuebner <heiko@sntech.de>, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        Peter Geis <pgwipeout@gmail.com>
-Subject: [PATCH v2 0/3] add Pine64 touch panel support to rockpro64
-Date:   Wed, 11 May 2022 07:35:13 -0400
-Message-Id: <20220511113517.4172962-1-pgwipeout@gmail.com>
+        Peter Geis <pgwipeout@gmail.com>, Rob Herring <robh@kernel.org>
+Subject: [PATCH v2 1/3] dt-bindings: display: panel: feiyang, fy07024di26a30d: make reset gpio optional
+Date:   Wed, 11 May 2022 07:35:14 -0400
+Message-Id: <20220511113517.4172962-2-pgwipeout@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220511113517.4172962-1-pgwipeout@gmail.com>
+References: <20220511113517.4172962-1-pgwipeout@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,37 +79,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good Morning,
+Some implementations do not use the reset signal, instead tying it to dvdd.
+Make the reset gpio optional to permit this.
 
-Apologies Heiko on taking so long for this v2.
+Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+Acked-by: Rob Herring <robh@kernel.org>
+---
+ .../bindings/display/panel/feiyang,fy07024di26a30d.yaml          | 1 -
+ 1 file changed, 1 deletion(-)
 
-This patch series adds support for the Pine64 touch panel to the
-rockpro64 single board computer.
-This panel attaches to the dsi port and includes an i2c touch screen.
-
-The first two patches involve making the reset pin to the Feiyang
-fy07024di26a30d panel optional. On the rockpro64 and quartz64-a this pin
-is tied to dvdd and automatically comes high when power is applied.
-The third patch adds the device tree nodes to rockpro64 to permit the
-panel to be used.
-
-Changelog:
-v2:
-- Drop patch 4 so we don't "enable" the nodes
-- Drop the unnecessary null checks
-- Rebase to 5.18-rc1
-
-Peter Geis (3):
-  dt-bindings: display: panel: feiyang, fy07024di26a30d: make reset gpio
-    optional
-  drm/panel: feiyang-fy07024di26a30d: make reset gpio optional
-  arm64: dts: rockchip: add pine64 touch panel display to rockpro64
-
- .../panel/feiyang,fy07024di26a30d.yaml        |  1 -
- .../boot/dts/rockchip/rk3399-rockpro64.dtsi   | 80 ++++++++++++++++++-
- .../drm/panel/panel-feiyang-fy07024di26a30d.c |  2 +-
- 3 files changed, 77 insertions(+), 6 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/display/panel/feiyang,fy07024di26a30d.yaml b/Documentation/devicetree/bindings/display/panel/feiyang,fy07024di26a30d.yaml
+index 95acf9e96f1c..1cf84c8dd85e 100644
+--- a/Documentation/devicetree/bindings/display/panel/feiyang,fy07024di26a30d.yaml
++++ b/Documentation/devicetree/bindings/display/panel/feiyang,fy07024di26a30d.yaml
+@@ -35,7 +35,6 @@ required:
+   - reg
+   - avdd-supply
+   - dvdd-supply
+-  - reset-gpios
+ 
+ additionalProperties: false
+ 
 -- 
 2.25.1
 

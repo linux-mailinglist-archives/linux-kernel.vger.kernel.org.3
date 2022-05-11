@@ -2,194 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4302522E0A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87781522E08
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:16:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243414AbiEKIQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 04:16:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
+        id S243430AbiEKIP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 04:15:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239529AbiEKIQK (ORCPT
+        with ESMTP id S243420AbiEKIPv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 04:16:10 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BD73FBCB;
-        Wed, 11 May 2022 01:15:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
-         references;
-        bh=hTDd4TSeU1fwQ6OaAmsGqmYgAJLDuU+/nhoN5LyCky4=;
-        b=ldKQ+oOIE/MncLwS3922wAbJevpexSt+HIQxIYg1unHt/01VteHHELxNQxNb+R1+KiqjTOsQgy2ne
-         DuHGgS1XmmAtT6yr9aGsyRSS9V2SMw2SyECTM6pZ+CuRcoc9YLffWIuV977YTHC0JpthZYFqsaXMhy
-         0waSNrTrfjWwpheLYEOJ96j+mhDCFYmC8kqIds/088PSv/oRnZ1jyugaljHdWYmeEr8yB1Bc7XOVHU
-         ktKpu8wb7hf8KGl7eKPSX4V3LTEG1XBZCVRQhGQkD6lpTsEGuyLTNeadAGsU/Kg2U4GZWYDRNimAOY
-         betkaC2da3ivsJSOYDg+T51TMwygUiQ==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1422, Stamp: 3], Multi: [Enabled, t: (0.000010,0.016053)], BW: [Enabled, t: (0.000015,0.000001)], RTDA: [Enabled, t: (0.071124), Hit: No, Details: v2.39.0; Id: 15.52k1cv.1g2p30lbn.venk; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from h-e2.ddg ([85.143.252.66])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Wed, 11 May 2022 11:15:51 +0300
-Date:   Wed, 11 May 2022 11:15:32 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     Conor Dooley <mail@conchuod.ie>
-Cc:     Conor.Dooley@microchip.com, mdf@kernel.org, hao.wu@intel.com,
-        yilun.xu@intel.com, trix@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        system@metrotek.ru
-Subject: Re: [PATCH v11 2/3] fpga: microchip-spi: add Microchip MPF FPGA
- manager
-Message-ID: <20220511081532.7gkmz3uumzxgwfaf@h-e2.ddg>
-References: <20220507074304.11144-1-i.bornyakov@metrotek.ru>
- <20220507074304.11144-3-i.bornyakov@metrotek.ru>
- <bd5cb37b-ee56-f6d5-2d98-c08566b60728@microchip.com>
- <20220509171621.zk4owxwlngxjodgz@x260>
- <da1e5125-de6b-11a8-a52d-7e6e5f45ab70@conchuod.ie>
- <4b752147-1a09-a4af-bc5d-3b132b84ef49@conchuod.ie>
+        Wed, 11 May 2022 04:15:51 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB24E19284
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 01:15:47 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id be20so1527364edb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 01:15:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=nGIPkUoD0VqgRPwmnJdq8aDIQ4mHp9cW//PkaS4eSJQ=;
+        b=v12qa2iTtKx2vdf1vq2PcT9u9GdQ9m9IGKZ4JZ6rG21TQSTvTP4+nmoa9IUpXFBIoo
+         HCXVmFpF11W8kT0P0Be2LQsxp0UEhAcGedjF+gxrswebMy203EvQsuk8q9cnpCIwnDHi
+         hJ8YVa+U5r+jDrQcUeQyDMH67V3MZoI5Ar2zEYMN0FPeklwVUvkTKQfUo/4ly7GB06wU
+         kRRQ0tUqRQcD2ivSDskqB0eOB4fmz9yDyMBGd1Csf8zg4FUVHmZ/jQT1fE9dUvLCxZsg
+         7028VOdrs3AVEHGFcTMMi93816g4PU0rULHhSquz166SszX/Cdl+dslpk2QRxW58Y67l
+         4Kvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nGIPkUoD0VqgRPwmnJdq8aDIQ4mHp9cW//PkaS4eSJQ=;
+        b=3GEkDbCI/OilH20xOmcSkiUAsHvuX5hEV2YFxx7X/cdxHqTnWLvZqYMyA3Gtl0kWKq
+         wTzUfSXJ1OJ0OhwQScGWzb2v4+3iXKAYaxSBAVuGCCGk0zBqDxwzvciW+93q13lmk8cK
+         bU2AC+YSCplZ7ROBd6IVOXnyeQSe2xmMG6NVLMf6mya6VdL20WUFbTleJQDXMNz1jrZA
+         FZCzlvg74GE27v7rMeIPJW5hk60ERNuZZRWwycSNrsNxC7uv9FeZtErAx24ZyWhrlAoA
+         zMTK1rxA4Za/COTO+Zps0HMPGl6d9EEauOL6s3X0bVbv+MBBx0C+/oqcF6Op+v6ohevy
+         /1zw==
+X-Gm-Message-State: AOAM530kA2978aEetusiVP0RTMXDemYLt2G3pMBVr8aildAG/uCJT7f0
+        2ZdvaKzWFrgRfz22AgUIz698rA==
+X-Google-Smtp-Source: ABdhPJyYpUvmHj5wexeKIFtMMhSwQ6w/vOEaR6DABNPdZPWdmBPuhvXzbQ4nDmBN1Iq3dFKuJCdiuw==
+X-Received: by 2002:aa7:c31a:0:b0:425:df3c:de8e with SMTP id l26-20020aa7c31a000000b00425df3cde8emr27001921edq.83.1652256946337;
+        Wed, 11 May 2022 01:15:46 -0700 (PDT)
+Received: from [192.168.0.254] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id n15-20020a05640204cf00b0042617ba63c4sm782288edw.78.2022.05.11.01.15.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 01:15:45 -0700 (PDT)
+Message-ID: <091e6619-3341-4a98-90f6-48a6281f6275@linaro.org>
+Date:   Wed, 11 May 2022 10:15:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4b752147-1a09-a4af-bc5d-3b132b84ef49@conchuod.ie>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v6 1/4] dt-bindings: thermal: k3-j72xx: Add VTM bindings
+ documentation
+Content-Language: en-US
+To:     "J, KEERTHY" <j-keerthy@ti.com>, robh+dt@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, amitk@kernel.org,
+        kristo@kernel.org, vigneshr@ti.com
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220427064635.24898-1-j-keerthy@ti.com>
+ <20220427064635.24898-2-j-keerthy@ti.com>
+ <5859fed0-82b7-95eb-5719-9b0016916c50@ti.com>
+ <eb0745a6-ecf2-4b70-368b-9ad8a322f208@linaro.org>
+ <117f175f-62d1-17b5-742b-bcb250b7866f@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <117f175f-62d1-17b5-742b-bcb250b7866f@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 12:29:54PM +0100, Conor Dooley wrote:
-> On 09/05/2022 19:56, Conor Dooley wrote:
-> > On 09/05/2022 18:16, Ivan Bornyakov wrote:
-> > > On Mon, May 09, 2022 at 11:41:18AM +0000, Conor.Dooley@microchip.com wrote:
-> > > > Hey Ivan, one comment below.
-> > > > Thanks,
-> > > > Conor.
-> > > > 
-> > > > On 07/05/2022 08:43, Ivan Bornyakov wrote:
-> > > > > ... snip ...
-> > > > > +static int mpf_read_status(struct spi_device *spi)
-> > > > > +{
-> > > > > +       u8 status, status_command = MPF_SPI_READ_STATUS;
-> > > > > +       struct spi_transfer xfer = {
-> > > > > +               .tx_buf = &status_command,
-> > > > > +               .rx_buf = &status,
-> > > > > +               .len = 1,
-> > > > > +       };
-> > > > > +       int ret = spi_sync_transfer(spi, &xfer, 1);
-> > > > > +
-> > > > > +       if ((status & MPF_STATUS_SPI_VIOLATION) ||
-> > > > > +           (status & MPF_STATUS_SPI_ERROR))
-> > > > > +               ret = -EIO;
-> > > > > +
-> > > > > +       return ret ? : status;
-> > > > > +}
-> > > > > +
-> > > > > ... snip ...
-> > > > > +
-> > > > > +static int poll_status_not_busy(struct spi_device *spi, u8 mask)
-> > > > > +{
-> > > > > +       int status, timeout = MPF_STATUS_POLL_TIMEOUT;
-> > > > > +
-> > > > > +       while (timeout--) {
-> > > > > +               status = mpf_read_status(spi);
-> > > > > +               if (status < 0 ||
-> > > > > +                   (!(status & MPF_STATUS_BUSY) && (!mask || (status & mask))))
-> > > > > +                       return status;
-> > > > > +
-> > > > > +               usleep_range(1000, 2000);
-> > > > > +       }
-> > > > > +
-> > > > > +       return -EBUSY;
-> > > > > +}
-> > > > 
-> > > > Is there a reason you changed this from the snippet you sent me
-> > > > in the responses to version 8:
-> > > > static int poll_status_not_busy(struct spi_device *spi, u8 mask)
-> > > > {
-> > > > 	u8 status, status_command = MPF_SPI_READ_STATUS;
-> > > > 	int ret, timeout = MPF_STATUS_POLL_TIMEOUT;
-> > > > 	struct spi_transfer xfer = {
-> > > > 		.tx_buf = &status_command,
-> > > > 		.rx_buf = &status,
-> > > > 		.len = 1,
-> > > > 	};
-> > > > 
-> > > > 	while (timeout--) {
-> > > > 		ret = spi_sync_transfer(spi, &xfer, 1);
-> > > > 		if (ret < 0)
-> > > > 			return ret;
-> > > > 
-> > > > 		if (!(status & MPF_STATUS_BUSY) && (!mask || (status & mask)))
-> > > > 			return status;
-> > > > 
-> > > > 		usleep_range(1000, 2000);
-> > > > 	}
-> > > > 
-> > > > 	return -EBUSY;
-> > > > }
-> > > > 
-> > > > With the current version, I hit the "Failed to write bitstream
-> > > > frame" check in mpf_ops_write at random points in the transfer.
-> > > > Replacing poll_status_not_busy with the above allows it to run
-> > > > to completion.
-> > > 
-> > > In my eyes they are equivalent, aren't they?
-> > > 
-> > 
-> > I was in a bit of a rush today & didn't have time to do proper
-> > debugging, I'll put some debug code in tomorrow and try to find
-> > exactly what is different between the two.
-> > 
-> > Off the top of my head, since I don't have a board on me to test,
-> > the only difference I can see is that with the snippet you only
-> > checked if spi_sync_transfer was negative whereas now you check
-> > if it has a value at all w/ that ternary operator.
-> > 
-> > But even that seems like it *shouldn't* be the problem, since ret
-> > should contain -errno or zero, right?
-> > Either way, I will do some digging tomorrow.
+On 11/05/2022 09:53, J, KEERTHY wrote:
+>>>
+>>> Any comments on this version?
+>>
+>> You got Rob's review, so you don't need also mine.
+>>
+>> If you want, then in general look okay, except the description for "reg"
+>> you could split per items:
+>>
+>> reg:
+>>    items:
+>>      - description: VTM cfg1 register space
+>>      - description: VTM cfg2 register space
+>>      - description: efuse register space
+>>
+>> It's more obvious what items you expect.
 > 
-> I put a printk("status %x, ret %d", status, ret); into the failure
-> path of mpf_read_status() & it looks like a status 0xA is being
-> returned - error & ready? That seems like a very odd combo to be
-> getting back out of it. It shouldn't be dodgy driver/connection
-> either, b/c that's what I see if I connect my protocol analyser:
-> https://i.imgur.com/VbjgfCk.png
+> Hi Krzysztof,
 > 
-> That's mosi (hex), ss, sclk, mosi, miso (hex), miso in descending
-> order.
+> DTEX 
+> Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.example.dts
+> Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml: found 
+> duplicate key "description" with value "VTM cfg2 register space" 
+> (original value: "VTM cfg1 register space")
+> Documentation/devicetree/bindings/Makefile:26: recipe for target 
+> 'Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.example.dts' 
+> failed
+> make[1]: *** 
+> [Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.example.dts] Er
 > 
-> I think what was happening was with the snippet you returned one
-> of the following: -EBUSY, ret (aka -errno) or status. Since status
-> is positive, the checks in mpf_spi_write.*() saw nothing wrong at
-> all and programming continued despite there being a problem.
-> 
-> The new version fixes this by returning -EIO rather than status from
-> poll_status_not_busy().
-> 
-> I wish I had a socketable PolarFire so I could investigate further,
-> but this looks like it might a be hardware issue somewhere on my
-> end?
-> 
-> So ye, sorry for the noise and carry on! I'll try tofind what is to
-> blame for it.
-> 
-> Thanks,
-> Conor.
-> 
+> I believe multiple instances of description is failing. So can i keep 
+> the description as is?
 
-Hi, Conor.
+It looks weird. Can you share your code (pastebin/github/paste here)?
 
-I've just noticed in SPI-DirectC User Guide [1] ch. 9 SmartFusion2 and
-IGLOO2 SPI-Slave Programming Waveform Analysis, that hw status checked
-two times every time. Does MPF family also need double check hw status?
-Does adding second mpf_read_status() to poll_status_not_busy() routine
-help with your issue?
 
+Best regards,
+Krzysztof

@@ -2,81 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB64522CED
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B81522D05
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242723AbiEKHNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 03:13:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36794 "EHLO
+        id S242745AbiEKHSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 03:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234682AbiEKHN2 (ORCPT
+        with ESMTP id S232103AbiEKHSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 03:13:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF19C6FD1F
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:13:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652253203;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sQHjzpYWUbx4DIbzDfueaE5axYdznIwfVWGZh8Ng7j8=;
-        b=HCshzj2BYoQDbguzjJ2fnhxSK+/VRtg97LKEp9mwRKjKSweXD1FQYsXvZj73IT7eA/5TUv
-        1OmZTwwbNSUATvpO6nt7Fhemk1cBxkactJb4n3TAxsOqNxV1plDcYb1waMX+gEyJplAi/T
-        ttgFIgdzUvjyzbXRvW3WZlAZbdWjPdQ=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-500-v0TonRvYN-CEXdV5Q_3ANw-1; Wed, 11 May 2022 03:13:22 -0400
-X-MC-Unique: v0TonRvYN-CEXdV5Q_3ANw-1
-Received: by mail-wr1-f69.google.com with SMTP id w4-20020adfbac4000000b0020acba4b779so460872wrg.22
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:13:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sQHjzpYWUbx4DIbzDfueaE5axYdznIwfVWGZh8Ng7j8=;
-        b=DXkEgCARIhhsVRk8dy+4OoSt9b9K5vH3RFdD+ZigvXc+DBhRak9fHCwrNEsKFJUFJf
-         5n62CNq2HUsZwGL7rSMgS//T9suNe32eh0fqiWIDIPBWYvwisCCcVKI/ZVmb24xwCIIk
-         2DUlxbfctn02i4HiTAgn1lJOK7dB1+dVWlhcZy5fTPdB/0Of9HOWoXJthbDiP648d7u3
-         1VmreWA1YdAojF+zgVlaIim8PEdjQ4raV6OZodNEg4fdqv0Aq140SQZ1lTqxpDxWikE4
-         iORbPk+vsHYbbTE39Lh5b7cclR/JfuXz8fJSUsfJD8u38D3Y9TJrXDvoMPrTJDIefdBn
-         3NxA==
-X-Gm-Message-State: AOAM533MILVhz67nWj0KaD35KqtVYVNUI6Pcs6oCU6rF8oyAfdfRFLEY
-        U9Cm8df4QCvP27Btqphznh6xZezK9IlSmhBtfzTKTj9fo3Oj7XOrcJWMerE/efjR5HrzU4SdmWw
-        4NJ9m3SWZJUzz/bOHcGslblq/
-X-Received: by 2002:a05:6000:156e:b0:20c:5218:8907 with SMTP id 14-20020a056000156e00b0020c52188907mr21286290wrz.297.1652253201347;
-        Wed, 11 May 2022 00:13:21 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxxTTooDnLmLT4EcFTkOSjKBlkOtgpHLONSlsyygQ8QPYyAJluPBdZsBfMCA6OcI1SOoePXNQ==
-X-Received: by 2002:a05:6000:156e:b0:20c:5218:8907 with SMTP id 14-20020a056000156e00b0020c52188907mr21286271wrz.297.1652253201133;
-        Wed, 11 May 2022 00:13:21 -0700 (PDT)
-Received: from redhat.com ([2.55.46.133])
-        by smtp.gmail.com with ESMTPSA id o20-20020a05600c2e1400b003944821105esm1239510wmf.2.2022.05.11.00.13.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 00:13:19 -0700 (PDT)
-Date:   Wed, 11 May 2022 03:13:16 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        KVM list <kvm@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        mie@igel.co.jp
-Subject: Re: [GIT PULL] virtio: last minute fixup
-Message-ID: <20220511030407-mutt-send-email-mst@kernel.org>
-References: <20220510082351-mutt-send-email-mst@kernel.org>
- <CAHk-=wjPR+bj7P1O=MAQWXp0Mx2hHuNQ1acn6gS+mRo_kbo5Lg@mail.gmail.com>
- <YnrxTMVRtDnGA/EK@dev-arch.thelio-3990X>
- <CAHk-=wgAk3NEJ2PHtb0jXzCUOGytiHLq=rzjkFKfpiuH-SROgA@mail.gmail.com>
+        Wed, 11 May 2022 03:18:30 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24931E15EA;
+        Wed, 11 May 2022 00:18:28 -0700 (PDT)
+Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KymTK6TpYzbngy;
+        Wed, 11 May 2022 15:17:57 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by dggpeml500024.china.huawei.com
+ (7.185.36.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 11 May
+ 2022 15:18:25 +0800
+From:   Yuan Can <yuancan@huawei.com>
+To:     <linux-rtc@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>, <yuancan@huawei.com>,
+        <linkmauve@linkmauve.fr>
+Subject: [PATCH] rtc: gamecube: Add missing iounmap in gamecube_rtc_read_offset_from_sram
+Date:   Wed, 11 May 2022 07:13:54 +0000
+Message-ID: <20220511071354.46202-1-yuancan@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgAk3NEJ2PHtb0jXzCUOGytiHLq=rzjkFKfpiuH-SROgA@mail.gmail.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500024.china.huawei.com (7.185.36.10)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,80 +46,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 04:50:47PM -0700, Linus Torvalds wrote:
-> On Tue, May 10, 2022 at 4:12 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > For what it's worth, as someone who is frequently tracking down and
-> > reporting issues, a link to the mailing list post in the commit message
-> > makes it much easier to get these reports into the right hands, as the
-> > original posting is going to have all relevant parties in one location
-> > and it will usually have all the context necessary to triage the
-> > problem.
-> 
-> Honestly, I think such a thing would be trivial to automate with
-> something like just a patch-id lookup, rather than a "Link:".
-> 
-> And such a lookup model ("where was this patch posted") would work for
-> <i>any</i> patch (and often also find previous unmodified versions of
-> it when it has been posted multiple times).
-> 
-> I suspect that most of the building blocks of such automation
-> effectively already exists, since I think the lore infrastructure
-> already integrates with patchwork, and patchwork already has a "look
-> up by patch id".
-> 
-> Wouldn't it be cool if you had some webby interface to just go from
-> commit SHA1 to patch ID to a lore.kernel.org lookup of where said
-> patch was done?
+The hw_srnprot needs to be unmapped when gamecube_rtc_read_offset_from_sram returns.
 
-Yes, that would be cool!
+Fixs: 86559400b3ef9d (rtc: gamecube: Add a RTC driver for the GameCube, Wii and Wii U)
+Signed-off-by: Yuan Can <yuancan@huawei.com>
+---
+ drivers/rtc/rtc-gamecube.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> Of course, I personally tend to just search by the commit contents
-> instead, which works just about as well. If the first line of the
-> commit isn't very unique, add a "f:author" to the search.
->
-> IOW, I really don't find much value in the "Link to original
-> submission", because that thing is *already* trivial to find, and the
-> lore search is actually better in many ways (it also tends to find
-> people *reporting* that commit, which is often what you really want -
-> the reason you're doing the search is that there's something going on
-> with it).
-> 
-> My argument here really is that "find where this commit was posted" is
-> 
->  (a) not generally the most interesting thing
-> 
->  (b) doesn't even need that "Link:" line.
-> 
-> but what *is* interesting, and where the "Link:" line is very useful,
-> is finding where the original problem that *caused* that patch to be
-> posted in the first place.
-> 
-> Yes, obviously you can find that original problem by searching too if
-> the commit message has enough other information.
-> 
-> For example, if there is an oops quoted in the commit message, I have
-> personally searched for parts of that kind of information to find the
-> original report and discussion.
-> 
-> So that whole "searching is often an option" is true for pretty much
-> _any_ Link:, but I think that for the whole "original submission" it's
-> so mindless and can be automated that it really doesn't add much real
-> value at all.
-> 
->                 Linus
-
-For me a problematic use-case is multiple versions of the patchset.
-So I have a tree and I apply a patchset, start testing etc. Meanwhile author
-posts another version. At that point I want to know which version
-did I apply. Since people put that within [] in the subject, it
-gets stripped off.
-
-Thinking about it some more, how about sticking a link to the *cover
-letter* in the commit, instead?  That would serve an extra useful purpose of
-being able to figure out which patches are part of the same patchset.
-And maybe Change "Link:" to "Patchset:" or "Cover-letter:"?
-
+diff --git a/drivers/rtc/rtc-gamecube.c b/drivers/rtc/rtc-gamecube.c
+index 18ca3b38b2d0..c2717bb52b2b 100644
+--- a/drivers/rtc/rtc-gamecube.c
++++ b/drivers/rtc/rtc-gamecube.c
+@@ -267,6 +267,7 @@ static int gamecube_rtc_read_offset_from_sram(struct priv *d)
+ 	ret = regmap_read(d->regmap, RTC_SRAM_BIAS, &d->rtc_bias);
+ 	if (ret) {
+ 		pr_err("failed to get the RTC bias\n");
++		iounmap(hw_srnprot);
+ 		return -1;
+ 	}
+ 
 -- 
-MST
+2.17.1
 

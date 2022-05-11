@@ -2,143 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7006523AFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B151523B12
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345234AbiEKQ6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 12:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
+        id S1345276AbiEKRCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 13:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233678AbiEKQ6b (ORCPT
+        with ESMTP id S237247AbiEKRCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 12:58:31 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB6713C377;
-        Wed, 11 May 2022 09:58:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652288310; x=1683824310;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=L+SbLcoPf9zuYRgUS6mcapuzb8rI2aXPD90HpmL4jgs=;
-  b=Zs6M85aKbq3gRwBYFFZcQp+0/T4/FCaZ/zPEZ39so5DS6eD6ddLyzP13
-   fOVwnu6Cb8XWBPQm5Jyc2tI0tIhMSqRvbNRwTK1AC8mwugVCyv23xkco/
-   DP5grrASN0f1DXpIXlXfFVD7K0Uxh23Z/OphJX3U0ZSkb1M1P0J8tmbCQ
-   mcsO0SDmwnP4/CSKoND+e9aJQLyXr3izE8kmHFx7IVQiS9einbwGQMrbJ
-   DzE+KRmSZG/ij2RZtdcwZTMbn2RzAF0pDMWTdZiyhLkYOk0YoEpT038oW
-   TrniUmwIiTx/2maTjg7ndeam3DvEjxqnfqWatop3azIvR9FACNSQ4XjXy
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="269887278"
-X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
-   d="scan'208";a="269887278"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 09:58:30 -0700
-X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
-   d="scan'208";a="520594260"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 09:58:29 -0700
-Date:   Wed, 11 May 2022 10:02:16 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     iommu@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>, dmaengine@vger.kernel.org,
-        Joerg Roedel <joro@8bytes.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>, vkoul@kernel.org,
-        robin.murphy@arm.com, will@kernel.org, Yi Liu <yi.l.liu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v3 1/4] iommu/vt-d: Implement domain ops for
- attach_dev_pasid
-Message-ID: <20220511100216.7615e288@jacob-builder>
-In-Reply-To: <20220511161237.GB49344@nvidia.com>
-References: <20220510210704.3539577-1-jacob.jun.pan@linux.intel.com>
-        <20220510210704.3539577-2-jacob.jun.pan@linux.intel.com>
-        <20220510232121.GP49344@nvidia.com>
-        <20220510172309.3c4e7512@jacob-builder>
-        <20220511115427.GU49344@nvidia.com>
-        <20220511082958.79d5d8ee@jacob-builder>
-        <20220511161237.GB49344@nvidia.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Wed, 11 May 2022 13:02:42 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A0264733;
+        Wed, 11 May 2022 10:02:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=qGbO2F4BgGoDa01K+lTe/8HxmdXnwujci0ArhS0FRT8=; b=JUpmsc/qHSdRlsIfTcfeWYxkEZ
+        3iA/qnwVbuw8FHxZlWbCoFb5V7vwvxiTxAExDI4kh6ejcKLyu1FpD6K9ZDF+ZgmT7Q5cub6NdzCJt
+        2Nwj6wToecfx/xGR1mZiDtjyBTAoP6lLKBFmMcTKMHDVpbKwPaV/8MmlZaGQ6OUsZYck=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nopjG-002Ko2-Cq; Wed, 11 May 2022 19:02:26 +0200
+Date:   Wed, 11 May 2022 19:02:26 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org,
+        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
+        kostap@marvell.com, robert.marko@sartura.hr,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v6 1/3] dt-bindings: marvell: Document the AC5/AC5X
+ compatibles
+Message-ID: <YnvsInrh03BVh7lN@lunn.ch>
+References: <20220510231002.1160798-1-chris.packham@alliedtelesis.co.nz>
+ <20220510231002.1160798-2-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220510231002.1160798-2-chris.packham@alliedtelesis.co.nz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
-
-On Wed, 11 May 2022 13:12:37 -0300, Jason Gunthorpe <jgg@nvidia.com> wrote:
-
-> On Wed, May 11, 2022 at 08:35:18AM -0700, Jacob Pan wrote:
+On Wed, May 11, 2022 at 11:10:00AM +1200, Chris Packham wrote:
+> Describe the compatible properties for the Marvell Alleycat5/5X switches
+> with integrated CPUs.
 > 
-> > > Huh? The intel driver shares the same ops between UNMANAGED and DMA -
-> > > and in general I do not think we should be putting special knowledge
-> > > about the DMA domains in the drivers. Drivers should continue to treat
-> > > them identically to UNMANAGED.
-> > >   
-> > OK, other than SVA domain, the rest domain types share the same default
-> > ops. I agree that the default ops should be the same for UNMANAGED,
-> > IDENTITY, and DMA domain types. Minor detail is that we need to treat
-> > IDENTITY domain slightly different when it comes down to PASID entry
-> > programming.  
+> Alleycat5:
+> * 98DX2538: 24x1G + 2x10G + 2x10G Stack
+> * 98DX2535: 24x1G + 4x1G Stack
+> * 98DX2532: 8x1G + 2x10G + 2x1G Stack
+> * 98DX2531: 8x1G + 4x1G Stack
+> * 98DX2528: 24x1G + 2x10G + 2x10G Stack
+> * 98DX2525: 24x1G + 4x1G Stack
+> * 98DX2522: 8x1G + 2x10G + 2x1G Stack
+> * 98DX2521: 8x1G + 4x1G Stack
+> * 98DX2518: 24x1G + 2x10G + 2x10G Stack
+> * 98DX2515: 24x1G + 4x1G Stack
+> * 98DX2512: 8x1G + 2x10G + 2x1G Stack
+> * 98DX2511: 8x1G + 4x1G Stack
 > 
-> I would be happy if IDENTITY had its own ops, if that makes sense
-> 
-I have tried to have its own ops but there are complications around
-checking if a domain has ops. It would be a logic thing to clean up next.
+> Alleycat5X:
+> * 98DX3500: 24x1G + 6x25G
+> * 98DX3501: 16x1G + 6x10G
+> * 98DX3510: 48x1G + 6x25G
+> * 98DX3520: 24x2.5G + 6x25G
+> * 98DX3530: 48x2.5G + 6x25G
+> * 98DX3540: 12x5G/6x10G + 6x25G
+> * 98DX3550: 24x5G/12x10G + 6x25G
 
-> > If not global, perhaps we could have a list of pasids (e.g. xarray)
-> > attached to the device_domain_info. The TLB flush logic would just go
-> > through the list w/o caring what the PASIDs are for. Does it make sense
-> > to you?  
-> 
-> Sort of, but we shouldn't duplicate xarrays - the group already has
-> this xarray - need to find some way to allow access to it from the
-> driver.
-> 
-I am not following,  here are the PASIDs for devTLB flush which is per
-device. Why group?
-We could retrieve PASIDs from the device PASID table but xa would be more
-efficient.
+Hi Chris
 
-> > > > Are you suggesting the dma-iommu API should be called
-> > > > iommu_set_dma_pasid instead of iommu_attach_dma_pasid?    
-> > > 
-> > > No that API is Ok - the driver ops API should be 'set' not
-> > > attach/detach 
-> > Sounds good, this operation has little in common with
-> > domain_ops.dev_attach_pasid() used by SVA domain. So I will add a new
-> > domain_ops.dev_set_pasid()  
-> 
-> What? No, their should only be one operation, 'dev_set_pasid' and it
-> is exactly the same as the SVA operation. It configures things so that
-> any existing translation on the PASID is removed and the PASID
-> translates according to the given domain.
-> 
-> SVA given domain or UNMANAGED given domain doesn't matter to the
-> higher level code. The driver should implement per-domain ops as
-> required to get the different behaviors.
-Perhaps some code to clarify, we have
-sva_domain_ops.dev_attach_pasid() = intel_svm_attach_dev_pasid;
-default_domain_ops.dev_attach_pasid() = intel_iommu_attach_dev_pasid;
+When looking at this list, is it just the switch which changes, and
+everything else in the package stays the same?
 
-Consolidate pasid programming into dev_set_pasid() then called by both
-intel_svm_attach_dev_pasid() and intel_iommu_attach_dev_pasid(), right?
+I'm thinking back to plain Kirkwood. There were 3 Kirkwood SoCs. We
+had kirkwood.dtsi which described everything common to all three
+SoCs. And then kirkwood-6192.dtsi, kirkwood-6281.dtsi,
+kirkwood-6282.dtsi which extended that base with whatever additional
+things each SoC had.
 
+I'm wondering if something similar is needed here?
 
-Thanks,
+armada-98DX25xx.dtsi which describes everything common to Alleycat5.
 
-Jacob
+armada-98DX35xx.dtsi which describes everything common to Alleycat5X,
+maybe making use of armada-98DX25xx.dtsi?.
+
+armada-98DX2538.dtsi which extends armada-98DX25xx.dtsi
+
+And then a board file which includes armada-98DX2538.dtsi and add the
+board specific bits?
+
+I've no idea how these different devices differ, so i don't know what
+the correct hierarchy should be.
+
+    Andrew

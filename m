@@ -2,130 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA73F52321D
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:48:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B87A2523225
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239291AbiEKLs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 07:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
+        id S240301AbiEKLtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 07:49:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236558AbiEKLsY (ORCPT
+        with ESMTP id S233701AbiEKLtb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 07:48:24 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4858E2438C7
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:48:22 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nokp7-00048f-28; Wed, 11 May 2022 13:48:09 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nokp4-0000Cy-Ci; Wed, 11 May 2022 13:48:06 +0200
-Date:   Wed, 11 May 2022 13:48:06 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
-Cc:     Robin van der Gracht <robin@protonic.nl>, kernel@pengutronix.de,
-        linux-can@vger.kernel.org, Oleksij Rempel <linux@rempel-privat.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
-        kbuild test robot <lkp@intel.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND 0/2] j1939: make sure that sent DAT/CTL frames are
- marked as TX
-Message-ID: <20220511114806.GA12398@pengutronix.de>
-References: <20220509170746.29893-1-devid.filoni@egluetechnologies.com>
- <20220510043406.GB10669@pengutronix.de>
- <a8ea7199230682f3fd53e0b5975afa7287bd5ac0.camel@egluetechnologies.com>
+        Wed, 11 May 2022 07:49:31 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 115E62438C7;
+        Wed, 11 May 2022 04:49:27 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8E882ED1;
+        Wed, 11 May 2022 04:49:27 -0700 (PDT)
+Received: from [10.57.65.69] (unknown [10.57.65.69])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CDE243F73D;
+        Wed, 11 May 2022 04:49:24 -0700 (PDT)
+Subject: Re: [PATCH 1/4] perf pmu: Add function to check if a pmu file exists
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220504150216.581281-1-german.gomez@arm.com>
+ <20220504150216.581281-2-german.gomez@arm.com> <YnqVqq5QW/b14oPZ@kernel.org>
+From:   German Gomez <german.gomez@arm.com>
+Message-ID: <c738398a-d512-6a4d-9d62-b67b0aac091a@arm.com>
+Date:   Wed, 11 May 2022 12:49:18 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <YnqVqq5QW/b14oPZ@kernel.org>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <a8ea7199230682f3fd53e0b5975afa7287bd5ac0.camel@egluetechnologies.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 13:45:31 up 42 days, 15 min, 82 users,  load average: 0.20, 0.23,
- 0.20
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Devid,
+Hi Arnaldo, thanks for the review
 
-On Tue, May 10, 2022 at 08:12:32PM +0200, Devid Antonio Filoni wrote:
-> Hi Oleksij,
-> 
-> On Tue, 2022-05-10 at 06:34 +0200, Oleksij Rempel wrote:
-> > Hi Devid,
-> > 
-> > On Mon, May 09, 2022 at 07:07:44PM +0200, Devid Antonio Filoni wrote:
-> > > Hello,
-> > > 
-> > > If candump -x is used to dump CAN bus traffic on an interface while a J1939
-> > > socket is sending multi-packet messages, then the DAT and CTL frames
-> > > show up as RX instead of TX.
-> > > 
-> > > This patch series sets to generated struct sk_buff the owning struct sock
-> > > pointer so that the MSG_DONTROUTE flag can be set by recv functions.
-> > > 
-> > > I'm not sure that j1939_session_skb_get is needed, I think that session->sk
-> > > could be directly passed as can_skb_set_owner parameter. This patch
-> > > is based on j1939_simple_txnext function which uses j1939_session_skb_get.
-> > > I can provide an additional patch to remove the calls to
-> > > j1939_session_skb_get function if you think they are not needed.
-> > 
-> > Thank you for your patches. By testing it I noticed that there is a memory
-> > leak in current kernel and it seems to be even worse after this patches.
-> > Found by this test:
-> > https://github.com/linux-can/can-tests/blob/master/j1939/run_all.sh#L13
-> > 
-> > 
-> > Can you please investigate it (or wait until I get time to do it).
-> > 
-> > Regards,
-> > Oleksij
-> > 
-> 
-> I checked the test you linked and I can see that the number of the
-> instances of the can_j1939 module increases on each
-> j1939_ac_100k_dual_can.sh test execution (then the script exits),
-> however this doesn't seem to be worse with my patches, I have the same
-> results with the original kernel. Did you execute a particular test to
-> verify that the memory leak is worse with my patches?
-> I tried to take a look at all code that I changed in my patches but the
-> used ref counters seem to be handled correctly in called functions. I
-> suspected that the issue may be caused by the ref counter increased
-> in can_skb_set_owner() function but, even if I remove that call from the
-> j1939_simple_txnext() function in original kernel, I can still reproduce
-> the memory leak.
-> I think the issue is somewhere else, I'll try to give another look but I
-> can't assure nothing.
+On 10/05/2022 17:41, Arnaldo Carvalho de Melo wrote:
+> Em Wed, May 04, 2022 at 04:02:12PM +0100, German Gomez escreveu:
+>> Add a utility function perf_pmu__file_exists() to check if a given pmu
+>> file exists in the sysfs filesystem.
+> While reviewing this I noticed:
+>
+> int perf_pmu__caps_parse(struct perf_pmu *pmu)
+> {
+>         struct stat st;
+>         char caps_path[PATH_MAX];
+>         const char *sysfs = sysfs__mountpoint();
+>         DIR *caps_dir;
+>         struct dirent *evt_ent;
+>         int nr_caps = 0;
+>
+>         if (!sysfs)
+>                 return -1;
+>
+>         snprintf(caps_path, PATH_MAX,
+>                  "%s" EVENT_SOURCE_DEVICE_PATH "%s/caps", sysfs, pmu->name);
+>
+>         if (stat(caps_path, &st) < 0)
+>                 return 0;       /* no error if caps does not exist */
+>
+>
+> ------------------------
+>
+> Shouldn't we introduce a:
+>
+> const int perf__pmu_pathname_scnprintf(struct perf_pmu *pmu, char *pathname, size_t size, char *filename)
+> {
+>
+> 	return scnprintf(pathname, size, "%s" EVENT_SOURCE_DEVICE_PATH "%s/%s", sysfs, pmu->name, filename);
+> }
+>
+> And use in your perf_pmu__file_exists() and in the other places where
+> this open coded pattern appears?
 
-Suddenly detecting local frames by skb->sk will not work for all control
-packets. I'll send different patch solving it for all j1939 and raw
-variants.
+I agree. If nobody else has done it before me, I will send the refactor
+in the next respin.
 
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Thanks,
+German
+
+>
+> I'm waiting for reviews for the ARM specific bits.
+>
+> - Arnaldo
+>  
+>> Signed-off-by: German Gomez <german.gomez@arm.com>
+>> ---
+>>  tools/perf/util/pmu.c | 17 +++++++++++++++++
+>>  tools/perf/util/pmu.h |  2 ++
+>>  2 files changed, 19 insertions(+)
+>>
+>> diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+>> index 9a1c7e63e663..9479e9a4da54 100644
+>> --- a/tools/perf/util/pmu.c
+>> +++ b/tools/perf/util/pmu.c
+>> @@ -1854,6 +1854,23 @@ int perf_pmu__scan_file(struct perf_pmu *pmu, const char *name, const char *fmt,
+>>  	return ret;
+>>  }
+>>  
+>> +bool perf_pmu__file_exists(struct perf_pmu *pmu, const char *name)
+>> +{
+>> +	char path[PATH_MAX];
+>> +	struct stat statbuf;
+>> +	const char *sysfs = sysfs__mountpoint();
+>> +
+>> +	if (!sysfs)
+>> +		return false;
+>> +
+>> +	snprintf(path, PATH_MAX,
+>> +		 "%s" EVENT_SOURCE_DEVICE_PATH "%s/%s", sysfs, pmu->name, name);
+>> +	if (!file_available(path))
+>> +		return false;
+>> +
+>> +	return stat(path, &statbuf) == 0;
+>> +}
+>> +
+>>  static int perf_pmu__new_caps(struct list_head *list, char *name, char *value)
+>>  {
+>>  	struct perf_pmu_caps *caps = zalloc(sizeof(*caps));
+>> diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
+>> index 541889fa9f9c..ab728eaf13b6 100644
+>> --- a/tools/perf/util/pmu.h
+>> +++ b/tools/perf/util/pmu.h
+>> @@ -120,6 +120,8 @@ bool pmu_have_event(const char *pname, const char *name);
+>>  
+>>  int perf_pmu__scan_file(struct perf_pmu *pmu, const char *name, const char *fmt, ...) __scanf(3, 4);
+>>  
+>> +bool perf_pmu__file_exists(struct perf_pmu *pmu, const char *name);
+>> +
+>>  int perf_pmu__test(void);
+>>  
+>>  struct perf_event_attr *perf_pmu__get_default_config(struct perf_pmu *pmu);
+>> -- 
+>> 2.25.1

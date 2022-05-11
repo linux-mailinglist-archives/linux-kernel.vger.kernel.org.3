@@ -2,140 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4118752298B
+	by mail.lfdr.de (Postfix) with ESMTP id D8CCE52298D
 	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 04:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241050AbiEKCUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 22:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41768 "EHLO
+        id S241093AbiEKCUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 22:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241120AbiEKCT5 (ORCPT
+        with ESMTP id S241063AbiEKCUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 22:19:57 -0400
+        Tue, 10 May 2022 22:20:16 -0400
 Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020A61F68F9
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 19:19:55 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 31so542908pgp.8
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 19:19:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19A61F7E03
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 19:20:14 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id a19so339998pgw.6
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 19:20:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=aIcSWreA+W0fIvQF/lKPGeaT+AYkn45ShR5b36w2q9o=;
-        b=5/Lld5QMG+BiecKOlFA0wMezCYTbJ4Q/Gr1IDeFcKOgwH72fHR/jtrHCNGGMByZica
-         LNS+OwfFslOxBaD726ya9nFnMOyGhUZBx/gHhRrRs8LHcaVctkHJOnukBmNOADOQO0+Q
-         70dYgeXJ4F+cZ63RkvgS+xoV1jHAV5GCpiKIDz524T6jZfyKpEaXLlVVppELH0BwmFiu
-         gEtI/8m0ldv/cso79j5SnOM6uZ3oy7YmlgAnC7mVCcM7jpqtjVaFuKQjpa5QD/MNV/YP
-         KwD94fE0OA0ycX8EtoMtYCywvZX4w5sTdXxer+u6+FUVFTCi5WgJokQi5s9uq2OEk5A4
-         kdxg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+O1DI8iNjAZn8PsQoBk4pwjX1aYVH8igGYI2zY2FbWg=;
+        b=S90BK2NKh3s0l4hPcjya0nRrxzwLOtSHenL75N1j9KfG9H2LlxjyHO/miA4g96YBbR
+         fjxe3We4CFn8hCBd97r5oZdHo/MQg+OlOrjQ7e5taW/vALXXaRejSP0+nmOCMM9tAMLf
+         LWGG/yjoVjQPmctnWljKkCmX4LDRixi4mJzpyuoSsWyLhtDDhbiiTc5bMZnEUMHtkYGt
+         6OjZIAKxOrryYfjfO1Pn81RMqffAhyc3gQoby13CHgHa0lq+6rEzlStfmszmVuKqX18T
+         ivMlpjtTDASlUVLaFRwz6CQhvayGXBjelCa4GDFQGHSkH16J5vHZocFKcBIVxP0caPv/
+         AVkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=aIcSWreA+W0fIvQF/lKPGeaT+AYkn45ShR5b36w2q9o=;
-        b=KaNQfxDwa+b31k+do32LnYjqOqs1KvcI2vUicPkU68pZnBxTKAJLgnaaXq8OGu2Rnk
-         bVUWv4a0rdR/rYpMnM2XRlvLb1KvXJJ63DNf3ZamedKCDlbeLzQGh/bf2lCHsj64QKqR
-         9wZcGcFxBsz0mvAmpPKe7pNSjgryn4h0VW3k7Wq35Ict0ifv+nVuNm7g3tdcorn2Pp6Y
-         3z9jZXrLRki6zvgBJc6Wh2AtLP9rQv5vrSodEfzmKj0WZ9J6de6GdSzmmHq4dbHSFYKn
-         PiuG1TDLz8c7LaOyGfWasO2yoiBJwUG1s4NYLLgEQ43/r6HNbEMGWToilKl+e/U5/fHf
-         AEBg==
-X-Gm-Message-State: AOAM5306V+Lozh8tTw6AJJpaEY4/xlbk+GHPRkYQNBjzoZdlPDPcoIC8
-        w2ZI70RvVf0PjMoWJRvJCi+WzQ==
-X-Google-Smtp-Source: ABdhPJzsT4kywaSzyEnClAPCSvzS5a9FdNsQR+tCDLD/YGZINPYPEdTQS9hI6/siAiDs/tS2I1v38A==
-X-Received: by 2002:a63:197:0:b0:3aa:9c7a:b269 with SMTP id 145-20020a630197000000b003aa9c7ab269mr18813125pgb.158.1652235594538;
-        Tue, 10 May 2022 19:19:54 -0700 (PDT)
-Received: from [10.254.203.126] ([139.177.225.242])
-        by smtp.gmail.com with ESMTPSA id a20-20020a63e414000000b003c14af50617sm407288pgi.47.2022.05.10.19.19.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 19:19:54 -0700 (PDT)
-Message-ID: <c44769b3-a132-63a5-fd40-4d483497dff2@bytedance.com>
-Date:   Wed, 11 May 2022 10:19:48 +0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+O1DI8iNjAZn8PsQoBk4pwjX1aYVH8igGYI2zY2FbWg=;
+        b=U0AEN4NOO390/NjYMcSl1hP75GT6PfZN3TtS8oExlrimSO8ZBuUjS9uKYfYq1JMf3B
+         dg867R6JxBRF8e5hYze8k29aIxIhlN1Bi7mVRok/Aik5ksXrc4WMnmLQC+lbSIsrKzzI
+         ElBGrDOel+Sfx2YueQieWaROenEhg0SiPC6THnYaKWYQapu3G4SlAFpz9P3lsVf17pm2
+         DGtCKmc+qmeTyocn4hAchtUvNWLEAzSoZWVyQxDXhTlbQbh6eD5sA1SQwdlDUaSdhSTb
+         yB2x+aVEtfQL/jI65YrjXbQhgQFckYV0RUQrTvnAf9PL89GvU6Z3cvKObN7cYfmwBZND
+         gwyQ==
+X-Gm-Message-State: AOAM530fq6bCf571h6GNi+16HXbWaNMRyJVwxjiyVLDCsSeFvTQ9RnEJ
+        8zkcic71zwwf9X1c/3/XZhIeSg==
+X-Google-Smtp-Source: ABdhPJwzRJprhZH2evJMiPwJT0Jpt3Ji57iSehdQOH1LNSR1cgVL130KN51K1W0+KiKeOpORuCRpzg==
+X-Received: by 2002:a05:6a00:4486:b0:50d:fc41:a9a with SMTP id cu6-20020a056a00448600b0050dfc410a9amr22732738pfb.71.1652235614344;
+        Tue, 10 May 2022 19:20:14 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s (104-237-153-19.ip.linodeusercontent.com. [104.237.153.19])
+        by smtp.gmail.com with ESMTPSA id v24-20020a170902e8d800b0015e8d4eb272sm307061plg.188.2022.05.10.19.20.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 19:20:13 -0700 (PDT)
+Date:   Wed, 11 May 2022 10:20:04 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Ali Saidi <alisaidi@amazon.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, german.gomez@arm.com,
+        benh@kernel.crashing.org, Nick.Forrington@arm.com,
+        alexander.shishkin@linux.intel.com, andrew.kilroy@arm.com,
+        james.clark@arm.com, john.garry@huawei.com, jolsa@kernel.org,
+        kjain@linux.ibm.com, lihuafei1@huawei.com, mark.rutland@arm.com,
+        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
+        peterz@infradead.org, will@kernel.org
+Subject: Re: [PATCH v8 2/5] perf tools: sync addition of PERF_MEM_SNOOPX_PEER
+Message-ID: <20220511022004.GA956170@leoy-ThinkPad-X240s>
+References: <20220504184850.24986-1-alisaidi@amazon.com>
+ <20220504184850.24986-3-alisaidi@amazon.com>
+ <YnqStjaWInPqLnsX@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH 1/2] mm: fix missing handler for __GFP_NOWARN
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     akinobu.mita@gmail.com, vbabka@suse.cz, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, rostedt@goodmis.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <20220510113809.80626-1-zhengqi.arch@bytedance.com>
- <20220510115922.350a496ca8b91686c1758282@linux-foundation.org>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <20220510115922.350a496ca8b91686c1758282@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnqStjaWInPqLnsX@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 10, 2022 at 01:28:38PM -0300, Arnaldo Carvalho de Melo wrote:
+> Em Wed, May 04, 2022 at 06:48:47PM +0000, Ali Saidi escreveu:
+> > Add a flag to the perf mem data struct to signal that a request caused a
+> > cache-to-cache transfer of a line from a peer of the requestor and
+> > wasn't sourced from a lower cache level.  The line being moved from one
+> > peer cache to another has latency and performance implications. On Arm64
+> > Neoverse systems the data source can indicate a cache-to-cache transfer
+> > but not if the line is dirty or clean, so instead of overloading HITM
+> > define a new flag that indicates this type of transfer.
+> > 
+> > Signed-off-by: Ali Saidi <alisaidi@amazon.com>
+> > Reviewed-by: Leo Yan <leo.yan@linaro.org>
+> 
+> Was this already merged on the ARM kernel tree?
 
+No, I don't think this patch has been merged on Arm kernel tree.  I searched
+Arm and Arm64 git repos, none of them has merged this patch.
 
-On 2022/5/11 2:59 AM, Andrew Morton wrote:
-> On Tue, 10 May 2022 19:38:08 +0800 Qi Zheng <zhengqi.arch@bytedance.com> wrote:
-> 
->> We expect no warnings to be issued when we specify __GFP_NOWARN, but
->> currently in paths like alloc_pages() and kmalloc(), there are still
->> some warnings printed, fix it.
-> 
-> Looks sane to me.
-> 
->> --- a/mm/internal.h
->> +++ b/mm/internal.h
->> @@ -35,6 +35,17 @@ struct folio_batch;
->>   /* Do not use these with a slab allocator */
->>   #define GFP_SLAB_BUG_MASK (__GFP_DMA32|__GFP_HIGHMEM|~__GFP_BITS_MASK)
->>   
->> +#define WARN_ON_ONCE_GFP(cond, gfp)	({				\
->> +	static bool __section(".data.once") __warned;			\
->> +	int __ret_warn_once = !!(cond);					\
->> +									\
->> +	if (unlikely(!(gfp & __GFP_NOWARN) && __ret_warn_once && !__warned)) { \
->> +		__warned = true;					\
->> +		WARN_ON(1);						\
->> +	}								\
->> +	unlikely(__ret_warn_once);					\
->> +})
-> 
-> I don't think WARN_ON_ONCE_GFP is a good name for this.  But
-> WARN_ON_ONCE_IF_NOT_GFP_NOWARN is too long :(
-> 
-> WARN_ON_ONCE_NOWARN might be better.  No strong opinion here, really.
+https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git/log/?qt=author&q=Ali+Saidi
+http://git.armlinux.org.uk/cgit/linux-arm.git/log/?qt=author&q=Ali+Saidi
 
-I've thought about WARN_ON_ONCE_NOWARN, but I feel a little weird 
-putting 'WARN' and 'NOWARN' together, how about WARN_ON_ONCE_IF_ALLOWED?
+P.s. Ali missed to include German's review tag, see:
+https://lore.kernel.org/lkml/458a2de1-dc93-7e2d-5dc5-fbcd670572b6@arm.com/
 
-> 
->> @@ -4902,8 +4906,8 @@ __alloc_pages_slowpath(gfp_t gfp_mask, unsigned int order,
->>   	 * We also sanity check to catch abuse of atomic reserves being used by
->>   	 * callers that are not in atomic context.
->>   	 */
->> -	if (WARN_ON_ONCE((gfp_mask & (__GFP_ATOMIC|__GFP_DIRECT_RECLAIM)) ==
->> -				(__GFP_ATOMIC|__GFP_DIRECT_RECLAIM)))
->> +	if (WARN_ON_ONCE_GFP((gfp_mask & (__GFP_ATOMIC|__GFP_DIRECT_RECLAIM)) ==
->> +				(__GFP_ATOMIC|__GFP_DIRECT_RECLAIM), gfp_mask))
->>   		gfp_mask &= ~__GFP_ATOMIC;
->>   
->>   retry_cpuset:
-> 
-> I dropped this hunk - Neil's "mm: discard __GFP_ATOMIC"
-> (https://lkml.kernel.org/r/163712397076.13692.4727608274002939094@noble.neil.brown.name)
-> deleted this code.
-> 
-
-This series is based on v5.18-rc5, I will rebase it to the latest next
-branch and check if there are any missing WARN_ON_ONCEs that are not
-being handled.
+Do you want us to resend the patch set for adding tags?
 
 Thanks,
-Qi
-
--- 
-Thanks,
-Qi
+Leo

@@ -2,66 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDEAF5233B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4A1F5233B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243119AbiEKNF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:05:58 -0400
+        id S237841AbiEKNFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:05:53 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235372AbiEKNFu (ORCPT
+        with ESMTP id S234571AbiEKNFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 11 May 2022 09:05:50 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9BCDEAA
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:05:48 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id w187so3904536ybe.2
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:05:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=alN9NUxZowEkDstVYOnVw32DS4I4mSVC05IaVQ1sfiU=;
-        b=NHbVLSb/IvYbshil6PcaDeTB9meK9lgGB+X9ifCZP+TCL1N3KBAZhlTd0GhktiOhkO
-         cJtPG3u7bW8cUQ7YGT1ptX9+VyXecVcV5Y6ZXRdjJSSfH8HRFEOz02hDo4Hfqu0dQbAN
-         Si4jvVk1JSJDxKvCLpBLZHl8Pa5bCknaZOJF4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=alN9NUxZowEkDstVYOnVw32DS4I4mSVC05IaVQ1sfiU=;
-        b=T3AuhbeESyTY60ZIvBvEahcoQgNdX3PIRya5a0+onO0GtIzGi4pS5U3k47E7k2v2M/
-         G3Vv1LpSMbz/nKlSNPFhXXuf/5QacOB/ZXOjyxYEWsUpq2I9tSjLaY3CrPuEdgbYnbCQ
-         oXPX3c/5O/1qgZrQxU/iW56gQOMv21QbAa4iu7nFGpDEoC4Ibfo8emk9CdiWerAnig0j
-         VUYDDdeiXFZvzBz7PTrG83q6dYcrwtwMkpNvb2RNHzvYR9nnhm8gywEDNSxiWfq1bvrv
-         WbAkfRb0Ebi55NVP9hoDWHOorxhNUM54FAawWyGG7gnGE3cUl1yd3K5OVjRmLQ9u5wH1
-         K2UA==
-X-Gm-Message-State: AOAM531DgcsHAqKTmSzIp8nkULIRtA37A/MTakiA8cp2x43T2kktiyIk
-        tjmCVuc38Z+2Zy7SUSNHAmUEqsC2V5kv7jV03mNtqA==
-X-Google-Smtp-Source: ABdhPJzkrcZMJilZKt8K7MTZ9r8G8qNFSk+3YyiZ6njw2XzhbTqbGkSKb6Y7yUx68sby8oqrklEVUwTAuqBK+A3Br4A=
-X-Received: by 2002:a5b:44e:0:b0:64a:c0be:c59c with SMTP id
- s14-20020a5b044e000000b0064ac0bec59cmr16451795ybp.573.1652274347928; Wed, 11
- May 2022 06:05:47 -0700 (PDT)
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC7F559B
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:05:45 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nom29-0006Tc-Su; Wed, 11 May 2022 15:05:41 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id A93A57BCDD;
+        Wed, 11 May 2022 13:05:40 +0000 (UTC)
+Date:   Wed, 11 May 2022 15:05:40 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Devid Antonio Filoni <devid.filoni@egluetechnologies.com>,
+        kernel@pengutronix.de, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Jander <david@protonic.nl>
+Subject: Re: [PATCH 1/1] can: skb: add and set local_origin flag
+Message-ID: <20220511130540.yowjdvzftq2jutiw@pengutronix.de>
+References: <20220511121913.2696181-1-o.rempel@pengutronix.de>
+ <b631b022-72d5-9160-fd13-f33c80dbbe59@hartkopp.net>
 MIME-Version: 1.0
-References: <20220511013057.245827-1-dlunev@chromium.org> <CAJfpegsmyY+D4kK3ov51FLGA=RkyGDKMcYiMo2zBqYuFNs78JQ@mail.gmail.com>
- <CAONX=-dqY64VkqF6cNYvm8t-ad8XRqDhELP9icfPTPD2iLobLA@mail.gmail.com>
- <CAJfpegvUZheWb3eJwVrpBDYzwQH=zQsuq9R8mpcXb3fqzzEdiQ@mail.gmail.com>
- <CAONX=-cxA-tZOSo33WK9iJU61yeDX8Ct_PwOMD=5WXLYTJ-Mjg@mail.gmail.com>
- <CAJfpegsNwsWJC+x8jL6kDzYhENQQ+aUYAV9wkdpQNT-FNMXyAg@mail.gmail.com>
- <CAONX=-d9nfYpPkbiVcaEsCQT1ZpwAN5ry8BYKBA6YoBvm7tPfg@mail.gmail.com> <CAJfpegtTP==oMm+LhvOkrxkPB973-Y80chbwYpXSiOAXBDhHJw@mail.gmail.com>
-In-Reply-To: <CAJfpegtTP==oMm+LhvOkrxkPB973-Y80chbwYpXSiOAXBDhHJw@mail.gmail.com>
-From:   Daniil Lunev <dlunev@chromium.org>
-Date:   Wed, 11 May 2022 23:05:37 +1000
-Message-ID: <CAONX=-fQvBczRk2HV1GXBoypq7_QbUX9JXc2AuDMQ+-qfYW32A@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Prevent re-use of FUSE superblock after force unmount
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     linux-fsdevel@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="byqmtarls5bvmvxs"
+Content-Disposition: inline
+In-Reply-To: <b631b022-72d5-9160-fd13-f33c80dbbe59@hartkopp.net>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,8 +58,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> I think it would be easiest to remove the super block from the
-> type->fs_supers list.
-I will try tomorrow and upload an updated patchset.
-Thanks,
-Daniil.
+
+--byqmtarls5bvmvxs
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 11.05.2022 14:38:32, Oliver Hartkopp wrote:
+> I'm a bit unsure why we should not stick with the simple skb->sk
+> handling?
+
+Another use where skb->sk breaks is sending CAN frames with SO_TXTIME
+with the sched_etf.
+
+I have a patched version of cangen that uses SO_TXTIME. It attaches a
+time to transmit to a CAN frame when sending it. If you send 10 frames,
+each 100ms after the other and then exit the program, the first CAN
+frames show up as TX'ed while the others (after closing the socket) show
+up as RX'ed CAN frames in candump.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--byqmtarls5bvmvxs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJ7tJoACgkQrX5LkNig
+010WOQgAn1qTEhHc8pkIFWfBgw5W+t+qG2osvmttQ6uBBEgBl3lTnJJL5ZhzvT68
+csQmMf5ZsbCTzmFZSy//7Nrguxhq8n2ZWL8+wh3o6OorNjCknWfHh1VndzHf6CwH
+ZOjVQk2kALuxQE8RXqpLUTWs9eVLoOkyB8qCffVtJyUjCt4p/i40/cQJhQ9OCHR+
+H70dhRddRvqYzUZ46bgRP9nh7beUcytGsvnVeV3TqpylYn62HTr9dyVm2h7eIC6j
+beS5BzSWqYK50SL8xJgnYhNN/dyhYlbeBMUh39Ex5sRe8TYk5atYPGbuP7SXhyJB
+GQk1IuRxFgqnTKIK4zPmVNdsZcdLPQ==
+=+1hK
+-----END PGP SIGNATURE-----
+
+--byqmtarls5bvmvxs--

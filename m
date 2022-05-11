@@ -2,140 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2442522BB5
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 07:31:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD02D522BBA
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 07:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239669AbiEKFbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 01:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37986 "EHLO
+        id S238620AbiEKFcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 01:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240765AbiEKFan (ORCPT
+        with ESMTP id S229532AbiEKFcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 01:30:43 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC98244F2E
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:30:16 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id i186so869217vsc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:30:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vB2dR56A5q3bFoAJ53SBSeAtmH77H5/ybtaBTyeQV0w=;
-        b=ikgkCUlCGPbFI/KIA/yJ6gB9/0MYb3JI9K0o5JCBRKlQgGkWsZpC7uLQl+rANxK3/k
-         wMsEGVKDlEtSnZ6REsRJfwKIl8itOVEpgP7LSl4X+Zy3TNN/upnfQ1mY4aV44W1J0Vln
-         MNPHCRa3i8mMagY9xHbVKc9TxTbbY6cggRTJ2xaXLgUf/KIF76ve3joDWJ1RtXoCKIJl
-         PheSx8lbtuBBY3/b5YJ/CgPTE2b/Eb6H1NWgnK9R9cEpip9NRytEd4tlpadx9wmsB3cM
-         NNulML+cFkkpwhIz38h+4zSMVmf2y7Ca0CObNcuoQTmrQ+lDHAQQlltdstcx837Px5wY
-         sqCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vB2dR56A5q3bFoAJ53SBSeAtmH77H5/ybtaBTyeQV0w=;
-        b=RivDpAqS0ctoSvG1TuiZYSXNlpRLzPF8fRqq5rUE4SBXUm/9AN0FaobSKX8VNlQbiE
-         mukBy0KXqsebdYYIzzXoTIPM1qKchNa/HGcsfDnGPnFmfC8yIybzcd7NB/iWs7/NiTjY
-         8RN5FdGzo7Aepxk4+ZIYNSxeCLs3kndM8FYI/gNz43yHoPt0F4wmTnGoFnjkKAUCNy4c
-         5mxbxw7hsRg5Q68wBS75MKggZq99AIhgAHajwp35LBn3d9XPWRdjABz00Ziq2yCwQRuo
-         ODRb11xK87zvR+28u6RIMhw9zMTSXtxW3fD2w+A//J87c0c/yhQSwPYeD+oC1nK1K6lD
-         BURQ==
-X-Gm-Message-State: AOAM533/WJugiRpyEZSIv8ujlOaEPV6VBN6QOqF6pdexzSMt02P8tSH+
-        RFu0Ksc+o2Iy9tGawfsdo3K7eqcNDDztBbxIZ3Vg2g==
-X-Google-Smtp-Source: ABdhPJzzixIezT5gEqBLEgY1fCr7L5PsmPNpQOqsuUutiXHgiLkjXSrPgB0gKdqJMWjIOVxUbUhYgLgbIQEu2o/mAk0=
-X-Received: by 2002:a67:ed88:0:b0:328:27d9:1381 with SMTP id
- d8-20020a67ed88000000b0032827d91381mr13054653vsp.12.1652247014975; Tue, 10
- May 2022 22:30:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
- <CAHbLzkq1YXXLMiREpGnzhJjPssu4WpSsnkTmrLJ=hAEhZVUr9w@mail.gmail.com>
- <CAAPL-u-r2Pc_MaHQmKKNH_icAa_fH1COWb5qSPpr8xffREQ_cQ@mail.gmail.com>
- <87tua3h5r1.fsf@nvdebian.thelocal> <CAAPL-u-0HwL6p1SA73LPfFyywG55QqE9O+q=83fhShoJAVVxyQ@mail.gmail.com>
- <875ymerl81.fsf@nvdebian.thelocal> <87fslhhb2l.fsf@linux.ibm.com>
-In-Reply-To: <87fslhhb2l.fsf@linux.ibm.com>
-From:   Wei Xu <weixugc@google.com>
-Date:   Tue, 10 May 2022 22:30:03 -0700
-Message-ID: <CAAPL-u9FvCfgA7xsqStLNZ=W03iyWBmvHrpVzPKyitsGN2v_KQ@mail.gmail.com>
-Subject: Re: RFC: Memory Tiering Kernel Interfaces
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc:     Alistair Popple <apopple@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Greg Thelen <gthelen@google.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Wed, 11 May 2022 01:32:12 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9925A1D0E0;
+        Tue, 10 May 2022 22:32:10 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 3EE253200958;
+        Wed, 11 May 2022 01:32:07 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Wed, 11 May 2022 01:32:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1652247126; x=1652333526; bh=QqiWjdgXow
+        1Gr1FgSKtpsEjOWoGYjEoKm4LJaqxtXFc=; b=MroINcgE/mOl9bRaitB3C7IUg0
+        TTe5ch1j+jROCjp9Dh9OHm1GQFsQu/b7Fba1utdqlji3BxHk2LnQ0ZeoBXet6ZDs
+        +iF1a2s2qkxAe9Fk2ttJl/03jJs973I7K2/9Iqo4m7vDTebqYPEdA4x5eACz99ok
+        e6iTSl6/sQRcn6M2IcWYI93A0vIZwdNhSZ1diWgaZMPDVlOv1La8MZRDaoKRDd1Q
+        ur3JPIBo3l7DsiiIRLho2EBT8FdRt7GGgzdJzJh5rKuaPs70+DAtzFYKuwHIo+jG
+        Ph9/N5NG01BYw33AcVOPYxpP2+PQivyWvT63QcVFuyKhXnwKptsumQkOjWKw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1652247126; x=
+        1652333526; bh=QqiWjdgXow1Gr1FgSKtpsEjOWoGYjEoKm4LJaqxtXFc=; b=o
+        yUh4AmxkqM/0NaLDH5WSzGM3Zz/LfTJ9civsecTmovFXtPYBN1GmTc1tyK3bbzTJ
+        Wl6whsC7405J63ruIXZQpb3WVj+vany00lZSSZQVDjHR5EVKP2v5Prw8n4CdNMwG
+        RoTUpK8oJdlz15z4PjGCwWoFrNJMnjoZG519jNI0dHFC0quvaFKO6eV44zU+OnNp
+        cyIGuOqFV8Zuy+Hw1Fkb0NCtClbJguxH7bnyJvX8yzO5lrDes7t/NBtAHdq566wN
+        nOdCCI48peHXsfmi88DZB67Gvi/IP/bGnGsoBWXjumylKb4ihGh5MGaSQIGapBM3
+        zcmuvZQlP0kOuUcvYP0KQ==
+X-ME-Sender: <xms:Vkp7YlJOTtMIA0GjlRdU3XBWEHrMJpf4uLgy4_B3kiYCezgLu5Ev-g>
+    <xme:Vkp7YhIhQ-puP6hfLsv-urgVbppwU2yX28jlulwOtKa59c0TzKCEKwRTrRQQuQCWY
+    djIwyAN6uhYCw>
+X-ME-Received: <xmr:Vkp7YtuYQx7S5yI-Ld5a_riz-jBDnCGHv90yMAWZJw4c7-cYXbCvjMZsz83PxK0drDgl2CXV5RtuqBylFSG0r6oi2WpIj8Pq>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgeeggdelgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvve
+    dvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:Vkp7YmZD5LYK3ga4LY42UNVgRlwIvO9gk50olXIWJprZc7vwqQL-gQ>
+    <xmx:Vkp7YsYaCsYj8Ff5rrptou009Daa9ogfmLM9j8cuI7KPhw73EWLmhg>
+    <xmx:Vkp7YqDmyUn5atrgz1TqunmBHpGW-aBEQZLdp7bVyGOu5K432zBisg>
+    <xmx:Vkp7YhPsEywn1sX4nGl2lZ3PERMT_dkd3MxCzs4aZ_WgMCpHi_Twjw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 11 May 2022 01:32:05 -0400 (EDT)
+Date:   Wed, 11 May 2022 07:32:02 +0200
+From:   Greg KH <greg@kroah.com>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Michal Hocko <mhocko@kernel.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the tty tree
+Message-ID: <YntKUn8AZKpLbBTp@kroah.com>
+References: <20220511075804.79c5b697@canb.auug.org.au>
+ <alpine.DEB.2.21.2205102341030.52331@angie.orcam.me.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.2205102341030.52331@angie.orcam.me.uk>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 4:38 AM Aneesh Kumar K.V
-<aneesh.kumar@linux.ibm.com> wrote:
->
-> Alistair Popple <apopple@nvidia.com> writes:
->
-> > Wei Xu <weixugc@google.com> writes:
-> >
-> >> On Thu, May 5, 2022 at 5:19 PM Alistair Popple <apopple@nvidia.com> wrote:
-> >>>
-> >>> Wei Xu <weixugc@google.com> writes:
-> >>>
-> >>> [...]
-> >>>
-> >>> >> >
-> >>> >> >
-> >>> >> > Tiering Hierarchy Initialization
-> >>> >> > `=============================='
-> >>> >> >
-> >>> >> > By default, all memory nodes are in the top tier (N_TOPTIER_MEMORY).
-> >>> >> >
-> >>> >> > A device driver can remove its memory nodes from the top tier, e.g.
-> >>> >> > a dax driver can remove PMEM nodes from the top tier.
-> >>> >>
-> >>> >> With the topology built by firmware we should not need this.
-> >>>
-> >>> I agree that in an ideal world the hierarchy should be built by firmware based
-> >>> on something like the HMAT. But I also think being able to override this will be
-> >>> useful in getting there. Therefore a way of overriding the generated hierarchy
-> >>> would be good, either via sysfs or kernel boot parameter if we don't want to
-> >>> commit to a particular user interface now.
-> >>>
-> >>> However I'm less sure letting device-drivers override this is a good idea. How
-> >>> for example would a GPU driver make sure it's node is in the top tier? By moving
-> >>> every node that the driver does not know about out of N_TOPTIER_MEMORY? That
-> >>> could get messy if say there were two drivers both of which wanted their node to
-> >>> be in the top tier.
-> >>
-> >> The suggestion is to allow a device driver to opt out its memory
-> >> devices from the top-tier, not the other way around.
-> >
-> > So how would demotion work in the case of accelerators then? In that
-> > case we would want GPU memory to demote to DRAM, but that won't happen
-> > if both DRAM and GPU memory are in N_TOPTIER_MEMORY and it seems the
-> > only override available with this proposal would move GPU memory into a
-> > lower tier, which is the opposite of what's needed there.
->
-> How about we do 3 tiers now. dax kmem devices can be registered to
-> tier 3. By default all numa nodes can be registered at tier 2 and HBM or
-> GPU can be enabled to register at tier 1. ?
+On Tue, May 10, 2022 at 11:46:26PM +0100, Maciej W. Rozycki wrote:
+> On Wed, 11 May 2022, Stephen Rothwell wrote:
+> 
+> > After merging the tty tree, yesterday's linux-next build (htmldocs) produced
+> > these warnings:
+> 
+>  Umm, sorry about that.  I wasn't even aware files under Documentation/ 
+> are meant to be processed somehow other than through eyeballs nowadays!
+> 
+>  I'll see how to fix the file up and will make the necessary corrections, 
+> but how shall I post the update?  A replacement patch or an incremental 
+> change?
 
-This makes sense.  I will send an updated RFC based on the discussions so far.
+Incremental change as I can't rebase my tree.
 
-> -aneesh
+thanks,
+
+greg k-h

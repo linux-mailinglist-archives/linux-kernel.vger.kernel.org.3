@@ -2,69 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B65F3522A18
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 04:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23573522A25
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 05:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241475AbiEKCxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 22:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33604 "EHLO
+        id S236079AbiEKDAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 23:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241829AbiEKCxU (ORCPT
+        with ESMTP id S229608AbiEKDAl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 22:53:20 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC3824959
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 19:53:05 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id i17so549049pla.10
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 19:53:05 -0700 (PDT)
+        Tue, 10 May 2022 23:00:41 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348C9CE3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 20:00:40 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id q4so563464plr.11
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 20:00:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Sa6iliEUhHDKiJ4d5VKYWANmjzvcVks6FAQCBioSqwo=;
-        b=iLg1sZkLeKPM2kWZK1dOBgkVtvIv9fskmkv+uRa3VrGM/iSiUFxz9myhwDCq/lYtMQ
-         uqYJxL/zrLKanqkbFe33nehGm6l5DZ8mvHCYyk8RO7ro9VrUdoxqMHW1qj/9L4C/sZR+
-         79n1lE2VsyCc+x3k5bTSQqe4BWZOIwuScBssM=
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mZiq0i3ZmSbOmRGumiJgmqnCAjwiMGc23Fy8HgZKiMw=;
+        b=fJbqTV61Ycfi+Xa36egufJwJScZ4LxDM66PtbkuTZBy7ejyzzEIOVnuXIg+Ke2cdyE
+         4Xs/1egwfv3V5DaUg5vQcLqGzgZo0mH7J6d+/PjwPyIqdNMp/ty9sBvIBXkLsDMSm9z7
+         +f7Q5Y9z4TwZsRvVF7Hl/LOazk9GaF5t4jitM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Sa6iliEUhHDKiJ4d5VKYWANmjzvcVks6FAQCBioSqwo=;
-        b=q1BTtqcZ0uTZlsPsyRBy+6pUIY2waZi95lnL2iKOio0vzJ4rAbS8gSlI4mwauMf490
-         +yCVyLbAMlCEekEsiwo5aqqkhBA5gwvaqEAaDTyDuCVR8zAxzazl/kCCPdVtLCRaP/nT
-         dCh1eFI1gIziu/P0LpZnTaclrQbFgi35ICcQHOumVZMRJ74hdmv0RSSR2PKJ1GwjM6T5
-         81d4efz3q+PbPitYXnhqGlCTecI2ouP6O7MiBRaaDpAfa6ZuGzD1B/G+/WtfNXhUXXaR
-         Ga8Hb6H3I7kgYhW/GYwKqBVf2ezR1rtyYTLFLC1x1bAHHNrG3Cx+28c3h3UdCkQ6xnHY
-         5i8Q==
-X-Gm-Message-State: AOAM533nWXH4g0eGC5hJ0JxsU8qeZIBTiEgMPIWDrLsgeRCZiRu44n8e
-        d+IkXxLnGdy2+4xvbw6+b5A5cA==
-X-Google-Smtp-Source: ABdhPJx1c1/TGylCkNI+72RCfr609NArcRVaQDmF+ypY51TnbvIezVGQVIwy6NL0mcbSprU53CJYrg==
-X-Received: by 2002:a17:902:d4c2:b0:15e:abd0:926f with SMTP id o2-20020a170902d4c200b0015eabd0926fmr23646480plg.129.1652237585369;
-        Tue, 10 May 2022 19:53:05 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mZiq0i3ZmSbOmRGumiJgmqnCAjwiMGc23Fy8HgZKiMw=;
+        b=BBASTw2FANbREPipu1/N5R5dn8Z62NYmB6axu1vdwq/QTaMLNCMUipEpK8ckNpDboK
+         GqhSIVuO1eimDQigRjFXdWWwLqKY0w59BLyP42mjnraHVrqkNXTcAWi8lzWt/kAffHtx
+         7KEGsIiosrlRn5ecQjWpBgKiB4HqG0CHzNke66teOpueVQnwK1K2RAyxrYX45N86Ghil
+         Iiue1V+rYSqiDEGzi50RWyt/+Q7SStFu0tKu0epY3UG0BoZfTXVySJR/l5lFOy4VXVL1
+         xZZAEzrB9Xf68GlrNtEoPdSkG/eiQrUV2lhRZq7YRVoIINdRzS6PYe9F034a9NbXBhgu
+         5e6Q==
+X-Gm-Message-State: AOAM531qHMCBb98Cu492w60YB/n/W3vSItduG0FxCfI8QO9zIMW4hG+u
+        Gicw7H5TpPRq9LrXxeESRHU4HjA8UkZcew==
+X-Google-Smtp-Source: ABdhPJyUvFaOINlxX4PXvon0YBAhVNu+6F4AtdgOXbDHCDm4+5aNd+8Uofu+71b2ZcsfxlEegJyKjw==
+X-Received: by 2002:a17:903:110c:b0:15f:f15:30ec with SMTP id n12-20020a170903110c00b0015f0f1530ecmr12996966plh.162.1652238039600;
+        Tue, 10 May 2022 20:00:39 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id n9-20020a170902968900b0015e8d4eb1d7sm363503plp.33.2022.05.10.19.53.04
+        by smtp.gmail.com with ESMTPSA id c1-20020a056a00008100b0050dc7628202sm270483pfj.220.2022.05.10.20.00.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 19:53:05 -0700 (PDT)
+        Tue, 10 May 2022 20:00:39 -0700 (PDT)
+Date:   Tue, 10 May 2022 20:00:38 -0700
 From:   Kees Cook <keescook@chromium.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Coco Li <lixiaoyan@google.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>, netdev@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-Subject: [PATCH] fortify: Provide a memcpy trap door for sharp corners
-Date:   Tue, 10 May 2022 19:53:01 -0700
-Message-Id: <20220511025301.3636666-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.32.0
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Alexander Popov <alex.popov@linux.com>,
+        linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org,
+        catalin.marinas@arm.com, linux-kernel@vger.kernel.org,
+        luto@kernel.org, will@kernel.org
+Subject: Re: [PATCH v2 03/13] stackleak: remove redundant check
+Message-ID: <202205101958.2A33DE20@keescook>
+References: <20220427173128.2603085-1-mark.rutland@arm.com>
+ <20220427173128.2603085-4-mark.rutland@arm.com>
+ <a604fa2b-e7c3-3fff-dd81-1a0585a9e2fa@linux.com>
+ <YnpQqBwYjlVffJk8@FVFF77S0Q05N>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4296; h=from:subject; bh=zskFoaXURO/IVylo7b2S5LXUxKy16zZKQmnvSBayKxA=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBieyUMQ7ji1ylNdh9eL1qcvtxDkFAlxq4iz5ETfoxb d7pbo8iJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYnslDAAKCRCJcvTf3G3AJnjwD/ 4vfLAWnR6lv2s6quyKFRlqqPX6DLgsFQO/0o6PWTm5WPdSp+jXJqvlubxLwxyUfRZUbAjVMOhXxrZz KnVhdajFWHnLc9B7YN9txp8Hh+eKcnC/OHn7yNU8hpZKQniQmkPh4D9/b1vwGodxeF6+u63TcnX8Z+ zZKjmoKETwoY1YykOIEE1Xqg8ox/oT52kP9u1N092vsWV6YXGrtSUQzsEqal/HToEvS6eW+ZUTi8i3 EyzzxjYtTSltgVY3Et9AqCO9Uo+0Ik7Go0rzqSNgnp0GS8xpKOFXb2g124++75uNB7utcfKmGn5yfR Wb4rd1+trzcYq7kxQp1xPZHqXXLV9UzeTqzToIVwDOwsWyKRmNdmsX9hDkiNiCn+7N9X+l9/gIbMm2 +RjZ/MRfPPTNuGmpliyix25Smdz53NXN1FrhronUFYEKnf1WpUEwTEvF4O42vsCTekwqIrgGXCLurf S/7d3fS4v4Bg8cA+5Qh+Uk0+ZqrTXgUP6OaDMkTICNXHTUGS80cHN7CrFE6q1UO+tsNQ/Fsge8taJS gm+Kiyli7VLSzYhXC0sKHxbB0JH0xP5894RSoW/K/PoLq+kRq7B1YseAHyV0Qfk5+iriQajxk+fnBQ egtZMtFQH8mxnRG8Q/Oo/X9lppUulkGrhJw92Vl2hjcQ77wy6/uvc14JCVXA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnpQqBwYjlVffJk8@FVFF77S0Q05N>
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -75,98 +72,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As we continue to narrow the scope of what the FORTIFY memcpy() will
-accept and build alternative APIs that give the compiler appropriate
-visibility into more complex memcpy scenarios, there is a need for
-"unfortified" memcpy use in rare cases where combinations of compiler
-behaviors, source code layout, etc, result in cases where the stricter
-memcpy checks need to be bypassed until appropriate solutions can be
-developed (i.e. fix compiler bugs, code refactoring, new API, etc). The
-intention is for this to be used only if there's no other reasonable
-solution, for its use to include a justification that can be used
-to assess future solutions, and for it to be temporary.
+On Tue, May 10, 2022 at 12:46:48PM +0100, Mark Rutland wrote:
+> On Sun, May 08, 2022 at 09:17:01PM +0300, Alexander Popov wrote:
+> > On 27.04.2022 20:31, Mark Rutland wrote:
+> > > In __stackleak_erase() we check that the `erase_low` value derived from
+> > > `current->lowest_stack` is above the lowest legitimate stack pointer
+> > > value, but this is already enforced by stackleak_track_stack() when
+> > > recording the lowest stack value.
+> > > 
+> > > Remove the redundant check.
+> > > 
+> > > There should be no functional change as a result of this patch.
+> > 
+> > Mark, I can't agree here. I think this check is important.
+> > The performance profit from dropping it is less than the confidence decrease :)
+> > 
+> > With this check, if the 'lowest_stack' value is corrupted, stackleak doesn't
+> > overwrite some wrong kernel memory, but simply clears the whole thread
+> > stack, which is safe behavior.
+> 
+> If you feel strongly about it, I can restore the check, but I struggle to
+> believe that it's worthwhile. The `lowest_stack` value lives in the
+> task_struct, and if you have the power to corrupt that you have the power to do
+> much more interesting things.
+> 
+> If we do restore it, I'd like to add a big fat comment explaining the
+> rationale (i.e. that it only matter if someone could corrupt
+> `current->lowest_stack`, as otherwise that's guarnateed to be within bounds).
 
-Example usage included, based on analysis and discussion from:
-https://lore.kernel.org/netdev/CANn89iLS_2cshtuXPyNUGDPaic=sJiYfvTb_wNLgWrZRyBxZ_g@mail.gmail.com
+Yeah, let's restore it and add the comment. While I do agree it's likely
+that such an corruption would likely mean an attacker had significant
+control over kernel memory already, it is not uncommon that an attack
+only has a limited index from a given address, etc. Or some manipulation
+is possible via weird gadgets, etc. It's unlikely, but not impossible,
+and a bounds-check for that value is cheap compared to the rest of the
+work happening. :)
 
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Coco Li <lixiaoyan@google.com>
-Cc: Tariq Toukan <tariqt@nvidia.com>
-Cc: Saeed Mahameed <saeedm@nvidia.com>
-Cc: Leon Romanovsky <leon@kernel.org>
-Cc: netdev@vger.kernel.org
-Cc: linux-hardening@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/net/ethernet/mellanox/mlx5/core/en_tx.c |  8 +++++++-
- include/linux/fortify-string.h                  | 16 ++++++++++++++++
- include/linux/string.h                          |  4 ++++
- 3 files changed, 27 insertions(+), 1 deletion(-)
+-Kees
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
-index 2dc48406cd08..5855d8f9c509 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
-@@ -386,7 +386,13 @@ mlx5e_sq_xmit_wqe(struct mlx5e_txqsq *sq, struct sk_buff *skb,
- 			stats->added_vlan_packets++;
- 		} else {
- 			eseg->inline_hdr.sz |= cpu_to_be16(attr->ihs);
--			memcpy(eseg->inline_hdr.start, skb->data, attr->ihs);
-+			unsafe_memcpy(eseg->inline_hdr.start, skb->data, attr->ihs,
-+				/* This copy has been bounds-checked earlier in
-+				 * mlx5i_sq_calc_wqe_attr() and intentionally
-+				 * crosses a flex array boundary. Since it is
-+				 * performance sensitive, splitting the copy is
-+				 * undesirable.
-+				 */);
- 		}
- 		dseg += wqe_attr->ds_cnt_inl;
- 	} else if (skb_vlan_tag_present(skb)) {
-diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
-index 295637a66c46..3b401fa0f374 100644
---- a/include/linux/fortify-string.h
-+++ b/include/linux/fortify-string.h
-@@ -52,6 +52,22 @@ extern char *__underlying_strncpy(char *p, const char *q, __kernel_size_t size)
- #define __underlying_strncpy	__builtin_strncpy
- #endif
- 
-+/**
-+ * unsafe_memcpy - memcpy implementation with no FORTIFY bounds checking
-+ *
-+ * @dst: Destination memory address to write to
-+ * @src: Source memory address to read from
-+ * @bytes: How many bytes to write to @dst from @src
-+ * @justification: Free-form text or comment describing why the use is needed
-+ *
-+ * This should be used for corner cases where the compiler cannot do the
-+ * right thing, or during transitions between APIs, etc. It should be used
-+ * very rarely, and includes a place for justification detailing where bounds
-+ * checking has happened, and why existing solutions cannot be employed.
-+ */
-+#define unsafe_memcpy(dst, src, bytes, justification)		\
-+	__underlying_memcpy(dst, src, bytes)
-+
- /*
-  * Clang's use of __builtin_object_size() within inlines needs hinting via
-  * __pass_object_size(). The preference is to only ever use type 1 (member
-diff --git a/include/linux/string.h b/include/linux/string.h
-index b6572aeca2f5..61ec7e4f6311 100644
---- a/include/linux/string.h
-+++ b/include/linux/string.h
-@@ -252,6 +252,10 @@ static inline const char *kbasename(const char *path)
- #if !defined(__NO_FORTIFY) && defined(__OPTIMIZE__) && defined(CONFIG_FORTIFY_SOURCE)
- #include <linux/fortify-string.h>
- #endif
-+#ifndef unsafe_memcpy
-+#define unsafe_memcpy(dst, src, bytes, justification)		\
-+	memcpy(dst, src, bytes)
-+#endif
- 
- void memcpy_and_pad(void *dest, size_t dest_len, const void *src, size_t count,
- 		    int pad);
 -- 
-2.32.0
-
+Kees Cook

@@ -2,156 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1619F522E85
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 270A2522E8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:37:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242119AbiEKIgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 04:36:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46246 "EHLO
+        id S231658AbiEKIhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 04:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236963AbiEKIgv (ORCPT
+        with ESMTP id S238431AbiEKIhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 04:36:51 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1779D55360;
-        Wed, 11 May 2022 01:36:50 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KypBw1B6dz1JC74;
-        Wed, 11 May 2022 16:35:36 +0800 (CST)
-Received: from [10.67.110.112] (10.67.110.112) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 11 May 2022 16:36:48 +0800
-Subject: Re: [PATCH -next] powerpc: add support for syscall stack
- randomization
-To:     Kees Cook <keescook@chromium.org>,
-        Nicholas Piggin <npiggin@gmail.com>
-CC:     <benh@kernel.crashing.org>, <christophe.leroy@csgroup.eu>,
-        <mark.rutland@arm.com>, <mpe@ellerman.id.au>, <paulus@samba.org>,
-        <tglx@linutronix.de>, <linux-hardening@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
-References: <20220505111932.228814-1-xiujianfeng@huawei.com>
- <1652173338.7bltwybi0c.astroid@bobo.none> <202205100917.5480D91@keescook>
-From:   xiujianfeng <xiujianfeng@huawei.com>
-Message-ID: <34b960b1-c0e3-19da-ae49-c709b837f2de@huawei.com>
-Date:   Wed, 11 May 2022 16:36:47 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        Wed, 11 May 2022 04:37:15 -0400
+Received: from qproxy6-pub.mail.unifiedlayer.com (qproxy6-pub.mail.unifiedlayer.com [69.89.23.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C9168312
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 01:37:14 -0700 (PDT)
+Received: from outbound-ss-820.bluehost.com (outbound-ss-820.bluehost.com [69.89.24.241])
+        by qproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id 5742B8029178
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:37:13 +0000 (UTC)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway2.mail.pro1.eigbox.com (Postfix) with ESMTP id 37F8B100483F4
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:37:12 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id ohqJnbiLGkku4ohqKnqjqA; Wed, 11 May 2022 08:37:12 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=ANANYO9+ c=1 sm=1 tr=0 ts=627b75b8
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=oZkIemNP1mAA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=PTOzKl9DnjhxoL6Ic-UA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=43dWgX/fyUBDeEofeV/EXVJM1ccF/W8TZLORYXiipsI=; b=P3rN5bfEqYwjp3WS7a/EljohYD
+        6YoWUlo0Iu3IhzzawBiQHgBb+akF0DB5WadOhoODnxw3f/TpgnmKQyc5z0mFXQ/zq+k+U7ZahAIsp
+        P6aa1oX2ZYZLEaNU+0RtVZ5jOIy2HFdZdTjmaRAa6ORYs3eKZ0VDj0QqClAP4DE7sm6OMQTbilqsN
+        SlJoRQSRkQXx9lNNiFSqsbNaufQda2PQJVEwexWAVizEwnMqVN7jQHxWvGQpClv8p0T/JMpdqSErR
+        Ynbl1gYgvF3kQdyiiQQ1v6NahkF0RZn/R5zjRId+M4FQji3ez4S2+GGG7Fvj5H/FaZWXf/f+baQc5
+        pxmyxKKw==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:50436 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1nohqI-001r0p-W3; Wed, 11 May 2022 02:37:11 -0600
+Subject: Re: [PATCH 5.15 000/135] 5.15.39-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <ec807329-3c34-848b-f873-fb4671a22ca7@w6rz.net>
+Date:   Wed, 11 May 2022 01:37:09 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <202205100917.5480D91@keescook>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.112]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1nohqI-001r0p-W3
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:50436
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/10/22 6:06 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.39 release.
+> There are 135 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.39-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-在 2022/5/11 0:19, Kees Cook 写道:
-> On Tue, May 10, 2022 at 07:23:46PM +1000, Nicholas Piggin wrote:
->> Excerpts from Xiu Jianfeng's message of May 5, 2022 9:19 pm:
->>> Add support for adding a random offset to the stack while handling
->>> syscalls. This patch uses mftb() instead of get_random_int() for better
->>> performance.
->> Hey, very nice.
-> Agreed! :)
->
->>> [...]
->>> @@ -82,6 +83,7 @@ notrace long system_call_exception(long r3, long r4, long r5,
->>>   
->>>   	kuap_lock();
->>>   
->>> +	add_random_kstack_offset();
->>>   	regs->orig_gpr3 = r3;
->>>   
->>>   	if (IS_ENABLED(CONFIG_PPC_IRQ_SOFT_MASK_DEBUG))
->> This looks like the right place. I wonder why other interrupts don't
->> get the same treatment. Userspace can induce the kernel to take a
->> synchronous interrupt, or wait for async ones. Smaller surface area
->> maybe but certain instruction emulation for example could result in
->> significant logic that depends on user state. Anyway that's for
->> hardening gurus to ponder.
-> I welcome it being used for any userspace controllable entry to the
-> kernel! :)
->
-> Also, related, have you validated the result using the LKDTM test?
-> See tools/testing/selftests/lkdtm/stack-entropy.sh
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-not yet, I tested it by printing the address of local variable 
-directly,  will do before I send v2,
+Tested-by: Ron Economos <re@w6rz.net>
 
-thanks.
-
->>> @@ -405,6 +407,7 @@ interrupt_exit_user_prepare_main(unsigned long ret, struct pt_regs *regs)
->>>   
->>>   	/* Restore user access locks last */
->>>   	kuap_user_restore(regs);
->>> +	choose_random_kstack_offset(mftb() & 0xFF);
->>>   
->>>   	return ret;
->>>   }
->> So this seems to be what x86 and s390 do, but why are we choosing a
->> new offset for every interrupt when it's only used on a syscall?
->> I would rather you do what arm64 does and just choose the offset
->> at the end of system_call_exception.
->>
->> I wonder why the choose is separated from the add? I guess it's to
->> avoid a data dependency for stack access on an expensive random
->> function, so that makes sense (a comment would be nice in the
->> generic code).
-> How does this read? I can send a "real" patch if it looks good:
->
->
-> diff --git a/include/linux/randomize_kstack.h b/include/linux/randomize_kstack.h
-> index 1468caf001c0..ad3e80275c74 100644
-> --- a/include/linux/randomize_kstack.h
-> +++ b/include/linux/randomize_kstack.h
-> @@ -40,8 +40,11 @@ DECLARE_PER_CPU(u32, kstack_offset);
->    */
->   #define KSTACK_OFFSET_MAX(x)	((x) & 0x3FF)
->   
-> -/*
-> - * These macros must be used during syscall entry when interrupts and
-> +/**
-> + * add_random_kstack_offset - Increase stack utilization by previously
-> + *			      chosen random offset
-> + *
-> + * This should be used in the syscall entry path when interrupts and
->    * preempt are disabled, and after user registers have been stored to
->    * the stack.
->    */
-> @@ -55,6 +58,24 @@ DECLARE_PER_CPU(u32, kstack_offset);
->   	}								\
->   } while (0)
->   
-> +/**
-> + * choose_random_kstack_offset - Choose the random offsset for the next
-> + *				 add_random_kstack_offset()
-> + *
-> + * This should only be used during syscall exit when interrupts and
-> + * preempt are disabled, and before user registers have been restored
-> + * from the stack. This is done to frustrate attack attempts from
-> + * userspace to learn the offset:
-> + * - Maximize the timing uncertainty visible from userspace: if the
-> + *   the offset is chosen at syscall entry, userspace has much more
-> + *   control over the timing between chosen offsets. "How long will we
-> + *   be in kernel mode?" tends to be more difficult to know than "how
-> + *   long will be be in user mode?"
-> + * - Reduce the lifetime of the new offset sitting in memory during
-> + *   kernel mode execution. Exposures of "thread-local" (e.g. current,
-> + *   percpu, etc) memory contents tends to be easier than arbitrary
-> + *   location memory exposures.
-> + */
->   #define choose_random_kstack_offset(rand) do {				\
->   	if (static_branch_maybe(CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT,	\
->   				&randomize_kstack_offset)) {		\
->
->

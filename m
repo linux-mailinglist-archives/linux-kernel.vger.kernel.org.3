@@ -2,74 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F13DC5228F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 03:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 961145228F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 03:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240581AbiEKB00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 21:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50226 "EHLO
+        id S240388AbiEKB2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 21:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240474AbiEKB0K (ORCPT
+        with ESMTP id S240611AbiEKB0a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 21:26:10 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE764D9E4;
-        Tue, 10 May 2022 18:26:08 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id z2so1124270ejj.3;
-        Tue, 10 May 2022 18:26:08 -0700 (PDT)
+        Tue, 10 May 2022 21:26:30 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F5760D90
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 18:26:28 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id l72-20020a63914b000000b003c1ac4355f5so250651pge.4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 18:26:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PvfiOTtqCMinHntPJghe2tAinuCO5v0PtBVLPwSQ7Xw=;
-        b=IT2YsSa+KlFPxWLz7VYVpluaeuLBPZsvknp7OYOsCNpwO7y03s3I7DTdKHN3FAiQ2Z
-         bG0d3yiMua3KShteUyfkcgWogjO54PWDWRmU/NOUzvCviM3QASQel/nUeDiIRe+wV0vf
-         jkkkkHn6pdQ8/ELxLmMcnn5PkGTWfHvif2xUcIAsc2H5yD20H8R4oLaKgPmzFzHjibd6
-         Q+5bFHzeNUVTBJxjZq9LuzTcF5rjOXHtT+LBgJHXhZ8D9gPgQKDpVhe/XzamM97dI294
-         qQ/9PXi2vahzo6x121R3xqgSxImmoyqictKFjqSFsSIc1OVfwz4sVKz/5lYnmZsR9uxG
-         lJvw==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=pnUaG30jMgngG5x6l8ucLv0AptNmlu+5TwnQDCkmbWE=;
+        b=GWQnoLZChQmkh7O7LbbpX7hz1tdrDmZCE2Eh4kV1tDjfkA0wwHWyCJi8pkErwLA3dg
+         nbJFcnvxOz3Aj5PWMjB9p3q8NZdGg1GtdkCwB0w3BbPhbHtcnuxbUP4BVCkzwM+vxN1w
+         CovkD/Z/bazGywUQvxoJxzFAEkNd52bwRMhINhJWwmJl0OgBOUpNBlz9h46zWn4w+Pf6
+         1Ei4Vuu6/gTZYRILEW8N5Cg0vVAC3Ug3WdU2xfeUNYy2qIBAiTF3jSbR3PlVgq5OlQYM
+         3mZdnrjorSMFCR0o/Ti9WnBPvyZLJzo1uNzfpuvH74fW2Lr5yU1YXQ6JUPSvxNmUS09x
+         rzjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PvfiOTtqCMinHntPJghe2tAinuCO5v0PtBVLPwSQ7Xw=;
-        b=xfKNNfuIvukH/30qtiD0PuZBLjq3WFCDc9KwTGyNNtL2ewTKwXqWz3X30yhil1Hluu
-         /DPlLjXjAjcG0A57eMcKw7EvVGGeMI10q5qBnpoMkx0YSzKU4bbnMY8uzIVv2Ek85xhh
-         wmycHxsN/CdVQhPQM30RQvXenZ3ts1IBQnJBA4KSXtYp0Ra/EyPn5rs2pgzzDc9LZYRY
-         sMB2h8czCKy8XJFguHVrgcUeLtXIg1G5rWCTzBH2ttvuJr8H91VdAnuk+mxC+LkEW/Ac
-         QQ0XUYB488mP32WD9HZTdqzVThnTK73lK6GKjcyEkg0mZAdkL7nqHN8S3LcgYPrlgcpH
-         zjfg==
-X-Gm-Message-State: AOAM533j7Qr2kZ5swaLYjIiY9sq21Xh82EmsM37iXjo0KIuXcZvChoJB
-        jGCcMp70y2BrXWGngUT6/a894NTyw3LH9/n/BNo=
-X-Google-Smtp-Source: ABdhPJy2UWzt9+ZBfW/ZU9LjONSYUHdkm5v6PfxnlnbjActnnTufr6GAZLz3AITobYht4uWyazqi7RihJuJFOqFEKd0=
-X-Received: by 2002:a17:906:1845:b0:6f4:346f:f767 with SMTP id
- w5-20020a170906184500b006f4346ff767mr21292457eje.214.1652232367153; Tue, 10
- May 2022 18:26:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220509111126.7032-1-max.oss.09@gmail.com> <20220509111126.7032-4-max.oss.09@gmail.com>
-In-Reply-To: <20220509111126.7032-4-max.oss.09@gmail.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Tue, 10 May 2022 22:25:55 -0300
-Message-ID: <CAOMZO5B1ESLpmK3fM9CzqYEWz969BajPAEbetofC4rDxg5V+dw@mail.gmail.com>
-Subject: Re: [PATCH v1 3/3] ARM: dts: imx6qdl-colibri: backlight pwm: Simplify
- inverted backlight
-To:     Max Krummenacher <max.oss.09@gmail.com>
-Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=pnUaG30jMgngG5x6l8ucLv0AptNmlu+5TwnQDCkmbWE=;
+        b=6QbsQ7WsD3SD42l2vc3uG/QWyYRPMrBCTm8bi5qD5mWIaOY3Kto5ZGKJvv3p9+i/tu
+         jjTue9dNzLLB0LdycSFvL4jGtKjSgPFx2gjJ1c0GlxyUPbUnsKb8l2hkz6Z5FOqHp5yt
+         PF/J8yuL0zeYyenuqINYcAAx2ttjkCGF8bTvC5U/PVTxZgdvLrMXABNdT8EfkxRNepMN
+         odV6htzWgCUejy/uuyrrCsHsgNeg+2vkyJrac32j7qiFmFucXQOpNys3G+S/nN2pFvA9
+         BZzTE+85/XzqP16Zvd011ebzAE/pW14k0yXPxxhN5sOIx/Ph3AX123yMdmWpn0kW40w2
+         FJCQ==
+X-Gm-Message-State: AOAM5330BMCTmO3A0c03QAJtiSVH7PEqXMuj8E1FptRwLLgu/DXZXpaT
+        kqEVCdJhIJNfie10yCpWw40EAs9kA94w9MV+J+T2+YK20vnJhr27ecyVj138TpZIyLcDscpirtc
+        VWYkod005btd9bOkUdgf6umZH/YAGP4q/NP8MogJsSplA54t6dddnbIoSS7j6UgQEdiECxuA=
+X-Google-Smtp-Source: ABdhPJxHi+T8HFFIdsi+8fpFBbHek8sX6pvBeLqEFs+VsU0dvLtN3RLwFFfJEUEB4PZZm8piLA05k5qawVDt
+X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
+ (user=jstultz job=sendgmr) by 2002:a62:1788:0:b0:50d:dc1f:70b0 with SMTP id
+ 130-20020a621788000000b0050ddc1f70b0mr22543275pfx.48.1652232388031; Tue, 10
+ May 2022 18:26:28 -0700 (PDT)
+Date:   Wed, 11 May 2022 01:26:11 +0000
+Message-Id: <20220511012612.3297577-1-jstultz@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
+Subject: [PATCH 1/2] drm/bridge: lt9611: Consolidate detection logic
+From:   John Stultz <jstultz@google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     John Stultz <jstultz@google.com>,
+        Yongqin Liu <yongqin.liu@linaro.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>, kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,15 +70,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 9, 2022 at 8:12 AM Max Krummenacher <max.oss.09@gmail.com> wrote:
->
-> From: Max Krummenacher <max.krummenacher@toradex.com>
->
-> Set #pwm-cells to the default 3 to gain access to the parameter
-> which allows inverting the PWM signal. This is useful to specify
-> a backlight which has its highest brightness at 0.
->
-> Also adapt the brightness steps as the backlight doesn't light up
-> for very low duty cycles.
+This patch simply consolidates the duplicated detection
+functionality in the driver.
 
-This should probably be a different patch.
+Cc: Yongqin Liu <yongqin.liu@linaro.org>
+Cc: Amit Pundir <amit.pundir@linaro.org>
+Cc: Peter Collingbourne <pcc@google.com>
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Robert Foss <robert.foss@linaro.org>
+Cc: kernel-team@android.com
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Signed-off-by: John Stultz <jstultz@google.com>
+---
+ drivers/gpu/drm/bridge/lontium-lt9611.c | 22 ++++++++--------------
+ 1 file changed, 8 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/lontium-lt9611.c b/drivers/gpu/drm/bridge/lontium-lt9611.c
+index 63df2e8a8abc..bf66af668f61 100644
+--- a/drivers/gpu/drm/bridge/lontium-lt9611.c
++++ b/drivers/gpu/drm/bridge/lontium-lt9611.c
+@@ -578,10 +578,8 @@ static struct lt9611_mode *lt9611_find_mode(const struct drm_display_mode *mode)
+ }
+ 
+ /* connector funcs */
+-static enum drm_connector_status
+-lt9611_connector_detect(struct drm_connector *connector, bool force)
++static enum drm_connector_status __lt9611_detect(struct lt9611 *lt9611)
+ {
+-	struct lt9611 *lt9611 = connector_to_lt9611(connector);
+ 	unsigned int reg_val = 0;
+ 	int connected = 0;
+ 
+@@ -594,6 +592,12 @@ lt9611_connector_detect(struct drm_connector *connector, bool force)
+ 	return lt9611->status;
+ }
+ 
++static enum drm_connector_status
++lt9611_connector_detect(struct drm_connector *connector, bool force)
++{
++	return __lt9611_detect(connector_to_lt9611(connector));
++}
++
+ static int lt9611_read_edid(struct lt9611 *lt9611)
+ {
+ 	unsigned int temp;
+@@ -887,17 +891,7 @@ static void lt9611_bridge_mode_set(struct drm_bridge *bridge,
+ 
+ static enum drm_connector_status lt9611_bridge_detect(struct drm_bridge *bridge)
+ {
+-	struct lt9611 *lt9611 = bridge_to_lt9611(bridge);
+-	unsigned int reg_val = 0;
+-	int connected;
+-
+-	regmap_read(lt9611->regmap, 0x825e, &reg_val);
+-	connected  = reg_val & BIT(0);
+-
+-	lt9611->status = connected ?  connector_status_connected :
+-				connector_status_disconnected;
+-
+-	return lt9611->status;
++	return __lt9611_detect(bridge_to_lt9611(bridge));
+ }
+ 
+ static struct edid *lt9611_bridge_get_edid(struct drm_bridge *bridge,
+-- 
+2.36.0.512.ge40c2bad7a-goog
+

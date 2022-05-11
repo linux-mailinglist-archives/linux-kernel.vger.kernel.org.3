@@ -2,116 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7D152292E
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 03:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B9BA52292F
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 03:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236227AbiEKBvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 21:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53634 "EHLO
+        id S240737AbiEKBvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 21:51:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233927AbiEKBvA (ORCPT
+        with ESMTP id S240796AbiEKBvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 21:51:00 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBCF4B420;
-        Tue, 10 May 2022 18:50:58 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d25so684579pfo.10;
-        Tue, 10 May 2022 18:50:58 -0700 (PDT)
+        Tue, 10 May 2022 21:51:17 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6230606E0;
+        Tue, 10 May 2022 18:51:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gDEht+gkZiFkbTmjk2YIJFInJDJINDJuhv19NAbiPEI=;
-        b=kJP+MLdy+ZDkYB4W4jB7vih5rEYiuEhzvE0wbq/MKspTIXFKGVsFJKAlsZq/dQYfLa
-         He08B6vK4RpECvZUiGdE+rTwsejMkIiwlS226qSnLV+HMisXLRlhu7TrL7svyLZxyrhr
-         +Jd0O/URbOA5cRdynLkgFEmoCMJ1ntssdddlcRlGecNTxq5bKKrlYknhWw5NX6kSuhi6
-         z2I2b4jTY7SeFQu4bgEs4RzaYn8y1LGg58K3UdARrfL0YE3pVG2gW1dyB4rz/Q04l/I2
-         rjdr5wqUlQDmXNjeyczCDuaCTGg8zdF2yD1JGXwUTFYYbXxlZ+ZyDiwFsJyCJNIY/yIx
-         T41w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gDEht+gkZiFkbTmjk2YIJFInJDJINDJuhv19NAbiPEI=;
-        b=0pG1NPjhx0NloGQEOkbmVPAINLV6GuVXMmer9h3R94HOgH/PJR6jzMIyLadzRgZNDK
-         CJiDnWKGkOIqUbyCepByB5jRXn+oZUUyNxs9YVVyOnsa/6I+DJh9MquR95Iv4m6x0JsU
-         zKobxQVwAb+tBSW+W0taU+ebpNZbcVddxhkAYs+TEJ47vCAeOOMo/SPqGLHhBhRcSHj3
-         UXqi9S+NpedtC6HpP1+I3/ctdZgzm7c8JdUnQwQNpNI6YX0vJu+mwH6isEoA1n0a63nT
-         jaqUvcpROVAcY9xr9omiURFxqFkhrZPjto28NRQK21JPUp7uhTNQuhkDl7w618HxWsiA
-         HkDg==
-X-Gm-Message-State: AOAM532u4GIls2zfCAeqx9MCZu+5WHjkOttgODD/3a/qIWOs66sVQRBs
-        8s3IIAlBNlRe3DkmhvKwp0dcmwqvI2WXVDWnra8=
-X-Google-Smtp-Source: ABdhPJwHLWCu0w3nBjf8E2zmucAMqA0ssK6lbH8hS3PAX6kZ6GBj4x6mIXJvCnP7581tIsNxItrsUnDK6zYX6HY2nbI=
-X-Received: by 2002:a63:114c:0:b0:3c2:3346:3c2b with SMTP id
- 12-20020a63114c000000b003c233463c2bmr18865428pgr.226.1652233858137; Tue, 10
- May 2022 18:50:58 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652233872; x=1683769872;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bGoWUSVkBi0VXKTbuYsdajcXGv1TjqD5Cu56Xf2zl10=;
+  b=CU744RWHpoPzi4UIdfb/vRjLY//Fmll07FWhSeIsVF2pB+ZAzQeK1Jj2
+   VzyO36VkciC4QKRaazlG6IiAfZ1IDXLN/rTaaPcOeaqyIov6Kc3Swru6M
+   D28ioiNm4BPmqI7fHUnmlyP8S3vPm3hTC668yc0V7Sn/1T2cyLw7STWFg
+   k=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 10 May 2022 18:51:11 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 18:51:11 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 10 May 2022 18:51:11 -0700
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 10 May 2022 18:51:04 -0700
+Date:   Wed, 11 May 2022 07:21:01 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+CC:     Matthias Kaehlcke <mka@chromium.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_vpulyala@quicinc.com>
+Subject: Re: [v15 2/6] usb: host: xhci-plat: Enable wakeup based on children
+ wakeup status
+Message-ID: <20220511015101.GB23843@hu-pkondeti-hyd.qualcomm.com>
+References: <1651740973-7944-1-git-send-email-quic_kriskura@quicinc.com>
+ <1651740973-7944-3-git-send-email-quic_kriskura@quicinc.com>
+ <YnVAZSZYQvIJxOHv@google.com>
+ <20220509033843.GB9170@hu-pkondeti-hyd.qualcomm.com>
 MIME-Version: 1.0
-References: <20220510130741.600270947@linuxfoundation.org>
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-From:   Zan Aziz <zanaziz313@gmail.com>
-Date:   Tue, 10 May 2022 19:50:46 -0600
-Message-ID: <CAFU3qoatKAhtpF2h62P3jM=F77UgHGuaRNUrBWs2CrwBvCRzZA@mail.gmail.com>
-Subject: Re: [PATCH 5.17 000/140] 5.17.7-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220509033843.GB9170@hu-pkondeti-hyd.qualcomm.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 10:21 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.17.7 release.
-> There are 140 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.7-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Mon, May 09, 2022 at 09:08:43AM +0530, Pavan Kondeti wrote:
+> On Fri, May 06, 2022 at 08:36:31AM -0700, Matthias Kaehlcke wrote:
+> > On Thu, May 05, 2022 at 02:26:09PM +0530, Krishna Kurapati wrote:
+> > > device_wakeup_path() tells if any of the children devices needs
+> > > wakeup. Use this hint to enable/disable wakeup of our device. This
+> > > helps the parent device of xhci-plat (like sysdev) to retrieve
+> > > the wakeup setting via device_wakeup_path().
+> > > 
+> > > Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> > > ---
+> > >  drivers/usb/host/xhci-plat.c | 8 ++++++++
+> > >  1 file changed, 8 insertions(+)
+> > > 
+> > > diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> > > index 649ffd8..ad585fa 100644
+> > > --- a/drivers/usb/host/xhci-plat.c
+> > > +++ b/drivers/usb/host/xhci-plat.c
+> > > @@ -415,6 +415,14 @@ static int __maybe_unused xhci_plat_suspend(struct device *dev)
+> > >  	if (pm_runtime_suspended(dev))
+> > >  		pm_runtime_resume(dev);
+> > >  
+> > > +	if (device_wakeup_path(dev)) {
+> > > +		if (!device_may_wakeup(dev))
+> > > +			device_wakeup_enable(dev);
+> > > +	} else {
+> > > +		if (device_may_wakeup(dev))
+> > > +			device_wakeup_disable(dev);
+> > > +	}
+> > 
+> > This code is not self-explantatory and deserves a comment.
+> > 
+> > Enabling/disabling wakeup for the purpose if signalling is a bit of a
+> > hack. It might be an acceptable hack as long as it has no side effects.
+> > However with the current implementation the wakeup state of the xHCI can
+> > be different after resuming than it was before going to suspend:
+> > 
+> > after boot
+> >   grep -h xhci /sys/class/wakeup/*/name
+> >     => xhci-hcd.14.auto
+> > 
+> > after suspend w/o wakeup capable device
+> >   grep -h xhci /sys/class/wakeup/*/name
+> >     => no results
+> > 
+> > after suspend with wakeup capable device
+> >   grep -h xhci /sys/class/wakeup/*/name
+> >     => xhci-hcd.14.auto
+> > 
+> > The hack shouldn't alter the wakeup state 'persistently', i.e. you'll have
+> > to restore it on resume, as in Pavan does in his reply to '[PATCH v14 2/7]
+> > PM / wakeup: Add device_children_wakeup_capable()' (it needs to be done
+> > conditionally though).
+> 
+> I am worried that we are not doing the right thing here. why should the
+> xhci-plat goes against the wishes of the user space policy here? Can we NOT
+> just do anything here? If some one wants xhci-plat to wakeup all the time,
+> dwc3 will be configured to wakeup the system provided that the support is
+> available. This way we don't break any existing users of xhci-plat i.e not
+> enabling wakeup from the kernel.
+> 
+Krishna,
 
-Hi Greg,
+can we please drop this patch and use device_wakeup_path() and verify the
+following cases.
 
-Compiled and booted on my test system Lenovo P50s: Intel Core i7
-No emergency and critical messages in the dmesg
+1. one of the downstream USB device supports wakeup and xhci-plat wakeup is enabled
+2. one of the downstream USB device supports wakeup and xhci-plat wakeup is
+disabled
+3. none of the downstream USB device supports wakeup (or disable) and
+xhci-plat wakeup is enabled.
+4. none of the downstream USB device supports wakeup (or disable) and
+xhci-plat wakeup is disabled.
 
-./perf bench sched all
-# Running sched/messaging benchmark...
-# 20 sender and receiver processes per group
-# 10 groups == 400 processes run
+We don't want to enable xhci-plat wakeup capability like we do in this patch
+and potentially break any other platform. Lets leave the policy to the user
+space and rely on wakeup path to see if we can achieve the desired result.
 
-     Total time: 0.589 [sec]
-
-# Running sched/pipe benchmark...
-# Executed 1000000 pipe operations between two processes
-
-     Total time: 7.285 [sec]
-
-       7.285558 usecs/op
-         137257 ops/sec
-
-Tested-by: Zan Aziz <zanaziz313@gmail.com>
-
-Thanks
--Zan
+Thanks,
+Pavan

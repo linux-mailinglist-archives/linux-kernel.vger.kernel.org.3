@@ -2,180 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB5552344C
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C18D6523450
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:34:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243755AbiEKNdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39794 "EHLO
+        id S243790AbiEKNek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239272AbiEKNdp (ORCPT
+        with ESMTP id S239272AbiEKNeh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:33:45 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A100C5D8A;
-        Wed, 11 May 2022 06:33:44 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id i20-20020a05600c355400b0039456976dcaso2542409wmq.1;
-        Wed, 11 May 2022 06:33:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ksy6PHWBR9sVN5QwB4AlZVRAOWKrGBlUQcJanMtrZ1E=;
-        b=mTDzNH2v16tSY8KR9n8XYuM9TmRFKMujDftxz6TIj6GtwaEOz1nHkwh9I23i0T3HdH
-         FkRLXEX5SaHr/3aMMMm7OL/M/d+MaFHllgpxQm/fpYTPdAYgalEfYfqkuEUtmA93LCsz
-         KTJ+dEbvn9aYPq/m/ywGmSofzC6L8X7kJ7GhdUszaeH8/X2mdeXpmjdv+8MkkdGJOkK5
-         Gy7x53+7PYcENNJD+lBQtTteeSN2J6383EG33+HODXzESWqPsDZuh/g7svvE1fImNNif
-         2mBzCB9nkBhxa2kVXx1d4gGeBI3j+8uRsqTkVokwRaI4RP3uLnVC7AdoYvSvrUEYrboU
-         /Gew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ksy6PHWBR9sVN5QwB4AlZVRAOWKrGBlUQcJanMtrZ1E=;
-        b=Te3yLYRzB0NysHtcEWCB1gaLaCzJQhVcX2c37IM4nrcptIbn9r3dgV13XCEqIFOJRJ
-         oqYGgUiw0Ba0vfr+99c2p/uWgk1hTe6K4l+VpxbHlH7zLDxo0W25vzaLT/judCJ7HR+D
-         ZLbHXY09DHnEe/2d5HCB/CAcn50xTDTQhNFlbqkfpJ5AaEqqJV6yKEr7+Gxp4cHA1kj+
-         wW9Rj8jnsZU1WAhXwe9m4atuqrO4pxz0BTJ8YPeVCvSoVhMWqrmt5+g8OcZQhA9d2N6q
-         /fuQD7Q+SG4dQje7j2RJoGDJiDJwKWLoiC1Aqb0BpaaPkgrTmTS2fhVozV8FZ/RQYI6A
-         trcA==
-X-Gm-Message-State: AOAM533dibntHCbFS9zUh5lod72P/g6u0HTzGisCZ9cJT7vj7brDmomj
-        lxgAk1K3yGM/iLAV9D3CEOAPHeS7mCtr2oZnXC0=
-X-Google-Smtp-Source: ABdhPJx0HsNmN6aXZ/qgME3QoitJWXJwbYBVMkQDcpQpvHLbKrddWJTuykdpvOlgA7X5TIZWTNkDfYvdnRN4NLyIp6Q=
-X-Received: by 2002:a05:600c:154d:b0:394:8d64:9166 with SMTP id
- f13-20020a05600c154d00b003948d649166mr4952413wmg.102.1652276022494; Wed, 11
- May 2022 06:33:42 -0700 (PDT)
+        Wed, 11 May 2022 09:34:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BFD214D7B5;
+        Wed, 11 May 2022 06:34:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3855B823E6;
+        Wed, 11 May 2022 13:34:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48793C34113;
+        Wed, 11 May 2022 13:34:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652276073;
+        bh=4NUdmq88v8DAbB7Vn40eqVC9dvLwvBx3ZTm5NvdS1lI=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=ptGl5zmLXOimnEN9XDeoridZtaiSiUjU68mS4DhfkCvTZXuARKEiJkBwbQUqCKcYA
+         AaahO4sMKdvIZWm3i37K7F/HaJq2p/1OrOSTjHdY/NbUFU4HlHvlTcRh8vxUU6ngcP
+         8QU5QFZELewgz4HMDUz44o5dLRzFin8IPdO//NONc1JmJRsNVQjflbU2gjShXvek0/
+         gRtn8HdsXDLFv40Gbv2Vy4rxYbJophPrbQdYhsoX1AfmJkfaElmNjHNcfDhsYUmDT1
+         e+0owWzk++VeOydD9U6fQdpjYi5fZNyaIFc2nmf33T9Iv9URQnXNoipqMm/xvXGxpF
+         ZsXmklYGN0qKw==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Abhishek Kumar <kuabhs@chromium.org>
+Cc:     netdev@vger.kernel.org, dianders@chromium.org,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ath10k@lists.infradead.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH v3] ath10k: improve BDF search fallback strategy
+References: <20220509022618.v3.1.Ibfd52b9f0890fffe87f276fa84deaf6f1fb0055c@changeid>
+Date:   Wed, 11 May 2022 16:34:26 +0300
+In-Reply-To: <20220509022618.v3.1.Ibfd52b9f0890fffe87f276fa84deaf6f1fb0055c@changeid>
+        (Abhishek Kumar's message of "Mon, 9 May 2022 02:26:36 +0000")
+Message-ID: <878rr86vml.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220510070140.45407-1-tomeu.vizoso@collabora.com>
- <20220510141329.54414-1-tomeu.vizoso@collabora.com> <CAPM=9tzLR-wsLhg2ikGjoK06s-ju5XWa1rtPPiUpN=pwD1vgtA@mail.gmail.com>
- <YntWQIXSqMCd6TYV@kroah.com> <1255a66a-121d-988a-19a7-316f703cb37d@mailbox.org>
- <YnujG0nkF0U6d5kd@kroah.com>
-In-Reply-To: <YnujG0nkF0U6d5kd@kroah.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Wed, 11 May 2022 06:33:32 -0700
-Message-ID: <CAF6AEGsmD-CNGj4bAE952JQpquaWA+Nxo5TGpFiHqaPK9doP-g@mail.gmail.com>
-Subject: Re: [Freedreno] Adding CI results to the kernel tree was Re: [RFC v2]
- drm/msm: Add initial ci/ subdirectory
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel.daenzer@mailbox.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Dave Airlie <airlied@gmail.com>, Sean Paul <sean@poorly.run>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 4:50 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+Abhishek Kumar <kuabhs@chromium.org> writes:
+
+> Board data files wrapped inside board-2.bin files are
+> identified based on a combination of bus architecture,
+> chip-id, board-id or variants. Here is one such example
+> of a BDF entry in board-2.bin file:
+> bus=snoc,qmi-board-id=67,qmi-chip-id=320,variant=GO_XXXX
+> It is possible for few platforms none of the combinations
+> of bus,qmi-board,chip-id or variants match, e.g. if
+> board-id is not programmed and thus reads board-id=0xff,
+> there won't be any matching BDF to be found. In such
+> situations, the wlan will fail to enumerate.
 >
-> On Wed, May 11, 2022 at 12:26:05PM +0200, Michel D=C3=A4nzer wrote:
-> > On 2022-05-11 08:22, Greg Kroah-Hartman wrote:
-> > > On Wed, May 11, 2022 at 03:06:47PM +1000, Dave Airlie wrote:
-> > >>> And use it to store expectations about what the drm/msm driver is
-> > >>> supposed to pass in the IGT test suite.
-> > >>
-> > >> I wanted to loop in Linus/Greg to see if there are any issues raised
-> > >> by adding CI results file to the tree in their minds, or if any othe=
-r
-> > >> subsystem has done this already, and it's all fine.
-> > >
-> > > Why does the results need to be added to the tree?  Shouldn't they be
-> > > either "all is good" or "constantly changing and a constant churn"?
-> > >
-> > >> I think this is a good thing after our Mesa experience, but Mesa has=
- a
-> > >> lot tighter integration here, so I want to get some more opinions
-> > >> outside the group.
-> > >
-> > > For systems that have "tight integration" this might make sense as pr=
-oof
-> > > that all is working for a specific commit, but I can't see how this w=
-ill
-> > > help the kernel out much.
-> > >
-> > > What are you going to do with these results being checked in all the
-> > > time?
-> >
-> > Having the expected results in the tree keeps them consistent with the =
-driver code itself, and allows putting in place gating CI to prevent mergin=
-g driver changes which make any of the tests deviate from the expected resu=
-lt.
+> Currently, to search for BDF, there are two fallback
+> boardnames creates to search for BDFs in case the full BDF
+> is not found. It is still possible that even the fallback
+> boardnames do not match.
 >
-> Shouldn't "expected result" always be "pass"?
+> As an improvement, search for BDF with full BDF combination
+> and perform the fallback searches by stripping down the last
+> elements until a BDF entry is found or none is found for all
+> possible BDF combinations.e.g.
+> Search for initial BDF first then followed by reduced BDF
+> names as follows:
+> bus=snoc,qmi-board-id=67,qmi-chip-id=320,variant=GO_XXXX
+> bus=snoc,qmi-board-id=67,qmi-chip-id=320
+> bus=snoc,qmi-board-id=67
+> bus=snoc
+> <No BDF found>
 >
-> If not, then the test should be changed to be "skipped" like we have
-> today in the kselftest tests.
-
-No, we want to run tests even if they are expected to fail.  This
-prevents the scenario of a test getting fixed without being noticed
-(for ex, developer was working on fixing test A and didn't notice that
-the fix also fixed test B).  If a fix goes unnoticed, a later
-regression would also go unnoticed ;-)
-
-I was skeptical about this approach at first with mesa CI, but having
-used mesa CI for a while, I am now a firm believer in the approach.
-
-And ofc we want the expectations to be in the kernel tree because
-there could be, for example, differences between -fixes and -next
-branches.  (Or even stable kernel branches if/when we get to the point
-of running CI on those.)
-
-> And how about tieing this into the kselftest process as well, why would
-> this be somehow separate from the rest of the kernel tests?
+> Tested-on: WCN3990/hw1.0 WLAN.HL.3.2.2.c10-00754-QCAHLSWMTPL-1
+> Signed-off-by: Abhishek Kumar <kuabhs@chromium.org>
+> ---
 >
-> > Keeping them separate inevitably results in divergence between the driv=
-er code and the expected test results, which would result in spurious failu=
-res of such CI.
+> Changes in v3:
+> - As discussed, instead of adding support for default BDF in DT, added
+> a method to drop the last elements from full BDF until a BDF is found.
+> - Previous patch was "ath10k: search for default BDF name provided in DT"
 >
-> Again, "pass" should be the expected results :)
+>  drivers/net/wireless/ath/ath10k/core.c | 65 +++++++++++++-------------
+>  1 file changed, 32 insertions(+), 33 deletions(-)
 >
-> > I expect the main complication for the kernel will be due to driver cha=
-nges merged via different trees, e.g. for cross-subsystem reworks. Since th=
-ose will not go through the same CI, they may accidentally introduce incons=
-istencies. The ideal solution for this IMO would be centralizing CI such th=
-at the same gating tests have to pass regardless of how the code is merged.=
- But there's likely quite a long way to go until we get there. :)
->
-> We have in-kernel tests for the rest of the kernel, why can't you put
-> your testing stuff into there as well?
+> diff --git a/drivers/net/wireless/ath/ath10k/core.c b/drivers/net/wireless/ath/ath10k/core.c
+> index 688177453b07..ebb0d2a02c28 100644
+> --- a/drivers/net/wireless/ath/ath10k/core.c
+> +++ b/drivers/net/wireless/ath/ath10k/core.c
+> @@ -1426,15 +1426,31 @@ static int ath10k_core_search_bd(struct ath10k *ar,
+>  	return ret;
+>  }
+>  
+> +static bool ath10k_create_reduced_boardname(struct ath10k *ar, char *boardname)
 
-We could ofc put a lot more of the gitlab yml and scripts into the
-kernel tree.  Probably all of i-g-t is a bit much to put in the kernel
-tree.  Not to mention I'd like to see this expand to also run some
-deqp and/or piglit tests, which is definitely too much to vendor into
-the kernel tree.
 
-The approach of this RFC was to put only what was absolutely required
-in the kernel tree (such as expectations), and then link out to an
-external drm-ci tree[1] which has all the necessary scripts and yml
-for building and running tests, to avoid having to put a whole lot
-more in the kernel tree. (We should be specifying exact commit-sha for
-that tree, IMO, as it controls the version of i-g-t which gets used,
-and we need to be able to update expectations in sync with an i-g-t
-uprev, for example when new tests are added or if a test fix caused a
-fail->pass transition.)
+"static int" as you use error values. Strange that the compiler doesn't
+warn about that.
 
-BR,
--R
+> +{
+> +	/* Find last BDF element */
+> +	char *last_field = strrchr(boardname, ',');
+> +
+> +	if (last_field) {
+> +		/* Drop the last BDF element */
+> +		last_field[0] = '\0';
+> +		ath10k_dbg(ar, ATH10K_DBG_BOOT,
+> +			   "boardname =%s\n", boardname);
+> +		return 0;
+> +	}
+> +	return -ENODATA;
 
-[1] https://gitlab.freedesktop.org/gfx-ci/drm-ci
+I would invert the check:
 
-> thanks,
->
-> greg k-h
+	if (!last_field)
+        	return -ENODATA;
+
+	/* Drop the last BDF element */
+	last_field[0] = '\0';
+	ath10k_dbg(ar, ATH10K_DBG_BOOT, "boot reduced boardname %s\n",
+		   boardname);
+
+	return 0;
+
+Also I changed the style used in the debug message.
+
+https://wireless.wiki.kernel.org/en/users/drivers/ath10k/codingstyle#debug_messages
+
+>  	data += magic_len;
+>  	len -= magic_len;
+>  
+> -	/* attempt to find boardname in the IE list */
+> -	ret = ath10k_core_search_bd(ar, boardname, data, len);
+> +	memcpy(temp_boardname, boardname, board_len);
+> +	ath10k_dbg(ar, ATH10K_DBG_BOOT, "boardname :%s\n", boardname);
+
+"boot boardname %s\n"
+
+>  
+> -	/* if we didn't find it and have a fallback name, try that */
+> -	if (ret == -ENOENT && fallback_boardname1)
+> -		ret = ath10k_core_search_bd(ar, fallback_boardname1, data, len);
+> +retry_search:
+> +	/* attempt to find boardname in the IE list */
+> +	ret = ath10k_core_search_bd(ar, temp_boardname, data, len);
+>  
+> -	if (ret == -ENOENT && fallback_boardname2)
+> -		ret = ath10k_core_search_bd(ar, fallback_boardname2, data, len);
+> +	/* If the full BDF entry was not found then drop the last element and
+> +	 * recheck until a BDF is found or until all options are exhausted.
+> +	 */
+> +	if (ret == -ENOENT)
+> +		if (!ath10k_create_reduced_boardname(ar, temp_boardname))
+> +			goto retry_search;
+>  
+>  	if (ret == -ENOENT) {
+>  		ath10k_err(ar,
+>  			   "failed to fetch board data for %s from %s/%s\n",
+> -			   boardname, ar->hw_params.fw.dir, filename);
+> +			   temp_boardname, ar->hw_params.fw.dir, filename);
+>  		ret = -ENODATA;
+>  	}
+
+This is hard to read, what about the loop below? Though I'm sure I
+missed some corner case but I hope you get the idea. It's always good to
+have a limit for the loops to avoid looping forever.
+
+	for (i = 0; i < 20; i++) {
+		/* attempt to find boardname in the IE list */
+		ret = ath10k_core_search_bd(ar, temp_boardname, data, len);
+		if (ret != -ENOENT)
+			/* found it or something was wrong */
+			break;
+
+		/* If the full BDF entry was not found then drop the last element and
+		 * recheck until a BDF is found or until all options are exhausted.
+		 */
+		ret = ath10k_create_reduced_boardname(ar, temp_boardname);
+		if (ret) {
+			ath10k_err(ar,
+				   "failed to fetch board data for %s from %s/%s\n",
+				   temp_boardname, ar->hw_params.fw.dir, filename);
+			ret = -ENODATA;
+			break;
+		}
+	};
+
+	if (ret)
+		goto err;
+
+        return 0;
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

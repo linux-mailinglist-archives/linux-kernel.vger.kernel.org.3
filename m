@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52AC95240EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 01:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 545AC5240E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 01:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349335AbiEKXVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 19:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48426 "EHLO
+        id S1349215AbiEKXUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 19:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349166AbiEKXTD (ORCPT
+        with ESMTP id S1349192AbiEKXTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 19:19:03 -0400
+        Wed, 11 May 2022 19:19:02 -0400
 Received: from mail.baikalelectronics.ru (mail.baikalelectronics.com [87.245.175.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 33DC419CB70;
-        Wed, 11 May 2022 16:18:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4AE1119CB7A;
+        Wed, 11 May 2022 16:18:40 -0700 (PDT)
 Received: from mail.baikalelectronics.ru (unknown [192.168.51.25])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 1307EBAA;
-        Thu, 12 May 2022 02:19:26 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.ru 1307EBAA
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 28110BAD;
+        Thu, 12 May 2022 02:19:27 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.ru 28110BAD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1652311166;
-        bh=0oMK30WdtHcOYdp8lm9r9navitmXPLaU64ebdlFu5B0=;
+        d=baikalelectronics.ru; s=mail; t=1652311167;
+        bh=W0zpVpyp21FcmZKKvGW6SPQXo73H6PMb/goz++F2IU4=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=PQWn75V0P2YD2KSr3PwGw8PY+VYycMwyFxMcW5J1886hUZ0xpksVAzHU0o2K2xbqP
-         oGUoQ1e4S3nbBeUhHyHW6MA6XTCG4JeVgWXrVLs5p5g/PpqhNL36I2kXH2yz+RuZfg
-         jXbA8EHWFgjlz9b7OlVuIjS5nowwb56IFOlnMYjA=
+        b=f0tQJrWYiTJQwpsl84AdwT0WdH89u4IAgOSFx6NkCImSFg+dOzmGgeYn4xNb8I1HH
+         C9y7EpDvpmOJoxJJ3CbajGPlSaYeUA6vr87lH7FcQAy3waGaECszPSp8qD3eQiEssh
+         0+2lgW7SZe1eO/M5bd1ipCmg7gBDrA8spcSNfM8Y=
 Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 12 May 2022 02:18:38 +0300
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 12 May 2022 02:18:39 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Hans de Goede <hdegoede@redhat.com>,
@@ -38,9 +38,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
         Rob Herring <robh+dt@kernel.org>, <linux-ide@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH v3 21/23] ata: ahci-dwc: Add platform-specific quirks support
-Date:   Thu, 12 May 2022 02:18:08 +0300
-Message-ID: <20220511231810.4928-22-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v3 22/23] ata: ahci-dwc: Add Baikal-T1 AHCI SATA interface support
+Date:   Thu, 12 May 2022 02:18:09 +0300
+Message-ID: <20220511231810.4928-23-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20220511231810.4928-1-Sergey.Semin@baikalelectronics.ru>
 References: <20220511231810.4928-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -57,146 +57,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some DWC AHCI SATA IP-core derivatives require to perform small platform
-or IP-core specific setups. They are too small to be placed in a dedicated
-driver. It's just much easier to have a set of quirks for them right in
-the DWC AHCI driver code. Since we are about to add such platform support,
-as a pre-requisite we introduce a platform-data based DWC AHCI quirks API.
-The platform data can be used to define the flags passed to the
-ahci_platform_get_resources() method, additional AHCI host-flags and a set
-of callbacks to initialize, re-initialize and clear the platform settings.
+It's almost fully compatible DWC AHCI SATA IP-core derivative except the
+reference clocks source, which need to be very carefully selected. In
+particular the DWC AHCI SATA PHY can be clocked either from the pads
+ref_pad_clk_{m,p} or from the internal wires ref_alt_clk_{m,n}. In the
+later case the clock signal is generated from the Baikal-T1 CCU SATA PLL.
+The clocks source is selected by means of the ref_use_pad wire connected
+to the CCU SATA reference clock CSR.
+
+In normal situation it would be much more handy to use the internal
+reference clock source, but alas we haven't managed to make the AHCI
+controller working well with it so far. So it's preferable to have the
+controller clocked from the external clock generator and fallback to the
+internal clock source only as a last resort. Other than that the
+controller is full compatible with the DWC AHCI SATA IP-core.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
 ---
 
 Changelog v2:
-- Change the local objects prefix from 'dwc_ahci_' to 'ahci_dwc_'.
-  (@Damien)
+- Rename 'syscon' property to 'baikal,bt1-syscon'.
+- Change the local objects prefix from 'dwc_ahci_' to 'ahci_dwc_',
+  from 'bt1_ahci_' to 'ahci_bt1_'. (@Damien)
 ---
- drivers/ata/ahci_dwc.c | 52 ++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 48 insertions(+), 4 deletions(-)
+ drivers/ata/Kconfig    |  1 +
+ drivers/ata/ahci_dwc.c | 87 ++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 88 insertions(+)
 
+diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
+index 95e0e022b5bb..249717cdc74f 100644
+--- a/drivers/ata/Kconfig
++++ b/drivers/ata/Kconfig
+@@ -180,6 +180,7 @@ config AHCI_DWC
+ 	tristate "Synopsys DWC AHCI SATA support"
+ 	select SATA_HOST
+ 	default SATA_AHCI_PLATFORM
++	select MFD_SYSCON if (MIPS_BAIKAL_T1 || COMPILE_TEST)
+ 	help
+ 	  This option enables support for the Synopsys DWC AHCI SATA
+ 	  controller implementation.
 diff --git a/drivers/ata/ahci_dwc.c b/drivers/ata/ahci_dwc.c
-index 73380aaaebab..f987efa1ad59 100644
+index f987efa1ad59..d464db20f869 100644
 --- a/drivers/ata/ahci_dwc.c
 +++ b/drivers/ata/ahci_dwc.c
-@@ -90,7 +90,16 @@
+@@ -13,10 +13,12 @@
+ #include <linux/kernel.h>
+ #include <linux/libata.h>
+ #include <linux/log2.h>
++#include <linux/mfd/syscon.h>
+ #include <linux/module.h>
+ #include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm.h>
++#include <linux/regmap.h>
+ 
+ #include "ahci.h"
+ 
+@@ -90,6 +92,26 @@
  #define AHCI_DWC_PORT_PHYCR		0x74
  #define AHCI_DWC_PORT_PHYSR		0x78
  
-+struct ahci_dwc_plat_data {
-+	unsigned int pflags;
-+	unsigned int hflags;
-+	int (*init)(struct ahci_host_priv *hpriv);
-+	int (*reinit)(struct ahci_host_priv *hpriv);
-+	void (*clear)(struct ahci_host_priv *hpriv);
-+};
++/* Baikal-T1 AHCI SATA specific registers */
++#define AHCI_BT1_HOST_PHYCR		AHCI_DWC_HOST_GPCR
++#define AHCI_BT1_HOST_MPLM_MASK		GENMASK(29, 23)
++#define AHCI_BT1_HOST_LOSDT_MASK	GENMASK(22, 20)
++#define AHCI_BT1_HOST_CRR		BIT(19)
++#define AHCI_BT1_HOST_CRW		BIT(18)
++#define AHCI_BT1_HOST_CRCD		BIT(17)
++#define AHCI_BT1_HOST_CRCA		BIT(16)
++#define AHCI_BT1_HOST_CRDI_MASK		GENMASK(15, 0)
 +
- struct ahci_dwc_host_priv {
-+	const struct ahci_dwc_plat_data *pdata;
- 	struct platform_device *pdev;
++#define AHCI_BT1_HOST_PHYSR		AHCI_DWC_HOST_GPSR
++#define AHCI_BT1_HOST_CRA		BIT(16)
++#define AHCI_BT1_HOST_CRDO_MASK		GENMASK(15, 0)
++
++/* Baikal-T1 CCU registers concerning the AHCI SATA module */
++#define BT1_CCU_SYS_SATA_REF		0x60
++#define BT1_CCU_SYS_SATA_REF_EXT	BIT(28)
++#define BT1_CCU_SYS_SATA_REF_INV	BIT(29)
++#define BT1_CCU_SYS_SATA_REF_BUF	BIT(30)
++
+ struct ahci_dwc_plat_data {
+ 	unsigned int pflags;
+ 	unsigned int hflags;
+@@ -106,6 +128,65 @@ struct ahci_dwc_host_priv {
+ 	u32 dmacr[AHCI_MAX_PORTS];
+ };
  
- 	u32 timv;
-@@ -107,11 +116,15 @@ static struct ahci_host_priv *ahci_dwc_get_resources(struct platform_device *pde
- 		return ERR_PTR(-ENOMEM);
- 
- 	dpriv->pdev = pdev;
-+	dpriv->pdata = device_get_match_data(&pdev->dev);
-+	if (!dpriv->pdata)
-+		return ERR_PTR(-EINVAL);
- 
--	hpriv = ahci_platform_get_resources(pdev, AHCI_PLATFORM_GET_RESETS);
-+	hpriv = ahci_platform_get_resources(pdev, dpriv->pdata->pflags);
- 	if (IS_ERR(hpriv))
- 		return hpriv;
- 
-+	hpriv->flags |= dpriv->pdata->hflags;
- 	hpriv->plat_data = (void *)dpriv;
- 
- 	return hpriv;
-@@ -242,22 +255,33 @@ static int ahci_dwc_init_dmacr(struct ahci_host_priv *hpriv)
- 
- static int ahci_dwc_init_host(struct ahci_host_priv *hpriv)
- {
++static int ahci_bt1_init(struct ahci_host_priv *hpriv)
++{
 +	struct ahci_dwc_host_priv *dpriv = hpriv->plat_data;
- 	int rc;
- 
- 	rc = ahci_platform_enable_resources(hpriv);
- 	if (rc)
- 		return rc;
- 
-+	if (dpriv->pdata->init) {
-+		rc = dpriv->pdata->init(hpriv);
-+		if (rc)
-+			goto err_disable_resources;
++	struct regmap *sys_regs;
++	u32 ref_ctl, mask;
++
++	/* APB and application clocks are required */
++	if (!ahci_platform_find_clk(hpriv, "pclk") ||
++	    !ahci_platform_find_clk(hpriv, "aclk")) {
++		dev_err(&dpriv->pdev->dev, "No system clocks specified\n");
++		return -EINVAL;
 +	}
 +
- 	ahci_dwc_check_cap(hpriv);
- 
- 	ahci_dwc_init_timer(hpriv);
- 
- 	rc = ahci_dwc_init_dmacr(hpriv);
- 	if (rc)
--		goto err_disable_resources;
-+		goto err_clear_platform;
- 
- 	return 0;
- 
-+err_clear_platform:
-+	if (dpriv->pdata->clear)
-+		dpriv->pdata->clear(hpriv);
-+
- err_disable_resources:
- 	ahci_platform_disable_resources(hpriv);
- 
-@@ -275,6 +299,12 @@ static int ahci_dwc_reinit_host(struct ahci_host_priv *hpriv)
- 	if (rc)
- 		return rc;
- 
-+	if (dpriv->pdata->reinit) {
-+		rc = dpriv->pdata->reinit(hpriv);
-+		if (rc)
-+			goto err_disable_resources;
++	/*
++	 * We need to select the PHY reference clock source. The signal
++	 * can be delivered either from the chip pads or from the internal
++	 * PLL. The source is selected by the PHY's ref_use_pad signal
++	 * tied up into one of the CCU SATA ref-ctl register field.
++	 */
++	sys_regs = syscon_regmap_lookup_by_phandle(dpriv->pdev->dev.of_node,
++						   "baikal,bt1-syscon");
++	if (IS_ERR(sys_regs)) {
++		dev_err(&dpriv->pdev->dev, "CCU syscon couldn't be found\n");
++		return PTR_ERR(sys_regs);
 +	}
 +
- 	writel(dpriv->timv, hpriv->mmio + AHCI_DWC_HOST_TIMER1MS);
- 
- 	for_each_set_bit(i, &port_map, AHCI_MAX_PORTS) {
-@@ -283,10 +313,20 @@ static int ahci_dwc_reinit_host(struct ahci_host_priv *hpriv)
- 	}
- 
- 	return 0;
++	(void)regmap_read(sys_regs, BT1_CCU_SYS_SATA_REF, &ref_ctl);
 +
-+err_disable_resources:
-+	ahci_platform_disable_resources(hpriv);
++	/*
++	 * Prefer activating external reference clock if one is supplied.
++	 * If there is no external ref clock, then we have no choice but
++	 * to fall back to the internal signal coming from PLL. Alas
++	 * we haven't managed to make the interface working well when it's
++	 * used so far, but in no alternative let's at least try...
++	 */
++	if (ahci_platform_find_clk(hpriv, "ref_ext")) {
++		ref_ctl |= BT1_CCU_SYS_SATA_REF_EXT;
++		mask = BT1_CCU_SYS_SATA_REF_EXT;
++	} else if (ahci_platform_find_clk(hpriv, "ref_int")) {
++		ref_ctl &= ~BT1_CCU_SYS_SATA_REF_EXT;
++		ref_ctl |= BT1_CCU_SYS_SATA_REF_INV | BT1_CCU_SYS_SATA_REF_BUF;
++		mask = BT1_CCU_SYS_SATA_REF_EXT |
++		       BT1_CCU_SYS_SATA_REF_INV | BT1_CCU_SYS_SATA_REF_BUF;
++		dev_warn(&dpriv->pdev->dev, "Fallback to PLL-based ref clock!\n");
++	} else {
++		dev_err(&dpriv->pdev->dev, "No ref clock specified\n");
++		return -EINVAL;
++	}
 +
-+	return rc;
- }
- 
- static void ahci_dwc_clear_host(struct ahci_host_priv *hpriv)
++	regmap_update_bits(sys_regs, BT1_CCU_SYS_SATA_REF, mask, ref_ctl);
++
++	/*
++	 * Fully reset the SATA AXI and ref clocks domain so to ensure the
++	 * state machine is working from scratch.
++	 */
++	ahci_platform_assert_rsts(hpriv);
++	return ahci_platform_deassert_rsts(hpriv);
++}
++
+ static struct ahci_host_priv *ahci_dwc_get_resources(struct platform_device *pdev)
  {
-+	struct ahci_dwc_host_priv *dpriv = hpriv->plat_data;
-+
-+	if (dpriv->pdata->clear)
-+		dpriv->pdata->clear(hpriv);
-+
- 	ahci_platform_disable_resources(hpriv);
- }
+ 	struct ahci_dwc_host_priv *dpriv;
+@@ -415,9 +496,15 @@ struct ahci_dwc_plat_data ahci_dwc_plat = {
+ 	.pflags = AHCI_PLATFORM_GET_RESETS,
+ };
  
-@@ -371,9 +411,13 @@ static int ahci_dwc_resume(struct device *dev)
- 
- static SIMPLE_DEV_PM_OPS(ahci_dwc_pm_ops, ahci_dwc_suspend, ahci_dwc_resume);
- 
-+struct ahci_dwc_plat_data ahci_dwc_plat = {
-+	.pflags = AHCI_PLATFORM_GET_RESETS,
++struct ahci_dwc_plat_data ahci_bt1_plat = {
++	.pflags = AHCI_PLATFORM_GET_RESETS | AHCI_PLATFORM_RST_TRIGGER,
++	.init = ahci_bt1_init,
 +};
 +
  static const struct of_device_id ahci_dwc_of_match[] = {
--	{ .compatible = "snps,dwc-ahci", },
--	{ .compatible = "snps,spear-ahci", },
-+	{ .compatible = "snps,dwc-ahci", &ahci_dwc_plat },
-+	{ .compatible = "snps,spear-ahci", &ahci_dwc_plat },
+ 	{ .compatible = "snps,dwc-ahci", &ahci_dwc_plat },
+ 	{ .compatible = "snps,spear-ahci", &ahci_dwc_plat },
++	{ .compatible = "baikal,bt1-ahci", &ahci_bt1_plat },
  	{},
  };
  MODULE_DEVICE_TABLE(of, ahci_dwc_of_match);

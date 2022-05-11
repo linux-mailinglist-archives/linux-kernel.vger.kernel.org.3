@@ -2,111 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77082524097
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 01:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2457A52409A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 01:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349037AbiEKXNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 19:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
+        id S1349061AbiEKXOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 19:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242847AbiEKXNc (ORCPT
+        with ESMTP id S1349052AbiEKXO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 19:13:32 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E02169E13
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:13:31 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id i19so6844602eja.11
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:13:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JgHIHZYfktFFhDix9ARk1W3agCJ5RlUjVdUHKQCQqAE=;
-        b=gygLmm76slBdVa2keLfFJYY7zR9gVLTrQN7Qeoxr8clFf1VZSLKxHawplwV3c1cvML
-         3F2nc0icCJFSso3TejBkbD4mveFcMg9/XBRM8VeOaUhHfU6oraKEtgeiiRmY9Y3d2Ofe
-         0e16IW4wgnUJtqxOljWBH6MhiRPRrpKM9eB3o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JgHIHZYfktFFhDix9ARk1W3agCJ5RlUjVdUHKQCQqAE=;
-        b=YyyoTw/Bo7MePvAxupO55w5rjyzPyx8scMwLolLHXqYg2f6PE3yQ7Q0ma8Dwc0hg5H
-         EbnXnLZNWPxUd+a/qwtmhKuAwEE/Jnv4v3U7dixkwAKp9Cw6/XgRM2TciHDh0BgdVZ37
-         LDSvQQ21LwKHdlnNnVGHTVFU0CCBf4ufCyRyuXocWzByCTbZgg53cAA3WoDulR00Q1HC
-         m2p1hKAs6W14r8u1yvFiw8Q6UvaezF9cNatpaFj42L56Iy2Fj7vDQXAIA2/XLnLfttW5
-         NFmnZFGZV8b2b/2W4pX32XImUFVUCdw1gll97POGVC5zf3cNCsUeJCU2jeHuwKK6pQyg
-         7uYQ==
-X-Gm-Message-State: AOAM5330tOqAVVjJMuSD9C7R/Ogfi/vgF1olgMsX5ILjz/byQm6pNal3
-        /e0nk0ekyrSaRB7S3G4bPgcRkwkH3z9LjWOa
-X-Google-Smtp-Source: ABdhPJzrMUo0ZNPGaAaIE35bg7lPphR/gTHrKK+rmMMVgld27lubMBLT6dW9jIykWhPGlb8+RzPmSg==
-X-Received: by 2002:a17:906:c114:b0:6f5:db6f:71a1 with SMTP id do20-20020a170906c11400b006f5db6f71a1mr24057339ejc.338.1652310809911;
-        Wed, 11 May 2022 16:13:29 -0700 (PDT)
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
-        by smtp.gmail.com with ESMTPSA id p3-20020a50c943000000b00425d6c76494sm1749067edh.1.2022.05.11.16.13.28
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 16:13:28 -0700 (PDT)
-Received: by mail-wm1-f44.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso4103880wme.5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:13:28 -0700 (PDT)
-X-Received: by 2002:a7b:c7c2:0:b0:394:18b:4220 with SMTP id
- z2-20020a7bc7c2000000b00394018b4220mr7173683wmk.118.1652310807772; Wed, 11
- May 2022 16:13:27 -0700 (PDT)
+        Wed, 11 May 2022 19:14:29 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95415169E34
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:14:27 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id D45E22C019F;
+        Wed, 11 May 2022 23:14:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1652310865;
+        bh=lhBDBNdC4q4BueoOvAmXJxWRfrkV+88cvt5Lnv+rYXg=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=Zrt5TISWDS2o6h2Su8jMNx4gYfhgqOiJ6T66Obpwb8PeMseAdu+MEkILvIbHlKUpR
+         4FQ2kITToHSyM9e3A9YYSUKci1f5FR/BxvvPi0hzieuUzOD1BGfygjuKEefU6msnNd
+         /LJ3gqlxaOHa8z5Z2GFcVRz/61nlQSifwvyQdhxSupQCn/dyKFXC8iN4ySWXkAEqp6
+         4rrkCJxhXHxiTzc11GOYR1jxyjKPE3eHEsRtGT+mLODISHes7SWq8shbWcVXJvJgsO
+         1eaiPgpwmlRmm8O04rSPjArt3usR32wRlmKG0LIlGPum1Qob/ekCvjlh2hA6ACi0XE
+         mmGupO3PpBv+A==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B627c43510001>; Thu, 12 May 2022 11:14:25 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.32; Thu, 12 May 2022 11:14:25 +1200
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.033; Thu, 12 May 2022 11:14:25 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
+        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
+        "kostap@marvell.com" <kostap@marvell.com>,
+        "robert.marko@sartura.hr" <robert.marko@sartura.hr>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v6 1/3] dt-bindings: marvell: Document the AC5/AC5X
+ compatibles
+Thread-Topic: [PATCH v6 1/3] dt-bindings: marvell: Document the AC5/AC5X
+ compatibles
+Thread-Index: AQHYZMMYWG5Tfvy6g0WGHR9i+piz6K0ZHxYAgABn74A=
+Date:   Wed, 11 May 2022 23:14:25 +0000
+Message-ID: <608a7d9d-9238-281a-8770-aa20feb7e6be@alliedtelesis.co.nz>
+References: <20220510231002.1160798-1-chris.packham@alliedtelesis.co.nz>
+ <20220510231002.1160798-2-chris.packham@alliedtelesis.co.nz>
+ <YnvsInrh03BVh7lN@lunn.ch>
+In-Reply-To: <YnvsInrh03BVh7lN@lunn.ch>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4377FB2D0F00FA439F61BEFBCD15089B@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220511160720.1.Ia196e35ad985059e77b038a41662faae9e26f411@changeid>
-In-Reply-To: <20220511160720.1.Ia196e35ad985059e77b038a41662faae9e26f411@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 11 May 2022 16:13:14 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XA6GKjdvc1YNh7v0SHSMCzgBtx453AKPjxbWWkTW5N1Q@mail.gmail.com>
-Message-ID: <CAD=FV=XA6GKjdvc1YNh7v0SHSMCzgBtx453AKPjxbWWkTW5N1Q@mail.gmail.com>
-Subject: Re: [PATCH] Revert "FROMGIT: drm/msm/dsi: move DSI host powerup to
- modeset time"
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Matt Turner <msturner@google.com>, Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=U+Hs8tju c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=oZkIemNP1mAA:10 a=tq87R11HY904XGWgxJsA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Wed, May 11, 2022 at 4:07 PM Douglas Anderson <dianders@chromium.org> wrote:
->
-> This reverts commit c7e4a2a72e696aa6aed2c8b651279f491bb096fe.
->
-> The patch causes sc7180 Chromebooks that use the parade-ps8640 bridge
-> chip to fail to turn the display back on after it turns off.
->
-> Let's revert to get these devices back to a working state. It seems
-> like the DSI powerup problem is somewhat common and probably we should
-> land something more general like Dave Stevenson's series [1] that
-> would give more flexibility.
->
-> [1] https://lore.kernel.org/r/cover.1646406653.git.dave.stevenson@raspberrypi.com
->
-> Fixes: c7e4a2a72e69 ("FROMGIT: drm/msm/dsi: move DSI host powerup to modeset time")
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
->
->  drivers/gpu/drm/msm/dsi/dsi_manager.c | 43 ++++++++-------------------
->  1 file changed, 12 insertions(+), 31 deletions(-)
-
-Well, that's embarrassing. I clearly reverted the wrong copy of this
-patch. Sorry. v2 coming right up.
+DQpPbiAxMi8wNS8yMiAwNTowMiwgQW5kcmV3IEx1bm4gd3JvdGU6DQo+IE9uIFdlZCwgTWF5IDEx
+LCAyMDIyIGF0IDExOjEwOjAwQU0gKzEyMDAsIENocmlzIFBhY2toYW0gd3JvdGU6DQo+PiBEZXNj
+cmliZSB0aGUgY29tcGF0aWJsZSBwcm9wZXJ0aWVzIGZvciB0aGUgTWFydmVsbCBBbGxleWNhdDUv
+NVggc3dpdGNoZXMNCj4+IHdpdGggaW50ZWdyYXRlZCBDUFVzLg0KPj4NCj4+IEFsbGV5Y2F0NToN
+Cj4+ICogOThEWDI1Mzg6IDI0eDFHICsgMngxMEcgKyAyeDEwRyBTdGFjaw0KPj4gKiA5OERYMjUz
+NTogMjR4MUcgKyA0eDFHIFN0YWNrDQo+PiAqIDk4RFgyNTMyOiA4eDFHICsgMngxMEcgKyAyeDFH
+IFN0YWNrDQo+PiAqIDk4RFgyNTMxOiA4eDFHICsgNHgxRyBTdGFjaw0KPj4gKiA5OERYMjUyODog
+MjR4MUcgKyAyeDEwRyArIDJ4MTBHIFN0YWNrDQo+PiAqIDk4RFgyNTI1OiAyNHgxRyArIDR4MUcg
+U3RhY2sNCj4+ICogOThEWDI1MjI6IDh4MUcgKyAyeDEwRyArIDJ4MUcgU3RhY2sNCj4+ICogOThE
+WDI1MjE6IDh4MUcgKyA0eDFHIFN0YWNrDQo+PiAqIDk4RFgyNTE4OiAyNHgxRyArIDJ4MTBHICsg
+MngxMEcgU3RhY2sNCj4+ICogOThEWDI1MTU6IDI0eDFHICsgNHgxRyBTdGFjaw0KPj4gKiA5OERY
+MjUxMjogOHgxRyArIDJ4MTBHICsgMngxRyBTdGFjaw0KPj4gKiA5OERYMjUxMTogOHgxRyArIDR4
+MUcgU3RhY2sNCj4+DQo+PiBBbGxleWNhdDVYOg0KPj4gKiA5OERYMzUwMDogMjR4MUcgKyA2eDI1
+Rw0KPj4gKiA5OERYMzUwMTogMTZ4MUcgKyA2eDEwRw0KPj4gKiA5OERYMzUxMDogNDh4MUcgKyA2
+eDI1Rw0KPj4gKiA5OERYMzUyMDogMjR4Mi41RyArIDZ4MjVHDQo+PiAqIDk4RFgzNTMwOiA0OHgy
+LjVHICsgNngyNUcNCj4+ICogOThEWDM1NDA6IDEyeDVHLzZ4MTBHICsgNngyNUcNCj4+ICogOThE
+WDM1NTA6IDI0eDVHLzEyeDEwRyArIDZ4MjVHDQo+IEhpIENocmlzDQo+DQo+IFdoZW4gbG9va2lu
+ZyBhdCB0aGlzIGxpc3QsIGlzIGl0IGp1c3QgdGhlIHN3aXRjaCB3aGljaCBjaGFuZ2VzLCBhbmQN
+Cj4gZXZlcnl0aGluZyBlbHNlIGluIHRoZSBwYWNrYWdlIHN0YXlzIHRoZSBzYW1lPw0KDQpDUFUg
+d2lzZSBJJ3ZlIGJlZW4gdG9sZCBldmVyeXRoaW5nIGlzIGlkZW50aWNhbC4gVGhlIGRpZmZlcmVu
+Y2VzIGFyZSBhbGwgDQppbiB0aGUgc3dpdGNoIHNpZGUuDQoNCj4gSSdtIHRoaW5raW5nIGJhY2sg
+dG8gcGxhaW4gS2lya3dvb2QuIFRoZXJlIHdlcmUgMyBLaXJrd29vZCBTb0NzLiBXZQ0KPiBoYWQg
+a2lya3dvb2QuZHRzaSB3aGljaCBkZXNjcmliZWQgZXZlcnl0aGluZyBjb21tb24gdG8gYWxsIHRo
+cmVlDQo+IFNvQ3MuIEFuZCB0aGVuIGtpcmt3b29kLTYxOTIuZHRzaSwga2lya3dvb2QtNjI4MS5k
+dHNpLA0KPiBraXJrd29vZC02MjgyLmR0c2kgd2hpY2ggZXh0ZW5kZWQgdGhhdCBiYXNlIHdpdGgg
+d2hhdGV2ZXIgYWRkaXRpb25hbA0KPiB0aGluZ3MgZWFjaCBTb0MgaGFkLg0KPg0KPiBJJ20gd29u
+ZGVyaW5nIGlmIHNvbWV0aGluZyBzaW1pbGFyIGlzIG5lZWRlZCBoZXJlPw0KPg0KPiBhcm1hZGEt
+OThEWDI1eHguZHRzaSB3aGljaCBkZXNjcmliZXMgZXZlcnl0aGluZyBjb21tb24gdG8gQWxsZXlj
+YXQ1Lg0KPg0KPiBhcm1hZGEtOThEWDM1eHguZHRzaSB3aGljaCBkZXNjcmliZXMgZXZlcnl0aGlu
+ZyBjb21tb24gdG8gQWxsZXljYXQ1WCwNCj4gbWF5YmUgbWFraW5nIHVzZSBvZiBhcm1hZGEtOThE
+WDI1eHguZHRzaT8uDQoNClJpZ2h0IG5vdyB0aGVyZSB3b3VsZCBiZSBubyBkaWZmZXJlbmNlIGJl
+dHdlZW4gMjV4eCBhbmQgMzV4eCBidXQgcGVyaGFwcyANCmhhdmluZyBhcm1hZGEtOThEWDM1eHgu
+ZHRzaSBqdXN0ICNpbmNsdWRlIGFybWFkYS05OERYMjV4eC5kdHNpIHdvdWxkIA0KbWFrZSB0aGUg
+Ym9hcmRzIGFibGUgdG8gcHVsbCBpbiBzb21ldGhpbmcgdGhhdCBtb3JlIG5hdHVyYWxseSBmaXRz
+IHRoZSANCmFjdHVhbCBjaGlwIHRoYXQgaXMgdXNlZC4NCg0KPiBhcm1hZGEtOThEWDI1MzguZHRz
+aSB3aGljaCBleHRlbmRzIGFybWFkYS05OERYMjV4eC5kdHNpDQoNClRoZXJlIHdvdWxkbid0IGJl
+IGFueXRoaW5nIHRvIGFkZCBpbiA5OERYMjUzOCAoYXQgbGVhc3Qgbm90IHVudGlsIHdlIA0KaGF2
+ZSBhIHByb3BlciBzd2l0Y2hkZXYgZHJpdmVyKS4NCg0KPiBBbmQgdGhlbiBhIGJvYXJkIGZpbGUg
+d2hpY2ggaW5jbHVkZXMgYXJtYWRhLTk4RFgyNTM4LmR0c2kgYW5kIGFkZCB0aGUNCj4gYm9hcmQg
+c3BlY2lmaWMgYml0cz8NCj4NCj4gSSd2ZSBubyBpZGVhIGhvdyB0aGVzZSBkaWZmZXJlbnQgZGV2
+aWNlcyBkaWZmZXIsIHNvIGkgZG9uJ3Qga25vdyB3aGF0DQo+IHRoZSBjb3JyZWN0IGhpZXJhcmNo
+eSBzaG91bGQgYmUuDQoNCklmIHlvdSBwdXQgYXNpZGUgdGhlIHN3aXRjaCBzdHVmZiB0aGV5IGRv
+bid0IGRpZmZlciBhdCBhbGwuIFdoaWNoIGlzIGEgDQpiaXQgZGlmZmVyZW50IHRvIHRoZSA5OGR4
+MzIzNi85OGR4MzMzNi85OGR4NDI1MSBzdXBwb3J0IEkgYWRkZWQgYSBmZXcgDQp5ZWFycyBhZ28g
+d2hlcmUgdGhlcmUgd2VyZSBkaWZmZXJlbmNlcyB3LnIudCBudW1iZXIgb2YgQ1BVIGNvcmVzIGFu
+ZCB0aGUgDQpvZGQgcGVyaXBoZXJhbC4NCg0KTXkgbWFpbiBnb2FsIGhhcyBiZWVuIHRvIGdldCB0
+aGUgQ1BVIHNpZGUgc3R1ZmYgbGFuZGVkIGZpcnN0LiBJbiB3aGF0IA0KSSd2ZSBzdWJtaXR0ZWQg
+c28gZmFyIEkgaGF2ZW4ndCB0cmllZCB0byBpbmNvcnBvcmF0ZSB0aGUgc3dpdGNoIHJlZ2lzdGVy
+IA0Kc3BhY2UsIHRoYXQncyB3aGVyZSB5b3UgbWlnaHQgc2VlIHNvbWUgZGlmZmVyZW5jZSBsaWtl
+ICdjb21wYXRpYmxlID0gDQoibWFydmVsbCxwcmVzdGVyYS05OGR4MjUzOCIsICJtYXJ2ZWxsLHBy
+ZXN0ZXJhIjsnLg0KDQoNCg==

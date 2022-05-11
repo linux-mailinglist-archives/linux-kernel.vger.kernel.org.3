@@ -2,194 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D914C52407A
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 00:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C513652407C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 00:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348970AbiEKW6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 18:58:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38998 "EHLO
+        id S1348974AbiEKW7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 18:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348955AbiEKW6c (ORCPT
+        with ESMTP id S234959AbiEKW7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 18:58:32 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBFA6D864
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 15:58:31 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id c14so3222806pfn.2
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 15:58:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=89uy48tv+fICrZBf9RmU2Yta3KtJdPD8gWAlGfSyAh4=;
-        b=Z8pBs+VD8D2l2tGyYYfzrdYMkcvx+KANqNOx32eqwUAdyA/WTxql+Du75fAqfzZSFk
-         3zJxpkF6IVXMn1nKa7YXu5pVDESLGE7wf2DOVhIboxQq/0tL6VUULEESsawPtqhyolg+
-         cUMdKgRfJFzz6kYphGLQPxdr+PjNJ80LROKH8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=89uy48tv+fICrZBf9RmU2Yta3KtJdPD8gWAlGfSyAh4=;
-        b=OFCMDAORzUbV/g7ct9NhXnmfJaGfFtInyJW8VMgqbfc64LMFgL9+lzHo9dTIymvVX5
-         APOupBqa+SpyT5bfeFfUbPY65xYKtKLTvtgmdCzyuewA7FcMRd04CbuomdYjLioGBgx8
-         vtt3+j9mjWONYw+MRyZ0Ay0adBXqVdecPrDmodLLm5Ob1T5kgdcSwarPVVDmsKkQHwQI
-         MCfZWmSyyzzrDB5iqambvryBjDvSBkUdyQ1GgfD1dFrjOsSnuVgI99ZLJcP4dlf31VUp
-         nP+JW6+s3pwc6KKESG8YXdHPU4PNgx4bYzBURcnA27IiqkwAikLmiC2PLIzqJoSZwTSD
-         z2tg==
-X-Gm-Message-State: AOAM53272DyWJmHOxr0O4EgB49s6nn1CyntD2puE1vb4xI/OsI9tjNsi
-        scbswK2XeiUEWFInlZifCKq3Bg==
-X-Google-Smtp-Source: ABdhPJx+mympQCJoXmuMaaaeFaXxs6TemcTvtTDVoJi/NnBpor/M/m5i6PYeNa6RZYdbqRbYOms+Cw==
-X-Received: by 2002:a05:6a00:a26:b0:4fd:f9dd:549c with SMTP id p38-20020a056a000a2600b004fdf9dd549cmr27509568pfh.42.1652309911002;
-        Wed, 11 May 2022 15:58:31 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:504e:720d:de58:4f66])
-        by smtp.gmail.com with ESMTPSA id n5-20020a170902968500b0015e8d4eb1easm2399714plp.52.2022.05.11.15.58.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 15:58:30 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, swboyd@chromium.org,
-        quic_khsieh@quicinc.com, quic_sbillaka@quicinc.com,
-        quic_abhinavk@quicinc.com, ville.syrjala@linux.intel.com,
-        quic_aravindh@quicinc.com, tzimmermann@suse.de,
-        dmitry.baryshkov@linaro.org, robdclark@gmail.com,
-        linux-arm-msm@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] drm/probe-helper: For DP, add 640x480 if all other modes are bad
-Date:   Wed, 11 May 2022 15:58:08 -0700
-Message-Id: <20220511155749.v3.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid>
-X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-In-Reply-To: <20220511155749.v3.1.I2dd93486c6952bd52f2020904de0133970d11b29@changeid>
-References: <20220511155749.v3.1.I2dd93486c6952bd52f2020904de0133970d11b29@changeid>
+        Wed, 11 May 2022 18:59:43 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF818A32B
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 15:59:41 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id E72C82C044A;
+        Wed, 11 May 2022 22:59:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1652309977;
+        bh=dbiwv2rHTCHRWVF5902F3Nh4mqpnE8U2uwEkp+IcrNw=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=lFeMiUjX1Yxq4bol/bKkC8pPOSkCWXZjKbKvV7X/XNh2NEpBPxIXqSJUkIk+t4mus
+         jjCmYJUDHeu5bJBzGOkn+8UydxubJ+rpiSz1UQmruoeRQ5TqgrBydToI7Jvq7DslAN
+         fXYDladwGGMCsVUCkqfkhQRK3k+NxB/d+vNcz1V0929B9Uirklm6voBnIKgaAPYsAk
+         9T2OxP1OoQdgM5Rwtjb56rXOTDmTpI/anM3xP2Iq62EwTYyjMUIVTM7YtVj+fowJZW
+         VHDq9hTJYPO0bKIoR/hcEKypR0Vl7v5BuydDiZGuEiAhN3KaQjgPu5aE1Qi8K9rqjo
+         iUBt7l3C6KZSg==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B627c3fd90001>; Thu, 12 May 2022 10:59:37 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.32; Thu, 12 May 2022 10:59:37 +1200
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.033; Thu, 12 May 2022 10:59:37 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vadym Kochan <vadym.kochan@plvision.eu>
+CC:     "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
+        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
+        "kostap@marvell.com" <kostap@marvell.com>,
+        "robert.marko@sartura.hr" <robert.marko@sartura.hr>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Elad Nachman <enachman@marvell.com>
+Subject: Re: [PATCH v5 1/2] arm64: dts: marvell: Add Armada 98DX2530 SoC and
+ RD-AC5X board
+Thread-Topic: [PATCH v5 1/2] arm64: dts: marvell: Add Armada 98DX2530 SoC and
+ RD-AC5X board
+Thread-Index: AQHYZVGaM5HNJyVFK0yMg5+dPH+INq0ZEh4AgABvp4A=
+Date:   Wed, 11 May 2022 22:59:37 +0000
+Message-ID: <c781f7eb-86f2-16c4-1380-b08b974900ff@alliedtelesis.co.nz>
+References: <20220504044624.951841-1-chris.packham@alliedtelesis.co.nz>
+ <20220511161003.GE10145@plvision.eu> <YnviMOtXX+us+IA4@lunn.ch>
+In-Reply-To: <YnviMOtXX+us+IA4@lunn.ch>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <138E75DF91EDC7498F0C922C7C0ECE8A@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=U+Hs8tju c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=oZkIemNP1mAA:10 a=nlR0Zc3rm02OJYrKWlIA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As per Displayport spec section 5.2.1.2 ("Video Timing Format") says
-that all detachable sinks shall support 640x480 @60Hz as a fail safe
-mode.
-
-A DP compliance test expected us to utilize the above fact when all
-modes it presented to the DP source were not achievable. It presented
-only modes that would be achievable with more lanes and/or higher
-speeds than we had available and expected that when we couldn't do
-that then we'd fall back to 640x480 even though it didn't advertise
-this size.
-
-In order to pass the compliance test (and also support any users who
-might fall into a similar situation with their display), we need to
-add 640x480 into the list of modes. However, we don't want to add
-640x480 all the time. Despite the fact that the DP spec says all sinks
-_shall support_ 640x480, they're not guaranteed to support it
-_well_. Continuing to read the spec you can see that the display is
-not required to really treat 640x480 equal to all the other modes. It
-doesn't need to scale or anything--just display the pixels somehow for
-failsafe purposes. It should also be noted that it's not hard to find
-a display hooked up via DisplayPort that _doesn't_ support 640x480 at
-all. The HP ZR30w screen I'm sitting in front of has a native DP port
-and doesn't work at 640x480. I also plugged in a tiny 800x480 HDMI
-display via a DP to HDMI adapter and that screen definitely doesn't
-support 640x480.
-
-As a compromise solution, let's only add the 640x480 mode if:
-* We're on DP.
-* All other modes have been pruned.
-
-This acknowledges that 640x480 might not be the best mode to use but,
-since sinks are _supposed_ to support it, we will at least fall back
-to it if there's nothing else.
-
-Note that we _don't_ add higher resolution modes like 1024x768 in this
-case. We only add those modes for a failed EDID read where we have no
-idea what's going on. In the case where we've pruned all modes then
-instead we only want 640x480 which is the only defined "Fail Safe"
-resolution.
-
-This patch originated in response to Kuogee Hsieh's patch [1].
-
-[1] https://lore.kernel.org/r/1650671124-14030-1-git-send-email-quic_khsieh@quicinc.com
-
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Tested-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
-
-Changes in v3:
-- Removed WARN_ON
-
-Changes in v2:
-- Two underscores for __drm_helper_update_and_validate().
-- Return err and use WARN_ON instead of returning a bool.
-
- drivers/gpu/drm/drm_probe_helper.c | 27 ++++++++++++++++++++++-----
- 1 file changed, 22 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_probe_helper.c
-index 2570d47e7eab..6fe28bc6595d 100644
---- a/drivers/gpu/drm/drm_probe_helper.c
-+++ b/drivers/gpu/drm/drm_probe_helper.c
-@@ -476,7 +476,6 @@ int drm_helper_probe_single_connector_modes(struct drm_connector *connector,
- 	const struct drm_connector_helper_funcs *connector_funcs =
- 		connector->helper_private;
- 	int count = 0, ret;
--	bool verbose_prune = true;
- 	enum drm_connector_status old_status;
- 	struct drm_modeset_acquire_ctx ctx;
- 
-@@ -556,8 +555,8 @@ int drm_helper_probe_single_connector_modes(struct drm_connector *connector,
- 		DRM_DEBUG_KMS("[CONNECTOR:%d:%s] disconnected\n",
- 			connector->base.id, connector->name);
- 		drm_connector_update_edid_property(connector, NULL);
--		verbose_prune = false;
--		goto prune;
-+		drm_mode_prune_invalid(dev, &connector->modes, false);
-+		goto exit;
- 	}
- 
- 	count = (*connector_funcs->get_modes)(connector);
-@@ -581,9 +580,27 @@ int drm_helper_probe_single_connector_modes(struct drm_connector *connector,
- 		}
- 	}
- 
--prune:
--	drm_mode_prune_invalid(dev, &connector->modes, verbose_prune);
-+	drm_mode_prune_invalid(dev, &connector->modes, true);
- 
-+	/*
-+	 * Displayport spec section 5.2.1.2 ("Video Timing Format") says that
-+	 * all detachable sinks shall support 640x480 @60Hz as a fail safe
-+	 * mode. If all modes were pruned, perhaps because they need more
-+	 * lanes or a higher pixel clock than available, at least try to add
-+	 * in 640x480.
-+	 */
-+	if (list_empty(&connector->modes) &&
-+	    connector->connector_type == DRM_MODE_CONNECTOR_DisplayPort) {
-+		count = drm_add_modes_noedid(connector, 640, 480);
-+		ret = __drm_helper_update_and_validate(connector, maxX, maxY, &ctx);
-+		if (ret == -EDEADLK) {
-+			drm_modeset_backoff(&ctx);
-+			goto retry;
-+		}
-+		drm_mode_prune_invalid(dev, &connector->modes, true);
-+	}
-+
-+exit:
- 	drm_modeset_drop_locks(&ctx);
- 	drm_modeset_acquire_fini(&ctx);
- 
--- 
-2.36.0.550.gb090851708-goog
-
+DQpPbiAxMi8wNS8yMiAwNDoyMCwgQW5kcmV3IEx1bm4gd3JvdGU6DQo+IE9uIFdlZCwgTWF5IDEx
+LCAyMDIyIGF0IDA3OjEwOjAzUE0gKzAzMDAsIFZhZHltIEtvY2hhbiB3cm90ZToNCj4+IEhpIENo
+cmlzLA0KPj4NCj4+PiBhcmNoL2FybTY0L2Jvb3QvZHRzL21hcnZlbGwvTWFrZWZpbGUgICAgICAg
+ICAgfCAgIDEgKw0KPj4+IC4uLi9ib290L2R0cy9tYXJ2ZWxsL2FybWFkYS05OGR4MjUzMC5kdHNp
+ICAgICB8IDMxMCArKysrKysrKysrKysrKysrKysNCj4+PiBhcmNoL2FybTY0L2Jvb3QvZHRzL21h
+cnZlbGwvcmQtYWM1eC5kdHMgICAgICAgfCAgOTAgKysrKysNCj4+PiAzIGZpbGVzIGNoYW5nZWQs
+IDQwMSBpbnNlcnRpb25zKCspDQo+PiBNYXJ2ZWxsIGlzIGdvaW5nIHRvIHN0YXJ0IHRoZSB1cHN0
+cmVhbWluZyBvZiBBQzVYIGJvYXJkcyBzdXBwb3J0LA0KVGhhdCdzIGdvb2QgbmV3cy4gSSdtIHBy
+b2JhYmx5IHRoZSBjdXN0b21lciB0aGF0J3MgYmVlbiBuYWdnaW5nIHRoZSANCk1hcnZlbGwgc3Vw
+cG9ydCB0ZWFtLiBCdXQgSSdtIGFsc28gaW1wYXRpZW50IGhlbmNlIEkgc3RhcnRlZCB3b3JraW5n
+IG9uIA0KdGhpcyBzZXJpZXMuIFRoZSBwaW5jdHJsIGFuZCBtdm5ldGEgY2hhbmdlcyBoYXZlIGFs
+cmVhZHkgYmVlbiBhY2NlcHRlZC4NCj4+ICAgd2UgaGF2ZSBhbHNvIHBhdGNoZXMgd2l0aCBzaW1p
+bGFyIC5kdHMoaSkgZmlsZXMNCj4+IGJ1dCB3aXRoIGRpZmZlcmVudCBuYW1pbmc6DQo+Pg0KPj4g
+ICAgICBhYzUuZHRzaQ0KPj4gICAgICBhYzVfcmQuZHRzDQo+PiAgICAgIGFjNV9kYi5kdHMNCj4+
+ICAgICAgYWM1eF9kYi5kdHMNCj4+DQo+PiBXaGF0IGRvIHlvdSB0aGluayBhYm91dCB0byB1c2Ug
+dGhlc2UgbmFtaW5nIHNjaGVtZSA/DQoNClBlcnNvbmFsbHkgSSB0aG91Z2h0IHRoZXknZCBiZSBy
+ZWplY3RlZCB1cHN0cmVhbSBhcyBiZWluZyB0b28gdmFndWUgYW5kIA0KZ2VuZXJpYy4gSSBzZXR0
+bGVkIG9uIGFybWFkYS05OGR4MjUzMCBhcyBJIHNhdyB0aGUgOThkeDI1MzAgbmFtZSB1c2VkIG9u
+IA0KdGhlIE1hcnZlbGwgUG9ydGFsIHRvIHJlZmVyIHRvIHRoZSBDbk0gYmxvY2sgZm9yIHRoZSBB
+QzUvQUM1WC4gSSB3YXMgDQpnb2luZyB0byBjYWxsIHRoZSBib2FyZCBmaWxlICJyZC1hYzV4LTMy
+ZzE2aHZnNmhsZy5kdHMiIGFzIHRoYXQncyB3aGF0IA0KdGhlIHNpbGtzY3JlZW4gb24gdGhlIGJv
+YXJkIEkgaGF2ZSBzYXlzIGJ1dCBJIHNob3J0ZW5lZCBpdCB0byAicmQtYWM1eCIgDQphcyB0aGUg
+c3dpdGNoIHBvcnQgY29uZmlndXJhdGlvbiBpcyBsYXJnZWx5IGlycmVsZXZhbnQgdG8gdGhlIGJv
+YXJkIA0Kc3VwcG9ydCBJJ20gdHJ5aW5nIHRvIGdldCBsYW5kZWQuDQoNCj4gQ2hyaXMgaGFzIGRv
+bmUgYWxsIHRoZSBoYXJkIHdvcmssIGhlIGdldHMgdG8gcGljayB0aGUgbmFtaW5nLiBBbmQgZ2V0
+DQo+IGhpcyBmaWxlcyBtZXJnZWQgZmlyc3QuDQoNCkknbSBub3QgYWdhaW5zdCBjaGFuZ2luZyBp
+ZiB0aGVyZSBpcyBhIGNvbnNlbnN1cy4gT24gYW5vdGhlciB0aHJlYWQgdGhlIA0KaWRlYSBvZiBh
+cm1hZGEtOThkeDI1eHgvYXJtYWRhLTk4ZHgzNXh4IHdhcyBtZW50aW9uZWQuIFRoYXQgbWlnaHQg
+YmUgYSANCnJlYXNvbmFibGUgY29tcHJvbWlzZSAoYWx0aG91Z2ggdGVjaG5pY2FsbHkgdGhlcmUn
+cyBubyBkaWZmZXJlbmNlIGluIHRoZSANCkNQVSBibG9jayBiZXR3ZWVuIHRoZSAyNXh4IGFuZCAz
+NXh4KS4NCg0KPiBIb3dldmVyLCBub3cgdGhhdCBpIGNvbWUgdG8gbG9vayBpbiBhcmNoL2FybTY0
+L2Jvb3QvZHRzL21hcnZlbGwsIGkNCj4gdGhpbmsgbW9zdCBvZiB0aGUgY3VycmVudCBmaWxlbmFt
+ZXMgcHJvcG9zZWQgZG9uJ3QgbWF0Y2ggdGhlIGN1cnJlbnQgbmFtZXMuDQo+DQo+IGFybWFkYS05
+OGR4MjUzMC5kdHNpIGZpdHMgdGhlIGN1cnJlbnQgcGF0dGVybi4NCj4NCj4gSG93ZXZlciwgQ2hy
+aXMncyBib2FyZCBmaWxlcyBzaG91bGQgcHJvYmFibHkgYmUNCj4NCj4gYXJtYWRhLTk4ZHgyNTMw
+LXJkLmR0cw0KPg0KPiBhbmQgdGhlIG90aGVyIGZpbGVzIHNob3VsZCBiZQ0KPg0KPiBhcm1hZGEt
+OThkeDI1MzAtZGIuZHRzDQo+DQo+IGFybWFkYS05OGR4MjUzMC14LWRiLmR0cw0KPg0KPiBXaGF0
+IGRvZXMgdGhlIHggaW4geF9kYiBtZWFuPyBEb2VzIHRoYXQgcmVmZXIgdG8gdGhlIGJvYXJkIG9y
+IHRoZSBTb0M/DQoNClRoZSB4IGlzIGZyb20gQUM1WCBzbyB3ZSdkIGFjdHVhbGx5IGhhdmUgYXJt
+YWRhLTk4ZHgyNXh4LWRiLmR0cyBhbmQgDQphcm1hZGEtOThkeDM1eHgtZGIuZHRzLiBNeSBib2Fy
+ZCB3b3VsZCBiZSBjYWxsZWQgYXJtYWRhLTk4ZHgzNXh4LXJkLmR0cyANCm9yIHBlcmhhcHMgYXJt
+YWRhLTk4ZHgzNTUwLXJkLmR0cy4NCg0K

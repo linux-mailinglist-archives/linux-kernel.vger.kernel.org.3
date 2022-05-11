@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8249523865
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD87152386C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344530AbiEKQQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 12:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35438 "EHLO
+        id S1344532AbiEKQQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 12:16:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344506AbiEKQQ2 (ORCPT
+        with ESMTP id S1344507AbiEKQQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 12:16:28 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C273E27150;
-        Wed, 11 May 2022 09:16:26 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id j6so2378258pfe.13;
-        Wed, 11 May 2022 09:16:26 -0700 (PDT)
+        Wed, 11 May 2022 12:16:35 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B92C289AE;
+        Wed, 11 May 2022 09:16:31 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id n8so2369146plh.1;
+        Wed, 11 May 2022 09:16:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Oo+xWOyB/yW9hDceUY9ZJG/L2ZB1N/Jc0WPvd/Kp/Sk=;
-        b=lD/aGErmGSFF6LS7HM2gBFn5Dgs3TUWq7SBRh0LJ951aAqlSmu07pYqqGc6jV0aebn
-         KrDlGykfQPnACbhNu35Hz6SK1qjifM/ANLvvB1vV8oLWmu0CD6fzgNoEpiezjOyKhMqs
-         DDfosSULYfqLqcyjfsdGR44R0kUj74XUouPUM87rncZcrheoAomlgcd8whBkwVqIqcVF
-         29ZffaUC3zlHRDcPamp0/RVdW4WvFv92q2zWGSlKBceZfMlj3oX3jCVdBMoqbtO+7UEP
-         7Mfw4HgVR/QQ5EUH3zpRTrqZtWkQdHxnOb7OtSsYuyzXVMc79DnUgLbUpT0Sl6yjmMvl
-         kZFQ==
+        bh=T8SQnMh/E47vyAFUdZ40OQGlgYRHYSg3xuunTb/Du/8=;
+        b=UMRQlDUpHvGDtuxCLGMBIl7V5WH0H2JGBXDBZLs0kLQeqFdcdz2jtDhZi/3LQ51eCp
+         5Y/yMK9Ul3ZvtSECQ6HPI+YDdn5ARpxzUIDADporJbJWKK2Ck4pnZ5V8pR540/FDJ0BN
+         3qFJ4TXIWeddfpKb1MZAOPWHozu7KmPFLJ5RC8xGSC/N97amDSZ1UUuXpt+gjKxvq4yp
+         +ufs5irtJMDXqi42aY2P4BqdncX7EmnAznh+TOn0KRg7ZzTnu2WEwLGtbDbshtWZxgDi
+         MTWmH/YnxOAhl68ZP2eT2CwYP9296yREAZGGOevBumnTH7DUkbSZlx38kAS+OCDnzSr0
+         RmHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Oo+xWOyB/yW9hDceUY9ZJG/L2ZB1N/Jc0WPvd/Kp/Sk=;
-        b=zQewMB9gHS9orRi/TB21tjndsZDg/3DY4GhZD4i4048qaRefqny29FTLNyCLk8VgZf
-         aPn58Q+q22BI7rgaLGgYEW9GPMbRqhKSkHVIShA/ajZrWd6ICXmsBtAaXpQvo+ZX2wPs
-         3nzg6VOS6CFk0IPdMk5eXcpOZlOyXfImV03iOJHQ3WqXfFF4+XFx0YPLIJQAQsGlHcCF
-         zWCZofT88gV1/v2phPX0DuU9Qdye6IdTkw6H2caoRvG9nB97JNhuWTP2UFhsWeIU2PxU
-         hfLaLUAwqZzP1+jQbo0KbLq0zXiJHkFyJCNcmLuQ9nKBEWWbNHqnNaumWKddqVVjgReo
-         c2kg==
-X-Gm-Message-State: AOAM531XwfM2qsNbciIV2Utq5lBfbFQhRSPEJyPKunFeAxZ7Ouyg3Yae
-        kb8yN5RPMloX/Q2XRpCnwdcGtaX6HJ9zJmi3
-X-Google-Smtp-Source: ABdhPJw3iDCRKWuiBpmy3ARg0rqWcyBUVXfoQdVvExCxrEH8K0wsVKCptGWoWIp0QmbHPV6YOySojA==
-X-Received: by 2002:a63:6507:0:b0:3c6:d417:914b with SMTP id z7-20020a636507000000b003c6d417914bmr10640678pgb.475.1652285785917;
-        Wed, 11 May 2022 09:16:25 -0700 (PDT)
+        bh=T8SQnMh/E47vyAFUdZ40OQGlgYRHYSg3xuunTb/Du/8=;
+        b=m/zO8wQIeKf3IPef5Qnm49Pxg1wCzJz3oxxOMwEPU0jwHvSGFEkt9KMFyA/0tC8YIA
+         nWBbwjwTLOd0atUZ3tzBqzbRH/pTJkKUgKg64rVHUdOZ7XKxtOWfS/OtjUJAYd8P/ITz
+         fQ75eVu/BhBo7HoTWg/uLuDDChdbT0eJvbEAMv61YcV1XL7VJRnuMNieIRk7tJHnQVWo
+         7KLXOWzAhI5ZJR4zwnyUggtEFUo411LGXv6MK6kpmf/4+43pdLmjQnydbMF5lrUU+eiJ
+         GmmI2A52+7w7WhhOI2PoA9ywnNfm2NcYGzLgMeiMXToyIH9HDBSTeEaUhX6tEkKM6JmL
+         pKDg==
+X-Gm-Message-State: AOAM530rmaZdVpqJGYsmxLcYM4atHAddMTscCA5KPkGP+QNGCNAW2xeu
+        P/j5wwM+A/TTT+FQVgxe2AGpwoJV5Vh8hhyS
+X-Google-Smtp-Source: ABdhPJw0c010EfWZkhOqxKl5sGlODUoeowe3AkbSVN6wOwgWZAvTuuqkP9et6hRVLXxgLW9HgkmSJg==
+X-Received: by 2002:a17:90a:ce13:b0:1d9:acbe:7ede with SMTP id f19-20020a17090ace1300b001d9acbe7edemr6229030pju.16.1652285790359;
+        Wed, 11 May 2022 09:16:30 -0700 (PDT)
 Received: from skynet-linux.local ([49.204.239.218])
-        by smtp.googlemail.com with ESMTPSA id x7-20020a17090a1f8700b001ded49491basm220322pja.2.2022.05.11.09.16.22
+        by smtp.googlemail.com with ESMTPSA id x7-20020a17090a1f8700b001ded49491basm220322pja.2.2022.05.11.09.16.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 09:16:25 -0700 (PDT)
+        Wed, 11 May 2022 09:16:29 -0700 (PDT)
 From:   Sireesh Kodali <sireeshkodali1@gmail.com>
 To:     linux-remoteproc@vger.kernel.org
 Cc:     linux-arm-msm@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht, bjorn.andersson@linaro.org,
         devicetree@vger.kernel.org, phone-devel@vger.kernel.org,
         linux-kernel@vger.kernel.org,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
         Sireesh Kodali <sireeshkodali1@gmail.com>,
         Andy Gross <agross@kernel.org>,
         Mathieu Poirier <mathieu.poirier@linaro.org>
-Subject: [PATCH 2/9] remoteproc: qcom: q6v5-mss: Add modem support on MSM8953
-Date:   Wed, 11 May 2022 21:45:55 +0530
-Message-Id: <20220511161602.117772-3-sireeshkodali1@gmail.com>
+Subject: [PATCH 3/9] remoteproc: qcom: qcom_wcnss: Add support for pronto-v3
+Date:   Wed, 11 May 2022 21:45:56 +0530
+Message-Id: <20220511161602.117772-4-sireeshkodali1@gmail.com>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220511161602.117772-1-sireeshkodali1@gmail.com>
 References: <20220511161602.117772-1-sireeshkodali1@gmail.com>
@@ -75,142 +76,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The modem on the MSM8953 platform is similar to the modem on the MSM8996
-platform in terms of set up. It differs primarily in the way it needs SCM
-to bless the MPSS firmware region.
+From: Vladimir Lypak <vladimir.lypak@gmail.com>
 
+Pronto-v3 is similar to pronto-v2. It requires two power domains, and it
+requires the xo clock. It is used on the MSM8953 platform.
+
+Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
 Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
 ---
- drivers/remoteproc/qcom_q6v5_mss.c | 64 +++++++++++++++++++++++++++---
- 1 file changed, 58 insertions(+), 6 deletions(-)
+ drivers/remoteproc/qcom_wcnss.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-index af217de75e4d..a73fdcddeda4 100644
---- a/drivers/remoteproc/qcom_q6v5_mss.c
-+++ b/drivers/remoteproc/qcom_q6v5_mss.c
-@@ -234,6 +234,7 @@ struct q6v5 {
- 
- enum {
- 	MSS_MSM8916,
-+	MSS_MSM8953,
- 	MSS_MSM8974,
- 	MSS_MSM8996,
- 	MSS_MSM8998,
-@@ -687,12 +688,14 @@ static int q6v5proc_reset(struct q6v5 *qproc)
- 		}
- 		goto pbl_wait;
- 	} else if (qproc->version == MSS_MSM8996 ||
--		   qproc->version == MSS_MSM8998) {
-+		   qproc->version == MSS_MSM8998 ||
-+		   qproc->version == MSS_MSM8953) {
- 		int mem_pwr_ctl;
- 
- 		/* Override the ACC value if required */
--		writel(QDSP6SS_ACC_OVERRIDE_VAL,
--		       qproc->reg_base + QDSP6SS_STRAP_ACC);
-+		if (qproc->version != MSS_MSM8953)
-+			writel(QDSP6SS_ACC_OVERRIDE_VAL,
-+					qproc->reg_base + QDSP6SS_STRAP_ACC);
- 
- 		/* Assert resets, stop core */
- 		val = readl(qproc->reg_base + QDSP6SS_RESET_REG);
-@@ -734,7 +737,8 @@ static int q6v5proc_reset(struct q6v5 *qproc)
- 		writel(val, qproc->reg_base + QDSP6SS_PWR_CTL_REG);
- 
- 		/* Turn on L1, L2, ETB and JU memories 1 at a time */
--		if (qproc->version == MSS_MSM8996) {
-+		if (qproc->version == MSS_MSM8996 ||
-+			qproc->version == MSS_MSM8953) {
- 			mem_pwr_ctl = QDSP6SS_MEM_PWR_CTL;
- 			i = 19;
- 		} else {
-@@ -1314,7 +1318,16 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
- 			max_addr = ALIGN(phdr->p_paddr + phdr->p_memsz, SZ_4K);
- 	}
- 
--	/*
-+	if (qproc->version == MSS_MSM8953) {
-+		ret = qcom_scm_pas_mem_setup(5, qproc->mpss_phys, qproc->mpss_size);
-+		if (ret) {
-+			dev_err(qproc->dev,
-+					"setting up mpss memory failed: %d\n", ret);
-+			goto release_firmware;
-+		}
-+	}
-+
-+	/**
- 	 * In case of a modem subsystem restart on secure devices, the modem
- 	 * memory can be reclaimed only after MBA is loaded.
- 	 */
-@@ -1413,7 +1426,6 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
- 			writel(RMB_CMD_LOAD_READY, qproc->rmb_base + RMB_MBA_COMMAND_REG);
- 		}
- 		writel(size, qproc->rmb_base + RMB_PMI_CODE_LENGTH_REG);
--
- 		ret = readl(qproc->rmb_base + RMB_MBA_STATUS_REG);
- 		if (ret < 0) {
- 			dev_err(qproc->dev, "MPSS authentication failed: %d\n",
-@@ -1422,6 +1434,7 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
- 		}
- 	}
- 
-+
- 	/* Transfer ownership of modem ddr region to q6 */
- 	ret = q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm, false, true,
- 				      qproc->mpss_phys, qproc->mpss_size);
-@@ -2198,6 +2211,44 @@ static const struct rproc_hexagon_res msm8996_mss = {
- 	.version = MSS_MSM8996,
+diff --git a/drivers/remoteproc/qcom_wcnss.c b/drivers/remoteproc/qcom_wcnss.c
+index 9a223d394087..add792d752ba 100644
+--- a/drivers/remoteproc/qcom_wcnss.c
++++ b/drivers/remoteproc/qcom_wcnss.c
+@@ -141,6 +141,18 @@ static const struct wcnss_data pronto_v2_data = {
+ 	.num_vregs = 1,
  };
  
-+static const struct rproc_hexagon_res msm8953_mss = {
-+	.hexagon_mba_image = "mba.mbn",
-+	.proxy_supply = (struct qcom_mss_reg_res[]) {
-+		{
-+			.supply = "pll",
-+			.uA = 100000,
-+		},
-+		{}
++static const struct wcnss_data pronto_v3_data = {
++	.pmu_offset = 0x1004,
++	.spare_offset = 0x1088,
++
++	.pd_names = { "mx", "cx" },
++	.vregs = (struct wcnss_vreg_info[]) {
++		{ "vddpx", 1800000, 1800000, 0 },
 +	},
-+	.proxy_pd_names = (char*[]) {
-+			"cx",
-+			"mx",
-+			NULL
-+	},
-+	.active_supply = (struct qcom_mss_reg_res[]) {
-+		{
-+			.supply = "mss",
-+			.uV = 1050000,
-+			.uA = 100000,
-+		},
-+		{}
-+	},
-+	.proxy_clk_names = (char*[]){
-+			"xo",
-+			NULL
-+	},
-+	.active_clk_names = (char*[]){
-+			"iface",
-+			"bus",
-+			"mem",
-+			NULL
-+	},
-+	.need_mem_protection = false,
-+	.has_alt_reset = false,
-+	.has_spare_reg = false,
-+	.version = MSS_MSM8953,
++	.num_pd_vregs = 2,
++	.num_vregs = 1,
 +};
 +
- static const struct rproc_hexagon_res msm8916_mss = {
- 	.hexagon_mba_image = "mba.mbn",
- 	.proxy_supply = (struct qcom_mss_reg_res[]) {
-@@ -2301,6 +2352,7 @@ static const struct of_device_id q6v5_of_match[] = {
- 	{ .compatible = "qcom,msm8916-mss-pil", .data = &msm8916_mss},
- 	{ .compatible = "qcom,msm8974-mss-pil", .data = &msm8974_mss},
- 	{ .compatible = "qcom,msm8996-mss-pil", .data = &msm8996_mss},
-+	{ .compatible = "qcom,msm8953-mss-pil", .data = &msm8953_mss},
- 	{ .compatible = "qcom,msm8998-mss-pil", .data = &msm8998_mss},
- 	{ .compatible = "qcom,sc7180-mss-pil", .data = &sc7180_mss},
- 	{ .compatible = "qcom,sc7280-mss-pil", .data = &sc7280_mss},
+ static int wcnss_load(struct rproc *rproc, const struct firmware *fw)
+ {
+ 	struct qcom_wcnss *wcnss = (struct qcom_wcnss *)rproc->priv;
+@@ -669,6 +681,7 @@ static const struct of_device_id wcnss_of_match[] = {
+ 	{ .compatible = "qcom,riva-pil", &riva_data },
+ 	{ .compatible = "qcom,pronto-v1-pil", &pronto_v1_data },
+ 	{ .compatible = "qcom,pronto-v2-pil", &pronto_v2_data },
++	{ .compatible = "qcom,pronto-v3-pil", &pronto_v3_data },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, wcnss_of_match);
 -- 
 2.36.0
 

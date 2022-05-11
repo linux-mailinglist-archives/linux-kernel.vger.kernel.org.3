@@ -2,100 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43D48523617
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1675752361A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245039AbiEKOr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 10:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51196 "EHLO
+        id S245070AbiEKOrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 10:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244750AbiEKOr1 (ORCPT
+        with ESMTP id S245059AbiEKOrg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 10:47:27 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18DBF13F1E;
-        Wed, 11 May 2022 07:47:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652280446; x=1683816446;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=N7APsdlpxz6u79WorIWwR5LZd+w3+vL9fRK/HNG4EQU=;
-  b=Sj9Q8flTXilnYFMR5m9urM3Xi1x4FYM5pLP57cfZwlxX4IE30iJzvsYQ
-   +OdANbqjx2JoDbWmf27lRjC12XEZUZRYhr+uwqyjXIEXhMkI6r7xza9cL
-   dRGmLFsifUSidTBSpslVMszrCl1peGoiCpW9+hfH4T170M1M1gdHD/P0T
-   I=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 11 May 2022 07:47:25 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 07:47:25 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 11 May 2022 07:47:24 -0700
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 11 May
- 2022 07:47:24 -0700
-Message-ID: <a0e60283-a448-650f-808e-a0080ae550f7@quicinc.com>
-Date:   Wed, 11 May 2022 08:47:23 -0600
+        Wed, 11 May 2022 10:47:36 -0400
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4CF2DD71;
+        Wed, 11 May 2022 07:47:33 -0700 (PDT)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-e93bbb54f9so3036744fac.12;
+        Wed, 11 May 2022 07:47:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PBUKOyei7jhZAd+rG0AZF55Jr3UmZvagA9TyiYBMsWU=;
+        b=vJIUiw+lUzQy+XM3boG+AiasfNlEn2u53UGyAEd+Epm0h29tx+uyvdX4wunrOgewaD
+         SPMLrE+UO45UpwMPElY82xTq2yM3VBBGFLhOug0PMws+pBIFe/qzTe8P783PX0WWkHpN
+         /A5y0blxzawCJncw6i3vHm6yKYLe0sReM98k5qx7J/6ZZwYjQhXfrHrjMGHixVvfviYF
+         7dFisOBkXU0HxUC88ZrfLoEq7eSGtrPdYLag86mimkOhKrSoHfChMCa/h3bAY8iD0SD4
+         TPjm6twF7U95GZ7P96iDj1jMzZoEEYLNUuAmxGPHfcE/WNbkQ9Z+iHqPh4njBEYB5MqV
+         mdXQ==
+X-Gm-Message-State: AOAM532Poy/mMEOU+y99NuKCtB0BDWUGc3Mh4LcCSuduO1qi8qASWGQO
+        uniABiJ1hlGUyf+FBHANYA==
+X-Google-Smtp-Source: ABdhPJz98n8ntxGILk81aL6US1/KphHKB3FmHQzCO8v2Qn3CLhjkTHsFGtb472uba5vtZ3ndGND17Q==
+X-Received: by 2002:a05:6870:b39c:b0:d1:4a9f:35f9 with SMTP id w28-20020a056870b39c00b000d14a9f35f9mr2769263oap.119.1652280452730;
+        Wed, 11 May 2022 07:47:32 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id y21-20020a4a6515000000b0035eb4e5a6c2sm1006637ooc.24.2022.05.11.07.47.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 07:47:32 -0700 (PDT)
+Received: (nullmailer pid 286708 invoked by uid 1000);
+        Wed, 11 May 2022 14:47:31 -0000
+Date:   Wed, 11 May 2022 09:47:31 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     devicetree@vger.kernel.org, kbuild-all@lists.01.org,
+        linux-tegra@vger.kernel.org, Thierry Reding <treding@nvidia.com>,
+        jsequeira@nvidia.com, bbasu@nvidia.com,
+        linux-kernel@vger.kernel.org, thierry.reding@gmail.com,
+        robh+dt@kernel.org, vsethi@nvidia.com, jonathanh@nvidia.com
+Subject: Re: [Patch v5 3/9] dt-bindings: arm: tegra: Add NVIDIA Tegra194
+ axi2apb binding
+Message-ID: <20220511144731.GA286675-robh@kernel.org>
+References: <20220506111217.8833-1-sumitg@nvidia.com>
+ <20220506111217.8833-4-sumitg@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 0/2] hyperv compose_msi_msg fixups
-Content-Language: en-US
-To:     Wei Liu <wei.liu@kernel.org>
-CC:     <kys@microsoft.com>, <haiyangz@microsoft.com>,
-        <sthemmin@microsoft.com>, <decui@microsoft.com>,
-        <lorenzo.pieralisi@arm.com>, <robh@kernel.org>, <kw@linux.com>,
-        <bhelgaas@google.com>, <jakeo@microsoft.com>,
-        <dazhan@microsoft.com>, <linux-hyperv@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1652132902-27109-1-git-send-email-quic_jhugo@quicinc.com>
- <20220511144124.rj7inq6zy6bgbii4@liuwe-devbox-debian-v2>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20220511144124.rj7inq6zy6bgbii4@liuwe-devbox-debian-v2>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220506111217.8833-4-sumitg@nvidia.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/11/2022 8:41 AM, Wei Liu wrote:
-> On Mon, May 09, 2022 at 03:48:20PM -0600, Jeffrey Hugo wrote:
->> While multi-MSI appears to work with pci-hyperv.c, there was a concern about
->> how linux was doing the ITRE allocations.  Patch 2 addresses the concern.
->>
->> However, patch 2 exposed an issue with how compose_msi_msg() was freeing a
->> previous allocation when called for the Nth time.  Imagine a driver using
->> pci_alloc_irq_vectors() to request 32 MSIs.  This would cause compose_msi_msg()
->> to be called 32 times, once for each MSI.  With patch 2, MSI0 would allocate
->> the ITREs needed, and MSI1-31 would use the cached information.  Then the driver
->> uses request_irq() on MSI1-17.  This would call compose_msi_msg() again on those
->> MSIs, which would again use the cached information.  Then unmask() would be
->> called to retarget the MSIs to the right VCPU vectors.  Finally, the driver
->> calls request_irq() on MSI0.  This would call conpose_msi_msg(), which would
->> free the block of 32 MSIs, and allocate a new block.  This would undo the
->> retarget of MSI1-17, and likely leave those MSIs targeting invalid VCPU vectors.
->> This is addressed by patch 1, which is introduced first to prevent a regression.
->>
->> Jeffrey Hugo (2):
->>    PCI: hv: Reuse existing ITRE allocation in compose_msi_msg()
->>    PCI: hv: Fix interrupt mapping for multi-MSI
->>
+On Fri, 06 May 2022 16:42:11 +0530, Sumit Gupta wrote:
+> Add device-tree binding documentation to represent the axi2apb bridges
+> used by Control Backbone (CBB) 1.0 in Tegra194 SOC. All errors for APB
+> slaves are reported as slave error because APB bas single bit to report
+> error. So, CBB driver needs to further check error status registers of
+> all the axi2apb bridges to find error type.
 > 
-> Applied to hyperv-next. Thanks.
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> ---
+>  .../arm/tegra/nvidia,tegra194-axi2apb.yaml    | 40 +++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-axi2apb.yaml
+> 
 
-Huh?  I thought you wanted a V2.  I was intending on sending that out today.
-
--Jeff
+Reviewed-by: Rob Herring <robh@kernel.org>

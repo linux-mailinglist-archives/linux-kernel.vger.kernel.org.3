@@ -2,117 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A03523C5D
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E92B523C5A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:19:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346166AbiEKSUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 14:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45272 "EHLO
+        id S1346161AbiEKSTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 14:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346168AbiEKST7 (ORCPT
+        with ESMTP id S1345354AbiEKSTw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 14:19:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A097B14043B
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:19:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652293197;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=OjmqosTJ6Gizg8804eI7hEvoeZHHnweNRCj5+1JAafk=;
-        b=VYXKQ/iHdXb2ogBJ4m+Vjq5e8O+qdH2qTVwVETflCgZ9Y+PmrtrNRbEjWZGjdJpnpL2GKq
-        2/40AtPta/pe6rd3Dr/OXys1CRapMr53t7h7l5sBaDYOKAiWKRtbmg6YN8J1AjdD7VtIJl
-        GQPdUwCh+A+QnRQb26DNnNXtiiSCysE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-286-EUlxPZ5CMFK0edoaKGsZPQ-1; Wed, 11 May 2022 14:19:52 -0400
-X-MC-Unique: EUlxPZ5CMFK0edoaKGsZPQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B16AA85A5A8;
-        Wed, 11 May 2022 18:19:51 +0000 (UTC)
-Received: from emerald.redhat.com (unknown [10.22.33.96])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1084F400E43D;
-        Wed, 11 May 2022 18:19:51 +0000 (UTC)
-From:   Lyude Paul <lyude@redhat.com>
-To:     amd-gfx@lists.freedesktop.org
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Evan Quan <evan.quan@amd.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Solomon Chiu <solomon.chiu@amd.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/amdgpu: Add 'modeset' module parameter
-Date:   Wed, 11 May 2022 14:19:33 -0400
-Message-Id: <20220511181935.810735-1-lyude@redhat.com>
+        Wed, 11 May 2022 14:19:52 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0927F140432
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:19:50 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id ch13so5650259ejb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:19:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=bGPi3sym2sxZNuq8XM44v+EhEVtJACn3fgf26OWgsSM=;
+        b=xIyjh3l1EuCFk77BXzR8OmHseKLWjA3L+QFx7Esfu1gCdNNOljH4U8pzyTmTAfeUPl
+         R1xQUxezEvy+2+R+WygC1u2eMVN10z2qzL9fm+aycu03bP7hbHKUCGl7b9pRwgDhevkE
+         TmVH35KEAxXFUG4Z3TsTQZ2Zmm8zcl3aQZeJG/JQxZym8rsuDJQZN+8/AdTJEoCfOGb0
+         e3g3pickNN5IzL8ph/3ZgmYaBRwlUY+N17yFU6NPUAWiMkTZ0T0W7yNGtX5lrdvFtQ2e
+         7DXMB8yVaylPGxPzidZzahyxjDf3+funYGQx83vBwa7p0FMRVtXHj9FS+yaGBirFt04g
+         21qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=bGPi3sym2sxZNuq8XM44v+EhEVtJACn3fgf26OWgsSM=;
+        b=3GtBQxNQQWNTQqOro5OKJDYyEQWxUpy0jOAPdg759fy16DqQhEtadjKQ+8MkXt4LBS
+         qZUolmy2tvZ/5Wa8myZqhdV6crEnL2Bco3dpWIVV4VYu1orT6QWxqrQAlGbGd/ZXO4Ab
+         QfL02craKRC8wvvxHgSCFe8ZQtc24ol2z7RtV4ku2rG92kBdN91AzMK9MzwaG+bYQ/Zy
+         276CkSIjh0La+ZlxB3GaqTbiAtT79WA8ZMYdukhpHyAA3a6wjzvRq2zmbupz/J8QRyVj
+         78vojwuHZbmyePi6Sfa9EsZ4KbwfW7EddVzY7ZOwhlK/ghvhvptg+ynASgoRBBHDDL3v
+         +uyA==
+X-Gm-Message-State: AOAM5302WPuUKRlRZQVBGfmHQDHJ+4RtHQg0c1x44gnFxCBxOxabvbwx
+        B/ndM3TfxbHg7wh7eWvEDIRm0w==
+X-Google-Smtp-Source: ABdhPJw66c9o+JFuSuktSAYjNSClBUHjxcCrVhgRBUlsQkLLo9gay5LhgxMMS79bGlogG5dtbdtSXw==
+X-Received: by 2002:a17:907:72ce:b0:6f4:d139:c2b1 with SMTP id du14-20020a17090772ce00b006f4d139c2b1mr26220333ejc.563.1652293188527;
+        Wed, 11 May 2022 11:19:48 -0700 (PDT)
+Received: from [192.168.0.155] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id a11-20020a17090682cb00b006f3ef214db4sm1223826ejy.26.2022.05.11.11.19.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 11:19:47 -0700 (PDT)
+Message-ID: <d296720d-ccbe-27f0-8ba1-9653af25dd52@linaro.org>
+Date:   Wed, 11 May 2022 20:19:46 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [v4 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
+ override params bindings
+Content-Language: en-US
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+References: <1652282793-5580-1-git-send-email-quic_kriskura@quicinc.com>
+ <1652282793-5580-2-git-send-email-quic_kriskura@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1652282793-5580-2-git-send-email-quic_kriskura@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Many DRM drivers feature a 'modeset' argument, which can be used to
-enable/disable the entire driver (as opposed to passing nomodeset to the
-kernel, which would disable modesetting globally and make it difficult to
-load amdgpu afterwards). Apparently amdgpu is actually missing this
-however, so let's add it!
+On 11/05/2022 17:26, Krishna Kurapati wrote:
+> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> 
+> Add device tree bindings for SNPS phy tuning parameters.
+> 
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+>  .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 87 ++++++++++++++++++++++
+>  1 file changed, 87 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+> index 1ce251d..70efffe 100644
+> --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+> @@ -53,6 +53,93 @@ properties:
+>    vdda33-supply:
+>      description: phandle to the regulator 3.3V supply node.
+>  
+> +  qcom,hs-disconnect-bps:
+> +    $ref: /schemas/types.yaml#/definitions/int32
+> +    description:
+> +      This adjusts the voltage level for the threshold used to
+> +      detect a disconnect event at the host. Possible values are.
+> +      The values defined are in multiples of basis points (1bp = 0.01%).
 
-Keep in mind that this currently just lets one enable or disable amdgpu, I
-haven't bothered adding a headless mode like nouveau has - however I'm sure
-someone else can add this if needed.
+This means there is some minimum and maximum (100%)?
 
-Signed-off-by: Lyude Paul <lyude@redhat.com>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+> +      The hardware accepts only discrete values. The value closest to the
+> +      provided input will be chosen as the override value for this param.
+> +
+> +  qcom,squelch-detector-bps:
+> +    $ref: /schemas/types.yaml#/definitions/int32
+> +    description:
+> +      This adjusts the voltage level for the threshold used to
+> +      detect valid high-speed data.
+> +      The values defined are in multiples of basis points (1bp = 0.01%).
+> +      The hardware accepts only discrete values. The value closest to the
+> +      provided input will be chosen as the override value for this param.
+> +
+> +  qcom,hs-amplitude-bps:
+> +    $ref: /schemas/types.yaml#/definitions/int32
+> +    description:
+> +      This adjusts the high-speed DC level voltage.
+> +      The values defined are in multiples of basis points (1bp = 0.01%).
+> +      The hardware accepts only discrete values. The value closest to the
+> +      provided input will be chosen as the override value for this param.
+> +
+> +  qcom,pre-emphasis-duration-bps:
+> +    $ref: /schemas/types.yaml#/definitions/int32
+> +    description:
+> +      This signal controls the duration for which the
+> +      HS pre-emphasis current is sourced onto DP<#> or DM<#>.
+> +      The HS Transmitter pre-emphasis duration is defined in terms of
+> +      unit amounts. One unit of pre-emphasis duration is approximately
+> +      650 ps and is defined as 1X pre-emphasis duration.
+> +      The values defined are in multiples of basis points (1bp = 0.01%).
+> +      The hardware accepts only discrete values. The value closest to the
+> +      provided input will be chosen as the override value for this param.
+> +
+> +  qcom,pre-emphasis-amplitude-bps:
+> +    $ref: /schemas/types.yaml#/definitions/int32
+> +    description:
+> +      This signal controls the amount of current sourced to
+> +      DP<#> and DM<#> after a J-to-K or K-to-J transition.
+> +      The HS Transmitter pre-emphasis current is defined in terms of unit
+> +      amounts. One unit amount is approximately 2 mA and is defined as
+> +      1X pre-emphasis current.
+> +      The values defined are in multiples of basis points (1bp = 0.01%).
+> +      The hardware accepts only discrete values. The value closest to the
+> +      provided input will be chosen as the override value for this param.
+> +
+> +  qcom,hs-rise-fall-time-bps:
+> +    $ref: /schemas/types.yaml#/definitions/int32
+> +    description:
+> +      This adjusts the rise/fall times of the high-speed waveform.
+> +      The values defined are in multiples of basis points (1bp = 0.01%).
+> +      The hardware accepts only discrete values. The value closest to the
+> +      provided input will be chosen as the override value for this param.
+> +
+> +  qcom,hs-crossover-voltage-mv:
+> +    $ref: /schemas/types.yaml#/definitions/int32
+> +    description:
+> +      This adjusts the voltage at which the DP<#> and DM<#>
+> +      signals cross while transmitting in HS mode.
+> +      The values defined are in milli volts. The hardware accepts only
+> +      discrete values. The value closest to the provided input will be
+> +      chosen as the override value for this param.
+> +
+> +  qcom,hs-output-impedance-mohm:
+> +    $ref: /schemas/types.yaml#/definitions/int32
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-index ebd37fb19cdb..24e6fb4517cc 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-@@ -872,6 +872,15 @@ MODULE_PARM_DESC(smu_pptable_id,
- 	"specify pptable id to be used (-1 = auto(default) value, 0 = use pptable from vbios, > 0 = soft pptable id)");
- module_param_named(smu_pptable_id, amdgpu_smu_pptable_id, int, 0444);
- 
-+/**
-+ * DOC: modeset (int)
-+ * Used to enable/disable modesetting for amdgpu exclusively.
-+ */
-+bool amdgpu_enable_modeset = true;
-+MODULE_PARM_DESC(modeset,
-+		 "Enable or disable display driver (1 = on (default), 0 = off");
-+module_param_named(modeset, amdgpu_enable_modeset, bool, 0444);
-+
- /* These devices are not supported by amdgpu.
-  * They are supported by the mach64, r128, radeon drivers
-  */
-@@ -2003,6 +2012,11 @@ static int amdgpu_pci_probe(struct pci_dev *pdev,
- 	bool is_fw_fb;
- 	resource_size_t base, size;
- 
-+	if (!amdgpu_enable_modeset) {
-+		DRM_INFO("modeset=0 passed to amdgpu, driver will not be enabled\n");
-+		return -ENODEV;
-+	}
-+
- 	/* skip devices which are owned by radeon */
- 	for (i = 0; i < ARRAY_SIZE(amdgpu_unsupported_pciidlist); i++) {
- 		if (amdgpu_unsupported_pciidlist[i] == pdev->device)
--- 
-2.35.1
+Here and in other places, please use standard units. See
+dtschema/schemas/property-units.yaml in dtschema repo.
 
+
+Best regards,
+Krzysztof

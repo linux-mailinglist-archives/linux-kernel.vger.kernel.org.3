@@ -2,151 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3800A523EC9
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 22:20:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63450523EDE
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 22:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347715AbiEKUUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 16:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
+        id S1347771AbiEKUY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 16:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347686AbiEKUTy (ORCPT
+        with ESMTP id S238984AbiEKUYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 16:19:54 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2C2239D8E
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 13:19:53 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id fv2so3240537pjb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 13:19:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Gw0Wy/q20wEZd72lzxD2a0cUuCarQEEakePN17Bh29I=;
-        b=ErQThYIf24YWagDeM8IZdV77fNmIH8MVxfnwE+zwvUi11262Mv5M9J9uGR9j4Y01e2
-         nM/GIe4fwnl7y5kl6kWHmAk+YMuFN2OJh8DjY17hzWWzYxRjMf7qf/bdi3Nkua5220VR
-         vB2m10/ou/LIxDWxnxWQ0o2d/HtWPjorXV5oE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Gw0Wy/q20wEZd72lzxD2a0cUuCarQEEakePN17Bh29I=;
-        b=o2jVcy+azypUGZeWIBGsh3Gv2Med2D+07KbcBU8jAhWIK/oALfTbaRgD73J/ORUseD
-         ZsbtK/4etBxqDI+J1NBYgNlArocEqNlzyaO1ZmR45ZYINxL+Hccqto+Wembb5FqH0Z3s
-         fEdaFon3fD4UOF8gPTn7qToS2qpQPn2w0lIuuMqQT+d3xS1DheYIgwmwPQtk1F3+zAzL
-         0yAIpniY2jyQQ5dXTMlG6MHVUrDSsR97tdamoqmt8L0gKbsr1UOMtY4ujmgMo1JOqFS+
-         94LMVeWo8vps3c1fhdPp0XbOAGH1OX+t1TU7X6bCbJ1LqoM9jD0qlrNJB+hP/CyQWrTU
-         KPDQ==
-X-Gm-Message-State: AOAM533x0eqhZOuPu1D2wZasX/AGyHjNW8swc1qXb2+t2wOAQ5t7MdLM
-        AWU3Ds/AN7zfn31dKj86DPiPHw==
-X-Google-Smtp-Source: ABdhPJwgCPJuzeIZbUoJFQnwWW4mzTiy/xhRt63UDwPNrpwk8vjx7kJz23BXc4wMqpPu1j8rzx43aA==
-X-Received: by 2002:a17:90b:3646:b0:1d8:15c5:464b with SMTP id nh6-20020a17090b364600b001d815c5464bmr7264403pjb.63.1652300393282;
-        Wed, 11 May 2022 13:19:53 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:201:193f:f17a:ab0d:1f83])
-        by smtp.gmail.com with ESMTPSA id y5-20020aa78045000000b0050dd876f5f8sm2161306pfm.49.2022.05.11.13.19.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 13:19:52 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Guenter Roeck <groeck@chromium.org>
-Subject: [PATCH v2] timers: Provide a better debugobjects hint for delayed works
-Date:   Wed, 11 May 2022 13:19:51 -0700
-Message-Id: <20220511201951.42408-1-swboyd@chromium.org>
-X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
+        Wed, 11 May 2022 16:24:17 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0345A72E01;
+        Wed, 11 May 2022 13:24:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=LCKlEcL/+gLbho7zoJo89g9MDYx2GFkg8N7n1nlW+0g=; b=MQpyMZ3nMM+SlSF0Ic+7AggIHS
+        wWCWxLFJNdpcNC/qKw1wNJR3uSo8xMkfiJlq7d2aikSbZG9yuq1pfGOyawWDcFgWnRsla4fbF455Y
+        3RXCIUoMIO9o6uix81B+J++RZraHoxYIg5AFTEzg2KmNpXSrs7BEjvRicrp5TYhs6s3mYN27kkyAz
+        njPDxaRSeQ75fkZPzqisnL9xIuav4szhmycF8VItK7avDyCoEE8U/Zs7xTZO8x+jizmxi0qGskMhG
+        GsWdK7oyZ7kJDFhpPsgWAmAhF7aiE+T5aNpN2RQ5WYTzC7ql7jtRy3esjCfYNiJNCeB+2D6JHceeB
+        Ayva3vzg==;
+Received: from [177.183.162.244] (helo=[192.168.0.5])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1noss0-000Aod-US; Wed, 11 May 2022 22:23:41 +0200
+Message-ID: <4b003501-f5c3-cd66-d222-88d98c93e141@igalia.com>
+Date:   Wed, 11 May 2022 17:22:22 -0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 11/30] um: Improve panic notifiers consistency and
+ ordering
+Content-Language: en-US
+To:     Petr Mladek <pmladek@suse.com>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Richard Weinberger <richard@nod.at>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-12-gpiccoli@igalia.com> <Ynp2hRodh04K3pzK@alley>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <Ynp2hRodh04K3pzK@alley>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With debugobjects enabled the timer hint for freeing of active timers
-embedded inside delayed works is always the same, i.e. the hint is
-delayed_work_timer_fn, even though the function the delayed work is
-going to run can be wildly different depending on what work was queued.
-Enabling workqueue debugobjects doesn't help either because the delayed
-work isn't considered active until it is actually queued to run on a
-workqueue. If the work is freed while the timer is pending the work
-isn't considered active so we don't get any information from workqueue
-debugobjects.
+On 10/05/2022 11:28, Petr Mladek wrote:
+> [...]
+> It is not clear to me why user mode linux should not care about
+> the other notifiers. It might be because I do not know much
+> about the user mode linux.
+> 
+> Is the because they always create core dump or are never running
+> in a hypervisor or ...?
+> 
+> AFAIK, the notifiers do many different things. For example, there
+> is a notifier that disables RCU watchdog, print some extra
+> information. Why none of them make sense here?
+>
 
-Special case delayed works in the timer debugobjects hint logic so that
-the delayed work function is returned instead of the
-delayed_work_timer_fn. This will help us understand what delayed work
-was pending that got freed. Apply the same treatment for
-kthread_delayed_work because it follows the same pattern.
+Hi Petr, my understanding is that UML is a form of running Linux as a
+regular userspace process for testing purposes. With that said, as soon
+as we exit in the error path, less "pollution" would happen, so users
+can use GDB to debug the core dump for example.
 
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Lai Jiangshan <jiangshanlai@gmail.com>
-Cc: Guenter Roeck <groeck@chromium.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
+In later patches of this series (when we split the panic notifiers in 3
+lists) these UML notifiers run in the pre-reboot list, so they run after
+the informational notifiers for example (in the default level).
+But without the list split we cannot order properly, so my gut feeling
+is that makes sense to run them rather earlier than later in the panic
+process...
 
-Feel free to reassign authorship to tglx.
+Maybe Anton / Johannes / Richard could give their opinions - appreciate
+that, I'm not attached to the priority here, it's more about users'
+common usage of UML I can think of...
 
-Changes from v1 (https://lore.kernel.org/r/20220504223148.644228-1-swboyd@chromium.org):
- * Use counter proposed patch from tglx
- * Deref function pointer to get proper hint
- * Add 't' the function pointer to make checkpatch quiet
+Cheers,
 
- kernel/time/timer.c | 32 +++++++++++++++++++++++++++++++-
- 1 file changed, 31 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 9dd2a39cb3b0..8637990a3842 100644
---- a/kernel/time/timer.c
-+++ b/kernel/time/timer.c
-@@ -615,9 +615,39 @@ static void internal_add_timer(struct timer_base *base, struct timer_list *timer
- 
- static const struct debug_obj_descr timer_debug_descr;
- 
-+struct timer_hint {
-+	void	(*function)(struct timer_list *t);
-+	long	offset;
-+};
-+
-+#define TIMER_HINT(fn, container, timr, hintfn)			\
-+	{							\
-+		.function = fn,					\
-+		.offset	  = offsetof(container, hintfn) -	\
-+			    offsetof(container, timr)		\
-+	}
-+
-+static const struct timer_hint timer_hints[] = {
-+	TIMER_HINT(delayed_work_timer_fn,
-+		   struct delayed_work, timer, work.func),
-+	TIMER_HINT(kthread_delayed_work_timer_fn,
-+		   struct kthread_delayed_work, timer, work.func),
-+};
-+
- static void *timer_debug_hint(void *addr)
- {
--	return ((struct timer_list *) addr)->function;
-+	struct timer_list *timer = addr;
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(timer_hints); i++) {
-+		if (timer_hints[i].function == timer->function) {
-+			void (**fn)(void) = addr + timer_hints[i].offset;
-+
-+			return *fn;
-+		}
-+	}
-+
-+	return timer->function;
- }
- 
- static bool timer_is_static_object(void *addr)
-
-base-commit: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
--- 
-https://chromeos.dev
-
+Guilherme

@@ -2,104 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DB9452339C
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDEAF5233B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbiEKNCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:02:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
+        id S243119AbiEKNF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiEKNCt (ORCPT
+        with ESMTP id S235372AbiEKNFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:02:49 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD1C69712
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:02:45 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id p26so3407870lfh.10
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:02:45 -0700 (PDT)
+        Wed, 11 May 2022 09:05:50 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9BCDEAA
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:05:48 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id w187so3904536ybe.2
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:05:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=95MuJt8/5xkfU9O/tURNa9ZrWheUB9lAAuDXN9qGKtY=;
-        b=QT7rwi+wKWvjRvhdXbfbV1peEgBYom3IFvEK/Pxp3KEZnBxpYoxCKJ9hXIpPgW7yhh
-         6WmmfJQ9eL16ES0yVXNZVMxy1HhjVC6Yt32ixndjHWm8ydrsoMYg0w3NvzIjLfZEOHl2
-         wk42DrxyziWjA3NIU/7rEij169TK5TQUBekKTGrl0XYszrApthy7LzQT21LCyR/uShRF
-         nBZ8o5ua9V8pD/cK3dbiXFDH9oVaLFPGj8vzDxyyqGxmizHrrvsmow9aHtSORsJpJMOW
-         YmJuMvRBaKFJx4n2Zd+yq6cWwlG9eVWT2FN8zsnUMRVMFfmkY1TYkz2KWHaXEg3YcKK9
-         PPtg==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=alN9NUxZowEkDstVYOnVw32DS4I4mSVC05IaVQ1sfiU=;
+        b=NHbVLSb/IvYbshil6PcaDeTB9meK9lgGB+X9ifCZP+TCL1N3KBAZhlTd0GhktiOhkO
+         cJtPG3u7bW8cUQ7YGT1ptX9+VyXecVcV5Y6ZXRdjJSSfH8HRFEOz02hDo4Hfqu0dQbAN
+         Si4jvVk1JSJDxKvCLpBLZHl8Pa5bCknaZOJF4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=95MuJt8/5xkfU9O/tURNa9ZrWheUB9lAAuDXN9qGKtY=;
-        b=1LLcl+SiNBdOiQ3t0N91OZiqqUEtaJ/qFZemWbkYw7/zhrS8vuO76qdYris7uFs+lV
-         qaKS3a9NkZ7FjAm6MPoHGIQ6mUmfXLkEuYAbrn2vkFo0G27Lso2CNC3N/xrJkF8P/jej
-         aiUOwj1FLM2PJhWq+59h0/KTu2j26/nOjRcen2gjU+fv0c6iu4Bqpotk5TsMJdk1M+Zl
-         KB9xsrCdcXlgmedHjno0Pmm9MqKsBfIpf8kfaAEfox59a12ZlceE0L3A/leSjdutgrnw
-         2qPiiKxAn70P0IorqZ2K93NXkhwQqLAOHDgWHIFRG/rxzXyTs+jfCZlIP0oNDguoIKGO
-         ZAyA==
-X-Gm-Message-State: AOAM530wOgDsQN5jhIVFe2yO1vq38VuADtssKWxIfGI9Dkt6gv0/dBU8
-        xaVOmY7NHQXQiHGORg7xXuE/Rk9mRwVG+Ga7QXM=
-X-Google-Smtp-Source: ABdhPJw1WfyIvPQXJF1Sqxy4dB/mobdLl6U5GIRL3fAlvhfT2DpYPIMze/UhmBLIvpH/zwnDnBbNunkH7WkBNP27SrU=
-X-Received: by 2002:a05:6512:2241:b0:471:d2b9:1f00 with SMTP id
- i1-20020a056512224100b00471d2b91f00mr20638593lfu.342.1652274163515; Wed, 11
- May 2022 06:02:43 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=alN9NUxZowEkDstVYOnVw32DS4I4mSVC05IaVQ1sfiU=;
+        b=T3AuhbeESyTY60ZIvBvEahcoQgNdX3PIRya5a0+onO0GtIzGi4pS5U3k47E7k2v2M/
+         G3Vv1LpSMbz/nKlSNPFhXXuf/5QacOB/ZXOjyxYEWsUpq2I9tSjLaY3CrPuEdgbYnbCQ
+         oXPX3c/5O/1qgZrQxU/iW56gQOMv21QbAa4iu7nFGpDEoC4Ibfo8emk9CdiWerAnig0j
+         VUYDDdeiXFZvzBz7PTrG83q6dYcrwtwMkpNvb2RNHzvYR9nnhm8gywEDNSxiWfq1bvrv
+         WbAkfRb0Ebi55NVP9hoDWHOorxhNUM54FAawWyGG7gnGE3cUl1yd3K5OVjRmLQ9u5wH1
+         K2UA==
+X-Gm-Message-State: AOAM531DgcsHAqKTmSzIp8nkULIRtA37A/MTakiA8cp2x43T2kktiyIk
+        tjmCVuc38Z+2Zy7SUSNHAmUEqsC2V5kv7jV03mNtqA==
+X-Google-Smtp-Source: ABdhPJzkrcZMJilZKt8K7MTZ9r8G8qNFSk+3YyiZ6njw2XzhbTqbGkSKb6Y7yUx68sby8oqrklEVUwTAuqBK+A3Br4A=
+X-Received: by 2002:a5b:44e:0:b0:64a:c0be:c59c with SMTP id
+ s14-20020a5b044e000000b0064ac0bec59cmr16451795ybp.573.1652274347928; Wed, 11
+ May 2022 06:05:47 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a2e:9814:0:0:0:0:0 with HTTP; Wed, 11 May 2022 06:02:42
- -0700 (PDT)
-Reply-To: nikkifenton79@gmail.com
-From:   Nikki Fenton <cldominique77@gmail.com>
-Date:   Wed, 11 May 2022 15:02:42 +0200
-Message-ID: <CADuPsQ9YQaUK89akt7qMX_VXm8uJbrHsBvNQ0oNYr6K60CArzA@mail.gmail.com>
-Subject: Please Read
-To:     undisclosed-recipients:;
+References: <20220511013057.245827-1-dlunev@chromium.org> <CAJfpegsmyY+D4kK3ov51FLGA=RkyGDKMcYiMo2zBqYuFNs78JQ@mail.gmail.com>
+ <CAONX=-dqY64VkqF6cNYvm8t-ad8XRqDhELP9icfPTPD2iLobLA@mail.gmail.com>
+ <CAJfpegvUZheWb3eJwVrpBDYzwQH=zQsuq9R8mpcXb3fqzzEdiQ@mail.gmail.com>
+ <CAONX=-cxA-tZOSo33WK9iJU61yeDX8Ct_PwOMD=5WXLYTJ-Mjg@mail.gmail.com>
+ <CAJfpegsNwsWJC+x8jL6kDzYhENQQ+aUYAV9wkdpQNT-FNMXyAg@mail.gmail.com>
+ <CAONX=-d9nfYpPkbiVcaEsCQT1ZpwAN5ry8BYKBA6YoBvm7tPfg@mail.gmail.com> <CAJfpegtTP==oMm+LhvOkrxkPB973-Y80chbwYpXSiOAXBDhHJw@mail.gmail.com>
+In-Reply-To: <CAJfpegtTP==oMm+LhvOkrxkPB973-Y80chbwYpXSiOAXBDhHJw@mail.gmail.com>
+From:   Daniil Lunev <dlunev@chromium.org>
+Date:   Wed, 11 May 2022 23:05:37 +1000
+Message-ID: <CAONX=-fQvBczRk2HV1GXBoypq7_QbUX9JXc2AuDMQ+-qfYW32A@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Prevent re-use of FUSE superblock after force unmount
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     linux-fsdevel@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:142 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4994]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [nikkifenton79[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [cldominique77[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [cldominique77[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good Day!
-
-Your swift responds will be greatly appreciated. I viewed your profile
-on Linkedin regarding a proposal that has something in common with
-you, reply for more details on my private
-email: nikkifenton79@gmail.com
-
-Nikki Fenton
-nikkifenton79@gmail.com
+> I think it would be easiest to remove the super block from the
+> type->fs_supers list.
+I will try tomorrow and upload an updated patchset.
+Thanks,
+Daniil.

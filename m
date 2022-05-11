@@ -2,105 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16932522C49
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC12522C58
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241703AbiEKG1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 02:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37762 "EHLO
+        id S242070AbiEKGbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 02:31:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233219AbiEKG1e (ORCPT
+        with ESMTP id S239665AbiEKGbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 02:27:34 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6990A22EA74;
-        Tue, 10 May 2022 23:27:32 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id q76so929871pgq.10;
-        Tue, 10 May 2022 23:27:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6QMLfxwOjrgEo2T024s8tceNALt/NjOUTGCdVzN17Y0=;
-        b=lrbiXuOxFTroo21bJnsXw8lr9QSBUnK/XFsQaWyDte2CMf+ycoWwOfCC4v4QsXIaFA
-         v3EOJP0bb7sWXSLScJL+uWVTk4ckOrs8s8wtuFOSm+xpeGk/VbobBqsTJx3yjXeNCqAl
-         TSVRYB1r7UaShsu4uZ/fjlXb2J8LKDOBQL/IZxFNKHNu1TrC+1/sC0NTm7aQYMwtSIvU
-         8Mi4akg3JxsMVgziu+MRSwxvmjap/XFPlaTeUH0l8yHVShfFbkWyaxIpaYiK4OaJPTyJ
-         WQnehxWCd12lf/l+aB7NBo9bVJ96nczhnI5cEMToNNK/+7snh0Gvi6SaIRUXxWk5YShU
-         CRAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6QMLfxwOjrgEo2T024s8tceNALt/NjOUTGCdVzN17Y0=;
-        b=V7fMUxA2exlXqCEY7jRPDdstjCy31lDJrqRkawpbgB6B5YDvwxYbJaYAisFXYqS9ov
-         VBP2pG2P0TaWv6tvlOWxZwoBF3bufMJ796fmpQtXZq/CTaTQM2yevimzaE+bbSUAhDao
-         ZdFKffi5Lsf9sO4ut5fMBwelkRCqyS3RuTilqnmL06oHc0nJqr1F2hsfkXTCW+Qxi3gI
-         tyLCWy0rfqia2PLcMjko5zrcTFTfqfL8xpQpUSU5s8H/jJZQsyLzxRlB5P0hB1r9d/j+
-         2pUf1iYQ1eQ5aa9YIc2KxqVqSp2DGjz97rR+NGHnK9Icm8wvn0Vel8jhoXsd7i8aNXES
-         bdbg==
-X-Gm-Message-State: AOAM530YRlLWZ1IR0PUj6/fpAGfhDDp2Oyr50IYp3JZ+uFL8uTPmjtV7
-        0Ca04T1s5Ou81eU8TWHgzV8=
-X-Google-Smtp-Source: ABdhPJzV7M8WNxLMmly7NZZKEXlt2lXzDUTZ89qzMV6tl2sP0GFbTZJ9KfjTX4f3cCcU/Dstwic0Pg==
-X-Received: by 2002:a63:da13:0:b0:3c6:4c0:e2f9 with SMTP id c19-20020a63da13000000b003c604c0e2f9mr19585290pgh.493.1652250451978;
-        Tue, 10 May 2022 23:27:31 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id s64-20020a17090a2f4600b001d7f3bb11d7sm3173716pjd.53.2022.05.10.23.27.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 23:27:31 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Jeff Garzik <jgarzik@redhat.com>,
-        David Daney <david.daney@cavium.com>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] ata: pata_octeon_cf: Fix refcount leak in octeon_cf_probe
-Date:   Wed, 11 May 2022 10:27:23 +0400
-Message-Id: <20220511062723.56652-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 11 May 2022 02:31:33 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F4D3C729;
+        Tue, 10 May 2022 23:31:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652250690; x=1683786690;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CGqCtaqi57In086U06rBSjn2KI5H866E/cXUj0HmPpA=;
+  b=O8DESnnIwq0ByWhIGL8fssZozxecC/C2cOe+4qzLAb8io96cw8FCZH1R
+   L44WzqCZAwtZmhRBYmtNrknCw2BQYoQPGyGtufuj2ac/GtslMxj6mU9ES
+   Pdoo8xuqT/rXw3reDK0Ts6+aMzAD0D3FE/m9y5OU9CMic/lmIIZs84NI1
+   HWugAoxzW7F8odqnV2ojcXf6gP73ivJ9pEU1kRXQc/ce3aQ5fq2igCcyk
+   Ok4KJGxaULgZAY9uCSZ1TnzxPocfuD9RU1kqAdqPKFrxsjKqE/di1qYFp
+   p7pZr49xKAxHFft72hCeVvWbYGpmwZahmQaURZWigTMVDAv2tkym5MxWA
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="269735718"
+X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
+   d="scan'208";a="269735718"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 23:31:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
+   d="scan'208";a="711356810"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 10 May 2022 23:31:26 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 11 May 2022 09:31:25 +0300
+Date:   Wed, 11 May 2022 09:31:25 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     cy_huang <u0084500@gmail.com>
+Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org,
+        matthias.bgg@gmail.com, cy_huang@richtek.com,
+        bryan_huang@richtek.com, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Fabien Parent <fparent@baylibre.com>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [PATCH v2] usb: typec: tcpci_mt6360: Update for BMC PHY setting
+Message-ID: <YntYPbHGkz08k47d@kuha.fi.intel.com>
+References: <1652159580-30959-1-git-send-email-u0084500@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1652159580-30959-1-git-send-email-u0084500@gmail.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_find_device_by_node() takes reference, we should use put_device()
-to release it when not need anymore.
-Add missing put_device() in error path to avoid refcount
-leak.
+On Tue, May 10, 2022 at 01:13:00PM +0800, cy_huang wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
+> 
+> Update MT6360 BMC PHY Tx/Rx setting for the compatibility.
+> 
+> Macpaul reported this CtoDP cable attention message cannot be received from
+> MT6360 TCPC. But actually, attention message really sent from UFP_D
+> device.
+> 
+> After RD's comment, there may be BMC PHY Tx/Rx setting causes this issue.
+> 
+> Below's the detailed TCPM log and DP attention message didn't received from 6360
+> TCPCI.
+> [ 1206.367775] Identity: 0000:0000.0000
+> [ 1206.416570] Alternate mode 0: SVID 0xff01, VDO 1: 0x00000405
+> [ 1206.447378] AMS DFP_TO_UFP_ENTER_MODE start
+> [ 1206.447383] PD TX, header: 0x1d6f
+> [ 1206.449393] PD TX complete, status: 0
+> [ 1206.454110] PD RX, header: 0x184f [1]
+> [ 1206.456867] Rx VDM cmd 0xff018144 type 1 cmd 4 len 1
+> [ 1206.456872] AMS DFP_TO_UFP_ENTER_MODE finished
+> [ 1206.456873] cc:=4
+> [ 1206.473100] AMS STRUCTURED_VDMS start
+> [ 1206.473103] PD TX, header: 0x2f6f
+> [ 1206.475397] PD TX complete, status: 0
+> [ 1206.480442] PD RX, header: 0x2a4f [1]
+> [ 1206.483145] Rx VDM cmd 0xff018150 type 1 cmd 16 len 2
+> [ 1206.483150] AMS STRUCTURED_VDMS finished
+> [ 1206.483151] cc:=4
+> [ 1206.505643] AMS STRUCTURED_VDMS start
+> [ 1206.505646] PD TX, header: 0x216f
+> [ 1206.507933] PD TX complete, status: 0
+> [ 1206.512664] PD RX, header: 0x1c4f [1]
+> [ 1206.515456] Rx VDM cmd 0xff018151 type 1 cmd 17 len 1
+> [ 1206.515460] AMS STRUCTURED_VDMS finished
+> [ 1206.515461] cc:=4
+> 
+> Fixes: e1aefcdd394fd ("usb typec: mt6360: Add support for mt6360 Type-C driver")
+> Reported-by: Macpaul Lin <macpaul.lin@mediatek.com>
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Cc: stable <stable@vger.kernel.org>
 
-Fixes: 43f01da0f279 ("MIPS/OCTEON/ata: Convert pata_octeon_cf.c to use device tree.")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/ata/pata_octeon_cf.c | 2 ++
- 1 file changed, 2 insertions(+)
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-diff --git a/drivers/ata/pata_octeon_cf.c b/drivers/ata/pata_octeon_cf.c
-index 6b5ed3046b44..65688459acf1 100644
---- a/drivers/ata/pata_octeon_cf.c
-+++ b/drivers/ata/pata_octeon_cf.c
-@@ -857,12 +857,14 @@ static int octeon_cf_probe(struct platform_device *pdev)
- 				res_dma = platform_get_resource(dma_dev, IORESOURCE_MEM, 0);
- 				if (!res_dma) {
- 					of_node_put(dma_node);
-+					put_device(&dma_dev->dev);
- 					return -EINVAL;
- 				}
- 				cf_port->dma_base = (u64)devm_ioremap(&pdev->dev, res_dma->start,
- 									 resource_size(res_dma));
- 				if (!cf_port->dma_base) {
- 					of_node_put(dma_node);
-+					put_device(&dma_dev->dev);
- 					return -EINVAL;
- 				}
- 
+> ---
+>  drivers/usb/typec/tcpm/tcpci_mt6360.c | 26 ++++++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c b/drivers/usb/typec/tcpm/tcpci_mt6360.c
+> index f1bd9e0..8a952ea 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
+> @@ -15,6 +15,9 @@
+>  
+>  #include "tcpci.h"
+>  
+> +#define MT6360_REG_PHYCTRL1	0x80
+> +#define MT6360_REG_PHYCTRL3	0x82
+> +#define MT6360_REG_PHYCTRL7	0x86
+>  #define MT6360_REG_VCONNCTRL1	0x8C
+>  #define MT6360_REG_MODECTRL2	0x8F
+>  #define MT6360_REG_SWRESET	0xA0
+> @@ -22,6 +25,8 @@
+>  #define MT6360_REG_DRPCTRL1	0xA2
+>  #define MT6360_REG_DRPCTRL2	0xA3
+>  #define MT6360_REG_I2CTORST	0xBF
+> +#define MT6360_REG_PHYCTRL11	0xCA
+> +#define MT6360_REG_RXCTRL1	0xCE
+>  #define MT6360_REG_RXCTRL2	0xCF
+>  #define MT6360_REG_CTDCTRL2	0xEC
+>  
+> @@ -106,6 +111,27 @@ static int mt6360_tcpc_init(struct tcpci *tcpci, struct tcpci_data *tdata)
+>  	if (ret)
+>  		return ret;
+>  
+> +	/* BMC PHY */
+> +	ret = mt6360_tcpc_write16(regmap, MT6360_REG_PHYCTRL1, 0x3A70);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_write(regmap, MT6360_REG_PHYCTRL3,  0x82);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_write(regmap, MT6360_REG_PHYCTRL7, 0x36);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = mt6360_tcpc_write16(regmap, MT6360_REG_PHYCTRL11, 0x3C60);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_write(regmap, MT6360_REG_RXCTRL1, 0xE8);
+> +	if (ret)
+> +		return ret;
+> +
+>  	/* Set shipping mode off, AUTOIDLE on */
+>  	return regmap_write(regmap, MT6360_REG_MODECTRL2, 0x7A);
+>  }
+> -- 
+> 2.7.4
+
 -- 
-2.25.1
-
+heikki

@@ -2,226 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4248F523D02
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A26523D06
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346565AbiEKTFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 15:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57900 "EHLO
+        id S1346576AbiEKTHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 15:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236747AbiEKTFP (ORCPT
+        with ESMTP id S237377AbiEKTHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 15:05:15 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCDB661604
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:05:13 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id a21so3693475edb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:05:13 -0700 (PDT)
+        Wed, 11 May 2022 15:07:01 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E45769716
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:06:58 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id dv4so2758319qvb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:06:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=4K/BqknQQ3B81Ri9IMPLTLrHNMzicKZVVfstqbcQoXw=;
-        b=A/KCQGg5ugLO69SideOJEv3eS/RyBeILjrfEq1trEjYp4cb9RZCmIZVFqxyI7WsooG
-         XsWzCAMH5B+G8qNASIFfM8v3cZTbZl3x5TWJGNd90LgqR8xJipz7OP0NHwqKYzKNE3I7
-         MVIOk5NK+bWC0jwrLMNufBwoueLjBB6jdZuiE=
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=RFcLVWiWlqjohwWrz8ZmNxS2c0JbCUFp6Lb1Ilp7lsM=;
+        b=Wqi934csibhv/mpquejGDXyoEtv7L4by8ZdjiC8Vt5xc0YCHBzZJVfZphSsZTUFtlk
+         BWN+uBN6xJN4vfk6rYwpgxP0+Hto8wWvFVtfTc81X66yFGK+cH1Z1HReUfrgi+Yk1g8h
+         vWplRp9WFeeKoSsIxxqRrUkTH0jt2TDkk/gNd00645n46RTD+bg1mhWdv97mtH3aF0HF
+         yhMdAMiB2NXXE93IjVJ7yPGxLJnM429NTCqFxnYtxNrKudFgsM3k8cVwAAYJk1fp+qp5
+         X/r/ZbGqcqzfvRKub5gm3w23S19pd4l2vLznyNBwE9dbtRWA6EbSBXEb7cMd6sqpbwND
+         H4/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=4K/BqknQQ3B81Ri9IMPLTLrHNMzicKZVVfstqbcQoXw=;
-        b=4V3IJG+cueFvWR/UtLuSufTojPkagDyHSjMi23iBqOjXiUIyXj6I12n4BuZYA8dLgH
-         Jpa+bxaSHjhYAocH9C97G2fmASusMxb1a6ALxl0eHBFyu5nAdO3ydhbMUfE+x8ApE9o+
-         5wy0u6LW/eZG3z6e/uodH+H/OdHL52mJFSeBxVzRYiRj4cLe6HTHIBagNznt+hnvusPP
-         di92PTOTIxk6j6Fqi+vzVkXVp58Cky4XwysJHXLF9anacksMXXX97fUqUFph7zHGsxz0
-         Za+Or32LZLkKWRBhDM+1/itEzzdqozlX4xH0NBN8QnTHLiNFqM9KbwPFXHhHXbhQvsIU
-         gOtA==
-X-Gm-Message-State: AOAM530VxrRTAARq5E2sPaV/cD6BNzzZVfuX1DkgcHWV3GqGRODtFRUr
-        jvmS5meoFFgB9dja3O6nw2zQ7A==
-X-Google-Smtp-Source: ABdhPJxzbQWruH8VN9oOr7p/K2/W+DT07g4nY6eAZpa/3zcSLOTXAgDkDgKjcZvZEO42b/8vTn+Ifg==
-X-Received: by 2002:a05:6402:278d:b0:42a:2dc0:744f with SMTP id b13-20020a056402278d00b0042a2dc0744fmr1951646ede.226.1652295912301;
-        Wed, 11 May 2022 12:05:12 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id i26-20020a1709063c5a00b006fa9384a0b5sm1259045ejg.61.2022.05.11.12.05.10
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=RFcLVWiWlqjohwWrz8ZmNxS2c0JbCUFp6Lb1Ilp7lsM=;
+        b=N+WOLY//zyaEUogVSua+lyKJE7PUENAy6org6KlawFY+evL7lG693ApZVDCdWTtb9R
+         bbSGCp7hci2ADxjzMAzuXDvBtAxOSdjzwyTt8+XbcBFlUIRBGbmkOHUcokAoqRr9Wtdp
+         Qs2neq/rs6cb2lkA87GE4lZkncqbhQyB7tSDzTgYnld5A9mc04SiTwbTdTJV1xjRHuz7
+         2jfXdeXLhFr1rTxZVXb1d3e8mKLnn9O0RFewLrFmhCaDh26PQzZPYJhRBFuWvqa+QXLs
+         W5MWo0NW9R0a7e4Xrs2dPXMatORuHf5ItG8iUoPnLOprVQNzKn9P4EBAxihNzYwZlD+x
+         xjFA==
+X-Gm-Message-State: AOAM533f8OeluX1UjgzdDY1Ikc1ZKXAwHWUJ3rirlOYDmQ6+GQG0pQq1
+        qKSTkmRRf18WgEXKmPTCuEmznQ==
+X-Google-Smtp-Source: ABdhPJwN87h/5O8XKH+GeEZgluUajrgQzz3p3faqLc70d9m7twEIqgosgWojvjricOwl86yxDeE5PA==
+X-Received: by 2002:ad4:4ee6:0:b0:45a:fe5a:1e2c with SMTP id dv6-20020ad44ee6000000b0045afe5a1e2cmr18676356qvb.103.1652296017143;
+        Wed, 11 May 2022 12:06:57 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::1:14fe])
+        by smtp.gmail.com with ESMTPSA id k11-20020ac8140b000000b002f39b99f6a8sm1601966qtj.66.2022.05.11.12.06.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 12:05:11 -0700 (PDT)
-Date:   Wed, 11 May 2022 21:05:09 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Stone <daniel@fooishbar.org>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v4 10/15] drm/shmem-helper: Take reservation lock instead
- of drm_gem_shmem locks
-Message-ID: <YnwI5UX/zvmnAHvg@phenom.ffwll.local>
-Mail-Followup-To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Stone <daniel@fooishbar.org>,
-        David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>, Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dmitry Osipenko <digetx@gmail.com>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-References: <01506516-ab2f-cb6e-7507-f2a3295efb59@collabora.com>
- <YnOHAh9I1ds4+1J+@phenom.ffwll.local>
- <83e68918-68de-c0c6-6f9b-e94d34b19383@collabora.com>
- <YnkaUk0mZNuPsZ5r@phenom.ffwll.local>
- <4d08b382-0076-1ea2-b565-893d50b453cb@collabora.com>
- <YnuziJDmXVR09UzP@phenom.ffwll.local>
- <56787b70-fb64-64da-6006-d3aa3ed59d12@gmail.com>
- <3a362c32-870c-1d73-bba6-bbdcd62dc326@collabora.com>
- <YnvWUbh5QDDs6u2B@phenom.ffwll.local>
- <ba2836d0-9a3a-b879-cb1e-a48aed31637d@collabora.com>
+        Wed, 11 May 2022 12:06:56 -0700 (PDT)
+Date:   Wed, 11 May 2022 15:06:56 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Minchan Kim <minchan@kernel.org>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com
+Subject: Re: [PATCH v2 6/6] zswap: memcg accounting
+Message-ID: <YnwJUL90fuoHs3YW@cmpxchg.org>
+References: <20220510152847.230957-1-hannes@cmpxchg.org>
+ <20220510152847.230957-7-hannes@cmpxchg.org>
+ <20220511173218.GB31592@blackbody.suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ba2836d0-9a3a-b879-cb1e-a48aed31637d@collabora.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220511173218.GB31592@blackbody.suse.cz>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 06:40:32PM +0300, Dmitry Osipenko wrote:
-> On 5/11/22 18:29, Daniel Vetter wrote:
-> > On Wed, May 11, 2022 at 06:14:00PM +0300, Dmitry Osipenko wrote:
-> >> On 5/11/22 17:24, Christian König wrote:
-> >>> Am 11.05.22 um 15:00 schrieb Daniel Vetter:
-> >>>> On Tue, May 10, 2022 at 04:39:53PM +0300, Dmitry Osipenko wrote:
-> >>>>> [SNIP]
-> >>>>> Since vmapping implies implicit pinning, we can't use a separate lock in
-> >>>>> drm_gem_shmem_vmap() because we need to protect the
-> >>>>> drm_gem_shmem_get_pages(), which is invoked by drm_gem_shmem_vmap() to
-> >>>>> pin the pages and requires the dma_resv_lock to be locked.
-> >>>>>
-> >>>>> Hence the problem is:
-> >>>>>
-> >>>>> 1. If dma-buf importer holds the dma_resv_lock and invokes
-> >>>>> dma_buf_vmap() -> drm_gem_shmem_vmap(), then drm_gem_shmem_vmap() shall
-> >>>>> not take the dma_resv_lock.
-> >>>>>
-> >>>>> 2. Since dma-buf locking convention isn't specified, we can't assume
-> >>>>> that dma-buf importer holds the dma_resv_lock around dma_buf_vmap().
-> >>>>>
-> >>>>> The possible solutions are:
-> >>>>>
-> >>>>> 1. Specify the dma_resv_lock convention for dma-bufs and make all
-> >>>>> drivers to follow it.
-> >>>>>
-> >>>>> 2. Make only DRM drivers to hold dma_resv_lock around dma_buf_vmap().
-> >>>>> Other non-DRM drivers will get the lockdep warning.
-> >>>>>
-> >>>>> 3. Make drm_gem_shmem_vmap() to take the dma_resv_lock and get deadlock
-> >>>>> if dma-buf importer holds the lock.
-> >>>>>
-> >>>>> ...
-> >>>> Yeah this is all very annoying.
-> >>> Ah, yes that topic again :)
-> >>>
-> >>> I think we could relatively easily fix that by just defining and
-> >>> enforcing that the dma_resv_lock must have be taken by the caller when
-> >>> dma_buf_vmap() is called.
-> >>>
-> >>> A two step approach should work:
-> >>> 1. Move the call to dma_resv_lock() into the dma_buf_vmap() function and
-> >>> remove all lock taking from the vmap callback implementations.
-> >>> 2. Move the call to dma_resv_lock() into the callers of dma_buf_vmap()
-> >>> and enforce that the function is called with the lock held.
-> >> I've doubts about the need to move out the dma_resv_lock() into the
-> >> callers of dma_buf_vmap()..
-> >>
-> >> I looked through all the dma_buf_vmap() users and neither of them
-> >> interacts with dma_resv_lock() at all, i.e. nobody takes the lock
-> >> in/outside of dma_buf_vmap(). Hence it's easy and more practical to make
-> >> dma_buf_mmap/vmap() to take the dma_resv_lock by themselves.
-> > i915_gem_dmabuf_vmap -> i915_gem_object_pin_map_unlocked ->
-> >   i915_gem_object_lock -> dma_resv_lock
-> > 
-> > And all the ttm drivers should work similarly. So there's definitely
-> > drivers which grab dma_resv_lock from their vmap callback.
+On Wed, May 11, 2022 at 07:32:18PM +0200, Michal Koutný wrote:
+> Hello.
 > 
-> Grr.. I'll take another look.
+> On Tue, May 10, 2022 at 11:28:47AM -0400, Johannes Weiner <hannes@cmpxchg.org> wrote:
+> > +void obj_cgroup_charge_zswap(struct obj_cgroup *objcg, size_t size)
+> > +{
+> > +	struct mem_cgroup *memcg;
+> > +
+> > +	VM_WARN_ON_ONCE(!(current->flags & PF_MEMALLOC));
+> > +
+> > +	/* PF_MEMALLOC context, charging must succeed */
+> > +	if (obj_cgroup_charge(objcg, GFP_KERNEL, size))
+> > +		VM_WARN_ON_ONCE(1);
 > 
-> >> It's unclear to me which driver may ever want to do the mapping under
-> >> the dma_resv_lock. But if we will ever have such a driver that will need
-> >> to map imported buffer under dma_resv_lock, then we could always add the
-> >> dma_buf_vmap_locked() variant of the function. In this case the locking
-> >> rule will sound like this:
-> >>
-> >> "All dma-buf importers are responsible for holding the dma-reservation
-> >> lock around the dmabuf->ops->mmap/vmap() calls."
-> 
-> Are you okay with this rule?
+> IIUC, the objcg is derived from the compressed page, i.e. same memcg
+> (reparenting neglected for now). This memcg's memory.current is then
+> charged with the compressed object size.
 
-Yeah I think long-term it's where we want to be, just trying to find
-clever ways to get there.
+Correct. After which the uncompressed page is reclaimed and uncharged.
+So the zswapout process will reduce the charge bottom line.
 
-And I think Christian agrees with that?
+> Do I get it right that memory.zswap.current is a subset of memory.current?
+>
+> (And that zswap is limited both by memory.max and memory.zswap.max?)
 
-> >>> It shouldn't be that hard to clean up. The last time I looked into it my
-> >>> main problem was that we didn't had any easy unit test for it.
-> >> Do we have any tests for dma-bufs at all? It's unclear to me what you
-> >> are going to test in regards to the reservation locks, could you please
-> >> clarify?
-> > Unfortunately not really :-/ Only way really is to grab a driver which
-> > needs vmap (those are mostly display drivers) on an imported buffer, and
-> > see what happens.
-> > 
-> > 2nd best is liberally sprinkling lockdep annotations all over the place
-> > and throwing it at intel ci (not sure amd ci is accessible to the public)
-> > and then hoping that's good enough. Stuff like might_lock and
-> > dma_resv_assert_held.
-> 
-> Alright
+Yes. Zswap is a memory consumer, and we want the compressed part of a
+workload's memory to show up in the total memory footprint.
 
-So throwing it at intel-gfx-ci can't hurt I think, but that only covers
-i915 so doesn't really help with the bigger issue of catching all the
-drivers.
-
-Cheers, Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+memory.zswap.* are there to configure zswap policy, within the
+boundaries of available memory - it's by definition a subset.

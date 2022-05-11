@@ -2,236 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63BF35236B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 296005236B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244515AbiEKPIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47610 "EHLO
+        id S245489AbiEKPJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232611AbiEKPIG (ORCPT
+        with ESMTP id S245433AbiEKPJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:08:06 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EDF65B3CE
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:08:01 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id kq17so4694054ejb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:08:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=+htlxhryt5zwPXYdzhQ7V8KfiLkG4zNwl/s3l6UhuRU=;
-        b=LGL3My4x17GvV1KlSY5iXqhDIbJTcIIFeCQmRuTaXTmcLxd0Tcb6e2bQoBM9MJWFvj
-         uisVIZpBB8LZrghAFKlDYKZ55c0sU6R9m7bVuDIIOnorc77SoXV/RLFt0g/WY9j3tpUn
-         Yk2OymXFAH9PvdVjC5mpLtX8AnABcEu07Io8E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=+htlxhryt5zwPXYdzhQ7V8KfiLkG4zNwl/s3l6UhuRU=;
-        b=fzw726HhWC2VxAOTY5wxq5Pw0jUHV+RJaIdlD/TWP1fYPqsyjVig6JLbBB5F9zwSVM
-         YGu38R7LoXueo0zrgF7SXG1ovhz4lZwoxKPNQYEI2axLLh7/0RlWgBRv64Gz2Q/fWOP8
-         hCoKDgSJxCB4EQvLmh7wwDuOMaz3guzWRlqQWoxf01cdEaQJWcm4u/F7fGLkDTz/f+A5
-         gN5HXXdWNSYkEzU7wCwuETn20zOFtdOUD0VmV4yP3gL10wvH7mO1U8x4wBZJKRV//tsx
-         GzbQF7OdKLLgSJqVLbkP+1/PCo6rftSwiDLJpWntphSZH2Zdodw/pxW9y8wc1AhsMVnB
-         LoFg==
-X-Gm-Message-State: AOAM531rjvak9xXTjkZ40dTHP2rguHm+GX70b7k8c+O3fmzyLpaZ0zR2
-        sAev/ZEtIgLfrb8S2O852zcWiQ==
-X-Google-Smtp-Source: ABdhPJy09dNf7K0wLNKFEAZ+1JjzzQdDpA0Abjzd5Bxo6hTpOLopY0uPQj69ilRYaiikGgteilAeKw==
-X-Received: by 2002:a17:907:7b85:b0:6fd:d799:ef4e with SMTP id ne5-20020a1709077b8500b006fdd799ef4emr2539950ejc.319.1652281680003;
-        Wed, 11 May 2022 08:08:00 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id q21-20020aa7d455000000b0042617ba63d3sm1287693edr.93.2022.05.11.08.07.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 08:07:59 -0700 (PDT)
-Date:   Wed, 11 May 2022 17:07:57 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>
-Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Stone <daniel@fooishbar.org>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v4 10/15] drm/shmem-helper: Take reservation lock instead
- of drm_gem_shmem locks
-Message-ID: <YnvRTaMoO24y8xE5@phenom.ffwll.local>
-Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Stone <daniel@fooishbar.org>,
-        David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>, Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dmitry Osipenko <digetx@gmail.com>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-References: <YmlYHNlcmNMfOeyy@phenom.ffwll.local>
- <8f932ab0-bb72-8fea-4078-dc59e9164bd4@collabora.com>
- <YnI3lE0TxLfZaQjE@phenom.ffwll.local>
- <01506516-ab2f-cb6e-7507-f2a3295efb59@collabora.com>
- <YnOHAh9I1ds4+1J+@phenom.ffwll.local>
- <83e68918-68de-c0c6-6f9b-e94d34b19383@collabora.com>
- <YnkaUk0mZNuPsZ5r@phenom.ffwll.local>
- <4d08b382-0076-1ea2-b565-893d50b453cb@collabora.com>
- <YnuziJDmXVR09UzP@phenom.ffwll.local>
- <56787b70-fb64-64da-6006-d3aa3ed59d12@gmail.com>
+        Wed, 11 May 2022 11:09:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5D25A5BA;
+        Wed, 11 May 2022 08:09:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 099A4617F4;
+        Wed, 11 May 2022 15:09:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 164F3C340EE;
+        Wed, 11 May 2022 15:09:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652281784;
+        bh=+5yhdEg3t7GmuaYfoKfEfexhg5W3/y5N1bM9raZWrGY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IBY5WeqxFQIsvZwdQLVR9GkA5PwhiSY6/1rd0dgaHKLxhFW6thgEhZXndBnhCLjmS
+         jbXYJOdaMshS5BDHa8cXWyQY5oKStPOqgRdoSb3hhDjRiVHDZrVwyo5MqtqOonEdHC
+         5J5XS0MkTv7ZRNQIooeeLcV3Cyd3E7FuFNwe+wr5c9BV+l2a0p6hBGmZBbOPx9zbFB
+         bYFeQiGDKA6JWe9bgxiPlWu6oXyqly1TmLxzSXFchguUywApwUV6j2bp/ZwZrc9Omx
+         7q5ZrW//Hu0a4enfgTsYirseppHifF8T49s8HW0qg4CR5GbBMWyqubaBR+gsGx/LUW
+         gpBv7UeNFH27w==
+Date:   Wed, 11 May 2022 18:08:14 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lukas@wunner.de,
+        p.rosenberger@kunbus.com, Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Subject: Re: [PATCH v4 6/6] tpm, tpm_tis: Only enable supported IRQs
+Message-ID: <YnvRXiMxMRF3mIb8@kernel.org>
+References: <20220509080559.4381-1-LinoSanfilippo@gmx.de>
+ <20220509080559.4381-7-LinoSanfilippo@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <56787b70-fb64-64da-6006-d3aa3ed59d12@gmail.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220509080559.4381-7-LinoSanfilippo@gmx.de>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 04:24:28PM +0200, Christian König wrote:
-> Am 11.05.22 um 15:00 schrieb Daniel Vetter:
-> > On Tue, May 10, 2022 at 04:39:53PM +0300, Dmitry Osipenko wrote:
-> > > [SNIP]
-> > > Since vmapping implies implicit pinning, we can't use a separate lock in
-> > > drm_gem_shmem_vmap() because we need to protect the
-> > > drm_gem_shmem_get_pages(), which is invoked by drm_gem_shmem_vmap() to
-> > > pin the pages and requires the dma_resv_lock to be locked.
-> > > 
-> > > Hence the problem is:
-> > > 
-> > > 1. If dma-buf importer holds the dma_resv_lock and invokes
-> > > dma_buf_vmap() -> drm_gem_shmem_vmap(), then drm_gem_shmem_vmap() shall
-> > > not take the dma_resv_lock.
-> > > 
-> > > 2. Since dma-buf locking convention isn't specified, we can't assume
-> > > that dma-buf importer holds the dma_resv_lock around dma_buf_vmap().
-> > > 
-> > > The possible solutions are:
-> > > 
-> > > 1. Specify the dma_resv_lock convention for dma-bufs and make all
-> > > drivers to follow it.
-> > > 
-> > > 2. Make only DRM drivers to hold dma_resv_lock around dma_buf_vmap().
-> > > Other non-DRM drivers will get the lockdep warning.
-> > > 
-> > > 3. Make drm_gem_shmem_vmap() to take the dma_resv_lock and get deadlock
-> > > if dma-buf importer holds the lock.
-> > > 
-> > > ...
-> > Yeah this is all very annoying.
+On Mon, May 09, 2022 at 10:05:59AM +0200, Lino Sanfilippo wrote:
+> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
 > 
-> Ah, yes that topic again :)
+> Instead of blindly trying to enable all possible interrupts, use the result
+> from the capability query and request only the interrupts that are actually
+> supported.
 > 
-> I think we could relatively easily fix that by just defining and enforcing
-> that the dma_resv_lock must have be taken by the caller when dma_buf_vmap()
-> is called.
+> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> ---
+>  drivers/char/tpm/tpm_tis_core.c | 67 ++++++++++++++++++---------------
+>  drivers/char/tpm/tpm_tis_core.h |  1 +
+>  2 files changed, 37 insertions(+), 31 deletions(-)
 > 
-> A two step approach should work:
-> 1. Move the call to dma_resv_lock() into the dma_buf_vmap() function and
-> remove all lock taking from the vmap callback implementations.
-> 2. Move the call to dma_resv_lock() into the callers of dma_buf_vmap() and
-> enforce that the function is called with the lock held.
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> index 4c65718feb7d..784e153e2895 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -976,13 +976,46 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  		goto out_err;
+>  	}
+>  
+> +	/* Figure out the capabilities */
+> +	rc = tpm_tis_read32(priv, TPM_INTF_CAPS(priv->locality), &intfcaps);
+> +	if (rc < 0)
+> +		goto out_err;
+> +
+> +	dev_dbg(dev, "TPM interface capabilities (0x%x):\n",
+> +		intfcaps);
+> +	if (intfcaps & TPM_INTF_BURST_COUNT_STATIC)
+> +		dev_dbg(dev, "\tBurst Count Static\n");
+> +	if (intfcaps & TPM_INTF_CMD_READY_INT) {
+> +		priv->supported_irqs |= TPM_INTF_CMD_READY_INT;
+> +		dev_dbg(dev, "\tCommand Ready Int Support\n");
+> +	}
+> +	if (intfcaps & TPM_INTF_INT_EDGE_FALLING)
+> +		dev_dbg(dev, "\tInterrupt Edge Falling\n");
+> +	if (intfcaps & TPM_INTF_INT_EDGE_RISING)
+> +		dev_dbg(dev, "\tInterrupt Edge Rising\n");
+> +	if (intfcaps & TPM_INTF_INT_LEVEL_LOW)
+> +		dev_dbg(dev, "\tInterrupt Level Low\n");
+> +	if (intfcaps & TPM_INTF_INT_LEVEL_HIGH)
+> +		dev_dbg(dev, "\tInterrupt Level High\n");
+> +	if (intfcaps & TPM_INTF_LOCALITY_CHANGE_INT) {
+> +		priv->supported_irqs |= TPM_INTF_LOCALITY_CHANGE_INT;
+> +		dev_dbg(dev, "\tLocality Change Int Support\n");
+> +	}
+> +	if (intfcaps & TPM_INTF_STS_VALID_INT) {
+> +		priv->supported_irqs |= TPM_INTF_STS_VALID_INT;
+> +		dev_dbg(dev, "\tSts Valid Int Support\n");
+> +	}
+> +	if (intfcaps & TPM_INTF_DATA_AVAIL_INT) {
+> +		priv->supported_irqs |= TPM_INTF_DATA_AVAIL_INT;
+> +		dev_dbg(dev, "\tData Avail Int Support\n");
+> +	}
+> +
+>  	/* Take control of the TPM's interrupt hardware and shut it off */
+>  	rc = tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
+>  	if (rc < 0)
+>  		goto out_err;
+>  
+> -	intmask |= TPM_INTF_CMD_READY_INT | TPM_INTF_LOCALITY_CHANGE_INT |
+> -		   TPM_INTF_DATA_AVAIL_INT | TPM_INTF_STS_VALID_INT;
+> +	intmask |= priv->supported_irqs;
+>  	intmask &= ~TPM_GLOBAL_INT_ENABLE;
+>  
+>  	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
+> @@ -1009,32 +1042,6 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  		goto out_err;
+>  	}
+>  
+> -	/* Figure out the capabilities */
+> -	rc = tpm_tis_read32(priv, TPM_INTF_CAPS(priv->locality), &intfcaps);
+> -	if (rc < 0)
+> -		goto out_err;
+> -
+> -	dev_dbg(dev, "TPM interface capabilities (0x%x):\n",
+> -		intfcaps);
+> -	if (intfcaps & TPM_INTF_BURST_COUNT_STATIC)
+> -		dev_dbg(dev, "\tBurst Count Static\n");
+> -	if (intfcaps & TPM_INTF_CMD_READY_INT)
+> -		dev_dbg(dev, "\tCommand Ready Int Support\n");
+> -	if (intfcaps & TPM_INTF_INT_EDGE_FALLING)
+> -		dev_dbg(dev, "\tInterrupt Edge Falling\n");
+> -	if (intfcaps & TPM_INTF_INT_EDGE_RISING)
+> -		dev_dbg(dev, "\tInterrupt Edge Rising\n");
+> -	if (intfcaps & TPM_INTF_INT_LEVEL_LOW)
+> -		dev_dbg(dev, "\tInterrupt Level Low\n");
+> -	if (intfcaps & TPM_INTF_INT_LEVEL_HIGH)
+> -		dev_dbg(dev, "\tInterrupt Level High\n");
+> -	if (intfcaps & TPM_INTF_LOCALITY_CHANGE_INT)
+> -		dev_dbg(dev, "\tLocality Change Int Support\n");
+> -	if (intfcaps & TPM_INTF_STS_VALID_INT)
+> -		dev_dbg(dev, "\tSts Valid Int Support\n");
+> -	if (intfcaps & TPM_INTF_DATA_AVAIL_INT)
+> -		dev_dbg(dev, "\tData Avail Int Support\n");
+> -
+>  	/* INTERRUPT Setup */
+>  	init_waitqueue_head(&priv->read_queue);
+>  	init_waitqueue_head(&priv->int_queue);
+> @@ -1101,9 +1108,7 @@ static void tpm_tis_reenable_interrupts(struct tpm_chip *chip)
+>  	if (rc < 0)
+>  		goto out;
+>  
+> -	intmask |= TPM_INTF_CMD_READY_INT
+> -	    | TPM_INTF_LOCALITY_CHANGE_INT | TPM_INTF_DATA_AVAIL_INT
+> -	    | TPM_INTF_STS_VALID_INT | TPM_GLOBAL_INT_ENABLE;
+> +	intmask |= priv->supported_irqs | TPM_GLOBAL_INT_ENABLE;
+>  
+>  	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
+>  
+> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+> index c8972ea8e13e..3d6b05c6fdba 100644
+> --- a/drivers/char/tpm/tpm_tis_core.h
+> +++ b/drivers/char/tpm/tpm_tis_core.h
+> @@ -97,6 +97,7 @@ struct tpm_tis_data {
+>  	u16 manufacturer_id;
+>  	int locality;
+>  	int irq;
+> +	unsigned int supported_irqs;
+>  	unsigned long irqtest_flags;
+>  	unsigned long flags;
+>  	void __iomem *ilb_base_addr;
+> -- 
+> 2.36.0
 > 
-> It shouldn't be that hard to clean up. The last time I looked into it my
-> main problem was that we didn't had any easy unit test for it.
 
-Yeah I think it's doable or at least a lot less work than the map/unmap
-side, which really was unfixable without just pinning at import time to
-avoid the locking fun. But vmap is used a lot less, and mostly by display
-drivers (where locking is a lot easier against dma_resv_lock), so it might
-be possible to pull off.
--Daniel
+Does the existing code cause issues in a some specific environment?
 
-> 
-> Regards,
-> Christian.
-> 
-> > 
-> > > There are actually very few drivers in kernel that use dma_buf_vmap()
-> > > [1], so perhaps it's not really a big deal to first try to define the
-> > > locking and pinning convention for the dma-bufs? At least for
-> > > dma_buf_vmap()? Let me try to do this.
-> > > 
-> > > [1] https://elixir.bootlin.com/linux/v5.18-rc6/C/ident/dma_buf_vmap
-> > Yeah looking through the code there's largely two classes of drivers that
-> > need vmap:
-> > 
-> > - display drivers that need to do cpu upload (usb, spi, i2c displays).
-> >    Those generally set up the vmap at import time or when creating the
-> >    drm_framebuffer object (e.g. see
-> >    drm_gem_cma_prime_import_sg_table_vmap()), because that's really the
-> >    only place where you can safely do that without running into locking
-> >    inversion issues sooner or later
-> > 
-> > - lots of other drivers (and shmem helpers) seem to do dma_buf_vmap just
-> >    because they can, but only actually ever use vmap on native objects,
-> >    never on imported objects. Or at least I think so.
-> > 
-> > So maybe another approach here:
-> > 
-> > 1. In general drivers which need a vmap need to set that up at dma_buf
-> > import time - the same way we pin the buffers at import time for
-> > non-dynamic importers because that's the only place where across all
-> > drivers it's ok to just take dma_resv_lock.
-> > 
-> > 2. We remove the "just because we can" dma_buf_vmap support from
-> > helpers/drivers - the paths all already can cope with NULL since
-> > dma_buf_vmap can fail. vmap will only work on native objects, not imported
-> > ones.
-> > 
-> > 3. If there is any driver using shmem helpers that absolutely needs vmap
-> > to also work on imported it needs a special import function (like cma
-> > helpers) which sets up the vmap at import time.
-> > 
-> > So since this is all very tricky ... what did I miss this time around?
-> > 
-> > > I envision that the extra dma_resv_locks for dma-bufs potentially may
-> > > create unnecessary bottlenecks for some drivers if locking isn't really
-> > > necessary by a specific driver, so drivers will need to keep this in
-> > > mind. On the other hand, I don't think that any of the today's drivers
-> > > will notice the additional resv locks in practice.
-> > Nah I don't think the extra locking will ever create a bottleneck,
-> > especially not for vmap. Generally vmap is a fallback or at least cpu
-> > operation, so at that point you're already going very slow.
-> > -Daniel
-> 
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+BR, Jarkko

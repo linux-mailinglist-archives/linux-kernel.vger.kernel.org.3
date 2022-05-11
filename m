@@ -2,106 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 319CB523D9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB5B2523D9B
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346991AbiEKTe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 15:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49378 "EHLO
+        id S1347012AbiEKTfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 15:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiEKTex (ORCPT
+        with ESMTP id S229633AbiEKTfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 15:34:53 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB50177898
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:34:50 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id j4so5310167lfh.8
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:34:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+ZeBueAo7XbLNHzSFdohWNSwZfJDZuFuvcSJwY8CQhE=;
-        b=sY5PApnBJsxPzMuys/jslbcKeJaxlN768xHRp85uJ2JjMBKylsLasOTE1xiOYz9DrE
-         +zHxayQfilge3sTH7mwsQGW9Fsx+J6W14+kAJtTARMuKl/NRqPANRL7sCv9C/vd34gF4
-         7pG39luF8/3brbm0o+w+UujmNj+v6Vhc3a00xXefZdKGF6wagpdJQ0qAKP+/pLw/q53J
-         lmv05KW000ufZQS3kM/ED5l1ic9V1Z1R3xEUPIVGfkGolOoj6d67VM0rQ9RXgMO+Eivw
-         KdR+E4pEu3A6zI0AhoYnU00bMG7f88OBlnnsfUJPV0JYjQPZzOoMMf8SahEhFktu27wh
-         zfCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+ZeBueAo7XbLNHzSFdohWNSwZfJDZuFuvcSJwY8CQhE=;
-        b=eerlRVig98b/tGO/uwvVAlOEiJBOXfF/qT+JHv2dxicsEZ3Dst9Fael8DFt0qlUpQ1
-         /9L6S4+Iqho3grJqqfISPvBbvx1SjTvlxoo3zaBEjKLYafjYhT4SX3msnwHNi4WyqP8F
-         HayHP3A84tuAgNUJITrlBYMg+2ja3EM3WjnwfAo3YiUPcd6FeqkLkHAcq2b/mkxHn7Nh
-         vQmyWrFdC8rcdo6aB/cvFDMVOfzsSbizABEqfwMdEsQ3501vFTB+wO4HBcK+WcqoIojn
-         rELfCur7jCdWFivqtBABi/tGBs4nvkpCysdNdVEzEFa7hb+tNjDOAfEvBZQZ5YP1nykI
-         YDPw==
-X-Gm-Message-State: AOAM530wy4/jtNpK9otYOpz/vy1SOgzI5AZdWqZ9lp1RZIQ5cU+tlZMv
-        EaMUUem6HbXWCwF20idX6FAeaqJg6Y/F8DCbZgNT7g==
-X-Google-Smtp-Source: ABdhPJx0nq21d57bjSMLc9tnNiGLxntA/KgJYcxML0H/xX2fFJiktsvqHKmc9w082aQb5KnRyqZul6G+7fuSOGjN+qg=
-X-Received: by 2002:a05:6512:1291:b0:473:b522:ef58 with SMTP id
- u17-20020a056512129100b00473b522ef58mr20873024lfs.190.1652297688470; Wed, 11
- May 2022 12:34:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220511072747.3960-1-jiangshanlai@gmail.com> <20220511072747.3960-2-jiangshanlai@gmail.com>
- <CAKwvOdmF_5KudQbC8j5hJT1CqxvYtMneZxb1Si3A2uNxopk3yQ@mail.gmail.com> <CANiq72kc02DbgVdKusDUeCkxVoQoOGMLnEJnzf-Gn=BiQUggLw@mail.gmail.com>
-In-Reply-To: <CANiq72kc02DbgVdKusDUeCkxVoQoOGMLnEJnzf-Gn=BiQUggLw@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 11 May 2022 12:34:36 -0700
-Message-ID: <CAKwvOdmVj006evgychajuUV4DqL4QXohHmYiE6To9traPKcr5w@mail.gmail.com>
-Subject: Re: [PATCH 1/7] x86/entry: Introduce __entry_text for entry code
- written in C
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
+        Wed, 11 May 2022 15:35:13 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E806C177898
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:35:11 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 712BA1EC0535;
+        Wed, 11 May 2022 21:35:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1652297706;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=B7VXmh66M+2El9UzptpiYafUbsBm6o9pydX/9uOO3yk=;
+        b=naMVL+3QI0M+uWHrRrw4Tv1CFrKKeItd5vbrSLAE2aOwAEu/foCljd+DPxtjL+fhdUrDiM
+        VwHOH4X9fQbC/exGi2o6//8xNSN5KXHMD+UGBfDW1C4qwNxjwBsHFjzDDBguPIU1vJbncY
+        FS/IzxDz2/3YxjjYLzE8WkAUfLvUjKg=
+Date:   Wed, 11 May 2022 21:35:09 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Theodore Ts'o <tytso@mit.edu>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
         Thomas Gleixner <tglx@linutronix.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Marco Elver <elver@google.com>, Hao Luo <haoluo@google.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Zhangfei Gao <zhangfei.gao@foxmail.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>
+Subject: Re: Link: tag and links to submission and reports (was: Re: [GIT
+ pull] core/urgent for v5.18-rc6)
+Message-ID: <YnwP7QmPzyv5FhrZ@zn.tnic>
+References: <165201148069.536527.1960632033331546251.tglx@xen13>
+ <CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com>
+ <ff841fdc-4db7-7a3d-8caf-d0cddd0dfa31@leemhuis.info>
+ <Ynt1z0eZ19eMqp8I@zn.tnic>
+ <YnvbLx9FKgQwZJ/F@mit.edu>
+ <CAHk-=wgUVHucyjp6M7qmn8b=aqwucfS4SQpqOCR5sKr16zoO5g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgUVHucyjp6M7qmn8b=aqwucfS4SQpqOCR5sKr16zoO5g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 12:27 PM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> On Wed, May 11, 2022 at 8:01 PM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
+On Wed, May 11, 2022 at 08:55:34AM -0700, Linus Torvalds wrote:
+> On Wed, May 11, 2022 at 8:50 AM Theodore Ts'o <tytso@mit.edu> wrote:
 > >
-> > I haven't looked at the rest of the series, but isn't `noinstr` used
-> > in a bunch of places? Wont this commit break all those uses or at
->
-> Except the order, it expands to the same, no? Or what is the issue?
+> > I would argue that it should be the patch submitter's responsibility
+> > to explicitly add a URL to the problem report.
+> 
+> I agree in the perfect case.
+> 
+> But in practice, we have a lot more patch submitters than we have
+> maintainers, and not all "leaf developers" necessarily know how to do
+> everything.
+> 
+> So the maintainer should probably expect to fix things up. Not always,
+> but also not a "the developer should have done this, so I won't do it"
+> 
+> This isn't so different from the fact that not everybody writes
+> English proficiently - people do hopefully end up fixing things up as
+> they get passed onwards.
 
-Yeah, nvm, I missed the bottom #define for some reason.
+And, in addition, what happens most often in my experience is I
+constantly get to point submitters to our process documentation -
+submitting-patches especially - as not a small number of them are not
+aware of different aspects of the whole patch dance: tags, SOB chains,
+etc. And the Link tag is no exception here.
+
+So yeah, the maintainer is kinda the last one to make sure the patch
+looks somewhat sane and documents the whole issue so that years from
+now, it can still be understood what we were fixing there.
+
+And I guess important part of that documentation is setting the proper
+Link so...
+
+And as said, yeah, we won't be perfect and catch all cases but at least
+we can pay attention.
+
 -- 
-Thanks,
-~Nick Desaulniers
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

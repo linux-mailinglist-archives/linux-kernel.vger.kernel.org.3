@@ -2,104 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8020B522ED4
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB5CD522EDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232402AbiEKI5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 04:57:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34252 "EHLO
+        id S235786AbiEKI66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 04:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244051AbiEKI5r (ORCPT
+        with ESMTP id S231363AbiEKI6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 04:57:47 -0400
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ef0:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1C96C0F9;
-        Wed, 11 May 2022 01:57:43 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 2373B2800167D;
-        Wed, 11 May 2022 10:57:41 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 16B0612B669; Wed, 11 May 2022 10:57:41 +0200 (CEST)
-Date:   Wed, 11 May 2022 10:57:41 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, maz@kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org,
-        Octavian Purdila <octavian.purdila@nxp.com>,
-        linux-kernel@vger.kernel.org, aou@eecs.berkeley.edu,
-        catalin.marinas@arm.com, deanbo422@gmail.com, green.hu@gmail.com,
-        guoren@kernel.org, jonas@southpole.se, kernelfans@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
-        nickhu@andestech.com, palmer@dabbelt.com, paul.walmsley@sifive.com,
-        shorne@gmail.com, stefan.kristiansson@saunalahti.fi,
-        tsbogend@alpha.franken.de, vgupta@kernel.org,
-        vladimir.murzin@arm.com, will@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2 17/17] irq: remove handle_domain_{irq,nmi}()
-Message-ID: <20220511085741.GA6558@wunner.de>
-References: <20211026092504.27071-1-mark.rutland@arm.com>
- <20211026092504.27071-18-mark.rutland@arm.com>
- <20220506203242.GA1855@wunner.de>
- <YnjWvbzn8ox+f2Y2@FVFF77S0Q05N>
- <20220510121320.GA3020@wunner.de>
- <Ynpzb5L53iGex14D@FVFF77S0Q05N>
- <87a6bpov9u.ffs@tglx>
- <YntynKK5Jjw2Q1rX@FVFF77S0Q05N>
+        Wed, 11 May 2022 04:58:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F28312460B
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 01:58:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652259526;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+Zc2Huyl9u354IxnbxBuQkxC8HSnVrj0E9v/FWkHr5U=;
+        b=Z6BqGIMCt6mVRD8AH8LAs6u3HckBOZe7sn2MDJiFkf+qpw0df3sdljgkDVsmTQP7VCt1R4
+        XXAGBh2kSR7mbG5aNwmc+N3yeGTDQyFt93PCV8fj3nxhtD4kn9YXJUrqios91h+vAKe6x4
+        1wfhxdvF8Jh/IUzu6kScESfhojTXhWc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-494-koZ8mR_ePsmDMcgIYEqBfg-1; Wed, 11 May 2022 04:58:43 -0400
+X-MC-Unique: koZ8mR_ePsmDMcgIYEqBfg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AFE50185A7B2;
+        Wed, 11 May 2022 08:58:42 +0000 (UTC)
+Received: from ws.net.home (unknown [10.36.112.12])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 117071121314;
+        Wed, 11 May 2022 08:58:39 +0000 (UTC)
+Date:   Wed, 11 May 2022 10:58:37 +0200
+From:   Karel Zak <kzak@redhat.com>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        linux-fsdevel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
+Message-ID: <20220511085837.xkxo5c5fevtgaekz@ws.net.home>
+References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
+ <20220509124815.vb7d2xj5idhb2wq6@wittgenstein>
+ <20220510123512.h6jjqgowex6gnjh5@ws.net.home>
+ <20220510232552.GD2306852@dread.disaster.area>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YntynKK5Jjw2Q1rX@FVFF77S0Q05N>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220510232552.GD2306852@dread.disaster.area>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 09:23:56AM +0100, Mark Rutland wrote:
-> On Wed, May 11, 2022 at 12:52:29AM +0200, Thomas Gleixner wrote:
-> > +	/* USB interrupts are received in softirq (tasklet) context.
-> > +	 * Switch to hardirq context to make genirq code happy.
-> > +	 */
-> > +	local_irq_save(flags);
-> > +	__irq_enter_raw();
-> > +
-> >  	if (intdata & INT_ENP_PHY_INT_)
-> > -		;
-> > +		generic_handle_domain_irq(pdata->irqdomain, PHY_HWIRQ);
+On Wed, May 11, 2022 at 09:25:52AM +1000, Dave Chinner wrote:
+> > I'd love something like:
+> > 
+> > ssize_t sz;
+> > fsinfo_query query[] = {
+> >     { .request = FSINFO_MOUNT_PATH },
+> >     { .request = FSINFO_PROPAGATION },
+> >     { .request = FSINFO_CHILDREN_IDS },
+> > };
+> > 
+> > sz = fsinfo(dfd, "", AT_EMPTY_PATH,
+> >                 &query, ARRAY_SIZE(query),
+> >                 buf, sizeof(buf));
+> > 
+> > for (p = buf; p < buf + sz; ) {
+> > {
+> >     fsinfo_entry *e = (struct fsinfo_entry) p;
+> >     char *data = p + sizeof(struct fsinfo_entry);
+> > 
+> >     switch(e->request) {
+> >     case FSINFO_MOUNT_PATH:
+> >         printf("mountpoint %s\n", data);
+> >         break;
+> >     case FSINFO_PROPAGATION:
+> >         printf("propagation %x\n", (uintptr_t) data);
+> >         break;
+> >     case FSINFO_CHILDREN_IDS:
+> >         fsinfo_child *x = (fsinfo_child *) data;
+> >         for (i = 0; i < e->count; i++) {
+> >             printf("child: %d\n", x[i].mnt_id);
+> >         }
+> >         break;
+> >     ...
+> >     }
+> > 
+> >     p += sizeof(struct fsinfo_entry) + e->len;
+> > }
 > 
-> Agreed. IIUC everyone agrees the __irq_enter_raw() usage is a hack,
-> but what's not clear is what we *should* do
+> That's pretty much what a multi-xattr get operation looks like.
+> It's a bit more more intricate in the setup of the request/return
+> buffer, but otherwise the structure of the code is the same.
 > 
-> I suspect that given we have generic_handle_irq_safe() for situations
-> like this we should add a generic_handle_domain_irq_safe(), and use
-> that in this driver?
-> That way we can keep the `WARN_ON_ONCE(!in_hardirq())` in
-> generic_handle_domain_irq().
+> I just don't see why we need special purpose interfaces like this
+> for key/value information when small tweaks to the existing
+> generic key/value interfaces can provide exactly the same
+> functionality....
 
-Thomas applied 792ea6a074ae ("genirq: Remove WARN_ON_ONCE() in
-generic_handle_domain_irq()") tonight:
+I don't say we need a new interface ;-) I'd be happy with whatever as
+long as:
 
-http://git.kernel.org/tip/tip/c/792ea6a074ae
+  * minimal strings parsing (wish than a requirement)
+  * one syscall returns multiple key/value
+  * can address mount table entries by ID
+  * can ask for list of children (submounts)
+  * extensible
 
-That allows me to drop the controversial __irq_enter_raw()
-and thus unblock my smsc95xx series.
+if this will be possible with xattr (listxattr2(), or so) when great.
 
-generic_handle_domain_irq_safe() would merely be a wrapper for
-generic_handle_domain_irq() which disables local interrupts.
-Then I wouldn't have to do that in smsc95xx.c.  IMHO that's a
-cosmetic improvement, though I'll be happy to provide a patch
-if desired?
+  Karel
 
-Thanks,
+-- 
+ Karel Zak  <kzak@redhat.com>
+ http://karelzak.blogspot.com
 
-Lukas

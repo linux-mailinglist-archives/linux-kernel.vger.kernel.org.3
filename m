@@ -2,65 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50335236EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3CD6523704
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:20:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245703AbiEKPRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48520 "EHLO
+        id S245752AbiEKPU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238311AbiEKPRg (ORCPT
+        with ESMTP id S245733AbiEKPUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:17:36 -0400
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0CB20EE07;
-        Wed, 11 May 2022 08:17:35 -0700 (PDT)
-Received: by mail-oi1-f177.google.com with SMTP id v66so3090786oib.3;
-        Wed, 11 May 2022 08:17:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dpNz+LwyfT9jjhoJa/sP1irt+XTKs3LHfBiFKQv6gts=;
-        b=iA1vUxtw7h/s60TLDCevXxswTFo+jiikB3YFh9+5Z0AkGX/xggRv0Tdp+AVd8ONw54
-         eT62j2wV4vFieBqUJkSRTdCb6rHpmKoUnOyE58ULSZYlh7exLbMotDpgxel/y+3ivAyN
-         0Cztn4EaEUykfRJMHoDpYDgrjoUoXt9Dkl5nHL+acXj2J7ZNRAnlqH5mNEDofvlrKvjZ
-         AB8bB7w8kcw7sqlL182a0P4Wtj3jjRVJ4KMjKrukDomNd0jchiCkZbSO/KzEVVOvL1u2
-         aHn3rvbYMaLzsZi+rwdaQPe792F0TYCllsqWt9Ik8wKJgpJnRVtCS5WmAlp6b5LgvgLD
-         x7MA==
-X-Gm-Message-State: AOAM530a81pthimlD4nPLuCgz42faAslz/oVQuGStcBQ0rlgv2Ou6lwl
-        OvGjBMgdDZd9+QeQbY1sH4EaIxqJag==
-X-Google-Smtp-Source: ABdhPJySwMiBeMQ6yXtbQUnyyCcnwB1XuD7UhAgD6UU+usUZdQxvCqjQ7Xgz3SrtyJhV1lmc8zq67Q==
-X-Received: by 2002:a05:6808:1b07:b0:328:ab46:623f with SMTP id bx7-20020a0568081b0700b00328ab46623fmr2629768oib.152.1652282254672;
-        Wed, 11 May 2022 08:17:34 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q3-20020aca4303000000b00325cda1ff8fsm840345oia.14.2022.05.11.08.17.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 08:17:34 -0700 (PDT)
-Received: (nullmailer pid 329835 invoked by uid 1000);
-        Wed, 11 May 2022 15:17:33 -0000
-Date:   Wed, 11 May 2022 10:17:33 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>
-Subject: Re: [PATCH v4] dt-bindings: nvmem: convert mtk-efuse.txt to YAML
- schema
-Message-ID: <20220511151733.GA313710-robh@kernel.org>
-References: <20220509014521.10248-1-chunfeng.yun@mediatek.com>
+        Wed, 11 May 2022 11:20:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A023620EE07;
+        Wed, 11 May 2022 08:20:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3047C61913;
+        Wed, 11 May 2022 15:20:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 167A1C340EE;
+        Wed, 11 May 2022 15:20:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652282403;
+        bh=GMvnWYvbccZQktGrME0uBhLf6d3GEhAgIRMMt6zfpKA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I0GgXQ3dUxlFBEyRNuKUVqUYG6uMd2yFDSWva9G/T2PZlVOT9WDgfIg5Aw4gRrLVH
+         LKx4I4DRmD5X5d+ukbDh0BUbefKRNEti9au2j7vah7qjirqIJJYTFesBfLg9ey8LIl
+         i7GZuYMCbttNcxJZGkYMctx8CWaFGzRT8u26sCF6y9yXLHftCHCvYfVjWw8zO5bCUC
+         PtDhOpduD0WUaYXj4wSRTRODtFpy2Ic11C7NZgkYUnvmJZ7V3mxQa9v2DHPNg6LwE/
+         yuZlQfJm9mh7R4hmn1ZQzCY0rgJ0AUOUcS0UT+2rmHoSfTNSm18QcSvhdLLKWFYDSv
+         vtpwU9Do0HeIw==
+Date:   Wed, 11 May 2022 18:18:33 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>, kernel@pengutronix.de,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        David Gstir <david@sigma-star.at>,
+        Richard Weinberger <richard@nod.at>,
+        Franck LENORMAND <franck.lenormand@nxp.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Michael Walle <michael@walle.cc>,
+        Sumit Garg <sumit.garg@linaro.org>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v9 7/7] MAINTAINERS: add KEYS-TRUSTED-CAAM
+Message-ID: <YnvTyd8s4T+s/uAL@kernel.org>
+References: <20220506062553.1068296-1-a.fatoum@pengutronix.de>
+ <20220506062553.1068296-8-a.fatoum@pengutronix.de>
+ <YnbH2Fgn/JFOU3Rf@iki.fi>
+ <YnbIiJynQq/tcFa2@iki.fi>
+ <e49920e6-0852-ad3d-5758-604655591671@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220509014521.10248-1-chunfeng.yun@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <e49920e6-0852-ad3d-5758-604655591671@pengutronix.de>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,23 +76,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 09:45:21AM +0800, Chunfeng Yun wrote:
-> Convert mtk-efuse.txt to YAML schema mediatek,efuse.yaml
+On Wed, May 11, 2022 at 12:48:53PM +0200, Ahmad Fatoum wrote:
+> On 07.05.22 21:29, Jarkko Sakkinen wrote:
+> >>> +KEYS-TRUSTED-CAAM
+> >>> +M:	Ahmad Fatoum <a.fatoum@pengutronix.de>
+> >>> +R:	Pengutronix Kernel Team <kernel@pengutronix.de>
+> >>> +L:	linux-integrity@vger.kernel.org
+> >>> +L:	keyrings@vger.kernel.org
+> >>> +S:	Maintained
+> >>> +F:	include/keys/trusted_caam.h
+> >>> +F:	security/keys/trusted-keys/trusted_caam.c
+> >>> +
+> >>>  KEYS/KEYRINGS
+> >>>  M:	David Howells <dhowells@redhat.com>
+> >>>  M:	Jarkko Sakkinen <jarkko@kernel.org>
+> >>> -- 
+> >>> 2.30.2
+> >>>
+> >>
+> >> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > 
+> > 3/7 would probably need tested-by. Other than that this starts to look
+> > good...
 > 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> ---
-> v4: fix duplicated unit-address in example;
->     drop reviewed-by Rob, due to changes;
+> It has been tested by me on an i.MX6 (era < 10 with blobbing support)
+> and by Michael on a LS1028A (era >= 10, both with and without blobbing
+> support).
 > 
-> v3: add reviewed-by Rob
-> 
-> v2:
->    1. remove description of subnodes which is covered by nvmem.yaml suggested by Rob
->    2. change the example which is commoner than mt8173's
+> Cheers,
+> Ahmad
 
-I'm assuming this will be resent with all the changes from the other 
-conversion posted[1].
+Michael, can you give a tested-by for the corresponding patch?
 
-Rob
-
-[1] https://lore.kernel.org/all/73b1feab3ecb20fef0339b322a61d63146b5790a.camel@mediatek.com/
+BR, Jarkko

@@ -2,72 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1006D522C93
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D474522CA6
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242357AbiEKGsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 02:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
+        id S242371AbiEKGtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 02:49:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242332AbiEKGsh (ORCPT
+        with ESMTP id S242352AbiEKGtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 02:48:37 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C605AEDB;
-        Tue, 10 May 2022 23:48:36 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 91C3D68BFE; Wed, 11 May 2022 08:48:32 +0200 (CEST)
-Date:   Wed, 11 May 2022 08:48:32 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Conor.Dooley@microchip.com
-Cc:     hch@lst.de, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: linux-next: Tree for May 3
-Message-ID: <20220511064832.GA761@lst.de>
-References: <20220503172926.08215c77@canb.auug.org.au> <3f94c9a8-c927-5cc0-7d67-4b21c3d9dbaf@microchip.com> <9a424be9-380f-f99c-4126-25a00eba0271@microchip.com> <20220509141122.GA14555@lst.de> <dd946220-eaf6-773a-06b4-307cda466c9c@microchip.com> <505d41d1-1bc8-c8bc-5ebb-8a2b7934f3de@microchip.com> <20220511062232.GA32524@lst.de> <102578f2-5c10-e9c2-c1ef-e76ba90d011e@microchip.com>
+        Wed, 11 May 2022 02:49:43 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2AE5D190
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 23:49:37 -0700 (PDT)
+X-UUID: 79573bfb5a70440692823d77ced38a24-20220511
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:49595733-6d94-4492-a465-17de7ee345b7,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:-20
+X-CID-META: VersionHash:faefae9,CLOUDID:3fe663b3-56b5-4c9e-8d83-0070b288eb6a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 79573bfb5a70440692823d77ced38a24-20220511
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 322758267; Wed, 11 May 2022 14:49:31 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 11 May 2022 14:49:30 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 11 May 2022 14:49:28 +0800
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <iommu@lists.linux-foundation.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Yong Wu <yong.wu@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <mingyuan.ma@mediatek.com>, <yf.wang@mediatek.com>,
+        <libo.kang@mediatek.com>, <chengci.xu@mediatek.com>,
+        <youlin.pei@mediatek.com>, <anan.sun@mediatek.com>,
+        <xueqi.zhang@mediatek.com>, Guenter Roeck <groeck@chromium.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: [PATCH 0/4] iommu/mediatek: Improve safety from dts
+Date:   Wed, 11 May 2022 14:49:16 +0800
+Message-ID: <20220511064920.18455-1-yong.wu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <102578f2-5c10-e9c2-c1ef-e76ba90d011e@microchip.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Type: text/plain
+X-MTK:  N
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 06:44:22AM +0000, Conor.Dooley@microchip.com wrote:
-> On 11/05/2022 07:22, Christoph Hellwig wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > Can you try this patch?
-> 
-> Hey Christoph, gave it a try but nfortunately, no joy!
+This patchset contains several improved patches:
+[1/4] When mt8195 v7, I added a error log for dts parse fail, but it
+doesn't ignore probe_defer case.(v6 doesn't have this err log.)
+[2/4] Add a error path for MM dts parse.
 
-Yes, while it is a real fix, the problem it fixes can only happen
-with Xen, which is not relevant to riscv.  The only other thing I
-can think off is that the allocations were always failing on your
-board, and the patch makes that failure fatal.  For that try the
-patch below.  I'd also be really curious by now about the kernel
-logs from a successful boot.
+[3/4][4/4] To improve safety from dts. Base on this:
+https://lore.kernel.org/linux-mediatek/20211210205704.1664928-1-linux@roeck-us.net/
 
-diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-index e2ef0864eb1e5..3e992a308c8a1 100644
---- a/kernel/dma/swiotlb.c
-+++ b/kernel/dma/swiotlb.c
-@@ -254,8 +254,10 @@ void __init swiotlb_init_remap(bool addressing_limit, unsigned int flags,
- 		tlb = memblock_alloc(bytes, PAGE_SIZE);
- 	else
- 		tlb = memblock_alloc_low(bytes, PAGE_SIZE);
--	if (!tlb)
--		panic("%s: failed to allocate tlb structure\n", __func__);
-+	if (!tlb) {
-+		pr_warn("%s: failed to allocate tlb structure\n", __func__);
-+		return;
-+	}
- 
- 	if (remap && remap(tlb, nslabs) < 0) {
- 		memblock_free(tlb, PAGE_ALIGN(bytes));
+Base on linux-next-20220510.
+
+Guenter Roeck (1):
+  iommu/mediatek: Validate number of phandles associated with
+    "mediatek,larbs"
+
+Yong Wu (3):
+  iommu/mediatek: Use dev_err_probe to mute probe_defer err log
+  iommu/mediatek: Add error path for loop of mm_dts_parse
+  iommu/mediatek: Improve safety for mediatek,smi property in larb nodes
+
+ drivers/iommu/mtk_iommu.c | 83 ++++++++++++++++++++++++++++-----------
+ 1 file changed, 61 insertions(+), 22 deletions(-)
+
+-- 
+2.18.0
+
+

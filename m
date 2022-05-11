@@ -2,63 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B27524061
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 00:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ADC8524064
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 00:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348873AbiEKWpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 18:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
+        id S1348881AbiEKWsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 18:48:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233822AbiEKWpo (ORCPT
+        with ESMTP id S233822AbiEKWsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 18:45:44 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6747DE8D;
-        Wed, 11 May 2022 15:45:42 -0700 (PDT)
-Date:   Wed, 11 May 2022 22:45:37 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652309139;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+RyO7ROotNJHQFAXixR358Xc2zA+QdzoD7iDT/kL0sE=;
-        b=wiq+yCko3kLUJYKmz2Fgo8dNgjFiFanW5im2B/ukhp0o8q26gDK7Id+rreGZqgAaOT5SRo
-        p5ykXHHFCiu+gNLFPDfjFURHhrFQVyQzkCCTyQvEujOHYMfHt0daWRaoZucvdNMkUvX45h
-        hC4MM2IQ8y30nDKtQbCSXHp7JMcr3IFeSNUTgdz05eNZpzXbJLH1xr4KzfywAHqjvxfzr6
-        23fEabJouPAEVxMG7FZjR2iHUiG1DdaoLLCPr2sZP+4z9T1EVj8G4I4p6ACHXj8UCY9q19
-        MEnQ08mh5ugpfhHxLYcRajtmwXS+ZrSUjamXN50BLf4F7OFdfpFqnEZE8ubD6w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652309139;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+RyO7ROotNJHQFAXixR358Xc2zA+QdzoD7iDT/kL0sE=;
-        b=0kje6s7vsBNTaD4u8XRzc0yvT90E6FAEh+UYrRS78h3zBhtdanCgo6/oMsLW2x0t9UDRlz
-        jOpqSDQDykUjoGBA==
-From:   "tip-bot2 for Delyan Kratunov" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/urgent] sched/tracing: Append prev_state to tp args instead
-Cc:     Delyan Kratunov <delyank@fb.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <c8a6930dfdd58a4a5755fc01732675472979732b.camel@fb.com>
-References: <c8a6930dfdd58a4a5755fc01732675472979732b.camel@fb.com>
+        Wed, 11 May 2022 18:48:43 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2057.outbound.protection.outlook.com [40.107.237.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BE65B891
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 15:48:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C8Xk9gIcOP+T2GMoICZJRYQ0qONdrHTil5sHQD+tcKlwMShCqtKrgBXcoAUeUDWPhbG6tH1gvMNebQWrjGTywavUGOXG1Wsm8MqHD384TKdSur/gb1kMC93N2Iqm6Lce4sfYD3gZKc+0ua3tM0Em0RwN6CVj2ybQnid7vyAtICYZxiqI8zwnkMX5EmQZwL7XbpC6DF6qM2Slrp68LbDTg1AIxlcZoWEW7HI7Iryn+Lvl8Gf4axM4NlqZgFt6ugwcx1fCb8NgudneVao4R9ID015LBs167RQjYLQ/NnnE+Sbr+7VzBT68z3Yi+kXb7iifZFv0yvUxrow6NyPK3EIesQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=t9WZSN/t4dDlb1Y/mG8XSSIubWT9jnrdKPZ5XAIcKpY=;
+ b=Tj4bqq2SRT+b0plR0BJRxLHXPZ7txMNCli4/T/5ps/jMi03JeYG1xA0sk/OMjqXu97LXyilUE1ZRWz7r/BYbsF4+nF28nJRaez0uN1Z9IYcC7/YBnJxMvu7Ak1J+C84G4LP1815H6mPpquk0BlFDMBypcXk7KLTTFVNrj2KvYhG4X3GVY2A9w3LlqRQFYuS+nYSn193Bw1acD72dNHIUELAePXCi+9Qs44/eMwiOzFlEKd2asmyWwpuVnFZH78EeXlTrlONZcV7vKNoYPPTEp7bbwFTv1DV7vLqv3aQrBFFJCaIgto4IwuEs2wy/NvWqdE4pgW0Kj0OTR0Q9IyqfTg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.238) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=t9WZSN/t4dDlb1Y/mG8XSSIubWT9jnrdKPZ5XAIcKpY=;
+ b=bV4VwQmu/M4IV+arPEnI7gRACKIu0/FSCvzvcJ6eMMIn64mHREU1y03XVhtOcGDz2xpgnlbwL9l1nVzt+YznzSoX7dwj3TvsaIyQyIL8J/MrLVlPxojKJftrPi0qf0Eh5Uy2MVQIB3f92vfGkniNJiJEH1sU1RmZovNCZmK9St56swPhFj/NV9NguoxpKtskaMbYaiE/gy0THZGMVCNDyyF4RmccsdNk0PJZ43DJ5mR6HJbgPN8z/VaWwG0V/HjhcJwDay+sWD8GwIkfohjOmxiLK/pITavR0RoY7jIy49fD81Yl7zED8r0w3BoBERNcNMdlm7FD/v67MrjfZLW6eQ==
+Received: from MW4PR03CA0332.namprd03.prod.outlook.com (2603:10b6:303:dc::7)
+ by BY5PR12MB4211.namprd12.prod.outlook.com (2603:10b6:a03:20f::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13; Wed, 11 May
+ 2022 22:48:37 +0000
+Received: from CO1NAM11FT063.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:dc:cafe::83) by MW4PR03CA0332.outlook.office365.com
+ (2603:10b6:303:dc::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13 via Frontend
+ Transport; Wed, 11 May 2022 22:48:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.238) by
+ CO1NAM11FT063.mail.protection.outlook.com (10.13.175.37) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5250.13 via Frontend Transport; Wed, 11 May 2022 22:48:37 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL105.nvidia.com
+ (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 11 May
+ 2022 22:48:36 +0000
+Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 11 May
+ 2022 15:48:36 -0700
+Message-ID: <f7bcda22-8ffe-67be-36bc-fcde58d8884a@nvidia.com>
+Date:   Wed, 11 May 2022 15:49:06 -0700
 MIME-Version: 1.0
-Message-ID: <165230913750.4207.4162492159806543933.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v4] mm: fix is_pinnable_page against on cma page
+Content-Language: en-US
+To:     Minchan Kim <minchan@kernel.org>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        John Dias <joaodias@google.com>,
+        David Hildenbrand <david@redhat.com>
+References: <20220510211743.95831-1-minchan@kernel.org>
+ <857d21da-5de2-fa3e-b1ce-41cc1cfb0191@nvidia.com>
+ <Ynr10y6pkH6WwbQo@google.com>
+ <bb6e76f1-2cbc-893d-c8ab-3ecd3fcae2a5@nvidia.com>
+ <Ynr+wTCQpyh8+vOD@google.com>
+ <2ffa7670-04ea-bb28-28f8-93a9b9eea7e8@nvidia.com>
+ <YnwupNzDNv7IbjRQ@google.com>
+ <54b5d177-f2f4-cef2-3a68-cd3b0b276f86@nvidia.com>
+ <Ynw6mauQuNhrOAHy@google.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <Ynw6mauQuNhrOAHy@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Originating-IP: [10.126.231.35]
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: adf4596c-c6a4-4a23-dac9-08da33a062f8
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4211:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR12MB421129B69FF47515C83FE75EA8C89@BY5PR12MB4211.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sW/Zdsm6yhXcWRVCzKV8kmrSggfDX4XJzqUHAV2Sf27ulFJtRKlW297lSheEr4WYWQ89obDapz+hwMu/tztbOebF9axLt2pHNbuhfiK9i8zEcALPcam76qNsZng/ENR4j4QGM1KRyTjuGC0o0oWWVeRhGrxwiDgh55Y5yJdweVXWLULHzg6KMFkLj/t65JE1IPM7Da4uXz+MXgZ63fvv1t1l3bSnAQH6KGtuDVPN8l8SCBL3YfQitrE1GzhfG3b1wb58xaxjEsfVXM2syVK8L5l1x2YcmLlFg2vebtlTAvOoEva77eqW6W5yjUZkWfOueAzcevIDgQUqC2DhjR3FPVqZ0DG5c0Yl0VMC41AB6aRYbLXb03sEtCawjnoewh2PMY9U/lfGDxTflQwnRLwr/+iETd+ewnUA1cLuDZvkR0rAMh08wdMQQyoJ6cCuHXeHBudyURdcLYSWN9I2qlAaY7lUDgnrkngo8demNDhaQFDBS9eSwLqscxzt4jC4fgz7mBZNj6KdnmlNghio+6l77XRHHUxjuKgPSC9a/r5PPuZkOSkzpWJDSsNned0UGkawx8utl7JWaToVrJEn6O0Qh10UdrEySIKDnY5ZRi6PptoYOzL4XDiGklsTQu6UfWzypn8TWIfKEUrIZJodYbA3qBTCXM8nI+cdbiFD0qX9ZtHDsDWF6BsRu1xpR2XCIuDRfHc25c2fXdxjxUyvMPQPwn2wWSJV2SwMK7G+LwfUKzQdd44dWw8h5MMfcYiGx8Md
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(36860700001)(31696002)(2906002)(86362001)(36756003)(6916009)(26005)(70586007)(40460700003)(53546011)(82310400005)(2616005)(316002)(54906003)(31686004)(16576012)(47076005)(336012)(426003)(16526019)(186003)(4326008)(8676002)(70206006)(6666004)(81166007)(356005)(508600001)(5660300002)(8936002)(83380400001)(36900700001)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2022 22:48:37.3512
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: adf4596c-c6a4-4a23-dac9-08da33a062f8
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT063.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4211
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,201 +119,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/urgent branch of tip:
+On 5/11/22 15:37, Minchan Kim wrote:
+>> Yes. But one thing that is still unanswered, that I think you can
+>> answer, is: even if the compiler *did* re-read the mt variable, what
+>> problems could that cause? I claim "no problems", because there is
+>> no combination of 0, _CMA, _ISOLATE, _CMA|ISOLATE that will cause
+>> problems here.
+> 
+> What scenario I am concerning with __READ_ONCE so compiler
+> inlining get_pageblock_migratetype two times are
+> 
+>          CPU 0                                                       CPU 1
+>                                                                  alloc_contig_range
+> is_pinnable_page                                                start_isolate_page_range
+>                                                                    set_pageblock_migratetype(MIGRATE_ISOLATE)
+>     if (get_pageeblock_migratetype(page) == MIGRATE_CMA)
+>         so it's false
+>                                                                  undo:
+>                                                                    set_pageblock_migratetype(MIGRATE_CMA)
+>       
+>     if (get_pageeblock_migratetype(page) == MIGRATE_ISOLATE)
+>         so it's false
+> 
+> In the end, CMA memory would be pinned by CPU 0 process
+> so CMA allocation keep failed until the process release the
+> refcount.
+> 
 
-Commit-ID:     9c2136be0878c88c53dea26943ce40bb03ad8d8d
-Gitweb:        https://git.kernel.org/tip/9c2136be0878c88c53dea26943ce40bb03ad8d8d
-Author:        Delyan Kratunov <delyank@fb.com>
-AuthorDate:    Wed, 11 May 2022 18:28:36 
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Thu, 12 May 2022 00:37:11 +02:00
+OK, so the code checks the wrong item each time. But the code really
+only needs to know "is either _CMA or _ISOLATE set?". And so you
+can just sidestep the entire question by writing it like this:
 
-sched/tracing: Append prev_state to tp args instead
+int mt = get_pageblock_migratetype(page);
 
-Commit fa2c3254d7cf (sched/tracing: Don't re-read p->state when emitting
-sched_switch event, 2022-01-20) added a new prev_state argument to the
-sched_switch tracepoint, before the prev task_struct pointer.
+if (mt & (MIGRATE_ISOLATE | MIGRATE_CMA))
+	return false;
 
-This reordering of arguments broke BPF programs that use the raw
-tracepoint (e.g. tp_btf programs). The type of the second argument has
-changed and existing programs that assume a task_struct* argument
-(e.g. for bpf_task_storage access) will now fail to verify.
 
-If we instead append the new argument to the end, all existing programs
-would continue to work and can conditionally extract the prev_state
-argument on supported kernel versions.
+...yes?
 
-Fixes: fa2c3254d7cf (sched/tracing: Don't re-read p->state when emitting sched_switch event, 2022-01-20)
-Signed-off-by: Delyan Kratunov <delyank@fb.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Link: https://lkml.kernel.org/r/c8a6930dfdd58a4a5755fc01732675472979732b.camel@fb.com
----
- include/trace/events/sched.h              | 6 +++---
- kernel/sched/core.c                       | 2 +-
- kernel/trace/fgraph.c                     | 4 ++--
- kernel/trace/ftrace.c                     | 4 ++--
- kernel/trace/trace_events.c               | 8 ++++----
- kernel/trace/trace_osnoise.c              | 4 ++--
- kernel/trace/trace_sched_switch.c         | 4 ++--
- kernel/trace/trace_sched_wakeup.c         | 4 ++--
- samples/trace_events/trace_custom_sched.h | 6 +++---
- 9 files changed, 21 insertions(+), 21 deletions(-)
-
-diff --git a/include/trace/events/sched.h b/include/trace/events/sched.h
-index 65e7867..fbb99a6 100644
---- a/include/trace/events/sched.h
-+++ b/include/trace/events/sched.h
-@@ -222,11 +222,11 @@ static inline long __trace_sched_switch_state(bool preempt,
- TRACE_EVENT(sched_switch,
- 
- 	TP_PROTO(bool preempt,
--		 unsigned int prev_state,
- 		 struct task_struct *prev,
--		 struct task_struct *next),
-+		 struct task_struct *next,
-+		 unsigned int prev_state),
- 
--	TP_ARGS(preempt, prev_state, prev, next),
-+	TP_ARGS(preempt, prev, next, prev_state),
- 
- 	TP_STRUCT__entry(
- 		__array(	char,	prev_comm,	TASK_COMM_LEN	)
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 51efaab..d58c038 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -6382,7 +6382,7 @@ static void __sched notrace __schedule(unsigned int sched_mode)
- 		migrate_disable_switch(rq, prev);
- 		psi_sched_switch(prev, next, !task_on_rq_queued(prev));
- 
--		trace_sched_switch(sched_mode & SM_MASK_PREEMPT, prev_state, prev, next);
-+		trace_sched_switch(sched_mode & SM_MASK_PREEMPT, prev, next, prev_state);
- 
- 		/* Also unlocks the rq: */
- 		rq = context_switch(rq, prev, next, &rf);
-diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
-index 8f4fb32..a7e84c8 100644
---- a/kernel/trace/fgraph.c
-+++ b/kernel/trace/fgraph.c
-@@ -404,9 +404,9 @@ free:
- 
- static void
- ftrace_graph_probe_sched_switch(void *ignore, bool preempt,
--				unsigned int prev_state,
- 				struct task_struct *prev,
--				struct task_struct *next)
-+				struct task_struct *next,
-+				unsigned int prev_state)
- {
- 	unsigned long long timestamp;
- 	int index;
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 4f1d2f5..af899b0 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -7420,9 +7420,9 @@ ftrace_func_t ftrace_ops_get_func(struct ftrace_ops *ops)
- 
- static void
- ftrace_filter_pid_sched_switch_probe(void *data, bool preempt,
--				     unsigned int prev_state,
- 				     struct task_struct *prev,
--				     struct task_struct *next)
-+				     struct task_struct *next,
-+				     unsigned int prev_state)
- {
- 	struct trace_array *tr = data;
- 	struct trace_pid_list *pid_list;
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index e11e167..f97de82 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -773,9 +773,9 @@ void trace_event_follow_fork(struct trace_array *tr, bool enable)
- 
- static void
- event_filter_pid_sched_switch_probe_pre(void *data, bool preempt,
--					unsigned int prev_state,
- 					struct task_struct *prev,
--					struct task_struct *next)
-+					struct task_struct *next,
-+					unsigned int prev_state)
- {
- 	struct trace_array *tr = data;
- 	struct trace_pid_list *no_pid_list;
-@@ -799,9 +799,9 @@ event_filter_pid_sched_switch_probe_pre(void *data, bool preempt,
- 
- static void
- event_filter_pid_sched_switch_probe_post(void *data, bool preempt,
--					 unsigned int prev_state,
- 					 struct task_struct *prev,
--					 struct task_struct *next)
-+					 struct task_struct *next,
-+					 unsigned int prev_state)
- {
- 	struct trace_array *tr = data;
- 	struct trace_pid_list *no_pid_list;
-diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
-index e9ae1f3..afb92e2 100644
---- a/kernel/trace/trace_osnoise.c
-+++ b/kernel/trace/trace_osnoise.c
-@@ -1168,9 +1168,9 @@ thread_exit(struct osnoise_variables *osn_var, struct task_struct *t)
-  */
- static void
- trace_sched_switch_callback(void *data, bool preempt,
--			    unsigned int prev_state,
- 			    struct task_struct *p,
--			    struct task_struct *n)
-+			    struct task_struct *n,
-+			    unsigned int prev_state)
- {
- 	struct osnoise_variables *osn_var = this_cpu_osn_var();
- 
-diff --git a/kernel/trace/trace_sched_switch.c b/kernel/trace/trace_sched_switch.c
-index 45796d8..c9ffdcf 100644
---- a/kernel/trace/trace_sched_switch.c
-+++ b/kernel/trace/trace_sched_switch.c
-@@ -22,8 +22,8 @@ static DEFINE_MUTEX(sched_register_mutex);
- 
- static void
- probe_sched_switch(void *ignore, bool preempt,
--		   unsigned int prev_state,
--		   struct task_struct *prev, struct task_struct *next)
-+		   struct task_struct *prev, struct task_struct *next,
-+		   unsigned int prev_state)
- {
- 	int flags;
- 
-diff --git a/kernel/trace/trace_sched_wakeup.c b/kernel/trace/trace_sched_wakeup.c
-index 46429f9..330aee1 100644
---- a/kernel/trace/trace_sched_wakeup.c
-+++ b/kernel/trace/trace_sched_wakeup.c
-@@ -426,8 +426,8 @@ tracing_sched_wakeup_trace(struct trace_array *tr,
- 
- static void notrace
- probe_wakeup_sched_switch(void *ignore, bool preempt,
--			  unsigned int prev_state,
--			  struct task_struct *prev, struct task_struct *next)
-+			  struct task_struct *prev, struct task_struct *next,
-+			  unsigned int prev_state)
- {
- 	struct trace_array_cpu *data;
- 	u64 T0, T1, delta;
-diff --git a/samples/trace_events/trace_custom_sched.h b/samples/trace_events/trace_custom_sched.h
-index 9fdd8e7..9513883 100644
---- a/samples/trace_events/trace_custom_sched.h
-+++ b/samples/trace_events/trace_custom_sched.h
-@@ -25,11 +25,11 @@ TRACE_CUSTOM_EVENT(sched_switch,
- 	 * that the custom event is using.
- 	 */
- 	TP_PROTO(bool preempt,
--		 unsigned int prev_state,
- 		 struct task_struct *prev,
--		 struct task_struct *next),
-+		 struct task_struct *next,
-+		 unsigned int prev_state),
- 
--	TP_ARGS(preempt, prev_state, prev, next),
-+	TP_ARGS(preempt, prev, next, prev_state),
- 
- 	/*
- 	 * The next fields are where the customization happens.
+thanks,
+-- 
+John Hubbard
+NVIDIA

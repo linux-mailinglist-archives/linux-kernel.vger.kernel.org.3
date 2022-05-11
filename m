@@ -2,276 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D223C522C8F
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A75522C91
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242268AbiEKGsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 02:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53540 "EHLO
+        id S242327AbiEKGse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 02:48:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbiEKGrz (ORCPT
+        with ESMTP id S239344AbiEKGsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 02:47:55 -0400
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D4133E20;
-        Tue, 10 May 2022 23:47:54 -0700 (PDT)
-Received: by mail-wm1-f51.google.com with SMTP id m62so585202wme.5;
-        Tue, 10 May 2022 23:47:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=d0+VSEkVTN5UKp/1tlZfodLf5D5A+zx04J2EOUOCF00=;
-        b=bpIyUzwbs/OtUHpzNEIE2R7Q4lGuQhU5BWu7fPzD6N45WXlzywpcfzFUtlRKK+WLyX
-         M+gETnkRftfEV7SDDmpvxYYh5K2m12i5hLxhPwWEa2BL5+2eOsk4S1fEkqXm7wucvnda
-         xT+Fi2wXunMoBdMn1oCoQl6Nx9ITSjfl11ZESjHqhAEIu3jA9n+DLkUpNRRG51Xfiyd6
-         5uHn7iKO+ulUhUu9JGwMbqZjp8DGbMuiI1cywCL/SEY5P8lAjasQh+xQ8/I0/84oHDiq
-         iw4kkhodK6NmJjfaa90lpd3TkKYA98d3WRyVAIfg2phx+fkFP5qpLHjG15Ag0d8IsnNQ
-         zqrg==
-X-Gm-Message-State: AOAM530GyhAAuAh7qo1Sof6+iEFZwkxzOEJlfGELnYZD3pmjhwe/1MuU
-        kvdgqgeha7pU5D1uVkqOaJA=
-X-Google-Smtp-Source: ABdhPJzpnoc2OQxaCLNzOlLY2Q6PMGILiG41ZK3gGqRANQoSQNuIjjpR7zhzwOg/QpERIZ7XiCnJ5Q==
-X-Received: by 2002:a05:600c:6021:b0:394:56be:18e with SMTP id az33-20020a05600c602100b0039456be018emr3207844wmb.86.1652251672631;
-        Tue, 10 May 2022 23:47:52 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id m36-20020a05600c3b2400b003942a244edbsm1446971wms.32.2022.05.10.23.47.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 23:47:52 -0700 (PDT)
-Message-ID: <48cfa0b3-0424-81bd-ac6a-d631184b71b7@kernel.org>
-Date:   Wed, 11 May 2022 08:47:50 +0200
+        Wed, 11 May 2022 02:48:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D32D56C32;
+        Tue, 10 May 2022 23:48:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D15ACB82147;
+        Wed, 11 May 2022 06:48:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21D99C385DB;
+        Wed, 11 May 2022 06:48:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652251705;
+        bh=tNrWqK8tIdU6SRxiHlLOa4Ph699/dL/O0qY7uyHGK20=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2E8wh/pxdT3LjtP3qRls4LA304qih347csoxuQFXIPbuaes3Z9rbPOfMIG7nKgla3
+         hWRhiFcbydbFx5ZZ4cM2Ph5eW1uQLN0bg8nfCUX/J2MkcgHXNtrVlsR8YBB0ILET7e
+         N6WPXUGcgwIT4FGi+bL1aYGavHIlVfxDgt2+nvTc=
+Date:   Wed, 11 May 2022 08:48:22 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "zhanghongtao (A)" <zhanghongtao22@huawei.com>
+Cc:     akpm@linux-foundation.org, linfeilong@huawei.com,
+        suweifeng1@huawei.com, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org
+Subject: Re: [PATCH] drivers:uio: Fix system crashes during driver switchover
+Message-ID: <YntcNunjPdb3Clry@kroah.com>
+References: <d204cc88-887c-b203-5a5b-01c307fda4fb@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v4 1/1] soc: fujitsu: Add A64FX diagnostic interrupt
- driver
-Content-Language: en-US
-To:     Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        linux-arm-kernel@lists.infradead.org, soc@kernel.org,
-        linux-serial@vger.kernel.org, sumit.garg@linaro.org
-Cc:     arnd@arndb.de, olof@lixom.net, catalin.marinas@arm.com,
-        will@kernel.org, gregkh@linuxfoundation.org,
-        jason.wessel@windriver.com, daniel.thompson@linaro.org,
-        dianders@chromium.org, linux-kernel@vger.kernel.org,
-        kgdb-bugreport@lists.sourceforge.net, peterz@infradead.org
-References: <20220511062113.2645747-1-hasegawa-hitomi@fujitsu.com>
- <20220511062113.2645747-2-hasegawa-hitomi@fujitsu.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220511062113.2645747-2-hasegawa-hitomi@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d204cc88-887c-b203-5a5b-01c307fda4fb@huawei.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11. 05. 22, 8:21, Hitomi Hasegawa wrote:
-> Enable diagnostic interrupts for the Fujitsu A64FX.
+On Wed, May 11, 2022 at 02:34:28PM +0800, zhanghongtao (A) wrote:
+> From: Hongtao Zhang <zhanghongtao22@huawei.com>
 > 
-> Register the NMI/IRQ corresponding to the A64FX's device definition
-> dedicated to diagnostic interrupts, so that when this interrupt is
-> sent using the BMC, it causes a panic. This can be used to obtain
-> a kernel dump.
+> Switch the driver of the SPDK program that is being read and written from the uio_pci_generic driver to the NVMe driver
+> (Unbind the UIO driver from the device and bind the NVMe driver to the device.) ,the system crashes and restarts.
+> Bug reproduction: When the SPDK is reading or writing data, run the following command: /opt/spdk/setup.sh reset
+
+Please properly wrap your lines at 72 columns like the editor asked you
+to.
+
+> The one with a higher probability of occurrence is as follows:
+> PANIC: "BUG: unable to handle kernel NULL pointer dereference at 0000000000000008"
+>     [exception RIP: _raw_spin_lock_irqsave+30]
+>     RIP: ffffffff836a1cae  RSP: ffff8bca9ecc3f20  RFLAGS: 00010046
+>     RAX: 0000000000000000  RBX: 0000000000000246  RCX: 0000000000000017
+>     RDX: 0000000000000001  RSI: 0000000000000000  RDI: 0000000000000008
+>     RBP: 0000000000000000   R8: 000000afb34e50f9   R9: 0000000000000000
+>     R10: 0000000000000000  R11: 0000000000000000  R12: ffff8bca9ecc3f50
+>     R13: 0000000000000004  R14: 0000000000000004  R15: 0000000000000000
+>     ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
+>  #7 [ffff8bca9ecc3f28] complete at ffffffff82f09bb8
+> reason:After the driver switchover, the upper-layer program can still access the bar space of the NVMe disk controller and knock the doorbell.
+> To solve this problem, a reference counting is added to prevent unbind execution before the application is closed or exited.
 > 
-> Signed-off-by: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Signed-off-by: Hongtao Zhang <zhanghongtao22@huawei.com>
+> Reviewed-by: Weifeng Su <suweifeng1@huawei.com>
+> ---
+>  drivers/uio/uio.c          | 13 +++++++++++++
+>  include/linux/uio_driver.h |  1 +
+>  2 files changed, 14 insertions(+)
+> 
+> diff --git a/drivers/uio/uio.c b/drivers/uio/uio.c
+> index 43afbb7c5ab9..cb8ed29a8648 100644
+> --- a/drivers/uio/uio.c
+> +++ b/drivers/uio/uio.c
+> @@ -31,6 +31,7 @@ static int uio_major;
+>  static struct cdev *uio_cdev;
+>  static DEFINE_IDR(uio_idr);
+>  static const struct file_operations uio_fops;
+> +static DECLARE_WAIT_QUEUE_HEAD(refc_wait);
+> 
+>  /* Protect idr accesses */
+>  static DEFINE_MUTEX(minor_lock);
+> @@ -501,6 +502,7 @@ static int uio_open(struct inode *inode, struct file *filep)
+>  	mutex_unlock(&idev->info_lock);
+>  	if (ret)
+>  		goto err_infoopen;
+> +	refcount_inc(&idev->dev_refc);
+> 
+>  	return 0;
+> 
+> @@ -536,6 +538,9 @@ static int uio_release(struct inode *inode, struct file *filep)
+>  		ret = idev->info->release(idev->info, inode);
+>  	mutex_unlock(&idev->info_lock);
+> 
+> +	if (refcount_dec_and_test(&idev->dev_refc))
+> +			wake_up(&refc_wait);
+> +
+>  	module_put(idev->owner);
+>  	kfree(listener);
+>  	put_device(&idev->dev);
+> @@ -937,6 +942,7 @@ int __uio_register_device(struct module *owner,
+> 
+>  	idev->owner = owner;
+>  	idev->info = info;
+> +	refcount_set(&idev->dev_refc, 0);
+>  	mutex_init(&idev->info_lock);
+>  	init_waitqueue_head(&idev->wait);
+>  	atomic_set(&idev->event, 0);
+> @@ -1045,6 +1051,7 @@ void uio_unregister_device(struct uio_info *info)
+>  {
+>  	struct uio_device *idev;
+>  	unsigned long minor;
+> +	unsigned int dref_count;
+> 
+>  	if (!info || !info->uio_dev)
+>  		return;
+> @@ -1052,6 +1059,12 @@ void uio_unregister_device(struct uio_info *info)
+>  	idev = info->uio_dev;
+>  	minor = idev->minor;
+> 
+> +	dref_count = refcount_read(&idev->dev_refc);
+> +	if (dref_count > 0) {
 
-Hi,
+You can not do this, it could have changed right after reading this.
 
-I'm not sure why you cc linux-serial, but anyway, comments below :).
+Also we went through this many times in the past already, why submit
+this type of change again?
 
-> --- /dev/null
-> +++ b/drivers/soc/fujitsu/a64fx-diag.c
-> @@ -0,0 +1,155 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * A64FX diag driver.
-> + * Copyright (c) 2022 Fujitsu Ltd.
-> + */
-> +
-> +#include <linux/acpi.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/irq.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +
-> +#define A64FX_DIAG_IRQ 1
-> +#define BMC_DIAG_INTERRUPT_STATUS_OFFSET (0x0044)
-> +#define BMC_DIAG_INTERRUPT_ENABLE_OFFSET (0x0040)
-> +#define BMC_DIAG_INTERRUPT_MASK BIT(31)
-> +
-> +struct a64fx_diag_priv {
-> +	int irq;
-> +	void __iomem *mmsc_reg_base;
-> +	bool has_nmi;
+thanks,
 
-There are unnecessary holes in the struct. If you reorder it, you drop 
-some alignment. Like: pointer, int, bool.
-
-> +};
-> +
-> +static irqreturn_t a64fx_diag_handler_nmi(int irq, void *dev_id)
-> +{
-> +	nmi_panic(NULL, "a64fx_diag: interrupt received\n");
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static irqreturn_t a64fx_diag_handler_irq(int irq, void *dev_id)
-> +{
-> +	panic("a64fx_diag: interrupt received\n");
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static void a64fx_diag_interrupt_clear(struct a64fx_diag_priv *priv)
-> +{
-> +	u32 mmsc;
-> +	void __iomem *diag_status_reg_addr;
-
-I'm not sure what soc/ maintainers prefer, but inverted xmas tree would 
-look/read better.
-
-> +
-> +	diag_status_reg_addr = priv->mmsc_reg_base + BMC_DIAG_INTERRUPT_STATUS_OFFSET;
-> +	mmsc = readl(diag_status_reg_addr);
-> +	if (mmsc & BMC_DIAG_INTERRUPT_MASK)
-> +		writel(BMC_DIAG_INTERRUPT_MASK, diag_status_reg_addr);
-> +}
-> +
-> +static void a64fx_diag_interrupt_enable(struct a64fx_diag_priv *priv)
-> +{
-> +	u32 mmsc;
-> +	void __iomem *diag_enable_reg_addr;
-> +
-> +	diag_enable_reg_addr = priv->mmsc_reg_base + BMC_DIAG_INTERRUPT_ENABLE_OFFSET;
-> +	mmsc = readl(diag_enable_reg_addr);
-> +	if (!(mmsc & BMC_DIAG_INTERRUPT_MASK)) {
-> +		mmsc |= BMC_DIAG_INTERRUPT_MASK;
-> +		writel(mmsc, diag_enable_reg_addr);
-> +	}
-> +}
-> +
-> +static void a64fx_diag_interrupt_disable(struct a64fx_diag_priv *priv)
-> +{
-> +	u32 mmsc;
-> +	void __iomem *diag_enable_reg_addr;
-> +
-> +	diag_enable_reg_addr = priv->mmsc_reg_base + BMC_DIAG_INTERRUPT_ENABLE_OFFSET;
-> +	mmsc = readl(diag_enable_reg_addr);
-> +	if (mmsc & BMC_DIAG_INTERRUPT_MASK) {
-> +		mmsc &= ~BMC_DIAG_INTERRUPT_MASK;
-> +		writel(mmsc, diag_enable_reg_addr);
-> +	}
-> +}
-> +
-> +static int a64fx_diag_probe(struct platform_device *pdev)
-> +{
-> +	int ret;
-> +	unsigned long irq_flags;
-> +	struct device *dev = &pdev->dev;
-> +	struct a64fx_diag_priv *priv;
-> +
-> +	priv = devm_kzalloc(dev, sizeof(struct a64fx_diag_priv), GFP_KERNEL);
-
-Don't we prefer sizeof(*priv)?
-
-> +	if (priv == NULL)
-> +		return -ENOMEM;
-> +
-> +	priv->mmsc_reg_base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(priv->mmsc_reg_base))
-> +		return PTR_ERR(priv->mmsc_reg_base);
-> +
-> +	priv->irq = platform_get_irq(pdev, A64FX_DIAG_IRQ);
-> +	if (priv->irq < 0)
-> +		return priv->irq;
-> +
-> +	platform_set_drvdata(pdev, priv);
-> +
-> +	a64fx_diag_interrupt_clear(priv);
-> +	a64fx_diag_interrupt_enable(priv);
-> +
-> +	irq_flags = IRQF_PERCPU | IRQF_NOBALANCING | IRQF_NO_AUTOEN |
-> +		   IRQF_NO_THREAD;
-> +	ret = request_nmi(priv->irq, &a64fx_diag_handler_nmi, irq_flags,
-> +			"a64fx_diag_nmi", NULL);
-> +	if (ret) {
-> +		ret = request_irq(priv->irq, &a64fx_diag_handler_irq,
-> +				irq_flags, "a64fx_diag_irq", NULL);
-> +		if (ret) {
-> +			dev_err(dev, "cannot register IRQ %d\n", ret);
-
-No a64fx_diag_interrupt_disable()?
-
-> +			return ret;
-> +		}
-> +		enable_irq(priv->irq);
-
-Hmm...
-
-> +		priv->has_nmi = false;
-
-No need to set zeroed priv member to zero.
-
-> +	} else {
-> +		enable_nmi(priv->irq);
-
-Provided the above, I don't immediatelly see, what's the purpose of 
-IRQF_NO_AUTOEN then?
-
-> +		priv->has_nmi = true;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int __exit a64fx_diag_remove(struct platform_device *pdev)
-
-Is __exit appropriate here at all -- I doubt that.
-
-> +{
-> +	struct a64fx_diag_priv *priv = platform_get_drvdata(pdev);
-> +
-> +	a64fx_diag_interrupt_disable(priv);
-> +	a64fx_diag_interrupt_clear(priv);
-> +
-> +	if (priv->has_nmi)
-> +		free_nmi(priv->irq, NULL);
-> +	else
-> +		free_irq(priv->irq, NULL);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct acpi_device_id a64fx_diag_acpi_match[] = {
-> +	{ "FUJI2007", 0 },
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(acpi, a64fx_diag_acpi_match);
-> +
-> +
-> +static struct platform_driver a64fx_diag_driver = {
-> +	.driver = {
-> +		.name = "a64fx_diag_driver",
-> +		.acpi_match_table = ACPI_PTR(a64fx_diag_acpi_match),
-> +	},
-> +	.probe = a64fx_diag_probe,
-> +	.remove = a64fx_diag_remove,
-> +};
-> +
-> +module_platform_driver(a64fx_diag_driver);
-> +
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_AUTHOR("Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>");
-> +MODULE_DESCRIPTION("A64FX diag driver");
-
-
--- 
-js
-suse labs
+greg k-h

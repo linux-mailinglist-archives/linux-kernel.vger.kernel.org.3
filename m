@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B6852306F
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3E88523077
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:13:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241332AbiEKKMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 06:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58812 "EHLO
+        id S241357AbiEKKMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 06:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241252AbiEKKMM (ORCPT
+        with ESMTP id S241058AbiEKKM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 06:12:12 -0400
+        Wed, 11 May 2022 06:12:29 -0400
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ACB0219F4A;
-        Wed, 11 May 2022 03:12:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DC321A94C;
+        Wed, 11 May 2022 03:12:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652263925; x=1683799925;
+  t=1652263928; x=1683799928;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=+zu/bQxVabGiEvqKrbpKyisyrq3lc1lCDi+u4VJE9D8=;
-  b=BYJVheBMeFkc/21gTu3P1NUtGpPRvpCR5wh2hTAicENyDdpCZGSdL+xH
-   +SXaV/1tj07IM2iI7/Evhfr92KMLVBVuRgd3KrPncIDI8P6OlG9Gwt2v0
-   SOdSXMgqqcHsa0wImnyNfm7pfuzuSonWppz3zS+GoqPp68HyShWjsBFOE
-   smnlhW6SF6U8IVgDIjjvMClc1PQEccPBUS3GegvvVHMRC2L8QFOKND06R
-   mG5KIkFDuXD+sMUx7p5tWSK7YJGmPbxzhD1sghsYeUzBszdSvpjpZ9O7/
-   FunrbLAK6sDjg9ygmZdWdnZFXBxw97YA4iAYQizx7CEk0a+x+GBoC6wNq
+  bh=EiPw22QBwiYjNZhy2MWCDoPUZBiGSzJ5rdmbTiN1S3Y=;
+  b=cBJYkzUlChLNcWP0qkzZ/s+Ep5pRhC8ofmZxv0bPyiU4uDlw9/g8UuXB
+   rh3xEWkVoV7CU8A1CBfNR0GzOSngtbF5T9wVuJ+3O2XGmZ8UwlsyT6Xkl
+   vIPUTUFNcI9S3nZpuZgIU7EBJXjLIIM0+8bDR5SNeTWTtt01tkYp1gJwX
+   TycnB+jdSTlpHsZz2F/PE9JLiQarwpT6u1tBb9BhJBwGbUVkERu3js9kt
+   IKgr8O0zLfHBmMS8xL/eNL9nFtOerccsqlaXT4OE//4Kv4yURWGsQLsYL
+   f+TfieCZ1ZCTw/uiROBoRvIYpgSE5y/Fv6G5RIzzsRXYFfZ7FZxL7RPFR
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="250184335"
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="250184346"
 X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
-   d="scan'208";a="250184335"
+   d="scan'208";a="250184346"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 03:12:05 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 03:12:08 -0700
 X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
-   d="scan'208";a="594049627"
+   d="scan'208";a="594049651"
 Received: from meliyahx-mobl2.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.32.210])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 03:12:03 -0700
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 03:12:06 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 3/5] tty/termbits: remove #ifdef IBSHIFT that is always defined
-Date:   Wed, 11 May 2022 13:11:37 +0300
-Message-Id: <20220511101139.5306-4-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 4/5] serial: fsl_lpuart: Remove unnecessary clearing for CRTSCTS
+Date:   Wed, 11 May 2022 13:11:38 +0300
+Message-Id: <20220511101139.5306-5-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220511101139.5306-1-ilpo.jarvinen@linux.intel.com>
 References: <20220511101139.5306-1-ilpo.jarvinen@linux.intel.com>
@@ -60,70 +60,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IBSHIFT is defined by all architectures.
+if (termios->c_cflag & CRTSCTS) guarantees that CRTSCTS is not ever set
+in the else block so clearing it is unnecessary.
+
+While at it, remove also one pair of extra parenthesis.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- drivers/tty/tty_baudrate.c | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+ drivers/tty/serial/fsl_lpuart.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/tty/tty_baudrate.c b/drivers/tty/tty_baudrate.c
-index 07bbbfee5635..d10318956c97 100644
---- a/drivers/tty/tty_baudrate.c
-+++ b/drivers/tty/tty_baudrate.c
-@@ -91,7 +91,6 @@ EXPORT_SYMBOL(tty_termios_baud_rate);
+diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+index 75b3c36c13bc..d3bb46cb7185 100644
+--- a/drivers/tty/serial/fsl_lpuart.c
++++ b/drivers/tty/serial/fsl_lpuart.c
+@@ -2110,12 +2110,10 @@ lpuart32_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	if (sport->port.rs485.flags & SER_RS485_ENABLED)
+ 		termios->c_cflag &= ~CRTSCTS;
  
- speed_t tty_termios_input_baud_rate(struct ktermios *termios)
- {
--#ifdef IBSHIFT
- 	unsigned int cbaud = (termios->c_cflag >> IBSHIFT) & CBAUD;
+-	if (termios->c_cflag & CRTSCTS) {
+-		modem |= (UARTMODIR_RXRTSE | UARTMODIR_TXCTSE);
+-	} else {
+-		termios->c_cflag &= ~CRTSCTS;
++	if (termios->c_cflag & CRTSCTS)
++		modem |= UARTMODIR_RXRTSE | UARTMODIR_TXCTSE;
++	else
+ 		modem &= ~(UARTMODIR_RXRTSE | UARTMODIR_TXCTSE);
+-	}
  
- 	if (cbaud == B0)
-@@ -110,9 +109,6 @@ speed_t tty_termios_input_baud_rate(struct ktermios *termios)
- 			cbaud += 15;
- 	}
- 	return cbaud >= n_baud_table ? 0 : baud_table[cbaud];
--#else	/* IBSHIFT */
--	return tty_termios_baud_rate(termios);
--#endif	/* IBSHIFT */
- }
- EXPORT_SYMBOL(tty_termios_input_baud_rate);
- 
-@@ -152,10 +148,9 @@ void tty_termios_encode_baud_rate(struct ktermios *termios,
- 	termios->c_ispeed = ibaud;
- 	termios->c_ospeed = obaud;
- 
--#ifdef IBSHIFT
- 	if (((termios->c_cflag >> IBSHIFT) & CBAUD) != B0)
- 		ibinput = 1;	/* An input speed was specified */
--#endif
-+
- 	/* If the user asked for a precise weird speed give a precise weird
- 	 * answer. If they asked for a Bfoo speed they may have problems
- 	 * digesting non-exact replies so fuzz a bit.
-@@ -170,9 +165,7 @@ void tty_termios_encode_baud_rate(struct ktermios *termios,
- 		iclose = 0;
- 
- 	termios->c_cflag &= ~CBAUD;
--#ifdef IBSHIFT
- 	termios->c_cflag &= ~(CBAUD << IBSHIFT);
--#endif
- 
- 	/*
- 	 *	Our goal is to find a close match to the standard baud rate
-@@ -194,12 +187,10 @@ void tty_termios_encode_baud_rate(struct ktermios *termios,
- 			 */
- 			if (ofound == i && !ibinput)
- 				ifound  = i;
--#ifdef IBSHIFT
- 			else {
- 				ifound = i;
- 				termios->c_cflag |= (baud_bits[i] << IBSHIFT);
- 			}
--#endif
- 		}
- 	} while (++i < n_baud_table);
- 
+ 	if (termios->c_cflag & CSTOPB)
+ 		bd |= UARTBAUD_SBNS;
 -- 
 2.30.2
 

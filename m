@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 813BE522D43
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F03C6522D47
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242917AbiEKH07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 03:26:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50988 "EHLO
+        id S242724AbiEKH1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 03:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiEKH05 (ORCPT
+        with ESMTP id S242910AbiEKH1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 03:26:57 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0493AA7E
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:26:56 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id i17so1037563pla.10
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:26:56 -0700 (PDT)
+        Wed, 11 May 2022 03:27:05 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC6E3BF90
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:27:03 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id qe3-20020a17090b4f8300b001dc24e4da73so3215329pjb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:27:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vJopSBEDjKmChLlyIXRU1jpkvMa7YXsWoRZ5f09Wqgs=;
-        b=BmaN9GNc9aSn02JO6dx7XlD1djznE79I23XgMI4E4HiqF/SVMCvoYSdpoHn+g6684J
-         ocQeV3PRbDp/y7BImUNn3brLDNHaStenJ4WslvSrI3tlV9gDsSrWjEpwHkwXuw0lWb44
-         VXLtcg6w+5l2Ho1rgiIhSEdnk5Uu79QiXtqVd7I5PWjL3spGjA5PSF7/1FF0RFNgq0yV
-         NrlCUajA5Uggz/Pih+UIV+g+h+u8e565n8H4XyrW6e4Ha8bxNTHDzQB+Dr9La1vkeQDa
-         cQCkIrsCd07mK7M8o/k/m82FQJssIIJBD7ok4/say7IeHhYtOq77x41XsHYYOFQB3Uvm
-         e/rQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=cjE84FymrEK7bxD5XFoGhOeZrQEQrNAiUbfRS8xIEcU=;
+        b=klbQJoWUooPPrElfPbe90DkbxVaCHOjQgHPdPkWZ9EL5GUtvOVe6OiRplW16LY4ZY5
+         k8MgfzvLE5cVP4mK9AdasxgHCTaqOUw/FvRPM7VpBFMUygJKJVnPWeCx+sqTx4DSyR/j
+         8A8/xgSnuVKWSqsp9caBimzpCSkf+IaINHQiUbMs+a67mGe/+A1Re38gsvN6Ds5ojn7A
+         W8P3Pgz+HnapBe7IoINiyzlspoyskQng/glCIzer8vIwIOM0o0E7P+pRHSvgqMCJpbZx
+         9bliRghw2MYr/GLeB+QvWR0C5QQKxPbBXCsbarHNF+aJj100F9bCh7YiAKauwvOL4SW5
+         uqwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vJopSBEDjKmChLlyIXRU1jpkvMa7YXsWoRZ5f09Wqgs=;
-        b=0JgNPNE/lFGt0uzzUF5Qge6kBlVDW3TqtITcyJWV1Xp1v46xJ+KCPjL25vBLQGcJAW
-         dSKW7ny33TY2vUBL12Fflm6Azja8kuPyZR+y8UjhQOUz5cv/5l91MXXj9+4FpPmlKdtH
-         4LymZFXlUzgUTM3xDslCWEQSIiMCIi+aDMoaSx2HHpIrcu+VC0+uQSiGttGh6Pu/7nt0
-         kzukM2Ld2mNVrh1HXbu3kN4692vOghBEzKeAbL6EgsEDaxxoWKPoIp6rCOsLvW7EavOo
-         7qxfnMhapDJx+y5az/PN8yhgpt1oWE9ApoVcrVGKciRR7jdiNWTTy5xCOTe8cyXpBGye
-         zSew==
-X-Gm-Message-State: AOAM532SjCofGu89fU0bwM/B/F6yL0SicUXcZiNKFJk8EyQeKe4K/BVf
-        DwTvcz6QMMPWqQ48kPVnS4NOrBnyStY=
-X-Google-Smtp-Source: ABdhPJwrabh71KEFQ9sODAMLDTrJik/AwHqT+lsCwwzC9p5JcC2Zb0ZpOPp8/85Jel78kBqnFPKswQ==
-X-Received: by 2002:a17:90a:8b91:b0:1be:db25:eecd with SMTP id z17-20020a17090a8b9100b001bedb25eecdmr3908111pjn.10.1652254015351;
-        Wed, 11 May 2022 00:26:55 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=cjE84FymrEK7bxD5XFoGhOeZrQEQrNAiUbfRS8xIEcU=;
+        b=Gm7kXrcQnUaqiDX4HJ9YUOHf2hQXpyZCgSOyuhy/lV9z/F/jYV9OfgyWzJNbcne9W4
+         C/25YA6VVSTHO1Wxvt+b4LUtwKrD8uC/9rpzkkdjmFRfFEW1FwGt9HmIrzmzD39pXa7f
+         IzAtSAvp834a1szSCCxCvXtHVk1/thzD8Yosbrl41bmLcUsPuj6uFSwLJXwMDNdq0M10
+         FNuwZ/Nm9L7N++qyjDrztSLufC1qmMQnY5ObhdWpf0VixnQYqBPokANMTTGKxP0Pgr3I
+         rDLM0txXDbCZIagJfnXqn33u6OVyjYm6Qht80CLk2/L51AkLNRSH4JYzwvtGF0FcmVvO
+         FHjw==
+X-Gm-Message-State: AOAM530UIb8r8d4l6iuMLNMR7CZWL5yM06a6DnWqM3vP/g4geRRfPQQ7
+        X8icROLK/CewIzjNF7SOsbdbqdD6gik=
+X-Google-Smtp-Source: ABdhPJymHzix4/M1wBKJtK96BCPSuwsqFL3j3N0YLQI2kCeEPCOJtMNL++Qz+8/4vKgW26FlWsvwPQ==
+X-Received: by 2002:a17:90b:3a86:b0:1dc:2343:2429 with SMTP id om6-20020a17090b3a8600b001dc23432429mr3918001pjb.206.1652254022944;
+        Wed, 11 May 2022 00:27:02 -0700 (PDT)
 Received: from localhost ([47.251.4.198])
-        by smtp.gmail.com with ESMTPSA id 2-20020a170902c10200b0015e8d4eb2aasm937874pli.244.2022.05.11.00.26.54
+        by smtp.gmail.com with ESMTPSA id rm10-20020a17090b3eca00b001cd4989fee1sm3519825pjb.45.2022.05.11.00.27.01
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 11 May 2022 00:26:55 -0700 (PDT)
+        Wed, 11 May 2022 00:27:02 -0700 (PDT)
 From:   Lai Jiangshan <jiangshanlai@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Borislav Petkov <bp@alien8.de>,
@@ -55,11 +55,28 @@ Cc:     Borislav Petkov <bp@alien8.de>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>
-Subject: [PATCH 0/7] x86/entry: Convert error_entry() to C code
-Date:   Wed, 11 May 2022 15:27:40 +0800
-Message-Id: <20220511072747.3960-1-jiangshanlai@gmail.com>
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Marco Elver <elver@google.com>, Hao Luo <haoluo@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: [PATCH 1/7] x86/entry: Introduce __entry_text for entry code written in C
+Date:   Wed, 11 May 2022 15:27:41 +0800
+Message-Id: <20220511072747.3960-2-jiangshanlai@gmail.com>
 X-Mailer: git-send-email 2.19.1.6.gb485710b
+In-Reply-To: <20220511072747.3960-1-jiangshanlai@gmail.com>
+References: <20220511072747.3960-1-jiangshanlai@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,49 +91,62 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-Add some C equivalent functions of the ASM macros and implement the whole
-error_entry() as C code.
+Some entry code will be implemented in C files.
+Introduce __entry_text to set them in .entry.text section.
 
-The patches are picked from the huge patchset
-https://lore.kernel.org/lkml/20211126101209.8613-1-jiangshanlai@gmail.com/
-which converts a large chunk of ASM code to C code.
+The new __entry_text disables instrumentation like noinstr, so
+__noinstr_section() is added for noinstr and the new __entry_text.
 
-The C version generally has better readability and easier to be
-updated/improved.
+Note, entry code can not access to %gs before the %gs base is switched
+to kernel %gs base, so stack protector can not be used on the C entry
+code.  But __entry_text doesn't disable stack protector since some
+compilers might not support function level granular attribute to
+disable stack protector.  It will be disabled in C file level.
 
-This smaller patchset converts error_entry() only.
-The equivalent ASM macros are not removed because they are still used by
-the IST exceptions.
+Cc: Borislav Petkov <bp@alien8.de>
+Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+---
+ arch/x86/include/asm/idtentry.h | 3 +++
+ include/linux/compiler_types.h  | 8 +++++---
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-Changed from the old huge patchset:
-	squash some patches
-
-Lai Jiangshan (7):
-  x86/entry: Introduce __entry_text for entry code written in C
-  x86/entry: Move PTI_USER_* to arch/x86/include/asm/processor-flags.h
-  x86: Mark __native_read_cr3() & native_write_cr3() as __always_inline
-  x86/entry: Add arch/x86/entry/entry64.c for C entry code
-  x86/entry: Add the C verion of SWITCH_TO_KERNEL_CR3 as
-    switch_to_kernel_cr3()
-  x86/traps: Add fence_swapgs_{user,kernel}_entry() and
-    user_entry_swapgs_and_fence()
-  x86/entry: Implement the whole error_entry() as C code
-
- arch/x86/entry/Makefile                |   3 +-
- arch/x86/entry/calling.h               |  10 --
- arch/x86/entry/entry64.c               | 137 +++++++++++++++++++++++++
- arch/x86/entry/entry_64.S              |  85 +--------------
- arch/x86/include/asm/idtentry.h        |   3 +
- arch/x86/include/asm/pgtable.h         |  23 +----
- arch/x86/include/asm/processor-flags.h |  15 +++
- arch/x86/include/asm/proto.h           |   1 +
- arch/x86/include/asm/special_insns.h   |   4 +-
- arch/x86/include/asm/traps.h           |   1 +
- arch/x86/kernel/traps.c                |   2 -
- include/linux/compiler_types.h         |   8 +-
- 12 files changed, 172 insertions(+), 120 deletions(-)
- create mode 100644 arch/x86/entry/entry64.c
-
+diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
+index 72184b0b2219..acc4c99f801c 100644
+--- a/arch/x86/include/asm/idtentry.h
++++ b/arch/x86/include/asm/idtentry.h
+@@ -13,6 +13,9 @@
+ 
+ #include <asm/irq_stack.h>
+ 
++/* Entry code written in C. */
++#define __entry_text __noinstr_section(".entry.text")
++
+ /**
+  * DECLARE_IDTENTRY - Declare functions for simple IDT entry points
+  *		      No error code pushed by hardware
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index 1c2c33ae1b37..8c7e81efe9bf 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -225,9 +225,11 @@ struct ftrace_likely_data {
+ #endif
+ 
+ /* Section for code which can't be instrumented at all */
+-#define noinstr								\
+-	noinline notrace __attribute((__section__(".noinstr.text")))	\
+-	__no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage
++#define __noinstr_section(section)				\
++	noinline notrace __section(section) __no_profile	\
++	__no_kcsan __no_sanitize_address __no_sanitize_coverage
++
++#define noinstr __noinstr_section(".noinstr.text")
+ 
+ #endif /* __KERNEL__ */
+ 
 -- 
 2.19.1.6.gb485710b
 

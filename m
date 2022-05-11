@@ -2,110 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 310B252307A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD374523081
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242253AbiEKKNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 06:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60194 "EHLO
+        id S236255AbiEKKOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 06:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241715AbiEKKMg (ORCPT
+        with ESMTP id S241945AbiEKKOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 06:12:36 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4611721935A;
-        Wed, 11 May 2022 03:12:33 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id i5so2217017wrc.13;
-        Wed, 11 May 2022 03:12:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QjOiABWwDVf3MfqksGqkegesFaJHfof1rS6bjlGGuC4=;
-        b=I7I4zJv9xEfpD5ecwkADzCpE5qp9p57z38WYdroMV8d0VO82lQvp2QgYca56YNLhkG
-         TBrna1GBY3oG7pOMiJYV3aJHV8F06B9g1Ayfrmi3NjG3Zt2eeiBzWaUmz9NKRa24qf0/
-         Oyghabp5978mKCONdpUR9XLN6YfWf0eN1ZtlwLUDvfbd7BU/Nt7K8YzD4OO0VeiqIg23
-         u31t1pNfeSS5h0zRbaa95Ti+0iKWGpw2qElQIm6QgdjILwUtFmOFTM7Gb072Fts9okgV
-         N3lGgxCYG4Tqy/RPTE6n2ztbhjnLPmA5t007wE2On8DXz5euksqeMRcevagyzgoMJ2z7
-         wxvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QjOiABWwDVf3MfqksGqkegesFaJHfof1rS6bjlGGuC4=;
-        b=yVIR5DE+ENbk5DB7R4XxbG05t7TFLFUEAu2Qwbpgxz1anncweSCyJCyxt3asDHvz6h
-         NqijYn/xRTtpTqDOqPHulHWWjRYjYxuFXOM2UhYlo5/lBGYshqHjIeIecAOskTuHLKOe
-         G35sF+FWZSuGmk2ydnFOD4WXlm+w2VipzAK8yUpz1D+C0NnGhtrvx2P8t6oaGCJNsFXm
-         2ZX0Lvrl0Cx+Z7rFHHDqdX34Pfa1cGE+gqPARJZLg4eWqHY6IhA6jEbwiSLSOmU5m8i1
-         pqqWr3AG0O2YbWkpvxoEerEKFXwrnLe6QD0P82V1jUMwhVOMelnK5zSOf0FFOYd8BCia
-         RFoQ==
-X-Gm-Message-State: AOAM533zburcmvXfy1Vty6LeiCi/7VCYSvuV2mLT10COMnwIur6EBbvh
-        tNbfEZK0FRBApPuQW8g/JWw=
-X-Google-Smtp-Source: ABdhPJyYxjVyKLnHJy496AZEtBYq6bkEgwwoC4B35ncrexX+oqDPGhsdeoruGD6BWteaKfURf/KqbQ==
-X-Received: by 2002:adf:f3cb:0:b0:20c:8afd:9572 with SMTP id g11-20020adff3cb000000b0020c8afd9572mr21546958wrp.179.1652263951554;
-        Wed, 11 May 2022 03:12:31 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id e13-20020a5d65cd000000b0020c5253d906sm1267182wrw.82.2022.05.11.03.12.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 03:12:31 -0700 (PDT)
-Date:   Wed, 11 May 2022 11:12:29 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 000/135] 5.15.39-rc1 review
-Message-ID: <YnuMDWIReGg6z0Al@debian>
-References: <20220510130740.392653815@linuxfoundation.org>
+        Wed, 11 May 2022 06:14:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0C44227B69
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:13:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652264007;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZL+idh8z82yGfceUpUMDcLt25Q+LynjrWsRec67ynZc=;
+        b=KbhDJUEovVpine+4H2+jv/WLr2Q6aVuJWgWWV9m4O8jF328sQ0gEpTamXK+t2hRxhwUugm
+        z1YNaJRWLkJ+F6wpvUyWHum4ZrbF72BU1dk+IBmbeNQ2/fQeHl3CBUIy4fdJ8h2DV0Hw2d
+        Dr6/aaPbI8Qu1V0Mq9Wja9oJVHkf7bI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-192-NPXEhp-JM5uUgxxvhIbx-w-1; Wed, 11 May 2022 06:13:24 -0400
+X-MC-Unique: NPXEhp-JM5uUgxxvhIbx-w-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CEA04800882;
+        Wed, 11 May 2022 10:13:23 +0000 (UTC)
+Received: from localhost (ovpn-13-194.pek2.redhat.com [10.72.13.194])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 592091121314;
+        Wed, 11 May 2022 10:13:15 +0000 (UTC)
+Date:   Wed, 11 May 2022 18:13:09 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v8 5/7] kexec: exclude hot remove cpu from elfcorehdr
+ notes
+Message-ID: <20220511101309.GI122876@MiWiFi-R3L-srv>
+References: <20220505184603.1548-1-eric.devolder@oracle.com>
+ <20220505184603.1548-6-eric.devolder@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220505184603.1548-6-eric.devolder@oracle.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Tue, May 10, 2022 at 03:06:22PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.39 release.
-> There are 135 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 05/05/22 at 02:46pm, Eric DeVolder wrote:
+> Due to use of CPUHP_AP_ONLINE_DYN, upon CPU unplug, the CPU is
+> still in the for_each_present_cpu() list when within the
+> handle_hotplug_event(). Thus the CPU must be explicitly excluded
+> when building the new list of CPUs.
 > 
-> Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
-> Anything received after that time might be too late.
+> This change identifies in handle_hotplug_event() the CPU to be
+> excluded, and the check for excluding the CPU in
+> crash_prepare_elf64_headers().
+> 
+> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
 
-Build test (gcc-11):
-mips (gcc version 11.2.1 20220408): 62 configs -> no failure
-arm (gcc version 11.2.1 20220408): 100 configs -> no new failure
-arm64 (gcc version 11.2.1 20220408): 3 configs -> no failure
-x86_64 (gcc version 11.2.1 20220408): 4 configs -> no failure
+LGTM,
 
-Build test (gcc-12):
-All the allmodconfig builds failed. Will check later what is needed.
+Acked-by: Baoquan He <bhe@redhat.com>
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
+> ---
+>  kernel/crash_core.c | 10 ++++++++++
+>  kernel/kexec_file.c |  5 +++++
+>  2 files changed, 15 insertions(+)
+> 
+> diff --git a/kernel/crash_core.c b/kernel/crash_core.c
+> index f197af50def6..7ba43f058d82 100644
+> --- a/kernel/crash_core.c
+> +++ b/kernel/crash_core.c
+> @@ -520,6 +520,16 @@ static void handle_hotplug_event(unsigned int hp_action, unsigned int cpu)
+>  		/* Flag to differentiate between normal load and hotplug */
+>  		kexec_crash_image->hotplug_event = true;
+>  
+> +		/*
+> +		 * Due to use of CPUHP_AP_ONLINE_DYN, upon unplug and during
+> +		 * this callback, the CPU is still in the for_each_present_cpu()
+> +		 * list. Must explicitly look to exclude this CPU when building
+> +		 * new list.
+> +		 */
+> +		kexec_crash_image->offlinecpu =
+> +			(hp_action == KEXEC_CRASH_HP_REMOVE_CPU) ?
+> +				cpu : KEXEC_CRASH_HP_INVALID_CPU;
+> +
+>  		/* Now invoke arch-specific update handler */
+>  		arch_crash_handle_hotplug_event(kexec_crash_image, hp_action, cpu);
+>  
+> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+> index aacdf93c3507..d68e5769b428 100644
+> --- a/kernel/kexec_file.c
+> +++ b/kernel/kexec_file.c
+> @@ -1314,6 +1314,11 @@ int crash_prepare_elf64_headers(struct kimage *image, struct crash_mem *mem,
+>  
+>  	/* Prepare one phdr of type PT_NOTE for each present CPU */
+>  	for_each_present_cpu(cpu) {
+> +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
+> +		/* Skip the soon-to-be offlined cpu */
+> +		if (image->hotplug_event && (cpu == image->offlinecpu))
+> +			continue;
+> +#endif
+>  		phdr->p_type = PT_NOTE;
+>  		notes_addr = per_cpu_ptr_to_phys(per_cpu_ptr(crash_notes, cpu));
+>  		phdr->p_offset = phdr->p_paddr = notes_addr;
+> -- 
+> 2.27.0
+> 
 
-
-[1]. https://openqa.qa.codethink.co.uk/tests/1122
-[2]. https://openqa.qa.codethink.co.uk/tests/1126
-[3]. https://openqa.qa.codethink.co.uk/tests/1127
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip

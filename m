@@ -2,94 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCCB523C44
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31D62523C4C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346116AbiEKSLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 14:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47358 "EHLO
+        id S1346117AbiEKSOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 14:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346094AbiEKSLo (ORCPT
+        with ESMTP id S1346094AbiEKSON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 14:11:44 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F801606F3
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:11:43 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id g20so3511463edw.6
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:11:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=B1sIommB5oiopHgf7KLQUzUatFJzc302ngrnM99CnbU=;
-        b=Bncm1ERZjlJ+C2I71BhUNNvrXo+iHTAiA5u+snQ3KP3WhoLiPOVk3UUcEFxCrbc3YL
-         oJd9CfUY9MfEb9TRmtBQm+tSNWQCSIfpzzZC8ZFUpiBl2yhENsNmzUohewRc5OcOK1Q/
-         AzuSt2dN3/CNM3XGzcostHznROhsNuHr3LLYv6dZXVNwd5FKo+SJNAErujYdxIF3Ywhw
-         NryiSYLfP73Fz2gCjZBALqkKzoWvqb2heHCTgVqdcsz4jRNiq7A4y4ktvw2sLAhUWfIb
-         NBoEdKWCHn67IPzIw8jdGuVvT7TXUTpuUoUS9dwMAOfisyXp0SlMzKyMKgJkpKuV+d0R
-         nW/g==
+        Wed, 11 May 2022 14:14:13 -0400
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E4DE15CE;
+        Wed, 11 May 2022 11:14:12 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2f7d7e3b5bfso30830277b3.5;
+        Wed, 11 May 2022 11:14:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=B1sIommB5oiopHgf7KLQUzUatFJzc302ngrnM99CnbU=;
-        b=eH2EDoms2TJyzwy2v9CmAOu6t8Tiu+psTfjfjsA8P/g4PMDnO4XaJMhkiVHmQOSZGs
-         ETOiCPsKhWEH5nkO0TThPEeH3IGwgNqqcKhB1tKk0Oewo4n/EGWfyDEIHuiCOmWodR6V
-         5R17ZpYSIjbsQ9WaUMd2PV6/wycEpJwh8EtmqA5cHCbvU5gkxJXIsvIg2XF1HM0TgQze
-         yOmPhi62ZPD2PoZRtSaVCUgq5BKHtmBdy/9NNc3iCE/pS7IvEBGlR4xB13ad4+mozPDH
-         BpDvM6OhgTgf0zpMI19g9PDzhSEArj26zjQW8ZM/rnEBoTDSDsj4Qx1M0SrLrWvwnIYu
-         MflA==
-X-Gm-Message-State: AOAM532MYgflCDFJJbXiz/vgfKSBkitpXCtacXRWjWllWhw0FTFwVkcE
-        bKToKfYNfdkbnP7B/N7a4Ounng==
-X-Google-Smtp-Source: ABdhPJyiDHzyY4rY+mnga9H3oSlY4ujZN6q06J9yJ2WZTAhsRJ/Dn4dfk2ee36mq5zINyyfgkHsSLw==
-X-Received: by 2002:aa7:c849:0:b0:427:d464:e66f with SMTP id g9-20020aa7c849000000b00427d464e66fmr30417861edt.411.1652292702040;
-        Wed, 11 May 2022 11:11:42 -0700 (PDT)
-Received: from [192.168.0.155] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id sb12-20020a1709076d8c00b006f3ef214e04sm1213887ejc.106.2022.05.11.11.11.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 11:11:41 -0700 (PDT)
-Message-ID: <81365629-6cf0-f320-e684-4fb40b829399@linaro.org>
-Date:   Wed, 11 May 2022 20:11:40 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HLM5UrVEFAMy1YzHX4aRkPBSHPjPij5ZKHaASows/yQ=;
+        b=FtJ1YybRhvLTIcs9rQwpQygnM0QlIbNwCKcjTaFdQ7I1tMc27lBmVBkX3s4TnsoLgP
+         cbBJ4/50Iny8OA+2NEojTBWLd9vITzkSWI5R2A84/hbwoi1YM3xzNqxM33IhKMqCRFjp
+         szpMaORcp+PesYSCZaB29PKsKu8QTWscgUWTxGUxkQD31Mlw2r5v1W4STjs577ZsxlLC
+         FlDmWGqHGSiqQa2aASPOqSDKYOU6YXKvhq8VQXX+gzxWlKUg9V1zGszT5sDtXnnTznt+
+         1P1wUMWNjSeBOcoQ6V5TfckvykzQsWF9mhpPLK6kU56m4SZnu1UvztQ2wZM4ukG3bcyA
+         861Q==
+X-Gm-Message-State: AOAM531zxY8IzkobRXArQvaOCKjZ6KZSHkOvwvKVBDj0mPbnaCGcWG40
+        Wcmb3P9i0Xs8+YVRIIq4rocL/0c3F7mtSNIZXiY3IQMm
+X-Google-Smtp-Source: ABdhPJwJgb5GseduKipcgYhSAba9IjmbsT3Bite0shM1myaAv+GAR6NQCFESaNLoOaOjuUZM9UZS6BbX0NKEYReQORY=
+X-Received: by 2002:a81:260a:0:b0:2f4:ca82:a42f with SMTP id
+ m10-20020a81260a000000b002f4ca82a42fmr26796687ywm.149.1652292851808; Wed, 11
+ May 2022 11:14:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: msm8916: Fix typo in pronto
- remoteproc node
-Content-Language: en-US
-To:     Sireesh Kodali <sireeshkodali1@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org
-Cc:     bjorn.andersson@linaro.org, Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220510042654.71152-1-sireeshkodali1@gmail.com>
- <20220510042654.71152-3-sireeshkodali1@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220510042654.71152-3-sireeshkodali1@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220510182221.3990256-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20220510182221.3990256-1-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 11 May 2022 20:14:00 +0200
+Message-ID: <CAJZ5v0hDN=iGBQei6XeJ1b3qLiRxPDm+ZFtKU1PcHbBcyxGpZw@mail.gmail.com>
+Subject: Re: [UPDATE][PATCH] thermal: int340x: Mode setting with new OS handshake
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/05/2022 06:26, Sireesh Kodali wrote:
-> The smem-state properties for the pronto node were incorrectly labelled,
-> reading `qcom,state*` rather than `qcom,smem-state*`. Fix that, allowing
-> the stop state to be used.
-> 
-> Fixes: 88106096cbf8 ("ARM: dts: msm8916: Add and enable wcnss node")
-> 
-> Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
+On Tue, May 10, 2022 at 8:22 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> With the new OS handshake introduced with the commit: "c7ff29763989
+> ("thermal: int340x: Update OS policy capability handshake")",
+> thermal zone mode "enabled" doesn't work in the same way as the legacy
+> handshake. The mode "enabled" fails with -EINVAL using new handshake.
+>
+> To address this issue, when the new OS UUID mask is set:
+> - When mode is "enabled", return 0 as the firmware already has the
+> latest policy mask.
+> - When mode is "disabled", update the firmware with UUID mask of zero.
+> In this way firmware can take control of the thermal control. Also
+> reset the OS UUID mask. This allows user space to update with new
+> set of policies.
+>
+> Fixes: c7ff29763989 ("thermal: int340x: Update OS policy capability handshake")
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: stable@vger.kernel.org
 
-No blank lines between tags, please.
+This is not -stable material yet.
 
-Best regards,
-Krzysztof
+> ---
+> update:
+> Added Fixes tag
+>
+>  .../intel/int340x_thermal/int3400_thermal.c   | 48 ++++++++++++-------
+>  1 file changed, 32 insertions(+), 16 deletions(-)
+>
+> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> index d97f496bab9b..1061728ad5a9 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> @@ -194,12 +194,31 @@ static int int3400_thermal_run_osc(acpi_handle handle, char *uuid_str, int *enab
+>         return result;
+>  }
+>
+> +static int set_os_uuid_mask(struct int3400_thermal_priv *priv, u32 mask)
+> +{
+> +       int cap = 0;
+> +
+> +       /*
+> +        * Capability bits:
+> +        * Bit 0: set to 1 to indicate DPTF is active
+> +        * Bi1 1: set to 1 to active cooling is supported by user space daemon
+> +        * Bit 2: set to 1 to passive cooling is supported by user space daemon
+> +        * Bit 3: set to 1 to critical trip is handled by user space daemon
+> +        */
+> +       if (mask)
+> +               cap = ((priv->os_uuid_mask << 1) | 0x01);
+> +
+> +       return int3400_thermal_run_osc(priv->adev->handle,
+> +                                      "b23ba85d-c8b7-3542-88de-8de2ffcfd698",
+> +                                      &cap);
+> +}
+> +
+>  static ssize_t current_uuid_store(struct device *dev,
+>                                   struct device_attribute *attr,
+>                                   const char *buf, size_t count)
+>  {
+>         struct int3400_thermal_priv *priv = dev_get_drvdata(dev);
+> -       int i;
+> +       int ret, i;
+>
+>         for (i = 0; i < INT3400_THERMAL_MAXIMUM_UUID; ++i) {
+>                 if (!strncmp(buf, int3400_thermal_uuids[i],
+> @@ -231,19 +250,7 @@ static ssize_t current_uuid_store(struct device *dev,
+>         }
+>
+>         if (priv->os_uuid_mask) {
+> -               int cap, ret;
+> -
+> -               /*
+> -                * Capability bits:
+> -                * Bit 0: set to 1 to indicate DPTF is active
+> -                * Bi1 1: set to 1 to active cooling is supported by user space daemon
+> -                * Bit 2: set to 1 to passive cooling is supported by user space daemon
+> -                * Bit 3: set to 1 to critical trip is handled by user space daemon
+> -                */
+> -               cap = ((priv->os_uuid_mask << 1) | 0x01);
+> -               ret = int3400_thermal_run_osc(priv->adev->handle,
+> -                                             "b23ba85d-c8b7-3542-88de-8de2ffcfd698",
+> -                                             &cap);
+> +               ret = set_os_uuid_mask(priv, priv->os_uuid_mask);
+>                 if (ret)
+>                         return ret;
+>         }
+> @@ -469,17 +476,26 @@ static int int3400_thermal_change_mode(struct thermal_zone_device *thermal,
+>         if (mode != thermal->mode) {
+>                 int enabled;
+>
+> +               enabled = (mode == THERMAL_DEVICE_ENABLED);
+> +
+> +               if (priv->os_uuid_mask) {
+> +                       if (!enabled) {
+> +                               priv->os_uuid_mask = 0;
+> +                               result = set_os_uuid_mask(priv, priv->os_uuid_mask);
+
+This change worries me a bit, because it means replaying an already
+established _OSC handshake which shouldn't be done by the spec.
+
+But I suppose you have tested this?
+
+> +                       }
+> +                       goto eval_odvp;
+> +               }
+> +
+>                 if (priv->current_uuid_index < 0 ||
+>                     priv->current_uuid_index >= INT3400_THERMAL_MAXIMUM_UUID)
+>                         return -EINVAL;
+>
+> -               enabled = (mode == THERMAL_DEVICE_ENABLED);
+>                 result = int3400_thermal_run_osc(priv->adev->handle,
+>                                                  int3400_thermal_uuids[priv->current_uuid_index],
+>                                                  &enabled);
+>         }
+>
+> -
+> +eval_odvp:
+>         evaluate_odvp(priv);
+>
+>         return result;
+> --
+
+Patch applied as 5.18-rc material, but I've removed some unneeded
+parens from the new code, so please double check the result in
+bleeding-edge.
+
+Thanks!

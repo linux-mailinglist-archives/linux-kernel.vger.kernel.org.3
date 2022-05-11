@@ -2,73 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A97B3523DB6
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCABD523DB7
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347065AbiEKTkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 15:40:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
+        id S1347069AbiEKTkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 15:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347061AbiEKTkX (ORCPT
+        with ESMTP id S1347082AbiEKTkg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 15:40:23 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4227F21A95E
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:40:21 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 16so3867532lju.13
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:40:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=s0WHnwC/LKH7P9lNbxHLOT0Ey/YFu5D9xNYFJTYtZ1Q=;
-        b=Fvz5uPtJHUorCw5qkY372eQ60ClhKlpeLwO1xjhAL9PQHj9vflc26CO74tkzg7EmAI
-         FEHbyF3V9YbZQYUmxvm1RNGhLDcIjYqTBqP4pZiVRnOpH7gUtNFeTmFleqdhViv3AS3i
-         q3If8KCbEwTyPf7Uo6YzYZ1DgplKvn07+Q5FTK3v4nApvYHZxE1K0C9zkXE0CAEZsylG
-         /vV6IuLMlkcjNQ0IVy3QsNh5mor400xpsLkIzUSChrp4HwfNkleiWjE/UsdexJvxUSKo
-         7XcpLaapmKfq6RqUk63VDmyq5ZCSDITSYlTLQDsqe8Nq/YlTdnTooSQfbfWhq1VOhG6a
-         uP7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s0WHnwC/LKH7P9lNbxHLOT0Ey/YFu5D9xNYFJTYtZ1Q=;
-        b=HnFLRU/2tDDN3hILG8L2dKZWWTsSkAIzuLpJpY4vSUDWO/X1SC2dbGi7VEC7VOrcB5
-         xUF988+ZWl3SPtLTgpL13FoHO8yGsykIX47GVodwVNGgMFeKOeCw3gJnpJD8LGduo1w7
-         B7njBGZtBmmEA6F8mpvWP0yk1BdYE6wWt/QQyWEIQH9n667Cg/HTpod7UXp2ZWcMZYMf
-         0uuw1HYcJPnW5+FcZ4mbirI0o6v3CIMsAeLCN/YTJj5dKbkt3k5P3r18qcn9X82/jGWm
-         5KE1P/fafkdFrG1sO3WW+R7gA7IrSg2sfQyMYWWBmn1S8U8AepIf1xVP7Ah/GHVjwWZJ
-         qNYA==
-X-Gm-Message-State: AOAM533cvzT912ypNcf6zu9YBrXCys3E5VYPPSL3vNGac1BmialX3li9
-        +ryY3FyTxOzvrv7ucpXT9VLgctzgCG6kJZkao1f0NQ==
-X-Google-Smtp-Source: ABdhPJz0NVpIZePVvZ3oOx6+FO7jLpzyA7B8CJCC9CbYcQngiEhIKV2dTdoUVdm176erPVni03DBhy5q0Zs/JvZO3y4=
-X-Received: by 2002:a05:651c:101:b0:250:896d:f870 with SMTP id
- a1-20020a05651c010100b00250896df870mr17878467ljb.235.1652298019389; Wed, 11
- May 2022 12:40:19 -0700 (PDT)
+        Wed, 11 May 2022 15:40:36 -0400
+Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BEF021936A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:40:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1652298027;
+        bh=VvsSj+I3QLO+GT/1Y+Fy8QHCuIf/f9a+/vykm0pmAPo=;
+        h=X-UI-Sender-Class:Date:From:Subject:To;
+        b=caKufFHpFZ/ya4QCGYXAnqfuVYr8zimRiJIqWarKdQCzjXq+eMOTNAurVWV9NiGXU
+         SY0Qy1XAGIS6esFR2qhEphr2/CwNZjyXGoBqPLdNDYAFNt1+dmpBWL9pE/MduN2Q2K
+         QQ3Z3ttML8D4Ken6So43p39J05xgFrlcsOcYg7r4=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [10.8.110.13] ([143.244.37.9]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1N9MpY-1nsOwp15SW-015L7Q for
+ <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 21:40:27 +0200
+Message-ID: <6e63294b-399c-4c56-deb6-2997e2f87bc8@gmx.com>
+Date:   Wed, 11 May 2022 19:40:26 +0000
 MIME-Version: 1.0
-References: <20220511120532.2228616-1-hca@linux.ibm.com> <20220511120532.2228616-8-hca@linux.ibm.com>
-In-Reply-To: <20220511120532.2228616-8-hca@linux.ibm.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 11 May 2022 12:40:07 -0700
-Message-ID: <CAKwvOdn3Mdn9ek-7EotHmd6Wb7C5rzZnOxAQVtbQEd2LBBZGRg@mail.gmail.com>
-Subject: Re: [PATCH 7/8] s390/boot: do not emit debug info for assembly with
- llvm's IAS
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jonas Paulsson <paulsson@linux.vnet.ibm.com>,
-        Ulrich Weigand <ulrich.weigand@de.ibm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andreas Krebbel <krebbel@linux.ibm.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+From:   "Artem S. Tashkinov" <aros@gmx.com>
+Subject: Linux swap file and LUKS
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:zg+vUbgnbWFN5YGjshGF+GQYkk/jwb6qZMTHkn7N1Ua5DbBAzbK
+ FkIDTY/171FEMz5tcPmH9wRvMTa1heBtnPbw2OP9sf9u0LN+0owGQ+S8scW3FMUbAwXuz9D
+ DKLhP1MTE+QYFcRwbPcceRIPky4YM7T3bXc3LnVWQvje45OckZM9k7rOemFHs6G3c5J1CaL
+ N6RnQ+ad6yOer9ZNqPFUw==
+X-UI-Out-Filterresults: junk:10;V03:K0:KigoD8omvAA=:9pIV6fDIDc9XDNQqj/GtuaeZ
+ NoczLO4B9czg86Zwv+GA0Pssi190/jZYfbGnz8ZB/qwOP0I5qnlByna+TX0ugdANAKOwsy0wI
+ Kg1BDjJ625t5refy95Hk7ZiOu8v80ZhJkJln8QdorIQIs6ASBAVu1bBDbkV+K5MsAo+hfjS79
+ nD312rprYHgVOa3bNiwGbUeWmrilK0J9n3n4LsdBt9rI83UI/NYtCAOIJt++QPhmEOBM1+tM8
+ kBwtggEBuYaKuFbXBW35ORGG+npK6NzKG5U1EdY7TYso5pqyup1LNiZM8O3WQPqs/bUxAQQCj
+ o9VWkjXuIEwSL/+KZJbxemOmQkRdJPSU5RaOsAfcjsq8c9OjZ/JeWB/WkPL4rO+Of6QdExtaJ
+ QP3HzBiNKWvbOL9TUksOzDAEq0RCNZOUaA/2YZLlz770jVV+M+/u5K+3y+6wMphjjd0RvWsOL
+ THi5JTfaZR9r3Ezi1HWSBfHqWa4Od2h70iyWL3LLYmphjKFMEncdeCYCxLfOSR7ceXfhtstre
+ C8rg42G+jFA3SaFWuY7e8kfrQNadPEs7VaXrOx1C5xIqgYh/kLir28s8OsZZJb4kM0QRDbq+A
+ kHESQczmJ2ogUc6L7sSs2SUhvUKaP+rqfk00Vo53pceOku++7fS/ryBDGyaozP6qisdcrF2Ib
+ xUOgN1KEhDuEFkQh1lOm7il0U2uF5/dt56UNGqJhAaq8gP/Cn6bTok3N+D2DF08g6B3Q0QFAP
+ uTjBOOOOwWY5wb7GgyydCmn/te1EyFHUY1IcrisOLNinn2pABx74O+zz0YCt7KYOV93GPNgG8
+ G20SnVhCKWrJ//wwfFZ/dfgE/YSJAEJBHJqMKqKGVE9GdcOtPrtyrQhiJYqLs4qOqS3n+vgWB
+ ZeocEIx22bZZ+r6ko/KLNTORfjJ1wwt+T3EsZAWkEOssY8ZT8CP9GpNGyHFtXAibIGEiF4qut
+ V02uETNXPH1ee7nG02DERgGm/jQQ7OMvhbKPSK/cwUjG35mjPidTMU8YclPsq2CXE+Jbx6w9j
+ duEzTZvhcjj3gdbcVCr+Hegi3Ol/PxTvd8oqyHpqpLTq2eaFaWzuW6tVItsazpwNgiqmuy6nz
+ PItzFJQFj08+OPzkIHbj0v7n/QQYiOwwiuVnh0UM3unspWu3S/pOAuMy4Eg1Fy7wtsWwmgWpK
+ 4M4=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,49 +65,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 5:05 AM Heiko Carstens <hca@linux.ibm.com> wrote:
->
-> Commit ee6d777d3e93 ("s390/decompressor: support extra debug flags")
-> added extra debug flags, in particular debug info is created,
-> depending on config options.
->
-> With llvm's IAS this causes this compile warning:
->
-> arch/s390/boot/head.S:38:1: warning: DWARF2 only supports one section per compilation unit
-> .section ".head.text","ax"
-> ^
->
-> This is a known problem and was addressed with a commit b8a9092330da
-> ("Kbuild: do not emit debug info for assembly with LLVM_IAS=1").
-> Just do the same for s390 to get rid of this warning.
->
-> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-> ---
->  arch/s390/Makefile | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/arch/s390/Makefile b/arch/s390/Makefile
-> index c59efc83f020..d73611b35164 100644
-> --- a/arch/s390/Makefile
-> +++ b/arch/s390/Makefile
-> @@ -20,7 +20,9 @@ LDFLAGS_vmlinux       := -pie
->  endif
->  aflags_dwarf   := -Wa,-gdwarf-2
+Hello,
 
-^ or can we use a more modern variant of dwarf, like at least dwarf-4?
+The man-page of swapon says:
 
->  KBUILD_AFLAGS_DECOMPRESSOR := $(CLANG_FLAGS) -m64 -D__ASSEMBLY__
-> +ifndef CONFIG_AS_IS_LLVM
->  KBUILD_AFLAGS_DECOMPRESSOR += $(if $(CONFIG_DEBUG_INFO),$(aflags_dwarf))
-> +endif
->  KBUILD_CFLAGS_DECOMPRESSOR := $(CLANG_FLAGS) -m64 -O2 -mpacked-stack
->  KBUILD_CFLAGS_DECOMPRESSOR += -DDISABLE_BRANCH_PROFILING -D__NO_FORTIFY
->  KBUILD_CFLAGS_DECOMPRESSOR += -fno-delete-null-pointer-checks -msoft-float -mbackchain
-> --
-> 2.32.0
->
+      The swap file implementation in the kernel expects to be able to
+write to the file directly, without the assistance of the filesystem.
 
+Does that mean that if the user has a LUKS volume with a partition on
+it, in the end the swapfile on this partition will end up unecrypted?
 
--- 
-Thanks,
-~Nick Desaulniers
+Could someone please explain it in more details?
+
+Regards,
+Artem

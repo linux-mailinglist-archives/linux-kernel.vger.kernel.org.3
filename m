@@ -2,81 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBBBF522A41
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 05:17:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CADA8522A46
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 05:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241551AbiEKDQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 23:16:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44726 "EHLO
+        id S241591AbiEKDRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 23:17:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241548AbiEKDQt (ORCPT
+        with ESMTP id S241468AbiEKDRr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 23:16:49 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFB03BBF1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 20:16:45 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id s16so650036pgs.3
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 20:16:45 -0700 (PDT)
+        Tue, 10 May 2022 23:17:47 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E013B558;
+        Tue, 10 May 2022 20:17:46 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so3666381pjb.5;
+        Tue, 10 May 2022 20:17:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=351fsulzgIB9s45r5aDOm6WnMH7u9ny+vycNfOOPWQs=;
-        b=KiltleuwVgGeRkRv9NEZxDAhsZnrsI0rvrspNE5rpKFJHuJJCryNVRWRascDsZP5+c
-         VgFWYsZXNZ1KTwYc4JqZL/sr4jK9ZcbGO4knq5y+y4yaqst6dPDXf3BWKwC4Q4Le0L5h
-         sFVKbTCnZZDE25GFlNbrOktAR5o9nZY6Lrvby1msNEMQ9P7CpnnnDLuML9KHXDSNWdTJ
-         LWmPxBu7Cu0zXHQDQMWmd6fka+7E4MPgEqTY6MXCVJE9yOgzfUK4vQV2rpAoL/jtz+mz
-         GDdygl97K77j7WecH0qaNLnLGsheZN98PYga879q41+ohCQkzAsmUzWot4ir+6p2qw3c
-         dlyw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=aeafOzN+KhT6xUt6Ci9vzPISfyWvX+i2zyBA9FualR8=;
+        b=mjeGKZrdMWExTOJ6nPIF/ql6gb2ybbylcxERjkn8bZkniAbu+OkCrh5PZomXGZrpa4
+         CyAZIcyYNW2HF13bB/wwbu5e3Bw36U7BWCWdePNlS1qBWVrwwatm6VabqeT3f4wJAX74
+         f5/BgNdy4+Sdo3Im6khhbbqCdAb4FfNDDIl6lM7EezVKU7aCEWIO2yhAR2P1L1HoLzTU
+         ZjPAz4p2JhBF9H6znOW4wi8xBa1OdS7MAMM+DbDy0ayTCYCOKfm7nd6ej2fKBn61MoPe
+         XeCCJY2JjdzZJYmI8gwKcfzJxvgd+8RnQSG+0PrjgGXJ9ybnx7vpK5WA4gD7IfKkgc0O
+         wSkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=351fsulzgIB9s45r5aDOm6WnMH7u9ny+vycNfOOPWQs=;
-        b=7cv9ivkt7T8dwfkPkG2xUNOvqyhKPlZy+/HJz3bKEzgiM6Jz4YOvKhOzpVyUSJfm3W
-         5XNPHoIvx3ksjCqTnzuH/53/3OphE4qXLIrhY/1DCvGkUDfFUxX8F5djgUfn27v335Gk
-         tcmFScCbXtNoLAju0rEkOH4pfLAgGaMoMorXaMhrCuoEkDMSZ1IlFZWlKRBRA9EG7xEV
-         iRyVzhNg9DkOF4fsv3u6RZerwBIxrsI2Nq5Y4A5ff30RYbkH1SCWCm1QOzMb9IDxFnck
-         yxQzgS/DGqi812+3UUkgp9Ic/yg04nOmaeI9k7goPCNtPs653AV++QHxhYJ7ygIX/Iqg
-         ci8w==
-X-Gm-Message-State: AOAM531gd3JLsVQWFvt4l8TJCTLad5BJLhk/z3KWDf+TDJJDmHWlAvm4
-        wgEnOnSboAOOJ595DpVy9dGobQ==
-X-Google-Smtp-Source: ABdhPJwH9MkjfMSImU0n8xgNYqs/wPiW1E3mNUN0UGgqP2wMeA/84jCkmHUFOVpu/jendWWQERL3Rg==
-X-Received: by 2002:a63:6381:0:b0:3c6:4449:fc60 with SMTP id x123-20020a636381000000b003c64449fc60mr18596862pgb.457.1652239005368;
-        Tue, 10 May 2022 20:16:45 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id y5-20020aa78045000000b0050dd876f5f8sm313012pfm.49.2022.05.10.20.16.44
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aeafOzN+KhT6xUt6Ci9vzPISfyWvX+i2zyBA9FualR8=;
+        b=SSh9+JqCOcYszPGmQtbAe/YD8uQ/2hgkWpbzhXcx70Mktg4qYK48OkMACztjoO7tLZ
+         G9DI0U5hzzd1TAkPk6/gTkNl/RbYGLCFbZA38LnxGLjS/oWe0bDxb/KVvH7nZ1LEf9jH
+         0JkFZIjtA9D4E0XaGaINQlP8Eh2Er1/yiae9WZJap+aPM0EFi6NiEEuCeUyBwftpvTZO
+         SqzjEuGM4EDkpW/rkWfDueh3RwGn1t+qv/whH3Y2I1cEZeUKLSPNsGsVcxTSeNsNFnvI
+         uaIvs8b84ipKNMlXFKwo5PMadt6B5Z4XMPXAapKoSll9LqXheSn3qlzszF33jdDesWr7
+         MwIQ==
+X-Gm-Message-State: AOAM531Zm6lISlgmw8IKdX+Wv/s5aMCLkQNzpJ6xb+VcmlHYQsfXRnNE
+        WwnlJkaH/VRIo8jv7xo38ho=
+X-Google-Smtp-Source: ABdhPJzuDCrXWj27Bp+TxP4Ag9W3lfCdFyaSyYAQH8xHrdDBO+s6hWJQXjFez5nZcUr36BNPHtd/6w==
+X-Received: by 2002:a17:90a:f310:b0:1db:effb:a614 with SMTP id ca16-20020a17090af31000b001dbeffba614mr3064928pjb.233.1652239066326;
+        Tue, 10 May 2022 20:17:46 -0700 (PDT)
+Received: from localhost ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id 11-20020a63184b000000b003c14af5062fsm446612pgy.71.2022.05.10.20.17.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 20:16:44 -0700 (PDT)
-Date:   Wed, 11 May 2022 08:46:42 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joe Perches <joe@perches.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Nicolas Palix <nicolas.palix@imag.fr>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        linux-kernel@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 21/22] cpufreq: use cpumask_weight_gt() in
- policy_is_shared()
-Message-ID: <20220511031642.6isyzny6ldhsj43q@vireshk-i7>
-References: <20220510154750.212913-1-yury.norov@gmail.com>
- <20220510154750.212913-22-yury.norov@gmail.com>
+        Tue, 10 May 2022 20:17:45 -0700 (PDT)
+Message-ID: <627b2ad9.1c69fb81.f2bc7.19d6@mx.google.com>
+X-Google-Original-Message-ID: <20220511031744.GA1494607@cgel.zte@gmail.com>
+Date:   Wed, 11 May 2022 03:17:44 +0000
+From:   CGEL <cgel.zte@gmail.com>
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Yang Shi <shy828301@gmail.com>, Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        William Kucharski <william.kucharski@oracle.com>,
+        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Cgroups <cgroups@vger.kernel.org>,
+        Yang Yang <yang.yang29@zte.com.cn>
+Subject: Re: [PATCH] mm/memcg: support control THP behaviour in cgroup
+References: <20220505033814.103256-1-xu.xin16@zte.com.cn>
+ <YnUlntNFR4zeD+qa@dhcp22.suse.cz>
+ <6275d3e7.1c69fb81.1d62.4504@mx.google.com>
+ <YnjmPAToTR0C5o8x@dhcp22.suse.cz>
+ <6278fa75.1c69fb81.9c598.f794@mx.google.com>
+ <Ynj/l+pyFJxKfcbQ@dhcp22.suse.cz>
+ <6279c354.1c69fb81.7f6c1.15e0@mx.google.com>
+ <CAHbLzkqztB+NXVcxtd7bVo7onH6AcMJ3JWCAHHqH3OAdbZsMOQ@mail.gmail.com>
+ <627b1d39.1c69fb81.fe952.6426@mx.google.com>
+ <CALvZod5aqZjUE8BBQZxwHDBuSWOSEAOqW4_xE22Am0sGZZs4sw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220510154750.212913-22-yury.norov@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <CALvZod5aqZjUE8BBQZxwHDBuSWOSEAOqW4_xE22Am0sGZZs4sw@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,40 +93,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10-05-22, 08:47, Yury Norov wrote:
-> cpumask_weight_gt() is better than cpumask_weight() because it may
-> return earlier depending on condition.
+On Tue, May 10, 2022 at 07:47:29PM -0700, Shakeel Butt wrote:
+> On Tue, May 10, 2022 at 7:19 PM CGEL <cgel.zte@gmail.com> wrote:
+> >
+> [...]
+> > > > >
+> > > > > All controls in cgroup v2 should be hierarchical. This is really
+> > > > > required for a proper delegation semantic.
+> > > > >
+> > > >
+> > > > Could we align to the semantic of /sys/fs/cgroup/memory.swappiness?
+> > > > Some distributions like Ubuntu is still using cgroup v1.
+> > >
+> > > Other than enable flag, how would you handle the defrag flag
+> > > hierarchically? It is much more complicated.
+> >
+> > Refer to memory.swappiness for cgroup, this new interface better be independent.
 > 
-> CC: Rafael J. Wysocki <rafael@kernel.org>
-> CC: Viresh Kumar <viresh.kumar@linaro.org>
-> CC: linux-pm@vger.kernel.org
-> CC: linux-kernel@vger.kernel.org
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> ---
->  include/linux/cpufreq.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index d5595d57f4e5..865cc9e23518 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -214,7 +214,7 @@ static inline bool policy_is_inactive(struct cpufreq_policy *policy)
->  
->  static inline bool policy_is_shared(struct cpufreq_policy *policy)
->  {
-> -	return cpumask_weight(policy->cpus) > 1;
-> +	return cpumask_weight_gt(policy->cpus, 1);
->  }
->  
->  #ifdef CONFIG_CPU_FREQ
+> Let me give my 0.02. I buy the use-case of Admin restricting THPs to
+> low priority jobs but I don't think memory controller is the right
+> place to enforce that policy. Michal gave one way (prctl()) to enforce
+> that policy. Have you explored the BPF way to enforce this policy?
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Thanks!
+prctl()(at least for the latest version) only support disable THP, it's semantic is
+not very perfection. Maybe we could expand the prctl() for THP?
+BPF maybe a way to realize more fine-grained THP control. But I think semantic comes
+first.
 
-Though the patch to add cpumask_weight_gt() is still in linux-next and so this
-patch should get merged after rc1 is out.
-
-And it would have been nice to know of this dependency in the original mail
-itself instead of me searching for it :)
-
--- 
-viresh
+So what about realize three layers of THP controller? All kinds of users maybe satisfy:
+    Layer 1: all system, realized. see /sys/kernel/mm/transparent_hugepage/enabled.
+    Layer 2: container/cgroup, unrealized. useful for user who treat container as
+lightweight virtual machine, let this overide layer 1.
+    Layer 3: process, partial realized. see prctl(), let this overide layer 1 & 2.

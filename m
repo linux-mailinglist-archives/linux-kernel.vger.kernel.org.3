@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC895522CBD
+	by mail.lfdr.de (Postfix) with ESMTP id 1F039522CBB
 	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242416AbiEKHCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 03:02:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44100 "EHLO
+        id S242532AbiEKHCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 03:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242469AbiEKHBt (ORCPT
+        with ESMTP id S242464AbiEKHBv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 03:01:49 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468C17305B
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:01:47 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2eb7d137101so9948227b3.12
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:01:47 -0700 (PDT)
+        Wed, 11 May 2022 03:01:51 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76717814A9
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:01:49 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id w21-20020a25df15000000b0064b401428bfso157618ybg.22
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:01:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=rLCQIdDIo0hjvRjcVna27zMmwetjRkxV8oX5TRyw2qw=;
-        b=MmpIllCb4cEgsGmk9jFaxVuPfuNP7dVZUMN6AowLxFrfOAUOuTpxMRaAM4dIiqfQJ+
-         hF7Mg2kFS2aDrHuSKCxlqJd9SgU68/PDP3ps6Q24winnQoTP8AMQiFXB8uPEaCh3bdNu
-         dgD8uo7/C1WU7d3oB82rakji2NeHpoDZLmxAAkrV9H7y/AaZORTo9LbOS8H7Ck+CtIxc
-         BcMttJ/iVmDuowEqjcs464xcnZW9n0DVUxMnFcHcNZ940TICRy1VZhEGwet4jU+3YlgH
-         NAh9HBQsN1aEFrsrAJZjDQaIrsBp5BESIEDP0mZWWgyfq62vC8H2OGs+FG1e4R/EjG/T
-         70VA==
+        bh=F175yXgo6Rtn6ipswoFePtZI8wN/S86uzy4b/OfTmOQ=;
+        b=EXbdpT9PcG4eB3kPIrbv2teFNwbXNpmiX8dkM3kQ1yREPCquNFpZnNzBahRz9kABt6
+         QdkkxBwkOp/IegB1bjvRv99Lq+VoZxawove3FL5r8oysNzGJVciJbE/QLuduSNc32QwN
+         v9Ne51hTG2daZTf1XRdx5hkzc2CrAkm3PhiCNVX954CW3skXTk7p3l/kQoDVPspdU+9I
+         iw76nLOoSA7PHYgSmihsAD5wV+EriYwARDS9nj6op9p0/6Fm+BPcpktkGQOlr/1nTf3G
+         h9V6it0wCKzQw9yqDYp5F1olN748de7UWc9IEZgUPG2EDHZRBz6M3MH71mXeOAhWgEFX
+         8xYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=rLCQIdDIo0hjvRjcVna27zMmwetjRkxV8oX5TRyw2qw=;
-        b=vHfPzde/1IcTTL7nsx/aYcjvK6qie3yHhHYleibLW07Aqr8gU3IHkHQ9/9Z3hpsp71
-         EuahpKqrvFLsypt9LItcalO4+8kuydB8UdBUyUtwgs2g9Qw0fuEAGPtDHjQ0Tf/7YPO8
-         qw/ZRYXkFE8RzvTYPHe2pT4p4/B32OVZvldDGH+yQsZSF0bJfRSxDrR9DwyOXbig1k0d
-         j4Mrfa6jr9JUeIMf4Epw4umTyElwB0NG1ibEIkVdRlzaxBv/YjZdXh4pTVVFO00Aw4x6
-         ODpLJVGAWHr7OobeATgkZ5hNEvL9EjOhimok/FZGpxKEqeHHs/eE2/GhcoQLu66n5x9Y
-         x4Pg==
-X-Gm-Message-State: AOAM531rHbcRqB4NGe1JGkatElm/6ZZGFIoE++QLBEXukNbwrez/gmAT
-        a2mZgLYJEG2i3GFlOiCvML0fRW0u/tcf
-X-Google-Smtp-Source: ABdhPJxdAUdl2TKac8QUPTEi0Tv90G7I07/SQAAXXHb0eqJQy5FdMT1rljNRxuHX+q7nsSy3s1YvPw4wYN4I
+        bh=F175yXgo6Rtn6ipswoFePtZI8wN/S86uzy4b/OfTmOQ=;
+        b=CR2NOUaLTHoaDzpRtLp9Mq1h3bISGkJp4cm1mHtADvkWrtxhFFNTmcc+u/8r0aqxD8
+         0bPrT0TmJ1IzmyFPiOAnUgFTdMUVvpYDXlLKEhp7Krlo9GdbfpfAOPRXRxTQWHXQ3TBT
+         3u6m1uetLyDgzS0sNPmdU6qW39obi2HmSy4BzmnKMAHz6CeHh8Mwwp7m42iYTlT6pXEJ
+         GQBMaQSs8Tl6Y69x6CuGfyC6g97t50Z7dsaoA5LvlMTJAOygO7LjIF3tfE+w6uhtUsv4
+         IXRXhj1mHIxHfBmi2xOu5z9u/ba/oH+iskaQrG9Xl6AuJz8O0XZLKdMFkoTTGWvbg1FO
+         ib4A==
+X-Gm-Message-State: AOAM5309XTnFBb19Q5IWSgxIxGqqdk9Xl+PF1vbKOc1s2iFV8cCPFfCf
+        xPDhxLm3KWlG+fUYPNl7z1I7yXyeS232
+X-Google-Smtp-Source: ABdhPJwZNYVDsBl8+9N5FhkPDFkHxPGoT+3pLPh3cScc8OecLSSQc57NEZw7uH2Tc4knEpw8SDlugbuv/r2c
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:b6c9:16a6:f912:39d5])
- (user=irogers job=sendgmr) by 2002:a81:1606:0:b0:2f7:d623:703 with SMTP id
- 6-20020a811606000000b002f7d6230703mr22911108yww.501.1652252506406; Wed, 11
- May 2022 00:01:46 -0700 (PDT)
-Date:   Wed, 11 May 2022 00:01:30 -0700
+ (user=irogers job=sendgmr) by 2002:a81:784a:0:b0:2f7:d9fd:396f with SMTP id
+ t71-20020a81784a000000b002f7d9fd396fmr24451204ywc.124.1652252508559; Wed, 11
+ May 2022 00:01:48 -0700 (PDT)
+Date:   Wed, 11 May 2022 00:01:31 -0700
 In-Reply-To: <20220511070133.710721-1-irogers@google.com>
-Message-Id: <20220511070133.710721-5-irogers@google.com>
+Message-Id: <20220511070133.710721-6-irogers@google.com>
 Mime-Version: 1.0
 References: <20220511070133.710721-1-irogers@google.com>
 X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
-Subject: [PATCH 4/7] perf jevents: Modify match field
+Subject: [PATCH 5/7] perf jevents: Add python converter script
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -84,250 +84,495 @@ Cc:     Stephane Eranian <eranian@google.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The match_field function looks for json values to append to the event
-string. As the C code processes these in order the output order matches
-that in the json dictionary. Python json readers read the entire
-dictionary and lose the ordering. To make the python and C output
-comparable makee the C code first read the extra fields then append them
-to the event in an order not determined by their order in the file.
+jevents.c is large, has a dependency on an old forked version of jsmn,
+and is challenging to work upon. A lot of jevents.c's complexity comes
+from needing to write json and csv parsing from first principles. In
+contrast python has this functionality in standard libraries and is
+already a build pre-requisite for tools like asciidoc (that builds all
+of the perf man pages).
 
-Modify the pmu-events test so that test expectations match the new
-order.
+Introduce jevents.py that produces identical output to jevents.c. Add a
+test that runs both converter tools and validates there are no output
+differences. The test can be invoked with a phony build target like:
+
+make -C tools/perf jevents-py-test
+
+The python code deliberately tries to replicate the behavior of
+jevents.c so that the output matches and transitioning tools shouldn't
+introduce regressions. In some cases the code isn't as elegant as hoped,
+but fixing this can be done as follow up.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/pmu-events/jevents.c | 82 ++++++++++++++++++++-------------
- tools/perf/tests/pmu-events.c   | 24 +++++-----
- 2 files changed, 62 insertions(+), 44 deletions(-)
+ tools/perf/Makefile.perf              |   6 +
+ tools/perf/pmu-events/jevents-test.sh |  33 +++
+ tools/perf/pmu-events/jevents.py      | 392 ++++++++++++++++++++++++++
+ 3 files changed, 431 insertions(+)
+ create mode 100755 tools/perf/pmu-events/jevents-test.sh
+ create mode 100755 tools/perf/pmu-events/jevents.py
 
-diff --git a/tools/perf/pmu-events/jevents.c b/tools/perf/pmu-events/jevents.c
-index e1f7c7afd435..cee61c4ed59e 100644
---- a/tools/perf/pmu-events/jevents.c
-+++ b/tools/perf/pmu-events/jevents.c
-@@ -207,21 +207,6 @@ static struct msrmap {
- 	{ NULL, NULL }
- };
+diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+index 6e5aded855cc..078f0b06f08a 100644
+--- a/tools/perf/Makefile.perf
++++ b/tools/perf/Makefile.perf
+@@ -669,6 +669,12 @@ $(JEVENTS_IN): FORCE
+ $(JEVENTS): $(JEVENTS_IN)
+ 	$(QUIET_LINK)$(HOSTCC) $(JEVENTS_IN) -o $@
  
--static struct field {
--	const char *field;
--	const char *kernel;
--} fields[] = {
--	{ "UMask",	"umask=" },
--	{ "CounterMask", "cmask=" },
--	{ "Invert",	"inv=" },
--	{ "AnyThread",	"any=" },
--	{ "EdgeDetect",	"edge=" },
--	{ "SampleAfterValue", "period=" },
--	{ "FCMask",	"fc_mask=" },
--	{ "PortMask",	"ch_mask=" },
--	{ NULL, NULL }
--};
--
- static void cut_comma(char *map, jsmntok_t *newval)
- {
- 	int i;
-@@ -233,21 +218,6 @@ static void cut_comma(char *map, jsmntok_t *newval)
- 	}
- }
- 
--static int match_field(char *map, jsmntok_t *field, int nz,
--		       char **event, jsmntok_t *val)
--{
--	struct field *f;
--	jsmntok_t newval = *val;
--
--	for (f = fields; f->field; f++)
--		if (json_streq(map, field, f->field) && nz) {
--			cut_comma(map, &newval);
--			addfield(map, event, ",", f->kernel, &newval);
--			return 1;
--		}
--	return 0;
--}
--
- static struct msrmap *lookup_msr(char *map, jsmntok_t *val)
- {
- 	jsmntok_t newval = *val;
-@@ -581,6 +551,14 @@ static int json_events(const char *fn,
- 		jsmntok_t *precise = NULL;
- 		jsmntok_t *obj = tok++;
- 		bool configcode_present = false;
-+		char *umask = NULL;
-+		char *cmask = NULL;
-+		char *inv = NULL;
-+		char *any = NULL;
-+		char *edge = NULL;
-+		char *period = NULL;
-+		char *fc_mask = NULL;
-+		char *ch_mask = NULL;
- 
- 		EXPECT(obj->type == JSMN_OBJECT, obj, "expected object");
- 		for (j = 0; j < obj->size; j += 2) {
-@@ -596,8 +574,23 @@ static int json_events(const char *fn,
- 			       "Expected string value");
- 
- 			nz = !json_streq(map, val, "0");
--			if (match_field(map, field, nz, &event, val)) {
--				/* ok */
-+			/* match_field */
-+			if (json_streq(map, field, "UMask") && nz) {
-+				addfield(map, &umask, "", "umask=", val);
-+			} else if (json_streq(map, field, "CounterMask") && nz) {
-+				addfield(map, &cmask, "", "cmask=", val);
-+			} else if (json_streq(map, field, "Invert") && nz) {
-+				addfield(map, &inv, "", "inv=", val);
-+			} else if (json_streq(map, field, "AnyThread") && nz) {
-+				addfield(map, &any, "", "any=", val);
-+			} else if (json_streq(map, field, "EdgeDetect") && nz) {
-+				addfield(map, &edge, "", "edge=", val);
-+			} else if (json_streq(map, field, "SampleAfterValue") && nz) {
-+				addfield(map, &period, "", "period=", val);
-+			} else if (json_streq(map, field, "FCMask") && nz) {
-+				addfield(map, &fc_mask, "", "fc_mask=", val);
-+			} else if (json_streq(map, field, "PortMask") && nz) {
-+				addfield(map, &ch_mask, "", "ch_mask=", val);
- 			} else if (json_streq(map, field, "EventCode")) {
- 				char *code = NULL;
- 				addfield(map, &code, "", "", val);
-@@ -690,6 +683,23 @@ static int json_events(const char *fn,
- 		else
- 			snprintf(buf, sizeof buf, "event=%#llx", eventcode);
- 		addfield(map, &event, ",", buf, NULL);
-+		if (any)
-+			addfield(map, &event, ",", any, NULL);
-+		if (ch_mask)
-+			addfield(map, &event, ",", ch_mask, NULL);
-+		if (cmask)
-+			addfield(map, &event, ",", cmask, NULL);
-+		if (edge)
-+			addfield(map, &event, ",", edge, NULL);
-+		if (fc_mask)
-+			addfield(map, &event, ",", fc_mask, NULL);
-+		if (inv)
-+			addfield(map, &event, ",", inv, NULL);
-+		if (period)
-+			addfield(map, &event, ",", period, NULL);
-+		if (umask)
-+			addfield(map, &event, ",", umask, NULL);
++JEVENTS_PY	:=  pmu-events/jevents.py
++JEVENTS_PY_TEST	:=  pmu-events/jevents-test.sh
++.PHONY: jevents-py-test
++jevents-py-test: $(JEVENTS)
++	$(Q)$(call echo-cmd,gen)$(JEVENTS_PY_TEST) $(JEVENTS) $(JEVENTS_PY) pmu-events/arch
 +
- 		if (je.desc && extra_desc)
- 			addfield(map, &je.desc, " ", extra_desc, NULL);
- 		if (je.long_desc && extra_desc)
-@@ -718,6 +728,14 @@ static int json_events(const char *fn,
- 		je.event = real_event(je.name, event);
- 		err = func(data, &je);
- free_strings:
-+		free(umask);
-+		free(cmask);
-+		free(inv);
-+		free(any);
-+		free(edge);
-+		free(period);
-+		free(fc_mask);
-+		free(ch_mask);
- 		free(event);
- 		free(je.desc);
- 		free(je.name);
-diff --git a/tools/perf/tests/pmu-events.c b/tools/perf/tests/pmu-events.c
-index b74c6ef59e51..f13368569d8b 100644
---- a/tools/perf/tests/pmu-events.c
-+++ b/tools/perf/tests/pmu-events.c
-@@ -63,33 +63,33 @@ static const struct perf_pmu_test_event bp_l2_btb_correct = {
- static const struct perf_pmu_test_event segment_reg_loads_any = {
- 	.event = {
- 		.name = "segment_reg_loads.any",
--		.event = "umask=0x80,period=200000,event=0x6",
-+		.event = "event=0x6,period=200000,umask=0x80",
- 		.desc = "Number of segment register loads",
- 		.topic = "other",
- 	},
--	.alias_str = "umask=0x80,period=0x30d40,event=0x6",
-+	.alias_str = "event=0x6,period=0x30d40,umask=0x80",
- 	.alias_long_desc = "Number of segment register loads",
- };
+ $(PMU_EVENTS_IN): $(JEVENTS) FORCE
+ 	$(Q)$(MAKE) -f $(srctree)/tools/build/Makefile.build dir=pmu-events obj=pmu-events
  
- static const struct perf_pmu_test_event dispatch_blocked_any = {
- 	.event = {
- 		.name = "dispatch_blocked.any",
--		.event = "umask=0x20,period=200000,event=0x9",
-+		.event = "event=0x9,period=200000,umask=0x20",
- 		.desc = "Memory cluster signals to block micro-op dispatch for any reason",
- 		.topic = "other",
- 	},
--	.alias_str = "umask=0x20,period=0x30d40,event=0x9",
-+	.alias_str = "event=0x9,period=0x30d40,umask=0x20",
- 	.alias_long_desc = "Memory cluster signals to block micro-op dispatch for any reason",
- };
- 
- static const struct perf_pmu_test_event eist_trans = {
- 	.event = {
- 		.name = "eist_trans",
--		.event = "umask=0x0,period=200000,event=0x3a",
-+		.event = "event=0x3a,period=200000,umask=0x0",
- 		.desc = "Number of Enhanced Intel SpeedStep(R) Technology (EIST) transitions",
- 		.topic = "other",
- 	},
--	.alias_str = "umask=0,period=0x30d40,event=0x3a",
-+	.alias_str = "event=0x3a,period=0x30d40,umask=0",
- 	.alias_long_desc = "Number of Enhanced Intel SpeedStep(R) Technology (EIST) transitions",
- };
- 
-@@ -132,13 +132,13 @@ static const struct perf_pmu_test_event uncore_hisi_ddrc_flux_wcmd = {
- static const struct perf_pmu_test_event unc_cbo_xsnp_response_miss_eviction = {
- 	.event = {
- 		.name = "unc_cbo_xsnp_response.miss_eviction",
--		.event = "umask=0x81,event=0x22",
-+		.event = "event=0x22,umask=0x81",
- 		.desc = "A cross-core snoop resulted from L3 Eviction which misses in some processor core. Unit: uncore_cbox ",
- 		.topic = "uncore",
- 		.long_desc = "A cross-core snoop resulted from L3 Eviction which misses in some processor core",
- 		.pmu = "uncore_cbox",
- 	},
--	.alias_str = "umask=0x81,event=0x22",
-+	.alias_str = "event=0x22,umask=0x81",
- 	.alias_long_desc = "A cross-core snoop resulted from L3 Eviction which misses in some processor core",
- 	.matching_pmu = "uncore_cbox_0",
- };
-@@ -146,13 +146,13 @@ static const struct perf_pmu_test_event unc_cbo_xsnp_response_miss_eviction = {
- static const struct perf_pmu_test_event uncore_hyphen = {
- 	.event = {
- 		.name = "event-hyphen",
--		.event = "umask=0x00,event=0xe0",
-+		.event = "event=0xe0,umask=0x00",
- 		.desc = "UNC_CBO_HYPHEN. Unit: uncore_cbox ",
- 		.topic = "uncore",
- 		.long_desc = "UNC_CBO_HYPHEN",
- 		.pmu = "uncore_cbox",
- 	},
--	.alias_str = "umask=0,event=0xe0",
-+	.alias_str = "event=0xe0,umask=0",
- 	.alias_long_desc = "UNC_CBO_HYPHEN",
- 	.matching_pmu = "uncore_cbox_0",
- };
-@@ -160,13 +160,13 @@ static const struct perf_pmu_test_event uncore_hyphen = {
- static const struct perf_pmu_test_event uncore_two_hyph = {
- 	.event = {
- 		.name = "event-two-hyph",
--		.event = "umask=0x00,event=0xc0",
-+		.event = "event=0xc0,umask=0x00",
- 		.desc = "UNC_CBO_TWO_HYPH. Unit: uncore_cbox ",
- 		.topic = "uncore",
- 		.long_desc = "UNC_CBO_TWO_HYPH",
- 		.pmu = "uncore_cbox",
- 	},
--	.alias_str = "umask=0,event=0xc0",
-+	.alias_str = "event=0xc0,umask=0",
- 	.alias_long_desc = "UNC_CBO_TWO_HYPH",
- 	.matching_pmu = "uncore_cbox_0",
- };
+diff --git a/tools/perf/pmu-events/jevents-test.sh b/tools/perf/pmu-events/jevents-test.sh
+new file mode 100755
+index 000000000000..195ec83630ad
+--- /dev/null
++++ b/tools/perf/pmu-events/jevents-test.sh
+@@ -0,0 +1,33 @@
++#!/bin/sh
++# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
++# Validate that the legacy jevents and jevents.py produce identical output.
++set -e
++
++JEVENTS="$1"
++JEVENTS_PY="$2"
++ARCH_PATH="$3"
++JEVENTS_C_GENERATED=$(mktemp /tmp/jevents_c.XXXXX.c)
++JEVENTS_PY_GENERATED=$(mktemp /tmp/jevents_py.XXXXX.c)
++
++cleanup() {
++  rm "$JEVENTS_C_GENERATED" "$JEVENTS_PY_GENERATED"
++  trap - exit term int
++}
++trap cleanup exit term int
++
++for path in "$ARCH_PATH"/*
++do
++  arch=$(basename $path)
++  if [[ "$arch" == "test" ]]
++  then
++    continue
++  fi
++  echo "Checking architecture: $arch"
++  echo "Generating using jevents.c"
++  "$JEVENTS" "$arch" "$ARCH_PATH" "$JEVENTS_C_GENERATED"
++  echo "Generating using jevents.py"
++  "$JEVENTS_PY" "$arch" "$ARCH_PATH" "$JEVENTS_PY_GENERATED"
++  echo "Diffing"
++  diff -u "$JEVENTS_C_GENERATED" "$JEVENTS_PY_GENERATED"
++done
++cleanup
+diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
+new file mode 100755
+index 000000000000..3a3d7471eb71
+--- /dev/null
++++ b/tools/perf/pmu-events/jevents.py
+@@ -0,0 +1,392 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
++"""Convert directories of JSON events to C code."""
++import argparse
++import csv
++import json
++import os
++import sys
++from typing import Callable
++
++# Global command line arguments.
++args = None
++# List of event tables generated from "/sys" directories.
++sys_event_tables = []
++# Map from an event name to an architecture standard
++# JsonEvent. Architecture standard events are in json files in the top
++# f'{args.starting_dir}/{args.arch}' directory.
++arch_std_events = dict()
++# Track whether an events table is currently being defined and needs closing.
++close_table = False
++
++
++def file_name_to_table_name(parents: list[str], dirname: str) -> str:
++  """Generate a C table name from directory names."""
++  tblname = 'pme'
++  for p in parents:
++    tblname += '_' + p
++  tblname += '_' + dirname
++  return tblname.replace('-', '_')
++
++
++class JsonEvent:
++  """Representation of an event loaded from a json file dictionary."""
++
++  def __init__(self, dict):
++    """Constructor passed the dictionary of parsed json values."""
++
++    def llx(x: int) -> str:
++      """Convert an int to a string similar to a printf modifier of %#llx."""
++      return '0' if x == 0 else hex(x)
++
++    def fixdesc(s: str) -> str:
++      """Fix formatting issue for the desc string."""
++      return s.removesuffix('.  ').removesuffix('. ').removesuffix('.').replace(
++          '\n', '\\n').replace('\"', '\\"').replace('\r', '\\r') if s else None
++
++    def convert_aggr_mode(aggr_mode: str) -> str:
++      """Returns the aggr_mode_class enum value associated with the JSON string."""
++      if not aggr_mode:
++        return None
++      aggr_mode_to_enum = {
++          'PerChip': '1',
++          'PerCore': '2',
++      }
++      return aggr_mode_to_enum[aggr_mode]
++
++    def lookup_msr(num: str) -> str:
++      """Converts the msr number, or first in a list to the appropriate event field."""
++      if not num:
++        return None
++      msrmap = {
++          0x3F6: 'ldlat=',
++          0x1A6: 'offcore_rsp=',
++          0x1A7: 'offcore_rsp=',
++          0x3F7: 'frontend=',
++      }
++      return msrmap[int(num.split(',', 1)[0], 0)]
++
++    def real_event(name: str, event: str) -> str:
++      """Convert well known event names to an event string otherwise use the event argument."""
++      fixed = {
++          'inst_retired.any': 'event=0xc0,period=2000003',
++          'inst_retired.any_p': 'event=0xc0,period=2000003',
++          'cpu_clk_unhalted.ref': 'event=0x0,umask=0x03,period=2000003',
++          'cpu_clk_unhalted.thread': 'event=0x3c,period=2000003',
++          'cpu_clk_unhalted.core': 'event=0x3c,period=2000003',
++          'cpu_clk_unhalted.thread_any': 'event=0x3c,any=1,period=2000003',
++      }
++      if not name:
++        return None
++      if name.lower() in fixed:
++        return fixed[name.lower()]
++      return event
++
++    def unit_to_pmu(unit: str) -> str:
++      """Convert a JSON Unit to Linux PMU name."""
++      if not unit:
++        return None
++      # Comment brought over from jevents.c:
++      # it's not realistic to keep adding these, we need something more scalable ...
++      table = {
++          'CBO': 'uncore_cbox',
++          'QPI LL': 'uncore_qpi',
++          'SBO': 'uncore_sbox',
++          'iMPH-U': 'uncore_arb',
++          'CPU-M-CF': 'cpum_cf',
++          'CPU-M-SF': 'cpum_sf',
++          'UPI LL': 'uncore_upi',
++          'hisi_sicl,cpa': 'hisi_sicl,cpa',
++          'hisi_sccl,ddrc': 'hisi_sccl,ddrc',
++          'hisi_sccl,hha': 'hisi_sccl,hha',
++          'hisi_sccl,l3c': 'hisi_sccl,l3c',
++          'imx8_ddr': 'imx8_ddr',
++          'L3PMC': 'amd_l3',
++          'DFPMC': 'amd_df',
++          'cpu_core': 'cpu_core',
++          'cpu_atom': 'cpu_atom',
++      }
++      return table[unit] if unit in table else f'uncore_{unit.lower()}'
++
++    eventcode = 0
++    if 'EventCode' in dict:
++      eventcode = int(dict['EventCode'].split(',', 1)[0], 0)
++    if 'ExtSel' in dict:
++      eventcode |= int(dict['ExtSel']) << 21
++    configcode = int(dict['ConfigCode'], 0) if 'ConfigCode' in dict else None
++    self.name = dict['EventName'].lower() if 'EventName' in dict else None
++    self.compat = dict.get('Compat')
++    self.desc = fixdesc(dict.get('BriefDescription'))
++    self.long_desc = fixdesc(dict.get('PublicDescription'))
++    precise = dict.get('PEBS')
++    msr = lookup_msr(dict.get('MSRIndex'))
++    msrval = dict.get('MSRValue')
++    extra_desc = ''
++    if 'Data_LA' in dict:
++      extra_desc += '  Supports address when precise'
++      if 'Errata' in dict:
++        extra_desc += '.'
++    if 'Errata' in dict:
++      extra_desc += '  Spec update: ' + dict['Errata']
++    self.pmu = unit_to_pmu(dict.get('Unit'))
++    filter = dict.get('Filter')
++    self.unit = dict.get('ScaleUnit')
++    self.perpkg = dict.get('PerPkg')
++    self.aggr_mode = convert_aggr_mode(dict.get('AggregationMode'))
++    self.deprecated = dict.get('Deprecated')
++    self.metric_name = dict.get('MetricName')
++    self.metric_group = dict.get('MetricGroup')
++    self.metric_constraint = dict.get('MetricConstraint')
++    self.metric_expr = dict.get('MetricExpr')
++    if self.metric_expr:
++      self.metric_expr = self.metric_expr.replace('\\', '\\\\')
++    arch_std = dict.get('ArchStdEvent')
++    if precise and self.desc and not '(Precise Event)' in self.desc:
++      extra_desc += ' (Must be precise)' if precise == '2' else (' (Precise '
++                                                                 'event)')
++    event = f'config={llx(configcode)}' if configcode is not None else f'event={llx(eventcode)}'
++    event_fields = [
++        ('AnyThread', 'any='),
++        ('PortMask', 'ch_mask='),
++        ('CounterMask', 'cmask='),
++        ('EdgeDetect', 'edge='),
++        ('FCMask', 'fc_mask='),
++        ('Invert', 'inv='),
++        ('SampleAfterValue', 'period='),
++        ('UMask', 'umask='),
++    ]
++    for key, value in event_fields:
++      if key in dict and dict[key] != '0':
++        event += ',' + value + dict[key]
++    if filter:
++      event += f',{filter}'
++    if msr:
++      event += f',{msr}{msrval}'
++    if self.desc and extra_desc:
++      self.desc += extra_desc
++    if self.long_desc and extra_desc:
++      self.long_desc += extra_desc
++    if self.pmu:
++      if self.desc and not self.desc.endswith('. '):
++        self.desc += '. '
++      self.desc = (self.desc if self.desc else '') + ('Unit: ' + self.pmu + ' ')
++    if arch_std and arch_std.lower() in arch_std_events:
++      event = arch_std_events[arch_std.lower()].event
++      # Copy from the architecture standard event to self for undefined fields.
++      for attr, value in arch_std_events[arch_std.lower()].__dict__.items():
++        if hasattr(self, attr) and not getattr(self, attr):
++          setattr(self, attr, value)
++
++    self.event = real_event(self.name, event)
++
++  def __repr__(self) -> str:
++    """String representation primarily for debugging."""
++    s = '{\n'
++    for attr, value in self.__dict__.items():
++      if value:
++        s += f'\t{attr} = {value},\n'
++    return s + '}'
++
++  def ToCString(self, topic_local: str) -> str:
++    """Representation of the event as a C struct initializer."""
++
++    def AttrString(attr: str, value: str) -> str:
++      return '\t.%s = \"%s\",\n' % (attr, value)
++
++    def StrIfPresent(self, attr: str) -> str:
++      if not getattr(self, attr):
++        return ''
++      return AttrString(attr, getattr(self, attr))
++
++    s = '{\n'
++    for attr in ['name', 'event']:
++      s += StrIfPresent(self, attr)
++    if self.desc:
++      s += AttrString('desc', self.desc)
++    else:
++      s += AttrString('desc', '(null)')
++    s += StrIfPresent(self, 'compat')
++    s += f'\t.topic = "{topic_local}",\n'
++    for attr in [
++        'long_desc', 'pmu', 'unit', 'perpkg', 'aggr_mode', 'metric_expr',
++        'metric_name', 'metric_group', 'deprecated', 'metric_constraint'
++    ]:
++      s += StrIfPresent(self, attr)
++    s += '},\n'
++    return s
++
++
++def read_json_events(path: str) -> list[JsonEvent]:
++  """Read json events from the specified file."""
++  return json.load(open(path), object_hook=lambda d: JsonEvent(d))
++
++def preprocess_arch_std_files(archpath: str) -> None:
++  """Read in all architecture standard events."""
++  global arch_std_events
++  for item in os.scandir(archpath):
++    if item.is_file() and item.name.endswith('.json'):
++      for event in read_json_events(item.path):
++        if event.name:
++          arch_std_events[event.name.lower()] = event
++
++
++def print_events_table_prefix(tblname: str) -> None:
++  """Called when a new events table is started."""
++  global close_table
++  if close_table:
++    raise IOError('Printing table prefix but last table has no suffix')
++  args.output_file.write('static const struct pmu_event %s[] = {\n' % tblname)
++  close_table = True
++
++
++def print_events_table_entries(item: os.DirEntry, topic: str) -> None:
++  """Create contents of an events table."""
++  if not close_table:
++    raise IOError('Table entries missing prefix')
++  for event in read_json_events(item.path):
++    args.output_file.write(event.ToCString(topic))
++
++def print_events_table_suffix() -> None:
++  """Optionally close events table."""
++  global close_table
++  if close_table:
++    args.output_file.write("""{
++\t.name = 0,
++\t.event = 0,
++\t.desc = 0,
++},
++};
++""")
++  close_table = False
++
++def process_one_file(parents: list[str], item: os.DirEntry) -> None:
++  """Process a JSON file during the main walk."""
++  global sys_event_tables
++
++  def get_topic(topic: str) -> str:
++    return topic.removesuffix('.json').replace('-', ' ')
++
++  def is_leaf_dir(path: str) -> bool:
++    for item in os.scandir(path):
++      if item.is_dir():
++        return False
++    return True
++
++  # model directory, reset topic
++  if item.is_dir() and is_leaf_dir(item.path):
++    print_events_table_suffix()
++
++    tblname = file_name_to_table_name(parents, item.name)
++    if item.name == 'sys':
++      sys_event_tables.append(tblname)
++    print_events_table_prefix(tblname)
++    return
++
++  # base dir or too deep
++  level = len(parents)
++  if level == 0 or level > 4:
++    return
++
++  # Ignore other directories. If the file name does not have a .json
++  # extension, ignore it. It could be a readme.txt for instance.
++  if not item.is_file() or not item.name.endswith('.json'):
++    return
++
++  print_events_table_entries(item, get_topic(item.name))
++
++
++def print_mapping_table() -> None:
++  """Read the mapfile and generate the struct from cpuid string to event table."""
++  table = csv.reader(open(f'{args.starting_dir}/{args.arch}/mapfile.csv'))
++  args.output_file.write('const struct pmu_events_map pmu_events_map[] = {\n')
++  first = True
++  for row in table:
++    # Skip the first row or any row beginning with #.
++    if not first and len(row) > 0 and not row[0].startswith('#'):
++      tblname = file_name_to_table_name([], row[2].replace('/', '_'))
++      args.output_file.write("""{
++\t.cpuid = \"%s\",
++\t.version = \"%s\",
++\t.type = \"%s\",
++\t.table = %s
++},
++""" % (row[0].replace('\\', '\\\\'), row[1], row[3], tblname))
++    first = False
++
++  args.output_file.write("""{
++\t.cpuid = "testcpu",
++\t.version = "v1",
++\t.type = "core",
++\t.table = pme_test_soc_cpu,
++},
++{
++\t.cpuid = 0,
++\t.version = 0,
++\t.type = 0,
++\t.table = 0,
++},
++};
++""")
++
++
++def print_system_mapping_table() -> None:
++  """C struct mapping table array for tables from /sys directories."""
++  args.output_file.write(
++      '\nconst struct pmu_sys_events pmu_sys_event_tables[] = {\n')
++  for tblname in sys_event_tables:
++    args.output_file.write("""\t{
++\t\t.table = %s,
++\t\t.name = \"%s\",
++\t},
++""" % (tblname, tblname))
++  args.output_file.write("""\t{
++\t\t.table = 0
++\t},
++};
++""")
++
++
++def main() -> None:
++  global args
++
++  def dir_path(path: str) -> str:
++    """Validate path is a directory for argparse."""
++    if os.path.isdir(path):
++      return path
++    else:
++      raise argparse.ArgumentTypeError(f'\'{path}\' is not a valid directory')
++
++  def ftw(path: str, parents: list[str],
++          action: Callable[[list[str], os.DirEntry], None]) -> None:
++    """Replicate the directory/file walking behavior of C's file tree walk."""
++    for item in os.scandir(path):
++      action(parents, item)
++      if item.is_dir():
++        ftw(item.path, parents + [item.name], action)
++
++  ap = argparse.ArgumentParser()
++  ap.add_argument('arch', help='Architecture name like x86')
++  ap.add_argument(
++      'starting_dir',
++      type=dir_path,
++      help='Root of tree containing architecture directories containing json files'
++  )
++  ap.add_argument(
++      'output_file', type=argparse.FileType('w'), nargs='?', default=sys.stdout)
++  args = ap.parse_args()
++
++  args.output_file.write("#include \"pmu-events/pmu-events.h\"\n")
++  for path in [args.arch, 'test']:
++    arch_path = f'{args.starting_dir}/{path}'
++    if not os.path.isdir(arch_path):
++      raise IOError(f'Missing architecture directory in \'{arch_path}\'')
++    preprocess_arch_std_files(arch_path)
++    ftw(arch_path, [], process_one_file)
++    print_events_table_suffix()
++
++  print_mapping_table()
++  print_system_mapping_table()
++
++
++if __name__ == '__main__':
++  main()
 -- 
 2.36.0.512.ge40c2bad7a-goog
 

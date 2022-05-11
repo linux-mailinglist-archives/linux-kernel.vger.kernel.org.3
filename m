@@ -2,167 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B11BA523D74
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:31:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DEEF523D8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231851AbiEKTat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 15:30:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59106 "EHLO
+        id S1346944AbiEKTcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 15:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347004AbiEKTac (ORCPT
+        with ESMTP id S1344980AbiEKTcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 15:30:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A81E2224061
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:30:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652297411;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G5azXxOWE111/EFfPUBN7PUx3Chajjhv4r8b0ykR4aQ=;
-        b=YyD5HnVaG4O1PcGFU3zfVHgmGjp+Zv+zMq/E65dX7KUp/NmpkHosW845tLYKY/wEWsXpUO
-        tf2Z0LdriGc305l3pO1nr5sthrkHQHxwRWriZajxxUMVaUdqpRrARdEsI+Mp50+dkDwBDd
-        kDxDHS8snE8OK5hlZjJbwMR2/5UsviU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-605-G3ZpW4pAPh23HfnJ9Ip6lA-1; Wed, 11 May 2022 15:30:10 -0400
-X-MC-Unique: G3ZpW4pAPh23HfnJ9Ip6lA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D44C43C62B62;
-        Wed, 11 May 2022 19:30:09 +0000 (UTC)
-Received: from horse.redhat.com (unknown [10.22.18.223])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B19E7C15D58;
-        Wed, 11 May 2022 19:30:09 +0000 (UTC)
-Received: by horse.redhat.com (Postfix, from userid 10451)
-        id 6D9EC220463; Wed, 11 May 2022 15:30:09 -0400 (EDT)
-Date:   Wed, 11 May 2022 15:30:09 -0400
-From:   Vivek Goyal <vgoyal@redhat.com>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Bernd Schubert <bschubert@ddn.com>,
-        Dharmendra Hans <dharamhans87@gmail.com>,
-        linux-fsdevel@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/3] FUSE: Implement atomic lookup + open/create
-Message-ID: <YnwOwS/bmUkbazeL@redhat.com>
-References: <20220502102521.22875-1-dharamhans87@gmail.com>
- <YnLRnR3Xqu0cYPdb@redhat.com>
- <CACUYsyEsRph+iFC_fj3F6Ceqhq7NCTuFPH3up8R6C+_bGHktZg@mail.gmail.com>
- <YnPI6f2fRZUXbCFP@redhat.com>
- <882fbf7f-a56b-1e82-a158-9e2186ec7c4c@ddn.com>
- <YnQsizX5Q1sMnlI2@redhat.com>
- <CAJfpegseGaWHkjdQj7XiR=TQNFpPZzDF_rTXces2oRz=x0N7OA@mail.gmail.com>
- <YnvwiZ+s+y3VDUMW@redhat.com>
+        Wed, 11 May 2022 15:32:12 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FC760D6
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:32:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652297531; x=1683833531;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PlXJzbc9MOdDh/cfMxyD+y75sxlBMKiH8XdJmPUKUqw=;
+  b=ZAiw6w0xz4ZoEQK8kcEO9hwNs23JUC6dsa8pVDqJacnkfgMkXIeMd9AY
+   QVR6A9Hti+bmq/QgXaYgUkpmITjaCEL2acvQbjSH2W3kueI2itsPQSw+U
+   cH639bnFlJyCyu023SxhHpJIcG7uJSO3v5v8BHmzSw+kmAgCNM4SIf7jv
+   IkFFMf0zCDDrAcjNXuVSfgsZ4S5xiS7DlkvzQLGUPEJlTfndhpeChrutp
+   bsMRnUdC/v5C1i6B1tbhAWhGzVh6zKoItBEWDqVbkzF588y4vcune7ezI
+   Hcgc8NoYg6nKNY7D8lyFAgtKU5ZGVTKhz6aOPAFXH1zozLqfJrEsUdpqK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="356218752"
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="356218752"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 12:32:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="542447770"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 11 May 2022 12:32:10 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nos49-000JUS-Mm;
+        Wed, 11 May 2022 19:32:09 +0000
+Date:   Thu, 12 May 2022 03:31:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [krzk-github:n/qcom-ufs-opp-v3 16/31]
+ drivers/scsi/ufs/ufshcd-pltfrm.c:118:18: warning: unused variable 'i'
+Message-ID: <202205120353.WOlEnscX-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YnvwiZ+s+y3VDUMW@redhat.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 01:21:13PM -0400, Vivek Goyal wrote:
-> On Wed, May 11, 2022 at 11:40:59AM +0200, Miklos Szeredi wrote:
-> > On Thu, 5 May 2022 at 21:59, Vivek Goyal <vgoyal@redhat.com> wrote:
-> > 
-> > > Oh, I have no issues with the intent. I will like to see cut in network
-> > > traffic too (if we can do this without introducing problems). My primary
-> > > interest is that this kind of change should benefit virtiofs as well.
-> > 
-> > One issue with that appears to be checking permissions.   AFAIU this
-> > patchset only enables the optimization if default_permissions is
-> > turned off (i.e. all permission checking is done by the server).  But
-> > virtiofs uses the default_permissions model.
-> 
-> IIUC, only 3rd patch mentions that default_permission should be turned
-> off. IOW, first patch where lookup + create + open is a single operation
-> and second patch which does "lookup + open" in a single operation does
-> not seem to require that default_permissions are not in effect.
-> 
-> So if first two patches work fine, I think virtiofs should benefit too.
-> (IMHO, 3rd patch is too hacky anyway)
-> 
-> W.r.t permission checks, looks like may_open() will finally be called
-> after ->atomic_open(). So even if we open the file, we should still be
-> able to check whether we have permissions to open the file or not
-> after the fact.
-> 
-> fs/namei.c
-> 
-> path_openat()
-> {
-> 	open_last_lookups()  <--- This calls ->atomic_open()
-> 	do_open()  <--- This calls may_open()
-> }
+tree:   https://github.com/krzk/linux n/qcom-ufs-opp-v3
+head:   a37fb33a00889e90edd1c74de967b3315980a65d
+commit: 1fe1bd364f49815ffd716b8a0f58e62a338305ff [16/31] wip
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220512/202205120353.WOlEnscX-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/krzk/linux/commit/1fe1bd364f49815ffd716b8a0f58e62a338305ff
+        git remote add krzk-github https://github.com/krzk/linux
+        git fetch --no-tags krzk-github n/qcom-ufs-opp-v3
+        git checkout 1fe1bd364f49815ffd716b8a0f58e62a338305ff
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/scsi/ufs/
 
-Actually I am not sure about it. I was playing with 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-open(foo.txt, O_CREAT | O_RDWR, O_IRUSR)
+All warnings (new ones prefixed by >>):
 
-This succeeds if file is newly created but if file already existed, this
-fails with -EACCESS
-
-So man 2 open says following. Thanks to Andy Price for pointing me to it.
-
-    Note that mode applies only to future accesses of the newly cre‐
-    ated  file;  the  open()  call that creates a read-only file may
-    well return a read/write file descriptor.
+   drivers/scsi/ufs/ufshcd-pltfrm.c: In function 'ufshcd_parse_operating_points':
+   drivers/scsi/ufs/ufshcd-pltfrm.c:175:12: error: 'struct ufs_hba' has no member named 'use_pm_opp'
+     175 |         hba->use_pm_opp = true;
+         |            ^~
+>> drivers/scsi/ufs/ufshcd-pltfrm.c:118:18: warning: unused variable 'i' [-Wunused-variable]
+     118 |         int cnt, i, ret;
+         |                  ^
+   drivers/scsi/ufs/ufshcd-pltfrm.c:117:14: warning: variable 'clocks_done' set but not used [-Wunused-but-set-variable]
+     117 |         bool clocks_done;
+         |              ^~~~~~~~~~~
+>> drivers/scsi/ufs/ufshcd-pltfrm.c:115:30: warning: unused variable 'clki' [-Wunused-variable]
+     115 |         struct ufs_clk_info *clki;
+         |                              ^~~~
+   At top level:
+   drivers/scsi/ufs/ufshcd-pltfrm.c:111:12: warning: 'ufshcd_parse_operating_points' defined but not used [-Wunused-function]
+     111 | static int ufshcd_parse_operating_points(struct ufs_hba *hba)
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-Now I am wondering how will it look like with first patch. Assume file
-already exists on the server (But there is no negative dentry present)
-and I do following. And assume file only has read permission for user
-and I am trying to open it read-write.
+vim +/i +118 drivers/scsi/ufs/ufshcd-pltfrm.c
 
-open(foo.txt, O_CREAT | O_RDWR, O_IRUSR)
+   110	
+   111	static int ufshcd_parse_operating_points(struct ufs_hba *hba)
+   112	{
+   113		struct device *dev = hba->dev;
+   114		struct device_node *np = dev->of_node;
+ > 115		struct ufs_clk_info *clki;
+   116		const char *names[16];
+   117		bool clocks_done;
+ > 118		int cnt, i, ret;
+   119	
+   120		if (!of_find_property(dev->of_node, "operating-points-v2", NULL))
+   121			return 0;
+   122	
+   123		cnt = of_property_count_strings(np, "clock-names");
+   124		if (cnt <= 0) {
+   125			dev_warn(dev, "%s: Missing clock-names\n",
+   126				 __func__);
+   127			return -EINVAL;
+   128		}
+   129	
+   130		if (cnt > ARRAY_SIZE(names)) {
+   131			dev_info(dev, "%s: Too many clock-names\n",  __func__);
+   132			return -EINVAL;
+   133		}
+   134	
+   135		/* clocks parsed by ufshcd_parse_clock_info() */
+   136		clocks_done = !!of_find_property(np, "freq-table-hz", NULL);
+   137	
+   138		/*
+   139		for (i = 0; i < cnt; i++) {
+   140			ret = of_property_read_string_index(np, "clock-names", i,
+   141							    &names[i]);
+   142			if (ret)
+   143				return ret;
+   144	
+   145			if (clocks_done)
+   146				continue;
+   147	
+   148			clki = devm_kzalloc(dev, sizeof(*clki), GFP_KERNEL);
+   149			if (!clki)
+   150				return -ENOMEM;
+   151	
+   152			clki->name = devm_kstrdup(dev, names[i], GFP_KERNEL);
+   153			if (!clki->name)
+   154				return -ENOMEM;
+   155	
+   156			if (!strcmp(names[i], "ref_clk"))
+   157				clki->keep_link_active = true;
+   158	
+   159			list_add_tail(&clki->list, &hba->clk_list_head);
+   160		}
+   161	
+   162		ret = devm_pm_opp_set_clknames(dev, names, i);
+   163		if (ret)
+   164			return ret;
+   165			*/
+   166	
+   167		ret = devm_pm_opp_register_set_opp_helper(dev, ufshcd_set_opp);
+   168		if (ret)
+   169			return ret;
+   170	
+   171		ret = devm_pm_opp_of_add_table(dev);
+   172		if (ret)
+   173			return ret;
+   174	
+   175		hba->use_pm_opp = true;
+   176	
+   177		return 0;
+   178	}
+   179	
 
-In normal circumstances, user will expect -EACCESS as file is read-only
-and user is trying to open it read-write.
-
-I am wondering how will it look like with this first patch.
-
-Current fuse ->atomic_open() looks up the dentry and does not open
-the file if dentry is positive.
-
-New implementation will skip lookup and open the file anyway and
-set file->f_mode |= FMODE_CREATED; (First patch in series)
-
-So first of all this seems wrong. I thought FMODE_CREATED should be
-set only if file was newly created. Is that a correct understanding.
-
-And I am looking at do_open() code. It does bunch of things based
-on FMODE_CREATED flag. One of the things it does is reset acc_mode =0
-
-        if (file->f_mode & FMODE_CREATED) {
-                /* Don't check for write permission, don't truncate */
-                open_flag &= ~O_TRUNC;
-                acc_mode = 0;
-	}
-	error = may_open(mnt_userns, &nd->path, acc_mode, open_flag);
-
-I suspect this is the code which allows opening a newly created read-only
-file as O_RDWR. (Though I am not 100% sure).
-
-I suspect with first patch this will be broken. We will set FMODE_CREATED
-even if file already existed and VFS will assume a new file has been
-created and do bunch of things which is wrong.
-
-So looks like fuse ->atomic_open() should set FMODE_CREATED only if
-it really created the file.
-
-Thanks
-Vivek
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

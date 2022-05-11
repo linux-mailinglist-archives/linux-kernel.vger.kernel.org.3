@@ -2,136 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB585234AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:50:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D32905234B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244174AbiEKNuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46072 "EHLO
+        id S244142AbiEKNud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244142AbiEKNuQ (ORCPT
+        with ESMTP id S244192AbiEKNu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:50:16 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1EC2723E29A;
-        Wed, 11 May 2022 06:50:14 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 931D7ED1;
-        Wed, 11 May 2022 06:50:13 -0700 (PDT)
-Received: from lpieralisi (unknown [10.57.1.148])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9FF783F66F;
-        Wed, 11 May 2022 06:50:11 -0700 (PDT)
-Date:   Wed, 11 May 2022 14:50:07 +0100
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     linux-rockchip@lists.infradead.org, Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Marc Zyngier <maz@kernel.org>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-Subject: Re: [PATCH v9 2/5] PCI: rockchip-dwc: Reset core at driver probe
-Message-ID: <Ynu/D4hXTRVy9IBF@lpieralisi>
-References: <20220429123832.2376381-1-pgwipeout@gmail.com>
- <20220429123832.2376381-3-pgwipeout@gmail.com>
+        Wed, 11 May 2022 09:50:28 -0400
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9FA248248;
+        Wed, 11 May 2022 06:50:23 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id v59so4076068ybi.12;
+        Wed, 11 May 2022 06:50:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6T461oZUF/Gcihy0sNyV0keeWDDkJXZ5dXIGK7Rlpm4=;
+        b=FhD/mJI6beFgnO2dlADIJAJfIwvW4jGtAWwL2F6iLqVRVLiIYcmrQ5fANhRa0jUSR3
+         zhMAso//l5f6lyO9LocDtRgfLwV0noYvlt3Cx0PLFs52u8VYB/6941Z+OCSXnZyj3xqP
+         Iv0FaQkeSQ0H+fM+GQPEhRdnANRLhZ6JS+oz+QroNCibcI7jxCEMZ80snwm3bLDQA3vr
+         9/fmafGknoUQmjXyHjwiMaOgPrAuYvlaM4EDcpHm1g50m2O+luvYHTZY1FhExDhMKLmH
+         ysDFaRVTzG54mTBsm2CleiAJmucQZvhjduGg/nVwQeysGeljsU30u1yqTemhW52SLeNY
+         ZFog==
+X-Gm-Message-State: AOAM531zux7S254RJAk/GdC6oyG3hdu/7QKEpQ35H76W6snLmKOXX1Dg
+        8KP1dKMyT6B10Uwm0N4DLhfIF362FKAYC363A54=
+X-Google-Smtp-Source: ABdhPJyF9CtAHyGPDj3C5LuFBkn+YAFfhdpjED3P5cec42HkSqLIoJKj+aqMJwdIsmbDiS36VgdmqCY+eO5f0pSGxwc=
+X-Received: by 2002:a25:e792:0:b0:645:7ddb:b5eb with SMTP id
+ e140-20020a25e792000000b006457ddbb5ebmr23615068ybh.482.1652277022345; Wed, 11
+ May 2022 06:50:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220429123832.2376381-3-pgwipeout@gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220510035259.5ep52sgahd2a6rie@vireshk-i7> <20220510154236.88753-1-schspa@gmail.com>
+ <20220511043515.fn2gz6q3kcpdai5p@vireshk-i7> <CAMA88TpefB=rnqea2u1zEvNUJNE_kdj4mYito7SGCuMj-o071Q@mail.gmail.com>
+ <20220511122114.wccgyur6g3qs6fps@vireshk-i7> <CAJZ5v0gN_yDFpvCXRXv8rN-i3TugCi-HKpBKK2z4eWU0Zm1GUg@mail.gmail.com>
+ <CAJZ5v0id+7vkqMQEyVRe29oF_dRtzZ0EhoYUn8=yzeENDeABJw@mail.gmail.com> <CAMA88TpJuJY7oxPFW8xKzch60+n_2qRp7KO2r-YwZxiM7GXF3w@mail.gmail.com>
+In-Reply-To: <CAMA88TpJuJY7oxPFW8xKzch60+n_2qRp7KO2r-YwZxiM7GXF3w@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 11 May 2022 15:50:11 +0200
+Message-ID: <CAJZ5v0hkdr2N65p84X0HdVCkqr621=rE4cFmqFMMXTvn6=BCAw@mail.gmail.com>
+Subject: Re: [PATCH v3] cpufreq: fix race on cpufreq online
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 08:38:28AM -0400, Peter Geis wrote:
-> The PCIe controller is in an unknown state at driver probe. This can
-> lead to undesireable effects when the driver attempts to configure the
-> controller.
-> 
-> Prevent issues in the future by resetting the core during probe.
-> 
-> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> Tested-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-> ---
->  drivers/pci/controller/dwc/pcie-dw-rockchip.c | 23 ++++++++-----------
->  1 file changed, 10 insertions(+), 13 deletions(-)
+On Wed, May 11, 2022 at 3:42 PM Schspa Shi <schspa@gmail.com> wrote:
+>
+> "Rafael J. Wysocki" <rafael@kernel.org> writes:
+>
+> > On Wed, May 11, 2022 at 2:59 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >>
+> >> On Wed, May 11, 2022 at 2:21 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >> >
+> >> > On 11-05-22, 16:10, Schspa Shi wrote:
+> >> > > Viresh Kumar <viresh.kumar@linaro.org> writes:
+> >> > > > I am not sure, but maybe there were issues in calling init() with rwsem held, as
+> >> > > > it may want to call some API from there.
+> >> > > >
+> >> > >
+> >> > > I have checked all the init() implement of the fellowing files, It should be OK.
+> >> > > Function find command:
+> >> > >   ag "init[\s]+=" drivers/cpufreq
+> >> > >
+> >> > > All the init() implement only initialize policy object without holding this lock
+> >> > > and won't call cpufreq APIs need to hold this lock.
+> >> >
+> >> > Okay, we can see if someone complains later then :)
+> >> >
+> >> > > > I don't think you can do that safely. offline() or exit() may depend on
+> >> > > > policy->cpus being set to all CPUs.
+> >> > > OK, I will move this after exit(). and there will be no effect with those
+> >> > > two APIs. But policy->cpus must be clear before release policy->rwsem.
+> >> >
+> >> > Hmm, I don't think depending on the values of policy->cpus is a good idea to be
+> >> > honest. This design is inviting bugs to come in at another place. We need a
+> >> > clear flag for this, a new flag or something like policy_list.
+> >
+> > Why?
+> >
+> >> > Also I see the same bug happening while the policy is removed. The kobject is
+> >> > put after the rwsem is dropped.
+> >
+> > This shouldn't be a problem because of the wait_for_completion() in
+> > cpufreq_policy_put_kobj().  It is known that cpufreq_sysfs_release()
+> > has run when cpufreq_policy_put_kobj() returns, so it is safe to free
+> > the policy then.
+> >
+> >> > > >  static inline bool policy_is_inactive(struct cpufreq_policy *policy)
+> >> > > >  {
+> >> > > > -     return cpumask_empty(policy->cpus);
+> >> > > > +     return unlikely(cpumask_empty(policy->cpus) ||
+> >> > > > +                     list_empty(&policy->policy_list));
+> >> > > >  }
+> >> > > >
+> >> > >
+> >> > > I don't think this fully solves my problem.
+> >> > > 1. There is some case which cpufreq_online failed after the policy is added to
+> >> > >    cpufreq_policy_list.
+> >> >
+> >> > And I missed that :(
+> >> >
+> >> > > 2. policy->policy_list is not protected by &policy->rwsem, and we
+> >> > > can't relay on this to
+> >> > >    indict the policy is fine.
+> >> >
+> >> > Ahh..
+> >> >
+> >> > > >From this point of view, we can fix this problem through the state of
+> >> > > this linked list.
+> >> > > But the above two problems need to be solved first.
+> >> >
+> >> > I feel overriding policy_list for this is going to make it complex/messy.
+> >> >
+> >> > Maybe something like this then:
+> >>
+> >> There are two things.
+> >>
+> >> One is the possible race with respect to the sysfs access occurring
+> >> during failing initialization and the other is that ->offline() or
+> >> ->exit() can be called with or without holding the policy rwsem
+> >> depending on the code path.
+> >>
+> >> Namely, cpufreq_offline() calls them under the policy rwsem, but
+> >> cpufreq_remove_dev() calls ->exit() outside the rwsem.  Also they are
+> >> called outside the rwsem in cpufreq_online().
+> >>
+> >> Moreover, ->offline() and ->exit() cannot expect policy->cpus to be
+> >> populated, because they are called when it is empty from
+> >> cpufreq_offline().
+> >>
+> >> So the $subject patch is correct AFAICS even though it doesn't address
+> >> all of the above.
+> >
+> > TBH, I'm not sure why show() doesn't check policy_is_inactive() under the rwsem.
+> >
+>
+> There is a exist bugs, and somebody try to fixed, please see commit
+> Fixes: 2f66196208c9 ("cpufreq: check if policy is inactive early in
+> __cpufreq_get()")
 
-I fear that the controller reset behaviour is bootloader/firmware
-dependent.
+Well, exactly.
 
-Are we sure we are not triggering any regressions by resetting the
-controller in the middle of probe (aka is the driver implicitly
-relying on existing behaviour on systems that are not the ones
-you are testing on) ?
+This only addressed one bug out of a category.
 
-Just asking, the rockchip maintainers should be able to answer this
-question.
+> > Moreover, I'm not sure why the locking dance in store() is necessary.
+>
+> The store interface hold cpu_hotplug_lock via
+>     cpus_read_trylock();
+> , cannot run in parallel with cpufreq_online() & cpufreq_offline().
 
-Thanks,
-Lorenzo
-
-> diff --git a/drivers/pci/controller/dwc/pcie-dw-rockchip.c b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
-> index c9b341e55cbb..faedbd6ebc20 100644
-> --- a/drivers/pci/controller/dwc/pcie-dw-rockchip.c
-> +++ b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
-> @@ -152,6 +152,11 @@ static int rockchip_pcie_resource_get(struct platform_device *pdev,
->  	if (IS_ERR(rockchip->rst_gpio))
->  		return PTR_ERR(rockchip->rst_gpio);
->  
-> +	rockchip->rst = devm_reset_control_array_get_exclusive(&pdev->dev);
-> +	if (IS_ERR(rockchip->rst))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(rockchip->rst),
-> +				     "failed to get reset lines\n");
-> +
->  	return 0;
->  }
->  
-> @@ -182,18 +187,6 @@ static void rockchip_pcie_phy_deinit(struct rockchip_pcie *rockchip)
->  	phy_power_off(rockchip->phy);
->  }
->  
-> -static int rockchip_pcie_reset_control_release(struct rockchip_pcie *rockchip)
-> -{
-> -	struct device *dev = rockchip->pci.dev;
-> -
-> -	rockchip->rst = devm_reset_control_array_get_exclusive(dev);
-> -	if (IS_ERR(rockchip->rst))
-> -		return dev_err_probe(dev, PTR_ERR(rockchip->rst),
-> -				     "failed to get reset lines\n");
-> -
-> -	return reset_control_deassert(rockchip->rst);
-> -}
-> -
->  static const struct dw_pcie_ops dw_pcie_ops = {
->  	.link_up = rockchip_pcie_link_up,
->  	.start_link = rockchip_pcie_start_link,
-> @@ -222,6 +215,10 @@ static int rockchip_pcie_probe(struct platform_device *pdev)
->  	if (ret)
->  		return ret;
->  
-> +	ret = reset_control_assert(rockchip->rst);
-> +	if (ret)
-> +		return ret;
-> +
->  	/* DON'T MOVE ME: must be enable before PHY init */
->  	rockchip->vpcie3v3 = devm_regulator_get_optional(dev, "vpcie3v3");
->  	if (IS_ERR(rockchip->vpcie3v3)) {
-> @@ -241,7 +238,7 @@ static int rockchip_pcie_probe(struct platform_device *pdev)
->  	if (ret)
->  		goto disable_regulator;
->  
-> -	ret = rockchip_pcie_reset_control_release(rockchip);
-> +	ret = reset_control_deassert(rockchip->rst);
->  	if (ret)
->  		goto deinit_phy;
->  
-> -- 
-> 2.25.1
-> 
+So the reason why is to prevent store() from running in parallel with
+the two functions above.  Which generally  is because the policy
+configuration is in-flight then.  However, I'm wondering about what
+exactly would break then.

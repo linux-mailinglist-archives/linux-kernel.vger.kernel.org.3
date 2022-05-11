@@ -2,107 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C14152301A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D7BD523014
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237122AbiEKJ7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 05:59:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
+        id S239223AbiEKKAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 06:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239236AbiEKJ7S (ORCPT
+        with ESMTP id S238546AbiEKJ70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 05:59:18 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FC01C83CB;
-        Wed, 11 May 2022 02:59:17 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id a14-20020a7bc1ce000000b00393fb52a386so2883800wmj.1;
-        Wed, 11 May 2022 02:59:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MAbg5yk+b/oK3VOSaGAHWACO3qSGTgNVxL8KcEWQXbg=;
-        b=bjmI+22UfZIVTrgoWzZPc39+P2uwhHU7xp0hj67O+EJhgj4Vuo6EGZbVFEEARoGWL+
-         1OeB7MRpRZR8XnbD4tvrwykHHmnjC9WOV2Axuiyl43tsVF0f5YzCUSd1a7gtt8Smhhx2
-         bGf1KyKgIk152d612/xnDs4iX7kygxQKzaKANHqgwF6dG4rbHl4rB3EgAkY1ralsNhzX
-         exSr4UglHYa8gQcZFvTsulrlG0J4njGFRUOoVVf1eZftXzWnOoJ7B9LUQRZHXjls71xR
-         CZEy5BKAVkd4boYiVZGI3U8g1jphKsuEZSKFDTKkioYxQKAzM+NZb4u3mY1zPHQEBULz
-         FtZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MAbg5yk+b/oK3VOSaGAHWACO3qSGTgNVxL8KcEWQXbg=;
-        b=PhYu43BznBugP6okm3pzCTOWskdUEoqxylSWTONPe+r7J9rsK1c+CzuRO1c0ducmMU
-         bjRF6Urawz8KQetj4JmCEVBxOY7AarbvMi32pk9YGu2ZyOPMQ805Hstd7BFI1Zh/Br3G
-         s9lrgozMNFnCJeSGSmGmA+dWMTxQuQGYmc73X15Y5urd6SGiM9Mv5BeM++7e/3iF3BYL
-         GmXAZFvlmn0Q24HMiTgte+rJRAvD3Wnq+QOV7A7uTkqUPo4NQChH0K28GvTYXkvvi1Qf
-         ZnCaFYBDqEOF/2LYvMtCmdLVDoShFuX2n+5q4FSr2sqDswhDvsfENqmpqOkXgYQ3S2u0
-         WN0A==
-X-Gm-Message-State: AOAM532R8uT8NMRAnSt5cIO+noQXxYV1XRoRxgb3uRsfgRnffdZkFvWX
-        wFhmj7Rzes1FRuV5kmLHe8A=
-X-Google-Smtp-Source: ABdhPJyAVBOSQldAg0ryMlGLdG3PC0kRmeIrSjJ30GKqENnCjcxjZvmPW7Hi1opqRIRzvD/xxz4y7Q==
-X-Received: by 2002:a05:600c:264e:b0:394:2c56:eeb5 with SMTP id 14-20020a05600c264e00b003942c56eeb5mr4049889wmy.6.1652263155934;
-        Wed, 11 May 2022 02:59:15 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id b15-20020a05600c4e0f00b003942a244f39sm5550371wmq.18.2022.05.11.02.59.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 02:59:15 -0700 (PDT)
-Date:   Wed, 11 May 2022 10:59:13 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.4 00/52] 5.4.193-rc1 review
-Message-ID: <YnuI8Qomvql5Ecoq@debian>
-References: <20220510130729.852544477@linuxfoundation.org>
+        Wed, 11 May 2022 05:59:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9991D5265;
+        Wed, 11 May 2022 02:59:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BAC58610A1;
+        Wed, 11 May 2022 09:59:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A59CC340ED;
+        Wed, 11 May 2022 09:59:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652263162;
+        bh=vOXfSFnQKU6CvSkUUaYHX1wpKYWqy+uhhPgV4sbyp/k=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=VNcPKLUHpR9b6osKzjz4C/GzkZRM/gRsFZFgoZ9IWo75NenLPa6e8CEToLELCbAwD
+         DiWqdZaJAkDwDbv0hW4jg2tVc1aBPtm9lpbGxvzefXx+iJf80ezjktSF1ErosZt17d
+         0gG29TFLVHyjH/j0K7l7K1txRWg24PDkskJqj9BQDlvD4Q0ZCsTva6bHf+MJOYRXZF
+         ZHYwy7CVYgAcwXq1emvCcHFNqaByjhqp2ayn9iRikJjKcxE+j4JHviAbV2+KvloPq/
+         MZMaj/V3OW9rXXO+znzHk7p3WdWXg+SIyHzgxSKijTIDnNn33OzQtfvh+iqRvYKDJX
+         XuTLqFrX8WeNg==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
+Cc:     Pavel Skripkin <paskripkin@gmail.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        ath9k-devel@qca.qualcomm.com, davem@davemloft.net, kuba@kernel.org,
+        linville@tuxdriver.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+03110230a11411024147@syzkaller.appspotmail.com,
+        syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
+Subject: Re: [PATCH v3 1/2] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
+References: <80962aae265995d1cdb724f5362c556d494c7566.1644265120.git.paskripkin@gmail.com>
+        <87h799a007.fsf@toke.dk>
+        <6f0615da-aa0b-df8e-589c-f5caf09d3449@gmail.com>
+        <5fd22dda-01d6-cfae-3458-cb3fa23eb84d@I-love.SAKURA.ne.jp>
+        <3cb712d9-c6be-94b7-6135-10b0eabba341@gmail.com>
+        <d9e6cf88-4f19-bd50-3d73-e2aee1caefa4@I-love.SAKURA.ne.jp>
+        <426f6965-152c-6d59-90e0-34fe3cd208ee@gmail.com>
+        <87ilqc7jv9.fsf@kernel.org> <87o804wg30.fsf@toke.dk>
+Date:   Wed, 11 May 2022 12:59:15 +0300
+In-Reply-To: <87o804wg30.fsf@toke.dk> ("Toke \=\?utf-8\?Q\?H\=C3\=B8iland-J\?\=
+ \=\?utf-8\?Q\?\=C3\=B8rgensen\=22's\?\= message of
+        "Wed, 11 May 2022 11:53:23 +0200")
+Message-ID: <87ee1075l8.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk> writes:
 
-On Tue, May 10, 2022 at 03:07:29PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.193 release.
-> There are 52 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
-> Anything received after that time might be too late.
+> Kalle Valo <kvalo@kernel.org> writes:
+>
+>> Pavel Skripkin <paskripkin@gmail.com> writes:
+>>
+>>> Hi Tetsuo,
+>>>
+>>> On 5/6/22 02:31, Tetsuo Handa wrote:
+>>>> On 2022/05/06 4:09, Pavel Skripkin wrote:
+>>>>>>> And we can meet NULL defer even if we leave drv_priv =3D priv initi=
+alization
+>>>>>>> on it's place.
+>>>>>>
+>>>>>> I didn't catch the location. As long as "htc_handle->drv_priv =3D pr=
+iv;" is done
+>>>>>> before complete_all(&hif_dev->fw_done) is done, is something wrong?
+>>>>>>
+>>>>>
+>>>>> I don't really remember why I said that, but looks like I just
+>>>>> haven't opened callbacks' code.
+>>>>
+>>>> OK. Then, why not accept Pavel's patch?
+>>>
+>>> As you might expect, I have same question. This series is under review
+>>> for like 7-8 months.
+>>>
+>>> I have no ath9 device, so I can't test it on real hw, so somebody else
+>>> should do it for me. It's requirement to get patch accepted.
+>>
+>> As Toke stepped up to be the ath9k maintainer the situation with ath9k
+>> is now much better. I recommend resubmitting any ath9k patches you might
+>> have.
+>
+> No need to resubmit this one, it's still in patchwork waiting for me to
+> take a closer look.
 
-Build test (gcc-11):
-mips (gcc version 11.2.1 20220408): 65 configs -> no failure
-arm (gcc version 11.2.1 20220408): 107 configs -> no new failure
-arm64 (gcc version 11.2.1 20220408): 2 configs -> no failure
-x86_64 (gcc version 11.2.1 20220408): 4 configs -> no failure
+Ah sorry, I thought this was something which was submitted 7-8 months
+ago but I didn't check, I should have.
 
-Build test (gcc-12):
-Mips builds are failing. Needs d422c6c0644b ("MIPS: Use address-of operator on section
-symbols")
+> I have a conference this week, but should hopefully have some time for
+> this next week.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
+It's great to be able to start meeting people again, have a good one :)
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1120
+--=20
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
+hes

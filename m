@@ -2,200 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A806522E14
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:18:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5749D522E36
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243458AbiEKISj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 04:18:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
+        id S243572AbiEKIWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 04:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242271AbiEKISh (ORCPT
+        with ESMTP id S243571AbiEKIWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 04:18:37 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41801E732F;
-        Wed, 11 May 2022 01:18:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
-         references;
-        bh=3cLMDtKi++EGcvFgiDpFbyfN0+A359izanQW4847Ev8=;
-        b=gZT5C4/+vjvZjryP12QuG8YceC5rhHmll3ZnjxuIZnSi654JWFsmN5svc/VU3+dGf04SIJG/kVIUQ
-         IrdaJqudf49vLrEcqzmt0LPCJyt0yU27PMLv1YEVk640bQBA2I4QHZ0hAJndNJhY0WPzJ169wOePEx
-         2O4NQdZtmq6GLOT2A1Nxf0fRfJ5GBywHn6rhBa2KdR8h4YJEZ/01YM2f2get4VbySyO1xcpZBRu2mQ
-         ATQX8+dbvqIL88X4wCvRdBIN79YZbK770pW5mCQHC19VmD4At8vpuFxEjaWDvLb5WxlEn9Dl7WgQCB
-         BdFkutGExej8kbOdvcBqcu5PVs5+6rw==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1422, Stamp: 3], Multi: [Enabled, t: (0.000010,0.017725)], BW: [Enabled, t: (0.000013,0.000001)], RTDA: [Enabled, t: (0.071522), Hit: No, Details: v2.39.0; Id: 15.52k9n0.1g2p35fnb.1p3ve; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from h-e2.ddg ([85.143.252.66])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Wed, 11 May 2022 11:18:30 +0300
-Date:   Wed, 11 May 2022 11:18:10 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     Conor Dooley <mail@conchuod.ie>
-Cc:     Conor.Dooley@microchip.com, mdf@kernel.org, hao.wu@intel.com,
-        yilun.xu@intel.com, trix@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        system@metrotek.ru
-Subject: Re: [PATCH v11 2/3] fpga: microchip-spi: add Microchip MPF FPGA
- manager
-Message-ID: <20220511081810.bwxjkhfuzfvov4iw@h-e2.ddg>
-References: <20220507074304.11144-1-i.bornyakov@metrotek.ru>
- <20220507074304.11144-3-i.bornyakov@metrotek.ru>
- <bd5cb37b-ee56-f6d5-2d98-c08566b60728@microchip.com>
- <20220509171621.zk4owxwlngxjodgz@x260>
- <da1e5125-de6b-11a8-a52d-7e6e5f45ab70@conchuod.ie>
- <4b752147-1a09-a4af-bc5d-3b132b84ef49@conchuod.ie>
- <20220511081532.7gkmz3uumzxgwfaf@h-e2.ddg>
+        Wed, 11 May 2022 04:22:14 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004FA2E6B3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 01:22:10 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id 204so1362857pfx.3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 01:22:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ok9rm5eSTA5NSL17Rhwq9EtRVWax1XY2Vi3Ds9AAgoI=;
+        b=1kOoitGokYdgXjsF0flRyn8o7fugnSK/+ThmSsEeyuc8Enzq/2hd03m5qRiq9Ddz3J
+         D1C5Ojry6Yl5nxjnZxEcZwN8oPaZrWH/tzk6KJZx0uKnrpvGOyteBoMwR17maxPhuDRw
+         NffRsYiQHTkoTmRR9n8SOQ8eK5jk+5TQL5rrvPque8hUwxph2iJq5AY7LJyFEfyezb9D
+         KaK2IaqLfcA4jSN+AE8+vPh71imDXpesFT5ZM9xoUlwFWTnymsWlhfWb5LdJUj3Lgv3F
+         /3HGDMUPcz8RhIYOm3lVGBBQmQ9Ij4OE7H9TVztToRykZSK6Ekyssd71dyPgZdV+wCud
+         r6XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ok9rm5eSTA5NSL17Rhwq9EtRVWax1XY2Vi3Ds9AAgoI=;
+        b=4a/vFw8DNJhsfwqvRyNcpkS+MfPjkN/BHWkBV8pk55d+K+Fw8cKlyjEP9xB9QaABtb
+         IIPz+yd9MBnCxeFo57vIS9QSWKZi39FLlz1XCjtFG8rQqer/eo6KyLHUzzLufFn48yGI
+         AWzDhWyXBLk8ZNejPIeRuc8fXWxM0IXSrSrAp/zMvAYhZRzc/Qv0PjhDku5HhKQ5vPXg
+         bRXuM3Tta+WahGbzh4Rp6vBVfxOCeBjr2oALLlDZOK07NSZB33muz0LwOShqba5u3nE6
+         aMuz7+HyJ23rj3HrlfA8idnhc5BmAWmRq9TN/mZZKEpYV4tycYqL7N4H0Sko5Jy4jBtc
+         OjMw==
+X-Gm-Message-State: AOAM530Se87psR+1wQesC80xtihWrO2o8S5kt85FrPMosvrQVPPNLTSg
+        errHUR5lQHOgqwseggk1HQFQS60vvwPsHQ==
+X-Google-Smtp-Source: ABdhPJyI3XwnQck5yj0j+Fts4bxAMxiOgAF+ugKSbXj5JQ/HxpiYyfhMeBXr1WNEXRZRkmxuF6q2Xw==
+X-Received: by 2002:a65:6e9b:0:b0:3c5:f761:2d94 with SMTP id bm27-20020a656e9b000000b003c5f7612d94mr19725021pgb.79.1652257330292;
+        Wed, 11 May 2022 01:22:10 -0700 (PDT)
+Received: from [10.255.89.252] ([139.177.225.239])
+        by smtp.gmail.com with ESMTPSA id c20-20020a62e814000000b0050dc7628130sm1035498pfi.10.2022.05.11.01.22.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 01:22:09 -0700 (PDT)
+Message-ID: <7aceb944-4c53-8cc8-473d-fc8a9da0ef11@bytedance.com>
+Date:   Wed, 11 May 2022 16:18:16 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220511081532.7gkmz3uumzxgwfaf@h-e2.ddg>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: Re: [PATCH v2 5/5] mm/memory-failure.c: simplify
+ num_poisoned_pages_inc/dec
+Content-Language: en-US
+To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220509105641.491313-1-pizhenwei@bytedance.com>
+ <20220509105641.491313-6-pizhenwei@bytedance.com>
+ <20220511082011.GC211620@hori.linux.bs1.fc.nec.co.jp>
+From:   zhenwei pi <pizhenwei@bytedance.com>
+In-Reply-To: <20220511082011.GC211620@hori.linux.bs1.fc.nec.co.jp>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 11:15:32AM +0300, Ivan Bornyakov wrote:
-> On Tue, May 10, 2022 at 12:29:54PM +0100, Conor Dooley wrote:
-> > On 09/05/2022 19:56, Conor Dooley wrote:
-> > > On 09/05/2022 18:16, Ivan Bornyakov wrote:
-> > > > On Mon, May 09, 2022 at 11:41:18AM +0000, Conor.Dooley@microchip.com wrote:
-> > > > > Hey Ivan, one comment below.
-> > > > > Thanks,
-> > > > > Conor.
-> > > > > 
-> > > > > On 07/05/2022 08:43, Ivan Bornyakov wrote:
-> > > > > > ... snip ...
-> > > > > > +static int mpf_read_status(struct spi_device *spi)
-> > > > > > +{
-> > > > > > +       u8 status, status_command = MPF_SPI_READ_STATUS;
-> > > > > > +       struct spi_transfer xfer = {
-> > > > > > +               .tx_buf = &status_command,
-> > > > > > +               .rx_buf = &status,
-> > > > > > +               .len = 1,
-> > > > > > +       };
-> > > > > > +       int ret = spi_sync_transfer(spi, &xfer, 1);
-> > > > > > +
-> > > > > > +       if ((status & MPF_STATUS_SPI_VIOLATION) ||
-> > > > > > +           (status & MPF_STATUS_SPI_ERROR))
-> > > > > > +               ret = -EIO;
-> > > > > > +
-> > > > > > +       return ret ? : status;
-> > > > > > +}
-> > > > > > +
-> > > > > > ... snip ...
-> > > > > > +
-> > > > > > +static int poll_status_not_busy(struct spi_device *spi, u8 mask)
-> > > > > > +{
-> > > > > > +       int status, timeout = MPF_STATUS_POLL_TIMEOUT;
-> > > > > > +
-> > > > > > +       while (timeout--) {
-> > > > > > +               status = mpf_read_status(spi);
-> > > > > > +               if (status < 0 ||
-> > > > > > +                   (!(status & MPF_STATUS_BUSY) && (!mask || (status & mask))))
-> > > > > > +                       return status;
-> > > > > > +
-> > > > > > +               usleep_range(1000, 2000);
-> > > > > > +       }
-> > > > > > +
-> > > > > > +       return -EBUSY;
-> > > > > > +}
-> > > > > 
-> > > > > Is there a reason you changed this from the snippet you sent me
-> > > > > in the responses to version 8:
-> > > > > static int poll_status_not_busy(struct spi_device *spi, u8 mask)
-> > > > > {
-> > > > > 	u8 status, status_command = MPF_SPI_READ_STATUS;
-> > > > > 	int ret, timeout = MPF_STATUS_POLL_TIMEOUT;
-> > > > > 	struct spi_transfer xfer = {
-> > > > > 		.tx_buf = &status_command,
-> > > > > 		.rx_buf = &status,
-> > > > > 		.len = 1,
-> > > > > 	};
-> > > > > 
-> > > > > 	while (timeout--) {
-> > > > > 		ret = spi_sync_transfer(spi, &xfer, 1);
-> > > > > 		if (ret < 0)
-> > > > > 			return ret;
-> > > > > 
-> > > > > 		if (!(status & MPF_STATUS_BUSY) && (!mask || (status & mask)))
-> > > > > 			return status;
-> > > > > 
-> > > > > 		usleep_range(1000, 2000);
-> > > > > 	}
-> > > > > 
-> > > > > 	return -EBUSY;
-> > > > > }
-> > > > > 
-> > > > > With the current version, I hit the "Failed to write bitstream
-> > > > > frame" check in mpf_ops_write at random points in the transfer.
-> > > > > Replacing poll_status_not_busy with the above allows it to run
-> > > > > to completion.
-> > > > 
-> > > > In my eyes they are equivalent, aren't they?
-> > > > 
-> > > 
-> > > I was in a bit of a rush today & didn't have time to do proper
-> > > debugging, I'll put some debug code in tomorrow and try to find
-> > > exactly what is different between the two.
-> > > 
-> > > Off the top of my head, since I don't have a board on me to test,
-> > > the only difference I can see is that with the snippet you only
-> > > checked if spi_sync_transfer was negative whereas now you check
-> > > if it has a value at all w/ that ternary operator.
-> > > 
-> > > But even that seems like it *shouldn't* be the problem, since ret
-> > > should contain -errno or zero, right?
-> > > Either way, I will do some digging tomorrow.
-> > 
-> > I put a printk("status %x, ret %d", status, ret); into the failure
-> > path of mpf_read_status() & it looks like a status 0xA is being
-> > returned - error & ready? That seems like a very odd combo to be
-> > getting back out of it. It shouldn't be dodgy driver/connection
-> > either, b/c that's what I see if I connect my protocol analyser:
-> > https://i.imgur.com/VbjgfCk.png
-> > 
-> > That's mosi (hex), ss, sclk, mosi, miso (hex), miso in descending
-> > order.
-> > 
-> > I think what was happening was with the snippet you returned one
-> > of the following: -EBUSY, ret (aka -errno) or status. Since status
-> > is positive, the checks in mpf_spi_write.*() saw nothing wrong at
-> > all and programming continued despite there being a problem.
-> > 
-> > The new version fixes this by returning -EIO rather than status from
-> > poll_status_not_busy().
-> > 
-> > I wish I had a socketable PolarFire so I could investigate further,
-> > but this looks like it might a be hardware issue somewhere on my
-> > end?
-> > 
-> > So ye, sorry for the noise and carry on! I'll try tofind what is to
-> > blame for it.
-> > 
-> > Thanks,
-> > Conor.
-> > 
+
+
+On 5/11/22 16:20, HORIGUCHI NAOYA(堀口 直也) wrote:
+> On Mon, May 09, 2022 at 06:56:41PM +0800, zhenwei pi wrote:
+>> Originally, do num_poisoned_pages_inc() in memory failure routine,
+>> use num_poisoned_pages_dec() to rollback the number if filtered/
+>> cancelled.
+>>
+>> Suggested by Naoya, do num_poisoned_pages_inc() only in
+>> action_result(), this make this clear and simple.
+>>
+>> Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
 > 
-> Hi, Conor.
+> I found that action_result(MF_MSG_UNKNOWN) in try_memory_failure_hugetlb()
+> does not follow the rule, so that could break the counter.
+> I don't think this is the issue in your patch, so I'm fine with this patch.
 > 
-> I've just noticed in SPI-DirectC User Guide [1] ch. 9 SmartFusion2 and
-> IGLOO2 SPI-Slave Programming Waveform Analysis, that hw status checked
-> two times every time. Does MPF family also need double check hw status?
-> Does adding second mpf_read_status() to poll_status_not_busy() routine
-> help with your issue?
+> I'll submit a fix later for this, which will add hugetlb_set_page_hwpoison()
+> in the path.  That will have a bit non-trivial change because we need do
+> this in hugeltb_lock.
+> 
+> Anyway, thank you for this work.
+> 
+> Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
-Sorry, forgot to insert link to SPI-DirectC User Guide. Here it is:
+A million thanks to you!
 
-  [1] https://coredocs.s3.amazonaws.com/DirectC/2021_2/spi_directc.pdf
-
+-- 
+zhenwei pi

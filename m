@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 070BD52341C
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:21:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA1352341A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238957AbiEKNVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45418 "EHLO
+        id S238226AbiEKNVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243786AbiEKNUB (ORCPT
+        with ESMTP id S243791AbiEKNUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 11 May 2022 09:20:01 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0380C2457BD
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:19:55 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BCE2469CF
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:19:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 50E7DCE249C
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 13:19:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 064C0C34110
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 13:19:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 51AA4B823DC
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 13:19:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23EE4C34112;
+        Wed, 11 May 2022 13:19:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652275192;
-        bh=uJNAc1t8T+kTYKJOXUGKSRo17sVrsJjMQmCKXoxR5Vw=;
-        h=From:To:Subject:Date:From;
-        b=EgUYxmnVxPbxUSeuOXfTuJJgW2izrL8XSCPezZOYfe2SdDFEk2QmKVGyhhEp5bdUZ
-         kMKG8BaZXK6dGv3G2T6h33tu+9At77M1L8EO+6OfbT5N3qb3boOcL5SFyzvqvFugmt
-         NZM8gXOhGGrHHuYTpy6oE7vfK+S4Ub5t8+KJrGorhWW7xc0mwbdVd+iNXote/8Jnax
-         pZEJLjaQmQeoDueTKyljZGnLvtOvD/QAFLT58PQZkjyD7hWJg8YnfNTqIBRcoSNUTA
-         l7J6AMc6SaXpwVpRaGdjSz1lQLHB/Nucf+C/PiRZZHQxGdaa38f/2I3/JBhzMhW+Yx
-         V0nEAzC1Ca0yA==
+        s=k20201202; t=1652275194;
+        bh=wOtB+Buzvelw0zCj5dXvDag7eeVBFMQDGau1jG60SfY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=TfdtRzpnUjxd3QVcQMFXkqd5eqoQs/Fa7UpZF+7Sm5Ui319U8gT5eI7TWivVlVMSC
+         AUiUJh0GYrhFAP589Ur1NSwYpiaJ1A6o8x8hMTP+X7TZGNL1y0gsFtWW02KNmK0i84
+         NBLHNU78rlwOxPhwAfrVCEpILyMu0srpIKqgC3Y+HFrjrwPqsvoW7+hI2TLzf/Dt2H
+         jX/IG1djAB3Qki7cekm9WXKw1f8vtr8JqVoMS05a07ENiMlrW3E0tmplgXp7t6FiiY
+         VB+1AmAUseh7D+gmuXQXu45YEz+IaneEbadobJVyUkYnDmENWxvq/KQ3sFRmG18kLT
+         j6GO5KpJWST3w==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] habanalabs: update firmware header
-Date:   Wed, 11 May 2022 16:19:46 +0300
-Message-Id: <20220511131948.1156471-1-ogabbay@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>
+Subject: [PATCH 2/3] habanalabs: use NULL for eventfd
+Date:   Wed, 11 May 2022 16:19:47 +0300
+Message-Id: <20220511131948.1156471-2-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220511131948.1156471-1-ogabbay@kernel.org>
+References: <20220511131948.1156471-1-ogabbay@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -50,87 +53,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update cpucp_if.h to latest version.
+eventfd is pointer. As such, it should be initialized to NULL, not to 0.
 
+In addition, no need to initialize it after creation because the
+entire structure is zeroed-out. Also, no need to initialize it before
+release because the entire structure is freed.
+
+Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- .../misc/habanalabs/include/common/cpucp_if.h | 32 ++++++++++++++++++-
- 1 file changed, 31 insertions(+), 1 deletion(-)
+ drivers/misc/habanalabs/common/device.c           | 8 ++------
+ drivers/misc/habanalabs/common/habanalabs_drv.c   | 4 ----
+ drivers/misc/habanalabs/common/habanalabs_ioctl.c | 4 ++--
+ 3 files changed, 4 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/include/common/cpucp_if.h b/drivers/misc/habanalabs/include/common/cpucp_if.h
-index 4af5bb695c16..38e44b6cf581 100644
---- a/drivers/misc/habanalabs/include/common/cpucp_if.h
-+++ b/drivers/misc/habanalabs/include/common/cpucp_if.h
-@@ -568,6 +568,12 @@ struct cpucp_array_data_packet {
- 	__le32 data[];
- };
+diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
+index 315510aaca35..0908ac301c70 100644
+--- a/drivers/misc/habanalabs/common/device.c
++++ b/drivers/misc/habanalabs/common/device.c
+@@ -286,10 +286,8 @@ static void hpriv_release(struct kref *ref)
+ 	hdev->compute_ctx_in_release = 0;
  
-+enum cpucp_led_index {
-+	CPUCP_LED0_INDEX = 0,
-+	CPUCP_LED1_INDEX,
-+	CPUCP_LED2_INDEX
-+};
-+
- enum cpucp_packet_rc {
- 	cpucp_packet_success,
- 	cpucp_packet_invalid,
-@@ -589,7 +595,10 @@ enum cpucp_temp_type {
- 	cpucp_temp_offset = 19,
- 	cpucp_temp_lowest = 21,
- 	cpucp_temp_highest = 22,
--	cpucp_temp_reset_history = 23
-+	cpucp_temp_reset_history = 23,
-+	cpucp_temp_warn = 24,
-+	cpucp_temp_max_crit = 25,
-+	cpucp_temp_max_warn = 26,
- };
+ 	/* release the eventfd */
+-	if (hpriv->notifier_event.eventfd) {
++	if (hpriv->notifier_event.eventfd)
+ 		eventfd_ctx_put(hpriv->notifier_event.eventfd);
+-		hpriv->notifier_event.eventfd = 0;
+-	}
  
- enum cpucp_in_attributes {
-@@ -699,6 +708,7 @@ enum pll_index {
- enum rl_index {
- 	TPC_RL = 0,
- 	MME_RL,
-+	EDMA_RL,
- };
+ 	mutex_destroy(&hpriv->notifier_event.lock);
  
- enum pvt_index {
-@@ -833,6 +843,7 @@ enum cpucp_serdes_type {
- 	TYPE_2_SERDES_TYPE,
- 	HLS1_SERDES_TYPE,
- 	HLS1H_SERDES_TYPE,
-+	HLS2_SERDES_TYPE,
- 	UNKNOWN_SERDES_TYPE,
- 	MAX_NUM_SERDES_TYPE = UNKNOWN_SERDES_TYPE
- };
-@@ -846,9 +857,28 @@ struct cpucp_nic_info {
- 	__u8 qsfp_eeprom[CPUCP_NIC_QSFP_EEPROM_MAX_LEN];
- 	__le64 auto_neg_mask[CPUCP_NIC_MASK_ARR_LEN];
- 	__le16 serdes_type; /* enum cpucp_serdes_type */
-+	__le16 tx_swap_map[CPUCP_MAX_NICS];
- 	__u8 reserved[6];
- };
+@@ -364,10 +362,8 @@ static int hl_device_release_ctrl(struct inode *inode, struct file *filp)
+ 	mutex_unlock(&hdev->fpriv_ctrl_list_lock);
+ out:
+ 	/* release the eventfd */
+-	if (hpriv->notifier_event.eventfd) {
++	if (hpriv->notifier_event.eventfd)
+ 		eventfd_ctx_put(hpriv->notifier_event.eventfd);
+-		hpriv->notifier_event.eventfd = 0;
+-	}
  
-+#define PAGE_DISCARD_MAX	64
-+
-+struct page_discard_info {
-+	__u8 num_entries;
-+	__u8 reserved[7];
-+	__le32 mmu_page_idx[PAGE_DISCARD_MAX];
-+};
-+
-+/*
-+ * struct ser_val - the SER (symbol error rate) value is represented by "integer * 10 ^ -exp".
-+ * @integer: the integer part of the SER value;
-+ * @exp: the exponent part of the SER value.
-+ */
-+struct ser_val {
-+	__le16 integer;
-+	__le16 exp;
-+};
-+
- /*
-  * struct cpucp_nic_status - describes the status of a NIC port.
-  * @port: NIC port index.
+ 	mutex_destroy(&hpriv->notifier_event.lock);
+ 	put_pid(hpriv->taskpid);
+diff --git a/drivers/misc/habanalabs/common/habanalabs_drv.c b/drivers/misc/habanalabs/common/habanalabs_drv.c
+index c97173e9507d..9ead0927208d 100644
+--- a/drivers/misc/habanalabs/common/habanalabs_drv.c
++++ b/drivers/misc/habanalabs/common/habanalabs_drv.c
+@@ -134,8 +134,6 @@ int hl_device_open(struct inode *inode, struct file *filp)
+ 	hpriv->hdev = hdev;
+ 	filp->private_data = hpriv;
+ 	hpriv->filp = filp;
+-	hpriv->notifier_event.events_mask = 0;
+-	hpriv->notifier_event.eventfd = 0;
+ 
+ 	mutex_init(&hpriv->notifier_event.lock);
+ 	mutex_init(&hpriv->restore_phase_mutex);
+@@ -246,8 +244,6 @@ int hl_device_open_ctrl(struct inode *inode, struct file *filp)
+ 	hpriv->hdev = hdev;
+ 	filp->private_data = hpriv;
+ 	hpriv->filp = filp;
+-	hpriv->notifier_event.events_mask = 0;
+-	hpriv->notifier_event.eventfd = 0;
+ 
+ 	mutex_init(&hpriv->notifier_event.lock);
+ 	nonseekable_open(inode, filp);
+diff --git a/drivers/misc/habanalabs/common/habanalabs_ioctl.c b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
+index d1ef56a8d3ac..51fa56287309 100644
+--- a/drivers/misc/habanalabs/common/habanalabs_ioctl.c
++++ b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
+@@ -647,7 +647,7 @@ static int eventfd_register(struct hl_fpriv *hpriv, struct hl_info_args *args)
+ 	hpriv->notifier_event.eventfd = eventfd_ctx_fdget(args->eventfd);
+ 	if (IS_ERR(hpriv->notifier_event.eventfd)) {
+ 		rc = PTR_ERR(hpriv->notifier_event.eventfd);
+-		hpriv->notifier_event.eventfd = 0;
++		hpriv->notifier_event.eventfd = NULL;
+ 		mutex_unlock(&hpriv->notifier_event.lock);
+ 		return rc;
+ 	}
+@@ -665,7 +665,7 @@ static int eventfd_unregister(struct hl_fpriv *hpriv, struct hl_info_args *args)
+ 	}
+ 
+ 	eventfd_ctx_put(hpriv->notifier_event.eventfd);
+-	hpriv->notifier_event.eventfd = 0;
++	hpriv->notifier_event.eventfd = NULL;
+ 	mutex_unlock(&hpriv->notifier_event.lock);
+ 	return 0;
+ }
 -- 
 2.25.1
 

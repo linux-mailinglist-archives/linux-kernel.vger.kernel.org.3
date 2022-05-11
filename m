@@ -2,135 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ED30523BC2
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D038523BC5
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345722AbiEKRl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 13:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50938 "EHLO
+        id S1345736AbiEKRl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 13:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345733AbiEKRlO (ORCPT
+        with ESMTP id S245572AbiEKRlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 13:41:14 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E827E219F69;
-        Wed, 11 May 2022 10:41:09 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id p18so3426277edr.7;
-        Wed, 11 May 2022 10:41:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2Ke+AGfzv6tvoEFSxFKuURhI7WvGdekzVHjZqAbbO8s=;
-        b=G9wqQwuFFHa1lknmirIg8grgSmlGhY4vOMeTI7ajMbQFOkPDfAjxkC53pYWGPJ2cZF
-         JYFgcz/9NdUz5O/wqsbhfPi2zN/aY/XE8j2tiIE+GNsGbyuPFnW8P1tp2iJW3pJ7hdxQ
-         0IWMmg6WoVXdfvmSzYuR0vhQNDCC0PHJKULu799/jK8hUupfLZ4wSeZ7OW6yle+knuIx
-         wKXck2gICgiHyMkOEoopjNhzgzuCsUiXl0Fc8RjVEZqu59KvypFwP3AWHlhIyW+2eUvJ
-         9/csBr94Q6HkyJhoRRrkcPuuXe8cn9wJZuWneLmHD2vUIG70ZoAZdfhxmnMfAxo/8/s1
-         RtmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2Ke+AGfzv6tvoEFSxFKuURhI7WvGdekzVHjZqAbbO8s=;
-        b=IyTEu0BCJo1oB/cUJnUAJCpi9etJdWOi4APkhpkhnU3OK4KyJvQw2Sbnthwgb7Kxu1
-         UKcGilb7cwwvXQo510/KQU4oxvdmispBYROdmkre/SAUi3kWcfnVzHZNDVsx9jZ6qW6A
-         XtbkR1ReBjaHUJEssFgr2CaAsbCF4eQCrYlHRIhuDXjMV2ieCMxOiVhDeWeo3CCExoLV
-         3mNFTUP4FdL/nD0Ux8TQXNYC+y3JFOvCI8tJZTFpUk956cYjQVPlvDNuNC3DquaSCo+L
-         m2IMd6Ovc74Evo611BIhymOWbwjpiRDLSWzd4wDwywGCgK6oToRl24HAOKpgtVRzqzhP
-         ZEnA==
-X-Gm-Message-State: AOAM533bLk4qWjQvGFDPtfc/i5dIJE2ibDasrobjBAftnPcZbBzuO9TQ
-        HHeUQgZvcfSS74UGlrwTBImL5b8PiyHNmllKooQ=
-X-Google-Smtp-Source: ABdhPJypHOUVtZ/mWQM6O1I1uprLxF37dkIpuFfu2UGbONcylK6L0+EILGXJ8zFdWrxtLQMY1Q94ZDxv7qrd1l5g0T4=
-X-Received: by 2002:a05:6402:1d4c:b0:427:d1f5:3a41 with SMTP id
- dz12-20020a0564021d4c00b00427d1f53a41mr29873435edb.218.1652290868261; Wed, 11
- May 2022 10:41:08 -0700 (PDT)
+        Wed, 11 May 2022 13:41:55 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2087521A953;
+        Wed, 11 May 2022 10:41:53 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:39398)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1noqLQ-00FuHr-O2; Wed, 11 May 2022 11:41:52 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37824 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1noqLO-001d7U-Ly; Wed, 11 May 2022 11:41:52 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-arch@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Al Viro <viro@ZenIV.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        =?utf-8?B?0JzQsNC60YHQuNC8INCa0YPRgtGP0LLQuNC9?= 
+        <maximkabox13@gmail.com>
+References: <87mtfu4up3.fsf@email.froward.int.ebiederm.org>
+        <20220506141512.516114-1-ebiederm@xmission.com> <87fslhpi58.ffs@tglx>
+        <87v8udwhc6.fsf@email.froward.int.ebiederm.org>
+Date:   Wed, 11 May 2022 12:41:44 -0500
+In-Reply-To: <87v8udwhc6.fsf@email.froward.int.ebiederm.org> (Eric
+        W. Biederman's message of "Tue, 10 May 2022 10:14:01 -0500")
+Message-ID: <87ilqcuftz.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <YnoJ0k6eIUiwjXSZ@debian-BULLSEYE-live-builder-AMD64>
- <CAHp75Vd574LCnEq-KX=WHnnDyrjZgGu6W9wNEbnw79FBpyx=Lw@mail.gmail.com> <8bd83f45-5278-e817-3f65-88fafd0ad3f4@collabora.com>
-In-Reply-To: <8bd83f45-5278-e817-3f65-88fafd0ad3f4@collabora.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 11 May 2022 19:40:31 +0200
-Message-ID: <CAHp75VcQYncfCv-2GE0a0e=0iOLBC6wMvoH8pFCirN3NyLzdhw@mail.gmail.com>
-Subject: Re: [PATCH RESEND v11] platform/chrome: Add ChromeOS ACPI device driver
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <eballetbo@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Collabora Kernel ML <kernel@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Dmitry Torokhov <dtor@chromium.org>,
-        Gwendal Grignou <gwendal@chromium.org>, vbendeb@chromium.org,
-        Andy Shevchenko <andy@infradead.org>,
-        Ayman Bagabas <ayman.bagabas@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        =?UTF-8?Q?Bla=C5=BE_Hrastnik?= <blaz@mxxn.io>,
-        Darren Hart <dvhart@infradead.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jeremy Soller <jeremy@system76.com>,
-        Mattias Jacobsson <2pi@mok.nu>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Rajat Jain <rajatja@google.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        chrome-platform@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1noqLO-001d7U-Ly;;;mid=<87ilqcuftz.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1/WkcezZ++DvlUbGu03UhymtxgbMnY4ZO0=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Virus: No
+X-Spam-DCC: XMission; sa03 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;Thomas Gleixner <tglx@linutronix.de>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1440 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 4.3 (0.3%), b_tie_ro: 3.1 (0.2%), parse: 0.69
+        (0.0%), extract_message_metadata: 10 (0.7%), get_uri_detail_list: 0.66
+        (0.0%), tests_pri_-1000: 13 (0.9%), tests_pri_-950: 1.06 (0.1%),
+        tests_pri_-900: 0.78 (0.1%), tests_pri_-90: 238 (16.5%), check_bayes:
+        232 (16.1%), b_tokenize: 4.1 (0.3%), b_tok_get_all: 6 (0.4%),
+        b_comp_prob: 1.31 (0.1%), b_tok_touch_all: 218 (15.2%), b_finish: 0.77
+        (0.1%), tests_pri_0: 1158 (80.4%), check_dkim_signature: 0.36 (0.0%),
+        check_dkim_adsp: 2.0 (0.1%), poll_dns_idle: 0.17 (0.0%), tests_pri_10:
+        2.9 (0.2%), tests_pri_500: 9 (0.7%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 1/7] kthread: Don't allocate kthread_struct for init and
+ umh
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 5:59 PM Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
-> On 5/10/22 2:33 PM, Andy Shevchenko wrote:
-> > On Tue, May 10, 2022 at 8:44 AM Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:
+"Eric W. Biederman" <ebiederm@xmission.com> writes:
 
-...
+> Thomas Gleixner <tglx@linutronix.de> writes:
+>
+>> I'm worried that there are more of these issues lurking. Haven't looked
+>> yet.
+>
+> I looked earlier and I missed this one.  I am going to look again today,
+> along with applying the obvious fix to task_tick_numa.
 
-> >> +       static struct attribute *attrs_##_group[] = {                                   \
-> >> +               &dev_attr_0_##_group.attr,                                              \
-> >> +               &dev_attr_1_##_group.attr,                                              \
-> >> +               &dev_attr_2_##_group.attr,                                              \
-> >> +               &dev_attr_3_##_group.attr,                                              \
-> >> +               NULL                                                                    \
+So I have just looked again and I don't see anything.  There are a
+couple of subtle issues on x86.  Especially with saving floating
+point but as I read the code copy_thread initializes things
+properly so that code that doesn't touch floating point registers
+doesn't need to do anything.
 
-(1)
+The important thing for lurking issues is that even if I missed
+something practically all of the uses of PF_KTHREAD are on x86
+or generic code so they should be flushed out quickly.
 
-> >> +       };                                                                              \
-> >> +       static const struct attribute_group attr_group_##_group = {                     \
-> >> +               .name = _name,                                                          \
-> >> +               .is_visible = attr_is_visible_gpio_##_num,                              \
-> >
-> >> +               .attrs = attrs_##_group                                                 \
-> >
-> > Keep a comma here.
+Eric
 
-> Is there any particular reason for it?
-
-Yes, if it's not a terminator entry, like (1), the comma would help to
-avoid unneeded churm in the future in case someone wants to add
-another initialization member.
-
-> If there is, I'll add commas to
-> all the structures.
-
-It depends if it is a terminator entry or not, so please check
-carefully where to add and where not (the latter example is (1) where
-comma is not needed and theoretically might add a confusion).
-
--- 
-With Best Regards,
-Andy Shevchenko

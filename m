@@ -2,208 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E69F523BB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:37:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63974523BB4
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345657AbiEKRg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 13:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
+        id S1345677AbiEKRhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 13:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234039AbiEKRg4 (ORCPT
+        with ESMTP id S234039AbiEKRhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 13:36:56 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2289468300
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:36:55 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id g23so3349769edy.13
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:36:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=jwXHsUB6qUpzl3VRnWjzmQKSgk8cDfdgFA5s7nwGaLI=;
-        b=bT22W7fDGAySEG7vBs4hb15DD4bL48uTSAqlVdi3MASn69ux2G7d6N/VKWbxFQeXzu
-         IgyiHQ6LaCd+Jy6MC9n/t37uslzcQJdkPoDj5+cJEJKwpg5f0JFW2jRrHzzzLJkf9iT4
-         QtQSQUI6LtFE/fIizHPmL1xz0u3XWz12sCguANLoXC7jJDbOFe74dMAP5p6lDhtoGNwH
-         DFbFezBtzeZP0nBg/lmOWq7iZL6At0YQIyWc6fyuUn3CK6qOaU17FXZxe0d/AgEW+9TG
-         J7Jt47UJoYkfeT8yAPruPYcESKHLZfst00coEXtq0vevDQTAQYtBInbCq7t9qf1jIkXW
-         U8mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jwXHsUB6qUpzl3VRnWjzmQKSgk8cDfdgFA5s7nwGaLI=;
-        b=kKfACVe6vDeYU3RUM9Dmgahks7ZyvTIqXf6R7rCK5h3TXmDarhcufn/zc666odA7FN
-         sGpB0GVgWteXV9OeSKClVFGlCGEzebndKZKOAEW23164kdvDkL62OQ4WIMXsC0/9cLGO
-         S2rACr21z6ypWRjKo0J6lZkJoN8MZTtcc3nqTD4GL6l3GxjFHZC0POiITkK1gD/GusWC
-         Z/PQeiR2w7CkuU7t2HZBPnh3bCi2il6TMmBnzNgdJnCbM9dW472xqgay4DMgyftee6wZ
-         bQ7viQfTUnpKmFhhCl4D1JKXX/IOyS2tg/EUiOpRCNnt1bjdUdiVnvWNUFA/rTLdIJ91
-         BymQ==
-X-Gm-Message-State: AOAM531VOe8Drjwnt95SR7T43XRnJgqsgg8gpCIf8vCb6KrwhbezAEGT
-        fUwGiLWDo5HYIRwZe3tuTrrjJg==
-X-Google-Smtp-Source: ABdhPJyHrA/Ee4SIk42qzBFrUON01ZYdvbhXAObX8J9n0ciqCBlqDatunWcWgBVW2FLF9m2wVcZ9SQ==
-X-Received: by 2002:a05:6402:2078:b0:428:1071:d9b2 with SMTP id bd24-20020a056402207800b004281071d9b2mr31020035edb.302.1652290613620;
-        Wed, 11 May 2022 10:36:53 -0700 (PDT)
-Received: from [192.168.0.155] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id y8-20020a170906524800b006f3ef214d9esm1231008ejm.4.2022.05.11.10.36.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 10:36:53 -0700 (PDT)
-Message-ID: <b619b455-c944-0cc6-ca83-e65490612ed7@linaro.org>
-Date:   Wed, 11 May 2022 19:36:52 +0200
+        Wed, 11 May 2022 13:37:41 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99FAD692AC;
+        Wed, 11 May 2022 10:37:40 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:58578)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1noqHJ-006mps-BT; Wed, 11 May 2022 11:37:37 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37816 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1noqHH-001c0M-Bx; Wed, 11 May 2022 11:37:36 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     <linux-arch@vger.kernel.org>
+Cc:     Tejun Heo <tj@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Al Viro <viro@ZenIV.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>
+References: <CANpfEhOnNZa5d_G3e0dzzbbEtSuqxWY-fUCqzSiFpiQ2k0hJyw@mail.gmail.com>
+        <CAHk-=wjfecvcUk2vNQM1GiUz_G=WQEJ8i8JS7yjnxjq_f-OgKw@mail.gmail.com>
+        <87a6czifo7.fsf@email.froward.int.ebiederm.org>
+        <CAHk-=wj=EHvH-DEUHbkoB3vDZJ1xRzrk44JibtNOepNkachxPw@mail.gmail.com>
+        <87ilrn1drx.ffs@tglx> <877d7zk1cf.ffs@tglx>
+        <CAHk-=wiJPeANKYU4imYaeEuV6sNP+EDR=rWURSKv=y4Mhcn1hA@mail.gmail.com>
+        <87y20fid4d.ffs@tglx>
+        <87bkx5q3pk.fsf_-_@email.froward.int.ebiederm.org>
+        <87mtfu4up3.fsf@email.froward.int.ebiederm.org>
+Date:   Wed, 11 May 2022 12:37:10 -0500
+In-Reply-To: <87mtfu4up3.fsf@email.froward.int.ebiederm.org> (Eric
+        W. Biederman's message of "Fri, 06 May 2022 09:11:36 -0500")
+Message-ID: <87r150ug1l.fsf_-_@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] CHROMIUM: arm64: dts: qcom: Add sc7180-gelarshie
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Julius Werner <jwerner@chromium.org>,
-        =?UTF-8?Q?Krzysztof_Koz=c5=82owski?= <k.kozlowski.k@gmail.com>,
-        Mars Chen <chenxiangrui@huaqin.corp-partner.google.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-References: <20220330090947.9100-1-chenxiangrui@huaqin.corp-partner.google.com>
- <a0eb6bf9-256a-29b1-2211-496df710f531@linaro.org>
- <CAD=FV=UjyLofXZqnj=bL89fza5JS6O5Np9W-A4V4WK+na0hdrw@mail.gmail.com>
- <b7ff08b8-60fb-7629-9399-3d5cca46ab9e@linaro.org>
- <CAD=FV=Vx5g_xTRZGc9wW=ZLnfsOcubTYFcnYQRC5jLm+n3en0w@mail.gmail.com>
- <606cc762-a0c2-49a4-3e5d-d2dbd4595bc7@linaro.org>
- <CAD=FV=W_SA-3PfDFi-Gkjk9pew5bchFNjQhXX8MkZyuy5UohEQ@mail.gmail.com>
- <CAJKOXPdt5WTg4VU-TEW3dmPHR76dKg63XVxRQfa7ZSKc_jz6Ag@mail.gmail.com>
- <CAD=FV=XQqQSQDNh-zXqEQkwsrax5Qb3OtfKZoQLkncJj_4mcQw@mail.gmail.com>
- <daf66d41-42ac-50dc-3f8d-c261da8e452d@linaro.org>
- <CAD=FV=WhA=n_=Ys6NfedPtNPddL81HnG6Qws_R+vq9w8Nrsn5A@mail.gmail.com>
- <ce2ea308-b63d-ad27-4cea-7353268f8ebb@linaro.org>
- <CAODwPW857CkH0+ZnBaUeowW4te-hSy6nrdeeX6-OLPOs5TptsQ@mail.gmail.com>
- <55dcf917-7ac0-efe9-8531-b77be682125a@linaro.org>
- <CAD=FV=UPKo4CxRVmdHr05rRPaNHFYfaQTqmBJAU5ZF61ccKgEA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAD=FV=UPKo4CxRVmdHr05rRPaNHFYfaQTqmBJAU5ZF61ccKgEA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1noqHH-001c0M-Bx;;;mid=<87r150ug1l.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX19mmGlUvgKMqbZ/amgfpc+1CZO+CoJffcI=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;<linux-arch@vger.kernel.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1382 ms - load_scoreonly_sql: 0.08 (0.0%),
+        signal_user_changed: 13 (0.9%), b_tie_ro: 11 (0.8%), parse: 1.07
+        (0.1%), extract_message_metadata: 16 (1.2%), get_uri_detail_list: 1.64
+        (0.1%), tests_pri_-1000: 24 (1.7%), tests_pri_-950: 1.29 (0.1%),
+        tests_pri_-900: 1.08 (0.1%), tests_pri_-90: 79 (5.7%), check_bayes: 77
+        (5.6%), b_tokenize: 10 (0.7%), b_tok_get_all: 9 (0.6%), b_comp_prob:
+        2.4 (0.2%), b_tok_touch_all: 52 (3.8%), b_finish: 0.95 (0.1%),
+        tests_pri_0: 1230 (89.1%), check_dkim_signature: 0.58 (0.0%),
+        check_dkim_adsp: 2.6 (0.2%), poll_dns_idle: 0.80 (0.1%), tests_pri_10:
+        3.1 (0.2%), tests_pri_500: 10 (0.7%), rewrite_mail: 0.00 (0.0%)
+Subject: [PATCH 8/7] sched: Update task_tick_numa to ignore tasks without an mm
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/05/2022 18:09, Doug Anderson wrote:
->>
->> So you choose they are not identical, fine. Why insisting on adding
->> fallback compatible while not keeping bindings updated? Just don't add
->> the compatible and work on rev3 or rev4. Doug even once wrote "_we don't
->> know_ if -rev7 and -rev8 are compatible", so don't make them compatible.
->> Don't add fallbacks or some generic unspecified front-compatibles and
->> just work on revision.
-> 
-> Somehow, it seems like we keep talking past each other here and it
-> feels like folks are getting upset and we're not moving forward. Maybe
-> the right way to make progress is to find some face-to-face time at a
-> future conference and sit in front of a white board and hash it out.
-> That being said:
-> 
-> * Without changing our bootloader or having a big explosion in the
-> number of dts files, we really can't change our scheme. The best we
-> can do is document it.
 
-That's reasonable.
+Qian Cai <quic_qiancai@quicinc.com> wrote:
+> Reverting the last 3 commits of the series fixed a boot crash.
+>
+> 1b2552cbdbe0 fork: Stop allowing kthreads to call execve
+> 753550eb0ce1 fork: Explicitly set PF_KTHREAD
+> 68d85f0a33b0 init: Deal with the init process being a user mode process
+>
+>  BUG: KASAN: null-ptr-deref in task_nr_scan_windows.isra.0
+>  arch_atomic_long_read at ./include/linux/atomic/atomic-long.h:29
+>  (inlined by) atomic_long_read at ./include/linux/atomic/atomic-instrumented.h:1266
+>  (inlined by) get_mm_counter at ./include/linux/mm.h:1996
+>  (inlined by) get_mm_rss at ./include/linux/mm.h:2049
+>  (inlined by) task_nr_scan_windows at kernel/sched/fair.c:1123
+>  Read of size 8 at addr 00000000000003d0 by task swapper/0/1
 
-> 
-> * If we want to change our scheme, we'd need to sit down and come to
-> an agreement that satisfies everyone, if such a thing is possible.
+With the change to init and the user mode helper processes to not have
+PF_KTHREAD set before they call kernel_execve the PF_KTHREAD test in
+task_tick_numa became insufficient to detect all tasks that have
+"->mm == NULL".  Correct that by testing for "->mm == NULL" directly.
 
-There is open CFP for ELCE 2022 (in Ireland). Maybe we could organize
-some session there? But we for sure would need Rob, so the arrangements
-should rather focus on him, not on my availability.
+Reported-by: Qian Cai <quic_qiancai@quicinc.com>
+Tested-by: Qian Cai <quic_qiancai@quicinc.com>
+Fixes: 1b2552cbdbe0 ("fork: Stop allowing kthreads to call execve")
+Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+---
+ kernel/sched/fair.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> That would only be able to affect future boards.
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index d4bd299d67ab..db6f0df9d43e 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -2915,7 +2915,7 @@ static void task_tick_numa(struct rq *rq, struct task_struct *curr)
+ 	/*
+ 	 * We don't care about NUMA placement if we don't have memory.
+ 	 */
+-	if ((curr->flags & (PF_EXITING | PF_KTHREAD)) || work->next != work)
++	if (!curr->mm || (curr->flags & (PF_EXITING | PF_KTHREAD)) || work->next != work)
+ 		return;
+ 
+ 	/*
+-- 
+2.35.3
 
-I would like to say that if you had bindings, then obviously we would
-not break them, but since there are no bindings... :)
-
-> We don't want to
-> change the bootloader dts loading scheme on old boards.
-
-Understood.
-
->>>> Right now it's not possible to validate QCOM DTSes against DT bindings
->>>> because they throw big fat warnings about undocumented top compatibles.
->>>> This is a downside for us.
->>>
->>> But that's a solvable problem, right? As I understand, what Doug was
->>> initially just asking was whether it made _sense_ to document all of
->>> these... not that we couldn't do it. Then this whole thread went down
->>> a rabbit hole of whether our compatible assignments are allowed in the
->>> first place. If we can compromise on this discussion by just doing
->>> whatever needs to be done to make the tool happy, I think(?) we can
->>> provide that.
->>
->> None of recent patches from Chromium were doing it, even after
->> complaining from my side, so why do you suddenly believe that it is
->> "doable"? If yes, please start doing it and fix the DTSes which you
->> already submitted without bindings.
->>
->> To remind - entire discussion started with Doug saying it is pure
->> overhead for him.
-> 
-> I mean, to be fair I said it _seems_ pure overhead and then said that
-> we could do it if it makes some tools happy. ...but before doing that,
-> I wanted to make sure it was actually valuable. I still have doubts
-> about the assertion that the most specific compatible is guaranteed to
-> uniquely identify hardware. So if the whole reason for doing this is
-> to make the validation tools happy and there's no other value, then at
-> least it's plausible to argue that the tools could simply be fixed to
-> allow this and not shout about it. 
-
-Instead of adding bindings, you can indeed change/fix the tools. Go
-ahead. :)
-
-> Now, certainly I'm not arguing that
-> yaml validation in general is useless. I'm in agreement that we want
-> dts files to be able to be formally validated because it catches
-> typos, missing properties, and bugs. I am _only_ saying that I still
-> haven't seen a good argument for why we need to validate the top-level
-> compatible string.
-
-I don't feel expert enough on this topic to give you good answer. Which
-does not prove that there isn't or there is such good answer.
-
-> Since there no properties associated with the
-> top-level compatible string, it's mostly just checking did some one
-> copy-paste the compatible string from one file (the dts file) to the
-> other file (the yaml file) correctly. To me, that does not feel like a
-> useful check.
-
-Still it can detect messing of SoC compatibles or not defining any
-board-level compatible thus pretending that someone's board is just
-SC7180. Imagine now user-space or bootloader trying to parse it...
-
-BTW, the bindings validation of top-level compatible might actually help
-you - to be sure that DTSes have proper compatibles matching what
-bootloader expects.
-
-> The other thing I wanted to make sure was that we weren't just going
-> to get NAKed later if/when we had to adjust compatible strings on
-> existing dts files.
-
-Stable ABI is more of SoC maintainer decision and I see Bjorn responded
-here.
-
-> In any case, I guess I'll make an attempt to document the compatibles
-> for existing Chromebooks and we'll see what happens. I'm still not
-> convinced of the value, but as long as we're not going to get NAKed
-> for documenting reality it's fine.
-
-
-Best regards,
-Krzysztof

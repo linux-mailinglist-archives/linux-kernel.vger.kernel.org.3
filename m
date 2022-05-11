@@ -2,72 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD3352375B
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D09523767
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242366AbiEKPbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:31:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
+        id S1343785AbiEKPfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240224AbiEKPbg (ORCPT
+        with ESMTP id S234832AbiEKPfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:31:36 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7060B53E29;
-        Wed, 11 May 2022 08:31:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652283095; x=1683819095;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Ndczgwyznivdqv1iFCHWhopQvKb+2Iqd5Yk+4O3ea9c=;
-  b=aUKdevAP1zBomDOXOkOhphGq5H4HUjh0MTWzI5wobT7G81nxLe+8P5KA
-   mslzsR3lcxHFNhOmHPLYc6+TNFqkdUX+k+hhVH9wd4ItfNpjEdYq/AhtY
-   tXDFNRkCqgcKhdBokaki0CSHyF2cIIdm3V0UI2g+qKy4yRvq6p0yL/V/D
-   BV/NL3DUqVJon9ayqBRl5B9CEgbQ6ca/eyXkFx/YJ8lSS8FJeulqtITwc
-   dYDyNvyIQ33oPQlrKNfzLCpa6ktzfHf2jA7z9CrbwWlAL0GnHApex/f/V
-   nvdOSr6Y4oZCZE3fAmpCqR+qVAOymvA8e5mZH7LLUEau6dv4ieW0Mhmv4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="330330913"
-X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
-   d="scan'208";a="330330913"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 08:31:33 -0700
-X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
-   d="scan'208";a="895392286"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 08:31:32 -0700
-Date:   Wed, 11 May 2022 08:35:18 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     iommu@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>, dmaengine@vger.kernel.org,
-        Joerg Roedel <joro@8bytes.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>, vkoul@kernel.org,
-        robin.murphy@arm.com, will@kernel.org, Yi Liu <yi.l.liu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v3 1/4] iommu/vt-d: Implement domain ops for
- attach_dev_pasid
-Message-ID: <20220511082958.79d5d8ee@jacob-builder>
-In-Reply-To: <20220511115427.GU49344@nvidia.com>
-References: <20220510210704.3539577-1-jacob.jun.pan@linux.intel.com>
- <20220510210704.3539577-2-jacob.jun.pan@linux.intel.com>
- <20220510232121.GP49344@nvidia.com>
- <20220510172309.3c4e7512@jacob-builder>
- <20220511115427.GU49344@nvidia.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Wed, 11 May 2022 11:35:36 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE53369491
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:35:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=4T/P7nk5HDT/LMOEvNiZF4F+08yR/q62Va+kEhtGeks=; b=pIWiZygdgVImGPwxabMGgcMTJv
+        ACM/Zq3wQU0a+0hXIvEDKj3o6NCMsVbpelz7e8GE0C3ivuCd9YjBh/1S6T3dBW1lGv64wXvqjFPDj
+        H9Ilm+339EGWEcjhBF9jjGMG0kmfU2qToNqRHkBPLGWbHOTr3EEpRH16L7elpC1H8DsemJphwkvSY
+        /yUQtcsv7L2Ev+bgNmxbtJUQo/taHrSyGX4ErgJ1R17XWYN840NJbaS8756JCkzYlbaU3ARjNjcvY
+        Qs9171GIEeBwLqlMsgiJSEItRjrWfUN6E7AJLXqEbOIuOiGY9NpnXRrvhHRVs4HEryQ0W6o7CEtOw
+        4+IVRTxQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nooN4-005Ywf-Pq; Wed, 11 May 2022 15:35:26 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 36F4230080B;
+        Wed, 11 May 2022 17:35:26 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2717E203BFA30; Wed, 11 May 2022 17:35:26 +0200 (CEST)
+Date:   Wed, 11 May 2022 17:35:26 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     x86@kernel.org, kan.liang@linux.intel.com, eranian@google.com
+Cc:     linux-kernel@vger.kernel.org, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org
+Subject: [RFC][PATCH 7/5] perf/x86/intel: Remove x86_pmu::update_topdown_event
+Message-ID: <YnvXvsxDClDwZb5d@hirez.programming.kicks-ass.net>
+References: <20220511142037.353492804@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511142037.353492804@infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,79 +59,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
 
-On Wed, 11 May 2022 08:54:27 -0300, Jason Gunthorpe <jgg@nvidia.com> wrote:
+Subject: perf/x86/intel: Remove x86_pmu::update_topdown_event
+From: Peter Zijlstra <peterz@infradead.org>
+Date: Wed May 11 17:02:05 CEST 2022
 
-> On Tue, May 10, 2022 at 05:23:09PM -0700, Jacob Pan wrote:
-> 
-> > > > diff --git a/include/linux/intel-iommu.h
-> > > > b/include/linux/intel-iommu.h index 5af24befc9f1..55845a8c4f4d
-> > > > 100644 +++ b/include/linux/intel-iommu.h
-> > > > @@ -627,6 +627,7 @@ struct device_domain_info {
-> > > >  	struct intel_iommu *iommu; /* IOMMU used by this device */
-> > > >  	struct dmar_domain *domain; /* pointer to domain */
-> > > >  	struct pasid_table *pasid_table; /* pasid table */
-> > > > +	ioasid_t pasid; /* DMA request with PASID */    
-> > > 
-> > > And this seems wrong - the DMA API is not the only user of
-> > > attach_dev_pasid, so there should not be any global pasid for the
-> > > device.
-> > >   
-> > True but the attach_dev_pasid() op is domain type specific. i.e. DMA API
-> > has its own attach_dev_pasid which is different than sva domain
-> > attach_dev_pasid().  
-> 
-> Huh? The intel driver shares the same ops between UNMANAGED and DMA -
-> and in general I do not think we should be putting special knowledge
-> about the DMA domains in the drivers. Drivers should continue to treat
-> them identically to UNMANAGED.
-> 
-OK, other than SVA domain, the rest domain types share the same default ops.
-I agree that the default ops should be the same for UNMANAGED, IDENTITY, and
-DMA domain types. Minor detail is that we need to treat IDENTITY domain
-slightly different when it comes down to PASID entry programming.
+Not that it is all internal to the intel driver, remove
+x86_pmu::update_topdown_event.
 
-If not global, perhaps we could have a list of pasids (e.g. xarray) attached
-to the device_domain_info. The TLB flush logic would just go through the
-list w/o caring what the PASIDs are for. Does it make sense to you?
+Assumes that is_topdown_count(event) can only be true when the
+hardware has topdown stuff and the function is set.
 
-> > device_domain_info is only used by DMA API.  
-> 
-> Huh?
-My mistake, i meant the device_domain_info.pasid is only used by DMA API
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ arch/x86/events/intel/core.c |   22 ++++++++++++----------
+ arch/x86/events/perf_event.h |    1 -
+ 2 files changed, 12 insertions(+), 11 deletions(-)
 
->  
-> > > I suspect this should be a counter of # of pasid domains attached so
-> > > that the special flush logic triggers
-> > >   
-> > This field is only used for devTLB, so it is per domain-device. struct
-> > device_domain_info is allocated per device-domain as well. Sorry, I
-> > might have totally missed your point.  
-> 
-> You can't store a single pasid in the driver like this, since the only
-> thing it does is trigger the flush logic just count how many pasids
-> are used by the device-domain and trigger pasid flush if any pasids
-> are attached
-> 
-Got it, will put the pasids in an xa as described above.
-
-> > > And rely on the core code to worry about assigning only one domain per
-> > > pasid - this should really be a 'set' function.  
-> >
-> > Yes, in this set the core code (in dma-iommu.c) only assign one PASID
-> > per DMA domain type.
-> > 
-> > Are you suggesting the dma-iommu API should be called
-> > iommu_set_dma_pasid instead of iommu_attach_dma_pasid?  
-> 
-> No that API is Ok - the driver ops API should be 'set' not attach/detach
-> 
-Sounds good, this operation has little in common with
-domain_ops.dev_attach_pasid() used by SVA domain. So I will add a new
-domain_ops.dev_set_pasid()
-
-
-Thanks,
-
-Jacob
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -2672,6 +2672,7 @@ static u64 adl_update_topdown_event(stru
+ 	return icl_update_topdown_event(event);
+ }
+ 
++DEFINE_STATIC_CALL(intel_pmu_update_topdown_event, x86_perf_event_update);
+ 
+ static void intel_pmu_read_topdown_event(struct perf_event *event)
+ {
+@@ -2683,7 +2684,7 @@ static void intel_pmu_read_topdown_event
+ 		return;
+ 
+ 	perf_pmu_disable(event->pmu);
+-	x86_pmu.update_topdown_event(event);
++	static_call(intel_pmu_update_topdown_event)(event);
+ 	perf_pmu_enable(event->pmu);
+ }
+ 
+@@ -2691,7 +2692,7 @@ static void intel_pmu_read_event(struct
+ {
+ 	if (event->hw.flags & PERF_X86_EVENT_AUTO_RELOAD)
+ 		intel_pmu_auto_reload_read(event);
+-	else if (is_topdown_count(event) && x86_pmu.update_topdown_event)
++	else if (is_topdown_count(event))
+ 		intel_pmu_read_topdown_event(event);
+ 	else
+ 		x86_perf_event_update(event);
+@@ -2820,9 +2821,8 @@ static int intel_pmu_set_period(struct p
+ 
+ static u64 intel_pmu_update(struct perf_event *event)
+ {
+-	if (unlikely(is_topdown_count(event)) &&
+-	    x86_pmu.update_topdown_event)
+-		return x86_pmu.update_topdown_event(event);
++	if (unlikely(is_topdown_count(event)))
++		return static_call(intel_pmu_update_topdown_event)(event);
+ 
+ 	return x86_perf_event_update(event);
+ }
+@@ -2950,8 +2950,7 @@ static int handle_pmi_common(struct pt_r
+ 	 */
+ 	if (__test_and_clear_bit(GLOBAL_STATUS_PERF_METRICS_OVF_BIT, (unsigned long *)&status)) {
+ 		handled++;
+-		if (x86_pmu.update_topdown_event)
+-			x86_pmu.update_topdown_event(NULL);
++		static_call(intel_pmu_update_topdown_event)(NULL);
+ 	}
+ 
+ 	/*
+@@ -6191,7 +6190,8 @@ __init int intel_pmu_init(void)
+ 		x86_pmu.lbr_pt_coexist = true;
+ 		intel_pmu_pebs_data_source_skl(pmem);
+ 		x86_pmu.num_topdown_events = 4;
+-		x86_pmu.update_topdown_event = icl_update_topdown_event;
++		static_call_update(intel_pmu_update_topdown_event,
++				   &icl_update_topdown_event);
+ 		static_call_update(intel_pmu_set_topdown_event_period,
+ 				   &icl_set_topdown_event_period);
+ 		pr_cont("Icelake events, ");
+@@ -6229,7 +6229,8 @@ __init int intel_pmu_init(void)
+ 		x86_pmu.lbr_pt_coexist = true;
+ 		intel_pmu_pebs_data_source_skl(pmem);
+ 		x86_pmu.num_topdown_events = 8;
+-		x86_pmu.update_topdown_event = icl_update_topdown_event;
++		static_call_update(intel_pmu_update_topdown_event,
++				   &icl_update_topdown_event);
+ 		static_call_update(intel_pmu_set_topdown_event_period,
+ 				   &icl_set_topdown_event_period);
+ 		pr_cont("Sapphire Rapids events, ");
+@@ -6263,7 +6264,8 @@ __init int intel_pmu_init(void)
+ 		x86_pmu.lbr_pt_coexist = true;
+ 		intel_pmu_pebs_data_source_skl(false);
+ 		x86_pmu.num_topdown_events = 8;
+-		x86_pmu.update_topdown_event = adl_update_topdown_event;
++		static_call_update(intel_pmu_update_topdown_event,
++				   &adl_update_topdown_event);
+ 		static_call_update(intel_pmu_set_topdown_event_period,
+ 				   &adl_set_topdown_event_period);
+ 
+--- a/arch/x86/events/perf_event.h
++++ b/arch/x86/events/perf_event.h
+@@ -878,7 +878,6 @@ struct x86_pmu {
+ 	 * Intel perf metrics
+ 	 */
+ 	int		num_topdown_events;
+-	u64		(*update_topdown_event)(struct perf_event *event);
+ 
+ 	/*
+ 	 * perf task context (i.e. struct perf_event_context::task_ctx_data)

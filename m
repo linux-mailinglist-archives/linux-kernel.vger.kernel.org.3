@@ -2,86 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B108523BE6
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10EAF523C17
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345832AbiEKRvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 13:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
+        id S1345949AbiEKR5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 13:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345812AbiEKRvb (ORCPT
+        with ESMTP id S241439AbiEKR5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 13:51:31 -0400
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B4D4839F;
-        Wed, 11 May 2022 10:51:30 -0700 (PDT)
-Received: by mail-wm1-f42.google.com with SMTP id k126-20020a1ca184000000b003943fd07180so1652670wme.3;
-        Wed, 11 May 2022 10:51:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WQGxLtNoh2A/ECrPGH0MG2WOSwIRhsRl05qWLoUIhKc=;
-        b=B8V0XQ8Cg2dWrsPzvWCpgHYnWDsBL+V6f1lY389lJW5m8hubKSZ6D1uuzAimSf6tpY
-         7t2eDTfMZSeaVOEOj723+LuQOHrmZkkGbmtroduY00CXphLRofGH000xeC/+uFFNS86X
-         7BWGwLxI+rRXKmMafqpmhZXVYpqTATWb/qUNVE4OHa4yT/rUm0xEkxkERqTU7/k3lQc7
-         qMOwJHNlmJHW4nuxcd6rZhal8KNUOp3Qq+3wJ9FHTzGfKLdeK8pBZYJk3LGjgInSNt07
-         5kPmDo+CuypZfCEZNPYlIbtlSXfpujjAmvDTsro/3sRv7vlvgvIQeTI8SxUfRE/rllcc
-         QHGw==
-X-Gm-Message-State: AOAM533vDD0yrFRRwbVKW5fgyVKhc351xx67otoAMGl5Q9B2wTG0kaZq
-        9ZLXk1PuMfanHscHyJxVu8+eTedQJ6c=
-X-Google-Smtp-Source: ABdhPJzzYvMP2x6heJp40ACS+Y59uZMrdJ58/WzlFFCkCHpOK55xWUK1YSFC+WBM3UBpA7NQrop7cw==
-X-Received: by 2002:a7b:c350:0:b0:38c:6d3c:6c8 with SMTP id l16-20020a7bc350000000b0038c6d3c06c8mr5990227wmj.45.1652291488581;
-        Wed, 11 May 2022 10:51:28 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id d10-20020a5d6dca000000b0020cd0762f37sm2236906wrz.107.2022.05.11.10.51.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 10:51:27 -0700 (PDT)
-Date:   Wed, 11 May 2022 17:51:26 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, lorenzo.pieralisi@arm.com,
-        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
-        jakeo@microsoft.com, dazhan@microsoft.com,
-        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] hyperv compose_msi_msg fixups
-Message-ID: <20220511175126.ezrayygwqmrvm7ql@liuwe-devbox-debian-v2>
-References: <1652282533-21502-1-git-send-email-quic_jhugo@quicinc.com>
+        Wed, 11 May 2022 13:57:45 -0400
+X-Greylist: delayed 174 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 11 May 2022 10:57:44 PDT
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31013694A2;
+        Wed, 11 May 2022 10:57:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1652291501;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=yDhDyiG143+NERzD1Q8ObYJHTt8duWx1100elYLk5Lw=;
+    b=r8NeX8j4jl8lZZEDENr2QyYz9IuHVl07+1svJVb03mdDMKhJIiCJebebK6r1SdasDL
+    wCKoyTZalQ6afuDiXvQLs8Jh0AzhRv1mTTPPtIIMhSZogPMPymE7HoSDVLloF3YvgZai
+    AjYGwIOPvTakRCmeJemsat+wwM9rLUgCIn5gTvXBb1fnon2l6m7gQQlsJL4W0gnatZsa
+    w5l5aM87bRodTTMOB4oJfY0FvG9YLL9ZXgvNtw0b7g1XOtNPA0NIx5BgHiqT1yyutoZ8
+    Lex2gFOxdj5C0drn/K6S2xPFFNEpq8H+kclxF/mAzVKUm0HIYtgs5EEgIJiTpnZ7zNtZ
+    myTg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKLUrK88/6Y="
+X-RZG-CLASS-ID: mo00
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 47.42.2 AUTH)
+    with ESMTPSA id u05e50y4BHpf2o2
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 11 May 2022 19:51:41 +0200 (CEST)
+Date:   Wed, 11 May 2022 19:51:32 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Sireesh Kodali <sireeshkodali1@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, bjorn.andersson@linaro.org,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: msm8916: Fix typo in pronto
+ remoteproc node
+Message-ID: <Ynv3pE3gkLW39jNk@gerhold.net>
+References: <20220510042654.71152-1-sireeshkodali1@gmail.com>
+ <20220510042654.71152-3-sireeshkodali1@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1652282533-21502-1-git-send-email-quic_jhugo@quicinc.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220510042654.71152-3-sireeshkodali1@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 09:22:11AM -0600, Jeffrey Hugo wrote:
-> While multi-MSI appears to work with pci-hyperv.c, there was a concern about
-> how linux was doing the ITRE allocations.  Patch 2 addresses the concern.
+On Tue, May 10, 2022 at 09:56:54AM +0530, Sireesh Kodali wrote:
+> The smem-state properties for the pronto node were incorrectly labelled,
+> reading `qcom,state*` rather than `qcom,smem-state*`. Fix that, allowing
+> the stop state to be used.
 > 
-> However, patch 2 exposed an issue with how compose_msi_msg() was freeing a
-> previous allocation when called for the Nth time.  Imagine a driver using
-> pci_alloc_irq_vectors() to request 32 MSIs.  This would cause compose_msi_msg()
-> to be called 32 times, once for each MSI.  With patch 2, MSI0 would allocate
-> the ITREs needed, and MSI1-31 would use the cached information.  Then the driver
-> uses request_irq() on MSI1-17.  This would call compose_msi_msg() again on those
-> MSIs, which would again use the cached information.  Then unmask() would be
-> called to retarget the MSIs to the right VCPU vectors.  Finally, the driver
-> calls request_irq() on MSI0.  This would call conpose_msi_msg(), which would
-> free the block of 32 MSIs, and allocate a new block.  This would undo the
-> retarget of MSI1-17, and likely leave those MSIs targeting invalid VCPU vectors.
-> This is addressed by patch 1, which is introduced first to prevent a regression.
+> Fixes: 88106096cbf8 ("ARM: dts: msm8916: Add and enable wcnss node")
 > 
-> Jeffrey Hugo (2):
->   PCI: hv: Reuse existing ITRE allocation in compose_msi_msg()
->   PCI: hv: Fix interrupt mapping for multi-MSI
+> Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
 
-Applied this version to hyperv-next. Thanks.
+Thanks for finding this!
+
+Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
+
+> ---
+>  arch/arm64/boot/dts/qcom/msm8916.dtsi | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+> index e34963505e07..7ecd747dc624 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+> @@ -1758,8 +1758,8 @@ pronto: remoteproc@a21b000 {
+>  					<&rpmpd MSM8916_VDDMX>;
+>  			power-domain-names = "cx", "mx";
+>  
+> -			qcom,state = <&wcnss_smp2p_out 0>;
+> -			qcom,state-names = "stop";
+> +			qcom,smem-states = <&wcnss_smp2p_out 0>;
+> +			qcom,smem-state-names = "stop";
+>  
+>  			pinctrl-names = "default";
+>  			pinctrl-0 = <&wcnss_pin_a>;
+> -- 
+> 2.36.0
+> 

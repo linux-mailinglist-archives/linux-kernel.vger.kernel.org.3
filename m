@@ -2,126 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A2DA522E03
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4302522E0A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243384AbiEKIPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 04:15:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52418 "EHLO
+        id S243414AbiEKIQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 04:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238624AbiEKIPg (ORCPT
+        with ESMTP id S239529AbiEKIQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 04:15:36 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9C4E529F;
-        Wed, 11 May 2022 01:15:35 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kynln0N2Kz4xVP;
-        Wed, 11 May 2022 18:15:33 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1652256933;
-        bh=l3GxOLtbw73sYny9t7lVVxAHv0bWf/ZyhbFpCZbGXBk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=RsXkWr6WzQK86RjgqjZZDhrCKhJdo+aRACVIXqRBx3GUDkr8AylOSuemmsscjqEvu
-         o4RyELWTikZN1kwXsi4yKbtTDld/Jl0efDl23WBapJkFwzsuZUrtsykuafpAWhT7ZO
-         pyq+JVY4dzWUr+dlKqPRvJHA0vw9tqi1jK5exCdNfdg+PNIB4mj4A4IAE7+k/3tNrx
-         PB/U5pWuXMNbtz8OWBP1cvq7nrhBHVT3nMr6tcJSjTsQLJJUkPDjsDXokSsG2lnqVl
-         Vrf+2KKIBlgt1ob5ZeXXUdAy97EvUwE72oZeo+rv4CoRTTh5vRWUyCr10swAcE+ya9
-         66IsdmOQgOzpw==
-Date:   Wed, 11 May 2022 18:15:31 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mm tree
-Message-ID: <20220511181531.7f27a5c1@canb.auug.org.au>
+        Wed, 11 May 2022 04:16:10 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BD73FBCB;
+        Wed, 11 May 2022 01:15:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
+         references;
+        bh=hTDd4TSeU1fwQ6OaAmsGqmYgAJLDuU+/nhoN5LyCky4=;
+        b=ldKQ+oOIE/MncLwS3922wAbJevpexSt+HIQxIYg1unHt/01VteHHELxNQxNb+R1+KiqjTOsQgy2ne
+         DuHGgS1XmmAtT6yr9aGsyRSS9V2SMw2SyECTM6pZ+CuRcoc9YLffWIuV977YTHC0JpthZYFqsaXMhy
+         0waSNrTrfjWwpheLYEOJ96j+mhDCFYmC8kqIds/088PSv/oRnZ1jyugaljHdWYmeEr8yB1Bc7XOVHU
+         ktKpu8wb7hf8KGl7eKPSX4V3LTEG1XBZCVRQhGQkD6lpTsEGuyLTNeadAGsU/Kg2U4GZWYDRNimAOY
+         betkaC2da3ivsJSOYDg+T51TMwygUiQ==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1422, Stamp: 3], Multi: [Enabled, t: (0.000010,0.016053)], BW: [Enabled, t: (0.000015,0.000001)], RTDA: [Enabled, t: (0.071124), Hit: No, Details: v2.39.0; Id: 15.52k1cv.1g2p30lbn.venk; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from h-e2.ddg ([85.143.252.66])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Wed, 11 May 2022 11:15:51 +0300
+Date:   Wed, 11 May 2022 11:15:32 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     Conor.Dooley@microchip.com, mdf@kernel.org, hao.wu@intel.com,
+        yilun.xu@intel.com, trix@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        system@metrotek.ru
+Subject: Re: [PATCH v11 2/3] fpga: microchip-spi: add Microchip MPF FPGA
+ manager
+Message-ID: <20220511081532.7gkmz3uumzxgwfaf@h-e2.ddg>
+References: <20220507074304.11144-1-i.bornyakov@metrotek.ru>
+ <20220507074304.11144-3-i.bornyakov@metrotek.ru>
+ <bd5cb37b-ee56-f6d5-2d98-c08566b60728@microchip.com>
+ <20220509171621.zk4owxwlngxjodgz@x260>
+ <da1e5125-de6b-11a8-a52d-7e6e5f45ab70@conchuod.ie>
+ <4b752147-1a09-a4af-bc5d-3b132b84ef49@conchuod.ie>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/J+y7q7vuvY==dwLKkKUlYze";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4b752147-1a09-a4af-bc5d-3b132b84ef49@conchuod.ie>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/J+y7q7vuvY==dwLKkKUlYze
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, May 10, 2022 at 12:29:54PM +0100, Conor Dooley wrote:
+> On 09/05/2022 19:56, Conor Dooley wrote:
+> > On 09/05/2022 18:16, Ivan Bornyakov wrote:
+> > > On Mon, May 09, 2022 at 11:41:18AM +0000, Conor.Dooley@microchip.com wrote:
+> > > > Hey Ivan, one comment below.
+> > > > Thanks,
+> > > > Conor.
+> > > > 
+> > > > On 07/05/2022 08:43, Ivan Bornyakov wrote:
+> > > > > ... snip ...
+> > > > > +static int mpf_read_status(struct spi_device *spi)
+> > > > > +{
+> > > > > +       u8 status, status_command = MPF_SPI_READ_STATUS;
+> > > > > +       struct spi_transfer xfer = {
+> > > > > +               .tx_buf = &status_command,
+> > > > > +               .rx_buf = &status,
+> > > > > +               .len = 1,
+> > > > > +       };
+> > > > > +       int ret = spi_sync_transfer(spi, &xfer, 1);
+> > > > > +
+> > > > > +       if ((status & MPF_STATUS_SPI_VIOLATION) ||
+> > > > > +           (status & MPF_STATUS_SPI_ERROR))
+> > > > > +               ret = -EIO;
+> > > > > +
+> > > > > +       return ret ? : status;
+> > > > > +}
+> > > > > +
+> > > > > ... snip ...
+> > > > > +
+> > > > > +static int poll_status_not_busy(struct spi_device *spi, u8 mask)
+> > > > > +{
+> > > > > +       int status, timeout = MPF_STATUS_POLL_TIMEOUT;
+> > > > > +
+> > > > > +       while (timeout--) {
+> > > > > +               status = mpf_read_status(spi);
+> > > > > +               if (status < 0 ||
+> > > > > +                   (!(status & MPF_STATUS_BUSY) && (!mask || (status & mask))))
+> > > > > +                       return status;
+> > > > > +
+> > > > > +               usleep_range(1000, 2000);
+> > > > > +       }
+> > > > > +
+> > > > > +       return -EBUSY;
+> > > > > +}
+> > > > 
+> > > > Is there a reason you changed this from the snippet you sent me
+> > > > in the responses to version 8:
+> > > > static int poll_status_not_busy(struct spi_device *spi, u8 mask)
+> > > > {
+> > > > 	u8 status, status_command = MPF_SPI_READ_STATUS;
+> > > > 	int ret, timeout = MPF_STATUS_POLL_TIMEOUT;
+> > > > 	struct spi_transfer xfer = {
+> > > > 		.tx_buf = &status_command,
+> > > > 		.rx_buf = &status,
+> > > > 		.len = 1,
+> > > > 	};
+> > > > 
+> > > > 	while (timeout--) {
+> > > > 		ret = spi_sync_transfer(spi, &xfer, 1);
+> > > > 		if (ret < 0)
+> > > > 			return ret;
+> > > > 
+> > > > 		if (!(status & MPF_STATUS_BUSY) && (!mask || (status & mask)))
+> > > > 			return status;
+> > > > 
+> > > > 		usleep_range(1000, 2000);
+> > > > 	}
+> > > > 
+> > > > 	return -EBUSY;
+> > > > }
+> > > > 
+> > > > With the current version, I hit the "Failed to write bitstream
+> > > > frame" check in mpf_ops_write at random points in the transfer.
+> > > > Replacing poll_status_not_busy with the above allows it to run
+> > > > to completion.
+> > > 
+> > > In my eyes they are equivalent, aren't they?
+> > > 
+> > 
+> > I was in a bit of a rush today & didn't have time to do proper
+> > debugging, I'll put some debug code in tomorrow and try to find
+> > exactly what is different between the two.
+> > 
+> > Off the top of my head, since I don't have a board on me to test,
+> > the only difference I can see is that with the snippet you only
+> > checked if spi_sync_transfer was negative whereas now you check
+> > if it has a value at all w/ that ternary operator.
+> > 
+> > But even that seems like it *shouldn't* be the problem, since ret
+> > should contain -errno or zero, right?
+> > Either way, I will do some digging tomorrow.
+> 
+> I put a printk("status %x, ret %d", status, ret); into the failure
+> path of mpf_read_status() & it looks like a status 0xA is being
+> returned - error & ready? That seems like a very odd combo to be
+> getting back out of it. It shouldn't be dodgy driver/connection
+> either, b/c that's what I see if I connect my protocol analyser:
+> https://i.imgur.com/VbjgfCk.png
+> 
+> That's mosi (hex), ss, sclk, mosi, miso (hex), miso in descending
+> order.
+> 
+> I think what was happening was with the snippet you returned one
+> of the following: -EBUSY, ret (aka -errno) or status. Since status
+> is positive, the checks in mpf_spi_write.*() saw nothing wrong at
+> all and programming continued despite there being a problem.
+> 
+> The new version fixes this by returning -EIO rather than status from
+> poll_status_not_busy().
+> 
+> I wish I had a socketable PolarFire so I could investigate further,
+> but this looks like it might a be hardware issue somewhere on my
+> end?
+> 
+> So ye, sorry for the noise and carry on! I'll try tofind what is to
+> blame for it.
+> 
+> Thanks,
+> Conor.
+> 
 
-Hi all,
+Hi, Conor.
 
-After merging the mm tree, today's linux-next build (sparc64 defconfig)
-failed like this:
+I've just noticed in SPI-DirectC User Guide [1] ch. 9 SmartFusion2 and
+IGLOO2 SPI-Slave Programming Waveform Analysis, that hw status checked
+two times every time. Does MPF family also need double check hw status?
+Does adding second mpf_read_status() to poll_status_not_busy() routine
+help with your issue?
 
-In file included from include/linux/hugetlb.h:757,
-                 from arch/sparc/mm/hugetlbpage.c:11:
-arch/sparc/include/asm/hugetlb.h: In function 'huge_ptep_clear_flush':
-arch/sparc/include/asm/hugetlb.h:27:1: error: no return statement in functi=
-on returning non-void [-Werror=3Dreturn-type]
-   27 | }
-      | ^
-
-(and many more)
-
-Caused by commit
-
-  083af99303b9 ("mm: change huge_ptep_clear_flush() to return the original =
-pte")
-
-I applied the following hack to make it build.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 11 May 2022 18:10:56 +1000
-Subject: [PATCH] fix up for "mm: change huge_ptep_clear_flush() to return t=
-he original pte"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- arch/sparc/include/asm/hugetlb.h | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/sparc/include/asm/hugetlb.h b/arch/sparc/include/asm/huge=
-tlb.h
-index b50aa6f8f9ab..0a26cca24232 100644
---- a/arch/sparc/include/asm/hugetlb.h
-+++ b/arch/sparc/include/asm/hugetlb.h
-@@ -24,6 +24,7 @@ pte_t huge_ptep_get_and_clear(struct mm_struct *mm, unsig=
-ned long addr,
- static inline pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
- 					  unsigned long addr, pte_t *ptep)
- {
-+	return *ptep;
- }
-=20
- #define __HAVE_ARCH_HUGE_PTEP_SET_WRPROTECT
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/J+y7q7vuvY==dwLKkKUlYze
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ7cKMACgkQAVBC80lX
-0Gym7wf/XNKVY2qjh09VsvjnYKVVrvGP58LiYynPpbjCuwAQrM/o4B/bQy+7jjxJ
-daXgGe5PdGfGzdKhgshQmmm+x5JUyAMZmk7+/ldutnk0g77YJzZOHsRPMZVEAkgd
-rqZxl2W+FOpV9wL9nlI4LZk0ek+bi1icyu1YIgXr+H+I5NmGCzGbCF4a6lJB6McO
-/RycjMgPrNYp6XO6PDWq+IWEIbKX1yEkklveStv8FlTtoznRIDPx9cfTA4lKz/Nh
-025VoADugEXKkLFO6P9Ubg3sOfPzqIDsoO5C+SML3vK67nsvgyk9WlulBpyRYbTr
-CK/Vnh2H47WqAgeoIZSh3mMygtXYgQ==
-=XfcZ
------END PGP SIGNATURE-----
-
---Sig_/J+y7q7vuvY==dwLKkKUlYze--

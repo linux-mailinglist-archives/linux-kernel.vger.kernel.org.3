@@ -2,96 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9232522C70
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF4E522C74
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:38:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242182AbiEKGhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 02:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44154 "EHLO
+        id S239627AbiEKGie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 02:38:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234462AbiEKGhg (ORCPT
+        with ESMTP id S234462AbiEKGi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 02:37:36 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFCB102754;
-        Tue, 10 May 2022 23:37:35 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id fv2so1321673pjb.4;
-        Tue, 10 May 2022 23:37:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZfSoPNQMQ3JtFIIIzzgju0SL8LR4iC7N17yQ0q5g1Gw=;
-        b=QvBv2UfaGGwqFWNY/pqXIZh/GYk8NUG2EtFqNMhHJItgzyGdcST13XjgT+C51QFIu0
-         wVRUAFagaBzJS1NQ19RnmAjO8E1K4w1zVumajYnd6dT4tvhMTgjaIX7mVrzFjuN+MdQ6
-         AjoMhKZnuR5eE4T4wrSqyPkP3cXhfYhVrdfRL9sQmy5ouvNWLQ4VowVZn9rznHpkBK7/
-         IbTWBK86znT2+Ma8LKDyx2Et/AwRVPK/pYs0za6VXQeQA/Rk5lUCqkV6hlnQYeLCB42U
-         4R5LHx5APkIlgmoX2sHMd6JXdI4qUVaEyN4kplZmkr75KP4eCOHxu7vORlx1aPvDjwnL
-         dl9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZfSoPNQMQ3JtFIIIzzgju0SL8LR4iC7N17yQ0q5g1Gw=;
-        b=ZUuiyiFAudULwR9dd5iPpX7P8erZv+bFFa04a7O89XUvqY4O1DJtD1XhvykXYKygW8
-         hNuB3JrrRlM/geePetWuEsQcexEHwqTjoIA1Z/1Ds5nFpRn8zPkIYYLVrIcLvLY29W9O
-         GkOY2KQI0RstTmmLeO1lvM52OBQ1jhogKvPOPBjvOrUBXTd02zpuYy/rfbLmtJU8dhvp
-         Ex90+8PLduGPwjzvcRDZse0EAQYDE7HrP/Jjs7wMaMNV0Afcc4s333qI7+TcfzPK1U5r
-         vJo/54X71FTXbM90hOKVoE/xgZv9P59HYSx1xANrBQYMhght1YopEvl19HKSlh6Fe8Zb
-         QbYg==
-X-Gm-Message-State: AOAM533UrhfNs81fidfOTIx+Pw87CdGcErBC84s49bKTi7V92xiSvzn2
-        ksJ3lBkS0+HnwL24wOZtKCI=
-X-Google-Smtp-Source: ABdhPJwgwpaW/4sIrJ2DtPGOF3tg6+/fSjpKZf+P2/qrsXRtPAFe1BSQEXPb0SCMKuAXhX1wdnAmWg==
-X-Received: by 2002:a17:90a:1509:b0:1d9:44a9:28c7 with SMTP id l9-20020a17090a150900b001d944a928c7mr3760102pja.89.1652251054890;
-        Tue, 10 May 2022 23:37:34 -0700 (PDT)
-Received: from localhost (subs02-180-214-232-26.three.co.id. [180.214.232.26])
-        by smtp.gmail.com with ESMTPSA id t67-20020a628146000000b0050dc762814asm732056pfd.36.2022.05.10.23.37.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 23:37:34 -0700 (PDT)
-Date:   Wed, 11 May 2022 13:37:31 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Pavel Pisa <pisa@cmp.felk.cvut.cz>,
-        Martin Jerabek <martin.jerabek01@gmail.com>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] docs: ctucanfd: Use 'kernel-figure' directive
- instead of 'figure'
-Message-ID: <YntZqxuLSci6f8Z+@debian.me>
-References: <05d491d4-c498-9bab-7085-9c892b636d68@gmail.com>
+        Wed, 11 May 2022 02:38:29 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B817513B8C3;
+        Tue, 10 May 2022 23:38:26 -0700 (PDT)
+Received: from [192.168.0.3] (ip5f5aeb08.dynamic.kabel-deutschland.de [95.90.235.8])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 4F8BB61E6478B;
+        Wed, 11 May 2022 08:38:25 +0200 (CEST)
+Message-ID: <d5aecbb9-a897-9423-833f-432907b5be87@molgen.mpg.de>
+Date:   Wed, 11 May 2022 08:38:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <05d491d4-c498-9bab-7085-9c892b636d68@gmail.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] md: remove useless INIT_LIST_HEAD()
+Content-Language: en-US
+To:     Haowen Bai <baihaowen@meizu.com>
+Cc:     Song Liu <song@kernel.org>, linux-raid@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1652237069-11486-1-git-send-email-baihaowen@meizu.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <1652237069-11486-1-git-send-email-baihaowen@meizu.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 06:34:37PM +0900, Akira Yokosawa wrote:
-> Two issues were observed in the ReST doc added by commit c3a0addefbde
-> ("docs: ctucanfd: CTU CAN FD open-source IP core documentation.").
+Dear Haowen,
+
+
+Thank you for your patch.
+
+Am 11.05.22 um 04:44 schrieb Haowen Bai:
+> list candidates has been inited staticly through LIST_HEAD,
+
+initialized statically
+
+> so there's no need to call another INIT_LIST_HEAD. Simply remove
+> it.
+
+Please reflow for 75 characters per line.
+
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> ---
+>   drivers/md/md.c | 1 -
+>   1 file changed, 1 deletion(-)
 > 
-> The plain "figure" directive broke "make pdfdocs" due to a missing
-> PDF figure.  For conversion of SVG -> PDF to work, the "kernel-figure"
-> directive, which is an extension for kernel documentations, should
-> be used instead.
-> 
+> diff --git a/drivers/md/md.c b/drivers/md/md.c
+> index 707e802d0082..eb2b23ef5ecc 100644
+> --- a/drivers/md/md.c
+> +++ b/drivers/md/md.c
+> @@ -6491,7 +6491,6 @@ static void autorun_devices(int part)
+>   					 struct md_rdev, same_set);
+>   
+>   		pr_debug("md: considering %s ...\n", bdevname(rdev0->bdev,b));
+> -		INIT_LIST_HEAD(&candidates);
+>   		rdev_for_each_list(rdev, tmp, &pending_raid_disks)
+>   			if (super_90_load(rdev, rdev0, 0) >= 0) {
+>   				pr_debug("md:  adding %s ...\n",
 
-Does plain "figure" directive not currently support SVG file argument?
-Because when I see reST documentation ([1]), it doesn't explicitly
-mentioned supported image formats.
 
-[1]: https://docutils.sourceforge.io/docs/ref/rst/directives.html#figure
+Kind regards,
 
--- 
-An old man doll... just what I always wanted! - Clara
+Paul

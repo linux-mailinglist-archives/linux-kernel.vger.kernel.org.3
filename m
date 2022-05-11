@@ -2,74 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61CC45228E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 03:23:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F13DC5228F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 03:28:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234986AbiEKBXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 21:23:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43468 "EHLO
+        id S240581AbiEKB00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 21:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiEKBXj (ORCPT
+        with ESMTP id S240474AbiEKB0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 21:23:39 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CEF9994C4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 18:23:35 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R421e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VCt7iBt_1652232209;
-Received: from 30.30.99.144(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCt7iBt_1652232209)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 11 May 2022 09:23:31 +0800
-Message-ID: <278d1d30-a7ad-11df-5242-5472a841a3b3@linux.alibaba.com>
-Date:   Wed, 11 May 2022 09:24:09 +0800
+        Tue, 10 May 2022 21:26:10 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE764D9E4;
+        Tue, 10 May 2022 18:26:08 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id z2so1124270ejj.3;
+        Tue, 10 May 2022 18:26:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PvfiOTtqCMinHntPJghe2tAinuCO5v0PtBVLPwSQ7Xw=;
+        b=IT2YsSa+KlFPxWLz7VYVpluaeuLBPZsvknp7OYOsCNpwO7y03s3I7DTdKHN3FAiQ2Z
+         bG0d3yiMua3KShteUyfkcgWogjO54PWDWRmU/NOUzvCviM3QASQel/nUeDiIRe+wV0vf
+         jkkkkHn6pdQ8/ELxLmMcnn5PkGTWfHvif2xUcIAsc2H5yD20H8R4oLaKgPmzFzHjibd6
+         Q+5bFHzeNUVTBJxjZq9LuzTcF5rjOXHtT+LBgJHXhZ8D9gPgQKDpVhe/XzamM97dI294
+         qQ/9PXi2vahzo6x121R3xqgSxImmoyqictKFjqSFsSIc1OVfwz4sVKz/5lYnmZsR9uxG
+         lJvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PvfiOTtqCMinHntPJghe2tAinuCO5v0PtBVLPwSQ7Xw=;
+        b=xfKNNfuIvukH/30qtiD0PuZBLjq3WFCDc9KwTGyNNtL2ewTKwXqWz3X30yhil1Hluu
+         /DPlLjXjAjcG0A57eMcKw7EvVGGeMI10q5qBnpoMkx0YSzKU4bbnMY8uzIVv2Ek85xhh
+         wmycHxsN/CdVQhPQM30RQvXenZ3ts1IBQnJBA4KSXtYp0Ra/EyPn5rs2pgzzDc9LZYRY
+         sMB2h8czCKy8XJFguHVrgcUeLtXIg1G5rWCTzBH2ttvuJr8H91VdAnuk+mxC+LkEW/Ac
+         QQ0XUYB488mP32WD9HZTdqzVThnTK73lK6GKjcyEkg0mZAdkL7nqHN8S3LcgYPrlgcpH
+         zjfg==
+X-Gm-Message-State: AOAM533j7Qr2kZ5swaLYjIiY9sq21Xh82EmsM37iXjo0KIuXcZvChoJB
+        jGCcMp70y2BrXWGngUT6/a894NTyw3LH9/n/BNo=
+X-Google-Smtp-Source: ABdhPJy2UWzt9+ZBfW/ZU9LjONSYUHdkm5v6PfxnlnbjActnnTufr6GAZLz3AITobYht4uWyazqi7RihJuJFOqFEKd0=
+X-Received: by 2002:a17:906:1845:b0:6f4:346f:f767 with SMTP id
+ w5-20020a170906184500b006f4346ff767mr21292457eje.214.1652232367153; Tue, 10
+ May 2022 18:26:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/2] arm64/hugetlb: Use ptep_get() to get the pte value of
- a huge page
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org, mike.kravetz@oracle.com,
-        akpm@linux-foundation.org, willy@infradead.org,
-        anshuman.khandual@arm.com, christophe.leroy@csgroup.eu,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <cover.1652180088.git.baolin.wang@linux.alibaba.com>
- <6aabddaf4cae5ae2205c3a7df9b9e15dbd61b641.1652180088.git.baolin.wang@linux.alibaba.com>
- <YnqK+Hah0wzMvT1p@FVFYT0MHHV2J.usts.net>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <YnqK+Hah0wzMvT1p@FVFYT0MHHV2J.usts.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220509111126.7032-1-max.oss.09@gmail.com> <20220509111126.7032-4-max.oss.09@gmail.com>
+In-Reply-To: <20220509111126.7032-4-max.oss.09@gmail.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Tue, 10 May 2022 22:25:55 -0300
+Message-ID: <CAOMZO5B1ESLpmK3fM9CzqYEWz969BajPAEbetofC4rDxg5V+dw@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] ARM: dts: imx6qdl-colibri: backlight pwm: Simplify
+ inverted backlight
+To:     Max Krummenacher <max.oss.09@gmail.com>
+Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 9, 2022 at 8:12 AM Max Krummenacher <max.oss.09@gmail.com> wrote:
+>
+> From: Max Krummenacher <max.krummenacher@toradex.com>
+>
+> Set #pwm-cells to the default 3 to gain access to the parameter
+> which allows inverting the PWM signal. This is useful to specify
+> a backlight which has its highest brightness at 0.
+>
+> Also adapt the brightness steps as the backlight doesn't light up
+> for very low duty cycles.
 
-
-On 5/10/2022 11:55 PM, Muchun Song wrote:
-> On Tue, May 10, 2022 at 07:12:52PM +0800, Baolin Wang wrote:
->> The original huge_ptep_get() on ARM64 is just a wrapper of ptep_get(),
->> which will not take into account any contig-PTEs dirty and access bits.
->> Meanwhile we will implement a new ARM64-specific huge_ptep_get()
->> interface in following patch, which will take into account any contig-PTEs
->> dirty and access bits and only be allowed to pass the head pte of
->> a contig-PTE/PMD size page.
-> 
-> IIUC, the huge_ptep_get() you have implemented in patch 2 could
-> handle non-head pte. It'll return the original pte without potential
-> AD bit. I admit it is more efficeent to use ptep_get() directly,
-> but the judgement here should be updated.
-
-Ah, right. I missed the 'ncontig' will be 0 if a non-head pte passed. 
-Will update the commit message in next version. Thanks for reviewing.
-
-> 
-> With this update.
-> 
-> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+This should probably be a different patch.

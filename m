@@ -2,153 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E3F9523345
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 14:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 948AC523348
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 14:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240984AbiEKMmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 08:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53088 "EHLO
+        id S242656AbiEKMnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 08:43:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbiEKMmO (ORCPT
+        with ESMTP id S231299AbiEKMm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 08:42:14 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9A4173F311;
-        Wed, 11 May 2022 05:42:12 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 72402ED1;
-        Wed, 11 May 2022 05:42:12 -0700 (PDT)
-Received: from [10.57.80.111] (unknown [10.57.80.111])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8555C3F66F;
-        Wed, 11 May 2022 05:42:09 -0700 (PDT)
-Message-ID: <b0b92bdd-9ebe-8ce9-abe3-1f4d05a838dc@arm.com>
-Date:   Wed, 11 May 2022 13:42:02 +0100
+        Wed, 11 May 2022 08:42:57 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8E03F89A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 05:42:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652272976; x=1683808976;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=GFhebHzBmdSTAm8X/ZQTSJF1RxXHbmrgrGWBEpfUvdY=;
+  b=bwqZDJMDCIidXiSPLgz5K81TMo0TumujtP6zkCsD6Hu3Z54zFt7Scx9q
+   VmvMRxHM0iiaGHUFJ7IxLW42a9rC8pRVbr/VWnhuD2seFHuWRvvOY4qXN
+   JFXfj3Oq1Sy09Zz2z1SEl3NM55NGXMwTkUh+MvvrsC2L+P7pHNTRqSEcO
+   GxUkuTi4IlRCn+tAik1Tko/QNPG0ARFlCKYW3MtdtAnkrHhe33PRa34QC
+   nzMrzErEmdal/zLc8SZ8hTDgITuhFt0HNcVzVGC6Bkutovkt4sNW/1nEk
+   ruDpacG/A4vN66Drd80x9exdzzD2/QSyhW+e9L0zQ47/697HA4HtvXfd1
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="257230095"
+X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
+   d="scan'208";a="257230095"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 05:42:56 -0700
+X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
+   d="scan'208";a="739204285"
+Received: from mstribae-mobl1.ger.corp.intel.com (HELO [10.249.254.135]) ([10.249.254.135])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 05:42:53 -0700
+Message-ID: <3ce81c514959e43f5afd7e74489dd5b89b1cd633.camel@linux.intel.com>
+Subject: Re: [PATCH 3/4] drm/i915: allow volatile buffers to use ttm pool
+ allocator
+From:   Thomas =?ISO-8859-1?Q?Hellstr=F6m?= 
+        <thomas.hellstrom@linux.intel.com>
+To:     Robert Beckett <bob.beckett@collabora.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Matthew Auld <matthew.auld@intel.com>, linux-kernel@vger.kernel.org
+Date:   Wed, 11 May 2022 14:42:51 +0200
+In-Reply-To: <20220503191316.1145124-4-bob.beckett@collabora.com>
+References: <20220503191316.1145124-1-bob.beckett@collabora.com>
+         <20220503191316.1145124-4-bob.beckett@collabora.com>
+Organization: Intel Sweden AB, Registration Number: 556189-6027
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-3.fc34) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 0/2] perf: ARM CoreSight PMU support
-Content-Language: en-GB
-To:     Besar Wicaksono <bwicaksono@nvidia.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "thanu.rangarajan@arm.com" <thanu.rangarajan@arm.com>,
-        "Michael.Williams@arm.com" <Michael.Williams@arm.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Vikram Sethi <vsethi@nvidia.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-References: <20220509002810.12412-1-bwicaksono@nvidia.com>
- <20220509092843.GB26264@willie-the-truck>
- <2e5e09f9-b71b-d936-e291-db8f94554b18@arm.com>
- <20220510110742.ievkihggndpms3fn@bogus>
- <20220510111318.GD27557@willie-the-truck>
- <20220510184025.iwgknfqe5ygz4jwn@bogus>
- <SJ0PR12MB5676E68453A977F1220FF7AFA0C89@SJ0PR12MB5676.namprd12.prod.outlook.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <SJ0PR12MB5676E68453A977F1220FF7AFA0C89@SJ0PR12MB5676.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-11 02:29, Besar Wicaksono wrote:
-> 
-> 
->> -----Original Message-----
->> From: Sudeep Holla <sudeep.holla@arm.com>
->> Sent: Tuesday, May 10, 2022 1:40 PM
->> To: Besar Wicaksono <bwicaksono@nvidia.com>
->> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>; Will Deacon
->> <will@kernel.org>; Sudeep Holla <sudeep.holla@arm.com>;
->> catalin.marinas@arm.com; mark.rutland@arm.com; linux-arm-
->> kernel@lists.infradead.org; linux-kernel@vger.kernel.org; linux-
->> tegra@vger.kernel.org; thanu.rangarajan@arm.com;
->> Michael.Williams@arm.com; Thierry Reding <treding@nvidia.com>; Jonathan
->> Hunter <jonathanh@nvidia.com>; Vikram Sethi <vsethi@nvidia.com>;
->> Mathieu Poirier <mathieu.poirier@linaro.org>
->> Subject: Re: [PATCH 0/2] perf: ARM CoreSight PMU support
->>
->> External email: Use caution opening links or attachments
->>
->>
->> On Tue, May 10, 2022 at 12:13:19PM +0100, Will Deacon wrote:
->>> On Tue, May 10, 2022 at 12:07:42PM +0100, Sudeep Holla wrote:
->>>> On Mon, May 09, 2022 at 11:02:23AM +0100, Suzuki K Poulose wrote:
->>>>> Cc: Mike Williams, Mathieu Poirier
->>>>> On 09/05/2022 10:28, Will Deacon wrote:
->>>>>> On Sun, May 08, 2022 at 07:28:08PM -0500, Besar Wicaksono wrote:
->>>>>>>    arch/arm64/configs/defconfig                  |    1 +
->>>>>>>    drivers/perf/Kconfig                          |    2 +
->>>>>>>    drivers/perf/Makefile                         |    1 +
->>>>>>>    drivers/perf/coresight_pmu/Kconfig            |   10 +
->>>>>>>    drivers/perf/coresight_pmu/Makefile           |    7 +
->>>>>>>    .../perf/coresight_pmu/arm_coresight_pmu.c    | 1317
->> +++++++++++++++++
->>>>>>>    .../perf/coresight_pmu/arm_coresight_pmu.h    |  147 ++
->>>>>>>    .../coresight_pmu/arm_coresight_pmu_nvidia.c  |  300 ++++
->>>>>>>    .../coresight_pmu/arm_coresight_pmu_nvidia.h  |   17 +
->>>>>>>    9 files changed, 1802 insertions(+)
->>>>>>
->>>>>> How does this interact with all the stuff we have under
->>>>>> drivers/hwtracing/coresight/?
->>>>>
->>>>> Absolutely zero, except for the name. The standard
->>>>> is named "CoreSight PMU" which is a bit unfortunate,
->>>>> given the only link, AFAIU, with the "CoreSight" architecture
->>>>> is the Lock Access Register(LAR). For reference, the
->>>>> drivers/hwtracing/coresight/ is purely "CoreSight" self-hosted
->>>>> tracing and the PMU is called "cs_etm" (expands to coresight etm).
->>>>> Otherwise the standard doesn't have anything to do with what
->>>>> exists already in the kernel.
->>>
->>> That's... a poor naming choice! But good, if it's entirely separate then I
->>> don't have to worry about that. Just wanted to make sure we're not going
->> to
->>> get tangled up in things like ROM tables and Coresight power domains for
->>> these things.
->>>
->>
->> OK, now that triggered another question/thought.
->>
->> 1. Do you need to do active power management for these PMUs ? Or like
->>     CPU PMUs, do you reject entering low power states if there is active
->>     session in progress. If there is active session, runtime PM won't get
->>     triggered but if there is system wide suspend, how is that dealt with ?
->>
-> 
-> Looking at the other uncore/system PMUs, none of the drivers support PM ops.
-> NVIDIA system PMU also does not get power gated and system suspend is not
-> supported. But just like other uncore PMU driver, this driver supports CPU hotplug.
-> If PM is needed, the required info should have been expressed in ACPI.
-> 
->> 2. Assuming you need some sort of PM, and since this is static table(which
->>     I really don't like/prefer but it is out there 🙁), how do you plan to
->>     get the power domain related information.
->>
-> 
-> I guess the APMT spec in section 2.2 may cover this. If a PMU implementation has
-> properties beyond what is defined in the spec, these properties can be described in DSDT.
-> The driver doesn’t take care of this currently, so this is a room for future improvement.
+Hi, Bob,
 
-Yes, I assume it's essentially the same story as for MPAM MSCs in this 
-respect. Plus it means that MSI support will be similarly fun, where 
-we'll need to have a corresponding DSDT device via which we can request 
-the interrupt, because that needs to further correlate to an IORT Named 
-Component node describing the ITS mapping. Hopefully we can abstract 
-some of that in the APMT code rather than expose it all to the PMU 
-driver...
+On Tue, 2022-05-03 at 19:13 +0000, Robert Beckett wrote:
+> internal buffers should be shmem backed.
+> if a volatile buffer is requested, allow ttm to use the pool
+> allocator
+> to provide volatile pages as backing
+> 
+> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+> ---
+>  drivers/gpu/drm/i915/gem/i915_gem_ttm.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+> b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+> index 4c25d9b2f138..fdb3a1c18cb6 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+> @@ -309,7 +309,8 @@ static struct ttm_tt *i915_ttm_tt_create(struct
+> ttm_buffer_object *bo,
+>                 page_flags |= TTM_TT_FLAG_ZERO_ALLOC;
+>  
+>         caching = i915_ttm_select_tt_caching(obj);
+> -       if (i915_gem_object_is_shrinkable(obj) && caching ==
+> ttm_cached) {
+> +       if (i915_gem_object_is_shrinkable(obj) && caching ==
+> ttm_cached &&
+> +           !i915_gem_object_is_volatile(obj)) {
+>                 page_flags |= TTM_TT_FLAG_EXTERNAL |
+>                               TTM_TT_FLAG_EXTERNAL_MAPPABLE;
+>                 i915_tt->is_shmem = true;
 
-Robin.
+While this is ok, I think it also needs adjustment in the i915_ttm
+shrink callback. If someone creates a volatile smem object which then
+hits the shrinker, I think we might hit asserts that it's a is_shem
+ttm?
+
+In this case, the shrink callback should just i915_ttm_purge().
+
+/Thomas
+
+

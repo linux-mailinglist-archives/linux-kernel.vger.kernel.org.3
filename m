@@ -2,155 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE6C522A10
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 04:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCFEA522A0A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 04:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236358AbiEKCst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 22:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59452 "EHLO
+        id S232086AbiEKCsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 22:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243183AbiEKCjz (ORCPT
+        with ESMTP id S243348AbiEKCkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 22:39:55 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8282920F4C4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 19:39:54 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id k2so1003380wrd.5
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 19:39:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=KimymyJktXOor657BlbrRRjA7HWKVOcx61gbNhrB/7o=;
-        b=ZTskdwHe7UUDxCjjzUIP50Srj0RKN2OBSf66044H+HXptMv9A605OSh25vJ7YOdG+P
-         8CWFNQSjC2CX4AMryGeDeVV/PLLXxV1NLtCivoeweCvK1w2iEyV8sdWQ666XzLfFtrY+
-         67SgDnkPzBDpl5rbl639zMJ/yn2uOnWvm9s5Q=
+        Tue, 10 May 2022 22:40:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B62920EE3B
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 19:40:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652236832;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4rsScbuPuNJutA0AJwuwsA+ysprCiaTZ/68Y1lfAnjY=;
+        b=EtK41e8XodKyi6LBr/oCEz3RJ5KKM45ydTzB+T13qEtyoEO1dM4vt6hwpz2WJTE1VehiOA
+        0+NBuLzb0709hcmzJJJironSeRWL3Ddx+xyVAV3aSsStIcokfi++MfG4Aj8Oj3xExendbc
+        SB8P9TzepQmr9Kvdw0FPvrouIaXEKho=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-528-LHez9YA0OSahYT54E_bJbw-1; Tue, 10 May 2022 22:40:24 -0400
+X-MC-Unique: LHez9YA0OSahYT54E_bJbw-1
+Received: by mail-lf1-f69.google.com with SMTP id i8-20020a0565123e0800b004725f87c5f2so294528lfv.1
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 19:40:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=KimymyJktXOor657BlbrRRjA7HWKVOcx61gbNhrB/7o=;
-        b=ht+DzSMSAcecn+tpIF/Evj0/UrsKKP+ck7dOqOEmCuDmge/a9CGIHs7zKqZaU56YCM
-         GZwmoyT5zx0JunvykfjE3hAcwB7lmmoHj8XdhUfKWeJOM4W/JFpqySoKzMWQuVDTcsJT
-         OPwgtPUFQiZo7eNY2IWek4hAp3Qw4aJkptO4yqh8udiKgoFs5x4lr42oci1eO76IUHqG
-         1ZYISxWtT6iKNsk3fEkBgM3rCqTumWc6H9135w1TL3NcvoBA1KHh7j/w7Be9iQTiIsBH
-         VsyZ9GatAwWiU69kRcSAcATGH4pDihw00+5f7TGM2TUnKd9sKylj0h7tr1LGf7Btqqv2
-         Rgtw==
-X-Gm-Message-State: AOAM530+EcNZw+E4mkCD1J17Rmm5NO5Sf4IdFhfYM1BZWZRca5srrDpM
-        QgCvd0yIM2sKm5WZFxArXPsBq8fvrcUmTLN4at6u6g==
-X-Google-Smtp-Source: ABdhPJyE21AqoP29m/WgP+FLL3uuTZ5ahlHZq51uPrAhbthHgig5xYN633m5PWpnaxVRM9I3YPxOQ1caQeVnDqhrN+Y=
-X-Received: by 2002:adf:fb03:0:b0:20a:e253:b8c7 with SMTP id
- c3-20020adffb03000000b0020ae253b8c7mr20282047wrr.119.1652236792930; Tue, 10
- May 2022 19:39:52 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=4rsScbuPuNJutA0AJwuwsA+ysprCiaTZ/68Y1lfAnjY=;
+        b=4jwEiS1+RhuFxxNuhfL80kUcrZl9bInXtPJ69mF/V8qT04iG4tstC5Ok4SMu+tvqFG
+         nDRNtRiJXHnWfuoqFiH1bKt1CJK1dHOq5mz3UIL7fBrbfW8zJg4PWKpOn+BQguasVNxO
+         PIBaOg7h4zEurygNL4F8Et7IBDcJ2yIfVjcrMgtj6efwlI8QlPMMLaaLlLf57/QVFtgJ
+         TV22aJ5PkMayNv+A6bTnvdJhdqNsJFQHClcsV8ganIbCaRgXXuJdsYpcziaIM5WrxxaO
+         FmQ8Wzoozv7PbhnCEnwLMLwA1lIAQN1dAmUok+emxVCqpWL4AYpj5TTAFnGlT7lWW9Se
+         3wdQ==
+X-Gm-Message-State: AOAM530SlLrWgxlfF1B5BcJ9eloZjIY0RIR5B1DVfdIF9CYpam/AsPvV
+        lAbMi/JuYDetx6QGztkvWW029qe0+qDcoLp2oU+vHBUTHYSKYRp9DJMQRU+xo0xLwTnKSRTZulL
+        uImslWfXWO2QzMlih1B+nO8cbcu3W1jTsotU4vsYY
+X-Received: by 2002:a05:6512:33d0:b0:473:a25e:f9fb with SMTP id d16-20020a05651233d000b00473a25ef9fbmr18536561lfg.98.1652236822576;
+        Tue, 10 May 2022 19:40:22 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyXPhsS7aZArFqRm1KQv3WcIM3fpOGbBNyqmSsuzU0vfQIcoWpVROQBx3w5Yryj7t+vM1cSBoexVRWIu8KK29c=
+X-Received: by 2002:a05:6512:33d0:b0:473:a25e:f9fb with SMTP id
+ d16-20020a05651233d000b00473a25ef9fbmr18536556lfg.98.1652236822393; Tue, 10
+ May 2022 19:40:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220330090947.9100-1-chenxiangrui@huaqin.corp-partner.google.com>
- <a0eb6bf9-256a-29b1-2211-496df710f531@linaro.org> <CAD=FV=UjyLofXZqnj=bL89fza5JS6O5Np9W-A4V4WK+na0hdrw@mail.gmail.com>
- <b7ff08b8-60fb-7629-9399-3d5cca46ab9e@linaro.org> <CAD=FV=Vx5g_xTRZGc9wW=ZLnfsOcubTYFcnYQRC5jLm+n3en0w@mail.gmail.com>
- <606cc762-a0c2-49a4-3e5d-d2dbd4595bc7@linaro.org> <CAD=FV=W_SA-3PfDFi-Gkjk9pew5bchFNjQhXX8MkZyuy5UohEQ@mail.gmail.com>
- <CAJKOXPdt5WTg4VU-TEW3dmPHR76dKg63XVxRQfa7ZSKc_jz6Ag@mail.gmail.com>
- <CAD=FV=XQqQSQDNh-zXqEQkwsrax5Qb3OtfKZoQLkncJj_4mcQw@mail.gmail.com>
- <daf66d41-42ac-50dc-3f8d-c261da8e452d@linaro.org> <CAD=FV=WhA=n_=Ys6NfedPtNPddL81HnG6Qws_R+vq9w8Nrsn5A@mail.gmail.com>
- <ce2ea308-b63d-ad27-4cea-7353268f8ebb@linaro.org>
-In-Reply-To: <ce2ea308-b63d-ad27-4cea-7353268f8ebb@linaro.org>
-From:   Julius Werner <jwerner@chromium.org>
-Date:   Tue, 10 May 2022 19:39:41 -0700
-Message-ID: <CAODwPW857CkH0+ZnBaUeowW4te-hSy6nrdeeX6-OLPOs5TptsQ@mail.gmail.com>
-Subject: Re: [PATCH] CHROMIUM: arm64: dts: qcom: Add sc7180-gelarshie
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        =?UTF-8?Q?Krzysztof_Koz=C5=82owski?= <k.kozlowski.k@gmail.com>,
-        Mars Chen <chenxiangrui@huaqin.corp-partner.google.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Julius Werner <jwerner@chromium.org>
+References: <20220507071954.14455-1-jasowang@redhat.com> <20220507071954.14455-9-jasowang@redhat.com>
+ <20220510072833-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220510072833-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 11 May 2022 10:40:11 +0800
+Message-ID: <CACGkMEtBfdhx-9CMKD0F4+536e5ewf6NQJGPTEBX00uby-C8+w@mail.gmail.com>
+Subject: Re: [PATCH V4 8/9] virtio: harden vring IRQ
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        eperezma <eperezma@redhat.com>, Cindy Lu <lulu@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Wait, we agreed that you don't consider them identical, didn't we? If
-> they are identical, you do not need rev4 at all. So they are not
-> identical...
+On Tue, May 10, 2022 at 7:32 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Sat, May 07, 2022 at 03:19:53PM +0800, Jason Wang wrote:
+> > This is a rework on the previous IRQ hardening that is done for
+> > virtio-pci where several drawbacks were found and were reverted:
+> >
+> > 1) try to use IRQF_NO_AUTOEN which is not friendly to affinity managed IRQ
+> >    that is used by some device such as virtio-blk
+> > 2) done only for PCI transport
+> >
+> > The vq->broken is re-used in this patch for implementing the IRQ
+> > hardening. The vq->broken is set to true during both initialization
+> > and reset. And the vq->broken is set to false in
+> > virtio_device_ready(). Then vring_interrupt can check and return when
+> > vq->broken is true. And in this case, switch to return IRQ_NONE to let
+> > the interrupt core aware of such invalid interrupt to prevent IRQ
+> > storm.
+> >
+> > The reason of using a per queue variable instead of a per device one
+> > is that we may need it for per queue reset hardening in the future.
+> >
+> > Note that the hardening is only done for vring interrupt since the
+> > config interrupt hardening is already done in commit 22b7050a024d7
+> > ("virtio: defer config changed notifications"). But the method that is
+> > used by config interrupt can't be reused by the vring interrupt
+> > handler because it uses spinlock to do the synchronization which is
+> > expensive.
+> >
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> > Cc: Marc Zyngier <maz@kernel.org>
+> > Cc: Halil Pasic <pasic@linux.ibm.com>
+> > Cc: Cornelia Huck <cohuck@redhat.com>
+> > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > ---
+> >  drivers/virtio/virtio.c       | 15 ++++++++++++---
+> >  drivers/virtio/virtio_ring.c  | 11 +++++++----
+> >  include/linux/virtio_config.h | 12 ++++++++++++
+> >  3 files changed, 31 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
+> > index 8dde44ea044a..696f5ba4f38e 100644
+> > --- a/drivers/virtio/virtio.c
+> > +++ b/drivers/virtio/virtio.c
+> > @@ -220,6 +220,15 @@ static int virtio_features_ok(struct virtio_device *dev)
+> >   * */
+> >  void virtio_reset_device(struct virtio_device *dev)
+> >  {
+> > +     /*
+> > +      * The below virtio_synchronize_cbs() guarantees that any
+> > +      * interrupt for this line arriving after
+> > +      * virtio_synchronize_vqs() has completed is guaranteed to see
+> > +      * driver_ready == false.
+> > +      */
+> > +     virtio_break_device(dev);
+> > +     virtio_synchronize_cbs(dev);
+> > +
+> >       dev->config->reset(dev);
+> >  }
+> >  EXPORT_SYMBOL_GPL(virtio_reset_device);
+> > @@ -428,6 +437,9 @@ int register_virtio_device(struct virtio_device *dev)
+> >       dev->config_enabled = false;
+> >       dev->config_change_pending = false;
+> >
+> > +     INIT_LIST_HEAD(&dev->vqs);
+> > +     spin_lock_init(&dev->vqs_list_lock);
+> > +
+> >       /* We always start by resetting the device, in case a previous
+> >        * driver messed it up.  This also tests that code path a little. */
+> >       virtio_reset_device(dev);
+> > @@ -435,9 +447,6 @@ int register_virtio_device(struct virtio_device *dev)
+> >       /* Acknowledge that we've seen the device. */
+> >       virtio_add_status(dev, VIRTIO_CONFIG_S_ACKNOWLEDGE);
+> >
+> > -     INIT_LIST_HEAD(&dev->vqs);
+> > -     spin_lock_init(&dev->vqs_list_lock);
+> > -
+> >       /*
+> >        * device_add() causes the bus infrastructure to look for a matching
+> >        * driver.
+> > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> > index 5b7df7c455f0..9dfad2890d7a 100644
+> > --- a/drivers/virtio/virtio_ring.c
+> > +++ b/drivers/virtio/virtio_ring.c
+> > @@ -1690,7 +1690,7 @@ static struct virtqueue *vring_create_virtqueue_packed(
+> >       vq->we_own_ring = true;
+> >       vq->notify = notify;
+> >       vq->weak_barriers = weak_barriers;
+> > -     vq->broken = false;
+> > +     vq->broken = true;
+> >       vq->last_used_idx = 0;
+> >       vq->event_triggered = false;
+> >       vq->num_added = 0;
+> > @@ -2136,8 +2136,11 @@ irqreturn_t vring_interrupt(int irq, void *_vq)
+> >               return IRQ_NONE;
+> >       }
+> >
+> > -     if (unlikely(vq->broken))
+> > -             return IRQ_HANDLED;
+> > +     if (unlikely(vq->broken)) {
+> > +             dev_warn_once(&vq->vq.vdev->dev,
+> > +                           "virtio vring IRQ raised before DRIVER_OK");
+> > +             return IRQ_NONE;
+> > +     }
+> >
+> >       /* Just a hint for performance: so it's ok that this can be racy! */
+> >       if (vq->event)
+> > @@ -2179,7 +2182,7 @@ struct virtqueue *__vring_new_virtqueue(unsigned int index,
+> >       vq->we_own_ring = false;
+> >       vq->notify = notify;
+> >       vq->weak_barriers = weak_barriers;
+> > -     vq->broken = false;
+> > +     vq->broken = true;
+> >       vq->last_used_idx = 0;
+> >       vq->event_triggered = false;
+> >       vq->num_added = 0;
+> > diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
+> > index d8a2340f928e..23f1694cdbd5 100644
+> > --- a/include/linux/virtio_config.h
+> > +++ b/include/linux/virtio_config.h
+> > @@ -256,6 +256,18 @@ void virtio_device_ready(struct virtio_device *dev)
+> >       unsigned status = dev->config->get_status(dev);
+> >
+> >       BUG_ON(status & VIRTIO_CONFIG_S_DRIVER_OK);
+> > +
+> > +     /*
+> > +      * The virtio_synchronize_cbs() makes sure vring_interrupt()
+> > +      * will see the driver specific setup if it sees vq->broken
+> > +      * as false.
+> > +      */
+> > +     virtio_synchronize_cbs(dev);
+>
+> since you mention vq->broken above, maybe add
+>         "set vq->broken to false"
 
-Well, they are identical until they're not. We intend them to be
-identical. But for practical purposes it does sometimes happen that
-two board revisions which were meant to be indistinguishable by
-software end up needing to be distinguished at a later point, when
-both the hardware and firmware can no longer be changed. We need to
-allow an escape hatch for that case. It does not happen often, so just
-treating them all as separate boards from the start is not a scalable
-solution. DTBs are not free when they all need to be packaged in the
-same kernel image.
+Ok.
 
-> Right now it's not possible to validate QCOM DTSes against DT bindings
-> because they throw big fat warnings about undocumented top compatibles.
-> This is a downside for us.
+>
+> > +     __virtio_unbreak_device(dev);
+> > +     /*
+> > +      * The transport is expected ensure the visibility of
+>
+> to ensure
 
-But that's a solvable problem, right? As I understand, what Doug was
-initially just asking was whether it made _sense_ to document all of
-these... not that we couldn't do it. Then this whole thread went down
-a rabbit hole of whether our compatible assignments are allowed in the
-first place. If we can compromise on this discussion by just doing
-whatever needs to be done to make the tool happy, I think(?) we can
-provide that.
+Will fix.
 
-> Remember, you do not have to use Devicetree or Linux at all if it causes
-> you some downsides... No one is forced. :) If you choose to use it,
-> sorry, it comes with some requirements like being following Devicetree
-> specification or the binding guidelines.
+>
+> > +      * vq->broken
+>
+> let's add: "visibility by vq callbacks"
 
-Woah... that is maybe a bit extreme, don't you think? My understanding
-was that Linux tries to support a wide variety of platforms and
-devices and can make the necessary compromises where needed to stay
-practical. I'm sure you are aware of the numerous hacks, workarounds
-and special cases throughout the kernel that enthusiasts put in there
-to get their favorite platform working, even if the original
-manufacturer never bothered to test with anything but Windows and
-blatantly violates common standards. Or how the USB stack has a file
-listing custom quirks for hundreds of individual device IDs just to
-make hardware work that didn't put any effort into following the spec.
+Sure.
 
-We're not even asking for any of that -- we're here, engaging with you
-and trying to find the best way for our platforms to fit cleanly into
-your model. All we're asking is to please offer some way that makes
-accommodations for the necessary practical concerns that come up when
-building devices at our scale. We're open for new suggestions, but
-they need to stay within the realm of what we can practically do (e.g.
-not ship a wholly separate DTB for each board revision, because that
-would grow the kernel image beyond what can fit in the kernel
-partitions on our platforms, and would create a notable extra cost in
-boot time for our users).
+>
+> > before setting VIRTIO_CONFIG_S_DRIVER_OK.
+> > +      */
+>
+>
+> Can I see some analysis of existing transports showing
+> this is actually the case for them?
 
-Besides, I don't actually see how this violates the Device Tree
-specification? All I see it say about the toplevel compatible property
-is that it
+Yes.
 
-> Specifies a list of platform architectures with which this platform is co=
-mpatible. This property can be used by operating systems in selecting platf=
-orm specific code.
+> And maybe add a comment near set_status to document the
+> requirement.
 
-It doesn't say anything about having to uniquely identify the platform
-architecture even if a more generic identifier is good enough to make
-all necessary platform-specific code choices for the operating system.
-In fact, about compatible properties in general the specification says
+For PCI and MMIO, we can quote the memory-barriers.txt or explain that
+wmb() is not needed before the MMIO writel().
+For CCW, it looks not obvious, it looks to me the IO was submitted via
+__ssch() which has an inline assembly.  Cornelia and Hali, could you
+help me to understand if and how did virtio_ccw_set_status() can
+ensure the visibility of the previous driver setup and vq->broken
+here?
 
-> The property value consists of a concatenated list of null terminated str=
-ings, from most specific to most general. They allow a device to express it=
-s compatibility with a family of similar devices, potentially allowing a si=
-ngle device driver to match against several devices.
+Thanks
 
-Which implies that using a more generic string to cover multiple cases
-at once is an intentionally allowed use case.
+>
+> >       dev->config->set_status(dev, status | VIRTIO_CONFIG_S_DRIVER_OK);
+> >  }
+> >
+> > --
+> > 2.25.1
+>
+

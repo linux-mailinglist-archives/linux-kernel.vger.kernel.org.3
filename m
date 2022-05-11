@@ -2,66 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D7BD523014
+	by mail.lfdr.de (Postfix) with ESMTP id BE845523015
 	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239223AbiEKKAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 06:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44874 "EHLO
+        id S238546AbiEKKAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 06:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238546AbiEKJ70 (ORCPT
+        with ESMTP id S238277AbiEKJ7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 05:59:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9991D5265;
-        Wed, 11 May 2022 02:59:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 11 May 2022 05:59:48 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685641DEC58;
+        Wed, 11 May 2022 02:59:38 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BAC58610A1;
-        Wed, 11 May 2022 09:59:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A59CC340ED;
-        Wed, 11 May 2022 09:59:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652263162;
-        bh=vOXfSFnQKU6CvSkUUaYHX1wpKYWqy+uhhPgV4sbyp/k=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=VNcPKLUHpR9b6osKzjz4C/GzkZRM/gRsFZFgoZ9IWo75NenLPa6e8CEToLELCbAwD
-         DiWqdZaJAkDwDbv0hW4jg2tVc1aBPtm9lpbGxvzefXx+iJf80ezjktSF1ErosZt17d
-         0gG29TFLVHyjH/j0K7l7K1txRWg24PDkskJqj9BQDlvD4Q0ZCsTva6bHf+MJOYRXZF
-         ZHYwy7CVYgAcwXq1emvCcHFNqaByjhqp2ayn9iRikJjKcxE+j4JHviAbV2+KvloPq/
-         MZMaj/V3OW9rXXO+znzHk7p3WdWXg+SIyHzgxSKijTIDnNn33OzQtfvh+iqRvYKDJX
-         XuTLqFrX8WeNg==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-Cc:     Pavel Skripkin <paskripkin@gmail.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        ath9k-devel@qca.qualcomm.com, davem@davemloft.net, kuba@kernel.org,
-        linville@tuxdriver.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+03110230a11411024147@syzkaller.appspotmail.com,
-        syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
-Subject: Re: [PATCH v3 1/2] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
-References: <80962aae265995d1cdb724f5362c556d494c7566.1644265120.git.paskripkin@gmail.com>
-        <87h799a007.fsf@toke.dk>
-        <6f0615da-aa0b-df8e-589c-f5caf09d3449@gmail.com>
-        <5fd22dda-01d6-cfae-3458-cb3fa23eb84d@I-love.SAKURA.ne.jp>
-        <3cb712d9-c6be-94b7-6135-10b0eabba341@gmail.com>
-        <d9e6cf88-4f19-bd50-3d73-e2aee1caefa4@I-love.SAKURA.ne.jp>
-        <426f6965-152c-6d59-90e0-34fe3cd208ee@gmail.com>
-        <87ilqc7jv9.fsf@kernel.org> <87o804wg30.fsf@toke.dk>
-Date:   Wed, 11 May 2022 12:59:15 +0300
-In-Reply-To: <87o804wg30.fsf@toke.dk> ("Toke \=\?utf-8\?Q\?H\=C3\=B8iland-J\?\=
- \=\?utf-8\?Q\?\=C3\=B8rgensen\=22's\?\= message of
-        "Wed, 11 May 2022 11:53:23 +0200")
-Message-ID: <87ee1075l8.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id F2CD822247;
+        Wed, 11 May 2022 11:59:35 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1652263176;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JZhWWO3QstT97s01mFu1Bt71dN/IqXZaokx+ODMQ35w=;
+        b=Cynq8uSxjBN0lAP/BLcfwojdc2XLfbG7IlqaDCl4Ro8j3QEO5eihr0NCX3F2IbyhxkIY/a
+        0qdhWP9yV/NR+LKNwkxZgTQVTKOFBtV3U47sMr8EHWa8+zT0SZiczTeDS5/mo9jXEP/wfv
+        Fp7Sy97rrxMgIQ2dBjP46NCleJRcHSg=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Wed, 11 May 2022 11:59:35 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     =?UTF-8?Q?Horia_Geant=C4=83?= <horia.geanta@nxp.com>
+Cc:     Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>, kernel@pengutronix.de,
+        James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        David Gstir <david@sigma-star.at>,
+        Richard Weinberger <richard@nod.at>,
+        Franck Lenormand <franck.lenormand@nxp.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [EXT] [PATCH v9 3/7] crypto: caam - determine whether CAAM
+ supports blob encap/decap
+In-Reply-To: <c3c1fbf2-c73a-02ec-d2cb-354880a84d5f@nxp.com>
+References: <20220506062553.1068296-1-a.fatoum@pengutronix.de>
+ <20220506062553.1068296-4-a.fatoum@pengutronix.de>
+ <DU2PR04MB8630501008F661C596C0106295C69@DU2PR04MB8630.eurprd04.prod.outlook.com>
+ <5e7c0b3c9bc285f1cf9f7b20f055aa376e1688cc.camel@pengutronix.de>
+ <DU2PR04MB8630A6F925454E5C007FA3EA95C89@DU2PR04MB8630.eurprd04.prod.outlook.com>
+ <232eb799dbbd341c305e911f85341409@walle.cc>
+ <c3c1fbf2-c73a-02ec-d2cb-354880a84d5f@nxp.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <a3b290ee4367309739948c06c11964f4@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,53 +80,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk> writes:
+Am 2022-05-11 11:48, schrieb Horia Geantă:
+> On 5/11/2022 12:21 PM, Michael Walle wrote:
+>> Hi,
+>> 
+>> Am 2022-05-11 11:16, schrieb Pankaj Gupta:
+>>>> -----Original Message-----
+>>>> From: Ahmad Fatoum <a.fatoum@pengutronix.de>
+>>>> Sent: Monday, May 9, 2022 6:34 PM
+>>>> To: Pankaj Gupta <pankaj.gupta@nxp.com>; Horia Geanta
+>>>> <horia.geanta@nxp.com>; Herbert Xu <herbert@gondor.apana.org.au>;
+>>>> David S.
+>>>> Miller <davem@davemloft.net>
+>>>> Cc: kernel@pengutronix.de; Michael Walle <michael@walle.cc>; James
+>>>> Bottomley <jejb@linux.ibm.com>; Jarkko Sakkinen <jarkko@kernel.org>;
+>>>> Mimi
+>>>> Zohar <zohar@linux.ibm.com>; David Howells <dhowells@redhat.com>;
+>>>> James
+>>>> Morris <jmorris@namei.org>; Eric Biggers <ebiggers@kernel.org>; 
+>>>> Serge
+>>>> E.
+>>>> Hallyn <serge@hallyn.com>; Jan Luebbe <j.luebbe@pengutronix.de>; 
+>>>> David
+>>>> Gstir
+>>>> <david@sigma-star.at>; Richard Weinberger <richard@nod.at>; Franck
+>>>> Lenormand <franck.lenormand@nxp.com>; Matthias Schiffer
+>>>> <matthias.schiffer@ew.tq-group.com>; Sumit Garg
+>>>> <sumit.garg@linaro.org>;
+>>>> linux-integrity@vger.kernel.org; keyrings@vger.kernel.org; linux-
+>>>> crypto@vger.kernel.org; linux-kernel@vger.kernel.org; 
+>>>> linux-security-
+>>>> module@vger.kernel.org
+>>>> Subject: Re: [EXT] [PATCH v9 3/7] crypto: caam - determine whether
+>>>> CAAM
+>>>> supports blob encap/decap
+>>>> 
+>>>> Caution: EXT Email
+>>>> 
+>>>> Hello Pankaj,
+>>>> 
+>>>> On Mon, 2022-05-09 at 12:39 +0000, Pankaj Gupta wrote:
+>>>>>> -       if (ctrlpriv->era < 10)
+>>>>>> +       comp_params = rd_reg32(&ctrl->perfmon.comp_parms_ls);
+>>>>>> +       ctrlpriv->blob_present = !!(comp_params & CTPR_LS_BLOB);
+>>>>>> +
+>>>>>> +       if (ctrlpriv->era < 10) {
+>>>>>>                 rng_vid = (rd_reg32(&ctrl->perfmon.cha_id_ls) &
+>>>>>>                            CHA_ID_LS_RNG_MASK) >>
+>>>>>> CHA_ID_LS_RNG_SHIFT;
+>>>>> 
+>>>>> Check for AES CHAs for Era < 10, should be added.
+>>>> 
+>>>> Do I need this? I only do this check for Era >= 10, because 
+>>>> apparently
+>>>> there are
+>>>> Layerscape non-E processors that indicate BLOB support via
+>>>> CTPR_LS_BLOB, but
+>>>> fail at runtime. Are there any Era < 10 SoCs that are similarly
+>>>> broken?
+>>>> 
+>>> 
+>>> For non-E variants, it might happen that Blob protocol is enabled, 
+>>> but
+>>> number of AES CHA are zero.
+>>> If the output of below expression is > 0, then only blob_present
+>>> should be marked present or true.
+>>> For era > 10, you handled. But for era < 10, please add the below 
+>>> code.
+>> 
+>> Are there any CAAMs which can be just enabled partially for era < 10?
+>> I didn't found anything. To me it looks like the non-export controlled
+>> CAAM is only available for era >= 10. For era < 10, the CAAM is either
+>> fully featured there or it is not available at all and thus the node
+>> is removed in the bootloader (at least that is the case for 
+>> layerscape).
+>> 
+> Qouting from our previous discussion in U-boot:
+> https://patchwork.ozlabs.org/project/uboot/patch/20200602150904.1997-1-michael@walle.cc/#2457448
+> 
+> "
+> Based on previous (NXP-internal) discussions, non-E crypto module is:
+> -fully disabled on: LS1021A (ARMv7), LS1043A, LS1088A, LS2088A
+> (and their personalities)
+> -partially [*] disabled on: LS1012A, LS1028A, LS1046A, LX2160A
+> (and their personalities)
+> "
+> 
+> From the partially disabled list, LS1028A and LX2160A have CAAM Era 10,
+> while LS1012A and LS1046A integrate CAAM Era 8.
 
-> Kalle Valo <kvalo@kernel.org> writes:
->
->> Pavel Skripkin <paskripkin@gmail.com> writes:
->>
->>> Hi Tetsuo,
->>>
->>> On 5/6/22 02:31, Tetsuo Handa wrote:
->>>> On 2022/05/06 4:09, Pavel Skripkin wrote:
->>>>>>> And we can meet NULL defer even if we leave drv_priv =3D priv initi=
-alization
->>>>>>> on it's place.
->>>>>>
->>>>>> I didn't catch the location. As long as "htc_handle->drv_priv =3D pr=
-iv;" is done
->>>>>> before complete_all(&hif_dev->fw_done) is done, is something wrong?
->>>>>>
->>>>>
->>>>> I don't really remember why I said that, but looks like I just
->>>>> haven't opened callbacks' code.
->>>>
->>>> OK. Then, why not accept Pavel's patch?
->>>
->>> As you might expect, I have same question. This series is under review
->>> for like 7-8 months.
->>>
->>> I have no ath9 device, so I can't test it on real hw, so somebody else
->>> should do it for me. It's requirement to get patch accepted.
->>
->> As Toke stepped up to be the ath9k maintainer the situation with ath9k
->> is now much better. I recommend resubmitting any ath9k patches you might
->> have.
->
-> No need to resubmit this one, it's still in patchwork waiting for me to
-> take a closer look.
+Thanks for clarification. Do you know it that is a layerscape feature?
+I had a look at the imx8mn which have a era 9 and it doesn't have the
+PKHA_VERSION register which indicates the partially disabled PKHA
+block. Thus I concluded that there is no partially disabled feature
+on era < 10.
 
-Ah sorry, I thought this was something which was submitted 7-8 months
-ago but I didn't check, I should have.
+Unfortunately, I don't have a security manual for the LS1012A and
+LS1046A so I cannot check there.
 
-> I have a conference this week, but should hopefully have some time for
-> this next week.
-
-It's great to be able to start meeting people again, have a good one :)
-
---=20
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
-hes
+-michael

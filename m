@@ -2,176 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D66C05230EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E08E25230F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiEKKpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 06:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60962 "EHLO
+        id S235067AbiEKKrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 06:47:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbiEKKpl (ORCPT
+        with ESMTP id S229714AbiEKKrZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 06:45:41 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5ED25CE;
-        Wed, 11 May 2022 03:45:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ynEFWcNLUbKhhfDP6Hof3WWOqulhkKgMvRGzqwxgZps=; b=fSj7/EtcmF5CUqcdvN0gELtZu2
-        H7LEdtNoKGlPjH/A7Jq3gGJypW5FkAjJiX/BhxPfzC7KCarmeqo9VJKGrw1mcRsNvrsITAJmt8lpp
-        awFjprOAKBKd45OFBxfJOfoOOygBkIqQPsGve1nwkgOCmNx3VTwUGpBcq9Hn03S3tNzdkB62aXYTH
-        39GDBwmdO3BfHt6S8dZfBewlXqePvpsBO8LsEU/c2iz/jxIY3mgIOtq/6IxySYDknhzp7FI45STBW
-        8bsHc8CZwFPjvmbjAGMfrZ5SO2Ae+Ra2zitTeZxtH8GfiFZAID3mWT8JgTBKXsdT/vSDs867SQxnD
-        73g41yFg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60680)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nojqQ-0006fL-Rg; Wed, 11 May 2022 11:45:27 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nojqO-00071x-IX; Wed, 11 May 2022 11:45:24 +0100
-Date:   Wed, 11 May 2022 11:45:24 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Wan Jiabing <wanjiabing@vivo.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Antoine Tenart <atenart@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 net] net: phy: mscc: Add error check when __phy_read()
- failed
-Message-ID: <YnuTxAw06UHCY1mf@shell.armlinux.org.uk>
-References: <20220510142247.16071-1-wanjiabing@vivo.com>
+        Wed, 11 May 2022 06:47:25 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10AC4D250
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:47:23 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1nojs0-0005aX-R8; Wed, 11 May 2022 12:47:04 +0200
+Message-ID: <3a8c493b-b19c-4490-85b4-22d240bfd06e@pengutronix.de>
+Date:   Wed, 11 May 2022 12:47:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220510142247.16071-1-wanjiabing@vivo.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v9 0/7] KEYS: trusted: Introduce support for NXP
+ CAAM-based trusted keys
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        =?UTF-8?Q?Horia_Geant=c4=83?= <horia.geanta@nxp.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        James Bottomley <jejb@linux.ibm.com>, kernel@pengutronix.de,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        David Gstir <david@sigma-star.at>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Franck LENORMAND <franck.lenormand@nxp.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Andreas Rammhold <andreas@rammhold.de>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+References: <20220506062553.1068296-1-a.fatoum@pengutronix.de>
+ <49e1738c55c73819ee0e2cac0be74d81@walle.cc>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <49e1738c55c73819ee0e2cac0be74d81@walle.cc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 10:22:45PM +0800, Wan Jiabing wrote:
-> Calling __phy_read() might return a negative error code. Use 'int'
-> to declare variables which call __phy_read() and also add error check
-> for them.
+Hello Michael,
+
+On 06.05.22 12:52, Michael Walle wrote:
+> Am 2022-05-06 08:25, schrieb Ahmad Fatoum:
+>> Series applies on top of v5.18-rc5. Would be great if this could make it
+>> into v5.19.
+>>
+>> v8 was here:
+>> https://lore.kernel.org/linux-integrity/09e2552c-7392-e1da-926b-53c7db0b118d@pengutronix.de
+>>
+>> Changelog is beneath each individual patch. Compared to v8, only code
+>> change is checking whether CAAM can support blobbing at init-time as
+>> apparently some Layerscape SoCs are available in a non-E(ncryption)
+>> variant that doesn't do AES. Previously, adding trusted keys on such
+>> SoCs would return an error with a cryptic error message.
+>>
+>>
+>> The Cryptographic Acceleration and Assurance Module (CAAM) is an IP core
+>> built into many newer i.MX and QorIQ SoCs by NXP.
+>>
+>> Its blob mechanism can AES encrypt/decrypt user data using a unique
+>> never-disclosed device-specific key.
+>>
+>> There has been multiple discussions on how to represent this within the kernel:
+>>
+>> The Cryptographic Acceleration and Assurance Module (CAAM) is an IP core
+>> built into many newer i.MX and QorIQ SoCs by NXP.
+>>
+>> Its blob mechanism can AES encrypt/decrypt user data using a unique
+>> never-disclosed device-specific key. There has been multiple
+>> discussions on how to represent this within the kernel:
+>>
+>>  - [RFC] crypto: caam - add red blobifier
+>>    Steffen implemented[1] a PoC sysfs driver to start a discussion on how to
+>>    best integrate the blob mechanism.
+>>    Mimi suggested that it could be used to implement trusted keys.
+>>    Trusted keys back then were a TPM-only feature.
+>>
+>>  - security/keys/secure_key: Adds the secure key support based on CAAM.
+>>    Udit Agarwal added[2] a new "secure" key type with the CAAM as backend.
+>>    The key material stays within the kernel only.
+>>    Mimi and James agreed that this needs a generic interface, not specific
+>>    to CAAM. Mimi suggested trusted keys. Jan noted that this could serve as
+>>    basis for TEE-backed keys.
+>>
+>>  - [RFC] drivers: crypto: caam: key: Add caam_tk key type
+>>    Franck added[3] a new "caam_tk" key type based on Udit's work. This time
+>>    it uses CAAM "black blobs" instead of "red blobs", so key material stays
+>>    within the CAAM and isn't exposed to kernel in plaintext.
+>>    James voiced the opinion that there should be just one user-facing generic
+>>    wrap/unwrap key type with multiple possible handlers.
+>>    David suggested trusted keys.
+>>
+>>  - Introduce TEE based Trusted Keys support
+>>    Sumit reworked[4] trusted keys to support multiple possible backends with
+>>    one chosen at boot time and added a new TEE backend along with TPM.
+>>    This now sits in Jarkko's master branch to be sent out for v5.13
+>>
+>> This patch series builds on top of Sumit's rework to have the CAAM as
+>> yet another
+>> trusted key backend.
+>>
+>> The CAAM bits are based on Steffen's initial patch from 2015. His work had been
+>> used in the field for some years now, so I preferred not to deviate
+>> too much from it.
+>>
+>> This series has been tested with dmcrypt[5] on an i.MX6Q/DL and an i.MX8M[6].
+>>
+>> Looking forward to your feedback.
 > 
-> The numerous callers of vsc8584_macsec_phy_read() don't expect it to
-> fail. So don't return the error code from __phy_read(), but also don't
-> return random values if it does fail.
+> For the whole series:
 > 
-> Fixes: fa164e40c53b ("net: phy: mscc: split the driver into separate files")
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
-> ---
-> Changelog:
-> v2:
-> - Sort variable declaration and add a detailed comment.
-> ---
->  drivers/net/phy/mscc/mscc_macsec.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
+> Tested-by: Michael Walle <michael@walle.cc> # on ls1028a (non-E and E)
+
+Thanks! Did you test checkpatch.pl and make htmldocs/pdfdocs too
+or should I add the Tested-by just for the first 5 patches?
+
+Cheers,
+Ahmad
+
 > 
-> diff --git a/drivers/net/phy/mscc/mscc_macsec.c b/drivers/net/phy/mscc/mscc_macsec.c
-> index b7b2521c73fb..58ad11a697b6 100644
-> --- a/drivers/net/phy/mscc/mscc_macsec.c
-> +++ b/drivers/net/phy/mscc/mscc_macsec.c
-> @@ -22,9 +22,9 @@
->  static u32 vsc8584_macsec_phy_read(struct phy_device *phydev,
->  				   enum macsec_bank bank, u32 reg)
->  {
-> -	u32 val, val_l = 0, val_h = 0;
-> +	int rc, val, val_l, val_h;
->  	unsigned long deadline;
-> -	int rc;
-> +	u32 ret = 0;
->  
->  	rc = phy_select_page(phydev, MSCC_PHY_PAGE_MACSEC);
->  	if (rc < 0)
-> @@ -47,15 +47,20 @@ static u32 vsc8584_macsec_phy_read(struct phy_device *phydev,
->  	deadline = jiffies + msecs_to_jiffies(PROC_CMD_NCOMPLETED_TIMEOUT_MS);
->  	do {
->  		val = __phy_read(phydev, MSCC_EXT_PAGE_MACSEC_19);
-> +		if (val < 0)
-> +			goto failed;
->  	} while (time_before(jiffies, deadline) && !(val & MSCC_PHY_MACSEC_19_CMD));
->  
->  	val_l = __phy_read(phydev, MSCC_EXT_PAGE_MACSEC_17);
->  	val_h = __phy_read(phydev, MSCC_EXT_PAGE_MACSEC_18);
->  
-> +	if (val_l > 0 && val_h > 0)
-> +		ret = (val_h << 16) | val_l;
-> +
->  failed:
->  	phy_restore_page(phydev, rc, rc);
->  
-> -	return (val_h << 16) | val_l;
-> +	return ret;
->  }
+> -michael
+> 
 
-This is still wrong - phy_restore_page() can fail to retore the page.
-
-It's rather unfortunate that you need to return a u32, where the
-high values become negative ints, which means you can't use
-phy_restore_page() as it's supposed to be used.
-
-If you fail to read from the PHY, is returning zero acceptable?
-
-I think what you should be doing at the very least is:
-
-	rc = phy_select_page(phydev, MSCC_PHY_PAGE_MACSEC);
-	if (rc < 0)
-		goto failed;
-
-	rc = __phy_write(phydev, MSCC_EXT_PAGE_MACSEC_20, ...);
-	if (rc < 0)
-		goto failed;
-
-	...
-
-	rc = __phy_write(phydev, MSCC_EXT_PAGE_MACSEC_19, ...);
-	if (rc < 0)
-		goto failed;
-
-	...
-	do {
-		val = __phy_read(phydev, MSCC_EXT_PAGE_MACSEC_19);
-		if (val < 0) {
-			rc = val;
-			goto failed;
-		}
-	} while (...);
-
-	val_l = __phy_read(phydev, MSCC_EXT_PAGE_MACSEC_17);
-	if (val_l < 0) {
-		rc = val_l;
-		goto failed;
-	}
-
-	val_h = __phy_read(phydev, MSCC_EXT_PAGE_MACSEC_18);
-	if (val_h < 0)
-		rc = val_h;
-
-failed:
-	rc = phy_restore_page(phgydev, rc, 0);
-
-	return rc < 0 ? 0 : val_h << 16 | val_l;
-
-Which means that if any of the PHY IO functions fail at any point, this
-returns zero.
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

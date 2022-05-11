@@ -2,160 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05993522FC8
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A4F522FEF
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232215AbiEKJqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 05:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51646 "EHLO
+        id S231435AbiEKJwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 05:52:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241332AbiEKJqQ (ORCPT
+        with ESMTP id S236413AbiEKJwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 05:46:16 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EE522BC7
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:46:10 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id j14so1373670plx.3
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:46:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tnyhr9C4u86T0lqYrI8D0t2XdDrJ442Ns675Ildd+iQ=;
-        b=Q+hGr50U5r7y+ABZgbwRjKwIrlkCY4Fbmk4XJC20JBI59bDP2DTmf3GXcrwElHQTdP
-         8dFrnWkgRJX+KOeHLnOOUashuYoweNIwoeoBsVsKcC1ZuhumaOcwkCUv+PydchpWyna8
-         pNAkYUmRtIMl4ClHqMh8GvcSuPH9Bx3N+1wa34t9/ouIgrmesgxIJMAg5dKob1eN7k6L
-         2haHAncIlPJyJwBWsOS3r3k3CcqkZqaxRUZ40hsI9ObrC3Lz4iIM7IyTFrDIoMU7L4uC
-         JkInJYvKlzK4lv0LfAuUxRC+E61wXdP6LStW3Ckr9oB3aPKV4ukrtiCuM839GCUpc6vV
-         kyoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tnyhr9C4u86T0lqYrI8D0t2XdDrJ442Ns675Ildd+iQ=;
-        b=7bmLw1Urb0771+SbxgVk/BEXx5tlLDfmBm0FvPi3P1XbGrhHMuJV+YZw86pcCMQKPv
-         t98WDLyptXKYdoIkck9/WSBOosccqWn0ifnaY2fJoj9XQfWEJ0YtyVmOdzk6yaaMfe8A
-         2A+iba8Go9MHhsOzqnYgvZQ0Hg1iGKDYu7ycxntSfrp8ocLBBqgNQZ6ouAGXNTgP71/z
-         49LahRTpshbfoW4nCupQ6TSuQeYryZ9vzRhRhsOhkJ/U0VfxKwq05hTuLVOzQl0NYGOy
-         I4hZBxzUiun3tR+1RRe2/u3ACY6YtBLBt0qtmeRs1ETCINuFpi2q06hCZy3XewsAAbUd
-         pY6g==
-X-Gm-Message-State: AOAM533c6/SqYjnDHSWf4E15aNcJs8ANyQD1OgO3U00MhMO1nOO0qqXJ
-        zfQFOQn8j8DI9wy844h9SUftoQ==
-X-Google-Smtp-Source: ABdhPJxIRZ1iBB/Hr0rz7Sunm9OPwb9CrQztMG9WxDcqkhIyyubwVwhbRR3ejI7COeCc5NEHiLzc7A==
-X-Received: by 2002:a17:902:bb90:b0:156:2c05:b34f with SMTP id m16-20020a170902bb9000b001562c05b34fmr25156995pls.53.1652262369846;
-        Wed, 11 May 2022 02:46:09 -0700 (PDT)
-Received: from localhost ([139.177.225.234])
-        by smtp.gmail.com with ESMTPSA id g23-20020a170902869700b0015ec44d25dasm1297219plo.235.2022.05.11.02.46.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 02:46:09 -0700 (PDT)
-Date:   Wed, 11 May 2022 17:45:57 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     corbet@lwn.net, akpm@linux-foundation.org, mcgrof@kernel.org,
-        keescook@chromium.org, yzaikin@google.com, osalvador@suse.de,
-        david@redhat.com, masahiroy@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        duanxiongchun@bytedance.com, smuchun@gmail.com
-Subject: Re: [PATCH v10 4/4] mm: hugetlb_vmemmap: add
- hugetlb_optimize_vmemmap sysctl
-Message-ID: <YnuF1c5fMOzJnNfD@FVFYT0MHHV2J.usts.net>
-References: <20220509062703.64249-1-songmuchun@bytedance.com>
- <20220509062703.64249-5-songmuchun@bytedance.com>
- <970166e0-f70e-dd2a-c764-af23a8425f87@oracle.com>
- <9d64809f-db8c-0a3e-1ae9-d4a8ab79041e@oracle.com>
+        Wed, 11 May 2022 05:52:13 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B1435D5F7;
+        Wed, 11 May 2022 02:51:56 -0700 (PDT)
+Received: from localhost.localdomain (unknown [112.20.109.92])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxitiZhXtir_oQAA--.45431S2;
+        Wed, 11 May 2022 17:44:58 +0800 (CST)
+From:   Yanteng Si <siyanteng@loongson.cn>
+To:     corbet@lwn.net, alexs@kernel.org, seakeel@gmail.com
+Cc:     Yanteng Si <siyanteng@loongson.cn>, chenhuacai@kernel.org,
+        jiaxun.yang@flygoat.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, siyanteng01@gmail.com
+Subject: [PATCH] MAINTAINERS: Become the docs/zh_CN maintainer
+Date:   Wed, 11 May 2022 17:46:33 +0800
+Message-Id: <20220511094633.2002194-1-siyanteng@loongson.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9d64809f-db8c-0a3e-1ae9-d4a8ab79041e@oracle.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9AxitiZhXtir_oQAA--.45431S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYY7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87
+        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
+        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72
+        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7
+        MxkIecxEwVAFwVW8uwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
+        026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
+        Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
+        vEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280
+        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyT
+        uYvjfUeLvtDUUUU
+X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 05:39:40PM -0700, Mike Kravetz wrote:
-> On 5/10/22 14:30, Mike Kravetz wrote:
-> > On 5/8/22 23:27, Muchun Song wrote:
-> >> diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
-> >> index 029fb7e26504..917112661b5c 100644
-> >> --- a/include/linux/memory_hotplug.h
-> >> +++ b/include/linux/memory_hotplug.h
-> >> @@ -351,4 +351,13 @@ void arch_remove_linear_mapping(u64 start, u64 size);
-> >>  extern bool mhp_supports_memmap_on_memory(unsigned long size);
-> >>  #endif /* CONFIG_MEMORY_HOTPLUG */
-> >>  
-> >> +#ifdef CONFIG_MHP_MEMMAP_ON_MEMORY
-> >> +bool mhp_memmap_on_memory(void);
-> >> +#else
-> >> +static inline bool mhp_memmap_on_memory(void)
-> >> +{
-> >> +	return false;
-> >> +}
-> >> +#endif
-> >> +
-> >>  #endif /* __LINUX_MEMORY_HOTPLUG_H */
-> >> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> >> index 8605d7eb7f5c..86158eb9da70 100644
-> >> --- a/mm/hugetlb.c
-> >> +++ b/mm/hugetlb.c
-> >> @@ -1617,6 +1617,9 @@ static DECLARE_WORK(free_hpage_work, free_hpage_workfn);
-> >>  
-> >>  static inline void flush_free_hpage_work(struct hstate *h)
-> >>  {
-> >> +	if (!hugetlb_optimize_vmemmap_enabled())
-> >> +		return;
-> >> +
-> > 
-> > Hi Muchun,
-> > 
-> > In v9 I was suggesting that we may be able to eliminate the static_branch_inc/dec from the vmemmap free/alloc paths.  With this patch
-> > I believe hugetlb_optimize_vmemmap_enabled() is really checking
-> > 'has hugetlb vmemmap optimization been enabled' OR 'are there still vmemmap
-> > optimized hugetlb pages in the system'.  That may be confusing.
-> > 
-> 
-> Sorry, I forgot about the use of hugetlb_optimize_vmemmap_enabled in
-> page_fixed_fake_head.  We need to know if there are any vmemmap optimized
-> hugetlb pages in the system in this performance sensitive path.  So,
-> static_branch_inc/dec is indeed a good idea.
->
+It's time to become a maintainer of Chinese documentation, and Yanteng's plan
+is to help everyone with the utmost enthusiasm and patience.
 
-Agree.
+Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-> Please disregard my attempt below at removing static_branch_inc/dec.
-> 
-> I still find the name hugetlb_optimize_vmemmap_enabled a bit confusing as
-> it tests two conditions (enabled and pages in use).
->
-
-Right. It tests two conditions.
-
-> You have already 'open coded' just the check for enabled in the routine
-> hugetlb_vmemmap_free with:
-> 
-> 	READ_ONCE(vmemmap_optimize_mode) == VMEMMAP_OPTIMIZE_OFF
-> 
-> How about having hugetlb_optimize_vmemmap_enabled() just check
-> vmemmap_optimize_mode in a manner like above?  Then rename
-
-I'm wondering is it necessary to do this? vmemmap_optimize_mode
-is a internal state in hugetlb_vmemmap.c, at leaset now there is
-no outside users who care about this.  Open-coding may be not
-an issue (I guess)?  If one day someone cares it, maybe it it
-the time to do this and rename hugetlb_optimize_vmemmap_enabled()?
-I'm not against doing this, just expressing some of my thoughts.
-What do you think, Mike?
-
-> hugetlb_optimize_vmemmap_enabled to something like:
-> hugetlb_optimized_vmemmap_possible().  Sorry, I can think if a great name.
-> 
-
-At least I cannot come up with an appropriate name.
-hugetlb_optimize_vmemmap_may_enabled()? It's not easy to come
-up with a good name.
-
-Thanks.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e8c52d0192a6..74969c0a60ea 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4619,6 +4619,7 @@ F:	Documentation/dev-tools/checkpatch.rst
+ 
+ CHINESE DOCUMENTATION
+ M:	Alex Shi <alexs@kernel.org>
++M:	Yanteng Si <siyanteng@loongson.cn>
+ S:	Maintained
+ F:	Documentation/translations/zh_CN/
+ 
+-- 
+2.27.0
 

@@ -2,49 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07DA752333A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 14:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C90BB52333F
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 14:38:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242555AbiEKMiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 08:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
+        id S242545AbiEKMit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 08:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242499AbiEKMiM (ORCPT
+        with ESMTP id S232923AbiEKMiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 08:38:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEDE22EA5F;
-        Wed, 11 May 2022 05:38:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 075D5B82219;
-        Wed, 11 May 2022 12:38:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 598DFC340F2;
-        Wed, 11 May 2022 12:38:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652272688;
-        bh=gyTtKqGrdgmxpfgLM/JIRhyOctz/MqSDCYRh45Yfp+A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2deGWEjFIg1VgIh1TKv9PzyymIsk0XV45P65/6KT+7fgWhx/q7J9Z93XxM0lgkI07
-         23oYRtnpPjgTC/vPze8yeriSL3XDwctV4KioqFkzfx6dPykma7d+doD/ho8cLanDT/
-         ebzYoRmFK85QBoksGCChCTVmfYHC+ERfFLMlwC6k=
-Date:   Wed, 11 May 2022 14:38:05 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wolfgang Walter <linux@stwm.de>
-Cc:     stable@vger.kernel.org, Trond Myklebust <trondmy@gmail.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: 5.4.188 and later: massive performance regression with nfsd
-Message-ID: <YnuuLZe6h80KCNhd@kroah.com>
-References: <f8d9b9112607df4807fba8948ac6e145@stwm.de>
+        Wed, 11 May 2022 08:38:46 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5209722EA5F;
+        Wed, 11 May 2022 05:38:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1652272719;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=3R1nyN7qEurI7mKVx7fVNCCwr1ntHBiV1xbhlFCvjRM=;
+    b=DiUzy4XK9JglPAKp58efIOGrWW9GhTsNGo6Pxl/cUe76D7l9JZXWD81dtsA110wv3I
+    Tk6dchEclVKI4PpBf1bgJDIfFozpkaOqNx0rStDUbsQLjM+0yQeVGaBSRF4ESYZ6IXA3
+    RjXOgee6Nu7+1CBSz5vjMWMTwT1ISb8dhvtYWGpGcC5DPYN8yQCHRTBq9IrEweAopXFw
+    pOoZHXnMjgwkLil2WGORwJ3ZORswfXizK9PsPkGZT0FRDVGdbbLnrrQIbt7tjovJQeBb
+    nD+SmdHRGazh5J39MinuSMv/GalS14MTOuoJtZr1MMZv9Cue/avwGlA9X5D8qvqj1ncb
+    BUDw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdBqPeOuh2koeKQvJnLjhchY2TXGXhEF98MlNg=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cff:5b00:9642:f755:5daa:777e]
+    by smtp.strato.de (RZmta 47.42.2 AUTH)
+    with ESMTPSA id 4544c9y4BCcdy2r
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 11 May 2022 14:38:39 +0200 (CEST)
+Message-ID: <b631b022-72d5-9160-fd13-f33c80dbbe59@hartkopp.net>
+Date:   Wed, 11 May 2022 14:38:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f8d9b9112607df4807fba8948ac6e145@stwm.de>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 1/1] can: skb: add and set local_origin flag
+Content-Language: en-US
+To:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Devid Antonio Filoni <devid.filoni@egluetechnologies.com>,
+        kernel@pengutronix.de, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Jander <david@protonic.nl>
+References: <20220511121913.2696181-1-o.rempel@pengutronix.de>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20220511121913.2696181-1-o.rempel@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,42 +65,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 12:03:13PM +0200, Wolfgang Walter wrote:
-> Hi,
-> 
-> starting with 5.4.188 wie see a massive performance regression on our
-> nfs-server. It basically is serving requests very very slowly with cpu
-> utilization of 100% (with 5.4.187 and earlier it is 10%) so that it is
-> unusable as a fileserver.
-> 
-> The culprit are commits (or one of it):
-> 
-> c32f1041382a88b17da5736886da4a492353a1bb "nfsd: cleanup
-> nfsd_file_lru_dispose()"
-> 628adfa21815f74c04724abc85847f24b5dd1645 "nfsd: Containerise filecache
-> laundrette"
-> 
-> (upstream 36ebbdb96b694dd9c6b25ad98f2bbd263d022b63 and
-> 9542e6a643fc69d528dfb3303f145719c61d3050)
-> 
-> If I revert them in v5.4.192 the kernel works as before and performance is
-> ok again.
-> 
-> I did not try to revert them one by one as any disruption of our nfs-server
-> is a severe problem for us and I'm not sure if they are related.
-> 
-> 5.10 and 5.15 both always performed very badly on our nfs-server in a
-> similar way so we were stuck with 5.4.
-> 
-> I now think this is because of 36ebbdb96b694dd9c6b25ad98f2bbd263d022b63
-> and/or 9542e6a643fc69d528dfb3303f145719c61d3050 though I didn't tried to
-> revert them in 5.15 yet.
+Hi Oleksij,
 
-Odds are 5.18-rc6 is also a problem?
+On 5/11/22 14:19, Oleksij Rempel wrote:
+> Add new can_skb_priv::local_origin flag to be able detect egress
+> packages even if they was sent directly from kernel and not assigned to
+> some socket.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Cc: Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
+> ---
+>   drivers/net/can/dev/skb.c | 3 +++
+>   include/linux/can/skb.h   | 1 +
+>   net/can/raw.c             | 2 +-
+>   3 files changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/can/dev/skb.c b/drivers/net/can/dev/skb.c
+> index 61660248c69e..3e2357fb387e 100644
+> --- a/drivers/net/can/dev/skb.c
+> +++ b/drivers/net/can/dev/skb.c
+> @@ -63,6 +63,7 @@ int can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
+>   
+>   		/* save frame_len to reuse it when transmission is completed */
+>   		can_skb_prv(skb)->frame_len = frame_len;
+> +		can_skb_prv(skb)->local_origin = true;
+>   
+>   		skb_tx_timestamp(skb);
+>   
+> @@ -200,6 +201,7 @@ struct sk_buff *alloc_can_skb(struct net_device *dev, struct can_frame **cf)
+>   	can_skb_reserve(skb);
+>   	can_skb_prv(skb)->ifindex = dev->ifindex;
+>   	can_skb_prv(skb)->skbcnt = 0;
+> +	can_skb_prv(skb)->local_origin = false;
+>   
+>   	*cf = skb_put_zero(skb, sizeof(struct can_frame));
+>   
+> @@ -231,6 +233,7 @@ struct sk_buff *alloc_canfd_skb(struct net_device *dev,
+>   	can_skb_reserve(skb);
+>   	can_skb_prv(skb)->ifindex = dev->ifindex;
+>   	can_skb_prv(skb)->skbcnt = 0;
+> +	can_skb_prv(skb)->local_origin = false;
 
-If so, I'll just wait for the fix to get into Linus's tree as this does
-not seem to be a stable-tree-only issue.
+IMO this patch does not work as intended.
 
-thanks,
+You probably need to revisit every place where can_skb_reserve() is 
+used, e.g. in raw_sendmsg().
 
-greg k-h
+E.g. to make it work for virtual CAN and vxcan interfaces.
+
+I'm a bit unsure why we should not stick with the simple skb->sk handling?
+
+Regards,
+Oliver
+
+>   
+>   	*cfd = skb_put_zero(skb, sizeof(struct canfd_frame));
+>   
+> diff --git a/include/linux/can/skb.h b/include/linux/can/skb.h
+> index fdb22b00674a..1b8a8cf2b13b 100644
+> --- a/include/linux/can/skb.h
+> +++ b/include/linux/can/skb.h
+> @@ -52,6 +52,7 @@ struct can_skb_priv {
+>   	int ifindex;
+>   	int skbcnt;
+>   	unsigned int frame_len;
+> +	bool local_origin;
+>   	struct can_frame cf[];
+>   };
+>   
+> diff --git a/net/can/raw.c b/net/can/raw.c
+> index b7dbb57557f3..df2d9334b395 100644
+> --- a/net/can/raw.c
+> +++ b/net/can/raw.c
+> @@ -173,7 +173,7 @@ static void raw_rcv(struct sk_buff *oskb, void *data)
+>   	/* add CAN specific message flags for raw_recvmsg() */
+>   	pflags = raw_flags(skb);
+>   	*pflags = 0;
+> -	if (oskb->sk)
+> +	if (can_skb_prv(skb)->local_origin)
+>   		*pflags |= MSG_DONTROUTE;
+>   	if (oskb->sk == sk)
+>   		*pflags |= MSG_CONFIRM;

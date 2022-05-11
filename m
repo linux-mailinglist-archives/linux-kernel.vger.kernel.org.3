@@ -2,91 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4AD0523A5E
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEFFF523A61
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344784AbiEKQbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 12:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58348 "EHLO
+        id S1344789AbiEKQba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 12:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344818AbiEKQbH (ORCPT
+        with ESMTP id S1344804AbiEKQbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 12:31:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 865311E3EED
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:31:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652286665;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NwRUdIGOtIagk3/zZnpGlBztHUulW1Iopy3U8SZNQBg=;
-        b=Igk3jGn5Sx/IbYEM75m7WGbRjyLWUFFMCZW+aYV8psVPnLOsmy5Wc20ljoHe/OJd3GUhUT
-        r4YjsuBVAN19gf6eaoWW7JpsOJYNVcNHOf0GqCd3lo8wyP8G6pmbCk5QTmb3/e/nqFL+RN
-        CC/C7mCmf/PabSLUASslEjnfLGn9kK4=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-414-IuZ0THWPN5aYSxjfVdTtag-1; Wed, 11 May 2022 12:31:03 -0400
-X-MC-Unique: IuZ0THWPN5aYSxjfVdTtag-1
-Received: by mail-wr1-f69.google.com with SMTP id j27-20020adfb31b000000b0020c4ca11566so1032948wrd.14
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:31:03 -0700 (PDT)
+        Wed, 11 May 2022 12:31:23 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF06F239B3A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:31:19 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id jt15so2464677qvb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:31:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5AW0aZoxHCN1VcWSiLevVsA+4vTrs8hedKoXKC8swoo=;
+        b=PeLfiEM2fdaGSYbtJQ/sHoHI/+L6Xi/cs5SHyHuC/SxKcebTKwmGKdh+4cqV5wbSFf
+         oQ2ZNFFCCuTMZtRNOUp4GIVnzh0u64rEZXI5WIL7iXphKrgMdGVWPA+e0JyTQz6N50p9
+         oTxSqjvYV4ZKuaTVTHUcSVX+Pcmcvz60odUTY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=NwRUdIGOtIagk3/zZnpGlBztHUulW1Iopy3U8SZNQBg=;
-        b=kIy7boaQWJhzQIP5t7L68pqbFcRFl9uBSiwGUtEVTypSr9aL2CyCKSpVBRM33+UBw0
-         RXDpUKt13YZLygNN0MCfnDZmZnv4UCYOUddMoNbCy5MaY+deokrj+MM54XqhqyO633e8
-         KZyoNMyAiU0kHTx0xm5ELmKnv+VwzGXCewFXR/pji3cNV60rWWCo3GixDTA+Bv4XVw5v
-         orI5h/OukmHsC2JTiTNNvGma/gH9Tr9hObunwfbHgAUwPzPI4ZmugrMrJT+Y3icUzXDh
-         ScI+bBfydhZBQZqZ0mcRwwVNH3HMTMuJa23BsF1qPtUAaWpb75pr01aQ81Dc+9YWQh94
-         ib5g==
-X-Gm-Message-State: AOAM530QIdGyoNN/GyqFmerZXow8A7hQ8o3RBrtU5P9wvWwo/AH1sVbt
-        OzZAUIQD7wSZjdb2rskU9V/pOgxPB3NLFtQwXSiL2+nm97YW4EORx/S8Kv8o/OmUvHoYhtpHa1J
-        cDax9uYUY1d2PuBusYHtFqB4D
-X-Received: by 2002:a05:600c:3515:b0:394:8c7e:fbde with SMTP id h21-20020a05600c351500b003948c7efbdemr5660659wmq.165.1652286662379;
-        Wed, 11 May 2022 09:31:02 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyxBi1Dj04MlOukt9LYl4UqTJT36Sqbp84lQ3YdTyLI0xlWc6yJdnKpgzjmA8uHrQm9JnMgUw==
-X-Received: by 2002:a05:600c:3515:b0:394:8c7e:fbde with SMTP id h21-20020a05600c351500b003948c7efbdemr5660632wmq.165.1652286662173;
-        Wed, 11 May 2022 09:31:02 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c701:700:2393:b0f4:ef08:bd51? (p200300cbc70107002393b0f4ef08bd51.dip0.t-ipconnect.de. [2003:cb:c701:700:2393:b0f4:ef08:bd51])
-        by smtp.gmail.com with ESMTPSA id o3-20020adfeac3000000b0020c66310845sm2016448wrn.55.2022.05.11.09.30.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 09:31:00 -0700 (PDT)
-Message-ID: <d3a0a870-dccf-186c-e079-96b8309721cd@redhat.com>
-Date:   Wed, 11 May 2022 18:30:59 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5AW0aZoxHCN1VcWSiLevVsA+4vTrs8hedKoXKC8swoo=;
+        b=DmiHm1KaU99JiPIPFY833BpGeKqhJMB0UYv3U3heyKqiM6sigbotaPjt8Za/CdP4Mh
+         HSPy4LSY+YFxU1UHfd9Hz5JPhaHcto85JtI0YSYNZlNs+EpI3EG17OtZhfaTm/IZPyey
+         aUuicvYDlmlLQD/01djZvs9gvXfWUNuLkzRiLMPpAdcgGG/u4JUXDicJA/dtVCTUMUTN
+         SlTmkW74paizVut7JgdiekWpYTJvJQdLshSzkQfWjBpChK66E79C2OIJY8t9+d5TvfZa
+         TybPLGUn84XOA+IS8sUKVHVHzSiS75H6hxj8NdSYShfz9aVGFx7yptV3lhha+mEHhQ8B
+         iLpA==
+X-Gm-Message-State: AOAM532xkQGJfvy48qld7vUnU8I9Zf+TjZ9sBhnTIPCB6Z9HtU9xPYgc
+        0oe/N80uuaFPY5fg0gSYgl02l9Aka16ZMg==
+X-Google-Smtp-Source: ABdhPJwCY37vGnZ+DMy0b1A6UZRgARNdpOdQuhqhLyeMoiUh4C59xvmwsBczXp7zrc+YeSQS3oD8Xg==
+X-Received: by 2002:a05:6214:5008:b0:45b:82:6ef with SMTP id jo8-20020a056214500800b0045b008206efmr17026158qvb.87.1652286678916;
+        Wed, 11 May 2022 09:31:18 -0700 (PDT)
+Received: from meerkat.local (bras-base-mtrlpq5031w-grc-32-216-209-220-127.dsl.bell.ca. [216.209.220.127])
+        by smtp.gmail.com with ESMTPSA id k14-20020a05620a414e00b0069fc2a7e7a5sm1546889qko.75.2022.05.11.09.31.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 09:31:18 -0700 (PDT)
+Date:   Wed, 11 May 2022 12:31:16 -0400
+From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        KVM list <kvm@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        mie@igel.co.jp
+Subject: Re: [GIT PULL] virtio: last minute fixup
+Message-ID: <20220511163116.fpw2lvrkjbxmiesz@meerkat.local>
+References: <20220510082351-mutt-send-email-mst@kernel.org>
+ <CAHk-=wjPR+bj7P1O=MAQWXp0Mx2hHuNQ1acn6gS+mRo_kbo5Lg@mail.gmail.com>
+ <YnrxTMVRtDnGA/EK@dev-arch.thelio-3990X>
+ <CAHk-=wgAk3NEJ2PHtb0jXzCUOGytiHLq=rzjkFKfpiuH-SROgA@mail.gmail.com>
+ <20220511125140.ormw47yluv4btiey@meerkat.local>
+ <87a6bo89w4.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v8 06/23] mm/shmem: Handle uffd-wp special pte in page
- fault handler
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Alistair Popple <apopple@nvidia.com>
-References: <20220405014646.13522-1-peterx@redhat.com>
- <20220405014844.14239-1-peterx@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220405014844.14239-1-peterx@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87a6bo89w4.fsf@mpe.ellerman.id.au>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,27 +78,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +/*
-> + * This is actually a page-missing access, but with uffd-wp special pte
-> + * installed.  It means this pte was wr-protected before being unmapped.
-> + */
-> +static vm_fault_t pte_marker_handle_uffd_wp(struct vm_fault *vmf)
-> +{
-> +	/*
-> +	 * Just in case there're leftover special ptes even after the region
-> +	 * got unregistered - we can simply clear them.  We can also do that
-> +	 * proactively when e.g. when we do UFFDIO_UNREGISTER upon some uffd-wp
-> +	 * ranges, but it should be more efficient to be done lazily here.
-> +	 */
-> +	if (unlikely(!userfaultfd_wp(vmf->vma) || vma_is_anonymous(vmf->vma)))
-> +		return pte_marker_clear(vmf);
+On Wed, May 11, 2022 at 11:40:59PM +1000, Michael Ellerman wrote:
+> > I think we should simply disambiguate the trailer added by tooling like b4.
+> > Instead of using Link:, it can go back to using Message-Id, which is already
+> > standard with git -- it's trivial for git.kernel.org to link them to
+> > lore.kernel.org.
+> 
+> But my mailer, editor and terminal don't know what to do with a Message-Id.
+> 
+> Whereas they can all open an https link.
+> 
+> Making people paste message ids into lore to see the original submission
+> is not a win. People make enough fun of us already for still using email
+> to submit patches, let's not make their job any easier :)
 
-What would happen if we do a unregister followed by a register? IMHO we
-should start with a clean uffd-wp slate then. Your comment makes ma
-assume that we could receive stale WP events, which would be wrong?
+Okay, I'm fine with using a dedicated trailer for this purpose, perhaps an
+"Archived-At"? That's a real header that was proposed by IETF for similar
+purposes. E.g.:
 
--- 
-Thanks,
+    Archived-at: https://lore.kernel.org/r/CAHk-=wgAk3NEJ2PHtb0jXzCUOGytiHLq=rzjkFKfpiuH-SROgA@mail.gmail.com
 
-David / dhildenb
-
+-K

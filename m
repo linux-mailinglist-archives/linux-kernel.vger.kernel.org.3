@@ -2,146 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F7BC522E43
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80316522E44
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243593AbiEKIXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 04:23:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56612 "EHLO
+        id S243607AbiEKIYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 04:24:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243565AbiEKIXi (ORCPT
+        with ESMTP id S232443AbiEKIYG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 04:23:38 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCAFF3CFF7
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 01:23:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652257416; x=1683793416;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=c8yFjI/vXth0xQYdEZ39Vhtg6TjCyTIBFEPXkMzEnQY=;
-  b=CpGSE+BCN66znbtnliAe1uFSKo+AXQvW2nN7WH7/92MpUcSLHcg/fe6b
-   kn0gqYHLlHUOumCbSKDB6NUa7r9TRYekivw2sFCVQefxtvWzZK8i+Apgl
-   MMmTlFQ1/QA8DeF9NQKtGcUBxn43vbnrgoh/68ZPphodu4vjBSI8ivW9i
-   CCHkTg10Cx6gG4+d51b/EaZG7DhzUXNRc796JJyR0H5/DRqRcjIUlLuyy
-   SXDghSkfu4Fr3uN75HCGjXBJtfyb+xMxHEy5ePO6uVJM9CxTG8T2bKTTo
-   4buWglDhnTdJhFvEsnjhN9To5nLXHtHYIEd567Tvdyhb0vVM9bEgTtGoZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="257172418"
-X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
-   d="scan'208";a="257172418"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 01:23:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
-   d="scan'208";a="697474313"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 11 May 2022 01:23:34 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nohd8-000ItQ-6R;
-        Wed, 11 May 2022 08:23:34 +0000
-Date:   Wed, 11 May 2022 16:23:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masahiro Yamada <yamada.masahiro@socionext.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: {standard input}:1155: Error: operands mismatch -- statement `divu.l
- %d0,%d3:%d7' ignored
-Message-ID: <202205111652.rA2Gh5Sy-lkp@intel.com>
+        Wed, 11 May 2022 04:24:06 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F141A562D6;
+        Wed, 11 May 2022 01:24:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A67FF106F;
+        Wed, 11 May 2022 01:24:04 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.3.187])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A24923F73D;
+        Wed, 11 May 2022 01:24:00 -0700 (PDT)
+Date:   Wed, 11 May 2022 09:23:56 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Lukas Wunner <lukas@wunner.de>, maz@kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-gpio@vger.kernel.org,
+        Octavian Purdila <octavian.purdila@nxp.com>,
+        linux-kernel@vger.kernel.org, aou@eecs.berkeley.edu,
+        catalin.marinas@arm.com, deanbo422@gmail.com, green.hu@gmail.com,
+        guoren@kernel.org, jonas@southpole.se, kernelfans@gmail.com,
+        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
+        nickhu@andestech.com, palmer@dabbelt.com, paul.walmsley@sifive.com,
+        shorne@gmail.com, stefan.kristiansson@saunalahti.fi,
+        tsbogend@alpha.franken.de, vgupta@kernel.org,
+        vladimir.murzin@arm.com, will@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v2 17/17] irq: remove handle_domain_{irq,nmi}()
+Message-ID: <YntynKK5Jjw2Q1rX@FVFF77S0Q05N>
+References: <20211026092504.27071-1-mark.rutland@arm.com>
+ <20211026092504.27071-18-mark.rutland@arm.com>
+ <20220506203242.GA1855@wunner.de>
+ <YnjWvbzn8ox+f2Y2@FVFF77S0Q05N>
+ <20220510121320.GA3020@wunner.de>
+ <Ynpzb5L53iGex14D@FVFF77S0Q05N>
+ <87a6bpov9u.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <87a6bpov9u.ffs@tglx>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   feb9c5e19e913b53cb536a7aa7c9f20107bb51ec
-commit: 9012d011660ea5cf2a623e1de207a2bc0ca6936d compiler: allow all arches to enable CONFIG_OPTIMIZE_INLINING
-date:   3 years ago
-config: m68k-randconfig-r003-20220509 (https://download.01.org/0day-ci/archive/20220511/202205111652.rA2Gh5Sy-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9012d011660ea5cf2a623e1de207a2bc0ca6936d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 9012d011660ea5cf2a623e1de207a2bc0ca6936d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+On Wed, May 11, 2022 at 12:52:29AM +0200, Thomas Gleixner wrote:
+> On Tue, May 10 2022 at 15:15, Mark Rutland wrote:
+> > On Tue, May 10, 2022 at 02:13:20PM +0200, Lukas Wunner wrote:
+> >> For gpio-dln2.c, I believe it from inspection.
+> >> 
+> >> For smsc95xx.c, I'm actually seeing it go wrong in practice,
+> >> unedited dmesg splat is included below FWIW.
+> >
+> > Thanks; having the trace makes this much easier to analyse.
+> 
+> which confirmes what I talked about before:
+> 
+> >> WARNING: CPU: 3 PID: 75 at kernel/irq/irqdesc.c:702 generic_handle_domain_irq+0x88/0x94
+> >>  generic_handle_domain_irq from smsc95xx_status+0x54/0xb0
+> >>  smsc95xx_status from intr_complete+0x80/0x84
+> >>  intr_complete from __usb_hcd_giveback_urb+0xa4/0x12c
+> >>  __usb_hcd_giveback_urb from usb_hcd_giveback_urb+0x118/0x11c
+> >>  usb_hcd_giveback_urb from completion_tasklet_func+0x7c/0xc8
+> >>  completion_tasklet_func from tasklet_callback+0x20/0x24
+> >>  tasklet_callback from tasklet_action_common.constprop.0+0x148/0x220
+> >>  tasklet_action_common.constprop.0 from tasklet_hi_action+0x28/0x30
+> >>  tasklet_hi_action from __do_softirq+0x154/0x3e8
+> >>  __do_softirq from __local_bh_enable_ip+0x12c/0x1a8
+> >>  __local_bh_enable_ip from irq_forced_thread_fn+0x7c/0xac
+> >>  irq_forced_thread_fn from irq_thread+0x16c/0x228
+> >>  irq_thread from kthread+0x100/0x140
+> 
+> So what happens here:
+> 
+>  interrupt
+>     -> wakeup threaded handler
+> 
+>  threaded handler runs
+>     local_bh_disable();
+>     ....
+>     schedules tasklet
+>     ...
+>     local_bh_enable()
+>       do_softirq()
+>         run_tasklet()
+>           urb_completion()
+>             smsc95xx_status()
+>               generic_handle_domain_irq()
+> 
+> That interrupt in question is an interrupt, which is not handled by the
+> primary CPU interrupt chips. It's a synthetic interrupt which is
+> generated from the received USB packet.
+> 
+> +	/* USB interrupts are received in softirq (tasklet) context.
+> +	 * Switch to hardirq context to make genirq code happy.
+> +	 */
+> +	local_irq_save(flags);
+> +	__irq_enter_raw();
+> +
+>  	if (intdata & INT_ENP_PHY_INT_)
+> -		;
+> +		generic_handle_domain_irq(pdata->irqdomain, PHY_HWIRQ);
+> 
+> This __irq_enter_raw() is really wrong. This is _not_ running in hard
+> interrupt context. Pretending so creates more problems than it
+> solves. It breaks context tracking, confuses lockdep ...
+> 
+> We also have demultiplexed interrupts which are nested in a threaded
+> interrupt handler and share the thread context. No, we are not going to
+> pretend that they run in hard interrupt context either.
+> 
+> So we need a clear distinction between interrupts which really happen in
+> hard interrupt context and those which are synthetic and can be invoked
+> from pretty much any context.
+> 
+> Anything else is just a recipe for disaster and endless supply of half
+> baken hacks.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Agreed. IIUC everyone agrees the __irq_enter_raw() usage is a hack, but what's
+not clear is what we *should* do -- sorry if I'm being thick here.
 
-All errors (new ones prefixed by >>):
+I suspect that given we have generic_handle_irq_safe() for situations like this
+we should add a generic_handle_domain_irq_safe(), and use that in this driver?
+That way we can keep the `WARN_ON_ONCE(!in_hardirq())` in
+generic_handle_domain_irq().
 
-   {standard input}: Assembler messages:
-   {standard input}:272: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `sub.b %d1,%d3' ignored
-   {standard input}:369: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `add.b %d3,%d1' ignored
-   {standard input}:505: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `sub.b %d3,%d1' ignored
-   {standard input}:609: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu 4(%a1){%d0,#8},%d0' ignored
-   {standard input}:650: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu 4(%a0){%d1,#8},%d1' ignored
-   {standard input}:752: Error: operands mismatch -- statement `mulu.l 4(%a0),%d3:%d0' ignored
-   {standard input}:752: Error: operands mismatch -- statement `mulu.l 8(%a0),%d2:%d4' ignored
-   {standard input}:752: Error: operands mismatch -- statement `mulu.l 4(%a0),%d7:%d6' ignored
-   {standard input}:755: Error: operands mismatch -- statement `mulu.l 8(%a0),%d7:%d5' ignored
-   {standard input}:765: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `roxl.l #1,%d0' ignored
-   {standard input}:768: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `roxl.l #1,%d3' ignored
-   {standard input}:819: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfffo %d0{#0,#32},%d2' ignored
-   {standard input}:835: Error: operands mismatch -- statement `mulu.l 4(%a0),%d3:%d0' ignored
-   {standard input}:835: Error: operands mismatch -- statement `mulu.l 8(%a0),%d2:%d4' ignored
-   {standard input}:835: Error: operands mismatch -- statement `mulu.l 4(%a0),%d7:%d6' ignored
-   {standard input}:838: Error: operands mismatch -- statement `mulu.l 8(%a0),%d7:%d5' ignored
-   {standard input}:853: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfffo %d2{#0,#32},%d0' ignored
-   {standard input}:926: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfffo %d3{#0,#32},%d2' ignored
-   {standard input}:937: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfffo %d3{#0,#32},%d0' ignored
-   {standard input}:1062: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu 4(%a0){%d0,#8},%d0' ignored
->> {standard input}:1155: Error: operands mismatch -- statement `divu.l %d0,%d3:%d7' ignored
->> {standard input}:1166: Error: operands mismatch -- statement `divu.l %d2,%d4:%d1' ignored
->> {standard input}:1166: Error: operands mismatch -- statement `mulu.l %d1,%d3:%d0' ignored
->> {standard input}:1169: Error: operands mismatch -- statement `mulu.l %d3,%d2:%d7' ignored
->> {standard input}:1174: Error: operands mismatch -- statement `mulu.l 4(%a1),%d0:%d1' ignored
-   {standard input}:1211: Error: operands mismatch -- statement `divu.l %d2,%d4:%d1' ignored
-   {standard input}:1211: Error: operands mismatch -- statement `mulu.l %d1,%d3:%d0' ignored
-   {standard input}:1215: Error: operands mismatch -- statement `mulu.l %d3,%d2:%d7' ignored
-   {standard input}:1223: Error: operands mismatch -- statement `mulu.l 4(%a1),%d0:%d1' ignored
-   {standard input}:1282: Error: operands mismatch -- statement `divu.l %d0,%d3:%d7' ignored
-   {standard input}:1293: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfffo %d1{#0,#32},%d2' ignored
-   {standard input}:1314: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfffo %d1{#0,#32},%d2' ignored
-   {standard input}:1416: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `roxr.l #1,%d0' ignored
-   {standard input}:1420: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `roxr.l #1,%d2' ignored
-   {standard input}:1425: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `roxr.l #1,%d0' ignored
-   {standard input}:1451: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfffo %d0{#0,#32},%d2' ignored
-   {standard input}:1461: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfffo %d0{#0,#32},%d2' ignored
-   {standard input}:1554: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu 4(%a0){%d0,#8},%d0' ignored
-   {standard input}:2057: Error: operands mismatch -- statement `mulu.l %d3,%d3:%d0' ignored
-   {standard input}:2269: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu 4(%a3){%d0,#8},%d0' ignored
-   {standard input}:2401: Error: operands mismatch -- statement `divu.l 4(%a4),%d0:%d1' ignored
-   {standard input}:2483: Error: operands mismatch -- statement `divu.l %d3,%d0:%d1' ignored
-   {standard input}:2585: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu 4(%a3){%d0,#8},%d0' ignored
-   {standard input}:2970: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu 4(%a3){%d1,#8},%d1' ignored
+... or do you think we should do something else entirely?
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for NEED_MULTIPLE_NODES
-   Depends on DISCONTIGMEM || NUMA
-   Selected by
-   - SINGLE_MEMORY_CHUNK && MMU
-   WARNING: unmet direct dependencies detected for NEED_MULTIPLE_NODES
-   Depends on DISCONTIGMEM || NUMA
-   Selected by
-   - SINGLE_MEMORY_CHUNK && MMU
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Mark.

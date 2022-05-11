@@ -2,83 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C3C0523C28
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9EC523C2D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346063AbiEKSBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 14:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
+        id S1346023AbiEKSCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 14:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346027AbiEKSBR (ORCPT
+        with ESMTP id S231759AbiEKSCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 14:01:17 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0B551E50
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:01:15 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id b18so4904071lfv.9
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:01:15 -0700 (PDT)
+        Wed, 11 May 2022 14:02:18 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8578381991;
+        Wed, 11 May 2022 11:02:17 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id z19so3485606edx.9;
+        Wed, 11 May 2022 11:02:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=vapj0kW4KwHiPms6GfxtxLcmGObJK471bDUmNzQRuog=;
-        b=BFD5fz+C7GTIOPRH8A7H7w72GvFbrLP4mTnO1BVj2UVwNJd6mVAlOOCMUTtqhGxUt0
-         VxLr9shPiDClWFiSXLImqDCVH8Jko3dbCW1ioEQ7whrSgDTzpFsPGFAQgjnkC/8x3t10
-         DSUiXJE5fJ5eMMA78q4HZU5jhfq/qUkGnqA9DMyAHKRerVelAj1X4WHCXw5/HhbX4mLV
-         3lB5D0c2VpPuoPt9wqtpYe6qFT+7onxnil8dOeCdK1i54YqCN4cSR4fP0Gcg17PRIYk2
-         SoFB5GfleAb54SzI+XQdfvjbQ0CkD7Y70NfFk7ESmAerbbsrcDa4r/Znf43bVqgAvUtX
-         zzAA==
+        bh=WXSifZkVMNKJIWFI2353UCu3hiqezZq+FGcwxX96rkU=;
+        b=G+0Za8nPUrc8M0fsDLPxGWlmEaKAp942tfzktpszcavil+hsJTVX794SkbzQ/4gxHG
+         zPfJuX/ctiEtkVXbI+iyAkObd23R2vM54dbSvqo0AmvAdqDoYkSTKIH+oksSFKoIvpr8
+         OdNV7sbn4X6o1ScR/3ah7q5ZA8YDLHOowO+FlJ75oyoaO0cUEcTr53Nx6Hu57P1GDdgV
+         EWkoRGlWhnvF1Cj8GKw2amyZlIySmYbjduYLE21gYJcqRHDK60uJWe4HfwIWpSRW4GqQ
+         d/00sYksDLT0W3c/YnrkFPS8zSl+s5dJOQYBMIhSBavxqsHr4jLh9Rg1L1wGtUrRMzEP
+         RTNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=vapj0kW4KwHiPms6GfxtxLcmGObJK471bDUmNzQRuog=;
-        b=VVpcNlyqOGOHgD1DEr1UZxEEL8Y0pw/jymW0waum2ilrgyLGp+3XHMMWGPcnvdL9KK
-         sT6Im0TmtI8SwmBsRupda1sWALtiNuRP/3wH3PFjmt7NA6ekQZoGwReA2oW4FkUt0RJj
-         7Vo1y97d7jLrJFT+EaiUdKCEnPmpati7uZy9QnXmkF6aYHe0Moot511rphS3sah/Vp66
-         uMyrW7oR9hgLI0417UsrbaHMLbTS2+oVHi8LonbgbEGb1h2dWahRJ/rzmAg84XIMdKvU
-         jlu0U7Nr1Wnk8JCZBRPDSVXkI8kJmzntC9+LqgeRYOCjK5CXi0zsSLuW4ylxdsJ5DZ8H
-         79Hg==
-X-Gm-Message-State: AOAM532lueziy0Gjy5xnSGO3bD51YAADe9XmPInuTGbWNuMHVpTORT5d
-        6+iIsyNWqeSZwrdKldAVXdKNnFZAYmIxt57Y7+z5Fw==
-X-Google-Smtp-Source: ABdhPJw18n/anGk78kJcfwbuCm1c1DJCRW8ONkjNYYHy9a4WHBpUUwKabm1HCH5hU465b4Sn61BD1WIu+IYeBknLcys=
-X-Received: by 2002:a05:6512:1291:b0:473:b522:ef58 with SMTP id
- u17-20020a056512129100b00473b522ef58mr20617140lfs.190.1652292073536; Wed, 11
- May 2022 11:01:13 -0700 (PDT)
+        bh=WXSifZkVMNKJIWFI2353UCu3hiqezZq+FGcwxX96rkU=;
+        b=UX3AkJmqjS/ELQXvMTBPdR82lRXtOvX7KiH0Gk/+RzPYItccDfK5SRCpdsN/IYABoS
+         pyCAtGHhpPPJ6LKIugg5i5hUicCWQVHhtxWXZ9wezGm0vTJMEyZx5e9qetLx6J3VbeoO
+         9BMwfLGeHVakRSIJb6ixkMB9kzKe6Jxu3/2uJ540c47YjrDc6B1DYLbvl7VgLB5gGKI7
+         EpXmPyRmT4OnCb9CGt9WUpMsBYcVk8FA75sc9oVhU8wpj9yakdwBfJ/eor7td10OS8R2
+         LXnHwvLBqUd/XZGE67rSndCNGmOD+ddZGC0dx6apI7ojikJDrXYmroI5qa/E9wolwLCA
+         k7lw==
+X-Gm-Message-State: AOAM530qz0UMzVIisZfoPARu4PyzKRi0AjP584jbRmJlJ2AAH3j6SPw7
+        WrkTqQsSWBGZY9au5mJde8Y00P7gpOEwMcP+PMQ=
+X-Google-Smtp-Source: ABdhPJzED7Bj/17e150QFoZy4+zLcq3hKeUUGjsXs0im7kbV5CxZM9b9YkqCYtGyfOXYgxCLa43Mb4ikyMkmyAox4Qk=
+X-Received: by 2002:a05:6402:d51:b0:425:d5e1:e9f0 with SMTP id
+ ec17-20020a0564020d5100b00425d5e1e9f0mr30316725edb.125.1652292136090; Wed, 11
+ May 2022 11:02:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220511072747.3960-1-jiangshanlai@gmail.com> <20220511072747.3960-2-jiangshanlai@gmail.com>
-In-Reply-To: <20220511072747.3960-2-jiangshanlai@gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 11 May 2022 11:01:02 -0700
-Message-ID: <CAKwvOdmF_5KudQbC8j5hJT1CqxvYtMneZxb1Si3A2uNxopk3yQ@mail.gmail.com>
-Subject: Re: [PATCH 1/7] x86/entry: Introduce __entry_text for entry code
- written in C
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Marco Elver <elver@google.com>, Hao Luo <haoluo@google.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+References: <20220510151451.85561-1-andriy.shevchenko@linux.intel.com> <eff9907f-e92b-9115-bea7-b1093d1dc28e@redhat.com>
+In-Reply-To: <eff9907f-e92b-9115-bea7-b1093d1dc28e@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 11 May 2022 20:01:39 +0200
+Message-ID: <CAHp75Vcnq=Ou6QNyPjwC+HR9wJ2BheonTqmkGvQU0qFtHO2BDw@mail.gmail.com>
+Subject: Re: [PATCH v5 0/8] platform/x86: introduce p2sb_bar() helper
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
+        Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?=C5=81ukasz_Bartosik?= <lb@semihalf.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-edac@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,102 +85,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 12:27 AM Lai Jiangshan <jiangshanlai@gmail.com> wrote:
->
-> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
->
-> Some entry code will be implemented in C files.
-> Introduce __entry_text to set them in .entry.text section.
->
-> The new __entry_text disables instrumentation like noinstr, so
-> __noinstr_section() is added for noinstr and the new __entry_text.
->
-> Note, entry code can not access to %gs before the %gs base is switched
-> to kernel %gs base, so stack protector can not be used on the C entry
-> code.  But __entry_text doesn't disable stack protector since some
-> compilers might not support function level granular attribute to
-> disable stack protector.  It will be disabled in C file level.
->
-> Cc: Borislav Petkov <bp@alien8.de>
-> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> ---
->  arch/x86/include/asm/idtentry.h | 3 +++
->  include/linux/compiler_types.h  | 8 +++++---
->  2 files changed, 8 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-> index 72184b0b2219..acc4c99f801c 100644
-> --- a/arch/x86/include/asm/idtentry.h
-> +++ b/arch/x86/include/asm/idtentry.h
-> @@ -13,6 +13,9 @@
->
->  #include <asm/irq_stack.h>
->
-> +/* Entry code written in C. */
-> +#define __entry_text __noinstr_section(".entry.text")
-> +
->  /**
->   * DECLARE_IDTENTRY - Declare functions for simple IDT entry points
->   *                   No error code pushed by hardware
-> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-> index 1c2c33ae1b37..8c7e81efe9bf 100644
-> --- a/include/linux/compiler_types.h
-> +++ b/include/linux/compiler_types.h
-> @@ -225,9 +225,11 @@ struct ftrace_likely_data {
->  #endif
->
->  /* Section for code which can't be instrumented at all */
-> -#define noinstr                                                                \
-> -       noinline notrace __attribute((__section__(".noinstr.text")))    \
-> -       __no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage
-> +#define __noinstr_section(section)                             \
-> +       noinline notrace __section(section) __no_profile        \
-> +       __no_kcsan __no_sanitize_address __no_sanitize_coverage
-> +
-> +#define noinstr __noinstr_section(".noinstr.text")
+On Wed, May 11, 2022 at 6:08 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> On 5/10/22 17:14, Andy Shevchenko wrote:
 
-I haven't looked at the rest of the series, but isn't `noinstr` used
-in a bunch of places? Wont this commit break all those uses or at
-least make it break bisection?
+...
 
-Also, my suggestion was simply not to open code
-__attribute__((section(""))). Does this work?
+> I must admit I have lost track of all the Ack-s / Reviewed-by-s a bit.
+>
+> So from the above I take it that the Ack-s resp. Reviewed-by-s on the
+> other non drivers/platform/x86 bits also signal an Ack to merge the entire
+> series through the pdx86 tree?
+>
+> Lee, any chance you can take a look at patches 3-5 and give your Ack
+> for merging these through the pdx86 tree together with the rest?
 
-```
-diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-index 7924f27f5c8b..10ec7039e17d 100644
---- a/arch/x86/include/asm/idtentry.h
-+++ b/arch/x86/include/asm/idtentry.h
-@@ -13,6 +13,9 @@
+Actually I misinterpreted Lee's different tags again. Acked-by is
+normal for routing MFD code via other subsystems, while
+Acked-for-MFD-by is for Lee (scripts?) to route the code via MFD tree.
+Lee, is it the correct interpretation now?
 
- #include <asm/irq_stack.h>
+...
 
-+/* Entry code written in C. Override the section used by noinstr. */
-+#define __entry_text noinstr __section(".entry.text")
-+
- /**
-  * DECLARE_IDTENTRY - Declare functions for simple IDT entry points
-  *                   No error code pushed by hardware
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index 1c2c33ae1b37..ce623099eb21 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -226,8 +226,8 @@ struct ftrace_likely_data {
+> p.s.
+>
+> Since this is mostly a cleanup series and since we are getting close
+> to the next merge-window I believe that it likely is best to merge
+> this after 5.19-rc1 has been released.
 
- /* Section for code which can't be instrumented at all */
- #define noinstr
-         \
--       noinline notrace __attribute((__section__(".noinstr.text")))    \
--       __no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage
-+       noinline notrace __section(".noinstr.text") __no_kcsan          \
-+       __no_sanitize_address __no_profile __no_sanitize_coverage
+OK.
 
- #endif /* __KERNEL__ */
-```
+> I can then also provide
+> an immutable branch for other maintainers early on in the 5.19
+> cycle which should help to avoid merge conflicts.
+
+I guess I will send a v6 anyway in order to attach Henning's series to mine.
+
 -- 
-Thanks,
-~Nick Desaulniers
+With Best Regards,
+Andy Shevchenko

@@ -2,90 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D83AB522CA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:52:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2DFB522CAD
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242433AbiEKGvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 02:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40214 "EHLO
+        id S241941AbiEKGzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 02:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242751AbiEKGv1 (ORCPT
+        with ESMTP id S238702AbiEKGzh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 02:51:27 -0400
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4882357128;
-        Tue, 10 May 2022 23:51:19 -0700 (PDT)
-Received: by mail-wr1-f54.google.com with SMTP id d5so1527136wrb.6;
-        Tue, 10 May 2022 23:51:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1wEl4hKP70nqNM7+s33aDLROWITXXzeuUXQCyFgNxKQ=;
-        b=fL0QpNLjw5Bu1FPrB1EV69pKMr1WMiaxGDyNCVRaUu88Bdh1KTpsixQhD9bddg7O+u
-         6Rvz0mzL/8eE4ABC986jenh9G4Kw7NCZqqmkwbDj02D2UNWsh14SR/maEjFDo2OxI2gj
-         Lk+rHMVrXcEl+uIjjiaaY5mMAGV2ypdg4W7V20ejr8UNBYDll3HZv9lktTcS1Lnz+sPn
-         0Mwf2Y6F08Nq5wTIm31d8qBM5kyCtuiX7JEsILRPAeDBk6KglhUDvYf03Z1RfpUG1jfF
-         WRxTmTq866PI9cwsOBGHYQyf2C7eRHcvciooxoepfEylwhINYPyqS8KGR8xoLro166J9
-         VTwQ==
-X-Gm-Message-State: AOAM530BpgUxgyylrVAGSsY/zJipdAQrKOw5EMpW/1mQrb6Hj/7i2q9j
-        g6JLWtUKKY1Y3eLDXkJG0jE=
-X-Google-Smtp-Source: ABdhPJzvSiFXK+Pkx1A+5Jgez3pwE0NnwYeWyDPJFd2IMdUv3cDPSfUbrL34eucFRES0Ji7AeRNSEg==
-X-Received: by 2002:a05:6000:144a:b0:20c:6b73:804 with SMTP id v10-20020a056000144a00b0020c6b730804mr21963700wrx.88.1652251877878;
-        Tue, 10 May 2022 23:51:17 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id r5-20020a05600c424500b003942a244f3asm4242899wmm.19.2022.05.10.23.51.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 23:51:17 -0700 (PDT)
-Message-ID: <e9a112f8-a35b-1df4-0567-9fddf80c8e17@kernel.org>
-Date:   Wed, 11 May 2022 08:51:16 +0200
+        Wed, 11 May 2022 02:55:37 -0400
+Received: from m15113.mail.126.com (m15113.mail.126.com [220.181.15.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9107A243105;
+        Tue, 10 May 2022 23:55:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=u1j75
+        +jwMktH6WYAlX+Azz8jfD4KSlO2j7a6v1tqq5E=; b=pk1zLcnONLE5+XxUCcVkW
+        TDWFbncfWIPO97BebKB3GOACmwfAjDLvC8mwYbI23TXhPNMb2sIwVFV/VXIxLe53
+        rnXdENFlckqpfTvu0yfnwE7sZedKRakyMvdXDUNgvaX8d3b6AdQBAcuM4OyLukzh
+        4nbFmajLK5H31z8Rx2/VHc=
+Received: from ubuntu.localdomain (unknown [58.213.83.157])
+        by smtp3 (Coremail) with SMTP id DcmowACXS5zBXXtit4LEBQ--.33384S4;
+        Wed, 11 May 2022 14:54:58 +0800 (CST)
+From:   Bernard Zhao <zhaojunkui2008@126.com>
+To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     bernard@vivo.com, Bernard Zhao <zhaojunkui2008@126.com>
+Subject: [PATCH] intel/i40e: delete if NULL check before dev_kfree_skb
+Date:   Tue, 10 May 2022 23:54:51 -0700
+Message-Id: <20220511065451.655335-1-zhaojunkui2008@126.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v4 1/1] soc: fujitsu: Add A64FX diagnostic interrupt
- driver
-Content-Language: en-US
-To:     Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        linux-arm-kernel@lists.infradead.org, soc@kernel.org,
-        linux-serial@vger.kernel.org, sumit.garg@linaro.org
-Cc:     arnd@arndb.de, olof@lixom.net, catalin.marinas@arm.com,
-        will@kernel.org, gregkh@linuxfoundation.org,
-        jason.wessel@windriver.com, daniel.thompson@linaro.org,
-        dianders@chromium.org, linux-kernel@vger.kernel.org,
-        kgdb-bugreport@lists.sourceforge.net, peterz@infradead.org
-References: <20220511062113.2645747-1-hasegawa-hitomi@fujitsu.com>
- <20220511062113.2645747-2-hasegawa-hitomi@fujitsu.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220511062113.2645747-2-hasegawa-hitomi@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DcmowACXS5zBXXtit4LEBQ--.33384S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtF1fCw18Wr1UAF1kZrWUurg_yoWfZFc_Cr
+        n7XF1xKw45KwnYqrn8Cr4fu3yjyrZ8W3yrury7t3yfJr9Fyr4UZryDZr95Xw4fWr4rCFy5
+        Aa43t3W7C345AjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRAR6w3UUUUU==
+X-Originating-IP: [58.213.83.157]
+X-CM-SenderInfo: p2kd0y5xqn3xasqqmqqrswhudrp/1tbiYAP9qlpEHUaynQAAse
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11. 05. 22, 8:21, Hitomi Hasegawa wrote:
-> --- /dev/null
-> +++ b/drivers/soc/fujitsu/a64fx-diag.c
-> @@ -0,0 +1,155 @@
-...
-> +#define BMC_DIAG_INTERRUPT_STATUS_OFFSET (0x0044)
-> +#define BMC_DIAG_INTERRUPT_ENABLE_OFFSET (0x0040)
+dev_kfree_skb check if the input parameter NULL and do the right
+thing, there is no need to check again.
+This change is to cleanup the code a bit.
 
-And I noticed here, I would:
-* remove unneeded parentheses
-* drop the "_OFFSET" suffix
-* just write 8bit values (0x40, 0x44), given they fit
-* order them numerically, 0x40 goes first
+Signed-off-by: Bernard Zhao <zhaojunkui2008@126.com>
+---
+ drivers/net/ethernet/intel/i40e/i40e_txrx.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-thanks,
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.c b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+index 0eae5858f2fe..98cfadfd0f35 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+@@ -1482,10 +1482,8 @@ void i40e_clean_rx_ring(struct i40e_ring *rx_ring)
+ 	if (!rx_ring->rx_bi)
+ 		return;
+ 
+-	if (rx_ring->skb) {
+-		dev_kfree_skb(rx_ring->skb);
+-		rx_ring->skb = NULL;
+-	}
++	dev_kfree_skb(rx_ring->skb);
++	rx_ring->skb = NULL;
+ 
+ 	if (rx_ring->xsk_pool) {
+ 		i40e_xsk_clean_rx_ring(rx_ring);
 -- 
-js
-suse labs
+2.33.1
+

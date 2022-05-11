@@ -2,134 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6FA5228DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 03:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21FB95228D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 03:17:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240234AbiEKBSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 21:18:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51790 "EHLO
+        id S240199AbiEKBRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 21:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237149AbiEKBSX (ORCPT
+        with ESMTP id S238619AbiEKBRV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 21:18:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA1C27CD2;
-        Tue, 10 May 2022 18:18:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1C44EB81F93;
-        Wed, 11 May 2022 01:18:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F7F4C385DF;
-        Wed, 11 May 2022 01:18:17 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="UfMP+emF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1652231895;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IsOOzB19/xOUpQ76zC1Vq6dt+kY3RnA9bkLKaUoyaYU=;
-        b=UfMP+emF48RhnkR0HZZ9wPYI4O4bBjfUJN8my+5k1pCyRl0c4YlekNCceRptDnpwFeNI1V
-        yLKb1cs24st7czkf9YWatfofWW1ee3sF2NEsdICBbkLLh8Lod7V5ER9FSknEpy3AicTmG/
-        z7Cjekv7HWSRlrJqMKghWkaTQxMmoa8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d5c8f119 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 11 May 2022 01:18:15 +0000 (UTC)
-Date:   Wed, 11 May 2022 03:18:12 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Simo Sorce <simo@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Alexander Graf <graf@amazon.com>,
-        Colm MacCarthaigh <colmmacc@amazon.com>,
-        Torben Hansen <htorben@amazon.co.uk>,
-        Jann Horn <jannh@google.com>
-Subject: Re: [PATCH 2/2] random: add fork_event sysctl for polling VM forks
-Message-ID: <YnsO1JGQm5FEkbJt@zx2c4.com>
-References: <20220502140602.130373-1-Jason@zx2c4.com>
- <20220502140602.130373-2-Jason@zx2c4.com>
- <8f305036248cae1d158c4e567191a957a1965ad1.camel@redhat.com>
+        Tue, 10 May 2022 21:17:21 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCED3C4BC
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 18:17:20 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id m23so670409ljb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 18:17:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=l/R7CNjWmMZ859kdXkriliqHFZFmcdN2UKowY7vVOHU=;
+        b=8CJByluZYe0dkhytOZ7LANy/Q36T2SzxDWXpHLGeWnfxyvns0y176nq5wqABdl8MuS
+         8JWwhkw/8Dz/zjo0vYLE6X4ieGVgty19A6fmFFJfTAkZf0XwfmaUvEBa51chzTSw2fNk
+         NCZFjZAzOuQZeVDNUshWB0ME+BKf6rAkRWyRi2suCa4HnC5cIEI70C8pbRMMhYKfUACy
+         lHeDeT9I/k+fOz1ysSaU8nlyyAjEfuSDDWejsXcoXUidz55t1Wl6dZHJV9vvCP+L3IFs
+         RWxkEh2zXcgX0WJ+D7S89UL9SGee8sjbbN4mdh9bgMFty7a0McfOFAswPU9H9kpsEhbS
+         0otA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=l/R7CNjWmMZ859kdXkriliqHFZFmcdN2UKowY7vVOHU=;
+        b=M7BeqJj/4RiuMI+noqGWNpF4BPYHewi2/4HLjhReZGCE2E7g9fig6av765ssV8nJJc
+         TBIKPePlkMjR5OfxlLsE1fCLUjQ8oBT0JLexN1ghLZLJRJl8GYzpldwUaL/mMTOgp2Sb
+         Tdpxqr/ydFpD9kCwfSN4IV3KJ56AGgXiAJThUlNXRdLXRFdQdQJa2B9KT0dJwVG7GILK
+         eSZUK4afUtDq5nY8CVTxF6E6fQgjytbodiEzMmKjl13U6dOXeQgn9BLNTe8D4a/qUJrx
+         rbDZq32R3083PttROvY902S9cZUsfmuoVnu/H4OtMUjGe5f3jL7Vh+A1Lu7wb6GBz/A0
+         gF1g==
+X-Gm-Message-State: AOAM531Yg9jSRf5R/7r/X8ZfkZjA3A0/hqSbPMhxRcQCSthpsNymYdC1
+        kpSyTUaL9juDg35nt+CYkUzGQA==
+X-Google-Smtp-Source: ABdhPJyrXOYBkxfOLvXU9Mn81RSN5B1FseXt9b41D13lneI6qmBsXWNhAHs+SC3qXiT0Ejz37PQkVA==
+X-Received: by 2002:a2e:a810:0:b0:250:a19f:8b30 with SMTP id l16-20020a2ea810000000b00250a19f8b30mr14868052ljq.397.1652231838459;
+        Tue, 10 May 2022 18:17:18 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id c20-20020ac25f74000000b0047255d21187sm62003lfc.182.2022.05.10.18.17.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 18:17:17 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 78BFE104757; Wed, 11 May 2022 04:19:06 +0300 (+03)
+Date:   Wed, 11 May 2022 04:19:06 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv5 10/12] x86/tdx: Unaccepted memory support
+Message-ID: <20220511011906.el4m54fns7ilh7fr@box.shutemov.name>
+References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
+ <20220425033934.68551-11-kirill.shutemov@linux.intel.com>
+ <YnOjJB8h3ZUR9sLX@zn.tnic>
+ <20220506204423.gu6jrb53kmuxze5r@box.shutemov.name>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8f305036248cae1d158c4e567191a957a1965ad1.camel@redhat.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220506204423.gu6jrb53kmuxze5r@box.shutemov.name>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Simo,
-
-On Tue, May 10, 2022 at 08:40:48PM -0400, Simo Sorce wrote:
-> At your request teleporting here the answer I gave on a different
-> thread, reinforced by some thinking.
+On Fri, May 06, 2022 at 11:44:23PM +0300, Kirill A. Shutemov wrote:
+> > > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> > > index 7021ec725dd3..e4c31dbea6d7 100644
+> > > --- a/arch/x86/Kconfig
+> > > +++ b/arch/x86/Kconfig
+> > > @@ -885,6 +885,7 @@ config INTEL_TDX_GUEST
+> > >  	select ARCH_HAS_CC_PLATFORM
+> > >  	select X86_MEM_ENCRYPT
+> > >  	select X86_MCE
+> > > +	select UNACCEPTED_MEMORY
+> > 
+> > WARNING: unmet direct dependencies detected for UNACCEPTED_MEMORY
+> >   Depends on [n]: EFI [=y] && EFI_STUB [=y] && !KEXEC_CORE [=y]
+> >   Selected by [y]:
+> >   - INTEL_TDX_GUEST [=y] && HYPERVISOR_GUEST [=y] && X86_64 [=y] && CPU_SUP_INTEL [=y] && X86_X2APIC [=y]
+> > 
+> > WARNING: unmet direct dependencies detected for UNACCEPTED_MEMORY
+> >   Depends on [n]: EFI [=y] && EFI_STUB [=y] && !KEXEC_CORE [=y]
+> >   Selected by [y]:
+> >   - INTEL_TDX_GUEST [=y] && HYPERVISOR_GUEST [=y] && X86_64 [=y] && CPU_SUP_INTEL [=y] && X86_X2APIC [=y]
 > 
-> As a user space crypto library person I think the only reasonable
-> interface is something like a vDSO.
+> Ughh. Any ideas how to get around it? (Except for implementing kexec
+> support right away?)
+
+I reworked this to boot-time kexec disable.
+
+
+> > Also, it doesn't need to be bool - you can simply return accept_size on
+> > success and 0 on error so that you don't have an I/O argument.
 > 
-> Poll() interfaces are nice and all for system programs that have full
-> control of their event loop and do not have to react immediately to
-> this event, however crypto libraries do not have the luxury of
-> controlling the main loop of the application.
+> So on the calling side it would look like:
 > 
-> Additionally crypto libraries really need to ensure the value they
-> return from their PRNG is fine, which means they do not return a value
-> if the vmgenid has changed before they can reseed, or there could be
-> catastrophic duplication of "random" values used in IVs or ECDSA
-> Signatures or ids/cookies or whatever.
+> 	accepted = try_accept_one(start, len, PG_LEVEL_1G)
+> 	if (accepted) {
+> 		start += accepted;
+> 		continue;
+> 	}
 > 
-> For crypto libraries it is much simpler to poll for this information 
-> than using notifications of any kind given libraries are
-> generally not in full control of what the process does.
-> 
-> This needs to be polled fast as well, because the whole point of
-> initializing a PRNG in the library is that asking /dev/urandom all the
-> time is too slow (due to context switches and syscall overhead), so
-> anything that would require a context switch in order to pull data from
-> the PRNG would not really fly.
-> 
-> A vDSO or similar would allow to pull the vmgenid or whatever epoch
-> value in before generating the random numbers and then barrier-style
-> check that the value is still unchanged before returning the random
-> data to the caller. This will reduce the race condition (which simply
-> cannot be completely avoided) to a very unlikely event.
+> And the similar for other levels. Is it really better?
 
-It sounds like your library issue is somewhat similar to what Alex was
-talking about with regards to having a hard time using poll in s2n. I'm
-still waiting to hear if Amazon figured out some way that this is
-possible (with, e.g., a thread). But anyway, it seems like this is
-something library authors might hit.
+JFYI, I've reworked it as
 
-My proposal here is made with nonce reuse in mind, for things like
-session keys that use sequential nonces.
+		accepted = try_accept_one(start, len, PG_LEVEL_1G);
+		if (!accepted)
+			accepted = try_accept_one(start, len, PG_LEVEL_2M);
+		if (!accepted)
+			accepted = try_accept_one(start, len, PG_LEVEL_4K);
+		if (!accepted)
+			return false;
+		start += accepted;
 
-A different issue is random nonces. For these, it seems like a call to
-getrandom() for each nonce is probably the best bet. But it sounds like
-you're interested in a userspace RNG, akin to OpenBSD's arc4random(3). I
-hope you saw these threads:
+looks good to me.
 
-- https://lore.kernel.org/lkml/YnA5CUJKvqmXJxf2@zx2c4.com/
-- https://lore.kernel.org/lkml/Yh4+9+UpanJWAIyZ@zx2c4.com/
-- https://lore.kernel.org/lkml/CAHmME9qHGSF8w3DoyCP+ud_N0MAJ5_8zsUWx=rxQB1mFnGcu9w@mail.gmail.com/
-
-Each one of those touches on vDSO things quite a bit. Basically, the
-motivation for doing that is for making userspace RNGs safe and
-promoting their use with a variety of kernel enhancements to make that
-easy. And IF we are to ship a vDSO RNG, then certainly this vmgenid
-business should be exposed that way, over and above other mechanisms.
-It'd make the most sense...IF we're going to ship a vDSO RNG.
-
-So the question really is: should we ship a vDSO RNG? I could work on
-designing that right. But I'm a little bit skeptical generally of the
-whole userspace RNG concept. By and large they always turn out to be
-less safe and more complex than the kernel one. So if we're to go that
-way, I'd like to understand what the strongest arguments for it are.
-
-Jason
+-- 
+ Kirill A. Shutemov

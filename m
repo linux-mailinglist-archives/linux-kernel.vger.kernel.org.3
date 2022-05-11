@@ -2,207 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C1C523F60
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 23:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E3A523F68
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 23:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348148AbiEKVRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 17:17:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
+        id S1347038AbiEKVXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 17:23:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244555AbiEKVQh (ORCPT
+        with ESMTP id S231319AbiEKVXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 17:16:37 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0251FA4F
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 14:16:33 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id o64-20020a257343000000b006483069a28aso3001549ybc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 14:16:33 -0700 (PDT)
+        Wed, 11 May 2022 17:23:49 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D09C5DD34;
+        Wed, 11 May 2022 14:23:48 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id cq17-20020a17090af99100b001dc0386cd8fso3143826pjb.5;
+        Wed, 11 May 2022 14:23:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=RmwhTmtOKEfJCDjFlaEgB2jMmIYPJxSkJAhFJBeKz2I=;
-        b=XkKSkM+v9S3PTc6l4ZTy49ewMfC2s4c5zMAg5UodUAo9tE3JjZGsHLiJZuutanSW/t
-         0PB1vzo+tXSImfHZPiGGWNQoWj/OsCpusTgXi9w15rSHH3t3+S2DZesoDXU52lamaqTv
-         6XL0EHRaDO6Ni1QV7CFRJ+DGgn9Mt2C7M4tGXW4u+r1NfQh+8CAeQMDlf18PXGERMkAG
-         Ww/NLII6pTmYG3t6DW3HAaTr3EUgtVWawVHmCI8bfIFXwAU3LqjPLfhojmZ6OE6lLxLQ
-         9telHSSUmU10mBg86HgEinjHRAqd7vyCOxBDQ7uitqe351eEz46zqPyUVZ3DnD+jBMu3
-         hyGQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VvDCd/At1ikMVmsEgnubdI0TPPYRdjzMNNE8etT+OBU=;
+        b=bsjlM7Pq6U03CPBLLJDkeXSVF+7dcAW8JJvWtSeLe3wG3Wk4iITnyn6kHrORor7KUb
+         Yd+6z2UzXJz6Wbpu6MmN/4Kd23s9shnjUqgHH+9ZlGemr+n0h8vk/tmlGOUaAddX+WZm
+         e3kTtx1ThpBpq/dWwZBa3DYxz4fIR02c+fbvwHeJEY9wpb91YbSBcqTRW2A3zTO8kCJG
+         fG5lUcM5XLXBkeMLi7R6hodzQSLbq78d2QkLIR9vKcYMQ9nrj3MiTjiaXN+oqBkfAGDb
+         EXYfZTMKCL2mgMTE6Wmj78hLWa0k+IBEK+uwsjjEpUNL4me04Oj8K3KYdKi5P6VyVBb4
+         bluw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=RmwhTmtOKEfJCDjFlaEgB2jMmIYPJxSkJAhFJBeKz2I=;
-        b=1ByWmMJcQVuIwWO3Afj+S7KmsR5HX436AaaKglj4kmx39ElW4gEysycUipJpHHm4BL
-         4wPV4OdKmr3Nuy8PEJEb3I/9O7bd5cnjVUqukRFYvvlHxvX9A1ZsueULeChV9Hc2cNrF
-         3rtM8ob9uLBPJ8bRCcBL4azSvyUtZXzIO2147TWapyO1TlYIyX5UCbdYtArdUg7lyCQR
-         FBSP3y3cArs5l19KrD83ERTNPJT5s/997DieqX6ASN2GGb6dOEu+LZ5rItaX5ZLfuLHS
-         Ss9ELI8E9LT/RG3bgTll2ooGCtxACwHmFVTzwM8WOEPI6KtBFUg/pTq8AsiStlCjYtHp
-         jTcw==
-X-Gm-Message-State: AOAM530yy0y9YYKAB2/sF2O2GwvSgN1BWTBvm5AqGhjRN/DV9adqQ2+9
-        3kMCxPQ27vPKOAul4nkNP/3tizhvFvMXgw==
-X-Google-Smtp-Source: ABdhPJxJscghYLknils0sPWTYiEWVf78KVRHjcnWmn2vXU7QMv4mIWF7u8hTkTvT9PIbzJ1Ow/LHJH9iF1/OvQ==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:bd59:7b9f:6863:5402])
- (user=dlatypov job=sendgmr) by 2002:a05:6902:704:b0:649:cadc:bcf0 with SMTP
- id k4-20020a056902070400b00649cadcbcf0mr25704910ybt.537.1652303793100; Wed,
- 11 May 2022 14:16:33 -0700 (PDT)
-Date:   Wed, 11 May 2022 14:16:26 -0700
-Message-Id: <20220511211626.3345036-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
-Subject: [PATCH v2] kunit: bail out of test filtering logic quicker if OOM
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>,
-        Zeal Robot <zealci@zte.com.cn>, Lv Ruyi <lv.ruyi@zte.com.cn>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VvDCd/At1ikMVmsEgnubdI0TPPYRdjzMNNE8etT+OBU=;
+        b=zHWqJCD43Ojg+U51x2MkBUZ46y4MDyrSmqjypf5+o/eMERXRVrS3C+hrC04/MTaTp9
+         tdK5k0qjiT52Wl0gfE4YHHPodOMsPwJynDKw45xFl42Q0zsVVOdT+vJBg90ETJwXsGpk
+         AJZlm4XKSCxmtBmjW4r9t1p6xDjErCyfXC5TTJsqW+a7UC3CfhPFl3056pymLEeigNz+
+         pEhe5vv2kkxk0N5/5WfgTbnk9Ar/OAmM9X/tGqX3AnvMKQmumB7JBxU0SKIYzG/G2EcI
+         ivMdioQNFVEqYgyTTxLLOfp62XM9Nhbty7gdL22JFtBWEHsHqgejMWuQNXO4E5yFH/hV
+         LpKg==
+X-Gm-Message-State: AOAM533v2JuZhCrZbn4hOEp3C5DGdCx1kg1YIlp03QD56oaSAv7sWOsT
+        abQ+5LAeT9dysVUxXUG+gftAfiH0A2cncPcGhn8=
+X-Google-Smtp-Source: ABdhPJzH3GqZYny/2c0KD7LAm2yheDLy0TMd0D9kGLu2hsACI+zrLgcPCJAau+hJ0XZIcfaMBR8jTv7d+hKy66JgZHU=
+X-Received: by 2002:a17:90a:528f:b0:1dc:9a7c:4a3 with SMTP id
+ w15-20020a17090a528f00b001dc9a7c04a3mr7244557pjh.112.1652304227558; Wed, 11
+ May 2022 14:23:47 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220509140403.1.I28d2ec514ad3b612015b28b8de861b8955033a19@changeid>
+In-Reply-To: <20220509140403.1.I28d2ec514ad3b612015b28b8de861b8955033a19@changeid>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Wed, 11 May 2022 14:23:35 -0700
+Message-ID: <CABBYNZ+qpWTX-FQ8QCiey0kf_rghDMnfQi3tt8zsv-5cuudbtg@mail.gmail.com>
+Subject: Re: [PATCH] Bluetooth: Fix Adv Monitor msft_add/remove_monitor_sync()
+To:     Manish Mandlik <mmandlik@google.com>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        ChromeOS Bluetooth Upstreaming 
+        <chromeos-bluetooth-upstreaming@chromium.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When filtering what tests to run (suites and/or cases) via
-kunit.filter_glob (e.g. kunit.py run <glob>), we allocate copies of
-suites.
+Hi Manish,
 
-These allocations can fail, and we largely don't handle that.
-Note: realistically, this probably doesn't matter much.
-We're not allocating much memory and this happens early in boot, so if
-we can't do that, then there's likely far bigger problems.
+On Mon, May 9, 2022 at 2:05 PM Manish Mandlik <mmandlik@google.com> wrote:
+>
+> Do not call skb_pull() in msft_add_monitor_sync() as
+> msft_le_monitor_advertisement_cb() expects 'status' to be
+> part of the skb.
+>
+> Same applies for msft_remove_monitor_sync().
+>
+> Signed-off-by: Manish Mandlik <mmandlik@google.com>
+> ---
+>
+>  net/bluetooth/msft.c | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/net/bluetooth/msft.c b/net/bluetooth/msft.c
+> index f43994523b1f..9990924719aa 100644
+> --- a/net/bluetooth/msft.c
+> +++ b/net/bluetooth/msft.c
+> @@ -387,7 +387,6 @@ static int msft_remove_monitor_sync(struct hci_dev *hdev,
+>                 return PTR_ERR(skb);
+>
+>         status = skb->data[0];
+> -       skb_pull(skb, 1);
+>
+>         msft_le_cancel_monitor_advertisement_cb(hdev, status, hdev->msft_opcode,
+>                                                 skb);
+> @@ -506,7 +505,6 @@ static int msft_add_monitor_sync(struct hci_dev *hdev,
+>                 return PTR_ERR(skb);
+>
+>         status = skb->data[0];
+> -       skb_pull(skb, 1);
 
-This patch makes us immediately bail out from the top-level function
-(kunit_filter_suites) with -ENOMEM if any of the underlying kmalloc()
-calls return NULL.
+Well if it expects it to be part of the skb then there is no reason to
+pass it as argument in addition to the skb itself.
 
-Implementation note: we used to return NULL pointers from some functions
-to indicate either that all suites/tests were filtered out or there was
-an error allocating the new array.
+>         msft_le_monitor_advertisement_cb(hdev, status, hdev->msft_opcode, skb);
+>
+> --
+> 2.36.0.512.ge40c2bad7a-goog
+>
 
-We'll log a short error in this case and not run any tests or print a
-TAP header. From a kunit.py user's perspective, they'll get a message
-about missing/invalid TAP output and have to dig into the test.log to
-see it. Since hitting this error seems so unlikely, it's probably fine
-to not invent a way to plumb this error message more visibly.
 
-See also: https://lore.kernel.org/linux-kselftest/20220329103919.2376818-1-lv.ruyi@zte.com.cn/
-
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Reported-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
----
-v1 -> v2: no code changes.
-Fix Reported-by tag, add Brendan's Reviewed-by.
----
- lib/kunit/executor.c      | 27 ++++++++++++++++++++++-----
- lib/kunit/executor_test.c |  4 +++-
- 2 files changed, 25 insertions(+), 6 deletions(-)
-
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index 22640c9ee819..2f73a6a35a7e 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -71,9 +71,13 @@ kunit_filter_tests(struct kunit_suite *const suite, const char *test_glob)
- 
- 	/* Use memcpy to workaround copy->name being const. */
- 	copy = kmalloc(sizeof(*copy), GFP_KERNEL);
-+	if (!copy)
-+		return ERR_PTR(-ENOMEM);
- 	memcpy(copy, suite, sizeof(*copy));
- 
- 	filtered = kcalloc(n + 1, sizeof(*filtered), GFP_KERNEL);
-+	if (!filtered)
-+		return ERR_PTR(-ENOMEM);
- 
- 	n = 0;
- 	kunit_suite_for_each_test_case(suite, test_case) {
-@@ -106,14 +110,16 @@ kunit_filter_subsuite(struct kunit_suite * const * const subsuite,
- 
- 	filtered = kmalloc_array(n + 1, sizeof(*filtered), GFP_KERNEL);
- 	if (!filtered)
--		return NULL;
-+		return ERR_PTR(-ENOMEM);
- 
- 	n = 0;
- 	for (i = 0; subsuite[i] != NULL; ++i) {
- 		if (!glob_match(filter->suite_glob, subsuite[i]->name))
- 			continue;
- 		filtered_suite = kunit_filter_tests(subsuite[i], filter->test_glob);
--		if (filtered_suite)
-+		if (IS_ERR(filtered_suite))
-+			return ERR_CAST(filtered_suite);
-+		else if (filtered_suite)
- 			filtered[n++] = filtered_suite;
- 	}
- 	filtered[n] = NULL;
-@@ -146,7 +152,8 @@ static void kunit_free_suite_set(struct suite_set suite_set)
- }
- 
- static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
--					    const char *filter_glob)
-+					    const char *filter_glob,
-+					    int *err)
- {
- 	int i;
- 	struct kunit_suite * const **copy, * const *filtered_subsuite;
-@@ -166,6 +173,10 @@ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
- 
- 	for (i = 0; i < max; ++i) {
- 		filtered_subsuite = kunit_filter_subsuite(suite_set->start[i], &filter);
-+		if (IS_ERR(filtered_subsuite)) {
-+			*err = PTR_ERR(filtered_subsuite);
-+			return filtered;
-+		}
- 		if (filtered_subsuite)
- 			*copy++ = filtered_subsuite;
- 	}
-@@ -236,9 +247,15 @@ int kunit_run_all_tests(void)
- 		.start = __kunit_suites_start,
- 		.end = __kunit_suites_end,
- 	};
-+	int err;
- 
--	if (filter_glob_param)
--		suite_set = kunit_filter_suites(&suite_set, filter_glob_param);
-+	if (filter_glob_param) {
-+		suite_set = kunit_filter_suites(&suite_set, filter_glob_param, &err);
-+		if (err) {
-+			pr_err("kunit executor: error filtering suites: %d\n", err);
-+			return err;
-+		}
-+	}
- 
- 	if (!action_param)
- 		kunit_exec_run_tests(&suite_set);
-diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
-index 4ed57fd94e42..eac6ff480273 100644
---- a/lib/kunit/executor_test.c
-+++ b/lib/kunit/executor_test.c
-@@ -137,14 +137,16 @@ static void filter_suites_test(struct kunit *test)
- 		.end = suites + 2,
- 	};
- 	struct suite_set filtered = {.start = NULL, .end = NULL};
-+	int err = 0;
- 
- 	/* Emulate two files, each having one suite */
- 	subsuites[0][0] = alloc_fake_suite(test, "suite0", dummy_test_cases);
- 	subsuites[1][0] = alloc_fake_suite(test, "suite1", dummy_test_cases);
- 
- 	/* Filter out suite1 */
--	filtered = kunit_filter_suites(&suite_set, "suite0");
-+	filtered = kunit_filter_suites(&suite_set, "suite0", &err);
- 	kfree_subsuites_at_end(test, &filtered); /* let us use ASSERTs without leaking */
-+	KUNIT_EXPECT_EQ(test, err, 0);
- 	KUNIT_ASSERT_EQ(test, filtered.end - filtered.start, (ptrdiff_t)1);
- 
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, filtered.start);
-
-base-commit: 38289a26e1b8a37755f3e07056ca416c1ee2a2e8
 -- 
-2.36.0.512.ge40c2bad7a-goog
-
+Luiz Augusto von Dentz

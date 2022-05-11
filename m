@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B26E5233E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:18:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3FDF5233E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243591AbiEKNSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:18:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32940 "EHLO
+        id S240349AbiEKNSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243317AbiEKNSC (ORCPT
+        with ESMTP id S243486AbiEKNSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:18:02 -0400
+        Wed, 11 May 2022 09:18:03 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ADC5DA0D01
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:17:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9238AA0D32
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:17:50 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7D2381042;
-        Wed, 11 May 2022 06:17:48 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6BF18106F;
+        Wed, 11 May 2022 06:17:50 -0700 (PDT)
 Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 562763F66F;
-        Wed, 11 May 2022 06:17:47 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 453963F66F;
+        Wed, 11 May 2022 06:17:49 -0700 (PDT)
 From:   Mark Rutland <mark.rutland@arm.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     catalin.marinas@arm.com, linux-kernel@vger.kernel.org,
         mark.rutland@arm.com, mingo@kernel.org, peterz@infradead.org,
         tglx@linutronix.de, will@kernel.org
-Subject: [PATCH 1/2] arch: make TRACE_IRQFLAGS_NMI_SUPPORT generic
-Date:   Wed, 11 May 2022 14:17:32 +0100
-Message-Id: <20220511131733.4074499-2-mark.rutland@arm.com>
+Subject: [PATCH 2/2] arm64: select TRACE_IRQFLAGS_NMI_SUPPORT
+Date:   Wed, 11 May 2022 14:17:33 +0100
+Message-Id: <20220511131733.4074499-3-mark.rutland@arm.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220511131733.4074499-1-mark.rutland@arm.com>
 References: <20220511131733.4074499-1-mark.rutland@arm.com>
@@ -43,35 +43,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On most architectures, IRQ flag tracing is disabled in NMI context, and
-architectures need to define and select TRACE_IRQFLAGS_NMI_SUPPORT in
-order to enable this.
+Due to an oversight, on arm64 lockdep IRQ state tracking doesn't work as
+intended in NMI context. This demonstrably results in bogus warnings
+from lockdep, and in theory could mask a variety of issues.
 
-Commit:
+On arm64, we've consistently tracked IRQ flag state for NMIs (and
+saved/restored the state of the interrupted context) since commit:
 
-  859d069ee1ddd878 ("lockdep: Prepare for NMI IRQ state tracking")
+  f0cd5ac1e4c53cb6 ("arm64: entry: fix NMI {user, kernel}->kernel transitions")
 
-Permitted IRQ flag tracing in NMI context, allowing lockdep to work in
-NMI context where an architecture had suitable entry logic. At the time,
-most architectures did not have such suitable entry logic, and this broke
-lockdep on such architectures. Thus, this was partially disabled in
+That commit fixed most lockdep issues with NMI by virtue of the
+save/restore of the lockdep state of the interrupted context. However,
+for lockdep IRQ state tracking to consistently take effect in NMI
+context it has been necessary to select TRACE_IRQFLAGS_NMI_SUPPORT since
 commit:
 
   ed00495333ccc80f ("locking/lockdep: Fix TRACE_IRQFLAGS vs. NMIs")
 
-... with architectures needing to select TRACE_IRQFLAGS_NMI_SUPPORT to
-enable IRQ flag tracing in NMI context.
+As arm64 does not select TRACE_IRQFLAGS_NMI_SUPPORT, this means that the
+lockdep state can be stale in NMI context, and some uses of that state
+can consume stale data.
 
-Currently TRACE_IRQFLAGS_NMI_SUPPORT is defined under
-arch/x86/Kconfig.debug. Move it to arch/Kconfig so architectures can
-select it without having to provide their own definition.
+When an NMI is taken arm64 entry code will call arm64_enter_nmi(). This
+will enter NMI context via __nmi_enter() before calling
+lockdep_hardirqs_off() to inform lockdep that IRQs have been masked.
+Where TRACE_IRQFLAGS_NMI_SUPPORT is not selected, lockdep_hardirqs_off()
+will not update lockdep state if called in NMI context. Thus if IRQs
+were enabled in the original context, lockdep will continue to believe
+that IRQs are enabled despite the call to lockdep_hardirqs_off().
 
-Since the regular TRACE_IRQFLAGS_SUPPORT is selected by
-arch/x86/Kconfig, the select of TRACE_IRQFLAGS_NMI_SUPPORT is moved
-there too.
+However, the lockdep_assert_*() checks do take effect in NMI context,
+and will consume the stale lockdep state. If an NMI is taken from a
+context which had IRQs enabled, and during the handling of the NMI
+something calls lockdep_assert_irqs_disabled(), this will result in a
+spurious warning based upon the stale lockdep state.
 
-There should be no functional change as a result of this patch.
+This can be seen when using perf with GICv3 pseudo-NMIs. Within the perf
+NMI handler we may attempt a uaccess to record the userspace callchain,
+and is this faults the el1_abort() call in the nested context will call
+exit_to_kernel_mode() when returning, which has a
+lockdep_assert_irqs_disabled() assertion:
 
+| # ./perf record -a -g sh
+| ------------[ cut here ]------------
+| WARNING: CPU: 0 PID: 164 at arch/arm64/kernel/entry-common.c:73 exit_to_kernel_mode+0x118/0x1ac
+| Modules linked in:
+| CPU: 0 PID: 164 Comm: perf Not tainted 5.18.0-rc5 #1
+| Hardware name: linux,dummy-virt (DT)
+| pstate: 004003c5 (nzcv DAIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+| pc : exit_to_kernel_mode+0x118/0x1ac
+| lr : el1_abort+0x80/0xbc
+| sp : ffff8000080039f0
+| pmr_save: 000000f0
+| x29: ffff8000080039f0 x28: ffff6831054e4980 x27: ffff683103adb400
+| x26: 0000000000000000 x25: 0000000000000001 x24: 0000000000000001
+| x23: 00000000804000c5 x22: 00000000000000c0 x21: 0000000000000001
+| x20: ffffbd51e635ec44 x19: ffff800008003a60 x18: 0000000000000000
+| x17: ffffaadf98d23000 x16: ffff800008004000 x15: 0000ffffd14f25c0
+| x14: 0000000000000000 x13: 00000000000018eb x12: 0000000000000040
+| x11: 000000000000001e x10: 000000002b820020 x9 : 0000000100110000
+| x8 : 000000000045cac0 x7 : 0000ffffd14f25c0 x6 : ffffbd51e639b000
+| x5 : 00000000000003e5 x4 : ffffbd51e58543b0 x3 : 0000000000000001
+| x2 : ffffaadf98d23000 x1 : ffff6831054e4980 x0 : 0000000100110000
+| Call trace:
+|  exit_to_kernel_mode+0x118/0x1ac
+|  el1_abort+0x80/0xbc
+|  el1h_64_sync_handler+0xa4/0xd0
+|  el1h_64_sync+0x74/0x78
+|  __arch_copy_from_user+0xa4/0x230
+|  get_perf_callchain+0x134/0x1e4
+|  perf_callchain+0x7c/0xa0
+|  perf_prepare_sample+0x414/0x660
+|  perf_event_output_forward+0x80/0x180
+|  __perf_event_overflow+0x70/0x13c
+|  perf_event_overflow+0x1c/0x30
+|  armv8pmu_handle_irq+0xe8/0x160
+|  armpmu_dispatch_irq+0x2c/0x70
+|  handle_percpu_devid_fasteoi_nmi+0x7c/0xbc
+|  generic_handle_domain_nmi+0x3c/0x60
+|  gic_handle_irq+0x1dc/0x310
+|  call_on_irq_stack+0x2c/0x54
+|  do_interrupt_handler+0x80/0x94
+|  el1_interrupt+0xb0/0xe4
+|  el1h_64_irq_handler+0x18/0x24
+|  el1h_64_irq+0x74/0x78
+|  lockdep_hardirqs_off+0x50/0x120
+|  trace_hardirqs_off+0x38/0x214
+|  _raw_spin_lock_irq+0x98/0xa0
+|  pipe_read+0x1f8/0x404
+|  new_sync_read+0x140/0x150
+|  vfs_read+0x190/0x1dc
+|  ksys_read+0xdc/0xfc
+|  __arm64_sys_read+0x20/0x30
+|  invoke_syscall+0x48/0x114
+|  el0_svc_common.constprop.0+0x158/0x17c
+|  do_el0_svc+0x28/0x90
+|  el0_svc+0x60/0x150
+|  el0t_64_sync_handler+0xa4/0x130
+|  el0t_64_sync+0x19c/0x1a0
+| irq event stamp: 483
+| hardirqs last  enabled at (483): [<ffffbd51e636aa24>] _raw_spin_unlock_irqrestore+0xa4/0xb0
+| hardirqs last disabled at (482): [<ffffbd51e636acd0>] _raw_spin_lock_irqsave+0xb0/0xb4
+| softirqs last  enabled at (468): [<ffffbd51e5216f58>] put_cpu_fpsimd_context+0x28/0x70
+| softirqs last disabled at (466): [<ffffbd51e5216ed4>] get_cpu_fpsimd_context+0x0/0x5c
+| ---[ end trace 0000000000000000 ]---
+
+Note that as lockdep_assert_irqs_disabled() uses WARN_ON_ONCE(), and
+this uses a BRK, the warning is logged with the real PSTATE at the time
+of the warning, which clearly has DAIF.I set, meaning IRQs (and
+pseudo-NMIs) were definitely masked and the warning is spurious.
+
+Fix this by selecting TRACE_IRQFLAGS_NMI_SUPPORT such that the existing
+entry tracking takes effect, as we had originally intended when the
+arm64 entry code was fixed for transitions to/from NMI.
+
+Arguably the lockdep_assert_*() functions should have the same NMI
+checks as the rest of the code to prevent spurious warnings when
+TRACE_IRQFLAGS_NMI_SUPPORT is not selected, but the real fix for any
+architecture is to explicitly handle the transitions to/from NMI in the
+entry code.
+
+Fixes: f0cd5ac1e4c53cb6 ("arm64: entry: fix NMI {user, kernel}->kernel transitions")
 Signed-off-by: Mark Rutland <mark.rutland@arm.com>
 Cc: Catalin Marinas <catalin.marinas@arm.com>
 Cc: Ingo Molnar <mingo@kernel.org>
@@ -79,49 +171,20 @@ Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Will Deacon <will@kernel.org>
 ---
- arch/Kconfig           | 3 +++
- arch/x86/Kconfig       | 1 +
- arch/x86/Kconfig.debug | 3 ---
- 3 files changed, 4 insertions(+), 3 deletions(-)
+ arch/arm64/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 31c4fdc4a4baa..ab45e0f6c21bf 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -214,6 +214,9 @@ config HAVE_FUNCTION_DESCRIPTORS
- config TRACE_IRQFLAGS_SUPPORT
- 	bool
- 
-+config TRACE_IRQFLAGS_NMI_SUPPORT
-+	bool
-+
- #
- # An arch should select this if it provides all these things:
- #
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 4bed3abf444d1..9b4559a1c65d4 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -272,6 +272,7 @@ config X86
- 	select SYSCTL_EXCEPTION_TRACE
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 20ea89d9ac2fa..8240ec9edb243 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -223,6 +223,7 @@ config ARM64
  	select THREAD_INFO_IN_TASK
+ 	select HAVE_ARCH_USERFAULTFD_MINOR if USERFAULTFD
  	select TRACE_IRQFLAGS_SUPPORT
 +	select TRACE_IRQFLAGS_NMI_SUPPORT
- 	select USER_STACKTRACE_SUPPORT
- 	select VIRT_TO_BUS
- 	select HAVE_ARCH_KCSAN			if X86_64
-diff --git a/arch/x86/Kconfig.debug b/arch/x86/Kconfig.debug
-index d3a6f74a94bdf..d4d6db4dde220 100644
---- a/arch/x86/Kconfig.debug
-+++ b/arch/x86/Kconfig.debug
-@@ -1,8 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
- 
--config TRACE_IRQFLAGS_NMI_SUPPORT
--	def_bool y
--
- config EARLY_PRINTK_USB
- 	bool
+ 	help
+ 	  ARM 64-bit (AArch64) Linux support.
  
 -- 
 2.30.2

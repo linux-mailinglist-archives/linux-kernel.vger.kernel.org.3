@@ -2,342 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6CEF523B7A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F15BD523B84
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345537AbiEKR1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 13:27:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58344 "EHLO
+        id S1345549AbiEKR2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 13:28:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345531AbiEKR1M (ORCPT
+        with ESMTP id S1345544AbiEKR2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 13:27:12 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3E037A3B
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:27:10 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id o12-20020a1c4d0c000000b00393fbe2973dso3678073wmh.2
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:27:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5OBqBsoJ/TxRsSFzQqMPW/kr9BMkFs7GUmU5KHrm7/4=;
-        b=DUZVTRT+yyDo7DUHH/QJg0TSEiL5v/fqE4I86EydXciRkX9DP98TpJ/16H1Y4s6Rhh
-         QvOkoWxXOt5d0v0SxH9gf/049yEJs9CNRU4pQcPySAQn/T7n24H2GawGplBllMf+NKAd
-         0YJ89dnaMevZxiu/2rtMhkQaiW1Ihpl01jnpm3g9AADQ6ZSN/tBW71BpOAPt3PaNlKKD
-         TP3+RQLx1B/4Ux2QbxuealCBvzD+n62BEMiUeLIYNgyBI2rFVaAKgen+AO7Jh2AFiMGC
-         32ccWgWuK+xvz8L641IFqS4z8ptXVVYws857SADKx2/OINFQGb+kruPL+0g/1lZJgVNW
-         WQ3A==
+        Wed, 11 May 2022 13:28:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D297252535
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:28:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652290079;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cS5E6UtIkG/hFuUJaz85MfZ3xWqLO1I63lqGQCOfSNw=;
+        b=I/TWgzq3wZ9tX0ZdebCt2Q/QHoEGdPYJKy2I8L7/cNTyZWGwdwbZSzRhlGCtN6tmfx/BC6
+        JqcQOwhwIwI/p9a/+DRB9vmDd2HqFj6kLhz8QkMo1X+ID1Fq+Rp88X/AXsQI4eO4RH/Pg+
+        F/+rBhl64Z3KDHfKPuo2zSU8u7VQ4+A=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-616-NLw7j5g-PsyUxl6Q_nqAzA-1; Wed, 11 May 2022 13:27:58 -0400
+X-MC-Unique: NLw7j5g-PsyUxl6Q_nqAzA-1
+Received: by mail-wm1-f71.google.com with SMTP id 205-20020a1c02d6000000b003928cd3853aso3113405wmc.9
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:27:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5OBqBsoJ/TxRsSFzQqMPW/kr9BMkFs7GUmU5KHrm7/4=;
-        b=PaYKROo+0sYp+XyiSnbyD8xYYKEUMUVh06oQ4YZAnH4Wag+4HYa7Y5snwAOOkjjS3y
-         KqI7vLHcirqAzVUWnuPN5HaunZblbwlq3SZt2abuThRUr8k52gjL/z9VU++3MfA5GfB1
-         H0Gz4WssyCE+smdAbA5M1a3gdzb8NEQZtLMUJrgLscywXUePUWJWcEDOjSAUv+E6sBuZ
-         f0mTVqOblFWyXGhz9Q4cI0xYNGaset9z/tGwDYljvo1CIew9rWD5bPKXvNpiKflKnRqA
-         x7/AIIn51+vUJVB19Q68aE9xr7A7JPE05qEU4ISGqzqlSpH6RxBruLcDaTMyWQoX0wKk
-         jJDg==
-X-Gm-Message-State: AOAM5319fdMRpHWB1O8WDbMg3dCKTnKIrG6vGsfBVYNGsbEDm9Og4A7p
-        pZ9aOJXUqD5MBNiNCB+AWnzSMFQVFtcv6Qx4F9rQ/g==
-X-Google-Smtp-Source: ABdhPJykX8HqwOyGovzZA/NwJlbix4JvMk8CETGmkdnSAnhe/gWGei1l8Yy1LKthlTjnxvE5Zv8hHQ4cEnwCR9wN1BU=
-X-Received: by 2002:a1c:19c1:0:b0:393:a19f:8f95 with SMTP id
- 184-20020a1c19c1000000b00393a19f8f95mr5962936wmz.149.1652290028915; Wed, 11
- May 2022 10:27:08 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=cS5E6UtIkG/hFuUJaz85MfZ3xWqLO1I63lqGQCOfSNw=;
+        b=Os9vvbAngRtq4XnKOhpso1BhBCbtgmUXR3lkzMge74vQ88UA8Bzg9/ce7HxpHG2HIz
+         rs+noBelYgWSAdvmXY2aN9bPdKJGFsa/JHoUQWTrD9qINlCtuNvoWj+bWeJ9Witre9v0
+         /4RGHCORZ+lo1tV8m6HXJakisFqzr1+ONeud3WGS0fSnfrn2o27VjP54WrhPf3VT1bs5
+         MvuI5dvc+CqdmsUbtgzMUWjoDIeo3wmIzzqo+VmNPNxUB86LH/O3FUtYthXuoQekOxsT
+         8f4XUpfliLqVX/0FIKP6ZZzBEjq+8jrH0fURzeIQ2rten3yFyyhN30f4W2O26bm6/JB9
+         1aDA==
+X-Gm-Message-State: AOAM5320XR6hC7XBxU7ijA76g4C0RqSN1Oj/sOQCoKvvlG0KdjF7vPNq
+        aZvW7+8rASXdY1la+3/JfNPFb+ZWhvBBTn6vjIvYSrcbaV1yNQCxMqqhux2RNHPT5pe/heSpg/J
+        mTFSZ9GWGJei/Ew0pVDNatJ/t
+X-Received: by 2002:a7b:c4d8:0:b0:393:fecd:2718 with SMTP id g24-20020a7bc4d8000000b00393fecd2718mr6012819wmk.23.1652290077483;
+        Wed, 11 May 2022 10:27:57 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzBTzXKBES23B3psLkzxI9cGRRJgtAEIRhBp8LvQHOEvCQMFPcLMWgEwEKr1C169Li1EVKAzw==
+X-Received: by 2002:a7b:c4d8:0:b0:393:fecd:2718 with SMTP id g24-20020a7bc4d8000000b00393fecd2718mr6012790wmk.23.1652290077160;
+        Wed, 11 May 2022 10:27:57 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c701:700:2393:b0f4:ef08:bd51? (p200300cbc70107002393b0f4ef08bd51.dip0.t-ipconnect.de. [2003:cb:c701:700:2393:b0f4:ef08:bd51])
+        by smtp.gmail.com with ESMTPSA id r12-20020a5d694c000000b0020c5253d8c3sm2174483wrw.15.2022.05.11.10.27.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 10:27:55 -0700 (PDT)
+Message-ID: <55e85b3e-dd6a-1dc2-719d-c6be9d5124c0@redhat.com>
+Date:   Wed, 11 May 2022 19:27:53 +0200
 MIME-Version: 1.0
-References: <20220511070133.710721-1-irogers@google.com> <20220511070133.710721-5-irogers@google.com>
- <35c5833b-6974-e40d-f4b3-a3b36d11d06c@linux.intel.com>
-In-Reply-To: <35c5833b-6974-e40d-f4b3-a3b36d11d06c@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 11 May 2022 10:26:56 -0700
-Message-ID: <CAP-5=fU3vs6c1ViZTxZECNi4jNKX0p47Lk1thTH8U_s6sQVSig@mail.gmail.com>
-Subject: Re: [PATCH 4/7] perf jevents: Modify match field
-To:     Xing Zhengjun <zhengjun.xing@linux.intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>, Felix Fietkau <nbd@nbd.name>,
-        Qi Liu <liuqi115@huawei.com>, Like Xu <likexu@tencent.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Nick Forrington <nick.forrington@arm.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>, Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        ananth.narayan@amd.com, ravi.bangoria@amd.com,
-        santosh.shukla@amd.com, sandipan.das@amd.com,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Kshipra Bopardikar <kshipra.bopardikar@intel.com>,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v4 2/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
+ migration
+Content-Language: en-US
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        akpm@linux-foundation.org, mike.kravetz@oracle.com
+Cc:     catalin.marinas@arm.com, will@kernel.org, songmuchun@bytedance.com,
+        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org
+References: <cover.1652270205.git.baolin.wang@linux.alibaba.com>
+ <a4baca670aca637e7198d9ae4543b8873cb224dc.1652270205.git.baolin.wang@linux.alibaba.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <a4baca670aca637e7198d9ae4543b8873cb224dc.1652270205.git.baolin.wang@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 12:43 AM Xing Zhengjun
-<zhengjun.xing@linux.intel.com> wrote:
->
->
->
-> On 5/11/2022 3:01 PM, Ian Rogers wrote:
-> > The match_field function looks for json values to append to the event
-> > string. As the C code processes these in order the output order matches
-> > that in the json dictionary. Python json readers read the entire
-> > dictionary and lose the ordering. To make the python and C output
-> > comparable makee the C code first read the extra fields then append them
->
-> The "makee" should be a typo.
+On 11.05.22 14:04, Baolin Wang wrote:
+> On some architectures (like ARM64), it can support CONT-PTE/PMD size
+> hugetlb, which means it can support not only PMD/PUD size hugetlb:
+> 2M and 1G, but also CONT-PTE/PMD size: 64K and 32M if a 4K page
+> size specified.
+> 
+> When migrating a hugetlb page, we will get the relevant page table
+> entry by huge_pte_offset() only once to nuke it and remap it with
+> a migration pte entry. This is correct for PMD or PUD size hugetlb,
+> since they always contain only one pmd entry or pud entry in the
+> page table.
+> 
+> However this is incorrect for CONT-PTE and CONT-PMD size hugetlb,
+> since they can contain several continuous pte or pmd entry with
+> same page table attributes. So we will nuke or remap only one pte
+> or pmd entry for this CONT-PTE/PMD size hugetlb page, which is
+> not expected for hugetlb migration. The problem is we can still
+> continue to modify the subpages' data of a hugetlb page during
+> migrating a hugetlb page, which can cause a serious data consistent
+> issue, since we did not nuke the page table entry and set a
+> migration pte for the subpages of a hugetlb page.
+> 
+> To fix this issue, we should change to use huge_ptep_clear_flush()
+> to nuke a hugetlb page table, and remap it with set_huge_pte_at()
+> and set_huge_swap_pte_at() when migrating a hugetlb page, which
+> already considered the CONT-PTE or CONT-PMD size hugetlb.
+> 
+> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
 
-Good catch, fixed in v2. Thanks,
-Ian
+Makes sense to me.
 
-> > to the event in an order not determined by their order in the file.
-> >
-> > Modify the pmu-events test so that test expectations match the new
-> > order.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >   tools/perf/pmu-events/jevents.c | 82 ++++++++++++++++++++-------------
-> >   tools/perf/tests/pmu-events.c   | 24 +++++-----
-> >   2 files changed, 62 insertions(+), 44 deletions(-)
-> >
-> > diff --git a/tools/perf/pmu-events/jevents.c b/tools/perf/pmu-events/jevents.c
-> > index e1f7c7afd435..cee61c4ed59e 100644
-> > --- a/tools/perf/pmu-events/jevents.c
-> > +++ b/tools/perf/pmu-events/jevents.c
-> > @@ -207,21 +207,6 @@ static struct msrmap {
-> >       { NULL, NULL }
-> >   };
-> >
-> > -static struct field {
-> > -     const char *field;
-> > -     const char *kernel;
-> > -} fields[] = {
-> > -     { "UMask",      "umask=" },
-> > -     { "CounterMask", "cmask=" },
-> > -     { "Invert",     "inv=" },
-> > -     { "AnyThread",  "any=" },
-> > -     { "EdgeDetect", "edge=" },
-> > -     { "SampleAfterValue", "period=" },
-> > -     { "FCMask",     "fc_mask=" },
-> > -     { "PortMask",   "ch_mask=" },
-> > -     { NULL, NULL }
-> > -};
-> > -
-> >   static void cut_comma(char *map, jsmntok_t *newval)
-> >   {
-> >       int i;
-> > @@ -233,21 +218,6 @@ static void cut_comma(char *map, jsmntok_t *newval)
-> >       }
-> >   }
-> >
-> > -static int match_field(char *map, jsmntok_t *field, int nz,
-> > -                    char **event, jsmntok_t *val)
-> > -{
-> > -     struct field *f;
-> > -     jsmntok_t newval = *val;
-> > -
-> > -     for (f = fields; f->field; f++)
-> > -             if (json_streq(map, field, f->field) && nz) {
-> > -                     cut_comma(map, &newval);
-> > -                     addfield(map, event, ",", f->kernel, &newval);
-> > -                     return 1;
-> > -             }
-> > -     return 0;
-> > -}
-> > -
-> >   static struct msrmap *lookup_msr(char *map, jsmntok_t *val)
-> >   {
-> >       jsmntok_t newval = *val;
-> > @@ -581,6 +551,14 @@ static int json_events(const char *fn,
-> >               jsmntok_t *precise = NULL;
-> >               jsmntok_t *obj = tok++;
-> >               bool configcode_present = false;
-> > +             char *umask = NULL;
-> > +             char *cmask = NULL;
-> > +             char *inv = NULL;
-> > +             char *any = NULL;
-> > +             char *edge = NULL;
-> > +             char *period = NULL;
-> > +             char *fc_mask = NULL;
-> > +             char *ch_mask = NULL;
-> >
-> >               EXPECT(obj->type == JSMN_OBJECT, obj, "expected object");
-> >               for (j = 0; j < obj->size; j += 2) {
-> > @@ -596,8 +574,23 @@ static int json_events(const char *fn,
-> >                              "Expected string value");
-> >
-> >                       nz = !json_streq(map, val, "0");
-> > -                     if (match_field(map, field, nz, &event, val)) {
-> > -                             /* ok */
-> > +                     /* match_field */
-> > +                     if (json_streq(map, field, "UMask") && nz) {
-> > +                             addfield(map, &umask, "", "umask=", val);
-> > +                     } else if (json_streq(map, field, "CounterMask") && nz) {
-> > +                             addfield(map, &cmask, "", "cmask=", val);
-> > +                     } else if (json_streq(map, field, "Invert") && nz) {
-> > +                             addfield(map, &inv, "", "inv=", val);
-> > +                     } else if (json_streq(map, field, "AnyThread") && nz) {
-> > +                             addfield(map, &any, "", "any=", val);
-> > +                     } else if (json_streq(map, field, "EdgeDetect") && nz) {
-> > +                             addfield(map, &edge, "", "edge=", val);
-> > +                     } else if (json_streq(map, field, "SampleAfterValue") && nz) {
-> > +                             addfield(map, &period, "", "period=", val);
-> > +                     } else if (json_streq(map, field, "FCMask") && nz) {
-> > +                             addfield(map, &fc_mask, "", "fc_mask=", val);
-> > +                     } else if (json_streq(map, field, "PortMask") && nz) {
-> > +                             addfield(map, &ch_mask, "", "ch_mask=", val);
-> >                       } else if (json_streq(map, field, "EventCode")) {
-> >                               char *code = NULL;
-> >                               addfield(map, &code, "", "", val);
-> > @@ -690,6 +683,23 @@ static int json_events(const char *fn,
-> >               else
-> >                       snprintf(buf, sizeof buf, "event=%#llx", eventcode);
-> >               addfield(map, &event, ",", buf, NULL);
-> > +             if (any)
-> > +                     addfield(map, &event, ",", any, NULL);
-> > +             if (ch_mask)
-> > +                     addfield(map, &event, ",", ch_mask, NULL);
-> > +             if (cmask)
-> > +                     addfield(map, &event, ",", cmask, NULL);
-> > +             if (edge)
-> > +                     addfield(map, &event, ",", edge, NULL);
-> > +             if (fc_mask)
-> > +                     addfield(map, &event, ",", fc_mask, NULL);
-> > +             if (inv)
-> > +                     addfield(map, &event, ",", inv, NULL);
-> > +             if (period)
-> > +                     addfield(map, &event, ",", period, NULL);
-> > +             if (umask)
-> > +                     addfield(map, &event, ",", umask, NULL);
-> > +
-> >               if (je.desc && extra_desc)
-> >                       addfield(map, &je.desc, " ", extra_desc, NULL);
-> >               if (je.long_desc && extra_desc)
-> > @@ -718,6 +728,14 @@ static int json_events(const char *fn,
-> >               je.event = real_event(je.name, event);
-> >               err = func(data, &je);
-> >   free_strings:
-> > +             free(umask);
-> > +             free(cmask);
-> > +             free(inv);
-> > +             free(any);
-> > +             free(edge);
-> > +             free(period);
-> > +             free(fc_mask);
-> > +             free(ch_mask);
-> >               free(event);
-> >               free(je.desc);
-> >               free(je.name);
-> > diff --git a/tools/perf/tests/pmu-events.c b/tools/perf/tests/pmu-events.c
-> > index b74c6ef59e51..f13368569d8b 100644
-> > --- a/tools/perf/tests/pmu-events.c
-> > +++ b/tools/perf/tests/pmu-events.c
-> > @@ -63,33 +63,33 @@ static const struct perf_pmu_test_event bp_l2_btb_correct = {
-> >   static const struct perf_pmu_test_event segment_reg_loads_any = {
-> >       .event = {
-> >               .name = "segment_reg_loads.any",
-> > -             .event = "umask=0x80,period=200000,event=0x6",
-> > +             .event = "event=0x6,period=200000,umask=0x80",
-> >               .desc = "Number of segment register loads",
-> >               .topic = "other",
-> >       },
-> > -     .alias_str = "umask=0x80,period=0x30d40,event=0x6",
-> > +     .alias_str = "event=0x6,period=0x30d40,umask=0x80",
-> >       .alias_long_desc = "Number of segment register loads",
-> >   };
-> >
-> >   static const struct perf_pmu_test_event dispatch_blocked_any = {
-> >       .event = {
-> >               .name = "dispatch_blocked.any",
-> > -             .event = "umask=0x20,period=200000,event=0x9",
-> > +             .event = "event=0x9,period=200000,umask=0x20",
-> >               .desc = "Memory cluster signals to block micro-op dispatch for any reason",
-> >               .topic = "other",
-> >       },
-> > -     .alias_str = "umask=0x20,period=0x30d40,event=0x9",
-> > +     .alias_str = "event=0x9,period=0x30d40,umask=0x20",
-> >       .alias_long_desc = "Memory cluster signals to block micro-op dispatch for any reason",
-> >   };
-> >
-> >   static const struct perf_pmu_test_event eist_trans = {
-> >       .event = {
-> >               .name = "eist_trans",
-> > -             .event = "umask=0x0,period=200000,event=0x3a",
-> > +             .event = "event=0x3a,period=200000,umask=0x0",
-> >               .desc = "Number of Enhanced Intel SpeedStep(R) Technology (EIST) transitions",
-> >               .topic = "other",
-> >       },
-> > -     .alias_str = "umask=0,period=0x30d40,event=0x3a",
-> > +     .alias_str = "event=0x3a,period=0x30d40,umask=0",
-> >       .alias_long_desc = "Number of Enhanced Intel SpeedStep(R) Technology (EIST) transitions",
-> >   };
-> >
-> > @@ -132,13 +132,13 @@ static const struct perf_pmu_test_event uncore_hisi_ddrc_flux_wcmd = {
-> >   static const struct perf_pmu_test_event unc_cbo_xsnp_response_miss_eviction = {
-> >       .event = {
-> >               .name = "unc_cbo_xsnp_response.miss_eviction",
-> > -             .event = "umask=0x81,event=0x22",
-> > +             .event = "event=0x22,umask=0x81",
-> >               .desc = "A cross-core snoop resulted from L3 Eviction which misses in some processor core. Unit: uncore_cbox ",
-> >               .topic = "uncore",
-> >               .long_desc = "A cross-core snoop resulted from L3 Eviction which misses in some processor core",
-> >               .pmu = "uncore_cbox",
-> >       },
-> > -     .alias_str = "umask=0x81,event=0x22",
-> > +     .alias_str = "event=0x22,umask=0x81",
-> >       .alias_long_desc = "A cross-core snoop resulted from L3 Eviction which misses in some processor core",
-> >       .matching_pmu = "uncore_cbox_0",
-> >   };
-> > @@ -146,13 +146,13 @@ static const struct perf_pmu_test_event unc_cbo_xsnp_response_miss_eviction = {
-> >   static const struct perf_pmu_test_event uncore_hyphen = {
-> >       .event = {
-> >               .name = "event-hyphen",
-> > -             .event = "umask=0x00,event=0xe0",
-> > +             .event = "event=0xe0,umask=0x00",
-> >               .desc = "UNC_CBO_HYPHEN. Unit: uncore_cbox ",
-> >               .topic = "uncore",
-> >               .long_desc = "UNC_CBO_HYPHEN",
-> >               .pmu = "uncore_cbox",
-> >       },
-> > -     .alias_str = "umask=0,event=0xe0",
-> > +     .alias_str = "event=0xe0,umask=0",
-> >       .alias_long_desc = "UNC_CBO_HYPHEN",
-> >       .matching_pmu = "uncore_cbox_0",
-> >   };
-> > @@ -160,13 +160,13 @@ static const struct perf_pmu_test_event uncore_hyphen = {
-> >   static const struct perf_pmu_test_event uncore_two_hyph = {
-> >       .event = {
-> >               .name = "event-two-hyph",
-> > -             .event = "umask=0x00,event=0xc0",
-> > +             .event = "event=0xc0,umask=0x00",
-> >               .desc = "UNC_CBO_TWO_HYPH. Unit: uncore_cbox ",
-> >               .topic = "uncore",
-> >               .long_desc = "UNC_CBO_TWO_HYPH",
-> >               .pmu = "uncore_cbox",
-> >       },
-> > -     .alias_str = "umask=0,event=0xc0",
-> > +     .alias_str = "event=0xc0,umask=0",
-> >       .alias_long_desc = "UNC_CBO_TWO_HYPH",
-> >       .matching_pmu = "uncore_cbox_0",
-> >   };
->
-> --
-> Zhengjun Xing
+Acked-by: David Hildenbrand <david@redhat.com>
+
+
+-- 
+Thanks,
+
+David / dhildenb
+

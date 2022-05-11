@@ -2,62 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0B4522CD9
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C1A522CDD
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:08:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242598AbiEKHIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 03:08:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42758 "EHLO
+        id S242615AbiEKHIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 03:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241099AbiEKHID (ORCPT
+        with ESMTP id S235005AbiEKHIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 03:08:03 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8FBA3087
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:07:56 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id g23so1328281edy.13
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:07:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yp55JvrZnoapZhhPg9nglUGsDWim50kPROdVVnou5Nw=;
-        b=Tbvi5ltsARlvIdW+yMDCQBzBIclvAZymsXsV9F1mkVq/BGVV8KVRlVGR6iMnl9HDR+
-         3AKJz2+/ZQxFAD9NoQksKZ+KbajOTvsmF7dhsfCekiiBg+WWkAZFgG6ZoFT+rfNm9BMv
-         jQrOD8jcc8q0YMiBHGx8DDTqA6mFaBTeMhQLU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yp55JvrZnoapZhhPg9nglUGsDWim50kPROdVVnou5Nw=;
-        b=g1/Xn2CZO7nVaUlSXD1lnMgrsjnknvzPvrJRvrgTKXlS8j4NQpdZ2vxgobGNtV/eIr
-         AcCkRF40dXu0wGK4OnpTu/NrigHKhGd7M/3fVbc2jsFUK1+LvqXAexEaqMUUpOVy+810
-         4af7G9l6L2T11+vnJ9htqnYIOdcpWBbStah+42j0TC2NPv5dk9PLbzI94xpGglmo5CFh
-         knsH5E0CFLZ45hMOxpdErgNyCT6v4hIXYCiz8QlKA733JHuQ3GvELplPZ8ReG184+L3/
-         Gg0qkBWf4NDMfEsUp9Izm/9Gc3PmEXBG+yxvjwnFH4OZnH6mlPK5SX1vu8K6I7Hhi1ct
-         8+XQ==
-X-Gm-Message-State: AOAM531rl0Qj+Ksx/hCJxZuQNXIEpdqiFxH/aXbevDtvaBz1PRLQ1VKO
-        IEFEEbBWSgqeoXMw8BrEkS7MZjrPGpakWRJttmu/PU/IMcd2DQ==
-X-Google-Smtp-Source: ABdhPJxes41Q7Oqs4oy9VMmXMdOFiEdoAK5Ep3Ngad2GkTjCm6BDzEGO5c+BibRshNVGl0pSqC5e8tq6q6OWavesbug=
-X-Received: by 2002:a05:6402:42c4:b0:426:a7a8:348f with SMTP id
- i4-20020a05640242c400b00426a7a8348fmr27535912edc.341.1652252874751; Wed, 11
- May 2022 00:07:54 -0700 (PDT)
+        Wed, 11 May 2022 03:08:25 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5B5A30A0;
+        Wed, 11 May 2022 00:08:22 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0B8841BF20D;
+        Wed, 11 May 2022 07:08:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1652252901;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j94gMFJ0WOTyCXQ5/7RSgY2UuqQn8cfJodJNeaB6sKM=;
+        b=o4c+Ks//LyKW+VNGeLfdEJFW3hTEugCv+16z7cGmKcltjQ8WhG3X3Vq+S/UPO3WWdiZPCP
+        VJ0y6wQTbnbXrfocRv47evYyFOBJG1kG9I38pNS9Alv/2ZBrYS124ovixjjR118MPtrKb7
+        Ibcuhc6jF5wTvdv2iw6auQvuqeRGDtGYJtB7O2clACTSUHmBrEiiDv3HV0nrt167iZEK1N
+        XgMr3cCTZhl2jR/X0BEjAVQf78V5xN8PVGhmscA+bWpLSWuk/+kSLGxMawkgGvclsuLNZP
+        IThnigvwZvpCraoAPYAxFKKMUkfdIEL+3iubgF6L95KefI/yL0GiUpnG+M3TLQ==
+Date:   Wed, 11 May 2022 09:08:15 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v4 00/12] add support for Renesas RZ/N1
+ ethernet subsystem devices
+Message-ID: <20220511090815.42deebac@xps-bootlin>
+In-Reply-To: <1b097089-d6e6-5622-15aa-7038b66b1367@gmail.com>
+References: <20220509131900.7840-1-clement.leger@bootlin.com>
+        <1b097089-d6e6-5622-15aa-7038b66b1367@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220511013057.245827-1-dlunev@chromium.org>
-In-Reply-To: <20220511013057.245827-1-dlunev@chromium.org>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Wed, 11 May 2022 09:07:43 +0200
-Message-ID: <CAJfpegsmyY+D4kK3ov51FLGA=RkyGDKMcYiMo2zBqYuFNs78JQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Prevent re-use of FUSE superblock after force unmount
-To:     Daniil Lunev <dlunev@chromium.org>
-Cc:     linux-fsdevel@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,12 +75,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 May 2022 at 03:31, Daniil Lunev <dlunev@chromium.org> wrote:
->
-> Force unmount of fuse severes the connection between FUSE driver and its
-> userspace counterpart.
+Le Tue, 10 May 2022 09:30:17 -0700,
+Florian Fainelli <f.fainelli@gmail.com> a =C3=A9crit :
 
-Why is forced umount being used in the first place?
+> On 5/9/22 06:18, Cl=C3=A9ment L=C3=A9ger wrote:
+> > The Renesas RZ/N1 SoCs features an ethernet subsystem which contains
+> > (most notably) a switch, two GMACs, and a MII converter [1]. This
+> > series adds support for the switch and the MII converter.
+> >=20
+> > The MII converter present on this SoC has been represented as a PCS
+> > which sit between the MACs and the PHY. This PCS driver is probed
+> > from the device-tree since it requires to be configured. Indeed the
+> > MII converter also contains the registers that are handling the
+> > muxing of ports (Switch, MAC, HSR, RTOS, etc) internally to the SoC.
+> >=20
+> > The switch driver is based on DSA and exposes 4 ports + 1 CPU
+> > management port. It include basic bridging support as well as FDB
+> > and statistics support.
+> >=20
+> > This series needs commits 14f11da778ff6421 ("soc: renesas: rzn1:
+> > Select PM and PM_GENERIC_DOMAINS configs") and ed66b37f916ee23b
+> > ("ARM: dts: r9a06g032: Add missing '#power-domain-cells'") which
+> > are available on the renesas-devel tree in order to enable generic
+> > power domain on RZ/N1.
+> >=20
+> > Link: [1]
+> > https://www.renesas.com/us/en/document/mah/rzn1d-group-rzn1s-group-rzn1=
+l-group-users-manual-r-engine-and-ethernet-peripherals
+> > =20
+> Build testing this patch set gave me the following Kconfig warnings:
+>=20
+> WARNING: unmet direct dependencies detected for PCS_RZN1_MIIC
+>    Depends on [n]: NETDEVICES [=3Dy] && (ARCH_RZN1 [=3Dn] || COMPILE_TEST
+> [=3Dn]) Selected by [m]:
+>    - NET_DSA_RZN1_A5PSW [=3Dm] && NETDEVICES [=3Dy] && NET_DSA [=3Dm]
+>=20
+> WARNING: unmet direct dependencies detected for PCS_RZN1_MIIC
+>    Depends on [n]: NETDEVICES [=3Dy] && (ARCH_RZN1 [=3Dn] || COMPILE_TEST
+> [=3Dn]) Selected by [m]:
+>    - NET_DSA_RZN1_A5PSW [=3Dm] && NETDEVICES [=3Dy] && NET_DSA [=3Dm]
+>=20
+> WARNING: unmet direct dependencies detected for PCS_RZN1_MIIC
+>    Depends on [n]: NETDEVICES [=3Dy] && (ARCH_RZN1 [=3Dn] || COMPILE_TEST
+> [=3Dn]) Selected by [m]:
+>    - NET_DSA_RZN1_A5PSW [=3Dm] && NETDEVICES [=3Dy] && NET_DSA [=3Dm]
+>=20
+> I started off with arm64's defconfig and then enabled all of the DSA=20
+> drivers.
 
-Thanks,
-Miklos
+Ok, I'll fix that.
+
+Cl=C3=A9ment

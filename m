@@ -2,110 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3CD6523704
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:20:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A92F5236F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:19:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245752AbiEKPU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56712 "EHLO
+        id S245723AbiEKPTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245733AbiEKPUF (ORCPT
+        with ESMTP id S232787AbiEKPTq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:20:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A023620EE07;
-        Wed, 11 May 2022 08:20:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3047C61913;
-        Wed, 11 May 2022 15:20:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 167A1C340EE;
-        Wed, 11 May 2022 15:20:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652282403;
-        bh=GMvnWYvbccZQktGrME0uBhLf6d3GEhAgIRMMt6zfpKA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I0GgXQ3dUxlFBEyRNuKUVqUYG6uMd2yFDSWva9G/T2PZlVOT9WDgfIg5Aw4gRrLVH
-         LKx4I4DRmD5X5d+ukbDh0BUbefKRNEti9au2j7vah7qjirqIJJYTFesBfLg9ey8LIl
-         i7GZuYMCbttNcxJZGkYMctx8CWaFGzRT8u26sCF6y9yXLHftCHCvYfVjWw8zO5bCUC
-         PtDhOpduD0WUaYXj4wSRTRODtFpy2Ic11C7NZgkYUnvmJZ7V3mxQa9v2DHPNg6LwE/
-         yuZlQfJm9mh7R4hmn1ZQzCY0rgJ0AUOUcS0UT+2rmHoSfTNSm18QcSvhdLLKWFYDSv
-         vtpwU9Do0HeIw==
-Date:   Wed, 11 May 2022 18:18:33 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc:     James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>, kernel@pengutronix.de,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        David Gstir <david@sigma-star.at>,
-        Richard Weinberger <richard@nod.at>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Michael Walle <michael@walle.cc>,
-        Sumit Garg <sumit.garg@linaro.org>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v9 7/7] MAINTAINERS: add KEYS-TRUSTED-CAAM
-Message-ID: <YnvTyd8s4T+s/uAL@kernel.org>
-References: <20220506062553.1068296-1-a.fatoum@pengutronix.de>
- <20220506062553.1068296-8-a.fatoum@pengutronix.de>
- <YnbH2Fgn/JFOU3Rf@iki.fi>
- <YnbIiJynQq/tcFa2@iki.fi>
- <e49920e6-0852-ad3d-5758-604655591671@pengutronix.de>
+        Wed, 11 May 2022 11:19:46 -0400
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD57320D4FF;
+        Wed, 11 May 2022 08:19:45 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id m2-20020a1ca302000000b003943bc63f98so1427519wme.4;
+        Wed, 11 May 2022 08:19:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=llXmD2rCq1+l8jPwFHVjaI9KkiK/giTbs6qtyUFVaFE=;
+        b=hqViGr2eMwvt1XQDbIyCQjIG764VWBKwuKJDuPa5kTDISu1vnn7OvnUcmNhb2Fhd9I
+         +bgEVvcreZvu4b8/fH2f2ZjE+am1v1kRfjLMTWQFBhxUm1Yl9T+/hY8rY9jj+hcLiMcC
+         0a1uBHuMgLflYtHmbfJc7VjhxB5sV8+DFi+q73XY8ecgrBGRtq8FV2vLnXTjQDZuz56m
+         Q7uJkVCccgnncm5CoWkH1+D1lJOXwjri8iKCgeqKXpSyR92dbne9RJlpOoXN04q4PWAG
+         uHqtvAgnZ7l5BAaa5lbQ9cq9mTpIS7iUMbtCW88fmzH3DdpvNloojyM9df3dnQYstwE5
+         TeCA==
+X-Gm-Message-State: AOAM532QjbIkQvFgRPybsz7cQGNJBmMQqYaScBDLx7q7kTx2PyhydLuk
+        BtrnkSPwXN3zGDXwk49+pCI=
+X-Google-Smtp-Source: ABdhPJz/IdYlaLe1v8zDU6pSmd8VWCh7Ua5p2i7f1ZEzponF7E0GJNqJnUWRh0RBxzQpyCUSwYOIGg==
+X-Received: by 2002:a7b:c199:0:b0:394:26d0:a6a9 with SMTP id y25-20020a7bc199000000b0039426d0a6a9mr5408256wmi.116.1652282384442;
+        Wed, 11 May 2022 08:19:44 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id p8-20020adfe608000000b0020c5253d8e6sm1882998wrm.50.2022.05.11.08.19.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 08:19:43 -0700 (PDT)
+Date:   Wed, 11 May 2022 15:19:42 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
+Cc:     Wei Liu <wei.liu@kernel.org>, kys@microsoft.com,
+        haiyangz@microsoft.com, sthemmin@microsoft.com,
+        decui@microsoft.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
+        kw@linux.com, bhelgaas@google.com, jakeo@microsoft.com,
+        dazhan@microsoft.com, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] hyperv compose_msi_msg fixups
+Message-ID: <20220511151942.ekxy2vodzvxzfs2e@liuwe-devbox-debian-v2>
+References: <1652132902-27109-1-git-send-email-quic_jhugo@quicinc.com>
+ <20220511144124.rj7inq6zy6bgbii4@liuwe-devbox-debian-v2>
+ <a0e60283-a448-650f-808e-a0080ae550f7@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e49920e6-0852-ad3d-5758-604655591671@pengutronix.de>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <a0e60283-a448-650f-808e-a0080ae550f7@quicinc.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 12:48:53PM +0200, Ahmad Fatoum wrote:
-> On 07.05.22 21:29, Jarkko Sakkinen wrote:
-> >>> +KEYS-TRUSTED-CAAM
-> >>> +M:	Ahmad Fatoum <a.fatoum@pengutronix.de>
-> >>> +R:	Pengutronix Kernel Team <kernel@pengutronix.de>
-> >>> +L:	linux-integrity@vger.kernel.org
-> >>> +L:	keyrings@vger.kernel.org
-> >>> +S:	Maintained
-> >>> +F:	include/keys/trusted_caam.h
-> >>> +F:	security/keys/trusted-keys/trusted_caam.c
-> >>> +
-> >>>  KEYS/KEYRINGS
-> >>>  M:	David Howells <dhowells@redhat.com>
-> >>>  M:	Jarkko Sakkinen <jarkko@kernel.org>
-> >>> -- 
-> >>> 2.30.2
-> >>>
-> >>
-> >> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+On Wed, May 11, 2022 at 08:47:23AM -0600, Jeffrey Hugo wrote:
+> On 5/11/2022 8:41 AM, Wei Liu wrote:
+> > On Mon, May 09, 2022 at 03:48:20PM -0600, Jeffrey Hugo wrote:
+> > > While multi-MSI appears to work with pci-hyperv.c, there was a concern about
+> > > how linux was doing the ITRE allocations.  Patch 2 addresses the concern.
+> > > 
+> > > However, patch 2 exposed an issue with how compose_msi_msg() was freeing a
+> > > previous allocation when called for the Nth time.  Imagine a driver using
+> > > pci_alloc_irq_vectors() to request 32 MSIs.  This would cause compose_msi_msg()
+> > > to be called 32 times, once for each MSI.  With patch 2, MSI0 would allocate
+> > > the ITREs needed, and MSI1-31 would use the cached information.  Then the driver
+> > > uses request_irq() on MSI1-17.  This would call compose_msi_msg() again on those
+> > > MSIs, which would again use the cached information.  Then unmask() would be
+> > > called to retarget the MSIs to the right VCPU vectors.  Finally, the driver
+> > > calls request_irq() on MSI0.  This would call conpose_msi_msg(), which would
+> > > free the block of 32 MSIs, and allocate a new block.  This would undo the
+> > > retarget of MSI1-17, and likely leave those MSIs targeting invalid VCPU vectors.
+> > > This is addressed by patch 1, which is introduced first to prevent a regression.
+> > > 
+> > > Jeffrey Hugo (2):
+> > >    PCI: hv: Reuse existing ITRE allocation in compose_msi_msg()
+> > >    PCI: hv: Fix interrupt mapping for multi-MSI
+> > > 
 > > 
-> > 3/7 would probably need tested-by. Other than that this starts to look
-> > good...
+> > Applied to hyperv-next. Thanks.
 > 
-> It has been tested by me on an i.MX6 (era < 10 with blobbing support)
-> and by Michael on a LS1028A (era >= 10, both with and without blobbing
-> support).
+> Huh?  I thought you wanted a V2.  I was intending on sending that out today.
 > 
-> Cheers,
-> Ahmad
 
-Michael, can you give a tested-by for the corresponding patch?
+Please send them out. I will apply the new version.
 
-BR, Jarkko
+Thanks,
+Wei.
+
+> -Jeff

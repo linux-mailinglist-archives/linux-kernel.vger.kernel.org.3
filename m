@@ -2,107 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D98C522DD3
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83DAB522DD1
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243303AbiEKID3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 04:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37954 "EHLO
+        id S243289AbiEKIDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 04:03:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243298AbiEKIDV (ORCPT
+        with ESMTP id S241805AbiEKIDE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 04:03:21 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7AA48CCCF;
-        Wed, 11 May 2022 01:03:10 -0700 (PDT)
+        Wed, 11 May 2022 04:03:04 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC5608B08C
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 01:03:02 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id q23so1789507wra.1
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 01:03:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652256192; x=1683792192;
-  h=from:to:cc:subject:date:message-id;
-  bh=U5JVmxHUUjxAbxSb6PLM4Nc67GW9UY1orKH/4MwbuNA=;
-  b=bCkL1ocYAlLpkbyLN7JZv7gxV/tX0Dq/om1qCxl7BVVBvDJJVxPaBlZP
-   NiawT2Qeaot9x461XiMuOIb7Vu7A/gjBPy77+vpCwZcKMjDqVejCuVN/v
-   K7DECh5413qPPHPQRyjJGcOeQ+inm46sApQ00A/a/NR3/0bOX5S2jL/ii
-   w=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 11 May 2022 01:03:10 -0700
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 11 May 2022 01:03:09 -0700
-X-QCInternal: smtphost
-Received: from blr-ubuntu-435.qualcomm.com ([10.79.42.176])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 11 May 2022 13:32:51 +0530
-Received: by blr-ubuntu-435.qualcomm.com (Postfix, from userid 2327845)
-        id B31489008AA; Wed, 11 May 2022 13:32:50 +0530 (IST)
-From:   Shreyas K K <quic_shrekk@quicinc.com>
-To:     Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Shreyas K K <quic_shrekk@quicinc.com>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Prasanna Kumar <quic_kprasan@quicinc.com>
-Subject: [PATCH] arm64: Enable repeat tlbi workaround on KRYO4XX gold CPUs
-Date:   Wed, 11 May 2022 13:32:47 +0530
-Message-Id: <20220511080247.1530-1-quic_shrekk@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=GcjkZzrLn6gMWk4BhtvbTNa6RAyAFLU8Gib10fMIL6M=;
+        b=UFsCqPurNA77DAQgdLeQK8XeRTaY48TIY6s55owkQ/HgvOvfVLRQqmVns5XkEwBZm6
+         56SK0SRGUPqyFSHm6kzFsqS/WCSavHeFIJcunmiB8T6YQVsHAP976fuV0RDx1fancQkE
+         pSz4Dy+7QjawQo5E9RZCzBbjfCovqAgf6SQnM4htoYjHzRGklIi+IRKyQ3Vq3sfQUUFj
+         Ob5BtPJ9es4c7J1OqHqdFMkzvbg3vandDzGIcfssTWeB3TYQ7BdlOt4vC2SQ69owYueh
+         YcwkeL249xYiu+DEr2CGR6yORYiafhfJr4LYTW0bAPJZE22e2aHtcWk3YZKi6NGCe6bD
+         pUow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=GcjkZzrLn6gMWk4BhtvbTNa6RAyAFLU8Gib10fMIL6M=;
+        b=ThWHTi7+xrZddH07PbteIcmLpYz9NoNeyE6oUymr9w1Z4Ylb+Nn4NGnE920HZpGFu8
+         /P3808oF/9P86QpibvZCVLH7beF8WmpCJI0UOi2qe6Jb+ecXikA3LW72j4xdS8/HO+B0
+         MEFWBoxkJ1VeQyQ6UYhlCzjFOZ6nvyaoQ0pEcVnmUvzDlpK58ud1ED+iNuwsDvcgWBBP
+         5aMhQLZpm8cVcy+LxKn3UcgLWFaSojR4IVq/VV/2M2IBZZFIDsLgq6lXf+uFGc0ycyvT
+         1P2Msp0PUF9PAZgxLZa8/kH0xHc7zg2l4ggLUaNE1m0Vxz/QxqyHaL4pCnVlhy1OeW8z
+         FyPw==
+X-Gm-Message-State: AOAM532/sLjPN8OmVNrlOIXPt3oUgyfswgx9nc7k4xbnnB/n7vPSr/PD
+        1hcMZesNndKz7ugJeuWC3qUDBA==
+X-Google-Smtp-Source: ABdhPJz141wwvjEmkFZHdaUgpw9RZwbK3CfA9t7e/8C9BiOzO9p9S/blepjTYOpKbso5uRqwI3xJxQ==
+X-Received: by 2002:a05:6000:1c09:b0:20c:b986:e593 with SMTP id ba9-20020a0560001c0900b0020cb986e593mr16089270wrb.170.1652256181310;
+        Wed, 11 May 2022 01:03:01 -0700 (PDT)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id z15-20020a05600c220f00b00394538d039esm4602915wml.6.2022.05.11.01.02.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 01:03:00 -0700 (PDT)
+Date:   Wed, 11 May 2022 10:02:58 +0200
+From:   LABBE Corentin <clabbe@baylibre.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, alexandre.torgue@foss.st.com,
+        calvin.johnson@oss.nxp.com, davem@davemloft.net,
+        edumazet@google.com, hkallweit1@gmail.com,
+        jernej.skrabec@gmail.com, joabreu@synopsys.com,
+        krzysztof.kozlowski+dt@linaro.org, kuba@kernel.org,
+        lgirdwood@gmail.com, linux@armlinux.org.uk, pabeni@redhat.com,
+        peppe.cavallaro@st.com, robh+dt@kernel.org, samuel@sholland.org,
+        wens@csie.org, netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 3/6] dt-bindings: net: Add documentation for phy-supply
+Message-ID: <YnttssHyCf8PJJev@Red>
+References: <20220509074857.195302-1-clabbe@baylibre.com>
+ <20220509074857.195302-4-clabbe@baylibre.com>
+ <YnkGV8DyTlCuT92R@lunn.ch>
+ <YnkWl+xYCX8r9DE7@Red>
+ <Ynk7L07VH/RFVzl6@lunn.ch>
+ <Ynk9ccoVh32Deg45@sirena.org.uk>
+ <YnlDbbegQ1IbbaHy@lunn.ch>
+ <YnlHwpiow9Flgzas@sirena.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YnlHwpiow9Flgzas@sirena.org.uk>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add KRYO4XX gold/big cores to the list of CPUs that need the
-repeat TLBI workaround. Apply this to the affected
-KRYO4XX cores (rcpe to rdpe).
+Le Mon, May 09, 2022 at 05:56:34PM +0100, Mark Brown a écrit :
+> On Mon, May 09, 2022 at 06:38:05PM +0200, Andrew Lunn wrote:
+> 
+> > So we have a collection of regulators, varying in numbers between
+> > different PHYs, with different vendor names and purposes. In general,
+> > they all should be turned on. Yet we want them named so it is clear
+> > what is going on.
+> 
+> > Is there a generic solution here so that the phylib core can somehow
+> > enumerate them and turn them on, without actually knowing what they
+> > are called because they have vendor specific names in order to be
+> > clear what they are?
+> 
+> > There must be a solution to this, phylib cannot be the first subsystem
+> > to have this requirement, so if you could point to an example, that
+> > would be great.
+> 
+> No, it's not really come up much before - generally things with
+> regulator control that have generic drivers tend not to be sophisticated
+> enough to have more than one supply, or to be on an enumerable bus where
+> the power is part of the bus specification so have the power specified
+> as part of the bus.  You'd need to extend the regulator bindings to
+> support parallel array of phandles and array of names properties like
+> clocks have as an option like you were asking for, which would doubtless
+> be fun for validation but is probably the thing here.
 
-The variant and revision bits are implementation defined and are
-different from the their Cortex CPU counterparts on which they are
-based on, i.e., (r0p0 to r1p0) is equivalent to (rcpe to rdpe).
-
-Signed-off-by: Shreyas K K <quic_shrekk@quicinc.com>
----
- Documentation/arm64/silicon-errata.rst | 3 +++
- arch/arm64/kernel/cpu_errata.c         | 2 ++
- 2 files changed, 5 insertions(+)
-
-diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
-index 466cb9e89047..d27db84d585e 100644
---- a/Documentation/arm64/silicon-errata.rst
-+++ b/Documentation/arm64/silicon-errata.rst
-@@ -189,6 +189,9 @@ stable kernels.
- +----------------+-----------------+-----------------+-----------------------------+
- | Qualcomm Tech. | Kryo4xx Silver  | N/A             | ARM64_ERRATUM_1024718       |
- +----------------+-----------------+-----------------+-----------------------------+
-+| Qualcomm Tech. | Kryo4xx Gold    | N/A             | ARM64_ERRATUM_1286807       |
-++----------------+-----------------+-----------------+-----------------------------+
+Does you mean something like this:
+diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
+index 1e54a833f2cf..404f5b874b59 100644
+--- a/drivers/regulator/core.c
++++ b/drivers/regulator/core.c
+@@ -351,6 +351,32 @@ static void regulator_lock_dependent(struct regulator_dev *rdev,
+ 	mutex_unlock(&regulator_list_mutex);
+ }
+ 
++/**
++ * of_get_regulator_from_list - get a regulator device node based on supply name
++ * from a DT regulators list
++ * @dev: Device pointer for the consumer (of regulator) device
++ * @supply: regulator supply name
++ *
++ * Extract the regulator device node corresponding to the supply name.
++ * returns the device node corresponding to the regulator if found, else
++ * returns NULL.
++ */
++static struct device_node *of_get_regulator_from_list(struct device *dev,
++						      struct device_node *np,
++						      const char *supply)
++{
++	int index, ret;
++	struct of_phandle_args regspec;
 +
- +----------------+-----------------+-----------------+-----------------------------+
- | Fujitsu        | A64FX           | E#010001        | FUJITSU_ERRATUM_010001      |
- +----------------+-----------------+-----------------+-----------------------------+
-diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
-index 4c9b5b4b7a0b..2518657e6de1 100644
---- a/arch/arm64/kernel/cpu_errata.c
-+++ b/arch/arm64/kernel/cpu_errata.c
-@@ -208,6 +208,8 @@ static const struct arm64_cpu_capabilities arm64_repeat_tlbi_list[] = {
- #ifdef CONFIG_ARM64_ERRATUM_1286807
- 	{
- 		ERRATA_MIDR_RANGE(MIDR_CORTEX_A76, 0, 0, 3, 0),
-+		/* Kryo4xx Gold (rcpe to rdpe) => (r0p0 to r1p0) */
-+		ERRATA_MIDR_RANGE(QCOM_CPU_PART_KRYO_4XX_GOLD, 0xc, 0xe, 0xd, 0xe),
- 	},
- #endif
- 	{},
--- 
-2.17.1
++	index = of_property_match_string(np, "regulator-names", supply);
++	if (index >= 0) {
++		ret = of_parse_phandle_with_args(np, "regulators", NULL, index, &regspec);
++		if (ret == 0)
++			return regspec.np;
++	}
++	return NULL;
++}
++
+ /**
+  * of_get_child_regulator - get a child regulator device node
+  * based on supply name
+@@ -362,17 +388,23 @@ static void regulator_lock_dependent(struct regulator_dev *rdev,
+  * returns the device node corresponding to the regulator if found, else
+  * returns NULL.
+  */
+-static struct device_node *of_get_child_regulator(struct device_node *parent,
+-						  const char *prop_name)
++static struct device_node *of_get_child_regulator(struct device *dev,
++						  struct device_node *parent,
++						  const char *supply)
+ {
+ 	struct device_node *regnode = NULL;
+ 	struct device_node *child = NULL;
++	char prop_name[64]; /* 64 is max size of property name */
+ 
++	snprintf(prop_name, 64, "%s-supply", supply);
+ 	for_each_child_of_node(parent, child) {
++		regnode = of_get_regulator_from_list(dev, child, supply);
++		if (regnode)
++			return regnode;
+ 		regnode = of_parse_phandle(child, prop_name, 0);
+ 
+ 		if (!regnode) {
+-			regnode = of_get_child_regulator(child, prop_name);
++			regnode = of_get_child_regulator(dev, child, prop_name);
+ 			if (regnode)
+ 				goto err_node_put;
+ 		} else {
+@@ -401,12 +433,15 @@ static struct device_node *of_get_regulator(struct device *dev, const char *supp
+ 	char prop_name[64]; /* 64 is max size of property name */
+ 
+ 	dev_dbg(dev, "Looking up %s-supply from device tree\n", supply);
++	regnode = of_get_regulator_from_list(dev, dev->of_node, supply);
++	if (regnode)
++		return regnode;
+ 
+ 	snprintf(prop_name, 64, "%s-supply", supply);
+ 	regnode = of_parse_phandle(dev->of_node, prop_name, 0);
+ 
+ 	if (!regnode) {
+-		regnode = of_get_child_regulator(dev->of_node, prop_name);
++		regnode = of_get_child_regulator(dev, dev->of_node, supply);
+ 		if (regnode)
+ 			return regnode;
+ 
 
+And then for our case, a regulator_get_bulk will be needed.
+Does I well understood what you mean ?

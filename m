@@ -2,60 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D9D5232F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 14:19:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 194805232F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 14:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242400AbiEKMTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 08:19:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33434 "EHLO
+        id S242410AbiEKMTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 08:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241951AbiEKMT3 (ORCPT
+        with ESMTP id S242347AbiEKMTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 08:19:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A6E68F83;
-        Wed, 11 May 2022 05:19:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1D1CB82153;
-        Wed, 11 May 2022 12:19:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54CBEC340F2;
-        Wed, 11 May 2022 12:19:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652271555;
-        bh=Fjm4AfHTC6kU6/6xhslVpnGbq5WyxAJ/0p2mGfcQWQs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dI8nHfktYwihT60Q3fiVVp9vZvUoayzvEP3HLDdwiTSPfDe0W+MsukymZqsR4Kd2j
-         PCwodjXXBErP4o57wwbtpgMST/ycE9NN6ce+KKZM0b/CM7ov+ufHIDT4GdmY5k5bbP
-         ND9+ZJmhaMZeCA4Y/KsO3exAO+Kzpycyoa+tLo7DAUAFOf1qv+B8CJqMMQBOS1CJ7K
-         5sWjOQxUgfK91zbxzcO3d3tV62B2YLcTPGd09Scr18/507m/X3/qwmhspsvK3f5SYt
-         MJtoD3ycIANo2dBljx/s/OkvfLzqC7FSwOOzjYYB9AqxuOUPOH31JnFY+l2mWjWgD+
-         gWUB2HEBycm6g==
-Received: by mail-wm1-f44.google.com with SMTP id r188-20020a1c44c5000000b003946c466c17so462477wma.4;
-        Wed, 11 May 2022 05:19:15 -0700 (PDT)
-X-Gm-Message-State: AOAM533hE49q25FzwYhhkIHDAv/fhor7lgehThDx5eMy8VPd9fKPe7Ie
-        9HcLyPLOKYLEijuvDwj3NKu8i8DnHhp7km9Mvb4=
-X-Google-Smtp-Source: ABdhPJzyVGRVS3f9RZC9vyM7pHDuzQgoTcjJcNnavzvLkUp3eQkqnwavyZ2cqLGpUK+B3lUA9FIEiurqeaJ8ZoB5Bq8=
-X-Received: by 2002:a05:600c:382:b0:394:6172:59dc with SMTP id
- w2-20020a05600c038200b00394617259dcmr4543642wmd.120.1652271553566; Wed, 11
- May 2022 05:19:13 -0700 (PDT)
+        Wed, 11 May 2022 08:19:31 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BBA73578
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 05:19:27 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nolJH-0000qE-Ql; Wed, 11 May 2022 14:19:19 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nolJI-001gNu-8e; Wed, 11 May 2022 14:19:18 +0200
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nolJG-00BJXp-Bi; Wed, 11 May 2022 14:19:18 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Devid Antonio Filoni <devid.filoni@egluetechnologies.com>,
+        kernel@pengutronix.de, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Jander <david@protonic.nl>
+Subject: [PATCH 1/1] can: skb: add and set local_origin flag
+Date:   Wed, 11 May 2022 14:19:13 +0200
+Message-Id: <20220511121913.2696181-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220510114852.1719018-1-zheyuma97@gmail.com>
-In-Reply-To: <20220510114852.1719018-1-zheyuma97@gmail.com>
-From:   Ricardo Ribalda Delgado <ribalda@kernel.org>
-Date:   Wed, 11 May 2022 14:18:57 +0200
-X-Gmail-Original-Message-ID: <CAPybu_2NCEmjVi2FZC+dPePkfZJQG9QT5qc=cRdHY4tHPEkVDg@mail.gmail.com>
-Message-ID: <CAPybu_2NCEmjVi2FZC+dPePkfZJQG9QT5qc=cRdHY4tHPEkVDg@mail.gmail.com>
-Subject: Re: [PATCH] media: imx214: Fix the error handling in imx214_probe()
-To:     Zheyu Ma <zheyuma97@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,37 +55,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zheyu
+Add new can_skb_priv::local_origin flag to be able detect egress
+packages even if they was sent directly from kernel and not assigned to
+some socket.
 
-Do you have seen this issue in a real hardware?  The device enters
-idle state unconditionally after power_on during probe.
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Cc: Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
+---
+ drivers/net/can/dev/skb.c | 3 +++
+ include/linux/can/skb.h   | 1 +
+ net/can/raw.c             | 2 +-
+ 3 files changed, 5 insertions(+), 1 deletion(-)
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/media/i2c/imx214.c#n1008
+diff --git a/drivers/net/can/dev/skb.c b/drivers/net/can/dev/skb.c
+index 61660248c69e..3e2357fb387e 100644
+--- a/drivers/net/can/dev/skb.c
++++ b/drivers/net/can/dev/skb.c
+@@ -63,6 +63,7 @@ int can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
+ 
+ 		/* save frame_len to reuse it when transmission is completed */
+ 		can_skb_prv(skb)->frame_len = frame_len;
++		can_skb_prv(skb)->local_origin = true;
+ 
+ 		skb_tx_timestamp(skb);
+ 
+@@ -200,6 +201,7 @@ struct sk_buff *alloc_can_skb(struct net_device *dev, struct can_frame **cf)
+ 	can_skb_reserve(skb);
+ 	can_skb_prv(skb)->ifindex = dev->ifindex;
+ 	can_skb_prv(skb)->skbcnt = 0;
++	can_skb_prv(skb)->local_origin = false;
+ 
+ 	*cf = skb_put_zero(skb, sizeof(struct can_frame));
+ 
+@@ -231,6 +233,7 @@ struct sk_buff *alloc_canfd_skb(struct net_device *dev,
+ 	can_skb_reserve(skb);
+ 	can_skb_prv(skb)->ifindex = dev->ifindex;
+ 	can_skb_prv(skb)->skbcnt = 0;
++	can_skb_prv(skb)->local_origin = false;
+ 
+ 	*cfd = skb_put_zero(skb, sizeof(struct canfd_frame));
+ 
+diff --git a/include/linux/can/skb.h b/include/linux/can/skb.h
+index fdb22b00674a..1b8a8cf2b13b 100644
+--- a/include/linux/can/skb.h
++++ b/include/linux/can/skb.h
+@@ -52,6 +52,7 @@ struct can_skb_priv {
+ 	int ifindex;
+ 	int skbcnt;
+ 	unsigned int frame_len;
++	bool local_origin;
+ 	struct can_frame cf[];
+ };
+ 
+diff --git a/net/can/raw.c b/net/can/raw.c
+index b7dbb57557f3..df2d9334b395 100644
+--- a/net/can/raw.c
++++ b/net/can/raw.c
+@@ -173,7 +173,7 @@ static void raw_rcv(struct sk_buff *oskb, void *data)
+ 	/* add CAN specific message flags for raw_recvmsg() */
+ 	pflags = raw_flags(skb);
+ 	*pflags = 0;
+-	if (oskb->sk)
++	if (can_skb_prv(skb)->local_origin)
+ 		*pflags |= MSG_DONTROUTE;
+ 	if (oskb->sk == sk)
+ 		*pflags |= MSG_CONFIRM;
+-- 
+2.30.2
 
-
-
-
-On Tue, May 10, 2022 at 1:49 PM Zheyu Ma <zheyuma97@gmail.com> wrote:
->
-> The driver should disable regulators when fails to probe.
->
-> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-> ---
->  drivers/media/i2c/imx214.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
-> index 83c1737abeec..61eeaefd4298 100644
-> --- a/drivers/media/i2c/imx214.c
-> +++ b/drivers/media/i2c/imx214.c
-> @@ -1076,6 +1076,7 @@ static int imx214_probe(struct i2c_client *client)
->         mutex_destroy(&imx214->mutex);
->         v4l2_ctrl_handler_free(&imx214->ctrls);
->         pm_runtime_disable(imx214->dev);
-> +       regulator_bulk_disable(IMX214_NUM_SUPPLIES, imx214->supplies);
->
->         return ret;
->  }
-> --
-> 2.25.1
->

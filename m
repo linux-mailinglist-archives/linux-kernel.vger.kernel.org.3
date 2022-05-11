@@ -2,138 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF8F65234AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB585234AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244158AbiEKNuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:50:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45924 "EHLO
+        id S244174AbiEKNuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244138AbiEKNuF (ORCPT
+        with ESMTP id S244142AbiEKNuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:50:05 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2B6239782;
-        Wed, 11 May 2022 06:50:03 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id s23so2072854iog.13;
-        Wed, 11 May 2022 06:50:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PPfAjhXsI/sCAXElGiIAWLNhfWDNEi+ZtaHTtSxHBEQ=;
-        b=aGnZg3AT2GqkRlrytHTaN/NZj7se3UweBltQbTucUz8qfefhYRjX8D58C1r2q954R4
-         6DJFBBvHMc/JilfjHyQ5aqY01UN/ab0jVIyzAY5dvdvZIeqaRUit6kQHk967vXUAo93I
-         pB8FjpEP39N8d0YPKBUtmkAzGQERpADWAWEHzgZkXpmv8coKTSst29t7IYGwSgZONziv
-         oI4+fIjhM3bVr2+UA+VQvZRxk3miTrNxlZjLwaex+qmsOl01vetgxC5dI5YMOWpvQjc3
-         XxgpabVXskv3rcn9yXJv3653A48xMi9ZFSBhEqXtI3PP5+XcVG1qaW97tIAzZBRusZCS
-         SidQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PPfAjhXsI/sCAXElGiIAWLNhfWDNEi+ZtaHTtSxHBEQ=;
-        b=Nb95y87xAS8rQvsrczlKK9ref94YMGImjeT860oZAusxTWJZCeC/7LKrvIBdnRAgku
-         +OBgPVBg8X189lH5+5WI1cKzBXyE+TBQPAoUOhCDSXsQmNcCs9zf7tIJe/5mORktkyVy
-         9ZDSIEgk5bqc7XZVIrl7bK151Wvq5L0h+98iMgpZ9uBaltOKmZYvlHenrH048G0193TM
-         qK9r4QsWMcjLxLcHQjA/SCxvNuLzScZFO1IkEQ+NCCqzuHXt2J1w6K/Cy+mSoroajxWm
-         QqWsgVzmAulJ73LVaH8X2ow6QgVi0VxzJr3doOEfE+k7pX4Z+e3svLSAOhAAABcMmuaV
-         97DA==
-X-Gm-Message-State: AOAM5302gSaDbJjhrWq6yyXyegCrGL26Wa3fQxMRaJ6n/sWw05ltk8w3
-        1zL5kd3TsWfGU0aTrFBe1M3c5JdzwmSEicY6Fio=
-X-Google-Smtp-Source: ABdhPJzjJIGp9s2bo97C4Z9816iV19iujbsRA1+GTtjaKDQ3YsQlDo9tdjEGYQ/NX+clvDAPgUUNuHpBQl2DPlIGM9A=
-X-Received: by 2002:a02:8624:0:b0:32b:397d:eeb1 with SMTP id
- e33-20020a028624000000b0032b397deeb1mr12780202jai.264.1652277001693; Wed, 11
- May 2022 06:50:01 -0700 (PDT)
+        Wed, 11 May 2022 09:50:16 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1EC2723E29A;
+        Wed, 11 May 2022 06:50:14 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 931D7ED1;
+        Wed, 11 May 2022 06:50:13 -0700 (PDT)
+Received: from lpieralisi (unknown [10.57.1.148])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9FF783F66F;
+        Wed, 11 May 2022 06:50:11 -0700 (PDT)
+Date:   Wed, 11 May 2022 14:50:07 +0100
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     linux-rockchip@lists.infradead.org, Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Marc Zyngier <maz@kernel.org>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Subject: Re: [PATCH v9 2/5] PCI: rockchip-dwc: Reset core at driver probe
+Message-ID: <Ynu/D4hXTRVy9IBF@lpieralisi>
+References: <20220429123832.2376381-1-pgwipeout@gmail.com>
+ <20220429123832.2376381-3-pgwipeout@gmail.com>
 MIME-Version: 1.0
-References: <20220507052451.12890-1-ojeda@kernel.org> <20220507052451.12890-19-ojeda@kernel.org>
- <875ymecp6f.fsf@meer.lwn.net>
-In-Reply-To: <875ymecp6f.fsf@meer.lwn.net>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 11 May 2022 15:49:50 +0200
-Message-ID: <CANiq72mpYjdhq6yZFBmy8zEo7Cjhh-WjOFc4TfKMZh+w4Fu5WA@mail.gmail.com>
-Subject: Re: [PATCH v6 18/23] docs: add Rust documentation
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux <rust-for-linux@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Finn Behrens <me@kloenk.de>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Wu XiangCheng <bobwxc@email.cn>, Gary Guo <gary@garyguo.net>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Yuki Okushi <jtitor@2k36.org>, Wei Liu <wei.liu@kernel.org>,
-        Daniel Xu <dxu@dxuuu.xyz>, Julian Merkle <me@jvmerkle.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220429123832.2376381-3-pgwipeout@gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 12:32 AM Jonathan Corbet <corbet@lwn.net> wrote:
->
-> Trying to take a closer look this time...
->
-> I foresee merge conflicts, but so it goes.  Trying to split this apart
-> would not make a lot of sense.
+On Fri, Apr 29, 2022 at 08:38:28AM -0400, Peter Geis wrote:
+> The PCIe controller is in an unknown state at driver probe. This can
+> lead to undesireable effects when the driver attempts to configure the
+> controller.
+> 
+> Prevent issues in the future by resetting the core during probe.
+> 
+> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> Tested-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+> ---
+>  drivers/pci/controller/dwc/pcie-dw-rockchip.c | 23 ++++++++-----------
+>  1 file changed, 10 insertions(+), 13 deletions(-)
 
-Is there a big change coming to docs? (there are not conflicts in
-linux-next within the docs). Or what do you mean?
+I fear that the controller reset behaviour is bootloader/firmware
+dependent.
 
-> Please use normal tables rather than list-table; this kind of thing is
-> really unreadable in the source form.
+Are we sure we are not triggering any regressions by resetting the
+controller in the middle of probe (aka is the driver implicitly
+relying on existing behaviour on systems that are not the ones
+you are testing on) ?
 
-Will do!
+Just asking, the rockchip maintainers should be able to answer this
+question.
 
-> I foresee disagreements over coding style conventions in the
-> future... I don't plan to be part of that conversation :)
+Thanks,
+Lorenzo
 
-Do you mean with the tool settings? I guess we may get some proposals
-about tweaking them, yeah, but one reason to stick to the defaults is
-to avoid that! :)
-
-If you mean enforcing `rustfmt`, please see below.
-
-> I will ask whether we want this, though.  Why would anybody want to
-> mass-reformat the entire body of kernel code?  This seems like something
-> that would generate an endless stream of "helpful" patches and a lot of
-> churn.
-
-So the idea is that, since everything is already formatted, the output
-of this is empty (in mainline), like Gaelan/Josh mentioned. Thus
-nobody should be sending any formatting patches since there is nothing
-to change.
-
-Now, for those developing and not running `rustfmt` automatically in
-some way (e.g. in their editors), it can be useful to run it before
-submitting the patches: the output should only show changes to
-whatever you changed since everything else should be already
-formatted.
-
-Of course, as soon as others start submitting patches independently,
-mistakes may slip through, but we are enforcing this in our CI (and it
-could be done more centrally), so we should notice quickly.
-
-There could be, of course, bugs in the tool; and there are a few
-situations where the tool may not guarantee formatting stability, but
-hopefully those are rare and small enough so that we can keep
-enforcing this. I think it is worth trying.
-
-Cheers,
-Miguel
+> diff --git a/drivers/pci/controller/dwc/pcie-dw-rockchip.c b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
+> index c9b341e55cbb..faedbd6ebc20 100644
+> --- a/drivers/pci/controller/dwc/pcie-dw-rockchip.c
+> +++ b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
+> @@ -152,6 +152,11 @@ static int rockchip_pcie_resource_get(struct platform_device *pdev,
+>  	if (IS_ERR(rockchip->rst_gpio))
+>  		return PTR_ERR(rockchip->rst_gpio);
+>  
+> +	rockchip->rst = devm_reset_control_array_get_exclusive(&pdev->dev);
+> +	if (IS_ERR(rockchip->rst))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(rockchip->rst),
+> +				     "failed to get reset lines\n");
+> +
+>  	return 0;
+>  }
+>  
+> @@ -182,18 +187,6 @@ static void rockchip_pcie_phy_deinit(struct rockchip_pcie *rockchip)
+>  	phy_power_off(rockchip->phy);
+>  }
+>  
+> -static int rockchip_pcie_reset_control_release(struct rockchip_pcie *rockchip)
+> -{
+> -	struct device *dev = rockchip->pci.dev;
+> -
+> -	rockchip->rst = devm_reset_control_array_get_exclusive(dev);
+> -	if (IS_ERR(rockchip->rst))
+> -		return dev_err_probe(dev, PTR_ERR(rockchip->rst),
+> -				     "failed to get reset lines\n");
+> -
+> -	return reset_control_deassert(rockchip->rst);
+> -}
+> -
+>  static const struct dw_pcie_ops dw_pcie_ops = {
+>  	.link_up = rockchip_pcie_link_up,
+>  	.start_link = rockchip_pcie_start_link,
+> @@ -222,6 +215,10 @@ static int rockchip_pcie_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return ret;
+>  
+> +	ret = reset_control_assert(rockchip->rst);
+> +	if (ret)
+> +		return ret;
+> +
+>  	/* DON'T MOVE ME: must be enable before PHY init */
+>  	rockchip->vpcie3v3 = devm_regulator_get_optional(dev, "vpcie3v3");
+>  	if (IS_ERR(rockchip->vpcie3v3)) {
+> @@ -241,7 +238,7 @@ static int rockchip_pcie_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		goto disable_regulator;
+>  
+> -	ret = rockchip_pcie_reset_control_release(rockchip);
+> +	ret = reset_control_deassert(rockchip->rst);
+>  	if (ret)
+>  		goto deinit_phy;
+>  
+> -- 
+> 2.25.1
+> 

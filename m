@@ -2,79 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C25E25237B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 622205237B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343972AbiEKPvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52262 "EHLO
+        id S1344005AbiEKPwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343928AbiEKPu4 (ORCPT
+        with ESMTP id S1343979AbiEKPwA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:50:56 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922E0393CD
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:50:53 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 24BFo7FH016599
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 May 2022 11:50:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1652284211; bh=vHauuC4he3d+QFIOnFA1W77VZ/VSJaURJ/FYW/LG53s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=j2rBf0BYbvuquAYZa9zhFrTyEk4I4iEUgOri9p5Rlfya50DlbGELYChMbolG62MNk
-         S094Su3UP4yBR5beBZsM9RN3hvUkaCeiBOW5llGsH16MsueYycWETes7y0lkKYw1NO
-         G4KRkBlxwkneLAI/pKxaprXUK68hodcbdSI3G8kF95evaaa2a2apL0rihkrFppxoK6
-         5ei7i63OaKEOkGCWotNi6oAY99WPTUeyxCeOOeb1+3FvbuVjaZpgeypDOM1rGTEVxm
-         7pI+QJLllKCW1OaXZ4SVkWfyjvchMx45CdL+BcLI4Yc59aw9SA9Z48rzBr0tqvWBJE
-         WRzC+nIg/Z0kQ==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 2330115C3F0C; Wed, 11 May 2022 11:50:07 -0400 (EDT)
-Date:   Wed, 11 May 2022 11:50:07 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Thorsten Leemhuis <linux@leemhuis.info>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Zhangfei Gao <zhangfei.gao@foxmail.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: Link: tag and links to submission and reports (was: Re: [GIT
- pull] core/urgent for v5.18-rc6)
-Message-ID: <YnvbLx9FKgQwZJ/F@mit.edu>
-References: <165201148069.536527.1960632033331546251.tglx@xen13>
- <CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com>
- <ff841fdc-4db7-7a3d-8caf-d0cddd0dfa31@leemhuis.info>
- <Ynt1z0eZ19eMqp8I@zn.tnic>
+        Wed, 11 May 2022 11:52:00 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF87D63BF3;
+        Wed, 11 May 2022 08:51:58 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 5f9c539cb460ba1c; Wed, 11 May 2022 17:51:57 +0200
+Received: from kreacher.localnet (unknown [213.134.181.161])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 4C20866C3E6;
+        Wed, 11 May 2022 17:51:56 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Subject: [PATCH v1 2/3] cpufreq: Split cpufreq_offline()
+Date:   Wed, 11 May 2022 17:50:09 +0200
+Message-ID: <2258373.ElGaqSPkdT@kreacher>
+In-Reply-To: <5585781.DvuYhMxLoT@kreacher>
+References: <5585781.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ynt1z0eZ19eMqp8I@zn.tnic>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.181.161
+X-CLIENT-HOSTNAME: 213.134.181.161
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrgeehgdeludcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepvddufedrudefgedrudekuddrudeiudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurdduiedupdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeefpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvhhirhgvshhhrdhkuhhmrghrsehlihhnrghrohdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 10:37:35AM +0200, Borislav Petkov wrote:
-> - The problem is when the discussion happened somewhere and the patch
-> got submitted separately. I can't think of a good way to automate
-> that so we have to pay attention and fix the link tag by hand and add
-> the relevant one. And I try to do that when I'm especially awake when
-> applying the patch.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-I would argue that it should be the patch submitter's responsibility
-to explicitly add a URL to the problem report.  In some cases this
-might be a pointer to a bug tracking system; in other cases it might
-be a URL to lore.kernel.org.
+Split the "core" part running under the policy rwsem out of
+cpufreq_offline() to allow the locking in cpufreq_remove_dev() to be
+rearranged more easily.
 
-					- Ted
+As a side-effect this eliminates the unlock label that's not needed
+any more.
+
+No expected functional impact.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/cpufreq/cpufreq.c |   33 +++++++++++++++++++--------------
+ 1 file changed, 19 insertions(+), 14 deletions(-)
+
+Index: linux-pm/drivers/cpufreq/cpufreq.c
+===================================================================
+--- linux-pm.orig/drivers/cpufreq/cpufreq.c
++++ linux-pm/drivers/cpufreq/cpufreq.c
+@@ -1576,21 +1576,10 @@ static int cpufreq_add_dev(struct device
+ 	return 0;
+ }
+ 
+-static int cpufreq_offline(unsigned int cpu)
++static void __cpufreq_offline(unsigned int cpu, struct cpufreq_policy *policy)
+ {
+-	struct cpufreq_policy *policy;
+ 	int ret;
+ 
+-	pr_debug("%s: unregistering CPU %u\n", __func__, cpu);
+-
+-	policy = cpufreq_cpu_get_raw(cpu);
+-	if (!policy) {
+-		pr_debug("%s: No cpu_data found\n", __func__);
+-		return 0;
+-	}
+-
+-	down_write(&policy->rwsem);
+-
+ 	if (has_target())
+ 		cpufreq_stop_governor(policy);
+ 
+@@ -1608,7 +1597,7 @@ static int cpufreq_offline(unsigned int
+ 				pr_err("%s: Failed to start governor\n", __func__);
+ 		}
+ 
+-		goto unlock;
++		return;
+ 	}
+ 
+ 	if (has_target())
+@@ -1635,8 +1624,24 @@ static int cpufreq_offline(unsigned int
+ 		cpufreq_driver->exit(policy);
+ 		policy->freq_table = NULL;
+ 	}
++}
++
++static int cpufreq_offline(unsigned int cpu)
++{
++	struct cpufreq_policy *policy;
++
++	pr_debug("%s: unregistering CPU %u\n", __func__, cpu);
++
++	policy = cpufreq_cpu_get_raw(cpu);
++	if (!policy) {
++		pr_debug("%s: No cpu_data found\n", __func__);
++		return 0;
++	}
++
++	down_write(&policy->rwsem);
++
++	__cpufreq_offline(cpu, policy);
+ 
+-unlock:
+ 	up_write(&policy->rwsem);
+ 	return 0;
+ }
+
+
+

@@ -2,99 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB7D523435
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AEAA523436
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243394AbiEKNYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
+        id S243467AbiEKNZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:25:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242446AbiEKNYb (ORCPT
+        with ESMTP id S242446AbiEKNZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:24:31 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6E159BAC
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:24:27 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nomKF-0000rv-1n; Wed, 11 May 2022 15:24:23 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B199D7BD22;
-        Wed, 11 May 2022 13:24:21 +0000 (UTC)
-Date:   Wed, 11 May 2022 15:24:21 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Devid Antonio Filoni <devid.filoni@egluetechnologies.com>,
-        kernel@pengutronix.de, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Jander <david@protonic.nl>
-Subject: Re: [PATCH 1/1] can: skb: add and set local_origin flag
-Message-ID: <20220511132421.7o5a3po32l3w2wcr@pengutronix.de>
-References: <20220511121913.2696181-1-o.rempel@pengutronix.de>
- <b631b022-72d5-9160-fd13-f33c80dbbe59@hartkopp.net>
+        Wed, 11 May 2022 09:25:21 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E974359BB6
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:25:19 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-deb9295679so2778722fac.6
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:25:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=c0q9lSthzZA9ebdoWrGjLlspxL9ScqJqzeHJj1mFYns=;
+        b=GDn6VZwUdzoS/PZ3WZphP5KfT1waNs06jisSm83Jmg2BvTfSwzZete6ZPWfptb04rq
+         g5gUU7fic3GIzM1Mgeq4JVyhRZapxoA3A5msRnO/lcN93aupjMeMB1YeJk5wDGEsh2s+
+         /otBPjaEM/keLmsADusUhUrkg9HGpi0c/zIlFTvtbzA2URjuV40krxeE8ivst2gpB10d
+         KPsvuLy6lbiisozNE/mGASP7jdxF8LcLJaU7qwg1MDEaw6qxWAJ5KwY229psO1EdgQUj
+         RQPqZq5elN4LeBdj+dxcQH2rYWZUA03ERM8kmtcUUl/uEzBUF/ixcHUkXxazJCFaYtqL
+         JmZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c0q9lSthzZA9ebdoWrGjLlspxL9ScqJqzeHJj1mFYns=;
+        b=faLGjOhBqyCLeB86velOMqbZNRBMcxfkDwCaX3jmFV7uWRpmOV8uu9AjNi8jvtcrdm
+         RwTP09bhgfqOrLgcwVJtc7pLfX8Clxj8y1Cf1aFOyQ4sZJcJtj7sdzJNABQ47aO5ijq2
+         pyBqHYlRAuOAX/ujRoRMCKvECD0eCwTLcs6/DrGxBjfZvO4B1LfUcfj12hv/d7TFzK9b
+         6BbU/Iu5+b0oJ43nlvwBlUU/GlvI/QXj48yXiXa1d3or3GLQqv1z8N5uGVObyzkhWxNu
+         Ba/ZtylVwDXpCd36Z/fmrJSlex5Q6/MfMBbBWaadpU+9MAh1DVq2teYAQXcFLk4ra/uj
+         WQwA==
+X-Gm-Message-State: AOAM530KSLG6GurNpzwcYS83q95UOko1S2w+99PqXxhB8pzMTEbHm1Cn
+        ax66biXRZZA4/6QFnLYDEermpK/4wpNU1xqDRiPpx2ogYEchPA==
+X-Google-Smtp-Source: ABdhPJz7GZ239s8+Wyg43/9unyRDmzOMvixUoOirET5gfDUKRAXG43OA/6RgP9YY/rZrHzWsdXtenPGfRKzZBh1mT0k=
+X-Received: by 2002:a05:6870:5b89:b0:e9:bb4c:a6f1 with SMTP id
+ em9-20020a0568705b8900b000e9bb4ca6f1mr2718055oab.52.1652275519287; Wed, 11
+ May 2022 06:25:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="regs3wlmb3rwqwth"
-Content-Disposition: inline
-In-Reply-To: <b631b022-72d5-9160-fd13-f33c80dbbe59@hartkopp.net>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220511124336.66705-1-schspa@gmail.com> <YnuyuFRaDTY2n4VB@kroah.com>
+In-Reply-To: <YnuyuFRaDTY2n4VB@kroah.com>
+From:   Schspa Shi <schspa@gmail.com>
+Date:   Wed, 11 May 2022 21:25:08 +0800
+Message-ID: <CAMA88TrZFp9XJ1YvAo_5JOEhtJ5wyueOLLVDnLPU=gxzvzN=sA@mail.gmail.com>
+Subject: Re: [PATCH] driver: base: fix UAF when driver_attach failed
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, ming.lei@canonical.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Greg KH <gregkh@linuxfoundation.org> writes:
 
---regs3wlmb3rwqwth
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Wed, May 11, 2022 at 08:43:36PM +0800, Schspa Shi wrote:
+>> When driver_attach(drv); failed, the driver_private will be freed.
+>> But it has been added to the bus, which caused a UAF.
+>>
+>> To fix it, we need to delete it from the bus when failed.
+>>
+>> Fixes: 190888ac01d0 ("driver core: fix possible missing of device probe")
+>>
+>> Signed-off-by: Schspa Shi <schspa@gmail.com>
+>
+> No blank line needed after fixes:
+>
 
-On 11.05.2022 14:38:32, Oliver Hartkopp wrote:
-> IMO this patch does not work as intended.
->=20
-> You probably need to revisit every place where can_skb_reserve() is used,
-> e.g. in raw_sendmsg().
+Do I need a new patch version for this ?
 
-And the loopback for devices that don't support IFF_ECHO:
+>> ---
+>>  drivers/base/bus.c | 4 +++-
+>>  1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/base/bus.c b/drivers/base/bus.c
+>> index 97936ec49bde..7ca47e5b3c1f 100644
+>> --- a/drivers/base/bus.c
+>> +++ b/drivers/base/bus.c
+>> @@ -617,7 +617,7 @@ int bus_add_driver(struct device_driver *drv)
+>>      if (drv->bus->p->drivers_autoprobe) {
+>>              error = driver_attach(drv);
+>>              if (error)
+>> -                    goto out_unregister;
+>> +                    goto out_del_list;
+>>      }
+>>      module_add_driver(drv->owner, drv);
+>>
+>> @@ -644,6 +644,8 @@ int bus_add_driver(struct device_driver *drv)
+>>
+>>      return 0;
+>>
+>> +out_del_list:
+>> +    klist_del(&priv->knode_bus);
+>
+> Odd, how did you find this?  Has this ever been triggered by any
+> real-world situations?
+>
 
-| https://elixir.bootlin.com/linux/latest/source/net/can/af_can.c#L257
+I found this when fixing this issue via code review.
+Link: https://lore.kernel.org/all/20220508150247.38204-1-schspa@gmail.com/
 
-Marc
+It shouldn't not happen, unless the bus driver's match() return value < 0.
+Which never happens with the existing bus drivers.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+> thanks,
+>
+> greg k-h
 
---regs3wlmb3rwqwth
-Content-Type: application/pgp-signature; name="signature.asc"
+---
+BRs
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJ7uQIACgkQrX5LkNig
-0112+Af+Pp84b/2x9pkUckJd7BiXaSSo95W2yPRSjLaA3r1A6jbGBVrogvYl49Xg
-MnKDo6z/Av30GwwOaKLXnMSdtL1Q73PabyGKD+ILzKQLxpAp3kXMVcz9M2jZliMF
-BqR6VjklD+9TrA6PBQ8YMqU1hROnr3Fb5shQtjhsa099Y1eG4riDSutyQ7AWUO9h
-luo3MTyzvY6Lml/yxm82qzzpJLOd7tvmN1OpFS/DV1Eyu5lr9sXp3cYvlqpc6MK5
-3Hc1tnbZ2Gss1drs9kKY5A6Fmx/YYklnsBzHVTAfiVBvqJ+Mgq9qw9SKIijG2nVa
-zHwaaZf/y6fiuSXfiHYkmTnNq1FjWA==
-=qnXD
------END PGP SIGNATURE-----
-
---regs3wlmb3rwqwth--
+Schspa Shi

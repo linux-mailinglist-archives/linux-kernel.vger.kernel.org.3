@@ -2,77 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99DE0522A31
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 05:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B53B4522A36
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 05:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239220AbiEKDML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 23:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57328 "EHLO
+        id S239546AbiEKDMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 23:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237572AbiEKDMG (ORCPT
+        with ESMTP id S236978AbiEKDMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 23:12:06 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8034A45796;
-        Tue, 10 May 2022 20:12:05 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 137so635879pgb.5;
-        Tue, 10 May 2022 20:12:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=2MBN0zAn4D9ezzvtFqR3BrhbtifUhq904sSLoPSl8Gg=;
-        b=OH3/AiTSfdYV426FLwS5odKSvQ6zAXUDpYal67qusApQXatvj5YUhB8Xnzkd5Uga2N
-         92qc2Y4cFUAupDnI6aiuK7qkkafx62Vla7PRAn9lwS6+9URIwNp7HZVdbtBazgz4o80X
-         702IC20TiPakyeONU3K8nSb3lXh4zK+hk+249Js2WkAwTcAPLwPbg/69XDN4YQEOQasT
-         mgYGge8LN8TLkmTT9buWJiZez7aFG34mWAz/Ticup+afm9L+/VIF/UAz7yBx3d5nFnTN
-         rMhZ5FuQ2YZdIpOqulGf9EcKKZuCC4WAaU6uuAtBrJBEmZpcmRpiPrIgFvoCqxSdF+1i
-         lbtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=2MBN0zAn4D9ezzvtFqR3BrhbtifUhq904sSLoPSl8Gg=;
-        b=OobcuAgA8BYC1Zi0K+qoXu7fSxgM+4+nIQjK1N/9lw77pvEw+NrFP02bgcyjZtavc5
-         h542pWNWsBNRx5tkZzLzThRk/VYK4GqezadlI2bCXK6Z7xG3KHflurMT5cxn+Pd4ppZ7
-         AFBlq4qGWMghb/n/5Bkq+8PttolqbY3hbYUf12n0MeeYf+nFCG5bNHgQKvHJkry8W2gp
-         AE8zCRrpeihTjSmAgm5nbUoJrXG1UBGCsAAUJT85UighSsu41JsOsSnUbBpHjpz03v/O
-         +KMjkLljow1K+x8HL8XM9awti3yycb+uhBFbr38UBJxJ9bXLGhor83vHYag7+aXE90Ct
-         X2ig==
-X-Gm-Message-State: AOAM532oXgyy3OxgSkmbPO0ADQ1b9T2wLltf9Ft9bc3UV0oJiibPbvXK
-        Cq/THsFNThKj2KimIPc/Z/0=
-X-Google-Smtp-Source: ABdhPJwUnDTfZUFHgHXqErgtlhY8Q79APm2Ey84kG+KC6CvYcMygKomgghJWTa+Yd+LiAI0zaxqmEg==
-X-Received: by 2002:a05:6a00:1a8d:b0:510:510f:d8e1 with SMTP id e13-20020a056a001a8d00b00510510fd8e1mr22928042pfv.83.1652238725019;
-        Tue, 10 May 2022 20:12:05 -0700 (PDT)
-Received: from localhost ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id d5-20020a170902c18500b0015e8d4eb1d2sm389038pld.28.2022.05.10.20.12.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 20:12:04 -0700 (PDT)
-Message-ID: <627b2984.1c69fb81.9002b.15f9@mx.google.com>
-X-Google-Original-Message-ID: <20220511031203.GA1492365@cgel.zte@gmail.com>
-Date:   Wed, 11 May 2022 03:12:03 +0000
-From:   CGEL <cgel.zte@gmail.com>
-To:     Oleksandr Natalenko <oleksandr@natalenko.name>
-Cc:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, corbet@lwn.net,
-        xu xin <xu.xin16@zte.com.cn>,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        wangyong <wang.yong12@zte.com.cn>,
-        Yunkai Zhang <zhang.yunkai@zte.com.cn>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH v6] mm/ksm: introduce ksm_force for each process
-References: <20220510122242.1380536-1-xu.xin16@zte.com.cn>
- <5820954.lOV4Wx5bFT@natalenko.name>
+        Tue, 10 May 2022 23:12:33 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E9047560;
+        Tue, 10 May 2022 20:12:31 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kyg1L3PrHzhZ1r;
+        Wed, 11 May 2022 11:11:50 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 11 May 2022 11:12:27 +0800
+Message-ID: <5fb30cc0-dcf6-75ec-b6fa-38be3e99dca6@huawei.com>
+Date:   Wed, 11 May 2022 11:12:27 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5820954.lOV4Wx5bFT@natalenko.name>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH bpf-next v3 5/7] bpf, arm64: Support to poke bpf prog
+Content-Language: en-US
+To:     Jakub Sitnicki <jakub@cloudflare.com>
+CC:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Delyan Kratunov <delyank@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+References: <20220424154028.1698685-1-xukuohai@huawei.com>
+ <20220424154028.1698685-6-xukuohai@huawei.com>
+ <87ilqdobl1.fsf@cloudflare.com>
+From:   Xu Kuohai <xukuohai@huawei.com>
+In-Reply-To: <87ilqdobl1.fsf@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.192]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,50 +85,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 03:30:36PM +0200, Oleksandr Natalenko wrote:
-> Hello.
+On 5/10/2022 5:36 PM, Jakub Sitnicki wrote:
+> Thanks for incorporating the attach to BPF progs bits into the series.
 > 
-> On úterý 10. května 2022 14:22:42 CEST cgel.zte@gmail.com wrote:
-> > From: xu xin <xu.xin16@zte.com.cn>
-> > 
-> > To use KSM, we have to explicitly call madvise() in application code,
-> > which means installed apps on OS needs to be uninstall and source code
-> > needs to be modified. It is inconvenient.
-> > 
-> > In order to change this situation, We add a new proc file ksm_force
-> > under /proc/<pid>/ to support turning on/off KSM scanning of a
-> > process's mm dynamically.
-> > 
-> > If ksm_force is set to 1, force all anonymous and 'qualified' VMAs
-> > of this mm to be involved in KSM scanning without explicitly calling
-> > madvise to mark VMA as MADV_MERGEABLE. But It is effective only when
-> > the klob of /sys/kernel/mm/ksm/run is set as 1.
-> > 
-> > If ksm_force is set to 0, cancel the feature of ksm_force of this
-> > process (fallback to the default state) and unmerge those merged pages
-> > belonging to VMAs which is not madvised as MADV_MERGEABLE of this process,
-> > but still leave MADV_MERGEABLE areas merged.
+> I have a couple minor comments. Please see below.
 > 
-> To my best knowledge, last time a forcible KSM was discussed (see threads [1], [2], [3] and probably others) it was concluded that a) procfs was a horrible interface for things like this one; and b) process_madvise() syscall was among the best suggested places to implement this (which would require a more tricky handling from userspace, but still).
+> On Sun, Apr 24, 2022 at 11:40 AM -04, Xu Kuohai wrote:
+>> 1. Set up the bpf prog entry in the same way as fentry to support
+>>    trampoline. Now bpf prog entry looks like this:
+>>
+>>    bti c        // if BTI enabled
+>>    mov x9, x30  // save lr
+>>    nop          // to be replaced with jump instruction
+>>    paciasp      // if PAC enabled
+>>
+>> 2. Update bpf_arch_text_poke() to poke bpf prog. If the instruction
+>>    to be poked is bpf prog's first instruction, skip to the nop
+>>    instruction in the prog entry.
+>>
+>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+>> ---
+>>  arch/arm64/net/bpf_jit.h      |  1 +
+>>  arch/arm64/net/bpf_jit_comp.c | 41 +++++++++++++++++++++++++++--------
+>>  2 files changed, 33 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
+>> index 194c95ccc1cf..1c4b0075a3e2 100644
+>> --- a/arch/arm64/net/bpf_jit.h
+>> +++ b/arch/arm64/net/bpf_jit.h
+>> @@ -270,6 +270,7 @@
+>>  #define A64_BTI_C  A64_HINT(AARCH64_INSN_HINT_BTIC)
+>>  #define A64_BTI_J  A64_HINT(AARCH64_INSN_HINT_BTIJ)
+>>  #define A64_BTI_JC A64_HINT(AARCH64_INSN_HINT_BTIJC)
+>> +#define A64_NOP    A64_HINT(AARCH64_INSN_HINT_NOP)
+>>  
+>>  /* DMB */
+>>  #define A64_DMB_ISH aarch64_insn_gen_dmb(AARCH64_INSN_MB_ISH)
+>> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+>> index 3f9bdfec54c4..293bdefc5d0c 100644
+>> --- a/arch/arm64/net/bpf_jit_comp.c
+>> +++ b/arch/arm64/net/bpf_jit_comp.c
+>> @@ -237,14 +237,23 @@ static bool is_lsi_offset(int offset, int scale)
+>>  	return true;
+>>  }
+>>  
+>> -/* Tail call offset to jump into */
+>> -#if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) || \
+>> -	IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL)
+>> -#define PROLOGUE_OFFSET 9
+>> +#if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL)
+>> +#define BTI_INSNS	1
+>> +#else
+>> +#define BTI_INSNS	0
+>> +#endif
+>> +
+>> +#if IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL)
+>> +#define PAC_INSNS	1
+>>  #else
+>> -#define PROLOGUE_OFFSET 8
+>> +#define PAC_INSNS	0
+>>  #endif
 > 
-> So, what changed since that discussion?
->
+> Above can be folded into:
+> 
+> #define BTI_INSNS (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) ? 1 : 0)
+> #define PAC_INSNS (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL) ? 1 : 0)
+> 
 
-Thanks a lot for your information. 
-However, the patch here is slightly different from your previous discussion: 
+will fix in v4
 
-your patch focuses on using procfs to change the madvise behaviour of another process,
-but this patch will not modify the flag of all VMAs of the process. It introduces
-a new bool ksm_force to represent this forcible feature of KSM based on process,
-which is independent of madvise. the same way, process_madvise is a kind of
-madvise in essence.
+>>  
+>> +/* Tail call offset to jump into */
+>> +#define PROLOGUE_OFFSET	(BTI_INSNS + 2 + PAC_INSNS + 8)
+>> +/* Offset of nop instruction in bpf prog entry to be poked */
+>> +#define POKE_OFFSET	(BTI_INSNS + 1)
+>> +
+>>  static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
+>>  {
+>>  	const struct bpf_prog *prog = ctx->prog;
+>> @@ -281,12 +290,15 @@ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
+>>  	 *
+>>  	 */
+>>  
+>> +	if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL))
+>> +		emit(A64_BTI_C, ctx);
+> 
+> I'm no arm64 expert, but this looks like a fix for BTI.
+> 
+> Currently we never emit BTI because ARM64_BTI_KERNEL depends on
+> ARM64_PTR_AUTH_KERNEL, while BTI must be the first instruction for the
+> jump target [1]. Am I following correctly?
+> 
+> [1] https://lwn.net/Articles/804982/
+> 
 
-> P.S. For now I do it via dedicated syscall, but I'm not trying to upstream this approach.
+Not quite correct. When the jump target is a PACIASP instruction, no
+Branch Target Exception is generated, so there is no need to insert a
+BTI before PACIASP [2].
+
+In order to attach trampoline to bpf prog, a MOV and NOP are inserted
+before the PACIASP, so BTI instruction is required to avoid Branch
+Target Exception.
+
+The reason for inserting NOP before PACIASP instead of after PACIASP is
+that no call frame is built before entering trampoline, so there is no
+return address on the stack and nothing to be protected by PACIASP.
+
+[2]
+https://developer.arm.com/documentation/ddi0596/2021-12/Base-Instructions/BTI--Branch-Target-Identification-?lang=en
+
+>> +
+>> +	emit(A64_MOV(1, A64_R(9), A64_LR), ctx);
+>> +	emit(A64_NOP, ctx);
+>> +
+>>  	/* Sign lr */
+>>  	if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL))
+>>  		emit(A64_PACIASP, ctx);
+>> -	/* BTI landing pad */
+>> -	else if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL))
+>> -		emit(A64_BTI_C, ctx);
+>>  
+>>  	/* Save FP and LR registers to stay align with ARM64 AAPCS */
+>>  	emit(A64_PUSH(A64_FP, A64_LR, A64_SP), ctx);
+>> @@ -1552,9 +1564,11 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
+>>  	u32 old_insn;
+>>  	u32 new_insn;
+>>  	u32 replaced;
+>> +	unsigned long offset = ~0UL;
+>>  	enum aarch64_insn_branch_type branch_type;
+>> +	char namebuf[KSYM_NAME_LEN];
+>>  
+>> -	if (!is_bpf_text_address((long)ip))
+>> +	if (!__bpf_address_lookup((unsigned long)ip, NULL, &offset, namebuf))
+>>  		/* Only poking bpf text is supported. Since kernel function
+>>  		 * entry is set up by ftrace, we reply on ftrace to poke kernel
+>>  		 * functions. For kernel funcitons, bpf_arch_text_poke() is only
+>> @@ -1565,6 +1579,15 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
+>>  		 */
+>>  		return -EINVAL;
+>>  
+>> +	/* bpf entry */
+>> +	if (offset == 0UL)
+>> +		/* skip to the nop instruction in bpf prog entry:
+>> +		 * bti c	// if BTI enabled
+>> +		 * mov x9, x30
+>> +		 * nop
+>> +		 */
+>> +		ip = (u32 *)ip + POKE_OFFSET;
 > 
-> [1] https://lore.kernel.org/lkml/2a66abd8-4103-f11b-06d1-07762667eee6@suse.cz/
-> [2] https://lore.kernel.org/all/20190515145151.GG16651@dhcp22.suse.cz/T/#u
-> [3] https://lore.kernel.org/lkml/20190516172452.GA2106@avx2/
-> [4] https://gitlab.com/post-factum/pf-kernel/-/commits/ksm-5.17/
+> This is very much personal preference, however, I find the use pointer
+> arithmetic too clever here. Would go for a more verbose:
 > 
-> Oleksandr Natalenko (post-factum)
+>         offset = POKE_OFFSET * AARCH64_INSN_SIZE;          
+>         ip = (void *)((unsigned long)ip + offset);
 > 
+
+will change in v4.
+
+>> +
+>>  	if (poke_type == BPF_MOD_CALL)
+>>  		branch_type = AARCH64_INSN_BRANCH_LINK;
+>>  	else
+> 
+> I think it'd make more sense to merge this patch with patch 4 (the
+> preceding one).
+> 
+> Initial implementation of of bpf_arch_text_poke() from patch 4 is not
+> fully functional, as it will always fail for bpf_arch_text_poke(ip,
+> BPF_MOD_CALL, ...) calls. At least, I find it a bit confusing.
+
+will merge in v4
+
+> 
+> Otherwise than that:
+> 
+> Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
+> 
+> .
+Thanks for the review!

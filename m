@@ -2,177 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28878522EB3
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEDC9522EB7
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:49:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239843AbiEKIsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 04:48:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56692 "EHLO
+        id S243943AbiEKIsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 04:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241909AbiEKIrx (ORCPT
+        with ESMTP id S244024AbiEKIsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 04:47:53 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FF7674C6
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 01:47:52 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1noi0J-00064w-5P; Wed, 11 May 2022 10:47:31 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1noi0G-0006L6-97; Wed, 11 May 2022 10:47:28 +0200
-Date:   Wed, 11 May 2022 10:47:28 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
-Cc:     Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
-        Robin van der Gracht <robin@protonic.nl>,
-        kernel@pengutronix.de, linux-can@vger.kernel.org,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
-        kbuild test robot <lkp@intel.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Jander <david@protonic.nl>
-Subject: Re: [PATCH RESEND] can: j1939: do not wait 250ms if the same addr
- was already claimed
-Message-ID: <20220511084728.GD10669@pengutronix.de>
-References: <20220509170303.29370-1-devid.filoni@egluetechnologies.com>
- <YnllpntZ8V5CD07v@x1.vandijck-laurijssen.be>
- <20220510042609.GA10669@pengutronix.de>
- <ce7da10389fe448efee86d788dd5282b8022f92e.camel@egluetechnologies.com>
+        Wed, 11 May 2022 04:48:23 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2070.outbound.protection.outlook.com [40.107.237.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F6C20130D
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 01:48:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WrfVjcJhSBgGp36qa4itIj1sGDhwv4P06sP5NWDfktnUH0wRDnuaGTS9/htjrZMK2X0eWH3k3BNZCmdg4LVHiJm/AihY/ICCgPT1YC3Br9qsgcSdpgekl/mSwUXhmzrTDPPYU5sAcSccGVgdt1dgPxce0bXvZv612mfwPetQ9QBJfq0CILRxS8wqo89I4KBYUIxFf1X5Gf0RkduG5XsYtApqaiWzlmz1zCLE6+8IQmwt1VqP+ODpWlMiyB8jluuGGZfdIMbCRIDjcszPUv+6Zalg7GI/24lDWS3Z551r0gsmR8POhpQM+a5dlt/WppgsWsjYiecJmSIBBoGdJxJ3iw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ItO9TutRwek/RY5zIMp+HqAHxGDs7jJ2ELpQTpFFSeY=;
+ b=NhrelxZmCOQHn7ezRiJxZiJFkPenTEIvnzodLBv+8dl9ZmZqJ8visaTcXh5ROxBlSg7sKdt7HO7EjndhS0J+cf/jW967gSQkOZFeX8/B7mduHAEVcJRLCqNRH996IMgUPLmZ7V6ch6tWSDr61sYbOB1VS+1cB+wmYOeWqrRpglgxBsxjaytxyQElSFUXjmOtSv6hmOchZmINqZX0A4sjZ3gg2cFYyyRGJOUb6oH8q2HZeJ2+BirDDO8bCi1+uo1cIwv2w2MhWrAfZ5BJUADfQxD9ahYO+kYBEd9zcwxzhUT10m5CRZV1NjhjuPpWsV0PC8qVX/6Skc2eWJRY241rxg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.238) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ItO9TutRwek/RY5zIMp+HqAHxGDs7jJ2ELpQTpFFSeY=;
+ b=Q3ZZ1cjwSRHtc2NS217krY6VmgbZlvOixIgbMb6ArKc7Q87cou0HikEcgDwKxaDI4EYsr34yns/4am5uZEJpRVv4OsGVIKkdJZN3gCTXBFSf9ahDBYf7VYYJ4Rvhj742BL5SMk8G91V2sB14lA/u2ch+9L+FsvrpwgF3mdrw79FnR2Yt5+GRBtitC55EGmFjPoL9wAIKkdgG0NKNVWHledpRBfJSvWsElglCQ53FSmjsbsQayQPL405zpu+P9xoYYlZiuzZKculNfnAXn5K+c4nBX/gpnwl1e/ydcbnDQO1wVMQJbYkLcB0Xh8Gkxr6+711Faufz5kP9l2+8M6WaJQ==
+Received: from DS7PR06CA0016.namprd06.prod.outlook.com (2603:10b6:8:2a::29) by
+ BN8PR12MB3220.namprd12.prod.outlook.com (2603:10b6:408:9e::24) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5227.22; Wed, 11 May 2022 08:48:11 +0000
+Received: from DM6NAM11FT046.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:2a:cafe::f4) by DS7PR06CA0016.outlook.office365.com
+ (2603:10b6:8:2a::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.20 via Frontend
+ Transport; Wed, 11 May 2022 08:48:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.238) by
+ DM6NAM11FT046.mail.protection.outlook.com (10.13.172.121) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5250.13 via Frontend Transport; Wed, 11 May 2022 08:48:11 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by DRHQMAIL105.nvidia.com
+ (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 11 May
+ 2022 08:48:10 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 11 May
+ 2022 01:48:09 -0700
+Received: from vdi.nvidia.com (10.127.8.13) by mail.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server id 15.2.986.22 via Frontend Transport; Wed, 11 May
+ 2022 01:48:08 -0700
+From:   Eli Cohen <elic@nvidia.com>
+To:     <mst@redhat.com>, <jasowang@redhat.com>
+CC:     <virtualization@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>, <si-wei.liu@oracle.com>,
+        Eli Cohen <elic@nvidia.com>
+Subject: [PATCH] vdpa: Warn if MTU configured is too low
+Date:   Wed, 11 May 2022 11:48:04 +0300
+Message-ID: <20220511084804.82482-1-elic@nvidia.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ce7da10389fe448efee86d788dd5282b8022f92e.camel@egluetechnologies.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 10:45:23 up 41 days, 21:15, 74 users,  load average: 0.15, 0.09,
- 0.09
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 99b154dc-59fc-4022-5b86-08da332afaa0
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3220:EE_
+X-Microsoft-Antispam-PRVS: <BN8PR12MB3220434266C69179B9668993ABC89@BN8PR12MB3220.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mFMKkm49RFGizCGXYw2FTVhb+I5/eu6Cte7BGdyjSoH48N/DbMk/DOlaOrhZyyakox6AZEtzQxbo5yJBOT8tX/XDpuCEpKEOrUrolH3qEB01rmrpKpFaCS+yXrcKmOThuebNvIz0z46F5OdLdp+chaVsaOawEOe5C1cvnwhfnRKaK5zLVdFbHQBvQbjc/VGU96kHsbyY+sBLWWJWr8hZCm3NSi2y6EathLda1/L9sYvWPAABWh07o035gCspW4tLwlhC6Zwt/W+rTlCtkwQFoNtTxyF26zoLiAYVa2IJpQlmAYBLziVFkARqcGLduq3F0TuJx7d0nVTrRXcOS8VZc8cMD9hSn6t8+OBFgqKNekcDnH9oJUALxeL5Wrajfs/zUR8MXMC8bsnYEl7oAgJNdxUEZQg7fZ0OcojOG+0YFdiJ9rCKKolz+LB1H6MpC0YmyGO0EbDpU+U7S5BIUqyffgw6hY97kvZPCbw6n48oaDgyESz4qF4Or4S/ZTekIHTJ7FRbY/4/c5Az3F6XuwjTWfuHiyU9v7UMAOn+IXj9vEIMSYs7k8+kSe/lR+JS0vreBZkhEbyVlUh1C5koS9icy77N8SYUY4cwIjZIdE5fvyNZQ6ixr2c8KfuGUAlELzs5PdybfxGIEAjX98mQpQhbfxtyF+v2xO+wu2RmJfk5tPXUzdj6e8ubRFPkHD7FPMkxFpSP1FPMjFkDeM1eOCtC9g==
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(81166007)(70586007)(70206006)(2616005)(4326008)(8676002)(508600001)(5660300002)(36756003)(8936002)(1076003)(107886003)(356005)(86362001)(40460700003)(7696005)(2906002)(26005)(6666004)(54906003)(110136005)(316002)(82310400005)(336012)(426003)(47076005)(83380400001)(186003)(36860700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2022 08:48:11.1552
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 99b154dc-59fc-4022-5b86-08da332afaa0
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT046.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3220
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Following the recommendation in virio spec 1.1, a device offering
+VIRTIO_NET_F_MTU should set the mtu to at least 1280 bytes.
 
-i'll CC more J1939 users to the discussion.
+Print a warning if this recommendation is not met.
 
-On Tue, May 10, 2022 at 01:00:41PM +0200, Devid Antonio Filoni wrote:
-> Hi,
-> 
-> On Tue, 2022-05-10 at 06:26 +0200, Oleksij Rempel wrote:
-> > Hi,
-> > 
-> > On Mon, May 09, 2022 at 09:04:06PM +0200, Kurt Van Dijck wrote:
-> > > On ma, 09 mei 2022 19:03:03 +0200, Devid Antonio Filoni wrote:
-> > > > This is not explicitly stated in SAE J1939-21 and some tools used for
-> > > > ISO-11783 certification do not expect this wait.
-> > 
-> > It will be interesting to know which certification tool do not expect it and
-> > what explanation is used if it fails?
-> > 
-> > > IMHO, the current behaviour is not explicitely stated, but nor is the opposite.
-> > > And if I'm not mistaken, this introduces a 250msec delay.
-> > > 
-> > > 1. If you want to avoid the 250msec gap, you should avoid to contest the same address.
-> > > 
-> > > 2. It's a balance between predictability and flexibility, but if you try to accomplish both,
-> > > as your patch suggests, there is slight time-window until the current owner responds,
-> > > in which it may be confusing which node has the address. It depends on how much history
-> > > you have collected on the bus.
-> > > 
-> > > I'm sure that this problem decreases with increasing processing power on the nodes,
-> > > but bigger internal queues also increase this window.
-> > > 
-> > > It would certainly help if you describe how the current implementation fails.
-> > > 
-> > > Would decreasing the dead time to 50msec help in such case.
-> > > 
-> > > Kind regards,
-> > > Kurt
-> > > 
-> > 
-> 
-> The test that is being executed during the ISOBUS compliance is the
-> following: after an address has been claimed by a CF (#1), another CF
-> (#2) sends a  message (other than address-claim) using the same address
-> claimed by CF #1.
-> 
-> As per ISO11783-5 standard, if a CF receives a message, other than the
-> address-claimed message, which uses the CF's own SA, then the CF (#1):
-> - shall send the address-claim message to the Global address;
-> - shall activate a diagnostic trouble code with SPN = 2000+SA and FMI =
-> 31
-> 
-> After the address-claim message is sent by CF #1, as per ISO11783-5
-> standard:
-> - If the name of the CF #1 has a lower priority then the one of the CF
-> #2, the the CF #2 shall send its address-claim message and thus the CF
-> #1 shall send the cannot-claim-address message or shall execute again
-> the claim procedure with a new address
-> - If the name of the CF #1 has higher priority then the of the CF #2,
-> then the CF #2 shall send the cannot-claim-address message or shall
-> execute the claim procedure with a new address
-> 
-> Above conflict management is OK with current J1939 driver
-> implementation, however, since the driver always waits 250ms after
-> sending an address-claim message, the CF #1 cannot set the DTC. The DM1
-> message which is expected to be sent each second (as per J1939-73
-> standard) may not be sent.
-> 
-> Honestly, I don't know which company is doing the ISOBUS compliance
-> tests on our products and which tool they use as it was choosen by our
-> customer, however they did send us some CAN traces of previously
-> performed tests and we noticed that the DM1 message is sent 160ms after
-> the address-claim message (but it may also be lower then that), and this
-> is something that we cannot do because the driver blocks the application
-> from sending it.
-> 
-> 28401.127146 1  18E6FFF0x    Tx   d 8 FE 26 FF FF FF FF FF FF  //Message
-> with other CF's address
-> 28401.167414 1  18EEFFF0x    Rx   d 8 15 76 D1 0B 00 86 00 A0  //Address
-> Claim - SA = F0
-> 28401.349214 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 01 FF FF  //DM1
-> 28402.155774 1  18E6FFF0x    Tx   d 8 FE 26 FF FF FF FF FF FF  //Message
-> with other CF's address
-> 28402.169455 1  18EEFFF0x    Rx   d 8 15 76 D1 0B 00 86 00 A0  //Address
-> Claim - SA = F0
-> 28402.348226 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 02 FF FF  //DM1
-> 28403.182753 1  18E6FFF0x    Tx   d 8 FE 26 FF FF FF FF FF FF  //Message
-> with other CF's address
-> 28403.188648 1  18EEFFF0x    Rx   d 8 15 76 D1 0B 00 86 00 A0  //Address
-> Claim - SA = F0
-> 28403.349328 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 03 FF FF  //DM1
-> 28404.349406 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 03 FF FF  //DM1
-> 28405.349740 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 03 FF FF  //DM1
-> 
-> Since the 250ms wait is not explicitly stated, IMHO it should be up to
-> the user-space implementation to decide how to manage it.
-> 
-> Thank you,
-> Devid
-> 
-> 
+Signed-off-by: Eli Cohen <elic@nvidia.com>
+---
+ drivers/vdpa/vdpa.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
+index 91f4c13c7c7c..961168fe9094 100644
+--- a/drivers/vdpa/vdpa.c
++++ b/drivers/vdpa/vdpa.c
+@@ -583,6 +583,9 @@ vdpa_nl_cmd_mgmtdev_get_dumpit(struct sk_buff *msg, struct netlink_callback *cb)
+ 				 BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MTU)     | \
+ 				 BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MAX_VQP))
+ 
++/* Recommended virtio spec 1.1 section 5.1.4.1 */
++#define VIRTIO_MIN_PREFERRED_MTU 1280
++
+ static int vdpa_nl_cmd_dev_add_set_doit(struct sk_buff *skb, struct genl_info *info)
+ {
+ 	struct vdpa_dev_set_config config = {};
+@@ -634,6 +637,10 @@ static int vdpa_nl_cmd_dev_add_set_doit(struct sk_buff *skb, struct genl_info *i
+ 		err = PTR_ERR(mdev);
+ 		goto err;
+ 	}
++	if ((mdev->supported_features & BIT_ULL(VIRTIO_NET_F_MTU)) &&
++	    (config.mask & BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MTU) &&
++	    config.net.mtu < VIRTIO_MIN_PREFERRED_MTU))
++		pr_warn("MTU is below recommended value\n");
+ 	if ((config.mask & mdev->config_attr_mask) != config.mask) {
+ 		NL_SET_ERR_MSG_MOD(info->extack,
+ 				   "All provided attributes are not supported");
+@@ -1135,7 +1142,7 @@ static const struct nla_policy vdpa_nl_policy[VDPA_ATTR_MAX + 1] = {
+ 	[VDPA_ATTR_DEV_NAME] = { .type = NLA_STRING },
+ 	[VDPA_ATTR_DEV_NET_CFG_MACADDR] = NLA_POLICY_ETH_ADDR,
+ 	/* virtio spec 1.1 section 5.1.4.1 for valid MTU range */
+-	[VDPA_ATTR_DEV_NET_CFG_MTU] = NLA_POLICY_MIN(NLA_U16, 68),
++	[VDPA_ATTR_DEV_NET_CFG_MTU] = NLA_POLICY_MIN(NLA_U16, ETH_MIN_MTU),
+ };
+ 
+ static const struct genl_ops vdpa_nl_ops[] = {
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.35.1
+

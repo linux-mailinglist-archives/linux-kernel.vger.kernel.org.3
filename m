@@ -2,78 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71FAA522C87
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B95A522C8C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:47:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242323AbiEKGpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 02:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44284 "EHLO
+        id S233126AbiEKGqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 02:46:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240497AbiEKGpR (ORCPT
+        with ESMTP id S242315AbiEKGq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 02:45:17 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21EF71FD845;
-        Tue, 10 May 2022 23:45:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 11 May 2022 02:46:27 -0400
+Received: from smtp2.math.uni-bielefeld.de (smtp2.math.uni-bielefeld.de [129.70.45.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0F533A37;
+        Tue, 10 May 2022 23:46:22 -0700 (PDT)
+Received: from math.uni-bielefeld.de (kvm01.math.uni-bielefeld.de [129.70.45.15])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4BDF1CE22C4;
-        Wed, 11 May 2022 06:45:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2242C385DB;
-        Wed, 11 May 2022 06:45:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652251512;
-        bh=Fx2QMCjEWeZ49x9y9ggLcnUsS1BY3UQodV4PGmGBX8c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OC8eDHtpnhpd1T5hhiDvGvZjuDaefTo3FWKpw8wMrsbbjeLLK8SUI4b2GTl89obOc
-         QOTRQNGbaXzWhU2PyWm7l70mAwcEb5yQbVFOR5OgGmJtkx3WJHkCV3Rmt5ReSiz1LW
-         3ETwi0xVb8HNKR9L/QyeqZSfoQLHBv2oWeYBOUt8=
-Date:   Wed, 11 May 2022 08:45:09 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        zbr@ioremap.net, jdelvare@suse.com, linux@roeck-us.net
-Subject: Re: [PATCH -next] drivers: w1: use kfree_sensitive()
-Message-ID: <YntbdfHLjeHzAb9/@kroah.com>
-References: <20220511064954.3401381-1-yangyingliang@huawei.com>
+        (Client did not present a certificate)
+        by smtp2.math.uni-bielefeld.de (Postfix) with ESMTPSA id 8825060283;
+        Wed, 11 May 2022 08:46:18 +0200 (CEST)
+Date:   Wed, 11 May 2022 08:46:17 +0200
+From:   Jean Rene Dawin <jdawin@math.uni-bielefeld.de>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "H . Nikolaus Schaller" <hns@goldelico.com>,
+        Huijin Park <huijin.park@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org
+Subject: Re: [PATCH] mmc: core: Restore (almost) the busy polling for
+ MMC_SEND_OP_COND
+Message-ID: <20220511064617.GA28982@math.uni-bielefeld.de>
+References: <20220304105656.149281-1-ulf.hansson@linaro.org>
+ <CAPDyKFr1PzSaiKqB4ZoqTS_8bGsEH=aB3ARhxyGu+cYeRqeBew@mail.gmail.com>
+ <20220504054652.GA7851@math.uni-bielefeld.de>
+ <CAPDyKFrBVyYx+BybGR2P8paS6qA=V2EHAXH+vPUc9JzxoXn6+g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220511064954.3401381-1-yangyingliang@huawei.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAPDyKFrBVyYx+BybGR2P8paS6qA=V2EHAXH+vPUc9JzxoXn6+g@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 02:49:54PM +0800, Yang Yingliang wrote:
-> Use kfree_sensitive() instead of open-coding it.
+Ulf Hansson wrote on Wed  4/05/22 11:08:
+> On Wed, 4 May 2022 at 07:46, Jean Rene Dawin
+> <jdawin@math.uni-bielefeld.de> wrote:
+> >
+> > Ulf Hansson wrote on Mon  7/03/22 13:17:
+> > > On Fri, 4 Mar 2022 at 11:57, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > > >
+> > > > Commit 76bfc7ccc2fa ("mmc: core: adjust polling interval for CMD1"),
+> > > > significantly decreased the polling period from ~10-12ms into just a couple
+> > > > of us. The purpose was to decrease the total time spent in the busy polling
+> > > > loop, but unfortunate it has lead to problems, that causes eMMC cards to
+> > > > never gets out busy and thus fails to be initialized.
+> > > >
+> > > > To fix the problem, but also to try to keep some of the new improved
+> > > > behaviour, let's start by using a polling period of 1-2ms, which then
+> > > > increases for each loop, according to common polling loop in
+> > > > __mmc_poll_for_busy().
+> > > >
+> > > > Reported-by: Jean Rene Dawin <jdawin@math.uni-bielefeld.de>
+> > > > Reported-by: H. Nikolaus Schaller <hns@goldelico.com>
+> > > > Cc: Huijin Park <huijin.park@samsung.com>
+> > > > Fixes: 76bfc7ccc2fa ("mmc: core: adjust polling interval for CMD1")
+> > > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > > > ---
+> > > >
+> > > > Jean Rene and H. Nikolaus, if this doesn't work, please try extending the
+> > > > the MMC_OP_COND_PERIOD_US a bit, to so see if we can find a value that always
+> > > > works.
+> > > >
+> > > > Kind regards
+> > > > Uffe
+> >
+> > >
+> > > Applied for fixes and by adding two tested-by tags from you, thanks!
+> > >
+> > > Kind regards
+> > > Uffe
+> >
+> > Hi,
+> >
+> > with the current value of MMC_OP_COND_PERIOD_US = 1ms I still see
+> >
+> > mmc1: Card stuck being busy! __mmc_poll_for_busy
+> > mmc1: error -110 doing runtime resume
+> >
+> > regularly. The same with 2ms. Setting it to 4ms makes the messages go
+> > away. Would it be ok to increase MMC_OP_COND_PERIOD_US to 4ms?
 > 
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->  drivers/w1/w1.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> It doesn't look like we have a very good alternative - unless the
+> problem is tied to a particular type of eMMC card, is it? (If so, we
+> can add a card-quirk).
 > 
-> diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
-> index f2ae2e563dc5..a0a6c3c739d9 100644
-> --- a/drivers/w1/w1.c
-> +++ b/drivers/w1/w1.c
-> @@ -73,8 +73,7 @@ static void w1_master_release(struct device *dev)
->  	struct w1_master *md = dev_to_w1_master(dev);
->  
->  	dev_dbg(dev, "%s: Releasing %s.\n", __func__, md->name);
-> -	memset(md, 0, sizeof(struct w1_master) + sizeof(struct w1_bus_master));
-> -	kfree(md);
-> +	kfree_sensitive(md);
+> The only other option I see, would then be to add a generic DT
+> property for eMMCs, that allows us to specify the OP_COND polling
+> period for it. See
+> Documentation/devicetree/bindings/mmc/mmc-card.yaml.
+> 
+> Kind regards
+> Uffe
 
-Does this actually change anything?  Why is the memset being called here
-at all?
+Hi,
 
-thanks,
+I tested 2 beaglebones now - one with Micron eMMC and the other with Kingston.
+With the Kingston chip I don't get the errors. So it seems to be card specific.
 
-greg k-h
+Grepping for mmc in dmesg gives the following.
+
+Beaglebone with Micron eMMC:
+
+  sdhci-omap 481d8000.mmc: supply pbias not found, using dummy regulator
+  sdhci-omap 481d8000.mmc: supply vqmmc not found, using dummy regulator
+  mmc1: SDHCI controller on 481d8000.mmc [481d8000.mmc] using External DMA
+  mmc1: new high speed MMC card at address 0001
+  mmcblk1: mmc1:0001 MMC04G 3.66 GiB
+   mmcblk1: p1
+  mmcblk1boot0: mmc1:0001 MMC04G 1.00 MiB
+  mmcblk1boot1: mmc1:0001 MMC04G 1.00 MiB
+  mmcblk1rpmb: mmc1:0001 MMC04G 128 KiB, chardev (247:0)
+  sdhci-omap 48060000.mmc: Got CD GPIO
+  sdhci-omap 48060000.mmc: supply pbias not found, using dummy regulator
+  sdhci-omap 48060000.mmc: supply vqmmc not found, using dummy regulator
+  mmc0: SDHCI controller on 48060000.mmc [48060000.mmc] using External DMA
+
+
+Beaglebone with Kingston eMMC:
+
+  sdhci-omap 481d8000.mmc: supply pbias not found, using dummy regulator
+  sdhci-omap 481d8000.mmc: supply vqmmc not found, using dummy regulator
+  mmc1: SDHCI controller on 481d8000.mmc [481d8000.mmc] using External DMA
+  mmc1: new high speed MMC card at address 0001
+  mmcblk1: mmc1:0001 M62704 3.56 GiB
+   mmcblk1: p1
+  mmcblk1boot0: mmc1:0001 M62704 2.00 MiB
+  mmcblk1boot1: mmc1:0001 M62704 2.00 MiB
+  mmcblk1rpmb: mmc1:0001 M62704 512 KiB, chardev (247:0)
+  sdhci-omap 48060000.mmc: Got CD GPIO
+  sdhci-omap 48060000.mmc: supply pbias not found, using dummy regulator
+  sdhci-omap 48060000.mmc: supply vqmmc not found, using dummy regulator
+  mmc0: SDHCI controller on 48060000.mmc [48060000.mmc] using External DMA
+
+Is this enough information to identify the mmc card?
+
+Regards,
+Jean Rene

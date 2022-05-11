@@ -2,105 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD91522EB9
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6DDA522EBD
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241814AbiEKIuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 04:50:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37570 "EHLO
+        id S241987AbiEKIvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 04:51:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiEKIud (ORCPT
+        with ESMTP id S244113AbiEKIvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 04:50:33 -0400
-Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C86A2181CD;
-        Wed, 11 May 2022 01:50:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-         s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:Subject:
-        From:References:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
-        :List-Post:List-Owner:List-Archive;
-        bh=K9S0p/PZ8mVH19diTHdZftm0WUxvYRUVPKuMIoWWr6A=; b=gqqRzYAyEQaZPglJ6z5hwVhmcy
-        ti0G3HCYz7sxUTKH6vXINCJA/N7H7NrCT7ghoWlveD5910asAltd71LxWbLjTQYXZJiVb+lD2XIVF
-        Q5YP3XqAugpioX/H9Vuw2lQqxASCD96KfQxSsxTbfzofUXvfyy5ANESzjP4VZ1SGusDA=;
-Received: from p200300daa70ef200e12105daa054647e.dip0.t-ipconnect.de ([2003:da:a70e:f200:e121:5da:a054:647e] helo=nf.local)
-        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <nbd@nbd.name>)
-        id 1noi30-00040B-O3; Wed, 11 May 2022 10:50:18 +0200
-Message-ID: <376b13ac-d90b-24e0-37ed-a96d8e5f80da@nbd.name>
-Date:   Wed, 11 May 2022 10:50:17 +0200
+        Wed, 11 May 2022 04:51:16 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725483703E;
+        Wed, 11 May 2022 01:51:13 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KypX85KKpzhZ08;
+        Wed, 11 May 2022 16:50:32 +0800 (CST)
+Received: from [10.174.179.0] (10.174.179.0) by dggpemm500024.china.huawei.com
+ (7.185.36.203) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 11 May
+ 2022 16:51:11 +0800
+Message-ID: <889918de-e0b8-1ee1-ab86-ca02c8aa35b9@huawei.com>
+Date:   Wed, 11 May 2022 16:51:11 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Content-Language: en-US
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220510094014.68440-1-nbd@nbd.name>
- <20220510123724.i2xqepc56z4eouh2@skbuf>
- <5959946d-1d34-49b9-1abe-9f9299cc194e@nbd.name>
- <20220510165233.yahsznxxb5yq6rai@skbuf>
- <bc4bde22-c2d6-1ded-884a-69465b9d1dc7@nbd.name>
- <20220510222101.od3n7gk3cofwhbks@skbuf>
-From:   Felix Fietkau <nbd@nbd.name>
-Subject: Re: [PATCH v2] net: dsa: tag_mtk: add padding for tx packets
-In-Reply-To: <20220510222101.od3n7gk3cofwhbks@skbuf>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] drivers:uio: Fix system crashes during driver switchover
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <akpm@linux-foundation.org>, <linfeilong@huawei.com>,
+        <suweifeng1@huawei.com>, <linux-kernel@vger.kernel.org>,
+        <io-uring@vger.kernel.org>
+References: <d204cc88-887c-b203-5a5b-01c307fda4fb@huawei.com>
+ <YntcNunjPdb3Clry@kroah.com>
+From:   "zhanghongtao (A)" <zhanghongtao22@huawei.com>
+In-Reply-To: <YntcNunjPdb3Clry@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.0]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thanks for your reply.
+I looked through the historical emails and thought I was not the
+same problem as his.
+After the driver is switched, the application can still operate
+on the mapped address, which causes the system to crash.
+The application is not aware of the driver's switchover.
+The solution I can think of is to block the switch and wait for
+the application to release before switching, as shown in the patch.
+So want to seek help from the community, how to solve it better?
+Is there a better way?
 
-Hi Vladimir,
-
-
-On 11.05.22 00:21, Vladimir Oltean wrote:
-> It sounds as if this is masking a problem on the receiver end, because
-> not only does my enetc port receive the packet, it also replies to the
-> ARP request.
+在 2022/5/11 14:48, Greg KH 写道:
+> On Wed, May 11, 2022 at 02:34:28PM +0800, zhanghongtao (A) wrote:
+>> From: Hongtao Zhang <zhanghongtao22@huawei.com>
+>>
+>> Switch the driver of the SPDK program that is being read and written from the uio_pci_generic driver to the NVMe driver
+>> (Unbind the UIO driver from the device and bind the NVMe driver to the device.) ,the system crashes and restarts.
+>> Bug reproduction: When the SPDK is reading or writing data, run the following command: /opt/spdk/setup.sh reset
 > 
-> pc # sudo tcpreplay -i eth1 arp-broken.pcap
-> root@debian:~# ip addr add 192.168.42.1/24 dev eno0
-> root@debian:~# tcpdump -i eno0 -e -n --no-promiscuous-mode arp
-> tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
-> listening on eno0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
-> 22:18:58.846753 f4:d4:88:5e:6f:d2 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 60: Request who-has 192.168.42.1 tell 192.168.42.173, length 46
-> 22:18:58.846806 00:04:9f:05:f4:ab > f4:d4:88:5e:6f:d2, ethertype ARP (0x0806), length 42: Reply 192.168.42.1 is-at 00:04:9f:05:f4:ab, length 28
-> ^C
-> 2 packets captured
-> 2 packets received by filter
-> 0 packets dropped by kernel
+> Please properly wrap your lines at 72 columns like the editor asked you
+> to.
 > 
-> What MAC/driver has trouble with these packets? Is there anything wrong
-> in ethtool stats? Do they even reach software? You can also use
-> "dropwatch -l kas" for some hints if they do.
-For some reason I can't reproduce the issue of ARPs not getting replies 
-anymore.
-The garbage data is still present in the ARP packets without my patch 
-though. So regardless of whether ARP packets are processed correctly or 
-if they just trip up on some receivers under specific conditions, I 
-believe my patch is valid and should be applied.
-
-Who knows, maybe the garbage padding even leaks some data from previous 
-packets, or some other information from within the switch.
-
-- Felix
+>> The one with a higher probability of occurrence is as follows:
+>> PANIC: "BUG: unable to handle kernel NULL pointer dereference at 0000000000000008"
+>>     [exception RIP: _raw_spin_lock_irqsave+30]
+>>     RIP: ffffffff836a1cae  RSP: ffff8bca9ecc3f20  RFLAGS: 00010046
+>>     RAX: 0000000000000000  RBX: 0000000000000246  RCX: 0000000000000017
+>>     RDX: 0000000000000001  RSI: 0000000000000000  RDI: 0000000000000008
+>>     RBP: 0000000000000000   R8: 000000afb34e50f9   R9: 0000000000000000
+>>     R10: 0000000000000000  R11: 0000000000000000  R12: ffff8bca9ecc3f50
+>>     R13: 0000000000000004  R14: 0000000000000004  R15: 0000000000000000
+>>     ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
+>>  #7 [ffff8bca9ecc3f28] complete at ffffffff82f09bb8
+>> reason:After the driver switchover, the upper-layer program can still access the bar space of the NVMe disk controller and knock the doorbell.
+>> To solve this problem, a reference counting is added to prevent unbind execution before the application is closed or exited.
+>>
+>> Signed-off-by: Hongtao Zhang <zhanghongtao22@huawei.com>
+>> Reviewed-by: Weifeng Su <suweifeng1@huawei.com>
+>> ---
+>>  drivers/uio/uio.c          | 13 +++++++++++++
+>>  include/linux/uio_driver.h |  1 +
+>>  2 files changed, 14 insertions(+)
+>>
+>> diff --git a/drivers/uio/uio.c b/drivers/uio/uio.c
+>> index 43afbb7c5ab9..cb8ed29a8648 100644
+>> --- a/drivers/uio/uio.c
+>> +++ b/drivers/uio/uio.c
+>> @@ -31,6 +31,7 @@ static int uio_major;
+>>  static struct cdev *uio_cdev;
+>>  static DEFINE_IDR(uio_idr);
+>>  static const struct file_operations uio_fops;
+>> +static DECLARE_WAIT_QUEUE_HEAD(refc_wait);
+>>
+>>  /* Protect idr accesses */
+>>  static DEFINE_MUTEX(minor_lock);
+>> @@ -501,6 +502,7 @@ static int uio_open(struct inode *inode, struct file *filep)
+>>  	mutex_unlock(&idev->info_lock);
+>>  	if (ret)
+>>  		goto err_infoopen;
+>> +	refcount_inc(&idev->dev_refc);
+>>
+>>  	return 0;
+>>
+>> @@ -536,6 +538,9 @@ static int uio_release(struct inode *inode, struct file *filep)
+>>  		ret = idev->info->release(idev->info, inode);
+>>  	mutex_unlock(&idev->info_lock);
+>>
+>> +	if (refcount_dec_and_test(&idev->dev_refc))
+>> +			wake_up(&refc_wait);
+>> +
+>>  	module_put(idev->owner);
+>>  	kfree(listener);
+>>  	put_device(&idev->dev);
+>> @@ -937,6 +942,7 @@ int __uio_register_device(struct module *owner,
+>>
+>>  	idev->owner = owner;
+>>  	idev->info = info;
+>> +	refcount_set(&idev->dev_refc, 0);
+>>  	mutex_init(&idev->info_lock);
+>>  	init_waitqueue_head(&idev->wait);
+>>  	atomic_set(&idev->event, 0);
+>> @@ -1045,6 +1051,7 @@ void uio_unregister_device(struct uio_info *info)
+>>  {
+>>  	struct uio_device *idev;
+>>  	unsigned long minor;
+>> +	unsigned int dref_count;
+>>
+>>  	if (!info || !info->uio_dev)
+>>  		return;
+>> @@ -1052,6 +1059,12 @@ void uio_unregister_device(struct uio_info *info)
+>>  	idev = info->uio_dev;
+>>  	minor = idev->minor;
+>>
+>> +	dref_count = refcount_read(&idev->dev_refc);
+>> +	if (dref_count > 0) {
+> 
+> You can not do this, it could have changed right after reading this.
+> 
+> Also we went through this many times in the past already, why submit
+> this type of change again?
+> 
+> thanks,
+> 
+> greg k-h
+> .

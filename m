@@ -2,87 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AAFF523057
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F120F523059
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240942AbiEKKJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 06:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51258 "EHLO
+        id S240464AbiEKKKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 06:10:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240419AbiEKKJk (ORCPT
+        with ESMTP id S240999AbiEKKKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 06:09:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8380983030;
-        Wed, 11 May 2022 03:09:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 11 May 2022 06:10:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4233EFD350
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:09:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652263797;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mh+649Dh6qwU40nTibeYt+SA3w58BbW+O7J+x0oXwyM=;
+        b=eNqYrYX1e2P0BJjIRFn+eX6GTgGZpxL+XjdAQyKjf+jyaKnEqjgpZDKFH6gSRa27qrOeag
+        w1zrcsc/WgLEHmry/sfKcLz30zc+GO22wvcgCLG5VR21OHCFMzflN9dgCjyzhsBRr2mCRs
+        c4DPIaVdXeANJQyaugc5O+V3aPq5mCA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-38-pu6jrhgOOPqP2VtuPPFOYQ-1; Wed, 11 May 2022 06:09:54 -0400
+X-MC-Unique: pu6jrhgOOPqP2VtuPPFOYQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EC7E614FB;
-        Wed, 11 May 2022 10:09:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB001C340ED;
-        Wed, 11 May 2022 10:09:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652263776;
-        bh=Az7KghA1K1FqtzlIeR2ZSVJbO3Qd9hiek6Rayqy2SXI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KAfyyUFMRyTcwHJtjpKhA0wviVF4xIq7ed1TBkPpgwzEBowjZ8erykABk6KszpRpo
-         meKTyOR/6C/fWl/uIJkFioOhTCDCBBIB97Fz4XXvZgiG6ZA7NY4e28ItHZx4mmSxLO
-         PQQimceoELvHoRr92n6G6UsSYvyW8GRpT57fXtdQ=
-Date:   Wed, 11 May 2022 12:09:33 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "zhanghongtao (A)" <zhanghongtao22@huawei.com>
-Cc:     akpm@linux-foundation.org, linfeilong@huawei.com,
-        suweifeng1@huawei.com, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org
-Subject: Re: [PATCH] drivers:uio: Fix system crashes during driver switchover
-Message-ID: <YnuLXTu1wXvCbP/x@kroah.com>
-References: <d204cc88-887c-b203-5a5b-01c307fda4fb@huawei.com>
- <YntcNunjPdb3Clry@kroah.com>
- <889918de-e0b8-1ee1-ab86-ca02c8aa35b9@huawei.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4D178185A7B2;
+        Wed, 11 May 2022 10:09:53 +0000 (UTC)
+Received: from localhost (ovpn-13-194.pek2.redhat.com [10.72.13.194])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5AEEE416362;
+        Wed, 11 May 2022 10:09:51 +0000 (UTC)
+Date:   Wed, 11 May 2022 18:09:49 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v8 3/7] crash: add generic infrastructure for crash
+ hotplug support
+Message-ID: <20220511100949.GG122876@MiWiFi-R3L-srv>
+References: <20220505184603.1548-1-eric.devolder@oracle.com>
+ <20220505184603.1548-4-eric.devolder@oracle.com>
+ <YnTKcvkCoRBxqGSW@MiWiFi-R3L-srv>
+ <2da2e67a-864e-246b-b9d0-673c7af937b4@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <889918de-e0b8-1ee1-ab86-ca02c8aa35b9@huawei.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2da2e67a-864e-246b-b9d0-673c7af937b4@oracle.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A: http://en.wikipedia.org/wiki/Top_post
-Q: Were do I find info about this thing called top-posting?
-A: Because it messes up the order in which people normally read text.
-Q: Why is top-posting such a bad thing?
-A: Top-posting.
-Q: What is the most annoying thing in e-mail?
+On 05/09/22 at 10:43am, Eric DeVolder wrote:
+> 
+> 
+> On 5/6/22 02:12, Baoquan He wrote:
+> > On 05/05/22 at 02:45pm, Eric DeVolder wrote:
+> > ......
+> > > diff --git a/kernel/crash_core.c b/kernel/crash_core.c
+> > > index 256cf6db573c..f197af50def6 100644
+> > > --- a/kernel/crash_core.c
+> > > +++ b/kernel/crash_core.c
+> > > @@ -9,12 +9,17 @@
+> > >   #include <linux/init.h>
+> > >   #include <linux/utsname.h>
+> > >   #include <linux/vmalloc.h>
+> > > +#include <linux/highmem.h>
+> > 
+> > Wondering where highmem.h is needed. Just curious.
+> 
+> Ahh, I missed that. At one point in time we moved map_crash_pages() into
+> this file, which brought highmem.h along with it. But we have since moved
+> map_crash_pages() into x86/crash.c. And I missed eliminating highmem.h at
+> that time.
+> 
+> I have removed this for v9.
 
-A: No.
-Q: Should I include quotations after my reply?
+That's nice, and you can add my ack when repost.
 
-http://daringfireball.net/2007/07/on_top
+Acked-by: Baoquan He <bhe@redhat.com>
 
-On Wed, May 11, 2022 at 04:51:11PM +0800, zhanghongtao (A) wrote:
-> Thanks for your reply.
-> I looked through the historical emails and thought I was not the
-> same problem as his.
-> After the driver is switched, the application can still operate
-> on the mapped address, which causes the system to crash.
-> The application is not aware of the driver's switchover.
-> The solution I can think of is to block the switch and wait for
-> the application to release before switching, as shown in the patch.
-> So want to seek help from the community, how to solve it better?
-> Is there a better way?
-
-A better way to do what?  I have no context here at all, sorry.
-
-What is "switching" the driver?  If it is root by doing a bind/unbind,
-then you are on your own and have to do that very carefully, right?
-
-thanks,
-
-greg k-h

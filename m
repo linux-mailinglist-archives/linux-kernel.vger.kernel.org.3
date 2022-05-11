@@ -2,371 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8748523385
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 14:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A00C6523387
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 14:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242895AbiEKM65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 08:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
+        id S242930AbiEKM7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 08:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237596AbiEKM6z (ORCPT
+        with ESMTP id S242905AbiEKM7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 08:58:55 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2043.outbound.protection.outlook.com [40.107.243.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B384195DE9
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 05:58:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V2jgalqTGAywuHU+ZnO2xGNvtatL5qwEeVXKkU43PX9mvdhCakxvQ9vVLEs/b2A49xtQCv+NOh2Wy2WSdTiRqXX56m1Zl5QSPiM6gb0U8k2ewPKkuCgYcHBDqCAYF3Dpo/N+C59QwXCSvmdJ3YLjQRhDuZTtG50c1DkI8hJCbos0Ai0KfsRyGkgLyhY3PDOjfAoVveOpt8Ya726QfGzGbn3upUdmF9pS213fW78IpUlrAV+xGaEVXVqb2rFbKIDkyiWKoOGv54iVgTPB9QGS8LVuiayEiQWlRcvpkiBEejWbiFw8RJuxAXLIdh8lauIM8fqwydzwzLDjQEKU06VVaA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q4P3StwQZpOgAbWrsPJ0JmXcYbBFPZk8Mogeg4KG3XY=;
- b=OJz9pR3NZTLphkTTCPc3HNCUOa9LRN/2AJ5kir48i3ELHvziKPkh/yAr20HuoFDDXRG+tAg4EeAfu9BhspcJaI1N5GkqqVZuEJBoFs0lZEJIgLTA2XEbmd+DaxZg0x14OheH9dlgC3IerpXZrs2gJGIviPkvvmN90M7w33NIY4Tijd1lUII3AwN3OlhL3vJs/OKzjMjiN7DmrK2Xt3wYe/zvuB8ErrQ5cLRNxF8lzRJAR18sdCZWtWI0l7nWsFURbBK+SOetYCO2yY4jNjgTbRfiTr6CDU4ZHvzrvK/8ypSo2etjOCfE0AxFtSuNdIOi3gRLzuB3o0pTuTlxD38GRA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.238) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q4P3StwQZpOgAbWrsPJ0JmXcYbBFPZk8Mogeg4KG3XY=;
- b=a/5Df9z5mkQdOE0nWbsFyzutGZaSGWK4NQRUfciUuZXaYTxreXfgwKkBohhfsY+SjrYtleeYs2ecHdAYH+hU5+b2QcUCGkUTLjHS/cqVF/H1wxdEXzwSFW/PafiTUw8vzscNDZajXs0z6j/WGyME/wevdZIEm2nZbuSJlyqN7vqPj7aStGU+2PpmC8IKFsaANkNdM+Hup1wZOT6UdD0V90qBjwDlHefm2GmPi6ghYMJhpKuAhLmLKem38dTkiS3gV/ig0+EOqSZFFYjbpGk4wdMzazZFMDRAMRwMOqpeD9iYGZt48oNHck6KGO3x1mRfBKBAPBCOer850ESFfu8H1w==
-Received: from BN9PR03CA0071.namprd03.prod.outlook.com (2603:10b6:408:fc::16)
- by BN6PR12MB1282.namprd12.prod.outlook.com (2603:10b6:404:1d::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.21; Wed, 11 May
- 2022 12:58:51 +0000
-Received: from BN8NAM11FT038.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:fc:cafe::3c) by BN9PR03CA0071.outlook.office365.com
- (2603:10b6:408:fc::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13 via Frontend
- Transport; Wed, 11 May 2022 12:58:51 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.238; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.238) by
- BN8NAM11FT038.mail.protection.outlook.com (10.13.176.246) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5250.13 via Frontend Transport; Wed, 11 May 2022 12:58:51 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- DRHQMAIL105.nvidia.com (10.27.9.14) with Microsoft SMTP Server (TLS) id
- 15.0.1497.32; Wed, 11 May 2022 12:58:50 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 11 May 2022 05:58:49 -0700
-Received: from vdi.nvidia.com (10.127.8.13) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server id 15.2.986.22 via Frontend
- Transport; Wed, 11 May 2022 05:58:48 -0700
-From:   Eli Cohen <elic@nvidia.com>
-To:     <mst@redhat.com>, <jasowang@redhat.com>
-CC:     <virtualization@lists.linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>, <si-wei.liu@oracle.com>,
-        Eli Cohen <elic@nvidia.com>
-Subject: [PATCH] net/vdpa: Use reader/writers semaphore instead of mutex
-Date:   Wed, 11 May 2022 15:58:45 +0300
-Message-ID: <20220511125845.1332586-1-elic@nvidia.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 11 May 2022 08:59:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42959231CBC
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 05:59:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652273951;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=P3pmuNFV/ptflpHqQQDwwf4tEA/mscwqGqx/YTI6DC4=;
+        b=Tt5laQ6f4IiXIiALiYDVI9PwOt6mrAB92You5QpaXucen7sD7VMrYjrfZtlZ7+mKu6u/7X
+        +MN5pQydPUXRwLltFTIkVhyMEzC31cCZtbdDoauYKoPruonfEnX3SczU70RLiOfhW+ulUT
+        1KGm76PuSsKRLQb+9TrRLbABLxlYwpk=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-313--URbmy-pNvSJKyANZ0e4OA-1; Wed, 11 May 2022 08:59:10 -0400
+X-MC-Unique: -URbmy-pNvSJKyANZ0e4OA-1
+Received: by mail-qt1-f197.google.com with SMTP id w21-20020a05622a135500b002f3b801f51eso1476952qtk.23
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 05:59:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=P3pmuNFV/ptflpHqQQDwwf4tEA/mscwqGqx/YTI6DC4=;
+        b=GPAfHlkrBfJU6QfSKJ3mbTWou0Q5svOR2cTCYKLPXGvxrhQXgcgGYPXMCU773lOKKF
+         YXWo0pmsNANNo/babMgJ7ug4+akCSx2BS2IQ/3tbIbpAgyyhm4MlABhOmXHN+HsQ/mG9
+         eZtEiYH3/V5pZulrlutgvsQtqBzaOMF+WK8N+IX6V4SmLqEYfCOpUNsfA2ahCkwfoIdB
+         N55EOfHto31A/RdwYqLlCREqTygy6cJAWKg1nhugSSqoF80aaWD6Zzc8lGvj2GPAoS9u
+         LpNCfjpTwre7YqNeJvVklaxBnXYCsZtoMN+lE/D5QuZFCvUMKbo4XCXBv4r4R+3WT5sI
+         I1Pg==
+X-Gm-Message-State: AOAM531GrPmmXOZ0vQ+KFgJwbxM9WHrbNjvcu9vFx8gabPq8lUnbj5aA
+        c0L6o01Yugu27E4HZKhaSzdt3ZW/wxH3QhvIewU8TqgWNuSQ2RqgW2JIVLZAFXZGaeRcnM4+CKx
+        QfwNa4rQvvyzHl5h4GrND8jnq
+X-Received: by 2002:a05:620a:2412:b0:6a0:5f8e:c050 with SMTP id d18-20020a05620a241200b006a05f8ec050mr13739693qkn.462.1652273949357;
+        Wed, 11 May 2022 05:59:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwI9z5WG7k9Nn2llTyyAOt4aUQjwE2gb23qqkGrh6jwCoQSAYhq0zfpk66qWA9cYV8vY6Vjmw==
+X-Received: by 2002:a05:620a:2412:b0:6a0:5f8e:c050 with SMTP id d18-20020a05620a241200b006a05f8ec050mr13739677qkn.462.1652273949082;
+        Wed, 11 May 2022 05:59:09 -0700 (PDT)
+Received: from m8.users.ipa.redhat.com (cpe-158-222-141-151.nyc.res.rr.com. [158.222.141.151])
+        by smtp.gmail.com with ESMTPSA id bk29-20020a05620a1a1d00b0069fca79fa3asm1244537qkb.62.2022.05.11.05.59.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 05:59:08 -0700 (PDT)
+Message-ID: <f6a4a5ccb126053534bebe4b070fc1384839e919.camel@redhat.com>
+Subject: Re: [PATCH 2/2] random: add fork_event sysctl for polling VM forks
+From:   Simo Sorce <simo@redhat.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Alexander Graf <graf@amazon.com>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        Torben Hansen <htorben@amazon.co.uk>,
+        Jann Horn <jannh@google.com>
+Date:   Wed, 11 May 2022 08:59:07 -0400
+In-Reply-To: <YnsO1JGQm5FEkbJt@zx2c4.com>
+References: <20220502140602.130373-1-Jason@zx2c4.com>
+         <20220502140602.130373-2-Jason@zx2c4.com>
+         <8f305036248cae1d158c4e567191a957a1965ad1.camel@redhat.com>
+         <YnsO1JGQm5FEkbJt@zx2c4.com>
+Organization: Red Hat
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2e3a556b-63dc-42cc-0f1a-08da334dff62
-X-MS-TrafficTypeDiagnostic: BN6PR12MB1282:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR12MB12827C5AD3522EEB740DC796ABC89@BN6PR12MB1282.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JlQ0tlvfVl4beKGv823Rm1VrPRCZbREZioVNLUrHunNXJJygjatF4tJOKf2fQ5niP95u05PyWXUnHWkF73vmjiywoM5np32YpkcIj6Eqsr9E9c2mWJ/NLXMWulnp2hAbgIbx+53wqy03FRaYOVIpsRGp4DwswdsZCYaZsbeaQDLxWvhZjN9VGIVQyD7dJu1Yd+atYzTrYcrgJtLsF03VouUObR58Jl8WDWNu/hLR2Qf+evE2QrhaNS+TeN8NGGALzNLgVbH6xmTmdDcta2ccaoQFam9ynkEakrRJwIAqrq9UEEfhdBGsHIG9a2sftPX6YAyj6W2Z3x6LXK9WKnDkJY8hNnHulHl9Ut4rug45w0hvVM7jnprEBThjEVegCwP3To8kzBsPe3Tvec20taaKCLWQLcQjl3BqUejy1DqS8mpsm1mpnjfAbwjCjyR840tAMUxE/m6iUbpW5F/Guz0HbL7hiaPG6wTz+zPioCtzHHUW1yHikfXn2gC29WSi0acN906aFNlLF2X6FalUy0C95GgLfRkGQmKthqVUA54I2d15xmKJjLIWm3uyoZt68U9xOZQCgbLChapYD+lAeowoA4VU9tHJMFYOCMJWEk9KECnbOKdu5dsbXnKh8goPwuYNpQ0T3Y5WrHoqWnryJEliQB3cUqUoz7+FwgulOIb27KBYlAGvBgwDGRqmLRu4lNQO3yp39lmcPqSe4gipoL9ziw==
-X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(26005)(70206006)(70586007)(426003)(6666004)(110136005)(47076005)(316002)(2906002)(81166007)(36860700001)(508600001)(40460700003)(7696005)(186003)(54906003)(8676002)(4326008)(336012)(82310400005)(86362001)(356005)(2616005)(8936002)(83380400001)(107886003)(1076003)(36756003)(5660300002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2022 12:58:51.4742
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2e3a556b-63dc-42cc-0f1a-08da334dff62
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT038.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1282
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use rw_semaphore instead of mutex to control access to vdpa devices.
-This can be especially beneficial in case process poll on statistics
-information.
+Hi Jason,
 
-Suggested-by: Si-Wei Liu <si-wei.liu@oracle.com>
-Signed-off-by: Eli Cohen <elic@nvidia.com>
----
- drivers/vdpa/vdpa.c | 64 ++++++++++++++++++++++-----------------------
- 1 file changed, 32 insertions(+), 32 deletions(-)
+On Wed, 2022-05-11 at 03:18 +0200, Jason A. Donenfeld wrote:
+> My proposal here is made with nonce reuse in mind, for things like
+> session keys that use sequential nonces.
 
-diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
-index 0fb4a615f267..ced634f94f76 100644
---- a/drivers/vdpa/vdpa.c
-+++ b/drivers/vdpa/vdpa.c
-@@ -18,7 +18,7 @@
- 
- static LIST_HEAD(mdev_head);
- /* A global mutex that protects vdpa management device and device level operations. */
--static DEFINE_MUTEX(vdpa_dev_mutex);
-+static DECLARE_RWSEM(vdpa_dev_lock);
- static DEFINE_IDA(vdpa_index_ida);
- 
- void vdpa_set_status(struct vdpa_device *vdev, u8 status)
-@@ -238,7 +238,7 @@ static int __vdpa_register_device(struct vdpa_device *vdev, u32 nvqs)
- 
- 	vdev->nvqs = nvqs;
- 
--	lockdep_assert_held(&vdpa_dev_mutex);
-+	lockdep_assert_held(&vdpa_dev_lock);
- 	dev = bus_find_device(&vdpa_bus, NULL, dev_name(&vdev->dev), vdpa_name_match);
- 	if (dev) {
- 		put_device(dev);
-@@ -278,9 +278,9 @@ int vdpa_register_device(struct vdpa_device *vdev, u32 nvqs)
- {
- 	int err;
- 
--	mutex_lock(&vdpa_dev_mutex);
-+	down_write(&vdpa_dev_lock);
- 	err = __vdpa_register_device(vdev, nvqs);
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_write(&vdpa_dev_lock);
- 	return err;
- }
- EXPORT_SYMBOL_GPL(vdpa_register_device);
-@@ -293,7 +293,7 @@ EXPORT_SYMBOL_GPL(vdpa_register_device);
-  */
- void _vdpa_unregister_device(struct vdpa_device *vdev)
- {
--	lockdep_assert_held(&vdpa_dev_mutex);
-+	lockdep_assert_held(&vdpa_dev_lock);
- 	WARN_ON(!vdev->mdev);
- 	device_unregister(&vdev->dev);
- }
-@@ -305,9 +305,9 @@ EXPORT_SYMBOL_GPL(_vdpa_unregister_device);
-  */
- void vdpa_unregister_device(struct vdpa_device *vdev)
- {
--	mutex_lock(&vdpa_dev_mutex);
-+	down_write(&vdpa_dev_lock);
- 	device_unregister(&vdev->dev);
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_write(&vdpa_dev_lock);
- }
- EXPORT_SYMBOL_GPL(vdpa_unregister_device);
- 
-@@ -352,9 +352,9 @@ int vdpa_mgmtdev_register(struct vdpa_mgmt_dev *mdev)
- 		return -EINVAL;
- 
- 	INIT_LIST_HEAD(&mdev->list);
--	mutex_lock(&vdpa_dev_mutex);
-+	down_write(&vdpa_dev_lock);
- 	list_add_tail(&mdev->list, &mdev_head);
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_write(&vdpa_dev_lock);
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(vdpa_mgmtdev_register);
-@@ -371,14 +371,14 @@ static int vdpa_match_remove(struct device *dev, void *data)
- 
- void vdpa_mgmtdev_unregister(struct vdpa_mgmt_dev *mdev)
- {
--	mutex_lock(&vdpa_dev_mutex);
-+	down_write(&vdpa_dev_lock);
- 
- 	list_del(&mdev->list);
- 
- 	/* Filter out all the entries belong to this management device and delete it. */
- 	bus_for_each_dev(&vdpa_bus, NULL, mdev, vdpa_match_remove);
- 
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_write(&vdpa_dev_lock);
- }
- EXPORT_SYMBOL_GPL(vdpa_mgmtdev_unregister);
- 
-@@ -532,17 +532,17 @@ static int vdpa_nl_cmd_mgmtdev_get_doit(struct sk_buff *skb, struct genl_info *i
- 	if (!msg)
- 		return -ENOMEM;
- 
--	mutex_lock(&vdpa_dev_mutex);
-+	down_read(&vdpa_dev_lock);
- 	mdev = vdpa_mgmtdev_get_from_attr(info->attrs);
- 	if (IS_ERR(mdev)) {
--		mutex_unlock(&vdpa_dev_mutex);
-+		up_read(&vdpa_dev_lock);
- 		NL_SET_ERR_MSG_MOD(info->extack, "Fail to find the specified mgmt device");
- 		err = PTR_ERR(mdev);
- 		goto out;
- 	}
- 
- 	err = vdpa_mgmtdev_fill(mdev, msg, info->snd_portid, info->snd_seq, 0);
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_read(&vdpa_dev_lock);
- 	if (err)
- 		goto out;
- 	err = genlmsg_reply(msg, info);
-@@ -561,7 +561,7 @@ vdpa_nl_cmd_mgmtdev_get_dumpit(struct sk_buff *msg, struct netlink_callback *cb)
- 	int idx = 0;
- 	int err;
- 
--	mutex_lock(&vdpa_dev_mutex);
-+	down_read(&vdpa_dev_lock);
- 	list_for_each_entry(mdev, &mdev_head, list) {
- 		if (idx < start) {
- 			idx++;
-@@ -574,7 +574,7 @@ vdpa_nl_cmd_mgmtdev_get_dumpit(struct sk_buff *msg, struct netlink_callback *cb)
- 		idx++;
- 	}
- out:
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_read(&vdpa_dev_lock);
- 	cb->args[0] = idx;
- 	return msg->len;
- }
-@@ -630,7 +630,7 @@ static int vdpa_nl_cmd_dev_add_set_doit(struct sk_buff *skb, struct genl_info *i
- 	    !netlink_capable(skb, CAP_NET_ADMIN))
- 		return -EPERM;
- 
--	mutex_lock(&vdpa_dev_mutex);
-+	down_write(&vdpa_dev_lock);
- 	mdev = vdpa_mgmtdev_get_from_attr(info->attrs);
- 	if (IS_ERR(mdev)) {
- 		NL_SET_ERR_MSG_MOD(info->extack, "Fail to find the specified management device");
-@@ -650,7 +650,7 @@ static int vdpa_nl_cmd_dev_add_set_doit(struct sk_buff *skb, struct genl_info *i
- 
- 	err = mdev->ops->dev_add(mdev, name, &config);
- err:
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_write(&vdpa_dev_lock);
- 	return err;
- }
- 
-@@ -666,7 +666,7 @@ static int vdpa_nl_cmd_dev_del_set_doit(struct sk_buff *skb, struct genl_info *i
- 		return -EINVAL;
- 	name = nla_data(info->attrs[VDPA_ATTR_DEV_NAME]);
- 
--	mutex_lock(&vdpa_dev_mutex);
-+	down_write(&vdpa_dev_lock);
- 	dev = bus_find_device(&vdpa_bus, NULL, name, vdpa_name_match);
- 	if (!dev) {
- 		NL_SET_ERR_MSG_MOD(info->extack, "device not found");
-@@ -684,7 +684,7 @@ static int vdpa_nl_cmd_dev_del_set_doit(struct sk_buff *skb, struct genl_info *i
- mdev_err:
- 	put_device(dev);
- dev_err:
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_write(&vdpa_dev_lock);
- 	return err;
- }
- 
-@@ -750,7 +750,7 @@ static int vdpa_nl_cmd_dev_get_doit(struct sk_buff *skb, struct genl_info *info)
- 	if (!msg)
- 		return -ENOMEM;
- 
--	mutex_lock(&vdpa_dev_mutex);
-+	down_read(&vdpa_dev_lock);
- 	dev = bus_find_device(&vdpa_bus, NULL, devname, vdpa_name_match);
- 	if (!dev) {
- 		NL_SET_ERR_MSG_MOD(info->extack, "device not found");
-@@ -768,13 +768,13 @@ static int vdpa_nl_cmd_dev_get_doit(struct sk_buff *skb, struct genl_info *info)
- 
- 	err = genlmsg_reply(msg, info);
- 	put_device(dev);
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_read(&vdpa_dev_lock);
- 	return err;
- 
- mdev_err:
- 	put_device(dev);
- err:
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_read(&vdpa_dev_lock);
- 	nlmsg_free(msg);
- 	return err;
- }
-@@ -816,9 +816,9 @@ static int vdpa_nl_cmd_dev_get_dumpit(struct sk_buff *msg, struct netlink_callba
- 	info.start_idx = cb->args[0];
- 	info.idx = 0;
- 
--	mutex_lock(&vdpa_dev_mutex);
-+	down_read(&vdpa_dev_lock);
- 	bus_for_each_dev(&vdpa_bus, NULL, &info, vdpa_dev_dump);
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_read(&vdpa_dev_lock);
- 	cb->args[0] = info.idx;
- 	return msg->len;
- }
-@@ -1016,7 +1016,7 @@ static int vdpa_nl_cmd_dev_config_get_doit(struct sk_buff *skb, struct genl_info
- 	if (!msg)
- 		return -ENOMEM;
- 
--	mutex_lock(&vdpa_dev_mutex);
-+	down_read(&vdpa_dev_lock);
- 	dev = bus_find_device(&vdpa_bus, NULL, devname, vdpa_name_match);
- 	if (!dev) {
- 		NL_SET_ERR_MSG_MOD(info->extack, "device not found");
-@@ -1037,7 +1037,7 @@ static int vdpa_nl_cmd_dev_config_get_doit(struct sk_buff *skb, struct genl_info
- mdev_err:
- 	put_device(dev);
- dev_err:
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_read(&vdpa_dev_lock);
- 	if (err)
- 		nlmsg_free(msg);
- 	return err;
-@@ -1075,9 +1075,9 @@ vdpa_nl_cmd_dev_config_get_dumpit(struct sk_buff *msg, struct netlink_callback *
- 	info.start_idx = cb->args[0];
- 	info.idx = 0;
- 
--	mutex_lock(&vdpa_dev_mutex);
-+	down_read(&vdpa_dev_lock);
- 	bus_for_each_dev(&vdpa_bus, NULL, &info, vdpa_dev_config_dump);
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_read(&vdpa_dev_lock);
- 	cb->args[0] = info.idx;
- 	return msg->len;
- }
-@@ -1104,7 +1104,7 @@ static int vdpa_nl_cmd_dev_stats_get_doit(struct sk_buff *skb,
- 		return -ENOMEM;
- 
- 	index = nla_get_u32(info->attrs[VDPA_ATTR_DEV_QUEUE_INDEX]);
--	mutex_lock(&vdpa_dev_mutex);
-+	down_read(&vdpa_dev_lock);
- 	dev = bus_find_device(&vdpa_bus, NULL, devname, vdpa_name_match);
- 	if (!dev) {
- 		NL_SET_ERR_MSG_MOD(info->extack, "device not found");
-@@ -1124,7 +1124,7 @@ static int vdpa_nl_cmd_dev_stats_get_doit(struct sk_buff *skb,
- 	err = genlmsg_reply(msg, info);
- 
- 	put_device(dev);
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_read(&vdpa_dev_lock);
- 
- 	return err;
- 
-@@ -1132,7 +1132,7 @@ static int vdpa_nl_cmd_dev_stats_get_doit(struct sk_buff *skb,
- 	put_device(dev);
- dev_err:
- 	nlmsg_free(msg);
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_read(&vdpa_dev_lock);
- 	return err;
- }
- 
+Although this makes sense the problem is that changing applications to
+do the right thing based on which situation they are in will never be
+done right or soon enough. So I would focus on a solution that makes
+the CSPRNGs in crypto libraries safe.
+
+> A different issue is random nonces. For these, it seems like a call to
+> getrandom() for each nonce is probably the best bet. But it sounds like
+> you're interested in a userspace RNG, akin to OpenBSD's arc4random(3). I
+> hope you saw these threads:
+> 
+> - https://lore.kernel.org/lkml/YnA5CUJKvqmXJxf2@zx2c4.com/
+> - https://lore.kernel.org/lkml/Yh4+9+UpanJWAIyZ@zx2c4.com/
+> - https://lore.kernel.org/lkml/CAHmME9qHGSF8w3DoyCP+ud_N0MAJ5_8zsUWx=rxQB1mFnGcu9w@mail.gmail.com/
+
+4c does sound like a decent solution, it is semantically identical to
+an epoch vmgenid, all the library needs to do is to create such a mmap
+region, stick a value on  it, verify it is not zero after computing the
+next random value but before returning it to the caller.
+This reduces the race to a very small window when the machine is frozen
+right after the random value is returned to the caller but before it is
+used, but hopefully this just means that the two machines will just
+make parallel computations that yield the exact same value, so no
+catastrophic consequence will arise (there is the odd case where two
+random values are sought and the split happens between the two are
+retrieved and this has bad consequences, I think we can ignore that).
+
+> Each one of those touches on vDSO things quite a bit. Basically, the
+> motivation for doing that is for making userspace RNGs safe and
+> promoting their use with a variety of kernel enhancements to make that
+> easy. And IF we are to ship a vDSO RNG, then certainly this vmgenid
+> business should be exposed that way, over and above other mechanisms.
+> It'd make the most sense...IF we're going to ship a vDSO RNG.
+> 
+> So the question really is: should we ship a vDSO RNG? I could work on
+> designing that right. But I'm a little bit skeptical generally of the
+> whole userspace RNG concept. By and large they always turn out to be
+> less safe and more complex than the kernel one. So if we're to go that
+> way, I'd like to understand what the strongest arguments for it are.
+
+I am not entirely sure how a vDSO RNG would work, I think exposing the
+epoch(or whatever indicator) is enough, crypto libraries have pretty
+good PRNGs, what they require is simply a good source of entropy for
+the initial seeding and this safety mechanism to avoid state
+duplication on machine cloning.
+All the decent libraries already support detecting process forks.
+
+Simo.
+
 -- 
-2.35.1
+Simo Sorce
+RHEL Crypto Team
+Red Hat, Inc
+
+
 

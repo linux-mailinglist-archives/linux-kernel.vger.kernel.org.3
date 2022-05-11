@@ -2,78 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5085523BCA
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B569523BD0
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:45:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345759AbiEKRmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 13:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57784 "EHLO
+        id S1345765AbiEKRpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 13:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345744AbiEKRmq (ORCPT
+        with ESMTP id S234034AbiEKRph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 13:42:46 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A27237276
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:42:40 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id j6so5480271ejc.13
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:42:40 -0700 (PDT)
+        Wed, 11 May 2022 13:45:37 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCEA219F69
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:45:36 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id 31so2405466pgp.8
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:45:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IPRBvvBW0lETz5m8YN39fLl5gQS2Sga9Keu000AT3pU=;
-        b=UgsIpw2ht5hPvVl099BLiCTT08ScStzT8c+FWysbU/Oy86z0w/uXgvQmDAbrMrlZGp
-         32M+oWHwDOkmTg6SHbcv/oXEJ0MJdTVAVh/ePYx9g5bOD6ZGeqIGFzfzNDU5F1MuRwV2
-         /mtUwL9J1sDC06DI+Q5uj5uScoyb2AKsRly0U=
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wtHf7ZrAH4PrrfQ8X/4WpEmrRmE9+0nPRk+51k/x4Pg=;
+        b=TOER+O7VaqpBhXcNlHd69BxSLKP+mAQh8v/s9TpZa5MJTiTfWMTtNofMl4X86hWtdA
+         aPmvvUYQRQJdHmTyWI89bnCpOvtfxZwn0x/6RsNJNuzpcAVLrRr0VM+iyn4o6TRPTO2N
+         caIzydcLfDBFP7zRqTvpCBUvGl9MlTlQAA8ik=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IPRBvvBW0lETz5m8YN39fLl5gQS2Sga9Keu000AT3pU=;
-        b=T0nWj24l2j+/iGzY28erp6tQfdgbow3wDKBi+NNySLnkEktxUZ0nDDitWPZxVAu9bq
-         ncnAKE5R2GUTvm+pDdmkvqfacZQCGEewHQzziTjfqUHICU1h5uYz6fEOZgg+fha9+pHI
-         7wN6vZEBqcfOtIyqs7D8eb0XnqQVyf8WyafevCe7btcZfErMaf0lEUPn96FFVUz/vlbV
-         RSf6y+Mlt+G8aoURSKdQPX15McnoDGAVdiFCQqzrzLbByTNSgSR2E6EkLxtMfW78PCP2
-         uTJGY++uOJr50luS/PFUPxcmTvOAQGJKrCY0h3UCMeyoWAwHQrJnM4lrXevU6WRRPnTD
-         gPOA==
-X-Gm-Message-State: AOAM5306xgW93Q9haS33WOW9GlprmeDC+/musWobVunNKFXK4boCkQlB
-        9ahLUAGZMsvNDZDzMWw0F45vCEk8yDTsL6xKw+s=
-X-Google-Smtp-Source: ABdhPJzvOTwl4CWtDrQboMytm+mtwDiRIZvtBzMYKd+adsfK5k5hdulkwdR2QG9bqMhG+x+lo2oYlQ==
-X-Received: by 2002:a17:906:7d5:b0:6f3:a6a5:28c6 with SMTP id m21-20020a17090607d500b006f3a6a528c6mr26238977ejc.11.1652290958982;
-        Wed, 11 May 2022 10:42:38 -0700 (PDT)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
-        by smtp.gmail.com with ESMTPSA id v3-20020a170906564300b006f3ef214e3esm1204803ejr.164.2022.05.11.10.42.37
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 10:42:38 -0700 (PDT)
-Received: by mail-wr1-f41.google.com with SMTP id a5so208543wrp.7
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:42:37 -0700 (PDT)
-X-Received: by 2002:adf:dfc8:0:b0:20a:d256:5b5c with SMTP id
- q8-20020adfdfc8000000b0020ad2565b5cmr23591245wrn.97.1652290957387; Wed, 11
- May 2022 10:42:37 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wtHf7ZrAH4PrrfQ8X/4WpEmrRmE9+0nPRk+51k/x4Pg=;
+        b=8DLIpUp/ZJZ+GWau3L3BYv4oeCnWikV7j3DP/JjXUV1nGg4GIldtAffGvFjM61JvjF
+         0WIp+vA4YR7OFm0TcZq993BoJSsYdK3cg+aoDBOrByMnBVt/i46vgXYxmJrl5I7YSdwW
+         Ql5M8lChk8l2skaNfTaDa2BGU49R1+3oyFeokIsdSjX7cBQ83K7M6LXGw/jK/Mt+mMmE
+         gak7MdGkS3I0f1jLFHgj8cgEQ3JvoR+eOyHF0ueZAm4oanBFpJ4wSJjWqdJrztBOCm9G
+         Dp7WczaTfCOUIivcKdAx4SGK26oa8zeeaFGjGxY4CZWnwbCMNfU1XOlqKB0OaUdxgT3X
+         6FMw==
+X-Gm-Message-State: AOAM530UBCPGIQbE3sgen6b4EnA3QLVd37xiA70FqdetUuXM91NcfIGM
+        BZfCr7ROy/ivqzRZq0SAvIfYgg==
+X-Google-Smtp-Source: ABdhPJz8MafUMLMmiPh2TPfTHw+Wd/WkD7AI9rIG8ZDT690/r5bid8PrhndlVGg4fTtJglDi1J+jFg==
+X-Received: by 2002:a63:cf08:0:b0:3db:2558:aa66 with SMTP id j8-20020a63cf08000000b003db2558aa66mr3459845pgg.624.1652291135961;
+        Wed, 11 May 2022 10:45:35 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id k125-20020a628483000000b0050dc7628193sm2081797pfd.109.2022.05.11.10.45.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 10:45:35 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        kernel test robot <lkp@intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Vitor Massaru Iha <vitor@massaru.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] lib: overflow: Always build 64-bit test cases
+Date:   Wed, 11 May 2022 10:45:31 -0700
+Message-Id: <20220511174531.1098548-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <CANpfEhOnNZa5d_G3e0dzzbbEtSuqxWY-fUCqzSiFpiQ2k0hJyw@mail.gmail.com>
- <CAHk-=wjfecvcUk2vNQM1GiUz_G=WQEJ8i8JS7yjnxjq_f-OgKw@mail.gmail.com>
- <87a6czifo7.fsf@email.froward.int.ebiederm.org> <CAHk-=wj=EHvH-DEUHbkoB3vDZJ1xRzrk44JibtNOepNkachxPw@mail.gmail.com>
- <87ilrn1drx.ffs@tglx> <877d7zk1cf.ffs@tglx> <CAHk-=wiJPeANKYU4imYaeEuV6sNP+EDR=rWURSKv=y4Mhcn1hA@mail.gmail.com>
- <87y20fid4d.ffs@tglx> <87bkx5q3pk.fsf_-_@email.froward.int.ebiederm.org>
- <87mtfu4up3.fsf@email.froward.int.ebiederm.org> <87r150ug1l.fsf_-_@email.froward.int.ebiederm.org>
-In-Reply-To: <87r150ug1l.fsf_-_@email.froward.int.ebiederm.org>
-From:   Linus Torvalds <torvalds@linuxfoundation.org>
-Date:   Wed, 11 May 2022 10:42:21 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whUy_cuJsVeob4zDnK5sWpE3U2EjVbnR2xobqgx7DOp4g@mail.gmail.com>
-Message-ID: <CAHk-=whUy_cuJsVeob4zDnK5sWpE3U2EjVbnR2xobqgx7DOp4g@mail.gmail.com>
-Subject: Re: [PATCH 8/7] sched: Update task_tick_numa to ignore tasks without
- an mm
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-arch <linux-arch@vger.kernel.org>, Tejun Heo <tj@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1509; h=from:subject; bh=eiJn2Wl6nc4704YmTbh5pwPU8pZHWuWKyERY0Sg+mvo=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBie/Y6HZp0vOkkjoDe+KyAaUAbsvxybtXQniz6E1rE zafXUnqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYnv2OgAKCRCJcvTf3G3AJm+tD/ 0R/7Mm9NFYf2jEkB+SGZEyGUFEXJAnhj1jGXcuvzuiJfp0DHrTx1rIYF8Z4/UMVyKRc8BQlncO4aaY Epq9sEMb3DHlLd2gSF2p/ZWUxYTagcF0+Lt0pxFAUdZkXBzUSoJsMLsNjmCKuhzgAUJxIK4cKcnyWX mA0PLfg0p8S4XK+PFBw6IILtM0IVNH4fcJk7Q2TLaIB1YRrBrq61CVzQik0WY3jaydlKNNzq6Bz2i5 9sc9Aq+/aNTiEJ+1CNx0rVKfs9ooBkVyZgnLRawZPk/ECQNCLWgIIMn/wGpY91P1HarD7jBOUHOB0Z IMZWI/ivmPjDOjZ/EkuVCF0ukMXUmSYW8bwP4xlEqAKCdm3JG9aczfcrB+3OX4O7GN9bv2qT8u0GyU t95u8p9wOmirGCegajZg2uKy2mVv7C3M+YNcpYaBP6ftFZCgVfhFhFXqCLN6F0BPHVzB00yPa/K08d kfompYhsOTwGfkhCxlIGWcAyXW1gGEs7grESyA07sUc6K7+S6rKvRrRgLeaSAYgqVoCPdL36v0TaXI MTeEPmi7IgkGwJ7ezQcWlZyJkp6VYQFIWl0XelID4cAsZDjFmLVgOtGGxmONapigzIeSzhvV23ewgb zBojb9InwUHwvxauQ51nlBfm0JBv1kmw5z/WGgx3HOcXNllz3IT5JPkHQqzQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -84,17 +72,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 10:37 AM Eric W. Biederman
-<ebiederm@xmission.com> wrote:
->
-> With the change to init and the user mode helper processes to not have
-> PF_KTHREAD set before they call kernel_execve the PF_KTHREAD test in
-> task_tick_numa became insufficient to detect all tasks that have
-> "->mm == NULL".  Correct that by testing for "->mm == NULL" directly.
+There shouldn't be a reason to not build the 64-bit test cases on 32-bit
+systems; the types exist there too. Remove the #ifdefs.
 
-If you end up rebasing at any time for other reasons (I didn't even
-check if you keep this series in a public git branch), please just
-fold this fix into the original commit, so that we don't have
-unnecessary bisection issues.
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/lkml/202205110324.7GrtxG8u-lkp@intel.com
+Fixes: 455a35a6cdb6 ("lib: add runtime test of check_*_overflow functions")
+Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc: Vitor Massaru Iha <vitor@massaru.org>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: Daniel Latypov <dlatypov@google.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ lib/overflow_kunit.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-               Linus
+diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
+index 475f0c064bf6..ac37bb543476 100644
+--- a/lib/overflow_kunit.c
++++ b/lib/overflow_kunit.c
+@@ -255,10 +255,8 @@ DEFINE_TEST_FUNC(u16, "%d");
+ DEFINE_TEST_FUNC(s16, "%d");
+ DEFINE_TEST_FUNC(u32, "%u");
+ DEFINE_TEST_FUNC(s32, "%d");
+-#if BITS_PER_LONG == 64
+ DEFINE_TEST_FUNC(u64, "%llu");
+ DEFINE_TEST_FUNC(s64, "%lld");
+-#endif
+ 
+ static void overflow_shift_test(struct kunit *test)
+ {
+@@ -650,10 +648,8 @@ static struct kunit_case overflow_test_cases[] = {
+ 	KUNIT_CASE(s16_overflow_test),
+ 	KUNIT_CASE(u32_overflow_test),
+ 	KUNIT_CASE(s32_overflow_test),
+-#if BITS_PER_LONG == 64
+ 	KUNIT_CASE(u64_overflow_test),
+ 	KUNIT_CASE(s64_overflow_test),
+-#endif
+ 	KUNIT_CASE(overflow_shift_test),
+ 	KUNIT_CASE(overflow_allocation_test),
+ 	KUNIT_CASE(overflow_size_helpers_test),
+-- 
+2.32.0
+

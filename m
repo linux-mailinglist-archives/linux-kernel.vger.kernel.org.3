@@ -2,72 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3CF5229DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 04:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACD2E5229DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 04:47:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbiEKCcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 22:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60544 "EHLO
+        id S235404AbiEKCcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 22:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240221AbiEKCcW (ORCPT
+        with ESMTP id S238096AbiEKCcT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 22:32:22 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E19B645C
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 19:32:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652236341; x=1683772341;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=GD5SNKppixG33DS3SuVjSEMLGzo8y1WE3tk191fvhtc=;
-  b=alOC50RR4mD98r0zJdAibwsQcayOGH30NnrSqHa/wJdQZXXsLRqT5+Di
-   FXwGZ/1bpvHPRSPkLy0z9FIfbHMIeIYLROGFV0ZoiRVckj9JQanMEawgV
-   knMNH1SQRzU4jeLjZo11+44hOxSLa0mUsFmE+SSKVb6JeH1TQthicKYZJ
-   UAmXjpKIg3rlzRbT5+N97311Rfr/lALP6XHksYuJ7lpIsCYOleK+LlX7K
-   P95+4aCei0JB4xnmEth0tA3RQl7R248KLaPGcvtnR45uiYb2NrONCuw/P
-   Xg313bJwUsVrGRakYXNWNheV3zNlCkMgHfxcHscCZ+TlfTTHIpCghyrB5
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="332596964"
-X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
-   d="scan'208";a="332596964"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 19:32:20 -0700
-X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
-   d="scan'208";a="542093731"
-Received: from chenji3x-mobl1.ccr.corp.intel.com (HELO [10.255.30.10]) ([10.255.30.10])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 19:32:16 -0700
-Message-ID: <f56ea479-aa82-37ae-91c3-754816a4ed8b@linux.intel.com>
-Date:   Wed, 11 May 2022 10:32:14 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v6 03/12] iommu: Add attach/detach_dev_pasid domain ops
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-References: <20220510061738.2761430-1-baolu.lu@linux.intel.com>
- <20220510061738.2761430-4-baolu.lu@linux.intel.com>
- <20220510140238.GD49344@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220510140238.GD49344@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Tue, 10 May 2022 22:32:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B730FD5
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 19:32:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AF207B81F93
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:32:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26FACC385D8;
+        Wed, 11 May 2022 02:32:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1652236336;
+        bh=/Hp6dU5hclTkoExV1aXWnjWD+RcFFs7kpZHwfwv6wEk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=o8RU/4GYhn7UPYgYuI1ACj0GMtmWe15Z9yy8qhGLuCOojJ817oL44x7KTrsCqd15i
+         HBSah0TyT99EjnD+fwvU5YclqKzLpJ7u4tiz6S2/R8DMA1Wckeo4YKmpbsJ/Ox/Vlv
+         Shy2mseOIgOs9IHx+HO0yWs9B+eo7WkAod8q9qs0=
+Date:   Tue, 10 May 2022 19:32:15 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Qi Zheng <zhengqi.arch@bytedance.com>
+Cc:     akinobu.mita@gmail.com, vbabka@suse.cz, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, rostedt@goodmis.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 1/2] mm: fix missing handler for __GFP_NOWARN
+Message-Id: <20220510193215.14ed7e3fb70857738e10c0a2@linux-foundation.org>
+In-Reply-To: <c44769b3-a132-63a5-fd40-4d483497dff2@bytedance.com>
+References: <20220510113809.80626-1-zhengqi.arch@bytedance.com>
+        <20220510115922.350a496ca8b91686c1758282@linux-foundation.org>
+        <c44769b3-a132-63a5-fd40-4d483497dff2@bytedance.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,35 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/10 22:02, Jason Gunthorpe wrote:
-> On Tue, May 10, 2022 at 02:17:29PM +0800, Lu Baolu wrote:
-> 
->> This adds a pair of common domain ops for this purpose and adds helpers
->> to attach/detach a domain to/from a {device, PASID}.
-> 
-> I wonder if this should not have a detach op - after discussing with
-> Robin we can see that detach_dev is not used in updated
-> drivers. Instead attach_dev acts as 'set_domain'
-> 
-> So, it would be more symmetrical if attaching a blocking_domain to the
-> PASID was the way to 'detach'.
-> 
-> This could be made straightforward by following the sketch I showed to
-> have a static, global blocing_domain and providing a pointer to it in
-> struct iommu_ops
-> 
-> Then 'detach pasid' is:
-> 
-> iommu_ops->blocking_domain->ops->attach_dev_pasid(domain, dev, pasid);
-> 
-> And we move away from the notion of 'detach' and in the direction that
-> everything continuously has a domain set. PASID would logically
-> default to blocking_domain, though we wouldn't track this anywhere.
+On Wed, 11 May 2022 10:19:48 +0800 Qi Zheng <zhengqi.arch@bytedance.com> wrote:
 
-I am not sure whether we still need to keep the blocking domain concept
-when we are entering the new PASID world. Please allow me to wait and
-listen to more opinions.
+> 
+> ,,,
+> >> --- a/mm/internal.h
+> >> +++ b/mm/internal.h
+> >> @@ -35,6 +35,17 @@ struct folio_batch;
+> >>   /* Do not use these with a slab allocator */
+> >>   #define GFP_SLAB_BUG_MASK (__GFP_DMA32|__GFP_HIGHMEM|~__GFP_BITS_MASK)
+> >>   
+> >> +#define WARN_ON_ONCE_GFP(cond, gfp)	({				\
+> >> +	static bool __section(".data.once") __warned;			\
+> >> +	int __ret_warn_once = !!(cond);					\
+> >> +									\
+> >> +	if (unlikely(!(gfp & __GFP_NOWARN) && __ret_warn_once && !__warned)) { \
+> >> +		__warned = true;					\
+> >> +		WARN_ON(1);						\
+> >> +	}								\
+> >> +	unlikely(__ret_warn_once);					\
+> >> +})
+> > 
+> > I don't think WARN_ON_ONCE_GFP is a good name for this.  But
+> > WARN_ON_ONCE_IF_NOT_GFP_NOWARN is too long :(
+> > 
+> > WARN_ON_ONCE_NOWARN might be better.  No strong opinion here, really.
+> 
+> I've thought about WARN_ON_ONCE_NOWARN, but I feel a little weird 
+> putting 'WARN' and 'NOWARN' together, how about WARN_ON_ONCE_IF_ALLOWED?
 
-Best regards,
-baolu
+I dunno.  WARN_ON_ONCE_GFP isn't too bad I suppose.  Add a comment over
+the definition explaining it?
 
+> > 
+> >> @@ -4902,8 +4906,8 @@ __alloc_pages_slowpath(gfp_t gfp_mask, unsigned int order,
+> >>   	 * We also sanity check to catch abuse of atomic reserves being used by
+> >>   	 * callers that are not in atomic context.
+> >>   	 */
+> >> -	if (WARN_ON_ONCE((gfp_mask & (__GFP_ATOMIC|__GFP_DIRECT_RECLAIM)) ==
+> >> -				(__GFP_ATOMIC|__GFP_DIRECT_RECLAIM)))
+> >> +	if (WARN_ON_ONCE_GFP((gfp_mask & (__GFP_ATOMIC|__GFP_DIRECT_RECLAIM)) ==
+> >> +				(__GFP_ATOMIC|__GFP_DIRECT_RECLAIM), gfp_mask))
+> >>   		gfp_mask &= ~__GFP_ATOMIC;
+> >>   
+> >>   retry_cpuset:
+> > 
+> > I dropped this hunk - Neil's "mm: discard __GFP_ATOMIC"
+> > (https://lkml.kernel.org/r/163712397076.13692.4727608274002939094@noble.neil.brown.name)
+> > deleted this code.
+> > 
+> 
+> This series is based on v5.18-rc5, I will rebase it to the latest next
+> branch and check if there are any missing WARN_ON_ONCEs that are not
+> being handled.
+
+Against git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm branch
+mm-unstable, please.  That ends up in linux-next, with a delay.

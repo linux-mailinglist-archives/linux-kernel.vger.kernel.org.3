@@ -2,115 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 544A452284D
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 02:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A887C522854
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 02:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239634AbiEKAM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 20:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47750 "EHLO
+        id S232511AbiEKATS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 20:19:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232070AbiEKAL4 (ORCPT
+        with ESMTP id S229593AbiEKATN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 20:11:56 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60339DA8;
-        Tue, 10 May 2022 17:11:55 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652227913;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LNuHk31MU8NfbUkWhTQWEmIsDRSnnMCHcYTmT8fO/lY=;
-        b=EuVQqWjL/KUqB/CW2WZnKUENdoV3TuMemWSLrLHG/zjCnV2kJitekfdllmCrXeRBHAgkJl
-        N9VGxaJCPGSLpEX+u6uP4cm9q+FXGP6kAIXyis97mVl9efUDKvqZudiBjyKHmvGVyVc331
-        43Fg5Q+fRfE0e3IaLyJPZ0p5wt2T9HRbzYztEW/EhAMaYQDSHLlFfjW7EOykBDmmYsJ8DQ
-        dJXQBxEOYamLScb9r7J3jtrV3iKhhBZGCJlbcWi+8Nknu81VMZ4fSewlMvNj0p0Nuo45ky
-        gF9fFsq4IivHfX7IPAFsf8L3pw769T3RIzGmQ1C3rUDE9HHCwuhzA0bbqbp6rA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652227913;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LNuHk31MU8NfbUkWhTQWEmIsDRSnnMCHcYTmT8fO/lY=;
-        b=5etwy+oQ4vqvPZjT8W/1Hehtrb4Q311ZjDMAfdogHZdAvif7QwpoU5ASIW8mLslfRgL21+
-        aAAQpQODQg29I9DA==
-To:     Mark Rutland <mark.rutland@arm.com>, Lukas Wunner <lukas@wunner.de>
-Cc:     maz@kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org,
-        Octavian Purdila <octavian.purdila@nxp.com>,
-        linux-kernel@vger.kernel.org, aou@eecs.berkeley.edu,
-        catalin.marinas@arm.com, deanbo422@gmail.com, green.hu@gmail.com,
-        guoren@kernel.org, jonas@southpole.se, kernelfans@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, shorne@gmail.com,
-        stefan.kristiansson@saunalahti.fi, tsbogend@alpha.franken.de,
-        vgupta@kernel.org, vladimir.murzin@arm.com, will@kernel.org
-Subject: Re: [PATCH v2 17/17] irq: remove handle_domain_{irq,nmi}()
-In-Reply-To: <Ynpzb5L53iGex14D@FVFF77S0Q05N>
-References: <20211026092504.27071-1-mark.rutland@arm.com>
- <20211026092504.27071-18-mark.rutland@arm.com>
- <20220506203242.GA1855@wunner.de> <YnjWvbzn8ox+f2Y2@FVFF77S0Q05N>
- <20220510121320.GA3020@wunner.de> <Ynpzb5L53iGex14D@FVFF77S0Q05N>
-Date:   Wed, 11 May 2022 02:11:52 +0200
-Message-ID: <874k1xorlj.ffs@tglx>
+        Tue, 10 May 2022 20:19:13 -0400
+Received: from qproxy3-pub.mail.unifiedlayer.com (qproxy3-pub.mail.unifiedlayer.com [67.222.38.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FD0266CAD
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 17:19:08 -0700 (PDT)
+Received: from gproxy2-pub.mail.unifiedlayer.com (gproxy2-pub.mail.unifiedlayer.com [69.89.18.3])
+        by qproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id 2DD96804243C
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:19:08 +0000 (UTC)
+Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
+        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 53D8110047FA9
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:19:07 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id oa4InGy9dwm8ioa4JnFw3L; Wed, 11 May 2022 00:19:07 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=DpSTREz+ c=1 sm=1 tr=0 ts=627b00fb
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=oZkIemNP1mAA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=PTOzKl9DnjhxoL6Ic-UA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=KvWGEAqooFHRFC2UjRixtVmWJeczAtbK7J9RKciYauM=; b=UYMMskCS/6/2ouM8iDv7QyIzbD
+        grFL2WrF1GOxUlRkGFzGRS/WH1WvZFUAzr4CiGjtm4QECz7R4kc6An19UvGiXI3UjH4SqwklFzEY1
+        PcAAqZvHiH5C2exCNwmnkFUXGZG74gOblU/VdJ5TQvLVNYTK7M83pzVs82rvKJANC+WuR/+oDMs0Z
+        ZOcMa7zSCCt5lxUXt8eCVVtpncPbRVwiMaAZzzakLLIuJCDXX15g+LiqNegecCRG11o1nPMxYvaD8
+        CRrO5qrNDx3wQmWuHwa8Q54gMnCzHNSq/DAA2bA8n3wrz8vXhmnKADdgrVlKLGGSQq2J0lFvVqyjN
+        16cMGbgg==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:50394 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1noa4H-003ZDz-P7; Tue, 10 May 2022 18:19:05 -0600
+Subject: Re: [PATCH 5.17 000/140] 5.17.7-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <5dfcc54f-ebdb-f8af-7ee5-72091334dcb6@w6rz.net>
+Date:   Tue, 10 May 2022 17:19:03 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1noa4H-003ZDz-P7
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:50394
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10 2022 at 15:15, Mark Rutland wrote:
-> On Tue, May 10, 2022 at 02:13:20PM +0200, Lukas Wunner wrote:
->> Actually, since you're mentioning the in_nmi() check, I suspect
->> there's another problem here:
->> 
->> generic_handle_domain_nmi() warns if !in_nmi(), then calls down 
->> to handle_irq_desc() which warns if !in_hardirq().  Doesn't this
->> cause a false-positive !in_hardirq() warning for a NMI on GIC/GICv3?
+On 5/10/22 6:06 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.17.7 release.
+> There are 140 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> I agree that doesn't look right.
+> Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
+> Anything received after that time might be too late.
 >
->> The only driver calling request_nmi() or request_percpu_nmi() is
->> drivers/perf/arm_pmu.c.  So that's the only one affected.
->> You may want to test if that driver indeed exhibits such a
->> false-positive warning since c16816acd086.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.7-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> and the diffstat can be found below.
 >
-> In testing with v5.18-rc5, I can't see that going wrong.
+> thanks,
 >
-> I also hacked the following in:
->
-> -------->8--------
-> diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
-> index 939d21cd55c38..3c85608a8779f 100644
-> --- a/kernel/irq/irqdesc.c
-> +++ b/kernel/irq/irqdesc.c
-> @@ -718,6 +718,7 @@ EXPORT_SYMBOL_GPL(generic_handle_domain_irq);
->  int generic_handle_domain_nmi(struct irq_domain *domain, unsigned int hwirq)
->  {
->         WARN_ON_ONCE(!in_nmi());
-> +       WARN_ON_ONCE(!in_hardirq());
->         return handle_irq_desc(irq_resolve_mapping(domain, hwirq));
+> greg k-h
 
-which is pointless because NMI entry code has to invoke [__]nmi_enter()
-before invoking this function. [__]nmi_enter() does:
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-    __preempt_count_add(NMI_OFFSET + HARDIRQ_OFFSET);
+Tested-by: Ron Economos <re@w6rz.net>
 
-So it's more than bloody obvious why there is no warning triggered for a
-regular hardware induced NMI invocation.
-
-For a software invocation from the wrong context it does not matter how
-many redundant WARN_ONs you add. The existing ones are covering it
-nicely already.
-
-Thanks,
-
-        tglx

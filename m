@@ -2,70 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C77522C30
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 804C3522C3A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240308AbiEKGWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 02:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46276 "EHLO
+        id S242145AbiEKGXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 02:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237612AbiEKGWg (ORCPT
+        with ESMTP id S242035AbiEKGXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 02:22:36 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A098C5DA1;
-        Tue, 10 May 2022 23:22:36 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id F317F68BEB; Wed, 11 May 2022 08:22:32 +0200 (CEST)
-Date:   Wed, 11 May 2022 08:22:32 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Conor.Dooley@microchip.com
-Cc:     hch@lst.de, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: linux-next: Tree for May 3
-Message-ID: <20220511062232.GA32524@lst.de>
-References: <20220503172926.08215c77@canb.auug.org.au> <3f94c9a8-c927-5cc0-7d67-4b21c3d9dbaf@microchip.com> <9a424be9-380f-f99c-4126-25a00eba0271@microchip.com> <20220509141122.GA14555@lst.de> <dd946220-eaf6-773a-06b4-307cda466c9c@microchip.com> <505d41d1-1bc8-c8bc-5ebb-8a2b7934f3de@microchip.com>
+        Wed, 11 May 2022 02:23:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD601F8C4E;
+        Tue, 10 May 2022 23:23:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95C73B82142;
+        Wed, 11 May 2022 06:23:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1CF1C385D1;
+        Wed, 11 May 2022 06:22:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652250179;
+        bh=dr1sS53G4Pm1TyL5NsyZonMQdvda/MUhmA20m7oW+z0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tCHRDyaGR/wgK9C5TITSFPPM9YlIjPDgY0oE8C8NjR7J+qG1gD8mlS/Cvn8MihHwq
+         0ZuQFmf6VbMmJB/OtN3emjcuijgLE2JhdCaL24vp8q30p98Uv+lr0x960Y6+uT/Vmd
+         ERIluI0KmC+Px3sf0zdAJ+X0HzEpMgPydBrZ1Hjs=
+Date:   Wed, 11 May 2022 08:22:56 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Dave Airlie <airlied@gmail.com>
+Cc:     Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>
+Subject: Re: Adding CI results to the kernel tree was Re: [RFC v2] drm/msm:
+ Add initial ci/ subdirectory
+Message-ID: <YntWQIXSqMCd6TYV@kroah.com>
+References: <20220510070140.45407-1-tomeu.vizoso@collabora.com>
+ <20220510141329.54414-1-tomeu.vizoso@collabora.com>
+ <CAPM=9tzLR-wsLhg2ikGjoK06s-ju5XWa1rtPPiUpN=pwD1vgtA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <505d41d1-1bc8-c8bc-5ebb-8a2b7934f3de@microchip.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAPM=9tzLR-wsLhg2ikGjoK06s-ju5XWa1rtPPiUpN=pwD1vgtA@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Can you try this patch?
+On Wed, May 11, 2022 at 03:06:47PM +1000, Dave Airlie wrote:
+> > And use it to store expectations about what the drm/msm driver is
+> > supposed to pass in the IGT test suite.
+> 
+> I wanted to loop in Linus/Greg to see if there are any issues raised
+> by adding CI results file to the tree in their minds, or if any other
+> subsystem has done this already, and it's all fine.
 
-diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-index e2ef0864eb1e5..856179f27f608 100644
---- a/kernel/dma/swiotlb.c
-+++ b/kernel/dma/swiotlb.c
-@@ -234,7 +234,7 @@ void __init swiotlb_init_remap(bool addressing_limit, unsigned int flags,
- {
- 	struct io_tlb_mem *mem = &io_tlb_default_mem;
- 	unsigned long nslabs = default_nslabs;
--	size_t alloc_size = PAGE_ALIGN(array_size(sizeof(*mem->slots), nslabs));
-+	size_t alloc_size;
- 	size_t bytes;
- 	void *tlb;
- 
-@@ -267,12 +267,13 @@ void __init swiotlb_init_remap(bool addressing_limit, unsigned int flags,
- 		goto retry;
- 	}
- 
-+	alloc_size = PAGE_ALIGN(array_size(sizeof(*mem->slots), nslabs));
- 	mem->slots = memblock_alloc(alloc_size, PAGE_SIZE);
- 	if (!mem->slots)
- 		panic("%s: Failed to allocate %zu bytes align=0x%lx\n",
- 		      __func__, alloc_size, PAGE_SIZE);
- 
--	swiotlb_init_io_tlb_mem(mem, __pa(tlb), default_nslabs, false);
-+	swiotlb_init_io_tlb_mem(mem, __pa(tlb), nslabs, false);
- 	mem->force_bounce = flags & SWIOTLB_FORCE;
- 
- 	if (flags & SWIOTLB_VERBOSE)
+Why does the results need to be added to the tree?  Shouldn't they be
+either "all is good" or "constantly changing and a constant churn"?
+
+> I think this is a good thing after our Mesa experience, but Mesa has a
+> lot tighter integration here, so I want to get some more opinions
+> outside the group.
+
+For systems that have "tight integration" this might make sense as proof
+that all is working for a specific commit, but I can't see how this will
+help the kernel out much.
+
+What are you going to do with these results being checked in all the
+time?
+
+thanks,
+
+greg k-h

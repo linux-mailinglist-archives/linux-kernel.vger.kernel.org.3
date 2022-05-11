@@ -2,283 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B438C522DEE
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6535522DE0
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243408AbiEKILT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 04:11:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
+        id S242130AbiEKIJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 04:09:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243328AbiEKIKw (ORCPT
+        with ESMTP id S233633AbiEKIJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 04:10:52 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B4365EE
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 01:10:46 -0700 (PDT)
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220511081044epoutp01117225d24c89e0e9f62e207d3c362153~t-qoDf8eY3126831268epoutp01E
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:10:44 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220511081044epoutp01117225d24c89e0e9f62e207d3c362153~t-qoDf8eY3126831268epoutp01E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1652256644;
-        bh=hYuYJE8BwycrFmnXxWX4i3trO1jS9jYV/ZuxbJi1tKQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pNqJVx0bFor6YxZSH+CH5q+KunN2n6yqFFwr+hL5akzubYpefwfz2kRoCqraGT6ru
-         7n7NAYbVmZjT8Fr3nqpF9hh+BJhMh/oTXB0k9gs3Sgad0u3DgA9EhV3glQcV15zPVw
-         s/e2Qdgqu2Cco7gOWb7vYXziaEZ9lxfoRjNglGF4=
-Received: from epsmges5p2new.samsung.com (unknown [182.195.42.74]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20220511081043epcas5p10f5e3b2a3f8855ff9749d9e7de865b90~t-qnWbudH1267712677epcas5p1L;
-        Wed, 11 May 2022 08:10:43 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        73.47.09827.38F6B726; Wed, 11 May 2022 17:10:43 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220511080728epcas5p2e377c38aba2e93dccc7fe8958e4724c2~t-nx_sb8M2058020580epcas5p2f;
-        Wed, 11 May 2022 08:07:28 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220511080728epsmtrp131b4e7949cc848bea730c9146e648d1a~t-nx9cZEl1662516625epsmtrp1d;
-        Wed, 11 May 2022 08:07:28 +0000 (GMT)
-X-AuditID: b6c32a4a-b3bff70000002663-b1-627b6f83abf8
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        4A.23.08924.0CE6B726; Wed, 11 May 2022 17:07:28 +0900 (KST)
-Received: from localhost.localdomain (unknown [107.109.224.44]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220511080724epsmtip1865254a99dca147d491a5b07d63ed55b~t-ntr2NO31048910489epsmtip1v;
-        Wed, 11 May 2022 08:07:24 +0000 (GMT)
-From:   Maninder Singh <maninder1.s@samsung.com>
-To:     mcgrof@kernel.org, avimalin@gmail.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, pmladek@suse.com, rostedt@goodmis.org,
-        senozhatsky@chromium.org, andriy.shevchenko@linux.intel.com,
-        naveen.n.rao@linux.ibm.com, davem@davemloft.net,
-        mhiramat@kernel.org, anil.s.keshavamurthy@intel.com,
-        linux@rasmusvillemoes.dk, akpm@linux-foundation.org,
-        keescook@chromium.org
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        v.narang@samsung.com, Maninder Singh <maninder1.s@samsung.com>,
-        Onkarnath <onkarnath.1@samsung.com>
-Subject: [PATCH 2/2] kallsyms: move sprint_module_info to kallsyms_tiny.c
-Date:   Wed, 11 May 2022 13:36:57 +0530
-Message-Id: <20220511080657.3996053-2-maninder1.s@samsung.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220511080657.3996053-1-maninder1.s@samsung.com>
+        Wed, 11 May 2022 04:09:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1529C2E0;
+        Wed, 11 May 2022 01:09:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 30E4D61A00;
+        Wed, 11 May 2022 08:09:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63A6FC385DB;
+        Wed, 11 May 2022 08:09:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652256555;
+        bh=Y+Ia4l60OdZb53bKEre3+7c6IYHAuawdxs89/G063l4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u1y/tduN3NYd2a1Qt8SFP3DOzm7mGXeZuFL3MU7g9j0gR9QNqz97VTUdc5LP6wDx1
+         Ly81YR2IrrLO4idAVyTPxr8tKOQwjoQvShvvPsQma9RvwsYSJvf4ZB2F8kC1wTgY39
+         T1bYdHk6NVAQr8DyG7npkaatv90RPNo5jYb25cQ2K3zE7uhZhkXJhg1wi6wocgV/vN
+         VOZ3FYWcHCHwCkxNa8rrGjqPu4uC8x2J5xrjMsldYvc6Iy5f9yltV94GRse1DuMN+v
+         iv/6fFGFPseIKYbziHNz1TD+vxqHNep6KvRyeQuzeZnooPebet5S83yntyQATDc61R
+         epxJXVhj1jdiQ==
+Date:   Wed, 11 May 2022 01:09:13 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Theodore Ts'o <tytso@mit.edu>,
+        Nadia Heninger <nadiah@cs.ucsd.edu>,
+        Tom Ristenpart <ristenpart@cornell.edu>
+Subject: Re: [PATCH] random: do not pretend to handle premature next security
+ model
+Message-ID: <YntvKcp5PYDUKoFE@sol.localdomain>
+References: <20220504113025.285784-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxTVxjHc+69vfe2S9nlJXoGSJWBBrPBxtScxAamIeRKWBQ+LHHMzAJ3
-        wCgvaxXdXAZCx6QMKQhaS8d4cRsWBGzKhALFFSyjOhVhk4654AAtJlsodJjKxka5kPnt/zzP
-        7/+8nBwa92skA+ms3GOcIlcmDyVFxHeDETteLck7lfra6Rs7kL6jjURPl+twVFF8AUO9zkkC
-        uT2TFJr6/j6FmhuXcKS/oyJQcXcLhpzzMwDdKs9Bjy0VGBoz60k0rasn0eBXpQSa0MwC1Pzt
-        dtRa8w+FbA2bUMsX8wL07/RfAmQ5M7Xa+2oTiTyDt3BkHfkSIOclLXgzkK0rGiVY02UHxlaV
-        /EmxPboHFKuy/EKxzX1zGKueuIezRkMZyf6gXSZYTdN1wNaPJLF31dnsWZMBsB2mnwh20Rhy
-        6MV3RNJ0Tp5VwCmiYo6KMlfGtIL89m0n2xYkReCzIDUQ0pDZBRc8vwM1ENF+TC+A+qY5kg8W
-        ALyut2N8sAjgr45KsGGx3RxeL5gB1E4N43zgBnDAdhn3UiQTCQ3mPsJbCGBmcVj2qHbNgjON
-        ADpdk6SX8mcOwDNDbsyrCSYcmhrsa24xEwMf9rcK+HkSePHeU0oNaFrIxMLinjAe8YUjF2cI
-        r8ZXkZKuurUtIHNNCNW9TYSXh0wcvDaxm2/jD58MmyheB8K5ylKKR07ALk0hb1WtHqCvIXkm
-        Fs6MNgq8DM5EwA5zFJ/eAmvt7Rg/1gdWLM9gfF4Mu+s3dDhUOTrXtw+Ciy4XwWsWTgytrL9v
-        NYBFniVSA7bqnjtH99w5uv9HNwDcAF7i8pU5GZxyd350LnciUinLUR7PzYhMy8sxgrVfvDOh
-        Gzycmo+0AowGVgBpPDRAPHD2ZKqfOF320cecIu89xXE5p7SCIJoI3Sy+mdEp82MyZMe4bI7L
-        5xQbVYwWBhZh1fhh6UrrHuE5+aFL/b397iPmkD9KAz7vOqiLHhrfU3j43H3b6YJ0ufGRPcXc
-        njRfv7+wWKsPTogh91EjT0qmJVcPnCL7fAqI5htRiQ80aZ/4Jpe1vJwWH/H3tENyZZx9/8eE
-        OylVvyGP/xuGOltIQ0ftbOZYfFrCFpF0IO7DKkuXy0ISvi+kv+UjJfa6RpJud94V2eVXpOKJ
-        sKPUz88cKUfcnvOj0ozqRHVlmzW2XFgrOV85YBwqDe3Z69zus18VJv1g3/K2gqJvTJv0AT6P
-        g3e5klVtdPLmqjDt19Hjr3TnWd8lxuw1cYG3k/rcMeWO+GB34qfPlt7eGp6dfjA1SxlKKDNl
-        r+/EFUrZf8C92200BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrMIsWRmVeSWpSXmKPExsWy7bCSnO6BvOokg0frTCzmrF/DZvH992xm
-        i96m6UwWu1/cZrH48vM2u8WDg9fZLRYv/MZsMed8C4tF044VTBYvPjxhtDjTnWvxfF8vk8Xl
-        XXPYLB7PmsdmcXh+G4vFjQlPGS0WL1ezWD3lL7vFsQViFit6PrBa/H/8ldViX8cDoNkbF7FZ
-        /Dx8htni0Mm5jBYvlsxgdJDymN1wkcVjy8qbTB4Tm9+xe+ycdZfdo2XfLXaPxXteMnl03bjE
-        7LFpVSebx4kZv1k8Jiw6wOgx72Sgx4WubI++LasYPdZvucri8XmTXAB/FJdNSmpOZllqkb5d
-        AlfGv8szWAvWKVas+STfwNgq3cXIySEhYCJx7PRxpi5GLg4hgR2MEif+HGGDSEhL/Pz3ngXC
-        FpZY+e85O0TRJ0aJVz/ngSXYBPQkVu3awwKSEBH4zyzxaUov2ChmgaWMEjevzAQbJSzgKdFx
-        5AsTiM0ioCqxZcEpZhCbV8BO4uHe1awQK+QlZl76DrSCg4NTwF6iaacKSFgIqKT7exs7RLmg
-        xMmZT8AWMwOVN2+dzTyBUWAWktQsJKkFjEyrGCVTC4pz03OLDQuM8lLL9YoTc4tL89L1kvNz
-        NzGC411LawfjnlUf9A4xMnEwHmKU4GBWEuHd31eRJMSbklhZlVqUH19UmpNafIhRmoNFSZz3
-        QtfJeCGB9MSS1OzU1ILUIpgsEwenVAOTxy7/vgO/y0M1k94KJ7unrN911J7TSN9DfdeV5Zc4
-        Jk8PnHlnyqPP6v4X/f8cWv3u3d7Y/Fi2m4tlMjft78y6wJ7/hfHb2h1T3yyYLHRd1lx1xcn/
-        KyU0uiKmP7G0ecm8wOdif/Zmm+9nfohOUfqpnCNsvmGL5c+w7Uti9yyyqbRYJtZUPOHjqmPH
-        l65e47d5WYzJ1tXeV4y3m3mxGd5O+iauYdSwvjuEQSX2295bnxqbI6865R4uNbi7w1LPLL/7
-        n0DWRg9Ggal7ZvWxBD66++pPsdKPFx35uhrtb5PLYrddSqr85f7qWqXGWpXNPj/fsgaJODNE
-        zjOYMFEq3WDT5Xs28WliIXfXzlq3kLkrTomlOCPRUIu5qDgRAMVlb3VmAwAA
-X-CMS-MailID: 20220511080728epcas5p2e377c38aba2e93dccc7fe8958e4724c2
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-X-CMS-RootMailID: 20220511080728epcas5p2e377c38aba2e93dccc7fe8958e4724c2
-References: <20220511080657.3996053-1-maninder1.s@samsung.com>
-        <CGME20220511080728epcas5p2e377c38aba2e93dccc7fe8958e4724c2@epcas5p2.samsung.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220504113025.285784-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As previous patch makes new file for generic kallsyms
-(always compilable), move sprint_module_info module to
-new file kallsyms_tiny.c
+On Wed, May 04, 2022 at 01:30:25PM +0200, Jason A. Donenfeld wrote:
+> Per the thread linked below, "premature next" is not considered to be a
+> realistic threat model, and leads to more serious security problems.
+> 
+> "Premature next" is the scenario in which:
+> 
+> - Attacker compromises the current state of a fully initialized RNG via
+>   some kind of infoleak.
+> - New bits of entropy are added directly to the key used to generate the
+>   /dev/urandom stream, without any buffering or pooling.
+> - Attacker then, somehow having read access to /dev/urandom, samples RNG
+>   output and brute forces the individual new bits that were added.
+> - Result: the RNG never "recovers" from the initial compromise, a
+>   so-called violation of what academics term "post-compromise security".
+> 
+> The usual solutions to this involve some form of delaying when entropy
+> gets mixed into the crng. With Fortuna, this involves multiple input
+> buckets. With what the Linux RNG was trying to do prior, this involves
+> entropy estimation.
+> 
+> However, by delaying when entropy gets mixed in, it also means that RNG
+> compromises are extremely dangerous during the window of time before
+> the RNG has gathered enough entropy, during which time nonces may become
+> predictable (or repeated), ephemeral keys may not be secret, and so
+> forth. Moreover, it's unclear how realistic "premature next" is from an
+> attack perspective, if these attacks even make sense in practice.
+> 
+> Put together -- and discussed in more detail in the thread below --
+> these constitute grounds for just doing away with the current code that
+> pretends to handle premature next. I say "pretends" because it wasn't
+> doing an especially great job at it either; should we change our mind
+> about this direction, we would probably implement Fortuna to "fix" the
+> "problem", in which case, removing the pretend solution still makes
+> sense.
+> 
+> This also reduces the crng reseed period from 5 minutes down to 1
+> minute. The rationale from the thread might lead us toward reducing that
+> even further in the future (or even eliminating it), but that remains a
+> topic of a future commit.
+> 
+> At a high level, this patch changes semantics from:
+> 
+>     Before: Seed for the first time after 256 "bits" of estimated
+>     entropy have been accumulated since the system booted. Thereafter,
+>     reseed once every five minutes, but only if 256 new "bits" have been
+>     accumulated since the last reseeding.
+> 
+>     After: Seed for the first time after 256 "bits" of estimated entropy
+>     have been accumulated since the system booted. Thereafter, reseed
+>     once every minute.
+> 
+> Most of this patch is renaming and removing: POOL_MIN_BITS becomes
+> POOL_INIT_BITS, credit_entropy_bits() becomes credit_init_bits(),
+> crng_reseed() loses its "force" parameter since it's now always true,
+> the drain_entropy() function no longer has any use so it's removed,
+> entropy estimation is skipped if we've already init'd, the various
+> notifiers for "low on entropy" are now only active prior to init, and
+> finally, some documentation comments are cleaned up here and there.
+> 
+> Link: https://lore.kernel.org/lkml/YmlMGx6+uigkGiZ0@zx2c4.com/
+> Cc: Theodore Ts'o <tytso@mit.edu>
+> Cc: Nadia Heninger <nadiah@cs.ucsd.edu>
+> Cc: Tom Ristenpart <ristenpart@cornell.edu>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-no functional change with this commit
+This looks good to me; thanks for cleaning this up!  Feel free to add:
 
-Co-developed-by: Onkarnath <onkarnath.1@samsung.com>
-Signed-off-by: Onkarnath <onkarnath.1@samsung.com>
-Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
----
- include/linux/kallsyms.h | 11 +++++++++
- kernel/kallsyms_tiny.c   | 47 +++++++++++++++++++++++++++++++++++
- lib/vsprintf.c           | 53 ----------------------------------------
- 3 files changed, 58 insertions(+), 53 deletions(-)
+	Reviewed-by: Eric Biggers <ebiggers@google.com>
 
-diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-index c5e63a217404..95a2f4ade996 100644
---- a/include/linux/kallsyms.h
-+++ b/include/linux/kallsyms.h
-@@ -27,6 +27,17 @@ struct module;
- /* How and when do we show kallsyms values? */
- extern bool kallsyms_show_value(const struct cred *cred);
- 
-+#if !defined(CONFIG_KALLSYMS) && defined(CONFIG_MODULES)
-+extern int sprint_module_info(char *buf, unsigned long value,
-+				int modbuildid, int backtrace, int symbol);
-+#else
-+static inline int sprint_module_info(char *buf, unsigned long value,
-+				int modbuildid, int backtrace, int symbol)
-+{
-+	return 0;
-+}
-+#endif
-+
- static inline int is_kernel_text(unsigned long addr)
- {
- 	if (__is_kernel_text(addr))
-diff --git a/kernel/kallsyms_tiny.c b/kernel/kallsyms_tiny.c
-index 96ad06836126..8ed9fdd7d9f7 100644
---- a/kernel/kallsyms_tiny.c
-+++ b/kernel/kallsyms_tiny.c
-@@ -49,3 +49,50 @@ bool kallsyms_show_value(const struct cred *cred)
- 		return false;
- 	}
- }
-+
-+#if !defined(CONFIG_KALLSYMS) && defined(CONFIG_MODULES)
-+int sprint_module_info(char *buf, unsigned long value,
-+			     int modbuildid, int backtrace, int symbol)
-+{
-+	struct module *mod;
-+	unsigned long offset;
-+	void *base;
-+	char *modname;
-+	int len;
-+	const unsigned char *buildid = NULL;
-+	bool add_offset;
-+
-+	if (is_ksym_addr(value))
-+		return 0;
-+
-+	if (backtrace || symbol)
-+		add_offset = true;
-+	else
-+		add_offset = false;
-+
-+	preempt_disable();
-+	mod = __module_address(value);
-+	if (mod) {
-+		modname = mod->name;
-+#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-+		if (modbuildid)
-+			buildid = mod->build_id;
-+#endif
-+		if (add_offset) {
-+			base = mod->core_layout.base;
-+			offset = value - (unsigned long)base;
-+		}
-+	}
-+	preempt_enable();
-+	if (!mod)
-+		return 0;
-+
-+	/* address belongs to module */
-+	if (add_offset)
-+		len = sprintf(buf, "0x%p+0x%lx", base, offset);
-+	else
-+		len = sprintf(buf, "0x%lx", value);
-+
-+	return len + fill_name_build_id(buf, modname, modbuildid, buildid, len);
-+}
-+#endif
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index 799fccca4a2d..983fdb02543c 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -999,59 +999,6 @@ char *bdev_name(char *buf, char *end, struct block_device *bdev,
- }
- #endif
- 
--#if !defined(CONFIG_KALLSYMS) && defined(CONFIG_MODULES)
--static int sprint_module_info(char *buf, unsigned long value,
--			     int modbuildid, int backtrace, int symbol)
--{
--	struct module *mod;
--	unsigned long offset;
--	void *base;
--	char *modname;
--	int len;
--	const unsigned char *buildid = NULL;
--	bool add_offset;
--
--	if (is_ksym_addr(value))
--		return 0;
--
--	if (backtrace || symbol)
--		add_offset = true;
--	else
--		add_offset = false;
--
--	preempt_disable();
--	mod = __module_address(value);
--	if (mod) {
--		modname = mod->name;
--#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
--		if (modbuildid)
--			buildid = mod->build_id;
--#endif
--		if (add_offset) {
--			base = mod->core_layout.base;
--			offset = value - (unsigned long)base;
--		}
--	}
--	preempt_enable();
--	if (!mod)
--		return 0;
--
--	/* address belongs to module */
--	if (add_offset)
--		len = sprintf(buf, "0x%p+0x%lx", base, offset);
--	else
--		len = sprintf(buf, "0x%lx", value);
--
--	return len + fill_name_build_id(buf, modname, modbuildid, buildid, len);
--}
--#else
--static inline int sprint_module_info(char *buf, unsigned long value,
--			     int modbuildid, int backtrace, int symbol)
--{
--	return 0;
--}
--#endif
--
- static noinline_for_stack
- char *symbol_string(char *buf, char *end, void *ptr,
- 		    struct printf_spec spec, const char *fmt)
--- 
-2.17.1
+A couple very minor comments:
 
+>   * The high level overview is that there is one input pool, into which
+> - * various pieces of data are hashed. Some of that data is then "credited" as
+> - * having a certain number of bits of entropy. When enough bits of entropy are
+> - * available, the hash is finalized and handed as a key to a stream cipher that
+> - * expands it indefinitely for various consumers. This key is periodically
+> - * refreshed as the various entropy collectors, described below, add data to the
+> - * input pool and credit it. There is currently no Fortuna-like scheduler
+> - * involved, which can lead to malicious entropy sources causing a premature
+> - * reseed, and the entropy estimates are, at best, conservative guesses.
+> + * various pieces of data are hashed. Prior to initialization, some of that
+> + * data is then "credited" as having a certain number of bits of entropy.
+> + * When enough bits of entropy are available, the hash is finalized and
+> + * handed as a key to a stream cipher that expands it indefinitely for
+> + * various consumers. This key is periodically refreshed as the various
+> + * entropy collectors, described below, add data to the input pool and
+> + * credit it.
+
+The words "and credit it" at the end of this paragraph shouldn't be there.
+
+> +      /*
+> +       * If the base_crng is old enough, we try to reseed, which in turn
+> +       * bumps the generation counter that we check below.
+> +       */
+
+This should say "reseed" instead of "try to reseed".
+
+- Eric

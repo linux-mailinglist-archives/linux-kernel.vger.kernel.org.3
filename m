@@ -2,103 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 295425235B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F000F5235B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:38:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244861AbiEKOiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 10:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44690 "EHLO
+        id S244845AbiEKOiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 10:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244794AbiEKOiC (ORCPT
+        with ESMTP id S241866AbiEKOh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 10:38:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11EA351581;
-        Wed, 11 May 2022 07:38:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7418B8242D;
-        Wed, 11 May 2022 14:37:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4790FC34114;
-        Wed, 11 May 2022 14:37:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652279878;
-        bh=+EwM9/Fo/mYHUrlVBMU+VRCENMG+agU2bXee/mgnCV8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oivTdHg0ETsFfYJ3nLcAkKMxQ0DDelY3MOQqxmOwu5Xuv22ns3iZdX45d3cAK7+gA
-         Drnv1xYGqunk1VYAvfQrEnWxX7yE2xkTN9e1KfddBiCN3mAwL3f6DfrJaK6WQu1ULj
-         R+yHyy8Jwl4ab3b5AxKaHsVWivIS8vlYpjD1fX6ud5I8IPbdqvKya+zboCzBQO9+CC
-         FkWxj+PybERog6k6gyAWL+OGBO5AQ59i5DWruA/S8fs1QdRO0+mqbP5ngzmYGyk/nM
-         Jowgp9Xe/3mCaMVPGsw7O1QHK+cJV9R0BBGohbDBjcvMUwyp/hYsgYwMruZRMuv0pC
-         bePN1FXBaE7DA==
-Date:   Wed, 11 May 2022 17:37:50 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Conor.Dooley@microchip.com, sfr@canb.auug.org.au,
-        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: linux-next: Tree for May 3
-Message-ID: <YnvKPu5uQ8rqEcvV@kernel.org>
-References: <20220509141122.GA14555@lst.de>
- <dd946220-eaf6-773a-06b4-307cda466c9c@microchip.com>
- <505d41d1-1bc8-c8bc-5ebb-8a2b7934f3de@microchip.com>
- <20220511062232.GA32524@lst.de>
- <102578f2-5c10-e9c2-c1ef-e76ba90d011e@microchip.com>
- <20220511064832.GA761@lst.de>
- <2c0e2fbe-4e45-4acc-c2a7-4f4dcf9161a3@microchip.com>
- <20220511123724.GA25121@lst.de>
- <YnvDdPz4S5IJ7l/5@kernel.org>
- <20220511141034.GA31732@lst.de>
+        Wed, 11 May 2022 10:37:59 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500664EA0B;
+        Wed, 11 May 2022 07:37:55 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-edeb6c3642so3061527fac.3;
+        Wed, 11 May 2022 07:37:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9BCuf6md1fXzU+TlOHk5VXDJaJ6H3g0zAe1qyFY7QIk=;
+        b=dZh1WxBEeGQKumtPUYfMFuH1dY5rrfiGaIDc4bcJaP49VAK9u+uU5Qe/wwNRGmwDK2
+         FvOO+N+OQBSOJOrSyjfDpKjS3F6jxhGPCNd0D9a0xjahUg6V2LHHhV7Rzg3jgoaSJARE
+         lsraAq4IcARRKLVaS8h0yZX0nvA59llEnUvJE4Qnn0+doxujYHl30iBRhspYPdr1HW/X
+         AV1chRXfl9gx+LHGthJCi1iuo87AxfVtKu3y5WyGZ2wRLhCk/X9m/v8bDtUYxtnP5Iy7
+         SfbFFeW5B/vk4ac5QvzcIFKQDTjdQT4vey2ZsfzsoefEet/ZtSQaR8UcABcxc//za5Bp
+         JVJw==
+X-Gm-Message-State: AOAM533G7NFAS/wH82ykn3B75uUHtup1eX73Jjfdi9LAER50sZJp5KMH
+        X1lT9QTJZTspvy0D7KvDYA==
+X-Google-Smtp-Source: ABdhPJzV7lHSAaPCIpfLtDq3OLUgefj/X2KavadZ2NnmpnbPgLsOcT7C0+3CfdxjsheCNj3k9xF1Cw==
+X-Received: by 2002:a05:6870:65a0:b0:ed:a635:eee9 with SMTP id fp32-20020a05687065a000b000eda635eee9mr2795975oab.48.1652279874613;
+        Wed, 11 May 2022 07:37:54 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t2-20020a056871020200b000e686d1388esm600266oad.40.2022.05.11.07.37.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 07:37:54 -0700 (PDT)
+Received: (nullmailer pid 272781 invoked by uid 1000);
+        Wed, 11 May 2022 14:37:53 -0000
+Date:   Wed, 11 May 2022 09:37:53 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     rafael@kernel.org, roger.lu@mediatek.com, krzk+dt@kernel.org,
+        robh+dt@kernel.org, hsinyi@google.com,
+        angelogioacchino.delregno@collabora.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        matthias.bgg@gmail.com, devicetree@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, khilman@baylibre.com,
+        jia-wei.chang@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-pm@vger.kernel.org, viresh.kumar@linaro.org
+Subject: Re: [PATCH v6 01/10] dt-bindings: cpufreq: mediatek: Add MediaTek
+ CCI property
+Message-ID: <20220511143753.GA272748-robh@kernel.org>
+References: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
+ <20220505115226.20130-2-rex-bc.chen@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220511141034.GA31732@lst.de>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220505115226.20130-2-rex-bc.chen@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 04:10:34PM +0200, Christoph Hellwig wrote:
-> On Wed, May 11, 2022 at 05:08:52PM +0300, Mike Rapoport wrote:
-> > I guess the default to use memblock_alloc_low() backfires on system with
-> > physical memory living at 0x1000200000:
-> > 
-> > [    0.000000] Early memory node ranges
-> > [    0.000000]   node   0: [mem 0x0000001000200000-0x000000103fffffff]
-> > 
-> > The default limit for "low" memory is 0xffffffff and there is simply no
-> > memory there.
+On Thu, 05 May 2022 19:52:17 +0800, Rex-BC Chen wrote:
+> MediaTek Cache Coherent Interconnect (CCI) uses software devfreq module
+> for scaling clock frequency and adjust voltage.
+> The phandle could be linked between CPU and MediaTek CCI for some
+> MediaTek SoCs, like MT8183 and MT8186.
 > 
-> Is there any way to ask memblock for a specific address limit?
-> swiotlb just wants <= 32-bit by default.  With the little caveat
-> that it should be 32-bit addressable for all devices, and we don't
-> know the physical to dma address mapping at time of allocation.
+> The reason we need the link status between cpufreq and MediaTek cci is
+> cpufreq and mediatek cci could share the same regulator in some MediaTek
+> SoCs. Therefore, to prevent the issue of high frequency and low voltage,
+> we need to use this to make sure mediatek cci is ready.
+> 
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  .../devicetree/bindings/cpufreq/cpufreq-mediatek.txt       | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
 
-There is 
-
-void *memblock_alloc_try_nid(phys_addr_t size, phys_addr_t align,
-			     phys_addr_t min_addr, phys_addr_t max_addr,
-			     int nid);
-
-that lets caller to specify min and max limits
-
-Presuming that devices see [0x1000200000-0x103fffffff] as
-[0x200000-0x3fffffff] we may try something like
-
-	min = memblock_start_of_DRAM();
-	max = min + 0xffffffff;
-
-	if (flags & SWIOTLB_ANY)
-		max = MEMBLOCK_ALLOC_ACCESSIBLE;
-
-	tlb = memblock_alloc_try_nid(bytes, PAGE_SIZE, min, max, NUMA_NO_NODE);
-
--- 
-Sincerely yours,
-Mike.
+Acked-by: Rob Herring <robh@kernel.org>

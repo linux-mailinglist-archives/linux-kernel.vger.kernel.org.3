@@ -2,144 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13196523F31
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 23:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF5FC523F33
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 23:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347961AbiEKVF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 17:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48902 "EHLO
+        id S1347975AbiEKVGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 17:06:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiEKVF1 (ORCPT
+        with ESMTP id S1347130AbiEKVF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 17:05:27 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283D322922E;
-        Wed, 11 May 2022 14:05:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652303126; x=1683839126;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fcAVKuqd6YZHzN7purgtSBIoD9bELDVNb4vgy0qU8LA=;
-  b=HxQdqGVMPhXplL8hRLoax5LfcGjF7bU7vpk/oRtT5w8gZFRHHuJ+WPB9
-   SDWmy53D4hLzjUwB6xXB4ERcz3r/+x637r3R5Ax8vdrsQCDCdEOpNFozq
-   tFfMySXrI9Q0hD+dfw2yefWAnumoAr44OYXcA90bbLYq3cgvWHGDIkGno
-   md+dkJs6b2itgzfHS7L8XUVn7lnDJ2Z5LJjVgnFuTXxzZla5CNSLMGOnN
-   iHXwB5uBkiIpmVQ7jS1WfTn3CVrNRJilKs1Rqm+bbXiFEcGHqqp0/YEr1
-   J7EDNVgI7Hp/Wki0tN0e2n3GopNwFJUObsUaOaTLVqaS6QY+WPXfhBcXp
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="251865948"
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="251865948"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 14:05:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="553491065"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 11 May 2022 14:05:21 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1notWK-000JaW-It;
-        Wed, 11 May 2022 21:05:20 +0000
-Date:   Thu, 12 May 2022 05:04:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
-        quic_vpulyala@quicinc.com,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: Re: [v4 2/3] phy: qcom-snps: Add support for overriding phy tuning
- parameters
-Message-ID: <202205120425.gScyEI7N-lkp@intel.com>
-References: <1652282793-5580-3-git-send-email-quic_kriskura@quicinc.com>
+        Wed, 11 May 2022 17:05:58 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048103630A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 14:05:57 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id j6so6402368ejc.13
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 14:05:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ynACITrtZzlKKqGyhSsamC0GjuNyAFQkpCuDbRLZ5eA=;
+        b=L+AOis4yZWcZ1IL0iiPSTBcAUZGQn0SnVYsycwPfW58FE93ROmbF7Bq0hPrNiFRa8g
+         JlrGFDByBnBWX5XKOuqEvyXXxMhG6UQkvV+XCCXX0AasnWtJ7lzwavwMGctz+7PCjPfw
+         P8l9wg9vsu3om2MiVDp2PgbXcXZKSfn3Vc0pLg4NLih5m3Upk9BdZ1VzrwAGvFhmjLjO
+         4M16DpVcSQ27cz+SJMwC/TKKZ3fNClJsGiy7u1rWz/ePh/1VRMnAZNrqe5POmmMFNCtq
+         tGQ79/PFZYBRAUe0jo4rCXfD1S4WxZimlrsSErCx2ZbPncFLyz77tISUtsD8lw3bkz5y
+         O7vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ynACITrtZzlKKqGyhSsamC0GjuNyAFQkpCuDbRLZ5eA=;
+        b=eLemGbwI1a8poV6Ln/fn0RuLZ6CWAJpYHwjN0AqA8GfZMESDOl0ETaVbwhMKpNMVwD
+         lLjgcOqzT5zp5fk4oFQRcsavEir1Vz5xoc08Wbsv3PqCU/cgbX7helZlErkemWmNdq7e
+         jytnDV8Vull0860aUegUG1Oo8kY8lQi3EvIbp/1H064Fv8CaIL0ZvYpj8DZG5Dne0dpW
+         oKVL9rskSpZhzKZ17JuFu+PjKmniBRe4aUh96ylTw4520jPa8P9NT7U3ICEIKH/ZOvPP
+         CuvS6ZPCdxEtQcGY8YkvjRQeO/Azy0aeyPYnYpSftqscv3cq0kyS+iOZS6W4ENy3VvQR
+         RPuA==
+X-Gm-Message-State: AOAM531fmbyIyu/b8InGlEc13gl3nITUEy3yfjniG5L5T7j7DCErUchI
+        +fSIOJPU4DUbCWY7edGA+KJFyT0b0C9663tgzpXQA8h1SJOwFHNK
+X-Google-Smtp-Source: ABdhPJw4G75TGPYUDLK0sLGgvp0IXvKBjVwkHssJ3WNT+0ieIBKIsLsCtXbiQIiHz5aaWSrxJ7SnEdCMer/vL8uYcxE=
+X-Received: by 2002:a17:907:968d:b0:6f4:9f9e:3e5f with SMTP id
+ hd13-20020a170907968d00b006f49f9e3e5fmr27155651ejc.540.1652303155279; Wed, 11
+ May 2022 14:05:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1652282793-5580-3-git-send-email-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220405190619.540177-1-dlatypov@google.com>
+In-Reply-To: <20220405190619.540177-1-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 11 May 2022 17:05:42 -0400
+Message-ID: <CAFd5g44HjAHkwY9rAe3VCSTpRUNcoR0WU-e1z0BA+MKu_BYXyA@mail.gmail.com>
+Subject: Re: [PATCH] lib/Kconfig.debug: change KUnit tests to default to KUNIT_ALL_TESTS
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krishna,
+On Tue, Apr 5, 2022 at 3:06 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> This is in line with Documentation/dev-tools/kunit/style.rst.
+> Some of these tests predate that so they don't follow this convention.
+>
+> With this and commit b0841b51cac9 ("kunit: arch/um/configs: Enable
+> KUNIT_ALL_TESTS by default"), kunit.py will now run these tests by
+> default. This hopefully makes it easier to run and maintain the tests.
+> If any of these were to start failing, people would notice much quicker.
+>
+> Note: this commit doesn't update LINEAR_RANGES_TEST since that would
+> select its dependency (LINEAR_RANGES). We don't want KUNIT_ALL_TESTS
+> to enable anything other than test kconfigs.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on krzk/for-next linus/master v5.18-rc6 next-20220511]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Kurapati/Add-QCOM-SNPS-PHY-overriding-params-support/20220511-232858
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220512/202205120425.gScyEI7N-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/48c46f24873c92d3e16904af9e654962d0b923f1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Krishna-Kurapati/Add-QCOM-SNPS-PHY-overriding-params-support/20220511-232858
-        git checkout 48c46f24873c92d3e16904af9e654962d0b923f1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/phy/qualcomm/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c: In function 'qcom_snps_hsphy_read_override_param_seq':
->> drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c:541:42: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-     541 |         struct override_param_map *cfg = of_device_get_match_data(dev);
-         |                                          ^~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/const +541 drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
-
-   534	
-   535	static void qcom_snps_hsphy_read_override_param_seq(struct device *dev)
-   536	{
-   537		struct device_node *node = dev->of_node;
-   538		s32 val;
-   539		int ret, i;
-   540		struct qcom_snps_hsphy *hsphy;
- > 541		struct override_param_map *cfg = of_device_get_match_data(dev);
-   542	
-   543		hsphy = dev_get_drvdata(dev);
-   544	
-   545		for (i = 0; i < ARRAY_SIZE(phy_seq_props); i++) {
-   546			ret = of_property_read_s32(node, phy_seq_props[i], &val);
-   547			if (!ret) {
-   548				dev_dbg(&hsphy->phy->dev, "Read param: %s val: %d\n",
-   549							phy_seq_props[i], val);
-   550				qcom_snps_hsphy_override_param_update_val(cfg[i], val,
-   551							&hsphy->update_seq_cfg[i]);
-   552			}
-   553		}
-   554	}
-   555	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

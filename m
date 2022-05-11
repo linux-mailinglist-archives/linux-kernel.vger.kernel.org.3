@@ -2,56 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 927A452294A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 03:58:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73C2B52294B
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 03:58:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240871AbiEKB6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 21:58:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51984 "EHLO
+        id S240924AbiEKB6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 21:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233522AbiEKB6T (ORCPT
+        with ESMTP id S240919AbiEKB6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 21:58:19 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC7A4754B;
-        Tue, 10 May 2022 18:58:18 -0700 (PDT)
-Received: from kwepemi100024.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KydKD2x3XzGpZJ;
-        Wed, 11 May 2022 09:55:28 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi100024.china.huawei.com (7.221.188.87) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 11 May 2022 09:58:16 +0800
-Received: from [10.174.178.208] (10.174.178.208) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 11 May 2022 09:58:15 +0800
-Subject: Re: [PATCH 5.4 00/52] 5.4.193-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <stable@vger.kernel.org>, <torvalds@linux-foundation.org>,
-        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
-        <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <slade@sladewatkins.com>
-References: <20220510130729.852544477@linuxfoundation.org>
-From:   Samuel Zou <zou_wei@huawei.com>
-Message-ID: <4e84b14b-427d-a76b-472c-c422f54f7122@huawei.com>
-Date:   Wed, 11 May 2022 09:58:15 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Tue, 10 May 2022 21:58:34 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25354A3CF
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 18:58:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652234311; x=1683770311;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=iN1Fkrsl+QmnVro/odOcjaQezWH2OHwK6t9GN9q9rpM=;
+  b=VKrUYYtFQyc1FZnuoA126Y7M5dXwQ0ej8nhJRbBjNMsBx+bObJfQqWNY
+   u23nPPpQyDehi+euRW3qcl2S40ccO1TdNiyd/grGCy5KKtd2C7TExCWDI
+   sTUBSHibGn31v/k4RRjzWYVJ2/r8Oo6r+QT1QHfaetZq5131xDx/FWhYd
+   JkMGQTl1dDCG4yX/0722iAtWDbRtHcmQXAuDUORQYiKJNjgx8OlAYtIjq
+   po57DP3A0ZHulk/84bHA4AlWAm4UJEipW1tR6C3aOwuFrzlVon+OdrIls
+   LEgAP6gEaCIIYRA3czRNu8PxeIbvaCPoLUw6hK/aJKv8SlpTUzUgETDpb
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="268393321"
+X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
+   d="scan'208";a="268393321"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 18:58:31 -0700
+X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
+   d="scan'208";a="593856606"
+Received: from rliu1-mobl1.ccr.corp.intel.com ([10.254.213.20])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 18:58:26 -0700
+Message-ID: <41c08a5371957acac5310a2e608b2e42bd231558.camel@intel.com>
+Subject: Re: [mm/page_alloc] f26b3fa046: netperf.Throughput_Mbps -18.0%
+ regression
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Waiman Long <longman@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>
+Cc:     Aaron Lu <aaron.lu@intel.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        kernel test robot <oliver.sang@intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        kernel test robot <lkp@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        fengwei.yin@intel.com
+Date:   Wed, 11 May 2022 09:58:23 +0800
+In-Reply-To: <CAHk-=wjguW5nxjagV99GHvc_-E_7mSg+LMvGtFjJ9LUSx4Skig@mail.gmail.com>
+References: <20220420013526.GB14333@xsang-OptiPlex-9020>
+         <YmvMDyx05UoPFtQy@ziqianlu-desk1>
+         <bd3db4de223a010d1e06013e93b09879fc9b36a8.camel@intel.com>
+         <YnURx04+hE0sQ3v3@ziqianlu-desk1>
+         <7d20a9543f69523cfda280e3f5ab17d68db037ab.camel@intel.com>
+         <YnXnLuYjmEWdVyBP@ziqianlu-desk1>
+         <ae763d63e50d14650c5762103d113934412bef57.camel@intel.com>
+         <ba83270a-4f37-7d5a-b37a-0b7a6df5f5b4@intel.com>
+         <d13688d1483e9d87ec477292893f2916832b3bdc.camel@intel.com>
+         <c11ae803-cea7-8b7f-9992-2f640c90f104@intel.com>
+         <37dac785a08e3a341bf05d9ee35f19718ce83d26.camel@intel.com>
+         <CAHk-=wjguW5nxjagV99GHvc_-E_7mSg+LMvGtFjJ9LUSx4Skig@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.208]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,53 +86,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/5/10 21:07, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.193 release.
-> There are 52 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, 2022-05-10 at 11:05 -0700, Linus Torvalds wrote:
+> [ Adding locking people in case they have any input ]
 > 
-> Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
-> Anything received after that time might be too late.
+> On Mon, May 9, 2022 at 11:23 PM ying.huang@intel.com
+> <ying.huang@intel.com> wrote:
+> > 
+> > > 
+> > > Can you point me to the regression report? I would like to take a look,
+> > > thanks.
+> > 
+> > https://lore.kernel.org/all/1425108604.10337.84.camel@linux.intel.com/
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.193-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
+> Hmm.
 > 
-> thanks,
-> 
-> greg k-h
-> 
+> That explanation looks believable, except that our qspinlocks
+> shouldn't be spinning on the lock itself, but spinning on the mcs node
+> it inserts into the lock.
 
-Tested on arm64 and x86 for 5.4.193-rc1,
+The referenced regression report is very old (in Feb 2015 for 3.16-
+3.17).  The ticket spinlock was still used at that time.  I believe that
+things become much better after we used qspinlock.  We can test that.
 
-Kernel repo:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-Branch: linux-5.4.y
-Version: 5.4.193-rc1
-Commit: 7dae5fe9ddc036e00696eb0f54f4e7cabc04bb81
-Compiler: gcc version 7.3.0 (GCC)
+Best Regards,
+Huang, Ying
 
-arm64:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 9030
-passed: 9030
-failed: 0
-timeout: 0
---------------------------------------------------------------------
-
-x86:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 9030
-passed: 9030
-failed: 0
-timeout: 0
---------------------------------------------------------------------
-
-Tested-by: Hulk Robot <hulkrobot@huawei.com>

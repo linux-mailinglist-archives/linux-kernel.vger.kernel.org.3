@@ -2,120 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD8C5237E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:57:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0945237EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235408AbiEKP5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45594 "EHLO
+        id S233721AbiEKP7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242624AbiEKP47 (ORCPT
+        with ESMTP id S239167AbiEKP66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:56:59 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F7C2E6BB
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:56:57 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2f7d621d1caso26019787b3.11
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:56:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=tMbUWE6GUv1nmWn5jY/d3TbzjqfiRal7mnHyl6mSSAY=;
-        b=KaGFtloNmAoNwJfWR5TNS23GuxmZdqJRVen/7BY9wcaeCroaDVyBsrIpdbO9uKT+ac
-         XWYRXQ8edgM5QIiVJ4UGKY00foAZTP1Pq8C50boOAvll3mKwxqJarpcfvi3N5v9fci6I
-         SPS14F+aRRHEwYEI+K0QNKkypvWJ8GiUPZzS8qPrZUtolninNqTBdJ0Swbo5p8IVyb7P
-         TCZmiQmARQkeyYYY5rwXrYaj4LExgxbY70aGIT6PSfMEG+w8u3b277fAayMrHLcBMa3B
-         YZMh8vVKLrvqL1tkejKXZEycIX6WxkIFEUCr9TrQXoP+t6AFk1IJUnXo2TcDLLxo09pq
-         44Zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=tMbUWE6GUv1nmWn5jY/d3TbzjqfiRal7mnHyl6mSSAY=;
-        b=5EnoWcRCorODeDWHtlD9e8ycC/Q2XsrknH/nuvYGp6oPQ148IANc8YjVzKBHL+2V8x
-         btpOJnHu3dhux9orxY3HEOlkQE/oCwX1F4zGr3wjmrTNzEfwPTUtPSOF2PiPMc/uLDWO
-         Fm83SAA308I5NZofjI0EEeWffPmk7IhD2P06SrZo718/iv2vdQ34OZaVV5Cw1/YzQj8J
-         bnZH9mHg+2V62FExEhVaniszth99lCKCXzo/qthWXLeBmo3HDlSxjx/Jrwt28C8DjaU2
-         iieG9O2HYEjcJsBNdKixDbbJAUhLxq9FN3YeZCgbFpmlKXQ9SM4XHJ6R6XLUevWym0oc
-         Lf/A==
-X-Gm-Message-State: AOAM530sjlB/laiAPnAPpPcsWPzlzz6BqJb8JhNZ+Uhn2YCFXP5IAP+p
-        ofSdPidJEnWFsKaP9lkpi5eKNvrOSoe6oNfdC4ldtA==
-X-Google-Smtp-Source: ABdhPJwfiCk+4rp6a194iwdP+jNLBhayr3fsevneoNtL9o8x2f3f80taDnfHY+cFI2s/+XLcOt34GlbnTgv+Bez/bYc=
-X-Received: by 2002:a0d:d88c:0:b0:2f7:bb41:1bd0 with SMTP id
- a134-20020a0dd88c000000b002f7bb411bd0mr25320456ywe.199.1652284616800; Wed, 11
- May 2022 08:56:56 -0700 (PDT)
+        Wed, 11 May 2022 11:58:58 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4EC1505CF;
+        Wed, 11 May 2022 08:58:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=kqE02dzRDRl7y2hgIY6W5nVbBS7sf7V+wbQ6b8v+gJ4=; b=vhAiG6IbQmevUMxUAN1yhan8tW
+        TQZT32pMZ4EJw3FKFbL+aCbeAGhRfWxCJg6N+4E/ZAACkM36RAO5ZV2H8/HfToxP8RmDsuBlLSkhJ
+        oCP639Pt/VSPnuGF81eSGXaoP+0o9afSBYunOzV8NoeJ6Cum9FWEjLn9Xmf4V8WJgJMr5h5ZlkDmz
+        JgBi8mwBumCFkp9OvSpl/gfS65rtNCOdVvdaWNfJkx/nKpYy6fWhmhCa2Oa7bXg2WmzULLyAgLLM4
+        gD4UdRK+5WNOyk4efWNgM1Pyu9SQTIiDiYukoMcyhGxDI5Lcu60Qt7O2dRJ9dkjt+vjI1BOZsJTnb
+        VrKvxQxg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1noojg-007gQb-4R; Wed, 11 May 2022 15:58:48 +0000
+Date:   Wed, 11 May 2022 08:58:48 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     ast@kernel.org, daniel@iogearbox.net
+Cc:     songliubraving@fb.com, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] bpf.h: fix clang compiler warning with
+ unpriv_ebpf_notify()
+Message-ID: <YnvdOAaYmhNiA5WN@bombadil.infradead.org>
+References: <20220509203623.3856965-1-mcgrof@kernel.org>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 11 May 2022 21:26:45 +0530
-Message-ID: <CA+G9fYtS5fXzbODO3+Rz7VE4VvjY_1c99Da5UhruXi16jcVGbw@mail.gmail.com>
-Subject: [next] sh: hugetlb.h:27:1: error: no return statement in function
- returning non-void [-Werror=return-type]
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, lkft-triage@lists.linaro.org
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Xu <peterx@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        David Hildenbrand <david@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220509203623.3856965-1-mcgrof@kernel.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following build regressions were noticed on sh builds on linux next-20220511
-with gcc-11, gcc-10, gcc-9 and gcc-8.
+On Mon, May 09, 2022 at 01:36:23PM -0700, Luis Chamberlain wrote:
+> The recent commit "bpf: Move BPF sysctls from kernel/sysctl.c to BPF core"
+> triggered 0-day to issue an email for what seems to have been an old
+> clang warning. So this issue should have existed before as well, from
+> what I can tell. The issue is that clang expects a forward declaration
+> for routines declared as weak while gcc does not.
+> 
+> This can be reproduced with 0-day's x86_64-randconfig-c007
+> https://download.01.org/0day-ci/archive/20220424/202204240008.JDntM9cU-lkp@intel.com/config
+> 
+> And using:
+> 
+> COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=x86_64 SHELL=/bin/bash kernel/bpf/syscall.o
+> Compiler will be installed in /home/mcgrof/0day
+> make --keep-going HOSTCC=/home/mcgrof/0day/clang/bin/clang CC=/home/mcgrof/0day/clang/bin/clang LD=/home/mcgrof/0day/clang/bin/ld.lld HOSTLD=/home/mcgrof/0day/clang/bin/ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump OBJSIZE=llvm-size READELF=llvm-readelf HOSTCXX=clang++ HOSTAR=llvm-ar CROSS_COMPILE=x86_64-linux-gnu- --jobs=24 W=1 ARCH=x86_64 SHELL=/bin/bash kernel/bpf/syscall.o
+>   DESCEND objtool
+>   CALL    scripts/atomic/check-atomics.sh
+>   CALL    scripts/checksyscalls.sh
+>   CC      kernel/bpf/syscall.o
+> kernel/bpf/syscall.c:4944:13: warning: no previous prototype for function 'unpriv_ebpf_notify' [-Wmissing-prototypes]
+> void __weak unpriv_ebpf_notify(int new_state)
+>             ^
+> kernel/bpf/syscall.c:4944:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+> void __weak unpriv_ebpf_notify(int new_state)
+> ^
+> static
+> 
+> Fixes: 2900005ea287 ("bpf: Move BPF sysctls from kernel/sysctl.c to BPF core")
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> ---
+> 
+> Daniel,
+> 
+> Given what we did fore 2900005ea287 ("bpf: Move BPF sysctls from
+> kernel/sysctl.c to BPF core") where I had pulled pr/bpf-sysctl a
+> while ago into sysctl-next and then merged the patch in question,
+> should I just safely carry this patch onto sysctl-next? Let me know
+> how you'd like to proceed.
+> 
+> Also, it wasn't clear if putting this forward declaration on
+> bpf.h was your ideal preference.
 
-Regressions found on sh:
+After testing this on sysctl-testing without issues going to move this
+to sysctl-next now.
 
-   - gcc-11-microdev_defconfig
-   - gcc-11-shx3_defconfig
-   - gcc-8-defconfig
-   - gcc-9-shx3_defconfig
-   - gcc-8-dreamcast_defconfig
-   - gcc-10-defconfig
-   - gcc-10-microdev_defconfig
-   - gcc-8-shx3_defconfig
-   - gcc-8-microdev_defconfig
-   - gcc-11-dreamcast_defconfig
-   - gcc-9-microdev_defconfig
-   - gcc-10-dreamcast_defconfig
-   - gcc-11-defconfig
-   - gcc-10-shx3_defconfig
-   - gcc-9-defconfig
-   - gcc-9-dreamcast_defconfig
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-In file included from include/linux/hugetlb.h:757,
-                 from mm/filemap.c:36:
-arch/sh/include/asm/hugetlb.h: In function 'huge_ptep_clear_flush':
-arch/sh/include/asm/hugetlb.h:27:1: error: no return statement in
-function returning non-void [-Werror=return-type]
-   27 | }
-      | ^
-cc1: some warnings being treated as errors
-make[2]: *** [scripts/Makefile.build:295: mm/filemap.o] Error 1
-
-
-Build url: https://builds.tuxbuild.com/291BWxg5eELaKSwUXNLIqh5w1k3/
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+  Luis

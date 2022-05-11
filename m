@@ -2,86 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4ED523730
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B41D523732
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343619AbiEKPYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:24:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
+        id S1343636AbiEKPY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343607AbiEKPY1 (ORCPT
+        with ESMTP id S241634AbiEKPYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:24:27 -0400
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB54C227831;
-        Wed, 11 May 2022 08:24:25 -0700 (PDT)
-Received: by mail-ot1-f52.google.com with SMTP id 31-20020a9d0822000000b00605f1807664so690990oty.3;
-        Wed, 11 May 2022 08:24:25 -0700 (PDT)
+        Wed, 11 May 2022 11:24:53 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E812297D1
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:24:52 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id z2so4802676ejj.3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:24:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=seaHCom44uiTs26SOVTHmO+d30N+urihbVnoa7jcBHU=;
+        b=TAsFxKUwFUu/cfHGMVs7euuOOaHKgnj7ofjrXFjp8r9Snf7wiMSBmToMDbll08c4wB
+         B4LGXeld//Q6hfxFtxBMvALlOyKkBrwRlXmA5HUoGvnBrbQ8Z0lf5TiNGHuyMrP5BR63
+         n6ueMhr6dz49B7BTy3DGmj6ZgllDGug3NlmCJzP7cNvRG6GoVu5qS4C3KtiUZlgXFufh
+         GrpfbUWWpQRQYDaaK9aKLJGsmkgEdTsj7LCUFYY8sOi2gz+5yjJCzJ/Cm21z7B6ydRD5
+         Eb6frZ5RtEav3mlIuE5peSrbI9eRPdVtxJETEJRXmlpTKjxCb0r6y2Qp7SoSZumEhuWj
+         rDBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/YW/NabRNlqlFBWgGilu1Fwu61bxFXT4UrNqhtMuKug=;
-        b=7kbhuQV5fm7djNPeL34dLhVs/CrjVYvHV07Szsy3FTbiFw6F25GGDKWCPTvhV+LtBI
-         O7dtzmfA5jxDtbiLallWKx7Kt12h0lR37jLyUCbxxCaXqL11QBIzEOpA9Q3SZ4t+kmCJ
-         y5RYDMCSTYZ5PJST0UYqGVYnTIu9J0V/XUllYwoSaWs5rh1L5fSyzQqR5U7UW4fPhAq3
-         +Fz1ERsp6wQ2317EXq7dYfPNpLOjI5aiWfsT4NOq7K+DhRUuCkEhn7KoDjeJO68KwvRd
-         +GNiapaMmXozkerMr5EZu6xJLXlWCQs6Td6q195SRen4UacOvbaVNlLbWfl+U0j2GqkC
-         tmZw==
-X-Gm-Message-State: AOAM531GYnPpSucUuWqbYQzLc36hXY3sGTpQ9XJ+KLkoW2ri4jCAveeh
-        yvuZH/nvXiM6ETZ2NRno7g==
-X-Google-Smtp-Source: ABdhPJwW6W24dzq/fhBeIZjPgBInHoKIcnuL7XRJyzp48a8Nt/eKYf23URC2W2inbDtmAxg7YeSoLA==
-X-Received: by 2002:a9d:674f:0:b0:606:5b6:b76e with SMTP id w15-20020a9d674f000000b0060605b6b76emr10106810otm.12.1652282664955;
-        Wed, 11 May 2022 08:24:24 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t13-20020a4aadcd000000b0035eb4e5a6c9sm1014996oon.31.2022.05.11.08.24.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 08:24:24 -0700 (PDT)
-Received: (nullmailer pid 339802 invoked by uid 1000);
-        Wed, 11 May 2022 15:24:22 -0000
-Date:   Wed, 11 May 2022 10:24:22 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Tyrone Ting <warp5tw@gmail.com>
-Cc:     sven@svenpeter.dev, JJLIU0@nuvoton.com,
-        linux-kernel@vger.kernel.org, jie.deng@intel.com, olof@lixom.net,
-        lukas.bulwahn@gmail.com, jarkko.nikula@linux.intel.com,
-        yuenn@google.com, arnd@arndb.de, tali.perry1@gmail.com,
-        openbmc@lists.ozlabs.org, krzysztof.kozlowski@canonical.com,
-        robh+dt@kernel.org, linux-i2c@vger.kernel.org, tmaimon77@gmail.com,
-        benjaminfair@google.com, tomer.maimon@nuvoton.com,
-        kfting@nuvoton.com, semen.protsenko@linaro.org,
-        Avi.Fishman@nuvoton.com, jsd@semihalf.com, wsa@kernel.org,
-        devicetree@vger.kernel.org, andriy.shevchenko@linux.intel.com,
-        KWLIU@nuvoton.com, tali.perry@nuvoton.com, avifishman70@gmail.com,
-        venture@google.com
-Subject: Re: [PATCH v4 1/9] dt-bindings: i2c: npcm: support NPCM845
-Message-ID: <20220511152422.GA339769-robh@kernel.org>
-References: <20220510091654.8498-1-warp5tw@gmail.com>
- <20220510091654.8498-2-warp5tw@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=seaHCom44uiTs26SOVTHmO+d30N+urihbVnoa7jcBHU=;
+        b=ZowSiwEDRVhxbKuYvB/J1NFPu/1rgCqTuPnzVRyPsKiHp7HmvIeLPCfmzuvJVABH59
+         7F5+9x+d4zXqax7SQ1c/5Wzz2EYYWBKfx3yL53LB8M3RoSc0iYVsBes/GzmnVNIxa54o
+         0ZZX8ORsHX6s0FjrP6+LdrZ7tczqlMvGOzU38bZWlNKtrkokEwLgUymhDhfI1PekJCXj
+         0SDdplG7PsbxkrHliTLd21YrASF37pHIY6S/IGtuv1emSaGfLn3OuydQFfp3RXj4Azqa
+         HBJCnY19xe5jrRvWunwrMyrL6gHowqIsZbm40khwiHDab2InLpJm80tWgLlg+ZVMwD/5
+         nlAw==
+X-Gm-Message-State: AOAM532pFS7Yv6WWxB0ZD/hKEVR0AnXq+jNbojaJ1A9clqMoA9pinaLQ
+        Vz0zwRn19dbqKZ+s/1E4doV1eq1ywUlim0Wl60U1zjbLu3Pkfg==
+X-Google-Smtp-Source: ABdhPJw5lbZ3f5D9UUxJJpVm5HxR51LIMMyK1ge48NZ+6rLvEM9+7xdSTx82HwOKw4EXjm+P/qHF+QOQPr1ZncyweS8=
+X-Received: by 2002:a17:907:162a:b0:6f4:c53b:fca7 with SMTP id
+ hb42-20020a170907162a00b006f4c53bfca7mr25795243ejc.723.1652282690650; Wed, 11
+ May 2022 08:24:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220510091654.8498-2-warp5tw@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220511064920.18455-1-yong.wu@mediatek.com> <20220511064920.18455-2-yong.wu@mediatek.com>
+In-Reply-To: <20220511064920.18455-2-yong.wu@mediatek.com>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Wed, 11 May 2022 08:24:39 -0700
+Message-ID: <CABXOdTcA1ERGTCMVDhz+cah6GwC3hsNR9W3PYyYZN6uGE5_Rsg@mail.gmail.com>
+Subject: Re: [PATCH 1/4] iommu/mediatek: Use dev_err_probe to mute probe_defer
+ err log
+To:     Yong Wu <yong.wu@mediatek.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        iommu@lists.linux-foundation.org,
+        linux-mediatek@lists.infradead.org,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
+        libo.kang@mediatek.com, chengci.xu@mediatek.com,
+        youlin.pei@mediatek.com, anan.sun@mediatek.com,
+        xueqi.zhang@mediatek.com, Guenter Roeck <groeck@chromium.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 May 2022 17:16:46 +0800, Tyrone Ting wrote:
-> From: Tyrone Ting <kfting@nuvoton.com>
-> 
-> Add compatible and nuvoton,sys-mgr description for NPCM i2c module.
-> 
-> Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
-> ---
->  .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml     | 25 +++++++++++++++----
->  1 file changed, 20 insertions(+), 5 deletions(-)
-> 
+On Tue, May 10, 2022 at 11:49 PM Yong Wu <yong.wu@mediatek.com> wrote:
+>
+> Mute the probe defer log:
+>
+> [    2.654806] mtk-iommu 14018000.iommu: mm dts parse fail(-517).
+> [    2.656168] mtk-iommu 1c01f000.iommu: mm dts parse fail(-517).
+>
+> Fixes: d2e9a1102cfc ("iommu/mediatek: Contain MM IOMMU flow with the MM TYPE")
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
+
+> ---
+> The Fixes tag commit-id is from linux-next.
+> ---
+>  drivers/iommu/mtk_iommu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+> index 71b2ace74cd6..0f6ec4a4d9d4 100644
+> --- a/drivers/iommu/mtk_iommu.c
+> +++ b/drivers/iommu/mtk_iommu.c
+> @@ -1198,7 +1198,7 @@ static int mtk_iommu_probe(struct platform_device *pdev)
+>         if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_MM)) {
+>                 ret = mtk_iommu_mm_dts_parse(dev, &match, data);
+>                 if (ret) {
+> -                       dev_err(dev, "mm dts parse fail(%d).", ret);
+> +                       dev_err_probe(dev, ret, "mm dts parse fail.");
+>                         goto out_runtime_disable;
+>                 }
+>         } else if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_INFRA) &&
+> --
+> 2.18.0
+>

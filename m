@@ -2,164 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E29E523F2A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 23:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13196523F31
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 23:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347940AbiEKVCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 17:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36912 "EHLO
+        id S1347961AbiEKVF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 17:05:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238958AbiEKVCV (ORCPT
+        with ESMTP id S229633AbiEKVF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 17:02:21 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4D96161F
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 14:02:20 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id h85so3335530iof.12
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 14:02:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=t9KxxV9NPaarLjUn6WnSeaJ1unQjijG7pUlU5QRc31c=;
-        b=H+FMOTettN+fuJtHKZqvo9EElI2NN1SPK4306s/OFHXEpdYb2w8lMqMB9SYcHYzNYK
-         fPb27VOOqwfpDDqp5639NElcCyMRqOxbTyvlNIvswSaV2AJihPzGq1xo3mRDRoBbdY9Z
-         ieamvJCGxKnz7laf6bu3Els3to1eswUjqz7BPVzm8ZEFjlu+mFmArNAeeZ61qgI+39xf
-         jp6z/bpGJfGdnhddB5JrTTHjNlonTnbTOU1XAcwGupZCq+QMV5rdjheyamVoOumzLFj6
-         uChw2lg4VDkyw1fMCaQlWP3tiyel2InlZRfoUFjbHjqsH2+sUFi5PugWTKBosWZmIjeT
-         dhLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=t9KxxV9NPaarLjUn6WnSeaJ1unQjijG7pUlU5QRc31c=;
-        b=rMGDIlS3Q0xLywYIxenRVtiIjafIYSXsAf5NIqy8MoaWnL3aOfmu2hjyLGCk5E5uBI
-         PiVbkFQc9nQx2iP31NsrCVbSWUid7fgIaSvBrVsiR2YbqoiW7Ow8uOLtiEkW79VZU8g+
-         xrPe8E9OnPPFUzbOtxuGp/UAV3kqhfPRvq+yU71VDnNcglyOToP8bhxr7sc8ewccbsAq
-         JVD21476UqkZqU5K4ZNVFe0vornFGocY/szfKvZicZA4qMcFUOenADbMR3ixe3THHO+x
-         VY5INGocFiSSzV2rB0ut+LIAXGoj9o2XXdHruQBKS/0TEjjHtCSnxIRMWB4NCGOafsC4
-         OQ+w==
-X-Gm-Message-State: AOAM533vOr9F9gJpaGURDaA2cvUIQCMfZNXFLkzfzCIZxvP9Iq3dzqJ8
-        dTiMv+54cCrAyysTSjWe8EZKwB0yW80FgHXbFewCuA==
-X-Google-Smtp-Source: ABdhPJwmnOOxYv5I7CBMV+/A8hb0Ch9gPYppkXgsf55Nobqofhk/HsYU3WHgCMZG16BXcmY0HTddv62MCMTE6GPSIAQ=
-X-Received: by 2002:a05:6638:34a2:b0:32b:7d4f:8932 with SMTP id
- t34-20020a05663834a200b0032b7d4f8932mr13504775jal.317.1652302939471; Wed, 11
- May 2022 14:02:19 -0700 (PDT)
+        Wed, 11 May 2022 17:05:27 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283D322922E;
+        Wed, 11 May 2022 14:05:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652303126; x=1683839126;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fcAVKuqd6YZHzN7purgtSBIoD9bELDVNb4vgy0qU8LA=;
+  b=HxQdqGVMPhXplL8hRLoax5LfcGjF7bU7vpk/oRtT5w8gZFRHHuJ+WPB9
+   SDWmy53D4hLzjUwB6xXB4ERcz3r/+x637r3R5Ax8vdrsQCDCdEOpNFozq
+   tFfMySXrI9Q0hD+dfw2yefWAnumoAr44OYXcA90bbLYq3cgvWHGDIkGno
+   md+dkJs6b2itgzfHS7L8XUVn7lnDJ2Z5LJjVgnFuTXxzZla5CNSLMGOnN
+   iHXwB5uBkiIpmVQ7jS1WfTn3CVrNRJilKs1Rqm+bbXiFEcGHqqp0/YEr1
+   J7EDNVgI7Hp/Wki0tN0e2n3GopNwFJUObsUaOaTLVqaS6QY+WPXfhBcXp
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="251865948"
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="251865948"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 14:05:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="553491065"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 11 May 2022 14:05:21 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1notWK-000JaW-It;
+        Wed, 11 May 2022 21:05:20 +0000
+Date:   Thu, 12 May 2022 05:04:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
+        quic_vpulyala@quicinc.com,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: Re: [v4 2/3] phy: qcom-snps: Add support for overriding phy tuning
+ parameters
+Message-ID: <202205120425.gScyEI7N-lkp@intel.com>
+References: <1652282793-5580-3-git-send-email-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-References: <20220412224348.1038613-1-tansuresh@google.com>
- <20220412224348.1038613-2-tansuresh@google.com> <CAJZ5v0ivNq3aYCEcxPYMosLJCAyWiAnucwOCmRBzkM=sbyPWgQ@mail.gmail.com>
- <CALVARr6v5hcY0Vcf1izPUX-tXNJyyNXBMANbKX4CW9wfRf-pYQ@mail.gmail.com>
- <YmzqrqfVLQ9/4KXp@kroah.com> <CALVARr50MWexNpCf_PoZ4-pdnexiZiibz7Nd0PH+b-EVnBUN6w@mail.gmail.com>
-In-Reply-To: <CALVARr50MWexNpCf_PoZ4-pdnexiZiibz7Nd0PH+b-EVnBUN6w@mail.gmail.com>
-From:   Tanjore Suresh <tansuresh@google.com>
-Date:   Wed, 11 May 2022 14:02:08 -0700
-Message-ID: <CALVARr71u8VD0+zaWbm=6A-1_6gO=bYUm7OM4K5b6kOVz09XOA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] driver core: Support asynchronous driver shutdown
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-nvme <linux-nvme@lists.infradead.org>,
-        Linux PCI <linux-pci@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1652282793-5580-3-git-send-email-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greg
+Hi Krishna,
 
-On Mon, May 2, 2022 at 12:13 PM Tanjore Suresh <tansuresh@google.com> wrote:
->
-> On Sat, Apr 30, 2022 at 12:52 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > A: http://en.wikipedia.org/wiki/Top_post
-> > Q: Were do I find info about this thing called top-posting?
-> > A: Because it messes up the order in which people normally read text.
-> > Q: Why is top-posting such a bad thing?
-> > A: Top-posting.
-> > Q: What is the most annoying thing in e-mail?
-> >
-> > A: No.
-> > Q: Should I include quotations after my reply?
-> >
-> > http://daringfireball.net/2007/07/on_top
-> >
-> > On Fri, Apr 29, 2022 at 11:03:07AM -0700, Tanjore Suresh wrote:
-> > > Rafael,
-> > >
-> > > That is a good observation, however, many of the use cases in data
-> > > centers (deployment of devices in data centers) do not exploit device
-> > > power management. Therefore, I'm not sure that is the right way to
-> > > design this.
-> >
-> > Yes it is, enable device power management and use that interface please.
-> > Devices in data centers should of course be doing the same thing as
-> > everyone else, as it actually saves real money in power costs.  To not
-> > do so is very odd.
-> >
->
-> I guess we are intermixing the  terminology of device power management
-> with shutdown.
-> My second, third reasoning in my previous e-mail, thought it brings
-> out that difference. Maybe not.
-> I will try one more time, my thought process on this one.
->
-> This patch is only for shutdown. The shutdown can be done in a system
-> in various flavors,
-> (this may include a power being pulled from the system components when
-> all the devices
-> are quiescent and it can also be soft shutdown, where power is not
-> removed from the system, but system
-> could be attempting a reboot)
->
-> The device power management allows the device to bring down any
-> devices that may be idle to various power states that
-> device may support in a selective manner & based on the transition
-> allowed by the device. Such a transition initiated by
-> the system can be achieved using the 'dpm' interface for runtime power
-> management (more for extending laptop battery life).
-> It can also be exploited for system sleep models (suspend and resume -
-> where state is preserved and restarted from where it left off
-> --> More applicable for laptops/desktops). That does not mean data
-> center devices cannot exploit, but they worry about slight latency
-> variation in any
-> I/O initiated to any device. Such power management could introduce
-> more latency when it transitions from one state to another.
-> Therefore, the use case is more apt for Laptops, in certain cases
-> desktops in my opinion or understanding.
->
-> The shutdown entry point has been traditionally different and the
-> semantics is that the whole system is going down to a
-> quiescent state and power may be pulled or may not be, IMO, i am
-> seeing both are independent requirements, in my view.
-> Let me know if I am mistaken. I am not sure why we should break the
-> shutdown semantics as understood by driver developers and
-> overload it with dpm requirements?
->
+Thank you for the patch! Perhaps something to improve:
 
-I have not seen additional comments, I request your help
-in moving this further, please. If i have missed something,
-Please let me know.
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on krzk/for-next linus/master v5.18-rc6 next-20220511]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Thanks
-sureshtk
+url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Kurapati/Add-QCOM-SNPS-PHY-overriding-params-support/20220511-232858
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220512/202205120425.gScyEI7N-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/48c46f24873c92d3e16904af9e654962d0b923f1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Krishna-Kurapati/Add-QCOM-SNPS-PHY-overriding-params-support/20220511-232858
+        git checkout 48c46f24873c92d3e16904af9e654962d0b923f1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/phy/qualcomm/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c: In function 'qcom_snps_hsphy_read_override_param_seq':
+>> drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c:541:42: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     541 |         struct override_param_map *cfg = of_device_get_match_data(dev);
+         |                                          ^~~~~~~~~~~~~~~~~~~~~~~~
 
 
+vim +/const +541 drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
 
-> Thanks
-> sureshtk
->
->
-> > thanks,
-> >
-> > greg k-h
+   534	
+   535	static void qcom_snps_hsphy_read_override_param_seq(struct device *dev)
+   536	{
+   537		struct device_node *node = dev->of_node;
+   538		s32 val;
+   539		int ret, i;
+   540		struct qcom_snps_hsphy *hsphy;
+ > 541		struct override_param_map *cfg = of_device_get_match_data(dev);
+   542	
+   543		hsphy = dev_get_drvdata(dev);
+   544	
+   545		for (i = 0; i < ARRAY_SIZE(phy_seq_props); i++) {
+   546			ret = of_property_read_s32(node, phy_seq_props[i], &val);
+   547			if (!ret) {
+   548				dev_dbg(&hsphy->phy->dev, "Read param: %s val: %d\n",
+   549							phy_seq_props[i], val);
+   550				qcom_snps_hsphy_override_param_update_val(cfg[i], val,
+   551							&hsphy->update_seq_cfg[i]);
+   552			}
+   553		}
+   554	}
+   555	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

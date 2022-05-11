@@ -2,188 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0E2752315C
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D46952315F
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236775AbiEKLVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 07:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41096 "EHLO
+        id S231492AbiEKLWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 07:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237381AbiEKLVF (ORCPT
+        with ESMTP id S229459AbiEKLWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 07:21:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC1C07A82E
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:21:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652268063;
+        Wed, 11 May 2022 07:22:36 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F41210896
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:22:34 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1652268153;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eJ1KZyjyXF/tGtlejNex1S6i6BxFqFTF0Dz+yunplNk=;
-        b=LwYjYvQ7XvjvcaRA6xmlgxCB0r3y4GUyAB4E/WuDHYiA3UZCVWt0/ED7x6Nf1S0I+U+Py7
-        i9sC2m0iIzLITPk/898ZcMH7XkZl+JWmVhjx87uk2sJGL5DIZ9UdIYlKJA76XGu0q9H07z
-        Wt49tSsDzgnOTrSt2c1yUf4vh9RT+cA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-445-jfkDCbqkNauI4uUmtMPUAg-1; Wed, 11 May 2022 07:20:55 -0400
-X-MC-Unique: jfkDCbqkNauI4uUmtMPUAg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5FDDA1D32364;
-        Wed, 11 May 2022 11:20:55 +0000 (UTC)
-Received: from starship (unknown [10.40.192.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1D0CC42B943;
-        Wed, 11 May 2022 11:20:52 +0000 (UTC)
-Message-ID: <e6954fea8f5413c9fec0f8777a47aeee7e726d1d.camel@redhat.com>
-Subject: Re: [PATCH v3 03/34] KVM: x86: hyper-v: Add helper to read
- hypercall data for array
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 11 May 2022 14:20:52 +0300
-In-Reply-To: <20220414132013.1588929-4-vkuznets@redhat.com>
-References: <20220414132013.1588929-1-vkuznets@redhat.com>
-         <20220414132013.1588929-4-vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4g56gF9BShwS0CUD8MKwxhjOnNnUm+SpxtifTSrg85c=;
+        b=n33BoqRNDSpMzngZM4rvseNt6pQbR9C5Yh45F/072yryqVb286ZcXiNVokvXFhOUfgmptb
+        6EzB5ZBHFn9HnBlegzLwsDvEZkMgerUq52+UBEXB551+nS8NQ0WCNGBuMsWdhwfKzN0pjM
+        LultSDsuJkjMKcEyMjZLYc/zIaDJjWc=
+From:   Yajun Deng <yajun.deng@linux.dev>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org, Yajun Deng <yajun.deng@linux.dev>
+Subject: [PATCH] sched/rt: fix the case where sched_rt_period_us is non-positive
+Date:   Wed, 11 May 2022 19:21:40 +0800
+Message-Id: <20220511112140.103579-1-yajun.deng@linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-14 at 15:19 +0200, Vitaly Kuznetsov wrote:
-> From: Sean Christopherson <seanjc@google.com>
-> 
-> Move the guts of kvm_get_sparse_vp_set() to a helper so that the code for
-> reading a guest-provided array can be reused in the future, e.g. for
-> getting a list of virtual addresses whose TLB entries need to be flushed.
-> 
-> Opportunisticaly swap the order of the data and XMM adjustment so that
-> the XMM/gpa offsets are bundled together.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/kvm/hyperv.c | 53 +++++++++++++++++++++++++++----------------
->  1 file changed, 33 insertions(+), 20 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index fb716cf919ed..d66c27fd1e8a 100644
-> --- a/arch/x86/kvm/hyperv.c
-> +++ b/arch/x86/kvm/hyperv.c
-> @@ -1758,38 +1758,51 @@ struct kvm_hv_hcall {
->  	sse128_t xmm[HV_HYPERCALL_MAX_XMM_REGISTERS];
->  };
->  
-> -static u64 kvm_get_sparse_vp_set(struct kvm *kvm, struct kvm_hv_hcall *hc,
-> -				 int consumed_xmm_halves,
-> -				 u64 *sparse_banks, gpa_t offset)
-> -{
-> -	u16 var_cnt;
-> -	int i;
->  
-> -	if (hc->var_cnt > 64)
-> -		return -EINVAL;
-> -
-> -	/* Ignore banks that cannot possibly contain a legal VP index. */
-> -	var_cnt = min_t(u16, hc->var_cnt, KVM_HV_MAX_SPARSE_VCPU_SET_BITS);
-> +static int kvm_hv_get_hc_data(struct kvm *kvm, struct kvm_hv_hcall *hc,
-> +			      u16 orig_cnt, u16 cnt_cap, u64 *data,
-> +			      int consumed_xmm_halves, gpa_t offset)
-> +{
-> +	/*
-> +	 * Preserve the original count when ignoring entries via a "cap", KVM
-> +	 * still needs to validate the guest input (though the non-XMM path
-> +	 * punts on the checks).
-> +	 */
-> +	u16 cnt = min(orig_cnt, cnt_cap);
-> +	int i, j;
->  
->  	if (hc->fast) {
->  		/*
->  		 * Each XMM holds two sparse banks, but do not count halves that
->  		 * have already been consumed for hypercall parameters.
->  		 */
-> -		if (hc->var_cnt > 2 * HV_HYPERCALL_MAX_XMM_REGISTERS - consumed_xmm_halves)
-> +		if (orig_cnt > 2 * HV_HYPERCALL_MAX_XMM_REGISTERS - consumed_xmm_halves)
->  			return HV_STATUS_INVALID_HYPERCALL_INPUT;
-> -		for (i = 0; i < var_cnt; i++) {
-> -			int j = i + consumed_xmm_halves;
-> +
-> +		for (i = 0; i < cnt; i++) {
-> +			j = i + consumed_xmm_halves;
->  			if (j % 2)
-> -				sparse_banks[i] = sse128_hi(hc->xmm[j / 2]);
-> +				data[i] = sse128_hi(hc->xmm[j / 2]);
->  			else
-> -				sparse_banks[i] = sse128_lo(hc->xmm[j / 2]);
-> +				data[i] = sse128_lo(hc->xmm[j / 2]);
->  		}
->  		return 0;
->  	}
->  
-> -	return kvm_read_guest(kvm, hc->ingpa + offset, sparse_banks,
-> -			      var_cnt * sizeof(*sparse_banks));
-> +	return kvm_read_guest(kvm, hc->ingpa + offset, data,
-> +			      cnt * sizeof(*data));
-> +}
-> +
-> +static u64 kvm_get_sparse_vp_set(struct kvm *kvm, struct kvm_hv_hcall *hc,
-> +				 u64 *sparse_banks, int consumed_xmm_halves,
-> +				 gpa_t offset)
-> +{
-> +	if (hc->var_cnt > 64)
-> +		return -EINVAL;
-> +
-> +	/* Cap var_cnt to ignore banks that cannot contain a legal VP index. */
-> +	return kvm_hv_get_hc_data(kvm, hc, hc->var_cnt, KVM_HV_MAX_SPARSE_VCPU_SET_BITS,
-> +				  sparse_banks, consumed_xmm_halves, offset);
->  }
->  
->  static inline int hv_tlb_flush_ring_free(struct kvm_vcpu_hv *hv_vcpu,
-> @@ -1937,7 +1950,7 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->  		if (!hc->var_cnt)
->  			goto ret_success;
->  
-> -		if (kvm_get_sparse_vp_set(kvm, hc, 2, sparse_banks,
-> +		if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks, 2,
->  					  offsetof(struct hv_tlb_flush_ex,
->  						   hv_vp_set.bank_contents)))
->  			return HV_STATUS_INVALID_HYPERCALL_INPUT;
-> @@ -2048,7 +2061,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->  		if (!hc->var_cnt)
->  			goto ret_success;
->  
-> -		if (kvm_get_sparse_vp_set(kvm, hc, 1, sparse_banks,
-> +		if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks, 1,
->  					  offsetof(struct hv_send_ipi_ex,
->  						   vp_set.bank_contents)))
->  			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+The proc_dointvec() in sched_rt_handler() is for integer, but
+sysctl_sched_rt_period is a unsigned integer. sched_rt_handler() would
+cover a non-positive number to positive number, so both proc_dointvec()
+and sched_rt_global_validate() aren't return error when we set a
+non-positive number.
 
-I don't see anything wrong, but I don't know this area that well, so I might have
-missed something.
+Use proc_dointvec_minmax() instead of proc_dointvec(), and add extra
+for sched_rt_period_us/sched_rt_runtime_us/sched_rr_timeslice_ms.
 
-Best regards,
-	Maxim Levitsky
+Fixes: 391e43da797a ("sched: Move all scheduler bits into kernel/sched/")
+Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+---
+ kernel/sched/rt.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
+diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+index b491a0f8c25d..f20389aa6731 100644
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -37,6 +37,7 @@ static struct ctl_table sched_rt_sysctls[] = {
+ 		.maxlen         = sizeof(unsigned int),
+ 		.mode           = 0644,
+ 		.proc_handler   = sched_rt_handler,
++		.extra1		= SYSCTL_ONE,
+ 	},
+ 	{
+ 		.procname       = "sched_rt_runtime_us",
+@@ -44,6 +45,8 @@ static struct ctl_table sched_rt_sysctls[] = {
+ 		.maxlen         = sizeof(int),
+ 		.mode           = 0644,
+ 		.proc_handler   = sched_rt_handler,
++		.extra1		= SYSCTL_NEG_ONE,
++		.extra2		= (void *)&sysctl_sched_rt_period,
+ 	},
+ 	{
+ 		.procname       = "sched_rr_timeslice_ms",
+@@ -51,6 +54,7 @@ static struct ctl_table sched_rt_sysctls[] = {
+ 		.maxlen         = sizeof(int),
+ 		.mode           = 0644,
+ 		.proc_handler   = sched_rr_handler,
++		.extra1		= SYSCTL_ONE,
+ 	},
+ 	{}
+ };
+@@ -2959,9 +2963,6 @@ static int sched_rt_global_constraints(void)
+ #ifdef CONFIG_SYSCTL
+ static int sched_rt_global_validate(void)
+ {
+-	if (sysctl_sched_rt_period <= 0)
+-		return -EINVAL;
+-
+ 	if ((sysctl_sched_rt_runtime != RUNTIME_INF) &&
+ 		((sysctl_sched_rt_runtime > sysctl_sched_rt_period) ||
+ 		 ((u64)sysctl_sched_rt_runtime *
+@@ -2992,7 +2993,7 @@ static int sched_rt_handler(struct ctl_table *table, int write, void *buffer,
+ 	old_period = sysctl_sched_rt_period;
+ 	old_runtime = sysctl_sched_rt_runtime;
+ 
+-	ret = proc_dointvec(table, write, buffer, lenp, ppos);
++	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+ 
+ 	if (!ret && write) {
+ 		ret = sched_rt_global_validate();
+@@ -3027,14 +3028,13 @@ static int sched_rr_handler(struct ctl_table *table, int write, void *buffer,
+ 	static DEFINE_MUTEX(mutex);
+ 
+ 	mutex_lock(&mutex);
+-	ret = proc_dointvec(table, write, buffer, lenp, ppos);
++	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+ 	/*
+ 	 * Make sure that internally we keep jiffies.
+ 	 * Also, writing zero resets the timeslice to default:
+ 	 */
+ 	if (!ret && write) {
+ 		sched_rr_timeslice =
+-			sysctl_sched_rr_timeslice <= 0 ? RR_TIMESLICE :
+ 			msecs_to_jiffies(sysctl_sched_rr_timeslice);
+ 	}
+ 	mutex_unlock(&mutex);
+-- 
+2.25.1
 

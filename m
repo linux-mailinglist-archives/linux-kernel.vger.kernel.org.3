@@ -2,105 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87725522F98
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3A45522F9E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbiEKJjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 05:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58104 "EHLO
+        id S230034AbiEKJju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 05:39:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242976AbiEKJjC (ORCPT
+        with ESMTP id S233551AbiEKJjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 05:39:02 -0400
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573F860B8B;
-        Wed, 11 May 2022 02:38:27 -0700 (PDT)
-Received: by mail-wr1-f43.google.com with SMTP id h16so1443013wrb.2;
-        Wed, 11 May 2022 02:38:27 -0700 (PDT)
+        Wed, 11 May 2022 05:39:18 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB255400E
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:39:14 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id x88so1737700pjj.1
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:39:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q9QdO95hB/1a07szG5DQddpKrWRTLifgbJv4wAyhbh8=;
+        b=pMf9S1yXYeBoeprJoZzPWwFGJl0HKc3tOJr6+RpuubLn7bv3HAf39sm6vrkj0d1Dhs
+         QTNj3odRa1DyTvvq0E8atDB4dbMBjYI0M4rIwnjiZUcOWxft1uFDlXyPFC9TSc1LooZM
+         jN+VbwtqCcxBe0mJ0htdB6T7GBryn8JORIWMNn63XUSPSSB7Mrh9WR5JdLLMlLbbycC0
+         /Q5zAZcZhlSLdK/sgoK7dZuqyb1+G/Np7Fpk0fyx/hkF+SdqPV4JGWwkxKOYuO+s3AQN
+         Rbv/ocVNxVpnE8J9JdYYd2jaV6O22ZZbzazz1o9xfdXhWwUDEE7ARaDHgLPFXcMuDxE5
+         mqiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=lzACg4GskWgzpiC8FnJ6syyhmXEEgXE0lIGs/KbCq9o=;
-        b=jtKfFP1lCqOriGDRrs8EeuSS2fvWnHaFJLntOm0zScTV/rPmrps6rxl3v72KDTi7LO
-         vEh9zC+0vOsL3pEwj0192VQcqij+iraKlP01ZaMcaoW6JRO/IOk32pTaTpxNLqegF0+R
-         WEOEdObBj/buvrnpFVkee+nfPmdtk3D+fkdhRVr5fWpjWcVdMbRpcKR6fRzF+s0M/tt+
-         PD00mRDywuk+RjbH+mh2icRjJXpFk6spKIkXGyWNLyOG1R0vK+vjzuSdIux5Vxv17e1i
-         me9gnlL/jNI2xTosySaSv7087/YcyppdBeo51tZ4z8lrHlbahZNZvYj5pBEorz9Hha3c
-         dXGw==
-X-Gm-Message-State: AOAM531PApvYR3wH8V19cW7kGH/DK8AzoptiEUGpS2SMtTj+ZX2NW3zP
-        X0AaK8wyApdlcVdqe0r9Pf4NtdwHnwE=
-X-Google-Smtp-Source: ABdhPJwoJ97JtoBiACfuZa0lRu3jF4CuA/9qZMyWjZsGxIHdriTf72Obw5v7nF1vuabJn1bt50PEUw==
-X-Received: by 2002:a5d:4b48:0:b0:207:9abd:792a with SMTP id w8-20020a5d4b48000000b002079abd792amr11189756wrs.118.1652261905757;
-        Wed, 11 May 2022 02:38:25 -0700 (PDT)
-Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
-        by smtp.gmail.com with ESMTPSA id e8-20020a5d5308000000b0020c5253d8c2sm1209516wrv.14.2022.05.11.02.38.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 02:38:25 -0700 (PDT)
-Message-ID: <cc73ed8b-b51f-59bc-ef4b-5f7e4ab26828@kernel.org>
-Date:   Wed, 11 May 2022 11:38:24 +0200
+        bh=Q9QdO95hB/1a07szG5DQddpKrWRTLifgbJv4wAyhbh8=;
+        b=yUwQsBcKf9efYR6K5t0iiinxzQUEAh5n93BiLb0bSksoC3wlhdLBsL4291emDvoHMm
+         ZbuqoH0GEMoyzZqBRCAL+pExqKLZW+u5ou5v59144l000nvSITH2MB39sE2sBJICT2YV
+         z10xAoLjERsbFowdxroXTJXGsp5iF+kaXHDXyVL++h+5+FXGEE/Fh3uCelWOlAcKyT1C
+         5g4hKmZwl50/6tnWgHEbYG1tHT7y1EDH9nau+pKHvSYfhXrylhFaXziYigYk9CLR9m4z
+         Y8fiJ7/Enh7fiEBDwbx9l7DHtvWIqhO6meueQQYUTL6Vr4cIFEgpi9sVBlmushBa4x4V
+         X8MA==
+X-Gm-Message-State: AOAM5313BtUgbAr8HUx9679fmo+Q0KmH6B8WeiWCvKV4shh3fvcMWZo5
+        18SYbFXdvYJIEUFAmdQNk1o+cA==
+X-Google-Smtp-Source: ABdhPJy3C+Y7SngriFVhDdq5WFkO5tqQiSkGREQ6wh9fbEkWgxLH3aMm/RVoKi/XdKFwdTWAwnNgVw==
+X-Received: by 2002:a17:90b:4ad1:b0:1dc:96fa:69aa with SMTP id mh17-20020a17090b4ad100b001dc96fa69aamr4404870pjb.189.1652261954413;
+        Wed, 11 May 2022 02:39:14 -0700 (PDT)
+Received: from C02F52LSML85.bytedance.net ([139.177.225.241])
+        by smtp.gmail.com with ESMTPSA id k4-20020aa790c4000000b0050dc76281cdsm1159834pfk.167.2022.05.11.02.39.06
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 11 May 2022 02:39:14 -0700 (PDT)
+From:   Feng zhou <zhoufeng.zf@bytedance.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, jolsa@kernel.org, davemarchevsky@fb.com,
+        joannekoong@fb.com, geliang.tang@suse.com
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        songmuchun@bytedance.com, wangdongdong.6@bytedance.com,
+        cong.wang@bytedance.com, zhouchengming@bytedance.com,
+        zhoufeng.zf@bytedance.com, yosryahmed@google.com
+Subject: [PATCH bpf-next v2 0/2] Introduce access remote cpu elem support in BPF percpu map
+Date:   Wed, 11 May 2022 17:38:52 +0800
+Message-Id: <20220511093854.411-1-zhoufeng.zf@bytedance.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH -next] tty: serial: max3100: Add missing
- uart_unregister_driver in max3100_probe
-Content-Language: en-US
-To:     Zheng Bin <zhengbin13@huawei.com>, gregkh@linuxfoundation.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     gaochao49@huawei.com
-References: <20220511071523.3128725-1-zhengbin13@huawei.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220511071523.3128725-1-zhengbin13@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11. 05. 22, 9:15, Zheng Bin wrote:
-> max3100_probe misses a call uart_unregister_driver in error path,
-> this patch fixes that.
+From: Feng Zhou <zhoufeng.zf@bytedance.com>
 
-I believe, that's intentional. Cf. uart_driver_registered.
+Trace some functions, such as enqueue_task_fair, need to access the
+corresponding cpu, not the current cpu, and bpf_map_lookup_elem percpu map
+cannot do it. So add bpf_map_lookup_percpu_elem to accomplish it for
+percpu_array_map, percpu_hash_map, lru_percpu_hash_map.
 
-> Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
-> ---
->   drivers/tty/serial/max3100.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/max3100.c b/drivers/tty/serial/max3100.c
-> index 0b5f21fbb53d..6d34ca2a3f7b 100644
-> --- a/drivers/tty/serial/max3100.c
-> +++ b/drivers/tty/serial/max3100.c
-> @@ -752,6 +752,7 @@ static int max3100_probe(struct spi_device *spi)
->   		if (!max3100s[i])
->   			break;
->   	if (i == MAX_MAX3100) {
-> +		uart_unregister_driver(&max3100_uart_driver);
->   		dev_warn(&spi->dev, "too many MAX3100 chips\n");
->   		mutex_unlock(&max3100s_lock);
->   		return -ENOMEM;
-> @@ -759,6 +760,7 @@ static int max3100_probe(struct spi_device *spi)
-> 
->   	max3100s[i] = kzalloc(sizeof(struct max3100_port), GFP_KERNEL);
->   	if (!max3100s[i]) {
-> +		uart_unregister_driver(&max3100_uart_driver);
->   		dev_warn(&spi->dev,
->   			 "kmalloc for max3100 structure %d failed!\n", i);
->   		mutex_unlock(&max3100s_lock);
-> --
-> 2.31.1
-> 
+v1->v2: Addressed comments from Alexei Starovoitov.
+- add a selftest for bpf_map_lookup_percpu_elem.
 
+Feng Zhou (2):
+  bpf: add bpf_map_lookup_percpu_elem for percpu map
+  selftests/bpf: add test case for bpf_map_lookup_percpu_elem
+
+ include/linux/bpf.h                           |  2 +
+ include/uapi/linux/bpf.h                      |  9 ++++
+ kernel/bpf/arraymap.c                         | 15 ++++++
+ kernel/bpf/core.c                             |  1 +
+ kernel/bpf/hashtab.c                          | 32 +++++++++++
+ kernel/bpf/helpers.c                          | 18 +++++++
+ kernel/bpf/verifier.c                         | 17 +++++-
+ kernel/trace/bpf_trace.c                      |  2 +
+ tools/include/uapi/linux/bpf.h                |  9 ++++
+ .../bpf/prog_tests/map_lookup_percpu_elem.c   | 46 ++++++++++++++++
+ .../bpf/progs/test_map_lookup_percpu_elem.c   | 54 +++++++++++++++++++
+ 11 files changed, 203 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
 
 -- 
-js
-suse labs
+2.20.1
+

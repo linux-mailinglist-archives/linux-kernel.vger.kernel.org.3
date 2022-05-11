@@ -2,85 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FFEB522FB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE76522FAB
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:43:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233968AbiEKJn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 05:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41034 "EHLO
+        id S235719AbiEKJnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 05:43:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243952AbiEKJmI (ORCPT
+        with ESMTP id S229892AbiEKJnG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 05:42:08 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0162113D1F
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:41:12 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id bv19so2861058ejb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:41:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=m0rKCtYWChKn67KUygwJk8Gq46fVsoVyqlFOLEWYRWU=;
-        b=TeWleuC25TI3U2UqoBqmnhTyrGAxfabSM2EnxHHqcAMjy/gpq8WgbWvjWWzenqfJvI
-         KhChVKX5sRQfrmarq20QMbTDOWenRR6knwUO/Zz+ESlF9djucufVKCCkjHf+tY9/d5Nq
-         7T8MhctInyM0LXJGblFoBhch7p9zgThu5sLEU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m0rKCtYWChKn67KUygwJk8Gq46fVsoVyqlFOLEWYRWU=;
-        b=JdDJUcGhI7DX915yi5P33CIBEs3aIWMqHn+dmpLs1NKBJE9TBy8y77IxR1VxgNGza4
-         SRb1cH0MtGUxTf8ZDi/4zxbXICexX1Dw07kc3Zbtwesg6LJqZdCI6V16Pgspk9CbQXfA
-         pXv8dSsW6veOHgpifbT32lD3ZfP0HBWoEyPbwWo1+XvWD4XsBV8MQblyC0Uq6B1mGzub
-         BLRsDGoRWZ4vIPU/BybBJyA8X9GKkirRNREk8U136GWYZSd8iz9iAoPTNnetfvhNW89+
-         bnw65Hli6TDOO32Hyp2RuuX4obOIGwYwdh5gSuBN7mh3VRIStPTfBy4ri66WelDkGWYc
-         brzg==
-X-Gm-Message-State: AOAM530kwLh6FtkFAbXFo6zcj4JUZisR4EEIJ5If8Yo3+Y4LRYg/YxOy
-        Dqm9krbPHO3YOfqyYHrmWDCOQ+otIvCND9gRmoe5Wg==
-X-Google-Smtp-Source: ABdhPJzEs5wOirJoUjRohPu2Nu5O2fRdKW703nAvdWb0P4NRYWnqd2+VtbPGyOZktRLlt3x5BXJrdDXXwJI6pWqUb2U=
-X-Received: by 2002:a17:906:8982:b0:6f3:95f4:4adf with SMTP id
- gg2-20020a170906898200b006f395f44adfmr23250807ejc.524.1652262070760; Wed, 11
- May 2022 02:41:10 -0700 (PDT)
+        Wed, 11 May 2022 05:43:06 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9579F13F1CE;
+        Wed, 11 May 2022 02:43:05 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 650B81FB;
+        Wed, 11 May 2022 02:43:05 -0700 (PDT)
+Received: from lpieralisi (unknown [10.57.1.148])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6E5163F73D;
+        Wed, 11 May 2022 02:43:01 -0700 (PDT)
+Date:   Wed, 11 May 2022 10:42:57 +0100
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>, linux-pci@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH v5 3/6] PCI: rcar-gen2: Add RZ/N1 SOCs family compatible
+ string
+Message-ID: <YnuFIfcq1Wg9Nh1L@lpieralisi>
+References: <20220429134143.628428-1-herve.codina@bootlin.com>
+ <20220429134143.628428-5-herve.codina@bootlin.com>
 MIME-Version: 1.0
-References: <20220502102521.22875-1-dharamhans87@gmail.com>
- <YnLRnR3Xqu0cYPdb@redhat.com> <CACUYsyEsRph+iFC_fj3F6Ceqhq7NCTuFPH3up8R6C+_bGHktZg@mail.gmail.com>
- <YnPI6f2fRZUXbCFP@redhat.com> <882fbf7f-a56b-1e82-a158-9e2186ec7c4c@ddn.com> <YnQsizX5Q1sMnlI2@redhat.com>
-In-Reply-To: <YnQsizX5Q1sMnlI2@redhat.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Wed, 11 May 2022 11:40:59 +0200
-Message-ID: <CAJfpegseGaWHkjdQj7XiR=TQNFpPZzDF_rTXces2oRz=x0N7OA@mail.gmail.com>
-Subject: Re: [PATCH v4 0/3] FUSE: Implement atomic lookup + open/create
-To:     Vivek Goyal <vgoyal@redhat.com>
-Cc:     Bernd Schubert <bschubert@ddn.com>,
-        Dharmendra Hans <dharamhans87@gmail.com>,
-        linux-fsdevel@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220429134143.628428-5-herve.codina@bootlin.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 5 May 2022 at 21:59, Vivek Goyal <vgoyal@redhat.com> wrote:
+On Fri, Apr 29, 2022 at 03:41:40PM +0200, Herve Codina wrote:
+> Add the Renesas RZ/N1 SOCs family support to the Renesas R-Car Gen2
+> PCI bridge driver.
+> 
+> The Renesas RZ/N1 SOCs internal PCI bridge is compatible with the one
+> available in the R-Car Gen2 family.
+> 
+> Tested with the RZ/N1D (R9A06G032) SOC.
+> 
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  drivers/pci/controller/pci-rcar-gen2.c | 1 +
+>  1 file changed, 1 insertion(+)
 
-> Oh, I have no issues with the intent. I will like to see cut in network
-> traffic too (if we can do this without introducing problems). My primary
-> interest is that this kind of change should benefit virtiofs as well.
+Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 
-One issue with that appears to be checking permissions.   AFAIU this
-patchset only enables the optimization if default_permissions is
-turned off (i.e. all permission checking is done by the server).  But
-virtiofs uses the default_permissions model.
-
-I'm not quite sure about this limitation, guessing that it's related
-to the fact that the permissions may be stale at the time of checking?
+I assume this series will be picked up by platforms maintainers.
 
 Thanks,
-Miklos
+Lorenzo
+
+> diff --git a/drivers/pci/controller/pci-rcar-gen2.c b/drivers/pci/controller/pci-rcar-gen2.c
+> index 35804ea394fd..839695791757 100644
+> --- a/drivers/pci/controller/pci-rcar-gen2.c
+> +++ b/drivers/pci/controller/pci-rcar-gen2.c
+> @@ -328,6 +328,7 @@ static const struct of_device_id rcar_pci_of_match[] = {
+>  	{ .compatible = "renesas,pci-r8a7791", },
+>  	{ .compatible = "renesas,pci-r8a7794", },
+>  	{ .compatible = "renesas,pci-rcar-gen2", },
+> +	{ .compatible = "renesas,pci-rzn1", },
+>  	{ },
+>  };
+>  
+> -- 
+> 2.35.1
+> 

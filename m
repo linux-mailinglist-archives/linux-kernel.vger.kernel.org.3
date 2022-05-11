@@ -2,120 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CFB6522EDE
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D67522EE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233005AbiEKI7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 04:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40308 "EHLO
+        id S230113AbiEKJBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 05:01:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235806AbiEKI7G (ORCPT
+        with ESMTP id S240057AbiEKJB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 04:59:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA2421238BA
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 01:59:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652259542;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yoGeyphSepardEf41QcL1JLghov0W4AMX9bIl+aH1nM=;
-        b=WRyseyoDqfKfH9LTuVI0tdnOZAT8B6X5UFmTK0KxsV1FxnMe3Uh7j1gnGlAQZYTO5sXyY/
-        eUdXi57+WibhXd7UyuDNSvbwBY3gZbfngptZ1KtwpYg8dDtWjkPipr0tWVAmk48EPpbsYq
-        6shUKbWmVCExGh1hZFRREgVozwXN/DY=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-131-mWHAn0IWOc-qbViinQxNMA-1; Wed, 11 May 2022 04:58:58 -0400
-X-MC-Unique: mWHAn0IWOc-qbViinQxNMA-1
-Received: by mail-lf1-f70.google.com with SMTP id n3-20020ac242c3000000b00473d8af3a0cso548304lfl.21
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 01:58:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yoGeyphSepardEf41QcL1JLghov0W4AMX9bIl+aH1nM=;
-        b=BPsWSZ2LfAOXi0y3ehOo2S4ydSSsBA0q/FEwQnTd0TLVItYHq7klChqSCOtwwd1jyN
-         heTZF4qGtXBM5821yS1T6bTdYWQq9GlSfYxpZ9NunYsWCKZgCrqKz/F/Dvyz7yCdk5+C
-         XxzwnxGZSkwyoEmDTDmsnJRRLcxgkJQ6g6MgB5rw/L4mDNYiMwfD1THtCMY93yvCA3m7
-         sYsZrqngg7bQn9F3ZFP5RGDgK/Pg6NRMOU1oSfeblLgv2H5yW3DpdOmkh6/WFqTeJwhf
-         IPLB0e7BQscgAJAhSf8oLlFiwKMglGEP40EPqa3vhzCv23d7zOxgtKPQqQ6O/zZiMEuK
-         9psw==
-X-Gm-Message-State: AOAM530i8H3DNy8bXcpwox80ZDN3EtjMYdKO3RLh2B9QKF5ZTyf5cLyd
-        dvo9bcwMgfRMPUyauHoMEYD6iup5pGdPjxzGaFDqNnhpiCI8HvXOjzEDOGiPV5VrEQwIxXGjpNP
-        LbFpT/HKVwetk5qLaW8zgAT7AxD7vv9Rx2Jf4NiLI
-X-Received: by 2002:ac2:4e14:0:b0:474:1f4d:9b86 with SMTP id e20-20020ac24e14000000b004741f4d9b86mr12432602lfr.257.1652259536940;
-        Wed, 11 May 2022 01:58:56 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxhoUKK046Hk4wwh632lBSQIvz0Gb2nt3PwbE+4jQq+SUbuyBn9aimQzYyODOcHcNl99FU4YVjonRabwAYO/Xg=
-X-Received: by 2002:ac2:4e14:0:b0:474:1f4d:9b86 with SMTP id
- e20-20020ac24e14000000b004741f4d9b86mr12432585lfr.257.1652259536769; Wed, 11
- May 2022 01:58:56 -0700 (PDT)
+        Wed, 11 May 2022 05:01:29 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B7A3525B;
+        Wed, 11 May 2022 02:01:22 -0700 (PDT)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24B6N7Xw012575;
+        Wed, 11 May 2022 05:01:14 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3fwnp5y35m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 May 2022 05:01:13 -0400
+Received: from m0167089.ppops.net (m0167089.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24B8qnYN025411;
+        Wed, 11 May 2022 05:01:12 -0400
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3fwnp5y35f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 May 2022 05:01:12 -0400
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 24B91BY9002624
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 11 May 2022 05:01:11 -0400
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Wed, 11 May 2022 05:01:09 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Wed, 11 May 2022 05:01:09 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Wed, 11 May 2022 05:01:09 -0400
+Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.132])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 24B90wqT026078;
+        Wed, 11 May 2022 05:01:00 -0400
+From:   Antoniu Miclaus <antoniu.miclaus@analog.com>
+To:     <jic23@kernel.org>, <linux-iio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Antoniu Miclaus <antoniu.miclaus@analog.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH v2] iio: freq: admv1014: Fix warning about dubious x & !y and improve readability
+Date:   Wed, 11 May 2022 12:00:06 +0300
+Message-ID: <20220511090006.90502-1-antoniu.miclaus@analog.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220507071954.14455-1-jasowang@redhat.com> <20220507071954.14455-7-jasowang@redhat.com>
- <20220510072451-mutt-send-email-mst@kernel.org> <CACGkMEvWFyEqeeXYEmbU4TWtnj9Ku6J7jLK_7MueuFvpR7FiGg@mail.gmail.com>
- <87r150bi0d.fsf@redhat.com>
-In-Reply-To: <87r150bi0d.fsf@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 11 May 2022 16:58:45 +0800
-Message-ID: <CACGkMEtPk9P4KhJ5wTOLj9CZoKDx9-X_5uLRVBag692x4s9SrA@mail.gmail.com>
-Subject: Re: [PATCH V4 6/9] virtio-ccw: implement synchronize_cbs()
-To:     Cornelia Huck <cohuck@redhat.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        eperezma <eperezma@redhat.com>, Cindy Lu <lulu@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: xr_h9GcanLM3thx0wB7n_-ynn5HFuU2r
+X-Proofpoint-ORIG-GUID: t2xRcMaxgyXEj3q-LloLDcjcbGdqMa5Q
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-11_02,2022-05-10_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 adultscore=0 phishscore=0 spamscore=0 mlxscore=0
+ suspectscore=0 priorityscore=1501 impostorscore=0 mlxlogscore=794
+ clxscore=1011 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2205110040
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 4:17 PM Cornelia Huck <cohuck@redhat.com> wrote:
->
-> On Wed, May 11 2022, Jason Wang <jasowang@redhat.com> wrote:
->
-> > On Tue, May 10, 2022 at 7:28 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >>
-> >> On Sat, May 07, 2022 at 03:19:51PM +0800, Jason Wang wrote:
-> >> > @@ -1106,6 +1130,7 @@ static void virtio_ccw_int_handler(struct ccw_device *cdev,
-> >> >                       vcdev->err = -EIO;
-> >> >       }
-> >> >       virtio_ccw_check_activity(vcdev, activity);
-> >> > +     read_lock_irqsave(&vcdev->irq_lock, flags);
-> >> >       for_each_set_bit(i, indicators(vcdev),
-> >> >                        sizeof(*indicators(vcdev)) * BITS_PER_BYTE) {
-> >> >               /* The bit clear must happen before the vring kick. */
-> >>
-> >> Cornelia sent a lockdep trace on this.
-> >>
-> >> Basically I think this gets the irqsave/restore logic wrong.
-> >> It attempts to disable irqs in the handler (which is an interrupt
-> >> anyway).
-> >
-> > The reason I use irqsave/restore is that it can be called from process
-> > context (if I was not wrong), e.g from io_subchannel_quiesce().
->
-> io_subchannel_quiesce() should disable interrupts, though? Otherwise, it
-> would be a bug.
+The warning comes from __BF_FIELD_CHECK()
+specifically
 
-Right, it was protected by a spin_lock_irq(), but I can see other
-cdev->handler() in e.g device_fsm.c, the irq status is not obvious, do
-they have the same assumption which IRQ is disabled?
+BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?		\
+		 ~((_mask) >> __bf_shf(_mask)) & (_val) : 0, \
+		 _pfx "value too large for the field"); \
 
-Thanks
+The code was using !(enum value) which is not particularly easy to follow
+so replace that with explicit matching and use of ? 0 : 1; or ? 1 : 0;
+to improve readability.
 
->
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+---
+changes in v2:
+ - fix the logic for the input mode set bits
+ drivers/iio/frequency/admv1014.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/iio/frequency/admv1014.c b/drivers/iio/frequency/admv1014.c
+index a7994f8e6b9b..1aac5665b5de 100644
+--- a/drivers/iio/frequency/admv1014.c
++++ b/drivers/iio/frequency/admv1014.c
+@@ -700,8 +700,10 @@ static int admv1014_init(struct admv1014_state *st)
+ 			 ADMV1014_DET_EN_MSK;
+ 
+ 	enable_reg = FIELD_PREP(ADMV1014_P1DB_COMPENSATION_MSK, st->p1db_comp ? 3 : 0) |
+-		     FIELD_PREP(ADMV1014_IF_AMP_PD_MSK, !(st->input_mode)) |
+-		     FIELD_PREP(ADMV1014_BB_AMP_PD_MSK, st->input_mode) |
++		     FIELD_PREP(ADMV1014_IF_AMP_PD_MSK,
++				(st->input_mode == ADMV1014_IF_MODE) ? 0 : 1) |
++		     FIELD_PREP(ADMV1014_BB_AMP_PD_MSK,
++				(st->input_mode == ADMV1014_IF_MODE) ? 1 : 0) |
+ 		     FIELD_PREP(ADMV1014_DET_EN_MSK, st->det_en);
+ 
+ 	return __admv1014_spi_update_bits(st, ADMV1014_REG_ENABLE, enable_reg_msk, enable_reg);
+-- 
+2.36.1
 

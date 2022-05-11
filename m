@@ -2,56 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6EEC52355A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B14552354B
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244596AbiEKOZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 10:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53198 "EHLO
+        id S244527AbiEKOW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 10:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232399AbiEKOZT (ORCPT
+        with ESMTP id S232954AbiEKOW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 10:25:19 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C9963394
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:25:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=RrsRwnufM8aJb8X9Do0ueNVFWhI9Rg8k/jxvL6pTy3A=; b=vnzOmGsJ8JHF5tstWbXoHMfj1B
-        yet9pcHyTbhthoPq81ecsWA4MmEu0qPUOXOm3kD0AxKaRrUBfYz+kzBvrzC1xr3a7PuvUDZ8YQ1I7
-        2QxmPAu3g8eilLhw3+nFUiTgD4DRE5IoPiuYuYIk4O8PvR3XuWFldF5aCMIUNEHPEmQ6rc4ScgYTF
-        aBYHYUzEyEUL0+NQNN5TgWP+vBQ5UlioCreu9ADuqI0GUHTcZPeGDJ3yGQtdr+s2RY1DNyNJqLtqs
-        oP2UGPL9aASxNV1DvWesK4gvE5ug7avOO0hskbN83R3pkSzHWLOVLHe7TNtWi5fadrvLfMypH/Xnk
-        cFd8s/Sw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nonH5-005VvM-LM; Wed, 11 May 2022 14:25:11 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 85EEE300859;
-        Wed, 11 May 2022 16:25:09 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 2FE7C203C276F; Wed, 11 May 2022 16:25:09 +0200 (CEST)
-Message-ID: <20220511142345.354695274@infradead.org>
-User-Agent: quilt/0.66
-Date:   Wed, 11 May 2022 16:20:42 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     x86@kernel.org, kan.liang@linux.intel.com, eranian@google.com
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org
-Subject: [PATCH 5/5] perf/x86: Add a x86_pmu::limit_period static_call
-References: <20220511142037.353492804@infradead.org>
+        Wed, 11 May 2022 10:22:26 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0255E62CFF;
+        Wed, 11 May 2022 07:22:25 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD59EED1;
+        Wed, 11 May 2022 07:22:24 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 24B343F66F;
+        Wed, 11 May 2022 07:22:23 -0700 (PDT)
+Date:   Wed, 11 May 2022 15:22:20 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
+        Sudeep Holla <sudeep.holla@arm.com>, Dietmar.Eggemann@arm.com,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Robert Moore <robert.moore@intel.com>,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        devel@acpica.org
+Subject: Re: [PATCH v1 2/5] ACPI: bus: Set CPPC _OSC bits for all and when
+ CPPC_LIB is supported
+Message-ID: <20220511142220.sjfhikuf6fydnrkb@bogus>
+References: <20220511134559.1466925-1-pierre.gondois@arm.com>
+ <20220511134559.1466925-2-pierre.gondois@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511134559.1466925-2-pierre.gondois@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,44 +50,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid a branch and indirect call.
+On Wed, May 11, 2022 at 03:45:56PM +0200, Pierre Gondois wrote:
+> The _OSC method allows the OS and firmware to communicate about
+> supported features/capabitlities. It also allows the OS to take
+> control of some features.
+> 
+> In ACPI 6.4, s6.2.11.2 Platform-Wide OSPM Capabilities, the CPPC
+> (resp. v2) bit should be set by the OS if it 'supports controlling
+> processor performance via the interfaces described in the _CPC
+> object'.
+> 
+> The OS supports CPPC and parses the _CPC object only if
+> CONFIG_ACPI_CPPC_LIB is set. Replace the x86 specific
+> boot_cpu_has(X86_FEATURE_HWP) dynamic check with an arch
+> generic CONFIG_ACPI_CPPC_LIB build-time check.
+> 
+> Note:
+> CONFIG_X86_INTEL_PSTATE selects CONFIG_ACPI_CPPC_LIB.
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/x86/events/core.c |    9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+While this is work as per the spec, by not sure what kind of ACPI firmware are
+in the wild. So be prepared to relax/constrain to original feature check
+for x86, unfortunate but may be needed.
 
---- a/arch/x86/events/core.c
-+++ b/arch/x86/events/core.c
-@@ -72,8 +72,9 @@ DEFINE_STATIC_CALL_NULL(x86_pmu_add,  *x
- DEFINE_STATIC_CALL_NULL(x86_pmu_del,  *x86_pmu.del);
- DEFINE_STATIC_CALL_NULL(x86_pmu_read, *x86_pmu.read);
- 
--DEFINE_STATIC_CALL_NULL(x86_pmu_set_period, *x86_pmu.set_period);
--DEFINE_STATIC_CALL_NULL(x86_pmu_update,     *x86_pmu.update);
-+DEFINE_STATIC_CALL_NULL(x86_pmu_set_period,   *x86_pmu.set_period);
-+DEFINE_STATIC_CALL_NULL(x86_pmu_update,       *x86_pmu.update);
-+DEFINE_STATIC_CALL_NULL(x86_pmu_limit_period, *x86_pmu.limit_period);
- 
- DEFINE_STATIC_CALL_NULL(x86_pmu_schedule_events,       *x86_pmu.schedule_events);
- DEFINE_STATIC_CALL_NULL(x86_pmu_get_event_constraints, *x86_pmu.get_event_constraints);
-@@ -1391,8 +1392,7 @@ int x86_perf_event_set_period(struct per
- 	if (left > x86_pmu.max_period)
- 		left = x86_pmu.max_period;
- 
--	if (x86_pmu.limit_period)
--		x86_pmu.limit_period(event, &left);
-+	static_call_cond(x86_pmu_limit_period)(event, &left);
- 
- 	this_cpu_write(pmc_prev_left[idx], left);
- 
-@@ -2017,6 +2017,7 @@ static void x86_pmu_static_call_update(v
- 
- 	static_call_update(x86_pmu_set_period, x86_pmu.set_period);
- 	static_call_update(x86_pmu_update, x86_pmu.update);
-+	static_call_update(x86_pmu_limit_period, x86_pmu.limit_period);
- 
- 	static_call_update(x86_pmu_schedule_events, x86_pmu.schedule_events);
- 	static_call_update(x86_pmu_get_event_constraints, x86_pmu.get_event_constraints);
+Anyways,
 
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
 
+-- 
+Regards,
+Sudeep

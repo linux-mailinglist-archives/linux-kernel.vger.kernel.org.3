@@ -2,106 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC1D5228EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 03:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61CC45228E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 03:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240306AbiEKBZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 21:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47758 "EHLO
+        id S234986AbiEKBXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 21:23:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234866AbiEKBZU (ORCPT
+        with ESMTP id S229595AbiEKBXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 21:25:20 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8732314ACA1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 18:25:19 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KycXt4CcfzCscn;
-        Wed, 11 May 2022 09:20:30 +0800 (CST)
-Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
- kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 11 May 2022 09:25:17 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.30) by
- kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 11 May 2022 09:25:17 +0800
-From:   Hui Tang <tanghui20@huawei.com>
-To:     <lgirdwood@gmail.com>
-CC:     <broonie@kernel.org>, <perex@perex.cz>, <tiwai@suse.com>,
-        <ryan.lee.analog@gmail.com>, <ricardw@axis.com>, <steve@sk2.org>,
-        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <tanghui20@huawei.com>
-Subject: [PATCH -next 2/2] ASoC: tlv320adc3xxx: Fix build error for implicit function declaration
-Date:   Wed, 11 May 2022 09:23:48 +0800
-Message-ID: <20220511012348.94288-3-tanghui20@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220511012348.94288-1-tanghui20@huawei.com>
-References: <20220511012348.94288-1-tanghui20@huawei.com>
+        Tue, 10 May 2022 21:23:39 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CEF9994C4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 18:23:35 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R421e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VCt7iBt_1652232209;
+Received: from 30.30.99.144(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCt7iBt_1652232209)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 11 May 2022 09:23:31 +0800
+Message-ID: <278d1d30-a7ad-11df-5242-5472a841a3b3@linux.alibaba.com>
+Date:   Wed, 11 May 2022 09:24:09 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.175.30]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600005.china.huawei.com (7.193.23.191)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 1/2] arm64/hugetlb: Use ptep_get() to get the pte value of
+ a huge page
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     catalin.marinas@arm.com, will@kernel.org, mike.kravetz@oracle.com,
+        akpm@linux-foundation.org, willy@infradead.org,
+        anshuman.khandual@arm.com, christophe.leroy@csgroup.eu,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <cover.1652180088.git.baolin.wang@linux.alibaba.com>
+ <6aabddaf4cae5ae2205c3a7df9b9e15dbd61b641.1652180088.git.baolin.wang@linux.alibaba.com>
+ <YnqK+Hah0wzMvT1p@FVFYT0MHHV2J.usts.net>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <YnqK+Hah0wzMvT1p@FVFYT0MHHV2J.usts.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sound/soc/codecs/tlv320adc3xxx.c: In function ‘adc3xxx_i2c_probe’:
-sound/soc/codecs/tlv320adc3xxx.c:1359:21: error: implicit declaration of function ‘devm_gpiod_get’; did you mean ‘devm_gpio_free’? [-Werror=implicit-function-declaration]
-  adc3xxx->rst_pin = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
-                     ^~~~~~~~~~~~~~
-                     devm_gpio_free
-  CC [M]  drivers/gpu/drm/nouveau/nvkm/engine/disp/sorgt215.o
-  LD [M]  sound/soc/codecs/snd-soc-ak4671.o
-  LD [M]  sound/soc/codecs/snd-soc-arizona.o
-  LD [M]  sound/soc/codecs/snd-soc-cros-ec-codec.o
-  LD [M]  sound/soc/codecs/snd-soc-ak4641.o
-  LD [M]  sound/soc/codecs/snd-soc-alc5632.o
-sound/soc/codecs/tlv320adc3xxx.c:1359:50: error: ‘GPIOD_OUT_LOW’ undeclared (first use in this function); did you mean ‘GPIOF_INIT_LOW’?
-  adc3xxx->rst_pin = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
-                                                  ^~~~~~~~~~~~~
-                                                  GPIOF_INIT_LOW
-sound/soc/codecs/tlv320adc3xxx.c:1359:50: note: each undeclared identifier is reported only once for each function it appears in
-  LD [M]  sound/soc/codecs/snd-soc-cs35l32.o
-sound/soc/codecs/tlv320adc3xxx.c:1408:2: error: implicit declaration of function ‘gpiod_set_value_cansleep’; did you mean ‘gpio_set_value_cansleep’? [-Werror=implicit-function-declaration]
-  gpiod_set_value_cansleep(adc3xxx->rst_pin, 1);
-  ^~~~~~~~~~~~~~~~~~~~~~~~
-  gpio_set_value_cansleep
-  LD [M]  sound/soc/codecs/snd-soc-cs35l41-lib.o
-  LD [M]  sound/soc/codecs/snd-soc-cs35l36.o
-  LD [M]  sound/soc/codecs/snd-soc-cs35l34.o
-  LD [M]  sound/soc/codecs/snd-soc-cs35l41.o
-  CC [M]  drivers/gpu/drm/nouveau/nvkm/engine/disp/sormcp89.o
-cc1: all warnings being treated as errors
 
-Add depend on GPIOLIB for 'config SND_SOC_TLV320ADC3XXX'
 
-Fixes: e9a3b57efd28 ("ASoC: codec: tlv320adc3xxx: New codec driver")
-Signed-off-by: Hui Tang <tanghui20@huawei.com>
----
- sound/soc/codecs/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+On 5/10/2022 11:55 PM, Muchun Song wrote:
+> On Tue, May 10, 2022 at 07:12:52PM +0800, Baolin Wang wrote:
+>> The original huge_ptep_get() on ARM64 is just a wrapper of ptep_get(),
+>> which will not take into account any contig-PTEs dirty and access bits.
+>> Meanwhile we will implement a new ARM64-specific huge_ptep_get()
+>> interface in following patch, which will take into account any contig-PTEs
+>> dirty and access bits and only be allowed to pass the head pte of
+>> a contig-PTE/PMD size page.
+> 
+> IIUC, the huge_ptep_get() you have implemented in patch 2 could
+> handle non-head pte. It'll return the original pte without potential
+> AD bit. I admit it is more efficeent to use ptep_get() directly,
+> but the judgement here should be updated.
 
-diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
-index 71a7afedd0aa..920486e01afb 100644
---- a/sound/soc/codecs/Kconfig
-+++ b/sound/soc/codecs/Kconfig
-@@ -1583,6 +1583,7 @@ config SND_SOC_TFA989X
- config SND_SOC_TLV320ADC3XXX
- 	tristate "Texas Instruments TLV320ADC3001/3101 audio ADC"
- 	depends on I2C
-+	depends on GPIOLIB
- 	help
- 	 Enable support for Texas Instruments TLV320ADC3001 and TLV320ADC3101
- 	 ADCs.
--- 
-2.17.1
+Ah, right. I missed the 'ncontig' will be 0 if a non-head pte passed. 
+Will update the commit message in next version. Thanks for reviewing.
 
+> 
+> With this update.
+> 
+> Reviewed-by: Muchun Song <songmuchun@bytedance.com>

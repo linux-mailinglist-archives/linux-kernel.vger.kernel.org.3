@@ -2,339 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B796522EF2
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56BBA522F4D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240756AbiEKJGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 05:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36922 "EHLO
+        id S233451AbiEKJXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 05:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239797AbiEKJGs (ORCPT
+        with ESMTP id S237887AbiEKJXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 05:06:48 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7EE237FF;
-        Wed, 11 May 2022 02:06:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1652260003; x=1683796003;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=nktfkNsyL1cC5D0iYtfmpjuGTbaTFabXSLm7ZYO0vlc=;
-  b=qq+wA7zfFYcWHA/PiJXySWmPSEYpqQjD28Ynb5qHuA2S3aUdrwME+OdY
-   lzEV8S74lGx9wTKItAe7U7o0a/GGmHz/NVyr6N6/dY7v57DKcMPnMObRm
-   EXG7DWiZAxSYuoucJKn4KrK14naVUYJwKbhv4yn/JbNeZiWhJZtMnqVnO
-   zEdNvXFZqOwUQ/DCXBE+zsRtVREc6t4rRcBNppZ793mAzRtIKoJfiHBex
-   s3bO/Nqh1DOIstbcuBrrHbgOYkqYb+KT0o0Q1vWiYrPIiMxcTqNPWcT/X
-   0VjHcHDulx4w5n8IipgrbqVuTCIhmg56s1WAU9Ofp9Jbzi0i//jZCmPP9
-   w==;
-X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
-   d="scan'208";a="163179275"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 May 2022 02:06:42 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 11 May 2022 02:06:41 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Wed, 11 May 2022 02:06:41 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VnEMakFQ3leQhmEPQySM/NYoCnOl8jPNxQHomrOGN89H+4fSQKwIIEXMg1mdwy3XerpGavN4J2X6heYYd6yNi+5k+CGFZQfK79gXzOOCxXQscW4RpMGXanTSMG4G0qyGgGEt567pDA1yG3VZ6nXfIO6NQIwu5kfFjWFd239P+la6MQ8B9ed0jpcILLR0lmnucGGhoJ5BQweai5TWEg5qGUCw8SiI16hW5AepXyvAzEQauaBy0UgBt8fYoCPHcQ/h2emqXk8qVIJH7x4B8MBSSr4lOjzdvIZVtHo2nlaZ8RSFPmMmvQTcOaxlezbZVv2N+6i/L6mvPZ/oNLmecASqiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nktfkNsyL1cC5D0iYtfmpjuGTbaTFabXSLm7ZYO0vlc=;
- b=bCtEOLpjNk279eisig6GLf48b3zvUGISzffRe3jKK20LiXmJsecgEWiLX6iycKBPPZldYs5CFtjeX5qRRhFZGnAXaQf2qMcRFwyoWMTxrJOk/sEP2zq8F660v1V24CktRkPMzk8okHlIWQzydj5xjMC1b7Y0gFeHfpF/S5kNPa75JuOF4hYqafsKu1GqWFP4vpfiC6yt6/lG475xDN+QqmkFcDXPl5vb9wU5H6VRcDoDDaZAms4LhmK9wrqTR7xQWJdxX7DlqhRsv0dSSgsgphl3tgUG48keY1xfWIGIQCLwZ75j/x9JtbYLV//hUoxcXdkbnWL8rlI94khnJQGp5w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        Wed, 11 May 2022 05:23:03 -0400
+X-Greylist: delayed 964 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 11 May 2022 02:23:00 PDT
+Received: from smtp16.bhosted.nl (smtp16.bhosted.nl [IPv6:2a02:9e0:8000::27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EEC7A456
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:22:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nktfkNsyL1cC5D0iYtfmpjuGTbaTFabXSLm7ZYO0vlc=;
- b=BJTWRRZgGcfji5MR57d5E6tLi4ppbhOmD7IVX7i1K7QWUQKjabse3d3ybElGl3JKAqzFvrpRwIthaNEmD0r7MsGD3Si8o1B/NZvkwhfAJYhFjJ9Cj32f8tJQjvgptAjjT4wMhjGKtMaVV3V4g7A/9Qw+pU+Mg7XhHJhWB8DsMhU=
-Received: from CO1PR11MB4769.namprd11.prod.outlook.com (2603:10b6:303:95::10)
- by BL1PR11MB5479.namprd11.prod.outlook.com (2603:10b6:208:317::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.21; Wed, 11 May
- 2022 09:06:36 +0000
-Received: from CO1PR11MB4769.namprd11.prod.outlook.com
- ([fe80::e906:3e8d:4741:c0f0]) by CO1PR11MB4769.namprd11.prod.outlook.com
- ([fe80::e906:3e8d:4741:c0f0%6]) with mapi id 15.20.5227.023; Wed, 11 May 2022
- 09:06:36 +0000
-From:   <Claudiu.Beznea@microchip.com>
-To:     <Kavyasree.Kotagiri@microchip.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <Nicolas.Ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <peda@axentia.se>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <lee.jones@linaro.org>,
-        <linux@armlinux.org.uk>, <Manohar.Puri@microchip.com>,
-        <UNGLinuxDriver@microchip.com>
-Subject: Re: [PATCH v2 4/4] mux: lan966: Add support for flexcom mux
- controller
-Thread-Topic: [PATCH v2 4/4] mux: lan966: Add support for flexcom mux
- controller
-Thread-Index: AQHYZRZqbNfPsiLIFUyGwMjX/zUsGA==
-Date:   Wed, 11 May 2022 09:06:36 +0000
-Message-ID: <175a0eda-fca3-018c-2b97-f9634f1600fa@microchip.com>
-References: <20220509084920.14529-1-kavyasree.kotagiri@microchip.com>
- <20220509084920.14529-5-kavyasree.kotagiri@microchip.com>
-In-Reply-To: <20220509084920.14529-5-kavyasree.kotagiri@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fa6231b2-fc91-4fff-c7ec-08da332d8d35
-x-ms-traffictypediagnostic: BL1PR11MB5479:EE_
-x-microsoft-antispam-prvs: <BL1PR11MB5479F79FB779E400F330D1A787C89@BL1PR11MB5479.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Wh7hgXb9R1ZwqeLloC9yS/JmhfUYzXxw6i/CeAKTCpCwHcozUh98lzSqLP2mhLRcMM9S1HR2/ZWO/S4k3LPz9NFwv1/y7p+8mBc/JBoxOoo22rJANqkb9OYhPbgtFP9eH1aA07nmqY4l3rOTVaiYvx/w34atPNfVitSuSE+t98sk65yZ09kshjnbyr36aH2v1K4zTpGdnU+RyRGj5K2bxN2LJP0uVdsEeNcHqoaCB89SF4oMnVk4PJUrHbUc/MCFvO1DdKjJG9w0R2iJtTUns2AqeRbG59cVDeygQS+PGi7dLSL0pNidPGRcdk6mYNUBNMVudDKP6dMpWKrx2tvFv8A+gtMJNKsmogZyAhwSs63EWf0ppDa5sV/S+3PxOiYG91BqQPDjmNWku8WSTDHzZ3QAPaqYFJySE1+wtabpTs5W8XcOgmXoZ4bIxdbmNKj8OkS7GpbzqZYjjbVYbtctLieQz2ulRv9K5CgBluMtwX4b2ZCZX4l1QzMNdjkgLTxO1MD4QX7c/NRIdozYcZJRLHg3z3SCdYbYEdiJXuZkRP6qo+SWy/unGY3y0weTwEC9WgCWiT/TuF4GRFUNB6zQTO7ucC+3aAwY4a+Ys9qziRHYxCToh2PiAREWqkqIQXD4mR5zBL+JoxwXNqRAi5nccmISqKbu7HYht5L8hQt+jJsyLZ53mdLsFZ/9lZTw7mCBQURuUjcM8/KeFoO+IIGU7JPuotipuCbgI8ERB/0hKPowg4v3ipYdV8YkF9b8Riy5C6s9mINbNO6jsP/3p1GSjw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4769.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38100700002)(107886003)(2616005)(6512007)(38070700005)(26005)(122000001)(31686004)(4326008)(64756008)(36756003)(8676002)(66446008)(66556008)(186003)(76116006)(91956017)(316002)(110136005)(66946007)(66476007)(54906003)(31696002)(53546011)(2906002)(71200400001)(86362001)(6506007)(508600001)(5660300002)(8936002)(6486002)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aStZR3J0ZzdCSE5tbGhXNmhCem80RGZBS1BFZUxXNklqdGM0bEZhUExVMWtl?=
- =?utf-8?B?a3plVlZWZmtvUDBRb1JXNmU4WjE3OGY3T2ZNb21nY3JGQ2UzRUVKaE9RQlpI?=
- =?utf-8?B?OFRKZlF6UEllcmNUV2Y0MFM5OTF4NjhDZmk4SWNLejZ6UUxTTUR3b0xlYVAz?=
- =?utf-8?B?aTlHa3FmWkU4SkJUZGlya3JiYWZ4Zm10WEpZMFd0UGdKaFJSc292SDFxWi96?=
- =?utf-8?B?eHZzak5TVmh4SDJFVHJCbCtlRmVyeFpKOUptNlhKUEY5SXkxbHcvVFZXN2Ns?=
- =?utf-8?B?N2RhcDhGdGlGN1FFNmR5S0txS2cvcFJ4aXNWMUxZMSszM21SZ2hwbms2VnVL?=
- =?utf-8?B?Y2pWS2EwQllsS3pLWnNBTWgvTFVUMmk0MUp3U0VZcGF2d20xWXdZTVhTUmsr?=
- =?utf-8?B?dkpNeU5EWC9qOXpJUmF4dFdndGViZmlJWDlHU3pJbVR2UDhBanhZZDRGaFdZ?=
- =?utf-8?B?MjdMS1BjSElFd0VXZXNBRDhDYVVVOGt3OVg2VGIwazN3NjEydlFQODR6cEpV?=
- =?utf-8?B?dUZyUXE0VGVZWXZGRnhDdm5kUXIvKzRUUk9KM3U2WFAzcWFEUVFZZkxtNFRn?=
- =?utf-8?B?WkNyZUJwRmpvdGEwNEx3Vll6TE52YkVOeTA1d0VHT3VVSmdCZkgvSjRzc01y?=
- =?utf-8?B?Q3p2UThXMHdNWVkwYnpKWXVjQk9sb2tHUmFaT0F0YittakE2bXBKZXJMTGM1?=
- =?utf-8?B?Tm5zdHZSWHVpc2Q1b2hKZDg4di9MUVJvWUdUTFN1aGZKWSswMVFkZ2VxV1N6?=
- =?utf-8?B?L1NsT0lRZFB3VzlJV3FPYmhVbjJCVjd4WU1qeS9sdUVoYk5QT3p4MWNFZDkw?=
- =?utf-8?B?OGF4ODVkTWhEalJ4ejY1YW1SRHR5UFFIRHJzSnFuRU9wNFU1Rm1odjBJeXY2?=
- =?utf-8?B?R1NPOW1sRUI1K0p6SzVIdG5wdExxOVJJZGdINWUrK0piN29LaUNNUFYxU1FF?=
- =?utf-8?B?bzRwUzBzOWRvNkNNWHJvKzZqUG1yM0ZIUnVKek15VktLQjFwbkZ0bm1TdGJa?=
- =?utf-8?B?VDdjTERUY1BTK3VLTllGcGtaT1dCTTNQVlF6bHM0TTZ0Y1h6Q1lIOHV5RUlv?=
- =?utf-8?B?QmNJUUF0YTA1blBPTWw4Z1pEWTJmcW1wMThmamNYc1VZTWFFSitiaG5WNlVK?=
- =?utf-8?B?ekRRd3dMS01ZTnFpcDZuK2FsemtlVk01aWloV1hJQml2SDIvcnFlVkVmYlNt?=
- =?utf-8?B?YjNzTFA1OW5TVEY2SDJyajZETERta3o3WTZRODZZUTVyUXVrNk1sQnBwNzdv?=
- =?utf-8?B?RlAwQWVyVHJSZUtpclIvU2NmN3BJcVhmRXhNMFNRTXRLb2hpOFJjMmcwRlRP?=
- =?utf-8?B?c0lzcXo3SXhRNzdyV1hMeFZvM2pOeU5IMDZ0R0pQci8wdTBteEhRWjNNWC90?=
- =?utf-8?B?QWRpa1dHZk83THZVUzA4USt3UWZuZi8xYmxlaVpwbTI4YkttWGNoVUhDZVg1?=
- =?utf-8?B?R1UvWFpqQTdodDJuTVNEaTNkYWM0bEs0MXltSkJBaGFGOElvTVYrSUJxeWlw?=
- =?utf-8?B?RzRsZDd5WnVOL0pzVk05anlTcGNoQ0NOaUVVQ0k3ckFlWkd2d0RSenJrZ2N6?=
- =?utf-8?B?Q0RtNUJqajdiYlM5VnF4Mk9pYjhOT1YrY3l0OTdIRjlDVGVOd0FJdElyRXBR?=
- =?utf-8?B?QWdjZEZhK3dzb092MldBZkwrR0NQUUw3c0Q4Z1pudHVGeUg0R202VDE3S1VZ?=
- =?utf-8?B?dE02L2pvM2NZWDRCN25PZWQ0YzVnMndCZzRScmZodHpScW5XaVJBSzhGK0Fw?=
- =?utf-8?B?L1N4UDU2Rk1PZ0lZZ3ZtZ2IzNS81WU1XNU5XaTVlSHdzMzJ2MGZyQlYybmtz?=
- =?utf-8?B?R1NrVkdFbnRaZDFScXF2MFdPamFWQXRQOTdSL29xR2tnL2x0d3Y5Sm9ONmp1?=
- =?utf-8?B?cEpCdEJDWTNyc2hvTUJMT2xyVHQ0T3VqUzFqeXc3RzVuRXVLNkdYckkyUk9p?=
- =?utf-8?B?Q2Y3UHZQN1JScWFmazNWUERLU29DTmEvdWFBaGlXdmVEdVZxajJKZ25jT01H?=
- =?utf-8?B?Q05qS1NKU3hJcUFubElQRG1rNDN3OVVUbWU5cXAwTnZNT0dhM0pTV29pNmNx?=
- =?utf-8?B?b1RVSEhiVzdDL2p6cm96RG01Q0pGVHFWZElHSCtGRXhLeHM1a2hWdlR5enJj?=
- =?utf-8?B?bThQSGQyMDhXS21icUFsc3JLdHhDRlY5QkpWNTQxaUhKMjFZRVhaNGJZU3Rm?=
- =?utf-8?B?Y3YrOUQ4NFpsaUZFcG9JazlZMHRZcG03cmN5a1RYdlA4eFJXMWh5NmFjN21z?=
- =?utf-8?B?SldyQ0tGSG9uam02QUp5QUpxS1lFY0hIb2RkZXduL2dBTStRUENJS2ExQmdR?=
- =?utf-8?B?L1Fjelo4OXNTaUpiQzhNaGtxbThKZnZHUEFCVjZaaWRNNklxSHNwYlVZNmdw?=
- =?utf-8?Q?YXSZtZwJev16+/Hc=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3424728C7A2F194DA86E838C03C1312E@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=protonic.nl; s=202111;
+        h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
+         message-id:subject:cc:to:from:date:from;
+        bh=n2xPqgvtWv5KMPWGWD4jNRZDCTudAr2aEHyO5J86aqQ=;
+        b=qYrSZo1cxYNIL8va3yr4DdJVks7DrzkR67viN5/7E68OKxujiGfglvzwgL5LFf0d3TNVUduU4IARg
+         phaMrIfqIkGEY+JkctXPWopo52PVZosqpf7b5LQlE2mGE8MVhBcDY8DOYTOFo8unC93HD7iK5hiwO4
+         cqlo2J/gdIPjL0fzeGx2EXQ+OjpacdlRsAVY9wl3h6xRZQDRDVZGaNNbc5QMbh38BdDJdgV5sMlf0x
+         cvJfBqHqZckdnPiCuQNr+zhmQSIVuimPN6UBNJIsSlu/hJMXCbnqNlY7ycptwzFAKRaBUxyTqAevxx
+         S9aWyHqFV4Q5tQ27FdgUAuzN9uaf5gw==
+X-MSG-ID: b1117358-d109-11ec-9896-0050569d2c73
+Date:   Wed, 11 May 2022 11:06:49 +0200
+From:   David Jander <david@protonic.nl>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Devid Antonio Filoni <devid.filoni@egluetechnologies.com>,
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        Robin van der Gracht <robin@protonic.nl>,
+        kernel@pengutronix.de, linux-can@vger.kernel.org,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
+        kbuild test robot <lkp@intel.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] can: j1939: do not wait 250ms if the same addr
+ was already claimed
+Message-ID: <20220511110649.21cc1f65@erd992>
+In-Reply-To: <20220511084728.GD10669@pengutronix.de>
+References: <20220509170303.29370-1-devid.filoni@egluetechnologies.com>
+        <YnllpntZ8V5CD07v@x1.vandijck-laurijssen.be>
+        <20220510042609.GA10669@pengutronix.de>
+        <ce7da10389fe448efee86d788dd5282b8022f92e.camel@egluetechnologies.com>
+        <20220511084728.GD10669@pengutronix.de>
+Organization: Protonic Holland
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4769.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fa6231b2-fc91-4fff-c7ec-08da332d8d35
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 May 2022 09:06:36.1846
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kyGliWjhQS3POsv4ZmYhqvFn6vSmKOMus27U6Xf+l3JIt6VAiUiQUVubElPfIG9XpSS6vYfI8dB7L9DYN2MBRPnj4xZ+3fmntkChTBM6ngU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5479
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGksIEthdnlhc3JlZSwNCg0KT24gMDkuMDUuMjAyMiAxMTo0OSwgS2F2eWFzcmVlIEtvdGFnaXJp
-IHdyb3RlOg0KPiBMQU45NjYgU29DIGhhdmUgNSBmbGV4Y29tcy4gRWFjaCBmbGV4Y29tIGhhcyAy
-IGNoaXAtc2VsZWN0cy4NCj4gRm9yIGVhY2ggY2hpcCBzZWxlY3Qgb2YgZWFjaCBmbGV4Y29tIHRo
-ZXJlIGlzIGEgY29uZmlndXJhdGlvbg0KPiByZWdpc3RlciBGTEVYQ09NX1NIQVJFRFswLTRdOlNT
-X01BU0tbMC0xXS4gVGhlIHdpZHRoIG9mDQo+IGNvbmZpZ3VyYXRpb24gcmVnaXN0ZXIgaXMgMjEg
-YmVjYXVzZSB0aGVyZSBhcmUgMjEgc2hhcmVkIHBpbnMNCj4gb24gZWFjaCBvZiB3aGljaCB0aGUg
-Y2hpcCBzZWxlY3QgY2FuIGJlIG1hcHBlZC4gRWFjaCBiaXQgb2YgdGhlDQo+IHJlZ2lzdGVyIHJl
-cHJlc2VudHMgYSBkaWZmZXJlbnQgRkxFWENPTV9TSEFSRUQgcGluLg0KPiANCj4gU2lnbmVkLW9m
-Zi1ieTogS2F2eWFzcmVlIEtvdGFnaXJpIDxrYXZ5YXNyZWUua290YWdpcmlAbWljcm9jaGlwLmNv
-bT4NCj4gLS0tDQo+ICBhcmNoL2FybS9tYWNoLWF0OTEvS2NvbmZpZyAgfCAgIDIgKw0KPiAgZHJp
-dmVycy9tZmQvYXRtZWwtZmxleGNvbS5jIHwgIDU1ICsrKysrKysrKysrKysrKy0NCj4gIGRyaXZl
-cnMvbXV4L0tjb25maWcgICAgICAgICB8ICAxMiArKysrDQo+ICBkcml2ZXJzL211eC9NYWtlZmls
-ZSAgICAgICAgfCAgIDIgKw0KPiAgZHJpdmVycy9tdXgvbGFuOTY2LWZseC5jICAgIHwgMTIxICsr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKw0KPiAgNSBmaWxlcyBjaGFuZ2VkLCAx
-OTEgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRy
-aXZlcnMvbXV4L2xhbjk2Ni1mbHguYw0KPiANCj4gZGlmZiAtLWdpdCBhL2FyY2gvYXJtL21hY2gt
-YXQ5MS9LY29uZmlnIGIvYXJjaC9hcm0vbWFjaC1hdDkxL0tjb25maWcNCj4gaW5kZXggMjc5ODEw
-MzgxMjU2Li4yNmZiMGY0ZTFiNzkgMTAwNjQ0DQo+IC0tLSBhL2FyY2gvYXJtL21hY2gtYXQ5MS9L
-Y29uZmlnDQo+ICsrKyBiL2FyY2gvYXJtL21hY2gtYXQ5MS9LY29uZmlnDQo+IEBAIC03NCw2ICs3
-NCw4IEBAIGNvbmZpZyBTT0NfTEFOOTY2DQo+ICAJc2VsZWN0IERXX0FQQl9USU1FUl9PRg0KPiAg
-CXNlbGVjdCBBUk1fR0lDDQo+ICAJc2VsZWN0IE1FTU9SWQ0KPiArCXNlbGVjdCBNVUxUSVBMRVhF
-Ug0KPiArCXNlbGVjdCBNVVhfTEFOOTY2DQo+ICAJaGVscA0KPiAgCSAgVGhpcyBlbmFibGVzIHN1
-cHBvcnQgZm9yIEFSTXY3IGJhc2VkIE1pY3JvY2hpcCBMQU45NjYgU29DIGZhbWlseS4NCj4gIA0K
-PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9tZmQvYXRtZWwtZmxleGNvbS5jIGIvZHJpdmVycy9tZmQv
-YXRtZWwtZmxleGNvbS5jDQo+IGluZGV4IDU1OWViNGQzNTJiNi4uN2NmZDBmYzNmNGYwIDEwMDY0
-NA0KPiAtLS0gYS9kcml2ZXJzL21mZC9hdG1lbC1mbGV4Y29tLmMNCj4gKysrIGIvZHJpdmVycy9t
-ZmQvYXRtZWwtZmxleGNvbS5jDQo+IEBAIC0xNyw2ICsxNyw3IEBADQo+ICAjaW5jbHVkZSA8bGlu
-dXgvaW8uaD4NCj4gICNpbmNsdWRlIDxsaW51eC9jbGsuaD4NCj4gICNpbmNsdWRlIDxkdC1iaW5k
-aW5ncy9tZmQvYXRtZWwtZmxleGNvbS5oPg0KPiArI2luY2x1ZGUgPGxpbnV4L211eC9jb25zdW1l
-ci5oPg0KPiAgDQo+ICAvKiBJL08gcmVnaXN0ZXIgb2Zmc2V0cyAqLw0KPiAgI2RlZmluZSBGTEVY
-X01SCQkweDAJLyogTW9kZSBSZWdpc3RlciAqLw0KPiBAQCAtMjgsNiArMjksMTAgQEANCj4gICNk
-ZWZpbmUgRkxFWF9NUl9PUE1PREUob3Btb2RlKQkoKChvcG1vZGUpIDw8IEZMRVhfTVJfT1BNT0RF
-X09GRlNFVCkgJglcDQo+ICAJCQkJIEZMRVhfTVJfT1BNT0RFX01BU0spDQo+ICANCj4gK3N0cnVj
-dCBhdG1lbF9mbGV4X2NhcHMgew0KPiArCWJvb2wgaGFzX2ZseF9tdXg7DQo+ICt9Ow0KPiArDQo+
-ICBzdHJ1Y3QgYXRtZWxfZmxleGNvbSB7DQo+ICAJdm9pZCBfX2lvbWVtICpiYXNlOw0KPiAgCXUz
-MiBvcG1vZGU7DQo+IEBAIC0zNyw2ICs0Miw3IEBAIHN0cnVjdCBhdG1lbF9mbGV4Y29tIHsNCj4g
-IHN0YXRpYyBpbnQgYXRtZWxfZmxleGNvbV9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpw
-ZGV2KQ0KPiAgew0KPiAgCXN0cnVjdCBkZXZpY2Vfbm9kZSAqbnAgPSBwZGV2LT5kZXYub2Zfbm9k
-ZTsNCj4gKwljb25zdCBzdHJ1Y3QgYXRtZWxfZmxleF9jYXBzICpjYXBzOw0KPiAgCXN0cnVjdCBy
-ZXNvdXJjZSAqcmVzOw0KPiAgCXN0cnVjdCBhdG1lbF9mbGV4Y29tICpkZGF0YTsNCj4gIAlpbnQg
-ZXJyOw0KPiBAQCAtNzYsMTMgKzgyLDYwIEBAIHN0YXRpYyBpbnQgYXRtZWxfZmxleGNvbV9wcm9i
-ZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgCSAqLw0KPiAgCXdyaXRlbChGTEVY
-X01SX09QTU9ERShkZGF0YS0+b3Btb2RlKSwgZGRhdGEtPmJhc2UgKyBGTEVYX01SKTsNCj4gIA0K
-PiArCWNhcHMgPSBvZl9kZXZpY2VfZ2V0X21hdGNoX2RhdGEoJnBkZXYtPmRldik7DQo+ICsJaWYg
-KCFjYXBzKSB7DQo+ICsJCWRldl9lcnIoJnBkZXYtPmRldiwgIkNvdWxkIG5vdCByZXRyaWV2ZSBm
-bGV4Y29tIGNhcHNcbiIpOw0KPiArCQlyZXR1cm4gLUVJTlZBTDsNCj4gKwl9DQo+ICsNCj4gKwkv
-KiBGbGV4Y29tIE11eCAqLw0KPiArCWlmIChjYXBzLT5oYXNfZmx4X211eCAmJiBvZl9wcm9wZXJ0
-eV9yZWFkX2Jvb2wobnAsICJtdXgtY29udHJvbHMiKSkgew0KPiArCQlzdHJ1Y3QgbXV4X2NvbnRy
-b2wgKmZseF9tdXg7DQo+ICsJCXN0cnVjdCBvZl9waGFuZGxlX2FyZ3MgYXJnczsNCj4gKwkJaW50
-IGksIGNvdW50Ow0KPiArDQo+ICsJCWZseF9tdXggPSBkZXZtX211eF9jb250cm9sX2dldCgmcGRl
-di0+ZGV2LCBOVUxMKTsNCj4gKwkJaWYgKElTX0VSUihmbHhfbXV4KSkNCj4gKwkJCXJldHVybiBQ
-VFJfRVJSKGZseF9tdXgpOw0KPiArDQo+ICsJCWNvdW50ID0gb2ZfcHJvcGVydHlfY291bnRfc3Ry
-aW5ncyhucCwgIm11eC1jb250cm9sLW5hbWVzIik7DQo+ICsJCWZvciAoaSA9IDA7IGkgPCBjb3Vu
-dDsgaSsrKSB7DQo+ICsJCQllcnIgPSBvZl9wYXJzZV9waGFuZGxlX3dpdGhfZml4ZWRfYXJncyhu
-cCwgIm11eC1jb250cm9scyIsIDEsIGksICZhcmdzKTsNCj4gKwkJCWlmIChlcnIpDQo+ICsJCQkJ
-YnJlYWs7DQo+ICsNCj4gKwkJCWVyciA9IG11eF9jb250cm9sX3NlbGVjdChmbHhfbXV4LCBhcmdz
-LmFyZ3NbMF0pOw0KPiArCQkJaWYgKCFlcnIpIHsNCj4gKwkJCQltdXhfY29udHJvbF9kZXNlbGVj
-dChmbHhfbXV4KTsNCj4gKwkJCX0gZWxzZSB7DQo+ICsJCQkJZGV2X2VycigmcGRldi0+ZGV2LCAi
-RmFpbGVkIHRvIHNlbGVjdCBGTEVYQ09NIG11eFxuIik7DQo+ICsJCQkJcmV0dXJuIGVycjsNCj4g
-KwkJCX0NCj4gKwkJfQ0KPiArCX0NCj4gKw0KDQpDYW4geW91IG1vdmUgdGhpcyBpbiBhIHNlcGFy
-YXRlIGZ1bmN0aW9uIGFuZCB0YWtlIGNhcmUgb2YgZGlzYWJsaW5nIHRoZQ0KY2xvY2sgb24gZXJy
-b3IgY2FzZXM/DQoNCj4gIAljbGtfZGlzYWJsZV91bnByZXBhcmUoZGRhdGEtPmNsayk7DQo+ICAN
-Cj4gIAlyZXR1cm4gZGV2bV9vZl9wbGF0Zm9ybV9wb3B1bGF0ZSgmcGRldi0+ZGV2KTsNCj4gIH0N
-Cj4gIA0KPiArc3RhdGljIGNvbnN0IHN0cnVjdCBhdG1lbF9mbGV4X2NhcHMgYXRtZWxfZmxleGNv
-bV9jYXBzID0ge307DQo+ICsNCj4gK3N0YXRpYyBjb25zdCBzdHJ1Y3QgYXRtZWxfZmxleF9jYXBz
-IGxhbjk2NnhfZmxleGNvbV9jYXBzID0gew0KPiArCS5oYXNfZmx4X211eCA9IHRydWUsDQo+ICt9
-Ow0KPiArDQo+ICBzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCBhdG1lbF9mbGV4Y29t
-X29mX21hdGNoW10gPSB7DQo+IC0JeyAuY29tcGF0aWJsZSA9ICJhdG1lbCxzYW1hNWQyLWZsZXhj
-b20iIH0sDQo+ICsJew0KPiArCQkuY29tcGF0aWJsZSA9ICJhdG1lbCxzYW1hNWQyLWZsZXhjb20i
-LA0KPiArCQkuZGF0YSA9ICZhdG1lbF9mbGV4Y29tX2NhcHMsDQo+ICsJfSwNCj4gKw0KPiArCXsN
-Cj4gKwkJLmNvbXBhdGlibGUgPSAibWljcm9jaGlwLGxhbjk2Ni1mbGV4Y29tIiwNCj4gKwkJLmRh
-dGEgPSAmbGFuOTY2eF9mbGV4Y29tX2NhcHMsDQo+ICsJfSwNCj4gKw0KPiAgCXsgLyogc2VudGlu
-ZWwgKi8gfQ0KPiAgfTsNCj4gIE1PRFVMRV9ERVZJQ0VfVEFCTEUob2YsIGF0bWVsX2ZsZXhjb21f
-b2ZfbWF0Y2gpOw0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9tdXgvS2NvbmZpZyBiL2RyaXZlcnMv
-bXV4L0tjb25maWcNCj4gaW5kZXggZTVjNTcxZmQyMzJjLi5lYTA5ZjQ3NGJjMmYgMTAwNjQ0DQo+
-IC0tLSBhL2RyaXZlcnMvbXV4L0tjb25maWcNCj4gKysrIGIvZHJpdmVycy9tdXgvS2NvbmZpZw0K
-PiBAQCAtNDUsNiArNDUsMTggQEAgY29uZmlnIE1VWF9HUElPDQo+ICAJICBUbyBjb21waWxlIHRo
-ZSBkcml2ZXIgYXMgYSBtb2R1bGUsIGNob29zZSBNIGhlcmU6IHRoZSBtb2R1bGUgd2lsbA0KPiAg
-CSAgYmUgY2FsbGVkIG11eC1ncGlvLg0KPiAgDQo+ICtjb25maWcgTVVYX0xBTjk2Ng0KPiArCXRy
-aXN0YXRlICJMQU45NjYgRmxleGNvbSBtdWx0aXBsZXhlciINCj4gKwlkZXBlbmRzIG9uIE9GIHx8
-IENPTVBJTEVfVEVTVA0KPiArCWhlbHANCj4gKwlMYW45NjYgRmxleGNvbSBNdWx0aXBsZXhlciBj
-b250cm9sbGVyLg0KPiArDQo+ICsJVGhlIGRyaXZlciBzdXBwb3J0cyBtYXBwaW5nIDIgY2hpcC1z
-ZWxlY3RzIG9mIGVhY2ggb2YgdGhlIGxhbjk2Ng0KPiArCWZsZXhjb21zIHRvIDIxIGZsZXhjb20g
-c2hhcmVkIHBpbnMuDQo+ICsNCj4gKwlUbyBjb21waWxlIHRoZSBkcml2ZXIgYXMgYSBtb2R1bGUs
-IGNob29zZSBNIGhlcmU6IHRoZSBtb2R1bGUgd2lsbA0KPiArCWJlIGNhbGxlZCBtdXgtbGFuOTY2
-Lg0KDQpVc3N1YWxseSB0aGUgaGVscCBtZXNzYWdlIGlzIGFsaWduZWQgMiBzcGFjZXMgb24gcmln
-aHQgYWZ0ZXIgaGVscC4NCg0KPiArDQo+ICBjb25maWcgTVVYX01NSU8NCj4gIAl0cmlzdGF0ZSAi
-TU1JTy9SZWdtYXAgcmVnaXN0ZXIgYml0ZmllbGQtY29udHJvbGxlZCBNdWx0aXBsZXhlciINCj4g
-IAlkZXBlbmRzIG9uIE9GIHx8IENPTVBJTEVfVEVTVA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9t
-dXgvTWFrZWZpbGUgYi9kcml2ZXJzL211eC9NYWtlZmlsZQ0KPiBpbmRleCA2ZTlmYTQ3ZGFmNTYu
-LjUzYTk4NDBkOTZmYSAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9tdXgvTWFrZWZpbGUNCj4gKysr
-IGIvZHJpdmVycy9tdXgvTWFrZWZpbGUNCj4gQEAgLTcsMTAgKzcsMTIgQEAgbXV4LWNvcmUtb2Jq
-cwkJCTo9IGNvcmUubw0KPiAgbXV4LWFkZzc5MmEtb2JqcwkJOj0gYWRnNzkyYS5vDQo+ICBtdXgt
-YWRnczE0MDgtb2JqcwkJOj0gYWRnczE0MDgubw0KPiAgbXV4LWdwaW8tb2JqcwkJCTo9IGdwaW8u
-bw0KPiArbXV4LWxhbjk2Ni1vYmpzCQkJOj0gbGFuOTY2LWZseC5vDQo+ICBtdXgtbW1pby1vYmpz
-CQkJOj0gbW1pby5vDQo+ICANCj4gIG9iai0kKENPTkZJR19NVUxUSVBMRVhFUikJKz0gbXV4LWNv
-cmUubw0KPiAgb2JqLSQoQ09ORklHX01VWF9BREc3OTJBKQkrPSBtdXgtYWRnNzkyYS5vDQo+ICBv
-YmotJChDT05GSUdfTVVYX0FER1MxNDA4KQkrPSBtdXgtYWRnczE0MDgubw0KPiAgb2JqLSQoQ09O
-RklHX01VWF9HUElPKQkJKz0gbXV4LWdwaW8ubw0KPiArb2JqLSQoQ09ORklHX01VWF9MQU45NjYp
-CSs9IG11eC1sYW45NjYubw0KPiAgb2JqLSQoQ09ORklHX01VWF9NTUlPKQkJKz0gbXV4LW1taW8u
-bw0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9tdXgvbGFuOTY2LWZseC5jIGIvZHJpdmVycy9tdXgv
-bGFuOTY2LWZseC5jDQo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+IGluZGV4IDAwMDAwMDAwMDAw
-MC4uMmM3ZGFiNjE2YTZhDQo+IC0tLSAvZGV2L251bGwNCj4gKysrIGIvZHJpdmVycy9tdXgvbGFu
-OTY2LWZseC5jDQo+IEBAIC0wLDAgKzEsMTIxIEBADQo+ICsvLyBTUERYLUxpY2Vuc2UtSWRlbnRp
-ZmllcjogR1BMLTIuMA0KPiArLyoNCj4gKyAqIExBTjk2NiBGbGV4Y29tIE1VWCBkcml2ZXINCj4g
-KyAqDQo+ICsgKiBDb3B5cmlnaHQgKGMpIDIwMjIgTWljcm9jaGlwIEluYy4NCj4gKyAqDQo+ICsg
-KiBBdXRob3I6IEthdnlhc3JlZSBLb3RhZ2lyaSA8a2F2eWFzcmVlLmtvdGFnaXJpQG1pY3JvY2hp
-cC5jb20+DQo+ICsgKi8NCj4gKw0KPiArI2luY2x1ZGUgPGxpbnV4L2Vyci5oPg0KPiArI2luY2x1
-ZGUgPGxpbnV4L21vZHVsZS5oPg0KPiArI2luY2x1ZGUgPGxpbnV4L29mX3BsYXRmb3JtLmg+DQo+
-ICsjaW5jbHVkZSA8bGludXgvcGxhdGZvcm1fZGV2aWNlLmg+DQo+ICsjaW5jbHVkZSA8bGludXgv
-cHJvcGVydHkuaD4NCj4gKyNpbmNsdWRlIDxsaW51eC9tdXgvZHJpdmVyLmg+DQo+ICsjaW5jbHVk
-ZSA8bGludXgvaW8uaD4NCj4gKw0KPiArI2RlZmluZSBGTEVYX1NIUkRfTUFTSwkJMHgxRkZGRkYN
-Cg0KT3IgeW91IGNhbiB1c2UgR0VOTUFTSygpDQoNCj4gKyNkZWZpbmUgTEFOOTY2X01BWF9DUwkJ
-MjENCj4gKw0KPiArc3RhdGljIHZvaWQgX19pb21lbSAqZmx4X3NoYXJlZF9iYXNlOw0KDQpJIGFn
-cmVlIHdpdGggUGV0ZXIncyBwb2ludCBvZiB2aWV3IG9uIHRoaXMuDQoNCj4gK3N0cnVjdCBtdXhf
-bGFuOTY2eCB7DQo+ICsJdTMyIG9mZnNldDsNCj4gKwl1MzIgc3NfcGluOw0KPiArfTsNCj4gKw0K
-PiArc3RhdGljIGludCBtdXhfbGFuOTY2eF9zZXQoc3RydWN0IG11eF9jb250cm9sICptdXgsIGlu
-dCBzdGF0ZSkNCj4gK3sNCj4gKwlzdHJ1Y3QgbXV4X2xhbjk2NnggKm11eF9sYW45NjZ4ID0gbXV4
-X2NoaXBfcHJpdihtdXgtPmNoaXApOw0KPiArCXUzMiB2YWw7DQo+ICsNCj4gKwl2YWwgPSB+KDEg
-PDwgbXV4X2xhbjk2Nnhbc3RhdGVdLnNzX3BpbikgJiBGTEVYX1NIUkRfTUFTSzsNCj4gKwl3cml0
-ZWwodmFsLCBmbHhfc2hhcmVkX2Jhc2UgKyBtdXhfbGFuOTY2eFtzdGF0ZV0ub2Zmc2V0KTsNCg0K
-d3JpdGVsX3JlbGF4ZWQgc2hvdWxkIGJlIGVub3VnaCBoZXJlLg0KDQo+ICsNCj4gKwlyZXR1cm4g
-MDsNCj4gK30NCj4gKw0KPiArc3RhdGljIGNvbnN0IHN0cnVjdCBtdXhfY29udHJvbF9vcHMgbXV4
-X2xhbjk2Nnhfb3BzID0gew0KPiArCS5zZXQgPSBtdXhfbGFuOTY2eF9zZXQsDQo+ICt9Ow0KPiAr
-DQo+ICtzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCBtdXhfbGFuOTY2eF9kdF9pZHNb
-XSA9IHsNCj4gKwl7IC5jb21wYXRpYmxlID0gIm1pY3JvY2hpcCxsYW45NjYtZmx4LW11eCIsIH0s
-DQo+ICsJeyAvKiBzZW50aW5lbCAqLyB9DQo+ICt9Ow0KPiArTU9EVUxFX0RFVklDRV9UQUJMRShv
-ZiwgbXV4X2xhbjk2NnhfZHRfaWRzKTsNCj4gKw0KPiArc3RhdGljIGludCBtdXhfbGFuOTY2eF9w
-cm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiArew0KPiArCXN0cnVjdCBkZXZp
-Y2Vfbm9kZSAqbnAgPSBwZGV2LT5kZXYub2Zfbm9kZTsNCj4gKwlzdHJ1Y3QgZGV2aWNlICpkZXYg
-PSAmcGRldi0+ZGV2Ow0KPiArCXN0cnVjdCBtdXhfbGFuOTY2eCAqbXV4X2xhbjk2Nng7DQo+ICsJ
-c3RydWN0IG11eF9jaGlwICptdXhfY2hpcDsNCj4gKwlpbnQgcmV0LCBudW1fZmllbGRzLCBpOw0K
-PiArDQo+ICsJcmV0ID0gb2ZfcHJvcGVydHlfY291bnRfdTMyX2VsZW1zKG5wLCAibXV4LW9mZnNl
-dC1waW4iKTsNCj4gKwlpZiAocmV0ID09IDAgfHwgcmV0ICUgMikNCj4gKwkJcmV0ID0gLUVJTlZB
-TDsNCj4gKwlpZiAocmV0IDwgMCkNCj4gKwkJcmV0dXJuIGRldl9lcnJfcHJvYmUoZGV2LCByZXQs
-DQo+ICsJCQkJICAgICAibXV4LW9mZnNldC1waW4gcHJvcGVydHkgbWlzc2luZyBvciBpbnZhbGlk
-Iik7DQo+ICsJbnVtX2ZpZWxkcyA9IHJldCAvIDI7DQo+ICsNCj4gKwltdXhfY2hpcCA9IGRldm1f
-bXV4X2NoaXBfYWxsb2MoZGV2LCBudW1fZmllbGRzLCBzaXplb2YoKm11eF9sYW45NjZ4KSk7DQo+
-ICsJaWYgKElTX0VSUihtdXhfY2hpcCkpDQo+ICsJCXJldHVybiBkZXZfZXJyX3Byb2JlKGRldiwg
-UFRSX0VSUihtdXhfY2hpcCksDQo+ICsJCQkJICAgICAiZmFpbGVkIHRvIGFsbG9jYXRlIG11eF9j
-aGlwc1xuIik7DQo+ICsNCj4gKwltdXhfbGFuOTY2eCA9IG11eF9jaGlwX3ByaXYobXV4X2NoaXAp
-Ow0KPiArDQo+ICsJZmx4X3NoYXJlZF9iYXNlID0gZGV2bV9wbGF0Zm9ybV9nZXRfYW5kX2lvcmVt
-YXBfcmVzb3VyY2UocGRldiwgMCwgTlVMTCk7DQo+ICsJaWYgKElTX0VSUihmbHhfc2hhcmVkX2Jh
-c2UpKQ0KPiArCQlyZXR1cm4gZGV2X2Vycl9wcm9iZShkZXYsIFBUUl9FUlIoZmx4X3NoYXJlZF9i
-YXNlKSwNCj4gKwkJCQkgICAgICJmYWlsZWQgdG8gZ2V0IGZsZXhjb20gc2hhcmVkIGJhc2UgYWRk
-cmVzc1xuIik7DQo+ICsNCj4gKwlmb3IgKGkgPSAwOyBpIDwgbnVtX2ZpZWxkczsgaSsrKSB7DQo+
-ICsJCXN0cnVjdCBtdXhfY29udHJvbCAqbXV4ID0gJm11eF9jaGlwLT5tdXhbaV07DQo+ICsJCXUz
-MiBvZmZzZXQsIHNoYXJlZF9waW47DQo+ICsNCj4gKwkJcmV0ID0gb2ZfcHJvcGVydHlfcmVhZF91
-MzJfaW5kZXgobnAsICJtdXgtb2Zmc2V0LXBpbiIsDQo+ICsJCQkJCQkgMiAqIGksICZvZmZzZXQp
-Ow0KPiArCQlpZiAocmV0ID09IDApDQo+ICsJCQlyZXQgPSBvZl9wcm9wZXJ0eV9yZWFkX3UzMl9p
-bmRleChucCwgIm11eC1vZmZzZXQtcGluIiwNCj4gKwkJCQkJCQkgMiAqIGkgKyAxLA0KPiArCQkJ
-CQkJCSAmc2hhcmVkX3Bpbik7DQo+ICsJCWlmIChyZXQgPCAwKQ0KPiArCQkJcmV0dXJuIGRldl9l
-cnJfcHJvYmUoZGV2LCByZXQsDQo+ICsJCQkJCSAgICAgImZhaWxlZCB0byByZWFkIG11eC1vZmZz
-ZXQtcGluIHByb3BlcnR5OiAlZCIsIGkpOw0KPiArDQo+ICsJCWlmIChzaGFyZWRfcGluID49IExB
-Tjk2Nl9NQVhfQ1MpDQo+ICsJCQlyZXR1cm4gLUVJTlZBTDsNCj4gKw0KPiArCQltdXhfbGFuOTY2
-eFtpXS5vZmZzZXQgPSBvZmZzZXQ7DQo+ICsJCW11eF9sYW45NjZ4W2ldLnNzX3BpbiA9IHNoYXJl
-ZF9waW47DQo+ICsNCj4gKwkJbXV4LT5zdGF0ZXMgPSBMQU45NjZfTUFYX0NTOw0KPiArCX0NCj4g
-Kw0KPiArCW11eF9jaGlwLT5vcHMgPSAmbXV4X2xhbjk2Nnhfb3BzOw0KPiArDQo+ICsJcmV0ID0g
-ZGV2bV9tdXhfY2hpcF9yZWdpc3RlcihkZXYsIG11eF9jaGlwKTsNCj4gKwlpZiAocmV0IDwgMCkN
-Cj4gKwkJcmV0dXJuIHJldDsNCj4gKw0KPiArCXJldHVybiAwOw0KDQp5b3UgY2FuIGp1c3QgcmV0
-dXJuIHJldDsgb3IgcmV0dXJuIGRldm1fbXV4X2NoaXBfcmVnaXN0ZXIoZGV2LCBtdXhfY2hpcCk7
-DQoNCj4gK30NCj4gKw0KPiArc3RhdGljIHN0cnVjdCBwbGF0Zm9ybV9kcml2ZXIgbXV4X2xhbjk2
-NnhfZHJpdmVyID0gew0KPiArCS5kcml2ZXIgPSB7DQo+ICsJCS5uYW1lID0gImxhbjk2Ni1tdXgi
-LA0KPiArCQkub2ZfbWF0Y2hfdGFibGUJPSBvZl9tYXRjaF9wdHIobXV4X2xhbjk2NnhfZHRfaWRz
-KSwNCj4gKwl9LA0KPiArCS5wcm9iZSA9IG11eF9sYW45NjZ4X3Byb2JlLA0KPiArfTsNCj4gKw0K
-PiArbW9kdWxlX3BsYXRmb3JtX2RyaXZlcihtdXhfbGFuOTY2eF9kcml2ZXIpOw0KPiArDQo+ICtN
-T0RVTEVfREVTQ1JJUFRJT04oIkxBTjk2NiBGbGV4Y29tIG11bHRpcGxleGVyIGRyaXZlciIpOw0K
-PiArTU9EVUxFX0FVVEhPUigiS2F2eWFzcmVlIEtvdGFnaXJpIDxrYXZ5YXNyZWUua290YWdpcmlA
-bWljcm9jaGlwLmNvbT4iKTsNCj4gK01PRFVMRV9MSUNFTlNFKCJHUEwgdjIiKTsNCg0KTGFzdCB0
-aW1lIEkgY2hlY2tlZCBjaGVja3BhdGNoLnBsIGNvbXBsYWluZWQgYWJvdXQgdXNpbmcgIkdQTCB2
-MiIgc3RyaW5nDQpoZXJlIGFuZCBzdWdnZXN0ZWQgdG8gdXNlICJHUEwiLg0KDQo+ICsNCg0K
+
+Hi,
+
+On Wed, 11 May 2022 10:47:28 +0200
+Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+
+> Hi,
+>=20
+> i'll CC more J1939 users to the discussion.
+
+Thanks for the CC.
+
+> On Tue, May 10, 2022 at 01:00:41PM +0200, Devid Antonio Filoni wrote:
+> > Hi,
+> >=20
+> > On Tue, 2022-05-10 at 06:26 +0200, Oleksij Rempel wrote: =20
+> > > Hi,
+> > >=20
+> > > On Mon, May 09, 2022 at 09:04:06PM +0200, Kurt Van Dijck wrote: =20
+> > > > On ma, 09 mei 2022 19:03:03 +0200, Devid Antonio Filoni wrote: =20
+> > > > > This is not explicitly stated in SAE J1939-21 and some tools used=
+ for
+> > > > > ISO-11783 certification do not expect this wait. =20
+> > >=20
+> > > It will be interesting to know which certification tool do not expect=
+ it and
+> > > what explanation is used if it fails?
+> > >  =20
+> > > > IMHO, the current behaviour is not explicitely stated, but nor is t=
+he opposite.
+> > > > And if I'm not mistaken, this introduces a 250msec delay.
+> > > >=20
+> > > > 1. If you want to avoid the 250msec gap, you should avoid to contes=
+t the same address.
+> > > >=20
+> > > > 2. It's a balance between predictability and flexibility, but if yo=
+u try to accomplish both,
+> > > > as your patch suggests, there is slight time-window until the curre=
+nt owner responds,
+> > > > in which it may be confusing which node has the address. It depends=
+ on how much history
+> > > > you have collected on the bus.
+> > > >=20
+> > > > I'm sure that this problem decreases with increasing processing pow=
+er on the nodes,
+> > > > but bigger internal queues also increase this window.
+> > > >=20
+> > > > It would certainly help if you describe how the current implementat=
+ion fails.
+> > > >=20
+> > > > Would decreasing the dead time to 50msec help in such case.
+> > > >=20
+> > > > Kind regards,
+> > > > Kurt
+> > > >  =20
+> > >  =20
+> >=20
+> > The test that is being executed during the ISOBUS compliance is the
+> > following: after an address has been claimed by a CF (#1), another CF
+> > (#2) sends a  message (other than address-claim) using the same address
+> > claimed by CF #1.
+> >=20
+> > As per ISO11783-5 standard, if a CF receives a message, other than the
+> > address-claimed message, which uses the CF's own SA, then the CF (#1):
+> > - shall send the address-claim message to the Global address;
+> > - shall activate a diagnostic trouble code with SPN =3D 2000+SA and FMI=
+ =3D
+> > 31
+> >=20
+> > After the address-claim message is sent by CF #1, as per ISO11783-5
+> > standard:
+> > - If the name of the CF #1 has a lower priority then the one of the CF
+> > #2, the the CF #2 shall send its address-claim message and thus the CF
+> > #1 shall send the cannot-claim-address message or shall execute again
+> > the claim procedure with a new address
+> > - If the name of the CF #1 has higher priority then the of the CF #2,
+> > then the CF #2 shall send the cannot-claim-address message or shall
+> > execute the claim procedure with a new address
+> >=20
+> > Above conflict management is OK with current J1939 driver
+> > implementation, however, since the driver always waits 250ms after
+> > sending an address-claim message, the CF #1 cannot set the DTC. The DM1
+> > message which is expected to be sent each second (as per J1939-73
+> > standard) may not be sent.
+> >=20
+> > Honestly, I don't know which company is doing the ISOBUS compliance
+> > tests on our products and which tool they use as it was choosen by our
+> > customer, however they did send us some CAN traces of previously
+> > performed tests and we noticed that the DM1 message is sent 160ms after
+> > the address-claim message (but it may also be lower then that), and this
+> > is something that we cannot do because the driver blocks the application
+> > from sending it.
+> >=20
+> > 28401.127146 1  18E6FFF0x    Tx   d 8 FE 26 FF FF FF FF FF FF  //Message
+> > with other CF's address
+> > 28401.167414 1  18EEFFF0x    Rx   d 8 15 76 D1 0B 00 86 00 A0  //Address
+> > Claim - SA =3D F0
+> > 28401.349214 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 01 FF FF  //DM1
+> > 28402.155774 1  18E6FFF0x    Tx   d 8 FE 26 FF FF FF FF FF FF  //Message
+> > with other CF's address
+> > 28402.169455 1  18EEFFF0x    Rx   d 8 15 76 D1 0B 00 86 00 A0  //Address
+> > Claim - SA =3D F0
+> > 28402.348226 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 02 FF FF  //DM1
+> > 28403.182753 1  18E6FFF0x    Tx   d 8 FE 26 FF FF FF FF FF FF  //Message
+> > with other CF's address
+> > 28403.188648 1  18EEFFF0x    Rx   d 8 15 76 D1 0B 00 86 00 A0  //Address
+> > Claim - SA =3D F0
+> > 28403.349328 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 03 FF FF  //DM1
+> > 28404.349406 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 03 FF FF  //DM1
+> > 28405.349740 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 03 FF FF  //DM1
+> >=20
+> > Since the 250ms wait is not explicitly stated, IMHO it should be up to
+> > the user-space implementation to decide how to manage it.
+
+I think this is not entirely correct. AFAICS the 250ms wait is indeed
+explicitly stated.
+The following is taken from ISO 11783-5:
+
+In "4.4.4.3 Address violation" it states that "If a CF receives a message,
+other than the address-claimed message, which uses the CF=E2=80=99s own SA,=
+ then the
+CF [...] shall send the address-claim message to the Global address."
+
+So the CF shall claim its address again. But further down, in "4.5.2 Address
+claim requirements" it is stated that "...No CF shall begin, or resume,
+transmission on the network until 250 ms after it has successfully claimed =
+an
+address".
+
+At this moment, the address is in dispute. The affected CFs are not allowed=
+ to
+send any other messages until this dispute is resolved, and the standard
+requires a waiting time of 250ms which is minimally deemed necessary to give
+all participants time to respond and eventually dispute the address claim.
+
+If the offending CF ignores this dispute and keeps sending incorrect messag=
+es
+faster than every 250ms, then effectively the other CF has no chance to ever
+resume normal operation because its address is still disputed.
+
+According to 4.4.4.3 it is also required to set a DTC, but it will not be
+allowed to send the DM1 message unless the address dispute is resolved.
+
+This effectively leads to the offending CF to DoS the affected CF if it kee=
+ps
+sending offending messages. Unfortunately neither J1939 nor ISObus takes in=
+to
+account adversarial behavior on the CAN network, so we cannot do anything
+about this.
+
+As for the ISObus compliance tool that is mentioned by Devid, IMHO this
+compliance tool should be challenged and fixed, since it is broken.
+
+The networking layer is prohibiting the DM1 message to be sent, and the
+networking layer has precedence above all superior protocol layers, so the
+diagnostics layer is not able to operate at this moment.
+
+Best regards,
+
+--=20
+David Jander
+Protonic Holland.

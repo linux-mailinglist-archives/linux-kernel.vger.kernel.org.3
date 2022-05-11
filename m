@@ -2,75 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18AA1523337
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 14:38:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07DA752333A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 14:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240548AbiEKMiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 08:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
+        id S242555AbiEKMiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 08:38:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242499AbiEKMh7 (ORCPT
+        with ESMTP id S242499AbiEKMiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 08:37:59 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D45BC2317FA;
-        Wed, 11 May 2022 05:37:58 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A7F5EED1;
-        Wed, 11 May 2022 05:37:58 -0700 (PDT)
-Received: from lpieralisi (unknown [10.57.1.148])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D94A3F66F;
-        Wed, 11 May 2022 05:37:56 -0700 (PDT)
-Date:   Wed, 11 May 2022 13:37:53 +0100
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Christian Gmeiner <christian.gmeiner@gmail.com>
-Cc:     Dominic Rath <dominic.rath@ibv-augsburg.net>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Tom Joseph <tjoseph@cadence.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Subject: Re: [PATCH] PCI: cadence: respond to received PTM Requests
-Message-ID: <YnuuIQgwt45zUEcR@lpieralisi>
-References: <20220429105627.GA28438@lpieralisi>
- <20220429192825.GA82239@bhelgaas>
- <20220505144347.GA19346@JADEVM-DRA>
- <CAH9NwWcU71gZ2woZ7ePRvuwz=_T+F7V6VOYLyAqPhTy1j6xxPA@mail.gmail.com>
+        Wed, 11 May 2022 08:38:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEDE22EA5F;
+        Wed, 11 May 2022 05:38:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 075D5B82219;
+        Wed, 11 May 2022 12:38:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 598DFC340F2;
+        Wed, 11 May 2022 12:38:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652272688;
+        bh=gyTtKqGrdgmxpfgLM/JIRhyOctz/MqSDCYRh45Yfp+A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2deGWEjFIg1VgIh1TKv9PzyymIsk0XV45P65/6KT+7fgWhx/q7J9Z93XxM0lgkI07
+         23oYRtnpPjgTC/vPze8yeriSL3XDwctV4KioqFkzfx6dPykma7d+doD/ho8cLanDT/
+         ebzYoRmFK85QBoksGCChCTVmfYHC+ERfFLMlwC6k=
+Date:   Wed, 11 May 2022 14:38:05 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Wolfgang Walter <linux@stwm.de>
+Cc:     stable@vger.kernel.org, Trond Myklebust <trondmy@gmail.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: 5.4.188 and later: massive performance regression with nfsd
+Message-ID: <YnuuLZe6h80KCNhd@kroah.com>
+References: <f8d9b9112607df4807fba8948ac6e145@stwm.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAH9NwWcU71gZ2woZ7ePRvuwz=_T+F7V6VOYLyAqPhTy1j6xxPA@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <f8d9b9112607df4807fba8948ac6e145@stwm.de>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 04:48:17PM +0200, Christian Gmeiner wrote:
-
-[...]
-
-> > > I think the proposed subject of "Enable Controller to respond to
-> > > received PTM Requests" is somewhat misleading, though, because PTM
-> > > responses still aren't enabled until we set PTM Enable.  I suggest
-> > > something like:
-> > >
-> > >   PCI: cadence: Allow PTM Responder to be enabled
-> >
-> > I'll ask Christian for permission to resend his patch with the subject
-> > changed.
-> >
+On Wed, May 11, 2022 at 12:03:13PM +0200, Wolfgang Walter wrote:
+> Hi,
 > 
-> I will send a new version tomorrow with an improved subject line.
+> starting with 5.4.188 wie see a massive performance regression on our
+> nfs-server. It basically is serving requests very very slowly with cpu
+> utilization of 100% (with 5.4.187 and earlier it is 10%) so that it is
+> unusable as a fileserver.
+> 
+> The culprit are commits (or one of it):
+> 
+> c32f1041382a88b17da5736886da4a492353a1bb "nfsd: cleanup
+> nfsd_file_lru_dispose()"
+> 628adfa21815f74c04724abc85847f24b5dd1645 "nfsd: Containerise filecache
+> laundrette"
+> 
+> (upstream 36ebbdb96b694dd9c6b25ad98f2bbd263d022b63 and
+> 9542e6a643fc69d528dfb3303f145719c61d3050)
+> 
+> If I revert them in v5.4.192 the kernel works as before and performance is
+> ok again.
+> 
+> I did not try to revert them one by one as any disruption of our nfs-server
+> is a severe problem for us and I'm not sure if they are related.
+> 
+> 5.10 and 5.15 both always performed very badly on our nfs-server in a
+> similar way so we were stuck with 5.4.
+> 
+> I now think this is because of 36ebbdb96b694dd9c6b25ad98f2bbd263d022b63
+> and/or 9542e6a643fc69d528dfb3303f145719c61d3050 though I didn't tried to
+> revert them in 5.15 yet.
 
-Hi Christian,
+Odds are 5.18-rc6 is also a problem?
 
-just asking if you are about to post a new version to pick it up.
+If so, I'll just wait for the fix to get into Linus's tree as this does
+not seem to be a stable-tree-only issue.
 
-Thanks,
-Lorenzo
+thanks,
+
+greg k-h

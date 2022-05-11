@@ -2,78 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8589F52299F
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 04:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC6485229A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 04:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239396AbiEKCZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 22:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
+        id S240291AbiEKCZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 22:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbiEKCZY (ORCPT
+        with ESMTP id S233114AbiEKCZz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 22:25:24 -0400
-Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8CC7B1FD870;
-        Tue, 10 May 2022 19:25:22 -0700 (PDT)
-IronPort-Data: =?us-ascii?q?A9a23=3AWvaHDKjfMAqDRRwuS/2JfpYUX161jBEKZh0ujC4?=
- =?us-ascii?q?5NGQNrF6WrkUPm2QfCzuGMquLZGKkLdEjbIrgpkoH68ODx99iGwdl/nw8FHgiR?=
- =?us-ascii?q?ejtX4rAdhiqV8+xwmwvdGo+toNGLICowPkcFhcwnT/wdOixxZVA/fvQHOCkUra?=
- =?us-ascii?q?dYnkZqTJME0/NtzoywobVvaY42bBVMyvV0T/Di5W31G2NglaYAUpIg063ky6Di?=
- =?us-ascii?q?dyp0N8uUvPSUtgQ1LPWvyF94JvyvshdJVOgKmVfNrbSq+ouUNiEEm3lExcFUrt?=
- =?us-ascii?q?Jk57wdAsEX7zTIROTzHFRXsBOgDAb/mprjPl9b6FaNC+7iB3Q9zx14M9QvJqrW?=
- =?us-ascii?q?EEnOLbQsOoAURhECDw4NqpDkFPCCSHl7ZXPlRGZLhMAxN0rVinaJ7Yw9u9pAG1?=
- =?us-ascii?q?m++YfLTcXZBGfwemxxdqTTuhqg8UqK8nmFIMCs25tzHfSCvNOaZDIQ43L49FC1?=
- =?us-ascii?q?Ts9j8wIGuzRD+IGaD5rfTzBZRNVM1saAZ54m/2n7lHzejseqhSKpK4z4mHW1yR?=
- =?us-ascii?q?w1qTgNJzefdnibclXgUGeqUrF8n7/DxVcM8aQoRKB83SxlqrKmAv4RosZF/u/7?=
- =?us-ascii?q?PECqFuNym0WDTUSVECnur+9i0ijS5RTJlJ80iolrYA271DtQtSVdxuxp2+N+B4?=
- =?us-ascii?q?bQdtfDuY66SmLx6GS6AGcbkAGRzhMLtcmqecxXzUh0lLPlNTsbRR1v7qRRW2M8?=
- =?us-ascii?q?J+PsCi/fyQYRUcGZCkZXU4L+NXuvow3pgzAQ8wlE6OviNDxXzbqzFiiqCk4mqV?=
- =?us-ascii?q?WjsMR0ai/1U7IjijqpZXTSAMxoALNUQqN6gJ/eZ7gd4KzwUbU4OwGL4uDSFSF+?=
- =?us-ascii?q?n8elKC28uEUCrmfmSqMXqMJHbe097CCKjKanF0HInWL31xB4Fb6JcYJvm44fxw?=
- =?us-ascii?q?vb645lfbSSBe7kWtsCFV7ZhNGtZNKXr8=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A2gRIpqywAbaW80CDHsAHKrPwEL1zdoMgy1kn?=
- =?us-ascii?q?xilNoH1uA6ilfqWV8cjzuiWbtN9vYhsdcLy7WZVoIkmskKKdg7NhXotKNTOO0A?=
- =?us-ascii?q?SVxepZnOnfKlPbexHWx6p00KdMV+xEAsTsMF4St63HyTj9P9E+4NTvysyVuds?=
- =?us-ascii?q?=3D?=
-X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
-   d="scan'208";a="124142475"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 11 May 2022 10:25:21 +0800
-Received: from G08CNEXMBPEKD06.g08.fujitsu.local (unknown [10.167.33.206])
-        by cn.fujitsu.com (Postfix) with ESMTP id 1CE594D1718C;
-        Wed, 11 May 2022 10:25:20 +0800 (CST)
-Received: from G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) by
- G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Wed, 11 May 2022 10:25:18 +0800
-Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
- G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Wed, 11 May 2022 10:25:19 +0800
-Received: from irides.mr.mr (10.167.225.141) by
- G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Wed, 11 May 2022 10:25:17 +0800
-From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
-        <nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
-        <linux-fsdevel@vger.kernel.org>
-CC:     <djwong@kernel.org>, <dan.j.williams@intel.com>,
-        <david@fromorbit.com>, <hch@infradead.org>, <jane.chu@oracle.com>,
-        <rgoldwyn@suse.de>, <viro@zeniv.linux.org.uk>,
-        <willy@infradead.org>, <naoya.horiguchi@nec.com>,
-        <linmiaohe@huawei.com>, Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v11.1 06/07] xfs: support CoW in fsdax mode
-Date:   Wed, 11 May 2022 10:25:17 +0800
-Message-ID: <20220511022517.2087361-1-ruansy.fnst@fujitsu.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220508143620.1775214-14-ruansy.fnst@fujitsu.com>
-References: <20220508143620.1775214-14-ruansy.fnst@fujitsu.com>
+        Tue, 10 May 2022 22:25:55 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A0C541A0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 19:25:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652235954; x=1683771954;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=W+VWsIRnkEGuh9oI6gzNdZHzNHTm1OXhUcAHi/Gdvh8=;
+  b=MWwcUO+j7iAIlVWXSuLO6BUO268dgHW9PKCIjaC6E6QvWaxHo302/xri
+   wWnmO0eEn++Wc7JSsG/ZKNz2OzKm59uMdYERg7r7HMhfO4dTg4lTd4R9s
+   QrM4pijZm1yZ5XrqcX6dhMXMQdruN+DtGcFPxcyiWaGfQSo0tk1F1S9Qv
+   am0DxQywez/VpA/eeuM/7oXMfTKQLwuup0xAl4J3s2hUnumGCtKF4KeN+
+   J8Li3tU7H+AVaa4yE6pf+CyBDyyvq7WXD0Fk0YhGhb2mgAsw+OKXdvdVh
+   m7SoHPx2nTtksHZ3V/ljRHAI4t6RNiw+PWXAB5PRgSPR4Xy2wUse78/lp
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="251610187"
+X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
+   d="scan'208";a="251610187"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 19:25:54 -0700
+X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
+   d="scan'208";a="542091647"
+Received: from chenji3x-mobl1.ccr.corp.intel.com (HELO [10.255.30.10]) ([10.255.30.10])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 19:25:50 -0700
+Message-ID: <3fe05f18-6726-276a-8c42-79e0b134dfdc@linux.intel.com>
+Date:   Wed, 11 May 2022 10:25:48 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-yoursite-MailScanner-ID: 1CE594D1718C.A0FAA
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v6 02/12] iommu: Add pasid_bits field in struct dev_iommu
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+References: <20220510061738.2761430-1-baolu.lu@linux.intel.com>
+ <20220510061738.2761430-3-baolu.lu@linux.intel.com>
+ <20220510143405.GE49344@nvidia.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20220510143405.GE49344@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,146 +75,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In fsdax mode, WRITE and ZERO on a shared extent need CoW performed.
-After that, new allocated extents needs to be remapped to the file.
-So, add a CoW identification in ->iomap_begin(), and implement
-->iomap_end() to do the remapping work.
+On 2022/5/10 22:34, Jason Gunthorpe wrote:
+> On Tue, May 10, 2022 at 02:17:28PM +0800, Lu Baolu wrote:
+> 
+>>   int iommu_device_register(struct iommu_device *iommu,
+>> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>> index 627a3ed5ee8f..afc63fce6107 100644
+>> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>> @@ -2681,6 +2681,8 @@ static struct iommu_device *arm_smmu_probe_device(struct device *dev)
+>>   	    smmu->features & ARM_SMMU_FEAT_STALL_FORCE)
+>>   		master->stall_enabled = true;
+>>   
+>> +	dev->iommu->pasid_bits = master->ssid_bits;
+>>   	return &smmu->iommu;
+>>   
+>>   err_free_master:
+>> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+>> index 2990f80c5e08..99643f897f26 100644
+>> +++ b/drivers/iommu/intel/iommu.c
+>> @@ -4624,8 +4624,11 @@ static struct iommu_device *intel_iommu_probe_device(struct device *dev)
+>>   			if (pasid_supported(iommu)) {
+>>   				int features = pci_pasid_features(pdev);
+>>   
+>> -				if (features >= 0)
+>> +				if (features >= 0) {
+>>   					info->pasid_supported = features | 1;
+>> +					dev->iommu->pasid_bits =
+>> +						fls(pci_max_pasids(pdev)) - 1;
+>> +				}
+> 
+> It is not very nice that both the iommu drivers have to duplicate the
+> code to read the pasid capability out of the PCI device.
+> 
+> IMHO it would make more sense for the iommu layer to report the
+> capability of its own HW block only, and for the core code to figure
+> out the master's limitation using a bus-specific approach.
 
-Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
----
- fs/xfs/xfs_file.c  | 33 ++++++++++++++++++++++++++++-----
- fs/xfs/xfs_iomap.c | 30 +++++++++++++++++++++++++++++-
- fs/xfs/xfs_iomap.h |  1 +
- 3 files changed, 58 insertions(+), 6 deletions(-)
+Fair enough. The iommu hardware capability could be reported in
 
-diff --git a/fs/xfs/xfs_file.c b/fs/xfs/xfs_file.c
-index af954a5b71f8..fe9f92586acf 100644
---- a/fs/xfs/xfs_file.c
-+++ b/fs/xfs/xfs_file.c
-@@ -25,6 +25,7 @@
- #include "xfs_iomap.h"
- #include "xfs_reflink.h"
- 
-+#include <linux/dax.h>
- #include <linux/falloc.h>
- #include <linux/backing-dev.h>
- #include <linux/mman.h>
-@@ -669,7 +670,7 @@ xfs_file_dax_write(
- 	pos = iocb->ki_pos;
- 
- 	trace_xfs_file_dax_write(iocb, from);
--	ret = dax_iomap_rw(iocb, from, &xfs_direct_write_iomap_ops);
-+	ret = dax_iomap_rw(iocb, from, &xfs_dax_write_iomap_ops);
- 	if (ret > 0 && iocb->ki_pos > i_size_read(inode)) {
- 		i_size_write(inode, iocb->ki_pos);
- 		error = xfs_setfilesize(ip, pos, ret);
-@@ -1254,6 +1255,31 @@ xfs_file_llseek(
- 	return vfs_setpos(file, offset, inode->i_sb->s_maxbytes);
- }
- 
-+#ifdef CONFIG_FS_DAX
-+int
-+xfs_dax_fault(
-+	struct vm_fault		*vmf,
-+	enum page_entry_size	pe_size,
-+	bool			write_fault,
-+	pfn_t			*pfn)
-+{
-+	return dax_iomap_fault(vmf, pe_size, pfn, NULL,
-+			(write_fault && !vmf->cow_page) ?
-+				&xfs_dax_write_iomap_ops :
-+				&xfs_read_iomap_ops);
-+}
-+#else
-+int
-+xfs_dax_fault(
-+	struct vm_fault		*vmf,
-+	enum page_entry_size	pe_size,
-+	bool			write_fault,
-+	pfn_t			*pfn)
-+{
-+	return 0;
-+}
-+#endif
-+
- /*
-  * Locking for serialisation of IO during page faults. This results in a lock
-  * ordering of:
-@@ -1285,10 +1311,7 @@ __xfs_filemap_fault(
- 		pfn_t pfn;
- 
- 		xfs_ilock(XFS_I(inode), XFS_MMAPLOCK_SHARED);
--		ret = dax_iomap_fault(vmf, pe_size, &pfn, NULL,
--				(write_fault && !vmf->cow_page) ?
--				 &xfs_direct_write_iomap_ops :
--				 &xfs_read_iomap_ops);
-+		ret = xfs_dax_fault(vmf, pe_size, write_fault, &pfn);
- 		if (ret & VM_FAULT_NEEDDSYNC)
- 			ret = dax_finish_sync_fault(vmf, pe_size, pfn);
- 		xfs_iunlock(XFS_I(inode), XFS_MMAPLOCK_SHARED);
-diff --git a/fs/xfs/xfs_iomap.c b/fs/xfs/xfs_iomap.c
-index 5a393259a3a3..4c07f5e718fb 100644
---- a/fs/xfs/xfs_iomap.c
-+++ b/fs/xfs/xfs_iomap.c
-@@ -773,7 +773,8 @@ xfs_direct_write_iomap_begin(
- 
- 		/* may drop and re-acquire the ilock */
- 		error = xfs_reflink_allocate_cow(ip, &imap, &cmap, &shared,
--				&lockmode, flags & IOMAP_DIRECT);
-+				&lockmode,
-+				(flags & IOMAP_DIRECT) || IS_DAX(inode));
- 		if (error)
- 			goto out_unlock;
- 		if (shared)
-@@ -867,6 +868,33 @@ const struct iomap_ops xfs_direct_write_iomap_ops = {
- 	.iomap_begin		= xfs_direct_write_iomap_begin,
- };
- 
-+static int
-+xfs_dax_write_iomap_end(
-+	struct inode		*inode,
-+	loff_t			pos,
-+	loff_t			length,
-+	ssize_t			written,
-+	unsigned		flags,
-+	struct iomap		*iomap)
-+{
-+	struct xfs_inode	*ip = XFS_I(inode);
-+
-+	if (!xfs_is_cow_inode(ip))
-+		return 0;
-+
-+	if (!written) {
-+		xfs_reflink_cancel_cow_range(ip, pos, length, true);
-+		return 0;
-+	}
-+
-+	return xfs_reflink_end_cow(ip, pos, written);
-+}
-+
-+const struct iomap_ops xfs_dax_write_iomap_ops = {
-+	.iomap_begin	= xfs_direct_write_iomap_begin,
-+	.iomap_end	= xfs_dax_write_iomap_end,
-+};
-+
- static int
- xfs_buffered_write_iomap_begin(
- 	struct inode		*inode,
-diff --git a/fs/xfs/xfs_iomap.h b/fs/xfs/xfs_iomap.h
-index e88dc162c785..c782e8c0479c 100644
---- a/fs/xfs/xfs_iomap.h
-+++ b/fs/xfs/xfs_iomap.h
-@@ -51,5 +51,6 @@ extern const struct iomap_ops xfs_direct_write_iomap_ops;
- extern const struct iomap_ops xfs_read_iomap_ops;
- extern const struct iomap_ops xfs_seek_iomap_ops;
- extern const struct iomap_ops xfs_xattr_iomap_ops;
-+extern const struct iomap_ops xfs_dax_write_iomap_ops;
- 
- #endif /* __XFS_IOMAP_H__*/
--- 
-2.35.1
+/**
+  * struct iommu_device - IOMMU core representation of one IOMMU hardware
+  *                       instance
+  * @list: Used by the iommu-core to keep a list of registered iommus
+  * @ops: iommu-ops for talking to this iommu
+  * @dev: struct device for sysfs handling
+  */
+struct iommu_device {
+         struct list_head list;
+         const struct iommu_ops *ops;
+         struct fwnode_handle *fwnode;
+         struct device *dev;
+};
 
+I haven't checked ARM code yet, but it works for x86 as far as I can
+see.
 
+> 
+> It is also unfortunate that the enable/disable pasid is inside the
+> iommu driver as well - ideally the PCI driver itself would do this
+> when it knows it wants to use PASIDs.
+> 
+> The ordering interaction with ATS makes this look quite annoying
+> though. :(
+> 
+> I'm also not convinced individual IOMMU drivers should be forcing ATS
+> on, there are performance and functional implications here. Using ATS
+> or not is possibly best left as an administrator policy controlled by
+> the core code. Again we seem to have some mess.
 
+Agreed with you. This has already been in my task list. I will start to
+solve it after the iommufd tasks.
+
+Best regards,
+baolu

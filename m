@@ -2,124 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9EC523C2D
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4284523C31
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346023AbiEKSCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 14:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43972 "EHLO
+        id S1346046AbiEKSDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 14:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231759AbiEKSCS (ORCPT
+        with ESMTP id S1345991AbiEKSDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 14:02:18 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8578381991;
-        Wed, 11 May 2022 11:02:17 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id z19so3485606edx.9;
-        Wed, 11 May 2022 11:02:17 -0700 (PDT)
+        Wed, 11 May 2022 14:03:10 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5587981487;
+        Wed, 11 May 2022 11:03:09 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id 31-20020a9d0822000000b00605f1807664so1006236oty.3;
+        Wed, 11 May 2022 11:03:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WXSifZkVMNKJIWFI2353UCu3hiqezZq+FGcwxX96rkU=;
-        b=G+0Za8nPUrc8M0fsDLPxGWlmEaKAp942tfzktpszcavil+hsJTVX794SkbzQ/4gxHG
-         zPfJuX/ctiEtkVXbI+iyAkObd23R2vM54dbSvqo0AmvAdqDoYkSTKIH+oksSFKoIvpr8
-         OdNV7sbn4X6o1ScR/3ah7q5ZA8YDLHOowO+FlJ75oyoaO0cUEcTr53Nx6Hu57P1GDdgV
-         EWkoRGlWhnvF1Cj8GKw2amyZlIySmYbjduYLE21gYJcqRHDK60uJWe4HfwIWpSRW4GqQ
-         d/00sYksDLT0W3c/YnrkFPS8zSl+s5dJOQYBMIhSBavxqsHr4jLh9Rg1L1wGtUrRMzEP
-         RTNw==
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=JjnAsshK1ygLfpmwHJL1Gf52yDOmz4G85Y+2UEczzWM=;
+        b=Imbdmkg5KSJtTH5nK8osWpMvPlAYu9ZbyqpjaIZW6rsjI51uMNSlCvy6QqTgqhUBfW
+         T2qwHBgCC5ieR7Mx/NX8LidOhgBXZ8IIozWnEUgqrt30U5rPG+7zKH7xfz7t6Fh23gqb
+         wPKRQcO67rFu/u22t3YheQjC+VP16bfJ13DrQbGHaifY1wo6udnVLbP4f08PITxioKTS
+         yOrG3MV44VxCrCbSMFj5Of7gkCfu+Mx2DyI+7CM1tj6Q/yuwhl6CZe1kgvioWJe8Sq9L
+         XY+cHCZa3YiGV6Y3iWnhaUFqWh2RX/gqURewf/OaifB5t29yGpox0Po9RgOOx+ImP9eh
+         Fplw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WXSifZkVMNKJIWFI2353UCu3hiqezZq+FGcwxX96rkU=;
-        b=UX3AkJmqjS/ELQXvMTBPdR82lRXtOvX7KiH0Gk/+RzPYItccDfK5SRCpdsN/IYABoS
-         pyCAtGHhpPPJ6LKIugg5i5hUicCWQVHhtxWXZ9wezGm0vTJMEyZx5e9qetLx6J3VbeoO
-         9BMwfLGeHVakRSIJb6ixkMB9kzKe6Jxu3/2uJ540c47YjrDc6B1DYLbvl7VgLB5gGKI7
-         EpXmPyRmT4OnCb9CGt9WUpMsBYcVk8FA75sc9oVhU8wpj9yakdwBfJ/eor7td10OS8R2
-         LXnHwvLBqUd/XZGE67rSndCNGmOD+ddZGC0dx6apI7ojikJDrXYmroI5qa/E9wolwLCA
-         k7lw==
-X-Gm-Message-State: AOAM530qz0UMzVIisZfoPARu4PyzKRi0AjP584jbRmJlJ2AAH3j6SPw7
-        WrkTqQsSWBGZY9au5mJde8Y00P7gpOEwMcP+PMQ=
-X-Google-Smtp-Source: ABdhPJzED7Bj/17e150QFoZy4+zLcq3hKeUUGjsXs0im7kbV5CxZM9b9YkqCYtGyfOXYgxCLa43Mb4ikyMkmyAox4Qk=
-X-Received: by 2002:a05:6402:d51:b0:425:d5e1:e9f0 with SMTP id
- ec17-20020a0564020d5100b00425d5e1e9f0mr30316725edb.125.1652292136090; Wed, 11
- May 2022 11:02:16 -0700 (PDT)
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=JjnAsshK1ygLfpmwHJL1Gf52yDOmz4G85Y+2UEczzWM=;
+        b=tRiEV+6WVhAsBY85+rA2T7FSCRx2NrX+gsHtkKd4XipdzvorD38KEIec5Oraq+1W6u
+         TQEEDe/uBacZ4xvDw6aQwlnEtJ945lqPXaJzEh7gNGX7rUF5iLAt0k7uyZCSeMr90wat
+         TsNTVx9/MjQQcmctXXSeq6sysmmsQPe8kUpnsRSmFJPvlZd2PUGxf14aRR444FvRLDUB
+         DXoD0UfoMlqf1kVC6MGda+l+xlpKEoZTWrh1PQi6BAh3bU1COrqlSu8rkCxjvMMEGRm6
+         wL1OqYGJiG2D0gan0euhDqYzNH+HGdvlNA6xaHCWMcDaVUliec/Wm08S04nziw7Ps2yQ
+         l22g==
+X-Gm-Message-State: AOAM532PwmvHZzwmmsledRoWVL2/+gZ1h4dEpaFEwo5wzPt/YC94gWJf
+        L9j3BM2oEShyWfSKPG1lnfA3YVv6/B0OlQ==
+X-Google-Smtp-Source: ABdhPJyp2MnsekH53L9TKdKVuTrjPVVSJ1KPE+AEhk8vuCmKSk4MzvytyrHsLQ1B0qqk/pPjH+7dXg==
+X-Received: by 2002:a05:6830:1303:b0:606:4e64:4c6c with SMTP id p3-20020a056830130300b006064e644c6cmr9949566otq.42.1652292188682;
+        Wed, 11 May 2022 11:03:08 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b20-20020a9d6b94000000b0060603221234sm1052568otq.4.2022.05.11.11.03.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 11:03:07 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <7c458add-a496-6b3a-a04f-e6b68865daf4@roeck-us.net>
+Date:   Wed, 11 May 2022 11:03:04 -0700
 MIME-Version: 1.0
-References: <20220510151451.85561-1-andriy.shevchenko@linux.intel.com> <eff9907f-e92b-9115-bea7-b1093d1dc28e@redhat.com>
-In-Reply-To: <eff9907f-e92b-9115-bea7-b1093d1dc28e@redhat.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 11 May 2022 20:01:39 +0200
-Message-ID: <CAHp75Vcnq=Ou6QNyPjwC+HR9wJ2BheonTqmkGvQU0qFtHO2BDw@mail.gmail.com>
-Subject: Re: [PATCH v5 0/8] platform/x86: introduce p2sb_bar() helper
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?=C5=81ukasz_Bartosik?= <lb@semihalf.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-edac@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: en-US
+To:     Henning Schild <henning.schild@siemens.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Enrico Weigelt <lkml@metux.net>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>
+References: <20220511153905.13980-1-henning.schild@siemens.com>
+ <20220511153905.13980-3-henning.schild@siemens.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 2/4] watchdog: simatic-ipc-wdt: convert to use P2SB
+ accessor
+In-Reply-To: <20220511153905.13980-3-henning.schild@siemens.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 6:08 PM Hans de Goede <hdegoede@redhat.com> wrote:
-> On 5/10/22 17:14, Andy Shevchenko wrote:
+On 5/11/22 08:39, Henning Schild wrote:
+> Since we have a common P2SB accessor in tree we may use it instead of
+> open coded variants.
+> 
+> Replace custom code by p2sb_bar() call.
+> 
+> Signed-off-by: Henning Schild <henning.schild@siemens.com>
+> ---
+>   drivers/watchdog/Kconfig           |  1 +
+>   drivers/watchdog/simatic-ipc-wdt.c | 15 ++++++++-------
+>   2 files changed, 9 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index c4e82a8d863f..643a8f5a97b1 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -1628,6 +1628,7 @@ config SIEMENS_SIMATIC_IPC_WDT
+>   	tristate "Siemens Simatic IPC Watchdog"
+>   	depends on SIEMENS_SIMATIC_IPC
+>   	select WATCHDOG_CORE
+> +	select P2SB if X86
 
-...
+Why "if X86" ? SIEMENS_SIMATIC_IPC already depends on it.
 
-> I must admit I have lost track of all the Ack-s / Reviewed-by-s a bit.
->
-> So from the above I take it that the Ack-s resp. Reviewed-by-s on the
-> other non drivers/platform/x86 bits also signal an Ack to merge the entire
-> series through the pdx86 tree?
->
-> Lee, any chance you can take a look at patches 3-5 and give your Ack
-> for merging these through the pdx86 tree together with the rest?
+Also, I just noticed that P2SB is neither in mainline nor
+in linux-next, meaning this code won't even compile right now.
+That should be mentioned in the introduction e-mail (the use
+of "introduced" suggests that it is already there; you could
+just use "will be introduced" instead).
 
-Actually I misinterpreted Lee's different tags again. Acked-by is
-normal for routing MFD code via other subsystems, while
-Acked-for-MFD-by is for Lee (scripts?) to route the code via MFD tree.
-Lee, is it the correct interpretation now?
-
-...
-
-> p.s.
->
-> Since this is mostly a cleanup series and since we are getting close
-> to the next merge-window I believe that it likely is best to merge
-> this after 5.19-rc1 has been released.
-
-OK.
-
-> I can then also provide
-> an immutable branch for other maintainers early on in the 5.19
-> cycle which should help to avoid merge conflicts.
-
-I guess I will send a v6 anyway in order to attach Henning's series to mine.
-
--- 
-With Best Regards,
-Andy Shevchenko
+Thanks,
+Guenter

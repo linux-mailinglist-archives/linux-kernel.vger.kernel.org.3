@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A675229CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 04:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC5E5229DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 04:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241302AbiEKCaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 22:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
+        id S241564AbiEKCa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 22:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241257AbiEKC3p (ORCPT
+        with ESMTP id S241287AbiEKC3u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 22:29:45 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E4421AAA6
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 19:29:43 -0700 (PDT)
+        Tue, 10 May 2022 22:29:50 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38A121A961
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 19:29:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652236183; x=1683772183;
+  t=1652236188; x=1683772188;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=/zG/vU7kvADc4pg2W2FY9O2Nfewu2j+VHOpdujenCaM=;
-  b=gmk2r5wBt/7PsfYhVYBG67UJ0PRmh76OD0ED3YZH/6eYgHewzckcHqY4
-   ZRl7HAltD6SqAzYsbBvtqncgMLArj05PzTG0y3BBOWqHTlK8mKosnP38u
-   sZ/56wz2+9SiS8eiq/3pnQNjIX7TlkrCmwuxLBh4lzbfmVVp1J3xbZp2G
-   UgGOzGdD+eUfxCjq9B7yNaEd6iY3d53aBb84h7yf7knZnNltr7fZq1lF9
-   EOAuDdaiaD8RLguoh7ESPyD+U5ussBoey1kj7DKd8Xk6ngh88w5fjSEdX
-   tYUl+WkX6RLHTve9kDFANmVlhnmH2Ui/aIl/APDrsoztftpnFWlHuBrDw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="250093485"
+  bh=yh4/dFHOtWSE9iF+GUg2XMGu0/7JiKaWrQ/zWPdOw6Y=;
+  b=EBDK8770Tn3fCw36mY697BFKERR1p3uKyqvE89dKNAnCawo+6pnvgLI3
+   shgKwcNAPP1Cr1OS//0ZrB/SPpJSZpz02lyNLUdAmQUJSj6byvptkq6yM
+   Q8c1dIWbzEzgxL14754Hy4iwzau4FlpivtQqz+O1XHcQAdsE+e8B9GuUq
+   BVPVb3ly37l05/1qlsdS6mjfFcwqzGhBAAB4MBOj7flhpexmm08ww34Fd
+   +AuyFQ1iOy5FjqM4yWznYTLfBeCRibL1YJo2hRBppu/KgX0ZTI0Z7Zggw
+   KIlJ6A6AnmpCxyELuP88WYUFNHRvFfbXW1nlNTVGeiof9QcluG5XjznqM
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="330158673"
 X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
-   d="scan'208";a="250093485"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 19:29:43 -0700
+   d="scan'208";a="330158673"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 19:29:44 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
-   d="scan'208";a="670166554"
+   d="scan'208";a="711294411"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 10 May 2022 19:29:40 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 10 May 2022 19:29:40 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 53BBA5D0; Wed, 11 May 2022 05:28:01 +0300 (EEST)
+        id 5EA78630; Wed, 11 May 2022 05:28:01 +0300 (EEST)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -52,9 +52,9 @@ Cc:     x86@kernel.org, Andrey Ryabinin <aryabinin@virtuozzo.com>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [RFCv2 07/10] x86/mm: Handle tagged memory accesses from kernel threads
-Date:   Wed, 11 May 2022 05:27:48 +0300
-Message-Id: <20220511022751.65540-9-kirill.shutemov@linux.intel.com>
+Subject: [RFCv2 08/10] x86/mm: Make LAM_U48 and mappings above 47-bits mutually exclusive
+Date:   Wed, 11 May 2022 05:27:49 +0300
+Message-Id: <20220511022751.65540-10-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
 References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
@@ -70,77 +70,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a kernel thread performs memory access on behalf of a process (like
-in async I/O, io_uring, etc.) it has to respect tagging setup of the
-process as user addresses can include tags.
+LAM_U48 steals bits above 47-bit for tags and makes it impossible for
+userspace to use full address space on 5-level paging machine.
 
-Normally, LAM setup is per-thread and recorded in thread features, but
-for this use case kernel also tracks LAM setup per-mm. mm->context.lam
-would record LAM that allows the most tag bits among the threads of
-the mm.
-
-The info used by switch_mm_irqs_off() to construct CR3 if the task is
-kernel thread. Thread featrues of the kernel thread get updated
-according to mm->context.lam. It allows untagged_addr() to work
-correctly.
+Make these features mutually exclusive: whichever gets enabled first
+blocks the othe one.
 
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 ---
- arch/x86/include/asm/mmu.h |  1 +
- arch/x86/mm/tlb.c          | 28 ++++++++++++++++++++++++++++
- 2 files changed, 29 insertions(+)
+ arch/x86/include/asm/elf.h         |  3 ++-
+ arch/x86/include/asm/mmu_context.h | 13 +++++++++++++
+ arch/x86/kernel/sys_x86_64.c       |  5 +++--
+ arch/x86/mm/hugetlbpage.c          |  6 ++++--
+ arch/x86/mm/mmap.c                 |  9 ++++++++-
+ 5 files changed, 30 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
-index 5d7494631ea9..52f3749f14e8 100644
---- a/arch/x86/include/asm/mmu.h
-+++ b/arch/x86/include/asm/mmu.h
-@@ -40,6 +40,7 @@ typedef struct {
+diff --git a/arch/x86/include/asm/elf.h b/arch/x86/include/asm/elf.h
+index 29fea180a665..53b96b0c8cc3 100644
+--- a/arch/x86/include/asm/elf.h
++++ b/arch/x86/include/asm/elf.h
+@@ -328,7 +328,8 @@ static inline int mmap_is_ia32(void)
+ extern unsigned long task_size_32bit(void);
+ extern unsigned long task_size_64bit(int full_addr_space);
+ extern unsigned long get_mmap_base(int is_legacy);
+-extern bool mmap_address_hint_valid(unsigned long addr, unsigned long len);
++extern bool mmap_address_hint_valid(struct mm_struct *mm,
++				    unsigned long addr, unsigned long len);
+ extern unsigned long get_sigframe_size(void);
  
- #ifdef CONFIG_X86_64
- 	unsigned short flags;
-+	u8 lam;
- #endif
+ #ifdef CONFIG_X86_32
+diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
+index 27516046117a..c8a6d80dfec3 100644
+--- a/arch/x86/include/asm/mmu_context.h
++++ b/arch/x86/include/asm/mmu_context.h
+@@ -218,6 +218,19 @@ static inline bool arch_vma_access_permitted(struct vm_area_struct *vma,
  
- 	struct mutex lock;
-diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
-index f9fe71d1f42c..b320556e1c22 100644
---- a/arch/x86/mm/tlb.c
-+++ b/arch/x86/mm/tlb.c
-@@ -185,6 +185,34 @@ static u8 gen_lam(struct task_struct *tsk, struct mm_struct *mm)
- 	if (!tsk)
- 		return LAM_NONE;
+ unsigned long __get_current_cr3_fast(void);
  
-+	if (tsk->flags & PF_KTHREAD) {
-+		/*
-+		 * For kernel thread use the most permissive LAM
-+		 * used by the mm. It's required to handle kernel thread
-+		 * memory accesses on behalf of a process.
-+		 *
-+		 * Adjust thread flags accodringly, so untagged_addr() would
-+		 * work correctly.
-+		 */
++#ifdef CONFIG_X86_5LEVEL
++static inline bool full_va_allowed(struct mm_struct *mm)
++{
++	/* LAM_U48 steals VA bits abouve 47-bit for tags */
++	return mm->context.lam != LAM_U48;
++}
++#else
++static inline bool full_va_allowed(struct mm_struct *mm)
++{
++	return false;
++}
++#endif
 +
-+		tsk->thread.features &= ~(X86_THREAD_LAM_U48 |
-+					  X86_THREAD_LAM_U57);
+ #include <asm-generic/mmu_context.h>
+ 
+ #endif /* _ASM_X86_MMU_CONTEXT_H */
+diff --git a/arch/x86/kernel/sys_x86_64.c b/arch/x86/kernel/sys_x86_64.c
+index 660b78827638..4526e8fadfd2 100644
+--- a/arch/x86/kernel/sys_x86_64.c
++++ b/arch/x86/kernel/sys_x86_64.c
+@@ -21,6 +21,7 @@
+ 
+ #include <asm/elf.h>
+ #include <asm/ia32.h>
++#include <asm/mmu_context.h>
+ 
+ /*
+  * Align a virtual address to avoid aliasing in the I$ on AMD F15h.
+@@ -185,7 +186,7 @@ arch_get_unmapped_area_topdown(struct file *filp, const unsigned long addr0,
+ 	/* requesting a specific address */
+ 	if (addr) {
+ 		addr &= PAGE_MASK;
+-		if (!mmap_address_hint_valid(addr, len))
++		if (!mmap_address_hint_valid(mm, addr, len))
+ 			goto get_unmapped_area;
+ 
+ 		vma = find_vma(mm, addr);
+@@ -206,7 +207,7 @@ arch_get_unmapped_area_topdown(struct file *filp, const unsigned long addr0,
+ 	 * !in_32bit_syscall() check to avoid high addresses for x32
+ 	 * (and make it no op on native i386).
+ 	 */
+-	if (addr > DEFAULT_MAP_WINDOW && !in_32bit_syscall())
++	if (addr > DEFAULT_MAP_WINDOW && !in_32bit_syscall() && full_va_allowed(mm))
+ 		info.high_limit += TASK_SIZE_MAX - DEFAULT_MAP_WINDOW;
+ 
+ 	info.align_mask = 0;
+diff --git a/arch/x86/mm/hugetlbpage.c b/arch/x86/mm/hugetlbpage.c
+index a0d023cb4292..9fdc8db42365 100644
+--- a/arch/x86/mm/hugetlbpage.c
++++ b/arch/x86/mm/hugetlbpage.c
+@@ -18,6 +18,7 @@
+ #include <asm/tlb.h>
+ #include <asm/tlbflush.h>
+ #include <asm/elf.h>
++#include <asm/mmu_context.h>
+ 
+ #if 0	/* This is just for testing */
+ struct page *
+@@ -103,6 +104,7 @@ static unsigned long hugetlb_get_unmapped_area_topdown(struct file *file,
+ 		unsigned long pgoff, unsigned long flags)
+ {
+ 	struct hstate *h = hstate_file(file);
++	struct mm_struct *mm = current->mm;
+ 	struct vm_unmapped_area_info info;
+ 
+ 	info.flags = VM_UNMAPPED_AREA_TOPDOWN;
+@@ -114,7 +116,7 @@ static unsigned long hugetlb_get_unmapped_area_topdown(struct file *file,
+ 	 * If hint address is above DEFAULT_MAP_WINDOW, look for unmapped area
+ 	 * in the full address space.
+ 	 */
+-	if (addr > DEFAULT_MAP_WINDOW && !in_32bit_syscall())
++	if (addr > DEFAULT_MAP_WINDOW && !in_32bit_syscall() && full_va_allowed(mm))
+ 		info.high_limit += TASK_SIZE_MAX - DEFAULT_MAP_WINDOW;
+ 
+ 	info.align_mask = PAGE_MASK & ~huge_page_mask(h);
+@@ -161,7 +163,7 @@ hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
+ 
+ 	if (addr) {
+ 		addr &= huge_page_mask(h);
+-		if (!mmap_address_hint_valid(addr, len))
++		if (!mmap_address_hint_valid(mm, addr, len))
+ 			goto get_unmapped_area;
+ 
+ 		vma = find_vma(mm, addr);
+diff --git a/arch/x86/mm/mmap.c b/arch/x86/mm/mmap.c
+index c90c20904a60..f9ca824729de 100644
+--- a/arch/x86/mm/mmap.c
++++ b/arch/x86/mm/mmap.c
+@@ -21,6 +21,7 @@
+ #include <linux/elf-randomize.h>
+ #include <asm/elf.h>
+ #include <asm/io.h>
++#include <asm/mmu_context.h>
+ 
+ #include "physaddr.h"
+ 
+@@ -35,6 +36,8 @@ unsigned long task_size_32bit(void)
+ 
+ unsigned long task_size_64bit(int full_addr_space)
+ {
++	if (!full_va_allowed(current->mm))
++		return DEFAULT_MAP_WINDOW;
+ 	return full_addr_space ? TASK_SIZE_MAX : DEFAULT_MAP_WINDOW;
+ }
+ 
+@@ -206,11 +209,15 @@ const char *arch_vma_name(struct vm_area_struct *vma)
+  * the failure of such a fixed mapping request, so the restriction is not
+  * applied.
+  */
+-bool mmap_address_hint_valid(unsigned long addr, unsigned long len)
++bool mmap_address_hint_valid(struct mm_struct *mm,
++			     unsigned long addr, unsigned long len)
+ {
+ 	if (TASK_SIZE - len < addr)
+ 		return false;
+ 
++	if (addr + len > DEFAULT_MAP_WINDOW && !full_va_allowed(mm))
++		return false;
 +
-+		switch (mm->context.lam) {
-+		case LAM_NONE:
-+			return LAM_NONE;
-+		case LAM_U57:
-+			tsk->thread.features |= X86_THREAD_LAM_U57;
-+			return LAM_U57;
-+		case LAM_U48:
-+			tsk->thread.features |= X86_THREAD_LAM_U48;
-+			return LAM_U48;
-+		default:
-+			WARN_ON_ONCE(1);
-+			return LAM_NONE;
-+		}
-+	}
-+
- 	if (tsk->thread.features & X86_THREAD_LAM_U57)
- 		return LAM_U57;
- 	if (tsk->thread.features & X86_THREAD_LAM_U48)
+ 	return (addr > DEFAULT_MAP_WINDOW) == (addr + len > DEFAULT_MAP_WINDOW);
+ }
+ 
 -- 
 2.35.1
 

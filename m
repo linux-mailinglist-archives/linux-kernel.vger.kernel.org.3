@@ -2,79 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C48DE52317A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6603B52317C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242830AbiEKL00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 07:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
+        id S240392AbiEKLZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 07:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241336AbiEKLZD (ORCPT
+        with ESMTP id S241287AbiEKLZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 11 May 2022 07:25:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 39383237BBF
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:25:00 -0700 (PDT)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4AF9C235C1D
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:24:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652268299;
+        s=mimecast20190719; t=1652268284;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xhuIDxij1dFQK1woz+U0GSNcD8pO0M2OCBta2I1W2Qw=;
-        b=ORBnxkDHB3xfQBM956IWxyKKhkWgmM/vAIHqush/esJWAq/OALFIa8Kmp7JSdaQ/6NQKCU
-        pE5fFBt3AO253X16kc1Fq+1MbssSJCuCJhIJxemwfSDY6WwIniEl5M1CBaeTpKlRNpuM8h
-        xbr1z71X/mUqBswsECj3Z2ivG2dB3oE=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=+hqVlDvCMcE/tiHufqNgKFkt8nO8gwuxe1+upIvX5Ak=;
+        b=dpMcFkWfcNBZGmLZnXY/Bihu3uI0HGYP92H8ornxSLOzZkG9dmCGpyUj7QX6QMk642uM5Z
+        4CD1UtVpoTGZJDt9iZqy0Rn6bGDLVPAaP9FzcGmLpuax3cgX+bcypxPrSmyS6zf5h4oLjU
+        /VbpU0L2iD+2hvg5vBmmOLHNS69U4EI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-625-lXwsggiIOsuKnIQzTRd7bA-1; Wed, 11 May 2022 07:24:58 -0400
-X-MC-Unique: lXwsggiIOsuKnIQzTRd7bA-1
-Received: by mail-wm1-f70.google.com with SMTP id i18-20020a1c5412000000b0039491a8298cso610434wmb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:24:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xhuIDxij1dFQK1woz+U0GSNcD8pO0M2OCBta2I1W2Qw=;
-        b=2q4gTW4KFcn0F6p2NNr8StxJWW5aI+H7tU/qrm2oMrQJtyJmnL/LIbIblcfpzlk1qG
-         Dmyz46PtBi/NBQ1H0C57AocMcPP9oFvV8sFh9QSLpRetFvQOWt+MlrC6Zw8+/2ZgAwbb
-         tfD6aNib6S0DZ9HmZ71rNv+JcBAcLtfDfuHCXDYmGwevesUx/aWu2isxza/giQNoT4DL
-         whlbCc9d8NgDaWX6qunQaJGFKr9L4bSTq/rOwdHJcyTlKqC1S9Fxs1oHukuU/nIwdAVK
-         YLiHOcgoKbGUOx6mDpgtzbGuzN++tI68hVP8V8BjA8GsfPcqr/0Er0ZwYSCLBnlgUYh4
-         YL6Q==
-X-Gm-Message-State: AOAM532UDaYKsDntnTu4vFfEodq7GebfVav7H21vuOmZOxmSStcy3CjP
-        /hzN0bpCJ4W9sUweIyMVwlYrvU8kCmsRq1g5WHvduKaa5bGy1pQjwlpVinMPqjplPsHPY9jeK9Y
-        e/4LCJ2x7G3c9umlj0OUYydKGhIMo4ALg4Qrw7PvH0uh3LQPWrlKnWSdUCPjKxi/XfwpkgiXMq6
-        Q=
-X-Received: by 2002:a7b:cc93:0:b0:394:2622:fcd9 with SMTP id p19-20020a7bcc93000000b003942622fcd9mr4514984wma.20.1652268296569;
-        Wed, 11 May 2022 04:24:56 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyRIFQcq1jQPPfql9v29OqbDwMo6HCFe2d4EHkjhfoYsd8KlDrK7oJBh/f5bYM9M/IMttgafQ==
-X-Received: by 2002:a7b:cc93:0:b0:394:2622:fcd9 with SMTP id p19-20020a7bcc93000000b003942622fcd9mr4514945wma.20.1652268296167;
-        Wed, 11 May 2022 04:24:56 -0700 (PDT)
-Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id j1-20020a5d4481000000b0020c5253d8d3sm1429174wrq.31.2022.05.11.04.24.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 04:24:55 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: [PATCH v5 2/7] firmware: sysfb: Add helpers to unregister a pdev and disable registration
-Date:   Wed, 11 May 2022 13:24:33 +0200
-Message-Id: <20220511112438.1251024-3-javierm@redhat.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220511112438.1251024-1-javierm@redhat.com>
-References: <20220511112438.1251024-1-javierm@redhat.com>
+ us-mta-504-hvVlbODnP1-ixabgTo6srg-1; Wed, 11 May 2022 07:24:41 -0400
+X-MC-Unique: hvVlbODnP1-ixabgTo6srg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EE3D185A5A8;
+        Wed, 11 May 2022 11:24:40 +0000 (UTC)
+Received: from starship (unknown [10.40.192.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AA1822166B2F;
+        Wed, 11 May 2022 11:24:38 +0000 (UTC)
+Message-ID: <94cec439f345313c1a909f6a012665dd10686d47.camel@redhat.com>
+Subject: Re: [PATCH v3 09/34] KVM: x86: hyper-v: Don't use
+ sparse_set_to_vcpu_mask() in kvm_hv_send_ipi()
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 11 May 2022 14:24:37 +0300
+In-Reply-To: <20220414132013.1588929-10-vkuznets@redhat.com>
+References: <20220414132013.1588929-1-vkuznets@redhat.com>
+         <20220414132013.1588929-10-vkuznets@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,200 +69,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These can be used by subsystems to unregister a platform device registered
-by sysfb and also to disable future platform device registration in sysfb.
+On Thu, 2022-04-14 at 15:19 +0200, Vitaly Kuznetsov wrote:
+> Get rid of on-stack allocation of vcpu_mask and optimize kvm_hv_send_ipi()
+> for a smaller number of vCPUs in the request. When Hyper-V TLB flush
+> is in  use, HvSendSyntheticClusterIpi{,Ex} calls are not commonly used to
+> send IPIs to a large number of vCPUs (and are rarely used in general).
+> 
+> Introduce hv_is_vp_in_sparse_set() to directly check if the specified
+> VP_ID is present in sparse vCPU set.
+> 
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/kvm/hyperv.c | 37 ++++++++++++++++++++++++++-----------
+>  1 file changed, 26 insertions(+), 11 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+> index 3cf68645a2e6..aebbb598ad1d 100644
+> --- a/arch/x86/kvm/hyperv.c
+> +++ b/arch/x86/kvm/hyperv.c
+> @@ -1746,6 +1746,25 @@ static void sparse_set_to_vcpu_mask(struct kvm *kvm, u64 *sparse_banks,
+>  	}
+>  }
+>  
+> +static bool hv_is_vp_in_sparse_set(u32 vp_id, u64 valid_bank_mask, u64 sparse_banks[])
+> +{
+> +	int bank, sbank = 0;
+> +
+> +	if (!test_bit(vp_id / HV_VCPUS_PER_SPARSE_BANK,
+> +		      (unsigned long *)&valid_bank_mask))
+> +		return false;
+> +
+> +	for_each_set_bit(bank, (unsigned long *)&valid_bank_mask,
+> +			 KVM_HV_MAX_SPARSE_VCPU_SET_BITS) {
+> +		if (bank == vp_id / HV_VCPUS_PER_SPARSE_BANK)
+> +			break;
+> +		sbank++;
+> +	}
+> +
+> +	return test_bit(vp_id % HV_VCPUS_PER_SPARSE_BANK,
+> +			(unsigned long *)&sparse_banks[sbank]);
+> +}
+> +
+>  struct kvm_hv_hcall {
+>  	u64 param;
+>  	u64 ingpa;
+> @@ -2089,8 +2108,8 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>  		((u64)hc->rep_cnt << HV_HYPERCALL_REP_COMP_OFFSET);
+>  }
+>  
+> -static void kvm_send_ipi_to_many(struct kvm *kvm, u32 vector,
+> -				 unsigned long *vcpu_bitmap)
+> +static void kvm_hv_send_ipi_to_many(struct kvm *kvm, u32 vector,
+> +				    u64 *sparse_banks, u64 valid_bank_mask)
+I think the indentation is wrong here (was wrong before as well)
 
-Suggested-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
----
 
-(no changes since v4)
+>  {
+>  	struct kvm_lapic_irq irq = {
+>  		.delivery_mode = APIC_DM_FIXED,
+> @@ -2100,7 +2119,10 @@ static void kvm_send_ipi_to_many(struct kvm *kvm, u32 vector,
+>  	unsigned long i;
+>  
+>  	kvm_for_each_vcpu(i, vcpu, kvm) {
+> -		if (vcpu_bitmap && !test_bit(i, vcpu_bitmap))
+> +		if (sparse_banks &&
+> +		    !hv_is_vp_in_sparse_set(kvm_hv_get_vpindex(vcpu),
+> +					    valid_bank_mask,
+> +					    sparse_banks))
+>  			continue;
+>  
+>  		/* We fail only when APIC is disabled */
+> @@ -2113,7 +2135,6 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>  	struct kvm *kvm = vcpu->kvm;
+>  	struct hv_send_ipi_ex send_ipi_ex;
+>  	struct hv_send_ipi send_ipi;
+> -	DECLARE_BITMAP(vcpu_mask, KVM_MAX_VCPUS);
+>  	unsigned long valid_bank_mask;
+>  	u64 sparse_banks[KVM_HV_MAX_SPARSE_VCPU_SET_BITS];
+>  	u32 vector;
+> @@ -2175,13 +2196,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>  	if ((vector < HV_IPI_LOW_VECTOR) || (vector > HV_IPI_HIGH_VECTOR))
+>  		return HV_STATUS_INVALID_HYPERCALL_INPUT;
+>  
+> -	if (all_cpus) {
+> -		kvm_send_ipi_to_many(kvm, vector, NULL);
+> -	} else {
+> -		sparse_set_to_vcpu_mask(kvm, sparse_banks, valid_bank_mask, vcpu_mask);
+> -
+> -		kvm_send_ipi_to_many(kvm, vector, vcpu_mask);
+> -	}
+> +	kvm_hv_send_ipi_to_many(kvm, vector, all_cpus ? NULL : sparse_banks, valid_bank_mask);
+>  
+>  ret_success:
+>  	return HV_STATUS_SUCCESS;
 
-Changes in v4:
-- Make sysfb_disable() to also attempt to unregister a device.
 
-Changes in v2:
-- Add kernel-doc comments and include in other_interfaces.rst (Daniel Vetter).
+Overall looks good to me, but I might have missed something.
 
- .../driver-api/firmware/other_interfaces.rst  |  6 ++
- drivers/firmware/sysfb.c                      | 87 +++++++++++++++++--
- include/linux/sysfb.h                         | 19 ++++
- 3 files changed, 106 insertions(+), 6 deletions(-)
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-diff --git a/Documentation/driver-api/firmware/other_interfaces.rst b/Documentation/driver-api/firmware/other_interfaces.rst
-index b81794e0cfbb..06ac89adaafb 100644
---- a/Documentation/driver-api/firmware/other_interfaces.rst
-+++ b/Documentation/driver-api/firmware/other_interfaces.rst
-@@ -13,6 +13,12 @@ EDD Interfaces
- .. kernel-doc:: drivers/firmware/edd.c
-    :internal:
- 
-+Generic System Framebuffers Interface
-+-------------------------------------
-+
-+.. kernel-doc:: drivers/firmware/sysfb.c
-+   :export:
-+
- Intel Stratix10 SoC Service Layer
- ---------------------------------
- Some features of the Intel Stratix10 SoC require a level of privilege
-diff --git a/drivers/firmware/sysfb.c b/drivers/firmware/sysfb.c
-index b032f40a92de..6768968949e6 100644
---- a/drivers/firmware/sysfb.c
-+++ b/drivers/firmware/sysfb.c
-@@ -34,21 +34,92 @@
- #include <linux/screen_info.h>
- #include <linux/sysfb.h>
- 
-+static struct platform_device *pd;
-+static DEFINE_MUTEX(disable_lock);
-+static bool disabled;
-+
-+static bool sysfb_unregister(void)
-+{
-+	if (IS_ERR_OR_NULL(pd))
-+		return false;
-+
-+	platform_device_unregister(pd);
-+	pd = NULL;
-+
-+	return true;
-+}
-+
-+/**
-+ * sysfb_disable() - disable the Generic System Framebuffers support
-+ *
-+ * This disables the registration of system framebuffer devices that match the
-+ * generic drivers that make use of the system framebuffer set up by firmware.
-+ *
-+ * It also unregisters a device if this was already registered by sysfb_init().
-+ *
-+ * Context: The function can sleep. A @disable_lock mutex is acquired to serialize
-+ *          against sysfb_init(), that registers a system framebuffer device and
-+ *          sysfb_try_unregister(), that tries to unregister a framebuffer device.
-+ */
-+void sysfb_disable(void)
-+{
-+	mutex_lock(&disable_lock);
-+	sysfb_unregister();
-+	disabled = true;
-+	mutex_unlock(&disable_lock);
-+}
-+EXPORT_SYMBOL_GPL(sysfb_disable);
-+
-+/**
-+ * sysfb_try_unregister() - attempt to unregister a system framebuffer device
-+ * @dev: device to unregister
-+ *
-+ * This tries to unregister a system framebuffer device if this was registered
-+ * by the Generic System Framebuffers. The device will only be unregistered if
-+ * it was registered by sysfb_init(), otherwise it will not be unregistered.
-+ *
-+ * Context: The function can sleep. a @load_lock mutex is acquired to serialize
-+ *          against sysfb_init(), that registers a simple framebuffer device and
-+ *          sysfb_disable(), that disables the Generic System Framebuffers support.
-+ *
-+ * Return:
-+ * * true          - the device was unregistered successfully
-+ * * false         - the device was not unregistered
-+ */
-+bool sysfb_try_unregister(struct device *dev)
-+{
-+	bool ret = false;
-+
-+	mutex_lock(&disable_lock);
-+	if (IS_ERR_OR_NULL(pd) || pd != to_platform_device(dev))
-+		goto unlock_mutex;
-+
-+	ret = sysfb_unregister();
-+
-+unlock_mutex:
-+	mutex_unlock(&disable_lock);
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(sysfb_try_unregister);
-+
- static __init int sysfb_init(void)
- {
- 	struct screen_info *si = &screen_info;
- 	struct simplefb_platform_data mode;
--	struct platform_device *pd;
- 	const char *name;
- 	bool compatible;
--	int ret;
-+	int ret = 0;
-+
-+	mutex_lock(&disable_lock);
-+	if (disabled)
-+		goto unlock_mutex;
- 
- 	/* try to create a simple-framebuffer device */
- 	compatible = sysfb_parse_mode(si, &mode);
- 	if (compatible) {
- 		pd = sysfb_create_simplefb(si, &mode);
- 		if (!IS_ERR(pd))
--			return 0;
-+			goto unlock_mutex;
- 	}
- 
- 	/* if the FB is incompatible, create a legacy framebuffer device */
-@@ -60,8 +131,10 @@ static __init int sysfb_init(void)
- 		name = "platform-framebuffer";
- 
- 	pd = platform_device_alloc(name, 0);
--	if (!pd)
--		return -ENOMEM;
-+	if (!pd) {
-+		ret = -ENOMEM;
-+		goto unlock_mutex;
-+	}
- 
- 	sysfb_apply_efi_quirks(pd);
- 
-@@ -73,9 +146,11 @@ static __init int sysfb_init(void)
- 	if (ret)
- 		goto err;
- 
--	return 0;
-+	goto unlock_mutex;
- err:
- 	platform_device_put(pd);
-+unlock_mutex:
-+	mutex_unlock(&disable_lock);
- 	return ret;
- }
- 
-diff --git a/include/linux/sysfb.h b/include/linux/sysfb.h
-index 708152e9037b..e8c0313fac8f 100644
---- a/include/linux/sysfb.h
-+++ b/include/linux/sysfb.h
-@@ -55,6 +55,25 @@ struct efifb_dmi_info {
- 	int flags;
- };
- 
-+#ifdef CONFIG_SYSFB
-+
-+void sysfb_disable(void);
-+bool sysfb_try_unregister(struct device *dev);
-+
-+#else /* CONFIG_SYSFB */
-+
-+static inline void sysfb_disable(void)
-+{
-+
-+}
-+
-+static inline bool sysfb_try_unregister(struct device *dev)
-+{
-+	return false;
-+}
-+
-+#endif /* CONFIG_SYSFB */
-+
- #ifdef CONFIG_EFI
- 
- extern struct efifb_dmi_info efifb_dmi_list[];
--- 
-2.35.1
+Best regards,
+	Maxim Levitsky
 

@@ -2,553 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 889A35231E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D99C25231ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:36:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238817AbiEKLf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 07:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40176 "EHLO
+        id S236353AbiEKLgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 07:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240587AbiEKLf2 (ORCPT
+        with ESMTP id S233890AbiEKLgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 07:35:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A5A4066F9E
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:35:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652268925;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xhRkRTM1s3XCqG7usuDSzmUS6nbMcfodiMVzITNLyzA=;
-        b=dI6G9p0UeQex0Rfa66KPML8aYbZjj2hIMlyo1R2SKwo7xomnbY3PAA/w6Te6vN6PkAWnnI
-        HU0+DCkgolcbbcpc86yTBt8+f5jgecSndcxdU6QmBW3iMHxRWJFBbM8OS+27CX9tEVFjUp
-        Hiu7X2uMN4SujHKdau20wwZoUCrcl4o=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-505-1ufYHWCKNwSub6A4TqBAEw-1; Wed, 11 May 2022 07:35:22 -0400
-X-MC-Unique: 1ufYHWCKNwSub6A4TqBAEw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ED011800882;
-        Wed, 11 May 2022 11:35:21 +0000 (UTC)
-Received: from starship (unknown [10.40.192.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 74ECB1121314;
-        Wed, 11 May 2022 11:35:19 +0000 (UTC)
-Message-ID: <eadde57a313dd70d9409791c2368828f6bd9b083.camel@redhat.com>
-Subject: Re: [PATCH v3 24/34] KVM: selftests: Hyper-V PV IPI selftest
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 11 May 2022 14:35:18 +0300
-In-Reply-To: <20220414132013.1588929-25-vkuznets@redhat.com>
-References: <20220414132013.1588929-1-vkuznets@redhat.com>
-         <20220414132013.1588929-25-vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 11 May 2022 07:36:42 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB56B457A9;
+        Wed, 11 May 2022 04:36:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1652268999; x=1683804999;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=pDMi9i/8HZxA+smuhylhOULPMUuSY1+x+42COCM5AZM=;
+  b=2Hsp/LPhRtjmXiIsX9UCn91/kwrKWVhQzn9lWVbORQTjQveQiNvZJJa6
+   yxxFK8gMeBskcXUIZQBzL9yCtDhR+W+R+G8a7Kcwbbw4dmShqkBVSIzO/
+   iKiDapDLwPBPCsxOEBaA4rVSZoIlARp9tkpShvr9isahlD5ySn7YJi5Pz
+   FhOT3MkgOrRA/MR5OspFbgO4FZkHSnnP6BsGepIueXoRiNymjUjpnONYx
+   +aJz/pFzYY45nZy2m59O+6+lXDd2Qwqn5y4/U5Gmodb98k+ZCAapm9Z2f
+   CqRWnsKIPzzVG9s604+0Pp7P3/itW3fGxdA1Ew3yQ61giq4HyNw3tfqeK
+   g==;
+X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
+   d="scan'208";a="163580244"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 May 2022 04:36:39 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 11 May 2022 04:36:38 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17 via Frontend Transport; Wed, 11 May 2022 04:36:38 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=U5yijlijs7JFb2JxwEifN9OOE+s2jA/Xhnj2u8GnWwXH4+q7euuIBJfXIDf1k4OXsPoq/mlzb0s3G2XHaygC5ThoALcXTXh05hSDm+wIeazl71qUjX0ezboXEAGdN6OuAy+VMFyqj1BjHNBlqYQalA8LKog6nTxB66R+hVhySuerBKQjFcApARMuCKHUwfA//SElI+0vNmgh/Jnx8+ZrsIhtmPnTVQX7dMnp+zP7WPZc/iFUteGAARHZFApJCARQ1Jh3jENqUnfgkCsuJWN7i2ovQMiKTYs3tYeO2of7dtpiMhMrJBhMFedMmBTafJv0Mef+aZZ6PjoSDUqiP1mMCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pDMi9i/8HZxA+smuhylhOULPMUuSY1+x+42COCM5AZM=;
+ b=RWX2zxsn34rxbEW8f9LT80qRseHtQi8C2oUGc0X2wtzg6uB7d/3DXz/oqI5I/XAclU43vDTcq6x+rBR5WtOWpy6fpD0GtgzOUD5CPKn84OCk1lXcGMTSVu8jj11WOEwtESH75BT1XKac5SYpj0FQkQiFTRG12ACrOzwBKaSLA1hSO7VM1D+ujftChY2dp48fOhFXd6yzYnyCSBOgNLHF1O0YG3MbzP4AE4QZ+ZF3AAFTMniiwvIqPJFU+gfioQg5+iQrJvj365x4QqDqXDzKmkmLZ1JXw4rU3uy1+xAMxWzwwFP5T2Dsp2RltfH/oyUUIGY//aTcbZtpPH/aHcoI7g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pDMi9i/8HZxA+smuhylhOULPMUuSY1+x+42COCM5AZM=;
+ b=EUNKI5ynfEFlWfa89LVxdk/Gkc50lOkitbuwpfHi74w0U+so6gZ23pzyOBCccgv2zvAa656DxbsgazAivWx0aYUEEYiXpHEUQ6Eqs1ViyalsPztlvofw+anv7q/Kr71vU/jgU0ZQyuO/tJtvdEHwPHWCsfRGqCkEACXHWDf7uvk=
+Received: from PH0PR11MB5160.namprd11.prod.outlook.com (2603:10b6:510:3e::8)
+ by SN6PR11MB3519.namprd11.prod.outlook.com (2603:10b6:805:d0::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13; Wed, 11 May
+ 2022 11:36:34 +0000
+Received: from PH0PR11MB5160.namprd11.prod.outlook.com
+ ([fe80::d10f:cc33:cfd8:365e]) by PH0PR11MB5160.namprd11.prod.outlook.com
+ ([fe80::d10f:cc33:cfd8:365e%8]) with mapi id 15.20.5250.013; Wed, 11 May 2022
+ 11:36:34 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <i.bornyakov@metrotek.ru>
+CC:     <mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>,
+        <trix@redhat.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linux-fpga@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <system@metrotek.ru>
+Subject: Re: [PATCH v11 2/3] fpga: microchip-spi: add Microchip MPF FPGA
+ manager
+Thread-Topic: [PATCH v11 2/3] fpga: microchip-spi: add Microchip MPF FPGA
+ manager
+Thread-Index: AQHYYekhJeVdxuqcOUSnsjuxyGg64q0Wb3mAgABdtYCAABvqgIABFZ8AgAFcBwCAADfBgA==
+Date:   Wed, 11 May 2022 11:36:33 +0000
+Message-ID: <f1557776-36c9-083f-2101-db84ca9a9cfa@microchip.com>
+References: <20220507074304.11144-1-i.bornyakov@metrotek.ru>
+ <20220507074304.11144-3-i.bornyakov@metrotek.ru>
+ <bd5cb37b-ee56-f6d5-2d98-c08566b60728@microchip.com>
+ <20220509171621.zk4owxwlngxjodgz@x260>
+ <da1e5125-de6b-11a8-a52d-7e6e5f45ab70@conchuod.ie>
+ <4b752147-1a09-a4af-bc5d-3b132b84ef49@conchuod.ie>
+ <20220511081532.7gkmz3uumzxgwfaf@h-e2.ddg>
+In-Reply-To: <20220511081532.7gkmz3uumzxgwfaf@h-e2.ddg>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 8aab681f-1438-4c85-b50b-08da33428052
+x-ms-traffictypediagnostic: SN6PR11MB3519:EE_
+x-microsoft-antispam-prvs: <SN6PR11MB3519F5566ACD2D53A0DC710798C89@SN6PR11MB3519.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: FdgDUEK/1pnOjRL7BH9XT0M5Dk6IWKaK+p6PclemgYsx48MyPULbFNSgo2nYlIU0I9hyJQ8foY5cb+oBHWeyw5hAHqsxJgsGiITl5rMtZFIzk+kKZZfVdEW6wGblH24HK6pQMiHmbi6Np7sd0fwVukkATXVctkTLNaE71XmscOTFE2N7MuTE0ssamdy4RiGjnN6TChFFaX4K5QwLRlN2dKkwB0zvDIDl8XqqaJcB/OeOt9QjFFMpiobg6wzE3SiIB7iQhlTsp4I73jPJ9f05fsoa03+d4D4W/g/yCHehoe804T44fd5cVU9z+zrbPTD3BvBGQJBVYizPoSPIQrK4q4YWCqX31/5C5YFj1nMtSeK/Jtym5usomaGGShU3ykm8lwNpbMiCzFjEY6YNuklMBvWgkeRSaXOsT83cupO3jPzM1VBb2PHDRQsz577pPbD2AjWLYJNSeHIDDJUt+PpIrSZoFhnG6nCllNIF3+KU4YOD0zsuYudRoNlHcK+9/p9YQ3goF8fq1XPh7l7WcUSZTTT3u4bzIQ8w8gyuFEfWef5Hjh7hZ2z36kpZhR6VMsjeB+2CTL1P7To11Gpsdor+y5+I6HbQzvo7RlKeAsGNQbXl8i76Mj1zZq6A5btbMMByMrTvzJHKrEBgu5FQ62PFbQ2YXrjb8b5NmYMIAu6TwL3nEf3miQrAsTTp10VmZPKJyZv39Hq5/40qrdr5YvAv5bIH8G9TyG9NKHwMl7C2pgNzR39AUrUc2jfAyA1Sx6UYYtSeCe1A65eheUhB/Jyk6WkZw2pvoG2xWPs9vHeQ0BUhhf+ciGWuHxsbWWEgWRWDznRlPO1mGRg3fD0u/Jyvr8UvW1V9/kZPXpT0CxuSXG3/r1leLl0bu1k+VUA1D/tz
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5160.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38070700005)(38100700002)(31686004)(76116006)(36756003)(4326008)(83380400001)(316002)(66946007)(66476007)(64756008)(66556008)(66446008)(2906002)(8676002)(71200400001)(6916009)(54906003)(91956017)(122000001)(86362001)(5660300002)(186003)(53546011)(6506007)(31696002)(6486002)(508600001)(8936002)(966005)(7416002)(2616005)(6512007)(26005)(45980500001)(15519875007)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MGRUaDhFL29LMWpSUzFxd1hYOW5mc2RMZEtic2QzSGsySE8wdGFxVDJKZHZx?=
+ =?utf-8?B?SkYrT3Y3SU1VM0pncWNJSmtzckhrNXgwOWQ2QlVtemdkNUpWSm11Tk1aZVVq?=
+ =?utf-8?B?ZGxKS0xlY3JTMW1meC96b0kxVkIwa2xTTUFEVlJ3aW5rL0paS2RrN283eWwr?=
+ =?utf-8?B?U0hNMnJhZ2hsQVd6MGh5ck5jNVFPdnIvSTU4eGdQWDM0ZWJXbTV4KzdxY0Ux?=
+ =?utf-8?B?eVlZRFlRZG1heWFVRTdBbnFNNjdkL0t0NTVkRnNPT0R2Z0xJVWp1R1JYT29k?=
+ =?utf-8?B?bXVlUmhoQzczS0xjSyt3cTJMdmFhWktDTkpPekswYVZtUFRJc0l3OWQ3c3dU?=
+ =?utf-8?B?VGxFdHpKdXp5dWpBQU9KQ3pVbDFQTmU5bjJoTDRScmNwTGlVRTZWZFUvVzR1?=
+ =?utf-8?B?YzJHVWg5ajU4enFra2FXNlExTlV2dlhNRzFtdy9hanpEV2NqcGJqdmVuSVhZ?=
+ =?utf-8?B?UFNzR3R0MVQ4R29aQnR3RXNkMnZzbU5DVWxjdDNiNlphZXJ3QWNjUTA3UDJ0?=
+ =?utf-8?B?SjVicXVyOXlzQnByQ3Q5S3M0eFRXbGhZOGp6anpUVTZreGVoaE5YeVlxZjM3?=
+ =?utf-8?B?MzZZUXZTaE00d1l5N2ppVUFycyt3cDFMUm9iQ0pMd1BmVVlUUkxtbDdocmU5?=
+ =?utf-8?B?dFFkY3J1MW83SEZVb01tTkxsa0ZFWUVCdVlHUlI2VEU2Rm9KM3N6cGg1czFG?=
+ =?utf-8?B?UlF6NlFvbnBPNk80d1NEcDRucWdsaGxLUDFGM0lwYTVqQUdDWnVFUGlmc3ZY?=
+ =?utf-8?B?T0ozM1ErcmdHZlB1M1praVYrZTBxMjN2TUh4K2F3bG9BZkRMR2VqN1RsMXZu?=
+ =?utf-8?B?Ny9qeFFZSVlzWGZjcWg3RlZKZVZoSklXbkhYMkwxd0ljUjdVTzFWY0tTTEZu?=
+ =?utf-8?B?KzVwRkROZ2dBeUcyYlhHYzl6U3ltZjJFd3pnNkFOSExMZll1MVlSMG0vdnBR?=
+ =?utf-8?B?bk93N09pNzhsU281RThWRmZtTGlTd3VtNVNpZnhNVkVMQ1MvbXR0K24wN2Rr?=
+ =?utf-8?B?RUh2QmtkVkFmWU1Tek1yc2hOMSs1NjliV1pOSEh5bUk0OHBrTGVqeFphdmx5?=
+ =?utf-8?B?VnVBd0dSVEY5RU45d2ExTzVnejBWa1B3U0JFbDVBSnp6TzJOc2lsTGpOL0wv?=
+ =?utf-8?B?Y2hjV1dvWUNkU3E5bENtYXFrWm1FcW5PN3BlNUV5OXJPQkE3bHlKQ3Uxa0sz?=
+ =?utf-8?B?MGpXNjd3TUZLazc2UXc4RzZZbURVVWhWcVlBaGwreWxSMzVsbmhOeWdtOVRy?=
+ =?utf-8?B?OS9ldmRQcFAvMThyMVdSU2VTTlhXQjBTKzE5MVBmZnpTRE1MaFF3V202UGxk?=
+ =?utf-8?B?YzBwemJGZHA5MzBjK3dYK0NmT1ZrSXZsTEpVOEsra3FCVzAwNXJkSlhWVllJ?=
+ =?utf-8?B?S3p1blU2bzhxdkk3YjZwN2RvVjM0U0lkbm9xV3RZMWx6Y1BDVlJscnAvU0VW?=
+ =?utf-8?B?VitEa3hQbVUrQUxQbncwSU53UDJKTTZya1hnUVdVTmtxKzN3cjZDRWY2Z2l4?=
+ =?utf-8?B?dmxDWkZtMzVoVXVRMmZkUVllKzBjWk5oRTFrVUJMdWc2K2lUR2piMCszRXVo?=
+ =?utf-8?B?WXdUU3J1djFhMXdJbXhCdzFhK2NEVzY4bW5TM1ZiMFBqOTlaaGNzeXhIZ2xF?=
+ =?utf-8?B?dWcvcGlCdzJFUzc1VXdTNVBzc2tVOTBIR0x3eStTNXpNVldvOG10R3RhWGFp?=
+ =?utf-8?B?cWdsUG9DMEcrY0taNWxHY1VmZENJa3I2KzlMYllnNUI4ZDRpeWNmRE1GVno5?=
+ =?utf-8?B?M056WlhORStJaUllSE1aKzU4ZU9XcGs4cVNqenZvOTA0RlZCUjEwRHZ5UlQv?=
+ =?utf-8?B?VitVL01wRXpTb1g5RjFZODhxWkgrc3NMUTltTnJBZFArZk12eC9QV2RTeEhq?=
+ =?utf-8?B?a3ZtalFtbjhxWEhUZElYbHBEdnUvMVFRTnBvMlFPV2lWWE9EMnZ6UFFTTEN4?=
+ =?utf-8?B?U2tkZXphR2duSzVNNW1DZ1VTU2x5dGk0UHB0bi9tMXhEbHJudXF2Vy8wWUdM?=
+ =?utf-8?B?LzN0VVY3dWQ0OExiS2Zrd0xhTzhuWE1ja0VsbmRYMFlpV2NFdHBCeUhxR2tl?=
+ =?utf-8?B?YUJGRXZoTTJZTWwvRUN2RjdwOEJWOWtWVk9OUXk3OTB6RnJzdUp0K3Z4dVVq?=
+ =?utf-8?B?NGk2R2dYeEFzc3NQeTBMZlF4OFdPa2g0SEJUTlBjQ3paQTZ0aTRTdmE5UDVv?=
+ =?utf-8?B?anJwMytPWDZuYXM5d3RhM2szOUVLK0pIcFhUa0M1MGJ4Y2JmSDJVbThxMnFh?=
+ =?utf-8?B?bzZJVHRkSXhVOXdiQUdHV0tMOFV5WlN1YzQ3dHJDUVhmb20yd2lzVVJKMVh4?=
+ =?utf-8?B?VTRLbWtRZ05Cak5IcWVDdis0TmliSkZuTjBYN0dwaWNZdHNyVzUzUT09?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <99A5CAF7029C8741858C6A42BB7BBAE9@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5160.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8aab681f-1438-4c85-b50b-08da33428052
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 May 2022 11:36:33.9639
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +yg/g/dDqDBlqUrMVfYXq0Kwfl9UZ/WLrzzK9CAQX559sn/aBdNLKrxcPwpkFzEmKZanqydtbFfED7wARKIDTQTtthNMBX5lbQHrhU8t3Ek=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3519
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-14 at 15:20 +0200, Vitaly Kuznetsov wrote:
-> Introduce a selftest for Hyper-V PV IPI hypercalls
-> (HvCallSendSyntheticClusterIpi, HvCallSendSyntheticClusterIpiEx).
-> 
-> The test creates one 'sender' vCPU and two 'receiver' vCPU and then
-> issues various combinations of send IPI hypercalls in both 'normal'
-> and 'fast' (with XMM input where necessary) mode. Later, the test
-> checks whether IPIs were delivered to the expected destination vCPU[s].
-> 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  tools/testing/selftests/kvm/.gitignore        |   1 +
->  tools/testing/selftests/kvm/Makefile          |   1 +
->  .../selftests/kvm/include/x86_64/hyperv.h     |   3 +
->  .../selftests/kvm/x86_64/hyperv_features.c    |   5 +-
->  .../testing/selftests/kvm/x86_64/hyperv_ipi.c | 374 ++++++++++++++++++
->  5 files changed, 381 insertions(+), 3 deletions(-)
->  create mode 100644 tools/testing/selftests/kvm/x86_64/hyperv_ipi.c
-> 
-> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-> index 56140068b763..5d5fbb161d56 100644
-> --- a/tools/testing/selftests/kvm/.gitignore
-> +++ b/tools/testing/selftests/kvm/.gitignore
-> @@ -23,6 +23,7 @@
->  /x86_64/hyperv_clock
->  /x86_64/hyperv_cpuid
->  /x86_64/hyperv_features
-> +/x86_64/hyperv_ipi
->  /x86_64/hyperv_svm_test
->  /x86_64/mmio_warning_test
->  /x86_64/mmu_role_test
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index af582d168621..44889f897fe7 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -52,6 +52,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/fix_hypercall_test
->  TEST_GEN_PROGS_x86_64 += x86_64/hyperv_clock
->  TEST_GEN_PROGS_x86_64 += x86_64/hyperv_cpuid
->  TEST_GEN_PROGS_x86_64 += x86_64/hyperv_features
-> +TEST_GEN_PROGS_x86_64 += x86_64/hyperv_ipi
->  TEST_GEN_PROGS_x86_64 += x86_64/hyperv_svm_test
->  TEST_GEN_PROGS_x86_64 += x86_64/kvm_clock_test
->  TEST_GEN_PROGS_x86_64 += x86_64/kvm_pv_test
-> diff --git a/tools/testing/selftests/kvm/include/x86_64/hyperv.h b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
-> index b66910702c0a..f51d6fab8e93 100644
-> --- a/tools/testing/selftests/kvm/include/x86_64/hyperv.h
-> +++ b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
-> @@ -184,5 +184,8 @@
->  
->  /* hypercall options */
->  #define HV_HYPERCALL_FAST_BIT		BIT(16)
-> +#define HV_HYPERCALL_VARHEAD_OFFSET	17
-> +
-> +#define HYPERV_LINUX_OS_ID ((u64)0x8100 << 48)
->  
->  #endif /* !SELFTEST_KVM_HYPERV_H */
-> diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_features.c b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-> index 672915ce73d8..98c020356925 100644
-> --- a/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-> +++ b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-> @@ -14,7 +14,6 @@
->  #include "hyperv.h"
->  
->  #define VCPU_ID 0
-> -#define LINUX_OS_ID ((u64)0x8100 << 48)
->  
->  extern unsigned char rdmsr_start;
->  extern unsigned char rdmsr_end;
-> @@ -127,7 +126,7 @@ static void guest_hcall(vm_vaddr_t pgs_gpa, struct hcall_data *hcall)
->  	int i = 0;
->  	u64 res, input, output;
->  
-> -	wrmsr(HV_X64_MSR_GUEST_OS_ID, LINUX_OS_ID);
-> +	wrmsr(HV_X64_MSR_GUEST_OS_ID, HYPERV_LINUX_OS_ID);
->  	wrmsr(HV_X64_MSR_HYPERCALL, pgs_gpa);
->  
->  	while (hcall->control) {
-> @@ -230,7 +229,7 @@ static void guest_test_msrs_access(void)
->  			 */
->  			msr->idx = HV_X64_MSR_GUEST_OS_ID;
->  			msr->write = 1;
-> -			msr->write_val = LINUX_OS_ID;
-> +			msr->write_val = HYPERV_LINUX_OS_ID;
->  			msr->available = 1;
->  			break;
->  		case 3:
-
-Nitpick: I think that the HYPERV_LINUX_OS_ID change should be in a separate patch.
-
-
-> diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_ipi.c b/tools/testing/selftests/kvm/x86_64/hyperv_ipi.c
-> new file mode 100644
-> index 000000000000..075963c32d45
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/x86_64/hyperv_ipi.c
-> @@ -0,0 +1,374 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Hyper-V HvCallSendSyntheticClusterIpi{,Ex} tests
-> + *
-> + * Copyright (C) 2022, Red Hat, Inc.
-> + *
-> + */
-> +
-> +#define _GNU_SOURCE /* for program_invocation_short_name */
-> +#include <pthread.h>
-> +#include <inttypes.h>
-> +
-> +#include "kvm_util.h"
-> +#include "hyperv.h"
-> +#include "processor.h"
-> +#include "test_util.h"
-> +#include "vmx.h"
-> +
-> +#define SENDER_VCPU_ID   1
-> +#define RECEIVER_VCPU_ID_1 2
-> +#define RECEIVER_VCPU_ID_2 65
-> +
-> +#define IPI_VECTOR	 0xfe
-> +
-> +static volatile uint64_t ipis_rcvd[RECEIVER_VCPU_ID_2 + 1];
-> +
-> +struct thread_params {
-> +	struct kvm_vm *vm;
-> +	uint32_t vcpu_id;
-> +};
-> +
-> +struct hv_vpset {
-> +	u64 format;
-> +	u64 valid_bank_mask;
-> +	u64 bank_contents[2];
-> +};
-> +
-> +enum HV_GENERIC_SET_FORMAT {
-> +	HV_GENERIC_SET_SPARSE_4K,
-> +	HV_GENERIC_SET_ALL,
-> +};
-> +
-> +/* HvCallSendSyntheticClusterIpi hypercall */
-> +struct hv_send_ipi {
-> +	u32 vector;
-> +	u32 reserved;
-> +	u64 cpu_mask;
-> +};
-> +
-> +/* HvCallSendSyntheticClusterIpiEx hypercall */
-> +struct hv_send_ipi_ex {
-> +	u32 vector;
-> +	u32 reserved;
-> +	struct hv_vpset vp_set;
-> +};
-> +
-> +static inline void hv_init(vm_vaddr_t pgs_gpa)
-> +{
-> +	wrmsr(HV_X64_MSR_GUEST_OS_ID, HYPERV_LINUX_OS_ID);
-> +	wrmsr(HV_X64_MSR_HYPERCALL, pgs_gpa);
-> +}
-> +
-> +static void receiver_code(void *hcall_page, vm_vaddr_t pgs_gpa)
-> +{
-> +	u32 vcpu_id;
-> +
-> +	x2apic_enable();
-> +	hv_init(pgs_gpa);
-> +
-> +	vcpu_id = rdmsr(HV_X64_MSR_VP_INDEX);
-> +
-> +	/* Signal sender vCPU we're ready */
-> +	ipis_rcvd[vcpu_id] = (u64)-1;
-> +
-> +	for (;;)
-> +		asm volatile("sti; hlt; cli");
-> +}
-> +
-> +static void guest_ipi_handler(struct ex_regs *regs)
-> +{
-> +	u32 vcpu_id = rdmsr(HV_X64_MSR_VP_INDEX);
-> +
-> +	ipis_rcvd[vcpu_id]++;
-> +	wrmsr(HV_X64_MSR_EOI, 1);
-> +}
-> +
-> +static inline u64 hypercall(u64 control, vm_vaddr_t arg1, vm_vaddr_t arg2)
-> +{
-> +	u64 hv_status;
-> +
-> +	asm volatile("mov %3, %%r8\n"
-> +		     "vmcall"
-> +		     : "=a" (hv_status),
-> +		       "+c" (control), "+d" (arg1)
-> +		     :  "r" (arg2)
-> +		     : "cc", "memory", "r8", "r9", "r10", "r11");
-> +
-> +	return hv_status;
-> +}
-> +
-> +static inline void nop_loop(void)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < 100000000; i++)
-> +		asm volatile("nop");
-> +}
-> +
-> +static inline void sync_to_xmm(void *data)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < 8; i++)
-> +		write_sse_reg(i, (sse128_t *)(data + sizeof(sse128_t) * i));
-> +}
-> +
-> +static void sender_guest_code(void *hcall_page, vm_vaddr_t pgs_gpa)
-> +{
-> +	struct hv_send_ipi *ipi = (struct hv_send_ipi *)hcall_page;
-> +	struct hv_send_ipi_ex *ipi_ex = (struct hv_send_ipi_ex *)hcall_page;
-> +	int stage = 1, ipis_expected[2] = {0};
-> +	u64 res;
-> +
-> +	hv_init(pgs_gpa);
-> +	GUEST_SYNC(stage++);
-> +
-> +	/* Wait for receiver vCPUs to come up */
-> +	while (!ipis_rcvd[RECEIVER_VCPU_ID_1] || !ipis_rcvd[RECEIVER_VCPU_ID_2])
-> +		nop_loop();
-> +	ipis_rcvd[RECEIVER_VCPU_ID_1] = ipis_rcvd[RECEIVER_VCPU_ID_2] = 0;
-> +
-> +	/* 'Slow' HvCallSendSyntheticClusterIpi to RECEIVER_VCPU_ID_1 */
-> +	ipi->vector = IPI_VECTOR;
-> +	ipi->cpu_mask = 1 << RECEIVER_VCPU_ID_1;
-> +	res = hypercall(HVCALL_SEND_IPI, pgs_gpa, pgs_gpa + 4096);
-> +	GUEST_ASSERT((res & 0xffff) == 0);
-> +	nop_loop();
-> +	GUEST_ASSERT(ipis_rcvd[RECEIVER_VCPU_ID_1] == ++ipis_expected[0]);
-> +	GUEST_ASSERT(ipis_rcvd[RECEIVER_VCPU_ID_2] == ipis_expected[1]);
-> +	GUEST_SYNC(stage++);
-> +	/* 'Fast' HvCallSendSyntheticClusterIpi to RECEIVER_VCPU_ID_1 */
-> +	res = hypercall(HVCALL_SEND_IPI | HV_HYPERCALL_FAST_BIT,
-> +			IPI_VECTOR, 1 << RECEIVER_VCPU_ID_1);
-> +	GUEST_ASSERT((res & 0xffff) == 0);
-> +	nop_loop();
-> +	GUEST_ASSERT(ipis_rcvd[RECEIVER_VCPU_ID_1] == ++ipis_expected[0]);
-> +	GUEST_ASSERT(ipis_rcvd[RECEIVER_VCPU_ID_2] == ipis_expected[1]);
-> +	GUEST_SYNC(stage++);
-> +
-> +	/* 'Slow' HvCallSendSyntheticClusterIpiEx to RECEIVER_VCPU_ID_1 */
-> +	memset(hcall_page, 0, 4096);
-> +	ipi_ex->vector = IPI_VECTOR;
-> +	ipi_ex->vp_set.format = HV_GENERIC_SET_SPARSE_4K;
-> +	ipi_ex->vp_set.valid_bank_mask = 1 << 0;
-> +	ipi_ex->vp_set.bank_contents[0] = BIT(RECEIVER_VCPU_ID_1);
-> +	res = hypercall(HVCALL_SEND_IPI_EX | (1 << HV_HYPERCALL_VARHEAD_OFFSET),
-> +			pgs_gpa, pgs_gpa + 4096);
-> +	GUEST_ASSERT((res & 0xffff) == 0);
-> +	nop_loop();
-> +	GUEST_ASSERT(ipis_rcvd[RECEIVER_VCPU_ID_1] == ++ipis_expected[0]);
-> +	GUEST_ASSERT(ipis_rcvd[RECEIVER_VCPU_ID_2] == ipis_expected[1]);
-> +	GUEST_SYNC(stage++);
-> +	/* 'XMM Fast' HvCallSendSyntheticClusterIpiEx to RECEIVER_VCPU_ID_1 */
-> +	sync_to_xmm(&ipi_ex->vp_set.valid_bank_mask);
-> +	res = hypercall(HVCALL_SEND_IPI_EX | HV_HYPERCALL_FAST_BIT |
-> +			(1 << HV_HYPERCALL_VARHEAD_OFFSET),
-> +			IPI_VECTOR, HV_GENERIC_SET_SPARSE_4K);
-> +	GUEST_ASSERT((res & 0xffff) == 0);
-> +	nop_loop();
-> +	GUEST_ASSERT(ipis_rcvd[RECEIVER_VCPU_ID_1] == ++ipis_expected[0]);
-> +	GUEST_ASSERT(ipis_rcvd[RECEIVER_VCPU_ID_2] == ipis_expected[1]);
-> +	GUEST_SYNC(stage++);
-> +
-> +	/* 'Slow' HvCallSendSyntheticClusterIpiEx to RECEIVER_VCPU_ID_2 */
-> +	memset(hcall_page, 0, 4096);
-> +	ipi_ex->vector = IPI_VECTOR;
-> +	ipi_ex->vp_set.format = HV_GENERIC_SET_SPARSE_4K;
-> +	ipi_ex->vp_set.valid_bank_mask = 1 << 1;
-> +	ipi_ex->vp_set.bank_contents[0] = BIT(RECEIVER_VCPU_ID_2 - 64);
-> +	res = hypercall(HVCALL_SEND_IPI_EX | (1 << HV_HYPERCALL_VARHEAD_OFFSET),
-> +			pgs_gpa, pgs_gpa + 4096);
-> +	GUEST_ASSERT((res & 0xffff) == 0);
-> +	nop_loop();
-> +	GUEST_ASSERT(ipis_rcvd[RECEIVER_VCPU_ID_1] == ipis_expected[0]);
-> +	GUEST_ASSERT(ipis_rcvd[RECEIVER_VCPU_ID_2] == ++ipis_expected[1]);
-> +	GUEST_SYNC(stage++);
-> +	/* 'XMM Fast' HvCallSendSyntheticClusterIpiEx to RECEIVER_VCPU_ID_2 */
-> +	sync_to_xmm(&ipi_ex->vp_set.valid_bank_mask);
-> +	res = hypercall(HVCALL_SEND_IPI_EX | HV_HYPERCALL_FAST_BIT |
-> +			(1 << HV_HYPERCALL_VARHEAD_OFFSET),
-> +			IPI_VECTOR, HV_GENERIC_SET_SPARSE_4K);
-> +	GUEST_ASSERT((res & 0xffff) == 0);
-> +	nop_loop();
-> +	GUEST_ASSERT(ipis_rcvd[RECEIVER_VCPU_ID_1] == ipis_expected[0]);
-> +	GUEST_ASSERT(ipis_rcvd[RECEIVER_VCPU_ID_2] == ++ipis_expected[1]);
-> +	GUEST_SYNC(stage++);
-> +
-> +	/* 'Slow' HvCallSendSyntheticClusterIpiEx to both RECEIVER_VCPU_ID_{1,2} */
-> +	memset(hcall_page, 0, 4096);
-> +	ipi_ex->vector = IPI_VECTOR;
-> +	ipi_ex->vp_set.format = HV_GENERIC_SET_SPARSE_4K;
-> +	ipi_ex->vp_set.valid_bank_mask = 1 << 1 | 1;
-> +	ipi_ex->vp_set.bank_contents[0] = BIT(RECEIVER_VCPU_ID_1);
-> +	ipi_ex->vp_set.bank_contents[1] = BIT(RECEIVER_VCPU_ID_2 - 64);
-> +	res = hypercall(HVCALL_SEND_IPI_EX | (2 << HV_HYPERCALL_VARHEAD_OFFSET),
-> +			pgs_gpa, pgs_gpa + 4096);
-> +	GUEST_ASSERT((res & 0xffff) == 0);
-> +	nop_loop();
-> +	GUEST_ASSERT(ipis_rcvd[RECEIVER_VCPU_ID_1] == ++ipis_expected[0]);
-> +	GUEST_ASSERT(ipis_rcvd[RECEIVER_VCPU_ID_2] == ++ipis_expected[1]);
-> +	GUEST_SYNC(stage++);
-> +	/* 'XMM Fast' HvCallSendSyntheticClusterIpiEx to both RECEIVER_VCPU_ID_{1, 2} */
-> +	sync_to_xmm(&ipi_ex->vp_set.valid_bank_mask);
-> +	res = hypercall(HVCALL_SEND_IPI_EX | HV_HYPERCALL_FAST_BIT |
-> +			(2 << HV_HYPERCALL_VARHEAD_OFFSET),
-> +			IPI_VECTOR, HV_GENERIC_SET_SPARSE_4K);
-> +	GUEST_ASSERT((res & 0xffff) == 0);
-> +	nop_loop();
-> +	GUEST_ASSERT(ipis_rcvd[RECEIVER_VCPU_ID_1] == ++ipis_expected[0]);
-> +	GUEST_ASSERT(ipis_rcvd[RECEIVER_VCPU_ID_2] == ++ipis_expected[1]);
-> +	GUEST_SYNC(stage++);
-> +
-> +	/* 'Slow' HvCallSendSyntheticClusterIpiEx to HV_GENERIC_SET_ALL */
-> +	memset(hcall_page, 0, 4096);
-> +	ipi_ex->vector = IPI_VECTOR;
-> +	ipi_ex->vp_set.format = HV_GENERIC_SET_ALL;
-> +	res = hypercall(HVCALL_SEND_IPI_EX,
-> +			pgs_gpa, pgs_gpa + 4096);
-> +	GUEST_ASSERT((res & 0xffff) == 0);
-> +	nop_loop();
-> +	GUEST_ASSERT(ipis_rcvd[RECEIVER_VCPU_ID_1] == ++ipis_expected[0]);
-> +	GUEST_ASSERT(ipis_rcvd[RECEIVER_VCPU_ID_2] == ++ipis_expected[1]);
-> +	GUEST_SYNC(stage++);
-> +	/* 'XMM Fast' HvCallSendSyntheticClusterIpiEx to HV_GENERIC_SET_ALL */
-> +	sync_to_xmm(&ipi_ex->vp_set.valid_bank_mask);
-> +	res = hypercall(HVCALL_SEND_IPI_EX | HV_HYPERCALL_FAST_BIT,
-> +			IPI_VECTOR, HV_GENERIC_SET_ALL);
-> +	GUEST_ASSERT((res & 0xffff) == 0);
-> +	nop_loop();
-> +	GUEST_ASSERT(ipis_rcvd[RECEIVER_VCPU_ID_1] == ++ipis_expected[0]);
-> +	GUEST_ASSERT(ipis_rcvd[RECEIVER_VCPU_ID_2] == ++ipis_expected[1]);
-> +	GUEST_SYNC(stage++);
-> +
-> +	GUEST_DONE();
-> +}
-> +
-> +static void *vcpu_thread(void *arg)
-> +{
-> +	struct thread_params *params = (struct thread_params *)arg;
-> +	struct ucall uc;
-> +	int old;
-> +	int r;
-> +	unsigned int exit_reason;
-> +
-> +	r = pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, &old);
-> +	TEST_ASSERT(r == 0,
-> +		    "pthread_setcanceltype failed on vcpu_id=%u with errno=%d",
-> +		    params->vcpu_id, r);
-> +
-> +	vcpu_run(params->vm, params->vcpu_id);
-> +	exit_reason = vcpu_state(params->vm, params->vcpu_id)->exit_reason;
-> +
-> +	TEST_ASSERT(exit_reason == KVM_EXIT_IO,
-> +		    "vCPU %u exited with unexpected exit reason %u-%s, expected KVM_EXIT_IO",
-> +		    params->vcpu_id, exit_reason, exit_reason_str(exit_reason));
-> +
-> +	if (get_ucall(params->vm, params->vcpu_id, &uc) == UCALL_ABORT) {
-> +		TEST_ASSERT(false,
-> +			    "vCPU %u exited with error: %s.\n",
-> +			    params->vcpu_id, (const char *)uc.args[0]);
-> +	}
-> +
-> +	return NULL;
-> +}
-> +
-> +static void cancel_join_vcpu_thread(pthread_t thread, uint32_t vcpu_id)
-> +{
-> +	void *retval;
-> +	int r;
-> +
-> +	r = pthread_cancel(thread);
-> +	TEST_ASSERT(r == 0,
-> +		    "pthread_cancel on vcpu_id=%d failed with errno=%d",
-> +		    vcpu_id, r);
-> +
-> +	r = pthread_join(thread, &retval);
-> +	TEST_ASSERT(r == 0,
-> +		    "pthread_join on vcpu_id=%d failed with errno=%d",
-> +		    vcpu_id, r);
-> +	TEST_ASSERT(retval == PTHREAD_CANCELED,
-> +		    "expected retval=%p, got %p", PTHREAD_CANCELED,
-> +		    retval);
-> +}
-> +
-> +int main(int argc, char *argv[])
-> +{
-> +	int r;
-> +	pthread_t threads[2];
-> +	struct thread_params params[2];
-> +	struct kvm_vm *vm;
-> +	struct kvm_run *run;
-> +	vm_vaddr_t hcall_page;
-> +	struct ucall uc;
-> +	int stage = 1;
-> +
-> +	vm = vm_create_default(SENDER_VCPU_ID, 0, sender_guest_code);
-> +	params[0].vm = vm;
-> +	params[1].vm = vm;
-> +
-> +	/* Hypercall input/output */
-> +	hcall_page = vm_vaddr_alloc_pages(vm, 2);
-> +	memset(addr_gva2hva(vm, hcall_page), 0x0, 2 * getpagesize());
-> +
-> +	vm_init_descriptor_tables(vm);
-> +
-> +	vm_vcpu_add_default(vm, RECEIVER_VCPU_ID_1, receiver_code);
-> +	vcpu_init_descriptor_tables(vm, RECEIVER_VCPU_ID_1);
-> +	vcpu_args_set(vm, RECEIVER_VCPU_ID_1, 2, hcall_page, addr_gva2gpa(vm, hcall_page));
-> +	vcpu_set_msr(vm, RECEIVER_VCPU_ID_1, HV_X64_MSR_VP_INDEX, RECEIVER_VCPU_ID_1);
-> +	vcpu_set_hv_cpuid(vm, RECEIVER_VCPU_ID_1);
-> +
-> +	vm_vcpu_add_default(vm, RECEIVER_VCPU_ID_2, receiver_code);
-> +	vcpu_init_descriptor_tables(vm, RECEIVER_VCPU_ID_2);
-> +	vcpu_args_set(vm, RECEIVER_VCPU_ID_2, 2, hcall_page, addr_gva2gpa(vm, hcall_page));
-> +	vcpu_set_msr(vm, RECEIVER_VCPU_ID_2, HV_X64_MSR_VP_INDEX, RECEIVER_VCPU_ID_2);
-> +	vcpu_set_hv_cpuid(vm, RECEIVER_VCPU_ID_2);
-> +
-> +	vm_install_exception_handler(vm, IPI_VECTOR, guest_ipi_handler);
-> +
-> +	vcpu_args_set(vm, SENDER_VCPU_ID, 2, hcall_page, addr_gva2gpa(vm, hcall_page));
-> +	vcpu_set_hv_cpuid(vm, SENDER_VCPU_ID);
-> +
-> +	params[0].vcpu_id = RECEIVER_VCPU_ID_1;
-> +	r = pthread_create(&threads[0], NULL, vcpu_thread, &params[0]);
-> +	TEST_ASSERT(r == 0,
-> +		    "pthread_create halter failed errno=%d", errno);
-> +
-> +	params[1].vcpu_id = RECEIVER_VCPU_ID_2;
-> +	r = pthread_create(&threads[1], NULL, vcpu_thread, &params[1]);
-> +	TEST_ASSERT(r == 0,
-> +		    "pthread_create halter failed errno=%d", errno);
-> +
-> +	run = vcpu_state(vm, SENDER_VCPU_ID);
-> +
-> +	while (true) {
-> +		r = _vcpu_run(vm, SENDER_VCPU_ID);
-> +		TEST_ASSERT(!r, "vcpu_run failed: %d\n", r);
-> +		TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
-> +			    "unexpected exit reason: %u (%s)",
-> +			    run->exit_reason, exit_reason_str(run->exit_reason));
-> +
-> +		switch (get_ucall(vm, SENDER_VCPU_ID, &uc)) {
-> +		case UCALL_SYNC:
-> +			TEST_ASSERT(uc.args[1] == stage,
-> +				    "Unexpected stage: %ld (%d expected)\n",
-> +				    uc.args[1], stage);
-> +			break;
-> +		case UCALL_ABORT:
-> +			TEST_FAIL("%s at %s:%ld", (const char *)uc.args[0],
-> +				  __FILE__, uc.args[1]);
-> +			return 1;
-> +		case UCALL_DONE:
-> +			return 0;
-> +		}
-> +
-> +		stage++;
-> +	}
-> +
-> +	cancel_join_vcpu_thread(threads[0], RECEIVER_VCPU_ID_1);
-> +	cancel_join_vcpu_thread(threads[1], RECEIVER_VCPU_ID_2);
-> +	kvm_vm_free(vm);
-> +
-> +	return 0;
-> +}
-
-
-Looks overall good to me, but I might have missed something.
-
-
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-
-
-Best regards,
-	Maxim Levitsky
-
-
-
-
+T24gMTEvMDUvMjAyMiAwOToxNSwgSXZhbiBCb3JueWFrb3Ygd3JvdGU6DQo+IEVYVEVSTkFMIEVN
+QUlMOiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91IGtu
+b3cgdGhlIGNvbnRlbnQgaXMgc2FmZQ0KPiANCj4gT24gVHVlLCBNYXkgMTAsIDIwMjIgYXQgMTI6
+Mjk6NTRQTSArMDEwMCwgQ29ub3IgRG9vbGV5IHdyb3RlOg0KPj4gT24gMDkvMDUvMjAyMiAxOTo1
+NiwgQ29ub3IgRG9vbGV5IHdyb3RlOg0KPj4+IE9uIDA5LzA1LzIwMjIgMTg6MTYsIEl2YW4gQm9y
+bnlha292IHdyb3RlOg0KPj4+PiBPbiBNb24sIE1heSAwOSwgMjAyMiBhdCAxMTo0MToxOEFNICsw
+MDAwLCBDb25vci5Eb29sZXlAbWljcm9jaGlwLmNvbSB3cm90ZToNCj4+Pj4+IEhleSBJdmFuLCBv
+bmUgY29tbWVudCBiZWxvdy4NCj4+Pj4+IFRoYW5rcywNCj4+Pj4+IENvbm9yLg0KPj4+Pj4NCj4+
+Pj4+IE9uIDA3LzA1LzIwMjIgMDg6NDMsIEl2YW4gQm9ybnlha292IHdyb3RlOg0KPj4+Pj4+IC4u
+LiBzbmlwIC4uLg0KPj4+Pj4+ICtzdGF0aWMgaW50IG1wZl9yZWFkX3N0YXR1cyhzdHJ1Y3Qgc3Bp
+X2RldmljZSAqc3BpKQ0KPj4+Pj4+ICt7DQo+Pj4+Pj4gKyAgICAgICB1OCBzdGF0dXMsIHN0YXR1
+c19jb21tYW5kID0gTVBGX1NQSV9SRUFEX1NUQVRVUzsNCj4+Pj4+PiArICAgICAgIHN0cnVjdCBz
+cGlfdHJhbnNmZXIgeGZlciA9IHsNCj4+Pj4+PiArICAgICAgICAgICAgICAgLnR4X2J1ZiA9ICZz
+dGF0dXNfY29tbWFuZCwNCj4+Pj4+PiArICAgICAgICAgICAgICAgLnJ4X2J1ZiA9ICZzdGF0dXMs
+DQo+Pj4+Pj4gKyAgICAgICAgICAgICAgIC5sZW4gPSAxLA0KPj4+Pj4+ICsgICAgICAgfTsNCj4+
+Pj4+PiArICAgICAgIGludCByZXQgPSBzcGlfc3luY190cmFuc2ZlcihzcGksICZ4ZmVyLCAxKTsN
+Cj4+Pj4+PiArDQo+Pj4+Pj4gKyAgICAgICBpZiAoKHN0YXR1cyAmIE1QRl9TVEFUVVNfU1BJX1ZJ
+T0xBVElPTikgfHwNCj4+Pj4+PiArICAgICAgICAgICAoc3RhdHVzICYgTVBGX1NUQVRVU19TUElf
+RVJST1IpKQ0KPj4+Pj4+ICsgICAgICAgICAgICAgICByZXQgPSAtRUlPOw0KPj4+Pj4+ICsNCj4+
+Pj4+PiArICAgICAgIHJldHVybiByZXQgPyA6IHN0YXR1czsNCj4+Pj4+PiArfQ0KPj4+Pj4+ICsN
+Cj4+Pj4+PiAuLi4gc25pcCAuLi4NCj4+Pj4+PiArDQo+Pj4+Pj4gK3N0YXRpYyBpbnQgcG9sbF9z
+dGF0dXNfbm90X2J1c3koc3RydWN0IHNwaV9kZXZpY2UgKnNwaSwgdTggbWFzaykNCj4+Pj4+PiAr
+ew0KPj4+Pj4+ICsgICAgICAgaW50IHN0YXR1cywgdGltZW91dCA9IE1QRl9TVEFUVVNfUE9MTF9U
+SU1FT1VUOw0KPj4+Pj4+ICsNCj4+Pj4+PiArICAgICAgIHdoaWxlICh0aW1lb3V0LS0pIHsNCj4+
+Pj4+PiArICAgICAgICAgICAgICAgc3RhdHVzID0gbXBmX3JlYWRfc3RhdHVzKHNwaSk7DQo+Pj4+
+Pj4gKyAgICAgICAgICAgICAgIGlmIChzdGF0dXMgPCAwIHx8DQo+Pj4+Pj4gKyAgICAgICAgICAg
+ICAgICAgICAoIShzdGF0dXMgJiBNUEZfU1RBVFVTX0JVU1kpICYmICghbWFzayB8fCAoc3RhdHVz
+ICYgbWFzaykpKSkNCj4+Pj4+PiArICAgICAgICAgICAgICAgICAgICAgICByZXR1cm4gc3RhdHVz
+Ow0KPj4+Pj4+ICsNCj4+Pj4+PiArICAgICAgICAgICAgICAgdXNsZWVwX3JhbmdlKDEwMDAsIDIw
+MDApOw0KPj4+Pj4+ICsgICAgICAgfQ0KPj4+Pj4+ICsNCj4+Pj4+PiArICAgICAgIHJldHVybiAt
+RUJVU1k7DQo+Pj4+Pj4gK30NCj4+Pj4+DQo+Pj4+PiBJcyB0aGVyZSBhIHJlYXNvbiB5b3UgY2hh
+bmdlZCB0aGlzIGZyb20gdGhlIHNuaXBwZXQgeW91IHNlbnQgbWUNCj4+Pj4+IGluIHRoZSByZXNw
+b25zZXMgdG8gdmVyc2lvbiA4Og0KPj4+Pj4gc3RhdGljIGludCBwb2xsX3N0YXR1c19ub3RfYnVz
+eShzdHJ1Y3Qgc3BpX2RldmljZSAqc3BpLCB1OCBtYXNrKQ0KPj4+Pj4gew0KPj4+Pj4gICAgICAg
+ICAgdTggc3RhdHVzLCBzdGF0dXNfY29tbWFuZCA9IE1QRl9TUElfUkVBRF9TVEFUVVM7DQo+Pj4+
+PiAgICAgICAgICBpbnQgcmV0LCB0aW1lb3V0ID0gTVBGX1NUQVRVU19QT0xMX1RJTUVPVVQ7DQo+
+Pj4+PiAgICAgICAgICBzdHJ1Y3Qgc3BpX3RyYW5zZmVyIHhmZXIgPSB7DQo+Pj4+PiAgICAgICAg
+ICAgICAgICAgIC50eF9idWYgPSAmc3RhdHVzX2NvbW1hbmQsDQo+Pj4+PiAgICAgICAgICAgICAg
+ICAgIC5yeF9idWYgPSAmc3RhdHVzLA0KPj4+Pj4gICAgICAgICAgICAgICAgICAubGVuID0gMSwN
+Cj4+Pj4+ICAgICAgICAgIH07DQo+Pj4+Pg0KPj4+Pj4gICAgICAgICAgd2hpbGUgKHRpbWVvdXQt
+LSkgew0KPj4+Pj4gICAgICAgICAgICAgICAgICByZXQgPSBzcGlfc3luY190cmFuc2ZlcihzcGks
+ICZ4ZmVyLCAxKTsNCj4+Pj4+ICAgICAgICAgICAgICAgICAgaWYgKHJldCA8IDApDQo+Pj4+PiAg
+ICAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJuIHJldDsNCj4+Pj4+DQo+Pj4+PiAgICAgICAg
+ICAgICAgICAgIGlmICghKHN0YXR1cyAmIE1QRl9TVEFUVVNfQlVTWSkgJiYgKCFtYXNrIHx8IChz
+dGF0dXMgJiBtYXNrKSkpDQo+Pj4+PiAgICAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJuIHN0
+YXR1czsNCj4+Pj4+DQo+Pj4+PiAgICAgICAgICAgICAgICAgIHVzbGVlcF9yYW5nZSgxMDAwLCAy
+MDAwKTsNCj4+Pj4+ICAgICAgICAgIH0NCj4+Pj4+DQo+Pj4+PiAgICAgICAgICByZXR1cm4gLUVC
+VVNZOw0KPj4+Pj4gfQ0KPj4+Pj4NCj4+Pj4+IFdpdGggdGhlIGN1cnJlbnQgdmVyc2lvbiwgSSBo
+aXQgdGhlICJGYWlsZWQgdG8gd3JpdGUgYml0c3RyZWFtDQo+Pj4+PiBmcmFtZSIgY2hlY2sgaW4g
+bXBmX29wc193cml0ZSBhdCByYW5kb20gcG9pbnRzIGluIHRoZSB0cmFuc2Zlci4NCj4+Pj4+IFJl
+cGxhY2luZyBwb2xsX3N0YXR1c19ub3RfYnVzeSB3aXRoIHRoZSBhYm92ZSBhbGxvd3MgaXQgdG8g
+cnVuDQo+Pj4+PiB0byBjb21wbGV0aW9uLg0KPj4+Pg0KPj4+PiBJbiBteSBleWVzIHRoZXkgYXJl
+IGVxdWl2YWxlbnQsIGFyZW4ndCB0aGV5Pw0KPj4+Pg0KPj4+DQo+Pj4gSSB3YXMgaW4gYSBiaXQg
+b2YgYSBydXNoIHRvZGF5ICYgZGlkbid0IGhhdmUgdGltZSB0byBkbyBwcm9wZXINCj4+PiBkZWJ1
+Z2dpbmcsIEknbGwgcHV0IHNvbWUgZGVidWcgY29kZSBpbiB0b21vcnJvdyBhbmQgdHJ5IHRvIGZp
+bmQNCj4+PiBleGFjdGx5IHdoYXQgaXMgZGlmZmVyZW50IGJldHdlZW4gdGhlIHR3by4NCj4+Pg0K
+Pj4+IE9mZiB0aGUgdG9wIG9mIG15IGhlYWQsIHNpbmNlIEkgZG9uJ3QgaGF2ZSBhIGJvYXJkIG9u
+IG1lIHRvIHRlc3QsDQo+Pj4gdGhlIG9ubHkgZGlmZmVyZW5jZSBJIGNhbiBzZWUgaXMgdGhhdCB3
+aXRoIHRoZSBzbmlwcGV0IHlvdSBvbmx5DQo+Pj4gY2hlY2tlZCBpZiBzcGlfc3luY190cmFuc2Zl
+ciB3YXMgbmVnYXRpdmUgd2hlcmVhcyBub3cgeW91IGNoZWNrDQo+Pj4gaWYgaXQgaGFzIGEgdmFs
+dWUgYXQgYWxsIHcvIHRoYXQgdGVybmFyeSBvcGVyYXRvci4NCj4+Pg0KPj4+IEJ1dCBldmVuIHRo
+YXQgc2VlbXMgbGlrZSBpdCAqc2hvdWxkbid0KiBiZSB0aGUgcHJvYmxlbSwgc2luY2UgcmV0DQo+
+Pj4gc2hvdWxkIGNvbnRhaW4gLWVycm5vIG9yIHplcm8sIHJpZ2h0Pw0KPj4+IEVpdGhlciB3YXks
+IEkgd2lsbCBkbyBzb21lIGRpZ2dpbmcgdG9tb3Jyb3cuDQo+Pg0KPj4gSSBwdXQgYSBwcmludGso
+InN0YXR1cyAleCwgcmV0ICVkIiwgc3RhdHVzLCByZXQpOyBpbnRvIHRoZSBmYWlsdXJlDQo+PiBw
+YXRoIG9mIG1wZl9yZWFkX3N0YXR1cygpICYgaXQgbG9va3MgbGlrZSBhIHN0YXR1cyAweEEgaXMg
+YmVpbmcNCj4+IHJldHVybmVkIC0gZXJyb3IgJiByZWFkeT8gVGhhdCBzZWVtcyBsaWtlIGEgdmVy
+eSBvZGQgY29tYm8gdG8gYmUNCj4+IGdldHRpbmcgYmFjayBvdXQgb2YgaXQuIEl0IHNob3VsZG4n
+dCBiZSBkb2RneSBkcml2ZXIvY29ubmVjdGlvbg0KPj4gZWl0aGVyLCBiL2MgdGhhdCdzIHdoYXQg
+SSBzZWUgaWYgSSBjb25uZWN0IG15IHByb3RvY29sIGFuYWx5c2VyOg0KPj4gaHR0cHM6Ly9pLmlt
+Z3VyLmNvbS9WYmpnZkNrLnBuZw0KPj4NCj4+IFRoYXQncyBtb3NpIChoZXgpLCBzcywgc2Nsaywg
+bW9zaSwgbWlzbyAoaGV4KSwgbWlzbyBpbiBkZXNjZW5kaW5nDQo+PiBvcmRlci4NCj4+DQo+PiBJ
+IHRoaW5rIHdoYXQgd2FzIGhhcHBlbmluZyB3YXMgd2l0aCB0aGUgc25pcHBldCB5b3UgcmV0dXJu
+ZWQgb25lDQo+PiBvZiB0aGUgZm9sbG93aW5nOiAtRUJVU1ksIHJldCAoYWthIC1lcnJubykgb3Ig
+c3RhdHVzLiBTaW5jZSBzdGF0dXMNCj4+IGlzIHBvc2l0aXZlLCB0aGUgY2hlY2tzIGluIG1wZl9z
+cGlfd3JpdGUuKigpIHNhdyBub3RoaW5nIHdyb25nIGF0DQo+PiBhbGwgYW5kIHByb2dyYW1taW5n
+IGNvbnRpbnVlZCBkZXNwaXRlIHRoZXJlIGJlaW5nIGEgcHJvYmxlbS4NCj4+DQo+PiBUaGUgbmV3
+IHZlcnNpb24gZml4ZXMgdGhpcyBieSByZXR1cm5pbmcgLUVJTyByYXRoZXIgdGhhbiBzdGF0dXMg
+ZnJvbQ0KPj4gcG9sbF9zdGF0dXNfbm90X2J1c3koKS4NCj4+DQo+PiBJIHdpc2ggSSBoYWQgYSBz
+b2NrZXRhYmxlIFBvbGFyRmlyZSBzbyBJIGNvdWxkIGludmVzdGlnYXRlIGZ1cnRoZXIsDQo+PiBi
+dXQgdGhpcyBsb29rcyBsaWtlIGl0IG1pZ2h0IGEgYmUgaGFyZHdhcmUgaXNzdWUgc29tZXdoZXJl
+IG9uIG15DQo+PiBlbmQ/DQo+Pg0KPj4gU28geWUsIHNvcnJ5IGZvciB0aGUgbm9pc2UgYW5kIGNh
+cnJ5IG9uISBJJ2xsIHRyeSB0b2ZpbmQgd2hhdCBpcyB0bw0KPj4gYmxhbWUgZm9yIGl0Lg0KPj4N
+Cj4+IFRoYW5rcywNCj4+IENvbm9yLg0KPj4NCj4gDQo+IEhpLCBDb25vci4NCj4gDQo+IEkndmUg
+anVzdCBub3RpY2VkIGluIFNQSS1EaXJlY3RDIFVzZXIgR3VpZGUgWzFdIGNoLiA5IFNtYXJ0RnVz
+aW9uMiBhbmQNCj4gSUdMT08yIFNQSS1TbGF2ZSBQcm9ncmFtbWluZyBXYXZlZm9ybSBBbmFseXNp
+cywgdGhhdCBodyBzdGF0dXMgY2hlY2tlZA0KPiB0d28gdGltZXMgZXZlcnkgdGltZS4gRG9lcyBN
+UEYgZmFtaWx5IGFsc28gbmVlZCBkb3VibGUgY2hlY2sgaHcgc3RhdHVzPw0KPiBEb2VzIGFkZGlu
+ZyBzZWNvbmQgbXBmX3JlYWRfc3RhdHVzKCkgdG8gcG9sbF9zdGF0dXNfbm90X2J1c3koKSByb3V0
+aW5lDQo+IGhlbHAgd2l0aCB5b3VyIGlzc3VlPw0KDQpIZXkgSXZhbiwNClRyaWVkIHlvdXIgc3Vn
+Z2VzdGlvbi4gUHJldmlvdXNseSBJIHdhcyBmYWlsaW5nIHF1aXRlIGNvbnNpc3RlbnRseSBhdA0K
+dHJhbnNmZXIgMzQgb2YgNTkwaywgYW5kIHNvbWV0aW1lcyBtYWtpbmcgaXQgYSBmdXJ0aGVyLiBX
+aXRoIHlvdXINCnN1Z2dlc3Rpb24sIEkgd2FzIG1ha2luZyBpdCBzaWduaWZpY2FudGx5IGZ1cnRo
+ZXIgKDEwMGsrKSBidXQgc3RpbGwNCnJ1bm5pbmcgaW50byBzb21lIG9mIHRoZSAweEEgc3RhdHVz
+Lg0KRGVjaWRlZCB0byBtb3ZlIHRoZSBkb3VibGUgY2hlY2sgaW50byBtcGZzX3JlYWRfc3RhdHVz
+IChzZWUgdGhlIGJlbG93DQpkaWZmKSBkaWQgbm90IHJ1biBpbnRvIGFueSB0aGUgMHhBIHN0YXR1
+c2VzLg0KSXQncyB3b3J0aCBwb2ludGluZyBvdXQgdGhhdCB0aGlzIGlzIHRoZSAqZmlyc3QqIHRp
+bWUgSSBoYXZlIHNlZW4NCkZsYXNoIFBybyBFeHByZXNzIHJlcG9ydCB0aGF0IHRoZSBGUEdBIGFy
+cmF5IGhhcyBiZWVuIGVuYWJsZWQgYWZ0ZXINCnByb2dyYW1taW5nIQ0KDQpTZWVtcyBsaWtlIGF0
+IHRoZSB2ZXJ5IGxlYXN0IHRoaXMgKGhhY2t5KSBkaWZmIGlzIG5vdCBoYXJtZnVsPw0KUGxlYXNl
+IGdpdmUgaXQgYSB0cnkgeW91cnNlbGYgYW5kIGNoZWNrIHRoYXQgdGhpbmdzIHN0aWxsIHdvcmsg
+Zm9yDQp5b3UuDQoNCmRpZmYgLS1naXQgYS9kcml2ZXJzL2ZwZ2EvbWljcm9jaGlwLXNwaS5jIGIv
+ZHJpdmVycy9mcGdhL21pY3JvY2hpcC1zcGkuYw0KaW5kZXggNjNiNzVkZmYyNTIyLi4xODNjZGZj
+MDVjNGEgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL2ZwZ2EvbWljcm9jaGlwLXNwaS5jDQorKysgYi9k
+cml2ZXJzL2ZwZ2EvbWljcm9jaGlwLXNwaS5jDQpAQCAtNDcsMTggKzQ3LDMwIEBAIHN0cnVjdCBt
+cGZfcHJpdiB7DQogIHN0YXRpYyBpbnQgbXBmX3JlYWRfc3RhdHVzKHN0cnVjdCBzcGlfZGV2aWNl
+ICpzcGkpDQogIHsNCiAgICAgICAgIHU4IHN0YXR1cywgc3RhdHVzX2NvbW1hbmQgPSBNUEZfU1BJ
+X1JFQURfU1RBVFVTOw0KKyAgICAgICB1OCBzdGF0dXNfcmVwZWF0Ow0KICAgICAgICAgc3RydWN0
+IHNwaV90cmFuc2ZlciB4ZmVyID0gew0KICAgICAgICAgICAgICAgICAudHhfYnVmID0gJnN0YXR1
+c19jb21tYW5kLA0KICAgICAgICAgICAgICAgICAucnhfYnVmID0gJnN0YXR1cywNCiAgICAgICAg
+ICAgICAgICAgLmxlbiA9IDEsDQogICAgICAgICB9Ow0KKyAgICAgICBzdHJ1Y3Qgc3BpX3RyYW5z
+ZmVyIHhmZXJfcmVwZWF0ID0gew0KKyAgICAgICAgICAgICAgIC50eF9idWYgPSAmc3RhdHVzX2Nv
+bW1hbmQsDQorICAgICAgICAgICAgICAgLnJ4X2J1ZiA9ICZzdGF0dXNfcmVwZWF0LA0KKyAgICAg
+ICAgICAgICAgIC5sZW4gPSAxLA0KKyAgICAgICB9Ow0KICAgICAgICAgaW50IHJldCA9IHNwaV9z
+eW5jX3RyYW5zZmVyKHNwaSwgJnhmZXIsIDEpOw0KKyAgICAgICBpbnQgcmV0X3JlcGVhdCA9IHNw
+aV9zeW5jX3RyYW5zZmVyKHNwaSwgJnhmZXJfcmVwZWF0LCAxKTsNCisNCisgICAgICAgaWYgKHJl
+dCB8fCByZXRfcmVwZWF0KQ0KKyAgICAgICAgICAgICAgIHJldHVybiAtRUlPOw0KICANCi0gICAg
+ICAgaWYgKChzdGF0dXMgJiBNUEZfU1RBVFVTX1NQSV9WSU9MQVRJT04pIHx8DQotICAgICAgICAg
+ICAoc3RhdHVzICYgTVBGX1NUQVRVU19TUElfRVJST1IpKQ0KKyAgICAgICBpZiAoc3RhdHVzICE9
+IHN0YXR1c19yZXBlYXQpDQorICAgICAgICAgICAgICAgcHJpbnRrKCJzdGF0dXMgZGlzYWdyZWVt
+ZW50ICV4ICV4Iiwgc3RhdHVzLCBzdGF0dXNfcmVwZWF0KTsNCisgICAgICAgaWYgKChzdGF0dXNf
+cmVwZWF0ICYgTVBGX1NUQVRVU19TUElfVklPTEFUSU9OKSB8fA0KKyAgICAgICAgICAgKHN0YXR1
+c19yZXBlYXQgJiBNUEZfU1RBVFVTX1NQSV9FUlJPUikpDQogICAgICAgICAgICAgICAgIHJldCA9
+IC1FSU87DQogIA0KLSAgICAgICByZXR1cm4gcmV0ID8gOiBzdGF0dXM7DQorICAgICAgIHJldHVy
+biByZXQgPzogc3RhdHVzX3JlcGVhdDsNCiAgfQ0KICANCiAgc3RhdGljIGVudW0gZnBnYV9tZ3Jf
+c3RhdGVzIG1wZl9vcHNfc3RhdGUoc3RydWN0IGZwZ2FfbWFuYWdlciAqbWdyKQ0KDQo=

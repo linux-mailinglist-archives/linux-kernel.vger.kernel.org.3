@@ -2,162 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFA9E5230E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:44:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E1425230E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:45:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236772AbiEKKnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 06:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49006 "EHLO
+        id S234309AbiEKKpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 06:45:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241974AbiEKKnF (ORCPT
+        with ESMTP id S234618AbiEKKpK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 06:43:05 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131713917D;
-        Wed, 11 May 2022 03:40:59 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 718E621BBF;
-        Wed, 11 May 2022 10:40:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1652265658; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ofid47dt60Dm91ho9M8uL9kLkVt/rULkt4KXybdMckE=;
-        b=Lol+a+kcWA56sN586Oba1fpxW7uV0D//ORTN8nwpZWGK4WaMdEYCwZvI/+KD9gdHSS0cgR
-        kc+Qlacc7Yc9A3WSeYaPLisNHrRfxg5KWt7Trxs1K9d8oiV/OpspkeuI0ldlrh8hGZTMMo
-        dijeZqRGWZpoJgdXKCVRTgMf3UWaH/I=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1652265658;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ofid47dt60Dm91ho9M8uL9kLkVt/rULkt4KXybdMckE=;
-        b=LaFoPCa6ZUXw8ce8hqFxk1K5ccJckkQnr5kOA0e2ohAY019lRpD8kUr7VsW/PLdIb2qWyj
-        7ayWpeDq6h8ofLBw==
-Received: from quack3.suse.cz (unknown [10.163.43.118])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 562472C141;
-        Wed, 11 May 2022 10:40:58 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id ECF99A062A; Wed, 11 May 2022 12:40:57 +0200 (CEST)
-Date:   Wed, 11 May 2022 12:40:57 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     yebin <yebin10@huawei.com>
-Cc:     Jan Kara <jack@suse.cz>, tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lczerner@redhat.com
-Subject: Re: [PATCH -next] ext4: fix bug_on in ext4_writepages
-Message-ID: <20220511104057.dzy3vz2zitqxwi2u@quack3.lan>
-References: <20220505135708.2629657-1-yebin10@huawei.com>
- <20220509130101.7myd6mhwd54fhvq7@quack3.lan>
- <627A34FE.6000605@huawei.com>
+        Wed, 11 May 2022 06:45:10 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F54D57
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:45:09 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1nojpq-0005CM-4b; Wed, 11 May 2022 12:44:50 +0200
+Message-ID: <fce6d626-06c3-3a89-1f0d-9535e6261f41@pengutronix.de>
+Date:   Wed, 11 May 2022 12:44:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <627A34FE.6000605@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v8 0/6] KEYS: trusted: Introduce support for NXP
+ CAAM-based trusted keys
+Content-Language: en-US
+To:     John Ernberg <john.ernberg@actia.se>
+Cc:     "andreas@rammhold.de" <andreas@rammhold.de>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "david@sigma-star.at" <david@sigma-star.at>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "ebiggers@kernel.org" <ebiggers@kernel.org>,
+        "franck.lenormand@nxp.com" <franck.lenormand@nxp.com>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "horia.geanta@nxp.com" <horia.geanta@nxp.com>,
+        "j.luebbe@pengutronix.de" <j.luebbe@pengutronix.de>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "matthias.schiffer@ew.tq-group.com" 
+        <matthias.schiffer@ew.tq-group.com>,
+        "pankaj.gupta@nxp.com" <pankaj.gupta@nxp.com>,
+        "richard@nod.at" <richard@nod.at>,
+        "s.trumtrar@pengutronix.de" <s.trumtrar@pengutronix.de>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
+        "tharvey@gateworks.com" <tharvey@gateworks.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>
+References: <09e2552c-7392-e1da-926b-53c7db0b118d@pengutronix.de>
+ <20220507213003.3373206-1-john.ernberg@actia.se>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <20220507213003.3373206-1-john.ernberg@actia.se>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 10-05-22 17:48:46, yebin wrote:
-> On 2022/5/9 21:01, Jan Kara wrote:
-> > On Thu 05-05-22 21:57:08, Ye Bin wrote:
-> > > we got issue as follows:
-> > > EXT4-fs error (device loop0): ext4_mb_generate_buddy:1141: group 0, block bitmap and bg descriptor inconsistent: 25 vs 31513 free cls
-> > > ------------[ cut here ]------------
-> > > kernel BUG at fs/ext4/inode.c:2708!
-> > > invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
-> > > CPU: 2 PID: 2147 Comm: rep Not tainted 5.18.0-rc2-next-20220413+ #155
-> > > RIP: 0010:ext4_writepages+0x1977/0x1c10
-> > > RSP: 0018:ffff88811d3e7880 EFLAGS: 00010246
-> > > RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffff88811c098000
-> > > RDX: 0000000000000000 RSI: ffff88811c098000 RDI: 0000000000000002
-> > > RBP: ffff888128140f50 R08: ffffffffb1ff6387 R09: 0000000000000000
-> > > R10: 0000000000000007 R11: ffffed10250281ea R12: 0000000000000001
-> > > R13: 00000000000000a4 R14: ffff88811d3e7bb8 R15: ffff888128141028
-> > > FS:  00007f443aed9740(0000) GS:ffff8883aef00000(0000) knlGS:0000000000000000
-> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > CR2: 0000000020007200 CR3: 000000011c2a4000 CR4: 00000000000006e0
-> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > Call Trace:
-> > >   <TASK>
-> > >   do_writepages+0x130/0x3a0
-> > >   filemap_fdatawrite_wbc+0x83/0xa0
-> > >   filemap_flush+0xab/0xe0
-> > >   ext4_alloc_da_blocks+0x51/0x120
-> > >   __ext4_ioctl+0x1534/0x3210
-> > >   __x64_sys_ioctl+0x12c/0x170
-> > >   do_syscall_64+0x3b/0x90
-> > > 
-> > > It may happen as follows:
-> > > 1. write inline_data inode
-> > > vfs_write
-> > >    new_sync_write
-> > >      ext4_file_write_iter
-> > >        ext4_buffered_write_iter
-> > >          generic_perform_write
-> > > 	  ext4_da_write_begin
-> > > 	    ext4_da_write_inline_data_begin -> If inline data size too
-> > > 	    small will allocate block to write, then mapping will has
-> > > 	    dirty page
-> > > 	    	ext4_da_convert_inline_data_to_extent ->clear EXT4_STATE_MAY_INLINE_DATA
-> > > 2. fallocate
-> > > do_vfs_ioctl
-> > >    ioctl_preallocate
-> > >      vfs_fallocate
-> > >        ext4_fallocate
-> > >          ext4_convert_inline_data
-> > > 	  ext4_convert_inline_data_nolock
-> > > 	    ext4_map_blocks -> fail will goto restore data
-> > > 	    ext4_restore_inline_data
-> > > 	      ext4_create_inline_data
-> > > 	      ext4_write_inline_data
-> > > 	      ext4_set_inode_state -> set inode EXT4_STATE_MAY_INLINE_DATA
-> > > 3. writepages
-> > > __ext4_ioctl
-> > >    ext4_alloc_da_blocks
-> > >      filemap_flush
-> > >        filemap_fdatawrite_wbc
-> > >          do_writepages
-> > > 	  ext4_writepages
-> > > 	    if (ext4_has_inline_data(inode))
-> > > 	      BUG_ON(ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA))
-> > > 
-> > > To solved this issue, record origin 'EXT4_STATE_MAY_INLINE_DATA' flag, then pass
-> > > value to 'ext4_restore_inline_data', 'ext4_restore_inline_data' will
-> > > decide to if recovery 'EXT4_STATE_MAY_INLINE_DATA' flag according to parameter.
-> > > 
-> > > Signed-off-by: Ye Bin <yebin10@huawei.com>
-> > Thanks for the patch. I agree it will fix the crash you have spotted but
-> > I'm somewhat wondering whether it would not be simpler to just move the
-> > call to ext4_destroy_inline_data_nolock() in
-> > ext4_convert_inline_data_nolock() later, after we have done writing
-> > data_bh. That way we can completely remove ext4_restore_inline_data() and
-> > as a consequence avoid problems. What do you think?
-> > 
-> > 								Honza
+Hello John,
+
+On 07.05.22 23:30, John Ernberg wrote:
+> Hi Ahmad,
 > 
-> It may be a good idea, but i didn't know how to handle when call
-> ext4_destroy_inline_data_nolock() failed. As it may lead to
-> 'ei <../cgi-bin/global.cgi?pattern=ei&type=symbol>->i_reserved_data_blocks
-> <../cgi-bin/global.cgi?pattern=i_reserved_data_blocks&type=symbol>'
-> incorrect, and also lead to data lost.
-> I have another idea which will inlcude in v2 patch.
+>>>
+>>> dmesg snips:
+>>> [    1.296772] trusted_key: Job Ring Device allocation for transform failed
+>>> ...
+>>> [    1.799768] caam 31400000.crypto: device ID = 0x0a16040000000100 (Era 9)
+>>> [    1.807142] caam 31400000.crypto: job rings = 2, qi = 0
+>>> [    1.822667] caam algorithms registered in /proc/crypto
+>>> [    1.830541] caam 31400000.crypto: caam pkc algorithms registered in /proc/crypto
+>>> [    1.841807] caam 31400000.crypto: registering rng-caam
+>>>
+>>> I didn't quite have the time to get a better trace than that.
+>>
+>> I don't see a crypto@31400000 node upstream. Where can I see your device tree?
+> 
+> Apologies for forgetting to mention that, I took it from the NXP tree
+> while removing the SM and SECO bits [1].
+> I also had to rebase some of their patches onto 5.17 for the CAAM to
+> probe, as the SCU makes some register pages unavailable.
 
-Well, that call failing means something is seriously wrong with the
-filesystem (IO errors, metadata corruption) so we don't care much what
-happens. Also currently you have the problem that restoration of inline data
-can fail so I don't think there's really tangible difference.
+If the CAAM has a dependency on some SCU-provided resource, this
+would explain why the driver probes it that late.
 
-								Honza
+>> Initcall ordering does the right thing, but if CAAM device probe is deferred beyond
+>> late_initcall, then it won't help.
+>>
+>> This is a general limitation with trusted keys at the moment. Anything that's
+>> not there by the time of the late_initcall won't be tried again. You can work
+>> around it by having trusted keys as a module. We might be able to do something
+>> with fw_devlinks in the future and a look into your device tree would help here,
+>> but I think that should be separate from this patch series.
+> 
+> Thank for you the explanation, it makes sense, and I agree that such work
+> would be a different patch set.
+> 
+>>
+>> Please let me know if the module build improves the situation for you.
+>>
+> 
+> After I changed trusted keys to a module I got it working. Which is good
+> enough for me as QXP CAAM support is not upstream yet.
+
+Great!
+
+> Feel free to add my tested by if you need to make another spin.
+> Tested-by: John Ernberg <john.ernberg@actia.se> # iMX8QXP
+> 
+> I didn't test v9 as I would have to patch around the new patch due to
+> the SCU.
+
+Thanks for the test. I will add it to v10 except for
+
+ - "crypto: caam - determine whether CAAM supports blob encap/decap", which
+   was new in v9
+ - "doc: trusted-encrypted: describe new CAAM trust source",
+   "MAINTAINERS: add KEYS-TRUSTED-CAAM" as runtime test isn't affected by these.
+
+Cheers,
+Ahmad
+
+> 
+> Best regards // John Ernberg
+> 
+> [1]: https://source.codeaurora.org/external/imx/linux-imx/tree/arch/arm64/boot/dts/freescale/imx8-ss-security.dtsi?h=lf-5.10.y
+
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

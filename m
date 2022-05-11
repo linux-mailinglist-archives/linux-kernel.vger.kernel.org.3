@@ -2,120 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A887C522854
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 02:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 052AB522860
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 02:20:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232511AbiEKATS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 20:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
+        id S237899AbiEKAUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 20:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiEKATN (ORCPT
+        with ESMTP id S235364AbiEKAUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 20:19:13 -0400
-Received: from qproxy3-pub.mail.unifiedlayer.com (qproxy3-pub.mail.unifiedlayer.com [67.222.38.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FD0266CAD
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 17:19:08 -0700 (PDT)
-Received: from gproxy2-pub.mail.unifiedlayer.com (gproxy2-pub.mail.unifiedlayer.com [69.89.18.3])
-        by qproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id 2DD96804243C
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:19:08 +0000 (UTC)
-Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
-        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 53D8110047FA9
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:19:07 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id oa4InGy9dwm8ioa4JnFw3L; Wed, 11 May 2022 00:19:07 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=DpSTREz+ c=1 sm=1 tr=0 ts=627b00fb
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=oZkIemNP1mAA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=PTOzKl9DnjhxoL6Ic-UA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=KvWGEAqooFHRFC2UjRixtVmWJeczAtbK7J9RKciYauM=; b=UYMMskCS/6/2ouM8iDv7QyIzbD
-        grFL2WrF1GOxUlRkGFzGRS/WH1WvZFUAzr4CiGjtm4QECz7R4kc6An19UvGiXI3UjH4SqwklFzEY1
-        PcAAqZvHiH5C2exCNwmnkFUXGZG74gOblU/VdJ5TQvLVNYTK7M83pzVs82rvKJANC+WuR/+oDMs0Z
-        ZOcMa7zSCCt5lxUXt8eCVVtpncPbRVwiMaAZzzakLLIuJCDXX15g+LiqNegecCRG11o1nPMxYvaD8
-        CRrO5qrNDx3wQmWuHwa8Q54gMnCzHNSq/DAA2bA8n3wrz8vXhmnKADdgrVlKLGGSQq2J0lFvVqyjN
-        16cMGbgg==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:50394 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1noa4H-003ZDz-P7; Tue, 10 May 2022 18:19:05 -0600
-Subject: Re: [PATCH 5.17 000/140] 5.17.7-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220510130741.600270947@linuxfoundation.org>
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <5dfcc54f-ebdb-f8af-7ee5-72091334dcb6@w6rz.net>
-Date:   Tue, 10 May 2022 17:19:03 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 10 May 2022 20:20:49 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07CEB11163
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 17:20:47 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2ef5380669cso3609757b3.9
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 17:20:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6vpXpw5XZq/WrbDVmy+tJWQcUF77jv1N0UbvJAonvnU=;
+        b=w7tblpXNjCpAdHrXR8Vsnj84FjFr91Zp7XFGp6hW6GdlcUctB8YZYvWN7+FqJhUsWp
+         Lfa9hz5DunLQMwkY2ijmdSDjEK+cvJE4bQLfuudysuE6TGFtxDwybpYoyjbSd0rfiLCB
+         ysPvqVgG3peWvDc+qujiXzaPwuf10GS1B55GhkPDJucFdnHiVI5R7+wLSoL9lW8bnBVP
+         z7GHP9+5NduIv82dOfKwrJYFFZZiOkMLJfZCowmQJFAVpkHmm0div0lp7B2unJ4Af4v5
+         bQnCGd3mcPkUpVgnxRgKCOIeTv14KQTG8EzBpPW8feDLdK1iMlzNYQcSBnRl3CzFdszT
+         yvzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6vpXpw5XZq/WrbDVmy+tJWQcUF77jv1N0UbvJAonvnU=;
+        b=ihafoEyVynFM85k0eaUm9BFsHPCTFdbwB2eWdFHB3t/0cQSaZqYwyLiAWNFxkO4gKo
+         4AhR3Zwt9vzPgbfV+Akzd2c99BtcI5nZUkkbkN0fUrGQw1WXdbYFtjvOzTkyA9o2xcYa
+         qHSug6BFkpe2rifAl2gd4UAGaV2jgXCDzcOeqwEYkLSe23YtzmeI8pWUggiOCMTQWSIw
+         6u6y2AoJVvcCYq10BnEoxpCv9/EWavOr5f7M5NsMyETA9LBlryfaxByLcMJWbOiWoZQN
+         lcYkPaq37LmIalA2oqN4LbJ/6oKp5FD9NsqGlWkZ7mGMQwlxOcY1aJkd7nxPQlmRPEip
+         Ml8Q==
+X-Gm-Message-State: AOAM533e+pOaigkSG0ScX1P/505B5JBIxX4eVriajbH+zGekG98/pM6X
+        w5j+kW+YvShjKjwtomY2BJbFR4bQgoOOnntAa41XZQ==
+X-Google-Smtp-Source: ABdhPJxvhAkk2Km4fbuCctbq2xFMtEja6/plgDD2L2i2wt+jmqVRruARk+Pto0kZ1tDyHEnHY8br6RxGTF6LJx15PkY=
+X-Received: by 2002:a0d:db8f:0:b0:2fb:958c:594f with SMTP id
+ d137-20020a0ddb8f000000b002fb958c594fmr1290258ywe.490.1652228446267; Tue, 10
+ May 2022 17:20:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1noa4H-003ZDz-P7
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:50394
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220510192944.2408515-1-dianders@chromium.org> <20220510122726.v3.1.Ia91f4849adfc5eb9da1eb37ba79aa65fb3c95a0f@changeid>
+In-Reply-To: <20220510122726.v3.1.Ia91f4849adfc5eb9da1eb37ba79aa65fb3c95a0f@changeid>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 11 May 2022 03:20:35 +0300
+Message-ID: <CAA8EJpoWA3sFDpAESp7XoZ279uTk25cxTcr9Chjp=0vrBaNmtA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] drm/dp: Export symbol / kerneldoc fixes for DP AUX bus
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     dri-devel@lists.freedesktop.org,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Philip Chen <philipchen@chromium.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/10/22 6:06 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.17.7 release.
-> There are 140 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, 10 May 2022 at 22:29, Douglas Anderson <dianders@chromium.org> wrote:
 >
-> Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
-> Anything received after that time might be too late.
+> While working on the DP AUX bus code I found a few small things that
+> should be fixed. Namely the non-devm version of
+> of_dp_aux_populate_ep_devices() was missing an export. There was also
+> an extra blank line in a kerneldoc and a kerneldoc that incorrectly
+> documented a return value. Fix these.
 >
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.7-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+> Fixes: aeb33699fc2c ("drm: Introduce the DP AUX bus")
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Tested-by: Ron Economos <re@w6rz.net>
+> ---
+> None of these seem critical, so my plan is to land this in
+> drm-misc-next and not drm-misc-fixes. This will avoid merge conflicts
+> with future patches.
+>
+> Changes in v3:
+> - Patch ("drm/dp: Export symbol / kerneldoc fixes...") split for v3.
+>
+>  drivers/gpu/drm/display/drm_dp_aux_bus.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/display/drm_dp_aux_bus.c b/drivers/gpu/drm/display/drm_dp_aux_bus.c
+> index dccf3e2ea323..552f949cff59 100644
+> --- a/drivers/gpu/drm/display/drm_dp_aux_bus.c
+> +++ b/drivers/gpu/drm/display/drm_dp_aux_bus.c
+> @@ -66,7 +66,6 @@ static int dp_aux_ep_probe(struct device *dev)
+>   * @dev: The device to remove.
+>   *
+>   * Calls through to the endpoint driver remove.
+> - *
+>   */
+>  static void dp_aux_ep_remove(struct device *dev)
+>  {
+> @@ -120,8 +119,6 @@ ATTRIBUTE_GROUPS(dp_aux_ep_dev);
+>  /**
+>   * dp_aux_ep_dev_release() - Free memory for the dp_aux_ep device
+>   * @dev: The device to free.
+> - *
+> - * Return: 0 if no error or negative error code.
+>   */
+>  static void dp_aux_ep_dev_release(struct device *dev)
+>  {
+> @@ -256,6 +253,7 @@ int of_dp_aux_populate_ep_devices(struct drm_dp_aux *aux)
+>
+>         return 0;
+>  }
+> +EXPORT_SYMBOL_GPL(of_dp_aux_populate_ep_devices);
+>
+>  static void of_dp_aux_depopulate_ep_devices_void(void *data)
+>  {
+> --
+> 2.36.0.550.gb090851708-goog
+>
 
+
+-- 
+With best wishes
+Dmitry

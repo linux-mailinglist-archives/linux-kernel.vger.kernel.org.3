@@ -2,136 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 301825237DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE5E5237DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344112AbiEKPy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39884 "EHLO
+        id S1344260AbiEKP4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233310AbiEKPy4 (ORCPT
+        with ESMTP id S1344116AbiEKPzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:54:56 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12olkn2090.outbound.protection.outlook.com [40.92.22.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960CF13F93D;
-        Wed, 11 May 2022 08:54:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P0QtNjAh0EmKM/X6Jz2jzBwEsUkYokdVFewKzND5OL69WhgWuPfjOGTXgf4woj6Ib4cnzP7a3XnNU8Wkag3cOBUXgirgrApxUkTJQ1tiIvTpHoXnkMeoJHQCxqtnqV8RrUi7q1Nku6nbrwlSU6g6LG981w5ITU0krxPN6Se0qqOMg0XdA+0D+RIXb7wPrCS9TsNvvuMB2Di4S9ilnrtvbG7lOn1AUPmF0clvwVNkguzsEDq2NC/PWqqJiwmrQos3Qh+0A7Zwuc0Go+c2XQ7KvSUuTRALi6Q1TnOnW3xEfrXq/Q2g8wO7GwKRjBhwZ2V5X4Hmc3Wnuy0gnafL3Skycw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VXWVjTMZZbeorYFpjiUkGBXXfobV5fvWOZ3nP5Fy3NM=;
- b=O/ZEZtUghvjB40tuhAAUX40CkW+LYmYu0G53zk3+d+O6oFAGiPdOqy+DI3wHX/0zeTr4uHAj4RH72egoCn/7vF20OEeIW9OHUmoeXONztIB/UqLSacita2/gx5I2DDvC3DEC4KvNTVjt777emO8/K2w843stqbTH8NeT0pQoH66sAhST03BWEFni1xknmLe3qvjrmeHm8nJiGRkOMf3poZwna+swMyqYT6d7pbPtSGd7r3pmrOjkaxAx725lEaKnh9ucmmOu7XHEQGbF1TUBUhOKfKPxLUfu/q54hZ/8cNKdjOhFLTVJo7dHAdcZtQirVrcU86bRXvTxvPpKDWLXHQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from BY5PR02MB7009.namprd02.prod.outlook.com (2603:10b6:a03:236::13)
- by BL0PR02MB3889.namprd02.prod.outlook.com (2603:10b6:207:4b::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.18; Wed, 11 May
- 2022 15:54:52 +0000
-Received: from BY5PR02MB7009.namprd02.prod.outlook.com
- ([fe80::303a:ab1:17c1:2d16]) by BY5PR02MB7009.namprd02.prod.outlook.com
- ([fe80::303a:ab1:17c1:2d16%9]) with mapi id 15.20.5227.023; Wed, 11 May 2022
- 15:54:52 +0000
-Message-ID: <BY5PR02MB7009605B175F12F0639EFD29D9C89@BY5PR02MB7009.namprd02.prod.outlook.com>
-Date:   Wed, 11 May 2022 21:24:39 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-To:     krzysztof.kozlowski@linaro.org
-Cc:     airlied@linux.ie, clabbe@baylibre.com, daniel@ffwll.ch,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        fanghao11@huawei.com, jo@jsfamily.in, linus.walleij@linaro.org,
-        linux-kernel@vger.kernel.org, linux@rempel-privat.de,
-        phone-devel@vger.kernel.org, robh+dt@kernel.org, sam@ravnborg.org,
-        shawnguo@kernel.org, stano.jakubek@gmail.com,
-        thierry.reding@gmail.com, ~postmarketos/upstreaming@lists.sr.ht
-References: <b3a618a6-f236-549c-0bac-4c874cd49a00@linaro.org>
-Subject: Re: [PATCH v2 1/3] dt-bindings: vendor-prefixes: Add prefix for EBBG
-Content-Language: en-US
-From:   Joel Selvaraj <jo@jsfamily.in>
-In-Reply-To: <b3a618a6-f236-549c-0bac-4c874cd49a00@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TMN:  [6TkkBXL4hQzHdTcFHPyTccFlPj2uXd3FgcFX+VuZ7r+e70Gk2KYzz3lT4mVpyIOf]
-X-ClientProxiedBy: PN2PR01CA0092.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:27::7) To BY5PR02MB7009.namprd02.prod.outlook.com
- (2603:10b6:a03:236::13)
-X-Microsoft-Original-Message-ID: <cb6feda7-ae04-a09b-0d0f-08a542deceae@jsfamily.in>
+        Wed, 11 May 2022 11:55:55 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015AE2DE8
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:55:53 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id i19so4911829eja.11
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:55:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4l19L6fTMT+2abs+HVT48B36V7g+rXx3Nn4f/wCqyd8=;
+        b=D91q8Wyo1ALfiHRP4ScLq7BqPgwaUuS/VfK4gJdCec3fBY8DVmQSqW6ZPF8okCRFOY
+         j3sqTbLKdhBH8NNQaT8XJmdepHbhLmCroUXchv6gct/lJWtjy4LqNVbF292jdiAFI3/X
+         3dufOa9MeWHPHOpS6z4M/YUeJg7Di5KISRdOU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4l19L6fTMT+2abs+HVT48B36V7g+rXx3Nn4f/wCqyd8=;
+        b=CraPG8A8CXgioZERkRw+4tugmIAARnqXxTX0OQgXzIpPLJog8P9NMW2suG/BCeRPiX
+         kBSsCFpEXaiIz+1ug8NlA9iNTYDS0vKpcWFOeLtqPhSX43O9TDPf7Ppkj/81iQuvjOmi
+         84fxIxHpvw9oSqawaHI4K7lPxMNsj2KKdCZSiAtcg5LG0ETJyNllMup2fg9m5oxV3i4n
+         Xrn4HlPXLZQjaxKrgL5fDMX2CdgpI7P/SZZrS6BXg4Qy36IkOfwJYnFP/a2lXHI4+f+E
+         IGx02Rn1KetOBX1JJWc+VUYU9Au5Go27EZDxiP2B1BdQQv9YdL1GVBGYsqjo2p4qbEDR
+         3QEA==
+X-Gm-Message-State: AOAM531j6dtsLj5Bpvu8A2nS3nMQ6rJyqQztRi/K3l5zzwe3GXy6ZgbW
+        8SnU9V+kTcFakl+dcwDW7WF646Sz1XaDsqJFVAU=
+X-Google-Smtp-Source: ABdhPJzmvZYE2EbOpPFvqH/oijzbXXGAG8j+rC5+f/JgjH25J6S2+Y+Uf0BeIqNCQSWc30ySpbG6Cw==
+X-Received: by 2002:a17:906:c284:b0:6f4:dcc3:7939 with SMTP id r4-20020a170906c28400b006f4dcc37939mr24566150ejz.444.1652284552234;
+        Wed, 11 May 2022 08:55:52 -0700 (PDT)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id jj10-20020a170907984a00b006f3ef214e70sm1084348ejc.214.2022.05.11.08.55.50
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 08:55:51 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id u3so3638916wrg.3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:55:50 -0700 (PDT)
+X-Received: by 2002:a5d:6dad:0:b0:20c:4dc1:e247 with SMTP id
+ u13-20020a5d6dad000000b0020c4dc1e247mr23326807wrs.274.1652284550591; Wed, 11
+ May 2022 08:55:50 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fe71bd6a-422a-4145-618b-08da33669583
-X-MS-TrafficTypeDiagnostic: BL0PR02MB3889:EE_
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TwdNLhWzQsr8vD51mc72eEQ3FCEcrq6uo6PCi0yt6s0s86x/u1zREaxz+FLCQFscmMDItMS3x9IAQdK1cQda87Wwd1ggOz0juHuFK1/MZgxzI+xXadRM8MhqzoH0xZ5NNDbNAmgpgRMNbyshJEVTq2K3sP84Uc1BiLQLdpCZHSFUvX51gkuizd5hkxeqq/9x3Krc6yV03C13SW0G7IAQedmJwJjugo6iiRXp6M4n+sTMux++y9Z8QkCnJaBEGrmEyqs5weuMRMcLJ7mhdkZO0xPHT2QvOvuVh+L91g/SG+IwlVyj3VjwXvP/SoXy7E5Jm26wZPdLrYC54UVcskDNtpXFzAO0ZfmmCyBrJhiH+AgJFwWyyoVcQQIGB82bhmKogO9KYQh9iZc/pnnQR09QvHSR25jetqKIhqERc7Qw9znjWvRIv8GV7O0J0qmQGblg4Wq3qLoOEPefoDXJ5MXVrPl6fGmjQYnCtx384q6OQA3VVnOKQczcm9fkNujheAodRfPntp3RGXUmNuuJvVzy+OpQsZirK3z3zAYX97Z2EKSqIMxnZ8pEid6rMdCmv3WCLOXfm+E7/UPlEsY8x6NEf4fL8DHV3o5eaLsYvyEXDzIjTQoCONhHnzKdILohTxNhwq98dr6q0EIuLRft160iUIE/H46YPc5ruqTdLQbl7/g=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SXBEM3Q0ZW1US1ZXVlI5Z1Z0TXFUbkZXSzVCa0tFTHJsMUtJODJwVHRpdmVP?=
- =?utf-8?B?VW01a0dWZ0o5LzNVOFg2Z1lTbzNPcS81YmRJM01LTEtqWUdyNTN5dmZSSk9u?=
- =?utf-8?B?cEhQTk9WTmZCTkZybktEL05ZdGtjdG1zM1FsdVJRUnpBMkluV2U1UXFuU0R3?=
- =?utf-8?B?MGMzdTZMeHVCaCt4dkIxYXc2SlZhWVBDdktJaVZrOTdhVDNqNjIvVDJNVXZj?=
- =?utf-8?B?TXJTVnFpaUZuYTVURE9BbW1YNzBGd0VubHl5Z3grTjdQcTc1ZWtQRHRZcllX?=
- =?utf-8?B?VjV0RHZLOElqajlBaXhjRi8zRlZCeDRrcURSb0RKWDEwTkNFSDY5c3NueFlj?=
- =?utf-8?B?MURnc2YyaXBnVHo0WkdpMG1maGZNakpoNU5VY0Zoazl4eVJlbUxtaVNRZ1RS?=
- =?utf-8?B?QVhESkxIN2RRcXpTeTNVUHBXL3NzUzgySVB1VmRzc1FRVHdmRjhKOVlvQTlt?=
- =?utf-8?B?MTBFanBFYmNLY1U0N2QwRXYydVh5dXNwZmFDY3duZXR6djUxNWFMb0RhV0oy?=
- =?utf-8?B?YnI5eGZZMGI1SWgzNXN1RmlNZVVPaFEyVGltNUVRRy9uNXNFR3A4dk5vTGJF?=
- =?utf-8?B?R3F0OXdVVHlVV2dWNlNNMHdNb1U1L2dYMXRyOThFT2UxVXZHb2JERFZWc0dq?=
- =?utf-8?B?WVJvNkJoMHZscDJDallyaFpyRWFnOGJLMGN5bmJsNHZ1YWNHSlNEQ2NiYnhS?=
- =?utf-8?B?WmN6OEtSNXRIeEk3bnFZSlFKTUdGR0hxNGEvZHBTWTlRMmg4VGIwLzYweDdN?=
- =?utf-8?B?OWFoWW93S28vbTVpVW44bzVzUHdXZHRaYm8zSFA5YkM4KzJhak5QN2dXSXRU?=
- =?utf-8?B?OVpONUFLbkZmeERxcUpmcjlOYkd0c2hNb2ROQVc1c2Z3bWNod1p5MG5yZkly?=
- =?utf-8?B?WjRaN2ExWkU5OFZGbFFzTWJXYWdKc2laL3dNN2cxYXJ4aVd4cFpHYUFyVi9Y?=
- =?utf-8?B?N2d0YmRoUnFOZ0MzQnhGWk9adlhmOUhsY0lsRXpNZHF4RVo2M2V1cUNXUnp2?=
- =?utf-8?B?czcvNW9lYVNvb2NUTTV0eWsrSEVsUHZFaXducXU0Q2hlL1l0UjVDVk9hL1pn?=
- =?utf-8?B?OGFzMHlpWlFhRnQvbE9HTCtKUWN1cC9mYkV0Ti9XTlROWjR1SUZVUzF3Tlc3?=
- =?utf-8?B?T1lNd0xQVllwWmYvcjd0RHREQWNXTm5jUzEwdGZXaUlNSWhOckYySXpwZ3Bi?=
- =?utf-8?B?TU9Jc0ZoV3hxbFAvL0oydVQxTTNKbDR1TmlGczkya1V3ZkE2aHk4d3J4azEw?=
- =?utf-8?B?NktEZk9KNWY5OUdkbXo3c3FWOFpDVU9VRk1kR0FrNWR1VmI4VzdRa2NjOFZQ?=
- =?utf-8?B?eWwzLzJuaVJ4ZnM2R01rVzljWUFyWTJ3Z3ludzZyWHcxRVhaenNHN1pqemhv?=
- =?utf-8?B?V3RVb1NaZ1hTTUE0NW81RVNrSkRIcmlacDlJOWRCc01TbEFpNkxobzhqOUpD?=
- =?utf-8?B?Z25CZWlMS1JBcFZlbEVNTk43VEFzMmsrWnBDVzQyN1pYOFFQNmtrMzBXOHB5?=
- =?utf-8?B?L3VpZzZFbnN1ak9DUEdCZnYvUkdubDA1MjZVeldkbVJpZnRFaWE3VTRhS1Mv?=
- =?utf-8?B?NnVWMlFJVVJ6dDFIb3pYOGZoR244T3pxdlZGNGxiQUVneWx3UmhiRDBQZzBv?=
- =?utf-8?B?MVo5K1J3elBIdkRaSDYwZFBZWnRzNFdDVm1IY0g1VytJNVpmczlzeHkrMEFM?=
- =?utf-8?B?Wkd2SzN2NkZwby9USGV3N21kbCtzYmNsdjhDVzhTWDJIL0xhanEwK2JCdXdx?=
- =?utf-8?B?UllLcXllWTFUZGR3TkNmVmZoY1BuSWRxTUNUZnRTZzBJMFRXV3FpL3ZCSWhB?=
- =?utf-8?B?TGowRFhtdk56elU3WXhjd25HTmloeXVJczI0QXlCVWhINXo4Mk5kRGMvZ25z?=
- =?utf-8?B?Q1Z2cHpTbWY4ZVN3cEoweWwvZTNVUlMwd0xjN3h3QUNrbG42ZDNyc3JaM09Q?=
- =?utf-8?B?amQxM2krZ1RoRzJtTUZNdWplM2p4U0laSjlYNzlrTVEzM3hxMHJkZTlJeGtP?=
- =?utf-8?B?cnBMekRMK3hRPT0=?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-99c3d.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: fe71bd6a-422a-4145-618b-08da33669583
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR02MB7009.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2022 15:54:52.0379
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB3889
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <165201148069.536527.1960632033331546251.tglx@xen13>
+ <CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com>
+ <ff841fdc-4db7-7a3d-8caf-d0cddd0dfa31@leemhuis.info> <Ynt1z0eZ19eMqp8I@zn.tnic>
+ <YnvbLx9FKgQwZJ/F@mit.edu>
+In-Reply-To: <YnvbLx9FKgQwZJ/F@mit.edu>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 11 May 2022 08:55:34 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgUVHucyjp6M7qmn8b=aqwucfS4SQpqOCR5sKr16zoO5g@mail.gmail.com>
+Message-ID: <CAHk-=wgUVHucyjp6M7qmn8b=aqwucfS4SQpqOCR5sKr16zoO5g@mail.gmail.com>
+Subject: Re: Link: tag and links to submission and reports (was: Re: [GIT
+ pull] core/urgent for v5.18-rc6)
+To:     "Theodore Ts'o" <tytso@mit.edu>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Zhangfei Gao <zhangfei.gao@foxmail.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 11, 2022 at 8:50 AM Theodore Ts'o <tytso@mit.edu> wrote:
+>
+> I would argue that it should be the patch submitter's responsibility
+> to explicitly add a URL to the problem report.
 
-On 11/05/22 13:50, Krzysztof Kozlowski wrote:
- > Please add Acked-by/Reviewed-by tags when posting new versions. However,
- > there's no need to repost patches *only* to add the tags. The upstream
- > maintainer will do that for acks received on the version they apply.
- >
- > 
-https://elixir.bootlin.com/linux/v5.13/source/Documentation/process/submitting-patches.rst#L543
- >
- > If a tag was not added on purpose, please state why and what changed.
+I agree in the perfect case.
 
-My bad. Completely forgot to pick the Acked-by. I will make sure to pick
-them up in future patches.
+But in practice, we have a lot more patch submitters than we have
+maintainers, and not all "leaf developers" necessarily know how to do
+everything.
 
-Best Regards,
-Joel Selvaraj
+So the maintainer should probably expect to fix things up. Not always,
+but also not a "the developer should have done this, so I won't do it"
+
+This isn't so different from the fact that not everybody writes
+English proficiently - people do hopefully end up fixing things up as
+they get passed onwards.
+
+               Linus

@@ -2,182 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11A545235BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D73E5235C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:39:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244867AbiEKOjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 10:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50374 "EHLO
+        id S244890AbiEKOjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 10:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231948AbiEKOjf (ORCPT
+        with ESMTP id S244878AbiEKOjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 10:39:35 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A7C546AB
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:39:29 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220511143924euoutp01a6c0f76ae3045ba530ec542dad693fb8~uE9_1LP-d1126711267euoutp01f
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 14:39:24 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220511143924euoutp01a6c0f76ae3045ba530ec542dad693fb8~uE9_1LP-d1126711267euoutp01f
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1652279964;
-        bh=EUaYeqrDCZdYIk1QARpzTYuomNghhQ2OqPnaqXtUYXI=;
-        h=Date:Subject:To:From:In-Reply-To:References:From;
-        b=cckO2daDpiVhFX6qpoQYbYH6llh83054qsmL/8fX4xsl//rh5oxEEQcsIU0wxEzN8
-         xPcjDha5le5ZiqVkoxD+PkgW+pYaKSajomW6x4BXGIpo680Bn11YENWOCckJ8aKbi2
-         4iFTqaIZqXzehfl096ccaQwYo2n6fkUvKh14nO70=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20220511143924eucas1p1114e84104a5c6c0eb50e67f8777969a5~uE9_R-fHL3194531945eucas1p1W;
-        Wed, 11 May 2022 14:39:24 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 60.2A.10009.C9ACB726; Wed, 11
-        May 2022 15:39:24 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220511143923eucas1p2e3a3e929d5d66bce874b5a9f7d7fd067~uE99xcdbm0496104961eucas1p2y;
-        Wed, 11 May 2022 14:39:23 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220511143923eusmtrp1fc902ac2cae0a49dc35e360306028ac3~uE99wDcd41329413294eusmtrp1g;
-        Wed, 11 May 2022 14:39:23 +0000 (GMT)
-X-AuditID: cbfec7f2-e7fff70000002719-24-627bca9c0b1d
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id A9.16.09404.B9ACB726; Wed, 11
-        May 2022 15:39:23 +0100 (BST)
-Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220511143923eusmtip1f71a6b406fa85da0c0332d11c8d4d4aa~uE99juOBx3226832268eusmtip1E;
-        Wed, 11 May 2022 14:39:23 +0000 (GMT)
-Received: from [192.168.8.130] (106.210.248.174) by CAMSVWEXC01.scsc.local
-        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Wed, 11 May 2022 15:39:18 +0100
-Message-ID: <d8e86c32-f122-01df-168e-648179766c55@samsung.com>
-Date:   Wed, 11 May 2022 16:39:17 +0200
+        Wed, 11 May 2022 10:39:43 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCB6B36F9;
+        Wed, 11 May 2022 07:39:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=FiKDI9HhA7r1AHskj6iUp9mVld6qQ9o+A800DaQAHwQ=; b=XlpCopCA1tvMM4IGD6BfsvKJJ3
+        6Ne4J4K8ICTVijFI20gMdznQKN26v+HzXDOqQM+gLJnQNUlf18YCULwS+DYBTr1W2CT//sXr/pzm/
+        N3v2xqYRQugLIno12BUCu9wbMJJ9pYaAWEJDtK/7iqRJ4KtfCExbag4imqu4x1d6YffI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nonUx-002Jv1-LY; Wed, 11 May 2022 16:39:31 +0200
+Date:   Wed, 11 May 2022 16:39:31 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Felix Fietkau <nbd@nbd.name>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: dsa: tag_mtk: add padding for tx packets
+Message-ID: <YnvKo2sMChiXaiFN@lunn.ch>
+References: <20220510094014.68440-1-nbd@nbd.name>
+ <20220510123724.i2xqepc56z4eouh2@skbuf>
+ <5959946d-1d34-49b9-1abe-9f9299cc194e@nbd.name>
+ <20220510165233.yahsznxxb5yq6rai@skbuf>
+ <bc4bde22-c2d6-1ded-884a-69465b9d1dc7@nbd.name>
+ <20220510222101.od3n7gk3cofwhbks@skbuf>
+ <376b13ac-d90b-24e0-37ed-a96d8e5f80da@nbd.name>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
-        Thunderbird/91.8.1
-Subject: Re: [PATCH v3 11/11] dm-zoned: ensure only power of 2 zone sizes
- are allowed
-Content-Language: en-US
-To:     <dsterba@suse.cz>, <jaegeuk@kernel.org>, <hare@suse.de>,
-        <dsterba@suse.com>, <axboe@kernel.dk>, <hch@lst.de>,
-        <damien.lemoal@opensource.wdc.com>, <snitzer@kernel.org>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        <bvanassche@acm.org>, <linux-fsdevel@vger.kernel.org>,
-        <matias.bjorling@wdc.com>, Jens Axboe <axboe@fb.com>,
-        <gost.dev@samsung.com>, <jonathan.derrick@linux.dev>,
-        <jiangbo.365@bytedance.com>, <linux-nvme@lists.infradead.org>,
-        <dm-devel@redhat.com>, Naohiro Aota <naohiro.aota@wdc.com>,
-        <linux-kernel@vger.kernel.org>,
-        Johannes Thumshirn <jth@kernel.org>,
-        "Sagi Grimberg" <sagi@grimberg.me>,
-        Alasdair Kergon <agk@redhat.com>,
-        <linux-block@vger.kernel.org>, Chaitanya Kulkarni <kch@nvidia.com>,
-        "Keith Busch" <kbusch@kernel.org>, <linux-btrfs@vger.kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>
-From:   Pankaj Raghav <p.raghav@samsung.com>
-In-Reply-To: <20220509185432.GB18596@twin.jikos.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [106.210.248.174]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0xTVxzHc3pv772tVC4V5QTYw4K4IUMbl+y4KWGZ4M3cdLIQlw03C94U
-        YinSFmQSGQ4kBaU8FIQOpStuPidDCA95jFUe5aGCrFpqdDAoTBmFAYsgC85yceG/z+/7+37P
-        +f1ODoWJawlPKkapYVVKmUJCCPHqtrnbb5V0JkduSrsvQOWdbRh63tBGoCsPcwhUODmHofyc
-        IhLN37qDoUbHd3zUM3uMh8rmn+KowZjPQ5eutPLQcLkeQyebJ3F0KX0QQ/8OStHgjA1H+aZ7
-        ANkteh5qtG1Ad4cukqihsQNHfTdKCFT6o51EuRn/YMiaawcor72Sj66NTeDIbPMK9mb6ftvJ
-        LJivEkxemoNk7jyqwJm+WwnM9cuZBPN9agHGVJ7/hqnvTyWY7DQHwdQd/53PTDRZCKa8yoIz
-        3YYWkqnsSmZyKyv4n4g/F249wCpiElnVxqD9wujTo7fxQwXCJG1xUioooLKAgIL027Be1wKc
-        LKYvApj9TJ4FhC94BkBtmQlwxTSAz3s6sJeJoa4eHte4AOCzmw/x/126auNSUQ9gb5txMSKi
-        g+C9uQLcyTi9Dp6veQw43Q12FA8v6qvpz2Chvptw8ip6L2xpNSxmMdoD2oZLF69zpy0ETM8f
-        4WcBiiJof3gsk3R6BPRmWFd2AnD+N+HxmnmS49dgzXjJ0tg+cGKgCef4KPyprZt0nglpixCe
-        mTECrrEdWgqKCI5XwSftVSTH3rDr1MmlcDK0W+cxLpwOYE5dOeEcCNLvQV23gvO8D422PwEn
-        r4TWcTdunpUwv/oMxskiqM0Q5wJf/bKX0C/bWL9sG/2ybQwAvww82AR1rJxVS5Xs4UC1LFad
-        oJQHRsXFXgcvPnfXQvtULTj75O9AE+BRwAQghUncRb/okiLFogOyr4+wqrivVAkKVm0CXhQu
-        8RBFxfwsE9NymYY9yLKHWNXLLo8SeKby+EfMa3CJutPsCKurZ/8aXnst0Pddu4UcKz71h0aj
-        CfXzCxo9F+xVu94lYERdK4hXUpuUE1bPiAdePuumzXmZiSvwG7WajDyf9PV5rx+M3N7U2Xr3
-        1aLxcNGKV2ZD+VJwelddxH7N4y0LFQNbpURrr3ti/Dths5+eCGkKHUhhV9/coPAt3eVtiOBv
-        VlwFMzv9XePcUqa27bN/IHe58GWhJDvkcPCUcsGwRxdsjSLnPp6OfrCn/6PJ9n17A5oVDgbt
-        2BYQ0drv4hJ/jnY0z45M7earJ9cwP0SEu255w08X9mtKQMioee0XveXh97XaR+FDPlVHp8a+
-        3Sjl53xoD0dP9a4SXB0tk/pjKrXsP9KMJ4lLBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrMKsWRmVeSWpSXmKPExsVy+t/xu7qzT1UnGbx+qmSx/tQxZov/e46x
-        Way+289mMe3DT2aLSf0z2C1+nz3PbLH33WxWiws/GpksFv/+zmKxZ9EkJouVq48yWTxZP4vZ
-        oufABxaLlS0PmS3+PDS0ePjlFovFpEPXGC2eXp3FZLH3lrbFpccr2C327D3JYnF51xw2i/nL
-        nrJbTGj7ymxxY8JTRouJxzezWqx7/Z7F4sQtaQcZj8tXvD3+nVjD5jGx+R27x/l7G1k8Lp8t
-        9di0qpPNY2HDVGaPzUvqPXbfbGDz6G1+x+axs/U+q8f7fVfZPNZvucricWbBEXaPzaerPSZs
-        3sgaIBSlZ1OUX1qSqpCRX1xiqxRtaGGkZ2hpoWdkYqlnaGwea2VkqqRvZ5OSmpNZllqkb5eg
-        lzHl+TmWgqlcFR0zKxoYp3J0MXJySAiYSDw+fYGpi5GLQ0hgKaNE74O/zBAJGYlPVz6yQ9jC
-        En+udbFBFH1klJiwZzkzhLMbqKO7kQmkilfATuLaz6ksIDaLgKrEku0vGSHighInZz4Bi4sK
-        REg82H2WFcQWFgiXWPN2C1gNs4C4xK0n88HOEBG4yibRMukZK8SG54wS7x+fB6ri4GAT0JJo
-        7AQ7iVPAWGLn4m6oZk2J1u2/2SFseYntb+dAvaAs8f7BPhYIu1bi1f3djBMYRWYhuWkWkt2z
-        kIyahWTUAkaWVYwiqaXFuem5xUZ6xYm5xaV56XrJ+bmbGIGpbduxn1t2MK589VHvECMTB+Mh
-        RgkOZiUR3v19FUlCvCmJlVWpRfnxRaU5qcWHGE2BATORWUo0OR+YXPNK4g3NDEwNTcwsDUwt
-        zYyVxHk9CzoShQTSE0tSs1NTC1KLYPqYODilGpg4qpNc0ydsyn0tv9U52nlJ4pMJW09kzrB8
-        enyejAfDqWt3FF26cs5+OjyJl/PEBPVC/SReEStbr8CsOydXtDpGrL2y7JJEqr9hTKXtrtmG
-        E+NeKL9cWBJZn3Q9+8WRwl1+rELmca9LVzprvjJoEPt6rlFk6+84hW/Oxpltcr77t3OmiAlW
-        Zv9kmdTooNbYM0vst+e1mMgi/lsbr3+3cFmu8OF1O8fmG2qn5igEHXpcd8Kj8K7JvMO7Tjme
-        6AtrOXtV8ZkYY+RRX85TSQ/Te65q/dFeftqJe9LM+h/XTPKWT/i8yz709x4umTCZowc+fcve
-        nl06I4uRw3tKkWv2Bof/S7OdtNbUux/X5d1q/EKJpTgj0VCLuag4EQANVqpY9gMAAA==
-X-CMS-MailID: 20220511143923eucas1p2e3a3e929d5d66bce874b5a9f7d7fd067
-X-Msg-Generator: CA
-X-RootMTR: 20220506081118eucas1p17f3c29cc36d748c3b5a3246f069f434a
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220506081118eucas1p17f3c29cc36d748c3b5a3246f069f434a
-References: <20220506081105.29134-1-p.raghav@samsung.com>
-        <CGME20220506081118eucas1p17f3c29cc36d748c3b5a3246f069f434a@eucas1p1.samsung.com>
-        <20220506081105.29134-12-p.raghav@samsung.com>
-        <20220509185432.GB18596@twin.jikos.cz>
-X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <376b13ac-d90b-24e0-37ed-a96d8e5f80da@nbd.name>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
-
-On 2022-05-09 20:54, David Sterba wrote:>> diff --git
-a/drivers/md/dm-zone.c b/drivers/md/dm-zone.c
->> index 3e7b1fe15..27dc4ddf2 100644
->> --- a/drivers/md/dm-zone.c
->> +++ b/drivers/md/dm-zone.c
->> @@ -231,6 +231,18 @@ static int dm_revalidate_zones(struct mapped_device *md, struct dm_table *t)
->>  	struct request_queue *q = md->queue;
->>  	unsigned int noio_flag;
->>  	int ret;
->> +	struct block_device *bdev = md->disk->part0;
->> +	sector_t zone_sectors;
->> +	char bname[BDEVNAME_SIZE];
->> +
->> +	zone_sectors = bdev_zone_sectors(bdev);
->> +
->> +	if (!is_power_of_2(zone_sectors)) {
+> The garbage data is still present in the ARP packets without my patch
+> though. So regardless of whether ARP packets are processed correctly or if
+> they just trip up on some receivers under specific conditions, I believe my
+> patch is valid and should be applied.
 > 
-> is_power_of_2 takes 'unsigned long' and sector_t is u64, so this is not
-> 32bit clean and we had an actual bug where value 1<<48 was not
-> recognized as power of 2.
-> 
-Good catch. Now I understand why btrfs has a helper for is_power_of_two_u64.
+> Who knows, maybe the garbage padding even leaks some data from previous
+> packets, or some other information from within the switch.
 
-But the zone size can never be more than 32bit value so the zone size
-sect will never greater than unsigned long.
+I somewhat agree with Vladimir at the moment. We don't seem to fully
+understand why the change makes things work better. And without that
+understanding, it is hard to say if this is the correct fix or not.
 
-With that said, we have two options:
+If this fix is making the transmitter work around bugs in the
+receiver, we really should be fixing the receiver, otherwise the
+receiver is going to be broken in other scenarios involving padded
+short packets.
 
-1.) We can put a comment explaining that even though it is 32 bit
-unsafe, zone size sect can never be a 32bit value
-
-or
-
-2) We should move the btrfs only helper `is_power_of_two_u64` to some
-common header and use it everywhere.
-
-Let me know your thoughts.
-
+	 Andrew

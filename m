@@ -2,66 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D22D5232EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 14:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D9D5232F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 14:19:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242280AbiEKMTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 08:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
+        id S242400AbiEKMTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 08:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242336AbiEKMTI (ORCPT
+        with ESMTP id S241951AbiEKMT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 08:19:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5AD5267D3E
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 05:19:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652271540;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qo0Tuocvu0rAXiJY7/7YeZeIw3FCBGuUkjFz35/a6LU=;
-        b=cvcNNAbRJc9oGEr2xQsRGX9FN185eVJflKHJx8nv5bXKQe4Qz6IeoppG6YHEQQ9qSCavO3
-        x8whfiWIGW2IpAquCZiOQvrY7f6nJPNpNBTclbwxh/sQHMdasU2/6n6scZU1Fe6wIRfXBv
-        vXxFxy5bMZsaNDgT4/pslbhxQcQBj+c=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-461-PkIhWHOFMeK95q2IfJGijQ-1; Wed, 11 May 2022 08:18:57 -0400
-X-MC-Unique: PkIhWHOFMeK95q2IfJGijQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 11 May 2022 08:19:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A6E68F83;
+        Wed, 11 May 2022 05:19:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 71CC4811E84;
-        Wed, 11 May 2022 12:18:56 +0000 (UTC)
-Received: from starship (unknown [10.40.192.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2DDFE4087D63;
-        Wed, 11 May 2022 12:18:53 +0000 (UTC)
-Message-ID: <79223471c31303020cf7766aeb4c5caf48ffab93.camel@redhat.com>
-Subject: Re: [PATCH v3 34/34] KVM: x86: Rename 'enable_direct_tlbflush' to
- 'enable_l2_tlb_flush'
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 11 May 2022 15:18:53 +0300
-In-Reply-To: <20220414132013.1588929-35-vkuznets@redhat.com>
-References: <20220414132013.1588929-1-vkuznets@redhat.com>
-         <20220414132013.1588929-35-vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1D1CB82153;
+        Wed, 11 May 2022 12:19:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54CBEC340F2;
+        Wed, 11 May 2022 12:19:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652271555;
+        bh=Fjm4AfHTC6kU6/6xhslVpnGbq5WyxAJ/0p2mGfcQWQs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dI8nHfktYwihT60Q3fiVVp9vZvUoayzvEP3HLDdwiTSPfDe0W+MsukymZqsR4Kd2j
+         PCwodjXXBErP4o57wwbtpgMST/ycE9NN6ce+KKZM0b/CM7ov+ufHIDT4GdmY5k5bbP
+         ND9+ZJmhaMZeCA4Y/KsO3exAO+Kzpycyoa+tLo7DAUAFOf1qv+B8CJqMMQBOS1CJ7K
+         5sWjOQxUgfK91zbxzcO3d3tV62B2YLcTPGd09Scr18/507m/X3/qwmhspsvK3f5SYt
+         MJtoD3ycIANo2dBljx/s/OkvfLzqC7FSwOOzjYYB9AqxuOUPOH31JnFY+l2mWjWgD+
+         gWUB2HEBycm6g==
+Received: by mail-wm1-f44.google.com with SMTP id r188-20020a1c44c5000000b003946c466c17so462477wma.4;
+        Wed, 11 May 2022 05:19:15 -0700 (PDT)
+X-Gm-Message-State: AOAM533hE49q25FzwYhhkIHDAv/fhor7lgehThDx5eMy8VPd9fKPe7Ie
+        9HcLyPLOKYLEijuvDwj3NKu8i8DnHhp7km9Mvb4=
+X-Google-Smtp-Source: ABdhPJzyVGRVS3f9RZC9vyM7pHDuzQgoTcjJcNnavzvLkUp3eQkqnwavyZ2cqLGpUK+B3lUA9FIEiurqeaJ8ZoB5Bq8=
+X-Received: by 2002:a05:600c:382:b0:394:6172:59dc with SMTP id
+ w2-20020a05600c038200b00394617259dcmr4543642wmd.120.1652271553566; Wed, 11
+ May 2022 05:19:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220510114852.1719018-1-zheyuma97@gmail.com>
+In-Reply-To: <20220510114852.1719018-1-zheyuma97@gmail.com>
+From:   Ricardo Ribalda Delgado <ribalda@kernel.org>
+Date:   Wed, 11 May 2022 14:18:57 +0200
+X-Gmail-Original-Message-ID: <CAPybu_2NCEmjVi2FZC+dPePkfZJQG9QT5qc=cRdHY4tHPEkVDg@mail.gmail.com>
+Message-ID: <CAPybu_2NCEmjVi2FZC+dPePkfZJQG9QT5qc=cRdHY4tHPEkVDg@mail.gmail.com>
+Subject: Re: [PATCH] media: imx214: Fix the error handling in imx214_probe()
+To:     Zheyu Ma <zheyuma97@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,143 +63,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-14 at 15:20 +0200, Vitaly Kuznetsov wrote:
-> To make terminology between Hyper-V-on-KVM and KVM-on-Hyper-V consistent,
-> rename 'enable_direct_tlbflush' to 'enable_l2_tlb_flush'. The change
-> eliminates the use of confusing 'direct' and adds the missing underscore.
-> 
-> No functional change.
-> 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Hi Zheyu
+
+Do you have seen this issue in a real hardware?  The device enters
+idle state unconditionally after power_on during probe.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/media/i2c/imx214.c#n1008
+
+
+
+
+On Tue, May 10, 2022 at 1:49 PM Zheyu Ma <zheyuma97@gmail.com> wrote:
+>
+> The driver should disable regulators when fails to probe.
+>
+> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
 > ---
->  arch/x86/include/asm/kvm-x86-ops.h | 2 +-
->  arch/x86/include/asm/kvm_host.h    | 2 +-
->  arch/x86/kvm/svm/svm_onhyperv.c    | 2 +-
->  arch/x86/kvm/svm/svm_onhyperv.h    | 6 +++---
->  arch/x86/kvm/vmx/vmx.c             | 6 +++---
->  arch/x86/kvm/x86.c                 | 6 +++---
->  6 files changed, 12 insertions(+), 12 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-> index 96e4e9842dfc..1e13612a6446 100644
-> --- a/arch/x86/include/asm/kvm-x86-ops.h
-> +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> @@ -121,7 +121,7 @@ KVM_X86_OP_OPTIONAL(vm_move_enc_context_from)
->  KVM_X86_OP(get_msr_feature)
->  KVM_X86_OP(can_emulate_instruction)
->  KVM_X86_OP(apic_init_signal_blocked)
-> -KVM_X86_OP_OPTIONAL(enable_direct_tlbflush)
-> +KVM_X86_OP_OPTIONAL(enable_l2_tlb_flush)
->  KVM_X86_OP_OPTIONAL(migrate_timers)
->  KVM_X86_OP(msr_filter_changed)
->  KVM_X86_OP(complete_emulated_msr)
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 168600490bd1..f4fd6da1f565 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1526,7 +1526,7 @@ struct kvm_x86_ops {
->  					void *insn, int insn_len);
->  
->  	bool (*apic_init_signal_blocked)(struct kvm_vcpu *vcpu);
-> -	int (*enable_direct_tlbflush)(struct kvm_vcpu *vcpu);
-> +	int (*enable_l2_tlb_flush)(struct kvm_vcpu *vcpu);
->  
->  	void (*migrate_timers)(struct kvm_vcpu *vcpu);
->  	void (*msr_filter_changed)(struct kvm_vcpu *vcpu);
-> diff --git a/arch/x86/kvm/svm/svm_onhyperv.c b/arch/x86/kvm/svm/svm_onhyperv.c
-> index 8cdc62c74a96..69a7014d1cef 100644
-> --- a/arch/x86/kvm/svm/svm_onhyperv.c
-> +++ b/arch/x86/kvm/svm/svm_onhyperv.c
-> @@ -14,7 +14,7 @@
->  #include "kvm_onhyperv.h"
->  #include "svm_onhyperv.h"
->  
-> -int svm_hv_enable_direct_tlbflush(struct kvm_vcpu *vcpu)
-> +int svm_hv_enable_l2_tlb_flush(struct kvm_vcpu *vcpu)
->  {
->  	struct hv_enlightenments *hve;
->  	struct hv_partition_assist_pg **p_hv_pa_pg =
-> diff --git a/arch/x86/kvm/svm/svm_onhyperv.h b/arch/x86/kvm/svm/svm_onhyperv.h
-> index e2fc59380465..d6ec4aeebedb 100644
-> --- a/arch/x86/kvm/svm/svm_onhyperv.h
-> +++ b/arch/x86/kvm/svm/svm_onhyperv.h
-> @@ -13,7 +13,7 @@
->  
->  static struct kvm_x86_ops svm_x86_ops;
->  
-> -int svm_hv_enable_direct_tlbflush(struct kvm_vcpu *vcpu);
-> +int svm_hv_enable_l2_tlb_flush(struct kvm_vcpu *vcpu);
->  
->  static inline void svm_hv_init_vmcb(struct vmcb *vmcb)
->  {
-> @@ -51,8 +51,8 @@ static inline void svm_hv_hardware_setup(void)
->  
->  			vp_ap->nested_control.features.directhypercall = 1;
->  		}
-> -		svm_x86_ops.enable_direct_tlbflush =
-> -				svm_hv_enable_direct_tlbflush;
-> +		svm_x86_ops.enable_l2_tlb_flush =
-> +				svm_hv_enable_l2_tlb_flush;
->  	}
+>  drivers/media/i2c/imx214.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
+> index 83c1737abeec..61eeaefd4298 100644
+> --- a/drivers/media/i2c/imx214.c
+> +++ b/drivers/media/i2c/imx214.c
+> @@ -1076,6 +1076,7 @@ static int imx214_probe(struct i2c_client *client)
+>         mutex_destroy(&imx214->mutex);
+>         v4l2_ctrl_handler_free(&imx214->ctrls);
+>         pm_runtime_disable(imx214->dev);
+> +       regulator_bulk_disable(IMX214_NUM_SUPPLIES, imx214->supplies);
+>
+>         return ret;
 >  }
->  
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index a81e44852f54..2b3c73b49dcb 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -461,7 +461,7 @@ static unsigned long host_idt_base;
->  static bool __read_mostly enlightened_vmcs = true;
->  module_param(enlightened_vmcs, bool, 0444);
->  
-> -static int hv_enable_direct_tlbflush(struct kvm_vcpu *vcpu)
-> +static int hv_enable_l2_tlb_flush(struct kvm_vcpu *vcpu)
->  {
->  	struct hv_enlightened_vmcs *evmcs;
->  	struct hv_partition_assist_pg **p_hv_pa_pg =
-> @@ -8151,8 +8151,8 @@ static int __init vmx_init(void)
->  		}
->  
->  		if (ms_hyperv.nested_features & HV_X64_NESTED_DIRECT_FLUSH)
-> -			vmx_x86_ops.enable_direct_tlbflush
-> -				= hv_enable_direct_tlbflush;
-> +			vmx_x86_ops.enable_l2_tlb_flush
-> +				= hv_enable_l2_tlb_flush;
->  
->  	} else {
->  		enlightened_vmcs = false;
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index d3839e648ab3..d620c56bc526 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -4365,7 +4365,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->  			kvm_x86_ops.nested_ops->get_state(NULL, NULL, 0) : 0;
->  		break;
->  	case KVM_CAP_HYPERV_DIRECT_TLBFLUSH:
-> -		r = kvm_x86_ops.enable_direct_tlbflush != NULL;
-> +		r = kvm_x86_ops.enable_l2_tlb_flush != NULL;
->  		break;
->  	case KVM_CAP_HYPERV_ENLIGHTENED_VMCS:
->  		r = kvm_x86_ops.nested_ops->enable_evmcs != NULL;
-> @@ -5275,10 +5275,10 @@ static int kvm_vcpu_ioctl_enable_cap(struct kvm_vcpu *vcpu,
->  		}
->  		return r;
->  	case KVM_CAP_HYPERV_DIRECT_TLBFLUSH:
-> -		if (!kvm_x86_ops.enable_direct_tlbflush)
-> +		if (!kvm_x86_ops.enable_l2_tlb_flush)
->  			return -ENOTTY;
->  
-> -		return static_call(kvm_x86_enable_direct_tlbflush)(vcpu);
-> +		return static_call(kvm_x86_enable_l2_tlb_flush)(vcpu);
->  
->  	case KVM_CAP_HYPERV_ENFORCE_CPUID:
->  		return kvm_hv_set_enforce_cpuid(vcpu, cap->args[0]);
-
-Nitpick: You may want to put that patch at the start of the series, since it doesn't depend on it.
-
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-
-
-Best regards,
-	Maxim Levitsky
-
-
+> --
+> 2.25.1
+>

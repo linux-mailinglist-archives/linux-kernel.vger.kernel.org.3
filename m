@@ -2,123 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F45522A9F
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 05:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B12F4522AAC
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 05:59:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229448AbiEKD5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 23:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39494 "EHLO
+        id S234940AbiEKD7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 23:59:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242058AbiEKD4r (ORCPT
+        with ESMTP id S229584AbiEKD7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 23:56:47 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FA45DBE7
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 20:56:32 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id i1so666530plg.7
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 20:56:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=elq3ZqCelpCSxkkjk1LXdyA6w9hgB+SCHXKMgxWGx/U=;
-        b=f0WEcC7jjPTFG6Q6v9mT/VTbUk6akakqKqThuRBA10OtcmKjJs4FotEBdprRTmZrZF
-         Kb8j00IvxlaVvxLhVF+olvEM7z068yqNY7DUksi25Wuhc+ittQMbF3sNNuMlrjp0trft
-         jPe+SBWtYADIgBt1U9crcisYDlPyJy9V3ts222QP9S+ZNj9WdGzgEwTfgBNGgl9lTyX0
-         2Fv+/xdOFKMtT6Hvk7/sOzspO4aPku8B/XAFXgUu6zqe5yJcQO9LXB8JSfcNQzqAzBt6
-         y50LLDXRRm0M8Qj3TiD3Vhrh3vbutMS5qxe2s2RBw/glkC+5rS+kVBVhvbLF5i3xYVL7
-         tJ4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=elq3ZqCelpCSxkkjk1LXdyA6w9hgB+SCHXKMgxWGx/U=;
-        b=y58oan3DG/eLpXp6HtxMcyRxTHFIV/3iDMZZOwC7lHUq6gGudZbjlvo4dnTtyCR03C
-         Nmk6G3EK++agbak2d8/SemanHT0fQ9eCaGUBFeCQv4Pd/iMhGVh+Py5Z+UL4xr7lb7XU
-         vydhpj5kdP8O8kF2Pu/tfvdcEcnI0QuN1wcibLb19NHF8+sUVaDe9KZoUvF1KrwO2hC/
-         RFKTlHnM1P/r5XlcJ1Ib5/LPZc6W2p5KpMVFRg+9wryJ4gpYkX+bWjoviHK1F+mcrI5y
-         plSJikET6Wx6kRYxqeAseeOgUbjrTUBLctczgbQsUfak0cVaelqNBnj3yYchg7E9pUcX
-         ZNkQ==
-X-Gm-Message-State: AOAM531b9/Mm8PVaF/aGpYiBoYRROvDmq1XfWCBVty+ZSeoYY3hRO38M
-        9KVobs/wdhOh2jApWGWQZLEGUP+9oo9wDLMaY1pQLw==
-X-Google-Smtp-Source: ABdhPJw5n1KJcz8j1FP3c7A6fBBMc1hcuPZsn2gE31BtaT8knvxsmvrFDZQnLCp0J+6DmYbEonpCWUJBRb2zAP6Umfo=
-X-Received: by 2002:a17:902:da8b:b0:15e:c0e8:d846 with SMTP id
- j11-20020a170902da8b00b0015ec0e8d846mr23539490plx.34.1652241391912; Tue, 10
- May 2022 20:56:31 -0700 (PDT)
+        Tue, 10 May 2022 23:59:32 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A10229FD5;
+        Tue, 10 May 2022 20:59:28 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=31;SR=0;TI=SMTPD_---0VCu38tE_1652241558;
+Received: from 30.30.99.144(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCu38tE_1652241558)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 11 May 2022 11:59:22 +0800
+Message-ID: <84209c7b-ac3e-fa3b-75fc-d76ec7c99d68@linux.alibaba.com>
+Date:   Wed, 11 May 2022 11:59:57 +0800
 MIME-Version: 1.0
-References: <20220422224508.440670-1-jane.chu@oracle.com> <20220422224508.440670-4-jane.chu@oracle.com>
- <CAPcyv4i7xi=5O=HSeBEzvoLvsmBB_GdEncbasMmYKf3vATNy0A@mail.gmail.com>
-In-Reply-To: <CAPcyv4i7xi=5O=HSeBEzvoLvsmBB_GdEncbasMmYKf3vATNy0A@mail.gmail.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Tue, 10 May 2022 20:56:21 -0700
-Message-ID: <CAPcyv4id8AbTFpO7ED_DAPren=eJQHwcdY8Mjx18LhW+u4MdNQ@mail.gmail.com>
-Subject: Re: [PATCH v9 3/7] mce: fix set_mce_nospec to always unmap the whole page
-To:     Jane Chu <jane.chu@oracle.com>, Borislav Petkov <bp@alien8.de>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>, david <david@fromorbit.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        X86 ML <x86@kernel.org>,
-        Vishal L Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        device-mapper development <dm-devel@redhat.com>,
-        "Weiny, Ira" <ira.weiny@intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        "Luck, Tony" <tony.luck@intel.com>, Jue Wang <juew@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v3 2/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
+ migration
+To:     Andrew Morton <akpm@linux-foundation.org>, mike.kravetz@oracle.com,
+        catalin.marinas@arm.com, will@kernel.org, songmuchun@bytedance.com,
+        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.osdn.me, dalias@libc.org,
+        davem@davemloft.net, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org
+References: <cover.1652147571.git.baolin.wang@linux.alibaba.com>
+ <ea5abf529f0997b5430961012bfda6166c1efc8c.1652147571.git.baolin.wang@linux.alibaba.com>
+ <20220510161739.fdea4d78dde8471033aab22b@linux-foundation.org>
+ <20220510162847.d9cf3c767e755a54699fb121@linux-foundation.org>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20220510162847.d9cf3c767e755a54699fb121@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 4:25 PM Dan Williams <dan.j.williams@intel.com> wrote:
->
-> [ Add Tony as the originator of the whole_page() logic and Jue who
-> reported the issue that lead to 17fae1294ad9 x86/{mce,mm}: Unmap the
-> entire page if the whole page is affected and poisoned ]
->
->
-> On Fri, Apr 22, 2022 at 3:46 PM Jane Chu <jane.chu@oracle.com> wrote:
-> >
-> > The set_memory_uc() approach doesn't work well in all cases.
-> > As Dan pointed out when "The VMM unmapped the bad page from
-> > guest physical space and passed the machine check to the guest."
-> > "The guest gets virtual #MC on an access to that page. When
-> > the guest tries to do set_memory_uc() and instructs cpa_flush()
-> > to do clean caches that results in taking another fault / exception
-> > perhaps because the VMM unmapped the page from the guest."
-> >
-> > Since the driver has special knowledge to handle NP or UC,
-> > mark the poisoned page with NP and let driver handle it when
-> > it comes down to repair.
-> >
-> > Please refer to discussions here for more details.
-> > https://lore.kernel.org/all/CAPcyv4hrXPb1tASBZUg-GgdVs0OOFKXMXLiHmktg_kFi7YBMyQ@mail.gmail.com/
-> >
-> > Now since poisoned page is marked as not-present, in order to
-> > avoid writing to a not-present page and trigger kernel Oops,
-> > also fix pmem_do_write().
-> >
-> > Fixes: 284ce4011ba6 ("x86/memory_failure: Introduce {set, clear}_mce_nospec()")
-> > Reviewed-by: Christoph Hellwig <hch@lst.de>
-> > Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-> > Signed-off-by: Jane Chu <jane.chu@oracle.com>
 
-Boris,
 
-This is the last patch in this set that needs an x86 maintainer ack.
-Since you have been involved in the history for most of this, mind
-giving it an ack so I can pull it in for v5.19? Let me know if you
-want a resend.
+On 5/11/2022 7:28 AM, Andrew Morton wrote:
+> On Tue, 10 May 2022 16:17:39 -0700 Andrew Morton <akpm@linux-foundation.org> wrote:
+> 
+>>> +
+>>> +static inline pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
+>>> +					  unsigned long addr, pte_t *ptep)
+>>> +{
+>>> +	return ptep_get(ptep);
+>>> +}
+>>> +
+>>> +static inline void set_huge_pte_at(struct mm_struct *mm, unsigned long addr,
+>>> +				   pte_t *ptep, pte_t pte)
+>>> +{
+>>> +}
+>>>   #endif	/* CONFIG_HUGETLB_PAGE */
+>>>   
+>>
+>> This blows up nommu (arm allnoconfig):
+>>
+>> In file included from fs/io_uring.c:71:
+>> ./include/linux/hugetlb.h: In function 'huge_ptep_clear_flush':
+>> ./include/linux/hugetlb.h:1100:16: error: implicit declaration of function 'ptep_get' [-Werror=implicit-function-declaration]
+>>   1100 |         return ptep_get(ptep);
+>>        |                ^~~~~~~~
+>>
+>>
+>> huge_ptep_clear_flush() is only used in CONFIG_NOMMU=n files, so I simply
+>> zapped this change.
+>>
+> 
+> Well that wasn't a great success.  Doing this instead.  It's pretty
+> nasty - something nicer would be nicer please.
+
+Thanks for fixing the building issue. I'll look at this to simplify the 
+dummy function. Myabe just remove the ptep_get().
+
+diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -1097,7 +1097,7 @@ static inline void set_huge_swap_pte_at(struct 
+mm_struct *mm, unsigned long addr
+  static inline pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
+                                           unsigned long addr, pte_t *ptep)
+  {
+-       return ptep_get(ptep);
++       return *ptep;
+  }
+
+> 
+> --- a/include/linux/hugetlb.h~mm-rmap-fix-cont-pte-pmd-size-hugetlb-issue-when-migration-fix
+> +++ a/include/linux/hugetlb.h
+> @@ -1094,6 +1094,7 @@ static inline void set_huge_swap_pte_at(
+>   {
+>   }
+>   
+> +#ifdef CONFIG_MMU
+>   static inline pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
+>   					  unsigned long addr, pte_t *ptep)
+>   {
+> @@ -1104,6 +1105,7 @@ static inline void set_huge_pte_at(struc
+>   				   pte_t *ptep, pte_t pte)
+>   {
+>   }
+> +#endif
+>   #endif	/* CONFIG_HUGETLB_PAGE */
+>   
+>   static inline spinlock_t *huge_pte_lock(struct hstate *h,
+> _

@@ -2,178 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B11E523E53
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 22:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 407C4523E6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 22:06:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344496AbiEKUEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 16:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
+        id S244787AbiEKUGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 16:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347496AbiEKUEW (ORCPT
+        with ESMTP id S231585AbiEKUGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 16:04:22 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9874231C82;
-        Wed, 11 May 2022 13:04:20 -0700 (PDT)
+        Wed, 11 May 2022 16:06:38 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A988233363;
+        Wed, 11 May 2022 13:06:37 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id m1so4430407wrb.8;
+        Wed, 11 May 2022 13:06:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652299461; x=1683835461;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=vo23C2NXNJUhjPv0ou9jjN5qBMPI2jaVxAHFOXzcqC0=;
-  b=PF7ikufoln50javw9oTeWcJn7KnrZguJBZ5W7vIUCYbzEGa31tNSIXhe
-   MIRrmJM87QBq4oUs/OHWXL1VNLfH8q7XwAO3RJGFal94QPZi4y53641C4
-   I0CjXAHvOg5E5LiSUsAW9BK4RjGoQ2QDtzIdPrQeib3tcauJEWAPapJEh
-   Q=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 11 May 2022 13:04:20 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 13:04:20 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 11 May 2022 13:04:19 -0700
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 11 May 2022 13:04:18 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
-        <airlied@linux.ie>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3] drm/msm/dp: Always clear mask bits to disable interrupts at dp_ctrl_reset_irq_ctrl()
-Date:   Wed, 11 May 2022 13:04:09 -0700
-Message-ID: <1652299449-31205-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=W6YNSoA5Dua0+s/FF7SpEIcKqn99xdL9v6a8e8wASjE=;
+        b=huVs1irgBIkg9Eul0wYK5EYPJx3b0ncqN0x9QsTfJvBcQ2t5FOtXmqR45KnVbSBCt0
+         tRVR32t6absZdZ99QabYYfqRY9JvV5eBYNqMncuhU2tTBEa3Jx27JsNQ5Qk/8J/I1Rqd
+         uiZxKXViZRvewgUcnsIcC3Lbrm8xA1GbN6EW0FjiDtQoz/UCGHm8rUNxBJguevCQ8bby
+         hbqSts8HPIVGxqadiiBHoU5HXVcqmZGmu8SOnw+2/jhm12VXAimJtNgdng9UB3jfuSIq
+         6e1eUh5wALaSoHtArYquH1ViBA4Y+EuTOUaXV46Htl6nWhXkQD9cVPMgbXCnlOic3bq7
+         XXOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=W6YNSoA5Dua0+s/FF7SpEIcKqn99xdL9v6a8e8wASjE=;
+        b=jIbk90YdUXfXvJZ8ACJopqiFLW53MdJ1ZBNfinMfZzq1Q9dsnQc/MonA3T6WsAU7cO
+         RVQKq2yvIyyM8DrG3mLon9itHq4PlxZgiTcG/hf+n1ee74HYm3h4KJsbEVgoVvxCrPsu
+         cTzxpxs0RgpI3DgJX3FhgYrCmmuMALv9HQYwSDqRsCoRje6j34gus6G0J3/nnefiMrom
+         bGQrAxDC/EJdkLqw1Lxr1+QQbg4zIebyGRExAUmQuvCCxn8rmENi4g0rLGeCAVoSm3xF
+         ouA9g+/ip7jECnhJ3NNGm1cN7R43Y4qHc0A5kRjZ0NoP6Fyq48ZEoKaQubD2uVW+xHKa
+         pDVw==
+X-Gm-Message-State: AOAM530RVgx+jmsPzKj9Oqa0FkGjdL/YX4TxAB1Cfd9+9WnKj1jEQ/xs
+        ZBnySnD8853MWCBnco9Z96cN9YfzowL9mF6Tj4g39n6z
+X-Google-Smtp-Source: ABdhPJztZ9XbUj0FLLKnjaG49uOatzw5PqIll6Yx+Z6ecof8fZ/Xg+4CXVkwVcsz/BnqI+EDtAS88Q5dTYmp2/hyOH8=
+X-Received: by 2002:a05:6000:156e:b0:20c:5218:8907 with SMTP id
+ 14-20020a056000156e00b0020c52188907mr24120425wrz.297.1652299596131; Wed, 11
+ May 2022 13:06:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220510070140.45407-1-tomeu.vizoso@collabora.com>
+ <20220510141329.54414-1-tomeu.vizoso@collabora.com> <CAPM=9tzLR-wsLhg2ikGjoK06s-ju5XWa1rtPPiUpN=pwD1vgtA@mail.gmail.com>
+ <CAHk-=wg8YgH1h3wrm9CtXff7rSewa+NE0Z5upb1GOE8XiTL9HA@mail.gmail.com>
+ <CAF6AEGusO9XAqHNatJLgV+wpVoyyLg1vHtUsnSkAxJeV7n3WNg@mail.gmail.com> <CAHk-=wjbE0f2AGroB1Hy=fx2fh7cRpS0wNdB46Ybk14Mb0b5Jw@mail.gmail.com>
+In-Reply-To: <CAHk-=wjbE0f2AGroB1Hy=fx2fh7cRpS0wNdB46Ybk14Mb0b5Jw@mail.gmail.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Wed, 11 May 2022 13:06:23 -0700
+Message-ID: <CAF6AEGvNfC6=o63hH7eoSzT5JmF5C73sDyYXJj-hecS_cgRjHg@mail.gmail.com>
+Subject: Re: Adding CI results to the kernel tree was Re: [RFC v2] drm/msm:
+ Add initial ci/ subdirectory
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Dave Airlie <airlied@gmail.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Corbet <corbet@lwn.net>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dp_catalog_ctrl_reset() will software reset DP controller. But it will
-not reset programmable registers to default value. DP driver still have
-to clear mask bits to interrupt status registers to disable interrupts
-after software reset of controller. This patch removes the enable flag
-condition checking to always clear mask bits of interrupt status
-registers to disable interrupts if enable flag is false.
+On Wed, May 11, 2022 at 12:08 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Wed, May 11, 2022 at 11:40 AM Rob Clark <robdclark@gmail.com> wrote:
+> >
+> > It is missing in this revision of the RFC, but the intention is to
+> > have the gitlab-ci.yml point to a specific commit SHA in the
+> > gfx-ci/drm-ci[1] tree, to solve the problem of keeping the results in
+> > sync with the expectations.  Ie. a kernel commit would control moving
+> > to a new version of i-g-t (and eventually deqp and/or piglit), and at
+> > the same time make any necessary updates in the expectations files.
+>
+> Wouldn't it then be better to just have the expectation files in the
+> ci tree too?
 
-This patch also will fix the potential problem happen at system suspend where
-dp_ctrl_reset_irq_ctrl() was called to try to disable HPD related irqs but
-the irq is still unmasked unexpectedly and can come in while system are
-suspending. This leads to bus hangs if the irq is handled after we power down
-the DP hardware because we run the irq handler and access a device register
-assuming that no irq could ever come in if we powered down the device. We
-don't know when the irq will be handled though, so it's possible the irq is
-pending from before we disable the irq in the hardware.
+The main reason is that we would frequently have situations where both
+-next and -fixes pointing at the same ci tree commit, but with
+differing expectations.  If we kept the expectations in the ci tree,
+we'd end up frequently updating the ci tree and then updating the
+kernel tree to point to the appropriate ci tree version.
 
-Changes in v2:
--- add more details commit text
+Additionally, on the mesa side, it has been useful to squash the
+expectations update into the commit that fixed a bug or added a
+feature.  It provides a connection in git history between code and
+test results.
 
-Changes in v3:
--- add synchrons_irq()
--- add atomic_t suspended
-
-Fixes: ba0a422be723 ("drm/msm/dp: do not initialize phy until plugin interrupt received")
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
----
- drivers/gpu/drm/msm/dp/dp_ctrl.c    |  9 +++++++--
- drivers/gpu/drm/msm/dp/dp_display.c | 18 ++++++++++++++++++
- 2 files changed, 25 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-index af7a80c..f3e333e 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-@@ -1389,8 +1389,13 @@ void dp_ctrl_reset_irq_ctrl(struct dp_ctrl *dp_ctrl, bool enable)
- 
- 	dp_catalog_ctrl_reset(ctrl->catalog);
- 
--	if (enable)
--		dp_catalog_ctrl_enable_irq(ctrl->catalog, enable);
-+	/*
-+	 * all dp controller programmable registers will not
-+	 * be reset to default value after DP_SW_RESET
-+	 * therefore interrupt mask bits have to be updated
-+	 * to enable/disable interrupts
-+	 */
-+	dp_catalog_ctrl_enable_irq(ctrl->catalog, enable);
- }
- 
- void dp_ctrl_phy_init(struct dp_ctrl *dp_ctrl)
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index c388323..c34dbfc 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -98,6 +98,8 @@ struct dp_display_private {
- 	struct dp_ctrl    *ctrl;
- 	struct dp_debug   *debug;
- 
-+	atomic_t suspended;
-+
- 	struct dp_usbpd_cb usbpd_cb;
- 	struct dp_display_mode dp_mode;
- 	struct msm_dp dp_display;
-@@ -187,6 +189,11 @@ static int dp_add_event(struct dp_display_private *dp_priv, u32 event,
- 	int pndx;
- 
- 	spin_lock_irqsave(&dp_priv->event_lock, flag);
-+	if (atomic_read(&dp_priv->suspended)) {
-+		spin_unlock_irqrestore(&dp_priv->event_lock, flag);
-+		return -EPERM;
-+	}
-+
- 	pndx = dp_priv->event_pndx + 1;
- 	pndx %= DP_EVENT_Q_MAX;
- 	if (pndx == dp_priv->event_gndx) {
-@@ -454,6 +461,13 @@ static void dp_display_host_deinit(struct dp_display_private *dp)
- 		dp->dp_display.connector_type, dp->core_initialized,
- 		dp->phy_initialized);
- 
-+	if (!dp->core_initialized) {
-+		DRM_DEBUG_DP("DP core not initialized\n");
-+		return;
-+	}
-+
-+	synchronize_irq(dp->irq);
-+
- 	dp_ctrl_reset_irq_ctrl(dp->ctrl, false);
- 	dp_aux_deinit(dp->aux);
- 	dp_power_deinit(dp->power);
-@@ -1362,6 +1376,8 @@ static int dp_pm_resume(struct device *dev)
- 		dp->dp_display.connector_type, dp->core_initialized,
- 		dp->phy_initialized, dp_display->power_on);
- 
-+	atomic_set(&dp->suspended, 0);
-+
- 	/* start from disconnected state */
- 	dp->hpd_state = ST_DISCONNECTED;
- 
-@@ -1431,6 +1447,8 @@ static int dp_pm_suspend(struct device *dev)
- 		dp->dp_display.connector_type, dp->core_initialized,
- 		dp->phy_initialized, dp_display->power_on);
- 
-+	atomic_inc(&dp->suspended);
-+
- 	/* mainlink enabled */
- 	if (dp_power_clk_status(dp->power, DP_CTRL_PM))
- 		dp_ctrl_off_link_stream(dp->ctrl);
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+BR,
+-R

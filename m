@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A7ED523253
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 14:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF748523251
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 14:00:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240889AbiEKMAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 08:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
+        id S241089AbiEKMAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 08:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238494AbiEKMAA (ORCPT
+        with ESMTP id S238801AbiEKMAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 08:00:00 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0168243107;
-        Wed, 11 May 2022 04:59:58 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id g23so2187567edy.13;
-        Wed, 11 May 2022 04:59:58 -0700 (PDT)
+        Wed, 11 May 2022 08:00:01 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C35B2438D6;
+        Wed, 11 May 2022 05:00:00 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id y21so2282375edo.2;
+        Wed, 11 May 2022 04:59:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=z9UUg/fQTsaqkN2h8KB+8rJP5/jfsoQ0IyVKGrfdu/4=;
-        b=bX7HkIaoRGew6tEpswM1+CpQTkckKbCj2lnYq+HShOUZpzz+RfWZilYyN71yloU2uI
-         ozyiwfQGWhSi7g+IzclDVQKRMv8hjB7jonUeVL9V8heuurAhq2C5G6iGiU2qmD6JWnRD
-         ex/o125CBSZ6xJXfa6jS3NpnpebkYl5bUM/cih75cRfvYd5yYaU2FXTHFLfTXpwLJqm2
-         7h0XsORg+WcxwkQanXx3QMJw+RRviq2wPVxyNE4KmbvVK1zFo5Db5HBNcto6CdvpTlzv
-         90nbMW146FyRT035OgKdwKUcqY+aEoX5wMadvfSpTXuVTnX1ZEjitYya9oHC/S+t7jBK
-         ZgvA==
+        bh=3eEpM+FBBTw194C71zX34kjk6ylwP+rd4n2HSuTY7Nw=;
+        b=MRgaBpz/RsKSinth52qx2FJq+/0G6AQQtuh9XafwkipCFyBfMsll+OtwaBTOaK6U0H
+         H7PJT2ZEWiTy3wnYZwGXp3e0+x4liCmtj/l0szWpbInYR6BImbfsFYgybhVyXKkBdVgY
+         EpQDXwSbw1en/6Ne3dtUK0D7uQYvxwA8WPcij/ERPcWO0aW4O0wNdizWLhJ7kly24OJd
+         nAzzKkz1V/2zAsWNiOdObrs0H9fLFcMOyri0f7uIhMFskJ17XAed4uvb5E7mWQE7zs7m
+         AueUActhEfLyPC/GNeMOmbABJd8LYLHE4C3BhZhwVZCKxaAJSFJFMB2Fcv+6dpT/etK5
+         7RgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=z9UUg/fQTsaqkN2h8KB+8rJP5/jfsoQ0IyVKGrfdu/4=;
-        b=43LTWGAda/EoZ7CzJf1p6LoQ8nwb1KQOUW1qTKhto88Cg9EtcBZX9kdyBiRBBxRrWI
-         7aJEaXOAJMc5HwqJLL+0a+L3nvjDYL+A7CU++3rO2OKnOjRBzCDN864sP66Xe8vglMhd
-         LdVoQm6PhHUZ4dsEcJ1L2D/+p6klMrdzoGYVAfnVHNEspDpzNutX3ck7Ar59ndN1XuS6
-         +hjKNjHaWRCfduZ+cGWZJP9bV5obBDabCmOSsM4YZ1FLzC/iuOgmoV5Fgqs6fhsnDaOm
-         ybhcSLpgRABPeNqarDn2b/pLPALq8EUUOvQHj5J8tMLQncM9sLYIxrsVHxX9mzFtZoxg
-         oHRQ==
-X-Gm-Message-State: AOAM533FqiXh3M+kNDVledX+3HQH9XQv71VdGjsSwEnLbghgSCv8464V
-        khY9gHGiSiZOayqVILGlq1gr+kJo+j0=
-X-Google-Smtp-Source: ABdhPJzxCvHM1I7LqhcNanhrQZI6z4CClwZqgmMIMSm/Hg8qiFB9Gdh0gSTe4+hoZrA1IWvHM7Pvsw==
-X-Received: by 2002:a05:6402:2790:b0:427:d09b:df82 with SMTP id b16-20020a056402279000b00427d09bdf82mr28621102ede.151.1652270397282;
-        Wed, 11 May 2022 04:59:57 -0700 (PDT)
+        bh=3eEpM+FBBTw194C71zX34kjk6ylwP+rd4n2HSuTY7Nw=;
+        b=nUKKFllc9EO36okTFKvDiKh6SW0fOLQodGTW//E7BC3Jahg6Xt5edVfozv3VoqJw6R
+         uwC9iWKV6P1Z6pmEt/5F0Ie3aEQ/rQ5KdHhXZtU+q/OXwcsNFTNAFsWk1txOJIW45OI5
+         k6Awd17GSZ4BAIdZjA0qfZNwaHFk3hOUCLFYBYbxWeDb01IXzCU0jdqFSSMxLMgneZdL
+         saKZVSKLX+7avZ1PJjoBZRCED3eH30uRjPaQ/xcTn0vrCkfrIiv8d+AIbk6yV8xVTobS
+         kc96IxDHBfa0Vojx86X2rTrpDMJE4DO9ccMqEzhbNCZEIdht1bWT7j1JgpfOMjPPdUso
+         aYsA==
+X-Gm-Message-State: AOAM532RVdfaVfqUmpKZz4G4hHcHe/tIJPPBsr/fXWeaSQhFU3hLTJtD
+        nDNx9uKWxkpcATJcR47SulUI3CVIxzo=
+X-Google-Smtp-Source: ABdhPJzG5hQF6/6whSh+Q6bYm+jLDCxI1y2bcjo9ORc2L/YKy513EqsfKP2t6gWyBKGIfmwPWt5kLg==
+X-Received: by 2002:a05:6402:424c:b0:427:eae2:ed09 with SMTP id g12-20020a056402424c00b00427eae2ed09mr28523662edb.376.1652270398431;
+        Wed, 11 May 2022 04:59:58 -0700 (PDT)
 Received: from linuxdev2.toradex.int (31-10-206-125.static.upc.ch. [31.10.206.125])
-        by smtp.gmail.com with ESMTPSA id g6-20020a50d0c6000000b0042617ba63aasm1089279edf.52.2022.05.11.04.59.56
+        by smtp.gmail.com with ESMTPSA id g6-20020a50d0c6000000b0042617ba63aasm1089279edf.52.2022.05.11.04.59.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 04:59:56 -0700 (PDT)
+        Wed, 11 May 2022 04:59:57 -0700 (PDT)
 From:   Max Krummenacher <max.oss.09@gmail.com>
 To:     max.krummenacher@toradex.com
 Cc:     Fabio Estevam <festevam@gmail.com>,
@@ -58,9 +58,9 @@ Cc:     Fabio Estevam <festevam@gmail.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/4] ARM: dts: imx6qdl-colibri: backlight pwm: Simplify inverted backlight
-Date:   Wed, 11 May 2022 13:59:09 +0200
-Message-Id: <20220511115911.54960-4-max.oss.09@gmail.com>
+Subject: [PATCH v2 4/4] ARM: dts: imx6qdl-colibri: backlight pwm: Adapt brightness steps
+Date:   Wed, 11 May 2022 13:59:10 +0200
+Message-Id: <20220511115911.54960-5-max.oss.09@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220511115911.54960-1-max.oss.09@gmail.com>
 References: <20220511115911.54960-1-max.oss.09@gmail.com>
@@ -78,57 +78,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Max Krummenacher <max.krummenacher@toradex.com>
 
-Set #pwm-cells to the default 3 to gain access to the parameter
-which allows inverting the PWM signal. This is useful to specify
-a backlight which has its highest brightness at 0.
+Adapt the brightness steps as the backlight doesn't light up
+for very low duty cycles.
 
 Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 
 ---
 
 Changes in v2:
+- add reviewed-by tags
+- Split the Backlight PWM patch into two patches, a) #pwm-cells 3, b) adapt brightness steps
 - Split to two patches as proposed by Fabio Estevam
 
- arch/arm/boot/dts/imx6qdl-colibri.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/arm/boot/dts/imx6qdl-colibri.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm/boot/dts/imx6qdl-colibri.dtsi b/arch/arm/boot/dts/imx6qdl-colibri.dtsi
-index f0908b530f86..d91fae92c90a 100644
+index d91fae92c90a..023e76215064 100644
 --- a/arch/arm/boot/dts/imx6qdl-colibri.dtsi
 +++ b/arch/arm/boot/dts/imx6qdl-colibri.dtsi
-@@ -6,6 +6,7 @@
-  */
- 
- #include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/pwm/pwm.h>
- 
- / {
- 	model = "Toradex Colibri iMX6DL/S Module";
-@@ -13,13 +14,13 @@
+@@ -14,8 +14,8 @@
  
  	backlight: backlight {
  		compatible = "pwm-backlight";
--		brightness-levels = <0 127 191 223 239 247 251 255>;
--		default-brightness-level = <1>;
-+		brightness-levels = <0 4 8 16 32 64 128 255>;
-+		default-brightness-level = <6>;
+-		brightness-levels = <0 4 8 16 32 64 128 255>;
+-		default-brightness-level = <6>;
++		brightness-levels = <0 45 63 88 119 158 203 255>;
++		default-brightness-level = <4>;
  		enable-gpios = <&gpio3 26 GPIO_ACTIVE_HIGH>; /* Colibri BL_ON */
  		pinctrl-names = "default";
  		pinctrl-0 = <&pinctrl_gpio_bl_on>;
- 		power-supply = <&reg_module_3v3>;
--		pwms = <&pwm3 0 5000000>;
-+		pwms = <&pwm3 0 5000000 PWM_POLARITY_INVERTED>;
- 		status = "disabled";
- 	};
- 
-@@ -620,7 +621,6 @@
- 
- /* Colibri PWM<A> */
- &pwm3 {
--	#pwm-cells = <2>;
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_pwm3>;
- 	status = "disabled";
 -- 
 2.20.1
 

@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21629523F59
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 23:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E717523F57
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 23:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348141AbiEKVQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 17:16:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52450 "EHLO
+        id S1348180AbiEKVQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 17:16:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348087AbiEKVPr (ORCPT
+        with ESMTP id S1348117AbiEKVPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 11 May 2022 17:15:47 -0400
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B9BCC8
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 14:15:42 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id a6-20020a056902056600b0064b3d5c324eso2190683ybt.5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 14:15:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CB15F7E
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 14:15:44 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 9-20020a250909000000b006484b89c979so2901822ybj.21
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 14:15:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=F175yXgo6Rtn6ipswoFePtZI8wN/S86uzy4b/OfTmOQ=;
-        b=DPNZ+k7wuaozSvmcFW45yaH1O8grNJ5B1D5hUN7AWeW1kwhUFUj2ldlMoFiGHX5jbo
-         CVRzAKdD/PGnIp2T9eELfQaP87c9A4OO4thqkmhC1z1EjcbugbUJNVL7bFjLXUukMgNw
-         ZUYbILHoNcg8RWNNzml6tzNs1XykPHE0Uiv78EzL52vMOH7IKu28hNaL5h2fYEMG1063
-         A/eAbga5gD0hJLGYvlkqQNVU75xdR+nImRliLe+csA8qX3IZ3+X8AiFBa62d1AeG0r2C
-         lbPDhsiDppPuBqj70KnXBqSjzi/E5iPFIX9iFNZdKv64/fD2nUoVwW8uV8nzFreSibXZ
-         siXA==
+        bh=D6em2/y0Ec3M3JoELPusdEp/9enysIaA1frZAYckr0E=;
+        b=aIDLDCuhHE8szzALl3o4l1VcmbNHpCJrVV9g5TMIh4zA1eD44EtcAVT4j0t+29zjCB
+         yCmL6UjQcrN68Nw/BhBwZqN+Qpk3L4lrYZYpBVVP5nSl/TW5JBV6OOEHc5DKJvx7042g
+         p3RqUPbMNUljpY+o+q5HhEJf2yEGYyQlGxVY5fjt2u8rVU+hTlROiQ/IK8fFwNAsN3ZS
+         KBExbsQVNevoBmRciu6IMypHDnM/Rbo7GUe0ps85yRhsbE6qY8GPr7AsvP+ZdHSfHR8Z
+         koEwd+/DSsMW1CCzUGUov6wacVz+8p4UDbckTkdjLicUEj9Zf/Z+Z11CFW61J1KD2QAA
+         TiTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=F175yXgo6Rtn6ipswoFePtZI8wN/S86uzy4b/OfTmOQ=;
-        b=N1OXC8eLPBvm7WzXGj60FdbffTQciACie8hL2EognZe/4MLZf1Vfz66PUHgpOnM/Xa
-         TmqRaKbyUYdQxgWei19oyJk5SB0K61CqyEKRJfs5sdB02NmCKqPfYEOQh1CuzLxtZ6iu
-         khV/+4SvKok/Vi5rkSOdlQ0u/MOR8tYMp3ACfC302e8VCdJvw4YkHxuOd5oOxD34rzi6
-         T1RqS9mMl2Sz4GzmhJ9ntTrWJeYxwfFmaK6Ju6N7ZMUh+epSJI3+HFW9mLXLsLWSlCHK
-         venuqzZ4BtbrOdmsZl2llHsr3zuIlb65WPsOCFg/5Vtj+PxEFPnWvQ4C9p8Gchkh/hEB
-         A27A==
-X-Gm-Message-State: AOAM533RiARqKSW5HKvyn7ijcqjj604+7s/cAPPfa/pKPsXTo6aUuLve
-        mcK3lChJvKpHEbmpSwGZvxsfr3icgHeR
-X-Google-Smtp-Source: ABdhPJxBJKJc2wFz04u3HTGpVXya1l1ZLKQpm6rWCE3r2PO0Aj+K1SiHoceb/1etpL5rRc5Gs2KEh6TSl0bL
+        bh=D6em2/y0Ec3M3JoELPusdEp/9enysIaA1frZAYckr0E=;
+        b=4Jh+cDQ5mHK7w6eVOkOMFKLIG7GtS7LfZ2SLkZS3yE63r17jOcZl2BEd1uvxnN4MD3
+         hy9tlxLiO7w5xp9TEITuHR9jR4j3H0dv5bkWUrMF6D+N126wdsmcJ/vo9vP+lMtYlusG
+         Me2gFMloDLBP8QaFMBFE2VOi64D8CR5OyQUkRqeW+2fv1xEokT63dyP526ClCTW7WSWn
+         sEnO6OToQKBrXjvMvTxoauXmz0ohK+E0brxvY5trY05LbHktJJS3Tc6fSObaI/eLopjq
+         CT6tSwXEyfYBt7nb09pO9gBMl+9yuxRgzOu197Fmzl7jzvQwuOzCnmTY92LmnLIfd6xZ
+         ixsw==
+X-Gm-Message-State: AOAM533t4sPAzox6uOSlV6obDwLQyhpS1qez6AAlgtlBU6jgQT5s9hGY
+        r+zBkeSVX9bzfpOF14yrpgdC0EB3HMx2
+X-Google-Smtp-Source: ABdhPJwQubfByYKyFe3OrB488XFwH81yKlDdIAz9ec5X0EWpKoovnt6VO0H5+cYx6bUCUAxcUY8ggwHFrzIv
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:5993:294b:7b62:54cb])
- (user=irogers job=sendgmr) by 2002:a25:d12:0:b0:64a:47ec:2638 with SMTP id
- 18-20020a250d12000000b0064a47ec2638mr24231297ybn.213.1652303741652; Wed, 11
- May 2022 14:15:41 -0700 (PDT)
-Date:   Wed, 11 May 2022 14:15:24 -0700
+ (user=irogers job=sendgmr) by 2002:a81:b810:0:b0:2fb:2da2:e043 with SMTP id
+ v16-20020a81b810000000b002fb2da2e043mr28869289ywe.483.1652303743938; Wed, 11
+ May 2022 14:15:43 -0700 (PDT)
+Date:   Wed, 11 May 2022 14:15:25 -0700
 In-Reply-To: <20220511211526.1021908-1-irogers@google.com>
-Message-Id: <20220511211526.1021908-6-irogers@google.com>
+Message-Id: <20220511211526.1021908-7-irogers@google.com>
 Mime-Version: 1.0
 References: <20220511211526.1021908-1-irogers@google.com>
 X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
-Subject: [PATCH v2 5/7] perf jevents: Add python converter script
+Subject: [PATCH v2 6/7] perf jevents: Switch build to use jevents.py
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -85,494 +85,122 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-jevents.c is large, has a dependency on an old forked version of jsmn,
-and is challenging to work upon. A lot of jevents.c's complexity comes
-from needing to write json and csv parsing from first principles. In
-contrast python has this functionality in standard libraries and is
-already a build pre-requisite for tools like asciidoc (that builds all
-of the perf man pages).
-
-Introduce jevents.py that produces identical output to jevents.c. Add a
-test that runs both converter tools and validates there are no output
-differences. The test can be invoked with a phony build target like:
-
-make -C tools/perf jevents-py-test
-
-The python code deliberately tries to replicate the behavior of
-jevents.c so that the output matches and transitioning tools shouldn't
-introduce regressions. In some cases the code isn't as elegant as hoped,
-but fixing this can be done as follow up.
+Generate pmu-events.c using jevents.py rather than the binary built from
+jevents.c. Add a new config variable NO_JEVENTS that is set when there
+is no architecture json or an appropriate python interpreter isn't present.
+When NO_JEVENTS is defined the file pmu-events/empty-pmu-events.c is copied
+and used as the pmu-events.c file.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/Makefile.perf              |   6 +
- tools/perf/pmu-events/jevents-test.sh |  33 +++
- tools/perf/pmu-events/jevents.py      | 392 ++++++++++++++++++++++++++
- 3 files changed, 431 insertions(+)
- create mode 100755 tools/perf/pmu-events/jevents-test.sh
- create mode 100755 tools/perf/pmu-events/jevents.py
+ tools/perf/Makefile.config               | 19 +++++++++++++++++++
+ tools/perf/Makefile.perf                 |  1 +
+ tools/perf/pmu-events/Build              | 11 +++++++++--
+ tools/perf/pmu-events/empty-pmu-events.c | 21 +++++++++++++++++++++
+ 4 files changed, 50 insertions(+), 2 deletions(-)
+ create mode 100644 tools/perf/pmu-events/empty-pmu-events.c
 
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index d9b699ad402c..5a19469f0048 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -854,6 +854,25 @@ else
+   endif
+ endif
+ 
++ifneq ($(NO_JEVENTS),1)
++  ifeq ($(wildcard pmu-events/arch/$(SRCARCH)/mapfile.csv),)
++    NO_JEVENTS := 1
++  endif
++endif
++ifneq ($(NO_JEVENTS),1)
++  NO_JEVENTS := 0
++  ifndef PYTHON
++    $(warning No python interpreter disabling jevent generation)
++    NO_JEVENTS := 1
++  else
++    # jevents.py uses os.scandir and type hints present in Python 3.5 released in Sept. 2015.
++    JEVENTS_PYTHON_GOOD := $(shell $(PYTHON) -c 'import sys;print("1" if(sys.version_info.major >= 3 and sys.version_info.minor >= 5) else "0")')
++    ifneq ($(JEVENTS_PYTHON_GOOD), 1)
++      $(warning Python interpreter too old (older than 3.5) disabling jevent generation)
++      NO_JEVENTS := 1
++    endif
++  endif
++endif
+ 
+ ifndef NO_LIBBFD
+   ifeq ($(feature-libbfd), 1)
 diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 6e5aded855cc..078f0b06f08a 100644
+index 078f0b06f08a..db416a13dca7 100644
 --- a/tools/perf/Makefile.perf
 +++ b/tools/perf/Makefile.perf
-@@ -669,6 +669,12 @@ $(JEVENTS_IN): FORCE
- $(JEVENTS): $(JEVENTS_IN)
- 	$(QUIET_LINK)$(HOSTCC) $(JEVENTS_IN) -o $@
+@@ -655,6 +655,7 @@ JEVENTS       := $(OUTPUT)pmu-events/jevents
+ JEVENTS_IN    := $(OUTPUT)pmu-events/jevents-in.o
  
-+JEVENTS_PY	:=  pmu-events/jevents.py
-+JEVENTS_PY_TEST	:=  pmu-events/jevents-test.sh
-+.PHONY: jevents-py-test
-+jevents-py-test: $(JEVENTS)
-+	$(Q)$(call echo-cmd,gen)$(JEVENTS_PY_TEST) $(JEVENTS) $(JEVENTS_PY) pmu-events/arch
-+
- $(PMU_EVENTS_IN): $(JEVENTS) FORCE
- 	$(Q)$(MAKE) -f $(srctree)/tools/build/Makefile.build dir=pmu-events obj=pmu-events
+ PMU_EVENTS_IN := $(OUTPUT)pmu-events/pmu-events-in.o
++export NO_JEVENTS
  
-diff --git a/tools/perf/pmu-events/jevents-test.sh b/tools/perf/pmu-events/jevents-test.sh
-new file mode 100755
-index 000000000000..195ec83630ad
+ export JEVENTS
+ 
+diff --git a/tools/perf/pmu-events/Build b/tools/perf/pmu-events/Build
+index a055dee6a46a..5e459e1c7a85 100644
+--- a/tools/perf/pmu-events/Build
++++ b/tools/perf/pmu-events/Build
+@@ -9,10 +9,17 @@ JSON		=  $(shell [ -d $(JDIR) ] &&				\
+ JDIR_TEST	=  pmu-events/arch/test
+ JSON_TEST	=  $(shell [ -d $(JDIR_TEST) ] &&			\
+ 			find $(JDIR_TEST) -name '*.json')
++JEVENTS_PY	=  pmu-events/jevents.py
+ 
+ #
+ # Locate/process JSON files in pmu-events/arch/
+ # directory and create tables in pmu-events.c.
+ #
+-$(OUTPUT)pmu-events/pmu-events.c: $(JSON) $(JSON_TEST) $(JEVENTS)
+-	$(Q)$(call echo-cmd,gen)$(JEVENTS) $(SRCARCH) pmu-events/arch $(OUTPUT)pmu-events/pmu-events.c $(V)
++
++ifeq ($(NO_JEVENTS),1)
++$(OUTPUT)pmu-events/pmu-events.c: pmu-events/empty-pmu-events.c
++	$(Q)cp $< $@
++else
++$(OUTPUT)pmu-events/pmu-events.c: $(JSON) $(JSON_TEST) $(JEVENTS_PY)
++	$(Q)$(call echo-cmd,gen)$(PYTHON) $(JEVENTS_PY) $(SRCARCH) pmu-events/arch $@
++endif
+diff --git a/tools/perf/pmu-events/empty-pmu-events.c b/tools/perf/pmu-events/empty-pmu-events.c
+new file mode 100644
+index 000000000000..08fee615e015
 --- /dev/null
-+++ b/tools/perf/pmu-events/jevents-test.sh
-@@ -0,0 +1,33 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+# Validate that the legacy jevents and jevents.py produce identical output.
-+set -e
++++ b/tools/perf/pmu-events/empty-pmu-events.c
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * An empty pmu-events.c file used when there is no architecture json files in
++ * arch or when the jevents.py script cannot be run.
++ */
++#include "pmu-events/pmu-events.h"
 +
-+JEVENTS="$1"
-+JEVENTS_PY="$2"
-+ARCH_PATH="$3"
-+JEVENTS_C_GENERATED=$(mktemp /tmp/jevents_c.XXXXX.c)
-+JEVENTS_PY_GENERATED=$(mktemp /tmp/jevents_py.XXXXX.c)
-+
-+cleanup() {
-+  rm "$JEVENTS_C_GENERATED" "$JEVENTS_PY_GENERATED"
-+  trap - exit term int
-+}
-+trap cleanup exit term int
-+
-+for path in "$ARCH_PATH"/*
-+do
-+  arch=$(basename $path)
-+  if [[ "$arch" == "test" ]]
-+  then
-+    continue
-+  fi
-+  echo "Checking architecture: $arch"
-+  echo "Generating using jevents.c"
-+  "$JEVENTS" "$arch" "$ARCH_PATH" "$JEVENTS_C_GENERATED"
-+  echo "Generating using jevents.py"
-+  "$JEVENTS_PY" "$arch" "$ARCH_PATH" "$JEVENTS_PY_GENERATED"
-+  echo "Diffing"
-+  diff -u "$JEVENTS_C_GENERATED" "$JEVENTS_PY_GENERATED"
-+done
-+cleanup
-diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-new file mode 100755
-index 000000000000..3a3d7471eb71
---- /dev/null
-+++ b/tools/perf/pmu-events/jevents.py
-@@ -0,0 +1,392 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+"""Convert directories of JSON events to C code."""
-+import argparse
-+import csv
-+import json
-+import os
-+import sys
-+from typing import Callable
-+
-+# Global command line arguments.
-+args = None
-+# List of event tables generated from "/sys" directories.
-+sys_event_tables = []
-+# Map from an event name to an architecture standard
-+# JsonEvent. Architecture standard events are in json files in the top
-+# f'{args.starting_dir}/{args.arch}' directory.
-+arch_std_events = dict()
-+# Track whether an events table is currently being defined and needs closing.
-+close_table = False
-+
-+
-+def file_name_to_table_name(parents: list[str], dirname: str) -> str:
-+  """Generate a C table name from directory names."""
-+  tblname = 'pme'
-+  for p in parents:
-+    tblname += '_' + p
-+  tblname += '_' + dirname
-+  return tblname.replace('-', '_')
-+
-+
-+class JsonEvent:
-+  """Representation of an event loaded from a json file dictionary."""
-+
-+  def __init__(self, dict):
-+    """Constructor passed the dictionary of parsed json values."""
-+
-+    def llx(x: int) -> str:
-+      """Convert an int to a string similar to a printf modifier of %#llx."""
-+      return '0' if x == 0 else hex(x)
-+
-+    def fixdesc(s: str) -> str:
-+      """Fix formatting issue for the desc string."""
-+      return s.removesuffix('.  ').removesuffix('. ').removesuffix('.').replace(
-+          '\n', '\\n').replace('\"', '\\"').replace('\r', '\\r') if s else None
-+
-+    def convert_aggr_mode(aggr_mode: str) -> str:
-+      """Returns the aggr_mode_class enum value associated with the JSON string."""
-+      if not aggr_mode:
-+        return None
-+      aggr_mode_to_enum = {
-+          'PerChip': '1',
-+          'PerCore': '2',
-+      }
-+      return aggr_mode_to_enum[aggr_mode]
-+
-+    def lookup_msr(num: str) -> str:
-+      """Converts the msr number, or first in a list to the appropriate event field."""
-+      if not num:
-+        return None
-+      msrmap = {
-+          0x3F6: 'ldlat=',
-+          0x1A6: 'offcore_rsp=',
-+          0x1A7: 'offcore_rsp=',
-+          0x3F7: 'frontend=',
-+      }
-+      return msrmap[int(num.split(',', 1)[0], 0)]
-+
-+    def real_event(name: str, event: str) -> str:
-+      """Convert well known event names to an event string otherwise use the event argument."""
-+      fixed = {
-+          'inst_retired.any': 'event=0xc0,period=2000003',
-+          'inst_retired.any_p': 'event=0xc0,period=2000003',
-+          'cpu_clk_unhalted.ref': 'event=0x0,umask=0x03,period=2000003',
-+          'cpu_clk_unhalted.thread': 'event=0x3c,period=2000003',
-+          'cpu_clk_unhalted.core': 'event=0x3c,period=2000003',
-+          'cpu_clk_unhalted.thread_any': 'event=0x3c,any=1,period=2000003',
-+      }
-+      if not name:
-+        return None
-+      if name.lower() in fixed:
-+        return fixed[name.lower()]
-+      return event
-+
-+    def unit_to_pmu(unit: str) -> str:
-+      """Convert a JSON Unit to Linux PMU name."""
-+      if not unit:
-+        return None
-+      # Comment brought over from jevents.c:
-+      # it's not realistic to keep adding these, we need something more scalable ...
-+      table = {
-+          'CBO': 'uncore_cbox',
-+          'QPI LL': 'uncore_qpi',
-+          'SBO': 'uncore_sbox',
-+          'iMPH-U': 'uncore_arb',
-+          'CPU-M-CF': 'cpum_cf',
-+          'CPU-M-SF': 'cpum_sf',
-+          'UPI LL': 'uncore_upi',
-+          'hisi_sicl,cpa': 'hisi_sicl,cpa',
-+          'hisi_sccl,ddrc': 'hisi_sccl,ddrc',
-+          'hisi_sccl,hha': 'hisi_sccl,hha',
-+          'hisi_sccl,l3c': 'hisi_sccl,l3c',
-+          'imx8_ddr': 'imx8_ddr',
-+          'L3PMC': 'amd_l3',
-+          'DFPMC': 'amd_df',
-+          'cpu_core': 'cpu_core',
-+          'cpu_atom': 'cpu_atom',
-+      }
-+      return table[unit] if unit in table else f'uncore_{unit.lower()}'
-+
-+    eventcode = 0
-+    if 'EventCode' in dict:
-+      eventcode = int(dict['EventCode'].split(',', 1)[0], 0)
-+    if 'ExtSel' in dict:
-+      eventcode |= int(dict['ExtSel']) << 21
-+    configcode = int(dict['ConfigCode'], 0) if 'ConfigCode' in dict else None
-+    self.name = dict['EventName'].lower() if 'EventName' in dict else None
-+    self.compat = dict.get('Compat')
-+    self.desc = fixdesc(dict.get('BriefDescription'))
-+    self.long_desc = fixdesc(dict.get('PublicDescription'))
-+    precise = dict.get('PEBS')
-+    msr = lookup_msr(dict.get('MSRIndex'))
-+    msrval = dict.get('MSRValue')
-+    extra_desc = ''
-+    if 'Data_LA' in dict:
-+      extra_desc += '  Supports address when precise'
-+      if 'Errata' in dict:
-+        extra_desc += '.'
-+    if 'Errata' in dict:
-+      extra_desc += '  Spec update: ' + dict['Errata']
-+    self.pmu = unit_to_pmu(dict.get('Unit'))
-+    filter = dict.get('Filter')
-+    self.unit = dict.get('ScaleUnit')
-+    self.perpkg = dict.get('PerPkg')
-+    self.aggr_mode = convert_aggr_mode(dict.get('AggregationMode'))
-+    self.deprecated = dict.get('Deprecated')
-+    self.metric_name = dict.get('MetricName')
-+    self.metric_group = dict.get('MetricGroup')
-+    self.metric_constraint = dict.get('MetricConstraint')
-+    self.metric_expr = dict.get('MetricExpr')
-+    if self.metric_expr:
-+      self.metric_expr = self.metric_expr.replace('\\', '\\\\')
-+    arch_std = dict.get('ArchStdEvent')
-+    if precise and self.desc and not '(Precise Event)' in self.desc:
-+      extra_desc += ' (Must be precise)' if precise == '2' else (' (Precise '
-+                                                                 'event)')
-+    event = f'config={llx(configcode)}' if configcode is not None else f'event={llx(eventcode)}'
-+    event_fields = [
-+        ('AnyThread', 'any='),
-+        ('PortMask', 'ch_mask='),
-+        ('CounterMask', 'cmask='),
-+        ('EdgeDetect', 'edge='),
-+        ('FCMask', 'fc_mask='),
-+        ('Invert', 'inv='),
-+        ('SampleAfterValue', 'period='),
-+        ('UMask', 'umask='),
-+    ]
-+    for key, value in event_fields:
-+      if key in dict and dict[key] != '0':
-+        event += ',' + value + dict[key]
-+    if filter:
-+      event += f',{filter}'
-+    if msr:
-+      event += f',{msr}{msrval}'
-+    if self.desc and extra_desc:
-+      self.desc += extra_desc
-+    if self.long_desc and extra_desc:
-+      self.long_desc += extra_desc
-+    if self.pmu:
-+      if self.desc and not self.desc.endswith('. '):
-+        self.desc += '. '
-+      self.desc = (self.desc if self.desc else '') + ('Unit: ' + self.pmu + ' ')
-+    if arch_std and arch_std.lower() in arch_std_events:
-+      event = arch_std_events[arch_std.lower()].event
-+      # Copy from the architecture standard event to self for undefined fields.
-+      for attr, value in arch_std_events[arch_std.lower()].__dict__.items():
-+        if hasattr(self, attr) and not getattr(self, attr):
-+          setattr(self, attr, value)
-+
-+    self.event = real_event(self.name, event)
-+
-+  def __repr__(self) -> str:
-+    """String representation primarily for debugging."""
-+    s = '{\n'
-+    for attr, value in self.__dict__.items():
-+      if value:
-+        s += f'\t{attr} = {value},\n'
-+    return s + '}'
-+
-+  def ToCString(self, topic_local: str) -> str:
-+    """Representation of the event as a C struct initializer."""
-+
-+    def AttrString(attr: str, value: str) -> str:
-+      return '\t.%s = \"%s\",\n' % (attr, value)
-+
-+    def StrIfPresent(self, attr: str) -> str:
-+      if not getattr(self, attr):
-+        return ''
-+      return AttrString(attr, getattr(self, attr))
-+
-+    s = '{\n'
-+    for attr in ['name', 'event']:
-+      s += StrIfPresent(self, attr)
-+    if self.desc:
-+      s += AttrString('desc', self.desc)
-+    else:
-+      s += AttrString('desc', '(null)')
-+    s += StrIfPresent(self, 'compat')
-+    s += f'\t.topic = "{topic_local}",\n'
-+    for attr in [
-+        'long_desc', 'pmu', 'unit', 'perpkg', 'aggr_mode', 'metric_expr',
-+        'metric_name', 'metric_group', 'deprecated', 'metric_constraint'
-+    ]:
-+      s += StrIfPresent(self, attr)
-+    s += '},\n'
-+    return s
-+
-+
-+def read_json_events(path: str) -> list[JsonEvent]:
-+  """Read json events from the specified file."""
-+  return json.load(open(path), object_hook=lambda d: JsonEvent(d))
-+
-+def preprocess_arch_std_files(archpath: str) -> None:
-+  """Read in all architecture standard events."""
-+  global arch_std_events
-+  for item in os.scandir(archpath):
-+    if item.is_file() and item.name.endswith('.json'):
-+      for event in read_json_events(item.path):
-+        if event.name:
-+          arch_std_events[event.name.lower()] = event
-+
-+
-+def print_events_table_prefix(tblname: str) -> None:
-+  """Called when a new events table is started."""
-+  global close_table
-+  if close_table:
-+    raise IOError('Printing table prefix but last table has no suffix')
-+  args.output_file.write('static const struct pmu_event %s[] = {\n' % tblname)
-+  close_table = True
-+
-+
-+def print_events_table_entries(item: os.DirEntry, topic: str) -> None:
-+  """Create contents of an events table."""
-+  if not close_table:
-+    raise IOError('Table entries missing prefix')
-+  for event in read_json_events(item.path):
-+    args.output_file.write(event.ToCString(topic))
-+
-+def print_events_table_suffix() -> None:
-+  """Optionally close events table."""
-+  global close_table
-+  if close_table:
-+    args.output_file.write("""{
-+\t.name = 0,
-+\t.event = 0,
-+\t.desc = 0,
-+},
++const struct pmu_events_map pmu_events_map[] = {
++	{
++		.cpuid = 0,
++		.version = 0,
++		.type = 0,
++		.table = 0,
++	},
 +};
-+""")
-+  close_table = False
 +
-+def process_one_file(parents: list[str], item: os.DirEntry) -> None:
-+  """Process a JSON file during the main walk."""
-+  global sys_event_tables
-+
-+  def get_topic(topic: str) -> str:
-+    return topic.removesuffix('.json').replace('-', ' ')
-+
-+  def is_leaf_dir(path: str) -> bool:
-+    for item in os.scandir(path):
-+      if item.is_dir():
-+        return False
-+    return True
-+
-+  # model directory, reset topic
-+  if item.is_dir() and is_leaf_dir(item.path):
-+    print_events_table_suffix()
-+
-+    tblname = file_name_to_table_name(parents, item.name)
-+    if item.name == 'sys':
-+      sys_event_tables.append(tblname)
-+    print_events_table_prefix(tblname)
-+    return
-+
-+  # base dir or too deep
-+  level = len(parents)
-+  if level == 0 or level > 4:
-+    return
-+
-+  # Ignore other directories. If the file name does not have a .json
-+  # extension, ignore it. It could be a readme.txt for instance.
-+  if not item.is_file() or not item.name.endswith('.json'):
-+    return
-+
-+  print_events_table_entries(item, get_topic(item.name))
-+
-+
-+def print_mapping_table() -> None:
-+  """Read the mapfile and generate the struct from cpuid string to event table."""
-+  table = csv.reader(open(f'{args.starting_dir}/{args.arch}/mapfile.csv'))
-+  args.output_file.write('const struct pmu_events_map pmu_events_map[] = {\n')
-+  first = True
-+  for row in table:
-+    # Skip the first row or any row beginning with #.
-+    if not first and len(row) > 0 and not row[0].startswith('#'):
-+      tblname = file_name_to_table_name([], row[2].replace('/', '_'))
-+      args.output_file.write("""{
-+\t.cpuid = \"%s\",
-+\t.version = \"%s\",
-+\t.type = \"%s\",
-+\t.table = %s
-+},
-+""" % (row[0].replace('\\', '\\\\'), row[1], row[3], tblname))
-+    first = False
-+
-+  args.output_file.write("""{
-+\t.cpuid = "testcpu",
-+\t.version = "v1",
-+\t.type = "core",
-+\t.table = pme_test_soc_cpu,
-+},
-+{
-+\t.cpuid = 0,
-+\t.version = 0,
-+\t.type = 0,
-+\t.table = 0,
-+},
++const struct pmu_sys_events pmu_sys_event_tables[] = {
++	{
++		.table = 0
++	},
 +};
-+""")
-+
-+
-+def print_system_mapping_table() -> None:
-+  """C struct mapping table array for tables from /sys directories."""
-+  args.output_file.write(
-+      '\nconst struct pmu_sys_events pmu_sys_event_tables[] = {\n')
-+  for tblname in sys_event_tables:
-+    args.output_file.write("""\t{
-+\t\t.table = %s,
-+\t\t.name = \"%s\",
-+\t},
-+""" % (tblname, tblname))
-+  args.output_file.write("""\t{
-+\t\t.table = 0
-+\t},
-+};
-+""")
-+
-+
-+def main() -> None:
-+  global args
-+
-+  def dir_path(path: str) -> str:
-+    """Validate path is a directory for argparse."""
-+    if os.path.isdir(path):
-+      return path
-+    else:
-+      raise argparse.ArgumentTypeError(f'\'{path}\' is not a valid directory')
-+
-+  def ftw(path: str, parents: list[str],
-+          action: Callable[[list[str], os.DirEntry], None]) -> None:
-+    """Replicate the directory/file walking behavior of C's file tree walk."""
-+    for item in os.scandir(path):
-+      action(parents, item)
-+      if item.is_dir():
-+        ftw(item.path, parents + [item.name], action)
-+
-+  ap = argparse.ArgumentParser()
-+  ap.add_argument('arch', help='Architecture name like x86')
-+  ap.add_argument(
-+      'starting_dir',
-+      type=dir_path,
-+      help='Root of tree containing architecture directories containing json files'
-+  )
-+  ap.add_argument(
-+      'output_file', type=argparse.FileType('w'), nargs='?', default=sys.stdout)
-+  args = ap.parse_args()
-+
-+  args.output_file.write("#include \"pmu-events/pmu-events.h\"\n")
-+  for path in [args.arch, 'test']:
-+    arch_path = f'{args.starting_dir}/{path}'
-+    if not os.path.isdir(arch_path):
-+      raise IOError(f'Missing architecture directory in \'{arch_path}\'')
-+    preprocess_arch_std_files(arch_path)
-+    ftw(arch_path, [], process_one_file)
-+    print_events_table_suffix()
-+
-+  print_mapping_table()
-+  print_system_mapping_table()
-+
-+
-+if __name__ == '__main__':
-+  main()
 -- 
 2.36.0.512.ge40c2bad7a-goog
 

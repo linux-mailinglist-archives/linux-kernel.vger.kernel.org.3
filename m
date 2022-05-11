@@ -2,60 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A0E523F11
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 22:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B351E523F1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 22:54:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347890AbiEKUwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 16:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34488 "EHLO
+        id S231820AbiEKUy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 16:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240502AbiEKUwU (ORCPT
+        with ESMTP id S240502AbiEKUyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 16:52:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C50E4D624;
-        Wed, 11 May 2022 13:52:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DBB24B82617;
-        Wed, 11 May 2022 20:52:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C670FC340EE;
-        Wed, 11 May 2022 20:52:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652302335;
-        bh=hcTWqS1/6JNEKbDUnWjOFRHI/i50sXfXkf41lVpBiUQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PQ6kXVe3mk9WbijP8yialUY26FPJdZZek0VQ97glkAophocZ78ag+Z+cbqXRkCud3
-         t/IJkpTKXPiSeyKFX6zDv2NQPeqP5hp5TlJt6NsPEFZgJ6clX5DndoZpGYXZJK7zWr
-         NLwvowhEoNMsnvxZOX9T928N41cLWyh6R86/yPz960nVtV9B8YP3Vz8Is8KjgTwRZ4
-         wyF9uru+cjyo3ByvguTNiMIYU/v0RUoSulCuLeiqlDdi+tXuTejPwiaVmNw8kRvy2E
-         dF1fiENoX8j5IwmuKnM441MnHbxU+3+IezmHa5GzPLjCkzEQDAWZ5WMfvX7AJ41VSw
-         9LZUpfiR6dSbA==
-Date:   Wed, 11 May 2022 13:52:13 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jonas Paulsson <paulsson@linux.vnet.ibm.com>,
-        Ulrich Weigand <ulrich.weigand@de.ibm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andreas Krebbel <krebbel@linux.ibm.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH 0/8] s390: allow to build with llvm's integrated assembler
-Message-ID: <Ynwh/Uk3IyiyRzO3@dev-arch.thelio-3990X>
-References: <20220511120532.2228616-1-hca@linux.ibm.com>
+        Wed, 11 May 2022 16:54:23 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1CC1C12ED
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 13:54:21 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id c11so2992933plg.13
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 13:54:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QOBEiygmzdOccRJ2xs/t/iC85JI6XVGlts/kvxY1hCw=;
+        b=g7FCdtcxf55q/ZSL4+jYR8X7GelzKz9XVwAEJyuojZG7N7IJOlQf1EwPdzlyNNLOBR
+         ytkV4tRtc2Vfdq+2up8FXugivmqJUkJ1NKbO+VIhJONrOIaIBOCtGutSjprYv8muoWM/
+         xFpAg+nEc1XkGMAScGvgPkXkOKukcm1Nhy9P+wg0vv+d2iwwxhvkJhTlsCNFlRTPLHgg
+         dG4yDir/XFNlNGLFtp0GAO2V+yxH+QS6zoYwCATlABLFCKae72ZFEItTpiTF4fCtRQIQ
+         r0N8HwLBIinDuXVL44RtEa6CL1WHQkl67HbwxwdGdBmypEV8jVq/yh8yGtuj5NyJFdg+
+         7qbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QOBEiygmzdOccRJ2xs/t/iC85JI6XVGlts/kvxY1hCw=;
+        b=FGYyhh8YLnTxpAn37bOGa/XKH9TcmaqzZu4hQ47lWBW7uHuephtioiPQUjqY07sLix
+         61wD79xGneMtwj+dxE9Andbxz0fJn1phraIIEhQ3DjHYvfkPEa37ZpkYNZOfDCgXByrB
+         +allYDC1f1Ul6IxRm7Sv+NPV1BMRbTrATRpQ3IvOPQ2B3pW2goekQ/LHHQtsiMkjQ/uu
+         gsbnIr+d7vKAGAOVka+EMDBjYjwFHxhiz1n3vMMbddssDIFp+A1/puDprzFqq6MlY3v8
+         V/KfZwDrBUqntRHUuetfJtA/wWmuteX/UVhY21JxZDA0/M+CdP0QaqODCn+GuTK63fCI
+         aLOg==
+X-Gm-Message-State: AOAM533S3r8zZRWqYlczjLJX5FtqmjqhllWPG+BIVW/Gg23CXVeOatrZ
+        NWzGVjZ9rCOFWDRKCkHvEoo=
+X-Google-Smtp-Source: ABdhPJwFu3ioJfSmYXGPxbC910Um6QR1JHzZzbjU+5wF3DCe4WFHNxpq4TDRRrij4g4Df0VGqvDlJQ==
+X-Received: by 2002:a17:902:bd81:b0:15f:2f8f:ea99 with SMTP id q1-20020a170902bd8100b0015f2f8fea99mr6287215pls.7.1652302461242;
+        Wed, 11 May 2022 13:54:21 -0700 (PDT)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id y23-20020a17090a8b1700b001d954837197sm373921pjn.22.2022.05.11.13.54.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 13:54:20 -0700 (PDT)
+Date:   Thu, 12 May 2022 05:54:18 +0900
+From:   Stafford Horne <shorne@gmail.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     openrisc@lists.librecores.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] openrisc: remove bogus nops and shutdowns
+Message-ID: <YnwiepO0tBvt4hMe@antec>
+References: <YnMKHdRy/GkAB+9e@zx2c4.com>
+ <20220511133550.143236-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220511120532.2228616-1-hca@linux.ibm.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+In-Reply-To: <20220511133550.143236-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,60 +70,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Heiko,
-
-On Wed, May 11, 2022 at 02:05:24PM +0200, Heiko Carstens wrote:
-> A couple of patches which in result make it finally possible to build the
-> kernel for s390 with llvm's integrated assembler. Several configs build
-> without errors or warnings, and the kernel also works as expected.
+On Wed, May 11, 2022 at 03:35:50PM +0200, Jason A. Donenfeld wrote:
+> Nop 42 is some leftover debugging thing by the looks of it. Nop 1 will
+> shut down the simulator, which isn't what we want, since it makes it
+> impossible to handle errors.
 > 
-> Note that patch 6 ("s390/boot: workaround llvm IAS bug") reveals a
-> miscompile. This looks like a bug in the instruction definitions of the mvc
-> and clc instructions(?). I'd like to ask people to look into this, since
-> this silently generated broken code.
+> Cc: Stafford Horne <shorne@gmail.com>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-I think it should be pretty simple to file a bug report for this since
-it occurs in a standalone assembly file? I agree with Nick that there
-should be a bug report filed and linked to in patch 6 so that we don't
-lose track of it.
-
-> This patch series is based on linux-next, which contains two additional
-> required s390 specific patches to make llvm's IAS work.
-> 
-> Thanks,
-> Heiko
-> 
-> Heiko Carstens (8):
->   s390/alternatives: provide identical sized orginal/alternative sequences
->   s390/alternatives: remove padding generation code
->   s390/entry: shorten OUTSIDE macro
->   s390/entry: workaround llvm's IAS limitations
->   s390/purgatory: workaround llvm's IAS limitations
->   s390/boot: workaround llvm IAS bug
->   s390/boot: do not emit debug info for assembly with llvm's IAS
->   scripts/min-tool-version.sh: raise minimum clang version to 14.0.0 for s390
-> 
->  arch/s390/Makefile                      |  2 +
->  arch/s390/boot/head.S                   | 34 +++++----
->  arch/s390/include/asm/alternative-asm.h | 76 +++-----------------
->  arch/s390/include/asm/alternative.h     | 93 ++++++-------------------
->  arch/s390/include/asm/spinlock.h        |  2 +-
->  arch/s390/kernel/alternative.c          | 61 +---------------
->  arch/s390/kernel/entry.S                | 39 +++++++----
->  arch/s390/lib/spinlock.c                |  4 +-
->  arch/s390/purgatory/head.S              | 29 ++++++--
->  scripts/min-tool-version.sh             |  3 +-
->  10 files changed, 104 insertions(+), 239 deletions(-)
-
-I applied this series to the latest s390 for-next branch (c4fb15578802)
-and built a few in-tree and distribution configurations with clang-14
-and clang-15 then boot tested them in QEMU with a simple buildroot
-userspace. I did not see any new warnings or errors. This is awesome, I
-am excited to get this wired up in our CI!
-
-In case it is worthwhile:
-
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-
-Cheers,
-Nathan
+Thanks, this looks good now. I will queue it.

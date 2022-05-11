@@ -2,95 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2EC1523C0F
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:56:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1FF523C13
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345939AbiEKR4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 13:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49264 "EHLO
+        id S1345903AbiEKR4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 13:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345966AbiEKR4M (ORCPT
+        with ESMTP id S241439AbiEKR4j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 13:56:12 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A8A2B1B9;
-        Wed, 11 May 2022 10:56:10 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id bv19so5597307ejb.6;
-        Wed, 11 May 2022 10:56:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Y4/SAPsJ9f4OXJYDdFhUA/nd1PhxlZKu/Ys21YszRaA=;
-        b=lZEjE+zhrFuarohgPN3uPPp3/1ifjXsr/pHVEE0WklPDTG0muYg+gRfQm2JpIVeLvD
-         clhRYNK89WLQOLEF94OpOfecWz2CWB13B5z9QOXm+oktp5meLYxiZUPtVY4RmjBvnbU3
-         /6S+aX7/uBWmn4YPi3VlznZnHBTIcH+uzmAH44/GYOmx5EzjXaGqEnaUCkbHSsCQfOwQ
-         uiJKgh0Zk6QECVwJKFJJXrHJmbV0GCiYQ1QJ1kjzTUF0Ipw3OmLJmYyhewMiTpW0KmUe
-         lVtK3VEzSqYqWOLRlsoGOs41WyZV7byxDZ95xdgEm5bo3p5E1r9aBwsJMQlreZFFRNUx
-         DGSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Y4/SAPsJ9f4OXJYDdFhUA/nd1PhxlZKu/Ys21YszRaA=;
-        b=XPQ5w/QMa1DkjJQUWuoW3k+gKvWb4tReBAn6K3+fe2/8i2/3xBme3QcLF3l1RraWQT
-         OGKdulsC78ISGHj6XAodhZ/E621PSAlJFJf0KSwbRLH1MrDJp8BCFbaQI5/PJybEWkuI
-         aeE/HpABFEMaIKp2nE18QuoRWFlwccSOzeTtzZz8x3Wvml3hnIyUGEVVEEK0WtKddhHo
-         CHuBKh0HEDuVFZ39H5Npcpe9y/GTz6Lb9qmvuhpRlL3gVAr/s5oa3sSwByKMtjYsFIc9
-         iRII3k15g6ZRHYJUjjXOPMcnqXZWmfvso1+Z7fYs4pYWXNmy0w7R3SFBAd87JAVS0RsP
-         EujA==
-X-Gm-Message-State: AOAM533AgeaBPqGZVtsnNGhXnT6H4S7PDIaeoJ47MQJVkoSWyVerstaQ
-        EsINZ0PVmZCR7aJm2c1Icsv3BHdZRmiB4KEOUamTjPO9mZeA4Q==
-X-Google-Smtp-Source: ABdhPJwVD3U070rN+XeenMtclJ09vcrP7AYcNnGmrmWjBeX2VPQ+rXyde6ML2tgSNrC70rjKc3pedg9gQgeK2xdVdq8=
-X-Received: by 2002:a17:906:c10d:b0:6f4:a770:846e with SMTP id
- do13-20020a170906c10d00b006f4a770846emr26455803ejc.497.1652291768721; Wed, 11
- May 2022 10:56:08 -0700 (PDT)
+        Wed, 11 May 2022 13:56:39 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9F33B57F;
+        Wed, 11 May 2022 10:56:27 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DE9501EC0535;
+        Wed, 11 May 2022 19:56:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1652291781;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=GTg1ZSG8tdoJ8Un5Pa70eoBMG9Ax/ldvlvlcyKKfV3E=;
+        b=iPODDOIc6RyWxTpJtBxT6AOjKo1uKlPx/uJZXQ5buY/OjTjFmQwMZhL6xJZqi1io4AGQZ5
+        bQIJ/ZLLzJNVJZcJSVVO20knOmJrvqvhSuhCT8/RA3afOAXcz8GlWaGGgsZM8WKVLRA5cN
+        KUGuXK6u/kDptGOdv2/CUS2phVFg17w=
+Date:   Wed, 11 May 2022 19:56:28 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Jonathan McDowell <noodles@fb.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH v3] x86/kexec: Carry forward IMA measurement log on kexec
+Message-ID: <Ynv4zBnLvbMKrwrq@zn.tnic>
+References: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
+ <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
+ <YnuJCH75GrhVm0Tp@noodles-fedora.dhcp.thefacebook.com>
+ <67f0fe5874638241bc2f2401dc2bc12c51becc0b.camel@linux.ibm.com>
 MIME-Version: 1.0
-References: <20220511153905.13980-1-henning.schild@siemens.com>
-In-Reply-To: <20220511153905.13980-1-henning.schild@siemens.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 11 May 2022 19:55:30 +0200
-Message-ID: <CAHp75Vc6imwy0faWEtmnnsNh6WfccA2KuJuy2e7+VHuxhQ8VbA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] simatic-ipc additions to p2sb apl lake gpio
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        linux-watchdog@vger.kernel.org, Enrico Weigelt <lkml@metux.net>,
-        Gerd Haeussler <gerd.haeussler.ext@siemens.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <67f0fe5874638241bc2f2401dc2bc12c51becc0b.camel@linux.ibm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 6:50 PM Henning Schild
-<henning.schild@siemens.com> wrote:
->
-> changed since v1:
->  - rebased
->  - split p1 into p1-3
->
-> This switches the simatic-ipc modules to using the p2sb interface
-> introduced by Andy with "platform/x86: introduce p2sb_bar() helper".
->
-> It also switches to one apollo lake device to using gpio leds.
->
-> I am kind of hoping Andy will take this on top and propose it in his
-> series.
+On Wed, May 11, 2022 at 01:53:23PM -0400, Mimi Zohar wrote:
+> This patch doesn't apply to Linus' master branch.  Which tip/master
+> branch?
 
-Yes, I will. Since it seems it requires a v6 of my series after
-v5.19-rc1 and will be material for v5.20... we have time.
+This one:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/log/
+
+Considering how the majority of the changes are x86-specific, I was
+thinking I'd carry it through the tip tree after getting your ACK for
+the IMA side of things?
+
+Thx.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

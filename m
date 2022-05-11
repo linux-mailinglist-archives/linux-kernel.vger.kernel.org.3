@@ -2,101 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A0052293F
+	by mail.lfdr.de (Postfix) with ESMTP id 31A5A52293D
 	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 03:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240825AbiEKBzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 21:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
+        id S240815AbiEKBz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 21:55:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240843AbiEKBzg (ORCPT
+        with ESMTP id S229581AbiEKBz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 21:55:36 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914EE18C063
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 18:55:35 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id gj17-20020a17090b109100b001d8b390f77bso3546994pjb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 18:55:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=2ba9RlsMQZXWIx36Z7u38zcXmSCVXQjEy1o7bWz6s8w=;
-        b=Yf0OpUrx+nfUoeezT84Ho8jYoJAtvR8bMUSrPF3q+WTRu6Ojay2B4dj6RtDYjvaror
-         vetcXq+m1RFeUa2gXq0i8ncujVkNNI5wScGQZ+j5D8fsb5aeLgzfnl4eRVK5S8cPRRtv
-         m2cck0UeO9+0JSlBuQxaTFfxD20DXCW/FzuKwWD4cNp8w8HtZIMS4jX/sWjjTE6yb2Qr
-         e9VRzGOsNBuBOJ5I4gCg8KX0Ff5oXJ65u5xRBJpYerfPiyXjaNfNH3KQD+ZEC48GjlgI
-         0ek7wC2HHcwTIgOMmqGkhoq6/i1lme5dq07X39Xm9TyjLxaxIP7a/rQN4UlBb9F4EwEw
-         8YHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=2ba9RlsMQZXWIx36Z7u38zcXmSCVXQjEy1o7bWz6s8w=;
-        b=bkfMFkT8HhYB0dU3EeYeyZZYNd1DO6xPGKpAB32Ef61KyJ4zEhg3DkrDX63LxfhgSv
-         tQriEZ7pQBf/WoHiH2VeYcyNEexOY80i7sL+dk2CGkdZx2NJ66Yqnix+Jn6qUhi7p/SH
-         zXxvHV48Ihdqwd8aAP8pJAZdRq92G3jc/l6mROYF3vZwAUPdgb7YhC9g9Vzw/06u4DjY
-         0shnJGGftuJdKZ9pZA/cG8T3hZ8dQ3ffwmn6ZHI6LykAcaqnchmFlRmV7HbJIemCcxFC
-         Lxcp/XTHn/MvBqoB9SAEJ4VQFWrRckEP1PRyevodcfHte6F0EXpqv33Z2j0aUufJgDrh
-         lNiw==
-X-Gm-Message-State: AOAM532HpyM9ZSG5lnmwp7kJ6PXnBDD9PGaXBiOANW4Ke9BRFw3/um64
-        XJJQEUAe221CN1IOLkf4k7h1SiifezMnK1o=
-X-Google-Smtp-Source: ABdhPJxoDtoqqDlHuOkZKONoO7zzvmWFvWXx00E4kWjd9G64OYb3ea98eE0UH2enSRVwLWVdAFpW5Q==
-X-Received: by 2002:a17:902:fe01:b0:15e:e178:e2e3 with SMTP id g1-20020a170902fe0100b0015ee178e2e3mr22853345plj.40.1652234134968;
-        Tue, 10 May 2022 18:55:34 -0700 (PDT)
-Received: from localhost.localdomain ([144.202.91.207])
-        by smtp.gmail.com with ESMTPSA id f12-20020aa79d8c000000b0050dc76281f2sm207807pfq.204.2022.05.10.18.55.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 18:55:34 -0700 (PDT)
-From:   Zheyu Ma <zheyuma97@gmail.com>
-To:     james.schulman@cirrus.com, david.rhodes@cirrus.com,
-        tanureal@opensource.cirrus.com, rf@opensource.cirrus.com,
-        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, ckeepax@opensource.cirrus.com,
-        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org
-Cc:     Zheyu Ma <zheyuma97@gmail.com>
-Subject: [PATCH v2] ASoC: cs42l56: Fix the error handling of cs42l56_i2c_probe()
-Date:   Wed, 11 May 2022 09:55:14 +0800
-Message-Id: <20220511015514.1777923-1-zheyuma97@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220510155410.GC38351@ediswmail.ad.cirrus.com>
-References: <20220510155410.GC38351@ediswmail.ad.cirrus.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 10 May 2022 21:55:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF00E18AABB
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 18:55:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5313661AF8
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 01:55:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84DF5C385D4;
+        Wed, 11 May 2022 01:55:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1652234124;
+        bh=RtSdZCnq9Vk4zc1XyJ8ZqHXdTm5EZ4CK1h6O7cMw0pI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=J79FLtB90hPRhj8Cyxnz5KUi42r/kNxFA3LWVSJAnnlxqXpoUmGvDgWXk+sf9663p
+         gacki1T30wP6yYsIoiz1GisRrMHjZKKFd7Y8FZf29HErhWaUq9kBMSh9AYY+lbXYL2
+         Hht6B3dw/xl2srLlkSdSQLev8e9GAfHBVPItXmn0=
+Date:   Tue, 10 May 2022 18:55:23 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Zhou Guanghui <zhouguanghui1@huawei.com>
+Cc:     <rppt@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <xuqiang36@huawei.com>
+Subject: Re: [PATCH] memblock: config the number of init memblock regions
+Message-Id: <20220510185523.3f7479b8ffc49a8a7c17d328@linux-foundation.org>
+In-Reply-To: <20220511010530.60962-1-zhouguanghui1@huawei.com>
+References: <20220511010530.60962-1-zhouguanghui1@huawei.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver should goto label 'err_enable' when failing at regmap_read().
+On Wed, 11 May 2022 01:05:30 +0000 Zhou Guanghui <zhouguanghui1@huawei.com> wrote:
 
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
----
-Changes in v2:
-    - Fix the typo in the subject
----
- sound/soc/codecs/cs42l56.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> During early boot, the number of memblocks may exceed 128(some memory
+> areas are not reported to the kernel due to test failures. As a result,
+> contiguous memory is divided into multiple parts for reporting). If
+> the size of the init memblock regions is exceeded before the array size
+> can be resized, the excess memory will be lost.
+> 
+> ...
+>
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -89,6 +89,14 @@ config SPARSEMEM_VMEMMAP
+>  	  pfn_to_page and page_to_pfn operations.  This is the most
+>  	  efficient option when sufficient kernel resources are available.
+>  
+> +config MEMBLOCK_INIT_REGIONS
+> +	int "Number of init memblock regions"
+> +	range 128 1024
+> +	default 128
+> +	help
+> +	  The number of init memblock regions which used to track "memory" and
+> +	  "reserved" memblocks during early boot.
+> +
+>  config HAVE_MEMBLOCK_PHYS_MAP
+>  	bool
+>  
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index e4f03a6e8e56..6893d26b750e 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -22,7 +22,7 @@
+>  
+>  #include "internal.h"
+>  
+> -#define INIT_MEMBLOCK_REGIONS			128
+> +#define INIT_MEMBLOCK_REGIONS			CONFIG_MEMBLOCK_INIT_REGIONS
 
-diff --git a/sound/soc/codecs/cs42l56.c b/sound/soc/codecs/cs42l56.c
-index 2c4e09b43199..dc23007336c5 100644
---- a/sound/soc/codecs/cs42l56.c
-+++ b/sound/soc/codecs/cs42l56.c
-@@ -1245,7 +1245,7 @@ static int cs42l56_i2c_probe(struct i2c_client *i2c_client)
- 	ret = regmap_read(cs42l56->regmap, CS42L56_CHIP_ID_1, &reg);
- 	if (ret) {
- 		dev_err(&i2c_client->dev, "Failed to read chip ID: %d\n", ret);
--		return ret;
-+		goto err_enable;
- 	}
- 
- 	devid = reg & CS42L56_CHIP_ID_MASK;
--- 
-2.25.1
+Consistent naming would be nice - MEMBLOCK_INIT versus INIT_MEMBLOCK.
 
+Can we simply increase INIT_MEMBLOCK_REGIONS to 1024 and avoid the
+config option?  It appears that the overhead from this would be 60kB or
+so.  Or zero if CONFIG_ARCH_KEEP_MEMBLOCK and CONFIG_MEMORY_HOTPLUG
+are cooperating.

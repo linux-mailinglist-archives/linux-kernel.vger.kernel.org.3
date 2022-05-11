@@ -2,66 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEC10523192
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:28:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9995152318D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241488AbiEKL1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 07:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54678 "EHLO
+        id S237540AbiEKL1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 07:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242074AbiEKL0L (ORCPT
+        with ESMTP id S243060AbiEKL0a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 07:26:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B7AC2300DC
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:25:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652268341;
+        Wed, 11 May 2022 07:26:30 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CE61CFC8
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:26:26 -0700 (PDT)
+Date:   Wed, 11 May 2022 13:26:23 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652268384;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=L7bgnpWqcdqNvHxNU2KzEbI653lACbzFb1RAD6XEVCk=;
-        b=JFyEMUTk3vgO8wNVeVgLaKmGPH2Tc+X3Z9HNeiFxL219I2542oczZISTMeTDBId29SisBc
-        IIPAunqelH7oIY04m/uW7xP+yGh+GLlWCYNVOcJYndWUqrmqf2YD1Lio61PUmnghxJs1Eu
-        NPkFAYGUKuRf0cu/heCgHw8oKy1QoGA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-648-DEKCNhICP1a9sy5jruSrWA-1; Wed, 11 May 2022 07:25:37 -0400
-X-MC-Unique: DEKCNhICP1a9sy5jruSrWA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D9D4D18E6C40;
-        Wed, 11 May 2022 11:25:36 +0000 (UTC)
-Received: from starship (unknown [10.40.192.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 96F58438BCE;
-        Wed, 11 May 2022 11:25:34 +0000 (UTC)
-Message-ID: <40adabce40dcf3f965538815bfb740023be06cdb.camel@redhat.com>
-Subject: Re: [PATCH v3 15/34] KVM: x86: hyper-v: Introduce
- kvm_hv_is_tlb_flush_hcall()
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 11 May 2022 14:25:33 +0300
-In-Reply-To: <20220414132013.1588929-16-vkuznets@redhat.com>
-References: <20220414132013.1588929-1-vkuznets@redhat.com>
-         <20220414132013.1588929-16-vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=RXcxCcCEHYkua10Jt4BwYI9HJhbTvBsUxwTZHrgO7K4=;
+        b=q75ytNBn4bykp/jOp4U3FG3izwIWTY3LryDZkV2a/wTHWiWW4ZlN1pkx5JU8/PAM2cwaJD
+        0hh96LH12motU9DOhE9PTob/7TdoYMdvSVbR2lnJTXtTco/GKUXFy6zn2B13Pgnz19jAO0
+        j5aCj1v1PopI0PnxQXh30x+kloctElA6CoDk8agwqtLJlVHF+GgZhN7DzedbZO49xJn+yg
+        mIdB69A6HQf3EDUxeOc2+3kPb5gJtymsO8O2GaM0vGLSjzDGgrmLtyBVbNrROPqNzxfswD
+        ogkLLTTM9DMeVCQjhx8SBviIJW+4uOXWJjwYc32Kq2emhF+Wze1y3lcPHnnNAA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652268384;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=RXcxCcCEHYkua10Jt4BwYI9HJhbTvBsUxwTZHrgO7K4=;
+        b=n6eJkXQe2mt1Vf01pSRVLE3JSONdl3kUlfJEH394bWQ7MBONWNJ7FP4S/aK/7ui50u9hIn
+        Qge0DxdKp22UPhBg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [REPOST PATCH] locking/lockdep: Remove lockdep_init_map_crosslock.
+Message-ID: <YnudX+1Wb8Px/t0y@linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,50 +55,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-14 at 15:19 +0200, Vitaly Kuznetsov wrote:
-> The newly introduced helper checks whether vCPU is performing a
-> Hyper-V TLB flush hypercall. This is required to filter out L2 TLB
-> flush hypercalls for processing.
-> 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/kvm/hyperv.h | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/hyperv.h b/arch/x86/kvm/hyperv.h
-> index d59f96700104..ca67c18cef2c 100644
-> --- a/arch/x86/kvm/hyperv.h
-> +++ b/arch/x86/kvm/hyperv.h
-> @@ -170,6 +170,24 @@ static inline void kvm_hv_vcpu_empty_flush_tlb(struct kvm_vcpu *vcpu)
->  	tlb_flush_ring = kvm_hv_get_tlb_flush_ring(vcpu);
->  	tlb_flush_ring->read_idx = tlb_flush_ring->write_idx;
->  }
-> +
-> +static inline bool kvm_hv_is_tlb_flush_hcall(struct kvm_vcpu *vcpu)
-> +{
-> +	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
-> +	u16 code;
-> +
-> +	if (!hv_vcpu)
-> +		return false;
-> +
-> +	code = is_64_bit_hypercall(vcpu) ? kvm_rcx_read(vcpu) :
-> +		kvm_rax_read(vcpu);
-> +
-> +	return (code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE ||
-> +		code == HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST ||
-> +		code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX ||
-> +		code == HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX);
-> +}
-> +
->  void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu);
->  
->  
+The cross-release bits have been removed, lockdep_init_map_crosslock() is
+a leftover.
 
-Looks Ok, but my knowelege of HV spec is limited so I might have missed something.
+Remove lockdep_init_map_crosslock.
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Reviewed-by: Waiman Long <longman@redhat.com>
+Link: https://lore.kernel.org/r/20220311164457.46461-1-bigeasy@linutronix.de
+---
+ include/linux/lockdep.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-Best regards,
-	Maxim Levitsky
+diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
+index 37951c17908e7..e4cfee37d5986 100644
+--- a/include/linux/lockdep.h
++++ b/include/linux/lockdep.h
+@@ -427,7 +427,6 @@ enum xhlock_context_t {
+ 	XHLOCK_CTX_NR,
+ };
+ 
+-#define lockdep_init_map_crosslock(m, n, k, s) do {} while (0)
+ /*
+  * To initialize a lockdep_map statically use this macro.
+  * Note that _name must not be NULL.
+-- 
+2.36.1
 

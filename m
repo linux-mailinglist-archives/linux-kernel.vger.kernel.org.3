@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B12D452369F
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:02:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3185236A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242925AbiEKPCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51742 "EHLO
+        id S245526AbiEKPDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245513AbiEKPB1 (ORCPT
+        with ESMTP id S245544AbiEKPBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:01:27 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF8824967;
-        Wed, 11 May 2022 08:01:25 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id k2so2189268qtp.1;
-        Wed, 11 May 2022 08:01:25 -0700 (PDT)
+        Wed, 11 May 2022 11:01:30 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83AC8E026;
+        Wed, 11 May 2022 08:01:27 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id hf18so2211602qtb.0;
+        Wed, 11 May 2022 08:01:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ipDuBEhFw2DyeLXG/FGMhARGVjkT9bgP/MDyzET/qKc=;
-        b=VqceqPLS+1htYwbnkdB1KBG2uG8SPVKbSfknbCr7putJwxx2cf4O1v6nSo207w8Kfk
-         mRwrH00M1xaanbcOw8aB6vSJfgrOybPgim2cr4NaasjycYeaOsZy/RM3naCj5jy8hl44
-         UHIJ8TFs9MghONZDytS/GtSeZYibpyRbzeXrzHHeCbqCAK6ThohEfj6Fyw7tPU49UKs3
-         Md+mXvivlDeSsQkXR7b1yuJskVs7+nMz9LUOoBQ8gkX0lcOHu8nO1joX3gtpEfhg+0/O
-         9FKWuMrl78hOvqVRXoLP6dPaeZWs53md1YdoqzeYomqSXNMBnNLu7CkkGiagycu9Or43
-         FZ9w==
+        bh=1+0VMWvkb5KhIaQ1vIx5DoEhMwYXv8cN9xgLJnTJYLQ=;
+        b=mRKrlFNGn5IbBhXKT/0K+CcQIBoIcJDeXtaQHe6SoiiJ3T1hka4jtIcnqUuffq725v
+         hPzBAl/d5PCCjf/aFdsx1HSmuwEhBOSHm0CmAlgqWws19GOF0Qw2+6amUhSeXnTuwbrR
+         RbZ1J27qWdAePKn8X195kQVjfqgz0VZDQVPM0Sd2p+u2SB7/yjzRZCJ18dGoOWk+cYcq
+         GIbgTWKbfZoDyV0O6YN02szADxJb0ot8l5O7l6CX+GxKz4OV2mtoEg2gDClc+klt1O/A
+         Eyqij7JRO9QkV342d8baxgcl1dDfGhvmAz9TU1tGP5DJLbkbLbgmrSTJ0vRiFSeX67k1
+         lQEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ipDuBEhFw2DyeLXG/FGMhARGVjkT9bgP/MDyzET/qKc=;
-        b=B7ByMtKvKmzjH5khOwlX/JEUYwy3QjoEtVTurYZrODUfIVAlkIoYkl3YdzyONizno3
-         FmHJrgKU+ztOs0y0c4++S+ZNtH4D4rQHlG8yqt/3SIxdFaXiCzlOgei6qMLWuB7D6O8s
-         FksRc9C0WbCOGOjuU2f4I7ehZoZbO5eQryhmAsrBfh6JMLFwp0zScD6VEHA81sTZAAO+
-         9OOPjeW+ihiOXkwzAXkRKMxXmp6G1pZn7hlxmc0E9zxJvpNsYBa02DbsLb6LZFM8RWx7
-         QuhPM6Xa4sPuJGg1tIn2OTAp75uCVVmvS2loiYo3eMcUYw+GWlTeeFwg0RmwBBIU9hfR
-         DPSQ==
-X-Gm-Message-State: AOAM530l1OCSEKI2iuuY3zPpppK3yWXTcc4mTjn4ciUeZglAh++u2W1L
-        0SG/AuD7pgnGUzzWHLh5bm8=
-X-Google-Smtp-Source: ABdhPJxQDBcvlYHhaql84573qZ07O8V9rUoBzOAlGDd772zbH2KQTV4gZdCmubxlDvAK9RPHKFpbtA==
-X-Received: by 2002:ac8:5fc9:0:b0:2f3:9bc9:e174 with SMTP id k9-20020ac85fc9000000b002f39bc9e174mr24002632qta.51.1652281285192;
-        Wed, 11 May 2022 08:01:25 -0700 (PDT)
+        bh=1+0VMWvkb5KhIaQ1vIx5DoEhMwYXv8cN9xgLJnTJYLQ=;
+        b=lTVuHtqs05YXg+1d27NLsbbxzxn4wdotEcjFLljusMc03XmxQ02GkQ4TYhsj3KgcaD
+         78xpNdQ/U8ww760WwN/QUC8IFdlp0urndxTfGS2OhGvfLQmDB/bY74BUfVg3Y6PRMjZ7
+         pfVqtTeAKZJzUaNYJJLWuR+YnpTtS6dkxm6+eIqhx3RxAqjmFg6rWYnil7HWXYWmTuTl
+         2gOqLv2BVazMIgKw/U2vxmpRJvKGPuBMqsxGqdYKlVqwxhthmfSP438RDtkLByr5NqD0
+         qM7wZGhg1MAqUKHzoxlfYCWEA1fkfiISQMkzvFVqIsqZw8icPGOTN/a6qG0Q5hbBEoCv
+         nUlg==
+X-Gm-Message-State: AOAM531u4ZBjC1geufnMidjDghXDadw203+FSm8LhvDb+oBcNFt4bDYP
+        k0tZ4dDCuUkcRE47MgHyspA=
+X-Google-Smtp-Source: ABdhPJxjiw+10SAJyJBRk1SuW3dIg3jBhQFMKieH82FSOH5Tb12OHXebD6jBjE/GmPefF6g0dMS8nw==
+X-Received: by 2002:ac8:7f43:0:b0:2f3:d55d:7296 with SMTP id g3-20020ac87f43000000b002f3d55d7296mr15820698qtk.635.1652281286126;
+        Wed, 11 May 2022 08:01:26 -0700 (PDT)
 Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
-        by smtp.gmail.com with ESMTPSA id h1-20020a05620a244100b0069fc6484c06sm1487134qkn.23.2022.05.11.08.01.24
+        by smtp.gmail.com with ESMTPSA id h1-20020a05620a244100b0069fc6484c06sm1487134qkn.23.2022.05.11.08.01.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 08:01:24 -0700 (PDT)
+        Wed, 11 May 2022 08:01:25 -0700 (PDT)
 From:   Peter Geis <pgwipeout@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -56,9 +56,9 @@ Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
         Peter Geis <pgwipeout@gmail.com>
-Subject: [PATCH v1 5/6] arm64: dts: rockchip: enable sdr-104 on sdmmc
-Date:   Wed, 11 May 2022 11:01:16 -0400
-Message-Id: <20220511150117.113070-6-pgwipeout@gmail.com>
+Subject: [PATCH v1 6/6] arm64: dts: rockchip: enable sfc controller on Quartz64 Model A
+Date:   Wed, 11 May 2022 11:01:17 -0400
+Message-Id: <20220511150117.113070-7-pgwipeout@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220511150117.113070-1-pgwipeout@gmail.com>
 References: <20220511150117.113070-1-pgwipeout@gmail.com>
@@ -74,31 +74,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that we have working io-domain support, we can enable higher date
-rates on the sdmmc card.
-
-Before:
-Timing buffered disk reads:  68 MB in  3.08 seconds =  22.07 MB/sec
-
-After:
-Timing buffered disk reads: 188 MB in  3.02 seconds =  62.29 MB/sec
+Add the sfc controller binding for the Quartz64 Model A. This is not
+populated by default, so leave it disabled.
 
 Signed-off-by: Peter Geis <pgwipeout@gmail.com>
 ---
- arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts | 1 +
- 1 file changed, 1 insertion(+)
+ .../boot/dts/rockchip/rk3566-quartz64-a.dts      | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-index 991b7b1b8443..71df64655de5 100644
+index 71df64655de5..6ec349e7e521 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
 +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-@@ -582,6 +582,7 @@ &sdmmc0 {
- 	disable-wp;
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&sdmmc0_bus4 &sdmmc0_clk &sdmmc0_cmd &sdmmc0_det>;
-+	sd-uhs-sdr104;
- 	vmmc-supply = <&vcc3v3_sd>;
- 	vqmmc-supply = <&vccio_sd>;
+@@ -603,6 +603,22 @@ &sdmmc1 {
+ 	status = "okay";
+ };
+ 
++&sfc {
++	pinctrl-0 = <&fspi_pins>;
++	pinctrl-names = "default";
++	#address-cells = <1>;
++	#size-cells = <0>;
++	status = "disabled";
++
++	flash@0 {
++		compatible = "jedec,spi-nor";
++		reg = <0>;
++		spi-max-frequency = <24000000>;
++		spi-rx-bus-width = <4>;
++		spi-tx-bus-width = <1>;
++	};
++};
++
+ /* spdif is exposed on con40 pin 18 */
+ &spdif {
  	status = "okay";
 -- 
 2.25.1

@@ -2,54 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7188522A85
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 05:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40B13522A88
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 05:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239575AbiEKDsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 23:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
+        id S240589AbiEKDvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 23:51:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbiEKDsI (ORCPT
+        with ESMTP id S232024AbiEKDvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 23:48:08 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0217816ABC5;
-        Tue, 10 May 2022 20:48:07 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 71BB9106F;
-        Tue, 10 May 2022 20:48:07 -0700 (PDT)
-Received: from [192.168.0.8] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2029B3F5A1;
-        Tue, 10 May 2022 20:48:00 -0700 (PDT)
-Message-ID: <6322e2d1-eaa0-e5ee-84b1-5c4a5ce522f3@arm.com>
-Date:   Wed, 11 May 2022 09:19:00 +0530
+        Tue, 10 May 2022 23:51:37 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB38526566;
+        Tue, 10 May 2022 20:51:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652241095; x=1683777095;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ylVSFRVSwhOX8+xtZy5BB4akLVXL41AMGbjByxG8wPE=;
+  b=uHJ0KTy0nUDm48B9e4IqqxMefwLLdCYKqYKm+j9bU76tmkhWObQE5C8M
+   joGm3YoV3u/hAz2QL5tB32st9eMOdsGItPFEZc9FpRWV276Nn2HYOTIJE
+   VxcBn37UC85taczHXpVxjgJdRzSCgrqb/nXGUwHlbuyAIcU/CQZpZGaep
+   8=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 10 May 2022 20:51:34 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 20:51:33 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 10 May 2022 20:51:33 -0700
+Received: from [10.50.27.146] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 10 May
+ 2022 20:51:28 -0700
+Message-ID: <9c8558fa-223b-7f62-2a3a-67780af782ef@quicinc.com>
+Date:   Wed, 11 May 2022 09:21:24 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V5 0/8] perf: Expand perf_branch_entry
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCHv14 5/9] lib: Add register read/write tracing support
 Content-Language: en-US
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        peterz@infradead.org, Robin Murphy <robin.murphy@arm.com>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        James Clark <james.clark@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-References: <20220404045046.634522-1-anshuman.khandual@arm.com>
- <f469f253-9ccc-d55b-731d-3ecc8d685104@arm.com>
- <a304d9e4-2632-1ba9-249f-1d87c90f82de@arm.com> <YmqagfywsvGXaIVl@kernel.org>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <YmqagfywsvGXaIVl@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+To:     <arnd@arndb.de>, <catalin.marinas@arm.com>, <rostedt@goodmis.org>
+CC:     <gregkh@linuxfoundation.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <maz@kernel.org>, <quic_psodagud@quicinc.com>,
+        <quic_tsoni@quicinc.com>, <will@kernel.org>,
+        Prasad Sodagudi <psodagud@codeaurora.org>
+References: <cover.1651663123.git.quic_saipraka@quicinc.com>
+ <9827bae40f6f319f294d06859c9e3c7442f067f2.1651663123.git.quic_saipraka@quicinc.com>
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+In-Reply-To: <9827bae40f6f319f294d06859c9e3c7442f067f2.1651663123.git.quic_saipraka@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,33 +71,274 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/4/2022 4:58 PM, Sai Prakash Ranjan wrote:
+> From: Prasad Sodagudi <psodagud@codeaurora.org>
+>
+> Generic MMIO read/write i.e., __raw_{read,write}{b,l,w,q} accessors
+> are typically used to read/write from/to memory mapped registers
+> and can cause hangs or some undefined behaviour in following few
+> cases,
+>
+> * If the access to the register space is unclocked, for example: if
+>    there is an access to multimedia(MM) block registers without MM
+>    clocks.
+>
+> * If the register space is protected and not set to be accessible from
+>    non-secure world, for example: only EL3 (EL: Exception level) access
+>    is allowed and any EL2/EL1 access is forbidden.
+>
+> * If xPU(memory/register protection units) is controlling access to
+>    certain memory/register space for specific clients.
+>
+> and more...
+>
+> Such cases usually results in instant reboot/SErrors/NOC or interconnect
+> hangs and tracing these register accesses can be very helpful to debug
+> such issues during initial development stages and also in later stages.
+>
+> So use ftrace trace events to log such MMIO register accesses which
+> provides rich feature set such as early enablement of trace events,
+> filtering capability, dumping ftrace logs on console and many more.
+>
+> Sample output:
+>
+> rwmmio_write: __qcom_geni_serial_console_write+0x160/0x1e0 width=32 val=0xa0d5d addr=0xfffffbfffdbff700
+> rwmmio_post_write: __qcom_geni_serial_console_write+0x160/0x1e0 width=32 val=0xa0d5d addr=0xfffffbfffdbff700
+> rwmmio_read: qcom_geni_serial_poll_bit+0x94/0x138 width=32 addr=0xfffffbfffdbff610
+> rwmmio_post_read: qcom_geni_serial_poll_bit+0x94/0x138 width=32 val=0x0 addr=0xfffffbfffdbff610
+>
+> Signed-off-by: Prasad Sodagudi <psodagud@codeaurora.org>
+> Co-developed-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+> ---
+>   arch/Kconfig                  |  3 ++
+>   arch/arm64/Kconfig            |  1 +
+>   include/trace/events/rwmmio.h | 97 +++++++++++++++++++++++++++++++++++
+>   lib/Kconfig                   |  7 +++
+>   lib/Makefile                  |  2 +
+>   lib/trace_readwrite.c         | 47 +++++++++++++++++
+>   6 files changed, 157 insertions(+)
+>   create mode 100644 include/trace/events/rwmmio.h
+>   create mode 100644 lib/trace_readwrite.c
+>
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index 31c4fdc4a4ba..5e7aa17ed609 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -1369,6 +1369,9 @@ config ARCH_HAS_ELFCORE_COMPAT
+>   config ARCH_HAS_PARANOID_L1D_FLUSH
+>   	bool
+>   
+> +config ARCH_HAVE_TRACE_MMIO_ACCESS
+> +	bool
+> +
+>   config DYNAMIC_SIGFRAME
+>   	bool
+>   
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 20ea89d9ac2f..926e1a252b6f 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -48,6 +48,7 @@ config ARM64
+>   	select ARCH_HAS_ZONE_DMA_SET if EXPERT
+>   	select ARCH_HAVE_ELF_PROT
+>   	select ARCH_HAVE_NMI_SAFE_CMPXCHG
+> +	select ARCH_HAVE_TRACE_MMIO_ACCESS
+>   	select ARCH_INLINE_READ_LOCK if !PREEMPTION
+>   	select ARCH_INLINE_READ_LOCK_BH if !PREEMPTION
+>   	select ARCH_INLINE_READ_LOCK_IRQ if !PREEMPTION
+> diff --git a/include/trace/events/rwmmio.h b/include/trace/events/rwmmio.h
+> new file mode 100644
+> index 000000000000..82edee9bf716
+> --- /dev/null
+> +++ b/include/trace/events/rwmmio.h
+> @@ -0,0 +1,97 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2021-2022 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +#undef TRACE_SYSTEM
+> +#define TRACE_SYSTEM rwmmio
+> +
+> +#if !defined(_TRACE_RWMMIO_H) || defined(TRACE_HEADER_MULTI_READ)
+> +#define _TRACE_RWMMIO_H
+> +
+> +#include <linux/tracepoint.h>
+> +
+> +DECLARE_EVENT_CLASS(rwmmio_rw_template,
+> +
+> +	TP_PROTO(unsigned long caller, u64 val, u8 width, volatile void __iomem *addr),
+> +
+> +	TP_ARGS(caller, val, width, addr),
+> +
+> +	TP_STRUCT__entry(
+> +		__field(unsigned long, caller)
+> +		__field(unsigned long, addr)
+> +		__field(u64, val)
+> +		__field(u8, width)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__entry->caller = caller;
+> +		__entry->val = val;
+> +		__entry->addr = (unsigned long)(void *)addr;
+> +		__entry->width = width;
+> +	),
+> +
+> +	TP_printk("%pS width=%d val=%#llx addr=%#lx",
+> +		(void *)(unsigned long)__entry->caller, __entry->width,
+> +		__entry->val, __entry->addr)
+> +);
+> +
+> +DEFINE_EVENT(rwmmio_rw_template, rwmmio_write,
+> +	TP_PROTO(unsigned long caller, u64 val, u8 width, volatile void __iomem *addr),
+> +	TP_ARGS(caller, val, width, addr)
+> +);
+> +
+> +DEFINE_EVENT(rwmmio_rw_template, rwmmio_post_write,
+> +	TP_PROTO(unsigned long caller, u64 val, u8 width, volatile void __iomem *addr),
+> +	TP_ARGS(caller, val, width, addr)
+> +);
+> +
+> +TRACE_EVENT(rwmmio_read,
+> +
+> +	TP_PROTO(unsigned long caller, u8 width, const volatile void __iomem *addr),
+> +
+> +	TP_ARGS(caller, width, addr),
+> +
+> +	TP_STRUCT__entry(
+> +		__field(unsigned long, caller)
+> +		__field(unsigned long, addr)
+> +		__field(u8, width)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__entry->caller = caller;
+> +		__entry->addr = (unsigned long)(void *)addr;
+> +		__entry->width = width;
+> +	),
+> +
+> +	TP_printk("%pS width=%d addr=%#lx",
+> +		 (void *)(unsigned long)__entry->caller, __entry->width, __entry->addr)
+> +);
+> +
+> +TRACE_EVENT(rwmmio_post_read,
+> +
+> +	TP_PROTO(unsigned long caller, u64 val, u8 width, const volatile void __iomem *addr),
+> +
+> +	TP_ARGS(caller, val, width, addr),
+> +
+> +	TP_STRUCT__entry(
+> +		__field(unsigned long, caller)
+> +		__field(unsigned long, addr)
+> +		__field(u64, val)
+> +		__field(u8, width)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__entry->caller = caller;
+> +		__entry->val = val;
+> +		__entry->addr = (unsigned long)(void *)addr;
+> +		__entry->width = width;
+> +	),
+> +
+> +	TP_printk("%pS width=%d val=%#llx addr=%#lx",
+> +		 (void *)(unsigned long)__entry->caller, __entry->width,
+> +		 __entry->val, __entry->addr)
+> +);
+> +
+> +#endif /* _TRACE_RWMMIO_H */
+> +
+> +#include <trace/define_trace.h>
+> diff --git a/lib/Kconfig b/lib/Kconfig
+> index 087e06b4cdfd..5e2fd075724f 100644
+> --- a/lib/Kconfig
+> +++ b/lib/Kconfig
+> @@ -118,6 +118,13 @@ config INDIRECT_IOMEM_FALLBACK
+>   	  mmio accesses when the IO memory address is not a registered
+>   	  emulated region.
+>   
+> +config TRACE_MMIO_ACCESS
+> +	bool "Register read/write tracing"
+> +	depends on TRACING && ARCH_HAVE_TRACE_MMIO_ACCESS
+> +	help
+> +	  Create tracepoints for MMIO read/write operations. These trace events
+> +	  can be used for logging all MMIO read/write operations.
+> +
+>   source "lib/crypto/Kconfig"
+>   
+>   config CRC_CCITT
+> diff --git a/lib/Makefile b/lib/Makefile
+> index 6b9ffc1bd1ee..3df7d24e65d2 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -151,6 +151,8 @@ lib-y += logic_pio.o
+>   
+>   lib-$(CONFIG_INDIRECT_IOMEM) += logic_iomem.o
+>   
+> +obj-$(CONFIG_TRACE_MMIO_ACCESS) += trace_readwrite.o
+> +
+>   obj-$(CONFIG_GENERIC_HWEIGHT) += hweight.o
+>   
+>   obj-$(CONFIG_BTREE) += btree.o
+> diff --git a/lib/trace_readwrite.c b/lib/trace_readwrite.c
+> new file mode 100644
+> index 000000000000..88637038b30c
+> --- /dev/null
+> +++ b/lib/trace_readwrite.c
+> @@ -0,0 +1,47 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Register read and write tracepoints
+> + *
+> + * Copyright (c) 2021-2022 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#include <linux/ftrace.h>
+> +#include <linux/module.h>
+> +#include <asm-generic/io.h>
+> +
+> +#define CREATE_TRACE_POINTS
+> +#include <trace/events/rwmmio.h>
+> +
+> +#ifdef CONFIG_TRACE_MMIO_ACCESS
+> +void log_write_mmio(u64 val, u8 width, volatile void __iomem *addr,
+> +		    unsigned long caller_addr)
+> +{
+> +	trace_rwmmio_write(caller_addr, val, width, addr);
+> +}
+> +EXPORT_SYMBOL_GPL(log_write_mmio);
+> +EXPORT_TRACEPOINT_SYMBOL_GPL(rwmmio_write);
+> +
+> +void log_post_write_mmio(u64 val, u8 width, volatile void __iomem *addr,
+> +			 unsigned long caller_addr)
+> +{
+> +	trace_rwmmio_post_write(caller_addr, val, width, addr);
+> +}
+> +EXPORT_SYMBOL_GPL(log_post_write_mmio);
+> +EXPORT_TRACEPOINT_SYMBOL_GPL(rwmmio_post_write);
+> +
+> +void log_read_mmio(u8 width, const volatile void __iomem *addr,
+> +		   unsigned long caller_addr)
+> +{
+> +	trace_rwmmio_read(caller_addr, width, addr);
+> +}
+> +EXPORT_SYMBOL_GPL(log_read_mmio);
+> +EXPORT_TRACEPOINT_SYMBOL_GPL(rwmmio_read);
+> +
+> +void log_post_read_mmio(u64 val, u8 width, const volatile void __iomem *addr,
+> +			unsigned long caller_addr)
+> +{
+> +	trace_rwmmio_post_read(caller_addr, val, width, addr);
+> +}
+> +EXPORT_SYMBOL_GPL(log_post_read_mmio);
+> +EXPORT_TRACEPOINT_SYMBOL_GPL(rwmmio_post_read);
+> +#endif /* CONFIG_TRACE_MMIO_ACCESS */
 
+Hi Steve,
 
-On 4/28/22 19:15, Arnaldo Carvalho de Melo wrote:
-> Em Mon, Apr 18, 2022 at 12:17:53PM +0530, Anshuman Khandual escreveu:
->> On 4/11/22 11:16, Anshuman Khandual wrote:
->>> On 4/4/22 10:20, Anshuman Khandual wrote:
->>>> - Rebased series on v5.18-rc1
->>>
->>> Gentle ping, any updates on this series ?
->>
->> Gentle ping, any updates on this series ?
->>
->> I have posted BRBE RFC V2 accommodating all these new perf ABI changes being
->> proposed here. I would really appreciate reviews and/or suggestions on this
->> series, which is essential and also prerequisite for the BRBE driver itself.
->>
->> https://lore.kernel.org/all/20220412115455.293119-1-anshuman.khandual@arm.com/
-> 
-> Has the kernel bits been merged? When that happens I'll cherry pick the
-No, this series is still waiting for reviews for the kernel changes.
+Could you please review this patch, it is the main one left for this series to get merged. All your
+previous review comments have been incorporated, you can find them in  the cover letter changelog.
 
-> tools/ ones.
-
-Sure.
-
-> 
-> In future series, please, on the final patch submission, please send two
-> series, one for the kernel and another for tooling.
-
-Sure, will do.
+Thanks,
+Sai

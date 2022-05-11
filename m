@@ -2,43 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5982D5236F0
+	by mail.lfdr.de (Postfix) with ESMTP id A61D35236F3
 	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245694AbiEKPQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
+        id S245683AbiEKPSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:18:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245656AbiEKPPz (ORCPT
+        with ESMTP id S245706AbiEKPR6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:15:55 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 162453CFD5;
-        Wed, 11 May 2022 08:15:53 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E06D6ED1;
-        Wed, 11 May 2022 08:15:52 -0700 (PDT)
-Received: from e123427-lin.arm.com (unknown [10.57.1.148])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5255D3F66F;
-        Wed, 11 May 2022 08:15:51 -0700 (PDT)
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     linux-rockchip@lists.infradead.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Peter Geis <pgwipeout@gmail.com>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>, linux-pci@vger.kernel.org,
-        heiko@sntech.de, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v9 0/5] Enable rk356x PCIe controller
-Date:   Wed, 11 May 2022 16:15:44 +0100
-Message-Id: <165228194780.18099.431001983386428849.b4-ty@arm.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220429123832.2376381-1-pgwipeout@gmail.com>
-References: <20220429123832.2376381-1-pgwipeout@gmail.com>
+        Wed, 11 May 2022 11:17:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0A320F4FD;
+        Wed, 11 May 2022 08:17:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B035618D6;
+        Wed, 11 May 2022 15:17:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52C70C340EE;
+        Wed, 11 May 2022 15:17:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652282276;
+        bh=15pJJEvRiuh11eXzFUTX/Cwaj4pw2lagxUeoD6XptCw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ONIcOnI44zE5Tg6ztuEmm0O+DTBmtSBtOpWp0UabRx2n1nmqAU56mPPAXziljv3+K
+         5Kekccr9BKxpYXhQ143unTvldjH4BFm2xaTRoIM339zjsDzHTh22wlbpkJLOmNCqln
+         iV7gh6OZ21a/uUP88nZw9mQkBgF+coPaoMY2B1QZ4n/7hdvzPgDaBSwicXs/NNm+AT
+         QyoCvS2gGK0bmsVf30hDh9CWy0Oa3kvImIu8YHFfC2inRWPfADasjfIh6roKmPbD6I
+         ZKHTbcWPGhuiSQKwPLbjJ4kgIQCtI9q+3MtEen0TBoL0i8bPjWz4gkHJuF3rhHlE9L
+         anIxWuwhMyDfA==
+Date:   Wed, 11 May 2022 18:16:26 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Johannes Holland <johannes.holland@infineon.com>,
+        Nayna <nayna@linux.vnet.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peterhuewe@gmx.de, jgg@ziepe.ca
+Subject: Re: [PATCH] tpm: sleep at least <...> ms in tpm_msleep()
+Message-ID: <YnvTSqRgYkWu0qgp@kernel.org>
+References: <20220510112902.23213-1-johannes.holland@infineon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220510112902.23213-1-johannes.holland@infineon.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -47,25 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Apr 2022 08:38:26 -0400, Peter Geis wrote:
-> This series enables the DesignWare based PCIe controller on the rk356x
-> series of chips. We drop the fallback to the core driver due to
-> compatibility issues. We reset the PCIe controller at driver probe to
-> prevent issues in the future when firmware / kexec leaves the controller
-> in an unknown state. We add support for legacy interrupts for cards that
-> lack MSI support (which is partially broken currently). We then add the
-> device tree nodes to enable PCIe on the Quartz64 Model A.
+On Tue, May 10, 2022 at 01:29:03PM +0200, Johannes Holland wrote:
+> To comply with protocol requirements, minimum polling times must often
+> be adhered to. Therefore, a macro like tpm_msleep() should sleep at
+> least the given amount of time (not up to the given period). Have
+> tpm_msleep() sleep at least the given number of milliseconds.
 > 
-> [...]
+> Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+> ---
+>  drivers/char/tpm/tpm.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> index 2163c6ee0d36..0971b55fffe3 100644
+> --- a/drivers/char/tpm/tpm.h
+> +++ b/drivers/char/tpm/tpm.h
+> @@ -185,8 +185,8 @@ int tpm_pm_resume(struct device *dev);
+>  
+>  static inline void tpm_msleep(unsigned int delay_msec)
+>  {
+> -	usleep_range((delay_msec * 1000) - TPM_TIMEOUT_RANGE_US,
+> -		     delay_msec * 1000);
+> +	usleep_range(delay_msec * 1000, (delay_msec * 1000)
+> +		     + TPM_TIMEOUT_RANGE_US);
+>  };
+>  
+>  int tpm_chip_start(struct tpm_chip *chip);
+> -- 
+> 2.34.1
+> 
 
-Applied to pci/dwc, thanks!
+For this I would really like to hear a 2nd opinion from Nayna and Mimi.
 
-[1/5] dt-bindings: PCI: Remove fallback from Rockchip DesignWare binding
-      https://git.kernel.org/lpieralisi/pci/c/931262e646
-[2/5] PCI: rockchip-dwc: Reset core at driver probe
-      https://git.kernel.org/lpieralisi/pci/c/431e7d2eec
-[3/5] PCI: rockchip-dwc: Add legacy interrupt support
-      https://git.kernel.org/lpieralisi/pci/c/e8aae154df
-
-Thanks,
-Lorenzo
+BR, Jarkko

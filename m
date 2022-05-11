@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAADA522C12
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C686F522C13
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240408AbiEKGFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 02:05:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51378 "EHLO
+        id S242039AbiEKGF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 02:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232391AbiEKGFo (ORCPT
+        with ESMTP id S232391AbiEKGFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 02:05:44 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F39DFF8
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 23:05:39 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso1181368pjg.0
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 23:05:39 -0700 (PDT)
+        Wed, 11 May 2022 02:05:52 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0844D60C6
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 23:05:45 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so1146744pjq.2
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 23:05:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=7JjRO1XM2cc2RjeI4NcGH570FtT+tUMSzeJQeq2jaPI=;
-        b=yETpf4plo6YLw66FN6+wSBXLofvajIy9gUVHSXi+dv5goV/UrJ1dwI49WYNhzOGajt
-         EVTzsjSNtN50WnD5TeW09SZUATAJDgk0zKq8cATDKNZOaDd4D5Thb1TX6yrrNtcrobvn
-         dDzS1LopmkWRg8qS2xtvjXnJc4z8hKZD20hmT34VtbvJmbNFziB6Vw++pmClyvfVLev/
-         N2rNO30fdy0tH4I/TkbddwS4uGAt36n4+GZt3+fg/DJzoFzjwsDxpYOLLDsRKEBmZ1UW
-         LG0TPwXTmC0blSdU4XoAmDl1nXR3SMe6rOF5Sf7hOQWAmKkguslyL0Ff4BodqqG3pW7i
-         sihA==
+        bh=M2tMIjY53oynE5ZZlI/baO0lGZKZqD2qqN0eNb/iE2w=;
+        b=PWhnEnJk9qvGqrSC7B+xbAQJFKIXMFzEqbX5YybccBDSFAD0JdmcVlA4aoZosIjEn6
+         jWruvxH1PxvP/amFuB48PZbbNr5pORQQafPTLAV5wflu7go3zAO6g7xXJwd0pUZJa1ij
+         Qk1ooH64bNO2AbmgXsF4uDjg5H3A08W36IgEJjgSNozKEMuCXwOvZyrsk99wMmCe29uF
+         uVwBU99akYHf+S7Ghh8jyLJhYc+txT750TY71WiD/u8RHc83zMTJGbefCmcjfvKuzfN1
+         4+KLv0uW/SqBrVpSfuygCQDQocWmhPikwA+9stwzEQcTHPvORve9yo5DzdMa88fdqGf4
+         zzHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7JjRO1XM2cc2RjeI4NcGH570FtT+tUMSzeJQeq2jaPI=;
-        b=rev0zOx/UYfhlXvkdRRg5gnwLqjaE717tzze9FGb82N0psj+aoRlOuka9Xt3jcw4PO
-         H9cneDQBNknekbhYHESEdHmh14or+sknMzGcayrxi4bVzz4LZfOaqdgsFICLHIFM8M5t
-         n1yFhfPVE5cBfZtrfu2v2T2Y7E/eFKPXgUhyWIi86s3Yl+uxUpiGXrZpsYa9f71Okvw5
-         tBvCnV6Q6zC/UQVrv1rCBNbZmkxmTJH71ZW4XcrCN+SpHn0p/iXi7XEksLZrxeovkb7s
-         jkMnFztt5Cb68KYLYV141ElHTNfGXoLkB33Xnvm3QAm0O/if+9OXeuUtqRVR7706p9qU
-         fx4Q==
-X-Gm-Message-State: AOAM533oUJPyiFsoE9cKLlyR/AfG49vBikZOX7ZwbbrcMFiJJHuJ7/pK
-        632nMhexoOoNf/SaYdIbVapGKA==
-X-Google-Smtp-Source: ABdhPJztP5LRu1TkIBC/svV1IQ8xsbq97wImFDfTWtHZBWJTDMYn8f0hRAX/l/o6YVJdhCdfQ/slqA==
-X-Received: by 2002:a17:90b:4a03:b0:1dc:756a:2463 with SMTP id kk3-20020a17090b4a0300b001dc756a2463mr3689571pjb.68.1652249139169;
-        Tue, 10 May 2022 23:05:39 -0700 (PDT)
+        bh=M2tMIjY53oynE5ZZlI/baO0lGZKZqD2qqN0eNb/iE2w=;
+        b=S4iBqaTWXgxPeAl51C5yuqHVwo0TCNqko+Xk+qqaH+U1otHYgfChVgTE+Uma961n+p
+         wt3IfKXa1pa/zI+xjqrcWlGml5uH6X01LFLRStrMBwphEbPW5AkhDcqCTQ642UJsqHh9
+         vqmXPVjSgV3pZcvs8E9cO6rklvwPLvdSAHoa0nWBqAxNPqYHR2P+HazwSGp1z8ADsZDO
+         ih6LA+eArzs+ihWI6S3bDdQXmbLSas0ynKlFnnPDb31e7oXhCQVkCqI+aF55W0t6vvlK
+         Ff5U8PljrTcZXfdPqh4nUKKFzCX7ohXQAB2Sob4wlUJr+I76B+wVr5ujKiI++iNdAech
+         mc5A==
+X-Gm-Message-State: AOAM532u3KxeBw5sDGu1tuseMIRhq4IyV5nRKwiFgLSIxzgvbSt+8MH0
+        6m5pbaNjVrb+uPuyOXYVLNoy+g==
+X-Google-Smtp-Source: ABdhPJzCg92rzXG3n/bMXqch/TKUzBM6ZIxdElEeaqetBR69Pcu9FbBXio81XWJ/L3/M9y8Px6C/lg==
+X-Received: by 2002:a17:902:ec8c:b0:15e:a371:ad7d with SMTP id x12-20020a170902ec8c00b0015ea371ad7dmr23663232plg.12.1652249143871;
+        Tue, 10 May 2022 23:05:43 -0700 (PDT)
 Received: from localhost.localdomain ([106.213.2.134])
-        by smtp.gmail.com with ESMTPSA id j7-20020a17090a31c700b001d960eaed66sm800216pjf.42.2022.05.10.23.05.35
+        by smtp.gmail.com with ESMTPSA id j7-20020a17090a31c700b001d960eaed66sm800216pjf.42.2022.05.10.23.05.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 23:05:38 -0700 (PDT)
+        Tue, 10 May 2022 23:05:42 -0700 (PDT)
 From:   Sumit Garg <sumit.garg@linaro.org>
 To:     daniel.thompson@linaro.org, dianders@chromium.org, will@kernel.org,
         liwei391@huawei.com
@@ -55,9 +55,9 @@ Cc:     catalin.marinas@arm.com, mark.rutland@arm.com, mhiramat@kernel.org,
         jason.wessel@windriver.com, maz@kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Sumit Garg <sumit.garg@linaro.org>
-Subject: [PATCH v3 1/2] arm64: entry: Skip single stepping into interrupt handlers
-Date:   Wed, 11 May 2022 11:35:20 +0530
-Message-Id: <20220511060521.465744-2-sumit.garg@linaro.org>
+Subject: [PATCH v3 2/2] arm64: kgdb: Set PSTATE.SS to 1 to re-enable single-step
+Date:   Wed, 11 May 2022 11:35:21 +0530
+Message-Id: <20220511060521.465744-3-sumit.garg@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220511060521.465744-1-sumit.garg@linaro.org>
 References: <20220511060521.465744-1-sumit.garg@linaro.org>
@@ -73,69 +73,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently on systems where the timer interrupt (or any other
-fast-at-human-scale periodic interrupt) is active then it is impossible
-to step any code with interrupts unlocked because we will always end up
-stepping into the timer interrupt instead of stepping the user code.
+Currently only the first attempt to single-step has any effect. After
+that all further stepping remains "stuck" at the same program counter
+value.
 
-The common user's goal while single stepping is that when they step then
-the system will stop at PC+4 or PC+I for a branch that gets taken
-relative to the instruction they are stepping. So, fix broken single step
-implementation via skipping single stepping into interrupt handlers.
+Refer to the ARM Architecture Reference Manual (ARM DDI 0487E.a) D2.12,
+i think PSTATE.SS=1 should be set each step for transferring the PE to the
+'Active-not-pending' state. The problem here is PSTATE.SS=1 is not set
+since the second single-step.
 
-The methodology is when we receive an interrupt from EL1, check if we
-are single stepping (pstate.SS). If yes then we save MDSCR_EL1.SS and
-clear the register bit if it was set. Then unmask only D and leave I set.
-On return from the interrupt, set D and restore MDSCR_EL1.SS. Along with
-this skip reschedule if we were stepping.
+After the first single-step, the PE transferes to the 'Inactive' state,
+with PSTATE.SS=0 and MDSCR.SS=1, thus PSTATE.SS won't be set to 1 due to
+kernel_active_single_step()=true. Then the PE transferes to the
+'Active-pending' state when ERET and returns to the debugger by step
+exception.
 
-Suggested-by: Will Deacon <will@kernel.org>
+Before this patch:
+==================
+Entering kdb (current=0xffff3376039f0000, pid 1) on processor 0 due to Keyboard Entry
+[0]kdb>
+
+[0]kdb>
+[0]kdb> bp write_sysrq_trigger
+Instruction(i) BP #0 at 0xffffa45c13d09290 (write_sysrq_trigger)
+    is enabled   addr at ffffa45c13d09290, hardtype=0 installed=0
+
+[0]kdb> go
+$ echo h > /proc/sysrq-trigger
+
+Entering kdb (current=0xffff4f7e453f8000, pid 175) on processor 1 due to Breakpoint @ 0xffffad651a309290
+[1]kdb> ss
+
+Entering kdb (current=0xffff4f7e453f8000, pid 175) on processor 1 due to SS trap @ 0xffffad651a309294
+[1]kdb> ss
+
+Entering kdb (current=0xffff4f7e453f8000, pid 175) on processor 1 due to SS trap @ 0xffffad651a309294
+[1]kdb>
+
+After this patch:
+=================
+Entering kdb (current=0xffff6851c39f0000, pid 1) on processor 0 due to Keyboard Entry
+[0]kdb> bp write_sysrq_trigger
+Instruction(i) BP #0 at 0xffffc02d2dd09290 (write_sysrq_trigger)
+    is enabled   addr at ffffc02d2dd09290, hardtype=0 installed=0
+
+[0]kdb> go
+$ echo h > /proc/sysrq-trigger
+
+Entering kdb (current=0xffff6851c53c1840, pid 174) on processor 1 due to Breakpoint @ 0xffffc02d2dd09290
+[1]kdb> ss
+
+Entering kdb (current=0xffff6851c53c1840, pid 174) on processor 1 due to SS trap @ 0xffffc02d2dd09294
+[1]kdb> ss
+
+Entering kdb (current=0xffff6851c53c1840, pid 174) on processor 1 due to SS trap @ 0xffffc02d2dd09298
+[1]kdb> ss
+
+Entering kdb (current=0xffff6851c53c1840, pid 174) on processor 1 due to SS trap @ 0xffffc02d2dd0929c
+[1]kdb>
+
+Fixes: 44679a4f142b ("arm64: KGDB: Add step debugging support")
+Co-developed-by: Wei Li <liwei391@huawei.com>
+Signed-off-by: Wei Li <liwei391@huawei.com>
 Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
 ---
- arch/arm64/kernel/entry-common.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ arch/arm64/include/asm/debug-monitors.h | 1 +
+ arch/arm64/kernel/debug-monitors.c      | 5 +++++
+ arch/arm64/kernel/kgdb.c                | 2 ++
+ 3 files changed, 8 insertions(+)
 
-diff --git a/arch/arm64/kernel/entry-common.c b/arch/arm64/kernel/entry-common.c
-index 878c65aa7206..dd2d3af615de 100644
---- a/arch/arm64/kernel/entry-common.c
-+++ b/arch/arm64/kernel/entry-common.c
-@@ -458,19 +458,35 @@ static __always_inline void __el1_irq(struct pt_regs *regs,
- 	do_interrupt_handler(regs, handler);
- 	irq_exit_rcu();
+diff --git a/arch/arm64/include/asm/debug-monitors.h b/arch/arm64/include/asm/debug-monitors.h
+index 00c291067e57..9e1e864d6440 100644
+--- a/arch/arm64/include/asm/debug-monitors.h
++++ b/arch/arm64/include/asm/debug-monitors.h
+@@ -104,6 +104,7 @@ void user_regs_reset_single_step(struct user_pt_regs *regs,
+ void kernel_enable_single_step(struct pt_regs *regs);
+ void kernel_disable_single_step(void);
+ int kernel_active_single_step(void);
++void kernel_regs_reset_single_step(struct pt_regs *regs);
  
--	arm64_preempt_schedule_irq();
-+	/* Don't reschedule in case we are single stepping */
-+	if (!(regs->pstate & DBG_SPSR_SS))
-+		arm64_preempt_schedule_irq();
- 
- 	exit_to_kernel_mode(regs);
+ #ifdef CONFIG_HAVE_HW_BREAKPOINT
+ int reinstall_suspended_bps(struct pt_regs *regs);
+diff --git a/arch/arm64/kernel/debug-monitors.c b/arch/arm64/kernel/debug-monitors.c
+index 4f3661eeb7ec..ea3f410aa385 100644
+--- a/arch/arm64/kernel/debug-monitors.c
++++ b/arch/arm64/kernel/debug-monitors.c
+@@ -438,6 +438,11 @@ int kernel_active_single_step(void)
  }
+ NOKPROBE_SYMBOL(kernel_active_single_step);
+ 
++void kernel_regs_reset_single_step(struct pt_regs *regs)
++{
++	set_regs_spsr_ss(regs);
++}
 +
- static void noinstr el1_interrupt(struct pt_regs *regs,
- 				  void (*handler)(struct pt_regs *))
+ /* ptrace API */
+ void user_enable_single_step(struct task_struct *task)
  {
-+	unsigned long reg;
-+
-+	/* Disable single stepping within interrupt handler */
-+	if (regs->pstate & DBG_SPSR_SS) {
-+		reg = read_sysreg(mdscr_el1);
-+		write_sysreg(reg & ~DBG_MDSCR_SS, mdscr_el1);
-+	}
-+
- 	write_sysreg(DAIF_PROCCTX_NOIRQ, daif);
- 
- 	if (IS_ENABLED(CONFIG_ARM64_PSEUDO_NMI) && !interrupts_enabled(regs))
- 		__el1_pnmi(regs, handler);
- 	else
- 		__el1_irq(regs, handler);
-+
-+	if (regs->pstate & DBG_SPSR_SS) {
-+		write_sysreg(DAIF_PROCCTX_NOIRQ | PSR_D_BIT, daif);
-+		write_sysreg(reg, mdscr_el1);
-+	}
- }
- 
- asmlinkage void noinstr el1h_64_irq_handler(struct pt_regs *regs)
+diff --git a/arch/arm64/kernel/kgdb.c b/arch/arm64/kernel/kgdb.c
+index 2aede780fb80..acf2196b1e9b 100644
+--- a/arch/arm64/kernel/kgdb.c
++++ b/arch/arm64/kernel/kgdb.c
+@@ -224,6 +224,8 @@ int kgdb_arch_handle_exception(int exception_vector, int signo,
+ 		 */
+ 		if (!kernel_active_single_step())
+ 			kernel_enable_single_step(linux_regs);
++		else
++			kernel_regs_reset_single_step(linux_regs);
+ 		err = 0;
+ 		break;
+ 	default:
 -- 
 2.25.1
 

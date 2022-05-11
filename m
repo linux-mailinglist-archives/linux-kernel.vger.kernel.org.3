@@ -2,105 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7309C522B33
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 06:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BFF7522B72
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 07:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238153AbiEKEjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 00:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42870 "EHLO
+        id S235016AbiEKFFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 01:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235636AbiEKEjZ (ORCPT
+        with ESMTP id S234627AbiEKFFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 00:39:25 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A700A14CA18
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 21:39:22 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-deb9295679so1483336fac.6
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 21:39:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=s3Cdswvtyrq8qHVwuRB9YRoTAIoD9G/2//h6WeFZHzo=;
-        b=nrkBIDyCffFbQz5WNhQU88q5l+bx8m1CoLNL/nRcxBFZRgp3B2RwRJzpJi69hjmFPQ
-         Eotn36CVTQor8sTwq84btYhQQ+OsypTpYdHIfGkC/Ekjg8a9U0HkQq0T/gbcQg5/if4Y
-         i1yzcJYhTRMm8ny1NIiOYUNRazrfloxlCC/1XVxW2+TG0ItQpx2/G3cXjgMuOALgO1Rc
-         auxKHXwS3ghK6vFFIfR8essc70JXfRi2oIpi3YT/VLqISCMTaVWCOI/Xf0rWfpfTmlnw
-         XgqCFC8jOuHD5AjsEtox3h0b9tzcHlVM0fA1RrJyDFubK9aS707t1BYf/K43qSc4slo4
-         wrQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=s3Cdswvtyrq8qHVwuRB9YRoTAIoD9G/2//h6WeFZHzo=;
-        b=HPiogl7iW7CSBVl+PrZelgX2d3KDg9gNsdz3s0G2cqY7IainwLurXYBB5lXuj366CD
-         tU8C+5gJBAc12js7V+mfANSru+7cabdFT94PNle6EOU17pQji2uHY4kEmMhx7TuXR5xe
-         kfGbQKONFKNcGxXst0rfbV7Doc4LzJbqhnT1OlwDPBkTeRKrHptspQmh+/zazanPATgk
-         urKTghBwWooVy7k0OAVqQ/nULJKT3XfMaRkVmEdPLpb3QPbFRsh2ogAmd85G5DMdZK5S
-         gy/C+bd3qenBvsoNWKPJFQphXtX8vpf12X+yYCQchiGHi2DILqO4zr8OCc5aBa+gF7BA
-         njnw==
-X-Gm-Message-State: AOAM5330dzIfZ248ucwa9OM167NSaVb3McXeV5lJO+g7UZvSKnJBCa3l
-        /Tqud2qE4ueJnTBL13eAKnaZ/pNdyy3uqDle6PRtyCkyir75UQ==
-X-Google-Smtp-Source: ABdhPJwbKHmbnZDflMHBZCcp2YbZAAZvFdPcM4owWeuPIkoxodmwIZJ+Xpgi08ylB1RFXLrw63SQRxJzumbwJKMTxhs=
-X-Received: by 2002:a17:90b:1007:b0:1dc:9862:68af with SMTP id
- gm7-20020a17090b100700b001dc986268afmr3261389pjb.205.1652243951499; Tue, 10
- May 2022 21:39:11 -0700 (PDT)
+        Wed, 11 May 2022 01:05:12 -0400
+X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 10 May 2022 22:05:10 PDT
+Received: from esa5.hc1455-7.c3s2.iphmx.com (esa5.hc1455-7.c3s2.iphmx.com [68.232.139.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C4C1F9A38
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:05:09 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="71958777"
+X-IronPort-AV: E=Sophos;i="5.91,216,1647270000"; 
+   d="scan'208";a="71958777"
+Received: from unknown (HELO yto-r1.gw.nic.fujitsu.com) ([218.44.52.217])
+  by esa5.hc1455-7.c3s2.iphmx.com with ESMTP; 11 May 2022 14:04:04 +0900
+Received: from yto-m3.gw.nic.fujitsu.com (yto-nat-yto-m3.gw.nic.fujitsu.com [192.168.83.66])
+        by yto-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id C6026E5BA1
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 14:04:02 +0900 (JST)
+Received: from m3003.s.css.fujitsu.com (m3003.s.css.fujitsu.com [10.128.233.114])
+        by yto-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id 199391416A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 14:04:02 +0900 (JST)
+Received: from localhost.localdomain (unknown [10.125.5.220])
+        by m3003.s.css.fujitsu.com (Postfix) with ESMTP id D5879200B3AF;
+        Wed, 11 May 2022 14:04:01 +0900 (JST)
+From:   Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
+To:     akpm@linux-foundation.org
+Cc:     mgorman@techsingularity.net, vvghjk1234@gmail.com,
+        aquini@redhat.com, ddutile@redhat.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, yamamoto.rei@jp.fujitsu.com
+Subject: [PATCH] mm, compaction: fast_find_migrateblock() should return pfn in the target zone
+Date:   Wed, 11 May 2022 13:43:00 +0900
+Message-Id: <20220511044300.4069-1-yamamoto.rei@jp.fujitsu.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:319:0:0:0:0 with HTTP; Tue, 10 May 2022 21:39:10
- -0700 (PDT)
-From:   Private Mail <privatemail1961@gmail.com>
-Date:   Tue, 10 May 2022 21:39:10 -0700
-Message-ID: <CANjAOAiiVcSrSv31FjThCVmeppS54UVvGVj3SRSvMfxOB+T8DA@mail.gmail.com>
-Subject: Have you had this? It is for your Benefit
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.3 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
-        BAYES_50,DEAR_BENEFICIARY,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,
-        LOTS_OF_MONEY,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Our Ref: BG/WA0151/2022
+Prevent returning a pfn outside the target zone in case that not
+aligned with pageblock boundary.
+Otherwise isolate_migratepages_block() would handle pages not in
+the target zone.
 
-Dear Beneficiary
+Signed-off-by: Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
+---
+ mm/compaction.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Subject: An Estate of US$15.8 Million
+diff --git a/mm/compaction.c b/mm/compaction.c
+index fe915db6149b..de42b8e48758 100644
+--- a/mm/compaction.c
++++ b/mm/compaction.c
+@@ -1858,6 +1858,8 @@ static unsigned long fast_find_migrateblock(struct compact_control *cc)
+ 
+ 				update_fast_start_pfn(cc, free_pfn);
+ 				pfn = pageblock_start_pfn(free_pfn);
++				if (pfn < cc->zone->zone_start_pfn)
++					pfn = cc->zone->zone_start_pfn;
+ 				cc->fast_search_fail = 0;
+ 				found_block = true;
+ 				set_pageblock_skip(freepage);
+-- 
+2.27.0
 
-Blount and Griffin Genealogical Investigators specializes in probate
-research to locate missing heirs and beneficiaries to estates in the
-United Kingdom and Europe.
-
-We can also help you find wills, obtain copies of certificates, help
-you to administer an estate, as well as calculating how an estate,
-intestacy or trust should be distributed.
-
-You may be entitled to a large pay out for an inheritance in Europe
-worth US$15.8 million. We have discovered an estate belonging to the
-late Depositor has remained unclaimed since he died in 2011 and we
-have strong reasons to believe you are the closest living relative to
-the deceased we can find.
-
-You may unknowingly be the heir of this person who died without
-leaving a will (intestate). We will conduct a probate research to
-prove your entitlement, and can submit a claim on your behalf all at
-no risk to yourselves.
-
-Our service fee of 10% will be paid to us after you have received the estate.
-
-The estate transfer process should take just a matter of days as we
-have the mechanism and expertise to get this done very quickly. This
-message may come to you as a shock, however we hope to work with you
-to transfer the estate to you as quickly as possible.
-
-Feel free to email our senior case worker Mr. Malcolm Casey on email:
-malcolmcasey68@yahoo.com for further discussions.
-
-With warm regards,
-
-Mr. Blount W. Gort, CEO.
-Blount and Griffin Associates Inc

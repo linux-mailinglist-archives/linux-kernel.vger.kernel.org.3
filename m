@@ -2,129 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA55523184
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0EB852317D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230428AbiEKLZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 07:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55190 "EHLO
+        id S237737AbiEKLZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 07:25:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237828AbiEKLYw (ORCPT
+        with ESMTP id S229933AbiEKLY7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 07:24:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B20CE239D9A
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:24:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652268254;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qyVh4yYbgKLJScnCPfU+OUbwX6+f1OtvAPiKUvEbSzQ=;
-        b=cFwOirAmPFi+hydGdwbYEKbrz3zuPBVV5UOLrT0bLUd9/mS9nGhGobgwm5FztIVh69gHYl
-        vg/hdo11+/dBEeu5W+XDZSKzJ8mckf9PG9y4bFFlMm9VT0qAjfeW2IIfQWw2az2fIn+Myo
-        5W8whT74hr5MQs76WS1GKjQXjam/B2o=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-461-j_qvobNEPxyE-MEDq4p5Ww-1; Wed, 11 May 2022 07:24:09 -0400
-X-MC-Unique: j_qvobNEPxyE-MEDq4p5Ww-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4A6F32949BD7;
-        Wed, 11 May 2022 11:24:09 +0000 (UTC)
-Received: from starship (unknown [10.40.192.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0947A14A5069;
-        Wed, 11 May 2022 11:24:06 +0000 (UTC)
-Message-ID: <01b9b22398d791126c41e517816b1cd513af7326.camel@redhat.com>
-Subject: Re: [PATCH v3 08/34] KVM: x86: hyper-v: Use
- HV_MAX_SPARSE_VCPU_BANKS/HV_VCPUS_PER_SPARSE_BANK instead of raw '64'
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 11 May 2022 14:24:06 +0300
-In-Reply-To: <20220414132013.1588929-9-vkuznets@redhat.com>
-References: <20220414132013.1588929-1-vkuznets@redhat.com>
-         <20220414132013.1588929-9-vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 11 May 2022 07:24:59 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C138D233A7C
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:24:21 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R331e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0VCvu-9A_1652268255;
+Received: from localhost(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VCvu-9A_1652268255)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 11 May 2022 19:24:16 +0800
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, akpm@linux-foundation.org,
+        anup@brainfault.org, wangkefeng.wang@huawei.com, rppt@kernel.org,
+        alex@ghiti.fr, twd2.me@gmail.com, david@redhat.com,
+        seanjc@google.com, petr.pavlu@suse.com, atishp@rivosinc.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        guoren@kernel.org, jianghuaming.jhm@alibaba-inc.com,
+        Xianting Tian <xianting.tian@linux.alibaba.com>,
+        Nick Kossifidis <mick@ics.forth.gr>
+Subject: [PATCH] RISC-V: Remove IORESOURCE_BUSY flag for no-map reserved memory
+Date:   Wed, 11 May 2022 19:24:13 +0800
+Message-Id: <20220511112413.559734-1-xianting.tian@linux.alibaba.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-14 at 15:19 +0200, Vitaly Kuznetsov wrote:
-> It may not be clear from where the '64' limit for the maximum sparse
-> bank number comes from, use HV_MAX_SPARSE_VCPU_BANKS define instead.
-> Use HV_VCPUS_PER_SPARSE_BANK in KVM_HV_MAX_SPARSE_VCPU_SET_BITS's
-> definition. Opportunistically adjust the comment around BUILD_BUG_ON().
-> 
-> No functional change.
-> 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/kvm/hyperv.c | 13 ++++++-------
->  1 file changed, 6 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index fc4bb0ead9fa..3cf68645a2e6 100644
-> --- a/arch/x86/kvm/hyperv.c
-> +++ b/arch/x86/kvm/hyperv.c
-> @@ -43,7 +43,7 @@
->  /* "Hv#1" signature */
->  #define HYPERV_CPUID_SIGNATURE_EAX 0x31237648
->  
-> -#define KVM_HV_MAX_SPARSE_VCPU_SET_BITS DIV_ROUND_UP(KVM_MAX_VCPUS, 64)
-> +#define KVM_HV_MAX_SPARSE_VCPU_SET_BITS DIV_ROUND_UP(KVM_MAX_VCPUS, HV_VCPUS_PER_SPARSE_BANK)
->  
->  static void stimer_mark_pending(struct kvm_vcpu_hv_stimer *stimer,
->  				bool vcpu_kick);
-> @@ -1798,7 +1798,7 @@ static u64 kvm_get_sparse_vp_set(struct kvm *kvm, struct kvm_hv_hcall *hc,
->  				 u64 *sparse_banks, int consumed_xmm_halves,
->  				 gpa_t offset)
->  {
-> -	if (hc->var_cnt > 64)
-> +	if (hc->var_cnt > HV_MAX_SPARSE_VCPU_BANKS)
->  		return -EINVAL;
->  
->  	/* Cap var_cnt to ignore banks that cannot contain a legal VP index. */
-> @@ -1969,12 +1969,11 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->  	gpa_t data_offset;
->  
->  	/*
-> -	 * The Hyper-V TLFS doesn't allow more than 64 sparse banks, e.g. the
-> -	 * valid mask is a u64.  Fail the build if KVM's max allowed number of
-> -	 * vCPUs (>4096) would exceed this limit, KVM will additional changes
-> -	 * for Hyper-V support to avoid setting the guest up to fail.
-> +	 * The Hyper-V TLFS doesn't allow more than HV_MAX_SPARSE_VCPU_BANKS
-> +	 * sparse banks. Fail the build if KVM's max allowed number of
-> +	 * vCPUs (>4096) exceeds this limit.
->  	 */
-> -	BUILD_BUG_ON(KVM_HV_MAX_SPARSE_VCPU_SET_BITS > 64);
-> +	BUILD_BUG_ON(KVM_HV_MAX_SPARSE_VCPU_SET_BITS > HV_MAX_SPARSE_VCPU_BANKS);
->  
->  	if (!hc->fast && is_guest_mode(vcpu)) {
->  		hc->ingpa = translate_nested_gpa(vcpu, hc->ingpa, 0, NULL);
+Commit 00ab027a3b82 ("RISC-V: Add kernel image sections to the resource tree")
+added IORESOURCE_BUSY flag for no-map reserved memory, this casued
+devm_ioremap_resource() failed for the no-map reserved memory in subsequent
+operations of related driver, so remove the IORESOURCE_BUSY flag.
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+The code to reproduce the issue,
+dts:
+	mem0: memory@a0000000 {
+                reg = <0x0 0xa0000000 0 0x1000000>;
+                no-map;
+        };
 
-Best regards,
-	Maxim Levitsky
+	&test {
+		status = "okay";
+		memory-region = <&mem0>;
+	};
+
+code:
+	np = of_parse_phandle(pdev->dev.of_node, "memory-region", 0);
+	ret = of_address_to_resource(np, 0, &r);
+	base = devm_ioremap_resource(&pdev->dev, &r);
+	// base = -EBUSY
+
+Fixes: 00ab027a3b82 ("RISC-V: Add kernel image sections to the resource tree")
+Reported-by: Huaming Jiang <jianghuaming.jhm@alibaba-inc.com>
+Reviewed-by: Guo Ren <guoren@kernel.org>
+CC: Nick Kossifidis <mick@ics.forth.gr>
+Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+---
+ arch/riscv/kernel/setup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+index 834eb652a7b9..71f2966b1474 100644
+--- a/arch/riscv/kernel/setup.c
++++ b/arch/riscv/kernel/setup.c
+@@ -214,7 +214,7 @@ static void __init init_resources(void)
+ 
+ 		if (unlikely(memblock_is_nomap(region))) {
+ 			res->name = "Reserved";
+-			res->flags = IORESOURCE_MEM | IORESOURCE_BUSY;
++			res->flags = IORESOURCE_MEM;
+ 		} else {
+ 			res->name = "System RAM";
+ 			res->flags = IORESOURCE_SYSTEM_RAM | IORESOURCE_BUSY;
+-- 
+2.17.1
 

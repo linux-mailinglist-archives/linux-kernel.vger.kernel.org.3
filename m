@@ -2,236 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C01C5240F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 01:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F2E5240FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 01:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349447AbiEKXYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 19:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40642 "EHLO
+        id S1349256AbiEKXY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 19:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349491AbiEKXYF (ORCPT
+        with ESMTP id S1349465AbiEKXYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 19:24:05 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788215640C;
-        Wed, 11 May 2022 16:21:57 -0700 (PDT)
+        Wed, 11 May 2022 19:24:08 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4830D6213A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:22:44 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id a21so4300210edb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:22:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652311317; x=1683847317;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=wc57Na2pTCiNNEmqE67S/Gi8zz7NqysL4NMydfAAhNo=;
-  b=iv9EV504fRKEZTyCz5Vp5MLP476UsZmjD1ByD/wI1DB1/UpFvy1PfymI
-   DlJPHWAgRWWtNycG5Y6AVo7764nmqPX562k1gwcGTbw/i9G31GLVlhY76
-   I37Kk9DT+I1MsqwzpaPs2Gx3S1MAiMdTtzFkpid/Ihpkggo+SBjEFwtT2
-   s=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 11 May 2022 16:21:57 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 16:21:56 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 11 May 2022 16:21:55 -0700
-Received: from [10.110.21.19] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 11 May
- 2022 16:21:54 -0700
-Message-ID: <89ac42c5-76a3-dfb4-16cf-18a2efbf8c6e@quicinc.com>
-Date:   Wed, 11 May 2022 16:21:54 -0700
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=h+W2uqkvSL6U5jn2MaeFHt2XSCx3i+exVEBv5pf2t0s=;
+        b=p4EkiWxjIQeox8PBlqp+ZcAP4vTVS+9knd4t+eQLjFArs98erdGnkuCkI0BYQr18d4
+         jWmPkNcqgWzRI5FA3YTcNLY36l+6T7Wes6hXHud08yyT2gAUlAhEVd7DAo2tT/PyK7l4
+         aixSO7/N+eLnhVLPC20xZqDXAS3mHKX8lSDWnSM/59ETR7rTULy50JXLwCCOVnB0nniC
+         d6L5cxLOUklG1Nup9A5SQx+C3KrfWWDOIK6eOWOvWXGaM4Qp5mmvM47tA+5wz0tdw4fJ
+         i9y+3kj5Qd0AaHnvOGBtHzHo2bD569jg4Fh+BvbsTBsnIoxdLD89hv+JJlmFF+C7J7mA
+         Sk3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=h+W2uqkvSL6U5jn2MaeFHt2XSCx3i+exVEBv5pf2t0s=;
+        b=i/LdEWhkRJ6nV3Pc0GV63MzgZhN27qIU3SWh9eKeyLkll09YcdDEegViv47EYX/F52
+         cF+1O3zH1pnKOD9wS7XzQLgx5pT2eMxf3mp70uuHj6nEW05k4y7bd73ntadVsfV4WhnX
+         dMfYol6pI1JRmCbM/xq0WAz+TAR6wf5I3PpzsguS+PWUl0O0JnvWNUnuErWPzrNkd5re
+         8r7wga3tZCIzXKlOLxWGKpBqSYt14s72l09N84lc9eaWPqqRqTZ1qQ3vxWW0GXd4Y0M6
+         DgscsfQMl1Uu6X0ssporNz/jqU0Z4vfc74AAoehgyjHsmayMfHfIO1mTqsX8BRaABmFL
+         Ryig==
+X-Gm-Message-State: AOAM530pxL7J5PbdXhGcXMNqMoGNJTKlnlyDT1Wa1OT+JW7ZTQvAAQye
+        +w9MxQ1oMduLqNiRA1HdMN/mMvxbPCryzUGrdjNhhA==
+X-Google-Smtp-Source: ABdhPJxv3RcmiWoN4KAIHvKOv1TuEje4H2x0E+LVOK4OxIM31BAHdXVfcuy8yWPZJVH25UGhnVtvIlUyox6Q0kDGBm4=
+X-Received: by 2002:a05:6402:1148:b0:416:a4fb:3c2e with SMTP id
+ g8-20020a056402114800b00416a4fb3c2emr31968096edw.182.1652311362565; Wed, 11
+ May 2022 16:22:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v4] drm/msm/dp: Always clear mask bits to disable
- interrupts at dp_ctrl_reset_irq_ctrl()
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
-        <airlied@linux.ie>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1652305225-1048-1-git-send-email-quic_khsieh@quicinc.com>
- <e12933c9-0439-410b-e691-0fa444c71011@linaro.org>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <e12933c9-0439-410b-e691-0fa444c71011@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220420203020.1412886-1-dlatypov@google.com>
+In-Reply-To: <20220420203020.1412886-1-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 11 May 2022 19:22:31 -0400
+Message-ID: <CAFd5g454KM9-45NEjUN3JWTZmpajHY9to=CW7Ecg6z_5xorU+w@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: stop using a shell to run kernel under QEMU
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 5/11/2022 2:47 PM, Dmitry Baryshkov wrote:
-> On 12/05/2022 00:40, Kuogee Hsieh wrote:
->> dp_catalog_ctrl_reset() will software reset DP controller. But it will
->> not reset programmable registers to default value. DP driver still have
->> to clear mask bits to interrupt status registers to disable interrupts
->> after software reset of controller. This patch removes the enable flag
->> condition checking to always clear mask bits of interrupt status
->> registers to disable interrupts if enable flag is false.
->>
->> This patch also will fix the potential problem happen at system 
->> suspend where
->> dp_ctrl_reset_irq_ctrl() was called to try to disable HPD related 
->> irqs but
->> the irq is still unmasked unexpectedly
+On Wed, Apr 20, 2022 at 4:30 PM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> Why is it unmasked? Especially unexpectedly.
-
-due to dp_catalog_ctrl_reset() does not clear hpd interrupt mask bits.
-
-This is the problem this patch try to fix it.
-
-I will revise commit text to explain more.
-
+> Note: this potentially breaks custom qemu_configs if people are using
+> them! But the fix for them is simple, don't specify multiple arguments
+> in one string and don't add on a redundant ''.
 >
->> and can come in while system are
->> suspending. This leads to bus hangs if the irq is handled after we 
->> power down
->> the DP hardware because we run the irq handler and access a device 
->> register
->> assuming that no irq could ever come in if we powered down the 
->> device. We
->> don't know when the irq will be handled though, so it's possible the 
->> irq is
->> pending from before we disable the irq in the hardware.
+> It feels a bit iffy to be using a shell in the first place.
 >
-> Please split into two patches.
+> There's the usual shenanigans where people could pass in arbitrary shell
+> commands via --kernel_arg (since we're just adding '' around the
+> kernel_cmdline) or via a custom qemu_config.
+> This isn't too much of a concern given the nature of this script (and
+> the qemu_config file is in python, you can do w/e you want already).
+>
+> But it does have some other drawbacks.
+>
+> One example of a kunit-specific pain point:
+> If the relevant qemu binary is missing, we get output like this:
+> > /bin/sh: line 1: qemu-system-aarch64: command not found
+> This in turn results in our KTAP parser complaining about
+> missing/invalid KTAP, but we don't directly show the error!
+> It's even more annoying to debug when you consider --raw_output only
+> shows KUnit output by default, i.e. you need --raw_output=all to see it.
+>
+> Whereas directly invoking the binary, Python will raise a
+> FileNotFoundError for us, which is a noisier but more clear.
+>
+> Making this change requires
+> * splitting parameters like ['-m 256'] into ['-m', '256'] in
+>   kunit/qemu_configs/*.py
+> * change [''] to [] in kunit/qemu_configs/*.py since otherwise
+>   QEMU fails w/ 'Device needs media, but drive is empty'
+> * dropping explicit quoting of the kernel cmdline
+> * using shlex.quote() when we print what command we're running
+>   so the user can copy-paste and run it
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
-this is just the same problem mention above.
+One issue I noticed below, otherwise:
 
->
->>
->> Changes in v2:
->> -- add more details commit text
->>
->> Changes in v3:
->> -- add synchrons_irq()
->> -- add atomic_t suspended
->>
->> Changes in v4:
->> -- correct Fixes's commit ID
->>
->> Fixes: 989ebe7bc446 ("drm/msm/dp: do not initialize phy until plugin 
->> interrupt received")
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->> ---
->>   drivers/gpu/drm/msm/dp/dp_ctrl.c    |  9 +++++++--
->>   drivers/gpu/drm/msm/dp/dp_display.c | 18 ++++++++++++++++++
->>   2 files changed, 25 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c 
->> b/drivers/gpu/drm/msm/dp/dp_ctrl.c
->> index af7a80c..f3e333e 100644
->> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
->> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
->> @@ -1389,8 +1389,13 @@ void dp_ctrl_reset_irq_ctrl(struct dp_ctrl 
->> *dp_ctrl, bool enable)
->>         dp_catalog_ctrl_reset(ctrl->catalog);
->>   -    if (enable)
->> -        dp_catalog_ctrl_enable_irq(ctrl->catalog, enable);
->> +    /*
->> +     * all dp controller programmable registers will not
->> +     * be reset to default value after DP_SW_RESET
->> +     * therefore interrupt mask bits have to be updated
->> +     * to enable/disable interrupts
->> +     */
->> +    dp_catalog_ctrl_enable_irq(ctrl->catalog, enable);
->>   }
->>     void dp_ctrl_phy_init(struct dp_ctrl *dp_ctrl)
->> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c 
->> b/drivers/gpu/drm/msm/dp/dp_display.c
->> index c388323..c34dbfc 100644
->> --- a/drivers/gpu/drm/msm/dp/dp_display.c
->> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
->> @@ -98,6 +98,8 @@ struct dp_display_private {
->>       struct dp_ctrl    *ctrl;
->>       struct dp_debug   *debug;
->>   +    atomic_t suspended;
->
-> Usage of atomic_t signifies that something is wrong here. Bool should 
-> be enough here.
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 
-suspended flag are shared by both event_thread and display_irq_handler, 
-i think it need either atomic
+> ---
+>  tools/testing/kunit/kunit_kernel.py         | 18 ++++++++++--------
+>  tools/testing/kunit/qemu_configs/alpha.py   |  2 +-
+>  tools/testing/kunit/qemu_configs/arm.py     |  2 +-
+>  tools/testing/kunit/qemu_configs/arm64.py   |  2 +-
+>  tools/testing/kunit/qemu_configs/i386.py    |  2 +-
+>  tools/testing/kunit/qemu_configs/powerpc.py |  2 +-
+>  tools/testing/kunit/qemu_configs/riscv.py   |  6 +++---
+>  tools/testing/kunit/qemu_configs/s390.py    |  4 ++--
+>  tools/testing/kunit/qemu_configs/sparc.py   |  2 +-
+>  tools/testing/kunit/qemu_configs/x86_64.py  |  2 +-
+>  10 files changed, 22 insertions(+), 20 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> index 483f78e15ce9..1b9c4922a675 100644
+> --- a/tools/testing/kunit/kunit_kernel.py
+> +++ b/tools/testing/kunit/kunit_kernel.py
+> @@ -11,6 +11,7 @@ import importlib.util
+>  import logging
+>  import subprocess
+>  import os
+> +import shlex
+>  import shutil
+>  import signal
+>  import threading
+> @@ -118,16 +119,17 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+>                                 '-nodefaults',
+>                                 '-m', '1024',
+>                                 '-kernel', kernel_path,
+> -                               '-append', '\'' + ' '.join(params + [self._kernel_command_line]) + '\'',
+> +                               '-append', ' '.join(params + [self._kernel_command_line]),
+>                                 '-no-reboot',
+>                                 '-nographic',
+> -                               '-serial stdio'] + self._extra_qemu_params
+> -               print('Running tests with:\n$', ' '.join(qemu_command))
+> -               return subprocess.Popen(' '.join(qemu_command),
+> -                                          stdin=subprocess.PIPE,
+> -                                          stdout=subprocess.PIPE,
+> -                                          stderr=subprocess.STDOUT,
+> -                                          text=True, shell=True, errors='backslashreplace')
+> +                               '-serial', 'stdio'] + self._extra_qemu_params
+> +               # Note: shlex.join() does what we want, but requires python 3.8+.
+> +               print('Running tests with:\n$', ' '.join(shlex.quote(arg) for arg in qemu_command))
+> +               return subprocess.Popen(qemu_command,
+> +                                       stdin=subprocess.PIPE,
+> +                                       stdout=subprocess.PIPE,
+> +                                       stderr=subprocess.STDOUT,
+> +                                       text=True, errors='backslashreplace')
+>
+>  class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+>         """An abstraction over command line operations performed on a source tree."""
+> diff --git a/tools/testing/kunit/qemu_configs/alpha.py b/tools/testing/kunit/qemu_configs/alpha.py
+> index 5d0c0cff03bd..3ac846e03a6b 100644
+> --- a/tools/testing/kunit/qemu_configs/alpha.py
+> +++ b/tools/testing/kunit/qemu_configs/alpha.py
+> @@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
+>                            qemu_arch='alpha',
+>                            kernel_path='arch/alpha/boot/vmlinux',
+>                            kernel_command_line='console=ttyS0',
+> -                          extra_qemu_params=[''])
+> +                          extra_qemu_params=[])
+> diff --git a/tools/testing/kunit/qemu_configs/arm.py b/tools/testing/kunit/qemu_configs/arm.py
+> index b9c2a35e0296..db2160200566 100644
+> --- a/tools/testing/kunit/qemu_configs/arm.py
+> +++ b/tools/testing/kunit/qemu_configs/arm.py
+> @@ -10,4 +10,4 @@ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y''',
+>                            qemu_arch='arm',
+>                            kernel_path='arch/arm/boot/zImage',
+>                            kernel_command_line='console=ttyAMA0',
+> -                          extra_qemu_params=['-machine virt'])
+> +                          extra_qemu_params=['-machine', 'virt'])
+> diff --git a/tools/testing/kunit/qemu_configs/arm64.py b/tools/testing/kunit/qemu_configs/arm64.py
+> index 517c04459f47..67d04064f785 100644
+> --- a/tools/testing/kunit/qemu_configs/arm64.py
+> +++ b/tools/testing/kunit/qemu_configs/arm64.py
+> @@ -9,4 +9,4 @@ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y''',
+>                            qemu_arch='aarch64',
+>                            kernel_path='arch/arm64/boot/Image.gz',
+>                            kernel_command_line='console=ttyAMA0',
+> -                          extra_qemu_params=['-machine virt', '-cpu cortex-a57'])
+> +                          extra_qemu_params=['-machine', 'virt', '-cpu', 'cortex-a57'])
+> diff --git a/tools/testing/kunit/qemu_configs/i386.py b/tools/testing/kunit/qemu_configs/i386.py
+> index aed3ffd3937d..52b80be40e4b 100644
+> --- a/tools/testing/kunit/qemu_configs/i386.py
+> +++ b/tools/testing/kunit/qemu_configs/i386.py
+> @@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
+>                            qemu_arch='x86_64',
+>                            kernel_path='arch/x86/boot/bzImage',
+>                            kernel_command_line='console=ttyS0',
+> -                          extra_qemu_params=[''])
+> +                          extra_qemu_params=[])
+> diff --git a/tools/testing/kunit/qemu_configs/powerpc.py b/tools/testing/kunit/qemu_configs/powerpc.py
+> index 35e9de24f0db..6c901149726b 100644
+> --- a/tools/testing/kunit/qemu_configs/powerpc.py
+> +++ b/tools/testing/kunit/qemu_configs/powerpc.py
+> @@ -9,4 +9,4 @@ CONFIG_HVC_CONSOLE=y''',
+>                            qemu_arch='ppc64',
+>                            kernel_path='vmlinux',
+>                            kernel_command_line='console=ttyS0',
+> -                          extra_qemu_params=['-M pseries', '-cpu power8'])
+> +                          extra_qemu_params=['-M', ' pseries', '-cpu', 'power8'])
 
-or protected by spinlock.
+This should be '-M', 'pseries', not '-M', ' pseries', (you left an
+extra space in.
 
->
->> +
->>       struct dp_usbpd_cb usbpd_cb;
->>       struct dp_display_mode dp_mode;
->>       struct msm_dp dp_display;
->> @@ -187,6 +189,11 @@ static int dp_add_event(struct 
->> dp_display_private *dp_priv, u32 event,
->>       int pndx;
->>         spin_lock_irqsave(&dp_priv->event_lock, flag);
->> +    if (atomic_read(&dp_priv->suspended)) {
->> +        spin_unlock_irqrestore(&dp_priv->event_lock, flag);
->> +        return -EPERM;
->
-> Why EPERM?
->
->> +    }
->> +
->>       pndx = dp_priv->event_pndx + 1;
->>       pndx %= DP_EVENT_Q_MAX;
->>       if (pndx == dp_priv->event_gndx) {
->> @@ -454,6 +461,13 @@ static void dp_display_host_deinit(struct 
->> dp_display_private *dp)
->>           dp->dp_display.connector_type, dp->core_initialized,
->>           dp->phy_initialized);
->>   +    if (!dp->core_initialized) {
->
-> Can this happen?
+Note this actually breaks QEMU on my machine.
 
-not likely,
-
-but It should not in this patch. will double check.
-
+> diff --git a/tools/testing/kunit/qemu_configs/riscv.py b/tools/testing/kunit/qemu_configs/riscv.py
+> index 9e528087cd7c..b882fde39435 100644
+> --- a/tools/testing/kunit/qemu_configs/riscv.py
+> +++ b/tools/testing/kunit/qemu_configs/riscv.py
+> @@ -26,6 +26,6 @@ CONFIG_SERIAL_EARLYCON_RISCV_SBI=y''',
+>                            kernel_path='arch/riscv/boot/Image',
+>                            kernel_command_line='console=ttyS0',
+>                            extra_qemu_params=[
+> -                                          '-machine virt',
+> -                                          '-cpu rv64',
+> -                                          '-bios opensbi-riscv64-generic-fw_dynamic.bin'])
+> +                                          '-machine', 'virt',
+> +                                          '-cpu', 'rv64',
+> +                                          '-bios', 'opensbi-riscv64-generic-fw_dynamic.bin'])
+> diff --git a/tools/testing/kunit/qemu_configs/s390.py b/tools/testing/kunit/qemu_configs/s390.py
+> index e310bd521113..98fa4fb60c0a 100644
+> --- a/tools/testing/kunit/qemu_configs/s390.py
+> +++ b/tools/testing/kunit/qemu_configs/s390.py
+> @@ -10,5 +10,5 @@ CONFIG_MODULES=y''',
+>                            kernel_path='arch/s390/boot/bzImage',
+>                            kernel_command_line='console=ttyS0',
+>                            extra_qemu_params=[
+> -                                          '-machine s390-ccw-virtio',
+> -                                          '-cpu qemu',])
+> +                                          '-machine', 's390-ccw-virtio',
+> +                                          '-cpu', 'qemu',])
+> diff --git a/tools/testing/kunit/qemu_configs/sparc.py b/tools/testing/kunit/qemu_configs/sparc.py
+> index 27f474e7ad6e..e975c4331a7c 100644
+> --- a/tools/testing/kunit/qemu_configs/sparc.py
+> +++ b/tools/testing/kunit/qemu_configs/sparc.py
+> @@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
+>                            qemu_arch='sparc',
+>                            kernel_path='arch/sparc/boot/zImage',
+>                            kernel_command_line='console=ttyS0 mem=256M',
+> -                          extra_qemu_params=['-m 256'])
+> +                          extra_qemu_params=['-m', '256'])
+> diff --git a/tools/testing/kunit/qemu_configs/x86_64.py b/tools/testing/kunit/qemu_configs/x86_64.py
+> index 77ab1aeee8a3..dc7949076863 100644
+> --- a/tools/testing/kunit/qemu_configs/x86_64.py
+> +++ b/tools/testing/kunit/qemu_configs/x86_64.py
+> @@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
+>                            qemu_arch='x86_64',
+>                            kernel_path='arch/x86/boot/bzImage',
+>                            kernel_command_line='console=ttyS0',
+> -                          extra_qemu_params=[''])
+> +                          extra_qemu_params=[])
 >
->> +        DRM_DEBUG_DP("DP core not initialized\n");
->> +        return;
->> +    }
->> +
->> +    synchronize_irq(dp->irq);
->
-> Why? If you need to run with IRQs disabled, you can use 
-> suspend_late/early_resume. But generally it should be enough to check 
-> for the !suspended in the IRQ.
->
->> +
->>       dp_ctrl_reset_irq_ctrl(dp->ctrl, false);
->>       dp_aux_deinit(dp->aux);
->>       dp_power_deinit(dp->power);
->> @@ -1362,6 +1376,8 @@ static int dp_pm_resume(struct device *dev)
->>           dp->dp_display.connector_type, dp->core_initialized,
->>           dp->phy_initialized, dp_display->power_on);
->>   +    atomic_set(&dp->suspended, 0);
->> +
->>       /* start from disconnected state */
->>       dp->hpd_state = ST_DISCONNECTED;
->>   @@ -1431,6 +1447,8 @@ static int dp_pm_suspend(struct device *dev)
->>           dp->dp_display.connector_type, dp->core_initialized,
->>           dp->phy_initialized, dp_display->power_on);
->>   +    atomic_inc(&dp->suspended);
->> +
->>       /* mainlink enabled */
->>       if (dp_power_clk_status(dp->power, DP_CTRL_PM))
->>           dp_ctrl_off_link_stream(dp->ctrl);
->
+> base-commit: 59729170afcd4900e08997a482467ffda8d88c7f
+> --
+> 2.36.0.rc0.470.gd361397f0d-goog
 >

@@ -2,109 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8220523B8D
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE64523B92
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345582AbiEKRaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 13:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40388 "EHLO
+        id S1345598AbiEKRav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 13:30:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239654AbiEKRaU (ORCPT
+        with ESMTP id S243285AbiEKRar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 13:30:20 -0400
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD242317E0;
-        Wed, 11 May 2022 10:30:18 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id r11so5333662ybg.6;
-        Wed, 11 May 2022 10:30:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kA5LUrg9FEK6lcfS6hSBAItDCTrYCnHyDwxKH4zNPeE=;
-        b=km5I3gSzIbTEWdHVVIN/zKLWy7PIJJa/NA7/y5zfX2YPaCmEgmyO5F9Hwrw5ybagmO
-         PhBW/ZhVHk7m0xNMPd9FSDZqRMoa49N8oqiLdq6eYVx2Zj99qhUqPhzyqza+ujOPWIXH
-         VBF8DxZAOrLfWUYfVeEqwIY2tOhS68mUiTmJ4cpWVjCqlupo+xaOwQGhIFYVEDTYWH1d
-         G6uMiVZymvDlMoeURi2KHrBUaQJgC4kEAq/5LbaepN6NM2b6hJhmVQKx7TSgm3rO4LRV
-         7Fi+FWm4gG8j3x3zycrjPJ+DSu24DcPNJrEsyRrgPo7PiymLLJfrBZ7apTsT/E8SPrJb
-         2qjQ==
-X-Gm-Message-State: AOAM531zzEIWUC23Cm4UovjyBr56UnnWJNiA3vUSJfOC+yh2Xwd1ylwD
-        u/BQTPcQ4pmn6EAlWfadInp4oHoXLscWHsuZ7TQ=
-X-Google-Smtp-Source: ABdhPJzx10oGXmjUdrgRFpSf2JnlUCQLWprnfw47qR/sZ08uGzJzbPZal4vP3IN9LVYQ/6ChRXKsf3TVio6AaBZyTuw=
-X-Received: by 2002:a25:e792:0:b0:645:7ddb:b5eb with SMTP id
- e140-20020a25e792000000b006457ddbb5ebmr24694201ybh.482.1652290218179; Wed, 11
- May 2022 10:30:18 -0700 (PDT)
+        Wed, 11 May 2022 13:30:47 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70587FF7;
+        Wed, 11 May 2022 10:30:46 -0700 (PDT)
+Date:   Wed, 11 May 2022 10:30:37 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1652290243;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hGt3BnCoU4kW+K89I9JK4z3L3KmFUi2s6F9PRzSqJy4=;
+        b=je+mlCfAdY+4OyJgDBp5E3GBVuEBLdvt6J+eoOdJnIYkin2GEDUy3o1Xu4pmthPdnADjnW
+        y1H2V1XbN5Q/fcQSXljhOoimbX3DNpiiDGnDR+z0zWakiPMO6Msv/BaB0DNLnlU7MSn595
+        ruFFuRlABf7+uSqATZ77rTKjlERBqG0=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     Shakeel Butt <shakeelb@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, kernel@openvz.org,
+        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>, linux-mm@kvack.org
+Subject: Re: [PATCH v2] percpu: improve percpu_alloc_percpu event trace
+Message-ID: <YnvyvaPWONjULpIa@carbon>
+References: <2b388d09-940e-990f-1f8a-2fdaa9210fa0@openvz.org>
+ <a07be858-c8a3-7851-9086-e3262cbcf707@openvz.org>
+ <YnsgbXKiNNSF+1ZO@carbon>
+ <30a47b4e-7c4b-cd2d-998d-cfaf8d12d342@openvz.org>
 MIME-Version: 1.0
-References: <20220511051605.103574-1-kunyu@nfschina.com>
-In-Reply-To: <20220511051605.103574-1-kunyu@nfschina.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 11 May 2022 19:30:07 +0200
-Message-ID: <CAJZ5v0hmHjjUx1+aWxph2aqh4jv=FQBTtc1ccH-thtD4G-iG9A@mail.gmail.com>
-Subject: Re: [PATCH] x86: The return type of the function could be void
-To:     Li kunyu <kunyu@nfschina.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <30a47b4e-7c4b-cd2d-998d-cfaf8d12d342@openvz.org>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 7:16 AM Li kunyu <kunyu@nfschina.com> wrote:
->
-> perhaps the return value of the function is not used.
-> it may be possible to optimize the execution instructions.
->
-> Signed-off-by: Li kunyu <kunyu@nfschina.com>
-> ---
->  arch/x86/kernel/acpi/boot.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
-> index 0d01e7f5078c..7e32e33d52fa 100644
-> --- a/arch/x86/kernel/acpi/boot.c
-> +++ b/arch/x86/kernel/acpi/boot.c
-> @@ -375,7 +375,7 @@ static void __init mp_override_legacy_irq(u8 bus_irq, u8 polarity, u8 trigger,
->         isa_irq_to_gsi[bus_irq] = gsi;
->  }
->
-> -static int mp_config_acpi_gsi(struct device *dev, u32 gsi, int trigger,
-> +static void mp_config_acpi_gsi(struct device *dev, u32 gsi, int trigger,
->                         int polarity)
->  {
->  #ifdef CONFIG_X86_MPPARSE
-> @@ -387,9 +387,9 @@ static int mp_config_acpi_gsi(struct device *dev, u32 gsi, int trigger,
->         u8 pin;
->
->         if (!acpi_ioapic)
-> -               return 0;
-> +               return;
->         if (!dev || !dev_is_pci(dev))
-> -               return 0;
-> +               return;
->
->         pdev = to_pci_dev(dev);
->         number = pdev->bus->number;
-> @@ -408,7 +408,6 @@ static int mp_config_acpi_gsi(struct device *dev, u32 gsi, int trigger,
->
->         mp_save_irq(&mp_irq);
->  #endif
-> -       return 0;
->  }
->
->  static int __init mp_register_ioapic_irq(u8 bus_irq, u8 polarity,
-> --
+On Wed, May 11, 2022 at 08:11:54AM +0300, Vasily Averin wrote:
+> On 5/11/22 05:33, Roman Gushchin wrote:
+> > On Fri, May 06, 2022 at 10:29:25PM +0300, Vasily Averin wrote:
+> >>  TRACE_EVENT(percpu_alloc_percpu,
+> >>  
+> >> -	TP_PROTO(bool reserved, bool is_atomic, size_t size,
+> >> -		 size_t align, void *base_addr, int off, void __percpu *ptr),
+> >> +	TP_PROTO(unsigned long call_site,
+> >> +		 bool reserved, bool is_atomic, size_t size,
+> >> +		 size_t align, void *base_addr, int off,
+> >> +		 void __percpu *ptr, size_t bytes_alloc, gfp_t gfp_flags),
+> > 
+> > Don't we want to preserve the order and add the call_site at the end?
+> > Trace events are not ABI, but if we don't have a strong reason to break it,
+> > I'd preserve the old order.
+> 
+> I checked recent trace patches and found that order changes is acceptable.
+> 
+> commit 8c39b8bc82aafcc8dd378bd79c76fac8e8a89c8d
+> Author: David Howells <dhowells@redhat.com>
+> Date:   Fri Jan 14 11:44:54 2022 +0000
+> 
+>     cachefiles: Make some tracepoint adjustments
+> 
+> -           TP_printk("o=%08x i=%lx e=%d",
+> -                     __entry->obj, __entry->ino, __entry->error)
+> +           TP_printk("o=%08x dB=%lx B=%lx e=%d",
+> +                     __entry->obj, __entry->dino, __entry->ino, __entry->error)
+> 
+> On the other hand I'm agree to keep old order by default.
+> that's why I added bytes_alloc and gfp_flags to end of output.
+> However I think call_site is an exception. In all cases found, 
+> call_site is output first.
+> For me personally it simplified output parsing.
+> 
+> So I would like to know Steven's position on this question.
 
-Applied as 5.19 material with rewritten subject and changelog, thanks!
+Ok, not a strong opinion, I think both options are acceptable.
+
+Thanks!

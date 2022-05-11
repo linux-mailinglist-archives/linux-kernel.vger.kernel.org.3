@@ -2,102 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD3E5236D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 253B75236C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245604AbiEKPNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
+        id S245543AbiEKPMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245590AbiEKPND (ORCPT
+        with ESMTP id S245505AbiEKPMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:13:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74F110115D;
-        Wed, 11 May 2022 08:12:55 -0700 (PDT)
+        Wed, 11 May 2022 11:12:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C6A6211B
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:12:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8137DB8249B;
-        Wed, 11 May 2022 15:12:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D845BC340EE;
-        Wed, 11 May 2022 15:12:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652281973;
-        bh=xL0TzVaiEO5aQMaeWan8rwYgo0MOQI+Fp4FxzLjw2tk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aKx+R2rdSnRCoaCHf9GcU1Xyf/iunPrgmyeh+ui8m1c9GlxKAgwv9joZXeECdC+fT
-         NMbPxGFMb1oRXC/E7Mtqey0wDXb1wJ7zndfRptQNYcbNI4mlMcPizJpZgm0KQEFTDl
-         IAY+5g3jvqN+N6U+GTiOjEnIUBTUqyiMr34Yzqq8EZiCww6tXlUsYWkx6p7YMVfRrW
-         1JilVx2utCxQ2cOj5HWMez3mRG+OPR0ljhHJ914Vj5dvBskurJcBkIoTKDARvg7S8N
-         cyte0dyNmz6J1Y30wXLEiazZGvHivPNjaZmgcHjMucEp2io+EK+L9lSUajIHxY1Aic
-         cf9MJtoe/X7Cg==
-Date:   Wed, 11 May 2022 18:11:23 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
-Cc:     Marten.Lindahl@axis.com, jgg@ziepe.ca,
-        johannes.holland@infineon.com, jsnitsel@redhat.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        martenli@axis.com, nayna@linux.vnet.ibm.com, peterhuewe@gmx.de,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] tpm: Fix buffer access in tpm2_get_tpm_pt()
-Message-ID: <YnvSG0hfjqEe92v6@kernel.org>
-References: <YnbL2R/a3SwA3fMC@iki.fi>
- <20220509114809.245621-1-stefan.mahnke-hartmann@infineon.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C1BE6186A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 15:12:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AB63C340EE;
+        Wed, 11 May 2022 15:12:09 +0000 (UTC)
+Date:   Wed, 11 May 2022 11:12:07 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        cj.chengjian@huawei.com, huawei.libin@huawei.com,
+        xiexiuqi@huawei.com, liwei391@huawei.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        catalin.marinas@arm.com, will@kernel.org, zengshun.wu@outlook.com,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [RFC PATCH -next v2 3/4] arm64/ftrace: support dynamically
+ allocated trampolines
+Message-ID: <20220511111207.25d1a693@gandalf.local.home>
+In-Reply-To: <20220511233450.40136cdf6a53eb32cd825be8@kernel.org>
+References: <YmFXrBG5AmX3+4f8@lakrids>
+        <20220421100639.03c0d123@gandalf.local.home>
+        <YmF0xYpTMoWOIl00@lakrids>
+        <20220421114201.21228eeb@gandalf.local.home>
+        <YmGF/OpIhAF8YeVq@lakrids>
+        <20220421130648.56b21951@gandalf.local.home>
+        <YmJ/l4vJoEpFt68l@FVFF77S0Q05N>
+        <20220422114541.34d71ad9@gandalf.local.home>
+        <YmLlmaXF00hPkOID@lakrids>
+        <20220426174749.b5372c5769af7bf901649a05@kernel.org>
+        <YnJUTuOIX9YoJq23@FVFF77S0Q05N>
+        <20220505121538.04773ac98e2a8ba17f675d39@kernel.org>
+        <20220509142203.6c4f2913@gandalf.local.home>
+        <20220510181012.d5cba23a2547f14d14f016b9@kernel.org>
+        <20220510104446.6d23b596@gandalf.local.home>
+        <20220511233450.40136cdf6a53eb32cd825be8@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220509114809.245621-1-stefan.mahnke-hartmann@infineon.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 01:48:09PM +0200, Stefan Mahnke-Hartmann wrote:
-> On 07.05.22 21:43, Jarkko Sakkinen wrote:
-> > On Fri, May 06, 2022 at 02:31:46PM +0200, Stefan Mahnke-Hartmann wrote:
-> >> Under certain conditions uninitialized memory will be accessed.
-> >> As described by TCG Trusted Platform Module Library Specification,
-> >> rev. 1.59 (Part 3: Commands), if a TPM2_GetCapability is received,
-> >> requesting a capability, the TPM in Field Upgrade mode may return a
-> >                                       ~~~~~~~~~~~~~~~~~~
-> >
-> > Looks like random picks for casing: two words with upper case letter and
-> > one with lowe case.
-> 
-> In the TCG specification it is unfortunately also inconsistent.
-> I will change it to lower case then.
-> 
-> >
-> >> zero length list.
-> >> Check the property count in tpm2_get_tpm_pt().
-> >>
-> >> Fixes: 2ab3241161b3 ("tpm: migrate tpm2_get_tpm_pt() to use struct tpm_buf")
-> >> Cc: stable@vger.kernel.org
-> >> Signed-off-by: Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
-> >
-> > Which section is this in that specification documented?
-> 
-> It is described in the TCG Trusted Platform Module Library Specification,
-> rev. 1.59 (Part 3: Commands) in Chapter 30.2.1, Example 3. This example
-> describes the behavior in failure mode, but it may occur in other
-> circumstances, such as field upgrade mode.
-> 
-> >
-> > I looked into section 30.2 but could not find the part that documents this
-> > behaviour, i.e. returning success in FW upgrade mode. Why it wouldn't just
-> > return TPM_RC_UPGRADE?
-> 
-> Since some computer system failed booting up in case the TPM returned
-> anything else than SUCCESS, therefore Infineon decided to return SUCCESS
-> when TPM is in field upgrade mode.
+On Wed, 11 May 2022 23:34:50 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-OK, fair enough. This would be a place for inline comment though, given
-that it is not obvious by intuition.
+> OK, so fregs::regs will have a subset of pt_regs, and accessibility of
+> the registers depends on the architecture. If we can have a checker like
+> 
+> ftrace_regs_exist(fregs, reg_offset)
 
-BR, Jarkko
+Or something. I'd have to see the use case.
+
+> 
+> kprobe on ftrace or fprobe user (BPF) can filter user's requests.
+> I think I can introduce a flag for kprobes so that user can make a
+> kprobe handler only using a subset of registers. 
+> Maybe similar filter code is also needed for BPF 'user space' library
+> because this check must be done when compiling BPF.
+
+Is there any other case without full regs that the user would want anything
+other than the args, stack pointer and instruction pointer?
+
+That is, have a flag that says "only_args" or something, that says they
+will only get the registers for arguments, a stack pointer, and the
+instruction pointer (note, the fregs may not have the instruction pointer
+as that is passed to the the caller via the "ip" parameter. If the fregs
+needs that, we can add a "ftrace_regs_set_ip()" before calling the
+callback registered to the fprobe).
+
+-- Steve

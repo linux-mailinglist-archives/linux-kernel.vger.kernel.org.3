@@ -2,84 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF4E522C74
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B09522C75
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239627AbiEKGie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 02:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48162 "EHLO
+        id S239257AbiEKGkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 02:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234462AbiEKGi3 (ORCPT
+        with ESMTP id S234181AbiEKGkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 02:38:29 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B817513B8C3;
-        Tue, 10 May 2022 23:38:26 -0700 (PDT)
-Received: from [192.168.0.3] (ip5f5aeb08.dynamic.kabel-deutschland.de [95.90.235.8])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 4F8BB61E6478B;
-        Wed, 11 May 2022 08:38:25 +0200 (CEST)
-Message-ID: <d5aecbb9-a897-9423-833f-432907b5be87@molgen.mpg.de>
-Date:   Wed, 11 May 2022 08:38:24 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] md: remove useless INIT_LIST_HEAD()
-Content-Language: en-US
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     Song Liu <song@kernel.org>, linux-raid@vger.kernel.org,
+        Wed, 11 May 2022 02:40:08 -0400
+Received: from m15111.mail.126.com (m15111.mail.126.com [220.181.15.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C4C42421BA;
+        Tue, 10 May 2022 23:40:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=RtS24
+        7RW6ZxcuKLxbipUrhShdpX0VWnQy9+bo9nU/z0=; b=MtRl5z1q/6cIOBNpfGv+r
+        d+HK7xlcGhnOB1NZz5JT3W5KP4euDRBauSrk4vaAOpt5albmVCDnmSajEf/SC1PR
+        UpmtuSWazeyp5UUjAwiycAmy9zM6Jf5hicMy5+yiIv1h3XegS83EvDW951zrgfyL
+        o7xWVdkvcAJbYDBU8hwWL8=
+Received: from ubuntu.localdomain (unknown [58.213.83.157])
+        by smtp1 (Coremail) with SMTP id C8mowAAXj9_8WXtiubKBBw--.33626S4;
+        Wed, 11 May 2022 14:38:54 +0800 (CST)
+From:   Bernard Zhao <zhaojunkui2008@126.com>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Bernard Zhao <zhaojunkui2008@126.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <1652237069-11486-1-git-send-email-baihaowen@meizu.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <1652237069-11486-1-git-send-email-baihaowen@meizu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Cc:     bernard@vivo.com
+Subject: [PATCH] usb/peak_usb: cleanup code
+Date:   Tue, 10 May 2022 23:38:38 -0700
+Message-Id: <20220511063850.649012-1-zhaojunkui2008@126.com>
+X-Mailer: git-send-email 2.33.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: C8mowAAXj9_8WXtiubKBBw--.33626S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrurWktF4fWF1fAryrWFyxGrg_yoWktrXEkr
+        W7Zr4kJF1UCrWjqF4DJw4Svry2y3WkuFs7XwnrKFs3G34YyF4UXrWxCFZ3Gw43WF1ayF9I
+        kr1UJr4xAr18tjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRAR6w3UUUUU==
+X-Originating-IP: [58.213.83.157]
+X-CM-SenderInfo: p2kd0y5xqn3xasqqmqqrswhudrp/1tbiuR79qlpD854fggAAsZ
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Haowen,
+The variable fi and bi only used in branch if (!dev->prev_siblings)
+, fi & bi not kmalloc in else branch, so move kfree into branch
+if (!dev->prev_siblings),this change is to cleanup the code a bit.
 
+Signed-off-by: Bernard Zhao <zhaojunkui2008@126.com>
+---
+ drivers/net/can/usb/peak_usb/pcan_usb_pro.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thank you for your patch.
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
+index ebe087f258e3..70c5aef57247 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
+@@ -903,6 +903,9 @@ static int pcan_usb_pro_init(struct peak_usb_device *dev)
+ 		     pcan_usb_pro.name,
+ 		     bi->hw_rev, bi->serial_num_hi, bi->serial_num_lo,
+ 		     pcan_usb_pro.ctrl_count);
++
++		kfree(bi);
++		kfree(fi);
+ 	} else {
+ 		usb_if = pcan_usb_pro_dev_if(dev->prev_siblings);
+ 	}
+@@ -913,9 +916,6 @@ static int pcan_usb_pro_init(struct peak_usb_device *dev)
+ 	/* set LED in default state (end of init phase) */
+ 	pcan_usb_pro_set_led(dev, PCAN_USBPRO_LED_DEVICE, 1);
+ 
+-	kfree(bi);
+-	kfree(fi);
+-
+ 	return 0;
+ 
+  err_out:
+-- 
+2.33.1
 
-Am 11.05.22 um 04:44 schrieb Haowen Bai:
-> list candidates has been inited staticly through LIST_HEAD,
-
-initialized statically
-
-> so there's no need to call another INIT_LIST_HEAD. Simply remove
-> it.
-
-Please reflow for 75 characters per line.
-
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-> ---
->   drivers/md/md.c | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/md/md.c b/drivers/md/md.c
-> index 707e802d0082..eb2b23ef5ecc 100644
-> --- a/drivers/md/md.c
-> +++ b/drivers/md/md.c
-> @@ -6491,7 +6491,6 @@ static void autorun_devices(int part)
->   					 struct md_rdev, same_set);
->   
->   		pr_debug("md: considering %s ...\n", bdevname(rdev0->bdev,b));
-> -		INIT_LIST_HEAD(&candidates);
->   		rdev_for_each_list(rdev, tmp, &pending_raid_disks)
->   			if (super_90_load(rdev, rdev0, 0) >= 0) {
->   				pr_debug("md:  adding %s ...\n",
-
-
-Kind regards,
-
-Paul

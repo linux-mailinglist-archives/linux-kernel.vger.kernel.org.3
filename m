@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F8E522AA1
+	by mail.lfdr.de (Postfix) with ESMTP id 9F787522AA2
 	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 05:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242117AbiEKD4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 23:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36282 "EHLO
+        id S241961AbiEKDz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 23:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241209AbiEKDzj (ORCPT
+        with ESMTP id S241882AbiEKDzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 23:55:39 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280D4218FF8
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 20:55:37 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id l11-20020a17090a49cb00b001d923a9ca99so938986pjm.1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 20:55:37 -0700 (PDT)
+        Tue, 10 May 2022 23:55:45 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126CD4CD55
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 20:55:39 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id q4so653297plr.11
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 20:55:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=fastly.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=HVRP118ZOlUZuoG/hDkho2/EllajCBtZWJSv42QBoCc=;
-        b=GEO29e6cFLU3C6rQeRvcHHx1B7Gl6areArEPEnkD1l5qphc906h2sIwiQ9NEQT3nxy
-         hnqzbFtx/vuGJLQlvdprTdtvWNTrHhwoY3C4BKHov0yQYeFQb7vB7W02Zx/MJLmHLzIm
-         0waUvGXOJQ5G3GNz0yafi51anAAeRtIfzso7A=
+        bh=8Oj5fYgOyP9r6j4Oo2YFgfJ89J2j62xWeof0Jo9AY3w=;
+        b=v9w+8OSo8NSVmDmBQbc8obXr4Wi1nhD7MIDl5mmowMNt72/kNMxqluqzW8jS3Kp7UB
+         /7VISt6MIJKtVD9o0A7m6LzNO5Lqp9ow+x5B9kBGB7t7PtEZGsvXfcXksfmbNr4z51g2
+         LTzKHBx8TvH8VwSw5qQxFSvqLW2aYGDGcyTCY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=HVRP118ZOlUZuoG/hDkho2/EllajCBtZWJSv42QBoCc=;
-        b=ZEH+Rk1YOo6wMwQCVQFVDK7NBdPEiaNtcRBzF7Pa2T7MzRAeGk343qJ3KsQ1ia1INO
-         wDNhXlHKJkEF1A/bf1wzJzIiT7KbDsHk+ecORCH9AsFdv6qUwrZ8IJj+gFa313hHV1gD
-         7RXa8C9Q685O1N0zG48YFFBzVD45V9c0BauOODN39sNuDJzme0Vx5jPi+LhMgvRpDAi0
-         2dpvnib/5xLan1dC0C8BPifiSdycZGtN5lvTbLgDXl2A2ScjRGUx/BzpLKKncXOfVKk9
-         a46omV6vanW6xyYbIuQer1bterR09jhxTGWTG+MSa1M2Bg5xc42JO7RlH1wWX20Kzuc9
-         j74g==
-X-Gm-Message-State: AOAM530bxCmzwtewQ0UUiOxAQUpSPYRnvz5SkAcHAsqo6HEnNMroUq3f
-        z2VqOP+ayuKinOmi0vD7eGJDaQ==
-X-Google-Smtp-Source: ABdhPJx2cBOX8TKr/h/WTeqUC4FZm457izcVFqtGtuZ/tZr6Sm6aO2hN978l1aOE3sJBvl184EerOw==
-X-Received: by 2002:a17:902:8644:b0:15a:3b4a:538a with SMTP id y4-20020a170902864400b0015a3b4a538amr23511594plt.146.1652241336651;
-        Tue, 10 May 2022 20:55:36 -0700 (PDT)
+        bh=8Oj5fYgOyP9r6j4Oo2YFgfJ89J2j62xWeof0Jo9AY3w=;
+        b=gKBNlz3W4ErVwNaV1LBEXKfjk7dCw+kncT24w8YgNAZMfksrnNqLEjZ6DORKeShwBx
+         igHWdzB+GyTeyq3If4B9nthhjFGz8ia39GQvuynsCyFmOB9gp3L+uiMaSzYYUSlW8oNe
+         H1Rqca0uRaQ2eWCKttcrrSujNy+gCXXgCUGHNDbTJLWfZAU5v82Y62LRfoDRJqhd4nFo
+         3vDgYJDJzsdOpgMYNeYUIMsu0MHBFmFAFhZViA+r7rxNqjYZnIvVCg532GpOiVWa2DxX
+         nU5IgyQI5uhCqMmqqLNTJ/BP2zVE4v1ft5xeW4ZFm4wyw5SiwP8MbrrJNbakXW81IorF
+         1rSA==
+X-Gm-Message-State: AOAM531dBxzYBmWuyzNcoVP/2nYXsVki2W4LEXf29DifWLr2XuKxWIpJ
+        VCYA9InzH8te8LaODbwvlJAJLA==
+X-Google-Smtp-Source: ABdhPJzDBQpUZk7W8Mq0NWHrteV9nx9UH/BVPj5fyK4gC7QCMNmi9ReuRK03KcV0ElJJJiZ8qW3FTA==
+X-Received: by 2002:a17:902:8644:b0:153:9f01:2090 with SMTP id y4-20020a170902864400b001539f012090mr22917397plt.101.1652241338601;
+        Tue, 10 May 2022 20:55:38 -0700 (PDT)
 Received: from localhost.localdomain (c-73-223-190-181.hsd1.ca.comcast.net. [73.223.190.181])
-        by smtp.gmail.com with ESMTPSA id d7-20020a170903230700b0015e8d4eb1f7sm442789plh.65.2022.05.10.20.55.35
+        by smtp.gmail.com with ESMTPSA id d7-20020a170903230700b0015e8d4eb1f7sm442789plh.65.2022.05.10.20.55.37
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 10 May 2022 20:55:35 -0700 (PDT)
+        Tue, 10 May 2022 20:55:38 -0700 (PDT)
 From:   Joe Damato <jdamato@fastly.com>
 To:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
         linux-kernel@vger.kernel.org, x86@kernel.org,
         Eric Dumazet <edumazet@google.com>,
         Paolo Abeni <pabeni@redhat.com>
 Cc:     Joe Damato <jdamato@fastly.com>
-Subject: [RFC,net-next 5/6] net: Add a way to copy skbs without affect cache
-Date:   Tue, 10 May 2022 20:54:26 -0700
-Message-Id: <1652241268-46732-6-git-send-email-jdamato@fastly.com>
+Subject: [RFC,net-next 6/6] net: unix: Add MSG_NTCOPY
+Date:   Tue, 10 May 2022 20:54:27 -0700
+Message-Id: <1652241268-46732-7-git-send-email-jdamato@fastly.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1652241268-46732-1-git-send-email-jdamato@fastly.com>
 References: <1652241268-46732-1-git-send-email-jdamato@fastly.com>
@@ -66,63 +66,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an skb_copier, skb_nocache_copier, which contains function pointers to
-nontemporal copy routines.
-
-Using skb_nocache_copier and do_skb_copy_datagram implement
-skb_copy_datagram_from_iter_nocache. This function is intended to be used
-by callers which would like to copy data into SKBs using nontemporal
-instructions to avoid the CPU cache.
+Add a new sendmsg flag, MSG_NTCOPY, which user programs can use to signal
+to the kernel that data copied into the kernel during sendmsg should be
+done so using nontemporal copies, if it is supported by the architecture.
 
 Signed-off-by: Joe Damato <jdamato@fastly.com>
 ---
- include/linux/skbuff.h |  2 ++
- net/core/datagram.c    | 12 ++++++++++++
- 2 files changed, 14 insertions(+)
+ include/linux/socket.h |  1 +
+ net/unix/af_unix.c     | 13 +++++++++++--
+ 2 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 97de40b..32c0cba 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -3918,6 +3918,8 @@ int skb_copy_and_hash_datagram_iter(const struct sk_buff *skb, int offset,
- 			   struct ahash_request *hash);
- int skb_copy_datagram_from_iter(struct sk_buff *skb, int offset,
- 				 struct iov_iter *from, int len);
-+int skb_copy_datagram_from_iter_nocache(struct sk_buff *skb, int offset,
-+				 struct iov_iter *from, int len);
- int zerocopy_sg_from_iter(struct sk_buff *skb, struct iov_iter *frm);
- void skb_free_datagram(struct sock *sk, struct sk_buff *skb);
- void __skb_free_datagram_locked(struct sock *sk, struct sk_buff *skb, int len);
-diff --git a/net/core/datagram.c b/net/core/datagram.c
-index a87c41b..da8557b 100644
---- a/net/core/datagram.c
-+++ b/net/core/datagram.c
-@@ -543,6 +543,11 @@ struct skb_copier skb_copier = {
- 	.copy_page_from_iter = copy_page_from_iter
- };
+diff --git a/include/linux/socket.h b/include/linux/socket.h
+index 12085c9..c9b10aa 100644
+--- a/include/linux/socket.h
++++ b/include/linux/socket.h
+@@ -318,6 +318,7 @@ struct ucred {
+ 					  * plain text and require encryption
+ 					  */
  
-+struct skb_copier skb_nocache_copier = {
-+	.copy_from_iter = copy_from_iter_nocache,
-+	.copy_page_from_iter = copy_page_from_iter_nocache
-+};
++#define MSG_NTCOPY	0x2000000	/* Use a non-temporal copy */
+ #define MSG_ZEROCOPY	0x4000000	/* Use user data in kernel path */
+ #define MSG_FASTOPEN	0x20000000	/* Send data in TCP SYN */
+ #define MSG_CMSG_CLOEXEC 0x40000000	/* Set close_on_exec for file
+diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+index e1dd9e9..ccbd643 100644
+--- a/net/unix/af_unix.c
++++ b/net/unix/af_unix.c
+@@ -1907,7 +1907,11 @@ static int unix_dgram_sendmsg(struct socket *sock, struct msghdr *msg,
+ 	skb_put(skb, len - data_len);
+ 	skb->data_len = data_len;
+ 	skb->len = len;
+-	err = skb_copy_datagram_from_iter(skb, 0, &msg->msg_iter, len);
++	if (msg->msg_flags & MSG_NTCOPY)
++		err = skb_copy_datagram_from_iter_nocache(skb, 0, &msg->msg_iter, len);
++	else
++		err = skb_copy_datagram_from_iter(skb, 0, &msg->msg_iter, len);
 +
- static int do_skb_copy_datagram(struct sk_buff *skb, int offset,
- 				struct iov_iter *from, int len, struct skb_copier copier)
- {
-@@ -611,6 +616,13 @@ static int do_skb_copy_datagram(struct sk_buff *skb, int offset,
- 	return -EFAULT;
- }
+ 	if (err)
+ 		goto out_free;
  
-+int skb_copy_datagram_from_iter_nocache(struct sk_buff *skb, int offset,
-+					struct iov_iter *from, int len)
-+{
-+	return do_skb_copy_datagram(skb, offset, from, len, skb_nocache_copier);
-+}
-+EXPORT_SYMBOL(skb_copy_datagram_from_iter_nocache);
+@@ -2167,7 +2171,12 @@ static int unix_stream_sendmsg(struct socket *sock, struct msghdr *msg,
+ 		skb_put(skb, size - data_len);
+ 		skb->data_len = data_len;
+ 		skb->len = size;
+-		err = skb_copy_datagram_from_iter(skb, 0, &msg->msg_iter, size);
 +
- /**
-  *	skb_copy_datagram_from_iter - Copy a datagram from an iov_iter.
-  *	@skb: buffer to copy
++		if (msg->msg_flags & MSG_NTCOPY)
++			err = skb_copy_datagram_from_iter_nocache(skb, 0, &msg->msg_iter, size);
++		else
++			err = skb_copy_datagram_from_iter(skb, 0, &msg->msg_iter, size);
++
+ 		if (err) {
+ 			kfree_skb(skb);
+ 			goto out_err;
 -- 
 2.7.4
 

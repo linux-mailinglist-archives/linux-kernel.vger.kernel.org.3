@@ -2,115 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E26E523B36
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C184523B3B
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:14:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345360AbiEKRNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 13:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37798 "EHLO
+        id S1345366AbiEKRN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 13:13:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345336AbiEKRNV (ORCPT
+        with ESMTP id S244088AbiEKRNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 13:13:21 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED47170F10;
-        Wed, 11 May 2022 10:13:19 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id A7F8F22205;
-        Wed, 11 May 2022 19:13:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1652289197;
+        Wed, 11 May 2022 13:13:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FE90173364
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:13:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652289232;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=npwkMmic3eVPlZhpwj5rxb1QYIswVUssmBLRYqELZ8U=;
-        b=kFd2hM8LE8TfYJ+duByj+KgoHppTeMdfuZGkgZamccC/CSp+ABcID0BaCIEWDmv6cbzj/6
-        N7jPiDC3juuEk3/WjBx4vebxjOVyYAzyFmwkumVpGqsSu2YaGXiiVm2MwDxuj5ErkP3MAb
-        R5UvvwiMBpuIgi6+w18Geh8tAfxXe2Q=
+        bh=EE9Fagjhe/kqd3S9iC2YvYzVpVJK7eXKAdqNAWFHIas=;
+        b=V+nCXNPDJ8h3Ey9KSjR+gF+xpXUiWUEsQ0UNAC+Cd4kYrfHmJBForclQk9zEeaTWrwhSTn
+        qB4uH+s7rUsq8Ud4iXtJLQpPSHeODg1KsrfObk4iGNaF0hgvoVnoGPxX+z5rQ1wMemZWAz
+        mWoQFVYvHiu8JgMNamhzuEbJ/HIF3OY=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-541-aPM6e6rSNUyxXTtsiO2pBQ-1; Wed, 11 May 2022 13:13:51 -0400
+X-MC-Unique: aPM6e6rSNUyxXTtsiO2pBQ-1
+Received: by mail-wm1-f71.google.com with SMTP id e9-20020a05600c4e4900b00394779649b1so3113670wmq.3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:13:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=EE9Fagjhe/kqd3S9iC2YvYzVpVJK7eXKAdqNAWFHIas=;
+        b=tx0kxkBYuxjPUnbrckxPFd+8z8j5RnGhh/2mbymcC3G7+yEEXEZkv4PbQBOFcAdsxl
+         WqjV8QAmE/A6KE7EuKa1PYvfUeNKiCZpUCnhyC8UaHT/DlpMZW9N0JJCjQZ3ucy9qK7H
+         MHChFklKoke/wRYjYvjS7W+VPp049tLWU3gOnhceAOkMhH9yg74M4P+Hv2v36AkIwCs4
+         hVNWz5E/IyNNr/zCovxoUEWXKFzuIblgmysu94CRE7xXL2FjQLNAlS1iySatvscOmzR/
+         lOMcuxtXa7raUY7Nw7a0J2xCvtGWQjY7MN0FEXDhN4bm3D7j4uSI22mNNMdIl+cHJ9p9
+         zjIA==
+X-Gm-Message-State: AOAM530GADf2PatkNd0ah7XJFRxVUqv5dRroX6LgQpYLpxe0vpl/Pmjj
+        wswa2/nObLr6c8ZnBiEmFbM1ILZwVPtmGymXwKDsCnHz7Fd3jtIc53z3hlJk+Rph7YnkBY3MSa9
+        iBB2Mdoo7/2PC5USI0SN84ugO
+X-Received: by 2002:a05:6000:1f1a:b0:20c:d84b:5863 with SMTP id bv26-20020a0560001f1a00b0020cd84b5863mr7146320wrb.277.1652289229998;
+        Wed, 11 May 2022 10:13:49 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwtVDDFsoc9w/8xVTQ/+hbmOEJtpXNmZ6DvqciF88VCZQENnuUJU2+YJE5rSrhhzo12JrSDgQ==
+X-Received: by 2002:a05:6000:1f1a:b0:20c:d84b:5863 with SMTP id bv26-20020a0560001f1a00b0020cd84b5863mr7146292wrb.277.1652289229792;
+        Wed, 11 May 2022 10:13:49 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c701:700:2393:b0f4:ef08:bd51? (p200300cbc70107002393b0f4ef08bd51.dip0.t-ipconnect.de. [2003:cb:c701:700:2393:b0f4:ef08:bd51])
+        by smtp.gmail.com with ESMTPSA id o12-20020a05600c2e0c00b003945781b725sm282850wmf.37.2022.05.11.10.13.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 10:13:49 -0700 (PDT)
+Message-ID: <f153dd2c-574a-a303-4f54-9e1396b131f9@redhat.com>
+Date:   Wed, 11 May 2022 19:13:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2 5/6] mm: zswap: add basic meminfo and vmstat coverage
+Content-Language: en-US
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Minchan Kim <minchan@kernel.org>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com
+References: <20220510152847.230957-1-hannes@cmpxchg.org>
+ <20220510152847.230957-6-hannes@cmpxchg.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220510152847.230957-6-hannes@cmpxchg.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Date:   Wed, 11 May 2022 19:13:16 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>, kernel@pengutronix.de,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        =?UTF-8?Q?Horia_Geant=C4=83?= <horia.geanta@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        David Gstir <david@sigma-star.at>,
-        Richard Weinberger <richard@nod.at>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Sumit Garg <sumit.garg@linaro.org>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v9 7/7] MAINTAINERS: add KEYS-TRUSTED-CAAM
-In-Reply-To: <YnvTyd8s4T+s/uAL@kernel.org>
-References: <20220506062553.1068296-1-a.fatoum@pengutronix.de>
- <20220506062553.1068296-8-a.fatoum@pengutronix.de> <YnbH2Fgn/JFOU3Rf@iki.fi>
- <YnbIiJynQq/tcFa2@iki.fi>
- <e49920e6-0852-ad3d-5758-604655591671@pengutronix.de>
- <YnvTyd8s4T+s/uAL@kernel.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <9ef8e6ee30ddaf71864dbdd50bb8a70f@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-05-11 17:18, schrieb Jarkko Sakkinen:
-> On Wed, May 11, 2022 at 12:48:53PM +0200, Ahmad Fatoum wrote:
->> On 07.05.22 21:29, Jarkko Sakkinen wrote:
->> >>> +KEYS-TRUSTED-CAAM
->> >>> +M:	Ahmad Fatoum <a.fatoum@pengutronix.de>
->> >>> +R:	Pengutronix Kernel Team <kernel@pengutronix.de>
->> >>> +L:	linux-integrity@vger.kernel.org
->> >>> +L:	keyrings@vger.kernel.org
->> >>> +S:	Maintained
->> >>> +F:	include/keys/trusted_caam.h
->> >>> +F:	security/keys/trusted-keys/trusted_caam.c
->> >>> +
->> >>>  KEYS/KEYRINGS
->> >>>  M:	David Howells <dhowells@redhat.com>
->> >>>  M:	Jarkko Sakkinen <jarkko@kernel.org>
->> >>> --
->> >>> 2.30.2
->> >>>
->> >>
->> >> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
->> >
->> > 3/7 would probably need tested-by. Other than that this starts to look
->> > good...
->> 
->> It has been tested by me on an i.MX6 (era < 10 with blobbing support)
->> and by Michael on a LS1028A (era >= 10, both with and without blobbing
->> support).
->> 
->> Cheers,
->> Ahmad
+On 10.05.22 17:28, Johannes Weiner wrote:
+> Currently it requires poking at debugfs to figure out the size and
+> population of the zswap cache on a host. There are no counters for
+> reads and writes against the cache. As a result, it's difficult to
+> understand zswap behavior on production systems.
 > 
-> Michael, can you give a tested-by for the corresponding patch?
+> Print zswap memory consumption and how many pages are zswapped out in
+> /proc/meminfo. Count zswapouts and zswapins in /proc/vmstat.
+> 
+> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
 
-I guess there will be a new version and esp a change of that patch.
-I'll retest once the new version is out.
+Acked-by: David Hildenbrand <david@redhat.com>
 
--michael
+
+-- 
+Thanks,
+
+David / dhildenb
+

@@ -2,73 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 552AE52379A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B20915237BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343894AbiEKPoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59518 "EHLO
+        id S1344012AbiEKPwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbiEKPoH (ORCPT
+        with ESMTP id S1343992AbiEKPwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:44:07 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDEF4E44F2;
-        Wed, 11 May 2022 08:44:05 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 24BFhwM7013033
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 May 2022 11:43:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1652283840; bh=rGR9lBAoNm8DMktTwLsasf+2wJML9uFzVwn56HBtvLo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=OplIdzmF3KpKKauL2SgRFX8Zhb9Grayd4vaRcj89GGOOTj9lBiVgwb3aQcsVzF8az
-         dwEMzbpx0hKA+G/WUFmEyPWdGtlbN85wd4GmDe3dLeZl5EcG8JWmNoItOxgZgID9HQ
-         z7B0/eHgbUpayf2y54IqOHf6CQIyE2SKAi5YRghvnt1B3ApNbMgPL7iCtcDjnNcrpt
-         ozULwEyd/HdzkUs2WypXV4H940besupCLegvz8IvczNszl0mFyCjFeEc0PFN1TBj4S
-         pCA8TuBYmmh071ZscT/TsJvrBEneGq/k+RcCMm4irawZowZWKWDZnCndDQfz+6wWut
-         jixdOfJT4teOw==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 2AFE415C3F0C; Wed, 11 May 2022 11:43:58 -0400 (EDT)
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     adilger.kernel@dilger.ca, Jinke Han <hanjinke.666@bytedance.com>
-Cc:     "Theodore Ts'o" <tytso@mit.edu>, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ext4: remove unnecessary code in __mb_check_buddy
-Date:   Wed, 11 May 2022 11:43:53 -0400
-Message-Id: <165228380205.403983.14257203487141722033.b4-ty@mit.edu>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220404152243.13556-1-hanjinke.666@bytedance.com>
-References: <20220404152243.13556-1-hanjinke.666@bytedance.com>
+        Wed, 11 May 2022 11:52:02 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA5063BEB;
+        Wed, 11 May 2022 08:52:01 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id b3c8452feecd8275; Wed, 11 May 2022 17:52:00 +0200
+Received: from kreacher.localnet (unknown [213.134.181.161])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 7B16866C3E6;
+        Wed, 11 May 2022 17:51:59 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Subject: [PATCH v1 0/3] cpufreq: Locking-related changes in cpufreq_offline() and cpufreq_remove_dev()
+Date:   Wed, 11 May 2022 17:46:41 +0200
+Message-ID: <5585781.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.181.161
+X-CLIENT-HOSTNAME: 213.134.181.161
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrgeehgdeludcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepvddufedrudefgedrudekuddrudeiudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurdduiedupdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeefpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvhhirhgvshhhrdhkuhhmrghrsehlihhnrghrohdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Apr 2022 23:22:43 +0800, Jinke Han wrote:
-> From: Jinke Han <hanjinke.666@bytedance.com>
-> 
-> When enter elseif branch, the the MB_CHECK_ASSERT will never fail.
-> In addtion, the only illegal combination is 0/0, which can be caught
-> by the first if branch.
-> 
-> 
-> [...]
+Hi,
 
-Applied, thanks!
+This series is based on the observation that the policy rwsem is used (or rather not
+used) inconsistently in cpufreq_remove_dev() (in summary, it does things without
+holding the policy rwsem that are done under that rwsem elsewhere).
 
-[1/1] ext4: remove unnecessary code in __mb_check_buddy
-      commit: 3114e248fcda22f4d9bb149050c22d5efb999899
+The first two patches are preparatory (but patch [1/3] is a good enough improvement
+by itself IMO) and patch [3/3] makes the essential change.
 
-Best regards,
--- 
-Theodore Ts'o <tytso@mit.edu>
+Please refer to the patch changelogs for details.
+
+Thanks!
+
+
+

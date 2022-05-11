@@ -2,155 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F151D522BBF
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 07:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E28522BC3
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 07:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241189AbiEKFdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 01:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
+        id S241542AbiEKFea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 01:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiEKFdb (ORCPT
+        with ESMTP id S240862AbiEKFe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 01:33:31 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3600E1DEC7A
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:33:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652247210; x=1683783210;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gnuqjfd3wZ6hDMhXMrQEf2p5FIJ7+rhERBbfS+mOnco=;
-  b=hzJOYFJlfmv9s9Z9bNWF/my0o5TfGPn8wIunTkkoDyTX7JnlR2mKxEEl
-   +YClp+liqgwLwLX1cK9qoA9DkS/VjxCtWglS0WFRNc+aRgZrI0fZk/KkR
-   21qgbQvg2R04QfQw+O7FTyNaeIW8v+thrUX3SuTVaQ91U0aroGzv6Gi2B
-   r/4bt6p688Giz6q/t77s/9YBZNJpq4lPLfbQa8hmrbyku+w+tdjkD1mz5
-   nBoYBh1XXdNfTlcyUQwvPrUyXitGjq+r6AlcsRxmqnDaEnKytNjyVCRzK
-   2TeEADbGbAf/usp7PVQlNM2JQ6AdXraWePFrC1reeYYx4/SQvF/7/+Jcb
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="356015808"
-X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
-   d="scan'208";a="356015808"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 22:33:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
-   d="scan'208";a="697416859"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 10 May 2022 22:33:28 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1noeyV-000Iko-Gg;
-        Wed, 11 May 2022 05:33:27 +0000
-Date:   Wed, 11 May 2022 13:33:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Chuck Lever <chuck.lever@oracle.com>
-Subject: [linux-stable-rc:linux-5.4.y 2861/3562]
- include/linux/sunrpc/xdr.h:539:17: error: comparison is always false due to
- limited range of data type
-Message-ID: <202205111304.qiUAxImo-lkp@intel.com>
+        Wed, 11 May 2022 01:34:26 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B81244F12
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:34:24 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id i24-20020a056e021d1800b002cf0541f514so732220ila.13
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:34:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=aFQgjH47dbDj5aNlTIcru9pTtYzNioptBNbSqlWWCQs=;
+        b=0rHLEQvfoIKV/R/icKBq17em5ps//Ebj8qBody/DgtSrKJjzWnyQUzE954OL+j17EO
+         q+V0MXgyEPtnJx/AYbKj52tQtdpMoMBTnrqY8/w4tBSdxYc9px1v4GcGRqQSAxjvdol4
+         OloSoOCzulRcM/7a+His5d8Rb/Jre3YoCYmSL28HwW5Iy7j8qsPuZ0t/1Wwsln8THSe+
+         8Iyxz+o9/df/u+YkXMdFpYwU2Lp/Iq2beWchWgpw8b81oLPps7TDI6JR/nfjMt7lyYwu
+         JeidiYMUW1GJKiIDwN4UuohoYIKk1w8Nq7wwQ92kdbdfk7om00OD+hYIvyVCnd1wW7ch
+         B3ng==
+X-Gm-Message-State: AOAM532FPvvInqlnMMcQQgVoPHglXMquxf2xxjYpt3qkPZbpNMD/jmWp
+        JHlGzTf3C+HcdQCLgTv075hNXBibA1T5mCmdSlaA0NXJEh5q
+X-Google-Smtp-Source: ABdhPJwTVsHq2aqZS5Ayf8vNemcKQ6F5l3+d4V/7OJEc4u2Ch8TFVZHMiN+gW/Gj8eoElw5dJksmF5Iid3mzzRCOAFXaifOKJzuC
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:1608:b0:65a:d365:c220 with SMTP id
+ x8-20020a056602160800b0065ad365c220mr7974969iow.69.1652247264100; Tue, 10 May
+ 2022 22:34:24 -0700 (PDT)
+Date:   Tue, 10 May 2022 22:34:24 -0700
+In-Reply-To: <00000000000042b02105d0db5037@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004206f505deb5cb12@google.com>
+Subject: Re: [syzbot] WARNING in mntput_no_expire (3)
+From:   syzbot <syzbot+5b1e53987f858500ec00@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dan,
+syzbot has found a reproducer for the following issue on:
 
-FYI, the error/warning still remains.
+HEAD commit:    feb9c5e19e91 Merge tag 'for_linus' of git://git.kernel.org..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=10ea9d8ef00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=79caa0035f59d385
+dashboard link: https://syzkaller.appspot.com/bug?extid=5b1e53987f858500ec00
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=125039fef00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17a27b71f00000
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-head:   52d5d4c85d2dc5c74edaba054d60cdfbda5e9808
-commit: ce1aa09cc14ed625104acc2d487bd92b9a88efe2 [2861/3562] NFSD: prevent integer overflow on 32 bit systems
-config: sparc-randconfig-r004-20220509 (https://download.01.org/0day-ci/archive/20220511/202205111304.qiUAxImo-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=ce1aa09cc14ed625104acc2d487bd92b9a88efe2
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.4.y
-        git checkout ce1aa09cc14ed625104acc2d487bd92b9a88efe2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash arch/sparc/kernel/
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5b1e53987f858500ec00@syzkaller.appspotmail.com
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3608 at fs/namespace.c:1236 mntput_no_expire+0xada/0xcd0 fs/namespace.c:1236
+Modules linked in:
 
-All errors (new ones prefixed by >>):
+CPU: 0 PID: 3608 Comm: syz-executor314 Not tainted 5.18.0-rc6-syzkaller-00009-gfeb9c5e19e91 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:mntput_no_expire+0xada/0xcd0 fs/namespace.c:1236
+Code: 30 84 c0 0f 84 b9 fe ff ff 3c 03 0f 8f b1 fe ff ff 4c 89 44 24 10 e8 45 50 e9 ff 4c 8b 44 24 10 e9 9d fe ff ff e8 56 bf 9d ff <0f> 0b e9 19 fd ff ff e8 4a bf 9d ff e8 b5 cf 91 07 31 ff 89 c5 89
+RSP: 0018:ffffc900030ffcf0 EFLAGS: 00010293
 
-   In file included from include/linux/sunrpc/sched.h:19,
-                    from include/linux/sunrpc/auth.h:15,
-                    from include/linux/nfs_fs.h:31,
-                    from arch/sparc/kernel/sys_sparc32.c:25:
-   include/linux/sunrpc/xdr.h: In function 'xdr_stream_decode_uint32_array':
->> include/linux/sunrpc/xdr.h:539:17: error: comparison is always false due to limited range of data type [-Werror=type-limits]
-     539 |         if (len > SIZE_MAX / sizeof(*p))
-         |                 ^
-   cc1: all warnings being treated as errors
+RAX: 0000000000000000 RBX: 1ffff9200061ffa4 RCX: 0000000000000000
+RDX: ffff88807c859d80 RSI: ffffffff81db815a RDI: 0000000000000003
+RBP: ffff88801bcbca80 R08: 0000000000000000 R09: ffffffff9006d90f
+R10: ffffffff81db7e71 R11: 0000000000000001 R12: 0000000000000008
+R13: ffffc900030ffd40 R14: 00000000ffffffff R15: 0000000000000002
+FS:  0000555556a0e300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000555556a17628 CR3: 0000000071c9d000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ path_umount+0x7d4/0x1260 fs/namespace.c:1806
+ ksys_umount fs/namespace.c:1825 [inline]
+ __do_sys_umount fs/namespace.c:1830 [inline]
+ __se_sys_umount fs/namespace.c:1828 [inline]
+ __x64_sys_umount+0x159/0x180 fs/namespace.c:1828
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fcc5b9cc2c7
+Code: 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffcb4fdf1a8 EFLAGS: 00000202 ORIG_RAX: 00000000000000a6
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fcc5b9cc2c7
+RDX: 00007ffcb4fdf269 RSI: 000000000000000a RDI: 00007ffcb4fdf260
+RBP: 00007ffcb4fdf260 R08: 00000000ffffffff R09: 00007ffcb4fdf040
+R10: 0000555556a0f693 R11: 0000000000000202 R12: 00007ffcb4fe02e0
+R13: 0000555556a0f5f0 R14: 00007ffcb4fdf1d0 R15: 0000000000000002
+ </TASK>
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for FRAME_POINTER
-   Depends on DEBUG_KERNEL && (M68K || UML || SUPERH) || ARCH_WANT_FRAME_POINTERS || MCOUNT
-   Selected by
-   - LOCKDEP && DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT && !MIPS && !PPC && !ARM && !S390 && !MICROBLAZE && !ARC && !X86
-
-
-vim +539 include/linux/sunrpc/xdr.h
-
-   517	
-   518	/**
-   519	 * xdr_stream_decode_uint32_array - Decode variable length array of integers
-   520	 * @xdr: pointer to xdr_stream
-   521	 * @array: location to store the integer array or NULL
-   522	 * @array_size: number of elements to store
-   523	 *
-   524	 * Return values:
-   525	 *   On success, returns number of elements stored in @array
-   526	 *   %-EBADMSG on XDR buffer overflow
-   527	 *   %-EMSGSIZE if the size of the array exceeds @array_size
-   528	 */
-   529	static inline ssize_t
-   530	xdr_stream_decode_uint32_array(struct xdr_stream *xdr,
-   531			__u32 *array, size_t array_size)
-   532	{
-   533		__be32 *p;
-   534		__u32 len;
-   535		ssize_t retval;
-   536	
-   537		if (unlikely(xdr_stream_decode_u32(xdr, &len) < 0))
-   538			return -EBADMSG;
- > 539		if (len > SIZE_MAX / sizeof(*p))
-   540			return -EBADMSG;
-   541		p = xdr_inline_decode(xdr, len * sizeof(*p));
-   542		if (unlikely(!p))
-   543			return -EBADMSG;
-   544		if (array == NULL)
-   545			return len;
-   546		if (len <= array_size) {
-   547			if (len < array_size)
-   548				memset(array+len, 0, (array_size-len)*sizeof(*array));
-   549			array_size = len;
-   550			retval = len;
-   551		} else
-   552			retval = -EMSGSIZE;
-   553		for (; array_size > 0; p++, array++, array_size--)
-   554			*array = be32_to_cpup(p);
-   555		return retval;
-   556	}
-   557	#endif /* __KERNEL__ */
-   558	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

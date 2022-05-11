@@ -2,121 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3B2A523B8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8220523B8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345570AbiEKRaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 13:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40288 "EHLO
+        id S1345582AbiEKRaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 13:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239654AbiEKRaL (ORCPT
+        with ESMTP id S239654AbiEKRaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 13:30:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561387890B;
-        Wed, 11 May 2022 10:30:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 115C0B82529;
-        Wed, 11 May 2022 17:30:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3B52C340EE;
-        Wed, 11 May 2022 17:30:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652290207;
-        bh=WvIKEZHgEn+Dq25Zw6Rksrl5jKHKzLQEMQqd1N3j2Ko=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GFN6k71AHMTgNwJwkH1IqkuKUozdUKqDNTuKbJ2jJ+BaNtNcV4i/l9n1TSzaUH6oA
-         p/Q/MWNZfRv99aOZ6I/p8457maoeuz7iUx+Xqb3/SXGTny37hRQe+jY+b5uN+n/CC5
-         RJRhLeHl7oPmsIVTDDiQzUpKWmeeOPyuB+dGUw3lMqZZSlBCF9zk9hVsAq7ITXs2G4
-         +RzhJFL77Q2N/y/VqzXgO3evkSHPIg7MDkPRSI2vgwPYBFLNeLds8AScgtCLxzamRl
-         /EKA49IJd5x/zajQO1DbTb3+bM5me72u1MHoxpoaNVufOZcVhJuhl9r8mCTdkG1/DU
-         r3DcvRmJDTG7g==
-Date:   Wed, 11 May 2022 10:30:05 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jonas Paulsson <paulsson@linux.vnet.ibm.com>,
-        Ulrich Weigand <ulrich.weigand@de.ibm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andreas Krebbel <krebbel@linux.ibm.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH 4/8] s390/entry: workaround llvm's IAS limitations
-Message-ID: <YnvynSZfF/8I8vmT@dev-arch.thelio-3990X>
-References: <20220511120532.2228616-1-hca@linux.ibm.com>
- <20220511120532.2228616-5-hca@linux.ibm.com>
+        Wed, 11 May 2022 13:30:20 -0400
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD242317E0;
+        Wed, 11 May 2022 10:30:18 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id r11so5333662ybg.6;
+        Wed, 11 May 2022 10:30:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kA5LUrg9FEK6lcfS6hSBAItDCTrYCnHyDwxKH4zNPeE=;
+        b=km5I3gSzIbTEWdHVVIN/zKLWy7PIJJa/NA7/y5zfX2YPaCmEgmyO5F9Hwrw5ybagmO
+         PhBW/ZhVHk7m0xNMPd9FSDZqRMoa49N8oqiLdq6eYVx2Zj99qhUqPhzyqza+ujOPWIXH
+         VBF8DxZAOrLfWUYfVeEqwIY2tOhS68mUiTmJ4cpWVjCqlupo+xaOwQGhIFYVEDTYWH1d
+         G6uMiVZymvDlMoeURi2KHrBUaQJgC4kEAq/5LbaepN6NM2b6hJhmVQKx7TSgm3rO4LRV
+         7Fi+FWm4gG8j3x3zycrjPJ+DSu24DcPNJrEsyRrgPo7PiymLLJfrBZ7apTsT/E8SPrJb
+         2qjQ==
+X-Gm-Message-State: AOAM531zzEIWUC23Cm4UovjyBr56UnnWJNiA3vUSJfOC+yh2Xwd1ylwD
+        u/BQTPcQ4pmn6EAlWfadInp4oHoXLscWHsuZ7TQ=
+X-Google-Smtp-Source: ABdhPJzx10oGXmjUdrgRFpSf2JnlUCQLWprnfw47qR/sZ08uGzJzbPZal4vP3IN9LVYQ/6ChRXKsf3TVio6AaBZyTuw=
+X-Received: by 2002:a25:e792:0:b0:645:7ddb:b5eb with SMTP id
+ e140-20020a25e792000000b006457ddbb5ebmr24694201ybh.482.1652290218179; Wed, 11
+ May 2022 10:30:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220511120532.2228616-5-hca@linux.ibm.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220511051605.103574-1-kunyu@nfschina.com>
+In-Reply-To: <20220511051605.103574-1-kunyu@nfschina.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 11 May 2022 19:30:07 +0200
+Message-ID: <CAJZ5v0hmHjjUx1+aWxph2aqh4jv=FQBTtc1ccH-thtD4G-iG9A@mail.gmail.com>
+Subject: Re: [PATCH] x86: The return type of the function could be void
+To:     Li kunyu <kunyu@nfschina.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Heiko,
-
-On Wed, May 11, 2022 at 02:05:28PM +0200, Heiko Carstens wrote:
-> llvm's integrated assembler cannot handle immediate values which are
-> calculated with two local labels:
-> 
-> <instantiation>:3:13: error: invalid operand for instruction
->  clgfi %r14,.Lsie_done - .Lsie_gmap
-> 
-> Workaround this by adding clang specific code which reads the specific
-> value from memory. Since this code is within the hot paths of the kernel
-> and adds an additional memory reference, keep the original code, and add
-> ifdef'ed code.
-> 
-> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+On Wed, May 11, 2022 at 7:16 AM Li kunyu <kunyu@nfschina.com> wrote:
+>
+> perhaps the return value of the function is not used.
+> it may be possible to optimize the execution instructions.
+>
+> Signed-off-by: Li kunyu <kunyu@nfschina.com>
 > ---
->  arch/s390/kernel/entry.S | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/arch/s390/kernel/entry.S b/arch/s390/kernel/entry.S
-> index e1664b45090f..ff7a75078e93 100644
-> --- a/arch/s390/kernel/entry.S
-> +++ b/arch/s390/kernel/entry.S
-> @@ -171,8 +171,19 @@ _LPP_OFFSET	= __LC_LPP
->  	.macro OUTSIDE reg,start,end,outside_label
->  	larl	%r14,\start
->  	slgrk	%r14,\reg,%r14
-> +#ifdef CONFIG_CC_IS_CLANG
+>  arch/x86/kernel/acpi/boot.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+> index 0d01e7f5078c..7e32e33d52fa 100644
+> --- a/arch/x86/kernel/acpi/boot.c
+> +++ b/arch/x86/kernel/acpi/boot.c
+> @@ -375,7 +375,7 @@ static void __init mp_override_legacy_irq(u8 bus_irq, u8 polarity, u8 trigger,
+>         isa_irq_to_gsi[bus_irq] = gsi;
+>  }
+>
+> -static int mp_config_acpi_gsi(struct device *dev, u32 gsi, int trigger,
+> +static void mp_config_acpi_gsi(struct device *dev, u32 gsi, int trigger,
+>                         int polarity)
+>  {
+>  #ifdef CONFIG_X86_MPPARSE
+> @@ -387,9 +387,9 @@ static int mp_config_acpi_gsi(struct device *dev, u32 gsi, int trigger,
+>         u8 pin;
+>
+>         if (!acpi_ioapic)
+> -               return 0;
+> +               return;
+>         if (!dev || !dev_is_pci(dev))
+> -               return 0;
+> +               return;
+>
+>         pdev = to_pci_dev(dev);
+>         number = pdev->bus->number;
+> @@ -408,7 +408,6 @@ static int mp_config_acpi_gsi(struct device *dev, u32 gsi, int trigger,
+>
+>         mp_save_irq(&mp_irq);
+>  #endif
+> -       return 0;
+>  }
+>
+>  static int __init mp_register_ioapic_irq(u8 bus_irq, u8 polarity,
+> --
 
-I intend to put this series through my build and boot test matrix later
-today but one fly by comment in the meantime. Should this be
-CONFIG_AS_IS_LLVM if this is an integrated assembler limitation, rather
-than a clang one?
-
-> +	clgfrl	%r14,.Lrange_size\@
-> +#else
->  	clgfi	%r14,\end - \start
-> +#endif
->  	jhe	\outside_label
-> +#ifdef CONFIG_CC_IS_CLANG
-> +	.section .rodata, "a"
-> +	.align 4
-> +.Lrange_size\@:
-> +	.long	\end - \start
-> +	.previous
-> +#endif
->  	.endm
->  
->  	.macro SIEEXIT
-> -- 
-> 2.32.0
-> 
-> 
-
-Cheers,
-Nathan
+Applied as 5.19 material with rewritten subject and changelog, thanks!

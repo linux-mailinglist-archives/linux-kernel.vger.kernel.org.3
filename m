@@ -2,160 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC13A522E65
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60BB9522E67
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243712AbiEKIah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 04:30:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52238 "EHLO
+        id S243775AbiEKIay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 04:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235054AbiEKIaW (ORCPT
+        with ESMTP id S243729AbiEKIat (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 04:30:22 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B26B118B97B;
-        Wed, 11 May 2022 01:30:19 -0700 (PDT)
-Received: from localhost.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxkNoPdHtiw+cQAA--.6S4;
-        Wed, 11 May 2022 16:30:10 +0800 (CST)
-From:   Qing Zhang <zhangqing@loongson.cn>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yangtiezhu@loongson.cn,
-        zhangqing@loongson.cn
-Subject: [PATCH 3/3] MIPS: Loongson64: Enable CONFIG_SMP and set default NR_CPUS to 2
-Date:   Wed, 11 May 2022 16:30:07 +0800
-Message-Id: <20220511083007.17700-3-zhangqing@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220511083007.17700-1-zhangqing@loongson.cn>
-References: <20220511083007.17700-1-zhangqing@loongson.cn>
+        Wed, 11 May 2022 04:30:49 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5CB0AC7E
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 01:30:41 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1CC92106F;
+        Wed, 11 May 2022 01:30:41 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.3.187])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4CE343F73D;
+        Wed, 11 May 2022 01:30:39 -0700 (PDT)
+Date:   Wed, 11 May 2022 09:30:31 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     cuigaosheng <cuigaosheng1@huawei.com>
+Cc:     Will Deacon <will@kernel.org>, catalin.marinas@arm.com,
+        broonie@kernel.org, pcc@google.com, keescook@chromium.org,
+        daniel.kiss@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, wangweiyang2@huawei.com,
+        gongruiqi1@huawei.com
+Subject: Re: [PATCH -next] arm64: add missing header dependencies
+Message-ID: <Ynt0J5daWq7swGP8@FVFF77S0Q05N>
+References: <20220509061751.3434059-1-cuigaosheng1@huawei.com>
+ <20220510104014.GA27557@willie-the-truck>
+ <3b692d9f-0f76-33b8-0c22-909a24377e33@huawei.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9BxkNoPdHtiw+cQAA--.6S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxuryDKFW8Cr45KF1UKF1Utrb_yoW5ur4Dpr
-        4fGFWxXay8Kr1UKrWjkr4DGasYqayDJa9FkF47Aw1Du3W8Aa13Xr1Dtr18JrWUXFZrXr4r
-        Xas3Kwn3Aan8Ga7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBS14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
-        8EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFyl42xK82
-        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
-        0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMI
-        IF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF
-        0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87
-        Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjTRijjyUUUUU
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <3b692d9f-0f76-33b8-0c22-909a24377e33@huawei.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
----
- arch/mips/configs/loongson2k_defconfig | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+On Wed, May 11, 2022 at 09:39:55AM +0800, cuigaosheng wrote:
+>     Do you know which commit is causing this error?
+> 
+> 9cce7a435f89 arm64: CPU support I got the error when building a module with
+> processor.h on arm64 and the module calls the KSTK_ESP macro,
 
-diff --git a/arch/mips/configs/loongson2k_defconfig b/arch/mips/configs/loongson2k_defconfig
-index e948ca487e2d..74353a4254eb 100644
---- a/arch/mips/configs/loongson2k_defconfig
-+++ b/arch/mips/configs/loongson2k_defconfig
-@@ -20,7 +20,10 @@ CONFIG_RELAY=y
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_EMBEDDED=y
- CONFIG_MACH_LOONGSON64=y
-+# CONFIG_CPU_LOONGSON3_WORKAROUNDS is not set
- # CONFIG_CPU_LOONGSON3_CPUCFG_EMULATION is not set
-+CONFIG_SMP=y
-+CONFIG_NR_CPUS=2
- CONFIG_HZ_256=y
- CONFIG_MIPS32_O32=y
- CONFIG_MIPS32_N32=y
-@@ -95,7 +98,6 @@ CONFIG_DEVTMPFS=y
- CONFIG_DEVTMPFS_MOUNT=y
- CONFIG_MTD=m
- CONFIG_BLK_DEV_LOOP=y
--CONFIG_BLK_DEV_CRYPTOLOOP=y
- CONFIG_BLK_DEV_RAM=y
- CONFIG_BLK_DEV_RAM_SIZE=8192
- CONFIG_RAID_ATTRS=m
-@@ -144,7 +146,6 @@ CONFIG_TUN=m
- # CONFIG_NET_VENDOR_ARC is not set
- # CONFIG_NET_VENDOR_ATHEROS is not set
- # CONFIG_NET_VENDOR_BROADCOM is not set
--# CONFIG_NET_VENDOR_BROCADE is not set
- # CONFIG_NET_VENDOR_CHELSIO is not set
- # CONFIG_NET_VENDOR_CIRRUS is not set
- # CONFIG_NET_VENDOR_CISCO is not set
-@@ -163,15 +164,16 @@ CONFIG_IXGBE=y
- # CONFIG_NET_VENDOR_MICROCHIP is not set
- # CONFIG_NET_VENDOR_MICROSEMI is not set
- # CONFIG_NET_VENDOR_MYRI is not set
-+# CONFIG_NET_VENDOR_NI is not set
- # CONFIG_NET_VENDOR_NATSEMI is not set
- # CONFIG_NET_VENDOR_NETERION is not set
- # CONFIG_NET_VENDOR_NETRONOME is not set
--# CONFIG_NET_VENDOR_NI is not set
- # CONFIG_NET_VENDOR_NVIDIA is not set
- # CONFIG_NET_VENDOR_OKI is not set
- # CONFIG_NET_VENDOR_PACKET_ENGINES is not set
- # CONFIG_NET_VENDOR_PENSANDO is not set
- # CONFIG_NET_VENDOR_QLOGIC is not set
-+# CONFIG_NET_VENDOR_BROCADE is not set
- # CONFIG_NET_VENDOR_QUALCOMM is not set
- # CONFIG_NET_VENDOR_RDC is not set
- CONFIG_8139CP=y
-@@ -182,9 +184,9 @@ CONFIG_R8169=y
- # CONFIG_NET_VENDOR_ROCKER is not set
- # CONFIG_NET_VENDOR_SAMSUNG is not set
- # CONFIG_NET_VENDOR_SEEQ is not set
--# CONFIG_NET_VENDOR_SOLARFLARE is not set
- # CONFIG_NET_VENDOR_SILAN is not set
- # CONFIG_NET_VENDOR_SIS is not set
-+# CONFIG_NET_VENDOR_SOLARFLARE is not set
- # CONFIG_NET_VENDOR_SMSC is not set
- CONFIG_STMMAC_ETH=y
- # CONFIG_NET_VENDOR_SUN is not set
-@@ -229,7 +231,6 @@ CONFIG_SERIAL_8250_RSA=y
- CONFIG_SERIAL_OF_PLATFORM=y
- CONFIG_SERIAL_NONSTANDARD=y
- CONFIG_HW_RANDOM=y
--CONFIG_RAW_DRIVER=m
- CONFIG_I2C_CHARDEV=y
- CONFIG_I2C_PIIX4=y
- CONFIG_GPIO_LOONGSON=y
-@@ -243,13 +244,9 @@ CONFIG_MEDIA_USB_SUPPORT=y
- CONFIG_USB_VIDEO_CLASS=m
- CONFIG_DRM=y
- CONFIG_DRM_RADEON=y
--CONFIG_FB_RADEON=y
- CONFIG_LCD_CLASS_DEVICE=y
- CONFIG_LCD_PLATFORM=m
- # CONFIG_VGA_CONSOLE is not set
--CONFIG_FRAMEBUFFER_CONSOLE=y
--CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
--CONFIG_LOGO=y
- CONFIG_SOUND=y
- CONFIG_SND=y
- CONFIG_SND_VERBOSE_PRINTK=y
-@@ -336,7 +333,6 @@ CONFIG_DEFAULT_SECURITY_DAC=y
- CONFIG_CRYPTO_SEQIV=m
- CONFIG_CRYPTO_HMAC=y
- CONFIG_CRYPTO_MD5=y
--CONFIG_CRYPTO_TGR192=m
- CONFIG_CRYPTO_WP512=m
- CONFIG_CRYPTO_BLOWFISH=m
- CONFIG_CRYPTO_CAST5=m
--- 
-2.20.1
+I assume that's an out-of-tree module?
 
+Looking at v5.18-rc5, the only users of KSTK_ESP() on arm64 are built in:
+
+| [mark@lakrids:~/src/linux]% git grep KSTK_ESP
+| arch/alpha/include/asm/processor.h:#define KSTK_ESP(tsk) \
+| arch/arc/include/asm/processor.h:#define KSTK_ESP(tsk)   (task_pt_regs(tsk)->sp)
+| arch/arm/include/asm/processor.h:#define KSTK_ESP(tsk)  task_pt_regs(tsk)->ARM_sp
+| arch/arm64/include/asm/processor.h:#define KSTK_ESP(tsk)        user_stack_pointer(task_pt_regs(tsk))
+| arch/csky/include/asm/processor.h:#define KSTK_ESP(tsk)         (task_pt_regs(tsk)->usp)
+| arch/h8300/include/asm/processor.h:#define      KSTK_ESP(tsk)   ((tsk) == current ? rdusp() : (tsk)->thread.usp)
+| arch/hexagon/include/asm/processor.h:#define KSTK_ESP(tsk) (pt_psp(task_pt_regs(tsk)))
+| arch/ia64/include/asm/processor.h:#define KSTK_ESP(tsk)  ((tsk)->thread.ksp)
+| arch/m68k/include/asm/processor.h:#define       KSTK_ESP(tsk)   ((tsk) == current ? rdusp() : (tsk)->thread.usp)
+| arch/microblaze/include/asm/processor.h:#  define KSTK_ESP(task)        (task_sp(task))
+| arch/mips/include/asm/processor.h:#define KSTK_ESP(tsk) (task_pt_regs(tsk)->regs[29])
+| arch/nios2/include/asm/processor.h:#define KSTK_ESP(tsk)        ((tsk)->thread.kregs->sp)
+| arch/openrisc/include/asm/processor.h:#define KSTK_ESP(tsk)   (task_pt_regs(tsk)->sp)
+| arch/parisc/include/asm/processor.h:#define KSTK_ESP(tsk)       ((tsk)->thread.regs.gr[30])
+| arch/powerpc/include/asm/processor.h:#define KSTK_ESP(tsk)  ((tsk)->thread.regs? (tsk)->thread.regs->gpr[1]: 0)
+| arch/riscv/include/asm/processor.h:#define KSTK_ESP(tsk)                (task_pt_regs(tsk)->sp)
+| arch/s390/include/asm/processor.h:#define KSTK_ESP(tsk) (task_pt_regs(tsk)->gprs[15])
+| arch/sh/include/asm/processor_32.h:#define KSTK_ESP(tsk)  (task_pt_regs(tsk)->regs[15])
+| arch/sparc/include/asm/processor_32.h:#define KSTK_ESP(tsk)  ((tsk)->thread.kregs->u_regs[UREG_FP])
+| arch/sparc/include/asm/processor_64.h:#define KSTK_ESP(tsk)  (task_pt_regs(tsk)->u_regs[UREG_FP])
+| arch/um/include/asm/stacktrace.h:       return (unsigned long *)KSTK_ESP(task);
+| arch/x86/include/asm/processor.h:#define KSTK_ESP(task)         (task_pt_regs(task)->sp)
+| arch/x86/include/asm/processor.h:extern unsigned long KSTK_ESP(struct task_struct *task);
+| arch/x86/kernel/process_64.c:unsigned long KSTK_ESP(struct task_struct *task)
+| arch/x86/um/asm/processor.h:#define KSTK_ESP(tsk) KSTK_REG(tsk, HOST_SP)
+| arch/xtensa/include/asm/processor.h:#define KSTK_ESP(tsk)               (task_pt_regs(tsk)->areg[1])
+| fs/proc/array.c:                                esp = KSTK_ESP(task);
+| mm/util.c:      return (vma->vm_start <= KSTK_ESP(t) && vma->vm_end >= KSTK_ESP(t));
+
+... or is that module being added in another tree at the moment?
+
+Thanks,
+Mark.
+
+> we can also add
+> additional header file dependencies(linux/sched/task_stack.h) in the module to
+> avoid this error. Maybe perfecting header file dependencies of processor.h is a
+> better option? Thanks,
+> 
+> 在 2022/5/10 18:40, Will Deacon 写道:
+> 
+>     On Mon, May 09, 2022 at 02:17:51PM +0800, Gaosheng Cui wrote:
+> 
+>         We get one error when building module with processor.h:
+> 
+>         ./arch/arm64/include/asm/processor.h:263:36: error: implicit declaration of function ‘task_stack_page’;
+>           ((struct pt_regs *)(THREAD_SIZE + task_stack_page(p)) - 1)
+>         ./arch/arm64/include/asm/processor.h:266:42: note: in expansion of macro ‘task_pt_regs’
+>          #define KSTK_ESP(tsk) user_stack_pointer(task_pt_regs(tsk))
+> 
+>         task_stack_page is declared in linux/sched/task_stack.h, so this patch
+>         add the missing header dependencies.
+> 
+>         Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+>         ---
+>          arch/arm64/include/asm/processor.h | 1 +
+>          1 file changed, 1 insertion(+)
+> 
+>     Do you know which commit is causing this error? I haven't seen any other
+>     reports, but it's hard to know which tree should take your patch as it
+>     stands.
+> 
+>     Thanks,
+> 
+>     Will
+> 
+> 
+>         diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
+>         index 73e38d9a540c..1c239841c4d6 100644
+>         --- a/arch/arm64/include/asm/processor.h
+>         +++ b/arch/arm64/include/asm/processor.h
+>         @@ -28,6 +28,7 @@
+>          #include <linux/build_bug.h>
+>          #include <linux/cache.h>
+>          #include <linux/init.h>
+>         +#include <linux/sched/task_stack.h>
+>          #include <linux/stddef.h>
+>          #include <linux/string.h>
+>          #include <linux/thread_info.h>
+>         --
+>         2.25.1
+> 
+> 
+>     .
+> 

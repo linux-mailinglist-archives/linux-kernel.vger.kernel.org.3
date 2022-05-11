@@ -2,167 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D09523767
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B20352376C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343785AbiEKPfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58280 "EHLO
+        id S1343798AbiEKPgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:36:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234832AbiEKPfg (ORCPT
+        with ESMTP id S1343789AbiEKPgj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:35:36 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE53369491
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:35:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4T/P7nk5HDT/LMOEvNiZF4F+08yR/q62Va+kEhtGeks=; b=pIWiZygdgVImGPwxabMGgcMTJv
-        ACM/Zq3wQU0a+0hXIvEDKj3o6NCMsVbpelz7e8GE0C3ivuCd9YjBh/1S6T3dBW1lGv64wXvqjFPDj
-        H9Ilm+339EGWEcjhBF9jjGMG0kmfU2qToNqRHkBPLGWbHOTr3EEpRH16L7elpC1H8DsemJphwkvSY
-        /yUQtcsv7L2Ev+bgNmxbtJUQo/taHrSyGX4ErgJ1R17XWYN840NJbaS8756JCkzYlbaU3ARjNjcvY
-        Qs9171GIEeBwLqlMsgiJSEItRjrWfUN6E7AJLXqEbOIuOiGY9NpnXRrvhHRVs4HEryQ0W6o7CEtOw
-        4+IVRTxQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nooN4-005Ywf-Pq; Wed, 11 May 2022 15:35:26 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 36F4230080B;
-        Wed, 11 May 2022 17:35:26 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2717E203BFA30; Wed, 11 May 2022 17:35:26 +0200 (CEST)
-Date:   Wed, 11 May 2022 17:35:26 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     x86@kernel.org, kan.liang@linux.intel.com, eranian@google.com
-Cc:     linux-kernel@vger.kernel.org, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org
-Subject: [RFC][PATCH 7/5] perf/x86/intel: Remove x86_pmu::update_topdown_event
-Message-ID: <YnvXvsxDClDwZb5d@hirez.programming.kicks-ass.net>
-References: <20220511142037.353492804@infradead.org>
+        Wed, 11 May 2022 11:36:39 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16AA16A429
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:36:38 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id ks9so4881695ejb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:36:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=s9lNfI7TcwVigUjSYULy3QOAhvngUhwQle5drwFbVL8=;
+        b=UDgM/7CIdwpg7TQ80bRyU4TfD8ldDTOoKUvXkBAypeBetC/ZXehem74fuUzxgv+673
+         bhZsUJVYmDXQBKCv9mVxNT8DkjGrWu575i4uN/rDyEsQmfOc6vQUpk0YNPBuYIog7qSF
+         2P7vnyyI3dNCAXfw6r4b/OFSIbV3X72g+t/iC2ugWlmt63dHNsvUrFCQag+pIgIRSy/6
+         X36SH1wzjqfPwgFhXAZvmlXcvWdB/VD/2hcsTQ/y3/3g4kKsewQPRK5kEV+ivnAT0Has
+         XPQ1xpoU6Mm7OLy5zsSHsf7Du68T8Kp4P0usibTXcfIPsjW5zgQZt1EAuku2OITtLhZQ
+         Qh8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=s9lNfI7TcwVigUjSYULy3QOAhvngUhwQle5drwFbVL8=;
+        b=kaLHIxd3zmO6sxzlTDlTmDCOiVcdEGnXX0xggO6ffQTi16IRCnJf1vMXLLrS/kmCa5
+         oLXd+yKqhMjjOQ8oN4lwO/aMHa7mRBApeT+IxmuDW7hZ6Z3vtbznBX+yyu35tfeQUOZz
+         U1qX7oUdxlNynFHPrnvZhQSDknrjlU0M5srdeXtDMWJAxrBD/eMlI/BgIjkgMhbTlAEZ
+         Tf4ytWx+oUjNcFGX3RZFcFl0UgcBnLjkkDV7DDzmumr8FC0A7oIrXJKSdiLMW/HkoUpn
+         SeiDbmH7I2eIUyxgrVH3Wz46n8kfYiyp7kKp6t16cBB2K5ryfi9UWEsq//b2tWHv0xqW
+         UMrA==
+X-Gm-Message-State: AOAM533HO4tBNM8gAPsFKY9KxNJM+XxloO9f4/Y26iHbSMEBXglR7oWK
+        264IUS+JuNaBof90XwZn3DQpkw==
+X-Google-Smtp-Source: ABdhPJzGKntoTYFAsjQgyRo8QHUf6eZ/sVXe1HlTdWu11CGW4leRLMnpi935aU7hwUOVWkAuFyelPw==
+X-Received: by 2002:a17:906:dc89:b0:6f4:d3a9:6862 with SMTP id cs9-20020a170906dc8900b006f4d3a96862mr25676309ejc.571.1652283396618;
+        Wed, 11 May 2022 08:36:36 -0700 (PDT)
+Received: from [192.168.0.154] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id x1-20020aa7d381000000b0042617ba63casm1356919edq.84.2022.05.11.08.36.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 08:36:35 -0700 (PDT)
+Message-ID: <3e5ddde1-9d0c-a5e8-1828-aef1d1165a3e@linaro.org>
+Date:   Wed, 11 May 2022 17:36:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220511142037.353492804@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] dt-bindings: pmic: mt6366: add binding document
+Content-Language: en-US
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>, lee.jones@linaro.org,
+        robh+dt@kernel.org, matthias.bgg@gmail.com, lgirdwood@gmail.com,
+        broonie@kernel.org, eddie.huang@mediatek.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, fshao@chromium.org
+Cc:     srv_heupstream@mediatek.com, hui.liu@mediatek.com,
+        tinghan.shen@mediatek.com, hsin-hsiung.wang@mediatek.com,
+        sean.wang@mediatek.com, macpaul.lin@mediatek.com,
+        wen.su@mediatek.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220510064603.15920-1-zhiyong.tao@mediatek.com>
+ <20220510064603.15920-2-zhiyong.tao@mediatek.com>
+ <6614cd3783666caa529106464e7684caf16d6582.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <6614cd3783666caa529106464e7684caf16d6582.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/05/2022 09:56, Rex-BC Chen wrote:
+>> +examples:
+>> +  - |
+>> +    pmic {
+>> +      regulators {
+>> +        mt6366_vdram1_reg: buck_vdram1 {
+>> +            regulator-name = "vdram1";
+>> +            regulator-min-microvolt = <500000>;
+>> +            regulator-max-microvolt = <2087500>;
+>> +            regulator-ramp-delay = <12500>;
+>> +            regulator-enable-ramp-delay = <0>;
+>> +            regulator-always-on;
+>> +            regulator-allowed-modes = <0 1>;
+> 
+> should be two space instead of 4 space?
+> mt6366_vdram1_reg: buck_vdram1 {
+>   regulator-name = "vdram1";
+>   ...
+> };
+> 
+> There is the same issue for this example.
 
-Subject: perf/x86/intel: Remove x86_pmu::update_topdown_event
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Wed May 11 17:02:05 CEST 2022
+Indentation is four spaces.
+https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/tree/Documentation/devicetree/bindings/writing-schema.rst?h=for-next&id=7a150b0d850e37e7bdfc87459edd0ff302f67478#n111
 
-Not that it is all internal to the intel driver, remove
-x86_pmu::update_topdown_event.
 
-Assumes that is_topdown_count(event) can only be true when the
-hardware has topdown stuff and the function is set.
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/x86/events/intel/core.c |   22 ++++++++++++----------
- arch/x86/events/perf_event.h |    1 -
- 2 files changed, 12 insertions(+), 11 deletions(-)
-
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -2672,6 +2672,7 @@ static u64 adl_update_topdown_event(stru
- 	return icl_update_topdown_event(event);
- }
- 
-+DEFINE_STATIC_CALL(intel_pmu_update_topdown_event, x86_perf_event_update);
- 
- static void intel_pmu_read_topdown_event(struct perf_event *event)
- {
-@@ -2683,7 +2684,7 @@ static void intel_pmu_read_topdown_event
- 		return;
- 
- 	perf_pmu_disable(event->pmu);
--	x86_pmu.update_topdown_event(event);
-+	static_call(intel_pmu_update_topdown_event)(event);
- 	perf_pmu_enable(event->pmu);
- }
- 
-@@ -2691,7 +2692,7 @@ static void intel_pmu_read_event(struct
- {
- 	if (event->hw.flags & PERF_X86_EVENT_AUTO_RELOAD)
- 		intel_pmu_auto_reload_read(event);
--	else if (is_topdown_count(event) && x86_pmu.update_topdown_event)
-+	else if (is_topdown_count(event))
- 		intel_pmu_read_topdown_event(event);
- 	else
- 		x86_perf_event_update(event);
-@@ -2820,9 +2821,8 @@ static int intel_pmu_set_period(struct p
- 
- static u64 intel_pmu_update(struct perf_event *event)
- {
--	if (unlikely(is_topdown_count(event)) &&
--	    x86_pmu.update_topdown_event)
--		return x86_pmu.update_topdown_event(event);
-+	if (unlikely(is_topdown_count(event)))
-+		return static_call(intel_pmu_update_topdown_event)(event);
- 
- 	return x86_perf_event_update(event);
- }
-@@ -2950,8 +2950,7 @@ static int handle_pmi_common(struct pt_r
- 	 */
- 	if (__test_and_clear_bit(GLOBAL_STATUS_PERF_METRICS_OVF_BIT, (unsigned long *)&status)) {
- 		handled++;
--		if (x86_pmu.update_topdown_event)
--			x86_pmu.update_topdown_event(NULL);
-+		static_call(intel_pmu_update_topdown_event)(NULL);
- 	}
- 
- 	/*
-@@ -6191,7 +6190,8 @@ __init int intel_pmu_init(void)
- 		x86_pmu.lbr_pt_coexist = true;
- 		intel_pmu_pebs_data_source_skl(pmem);
- 		x86_pmu.num_topdown_events = 4;
--		x86_pmu.update_topdown_event = icl_update_topdown_event;
-+		static_call_update(intel_pmu_update_topdown_event,
-+				   &icl_update_topdown_event);
- 		static_call_update(intel_pmu_set_topdown_event_period,
- 				   &icl_set_topdown_event_period);
- 		pr_cont("Icelake events, ");
-@@ -6229,7 +6229,8 @@ __init int intel_pmu_init(void)
- 		x86_pmu.lbr_pt_coexist = true;
- 		intel_pmu_pebs_data_source_skl(pmem);
- 		x86_pmu.num_topdown_events = 8;
--		x86_pmu.update_topdown_event = icl_update_topdown_event;
-+		static_call_update(intel_pmu_update_topdown_event,
-+				   &icl_update_topdown_event);
- 		static_call_update(intel_pmu_set_topdown_event_period,
- 				   &icl_set_topdown_event_period);
- 		pr_cont("Sapphire Rapids events, ");
-@@ -6263,7 +6264,8 @@ __init int intel_pmu_init(void)
- 		x86_pmu.lbr_pt_coexist = true;
- 		intel_pmu_pebs_data_source_skl(false);
- 		x86_pmu.num_topdown_events = 8;
--		x86_pmu.update_topdown_event = adl_update_topdown_event;
-+		static_call_update(intel_pmu_update_topdown_event,
-+				   &adl_update_topdown_event);
- 		static_call_update(intel_pmu_set_topdown_event_period,
- 				   &adl_set_topdown_event_period);
- 
---- a/arch/x86/events/perf_event.h
-+++ b/arch/x86/events/perf_event.h
-@@ -878,7 +878,6 @@ struct x86_pmu {
- 	 * Intel perf metrics
- 	 */
- 	int		num_topdown_events;
--	u64		(*update_topdown_event)(struct perf_event *event);
- 
- 	/*
- 	 * perf task context (i.e. struct perf_event_context::task_ctx_data)
+Best regards,
+Krzysztof

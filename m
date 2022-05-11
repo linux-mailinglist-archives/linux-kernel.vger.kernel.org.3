@@ -2,195 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F67B5233E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E981252340F
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:20:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231758AbiEKNTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:19:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
+        id S231725AbiEKNUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243642AbiEKNSy (ORCPT
+        with ESMTP id S243733AbiEKNTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:18:54 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DAFEC9EE1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:18:39 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id i27so3981986ejd.9
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:18:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=0ez9TXiKaOl72tEoV60FrlOBkHPwboHnppSug+gfkOo=;
-        b=AZvGNJP2363v6TN8/GS5hENFTQ0BNKe+jWaNl89FHJLwTiyzJllczlQosgV/8gKSPl
-         k/r0geg1iE4xe/6Vvft5LzRvVcwoMLpok5wnHUrkyJwMmp1MeSKatSjbreIyNyW12vH0
-         VY7saVz4vb7tvLBfcWR1gPGEQ/TXeUGYUvTRI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=0ez9TXiKaOl72tEoV60FrlOBkHPwboHnppSug+gfkOo=;
-        b=x+vGdkzkfYYUmGzKOBMsc2IjX6l+uTx8K6uA8eYspJjAWQmxNVkq6yZZrSQ83xvHlt
-         ZsqVBnVuKdipJFdgHglTnzjKdbkuLrVE/qzoY6zejs1OcVD84d9bsPTzTKJi9v/fn6eg
-         p5BhTPMlLkg4KgGkldKE1cY6F3o2Z+pKs0vKZlB16mIDyZh6uyz6SFEqP2zvqPznBxdM
-         MnA1yg2r/OJMvRY69fvYwjgaz2gtkv7jyyebW2aaqcAFC+50TJfzRnHFZmP+l54D+FMo
-         gqtGqcoPkbrEmVuCzhpvn5ElWOX/vQuHMlinMhdCWOy0Dmd4exPTF53/FllIoXZ0ezkf
-         C5dg==
-X-Gm-Message-State: AOAM531XyWHFpQMR4n9r3VzoGJERM2+Ok1NRqYSd6b7zfATCTNBgy15+
-        pXX/Yra6nSfZiGKmeEPN7hZdFzkxvsAnbg==
-X-Google-Smtp-Source: ABdhPJzAAytEOBJC9d8weQVKkGdTDHAUDyPw/j1hyXBhNoXuggtWfKEBCC0fJwT/f+TZszfW1UM2RA==
-X-Received: by 2002:a17:907:2d24:b0:6f4:3152:3d1a with SMTP id gs36-20020a1709072d2400b006f431523d1amr23800536ejc.324.1652275117889;
-        Wed, 11 May 2022 06:18:37 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id g7-20020a170906c18700b006f3ef214e58sm1003731ejz.190.2022.05.11.06.18.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 06:18:37 -0700 (PDT)
-Date:   Wed, 11 May 2022 15:18:35 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
-        Daniel Vetter <daniel.vetter@intel.com>
-Subject: Re: [PATCH v3 1/4] fbdev: Prevent possible use-after-free in
- fb_release()
-Message-ID: <Ynu3qy5DrSVHv1/U@phenom.ffwll.local>
-Mail-Followup-To: Javier Martinez Canillas <javierm@redhat.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
-        Daniel Vetter <daniel.vetter@intel.com>
-References: <753d0350-42dc-389b-b10b-4533ddcf32ac@intel.com>
- <1f788b8f-0bea-1818-349e-b1bc907bf251@redhat.com>
- <a339df59-9e00-c7cb-e33d-2ac626443639@intel.com>
- <3b7fe4fe-fdec-cef2-4e0e-309d9dc4a8af@redhat.com>
- <b5ab1c49-04e7-36c3-677d-2989b79e50ca@suse.de>
- <2bf27b09-0896-1849-254f-d5b19abdc892@redhat.com>
- <fc3e8a40-664f-07ae-7474-c0412a1ab1b5@intel.com>
- <1c36d431-d5c0-7278-c9e0-61867e9dc174@redhat.com>
- <8401c328-ed67-8d5e-4ba2-b487f256e139@intel.com>
- <42fe44ae-de02-5506-d1b4-059af0419366@redhat.com>
+        Wed, 11 May 2022 09:19:54 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078742375C5;
+        Wed, 11 May 2022 06:19:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652275191; x=1683811191;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BDtuOCfS6C3Ia8cLwl8KAUdYzlIUCpcNho6y1uVXns4=;
+  b=Oz2yPJU7ytKS8zZJOrxjM0aj0SyGK3AFuTQ8v3NC3DsDP89NptRhppYy
+   w8kLv9dNR98TD+7qzQN+r6wLvDl8uZFT0K38JOgRL0zK2hoIMVppZU0X/
+   QxO5qgL784Rwcpn2tF6B+ufEOl0rMG5cq9iUpFqQfus590VPeRE7idvBT
+   zUdvH83+DfTX5Xap+XB8BCZQp3TCT2OWNwQeeagmnE6OLbQ4ziLORdq44
+   oR3MxzkKo0U65Aadu0k3+suKn+izXDYZR3kTkfrjGgRRHUYHVApUpILyU
+   tmPwHSvIWxEXmtR2mrtoRxN3j4/GU2F4q5gvQWYqcYhj6yH6m2m/YhqGc
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="330293914"
+X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
+   d="scan'208";a="330293914"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 06:19:50 -0700
+X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
+   d="scan'208";a="658155336"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 06:19:48 -0700
+Received: by lahna (sSMTP sendmail emulation); Wed, 11 May 2022 16:18:41 +0300
+Date:   Wed, 11 May 2022 16:18:41 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v1 1/1] pinctrl: broxton: Add module alias for Intel
+ Apollo Lake
+Message-ID: <Ynu3sbnWwQgOUK4H@lahna>
+References: <20220511123421.88439-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <42fe44ae-de02-5506-d1b4-059af0419366@redhat.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20220511123421.88439-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 09:50:38AM +0200, Javier Martinez Canillas wrote:
-> On 5/10/22 09:19, Andrzej Hajda wrote:
-> > 
-> > 
-> > On 10.05.2022 00:42, Javier Martinez Canillas wrote:
-> >> On 5/10/22 00:22, Andrzej Hajda wrote:
-> >>
-> >> [snip]
-> >>
-> >>>>    static void drm_fbdev_fb_destroy(struct fb_info *info)
-> >>>>    {
-> >>>> +       if (info->cmap.len)
-> >>>> +               fb_dealloc_cmap(&info->cmap);
-> >>>> +
-> >>>>           drm_fbdev_release(info->par);
-> >>>> +       framebuffer_release(info);
-> >>> I would put drm_fbdev_release at the beginning - it cancels workers
-> >>> which could expect cmap to be still valid.
-> >>>
-> >> Indeed, you are correct again. [0] is the final version of the patch I've
-> >> but don't have an i915 test machine to give it a try. I'll test tomorrow
-> >> on my test systems to verify that it doesn't cause any regressions since
-> >> with other DRM drivers.
-> >>
-> >> I think that besides this patch, drivers shouldn't need to call to the
-> >> drm_fb_helper_fini() function directly. Since that would be called during
-> >> drm_fbdev_fb_destroy() anyways.
-> >>
-> >> We should probably remove that call in all drivers and make this helper
-> >> function static and just private to drm_fb_helper functions.
-> >>
-> >> Or am I missing something here ?
-> > 
-> > This is question for experts :)
+On Wed, May 11, 2022 at 03:34:21PM +0300, Andy Shevchenko wrote:
+> We have platform device IDs for Broxton and Apollo Lake, but
+> module alias is provided only for the former. Make it consistent
+> by providing an alias for Apollo Lake.
 > 
-> Fair. I'm definitely not one of them :)
-> 
-> > I do not know what are user API/ABI expectations regarding removal of 
-> > fbdev driver, I wonder if they are documented somewhere :)
-> 
-> I don't know. At least I haven't found them.
-> 
-> > Apparently we have some process of 'zombification'  here - we need to 
-> > remove the driver without waiting for userspace closing framebuffer(???) 
-> > (to unbind ops-es and remove references to driver related things), but 
-> > we need to leave some structures to fool userspace, 'info' seems to be 
-> > one of them.
-> 
-> That's correct, yes. I think that any driver that provides a .mmap file
-> operation would have the same issue. But drivers keep an internal state
-> and just return -ENODEV or whatever on read/write/close after a removal.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Just commenting on the mmap part here. I think there's two options:
-
-- shadow buffer for fbdev defio, and keep the shadow buffer around until
-  fb_destroy
-
-- redirect fbdev mmap fully to gem mmap, and make sure the gem mmap is
-  hotunplug safe. The approach amd folks are pushing for that we discussed
-  is to replace them all with a dummy r/w page, because removing the ptes
-  means you can get a SIGBUS almost anywhere in application code, and that
-  violates like all the assumptions behind gl/vk and would just crash your
-  desktop. Reading/writing garbage otoh is generally much better.
-
-So yeah hotunplug safe fbdev mmap is still quite a bit of work ...
-
-Cheers, Daniel
-> 
-> The fbdev subsystem is different though since as you said it, the fbdev
-> core unconditionally calls to the driver .fb_release() callback with a
-> struct fb_info reference as argument.
-> 
-> I tried to prevent that with commit aafa025c76dc ("fbdev: Make fb_release()
-> return -ENODEV if fbdev was unregistered") but Daniel pointed out that
-> is was wrong since could leak memory allocated and was expected to be
-> freed on release.
-> 
-> That's why I instead fixed the issue in the fbdev drivers and just added
-> a warn on fb_release(), that is $SUBJECT.
-> 
-> > So I guess there should be something called on driver's _remove path, 
-> > and sth on destroy path.
-> >
-> 
-> That was my question actually, do we need something to be called in the
-> destroy path ? Since that could just be internal to the DRM fb helpers.
-> 
-> In other words, drivers should only care about setting a generic fbdev
-> by calling drm_fbdev_generic_setup(), and then do any HW cleanup in the
-> removal path, but let the fb helpers to handle the SW cleanup in destroy.
->  
-> -- 
-> Best regards,
-> 
-> Javier Martinez Canillas
-> Linux Engineering
-> Red Hat
-> 
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>

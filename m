@@ -2,93 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B875230B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:32:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DF175230BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232774AbiEKKcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 06:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42514 "EHLO
+        id S236149AbiEKKfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 06:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230312AbiEKKcg (ORCPT
+        with ESMTP id S236201AbiEKKfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 06:32:36 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5309C68335
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:32:33 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id n10so3126019ejk.5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:32:33 -0700 (PDT)
+        Wed, 11 May 2022 06:35:11 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 120646CA80
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:35:08 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id c12so1982671edv.10
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:35:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=szeredi.hu; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=diBqFc+BoWzAr/VmLH7dKrLdPRQvzkNUrCN5zzOorr4=;
-        b=j7v8dV+of4JcYw6oQpjfYDg+/AhDGlh8rWDyVb4dNZFpWwCXA/ba7PSzuOc073fq5C
-         CkbxcaE8TIYaP/pepZuL48hr/m1y4+28nijoEjmbwdqh6cKWZ9DJnWqZNJdkIV7JUYyK
-         K+adh0jDs6KRrHOvq2jskXIux2qU/jq084T6hmNIBFHJD1Kdjv3EQgIogmZypxSboneH
-         u24R/YdKD1LA+I5Zm3gwoh4EXivmzYiVlM1C6kwKzu3sEDV7G/8qbNQlrgM+GuoAmdEE
-         TrmZCR0vnIxqBgF7fdIt1N9tzj894I735RdxUya0xlE6QJTIBqjtLCBvRhw/nG5KNTUv
-         2ZWw==
+        bh=e9RMvdxfaUgmFv28W78x2gPvdrNxAzfKB4dqdIX05kM=;
+        b=jUsxcGvMHY8GtTbYfp5So2fib+F6Jd8jOLdPWNb3IDtXLg0g+aX3UcVnd4j/fzW+Xe
+         timyQuWT26SQqy3tfXt0O/l5VOUjBb3vKLQC9t7ht5dw7M6i2OZyHZCo9T9egWeAzx+Z
+         SBN+JpPuwCVXUudpy7Sr5YvnYxT3/NxuCZsJs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=diBqFc+BoWzAr/VmLH7dKrLdPRQvzkNUrCN5zzOorr4=;
-        b=yZavLABkBdn9iodIwjOm6Uzpr2g9tIM7DdkiyzEVdVEUh8tJ+ToAeWi1UVW4XT15lj
-         bhDPlmhFwdK+q9yS5Th28atk+pP+wE+XEbxmcXlo6Q6li5/+NiRN0XDw75W2f15tZ+f2
-         8OdkUKo5dpKoc9e3wc0a32glrPYDtW4qdDm3nMrYwottY5RrXhTxBvDQZ+RPtwzVeSos
-         LC8FPH89PIlau7JOgClCMAjBXSfrEzeLc+o9faP052YH+HtzxtPoWmfAiFSdzW5Twe30
-         MX7ZOm+DURpZxvxPSUVczD/WpVpETyd9TFdzsdLvvtu3I/Zst+TsXux5rpWeEoVM8ctD
-         QsiA==
-X-Gm-Message-State: AOAM532XWovvHmNteHSxShRt5stK0K4J/xYcfu9J2/tGDy9Tth455zIx
-        ziynDhBz4HItOywKVzIU8O41HyuvmOajFIZnzlI=
-X-Google-Smtp-Source: ABdhPJw6yj7TxbR0Hf9m7Lwxgm0Ky888mXXjlZZAf43y7eUMo7ah+68FM66Xr2uyLeand054/IqjszNELkdzUOz42E0=
-X-Received: by 2002:a17:906:c14b:b0:6f8:e6bb:f8d5 with SMTP id
- dp11-20020a170906c14b00b006f8e6bbf8d5mr16921243ejc.4.1652265151596; Wed, 11
- May 2022 03:32:31 -0700 (PDT)
+        bh=e9RMvdxfaUgmFv28W78x2gPvdrNxAzfKB4dqdIX05kM=;
+        b=BPOrKXzoEnj69lBDjjEvzyTfXXxN+NeV2jilAj0oKkj5R7def2nf6m/FO1tUfvFmBh
+         K84iv1BSs0Xs7dqnIHGZeSDpTipS3c+pct+GID07oCri2Fx7tO49aLWMyMgwdcffT9gt
+         tLGbPO+gmmPRRHhQSaISHmybbs/AhqBtP8AkmX8ttxxNxZqdfduZIUi+7OyV0rNo/l8V
+         sqGeMLEFmqyFL9mTp6NhV36hfStOSATUc9lRByYk0Zb3n/RpAcFpUEdFV5OMpqJVjRau
+         Wvw4yszheaGkonP3W4HiUvWhIf+5QbF8gk4qU65NnbEzpKsQiqp2r4GNaxUcyFh6nj7g
+         9UmQ==
+X-Gm-Message-State: AOAM532935ix3XLTlihvdhRISidmGBkfu7PktTybiqXjaTOEFrD41WoG
+        pd/BpRzbg+5SAuENRLAZvuagmxGU4MOBZHkLAUGcfQ==
+X-Google-Smtp-Source: ABdhPJz8rDAihlF+zRcGYP/fmKwXLVzb38QkYRUruiCxQkvF1++pZd0LH6sbiBuqtKTMi64DqlpiPIeveR0/kja2T7s=
+X-Received: by 2002:a05:6402:50d1:b0:428:1473:d173 with SMTP id
+ h17-20020a05640250d100b004281473d173mr27578456edb.37.1652265306607; Wed, 11
+ May 2022 03:35:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220511065803.3957-1-linmq006@gmail.com>
-In-Reply-To: <20220511065803.3957-1-linmq006@gmail.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Wed, 11 May 2022 07:32:19 -0300
-Message-ID: <CAOMZO5AqKNg36_OBntqzpF6sYFitCMMJZP-KwFpYftJ76fdDsA@mail.gmail.com>
-Subject: Re: [PATCH] ASoC: fsl: Fix refcount leak in imx_sgtl5000_probe
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Richard Zhao <richard.zhao@linaro.org>,
-        Linux-ALSA <alsa-devel@alsa-project.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20220511013057.245827-1-dlunev@chromium.org> <CAJfpegsmyY+D4kK3ov51FLGA=RkyGDKMcYiMo2zBqYuFNs78JQ@mail.gmail.com>
+ <CAONX=-dqY64VkqF6cNYvm8t-ad8XRqDhELP9icfPTPD2iLobLA@mail.gmail.com>
+ <CAJfpegvUZheWb3eJwVrpBDYzwQH=zQsuq9R8mpcXb3fqzzEdiQ@mail.gmail.com> <CAONX=-cxA-tZOSo33WK9iJU61yeDX8Ct_PwOMD=5WXLYTJ-Mjg@mail.gmail.com>
+In-Reply-To: <CAONX=-cxA-tZOSo33WK9iJU61yeDX8Ct_PwOMD=5WXLYTJ-Mjg@mail.gmail.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Wed, 11 May 2022 12:34:54 +0200
+Message-ID: <CAJfpegsNwsWJC+x8jL6kDzYhENQQ+aUYAV9wkdpQNT-FNMXyAg@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Prevent re-use of FUSE superblock after force unmount
+To:     Daniil Lunev <dlunev@chromium.org>
+Cc:     linux-fsdevel@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 3:58 AM Miaoqian Lin <linmq006@gmail.com> wrote:
+On Wed, 11 May 2022 at 11:37, Daniil Lunev <dlunev@chromium.org> wrote:
 >
-> of_find_i2c_device_by_node() takes a reference,
-> In error paths, we should call put_device() to drop
-> the reference to aviod refount leak.
+> > No progress has been made in the past decade with regard to suspend.
+> > I mainly put that down to lack of interest.
+> >
+> That is unfortunate.
+>
+> > It is a legitimate operation, but one that is not guaranteed to leave
+> > the system in a clean state.
+> Sure, I don't think I can argue about it. The current behaviour is a problem,
+> however, since there is no other way to ensure the system can suspend
+> reliably but force unmount - we try normal unmount first and proceed with
+> force if that fails. Do you think that the approach proposed in this patchset
+> is a reasonable path to mitigate the issue?
 
-s/aviod refount/avoid refcount
+At a glance it's a gross hack.   I can think of more than one way in
+which this could be achieved without adding a new field to struct
+super_block.
 
-> Fixes: 81e8e4926167 ("ASoC: fsl: add sgtl5000 clock support for imx-sgtl5000")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+But...  what I'd really prefer is if the underlying issue of fuse vs.
+suspend was properly addressed instead of adding band-aids.  And that
+takes lots more resources, for sure, and the result is not guaranteed.
+But you could at least give it a try.
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Thanks,
+Miklos

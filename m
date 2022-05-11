@@ -2,142 +2,1009 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53988522B7C
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 07:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06461522B81
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 07:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236935AbiEKFG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 01:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
+        id S239450AbiEKFHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 01:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236984AbiEKFGv (ORCPT
+        with ESMTP id S238278AbiEKFHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 01:06:51 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D244EF47
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:06:46 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id 204so1012862pfx.3
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:06:46 -0700 (PDT)
+        Wed, 11 May 2022 01:07:06 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492534ECC7;
+        Tue, 10 May 2022 22:07:00 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id i19so1656369eja.11;
+        Tue, 10 May 2022 22:07:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=AUEIkeNWULTqIuIT1TZeXx+IdneqcLu7BzWDktuhfnk=;
-        b=F8jn7i4bbQ95N7G7p4DIUqUUwb8R45Ly5JB7TyyhJiHYhrGNc7SkaFJWOMLSwQiz6B
-         mLVffC7ztUhB4aMrEx9YveKtguy8R5xI87IrhfPmry6wYuvrkwwXZhpMXR2S/FF3paXF
-         4vR4IChTGPB+fepRra4S8AToZBNXV2Un6pyThhngFfNZ12B4XRupcgr9ykO+zGnLooZe
-         WEypzao1fonjiP3LL3Df9bvaMieh8T3HC9Lp2fDodmttzz5+CZTXnRYZn2ANc1NCvkus
-         AfLV9HnZVpARsF8gv35ufAIkT1BXKQoDK835N2MrukdhICpE6kgp8lRM8SUu7m7KiNPy
-         GOaQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=VMIOdeGqL3HOzTjZaUDGBw1tnUqriIhjmylMj6ixZ98=;
+        b=dLKLdyA7tt5tzyq/cOTBMVBYd9FZVej8+5FaVLyxgltqdYgykIaED9VdjCBEzKRJvw
+         eyD/BIGa6AGkFFXMGXgOodpfhlFDEgAM8o30tRFHSyw8thdNhxnqp3RcW12bvFEWoI4J
+         86fqMq9AEu5N7y+95ZXswX1b8jOv8+tUh8itkp9uoxDkktZ0E41xgsDh70J5FO+pXugT
+         QU8yBBaqwSS3bxUHFto7xRKO5RoIx+h20mbK5sJUoje8wYFmw7h27ZEaYr12hpDSuWDP
+         kwFOlDC6yDj6VVE7W6mc6C00EM2chauiKU1RKStk9vldEol1OxP5TFR+8wrmrvybL/on
+         I4HA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=AUEIkeNWULTqIuIT1TZeXx+IdneqcLu7BzWDktuhfnk=;
-        b=gMdDBO5G1uhIaIHnzi85JIkrKWCX0OYdVOy3XjKGHm74IVhbv8lHuTnet6N7CysBTf
-         BGogcIgZpKjVf0/HAh9s/GkT7TWyjX8KnQWgHcHuFAiQ+tU0Z+NB6f42iEQiVfTaIGNp
-         0ozowHYap4pz6gC8ANXHG10RdCg8vO32ABNIt4GxzVgvk5sG3OkJClJHwBKC6YyoRT0T
-         wEjxSbwdgXHZ0wduyzdTCeEeQbiApWh5VpwS3ci2Xlw3leRDgRHSFCv4nFW8q2Jcik9X
-         +QbFmXJz2lEJWCHcX2IE7I+Z6SkRqP7AuDhDBjFZpjqIDX8riKTSqCnHK/bPLHZwjAHV
-         2EHQ==
-X-Gm-Message-State: AOAM531C/Q59KclS+DmVXc+5ZWVX46mqvJNBLtlEtiZmB7wpDwPO2wXM
-        gDt5s0sodcUUqYOSOYTRVO7qww==
-X-Google-Smtp-Source: ABdhPJw19bwjjubf5ZE0oIAmRAefBe7FNecIitByBceQ0V+zCTh9c6/8TSu7+c0yFISh4fD8ZvKs3w==
-X-Received: by 2002:a05:6a00:18a9:b0:50d:d41b:7240 with SMTP id x41-20020a056a0018a900b0050dd41b7240mr23119315pfh.66.1652245606028;
-        Tue, 10 May 2022 22:06:46 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id 13-20020a62190d000000b0050dc7628161sm496573pfz.59.2022.05.10.22.06.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 22:06:45 -0700 (PDT)
-Date:   Wed, 11 May 2022 10:36:43 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
-Message-ID: <20220511050643.hd5tcrojb3wkbg7t@vireshk-i7>
-References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
- <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
- <20220425072710.v6gwo4gu3aouezg4@vireshk-i7>
- <dea39b1f-0091-2690-7f07-108d07ef9f3c@linaro.org>
- <20220510044053.ykn6ygnbeokhzrsa@vireshk-i7>
- <1e533194-7047-8342-b426-f607fddbfaa3@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=VMIOdeGqL3HOzTjZaUDGBw1tnUqriIhjmylMj6ixZ98=;
+        b=RXZgthyENAELI2286CqzL8HE0900VqC6HnlKiclZw7I/4LKL2ltBJGcvDO245NCBkT
+         WQpx8C82SEFJiE0tNlb1kw/X4qYtDZ/nkH9Zz9RI5obMleXk1a4/T7EOkLzn4wL783/v
+         fgD6ST4dGoguqC/GgXZLmyTdZunMn9JqVZGOsjJ5cFisxTisQ+npB8O0rpX+3Jg5bVFD
+         dL4F+eHMLuCKkqC9pb0xGy6cOSt5NDlM9ylSNjKGZ397Y5Nv0kwYkiPNU2khz78oMhTm
+         NRB5yJvSSpiZDwttCV531GZ2MLIYr3ob9Y8a66y8Q4QtYs0UKIn/IPnbmgBWIqpgsaWV
+         7VLA==
+X-Gm-Message-State: AOAM533incxy7goVhG+kTLmjXcwMpb/7WhUFtlcrwNIuJzmq4BZZb4zk
+        GkN7xsApECTd+9i9sDecCzmkYwqEvASzDxx3waakiKHy5UQ=
+X-Google-Smtp-Source: ABdhPJzmIv8gbQr4mtEGxZWCWwK36MEcUsKDK2zZ0KtmK5l5P3t0qKLnHr/j3MlBxe8qB4MInW7owDr8w7sPPz127II=
+X-Received: by 2002:a17:906:4fd5:b0:6f8:5784:fddb with SMTP id
+ i21-20020a1709064fd500b006f85784fddbmr20057698ejw.161.1652245618504; Tue, 10
+ May 2022 22:06:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1e533194-7047-8342-b426-f607fddbfaa3@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <20220510070140.45407-1-tomeu.vizoso@collabora.com> <20220510141329.54414-1-tomeu.vizoso@collabora.com>
+In-Reply-To: <20220510141329.54414-1-tomeu.vizoso@collabora.com>
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Wed, 11 May 2022 15:06:47 +1000
+Message-ID: <CAPM=9tzLR-wsLhg2ikGjoK06s-ju5XWa1rtPPiUpN=pwD1vgtA@mail.gmail.com>
+Subject: Adding CI results to the kernel tree was Re: [RFC v2] drm/msm: Add
+ initial ci/ subdirectory
+To:     Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10-05-22, 15:09, Krzysztof Kozlowski wrote:
-> On 10/05/2022 06:40, Viresh Kumar wrote:
-> > They shouldn't reach the OPP core then. What will the OPP core do if a
-> > clock has a value for one OPP and not the other ?
-> 
-> That would be the same mistake as providing one voltage as 0 or with
-> something outside of a spec (but still within regulators min/max).
-> Mistakes in DTS create undesirable behavior and this part is no different.
+> And use it to store expectations about what the drm/msm driver is
+> supposed to pass in the IGT test suite.
 
-Right, I agree and so it shouldn't be allowed in principle.
+I wanted to loop in Linus/Greg to see if there are any issues raised
+by adding CI results file to the tree in their minds, or if any other
+subsystem has done this already, and it's all fine.
 
-> However I understand your point - since the driver provides the list of
-> clocks to OPP, it should not provide ones which are irrelevant.
+I think this is a good thing after our Mesa experience, but Mesa has a
+lot tighter integration here, so I want to get some more opinions
+outside the group.
 
-Right.
+Dave.
 
-> > IMHO, this is broken by design. I can easily see that someone wants to
-> > have few variants of all other frequencies for the same frequency of
-> > the so called "main" clock, i.e. multiple OPPs with same "main" freq
-> > value.  I don't think we can mark the clocks "main" or otherwise as
-> > easily for every platform.
-> > 
-> > Stephen, any inputs on this ?
-> 
-> In such case, matching opps by frequency would be a quite different API.
-> The drivers can use now:
-> https://github.com/krzk/linux/commit/ebc31798494fcc66389ae409dce6d9489c16156a#diff-b6370444c32afa2e55d9b6150f355ba6f4d20c5ed5da5399ea8295d323de8267R1200
-> 
-> If you assume that this frequency can be used for multiple OPPs, then
-> the API should be different. Something like:
-> int dev_pm_opp_set_rate(struct device *dev, unsigned long *target_freqs,
->                         size_t num_freqs);
-
-At this point I am not looking for a new API, but just continuing the discussion
-to understand what different hardwares want or look like.
-
-> Finding right opp for given frequencies would be also quite much more
-> complicated task. Not a simple ceil/floor search by one frequency.
-
-Right.
-
-> I don't need that use-case and my implementation does not prevent anyone
-> from implementing it in the future. IOW, why developing now complex
-> solution which no one currently needs? If anyone needs such scaling by
-> multiple-frequencies, the PM OPP can be reworked/extended/improved again.
-
-It isn't about being complex or simple for me, but the design needs to be
-robust. Either we can have a guaranteed "main" frequency or not and that would
-decide how we need to proceed here.
-
--- 
-viresh
+>
+> Also include a configuration file that points to the out-of-tree CI
+> scripts.
+>
+> By storing the test expectations along the code we can make sure both
+> stay in sync with each other, and so we can know when a code change
+> breaks those expectations.
+>
+> This will allow all contributors to drm/msm to reuse the infrastructure
+> already in gitlab.freedesktop.org to test the driver on several
+> generations of the hardware.
+>
+> v2:
+>   - Fix names of result expectation files to match SoC
+>   - Don't execute tests that are going to skip on all boards
+>
+> Signed-off-by: Tomeu Vizoso <tomeu.vizoso@collabora.com>
+> ---
+>  Documentation/gpu/msm_automated_testing.rst   |  70 +++++++++
+>  drivers/gpu/drm/msm/ci/gitlab-ci.yml          |  11 ++
+>  drivers/gpu/drm/msm/ci/msm.testlist           | 148 ++++++++++++++++++
+>  .../gpu/drm/msm/ci/msm_apq8016_results.txt    | 140 +++++++++++++++++
+>  .../gpu/drm/msm/ci/msm_apq8096_results.txt    | 140 +++++++++++++++++
+>  drivers/gpu/drm/msm/ci/msm_sc7180_results.txt | 141 +++++++++++++++++
+>  drivers/gpu/drm/msm/ci/msm_sdm845_results.txt | 141 +++++++++++++++++
+>  7 files changed, 791 insertions(+)
+>  create mode 100644 Documentation/gpu/msm_automated_testing.rst
+>  create mode 100644 drivers/gpu/drm/msm/ci/gitlab-ci.yml
+>  create mode 100644 drivers/gpu/drm/msm/ci/msm.testlist
+>  create mode 100644 drivers/gpu/drm/msm/ci/msm_apq8016_results.txt
+>  create mode 100644 drivers/gpu/drm/msm/ci/msm_apq8096_results.txt
+>  create mode 100644 drivers/gpu/drm/msm/ci/msm_sc7180_results.txt
+>  create mode 100644 drivers/gpu/drm/msm/ci/msm_sdm845_results.txt
+>
+> diff --git a/Documentation/gpu/msm_automated_testing.rst b/Documentation/=
+gpu/msm_automated_testing.rst
+> new file mode 100644
+> index 000000000000..fe59474569c2
+> --- /dev/null
+> +++ b/Documentation/gpu/msm_automated_testing.rst
+> @@ -0,0 +1,70 @@
+> +.. SPDX-License-Identifier: GPL-2.0+
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +Automated testing of MSM DRM driver
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +
+> +Introduction
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Making sure that changes to a driver don't introduce regressions can be =
+very time consuming when lots of different hardware configurations need to =
+be tested. Moreover, it isn't practical for each person interested in this =
+testing to have to acquire and maintain what can be a considerable amount o=
+f hardware.
+> +
+> +Also, it is desirable for developers to check for regressions in their c=
+ode by themselves, instead of relying on the maintainer finding them and th=
+en reporting back.
+> +
+> +There are facilities in gitlab.freedesktop.org to automatically test Mes=
+a that can be used as well for testing DRM drivers such as drm/msm. This do=
+cument explains how people interested in testing the drm/msm driver can use=
+ this shared infrastructure to save quite some time and effort.
+> +
+> +
+> +Relevant files
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +drivers/gpu/drm/msm/ci/gitlab-ci.yml
+> +------------------------------------
+> +
+> +Specifies the specific version of the scripts to be used. GitLab CI will=
+ use the values defined in this file to fetch the right scripts.
+> +
+> +
+> +drivers/gpu/drm/msm/ci/msm.testlist
+> +-----------------------------------
+> +
+> +Specifies the tests that the current code is expected to be able to reli=
+ably run. These tests are expected to not hang the DUT (device under testin=
+g) when running on the revision they belong to, and to give consistent resu=
+lts.
+> +
+> +
+> +drivers/gpu/drm/msm/ci/msm_*_results.txt
+> +----------------------------------------
+> +
+> +Specifies the expected results of running this specific kernel revision =
+on a given hardware configuration.
+> +
+> +
+> +How to enable automated testing on your tree
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +1. Create a Linux tree in https://gitlab.freedesktop.org/ if you don't h=
+ave one yet
+> +
+> +2. In your kernel repo's configuration (eg. https://gitlab.freedesktop.o=
+rg/tomeu/linux/-/settings/ci_cd), change the CI/CD configuration file from =
+.gitlab-ci.yml to drivers/gpu/drm/msm/ci/gitlab-ci.yml.
+> +
+> +3. Next time you push to this repository, you will see a CI pipeline bei=
+ng created (eg. https://gitlab.freedesktop.org/tomeu/linux/-/pipelines)
+> +
+> +4. The various jobs will be run and when the pipeline is finished, all j=
+obs should be green unless a regression has been found.
+> +
+> +
+> +How to update test expectations
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D
+> +
+> +If your changes to the code fix any tests, you will have to update one o=
+r more of the files in drivers/gpu/drm/msm/ci/msm_*_results.txt, for each o=
+f the test platforms affected by the change.
+> +
+> +If you have run a pipeline and it failed because of a mismatched test re=
+sult, you will have been offered a patch at the end of the run that you can=
+ apply after reviewing it.
+> +
+> +
+> +How to expand coverage
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +If your code changes makes it possible to run more tests (by solving rel=
+iability issues, for example), more tests can be added to this list, and th=
+en the expected results updated with the patch file that will be printed at=
+ the end of each job.
+> +
+> +If there is a need for updating the version of IGT being used (maybe you=
+ have added more tests to it), follow the instructions at https://gitlab.fr=
+eedesktop.org/gfx-ci/drm-ci/-/tree/msm#upreving-igt.
+> +
+> +
+> +How to test your changes to the scripts
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +For testing changes to the scripts in the drm-ci repo, change the DRM_CI=
+_PROJECT_PATH variable in drivers/gpu/drm/msm/ci/gitlab-ci.yml to match you=
+r fork of the project (eg. tomeu/drm-ci). This fork needs to be in https://=
+gitlab.freedesktop.org/.
+> \ No newline at end of file
+> diff --git a/drivers/gpu/drm/msm/ci/gitlab-ci.yml b/drivers/gpu/drm/msm/c=
+i/gitlab-ci.yml
+> new file mode 100644
+> index 000000000000..9b7caa7fcab2
+> --- /dev/null
+> +++ b/drivers/gpu/drm/msm/ci/gitlab-ci.yml
+> @@ -0,0 +1,11 @@
+> +variables:
+> +  # Change this to use your fork of drm-ci
+> +  DRM_CI_PROJECT_PATH: &drm-ci-project-path gfx-ci/drm-ci
+> +  DRM_CI_COMMIT_SHA: &drm-ci-commit-sha msm
+> +
+> +include:
+> +  - project: *drm-ci-project-path
+> +    ref: *drm-ci-commit-sha
+> +    file:
+> +      - '.msm-gitlab-ci.yml'
+> +      - '.gitlab-ci.yml'
+> diff --git a/drivers/gpu/drm/msm/ci/msm.testlist b/drivers/gpu/drm/msm/ci=
+/msm.testlist
+> new file mode 100644
+> index 000000000000..8805a3bc7316
+> --- /dev/null
+> +++ b/drivers/gpu/drm/msm/ci/msm.testlist
+> @@ -0,0 +1,148 @@
+> +# Keep alphabetically sorted by default
+> +
+> +igt@core_auth@getclient-simple
+> +igt@core_auth@getclient-master-drop
+> +igt@core_auth@basic-auth
+> +igt@core_auth@many-magics
+> +igt@core_getclient
+> +igt@core_getstats
+> +igt@core_getversion
+> +igt@core_setmaster_vs_auth
+> +igt@drm_read@invalid-buffer
+> +igt@drm_read@fault-buffer
+> +igt@drm_read@empty-block
+> +igt@drm_read@empty-nonblock
+> +igt@drm_read@short-buffer-block
+> +igt@drm_read@short-buffer-nonblock
+> +igt@drm_read@short-buffer-wakeup
+> +igt@kms_addfb_basic@unused-handle
+> +igt@kms_addfb_basic@unused-pitches
+> +igt@kms_addfb_basic@unused-offsets
+> +igt@kms_addfb_basic@unused-modifier
+> +igt@kms_addfb_basic@legacy-format
+> +igt@kms_addfb_basic@no-handle
+> +igt@kms_addfb_basic@basic
+> +igt@kms_addfb_basic@bad-pitch-0
+> +igt@kms_addfb_basic@bad-pitch-32
+> +igt@kms_addfb_basic@bad-pitch-63
+> +igt@kms_addfb_basic@bad-pitch-128
+> +igt@kms_addfb_basic@bad-pitch-256
+> +igt@kms_addfb_basic@bad-pitch-1024
+> +igt@kms_addfb_basic@bad-pitch-999
+> +igt@kms_addfb_basic@bad-pitch-65536
+> +igt@kms_addfb_basic@size-max
+> +igt@kms_addfb_basic@too-wide
+> +igt@kms_addfb_basic@too-high
+> +igt@kms_addfb_basic@bo-too-small
+> +igt@kms_addfb_basic@small-bo
+> +igt@kms_addfb_basic@addfb25-modifier-no-flag
+> +igt@kms_addfb_basic@addfb25-bad-modifier
+> +igt@kms_addfb_basic@invalid-get-prop-any
+> +igt@kms_addfb_basic@invalid-get-prop
+> +igt@kms_addfb_basic@invalid-set-prop-any
+> +igt@kms_addfb_basic@invalid-set-prop
+> +igt@kms_addfb_basic@master-rmfb
+> +igt@kms_atomic@plane-overlay-legacy
+> +igt@kms_atomic@plane-primary-legacy
+> +igt@kms_atomic@plane-primary-overlay-mutable-zpos
+> +igt@kms_atomic@plane-immutable-zpos
+> +igt@kms_atomic@test-only
+> +igt@kms_atomic@plane-cursor-legacy
+> +igt@kms_atomic@plane-invalid-params
+> +igt@kms_atomic@crtc-invalid-params
+> +igt@kms_atomic@atomic-invalid-params
+> +igt@kms_atomic@atomic_plane_damage
+> +igt@kms_atomic_interruptible@legacy-setmode@pipe-a-edp-1
+> +igt@kms_atomic_interruptible@atomic-setmode@pipe-a-edp-1
+> +igt@kms_atomic_interruptible@legacy-dpms@pipe-a-edp-1
+> +igt@kms_atomic_interruptible@legacy-pageflip@pipe-a-edp-1
+> +igt@kms_atomic_interruptible@legacy-cursor@pipe-a-edp-1
+> +igt@kms_atomic_interruptible@universal-setplane-primary@pipe-a-edp-1
+> +igt@kms_atomic_interruptible@universal-setplane-cursor@pipe-a-edp-1
+> +igt@kms_content_protection@LIC
+> +igt@kms_flip_event_leak
+> +igt@kms_getfb@getfb-handle-zero
+> +igt@kms_getfb@getfb-handle-valid
+> +igt@kms_getfb@getfb-handle-closed
+> +igt@kms_getfb@getfb-handle-not-fb
+> +igt@kms_getfb@getfb-addfb-different-handles
+> +igt@kms_getfb@getfb-repeated-different-handles
+> +igt@kms_getfb@getfb2-handle-zero
+> +igt@kms_getfb@getfb2-handle-closed
+> +igt@kms_getfb@getfb2-handle-not-fb
+> +igt@kms_getfb@getfb2-into-addfb2
+> +igt@kms_getfb@getfb-handle-protection
+> +igt@kms_getfb@getfb2-handle-protection
+> +igt@kms_hdmi_inject@inject-4k
+> +igt@kms_multipipe_modeset@basic-max-pipe-crc-check
+> +igt@kms_pipe_crc_basic@bad-source
+> +igt@kms_pipe_crc_basic@read-crc-pipe-a
+> +igt@kms_pipe_crc_basic@read-crc-pipe-a-frame-sequence
+> +igt@kms_pipe_crc_basic@nonblocking-crc-pipe-a
+> +igt@kms_pipe_crc_basic@nonblocking-crc-pipe-a-frame-sequence
+> +igt@kms_pipe_crc_basic@disable-crc-after-crtc-pipe-a
+> +igt@kms_pipe_crc_basic@compare-crc-sanitycheck-pipe-a
+> +igt@kms_pipe_crc_basic@read-crc-pipe-b
+> +igt@kms_pipe_crc_basic@read-crc-pipe-b-frame-sequence
+> +igt@kms_pipe_crc_basic@nonblocking-crc-pipe-b
+> +igt@kms_pipe_crc_basic@nonblocking-crc-pipe-b-frame-sequence
+> +igt@kms_pipe_crc_basic@disable-crc-after-crtc-pipe-b
+> +igt@kms_pipe_crc_basic@compare-crc-sanitycheck-pipe-b
+> +igt@kms_prop_blob@basic
+> +igt@kms_prop_blob@blob-prop-core
+> +igt@kms_prop_blob@blob-prop-validate
+> +igt@kms_prop_blob@blob-prop-lifetime
+> +igt@kms_prop_blob@blob-multiple
+> +igt@kms_prop_blob@invalid-get-prop-any
+> +igt@kms_prop_blob@invalid-get-prop
+> +igt@kms_prop_blob@invalid-set-prop-any
+> +igt@kms_prop_blob@invalid-set-prop
+> +igt@kms_rmfb@rmfb-ioctl
+> +igt@kms_rmfb@close-fd
+> +igt@kms_setmode@basic@pipe-a-edp-1
+> +igt@kms_setmode@basic@pipe-b-edp-1
+> +
+> +# Flakes on a530 with:
+> +# arm-smmu b40000.iommu: Unhandled context fault: fsr=3D0x408, iova=3D0x=
+01003000, fsynr=3D0x13, cbfrsynra=3D0x0, cb=3D0
+> +# igt@msm_mapping@ring
+> +
+> +igt@msm_mapping@sqefw
+> +igt@msm_mapping@shadow
+> +igt@msm_recovery@hangcheck
+> +igt@msm_recovery@gpu-fault
+> +igt@msm_recovery@iova-fault
+> +igt@msm_submit@empty-submit
+> +igt@msm_submit@invalid-queue-submit
+> +igt@msm_submit@invalid-flags-submit
+> +igt@msm_submit@invalid-in-fence-submit
+> +igt@msm_submit@invalid-duplicate-bo-submit
+> +igt@msm_submit@invalid-cmd-idx-submit
+> +igt@msm_submit@invalid-cmd-type-submit
+> +igt@msm_submit@valid-submit
+> +igt@kms_sysfs_edid_timing
+> +igt@kms_universal_plane@universal-plane-pipe-a-functional
+> +igt@kms_universal_plane@disable-primary-vs-flip-pipe-a
+> +igt@kms_universal_plane@disable-primary-vs-flip-pipe-b
+> +igt@kms_vblank@invalid
+> +igt@kms_vblank@crtc-id
+> +igt@kms_vblank@pipe-a-query-idle
+> +igt@kms_vblank@pipe-a-query-forked
+> +igt@kms_vblank@pipe-a-query-busy
+> +igt@kms_vblank@pipe-a-query-forked-busy
+> +igt@kms_vblank@pipe-a-wait-idle
+> +igt@kms_vblank@pipe-a-wait-forked
+> +igt@kms_vblank@pipe-a-wait-busy
+> +igt@kms_vblank@pipe-a-wait-forked-busy
+> +igt@kms_vblank@pipe-a-ts-continuation-idle
+> +igt@kms_vblank@pipe-a-ts-continuation-modeset
+> +igt@kms_vblank@pipe-b-accuracy-idle
+> +igt@kms_vblank@pipe-b-query-idle
+> +igt@kms_vblank@pipe-b-query-forked
+> +igt@kms_vblank@pipe-b-query-busy
+> +igt@kms_vblank@pipe-b-query-forked-busy
+> +igt@kms_vblank@pipe-b-wait-idle
+> +igt@kms_vblank@pipe-b-wait-forked
+> +igt@kms_vblank@pipe-b-wait-busy
+> +igt@kms_vblank@pipe-b-wait-forked-busy
+> +igt@kms_vblank@pipe-b-ts-continuation-idle
+> +igt@kms_vblank@pipe-b-ts-continuation-modeset
+> diff --git a/drivers/gpu/drm/msm/ci/msm_apq8016_results.txt b/drivers/gpu=
+/drm/msm/ci/msm_apq8016_results.txt
+> new file mode 100644
+> index 000000000000..2cad61d89faf
+> --- /dev/null
+> +++ b/drivers/gpu/drm/msm/ci/msm_apq8016_results.txt
+> @@ -0,0 +1,140 @@
+> +igt@core_auth@getclient-simple,pass
+> +igt@core_auth@getclient-master-drop,pass
+> +igt@core_auth@basic-auth,pass
+> +igt@core_auth@many-magics,pass
+> +igt@core_getclient,pass
+> +igt@core_getstats,pass
+> +igt@core_getversion,pass
+> +igt@core_setmaster_vs_auth,pass
+> +igt@drm_read@invalid-buffer,skip
+> +igt@drm_read@fault-buffer,skip
+> +igt@drm_read@empty-block,skip
+> +igt@drm_read@empty-nonblock,skip
+> +igt@drm_read@short-buffer-block,skip
+> +igt@drm_read@short-buffer-nonblock,skip
+> +igt@drm_read@short-buffer-wakeup,skip
+> +igt@kms_addfb_basic@unused-handle,pass
+> +igt@kms_addfb_basic@unused-pitches,pass
+> +igt@kms_addfb_basic@unused-offsets,pass
+> +igt@kms_addfb_basic@unused-modifier,pass
+> +igt@kms_addfb_basic@legacy-format,dmesg-warn
+> +igt@kms_addfb_basic@no-handle,pass
+> +igt@kms_addfb_basic@basic,pass
+> +igt@kms_addfb_basic@bad-pitch-0,pass
+> +igt@kms_addfb_basic@bad-pitch-32,pass
+> +igt@kms_addfb_basic@bad-pitch-63,pass
+> +igt@kms_addfb_basic@bad-pitch-128,pass
+> +igt@kms_addfb_basic@bad-pitch-256,pass
+> +igt@kms_addfb_basic@bad-pitch-1024,pass
+> +igt@kms_addfb_basic@bad-pitch-999,pass
+> +igt@kms_addfb_basic@bad-pitch-65536,pass
+> +igt@kms_addfb_basic@size-max,pass
+> +igt@kms_addfb_basic@too-wide,pass
+> +igt@kms_addfb_basic@too-high,dmesg-warn
+> +igt@kms_addfb_basic@bo-too-small,pass
+> +igt@kms_addfb_basic@small-bo,pass
+> +igt@kms_addfb_basic@addfb25-modifier-no-flag,pass
+> +igt@kms_addfb_basic@addfb25-bad-modifier,fail
+> +igt@kms_addfb_basic@invalid-get-prop-any,pass
+> +igt@kms_addfb_basic@invalid-get-prop,pass
+> +igt@kms_addfb_basic@invalid-set-prop-any,pass
+> +igt@kms_addfb_basic@invalid-set-prop,pass
+> +igt@kms_addfb_basic@master-rmfb,pass
+> +igt@kms_atomic@plane-overlay-legacy,skip
+> +igt@kms_atomic@plane-primary-legacy,skip
+> +igt@kms_atomic@plane-primary-overlay-mutable-zpos,skip
+> +igt@kms_atomic@plane-immutable-zpos,skip
+> +igt@kms_atomic@test-only,skip
+> +igt@kms_atomic@plane-cursor-legacy,skip
+> +igt@kms_atomic@plane-invalid-params,skip
+> +igt@kms_atomic@crtc-invalid-params,skip
+> +igt@kms_atomic@atomic-invalid-params,skip
+> +igt@kms_atomic@atomic_plane_damage,skip
+> +igt@kms_atomic_interruptible@legacy-setmode,skip
+> +igt@kms_atomic_interruptible@atomic-setmode,skip
+> +igt@kms_atomic_interruptible@legacy-dpms,skip
+> +igt@kms_atomic_interruptible@legacy-pageflip,skip
+> +igt@kms_atomic_interruptible@legacy-cursor,skip
+> +igt@kms_atomic_interruptible@universal-setplane-primary,skip
+> +igt@kms_atomic_interruptible@universal-setplane-cursor,skip
+> +igt@kms_content_protection@lic,skip
+> +igt@kms_flip_event_leak,skip
+> +igt@kms_getfb@getfb-handle-zero,pass
+> +igt@kms_getfb@getfb-handle-valid,pass
+> +igt@kms_getfb@getfb-handle-closed,pass
+> +igt@kms_getfb@getfb-handle-not-fb,pass
+> +igt@kms_getfb@getfb-addfb-different-handles,pass
+> +igt@kms_getfb@getfb-repeated-different-handles,pass
+> +igt@kms_getfb@getfb2-handle-zero,pass
+> +igt@kms_getfb@getfb2-handle-closed,pass
+> +igt@kms_getfb@getfb2-handle-not-fb,pass
+> +igt@kms_getfb@getfb2-into-addfb2,pass
+> +igt@kms_getfb@getfb-handle-protection,pass
+> +igt@kms_getfb@getfb2-handle-protection,pass
+> +igt@kms_hdmi_inject@inject-4k,fail
+> +igt@kms_multipipe_modeset@basic-max-pipe-crc-check,skip
+> +igt@kms_pipe_crc_basic@bad-source,skip
+> +igt@kms_pipe_crc_basic@read-crc-pipe-a,skip
+> +igt@kms_pipe_crc_basic@read-crc-pipe-a-frame-sequence,skip
+> +igt@kms_pipe_crc_basic@nonblocking-crc-pipe-a,skip
+> +igt@kms_pipe_crc_basic@nonblocking-crc-pipe-a-frame-sequence,skip
+> +igt@kms_pipe_crc_basic@disable-crc-after-crtc-pipe-a,skip
+> +igt@kms_pipe_crc_basic@compare-crc-sanitycheck-pipe-a,skip
+> +igt@kms_pipe_crc_basic@read-crc-pipe-b,skip
+> +igt@kms_pipe_crc_basic@read-crc-pipe-b-frame-sequence,skip
+> +igt@kms_pipe_crc_basic@nonblocking-crc-pipe-b,skip
+> +igt@kms_pipe_crc_basic@nonblocking-crc-pipe-b-frame-sequence,skip
+> +igt@kms_pipe_crc_basic@disable-crc-after-crtc-pipe-b,skip
+> +igt@kms_pipe_crc_basic@compare-crc-sanitycheck-pipe-b,skip
+> +igt@kms_prop_blob@basic,pass
+> +igt@kms_prop_blob@blob-prop-core,pass
+> +igt@kms_prop_blob@blob-prop-validate,pass
+> +igt@kms_prop_blob@blob-prop-lifetime,pass
+> +igt@kms_prop_blob@blob-multiple,pass
+> +igt@kms_prop_blob@invalid-get-prop-any,pass
+> +igt@kms_prop_blob@invalid-get-prop,pass
+> +igt@kms_prop_blob@invalid-set-prop-any,pass
+> +igt@kms_prop_blob@invalid-set-prop,pass
+> +igt@kms_rmfb@rmfb-ioctl,skip
+> +igt@kms_rmfb@close-fd,skip
+> +igt@kms_setmode@basic,skip
+> +igt@msm_mapping@sqefw,skip
+> +igt@msm_mapping@shadow,skip
+> +igt@msm_recovery@hangcheck,skip
+> +igt@msm_recovery@gpu-fault,skip
+> +igt@msm_recovery@iova-fault,skip
+> +igt@msm_submit@empty-submit,pass
+> +igt@msm_submit@invalid-queue-submit,pass
+> +igt@msm_submit@invalid-flags-submit,pass
+> +igt@msm_submit@invalid-in-fence-submit,pass
+> +igt@msm_submit@invalid-duplicate-bo-submit,dmesg-warn
+> +igt@msm_submit@invalid-cmd-idx-submit,dmesg-warn
+> +igt@msm_submit@invalid-cmd-type-submit,dmesg-warn
+> +igt@msm_submit@valid-submit,pass
+> +igt@kms_sysfs_edid_timing,pass
+> +igt@kms_universal_plane@universal-plane-pipe-a-functional,skip
+> +igt@kms_universal_plane@disable-primary-vs-flip-pipe-a,skip
+> +igt@kms_universal_plane@disable-primary-vs-flip-pipe-b,skip
+> +igt@kms_vblank@invalid,skip
+> +igt@kms_vblank@crtc-id,skip
+> +igt@kms_vblank@pipe-a-query-idle,skip
+> +igt@kms_vblank@pipe-a-query-forked,skip
+> +igt@kms_vblank@pipe-a-query-busy,skip
+> +igt@kms_vblank@pipe-a-query-forked-busy,skip
+> +igt@kms_vblank@pipe-a-wait-idle,skip
+> +igt@kms_vblank@pipe-a-wait-forked,skip
+> +igt@kms_vblank@pipe-a-wait-busy,skip
+> +igt@kms_vblank@pipe-a-wait-forked-busy,skip
+> +igt@kms_vblank@pipe-a-ts-continuation-idle,skip
+> +igt@kms_vblank@pipe-a-ts-continuation-modeset,skip
+> +igt@kms_vblank@pipe-b-accuracy-idle,skip
+> +igt@kms_vblank@pipe-b-query-idle,skip
+> +igt@kms_vblank@pipe-b-query-forked,skip
+> +igt@kms_vblank@pipe-b-query-busy,skip
+> +igt@kms_vblank@pipe-b-query-forked-busy,skip
+> +igt@kms_vblank@pipe-b-wait-idle,skip
+> +igt@kms_vblank@pipe-b-wait-forked,skip
+> +igt@kms_vblank@pipe-b-wait-busy,skip
+> +igt@kms_vblank@pipe-b-wait-forked-busy,skip
+> +igt@kms_vblank@pipe-b-ts-continuation-idle,skip
+> +igt@kms_vblank@pipe-b-ts-continuation-modeset,skip
+> diff --git a/drivers/gpu/drm/msm/ci/msm_apq8096_results.txt b/drivers/gpu=
+/drm/msm/ci/msm_apq8096_results.txt
+> new file mode 100644
+> index 000000000000..6f10941e5626
+> --- /dev/null
+> +++ b/drivers/gpu/drm/msm/ci/msm_apq8096_results.txt
+> @@ -0,0 +1,140 @@
+> +igt@core_auth@getclient-simple,pass
+> +igt@core_auth@getclient-master-drop,pass
+> +igt@core_auth@basic-auth,pass
+> +igt@core_auth@many-magics,pass
+> +igt@core_getclient,pass
+> +igt@core_getstats,pass
+> +igt@core_getversion,pass
+> +igt@core_setmaster_vs_auth,pass
+> +igt@drm_read@invalid-buffer,skip
+> +igt@drm_read@fault-buffer,skip
+> +igt@drm_read@empty-block,skip
+> +igt@drm_read@empty-nonblock,skip
+> +igt@drm_read@short-buffer-block,skip
+> +igt@drm_read@short-buffer-nonblock,skip
+> +igt@drm_read@short-buffer-wakeup,skip
+> +igt@kms_addfb_basic@unused-handle,pass
+> +igt@kms_addfb_basic@unused-pitches,pass
+> +igt@kms_addfb_basic@unused-offsets,pass
+> +igt@kms_addfb_basic@unused-modifier,pass
+> +igt@kms_addfb_basic@legacy-format,dmesg-warn
+> +igt@kms_addfb_basic@no-handle,pass
+> +igt@kms_addfb_basic@basic,pass
+> +igt@kms_addfb_basic@bad-pitch-0,pass
+> +igt@kms_addfb_basic@bad-pitch-32,pass
+> +igt@kms_addfb_basic@bad-pitch-63,pass
+> +igt@kms_addfb_basic@bad-pitch-128,pass
+> +igt@kms_addfb_basic@bad-pitch-256,pass
+> +igt@kms_addfb_basic@bad-pitch-1024,pass
+> +igt@kms_addfb_basic@bad-pitch-999,pass
+> +igt@kms_addfb_basic@bad-pitch-65536,pass
+> +igt@kms_addfb_basic@size-max,pass
+> +igt@kms_addfb_basic@too-wide,pass
+> +igt@kms_addfb_basic@too-high,dmesg-warn
+> +igt@kms_addfb_basic@bo-too-small,pass
+> +igt@kms_addfb_basic@small-bo,pass
+> +igt@kms_addfb_basic@addfb25-modifier-no-flag,pass
+> +igt@kms_addfb_basic@addfb25-bad-modifier,fail
+> +igt@kms_addfb_basic@invalid-get-prop-any,pass
+> +igt@kms_addfb_basic@invalid-get-prop,pass
+> +igt@kms_addfb_basic@invalid-set-prop-any,pass
+> +igt@kms_addfb_basic@invalid-set-prop,pass
+> +igt@kms_addfb_basic@master-rmfb,pass
+> +igt@kms_atomic@plane-overlay-legacy,skip
+> +igt@kms_atomic@plane-primary-legacy,skip
+> +igt@kms_atomic@plane-primary-overlay-mutable-zpos,skip
+> +igt@kms_atomic@plane-immutable-zpos,skip
+> +igt@kms_atomic@test-only,skip
+> +igt@kms_atomic@plane-cursor-legacy,skip
+> +igt@kms_atomic@plane-invalid-params,skip
+> +igt@kms_atomic@crtc-invalid-params,skip
+> +igt@kms_atomic@atomic-invalid-params,skip
+> +igt@kms_atomic@atomic_plane_damage,skip
+> +igt@kms_atomic_interruptible@legacy-setmode,skip
+> +igt@kms_atomic_interruptible@atomic-setmode,skip
+> +igt@kms_atomic_interruptible@legacy-dpms,skip
+> +igt@kms_atomic_interruptible@legacy-pageflip,skip
+> +igt@kms_atomic_interruptible@legacy-cursor,skip
+> +igt@kms_atomic_interruptible@universal-setplane-primary,skip
+> +igt@kms_atomic_interruptible@universal-setplane-cursor,skip
+> +igt@kms_content_protection@lic,skip
+> +igt@kms_flip_event_leak,skip
+> +igt@kms_getfb@getfb-handle-zero,pass
+> +igt@kms_getfb@getfb-handle-valid,pass
+> +igt@kms_getfb@getfb-handle-closed,pass
+> +igt@kms_getfb@getfb-handle-not-fb,pass
+> +igt@kms_getfb@getfb-addfb-different-handles,pass
+> +igt@kms_getfb@getfb-repeated-different-handles,pass
+> +igt@kms_getfb@getfb2-handle-zero,pass
+> +igt@kms_getfb@getfb2-handle-closed,pass
+> +igt@kms_getfb@getfb2-handle-not-fb,pass
+> +igt@kms_getfb@getfb2-into-addfb2,pass
+> +igt@kms_getfb@getfb-handle-protection,pass
+> +igt@kms_getfb@getfb2-handle-protection,pass
+> +igt@kms_hdmi_inject@inject-4k,dmesg-warn
+> +igt@kms_multipipe_modeset@basic-max-pipe-crc-check,skip
+> +igt@kms_pipe_crc_basic@bad-source,skip
+> +igt@kms_pipe_crc_basic@read-crc-pipe-a,skip
+> +igt@kms_pipe_crc_basic@read-crc-pipe-a-frame-sequence,skip
+> +igt@kms_pipe_crc_basic@nonblocking-crc-pipe-a,skip
+> +igt@kms_pipe_crc_basic@nonblocking-crc-pipe-a-frame-sequence,skip
+> +igt@kms_pipe_crc_basic@disable-crc-after-crtc-pipe-a,skip
+> +igt@kms_pipe_crc_basic@compare-crc-sanitycheck-pipe-a,skip
+> +igt@kms_pipe_crc_basic@read-crc-pipe-b,skip
+> +igt@kms_pipe_crc_basic@read-crc-pipe-b-frame-sequence,skip
+> +igt@kms_pipe_crc_basic@nonblocking-crc-pipe-b,skip
+> +igt@kms_pipe_crc_basic@nonblocking-crc-pipe-b-frame-sequence,skip
+> +igt@kms_pipe_crc_basic@disable-crc-after-crtc-pipe-b,skip
+> +igt@kms_pipe_crc_basic@compare-crc-sanitycheck-pipe-b,skip
+> +igt@kms_prop_blob@basic,pass
+> +igt@kms_prop_blob@blob-prop-core,pass
+> +igt@kms_prop_blob@blob-prop-validate,pass
+> +igt@kms_prop_blob@blob-prop-lifetime,pass
+> +igt@kms_prop_blob@blob-multiple,pass
+> +igt@kms_prop_blob@invalid-get-prop-any,pass
+> +igt@kms_prop_blob@invalid-get-prop,pass
+> +igt@kms_prop_blob@invalid-set-prop-any,pass
+> +igt@kms_prop_blob@invalid-set-prop,pass
+> +igt@kms_rmfb@rmfb-ioctl,skip
+> +igt@kms_rmfb@close-fd,skip
+> +igt@kms_setmode@basic,skip
+> +igt@msm_mapping@sqefw,skip
+> +igt@msm_mapping@shadow,skip
+> +igt@msm_recovery@hangcheck,skip
+> +igt@msm_recovery@gpu-fault,skip
+> +igt@msm_recovery@iova-fault,skip
+> +igt@msm_submit@empty-submit,pass
+> +igt@msm_submit@invalid-queue-submit,pass
+> +igt@msm_submit@invalid-flags-submit,pass
+> +igt@msm_submit@invalid-in-fence-submit,pass
+> +igt@msm_submit@invalid-duplicate-bo-submit,dmesg-warn
+> +igt@msm_submit@invalid-cmd-idx-submit,dmesg-warn
+> +igt@msm_submit@invalid-cmd-type-submit,dmesg-warn
+> +igt@msm_submit@valid-submit,pass
+> +igt@kms_sysfs_edid_timing,pass
+> +igt@kms_universal_plane@universal-plane-pipe-a-functional,skip
+> +igt@kms_universal_plane@disable-primary-vs-flip-pipe-a,skip
+> +igt@kms_universal_plane@disable-primary-vs-flip-pipe-b,skip
+> +igt@kms_vblank@invalid,skip
+> +igt@kms_vblank@crtc-id,skip
+> +igt@kms_vblank@pipe-a-query-idle,skip
+> +igt@kms_vblank@pipe-a-query-forked,skip
+> +igt@kms_vblank@pipe-a-query-busy,skip
+> +igt@kms_vblank@pipe-a-query-forked-busy,skip
+> +igt@kms_vblank@pipe-a-wait-idle,skip
+> +igt@kms_vblank@pipe-a-wait-forked,skip
+> +igt@kms_vblank@pipe-a-wait-busy,skip
+> +igt@kms_vblank@pipe-a-wait-forked-busy,skip
+> +igt@kms_vblank@pipe-a-ts-continuation-idle,skip
+> +igt@kms_vblank@pipe-a-ts-continuation-modeset,skip
+> +igt@kms_vblank@pipe-b-accuracy-idle,skip
+> +igt@kms_vblank@pipe-b-query-idle,skip
+> +igt@kms_vblank@pipe-b-query-forked,skip
+> +igt@kms_vblank@pipe-b-query-busy,skip
+> +igt@kms_vblank@pipe-b-query-forked-busy,skip
+> +igt@kms_vblank@pipe-b-wait-idle,skip
+> +igt@kms_vblank@pipe-b-wait-forked,skip
+> +igt@kms_vblank@pipe-b-wait-busy,skip
+> +igt@kms_vblank@pipe-b-wait-forked-busy,skip
+> +igt@kms_vblank@pipe-b-ts-continuation-idle,skip
+> +igt@kms_vblank@pipe-b-ts-continuation-modeset,skip
+> diff --git a/drivers/gpu/drm/msm/ci/msm_sc7180_results.txt b/drivers/gpu/=
+drm/msm/ci/msm_sc7180_results.txt
+> new file mode 100644
+> index 000000000000..01f7b4b399b5
+> --- /dev/null
+> +++ b/drivers/gpu/drm/msm/ci/msm_sc7180_results.txt
+> @@ -0,0 +1,141 @@
+> +igt@core_auth@getclient-simple,dmesg-warn
+> +igt@core_auth@getclient-master-drop,pass
+> +igt@core_auth@basic-auth,pass
+> +igt@core_auth@many-magics,pass
+> +igt@core_getclient,pass
+> +igt@core_getstats,pass
+> +igt@core_getversion,pass
+> +igt@core_setmaster_vs_auth,pass
+> +igt@drm_read@invalid-buffer,pass
+> +igt@drm_read@fault-buffer,pass
+> +igt@drm_read@empty-block,pass
+> +igt@drm_read@empty-nonblock,pass
+> +igt@drm_read@short-buffer-block,pass
+> +igt@drm_read@short-buffer-nonblock,pass
+> +igt@drm_read@short-buffer-wakeup,pass
+> +igt@kms_addfb_basic@unused-handle,pass
+> +igt@kms_addfb_basic@unused-pitches,pass
+> +igt@kms_addfb_basic@unused-offsets,pass
+> +igt@kms_addfb_basic@unused-modifier,pass
+> +igt@kms_addfb_basic@legacy-format,dmesg-warn
+> +igt@kms_addfb_basic@no-handle,pass
+> +igt@kms_addfb_basic@basic,pass
+> +igt@kms_addfb_basic@bad-pitch-0,pass
+> +igt@kms_addfb_basic@bad-pitch-32,pass
+> +igt@kms_addfb_basic@bad-pitch-63,pass
+> +igt@kms_addfb_basic@bad-pitch-128,pass
+> +igt@kms_addfb_basic@bad-pitch-256,pass
+> +igt@kms_addfb_basic@bad-pitch-1024,pass
+> +igt@kms_addfb_basic@bad-pitch-999,pass
+> +igt@kms_addfb_basic@bad-pitch-65536,pass
+> +igt@kms_addfb_basic@size-max,pass
+> +igt@kms_addfb_basic@too-wide,pass
+> +igt@kms_addfb_basic@too-high,dmesg-warn
+> +igt@kms_addfb_basic@bo-too-small,pass
+> +igt@kms_addfb_basic@small-bo,pass
+> +igt@kms_addfb_basic@addfb25-modifier-no-flag,pass
+> +igt@kms_addfb_basic@addfb25-bad-modifier,dmesg-warn
+> +igt@kms_addfb_basic@invalid-get-prop-any,pass
+> +igt@kms_addfb_basic@invalid-get-prop,pass
+> +igt@kms_addfb_basic@invalid-set-prop-any,pass
+> +igt@kms_addfb_basic@invalid-set-prop,pass
+> +igt@kms_addfb_basic@master-rmfb,pass
+> +igt@kms_atomic@plane-overlay-legacy,skip
+> +igt@kms_atomic@plane-primary-legacy,pass
+> +igt@kms_atomic@plane-primary-overlay-mutable-zpos,skip
+> +igt@kms_atomic@plane-immutable-zpos,pass
+> +igt@kms_atomic@test-only,pass
+> +igt@kms_atomic@plane-cursor-legacy,pass
+> +igt@kms_atomic@plane-invalid-params,pass
+> +igt@kms_atomic@crtc-invalid-params,pass
+> +igt@kms_atomic@atomic-invalid-params,pass
+> +igt@kms_atomic@atomic_plane_damage,pass
+> +igt@kms_atomic_interruptible@legacy-setmode,skip
+> +igt@kms_atomic_interruptible@atomic-setmode,skip
+> +igt@kms_atomic_interruptible@legacy-dpms,skip
+> +igt@kms_atomic_interruptible@legacy-pageflip,skip
+> +igt@kms_atomic_interruptible@legacy-cursor,skip
+> +igt@kms_atomic_interruptible@universal-setplane-primary,skip
+> +igt@kms_atomic_interruptible@universal-setplane-cursor,skip
+> +igt@kms_content_protection@lic,skip
+> +igt@kms_flip_event_leak,pass
+> +igt@kms_getfb@getfb-handle-zero,pass
+> +igt@kms_getfb@getfb-handle-valid,pass
+> +igt@kms_getfb@getfb-handle-closed,pass
+> +igt@kms_getfb@getfb-handle-not-fb,pass
+> +igt@kms_getfb@getfb-addfb-different-handles,pass
+> +igt@kms_getfb@getfb-repeated-different-handles,pass
+> +igt@kms_getfb@getfb2-handle-zero,pass
+> +igt@kms_getfb@getfb2-handle-closed,pass
+> +igt@kms_getfb@getfb2-handle-not-fb,pass
+> +igt@kms_getfb@getfb2-into-addfb2,pass
+> +igt@kms_getfb@getfb-handle-protection,pass
+> +igt@kms_getfb@getfb2-handle-protection,pass
+> +igt@kms_hdmi_inject@inject-4k,skip
+> +igt@kms_multipipe_modeset@basic-max-pipe-crc-check,skip
+> +igt@kms_pipe_crc_basic@bad-source,pass
+> +igt@kms_pipe_crc_basic@read-crc-pipe-a,pass
+> +igt@kms_pipe_crc_basic@read-crc-pipe-a-frame-sequence,pass
+> +igt@kms_pipe_crc_basic@nonblocking-crc-pipe-a,pass
+> +igt@kms_pipe_crc_basic@nonblocking-crc-pipe-a-frame-sequence,pass
+> +igt@kms_pipe_crc_basic@disable-crc-after-crtc-pipe-a,pass
+> +igt@kms_pipe_crc_basic@compare-crc-sanitycheck-pipe-a,pass
+> +igt@kms_pipe_crc_basic@read-crc-pipe-b,pass
+> +igt@kms_pipe_crc_basic@read-crc-pipe-b-frame-sequence,pass
+> +igt@kms_pipe_crc_basic@nonblocking-crc-pipe-b,pass
+> +igt@kms_pipe_crc_basic@nonblocking-crc-pipe-b-frame-sequence,pass
+> +igt@kms_pipe_crc_basic@disable-crc-after-crtc-pipe-b,pass
+> +igt@kms_pipe_crc_basic@compare-crc-sanitycheck-pipe-b,pass
+> +igt@kms_prop_blob@basic,pass
+> +igt@kms_prop_blob@blob-prop-core,pass
+> +igt@kms_prop_blob@blob-prop-validate,pass
+> +igt@kms_prop_blob@blob-prop-lifetime,pass
+> +igt@kms_prop_blob@blob-multiple,pass
+> +igt@kms_prop_blob@invalid-get-prop-any,pass
+> +igt@kms_prop_blob@invalid-get-prop,pass
+> +igt@kms_prop_blob@invalid-set-prop-any,pass
+> +igt@kms_prop_blob@invalid-set-prop,pass
+> +igt@kms_rmfb@rmfb-ioctl,pass
+> +igt@kms_rmfb@close-fd,fail
+> +igt@kms_setmode@basic@pipe-a-edp-1,pass
+> +igt@kms_setmode@basic@pipe-b-edp-1,pass
+> +igt@msm_mapping@sqefw,dmesg-fail
+> +igt@msm_mapping@shadow,dmesg-fail
+> +igt@msm_recovery@hangcheck,dmesg-warn
+> +igt@msm_recovery@gpu-fault,dmesg-warn
+> +igt@msm_recovery@iova-fault,dmesg-warn
+> +igt@msm_submit@empty-submit,pass
+> +igt@msm_submit@invalid-queue-submit,pass
+> +igt@msm_submit@invalid-flags-submit,pass
+> +igt@msm_submit@invalid-in-fence-submit,pass
+> +igt@msm_submit@invalid-duplicate-bo-submit,dmesg-warn
+> +igt@msm_submit@invalid-cmd-idx-submit,dmesg-warn
+> +igt@msm_submit@invalid-cmd-type-submit,dmesg-warn
+> +igt@msm_submit@valid-submit,pass
+> +igt@kms_sysfs_edid_timing,pass
+> +igt@kms_universal_plane@universal-plane-pipe-a-functional,skip
+> +igt@kms_universal_plane@disable-primary-vs-flip-pipe-a,pass
+> +igt@kms_universal_plane@disable-primary-vs-flip-pipe-b,fail
+> +igt@kms_vblank@invalid,pass
+> +igt@kms_vblank@crtc-id,pass
+> +igt@kms_vblank@pipe-a-query-idle,pass
+> +igt@kms_vblank@pipe-a-query-forked,pass
+> +igt@kms_vblank@pipe-a-query-busy,pass
+> +igt@kms_vblank@pipe-a-query-forked-busy,pass
+> +igt@kms_vblank@pipe-a-wait-idle,pass
+> +igt@kms_vblank@pipe-a-wait-forked,pass
+> +igt@kms_vblank@pipe-a-wait-busy,pass
+> +igt@kms_vblank@pipe-a-wait-forked-busy,pass
+> +igt@kms_vblank@pipe-a-ts-continuation-idle,pass
+> +igt@kms_vblank@pipe-a-ts-continuation-modeset,pass
+> +igt@kms_vblank@pipe-b-accuracy-idle,pass
+> +igt@kms_vblank@pipe-b-query-idle,pass
+> +igt@kms_vblank@pipe-b-query-forked,pass
+> +igt@kms_vblank@pipe-b-query-busy,pass
+> +igt@kms_vblank@pipe-b-query-forked-busy,pass
+> +igt@kms_vblank@pipe-b-wait-idle,pass
+> +igt@kms_vblank@pipe-b-wait-forked,pass
+> +igt@kms_vblank@pipe-b-wait-busy,pass
+> +igt@kms_vblank@pipe-b-wait-forked-busy,pass
+> +igt@kms_vblank@pipe-b-ts-continuation-idle,pass
+> +igt@kms_vblank@pipe-b-ts-continuation-modeset,pass
+> diff --git a/drivers/gpu/drm/msm/ci/msm_sdm845_results.txt b/drivers/gpu/=
+drm/msm/ci/msm_sdm845_results.txt
+> new file mode 100644
+> index 000000000000..3df1e5ef6d80
+> --- /dev/null
+> +++ b/drivers/gpu/drm/msm/ci/msm_sdm845_results.txt
+> @@ -0,0 +1,141 @@
+> +igt@core_auth@getclient-simple,dmesg-warn
+> +igt@core_auth@getclient-master-drop,pass
+> +igt@core_auth@basic-auth,pass
+> +igt@core_auth@many-magics,pass
+> +igt@core_getclient,pass
+> +igt@core_getstats,pass
+> +igt@core_getversion,pass
+> +igt@core_setmaster_vs_auth,pass
+> +igt@drm_read@invalid-buffer,pass
+> +igt@drm_read@fault-buffer,pass
+> +igt@drm_read@empty-block,pass
+> +igt@drm_read@empty-nonblock,pass
+> +igt@drm_read@short-buffer-block,pass
+> +igt@drm_read@short-buffer-nonblock,pass
+> +igt@drm_read@short-buffer-wakeup,pass
+> +igt@kms_addfb_basic@unused-handle,pass
+> +igt@kms_addfb_basic@unused-pitches,pass
+> +igt@kms_addfb_basic@unused-offsets,pass
+> +igt@kms_addfb_basic@unused-modifier,pass
+> +igt@kms_addfb_basic@legacy-format,dmesg-warn
+> +igt@kms_addfb_basic@no-handle,pass
+> +igt@kms_addfb_basic@basic,pass
+> +igt@kms_addfb_basic@bad-pitch-0,pass
+> +igt@kms_addfb_basic@bad-pitch-32,pass
+> +igt@kms_addfb_basic@bad-pitch-63,pass
+> +igt@kms_addfb_basic@bad-pitch-128,pass
+> +igt@kms_addfb_basic@bad-pitch-256,pass
+> +igt@kms_addfb_basic@bad-pitch-1024,pass
+> +igt@kms_addfb_basic@bad-pitch-999,pass
+> +igt@kms_addfb_basic@bad-pitch-65536,pass
+> +igt@kms_addfb_basic@size-max,pass
+> +igt@kms_addfb_basic@too-wide,pass
+> +igt@kms_addfb_basic@too-high,dmesg-warn
+> +igt@kms_addfb_basic@bo-too-small,pass
+> +igt@kms_addfb_basic@small-bo,pass
+> +igt@kms_addfb_basic@addfb25-modifier-no-flag,pass
+> +igt@kms_addfb_basic@addfb25-bad-modifier,dmesg-warn
+> +igt@kms_addfb_basic@invalid-get-prop-any,pass
+> +igt@kms_addfb_basic@invalid-get-prop,pass
+> +igt@kms_addfb_basic@invalid-set-prop-any,pass
+> +igt@kms_addfb_basic@invalid-set-prop,pass
+> +igt@kms_addfb_basic@master-rmfb,pass
+> +igt@kms_atomic@plane-overlay-legacy,dmesg-warn
+> +igt@kms_atomic@plane-primary-legacy,dmesg-warn
+> +igt@kms_atomic@plane-primary-overlay-mutable-zpos,dmesg-warn
+> +igt@kms_atomic@plane-immutable-zpos,dmesg-warn
+> +igt@kms_atomic@test-only,dmesg-warn
+> +igt@kms_atomic@plane-cursor-legacy,dmesg-warn
+> +igt@kms_atomic@plane-invalid-params,dmesg-warn
+> +igt@kms_atomic@crtc-invalid-params,dmesg-warn
+> +igt@kms_atomic@atomic-invalid-params,dmesg-warn
+> +igt@kms_atomic@atomic_plane_damage,dmesg-warn
+> +igt@kms_atomic_interruptible@legacy-setmode,skip
+> +igt@kms_atomic_interruptible@atomic-setmode,skip
+> +igt@kms_atomic_interruptible@legacy-dpms,skip
+> +igt@kms_atomic_interruptible@legacy-pageflip,skip
+> +igt@kms_atomic_interruptible@legacy-cursor,skip
+> +igt@kms_atomic_interruptible@universal-setplane-primary,skip
+> +igt@kms_atomic_interruptible@universal-setplane-cursor,skip
+> +igt@kms_content_protection@lic,skip
+> +igt@kms_flip_event_leak,dmesg-warn
+> +igt@kms_getfb@getfb-handle-zero,pass
+> +igt@kms_getfb@getfb-handle-valid,pass
+> +igt@kms_getfb@getfb-handle-closed,pass
+> +igt@kms_getfb@getfb-handle-not-fb,pass
+> +igt@kms_getfb@getfb-addfb-different-handles,pass
+> +igt@kms_getfb@getfb-repeated-different-handles,pass
+> +igt@kms_getfb@getfb2-handle-zero,pass
+> +igt@kms_getfb@getfb2-handle-closed,pass
+> +igt@kms_getfb@getfb2-handle-not-fb,pass
+> +igt@kms_getfb@getfb2-into-addfb2,pass
+> +igt@kms_getfb@getfb-handle-protection,pass
+> +igt@kms_getfb@getfb2-handle-protection,pass
+> +igt@kms_hdmi_inject@inject-4k,skip
+> +igt@kms_multipipe_modeset@basic-max-pipe-crc-check,pass
+> +igt@kms_pipe_crc_basic@bad-source,pass
+> +igt@kms_pipe_crc_basic@read-crc-pipe-a,pass
+> +igt@kms_pipe_crc_basic@read-crc-pipe-a-frame-sequence,pass
+> +igt@kms_pipe_crc_basic@nonblocking-crc-pipe-a,pass
+> +igt@kms_pipe_crc_basic@nonblocking-crc-pipe-a-frame-sequence,pass
+> +igt@kms_pipe_crc_basic@disable-crc-after-crtc-pipe-a,dmesg-warn
+> +igt@kms_pipe_crc_basic@compare-crc-sanitycheck-pipe-a,dmesg-warn
+> +igt@kms_pipe_crc_basic@read-crc-pipe-b,skip
+> +igt@kms_pipe_crc_basic@read-crc-pipe-b-frame-sequence,skip
+> +igt@kms_pipe_crc_basic@nonblocking-crc-pipe-b,skip
+> +igt@kms_pipe_crc_basic@nonblocking-crc-pipe-b-frame-sequence,skip
+> +igt@kms_pipe_crc_basic@disable-crc-after-crtc-pipe-b,skip
+> +igt@kms_pipe_crc_basic@compare-crc-sanitycheck-pipe-b,skip
+> +igt@kms_prop_blob@basic,pass
+> +igt@kms_prop_blob@blob-prop-core,pass
+> +igt@kms_prop_blob@blob-prop-validate,pass
+> +igt@kms_prop_blob@blob-prop-lifetime,pass
+> +igt@kms_prop_blob@blob-multiple,pass
+> +igt@kms_prop_blob@invalid-get-prop-any,pass
+> +igt@kms_prop_blob@invalid-get-prop,pass
+> +igt@kms_prop_blob@invalid-set-prop-any,pass
+> +igt@kms_prop_blob@invalid-set-prop,pass
+> +igt@kms_rmfb@rmfb-ioctl,pass
+> +igt@kms_rmfb@close-fd,fail
+> +igt@kms_setmode@basic@pipe-a-edp-1,dmesg-warn
+> +igt@kms_setmode@basic,skip
+> +igt@msm_mapping@sqefw,dmesg-fail
+> +igt@msm_mapping@shadow,dmesg-fail
+> +igt@msm_recovery@hangcheck,dmesg-warn
+> +igt@msm_recovery@gpu-fault,dmesg-warn
+> +igt@msm_recovery@iova-fault,dmesg-warn
+> +igt@msm_submit@empty-submit,pass
+> +igt@msm_submit@invalid-queue-submit,pass
+> +igt@msm_submit@invalid-flags-submit,pass
+> +igt@msm_submit@invalid-in-fence-submit,pass
+> +igt@msm_submit@invalid-duplicate-bo-submit,dmesg-warn
+> +igt@msm_submit@invalid-cmd-idx-submit,dmesg-warn
+> +igt@msm_submit@invalid-cmd-type-submit,dmesg-warn
+> +igt@msm_submit@valid-submit,pass
+> +igt@kms_sysfs_edid_timing,pass
+> +igt@kms_universal_plane@universal-plane-pipe-a-functional,dmesg-fail
+> +igt@kms_universal_plane@disable-primary-vs-flip-pipe-a,dmesg-warn
+> +igt@kms_universal_plane@disable-primary-vs-flip-pipe-b,skip
+> +igt@kms_vblank@invalid,dmesg-warn
+> +igt@kms_vblank@crtc-id,dmesg-warn
+> +igt@kms_vblank@pipe-a-query-idle,dmesg-warn
+> +igt@kms_vblank@pipe-a-query-forked,dmesg-warn
+> +igt@kms_vblank@pipe-a-query-busy,dmesg-warn
+> +igt@kms_vblank@pipe-a-query-forked-busy,dmesg-warn
+> +igt@kms_vblank@pipe-a-wait-idle,dmesg-warn
+> +igt@kms_vblank@pipe-a-wait-forked,dmesg-warn
+> +igt@kms_vblank@pipe-a-wait-busy,dmesg-warn
+> +igt@kms_vblank@pipe-a-wait-forked-busy,dmesg-warn
+> +igt@kms_vblank@pipe-a-ts-continuation-idle,dmesg-warn
+> +igt@kms_vblank@pipe-a-ts-continuation-modeset,dmesg-warn
+> +igt@kms_vblank@pipe-b-accuracy-idle,skip
+> +igt@kms_vblank@pipe-b-query-idle,skip
+> +igt@kms_vblank@pipe-b-query-forked,skip
+> +igt@kms_vblank@pipe-b-query-busy,skip
+> +igt@kms_vblank@pipe-b-query-forked-busy,skip
+> +igt@kms_vblank@pipe-b-wait-idle,skip
+> +igt@kms_vblank@pipe-b-wait-forked,skip
+> +igt@kms_vblank@pipe-b-wait-busy,skip
+> +igt@kms_vblank@pipe-b-wait-forked-busy,skip
+> +igt@kms_vblank@pipe-b-ts-continuation-idle,skip
+> +igt@kms_vblank@pipe-b-ts-continuation-modeset,skip
+> --
+> 2.31.1
+>

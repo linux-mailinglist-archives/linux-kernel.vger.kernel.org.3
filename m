@@ -2,114 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 948AC523348
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 14:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E7C52334A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 14:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242656AbiEKMnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 08:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56222 "EHLO
+        id S242676AbiEKMnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 08:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbiEKMm5 (ORCPT
+        with ESMTP id S235845AbiEKMne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 08:42:57 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8E03F89A
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 05:42:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652272976; x=1683808976;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=GFhebHzBmdSTAm8X/ZQTSJF1RxXHbmrgrGWBEpfUvdY=;
-  b=bwqZDJMDCIidXiSPLgz5K81TMo0TumujtP6zkCsD6Hu3Z54zFt7Scx9q
-   VmvMRxHM0iiaGHUFJ7IxLW42a9rC8pRVbr/VWnhuD2seFHuWRvvOY4qXN
-   JFXfj3Oq1Sy09Zz2z1SEl3NM55NGXMwTkUh+MvvrsC2L+P7pHNTRqSEcO
-   GxUkuTi4IlRCn+tAik1Tko/QNPG0ARFlCKYW3MtdtAnkrHhe33PRa34QC
-   nzMrzErEmdal/zLc8SZ8hTDgITuhFt0HNcVzVGC6Bkutovkt4sNW/1nEk
-   ruDpacG/A4vN66Drd80x9exdzzD2/QSyhW+e9L0zQ47/697HA4HtvXfd1
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="257230095"
-X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
-   d="scan'208";a="257230095"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 05:42:56 -0700
-X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
-   d="scan'208";a="739204285"
-Received: from mstribae-mobl1.ger.corp.intel.com (HELO [10.249.254.135]) ([10.249.254.135])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 05:42:53 -0700
-Message-ID: <3ce81c514959e43f5afd7e74489dd5b89b1cd633.camel@linux.intel.com>
-Subject: Re: [PATCH 3/4] drm/i915: allow volatile buffers to use ttm pool
- allocator
-From:   Thomas =?ISO-8859-1?Q?Hellstr=F6m?= 
-        <thomas.hellstrom@linux.intel.com>
-To:     Robert Beckett <bob.beckett@collabora.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Matthew Auld <matthew.auld@intel.com>, linux-kernel@vger.kernel.org
-Date:   Wed, 11 May 2022 14:42:51 +0200
-In-Reply-To: <20220503191316.1145124-4-bob.beckett@collabora.com>
-References: <20220503191316.1145124-1-bob.beckett@collabora.com>
-         <20220503191316.1145124-4-bob.beckett@collabora.com>
-Organization: Intel Sweden AB, Registration Number: 556189-6027
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-3.fc34) 
+        Wed, 11 May 2022 08:43:34 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258EA3F311
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 05:43:31 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0VCwOcAr_1652273005;
+Received: from B-LB6YLVDL-0141.local(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VCwOcAr_1652273005)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 11 May 2022 20:43:26 +0800
+Subject: Re: [PATCH] RISC-V: Remove IORESOURCE_BUSY flag for no-map reserved
+ memory
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+To:     David Hildenbrand <david@redhat.com>, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu,
+        akpm@linux-foundation.org, anup@brainfault.org,
+        wangkefeng.wang@huawei.com, rppt@kernel.org, alex@ghiti.fr,
+        twd2.me@gmail.com, seanjc@google.com, petr.pavlu@suse.com,
+        atishp@rivosinc.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        guoren@kernel.org, jianghuaming.jhm@alibaba-inc.com,
+        Nick Kossifidis <mick@ics.forth.gr>
+References: <20220511112413.559734-1-xianting.tian@linux.alibaba.com>
+ <4407c84b-a64f-51b0-fa96-388aaf3b3e35@redhat.com>
+ <f12c2576-1bd4-970d-4435-59273c5de0fc@linux.alibaba.com>
+Message-ID: <f214bb0b-41d9-18cc-9f22-f3a7918689c9@linux.alibaba.com>
+Date:   Wed, 11 May 2022 20:43:25 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.10.1
 MIME-Version: 1.0
+In-Reply-To: <f12c2576-1bd4-970d-4435-59273c5de0fc@linux.alibaba.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bob,
 
-On Tue, 2022-05-03 at 19:13 +0000, Robert Beckett wrote:
-> internal buffers should be shmem backed.
-> if a volatile buffer is requested, allow ttm to use the pool
-> allocator
-> to provide volatile pages as backing
-> 
-> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
-> ---
->  drivers/gpu/drm/i915/gem/i915_gem_ttm.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-> b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-> index 4c25d9b2f138..fdb3a1c18cb6 100644
-> --- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-> +++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-> @@ -309,7 +309,8 @@ static struct ttm_tt *i915_ttm_tt_create(struct
-> ttm_buffer_object *bo,
->                 page_flags |= TTM_TT_FLAG_ZERO_ALLOC;
->  
->         caching = i915_ttm_select_tt_caching(obj);
-> -       if (i915_gem_object_is_shrinkable(obj) && caching ==
-> ttm_cached) {
-> +       if (i915_gem_object_is_shrinkable(obj) && caching ==
-> ttm_cached &&
-> +           !i915_gem_object_is_volatile(obj)) {
->                 page_flags |= TTM_TT_FLAG_EXTERNAL |
->                               TTM_TT_FLAG_EXTERNAL_MAPPABLE;
->                 i915_tt->is_shmem = true;
+在 2022/5/11 下午8:37, Xianting Tian 写道:
+>
+> 在 2022/5/11 下午8:27, David Hildenbrand 写道:
+>> On 11.05.22 13:24, Xianting Tian wrote:
+>>> Commit 00ab027a3b82 ("RISC-V: Add kernel image sections to the 
+>>> resource tree")
+>>> added IORESOURCE_BUSY flag for no-map reserved memory, this casued
+>>> devm_ioremap_resource() failed for the no-map reserved memory in 
+>>> subsequent
+>>> operations of related driver, so remove the IORESOURCE_BUSY flag.
+>>>
+>>> The code to reproduce the issue,
+>>> dts:
+>>>     mem0: memory@a0000000 {
+>>>                  reg = <0x0 0xa0000000 0 0x1000000>;
+>>>                  no-map;
+>>>          };
+>>>
+>>>     &test {
+>>>         status = "okay";
+>>>         memory-region = <&mem0>;
+>>>     };
+>>>
+>>> code:
+>>>     np = of_parse_phandle(pdev->dev.of_node, "memory-region", 0);
+>>>     ret = of_address_to_resource(np, 0, &r);
+>>>     base = devm_ioremap_resource(&pdev->dev, &r);
+>>>     // base = -EBUSY
+>>>
+>>> Fixes: 00ab027a3b82 ("RISC-V: Add kernel image sections to the 
+>>> resource tree")
+>>> Reported-by: Huaming Jiang <jianghuaming.jhm@alibaba-inc.com>
+>>> Reviewed-by: Guo Ren <guoren@kernel.org>
+>>> CC: Nick Kossifidis <mick@ics.forth.gr>
+>>> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+>>> ---
+>>>   arch/riscv/kernel/setup.c | 2 +-
+>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+>>> index 834eb652a7b9..71f2966b1474 100644
+>>> --- a/arch/riscv/kernel/setup.c
+>>> +++ b/arch/riscv/kernel/setup.c
+>>> @@ -214,7 +214,7 @@ static void __init init_resources(void)
+>>>             if (unlikely(memblock_is_nomap(region))) {
+>>>               res->name = "Reserved";
+>>> -            res->flags = IORESOURCE_MEM | IORESOURCE_BUSY;
+>>> +            res->flags = IORESOURCE_MEM;
+>>>           } else {
+>>>               res->name = "System RAM";
+>>>               res->flags = IORESOURCE_SYSTEM_RAM | IORESOURCE_BUSY;
+>> I assume the "Reserved" part is essentially unused by the kernel 
+>> correct?
+>
+> I think we may use it, actually we found the issue in our product 
+> after merged kdump functionality.
+>
+> Actually, the code didn't add IORESOURCE_BUSY for no-map reserved 
+> memory before 00ab027a3b82 merged,  so it is a typo for commit 
+> 00ab027a3b82 to add IORESOURCE_BUSY?
 
-While this is ok, I think it also needs adjustment in the i915_ttm
-shrink callback. If someone creates a volatile smem object which then
-hits the shrinker, I think we might hit asserts that it's a is_shem
-ttm?
+This is arm64 code, which doesn't add IORESOURCE_BUSY for no-map 
+reserved memory,
 
-In this case, the shrink callback should just i915_ttm_purge().
+arch/arm64/kernel/setup.c
 
-/Thomas
+         for_each_mem_region(region) {
+                 res = &standard_resources[i++];
+                 if (memblock_is_nomap(region)) {
+                         res->name  = "reserved";
+                         res->flags = IORESOURCE_MEM;
+                         res->start = 
+__pfn_to_phys(memblock_region_reserved_base_pfn(region));
+                         res->end = 
+__pfn_to_phys(memblock_region_reserved_end_pfn(region)) - 1;
 
-
+>
+>>

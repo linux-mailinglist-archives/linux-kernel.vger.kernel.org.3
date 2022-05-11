@@ -2,159 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 412D1522EA5
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:44:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E28C522EA8
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:45:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243851AbiEKIom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 04:44:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45116 "EHLO
+        id S243898AbiEKIpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 04:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243938AbiEKIog (ORCPT
+        with ESMTP id S243909AbiEKIpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 04:44:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A7B6D200F7D
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 01:44:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652258670;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6XAsQFnhrZpWvc7RJwu2raTQ/L5Wv/W+iz3iayoq1a0=;
-        b=REf+YWLnEYGIUST6v3wPpiAawhX0i6ZLI0l9KpTQc9tVDcd7A/hGiBq8Qy0ZoKupbNQK3/
-        9ajiu84pRVB1gkO3xGY1Ai9ppbQknGfOmfAstM3UYZ1gl+awqdzzpGPGNGrpWLzBNL6464
-        WtLD+o7TvDDRLudT4p2oY/f4MzTht90=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-669-NMVowrerMIai6WqcNK0bPA-1; Wed, 11 May 2022 04:44:27 -0400
-X-MC-Unique: NMVowrerMIai6WqcNK0bPA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B2059801210;
-        Wed, 11 May 2022 08:44:26 +0000 (UTC)
-Received: from localhost (unknown [10.39.193.115])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1A9827AD9;
-        Wed, 11 May 2022 08:44:15 +0000 (UTC)
-From:   Cornelia Huck <cohuck@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        eperezma <eperezma@redhat.com>, Cindy Lu <lulu@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH V4 8/9] virtio: harden vring IRQ
-In-Reply-To: <CACGkMEtBfdhx-9CMKD0F4+536e5ewf6NQJGPTEBX00uby-C8+w@mail.gmail.com>
-Organization: Red Hat GmbH
-References: <20220507071954.14455-1-jasowang@redhat.com>
- <20220507071954.14455-9-jasowang@redhat.com>
- <20220510072833-mutt-send-email-mst@kernel.org>
- <CACGkMEtBfdhx-9CMKD0F4+536e5ewf6NQJGPTEBX00uby-C8+w@mail.gmail.com>
-User-Agent: Notmuch/0.34 (https://notmuchmail.org)
-Date:   Wed, 11 May 2022 10:44:14 +0200
-Message-ID: <87o804bgrl.fsf@redhat.com>
+        Wed, 11 May 2022 04:45:02 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7DFE6201330;
+        Wed, 11 May 2022 01:45:01 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 499EF106F;
+        Wed, 11 May 2022 01:45:01 -0700 (PDT)
+Received: from [10.57.1.137] (unknown [10.57.1.137])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 185D63F73D;
+        Wed, 11 May 2022 01:44:58 -0700 (PDT)
+Message-ID: <6fcc2358-b029-fa01-cf06-aa040f53cf83@arm.com>
+Date:   Wed, 11 May 2022 09:44:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.1
+Subject: Re: [PATCH 0/2] perf: ARM CoreSight PMU support
+To:     Will Deacon <will@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Besar Wicaksono <bwicaksono@nvidia.com>, catalin.marinas@arm.com,
+        mark.rutland@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        thanu.rangarajan@arm.com, Michael.Williams@arm.com,
+        treding@nvidia.com, jonathanh@nvidia.com, vsethi@nvidia.com,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+References: <20220509002810.12412-1-bwicaksono@nvidia.com>
+ <20220509092843.GB26264@willie-the-truck>
+ <2e5e09f9-b71b-d936-e291-db8f94554b18@arm.com>
+ <20220510110742.ievkihggndpms3fn@bogus>
+ <20220510111318.GD27557@willie-the-truck>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20220510111318.GD27557@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11 2022, Jason Wang <jasowang@redhat.com> wrote:
+On 10/05/2022 12:13, Will Deacon wrote:
+> On Tue, May 10, 2022 at 12:07:42PM +0100, Sudeep Holla wrote:
+>> On Mon, May 09, 2022 at 11:02:23AM +0100, Suzuki K Poulose wrote:
+>>> Cc: Mike Williams, Mathieu Poirier
+>>> On 09/05/2022 10:28, Will Deacon wrote:
+>>>> On Sun, May 08, 2022 at 07:28:08PM -0500, Besar Wicaksono wrote:
+>>>>>    arch/arm64/configs/defconfig                  |    1 +
+>>>>>    drivers/perf/Kconfig                          |    2 +
+>>>>>    drivers/perf/Makefile                         |    1 +
+>>>>>    drivers/perf/coresight_pmu/Kconfig            |   10 +
+>>>>>    drivers/perf/coresight_pmu/Makefile           |    7 +
+>>>>>    .../perf/coresight_pmu/arm_coresight_pmu.c    | 1317 +++++++++++++++++
+>>>>>    .../perf/coresight_pmu/arm_coresight_pmu.h    |  147 ++
+>>>>>    .../coresight_pmu/arm_coresight_pmu_nvidia.c  |  300 ++++
+>>>>>    .../coresight_pmu/arm_coresight_pmu_nvidia.h  |   17 +
+>>>>>    9 files changed, 1802 insertions(+)
+>>>>
+>>>> How does this interact with all the stuff we have under
+>>>> drivers/hwtracing/coresight/?
+>>>
+>>> Absolutely zero, except for the name. The standard
+>>> is named "CoreSight PMU" which is a bit unfortunate,
+>>> given the only link, AFAIU, with the "CoreSight" architecture
+>>> is the Lock Access Register(LAR). For reference, the
+>>> drivers/hwtracing/coresight/ is purely "CoreSight" self-hosted
+>>> tracing and the PMU is called "cs_etm" (expands to coresight etm).
+>>> Otherwise the standard doesn't have anything to do with what
+>>> exists already in the kernel.
+> 
+> That's... a poor naming choice! But good, if it's entirely separate then I
+> don't have to worry about that. Just wanted to make sure we're not going to
+> get tangled up in things like ROM tables and Coresight power domains for
+> these things.
+> 
+>>> One potential recommendation for the name is, "Arm PMU"  (The ACPI table is
+>>> named Arm PMU Table). But then that could be clashing with the armv8_pmu
+>>> :-(.
+>>>
+>>> Some of the other options are :
+>>>
+>>> "Arm Generic PMU"
+>>> "Arm Uncore PMU"
+>>
+>> I wasn't sure on this if there is any restriction on usage of this on Arm
+>> and hence didn't make the suggestion. But if allowed, this would be my
+>> choice too.
+> 
+> We'd taken to calling them "System" PMUS in the past, so maybe just stick
+> with that? I think "Uncore" is Intel terminology so it's probably best to
 
-> On Tue, May 10, 2022 at 7:32 PM Michael S. Tsirkin <mst@redhat.com> wrote:
->>
->> On Sat, May 07, 2022 at 03:19:53PM +0800, Jason Wang wrote:
->> > diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
->> > index d8a2340f928e..23f1694cdbd5 100644
->> > --- a/include/linux/virtio_config.h
->> > +++ b/include/linux/virtio_config.h
->> > @@ -256,6 +256,18 @@ void virtio_device_ready(struct virtio_device *dev)
->> >       unsigned status = dev->config->get_status(dev);
->> >
->> >       BUG_ON(status & VIRTIO_CONFIG_S_DRIVER_OK);
->> > +
->> > +     /*
->> > +      * The virtio_synchronize_cbs() makes sure vring_interrupt()
->> > +      * will see the driver specific setup if it sees vq->broken
->> > +      * as false.
->> > +      */
->> > +     virtio_synchronize_cbs(dev);
->>
->> since you mention vq->broken above, maybe add
->>         "set vq->broken to false"
->
-> Ok.
->
->>
->> > +     __virtio_unbreak_device(dev);
->> > +     /*
->> > +      * The transport is expected ensure the visibility of
->>
->> to ensure
->
-> Will fix.
->
->>
->> > +      * vq->broken
->>
->> let's add: "visibility by vq callbacks"
->
-> Sure.
->
->>
->> > before setting VIRTIO_CONFIG_S_DRIVER_OK.
->> > +      */
->>
->>
->> Can I see some analysis of existing transports showing
->> this is actually the case for them?
->
-> Yes.
->
->> And maybe add a comment near set_status to document the
->> requirement.
->
-> For PCI and MMIO, we can quote the memory-barriers.txt or explain that
-> wmb() is not needed before the MMIO writel().
-> For CCW, it looks not obvious, it looks to me the IO was submitted via
-> __ssch() which has an inline assembly.  Cornelia and Hali, could you
-> help me to understand if and how did virtio_ccw_set_status() can
-> ensure the visibility of the previous driver setup and vq->broken
-> here?
+I thought about that, but there are some IPs named "System Profilers" 
+(e.g., on Juno board) which could be easily confused. But I hope their
+population in the name space is much less. So, I am happy with that
+choice. The only other concern is, it doesn't indicate it supports PMUs
+that are compliant to a given Arm Standard. i.e., people could think of 
+this as a "single type" of PMU.
+So, I am wondering if something like "Arm Standard PMU" makes any sense ?
 
-I'm not sure I completely understand the question here, but let me try:
+Also, I hope the drivers would choose a name indicating the "type"  -
+<vendor>_<type>_pmu (e.g., nvidia_pcie_pmu, arm_smmuv3_pmu etc) while 
+registering their PMU. That way it is clearer for the PMU while the
+base device could be arm_system_pmu_0 etc.
 
-virtio_ccw_set_status() uses a channel command to set the status, with
-the interesting stuff done inside ccw_io_helper(). That function
-- takes the subchannel lock, disabling interrupts
-- does the ssch; this instruction will fail if there's already another
-  I/O in progress, or an interrupt is pending for the subchannel; on
-  success, it is guaranteed that we'll get an interrupt eventually
-- unlock the subchannel, and wait for the interupt handler to eventually
-  process the interrupt, so I guess it should see the vq->broken value?
-
-If the I/O fails, virtio_ccw_set_status() will revert its internal
-status to the old value.
+Suzuki
 
 
->
-> Thanks
->
->>
->> >       dev->config->set_status(dev, status | VIRTIO_CONFIG_S_DRIVER_OK);
->> >  }
+> avoid it for non-Intel parts.
+> 
+> Will
 

@@ -2,100 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD50D5236D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:13:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4EE25236C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245590AbiEKPNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
+        id S245433AbiEKPMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:12:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241287AbiEKPNt (ORCPT
+        with ESMTP id S245540AbiEKPMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:13:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E6FEAD09;
-        Wed, 11 May 2022 08:13:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 397FFB824C8;
-        Wed, 11 May 2022 15:13:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98AB0C340EE;
-        Wed, 11 May 2022 15:13:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652282026;
-        bh=oiXSRKcpIah/AZEY44g3Ce/a9M9OgnM/n6q6sy4F74U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WfkhT8nFe6Dg5o5l2Z9GuasTRw14JfXpoxQtWwOeFqHgNZ+2HU02T5ifnJwRbaLQD
-         CSBSRXAC0+Riv2C0WO4gVMtr8cpS0GceuUZJkYAznQrqe3ZWtCse4KYWKEi8l0vyAc
-         M3bfRXuqVdGRcsFBf2Tej4jGOa5LbMzYG+FVmdXk57q1LUVVpUpzyqSrBEB7jfdj9E
-         OZYxSMS0VS9Y/gjVqOo8PdIAUBpcF9Ge5FkLu6DEWe1Si3kCQRj6RRXPnhsDPcIO2F
-         0wLiRU1UkaJuFmDIvVBd66NgpCkOMfsQQzG/vfQ+sp8vobDBmZ7j+G/MiYjA7o/VCW
-         f3s76IuCTOaew==
-Date:   Wed, 11 May 2022 18:12:16 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
-Cc:     Marten.Lindahl@axis.com, jgg@ziepe.ca,
-        johannes.holland@infineon.com, jsnitsel@redhat.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        martenli@axis.com, nayna@linux.vnet.ibm.com, peterhuewe@gmx.de
-Subject: Re: [PATCH 2/2] tpm: Add Field Upgrade mode support for Infineon
- TPM2 modules
-Message-ID: <YnvSULFUC9gADu0z@kernel.org>
-References: <YnbL9LwDkY+MHdkK@iki.fi>
- <20220509125018.246093-1-stefan.mahnke-hartmann@infineon.com>
+        Wed, 11 May 2022 11:12:35 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27426211B;
+        Wed, 11 May 2022 08:12:34 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-e93bbb54f9so3125324fac.12;
+        Wed, 11 May 2022 08:12:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+bHIvRwbZy2PU2tVG2MsolIs4vwnuxHm9cCZ7s9+0ag=;
+        b=h/qSCPk7bxX2NqGK8OaRIVXDvJuBiq0CsuQWDMquStjFRfFsc0gahwRh0gxctRtK4D
+         OGUT81NVBOzRes8TQJQyvzIRQZ1SNsNxblFnupyjKVUpIGnv2aKHHTckBDafFhcMW1aB
+         nMkNQT1mglT+xuY1rHJfW5iJPmS31XTnzF5JVISLpz5/7tYTS8iVTUDMdjqkLrmwDN0x
+         o43TdIJ3D/QqygEsWPc82LzQLKOuvS+1GF/fjF+nN2NKSeBZ1lea9yvvLkX3OeBdkncm
+         0SRSyhAqNkGOVwcui0MRBwcqKVKs488x4+nIu9KfSCnteVu+BB+dP4TtyQFAzzcz+zDc
+         f9sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=+bHIvRwbZy2PU2tVG2MsolIs4vwnuxHm9cCZ7s9+0ag=;
+        b=rYlHjOMzlBuSNm4lp8KbX549/J4y9zva2r6vmwVPHT7EEb9iynyMRFCqj1OSfjJUJs
+         fuZf87eQyC5AlpFCSsLS4wDgDocJV9hDGJ/AWjZVUa5zIBRh6Pi9BgqwR0RtkqgI6yzn
+         gMlxzzoZ81Kr3yu0E+ikFSex6qdhmiUgLuCpXEnZ+0tlajUcdkkvIWF2+o5O3Xpf+U0B
+         /q4w7lTJMV7P3CK9d/AoPTGedZgCxlLLc2qFDoiLleTA5d+8QfbEEzHIKOiKTWlFg39G
+         F9AuEMn7loaE5grXI0LYlMfZ/EJvFffue6bDUko8MsUS1qcbAV8s3rwrcaHhOqR4SO12
+         JmJQ==
+X-Gm-Message-State: AOAM533MkKw6aTj2IqiBpnEYFAe1knqU4pXeOL9vt9oca34IEhXqZta6
+        5UFvHmvvrVl76RQ6VrLxBHs=
+X-Google-Smtp-Source: ABdhPJyPGhcynPWtpfjk8Hqhg2tYOLdv7xwnSqCnr8ZN1EmY6T3rWTO0jq87FeL7LHsJHqRGe/Iovg==
+X-Received: by 2002:a05:6870:3488:b0:de:eaa5:260b with SMTP id n8-20020a056870348800b000deeaa5260bmr2942141oah.281.1652281954175;
+        Wed, 11 May 2022 08:12:34 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b42-20020a056870392a00b000e686d13887sm641007oap.33.2022.05.11.08.12.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 08:12:33 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 0/3] hwmon: Introduce and use hwmon_device_register_for_thermal
+Date:   Wed, 11 May 2022 08:12:27 -0700
+Message-Id: <20220511151230.2983227-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220509125018.246093-1-stefan.mahnke-hartmann@infineon.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 02:50:18PM +0200, Stefan Mahnke-Hartmann wrote:
-> On 07.05.22 21:43, Jarkko Sakkinen wrote:
-> > On Fri, May 06, 2022 at 02:31:48PM +0200, Stefan Mahnke-Hartmann wrote:
-> >> TPM2_GetCapability with a capability that has the property type value
-> >> of TPM_PT_TOTAL_COMMANDS returns a zero length list, when an Infineon
-> >> TPM2 is in Field Upgrade mode.
-> >> Since an Infineon TPM2.0 in Field Upgrade mode returns RC_SUCCESS on
-> >> TPM2_Startup, the Field Upgrade mode has to be detected by
-> >> TPM2_GetCapability.
-> >>
-> >> Signed-off-by: Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
-> >> ---
-> >>  drivers/char/tpm/tpm2-cmd.c | 6 ++++++
-> >>  1 file changed, 6 insertions(+)
-> >>
-> >> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-> >> index e62a644ce26b..659130e2936e 100644
-> >> --- a/drivers/char/tpm/tpm2-cmd.c
-> >> +++ b/drivers/char/tpm/tpm2-cmd.c
-> >> @@ -746,6 +746,12 @@ int tpm2_auto_startup(struct tpm_chip *chip)
-> >>  	}
-> >>  
-> >>  	rc = tpm2_get_cc_attrs_tbl(chip);
-> >> +	/*
-> >> +	 * Infineon TPM in Field Upgrade mode will return no data for the number
-> >> +	 * of supported commands.
-> >> +	 */
-> >> +	if (rc == -ENODATA)
-> >> +		rc = TPM2_RC_UPGRADE;
-> >
-> > Injecting hardware error codes like this is not considered a great idea.
-> 
-> Resetting the error code was to avoid code duplication, while following the
-> same rationale as Mårten's patch. I can also add the -ENODATA to the if clause
-> below or duplicate the code block (similar to Mårten's). Do you have a better
-> suggestion?
+The thermal subsystem registers a hwmon driver without providing
+chip information or sysfs group information. This is for legacy reasons
+and would be difficult to change.
 
-I'd do that instead. It documents better the conditions.
+At the same time, several attempts have been made to convert hwmon
+drivers using the deprecated hwmon_device_register() to use
+hwmon_device_register_with_info() by just providing NULL parameters.
+This is an abuse of the hwmon API. To prevent this abuse, we want to
+enforce that a parent device pointer as well as chip information is
+provided when registering a hwmon device using
+hwmon_device_register_with_info().
 
-BR, Jarkko
+To be able to do this, introduce and use a special API for use only by
+the thermal subsystem (patches 1 and 2). Patch 3 makes the 'dev' and 'chip'
+parameters of hwmon_device_register_with_info() mandatory.
+
+----------------------------------------------------------------
+Guenter Roeck (3):
+      hwmon: Introduce hwmon_device_register_for_thermal
+      thermal/drivers/thermal_hwmon: Use hwmon_device_register_for_thermal()
+      hwmon: Make chip parameter for with_info API mandatory
+
+ Documentation/hwmon/hwmon-kernel-api.rst |  2 +-
+ drivers/hwmon/hwmon.c                    | 41 ++++++++++++++++++++++++++++++++---------
+ drivers/thermal/thermal_hwmon.c          |  6 ++++--
+ include/linux/hwmon.h                    |  3 +++
+ 4 files changed, 40 insertions(+), 12 deletions(-)

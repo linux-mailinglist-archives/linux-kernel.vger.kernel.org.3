@@ -2,94 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 253B75236C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD50D5236D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245543AbiEKPMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:12:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
+        id S245590AbiEKPNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245505AbiEKPMO (ORCPT
+        with ESMTP id S241287AbiEKPNt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:12:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C6A6211B
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:12:11 -0700 (PDT)
+        Wed, 11 May 2022 11:13:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E6FEAD09;
+        Wed, 11 May 2022 08:13:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C1BE6186A
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 15:12:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AB63C340EE;
-        Wed, 11 May 2022 15:12:09 +0000 (UTC)
-Date:   Wed, 11 May 2022 11:12:07 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        cj.chengjian@huawei.com, huawei.libin@huawei.com,
-        xiexiuqi@huawei.com, liwei391@huawei.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        catalin.marinas@arm.com, will@kernel.org, zengshun.wu@outlook.com,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [RFC PATCH -next v2 3/4] arm64/ftrace: support dynamically
- allocated trampolines
-Message-ID: <20220511111207.25d1a693@gandalf.local.home>
-In-Reply-To: <20220511233450.40136cdf6a53eb32cd825be8@kernel.org>
-References: <YmFXrBG5AmX3+4f8@lakrids>
-        <20220421100639.03c0d123@gandalf.local.home>
-        <YmF0xYpTMoWOIl00@lakrids>
-        <20220421114201.21228eeb@gandalf.local.home>
-        <YmGF/OpIhAF8YeVq@lakrids>
-        <20220421130648.56b21951@gandalf.local.home>
-        <YmJ/l4vJoEpFt68l@FVFF77S0Q05N>
-        <20220422114541.34d71ad9@gandalf.local.home>
-        <YmLlmaXF00hPkOID@lakrids>
-        <20220426174749.b5372c5769af7bf901649a05@kernel.org>
-        <YnJUTuOIX9YoJq23@FVFF77S0Q05N>
-        <20220505121538.04773ac98e2a8ba17f675d39@kernel.org>
-        <20220509142203.6c4f2913@gandalf.local.home>
-        <20220510181012.d5cba23a2547f14d14f016b9@kernel.org>
-        <20220510104446.6d23b596@gandalf.local.home>
-        <20220511233450.40136cdf6a53eb32cd825be8@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 397FFB824C8;
+        Wed, 11 May 2022 15:13:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98AB0C340EE;
+        Wed, 11 May 2022 15:13:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652282026;
+        bh=oiXSRKcpIah/AZEY44g3Ce/a9M9OgnM/n6q6sy4F74U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WfkhT8nFe6Dg5o5l2Z9GuasTRw14JfXpoxQtWwOeFqHgNZ+2HU02T5ifnJwRbaLQD
+         CSBSRXAC0+Riv2C0WO4gVMtr8cpS0GceuUZJkYAznQrqe3ZWtCse4KYWKEi8l0vyAc
+         M3bfRXuqVdGRcsFBf2Tej4jGOa5LbMzYG+FVmdXk57q1LUVVpUpzyqSrBEB7jfdj9E
+         OZYxSMS0VS9Y/gjVqOo8PdIAUBpcF9Ge5FkLu6DEWe1Si3kCQRj6RRXPnhsDPcIO2F
+         0wLiRU1UkaJuFmDIvVBd66NgpCkOMfsQQzG/vfQ+sp8vobDBmZ7j+G/MiYjA7o/VCW
+         f3s76IuCTOaew==
+Date:   Wed, 11 May 2022 18:12:16 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
+Cc:     Marten.Lindahl@axis.com, jgg@ziepe.ca,
+        johannes.holland@infineon.com, jsnitsel@redhat.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        martenli@axis.com, nayna@linux.vnet.ibm.com, peterhuewe@gmx.de
+Subject: Re: [PATCH 2/2] tpm: Add Field Upgrade mode support for Infineon
+ TPM2 modules
+Message-ID: <YnvSULFUC9gADu0z@kernel.org>
+References: <YnbL9LwDkY+MHdkK@iki.fi>
+ <20220509125018.246093-1-stefan.mahnke-hartmann@infineon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220509125018.246093-1-stefan.mahnke-hartmann@infineon.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 May 2022 23:34:50 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
-
-> OK, so fregs::regs will have a subset of pt_regs, and accessibility of
-> the registers depends on the architecture. If we can have a checker like
+On Mon, May 09, 2022 at 02:50:18PM +0200, Stefan Mahnke-Hartmann wrote:
+> On 07.05.22 21:43, Jarkko Sakkinen wrote:
+> > On Fri, May 06, 2022 at 02:31:48PM +0200, Stefan Mahnke-Hartmann wrote:
+> >> TPM2_GetCapability with a capability that has the property type value
+> >> of TPM_PT_TOTAL_COMMANDS returns a zero length list, when an Infineon
+> >> TPM2 is in Field Upgrade mode.
+> >> Since an Infineon TPM2.0 in Field Upgrade mode returns RC_SUCCESS on
+> >> TPM2_Startup, the Field Upgrade mode has to be detected by
+> >> TPM2_GetCapability.
+> >>
+> >> Signed-off-by: Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
+> >> ---
+> >>  drivers/char/tpm/tpm2-cmd.c | 6 ++++++
+> >>  1 file changed, 6 insertions(+)
+> >>
+> >> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+> >> index e62a644ce26b..659130e2936e 100644
+> >> --- a/drivers/char/tpm/tpm2-cmd.c
+> >> +++ b/drivers/char/tpm/tpm2-cmd.c
+> >> @@ -746,6 +746,12 @@ int tpm2_auto_startup(struct tpm_chip *chip)
+> >>  	}
+> >>  
+> >>  	rc = tpm2_get_cc_attrs_tbl(chip);
+> >> +	/*
+> >> +	 * Infineon TPM in Field Upgrade mode will return no data for the number
+> >> +	 * of supported commands.
+> >> +	 */
+> >> +	if (rc == -ENODATA)
+> >> +		rc = TPM2_RC_UPGRADE;
+> >
+> > Injecting hardware error codes like this is not considered a great idea.
 > 
-> ftrace_regs_exist(fregs, reg_offset)
+> Resetting the error code was to avoid code duplication, while following the
+> same rationale as Mårten's patch. I can also add the -ENODATA to the if clause
+> below or duplicate the code block (similar to Mårten's). Do you have a better
+> suggestion?
 
-Or something. I'd have to see the use case.
+I'd do that instead. It documents better the conditions.
 
-> 
-> kprobe on ftrace or fprobe user (BPF) can filter user's requests.
-> I think I can introduce a flag for kprobes so that user can make a
-> kprobe handler only using a subset of registers. 
-> Maybe similar filter code is also needed for BPF 'user space' library
-> because this check must be done when compiling BPF.
-
-Is there any other case without full regs that the user would want anything
-other than the args, stack pointer and instruction pointer?
-
-That is, have a flag that says "only_args" or something, that says they
-will only get the registers for arguments, a stack pointer, and the
-instruction pointer (note, the fregs may not have the instruction pointer
-as that is passed to the the caller via the "ip" parameter. If the fregs
-needs that, we can add a "ftrace_regs_set_ip()" before calling the
-callback registered to the fprobe).
-
--- Steve
+BR, Jarkko

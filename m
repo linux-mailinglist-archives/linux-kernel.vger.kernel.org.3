@@ -2,131 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 091715235AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3EB5235AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:37:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244773AbiEKOgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 10:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37996 "EHLO
+        id S243006AbiEKOg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 10:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243006AbiEKOg2 (ORCPT
+        with ESMTP id S241866AbiEKOgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 10:36:28 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AB32DD40
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:36:27 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nonRu-0002Lv-Bs; Wed, 11 May 2022 16:36:22 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D8B317BDD4;
-        Wed, 11 May 2022 14:36:20 +0000 (UTC)
-Date:   Wed, 11 May 2022 16:36:20 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Devid Antonio Filoni <devid.filoni@egluetechnologies.com>,
-        kernel@pengutronix.de, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Jander <david@protonic.nl>
-Subject: Re: [PATCH 1/1] can: skb: add and set local_origin flag
-Message-ID: <20220511143620.kphwgp2vhjyoecs5@pengutronix.de>
-References: <20220511121913.2696181-1-o.rempel@pengutronix.de>
- <b631b022-72d5-9160-fd13-f33c80dbbe59@hartkopp.net>
- <20220511132421.7o5a3po32l3w2wcr@pengutronix.de>
+        Wed, 11 May 2022 10:36:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC2341616;
+        Wed, 11 May 2022 07:36:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F33A7B82410;
+        Wed, 11 May 2022 14:36:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9BB0C34116;
+        Wed, 11 May 2022 14:36:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652279807;
+        bh=CFhh69pRRTRkzZMswQTkxgZWxD/YArFAjT9FIgk+yio=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=gEiSBSsGKR+8BwK8haoPAsMJZYD8XCaC46lJnoHPerCMp1g6l9P3xZteEOsKk2MUo
+         ZELEJ1mhPuDhJmP3W+BmC6+m5Y+12EYvpGP8QstJEZBeHL/AVpMiFpf493GaDnSS/M
+         OkGALA59NNBTMT1eUG/2thE3TNfy8FjzAreDuz/5UUhAKiLbdQr/l3+ZqdH+XWYymp
+         ZaPf2ZqzoiiKqUBpg+UMK5SZ278kFIWfvi1QQqMzqxhTdHy3Vb7OtHLdD9l3RgV0d5
+         dQsiJXbqdK5Y2Rs8nGNZwhzkcD3yr374Vzpk+l1sKqylC3lo1EteelNQbN23gaG6vA
+         yN18XzCLNNY/A==
+Received: by mail-pg1-f172.google.com with SMTP id 15so1975211pgf.4;
+        Wed, 11 May 2022 07:36:47 -0700 (PDT)
+X-Gm-Message-State: AOAM530Gah/Q4jE02qiGWsyjL7ASd8mQmRALHe+g+A6dzKYOpJ3sE4Vs
+        IK+nXqt7JccN+2irDY+0YVeepwRPgu/higbeVA==
+X-Google-Smtp-Source: ABdhPJzuQsnkqZbdNusjFeMctKvTdpkvefeyuXEUsA0fTySx0Vw8lpkWlOD30zEX2dqbf4Ozf1dDOiJd7nqvDOobbuc=
+X-Received: by 2002:aa7:9519:0:b0:510:5175:7649 with SMTP id
+ b25-20020aa79519000000b0051051757649mr25841856pfp.15.1652279807276; Wed, 11
+ May 2022 07:36:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ljoxgzahuknnbyf5"
-Content-Disposition: inline
-In-Reply-To: <20220511132421.7o5a3po32l3w2wcr@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <20220504091923.2219-1-rex-bc.chen@mediatek.com>
+ <20220504091923.2219-2-rex-bc.chen@mediatek.com> <e45e68c76775edbf935418ca4f75dc83591805cd.camel@mediatek.com>
+In-Reply-To: <e45e68c76775edbf935418ca4f75dc83591805cd.camel@mediatek.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Wed, 11 May 2022 09:36:35 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLcZ69-WPk6Oq54EgXPZo-wviu5-SrKEaAYRQ5LZU0rcw@mail.gmail.com>
+Message-ID: <CAL_JsqLcZ69-WPk6Oq54EgXPZo-wviu5-SrKEaAYRQ5LZU0rcw@mail.gmail.com>
+Subject: Re: [PATCH v6 1/4] dt-bindings: display: mediatek: dsi: Convert
+ dsi_dtbinding to .yaml
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        devicetree@vger.kernel.org, Jitao Shi <jitao.shi@mediatek.com>,
+        "xinlei.lee" <xinlei.lee@mediatek.com>,
+        David Airlie <airlied@linux.ie>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 11, 2022 at 2:24 AM Rex-BC Chen <rex-bc.chen@mediatek.com> wrote:
+>
+> On Wed, 2022-05-04 at 17:19 +0800, Rex-BC Chen wrote:
+> > From: Xinlei Lee <xinlei.lee@mediatek.com>
+> >
+> > Convert mediatek,dsi.txt to mediatek,dsi.yaml format
+> >
+> > Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >  .../display/mediatek/mediatek,dsi.txt         |  62 ----------
+> >  .../display/mediatek/mediatek,dsi.yaml        | 115
+> > ++++++++++++++++++
+> >  2 files changed, 115 insertions(+), 62 deletions(-)
+> >  delete mode 100644
+> > Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
+> >  create mode 100644
+> > Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yaml
 
---ljoxgzahuknnbyf5
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[...]
 
-On 11.05.2022 15:24:21, Marc Kleine-Budde wrote:
-> On 11.05.2022 14:38:32, Oliver Hartkopp wrote:
-> > IMO this patch does not work as intended.
-> >=20
-> > You probably need to revisit every place where can_skb_reserve() is use=
-d,
-> > e.g. in raw_sendmsg().
->=20
-> And the loopback for devices that don't support IFF_ECHO:
->=20
-> | https://elixir.bootlin.com/linux/latest/source/net/can/af_can.c#L257
+> Hello Rob and Krzysztof,
+>
+> Can you give us some suggestions for this conversion patch?
+> Thanks!
 
-BTW: There is a bug with interfaces that don't support IFF_ECHO.
+You can check status for yourself by looking at PW[1] where you will
+see the review queue is currently ~120 patches and goes back to 5/3.
+If it is in the queue, I will get to it.
 
-Assume an invalid CAN frame is passed to can_send() on an interface that
-doesn't support IFF_ECHO. The above mentioned code does happily generate
-an echo frame and it's send, even if the driver drops it, due to
-can_dropped_invalid_skb(dev, skb).
+Rob
 
-The echoed back CAN frame is treated in raw_rcv() as if the headroom is val=
-id:
-
-| https://elixir.bootlin.com/linux/v5.17.6/source/net/can/raw.c#L138
-
-But as far as I can see the can_skb_headroom_valid() check never has
-been done. What about this patch?
-
-index 1fb49d51b25d..fda4807ad165 100644
---- a/net/can/af_can.c
-+++ b/net/can/af_can.c
-@@ -255,6 +255,9 @@ int can_send(struct sk_buff *skb, int loop)
-                 */
-=20
-                if (!(skb->dev->flags & IFF_ECHO)) {
-+                       if (can_dropped_invalid_skb(dev, skb))
-+                               return -EINVAL;
-+
-                        /* If the interface is not capable to do loopback
-                         * itself, we do it here.
-                         */
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---ljoxgzahuknnbyf5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJ7yeEACgkQrX5LkNig
-013sQgf9GZiV+J8h1BBY78BuX+q12pFS6uA1Ocl8Xx+dHF//nkU2y9FuYXbn8+fi
-fBFXw7jdhwMMfjSQPLHCbTXbLdrwEONAkQ1QQ6Db5M450W/8wisOgf+JqjDNM3iU
-tvZ1x3l3U/xFkFTdCm2A3IE/UMG7kaxeb/5v3Fk283gZNZ6FBhymRrxxofTfUtRJ
-G9Mn3Bhge8BFZ84kJZcYqhbAspY4MWoDKRDSysEjt0hxq37TxJw4M0JL4cPVH6s/
-8/HjzP5MZBh4Ep+dp4g5Y/KjEoLTLvbCtVHXcnJaLYJwW0vDvAKMG6dA8dQnc8fl
-9gmOJe5ZtenWSw87iMOsTEekkDFy2A==
-=sDfU
------END PGP SIGNATURE-----
-
---ljoxgzahuknnbyf5--
+[1] https://patchwork.ozlabs.org/project/devicetree-bindings/list/

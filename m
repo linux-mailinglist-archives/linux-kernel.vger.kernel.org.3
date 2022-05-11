@@ -2,206 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC28522FB8
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF490522FC1
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235048AbiEKJmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 05:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36544 "EHLO
+        id S241550AbiEKJog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 05:44:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232963AbiEKJkQ (ORCPT
+        with ESMTP id S234189AbiEKJmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 05:40:16 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C86B0994EC
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:39:45 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id p12so1548312pfn.0
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:39:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/fUBFqLThKL0/oaZ4altcxEM2SUwyrO5ldQGIQjCN9A=;
-        b=eCKuPbS3/VRMucuQKW3fV3J1Ax7JRz48UTyPqJ9d4QLXXrpHG/NK7WY8d+A+AM8hUp
-         Z4WF3/AniPqFxeK7V7vGG0KrAQOCPyoLla6A1/xTMjxb72DJ+iiSG8IAdYNvzyFhb2zz
-         f9UhYYkuakC1b6i/a/7nPdTssHoc63E0sv6onRn2fTnILoEc7Rs1Sutf09ywHPeXbcqL
-         ErX0tg0HrFzZqIpEd44dcclLS5hYBENT77DOYHQ2l9HGeaSAsor+OqzpHZFKISFSHQ1u
-         EwFScclZw++t3uWQxi2MjTgm82PAnmpAlaEAePYCgZYHtgbGezKLQ7hsXlgLaKg7L30Y
-         m2MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/fUBFqLThKL0/oaZ4altcxEM2SUwyrO5ldQGIQjCN9A=;
-        b=xerbrjhqz5bzMKLELAUoqQksw8TXZKk2HYSmz70EqZlA8XnaPjZVQFJoxKp09mglQr
-         1U9ZwSto8BkR3KYdE4leNVAShWybwEgFYp5Pt6RtUW2nHOcm7XSSgmwsNC+aIvocLdb2
-         n60KMhpkooGmoMYZ/t4hUFE1CgdKeR6I6hXxUTBe82hevTWYNpbrYYGWIu9U6OTeoMa8
-         3SdGWGlHquptA5nwu8h9Fvq/LrbODBDc81zbsYhK1pVX/XZbRJO7y81DmqU7r/HNUm4i
-         6AEaI1kcPxN6hPLleLF32/UJH0Q6MCLPVS/T4iuLbBGiytGssXPFaeBP9cuKW1jVFs48
-         ZaTQ==
-X-Gm-Message-State: AOAM5338Ctd2lzQWI8wa27n4dPP2LvpynWBmiYDt5jUv2/KbIi6ez7RF
-        EYVlEGM91A920FoKjai8FJEg6Q==
-X-Google-Smtp-Source: ABdhPJwDMbRMxkaPKPPiBYE8YkF1nY3WaIESUDRv3AovB82URlFnnq3Oon+lU4rIHVhBZMZRCGVZmw==
-X-Received: by 2002:a63:6904:0:b0:3c6:5a3c:64bd with SMTP id e4-20020a636904000000b003c65a3c64bdmr3032831pgc.371.1652261985323;
-        Wed, 11 May 2022 02:39:45 -0700 (PDT)
-Received: from C02F52LSML85.bytedance.net ([139.177.225.241])
-        by smtp.gmail.com with ESMTPSA id k4-20020aa790c4000000b0050dc76281cdsm1159834pfk.167.2022.05.11.02.39.37
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 11 May 2022 02:39:45 -0700 (PDT)
-From:   Feng zhou <zhoufeng.zf@bytedance.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, jolsa@kernel.org, davemarchevsky@fb.com,
-        joannekoong@fb.com, geliang.tang@suse.com
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        songmuchun@bytedance.com, wangdongdong.6@bytedance.com,
-        cong.wang@bytedance.com, zhouchengming@bytedance.com,
-        zhoufeng.zf@bytedance.com, yosryahmed@google.com
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: add test case for bpf_map_lookup_percpu_elem
-Date:   Wed, 11 May 2022 17:38:54 +0800
-Message-Id: <20220511093854.411-3-zhoufeng.zf@bytedance.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <20220511093854.411-1-zhoufeng.zf@bytedance.com>
-References: <20220511093854.411-1-zhoufeng.zf@bytedance.com>
+        Wed, 11 May 2022 05:42:14 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0148DDED5;
+        Wed, 11 May 2022 02:41:08 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: shreeya)
+        with ESMTPSA id D06A41F43FDC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652262066;
+        bh=+2usJXmX9v+EVeE5jSEdCqwLDL5071aGc+5kYIF6aq8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eCD9cZO350OL4oMGSCPh14Ukp+DQnX4Dz1Xs2PDxNK7HHQBoYeWl6kldHZTtcAmMy
+         S8QLpDN6D4aWQlYXXTez3FbaLqE2vuvmr72p3TakhBNIgGUxblCue4OgInDkCyxr3q
+         GnUURc/peFkCrFWv6WiywWGb8GIj93GhLPNWayfH4/6+gEvIXAYiBoO3qgHLFruAzW
+         lEt69fWLzRqJ0Lidwf817KgciRb/5X4SaJHbLhAhe5Qq3ExXa0xNbs0XQifCvFiPn5
+         MhYw40gIxyOPC2Jdh6tC3V3Ehd9O4jIDnRc+2emng0CSUxBbUj5xJ8PL6UmHFTzriy
+         g/Of/coNH8nnQ==
+From:   Shreeya Patel <shreeya.patel@collabora.com>
+To:     jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
+        Zhigang.Shi@liteon.com, krisman@collabora.com
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        alvaro.soliverez@collabora.com,
+        Shreeya Patel <shreeya.patel@collabora.com>
+Subject: [PATCH v4 0/3] Add LTRF216A Driver
+Date:   Wed, 11 May 2022 15:10:21 +0530
+Message-Id: <20220511094024.175994-1-shreeya.patel@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Feng Zhou <zhoufeng.zf@bytedance.com>
+This patchset adds support for ltrf216a Ambient Light Sensor
+and documents the DT bindings for the same.
 
-test_progs:
-Tests new ebpf helpers bpf_map_lookup_percpu_elem.
 
-Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
----
- .../bpf/prog_tests/map_lookup_percpu_elem.c   | 46 ++++++++++++++++
- .../bpf/progs/test_map_lookup_percpu_elem.c   | 54 +++++++++++++++++++
- 2 files changed, 100 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
+Changes in v4
+  - Add more descriptive comment for mutex lock
+  - Fix mutex locking in read_raw()
+  - Use i2c_smbus_read_i2c_block_data()
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
-new file mode 100644
-index 000000000000..58b24c2112b0
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
-@@ -0,0 +1,46 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2022 Bytedance
-+
-+#include <test_progs.h>
-+
-+#include "test_map_lookup_percpu_elem.skel.h"
-+
-+#define TEST_VALUE  1
-+
-+void test_map_lookup_percpu_elem(void)
-+{
-+	struct test_map_lookup_percpu_elem *skel;
-+	int key = 0, ret;
-+	int nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
-+	int *buf;
-+
-+	buf = (int *)malloc(nr_cpus*sizeof(int));
-+	if (!ASSERT_OK_PTR(buf, "malloc"))
-+		return;
-+	memset(buf, 0, nr_cpus*sizeof(int));
-+	buf[0] = TEST_VALUE;
-+
-+	skel = test_map_lookup_percpu_elem__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_map_lookup_percpu_elem__open_and_load"))
-+		return;
-+	ret = test_map_lookup_percpu_elem__attach(skel);
-+	ASSERT_OK(ret, "test_map_lookup_percpu_elem__attach");
-+
-+	ret = bpf_map_update_elem(bpf_map__fd(skel->maps.percpu_array_map), &key, buf, 0);
-+	ASSERT_OK(ret, "percpu_array_map update");
-+
-+	ret = bpf_map_update_elem(bpf_map__fd(skel->maps.percpu_hash_map), &key, buf, 0);
-+	ASSERT_OK(ret, "percpu_hash_map update");
-+
-+	ret = bpf_map_update_elem(bpf_map__fd(skel->maps.percpu_lru_hash_map), &key, buf, 0);
-+	ASSERT_OK(ret, "percpu_lru_hash_map update");
-+
-+	syscall(__NR_getuid);
-+
-+	ret = skel->bss->percpu_array_elem_val == TEST_VALUE &&
-+	      skel->bss->percpu_hash_elem_val == TEST_VALUE &&
-+	      skel->bss->percpu_lru_hash_elem_val == TEST_VALUE;
-+	ASSERT_OK(!ret, "bpf_map_lookup_percpu_elem success");
-+
-+	test_map_lookup_percpu_elem__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c b/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
-new file mode 100644
-index 000000000000..5d4ef86cbf48
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
-@@ -0,0 +1,54 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2022 Bytedance
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+int percpu_array_elem_val = 0;
-+int percpu_hash_elem_val = 0;
-+int percpu_lru_hash_elem_val = 0;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} percpu_array_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_HASH);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} percpu_hash_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_LRU_PERCPU_HASH);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} percpu_lru_hash_map SEC(".maps");
-+
-+SEC("tp/syscalls/sys_enter_getuid")
-+int sysenter_getuid(const void *ctx)
-+{
-+	__u32 key = 0;
-+	__u32 cpu = 0;
-+	__u32 *value;
-+
-+	value = bpf_map_lookup_percpu_elem(&percpu_array_map, &key, cpu);
-+	if (value)
-+		percpu_array_elem_val = *value;
-+
-+	value = bpf_map_lookup_percpu_elem(&percpu_hash_map, &key, cpu);
-+	if (value)
-+		percpu_hash_elem_val = *value;
-+
-+	value = bpf_map_lookup_percpu_elem(&percpu_lru_hash_map, &key, cpu);
-+	if (value)
-+		percpu_lru_hash_elem_val = *value;
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+Changes in v3
+  - Use u16 instead of u8 for int_time_fac
+  - Reorder headers in ltrf216a.c file
+  - Remove int_time_mapping table and use int_time_available
+  - Fix indentation in the bindings file.
+
+Changes in v2
+  - Add support for 25ms and 50ms integration time.
+  - Rename some of the macros as per names given in datasheet
+  - Add a comment for the mutex lock
+  - Use read_avail callback instead of attributes and set the
+    appropriate _available bit.
+  - Use FIELD_PREP() at appropriate places.
+  - Add a constant lookup table for integration time and reg val
+  - Use BIT() macro for magic numbers.
+  - Improve error handling at few places.
+  - Use get_unaligned_le24() and div_u64()
+  - Use probe_new() callback and devm functions
+  - Return errors in probe using dev_err_probe()
+  - Use DEFINE_SIMPLE_DEV_PM_OPS()
+  - Correct the formula for lux to use 0.45 instead of 0.8
+  - Add interrupt and power supply property in DT bindings
+  - Add vendor prefix name as per the alphabetical order.
+
+
+Shreeya Patel (3):
+  dt-bindings: vendor-prefixes: Add 'ltr' as deprecated vendor prefix
+  dt-bindings: Document ltrf216a light sensor bindings
+  iio: light: Add support for ltrf216a sensor
+
+ .../bindings/iio/light/liteon,ltrf216a.yaml   |  51 +++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   3 +
+ drivers/iio/light/Kconfig                     |  10 +
+ drivers/iio/light/Makefile                    |   1 +
+ drivers/iio/light/ltrf216a.c                  | 346 ++++++++++++++++++
+ 5 files changed, 411 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml
+ create mode 100644 drivers/iio/light/ltrf216a.c
+
 -- 
-2.20.1
+2.30.2
 

@@ -2,216 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B3C4522F00
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:10:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E77C5522F09
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239082AbiEKJJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 05:09:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48280 "EHLO
+        id S234703AbiEKJM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 05:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234703AbiEKJJu (ORCPT
+        with ESMTP id S231732AbiEKJMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 05:09:50 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1B25A5BD
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:09:48 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id y41so1420538pfw.12
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:09:48 -0700 (PDT)
+        Wed, 11 May 2022 05:12:51 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2B274862
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:12:48 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id w24so1776309edx.3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:12:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5y47Ze+puPsrR0aFbFwPILElAdn4Fvp9ntV65sizufo=;
-        b=IkcjWKCEDyJTCkONRkQb7ptSXZeFKswqvr6NFyTO9ByroqljqH40Xr8qmuoPuC2/dE
-         7gD8Xgf2+5CIgPo4IIICtA+ad7y+vaoiR4k43MH1a1vCreYAamj3qFvOPDc/GkBwi3Cp
-         tQDTHqqHRKPiyltRJdHJbh4Lhyhu33La++I8PdBbuovaOX3ReihQRSlyj9y06JQfX55+
-         VX7YKqlEdL9fpfqRaiPJCdRo3Vb/S/bEsPJTnb4THRMkR02o1wS4D55zMq/IKJCXKR3J
-         1Jt/nMBVmsXVpHm6JM2eTZtE1G78cjPxX71JcjZCgP7BX2v1iAX42S071GwpGUyD5kdX
-         QOBg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=iSM4KiWX5xiHYNImgQ6cDdJf0LCKtuaDlzcLfop++Jc=;
+        b=FM/vJ5D6P9x5+MqRB5GdGmrNf9cYDyJXebGhlNhF2u1A7m2Q+A93DNdO8nK1CBEXer
+         zqeo1Rkj7fSn7aO7BsPCAjVkbeq1WnvazQSNJeLEGXJzEr9BrC6MptVVEkqRqLDGqy9R
+         ctQbLtbuvZ0bdkBsXU1A1mkJ5FBorUWEZZI9KYJiL/koaHgU+0cm2wnXhQV0KSO0mq5O
+         rAQnl9p0rTja6EPjoI73YbS2GoLZZ5fKSQBQMDLQRaSLpVa3lHf6+czUrqLjcSkyzkfy
+         90h3XmzZ9y/bIriHXMRqYwCUCiUTbZMVemBEwuFENyHguqz3IH6U79m8+QWZZgn6nEMk
+         WHBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5y47Ze+puPsrR0aFbFwPILElAdn4Fvp9ntV65sizufo=;
-        b=sz2zDFosnrSWuyWMjXDR+6UjBXDM7JDAbBPZpzdSt3QAF2nhlB+f3QLlQa/4JY8oPM
-         fJipFRpq+YnAE9vZ840jaqrRCu0neY69ESZjADrlfsdBJgxNNKQ5QuhLXq6uvsfkr6vd
-         CPr0OhoOd56E2rt1pgdtCMKsNKkcJ7dnDDwdYtpnIJGZwPzsPsU+TvWdBHWhcuZgy10r
-         sSlbO+VnyIwmvyeUxKnOhWgA+b4FAExedzeX02ssHKc9r3xXFJhBmLTTnIxUuiPbzvNk
-         BUD6uA0rf/f55M0hDeIQa/LepPNor5H5LoPPO2gWwJmrqLhiTU53438DxPnFeU5yWmqd
-         vSYg==
-X-Gm-Message-State: AOAM531nuMLm9BD1HSNM81/yJ65qzdlOGCPOZGsY7O+kBjOeT2UFefXc
-        TYFm04N0xVN8GYi038dNzg==
-X-Google-Smtp-Source: ABdhPJzxUYOkr6sk+bfh47QK6sHUduEB6chMlePEMrS6bT0X6tEiKzXJK71SNvOGXrbvLa0r9SmOhA==
-X-Received: by 2002:a63:4e:0:b0:3c4:a040:fff3 with SMTP id 75-20020a63004e000000b003c4a040fff3mr19769918pga.22.1652260188517;
-        Wed, 11 May 2022 02:09:48 -0700 (PDT)
-Received: from piliu.users.ipa.redhat.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id a10-20020a631a4a000000b003c14af505f1sm1242020pgm.9.2022.05.11.02.09.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 02:09:48 -0700 (PDT)
-Date:   Wed, 11 May 2022 17:09:40 +0800
-From:   Pingfan Liu <kernelfans@gmail.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Vincent Donnefort <vincent.donnefort@arm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Baoquan He <bhe@redhat.com>, kexec@lists.infradead.org
-Subject: Re: [PATCHv3 1/2] cpu/hotplug: Keep cpu hotplug disabled until the
- rebooting cpu is stable
-Message-ID: <Ynt9VHkNYEzsSRnF@piliu.users.ipa.redhat.com>
-References: <20220509041305.15056-1-kernelfans@gmail.com>
- <20220509041305.15056-2-kernelfans@gmail.com>
- <87ee13rn52.ffs@tglx>
- <YnneUeRJ42SRM/M+@piliu.users.ipa.redhat.com>
- <87y1z9pzac.ffs@tglx>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iSM4KiWX5xiHYNImgQ6cDdJf0LCKtuaDlzcLfop++Jc=;
+        b=Sd7vsgsla/Oxf1ITcbxJIEG/PkG5eUsnuzfQ9lvLMQXJHVG4G1rj9PZhsFLjsAJAbz
+         ZN2jQhZQfG/e+NdamSMgKJpTZPvVbox1l6bhJZNWxtUpFC1I9QoLHse2ZSFUYgUO2f6q
+         8U7Kwy87kk2NlR4XZ//voxg7OvyrnboxiaWku6l2V27fMxoer2Qljlgq86zh2sRKEIcd
+         Nxy8TdP2YwzG+Mt2dhPLnEHl1dwMa9KZxoLkpHqYiyMZc3UmUod824Woc5uBwrmM3sNQ
+         6lGooKY0JUp4lFyWcZqek5fzLlVLPo/3Kzm6ph+y8IoBuIhlWVp3+LWtt1X5dJWpZ39B
+         3dUg==
+X-Gm-Message-State: AOAM531L5aR1l8WFNXrueqKBTi+xzHLhH6RwTYOoJY3baZny0ysX80v7
+        HCChvG1VFc0WslaRYtdmDaVONQ==
+X-Google-Smtp-Source: ABdhPJwAJshh0pyoM8iVsERACEz5gij6am1vxgOpfUotlGosF/fppxLJBLF71r5SRAXCzg2PJZXhpA==
+X-Received: by 2002:a05:6402:f13:b0:428:a849:d0c1 with SMTP id i19-20020a0564020f1300b00428a849d0c1mr11917128eda.346.1652260367481;
+        Wed, 11 May 2022 02:12:47 -0700 (PDT)
+Received: from [192.168.0.152] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id cb13-20020a0564020b6d00b0042617ba639asm893261edb.36.2022.05.11.02.12.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 02:12:46 -0700 (PDT)
+Message-ID: <66796853-efe7-f661-9637-ac6cfefc68e5@linaro.org>
+Date:   Wed, 11 May 2022 11:12:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87y1z9pzac.ffs@tglx>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v4 1/2] dt-bindings: remoteproc: mediatek: Make l1tcm reg
+ exclusive to mt819x
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Tzung-Bi Shih <tzungbi@google.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org
+References: <20220506213226.257859-1-nfraprado@collabora.com>
+ <20220506213226.257859-2-nfraprado@collabora.com>
+ <d3e027ca-9ccf-cf91-2414-85d2b9b680f0@linaro.org>
+ <20220510165016.r7nyck2abt5m4djp@notapiano>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220510165016.r7nyck2abt5m4djp@notapiano>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 10:28:11AM +0200, Thomas Gleixner wrote:
-> On Tue, May 10 2022 at 11:38, Pingfan Liu wrote:
-> > On Mon, May 09, 2022 at 12:55:21PM +0200, Thomas Gleixner wrote:
-> >> On Mon, May 09 2022 at 12:13, Pingfan Liu wrote:
-> >> > The following code chunk repeats in both
-> >> > migrate_to_reboot_cpu() and smp_shutdown_nonboot_cpus():
-> >> > This is due to a breakage like the following:
-> >> 
-> >> I don't see what's broken here.
-> >> 
-> >
-> > No, no broken. Could it be better to replace 'breakage' with
-> > 'breakin'?
+On 10/05/2022 18:50, Nícolas F. R. A. Prado wrote:
+>>> Also I had to add a description to the global reg-names, since it
+>>> couldn't be neither missing nor empty.
+>>
+>> It is possible:
+>> https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/example-schema.yaml#L91
+>>
+>> Keep constraints and list of names in properties. Then in allOf:if:then
+>> raise minItems or lower maxItems, depending on the variant.
 > 
-> There is no break-in. There is a phase where CPU hotplug is reenabled,
-> which might be avoided.
+> Hi Krzysztof,
 > 
+> that example only shows setting minItems to override the default value, but the
+> issue here is that it's not possible to override minItems/maxItems (after
+> they're already set, even if implicitly) with a different value in the if.
 
-OK, I will rephrase like this.
+No, this example shows exactly what you need in first step - make one
+item on the list optional.
 
-> >> > +/* primary_cpu keeps unchanged after migrate_to_reboot_cpu() */
-> >> 
-> >> This comment makes no sense.
-> >> 
-> >
-> > Since migrate_to_reboot_cpu() disables cpu hotplug, so the selected
-> > valid online cpu -- primary_cpu keeps unchange.
+There are several other examples for the entire picture or different
+aproach:
+https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/example-schema.yaml#L91
+
+https://elixir.bootlin.com/linux/v5.18-rc2/source/Documentation/devicetree/bindings/clock/samsung,exynos7885-clock.yaml#L53
+
 > 
-> So what is that parameter for then? If migrate_to_reboot_cpu() ensured
-> that the current task is on the reboot CPU then this parameter is
-> useless, no?
+> That is:
 > 
+> 	properties:
+> 	  reg-names:
+> 	    items:
+> 	      - const: sram
+> 	      - const: cfg
+> 	      - const: l1tcm
 
-Yes, it is useless after this patch. I will post V4 to kill it.
+You did not use the example I gave you. Where is the minItems?
 
-> >> >  void smp_shutdown_nonboot_cpus(unsigned int primary_cpu)
-> >> >  {
-> >> >  	unsigned int cpu;
-> >> >  	int error;
-> >> >  
-> >> > +	/*
-> >> > +	 * Block other cpu hotplug event, so primary_cpu is always online if
-> >> > +	 * it is not touched by us
-> >> > +	 */
-> >> >  	cpu_maps_update_begin();
-> >> > -
-> >> >  	/*
-> >> > -	 * Make certain the cpu I'm about to reboot on is online.
-> >> > -	 *
-> >> > -	 * This is inline to what migrate_to_reboot_cpu() already do.
-> >> > +	 * migrate_to_reboot_cpu() disables CPU hotplug assuming that
-> >> > +	 * no further code needs to use CPU hotplug (which is true in
-> >> > +	 * the reboot case). However, the kexec path depends on using
-> >> > +	 * CPU hotplug again; so re-enable it here.
-> >> 
-> >> You want to reduce confusion, but in reality this is even more confusing
-> >> than before.
-> >> 
-> >
-> > This __cpu_hotplug_enable() can be considered to defer from kernel_kexec() to
-> > arch-dependent code chunk (here), which is a more proper point.
-> >
-> > Could it make things better by rephrasing the words as the following?
-> >    migrate_to_reboot_cpu() disables CPU hotplug to prevent the selected
-> >    reboot cpu from disappearing. But arches need cpu_down to hot remove
-> >    cpus except rebooting-cpu, so re-enabling cpu hotplug again.
 > 
-> Can you please use proper words. arches is not a word and it's closer to
-> the plural of arch, than to the word architecture. This is not twitter.
+> 	if:
+> 	  properties:
+> 	    compatible:
+> 	      enum:
+> 		- mediatek,mt8183-scp
+> 		- mediatek,mt8186-scp
+> 	then:
+> 	  properties:
+> 	    reg-names:
+> 	      minItems: 2
+> 	      maxItems: 2
 > 
-
-OK, I will correct it.
-
-> And no, the architectures do not need cpu_down() at all. This very
-> function smp_shutdown_nonboot_cpus() invokes cpu_down_maps_locked() to
-> shut down the non boot CPUs. That fails when cpu_hotplug_disabled != 0.
+> Generates the error on dtbs_check:
 > 
+> /home/nfraprado/ext/git/linux/arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtb: scp@10500000: reg-names: ['sram', 'cfg'] is too short
 
-Yes. I will pay attention to the accuracy of the description.
+Missing minItems in first properties.
 
-> >> >  	 */
-> >> > -	if (!cpu_online(primary_cpu))
-> >> > -		primary_cpu = cpumask_first(cpu_online_mask);
-> >> > +	__cpu_hotplug_enable();
-> >> 
-> >> How is this decrement solving anything? At the end of this function, the
-> >> counter is incremented again. So what's the point of this exercise?
-> >> 
-> > This decrement enables the cpu hot-removing.  Since
-> > smp_shutdown_nonboot_cpus()->cpu_down_maps_locked(), if
-> > cpu_hotplug_disabled, it returns -EBUSY.
 > 
-> Correct, so why can't you spell that out in concise words in the first
-> place right at that comment which reenables hotplug?
+> I believe the tooling is implicitly adding
 > 
-
-OK, thanks for the suggestion.
-
-> >> What does that for arch/powerpc/kernel/kexec_machine64.c now?
-> >> 
-> >> Nothing, as far as I can tell. Which means you basically reverted
-> >> 011e4b02f1da ("powerpc, kexec: Fix "Processor X is stuck" issue during
-> >> kexec from ST mode") unless I'm completely confused.
-> >> 
-> >
-> > Oops. Forget about powerpc. Considering the cpu hotplug is an
-> > arch-dependent feature in machine_shutdown(), as x86 does not need it.
+> 	      minItems: 3
+> 	      maxItems: 3
 > 
-> It's not a feature, it's a architecture specific requirement. x86 is
-> irrelevant here because this is a powerpc requirement.
+> to the common reg-names, and since it's not possible to override them, the
+> override to 2 doesn't work so they are kept at 3, causing the error.
 > 
+> Moving the minItems/maxItems to the common reg-names as a test gives:
 
-Yes.
+You cannot just. You need it in both places.
 
-> >> This is tinkering at best. Can we please sit down and rethink this whole
-> >> machinery instead of applying random duct tape to it?
-> >> 
-> > I try to make code look consistent.
 > 
-> Emphasis on try. So far the attempt failed and resulted in a regression.
+> /home/nfraprado/ext/git/linux/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml: properties:reg-names: {'minItems': 2, 'maxItems': 2, 'items': [{'const': 'sram'}, {'const': 'cfg'}, {'const': 'l1tcm'}]} should not be valid under {'required': ['maxItems']}
+> 	hint: "maxItems" is not needed with an "items" list
 > 
+> That error, plus looking in the items meta-schema, suggests me that maxItems
+> isn't supposed to be set lower then the length of items. So even if the
+> minItems/maxItems override is fixed, there's still this issue. It seems like
+> defining the reg-names list separetely in each if branch is indeed the right way
+> to go.
 
-I will fix the powerpc issue and post V4 after a test.
 
 
-Thanks for your precious time.
-
-Best Regards,
-
-	Pingfan
-
+Best regards,
+Krzysztof

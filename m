@@ -2,68 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D26522DA1
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE58522DA4
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:50:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243138AbiEKHtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 03:49:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45014 "EHLO
+        id S238592AbiEKHt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 03:49:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243120AbiEKHtB (ORCPT
+        with ESMTP id S243181AbiEKHtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 03:49:01 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F74013B8C2;
-        Wed, 11 May 2022 00:49:00 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id x52so1264162pfu.11;
-        Wed, 11 May 2022 00:49:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gzoa+jq0XpHGYJhcqgikWEC9JzeX9J0ZmovNXZZqPlw=;
-        b=pZSkpwiMq4LnqPxtv7NNZnd0sQ+5K2QkvF7M00OPRdBBKZbN6fzMaV6MJ4pqhUWVw3
-         qeiB5fkuIePt4fE3hDydIodwOhXdxl0yN1yC4BtaIbYFC+ePtdSDHCS+6VNb0eDtqYuk
-         AulJ4HKphYw749hNPshP78whdF192rhBQAtAojzF8WIPZLHLj9KWjxaF+R4EuxjPyf9M
-         RJsDZI6Vkw9VbFtfKnTlgLWfxzmwAMj4OmbM3iNnPFvEVQnCQE5AvAj4ZeRjchRJlPuz
-         i/nCN41u69MS24J1UGFonJ092NoOkpxszFPNAY4W9uZsAuG1xoZ3tF7XAuaQJHbXsegC
-         OVWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gzoa+jq0XpHGYJhcqgikWEC9JzeX9J0ZmovNXZZqPlw=;
-        b=r4b24pAci37AEQA3b8U0NwpbeMeb03a1/1RrRcGl4HKOT9P0uvy4VATxsuz7184S89
-         1HuBX0ADYtM5nx3VdWeHQEwv8njW39oNF8XTeXb1FNr8JhWex/O7AlWa2gmsopUoIlSO
-         uLjCLOjWYu+9QpAB5R6+49KRYmP4MLgtDd+vrgYqKofzsVb3/hsfKdbkTyk1xdt2SOrM
-         Yn3JabPQffNSo7O3r8dYGaOQq91uoLu3Rp9e0ii3Msaap4/9LUD2c5AFY3LLqrXdCxZ0
-         F3MlogmGhm3aDqiamzKOnnmU5Hja50oQWqJhni44nrKjAn9/MIac2eLLNPupDt5g6OeV
-         IKGQ==
-X-Gm-Message-State: AOAM531VrNHD9JxPYHw6jd/gJTma0+siEHicYvmini8YsEmNB8EHlIh7
-        XDJma0/nCWj7oBXoR4yIEjU=
-X-Google-Smtp-Source: ABdhPJzVIZV8D4vEEibviwMNgTyoQBp4SRevkz7PIHOExgBxObpfveqLm+o4+WoTueHQ5w3vO3B2KQ==
-X-Received: by 2002:a63:6381:0:b0:3c6:4449:fc60 with SMTP id x123-20020a636381000000b003c64449fc60mr19232124pgb.457.1652255339674;
-        Wed, 11 May 2022 00:48:59 -0700 (PDT)
-Received: from localhost ([2406:7400:63:532d:2759:da01:e9ea:1584])
-        by smtp.gmail.com with ESMTPSA id n19-20020a635913000000b003dafd8f0760sm1036339pgb.28.2022.05.11.00.48.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 00:48:59 -0700 (PDT)
-Date:   Wed, 11 May 2022 13:18:53 +0530
-From:   Ritesh Harjani <ritesh.list@gmail.com>
-To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ext4: Fix journal_ioprio mount option handling
-Message-ID: <20220511074853.4xgdzagwmkp4ejuz@riteshh-domain>
-References: <20220418083545.45778-1-ojaswin@linux.ibm.com>
+        Wed, 11 May 2022 03:49:50 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7942380CE
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:49:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652255381; x=1683791381;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=b6gFhgmPfcp/OZxV5AdY/HulAh7d6sjI5KnIRmFjjnE=;
+  b=br4FO2HeL03j8llWkjIqTlDDbBnRMNoQmIVE6ttP1askSQsNr/LDcfrz
+   tKeHsv+WUTHAcPliV2smWSuOWbB5jfLMu5WI3ccNCLke0WvF9zw/FGhwY
+   1vGu9Xyvk6hz+q8lw7J5LQ3n1UWus1+MhD666utouinUgu91pxuCYF6uK
+   r/ePjJgT7g4MaIp6Ts5BrrAB3f5AnpiwESvdncQ5XaLdEMBetqisU1scS
+   tmfTtHakNVJz1qVagmyYkj/Oa5fLXsm4IZIbTUUz40m2iWQWk3301/06k
+   vd7AdeCOrCIa3iNgSSvCfvHe1vu0hpMIW6IzW8w4mYUSrjxAjQQyV40J6
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="269753785"
+X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
+   d="scan'208";a="269753785"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 00:49:41 -0700
+X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
+   d="scan'208";a="593991837"
+Received: from rliu1-mobl1.ccr.corp.intel.com ([10.254.213.20])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 00:49:37 -0700
+Message-ID: <68333b21a58604f3fd0e660f1a39921ae22849d8.camel@intel.com>
+Subject: Re: RFC: Memory Tiering Kernel Interfaces
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     Wei Xu <weixugc@google.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc:     Alistair Popple <apopple@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Greg Thelen <gthelen@google.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Michal Hocko <mhocko@kernel.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>
+Date:   Wed, 11 May 2022 15:49:34 +0800
+In-Reply-To: <CAAPL-u9FvCfgA7xsqStLNZ=W03iyWBmvHrpVzPKyitsGN2v_KQ@mail.gmail.com>
+References: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
+         <CAHbLzkq1YXXLMiREpGnzhJjPssu4WpSsnkTmrLJ=hAEhZVUr9w@mail.gmail.com>
+         <CAAPL-u-r2Pc_MaHQmKKNH_icAa_fH1COWb5qSPpr8xffREQ_cQ@mail.gmail.com>
+         <87tua3h5r1.fsf@nvdebian.thelocal>
+         <CAAPL-u-0HwL6p1SA73LPfFyywG55QqE9O+q=83fhShoJAVVxyQ@mail.gmail.com>
+         <875ymerl81.fsf@nvdebian.thelocal> <87fslhhb2l.fsf@linux.ibm.com>
+         <CAAPL-u9FvCfgA7xsqStLNZ=W03iyWBmvHrpVzPKyitsGN2v_KQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220418083545.45778-1-ojaswin@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,129 +81,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/04/18 02:05PM, Ojaswin Mujoo wrote:
-> In __ext4_super() we always overwrote the user specified journal_ioprio
-> value with a default value, expecting  parse_apply_sb_mount_options() to
-> later correctly set ctx->journal_ioprio to the user specified value.
-> However, if parse_apply_sb_mount_options() returned early because of
-> empty sbi->es_s->s_mount_opts, the correct journal_ioprio value was
-> never set.
+On Tue, 2022-05-10 at 22:30 -0700, Wei Xu wrote:
+> On Tue, May 10, 2022 at 4:38 AM Aneesh Kumar K.V
+> <aneesh.kumar@linux.ibm.com> wrote:
+> > 
+> > Alistair Popple <apopple@nvidia.com> writes:
+> > 
+> > > Wei Xu <weixugc@google.com> writes:
+> > > 
+> > > > On Thu, May 5, 2022 at 5:19 PM Alistair Popple <apopple@nvidia.com> wrote:
+> > > > > 
+> > > > > Wei Xu <weixugc@google.com> writes:
+> > > > > 
+> > > > > [...]
+> > > > > 
+> > > > > > > > 
+> > > > > > > > 
+> > > > > > > > Tiering Hierarchy Initialization
+> > > > > > > > `=============================='
+> > > > > > > > 
+> > > > > > > > By default, all memory nodes are in the top tier (N_TOPTIER_MEMORY).
+> > > > > > > > 
+> > > > > > > > A device driver can remove its memory nodes from the top tier, e.g.
+> > > > > > > > a dax driver can remove PMEM nodes from the top tier.
+> > > > > > > 
+> > > > > > > With the topology built by firmware we should not need this.
+> > > > > 
+> > > > > I agree that in an ideal world the hierarchy should be built by firmware based
+> > > > > on something like the HMAT. But I also think being able to override this will be
+> > > > > useful in getting there. Therefore a way of overriding the generated hierarchy
+> > > > > would be good, either via sysfs or kernel boot parameter if we don't want to
+> > > > > commit to a particular user interface now.
+> > > > > 
+> > > > > However I'm less sure letting device-drivers override this is a good idea. How
+> > > > > for example would a GPU driver make sure it's node is in the top tier? By moving
+> > > > > every node that the driver does not know about out of N_TOPTIER_MEMORY? That
+> > > > > could get messy if say there were two drivers both of which wanted their node to
+> > > > > be in the top tier.
+> > > > 
+> > > > The suggestion is to allow a device driver to opt out its memory
+> > > > devices from the top-tier, not the other way around.
+> > > 
+> > > So how would demotion work in the case of accelerators then? In that
+> > > case we would want GPU memory to demote to DRAM, but that won't happen
+> > > if both DRAM and GPU memory are in N_TOPTIER_MEMORY and it seems the
+> > > only override available with this proposal would move GPU memory into a
+> > > lower tier, which is the opposite of what's needed there.
+> > 
+> > How about we do 3 tiers now. dax kmem devices can be registered to
+> > tier 3. By default all numa nodes can be registered at tier 2 and HBM or
+> > GPU can be enabled to register at tier 1. ?
+> 
+> This makes sense.  I will send an updated RFC based on the discussions so far.
 
->
-> This patch fixes __ext4_super() to only use the default value if the
-					^^^ __ext4_fill_super
-> user has not specified any value for journal_ioprio.
+Are these tier number fixed?  If so, it appears strange that the
+smallest tier number is 0 on some machines, but 1 on some other
+machines.
 
-Also the problem is that ext4_parse_param() is called before
-__ext4_fill_super(). Hence when we overwrite ctx->journal_ioprio to default
-value in __ext4_fill_super(), that will end up ignoring the user passed
-journal_ioprio value via mount opts (which was passed earlier in
-ext4_parse_param()).
-
-
->
-> Similarly, the remount behavior was to either use journal_ioprio
-> value specified during initial mount, or use the default value
-> irrespective of the journal_ioprio value specified during remount.
-> This patch modifies this to first check if a new value for ioprio
-> has been passed during remount and apply it. Incase, no new value is
-> passed, use the value specified during initial mount.
-
-Yup, here also ext4_parse_param() is called before __ext4_remount().
-Hence we should check if the user has passed it's value in mount opts, if not,
-only then we should use the task original ioprio.
-
-
-I tested this patch and with the patch applied, the task ioprio can be correctly
-set using "journal_ioprio" mount option.
-
-"Mount test"
-=============
-qemu-> sudo perf record -e probe:* -aR mount -o journal_ioprio=1 /dev/loop2 /mnt
-qemu-> ps -eaf |grep -E "jbd2|loop2"
-root        3506       2  0 07:41 ?        00:00:00 [jbd2/loop2-8]
-qemu-> sudo perf script
-           mount  3504 [000]  2503.106871: probe:ext4_parse_param_L222: (ffffffff8147817f) journal_ioprio=16385 spec=32
-           mount  3504 [000]  2503.106908: probe:__ext4_fill_super_L26: (ffffffff8147a650) journal_ioprio=16385 spec=32
-qemu-> ionice -p 3506
-best-effort: prio 1
-
-"remount test"
-=================
-qemu-> sudo perf record -e probe:* -aR mount -o remount,journal_ioprio=0 /dev/loop2 /mnt
-qemu-> sudo perf script
-           mount  3519 [000]  2544.958850: probe:ext4_parse_param_L222: (ffffffff8147817f) journal_ioprio=16384 spec=32
-           mount  3519 [000]  2544.958860:    probe:__ext4_remount_L49: (ffffffff81479da2) journal_ioprio=16384 spec=32
-qemu-> ionice -p 3506
-best-effort: prio 0
-
-"remount with no mount options"
-=================================
-qemu-> sudo perf record -e probe:* -aR mount -o remount /dev/loop2 /mnt
-qemu-> ionice -p 3506
-best-effort: prio 0
-qemu-> sudo perf script
-           mount  3530 [000]  2575.964048:    probe:__ext4_remount_L49: (ffffffff81479da2) journal_ioprio=16384 spec=0
+Best Regards,
+Huang, Ying
 
 
->
-> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-
-We should add fixes tag too. Can you please confirm if that would be this patch?
-"ext4: Completely separate options parsing and sb setup".
-
-With that feel free to add below -
-
-Reviewed-by: Ritesh Harjani <riteshh@linux.ibm.com>
-Tested-by: Ritesh Harjani <riteshh@linux.ibm.com>
-
-
--ritesh
-
-> ---
->  fs/ext4/super.c | 15 ++++++++++-----
->  1 file changed, 10 insertions(+), 5 deletions(-)
->
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index c5a9ffbf7f4f..bfd767c51203 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -4427,7 +4427,8 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
->  	int silent = fc->sb_flags & SB_SILENT;
->
->  	/* Set defaults for the variables that will be set during parsing */
-> -	ctx->journal_ioprio = DEFAULT_JOURNAL_IOPRIO;
-> +	if (!(ctx->spec & EXT4_SPEC_JOURNAL_IOPRIO))
-> +		ctx->journal_ioprio = DEFAULT_JOURNAL_IOPRIO;
->
->  	sbi->s_inode_readahead_blks = EXT4_DEF_INODE_READAHEAD_BLKS;
->  	sbi->s_sectors_written_start =
-> @@ -6289,7 +6290,6 @@ static int __ext4_remount(struct fs_context *fc, struct super_block *sb)
->  	char *to_free[EXT4_MAXQUOTAS];
->  #endif
->
-> -	ctx->journal_ioprio = DEFAULT_JOURNAL_IOPRIO;
->
->  	/* Store the original options */
->  	old_sb_flags = sb->s_flags;
-> @@ -6315,9 +6315,14 @@ static int __ext4_remount(struct fs_context *fc, struct super_block *sb)
->  		} else
->  			old_opts.s_qf_names[i] = NULL;
->  #endif
-> -	if (sbi->s_journal && sbi->s_journal->j_task->io_context)
-> -		ctx->journal_ioprio =
-> -			sbi->s_journal->j_task->io_context->ioprio;
-> +	if (!(ctx->spec & EXT4_SPEC_JOURNAL_IOPRIO)) {
-> +		if (sbi->s_journal && sbi->s_journal->j_task->io_context)
-> +			ctx->journal_ioprio =
-> +				sbi->s_journal->j_task->io_context->ioprio;
-> +		else
-> +			ctx->journal_ioprio = DEFAULT_JOURNAL_IOPRIO;
-> +
-> +	}
->
->  	ext4_apply_options(fc, sb);
->
-> --
-> 2.27.0
->

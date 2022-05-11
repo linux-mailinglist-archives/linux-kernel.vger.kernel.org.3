@@ -2,72 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E4AE523DF8
+	by mail.lfdr.de (Postfix) with ESMTP id 428D9523DF7
 	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347207AbiEKTvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 15:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48850 "EHLO
+        id S1347240AbiEKTv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 15:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347223AbiEKTvA (ORCPT
+        with ESMTP id S1347295AbiEKTvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 15:51:00 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBC9101EE
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:50:58 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id o22so3043159ljp.8
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:50:58 -0700 (PDT)
+        Wed, 11 May 2022 15:51:13 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38C325C7F
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:51:11 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id l18so6112872ejc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:51:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6vJ9IfqbShMwDeZyz1OcvmyyEHqFvjHPJh6cdK+fsg8=;
-        b=UOIE2CT/TYOhvf0DQUQNJDj520sVaeFt2GPpw42TGAING/IxIHozir3J+l2kzfBaOP
-         aZ56YV1LVJWQ1bijrGOPa3B9nSstWPsqBb2wkqnwcszxqn++LJvNICOYSOj65xkC6zgx
-         hdKsujTqiIeus3grGd7grZ5z0LCNNhej1SM1H9tCyCrjPNOuiJhsgWsvFzrH5PzJs4aK
-         dD8GDfegvX0E3s56aIb199J0fhjJKjx1BMi0yK07l4/Ut6ngXRy27nsNAhUutV0A+See
-         L2QDulBw0Hr8OXjInO7UQQKP8Wct/ZhNCtIKLku71YjzrKpUNNPCN+GvJOkWwfPXLofR
-         KzPw==
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=okDasmSIedZIfDNVfGzL/C0tlLQxT7cXpy43/5U1qMo=;
+        b=QUS04llQ/TQdvF3bJLtNkYv+9Y/6CRyA1IhJj03bD1ysf9ANin3YF7pIozL2ckCVd9
+         OEgvjLcrm/1wDU9oB6CTsdkJp6bSY0dGxFMc0XUZpQx5vjtv+lpaWgY+z91+b2dCfgUQ
+         oJPZmG2v8C8OYJmWR8Lmy78eHPjrvYJULiRqg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6vJ9IfqbShMwDeZyz1OcvmyyEHqFvjHPJh6cdK+fsg8=;
-        b=U9JyRksERabLvvMfHzFKw6QQT6VFbTo82VXjycxhBjafByk7ONI/AU54g6MT17ZjpC
-         HibRLtUazCj41nmBt3CGGb3Dopw1qCQB61pYPa+XnWx2drzUDckheHsY4fmncce5r6aB
-         aJpx3SrE0kGtEJ56X8Gq0YSY1bsMADo20yjTX2U4NebxmIb3QyVD1U+5QlQIxHSBrswe
-         Gw/bqwGmrbCqZjFIH74LAWdjrWUkBobSdEg3aWlUFb9+Fr/DSL2CsX88223gr/eBYGY9
-         Fz7VvQuYNM/HpBgjdL/8oczZLyECc4DkzVI1ZN9MXf44dgIkDODpUzlgfgUsWVnPZTqz
-         fOEg==
-X-Gm-Message-State: AOAM530BFN/otUxAhsDmwxmfg8bjjBbVgLfRrr4UMVKLq8aBZrDH3YvF
-        S7cpjV2ELmFktjR6Zfjcc40OBEgcFHqseUdatKIJ1g==
-X-Google-Smtp-Source: ABdhPJxbl6AVhFz14fTg7IRY5I0/Q58Tf2tCnV3m85uqUY7iJNM7YqYLU6WY5ikkw36a0J+gHUd0dYfSGwztBAg47GM=
-X-Received: by 2002:a2e:854b:0:b0:24f:b98:e2d2 with SMTP id
- u11-20020a2e854b000000b0024f0b98e2d2mr18763646ljj.165.1652298656527; Wed, 11
- May 2022 12:50:56 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=okDasmSIedZIfDNVfGzL/C0tlLQxT7cXpy43/5U1qMo=;
+        b=mhpmvvh6lrTCrYddKlIGHx4VmmtiTyq3ISGOgm3Q+Zu9D/q7207xXHlmMxwlt03Jtr
+         X3BwUfwc9VljmsgwdxN3wpxnEu1GDjr2HE/Qnvz3KX4MMW0GRM+ep9ICd7Aqa11+vL+2
+         he5Ea439jjQmQt+6aC4PbuHR9qsp2HrTJmpp0FcrslZtEs4JgX8xiKEzeIxUzMcGtHFL
+         cwyDKmSDutkgPAwuKr31PXIrJip5MLrzD7sS7bHEPTx+5/JcuZZycgTXBPhWvYqmcUDp
+         wwngUroEfyY4wgGn1nGXnU+h6fbakXWhL+s77Ga472fPWFZbwvbkrLk3bjUgt0vwPzdp
+         JHsA==
+X-Gm-Message-State: AOAM5317hQScdblMszzwMzy+14rJnYE4jcHolwR+DCSka0Byhr6LBu4s
+        eY6YljWBW5NFeKFbKiJoWksfKw==
+X-Google-Smtp-Source: ABdhPJzc30UDk4ot2UfqIn3JcPVtx5jKy3U9yzEWlwhCj1FbId8oXyy3bEiSM7KRq59c9iZ9/8xhUg==
+X-Received: by 2002:a17:906:b74b:b0:6f4:cd08:6fec with SMTP id fx11-20020a170906b74b00b006f4cd086fecmr28194512ejb.155.1652298670454;
+        Wed, 11 May 2022 12:51:10 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id cb13-20020a0564020b6d00b0042617ba639asm1598568edb.36.2022.05.11.12.51.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 12:51:09 -0700 (PDT)
+Date:   Wed, 11 May 2022 21:51:08 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Kai Vehmanen <kai.vehmanen@intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        mauro.chehab@linux.intel.com, Takashi Iwai <tiwai@suse.de>
+Subject: Re: [PATCH v6 4/4] ALSA: hda - identify when audio is provided by a
+ video driver
+Message-ID: <YnwTrF6VpM7V1jdu@phenom.ffwll.local>
+Mail-Followup-To: Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Kai Vehmanen <kai.vehmanen@intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        mauro.chehab@linux.intel.com, Takashi Iwai <tiwai@suse.de>
+References: <cover.1652113087.git.mchehab@kernel.org>
+ <f53f8a9d04b39a6843f19fe3069d1be7a9713aae.1652113087.git.mchehab@kernel.org>
 MIME-Version: 1.0
-References: <20220511120532.2228616-1-hca@linux.ibm.com> <20220511120532.2228616-7-hca@linux.ibm.com>
-In-Reply-To: <20220511120532.2228616-7-hca@linux.ibm.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 11 May 2022 12:50:45 -0700
-Message-ID: <CAKwvOdkNAY0C0qC0=_P5vq54VHYwTpAcVLps4VtzHhUxcrmq=w@mail.gmail.com>
-Subject: Re: [PATCH 6/8] s390/boot: workaround llvm IAS bug
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jonas Paulsson <paulsson@linux.vnet.ibm.com>,
-        Ulrich Weigand <ulrich.weigand@de.ibm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andreas Krebbel <krebbel@linux.ibm.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f53f8a9d04b39a6843f19fe3069d1be7a9713aae.1652113087.git.mchehab@kernel.org>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,118 +93,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 5:05 AM Heiko Carstens <hca@linux.ibm.com> wrote:
->
-> For at least the mvc and clc instructions llvm's integrated assembler can
-> generate incorrect code. In particular this happens with decompressor boot
-> code. The reason seems to be that relocations for the second displacement
-> of each instruction are at incorrect locations (-/+: gas vs llvm IAS):
->
-> mvc     __LC_IO_NEW_PSW(16),.Lnewpsw
->
-> results in
->
->         4:      d2 0f 01 f0 00 00       mvc     496(16,%r0),0
-> -                       8: R_390_12     .head.text+0x10
-> +                       6: R_390_12     .head.text+0x10
->
-> and
-> clc     0(3,%r4),.L_hdr
-> results in
->
->       258:      d5 02 40 00 00 00       clc     0(3,%r4),0
-> -                       25c: R_390_12   .head.text+0x324
-> +                       25a: R_390_12   .head.text+0x324
->
-> Workaround this by writing the code in a different way.
->
-> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-
-Please link to an LLVM bugreport for this.
-
+On Mon, May 09, 2022 at 06:23:39PM +0200, Mauro Carvalho Chehab wrote:
+> On some devices, the hda driver needs to hook into a video driver,
+> in order to be able to properly access the audio hardware and/or
+> the power management function.
+> 
+> That's the case of several snd_hda_intel devices that depends on
+> i915 driver.
+> 
+> Ensure that a proper reference between the snd-hda driver needing
+> such binding is shown at /proc/modules, in order to allow userspace
+> to know about such binding.
+> 
+> Reviewed-by: Takashi Iwai <tiwai@suse.de>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 > ---
->  arch/s390/boot/head.S | 34 +++++++++++++++++++++-------------
->  1 file changed, 21 insertions(+), 13 deletions(-)
->
-> diff --git a/arch/s390/boot/head.S b/arch/s390/boot/head.S
-> index 2ced90172680..8402e1cd133b 100644
-> --- a/arch/s390/boot/head.S
-> +++ b/arch/s390/boot/head.S
-> @@ -42,7 +42,8 @@ ipl_start:
->  # subroutine to wait for end I/O
->  #
->  .Lirqwait:
-> -       mvc     __LC_IO_NEW_PSW(16),.Lnewpsw    # set up IO interrupt psw
-> +       larl    %r13,.Lnewpsw           # set up IO interrupt psw
-> +       mvc     __LC_IO_NEW_PSW(16),0(%r13)
->         lpsw    .Lwaitpsw
->  .Lioint:
->         br      %r14
-> @@ -155,9 +156,11 @@ ipl_start:
->         lr      %r2,%r3
->  .Lnotrunc:
->         l       %r4,.Linitrd
-> -       clc     0(3,%r4),.L_hdr         # if it is HDRx
-> +       larl    %r13,.L_hdr
-> +       clc     0(3,%r4),0(%r13)        # if it is HDRx
->         bz      .Lagain1                # skip dataset header
-> -       clc     0(3,%r4),.L_eof         # if it is EOFx
-> +       larl    %r13,.L_eof
-> +       clc     0(3,%r4),0(%r13)        # if it is EOFx
->         bz      .Lagain1                # skip dateset trailer
->
->         lr      %r5,%r2
-> @@ -181,9 +184,11 @@ ipl_start:
->  .Lrdcont:
->         l       %r2,.Linitrd
->
-> -       clc     0(3,%r2),.L_hdr         # skip HDRx and EOFx
-> +       larl    %r13,.L_hdr             # skip HDRx and EOFx
-> +       clc     0(3,%r2),0(%r13)
->         bz      .Lagain2
-> -       clc     0(3,%r2),.L_eof
-> +       larl    %r13,.L_eof
-> +       clc     0(3,%r2),0(%r13)
->         bz      .Lagain2
->
->  #
-> @@ -260,20 +265,23 @@ SYM_CODE_START_LOCAL(startup_normal)
->         .fill   16,4,0x0
->  0:     lmh     %r0,%r15,0(%r13)        # clear high-order half of gprs
->         sam64                           # switch to 64 bit addressing mode
-> -       basr    %r13,0                  # get base
-> -.LPG0:
-> -       mvc     __LC_EXT_NEW_PSW(16),.Lext_new_psw-.LPG0(%r13)
-> -       mvc     __LC_PGM_NEW_PSW(16),.Lpgm_new_psw-.LPG0(%r13)
-> -       mvc     __LC_IO_NEW_PSW(16),.Lio_new_psw-.LPG0(%r13)
-> +       larl    %r13,.Lext_new_psw
-> +       mvc     __LC_EXT_NEW_PSW(16),0(%r13)
-> +       larl    %r13,.Lpgm_new_psw
-> +       mvc     __LC_PGM_NEW_PSW(16),0(%r13)
-> +       larl    %r13,.Lio_new_psw
-> +       mvc     __LC_IO_NEW_PSW(16),0(%r13)
->         xc      0x200(256),0x200        # partially clear lowcore
->         xc      0x300(256),0x300
->         xc      0xe00(256),0xe00
->         xc      0xf00(256),0xf00
-> -       lctlg   %c0,%c15,.Lctl-.LPG0(%r13)      # load control registers
-> +       larl    %r13,.Lctl
-> +       lctlg   %c0,%c15,0(%r13)        # load control registers
->         stcke   __LC_BOOT_CLOCK
->         mvc     __LC_LAST_UPDATE_CLOCK(8),__LC_BOOT_CLOCK+1
-> -       spt     6f-.LPG0(%r13)
-> -       mvc     __LC_LAST_UPDATE_TIMER(8),6f-.LPG0(%r13)
-> +       larl    %r13,6f
-> +       spt     0(%r13)
-> +       mvc     __LC_LAST_UPDATE_TIMER(8),0(%r13)
->         larl    %r15,_stack_end-STACK_FRAME_OVERHEAD
->         brasl   %r14,sclp_early_setup_buffer
->         brasl   %r14,verify_facilities
-> --
-> 2.32.0
->
+> 
+> See [PATCH v6 0/4] at: https://lore.kernel.org/all/cover.1652113087.git.mchehab@kernel.org/
+> 
+>  sound/hda/hdac_component.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/sound/hda/hdac_component.c b/sound/hda/hdac_component.c
+> index bb37e7e0bd79..7789873ddf47 100644
+> --- a/sound/hda/hdac_component.c
+> +++ b/sound/hda/hdac_component.c
+> @@ -199,7 +199,7 @@ static int hdac_component_master_bind(struct device *dev)
+>  	}
+>  
+>  	/* pin the module to avoid dynamic unbinding, but only if given */
+> -	if (!try_module_get(acomp->ops->owner)) {
+> +	if (!try_module_get_owner(acomp->ops->owner, dev->driver->owner)) {
 
+I'm still a bit confused why snd-hda does this and why this wasn't put
+into component.c, but that's kinda a pre-existing issue and I guess could
+be fixed later on. It really shouldn't be anything specific to snd-hda
+here.
 
+Anyway I scrolled through the series, it makes a lot more sense than the
+intial hack to me, so on the series:
+
+Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+
+But maybe don't count that as real review :-)
+
+Cheers, Daniel
 -- 
-Thanks,
-~Nick Desaulniers
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCFEA522A0A
+	by mail.lfdr.de (Postfix) with ESMTP id 90C67522A09
 	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 04:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232086AbiEKCsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 22:48:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59642 "EHLO
+        id S239219AbiEKCsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 22:48:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243348AbiEKCkh (ORCPT
+        with ESMTP id S243775AbiEKCmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 22:40:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B62920EE3B
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 19:40:33 -0700 (PDT)
+        Tue, 10 May 2022 22:42:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A625A4C40E
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 19:42:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652236832;
+        s=mimecast20190719; t=1652236930;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=4rsScbuPuNJutA0AJwuwsA+ysprCiaTZ/68Y1lfAnjY=;
-        b=EtK41e8XodKyi6LBr/oCEz3RJ5KKM45ydTzB+T13qEtyoEO1dM4vt6hwpz2WJTE1VehiOA
-        0+NBuLzb0709hcmzJJJironSeRWL3Ddx+xyVAV3aSsStIcokfi++MfG4Aj8Oj3xExendbc
-        SB8P9TzepQmr9Kvdw0FPvrouIaXEKho=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=4nGkvcvFWz+odk5yhwLYeDyIG2eWn1ClUMoDKPyJdBk=;
+        b=GSklQrxnk4oJqeDhQkPUD4cW23eZuuXShA899Dudk4vcn4NGUx345Z3ONrM4+Xxs8moKOH
+        vDEDUQZ+NE4rqNmgnf5VLjTA74b/gjIGl3jLOWASkp56OHnfsQDvJZOXiyX9v2BORLN+kh
+        0qwnPRjlCou9+hlQcglU02xbpF7mZKo=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-528-LHez9YA0OSahYT54E_bJbw-1; Tue, 10 May 2022 22:40:24 -0400
-X-MC-Unique: LHez9YA0OSahYT54E_bJbw-1
-Received: by mail-lf1-f69.google.com with SMTP id i8-20020a0565123e0800b004725f87c5f2so294528lfv.1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 19:40:23 -0700 (PDT)
+ us-mta-649-hiCtTezCPaWz2zOrOMD6CA-1; Tue, 10 May 2022 22:42:09 -0400
+X-MC-Unique: hiCtTezCPaWz2zOrOMD6CA-1
+Received: by mail-lf1-f71.google.com with SMTP id x36-20020a056512132400b0044b07b24746so287203lfu.8
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 19:42:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4rsScbuPuNJutA0AJwuwsA+ysprCiaTZ/68Y1lfAnjY=;
-        b=4jwEiS1+RhuFxxNuhfL80kUcrZl9bInXtPJ69mF/V8qT04iG4tstC5Ok4SMu+tvqFG
-         nDRNtRiJXHnWfuoqFiH1bKt1CJK1dHOq5mz3UIL7fBrbfW8zJg4PWKpOn+BQguasVNxO
-         PIBaOg7h4zEurygNL4F8Et7IBDcJ2yIfVjcrMgtj6efwlI8QlPMMLaaLlLf57/QVFtgJ
-         TV22aJ5PkMayNv+A6bTnvdJhdqNsJFQHClcsV8ganIbCaRgXXuJdsYpcziaIM5WrxxaO
-         FmQ8Wzoozv7PbhnCEnwLMLwA1lIAQN1dAmUok+emxVCqpWL4AYpj5TTAFnGlT7lWW9Se
-         3wdQ==
-X-Gm-Message-State: AOAM530SlLrWgxlfF1B5BcJ9eloZjIY0RIR5B1DVfdIF9CYpam/AsPvV
-        lAbMi/JuYDetx6QGztkvWW029qe0+qDcoLp2oU+vHBUTHYSKYRp9DJMQRU+xo0xLwTnKSRTZulL
-        uImslWfXWO2QzMlih1B+nO8cbcu3W1jTsotU4vsYY
-X-Received: by 2002:a05:6512:33d0:b0:473:a25e:f9fb with SMTP id d16-20020a05651233d000b00473a25ef9fbmr18536561lfg.98.1652236822576;
-        Tue, 10 May 2022 19:40:22 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyXPhsS7aZArFqRm1KQv3WcIM3fpOGbBNyqmSsuzU0vfQIcoWpVROQBx3w5Yryj7t+vM1cSBoexVRWIu8KK29c=
-X-Received: by 2002:a05:6512:33d0:b0:473:a25e:f9fb with SMTP id
- d16-20020a05651233d000b00473a25ef9fbmr18536556lfg.98.1652236822393; Tue, 10
- May 2022 19:40:22 -0700 (PDT)
+        bh=4nGkvcvFWz+odk5yhwLYeDyIG2eWn1ClUMoDKPyJdBk=;
+        b=ZSP/eMlFHtc8446fN1uO3aHximkgn9+u/NUhYjf0iEScSwoVQzxmwWeoJHKKuI3gD8
+         kLF17UzLWaaCWIk0KtTjhBES1vsINIJrn8LTqAY3ied0bKKOW/bxfqBb5jbsZb+WCLC/
+         crCQH1Tq32uRRNyHkKVv6S4m5lUYI+lcyRyBQnn3oimS8hURSAUv6kK9sUiC7IrIc3MP
+         jdU0cqfc3vXfjVoAs0b6OArlnWoTJEX39CtoRIsviQktSGcDJcTWUxjL3ffC6wytRmP4
+         FfSuHs69iNXGdhLYacoE3KSkTAVW6vB2HdoG/FhcRvnfaz09e1b8ZmErgDugo/WF/g++
+         2zLA==
+X-Gm-Message-State: AOAM530nm0B8MHmLwxWBU1RFn8j63FD+8V7W4P4jE2VQ6dkAZu0egNA2
+        qKxdu17YKePREggLimtMPtxfm5vxUFmK1vbqRB7otNjhPMO5C+kUC1VS0JvZLEQ5rnS3XSoaeX/
+        Sjjco5FDUHXypTuLmA3dBPcV9AlN3uKki42S7+066
+X-Received: by 2002:a19:ca50:0:b0:471:f556:92b with SMTP id h16-20020a19ca50000000b00471f556092bmr18230633lfj.587.1652236927983;
+        Tue, 10 May 2022 19:42:07 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyHTIitvlKBo9gntoR+9nuIVQxt66PfDgGM8uDAMiSrYJWVeqcsjWShA2gwMUq9hVPezrkTWEGfgTI37LaNx88=
+X-Received: by 2002:a19:ca50:0:b0:471:f556:92b with SMTP id
+ h16-20020a19ca50000000b00471f556092bmr18230621lfj.587.1652236927813; Tue, 10
+ May 2022 19:42:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220507071954.14455-1-jasowang@redhat.com> <20220507071954.14455-9-jasowang@redhat.com>
- <20220510072833-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20220510072833-mutt-send-email-mst@kernel.org>
+References: <20220507071954.14455-1-jasowang@redhat.com> <20220507071954.14455-7-jasowang@redhat.com>
+ <20220510072451-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220510072451-mutt-send-email-mst@kernel.org>
 From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 11 May 2022 10:40:11 +0800
-Message-ID: <CACGkMEtBfdhx-9CMKD0F4+536e5ewf6NQJGPTEBX00uby-C8+w@mail.gmail.com>
-Subject: Re: [PATCH V4 8/9] virtio: harden vring IRQ
+Date:   Wed, 11 May 2022 10:41:56 +0800
+Message-ID: <CACGkMEvWFyEqeeXYEmbU4TWtnj9Ku6J7jLK_7MueuFvpR7FiGg@mail.gmail.com>
+Subject: Re: [PATCH V4 6/9] virtio-ccw: implement synchronize_cbs()
 To:     "Michael S. Tsirkin" <mst@redhat.com>
 Cc:     virtualization <virtualization@lists.linux-foundation.org>,
         linux-kernel <linux-kernel@vger.kernel.org>,
@@ -82,33 +82,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 7:32 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+On Tue, May 10, 2022 at 7:28 PM Michael S. Tsirkin <mst@redhat.com> wrote:
 >
-> On Sat, May 07, 2022 at 03:19:53PM +0800, Jason Wang wrote:
-> > This is a rework on the previous IRQ hardening that is done for
-> > virtio-pci where several drawbacks were found and were reverted:
-> >
-> > 1) try to use IRQF_NO_AUTOEN which is not friendly to affinity managed IRQ
-> >    that is used by some device such as virtio-blk
-> > 2) done only for PCI transport
-> >
-> > The vq->broken is re-used in this patch for implementing the IRQ
-> > hardening. The vq->broken is set to true during both initialization
-> > and reset. And the vq->broken is set to false in
-> > virtio_device_ready(). Then vring_interrupt can check and return when
-> > vq->broken is true. And in this case, switch to return IRQ_NONE to let
-> > the interrupt core aware of such invalid interrupt to prevent IRQ
-> > storm.
-> >
-> > The reason of using a per queue variable instead of a per device one
-> > is that we may need it for per queue reset hardening in the future.
-> >
-> > Note that the hardening is only done for vring interrupt since the
-> > config interrupt hardening is already done in commit 22b7050a024d7
-> > ("virtio: defer config changed notifications"). But the method that is
-> > used by config interrupt can't be reused by the vring interrupt
-> > handler because it uses spinlock to do the synchronization which is
-> > expensive.
+> On Sat, May 07, 2022 at 03:19:51PM +0800, Jason Wang wrote:
+> > This patch tries to implement the synchronize_cbs() for ccw. For the
+> > vring_interrupt() that is called via virtio_airq_handler(), the
+> > synchronization is simply done via the airq_info's lock. For the
+> > vring_interrupt() that is called via virtio_ccw_int_handler(), a per
+> > device spinlock for irq is introduced ans used in the synchronization
+> > method.
 > >
 > > Cc: Thomas Gleixner <tglx@linutronix.de>
 > > Cc: Peter Zijlstra <peterz@infradead.org>
@@ -118,151 +100,112 @@ On Tue, May 10, 2022 at 7:32 PM Michael S. Tsirkin <mst@redhat.com> wrote:
 > > Cc: Cornelia Huck <cohuck@redhat.com>
 > > Signed-off-by: Jason Wang <jasowang@redhat.com>
 > > ---
-> >  drivers/virtio/virtio.c       | 15 ++++++++++++---
-> >  drivers/virtio/virtio_ring.c  | 11 +++++++----
-> >  include/linux/virtio_config.h | 12 ++++++++++++
-> >  3 files changed, 31 insertions(+), 7 deletions(-)
+> >  drivers/s390/virtio/virtio_ccw.c | 27 +++++++++++++++++++++++++++
+> >  1 file changed, 27 insertions(+)
 > >
-> > diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
-> > index 8dde44ea044a..696f5ba4f38e 100644
-> > --- a/drivers/virtio/virtio.c
-> > +++ b/drivers/virtio/virtio.c
-> > @@ -220,6 +220,15 @@ static int virtio_features_ok(struct virtio_device *dev)
-> >   * */
-> >  void virtio_reset_device(struct virtio_device *dev)
-> >  {
-> > +     /*
-> > +      * The below virtio_synchronize_cbs() guarantees that any
-> > +      * interrupt for this line arriving after
-> > +      * virtio_synchronize_vqs() has completed is guaranteed to see
-> > +      * driver_ready == false.
-> > +      */
-> > +     virtio_break_device(dev);
-> > +     virtio_synchronize_cbs(dev);
-> > +
-> >       dev->config->reset(dev);
+> > diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
+> > index d35e7a3f7067..001e1f0e6037 100644
+> > --- a/drivers/s390/virtio/virtio_ccw.c
+> > +++ b/drivers/s390/virtio/virtio_ccw.c
+> > @@ -62,6 +62,7 @@ struct virtio_ccw_device {
+> >       unsigned int revision; /* Transport revision */
+> >       wait_queue_head_t wait_q;
+> >       spinlock_t lock;
+> > +     rwlock_t irq_lock;
+> >       struct mutex io_lock; /* Serializes I/O requests */
+> >       struct list_head virtqueues;
+> >       bool is_thinint;
+> > @@ -984,6 +985,27 @@ static const char *virtio_ccw_bus_name(struct virtio_device *vdev)
+> >       return dev_name(&vcdev->cdev->dev);
 > >  }
-> >  EXPORT_SYMBOL_GPL(virtio_reset_device);
-> > @@ -428,6 +437,9 @@ int register_virtio_device(struct virtio_device *dev)
-> >       dev->config_enabled = false;
-> >       dev->config_change_pending = false;
 > >
-> > +     INIT_LIST_HEAD(&dev->vqs);
-> > +     spin_lock_init(&dev->vqs_list_lock);
+> > +static void virtio_ccw_synchronize_cbs(struct virtio_device *vdev)
+> > +{
+> > +     struct virtio_ccw_device *vcdev = to_vc_device(vdev);
+> > +     struct airq_info *info = vcdev->airq_info;
 > > +
-> >       /* We always start by resetting the device, in case a previous
-> >        * driver messed it up.  This also tests that code path a little. */
-> >       virtio_reset_device(dev);
-> > @@ -435,9 +447,6 @@ int register_virtio_device(struct virtio_device *dev)
-> >       /* Acknowledge that we've seen the device. */
-> >       virtio_add_status(dev, VIRTIO_CONFIG_S_ACKNOWLEDGE);
-> >
-> > -     INIT_LIST_HEAD(&dev->vqs);
-> > -     spin_lock_init(&dev->vqs_list_lock);
-> > -
-> >       /*
-> >        * device_add() causes the bus infrastructure to look for a matching
-> >        * driver.
-> > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> > index 5b7df7c455f0..9dfad2890d7a 100644
-> > --- a/drivers/virtio/virtio_ring.c
-> > +++ b/drivers/virtio/virtio_ring.c
-> > @@ -1690,7 +1690,7 @@ static struct virtqueue *vring_create_virtqueue_packed(
-> >       vq->we_own_ring = true;
-> >       vq->notify = notify;
-> >       vq->weak_barriers = weak_barriers;
-> > -     vq->broken = false;
-> > +     vq->broken = true;
-> >       vq->last_used_idx = 0;
-> >       vq->event_triggered = false;
-> >       vq->num_added = 0;
-> > @@ -2136,8 +2136,11 @@ irqreturn_t vring_interrupt(int irq, void *_vq)
-> >               return IRQ_NONE;
-> >       }
-> >
-> > -     if (unlikely(vq->broken))
-> > -             return IRQ_HANDLED;
-> > +     if (unlikely(vq->broken)) {
-> > +             dev_warn_once(&vq->vq.vdev->dev,
-> > +                           "virtio vring IRQ raised before DRIVER_OK");
-> > +             return IRQ_NONE;
+> > +     if (info) {
+> > +             /*
+> > +              * Synchronize with the vring_interrupt() with airq indicator
+> > +              */
+> > +             write_lock(&info->lock);
+> > +             write_unlock(&info->lock);
+> > +     } else {
+> > +             /*
+> > +              * Synchronize with the vring_interrupt() called by
+> > +              * virtio_ccw_int_handler().
+> > +              */
+> > +             write_lock(&vcdev->irq_lock);
+> > +             write_unlock(&vcdev->irq_lock);
 > > +     }
-> >
-> >       /* Just a hint for performance: so it's ok that this can be racy! */
-> >       if (vq->event)
-> > @@ -2179,7 +2182,7 @@ struct virtqueue *__vring_new_virtqueue(unsigned int index,
-> >       vq->we_own_ring = false;
-> >       vq->notify = notify;
-> >       vq->weak_barriers = weak_barriers;
-> > -     vq->broken = false;
-> > +     vq->broken = true;
-> >       vq->last_used_idx = 0;
-> >       vq->event_triggered = false;
-> >       vq->num_added = 0;
-> > diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
-> > index d8a2340f928e..23f1694cdbd5 100644
-> > --- a/include/linux/virtio_config.h
-> > +++ b/include/linux/virtio_config.h
-> > @@ -256,6 +256,18 @@ void virtio_device_ready(struct virtio_device *dev)
-> >       unsigned status = dev->config->get_status(dev);
-> >
-> >       BUG_ON(status & VIRTIO_CONFIG_S_DRIVER_OK);
+> > +}
 > > +
-> > +     /*
-> > +      * The virtio_synchronize_cbs() makes sure vring_interrupt()
-> > +      * will see the driver specific setup if it sees vq->broken
-> > +      * as false.
-> > +      */
-> > +     virtio_synchronize_cbs(dev);
+> >  static const struct virtio_config_ops virtio_ccw_config_ops = {
+> >       .get_features = virtio_ccw_get_features,
+> >       .finalize_features = virtio_ccw_finalize_features,
+> > @@ -995,6 +1017,7 @@ static const struct virtio_config_ops virtio_ccw_config_ops = {
+> >       .find_vqs = virtio_ccw_find_vqs,
+> >       .del_vqs = virtio_ccw_del_vqs,
+> >       .bus_name = virtio_ccw_bus_name,
+> > +     .synchronize_cbs = virtio_ccw_synchronize_cbs,
+> >  };
+> >
+> >
+> > @@ -1079,6 +1102,7 @@ static void virtio_ccw_int_handler(struct ccw_device *cdev,
+> >  {
+> >       __u32 activity = intparm & VIRTIO_CCW_INTPARM_MASK;
+> >       struct virtio_ccw_device *vcdev = dev_get_drvdata(&cdev->dev);
+> > +     unsigned long flags;
+> >       int i;
+> >       struct virtqueue *vq;
+> >
+> > @@ -1106,6 +1130,7 @@ static void virtio_ccw_int_handler(struct ccw_device *cdev,
+> >                       vcdev->err = -EIO;
+> >       }
+> >       virtio_ccw_check_activity(vcdev, activity);
+> > +     read_lock_irqsave(&vcdev->irq_lock, flags);
+> >       for_each_set_bit(i, indicators(vcdev),
+> >                        sizeof(*indicators(vcdev)) * BITS_PER_BYTE) {
+> >               /* The bit clear must happen before the vring kick. */
 >
-> since you mention vq->broken above, maybe add
->         "set vq->broken to false"
+> Cornelia sent a lockdep trace on this.
+>
+> Basically I think this gets the irqsave/restore logic wrong.
+> It attempts to disable irqs in the handler (which is an interrupt
+> anyway).
 
-Ok.
+The reason I use irqsave/restore is that it can be called from process
+context (if I was not wrong), e.g from io_subchannel_quiesce().
 
+> And it does not disable irqs in the synchronize_cbs.
 >
-> > +     __virtio_unbreak_device(dev);
-> > +     /*
-> > +      * The transport is expected ensure the visibility of
+> As a result in interrupt might try to take a read lock while
+> .synchronize_cbs has the writer lock, resulting in a deadlock.
 >
-> to ensure
-
-Will fix.
-
->
-> > +      * vq->broken
->
-> let's add: "visibility by vq callbacks"
-
-Sure.
-
->
-> > before setting VIRTIO_CONFIG_S_DRIVER_OK.
-> > +      */
->
->
-> Can I see some analysis of existing transports showing
-> this is actually the case for them?
+> I think you want regular read_lock + write_lock_irq.
 
 Yes.
-
-> And maybe add a comment near set_status to document the
-> requirement.
-
-For PCI and MMIO, we can quote the memory-barriers.txt or explain that
-wmb() is not needed before the MMIO writel().
-For CCW, it looks not obvious, it looks to me the IO was submitted via
-__ssch() which has an inline assembly.  Cornelia and Hali, could you
-help me to understand if and how did virtio_ccw_set_status() can
-ensure the visibility of the previous driver setup and vq->broken
-here?
 
 Thanks
 
 >
-> >       dev->config->set_status(dev, status | VIRTIO_CONFIG_S_DRIVER_OK);
-> >  }
+>
+> > @@ -1114,6 +1139,7 @@ static void virtio_ccw_int_handler(struct ccw_device *cdev,
+> >               vq = virtio_ccw_vq_by_ind(vcdev, i);
+> >               vring_interrupt(0, vq);
+> >       }
+> > +     read_unlock_irqrestore(&vcdev->irq_lock, flags);
+> >       if (test_bit(0, indicators2(vcdev))) {
+> >               virtio_config_changed(&vcdev->vdev);
+> >               clear_bit(0, indicators2(vcdev));
+> > @@ -1284,6 +1310,7 @@ static int virtio_ccw_online(struct ccw_device *cdev)
+> >       init_waitqueue_head(&vcdev->wait_q);
+> >       INIT_LIST_HEAD(&vcdev->virtqueues);
+> >       spin_lock_init(&vcdev->lock);
+> > +     rwlock_init(&vcdev->irq_lock);
+> >       mutex_init(&vcdev->io_lock);
 > >
+> >       spin_lock_irqsave(get_ccwdev_lock(cdev), flags);
 > > --
 > > 2.25.1
 >

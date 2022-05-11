@@ -2,124 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D56952300B
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C708652301B
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238639AbiEKJ5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 05:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59288 "EHLO
+        id S239046AbiEKJ61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 05:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242100AbiEKJ4Q (ORCPT
+        with ESMTP id S240559AbiEKJ56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 05:56:16 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BC31129
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:55:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652262946; x=1683798946;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SX0dEp+tLhnsLuHd+ayLflaXz08Ib7oj9qhBSJksrzw=;
-  b=OnNjS5IRUPFoYB0YSf4uoV61nCQCisDqsbdlNa1/8RyZE6ES8UFbbBjy
-   cnLqQ47WdUvzPLdTnAjDsPKykJHrEnztI28KjKL2pk+qZALKj03tI14r+
-   F/MGunDUrHRqCo/esA6+qndP0n04qW1pf9+OxS9mEFhiPJA9FZLh/JAAA
-   5Bx4ZSPZylqOZEX+AA3F2iO9mO/IZEBPJ+McQuksfV/ucl3dvv9IsluSb
-   TR0pnZpUGeIs74reMB4XWMnmEHyitYMcAgxwHaEb8vKUHIROkcUE3siMH
-   q6CU4KIDi8LxXFA0LQL45UrAhak+YJQut7RDZfnNQJX0Hzz/qn7LejhlU
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="269319024"
-X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
-   d="scan'208";a="269319024"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 02:55:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
-   d="scan'208";a="602880761"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 11 May 2022 02:55:38 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1noj4D-000Ixc-Mw;
-        Wed, 11 May 2022 09:55:37 +0000
-Date:   Wed, 11 May 2022 17:55:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Martin Habets <habetsm.xilinx@gmail.com>
-Cc:     kbuild-all@lists.01.org, alaa@dev.mellanox.co.il,
-        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
-Subject: [alaahl:netdev-next 12/22]
- drivers/net/ethernet/sfc/siena/siena_sriov.c:1578:5: warning: no previous
- prototype for 'efx_init_sriov'
-Message-ID: <202205111720.oJ7rmJle-lkp@intel.com>
+        Wed, 11 May 2022 05:57:58 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D96A18995A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:57:55 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id i11so2941689ybq.9
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:57:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=aqlUuH3Mogi7M0OT0eahUUYZoOsvHGZ6FB58g6kt7Gc=;
+        b=hrNl55+ilJgq7oFkQ5rh7nP8b7/KHXi2LMl6uMB/Z+smZp+pzK9dIXTTFp3FNJhFTq
+         ljrx+/d+AKlwUVN/vfAGvtze99puNYKsKsOBS+p72dq8IXGx55BmuI9UF8+YKBiRzeJ2
+         Pkspx2Hd82ke9AjrR40NRQShK1LFjOuQDfzUO7YniwbzcY6kAduYL5TnfYGDkGiMQqSu
+         4C5dQyV5QdH/ERk0xQm/YsGe/HXbkJjCgwleIIYAztm/HXwgAxnESCx7GenbMtIp9aaD
+         ZLvFxfH5ZUNEAlHvIp7rAsXnMRNdmzYfIDTK2BAqdJdjtwXQd2CeTUzQTAQtfUA5v6/h
+         N4Dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=aqlUuH3Mogi7M0OT0eahUUYZoOsvHGZ6FB58g6kt7Gc=;
+        b=FTiiQ7QZVtwOjYfx9m7ms94N98Ybv/PXNF09h97r1E1LM0OWJcFgQDrKmNu1+cN3ZX
+         OzvuPYTnX+epX1rL/Kq+ZYcyQ0cyZqZ1t4/QSjWXBtpPlheULZxuFhkXlILR1wXkYWzM
+         j2866BRlVJloyqXjuXPTve+nm+b4EhDQIqZzDC4zfJcabsEWJIkfp1NWOeLWIy/W11Lu
+         KNxPumOW3YacqkAAJk/mq8qt0XXFCV4frW422WogW7eJEaGD+nYU9OFvoJHbx4AM41dq
+         8txhpTmLu+1s1uG+rj6iB/Ih0jSUYY3AQGEb+oIq6XsQ3+pdgrkGTxRm693sBY79qyP9
+         K7wA==
+X-Gm-Message-State: AOAM530ucp42OBKPTVLpVpx95RDoG6tSWbNNz4uCx3YDYxOI//0fBRPN
+        2JnIkstQ+CT9ZBsixxnPNC6ZwodkOEH2PuglFo6hC2t4SZYYeg==
+X-Google-Smtp-Source: ABdhPJwSYL75bn/ktXErx0oAZKnHRhI/Qyh0cZ98CgW3AKClgDSY9J+SzfBLa9pUWvTseDbpseT2G/IEo01keBV8ClE=
+X-Received: by 2002:a25:c012:0:b0:648:4912:7b9a with SMTP id
+ c18-20020a25c012000000b0064849127b9amr23505071ybf.474.1652263074282; Wed, 11
+ May 2022 02:57:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 11 May 2022 15:27:42 +0530
+Message-ID: <CA+G9fYtFv0PVih2FxMUEO3Q--1VQQUsEQ2w6cNh3oH==Bk+rrQ@mail.gmail.com>
+Subject: Re: [PATCH 4.19 00/88] 4.19.242-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/alaahl/linux.git netdev-next
-head:   53a332f222c015cb82349fd4f6b58cb14f574e8d
-commit: c5a13c319e10e795850b61bc7e3447b08024be2e [12/22] sfc: Add a basic Siena module
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220511/202205111720.oJ7rmJle-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/alaahl/linux/commit/c5a13c319e10e795850b61bc7e3447b08024be2e
-        git remote add alaahl https://github.com/alaahl/linux.git
-        git fetch --no-tags alaahl netdev-next
-        git checkout c5a13c319e10e795850b61bc7e3447b08024be2e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/hwmon/ drivers/net/ethernet/sfc/siena/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/ethernet/sfc/siena/siena_sriov.c:1578:5: warning: no previous prototype for 'efx_init_sriov' [-Wmissing-prototypes]
-    1578 | int efx_init_sriov(void)
-         |     ^~~~~~~~~~~~~~
->> drivers/net/ethernet/sfc/siena/siena_sriov.c:1590:6: warning: no previous prototype for 'efx_fini_sriov' [-Wmissing-prototypes]
-    1590 | void efx_fini_sriov(void)
-         |      ^~~~~~~~~~~~~~
+On Tue, 10 May 2022 at 18:49, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.19.242 release.
+> There are 88 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.19.242-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
 
-vim +/efx_init_sriov +1578 drivers/net/ethernet/sfc/siena/siena_sriov.c
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-cd2d5b529cdb9b drivers/net/ethernet/sfc/siena_sriov.c Ben Hutchings 2012-02-14  1577  
-cd2d5b529cdb9b drivers/net/ethernet/sfc/siena_sriov.c Ben Hutchings 2012-02-14 @1578  int efx_init_sriov(void)
-cd2d5b529cdb9b drivers/net/ethernet/sfc/siena_sriov.c Ben Hutchings 2012-02-14  1579  {
-327c685eb745e3 drivers/net/ethernet/sfc/siena_sriov.c Shradha Shah  2014-11-05  1580  	/* A single threaded workqueue is sufficient. efx_siena_sriov_vfdi() and
-327c685eb745e3 drivers/net/ethernet/sfc/siena_sriov.c Shradha Shah  2014-11-05  1581  	 * efx_siena_sriov_peer_work() spend almost all their time sleeping for
-cd2d5b529cdb9b drivers/net/ethernet/sfc/siena_sriov.c Ben Hutchings 2012-02-14  1582  	 * MCDI to complete anyway
-cd2d5b529cdb9b drivers/net/ethernet/sfc/siena_sriov.c Ben Hutchings 2012-02-14  1583  	 */
-cd2d5b529cdb9b drivers/net/ethernet/sfc/siena_sriov.c Ben Hutchings 2012-02-14  1584  	vfdi_workqueue = create_singlethread_workqueue("sfc_vfdi");
-cd2d5b529cdb9b drivers/net/ethernet/sfc/siena_sriov.c Ben Hutchings 2012-02-14  1585  	if (!vfdi_workqueue)
-cd2d5b529cdb9b drivers/net/ethernet/sfc/siena_sriov.c Ben Hutchings 2012-02-14  1586  		return -ENOMEM;
-cd2d5b529cdb9b drivers/net/ethernet/sfc/siena_sriov.c Ben Hutchings 2012-02-14  1587  	return 0;
-cd2d5b529cdb9b drivers/net/ethernet/sfc/siena_sriov.c Ben Hutchings 2012-02-14  1588  }
-cd2d5b529cdb9b drivers/net/ethernet/sfc/siena_sriov.c Ben Hutchings 2012-02-14  1589  
-cd2d5b529cdb9b drivers/net/ethernet/sfc/siena_sriov.c Ben Hutchings 2012-02-14 @1590  void efx_fini_sriov(void)
-cd2d5b529cdb9b drivers/net/ethernet/sfc/siena_sriov.c Ben Hutchings 2012-02-14  1591  {
-cd2d5b529cdb9b drivers/net/ethernet/sfc/siena_sriov.c Ben Hutchings 2012-02-14  1592  	destroy_workqueue(vfdi_workqueue);
-cd2d5b529cdb9b drivers/net/ethernet/sfc/siena_sriov.c Ben Hutchings 2012-02-14  1593  }
-cd2d5b529cdb9b drivers/net/ethernet/sfc/siena_sriov.c Ben Hutchings 2012-02-14  1594  
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-:::::: The code at line 1578 was first introduced by commit
-:::::: cd2d5b529cdb9bd274f3e4bc68d37d4d63b7f383 sfc: Add SR-IOV back-end support for SFC9000 family
+## Build
+* kernel: 4.19.242-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-4.19.y
+* git commit: 71a9ee8b0cfdadb5c55e9205066a83286e709ca3
+* git describe: v4.19.241-89-g71a9ee8b0cfd
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
+.241-89-g71a9ee8b0cfd
 
-:::::: TO: Ben Hutchings <bhutchings@solarflare.com>
-:::::: CC: Ben Hutchings <bhutchings@solarflare.com>
+## Test Regressions (compared to v4.19.241-79-ge28b1117a7ab)
+No test regressions found.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+## Metric Regressions (compared to v4.19.241-79-ge28b1117a7ab)
+No metric regressions found.
+
+## Test Fixes (compared to v4.19.241-79-ge28b1117a7ab)
+No test fixes found.
+
+## Metric Fixes (compared to v4.19.241-79-ge28b1117a7ab)
+No metric fixes found.
+
+## Test result summary
+total: 84759, pass: 68003, fail: 1160, skip: 13643, xfail: 1953
+
+## Build Summary
+* arm: 281 total, 275 passed, 6 failed
+* arm64: 39 total, 39 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 19 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 27 total, 27 passed, 0 failed
+* powerpc: 60 total, 54 passed, 6 failed
+* s390: 12 total, 12 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 38 total, 38 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

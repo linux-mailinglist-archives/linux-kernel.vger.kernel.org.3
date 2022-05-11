@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCED522D4B
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4CB522D4E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242973AbiEKH1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 03:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53198 "EHLO
+        id S242922AbiEKH14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 03:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242956AbiEKH1W (ORCPT
+        with ESMTP id S232073AbiEKH1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 03:27:22 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1623DA42
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:27:16 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id bo5so1257067pfb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:27:16 -0700 (PDT)
+        Wed, 11 May 2022 03:27:52 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911473AA7E
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:27:50 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 31so1050255pgp.8
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:27:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=QPVmCWUy/pAelwn42xkgA5+/zRNQTu28RGMt2EDlrN0=;
-        b=PYKMhrwupiX1DKVFHB67nL6xi45Gejxb9M3oWtYgWDpMTbNtlZhy3M9WBRoEc+gFU+
-         y9swxYtgp6J09vJYhWRcCAviWIa6waO2YY94BGwT73H0BNP4XDHzroirDB44Fy9c7kXg
-         mMXIMrDnYLuq8t2U3f9KuAFPmy7fOA362VFVUk18+JpAna3cjgn3lrrAVH3vvraENPpb
-         tr9zIk0WGFBenjThfNM0wy8/ZGmtNVRgTKaaYfVrSjuTI0WD7TMqFFecdA2jVnlF2K7c
-         ZdiFVif8AaVTB92CAq46ZTicaV94F5HiwO2W2CJGMXukbWl4hcgOOhDiSqSTaIMcZkt2
-         IYoQ==
+        bh=TdTLtLMgpiAme8Im7kZEk/uGXhOybjozcq+A7lmpHwg=;
+        b=pvxV6K/xSiTVa9ouO64Cucp0uIhtHSTkom5BcnoiAqnJbB6ZJM9EK6bsCZya40wO9u
+         yIyF6ffIgXHGT8WhsRTBuHt1Q+wl6TRs+G84OsLjn+NYynhjPwYTShUNp4caTwUPfEX2
+         J2VnIsA/OIpu4Xx9ncex06m0trvedxBr3Eh3xjpHqmyDsVFFaAJoZxBiq5N6w4ttoEpB
+         Z5KVmG1nQnJ4L/XmIMnHTQSywz9rVsCbio+A9JF98Je/VWiknZZCnYbt1FKExyikMmhZ
+         5en1vydKM8h4FAXvfU2qO7luR05jrQ/JModUp4yPOwXTDQXDnkO16XkgqFkdyQGKCdrq
+         XoQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=QPVmCWUy/pAelwn42xkgA5+/zRNQTu28RGMt2EDlrN0=;
-        b=XkuEHWIK1NN6KQXkVp8T5vnuVSZ3Gs/Vtr6zc0OyBe0Bj4U4CUuq+JCQ6Ifn/iDelU
-         7F/tLMd41zvr47gYzur25QjD054DuDSKsmLREjI2Nljybw0QHupDq03XhUxGMK2L3iJ0
-         /GuJ1VHR506jXSZzGTUKwo5KmHN7d731RMn21r4GFL4YXpWA7b+nh+m2Hku3kUUe97sE
-         IbZM00sEFlFbhJ+ZVwmB0rROFlielZywgClDs5M6gLR02eCYdK0FhD5NHnBkj3+nPno7
-         o/NlMahfKTn/MKXBa/2wVkiZ3x3EO3XH2+DCmV4+H4nCh29ssaR6oTrIh28d1KRucUqW
-         wCqg==
-X-Gm-Message-State: AOAM531xs2l4b6LmCgfLqCJIUBjcuKjcI+RGUlK8paouYb+XVKlEQA90
-        cQTq4Qcir4VGd/ctRXNsKeSBYuhVmGw=
-X-Google-Smtp-Source: ABdhPJzN3XtJyFsowFOS2kEc3mCV/5GAixyocAPpmL7YzPDA3RBzWStn46ECX90OlktJImbSkeEu/g==
-X-Received: by 2002:a05:6a00:14ce:b0:50f:ac00:2a8b with SMTP id w14-20020a056a0014ce00b0050fac002a8bmr23519267pfu.36.1652254036178;
-        Wed, 11 May 2022 00:27:16 -0700 (PDT)
+        bh=TdTLtLMgpiAme8Im7kZEk/uGXhOybjozcq+A7lmpHwg=;
+        b=M4L7wc/VbReRj4+EZXq+JSanhM9GCW2xdq45wFWpmay115ZOUItbISU701d2D+1xSV
+         +5nHT6V2YhAlhv1i8d2yocgLjeQNzqiLSVT2UnVQsuukplu6lr1NktUL0iwOVbg21z6X
+         sjJR88EjEHJ/NaQljUTlUQWZf1X4m2CaAvb8Ju5HGuNBkx12Do8bnTkJfvgH+DBFdhPM
+         MitiN2h9WpiVncZW0TS4M8x1vnmzPDR+Mb1gt0w7YN7+wqNxQha0kdKYLM5ZRfsc/LdZ
+         cjQ2MFMA78ONLqWrFgNycEEcKTkTmoIdTBcKNe7qlsnvdqP6bV77+Qd1zKpHm9N2XNR/
+         5ZJA==
+X-Gm-Message-State: AOAM531IV37LdZFC+DX+Cy8cx7YBiPvQvNpfZkldErn/2eUgo98P7+CD
+        EcAJ1MoyqBYvJiAGJe9AG0Juf4RlCtg=
+X-Google-Smtp-Source: ABdhPJxhuWB4xSn8IVNoHnxsY9u1CPBfaXXhRAQrRzX+MginwFsfHYkQKLdClr1S8jOscXPq0b9Qzw==
+X-Received: by 2002:a65:6e47:0:b0:3c6:7d47:ddc8 with SMTP id be7-20020a656e47000000b003c67d47ddc8mr15078467pgb.157.1652254069888;
+        Wed, 11 May 2022 00:27:49 -0700 (PDT)
 Received: from localhost ([47.251.4.198])
-        by smtp.gmail.com with ESMTPSA id s125-20020a637783000000b003c14af5062dsm932739pgc.69.2022.05.11.00.27.15
+        by smtp.gmail.com with ESMTPSA id h17-20020a635311000000b003c14af505f8sm982033pgb.16.2022.05.11.00.27.49
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 11 May 2022 00:27:15 -0700 (PDT)
+        Wed, 11 May 2022 00:27:49 -0700 (PDT)
 From:   Lai Jiangshan <jiangshanlai@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Borislav Petkov <bp@alien8.de>,
@@ -58,12 +58,10 @@ Cc:     Borislav Petkov <bp@alien8.de>,
         Lai Jiangshan <jiangshan.ljs@antgroup.com>,
         Ingo Molnar <mingo@redhat.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kees Cook <keescook@chromium.org>,
-        Brian Gerst <brgerst@gmail.com>
-Subject: [PATCH 3/7] x86: Mark __native_read_cr3() & native_write_cr3() as __always_inline
-Date:   Wed, 11 May 2022 15:27:43 +0800
-Message-Id: <20220511072747.3960-4-jiangshanlai@gmail.com>
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH 4/7] x86/entry: Add arch/x86/entry/entry64.c for C entry code
+Date:   Wed, 11 May 2022 15:27:44 +0800
+Message-Id: <20220511072747.3960-5-jiangshanlai@gmail.com>
 X-Mailer: git-send-email 2.19.1.6.gb485710b
 In-Reply-To: <20220511072747.3960-1-jiangshanlai@gmail.com>
 References: <20220511072747.3960-1-jiangshanlai@gmail.com>
@@ -81,39 +79,67 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-Mark __native_read_cr3() & native_write_cr3() as __always_inline to
-ensure they are not instrumentable and in the .entry.text section if
-the caller is not instrumentable and in the .entry.text section.
+Add a C file "entry64.c" to deposit C entry code for traps and faults
+which will be as the same logic as the existing ASM code in entry_64.S.
 
-It prepares for __native_read_cr3() and native_write_cr3() to be used
-in the C entry code for handling KPTI.
+The file is as low level as entry_64.S and its code can be running in
+the environments that the GS base is a user controlled value, or
+the CR3 is the KPTI user CR3 or both.
 
+All the code in this file should not be instrumentable.  Many instrument
+facilities can be disabled by per-function attributes which are included
+in __noinstr_section.  But stack-protector can not be disabled function-
+granularly by some compliers.  So stack-protector is disabled for the
+whole file in Makefile.
+
+Suggested-by: Joerg Roedel <jroedel@suse.de>
 Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 ---
- arch/x86/include/asm/special_insns.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/entry/Makefile  |  3 ++-
+ arch/x86/entry/entry64.c | 14 ++++++++++++++
+ 2 files changed, 16 insertions(+), 1 deletion(-)
+ create mode 100644 arch/x86/entry/entry64.c
 
-diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
-index 45b18eb94fa1..dbaee50abb3c 100644
---- a/arch/x86/include/asm/special_insns.h
-+++ b/arch/x86/include/asm/special_insns.h
-@@ -42,14 +42,14 @@ static __always_inline void native_write_cr2(unsigned long val)
- 	asm volatile("mov %0,%%cr2": : "r" (val) : "memory");
- }
+diff --git a/arch/x86/entry/Makefile b/arch/x86/entry/Makefile
+index 7fec5dcf6438..792f7009ff32 100644
+--- a/arch/x86/entry/Makefile
++++ b/arch/x86/entry/Makefile
+@@ -10,13 +10,14 @@ KCOV_INSTRUMENT := n
+ CFLAGS_REMOVE_common.o		= $(CC_FLAGS_FTRACE)
  
--static inline unsigned long __native_read_cr3(void)
-+static __always_inline unsigned long __native_read_cr3(void)
- {
- 	unsigned long val;
- 	asm volatile("mov %%cr3,%0\n\t" : "=r" (val) : __FORCE_ORDER);
- 	return val;
- }
+ CFLAGS_common.o			+= -fno-stack-protector
++CFLAGS_entry64.o		+= -fno-stack-protector
  
--static inline void native_write_cr3(unsigned long val)
-+static __always_inline void native_write_cr3(unsigned long val)
- {
- 	asm volatile("mov %0,%%cr3": : "r" (val) : "memory");
- }
+ obj-y				:= entry_$(BITS).o thunk_$(BITS).o syscall_$(BITS).o
+ obj-y				+= common.o
++obj-$(CONFIG_X86_64)		+= entry64.o
+ 
+ obj-y				+= vdso/
+ obj-y				+= vsyscall/
+ 
+ obj-$(CONFIG_IA32_EMULATION)	+= entry_64_compat.o syscall_32.o
+ obj-$(CONFIG_X86_X32_ABI)	+= syscall_x32.o
+-
+diff --git a/arch/x86/entry/entry64.c b/arch/x86/entry/entry64.c
+new file mode 100644
+index 000000000000..ace73861c2a0
+--- /dev/null
++++ b/arch/x86/entry/entry64.c
+@@ -0,0 +1,14 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ *  Copyright (C) 1991, 1992  Linus Torvalds
++ *  Copyright (C) 2000, 2001, 2002  Andi Kleen SuSE Labs
++ *  Copyright (C) 2000  Pavel Machek <pavel@suse.cz>
++ *  Copyright (C) 2022 Lai Jiangshan, Ant Group
++ *
++ * Handle entries and exits for hardware traps and faults.
++ *
++ * It is as low level as entry_64.S and its code can be running in the
++ * environments that the GS base is a user controlled value, or the CR3
++ * is the PTI user CR3 or both.
++ */
++#include <asm/traps.h>
 -- 
 2.19.1.6.gb485710b
 

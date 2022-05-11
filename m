@@ -2,122 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 004A6523D50
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95DFF523D52
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346753AbiEKTV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 15:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
+        id S245748AbiEKTVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 15:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346743AbiEKTVY (ORCPT
+        with ESMTP id S1346762AbiEKTVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 15:21:24 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A535AA44;
-        Wed, 11 May 2022 12:21:23 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-e2fa360f6dso4048201fac.2;
-        Wed, 11 May 2022 12:21:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=FOGb83gh0B4t5TMaKCDb4y5EtmPQl9IuuPX9Uog2s5c=;
-        b=Kkxoe2mKc5EtL6uY6MFINdhc6GDFJrdoI6XvxPZoAVtXblS91W0j27vb7y+UAaKD+v
-         wikp6ZMt7f7M09cKXUqUGhsN+5lXyuohjbFC6JAM8A6A7EHNnfY6eQJOTrbnO1Wtpx+i
-         hK+f7KpCqoCeQW7NiFdUndh7jfjBpp78WraztRGKMP4C7EOxJ7GmB3/el8G2EJFANWJk
-         f80Hy4TNas9PBAKIxSe4RG6wf/ioRbGyLOzoR2DZSwcOLLpfkoaJ5vCBvz7vG44KrsIR
-         DVOTeixW1wf3rBzd7w1E3s8mib7dUxYveE5Jl+5kZHcxqAGFz/OLkyoRvSWDrvp9AZgP
-         2Iqw==
+        Wed, 11 May 2022 15:21:34 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3044C5D5E1
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:21:33 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id q12-20020a0566022f0c00b0065af7776ee7so1696459iow.17
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:21:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=FOGb83gh0B4t5TMaKCDb4y5EtmPQl9IuuPX9Uog2s5c=;
-        b=EIFuGlC0flRZU9vh9zFMkKpjBB8llZkqG/drdyEPAsSqgsILKyKgcYEEPwacZ/v7Lb
-         BZm+Am3yo4ZluPAs4wXOUFJY3zZinIYplocV5zIGC9vhh1CiMlv6iadqRKrjNq/qf9bG
-         /8i/xRTfQbhdsbpR98ujxEx/W1bSABwAei/1H2RYOiJ/HjENsK4cjTtWYTRsrU20z2J6
-         X702EYRJzhmTooa61xVZ4gsHg6PeuFE1GRbnBYAlePFNO6G3AlXxpY1JXMtI2FqPXoLk
-         xEqzsruyCzVgtciR1eh94lweRoW6fGA4kBs+FwXr5yhY08W8W0aLWGDRHp0GTzJyshGJ
-         IcPQ==
-X-Gm-Message-State: AOAM5314mm7FkKHLO/56fU1PkkaemONvDvAwnpF52M/wIbEI9fuc4Iao
-        zX8uvH6UVncDf8QUjszJVWM=
-X-Google-Smtp-Source: ABdhPJwKeqnUpEXQLb+TheYbgCxz702S6d71N8wzoKShYtVEJ4qCZjcmwrHZ+u+ievXUuN2hJZ5xaw==
-X-Received: by 2002:a05:6870:548f:b0:ed:a0e8:881b with SMTP id f15-20020a056870548f00b000eda0e8881bmr3660428oan.25.1652296882911;
-        Wed, 11 May 2022 12:21:22 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y132-20020acae18a000000b00326e2284976sm1085094oig.15.2022.05.11.12.21.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 12:21:22 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <637ed1af-8914-96b5-3a3f-04db94d16b38@roeck-us.net>
-Date:   Wed, 11 May 2022 12:21:19 -0700
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=ot1OWyPBUaYmsL/rpRXMCMJU20uzrbWIkZX+H6+xufs=;
+        b=PRFfHllMoEa4IT5+E8XIyfHO/YPhzkdEtI6671LOjGnH2aGxLxnNXTW7LwA8Oz/WEW
+         PrSkd8GMa6TxJdomT/6s/qujNhxWfOpsUOaWRjPVWCytGf+cEMN4aE0w8YoM3YNIqVMF
+         yAFv1vB525+S+BlfIKAMtLvD/aJKs7rEaAk3FraKs8L3pf1k8fo3hNQUMUdFoUrZr6mI
+         9Fvi3svUmOS091GEvCE1/WCQZp/RhzQs6DI6Q0ZFdVPpHJuAhTDAGA93cMH/NLMjQego
+         2pJu/cTO9NEaJsZn2q9qkqtkQstzh4us8GDcy+eCTfP+rac2jSZ4tgQu31R6tKmSXHgA
+         15MQ==
+X-Gm-Message-State: AOAM5329RmKVcFv7P3MF09HJiXXE1/rTySgbQutf75SLc5hi0SJHgMLZ
+        lofIOZdFCDKWlpl7OUOrDtoJy/wM6DDMjCMCiM9J4OoX8dls
+X-Google-Smtp-Source: ABdhPJyvOsk/u2xVrvdbkaOMguoZ2YYFEphNw6wj66dFQA7gnt8Ylv8Ln1GUDoRgRJ+1nTHEacRmiGq5+0TafVTg7ibH/nyElN6P
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 0/3] hwmon: Introduce and use
- hwmon_device_register_for_thermal
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <20220511151230.2983227-1-linux@roeck-us.net>
- <CAJZ5v0gk19uQG-+_gm7J_Gk+H2mtH+SmEojnPcEDiFdPoyjCzw@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CAJZ5v0gk19uQG-+_gm7J_Gk+H2mtH+SmEojnPcEDiFdPoyjCzw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:cd3:b0:32a:eec5:bbca with SMTP id
+ e19-20020a0566380cd300b0032aeec5bbcamr13461113jak.99.1652296892381; Wed, 11
+ May 2022 12:21:32 -0700 (PDT)
+Date:   Wed, 11 May 2022 12:21:32 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000557fe905dec159a6@google.com>
+Subject: [syzbot] memory leak in blk_ioprio_init
+From:   syzbot <syzbot+5d564137a4c4677abcf1@syzkaller.appspotmail.com>
+To:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/11/22 11:21, Rafael J. Wysocki wrote:
-> On Wed, May 11, 2022 at 5:12 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> The thermal subsystem registers a hwmon driver without providing
->> chip information or sysfs group information. This is for legacy reasons
->> and would be difficult to change.
->>
->> At the same time, several attempts have been made to convert hwmon
->> drivers using the deprecated hwmon_device_register() to use
->> hwmon_device_register_with_info() by just providing NULL parameters.
->> This is an abuse of the hwmon API. To prevent this abuse, we want to
->> enforce that a parent device pointer as well as chip information is
->> provided when registering a hwmon device using
->> hwmon_device_register_with_info().
->>
->> To be able to do this, introduce and use a special API for use only by
->> the thermal subsystem (patches 1 and 2). Patch 3 makes the 'dev' and 'chip'
->> parameters of hwmon_device_register_with_info() mandatory.
->>
->> ----------------------------------------------------------------
->> Guenter Roeck (3):
->>        hwmon: Introduce hwmon_device_register_for_thermal
->>        thermal/drivers/thermal_hwmon: Use hwmon_device_register_for_thermal()
->>        hwmon: Make chip parameter for with_info API mandatory
->>
->>   Documentation/hwmon/hwmon-kernel-api.rst |  2 +-
->>   drivers/hwmon/hwmon.c                    | 41 ++++++++++++++++++++++++++++++++---------
->>   drivers/thermal/thermal_hwmon.c          |  6 ++++--
->>   include/linux/hwmon.h                    |  3 +++
->>   4 files changed, 40 insertions(+), 12 deletions(-)
-> 
-> This looks good to me from the thermal perspective, so please feel
-> free to add my ACKs to the first two patches.
-> 
+Hello,
 
-Thanks!
+syzbot found the following issue on:
 
-Guenter
+HEAD commit:    feb9c5e19e91 Merge tag 'for_linus' of git://git.kernel.org..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=104f2666f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f33cdac6164584bd
+dashboard link: https://syzkaller.appspot.com/bug?extid=5d564137a4c4677abcf1
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12071811f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ffd166f00000
 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5d564137a4c4677abcf1@syzkaller.appspotmail.com
+
+executing program
+BUG: memory leak
+unreferenced object 0xffff88810a36cc80 (size 64):
+  comm "syz-executor844", pid 3616, jiffies 4294958438 (age 12.560s)
+  hex dump (first 32 bytes):
+    80 99 ca 85 ff ff ff ff 40 16 93 04 81 88 ff ff  ........@.......
+    03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff82338d25>] kmalloc include/linux/slab.h:581 [inline]
+    [<ffffffff82338d25>] kzalloc include/linux/slab.h:714 [inline]
+    [<ffffffff82338d25>] blk_ioprio_init+0x25/0xf0 block/blk-ioprio.c:233
+    [<ffffffff8233169d>] blkcg_init_queue+0xcd/0x1f0 block/blk-cgroup.c:1216
+    [<ffffffff82317c6e>] __alloc_disk_node+0x11e/0x230 block/genhd.c:1381
+    [<ffffffff82317db5>] __blk_alloc_disk+0x35/0x70 block/genhd.c:1421
+    [<ffffffff832f7574>] md_alloc+0x5d4/0x830 drivers/md/md.c:5697
+    [<ffffffff832f7839>] md_probe+0x69/0x70 drivers/md/md.c:5746
+    [<ffffffff8231858a>] blk_request_module+0x8a/0x110 block/genhd.c:716
+    [<ffffffff822e79f7>] blkdev_get_no_open+0x77/0xc0 block/bdev.c:737
+    [<ffffffff822e7a63>] blkdev_get_by_dev.part.0+0x23/0x520 block/bdev.c:794
+    [<ffffffff822e7fcb>] blkdev_get_by_dev+0x6b/0x80 block/bdev.c:850
+    [<ffffffff822e9337>] blkdev_open+0xb7/0x130 block/fops.c:498
+    [<ffffffff815b4be6>] do_dentry_open+0x1e6/0x650 fs/open.c:824
+    [<ffffffff815db0a1>] do_open fs/namei.c:3476 [inline]
+    [<ffffffff815db0a1>] path_openat+0x18a1/0x1e70 fs/namei.c:3609
+    [<ffffffff815ddd71>] do_filp_open+0xc1/0x1b0 fs/namei.c:3636
+    [<ffffffff815b83bd>] do_sys_openat2+0xed/0x260 fs/open.c:1213
+    [<ffffffff815b8e0f>] do_sys_open fs/open.c:1229 [inline]
+    [<ffffffff815b8e0f>] __do_sys_openat fs/open.c:1245 [inline]
+    [<ffffffff815b8e0f>] __se_sys_openat fs/open.c:1240 [inline]
+    [<ffffffff815b8e0f>] __x64_sys_openat+0x7f/0xe0 fs/open.c:1240
+
+BUG: memory leak
+unreferenced object 0xffff88810f6c7780 (size 96):
+  comm "syz-executor844", pid 3616, jiffies 4294958438 (age 12.560s)
+  hex dump (first 32 bytes):
+    c0 9f ca 85 ff ff ff ff 40 16 93 04 81 88 ff ff  ........@.......
+    01 00 00 00 00 00 00 00 80 cc 36 0a 81 88 ff ff  ..........6.....
+  backtrace:
+    [<ffffffff8233b228>] kmalloc include/linux/slab.h:581 [inline]
+    [<ffffffff8233b228>] kzalloc include/linux/slab.h:714 [inline]
+    [<ffffffff8233b228>] blk_iolatency_init+0x28/0x190 block/blk-iolatency.c:725
+    [<ffffffff823316f5>] blkcg_init_queue+0x125/0x1f0 block/blk-cgroup.c:1224
+    [<ffffffff82317c6e>] __alloc_disk_node+0x11e/0x230 block/genhd.c:1381
+    [<ffffffff82317db5>] __blk_alloc_disk+0x35/0x70 block/genhd.c:1421
+    [<ffffffff832f7574>] md_alloc+0x5d4/0x830 drivers/md/md.c:5697
+    [<ffffffff832f7839>] md_probe+0x69/0x70 drivers/md/md.c:5746
+    [<ffffffff8231858a>] blk_request_module+0x8a/0x110 block/genhd.c:716
+    [<ffffffff822e79f7>] blkdev_get_no_open+0x77/0xc0 block/bdev.c:737
+    [<ffffffff822e7a63>] blkdev_get_by_dev.part.0+0x23/0x520 block/bdev.c:794
+    [<ffffffff822e7fcb>] blkdev_get_by_dev+0x6b/0x80 block/bdev.c:850
+    [<ffffffff822e9337>] blkdev_open+0xb7/0x130 block/fops.c:498
+    [<ffffffff815b4be6>] do_dentry_open+0x1e6/0x650 fs/open.c:824
+    [<ffffffff815db0a1>] do_open fs/namei.c:3476 [inline]
+    [<ffffffff815db0a1>] path_openat+0x18a1/0x1e70 fs/namei.c:3609
+    [<ffffffff815ddd71>] do_filp_open+0xc1/0x1b0 fs/namei.c:3636
+    [<ffffffff815b83bd>] do_sys_openat2+0xed/0x260 fs/open.c:1213
+    [<ffffffff815b8e0f>] do_sys_open fs/open.c:1229 [inline]
+    [<ffffffff815b8e0f>] __do_sys_openat fs/open.c:1245 [inline]
+    [<ffffffff815b8e0f>] __se_sys_openat fs/open.c:1240 [inline]
+    [<ffffffff815b8e0f>] __x64_sys_openat+0x7f/0xe0 fs/open.c:1240
+
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

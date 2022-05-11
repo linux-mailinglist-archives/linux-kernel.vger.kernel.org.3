@@ -2,146 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E60522F52
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:24:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8246B522F57
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237355AbiEKJYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 05:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
+        id S240813AbiEKJ0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 05:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbiEKJYh (ORCPT
+        with ESMTP id S240576AbiEKJ0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 05:24:37 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C787A456;
-        Wed, 11 May 2022 02:24:35 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id D5ED41F8D3;
-        Wed, 11 May 2022 09:24:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652261073; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nN072XjvLtJhbhtDvTS9a15agLhgCefyfNf1N5AcBXs=;
-        b=uJ2FMBtequR4/wjREO5p/fnprXFSlkerpk1Fvx7S/H/qf9TOYAY5LrYhCDCJTeg2TXlXNO
-        2GtHqKnX89iUoYuy5S6gxJqS68eOg+bPBWy9C2rdnB01ACkKGGWfrrRqDYhbZ4c1yjqI/H
-        4nG/BhZLKtkzC1L424qbgvsPMRGDrQ0=
-Received: from suse.cz (pathway.suse.cz [10.100.12.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id BABAB2C142;
-        Wed, 11 May 2022 09:24:33 +0000 (UTC)
-Date:   Wed, 11 May 2022 11:24:33 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Song Liu <songliubraving@fb.com>, Rik van Riel <riel@fb.com>,
-        "song@kernel.org" <song@kernel.org>,
-        "joe.lawrence@redhat.com" <joe.lawrence@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>
-Subject: Re: [RFC] sched,livepatch: call klp_try_switch_task in __cond_resched
-Message-ID: <20220511092433.GA26047@pathway.suse.cz>
-References: <3a9bfb4a52b715bd8739d8834409c9549ec7f22f.camel@fb.com>
- <YnqIcw+dYsWz/w7g@alley>
- <6bf85ff908377508a5f5bcc7c4e75d598b96f388.camel@fb.com>
- <20220510165244.ikfh64ertnvodxb4@treble>
- <1bd15361edfd4db9fc9271d35e7bbe5edad1b87a.camel@fb.com>
- <20220510184213.l3gjweeleyg7obca@treble>
- <47440502-930F-4CBD-B859-3AC9BBFF8FC6@fb.com>
- <20220510230402.e5ymkwt45sg7bd35@treble>
- <D298A3F1-43A5-4FD5-B198-906364BF4B79@fb.com>
- <20220511003331.clfvwfgpmbr5yx6n@treble>
+        Wed, 11 May 2022 05:26:21 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434032A269
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:26:19 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KyqG90H87zGpg6;
+        Wed, 11 May 2022 17:23:29 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 11 May 2022 17:26:17 +0800
+Subject: Re: [PATCH] mm, compaction: fast_find_migrateblock() should return
+ pfn in the target zone
+To:     Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
+CC:     <akpm@linux-foundation.org>, <aquini@redhat.com>,
+        <ddutile@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <mgorman@techsingularity.net>,
+        <vvghjk1234@gmail.com>
+References: <2c2900eb-886a-5bbe-f7c7-9d74a6399893@huawei.com>
+ <20220511070710.5576-1-yamamoto.rei@jp.fujitsu.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <07e0ceb8-a637-b011-bbf6-ba760a0b12e4@huawei.com>
+Date:   Wed, 11 May 2022 17:26:16 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220511003331.clfvwfgpmbr5yx6n@treble>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220511070710.5576-1-yamamoto.rei@jp.fujitsu.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-05-10 17:33:31, Josh Poimboeuf wrote:
-> On Tue, May 10, 2022 at 11:57:04PM +0000, Song Liu wrote:
-> > > If it's a real bug, we should fix it everywhere, not just for Facebook.
-> > > Otherwise CONFIG_PREEMPT and/or non-x86 arches become second-class
-> > > citizens.
-> > 
-> > I think "is it a real bug?" is the top question for me. So maybe we 
-> > should take a step back.
-> > 
-> > The behavior we see is: A busy kernel thread blocks klp transition 
-> > for more than a minute. But the transition eventually succeeded after 
-> > < 10 retries on most systems. The kernel thread is well-behaved, as 
-> > it calls cond_resched() at a reasonable frequency, so this is not a 
-> > deadlock. 
-> > 
-> > If I understand Petr correctly, this behavior is expected, and thus 
-> > is not a bug or issue for the livepatch subsystem. This is different
-> > to our original expectation, but if this is what we agree on, we 
-> > will look into ways to incorporate long wait time for patch 
-> > transition in our automations. 
+On 2022/5/11 15:07, Rei Yamamoto wrote:
+> On Wed, 11 May 2022 14:25:34 Miaohe Lin wrote:
+>> On 2022/5/11 12:43, Rei Yamamoto wrote:
+>>> Prevent returning a pfn outside the target zone in case that not
+>>> aligned with pageblock boundary.
+>>> Otherwise isolate_migratepages_block() would handle pages not in
+>>> the target zone.
+>>>
+>>
+>> IIUC, the sole caller isolate_migratepages will ensure the pfn won't outside
+>> the target zone. So the below code change might not be necessary. Or am I miss
+>> something ?
 > 
-> That's how we've traditionally looked at it, though apparently Red Hat
-> and SUSE have implemented different ideas of what a long wait time is.
+> While block_start_pfn is ensured, this variable is not used as the argument for 
+> isolate_migratepages_block():
+>   -----
+>   static isolate_migrate_t isolate_migratepages(struct compact_control *cc)
+>   {
+>   :
+>           low_pfn = fast_find_migrateblock(cc);
+>           block_start_pfn = pageblock_start_pfn(low_pfn);
+>           if (block_start_pfn < cc->zone->zone_start_pfn)
+>                   block_start_pfn = cc->zone->zone_start_pfn;  <--- block_start_pfn is ensured not outside 
+>                                                                     the target zone
+>   :
+>           block_end_pfn = pageblock_end_pfn(low_pfn);
+>   :
+>           for (; block_end_pfn <= cc->free_pfn;
+>                           fast_find_block = false,
+>                           cc->migrate_pfn = low_pfn = block_end_pfn,
+>                           block_start_pfn = block_end_pfn,
+>                           block_end_pfn += pageblock_nr_pages) {
+>   :
+>                   if (isolate_migratepages_block(cc, low_pfn, block_end_pfn,  <--- low_pfn is passed as 
+>                                                                                    the argument
+
+Sorry, I think you're right. And could you please add the runtime effect of this issue?
+
+Anyway, this patch looks good to me now. Thanks!
+
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+
+>                                                   isolate_mode))
+>                           return ISOLATE_ABORT;
+>   -----
 > 
-> In practice, one minute has always been enough for all of kpatch's users
-> -- AFAIK, everybody except SUSE -- up until now.
+> So, the low_pfn passed to isolate_migratepages_block() can be outside the target zone.
+> 
+> Thanks,
+> Rei
+> .
+> 
 
-I am actually surprised that nobody met the problem yet. There are
-"only" 60 attempts to transition the pending tasks.
-
-Well, the problem is mainly with kthreads. User space processes are
-migrated also on the kernel boundary. And the fake signal is likely
-pretty effective here. And it probably is not that common that
-a kthread would occupy a single CPU all the time.
-
-
-> Though, these options might be considered workarounds, as it's
-> theoretically possible for a kthread to be CPU-bound indefinitely,
-> beyond any arbitrarily chosen timeout.  But maybe that's not realistic
-> beyond a certain timeout value of X and we don't care?  I dunno.
-
-I agree that it might happen theoretically. And it would be great
-to be prepared for this. My only concern is the complexity and risk.
-We should know that it is worth it.
-
-
-> As I have been trying to say, that won't work for PREEMPT+!ORC, because,
-> when the kthread gets preempted, the stack trace will be attempted from
-> an IRQ and will be reported as unreliable.
-
-This limits the range of possible solutions quite a lot. But it is
-how it is.
-
-> Ideally we'd have the ORC unwinder for all arches, that would make this
-> much easier.  But we're not there yet.
-
-The alternative solution is that the process has to migrate itself
-on some safe location.
-
-One crazy idea. It still might be possible to find the called
-functions on the stack even when it is not reliable. Then it
-might be possible to add another ftrace handler on
-these found functions. This other ftrace handler might migrate
-the task when it calls this function again.
-
-It assumes that the task will call the same functions again
-and again. Also it might require that the tasks checks its
-own stack from the ftrace handler. I am not sure if this
-is possible.
-
-There might be other variants of this approach.
-
-Best Regards,
-Petr

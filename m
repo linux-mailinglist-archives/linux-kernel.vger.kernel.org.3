@@ -2,80 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 082E1522F62
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA1C522F61
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236645AbiEKJ2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 05:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53984 "EHLO
+        id S235409AbiEKJ2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 05:28:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230375AbiEKJ2D (ORCPT
+        with ESMTP id S232031AbiEKJ2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 11 May 2022 05:28:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C2B2E5299
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:28:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652261280;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ehAdFMHQin7sBzIsjKPJMBNM1tNTUowv6Coiiw6E2YI=;
-        b=bKKCg1m8r9y+gSruvmXUWmM9bQd7gUeWSwJ4cyCeE5kMK1sE79iAtWHBKmgyKdLmNsdEuO
-        /+UZVlyZ6/Z2ATVDMJ3vDHHqUt9j2XXyv0QTG9cn0MuItUGTND3mQKxSe+9Tu/V48fcLxv
-        M8YaiMo8PgiU97TbPh2ZowubOSlaVhg=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-307-tDcr2LFbMRy9maZKk_mODQ-1; Wed, 11 May 2022 05:27:57 -0400
-X-MC-Unique: tDcr2LFbMRy9maZKk_mODQ-1
-Received: by mail-lf1-f71.google.com with SMTP id a13-20020a19ca0d000000b0047233f64994so584893lfg.14
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:27:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ehAdFMHQin7sBzIsjKPJMBNM1tNTUowv6Coiiw6E2YI=;
-        b=SVKcJFcUzaST8Ba+grHjZMtJcv4x2zbK0JVffH3iCGICX829JNt2qG5GbFnphrMhWh
-         ar/TY0UYB+/GHFjrrCD59o73FtNOUOe3hJw61nRbkg0MKnaZQk6Xvg8GU4YI4iaVSmj6
-         YTXGP7PlLKPjqzYGxIaPK2QNNlMdaTFq6gX4lAj7w/LX1zYHYUyAKTLxXhSGVEW9g2YK
-         hXUF1KQuIZ6jh7YJgHLhA6F/EuRZLZwLPGIVmAXHmXAAE9yVcq7s2pi+kHmFPv+1Saro
-         v6V3Q9E+8rP/HPro/RtaHcr7wNJ7sZPBUwQrVKQPhOhE9cgz+pL3INvNKJbBZP99qyTH
-         FALA==
-X-Gm-Message-State: AOAM530yl4f8zQsOhRGEk1RCEAkpiVI+whvF+lcaRxbq4eAK9XMclYct
-        zSMq2Qav9bSYDiQijcE9CtcxkTL4L1mzwzMvqEgWATwe6WaUAvThyWTENBvyz3rmZNoAqFVfelK
-        LTq4CsEp4V4X5cLwMeDUsxnf60QaClB/KW54/W57Q
-X-Received: by 2002:a2e:b057:0:b0:24f:2668:833b with SMTP id d23-20020a2eb057000000b0024f2668833bmr16381999ljl.300.1652261276012;
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 08E5547545;
+        Wed, 11 May 2022 02:28:01 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B71611FB;
+        Wed, 11 May 2022 02:28:00 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.3.187])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C1EC73F73D;
         Wed, 11 May 2022 02:27:56 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw5pnyy7RM02GVjjr25zdMxywsAUXwIZXeHQ+BpJH/yZ8wlAwtqIUV0+RNxrlNjUJdUnXcetv7Su7hXh9EzXk4=
-X-Received: by 2002:a2e:b057:0:b0:24f:2668:833b with SMTP id
- d23-20020a2eb057000000b0024f2668833bmr16381981ljl.300.1652261275822; Wed, 11
- May 2022 02:27:55 -0700 (PDT)
+Date:   Wed, 11 May 2022 10:27:47 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, maz@kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-gpio@vger.kernel.org,
+        Octavian Purdila <octavian.purdila@nxp.com>,
+        linux-kernel@vger.kernel.org, aou@eecs.berkeley.edu,
+        catalin.marinas@arm.com, deanbo422@gmail.com, green.hu@gmail.com,
+        guoren@kernel.org, jonas@southpole.se, kernelfans@gmail.com,
+        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
+        nickhu@andestech.com, palmer@dabbelt.com, paul.walmsley@sifive.com,
+        shorne@gmail.com, stefan.kristiansson@saunalahti.fi,
+        tsbogend@alpha.franken.de, vgupta@kernel.org,
+        vladimir.murzin@arm.com, will@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v2 17/17] irq: remove handle_domain_{irq,nmi}()
+Message-ID: <YnuBk5dP89w6lvhB@FVFF77S0Q05N>
+References: <20211026092504.27071-1-mark.rutland@arm.com>
+ <20211026092504.27071-18-mark.rutland@arm.com>
+ <20220506203242.GA1855@wunner.de>
+ <YnjWvbzn8ox+f2Y2@FVFF77S0Q05N>
+ <20220510121320.GA3020@wunner.de>
+ <Ynpzb5L53iGex14D@FVFF77S0Q05N>
+ <87a6bpov9u.ffs@tglx>
+ <YntynKK5Jjw2Q1rX@FVFF77S0Q05N>
+ <20220511085741.GA6558@wunner.de>
 MIME-Version: 1.0
-References: <20220507071954.14455-1-jasowang@redhat.com> <20220507071954.14455-9-jasowang@redhat.com>
- <20220510072833-mutt-send-email-mst@kernel.org> <CACGkMEtBfdhx-9CMKD0F4+536e5ewf6NQJGPTEBX00uby-C8+w@mail.gmail.com>
- <87o804bgrl.fsf@redhat.com>
-In-Reply-To: <87o804bgrl.fsf@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 11 May 2022 17:27:44 +0800
-Message-ID: <CACGkMEt0WdaVCbzeJ9KJuLw273D6KjSOG85RCk675QW3ZxvEsQ@mail.gmail.com>
-Subject: Re: [PATCH V4 8/9] virtio: harden vring IRQ
-To:     Cornelia Huck <cohuck@redhat.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        eperezma <eperezma@redhat.com>, Cindy Lu <lulu@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511085741.GA6558@wunner.de>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,125 +62,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 4:44 PM Cornelia Huck <cohuck@redhat.com> wrote:
->
-> On Wed, May 11 2022, Jason Wang <jasowang@redhat.com> wrote:
->
-> > On Tue, May 10, 2022 at 7:32 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >>
-> >> On Sat, May 07, 2022 at 03:19:53PM +0800, Jason Wang wrote:
-> >> > diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
-> >> > index d8a2340f928e..23f1694cdbd5 100644
-> >> > --- a/include/linux/virtio_config.h
-> >> > +++ b/include/linux/virtio_config.h
-> >> > @@ -256,6 +256,18 @@ void virtio_device_ready(struct virtio_device *dev)
-> >> >       unsigned status = dev->config->get_status(dev);
-> >> >
-> >> >       BUG_ON(status & VIRTIO_CONFIG_S_DRIVER_OK);
-> >> > +
-> >> > +     /*
-> >> > +      * The virtio_synchronize_cbs() makes sure vring_interrupt()
-> >> > +      * will see the driver specific setup if it sees vq->broken
-> >> > +      * as false.
-> >> > +      */
-> >> > +     virtio_synchronize_cbs(dev);
-> >>
-> >> since you mention vq->broken above, maybe add
-> >>         "set vq->broken to false"
-> >
-> > Ok.
-> >
-> >>
-> >> > +     __virtio_unbreak_device(dev);
-> >> > +     /*
-> >> > +      * The transport is expected ensure the visibility of
-> >>
-> >> to ensure
-> >
-> > Will fix.
-> >
-> >>
-> >> > +      * vq->broken
-> >>
-> >> let's add: "visibility by vq callbacks"
-> >
-> > Sure.
-> >
-> >>
-> >> > before setting VIRTIO_CONFIG_S_DRIVER_OK.
-> >> > +      */
-> >>
-> >>
-> >> Can I see some analysis of existing transports showing
-> >> this is actually the case for them?
-> >
-> > Yes.
-> >
-> >> And maybe add a comment near set_status to document the
-> >> requirement.
-> >
-> > For PCI and MMIO, we can quote the memory-barriers.txt or explain that
-> > wmb() is not needed before the MMIO writel().
-> > For CCW, it looks not obvious, it looks to me the IO was submitted via
-> > __ssch() which has an inline assembly.  Cornelia and Hali, could you
-> > help me to understand if and how did virtio_ccw_set_status() can
-> > ensure the visibility of the previous driver setup and vq->broken
-> > here?
->
-> I'm not sure I completely understand the question here, but let me try:
+On Wed, May 11, 2022 at 10:57:41AM +0200, Lukas Wunner wrote:
+> On Wed, May 11, 2022 at 09:23:56AM +0100, Mark Rutland wrote:
+> > On Wed, May 11, 2022 at 12:52:29AM +0200, Thomas Gleixner wrote:
+> > > +	/* USB interrupts are received in softirq (tasklet) context.
+> > > +	 * Switch to hardirq context to make genirq code happy.
+> > > +	 */
+> > > +	local_irq_save(flags);
+> > > +	__irq_enter_raw();
+> > > +
+> > >  	if (intdata & INT_ENP_PHY_INT_)
+> > > -		;
+> > > +		generic_handle_domain_irq(pdata->irqdomain, PHY_HWIRQ);
+> > 
+> > Agreed. IIUC everyone agrees the __irq_enter_raw() usage is a hack,
+> > but what's not clear is what we *should* do
+> > 
+> > I suspect that given we have generic_handle_irq_safe() for situations
+> > like this we should add a generic_handle_domain_irq_safe(), and use
+> > that in this driver?
+> > That way we can keep the `WARN_ON_ONCE(!in_hardirq())` in
+> > generic_handle_domain_irq().
+> 
+> Thomas applied 792ea6a074ae ("genirq: Remove WARN_ON_ONCE() in
+> generic_handle_domain_irq()") tonight:
+> 
+> http://git.kernel.org/tip/tip/c/792ea6a074ae
 
-It's something like the following case:
+Ah; I missed that. Sorry for the noise!
 
-CPU 0: vq->broken = false
-CPU 0: set_status(DRIVER_OK)
-CPU 1: vring_interrupt() { if (vq->broken) return IRQ_NONE; }
+> That allows me to drop the controversial __irq_enter_raw()
+> and thus unblock my smsc95xx series.
+> 
+> generic_handle_domain_irq_safe() would merely be a wrapper for
+> generic_handle_domain_irq() which disables local interrupts.
+> Then I wouldn't have to do that in smsc95xx.c.  IMHO that's a
+> cosmetic improvement, though I'll be happy to provide a patch
+> if desired?
 
-We need to make sure the CPU 1 sees the vq->broken if the interrupt is
-raised after DRVER_OK.
+I think it's a nice-to-have, but I don't have a strong feelings about it, so I
+think we can forget about it for now unless Marc or Thomas want it.
 
-For PCI, we use MMIO of writel() for set_status(), a wmb() is not
-needed in this case according to memory-barriers.txt.
-
-"
-Note that, when using writel(), a prior
-wmb() is not needed to guarantee that the cache coherent memory writes
-have completed before writing to the MMIO region.
-"
-
-So CPU 1 will see the broken as false.
-
->
-> virtio_ccw_set_status() uses a channel command to set the status, with
-> the interesting stuff done inside ccw_io_helper(). That function
-> - takes the subchannel lock, disabling interrupts
-
-Then it is, for x86 the operation to disable interrupt is a full
-barrier. I guess this should apply to other architecture like s390. I
-see a stnsm is used in this case but a quick google doesn't tell me if
-it's a barrier.
-If this is true. The vring_interrupt will see broken as false.
-
-> - does the ssch; this instruction will fail if there's already another
->   I/O in progress, or an interrupt is pending for the subchannel; on
->   success, it is guaranteed that we'll get an interrupt eventually
-
-I guess ssch might imply a barrier as well, otherwise we may need a
-lot of barriers before this.
-
-Thanks
-
-> - unlock the subchannel, and wait for the interupt handler to eventually
->   process the interrupt, so I guess it should see the vq->broken value?
->
-> If the I/O fails, virtio_ccw_set_status() will revert its internal
-> status to the old value.
->
->
-> >
-> > Thanks
-> >
-> >>
-> >> >       dev->config->set_status(dev, status | VIRTIO_CONFIG_S_DRIVER_OK);
-> >> >  }
->
-
+Thanks,
+Mark.

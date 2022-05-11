@@ -2,104 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64676522981
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 04:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0C152298C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 04:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241047AbiEKCQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 22:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59396 "EHLO
+        id S241074AbiEKCTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 22:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbiEKCQo (ORCPT
+        with ESMTP id S241050AbiEKCTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 22:16:44 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBAE481644;
-        Tue, 10 May 2022 19:16:42 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id v10so525638pgl.11;
-        Tue, 10 May 2022 19:16:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=buRI718RFPrTtdiRLJoEyVax+0RYy5X13JOpEpadUuU=;
-        b=O38Tu6+beNDnnVNtxh7fOgBixYQaJXblJOrMVxDv629pCOwVzoPH1O4x3it3LR9GWm
-         WmSwqKjedt/f3uWUmwbXgxDqBSAIELGRm2sEUwe7zPkn4uf9k9o0tjRlGY+58AlIX6f+
-         3ivEDQw1au4QnXgkrtPV5V6tcCB889NVaX4KMa3/OvLO/e4P1RmYFS4c1cySw6G2UaaJ
-         pNIW64MLUCJlsBgvHGUQWppfXYV34agKMin093B8ASOXxiXK3SArgPcUhCo7v7WYjCM0
-         rIOBwuwZccdegIbYgwgn1cocMgNXJkytVusVODABrIKITsRpgDWE9bUwm9seX6/2SraB
-         oWRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=buRI718RFPrTtdiRLJoEyVax+0RYy5X13JOpEpadUuU=;
-        b=VYiwUQgLjrm62sRwqRJz0EIW3FGOvvN92JJvTdeJQ91c48mskCSy7k5lz0krQ/fWhK
-         okj2SWzfm46tRe/U+J09zyoVK97vULTJcbwFqEH86iK3Tbl7cVidCPCot3YZlg/mWkQa
-         ZVlEdn+9WpiCSM8TVRDCEAceGgOp2nuEc7hvc69MQF3nxmmBLnpUm8QbacWFK2JvJYan
-         z4wYrez3KVYozjL1UTa8BLx7bU61k9y332+65c25SwDLu3ylOuuB8Jt6mLrZmDDyAcJr
-         DG8qr36FpodCGin9ym7b0NK85x3jBqDGRgdERijfK7d7CYrPRqOZargMqCqCia9TQsBT
-         bZaw==
-X-Gm-Message-State: AOAM532Wa3qVJByOYnjChE+vQcjbH+VCSuju1ORmwfe7Y/oUKXnhbQjn
-        WOotTTh2pBpfguGG0bGwp7BoAcLCxo4=
-X-Google-Smtp-Source: ABdhPJwSTNC7XV5g8rgzvLhMnHke+15+xCA+f/9KoLJUeFW2q/tcqIfUyrGoJdlVs17dXjSkPjgyjA==
-X-Received: by 2002:a63:d241:0:b0:3db:11bc:8d6e with SMTP id t1-20020a63d241000000b003db11bc8d6emr2313497pgi.229.1652235402492;
-        Tue, 10 May 2022 19:16:42 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id j12-20020a17090a2a8c00b001d792761e2esm2566405pjd.47.2022.05.10.19.16.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 19:16:42 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     andy.shevchenko@gmail.com
-Cc:     cgel.zte@gmail.com, chi.minghao@zte.com.cn, coproscefalo@gmail.com,
-        hdegoede@redhat.com, linux-kernel@vger.kernel.org,
-        markgross@kernel.org, platform-driver-x86@vger.kernel.org,
-        zealci@zte.com.cn
-Subject: [PATCH V2] toshiba_acpi: use kobj_to_dev()
-Date:   Wed, 11 May 2022 02:16:38 +0000
-Message-Id: <20220511021638.1488650-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CAHp75VfzbWAS6phV3eB7ehe50NrXitkuS54sYjdVK-OqqYVieA@mail.gmail.com>
-References: <CAHp75VfzbWAS6phV3eB7ehe50NrXitkuS54sYjdVK-OqqYVieA@mail.gmail.com>
+        Tue, 10 May 2022 22:19:41 -0400
+Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 404941F68E4;
+        Tue, 10 May 2022 19:19:40 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-2-147.pa.nsw.optusnet.com.au [49.181.2.147])
+        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id 62ED610E67FF;
+        Wed, 11 May 2022 12:19:37 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1nobwt-00AWOv-Mb; Wed, 11 May 2022 12:19:35 +1000
+Date:   Wed, 11 May 2022 12:19:35 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     "Darrick J. Wong" <djwong@kernel.org>,
+        Shiyang Ruan <ruansy.fnst@fujitsu.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jane Chu <jane.chu@oracle.com>,
+        Goldwyn Rodrigues <rgoldwyn@suse.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        linmiaohe@huawei.com, Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCHSETS] v14 fsdax-rmap + v11 fsdax-reflink
+Message-ID: <20220511021935.GF1098723@dread.disaster.area>
+References: <20220508143620.1775214-1-ruansy.fnst@fujitsu.com>
+ <20220511000352.GY27195@magnolia>
+ <20220511014818.GE1098723@dread.disaster.area>
+ <CAPcyv4h0a3aT3XH9qCBW3nbT4K3EwQvBSD_oX5W=55_x24-wFA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPcyv4h0a3aT3XH9qCBW3nbT4K3EwQvBSD_oX5W=55_x24-wFA@mail.gmail.com>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=e9dl9Yl/ c=1 sm=1 tr=0 ts=627b1d3b
+        a=ivVLWpVy4j68lT4lJFbQgw==:117 a=ivVLWpVy4j68lT4lJFbQgw==:17
+        a=kj9zAlcOel0A:10 a=oZkIemNP1mAA:10 a=7-415B0cAAAA:8 a=VwQbUJbxAAAA:8
+        a=omOdbC7AAAAA:8 a=yxOYEzMc2pvqTVPWZc0A:9 a=CjuIK1q_8ugA:10
+        a=biEYGPWJfzWAr4FL6Ov7:22 a=AjGcO6oz07-iQ99wixmX:22
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+On Tue, May 10, 2022 at 06:55:50PM -0700, Dan Williams wrote:
+> [ add Andrew ]
+> 
+> 
+> On Tue, May 10, 2022 at 6:49 PM Dave Chinner <david@fromorbit.com> wrote:
+> >
+> > On Tue, May 10, 2022 at 05:03:52PM -0700, Darrick J. Wong wrote:
+> > > On Sun, May 08, 2022 at 10:36:06PM +0800, Shiyang Ruan wrote:
+> > > > This is a combination of two patchsets:
+> > > >  1.fsdax-rmap: https://lore.kernel.org/linux-xfs/20220419045045.1664996-1-ruansy.fnst@fujitsu.com/
+> > > >  2.fsdax-reflink: https://lore.kernel.org/linux-xfs/20210928062311.4012070-1-ruansy.fnst@fujitsu.com/
+> > > >
+> > > >  Changes since v13 of fsdax-rmap:
+> > > >   1. Fixed mistakes during rebasing code to latest next-
+> > > >   2. Rebased to next-20220504
+> > > >
+> > > >  Changes since v10 of fsdax-reflink:
+> > > >   1. Rebased to next-20220504 and fsdax-rmap
+> > > >   2. Dropped a needless cleanup patch: 'fsdax: Convert dax_iomap_zero to
+> > > >       iter model'
+> > > >   3. Fixed many conflicts during rebasing
+> > > >   4. Fixed a dedupe bug in Patch 05: the actuall length to compare could be
+> > > >       shorter than smap->length or dmap->length.
+> > > >   PS: There are many changes during rebasing.  I think it's better to
+> > > >       review again.
+> > > >
+> > > > ==
+> > > > Shiyang Ruan (14):
+> > > >   fsdax-rmap:
+> > > >     dax: Introduce holder for dax_device
+> > > >     mm: factor helpers for memory_failure_dev_pagemap
+> > > >     pagemap,pmem: Introduce ->memory_failure()
+> > > >     fsdax: Introduce dax_lock_mapping_entry()
+> > > >     mm: Introduce mf_dax_kill_procs() for fsdax case
+> > >
+> > > Hmm.  This patchset touches at least the dax, pagecache, and xfs
+> > > subsystems.  Assuming it's too late for 5.19, how should we stage this
+> > > for 5.20?
+> >
+> > Yeah, it's past my "last date for this merge cycle" which was
+> > -rc6. I expected stuff might slip a little - as it has with the LARP
+> > code - but I don't have the time and bandwidth to start working
+> > on merging another feature from scratch before the merge window
+> > comes around.
+> >
+> > Getting the dax+reflink stuff in this cycle was always an optimistic
+> > stretch, but I wanted to try so that there was no doubt it would be
+> > ready for merge in the next cycle...
+> >
+> > > I could just add the entire series to iomap-5.20-merge and base the
+> > > xfs-5.20-merge off of that?  But I'm not sure what else might be landing
+> > > in the other subsystems, so I'm open to input.
+> >
+> > It'll need to be a stable branch somewhere, but I don't think it
+> > really matters where al long as it's merged into the xfs for-next
+> > tree so it gets filesystem test coverage...
+> 
+> So how about let the notify_failure() bits go through -mm this cycle,
+> if Andrew will have it, and then the reflnk work has a clean v5.19-rc1
+> baseline to build from?
 
-Use kobj_to_dev() instead of open-coding it.
+Sure, if you want to push them that way I'm not going to complain
+or stop you. :)
 
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
-v1->v2:
-	remove Reported-by: Zeal Robot <zealci@zte.com.cn>
+Anything that makes the eventual XFS feature merge simpler counts as
+a win in my books.
 
- drivers/platform/x86/toshiba_acpi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Cheers,
 
-diff --git a/drivers/platform/x86/toshiba_acpi.c
-b/drivers/platform/x86/toshiba_acpi.c
-index f113dec98e21..0fc9e8b8827b 100644
---- a/drivers/platform/x86/toshiba_acpi.c
-+++ b/drivers/platform/x86/toshiba_acpi.c
-@@ -2353,7 +2353,7 @@ static struct attribute *toshiba_attributes[] = {
- static umode_t toshiba_sysfs_is_visible(struct kobject *kobj,
- 					struct attribute *attr, int idx)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct toshiba_acpi_dev *drv = dev_get_drvdata(dev);
- 	bool exists = true;
- 
+Dave.
 -- 
-2.25.1
-
-
+Dave Chinner
+david@fromorbit.com

@@ -2,52 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4718952348A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D18D523490
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244040AbiEKNo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54222 "EHLO
+        id S244083AbiEKNqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239724AbiEKNoY (ORCPT
+        with ESMTP id S244065AbiEKNq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:44:24 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61ED0217FDC
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:44:23 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id n5-20020a056602340500b0065a9f426e7aso1215047ioz.0
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:44:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=erT/t/juAQcbBOTyFnqWzQMRhm/5cnnswBIuM+fpu5Y=;
-        b=Af+Le0IrvPF9skmlqWBjP+WhyE7uRdsAuKC8FV7F5jsJko+t0KYA1kXlB//FAK6cQh
-         C32wTxS3j3xG16QTzmvWd+4Sf1lZTEmfaYQ2Hw/8ISupDiNZcMkhdDg4Q04/rHry2OwC
-         AU9/vRRW2rwXM4GmcmLaCLJtBthfcyzJGOigLSsSC1/Zx8ZgoMqZeHv6QyshfvzSYgaC
-         3S6WJARwlAK2wVFUX0SLgbjC2TGtkq3yRqY98tbPwP+cBmGn5HyXgmiEDy5djfMxPRfT
-         ug9hJDf+NkdriJFfwdrhbAS+lhh6UtKl7BG++8ajeHEH2JAnprDTuxnPD8HGqP43szGH
-         Fmkw==
-X-Gm-Message-State: AOAM532pCHxRWsJ4p0BfcQb912wPlBUbiELBUnFFj/BzwVUhhZbo/1rm
-        ZWTEXGXFX4jYru1QsBbQouUSkjHLo12RPnilDQozEZLGZ7XK
-X-Google-Smtp-Source: ABdhPJwGUXG396YxiOh7vyGBgcQC6MrxCDc/f85IpX3qsXxxqAh79ndEliGsQzPHaAph95WCGbPdj9Pb2YLYu9ne16I8BZUcgis1
+        Wed, 11 May 2022 09:46:26 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 686045FF36;
+        Wed, 11 May 2022 06:46:23 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 314D8ED1;
+        Wed, 11 May 2022 06:46:23 -0700 (PDT)
+Received: from pierre123.arm.com (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A065C3F66F;
+        Wed, 11 May 2022 06:46:20 -0700 (PDT)
+From:   Pierre Gondois <pierre.gondois@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ionela.Voinescu@arm.com, Dietmar.Eggemann@arm.com,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Robert Moore <robert.moore@intel.com>,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        devel@acpica.org
+Subject: [PATCH v1 1/5] ACPI: CPPC: Check _OSC for flexible address space
+Date:   Wed, 11 May 2022 15:45:55 +0200
+Message-Id: <20220511134559.1466925-1-pierre.gondois@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:12c5:b0:2cf:8aaa:454d with SMTP id
- i5-20020a056e0212c500b002cf8aaa454dmr10594507ilm.219.1652276662769; Wed, 11
- May 2022 06:44:22 -0700 (PDT)
-Date:   Wed, 11 May 2022 06:44:22 -0700
-In-Reply-To: <20220511132050.5868-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008e20a005debca377@google.com>
-Subject: Re: [syzbot] INFO: task hung in synchronize_rcu (3)
-From:   syzbot <syzbot+0c6da80218456f1edc36@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,19 +47,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+ACPI 6.2 Section 6.2.11.2 'Platform-Wide OSPM Capabilities':
+  Starting with ACPI Specification 6.2, all _CPC registers can be in
+  PCC, System Memory, System IO, or Functional Fixed Hardware address
+  spaces. OSPM support for this more flexible register space scheme is
+  indicated by the “Flexible Address Space for CPPC Registers” _OSC bit
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Otherwise (cf ACPI 6.1, s8.4.7.1.1.X), _CPC registers must be in:
+- PCC or Functional Fixed Hardware address space if defined
+- SystemMemory address space (NULL register) if not defined
 
-Reported-and-tested-by: syzbot+0c6da80218456f1edc36@syzkaller.appspotmail.com
+Add the corresponding _OSC bit and check it when parsing _CPC objects.
 
-Tested on:
+Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+---
+ drivers/acpi/bus.c       | 18 ++++++++++++++++++
+ drivers/acpi/cppc_acpi.c |  9 +++++++++
+ include/linux/acpi.h     |  2 ++
+ 3 files changed, 29 insertions(+)
 
-commit:         4fa640dc Merge tag 'vfio-v5.8-rc7' of git://github.com..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c8387e9c623864db
-dashboard link: https://syzkaller.appspot.com/bug?extid=0c6da80218456f1edc36
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=163b1869f00000
+diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
+index 3e58b613a2c4..a5d08de5d1e9 100644
+--- a/drivers/acpi/bus.c
++++ b/drivers/acpi/bus.c
+@@ -278,6 +278,20 @@ bool osc_sb_apei_support_acked;
+ bool osc_pc_lpi_support_confirmed;
+ EXPORT_SYMBOL_GPL(osc_pc_lpi_support_confirmed);
+ 
++/*
++ * ACPI 6.2 Section 6.2.11.2 'Platform-Wide OSPM Capabilities':
++ *   Starting with ACPI Specification 6.2, all _CPC registers can be in
++ *   PCC, System Memory, System IO, or Functional Fixed Hardware address
++ *   spaces. OSPM support for this more flexible register space scheme is
++ *   indicated by the “Flexible Address Space for CPPC Registers” _OSC bit.
++ *
++ * Otherwise (cf ACPI 6.1, s8.4.7.1.1.X), _CPC registers must be in:
++ * - PCC or Functional Fixed Hardware address space if defined
++ * - SystemMemory address space (NULL register) if not defined
++ */
++bool osc_cpc_flexible_adr_space_confirmed;
++EXPORT_SYMBOL_GPL(osc_cpc_flexible_adr_space_confirmed);
++
+ /*
+  * ACPI 6.4 Operating System Capabilities for USB.
+  */
+@@ -321,6 +335,8 @@ static void acpi_bus_osc_negotiate_platform_control(void)
+ 	}
+ #endif
+ 
++	capbuf[OSC_SUPPORT_DWORD] |= OSC_SB_CPC_FLEXIBLE_ADR_SP;
++
+ 	if (IS_ENABLED(CONFIG_SCHED_MC_PRIO))
+ 		capbuf[OSC_SUPPORT_DWORD] |= OSC_SB_CPC_DIVERSE_HIGH_SUPPORT;
+ 
+@@ -366,6 +382,8 @@ static void acpi_bus_osc_negotiate_platform_control(void)
+ 			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_PCLPI_SUPPORT;
+ 		osc_sb_native_usb4_support_confirmed =
+ 			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_NATIVE_USB4_SUPPORT;
++		osc_cpc_flexible_adr_space_confirmed =
++			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_CPC_FLEXIBLE_ADR_SP;
+ 	}
+ 
+ 	kfree(context.ret.pointer);
+diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+index bc1454789a06..6f09fe011544 100644
+--- a/drivers/acpi/cppc_acpi.c
++++ b/drivers/acpi/cppc_acpi.c
+@@ -736,6 +736,11 @@ int acpi_cppc_processor_probe(struct acpi_processor *pr)
+ 				if (gas_t->address) {
+ 					void __iomem *addr;
+ 
++					if (!osc_cpc_flexible_adr_space_confirmed) {
++						pr_debug("Flexible address space capability not supported\n");
++						goto out_free;
++					}
++
+ 					addr = ioremap(gas_t->address, gas_t->bit_width/8);
+ 					if (!addr)
+ 						goto out_free;
+@@ -758,6 +763,10 @@ int acpi_cppc_processor_probe(struct acpi_processor *pr)
+ 						 gas_t->address);
+ 					goto out_free;
+ 				}
++				if (!osc_cpc_flexible_adr_space_confirmed) {
++					pr_debug("Flexible address space capability not supported\n");
++					goto out_free;
++				}
+ 			} else {
+ 				if (gas_t->space_id != ACPI_ADR_SPACE_FIXED_HARDWARE || !cpc_ffh_supported()) {
+ 					/* Support only PCC, SystemMemory, SystemIO, and FFH type regs. */
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index d7136d13aa44..977d74d0465b 100644
+--- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -574,6 +574,7 @@ acpi_status acpi_run_osc(acpi_handle handle, struct acpi_osc_context *context);
+ #define OSC_SB_OSLPI_SUPPORT			0x00000100
+ #define OSC_SB_CPC_DIVERSE_HIGH_SUPPORT		0x00001000
+ #define OSC_SB_GENERIC_INITIATOR_SUPPORT	0x00002000
++#define OSC_SB_CPC_FLEXIBLE_ADR_SP		0x00004000
+ #define OSC_SB_NATIVE_USB4_SUPPORT		0x00040000
+ #define OSC_SB_PRM_SUPPORT			0x00200000
+ 
+@@ -581,6 +582,7 @@ extern bool osc_sb_apei_support_acked;
+ extern bool osc_pc_lpi_support_confirmed;
+ extern bool osc_sb_native_usb4_support_confirmed;
+ extern bool osc_sb_cppc_not_supported;
++extern bool osc_cpc_flexible_adr_space_confirmed;
+ 
+ /* USB4 Capabilities */
+ #define OSC_USB_USB3_TUNNELING			0x00000001
+-- 
+2.25.1
 
-Note: testing is done by a robot and is best-effort only.

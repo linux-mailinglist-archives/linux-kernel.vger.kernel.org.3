@@ -2,116 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4284523C31
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18586523C35
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:05:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346046AbiEKSDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 14:03:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48068 "EHLO
+        id S1346048AbiEKSFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 14:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345991AbiEKSDK (ORCPT
+        with ESMTP id S233707AbiEKSE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 14:03:10 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5587981487;
-        Wed, 11 May 2022 11:03:09 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id 31-20020a9d0822000000b00605f1807664so1006236oty.3;
-        Wed, 11 May 2022 11:03:09 -0700 (PDT)
+        Wed, 11 May 2022 14:04:58 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91543B36F3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:04:56 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id bo5so2655968pfb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:04:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=JjnAsshK1ygLfpmwHJL1Gf52yDOmz4G85Y+2UEczzWM=;
-        b=Imbdmkg5KSJtTH5nK8osWpMvPlAYu9ZbyqpjaIZW6rsjI51uMNSlCvy6QqTgqhUBfW
-         T2qwHBgCC5ieR7Mx/NX8LidOhgBXZ8IIozWnEUgqrt30U5rPG+7zKH7xfz7t6Fh23gqb
-         wPKRQcO67rFu/u22t3YheQjC+VP16bfJ13DrQbGHaifY1wo6udnVLbP4f08PITxioKTS
-         yOrG3MV44VxCrCbSMFj5Of7gkCfu+Mx2DyI+7CM1tj6Q/yuwhl6CZe1kgvioWJe8Sq9L
-         XY+cHCZa3YiGV6Y3iWnhaUFqWh2RX/gqURewf/OaifB5t29yGpox0Po9RgOOx+ImP9eh
-         Fplw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5mKxMRQlQWPwu4mRllmx6ShZNHltflA3/hsURvdMH9A=;
+        b=JzVH0E99WgNhNFtMfddusYX9t0PPvm7mYKeZDoS8KfHQDtCr1maZaOZ5krlAKZPJj/
+         kSW4plzUCRDHuBBSuGeuHXr5pNILn1GReHmBdfnA/5z52hs8xsQzrNoaHGtSV7hNJTQA
+         0ENT+HjHkqcKTTG9DCNwsmW7oYcqPsEGF7CgU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=JjnAsshK1ygLfpmwHJL1Gf52yDOmz4G85Y+2UEczzWM=;
-        b=tRiEV+6WVhAsBY85+rA2T7FSCRx2NrX+gsHtkKd4XipdzvorD38KEIec5Oraq+1W6u
-         TQEEDe/uBacZ4xvDw6aQwlnEtJ945lqPXaJzEh7gNGX7rUF5iLAt0k7uyZCSeMr90wat
-         TsNTVx9/MjQQcmctXXSeq6sysmmsQPe8kUpnsRSmFJPvlZd2PUGxf14aRR444FvRLDUB
-         DXoD0UfoMlqf1kVC6MGda+l+xlpKEoZTWrh1PQi6BAh3bU1COrqlSu8rkCxjvMMEGRm6
-         wL1OqYGJiG2D0gan0euhDqYzNH+HGdvlNA6xaHCWMcDaVUliec/Wm08S04nziw7Ps2yQ
-         l22g==
-X-Gm-Message-State: AOAM532PwmvHZzwmmsledRoWVL2/+gZ1h4dEpaFEwo5wzPt/YC94gWJf
-        L9j3BM2oEShyWfSKPG1lnfA3YVv6/B0OlQ==
-X-Google-Smtp-Source: ABdhPJyp2MnsekH53L9TKdKVuTrjPVVSJ1KPE+AEhk8vuCmKSk4MzvytyrHsLQ1B0qqk/pPjH+7dXg==
-X-Received: by 2002:a05:6830:1303:b0:606:4e64:4c6c with SMTP id p3-20020a056830130300b006064e644c6cmr9949566otq.42.1652292188682;
-        Wed, 11 May 2022 11:03:08 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b20-20020a9d6b94000000b0060603221234sm1052568otq.4.2022.05.11.11.03.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 11:03:07 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7c458add-a496-6b3a-a04f-e6b68865daf4@roeck-us.net>
-Date:   Wed, 11 May 2022 11:03:04 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5mKxMRQlQWPwu4mRllmx6ShZNHltflA3/hsURvdMH9A=;
+        b=VRynZTwrFaIGhkHHzhN3A65F9C8OSwnRcg8Pv7/GChxlH9000mRamIFhPyjq5Mqal5
+         FleAan45ODH9O8j34k2ABRdtlGZjaGbfN0YwOQ5vaXIfQe6s5CLQXMZmuC6tGwL8cVxn
+         5iaqm6ohVXwkLbzFP+f4jeWEay8dTgkEDLkCkG0/2PC+UY10rVRPbO1XSyOq+Eyxp+tP
+         Hm1n5o2c9w1luVHKdXeqBQ/V8IL0mcTM0DQE5gGm4/V6mOdN5TVMX8PX/H61yU7AebTg
+         RIBTqa+JJIWk7LTLk1CxmUCvfN7Fa3puEQoZZlLo/pvx9OwM3puzdFT4ZiUEdQmH6j5Y
+         NPBw==
+X-Gm-Message-State: AOAM530ZpODjXlVxAABmRhj5BHEd9a7mI5UXglZcfKOZAe7ykWnQpu9w
+        x3RWEezdvZzbmrNaFbEwoAy5O+f2iBvRiw==
+X-Google-Smtp-Source: ABdhPJyPos/XQ6ildWdXQ1gBpyfJs9fGclLfzv5zJqzYDzl9/thflZeTxuO7AI0vh5ZVkV1EYH8wuQ==
+X-Received: by 2002:a05:6a00:140c:b0:4e1:530c:edc0 with SMTP id l12-20020a056a00140c00b004e1530cedc0mr26275217pfu.18.1652292296092;
+        Wed, 11 May 2022 11:04:56 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id l12-20020a170902d34c00b0015e8d4eb296sm2149525plk.224.2022.05.11.11.04.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 11:04:55 -0700 (PDT)
+Date:   Wed, 11 May 2022 11:04:55 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     x86@kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Florian Weimer <fweimer@redhat.com>
+Subject: Re: [PATCH] x86/vsyscall: Remove CONFIG_LEGACY_VSYSCALL_EMULATE
+Message-ID: <202205111104.464A6619@keescook>
+References: <898932fe61db6a9d61bc2458fa2f6049f1ca9f5c.1652290558.git.luto@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     Henning Schild <henning.schild@siemens.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, Enrico Weigelt <lkml@metux.net>,
-        Gerd Haeussler <gerd.haeussler.ext@siemens.com>
-References: <20220511153905.13980-1-henning.schild@siemens.com>
- <20220511153905.13980-3-henning.schild@siemens.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 2/4] watchdog: simatic-ipc-wdt: convert to use P2SB
- accessor
-In-Reply-To: <20220511153905.13980-3-henning.schild@siemens.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <898932fe61db6a9d61bc2458fa2f6049f1ca9f5c.1652290558.git.luto@kernel.org>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/11/22 08:39, Henning Schild wrote:
-> Since we have a common P2SB accessor in tree we may use it instead of
-> open coded variants.
+On Wed, May 11, 2022 at 10:38:53AM -0700, Andy Lutomirski wrote:
+> CONFIG_LEGACY_VSYSCALL_EMULATE is, as far as I know, only needed for the
+> combined use of exotic and outdated debugging mechanisms with outdated
+> binaries.  At this point, no one should be using it.  We would like to
+> implement dynamic switching of vsyscalls, but this is much more
+> complicated to support in EMULATE mode than XONLY mode.
 > 
-> Replace custom code by p2sb_bar() call.
+> So let's force all the distros off of EMULATE mode.  If anyone actually
+> needs it, they can set vsyscall=emulate, and we can then get away with
+> refusing to support newer security models if that option is set.
 > 
-> Signed-off-by: Henning Schild <henning.schild@siemens.com>
-> ---
->   drivers/watchdog/Kconfig           |  1 +
->   drivers/watchdog/simatic-ipc-wdt.c | 15 ++++++++-------
->   2 files changed, 9 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index c4e82a8d863f..643a8f5a97b1 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -1628,6 +1628,7 @@ config SIEMENS_SIMATIC_IPC_WDT
->   	tristate "Siemens Simatic IPC Watchdog"
->   	depends on SIEMENS_SIMATIC_IPC
->   	select WATCHDOG_CORE
-> +	select P2SB if X86
+> Cc: x86@kernel.org
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Florian Weimer <fweimer@redhat.com>
+> Signed-off-by: Andy Lutomirski <luto@kernel.org>
 
-Why "if X86" ? SIEMENS_SIMATIC_IPC already depends on it.
+Sounds legit! Can we switch the default to "none" while we're at it?
 
-Also, I just noticed that P2SB is neither in mainline nor
-in linux-next, meaning this code won't even compile right now.
-That should be mentioned in the introduction e-mail (the use
-of "introduced" suggests that it is already there; you could
-just use "will be introduced" instead).
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Thanks,
-Guenter
+-- 
+Kees Cook

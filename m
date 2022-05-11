@@ -2,87 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 597F7522990
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 04:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF33522994
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 04:22:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241117AbiEKCU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 22:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42090 "EHLO
+        id S237760AbiEKCWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 22:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241084AbiEKCUQ (ORCPT
+        with ESMTP id S229448AbiEKCWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 22:20:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FAB01F7E1A;
-        Tue, 10 May 2022 19:20:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F391FB80E7B;
-        Wed, 11 May 2022 02:20:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7C444C385D8;
-        Wed, 11 May 2022 02:20:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652235612;
-        bh=eIJ4fPUoByXuETSaRKF97jSwOAi2SBfrcalrVlkk3g4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=izzoJdlZya4l1jkVTC+9UFajfSKtQLwOHzNqm7P2j56Fz8h1qwORfMTdVzUEev5ak
-         Q6poJPmIxtnrM9q/b2CX8GEqWcfuMoXOsvrdELeusNsbW/VOfz9/FfOcIemODSMeFo
-         HKMOcnvkyzDjIRTWxN2WszOz8Y/05/Wb77F81fpLsA2znktez41w4GbCqQ7bLGqDNp
-         PffMdOLon6ItaMxdeU+wC/GUOTqV8SYb5HpRzkTG40zM0M2d2gft4lGntDWvd1IizW
-         rTS7k4woCP5g1ItfZEWVjBcMgH/WKbYhE2BaS+FA+XeGkvAKjZFgXVK8GHBctHNTgb
-         MyuRqSjhJ20VA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5AB48F0392B;
-        Wed, 11 May 2022 02:20:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 10 May 2022 22:22:30 -0400
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FCA14C749;
+        Tue, 10 May 2022 19:22:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.co.jp; i=@amazon.co.jp; q=dns/txt;
+  s=amazon201209; t=1652235748; x=1683771748;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=zmwvbfSvqDsGXUYgLhWD8/wDkuM1DY3RQ9mlmoV5r/g=;
+  b=Wj6AIuwHdE9QHgT1dFhlK4+4pkKda06F/3PlqjufySnSGzhWBnx8yip7
+   uMCQEbGEANDqE1esysTjPke1ADraA13hHeljstZ6dTLlbJSLx5vOPJ0td
+   vCXBS4+3CugIfJxp2cf5gsZ2z3UET0nCyeXNeaDLvYTnXrX+6x+BjYqpq
+   A=;
+X-IronPort-AV: E=Sophos;i="5.91,215,1647302400"; 
+   d="scan'208";a="87272036"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-1f9d5b26.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP; 11 May 2022 02:22:27 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2b-1f9d5b26.us-west-2.amazon.com (Postfix) with ESMTPS id 8319541C5A;
+        Wed, 11 May 2022 02:22:27 +0000 (UTC)
+Received: from EX13D04ANC001.ant.amazon.com (10.43.157.89) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Wed, 11 May 2022 02:22:26 +0000
+Received: from 88665a182662.ant.amazon.com (10.43.160.22) by
+ EX13D04ANC001.ant.amazon.com (10.43.157.89) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Wed, 11 May 2022 02:22:23 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+To:     <keescook@chromium.org>
+CC:     <ast@kernel.org>, <cong.wang@bytedance.com>, <davem@davemloft.net>,
+        <hch@infradead.org>, <kuba@kernel.org>, <kuniyu@amazon.co.jp>,
+        <linux-hardening@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <pabeni@redhat.com>,
+        <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH] af_unix: Silence randstruct GCC plugin warning
+Date:   Wed, 11 May 2022 11:22:17 +0900
+Message-ID: <20220511022217.58586-1-kuniyu@amazon.co.jp>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220511000109.3628404-1-keescook@chromium.org>
+References: <20220511000109.3628404-1-keescook@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] dt-bindings: net: orion-mdio: Convert to JSON schema
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165223561236.21834.15484862812864073697.git-patchwork-notify@kernel.org>
-Date:   Wed, 11 May 2022 02:20:12 +0000
-References: <20220505210621.3637268-1-chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <20220505210621.3637268-1-chris.packham@alliedtelesis.co.nz>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, andrew@lunn.ch,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.43.160.22]
+X-ClientProxiedBy: EX13D15UWB004.ant.amazon.com (10.43.161.61) To
+ EX13D04ANC001.ant.amazon.com (10.43.157.89)
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Fri,  6 May 2022 09:06:20 +1200 you wrote:
-> Convert the marvell,orion-mdio binding to JSON schema.
+From:   Kees Cook <keescook@chromium.org>
+Date:   Tue, 10 May 2022 17:01:09 -0700
+> While preparing for Clang randstruct support (which duplicated many of
+> the warnings the randstruct GCC plugin warned about), one strange one
+> remained only for the randstruct GCC plugin. Eliminating this rids
+> the plugin of the last exception.
 > 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
+> It seems the plugin is happy to dereference individual members of
+> a cross-struct cast, but it is upset about casting to a whole object
+> pointer. This only manifests in one place in the kernel, so just replace
+> the variable with individual member accesses. There is no change in
+> executable instruction output.
 > 
-> Notes:
->     This does throw up the following dtbs_check warnings for turris-mox:
+> Drop the last exception from the randstruct GCC plugin.
 > 
-> [...]
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Christoph Hellwig <hch@infradead.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Cong Wang <cong.wang@bytedance.com>
+> Cc: Al Viro <viro@zeniv.linux.org.uk>
+> Cc: netdev@vger.kernel.org
+> Cc: linux-hardening@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Here is the summary with links:
-  - [v2] dt-bindings: net: orion-mdio: Convert to JSON schema
-    https://git.kernel.org/netdev/net-next/c/0781434af811
+LGTM, thank you.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Acked-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>

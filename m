@@ -2,211 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F3B523A89
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7F10523A8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344916AbiEKQnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 12:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50110 "EHLO
+        id S1344920AbiEKQop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 12:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234153AbiEKQnq (ORCPT
+        with ESMTP id S230440AbiEKQom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 12:43:46 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D3C62A1D
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:43:42 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-deb9295679so3480606fac.6
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:43:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Qv5UPaNLDRk7OZesf9/OmG2IAf7szhws6U9XAPIZMsU=;
-        b=KHSscfX2VH88d4KZ8IH4882XNUx7gbxDp0H53sNZEcKHbBd0GlfHPCRJsWZAFSKulo
-         Y+i6p6Jr8+ZVY45RCmnhekz9C/ttFtLh2dTnv4xa1Q+PpWB7Gsyuf6DhDmxbKtjc9JdO
-         e2NW++2QKWi9+U6ubodpwq6eLTZOgqK/xZcJ0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Qv5UPaNLDRk7OZesf9/OmG2IAf7szhws6U9XAPIZMsU=;
-        b=x/FObBwDnz4USEf7YSS8Pzhs4D1K2cgC/W8hxN1qxqOmHTIK92aOJvuzgZzueCP2sE
-         IQs3gFarJVMuia+jgUlAg0+hAAiYFYcUk1tsNfVNQihVHHFi83xXi5S7HBAJuv/wwcVY
-         +pwLs6NBKKqWj+QfrfbmTmuVg+CmPRMatnDWrauTRXtWIIkoIFTEpUfdkxs2wJwx9ObR
-         jRJlrYhpXWz94K3ZiovLtjTVL6+0U8jpPz85rr0uigRRBiDBGonHWPJFJCSoyKIh3Vph
-         YVkbxGHhFxU8rpizFx1FT7dYUJazb8h/vLuyGc1KQ6K1Jd2dJjWu3vXJM3BjZsUuM+EF
-         aQug==
-X-Gm-Message-State: AOAM533Ll5ZYqmYLlqgHw1ztJ+YsxSrAwK8Uqj/kw07U5UcIKqDeMvW1
-        3U95R6uH5An4xKLdB4BlFhTdBWlS9vRZhMHMkBNXiIGzuw4=
-X-Google-Smtp-Source: ABdhPJy4VUawIZKr2RKSdWewGiu4eDM2uIznpYK2t+g0yjD/k1O8zxOEKSecLPlBSOajA0MocZ2fHlfSRQxeSPeybkM=
-X-Received: by 2002:a05:6870:b4a2:b0:ee:326e:58fb with SMTP id
- y34-20020a056870b4a200b000ee326e58fbmr3261404oap.7.1652287420253; Wed, 11 May
- 2022 09:43:40 -0700 (PDT)
+        Wed, 11 May 2022 12:44:42 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2062.outbound.protection.outlook.com [40.107.223.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D6062BEC;
+        Wed, 11 May 2022 09:44:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=M/iYryfCQZobEiLtL5gaW/+RN0YbXVlCkUpZP7ImeXfJ+mNuCSamS5i1xbqB5GBPQoJKNxSLcpY1+W6Tkt6ZPa5SmzzC3c5OSIV4+4EUR/FKfuKJ2Hxk7z0TZsBMT9k1DmCZ0/VbAM0m9lyZpBLIm5kTBXf0HKnETTy2/mQGGq+aXEPYr1aHqTmA39a+kuN592O5rKD41s1Dfoi/Ihu7nPLj36DU/tCwpdz0uQxEkwiWRpXyZdCn6qA98xpJE1loKknSf19c9jhZaitv2FffeSlzASz+lAIU50K27MNE7/PUnygfWl38KGpRPWyZ5olzWmqw+bCV+WKptuPGwWIHYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zRUUG3mYO/3FbKb2+mLaz0l2TPCw8MCB7tPkWXl7yfQ=;
+ b=WdWvEqmO2u1m6JrUmAu4vaASX1s1ukz+5OMCEBcO1iJyoenwklof6G/jItXPwWxCqwI6e/hHF0Ps8D4eKobk1LL9q7KuuR7+Ypdqrd8Ew1kiZT+5A7CGWFMX5KRLBDIT88iEtiyxwd39kxXsYyZnHwqyu5J43QqTL60fXB4SLAxXxp/JN9vQRL1ptpFZS/foKs0NRWdJSFNYmyDy6ZUCkeV+qzUpM2AQGxER6pEqa8xzJ87Oj3fBI2AxAsnuGImkwgbI+eW1A9oAetEqqI3bw2DzkkJTsUu+E+2aNbdGPwQSGpenys3JaibazRRV+DILCasSmGJIhpTgtdBIPZ8D6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zRUUG3mYO/3FbKb2+mLaz0l2TPCw8MCB7tPkWXl7yfQ=;
+ b=TTEvS0RqF6zNa3l8YVapc9zKoTWnMyVdMtaElDcQzjKNatA/L0iP/qPFuRjk/iwHbccUz76E2wrg+abKmLpKmIu4SmSGQ4h1yTcMcxwg55SNIeeWlb5VUpdBQ7aHxcPbrD+r3qyhc3nb3BJaj6PYTWpUMFgjvyYKdlDImXCT6dxPJxmaSRrtnFE2HWcaLHPC4xBZJDIZGQ+0fG0BL4H3mGD+49uXApxvQWyPyibGl3rzJTKWkomFEQU33tptozGbtrXuSS19VdcgJ83/FxRUoGR6D7hCHOWNjruWNL0lZ2eIcsFE9KuBg4S/REUV23QgjEP0xjvfEMlxPqEbEPuskw==
+Received: from SJ0PR12MB5676.namprd12.prod.outlook.com (2603:10b6:a03:42e::8)
+ by MN2PR12MB3934.namprd12.prod.outlook.com (2603:10b6:208:167::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.22; Wed, 11 May
+ 2022 16:44:38 +0000
+Received: from SJ0PR12MB5676.namprd12.prod.outlook.com
+ ([fe80::7526:b8f5:b10:1c4c]) by SJ0PR12MB5676.namprd12.prod.outlook.com
+ ([fe80::7526:b8f5:b10:1c4c%7]) with mapi id 15.20.5227.021; Wed, 11 May 2022
+ 16:44:38 +0000
+From:   Besar Wicaksono <bwicaksono@nvidia.com>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>
+CC:     "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "thanu.rangarajan@arm.com" <thanu.rangarajan@arm.com>,
+        "Michael.Williams@arm.com" <Michael.Williams@arm.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Vikram Sethi <vsethi@nvidia.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Subject: RE: [PATCH 0/2] perf: ARM CoreSight PMU support
+Thread-Topic: [PATCH 0/2] perf: ARM CoreSight PMU support
+Thread-Index: AQHYYzu4AtKVUSpJ7k+AnLFkxMXOCq0WR+MAgAAJZ4CAAaSUAIAAAZKAgAFo4YCAAHu4EA==
+Date:   Wed, 11 May 2022 16:44:38 +0000
+Message-ID: <SJ0PR12MB56760A681243DE07AB7BD73CA0C89@SJ0PR12MB5676.namprd12.prod.outlook.com>
+References: <20220509002810.12412-1-bwicaksono@nvidia.com>
+ <20220509092843.GB26264@willie-the-truck>
+ <2e5e09f9-b71b-d936-e291-db8f94554b18@arm.com>
+ <20220510110742.ievkihggndpms3fn@bogus>
+ <20220510111318.GD27557@willie-the-truck>
+ <6fcc2358-b029-fa01-cf06-aa040f53cf83@arm.com>
+In-Reply-To: <6fcc2358-b029-fa01-cf06-aa040f53cf83@arm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 61ea60d2-6be0-4c2a-8ebe-08da336d89f8
+x-ms-traffictypediagnostic: MN2PR12MB3934:EE_
+x-microsoft-antispam-prvs: <MN2PR12MB39348C50096850F6C8267730A0C89@MN2PR12MB3934.namprd12.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: J9UhlEK8qalGigfr9UhYjG0roIi6jY4C9BGWlLqVZfDhtNjef3spF9LHsrKBNncBm1Cb6YXgvW6FfCzBn9JGxGQgGJUrqHIDCpY7e1Tfxf/eSYeJApf8SYqqpF7uuGhxrHRyw1fa/AmVEToTC3GPrWMPwUrfbGs/BmRCk3BSMhJB2uO4VCS3LDjsSisnA+zwLjXkVrMN8MLTq+0yZLpIU6kDDYHwNV12t+QXTcNtCdLBQ1BrkiShh4VjofwKn4qVV9lkR5m7fMAqx8sFc2rsECv5JVTXCaMS5hwoVU8smcXtdfinFGwhRXII35LdC9vspFYznVV3kMG9voAioN4zYu/QeglA3ZbF6B4Pi0H++Col/7cwMw5HwiXGx4BDWslBsocCsrgy6URtKvU83ALGBa57O8S1RKVGHdx5fasLzR28fhjmeV7Mbjvs5qFCS3rlOfKFC1SXHj0qPOcQ6X/TXe7qedLQkpbd9xlIWucAgEiqp11ACwGy4x2MHPAg6OeC0ftFLftNqG0Zm+SMTJsjADLmdmn73tBOAW8eHVR0P5hbl8rHEUzQkLWY0zB8tlcjVKSUpgh0kZ09SSVz5w2RFN6RZI6XUgBQ3IW2JJ2lVQFv4JUDc7dTgg6/UYRGldkH+zJxzl0vt+l+2JLabx38Y75xtlGJkmbPKSweVULEmPXihhDDN/j3b4RsFZCh0QVgGEtCe7xNJP44N9IjNlg0eA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR12MB5676.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(52536014)(8936002)(5660300002)(508600001)(38100700002)(33656002)(83380400001)(7416002)(71200400001)(6506007)(86362001)(53546011)(9686003)(26005)(2906002)(186003)(55016003)(7696005)(316002)(122000001)(110136005)(54906003)(64756008)(66476007)(4326008)(38070700005)(66556008)(76116006)(66946007)(66446008)(8676002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?V3QxV0l2Z0FSbEEwdTlzbHJodVZyUnlablJ5dmkxc3E3SWNYTUtkdHdDdEp6?=
+ =?utf-8?B?TU5FMFBDYkVGbHpkSmd5Z09DRWtTN0dXakl0SHd4LzlNUDRWeDdIRUlwSUZo?=
+ =?utf-8?B?aUZhb0VWVFZvK2xtNHhUNkNMNEtERzdOOTNNTEQrZGhDQXlXSlJGZkNpY1hk?=
+ =?utf-8?B?b0xGOTBRajlyWmlLdEdqVDl5ZWhPZ01XUHp0R1pJRk0wOGd5K003MVFVTzd4?=
+ =?utf-8?B?bndQNzlzWVI0b014NzJIMkRYZUJXeGhEL3dwQXNmWDIwSUdsVXh4Nyt0d0tv?=
+ =?utf-8?B?WXNjcEp3UXpYVkVObExVN1BTbHZFcTZ6WC9ETjk2OC84emVZY1Z4V1Y1WWsr?=
+ =?utf-8?B?aWIwZkRVU3RIbGtsRE9aS3Rnb0RtZk1YN1dNRkRvUzFOaWlmdmJFNDlkRCtk?=
+ =?utf-8?B?bUhzOW5uSGc3QUVOWEFTa1J4MW1JNFluaDkyei9mT1FreHQ3UU1URzFIc2ZD?=
+ =?utf-8?B?VGMyU05RN1Y3RzJHaUpKRE5kSTlkeGpXRmtMQXJVUVg5ZUZZQVUzdGlndUFk?=
+ =?utf-8?B?TXJBK3RveW9xV0s5WHQ5YnpNSWhpR1MrbU8ydkJSOXRyS2pVL3hSRS85WlJ0?=
+ =?utf-8?B?TklJd2ZKQUE1Rk9oUXk5aUxmUDJOR3dEQWhoOWUvMkU4ODRyVFVyK3g3ZnRH?=
+ =?utf-8?B?c29QK1lETEE3blUrZlRNR2lGb0VFVnl5TENiNy9QK1BnSjNoSE5tMmd2TDhJ?=
+ =?utf-8?B?SXNkSHkrU1BUZWc1OEdPOWIzTW9SUTNsTjNRYjduN2VjSTc5YXJ5Nis5U0l3?=
+ =?utf-8?B?SHEvT0o0SHJHQ2dpMTcvcHN0YUIwMFd1bjN6TUxtWWUvbXFDdTZPVExBc2NG?=
+ =?utf-8?B?VWgrUFQ2TE9nbXRZUnlsOHY3a2ZFVGZ2T0JkWFZUczRKRDJhRFRxSUtRcE53?=
+ =?utf-8?B?bG5JU3oxTWk2UCtDcmZ5eU1QYlpySUJyQVBSTXd6VzJkUEtzMnJvd0VrRlFQ?=
+ =?utf-8?B?aUNGcVRueG1sRlErUGZZQjhqWTN0YkxVcEdnaldneXQ5Sk5HbDVIWTR6UEZk?=
+ =?utf-8?B?NG52eFNsZU9OakJ0NHFQN3A1NWRkbVRYbXBvT3ZhTG0rMk4zWmVOdkZNaVhP?=
+ =?utf-8?B?YVNKT2hSZ2dyWngvYkpvb3NrQUwvb2FqL3NmYi9oNVdnelRWYVhhaHkzd2l3?=
+ =?utf-8?B?SnlUVC9nUDV6N1pBbTlDcnRrL05Mb1VXeWhYSFpua01HZE9Tb05YUi9PWXZz?=
+ =?utf-8?B?K1FyNG56R1dlYWJ4Ujc1MGlLYWp1QzIwdDhBd0ZqQTdjZnphanJoZ2J4cmlE?=
+ =?utf-8?B?UWpiaVZsRjlFcFhQMHdCaFNxaWlFdVkydmYvV0JGUHVyVitXcjc4cVBEL3Ey?=
+ =?utf-8?B?S2kyTnlPalExSVh2ckczY1lXQ3Y2MjhacUxKajk5VmlUS0hKVUlOTE4rSFNt?=
+ =?utf-8?B?SXhJaEdOQmJhYkNIQ1JtQ2dDTW9ZRUNZelJrd1RHaE9BSURuUFIrWjZtYWQ5?=
+ =?utf-8?B?ZFV6RG9SZkNGaUdodWpIUFpTRmpnb01tNXFnZXVpSU1DbC9aOThZeEZkWktY?=
+ =?utf-8?B?OXB2MElTc2V4R0szL2pRZXdaZnhhUk5HQW9xd3ZtYUUzQS9zekIyRHFsTnpk?=
+ =?utf-8?B?RG5QakovQm9JOGZNZkRsSmNmbzFzWHpJMmY4cmNrVkZLTjlyVmZ2RmRvWnlE?=
+ =?utf-8?B?b2d6SGpMR3FmQUVzaURwV2tqajcyZWdWVVRrYzVzNXlyNUhHbkloM1grbzBl?=
+ =?utf-8?B?cVozWXFnOFNxcVJ2b1pRMVAzT2tCSTN3cVFSUmN3L2lXN2ZJMktuYnFDanli?=
+ =?utf-8?B?RXlTUmRUVUxubzNFTlZUOE1BZDJ0TnJac2ZuOXpsMnhsWXdZNzhXSG5OVk01?=
+ =?utf-8?B?d2RSY2hqWjByNTdHYi90bC9QaHNEOG1HeGxoTzZlMTNUaFdSR295WlN1TVg3?=
+ =?utf-8?B?Qk1lNEZKZmFud0FiYmlsak5pMjB2ajBoMTZJcXhlT2JhNXBGcjNNd3RnNFgr?=
+ =?utf-8?B?U2hMSHMwY2JkNWEvbmZjMGNDZjN6dHp3Vk1Pbkk1RFBEYzlmV3BsMGNjNmdk?=
+ =?utf-8?B?aXcwdXhXSVpHd1hDTDZuY0ptM0QrYW9uVlBFSllKNmZ1a3dBaXhIcHpqMWVk?=
+ =?utf-8?B?dWllMHp5QnVDS3dWM3dLdkgwVG5HWGJEdk5XN3NjWElmM0w5VWtpYlU0cXBY?=
+ =?utf-8?B?THlNQTFJMlZTendLNmxKdHBJVE1ya0ZsUXlDQS8rNGlBMmVlVGNQR0Z2aFRU?=
+ =?utf-8?B?ZElDNnQvNUpiRE9Xc3ZUWGNXOXdHc2N4OXROdEk4L0RYQUNrYVExbG9xQWNs?=
+ =?utf-8?B?Y3FrbVBRNVYrMU95Y09mK2o1VWZ2c2ZKTEJ3SDl4eVVqNmpVTWExNmJkL1BV?=
+ =?utf-8?B?ODBKNkhhamZJWUFoZGl2VlhtTFNVRUhzZkQwdGxkUUtHTlZCMDMxUT09?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220510070140.45407-1-tomeu.vizoso@collabora.com>
- <20220510141329.54414-1-tomeu.vizoso@collabora.com> <CAPM=9tzLR-wsLhg2ikGjoK06s-ju5XWa1rtPPiUpN=pwD1vgtA@mail.gmail.com>
- <YntWQIXSqMCd6TYV@kroah.com> <1255a66a-121d-988a-19a7-316f703cb37d@mailbox.org>
- <YnujG0nkF0U6d5kd@kroah.com> <CAF6AEGsmD-CNGj4bAE952JQpquaWA+Nxo5TGpFiHqaPK9doP-g@mail.gmail.com>
-In-Reply-To: <CAF6AEGsmD-CNGj4bAE952JQpquaWA+Nxo5TGpFiHqaPK9doP-g@mail.gmail.com>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Wed, 11 May 2022 18:43:29 +0200
-Message-ID: <CAKMK7uH8k6j5jE562yvbtBaE8EnM8JGF7zOXT4C62HdOgOs9SQ@mail.gmail.com>
-Subject: Re: [Freedreno] Adding CI results to the kernel tree was Re: [RFC v2]
- drm/msm: Add initial ci/ subdirectory
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sean Paul <sean@poorly.run>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel.daenzer@mailbox.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR12MB5676.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 61ea60d2-6be0-4c2a-8ebe-08da336d89f8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 May 2022 16:44:38.5097
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 3klnz1fLO3HHUAMXV/HtuJIRlQbcYtZ8KNtAkaeMWw8dQpMPDOEUP2IDqpbS4cD3THOzkGK8pHlThMMhUElx3A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3934
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 May 2022 at 15:33, Rob Clark <robdclark@gmail.com> wrote:
-> On Wed, May 11, 2022 at 4:50 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Wed, May 11, 2022 at 12:26:05PM +0200, Michel D=C3=A4nzer wrote:
-> > > On 2022-05-11 08:22, Greg Kroah-Hartman wrote:
-> > > > On Wed, May 11, 2022 at 03:06:47PM +1000, Dave Airlie wrote:
-> > > >>> And use it to store expectations about what the drm/msm driver is
-> > > >>> supposed to pass in the IGT test suite.
-> > > >>
-> > > >> I wanted to loop in Linus/Greg to see if there are any issues rais=
-ed
-> > > >> by adding CI results file to the tree in their minds, or if any ot=
-her
-> > > >> subsystem has done this already, and it's all fine.
-> > > >
-> > > > Why does the results need to be added to the tree?  Shouldn't they =
-be
-> > > > either "all is good" or "constantly changing and a constant churn"?
-> > > >
-> > > >> I think this is a good thing after our Mesa experience, but Mesa h=
-as a
-> > > >> lot tighter integration here, so I want to get some more opinions
-> > > >> outside the group.
-> > > >
-> > > > For systems that have "tight integration" this might make sense as =
-proof
-> > > > that all is working for a specific commit, but I can't see how this=
- will
-> > > > help the kernel out much.
-> > > >
-> > > > What are you going to do with these results being checked in all th=
-e
-> > > > time?
-> > >
-> > > Having the expected results in the tree keeps them consistent with th=
-e driver code itself, and allows putting in place gating CI to prevent merg=
-ing driver changes which make any of the tests deviate from the expected re=
-sult.
-> >
-> > Shouldn't "expected result" always be "pass"?
-> >
-> > If not, then the test should be changed to be "skipped" like we have
-> > today in the kselftest tests.
->
-> No, we want to run tests even if they are expected to fail.  This
-> prevents the scenario of a test getting fixed without being noticed
-> (for ex, developer was working on fixing test A and didn't notice that
-> the fix also fixed test B).  If a fix goes unnoticed, a later
-> regression would also go unnoticed ;-)
->
-> I was skeptical about this approach at first with mesa CI, but having
-> used mesa CI for a while, I am now a firm believer in the approach.
->
-> And ofc we want the expectations to be in the kernel tree because
-> there could be, for example, differences between -fixes and -next
-> branches.  (Or even stable kernel branches if/when we get to the point
-> of running CI on those.)
-
-Yeah result files in tree is kinda needed, even more so for the
-kernel. A lot of the linux-next integration testing is only done after
-patches have landed, and sometimes such breakage makes it to upstream
-and then into the subsystem/driver tree. Annotating in the backmerge
-what exactly broke and why helps a lot with tracking issues.
-
-And expecting every subsystem to run every other subsystem's tests,
-especially tests that run on hw, is just not going to scale. So there
-will be all kinds of difference in test results.
-
-> > And how about tieing this into the kselftest process as well, why would
-> > this be somehow separate from the rest of the kernel tests?
-> >
-> > > Keeping them separate inevitably results in divergence between the dr=
-iver code and the expected test results, which would result in spurious fai=
-lures of such CI.
-> >
-> > Again, "pass" should be the expected results :)
-> >
-> > > I expect the main complication for the kernel will be due to driver c=
-hanges merged via different trees, e.g. for cross-subsystem reworks. Since =
-those will not go through the same CI, they may accidentally introduce inco=
-nsistencies. The ideal solution for this IMO would be centralizing CI such =
-that the same gating tests have to pass regardless of how the code is merge=
-d. But there's likely quite a long way to go until we get there. :)
-> >
-> > We have in-kernel tests for the rest of the kernel, why can't you put
-> > your testing stuff into there as well?
->
-> We could ofc put a lot more of the gitlab yml and scripts into the
-> kernel tree.  Probably all of i-g-t is a bit much to put in the kernel
-> tree.  Not to mention I'd like to see this expand to also run some
-> deqp and/or piglit tests, which is definitely too much to vendor into
-> the kernel tree.
->
-> The approach of this RFC was to put only what was absolutely required
-> in the kernel tree (such as expectations), and then link out to an
-> external drm-ci tree[1] which has all the necessary scripts and yml
-> for building and running tests, to avoid having to put a whole lot
-> more in the kernel tree. (We should be specifying exact commit-sha for
-> that tree, IMO, as it controls the version of i-g-t which gets used,
-> and we need to be able to update expectations in sync with an i-g-t
-> uprev, for example when new tests are added or if a test fix caused a
-> fail->pass transition.)
-
-Yeah I think longer-term we should carry a lot more in upstream, at
-least anything that's shared across drivers wrt the ci integration (or
-build testing and running tests which are hw agnostic). Maybe even
-igt, not sure (otoh xfs-tests isn't moving into the kernel either, and
-there's lots more like that).
-
-Personally I think long-term the only thing outside should be other
-repos with tests or stuff you need to run them, and not really the
-glue to make it all work in ci. But that's maybe a bit too much
-wishful thinking if CI systems stay largely subsystem specific (which
-they currently are in many ways, with some overlap).
-
-But maybe there is enough random pieces to share here for a lot more
-in-tree to make sense, and imo the fewer extra steps and indirection
-CI testing and test updating has, the better.
-
-But like Rob says, eventually there's a limit and when you put the
-entire GL/vulkan stack + it's conformance testsuite (which is
-maintained by khronos somewhere completely different than both
-kernel.org and freedesktop.org) then it's definitely too much and wont
-work. And eventually we do want to run these things too (e.g.
-intel-gfx-ci does run mesa + piglit on every run).
--Daniel
---=20
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogU3V6dWtpIEsgUG91bG9z
+ZSA8c3V6dWtpLnBvdWxvc2VAYXJtLmNvbT4NCj4gU2VudDogV2VkbmVzZGF5LCBNYXkgMTEsIDIw
+MjIgMzo0NSBBTQ0KPiBUbzogV2lsbCBEZWFjb24gPHdpbGxAa2VybmVsLm9yZz47IFN1ZGVlcCBI
+b2xsYSA8c3VkZWVwLmhvbGxhQGFybS5jb20+DQo+IENjOiBCZXNhciBXaWNha3Nvbm8gPGJ3aWNh
+a3Nvbm9AbnZpZGlhLmNvbT47IGNhdGFsaW4ubWFyaW5hc0Bhcm0uY29tOw0KPiBtYXJrLnJ1dGxh
+bmRAYXJtLmNvbTsgbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnOyBsaW51eC0N
+Cj4ga2VybmVsQHZnZXIua2VybmVsLm9yZzsgbGludXgtdGVncmFAdmdlci5rZXJuZWwub3JnOw0K
+PiB0aGFudS5yYW5nYXJhamFuQGFybS5jb207IE1pY2hhZWwuV2lsbGlhbXNAYXJtLmNvbTsgVGhp
+ZXJyeSBSZWRpbmcNCj4gPHRyZWRpbmdAbnZpZGlhLmNvbT47IEpvbmF0aGFuIEh1bnRlciA8am9u
+YXRoYW5oQG52aWRpYS5jb20+OyBWaWtyYW0NCj4gU2V0aGkgPHZzZXRoaUBudmlkaWEuY29tPjsg
+TWF0aGlldSBQb2lyaWVyIDxtYXRoaWV1LnBvaXJpZXJAbGluYXJvLm9yZz4NCj4gU3ViamVjdDog
+UmU6IFtQQVRDSCAwLzJdIHBlcmY6IEFSTSBDb3JlU2lnaHQgUE1VIHN1cHBvcnQNCj4gDQo+IEV4
+dGVybmFsIGVtYWlsOiBVc2UgY2F1dGlvbiBvcGVuaW5nIGxpbmtzIG9yIGF0dGFjaG1lbnRzDQo+
+IA0KPiANCj4gT24gMTAvMDUvMjAyMiAxMjoxMywgV2lsbCBEZWFjb24gd3JvdGU6DQo+ID4gT24g
+VHVlLCBNYXkgMTAsIDIwMjIgYXQgMTI6MDc6NDJQTSArMDEwMCwgU3VkZWVwIEhvbGxhIHdyb3Rl
+Og0KPiA+PiBPbiBNb24sIE1heSAwOSwgMjAyMiBhdCAxMTowMjoyM0FNICswMTAwLCBTdXp1a2kg
+SyBQb3Vsb3NlIHdyb3RlOg0KPiA+Pj4gQ2M6IE1pa2UgV2lsbGlhbXMsIE1hdGhpZXUgUG9pcmll
+cg0KPiA+Pj4gT24gMDkvMDUvMjAyMiAxMDoyOCwgV2lsbCBEZWFjb24gd3JvdGU6DQo+ID4+Pj4g
+T24gU3VuLCBNYXkgMDgsIDIwMjIgYXQgMDc6Mjg6MDhQTSAtMDUwMCwgQmVzYXIgV2ljYWtzb25v
+IHdyb3RlOg0KPiA+Pj4+PiAgICBhcmNoL2FybTY0L2NvbmZpZ3MvZGVmY29uZmlnICAgICAgICAg
+ICAgICAgICAgfCAgICAxICsNCj4gPj4+Pj4gICAgZHJpdmVycy9wZXJmL0tjb25maWcgICAgICAg
+ICAgICAgICAgICAgICAgICAgIHwgICAgMiArDQo+ID4+Pj4+ICAgIGRyaXZlcnMvcGVyZi9NYWtl
+ZmlsZSAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgIDEgKw0KPiA+Pj4+PiAgICBkcml2ZXJz
+L3BlcmYvY29yZXNpZ2h0X3BtdS9LY29uZmlnICAgICAgICAgICAgfCAgIDEwICsNCj4gPj4+Pj4g
+ICAgZHJpdmVycy9wZXJmL2NvcmVzaWdodF9wbXUvTWFrZWZpbGUgICAgICAgICAgIHwgICAgNyAr
+DQo+ID4+Pj4+ICAgIC4uLi9wZXJmL2NvcmVzaWdodF9wbXUvYXJtX2NvcmVzaWdodF9wbXUuYyAg
+ICB8IDEzMTcNCj4gKysrKysrKysrKysrKysrKysNCj4gPj4+Pj4gICAgLi4uL3BlcmYvY29yZXNp
+Z2h0X3BtdS9hcm1fY29yZXNpZ2h0X3BtdS5oICAgIHwgIDE0NyArKw0KPiA+Pj4+PiAgICAuLi4v
+Y29yZXNpZ2h0X3BtdS9hcm1fY29yZXNpZ2h0X3BtdV9udmlkaWEuYyAgfCAgMzAwICsrKysNCj4g
+Pj4+Pj4gICAgLi4uL2NvcmVzaWdodF9wbXUvYXJtX2NvcmVzaWdodF9wbXVfbnZpZGlhLmggIHwg
+ICAxNyArDQo+ID4+Pj4+ICAgIDkgZmlsZXMgY2hhbmdlZCwgMTgwMiBpbnNlcnRpb25zKCspDQo+
+ID4+Pj4NCj4gPj4+PiBIb3cgZG9lcyB0aGlzIGludGVyYWN0IHdpdGggYWxsIHRoZSBzdHVmZiB3
+ZSBoYXZlIHVuZGVyDQo+ID4+Pj4gZHJpdmVycy9od3RyYWNpbmcvY29yZXNpZ2h0Lz8NCj4gPj4+
+DQo+ID4+PiBBYnNvbHV0ZWx5IHplcm8sIGV4Y2VwdCBmb3IgdGhlIG5hbWUuIFRoZSBzdGFuZGFy
+ZA0KPiA+Pj4gaXMgbmFtZWQgIkNvcmVTaWdodCBQTVUiIHdoaWNoIGlzIGEgYml0IHVuZm9ydHVu
+YXRlLA0KPiA+Pj4gZ2l2ZW4gdGhlIG9ubHkgbGluaywgQUZBSVUsIHdpdGggdGhlICJDb3JlU2ln
+aHQiIGFyY2hpdGVjdHVyZQ0KPiA+Pj4gaXMgdGhlIExvY2sgQWNjZXNzIFJlZ2lzdGVyKExBUiku
+IEZvciByZWZlcmVuY2UsIHRoZQ0KPiA+Pj4gZHJpdmVycy9od3RyYWNpbmcvY29yZXNpZ2h0LyBp
+cyBwdXJlbHkgIkNvcmVTaWdodCIgc2VsZi1ob3N0ZWQNCj4gPj4+IHRyYWNpbmcgYW5kIHRoZSBQ
+TVUgaXMgY2FsbGVkICJjc19ldG0iIChleHBhbmRzIHRvIGNvcmVzaWdodCBldG0pLg0KPiA+Pj4g
+T3RoZXJ3aXNlIHRoZSBzdGFuZGFyZCBkb2Vzbid0IGhhdmUgYW55dGhpbmcgdG8gZG8gd2l0aCB3
+aGF0DQo+ID4+PiBleGlzdHMgYWxyZWFkeSBpbiB0aGUga2VybmVsLg0KPiA+DQo+ID4gVGhhdCdz
+Li4uIGEgcG9vciBuYW1pbmcgY2hvaWNlISBCdXQgZ29vZCwgaWYgaXQncyBlbnRpcmVseSBzZXBh
+cmF0ZSB0aGVuIEkNCj4gPiBkb24ndCBoYXZlIHRvIHdvcnJ5IGFib3V0IHRoYXQuIEp1c3Qgd2Fu
+dGVkIHRvIG1ha2Ugc3VyZSB3ZSdyZSBub3QgZ29pbmcNCj4gdG8NCj4gPiBnZXQgdGFuZ2xlZCB1
+cCBpbiB0aGluZ3MgbGlrZSBST00gdGFibGVzIGFuZCBDb3Jlc2lnaHQgcG93ZXIgZG9tYWlucyBm
+b3INCj4gPiB0aGVzZSB0aGluZ3MuDQo+ID4NCj4gPj4+IE9uZSBwb3RlbnRpYWwgcmVjb21tZW5k
+YXRpb24gZm9yIHRoZSBuYW1lIGlzLCAiQXJtIFBNVSIgIChUaGUgQUNQSQ0KPiB0YWJsZSBpcw0K
+PiA+Pj4gbmFtZWQgQXJtIFBNVSBUYWJsZSkuIEJ1dCB0aGVuIHRoYXQgY291bGQgYmUgY2xhc2hp
+bmcgd2l0aCB0aGUNCj4gYXJtdjhfcG11DQo+ID4+PiA6LSguDQo+ID4+Pg0KPiA+Pj4gU29tZSBv
+ZiB0aGUgb3RoZXIgb3B0aW9ucyBhcmUgOg0KPiA+Pj4NCj4gPj4+ICJBcm0gR2VuZXJpYyBQTVUi
+DQo+ID4+PiAiQXJtIFVuY29yZSBQTVUiDQo+ID4+DQo+ID4+IEkgd2Fzbid0IHN1cmUgb24gdGhp
+cyBpZiB0aGVyZSBpcyBhbnkgcmVzdHJpY3Rpb24gb24gdXNhZ2Ugb2YgdGhpcyBvbiBBcm0NCj4g
+Pj4gYW5kIGhlbmNlIGRpZG4ndCBtYWtlIHRoZSBzdWdnZXN0aW9uLiBCdXQgaWYgYWxsb3dlZCwg
+dGhpcyB3b3VsZCBiZSBteQ0KPiA+PiBjaG9pY2UgdG9vLg0KPiA+DQo+ID4gV2UnZCB0YWtlbiB0
+byBjYWxsaW5nIHRoZW0gIlN5c3RlbSIgUE1VUyBpbiB0aGUgcGFzdCwgc28gbWF5YmUganVzdCBz
+dGljaw0KPiA+IHdpdGggdGhhdD8gSSB0aGluayAiVW5jb3JlIiBpcyBJbnRlbCB0ZXJtaW5vbG9n
+eSBzbyBpdCdzIHByb2JhYmx5IGJlc3QgdG8NCj4gDQo+IEkgdGhvdWdodCBhYm91dCB0aGF0LCBi
+dXQgdGhlcmUgYXJlIHNvbWUgSVBzIG5hbWVkICJTeXN0ZW0gUHJvZmlsZXJzIg0KPiAoZS5nLiwg
+b24gSnVubyBib2FyZCkgd2hpY2ggY291bGQgYmUgZWFzaWx5IGNvbmZ1c2VkLiBCdXQgSSBob3Bl
+IHRoZWlyDQo+IHBvcHVsYXRpb24gaW4gdGhlIG5hbWUgc3BhY2UgaXMgbXVjaCBsZXNzLiBTbywg
+SSBhbSBoYXBweSB3aXRoIHRoYXQNCj4gY2hvaWNlLiBUaGUgb25seSBvdGhlciBjb25jZXJuIGlz
+LCBpdCBkb2Vzbid0IGluZGljYXRlIGl0IHN1cHBvcnRzIFBNVXMNCj4gdGhhdCBhcmUgY29tcGxp
+YW50IHRvIGEgZ2l2ZW4gQXJtIFN0YW5kYXJkLiBpLmUuLCBwZW9wbGUgY291bGQgdGhpbmsgb2YN
+Cj4gdGhpcyBhcyBhICJzaW5nbGUgdHlwZSIgb2YgUE1VLg0KPiBTbywgSSBhbSB3b25kZXJpbmcg
+aWYgc29tZXRoaW5nIGxpa2UgIkFybSBTdGFuZGFyZCBQTVUiIG1ha2VzIGFueSBzZW5zZSA/DQo+
+IA0KPiBBbHNvLCBJIGhvcGUgdGhlIGRyaXZlcnMgd291bGQgY2hvb3NlIGEgbmFtZSBpbmRpY2F0
+aW5nIHRoZSAidHlwZSIgIC0NCj4gPHZlbmRvcj5fPHR5cGU+X3BtdSAoZS5nLiwgbnZpZGlhX3Bj
+aWVfcG11LCBhcm1fc21tdXYzX3BtdSBldGMpDQo+IHdoaWxlDQo+IHJlZ2lzdGVyaW5nIHRoZWly
+IFBNVS4gVGhhdCB3YXkgaXQgaXMgY2xlYXJlciBmb3IgdGhlIFBNVSB3aGlsZSB0aGUNCj4gYmFz
+ZSBkZXZpY2UgY291bGQgYmUgYXJtX3N5c3RlbV9wbXVfMCBldGMuDQoNCkZyb20gdGhlIG90aGVy
+IFBNVSBkcml2ZXJzLCB0aGUgcmVnaXN0ZXJlZCBuYW1lIG1heSBoYXZlIGFkZGl0aW9uYWwgcHJv
+cGVydGllcw0Kc3BlY2lmaWMgdG8gdGhlIGltcGxlbWVudGF0aW9uLCBlLmcuIHNvY2tldCwgY2x1
+c3RlciBpZCwgaW5zdGFuY2UgbnVtYmVyLCBtZW1vcnkNCmFkZHJlc3MsIGNhY2hlIGxldmVsLiBT
+aW5jZSB0aGlzIGlzIGEgc2hhcmVkIGRyaXZlciwgbXkgaW5pdGlhbCB0aG91Z2h0IGlzIHRvIHJl
+Z2lzdGVyDQphIGRlZmF1bHQgYXJtX2NvcmVzaWdodF9wbXU8QVBNVCBub2RlIGlkPiBuYW1pbmcg
+Zm9ybWF0IGZvciBjb25zaXN0ZW5jeSBhbmQNCiJpZGVudGlmaWVyIiBzeXNmcyBub2RlIHRvIGRp
+c3Rpbmd1aXNoIHRoZSBQTVVzLiBJZiBhbiBpbXBsZW1lbnRhdGlvbiBuZWVkcyB0bw0KZXhwb3Nl
+IG1vcmUgZGV0YWlscyBhYm91dCB0aGUgUE1VLCBpdCBjYW4gYmUgY29tbXVuaWNhdGVkIHZpYSBh
+ZGRpdGlvbmFsDQpzeXNmcyBhdHRyaWJ1dGVzLg0KDQpSZWdhcmRzLA0KQmVzYXINCg==

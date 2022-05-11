@@ -2,113 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB35523D46
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 611B9523D38
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:13:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346729AbiEKTRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 15:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46428 "EHLO
+        id S1346692AbiEKTNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 15:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242629AbiEKTRl (ORCPT
+        with ESMTP id S1345686AbiEKTNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 15:17:41 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E353D493
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:17:39 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id w24so3717460edx.3
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:17:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=m0rLYZTGM9tABUfYW7kAK/fqq3Ax7YNevFHH/XCjFGs=;
-        b=eCbRkCpG+1uv8o7qRy4S8ofMtbzrfrNObimViXJYOfvi54JNTAr6JFhhlnpgtpAcS+
-         VN1OH3CnIDFz9Ap8QJJbmVusIA88+j05i4dmbpolhuHRtJjOf6pV7NrV6W8AIKtloJuO
-         Epo1XPPLAfd3d4t/rIpKYoMleVpcQa62xi+gI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m0rLYZTGM9tABUfYW7kAK/fqq3Ax7YNevFHH/XCjFGs=;
-        b=L9JtPLpzeoximmVC2GzimFBO8hk1UkWKpTcOqrStYgyfBFRxvFu9nPJOv600CTMWKr
-         9eDng2enM0sCBaVD2XjCqDSEP3Gv4rfa4KdT5s1rJRNx4AI+thCk8ge7mi9KvdZLdvUR
-         66COKGeq+zLn3jOY8B2T2EiHwdAXwTQg/YZLHYMUBT9cc+EI0f7YbWx+hKbbF1L8id/Q
-         2x1lqzeDgtpv8SqCHfU9lKJLWueM1xPq96GrGMwD3lA6iilyjTCvp2ypyb7xITaXAhV8
-         Y1OuwjuKMn9UbI7g1g4AuX/gODEbLx54E4chxguk4tle3G8VT+GfRAt0aLeA9tCb6smZ
-         L61Q==
-X-Gm-Message-State: AOAM533MEugwkFFCLRoJPsr3ra64dPfz/1y304/thaAy4DXCEYsdOu8x
-        nHkc27qqXdNGM0LxuTyB/LLdaEl0SNS4ceElRVw=
-X-Google-Smtp-Source: ABdhPJxPbkUXEOcWc6CxCHwFmjYe4sg8Oogrm+XfoPnYE12Hd5DuXzdlTAA7tX+Xg6uuHpq9oyn4Aw==
-X-Received: by 2002:a05:6402:1941:b0:413:2b5f:9074 with SMTP id f1-20020a056402194100b004132b5f9074mr30455131edz.414.1652296657945;
-        Wed, 11 May 2022 12:17:37 -0700 (PDT)
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
-        by smtp.gmail.com with ESMTPSA id j23-20020a1709064b5700b006f3ef214e6esm1272869ejv.212.2022.05.11.12.17.37
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 12:17:37 -0700 (PDT)
-Received: by mail-wr1-f51.google.com with SMTP id v12so4270299wrv.10
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:17:37 -0700 (PDT)
-X-Received: by 2002:a5d:6dad:0:b0:20c:4dc1:e247 with SMTP id
- u13-20020a5d6dad000000b0020c4dc1e247mr24044515wrs.274.1652296354621; Wed, 11
- May 2022 12:12:34 -0700 (PDT)
+        Wed, 11 May 2022 15:13:17 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC2E7357F;
+        Wed, 11 May 2022 12:13:16 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24BH1qih030573;
+        Wed, 11 May 2022 19:12:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=7GCQv78viqKU8RwDGBuW3z+HlE0qjI3m9seEq8djQSw=;
+ b=JKeXOfhJY31bnB3N8mlZWyQTtVg/2iabjwzDPbV6QJbzNL04pzYx/3Bdlo9B2w97XxXp
+ g3cQjjs/DRt0/Cs9VOueuz5z4aJM9qVL82NBVZ+PCjKBv5ER32zRJPBwRvtu+7iJWGNZ
+ l2jvlWTZPKISTV8g3kg0xWPCbyO3jJc0q68I4go6DETklymLviOQSJDS2D2F5lHRBvnP
+ 7ZR5eJAgnTxrBz+RJyBxyzCrOYF9srf2HtXUrV+klNJNJxb3J/PVsYQd/pkPlBcbim5c
+ ars20e+3CnQQRSJjZZdrXYNUurz84m546xXo/WTs4PMzB+eFgqyIx9AZGkFHVXQSFrdK ew== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g0cme100e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 May 2022 19:12:46 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24BIvBrm014399;
+        Wed, 11 May 2022 19:12:45 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g0cme0yyw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 May 2022 19:12:45 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24BJ7hX2005482;
+        Wed, 11 May 2022 19:12:43 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06fra.de.ibm.com with ESMTP id 3fwg1hvk4d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 May 2022 19:12:43 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24BJCeuR50790726
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 11 May 2022 19:12:40 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A346EA405C;
+        Wed, 11 May 2022 19:12:40 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DF350A4054;
+        Wed, 11 May 2022 19:12:38 +0000 (GMT)
+Received: from sig-9-65-89-202.ibm.com (unknown [9.65.89.202])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 11 May 2022 19:12:38 +0000 (GMT)
+Message-ID: <997ea6e0a1f2c40f429ad1f457566cdd80458c78.camel@linux.ibm.com>
+Subject: Re: [PATCH v3] x86/kexec: Carry forward IMA measurement log on kexec
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Jonathan McDowell <noodles@fb.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Date:   Wed, 11 May 2022 15:12:38 -0400
+In-Reply-To: <Ynv4zBnLvbMKrwrq@zn.tnic>
+References: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
+         <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
+         <YnuJCH75GrhVm0Tp@noodles-fedora.dhcp.thefacebook.com>
+         <67f0fe5874638241bc2f2401dc2bc12c51becc0b.camel@linux.ibm.com>
+         <Ynv4zBnLvbMKrwrq@zn.tnic>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: FMIVkOK8bETfNCXJnG5WCBfstjQsssso
+X-Proofpoint-GUID: qv3eKpt49e3w7Y1UmtFq3Qv1l1cZgdY6
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20220510070140.45407-1-tomeu.vizoso@collabora.com>
- <20220510141329.54414-1-tomeu.vizoso@collabora.com> <CAPM=9tzLR-wsLhg2ikGjoK06s-ju5XWa1rtPPiUpN=pwD1vgtA@mail.gmail.com>
- <CAHk-=wg8YgH1h3wrm9CtXff7rSewa+NE0Z5upb1GOE8XiTL9HA@mail.gmail.com>
- <CAF6AEGusO9XAqHNatJLgV+wpVoyyLg1vHtUsnSkAxJeV7n3WNg@mail.gmail.com> <CAHk-=wjbE0f2AGroB1Hy=fx2fh7cRpS0wNdB46Ybk14Mb0b5Jw@mail.gmail.com>
-In-Reply-To: <CAHk-=wjbE0f2AGroB1Hy=fx2fh7cRpS0wNdB46Ybk14Mb0b5Jw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 11 May 2022 12:12:18 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjy4DY_ya8TBs9W2wLWHibBiHMQW2T43DQR1SGRkqD=gw@mail.gmail.com>
-Message-ID: <CAHk-=wjy4DY_ya8TBs9W2wLWHibBiHMQW2T43DQR1SGRkqD=gw@mail.gmail.com>
-Subject: Re: Adding CI results to the kernel tree was Re: [RFC v2] drm/msm:
- Add initial ci/ subdirectory
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     Dave Airlie <airlied@gmail.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Corbet <corbet@lwn.net>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-11_07,2022-05-11_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ mlxlogscore=851 adultscore=0 lowpriorityscore=0 malwarescore=0 spamscore=0
+ phishscore=0 impostorscore=0 priorityscore=1501 bulkscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205110083
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 12:08 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> The kernel tree might have just the expected *failures* listed, if
-> there are any. Presumably the ci tree has to have the expected results
-> anyway, so what's the advantage of listing non-failures?
+On Wed, 2022-05-11 at 19:56 +0200, Borislav Petkov wrote:
+> On Wed, May 11, 2022 at 01:53:23PM -0400, Mimi Zohar wrote:
+> > This patch doesn't apply to Linus' master branch.  Which tip/master
+> > branch?
+> 
+> This one:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/log/
 
-.. put another way: I think a list of "we are aware that these
-currently fail" is quite reasonable for a development tree, maybe even
-with a comment in the commit that created them about why they
-currently fail.
+thanks!
 
-That also ends up being very nice if you fix a problem, and the fix
-commit might then remove the failure for the list, and that all makes
-perfect sense.
+> 
+> Considering how the majority of the changes are x86-specific, I was
+> thinking I'd carry it through the tip tree after getting your ACK for
+> the IMA side of things?
 
-But having just the raw output of "these are the expected CI results"
-that is being done and specified by some other tree entirely - that
-seems pointless and just noise to me. There's no actual reason to have
-that kind of noise - and update that kind of noise - that I really
-see.
+Agreed, all of the changes should be architecture specific.  It should
+definitely be upstreamed via x86.
 
-                Linus
+thanks,
+
+Mimi
+

@@ -2,142 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9776D522C7E
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17AA6522C7F
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242234AbiEKGnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 02:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38884 "EHLO
+        id S242247AbiEKGoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 02:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbiEKGno (ORCPT
+        with ESMTP id S242238AbiEKGoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 02:43:44 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F08B1D4;
-        Tue, 10 May 2022 23:43:42 -0700 (PDT)
+        Wed, 11 May 2022 02:44:11 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AEF6C0C0;
+        Tue, 10 May 2022 23:44:10 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id i24so1164699pfa.7;
+        Tue, 10 May 2022 23:44:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652251423; x=1683787423;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=PTO+On8Bs9vt5yZvZ1hxSaNlJGopfMF1D5C9kQY7ebs=;
-  b=s1Rq46lVeG0L3uCi9uTO0VYBweE9Di51XzSFM2ZbFrGC7gsx3Umtt7yz
-   nGixCQbFIj0bmM0R6cINn3Q5fD8bYK5IR/lrcpeT7jM3Mbo0s2EmSYLFc
-   +3qy0D5w/4wdyySxkh3s0xcoAyvXW8iUszdHS9fjZgpbqxWSsL3Kd1xsH
-   A=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 10 May 2022 23:43:41 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 23:43:41 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 10 May 2022 23:43:41 -0700
-Received: from blr-ubuntu-87.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 10 May 2022 23:43:38 -0700
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-To:     <bjorn.andersson@linaro.org>, <mani@kernel.org>,
-        <jassisinghbrar@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <agross@kernel.org>, Prasad Sodagudi <quic_psodagud@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>
-Subject: [PATCH v2] mailbox: qcom-ipcc: Log the pending interrupt during resume
-Date:   Wed, 11 May 2022 12:13:24 +0530
-Message-ID: <1652251404-30562-1-git-send-email-quic_sibis@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EmHkqlWr7c4QFgT4EmfZ9lldeIHOaKWpbWlbDUJ786E=;
+        b=Xie9XphIFkYPUZEie/Egz6ibA1CeJIe4XjLyItsFWpUS85J9v+hVZGpZ5dPmH2DxrW
+         p8Y+/oNNubymXLVYOnrO9YyCdAF2lXqIyuXH9dqn/5OQ0zwq8djccpTv66HhHK2YtKd/
+         hNXhA/XcGMIUvp6NpmMyhgGOan2MUmaeiQBt9GzJnTRPa4u7UvCKyt+5JSv4SouDtdJU
+         uzeSFLzZNYW+Vajx9EHEs/uR9GOVEu/gWTcGs788/nZS7klvKLZcs+jMaAqsJEPXG70w
+         Vf1Qn75mR4hmzAU3XM2Qi54gRUxLyBzM/7qxoV3Zg617vFLzOTB95HB7HgjfGFh/uz8R
+         FRYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EmHkqlWr7c4QFgT4EmfZ9lldeIHOaKWpbWlbDUJ786E=;
+        b=gTdUEGx6QR+oy/27l+jJWjxiFdjuLsgerjBRyBklf4ukYOhNlymArf2Q3j+h7mgIJH
+         mQt5retpmatEpQbjRfogQmWqpe2kszia2oYxOr9FmaFy1xNQmHVAhWiBoOZ8GNvZTXsV
+         1VX3bqt+19+08zJ9loVoVrfMT+/ZVbjvamgI5Vx8/fHPg6d5eoyeGSRmBZox8Zz3Ctc7
+         thsUgRKAWSK5SgWbGsgLdHf0SlP3XBLUFr47zgt/XWHAVRE1IM8VrS4R9ofcDvRBaYDR
+         7pLS/BT4Oh9vm73AMehHCprGQuD00qLS6wv83E3+Sj6dT/tXIyzcfVc3k7ulzb4OFT7I
+         6UnQ==
+X-Gm-Message-State: AOAM533G4z/W9iw9HaOCC2kapkbNgiUaQqC1MTXg5WXenX01rSiYPk1s
+        TbmHgGq8laNF/DQROsidTQFHdzabRWTupsZjgOo=
+X-Google-Smtp-Source: ABdhPJz4gMyxezuz3NNsXZsooFJpcRZR+boVRmrZ1TbuIvUZm0lsMkMbXWpFXPUPR7twYVbJF5IOHQ==
+X-Received: by 2002:a63:c015:0:b0:385:fe06:eb86 with SMTP id h21-20020a63c015000000b00385fe06eb86mr19418244pgg.132.1652251449932;
+        Tue, 10 May 2022 23:44:09 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id c23-20020a63da17000000b003c14af50639sm858113pgh.81.2022.05.10.23.44.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 23:44:09 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        Tim Whisonant <tim.whisonant@intel.com>,
+        Enno Luebbers <enno.luebbers@intel.com>,
+        Alan Tull <atull@kernel.org>, Shiva Rao <shiva.rao@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] fpga: Fix memory leak in build_info_create_dev
+Date:   Wed, 11 May 2022 10:44:00 +0400
+Message-Id: <20220511064400.63518-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Prasad Sodagudi <quic_psodagud@quicinc.com>
+platform_device_alloc() create a platform device object.
+we should call platform_device_put() in error path to
+release the resource.
 
-Enable logging of the pending interrupt that triggered device wakeup. This
-logging information helps to debug IRQs that cause periodic device wakeups
-and prints the detailed information of pending IPCC interrupts instead of
-the generic "Resume caused by IRQ 17, ipcc".
-
-Scenario: Device wakeup caused by Modem crash
-Logs:
-qcom-ipcc mailbox: virq: 182 triggered client-id: 2; signal-id: 2
-
-From the IPCC bindings it can further understood that the client here is
-IPCC_CLIENT_MPSS and the signal was IPCC_MPROC_SIGNAL_SMP2P.
-
-Signed-off-by: Prasad Sodagudi <quic_psodagud@quicinc.com>
-Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+Fixes: 543be3d8c999 ("fpga: add device feature list support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
+ drivers/fpga/dfl.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-V2:
- * Fix build error when ipcc is a module [Kernel Test Bot]
-
- drivers/mailbox/qcom-ipcc.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
-
-diff --git a/drivers/mailbox/qcom-ipcc.c b/drivers/mailbox/qcom-ipcc.c
-index c5d963222014..21c071ec119c 100644
---- a/drivers/mailbox/qcom-ipcc.c
-+++ b/drivers/mailbox/qcom-ipcc.c
-@@ -254,6 +254,28 @@ static int qcom_ipcc_setup_mbox(struct qcom_ipcc *ipcc,
- 	return devm_mbox_controller_register(dev, mbox);
- }
+diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
+index 599bb21d86af..f0b945bd975f 100644
+--- a/drivers/fpga/dfl.c
++++ b/drivers/fpga/dfl.c
+@@ -879,8 +879,10 @@ build_info_create_dev(struct build_feature_devs_info *binfo,
+ 	INIT_LIST_HEAD(&binfo->sub_features);
  
-+#ifdef CONFIG_PM_SLEEP
-+static int qcom_ipcc_pm_resume(struct device *dev)
-+{
-+	struct qcom_ipcc *ipcc = dev_get_drvdata(dev);
-+	u32 hwirq;
-+	int virq;
-+
-+	hwirq = readl(ipcc->base + IPCC_REG_RECV_ID);
-+	if (hwirq == IPCC_NO_PENDING_IRQ)
-+		return 0;
-+
-+	virq = irq_find_mapping(ipcc->irq_domain, hwirq);
-+
-+	dev_info(dev, "virq: %d triggered client-id: %ld; signal-id: %ld\n", virq,
-+		 FIELD_GET(IPCC_CLIENT_ID_MASK, hwirq), FIELD_GET(IPCC_SIGNAL_ID_MASK, hwirq));
-+
-+	return 0;
-+}
-+#else
-+#define qcom_ipcc_pm_resume NULL
-+#endif
-+
- static int qcom_ipcc_probe(struct platform_device *pdev)
- {
- 	struct qcom_ipcc *ipcc;
-@@ -324,6 +346,10 @@ static const struct of_device_id qcom_ipcc_of_match[] = {
- };
- MODULE_DEVICE_TABLE(of, qcom_ipcc_of_match);
+ 	fdev->id = dfl_id_alloc(type, &fdev->dev);
+-	if (fdev->id < 0)
++	if (fdev->id < 0) {
++		platform_device_put(fdev);
+ 		return fdev->id;
++	}
  
-+static const struct dev_pm_ops qcom_ipcc_dev_pm_ops = {
-+	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(NULL, qcom_ipcc_pm_resume)
-+};
-+
- static struct platform_driver qcom_ipcc_driver = {
- 	.probe = qcom_ipcc_probe,
- 	.remove = qcom_ipcc_remove,
-@@ -331,6 +357,7 @@ static struct platform_driver qcom_ipcc_driver = {
- 		.name = "qcom-ipcc",
- 		.of_match_table = qcom_ipcc_of_match,
- 		.suppress_bind_attrs = true,
-+		.pm = &qcom_ipcc_dev_pm_ops,
- 	},
- };
- 
+ 	fdev->dev.parent = &binfo->cdev->region->dev;
+ 	fdev->dev.devt = dfl_get_devt(dfl_devs[type].devt_type, fdev->id);
 -- 
-2.7.4
+2.25.1
 

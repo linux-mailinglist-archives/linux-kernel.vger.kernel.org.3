@@ -2,71 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 518CF523429
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:22:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A067523426
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237956AbiEKNWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45326 "EHLO
+        id S234068AbiEKNW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:22:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243660AbiEKNV6 (ORCPT
+        with ESMTP id S239473AbiEKNWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:21:58 -0400
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094D256212;
-        Wed, 11 May 2022 06:21:06 -0700 (PDT)
+        Wed, 11 May 2022 09:22:03 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E655B3EC
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:21:24 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id kl21so2039959qvb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:21:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1652275267; x=1683811267;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3jHRwtWUihggnpz3rDI3WciJRbfNX+tFdwfkwhJM9SE=;
-  b=HPlkq/4VqBzr4ajXAOaJ8RFS8xY4d+Fhy0AWUYlht+zmHz2Ibtdil8hy
-   PdQbenjsRlLEGkUuy7Ho7aJW/UB58Ywis49QyJW99C7ELk+LFIkZ2/euK
-   xd4k72C1CRzAcZCqvFVR9isAEyfIptWSyvu3teTmAhWW8OCofDuCz3QfZ
-   o=;
-X-IronPort-AV: E=Sophos;i="5.91,217,1647302400"; 
-   d="scan'208";a="201940142"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-e823fbde.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP; 11 May 2022 13:20:56 +0000
-Received: from EX13MTAUWC001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1a-e823fbde.us-east-1.amazon.com (Postfix) with ESMTPS id 6B0ABC0A3F;
-        Wed, 11 May 2022 13:20:54 +0000 (UTC)
-Received: from EX13D20UWC001.ant.amazon.com (10.43.162.244) by
- EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
- id 15.0.1497.32; Wed, 11 May 2022 13:20:51 +0000
-Received: from [0.0.0.0] (10.43.162.96) by EX13D20UWC001.ant.amazon.com
- (10.43.162.244) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 11 May
- 2022 13:20:48 +0000
-Message-ID: <1bdef9a5-d0a9-6dcb-2fdf-19351c68da7a@amazon.com>
-Date:   Wed, 11 May 2022 15:20:46 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH 2/2] random: add fork_event sysctl for polling VM forks
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Simo Sorce <simo@redhat.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-        "Dominik Brodowski" <linux@dominikbrodowski.net>,
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=2iODird8x/BZrqTa4Iuj7D6s9MjuDZsxdzue4KwvOeA=;
+        b=r7f0FY/4IwO3yzB9eJxHW7qT2sRXh2JrXmFGOKGcRiOlaoGVwWtzM5egP2Pri5Xprh
+         hZkvDIA5w80yhNS6F7RIDAGS6dZzuX35Qdo5XVxzb37gIo+Lxll3tSsSVCESkrEZyTlK
+         9/5wRpBRgiiPGONpfquzxVz89YvIfhXWM+Ef5ZiFpn8hS1X2WiYT9R1CI2MKiljYfsup
+         OQPJZfUOp3oURb5I8CS1j/JZJFJU8J1fwCVIzw74hyIk2F62BBtJiz5k/xqAPAE3XNKA
+         dMIe3OAVmt2/OoMBe0VS4EcdjQx3UHm6ppN8sqrBFlow4yt0eZ9/21Z1BGZFy9Auu6QU
+         Z3BQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=2iODird8x/BZrqTa4Iuj7D6s9MjuDZsxdzue4KwvOeA=;
+        b=F6dOPNzgNaXDURiPEFNhaesvTKX8D2bNljSwfA2GuMACFg0C6sfrYT+KLfs/NozfB+
+         vXZRFE1sU4+yMN5INZQwaNldC/224UoNZ5vxEH+ThaLgAnvwLd/6nQt2RENJ4UvUUwpU
+         z62oo0aT+tk3d+Y5SnnQeTGpwNDitLQYsb8alu/rSVetXbs3P8qSwAOFYPhcHelkDv1L
+         292jlw9dKA53O5YcjHhWXKacFT2MVV9PsmJPzwAIG/+ZIf+Jb3wuPJHFhWDnbkFhiPbv
+         Pej1hdpCrvk60aso5YYRv6bLATzNJ3y6OG0AoNJPApN9tOSToE5bLCvl2C9fGe6VgkeC
+         uFUw==
+X-Gm-Message-State: AOAM531GsoMx48T96/8ATlAmrnB0y5sxFSlaclywovQFrjMTCE1LyCu1
+        RoVix+dtpWqoENXTu6yk/HkWyw==
+X-Google-Smtp-Source: ABdhPJx1J+0Hxhf/anNC9wgHSzXinmeOWtD8RSs5P4tduqzYgwzQJnWgWruvLzhaQ7YIAGkUO6gd7Q==
+X-Received: by 2002:ad4:5bc1:0:b0:42c:531c:ef12 with SMTP id t1-20020ad45bc1000000b0042c531cef12mr22412148qvt.15.1652275283277;
+        Wed, 11 May 2022 06:21:23 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
+        by smtp.gmail.com with ESMTPSA id s12-20020a05620a29cc00b0069fc13ce207sm1230564qkp.56.2022.05.11.06.21.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 06:21:22 -0700 (PDT)
+Message-ID: <3365cd1d750e84fedc8e75d646a77ffd85619d35.camel@ndufresne.ca>
+Subject: Re: [PATCH v7 0/6] Proposal for a GPU cgroup controller
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     "T.J. Mercier" <tjmercier@google.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        "Colm MacCarthaigh" <colmmacc@amazon.com>,
-        Torben Hansen <htorben@amazon.co.uk>,
-        Jann Horn <jannh@google.com>
-References: <20220502140602.130373-1-Jason@zx2c4.com>
- <20220502140602.130373-2-Jason@zx2c4.com>
- <8f305036248cae1d158c4e567191a957a1965ad1.camel@redhat.com>
- <YnsO1JGQm5FEkbJt@zx2c4.com>
-From:   Alexander Graf <graf@amazon.com>
-In-Reply-To: <YnsO1JGQm5FEkbJt@zx2c4.com>
-X-Originating-IP: [10.43.162.96]
-X-ClientProxiedBy: EX13D36UWB004.ant.amazon.com (10.43.161.49) To
- EX13D20UWC001.ant.amazon.com (10.43.162.244)
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        Arve =?ISO-8859-1?Q?Hj=F8nnev=E5g?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     daniel@ffwll.ch, jstultz@google.com, cmllamas@google.com,
+        kaleshsingh@google.com, Kenny.Ho@amd.com, mkoutny@suse.com,
+        skhan@linuxfoundation.org, kernel-team@android.com,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kselftest@vger.kernel.org
+Date:   Wed, 11 May 2022 09:21:20 -0400
+In-Reply-To: <20220510235653.933868-1-tjmercier@google.com>
+References: <20220510235653.933868-1-tjmercier@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,72 +94,217 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ck9uIDExLjA1LjIyIDAzOjE4LCBKYXNvbiBBLiBEb25lbmZlbGQgd3JvdGU6Cj4gSGkgU2ltbywK
-Pgo+IE9uIFR1ZSwgTWF5IDEwLCAyMDIyIGF0IDA4OjQwOjQ4UE0gLTA0MDAsIFNpbW8gU29yY2Ug
-d3JvdGU6Cj4+IEF0IHlvdXIgcmVxdWVzdCB0ZWxlcG9ydGluZyBoZXJlIHRoZSBhbnN3ZXIgSSBn
-YXZlIG9uIGEgZGlmZmVyZW50Cj4+IHRocmVhZCwgcmVpbmZvcmNlZCBieSBzb21lIHRoaW5raW5n
-Lgo+Pgo+PiBBcyBhIHVzZXIgc3BhY2UgY3J5cHRvIGxpYnJhcnkgcGVyc29uIEkgdGhpbmsgdGhl
-IG9ubHkgcmVhc29uYWJsZQo+PiBpbnRlcmZhY2UgaXMgc29tZXRoaW5nIGxpa2UgYSB2RFNPLgo+
-Pgo+PiBQb2xsKCkgaW50ZXJmYWNlcyBhcmUgbmljZSBhbmQgYWxsIGZvciBzeXN0ZW0gcHJvZ3Jh
-bXMgdGhhdCBoYXZlIGZ1bGwKPj4gY29udHJvbCBvZiB0aGVpciBldmVudCBsb29wIGFuZCBkbyBu
-b3QgaGF2ZSB0byByZWFjdCBpbW1lZGlhdGVseSB0bwo+PiB0aGlzIGV2ZW50LCBob3dldmVyIGNy
-eXB0byBsaWJyYXJpZXMgZG8gbm90IGhhdmUgdGhlIGx1eHVyeSBvZgo+PiBjb250cm9sbGluZyB0
-aGUgbWFpbiBsb29wIG9mIHRoZSBhcHBsaWNhdGlvbi4KPj4KPj4gQWRkaXRpb25hbGx5IGNyeXB0
-byBsaWJyYXJpZXMgcmVhbGx5IG5lZWQgdG8gZW5zdXJlIHRoZSB2YWx1ZSB0aGV5Cj4+IHJldHVy
-biBmcm9tIHRoZWlyIFBSTkcgaXMgZmluZSwgd2hpY2ggbWVhbnMgdGhleSBkbyBub3QgcmV0dXJu
-IGEgdmFsdWUKPj4gaWYgdGhlIHZtZ2VuaWQgaGFzIGNoYW5nZWQgYmVmb3JlIHRoZXkgY2FuIHJl
-c2VlZCwgb3IgdGhlcmUgY291bGQgYmUKPj4gY2F0YXN0cm9waGljIGR1cGxpY2F0aW9uIG9mICJy
-YW5kb20iIHZhbHVlcyB1c2VkIGluIElWcyBvciBFQ0RTQQo+PiBTaWduYXR1cmVzIG9yIGlkcy9j
-b29raWVzIG9yIHdoYXRldmVyLgo+Pgo+PiBGb3IgY3J5cHRvIGxpYnJhcmllcyBpdCBpcyBtdWNo
-IHNpbXBsZXIgdG8gcG9sbCBmb3IgdGhpcyBpbmZvcm1hdGlvbgo+PiB0aGFuIHVzaW5nIG5vdGlm
-aWNhdGlvbnMgb2YgYW55IGtpbmQgZ2l2ZW4gbGlicmFyaWVzIGFyZQo+PiBnZW5lcmFsbHkgbm90
-IGluIGZ1bGwgY29udHJvbCBvZiB3aGF0IHRoZSBwcm9jZXNzIGRvZXMuCj4+Cj4+IFRoaXMgbmVl
-ZHMgdG8gYmUgcG9sbGVkIGZhc3QgYXMgd2VsbCwgYmVjYXVzZSB0aGUgd2hvbGUgcG9pbnQgb2YK
-Pj4gaW5pdGlhbGl6aW5nIGEgUFJORyBpbiB0aGUgbGlicmFyeSBpcyB0aGF0IGFza2luZyAvZGV2
-L3VyYW5kb20gYWxsIHRoZQo+PiB0aW1lIGlzIHRvbyBzbG93IChkdWUgdG8gY29udGV4dCBzd2l0
-Y2hlcyBhbmQgc3lzY2FsbCBvdmVyaGVhZCksIHNvCj4+IGFueXRoaW5nIHRoYXQgd291bGQgcmVx
-dWlyZSBhIGNvbnRleHQgc3dpdGNoIGluIG9yZGVyIHRvIHB1bGwgZGF0YSBmcm9tCj4+IHRoZSBQ
-Uk5HIHdvdWxkIG5vdCByZWFsbHkgZmx5Lgo+Pgo+PiBBIHZEU08gb3Igc2ltaWxhciB3b3VsZCBh
-bGxvdyB0byBwdWxsIHRoZSB2bWdlbmlkIG9yIHdoYXRldmVyIGVwb2NoCj4+IHZhbHVlIGluIGJl
-Zm9yZSBnZW5lcmF0aW5nIHRoZSByYW5kb20gbnVtYmVycyBhbmQgdGhlbiBiYXJyaWVyLXN0eWxl
-Cj4+IGNoZWNrIHRoYXQgdGhlIHZhbHVlIGlzIHN0aWxsIHVuY2hhbmdlZCBiZWZvcmUgcmV0dXJu
-aW5nIHRoZSByYW5kb20KPj4gZGF0YSB0byB0aGUgY2FsbGVyLiBUaGlzIHdpbGwgcmVkdWNlIHRo
-ZSByYWNlIGNvbmRpdGlvbiAod2hpY2ggc2ltcGx5Cj4+IGNhbm5vdCBiZSBjb21wbGV0ZWx5IGF2
-b2lkZWQpIHRvIGEgdmVyeSB1bmxpa2VseSBldmVudC4KPiBJdCBzb3VuZHMgbGlrZSB5b3VyIGxp
-YnJhcnkgaXNzdWUgaXMgc29tZXdoYXQgc2ltaWxhciB0byB3aGF0IEFsZXggd2FzCj4gdGFsa2lu
-ZyBhYm91dCB3aXRoIHJlZ2FyZHMgdG8gaGF2aW5nIGEgaGFyZCB0aW1lIHVzaW5nIHBvbGwgaW4g
-czJuLiBJJ20KPiBzdGlsbCB3YWl0aW5nIHRvIGhlYXIgaWYgQW1hem9uIGZpZ3VyZWQgb3V0IHNv
-bWUgd2F5IHRoYXQgdGhpcyBpcwo+IHBvc3NpYmxlICh3aXRoLCBlLmcuLCBhIHRocmVhZCkuIEJ1
-dCBhbnl3YXksIGl0IHNlZW1zIGxpa2UgdGhpcyBpcwoKClNvdW5kcyBsaWtlIEkgZGlkbid0IHJl
-cGx5IHdpdGggbXkgZmluZGluZ3MgLSBzb3JyeSBhYm91dCB0aGF0LiBPdXIgczJuIApwZW9wbGUg
-KmNvdWxkKiBidWlsZCBzb21ldGhpbmcgYmFzZWQgb24gYSB0aHJlYWQsIGJ1dCBhcmUgYWZyYWlk
-IHRoYXQgCml0J3MgcmFjeSBhbmQgd291bGQgaW50cm9kdWNlIGNyZWF0aW5nIGEgdGhyZWFkIHdo
-aWNoIHRoZSBsaWJyYXJ5IGRvZXMgCm5vdCBkbyB0b2RheS4KClNvIGluIGEgbnV0c2hlbGwsIHBv
-c3NpYmxlIHllcywgZGVzaXJhYmxlIG5vLgoKSSB0aGluayB3ZSdyZSBtYXliZSBhIGJpdCB0b28g
-c2NhcmVkIG9mIGJ1aWxkaW5nIHNvbWV0aGluZyBmcm9tIHNjcmF0Y2ggCmhlcmUuIFdoYXQgd291
-bGQgdGhlIGJlc3QgY2FzZSBzaXR1YXRpb24gYmU/IExldCdzIHJvbGwgYmFja3dhcmRzIGZyb20g
-CnRoYXQgdGhlbi4KCiBGcm9tIHdoYXQgSSByZWFkLCB3ZSB3YW50IGEgIlZNR2VuSUQgdjIiIGRl
-dmljZSB0aGF0IGdpdmVzIHVzIHRoZSAKYWJpbGl0eSB0bwoKIMKgICogR2V0IGFuIElSUSBvbiBW
-TSBjbG9uZQogwqAgKiBTdG9yZSBhbmQgdXBkYXRlIGFuIFJORyBzZWVkIHZhbHVlICgxMjhiaXQ/
-IENvbmZpZ3VyYWJsZSBsZW4/KSBhdCBhIApwaHlzaWNhbCBhZGRyZXNzIG9yIHN0YW5kIGFsb25l
-IHBhZ2Ugb24gY2xvbmUKIMKgICogU3RvcmUgYW5kIHVwZGF0ZSBhIHVuaXF1ZS10by10aGlzLVZN
-IHJvbGxpbmcgMzJiaXQgaWRlbnRpZmllciBhdCBhIApwaHlzaWNhbCBhZGRyZXNzIG9yIHN0YW5k
-IGFsb25lIHBhZ2Ugb24gY2xvbmUKCldlIGNhbiBlaXRoZXIgbWFrZSB0aGUgZGV2aWNlIGV4cG9z
-ZSB0aGVzZSB2YWx1ZXMgYXMgaW5kaXZpZHVhbCBwYWdlcyAKKGxpa2UgVk1HZW5JRCBkb2VzIHRv
-ZGF5KSBvciBhcyBndWVzdCBwaHlzaWNhbCBhZGRyZXNzZXMgdGhhdCBpdCBuZWVkcyAKdG8gc3Rv
-cmUgaW50byAobGlrZSB2aXJ0aW8tcm5nKS4gVGhlIGxhdHRlciBtYWtlcyBwcm90ZWN0aW9uIGZy
-b20gRE1BIAphdHRhY2tzIG9mIHRoZSBoeXBlcnZpc29yIGFuZCBrZXhlYyBzbGlnaHRseSBtb3Jl
-IGNvbXBsaWNhdGVkLCBidXQgaXQgCndvdWxkIGJlIGRvYWJsZS4KClZNR2VuSUQgaGFzIDIgb3V0
-IG9mIDMgZmVhdHVyZXMgYWJvdmUuIFNvIHdoeSBkb24ndCB3ZSBqdXN0IGdvIHRoZSBlYXN5IApy
-b3V0ZSwgYWRkIGEgc2Vjb25kIHByb3BlcnR5IHRvIFZNR2VuSUQgdGhhdCBnaXZlcyB1cyBhbm90
-aGVyIHBhZ2Ugd2l0aCAKdGhhdCAzMmJpdCB2YWx1ZSBhbmQgdGhlbiBwcm92aWRlIGEgL2Rldi92
-bWdlbmlkIGRldmljZSBub2RlIHlvdSBjYW4gCm9wZW4gYW5kIG1tYXAoKSB0aGF0IDMyYml0IHZh
-bHVlIHBhZ2UgZnJvbT8KClVzZXIgc3BhY2UgbGlicmFyaWVzIGNhbiB0aGVuIHRyeSB0byBvcGVu
-IG9uIGluaXQgYW5kIGRldGVybWluZSB0aGVpciBlcG9jaC4KRm9yIHRoZSBhc3luYyBldmVudCwg
-d2UgYWRkIHRoZSBwb2xsKCkgbG9naWMgYWdhaW4gdG8gL2Rldi92bWdlbmlkIGFuZCAKbWFrZSBu
-ZXR3b3JrZCBmb3IgZXhhbXBsZSB1c2UgdGhhdC4KCgpBbGV4CgoKCgpBbWF6b24gRGV2ZWxvcG1l
-bnQgQ2VudGVyIEdlcm1hbnkgR21iSApLcmF1c2Vuc3RyLiAzOAoxMDExNyBCZXJsaW4KR2VzY2hh
-ZWZ0c2Z1ZWhydW5nOiBDaHJpc3RpYW4gU2NobGFlZ2VyLCBKb25hdGhhbiBXZWlzcwpFaW5nZXRy
-YWdlbiBhbSBBbXRzZ2VyaWNodCBDaGFybG90dGVuYnVyZyB1bnRlciBIUkIgMTQ5MTczIEIKU2l0
-ejogQmVybGluClVzdC1JRDogREUgMjg5IDIzNyA4NzkKCgo=
+Hi,
+
+Le mardi 10 mai 2022 =C3=A0 23:56 +0000, T.J. Mercier a =C3=A9crit=C2=A0:
+> This patch series revisits the proposal for a GPU cgroup controller to
+> track and limit memory allocations by various device/allocator
+> subsystems. The patch series also contains a simple prototype to
+> illustrate how Android intends to implement DMA-BUF allocator
+> attribution using the GPU cgroup controller. The prototype does not
+> include resource limit enforcements.
+
+I'm sorry, since I'm not in-depth technically involve. But from reading the
+topic I don't understand the bound this creates between DMABuf Heaps and GP=
+U. Is
+this an attempt to really track the DMABuf allocated by userland, or just
+something for GPU ? What about V4L2 devices ? Any way this can be clarified=
+,
+specially what would other subsystem needs to have cgroup DMABuf allocation
+controller support ?
+
+>=20
+> Changelog:
+> v7:
+> Hide gpucg and gpucg_bucket struct definitions per Michal Koutn=C3=BD.
+> This means gpucg_register_bucket now returns an internally allocated
+> struct gpucg_bucket.
+>=20
+> Move all public function documentation to the cgroup_gpu.h header.
+>=20
+> Remove comment in documentation about duplicate name rejection which
+> is not relevant to cgroups users per Michal Koutn=C3=BD.
+>=20
+> v6:
+> Move documentation into cgroup-v2.rst per Tejun Heo.
+>=20
+> Rename BINDER_FD{A}_FLAG_SENDER_NO_NEED ->
+> BINDER_FD{A}_FLAG_XFER_CHARGE per Carlos Llamas.
+>=20
+> Return error on transfer failure per Carlos Llamas.
+>=20
+> v5:
+> Rebase on top of v5.18-rc3
+>=20
+> Drop the global GPU cgroup "total" (sum of all device totals) portion
+> of the design since there is no currently known use for this per
+> Tejun Heo.
+>=20
+> Fix commit message which still contained the old name for
+> dma_buf_transfer_charge per Michal Koutn=C3=BD.
+>=20
+> Remove all GPU cgroup code except what's necessary to support charge tran=
+sfer
+> from dma_buf. Previously charging was done in export, but for non-Android
+> graphics use-cases this is not ideal since there may be a delay between
+> allocation and export, during which time there is no accounting.
+>=20
+> Merge dmabuf: Use the GPU cgroup charge/uncharge APIs patch into
+> dmabuf: heaps: export system_heap buffers with GPU cgroup charging as a
+> result of above.
+>=20
+> Put the charge and uncharge code in the same file (system_heap_allocate,
+> system_heap_dma_buf_release) instead of splitting them between the heap a=
+nd
+> the dma_buf_release. This avoids asymmetric management of the gpucg charg=
+es.
+>=20
+> Modify the dma_buf_transfer_charge API to accept a task_struct instead
+> of a gpucg. This avoids requiring the caller to manage the refcount
+> of the gpucg upon failure and confusing ownership transfer logic.
+>=20
+> Support all strings for gpucg_register_bucket instead of just string
+> literals.
+>=20
+> Enforce globally unique gpucg_bucket names.
+>=20
+> Constrain gpucg_bucket name lengths to 64 bytes.
+>=20
+> Append "-heap" to gpucg_bucket names from dmabuf-heaps.
+>=20
+> Drop patch 7 from the series, which changed the types of
+> binder_transaction_data's sender_pid and sender_euid fields. This was
+> done in another commit here:
+> https://lore.kernel.org/all/20220210021129.3386083-4-masahiroy@kernel.org=
+/
+>=20
+> Rename:
+>   gpucg_try_charge -> gpucg_charge
+>   find_cg_rpool_locked -> cg_rpool_find_locked
+>   init_cg_rpool -> cg_rpool_init
+>   get_cg_rpool_locked -> cg_rpool_get_locked
+>   "gpu cgroup controller" -> "GPU controller"
+>   gpucg_device -> gpucg_bucket
+>   usage -> size
+>=20
+> Tests:
+>   Support both binder_fd_array_object and binder_fd_object. This is
+>   necessary because new versions of Android will use binder_fd_object
+>   instead of binder_fd_array_object, and we need to support both.
+>=20
+>   Tests for both binder_fd_array_object and binder_fd_object.
+>=20
+>   For binder_utils return error codes instead of
+>   struct binder{fs}_ctx.
+>=20
+>   Use ifdef __ANDROID__ to choose platform-dependent temp path instead
+>   of a runtime fallback.
+>=20
+>   Ensure binderfs_mntpt ends with a trailing '/' character instead of
+>   prepending it where used.
+>=20
+> v4:
+> Skip test if not run as root per Shuah Khan
+>=20
+> Add better test logging for abnormal child termination per Shuah Khan
+>=20
+> Adjust ordering of charge/uncharge during transfer to avoid potentially
+> hitting cgroup limit per Michal Koutn=C3=BD
+>=20
+> Adjust gpucg_try_charge critical section for charge transfer functionalit=
+y
+>=20
+> Fix uninitialized return code error for dmabuf_try_charge error case
+>=20
+> v3:
+> Remove Upstreaming Plan from gpu-cgroup.rst per John Stultz
+>=20
+> Use more common dual author commit message format per John Stultz
+>=20
+> Remove android from binder changes title per Todd Kjos
+>=20
+> Add a kselftest for this new behavior per Greg Kroah-Hartman
+>=20
+> Include details on behavior for all combinations of kernel/userspace
+> versions in changelog (thanks Suren Baghdasaryan) per Greg Kroah-Hartman.
+>=20
+> Fix pid and uid types in binder UAPI header
+>=20
+> v2:
+> See the previous revision of this change submitted by Hridya Valsaraju
+> at: https://lore.kernel.org/all/20220115010622.3185921-1-hridya@google.co=
+m/
+>=20
+> Move dma-buf cgroup charge transfer from a dma_buf_op defined by every
+> heap to a single dma-buf function for all heaps per Daniel Vetter and
+> Christian K=C3=B6nig. Pointers to struct gpucg and struct gpucg_device
+> tracking the current associations were added to the dma_buf struct to
+> achieve this.
+>=20
+> Fix incorrect Kconfig help section indentation per Randy Dunlap.
+>=20
+> History of the GPU cgroup controller
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> The GPU/DRM cgroup controller came into being when a consensus[1]
+> was reached that the resources it tracked were unsuitable to be integrate=
+d
+> into memcg. Originally, the proposed controller was specific to the DRM
+> subsystem and was intended to track GEM buffers and GPU-specific
+> resources[2]. In order to help establish a unified memory accounting mode=
+l
+> for all GPU and all related subsystems, Daniel Vetter put forth a
+> suggestion to move it out of the DRM subsystem so that it can be used by
+> other DMA-BUF exporters as well[3]. This RFC proposes an interface that
+> does the same.
+>=20
+> [1]: https://patchwork.kernel.org/project/dri-devel/cover/20190501140438.=
+9506-1-brian.welty@intel.com/#22624705
+> [2]: https://lore.kernel.org/amd-gfx/20210126214626.16260-1-brian.welty@i=
+ntel.com/
+> [3]: https://lore.kernel.org/amd-gfx/YCVOl8%2F87bqRSQei@phenom.ffwll.loca=
+l/
+>=20
+> Hridya Valsaraju (3):
+>   gpu: rfc: Proposal for a GPU cgroup controller
+>   cgroup: gpu: Add a cgroup controller for allocator attribution of GPU
+>     memory
+>   binder: Add flags to relinquish ownership of fds
+>=20
+> T.J. Mercier (3):
+>   dmabuf: heaps: export system_heap buffers with GPU cgroup charging
+>   dmabuf: Add gpu cgroup charge transfer function
+>   selftests: Add binder cgroup gpu memory transfer tests
+>=20
+>  Documentation/admin-guide/cgroup-v2.rst       |  23 +
+>  drivers/android/binder.c                      |  31 +-
+>  drivers/dma-buf/dma-buf.c                     |  80 ++-
+>  drivers/dma-buf/dma-heap.c                    |  38 ++
+>  drivers/dma-buf/heaps/system_heap.c           |  28 +-
+>  include/linux/cgroup_gpu.h                    | 146 +++++
+>  include/linux/cgroup_subsys.h                 |   4 +
+>  include/linux/dma-buf.h                       |  49 +-
+>  include/linux/dma-heap.h                      |  15 +
+>  include/uapi/linux/android/binder.h           |  23 +-
+>  init/Kconfig                                  |   7 +
+>  kernel/cgroup/Makefile                        |   1 +
+>  kernel/cgroup/gpu.c                           | 390 +++++++++++++
+>  .../selftests/drivers/android/binder/Makefile |   8 +
+>  .../drivers/android/binder/binder_util.c      | 250 +++++++++
+>  .../drivers/android/binder/binder_util.h      |  32 ++
+>  .../selftests/drivers/android/binder/config   |   4 +
+>  .../binder/test_dmabuf_cgroup_transfer.c      | 526 ++++++++++++++++++
+>  18 files changed, 1632 insertions(+), 23 deletions(-)
+>  create mode 100644 include/linux/cgroup_gpu.h
+>  create mode 100644 kernel/cgroup/gpu.c
+>  create mode 100644 tools/testing/selftests/drivers/android/binder/Makefi=
+le
+>  create mode 100644 tools/testing/selftests/drivers/android/binder/binder=
+_util.c
+>  create mode 100644 tools/testing/selftests/drivers/android/binder/binder=
+_util.h
+>  create mode 100644 tools/testing/selftests/drivers/android/binder/config
+>  create mode 100644 tools/testing/selftests/drivers/android/binder/test_d=
+mabuf_cgroup_transfer.c
+>=20
 

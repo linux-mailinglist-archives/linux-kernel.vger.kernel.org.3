@@ -2,70 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A793D52406C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 00:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C0D52406D
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 00:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348904AbiEKWxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 18:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49558 "EHLO
+        id S1348912AbiEKWxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 18:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348895AbiEKWw6 (ORCPT
+        with ESMTP id S1348903AbiEKWxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 18:52:58 -0400
-Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5266339C
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 15:52:55 -0700 (PDT)
-Received: by mail-vk1-xa2e.google.com with SMTP id e7so1868829vkh.2
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 15:52:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=29E8HlhduSQieWez20AluJPdVntOzq6QdIcJrP9MAKk=;
-        b=eXGPAqhI9a4OPJLyWf2JCXYWPoGF2Iqgn/jpjizCOMqrKYoxsu1tb7zHp3VJp3IFTo
-         9yAYtEqlcPCbW21popx8Zr45u8pa+c9YhpeTgmeLUZo0K6sfDkZg+TRKDhcITVSjd6ET
-         zKDrLLI2q4L+21rdFSp174xKy8LWXr9bNw/3XZGcMo3ke+9mdeNHfzLeZlAavO+zzdnx
-         VRDsPxze0AR4UuOxdZwyW6VCwrI9v1kHbE1dKzaXVQ9tYQPORPjLUuTtxOYnxkD/zr8i
-         0uUdnLTlZWQKD/qJyTxesp836Zw49IcLVD9QHDeByverzbHjaJDoWoSV5qW0RhxqtPoq
-         LVQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=29E8HlhduSQieWez20AluJPdVntOzq6QdIcJrP9MAKk=;
-        b=yntLplog8lf8f77TJYeoegYkuTe6wGJs5F6oLGQrd4WVkiReqATmw7pmjsN606WfC8
-         mVxAAnX5/cfE2excjDWblk0QBBYNrO4i3DNQtSsYd9vkSrqd5Z6aswzY4iEHHrzHL/zo
-         J+fK4BOZNvndPYWK/fJQSbJotNxCbidQ1Vibg+kJYMifSbjQEVgc60sxaT/AYIk1FVlc
-         xMQDri3peCr4IA9Bt0lTBfUcxmSVaKmMhbjS/iktC+MR7RPSNjW6Z/fTtEdjmYxDaG6j
-         eewIGdO0W3LkD/ZUJnBUZRpNTcsOlpC61CROJjt+/aww/DpKWaUmMytpiNohmChWz0Gt
-         pFdg==
-X-Gm-Message-State: AOAM531yyV0g7R3gxCRIviZJwq8zf3wes3suUbZnCNGO4JZHrkuo8bQZ
-        I6w8jjLgb1ixE7Wu18dkD8SQcTbomTvsa4gM+1kK
-X-Google-Smtp-Source: ABdhPJzmuGqT2ng35Dpv3DBtE0pM/yQmY6DTNKnBIPS+Zw6hZvfILYF5ZN6FVAZD2LvgVRo04xAXzJ4beqwpGm+ZkrI=
-X-Received: by 2002:a1f:91cb:0:b0:34e:10c8:cf1c with SMTP id
- t194-20020a1f91cb000000b0034e10c8cf1cmr15641958vkd.31.1652309574277; Wed, 11
- May 2022 15:52:54 -0700 (PDT)
+        Wed, 11 May 2022 18:53:22 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C068D6F49F
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 15:53:20 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652309597;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EJCx/JZR7FMKyZ5jsPBr5sn4ghW4qqCOnaHIaFs+jyE=;
+        b=wMjZtA33gC2+9jWxFm3oXeenXbYxynAzgZXy4/Nxv5pchern+rbsOD3wW3bxQ37/nz0Kbt
+        nYOTCz29HkJLfY+rnh2MOqqF4ASHMSZ7bpRe0WaG9mB1U9zVFqvyc/zKLml2t3ljUUdYX/
+        3OZjj6cI8WrKbDx9gccr1lp7CW9Lu6xgim0yR7NidrbLoYjkHeSkeihVEVdAdFpqWkSIAq
+        ANnV/4wA/4re8LNQ+C47hqvROTbiogxsTpdBWSVuEYA8fX+bQ8mBlih+S89eW+ksycOc7n
+        ERFuiBvKmGudfta7yY+WPWc8LgbnGOel7tJRn2RhMg8fNl2xvii3DtJrm517Gg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652309597;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EJCx/JZR7FMKyZ5jsPBr5sn4ghW4qqCOnaHIaFs+jyE=;
+        b=OZgPP5LEMsDJodUnXoUk6SBxnInrnC+qwrjfmkgMBlgm+eDsE7t9l+QtKVQctiD44oKCh2
+        4D2bY6vV5I+JT9Cg==
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Zhang Qiao <zhangqiao22@huawei.com>,
+        lkml <linux-kernel@vger.kernel.org>, keescook@chromium.org,
+        Peter Zijlstra <peterz@infradead.org>, elver@google.com,
+        legion@kernel.org, oleg@redhat.com, brauner@kernel.org
+Subject: Re: Question about kill a process group
+In-Reply-To: <87a6bnudfy.fsf@email.froward.int.ebiederm.org>
+References: <aff07d75-622c-9bab-863c-0917c79da3c4@huawei.com>
+ <fff65bc3-0b73-3c5e-0f31-bd5404f75353@huawei.com>
+ <e70b350e-abfc-7f8d-4590-d18801a9a722@huawei.com>
+ <87ilrd2dfj.fsf@email.froward.int.ebiederm.org>
+ <58223bd3-b63b-0c2b-abcc-e1136090d060@huawei.com>
+ <874k2mtny7.fsf@email.froward.int.ebiederm.org> <87zgk5v148.ffs@tglx>
+ <87a6bnudfy.fsf@email.froward.int.ebiederm.org>
+Date:   Thu, 12 May 2022 00:53:16 +0200
+Message-ID: <87bkw3y943.ffs@tglx>
 MIME-Version: 1.0
-References: <20200527165718.129307-1-briannorris@chromium.org>
- <YmPadTu8CfEARfWs@xps> <CA+ASDXPeJ6fD9hvc0Nq_RY05YRdSP77U_96vUZcTYgkQKY9Bvg@mail.gmail.com>
- <CAG2Q2vXce2V3Y6MnPhV6obcNWyQzyusMTL=5oCQLRNh2_ffNYA@mail.gmail.com>
-In-Reply-To: <CAG2Q2vXce2V3Y6MnPhV6obcNWyQzyusMTL=5oCQLRNh2_ffNYA@mail.gmail.com>
-From:   Cale Collins <ccollins@gateworks.com>
-Date:   Wed, 11 May 2022 15:52:18 -0700
-Message-ID: <CAG2Q2vXFcSVwF4CbU5o3VP1MWwrdqrZjTHgfBj_Q0t3nNipJRw@mail.gmail.com>
-Subject: Re: [PATCH] Revert "ath: add support for special 0x0 regulatory domain"
-To:     kvalo@kernel.org, Brian Norris <briannorris@chromium.org>
-Cc:     Patrick Steinhardt <ps@pks.im>,
-        ath10k <ath10k@lists.infradead.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Stephen McCarthy <stephen.mccarthy@pctel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,166 +63,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding Kalle, I got his address wrong the first time.
+On Wed, May 11 2022 at 13:33, Eric W. Biederman wrote:
+> Thomas Gleixner <tglx@linutronix.de> writes:
+>> So unless the number of PIDs for a user is limited this _is_ an
+>> unpriviledged DoS vector.
+>
+> After having slept on this a bit it finally occurred to me the
+> semi-obvious solution to this issue is to convert tasklist_lock
+> from a rw-spinlock to rw-semaphore.  The challenge is finding
+> the users (tty layer?) that generate signals from interrupt
+> context and redirect that signal generation.
 
+From my outdated notes where I looked at this before:
 
-On Mon, May 9, 2022 at 11:16 AM Cale Collins <ccollins@gateworks.com> wrote:
->
-> Hello Brian and Kalle,
->
-> I'm experiencing an issue very similar to this.  The regulatory domain
-> settings wouldn't allow me to create an AP on 5ghz bands on kernels
-> newer than 5.10 when using a WLE900VX (QCA9984) radio.  I bisected the
-> kernel and ultimately landed on the regression that Brian patched.  I
-> applied the patch and that resolved the issue from 5.4 up to 5.10.
-> For versions later than that I encountered the same problem.  I tried
-> to bisect again but PCI is broken for the ARM board(s) I'm using in
-> many of the RC's, I'm pretty new to all of this and it was just over
-> my head. I saw Kalle pushed Brian's patch a few weeks ago, so I
-> figured the politics behind how the regulatory domain should be
-> addressed was decided at that point.  I cherry picked Brian's patch
-> onto 5.17 to test, the results are below.  Can someone help me figure
-> out what I can do to get 5ghz APs back?
->
-> If there's any more information I can provide please let me know, I
-> wanted to keep things on the shorter side.
->
-> cale@cale:~/builds/upstream/linux$ git log --oneline
-> 5c12efe9e783 (HEAD) Revert "ath: add support for special 0x0 regulatory domain"
-> f443e374ae13 (tag: v5.17) Linux 5.17
->
-> #On my ARM64 board
->
-> root@focal-ventana:~# uname -a
-> Linux focal-ventana 5.17.0-00001-g5c12efe9e783 #1 SMP Wed Apr 6
-> 16:33:54 PDT 2022 armv7l armv7l armv7l GNU/Linux
->
->
-> root@focal-ventana:~# ls /sys/class/net/
-> can0  eth0  lo  sit0  wlp6s0
->
-> root@focal-ventana:~# iw phy phy0 info | grep " MHz \[" | grep -v "no
-> IR\|disabled"
->             * 2412 MHz [1] (20.0 dBm)
->             * 2417 MHz [2] (20.0 dBm)
->             * 2422 MHz [3] (20.0 dBm)
->             * 2427 MHz [4] (20.0 dBm)
->             * 2432 MHz [5] (20.0 dBm)
->             * 2437 MHz [6] (20.0 dBm)
->             * 2442 MHz [7] (20.0 dBm)
->             * 2447 MHz [8] (20.0 dBm)
->             * 2452 MHz [9] (20.0 dBm)
->             * 2457 MHz [10] (20.0 dBm)
->             * 2462 MHz [11] (20.0 dBm)
->
->
-> root@focal-ventana:~# iw reg get
-> global
-> country 00: DFS-UNSET
->     (2402 - 2472 @ 40), (N/A, 20), (N/A)
->     (2457 - 2482 @ 20), (N/A, 20), (N/A), AUTO-BW, NO-IR
->     (2474 - 2494 @ 20), (N/A, 20), (N/A), NO-OFDM, NO-IR
->     (5170 - 5250 @ 80), (N/A, 20), (N/A), AUTO-BW, NO-IR
->     (5250 - 5330 @ 80), (N/A, 20), (0 ms), DFS, AUTO-BW, NO-IR
->     (5490 - 5730 @ 160), (N/A, 20), (0 ms), DFS, NO-IR
->     (5735 - 5835 @ 80), (N/A, 20), (N/A), NO-IR
->     (57240 - 63720 @ 2160), (N/A, 0), (N/A)
->
-> phy#0
-> country 99: DFS-UNSET
->     (2402 - 2472 @ 40), (N/A, 20), (N/A)
->     (5140 - 5360 @ 80), (N/A, 30), (N/A), PASSIVE-SCAN
->     (5715 - 5860 @ 80), (N/A, 30), (N/A), PASSIVE-SCAN
->
-> #dmesg |grep ath output
->
->     [    5.724215] ath10k_pci 0000:06:00.0: enabling device (0140 -> 0142)
->     [    5.732439] ath10k_pci 0000:06:00.0: pci irq msi oper_irq_mode
-> 2 irq_mode 0 reset_mode 0
->     [   17.573591] ath10k_pci 0000:06:00.0: qca988x hw2.0 target
-> 0x4100016c chip_id 0x043202ff sub 0000:0000
->     [   17.573707] ath10k_pci 0000:06:00.0: kconfig debug 0 debugfs 0
-> tracing 0 dfs 0 testmode 0
->     [   17.575118] ath10k_pci 0000:06:00.0: firmware ver
-> 10.2.4-1.0-00047 api 5 features no-p2p,raw-mode,mfp,allows-mesh-bcast
-> crc32 35bd9258
->     [   17.637397] ath10k_pci 0000:06:00.0: board_file api 1 bmi_id
-> N/A crc32 bebc7c08
->     [   18.849651] ath10k_pci 0000:06:00.0: htt-ver 2.1 wmi-op 5
-> htt-op 2 cal otp max-sta 128 raw 0 hwcrypto 1
->
-> Best regards,
->
-> Cale Collins
->
->
-> Cale Collins
-> Field Applications Engineer II
-> Gateworks Corporation
-> (805)781-2000 x37
-> 3026 S. Higuera, San Luis Obispo, CA 93401
-> www.gateworks.com
->
->
->
-> On Mon, Apr 25, 2022 at 11:55 AM Brian Norris <briannorris@chromium.org> wrote:
-> >
-> > Hi Patrick,
-> >
-> > On Sat, Apr 23, 2022 at 3:52 AM Patrick Steinhardt <ps@pks.im> wrote:
-> > > This revert is in fact causing problems on my machine. I have a QCA9984,
-> > > which exports two network interfaces. While I was able to still use one
-> > > of both NICs for 2.4GHz, I couldn't really use the other card to set up
-> > > a 5GHz AP anymore because all frequencies were restricted. This has
-> > > started with v5.17.1, to which this revert was backported.
-> > >
-> > > Reverting this patch again fixes the issue on my system. So it seems
-> > > like there still are cards out there in the wild which have a value of
-> > > 0x0 as their regulatory domain.
-> > >
-> > > Quoting from your other mail:
-> > >
-> > > > My understanding was that no QCA modules *should* be shipped with a
-> > > > value of 0 in this field. The instance I'm aware of was more or less a
-> > > > manufacturing error I think, and we got Qualcomm to patch it over in
-> > > > software.
-> > >
-> > > This sounds like the issue should've already been fixed in firmware,
-> > > right?
-> >
-> > See the original patch:
-> > https://git.kernel.org/linus/2dc016599cfa9672a147528ca26d70c3654a5423
-> >
-> > "Tested with QCA6174 SDIO with firmware WLAN.RMH.4.4.1-00029."
-> >
-> > That patch was only tested for QCA6174 SDIO, and the 6174 firmware has
-> > since been updated. So none of that really applies to QCA9984. I
-> > suppose your device was also not working before v5.6 either, and IIUC,
-> > according to Qualcomm your hardware is a manufacturing error (i.e.,
-> > invalid country code).
-> >
-> > I don't know what to tell you exactly, other than that the original
-> > patch was wrong/unnecessary (and broke various existing systems) so it
-> > should be reverted. I'm not quite sure how to fix the variety of
-> > hardware out there (like yours) that may be using non-conforming
-> > EEPROM settings. It would seem to me that we might need some more
-> > targeted way of addressing broken hardware, rather than changing this
-> > particular default workaround. I'm honestly not that familiar with
-> > this Qualcomm regulatory stuff though, so my main contribution was
-> > just to suggest reverting (i.e., don't break what used to work); I'm
-> > not as savvy on providing alternative "fixes" for you.
-> >
-> > (That said: I *think* what's happening is that in the absence of a
-> > proper EEPROM code, ath drivers fall back to a default=US country
-> > code, and without further information to know you're compliant,
-> > regulatory rules disallow initiating radiation (such as, an AP) on
-> > 5GHz.)
-> >
-> > >  I've added the relevant dmesg
-> > > snippets though in case I'm mistaken:
-> >
-> > With what kernel? That looks like pre-v5.17.1. The "broken"
-> > (post-5.17.1) logs might be a bit more informative.
-> >
-> > Sorry,
-> > Brian
+[soft]interrupt context which acquires tasklist_lock:
+sysrq-e		send_sig_all()
+sysrq-i         send_sig_all()
+sysrq-n		normalize_rt_tasks()
+
+tasklist_lock nesting into other locks:
+   fs/fcntl.c: send_sigio(), send_sigurg()
+
+   send_sigurg() is called from the network stack ...
+
+Some very obscure stuff in arch/ia64/kernel/mca.c which is called
+from a DIE notifier.
+
+Plus quite a bunch of read_lock() instances which nest inside
+rcu_read_lock() held sections.
+
+This is probably incomplete, but the scope of the problem has been
+greatly reduced vs. the point where I looked at it last time a couple of
+years ago. But that's still a herculean task.
+
+> Once signals holding tasklist_lock are no longer generated from
+> interrupt context irqs no longer need to be disabled and
+> after verifying tasklist_lock isn't held under any other spinlocks
+> it can be converted to a semaphore.
+
+Going to take a while. :)
+
+> It won't help the signal delivery times, but it should reduce
+> the effect on the rest of the system, and prevent watchdogs from
+> firing.
+
+The signal delivery time itself is the least of the worries, but this
+still prevents any other operations which require tasklist_lock from
+making progress for quite some time, i.e. fork/exec for unrelated
+processes/users will have to wait too. So you converted the 'visible'
+DoS to an 'invisible' one.
+
+The real problem is that the scope of tasklist_lock is too broad for
+most use cases. That does not change when you actually can convert it to
+a rwsem. The underlying problem still persists.
+
+Let's take a step back and look what most sane use cases (sysrq-* is not
+in that category) require:
+
+   Preventing that tasks are added or removed
+
+Do they require that any task is added or removed? No.
+
+   They require to prevent add/remove for the intended scope.
+
+That's the thing we need to focus on: reducing the protection scope.
+
+If we can segment the protection for the required scope of e.g. kill(2)
+then we still can let unrelated processes/tasks make progress and just
+inflict the damage on the affected portion of processes/tasks.
+
+For example:
+
+	read_lock(&tasklist_lock);
+	for_each_process(p) {
+		if (task_pid_vnr(p) > 1 &&
+		    !same_thread_group(p, current)) {
+
+			group_send_sig_info(...., p);
+		}
+	}
+	read_unlock(&tasklist_lock);
+
+same_thread_group() does:
+
+   return p->signal == current->signal;
+
+Ideally we can do:
+
+	read_lock(&tasklist_lock);
+        prevent_add_remove(current->signal);
+	read_unlock(&tasklist_lock);
+
+        rcu_read_lock();
+	for_each_process(p) {
+		if (task_pid_vnr(p) > 1 &&
+		    !same_thread_group(p, current)) {
+
+			group_send_sig_info(...., p);
+		}
+	}
+        rcu_read_unlock();
+
+        allow_add_remove(current->signal);
+
+Where prevent_add_remove() sets a state which has to be waited for to be
+cleared by anything which wants to add/remove a task in that scope or
+change $relatedtask->signal until allow_add_remove() removes that
+blocker. I'm sure it's way more complicated, but you get the idea.
+
+If we find a solution to this scope reduction problem, then it will not
+only squash the issue which started this discussion. This will have a
+benefit in general.
+
+Thanks,
+
+        tglx

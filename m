@@ -2,106 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B037D522D3A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2A7F522D40
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242890AbiEKHZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 03:25:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46128 "EHLO
+        id S242985AbiEKH0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 03:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiEKHZh (ORCPT
+        with ESMTP id S242918AbiEKHZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 03:25:37 -0400
-Received: from m15113.mail.126.com (m15113.mail.126.com [220.181.15.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A64821C94EC;
-        Wed, 11 May 2022 00:25:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=C7Z/r
-        x32c/cR9tT2PP2QxCWlQz3jKgGCRgpp9g7dDHM=; b=Ze0dgM1umeB5q9cYf6OHN
-        7TL9RN4hFO5KAbE16H0j0NgFECHQV7O/8Cp/E2mrtu+PYBXzy7CGwrbnWDTsxG7b
-        Bno/Bw695u+SEASpWMc3QQgyuI74xvXlTy318FuzgRbnRsKF3LXZTyOCkRWLYhyW
-        xpQcdjW0McG+cA2TXmIG1o=
-Received: from ubuntu.localdomain (unknown [58.213.83.157])
-        by smtp3 (Coremail) with SMTP id DcmowAAHA5zaZHti+k_FBQ--.16427S4;
-        Wed, 11 May 2022 15:25:15 +0800 (CST)
-From:   Bernard Zhao <zhaojunkui2008@126.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bernard Zhao <zhaojunkui2008@126.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Bernard Zhao <bernard@vivo.com>
-Subject: [PATCH] ethernet/ti: delete if NULL check befort devm_kfree
-Date:   Wed, 11 May 2022 00:25:10 -0700
-Message-Id: <20220511072512.666863-1-zhaojunkui2008@126.com>
-X-Mailer: git-send-email 2.33.1
+        Wed, 11 May 2022 03:25:58 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4182C13C;
+        Wed, 11 May 2022 00:25:55 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kymd52qMlzfbZr;
+        Wed, 11 May 2022 15:24:41 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 11 May 2022 15:25:53 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 11 May 2022 15:25:53 +0800
+Subject: Re: [PATCH -next] drivers: w1: use kfree_sensitive()
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
+        <zbr@ioremap.net>, <jdelvare@suse.com>, <linux@roeck-us.net>
+References: <20220511064954.3401381-1-yangyingliang@huawei.com>
+ <YntbdfHLjeHzAb9/@kroah.com>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <2cf24169-ea56-9c72-fa95-a1e6625c8545@huawei.com>
+Date:   Wed, 11 May 2022 15:25:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DcmowAAHA5zaZHti+k_FBQ--.16427S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ZFW7JryDWw4DAr1kAryUtrb_yoW8AFW3pa
-        93GF1UtFy7Zw4fGanrZF4rX345Wa1Sk3yDCry8CryfAw4Fyw1rtF18uFWDuFy5WrWkAay5
-        AF4DAa4xXr1q9F7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEt8nnUUUUU=
-X-Originating-IP: [58.213.83.157]
-X-CM-SenderInfo: p2kd0y5xqn3xasqqmqqrswhudrp/1tbiuRz9qlpD857i+QAAsd
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YntbdfHLjeHzAb9/@kroah.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-devm_kfree check the point, there is no need to check before
-devm_kfree call.
-This change is to cleanup the code a bit.
+Hi,
 
-Signed-off-by: Bernard Zhao <zhaojunkui2008@126.com>
-Signed-off-by: Bernard Zhao <bernard@vivo.com>
----
- drivers/net/ethernet/ti/am65-cpsw-qos.c | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
+On 2022/5/11 14:45, Greg KH wrote:
+> On Wed, May 11, 2022 at 02:49:54PM +0800, Yang Yingliang wrote:
+>> Use kfree_sensitive() instead of open-coding it.
+>>
+>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+>> ---
+>>   drivers/w1/w1.c | 3 +--
+>>   1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
+>> index f2ae2e563dc5..a0a6c3c739d9 100644
+>> --- a/drivers/w1/w1.c
+>> +++ b/drivers/w1/w1.c
+>> @@ -73,8 +73,7 @@ static void w1_master_release(struct device *dev)
+>>   	struct w1_master *md = dev_to_w1_master(dev);
+>>   
+>>   	dev_dbg(dev, "%s: Releasing %s.\n", __func__, md->name);
+>> -	memset(md, 0, sizeof(struct w1_master) + sizeof(struct w1_bus_master));
+>> -	kfree(md);
+>> +	kfree_sensitive(md);
+> Does this actually change anything?  Why is the memset being called here
+> at all?
+It's no functional change and I got this by 
+scripts/coccinelle/api/kfree_sensitive.cocci.
+I'm not sure why using memset() here.
 
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-qos.c b/drivers/net/ethernet/ti/am65-cpsw-qos.c
-index ebcc6386cc34..16b8794cb13c 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-qos.c
-+++ b/drivers/net/ethernet/ti/am65-cpsw-qos.c
-@@ -164,8 +164,7 @@ static void am65_cpsw_admin_to_oper(struct net_device *ndev)
- {
- 	struct am65_cpsw_port *port = am65_ndev_to_port(ndev);
- 
--	if (port->qos.est_oper)
--		devm_kfree(&ndev->dev, port->qos.est_oper);
-+	devm_kfree(&ndev->dev, port->qos.est_oper);
- 
- 	port->qos.est_oper = port->qos.est_admin;
- 	port->qos.est_admin = NULL;
-@@ -432,11 +431,8 @@ static void am65_cpsw_purge_est(struct net_device *ndev)
- 
- 	am65_cpsw_stop_est(ndev);
- 
--	if (port->qos.est_admin)
--		devm_kfree(&ndev->dev, port->qos.est_admin);
--
--	if (port->qos.est_oper)
--		devm_kfree(&ndev->dev, port->qos.est_oper);
-+	devm_kfree(&ndev->dev, port->qos.est_admin);
-+	devm_kfree(&ndev->dev, port->qos.est_oper);
- 
- 	port->qos.est_oper = NULL;
- 	port->qos.est_admin = NULL;
-@@ -522,8 +518,7 @@ static int am65_cpsw_set_taprio(struct net_device *ndev, void *type_data)
- 	ret = am65_cpsw_configure_taprio(ndev, est_new);
- 	if (!ret) {
- 		if (taprio->enable) {
--			if (port->qos.est_admin)
--				devm_kfree(&ndev->dev, port->qos.est_admin);
-+			devm_kfree(&ndev->dev, port->qos.est_admin);
- 
- 			port->qos.est_admin = est_new;
- 		} else {
--- 
-2.33.1
-
+Thanks,
+Yang
+>
+> thanks,
+>
+> greg k-h
+> .

@@ -2,128 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8DB1523D20
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC8B523D28
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346673AbiEKTJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 15:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44672 "EHLO
+        id S1346671AbiEKTJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 15:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234118AbiEKTI4 (ORCPT
+        with ESMTP id S1346684AbiEKTJM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 15:08:56 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D697F6EB10;
-        Wed, 11 May 2022 12:08:55 -0700 (PDT)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24BIftZV029492;
-        Wed, 11 May 2022 19:08:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=qlOWqXyfi0rR8T2Ty+QTIJ3Y8i5IUOUaQI1MNmkuf5Y=;
- b=OVTqrNx28vOMpJb0sSyFMSCbcFQ9jbIfWD8ZP4gYo+lPxI8UWtZY/DJqRAWLtUV45eD8
- fzBb0PyT1Cj4Bjq3XFDN7yZCu2QIWwHDhzpEubrHgJyCleZK4lGr0iKezhWu83QqX2NP
- 2og3I1aajaNQHk1XRHkDTH+vGjxLTPtvqG8XixZlnWWRvg4t9+Nb9DtuqvSPayRHoHxe
- B7MNjCePSXoujGXpxDUqR8ted4/zYg4f8ZG6MYzMyXqcWDmmG1AVoI7hCnRKd1bbbTnG
- POhlWceP5hJO5HMXtD/UDHKDhKwl9Y4GvyYMjIambMoOmbcVD4diXnExTKz2OG2DXUUl Uw== 
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g0jn5rdu2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 May 2022 19:08:39 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24BJ8Soj002140;
-        Wed, 11 May 2022 19:08:38 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma03dal.us.ibm.com with ESMTP id 3fwgda5sg0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 May 2022 19:08:38 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24BJ8bqI31654354
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 11 May 2022 19:08:37 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 249F66A04F;
-        Wed, 11 May 2022 19:08:37 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B358D6A04D;
-        Wed, 11 May 2022 19:08:36 +0000 (GMT)
-Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.61.211])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 11 May 2022 19:08:36 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-iio@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, dbarksdale@uplogix.com,
-        eajames@linux.ibm.com
-Subject: [PATCH 2/2] iio: humidity: si7020: Check device property for skipping reset in probe
-Date:   Wed, 11 May 2022 14:08:35 -0500
-Message-Id: <20220511190835.51046-3-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220511190835.51046-1-eajames@linux.ibm.com>
-References: <20220511190835.51046-1-eajames@linux.ibm.com>
+        Wed, 11 May 2022 15:09:12 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055436EC56
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:09:10 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id g6so5979414ejw.1
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:09:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=M2DykjHAMdlStYb5EmcYSUR1Pkzo63PzxwPMaZ8LvFo=;
+        b=RyFGCFRtSxjZc9mIoytVCXq/YWGjqf+7X1f1onqM7tbKpLpI5ilS0HD3W+wryYO3eA
+         OxxE2IpBo99CuN/f3UvdN2TyQdKnAWqhafI0mCX9WQ2GKArXjz3PpjvEofURYxNFo5Yb
+         zCYHi0yxeD9Ub457ewESExxn2/2ovvErrm4A0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=M2DykjHAMdlStYb5EmcYSUR1Pkzo63PzxwPMaZ8LvFo=;
+        b=IWVY+SOHy8eQkFC+KrxjelW5bmA6A8uCfTJtdvBvhI6vBfBxocAPHGFI63NtpGenkX
+         +OmVFhvmUXQWPWUrHawCMx8aNtTtPTLrJE1a/Zt5JuHEyR0FQtnbbpVzhpCF6SMRgPeh
+         cKnmCQxkdxflX2KpenUdVoY6/RdoMZ/mXJ6VC7tzdYaRvmJmGrlODE/lshU3W1AibYNE
+         l5mY+Av6lk5VZB6ynrFyeBdzbIr3fPI/ENLE5+xxaMUcgXaIwVcn2p4QlVepQV/VAP5H
+         sqF/cD50wi9q2vOKkpRuB7dL2a20Usg9J6w1+1U0KHI31JCyBlav2R9UOqVnDS5I0btu
+         chgw==
+X-Gm-Message-State: AOAM532StfQHPGXg2JvPJd93VWtOOl16hJiKF6VRpbiV7EIRm/ZZBVl4
+        1pUCD2wh1oZ6n4DPrDE4IPGsNA==
+X-Google-Smtp-Source: ABdhPJw9Nd8vnPYqEL0MNAFmVh+U7IZ/wircjNLfEqm8Te3y/rY6G1oUIM7+PpLhbG8Z+WzygG5ebQ==
+X-Received: by 2002:a17:907:2d07:b0:6f4:36fe:f1c with SMTP id gs7-20020a1709072d0700b006f436fe0f1cmr26449179ejc.383.1652296149389;
+        Wed, 11 May 2022 12:09:09 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id y13-20020a056402134d00b0042617ba63d6sm1528596edw.96.2022.05.11.12.09.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 12:09:08 -0700 (PDT)
+Date:   Wed, 11 May 2022 21:09:06 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v4 11/15] drm/shmem-helper: Add generic memory shrinker
+Message-ID: <YnwJ0kLwLS7RxuwS@phenom.ffwll.local>
+Mail-Followup-To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>, Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dmitry Osipenko <digetx@gmail.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+References: <20220417223707.157113-1-dmitry.osipenko@collabora.com>
+ <20220417223707.157113-12-dmitry.osipenko@collabora.com>
+ <e6108e9c-6e67-2d71-0665-654e11d9c3a5@suse.de>
+ <ff97790a-fb64-1e15-74b4-59c807bce0b9@collabora.com>
+ <Ynkb1U2nNWYPML88@phenom.ffwll.local>
+ <5fdf5232-e2b2-b444-5a41-f1db7e6a04da@collabora.com>
+ <Ynu1k5lH+xvqtObG@phenom.ffwll.local>
+ <3429a12f-9fbe-b66b-dbbd-94a1df54714e@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -_y8u645Od0zadYsOSuBHFg1MVzJMxeA
-X-Proofpoint-ORIG-GUID: -_y8u645Od0zadYsOSuBHFg1MVzJMxeA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-11_07,2022-05-11_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 adultscore=0 spamscore=0 impostorscore=0 phishscore=0
- malwarescore=0 clxscore=1015 priorityscore=1501 mlxlogscore=999
- bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205110083
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3429a12f-9fbe-b66b-dbbd-94a1df54714e@collabora.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I2C commands issued after the SI7020 is starting up or after reset
-can potentially upset the startup sequence. Therefore, the host
-needs to wait for the startup sequence to finish before issuing
-further i2c commands. This is impractical in cases where the SI7020
-is on a shared bus or behind a mux, which may switch channels at
-any time (generating I2C traffic). Therefore, check for a device
-property that indicates that the driver should skip resetting the
-device when probing.
+On Wed, May 11, 2022 at 07:06:18PM +0300, Dmitry Osipenko wrote:
+> On 5/11/22 16:09, Daniel Vetter wrote:
+> >>>>> I'd like to ask you to reduce the scope of the patchset and build the
+> >>>>> shrinker only for virtio-gpu. I know that I first suggested to build
+> >>>>> upon shmem helpers, but it seems that it's easier to do that in a later
+> >>>>> patchset.
+> >>>> The first version of the VirtIO shrinker didn't support memory eviction.
+> >>>> Memory eviction support requires page fault handler to be aware of the
+> >>>> evicted pages, what should we do about it? The page fault handling is a
+> >>>> part of memory management, hence to me drm-shmem is already kinda a MM.
+> >>> Hm I still don't get that part, why does that also not go through the
+> >>> shmem helpers?
+> >> The drm_gem_shmem_vm_ops includes the page faults handling, it's a
+> >> helper by itself that is used by DRM drivers.
+> >>
+> >> I could try to move all the shrinker logic to the VirtIO and re-invent
+> >> virtio_gem_shmem_vm_ops, but what is the point of doing this for each
+> >> driver if we could have it once and for all in the common drm-shmem code?
+> >>
+> >> Maybe I should try to factor out all the shrinker logic from drm-shmem
+> >> into a new drm-shmem-shrinker that could be shared by drivers? Will you
+> >> be okay with this option?
+> > I think we're talking past each another a bit. I'm only bringing up the
+> > purge vs eviction topic we discussed in the other subthread again.
+> 
+> Thomas asked to move the whole shrinker code to the VirtIO driver and
+> I's saying that this is not a great idea to me, or am I misunderstanding
+> the Thomas' suggestion? Thomas?
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
- drivers/iio/humidity/si7020.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+I think it was just me creating a confusion here.
 
-diff --git a/drivers/iio/humidity/si7020.c b/drivers/iio/humidity/si7020.c
-index ab6537f136ba..49f6a1b1f5c4 100644
---- a/drivers/iio/humidity/si7020.c
-+++ b/drivers/iio/humidity/si7020.c
-@@ -115,12 +115,14 @@ static int si7020_probe(struct i2c_client *client,
- 				     I2C_FUNC_SMBUS_READ_WORD_DATA))
- 		return -EOPNOTSUPP;
- 
--	/* Reset device, loads default settings. */
--	ret = i2c_smbus_write_byte(client, SI7020CMD_RESET);
--	if (ret < 0)
--		return ret;
--	/* Wait the maximum power-up time after software reset. */
--	msleep(15);
-+	if (!device_property_read_bool(&client->dev, "silabs,skip-reset")) {
-+		/* Reset device, loads default settings. */
-+		ret = i2c_smbus_write_byte(client, SI7020CMD_RESET);
-+		if (ret < 0)
-+			return ret;
-+		/* Wait the maximum power-up time after software reset. */
-+		msleep(15);
-+	}
- 
- 	indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*data));
- 	if (!indio_dev)
+fwiw I do also think that shrinker in shmem helpers makes sense, just in
+case that was also lost in confusion.
+
+> >>> I'm still confused why drivers need to know the difference
+> >>> between evition and purging. Or maybe I'm confused again.
+> >> Example:
+> >>
+> >> If userspace uses IOV addresses, then these addresses must be kept
+> >> reserved while buffer is evicted.
+> >>
+> >> If BO is purged, then we don't need to retain the IOV space allocated
+> >> for the purged BO.
+> > Yeah but is that actually needed by anyone? If userspace fails to allocate
+> > another bo because of lack of gpu address space then it's very easy to
+> > handle that:
+> > 
+> > 1. Make a rule that "out of gpu address space" gives you a special errno
+> > code like ENOSPC
+> > 
+> > 2. If userspace gets that it walks the list of all buffers it marked as
+> > purgeable and nukes them (whether they have been evicted or not). Then it
+> > retries the bo allocation.
+> > 
+> > Alternatively you can do step 2 also directly from the bo alloc ioctl in
+> > step 1. Either way you clean up va space, and actually a lot more (you
+> > potentially nuke all buffers marked as purgeable, not just the ones that
+> > have been purged already) and only when va cleanup is actually needed
+> > 
+> > Trying to solve this problem at eviction time otoh means:
+> > - we have this difference between eviction and purging
+> > - it's still not complete, you still need to glue step 2 above into your
+> >   driver somehow, and once step 2 above is glued in doing additional
+> >   cleanup in the purge function is just duplicated logic
+> > 
+> > So at least in my opinion this isn't the justification we need. And we
+> > should definitely not just add that complication "in case, for the
+> > future", if we don't have a real need right now. Adding it later on is
+> > easy, removing it later on because it just gets in the way and confuses is
+> > much harder.
+> 
+> The IOVA space is only one example.
+> 
+> In case of the VirtIO driver, we may have two memory allocation for a
+> BO. One is the shmem allcation in guest and the other is in host's vram.
+> If we will only release the guest's memory on purge, then the vram will
+> remain allocated until BO is destroyed, which unnecessarily sub-optimal.
+
+Hm but why don't you just nuke the memory on the host side too when you
+evict? Allowing the guest memory to be swapped out while keeping the host
+memory allocation alive also doesn't make a lot of sense for me. Both can
+be recreated (I guess at least?) on swap-in.
+-Daniel
 -- 
-2.27.0
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

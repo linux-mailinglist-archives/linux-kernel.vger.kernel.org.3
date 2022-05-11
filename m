@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B4A25228FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 03:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CABA522900
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 03:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232126AbiEKBbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 21:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42196 "EHLO
+        id S240611AbiEKBbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 21:31:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240480AbiEKBb0 (ORCPT
+        with ESMTP id S240521AbiEKBbb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 21:31:26 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9836845AD2
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 18:31:24 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id w17-20020a17090a529100b001db302efed6so687800pjh.4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 18:31:24 -0700 (PDT)
+        Tue, 10 May 2022 21:31:31 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0E3434AF
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 18:31:29 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id iq10so850560pjb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 18:31:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wQmwATZBlwPgfe8/IGykSqfJ1WJmNhS7AYJLIfu/Nbs=;
-        b=jdvdOCo2qk6heSQztmRcF899GenupEv0QQQh1lywcGwx6Kpf9sxQcL2o94zB9sDFRG
-         Jth1x3ZXgTgq27nABt9ux9Q5QOzYmdZi8r6Ttw6qfkL8CmbXuG2bSSeoBMBIZtSszFgq
-         ftr4Qoc7Ed9l8CpFJ00KYOZ+j8e5+w+M+gDFE=
+        bh=nyT+TEM6YfXjFwh6RP3Mgulu/QW39cAOrSoKYlACyaM=;
+        b=meI7q9780fzkqj6a0HhsAQmhu3va+coXBZlxQAwgjwFiDPhNeV2GiDAIgDzjWT5Dni
+         rsOyD5RkxOqImMxvbKnwTxybY7H6JTfuS2lsAMjuWh1HUHkXQ4PRvCUSB5wj8KZgbyXQ
+         gpQmQW533keZw+eCzRQfdd5meZ/0WUPyR7ifA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wQmwATZBlwPgfe8/IGykSqfJ1WJmNhS7AYJLIfu/Nbs=;
-        b=Wv9TI5xA+qzhV/Oa220fjsSuzQ0Fj2EuakK2Z0jVlMJNvfnylAQUzN/crKtriGjOyI
-         E3oUDGdEOTw8/Fw7zsH60MUoEPsyxZo0g6NkZ/kK0+vhBj2d02KqZuIsEVNOQWNVHscu
-         M47K+428JfJJ5kjql6i+T4hrggAepNsb/MN+wBkWidJU69QhoarahKgGt4DLRWWMf/RI
-         oi4iCNG1ZX3zne29sGfREn0nkHX1TKBUBlkPEqUqh4FCgh5z39CEp+Ww5eV/SY8gl6gH
-         9W0zRsiCfei1h4IuFERj01bf3Rhzj3axYZzKml4wuUYneAS1VB55069NozMpF7FXubMN
-         PJCQ==
-X-Gm-Message-State: AOAM530Ea+D7eToiFI8eZts5W0epyqdkMfmYJzEyI9Eq6dWATuJhoKk+
-        Wx1dIiNdHFfAA4aHMTUWDj3ZGw==
-X-Google-Smtp-Source: ABdhPJwStc3JS5ugin6DYuNIOemCa2wJPbZeDEGecbfHJpVUVx+kYkZovA4pUxJSJoOwQ6w/IkIZqA==
-X-Received: by 2002:a17:902:7fc9:b0:15f:2afd:82f3 with SMTP id t9-20020a1709027fc900b0015f2afd82f3mr3976685plb.91.1652232684169;
-        Tue, 10 May 2022 18:31:24 -0700 (PDT)
+        bh=nyT+TEM6YfXjFwh6RP3Mgulu/QW39cAOrSoKYlACyaM=;
+        b=Io5KKB2e0zU4hXnI6ECZTktzYs9A3v4nm9FNuwGM6xlqRrVEounZJQxHJYuvH63/kr
+         mfj7/nlCH9zU8Y+lUhRfE3gED1oznTz/335s1npYjjGPsNPfEW66uwWGz+kEoNAPfukI
+         v+YnNTcqVQlA0qjs1R09Y1hL9CZoAWB/weCcaKtV4sMBW29C8azDBPeMIFAKWfnVDN9r
+         EqbwoDna4Bz3/1vww2T79o9EWR4hVLizbUGuUfIrET1A6FON33PzBOFsOtQIRxzPR5Hi
+         Pd0ogM6Ip7lSJtqcvthhzoPpAajht92mdmsqBX502G+nMhir5XZzm6gJL/3hFtdrEt6i
+         SJrQ==
+X-Gm-Message-State: AOAM531pwNaoltO5Cp3YOPVyCIarSXXyp5GnUVoVrKO75X38mE8GiGd4
+        rUrzq6Kf2rQkVXCgUsQt4by185K/mf289w==
+X-Google-Smtp-Source: ABdhPJyVmsGY+I+4n3pCMGU/dXV5in4S+vZlRPTbhVbpJV4FxM/OsoM7PfiNLPYpVZRQ812YNj6kFA==
+X-Received: by 2002:a17:903:40cf:b0:15e:9bd0:2cab with SMTP id t15-20020a17090340cf00b0015e9bd02cabmr22614313pld.170.1652232688669;
+        Tue, 10 May 2022 18:31:28 -0700 (PDT)
 Received: from dlunevwfh.roam.corp.google.com (n122-107-196-14.sbr2.nsw.optusnet.com.au. [122.107.196.14])
-        by smtp.gmail.com with ESMTPSA id a4-20020a17090aa50400b001cd4989feecsm2494749pjq.56.2022.05.10.18.31.21
+        by smtp.gmail.com with ESMTPSA id a4-20020a17090aa50400b001cd4989feecsm2494749pjq.56.2022.05.10.18.31.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 18:31:23 -0700 (PDT)
+        Tue, 10 May 2022 18:31:28 -0700 (PDT)
 From:   Daniil Lunev <dlunev@chromium.org>
 To:     linux-fsdevel@vger.kernel.org
 Cc:     fuse-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
         Daniil Lunev <dlunev@chromium.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: [PATCH 1/2] fs/super: Add a flag to mark super block defunc
-Date:   Wed, 11 May 2022 11:30:56 +1000
-Message-Id: <20220511113050.1.Ifc059f4eca1cce3e2cc79818467c94f65e3d8dde@changeid>
+        Miklos Szeredi <miklos@szeredi.hu>
+Subject: [PATCH 2/2] FUSE: Mark super block defunc on force unmount
+Date:   Wed, 11 May 2022 11:30:57 +1000
+Message-Id: <20220511113050.2.I103b609e957667ca427c689fd83990e6ab32f3dd@changeid>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20220511013057.245827-1-dlunev@chromium.org>
 References: <20220511013057.245827-1-dlunev@chromium.org>
@@ -68,50 +68,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-File system can mark a block "defunc" in order to prevent matching
-against it in a new mount.
+Force unmount of FUSE severes the connection with the user space, even
+if there are still open files. Subsequent remount tries to re-use the
+superblock held by the open files, which is meaningless in the FUSE case
+after disconnect - reused super block doesn't have userspace counterpart
+attached to it and is incapable of doing any IO.
 
 Signed-off-by: Daniil Lunev <dlunev@chromium.org>
 ---
 
- fs/super.c         | 4 ++--
- include/linux/fs.h | 1 +
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ fs/fuse/inode.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/fs/super.c b/fs/super.c
-index f1d4a193602d6..fc5b3efe0cd01 100644
---- a/fs/super.c
-+++ b/fs/super.c
-@@ -1216,7 +1216,7 @@ static int set_bdev_super_fc(struct super_block *s, struct fs_context *fc)
- 
- static int test_bdev_super_fc(struct super_block *s, struct fs_context *fc)
+diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
+index 8c0665c5dff88..e2ad3c9b2d5c5 100644
+--- a/fs/fuse/inode.c
++++ b/fs/fuse/inode.c
+@@ -476,8 +476,15 @@ static void fuse_umount_begin(struct super_block *sb)
  {
--	return s->s_bdev == fc->sget_key;
-+	return !s->s_defunc && s->s_bdev == fc->sget_key;
+ 	struct fuse_conn *fc = get_fuse_conn_super(sb);
+ 
+-	if (!fc->no_force_umount)
+-		fuse_abort_conn(fc);
++	if (fc->no_force_umount)
++		return;
++
++	sb->s_defunc = true;
++	if (sb->s_bdi != &noop_backing_dev_info) {
++		bdi_put(sb->s_bdi);
++		sb->s_bdi = &noop_backing_dev_info;
++	}
++	fuse_abort_conn(fc);
  }
  
- /**
-@@ -1307,7 +1307,7 @@ EXPORT_SYMBOL(get_tree_bdev);
- 
- static int test_bdev_super(struct super_block *s, void *data)
- {
--	return (void *)s->s_bdev == data;
-+	return !s->s_defunc && (void *)s->s_bdev == data;
- }
- 
- struct dentry *mount_bdev(struct file_system_type *fs_type,
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index bbde95387a23a..76feb3fe9bb9e 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -1448,6 +1448,7 @@ struct super_block {
- 	struct rw_semaphore	s_umount;
- 	int			s_count;
- 	atomic_t		s_active;
-+	bool			s_defunc;
- #ifdef CONFIG_SECURITY
- 	void                    *s_security;
- #endif
+ static void fuse_send_destroy(struct fuse_mount *fm)
 -- 
 2.31.0
 

@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4A1F5233B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F1E5233B4
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:08:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237841AbiEKNFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:05:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54050 "EHLO
+        id S238419AbiEKNIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:08:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234571AbiEKNFu (ORCPT
+        with ESMTP id S234773AbiEKNId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:05:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC7F559B
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:05:45 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nom29-0006Tc-Su; Wed, 11 May 2022 15:05:41 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id A93A57BCDD;
-        Wed, 11 May 2022 13:05:40 +0000 (UTC)
-Date:   Wed, 11 May 2022 15:05:40 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Devid Antonio Filoni <devid.filoni@egluetechnologies.com>,
-        kernel@pengutronix.de, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Jander <david@protonic.nl>
-Subject: Re: [PATCH 1/1] can: skb: add and set local_origin flag
-Message-ID: <20220511130540.yowjdvzftq2jutiw@pengutronix.de>
-References: <20220511121913.2696181-1-o.rempel@pengutronix.de>
- <b631b022-72d5-9160-fd13-f33c80dbbe59@hartkopp.net>
+        Wed, 11 May 2022 09:08:33 -0400
+Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAD8694BF
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:08:25 -0700 (PDT)
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 4KywFg4Vvfz1s767;
+        Wed, 11 May 2022 15:08:23 +0200 (CEST)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 4KywFg3pqTz1qqkC;
+        Wed, 11 May 2022 15:08:23 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id kYXiVRSumpor; Wed, 11 May 2022 15:08:22 +0200 (CEST)
+X-Auth-Info: YEBr5TXT5M0JFjoy9bg7asKyhj92V+KtsCcBJL9EYLO6BmBfGrQV3CaUgj1M9MBe
+Received: from igel.home (ppp-46-244-167-40.dynamic.mnet-online.de [46.244.167.40])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Wed, 11 May 2022 15:08:22 +0200 (CEST)
+Received: by igel.home (Postfix, from userid 1000)
+        id 5485A2C39F6; Wed, 11 May 2022 15:08:22 +0200 (CEST)
+From:   Andreas Schwab <schwab@linux-m68k.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Greg Ungerer <gerg@uclinux.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] m68k: math-emu: Fix dependencies of math emulation support
+References: <e0a9cf982a80f14efbf01cdc38e31128a9f41999.1652262437.git.geert@linux-m68k.org>
+        <875ymcwek5.fsf@igel.home>
+        <CAMuHMdXrd07goR2WffENJnLMAWZxtxoQzaL_7+SG-ZSvaYK1HQ@mail.gmail.com>
+X-Yow:  Yow!  Now we can become alcoholics!
+Date:   Wed, 11 May 2022 15:08:22 +0200
+In-Reply-To: <CAMuHMdXrd07goR2WffENJnLMAWZxtxoQzaL_7+SG-ZSvaYK1HQ@mail.gmail.com>
+        (Geert Uytterhoeven's message of "Wed, 11 May 2022 14:02:01 +0200")
+Message-ID: <87lev8ushl.fsf@igel.home>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="byqmtarls5bvmvxs"
-Content-Disposition: inline
-In-Reply-To: <b631b022-72d5-9160-fd13-f33c80dbbe59@hartkopp.net>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,47 +61,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mai 11 2022, Geert Uytterhoeven wrote:
 
---byqmtarls5bvmvxs
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> The FPU emu code also relies on the CPU trapping on the proper
+> instructions, which I believe you need a 68020+ for, too?
 
-On 11.05.2022 14:38:32, Oliver Hartkopp wrote:
-> I'm a bit unsure why we should not stick with the simple skb->sk
-> handling?
+While pre-020 doesn't have the coprocessor interface (which is not
+fpu-specific, though), they still use the same exception vector.
 
-Another use where skb->sk breaks is sending CAN frames with SO_TXTIME
-with the sched_etf.
-
-I have a patched version of cangen that uses SO_TXTIME. It attaches a
-time to transmit to a CAN frame when sending it. If you send 10 frames,
-each 100ms after the other and then exit the program, the first CAN
-frames show up as TX'ed while the others (after closing the socket) show
-up as RX'ed CAN frames in candump.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---byqmtarls5bvmvxs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJ7tJoACgkQrX5LkNig
-010WOQgAn1qTEhHc8pkIFWfBgw5W+t+qG2osvmttQ6uBBEgBl3lTnJJL5ZhzvT68
-csQmMf5ZsbCTzmFZSy//7Nrguxhq8n2ZWL8+wh3o6OorNjCknWfHh1VndzHf6CwH
-ZOjVQk2kALuxQE8RXqpLUTWs9eVLoOkyB8qCffVtJyUjCt4p/i40/cQJhQ9OCHR+
-H70dhRddRvqYzUZ46bgRP9nh7beUcytGsvnVeV3TqpylYn62HTr9dyVm2h7eIC6j
-beS5BzSWqYK50SL8xJgnYhNN/dyhYlbeBMUh39Ex5sRe8TYk5atYPGbuP7SXhyJB
-GQk1IuRxFgqnTKIK4zPmVNdsZcdLPQ==
-=+1hK
------END PGP SIGNATURE-----
-
---byqmtarls5bvmvxs--
+-- 
+Andreas Schwab, schwab@linux-m68k.org
+GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+"And now for something completely different."

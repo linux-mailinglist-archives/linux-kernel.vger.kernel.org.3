@@ -2,141 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7368B5236CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F10D5236D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245588AbiEKPMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
+        id S243958AbiEKPOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:14:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245534AbiEKPMl (ORCPT
+        with ESMTP id S236270AbiEKPOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:12:41 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC819D06D;
-        Wed, 11 May 2022 08:12:40 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id q8so3016109oif.13;
-        Wed, 11 May 2022 08:12:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=2JX+KNvsq9d1yikcsx1hZpdGq5xppixGCVbpyE6im6I=;
-        b=kCGrRCJGNI+WeRLn77rZwlRWumPJr2+bP75SMWO0fNDZL16qg349h5SG2al9dBdry4
-         WRaLRx6hxSI0pWXjVJcCRMG6s2IEaRilbQN1UXR3ni0cCT3x7r+VMUMFyUVyupXcG7XM
-         iKLUUZlmtLi0Fbn0Mr2IwCCFXhbDKLslZ/L7h78h2ybHEPp0ZHEK4Xc078GCRT40/Ktv
-         p5eU3sIDwCSNB84IWL57LMwOSL9+FmVptp/YmRNNcrnqFQ9apiqCk1CmXxX/dcK65YiA
-         z/tbjUHjz4CmTsLUjrk9N3K6IeAScYM6Kx6vfJuyvPKoV3prghhtfl+b+PQFNL417vkP
-         h7KA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=2JX+KNvsq9d1yikcsx1hZpdGq5xppixGCVbpyE6im6I=;
-        b=NXx2NWtm8l34RE8+yy4jLZlcdUJKmEpbEZ0CqRep51ShZce+inxeKLCxDBpJFli4xE
-         F09XYGaw9qWJ4/ZQjPm/+BGqTR0j30CWO22IZPPm83knp1K0qilLw4xIq6fNyOFW7weN
-         ArWglLcQy2lw/8LEpVyJGFVIwpmGeKpzD6KCv4pdzzTzlE+D1UZA9khUPJ8gtRn/nZ/G
-         E7Sh8G+Of2hzfWxH8rVFPedhFMZQJmxnboQMSyt+cz+Z3hh1aTjzP2N5udFbhEMeS8EE
-         8rFS0Qj84v7A/+wJF6gR391Dv9DBQqa5Hq/AX8HbS8eYg+uaqC47JTaTyH6Lx/x5BHjA
-         gmUA==
-X-Gm-Message-State: AOAM531s1vxfODflYtP33h5cdIeCHSWg6yEELmqsXP7WBeF2gGQ7wZI5
-        i3PERDE9IRVTFZUlyfn0zGk=
-X-Google-Smtp-Source: ABdhPJz+eElEIyCPFZ77pMdbL315KuHzBSvEQ+BtjifhttYf8bNjDK2dbzTQRO81BzhIC6h3AfWGaA==
-X-Received: by 2002:a05:6808:1250:b0:2da:39df:1f92 with SMTP id o16-20020a056808125000b002da39df1f92mr2728045oiv.27.1652281959974;
-        Wed, 11 May 2022 08:12:39 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a17-20020a056870e0d100b000e932746d33sm710336oab.28.2022.05.11.08.12.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 08:12:39 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 3/3] hwmon: Make chip parameter for with_info API mandatory
-Date:   Wed, 11 May 2022 08:12:30 -0700
-Message-Id: <20220511151230.2983227-4-linux@roeck-us.net>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220511151230.2983227-1-linux@roeck-us.net>
-References: <20220511151230.2983227-1-linux@roeck-us.net>
+        Wed, 11 May 2022 11:14:06 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C69C10115D
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:14:06 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id 233EA1F4381F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652282044;
+        bh=naLUmXHrJqVcoG+0h6Ngqc/M0jcxE4edxD1itFrgoJs=;
+        h=Date:Subject:To:References:From:Cc:In-Reply-To:From;
+        b=Tp0kE5HPgJhUZsGrsmP2mwWWjrg/hCF6gkoFpchoRBzOxxHGyT1pJ5YR1ASGKl/HF
+         3hzJSE98lNTcB1vZclbn8haY3XVw/WTEKfqJkERK4UENivrZC8ahbeBeCsTp8ZSo9D
+         AtQQJVpeRNTb2WoTJjIXq+gAZZGiQJuHEhAXE98MM6eygUfdmpsvXC1v+YM8aNT6PD
+         QPRa0GNk3s6/a+VYnIBLP2EjMLkZtwmnzlMHAXi/p2xBIFSSi2VJLK0R4FLbX3HgWc
+         eyAagnmemnWm4nyJ/qUSi8KqZTSuVf28Jjlmy5he2FD3Cc/rwPsiBh6CwCHqETK+dc
+         32XaUThTMZBEA==
+Message-ID: <3a362c32-870c-1d73-bba6-bbdcd62dc326@collabora.com>
+Date:   Wed, 11 May 2022 18:14:00 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v4 10/15] drm/shmem-helper: Take reservation lock instead
+ of drm_gem_shmem locks
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+References: <248083d2-b8f2-a4d7-099d-70a7e7859c11@suse.de>
+ <d9e7bec1-fffb-e0c4-8659-ef3ce2c31280@collabora.com>
+ <YmlYHNlcmNMfOeyy@phenom.ffwll.local>
+ <8f932ab0-bb72-8fea-4078-dc59e9164bd4@collabora.com>
+ <YnI3lE0TxLfZaQjE@phenom.ffwll.local>
+ <01506516-ab2f-cb6e-7507-f2a3295efb59@collabora.com>
+ <YnOHAh9I1ds4+1J+@phenom.ffwll.local>
+ <83e68918-68de-c0c6-6f9b-e94d34b19383@collabora.com>
+ <YnkaUk0mZNuPsZ5r@phenom.ffwll.local>
+ <4d08b382-0076-1ea2-b565-893d50b453cb@collabora.com>
+ <YnuziJDmXVR09UzP@phenom.ffwll.local>
+ <56787b70-fb64-64da-6006-d3aa3ed59d12@gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Daniel Stone <daniel@fooishbar.org>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+In-Reply-To: <56787b70-fb64-64da-6006-d3aa3ed59d12@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Various attempts were made recently to "convert" the old
-hwmon_device_register() API to devm_hwmon_device_register_with_info()
-by just changing the function name without actually converting the
-driver. Prevent this from happening by making the 'chip' parameter of
-devm_hwmon_device_register_with_info() mandatory.
+On 5/11/22 17:24, Christian König wrote:
+> Am 11.05.22 um 15:00 schrieb Daniel Vetter:
+>> On Tue, May 10, 2022 at 04:39:53PM +0300, Dmitry Osipenko wrote:
+>>> [SNIP]
+>>> Since vmapping implies implicit pinning, we can't use a separate lock in
+>>> drm_gem_shmem_vmap() because we need to protect the
+>>> drm_gem_shmem_get_pages(), which is invoked by drm_gem_shmem_vmap() to
+>>> pin the pages and requires the dma_resv_lock to be locked.
+>>>
+>>> Hence the problem is:
+>>>
+>>> 1. If dma-buf importer holds the dma_resv_lock and invokes
+>>> dma_buf_vmap() -> drm_gem_shmem_vmap(), then drm_gem_shmem_vmap() shall
+>>> not take the dma_resv_lock.
+>>>
+>>> 2. Since dma-buf locking convention isn't specified, we can't assume
+>>> that dma-buf importer holds the dma_resv_lock around dma_buf_vmap().
+>>>
+>>> The possible solutions are:
+>>>
+>>> 1. Specify the dma_resv_lock convention for dma-bufs and make all
+>>> drivers to follow it.
+>>>
+>>> 2. Make only DRM drivers to hold dma_resv_lock around dma_buf_vmap().
+>>> Other non-DRM drivers will get the lockdep warning.
+>>>
+>>> 3. Make drm_gem_shmem_vmap() to take the dma_resv_lock and get deadlock
+>>> if dma-buf importer holds the lock.
+>>>
+>>> ...
+>> Yeah this is all very annoying.
+> 
+> Ah, yes that topic again :)
+> 
+> I think we could relatively easily fix that by just defining and
+> enforcing that the dma_resv_lock must have be taken by the caller when
+> dma_buf_vmap() is called.
+> 
+> A two step approach should work:
+> 1. Move the call to dma_resv_lock() into the dma_buf_vmap() function and
+> remove all lock taking from the vmap callback implementations.
+> 2. Move the call to dma_resv_lock() into the callers of dma_buf_vmap()
+> and enforce that the function is called with the lock held.
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- Documentation/hwmon/hwmon-kernel-api.rst |  2 +-
- drivers/hwmon/hwmon.c                    | 16 +++++++---------
- 2 files changed, 8 insertions(+), 10 deletions(-)
+I've doubts about the need to move out the dma_resv_lock() into the
+callers of dma_buf_vmap()..
 
-diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
-index e2975d5caf34..f3276b3a381a 100644
---- a/Documentation/hwmon/hwmon-kernel-api.rst
-+++ b/Documentation/hwmon/hwmon-kernel-api.rst
-@@ -76,7 +76,7 @@ hwmon_device_register_with_info is the most comprehensive and preferred means
- to register a hardware monitoring device. It creates the standard sysfs
- attributes in the hardware monitoring core, letting the driver focus on reading
- from and writing to the chip instead of having to bother with sysfs attributes.
--The parent device parameter cannot be NULL with non-NULL chip info. Its
-+The parent device parameter as well as the chip parameter must not be NULL. Its
- parameters are described in more detail below.
- 
- devm_hwmon_device_register_with_info is similar to
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 13053a4edc9e..22de7a9e7ba7 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -886,11 +886,12 @@ EXPORT_SYMBOL_GPL(hwmon_device_register_with_groups);
- 
- /**
-  * hwmon_device_register_with_info - register w/ hwmon
-- * @dev: the parent device
-- * @name: hwmon name attribute
-- * @drvdata: driver data to attach to created device
-- * @chip: pointer to hwmon chip information
-+ * @dev: the parent device (mandatory)
-+ * @name: hwmon name attribute (mandatory)
-+ * @drvdata: driver data to attach to created device (optional)
-+ * @chip: pointer to hwmon chip information (mandatory)
-  * @extra_groups: pointer to list of additional non-standard attribute groups
-+ *	(optional)
-  *
-  * hwmon_device_unregister() must be called when the device is no
-  * longer needed.
-@@ -903,13 +904,10 @@ hwmon_device_register_with_info(struct device *dev, const char *name,
- 				const struct hwmon_chip_info *chip,
- 				const struct attribute_group **extra_groups)
- {
--	if (!name)
--		return ERR_PTR(-EINVAL);
--
--	if (chip && (!chip->ops || !chip->ops->is_visible || !chip->info))
-+	if (!dev || !name || !chip)
- 		return ERR_PTR(-EINVAL);
- 
--	if (chip && !dev)
-+	if (!chip->ops || !chip->ops->is_visible || !chip->info)
- 		return ERR_PTR(-EINVAL);
- 
- 	return __hwmon_device_register(dev, name, drvdata, chip, extra_groups);
+I looked through all the dma_buf_vmap() users and neither of them
+interacts with dma_resv_lock() at all, i.e. nobody takes the lock
+in/outside of dma_buf_vmap(). Hence it's easy and more practical to make
+dma_buf_mmap/vmap() to take the dma_resv_lock by themselves.
+
+It's unclear to me which driver may ever want to do the mapping under
+the dma_resv_lock. But if we will ever have such a driver that will need
+to map imported buffer under dma_resv_lock, then we could always add the
+dma_buf_vmap_locked() variant of the function. In this case the locking
+rule will sound like this:
+
+"All dma-buf importers are responsible for holding the dma-reservation
+lock around the dmabuf->ops->mmap/vmap() calls."
+
+> It shouldn't be that hard to clean up. The last time I looked into it my
+> main problem was that we didn't had any easy unit test for it.
+
+Do we have any tests for dma-bufs at all? It's unclear to me what you
+are going to test in regards to the reservation locks, could you please
+clarify?
+
 -- 
-2.35.1
-
+Best regards,
+Dmitry

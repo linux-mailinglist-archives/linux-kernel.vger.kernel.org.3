@@ -2,92 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1DEE524083
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 01:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40A9652408B
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 01:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348986AbiEKXGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 19:06:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
+        id S1349008AbiEKXH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 19:07:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348992AbiEKXGS (ORCPT
+        with ESMTP id S1348999AbiEKXHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 19:06:18 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F7029C84
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:06:17 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 31so3025533pgp.8
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:06:17 -0700 (PDT)
+        Wed, 11 May 2022 19:07:54 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7280162BE1
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:07:53 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id n8so3280274plh.1
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:07:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=wp2EX9vjKBERiNLVm2YqE4Qazcs+sBTSt8gG1hLKc48=;
-        b=0lEWBFfhsdG9IId5GVveiAnldtVBmoSpEs2i4HsAWqt/iB4StaKi6DfEsruofQfLWx
-         uw7e1Ed0i836DvAtDxkr6W+u1IWP9ZhseUwzVXuybeGQYSFDJNv2tgH3y0P8/67FWFp2
-         AE9kjICIrnDNadxbQ0Lp/eE9JYnq6jncO37WK/GNovN/vfTq1esy1hVTDR61tXpJDylM
-         4AAnmAZIag4R7SrUZFtJP+zMFinnk9CGJP2y2wmA9GqSJYrHkRbGYXHVppR7NOAQW2Ix
-         NtCtiqwIlMg6v6IOa74j1UPcctBQ+/gtJWUXar86UvPyQd5X+qoJz683pUA+eYOEbJcW
-         P90w==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+h5BGQI49DQhmjTX/s14iEXNSZvSAwC6EupheV291XM=;
+        b=Kf6FrMiEHjfjgfJDZBcMBtfwhvrQBGI8YwXYvszIiRGeAevlX/VNGJ7UBEIpS5gcD6
+         wIOo7hmnT9KxBUpZCKlhpH/DypcqSV1BTLiOoGqqu+jv06Lni3KphsYn87K1GMHGpgOg
+         Wyff30l9oQ6lcC4u6AiQ/D1Wr+0xajD28SwUw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=wp2EX9vjKBERiNLVm2YqE4Qazcs+sBTSt8gG1hLKc48=;
-        b=QIUuvOt7LnoahJd5kwT6kRqPbjNJ3nd6Axw4UB8S1urr0BaStipXcbeQKJqtA99L5L
-         0rAkaY60+grEe/PSMXTvBrWsijd79qxOLLwIUhlfgYGDveAvD/NmWUGbEIp3AOOA4yX9
-         FOVqeQtUy4MxyIonRl24QfasIovdphgdVCCr5CKqGg6FkjOnPB8B0h4dI12Piu2G5XtT
-         a3G8cX3qARWghoJhcc0GPKjUap8c4yw7y4LaCR609hq2g3l+Gu4sJnqDAJCLoZkyDSKu
-         crcQDFL15cYRAIoAnOHPK7VptiYScNiZiwE5KO9Dfr4PjFAkR9I+Z5UtRlQvvEEgPeAy
-         3nuQ==
-X-Gm-Message-State: AOAM533nIV7kk4Q/wtMyAk2uKnmBaaQpdvaVY+OwIoVDBTab6AT9pC8j
-        TDdPQ8NjjNA9MrPnzzwY+dr564bHRth57Q==
-X-Google-Smtp-Source: ABdhPJwZ2VgQYwg6fjILGazTAqXGaVFmsdZbwOX3wddLlrT+rWFgzZMa1pmGwGV6SQeR8dw81bnIhQ==
-X-Received: by 2002:a63:515:0:b0:3ab:84c3:3f37 with SMTP id 21-20020a630515000000b003ab84c33f37mr23152360pgf.110.1652310376457;
-        Wed, 11 May 2022 16:06:16 -0700 (PDT)
-Received: from [127.0.1.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id q10-20020a170902f34a00b0015e8d4eb1d8sm2387443ple.34.2022.05.11.16.06.15
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+h5BGQI49DQhmjTX/s14iEXNSZvSAwC6EupheV291XM=;
+        b=cdjPxGjqwPZL2eQfKX6A6Xbi5RiENQi67lt6zEIdmH+adaFb99C28WVSdm305jwnZ7
+         kPua62fWWRjVMjy9O56U45WGj3H97uD1KNxaPvLVE/uEdOR0UXhc2wlMiZoe59s4ttT1
+         WxUuySlI04TS7ykdZwaAGrXRqtIkqj37BAniZcMi1r7rphrTGIaBqeOgNWjK8LL8PPFQ
+         6JGNgLBEOOzsL/md2TyP7alFYKQiamJ7eeTUj3lZEIG4uWYjA2xLAs/ZiT3Gm+QlJEzY
+         iWZYlMsgHzHx6kttsNQB1D8lNEP6z/FXxkBmGny0zfRIquVQatb96hHLjMNVztqAKNVG
+         2vFA==
+X-Gm-Message-State: AOAM532TxPjeoSQ3269QX0237md3LtM+bWY30GRv//eBuSJTJLhrVF6K
+        DsSwzGFyxp7jTwHL8OjJ8KwITA==
+X-Google-Smtp-Source: ABdhPJxB2qvIIMgI6yy/IZ+UdmjxpvtVH1PdpeNF88kRVGM0lXOSoqgHygFnKX7NE9n58Hd5f8EwSw==
+X-Received: by 2002:a17:90a:b10c:b0:1d9:49de:81c5 with SMTP id z12-20020a17090ab10c00b001d949de81c5mr7602112pjq.120.1652310472972;
+        Wed, 11 May 2022 16:07:52 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:504e:720d:de58:4f66])
+        by smtp.gmail.com with ESMTPSA id u8-20020a170902714800b0015e8d4eb276sm2398985plm.192.2022.05.11.16.07.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 16:06:15 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     tj@kernel.org, zhouchengming@bytedance.com
-Cc:     duanxiongchun@bytedance.com, songmuchun@bytedance.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220510034757.21761-1-zhouchengming@bytedance.com>
-References: <20220510034757.21761-1-zhouchengming@bytedance.com>
-Subject: Re: [PATCH] blk-iocost: combine local_stat and desc_stat to stat
-Message-Id: <165231037549.15699.13051976092288865949.b4-ty@kernel.dk>
-Date:   Wed, 11 May 2022 17:06:15 -0600
+        Wed, 11 May 2022 16:07:52 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Matt Turner <msturner@google.com>, Sean Paul <sean@poorly.run>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Vinod Koul <vkoul@kernel.org>, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] Revert "FROMGIT: drm/msm/dsi: move DSI host powerup to modeset time"
+Date:   Wed, 11 May 2022 16:07:41 -0700
+Message-Id: <20220511160720.1.Ia196e35ad985059e77b038a41662faae9e26f411@changeid>
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 May 2022 11:47:57 +0800, Chengming Zhou wrote:
-> When we flush usage, wait, indebt stat in iocg_flush_stat(), we use
-> local_stat and desc_stat, which has no point since the leaf iocg
-> only has local_stat and the inner iocg only has desc_stat. Also
-> we don't need to flush percpu abs_vusage for these inner iocgs.
-> 
-> This patch combine local_stat and desc_stat to stat, only flush
-> percpu abs_vusage for active leaf iocgs, then build inner walk
-> list to propagate.
-> 
-> [...]
+This reverts commit c7e4a2a72e696aa6aed2c8b651279f491bb096fe.
 
-Applied, thanks!
+The patch causes sc7180 Chromebooks that use the parade-ps8640 bridge
+chip to fail to turn the display back on after it turns off.
 
-[1/1] blk-iocost: combine local_stat and desc_stat to stat
-      commit: 2a371f7d5fa575010b915e325c5d20b9ad0d5d5a
+Let's revert to get these devices back to a working state. It seems
+like the DSI powerup problem is somewhat common and probably we should
+land something more general like Dave Stevenson's series [1] that
+would give more flexibility.
 
-Best regards,
+[1] https://lore.kernel.org/r/cover.1646406653.git.dave.stevenson@raspberrypi.com
+
+Fixes: c7e4a2a72e69 ("FROMGIT: drm/msm/dsi: move DSI host powerup to modeset time")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+
+ drivers/gpu/drm/msm/dsi/dsi_manager.c | 43 ++++++++-------------------
+ 1 file changed, 12 insertions(+), 31 deletions(-)
+
+diff --git a/drivers/gpu/drm/msm/dsi/dsi_manager.c b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+index 50b987658b1f..8d51711a3417 100644
+--- a/drivers/gpu/drm/msm/dsi/dsi_manager.c
++++ b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+@@ -315,12 +315,13 @@ dsi_mgr_connector_best_encoder(struct drm_connector *connector)
+ 	return msm_dsi_get_encoder(msm_dsi);
+ }
+ 
+-static void dsi_mgr_bridge_power_on(struct drm_bridge *bridge)
++static void dsi_mgr_bridge_pre_enable(struct drm_bridge *bridge)
+ {
+ 	int id = dsi_mgr_bridge_get_id(bridge);
+ 	struct msm_dsi *msm_dsi = dsi_mgr_get_dsi(id);
+ 	struct msm_dsi *msm_dsi1 = dsi_mgr_get_dsi(DSI_1);
+ 	struct mipi_dsi_host *host = msm_dsi->host;
++	struct drm_panel *panel = msm_dsi->panel;
+ 	struct msm_dsi_phy_shared_timings phy_shared_timings[DSI_MAX];
+ 	bool is_bonded_dsi = IS_BONDED_DSI();
+ 	int ret;
+@@ -361,34 +362,6 @@ static void dsi_mgr_bridge_power_on(struct drm_bridge *bridge)
+ 	if (is_bonded_dsi && msm_dsi1)
+ 		msm_dsi_host_enable_irq(msm_dsi1->host);
+ 
+-	return;
+-
+-host1_on_fail:
+-	msm_dsi_host_power_off(host);
+-host_on_fail:
+-	dsi_mgr_phy_disable(id);
+-phy_en_fail:
+-	return;
+-}
+-
+-static void dsi_mgr_bridge_pre_enable(struct drm_bridge *bridge)
+-{
+-	int id = dsi_mgr_bridge_get_id(bridge);
+-	struct msm_dsi *msm_dsi = dsi_mgr_get_dsi(id);
+-	struct msm_dsi *msm_dsi1 = dsi_mgr_get_dsi(DSI_1);
+-	struct mipi_dsi_host *host = msm_dsi->host;
+-	struct drm_panel *panel = msm_dsi->panel;
+-	bool is_bonded_dsi = IS_BONDED_DSI();
+-	int ret;
+-
+-	DBG("id=%d", id);
+-	if (!msm_dsi_device_connected(msm_dsi))
+-		return;
+-
+-	/* Do nothing with the host if it is slave-DSI in case of bonded DSI */
+-	if (is_bonded_dsi && !IS_MASTER_DSI_LINK(id))
+-		return;
+-
+ 	/* Always call panel functions once, because even for dual panels,
+ 	 * there is only one drm_panel instance.
+ 	 */
+@@ -423,7 +396,17 @@ static void dsi_mgr_bridge_pre_enable(struct drm_bridge *bridge)
+ 	if (panel)
+ 		drm_panel_unprepare(panel);
+ panel_prep_fail:
++	msm_dsi_host_disable_irq(host);
++	if (is_bonded_dsi && msm_dsi1)
++		msm_dsi_host_disable_irq(msm_dsi1->host);
+ 
++	if (is_bonded_dsi && msm_dsi1)
++		msm_dsi_host_power_off(msm_dsi1->host);
++host1_on_fail:
++	msm_dsi_host_power_off(host);
++host_on_fail:
++	dsi_mgr_phy_disable(id);
++phy_en_fail:
+ 	return;
+ }
+ 
+@@ -569,8 +552,6 @@ static void dsi_mgr_bridge_mode_set(struct drm_bridge *bridge,
+ 	msm_dsi_host_set_display_mode(host, adjusted_mode);
+ 	if (is_bonded_dsi && other_dsi)
+ 		msm_dsi_host_set_display_mode(other_dsi->host, adjusted_mode);
+-
+-	dsi_mgr_bridge_power_on(bridge);
+ }
+ 
+ static enum drm_mode_status dsi_mgr_bridge_mode_valid(struct drm_bridge *bridge,
 -- 
-Jens Axboe
-
+2.36.0.550.gb090851708-goog
 

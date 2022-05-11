@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B95522840
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 02:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D77522843
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 02:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236837AbiEKAJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 20:09:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36030 "EHLO
+        id S239399AbiEKAJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 20:09:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239675AbiEKAIr (ORCPT
+        with ESMTP id S239375AbiEKAJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 20:08:47 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2727631373
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 17:08:41 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id y5-20020aa79425000000b005104c6e01efso227482pfo.23
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 17:08:41 -0700 (PDT)
+        Tue, 10 May 2022 20:09:11 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4795B66F80
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 17:08:46 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id ij27-20020a170902ab5b00b0015d41282214so163633plb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 17:08:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
         bh=FKYCy8nTeKBSce/4iCSXAO9o2F9LxoRfpI1neokEeTE=;
-        b=ssPbYUDDUR7Lk75ZwCroNZYn4ps9HZK45xYG0ZA/1nAmYyewmiB9+4jTK3lomDzHCU
-         bP1sovRM/YX1uIo2/l1kOLMSeItaVf9KI6OUJN/9MvLBkBOq/hgF8YgLyfK8iCTSWWBA
-         xW54BCXfW5Erd2zyTo259DTs1cZi2LgsB1J0ve5P7UlLI+P9G6L1Uxe3dD2cZ0pRPOHR
-         wFOYkgJh4+qea58ZVGFCdzMK6fAHF+cv4Kp25iMEUIKSqHMNHlBN3z7kZf5Rm53gtQox
-         dtNcYWkO4FsXB5F3Auf7UEIizxCT51k6ldFJPdqdprMxnhah1vRLXSU/pkLoUHW2ePn9
-         isMA==
+        b=WrZJT/TTcn8b/jtcJKP77InSNooQFUCjeau/X0H0SV09QpVull24vp0CmIuLtWLJiw
+         fCJ+/jiOlCMCEbU3fOVbp/r8u6+YhOZRw12u1T65WftzSSwYsOxlhV/4N6Vxnn8BXvxk
+         h4cqcdgskBOOZvtOJozqZCGvUeA+MdartxN0ILu3UuuM2unHTauGZdk2M4Rb7gnSIibv
+         B1cYFhbyq1OZl08wTouqbJBkEaP2r4FvJT3csHtYs4iWzQ9cj/5VRkpm8rV/lRxzWLOL
+         NDufTqaZz+h9de/5ln2+xnQiAXOJmVhaLGTNvTfvTkRmv2Q7B+OKf9sm3qy9zITR9o7f
+         Edmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
         bh=FKYCy8nTeKBSce/4iCSXAO9o2F9LxoRfpI1neokEeTE=;
-        b=rv7kKOvqvHY8EzqSi0LkvxIeZoQSyPNZ6po5fARMlCEozvOvqW6EdOYW7X2CE+eFW4
-         2poJoc270L9TNdPx686uN8Sa0A+rwr6oJV5Nus3aG19O5B3hUtAJbPa6CSDt+D1Co7kd
-         ByKXeVObOwQgSep+4AJSzQlqunVcid8ZawH9uLblrBXqVdrTXWXHuDKHBGYuLgABvs5z
-         l0Y0uNrRBz+nCHwy8bzWjWH0rcv7y4951JyXxSsHNolRSOIXjkeBhaj01IzpJtUYi45h
-         QUFpHzQtRRoz7t3oirezynQOYwKRFgl1OXvj/h40HMSw3MltD7eoDuL/UZ3y1qyBSejo
-         CdTA==
-X-Gm-Message-State: AOAM532opMxmHNz+h8CmZ/2Q5V+15rK8dPhNZ1S/f+jjGLvigxqAArgH
-        XMPseKKjCOZyUiw4u2rngvZYPWEr3Gqmnpjb
-X-Google-Smtp-Source: ABdhPJzR473SpZp8Yag+VqE5GdAoG5IupcfbIthbh8IUjySyWZjJRrDwxsWbsBYaG8nQDo2oH5pQpOExjRQNMOsZ
+        b=LWqHPbhNA502Kx0cWhiMidOu6sDvTiPlLN5N7ef3PLJFw26KhI9V04lp8VDWhp3OkQ
+         bpa9JQSGpG4/Pwjh94S+btvAPkS7VzqVEIQpRLZ91RS6H7nSGDuKNvcqqYo7GVfAbwOu
+         2LRyToy1HT9lrIpMWfCr2geqRAe0Tz+YqEhiCmece9rRn+y4bIRl79NMLvDqVfFHd16C
+         Uj5KmQCgapFSFbrLFBmmNk6If1IyLUnTtwAG8xG9C6W8/sToySKDCwxLAFxBcbIEGrTg
+         CdvnqVf86qkq4/Kd/PA9h8bA+NxZeXHtGMm5e5qAcz2ArMMBR3z77z6oxPjags1E8u3v
+         XXlg==
+X-Gm-Message-State: AOAM5312NA6NZ52YpkbF/g+TgZQI7Cd8/KgYq3IzV2tsgMCoyeCC9mtD
+        B9f4BvJwwN/+TvEqHJOvEepIej/+Gdf5WUEK
+X-Google-Smtp-Source: ABdhPJwl/lO+0cjrfsYrNaI2y61itV/RzyivjHB/9eGEeXIrW2BIZ4lIStQL7yRe9lkokTR3DMkLl8lXRk6cv9Y3
 X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
- (user=vannapurve job=sendgmr) by 2002:a05:6a00:a0e:b0:4fd:fa6e:95fc with SMTP
- id p14-20020a056a000a0e00b004fdfa6e95fcmr22764103pfh.17.1652227720345; Tue,
- 10 May 2022 17:08:40 -0700 (PDT)
-Date:   Wed, 11 May 2022 00:08:10 +0000
+ (user=vannapurve job=sendgmr) by 2002:a17:90a:e510:b0:1d9:ee23:9fa1 with SMTP
+ id t16-20020a17090ae51000b001d9ee239fa1mr55596pjy.0.1652227725108; Tue, 10
+ May 2022 17:08:45 -0700 (PDT)
+Date:   Wed, 11 May 2022 00:08:11 +0000
 In-Reply-To: <20220511000811.384766-1-vannapurve@google.com>
-Message-Id: <20220511000811.384766-9-vannapurve@google.com>
+Message-Id: <20220511000811.384766-10-vannapurve@google.com>
 Mime-Version: 1.0
 References: <20220511000811.384766-1-vannapurve@google.com>
 X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [RFC V2 PATCH 8/8] selftests: kvm: priv_memfd: Add test avoiding
+Subject: [RFC V2 PATCH 8/8] selftests: kvm: priv_memfd: Add test without
  double allocation
 From:   Vishal Annapurve <vannapurve@google.com>
 To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -76,8 +76,7 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk

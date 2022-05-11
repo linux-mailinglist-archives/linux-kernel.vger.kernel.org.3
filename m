@@ -2,147 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B801523FB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 23:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5E1523F9F
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 23:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348454AbiEKVse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 17:48:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
+        id S1348297AbiEKVrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 17:47:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348382AbiEKVsU (ORCPT
+        with ESMTP id S232214AbiEKVra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 17:48:20 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AD6515B0;
-        Wed, 11 May 2022 14:48:10 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id d15so5854697lfk.5;
-        Wed, 11 May 2022 14:48:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=qjFTO1D1EZDKKiJccbHJv6i5BuHy5bt8K51ddMuen78=;
-        b=gXg11SMVbS7MdGdULt0/Q2dwr+lb6VgC7aQA1IJ7Lz0N+iATdF4knANd0/t3M28n5m
-         27Rk+OdfyoNSV56ollhWuGjeOcp86A0fl8L0MUVaILWc9NSyrFA38ssX11IURCZmbHFK
-         gSYxLBNLZoDj7L3UKIB2NSCCytNtSVkU1wcGKFnbrSs/H+2x/QjdGAsSijB/4TRQQCfR
-         DzsYUSa1hLUgh6q8HxRHyDhNa8WQKW8kS26s7BCf8tEB09kBxnumEZtN9S7mJMudlVXJ
-         kOE/KmcVR14QrlgDbPAjfX1ow3cK67Q1Rn32FUg5EFywEmIHU9Pit656mZ+aTxVkcPX0
-         8rmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=qjFTO1D1EZDKKiJccbHJv6i5BuHy5bt8K51ddMuen78=;
-        b=5jPBqL/LyiRojauO/1raxB3kxc6gR7dLpKXCMQFr5+sYF2xGJVYYwWdRqxOjfMIZsG
-         5T/QuojPEoOp/QrFivxiTIKb6SBN352cB6dGr32HyaUj1TLHMUikIKepfipNCn2Pb3OH
-         rrie40YDB8OkiG2QwoGT47ZEhPXCtJgfhW7G0ndbfN6im6oENuN0h/JNqUo29sAjAidR
-         0PAUu5KXyelJ+6xMyoLlWZkF3+3D+l/SdBoTLWYVSpVrpViXUDIS4bEjCPdWgUohf33m
-         DNVM2Xk5WhJsI4dRjzhu/KIVp/asw4uwLfjWnApbe4cPqJ9fll/h+Oza/wwcu1QFQpzg
-         dBnQ==
-X-Gm-Message-State: AOAM531PJA+5ls2dRzbEc72M2GT7EQYxR1yUFNnha+vAshDyK/6EkBhC
-        ASsmRkg4R57I/bYiVgI9i+ZyToM/bFRrIQ==
-X-Google-Smtp-Source: ABdhPJyYNFiN9PteQqRh87oyzawDjvUiMWjw4JDEft2h/aD+ItAVOoshpTcGYPYGo7KqG2JM6BlLZQ==
-X-Received: by 2002:a05:6512:12c3:b0:473:c7e2:b46b with SMTP id p3-20020a05651212c300b00473c7e2b46bmr21650100lfg.382.1652305688674;
-        Wed, 11 May 2022 14:48:08 -0700 (PDT)
-Received: from nergzd-desktop.localdomain ([194.39.226.133])
-        by smtp.gmail.com with ESMTPSA id 7-20020ac25687000000b0047255d211afsm458891lfr.222.2022.05.11.14.48.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 14:48:08 -0700 (PDT)
-From:   Markuss Broks <markuss.broks@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Markuss Broks <markuss.broks@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Song Qiang <songqiang1304521@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH v2 5/5] arm64: dts: qcom: msm8998-xperia: Introduce ToF sensor support
-Date:   Thu, 12 May 2022 00:47:17 +0300
-Message-Id: <20220511214718.50879-6-markuss.broks@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220511214718.50879-1-markuss.broks@gmail.com>
-References: <20220511214718.50879-1-markuss.broks@gmail.com>
+        Wed, 11 May 2022 17:47:30 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDC2286F3;
+        Wed, 11 May 2022 14:47:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652305649; x=1683841649;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=K5vUYX7cPworJBAWBFM83vOSyWXHdl4K9zNHAtvVvDI=;
+  b=QTdDc/sNEhHY4m7vFFOpM9uyOKll4nqK9JpqvS+Gx3I33A0RogtgCyH8
+   hxLxeGMyExisGfF81KxOwONn0W8XexAii6+Vvh8JxNj2PPE891sJEnn+R
+   4tAYcq0yhfnlIlnpxlyfHwcKEE+IwpIdnN+nTGs9zl2MbI8ykpfMSn9Wn
+   fl/SQs5ur3O6dPypsZ/27I3LtpNfFDOFhRCWoMFLHY6Yg3yVCjW8Mn4kc
+   urVBnMpumiBI+uOGfv/n2FZZpInns9OennrRsevh0q3uubVuupfwHjvw2
+   l2hQeYEVeQvPw/dfnp8Q0Waeng+ZrcgIMupklArWOawHLpYNLUvJKCa/X
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="269493744"
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="269493744"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 14:47:28 -0700
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="636586943"
+Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.212.146.202]) ([10.212.146.202])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 14:47:26 -0700
+Message-ID: <96ad6825-7607-92ef-566c-3e7a54c397bb@linux.intel.com>
+Date:   Wed, 11 May 2022 14:47:22 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2 5/7] perf jevents: Add python converter script
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Felix Fietkau <nbd@nbd.name>, Qi Liu <liuqi115@huawei.com>,
+        Like Xu <likexu@tencent.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Nick Forrington <nick.forrington@arm.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>, Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        ananth.narayan@amd.com, ravi.bangoria@amd.com,
+        santosh.shukla@amd.com, sandipan.das@amd.com,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Kshipra Bopardikar <kshipra.bopardikar@intel.com>
+Cc:     Stephane Eranian <eranian@google.com>
+References: <20220511211526.1021908-1-irogers@google.com>
+ <20220511211526.1021908-6-irogers@google.com>
+From:   Andi Kleen <ak@linux.intel.com>
+In-Reply-To: <20220511211526.1021908-6-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds device tree support for the VL53L0X ToF sensor
-found on all Yoshino devices.
 
-Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
----
- .../dts/qcom/msm8998-sony-xperia-yoshino.dtsi | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
+On 5/11/2022 2:15 PM, Ian Rogers wrote:
+> jevents.c is large, has a dependency on an old forked version of jsmn,
+> and is challenging to work upon. A lot of jevents.c's complexity comes
+> from needing to write json and csv parsing from first principles. In
+> contrast python has this functionality in standard libraries and is
+> already a build pre-requisite for tools like asciidoc (that builds all
+> of the perf man pages).
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi b/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi
-index 47488a1aecae..a95fa29aa18b 100644
---- a/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi
-@@ -245,6 +245,24 @@ &blsp2_uart1 {
- 	status = "okay";
- };
- 
-+&blsp2_i2c2 {
-+	status = "okay";
-+
-+	proximity@29 {
-+		compatible = "st,vl53l0x";
-+		reg = <0x29>;
-+
-+		interrupt-parent = <&tlmm>;
-+		interrupts = <22 IRQ_TYPE_EDGE_FALLING>;
-+
-+		reset-gpios = <&tlmm 27 GPIO_ACTIVE_LOW>;
-+		vdd-supply = <&cam_vio_vreg>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&tof_int &tof_reset>;
-+	};
-+};
-+
- &ibb {
- 	regulator-min-microamp = <800000>;
- 	regulator-max-microamp = <800000>;
-@@ -621,6 +639,21 @@ hall_sensor0_default: acc-cover-open {
- 		input-enable;
- 	};
- 
-+	tof_int: tof-int {
-+		pins = "gpio22";
-+		function = "gpio";
-+		bias-pull-up;
-+		drive-strength = <2>;
-+		input-enable;
-+	};
-+
-+	tof_reset: tof-reset {
-+		pins = "gpio27";
-+		function = "gpio";
-+		bias-disable;
-+		drive-strength = <2>;
-+	};
-+
- 	ts_int_n: ts-int-n {
- 		pins = "gpio125";
- 		function = "gpio";
--- 
-2.36.1
+
+Well I was still hoping at some point we could have run time loading of 
+events. But yes if that's not
+
+happening then this probably the right approach.
+
+-Andi
+
 

@@ -2,119 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E503523E6F
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 22:07:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1758A523E72
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 22:09:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345063AbiEKUHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 16:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
+        id S1345513AbiEKUJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 16:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237946AbiEKUHh (ORCPT
+        with ESMTP id S235778AbiEKUJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 16:07:37 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF2D49693
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 13:07:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652299656; x=1683835656;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=p1YYXl+yTi1DWtmId54tKAQpdz8+AHZrDsEKCg5NNqI=;
-  b=W2manKi2p6zrEBRto/Z95UjwscM1LIqObpkfvGn3OEUJTOSHM8XHGTBl
-   fyOHrf16laxHcEd/GZzQu8M9mH4a8W22mqJ6VDmJMXEtrguQDXTiKke2N
-   flMBkgBOf4hst9+G0BtEBf+8LRmuYZySIHWWE/b4d9PHOibI8XZ2Y3bpN
-   T5jrVpEXjFad6nX4pJ4d1Twl5Os1YWkaUEyz0Vdh8O5cpwrwHY0C5gk21
-   8ZKEq+ZrxbFI5Iz5xUqORp7GXbI7WAMb9a4ES6FIM5WetavGy8huZmvJB
-   o8rKRNJx8M47F6lyOl7C2ceN2LkJ1K0/YgOebryOp2CBaMvNEFxpaGvME
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="330403515"
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="330403515"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 13:07:36 -0700
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="711629310"
-Received: from tssurap-mobl1.amr.corp.intel.com (HELO [10.255.229.68]) ([10.255.229.68])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 13:07:35 -0700
-Message-ID: <69a3eaf4-0ad6-ffbf-f5be-d6fdc880276f@linux.intel.com>
-Date:   Wed, 11 May 2022 15:07:34 -0500
+        Wed, 11 May 2022 16:09:21 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5935B73544
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 13:09:20 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652299758;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a7NawlKYu3QodR35FTRzKw5nCCPq3TD4KSebWdKcyUQ=;
+        b=UCJy6hzaYRsCePyxYTKoqSPy/eU76DBtKjgBlQViGRhYk+RyKQMHzirUQTZJReKrek4Zv1
+        AuxcBooAjPvk3IQFtipJXU2yJe63ZsRDH6K0kP/216+1TUnkFP+95k/Pt8ypv0kaPnj0Mg
+        WnkoRSxE5N/51xY3YCA8PW2HHwD6kXqxeTlkPOAdiLFo3cEaRPZAsDTWRFwcGQB7Nne/lR
+        362MJRSGvpMapeU/75NYRYJdMbD5V6gy3cKLmeuTomlD910O6PWbtD8LhnQ2ZUxAIwpSQl
+        l1c3DEpC8iY3VdPr2pysLdHsoTQ4I1FhLl8X7AONGYvvlrG5bN9YvcOmELC4Fg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652299758;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a7NawlKYu3QodR35FTRzKw5nCCPq3TD4KSebWdKcyUQ=;
+        b=uf5NxaIs4bnOj4TuXkHxTZTpVVAeXu4vdNYYIg8ulJy7MYbrFRtaoo4kFuqWOR6BxZ0sqy
+        IJi4kfKPCG2jcZBg==
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Marco Elver <elver@google.com>, Hao Luo <haoluo@google.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH 1/7] x86/entry: Introduce __entry_text for entry code
+ written in C
+In-Reply-To: <CAKwvOdmF_5KudQbC8j5hJT1CqxvYtMneZxb1Si3A2uNxopk3yQ@mail.gmail.com>
+References: <20220511072747.3960-1-jiangshanlai@gmail.com>
+ <20220511072747.3960-2-jiangshanlai@gmail.com>
+ <CAKwvOdmF_5KudQbC8j5hJT1CqxvYtMneZxb1Si3A2uNxopk3yQ@mail.gmail.com>
+Date:   Wed, 11 May 2022 22:09:18 +0200
+Message-ID: <87bkw3hlw1.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: kismet: WARNING: unmet direct dependencies detected for
- SND_SOC_MAX98357A when selected by SND_SOC_INTEL_SOF_CS42L42_MACH
-Content-Language: en-US
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-To:     kernel test robot <yujie.liu@intel.com>,
-        Brent Lu <brent.lu@intel.com>
-Cc:     ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        kbuild-all@lists.01.org, paul@pgazz.com, fazilyildiran@gmail.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>
-References: <202205110550.80rLRw2L-lkp@intel.com>
- <cc9905dd-5b66-d01e-491c-64c18198d208@intel.com>
- <dfae72f1-0ee0-cf22-0fd7-5465209fb8b0@linux.intel.com>
-In-Reply-To: <dfae72f1-0ee0-cf22-0fd7-5465209fb8b0@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 11 2022 at 11:01, Nick Desaulniers wrote:
+> On Wed, May 11, 2022 at 12:27 AM Lai Jiangshan <jiangshanlai@gmail.com> wrote:
+>>  /* Section for code which can't be instrumented at all */
+>> -#define noinstr                                                                \
+>> -       noinline notrace __attribute((__section__(".noinstr.text")))    \
+>> -       __no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage
+>> +#define __noinstr_section(section)                             \
+>> +       noinline notrace __section(section) __no_profile        \
+>> +       __no_kcsan __no_sanitize_address __no_sanitize_coverage
+>> +
+>> +#define noinstr __noinstr_section(".noinstr.text")
+>
+> I haven't looked at the rest of the series, but isn't `noinstr` used
+> in a bunch of places? Wont this commit break all those uses or at
+> least make it break bisection?
 
->>>> kismet: WARNING: unmet direct dependencies detected for
->> SND_SOC_MAX98357A when selected by SND_SOC_INTEL_SOF_CS42L42_MACH
->>
->>    WARNING: unmet direct dependencies detected for SND_SOC_MAX98357A
->>      Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] &&
->> GPIOLIB [=n]
->>      Selected by [y]:
->>      - SND_SOC_INTEL_SOF_CS42L42_MACH [=y] && SOUND [=y] && !UML && SND
->> [=y] && SND_SOC [=y] && SND_SOC_INTEL_MACH [=y] && (SND_SOC_SOF_HDA_LINK
->> [=y] || SND_SOC_SOF_BAYTRAIL [=n]) && I2C [=y] && ACPI [=y] &&
->> SND_HDA_CODEC_HDMI [=y] && SND_SOC_SOF_HDA_AUDIO_CODEC [=y] &&
->> (MFD_INTEL_LPSS [=y] || COMPILE_TEST [=n])
-> 
-> I can reproduce this, but I question the hard dependency on GPIOLIB in
-> the amplifier Kconfig:
-> 
-> 	max98357a->sdmode = devm_gpiod_get_optional(&pdev->dev,
-> 				"sdmode", GPIOD_OUT_LOW);
-> 
-> If the gpio is optional, max98357a.c should build and compile without
-> GPIOLIB, no?
+Why so?
 
-The warning goes away with the patch suggested in
-https://github.com/thesofproject/linux/pull/3646
+This is still applying all the 'no' annotations and puts the code in
+the very same section as before, no?
 
-diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
+Thanks,
 
-index b106e55170904..8536773548090 100644
+        tglx
 
---- a/sound/soc/codecs/Kconfig
-
-+++ b/sound/soc/codecs/Kconfig
-
-@@ -986,7 +986,6 @@ config SND_SOC_MAX98095
-
-
-
- config SND_SOC_MAX98357A
-
-        tristate "Maxim MAX98357A CODEC"
-
--       depends on GPIOLIB
-
-
-
- config SND_SOC_MAX98371
-
-        tristate
 

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7EE523667
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9473652366E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245486AbiEKO6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 10:58:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35204 "EHLO
+        id S245342AbiEKO6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 10:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245305AbiEKO5h (ORCPT
+        with ESMTP id S245324AbiEKO5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 10:57:37 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAAB71AD5A3
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:57:30 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id bx33so2927351ljb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:57:30 -0700 (PDT)
+        Wed, 11 May 2022 10:57:38 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E421FD840
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:57:32 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id p26so4006409lfh.10
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:57:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Bl8rpHW4c3CiFMsX2DAaPyQ7hRT28ZNH8vs9g1j1WIc=;
-        b=gwNW8kn6F4StiafOJBEyuoeas2dplhxakMCkbmJ5pa779M+8mNuBYtJ8+wZrFuDEtD
-         iL3gMOmPhwBVgwqJDa7RilmY+kZ674O5esZOGux0YHLjV2ZvCIXnIE4Qre/LI7yDlM+r
-         dRHVPsHPPX5HnY0QUtkQT+dY43EAM+bZhkJKFi58PI+AKJjrZ0VSI912DRkze5Uuu7sv
-         1MZn7hyt+DjkWI0Fn115LCpIDoiOt4qLfJ0CFXIx2p2TqbZGq6OntoaBzjUHWoWmV8QH
-         d+1/XOGpJot3pw7ai6NXha5jRaGfI9dhnxOLfKpNIcmx+B/xTYXprAXve7yQBgs2CwgZ
-         c2Ug==
+        bh=2gFFvwdN/Sbzb6gl/THgYR/bjpxtOmE1Z07RfTChlck=;
+        b=AKMBOxosg+GEA7ZZLPUVvSF9Nz2ZhFwCheRbwlKRxf5eHcI/lcg2XZ/v0Q1fKU3Y8r
+         PyEMzM0zsZpNRhjZ/q3kO6e+AS1vgy1HuYHmkxc3od8ILggFTkUv33Q7QR9m+ikgKhwt
+         bK6jV3XkOGqKRwsa5Vr8Took8lIY9B7N75kQyHZBrbsJEXIsVreCgmzUbXHffQGKsaTE
+         4PFbREOn5I8aK2EUBC/48mzJHHMVl4buN8+wyF2G7ysE30SgmFl44/boOgrPx9ZhOnJI
+         LkHXt1ItXHq8C6FaK0r/YlZjmFLmH8bfe58M/tZcC+H9vIiPtym5x8NqCC2FLyfh1h/B
+         4PpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Bl8rpHW4c3CiFMsX2DAaPyQ7hRT28ZNH8vs9g1j1WIc=;
-        b=tHtvc4pZ8i9kaY9H3ikF90GmY7X8V3Lp8wGNZP1TtCxrEdItVsijPWGPxpGSAlDHdq
-         7yxJ+gZEgxR58bfd5fut21YAXQC5bgEcxYiYuzYzOrdcisCNerlnoFBupCQBt/s22mjH
-         sHoCxZ13+KBXwjmHkmrDGlGrTnxoyUl2CJvEcJObDXF2mVrcoE8xE9UEkurh/kecHBUH
-         f8DvkJ3ZtvKN8zfdQjB0niA7X4eQoxJ+Gi/obPX/6XNeWu2wAJY7EFPXRF3GAYSM8lgf
-         Aj/3cKwQJRZiCKYl3xhnQbuWPAQf2MuqO5H4nZeIKJC1xT3JyGVHkWRyxmtf8kO3UMui
-         TBNg==
-X-Gm-Message-State: AOAM530HyPo2HrQnJ47an+vLitMmjys8xpxlTCs6CiKgmVGEwkrylL10
-        P0sXdDZJ8B/Qs/SOnQ38q5Y50A==
-X-Google-Smtp-Source: ABdhPJxMcTq2eSQHDiwNWQsDX/A48wtxQ8/Nmme8fG3v2YBLDyaKJ7rAlDVk6lXwrPr1t7QCVrKRqw==
-X-Received: by 2002:a2e:964b:0:b0:24e:ee06:5b70 with SMTP id z11-20020a2e964b000000b0024eee065b70mr11174894ljh.126.1652281048825;
-        Wed, 11 May 2022 07:57:28 -0700 (PDT)
+        bh=2gFFvwdN/Sbzb6gl/THgYR/bjpxtOmE1Z07RfTChlck=;
+        b=w9SieJwrfxD8N5R6qCHPdGtbhQxFVz0zooDZOU+A2BZ4r/v/G0h+z6r0tMlWJTswub
+         Zh876bO6MKY+ghDQpKePHNqPG/A/1azQqjyOOE9WmLT83oSIEgtsSCtU0EM0fk84RbAZ
+         DJ1FJ3KgCkVXn8e70OE5OrAdGr7QziXypFfuqW0svO2lzNhoNmlxcE7+qoMareInQkJq
+         UdfNCNwRUCnV/sYi9oYliKVDkFX+HZ5ZWamTdCrTdjY6ySreP9f1zouufAdYQFq2oMJb
+         J7tNna9bKjxyqQgHoemKflB35R45/enm/uwGlEJlV3i2OpJ+hru0S9ZHVz4sIpihEv5h
+         VyAg==
+X-Gm-Message-State: AOAM530VmJ2HhxPVGKzW+a5CrpfgUmIfvGnaZgWi5cDWYTwq99WWhIFF
+        d99E09YKMwYFXIKAukzbsKOn8A==
+X-Google-Smtp-Source: ABdhPJyKM/oX7q2GnhgQf0vJUOqTliTzVsmMWV8dFynsx6Tt6u0Zi82/g1j3o0k081btT4lf1QlnJQ==
+X-Received: by 2002:ac2:5456:0:b0:471:f9e6:7388 with SMTP id d22-20020ac25456000000b00471f9e67388mr19548791lfn.504.1652281051171;
+        Wed, 11 May 2022 07:57:31 -0700 (PDT)
 Received: from localhost.localdomain (h-98-128-181-154.NA.cust.bahnhof.se. [98.128.181.154])
-        by smtp.gmail.com with ESMTPSA id z26-20020a19f71a000000b0047255d210f3sm320793lfe.34.2022.05.11.07.57.27
+        by smtp.gmail.com with ESMTPSA id z26-20020a19f71a000000b0047255d210f3sm320793lfe.34.2022.05.11.07.57.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 07:57:27 -0700 (PDT)
+        Wed, 11 May 2022 07:57:30 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
 Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
@@ -59,9 +59,9 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Kevin Hilman <khilman@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 06/14] PM: domains: Allocate gpd_timing_data dynamically based on governor
-Date:   Wed, 11 May 2022 16:56:56 +0200
-Message-Id: <20220511145704.698189-7-ulf.hansson@linaro.org>
+Subject: [PATCH 07/14] PM: domains: Move the next_wakeup variable into the struct gpd_timing_data
+Date:   Wed, 11 May 2022 16:56:57 +0200
+Message-Id: <20220511145704.698189-8-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220511145704.698189-1-ulf.hansson@linaro.org>
 References: <20220511145704.698189-1-ulf.hansson@linaro.org>
@@ -70,217 +70,100 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a genpd doesn't have an associated governor assigned, there's really no
-point to allocate the per device gpd_timing_data, as the data isn't being
-used by a governor anyway.
+If the corresponding genpd for the device doesn't use a governor, the
+variable next_wakeup within the struct generic_pm_domain_data becomes
+superfluous.
 
-To avoid wasting memory, let's therefore convert the corresponding td
-variable in the struct generic_pm_domain_data into a pointer and manage the
-allocation of its data dynamically.
+To avoid wasting memory, let's move it into the struct gpd_timing_data,
+which is already being allocated based upon if there is governor assigned.
 
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- drivers/base/power/domain.c          | 48 +++++++++++++++++++---------
- drivers/base/power/domain_governor.c |  9 ++++--
- include/linux/pm_domain.h            |  2 +-
- 3 files changed, 40 insertions(+), 19 deletions(-)
+ drivers/base/power/domain.c          | 9 +++++----
+ drivers/base/power/domain_governor.c | 2 +-
+ include/linux/pm_domain.h            | 2 +-
+ 3 files changed, 7 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index a3e727c9a4fa..ca86fb3db901 100644
+index ca86fb3db901..4c059a858957 100644
 --- a/drivers/base/power/domain.c
 +++ b/drivers/base/power/domain.c
-@@ -773,13 +773,16 @@ static int genpd_dev_pm_qos_notifier(struct notifier_block *nb,
- 	for (;;) {
- 		struct generic_pm_domain *genpd;
- 		struct pm_domain_data *pdd;
-+		struct gpd_timing_data *td;
- 
- 		spin_lock_irq(&dev->power.lock);
- 
- 		pdd = dev->power.subsys_data ?
- 				dev->power.subsys_data->domain_data : NULL;
- 		if (pdd) {
--			to_gpd_data(pdd)->td.constraint_changed = true;
-+			td = to_gpd_data(pdd)->td;
-+			if (td)
-+				td->constraint_changed = true;
- 			genpd = dev_to_genpd(dev);
- 		} else {
- 			genpd = ERR_PTR(-ENODATA);
-@@ -875,7 +878,7 @@ static int genpd_runtime_suspend(struct device *dev)
- 	struct generic_pm_domain *genpd;
- 	bool (*suspend_ok)(struct device *__dev);
- 	struct generic_pm_domain_data *gpd_data = dev_gpd_data(dev);
--	struct gpd_timing_data *td = &gpd_data->td;
-+	struct gpd_timing_data *td = gpd_data->td;
- 	bool runtime_pm = pm_runtime_enabled(dev);
- 	ktime_t time_start;
- 	s64 elapsed_ns;
-@@ -915,7 +918,7 @@ static int genpd_runtime_suspend(struct device *dev)
- 	/* Update suspend latency value if the measured time exceeds it. */
- 	if (runtime_pm) {
- 		elapsed_ns = ktime_to_ns(ktime_sub(ktime_get(), time_start));
--		if (elapsed_ns > td->suspend_latency_ns) {
-+		if (td && (elapsed_ns > td->suspend_latency_ns)) {
- 			td->suspend_latency_ns = elapsed_ns;
- 			dev_dbg(dev, "suspend latency exceeded, %lld ns\n",
- 				elapsed_ns);
-@@ -951,7 +954,7 @@ static int genpd_runtime_resume(struct device *dev)
+@@ -478,15 +478,16 @@ EXPORT_SYMBOL_GPL(dev_pm_genpd_set_performance_state);
+  */
+ void dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next)
  {
+-	struct generic_pm_domain_data *gpd_data;
  	struct generic_pm_domain *genpd;
- 	struct generic_pm_domain_data *gpd_data = dev_gpd_data(dev);
--	struct gpd_timing_data *td = &gpd_data->td;
-+	struct gpd_timing_data *td = gpd_data->td;
- 	bool runtime_pm = pm_runtime_enabled(dev);
- 	ktime_t time_start;
- 	s64 elapsed_ns;
-@@ -999,7 +1002,7 @@ static int genpd_runtime_resume(struct device *dev)
- 	/* Update resume latency value if the measured time exceeds it. */
- 	if (timed && runtime_pm) {
- 		elapsed_ns = ktime_to_ns(ktime_sub(ktime_get(), time_start));
--		if (elapsed_ns > td->resume_latency_ns) {
-+		if (td && (elapsed_ns > td->resume_latency_ns)) {
- 			td->resume_latency_ns = elapsed_ns;
- 			dev_dbg(dev, "resume latency exceeded, %lld ns\n",
- 				elapsed_ns);
-@@ -1496,9 +1499,11 @@ EXPORT_SYMBOL_GPL(dev_pm_genpd_resume);
- 
- #endif /* CONFIG_PM_SLEEP */
- 
--static struct generic_pm_domain_data *genpd_alloc_dev_data(struct device *dev)
-+static struct generic_pm_domain_data *genpd_alloc_dev_data(struct device *dev,
-+							   bool has_governor)
- {
- 	struct generic_pm_domain_data *gpd_data;
 +	struct gpd_timing_data *td;
- 	int ret;
  
- 	ret = dev_pm_get_subsys_data(dev);
-@@ -1512,26 +1517,38 @@ static struct generic_pm_domain_data *genpd_alloc_dev_data(struct device *dev)
- 	}
+ 	genpd = dev_to_genpd_safe(dev);
+ 	if (!genpd)
+ 		return;
+ 
+-	gpd_data = to_gpd_data(dev->power.subsys_data->domain_data);
+-	gpd_data->next_wakeup = next;
++	td = to_gpd_data(dev->power.subsys_data->domain_data)->td;
++	if (td)
++		td->next_wakeup = next;
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_genpd_set_next_wakeup);
+ 
+@@ -1518,7 +1519,6 @@ static struct generic_pm_domain_data *genpd_alloc_dev_data(struct device *dev,
  
  	gpd_data->base.dev = dev;
--	gpd_data->td.constraint_changed = true;
--	gpd_data->td.effective_constraint_ns = PM_QOS_RESUME_LATENCY_NO_CONSTRAINT_NS;
  	gpd_data->nb.notifier_call = genpd_dev_pm_qos_notifier;
- 	gpd_data->next_wakeup = KTIME_MAX;
+-	gpd_data->next_wakeup = KTIME_MAX;
  
--	spin_lock_irq(&dev->power.lock);
-+	/* Allocate data used by a governor. */
-+	if (has_governor) {
-+		td = kzalloc(sizeof(*td), GFP_KERNEL);
-+		if (!td) {
-+			ret = -ENOMEM;
-+			goto err_free;
-+		}
+ 	/* Allocate data used by a governor. */
+ 	if (has_governor) {
+@@ -1530,6 +1530,7 @@ static struct generic_pm_domain_data *genpd_alloc_dev_data(struct device *dev,
  
--	if (dev->power.subsys_data->domain_data) {
--		ret = -EINVAL;
--		goto err_free;
-+		td->constraint_changed = true;
-+		td->effective_constraint_ns = PM_QOS_RESUME_LATENCY_NO_CONSTRAINT_NS;
-+		gpd_data->td = td;
+ 		td->constraint_changed = true;
+ 		td->effective_constraint_ns = PM_QOS_RESUME_LATENCY_NO_CONSTRAINT_NS;
++		td->next_wakeup = KTIME_MAX;
+ 		gpd_data->td = td;
  	}
  
--	dev->power.subsys_data->domain_data = &gpd_data->base;
-+	spin_lock_irq(&dev->power.lock);
-+
-+	if (dev->power.subsys_data->domain_data)
-+		ret = -EINVAL;
-+	else
-+		dev->power.subsys_data->domain_data = &gpd_data->base;
- 
- 	spin_unlock_irq(&dev->power.lock);
- 
-+	if (ret)
-+		goto err_free;
-+
- 	return gpd_data;
- 
-  err_free:
--	spin_unlock_irq(&dev->power.lock);
-+	kfree(gpd_data->td);
- 	kfree(gpd_data);
-  err_put:
- 	dev_pm_put_subsys_data(dev);
-@@ -1547,6 +1564,7 @@ static void genpd_free_dev_data(struct device *dev,
- 
- 	spin_unlock_irq(&dev->power.lock);
- 
-+	kfree(gpd_data->td);
- 	kfree(gpd_data);
- 	dev_pm_put_subsys_data(dev);
- }
-@@ -1611,7 +1629,7 @@ static int genpd_add_device(struct generic_pm_domain *genpd, struct device *dev,
- 	if (IS_ERR_OR_NULL(genpd) || IS_ERR_OR_NULL(dev))
- 		return -EINVAL;
- 
--	gpd_data = genpd_alloc_dev_data(dev);
-+	gpd_data = genpd_alloc_dev_data(dev, genpd->gov);
- 	if (IS_ERR(gpd_data))
- 		return PTR_ERR(gpd_data);
- 
 diff --git a/drivers/base/power/domain_governor.c b/drivers/base/power/domain_governor.c
-index c13e44823f16..62be9b3f8c90 100644
+index 62be9b3f8c90..599b3909821c 100644
 --- a/drivers/base/power/domain_governor.c
 +++ b/drivers/base/power/domain_governor.c
-@@ -18,6 +18,8 @@ static int dev_update_qos_constraint(struct device *dev, void *data)
- 	s64 constraint_ns;
- 
- 	if (dev->power.subsys_data && dev->power.subsys_data->domain_data) {
-+		struct gpd_timing_data *td = dev_gpd_data(dev)->td;
-+
- 		/*
- 		 * Only take suspend-time QoS constraints of devices into
- 		 * account, because constraints updated after the device has
-@@ -25,7 +27,8 @@ static int dev_update_qos_constraint(struct device *dev, void *data)
- 		 * anyway.  In order for them to take effect, the device has to
- 		 * be resumed and suspended again.
- 		 */
--		constraint_ns = dev_gpd_data(dev)->td.effective_constraint_ns;
-+		constraint_ns = td ? td->effective_constraint_ns :
-+				PM_QOS_RESUME_LATENCY_NO_CONSTRAINT_NS;
- 	} else {
- 		/*
- 		 * The child is not in a domain and there's no info on its
-@@ -49,7 +52,7 @@ static int dev_update_qos_constraint(struct device *dev, void *data)
-  */
- static bool default_suspend_ok(struct device *dev)
- {
--	struct gpd_timing_data *td = &dev_gpd_data(dev)->td;
-+	struct gpd_timing_data *td = dev_gpd_data(dev)->td;
- 	unsigned long flags;
- 	s64 constraint_ns;
- 
-@@ -215,7 +218,7 @@ static bool __default_power_down_ok(struct dev_pm_domain *pd,
- 		 * domain to turn off and on (that's how much time it will
- 		 * have to wait worst case).
- 		 */
--		td = &to_gpd_data(pdd)->td;
-+		td = to_gpd_data(pdd)->td;
- 		constraint_ns = td->effective_constraint_ns;
- 		/*
- 		 * Zero means "no suspend at all" and this runs only when all
+@@ -139,7 +139,7 @@ static void update_domain_next_wakeup(struct generic_pm_domain *genpd, ktime_t n
+ 	 * is able to enter its optimal idle state.
+ 	 */
+ 	list_for_each_entry(pdd, &genpd->dev_list, list_node) {
+-		next_wakeup = to_gpd_data(pdd)->next_wakeup;
++		next_wakeup = to_gpd_data(pdd)->td->next_wakeup;
+ 		if (next_wakeup != KTIME_MAX && !ktime_before(next_wakeup, now))
+ 			if (ktime_before(next_wakeup, domain_wakeup))
+ 				domain_wakeup = next_wakeup;
 diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-index 043d48e4420a..126a4b9ab215 100644
+index 126a4b9ab215..1f370f074f30 100644
 --- a/include/linux/pm_domain.h
 +++ b/include/linux/pm_domain.h
-@@ -193,7 +193,7 @@ struct pm_domain_data {
+@@ -182,6 +182,7 @@ struct gpd_timing_data {
+ 	s64 suspend_latency_ns;
+ 	s64 resume_latency_ns;
+ 	s64 effective_constraint_ns;
++	ktime_t	next_wakeup;
+ 	bool constraint_changed;
+ 	bool cached_suspend_ok;
+ };
+@@ -200,7 +201,6 @@ struct generic_pm_domain_data {
+ 	unsigned int performance_state;
+ 	unsigned int default_pstate;
+ 	unsigned int rpm_pstate;
+-	ktime_t	next_wakeup;
+ 	void *data;
+ };
  
- struct generic_pm_domain_data {
- 	struct pm_domain_data base;
--	struct gpd_timing_data td;
-+	struct gpd_timing_data *td;
- 	struct notifier_block nb;
- 	struct notifier_block *power_nb;
- 	int cpu;
 -- 
 2.25.1
 

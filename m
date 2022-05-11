@@ -2,142 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 717F652320F
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6728E523217
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238575AbiEKLpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 07:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49368 "EHLO
+        id S239043AbiEKLrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 07:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230470AbiEKLpq (ORCPT
+        with ESMTP id S238766AbiEKLrE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 07:45:46 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9CA1DA55;
-        Wed, 11 May 2022 04:45:44 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 3226C21B6B;
-        Wed, 11 May 2022 11:45:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652269543; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0Q+AKogAFqrapMhSKhemsZfgkWqWDsARusHusUCyiK4=;
-        b=iY95HDQGs4qC23cq77bOCFTEdU/S8O5CyJ+RlnRZnMkkUzmn+I2Mm5/bPWA2BvWJDPDEv9
-        JwfZEqzAICGf45PeIFuZlFjlIC7fxZJfv9Ryxp3gi9axon0On+MdUW3HdUoK9u0ccTLMhL
-        Yjmk7zW6CuGXpaXXuOUQvYlsrSO1r9M=
-Received: from suse.cz (pathway.suse.cz [10.100.12.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 043992C141;
-        Wed, 11 May 2022 11:45:41 +0000 (UTC)
-Date:   Wed, 11 May 2022 13:45:41 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org
-Subject: Re: [PATCH 17/30] tracing: Improve panic/die notifiers
-Message-ID: <20220511114541.GC26047@pathway.suse.cz>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-18-gpiccoli@igalia.com>
+        Wed, 11 May 2022 07:47:04 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9CD237BAE;
+        Wed, 11 May 2022 04:46:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
+         references;
+        bh=vjcn2vGwiDQayBSUK5MyFT9LXkL0XQOenn0k4ZdaLhM=;
+        b=HCGEUTBqS5y/AWVzcxewO6i+TC9ckOpKQ67WnjztqtHr/+AOULK8eMWKOxKh8M1zbelhng0jUgYX4
+         wE9NF5PRLsi9YGurxDm+d8EhoCuuhr84eBpWdUHg1xIk79ZnVIMzQhFyON3inDmYbSBWqhH4QBe11W
+         3gZ+i+npYHPaQE4GhZpUzGFBxBd+lGTkhZpQCBhmzG4iqJ+ZKsXf3Wbr2zju+f7de3wtVM/mAPmtI2
+         vwgwPF/cSeefpt5CW/usiGHMn9RdcFV5zPAZEppxMmlua4ZNaFucxg90HCaMjxFF8EZbwFnY/sgZuS
+         PpxXXBGDr2G4WYtQjsHpXXvoLL7+aYg==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1422, Stamp: 3], Multi: [Enabled, t: (0.000009,0.024232)], BW: [Enabled, t: (0.000018,0.000001)], RTDA: [Enabled, t: (0.070885), Hit: No, Details: v2.39.0; Id: 15.52k9mu.1g2pf2ked.1utsm; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from h-e2.ddg ([85.143.252.66])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Wed, 11 May 2022 14:46:39 +0300
+Date:   Wed, 11 May 2022 14:46:27 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     Conor.Dooley@microchip.com
+Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        system@metrotek.ru
+Subject: Re: [PATCH v11 2/3] fpga: microchip-spi: add Microchip MPF FPGA
+ manager
+Message-ID: <20220511114627.txon23yigcaxzumx@h-e2.ddg>
+References: <20220507074304.11144-1-i.bornyakov@metrotek.ru>
+ <20220507074304.11144-3-i.bornyakov@metrotek.ru>
+ <bd5cb37b-ee56-f6d5-2d98-c08566b60728@microchip.com>
+ <20220509171621.zk4owxwlngxjodgz@x260>
+ <da1e5125-de6b-11a8-a52d-7e6e5f45ab70@conchuod.ie>
+ <4b752147-1a09-a4af-bc5d-3b132b84ef49@conchuod.ie>
+ <20220511081532.7gkmz3uumzxgwfaf@h-e2.ddg>
+ <f1557776-36c9-083f-2101-db84ca9a9cfa@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220427224924.592546-18-gpiccoli@igalia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <f1557776-36c9-083f-2101-db84ca9a9cfa@microchip.com>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-04-27 19:49:11, Guilherme G. Piccoli wrote:
-> Currently the tracing dump_on_oops feature is implemented
-> through separate notifiers, one for die/oops and the other
-> for panic. With the addition of panic notifier "id", this
-> patch makes use of such "id" to unify both functions.
+On Wed, May 11, 2022 at 11:36:33AM +0000, Conor.Dooley@microchip.com wrote:
+> On 11/05/2022 09:15, Ivan Bornyakov wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > On Tue, May 10, 2022 at 12:29:54PM +0100, Conor Dooley wrote:
+> >> On 09/05/2022 19:56, Conor Dooley wrote:
+> >>> On 09/05/2022 18:16, Ivan Bornyakov wrote:
+> >>>> On Mon, May 09, 2022 at 11:41:18AM +0000, Conor.Dooley@microchip.com wrote:
+> >>>>> Hey Ivan, one comment below.
+> >>>>> Thanks,
+> >>>>> Conor.
+> >>>>>
+> >>>>> On 07/05/2022 08:43, Ivan Bornyakov wrote:
+> >>>>>> ... snip ...
+> >>>>>> +static int mpf_read_status(struct spi_device *spi)
+> >>>>>> +{
+> >>>>>> +       u8 status, status_command = MPF_SPI_READ_STATUS;
+> >>>>>> +       struct spi_transfer xfer = {
+> >>>>>> +               .tx_buf = &status_command,
+> >>>>>> +               .rx_buf = &status,
+> >>>>>> +               .len = 1,
+> >>>>>> +       };
+> >>>>>> +       int ret = spi_sync_transfer(spi, &xfer, 1);
+> >>>>>> +
+> >>>>>> +       if ((status & MPF_STATUS_SPI_VIOLATION) ||
+> >>>>>> +           (status & MPF_STATUS_SPI_ERROR))
+> >>>>>> +               ret = -EIO;
+> >>>>>> +
+> >>>>>> +       return ret ? : status;
+> >>>>>> +}
+> >>>>>> +
+> >>>>>> ... snip ...
+> >>>>>> +
+> >>>>>> +static int poll_status_not_busy(struct spi_device *spi, u8 mask)
+> >>>>>> +{
+> >>>>>> +       int status, timeout = MPF_STATUS_POLL_TIMEOUT;
+> >>>>>> +
+> >>>>>> +       while (timeout--) {
+> >>>>>> +               status = mpf_read_status(spi);
+> >>>>>> +               if (status < 0 ||
+> >>>>>> +                   (!(status & MPF_STATUS_BUSY) && (!mask || (status & mask))))
+> >>>>>> +                       return status;
+> >>>>>> +
+> >>>>>> +               usleep_range(1000, 2000);
+> >>>>>> +       }
+> >>>>>> +
+> >>>>>> +       return -EBUSY;
+> >>>>>> +}
+> >>>>>
+> >>>>> Is there a reason you changed this from the snippet you sent me
+> >>>>> in the responses to version 8:
+> >>>>> static int poll_status_not_busy(struct spi_device *spi, u8 mask)
+> >>>>> {
+> >>>>>          u8 status, status_command = MPF_SPI_READ_STATUS;
+> >>>>>          int ret, timeout = MPF_STATUS_POLL_TIMEOUT;
+> >>>>>          struct spi_transfer xfer = {
+> >>>>>                  .tx_buf = &status_command,
+> >>>>>                  .rx_buf = &status,
+> >>>>>                  .len = 1,
+> >>>>>          };
+> >>>>>
+> >>>>>          while (timeout--) {
+> >>>>>                  ret = spi_sync_transfer(spi, &xfer, 1);
+> >>>>>                  if (ret < 0)
+> >>>>>                          return ret;
+> >>>>>
+> >>>>>                  if (!(status & MPF_STATUS_BUSY) && (!mask || (status & mask)))
+> >>>>>                          return status;
+> >>>>>
+> >>>>>                  usleep_range(1000, 2000);
+> >>>>>          }
+> >>>>>
+> >>>>>          return -EBUSY;
+> >>>>> }
+> >>>>>
+> >>>>> With the current version, I hit the "Failed to write bitstream
+> >>>>> frame" check in mpf_ops_write at random points in the transfer.
+> >>>>> Replacing poll_status_not_busy with the above allows it to run
+> >>>>> to completion.
+> >>>>
+> >>>> In my eyes they are equivalent, aren't they?
+> >>>>
+> >>>
+> >>> I was in a bit of a rush today & didn't have time to do proper
+> >>> debugging, I'll put some debug code in tomorrow and try to find
+> >>> exactly what is different between the two.
+> >>>
+> >>> Off the top of my head, since I don't have a board on me to test,
+> >>> the only difference I can see is that with the snippet you only
+> >>> checked if spi_sync_transfer was negative whereas now you check
+> >>> if it has a value at all w/ that ternary operator.
+> >>>
+> >>> But even that seems like it *shouldn't* be the problem, since ret
+> >>> should contain -errno or zero, right?
+> >>> Either way, I will do some digging tomorrow.
+> >>
+> >> I put a printk("status %x, ret %d", status, ret); into the failure
+> >> path of mpf_read_status() & it looks like a status 0xA is being
+> >> returned - error & ready? That seems like a very odd combo to be
+> >> getting back out of it. It shouldn't be dodgy driver/connection
+> >> either, b/c that's what I see if I connect my protocol analyser:
+> >> https://i.imgur.com/VbjgfCk.png
+> >>
+> >> That's mosi (hex), ss, sclk, mosi, miso (hex), miso in descending
+> >> order.
+> >>
+> >> I think what was happening was with the snippet you returned one
+> >> of the following: -EBUSY, ret (aka -errno) or status. Since status
+> >> is positive, the checks in mpf_spi_write.*() saw nothing wrong at
+> >> all and programming continued despite there being a problem.
+> >>
+> >> The new version fixes this by returning -EIO rather than status from
+> >> poll_status_not_busy().
+> >>
+> >> I wish I had a socketable PolarFire so I could investigate further,
+> >> but this looks like it might a be hardware issue somewhere on my
+> >> end?
+> >>
+> >> So ye, sorry for the noise and carry on! I'll try tofind what is to
+> >> blame for it.
+> >>
+> >> Thanks,
+> >> Conor.
+> >>
+> > 
+> > Hi, Conor.
+> > 
+> > I've just noticed in SPI-DirectC User Guide [1] ch. 9 SmartFusion2 and
+> > IGLOO2 SPI-Slave Programming Waveform Analysis, that hw status checked
+> > two times every time. Does MPF family also need double check hw status?
+> > Does adding second mpf_read_status() to poll_status_not_busy() routine
+> > help with your issue?
 > 
-> It also comments the function and changes the priority of the
-> notifier blocks, in order they run early compared to other
-> notifiers, to prevent useless trace data (like the callback
-> names for the other notifiers). Finally, we also removed an
-> unnecessary header inclusion.
+> Hey Ivan,
+> Tried your suggestion. Previously I was failing quite consistently at
+> transfer 34 of 590k, and sometimes making it a further. With your
+> suggestion, I was making it significantly further (100k+) but still
+> running into some of the 0xA status.
+> Decided to move the double check into mpfs_read_status (see the below
+> diff) did not run into any the 0xA statuses.
+> It's worth pointing out that this is the *first* time I have seen
+> Flash Pro Express report that the FPGA array has been enabled after
+> programming!
+
+That's good news!
+
+> Seems like at the very least this (hacky) diff is not harmful?
+> Please give it a try yourself and check that things still work for
+> you.
 > 
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -9767,38 +9766,46 @@ static __init int tracer_init_tracefs(void)
->  
->  fs_initcall(tracer_init_tracefs);
->  
-> -static int trace_panic_handler(struct notifier_block *this,
-> -			       unsigned long event, void *unused)
-> +/*
-> + * The idea is to execute the following die/panic callback early, in order
-> + * to avoid showing irrelevant information in the trace (like other panic
-> + * notifier functions); we are the 2nd to run, after hung_task/rcu_stall
-> + * warnings get disabled (to prevent potential log flooding).
-> + */
-> +static int trace_die_panic_handler(struct notifier_block *self,
-> +				unsigned long ev, void *unused)
->  {
-> -	if (ftrace_dump_on_oops)
-> +	int do_dump;
+> diff --git a/drivers/fpga/microchip-spi.c b/drivers/fpga/microchip-spi.c
+> index 63b75dff2522..183cdfc05c4a 100644
+> --- a/drivers/fpga/microchip-spi.c
+> +++ b/drivers/fpga/microchip-spi.c
+> @@ -47,18 +47,30 @@ struct mpf_priv {
+>   static int mpf_read_status(struct spi_device *spi)
+>   {
+>          u8 status, status_command = MPF_SPI_READ_STATUS;
+> +       u8 status_repeat;
+>          struct spi_transfer xfer = {
+>                  .tx_buf = &status_command,
+>                  .rx_buf = &status,
+>                  .len = 1,
+>          };
+> +       struct spi_transfer xfer_repeat = {
+> +               .tx_buf = &status_command,
+> +               .rx_buf = &status_repeat,
+> +               .len = 1,
+> +       };
+>          int ret = spi_sync_transfer(spi, &xfer, 1);
+> +       int ret_repeat = spi_sync_transfer(spi, &xfer_repeat, 1);
 > +
-> +	if (!ftrace_dump_on_oops)
-> +		return NOTIFY_DONE;
-> +
-> +	switch (ev) {
-> +	case DIE_OOPS:
-> +		do_dump = 1;
-> +		break;
-> +	case PANIC_NOTIFIER:
-> +		do_dump = 1;
-> +		break;
+> +       if (ret || ret_repeat)
+> +               return -EIO;
+>   
+> -       if ((status & MPF_STATUS_SPI_VIOLATION) ||
+> -           (status & MPF_STATUS_SPI_ERROR))
+> +       if (status != status_repeat)
+> +               printk("status disagreement %x %x", status, status_repeat);
+> +       if ((status_repeat & MPF_STATUS_SPI_VIOLATION) ||
+> +           (status_repeat & MPF_STATUS_SPI_ERROR))
+>                  ret = -EIO;
+>   
+> -       return ret ? : status;
+> +       return ret ?: status_repeat;
+>   }
+>   
+>   static enum fpga_mgr_states mpf_ops_state(struct fpga_manager *mgr)
 
-DIE_OOPS and PANIC_NOTIFIER are from different enum.
-It feels like comparing apples with oranges here.
+I'll check that and send out v12 if it's all rigth in the near future.
 
-IMHO, the proper way to unify the two notifiers is
-a check of the @self parameter. Something like:
-
-static int trace_die_panic_handler(struct notifier_block *self,
-				unsigned long ev, void *unused)
-{
-	if (self == trace_die_notifier && val != DIE_OOPS)
-		goto out;
-
-	ftrace_dump(ftrace_dump_on_oops);
-out:
-	return NOTIFY_DONE;
-}
-
-Best Regards,
-Petr

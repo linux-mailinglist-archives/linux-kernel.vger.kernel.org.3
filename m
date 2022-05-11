@@ -2,123 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F787522AA2
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 05:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F45522A9F
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 05:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241961AbiEKDz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 23:55:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36626 "EHLO
+        id S229448AbiEKD5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 23:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241882AbiEKDzp (ORCPT
+        with ESMTP id S242058AbiEKD4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 23:55:45 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126CD4CD55
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 20:55:39 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id q4so653297plr.11
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 20:55:39 -0700 (PDT)
+        Tue, 10 May 2022 23:56:47 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FA45DBE7
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 20:56:32 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id i1so666530plg.7
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 20:56:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=8Oj5fYgOyP9r6j4Oo2YFgfJ89J2j62xWeof0Jo9AY3w=;
-        b=v9w+8OSo8NSVmDmBQbc8obXr4Wi1nhD7MIDl5mmowMNt72/kNMxqluqzW8jS3Kp7UB
-         /7VISt6MIJKtVD9o0A7m6LzNO5Lqp9ow+x5B9kBGB7t7PtEZGsvXfcXksfmbNr4z51g2
-         LTzKHBx8TvH8VwSw5qQxFSvqLW2aYGDGcyTCY=
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=elq3ZqCelpCSxkkjk1LXdyA6w9hgB+SCHXKMgxWGx/U=;
+        b=f0WEcC7jjPTFG6Q6v9mT/VTbUk6akakqKqThuRBA10OtcmKjJs4FotEBdprRTmZrZF
+         Kb8j00IvxlaVvxLhVF+olvEM7z068yqNY7DUksi25Wuhc+ittQMbF3sNNuMlrjp0trft
+         jPe+SBWtYADIgBt1U9crcisYDlPyJy9V3ts222QP9S+ZNj9WdGzgEwTfgBNGgl9lTyX0
+         2Fv+/xdOFKMtT6Hvk7/sOzspO4aPku8B/XAFXgUu6zqe5yJcQO9LXB8JSfcNQzqAzBt6
+         y50LLDXRRm0M8Qj3TiD3Vhrh3vbutMS5qxe2s2RBw/glkC+5rS+kVBVhvbLF5i3xYVL7
+         tJ4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=8Oj5fYgOyP9r6j4Oo2YFgfJ89J2j62xWeof0Jo9AY3w=;
-        b=gKBNlz3W4ErVwNaV1LBEXKfjk7dCw+kncT24w8YgNAZMfksrnNqLEjZ6DORKeShwBx
-         igHWdzB+GyTeyq3If4B9nthhjFGz8ia39GQvuynsCyFmOB9gp3L+uiMaSzYYUSlW8oNe
-         H1Rqca0uRaQ2eWCKttcrrSujNy+gCXXgCUGHNDbTJLWfZAU5v82Y62LRfoDRJqhd4nFo
-         3vDgYJDJzsdOpgMYNeYUIMsu0MHBFmFAFhZViA+r7rxNqjYZnIvVCg532GpOiVWa2DxX
-         nU5IgyQI5uhCqMmqqLNTJ/BP2zVE4v1ft5xeW4ZFm4wyw5SiwP8MbrrJNbakXW81IorF
-         1rSA==
-X-Gm-Message-State: AOAM531dBxzYBmWuyzNcoVP/2nYXsVki2W4LEXf29DifWLr2XuKxWIpJ
-        VCYA9InzH8te8LaODbwvlJAJLA==
-X-Google-Smtp-Source: ABdhPJzDBQpUZk7W8Mq0NWHrteV9nx9UH/BVPj5fyK4gC7QCMNmi9ReuRK03KcV0ElJJJiZ8qW3FTA==
-X-Received: by 2002:a17:902:8644:b0:153:9f01:2090 with SMTP id y4-20020a170902864400b001539f012090mr22917397plt.101.1652241338601;
-        Tue, 10 May 2022 20:55:38 -0700 (PDT)
-Received: from localhost.localdomain (c-73-223-190-181.hsd1.ca.comcast.net. [73.223.190.181])
-        by smtp.gmail.com with ESMTPSA id d7-20020a170903230700b0015e8d4eb1f7sm442789plh.65.2022.05.10.20.55.37
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 10 May 2022 20:55:38 -0700 (PDT)
-From:   Joe Damato <jdamato@fastly.com>
-To:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Joe Damato <jdamato@fastly.com>
-Subject: [RFC,net-next 6/6] net: unix: Add MSG_NTCOPY
-Date:   Tue, 10 May 2022 20:54:27 -0700
-Message-Id: <1652241268-46732-7-git-send-email-jdamato@fastly.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1652241268-46732-1-git-send-email-jdamato@fastly.com>
-References: <1652241268-46732-1-git-send-email-jdamato@fastly.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=elq3ZqCelpCSxkkjk1LXdyA6w9hgB+SCHXKMgxWGx/U=;
+        b=y58oan3DG/eLpXp6HtxMcyRxTHFIV/3iDMZZOwC7lHUq6gGudZbjlvo4dnTtyCR03C
+         Nmk6G3EK++agbak2d8/SemanHT0fQ9eCaGUBFeCQv4Pd/iMhGVh+Py5Z+UL4xr7lb7XU
+         vydhpj5kdP8O8kF2Pu/tfvdcEcnI0QuN1wcibLb19NHF8+sUVaDe9KZoUvF1KrwO2hC/
+         RFKTlHnM1P/r5XlcJ1Ib5/LPZc6W2p5KpMVFRg+9wryJ4gpYkX+bWjoviHK1F+mcrI5y
+         plSJikET6Wx6kRYxqeAseeOgUbjrTUBLctczgbQsUfak0cVaelqNBnj3yYchg7E9pUcX
+         ZNkQ==
+X-Gm-Message-State: AOAM531b9/Mm8PVaF/aGpYiBoYRROvDmq1XfWCBVty+ZSeoYY3hRO38M
+        9KVobs/wdhOh2jApWGWQZLEGUP+9oo9wDLMaY1pQLw==
+X-Google-Smtp-Source: ABdhPJw5n1KJcz8j1FP3c7A6fBBMc1hcuPZsn2gE31BtaT8knvxsmvrFDZQnLCp0J+6DmYbEonpCWUJBRb2zAP6Umfo=
+X-Received: by 2002:a17:902:da8b:b0:15e:c0e8:d846 with SMTP id
+ j11-20020a170902da8b00b0015ec0e8d846mr23539490plx.34.1652241391912; Tue, 10
+ May 2022 20:56:31 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220422224508.440670-1-jane.chu@oracle.com> <20220422224508.440670-4-jane.chu@oracle.com>
+ <CAPcyv4i7xi=5O=HSeBEzvoLvsmBB_GdEncbasMmYKf3vATNy0A@mail.gmail.com>
+In-Reply-To: <CAPcyv4i7xi=5O=HSeBEzvoLvsmBB_GdEncbasMmYKf3vATNy0A@mail.gmail.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Tue, 10 May 2022 20:56:21 -0700
+Message-ID: <CAPcyv4id8AbTFpO7ED_DAPren=eJQHwcdY8Mjx18LhW+u4MdNQ@mail.gmail.com>
+Subject: Re: [PATCH v9 3/7] mce: fix set_mce_nospec to always unmap the whole page
+To:     Jane Chu <jane.chu@oracle.com>, Borislav Petkov <bp@alien8.de>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>, david <david@fromorbit.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        X86 ML <x86@kernel.org>,
+        Vishal L Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>,
+        device-mapper development <dm-devel@redhat.com>,
+        "Weiny, Ira" <ira.weiny@intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        "Luck, Tony" <tony.luck@intel.com>, Jue Wang <juew@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new sendmsg flag, MSG_NTCOPY, which user programs can use to signal
-to the kernel that data copied into the kernel during sendmsg should be
-done so using nontemporal copies, if it is supported by the architecture.
+On Fri, Apr 22, 2022 at 4:25 PM Dan Williams <dan.j.williams@intel.com> wrote:
+>
+> [ Add Tony as the originator of the whole_page() logic and Jue who
+> reported the issue that lead to 17fae1294ad9 x86/{mce,mm}: Unmap the
+> entire page if the whole page is affected and poisoned ]
+>
+>
+> On Fri, Apr 22, 2022 at 3:46 PM Jane Chu <jane.chu@oracle.com> wrote:
+> >
+> > The set_memory_uc() approach doesn't work well in all cases.
+> > As Dan pointed out when "The VMM unmapped the bad page from
+> > guest physical space and passed the machine check to the guest."
+> > "The guest gets virtual #MC on an access to that page. When
+> > the guest tries to do set_memory_uc() and instructs cpa_flush()
+> > to do clean caches that results in taking another fault / exception
+> > perhaps because the VMM unmapped the page from the guest."
+> >
+> > Since the driver has special knowledge to handle NP or UC,
+> > mark the poisoned page with NP and let driver handle it when
+> > it comes down to repair.
+> >
+> > Please refer to discussions here for more details.
+> > https://lore.kernel.org/all/CAPcyv4hrXPb1tASBZUg-GgdVs0OOFKXMXLiHmktg_kFi7YBMyQ@mail.gmail.com/
+> >
+> > Now since poisoned page is marked as not-present, in order to
+> > avoid writing to a not-present page and trigger kernel Oops,
+> > also fix pmem_do_write().
+> >
+> > Fixes: 284ce4011ba6 ("x86/memory_failure: Introduce {set, clear}_mce_nospec()")
+> > Reviewed-by: Christoph Hellwig <hch@lst.de>
+> > Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+> > Signed-off-by: Jane Chu <jane.chu@oracle.com>
 
-Signed-off-by: Joe Damato <jdamato@fastly.com>
----
- include/linux/socket.h |  1 +
- net/unix/af_unix.c     | 13 +++++++++++--
- 2 files changed, 12 insertions(+), 2 deletions(-)
+Boris,
 
-diff --git a/include/linux/socket.h b/include/linux/socket.h
-index 12085c9..c9b10aa 100644
---- a/include/linux/socket.h
-+++ b/include/linux/socket.h
-@@ -318,6 +318,7 @@ struct ucred {
- 					  * plain text and require encryption
- 					  */
- 
-+#define MSG_NTCOPY	0x2000000	/* Use a non-temporal copy */
- #define MSG_ZEROCOPY	0x4000000	/* Use user data in kernel path */
- #define MSG_FASTOPEN	0x20000000	/* Send data in TCP SYN */
- #define MSG_CMSG_CLOEXEC 0x40000000	/* Set close_on_exec for file
-diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-index e1dd9e9..ccbd643 100644
---- a/net/unix/af_unix.c
-+++ b/net/unix/af_unix.c
-@@ -1907,7 +1907,11 @@ static int unix_dgram_sendmsg(struct socket *sock, struct msghdr *msg,
- 	skb_put(skb, len - data_len);
- 	skb->data_len = data_len;
- 	skb->len = len;
--	err = skb_copy_datagram_from_iter(skb, 0, &msg->msg_iter, len);
-+	if (msg->msg_flags & MSG_NTCOPY)
-+		err = skb_copy_datagram_from_iter_nocache(skb, 0, &msg->msg_iter, len);
-+	else
-+		err = skb_copy_datagram_from_iter(skb, 0, &msg->msg_iter, len);
-+
- 	if (err)
- 		goto out_free;
- 
-@@ -2167,7 +2171,12 @@ static int unix_stream_sendmsg(struct socket *sock, struct msghdr *msg,
- 		skb_put(skb, size - data_len);
- 		skb->data_len = data_len;
- 		skb->len = size;
--		err = skb_copy_datagram_from_iter(skb, 0, &msg->msg_iter, size);
-+
-+		if (msg->msg_flags & MSG_NTCOPY)
-+			err = skb_copy_datagram_from_iter_nocache(skb, 0, &msg->msg_iter, size);
-+		else
-+			err = skb_copy_datagram_from_iter(skb, 0, &msg->msg_iter, size);
-+
- 		if (err) {
- 			kfree_skb(skb);
- 			goto out_err;
--- 
-2.7.4
-
+This is the last patch in this set that needs an x86 maintainer ack.
+Since you have been involved in the history for most of this, mind
+giving it an ack so I can pull it in for v5.19? Let me know if you
+want a resend.

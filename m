@@ -2,181 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 191E3523E12
+	by mail.lfdr.de (Postfix) with ESMTP id BE6E5523E14
 	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347333AbiEKTzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 15:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
+        id S1347366AbiEKTzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 15:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347305AbiEKTy4 (ORCPT
+        with ESMTP id S1347327AbiEKTy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 15:54:56 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F1393982
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:54:54 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id i10so5357708lfg.13
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:54:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2Qb1M+JmVqidyh+GcY2AVrkjW3SfrjqMOoV1GmxoVTk=;
-        b=aNqlCDjSlQAd5Mkgx9/ZjT6A3I6OWm4d++cBnww6hEPmMfrBMTKVPsD/1CUt1mcZoX
-         FKcLAr/gRpPKKPPep48fSb6xq4ggxDJONXdvVJHAZrBuiluQK/Ynrxm9YvW0KHU2fgGj
-         TiRJbIM7X79t91zZCCuEypIdirxM7C/m4vmPji5m2EgzfU3QrbDfeKMdKM/zPobP8xMp
-         SupwiG77x1WnILjbHZUv7laC8VunueEaZHxeQkgAsw8U8onVelHw8ZaX/GYYUW6NQ9z5
-         JIrDS3puH0QxD2pqiwkVF78OyB0PQfib9zYepB2Vs61A1xBTMgN5RTEiO5dEIZqQObc5
-         re8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2Qb1M+JmVqidyh+GcY2AVrkjW3SfrjqMOoV1GmxoVTk=;
-        b=u6sqcqFbaIQSH30UKoPwFJyejBY7VcIERNuZ8R9Hcx/caVtKMhWvxmdbsm1yCXWqnh
-         r2UbGj474Ld7M539dZ1f2y4vcsjw/kQmQI+yx8ww97EWaq6bNWM8ARvnWICC1d92X/pm
-         YH4+diU0rUBhlFAsCGzDHiQdQhJGX42u+7YUSvW7u3w9OV7qzsk7834qb2fvJgrZGQHs
-         gHn/uj/JjsyC5memtjXrhFtvCqnIXGSggKEw7TlICdzG0WqApLjJjIk5OG8QVDeVVhaW
-         I6t73t3OPkyP2oJmrSr1G2CgueyxS58cI9LeyiSBlcEsiv4QEBPEgSK9xBNgjViLuDTH
-         bVMg==
-X-Gm-Message-State: AOAM531BUUwTYOIeFwHkmNu8NCpkdKgEwea+Iu5Wvw0/EgNEJ1fjnMSF
-        q+7ZKuUMYwbm2mDrMYkj4JDMlQ1nzDbsUX1HrT4cjQ==
-X-Google-Smtp-Source: ABdhPJyv+rsZDchbo4bbs51p7N/3mDFXD5dB/xCj/WH1juB/LdvdRHX77SRuTlb0XXqG1KUKBYTfafEXBGS1FNyaTNg=
-X-Received: by 2002:ac2:4646:0:b0:472:108e:51af with SMTP id
- s6-20020ac24646000000b00472108e51afmr21415635lfo.184.1652298892520; Wed, 11
- May 2022 12:54:52 -0700 (PDT)
+        Wed, 11 May 2022 15:54:59 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AFE9C2FC;
+        Wed, 11 May 2022 12:54:59 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id F06951F42CF0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652298897;
+        bh=mb8FI9cn+BTWOJjO46oabe4cMLSOl4wn8hXjvFvCuoc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dpQiAjZI6Jhhxfs09HDMi10UTpbhdgj5qfUkzPgXjjmC7MFCoRAkXh2kPf8Zj/b6n
+         a31L8+kgqyxzLRD2bCYy1OcJv7Xh50hv++mdnTyw+xaxVCcjwvSq37pBLJhzNuJ7zp
+         k8XTHxEU/cPaEhoMXKQTkDl+FkDPjVMgyCBA5HJLq2VQr2UlfS/pmTkE6U1Q/t0XdC
+         rvdJV/8mEr7YgwsBJDPdQE+Lbaj+wFTdrOWFrfm7YiVivvmtDv/wgAnfiDQ7lg0pwF
+         thV44tjSbn8ZL6xGxPObQWwaig4gYkbUK5SwTP2Xs9pWcvs5UWS9lG4KSYBN2rLw73
+         9IwJ0Y27HprkA==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Tzung-Bi Shih <tzungbi@google.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org
+Subject: [PATCH v5 0/2] Mediatek SCP dt-binding tweaks
+Date:   Wed, 11 May 2022 15:54:50 -0400
+Message-Id: <20220511195452.871897-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220511120532.2228616-1-hca@linux.ibm.com> <20220511120532.2228616-6-hca@linux.ibm.com>
-In-Reply-To: <20220511120532.2228616-6-hca@linux.ibm.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 11 May 2022 12:54:41 -0700
-Message-ID: <CAKwvOdm3P+c0W+oZ9wtgMyxcP3KYX0UkYxO4o=7DLLyMdKdnPg@mail.gmail.com>
-Subject: Re: [PATCH 5/8] s390/purgatory: workaround llvm's IAS limitations
-To:     Heiko Carstens <hca@linux.ibm.com>,
-        Jonas Paulsson <paulsson@linux.vnet.ibm.com>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Ulrich Weigand <ulrich.weigand@de.ibm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andreas Krebbel <krebbel@linux.ibm.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 5:05 AM Heiko Carstens <hca@linux.ibm.com> wrote:
->
-> llvm's integrated assembler cannot handle immediate values which are
-> calculated with two local labels:
->
-> arch/s390/purgatory/head.S:139:11: error: invalid operand for instruction
->  aghi %r8,-(.base_crash-purgatory_start)
 
-I thought this was fixed in
-https://github.com/ClangBuiltLinux/linux/issues/1420
-https://reviews.llvm.org/D113341
-(clang-14)
-?
+Two simple patches for the Mediatek SCP dt-binding. The first fixes the
+reg/reg-names property while the second adds a new optional
+memory-region property.
 
->
-> Workaround this by partially rewriting the code.
->
-> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-> ---
->  arch/s390/purgatory/head.S | 29 ++++++++++++++++++++++-------
->  1 file changed, 22 insertions(+), 7 deletions(-)
->
-> diff --git a/arch/s390/purgatory/head.S b/arch/s390/purgatory/head.S
-> index 3d1c31e0cf3d..ac1a27a20b66 100644
-> --- a/arch/s390/purgatory/head.S
-> +++ b/arch/s390/purgatory/head.S
-> @@ -44,11 +44,14 @@
->  .endm
->
->  .macro MEMSWAP dst,src,buf,len
-> -10:    cghi    \len,bufsz
-> +10:    larl    %r0,purgatory_end
-> +       larl    %r1,stack
-> +       slgr    %r0,%r1
-> +       cgr     \len,%r0
->         jh      11f
->         lgr     %r4,\len
->         j       12f
-> -11:    lghi    %r4,bufsz
-> +11:    lgr     %r4,%r0
->
->  12:    MEMCPY  \buf,\dst,%r4
->         MEMCPY  \dst,\src,%r4
-> @@ -135,12 +138,18 @@ ENTRY(purgatory_start)
->
->  .start_crash_kernel:
->         /* Location of purgatory_start in crash memory */
-> +       larl    %r0,.base_crash
-> +       larl    %r1,purgatory_start
-> +       slgr    %r0,%r1
->         lgr     %r8,%r13
-> -       aghi    %r8,-(.base_crash-purgatory_start)
-> +       sgr     %r8,%r0
->
->         /* Destination for this code i.e. end of memory to be swapped. */
-> +       larl    %r0,purgatory_end
-> +       larl    %r1,purgatory_start
-> +       slgr    %r0,%r1
->         lg      %r9,crash_size-.base_crash(%r13)
-> -       aghi    %r9,-(purgatory_end-purgatory_start)
-> +       sgr     %r9,%r0
->
->         /* Destination in crash memory, i.e. same as r9 but in crash memory. */
->         lg      %r10,crash_start-.base_crash(%r13)
-> @@ -149,15 +158,19 @@ ENTRY(purgatory_start)
->         /* Buffer location (in crash memory) and size. As the purgatory is
->          * behind the point of no return it can re-use the stack as buffer.
->          */
-> -       lghi    %r11,bufsz
-> +       larl    %r11,purgatory_end
->         larl    %r12,stack
-> +       slgr    %r11,%r12
->
->         MEMCPY  %r12,%r9,%r11   /* dst  -> (crash) buf */
->         MEMCPY  %r9,%r8,%r11    /* self -> dst */
->
->         /* Jump to new location. */
->         lgr     %r7,%r9
-> -       aghi    %r7,.jump_to_dst-purgatory_start
-> +       larl    %r0,.jump_to_dst
-> +       larl    %r1,purgatory_start
-> +       slgr    %r0,%r1
-> +       agr     %r7,%r0
->         br      %r7
->
->  .jump_to_dst:
-> @@ -169,7 +182,9 @@ ENTRY(purgatory_start)
->
->         /* Load new buffer location after jump */
->         larl    %r7,stack
-> -       aghi    %r10,stack-purgatory_start
-> +       larl    %r0,purgatory_start
-> +       slgrk   %r0,%r7,%r0
-> +       agr     %r10,%r0
->         MEMCPY  %r10,%r7,%r11   /* (new) buf -> (crash) buf */
->
->         /* Now the code is set up to run from its designated location. Start
-> --
-> 2.32.0
->
+v4: https://lore.kernel.org/all/20220506213226.257859-1-nfraprado@collabora.com
+v3: https://lore.kernel.org/all/20220503211114.2656099-1-nfraprado@collabora.com
+v2: https://lore.kernel.org/all/20220502192420.2548512-1-nfraprado@collabora.com
+v1: https://lore.kernel.org/all/20220429211111.2214119-1-nfraprado@collabora.com
 
+Changes in v5:
+- Made l1tcm optional for mt8192/mt8195
+- Greatly simplified the constraints override in the if:then:
+
+Changes in v4:
+- Reworked presence of l1tcm reg to be if:then: based and present only
+  on mt8192/mt8195
+
+Changes in v3:
+- Made the cfg reg required again. After looking again into the mtk-scp
+  driver, only l1tcm is optional.
+
+Changes in v2:
+- Dropped type and description from memory-region since it's a
+  well-known property
+- Set memory-region maxItems to 1
+
+Nícolas F. R. A. Prado (2):
+  dt-bindings: remoteproc: mediatek: Make l1tcm reg exclusive to mt819x
+  dt-bindings: remoteproc: mediatek: Add optional memory-region to
+    mtk,scp
+
+ .../bindings/remoteproc/mtk,scp.yaml          | 47 +++++++++++++------
+ 1 file changed, 33 insertions(+), 14 deletions(-)
 
 -- 
-Thanks,
-~Nick Desaulniers
+2.36.1
+

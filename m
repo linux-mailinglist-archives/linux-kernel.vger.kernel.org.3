@@ -2,64 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56BBA522F4D
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E44D522EF6
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:07:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233451AbiEKJXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 05:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
+        id S238686AbiEKJHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 05:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237887AbiEKJXD (ORCPT
+        with ESMTP id S229507AbiEKJHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 05:23:03 -0400
-X-Greylist: delayed 964 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 11 May 2022 02:23:00 PDT
-Received: from smtp16.bhosted.nl (smtp16.bhosted.nl [IPv6:2a02:9e0:8000::27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EEC7A456
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:22:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protonic.nl; s=202111;
-        h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
-         message-id:subject:cc:to:from:date:from;
-        bh=n2xPqgvtWv5KMPWGWD4jNRZDCTudAr2aEHyO5J86aqQ=;
-        b=qYrSZo1cxYNIL8va3yr4DdJVks7DrzkR67viN5/7E68OKxujiGfglvzwgL5LFf0d3TNVUduU4IARg
-         phaMrIfqIkGEY+JkctXPWopo52PVZosqpf7b5LQlE2mGE8MVhBcDY8DOYTOFo8unC93HD7iK5hiwO4
-         cqlo2J/gdIPjL0fzeGx2EXQ+OjpacdlRsAVY9wl3h6xRZQDRDVZGaNNbc5QMbh38BdDJdgV5sMlf0x
-         cvJfBqHqZckdnPiCuQNr+zhmQSIVuimPN6UBNJIsSlu/hJMXCbnqNlY7ycptwzFAKRaBUxyTqAevxx
-         S9aWyHqFV4Q5tQ27FdgUAuzN9uaf5gw==
-X-MSG-ID: b1117358-d109-11ec-9896-0050569d2c73
-Date:   Wed, 11 May 2022 11:06:49 +0200
-From:   David Jander <david@protonic.nl>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Devid Antonio Filoni <devid.filoni@egluetechnologies.com>,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
-        Robin van der Gracht <robin@protonic.nl>,
-        kernel@pengutronix.de, linux-can@vger.kernel.org,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
-        kbuild test robot <lkp@intel.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND] can: j1939: do not wait 250ms if the same addr
- was already claimed
-Message-ID: <20220511110649.21cc1f65@erd992>
-In-Reply-To: <20220511084728.GD10669@pengutronix.de>
-References: <20220509170303.29370-1-devid.filoni@egluetechnologies.com>
-        <YnllpntZ8V5CD07v@x1.vandijck-laurijssen.be>
-        <20220510042609.GA10669@pengutronix.de>
-        <ce7da10389fe448efee86d788dd5282b8022f92e.camel@egluetechnologies.com>
-        <20220511084728.GD10669@pengutronix.de>
-Organization: Protonic Holland
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 11 May 2022 05:07:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA0133EB97
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:07:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652260020;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+6aR4G5bhHxoYCpwQyfjz1xkmAc7kDl/rLkC6zVA3qk=;
+        b=YePXmrxTcx2kMgVusx7fVz+Cu/JY3jl0FudaSjua4ZSLqpA5ctDdg5dzg19ExMNaX7sBNQ
+        uAKStNtWcyNEl4pmEqdcAxF1BwQ/Um1+JNWwudUfdO+ANrswHe/Jk30jvJpTOEkNYj+ALs
+        imMB2dhQhldONp/9u0G9IwptGEE0XP8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-228-WkHv9DnJMvaF9c7uYKNQ9g-1; Wed, 11 May 2022 05:06:57 -0400
+X-MC-Unique: WkHv9DnJMvaF9c7uYKNQ9g-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0C124804195;
+        Wed, 11 May 2022 09:06:57 +0000 (UTC)
+Received: from localhost (ovpn-12-154.pek2.redhat.com [10.72.12.154])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id CD872416539;
+        Wed, 11 May 2022 09:06:55 +0000 (UTC)
+Date:   Wed, 11 May 2022 17:06:51 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Dave Young <dyoung@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+Subject: Re: [PATCH] arm64: kdump: Do not allocate crash low memory if not
+ needed
+Message-ID: <Ynt8qwG9WoiW4L+o@MiWiFi-R3L-srv>
+References: <20220511032033.426-1-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511032033.426-1-thunder.leizhen@huawei.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,165 +72,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 05/11/22 at 11:20am, Zhen Lei wrote:
+> When "crashkernel=X,high" is specified, the specified "crashkernel=Y,low"
+> memory is not required in the following corner cases:
+> 1. If both CONFIG_ZONE_DMA and CONFIG_ZONE_DMA32 are disabled, it means
+>    that the devices can access any memory.
+> 2. If the system memory is small, the crash high memory may be allocated
+>    from the DMA zones. If that happens, there's no need to allocate
+>    another crash low memory because there's already one.
+> 
+> Add condition '(crash_base >= CRASH_ADDR_LOW_MAX)' to determine whether
+> the 'high' memory is allocated above DMA zones. Note: when both
+> CONFIG_ZONE_DMA and CONFIG_ZONE_DMA32 are disabled, the entire physical
+> memory is DMA accessible, CRASH_ADDR_LOW_MAX equals 'PHYS_MASK + 1'.
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> ---
+>  Documentation/admin-guide/kernel-parameters.txt | 5 +++--
+>  arch/arm64/mm/init.c                            | 3 ++-
+>  2 files changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index f6ff55840751a78..1b543c3109f4851 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -823,7 +823,7 @@
+>  			low memory is needed to make sure DMA buffers for 32-bit
+>  			devices won't run out. Kernel would try to allocate
+>  			at least 256M below 4G automatically.
+> -			This one let user to specify own low range under 4G
+> +			This one lets the user specify own low range under 4G
+                        ~ This one let users specify own low range ...
 
-Hi,
+Other than this nitpick, LGTM
 
-On Wed, 11 May 2022 10:47:28 +0200
-Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+Acked-by: Baoquan He <bhe@redhat.com>
 
-> Hi,
->=20
-> i'll CC more J1939 users to the discussion.
+>  			for second kernel instead.
+>  			0: to disable low allocation.
+>  			It will be ignored when crashkernel=X,high is not used
+> @@ -832,7 +832,8 @@
+>  			[KNL, ARM64] range in low memory.
+>  			This one lets the user specify a low range in the
+>  			DMA zone for the crash dump kernel.
+> -			It will be ignored when crashkernel=X,high is not used.
+> +			It will be ignored when crashkernel=X,high is not used
+> +			or memory reserved is located in the DMA zones.
+>  
+>  	cryptomgr.notests
+>  			[KNL] Disable crypto self-tests
+> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+> index 18ba66c90991ea0..ac510fb6a2c0189 100644
+> --- a/arch/arm64/mm/init.c
+> +++ b/arch/arm64/mm/init.c
+> @@ -170,7 +170,8 @@ static void __init reserve_crashkernel(void)
+>  		return;
+>  	}
+>  
+> -	if (crash_low_size && reserve_crashkernel_low(crash_low_size)) {
+> +	if ((crash_base >= CRASH_ADDR_LOW_MAX) &&
+> +	     crash_low_size && reserve_crashkernel_low(crash_low_size)) {
+>  		memblock_phys_free(crash_base, crash_size);
+>  		return;
+>  	}
+> -- 
+> 2.25.1
+> 
 
-Thanks for the CC.
-
-> On Tue, May 10, 2022 at 01:00:41PM +0200, Devid Antonio Filoni wrote:
-> > Hi,
-> >=20
-> > On Tue, 2022-05-10 at 06:26 +0200, Oleksij Rempel wrote: =20
-> > > Hi,
-> > >=20
-> > > On Mon, May 09, 2022 at 09:04:06PM +0200, Kurt Van Dijck wrote: =20
-> > > > On ma, 09 mei 2022 19:03:03 +0200, Devid Antonio Filoni wrote: =20
-> > > > > This is not explicitly stated in SAE J1939-21 and some tools used=
- for
-> > > > > ISO-11783 certification do not expect this wait. =20
-> > >=20
-> > > It will be interesting to know which certification tool do not expect=
- it and
-> > > what explanation is used if it fails?
-> > >  =20
-> > > > IMHO, the current behaviour is not explicitely stated, but nor is t=
-he opposite.
-> > > > And if I'm not mistaken, this introduces a 250msec delay.
-> > > >=20
-> > > > 1. If you want to avoid the 250msec gap, you should avoid to contes=
-t the same address.
-> > > >=20
-> > > > 2. It's a balance between predictability and flexibility, but if yo=
-u try to accomplish both,
-> > > > as your patch suggests, there is slight time-window until the curre=
-nt owner responds,
-> > > > in which it may be confusing which node has the address. It depends=
- on how much history
-> > > > you have collected on the bus.
-> > > >=20
-> > > > I'm sure that this problem decreases with increasing processing pow=
-er on the nodes,
-> > > > but bigger internal queues also increase this window.
-> > > >=20
-> > > > It would certainly help if you describe how the current implementat=
-ion fails.
-> > > >=20
-> > > > Would decreasing the dead time to 50msec help in such case.
-> > > >=20
-> > > > Kind regards,
-> > > > Kurt
-> > > >  =20
-> > >  =20
-> >=20
-> > The test that is being executed during the ISOBUS compliance is the
-> > following: after an address has been claimed by a CF (#1), another CF
-> > (#2) sends a  message (other than address-claim) using the same address
-> > claimed by CF #1.
-> >=20
-> > As per ISO11783-5 standard, if a CF receives a message, other than the
-> > address-claimed message, which uses the CF's own SA, then the CF (#1):
-> > - shall send the address-claim message to the Global address;
-> > - shall activate a diagnostic trouble code with SPN =3D 2000+SA and FMI=
- =3D
-> > 31
-> >=20
-> > After the address-claim message is sent by CF #1, as per ISO11783-5
-> > standard:
-> > - If the name of the CF #1 has a lower priority then the one of the CF
-> > #2, the the CF #2 shall send its address-claim message and thus the CF
-> > #1 shall send the cannot-claim-address message or shall execute again
-> > the claim procedure with a new address
-> > - If the name of the CF #1 has higher priority then the of the CF #2,
-> > then the CF #2 shall send the cannot-claim-address message or shall
-> > execute the claim procedure with a new address
-> >=20
-> > Above conflict management is OK with current J1939 driver
-> > implementation, however, since the driver always waits 250ms after
-> > sending an address-claim message, the CF #1 cannot set the DTC. The DM1
-> > message which is expected to be sent each second (as per J1939-73
-> > standard) may not be sent.
-> >=20
-> > Honestly, I don't know which company is doing the ISOBUS compliance
-> > tests on our products and which tool they use as it was choosen by our
-> > customer, however they did send us some CAN traces of previously
-> > performed tests and we noticed that the DM1 message is sent 160ms after
-> > the address-claim message (but it may also be lower then that), and this
-> > is something that we cannot do because the driver blocks the application
-> > from sending it.
-> >=20
-> > 28401.127146 1  18E6FFF0x    Tx   d 8 FE 26 FF FF FF FF FF FF  //Message
-> > with other CF's address
-> > 28401.167414 1  18EEFFF0x    Rx   d 8 15 76 D1 0B 00 86 00 A0  //Address
-> > Claim - SA =3D F0
-> > 28401.349214 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 01 FF FF  //DM1
-> > 28402.155774 1  18E6FFF0x    Tx   d 8 FE 26 FF FF FF FF FF FF  //Message
-> > with other CF's address
-> > 28402.169455 1  18EEFFF0x    Rx   d 8 15 76 D1 0B 00 86 00 A0  //Address
-> > Claim - SA =3D F0
-> > 28402.348226 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 02 FF FF  //DM1
-> > 28403.182753 1  18E6FFF0x    Tx   d 8 FE 26 FF FF FF FF FF FF  //Message
-> > with other CF's address
-> > 28403.188648 1  18EEFFF0x    Rx   d 8 15 76 D1 0B 00 86 00 A0  //Address
-> > Claim - SA =3D F0
-> > 28403.349328 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 03 FF FF  //DM1
-> > 28404.349406 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 03 FF FF  //DM1
-> > 28405.349740 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 03 FF FF  //DM1
-> >=20
-> > Since the 250ms wait is not explicitly stated, IMHO it should be up to
-> > the user-space implementation to decide how to manage it.
-
-I think this is not entirely correct. AFAICS the 250ms wait is indeed
-explicitly stated.
-The following is taken from ISO 11783-5:
-
-In "4.4.4.3 Address violation" it states that "If a CF receives a message,
-other than the address-claimed message, which uses the CF=E2=80=99s own SA,=
- then the
-CF [...] shall send the address-claim message to the Global address."
-
-So the CF shall claim its address again. But further down, in "4.5.2 Address
-claim requirements" it is stated that "...No CF shall begin, or resume,
-transmission on the network until 250 ms after it has successfully claimed =
-an
-address".
-
-At this moment, the address is in dispute. The affected CFs are not allowed=
- to
-send any other messages until this dispute is resolved, and the standard
-requires a waiting time of 250ms which is minimally deemed necessary to give
-all participants time to respond and eventually dispute the address claim.
-
-If the offending CF ignores this dispute and keeps sending incorrect messag=
-es
-faster than every 250ms, then effectively the other CF has no chance to ever
-resume normal operation because its address is still disputed.
-
-According to 4.4.4.3 it is also required to set a DTC, but it will not be
-allowed to send the DM1 message unless the address dispute is resolved.
-
-This effectively leads to the offending CF to DoS the affected CF if it kee=
-ps
-sending offending messages. Unfortunately neither J1939 nor ISObus takes in=
-to
-account adversarial behavior on the CAN network, so we cannot do anything
-about this.
-
-As for the ISObus compliance tool that is mentioned by Devid, IMHO this
-compliance tool should be challenged and fixed, since it is broken.
-
-The networking layer is prohibiting the DM1 message to be sent, and the
-networking layer has precedence above all superior protocol layers, so the
-diagnostics layer is not able to operate at this moment.
-
-Best regards,
-
---=20
-David Jander
-Protonic Holland.

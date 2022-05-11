@@ -2,151 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D77A4523613
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D48523617
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245143AbiEKOrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 10:47:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48292 "EHLO
+        id S245039AbiEKOr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 10:47:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245041AbiEKOqu (ORCPT
+        with ESMTP id S244750AbiEKOr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 10:46:50 -0400
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653342DD6D
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:46:43 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id y76so4496578ybe.1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:46:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EnmGA8ainxG/8m3UcH5gpShY1r3ysYYHWnV4t7QF74M=;
-        b=3t1QvIMeFK5mP1pm+mtbHV+1M6nMvHDx53e5f+bT8UJgXX9hTvdaYvt/UdCBWKpDI8
-         zCGkBtm8SmniRqbfBk5i6DS/pT/GsHiTvzLFlzOY3ZhV9QLx5KRIJa1gn/2OJipf4UlU
-         SpwDuUNs+eGnnXhK6Fov+n9a9I468QyGh+XeCuIxep/VZhq7WJo/Xkh8iafV+OrPKoKl
-         q5ZpmXV2tE3kVNzDTLaliuYPph65Goh6s+2072AVULu6/TajYWmxVP+hHqCxDfLOTT6S
-         i3FVfz2HeyqK9ZXNDNs612Gz3NFog2DlWqNP5BNYTUBSwzT6yOn9yZZ59ahuJF0coHHE
-         3YdQ==
-X-Gm-Message-State: AOAM532P+utQwNcz25zow5pCUxBXuRUgycFflOFeSqPxORiH8jKTK9hN
-        GqL2hsQ/Zhmf6omjUXS930d56L8fA0/iom23hHc=
-X-Google-Smtp-Source: ABdhPJz133qXMWdxupMygY4BBcGRdChR+/DiYHApj1IKMWU/Q7kPKoCoY6f0TWiUlZt4lRx62X+4i0YPk2Pcj5ZyDFg=
-X-Received: by 2002:a25:cb4b:0:b0:645:d702:eb15 with SMTP id
- b72-20020a25cb4b000000b00645d702eb15mr22111070ybg.500.1652280402426; Wed, 11
- May 2022 07:46:42 -0700 (PDT)
+        Wed, 11 May 2022 10:47:27 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18DBF13F1E;
+        Wed, 11 May 2022 07:47:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652280446; x=1683816446;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=N7APsdlpxz6u79WorIWwR5LZd+w3+vL9fRK/HNG4EQU=;
+  b=Sj9Q8flTXilnYFMR5m9urM3Xi1x4FYM5pLP57cfZwlxX4IE30iJzvsYQ
+   +OdANbqjx2JoDbWmf27lRjC12XEZUZRYhr+uwqyjXIEXhMkI6r7xza9cL
+   dRGmLFsifUSidTBSpslVMszrCl1peGoiCpW9+hfH4T170M1M1gdHD/P0T
+   I=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 11 May 2022 07:47:25 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 07:47:25 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 11 May 2022 07:47:24 -0700
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 11 May
+ 2022 07:47:24 -0700
+Message-ID: <a0e60283-a448-650f-808e-a0080ae550f7@quicinc.com>
+Date:   Wed, 11 May 2022 08:47:23 -0600
 MIME-Version: 1.0
-References: <20220510142550.1686866-1-mailhol.vincent@wanadoo.fr>
- <CAKwvOdnShyGvW9cuDuqQS+uvY7DHSmh8-55R1Bx_dxej8YQRHg@mail.gmail.com> <CAMZ6RqKD9O8OHVUGCOYK1BXm7SCOkWbxCsSb=6jjfzgKn61JEw@mail.gmail.com>
-In-Reply-To: <CAMZ6RqKD9O8OHVUGCOYK1BXm7SCOkWbxCsSb=6jjfzgKn61JEw@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 11 May 2022 23:46:31 +0900
-Message-ID: <CAMZ6RqJ5wO5RZ1bjKeeq8VOuYWM4ihBcCqf9y03GWrg_eovX-w@mail.gmail.com>
-Subject: Re: [PATCH 0/2] x86/asm/bitops: optimize ff{s,z} functions for
- constant expressions
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH 0/2] hyperv compose_msi_msg fixups
+Content-Language: en-US
+To:     Wei Liu <wei.liu@kernel.org>
+CC:     <kys@microsoft.com>, <haiyangz@microsoft.com>,
+        <sthemmin@microsoft.com>, <decui@microsoft.com>,
+        <lorenzo.pieralisi@arm.com>, <robh@kernel.org>, <kw@linux.com>,
+        <bhelgaas@google.com>, <jakeo@microsoft.com>,
+        <dazhan@microsoft.com>, <linux-hyperv@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1652132902-27109-1-git-send-email-quic_jhugo@quicinc.com>
+ <20220511144124.rj7inq6zy6bgbii4@liuwe-devbox-debian-v2>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <20220511144124.rj7inq6zy6bgbii4@liuwe-devbox-debian-v2>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed. 11 mai 2022 at 08:24, Vincent MAILHOL
-<mailhol.vincent@wanadoo.fr> wrote:
-> On Wed. 11 May 2022 at 07:14, Nick Desaulniers <ndesaulniers@google.com> wrote:
-> > On Tue, May 10, 2022 at 7:26 AM Vincent Mailhol
-> > <mailhol.vincent@wanadoo.fr> wrote:
-> > >
-> > > The compilers provides some builtin expression equivalent to the
-> > > ffs(), __ffs() and ffz() function of the kernel. The kernel uses
-> > > optimized assembly which produces better code than the builtin
-> > > functions. However, such assembly code can not be optimized when used
-> > > on constant expression.
-> > >
-> > > This series relies on __builtin_constant_p to select the optimal solution:
-> > >
-> > >   * use kernel assembly for non constant expressions
-> > >
-> > >   * use compiler's __builtin function for constant expressions.
-> > >
-> > > I also think that the fls() and fls64() can be optimized in a similar
-> > > way, using __builtin_ctz() and __builtin_ctzll() but it is a bit less
-> > > trivial so I want to focus on this series first. If it get accepted, I
-> > > will then work on those two additionnal function.
-> > >
-> > >
-> > > ** Statistics **
-> > >
-> > > On a allyesconfig, before applying this series, I get:
-> > >
-> > > | $ objdump -d vmlinux.o | grep bsf | wc -l
-> > > | 1081
-> > >
-> > > After applying this series:
-> > >
-> > > | $ objdump -d vmlinux.o | grep bsf | wc -l
-> > > | 792
-> > >
-> > > So, roughly 26.7% of the call to either ffs() or __ffs() were using
-> > > constant expression and can be optimized (I did not produce the
-> > > figures for ffz()).
-> >
-> > These stats are interesting; consider putting them on patch 1/2 commit
-> > message though (in addition to the cover letter). (Sending thoughts on
-> > 1/2 next).
->
-> The fact is that patch 1/2 changes ffs() and patch 2/2 changes
-> __ffs(). For v2, I will run the stats on each patch separately in
-> order not to mix the results.
->
-> > >
-> > > (tests done on linux v5.18-rc5 x86_64 using GCC 11.2.1)
-> >
-> > Here's the same measure of x86_64 allyesconfig (./scripts/config -d
-> > CONFIG_HINIC) at 9be9ed2612b5aedb52a2c240edb1630b6b743cb6 with ToT
-> > LLVM (~clang-15):
-> >
-> > Before:
-> > $ objdump -d vmlinux.o | grep bsf | wc -l
-> > 1454
-> >
-> > After:
-> > $ objdump -d vmlinux.o | grep bsf | wc -l
-> > 1070
-> >
-> > -26.4% :)
->
-> Roughly same ratio. I am just surprise that the absolute number
-> are different:
->
->   * GCC before: 1081, after 792
->   * clang before 1454, after 1070
->
-> I wonder why clang produces more bsf instructions than GCC?
+On 5/11/2022 8:41 AM, Wei Liu wrote:
+> On Mon, May 09, 2022 at 03:48:20PM -0600, Jeffrey Hugo wrote:
+>> While multi-MSI appears to work with pci-hyperv.c, there was a concern about
+>> how linux was doing the ITRE allocations.  Patch 2 addresses the concern.
+>>
+>> However, patch 2 exposed an issue with how compose_msi_msg() was freeing a
+>> previous allocation when called for the Nth time.  Imagine a driver using
+>> pci_alloc_irq_vectors() to request 32 MSIs.  This would cause compose_msi_msg()
+>> to be called 32 times, once for each MSI.  With patch 2, MSI0 would allocate
+>> the ITREs needed, and MSI1-31 would use the cached information.  Then the driver
+>> uses request_irq() on MSI1-17.  This would call compose_msi_msg() again on those
+>> MSIs, which would again use the cached information.  Then unmask() would be
+>> called to retarget the MSIs to the right VCPU vectors.  Finally, the driver
+>> calls request_irq() on MSI0.  This would call conpose_msi_msg(), which would
+>> free the block of 32 MSIs, and allocate a new block.  This would undo the
+>> retarget of MSI1-17, and likely leave those MSIs targeting invalid VCPU vectors.
+>> This is addressed by patch 1, which is introduced first to prevent a regression.
+>>
+>> Jeffrey Hugo (2):
+>>    PCI: hv: Reuse existing ITRE allocation in compose_msi_msg()
+>>    PCI: hv: Fix interrupt mapping for multi-MSI
+>>
+> 
+> Applied to hyperv-next. Thanks.
 
-Did not find the answer yet, but while looking at this, I found
-another interesting thing: on x86_64 the bsf instruction produces
-tzcnt when used with the ret prefix. So ffs() produces bsf assembly
-instructions but __ffs() and ffz() produces tzcnt. c.f.
+Huh?  I thought you wanted a V2.  I was intending on sending that out today.
 
-http://lkml.kernel.org/r/5058741E020000780009C014@nat28.tlf.novell.com
-
-I will update the figures in v2 and benchmark both bsf and tzcnt.
-
-> Also, on a side note, I am not the first one to realize that
-> __builtin_ffs() is able to optimize the constant variable. Some
-> people already used it to locally:
->
-> | $ git grep __builtin_ffs | wc -l
-> | 80
+-Jeff

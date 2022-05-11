@@ -2,122 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 679AA522B6A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 06:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 600BB522B6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 06:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232810AbiEKEzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 00:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
+        id S234139AbiEKE5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 00:57:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiEKEzh (ORCPT
+        with ESMTP id S229464AbiEKE5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 00:55:37 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3781D7A45E
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 21:55:36 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id n24so1384391oie.12
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 21:55:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BtVYbChrQb9+TbAIbuoATF9Q1J0NgY2dl10/0GKd40Y=;
-        b=Eth5/BcDhOsEjKlKqiQqgbB2THavdp8z3RyNtk5YZAEHxfd9cVU7iNxRneXMRjxQZt
-         gEmtJASQ+JHR29IBv/kVR+yk9f4IPghCgmQ2YlgbuvwNHHNzW5B3e0lznhEam6bjpvR/
-         qh476h+Pf9YBu5zOMvhF0UjnTtc6O2LvJ55JQmtXpyMw2tbnpNqRO1BxPPWVgyPTCwI3
-         G2bd0CyyNXSOb2Z/VRocApl8C0gWZoXlvHkAx6eO7MIRMap+cZFOFeLPxs4mNpZfTrOB
-         8HbDHOPKfrJqyHPkpgc69cYLh/y+P6ZgU+3Y1HY+Q9I2uxXGPoGriuXIUlwxfcFYc1Yc
-         3CpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BtVYbChrQb9+TbAIbuoATF9Q1J0NgY2dl10/0GKd40Y=;
-        b=FbL8VyfcMMDPzZZbG7YKQbFr8s0GHkuhP8s0lw6XAIHjmrZaZlE5/S00DdIFyb6+uA
-         Xvi92DnTPzcnNqPrUZKLNlvcGMHYPqeSMwbzDbR425MfPLzANatKnq2HOXNwPuWlQOUQ
-         8d9LrfIi3tbBIlJ7A48KbAXy4VBy4atyPo32OohxnAgOi0lWB8wH2L+oGnNZ3sB0jYM8
-         bW3BDJZHBhJJREdeWhrmKNFN2FEZTvUvplqd9QeACLCq8hvZbEgS6WW82qygX3xOb1M9
-         JjNIqH0x99fziR3vJoIYTGx+rVTKpbhKF45KCXbq+iW/Om5EcbqzLozYp50BXvYxBO27
-         1IBA==
-X-Gm-Message-State: AOAM532wct9/NMvfI6/8/VxeeolX//+Dz0w9tyfanSb6RTjoqFM9tJTd
-        Et+bzLgQB3EnOJ1lQu8NG9oTE8yAQlRdtxacZ/4=
-X-Google-Smtp-Source: ABdhPJzwwFDw0VN3O8LuhruIoQBdA3jN1sQ6Mq3A8i+EhwCkbeEgwDrzC3GB+aabxhUD+hK1xiT5X6aBc7GGAaLDSrE=
-X-Received: by 2002:a05:6808:1202:b0:2f9:c7b4:fd56 with SMTP id
- a2-20020a056808120200b002f9c7b4fd56mr1564634oil.55.1652244934349; Tue, 10 May
- 2022 21:55:34 -0700 (PDT)
+        Wed, 11 May 2022 00:57:20 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA3EBA981;
+        Tue, 10 May 2022 21:57:17 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24B4v8MD009060;
+        Tue, 10 May 2022 23:57:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1652245028;
+        bh=nTz7YT0yRqP5kLgxJz0n83SBM4tCZh4oJr4tKzF560c=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=Prioy0KvgkySR8MuJXpUWhWdXwff8EzSci6WKuhIVkun72tmhLVL5ZgvO59qepVVV
+         PMgv6zLrdirZvFcetVI372ORxY9p4vhwzyrcxpqZ9znLKd4hS6b+pDZesMS+1k8HNZ
+         Y/SepBW3GWN/pswogDyK+UyJ7ehR8t6GCTIjYzvE=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24B4v8rJ108735
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 10 May 2022 23:57:08 -0500
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 10
+ May 2022 23:57:08 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 10 May 2022 23:57:08 -0500
+Received: from [172.24.145.176] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24B4v4bK026680;
+        Tue, 10 May 2022 23:57:05 -0500
+Message-ID: <6054e7e6-928e-1378-fed5-587fd7fe3442@ti.com>
+Date:   Wed, 11 May 2022 10:27:04 +0530
 MIME-Version: 1.0
-References: <20220510154750.212913-1-yury.norov@gmail.com> <20220510154750.212913-9-yury.norov@gmail.com>
- <CAMo8Bf+JiyKD=g00whNOYGynx_0KjC_wJtpEBCB2ynFZ3U+e_Q@mail.gmail.com> <Ynq6JxyfBKK4SMZj@yury-laptop>
-In-Reply-To: <Ynq6JxyfBKK4SMZj@yury-laptop>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Tue, 10 May 2022 21:55:23 -0700
-Message-ID: <CAMo8BfKW15_vLWLHmxPDzB4qWNkH6R8yYJ4fMtVXRge6eMj3yA@mail.gmail.com>
-Subject: Re: [PATCH 08/22] bitops: introduce MANY_BITS() macro
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Laight <David.Laight@aculab.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joe Perches <joe@perches.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Nicolas Palix <nicolas.palix@imag.fr>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Chris Zankel <chris@zankel.net>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v6 4/4] thermal: k3_j72xx_bandgap: Add the bandgap driver
+ support
+Content-Language: en-US
+To:     "J, KEERTHY" <j-keerthy@ti.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        <robh+dt@kernel.org>, <rui.zhang@intel.com>, <amitk@kernel.org>,
+        <kristo@kernel.org>, <krzysztof.kozlowski@linaro.org>
+CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220427064635.24898-1-j-keerthy@ti.com>
+ <20220427064635.24898-5-j-keerthy@ti.com>
+ <78a3cc4d-8ce4-0dae-2f4e-7522a0a3aa0b@ti.com>
+ <d94ea6b0-e138-951d-5405-375255104adb@linaro.org>
+ <ffafc50e-9adb-9d66-3d1f-4ebc9f91f47d@ti.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <ffafc50e-9adb-9d66-3d1f-4ebc9f91f47d@ti.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 12:16 PM Yury Norov <yury.norov@gmail.com> wrote:
->
-> Hi Max,
->
-> On Tue, May 10, 2022 at 10:57:25AM -0700, Max Filippov wrote:
-> > Hi Yury,
-> >
-> > On Tue, May 10, 2022 at 8:48 AM Yury Norov <yury.norov@gmail.com> wrote:
-> > > arch/xtensa/kernel/traps.c and include/linux/log2.h define very similar
-> > > functions with different behaviour. XTENSA defines IS_POW2(), and
-> > > log2.h defines is_power_of_2(). The difference is that IS_POW2()
-> > > considers 0 as power of 2, while is_power_of_2() - does not.
-> >
-> > IS_POW2 is constructed this way because we know that there is at least
-> > one non-zero bit in the value that it tests.
-> >
-> > > This discrepancy may confuse reader. From mathematical point of view,
-> > > 0 is not a power of 2.
-> >
-> > If it would reduce the confusion we can add a check that the value is
-> > non-zero in the IS_POW2 macro.
-> >
-> > I'd really like to not introduce the local macro and just use something
-> > standard,
->
-> This patch introduces a macro MANY_BITS() in include/linux/bitops.h, which
-> is a full analogue of IS_POW2(). Would it work for you to switch to
-> MANY_BITS()?
 
-It would, I guess. It would also work if is_power_of_2 was a macro.
+
+On 10/05/22 22:47, J, KEERTHY wrote:
+> 
+> 
+> On 5/10/2022 8:55 PM, Daniel Lezcano wrote:
+>> On 09/05/2022 05:10, J, KEERTHY wrote:
+>>>
+>>>
+>>> On 4/27/2022 12:16 PM, Keerthy wrote:
+>>>> Add VTM thermal support. In the Voltage Thermal Management
+>>>> Module(VTM), K3 J72XX supplies a voltage reference and a temperature
+>>>> sensor feature that are gathered in the band gap voltage and
+>>>> temperature sensor (VBGAPTS) module. The band gap provides current and
+>>>> voltage reference for its internal circuits and other analog IP
+>>>> blocks. The analog-to-digital converter (ADC) produces an output value
+>>>> that is proportional to the silicon temperature.
+>>>>
+>>>> Currently reading temperatures only is supported.  There are no
+>>>> active/passive cooling agent supported.
+>>>>
+>>>> J721e SoCs have errata i2128: https://www.ti.com/lit/pdf/sprz455
+>>>>
+>>>> The VTM Temperature Monitors (TEMPSENSORs) are trimmed during
+>>>> production,
+>>>> with the resulting values stored in software-readable registers.
+>>>> Software
+>>>> should use these  register values when translating the Temperature
+>>>> Monitor output codes to temperature values.
+>>>>
+>>>> It has an involved workaround. Software needs to read the error
+>>>> codes for
+>>>> -40C, 30C, 125C from the efuse for each device & derive a new look
+>>>> up table
+>>>> for adc to temperature conversion. Involved calculating slopes &
+>>>> constants
+>>>> using 3 different straight line equations with adc refernce codes as
+>>>> the
+>>>> y-axis & error codes in the x-axis.
+>>>>
+>>>> -40C to 30C
+>>>> 30C to 125C
+>>>> 125C to 150C
+>>>>
+>>>> With the above 2 line equations we derive the full look-up table to
+>>>> workaround the errata i2128 for j721e SoC.
+>>>
+>>> Hi Daniel,
+>>>
+>>> Any feedback on this series? Let me know.
+>>
+>> There are a few but that would be nit picking and I don't want to
+>> postpone this driver any longer.
+>>
+>> How do you want to proceed? Shall I take it through my tree?
+> 
+> Hi Daniel,
+> 
+> Patch 1 & 4 i.e Documentation patch and driver patch can be picked by
+> you. I believe Vignesh will take the dts patches.
+> 
+> Vignesh,
+> 
+> Can you confirm?
+> 
+
+Yes, please decouple DT patches from driver+binding patches as they are
+to be applied to different trees.
+
 
 -- 
-Thanks.
--- Max
+Regards
+Vignesh

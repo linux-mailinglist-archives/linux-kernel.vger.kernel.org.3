@@ -2,105 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B84523C1B
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E4B3523C20
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345953AbiEKR7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 13:59:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60968 "EHLO
+        id S1346004AbiEKSAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 14:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345952AbiEKR72 (ORCPT
+        with ESMTP id S1345980AbiEKSAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 13:59:28 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE156FA29
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:59:27 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id k27so3490553edk.4
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:59:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vpvF/G4xuVb2lXY63PSPtbidovxryyw3Az5XWwC60vo=;
-        b=RbK3zt9fAFVilHkcwWN9jceetynxrMvtlrXzPTlVar2ZD6mqSxmFHhHsJvVdGdj8oI
-         BdUObZOYI75NcJ2SSDoRa5dgZGU0KHn4S4ony/g70hsqCPjT2fqxPmixaO08qir+9s1k
-         sMGXhofMo+yhDn2YS7Eyv334cFNRehtrMjd18=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vpvF/G4xuVb2lXY63PSPtbidovxryyw3Az5XWwC60vo=;
-        b=4kRnqRY7/D3hYL98N8feQJ+Xvbf8t/rsetILEVy2K/pZfuWEZEl/FtgsrBQPbYxxEA
-         xPia7BVphGlb+1K7QHFb9WtLWKYdEKm2I/c7rzMrk08BuHQJKlyX294RUrf6I8YCfJUM
-         NMsI6UjFvQ8RrQsATMW5f3Vpi8YpvnL9KlzVXk480ZU5Yi2jyXXFm4+mvI1MYv1GO2G1
-         ipsULJcBwdBOJDsU2z73WUJFfPVS7+4FR71TWmhmuLxLPjiG3Gf9FEn8FEwBtIbZqZsh
-         B0rftZnNVoCJRRWXHbupvkkQQddSuBUeMyhThv/NKcyNylP3swBfqVJzCVUZjhlIuovt
-         ptGw==
-X-Gm-Message-State: AOAM532cpMOJEsPg+foMQo3U6CqdmB6OkyGXJ/zPdNcOHoqk2/neJgfX
-        6zT3C/qmGwSGNp+1KJvi2R+PXt0XnzsnH9632EE=
-X-Google-Smtp-Source: ABdhPJxZFOVdeyeCTnq0I7hZUgkq3Cotg/sz93oOxDq151WE8TIyOxTWLOY8aKddFtcMaf6/co4cBw==
-X-Received: by 2002:aa7:c418:0:b0:428:44a0:9967 with SMTP id j24-20020aa7c418000000b0042844a09967mr30668232edq.342.1652291965505;
-        Wed, 11 May 2022 10:59:25 -0700 (PDT)
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
-        by smtp.gmail.com with ESMTPSA id m11-20020a50cc0b000000b0042617ba63a9sm1436908edi.51.2022.05.11.10.59.24
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 10:59:24 -0700 (PDT)
-Received: by mail-wm1-f42.google.com with SMTP id q20so1680850wmq.1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:59:24 -0700 (PDT)
-X-Received: by 2002:a7b:c8d6:0:b0:394:25ff:2de with SMTP id
- f22-20020a7bc8d6000000b0039425ff02demr5994279wml.154.1652291964221; Wed, 11
- May 2022 10:59:24 -0700 (PDT)
+        Wed, 11 May 2022 14:00:08 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BCC6FD01;
+        Wed, 11 May 2022 11:00:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652292005; x=1683828005;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ea+lYRPzihmO8EVmbnlP0uLWZcsNp5NT/ZPU0VZFjGk=;
+  b=Ozsb0R+HKLUH0PPr6szmm0OSRc+17gnBRn99+Yog4JYInkc909fTlSid
+   4ovbTzdKa2pE5K8oir7ufZ7NRJrsRBNDK41/rYEmGi5MuzZ80webNVNZw
+   P87MzHJxi9FCI7MeSuFOKaZu3yB3fAL3hudmRpzbmXndJ2oFPcBjE7UF/
+   RapinTMEDrYnpN6LBFW6pkTpWw3fWm3+qP731MiNMptkuOanlQ4ZKhER8
+   h3kUL4udz3AA9aEniN5In/6hopmvHlkcUnK7/hAERko3WktEswGliu4JK
+   23OawPeXLLP4Mx5hCsKYPeMftDkrFhpTGWPFNgURLqcnIWB2gnhsmX4Nj
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="295014431"
+X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
+   d="scan'208";a="295014431"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 11:00:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
+   d="scan'208";a="711586936"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 11 May 2022 11:00:02 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1noqd0-000JNw-1P;
+        Wed, 11 May 2022 18:00:02 +0000
+Date:   Thu, 12 May 2022 01:59:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Miaoqian Lin <linmq006@gmail.com>, Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Doug Thompson <dougthompson@xmission.com>,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, linux-media@vger.kernel.org,
+        linmq006@gmail.com
+Subject: Re: [PATCH] EDAC: Fix some refcount leaks
+Message-ID: <202205120119.sArUU4SY-lkp@intel.com>
+References: <20220511081402.19784-1-linmq006@gmail.com>
 MIME-Version: 1.0
-References: <CANpfEhOnNZa5d_G3e0dzzbbEtSuqxWY-fUCqzSiFpiQ2k0hJyw@mail.gmail.com>
- <CAHk-=wjfecvcUk2vNQM1GiUz_G=WQEJ8i8JS7yjnxjq_f-OgKw@mail.gmail.com>
- <87a6czifo7.fsf@email.froward.int.ebiederm.org> <CAHk-=wj=EHvH-DEUHbkoB3vDZJ1xRzrk44JibtNOepNkachxPw@mail.gmail.com>
- <87ilrn1drx.ffs@tglx> <877d7zk1cf.ffs@tglx> <CAHk-=wiJPeANKYU4imYaeEuV6sNP+EDR=rWURSKv=y4Mhcn1hA@mail.gmail.com>
- <87y20fid4d.ffs@tglx> <87bkx5q3pk.fsf_-_@email.froward.int.ebiederm.org>
- <87mtfu4up3.fsf@email.froward.int.ebiederm.org> <87r150ug1l.fsf_-_@email.froward.int.ebiederm.org>
- <CAHk-=whUy_cuJsVeob4zDnK5sWpE3U2EjVbnR2xobqgx7DOp4g@mail.gmail.com> <87zgjot0qr.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <87zgjot0qr.fsf@email.froward.int.ebiederm.org>
-From:   Linus Torvalds <torvalds@linuxfoundation.org>
-Date:   Wed, 11 May 2022 10:59:08 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgT7XdnjJhJmsc342ouHiDu2oxcguziHSL21UH3jsnrCw@mail.gmail.com>
-Message-ID: <CAHk-=wgT7XdnjJhJmsc342ouHiDu2oxcguziHSL21UH3jsnrCw@mail.gmail.com>
-Subject: Re: [PATCH 8/7] sched: Update task_tick_numa to ignore tasks without
- an mm
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-arch <linux-arch@vger.kernel.org>, Tejun Heo <tj@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511081402.19784-1-linmq006@gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 10:53 AM Eric W. Biederman
-<ebiederm@xmission.com> wrote:
->
-> I do have it in a public git branch.  The testing in linux-next
-> is what revealed this.
->
-> However it is a topic branch that as far as I know no one depends
-> on so I should be able to rebase it.
+Hi Miaoqian,
 
-Not a big deal, since it needs to not just bisect into that small
-series, you also need a certain amount of bad luck to then hit the
-issue.
+Thank you for the patch! Yet something to improve:
 
-So I don't think you should rebase unless you have other reasons to do
-so, but if you do, just put this commit either first, or fold it into
-the commit that removes PF_KTHREAD for threads that will become user
-threads.
+[auto build test ERROR on ras/edac-for-next]
+[also build test ERROR on linux/master linus/master v5.18-rc6 next-20220511]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-                  Linus
+url:    https://github.com/intel-lab-lkp/linux/commits/Miaoqian-Lin/EDAC-Fix-some-refcount-leaks/20220511-161440
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git edac-for-next
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20220512/202205120119.sArUU4SY-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/e5e3d8b94764dd1abe3c99881483c3f6dee8030a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Miaoqian-Lin/EDAC-Fix-some-refcount-leaks/20220511-161440
+        git checkout e5e3d8b94764dd1abe3c99881483c3f6dee8030a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/edac/edac_device_sysfs.c: In function 'edac_device_create_instance':
+>> drivers/edac/edac_device_sysfs.c:640:17: error: label 'edac_device_create_instance' used but not defined
+     640 |                 goto edac_device_create_instance;
+         |                 ^~~~
+
+
+vim +/edac_device_create_instance +640 drivers/edac/edac_device_sysfs.c
+
+   604	
+   605	/*
+   606	 * edac_device_create_instance
+   607	 *	create just one instance of an edac_device 'instance'
+   608	 */
+   609	static int edac_device_create_instance(struct edac_device_ctl_info *edac_dev,
+   610					int idx)
+   611	{
+   612		int i, j;
+   613		int err;
+   614		struct edac_device_instance *instance;
+   615		struct kobject *main_kobj;
+   616	
+   617		instance = &edac_dev->instances[idx];
+   618	
+   619		/* Init the instance's kobject */
+   620		memset(&instance->kobj, 0, sizeof(struct kobject));
+   621	
+   622		instance->ctl = edac_dev;
+   623	
+   624		/* bump the main kobject's reference count for this controller
+   625		 * and this instance is dependent on the main
+   626		 */
+   627		main_kobj = kobject_get(&edac_dev->kobj);
+   628		if (!main_kobj) {
+   629			err = -ENODEV;
+   630			goto err_out;
+   631		}
+   632	
+   633		/* Formally register this instance's kobject under the edac_device */
+   634		err = kobject_init_and_add(&instance->kobj, &ktype_instance_ctrl,
+   635					   &edac_dev->kobj, "%s", instance->name);
+   636		if (err != 0) {
+   637			edac_dbg(2, "Failed to register instance '%s'\n",
+   638				 instance->name);
+   639			kobject_put(main_kobj);
+ > 640			goto edac_device_create_instance;
+   641		}
+   642	
+   643		edac_dbg(4, "now register '%d' blocks for instance %d\n",
+   644			 instance->nr_blocks, idx);
+   645	
+   646		/* register all blocks of this instance */
+   647		for (i = 0; i < instance->nr_blocks; i++) {
+   648			err = edac_device_create_block(edac_dev, instance,
+   649							&instance->blocks[i]);
+   650			if (err) {
+   651				/* If any fail, remove all previous ones */
+   652				for (j = 0; j < i; j++)
+   653					edac_device_delete_block(edac_dev,
+   654								&instance->blocks[j]);
+   655				goto err_release_instance_kobj;
+   656			}
+   657		}
+   658		kobject_uevent(&instance->kobj, KOBJ_ADD);
+   659	
+   660		edac_dbg(4, "Registered instance %d '%s' kobject\n",
+   661			 idx, instance->name);
+   662	
+   663		return 0;
+   664	
+   665		/* error unwind stack */
+   666	err_release_instance_kobj:
+   667		kobject_put(&instance->kobj);
+   668	
+   669	err_out:
+   670		return err;
+   671	}
+   672	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,221 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7569F52281F
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 02:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47865522820
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 02:05:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239050AbiEKAES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 20:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44566 "EHLO
+        id S239096AbiEKAFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 20:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237246AbiEKAEQ (ORCPT
+        with ESMTP id S231839AbiEKAFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 20:04:16 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2086.outbound.protection.outlook.com [40.107.94.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9101DEC5B;
-        Tue, 10 May 2022 17:04:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eMQP9gj7GHPLk/8ADVI4jiwFklJ+ThtgPyl1Ys/AyuvZDryfYimtO4+F8aDx0w/FddJfN4jU5vbneei3q28NgcTAqSIjz+byARWWVAGpDCcBZSI5M/oHvoqkFcFwtnAnsAi+1IozA17fJRb1H7nNmzt9N91q6V6hsCyv/gZXcH18d1zzVf07tmJ9tUoqvr66i/GDKW3wC93sq0/8LtCKDiVrwIkbTo4q1au3BugqdP1nBWCDd08tLRX1mSthTA1UmFzNfsyfw4BvpYrYSXFGLAcgUv+FNcOmgQvHE7xb+YbX+ncgvuaEUERQ7npFDR4ieBX9nNMZXJmXRJJHtaouiQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HFIymLM0iTrJegpXn9dj+XzadkiMkX2G1N1lTJCw7iU=;
- b=XFIS74w4QF862bVCtxugFwvRt4XPwXh8VR5NotONjZcMvaAMuwJnm0zirYTqK3AqA8WIis06ARC7VaIOssiepYOMnXQm2CUcucmiyhBz7pvvZbbhtpqIctySrmL4nZ6WQK+miX52ypv8EOWOrdfoZR6TQ4r0gka+S4uunKmrs9qUtjQr4gkMfeMY54rbJ/0fpnu8RJ9zLj9Ki7LjUGzceSDzZElweNHWmT0LxDn3/6ijr8bwvTEQNsJioGI3nxuXMTMkadW1hkPI4vBAL5XRElQJflSq1UBDC/Y+eOYwDBIYjg7BCvF8dAvqv8Mhbh5TKTww6z5/IvfKQqyxLyxJNw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HFIymLM0iTrJegpXn9dj+XzadkiMkX2G1N1lTJCw7iU=;
- b=dDA//pdQYYPo31EnLFLkK9iZK8dDS0p2w1bjDKtHfStMNoeClGCP75l5GeQJk7OpySLDNkbnE87MBhqJqDrcTwH2lf0zfX64inkut6pr8qWgioUt/xMYLOLDg+TRCKE5wIEp6bzsAZLre1ogr2DxX8auYuoRa67Zg5buMDgTB97V+uMAK3l2uCBxsoofRWhObyJx/pEED8zUWKpVx6SCg4mOfw9h6eYudd5BDRJ7OTKooHRg6v/7wNUzFuYKwf/a47dHeGVKjUlGJ6257ccJ+T3XEOtL0BQr3a0gCGJpnmh627nzdbTbV+VzjL56ZDBW4pz+SzjtCMtGn+Qp7DX36A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by DM6PR12MB4355.namprd12.prod.outlook.com (2603:10b6:5:2a3::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.18; Wed, 11 May
- 2022 00:04:12 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2%5]) with mapi id 15.20.5227.023; Wed, 11 May 2022
- 00:04:12 +0000
-Date:   Tue, 10 May 2022 21:04:11 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Patrisious Haddad <phaddad@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        Mark Zhang <markzhang@nvidia.com>
-Subject: Re: [PATCH rdma-next 2/2] RDMA/core: Add a netevent notifier to cma
-Message-ID: <20220511000411.GA1164300@nvidia.com>
-References: <cover.1649075034.git.leonro@nvidia.com>
- <8c85028f89a877e9b4e6bb58bdd8a7f2cb4567a9.1649075034.git.leonro@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8c85028f89a877e9b4e6bb58bdd8a7f2cb4567a9.1649075034.git.leonro@nvidia.com>
-X-ClientProxiedBy: MN2PR13CA0023.namprd13.prod.outlook.com
- (2603:10b6:208:160::36) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Tue, 10 May 2022 20:05:00 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433D1248E3A
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 17:04:59 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id q18so260107pln.12
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 17:04:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZchoqzQKbQQ0HkN8pkgXJH0p5sZcEYr4VEaC4c3fZv0=;
+        b=Tm4Ct/yLf05DymgN6mV0U11Xeko5sOECiRgXCosO/olG5NK32Q/dzN+FXG3OMMYauZ
+         7+Irsp9mnIlzsxodeL14fWjKfV8MdCVM++HPh+a9HMHBEAOAKBCe723qvaq8RN9ZLe66
+         kX6gg57f7qsbux6WOtEvbFTvd9cwXIVQdYUfE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZchoqzQKbQQ0HkN8pkgXJH0p5sZcEYr4VEaC4c3fZv0=;
+        b=UA1B06At/GXRSIAHUOU6TennAV3ER9CG+R8JPBRvj4mYoAPXKFDPnqkmyVa3vGCjQk
+         r6GB2rNL25C39vmYK6fZ5Ts11IzPI2/5TCjMh1pwDPLI2tnFj1rMa6MorSgOtLvPu4BB
+         lh+KjjRVQFvYRnaiev1y+0DyI6L0YaPDDjKVCUw+Z9/20QM+SMCX01VS9/M7l2MGsXo5
+         u5LceT5sACZFKstAfTa2yCgN5wE7lSYhLeHHEg9g3yOUtSkyDrpEFDu9KskBM6dXcjgk
+         QuO3hxV71cPoqPlUo9gVByeHYshQZayYzSQDq8vCcAypg19XGmo5QlL/319Z4RBjKkjw
+         dmCg==
+X-Gm-Message-State: AOAM5319JwnSsL7TSz+L/VyW5sC2DHk/UP+5QjCRwNIQePmwcP4dYAXu
+        z1sqU0Z9GX4N7FB356WoR2dTzQ==
+X-Google-Smtp-Source: ABdhPJzYKPRjsS265QVn9SJMMbFfgmvXxQIW1Nk7jN2bzvqGgd+9VottH0k7ZuOcUwn0zEbmbuhd6Q==
+X-Received: by 2002:a17:90b:1b0d:b0:1dc:672e:c8c2 with SMTP id nu13-20020a17090b1b0d00b001dc672ec8c2mr2413297pjb.96.1652227498758;
+        Tue, 10 May 2022 17:04:58 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id v1-20020aa78081000000b0050dc7628191sm130081pff.107.2022.05.10.17.04.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 17:04:58 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] gcc-plugins: randstruct: Remove cast exception handling
+Date:   Tue, 10 May 2022 17:04:56 -0700
+Message-Id: <20220511000456.3628751-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 965d8e89-6262-41d4-faee-08da32e1c785
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4355:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB435561144FEBB2C073431D2EC2C89@DM6PR12MB4355.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TWHafySM6sx6nXc4UdwjIniTU0ZL8MOPc64t76WW+Fw4e1vR4rFW7wPFkdzAfsQrtJz0sbBdWEUggHLqqqe34Iun9qn2HdMIZCOFmqz6jMLHN9oS/1SugPV9DqY1dVE9mmo+o7a7ebbiDb81MqkIHLexKccXPgk9XyHZ/l380ejry2Fam2OPbvt06HcL/A6ZTJHJ9K6q6rRqFE5bSEkvSOrxUx9xuefkRxuC//2CH0krbyYuKdAEjs7eCzPVUCV/4MBpHC3qbKemcCiEMObGOHNNIWpivj8BKIdISCtNaExOKNRUHNr1Njv+fStdSmX2SrnEFhj75ILt+cdrz9zjRkJwb9V1kRuzfPF+kH3icR9J/hK8/aGWyaca9XQoYUANSKqLjB9iRsj/5cfvqBUVv9gMuzQubbSctS6w3u8qZrjuXYLpyn0dYoU/66gska1+T719CZWl5iNo85SIc7y94WYjJsnObiUqs8qF28sAZ3kRFq2A9zGFYpdgRFTcb8+Kc+fvsurMBgkqjXMdW10eQ9FrGeW6437AESYAD5YEfocwtkbn2Gvqb3Ii8qLK7kar7cjFlXENUINco9uC7vMzB+9ix1Zj3dKq1GUyKDTqGZiXPtOtlYNZMFhCz41Z4UxQ+ORaDbVpARMI4Ta5hFZtuA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(38100700002)(6486002)(316002)(8936002)(6916009)(54906003)(86362001)(66476007)(66946007)(8676002)(4326008)(66556008)(83380400001)(6512007)(26005)(6506007)(1076003)(2616005)(107886003)(186003)(2906002)(5660300002)(36756003)(33656002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?De2te8toXSMzDjAa50ed1DRXCbR4ZOKx1QeiCAYLW3RNg8ferqgyMx/Q+iSx?=
- =?us-ascii?Q?qSvbg8iddEwZsViSa8AoRuvmamZOSbqQYF6JdQTYsGrIQ62+Sg5B2neIgpMG?=
- =?us-ascii?Q?hDhknMUsogNHBJQ7koAakbOfR41lSae4CXFS7OTSVIC7bjeeZJReKkFs76k4?=
- =?us-ascii?Q?Mb1kUm1IKO6G+Gnqtnofu5t2bB3qdMkuE2ARB93BImmsRCjEHvj+byg2BQca?=
- =?us-ascii?Q?2qsV4ipk+5xKjNsNOz09SEjnDI+W2VmmMqnEoXOOuN+gWHOy8ZB7IrYBOfDg?=
- =?us-ascii?Q?NfhMnR+T6EhJqT+2oETCj7CgoviZ4bulwZnj0pHMytQ+FtC5zzOVamnNtASW?=
- =?us-ascii?Q?eMiXpMiD528tN3hlqCMEJEj0EDGfwL02ch5w6DsFHo8rh0vCaMHBo9OvIKCy?=
- =?us-ascii?Q?PVBRZuzg+H+Y/9WmxJbctrf196iYnIe28VtSyWe9qpAn6qjyFMI38MXAwn3Q?=
- =?us-ascii?Q?g2QjxhJTANAQCxkppkQAzHRnmM2yFWMCilVzyJ+iRE1VqVQNaTiqTDeR6R51?=
- =?us-ascii?Q?afZI5V1h92KpvlYYCAFrRHJJ9n14g57a+8QHLbF45odP2O2W4WFsI9G5lurh?=
- =?us-ascii?Q?tTJtVA3OT9Yc+RrprSRQbeyXQUmsb9Qihw1j97fEjCGFQu1HqjAGUO+ZZFQq?=
- =?us-ascii?Q?mzJuPifBt97xosMU2xhRx532BRSErzQxqqRhNbWBge5hYjDzCNrocab9ZpEX?=
- =?us-ascii?Q?ZBNDxo4i59Ah3lo8E3B8OFLs4ulk+Q9e2VqCjoN5374k68WqI2hOQ6ZZrk7j?=
- =?us-ascii?Q?ReCtirU2xXKzBR+oyeWBoB8AKjPSe+jUY5V57LCf8yxVeAChRLnq9HFHi2os?=
- =?us-ascii?Q?FxeOLOxeFgZ/+NDlQqW3WHhFkqJxtuHljHPKbtGXJD9LYcn8yUr+ZnKeNz42?=
- =?us-ascii?Q?Y5TtVQShpJ17vFru1y0T7Cv80XN7rkYaSHXAne+eolZKm2UJCW21NIMzhVO0?=
- =?us-ascii?Q?0v3fo+6B91an4gAY+40vpCerCdXJeHWscU1KBXyGOjoLPx5/trLEJCJbBKQr?=
- =?us-ascii?Q?y+7iuNm+OmXmn1RrQPML9dHtbrYWJkRwWh4jMwM7gIQ+Pkkutq94HZbf6jkZ?=
- =?us-ascii?Q?V3fBzRJxwsWAA9Ho/kkFPSLnu9GsXws36tPdfHtzvL60IgLkEHfsqXuqP3b7?=
- =?us-ascii?Q?udc96QK8PbCNdCPNQio/0Q7Ge6cIlrkJVfmy82245Z+cRkn0+Z6u2nO1mlzy?=
- =?us-ascii?Q?GKwnPPDdBqXz7t4rtZXCEMbehKFTj9fkYSo8sFPSyQ9+zJ7BJmwvbnaDzeKS?=
- =?us-ascii?Q?YFGr77g0NpqYmMD5OnHWl+LXO+OzafGJpiqPG+pqFbkPffAaqBz5NVQ+mtpU?=
- =?us-ascii?Q?o8hmN29+ZsfdtkpeQrCfFl0pfAsifW4MI7pKUxKy4uEcDxKdK6BBkt0Hwmzt?=
- =?us-ascii?Q?azpdZBfFl0+Xn7dJeTcrU0QzJTSkItOz1D1NDQN8U8pcwsmmv3tPnjLbBFAZ?=
- =?us-ascii?Q?5lqJJZP/LuMe7UkEObWBo4UtL6AHyNZtwIIzAQJsjiMAswq14DpNvaRJJTef?=
- =?us-ascii?Q?GYjZ/3p7WUAQFV6NOYHKmNBxVECRbkfVDjKIlJ6oWvoi3A3zCQwpgs3MPmtx?=
- =?us-ascii?Q?TsGbbmEsf21bsUkPw4gpU7Ge35jTVB0AhEvr7vfIrctfHnDMUNspggfe8Fv6?=
- =?us-ascii?Q?5LuIqcFCxn4e5caMhwrTz5/FNnhDgSRDgU7Q6lr1pkOroHRCQY+DOfvX7lLm?=
- =?us-ascii?Q?LuAXAK4Awwx/0gYtWp7RmGgMi/VCZbh/bbpCdFGEiMtwRGOIaH14Ra6N8FmY?=
- =?us-ascii?Q?DzEu5oHj+A=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 965d8e89-6262-41d4-faee-08da32e1c785
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2022 00:04:12.3916
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RnY3RAxGXwes0jQS3UcUhw5dlcKhZIOgU/Ahb91A1H71vUNYzqcWkIST/GJkQC3F
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4355
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4672; h=from:subject; bh=sxL2eDYL0WKROpn9RSAKksfRkZnvvnEFvCZ/CKvb7mk=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiev2oabvR4A3+JQQt/oBAOfuC7eY8RMBUyosqzaYa LPbHKf2JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYnr9qAAKCRCJcvTf3G3AJsxqD/ wNW8LHqJ04IT2OIsBy0JnUcUK59JPeTHe+dz+4Bep+SE4VzFi2arz0x1JRYdv3QZ4scpIyBAg2/of7 WoHnmJG+9DA4gyUz+RWk877MdDAbnpebI0qB/Q9Z7QkONT9FbGaFywqHSG4J2T1A3K+hmoOvSKWAGM cx6+Ka1UYjYlOjBUSj4MCqDW+t2Yz4iOY85nNTHXkbh8WCKgwK7rF02xlki87zH/23uyBeu6On6bQo BimMMSG3fnTy1BBmniUzrKzjA/QGve7buUVaAesDVY1cJRyCMJk7t9uAzsvJ/Izl+jEzFvmYtoarlp naydl6DkGBsgytwU+OlOFNPsqK6kRUWL0uoJfAQDWVu3Vzu82pkMQdc09UyWtiUFQiR/fbVGdTTbW/ p8qj0DnUhUZOoW77d58d90nhjL9UVzbjexj4os/2ifIrukOAV8HRBrbxUCspV6ePXkDZEYbM6E6f6w 9l8emKJHZ3rGA2X+XINHOHc3Dh8+5YS8ydLAPsvbhKicjUD/klxnzoUTA+FMYA6wGS1u+WLfKHrgb6 Tfj4TL92vXCJ4VS0LrYo9z+GN7BjAuCqYSrlZ9vJR+wFr36sOahRUeHK51C+mXeKDvapboK8GCdrkG rww0XJEswFgE7mVFi+fp3ZPkZ8lz9gynh8GH1FKwKwe1rMtstYH8SiUHOwmQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 03:27:27PM +0300, Leon Romanovsky wrote:
+With all randstruct exceptions removed, remove all the exception
+handling code. Any future warnings are likely to be shared between
+this plugin and Clang randstruct, and will need to be addressed in a
+more wholistic fashion.
 
-> @@ -5054,10 +5061,95 @@ static int cma_netdev_callback(struct notifier_block *self, unsigned long event,
->  	return ret;
->  }
->  
-> +static void cma_netevent_work_handler(struct work_struct *_work)
-> +{
-> +	struct cma_netevent_work *network =
-> +		container_of(_work, struct cma_netevent_work, work);
-> +	struct rdma_cm_event event = {};
-> +
-> +	mutex_lock(&network->id_priv->handler_mutex);
-> +
-> +	if (READ_ONCE(network->id_priv->state) == RDMA_CM_DESTROYING ||
-> +	    READ_ONCE(network->id_priv->state) == RDMA_CM_DEVICE_REMOVAL)
-> +		goto out_unlock;
-> +
-> +	event.event = RDMA_CM_EVENT_UNREACHABLE;
-> +	event.status = -ETIMEDOUT;
-> +
-> +	if (cma_cm_event_handler(network->id_priv, &event)) {
-> +		__acquire(&network->id_priv->handler_mutex);
+Cc: Christoph Hellwig <hch@infradead.org>
+Cc: linux-hardening@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+This depends on the other patches that remove the exception entries:
+https://lore.kernel.org/linux-hardening/20220510235817.3627784-1-keescook@chromium.org/
+https://lore.kernel.org/linux-hardening/20220510205729.3574400-1-keescook@chromium.org/
+https://lore.kernel.org/linux-hardening/20220511000109.3628404-1-keescook@chromium.org/
+---
+ scripts/gcc-plugins/randomize_layout_plugin.c | 79 +------------------
+ 1 file changed, 3 insertions(+), 76 deletions(-)
 
-??
+diff --git a/scripts/gcc-plugins/randomize_layout_plugin.c b/scripts/gcc-plugins/randomize_layout_plugin.c
+index 2ca768d88a68..ea2aea570404 100644
+--- a/scripts/gcc-plugins/randomize_layout_plugin.c
++++ b/scripts/gcc-plugins/randomize_layout_plugin.c
+@@ -39,16 +39,6 @@ static struct plugin_info randomize_layout_plugin_info = {
+ 			  "performance-mode\tenable cacheline-aware layout randomization\n"
+ };
+ 
+-struct whitelist_entry {
+-	const char *pathname;
+-	const char *lhs;
+-	const char *rhs;
+-};
+-
+-static const struct whitelist_entry whitelist[] = {
+-	{ }
+-};
+-
+ /* from old Linux dcache.h */
+ static inline unsigned long
+ partial_name_hash(unsigned long c, unsigned long prevhash)
+@@ -734,60 +724,6 @@ static void handle_local_var_initializers(void)
+ 	}
+ }
+ 
+-static bool type_name_eq(gimple stmt, const_tree type_tree, const char *wanted_name)
+-{
+-	const char *type_name;
+-
+-	if (type_tree == NULL_TREE)
+-		return false;
+-
+-	switch (TREE_CODE(type_tree)) {
+-	case RECORD_TYPE:
+-		type_name = TYPE_NAME_POINTER(type_tree);
+-		break;
+-	case INTEGER_TYPE:
+-		if (TYPE_PRECISION(type_tree) == CHAR_TYPE_SIZE)
+-			type_name = "char";
+-		else {
+-			INFORM(gimple_location(stmt), "found non-char INTEGER_TYPE cast comparison: %qT\n", type_tree);
+-			debug_tree(type_tree);
+-			return false;
+-		}
+-		break;
+-	case POINTER_TYPE:
+-		if (TREE_CODE(TREE_TYPE(type_tree)) == VOID_TYPE) {
+-			type_name = "void *";
+-			break;
+-		} else {
+-			INFORM(gimple_location(stmt), "found non-void POINTER_TYPE cast comparison %qT\n", type_tree);
+-			debug_tree(type_tree);
+-			return false;
+-		}
+-	default:
+-		INFORM(gimple_location(stmt), "unhandled cast comparison: %qT\n", type_tree);
+-		debug_tree(type_tree);
+-		return false;
+-	}
+-
+-	return strcmp(type_name, wanted_name) == 0;
+-}
+-
+-static bool whitelisted_cast(gimple stmt, const_tree lhs_tree, const_tree rhs_tree)
+-{
+-	const struct whitelist_entry *entry;
+-	expanded_location xloc = expand_location(gimple_location(stmt));
+-
+-	for (entry = whitelist; entry->pathname; entry++) {
+-		if (!strstr(xloc.file, entry->pathname))
+-			continue;
+-
+-		if (type_name_eq(stmt, lhs_tree, entry->lhs) && type_name_eq(stmt, rhs_tree, entry->rhs))
+-			return true;
+-	}
+-
+-	return false;
+-}
+-
+ /*
+  * iterate over all statements to find "bad" casts:
+  * those where the address of the start of a structure is cast
+@@ -864,10 +800,7 @@ static unsigned int find_bad_casts_execute(void)
+ #ifndef __DEBUG_PLUGIN
+ 				if (lookup_attribute("randomize_performed", TYPE_ATTRIBUTES(ptr_lhs_type)))
+ #endif
+-				{
+-					if (!whitelisted_cast(stmt, ptr_lhs_type, ptr_rhs_type))
+-						MISMATCH(gimple_location(stmt), "rhs", ptr_lhs_type, ptr_rhs_type);
+-				}
++				MISMATCH(gimple_location(stmt), "rhs", ptr_lhs_type, ptr_rhs_type);
+ 				continue;
+ 			}
+ 
+@@ -890,10 +823,7 @@ static unsigned int find_bad_casts_execute(void)
+ #ifndef __DEBUG_PLUGIN
+ 				if (lookup_attribute("randomize_performed", TYPE_ATTRIBUTES(op0_type)))
+ #endif
+-				{
+-					if (!whitelisted_cast(stmt, ptr_lhs_type, op0_type))
+-						MISMATCH(gimple_location(stmt), "op0", ptr_lhs_type, op0_type);
+-				}
++				MISMATCH(gimple_location(stmt), "op0", ptr_lhs_type, op0_type);
+ 			} else {
+ 				const_tree ssa_name_var = SSA_NAME_VAR(rhs1);
+ 				/* skip bogus type casts introduced by container_of */
+@@ -903,10 +833,7 @@ static unsigned int find_bad_casts_execute(void)
+ #ifndef __DEBUG_PLUGIN
+ 				if (lookup_attribute("randomize_performed", TYPE_ATTRIBUTES(ptr_rhs_type)))
+ #endif
+-				{
+-					if (!whitelisted_cast(stmt, ptr_lhs_type, ptr_rhs_type))
+-						MISMATCH(gimple_location(stmt), "ssa", ptr_lhs_type, ptr_rhs_type);
+-				}
++				MISMATCH(gimple_location(stmt), "ssa", ptr_lhs_type, ptr_rhs_type);
+ 			}
+ 
+ 		}
+-- 
+2.32.0
 
-> +		network->id_priv->cm_id.ib = NULL;
-> +		cma_id_put(network->id_priv);
-> +		destroy_id_handler_unlock(network->id_priv);
-> +		kfree(network);
-> +		return;
-> +	}
-> +
-> +out_unlock:
-> +	mutex_unlock(&network->id_priv->handler_mutex);
-> +	cma_id_put(network->id_priv);
-> +	kfree(network);
-> +}
-> +
-> +static int cma_netevent_callback(struct notifier_block *self,
-> +				 unsigned long event, void *ctx)
-> +{
-> +	struct id_table_entry *ips_node = NULL;
-> +	struct rdma_id_private *current_id;
-> +	struct cma_netevent_work *network;
-> +	struct neighbour *neigh = ctx;
-> +	unsigned long flags;
-> +
-> +	if (event != NETEVENT_NEIGH_UPDATE)
-> +		return NOTIFY_DONE;
-> +
-> +	spin_lock_irqsave(&id_table_lock, flags);
-> +	if (neigh->tbl->family == AF_INET6) {
-> +		struct sockaddr_in6 neigh_sock_6;
-> +
-> +		neigh_sock_6.sin6_family = AF_INET6;
-> +		neigh_sock_6.sin6_addr = *(struct in6_addr *)neigh->primary_key;
-> +		ips_node = node_from_ndev_ip(&id_table, neigh->dev->ifindex,
-> +					     (struct sockaddr *)&neigh_sock_6);
-> +	} else if (neigh->tbl->family == AF_INET) {
-> +		struct sockaddr_in neigh_sock_4;
-> +
-> +		neigh_sock_4.sin_family = AF_INET;
-> +		neigh_sock_4.sin_addr.s_addr = *(__be32 *)(neigh->primary_key);
-> +		ips_node = node_from_ndev_ip(&id_table, neigh->dev->ifindex,
-> +					     (struct sockaddr *)&neigh_sock_4);
-> +	} else
-> +		goto out;
-> +
-> +	if (!ips_node)
-> +		goto out;
-> +
-> +	list_for_each_entry(current_id, &ips_node->id_list, id_list_entry) {
-> +		if (!memcmp(current_id->id.route.addr.dev_addr.dst_dev_addr,
-> +			   neigh->ha, ETH_ALEN))
-> +			continue;
-> +		network = kzalloc(sizeof(*network), GFP_ATOMIC);
-> +		if (!network)
-> +			goto out;
-> +
-> +		INIT_WORK(&network->work, cma_netevent_work_handler);
-> +		network->id_priv = current_id;
-> +		cma_id_get(current_id);
-> +		queue_work(cma_netevent_wq, &network->work);
-
-This is pretty ugly that we need to do atomic allocations for every
-matching id.
-
-It would be better to add the work directly to the rdma_cm_id and just
-waste that memory.
-
-> +	cma_netevent_wq = alloc_ordered_workqueue("rdma_cm_netevent", 0);
-> +	if (!cma_netevent_wq) {
-> +		ret = -ENOMEM;
-> +		goto err_netevent_wq;
-> +	}
-
-Why do we need another WQ? Why does it need to be ordered?
-
-Jason

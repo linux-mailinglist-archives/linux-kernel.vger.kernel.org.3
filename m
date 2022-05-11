@@ -2,97 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75346523CDC
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81A2A523CE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:51:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346483AbiEKSuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 14:50:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
+        id S1346518AbiEKSvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 14:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiEKSuC (ORCPT
+        with ESMTP id S1346494AbiEKSvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 14:50:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837671ACFAC;
-        Wed, 11 May 2022 11:50:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C137360F2F;
-        Wed, 11 May 2022 18:49:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1788C340EE;
-        Wed, 11 May 2022 18:49:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652294999;
-        bh=1/F7wsDez0z3wrk2Ax/t4Z3pU9oQk4PfJkSQFlB07kQ=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=cDqvRFyyAsMQPyM+khdB7N1GbvetpBwd8gw7x9bIgfAfpQNYRE1n6r/kuH2fdisZg
-         p6jpzPYr30KC6DqpclR9v9tZzG3vbscidCN78WL38Zp/YbYgW9yuhxEIs2nsboIgqQ
-         3QQiJYl798OmTnUS2DFlN9Q9dDg5IbLRLTf83HeaBWc9XcA3f08TWaM02S4KzVJ6ek
-         wsW2nF2upA4jm84EIDyps12Xb/KmAt4HSQdsiEk4m41cC7Cb92dZG71GNa0L0kfyFv
-         f/S1UTOD3IuHq0s76crG73KqsbLA5u1mEwBb3RQBYFh+VvNaZUbZI3T9I30fLo2uog
-         0cNAkNhAZ0Ncg==
-From:   Mark Brown <broonie@kernel.org>
-To:     alexandre.torgue@foss.st.com, patrice.chotard@foss.st.com
-Cc:     linux-stm32@st-md-mailman.stormreply.com,
-        christophe.kerello@foss.st.com, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20220511074644.558874-1-patrice.chotard@foss.st.com>
-References: <20220511074644.558874-1-patrice.chotard@foss.st.com>
-Subject: Re: [PATCH 0/3] spi: stm32-qspi: flags management fixes
-Message-Id: <165229499740.364474.10772649163744226308.b4-ty@kernel.org>
-Date:   Wed, 11 May 2022 19:49:57 +0100
+        Wed, 11 May 2022 14:51:10 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F671E1238
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:51:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652295069; x=1683831069;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=p22jqMyd9Gd9xko9YeWm7snKhmAr9/rzXbOCBbDXaEU=;
+  b=EyA//dqud0CihvhQyy/zgx76jy/rNWqMRXllP0JjY9wC23dzgm6OTvE5
+   77kpeK8iTEIcomrPbT+328yEpZbCVcbUejgpQ14nw5CxCzhDlezsJhGdq
+   u4b0/vGsAnPEq2ro2/YwSIVH8kO01mDo/OldRrvZhvNA/7TAHm3K8yhXz
+   ywEdwm7c72FDn9/bjHX7q44sXVv1GrkIGc5jqJkdw14wPlBT8komvORQO
+   VrX4bjGfKqPZVpAamb5OtQ4gSaE8hbxkRTI7h64IlCKqFOsPXReSrZlP+
+   jKfMPvJxhPi1Lt7AlYcpqz57LWlx4IvVhjGyIoZSHcKGbwT0lHkluAh//
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="268623218"
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="268623218"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 11:51:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="739346950"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 11 May 2022 11:51:07 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1norQQ-000JQO-Uc;
+        Wed, 11 May 2022 18:51:06 +0000
+Date:   Thu, 12 May 2022 02:50:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Michael Shych <michaelsh@nvidia.com>
+Cc:     kbuild-all@lists.01.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-kernel@vger.kernel.org, Vadim Pasternak <vadimp@nvidia.com>
+Subject: [pdx86-platform-drivers-x86:review-hans 40/59]
+ drivers/platform/mellanox/nvsw-sn2201.c:942:16: warning: variable 'j' set
+ but not used
+Message-ID: <202205120232.oCAO8rb3-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 May 2022 09:46:41 +0200, patrice.chotard@foss.st.com wrote:
-> From: Patrice Chotard <patrice.chotard@foss.st.com>
-> 
-> This series update flags management in the following cases:
->   - In APM mode, don't take care of TCF and TEF flags
->   - Always check TCF flag in stm32_qspi_wait_cmd()
->   - Don't check BUSY flag when sending new command
-> 
-> [...]
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git review-hans
+head:   57709a27d9744f5af4bbeec3ba3105c6aa1075eb
+commit: 9e267f050444fa018c9a06b0cc07effac084b920 [40/59] platform/mellanox: Add support for new SN2201 system
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220512/202205120232.oCAO8rb3-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/commit/?id=9e267f050444fa018c9a06b0cc07effac084b920
+        git remote add pdx86-platform-drivers-x86 https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git
+        git fetch --no-tags pdx86-platform-drivers-x86 review-hans
+        git checkout 9e267f050444fa018c9a06b0cc07effac084b920
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/platform/mellanox/
 
-Applied to
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+All warnings (new ones prefixed by >>):
 
-Thanks!
+   drivers/platform/mellanox/nvsw-sn2201.c: In function 'nvsw_sn2201_config_post_init':
+>> drivers/platform/mellanox/nvsw-sn2201.c:942:16: warning: variable 'j' set but not used [-Wunused-but-set-variable]
+     942 |         int i, j, err;
+         |                ^
 
-[1/3] spi: stm32-qspi: Fix wait_cmd timeout in APM mode
-      commit: d83d89ea68b4726700fa87b22db075e4217e691c
-[2/3] spi: stm32-qspi: Always check SR_TCF flags in stm32_qspi_wait_cmd()
-      commit: 0cf8d32600cf5660ee45d421f1b6e3a129ca58b6
-[3/3] spi: stm32-qspi: Remove SR_BUSY bit check before sending command
-      commit: ae16cc18f37bcdea7d4ef57a5e526a60b09a1506
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+vim +/j +942 drivers/platform/mellanox/nvsw-sn2201.c
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+   936	
+   937	static int nvsw_sn2201_config_post_init(struct nvsw_sn2201 *nvsw_sn2201)
+   938	{
+   939		struct mlxreg_hotplug_device *sn2201_dev;
+   940		struct i2c_adapter *adap;
+   941		struct device *dev;
+ > 942		int i, j, err;
+   943	
+   944		dev = nvsw_sn2201->dev;
+   945		adap = i2c_get_adapter(nvsw_sn2201->main_mux_deferred_nr);
+   946		if (!adap) {
+   947			dev_err(dev, "Failed to get adapter for bus %d\n",
+   948				nvsw_sn2201->main_mux_deferred_nr);
+   949			return -ENODEV;
+   950		}
+   951		i2c_put_adapter(adap);
+   952	
+   953		/* Update board info. */
+   954		sn2201_dev = nvsw_sn2201->sn2201_devs;
+   955		for (i = 0, j = 0; i < nvsw_sn2201->sn2201_devs_num; i++, sn2201_dev++) {
+   956			sn2201_dev->adapter = i2c_get_adapter(sn2201_dev->nr);
+   957			if (!sn2201_dev->adapter)
+   958				return -ENODEV;
+   959			i2c_put_adapter(sn2201_dev->adapter);
+   960		}
+   961	
+   962		err = nvsw_sn2201_create_static_devices(nvsw_sn2201, nvsw_sn2201->sn2201_devs,
+   963							nvsw_sn2201->sn2201_devs_num);
+   964		if (err)
+   965			dev_err(dev, "Failed to create static devices\n");
+   966	
+   967		return err;
+   968	}
+   969	
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

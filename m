@@ -2,109 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79479522A6C
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 05:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 322B1522A71
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 05:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240668AbiEKDaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 23:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36306 "EHLO
+        id S241769AbiEKDar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 23:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbiEKDaU (ORCPT
+        with ESMTP id S241672AbiEKDai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 23:30:20 -0400
-Received: from mail.giordona-me.com (mail.giordona-me.com [2.56.59.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DFA518B12A
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 20:30:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=giordona-me.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Message-ID:Date:Subject:To:From:Reply-To:Sender:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=5zqKA6JLZ6OviX3mmsH55RIlUog6kavbDch01U+0u3Y=; b=sYWaAeylF3vlJIxxWsj2xx+zTb
-        j3qzaOoNdMVE+DN+2sZHAiDtTce9ChSI+QLNViIRRmLHiODlqePnWHXgmixC29ntCSo8MdY95IL7x
-        fflxFOSX11/NsST5Q/6MNBIlP4wxr41UEy/ijNGAcRxFC4QiLr7jUzGDnpk8C68S4urSdV4/C6B1O
-        Dm1yN8U5qLVtHMt0Aps8AROkS2ZNdSV6OpKD/H91czDxxrdoNIv4okDe0t8kFgNy9ezJgz2+Xy53N
-        QXexaM2jeB+VFqv7P3iqjiJBPqaqRDONnLCFEynIkw6DYgbRl27yQi+9XTqG1/iqAGNbFchnxBxPC
-        gy4FlC4w==;
-Received: from ec2-35-86-146-187.us-west-2.compute.amazonaws.com ([35.86.146.187]:53029)
-        by mail.giordona-me.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <info.kleve@kci-world.com>)
-        id 1nod3H-0007L7-Og
-        for linux-kernel@vger.kernel.org;
-        Tue, 10 May 2022 23:30:15 -0400
-Reply-To: "Karl Hoffmann" <karlhoffmann022@gmail.com>
-From:   "Karl Hoffmann" <info.kleve@kci-world.com>
-To:     linux-kernel@vger.kernel.org
-Subject: Investment Corporation
-Date:   11 May 2022 03:30:19 +0000
-Message-ID: <20220511033019.9FE2C224B1CC4795@kci-world.com>
+        Tue, 10 May 2022 23:30:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8976F1AF8D8
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 20:30:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2633CB82013
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:30:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC46DC385A4;
+        Wed, 11 May 2022 03:30:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652239832;
+        bh=LCu9ZDp9CN/7vd9liNbcMeChr+buxDxk3VjPo34ywlA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=F2hk3I4btQ1IH09Gr/sBohI5zBaRmmQHuI7wjOW92aze2UgOsRTR0zq12D9ovsBI/
+         0uNM3lCt74K02P/LoftdnGBE7Q9+SEA4Aur6X+QSHKpNQX3ctIoCnvgwG6WUy3M7Qw
+         2wxIwE03brAW0gXkVgJOtgkLPoO4pqSeK9bqB+DSlGnhAwL89Tq4yxv0r2iAU4zEXO
+         /SZwyYKRbMDhGnLr5E51ou0H++Mhviy+477FiEhMDko24yQshoQ8PPDVy9sZRJale/
+         XRw2jiUVOwn3cfnwIyiBxF7dHKyz72i3ccXSBexRSv2cGt1rUutLyxWnQ03wMH9LdQ
+         qq48FAMUR3wNg==
+Date:   Tue, 10 May 2022 20:30:31 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [f2fs-dev] [PATCH 2/5 v2] f2fs: introduce f2fs_gc_control to
+ consolidate f2fs_gc parameters
+Message-ID: <Ynst13cs86AHMLQ8@google.com>
+References: <20220506232032.1264078-1-jaegeuk@kernel.org>
+ <20220506232032.1264078-2-jaegeuk@kernel.org>
+ <YnlFiz/IgsjtGhqu@google.com>
+ <0a58b401-6fa4-4314-d7b4-029993cb7a75@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - mail.giordona-me.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - kci-world.com
-X-Get-Message-Sender-Via: mail.giordona-me.com: authenticated_id: admin@giordona-me.com
-X-Authenticated-Sender: mail.giordona-me.com: admin@giordona-me.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_ZBI,
-        RCVD_IN_VALIDITY_RPBL,SPF_FAIL,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
-        *      bl.spamcop.net
-        *      [Blocked - see <https://www.spamcop.net/bl.shtml?2.56.59.25>]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5698]
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [2.56.59.25 listed in bl.score.senderscore.com]
-        *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
-        *      blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [URIs: giordona-me.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [karlhoffmann022[at]gmail.com]
-        *  0.0 SPF_FAIL SPF: sender does not match SPF record (fail)
-        *      [SPF failed: Please see http://www.openspf.org/Why?s=mfrom;id=info.kleve%40kci-world.com;ip=2.56.59.25;r=lindbergh.monkeyblade.net]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 RCVD_IN_MSPIKE_BL Mailspike blocklisted
-        *  0.0 RCVD_IN_MSPIKE_ZBI No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0a58b401-6fa4-4314-d7b4-029993cb7a75@kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Dear,
+On 05/11, Chao Yu wrote:
+> Jaegeuk,
+> 
+> Seems it includes a wrong android tracepoint patch?
 
-My name is Mr. Karl Hoffmann.
-I am certified Senior consultant for an Investor.
-I manage investor funds into profitable projects.
-It will be a pleasure to discuss possible business investment
-with you, Debt funding, Project Funding, Loan, Joint Venture and=20
-Treasure
-markets.
+Oops. :)
 
-Please kindly contact me with my email karlhoffmann022@gmail.com
-for more details and enlightenment.
-
-Regards
-
-Karl Hoffmann
+> 
+> Thanks,
+> 
+> On 2022/5/10 0:47, Jaegeuk Kim wrote:
+> > This was used in Android for a long time. Let's upstream it.
+> > 
+> > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> > ---
+> >   Change log from v1:
+> >    - fix tracepoint for the "don't care" entry
+> > 
+> >   fs/f2fs/file.c              | 58 ++++++++++++++++++++---
+> >   include/trace/events/f2fs.h | 94 +++++++++++++++++++++++++++++++++++++
+> >   2 files changed, 145 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> > index 68ddf4c7ca64..51df34f95984 100644
+> > --- a/fs/f2fs/file.c
+> > +++ b/fs/f2fs/file.c
+> > @@ -4329,17 +4329,39 @@ static ssize_t f2fs_dio_read_iter(struct kiocb *iocb, struct iov_iter *to)
+> >   static ssize_t f2fs_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
+> >   {
+> >   	struct inode *inode = file_inode(iocb->ki_filp);
+> > +	const loff_t pos = iocb->ki_pos;
+> >   	ssize_t ret;
+> >   	if (!f2fs_is_compress_backend_ready(inode))
+> >   		return -EOPNOTSUPP;
+> > -	if (f2fs_should_use_dio(inode, iocb, to))
+> > -		return f2fs_dio_read_iter(iocb, to);
+> > +	if (trace_f2fs_dataread_start_enabled()) {
+> > +		char *p = f2fs_kmalloc(F2FS_I_SB(inode), PATH_MAX, GFP_KERNEL);
+> > +		char *path;
+> > +
+> > +		if (!p)
+> > +			goto skip_read_trace;
+> > +
+> > +		path = dentry_path_raw(file_dentry(iocb->ki_filp), p, PATH_MAX);
+> > +		if (IS_ERR(path)) {
+> > +			kfree(p);
+> > +			goto skip_read_trace;
+> > +		}
+> > -	ret = filemap_read(iocb, to, 0);
+> > -	if (ret > 0)
+> > -		f2fs_update_iostat(F2FS_I_SB(inode), APP_BUFFERED_READ_IO, ret);
+> > +		trace_f2fs_dataread_start(inode, pos, iov_iter_count(to),
+> > +					current->pid, path, current->comm);
+> > +		kfree(p);
+> > +	}
+> > +skip_read_trace:
+> > +	if (f2fs_should_use_dio(inode, iocb, to)) {
+> > +		ret = f2fs_dio_read_iter(iocb, to);
+> > +	} else {
+> > +		ret = filemap_read(iocb, to, 0);
+> > +		if (ret > 0)
+> > +			f2fs_update_iostat(F2FS_I_SB(inode), APP_BUFFERED_READ_IO, ret);
+> > +	}
+> > +	if (trace_f2fs_dataread_end_enabled())
+> > +		trace_f2fs_dataread_end(inode, pos, ret);
+> >   	return ret;
+> >   }
+> > @@ -4637,14 +4659,36 @@ static ssize_t f2fs_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
+> >   	/* Possibly preallocate the blocks for the write. */
+> >   	target_size = iocb->ki_pos + iov_iter_count(from);
+> >   	preallocated = f2fs_preallocate_blocks(iocb, from, dio);
+> > -	if (preallocated < 0)
+> > +	if (preallocated < 0) {
+> >   		ret = preallocated;
+> > -	else
+> > +	} else {
+> > +		if (trace_f2fs_datawrite_start_enabled()) {
+> > +			char *p = f2fs_kmalloc(F2FS_I_SB(inode),
+> > +						PATH_MAX, GFP_KERNEL);
+> > +			char *path;
+> > +
+> > +			if (!p)
+> > +				goto skip_write_trace;
+> > +			path = dentry_path_raw(file_dentry(iocb->ki_filp),
+> > +								p, PATH_MAX);
+> > +			if (IS_ERR(path)) {
+> > +				kfree(p);
+> > +				goto skip_write_trace;
+> > +			}
+> > +			trace_f2fs_datawrite_start(inode, orig_pos, orig_count,
+> > +					current->pid, path, current->comm);
+> > +			kfree(p);
+> > +		}
+> > +skip_write_trace:
+> >   		/* Do the actual write. */
+> >   		ret = dio ?
+> >   			f2fs_dio_write_iter(iocb, from, &may_need_sync):
+> >   			f2fs_buffered_write_iter(iocb, from);
+> > +		if (trace_f2fs_datawrite_end_enabled())
+> > +			trace_f2fs_datawrite_end(inode, orig_pos, ret);
+> > +	}
+> > +
+> >   	/* Don't leave any preallocated blocks around past i_size. */
+> >   	if (preallocated && i_size_read(inode) < target_size) {
+> >   		f2fs_down_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
+> > diff --git a/include/trace/events/f2fs.h b/include/trace/events/f2fs.h
+> > index f701bb23f83c..11f6b7147be2 100644
+> > --- a/include/trace/events/f2fs.h
+> > +++ b/include/trace/events/f2fs.h
+> > @@ -2068,6 +2068,100 @@ TRACE_EVENT(f2fs_fiemap,
+> >   		__entry->ret)
+> >   );
+> > +DECLARE_EVENT_CLASS(f2fs__rw_start,
+> > +
+> > +	TP_PROTO(struct inode *inode, loff_t offset, int bytes,
+> > +			pid_t pid, char *pathname, char *command),
+> > +
+> > +	TP_ARGS(inode, offset, bytes, pid, pathname, command),
+> > +
+> > +	TP_STRUCT__entry(
+> > +		__string(pathbuf, pathname)
+> > +		__field(loff_t, offset)
+> > +		__field(int, bytes)
+> > +		__field(loff_t, i_size)
+> > +		__string(cmdline, command)
+> > +		__field(pid_t, pid)
+> > +		__field(ino_t, ino)
+> > +	),
+> > +
+> > +	TP_fast_assign(
+> > +		/*
+> > +		 * Replace the spaces in filenames and cmdlines
+> > +		 * because this screws up the tooling that parses
+> > +		 * the traces.
+> > +		 */
+> > +		__assign_str(pathbuf, pathname);
+> > +		(void)strreplace(__get_str(pathbuf), ' ', '_');
+> > +		__entry->offset = offset;
+> > +		__entry->bytes = bytes;
+> > +		__entry->i_size = i_size_read(inode);
+> > +		__assign_str(cmdline, command);
+> > +		(void)strreplace(__get_str(cmdline), ' ', '_');
+> > +		__entry->pid = pid;
+> > +		__entry->ino = inode->i_ino;
+> > +	),
+> > +
+> > +	TP_printk("entry_name %s, offset %llu, bytes %d, cmdline %s,"
+> > +		" pid %d, i_size %llu, ino %lu",
+> > +		__get_str(pathbuf), __entry->offset, __entry->bytes,
+> > +		__get_str(cmdline), __entry->pid, __entry->i_size,
+> > +		(unsigned long) __entry->ino)
+> > +);
+> > +
+> > +DECLARE_EVENT_CLASS(f2fs__rw_end,
+> > +
+> > +	TP_PROTO(struct inode *inode, loff_t offset, int bytes),
+> > +
+> > +	TP_ARGS(inode, offset, bytes),
+> > +
+> > +	TP_STRUCT__entry(
+> > +		__field(ino_t,	ino)
+> > +		__field(loff_t,	offset)
+> > +		__field(int,	bytes)
+> > +	),
+> > +
+> > +	TP_fast_assign(
+> > +		__entry->ino		= inode->i_ino;
+> > +		__entry->offset		= offset;
+> > +		__entry->bytes		= bytes;
+> > +	),
+> > +
+> > +	TP_printk("ino %lu, offset %llu, bytes %d",
+> > +		(unsigned long) __entry->ino,
+> > +		__entry->offset, __entry->bytes)
+> > +);
+> > +
+> > +DEFINE_EVENT(f2fs__rw_start, f2fs_dataread_start,
+> > +
+> > +	TP_PROTO(struct inode *inode, loff_t offset, int bytes,
+> > +		pid_t pid, char *pathname, char *command),
+> > +
+> > +	TP_ARGS(inode, offset, bytes, pid, pathname, command)
+> > +);
+> > +
+> > +DEFINE_EVENT(f2fs__rw_end, f2fs_dataread_end,
+> > +
+> > +	TP_PROTO(struct inode *inode, loff_t offset, int bytes),
+> > +
+> > +	TP_ARGS(inode, offset, bytes)
+> > +);
+> > +
+> > +DEFINE_EVENT(f2fs__rw_start, f2fs_datawrite_start,
+> > +
+> > +	TP_PROTO(struct inode *inode, loff_t offset, int bytes,
+> > +		pid_t pid, char *pathname, char *command),
+> > +
+> > +	TP_ARGS(inode, offset, bytes, pid, pathname, command)
+> > +);
+> > +
+> > +DEFINE_EVENT(f2fs__rw_end, f2fs_datawrite_end,
+> > +
+> > +	TP_PROTO(struct inode *inode, loff_t offset, int bytes),
+> > +
+> > +	TP_ARGS(inode, offset, bytes)
+> > +);
+> > +
+> >   #endif /* _TRACE_F2FS_H */
+> >    /* This part must be outside protection */

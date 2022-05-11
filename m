@@ -2,84 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5AA852288F
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 02:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F92522895
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 02:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238627AbiEKAlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 20:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34934 "EHLO
+        id S235952AbiEKAmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 20:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238599AbiEKAky (ORCPT
+        with ESMTP id S229795AbiEKAmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 20:40:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22E3A50004
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 17:40:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652229651;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=75c2pwoMl9AH7S04XkzjExQuuOAifRI3PqS3C+YfgtY=;
-        b=DbDDI7NcnZPq5Fw+RkvjJe4XvIWWR3b0m6UE/mq29Dk4+bgQkzcUuZr98kswJhi3+/DZY+
-        amykOV0Z3C9NZAuE7wUU5MfRvELl052Xg7PJJgAbj1GI0CrDT1UWHI+YBGqIl2D9+c/ap8
-        8mwizIp89f+J3t/4EFjLTqxZwrLgEB4=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-649-05bw7PcqMy2Rw_ZT_2iREA-1; Tue, 10 May 2022 20:40:50 -0400
-X-MC-Unique: 05bw7PcqMy2Rw_ZT_2iREA-1
-Received: by mail-qv1-f69.google.com with SMTP id n5-20020a0cbe85000000b0045aff56564bso715078qvi.4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 17:40:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:organization:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=75c2pwoMl9AH7S04XkzjExQuuOAifRI3PqS3C+YfgtY=;
-        b=thze3JCfuGVEpLbPoFZFiT9KGWt4NR15DLjNYRxUaF5ma08gFuN4AvT8G2+ftcELFP
-         /wWurSuRDMf1FYy566rhUtayRdvu6mgeYDM+TMxbxCDG6jutmBKhe5Id71a1XfXqlS0n
-         vOZIXeGEsdes2LGkn2/LJKUJU1I8iLZBwoWhAmCw/8IZWn9RgmNEfm5tq+QR+PyDjjd3
-         fhTYk0qcYqHv72oHKwAeE7kIbq46hLGSZ6O9xplR9vpd2OLMj0CqdaQWhbwDAbjMlNxd
-         nr8J9xi3Bjz6OzK1x1FzfG8EKaQ5ohWdp7VGnKXiNuqLNLEtsnVDosaRLTt0YPZ2KgFS
-         Gfqg==
-X-Gm-Message-State: AOAM532rR5wVGLkd1GvzbBT1wpLJ4eJAf/PxHfwMzSYHYiZGRIp429yu
-        QoIz2tBO4C/mKPaj8qmEwOgCHrTmNd5sqcS/ovz6m2L+3Xdc0/y1PH3DV9Z0lkfYZsACfL9l+vI
-        ws9AJ7e3Kv/dac4cHiM1eKCOt
-X-Received: by 2002:a37:9d4b:0:b0:69f:b567:efec with SMTP id g72-20020a379d4b000000b0069fb567efecmr17402301qke.592.1652229650230;
-        Tue, 10 May 2022 17:40:50 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzEL8ckarl5PqTLa58S+ksf2hfiaXZWb4frzEks4mCUNysmcB31Tm/yfkyt10KIrdo3U+6IBQ==
-X-Received: by 2002:a37:9d4b:0:b0:69f:b567:efec with SMTP id g72-20020a379d4b000000b0069fb567efecmr17402288qke.592.1652229649978;
-        Tue, 10 May 2022 17:40:49 -0700 (PDT)
-Received: from m8.users.ipa.redhat.com (cpe-158-222-141-151.nyc.res.rr.com. [158.222.141.151])
-        by smtp.gmail.com with ESMTPSA id c4-20020ac87dc4000000b002f39b99f68esm326680qte.40.2022.05.10.17.40.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 17:40:49 -0700 (PDT)
-Message-ID: <8f305036248cae1d158c4e567191a957a1965ad1.camel@redhat.com>
-Subject: Re: [PATCH 2/2] random: add fork_event sysctl for polling VM forks
-From:   Simo Sorce <simo@redhat.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
-Cc:     Dominik Brodowski <linux@dominikbrodowski.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Alexander Graf <graf@amazon.com>,
-        Colm MacCarthaigh <colmmacc@amazon.com>,
-        Torben Hansen <htorben@amazon.co.uk>,
-        Jann Horn <jannh@google.com>
-Date:   Tue, 10 May 2022 20:40:48 -0400
-In-Reply-To: <20220502140602.130373-2-Jason@zx2c4.com>
-References: <20220502140602.130373-1-Jason@zx2c4.com>
-         <20220502140602.130373-2-Jason@zx2c4.com>
-Organization: Red Hat
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Tue, 10 May 2022 20:42:07 -0400
+Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 686591B57AA;
+        Tue, 10 May 2022 17:42:06 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-2-147.pa.nsw.optusnet.com.au [49.181.2.147])
+        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 2B7C25345BC;
+        Wed, 11 May 2022 10:42:02 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1noaQS-00AUmR-E4; Wed, 11 May 2022 10:42:00 +1000
+Date:   Wed, 11 May 2022 10:42:00 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-fsdevel@vger.kernel.org,
+        Theodore Ts'o <tytso@mit.edu>, Karel Zak <kzak@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
+Message-ID: <20220511004200.GE2306852@dread.disaster.area>
+References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
+ <20220509124815.vb7d2xj5idhb2wq6@wittgenstein>
+ <20220510005533.GA2306852@dread.disaster.area>
+ <20220510124033.lobf33hxey4quza3@wittgenstein>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220510124033.lobf33hxey4quza3@wittgenstein>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=e9dl9Yl/ c=1 sm=1 tr=0 ts=627b065d
+        a=ivVLWpVy4j68lT4lJFbQgw==:117 a=ivVLWpVy4j68lT4lJFbQgw==:17
+        a=kj9zAlcOel0A:10 a=oZkIemNP1mAA:10 a=7-415B0cAAAA:8
+        a=-VcIyIBGfY_eVRxBFnQA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,73 +62,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-05-02 at 16:06 +0200, Jason A. Donenfeld wrote:
-> In order to inform userspace of virtual machine forks, this commit adds
-> a "fork_event" sysctl, which does not return any data, but allows
-> userspace processes to poll() on it for notification of VM forks.
+On Tue, May 10, 2022 at 02:40:33PM +0200, Christian Brauner wrote:
+> On Tue, May 10, 2022 at 10:55:33AM +1000, Dave Chinner wrote:
+> > On Mon, May 09, 2022 at 02:48:15PM +0200, Christian Brauner wrote:
+> > > On Tue, May 03, 2022 at 02:23:23PM +0200, Miklos Szeredi wrote:
+> > >   I really think users would love to have an interfact where they can
+> > >   get a struct with binary info back.
+> > 
+> > No. Not for kernel informational interfaces. We have ioctls and
 > 
-> It avoids exposing the actual vmgenid from the hypervisor to userspace,
-> in case there is any randomness value in keeping it secret. Rather,
-> userspace is expected to simply use getrandom() if it wants a fresh
-> value.
+> That feels like semantics. statx is in all sensible readings of the
+> words a kernel informational interface.
+
+statx is an special purpose binary syscall interface for returning
+inode specific information, it's not an abstract, generic
+informational interface.
+
+> I'm really looking at this from the perspective of someone who uses
+> these interfaces regularly in userspace and a text-based interface for
+> very basic information such as detailed information about a mount is
+> cumbersome. I know people like to "counter" with "parsing strings is
+> easy" but it remains a giant pain for userspace; at least for basic
+> info.
+
+As I said last reply, you are making all the same arguements against
+text based information interfaces that were made against proc and
+sysfs a long long time again. they weren't convincing a couple of
+decades ago, and there aren't really convincing now. Text-based
+key/value data is hard to screw up in the long run, binary
+interfaces have a habit of biting hard whenever the contents of
+the binary structure needs to change...
+
+> > >   Imho, xattrs are a bit like a wonky version of streams already (One of
+> > >   the reasons I find them quite unpleasant.). Making mount and other
+> > >   information retrievable directly through the getxattr() interface will
+> > >   turn them into a full-on streams implementation imho. I'd prefer not
+> > >   to do that (Which is another reason I'd prefer at least a separate
+> > >   system call.).
+> > 
+> > And that's a total misunderstanding of what xattrs are.
+> > 
+> > Alternate data streams are just {file,offset} based data streams
+> > accessed via ithe same read/write() mechanisms as the primary data
+> > stream.
 > 
-> For example, the following snippet can be used to print a message every
-> time a VM forks, after the RNG has been reseeded:
+> That's why I said "wonky". But I'm not going to argue this point. I
+> think you by necessity have wider historical context on these things
+> that I lack. But I don't find it unreasonable to also see them as an
+> additional information channel.
 > 
->   struct pollfd fd = { .fd = open("/proc/sys/kernel/random/fork_event", O_RDONLY)  };
->   assert(fd.fd >= 0);
->   for (;;) {
->     read(fd.fd, NULL, 0);
->     assert(poll(&fd, 1, -1) > 0);
->     puts("vm fork detected");
->   }
+> Sure, they are a generic key=value store for anything _in principle_. In
+> practice however xattrs are very much perceived and used as information
+> storage on files, a metadata side-channel if you will.
+
+That's how *you* perceive them, not how everyone perceives them.
+
+> All I'm claiming here is that it will confuse the living hell out of
+> users if the getxattr() api suddenly is used not to just set and get
+> information associated with inodes but to also provides filesystem or
+> mount information.
+
+Why would it confuse people? The xattr namespace is already well
+known to be heirarchical and context dependent based on the intial
+name prefix (user, security, btrfs, trusted, etc). i.e. if you don't
+know that the context the xattr acts on is determined by the initial
+name prefix, then you need to read the xattr(7) man page again:
+
+Extended attribute namespaces
+
+	Attribute  names  are  null-terminated  strings.   The
+	attribute name is always specified in the fully qualified
+	namespace.attribute form, for example, user.mime_type,
+	trusted.md5sum, system.posix_acl_access, or
+	security.selinux.
+
+	The namespace mechanism is used to define different classes
+	of extended attributes.  These different classes exist for
+	several reasons;  for  example, the permissions and
+	capabilities required for manipulating extended attributes
+	of one namespace may differ to another.
+
+	Currently,  the  security, system, trusted, and user
+	extended attribute classes are defined as described below.
+	Additional classes may be added in the future.
+
+> That's a totally a totally differnet type of information. Sure, it may
+> fit well in the key=value scheme because the xattr key=value _interface_
+> is generic but that's a very technical argument.
+
+Yet adding a new xattr namespace for a new class of information that
+is associated the mount that the path/inode/fd is associated with is
+exactly what the xattr namespaces are intended to allow. And it is
+clearly documented that new classes "may be added in the future".
+
+I just don't see where the confusion would come from...
+
 > 
-> Various programs and libraries that utilize cryptographic operations
-> depending on fresh randomness can invalidate old keys or take other
-> appropriate actions when receiving that event. While this is racier than
-> allowing userspace to mmap/vDSO the vmgenid itself, it's an incremental
-> step forward that's not as heavyweight.
+> I'm looking at this from the experience of a user of the API for a
+> moment and in code they'd do in one place:
+> 
+> getxattr('/super/special/binary', "security.capability", ...);
+> 
+> and then in another place they do:
+> 
+> getxattr('/path/to/some/mount', "mntns:info", ...);
+> 
+> that is just flatout confusing.
 
-At your request teleporting here the answer I gave on a different
-thread, reinforced by some thinking.
+Why? Both are getting different classes of key/value information
+that is specific to the given path. Just because on is on-disk and
+the other is ephemeral doesn't make it in any way confusing. This is
+exactly what xattr namesapces are intended to support...
 
-As a user space crypto library person I think the only reasonable
-interface is something like a vDSO.
+> > Xattrs provide an *atomic key-value object store API*, not an offset
+> > based data stream API. They are completely different beasts,
+> > intended for completely different purposes. ADS are redundant when you
+> > have directories and files, whilst an atomic key-value store is
+> > something completely different.
+> > 
+> > You do realise we have an independent, scalable, ACID compliant
+> > key-value object store in every inode in an XFS filesystem, right?
+> 
+> So far this was a really mail with good background information but I'm
+> struggling to make sense of what that last sentence is trying to tell
+> me. :)
 
-Poll() interfaces are nice and all for system programs that have full
-control of their event loop and do not have to react immediately to
-this event, however crypto libraries do not have the luxury of
-controlling the main loop of the application.
+That people in the past have built large scale data storage
+applications that use XFS inodes as key based object stores, not as
+a offset based data stream. Who needs atomic write() functionality
+when you have ACID set and replace operations for named objects?
 
-Additionally crypto libraries really need to ensure the value they
-return from their PRNG is fine, which means they do not return a value
-if the vmgenid has changed before they can reseed, or there could be
-catastrophic duplication of "random" values used in IVs or ECDSA
-Signatures or ids/cookies or whatever.
+The reality is that modern filesystems are really just btree based
+object stores with high performance transaction engines overlaid
+with a POSIX wrapper. And in the case of xattrs, we effectively
+expose that btree based key-value database functionality directly to
+userspace....
 
-For crypto libraries it is much simpler to poll for this information 
-than using notifications of any kind given libraries are
-generally not in full control of what the process does.
+Stop thinking like xattrs are some useless metadata side channel,
+and start thinking of them as an atomic object store that stores and
+retreives millions of small (< 1/2 the filesystem block size) named
+objects far space effciently than a directory structure full of
+small files indexed by object hash.
 
-This needs to be polled fast as well, because the whole point of
-initializing a PRNG in the library is that asking /dev/urandom all the
-time is too slow (due to context switches and syscall overhead), so
-anything that would require a context switch in order to pull data from
-the PRNG would not really fly.
+Cheers,
 
-A vDSO or similar would allow to pull the vmgenid or whatever epoch
-value in before generating the random numbers and then barrier-style
-check that the value is still unchanged before returning the random
-data to the caller. This will reduce the race condition (which simply
-cannot be completely avoided) to a very unlikely event.
-
-HTH,
-Simo.
-
+Dave.
 -- 
-Simo Sorce
-RHEL Crypto Team
-Red Hat, Inc
-
-
-
+Dave Chinner
+david@fromorbit.com

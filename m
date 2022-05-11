@@ -2,143 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE58522DA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16351522DC0
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238592AbiEKHt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 03:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47048 "EHLO
+        id S243219AbiEKH6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 03:58:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243181AbiEKHtu (ORCPT
+        with ESMTP id S231703AbiEKH60 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 03:49:50 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7942380CE
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:49:42 -0700 (PDT)
+        Wed, 11 May 2022 03:58:26 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CAA75045C;
+        Wed, 11 May 2022 00:58:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652255381; x=1683791381;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=b6gFhgmPfcp/OZxV5AdY/HulAh7d6sjI5KnIRmFjjnE=;
-  b=br4FO2HeL03j8llWkjIqTlDDbBnRMNoQmIVE6ttP1askSQsNr/LDcfrz
-   tKeHsv+WUTHAcPliV2smWSuOWbB5jfLMu5WI3ccNCLke0WvF9zw/FGhwY
-   1vGu9Xyvk6hz+q8lw7J5LQ3n1UWus1+MhD666utouinUgu91pxuCYF6uK
-   r/ePjJgT7g4MaIp6Ts5BrrAB3f5AnpiwESvdncQ5XaLdEMBetqisU1scS
-   tmfTtHakNVJz1qVagmyYkj/Oa5fLXsm4IZIbTUUz40m2iWQWk3301/06k
-   vd7AdeCOrCIa3iNgSSvCfvHe1vu0hpMIW6IzW8w4mYUSrjxAjQQyV40J6
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="269753785"
+  t=1652255904; x=1683791904;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=etfXY7aRBHWY1zrZQ6x+4EO2EbvNrfvGqvu3EERCjPA=;
+  b=WNs7wSMyUdMx5cvAEZK/KBD7974bGmCI+2gc7dHfqVngdiSKaQs7k5Ro
+   FLacMs4qrHdXDyAk+5AQHpAGrkKciE5tcrKOc1eOyj15MJe0Zy77FghQS
+   rAa8cilpxPM/FSop8Pb6fiLac7Nc1duJYunn3c/B1u1Zm1KQxcDfyyLGR
+   qCS3r0Pe+49NVkG6AX5x5fcHkK1qXlwGIXGQgLNDIi1Gag8dRz9IfQLjv
+   ON2xZl4irxCnRR7fQRwsYlOgy9qUGNIAvlwMKLJwvV/ztHtgrpCHp6QCo
+   9wty94lkGEHv6w/po7YAgwKppklI6FWYUHVd4+NPQIPglxd9gloVyWF3R
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="257166209"
 X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
-   d="scan'208";a="269753785"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 00:49:41 -0700
+   d="scan'208";a="257166209"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 00:58:24 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
-   d="scan'208";a="593991837"
-Received: from rliu1-mobl1.ccr.corp.intel.com ([10.254.213.20])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 00:49:37 -0700
-Message-ID: <68333b21a58604f3fd0e660f1a39921ae22849d8.camel@intel.com>
-Subject: Re: RFC: Memory Tiering Kernel Interfaces
-From:   "ying.huang@intel.com" <ying.huang@intel.com>
-To:     Wei Xu <weixugc@google.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc:     Alistair Popple <apopple@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Greg Thelen <gthelen@google.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Michal Hocko <mhocko@kernel.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>
-Date:   Wed, 11 May 2022 15:49:34 +0800
-In-Reply-To: <CAAPL-u9FvCfgA7xsqStLNZ=W03iyWBmvHrpVzPKyitsGN2v_KQ@mail.gmail.com>
-References: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
-         <CAHbLzkq1YXXLMiREpGnzhJjPssu4WpSsnkTmrLJ=hAEhZVUr9w@mail.gmail.com>
-         <CAAPL-u-r2Pc_MaHQmKKNH_icAa_fH1COWb5qSPpr8xffREQ_cQ@mail.gmail.com>
-         <87tua3h5r1.fsf@nvdebian.thelocal>
-         <CAAPL-u-0HwL6p1SA73LPfFyywG55QqE9O+q=83fhShoJAVVxyQ@mail.gmail.com>
-         <875ymerl81.fsf@nvdebian.thelocal> <87fslhhb2l.fsf@linux.ibm.com>
-         <CAAPL-u9FvCfgA7xsqStLNZ=W03iyWBmvHrpVzPKyitsGN2v_KQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+   d="scan'208";a="739105935"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
+  by orsmga005.jf.intel.com with ESMTP; 11 May 2022 00:58:21 -0700
+Date:   Wed, 11 May 2022 15:50:23 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Tim Whisonant <tim.whisonant@intel.com>,
+        Enno Luebbers <enno.luebbers@intel.com>,
+        Alan Tull <atull@kernel.org>, Shiva Rao <shiva.rao@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fpga: Fix memory leak in build_info_create_dev
+Message-ID: <20220511075023.GA487046@yilunxu-OptiPlex-7050>
+References: <20220511064400.63518-1-linmq006@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511064400.63518-1-linmq006@gmail.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-05-10 at 22:30 -0700, Wei Xu wrote:
-> On Tue, May 10, 2022 at 4:38 AM Aneesh Kumar K.V
-> <aneesh.kumar@linux.ibm.com> wrote:
-> > 
-> > Alistair Popple <apopple@nvidia.com> writes:
-> > 
-> > > Wei Xu <weixugc@google.com> writes:
-> > > 
-> > > > On Thu, May 5, 2022 at 5:19 PM Alistair Popple <apopple@nvidia.com> wrote:
-> > > > > 
-> > > > > Wei Xu <weixugc@google.com> writes:
-> > > > > 
-> > > > > [...]
-> > > > > 
-> > > > > > > > 
-> > > > > > > > 
-> > > > > > > > Tiering Hierarchy Initialization
-> > > > > > > > `=============================='
-> > > > > > > > 
-> > > > > > > > By default, all memory nodes are in the top tier (N_TOPTIER_MEMORY).
-> > > > > > > > 
-> > > > > > > > A device driver can remove its memory nodes from the top tier, e.g.
-> > > > > > > > a dax driver can remove PMEM nodes from the top tier.
-> > > > > > > 
-> > > > > > > With the topology built by firmware we should not need this.
-> > > > > 
-> > > > > I agree that in an ideal world the hierarchy should be built by firmware based
-> > > > > on something like the HMAT. But I also think being able to override this will be
-> > > > > useful in getting there. Therefore a way of overriding the generated hierarchy
-> > > > > would be good, either via sysfs or kernel boot parameter if we don't want to
-> > > > > commit to a particular user interface now.
-> > > > > 
-> > > > > However I'm less sure letting device-drivers override this is a good idea. How
-> > > > > for example would a GPU driver make sure it's node is in the top tier? By moving
-> > > > > every node that the driver does not know about out of N_TOPTIER_MEMORY? That
-> > > > > could get messy if say there were two drivers both of which wanted their node to
-> > > > > be in the top tier.
-> > > > 
-> > > > The suggestion is to allow a device driver to opt out its memory
-> > > > devices from the top-tier, not the other way around.
-> > > 
-> > > So how would demotion work in the case of accelerators then? In that
-> > > case we would want GPU memory to demote to DRAM, but that won't happen
-> > > if both DRAM and GPU memory are in N_TOPTIER_MEMORY and it seems the
-> > > only override available with this proposal would move GPU memory into a
-> > > lower tier, which is the opposite of what's needed there.
-> > 
-> > How about we do 3 tiers now. dax kmem devices can be registered to
-> > tier 3. By default all numa nodes can be registered at tier 2 and HBM or
-> > GPU can be enabled to register at tier 1. ?
+On Wed, May 11, 2022 at 10:44:00AM +0400, Miaoqian Lin wrote:
+> platform_device_alloc() create a platform device object.
+> we should call platform_device_put() in error path to
+> release the resource.
 > 
-> This makes sense.  I will send an updated RFC based on the discussions so far.
+> Fixes: 543be3d8c999 ("fpga: add device feature list support")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>  drivers/fpga/dfl.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
+> index 599bb21d86af..f0b945bd975f 100644
+> --- a/drivers/fpga/dfl.c
+> +++ b/drivers/fpga/dfl.c
+> @@ -879,8 +879,10 @@ build_info_create_dev(struct build_feature_devs_info *binfo,
+>  	INIT_LIST_HEAD(&binfo->sub_features);
+>  
+>  	fdev->id = dfl_id_alloc(type, &fdev->dev);
+> -	if (fdev->id < 0)
+> +	if (fdev->id < 0) {
+> +		platform_device_put(fdev);
+>  		return fdev->id;
+> +	}
 
-Are these tier number fixed?  If so, it appears strange that the
-smallest tier number is 0 on some machines, but 1 on some other
-machines.
+The build_info_free() will finally put the fdev, is it?
 
-Best Regards,
-Huang, Ying
+Thanks
+Yilun
 
-
+>  
+>  	fdev->dev.parent = &binfo->cdev->region->dev;
+>  	fdev->dev.devt = dfl_get_devt(dfl_devs[type].devt_type, fdev->id);
+> -- 
+> 2.25.1

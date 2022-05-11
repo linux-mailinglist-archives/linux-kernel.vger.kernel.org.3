@@ -2,41 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61442522C9F
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52AFC522CA2
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242388AbiEKGuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 02:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33408 "EHLO
+        id S241258AbiEKGuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 02:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235515AbiEKGuN (ORCPT
+        with ESMTP id S242392AbiEKGuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 02:50:13 -0400
+        Wed, 11 May 2022 02:50:23 -0400
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B865D190
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 23:50:12 -0700 (PDT)
-X-UUID: 33d18a52e2a347b082f05c9c411eec43-20220511
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFF75DA53
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 23:50:21 -0700 (PDT)
+X-UUID: eaa8c6051d684a3c9af820dbd46d9813-20220511
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:1f226f53-b785-49b6-bb50-1eb413231f61,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:-20
-X-CID-META: VersionHash:faefae9,CLOUDID:23eb63b3-56b5-4c9e-8d83-0070b288eb6a,C
+X-CID-O-INFO: VERSION:1.1.4,REQID:e6b004a1-2358-496b-a84f-2d1f9671fbdb,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:74920fe6-38f2-431d-8de7-bf8fac490b0a,C
         OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 33d18a52e2a347b082f05c9c411eec43-20220511
+X-UUID: eaa8c6051d684a3c9af820dbd46d9813-20220511
 Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
         (envelope-from <yong.wu@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1948481888; Wed, 11 May 2022 14:50:05 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 11 May 2022 14:50:04 +0800
+        with ESMTP id 245592724; Wed, 11 May 2022 14:50:15 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 11 May 2022 14:50:03 +0800
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 11 May 2022 14:50:12 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 11 May 2022 14:50:02 +0800
+ Transport; Wed, 11 May 2022 14:50:11 +0800
 From:   Yong Wu <yong.wu@mediatek.com>
 To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
         "Matthias Brugger" <matthias.bgg@gmail.com>
@@ -51,9 +48,9 @@ CC:     <iommu@lists.linux-foundation.org>,
         <youlin.pei@mediatek.com>, <anan.sun@mediatek.com>,
         <xueqi.zhang@mediatek.com>, Guenter Roeck <groeck@chromium.org>,
         "Dan Carpenter" <dan.carpenter@oracle.com>
-Subject: [PATCH 3/4] iommu/mediatek: Validate number of phandles associated with "mediatek,larbs"
-Date:   Wed, 11 May 2022 14:49:19 +0800
-Message-ID: <20220511064920.18455-4-yong.wu@mediatek.com>
+Subject: [PATCH 4/4] iommu/mediatek: Improve safety for mediatek,smi property in larb nodes
+Date:   Wed, 11 May 2022 14:49:20 +0800
+Message-ID: <20220511064920.18455-5-yong.wu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220511064920.18455-1-yong.wu@mediatek.com>
 References: <20220511064920.18455-1-yong.wu@mediatek.com>
@@ -69,64 +66,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guenter Roeck <groeck@chromium.org>
+No functional change. Just improve safety from dts.
 
-Fix the smatch warnings:
-drivers/iommu/mtk_iommu.c:878 mtk_iommu_mm_dts_parse() error: uninitialized
-symbol 'larbnode'.
+All the larbs that connect to one IOMMU must connect with the same
+smi-common. This patch checks all the mediatek,smi property for each
+larb, If their mediatek,smi are different, it will return fails.
+Also avoid there is no available smi-larb nodes.
 
-If someone abuse the dtsi node(Don't follow the definition of dt-binding),
-for example "mediatek,larbs" is provided as boolean property, the code may
-crash. To fix this problem and improve the code safety, add some checking
-for the invalid input from dtsi, e.g. checking the larb_nr/larbid valid
-range, and avoid "mediatek,larb-id" property conflicts in the smi-larb
-nodes.
-
-Fixes: d2e9a1102cfc ("iommu/mediatek: Contain MM IOMMU flow with the MM TYPE")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Guenter Roeck <groeck@chromium.org>
+Suggested-by: Guenter Roeck <groeck@chromium.org>
 Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 ---
- drivers/iommu/mtk_iommu.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/iommu/mtk_iommu.c | 49 ++++++++++++++++++++++++++-------------
+ 1 file changed, 33 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index 523bf59264e1..1ba92751e9df 100644
+index 1ba92751e9df..75b9ede45a1a 100644
 --- a/drivers/iommu/mtk_iommu.c
 +++ b/drivers/iommu/mtk_iommu.c
-@@ -1046,6 +1046,8 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
- 	larb_nr = of_count_phandle_with_args(dev->of_node, "mediatek,larbs", NULL);
- 	if (larb_nr < 0)
- 		return larb_nr;
-+	if (larb_nr == 0 || larb_nr > MTK_LARB_NR_MAX)
-+		return -EINVAL;
+@@ -1038,7 +1038,7 @@ static const struct component_master_ops mtk_iommu_com_ops = {
+ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **match,
+ 				  struct mtk_iommu_data *data)
+ {
+-	struct device_node *larbnode, *smicomm_node, *smi_subcomm_node;
++	struct device_node *larbnode, *frst_avail_smicomm_node = NULL;
+ 	struct platform_device *plarbdev;
+ 	struct device_link *link;
+ 	int i, larb_nr, ret;
+@@ -1050,6 +1050,7 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
+ 		return -EINVAL;
  
  	for (i = 0; i < larb_nr; i++) {
++		struct device_node *smicomm_node, *smi_subcomm_node;
  		u32 id;
-@@ -1062,6 +1064,10 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
- 		ret = of_property_read_u32(larbnode, "mediatek,larb-id", &id);
- 		if (ret)/* The id is consecutive if there is no this property */
- 			id = i;
-+		if (id >= MTK_LARB_NR_MAX) {
+ 
+ 		larbnode = of_parse_phandle(dev->of_node, "mediatek,larbs", i);
+@@ -1085,27 +1086,43 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
+ 		}
+ 		data->larb_imu[id].dev = &plarbdev->dev;
+ 
++		/* Get smi-(sub)-common dev from the last larb. */
++		smi_subcomm_node = of_parse_phandle(larbnode, "mediatek,smi", 0);
++		if (!smi_subcomm_node) {
 +			ret = -EINVAL;
 +			goto err_larbnode_put;
 +		}
- 
- 		plarbdev = of_find_device_by_node(larbnode);
- 		if (!plarbdev) {
-@@ -1072,6 +1078,11 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
- 			ret = -EPROBE_DEFER;
- 			goto err_larbnode_put;
- 		}
 +
-+		if (data->larb_imu[id].dev) {
-+			ret = -EEXIST;
++		/*
++		 * It may have two level smi-common. the node is smi-sub-common if it
++		 * has a new mediatek,smi property. otherwise it is smi-commmon.
++		 */
++		smicomm_node = of_parse_phandle(smi_subcomm_node, "mediatek,smi", 0);
++		if (smicomm_node)
++			of_node_put(smi_subcomm_node);
++		else
++			smicomm_node = smi_subcomm_node;
++
++		if (!frst_avail_smicomm_node) {
++			frst_avail_smicomm_node = smicomm_node;
++		} else if (frst_avail_smicomm_node != smicomm_node) {
++			dev_err(dev, "mediatek,smi is not right @larb%d.", id);
++			of_node_put(smicomm_node);
++			ret = -EINVAL;
 +			goto err_larbnode_put;
++		} else {
++			of_node_put(smicomm_node);
 +		}
- 		data->larb_imu[id].dev = &plarbdev->dev;
- 
++
  		component_match_add_release(dev, match, component_release_of,
+ 					    component_compare_of, larbnode);
+ 	}
+ 
+-	/* Get smi-(sub)-common dev from the last larb. */
+-	smi_subcomm_node = of_parse_phandle(larbnode, "mediatek,smi", 0);
+-	if (!smi_subcomm_node)
++	if (!frst_avail_smicomm_node)
+ 		return -EINVAL;
+ 
+-	/*
+-	 * It may have two level smi-common. the node is smi-sub-common if it
+-	 * has a new mediatek,smi property. otherwise it is smi-commmon.
+-	 */
+-	smicomm_node = of_parse_phandle(smi_subcomm_node, "mediatek,smi", 0);
+-	if (smicomm_node)
+-		of_node_put(smi_subcomm_node);
+-	else
+-		smicomm_node = smi_subcomm_node;
+-
+-	plarbdev = of_find_device_by_node(smicomm_node);
+-	of_node_put(smicomm_node);
++	plarbdev = of_find_device_by_node(frst_avail_smicomm_node);
++	of_node_put(frst_avail_smicomm_node);
+ 	data->smicomm_dev = &plarbdev->dev;
+ 
+ 	link = device_link_add(data->smicomm_dev, dev,
 -- 
 2.18.0
 

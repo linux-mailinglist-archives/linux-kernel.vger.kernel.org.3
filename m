@@ -2,150 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA45523582
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA37523587
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243434AbiEKOaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 10:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43944 "EHLO
+        id S244784AbiEKObR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 10:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238685AbiEKOaJ (ORCPT
+        with ESMTP id S244677AbiEKOaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 10:30:09 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F41F51339D6;
-        Wed, 11 May 2022 07:30:07 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5B787ED1;
-        Wed, 11 May 2022 07:30:07 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4AA413F66F;
-        Wed, 11 May 2022 07:30:04 -0700 (PDT)
-Date:   Wed, 11 May 2022 15:30:01 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Pierre Gondois <pierre.gondois@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
-        Sudeep Holla <sudeep.holla@arm.com>, Dietmar.Eggemann@arm.com,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Robert Moore <robert.moore@intel.com>,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        devel@acpica.org
-Subject: Re: [PATCH v1 3/5] ACPI: CPPC: Assume no transition latency if no
- PCCT
-Message-ID: <20220511143001.ewba7sovabinnajz@bogus>
-References: <20220511134559.1466925-1-pierre.gondois@arm.com>
- <20220511134559.1466925-3-pierre.gondois@arm.com>
+        Wed, 11 May 2022 10:30:55 -0400
+Received: from outbound-smtp57.blacknight.com (outbound-smtp57.blacknight.com [46.22.136.241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD5C40913
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:30:51 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail03.blacknight.ie [81.17.254.16])
+        by outbound-smtp57.blacknight.com (Postfix) with ESMTPS id 69ABFFB4F4
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 15:30:50 +0100 (IST)
+Received: (qmail 6090 invoked from network); 11 May 2022 14:30:50 -0000
+Received: from unknown (HELO morpheus.112glenside.lan) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPA; 11 May 2022 14:30:50 -0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>
+Subject: [PATCH 0/4] Mitigate inconsistent NUMA imbalance behaviour
+Date:   Wed, 11 May 2022 15:30:34 +0100
+Message-Id: <20220511143038.4620-1-mgorman@techsingularity.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220511134559.1466925-3-pierre.gondois@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,HEXHASH_WORD,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 03:45:57PM +0200, Pierre Gondois wrote:
-> From: Pierre Gondois <Pierre.Gondois@arm.com>
-> 
-> The transition_delay_us (struct cpufreq_policy) is currently defined
-> as:
->   Preferred average time interval between consecutive invocations of
->   the driver to set the frequency for this policy.  To be set by the
->   scaling driver (0, which is the default, means no preference).
-> The transition_latency represents the amount of time necessary for a
-> CPU to change its frequency.
-> 
-> A PCCT table advertises mutliple values:
-> - pcc_nominal: Expected latency to process a command, in microseconds
-> - pcc_mpar: The maximum number of periodic requests that the subspace
->   channel can support, reported in commands per minute. 0 indicates no
->   limitation.
-> - pcc_mrtt: The minimum amount of time that OSPM must wait after the
->   completion of a command before issuing the next command,
->   in microseconds.
-> cppc_get_transition_latency() allows to get the max of them.
-> 
-> commit d4f3388afd48 ("cpufreq / CPPC: Set platform specific
-> transition_delay_us") allows to select transition_delay_us based on
-> the platform, and fallbacks to cppc_get_transition_latency()
-> otherwise.
-> 
-> If _CPC objects are not using PCC channels (no PPCT table), the
-> transition_delay_us is set to CPUFREQ_ETERNAL, leading to really long
-> periods between frequency updates (~4s).
-> 
-> If the desired_reg, where performance requests are written, is in
-> SystemMemory or SystemIo ACPI address space, there is no delay
-> in requests. So return 0 instead of CPUFREQ_ETERNAL, leading to
-> transition_delay_us being set to LATENCY_MULTIPLIER us (1000 us).
-> 
-> This patch also adds two macros to check the address spaces.
-> 
-> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
-> ---
->  drivers/acpi/cppc_acpi.c | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index 6f09fe011544..cc932ec1b613 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -100,6 +100,16 @@ static DEFINE_PER_CPU(struct cpc_desc *, cpc_desc_ptr);
->  				(cpc)->cpc_entry.reg.space_id ==	\
->  				ACPI_ADR_SPACE_PLATFORM_COMM)
->  
-> +/* Check if a CPC register is in SystemMemory */
-> +#define CPC_IN_SM(cpc) ((cpc)->type == ACPI_TYPE_BUFFER &&		\
-> +				(cpc)->cpc_entry.reg.space_id ==	\
-> +				ACPI_ADR_SPACE_SYSTEM_MEMORY)
-> +
+A problem was reported privately related to inconsistent performance of
+NAS when parallelised with MPICH. The root of the problem is that the
+initial placement is unpredictable and there can be a larger imbalance
+than expected between NUMA nodes. As there is spare capacity and the faults
+are local, the imbalance persists for a long time and performance suffers.
 
-Again my taste or preference: s/SM/SYS_MEM or SYSTEM_MEM
+This is not 100% an "allowed imbalance" problem as setting the allowed
+imbalance to 0 does not fix the issue but the allowed imbalance contributes
+the the performance problem. The unpredictable behaviour was most recently
+introduced by commit c6f886546cb8 ("sched/fair: Trigger the update of
+blocked load on newly idle cpu").
 
-> +/* Check if a CPC register is in SystemIo */
-> +#define CPC_IN_SIO(cpc) ((cpc)->type == ACPI_TYPE_BUFFER &&		\
-> +				(cpc)->cpc_entry.reg.space_id ==	\
-> +				ACPI_ADR_SPACE_SYSTEM_IO)
-> +
+mpirun forks hydra_pmi_proxy helpers with MPICH that go to sleep before the
+execing the target workload. As the new tasks are sleeping, the potential
+imbalance is not observed as idle_cpus does not reflect the tasks that
+will be running in the near future. How bad the problem depends on the
+timing of when fork happens and whether the new tasks are still running.
+Consequently, a large initial imbalance may not be detected until the
+workload is fully running. Once running, NUMA Balancing picks the preferred
+node based on locality and runtime load balancing often ignores the tasks
+as can_migrate_task() fails for either locality or task_hot reasons and
+instead picks unrelated tasks.
 
-Ditto, s/SM/SYS_IO or SYSTEM_IO
+This is the min, max and range of run time for mg.D parallelised with ~25%
+of the CPUs parallelised by MPICH running on a 2-socket machine (80 CPUs,
+16 active for mg.D due to limitations of mg.D).
 
-I need not refer back to the macro when reading the code. SM/SIO is too
-short and makes it hard to infer from the name in general.
+v5.3                         Min  95.84 Max  96.55 Range   0.71 Mean  96.16
+v5.7                         Min  95.44 Max  96.51 Range   1.07 Mean  96.14
+v5.8                         Min  96.02 Max 197.08 Range 101.06 Mean 154.70
+v5.12                        Min 104.45 Max 111.03 Range   6.58 Mean 105.94
+v5.13                        Min 104.38 Max 170.37 Range  65.99 Mean 117.35
+v5.13-revert-c6f886546cb8    Min 104.40 Max 110.70 Range   6.30 Mean 105.68 
+v5.18rc4-baseline            Min 104.46 Max 169.04 Range  64.58 Mean 130.49
+v5.18rc4-revert-c6f886546cb8 Min 113.98 Max 117.29 Range   3.31 Mean 114.71
+v5.18rc4-this_series         Min  95.24 Max 175.33 Range  80.09 Mean 108.91
+v5.18rc4-this_series+revert  Min  95.24 Max  99.87 Range   4.63 Mean  96.54
 
->  /* Evaluates to True if reg is a NULL register descriptor */
->  #define IS_NULL_REG(reg) ((reg)->space_id ==  ACPI_ADR_SPACE_SYSTEM_MEMORY && \
->  				(reg)->address == 0 &&			\
-> @@ -1456,6 +1466,9 @@ EXPORT_SYMBOL_GPL(cppc_set_perf);
->   * transition latency for performance change requests. The closest we have
->   * is the timing information from the PCCT tables which provides the info
->   * on the number and frequency of PCC commands the platform can handle.
-> + *
-> + * If desired_reg is in the SystemMemory or SystemIo ACPI address space,
-> + * then assume there is no latency.
->   */
->  unsigned int cppc_get_transition_latency(int cpu_num)
->  {
-> @@ -1481,7 +1494,9 @@ unsigned int cppc_get_transition_latency(int cpu_num)
->  		return CPUFREQ_ETERNAL;
->  
->  	desired_reg = &cpc_desc->cpc_regs[DESIRED_PERF];
-> -	if (!CPC_IN_PCC(desired_reg))
-> +	if (CPC_IN_SM(desired_reg) || CPC_IN_SIO(desired_reg))
-> +		return 0;
-> +	else if (!CPC_IN_PCC(desired_reg))
->  		return CPUFREQ_ETERNAL;
+This shows that we've had unpredictable performance for a long time for
+this load. Instability was introduced somewhere between v5.7 and v5.8,
+fixed in v5.12 and broken again since v5.13.  The revert against 5.13
+and 5.18-rc4 shows that c6f886546cb8 is the primary source of instability
+although the best case is still worse than 5.7.
 
-Apart from the above,
+This series addresses the allowed imbalance problems to get the peak
+performance back to 5.7 although only some of the time due to the
+instability problem. The series plus the revert is both stable and has
+slightly better peak performance and similar average performance. I'm
+not convinced commit c6f886546cb8 is wrong but haven't isolated exactly
+why it's unstable so for now, I'm just noting it has an issue.
 
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+Patch 1 initialises numa_migrate_retry. While this resolves itself
+	eventually, it is unpredictable early in the lifetime of
+	a task.
+
+Patch 2 will not swap NUMA tasks in the same NUMA group or without
+	a NUMA group if there is spare capacity. Swapping is just
+	punishing one task to help another.
+
+Patch 3 fixes an issue where a larger imbalance can be created at
+	fork time than would be allowed at run time. This behaviour
+	can help some workloads that are short lived and prefer
+	to remain local but it punishes long-lived tasks that are
+	memory intensive.
+
+Patch 4 adjusts the threshold where a NUMA imbalance is allowed to
+	better approximate the number of memory channels, at least
+	for x86-64.
+
+ kernel/sched/fair.c     | 59 ++++++++++++++++++++++++++---------------
+ kernel/sched/topology.c | 23 ++++++++++------
+ 2 files changed, 53 insertions(+), 29 deletions(-)
 
 -- 
-Regards,
-Sudeep
+2.34.1
+

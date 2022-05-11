@@ -2,159 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7685352313B
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4DA52314A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241068AbiEKLNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 07:13:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
+        id S233539AbiEKLPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 07:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237622AbiEKLNV (ORCPT
+        with ESMTP id S231238AbiEKLPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 07:13:21 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789901ED2B2;
-        Wed, 11 May 2022 04:13:19 -0700 (PDT)
-Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KysbL4Nfgz6H6sP;
-        Wed, 11 May 2022 19:08:30 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 11 May 2022 13:13:16 +0200
-Received: from [10.47.91.186] (10.47.91.186) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.24; Wed, 11 May
- 2022 12:13:15 +0100
-Message-ID: <3f5f1075-49b3-3ba4-6392-cd0e6abf57d8@huawei.com>
-Date:   Wed, 11 May 2022 12:13:29 +0100
+        Wed, 11 May 2022 07:15:15 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42D6237242
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:15:14 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2ebf4b91212so16585897b3.8
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:15:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=eSCurJ4ghpxs8YXtVvBKXMNXNhwTELGU9OmHkyGedXQ=;
+        b=Gx8mo99eRQyvZg9T0g22nL+WNohNJT6ZErCf73vIQvX17kOheuurYqHNaJFB6XGH/E
+         43d4AJEjJ0uutOHSR7m9sIokq4yKYLHdBNAzWgo+MCMk1OMXhvElYj6Ol5yFh53Pn7Cv
+         wJq2rQ20xK+jwKPATwgDJZ3ebr1aJiWFEXjkRGO6DKofbuZtKzVEp3D8Rdezl/z+vYZe
+         jaZ54l5KRMtdDsek6LpKlUObbhdO9BSjbB0S5Rr8aPIW2o9g6pGiyvfnJxHtFP+ZiNVE
+         5bFTfCSjulf9s+WCMNmM77AUy3YN7d3d6L0CDBAtDO4aM1fnyYEA1i068M3YQ+f9Irq8
+         XZRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=eSCurJ4ghpxs8YXtVvBKXMNXNhwTELGU9OmHkyGedXQ=;
+        b=S7j9luuecZVYvMWwJK6dpRF5vDzNqUXdqfhxPzSRWPsl9gzkyike7QOxjC4f/UgRE+
+         LWkjVF+jyV48i0VaQXpBfJaP2vZA86BMYprpOxSvfGJLQROJxdy6kUViZ6S9HOAo7o9z
+         L2msXVlZ4KPxThBnX2JuCaxX/2L908zGntDT8BGOjtqGjEwDgJzksqUvdtqCHJOJJunW
+         NsFHqwY7lDOPrp1+AJfCYB8wtL1Y6AQaJbW+NalyKUqnr15d4c1ZFReJ8ZBfC+T8102n
+         6nJMmbO+4Avwxw0pzecoIH24jxq8Y00utuYmRtXNSEyezLJZEiWSfkSiq7gkLwjlsfBc
+         r5tg==
+X-Gm-Message-State: AOAM531kXoVWddRaZVv9bzIMViG+I5JhNGfhcCbAwyErlC4S8fSrVm0H
+        5Nvgh88CC744SX2CqZmW/t9JsgH7y9C55rv9oG2igA==
+X-Google-Smtp-Source: ABdhPJx9ROe+fPWiYR2Lpd+JkD+5ml+xHth0XXMWQCkZvGos1zeFiLHoeAW80RbgsDnAgnJgHLz84D2wogX6aN63emU=
+X-Received: by 2002:a81:23ce:0:b0:2f8:ad74:1185 with SMTP id
+ j197-20020a8123ce000000b002f8ad741185mr24246559ywj.120.1652267713817; Wed, 11
+ May 2022 04:15:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 0/7] Rewrite jevents program in python
-To:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        "Namhyung Kim" <namhyung@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        "Felix Fietkau" <nbd@nbd.name>, Qi Liu <liuqi115@huawei.com>,
-        Like Xu <likexu@tencent.com>, <linux-kernel@vger.kernel.org>,
-        <linux-perf-users@vger.kernel.org>,
-        Nick Forrington <nick.forrington@arm.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>, Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        <ananth.narayan@amd.com>, <ravi.bangoria@amd.com>,
-        <santosh.shukla@amd.com>, <sandipan.das@amd.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Kshipra Bopardikar <kshipra.bopardikar@intel.com>
-CC:     Stephane Eranian <eranian@google.com>
-References: <20220511070133.710721-1-irogers@google.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220511070133.710721-1-irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.91.186]
-X-ClientProxiedBy: lhreml705-chm.china.huawei.com (10.201.108.54) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220510130729.762341544@linuxfoundation.org>
+In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 11 May 2022 16:45:02 +0530
+Message-ID: <CA+G9fYu0=-RBEf4bxLDVX2H+wvLuAQ1_1gwZ3+1CvLqP=SSbnw@mail.gmail.com>
+Subject: Re: [PATCH 4.9 00/66] 4.9.313-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/05/2022 08:01, Ian Rogers wrote:
-> New architectures bring new complexity, such as Intel's hybrid
-> models. jevents provides an alternative to specifying events in the
-> kernel and exposing them through sysfs, however, it is difficult to
-> work with. For example, an error in the json input would yield an
-> error message but no json file or location. It is also a challenge to
-> update jsmn.c given its forked nature.
-> 
-> The changes here switch from jevents.c to a rewrite in python called
-> jevents.py. This means there is a build time dependency on python, but
-> such a dependency already exists for asciidoc (used to generate perf's
-> man pages).
-> 
+On Tue, 10 May 2022 at 18:41, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.9.313 release.
+> There are 66 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.9.313-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.9.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Hi Ian,
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-This does not build for me:
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Auto-detecting system features:
-...                         dwarf: [ on  ]
-...            dwarf_getlocations: [ on  ]
-...                         glibc: [ on  ]
-...                        libbfd: [ OFF ]
-...                libbfd-buildid: [ OFF ]
-...                        libcap: [ on  ]
-...                        libelf: [ on  ]
-...                       libnuma: [ on  ]
-...        numa_num_possible_cpus: [ on  ]
-...                       libperl: [ on  ]
-...                     libpython: [ on  ]
-...                     libcrypto: [ on  ]
-...                     libunwind: [ on  ]
-...            libdw-dwarf-unwind: [ on  ]
-...                          zlib: [ on  ]
-...                          lzma: [ on  ]
-...                     get_cpuid: [ on  ]
-...                           bpf: [ on  ]
-...                        libaio: [ on  ]
-...                       libzstd: [ on  ]
-...        disassembler-four-args: [ on  ]
+## Build
+* kernel: 4.9.313-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-4.9.y
+* git commit: bc7a724ac0ce0bc37f8b7335bfcbbc0d9bf71e51
+* git describe: v4.9.312-67-gbc7a724ac0ce
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.3=
+12-67-gbc7a724ac0ce
 
+## Test Regressions (compared to v4.9.312-60-g806e59090c6c)
+No test regressions found.
 
-make[3]: Nothing to be done for 'install_headers'.
-  GEN     pmu-events/pmu-events.c
-  CC      /home/john/acme/tools/perf/libbpf/staticobjs/libbpf.o
-  LINK    dlfilters/dlfilter-test-api-v0.so
-  CC      dlfilters/dlfilter-show-cycles.o
-  CC      builtin-bench.o
-Traceback (most recent call last):
-  File "pmu-events/jevents.py", line 23, in <module>
-    def file_name_to_table_name(parents: list[str], dirname: str) -> str:
-TypeError: 'type' object is not subscriptable
-make[3]: *** [pmu-events/Build:15: pmu-events/pmu-events.c] Error 1
-make[2]: *** [Makefile.perf:662: pmu-events/pmu-events-in.o] Error 2
-make[2]: *** Waiting for unfinished jobs....
+## Metric Regressions (compared to v4.9.312-60-g806e59090c6c)
+No metric regressions found.
 
-What baseline do you use? It's always good to mention it I think.
+## Test Fixes (compared to v4.9.312-60-g806e59090c6c)
+No test fixes found.
 
-> A challenge with this code is in avoiding regressions. For this reason
-> the jevents.py produces identical output to jevents.c, validated with a
-> test script and build target.
+## Metric Fixes (compared to v4.9.312-60-g806e59090c6c)
+No metric fixes found.
 
-As you know (and have done), verifying no regression should be 
-straightforward by diff'ing. For avoidance of doubt, which archs did you 
-test? We also need to ensure those which don't use pmu-events (like 
-arm32) work as before.
+## Test result summary
+total: 65257, pass: 51559, fail: 751, skip: 11207, xfail: 1740
 
-> 
-> A difference in the python to the C approach is that the python loads
-> an entire json file in to memory, while the C code works from token to
-> token. In some cases the C approach was sensitive to the order of
-> dictionary items in the json file. To ensure matching output there are
-> two changes made to jevents.c to cause it to read all values before
-> creating output.
-> 
-> The changes also found a bug in Ivytown's UNC_M_ACT_COUNT.RD event
-> encoding, as well as unnecessary whitespace introduced in Alderlake's
-> metrics. In these cases the json input is fixed.
+## Build Summary
+* arm: 254 total, 238 passed, 16 failed
+* arm64: 32 total, 32 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 19 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 22 total, 22 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 31 total, 31 passed, 0 failed
 
-Thanks,
-John
+## Test suites summary
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

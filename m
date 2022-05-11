@@ -2,90 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01AD7522B90
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 07:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11ECA522B93
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 07:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236419AbiEKFQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 01:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47684 "EHLO
+        id S236916AbiEKFRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 01:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiEKFQg (ORCPT
+        with ESMTP id S236761AbiEKFQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 01:16:36 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8EB9441638;
-        Tue, 10 May 2022 22:16:32 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id CF3621E80D6B;
-        Wed, 11 May 2022 13:11:07 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Hdh699IbcE_1; Wed, 11 May 2022 13:11:05 +0800 (CST)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: kunyu@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 0C5031E80D08;
-        Wed, 11 May 2022 13:11:05 +0800 (CST)
-From:   Li kunyu <kunyu@nfschina.com>
-To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Li kunyu <kunyu@nfschina.com>
-Subject: [PATCH] x86: The return type of the function could be void
-Date:   Wed, 11 May 2022 13:16:05 +0800
-Message-Id: <20220511051605.103574-1-kunyu@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Wed, 11 May 2022 01:16:56 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E939B52E71
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:16:53 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2ec42eae76bso7914487b3.10
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:16:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=K7vluCZEPRmcKgiJXvMD7fUmvJ/aH53x/09ad+GgHBE=;
+        b=gLLOvMo/RuPEjsE+pHY40C1Y8GNlNEN/5IT2ix3jhWDY5XordkvFaFtJLdtkJAkP19
+         k1VlMpycA5ecu9CqXR/R/xCdNyJ6X8PlXhgtk59cCkUADS9+6oBCS6/0NXnWEqKJ5Wb5
+         wNA3ns01G0P1WwQEOXVqpdGRv4ixxRpIx4B+A2zTxypQaHp9HVVTsqX170Ds40kCEVao
+         eB33lILpSpAUgG8007snqrX5nbuidcvST69cE5iSZdmfcr6zt3suwuCbybNLMwUnuiul
+         HszgLVp2G8inhV3+zlfgPl6eeDiASgELm/BBbpvXIX2B71cnnk7Ux9XrVKNmM2jlnutk
+         0c0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=K7vluCZEPRmcKgiJXvMD7fUmvJ/aH53x/09ad+GgHBE=;
+        b=y6TyUOSAxAjtX+u6wUfKhfSMX9k8XoI0dZq+UF386AwRp3YD+KkMSzvX0T+2S/caKT
+         mZAdY4IwslhmQ9916PxHsLnibRPb7fb4YOwuRnJys2LbMSOq+eWYYbyhQjRqhWw8FDD6
+         zzmwDpVOfRo5Qg81q9BFa/q3lNZVSOPe4T7hE63QVcZ4ZzLeVDzyCD2A2hBHeB8oIrW1
+         +7/Zrcm7L3k1v/RB6j8ApSBUQC81Z+0g3WSubZP7iT3ZgSKUONZZG5cq6VeewexX2sYV
+         tI4QjhHrHKVllRcV8MagEA6+dqwtqmTrwE+9EBRPgPdo7uc7JaMrtUAervl1j9zeOyHR
+         DthQ==
+X-Gm-Message-State: AOAM532uw9VG1XbuW59r17sHyVa+nNpdruN5IVWp4XYCLEFXSrycosLW
+        e/lbkqWiA038LmX5/POCxyZ+vZBtHL1VeVfOsknwYg==
+X-Google-Smtp-Source: ABdhPJy64xOdrMNxugRq3EWe7akbLXc+bIB7h7uYmhW2YbTvkv+HCuR3JKsn7DyqPB9G5pGT82lSQCVWglUj9nvTmwE=
+X-Received: by 2002:a0d:ffc3:0:b0:2eb:2327:3361 with SMTP id
+ p186-20020a0dffc3000000b002eb23273361mr23097388ywf.36.1652246213044; Tue, 10
+ May 2022 22:16:53 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 11 May 2022 10:46:41 +0530
+Message-ID: <CA+G9fYvgoK6PVm495QjQ004WszeNdt+zkw-hYfArE_p1mNmmkw@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/135] 5.15.39-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-perhaps the return value of the function is not used.
-it may be possible to optimize the execution instructions.
+On Tue, 10 May 2022 at 19:00, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.39 release.
+> There are 135 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.39-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: Li kunyu <kunyu@nfschina.com>
----
- arch/x86/kernel/acpi/boot.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
-index 0d01e7f5078c..7e32e33d52fa 100644
---- a/arch/x86/kernel/acpi/boot.c
-+++ b/arch/x86/kernel/acpi/boot.c
-@@ -375,7 +375,7 @@ static void __init mp_override_legacy_irq(u8 bus_irq, u8 polarity, u8 trigger,
- 	isa_irq_to_gsi[bus_irq] = gsi;
- }
- 
--static int mp_config_acpi_gsi(struct device *dev, u32 gsi, int trigger,
-+static void mp_config_acpi_gsi(struct device *dev, u32 gsi, int trigger,
- 			int polarity)
- {
- #ifdef CONFIG_X86_MPPARSE
-@@ -387,9 +387,9 @@ static int mp_config_acpi_gsi(struct device *dev, u32 gsi, int trigger,
- 	u8 pin;
- 
- 	if (!acpi_ioapic)
--		return 0;
-+		return;
- 	if (!dev || !dev_is_pci(dev))
--		return 0;
-+		return;
- 
- 	pdev = to_pci_dev(dev);
- 	number = pdev->bus->number;
-@@ -408,7 +408,6 @@ static int mp_config_acpi_gsi(struct device *dev, u32 gsi, int trigger,
- 
- 	mp_save_irq(&mp_irq);
- #endif
--	return 0;
- }
- 
- static int __init mp_register_ioapic_irq(u8 bus_irq, u8 polarity,
--- 
-2.18.2
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 5.15.39-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: 60041d0985244b5cda37d857a7807f2d572b3762
+* git describe: v5.15.37-314-g60041d098524
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.37-314-g60041d098524
+
+## Test Regressions (compared to v5.15.37-259-gab77581473a3)
+No test regressions found.
+
+## Metric Regressions (compared to v5.15.37-259-gab77581473a3)
+No metric regressions found.
+
+## Test Fixes (compared to v5.15.37-259-gab77581473a3)
+No test fixes found.
+
+## Metric Fixes (compared to v5.15.37-259-gab77581473a3)
+No metric fixes found.
+
+## Test result summary
+total: 103063, pass: 87539, fail: 626, skip: 13925, xfail: 973
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 291 total, 291 passed, 0 failed
+* arm64: 41 total, 41 passed, 0 failed
+* i386: 39 total, 39 passed, 0 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 60 total, 54 passed, 6 failed
+* riscv: 27 total, 22 passed, 5 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 41 total, 41 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* timesync-off
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

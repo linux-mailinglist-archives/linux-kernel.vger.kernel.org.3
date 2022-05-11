@@ -2,97 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31A5A52293D
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 03:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DABD9522945
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 03:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240815AbiEKBz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 21:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
+        id S240859AbiEKB4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 21:56:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiEKBz1 (ORCPT
+        with ESMTP id S240919AbiEKB4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 21:55:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF00E18AABB
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 18:55:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5313661AF8
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 01:55:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84DF5C385D4;
-        Wed, 11 May 2022 01:55:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1652234124;
-        bh=RtSdZCnq9Vk4zc1XyJ8ZqHXdTm5EZ4CK1h6O7cMw0pI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=J79FLtB90hPRhj8Cyxnz5KUi42r/kNxFA3LWVSJAnnlxqXpoUmGvDgWXk+sf9663p
-         gacki1T30wP6yYsIoiz1GisRrMHjZKKFd7Y8FZf29HErhWaUq9kBMSh9AYY+lbXYL2
-         Hht6B3dw/xl2srLlkSdSQLev8e9GAfHBVPItXmn0=
-Date:   Tue, 10 May 2022 18:55:23 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Zhou Guanghui <zhouguanghui1@huawei.com>
-Cc:     <rppt@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <xuqiang36@huawei.com>
-Subject: Re: [PATCH] memblock: config the number of init memblock regions
-Message-Id: <20220510185523.3f7479b8ffc49a8a7c17d328@linux-foundation.org>
-In-Reply-To: <20220511010530.60962-1-zhouguanghui1@huawei.com>
-References: <20220511010530.60962-1-zhouguanghui1@huawei.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 10 May 2022 21:56:06 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B0823144
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 18:56:02 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 15so516403pgf.4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 18:56:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TkVkCo+AEqF0i40htkHNCtoH0Rbet/ikc5+1DL9KmSo=;
+        b=Hi5aqq1+m/Ej+vEenvxjgpdjskjWHa8HcLWWVrtyiqSRIgdPRYcdyTMaLzlDyQMAKz
+         hlTV9+BhNIFpEMn3zSVZWxWdrXpT2fH5AFkxhKaw3lHtgS3Vux29n80lupydfOUZD67S
+         xaDCcCpZYZmO17Upd/ga/rOBpLackfaJj+oiKTcWZ53uEetfaIi+btgGotGImVV69IqN
+         lnv4N0Kx2TQayXO2t/IA1LNXLRMllhs2tpW1+kEDqvGIhc7+Tv6Qybg1MjvOZV1bQFuR
+         L/6GLMXKGmf8Cn5kzsJLn2NNPN3ugYfuVN51A5bMRmdo5/VQf2sfe9fivmRpGFtiIjB2
+         po6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TkVkCo+AEqF0i40htkHNCtoH0Rbet/ikc5+1DL9KmSo=;
+        b=jIXxiISPWuxgyDsj04VzlHRLBruRFCMojKB87FUMdJrYRKYXtp6quEemCNIDFZhaD0
+         3YfQ+xpsP8+3wygiqyfofyyb7dwkcaauBEFrxRX7q9KYc3fobKx9GEWt3XR6S3Yh4vq4
+         i2Zv/qpTdERGME+fh2Rb4WTTxxBNBxDi9R7mDhljB6bOn+HHlzij80FrdqXv0ukIKeNL
+         WNrfrU0zA0Ke6xwuretjVKx9MIDn1CReqGbxQRz57z+7LG+87cM4DwLjUePWxN+BS6rT
+         Iguf673IomkjyecKJn8sCPvAOac743gsvU1yU0YI/3UaZuJs+2Ul4MapWnK4uwlMwqbL
+         y/CQ==
+X-Gm-Message-State: AOAM532Zn4lXHsR3ThhBlU01AkNP8FlwDD/R38SiTf+MySwx0OTvafDZ
+        z6A+IYUl+wOkpr3uNJOP0ZIwHzXrw0frWoj7QiGo8g==
+X-Google-Smtp-Source: ABdhPJxTwIrZK3os2Y5Gy2M9XbVTxVNnvEv6gF+cVyLYFsVX8OyNesDt7qGu7dcx91JA1iqzYWRqknggbdHvQFq8KGg=
+X-Received: by 2002:a05:6a00:22d4:b0:510:6d75:e3da with SMTP id
+ f20-20020a056a0022d400b005106d75e3damr23281842pfj.3.1652234161869; Tue, 10
+ May 2022 18:56:01 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220508143620.1775214-1-ruansy.fnst@fujitsu.com>
+ <20220511000352.GY27195@magnolia> <20220511014818.GE1098723@dread.disaster.area>
+In-Reply-To: <20220511014818.GE1098723@dread.disaster.area>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Tue, 10 May 2022 18:55:50 -0700
+Message-ID: <CAPcyv4h0a3aT3XH9qCBW3nbT4K3EwQvBSD_oX5W=55_x24-wFA@mail.gmail.com>
+Subject: Re: [PATCHSETS] v14 fsdax-rmap + v11 fsdax-reflink
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     "Darrick J. Wong" <djwong@kernel.org>,
+        Shiyang Ruan <ruansy.fnst@fujitsu.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jane Chu <jane.chu@oracle.com>,
+        Goldwyn Rodrigues <rgoldwyn@suse.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        linmiaohe@huawei.com, Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 May 2022 01:05:30 +0000 Zhou Guanghui <zhouguanghui1@huawei.com> wrote:
+[ add Andrew ]
 
-> During early boot, the number of memblocks may exceed 128(some memory
-> areas are not reported to the kernel due to test failures. As a result,
-> contiguous memory is divided into multiple parts for reporting). If
-> the size of the init memblock regions is exceeded before the array size
-> can be resized, the excess memory will be lost.
-> 
-> ...
+
+On Tue, May 10, 2022 at 6:49 PM Dave Chinner <david@fromorbit.com> wrote:
 >
-> --- a/mm/Kconfig
-> +++ b/mm/Kconfig
-> @@ -89,6 +89,14 @@ config SPARSEMEM_VMEMMAP
->  	  pfn_to_page and page_to_pfn operations.  This is the most
->  	  efficient option when sufficient kernel resources are available.
->  
-> +config MEMBLOCK_INIT_REGIONS
-> +	int "Number of init memblock regions"
-> +	range 128 1024
-> +	default 128
-> +	help
-> +	  The number of init memblock regions which used to track "memory" and
-> +	  "reserved" memblocks during early boot.
-> +
->  config HAVE_MEMBLOCK_PHYS_MAP
->  	bool
->  
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index e4f03a6e8e56..6893d26b750e 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -22,7 +22,7 @@
->  
->  #include "internal.h"
->  
-> -#define INIT_MEMBLOCK_REGIONS			128
-> +#define INIT_MEMBLOCK_REGIONS			CONFIG_MEMBLOCK_INIT_REGIONS
+> On Tue, May 10, 2022 at 05:03:52PM -0700, Darrick J. Wong wrote:
+> > On Sun, May 08, 2022 at 10:36:06PM +0800, Shiyang Ruan wrote:
+> > > This is a combination of two patchsets:
+> > >  1.fsdax-rmap: https://lore.kernel.org/linux-xfs/20220419045045.1664996-1-ruansy.fnst@fujitsu.com/
+> > >  2.fsdax-reflink: https://lore.kernel.org/linux-xfs/20210928062311.4012070-1-ruansy.fnst@fujitsu.com/
+> > >
+> > >  Changes since v13 of fsdax-rmap:
+> > >   1. Fixed mistakes during rebasing code to latest next-
+> > >   2. Rebased to next-20220504
+> > >
+> > >  Changes since v10 of fsdax-reflink:
+> > >   1. Rebased to next-20220504 and fsdax-rmap
+> > >   2. Dropped a needless cleanup patch: 'fsdax: Convert dax_iomap_zero to
+> > >       iter model'
+> > >   3. Fixed many conflicts during rebasing
+> > >   4. Fixed a dedupe bug in Patch 05: the actuall length to compare could be
+> > >       shorter than smap->length or dmap->length.
+> > >   PS: There are many changes during rebasing.  I think it's better to
+> > >       review again.
+> > >
+> > > ==
+> > > Shiyang Ruan (14):
+> > >   fsdax-rmap:
+> > >     dax: Introduce holder for dax_device
+> > >     mm: factor helpers for memory_failure_dev_pagemap
+> > >     pagemap,pmem: Introduce ->memory_failure()
+> > >     fsdax: Introduce dax_lock_mapping_entry()
+> > >     mm: Introduce mf_dax_kill_procs() for fsdax case
+> >
+> > Hmm.  This patchset touches at least the dax, pagecache, and xfs
+> > subsystems.  Assuming it's too late for 5.19, how should we stage this
+> > for 5.20?
+>
+> Yeah, it's past my "last date for this merge cycle" which was
+> -rc6. I expected stuff might slip a little - as it has with the LARP
+> code - but I don't have the time and bandwidth to start working
+> on merging another feature from scratch before the merge window
+> comes around.
+>
+> Getting the dax+reflink stuff in this cycle was always an optimistic
+> stretch, but I wanted to try so that there was no doubt it would be
+> ready for merge in the next cycle...
+>
+> > I could just add the entire series to iomap-5.20-merge and base the
+> > xfs-5.20-merge off of that?  But I'm not sure what else might be landing
+> > in the other subsystems, so I'm open to input.
+>
+> It'll need to be a stable branch somewhere, but I don't think it
+> really matters where al long as it's merged into the xfs for-next
+> tree so it gets filesystem test coverage...
 
-Consistent naming would be nice - MEMBLOCK_INIT versus INIT_MEMBLOCK.
-
-Can we simply increase INIT_MEMBLOCK_REGIONS to 1024 and avoid the
-config option?  It appears that the overhead from this would be 60kB or
-so.  Or zero if CONFIG_ARCH_KEEP_MEMBLOCK and CONFIG_MEMORY_HOTPLUG
-are cooperating.
+So how about let the notify_failure() bits go through -mm this cycle,
+if Andrew will have it, and then the reflnk work has a clean v5.19-rc1
+baseline to build from?

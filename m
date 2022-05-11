@@ -2,109 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B151523B12
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24E26523B15
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345276AbiEKRCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 13:02:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
+        id S1345305AbiEKRDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 13:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237247AbiEKRCm (ORCPT
+        with ESMTP id S1345296AbiEKRDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 13:02:42 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A0264733;
-        Wed, 11 May 2022 10:02:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=qGbO2F4BgGoDa01K+lTe/8HxmdXnwujci0ArhS0FRT8=; b=JUpmsc/qHSdRlsIfTcfeWYxkEZ
-        3iA/qnwVbuw8FHxZlWbCoFb5V7vwvxiTxAExDI4kh6ejcKLyu1FpD6K9ZDF+ZgmT7Q5cub6NdzCJt
-        2Nwj6wToecfx/xGR1mZiDtjyBTAoP6lLKBFmMcTKMHDVpbKwPaV/8MmlZaGQ6OUsZYck=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nopjG-002Ko2-Cq; Wed, 11 May 2022 19:02:26 +0200
-Date:   Wed, 11 May 2022 19:02:26 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        catalin.marinas@arm.com, will@kernel.org,
-        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
-        kostap@marvell.com, robert.marko@sartura.hr,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v6 1/3] dt-bindings: marvell: Document the AC5/AC5X
- compatibles
-Message-ID: <YnvsInrh03BVh7lN@lunn.ch>
-References: <20220510231002.1160798-1-chris.packham@alliedtelesis.co.nz>
- <20220510231002.1160798-2-chris.packham@alliedtelesis.co.nz>
+        Wed, 11 May 2022 13:03:15 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2716B019
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:03:13 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2ef5380669cso28435257b3.9
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:03:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=IpFPdO/uhoos0ytjMYOded4nPoWVZB+GddWGBdrYbMs=;
+        b=DftVrELHUbG6fAglpJBSkYraK/JxtyLTYij8BRwZtbKjUIRS9rXC3CRLLTATNg0yT6
+         /BV+kAxtxbvLKnrVBCq0rp4iVtB/4xhip7cMbKBqncF40dKtWBU/O75l6+6mtUQuc9Jf
+         7OqdNr68dN+aTIx2kNYySQZF4SNazr9zk17XEMjMRw6dwpWf8ZA09XtvmjNzAv1U0y1d
+         GEKn6XWp/zxkLAVu5hg1NlJ4KHcUSYtjiCCzmG5lBNHBzItUWlQVzKhpeEGOwAitnl8d
+         uP2bBRoM5MySUSBzHeW1tUa+DBONyCkjwtBe+nX1wiLYnPvzR87oYgJ7gr9jdyn54zaf
+         II6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=IpFPdO/uhoos0ytjMYOded4nPoWVZB+GddWGBdrYbMs=;
+        b=LP8cKcVPVqlUlIK6G/EwBmNoXec6uhuSGAvo5PemDN8J4zortoGqGk+xw/4LoxM/VQ
+         t3ZXVTjSAtjC49wxSoTItSux+g7HN0I6S49tWgtE6xFeUF/HwqgiCXgYUY+0Nzdv5Jzo
+         m7fFTGuSAROAZRxoSKfIfhHO/vA6k7tOIAOewUgNM40mSNwL/obnEDsvKZTqgVM1Q2vL
+         7pw6A7e2A5kBbyEb+hPEDz6Q5swGKwgB23sAZj5YbF14wyN+2UMjxdcrmF6ZQm9bQopa
+         yv2Y4vDt8s+js/13h+9J6aSHzUtFbrtc3Rvb7YADlQlALVB7Cz5AS/ZV7XJkkkRUgbTp
+         vJ2w==
+X-Gm-Message-State: AOAM531OAixBxXyxONhLkg3QikZCeb6YboqH8OVYz6A+munJ16B2stFm
+        mGdfoKw6vbejhOhBE4HGp3mOXA2GiOjlZ2G8Vt90PhRv2PuNZw==
+X-Google-Smtp-Source: ABdhPJwPNDG2qz9xm6hazjQfNV88Bgu3tDJb25KA7U+2Gg82o7sTH39Xql9UQcRPBTAYCAQHCh1Bu4zryk5beAVHzQY=
+X-Received: by 2002:a0d:d88c:0:b0:2f7:bb41:1bd0 with SMTP id
+ a134-20020a0dd88c000000b002f7bb411bd0mr25670953ywe.199.1652288592004; Wed, 11
+ May 2022 10:03:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220510231002.1160798-2-chris.packham@alliedtelesis.co.nz>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 11 May 2022 22:33:00 +0530
+Message-ID: <CA+G9fYtKJ_a2rLSvxsYFrkUjNHpGeTn_xsL8kyz=-pBoeA+eXA@mail.gmail.com>
+Subject: [next] mm: overcommit_memory: failed - TFAIL: alloc passed, expected
+ to fail
+To:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, lkft-triage@lists.linaro.org,
+        LTP List <ltp@lists.linux.it>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Peter Xu <peterx@redhat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Ganesan Rajagopal <rganesan@arista.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Michal Hocko <mhocko@suse.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 11:10:00AM +1200, Chris Packham wrote:
-> Describe the compatible properties for the Marvell Alleycat5/5X switches
-> with integrated CPUs.
-> 
-> Alleycat5:
-> * 98DX2538: 24x1G + 2x10G + 2x10G Stack
-> * 98DX2535: 24x1G + 4x1G Stack
-> * 98DX2532: 8x1G + 2x10G + 2x1G Stack
-> * 98DX2531: 8x1G + 4x1G Stack
-> * 98DX2528: 24x1G + 2x10G + 2x10G Stack
-> * 98DX2525: 24x1G + 4x1G Stack
-> * 98DX2522: 8x1G + 2x10G + 2x1G Stack
-> * 98DX2521: 8x1G + 4x1G Stack
-> * 98DX2518: 24x1G + 2x10G + 2x10G Stack
-> * 98DX2515: 24x1G + 4x1G Stack
-> * 98DX2512: 8x1G + 2x10G + 2x1G Stack
-> * 98DX2511: 8x1G + 4x1G Stack
-> 
-> Alleycat5X:
-> * 98DX3500: 24x1G + 6x25G
-> * 98DX3501: 16x1G + 6x10G
-> * 98DX3510: 48x1G + 6x25G
-> * 98DX3520: 24x2.5G + 6x25G
-> * 98DX3530: 48x2.5G + 6x25G
-> * 98DX3540: 12x5G/6x10G + 6x25G
-> * 98DX3550: 24x5G/12x10G + 6x25G
+Following LTP test regressions were noticed on Linux next-20220511 tag on
+all the devices.
 
-Hi Chris
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-When looking at this list, is it just the switch which changes, and
-everything else in the package stays the same?
+Regressions found on x86 and arm64.
 
-I'm thinking back to plain Kirkwood. There were 3 Kirkwood SoCs. We
-had kirkwood.dtsi which described everything common to all three
-SoCs. And then kirkwood-6192.dtsi, kirkwood-6281.dtsi,
-kirkwood-6282.dtsi which extended that base with whatever additional
-things each SoC had.
+   ltp-mm-tests/overcommit_memory04
+   ltp-mm-tests/overcommit_memory06
+   ltp-mm-tests/overcommit_memory03
+   ltp-mm-tests/min_free_kbytes
+   ltp-mm-tests/overcommit_memory01
+   ltp-mm-tests/oom01
+   ltp-mm-tests/overcommit_memory05
 
-I'm wondering if something similar is needed here?
 
-armada-98DX25xx.dtsi which describes everything common to Alleycat5.
+mem.c:154: TFAIL: victim signalled: (9) SIGKILL
+overcommit_memory.c:203: TFAIL: alloc passed, expected to fail
+overcommit_memory.c:176: TINFO: malloc 7102100 kB successfully
+overcommit_memory.c:203: TFAIL: alloc passed, expected to fail
+overcommit_memory.c:176: TINFO: malloc 3523530 kB successfully
 
-armada-98DX35xx.dtsi which describes everything common to Alleycat5X,
-maybe making use of armada-98DX25xx.dtsi?.
+overcommit_memory.c:203: TFAIL: alloc passed, expected to fail
+overcommit_memory.c:176: TINFO: malloc 8456472 kB successfully
+overcommit_memory.c:203: TFAIL: alloc passed, expected to fail
+overcommit_memory.c:176: TINFO: malloc 4283276 kB successfully
+overcommit_memory.c:203: TFAIL: alloc passed, expected to fail
+overcommit_memory.c:176: TINFO: malloc 2114118 kB successfully
 
-armada-98DX2538.dtsi which extends armada-98DX25xx.dtsi
 
-And then a board file which includes armada-98DX2538.dtsi and add the
-board specific bits?
+metadata:
+  git_ref: master
+  git_repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+  git_sha: 6107040c99d5dfc920721c198d45ed2d639b113a
+  git_describe: next-20220511
+  kernel_version: 5.18.0-rc6
+  kernel-config: https://builds.tuxbuild.com/291BWBU964yoppGqYfnVF8AJMg4/config
+  build-url: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/pipelines/536448964
+  artifact-location: https://builds.tuxbuild.com/291BWBU964yoppGqYfnVF8AJMg4
+  toolchain: gcc-11
 
-I've no idea how these different devices differ, so i don't know what
-the correct hierarchy should be.
 
-    Andrew
+Full test log on x86:
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220511/testrun/9438084/suite/ltp-mm-tests/test/overcommit_memory01/log
+https://lkft.validation.linaro.org/scheduler/job/5012581#L10525
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org

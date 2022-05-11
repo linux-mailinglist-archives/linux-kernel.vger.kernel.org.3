@@ -2,151 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E1425230E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC5A5230EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:45:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234309AbiEKKpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 06:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59366 "EHLO
+        id S232127AbiEKKo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 06:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234618AbiEKKpK (ORCPT
+        with ESMTP id S229475AbiEKKow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 06:45:10 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F54D57
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:45:09 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nojpq-0005CM-4b; Wed, 11 May 2022 12:44:50 +0200
-Message-ID: <fce6d626-06c3-3a89-1f0d-9535e6261f41@pengutronix.de>
-Date:   Wed, 11 May 2022 12:44:43 +0200
+        Wed, 11 May 2022 06:44:52 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BBD25A;
+        Wed, 11 May 2022 03:44:51 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso2969720wma.0;
+        Wed, 11 May 2022 03:44:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sSANPAJEcLApaNo9JQsHkO1TMkxVWZ0hRpqjKUJDwiU=;
+        b=J2uIr9J3ZBKzU2GQGiMLPp17ZHBWsGTy+hlqS06Gg7ufytIF+2hD7+NsdirvYjvOxU
+         t7opLzS6zOcLDtSO0u/Qr3ofmCuRQLpi3rrCxb3DhM5qi2TluLdd+eyX74OxNixQpKTB
+         p+wtVCxAyqwnAUwekAMWmB1cQ6hXTye8GQ7V/jBZhSUImnAilcZz32hBILwLz3FBqrbR
+         ZMYGSP/9RvZGNtQ5NQ68NLywY9/KLpVvX6q82dMbcABgBmx3AbEai6CToVRXIy+PHSxK
+         LS9E27lx/LC3mYIVvhWnri1Awg0zFlGM3fBpMJkZt0xjNLNfJaWIJiQsSvtRP4tmx2co
+         WX0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sSANPAJEcLApaNo9JQsHkO1TMkxVWZ0hRpqjKUJDwiU=;
+        b=AcS5s7hJmZVMMd6z1WHfVZPWbmEzLT/7ThqExz7JuUjz132RLyaqz07cRhlR3Zhy9Y
+         Yld4dsbnpv7Pkj0P3YFB8jWOupMDY6Z7Yv3fQwdN3pzBDmEWX6zAvVmiuS40ie2W5RX6
+         77FlU4MblX6ug0gEK76I3McS9mqGnE0cNt2GW61OF+E/rIB7oBUpBDZ6BU2uoT9ddfbX
+         Gjsi/wj1J60DMIw1jnfDvJoLKXGsawf9PqxPioXlOjUMst6wgFVttVKBDw8pSxWbQa+6
+         dmHASmZR+O7hYeYyLeaPD8bFct7fHCmNoWkgbVpSyKOHqRadig8NKAsD5ofQbfUeZFQi
+         DvfA==
+X-Gm-Message-State: AOAM5331UgGvPhEYO5m1wkAbKxMZioMqvLu/O5vcUL6HM5zjwp4qi3/d
+        mtHr9R1RHPr8zflNF7DMjnK9Zt377YHTUw==
+X-Google-Smtp-Source: ABdhPJxJVetvp4dl7ChKMxe08Vd94vwV8ycZYPR3kb+dqAjW/maTyX0FPO1OtEUZvyP8RUhSnvY1dQ==
+X-Received: by 2002:a7b:c0c3:0:b0:394:70a2:89d1 with SMTP id s3-20020a7bc0c3000000b0039470a289d1mr4172421wmh.12.1652265889835;
+        Wed, 11 May 2022 03:44:49 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id a22-20020a1cf016000000b003942a244f4esm4954134wmb.39.2022.05.11.03.44.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 03:44:49 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Wells Lu <wellslutw@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] net: ethernet: SP7021: Fix spelling mistake "Interrput" -> "Interrupt"
+Date:   Wed, 11 May 2022 11:44:48 +0100
+Message-Id: <20220511104448.150800-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v8 0/6] KEYS: trusted: Introduce support for NXP
- CAAM-based trusted keys
-Content-Language: en-US
-To:     John Ernberg <john.ernberg@actia.se>
-Cc:     "andreas@rammhold.de" <andreas@rammhold.de>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "david@sigma-star.at" <david@sigma-star.at>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>,
-        "franck.lenormand@nxp.com" <franck.lenormand@nxp.com>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "horia.geanta@nxp.com" <horia.geanta@nxp.com>,
-        "j.luebbe@pengutronix.de" <j.luebbe@pengutronix.de>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "matthias.schiffer@ew.tq-group.com" 
-        <matthias.schiffer@ew.tq-group.com>,
-        "pankaj.gupta@nxp.com" <pankaj.gupta@nxp.com>,
-        "richard@nod.at" <richard@nod.at>,
-        "s.trumtrar@pengutronix.de" <s.trumtrar@pengutronix.de>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
-        "tharvey@gateworks.com" <tharvey@gateworks.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>
-References: <09e2552c-7392-e1da-926b-53c7db0b118d@pengutronix.de>
- <20220507213003.3373206-1-john.ernberg@actia.se>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <20220507213003.3373206-1-john.ernberg@actia.se>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello John,
+There is a spelling mistake in a dev_dbg message. Fix it.
 
-On 07.05.22 23:30, John Ernberg wrote:
-> Hi Ahmad,
-> 
->>>
->>> dmesg snips:
->>> [    1.296772] trusted_key: Job Ring Device allocation for transform failed
->>> ...
->>> [    1.799768] caam 31400000.crypto: device ID = 0x0a16040000000100 (Era 9)
->>> [    1.807142] caam 31400000.crypto: job rings = 2, qi = 0
->>> [    1.822667] caam algorithms registered in /proc/crypto
->>> [    1.830541] caam 31400000.crypto: caam pkc algorithms registered in /proc/crypto
->>> [    1.841807] caam 31400000.crypto: registering rng-caam
->>>
->>> I didn't quite have the time to get a better trace than that.
->>
->> I don't see a crypto@31400000 node upstream. Where can I see your device tree?
-> 
-> Apologies for forgetting to mention that, I took it from the NXP tree
-> while removing the SM and SECO bits [1].
-> I also had to rebase some of their patches onto 5.17 for the CAAM to
-> probe, as the SCU makes some register pages unavailable.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/net/ethernet/sunplus/spl2sw_int.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If the CAAM has a dependency on some SCU-provided resource, this
-would explain why the driver probes it that late.
-
->> Initcall ordering does the right thing, but if CAAM device probe is deferred beyond
->> late_initcall, then it won't help.
->>
->> This is a general limitation with trusted keys at the moment. Anything that's
->> not there by the time of the late_initcall won't be tried again. You can work
->> around it by having trusted keys as a module. We might be able to do something
->> with fw_devlinks in the future and a look into your device tree would help here,
->> but I think that should be separate from this patch series.
-> 
-> Thank for you the explanation, it makes sense, and I agree that such work
-> would be a different patch set.
-> 
->>
->> Please let me know if the module build improves the situation for you.
->>
-> 
-> After I changed trusted keys to a module I got it working. Which is good
-> enough for me as QXP CAAM support is not upstream yet.
-
-Great!
-
-> Feel free to add my tested by if you need to make another spin.
-> Tested-by: John Ernberg <john.ernberg@actia.se> # iMX8QXP
-> 
-> I didn't test v9 as I would have to patch around the new patch due to
-> the SCU.
-
-Thanks for the test. I will add it to v10 except for
-
- - "crypto: caam - determine whether CAAM supports blob encap/decap", which
-   was new in v9
- - "doc: trusted-encrypted: describe new CAAM trust source",
-   "MAINTAINERS: add KEYS-TRUSTED-CAAM" as runtime test isn't affected by these.
-
-Cheers,
-Ahmad
-
-> 
-> Best regards // John Ernberg
-> 
-> [1]: https://source.codeaurora.org/external/imx/linux-imx/tree/arch/arm64/boot/dts/freescale/imx8-ss-security.dtsi?h=lf-5.10.y
-
-
+diff --git a/drivers/net/ethernet/sunplus/spl2sw_int.c b/drivers/net/ethernet/sunplus/spl2sw_int.c
+index 95ce096d1543..69b1e2e0271e 100644
+--- a/drivers/net/ethernet/sunplus/spl2sw_int.c
++++ b/drivers/net/ethernet/sunplus/spl2sw_int.c
+@@ -215,7 +215,7 @@ irqreturn_t spl2sw_ethernet_interrupt(int irq, void *dev_id)
+ 
+ 	status = readl(comm->l2sw_reg_base + L2SW_SW_INT_STATUS_0);
+ 	if (unlikely(!status)) {
+-		dev_dbg(&comm->pdev->dev, "Interrput status is null!\n");
++		dev_dbg(&comm->pdev->dev, "Interrupt status is null!\n");
+ 		goto spl2sw_ethernet_int_out;
+ 	}
+ 	writel(status, comm->l2sw_reg_base + L2SW_SW_INT_STATUS_0);
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.35.1
+

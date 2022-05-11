@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C92FC522CB9
+	by mail.lfdr.de (Postfix) with ESMTP id 32548522CB7
 	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242508AbiEKHCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 03:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
+        id S242468AbiEKHBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 03:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242439AbiEKHBl (ORCPT
+        with ESMTP id S242455AbiEKHBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 03:01:41 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01735E157
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:01:40 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f8be9326fcso9704767b3.18
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:01:40 -0700 (PDT)
+        Wed, 11 May 2022 03:01:45 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122545E74C
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:01:42 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id d188-20020a25cdc5000000b00648429e5ab9so1093719ybf.13
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:01:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=GOl/dDyiic3CHN6RpwyPiPKb1wU0VPhBRck28P7ZCHk=;
-        b=EnHwC10qwtnV6pxqRJcYnJ49YxvO7SNM936gaY/vUD9nwsdn7XuxHwNK64iZ+h+Fix
-         h3I+btR3DZSQ8xyOxoxGB6qWSKczhaCoFnjdHBtUxuju4nkgOyLypfaTl6AzAjGypQMI
-         CCIitXJUvLQc8FBX3I1njZS2zgHo0zG9ze2tgKP+0lHT2wTJJmaCX1IDzPyHTL5kSHyi
-         1Hmykb+40ppEPYOwmJwY6kJNOC0ibZZ+6b6gXfPAhMCyHJjsmpmMsKPBZkfj0y2wiFYJ
-         ORhKqKt7xxIfuToMv4ERtBOfxqzWVg89x8ABummQWCwjzgxE1dYcPvbdyN4L+EcO/SPL
-         kdUw==
+        bh=p1OX+w7IK0mnK9F3eqD3DEeM7lTBarWyy9w79QDENKE=;
+        b=FIO2yZvt1EnPVeydYIqjeebHVBci+Re90bjDH3fQ09Xb/6mSaO0ILtM7ELgkMB+eGK
+         djqQCD/4SHfkPvwCvyouKotO5ghRj3BBtt2IeRIVETFqgQjmfZ5wTUl/WmCgOn96jm4C
+         BSHeD7pY2bL8an1cH3ZzX7fuvlSL81HruwA9MhYXIWwkUv8lxrfiib5xyEKak+kNridm
+         M0ytdE7SWmqVd4ukmqOONHSqrEp9uVryzpGzasL8oT8GpxDQfACNIF3ZWAHeWM810Dyf
+         yso2qirh1NT8M7MYIfWg5AqcJpfvxlMMPc0x0cXd+9eIf0etskK/7l2WfMUKSBPDZqdN
+         Gprg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=GOl/dDyiic3CHN6RpwyPiPKb1wU0VPhBRck28P7ZCHk=;
-        b=scoXMcLM5HIVkBk7pyInZD5TZjdWhm/4wUmR3lKGXilatnqOJHTEG/psCOtYTyhfpL
-         aSLEIw3iuVnFdHCdCRRxGzkPEPIgXxP5sVUEoF8RVPQSMZejPQ+8d3/d88Obu/DQBYW8
-         v7lfF1GRJteXhZP31/6iHCnwk78BegrpdqhUDih25MWvZGsGE5i40QmOS/In6SzATzkM
-         XS++Tc+uDjMfcfKCEZXlmHqE/g9ZXwamVaaNGqXHi6TKTw0A8jWSAqqEXLLoxNqlnEJc
-         nc4lBsSU5WK6SlpQe81E1Ddk/93gqtxTttrvws9ZogrqR6LlgijFleRUb+DLk/NlgFQe
-         CKPQ==
-X-Gm-Message-State: AOAM533nGx30/aMrkluCr6U4ZR8SCXxbMWR7GV88Hm/kzqM2fucSIGv+
-        fe5ls0JiONBCPX/Sv8DVghXYjMJu0tGX
-X-Google-Smtp-Source: ABdhPJz6DgNH2KUDVEqruh6QTuP3eHV+0C65QhAonB7KFFGCDZ9k68xvIzb57Q2CYcotHaOjeHpkPVu6UIAq
+        bh=p1OX+w7IK0mnK9F3eqD3DEeM7lTBarWyy9w79QDENKE=;
+        b=sWq2nuwf1qqPDcHcpn6bogr2M/Nm3uTVnPhTsgtZOLT12TeTtzYv0k/RPzmKHt42C8
+         4BdaxnOOhUhJ+x9ZF9zn4HYSU6O+DxRQZ8++dSpvfhFYbHWxfXFR72CCGW06PVCEHDZQ
+         T+fzl81W0EUp2zHMVRHN4apFz/a5aJ2umsXwVvss3AJ72ufhiH/Vfe5nvfdoN1F31iM3
+         lZ/2WQu5/Tivr+U/lrYmiCrBal6coPIlQoh/vnQ6jHwFsFAlI1i2II1mx194t4r9LkeR
+         qF9vuTiawU+8mlbKFIF68AyCu8niFAax3T2hjygrgOxMaMVRR6I2X0LjcPO6CQNkRCpo
+         wCQw==
+X-Gm-Message-State: AOAM531eKRq2dBiAdIkANF6LWDung5Swczh0vKxrU8ZSydF9BrQClMdB
+        UNkQJGk7EY//3Hvp/phHedOAFKf5tgUp
+X-Google-Smtp-Source: ABdhPJxpapPDx4GvGXc5S+8qppcE3wrnnn+RrBiK6n6ApsanFrFANYx/sXkYOA9dYCH65NvEOFC5nVmuJ5Tw
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:b6c9:16a6:f912:39d5])
- (user=irogers job=sendgmr) by 2002:a25:acd2:0:b0:645:d5c8:b837 with SMTP id
- x18-20020a25acd2000000b00645d5c8b837mr21754737ybd.481.1652252499791; Wed, 11
- May 2022 00:01:39 -0700 (PDT)
-Date:   Wed, 11 May 2022 00:01:27 -0700
+ (user=irogers job=sendgmr) by 2002:a25:47c1:0:b0:64a:9f13:61c7 with SMTP id
+ u184-20020a2547c1000000b0064a9f1361c7mr18383514yba.464.1652252501992; Wed, 11
+ May 2022 00:01:41 -0700 (PDT)
+Date:   Wed, 11 May 2022 00:01:28 -0700
 In-Reply-To: <20220511070133.710721-1-irogers@google.com>
-Message-Id: <20220511070133.710721-2-irogers@google.com>
+Message-Id: <20220511070133.710721-3-irogers@google.com>
 Mime-Version: 1.0
 References: <20220511070133.710721-1-irogers@google.com>
 X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
-Subject: [PATCH 1/7] perf jevents: Append PMU description later
+Subject: [PATCH 2/7] perf vendor events: Fix Alderlake metric groups
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -92,77 +92,242 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Append the PMU information from "Unit" to the description later. This
-avoids a problem when "Unit" appears early in a json event and the
-information prepends the description rather than being the expected
-suffix.
-
-Update the pmu-events test so that expectations now match the improved
-output.
+Remove unnecessary empty groups.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/pmu-events/jevents.c | 8 +++++---
- tools/perf/tests/pmu-events.c   | 6 +++---
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ .../arch/x86/alderlake/adl-metrics.json       | 32 -------------------
+ 1 file changed, 32 deletions(-)
 
-diff --git a/tools/perf/pmu-events/jevents.c b/tools/perf/pmu-events/jevents.c
-index 159d9eab6e79..e1f7c7afd435 100644
---- a/tools/perf/pmu-events/jevents.c
-+++ b/tools/perf/pmu-events/jevents.c
-@@ -652,9 +652,6 @@ static int json_events(const char *fn,
- 					for (s = je.pmu; *s; s++)
- 						*s = tolower(*s);
- 				}
--				addfield(map, &je.desc, ". ", "Unit: ", NULL);
--				addfield(map, &je.desc, "", je.pmu, NULL);
--				addfield(map, &je.desc, "", " ", NULL);
- 			} else if (json_streq(map, field, "Filter")) {
- 				addfield(map, &filter, "", "", val);
- 			} else if (json_streq(map, field, "ScaleUnit")) {
-@@ -697,6 +694,11 @@ static int json_events(const char *fn,
- 			addfield(map, &je.desc, " ", extra_desc, NULL);
- 		if (je.long_desc && extra_desc)
- 			addfield(map, &je.long_desc, " ", extra_desc, NULL);
-+		if (je.pmu) {
-+			addfield(map, &je.desc, ". ", "Unit: ", NULL);
-+			addfield(map, &je.desc, "", je.pmu, NULL);
-+			addfield(map, &je.desc, "", " ", NULL);
-+		}
- 		if (filter)
- 			addfield(map, &event, ",", filter, NULL);
- 		if (msr != NULL)
-diff --git a/tools/perf/tests/pmu-events.c b/tools/perf/tests/pmu-events.c
-index 299a215eb54c..b74c6ef59e51 100644
---- a/tools/perf/tests/pmu-events.c
-+++ b/tools/perf/tests/pmu-events.c
-@@ -133,7 +133,7 @@ static const struct perf_pmu_test_event unc_cbo_xsnp_response_miss_eviction = {
- 	.event = {
- 		.name = "unc_cbo_xsnp_response.miss_eviction",
- 		.event = "umask=0x81,event=0x22",
--		.desc = "Unit: uncore_cbox A cross-core snoop resulted from L3 Eviction which misses in some processor core",
-+		.desc = "A cross-core snoop resulted from L3 Eviction which misses in some processor core. Unit: uncore_cbox ",
- 		.topic = "uncore",
- 		.long_desc = "A cross-core snoop resulted from L3 Eviction which misses in some processor core",
- 		.pmu = "uncore_cbox",
-@@ -147,7 +147,7 @@ static const struct perf_pmu_test_event uncore_hyphen = {
- 	.event = {
- 		.name = "event-hyphen",
- 		.event = "umask=0x00,event=0xe0",
--		.desc = "Unit: uncore_cbox UNC_CBO_HYPHEN",
-+		.desc = "UNC_CBO_HYPHEN. Unit: uncore_cbox ",
- 		.topic = "uncore",
- 		.long_desc = "UNC_CBO_HYPHEN",
- 		.pmu = "uncore_cbox",
-@@ -161,7 +161,7 @@ static const struct perf_pmu_test_event uncore_two_hyph = {
- 	.event = {
- 		.name = "event-two-hyph",
- 		.event = "umask=0x00,event=0xc0",
--		.desc = "Unit: uncore_cbox UNC_CBO_TWO_HYPH",
-+		.desc = "UNC_CBO_TWO_HYPH. Unit: uncore_cbox ",
- 		.topic = "uncore",
- 		.long_desc = "UNC_CBO_TWO_HYPH",
- 		.pmu = "uncore_cbox",
+diff --git a/tools/perf/pmu-events/arch/x86/alderlake/adl-metrics.json b/tools/perf/pmu-events/arch/x86/alderlake/adl-metrics.json
+index 4d172687f936..6b24958737b5 100644
+--- a/tools/perf/pmu-events/arch/x86/alderlake/adl-metrics.json
++++ b/tools/perf/pmu-events/arch/x86/alderlake/adl-metrics.json
+@@ -477,224 +477,192 @@
+     {
+         "BriefDescription": "",
+         "MetricExpr": "CPU_CLK_UNHALTED.CORE",
+-        "MetricGroup": " ",
+         "MetricName": "CLKS",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "",
+         "MetricExpr": "CPU_CLK_UNHALTED.CORE_P",
+-        "MetricGroup": " ",
+         "MetricName": "CLKS_P",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "",
+         "MetricExpr": "5 * CPU_CLK_UNHALTED.CORE",
+-        "MetricGroup": " ",
+         "MetricName": "SLOTS",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Instructions Per Cycle",
+         "MetricExpr": "INST_RETIRED.ANY / CPU_CLK_UNHALTED.CORE",
+-        "MetricGroup": " ",
+         "MetricName": "IPC",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Cycles Per Instruction",
+         "MetricExpr": "CPU_CLK_UNHALTED.CORE / INST_RETIRED.ANY",
+-        "MetricGroup": " ",
+         "MetricName": "CPI",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Uops Per Instruction",
+         "MetricExpr": "UOPS_RETIRED.ALL / INST_RETIRED.ANY",
+-        "MetricGroup": " ",
+         "MetricName": "UPI",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Percentage of total non-speculative loads with a store forward or unknown store address block",
+         "MetricExpr": "100 * LD_BLOCKS.DATA_UNKNOWN / MEM_UOPS_RETIRED.ALL_LOADS",
+-        "MetricGroup": "",
+         "MetricName": "Store_Fwd_Blocks",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Percentage of total non-speculative loads with a address aliasing block",
+         "MetricExpr": "100 * LD_BLOCKS.4K_ALIAS / MEM_UOPS_RETIRED.ALL_LOADS",
+-        "MetricGroup": "",
+         "MetricName": "Address_Alias_Blocks",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Percentage of total non-speculative loads that are splits",
+         "MetricExpr": "100 * MEM_UOPS_RETIRED.SPLIT_LOADS / MEM_UOPS_RETIRED.ALL_LOADS",
+-        "MetricGroup": "",
+         "MetricName": "Load_Splits",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Instructions per Branch (lower number means higher occurrence rate)",
+         "MetricExpr": "INST_RETIRED.ANY / BR_INST_RETIRED.ALL_BRANCHES",
+-        "MetricGroup": " ",
+         "MetricName": "IpBranch",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Instruction per (near) call (lower number means higher occurrence rate)",
+         "MetricExpr": "INST_RETIRED.ANY / BR_INST_RETIRED.CALL",
+-        "MetricGroup": " ",
+         "MetricName": "IpCall",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Instructions per Load",
+         "MetricExpr": "INST_RETIRED.ANY / MEM_UOPS_RETIRED.ALL_LOADS",
+-        "MetricGroup": " ",
+         "MetricName": "IpLoad",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Instructions per Store",
+         "MetricExpr": "INST_RETIRED.ANY / MEM_UOPS_RETIRED.ALL_STORES",
+-        "MetricGroup": " ",
+         "MetricName": "IpStore",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Number of Instructions per non-speculative Branch Misprediction",
+         "MetricExpr": "INST_RETIRED.ANY / BR_MISP_RETIRED.ALL_BRANCHES",
+-        "MetricGroup": " ",
+         "MetricName": "IpMispredict",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Instructions per Far Branch",
+         "MetricExpr": "INST_RETIRED.ANY / ( BR_INST_RETIRED.FAR_BRANCH / 2 )",
+-        "MetricGroup": " ",
+         "MetricName": "IpFarBranch",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Ratio of all branches which mispredict",
+         "MetricExpr": "BR_MISP_RETIRED.ALL_BRANCHES / BR_INST_RETIRED.ALL_BRANCHES",
+-        "MetricGroup": " ",
+         "MetricName": "Branch_Mispredict_Ratio",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Ratio between Mispredicted branches and unknown branches",
+         "MetricExpr": "BR_MISP_RETIRED.ALL_BRANCHES / BACLEARS.ANY",
+-        "MetricGroup": " ",
+         "MetricName": "Branch_Mispredict_to_Unknown_Branch_Ratio",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Percentage of all uops which are ucode ops",
+         "MetricExpr": "100 * UOPS_RETIRED.MS / UOPS_RETIRED.ALL",
+-        "MetricGroup": " ",
+         "MetricName": "Microcode_Uop_Ratio",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Percentage of all uops which are FPDiv uops",
+         "MetricExpr": "100 * UOPS_RETIRED.FPDIV / UOPS_RETIRED.ALL",
+-        "MetricGroup": " ",
+         "MetricName": "FPDiv_Uop_Ratio",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Percentage of all uops which are IDiv uops",
+         "MetricExpr": "100 * UOPS_RETIRED.IDIV / UOPS_RETIRED.ALL",
+-        "MetricGroup": " ",
+         "MetricName": "IDiv_Uop_Ratio",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Percentage of all uops which are x87 uops",
+         "MetricExpr": "100 * UOPS_RETIRED.X87 / UOPS_RETIRED.ALL",
+-        "MetricGroup": " ",
+         "MetricName": "X87_Uop_Ratio",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Average Frequency Utilization relative nominal frequency",
+         "MetricExpr": "CPU_CLK_UNHALTED.CORE / CPU_CLK_UNHALTED.REF_TSC",
+-        "MetricGroup": " ",
+         "MetricName": "Turbo_Utilization",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Fraction of cycles spent in Kernel mode",
+         "MetricExpr": "CPU_CLK_UNHALTED.CORE:k / CPU_CLK_UNHALTED.CORE",
+-        "MetricGroup": " ",
+         "MetricName": "Kernel_Utilization",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Average CPU Utilization",
+         "MetricExpr": "CPU_CLK_UNHALTED.REF_TSC / msr@tsc@",
+-        "MetricGroup": " ",
+         "MetricName": "CPU_Utilization",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Estimated Pause cost. In percent",
+         "MetricExpr": "100 * SERIALIZATION.NON_C01_MS_SCB / ( 5 * CPU_CLK_UNHALTED.CORE )",
+-        "MetricGroup": " ",
+         "MetricName": "Estimated_Pause_Cost",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Cycle cost per L2 hit",
+         "MetricExpr": "MEM_BOUND_STALLS.LOAD_L2_HIT / MEM_LOAD_UOPS_RETIRED.L2_HIT",
+-        "MetricGroup": " ",
+         "MetricName": "Cycles_per_Demand_Load_L2_Hit",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Cycle cost per LLC hit",
+         "MetricExpr": "MEM_BOUND_STALLS.LOAD_LLC_HIT / MEM_LOAD_UOPS_RETIRED.L3_HIT",
+-        "MetricGroup": " ",
+         "MetricName": "Cycles_per_Demand_Load_L3_Hit",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Cycle cost per DRAM hit",
+         "MetricExpr": "MEM_BOUND_STALLS.LOAD_DRAM_HIT / MEM_LOAD_UOPS_RETIRED.DRAM_HIT",
+-        "MetricGroup": " ",
+         "MetricName": "Cycles_per_Demand_Load_DRAM_Hit",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Percent of instruction miss cost that hit in the L2",
+         "MetricExpr": "100 * MEM_BOUND_STALLS.IFETCH_L2_HIT / ( MEM_BOUND_STALLS.IFETCH )",
+-        "MetricGroup": " ",
+         "MetricName": "Inst_Miss_Cost_L2Hit_Percent",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Percent of instruction miss cost that hit in the L3",
+         "MetricExpr": "100 * MEM_BOUND_STALLS.IFETCH_LLC_HIT / ( MEM_BOUND_STALLS.IFETCH )",
+-        "MetricGroup": " ",
+         "MetricName": "Inst_Miss_Cost_L3Hit_Percent",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "Percent of instruction miss cost that hit in DRAM",
+         "MetricExpr": "100 * MEM_BOUND_STALLS.IFETCH_DRAM_HIT / ( MEM_BOUND_STALLS.IFETCH )",
+-        "MetricGroup": " ",
+         "MetricName": "Inst_Miss_Cost_DRAMHit_Percent",
+         "Unit": "cpu_atom"
+     },
+     {
+         "BriefDescription": "load ops retired per 1000 instruction",
+         "MetricExpr": "1000 * MEM_UOPS_RETIRED.ALL_LOADS / INST_RETIRED.ANY",
+-        "MetricGroup": " ",
+         "MetricName": "MemLoadPKI",
+         "Unit": "cpu_atom"
+     },
 -- 
 2.36.0.512.ge40c2bad7a-goog
 

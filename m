@@ -2,97 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB1E522F4A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E60522F52
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:24:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232856AbiEKJW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 05:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35748 "EHLO
+        id S237355AbiEKJYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 05:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbiEKJW5 (ORCPT
+        with ESMTP id S229795AbiEKJYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 05:22:57 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA7C6BFC1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:22:54 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id m20so2741242ejj.10
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:22:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=p09vjTM88gJEpe+RFeDanDG0F3s0eSagXk6IVVR5d+Q=;
-        b=gycWNXzYJ83DgmFANHQCSScS3mDGlj0/fGHnB3snL83/1khVXhMdcgDA/lVe0QC3NQ
-         PTMdzh/2DEilxLN+f86HdOJiG7ANb96rA1/Eqvcw+JpqkscQ9TqR/ixo8uP3t3zY94D/
-         C8pY9Wsfdvk1IquI480xzrVuR3/YhBQcv4Dzh96aKNfNJau6GtGpbCRs2vcZ3QNgfoak
-         Uqv7tW05NMOoDfDKFkQNs+KOCNl1HdssIQ9K6k70KIcHho0nH6+WqfSUGyHYdtZGWRVQ
-         fNX755lUVs3MLfEVnA6G/7WE21rqXABlu5DP+je9pdRBXuma0CIV1/HXsxMxnRe4hxw6
-         CLFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=p09vjTM88gJEpe+RFeDanDG0F3s0eSagXk6IVVR5d+Q=;
-        b=PGJx23+0aLYGf3+jSXi0Bk8MmtkohcuyBqJ6QZBttOWQNwuyW+gOetMSBHEp+54XB8
-         XqCsaNAr4Jdb/90gmHZh38efcK1iGrtlg4YD/ZQMw3ZPOEFHiCqtZeakuVquByedJ1Lo
-         a+rem1+Z7hGLyU91VOHsD/WZnm1Yrg4wkyWWy8zNsLw8Tu9kr+r7zrUqA55PkJuqXJqp
-         KjHwUfaV/ym2UhegoG1bzSGritEyiO+rljGuP1vMj0SvApAL2PLYAFLCe3NB0LXmnGWM
-         A6mTfgIHa4mNABezqT+zGQTvDI//E8MmLbc8+a/Y0/VrSHJdlJgPIZVsSE2qGPOv8IpO
-         txHA==
-X-Gm-Message-State: AOAM533FMcT9lDgjlO+jEanBmTrVR6rh8VjoLlGHSYkRT8Wa/fwb805X
-        PlAi36p/pTkOSYLDpiR5I6eokg==
-X-Google-Smtp-Source: ABdhPJxx2qqzNoIfVTNAmwZ1XINIWzZC1gYKAr4taH6uPlmjrldY/hW+qryscbswJfH9nYxE7MOntg==
-X-Received: by 2002:a17:907:3c81:b0:6e6:cf3e:6e14 with SMTP id gl1-20020a1709073c8100b006e6cf3e6e14mr23605572ejc.181.1652260973014;
-        Wed, 11 May 2022 02:22:53 -0700 (PDT)
-Received: from [192.168.0.152] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id cb13-20020a0564020b6d00b0042617ba639asm906797edb.36.2022.05.11.02.22.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 02:22:52 -0700 (PDT)
-Message-ID: <51742635-23df-a534-eff4-81f021eeb474@linaro.org>
-Date:   Wed, 11 May 2022 11:22:51 +0200
+        Wed, 11 May 2022 05:24:37 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C787A456;
+        Wed, 11 May 2022 02:24:35 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id D5ED41F8D3;
+        Wed, 11 May 2022 09:24:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652261073; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nN072XjvLtJhbhtDvTS9a15agLhgCefyfNf1N5AcBXs=;
+        b=uJ2FMBtequR4/wjREO5p/fnprXFSlkerpk1Fvx7S/H/qf9TOYAY5LrYhCDCJTeg2TXlXNO
+        2GtHqKnX89iUoYuy5S6gxJqS68eOg+bPBWy9C2rdnB01ACkKGGWfrrRqDYhbZ4c1yjqI/H
+        4nG/BhZLKtkzC1L424qbgvsPMRGDrQ0=
+Received: from suse.cz (pathway.suse.cz [10.100.12.24])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id BABAB2C142;
+        Wed, 11 May 2022 09:24:33 +0000 (UTC)
+Date:   Wed, 11 May 2022 11:24:33 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Song Liu <songliubraving@fb.com>, Rik van Riel <riel@fb.com>,
+        "song@kernel.org" <song@kernel.org>,
+        "joe.lawrence@redhat.com" <joe.lawrence@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        Kernel Team <Kernel-team@fb.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>
+Subject: Re: [RFC] sched,livepatch: call klp_try_switch_task in __cond_resched
+Message-ID: <20220511092433.GA26047@pathway.suse.cz>
+References: <3a9bfb4a52b715bd8739d8834409c9549ec7f22f.camel@fb.com>
+ <YnqIcw+dYsWz/w7g@alley>
+ <6bf85ff908377508a5f5bcc7c4e75d598b96f388.camel@fb.com>
+ <20220510165244.ikfh64ertnvodxb4@treble>
+ <1bd15361edfd4db9fc9271d35e7bbe5edad1b87a.camel@fb.com>
+ <20220510184213.l3gjweeleyg7obca@treble>
+ <47440502-930F-4CBD-B859-3AC9BBFF8FC6@fb.com>
+ <20220510230402.e5ymkwt45sg7bd35@treble>
+ <D298A3F1-43A5-4FD5-B198-906364BF4B79@fb.com>
+ <20220511003331.clfvwfgpmbr5yx6n@treble>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v4 1/3] dt-bindings: Add Sercomm (Suzhou) Corporation
- vendor prefix
-Content-Language: en-US
-To:     Mikhail Zhilkin <csharper2005@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Karim <Karimdplay@gmail.com>, M <x1@disroot.org>
-References: <20220510161641.20655-1-csharper2005@gmail.com>
- <20220510162314.20810-1-csharper2005@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220510162314.20810-1-csharper2005@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511003331.clfvwfgpmbr5yx6n@treble>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/05/2022 18:23, Mikhail Zhilkin wrote:
-> Add "sercomm" vendor prefix for "Sercomm (Suzhou) Corporation".
+On Tue 2022-05-10 17:33:31, Josh Poimboeuf wrote:
+> On Tue, May 10, 2022 at 11:57:04PM +0000, Song Liu wrote:
+> > > If it's a real bug, we should fix it everywhere, not just for Facebook.
+> > > Otherwise CONFIG_PREEMPT and/or non-x86 arches become second-class
+> > > citizens.
+> > 
+> > I think "is it a real bug?" is the top question for me. So maybe we 
+> > should take a step back.
+> > 
+> > The behavior we see is: A busy kernel thread blocks klp transition 
+> > for more than a minute. But the transition eventually succeeded after 
+> > < 10 retries on most systems. The kernel thread is well-behaved, as 
+> > it calls cond_resched() at a reasonable frequency, so this is not a 
+> > deadlock. 
+> > 
+> > If I understand Petr correctly, this behavior is expected, and thus 
+> > is not a bug or issue for the livepatch subsystem. This is different
+> > to our original expectation, but if this is what we agree on, we 
+> > will look into ways to incorporate long wait time for patch 
+> > transition in our automations. 
 > 
-> Company website:
-> Link: https://www.sercomm.com/
+> That's how we've traditionally looked at it, though apparently Red Hat
+> and SUSE have implemented different ideas of what a long wait time is.
 > 
-> Signed-off-by: Mikhail Zhilkin <csharper2005@gmail.com>
-> ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+> In practice, one minute has always been enough for all of kpatch's users
+> -- AFAIK, everybody except SUSE -- up until now.
+
+I am actually surprised that nobody met the problem yet. There are
+"only" 60 attempts to transition the pending tasks.
+
+Well, the problem is mainly with kthreads. User space processes are
+migrated also on the kernel boundary. And the fake signal is likely
+pretty effective here. And it probably is not that common that
+a kthread would occupy a single CPU all the time.
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Though, these options might be considered workarounds, as it's
+> theoretically possible for a kthread to be CPU-bound indefinitely,
+> beyond any arbitrarily chosen timeout.  But maybe that's not realistic
+> beyond a certain timeout value of X and we don't care?  I dunno.
+
+I agree that it might happen theoretically. And it would be great
+to be prepared for this. My only concern is the complexity and risk.
+We should know that it is worth it.
 
 
-Best regards,
-Krzysztof
+> As I have been trying to say, that won't work for PREEMPT+!ORC, because,
+> when the kthread gets preempted, the stack trace will be attempted from
+> an IRQ and will be reported as unreliable.
+
+This limits the range of possible solutions quite a lot. But it is
+how it is.
+
+> Ideally we'd have the ORC unwinder for all arches, that would make this
+> much easier.  But we're not there yet.
+
+The alternative solution is that the process has to migrate itself
+on some safe location.
+
+One crazy idea. It still might be possible to find the called
+functions on the stack even when it is not reliable. Then it
+might be possible to add another ftrace handler on
+these found functions. This other ftrace handler might migrate
+the task when it calls this function again.
+
+It assumes that the task will call the same functions again
+and again. Also it might require that the tasks checks its
+own stack from the ftrace handler. I am not sure if this
+is possible.
+
+There might be other variants of this approach.
+
+Best Regards,
+Petr

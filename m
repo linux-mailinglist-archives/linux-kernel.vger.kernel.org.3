@@ -2,92 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 012D35234BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C810E5234C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237502AbiEKNxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57152 "EHLO
+        id S239953AbiEKNyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244213AbiEKNxS (ORCPT
+        with ESMTP id S244216AbiEKNyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:53:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A3722DD56
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:53:16 -0700 (PDT)
+        Wed, 11 May 2022 09:54:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FED434B95
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:54:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652277195;
+        s=mimecast20190719; t=1652277245;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lA4geVyOxRQyAI3c8C3u5d9Je5L+YOhU/m/ISVgHoMw=;
-        b=NrMPg3S11WS7DgKlyOVBv/imTimKZuz3/1bXvxwhIXR/tDOswvkTiKF4AHcmjLPOxjs2r2
-        vWFX5+UXGeeHC5A1Zcxps7L+4mryyliulHTvXQl/vbalIElLD9Gjk06a5sWhQhAlg7/jYX
-        c48xAjDEM0P327znx9e3OhxraP5e9ts=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=yiBquU9ycutIGVQ+Lafkd382/sLMfLYmiUneQuM6tdo=;
+        b=d1KUMZBHHjdjA3axPTvahqtKQA6qxLvSs9pCFpW16TNcqrgTTTlguClzu1Lv3DhUEcIOPZ
+        nvUajJGjD350Bo2irqRvr8eGHo6IoOS2c9zbKld2ConKKUHdnB3+6BPYn1UOgfASmEDqG9
+        bqyTztglUdaY362MMzu4q3znBR4+Ib4=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-283-_y5KDllKOl-BaprV_Dn_sw-1; Wed, 11 May 2022 09:53:13 -0400
-X-MC-Unique: _y5KDllKOl-BaprV_Dn_sw-1
-Received: by mail-ed1-f70.google.com with SMTP id r8-20020a056402018800b00428b43999feso1381724edv.5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:53:13 -0700 (PDT)
+ us-mta-450-d3z9dT_rMFCYASVnl7vJag-1; Wed, 11 May 2022 09:54:04 -0400
+X-MC-Unique: d3z9dT_rMFCYASVnl7vJag-1
+Received: by mail-ej1-f71.google.com with SMTP id nb10-20020a1709071c8a00b006e8f89863ceso1187588ejc.18
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:54:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=lA4geVyOxRQyAI3c8C3u5d9Je5L+YOhU/m/ISVgHoMw=;
-        b=wpIPJr57A2ZTW/+E3Mtn2v6do8EcQo1SSy2atVTni/eEjTE5AFP+4kbjKdP7gWDZcH
-         QFszQ4lxaI8GDUkPB2z3qVGPYyyhZoH8aRxqcVCDdXvM1VnLNa0FZnCX7EhrrD7ieHiM
-         8MPd/ovseDAqCLW684Hz64Iqwxe6VoCmhKgrdCvKiCGyRm1H0DkZKfyz0ECaVVuZe42z
-         ny3QBZSSaeM9kVnkKHbjZ2FdjReC2Hvvnj0lX0DkLeNDpAf4Fx3EQsiDDD+F1737P17f
-         V0bwxS+pyjjVTIPMeaJgmogrKMSEJ00WyOvjO06mbnF1t07BtDRcWP8f+clMOfOxiUzY
-         l1lg==
-X-Gm-Message-State: AOAM533BH/ovNNyikGyhu7ItS34lVFCHv8N9Rvbra2F41jjf5GUDViT+
-        tNoksTl1VVDk2+3s8li54LCXUO7LrhNaIJK5pba4MYBp/voIl+Ek+MV+JZuYijT4VcNM91FMgEh
-        AvwFKxb94sN3n3KDuycmUYVlT
-X-Received: by 2002:a50:9ecc:0:b0:428:73bd:4667 with SMTP id a70-20020a509ecc000000b0042873bd4667mr25199313edf.165.1652277192826;
-        Wed, 11 May 2022 06:53:12 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzNpPcqaDgy6ACO49WlAIYSxJh/Gjw8KqLpHuWmE+kyyTZCgKq/Nd8OS+KXR+G0Eeja4jW/jw==
-X-Received: by 2002:a50:9ecc:0:b0:428:73bd:4667 with SMTP id a70-20020a509ecc000000b0042873bd4667mr25199294edf.165.1652277192638;
-        Wed, 11 May 2022 06:53:12 -0700 (PDT)
+        bh=yiBquU9ycutIGVQ+Lafkd382/sLMfLYmiUneQuM6tdo=;
+        b=SRWYqN6L0kKKhRXktBKIDRGWNDzh/lAQYphr4nxXQLhpyAK0RM0SkZAiLZci8oEAxF
+         tUKR0zouJa/ZH4Fn7R4zVPyhFX0xZCnmbkWcxrM5tYIm7OSplNxoTtQPd7ExGx/G41Tk
+         eiuJ39KQhsq1Po1/n5uGNqyTLSjgIecBjkUoOkoYL6C92REB7kJSkuXYEzrLD0T2+5/y
+         WI76cd3nTPExfcmK2x8ZK6Q4m/Ssa3wIG2yw7WXG0wZIBTR807BXN5cyH8rn2EDbbw3g
+         n+n2LPreTNhX++kGumGwDlVwfMrGJP/FZxQsvJGBfuW3RJ6NjFEqvZmTQlaHtSW+tNoQ
+         CMFQ==
+X-Gm-Message-State: AOAM533gx1JTq3NZ8nCK/vqqKM0pGALW1fJgqWHpI2tQj1jLgSGlg38m
+        OlBg5bbKy4kWfXl/QT3bIF7Yp6my2/7vJvy3EWGYDJrRzDZ6tlP12PpSzgvw2uwFNouyiBMhxE+
+        jepY8+whOMzHQzKKJrtueK6xA
+X-Received: by 2002:a05:6402:2078:b0:428:1071:d9b2 with SMTP id bd24-20020a056402207800b004281071d9b2mr29798745edb.302.1652277242271;
+        Wed, 11 May 2022 06:54:02 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyFNGrXEYB8j4ZnML/DgDYxNGSibD3TzmU9JnkCNgK/+z8cTd0gXxgIxWKyb7My6aTgwuk7Gw==
+X-Received: by 2002:a05:6402:2078:b0:428:1071:d9b2 with SMTP id bd24-20020a056402207800b004281071d9b2mr29798734edb.302.1652277242095;
+        Wed, 11 May 2022 06:54:02 -0700 (PDT)
 Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id dx18-20020a170906a85200b006f3a8b81ff7sm1061918ejb.3.2022.05.11.06.53.11
+        by smtp.googlemail.com with ESMTPSA id b22-20020a170906491600b006f3ef214e2esm1034769ejq.148.2022.05.11.06.54.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 06:53:11 -0700 (PDT)
-Message-ID: <7541c9c1-a580-92d1-1261-3cf3ef756215@redhat.com>
-Date:   Wed, 11 May 2022 15:53:10 +0200
+        Wed, 11 May 2022 06:54:01 -0700 (PDT)
+Message-ID: <7d9d5f72-21ed-070e-c063-1cd7ae6671ec@redhat.com>
+Date:   Wed, 11 May 2022 15:53:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
-Subject: Re: [PATCH 16/22] KVM: x86/mmu: remove redundant bits from extended
- role
+Subject: Re: [PATCH v2 1/2] KVM: LAPIC: Disarm LAPIC timer includes pending
+ timer around TSC deadline switch
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20220414074000.31438-1-pbonzini@redhat.com>
- <20220414074000.31438-17-pbonzini@redhat.com> <Ynmv2X5eLz2OQDMB@google.com>
+To:     Wanpeng Li <kernellwp@gmail.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>
+References: <1652236710-36524-1-git-send-email-wanpengli@tencent.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Ynmv2X5eLz2OQDMB@google.com>
+In-Reply-To: <1652236710-36524-1-git-send-email-wanpengli@tencent.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/10/22 02:20, Sean Christopherson wrote:
-> If it's not too late for fixup, this should be:
+On 5/11/22 04:38, Wanpeng Li wrote:
 > 
-> 	return is_cr0_pg(mmu) && !mmu->cpu_role.base.has_4_byte_gpte;
+> Fixes: 4427593258 (KVM: x86: thoroughly disarm LAPIC timer around TSC deadline switch)
+> Signed-off-by: Wanpeng Li<wanpengli@tencent.com>
+> ---
 
-It's not, thanks!
+Please write a testcase for this.
 
 Paolo
 

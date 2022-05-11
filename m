@@ -2,62 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D73E5235C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5065235C5
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244890AbiEKOjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 10:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
+        id S242439AbiEKOkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 10:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244878AbiEKOjn (ORCPT
+        with ESMTP id S229534AbiEKOkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 10:39:43 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCB6B36F9;
-        Wed, 11 May 2022 07:39:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=FiKDI9HhA7r1AHskj6iUp9mVld6qQ9o+A800DaQAHwQ=; b=XlpCopCA1tvMM4IGD6BfsvKJJ3
-        6Ne4J4K8ICTVijFI20gMdznQKN26v+HzXDOqQM+gLJnQNUlf18YCULwS+DYBTr1W2CT//sXr/pzm/
-        N3v2xqYRQugLIno12BUCu9wbMJJ9pYaAWEJDtK/7iqRJ4KtfCExbag4imqu4x1d6YffI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nonUx-002Jv1-LY; Wed, 11 May 2022 16:39:31 +0200
-Date:   Wed, 11 May 2022 16:39:31 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Felix Fietkau <nbd@nbd.name>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: dsa: tag_mtk: add padding for tx packets
-Message-ID: <YnvKo2sMChiXaiFN@lunn.ch>
-References: <20220510094014.68440-1-nbd@nbd.name>
- <20220510123724.i2xqepc56z4eouh2@skbuf>
- <5959946d-1d34-49b9-1abe-9f9299cc194e@nbd.name>
- <20220510165233.yahsznxxb5yq6rai@skbuf>
- <bc4bde22-c2d6-1ded-884a-69465b9d1dc7@nbd.name>
- <20220510222101.od3n7gk3cofwhbks@skbuf>
- <376b13ac-d90b-24e0-37ed-a96d8e5f80da@nbd.name>
+        Wed, 11 May 2022 10:40:37 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCF96CA80;
+        Wed, 11 May 2022 07:40:36 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 63DE168CFE; Wed, 11 May 2022 16:40:33 +0200 (CEST)
+Date:   Wed, 11 May 2022 16:40:33 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Conor.Dooley@microchip.com,
+        sfr@canb.auug.org.au, linux-next@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: linux-next: Tree for May 3
+Message-ID: <20220511144033.GA1478@lst.de>
+References: <dd946220-eaf6-773a-06b4-307cda466c9c@microchip.com> <505d41d1-1bc8-c8bc-5ebb-8a2b7934f3de@microchip.com> <20220511062232.GA32524@lst.de> <102578f2-5c10-e9c2-c1ef-e76ba90d011e@microchip.com> <20220511064832.GA761@lst.de> <2c0e2fbe-4e45-4acc-c2a7-4f4dcf9161a3@microchip.com> <20220511123724.GA25121@lst.de> <YnvDdPz4S5IJ7l/5@kernel.org> <20220511141034.GA31732@lst.de> <YnvKPu5uQ8rqEcvV@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <376b13ac-d90b-24e0-37ed-a96d8e5f80da@nbd.name>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+In-Reply-To: <YnvKPu5uQ8rqEcvV@kernel.org>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,21 +40,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> The garbage data is still present in the ARP packets without my patch
-> though. So regardless of whether ARP packets are processed correctly or if
-> they just trip up on some receivers under specific conditions, I believe my
-> patch is valid and should be applied.
+On Wed, May 11, 2022 at 05:37:50PM +0300, Mike Rapoport wrote:
+> Presuming that devices see [0x1000200000-0x103fffffff] as
+> [0x200000-0x3fffffff] we may try something like
 > 
-> Who knows, maybe the garbage padding even leaks some data from previous
-> packets, or some other information from within the switch.
+> 	min = memblock_start_of_DRAM();
+> 	max = min + 0xffffffff;
+> 
+> 	if (flags & SWIOTLB_ANY)
+> 		max = MEMBLOCK_ALLOC_ACCESSIBLE;
+> 
+> 	tlb = memblock_alloc_try_nid(bytes, PAGE_SIZE, min, max, NUMA_NO_NODE);
 
-I somewhat agree with Vladimir at the moment. We don't seem to fully
-understand why the change makes things work better. And without that
-understanding, it is hard to say if this is the correct fix or not.
-
-If this fix is making the transmitter work around bugs in the
-receiver, we really should be fixing the receiver, otherwise the
-receiver is going to be broken in other scenarios involving padded
-short packets.
-
-	 Andrew
+While there is still no guarantee the first 32-bits worth of DRAM
+are actually mapped to a usable address, this looks like a much better
+default than what we have right now.

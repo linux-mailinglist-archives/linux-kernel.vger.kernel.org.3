@@ -2,113 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3667D5233B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1BAE5233C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243110AbiEKNJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
+        id S243171AbiEKNMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbiEKNJr (ORCPT
+        with ESMTP id S241031AbiEKNMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:09:47 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CA4694BF
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:09:44 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id m20so3913860ejj.10
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:09:44 -0700 (PDT)
+        Wed, 11 May 2022 09:12:49 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84B864BE5;
+        Wed, 11 May 2022 06:12:44 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-ed9a75c453so2706254fac.11;
+        Wed, 11 May 2022 06:12:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=JAobyhQX8H28MWg1GXlj8hoyzU7OkAnh8WBV4s4iSFA=;
-        b=O0tqaeHW1b34CdyLh6rhmuS8HHLjDsWSGIXiwQNqVGt1ohbeSFo6zK0TNyMZaGEpF8
-         /1h5/CYnXf+rbXS8dfpx3ZBhlABsIek+tgMaijJ7ylZwJOeumQPS5k0hAvwJjQG9JEAT
-         1cmWL9qgE/5A1kVb4rrQV/mYuqEG8xxD088nU=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=o2Dh4MeWdqreTOUPSop5Ro3qX7Qg777r5NKDOefdzYI=;
+        b=JP1gLP2iArbL0gRgZOebzD4QRJhM8/73WMYOip6lL46f6sxYnNzOQAR8glUIPDxRDA
+         a4VSj7vpIrR4OLcLk6yiPKftQNYDa8rlVa3fNHYP0TYHXqJR4+MkzovVsm35UfCoTF7l
+         LsB7QEUcq4ZXpgs5mdEhjRnnBtG36CesUTlyT9S3eRxWPisI207au0WuI6js4SG0XPT7
+         q6A8WIBOCTWk4c7V+4fb3Vge4R3WzDF+TQT6HdkiL3huNA8GQuUfw0xFXGfxtYuSto5d
+         23me93dx/PLZN+KTl3Lbdz+h8QhBGM5/lLrIl/+u9MK/xz85iQnrUVxjM7xBn52UoAgb
+         EzDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=JAobyhQX8H28MWg1GXlj8hoyzU7OkAnh8WBV4s4iSFA=;
-        b=YqobcnB5hU/u2kZYU/R2HKT+/UhbM4EcxTeVd+lz9g23mt/+PBDZr/gxCHcZ+HWoU7
-         OZdR2K5vzpJNLsYQkCkusR1e51icRPGnYbwKPiCvgp1Spws4AtVks2zMpex3mrn2kXzk
-         u1IIGzxj0ktEBJnIQ4bxo5OzKiE5glMbayCyZRkkjS9u6i4zD8z1SU/h/QmHkhYAL63O
-         qnLfVNN8iFRwckoUO3M44EwH/RFi0/T6jXiBctgRitPEIPxvVxWSr4d4xya0I9FJ2H4O
-         87XOpoEV6vw4358ZfxMjhNmVEC9JyEvkFAy1GGPLiDcwMy0aE7Yty4A9fqH2L+8bJclx
-         0tEQ==
-X-Gm-Message-State: AOAM532/MA1/TD6koFQAuRSpDxOst1TZCPUpSmprvtYCBP+BNPL2w78v
-        SmgUMt0V07pO60peU2v8rM6qaw==
-X-Google-Smtp-Source: ABdhPJxQyu3mGcdaLrUBTixmsVRWayFME/f8TFtVOcPnDDroBUBuDYz0i+eVHsIFOn98nhRIyA8C7w==
-X-Received: by 2002:a17:906:3104:b0:6ce:6b85:ecc9 with SMTP id 4-20020a170906310400b006ce6b85ecc9mr23720564ejx.339.1652274582909;
-        Wed, 11 May 2022 06:09:42 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id hh3-20020a170906a94300b006f3ef214e32sm958477ejb.152.2022.05.11.06.09.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 06:09:41 -0700 (PDT)
-Date:   Wed, 11 May 2022 15:09:39 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v4 11/15] drm/shmem-helper: Add generic memory shrinker
-Message-ID: <Ynu1k5lH+xvqtObG@phenom.ffwll.local>
-Mail-Followup-To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>, Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dmitry Osipenko <digetx@gmail.com>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-References: <20220417223707.157113-1-dmitry.osipenko@collabora.com>
- <20220417223707.157113-12-dmitry.osipenko@collabora.com>
- <e6108e9c-6e67-2d71-0665-654e11d9c3a5@suse.de>
- <ff97790a-fb64-1e15-74b4-59c807bce0b9@collabora.com>
- <Ynkb1U2nNWYPML88@phenom.ffwll.local>
- <5fdf5232-e2b2-b444-5a41-f1db7e6a04da@collabora.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=o2Dh4MeWdqreTOUPSop5Ro3qX7Qg777r5NKDOefdzYI=;
+        b=gUmMYNZQoEtHMCjs60c43t5rQbHGJYrRQJHKXd7Lc7QcSjk5Tr+yA8ZfMiN6UfAjom
+         jHkDrYkBeCOk6T3/chU5oQ6O50Ykmo3ddFpV3Ld3r9Z6Zk9Fl1sXcVDvX8y4PWTjkRkB
+         J8KHUW5a4OjyV/LfmD8xvqayJXFgqF7rGVKKOnBsC+UPsnAKVctqXylYGkIvNC1bOOCC
+         KLQsxIrQgqJUpM+jxxOfryLM7WMsdjmt8zYCNoj4pTgVg4gBMcPS7on+7A6HTDBv9fV5
+         4h1j5PKFdvhLR2l3HOXunFaLM5R17wjMJ43AQfUwC3TgxLUVDYcMKGrru5kcAdYdQN1m
+         bXPQ==
+X-Gm-Message-State: AOAM531ScZgV7Co0YTY36RULplyKxUKozxkzUoZbFT5sm5Z6S0ms8cqL
+        37nh8aIhuRiwl0I/u+yEclYb+sfb0NUICvRwsJtiyn+mUjL42A==
+X-Google-Smtp-Source: ABdhPJzWCldGy6T/GkQIddyJKIzOW7kgzLPYLyTXswCCWvM/3xXwo7eBomIUyZgUm74ivLDAgFHlh2s90rCjrtzTJ9c=
+X-Received: by 2002:a05:6871:611:b0:ed:9b5e:261f with SMTP id
+ w17-20020a056871061100b000ed9b5e261fmr2758397oan.276.1652274764103; Wed, 11
+ May 2022 06:12:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5fdf5232-e2b2-b444-5a41-f1db7e6a04da@collabora.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+References: <20220510035259.5ep52sgahd2a6rie@vireshk-i7> <20220510154236.88753-1-schspa@gmail.com>
+ <20220511043515.fn2gz6q3kcpdai5p@vireshk-i7> <CAMA88TpefB=rnqea2u1zEvNUJNE_kdj4mYito7SGCuMj-o071Q@mail.gmail.com>
+ <20220511122114.wccgyur6g3qs6fps@vireshk-i7>
+In-Reply-To: <20220511122114.wccgyur6g3qs6fps@vireshk-i7>
+From:   Schspa Shi <schspa@gmail.com>
+Date:   Wed, 11 May 2022 21:12:32 +0800
+Message-ID: <CAMA88TrJetex5OS6qDbB1T2nc=0Md2gzNsc3YdDk6ihy5w6S+Q@mail.gmail.com>
+Subject: Re: [PATCH v3] cpufreq: fix race on cpufreq online
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -116,145 +69,210 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 04:47:52PM +0300, Dmitry Osipenko wrote:
-> On 5/9/22 16:49, Daniel Vetter wrote:
-> > On Fri, May 06, 2022 at 03:10:43AM +0300, Dmitry Osipenko wrote:
-> >> On 5/5/22 11:34, Thomas Zimmermann wrote:
-> >>> Hi
-> >>>
-> >>> Am 18.04.22 um 00:37 schrieb Dmitry Osipenko:
-> >>>> Introduce a common DRM SHMEM shrinker. It allows to reduce code
-> >>>> duplication among DRM drivers that implement theirs own shrinkers.
-> >>>> This is initial version of the shrinker that covers basic needs of
-> >>>> GPU drivers, both purging and eviction of shmem objects are supported.
-> >>>>
-> >>>> This patch is based on a couple ideas borrowed from Rob's Clark MSM
-> >>>> shrinker and Thomas' Zimmermann variant of SHMEM shrinker.
-> >>>>
-> >>>> In order to start using DRM SHMEM shrinker drivers should:
-> >>>>
-> >>>> 1. Implement new purge(), evict() + swap_in() GEM callbacks.
-> >>>> 2. Register shrinker using drm_gem_shmem_shrinker_register(drm_device).
-> >>>> 3. Use drm_gem_shmem_set_purgeable_and_evictable(shmem) and alike API
-> >>>>     functions to activate shrinking of GEMs.
-> >>>
-> >>> Honestly speaking, after reading the patch and the discussion here I
-> >>> really don't like where all tis is going. The interfaces and
-> >>> implementation are overengineered.  Descisions about evicting and
-> >>> purging should be done by the memory manager. For the most part, it's
-> >>> none of the driver's business.
-> >>
-> >> Daniel mostly suggesting to make interface more flexible for future
-> >> drivers, so we won't need to re-do it later on. My version of the
-> >> interface is based on what drivers need today.
-> >>
-> >> Why do you think it's a problem to turn shmem helper into the simple
-> >> generic memory manager? I don't see how it's better to have drivers
-> >> duplicating the exactly same efforts and making different mistakes.
-> >>
-> >> The shmem shrinker implementation is mostly based on the freedreno's
-> >> shrinker and it's very easy to enable generic shrinker for VirtIO and
-> >> Panfrost drivers. I think in the future freedreno and other drivers
-> >> could switch to use drm shmem instead of open coding the memory management.
-> > 
-> > Yeah I think we have enough shrinkers all over drm to actually design
-> > something solid here.
-> > 
-> > There's also the i915 shrinker and some kinda shrinker in ttm too. So we
-> > are definitely past the "have 3 examples to make sure you design something
-> > solid" rule of thumb.
-> > 
-> > I also have a bit an idea that we could try to glue the shmem shrinker
-> > into ttm, at least at a very high level that's something that would make
-> > some sense.
-> 
-> Before gluing the shmem shrinker into ttm, the drivers should be
-> switched to ttm? Or do you mean something else by the gluing?
+Viresh Kumar <viresh.kumar@linaro.org> writes:
 
-No, drivers which don't need ttm shouldn't be forced to use it.
+> On 11-05-22, 16:10, Schspa Shi wrote:
+>> Viresh Kumar <viresh.kumar@linaro.org> writes:
+>> > I am not sure, but maybe there were issues in calling init() with rwsem held, as
+>> > it may want to call some API from there.
+>> >
+>>
+>> I have checked all the init() implement of the fellowing files, It should be OK.
+>> Function find command:
+>>   ag "init[\s]+=" drivers/cpufreq
+>>
+>> All the init() implement only initialize policy object without holding this lock
+>> and won't call cpufreq APIs need to hold this lock.
+>
+> Okay, we can see if someone complains later then :)
+>
+>> > I don't think you can do that safely. offline() or exit() may depend on
+>> > policy->cpus being set to all CPUs.
+>> OK, I will move this after exit(). and there will be no effect with those
+>> two APIs. But policy->cpus must be clear before release policy->rwsem.
+>
+> Hmm, I don't think depending on the values of policy->cpus is a good idea to be
+> honest. This design is inviting bugs to come in at another place. We need a
+> clear flag for this, a new flag or something like policy_list.
+>
+> Also I see the same bug happening while the policy is removed. The kobject is
+> put after the rwsem is dropped.
+>
+>> >  static inline bool policy_is_inactive(struct cpufreq_policy *policy)
+>> >  {
+>> > -     return cpumask_empty(policy->cpus);
+>> > +     return unlikely(cpumask_empty(policy->cpus) ||
+>> > +                     list_empty(&policy->policy_list));
+>> >  }
+>> >
+>>
+>> I don't think this fully solves my problem.
+>> 1. There is some case which cpufreq_online failed after the policy is added to
+>>    cpufreq_policy_list.
+>
+> And I missed that :(
+>
+>> 2. policy->policy_list is not protected by &policy->rwsem, and we
+>> can't relay on this to
+>>    indict the policy is fine.
+>
+> Ahh..
+>
+>> >From this point of view, we can fix this problem through the state of
+>> this linked list.
+>> But the above two problems need to be solved first.
+>
+> I feel overriding policy_list for this is going to make it complex/messy.
+>
 
-> Perhaps it should be possible to have a common drm-shrinker helper that
-> will do the basic-common things like tracking the eviction size and
-> check whether BO is exported or locked, but we shouldn't consider doing
-> this for now. For the starter more reasonable should be to create a
-> common shrinker base for drivers that use drm-shmem, IMO.
+Yes, I agree with it.
 
-Yeah that might be the more practical approach. But really this was just
-an aside, absolutely no need to worry about this for now. I just wanted to
-point out that there really is a lot of use for this.
+> Maybe something like this then:
+>
+> -------------------------8<-------------------------
+>
+> From dacc8d09d4d7b3d9a8bca8d78fc72199c16dc4a5 Mon Sep 17 00:00:00 2001
+> Message-Id: <dacc8d09d4d7b3d9a8bca8d78fc72199c16dc4a5.1652271581.git.viresh.kumar@linaro.org>
+> From: Viresh Kumar <viresh.kumar@linaro.org>
+> Date: Wed, 11 May 2022 09:13:26 +0530
+> Subject: [PATCH] cpufreq: Allow sysfs access only for active policies
+>
+> It is currently possible, in a corner case, to access the sysfs files
+> and reach show_cpuinfo_cur_freq(), etc, for a partly initialized policy.
+>
+> This can happen for example if cpufreq_online() fails after adding the
+> sysfs files, which are immediately accessed by another process. There
+> can easily be other such cases, which aren't identified yet, like while
+> the policy is getting freed.
+>
+> Process A:                                    Process B
+>
+> cpufreq_online()
+>   down_write(&policy->rwsem);
+>   if (new_policy) {
+>     ret = cpufreq_add_dev_interface(policy);
+>     /* This fails after adding few files */
+>     if (ret)
+>       goto out_destroy_policy;
+>
+>     ...
+>   }
+>
+>   ...
+>
+> out_destroy_policy:
+>   ...
+>   up_write(&policy->rwsem);
+>                                               /*
+>                                                * This will end up accessing the policy
+>                                                * which isn't fully initialized.
+>                                                */
+>                                               show_cpuinfo_cur_freq()
+>
+> if (cpufreq_driver->offline)
+>     cpufreq_driver->offline(policy);
+>
+>   if (cpufreq_driver->exit)
+>     cpufreq_driver->exit(policy);
+>
+>   cpufreq_policy_free(policy);
+>
+> Fix these by checking in show/store if the policy is sysfs ready or not.
+>
+> Reported-by: Schspa Shi <schspa@gmail.com>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  drivers/cpufreq/cpufreq.c | 18 ++++++++++++++----
+>  include/linux/cpufreq.h   |  3 +++
+>  2 files changed, 17 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index c8bf6c68597c..65c2bbcf555d 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -948,13 +948,14 @@ static ssize_t show(struct kobject *kobj, struct attribute *attr, char *buf)
+>  {
+>       struct cpufreq_policy *policy = to_policy(kobj);
+>       struct freq_attr *fattr = to_attr(attr);
+> -     ssize_t ret;
+> +     ssize_t ret = -EBUSY;
+>
+>       if (!fattr->show)
+>               return -EIO;
+>
+>       down_read(&policy->rwsem);
+> -     ret = fattr->show(policy, buf);
+> +     if (policy->sysfs_ready)
+> +             ret = fattr->show(policy, buf);
+>       up_read(&policy->rwsem);
+>
+>       return ret;
+> @@ -965,7 +966,7 @@ static ssize_t store(struct kobject *kobj, struct attribute *attr,
+>  {
+>       struct cpufreq_policy *policy = to_policy(kobj);
+>       struct freq_attr *fattr = to_attr(attr);
+> -     ssize_t ret = -EINVAL;
+> +     ssize_t ret = -EBUSY;
+>
+>       if (!fattr->store)
+>               return -EIO;
+> @@ -979,7 +980,8 @@ static ssize_t store(struct kobject *kobj, struct attribute *attr,
+>
+>       if (cpu_online(policy->cpu)) {
+>               down_write(&policy->rwsem);
+> -             ret = fattr->store(policy, buf, count);
+> +             if (policy->sysfs_ready)
+> +                     ret = fattr->store(policy, buf, count);
+>               up_write(&policy->rwsem);
+>       }
+>
+> @@ -1280,6 +1282,11 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
+>       unsigned long flags;
+>       int cpu;
+>
+> +     /* Disallow sysfs interactions now */
+> +     down_write(&policy->rwsem);
+> +     policy->sysfs_ready = false;
+> +     up_write(&policy->rwsem);
+> +
+>       /* Remove policy from list */
+>       write_lock_irqsave(&cpufreq_driver_lock, flags);
+>       list_del(&policy->policy_list);
+> @@ -1516,6 +1523,9 @@ static int cpufreq_online(unsigned int cpu)
+>               goto out_destroy_policy;
+>       }
+>
+> +     /* We can allow sysfs interactions now */
+> +     policy->sysfs_ready = true;
+> +
+>       up_write(&policy->rwsem);
+>
+>       kobject_uevent(&policy->kobj, KOBJ_ADD);
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index 35c7d6db4139..7e4384e535fd 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -101,6 +101,9 @@ struct cpufreq_policy {
+>        */
+>       struct rw_semaphore     rwsem;
+>
+> +     /* Policy is ready for sysfs interactions */
+> +     bool                    sysfs_ready;
+> +
 
-> >>> I'd like to ask you to reduce the scope of the patchset and build the
-> >>> shrinker only for virtio-gpu. I know that I first suggested to build
-> >>> upon shmem helpers, but it seems that it's easier to do that in a later
-> >>> patchset.
-> >>
-> >> The first version of the VirtIO shrinker didn't support memory eviction.
-> >> Memory eviction support requires page fault handler to be aware of the
-> >> evicted pages, what should we do about it? The page fault handling is a
-> >> part of memory management, hence to me drm-shmem is already kinda a MM.
-> > 
-> > Hm I still don't get that part, why does that also not go through the
-> > shmem helpers?
-> 
-> The drm_gem_shmem_vm_ops includes the page faults handling, it's a
-> helper by itself that is used by DRM drivers.
-> 
-> I could try to move all the shrinker logic to the VirtIO and re-invent
-> virtio_gem_shmem_vm_ops, but what is the point of doing this for each
-> driver if we could have it once and for all in the common drm-shmem code?
-> 
-> Maybe I should try to factor out all the shrinker logic from drm-shmem
-> into a new drm-shmem-shrinker that could be shared by drivers? Will you
-> be okay with this option?
+Do we need to add this flag to some APIs like
+  unsigned int cpufreq_get(unsigned int cpu);
+  void refresh_frequency_limits(struct cpufreq_policy *policy);
+too ?
 
-I think we're talking past each another a bit. I'm only bringing up the
-purge vs eviction topic we discussed in the other subthread again.
+But if we made this change it seems to have the same meaning as
+policy_is_inactive.
 
-> > I'm still confused why drivers need to know the difference
-> > between evition and purging. Or maybe I'm confused again.
-> 
-> Example:
-> 
-> If userspace uses IOV addresses, then these addresses must be kept
-> reserved while buffer is evicted.
-> 
-> If BO is purged, then we don't need to retain the IOV space allocated
-> for the purged BO.
+>       /*
+>        * Fast switch flags:
+>        * - fast_switch_possible should be set by the driver if it can
 
-Yeah but is that actually needed by anyone? If userspace fails to allocate
-another bo because of lack of gpu address space then it's very easy to
-handle that:
+---
+BRs
 
-1. Make a rule that "out of gpu address space" gives you a special errno
-code like ENOSPC
-
-2. If userspace gets that it walks the list of all buffers it marked as
-purgeable and nukes them (whether they have been evicted or not). Then it
-retries the bo allocation.
-
-Alternatively you can do step 2 also directly from the bo alloc ioctl in
-step 1. Either way you clean up va space, and actually a lot more (you
-potentially nuke all buffers marked as purgeable, not just the ones that
-have been purged already) and only when va cleanup is actually needed
-
-Trying to solve this problem at eviction time otoh means:
-- we have this difference between eviction and purging
-- it's still not complete, you still need to glue step 2 above into your
-  driver somehow, and once step 2 above is glued in doing additional
-  cleanup in the purge function is just duplicated logic
-
-So at least in my opinion this isn't the justification we need. And we
-should definitely not just add that complication "in case, for the
-future", if we don't have a real need right now. Adding it later on is
-easy, removing it later on because it just gets in the way and confuses is
-much harder.
-
-> The drm-shmem only handles shmem pages, not the mappings of these pages.
-
-Yeah that's why you need an evict callback into the driver. That part is
-clear.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Schspa Shi

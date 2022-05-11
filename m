@@ -2,249 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD72523039
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D8152303F
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238539AbiEKKFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 06:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35716 "EHLO
+        id S232003AbiEKKFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 06:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiEKKFN (ORCPT
+        with ESMTP id S238513AbiEKKFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 06:05:13 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEE05DA0C;
-        Wed, 11 May 2022 03:05:11 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id c11so1375947plg.13;
-        Wed, 11 May 2022 03:05:11 -0700 (PDT)
+        Wed, 11 May 2022 06:05:19 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA935DA68;
+        Wed, 11 May 2022 03:05:17 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id s15so927377wrb.7;
+        Wed, 11 May 2022 03:05:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=dl2s8Tv2/kKkPRE8ZoHeNUZB1flbWNAHTlntidklYaY=;
-        b=KlIsnrMl6LzKnPwuuLyOxZLp19pZPqeI5Z4V8cuAYHI+9RVTGzbduTyCxz28BfMcY5
-         CwyO3hIQASgaBQ4kvhQxLyYSbckbWRlCLb1dD/BMJSrScuRjQHw7frIEqtCsYUwV0aJo
-         alk0g68BL70ZuQYOvBt58YRDPJ1xZn3xnx/SNkP8njfG7szgY0Hu9RRaME/VZH7+xzfW
-         9YmVvFN9yJDIXLpbXehLIFtj0nsBlM+xlrmaYop1xZL6z0w8gbSOGA+RryCui01GAuoH
-         cnWXREB1+3Q/d1q3pf62BP3GXl9AVtphO3G/fEuwafxxWxfxd2TZKvoEk0cxfjqDDCHb
-         RZlg==
+        bh=a78p1AjzrapLqC0ERAtlikRKGtUZly0gff/iNB5DsF4=;
+        b=L1EpaP1GsqseXhKqiTJUTeYmtOApce0H2IMGbP68Ua9uHDWq1KDsGPDzyOJIvA/06f
+         6PRhA5/Wf8DdZUootLdQUgH+NlzyJw6gVIsPQbznbYGQxJcyKu97A2DnIM0Uy5V+HFDG
+         /l6DR2SbD8Jy2vdPRPMQK7M8ZyPUkzsoUILsYTmtZs3OrVc8KkJwcjJsGNhFvfYGgDaE
+         pBoX3m8EJk7W5TEE5307oR3DuaIbYFIx1rhwkSQn26k0nqGyJrk4oz/0X6dUY13RlUv2
+         oNz2BNNTDfFzUC9C+d5jjwR1F7JtBxlUeBDun/GeFnDwRJaRtVtTimyovzJTOOYuj5fk
+         k5Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=dl2s8Tv2/kKkPRE8ZoHeNUZB1flbWNAHTlntidklYaY=;
-        b=YEZOaKcvCruFRJUUeXH2uTSQvQVmgTEuZb1p4KVD43ClnU8v4+iwSzZwrTVl4UG+k8
-         YXPLwZVFe+YP1TNjusIE0wyBs4R2cidIMfeq6BHD8hT+ei4mvE9WL+BIieI3whnBMD2A
-         ILLJy2xNwA2BEi9OUTpgqTB9Q+sRpzk2OmAQWfKVnB5J7KMsj4CKyq04W7idzrydZcDz
-         xGBPIpr6vCVmWpD95aD0oQLWLla2Lx7TQiCz8NOOqrxOFz/8YNAJAe9zTAMtB8eExzUF
-         ZDf36kgn5ntrN3vDx3zFrGLLA4hLFlSUvT8rLftBRKezjT5nrp1ygo1dJByidVpoTNPZ
-         twBw==
-X-Gm-Message-State: AOAM530tHHIECZjogysmOdLT5/rKQ5SHXLqG02TND05Ndkej7na8Pzj3
-        Xp3wDlQtKsCB5BokFbu9v9aUNMhzSYPyBg==
-X-Google-Smtp-Source: ABdhPJxrR1W/gIbDjmZ7/+hWQ3pnc2AjtEKGxX+igDjmtKyPWlr1/5lfQ6qKTWVrO1rYmy4ogJ7Jlw==
-X-Received: by 2002:a17:90b:d91:b0:1da:35d7:a0c with SMTP id bg17-20020a17090b0d9100b001da35d70a0cmr4565541pjb.92.1652263510558;
-        Wed, 11 May 2022 03:05:10 -0700 (PDT)
-Received: from hyeyoo ([114.29.24.243])
-        by smtp.gmail.com with ESMTPSA id i20-20020a63cd14000000b003c291b46f7esm1330537pgg.18.2022.05.11.03.04.54
+        bh=a78p1AjzrapLqC0ERAtlikRKGtUZly0gff/iNB5DsF4=;
+        b=8FAq3+vp0GWeahqnHFq8DW9BGqqBHiOb9QQKabFbBlc2OSvjM88hdB4eZHsD7+8U/z
+         QYB+PTQvE9pxwuUbTSp3fECHkIz1I5uHnEz60bWPjJeVFnklKCTlbGIm5VJuQejfhKEa
+         fUPxjCK+QfCvreLEkx26J886IJPT5s7q47bBEmiNx4FfZmVqYt1onCFj1N6AbBXKlkUF
+         NPRmRsr7aZhpwyBPcvhWhPDFS/hQjYYBuJccSdysT3jxzymM7yghlq/8wCsig/MX543D
+         dRD5bV+n0PTFzGDf7vPz6uIUvUZ2UI6Rk4OyYAETIOSlQale2knGVFH9cU9HNJLVO5W4
+         Mwrw==
+X-Gm-Message-State: AOAM530ZnGjg3FNIYlGy7EASKnHJUU2H9fjSIJ4LQ05Gmj3Jhg/VwvlB
+        riF2bjW7GmxvtLvbLb/XKrc=
+X-Google-Smtp-Source: ABdhPJwLwzmIo8fcmm8XOYcwiy/1EqvXdCuMvJT4lQxkLjhnMPfwJVWY7dmdRC6ufIZT5IdzpOUeWQ==
+X-Received: by 2002:a5d:5885:0:b0:20c:7048:2951 with SMTP id n5-20020a5d5885000000b0020c70482951mr22457098wrf.28.1652263516031;
+        Wed, 11 May 2022 03:05:16 -0700 (PDT)
+Received: from debian ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id a8-20020a7bc1c8000000b00394867d66ddsm1617158wmj.35.2022.05.11.03.05.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 03:05:09 -0700 (PDT)
-Date:   Wed, 11 May 2022 19:04:51 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Byungchul Park <byungchul.park@lge.com>
-Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
-        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
-        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-        chris@chris-wilson.co.uk, duyuyang@gmail.com,
-        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
-        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
-        gregkh@linuxfoundation.org, kernel-team@lge.com,
-        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
-        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
-        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
-        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
-        ngupta@vflare.org, linux-block@vger.kernel.org,
-        paolo.valente@linaro.org, josef@toxicpanda.com,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
-        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
-        dri-devel@lists.freedesktop.org, airlied@linux.ie,
-        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
-        hamohammed.sa@gmail.com, catalin.marinas@arm.com
-Subject: Re: [PATCH RFC v6 00/21] DEPT(Dependency Tracker)
-Message-ID: <YnuKQ9UIhk9WYoz7@hyeyoo>
-References: <CAHk-=whnPePcffsNQM+YSHMGttLXvpf8LbBQ8P7HEdqFXaV7Lg@mail.gmail.com>
- <1651795895-8641-1-git-send-email-byungchul.park@lge.com>
- <YnYd0hd+yTvVQxm5@hyeyoo>
- <20220509001637.GA6047@X58A-UD3R>
- <YnpJ9Mtf+pjx4JYm@hyeyoo>
- <20220510233929.GB18445@X58A-UD3R>
+        Wed, 11 May 2022 03:05:15 -0700 (PDT)
+Date:   Wed, 11 May 2022 11:05:13 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 00/70] 5.10.115-rc1 review
+Message-ID: <YnuKWQzXyoGhEElv@debian>
+References: <20220510130732.861729621@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220510233929.GB18445@X58A-UD3R>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 08:39:29AM +0900, Byungchul Park wrote:
-> On Tue, May 10, 2022 at 08:18:12PM +0900, Hyeonggon Yoo wrote:
-> > On Mon, May 09, 2022 at 09:16:37AM +0900, Byungchul Park wrote:
-> > > On Sat, May 07, 2022 at 04:20:50PM +0900, Hyeonggon Yoo wrote:
-> > > > On Fri, May 06, 2022 at 09:11:35AM +0900, Byungchul Park wrote:
-> > > > > Linus wrote:
-> > > > > >
-> > > > > > On Wed, May 4, 2022 at 1:19 AM Byungchul Park <byungchul.park@lge.com> wrote:
-> > > > > > >
-> > > > > > > Hi Linus and folks,
-> > > > > > >
-> > > > > > > I've been developing a tool for detecting deadlock possibilities by
-> > > > > > > tracking wait/event rather than lock(?) acquisition order to try to
-> > > > > > > cover all synchonization machanisms.
-> > > > > > 
-> > > > > > So what is the actual status of reports these days?
-> > > > > > 
-> > > > > > Last time I looked at some reports, it gave a lot of false positives
-> > > > > > due to mis-understanding prepare_to_sleep().
-> > > > > 
-> > > > > Yes, it was. I handled the case in the following way:
-> > > > > 
-> > > > > 1. Stage the wait at prepare_to_sleep(), which might be used at commit.
-> > > > >    Which has yet to be an actual wait that Dept considers.
-> > > > > 2. If the condition for sleep is true, the wait will be committed at
-> > > > >    __schedule(). The wait becomes an actual one that Dept considers.
-> > > > > 3. If the condition is false and the task gets back to TASK_RUNNING,
-> > > > >    clean(=reset) the staged wait.
-> > > > > 
-> > > > > That way, Dept only works with what actually hits to __schedule() for
-> > > > > the waits through sleep.
-> > > > > 
-> > > > > > For this all to make sense, it would need to not have false positives
-> > > > > > (or at least a very small number of them together with a way to sanely
-> > > > > 
-> > > > > Yes. I agree with you. I got rid of them that way I described above.
-> > > > >
-> > > > 
-> > > > IMHO DEPT should not report what lockdep allows (Not talking about
-> > > 
-> > > No.
-> > > 
-> > > > wait events). I mean lockdep allows some kind of nested locks but
-> > > > DEPT reports them.
-> > > 
-> > > You have already asked exactly same question in another thread of
-> > > LKML. That time I answered to it but let me explain it again.
-> > > 
-> > > ---
-> > > 
-> > > CASE 1.
-> > > 
-> > >    lock L with depth n
-> > >    lock_nested L' with depth n + 1
-> > >    ...
-> > >    unlock L'
-> > >    unlock L
-> > > 
-> > > This case is allowed by Lockdep.
-> > > This case is allowed by DEPT cuz it's not a deadlock.
-> > > 
-> > > CASE 2.
-> > > 
-> > >    lock L with depth n
-> > >    lock A
-> > >    lock_nested L' with depth n + 1
-> > >    ...
-> > >    unlock L'
-> > >    unlock A
-> > >    unlock L
-> > > 
-> > > This case is allowed by Lockdep.
-> > > This case is *NOT* allowed by DEPT cuz it's a *DEADLOCK*.
-> > >
-> > 
-> > Yeah, in previous threads we discussed this [1]
-> > 
-> > And the case was:
-> > 	scan_mutex -> object_lock -> kmemleak_lock -> object_lock
-> > And dept reported:
-> > 	object_lock -> kmemleak_lock, kmemleak_lock -> object_lock as
-> > 	deadlock.
-> > 
-> > But IIUC - What DEPT reported happens only under scan_mutex and
-> > It is not simple just not to take them because the object can be removed from the
-> > list and freed while scanning via kmemleak_free() without kmemleak_lock and object_lock.
->
->
-> That should be one of the following order:
+Hi Greg,
+
+On Tue, May 10, 2022 at 03:07:19PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.115 release.
+> There are 70 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> 1. kmemleak_lock -> object_lock -> object_lock(nested)
-> 2. object_lock -> object_lock(nested) -> kmemleak_lock
-> 
-> > Just I'm still not sure that someone will fix the warning in the future - even if the
-> > locking rule is not good - if it will not cause a real deadlock.
-> 
-> There's more important thing than making code just work for now. For
-> example, maintainance, communcation via code between current developers
-> and potential new commers in the future and so on.
+> Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
+> Anything received after that time might be too late.
 
-Then we will get same reports from DEPT until already existing bad code (even if it does not
-cause deadlock) is reworked. If you think that is right thing to do, okay.
+Build test (gcc-11):
+mips (gcc version 11.2.1 20220408): 63 configs -> 1 new failure
+arm (gcc version 11.2.1 20220408): 105 configs -> 1 new failure
+arm64 (gcc version 11.2.1 20220408): 3 configs -> no failure
+x86_64 (gcc version 11.2.1 20220408): 4 configs -> no failure
 
-> At least, a comment describing why the wrong order in the code is safe
-> should be added.
+mips xway_defconfig and arm hisi_defconfig both failed with:
 
-AFAIK The comment is already there in mm/kmemleak.c.
+drivers/usb/phy/phy-generic.c: In function 'usb_phy_gen_create_phy':
+drivers/usb/phy/phy-generic.c:271:26: error: implicit declaration of function 'devm_regulator_get_exclusive'; did you mean 'regulator_get_exclusive'? [-Werror=implicit-function-declaration]
+  271 |         nop->vbus_draw = devm_regulator_get_exclusive(dev, "vbus");
 
-> I wouldn't allow the current order in the code if I
-> were the maintainer.
+It was introduced in v5.10.114 by d22d92230ffb ("usb: phy: generic: Get the vbus supply")
 
-[+Cc Catalin]
-He may have opinion.
+Build test (gcc-12):
+Mips builds are failing. Needs d422c6c0644b ("MIPS: Use address-of operator on section
+symbols")
+arm64 allmodconfig failed. Will check later what is needed for arm64.
 
-Thanks,
-Hyeonggon
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
 
-> 	Byungchul
-> 
-> > > ---
-> > > 
-> > > The following scenario would explain why CASE 2 is problematic.
-> > > 
-> > >    THREAD X			THREAD Y
-> > > 
-> > >    lock L with depth n
-> > > 				lock L' with depth n
-> > >    lock A
-> > > 				lock A
-> > >    lock_nested L' with depth n + 1
-> > > 				lock_nested L'' with depth n + 1
-> > >    ...				...
-> > >    unlock L'			unlock L''
-> > >    unlock A			unlock A
-> > >    unlock L			unlock L'
-> > > 
-> > > Yes. I need to check if the report you shared with me is a true one, but
-> > > it's not because DEPT doesn't work with *_nested() APIs.
-> > >
-> > 
-> > Sorry, It was not right just to say DEPT doesn't work with _nested() APIs.
-> > 
-> > > 	Byungchul
-> > 
-> > [1] https://lore.kernel.org/lkml/20220304002809.GA6112@X58A-UD3R/
-> > 
-> > -- 
-> > Thanks,
-> > Hyeonggon
+[1]. https://openqa.qa.codethink.co.uk/tests/1123
+[2]. https://openqa.qa.codethink.co.uk/tests/1125
 
--- 
-Thanks,
-Hyeonggon
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip
+

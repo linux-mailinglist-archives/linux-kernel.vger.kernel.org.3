@@ -2,266 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972C1523303
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 14:21:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A955523314
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 14:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237729AbiEKMVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 08:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40054 "EHLO
+        id S242364AbiEKMYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 08:24:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiEKMVV (ORCPT
+        with ESMTP id S239244AbiEKMYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 08:21:21 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF9EF61D3
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 05:21:19 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id g8so1841256pfh.5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 05:21:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Zu0vDG30iDCeqnvFJYec9mPAq1krcLLpZzNBmfizPr4=;
-        b=WTYai0R1CMae7C1ojqbvv26/WoYECprNeG9MvrAYCP6U1EyTXTWDpoKDSoA6u/McUx
-         8x3eGcSqBPgwhsQPNijFjuoHLclOUA2Uh6Lfs08wDjOKTEGk+hyNbaiLmwi1xgfH41pl
-         CoWVqqXQaLX5Jw7quRJeOSFKvLqlifBhCKrr4zF6LGU0Ad1TcxXX3JWlxEx2Hthxor7I
-         gw2WBLlKnidi0cc6HdVITzw0BOgtg8HUyDpM1n6l9b8zFYDfwvKtxWNWxGfNfn/zctFA
-         zw273z6pJ1ri+H6YSPZYT9a8cP65J0uhpyervzCLg1w7GqZO4UFlIjtmXqcp7FgMA3vu
-         h8Eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Zu0vDG30iDCeqnvFJYec9mPAq1krcLLpZzNBmfizPr4=;
-        b=N+ab2ZWvDYU1L3omRzpC0HtO7K/Q25V0hlPnWdMUtBF0PMGjhfJShuWIgDeMaQv5jH
-         IdD/TswX8fDMEi+iFqimaZ6Gy/nBwaUGLrAdnD9wQrwhvcdkPVbA43PUs+3oi/sekq1i
-         o1P7Ay32n2SZMHEEL5bxFLyCrk8m2k3jGHEUrIfGNfDy6o/ghvwmoHfeZPgvVDtojG/g
-         qIuzNGoV9fCptM8flt8gu7HZVkssW0/Ofd8pNTCObmHrvZkxKa3ymy/2gDEFAE588+MY
-         UfjsfBS3/SJPYsm9cHZT3d6q5gMid2JItv9JrtLRgyf9AkKDFQHSdA8A2/J3FVJr20yV
-         WrIA==
-X-Gm-Message-State: AOAM5303G1Okv8tTc90n/yScK46/Ls6luJ8bL1Gypm7FNuyON77jA+hX
-        Y8HzNjXirCILgeTgCe1KY0Tj6w==
-X-Google-Smtp-Source: ABdhPJya6SegzD3EabAH8KzEFVPIw8qnKM7iVqDqXyicbd53l/POubpHSHyTI3C1nH5iFiRrtFMzkg==
-X-Received: by 2002:a05:6a00:1352:b0:510:4c0e:d230 with SMTP id k18-20020a056a00135200b005104c0ed230mr25470973pfu.79.1652271679049;
-        Wed, 11 May 2022 05:21:19 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id r3-20020a632b03000000b003c14af505edsm1677853pgr.5.2022.05.11.05.21.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 05:21:17 -0700 (PDT)
-Date:   Wed, 11 May 2022 17:51:14 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Schspa Shi <schspa@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rafael@kernel.org
-Subject: Re: [PATCH v3] cpufreq: fix race on cpufreq online
-Message-ID: <20220511122114.wccgyur6g3qs6fps@vireshk-i7>
-References: <20220510035259.5ep52sgahd2a6rie@vireshk-i7>
- <20220510154236.88753-1-schspa@gmail.com>
- <20220511043515.fn2gz6q3kcpdai5p@vireshk-i7>
- <CAMA88TpefB=rnqea2u1zEvNUJNE_kdj4mYito7SGCuMj-o071Q@mail.gmail.com>
+        Wed, 11 May 2022 08:24:46 -0400
+Received: from m1522.mail.126.com (m1522.mail.126.com [220.181.15.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1FC91CA34C
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 05:24:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=NzGyS
+        dDkg2hI6k1IFP0p5UJxdT58EC2bkNs6SgU0wNc=; b=jEuKkGFgLg42vyyMnpdYX
+        YyTNhmPm/QjEGJF9V+6EZg8F3dPmU0TAOInPdKLOymE86kRXR+F3R9HC57U1xNgW
+        obHsggP0RVLu9CN5RepJBGDnI11tjsfUWRiZiNxREnTCXuI9V2Joeix/gF8cOzug
+        IipqIdDsmmtbcEptyQKRlo=
+Received: from zhaojunkui2008$126.com ( [58.213.83.157] ) by
+ ajax-webmail-wmsvr22 (Coremail) ; Wed, 11 May 2022 20:22:15 +0800 (CST)
+X-Originating-IP: [58.213.83.157]
+Date:   Wed, 11 May 2022 20:22:15 +0800 (CST)
+From:   z <zhaojunkui2008@126.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     "Larry Finger" <Larry.Finger@lwfinger.net>,
+        "Florian Schilhabel" <florian.c.schilhabel@googlemail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        "Bernard Zhao" <bernard@vivo.com>
+Subject: Re:Re: [PATCH] staging/rtl8712: fix potential memory leak
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 126com
+In-Reply-To: <YnuhYuYq62y4HR9r@kroah.com>
+References: <20220511112147.753316-1-zhaojunkui2008@126.com>
+ <YnuhYuYq62y4HR9r@kroah.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMA88TpefB=rnqea2u1zEvNUJNE_kdj4mYito7SGCuMj-o071Q@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <2831ff27.6685.180b311e22b.Coremail.zhaojunkui2008@126.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: FsqowADHz2N4qntiNIEpAA--.11598W
+X-CM-SenderInfo: p2kd0y5xqn3xasqqmqqrswhudrp/1tbiuRr9qlpD86LSsAABsf
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11-05-22, 16:10, Schspa Shi wrote:
-> Viresh Kumar <viresh.kumar@linaro.org> writes:
-> > I am not sure, but maybe there were issues in calling init() with rwsem held, as
-> > it may want to call some API from there.
-> >
-> 
-> I have checked all the init() implement of the fellowing files, It should be OK.
-> Function find command:
->   ag "init[\s]+=" drivers/cpufreq
-> 
-> All the init() implement only initialize policy object without holding this lock
-> and won't call cpufreq APIs need to hold this lock.
-
-Okay, we can see if someone complains later then :)
-
-> > I don't think you can do that safely. offline() or exit() may depend on
-> > policy->cpus being set to all CPUs.
-> OK, I will move this after exit(). and there will be no effect with those
-> two APIs. But policy->cpus must be clear before release policy->rwsem.
-
-Hmm, I don't think depending on the values of policy->cpus is a good idea to be
-honest. This design is inviting bugs to come in at another place. We need a
-clear flag for this, a new flag or something like policy_list.
-
-Also I see the same bug happening while the policy is removed. The kobject is
-put after the rwsem is dropped.
-
-> >  static inline bool policy_is_inactive(struct cpufreq_policy *policy)
-> >  {
-> > -     return cpumask_empty(policy->cpus);
-> > +     return unlikely(cpumask_empty(policy->cpus) ||
-> > +                     list_empty(&policy->policy_list));
-> >  }
-> >
-> 
-> I don't think this fully solves my problem.
-> 1. There is some case which cpufreq_online failed after the policy is added to
->    cpufreq_policy_list.
-
-And I missed that :(
-
-> 2. policy->policy_list is not protected by &policy->rwsem, and we
-> can't relay on this to
->    indict the policy is fine.
-
-Ahh..
-
-> >From this point of view, we can fix this problem through the state of
-> this linked list.
-> But the above two problems need to be solved first.
-
-I feel overriding policy_list for this is going to make it complex/messy.
-
-Maybe something like this then:
-
--------------------------8<-------------------------
-
-From dacc8d09d4d7b3d9a8bca8d78fc72199c16dc4a5 Mon Sep 17 00:00:00 2001
-Message-Id: <dacc8d09d4d7b3d9a8bca8d78fc72199c16dc4a5.1652271581.git.viresh.kumar@linaro.org>
-From: Viresh Kumar <viresh.kumar@linaro.org>
-Date: Wed, 11 May 2022 09:13:26 +0530
-Subject: [PATCH] cpufreq: Allow sysfs access only for active policies
-
-It is currently possible, in a corner case, to access the sysfs files
-and reach show_cpuinfo_cur_freq(), etc, for a partly initialized policy.
-
-This can happen for example if cpufreq_online() fails after adding the
-sysfs files, which are immediately accessed by another process. There
-can easily be other such cases, which aren't identified yet, like while
-the policy is getting freed.
-
-Process A:					Process B
-
-cpufreq_online()
-  down_write(&policy->rwsem);
-  if (new_policy) {
-    ret = cpufreq_add_dev_interface(policy);
-    /* This fails after adding few files */
-    if (ret)
-      goto out_destroy_policy;
-
-    ...
-  }
-
-  ...
-
-out_destroy_policy:
-  ...
-  up_write(&policy->rwsem);
-						/*
-						 * This will end up accessing the policy
-						 * which isn't fully initialized.
-						 */
-						show_cpuinfo_cur_freq()
-
-if (cpufreq_driver->offline)
-    cpufreq_driver->offline(policy);
-
-  if (cpufreq_driver->exit)
-    cpufreq_driver->exit(policy);
-
-  cpufreq_policy_free(policy);
-
-Fix these by checking in show/store if the policy is sysfs ready or not.
-
-Reported-by: Schspa Shi <schspa@gmail.com>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/cpufreq/cpufreq.c | 18 ++++++++++++++----
- include/linux/cpufreq.h   |  3 +++
- 2 files changed, 17 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index c8bf6c68597c..65c2bbcf555d 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -948,13 +948,14 @@ static ssize_t show(struct kobject *kobj, struct attribute *attr, char *buf)
- {
- 	struct cpufreq_policy *policy = to_policy(kobj);
- 	struct freq_attr *fattr = to_attr(attr);
--	ssize_t ret;
-+	ssize_t ret = -EBUSY;
- 
- 	if (!fattr->show)
- 		return -EIO;
- 
- 	down_read(&policy->rwsem);
--	ret = fattr->show(policy, buf);
-+	if (policy->sysfs_ready)
-+		ret = fattr->show(policy, buf);
- 	up_read(&policy->rwsem);
- 
- 	return ret;
-@@ -965,7 +966,7 @@ static ssize_t store(struct kobject *kobj, struct attribute *attr,
- {
- 	struct cpufreq_policy *policy = to_policy(kobj);
- 	struct freq_attr *fattr = to_attr(attr);
--	ssize_t ret = -EINVAL;
-+	ssize_t ret = -EBUSY;
- 
- 	if (!fattr->store)
- 		return -EIO;
-@@ -979,7 +980,8 @@ static ssize_t store(struct kobject *kobj, struct attribute *attr,
- 
- 	if (cpu_online(policy->cpu)) {
- 		down_write(&policy->rwsem);
--		ret = fattr->store(policy, buf, count);
-+		if (policy->sysfs_ready)
-+			ret = fattr->store(policy, buf, count);
- 		up_write(&policy->rwsem);
- 	}
- 
-@@ -1280,6 +1282,11 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
- 	unsigned long flags;
- 	int cpu;
- 
-+	/* Disallow sysfs interactions now */
-+	down_write(&policy->rwsem);
-+	policy->sysfs_ready = false;
-+	up_write(&policy->rwsem);
-+
- 	/* Remove policy from list */
- 	write_lock_irqsave(&cpufreq_driver_lock, flags);
- 	list_del(&policy->policy_list);
-@@ -1516,6 +1523,9 @@ static int cpufreq_online(unsigned int cpu)
- 		goto out_destroy_policy;
- 	}
- 
-+	/* We can allow sysfs interactions now */
-+	policy->sysfs_ready = true;
-+
- 	up_write(&policy->rwsem);
- 
- 	kobject_uevent(&policy->kobj, KOBJ_ADD);
-diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-index 35c7d6db4139..7e4384e535fd 100644
---- a/include/linux/cpufreq.h
-+++ b/include/linux/cpufreq.h
-@@ -101,6 +101,9 @@ struct cpufreq_policy {
- 	 */
- 	struct rw_semaphore	rwsem;
- 
-+	/* Policy is ready for sysfs interactions */
-+	bool			sysfs_ready;
-+
- 	/*
- 	 * Fast switch flags:
- 	 * - fast_switch_possible should be set by the driver if it can
--- 
-2.31.1.272.g89b43f80a514
-
+CkF0IDIwMjItMDUtMTEgMTk6NDM6MzAsICJHcmVnIEtyb2FoLUhhcnRtYW4iIDxncmVna2hAbGlu
+dXhmb3VuZGF0aW9uLm9yZz4gd3JvdGU6Cj5PbiBXZWQsIE1heSAxMSwgMjAyMiBhdCAwNDoyMTo0
+NEFNIC0wNzAwLCBCZXJuYXJkIFpoYW8gd3JvdGU6Cj4+IFRoaXMgYnVnIGlzIGZvdW5kIGJ5IGdv
+b2dsZSBzeXpib3QsIHRoZSBsaW5rIGlzOgo+PiBodHRwczovL3N5emthbGxlci5hcHBzcG90LmNv
+bS9idWc/aWQ9M2EzMjViODM4OWZjNDFjMWJjOTRkZTBmNGFjNDM3ZWQxM2NjZTU4NAo+PiBtZW1v
+cnkgbGVhayBsb2c6Cj4+IEJVRzogbWVtb3J5IGxlYWsKPj4gdW5yZWZlcmVuY2VkIG9iamVjdCAw
+eGZmZmY4ODgxMGZmOWIzYzAgKHNpemUgMTkyKToKPj4gICBjb21tICJrd29ya2VyLzA6MiIsIHBp
+ZCAzNjUzLCBqaWZmaWVzIDQyOTQ5NDIyMjggKGFnZSA4LjI1MHMpCj4+ICAgaGV4IGR1bXAgKGZp
+cnN0IDMyIGJ5dGVzKToKPj4gICAgIDAxIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAw
+IDAwIDAwIDAwIDAwICAuLi4uLi4uLi4uLi4uLi4uCj4+ICAgICAwMCAwMCAwMCAwMCAwMCAwMCAw
+MCAwMCBkOCBiMyBmOSAwZiA4MSA4OCBmZiBmZiAgLi4uLi4uLi4uLi4uLi4uLgo+PiAgIGJhY2t0
+cmFjZToKPj4gICAgIFs8MDAwMDAwMDBlMDc0OGViNz5dIHVzYl9hbGxvY191cmIrMHg2Ni8weGUw
+Cj4+ICAgICBbPDAwMDAwMDAwZmU1YTk0MzI+XSByODcxMl9vc19yZWN2YnVmX3Jlc291cmNlX2Fs
+bG9jKzB4MWIvMHg4MAo+PiAgICAgWzwwMDAwMDAwMDkyM2ZlZDcyPl0gcjg3MTJfaW5pdF9yZWN2
+X3ByaXYrMHg5Ni8weDIxMAo+PiAgICAgWzwwMDAwMDAwMDAwMzg1MTJmPl0gX3I4NzEyX2luaXRf
+cmVjdl9wcml2KzB4MTM0LzB4MTUwCj4+ICAgICBbPDAwMDAwMDAwNjZlNzBhNGU+XSByODcxMl9p
+bml0X2Rydl9zdysweGEwLzB4MWQwCj4+ICAgICBbPDAwMDAwMDAwMWQyOTc0YzA+XSByODcxeHVf
+ZHJ2X2luaXQuY29sZCsweDEwNC8weDdkMQo+PiAgICAgWzwwMDAwMDAwMDFkNDQ5Y2UyPl0gdXNi
+X3Byb2JlX2ludGVyZmFjZSsweDE3Ny8weDM3MAo+PiAgICAgWzwwMDAwMDAwMGNkMTIzZDM0Pl0g
+cmVhbGx5X3Byb2JlKzB4MTU5LzB4NGEwCj4+ICAgICBbPDAwMDAwMDAwMzY0NTg1Y2M+XSBkcml2
+ZXJfcHJvYmVfZGV2aWNlKzB4ODQvMHgxMDAKPj4gICAgIFs8MDAwMDAwMDA0OGI3NGJkZT5dIF9f
+ZGV2aWNlX2F0dGFjaF9kcml2ZXIrMHhlZS8weDExMAo+PiAgICAgWzwwMDAwMDAwMGMzNThhYjE1
+Pl0gYnVzX2Zvcl9lYWNoX2RydisweGI3LzB4MTAwCj4+ICAgICBbPDAwMDAwMDAwYmZhOWIwNzY+
+XSBfX2RldmljZV9hdHRhY2grMHgxMjIvMHgyNTAKPj4gICAgIFs8MDAwMDAwMDA0OGZlMzAyYT5d
+IGJ1c19wcm9iZV9kZXZpY2UrMHhjNi8weGUwCj4+ICAgICBbPDAwMDAwMDAwMmNlYWUxNzU+XSBk
+ZXZpY2VfYWRkKzB4NWJlLzB4YzMwCj4+ICAgICBbPDAwMDAwMDAwZTQ4MTNhMGQ+XSB1c2Jfc2V0
+X2NvbmZpZ3VyYXRpb24rMHg5ZDkvMHhiOTAKPj4gICAgIFs8MDAwMDAwMDBjYmI4Yzk4Zj5dIHVz
+Yl9nZW5lcmljX2RyaXZlcl9wcm9iZSsweDhjLzB4YzAKPj4gCj4+IEZvciB0aGlzIGlzc3Vlo6xJ
+IHNlZSB0aGF0IHRoZSBmb2xsb3dpbmcgY2FsbCBzZXF1ZW5jZSBjYXVzaW5nCj4+IHNvbWUgbWVt
+b3J5IGxlYWtzOgo+PiB1c2JfcHJvYmVfaW50ZXJmYWNlCj4+ICByODcxeHVfZHJ2X2luaXQKPj4g
+ICByODcxMl9pbml0X2Rydl9zdwo+PiAgICBfcjg3MTJfaW5pdF9yZWN2X3ByaXYKPj4gICAgIHI4
+NzEyX2luaXRfcmVjdl9wcml2Ly92b2lkIHR5cGUgZnVuY3Rpb24KPj4gICAgICBmb3IgKGkgPSAw
+OyBpIDwgTlJfUkVDVkJVRkY7Cj4+ICAgICAgIGlmIChyODcxMl9vc19yZWN2YnVmX3Jlc291cmNl
+X2FsbG9jKHBhZGFwdGVyLCBwcmVjdmJ1ZikpCj4+ICAgICAgICByODcxMl9vc19yZWN2YnVmX3Jl
+c291cmNlX2FsbG9jCj4+ICAgICAgICAgcHJlY3ZidWYtPnB1cmIgPSB1c2JfYWxsb2NfdXJiCj4+
+ICAgICAgICAgIGttYWxsb2MKPj4gCj4+ICAgICAgICBicmVhazsvLyBpZiBlcnJvciBicmFuY2gu
+IEhlcmUgbWF5IGJlIHNvbWUgbWVtb3J5IGxlYWssCj4+ICAgICAgICAgICAgICAvLyBicmVhayBk
+aXJlY3RseSBhZnRlciByODcxMl9vc19yZWN2YnVmX3Jlc291cmNlX2FsbG9jCj4+ICAgICAgICAg
+ICAgICAvLyBmYWlsLCBhbmQgbm8gY2xlYW51cCBvcGVyYXRpb24gaXMgZG9uZS4KPj4gCj4+IEFu
+ZCBhbHNvIHRoZSBzaXplIG9mIHRoZSBtZW1vcnkgbGVhayBjYW4gYmUgc2VlbiBpbiB0aGUgbG9n
+IGlzCj4+IDE5MiBieXRlcywgSSBjaGVjayB0aGUgc2l6ZSBvZiB0aGUgdXNiX2FsbG9jX3VyYiBh
+cHBsaWNhdGlvbiBpcwo+PiB1c2JfYWxsb2NfdXJiKDAsCj4+ICAtPiBrbWFsbG9jKHN0cnVjdF9z
+aXplKHVyYiwgaXNvX2ZyYW1lX2Rlc2MsIGlzb19wYWNrZXRzKSkKPj4gICAtPiBzaXplb2Yoc3Ry
+dWN0IHVyYikraXNvX3BhY2tldHMqc2l6ZW9mKHN0cnVjdCBpc29fZnJhbWVfZGVzYykKPj4gaXNv
+X3BhY2tldHMgaXMgMCwgc28gdGhlIHNpemUgb2YgdGhlIGFjdHVhbCBhcHBsaWNhdGlvbiBpcwo+
+PiBzaXplb2Yoc3RydWN0IHVyYikgLT4gdGhlIGNhbGN1bGF0aW9uIHJlc3VsdCBpcyAxOTIsIHdo
+aWNoIG1hdGNoZXMKPj4gdGhlIHNpemUgb2YgdGhlIGxlYWsgcG9pbnQuCj4+IAo+PiBBZnRlciB0
+aGF0IGNsZWFudXAsIHRoZSBwcmVjdmJ1Zi0+cHVyYiBtYXliZSB1c2VkIGZvciBsb25nIHRpbWUK
+Pj4gU28gSSBhZGQga21lbWxlYWtfbm90X2xlYWsgdG8gYXZvaWQgZmFsc2UgcG9zaXRpdmUgcmVw
+b3J0Lgo+PiAKPj4gVGhpcyBwYXRjaCBzeXpib3QgdGVzdCBPSzoKPj4gMjAyMi8wNS8xMSAwNjox
+NSAxNG0gemhhb2p1bmt1aTIwMDhAMTI2LmNvbSBwYXRjaCB1cHN0cmVhbSBPSwo+PiAKPj4gU2ln
+bmVkLW9mZi1ieTogQmVybmFyZCBaaGFvIDx6aGFvanVua3VpMjAwOEAxMjYuY29tPgo+PiBTaWdu
+ZWQtb2ZmLWJ5OiBCZXJuYXJkIFpoYW8gPGJlcm5hcmRAdml2by5jb20+Cj4KPllvdSBjYW4gbm90
+IHNpZ24gb2ZmIG9uIHRoZSBzYW1lIHBhdGNoIGJ5IHRoZSBzYW1lIHBlcnNvbiBtdWx0aXBsZSB0
+aW1lcwo+YXMgdGhpcyBpcyBhIGxlZ2FsIHN0YXRlbWVudC4KSGkgZ3JlZyBrLWg6CgpUaGFua3Mg
+Zm9yIHBvaW50aW5nIG91dCBteSBtaXN0YWtlLCBJIHdpbGwgY29ycmVjdCBpdCBpbiBteSBmdXR1
+cmUgc3VibWlzc2lvbnMuCgo+PiAtLS0KPj4gIGRyaXZlcnMvc3RhZ2luZy9ydGw4NzEyL3J0bDg3
+MTJfcmVjdi5jIHwgMTEgKysrKysrKysrKy0KPj4gIDEgZmlsZSBjaGFuZ2VkLCAxMCBpbnNlcnRp
+b25zKCspLCAxIGRlbGV0aW9uKC0pCj4+IAo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9zdGFnaW5n
+L3J0bDg3MTIvcnRsODcxMl9yZWN2LmMgYi9kcml2ZXJzL3N0YWdpbmcvcnRsODcxMi9ydGw4NzEy
+X3JlY3YuYwo+PiBpbmRleCAwZmZiMzBmMWFmN2UuLjhiZjhlNmQ1YjAwNSAxMDA2NDQKPj4gLS0t
+IGEvZHJpdmVycy9zdGFnaW5nL3J0bDg3MTIvcnRsODcxMl9yZWN2LmMKPj4gKysrIGIvZHJpdmVy
+cy9zdGFnaW5nL3J0bDg3MTIvcnRsODcxMl9yZWN2LmMKPj4gQEAgLTE5LDYgKzE5LDcgQEAKPj4g
+ICNpbmNsdWRlIDxsaW51eC9pZl9ldGhlci5oPgo+PiAgI2luY2x1ZGUgPGxpbnV4L2lwLmg+Cj4+
+ICAjaW5jbHVkZSA8bmV0L2NmZzgwMjExLmg+Cj4+ICsjaW5jbHVkZSA8bGludXgva21lbWxlYWsu
+aD4KPj4gIAo+PiAgI2luY2x1ZGUgIm9zZGVwX3NlcnZpY2UuaCIKPj4gICNpbmNsdWRlICJkcnZf
+dHlwZXMuaCIKPj4gQEAgLTUxLDEyICs1MiwyMCBAQCB2b2lkIHI4NzEyX2luaXRfcmVjdl9wcml2
+KHN0cnVjdCByZWN2X3ByaXYgKnByZWN2cHJpdiwKPj4gIAlmb3IgKGkgPSAwOyBpIDwgTlJfUkVD
+VkJVRkY7IGkrKykgewo+PiAgCQlJTklUX0xJU1RfSEVBRCgmcHJlY3ZidWYtPmxpc3QpOwo+PiAg
+CQlzcGluX2xvY2tfaW5pdCgmcHJlY3ZidWYtPnJlY3ZidWZfbG9jayk7Cj4+IC0JCWlmIChyODcx
+Ml9vc19yZWN2YnVmX3Jlc291cmNlX2FsbG9jKHBhZGFwdGVyLCBwcmVjdmJ1ZikpCj4+ICsJCWlm
+IChyODcxMl9vc19yZWN2YnVmX3Jlc291cmNlX2FsbG9jKHBhZGFwdGVyLCBwcmVjdmJ1ZikpIHsK
+Pj4gKwkJCWludCBqID0gaTsKPj4gKwo+PiArCQkJd2hpbGUgKGotLSA+IDApIHsKPj4gKwkJCQly
+ODcxMl9vc19yZWN2YnVmX3Jlc291cmNlX2ZyZWUocGFkYXB0ZXIsIHByZWN2YnVmKTsKPj4gKwkJ
+CQlwcmVjdmJ1Zi0tOwo+PiArCQkJfQo+PiAgCQkJYnJlYWs7Cj4+ICsJCX0KPj4gIAkJcHJlY3Zi
+dWYtPnJlZl9jbnQgPSAwOwo+PiAgCQlwcmVjdmJ1Zi0+YWRhcHRlciA9IHBhZGFwdGVyOwo+PiAg
+CQlsaXN0X2FkZF90YWlsKCZwcmVjdmJ1Zi0+bGlzdCwKPj4gIAkJCSAgICAgICYocHJlY3Zwcml2
+LT5mcmVlX3JlY3ZfYnVmX3F1ZXVlLnF1ZXVlKSk7Cj4+ICsJCWttZW1sZWFrX25vdF9sZWFrKHBy
+ZWN2YnVmLT5wdXJiKTsKPgo+VGhpcyBzaG91bGQgbm90IGJlIG5lZWRlZCwgdGhhdCdzIGFuIGlu
+ZGljYXRpb24gdGhhdCBzb21ldGhpbmcgaXMgcmVhbGx5Cj53cm9uZyBpbiB0aGUgZHJpdmVyLiAg
+V2hlcmUgaXMgdGhlIHVyYiByZWFsbHkgZnJlZWQ/Cj4KPllvdSBzaG91bGQgbm90IGhhdmUgdG8g
+c2F5IHRoYXQgdGhpcyB1cmIgaGFzIG5vdCBsZWFrZWQgaWYgaXQgcmVhbGx5IGhhcwo+bm90IGxl
+YWtlZC4gIENsZWFuIGl0IHVwIHByb3Blcmx5IGlmIGl0IG5lZWRzIHRvIGJlIGNsZWFuZWQgdXAg
+aGVyZSwgYnV0Cj50aGF0J3Mgbm90IHVzdWFsbHkgd2hlcmUgYW4gdXJiIGlzIGNsZWFuZWQgdXAg
+YXQgYWxsLgo+ClRoZSByZWFsbHkgZnJlZSBjYWxsIHNlcXVlbmNlIGlzIGRvbmUgaW4gcjg3MTJf
+ZnJlZV9kcnZfc3csIGxpa2UgdGhlIGZvbGxvdyBlcnJvciBicmFuY2g6CnI4NzF4dV9kcnZfaW5p
+dAoJaWYgKHN0YXR1cykKCQlnb3RvIGR2b2JqX2RlaW5pdAoJCQlyODcxMl9mcmVlX2Rydl9zdwog
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIF9yODcxMl9mcmVlX3JlY3ZfcHJpdgoJICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgcjg3MTJfZnJlZV9yZWN2X3ByaXYKCQkgICAgICAgICAgICAg
+ICAgICAgICAgICAgZm9yIChpID0gMDsgaSA8IE5SX1JFQ1ZCVUZGOyBpKyspCgkJCSAgICAgICAg
+ICAgICAgICAgICAgICAgIHI4NzEyX29zX3JlY3ZidWZfcmVzb3VyY2VfZnJlZQoJCQkJICAgICAg
+ICAgICAgICAgIGlmIChwcmVjdmJ1Zi0+cHNrYikKCQkJCQkgICAgICAgICAgICAgIGRldl9rZnJl
+ZV9za2JfYW55KHByZWN2YnVmLT5wc2tiKQoJCQkJICAgICAgICAgICAgICAgIGlmIChwcmVjdmJ1
+Zi0+cHVyYikKCQkJCQkgICAgICAgICAgICAgIHVzYl9raWxsX3VyYihwcmVjdmJ1Zi0+cHVyYikK
+CQkJCQkgICAgICAgICAgICAgIHVzYl9mcmVlX3VyYihwcmVjdmJ1Zi0+cHVyYikKSSBjaGVja2Vk
+IHRoZSAgY2FsbGVyJ3MgZXJyb3IgYnJhbmNoLCB0aGV5IGNhbGwgcjg3MTJfZnJlZV9kcnZfc3cg
+dG8gZG8gdGhlIGNsZWFudXAgam9iLCBpIHRocm91Z2h0IHRoZSBjYWxsZXIgaXMgT0suCkFuZCBt
+eSB0ZXN0IGZyb20gc3lzYm90IHNob3dzIHRoYXQ6CkJlZm9yZSBpIGFkZCBmb2xsb3cgY29kZSwg
+dGhlIG1lbWxlYWsgaXMgYWxtb3N0IDYyIHRpbWVzLGFmdGVyIG15IGNoYW5nZSwgdGhlIG1lbWxl
+YWsgbnVtYmVyIGNoYW5nZSB0byA3LgpiZWZvcmUKWyAgIDkzLjA3MDA4OV1bVDEwODQ3XSBrbWVt
+bGVhazogNjIgbmV3IHN1c3BlY3RlZCBtZW1vcnkgbGVha3MgKHNlZSAvc3lzL2tlcm5lbC9kZWJ1
+Zy9rbWVtbGVhaykKYWZ0ZXIgZml4OgpbICAgNzcuNTU3MzU1XVsgVDQwOThdIGttZW1sZWFrOiA3
+IG5ldyBzdXNwZWN0ZWQgbWVtb3J5IGxlYWtzIChzZWUgL3N5cy9rZXJuZWwvZGVidWcva21lbWxl
+YWspCgpJIHRocm91Z2h0IHRoZSByZW1haW4gNyBpcyB0aGUgcmlnaHQgdXNlLCBzbyBpIGFkZCBr
+bWVtbGVha19ub3RfbGVhay4KSSBhbSBub3Qgc3VyZSBpZiB0aGVyZSBpcyBzb21lIGdhcC4KS2lu
+ZGx5IGhlbHAgdG8gY29ycmVjdCBtZSBpZiBJJ20gbWlzc2luZyBzb21ldGhpbmcsIHRoYW5rcyEK
+CkJSLy9CZXJuYXJkCj5UaGlzIGZlZWxzIHdyb25nLCBzb3JyeS4KPgo+dGhhbmtzLAo+Cj5ncmVn
+IGstaAo=

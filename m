@@ -2,49 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E7C52334A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 14:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED9852334C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 14:43:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242676AbiEKMnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 08:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59296 "EHLO
+        id S242718AbiEKMnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 08:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235845AbiEKMne (ORCPT
+        with ESMTP id S242737AbiEKMnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 08:43:34 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258EA3F311
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 05:43:31 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0VCwOcAr_1652273005;
-Received: from B-LB6YLVDL-0141.local(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VCwOcAr_1652273005)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 11 May 2022 20:43:26 +0800
-Subject: Re: [PATCH] RISC-V: Remove IORESOURCE_BUSY flag for no-map reserved
- memory
-From:   Xianting Tian <xianting.tian@linux.alibaba.com>
-To:     David Hildenbrand <david@redhat.com>, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu,
-        akpm@linux-foundation.org, anup@brainfault.org,
-        wangkefeng.wang@huawei.com, rppt@kernel.org, alex@ghiti.fr,
-        twd2.me@gmail.com, seanjc@google.com, petr.pavlu@suse.com,
-        atishp@rivosinc.com
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        guoren@kernel.org, jianghuaming.jhm@alibaba-inc.com,
-        Nick Kossifidis <mick@ics.forth.gr>
-References: <20220511112413.559734-1-xianting.tian@linux.alibaba.com>
- <4407c84b-a64f-51b0-fa96-388aaf3b3e35@redhat.com>
- <f12c2576-1bd4-970d-4435-59273c5de0fc@linux.alibaba.com>
-Message-ID: <f214bb0b-41d9-18cc-9f22-f3a7918689c9@linux.alibaba.com>
-Date:   Wed, 11 May 2022 20:43:25 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.10.1
+        Wed, 11 May 2022 08:43:47 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004D041305
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 05:43:46 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id l1so1992657qvh.1
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 05:43:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Qsiv1TVIjBCFn3mJfyoC7yf67O63B0wHbv7qQGoztZw=;
+        b=d21c6940FfE0c2Irk5Vc66TrQ/aBxdFayMLY6R12Hfe5c0Z4DIiPb6fprSRS/JSh+Q
+         7LrGhqqS4nLdyDU28ahlf25w5NvMPtiETfLaDXRkOR+OaDCvn3CUsp0+Svk+laHjwc6b
+         NIZaBJ7UaCoJR1VF5+wIWCBH2YSbhEs+YclmjpywjDMCncLsMapc/57vTGul1DcOEz82
+         uIYVXtr2qXH3pbXATJQvKsh1OqSsbJpxUly9sseAzur8u3o3I/b1Z+zhhB1bioth6naS
+         4t1tckVMc/UYoHcm0zzRiin4K+f1sw+Xg2BEkOdV79nJ4daruUjQynShtgJ5d5lak1UC
+         Y2gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Qsiv1TVIjBCFn3mJfyoC7yf67O63B0wHbv7qQGoztZw=;
+        b=XpBdLKPbXQg4Z5IWMt1KItYWif/pkf6LnEyNr9SUGMTerl70ti5ml+btCFmwYm6cGQ
+         fg5hm2XTy756l3Tb6wGgPBiyhnwvrykNxrlDY/OFByH+69ue1IiLSREjJZ3cdJGdUAJO
+         0kn0dLJ9utx/4e49ifXiJ/I/1R72lUE2h8tjBcvvHqH2l5CyvmMMbYx8YBitoqga9daP
+         QU0dXFOi4P1hm8izP7NLy+rSzefRlvRNx9Dpv2hK9/CceZgS+P60tEBFSpkkfymRAnlT
+         g6J7meBsQU/eCtGcDjryojVLWEDcSRN6QWMQsoJpQyID4ek+6k1QESJFuZphWLkrPahM
+         en1g==
+X-Gm-Message-State: AOAM530q4VNaZx6Mbz8uav/VBsYL05HwC/hvEuMTfWnd9JGRW9Ef760r
+        Sj9IXTS5DuM79/050f3HezY=
+X-Google-Smtp-Source: ABdhPJyD+dne4X5d/D8O0zW7qdXw8MHevWPZhch4IGLhSDRx6E4RMv8mWL93cQn8RvIcmmzcdcL7uA==
+X-Received: by 2002:a05:6214:c42:b0:45a:d3e9:5797 with SMTP id r2-20020a0562140c4200b0045ad3e95797mr22147371qvj.103.1652273026014;
+        Wed, 11 May 2022 05:43:46 -0700 (PDT)
+Received: from MBP.hobot.cc (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
+        by smtp.gmail.com with ESMTPSA id s19-20020ac85cd3000000b002f39b99f6b1sm1111016qta.75.2022.05.11.05.43.43
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 11 May 2022 05:43:45 -0700 (PDT)
+From:   Schspa Shi <schspa@gmail.com>
+To:     gregkh@linuxfoundation.org, rafael@kernel.org
+Cc:     ming.lei@canonical.com, linux-kernel@vger.kernel.org,
+        Schspa Shi <schspa@gmail.com>
+Subject: [PATCH] driver: base: fix UAF when driver_attach failed
+Date:   Wed, 11 May 2022 20:43:36 +0800
+Message-Id: <20220511124336.66705-1-schspa@gmail.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-In-Reply-To: <f12c2576-1bd4-970d-4435-59273c5de0fc@linux.alibaba.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,82 +68,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When driver_attach(drv); failed, the driver_private will be freed.
+But it has been added to the bus, which caused a UAF.
 
-在 2022/5/11 下午8:37, Xianting Tian 写道:
->
-> 在 2022/5/11 下午8:27, David Hildenbrand 写道:
->> On 11.05.22 13:24, Xianting Tian wrote:
->>> Commit 00ab027a3b82 ("RISC-V: Add kernel image sections to the 
->>> resource tree")
->>> added IORESOURCE_BUSY flag for no-map reserved memory, this casued
->>> devm_ioremap_resource() failed for the no-map reserved memory in 
->>> subsequent
->>> operations of related driver, so remove the IORESOURCE_BUSY flag.
->>>
->>> The code to reproduce the issue,
->>> dts:
->>>     mem0: memory@a0000000 {
->>>                  reg = <0x0 0xa0000000 0 0x1000000>;
->>>                  no-map;
->>>          };
->>>
->>>     &test {
->>>         status = "okay";
->>>         memory-region = <&mem0>;
->>>     };
->>>
->>> code:
->>>     np = of_parse_phandle(pdev->dev.of_node, "memory-region", 0);
->>>     ret = of_address_to_resource(np, 0, &r);
->>>     base = devm_ioremap_resource(&pdev->dev, &r);
->>>     // base = -EBUSY
->>>
->>> Fixes: 00ab027a3b82 ("RISC-V: Add kernel image sections to the 
->>> resource tree")
->>> Reported-by: Huaming Jiang <jianghuaming.jhm@alibaba-inc.com>
->>> Reviewed-by: Guo Ren <guoren@kernel.org>
->>> CC: Nick Kossifidis <mick@ics.forth.gr>
->>> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
->>> ---
->>>   arch/riscv/kernel/setup.c | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
->>> index 834eb652a7b9..71f2966b1474 100644
->>> --- a/arch/riscv/kernel/setup.c
->>> +++ b/arch/riscv/kernel/setup.c
->>> @@ -214,7 +214,7 @@ static void __init init_resources(void)
->>>             if (unlikely(memblock_is_nomap(region))) {
->>>               res->name = "Reserved";
->>> -            res->flags = IORESOURCE_MEM | IORESOURCE_BUSY;
->>> +            res->flags = IORESOURCE_MEM;
->>>           } else {
->>>               res->name = "System RAM";
->>>               res->flags = IORESOURCE_SYSTEM_RAM | IORESOURCE_BUSY;
->> I assume the "Reserved" part is essentially unused by the kernel 
->> correct?
->
-> I think we may use it, actually we found the issue in our product 
-> after merged kdump functionality.
->
-> Actually, the code didn't add IORESOURCE_BUSY for no-map reserved 
-> memory before 00ab027a3b82 merged,  so it is a typo for commit 
-> 00ab027a3b82 to add IORESOURCE_BUSY?
+To fix it, we need to delete it from the bus when failed.
 
-This is arm64 code, which doesn't add IORESOURCE_BUSY for no-map 
-reserved memory,
+Fixes: 190888ac01d0 ("driver core: fix possible missing of device probe")
 
-arch/arm64/kernel/setup.c
+Signed-off-by: Schspa Shi <schspa@gmail.com>
+---
+ drivers/base/bus.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-         for_each_mem_region(region) {
-                 res = &standard_resources[i++];
-                 if (memblock_is_nomap(region)) {
-                         res->name  = "reserved";
-                         res->flags = IORESOURCE_MEM;
-                         res->start = 
-__pfn_to_phys(memblock_region_reserved_base_pfn(region));
-                         res->end = 
-__pfn_to_phys(memblock_region_reserved_end_pfn(region)) - 1;
+diff --git a/drivers/base/bus.c b/drivers/base/bus.c
+index 97936ec49bde..7ca47e5b3c1f 100644
+--- a/drivers/base/bus.c
++++ b/drivers/base/bus.c
+@@ -617,7 +617,7 @@ int bus_add_driver(struct device_driver *drv)
+ 	if (drv->bus->p->drivers_autoprobe) {
+ 		error = driver_attach(drv);
+ 		if (error)
+-			goto out_unregister;
++			goto out_del_list;
+ 	}
+ 	module_add_driver(drv->owner, drv);
+ 
+@@ -644,6 +644,8 @@ int bus_add_driver(struct device_driver *drv)
+ 
+ 	return 0;
+ 
++out_del_list:
++	klist_del(&priv->knode_bus);
+ out_unregister:
+ 	kobject_put(&priv->kobj);
+ 	/* drv->p is freed in driver_release()  */
+-- 
+2.29.0
 
->
->>

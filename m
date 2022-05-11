@@ -2,76 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72176524052
+	by mail.lfdr.de (Postfix) with ESMTP id C11BE524053
 	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 00:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348818AbiEKWcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 18:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
+        id S1348836AbiEKWcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 18:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348790AbiEKWc3 (ORCPT
+        with ESMTP id S1348781AbiEKWcc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 18:32:29 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887666352A;
-        Wed, 11 May 2022 15:32:28 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id m20so6719425ejj.10;
-        Wed, 11 May 2022 15:32:28 -0700 (PDT)
+        Wed, 11 May 2022 18:32:32 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8B562A18
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 15:32:30 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id x23so3160219pff.9
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 15:32:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KBRuCmP2siWBRF1mJGIqu92AfzuFsib8CXOarE94Pec=;
-        b=n2QnsrARZfRY2HojclW+Ojnkv82EmY9t8X1xvOClhSc9hBsIdUTj18Qqr5glQ49f2u
-         xkvhWUhbW8uUjKrlcLSeiIS6AUV2FeHJMeoL8+AICZolXzMg9dsk1nRznkSdUSqbGJwa
-         IDgj7Qbl/PG5cyyRWLnz+FGPUIcCBvgSMOA+QJ9SRIq9NP1rmwx/onl/+JD/TXuQrSRy
-         JEAIJOPV8vxa0OADNhYNZqgjw4Bk7PSkw6yzWPWmOwcoseXQJwmrWeS1fiZof8VqOLHR
-         k187oZoebyLihXoeQY9krZktcX8rUHhtaml9T2qOdVyWgYRgWqJ6huJf6kyUfqOUvpNy
-         xojw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lu8Yk3g+KqauzNzBiFKSP6KQpOiG+G3Df6KTkrdelIs=;
+        b=niGOrTTEvvwDakGPfaEm+H/jXShM05yULb78ZRtInqcr0ntY7ypT568jGc5K9zi/NK
+         RvZCIZgIO5a6JOvTXSsEU9k1t13N7gMcSLzP7XtdlnXEccTeQnQtMdAFVAY2OvP9VNc5
+         cf+eEx6HGQtK59kyC+ae06R1Pb5Bl+TkVXjvo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KBRuCmP2siWBRF1mJGIqu92AfzuFsib8CXOarE94Pec=;
-        b=zlvFFN9tLXmg9xsB2gBNKO3skue8RMqlHX/z8hocrUaffeY8KAUeqRqxeZeeym4Z+z
-         DGBJTjIuDieu53GCfbDMsBe0vtX3SSDHyTmIyZo8k9yeG8P+p09rV/peno/bq+LslCxp
-         fyfAlihK5G9G2X7fIG6+QW6M3V5Gg4/Ogsm/a5H2g898Wijmvw6YeFsrz173YAlgVckI
-         D/w7bOVgreMb91q7tMmo2EPpMRvHu+6DYUVM8lWOxvqwq46tDELDJLXfpf8yM8unNWuA
-         u32Uh6ziekyMIE9Zo/k9yC9VWe3pTYuUEDBm3vHf35jFO3NqhaXML6XqaSkiOFFl7aiC
-         qjkA==
-X-Gm-Message-State: AOAM532TDewYaQS2flcbsgaWnEXFANybRwoEnJQQWkgnRqMiIHAgOHAM
-        RtZ9P4Aw6PCP4acMclj2IYU=
-X-Google-Smtp-Source: ABdhPJzvE2W+LU+8iVBW8Ghx0/iWtRXQlPYrP1RxK1o32UgdLkTxBTZlS+vImiPkDg5Ioe0IqYeYqg==
-X-Received: by 2002:a17:906:6a10:b0:6f5:5e4:9d5 with SMTP id qw16-20020a1709066a1000b006f505e409d5mr26598518ejc.122.1652308347095;
-        Wed, 11 May 2022 15:32:27 -0700 (PDT)
-Received: from anparri.mshome.net (host-79-30-69-23.retail.telecomitalia.it. [79.30.69.23])
-        by smtp.gmail.com with ESMTPSA id f1-20020a1709064dc100b006fa84a0af2asm1468456ejw.16.2022.05.11.15.32.25
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lu8Yk3g+KqauzNzBiFKSP6KQpOiG+G3Df6KTkrdelIs=;
+        b=e/BNagSHcOTA3NxtwzImTQFgp4zcS17p35lehe2AJFut4+2IjcTKhvXEpv3pWPxY8B
+         pv1iRLkCjA1mIJIzVrJ0HAMKb0MrySWmMxUevQBsfaa9+QBEN+y9JvcphNkieFICBR49
+         pO767sYv0NkFRd013jj95P6fu0kAKDBSZOVQEZT/z/VLmTk4LRSqXYEmmcZ/McY3YBZS
+         mdmdbuo231GNzY4GHXoNNxwtO1emJa+YOTwxFUSwltAo3KYsbdwvIeBdM54AHhxpbonQ
+         9uRqiLYNboeHOdV/cfp9fteDw3RoJCuSrYaw+NAIYh2WYDaxdWf+zLaNGtzyqAeW3pvD
+         /ByA==
+X-Gm-Message-State: AOAM530nOnP1vmikPeYcj2zwfNsteYKYCDOSSTFSsB3rkOZTjLa0Q0rE
+        FZpwi4OR34CThaUg6ZnD203QOtmBU8v80A==
+X-Google-Smtp-Source: ABdhPJywPERqtDjyK6IMSaCkF3byY8oVHiUYV1+JAYdH4mGwmEW2PT4iA5vzx2yw+YiBsg79ZtNpcA==
+X-Received: by 2002:a63:1a5c:0:b0:3c1:9a7c:3739 with SMTP id a28-20020a631a5c000000b003c19a7c3739mr22723271pgm.272.1652308350421;
+        Wed, 11 May 2022 15:32:30 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id t19-20020a62d153000000b005087c23ad8dsm2240431pfl.0.2022.05.11.15.32.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 15:32:26 -0700 (PDT)
-From:   "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
-To:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
-Subject: [PATCH v2 2/2] PCI: hv: Fix synchronization between channel callback and hv_pci_bus_exit()
-Date:   Thu, 12 May 2022 00:32:07 +0200
-Message-Id: <20220511223207.3386-3-parri.andrea@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220511223207.3386-1-parri.andrea@gmail.com>
-References: <20220511223207.3386-1-parri.andrea@gmail.com>
+        Wed, 11 May 2022 15:32:29 -0700 (PDT)
+Date:   Wed, 11 May 2022 15:32:29 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Maninder Singh <maninder1.s@samsung.com>
+Cc:     mcgrof@kernel.org, avimalin@gmail.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, pmladek@suse.com, rostedt@goodmis.org,
+        senozhatsky@chromium.org, andriy.shevchenko@linux.intel.com,
+        naveen.n.rao@linux.ibm.com, davem@davemloft.net,
+        mhiramat@kernel.org, anil.s.keshavamurthy@intel.com,
+        linux@rasmusvillemoes.dk, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        v.narang@samsung.com, Onkarnath <onkarnath.1@samsung.com>
+Subject: Re: [PATCH 1/2] kallsyms: add kallsyms_show_value definition in all
+ cases
+Message-ID: <202205111525.92B1C597@keescook>
+References: <CGME20220511080722epcas5p459493d02ff662a7c75590e44a11e34a6@epcas5p4.samsung.com>
+ <20220511080657.3996053-1-maninder1.s@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511080657.3996053-1-maninder1.s@samsung.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,82 +77,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ Similarly to commit a765ed47e4516 ("PCI: hv: Fix synchronization
-  between channel callback and hv_compose_msi_msg()"): ]
+On Wed, May 11, 2022 at 01:36:56PM +0530, Maninder Singh wrote:
+> kallsyms_show_value return false if KALLSYMS is disabled,
+> but its usage is done by module.c also.
+> Thus when KALLSYMS is disabled, system will not print module
+> load address:
 
-The (on-stack) teardown packet becomes invalid once the completion
-timeout in hv_pci_bus_exit() has expired and hv_pci_bus_exit() has
-returned.  Prevent the channel callback from accessing the invalid
-packet by removing the ID associated to such packet from the VMbus
-requestor in hv_pci_bus_exit().
+Eek, I hadn't see the other changes this depends on. I think those
+changes need to be reworked first. Notably in the other patch, this is
+no good:
 
-Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
----
- drivers/pci/controller/pci-hyperv.c | 26 +++++++++++++++++++-------
- 1 file changed, 19 insertions(+), 7 deletions(-)
+        /* address belongs to module */
+        if (add_offset)
+                len = sprintf(buf, "0x%p+0x%lx", base, offset);
+        else
+                len = sprintf(buf, "0x%lx", value);
 
-diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-index a06e2cf946580..db814f7b93baa 100644
---- a/drivers/pci/controller/pci-hyperv.c
-+++ b/drivers/pci/controller/pci-hyperv.c
-@@ -3664,6 +3664,7 @@ static int hv_pci_probe(struct hv_device *hdev,
- static int hv_pci_bus_exit(struct hv_device *hdev, bool keep_devs)
- {
- 	struct hv_pcibus_device *hbus = hv_get_drvdata(hdev);
-+	struct vmbus_channel *chan = hdev->channel;
- 	struct {
- 		struct pci_packet teardown_packet;
- 		u8 buffer[sizeof(struct pci_message)];
-@@ -3671,13 +3672,14 @@ static int hv_pci_bus_exit(struct hv_device *hdev, bool keep_devs)
- 	struct hv_pci_compl comp_pkt;
- 	struct hv_pci_dev *hpdev, *tmp;
- 	unsigned long flags;
-+	u64 trans_id;
- 	int ret;
- 
- 	/*
- 	 * After the host sends the RESCIND_CHANNEL message, it doesn't
- 	 * access the per-channel ringbuffer any longer.
- 	 */
--	if (hdev->channel->rescind)
-+	if (chan->rescind)
- 		return 0;
- 
- 	if (!keep_devs) {
-@@ -3714,16 +3716,26 @@ static int hv_pci_bus_exit(struct hv_device *hdev, bool keep_devs)
- 	pkt.teardown_packet.compl_ctxt = &comp_pkt;
- 	pkt.teardown_packet.message[0].type = PCI_BUS_D0EXIT;
- 
--	ret = vmbus_sendpacket(hdev->channel, &pkt.teardown_packet.message,
--			       sizeof(struct pci_message),
--			       (unsigned long)&pkt.teardown_packet,
--			       VM_PKT_DATA_INBAND,
--			       VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
-+	ret = vmbus_sendpacket_getid(chan, &pkt.teardown_packet.message,
-+				     sizeof(struct pci_message),
-+				     (unsigned long)&pkt.teardown_packet,
-+				     &trans_id, VM_PKT_DATA_INBAND,
-+				     VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
- 	if (ret)
- 		return ret;
- 
--	if (wait_for_completion_timeout(&comp_pkt.host_event, 10 * HZ) == 0)
-+	if (wait_for_completion_timeout(&comp_pkt.host_event, 10 * HZ) == 0) {
-+		/*
-+		 * The completion packet on the stack becomes invalid after
-+		 * 'return'; remove the ID from the VMbus requestor if the
-+		 * identifier is still mapped to/associated with the packet.
-+		 *
-+		 * Cf. hv_pci_onchannelcallback().
-+		 */
-+		vmbus_request_addr_match(chan, trans_id,
-+					 (unsigned long)&pkt.teardown_packet);
- 		return -ETIMEDOUT;
-+	}
- 
- 	return 0;
- }
+This is printing raw kernel addresses with no hashing, as far as I can
+tell. That's not okay at all.
+
+Once that other patch gets fixed, this one then can be revisited.
+
+And just on naming: "kallsyms_tiny" is a weird name: it's just "ksyms"
+-- there's no "all".  :)
+
 -- 
-2.25.1
-
+Kees Cook

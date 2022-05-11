@@ -2,92 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3282E523D43
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 142A8523D49
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346717AbiEKTQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 15:16:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41592 "EHLO
+        id S1346740AbiEKTTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 15:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233395AbiEKTQI (ORCPT
+        with ESMTP id S242629AbiEKTTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 15:16:08 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9475124BFE;
-        Wed, 11 May 2022 12:16:04 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 7so2592173pga.12;
-        Wed, 11 May 2022 12:16:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=NlpSIY55/vhhSMAXUY8HjSp2cIpRawXhaXbZ3jqbOFs=;
-        b=dh52RZQkMA5F04yXcqzHA2XBKBrix5ERquN2TGlqCi1JycSfnM5xRFkhKiGKpCUdeJ
-         DVCC4jPsPyT+qutdbb8F6KjQ0cqgNftgL+BbjG7zUHWPlsPTmr+za32ZRGAOUvLUYmNO
-         n7gi0VLW3uPqiyOqPmUid38RjKrJjPps18Z6l1tOUxPQ1xyJxyrmf69owWKDOf3wVFnY
-         q7mHusvTOq9htahS0RjoeB/Ewzfshqt92QfLHVjcxIT9mst5QZIXXs9iWECf3936jI6Z
-         IplzkRTzxH9k0j+/7rJqq27qpq/zT9z+rCR0rd/L92ew2EE6qeq+tPcTBViWgU/cqZkL
-         aJ/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=NlpSIY55/vhhSMAXUY8HjSp2cIpRawXhaXbZ3jqbOFs=;
-        b=XCJ8i9yI7aLHkFPIor/o7DgIvrWCg2sgHwXcnYM+VThteSw0VqEqZo53jyxV9zchs/
-         GtcAQMLarSMyn6YSu/yUZY+SEpd7q7WAWiIwmP4rwjxoMGtzAd1M8oYoT7e7jI4KAtm7
-         aHVG3Y+0SKtqxjcyjx57fSpEZzbxdyDoVS2SQBJM0zy/M/bN2ZHcSvRm44Ukiodterb8
-         /8DxglPYFAofY9TY1nnOmAJLluQ821Wa80CvVwb98ixxKmh2Tcg+hwf7zFrNLDiCs6qA
-         1E4Bdmh3ok7kSh99DWBt9SzeofmHneEkCUjJLuQAYDq9+mkLiT/4WNYkqWh+L6/aLqHP
-         deIQ==
-X-Gm-Message-State: AOAM530S0V7wBANYLS6L2bSqPY5hPLMgjW8HsAPSBRBZFzKZGSKGtjA5
-        +pPWcdGrP35ZhjIga4L0crg=
-X-Google-Smtp-Source: ABdhPJw7cfLquMFIpOP2v6T5a0S18OkdeoZczUfSnRCGQ0YVWeC8TV8HBNOI/1R/kNTf8UemtnziSA==
-X-Received: by 2002:a62:a211:0:b0:50d:cdb2:87f4 with SMTP id m17-20020a62a211000000b0050dcdb287f4mr26527957pff.63.1652296564123;
-        Wed, 11 May 2022 12:16:04 -0700 (PDT)
-Received: from ?IPV6:2620:15c:2c1:200:3e8a:bf9a:d0b0:e550? ([2620:15c:2c1:200:3e8a:bf9a:d0b0:e550])
-        by smtp.gmail.com with ESMTPSA id c19-20020a170902c2d300b0015eee3ab203sm2281176pla.49.2022.05.11.12.16.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 12:16:03 -0700 (PDT)
-Message-ID: <990f83d5-f684-9160-b90e-14d6069fba1e@gmail.com>
-Date:   Wed, 11 May 2022 12:16:02 -0700
+        Wed, 11 May 2022 15:19:08 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF50541A4;
+        Wed, 11 May 2022 12:19:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1652296720;
+        bh=K6++BUf6/YdegjM4BnlUkF76z9/6nIa57i654gYKFwg=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=T/woSgcwitQUDyi8m4Ah7EDL3k3Q+Da+10SEgWnWKh0sUA4JgpT1SklBMUrgS/7Px
+         D8gxGmYgirxBrzSJ8pBPm9iU0UrHIJnVkzAtZMabpyF+jK4TiGtpvbM8seF6PSrBPZ
+         UBe83135XoH85ioxAGAsWB3ytCNWp6ovdMl8AmYI=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.0.33] ([46.223.3.12]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MDhhX-1nfpJf2fN1-00AoPq; Wed, 11
+ May 2022 21:18:40 +0200
+Subject: Re: [PATCH v4 1/6] tpm, tpm_tis_spi: Request threaded irq
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lukas@wunner.de,
+        p.rosenberger@kunbus.com, Lino Sanfilippo <l.sanfilippo@kunbus.com>
+References: <20220509080559.4381-1-LinoSanfilippo@gmx.de>
+ <20220509080559.4381-2-LinoSanfilippo@gmx.de> <YnucgDH3I87RI8PN@kernel.org>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <486cec01-ec02-3f11-0b81-037e0700c503@gmx.de>
+Date:   Wed, 11 May 2022 21:18:39 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [syzbot] WARNING in mroute_clean_tables
+In-Reply-To: <YnucgDH3I87RI8PN@kernel.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     syzbot <syzbot+a7c030a05218db921de5@syzkaller.appspotmail.com>,
-        davem@davemloft.net, dsahern@kernel.org, erdnetdev@gmail.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        yoshfuji@linux-ipv6.org
-References: <000000000000e0d41905debf1844@google.com>
-From:   Eric Dumazet <eric.dumazet@gmail.com>
-In-Reply-To: <000000000000e0d41905debf1844@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:isOjDfYGs9rj3rFvgoSSlcdFwtYl/xB/3PYo10NFQYguhcBoORe
+ rkmEuS2ylsl5mRo+Vp03AnDvbURnm3Q7SO2594DDENp1KR1+oTibJb0s3puEH2UKmWNUu1J
+ Lirp/k8iiPUnCf7X9f5QUROUHVOza7iI5YODuONcBJFxSdQHZukvOlah+wDnrA3z7Mq0SAa
+ od/sdOY1JmIRocXlY2jzA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:eXJ1qHVv3nk=:5OO9LtosDPQb1K80uv70Ef
+ YEsYh9g6UjN+uADMLSvoDT+VwB16Z+EwFH/UahyHi/ChD78thsWhK59tuOWTYkenmHFveeRAf
+ 1vGERV/WrqM+P9aC1fjiMK2/kDFsJJd1hyOixMCeJM6dGG9yP9jixTtPJICROX5SP6E9g6HcC
+ J06v1jO2PlbE6k3/14sXptP1cxOKZ2CyaeeTBXNEmhwiu1bPsFN3gIGjwk8385vgGsQxVLeKr
+ OJ6RWqyWhXcEYizXaS1sDSoy3Vex4OTLST+sRBATXh0gdPB4IiXrljDPRWKz5C/t4ZCZ7/WV8
+ xnFNssFzfY0nYBiw7kZEr0mAc309gP5cInbE2hMAc2rPUIyJSlkXNf1SOxUA1im7PQSRJANNn
+ kRLF0f8UYnOdsFxFXrQgRua46SCg/dusqokrDFUjRxjkCEmckrr0VshRgyeflKqXSG5HsTE9W
+ 0+0LDDXxS1vFkMCAfdbfdXCJrzd/ZfZEI4jjn2d2zYA/Vti3ez+umr36d2914eU5P++Cwh9S8
+ /G6Xff5LJOPXbFIQPIxOOSXAeWr1uTkuFWVHFcOLLlBQh0uIjldidSpgC3l6sZW8xBomy9Qoe
+ lAvU1S4IxYtlobUG1ka8TLQxoNHCkoSQNrCDjif2sNLeGif/HgY4lFoR4QTx1KfLvDURn3mY/
+ BwUKjcSRsLD6c3zFYeUE9LX7XXeb7jRansOl6fJWrmB1YAGker961WpgRlfc1tTMuA9JoKg3z
+ 0QRr9ZU8ktCs4ivu2dl/67RN/qctcqZlnErhBNJgfmIXM6fqMWeDfe/PwsSdflXBYfOv4iJp5
+ syNNomr7GnHJnedANJCij6gSDE/qTLcCLssB4raNH/MJArQ8tAebQ6zZriBepfeDZ6zAqBck6
+ RU9UxA44U8SMJ+McQE0pG+pmZwIrOEIGwlcz/kociGfCQJx/AkZGjWMtjevE83LEZFgsHAI3c
+ 7gscEcuHW1p7JqwqK8n9Szqf2IZxcHFb9CbfEw0lNyw4tsUVwbXFZafYlssQlbhGDFgrJEHbn
+ gS9EwEtQayq0Ro00BW/IzyRPAMftWZpcL0/qxjRLDeHnHPT9TEfmayvSWYlVVMKQgvC2200UX
+ 1+DYY8txEaT5Ag=
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On 5/11/22 09:40, syzbot wrote:
-> This bug is marked as fixed by commit:
-> ipmr,ip6mr: acquire RTNL before calling ip[6]mr_free_table()
-> But I can't find it in any tested tree for more than 90 days.
-> Is it a correct commit? Please update it by replying:
-> #syz fix: exact-commit-title
-> Until then the bug is still considered open and
-> new crashes with the same signature are ignored.
+On 11.05.22 at 13:22, Jarkko Sakkinen wrote:
+> On Mon, May 09, 2022 at 10:05:54AM +0200, Lino Sanfilippo wrote:
+>> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+>>
+>> Interrupt handling at least includes reading and writing the interrupt
+>> status register within the interrupt routine. Since accesses over the S=
+PI
+>> bus are synchronized by a mutex, request a threaded interrupt handler t=
+o
+>> ensure a sleepable context during interrupt processing.
+>>
+>> Fixes: 1a339b658d9d ("tpm_tis_spi: Pass the SPI IRQ down to the driver"=
+)
+>> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+>
+> When you state that it needs a sleepable context, you should bring a
+> context why it needs it. This not to disregard the code change overally =
+but
+> you cannot make even the most obvious claim without backing data.
+>
+
+so what kind of backing data do you have in mind? Would it help to emphasi=
+ze more
+that the irq handler is running in hard irq context in the current code an=
+d thus
+must not access registers over SPI since SPI uses a mutex (I consider it a=
+s basic
+knowledge that a mutex must not be taken in hard irq context)?
 
 
-#syz fix: ipmr,ip6mr: acquire RTNL before calling ip[6]mr_free_table() 
-on failure path
+Regards,
+Lino
 
+
+>> ---
+>>  drivers/char/tpm/tpm_tis_core.c     | 15 +++++++++++++--
+>>  drivers/char/tpm/tpm_tis_core.h     |  1 +
+>>  drivers/char/tpm/tpm_tis_spi_main.c |  5 +++--
+>>  3 files changed, 17 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis=
+_core.c
+>> index dc56b976d816..52369ef39b03 100644
+>> --- a/drivers/char/tpm/tpm_tis_core.c
+>> +++ b/drivers/char/tpm/tpm_tis_core.c
+>> @@ -747,8 +747,19 @@ static int tpm_tis_probe_irq_single(struct tpm_chi=
+p *chip, u32 intmask,
+>>  	int rc;
+>>  	u32 int_status;
+>>
+>> -	if (devm_request_irq(chip->dev.parent, irq, tis_int_handler, flags,
+>> -			     dev_name(&chip->dev), chip) !=3D 0) {
+>> +
+>> +	if (priv->flags & TPM_TIS_USE_THREADED_IRQ) {
+>> +		rc =3D devm_request_threaded_irq(chip->dev.parent, irq, NULL,
+>> +					       tis_int_handler,
+>> +					       IRQF_ONESHOT | flags,
+>> +					       dev_name(&chip->dev),
+>> +					       chip);
+>> +	} else {
+>> +		rc =3D devm_request_irq(chip->dev.parent, irq, tis_int_handler,
+>> +				      flags, dev_name(&chip->dev), chip);
+>> +	}
+>> +
+>> +	if (rc) {
+>>  		dev_info(&chip->dev, "Unable to request irq: %d for probe\n",
+>>  			 irq);
+>>  		return -1;
+>> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis=
+_core.h
+>> index 3be24f221e32..43b724e55192 100644
+>> --- a/drivers/char/tpm/tpm_tis_core.h
+>> +++ b/drivers/char/tpm/tpm_tis_core.h
+>> @@ -86,6 +86,7 @@ enum tis_defaults {
+>>  enum tpm_tis_flags {
+>>  	TPM_TIS_ITPM_WORKAROUND		=3D BIT(0),
+>>  	TPM_TIS_INVALID_STATUS		=3D BIT(1),
+>> +	TPM_TIS_USE_THREADED_IRQ	=3D BIT(2),
+>>  };
+>>
+>>  struct tpm_tis_data {
+>> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm=
+_tis_spi_main.c
+>> index 184396b3af50..f56613f2946f 100644
+>> --- a/drivers/char/tpm/tpm_tis_spi_main.c
+>> +++ b/drivers/char/tpm/tpm_tis_spi_main.c
+>> @@ -223,9 +223,10 @@ static int tpm_tis_spi_probe(struct spi_device *de=
+v)
+>>  	phy->flow_control =3D tpm_tis_spi_flow_control;
+>>
+>>  	/* If the SPI device has an IRQ then use that */
+>> -	if (dev->irq > 0)
+>> +	if (dev->irq > 0) {
+>>  		irq =3D dev->irq;
+>> -	else
+>> +		phy->priv.flags |=3D TPM_TIS_USE_THREADED_IRQ;
+>> +	} else
+>>  		irq =3D -1;
+>>
+>>  	init_completion(&phy->ready);
+>> --
+>> 2.36.0
+>>
+>
+>
+> BR, Jarkko
+>
 

@@ -2,133 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAA0E52380A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07353523812
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:05:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344302AbiEKQEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 12:04:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46736 "EHLO
+        id S239663AbiEKQFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 12:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344303AbiEKQEV (ORCPT
+        with ESMTP id S1344360AbiEKQEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 12:04:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5687419CECC
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:04:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652285056;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/5E5ae+fiX+8fhds4+yHVslnnnzZ+qVMHnlGIRP/rgo=;
-        b=OtxltTT9GD8rlYeUvSWVBdmXHc2GykIiWQq7CFseHY+ywjhvt6MylqJkikMFVQYaEgc9rJ
-        ThNXqdgWBcL964UcqsQbrDnXXEGGbiArzFe7OR8MqgMd08hfxUkOn0hWc5qpXdHxEP/sWd
-        uD0ODCtYZ3rnQ0XZdQ7GrYbj0nk8BrI=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-367-dU1fsjFGNTaCZ6Q27RdIcA-1; Wed, 11 May 2022 12:04:13 -0400
-X-MC-Unique: dU1fsjFGNTaCZ6Q27RdIcA-1
-Received: by mail-ed1-f70.google.com with SMTP id cz24-20020a0564021cb800b00425dfdd7768so1613039edb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:04:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/5E5ae+fiX+8fhds4+yHVslnnnzZ+qVMHnlGIRP/rgo=;
-        b=HmNrnt5qH+HNioVvWxDMjXpEXLaJ96/PZzdPZimBce8RTeLYEHC78yz2HFmQ4mkjJ3
-         XKaKLJiVa0uA4A9C34eNGw8vKe0kW2KNH6tknz1tnUlxXgVmsfszHvpD9si1P1OQbhKC
-         auQKMeuwwj9U9PrN4b2NzEYuDBxPmAVdln95XgJMN8zduBy3oXFeQ2a5vdv75Um9xxZa
-         1GHJumDz+AihzL+GO2OOwNlUVyWpm4aDy7KcH94maguCUi7uD6RDPGiTX/0lXUjYgKv5
-         OxhbsFhqJlis/Dth83gYEH54OG27cVxju5NfRNAEUNB1veToK7jcMdPxzIjyJP6MOwH0
-         7oXA==
-X-Gm-Message-State: AOAM530jBu8Tvl1RfkJ0ZHB0JV7SKGv2ZnOqhlzT9P8WMuOkHOeLdDiz
-        5hl4waAl00B6ph5TCbEwG7G0w+3f/5/0e+maYlPX/DP9PaXYTqcxK4TkR46KF7A+WwarMHZ9mqB
-        AqyMEu/6NwoIXVacYCn7BeHPy
-X-Received: by 2002:a17:907:2cc4:b0:6f5:28ea:83f with SMTP id hg4-20020a1709072cc400b006f528ea083fmr24163748ejc.255.1652285052540;
-        Wed, 11 May 2022 09:04:12 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw4FYhwaUmeTEVBmeSUYIufRa7f3HQ22CFzDmAHIL5LOnpIxLtX0aUZqjA+oZOOPoQ2QWcJwg==
-X-Received: by 2002:a17:907:2cc4:b0:6f5:28ea:83f with SMTP id hg4-20020a1709072cc400b006f528ea083fmr24163736ejc.255.1652285052373;
-        Wed, 11 May 2022 09:04:12 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id k8-20020a1709065fc800b006f3ef214e71sm1121435ejv.215.2022.05.11.09.04.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 09:04:12 -0700 (PDT)
-Message-ID: <6c848c9f-5099-b565-0d33-2ab4c6b9fff0@redhat.com>
-Date:   Wed, 11 May 2022 18:04:11 +0200
+        Wed, 11 May 2022 12:04:55 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3B81CE60C;
+        Wed, 11 May 2022 09:04:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652285088; x=1683821088;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=DdgW529vfrzUdK200xAyqlK8chpMkKRWAWDKnvN+xwU=;
+  b=n/CoXh9Go0iybYnUG27b1a3hP3k/avkGPZonqwWtrkrN7K5m3OHChXVn
+   c7z/BACU6zTcM0yjnYpee1POSZyj642aXVxaYM70LpyoAtOOUIYyDfCjO
+   YLw7ZpVgA8+W7jPhid0NFF5SMGiiwCoMyKEZOxNlUExYBddAivsTPbPux
+   KFN1Q9zFMF9PwB6rvxzs6tAai3dziwvM9LJQQLcOXBFmO7cNWEvmHybPk
+   4gUNjD/J5taec7USjt07jDZQYQN2uJbQ5Ja6VEBOdGNyhddxawtg5ED/+
+   erBdZ319BuMI3tAqAzT7xRs43sCClDi/A9GMH/wW8rgzsGTqJ3pvLxb7F
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="294982389"
+X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
+   d="scan'208";a="294982389"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 09:04:48 -0700
+X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
+   d="scan'208";a="739283010"
+Received: from abynum-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.66.243])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 09:04:47 -0700
+Message-ID: <7481e4eb79a1eabb7389b3d74d132c111be36477.camel@linux.intel.com>
+Subject: Re: [PATCH] tools/power/x86/intel-speed-select: Display error on
+ turbo mode disabled
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>, markgross@kernel.org
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 11 May 2022 09:04:47 -0700
+In-Reply-To: <e2f85541-3e7b-6120-1c44-70ec4447291c@redhat.com>
+References: <20220510023421.3930540-1-srinivas.pandruvada@linux.intel.com>
+         <e2f85541-3e7b-6120-1c44-70ec4447291c@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH V2] toshiba_acpi: use kobj_to_dev()
-Content-Language: en-US
-To:     cgel.zte@gmail.com, andy.shevchenko@gmail.com
-Cc:     chi.minghao@zte.com.cn, coproscefalo@gmail.com,
-        linux-kernel@vger.kernel.org, markgross@kernel.org,
-        platform-driver-x86@vger.kernel.org, zealci@zte.com.cn
-References: <CAHp75VfzbWAS6phV3eB7ehe50NrXitkuS54sYjdVK-OqqYVieA@mail.gmail.com>
- <20220511021638.1488650-1-chi.minghao@zte.com.cn>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220511021638.1488650-1-chi.minghao@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Hans,
 
-On 5/11/22 04:16, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+On Wed, 2022-05-11 at 17:56 +0200, Hans de Goede wrote:
+> Hi,
 > 
-> Use kobj_to_dev() instead of open-coding it.
+> On 5/10/22 04:34, Srinivas Pandruvada wrote:
+> > For Intel SST turbo-freq feature to be enabled, the turbo mode on
+> > the
+> > platform must be enabled also. If turbo mode is disabled, display
+> > error
+> > while enabling turbo-freq feature.
+> > 
+> > Signed-off-by: Srinivas Pandruvada
+> > <srinivas.pandruvada@linux.intel.com>
+> > ---
+> > Since this is a trivial patch, I am not sending a PULL request.
 > 
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-
-
-> ---
-> v1->v2:
-> 	remove Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Note not related to this patch, but when test building intel-speed-
+> select
+> I got the following compiler warning:
 > 
->  drivers/platform/x86/toshiba_acpi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>   CC      hfi-events.o
+> In function ‘process_hfi_event’,
+>     inlined from ‘handle_event’ at hfi-events.c:220:5:
+> hfi-events.c:184:9: warning: ‘perf_cap.cpu’ may be used uninitialized
+> [-Wmaybe-uninitialized]
+>   184 |         process_level_change(perf_cap->cpu);
+>       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> hfi-events.c: In function ‘handle_event’:
+> hfi-events.c:193:25: note: ‘perf_cap.cpu’ was declared here
+>   193 |         struct perf_cap perf_cap;
+>       |                         ^~~~~~~~
 > 
-> diff --git a/drivers/platform/x86/toshiba_acpi.c
-> b/drivers/platform/x86/toshiba_acpi.c
-> index f113dec98e21..0fc9e8b8827b 100644
-> --- a/drivers/platform/x86/toshiba_acpi.c
-> +++ b/drivers/platform/x86/toshiba_acpi.c
-> @@ -2353,7 +2353,7 @@ static struct attribute *toshiba_attributes[] = {
->  static umode_t toshiba_sysfs_is_visible(struct kobject *kobj,
->  					struct attribute *attr, int idx)
->  {
-> -	struct device *dev = container_of(kobj, struct device, kobj);
-> +	struct device *dev = kobj_to_dev(kobj);
->  	struct toshiba_acpi_dev *drv = dev_get_drvdata(dev);
->  	bool exists = true;
->  
+> 
+Let me send a patch to fix. In reality this will not happen as HFI
+message will always have a CPU.
+
+Thanks,
+Srinivas
+
+
+> Regards,
+> 
+> Hans
+> 
+> 
+> 
+> > 
+> >  tools/power/x86/intel-speed-select/isst-config.c | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> > 
+> > diff --git a/tools/power/x86/intel-speed-select/isst-config.c
+> > b/tools/power/x86/intel-speed-select/isst-config.c
+> > index 060390e88e37..9d35614995ee 100644
+> > --- a/tools/power/x86/intel-speed-select/isst-config.c
+> > +++ b/tools/power/x86/intel-speed-select/isst-config.c
+> > @@ -1892,6 +1892,12 @@ static void set_fact_for_cpu(int cpu, void
+> > *arg1, void *arg2, void *arg3,
+> >         int ret;
+> >         int status = *(int *)arg4;
+> >  
+> > +       if (status && no_turbo()) {
+> > +               isst_display_error_info_message(1, "Turbo mode is
+> > disabled", 0, 0);
+> > +               ret = -1;
+> > +               goto disp_results;
+> > +       }
+> > +
+> >         ret = isst_get_ctdp_levels(cpu, &pkg_dev);
+> >         if (ret) {
+> >                 isst_display_error_info_message(1, "Failed to get
+> > number of levels", 0, 0);
+> 
 

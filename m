@@ -2,117 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F300A5234B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D098B5234B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:52:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244190AbiEKNv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:51:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49030 "EHLO
+        id S244195AbiEKNwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244272AbiEKNvV (ORCPT
+        with ESMTP id S244182AbiEKNwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:51:21 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A76F38
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:51:16 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id k2so3106671wrd.5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:51:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=E/fOcrZZUcmh5mqkQ0xhNdrjRyLvkxvBijB4Co29OaA=;
-        b=eWpvmm8nTNmezqjSaRFWnvip2x3d5DxnHqGvOIUljx8Jy6SQVavMXugmtwNNhfWkUv
-         FpP1Y8b/GiLgfC6DThIGtJ6aH7E5m7gJJA1E3jO6tS5V+m6JGg8dcysecRsMrT7/J8pC
-         k1MCcN+M3dSMkggl4Pz3alt0nRClV+kiWbTmI7xKpexBpZseNotBoJpySUAJ8KRd6KGg
-         6t7m+jNQGvGitOOWyeaLMbstCZtPdHNnBCvosp8PuMh+LxqnIkRNySBJzFVgNVT+KFwk
-         RAOp1GBYpuC6oBV9wFifmz2WRjc4JpFmVvj9VR4FQ8gyfXkQEc4Qn/o9cvrXMbVH/ODN
-         pD5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=E/fOcrZZUcmh5mqkQ0xhNdrjRyLvkxvBijB4Co29OaA=;
-        b=UkCQi23jBjsrCO+16sqb8E5AW6Ka2PjagKSpLwL1a8HhHBttSTKV36q/s9Ov4Izf1p
-         gISEp2Ah3acK5jCVmp5zaeVEprJwS8WxpbglvSCqSI3tBqT1JepJKYElhkdbLIypO/EW
-         Lqj19PidSjX2t4KggmnC1O7UWe51tvrzdBR5zIbh0SZDnQsIsBoit1eSKheCqiSyH32N
-         YoMSoLJv1k6dbpp9OcfLDjU/WOf+JUpSQJ57/y7O5JN3c8OZ93n5pf7CMOaPhL/27umA
-         xChc/Fl8XNbQ2T+K7oLsn1Sz9B5NftUgAlYLMkXIAGNcol0k42oRJlrMCJyEkyFZTUCo
-         LErA==
-X-Gm-Message-State: AOAM533F/nsQOcCbqS/R5zlcXy9FFixxooVQcMEkdYVFqAof5G0E+kRd
-        yu9WE4JGvan9n/DdHt7gH0rxq4jLyT4hHqRR1wW64A==
-X-Google-Smtp-Source: ABdhPJzv3SW5s3y10HDMfCOw3Hp7XbPNRrhqe0ZKmIoLMqb7I4GfSVmBOpBfNQC3HiMb7+YS8i2tqFHvZYWDI6205Gc=
-X-Received: by 2002:a05:6000:1f1b:b0:20c:9ea8:b650 with SMTP id
- bv27-20020a0560001f1b00b0020c9ea8b650mr22571279wrb.300.1652277074370; Wed, 11
- May 2022 06:51:14 -0700 (PDT)
+        Wed, 11 May 2022 09:52:32 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165B5D5F;
+        Wed, 11 May 2022 06:52:32 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id C5EF31F381;
+        Wed, 11 May 2022 13:52:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1652277150; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=j5EtuSyYuYlsw4axGP9aJGHFXz29o0qgte+7cip7nFw=;
+        b=xw+lZ84zZi1EiVgC0K27vK7IIEPWkv7FL1kX0qbRgP6HRH57dcPFfcj37UgW1Pq4S8oLYF
+        1wnXrsIaV2DoRewtFUZ3SRNwVVFvLvDh0f9qm9dIlbN7pdQSUxnV294089AE/oY6cLEWSb
+        3tp0e3M+OxjM9Ja6f2O1VuNhw3nT/eM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1652277150;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=j5EtuSyYuYlsw4axGP9aJGHFXz29o0qgte+7cip7nFw=;
+        b=0nnKyr/0j3rNtV1cf5l/9yRuH20nOxARYq4+t+qjIgBViXYCzj/Egy7Seb1m46lSTlpuG7
+        KO1qpR0zLyrwlGCg==
+Received: from quack3.suse.cz (jack.udp.ovpn2.nue.suse.de [10.163.43.118])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id B2FC92C141;
+        Wed, 11 May 2022 13:52:30 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 02294A062A; Wed, 11 May 2022 15:52:27 +0200 (CEST)
+Date:   Wed, 11 May 2022 15:52:27 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     jack@suse.cz, paolo.valente@linaro.org, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH -next 1/2] block, bfq: protect 'bfqd->queued' by
+ 'bfqd->lock'
+Message-ID: <20220511135227.lawvrlrajtyszwfb@quack3.lan>
+References: <20220510131629.1964415-1-yukuai3@huawei.com>
+ <20220510131629.1964415-2-yukuai3@huawei.com>
 MIME-Version: 1.0
-References: <20220511070133.710721-1-irogers@google.com> <20220511073501.GW76023@worktop.programming.kicks-ass.net>
-In-Reply-To: <20220511073501.GW76023@worktop.programming.kicks-ass.net>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 11 May 2022 06:50:59 -0700
-Message-ID: <CAP-5=fVoZSusNWfpYDpHvbxF=J0-a2jF+TpxEYLxmtWx6QFZ7A@mail.gmail.com>
-Subject: Re: [PATCH 0/7] Rewrite jevents program in python
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Felix Fietkau <nbd@nbd.name>, Qi Liu <liuqi115@huawei.com>,
-        Like Xu <likexu@tencent.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Nick Forrington <nick.forrington@arm.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>, Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        ananth.narayan@amd.com, ravi.bangoria@amd.com,
-        santosh.shukla@amd.com, sandipan.das@amd.com,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Kshipra Bopardikar <kshipra.bopardikar@intel.com>,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220510131629.1964415-2-yukuai3@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 12:35 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Wed, May 11, 2022 at 12:01:26AM -0700, Ian Rogers wrote:
->
-> > The changes here switch from jevents.c to a rewrite in python called
-> > jevents.py. This means there is a build time dependency on python, but
-> > such a dependency already exists for asciidoc (used to generate perf's
-> > man pages).
->
-> You mean just building perf (not the docs) will now require snake stuff?
->
-> That's very tedious :/ I don't typically have snakes on my machines.
+On Tue 10-05-22 21:16:28, Yu Kuai wrote:
+> If bfq_schedule_dispatch() is called from bfq_idle_slice_timer_body(),
+> then 'bfqd->queued' is read without holding 'bfqd->lock'. This is
+> wrong since it can be wrote concurrently.
+> 
+> Fix the problem by holding 'bfqd->lock' for bfq_schedule_dispatch(),
+> like everywhere else.
+> 
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 
-Hi Peter,
+Looks good. Feel free to add:
 
-You're right that after these changes python is a build requirement
-for jevents. We could keep the C code around for the case that python
-isn't there, but I want to do things like remove the string
-relocations, sort the events by name so we don't linearly search, etc.
-which would be a massive chore to keep alive on the C side. An
-alternative would be to have an empty pmu-events.c file that is used
-for this case. If you wanted to keep things in C and have jevents like
-event names, you could use the empty version and link in libpfm4.
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-Thanks,
-Ian
+								Honza
+
+> ---
+>  block/bfq-iosched.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+> index 272d48d8f326..61750696e87f 100644
+> --- a/block/bfq-iosched.c
+> +++ b/block/bfq-iosched.c
+> @@ -456,6 +456,8 @@ static struct bfq_io_cq *bfq_bic_lookup(struct request_queue *q)
+>   */
+>  void bfq_schedule_dispatch(struct bfq_data *bfqd)
+>  {
+> +	lockdep_assert_held(&bfqd->lock);
+> +
+>  	if (bfqd->queued != 0) {
+>  		bfq_log(bfqd, "schedule dispatch");
+>  		blk_mq_run_hw_queues(bfqd->queue, true);
+> @@ -6898,8 +6900,8 @@ bfq_idle_slice_timer_body(struct bfq_data *bfqd, struct bfq_queue *bfqq)
+>  	bfq_bfqq_expire(bfqd, bfqq, true, reason);
+>  
+>  schedule_dispatch:
+> -	spin_unlock_irqrestore(&bfqd->lock, flags);
+>  	bfq_schedule_dispatch(bfqd);
+> +	spin_unlock_irqrestore(&bfqd->lock, flags);
+>  }
+>  
+>  /*
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

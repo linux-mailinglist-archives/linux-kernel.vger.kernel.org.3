@@ -2,187 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C686F522C13
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E65EB522C16
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:09:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242039AbiEKGF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 02:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51828 "EHLO
+        id S239035AbiEKGJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 02:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232391AbiEKGFw (ORCPT
+        with ESMTP id S232202AbiEKGJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 02:05:52 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0844D60C6
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 23:05:45 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so1146744pjq.2
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 23:05:45 -0700 (PDT)
+        Wed, 11 May 2022 02:09:49 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E730106A7D;
+        Tue, 10 May 2022 23:09:46 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id k2so1417663wrd.5;
+        Tue, 10 May 2022 23:09:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=M2tMIjY53oynE5ZZlI/baO0lGZKZqD2qqN0eNb/iE2w=;
-        b=PWhnEnJk9qvGqrSC7B+xbAQJFKIXMFzEqbX5YybccBDSFAD0JdmcVlA4aoZosIjEn6
-         jWruvxH1PxvP/amFuB48PZbbNr5pORQQafPTLAV5wflu7go3zAO6g7xXJwd0pUZJa1ij
-         Qk1ooH64bNO2AbmgXsF4uDjg5H3A08W36IgEJjgSNozKEMuCXwOvZyrsk99wMmCe29uF
-         uVwBU99akYHf+S7Ghh8jyLJhYc+txT750TY71WiD/u8RHc83zMTJGbefCmcjfvKuzfN1
-         4+KLv0uW/SqBrVpSfuygCQDQocWmhPikwA+9stwzEQcTHPvORve9yo5DzdMa88fdqGf4
-         zzHg==
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8VHraj8d06YM+De4Pnpm/ftVhB4j15aURh4OR3XtQQs=;
+        b=eRq98BENscelG1cmv/7KdEfz37qy++0ZvRiGwjts7OYmQnJYTfoyhT12xutzugvRIb
+         xA91PdIdQlQlYtyXshVyKPlGA29Ly68zQbYZW9BypgLRH6rgbm8Uq8OwhtQpGViAuWx+
+         ir9yaQ3hCoV7+0wSmnwSP/4RSjOH4RY146Xmw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=M2tMIjY53oynE5ZZlI/baO0lGZKZqD2qqN0eNb/iE2w=;
-        b=S4iBqaTWXgxPeAl51C5yuqHVwo0TCNqko+Xk+qqaH+U1otHYgfChVgTE+Uma961n+p
-         wt3IfKXa1pa/zI+xjqrcWlGml5uH6X01LFLRStrMBwphEbPW5AkhDcqCTQ642UJsqHh9
-         vqmXPVjSgV3pZcvs8E9cO6rklvwPLvdSAHoa0nWBqAxNPqYHR2P+HazwSGp1z8ADsZDO
-         ih6LA+eArzs+ihWI6S3bDdQXmbLSas0ynKlFnnPDb31e7oXhCQVkCqI+aF55W0t6vvlK
-         Ff5U8PljrTcZXfdPqh4nUKKFzCX7ohXQAB2Sob4wlUJr+I76B+wVr5ujKiI++iNdAech
-         mc5A==
-X-Gm-Message-State: AOAM532u3KxeBw5sDGu1tuseMIRhq4IyV5nRKwiFgLSIxzgvbSt+8MH0
-        6m5pbaNjVrb+uPuyOXYVLNoy+g==
-X-Google-Smtp-Source: ABdhPJzCg92rzXG3n/bMXqch/TKUzBM6ZIxdElEeaqetBR69Pcu9FbBXio81XWJ/L3/M9y8Px6C/lg==
-X-Received: by 2002:a17:902:ec8c:b0:15e:a371:ad7d with SMTP id x12-20020a170902ec8c00b0015ea371ad7dmr23663232plg.12.1652249143871;
-        Tue, 10 May 2022 23:05:43 -0700 (PDT)
-Received: from localhost.localdomain ([106.213.2.134])
-        by smtp.gmail.com with ESMTPSA id j7-20020a17090a31c700b001d960eaed66sm800216pjf.42.2022.05.10.23.05.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 23:05:42 -0700 (PDT)
-From:   Sumit Garg <sumit.garg@linaro.org>
-To:     daniel.thompson@linaro.org, dianders@chromium.org, will@kernel.org,
-        liwei391@huawei.com
-Cc:     catalin.marinas@arm.com, mark.rutland@arm.com, mhiramat@kernel.org,
-        jason.wessel@windriver.com, maz@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Sumit Garg <sumit.garg@linaro.org>
-Subject: [PATCH v3 2/2] arm64: kgdb: Set PSTATE.SS to 1 to re-enable single-step
-Date:   Wed, 11 May 2022 11:35:21 +0530
-Message-Id: <20220511060521.465744-3-sumit.garg@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220511060521.465744-1-sumit.garg@linaro.org>
-References: <20220511060521.465744-1-sumit.garg@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8VHraj8d06YM+De4Pnpm/ftVhB4j15aURh4OR3XtQQs=;
+        b=q2yKX7o4uadC7GZlNv3aLrjZfV48cMp51gKBTKKPKy5jF6OHknbGF6UtvdcCbT+jGG
+         0pK+Lg6g6dA7IEI4yKDZ6KGTmPtKYi4AGxVmgqm8V0GansSyWr39swtpZz6ly8S+8Nen
+         aJBIq4p539jQaIDz4EWJQzpN+m4doXR8nm0lM2cgvu0BQRf4bOEihX9OVMoXAKDh1FVK
+         DdHOsT2piyW/UvPFVs8uU/rpicNBZn52ZtiNuheEcl3JZml7cB6A0D2j/iULcz6fCcP+
+         37hgSkRisuCtv93piIxr2bibBoFX2DK5jRhzzp2Z2Adgwcy88OFdr4rIbAbpHTAlAj2d
+         7+QA==
+X-Gm-Message-State: AOAM533EBQgTgZXeJqUCckWRZVmD8bA/bHe2SDnpkpQ9xKsX/ASV21iG
+        mviXsl0n+J4QWDuMXbFXkUtzD9N1Rn9dkdWyiCY=
+X-Google-Smtp-Source: ABdhPJyjDLNrgyQtYLmk0GuQSBajTH2voVldGLT2eHhEtoR8SqbzkHxfdWJfAsyGl8t5S9qpn5RGgyG9B1Gia/zSL8U=
+X-Received: by 2002:a5d:6d04:0:b0:20c:52de:9ce4 with SMTP id
+ e4-20020a5d6d04000000b0020c52de9ce4mr22646590wrq.572.1652249384925; Tue, 10
+ May 2022 23:09:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220509151118.4899-1-potin.lai.pt@gmail.com>
+In-Reply-To: <20220509151118.4899-1-potin.lai.pt@gmail.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 11 May 2022 06:09:33 +0000
+Message-ID: <CACPK8XfXbay7u5kMDgMoyDTO_Le2i4okNUG8sb8_NDepbPRjxA@mail.gmail.com>
+Subject: Re: [PATCH 0/6] ARM: dts: aspeed: bletchley: update dts file base on
+ DVT schematic
+To:     Potin Lai <potin.lai.pt@gmail.com>,
+        Patrick Williams <patrick@stwcx.xyz>
+Cc:     Rob Herring <robh+dt@kernel.org>, Andrew Jeffery <andrew@aj.id.au>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently only the first attempt to single-step has any effect. After
-that all further stepping remains "stuck" at the same program counter
-value.
+On Mon, 9 May 2022 at 15:14, Potin Lai <potin.lai.pt@gmail.com> wrote:
+>
+> This patch series update Facebook Bletchley BMC devicetree base on DVT
+> schematic.
+>
+> - EHCI: enable ehci0 for detecting and accessing usb device on sled
+> - MDIO Bus: enable mdio0 for accessing switch registers
+> - SPI2 Flash: switch spi driver back to aspeed-smc to improve performance
+> - EEPROM: add eeprom node on each sled
+> - GPIO:
+>   - add PCA9536 IOEPX node on each sled
+>   - update gpio line names
 
-Refer to the ARM Architecture Reference Manual (ARM DDI 0487E.a) D2.12,
-i think PSTATE.SS=1 should be set each step for transferring the PE to the
-'Active-not-pending' state. The problem here is PSTATE.SS=1 is not set
-since the second single-step.
+These look fine to me.
 
-After the first single-step, the PE transferes to the 'Inactive' state,
-with PSTATE.SS=0 and MDSCR.SS=1, thus PSTATE.SS won't be set to 1 due to
-kernel_active_single_step()=true. Then the PE transferes to the
-'Active-pending' state when ERET and returns to the debugger by step
-exception.
+Reviewed-by: Joel Stanley <joel@jms.id.au>
 
-Before this patch:
-==================
-Entering kdb (current=0xffff3376039f0000, pid 1) on processor 0 due to Keyboard Entry
-[0]kdb>
+Patrick, did you want to review them before I merge?
 
-[0]kdb>
-[0]kdb> bp write_sysrq_trigger
-Instruction(i) BP #0 at 0xffffa45c13d09290 (write_sysrq_trigger)
-    is enabled   addr at ffffa45c13d09290, hardtype=0 installed=0
-
-[0]kdb> go
-$ echo h > /proc/sysrq-trigger
-
-Entering kdb (current=0xffff4f7e453f8000, pid 175) on processor 1 due to Breakpoint @ 0xffffad651a309290
-[1]kdb> ss
-
-Entering kdb (current=0xffff4f7e453f8000, pid 175) on processor 1 due to SS trap @ 0xffffad651a309294
-[1]kdb> ss
-
-Entering kdb (current=0xffff4f7e453f8000, pid 175) on processor 1 due to SS trap @ 0xffffad651a309294
-[1]kdb>
-
-After this patch:
-=================
-Entering kdb (current=0xffff6851c39f0000, pid 1) on processor 0 due to Keyboard Entry
-[0]kdb> bp write_sysrq_trigger
-Instruction(i) BP #0 at 0xffffc02d2dd09290 (write_sysrq_trigger)
-    is enabled   addr at ffffc02d2dd09290, hardtype=0 installed=0
-
-[0]kdb> go
-$ echo h > /proc/sysrq-trigger
-
-Entering kdb (current=0xffff6851c53c1840, pid 174) on processor 1 due to Breakpoint @ 0xffffc02d2dd09290
-[1]kdb> ss
-
-Entering kdb (current=0xffff6851c53c1840, pid 174) on processor 1 due to SS trap @ 0xffffc02d2dd09294
-[1]kdb> ss
-
-Entering kdb (current=0xffff6851c53c1840, pid 174) on processor 1 due to SS trap @ 0xffffc02d2dd09298
-[1]kdb> ss
-
-Entering kdb (current=0xffff6851c53c1840, pid 174) on processor 1 due to SS trap @ 0xffffc02d2dd0929c
-[1]kdb>
-
-Fixes: 44679a4f142b ("arm64: KGDB: Add step debugging support")
-Co-developed-by: Wei Li <liwei391@huawei.com>
-Signed-off-by: Wei Li <liwei391@huawei.com>
-Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
----
- arch/arm64/include/asm/debug-monitors.h | 1 +
- arch/arm64/kernel/debug-monitors.c      | 5 +++++
- arch/arm64/kernel/kgdb.c                | 2 ++
- 3 files changed, 8 insertions(+)
-
-diff --git a/arch/arm64/include/asm/debug-monitors.h b/arch/arm64/include/asm/debug-monitors.h
-index 00c291067e57..9e1e864d6440 100644
---- a/arch/arm64/include/asm/debug-monitors.h
-+++ b/arch/arm64/include/asm/debug-monitors.h
-@@ -104,6 +104,7 @@ void user_regs_reset_single_step(struct user_pt_regs *regs,
- void kernel_enable_single_step(struct pt_regs *regs);
- void kernel_disable_single_step(void);
- int kernel_active_single_step(void);
-+void kernel_regs_reset_single_step(struct pt_regs *regs);
- 
- #ifdef CONFIG_HAVE_HW_BREAKPOINT
- int reinstall_suspended_bps(struct pt_regs *regs);
-diff --git a/arch/arm64/kernel/debug-monitors.c b/arch/arm64/kernel/debug-monitors.c
-index 4f3661eeb7ec..ea3f410aa385 100644
---- a/arch/arm64/kernel/debug-monitors.c
-+++ b/arch/arm64/kernel/debug-monitors.c
-@@ -438,6 +438,11 @@ int kernel_active_single_step(void)
- }
- NOKPROBE_SYMBOL(kernel_active_single_step);
- 
-+void kernel_regs_reset_single_step(struct pt_regs *regs)
-+{
-+	set_regs_spsr_ss(regs);
-+}
-+
- /* ptrace API */
- void user_enable_single_step(struct task_struct *task)
- {
-diff --git a/arch/arm64/kernel/kgdb.c b/arch/arm64/kernel/kgdb.c
-index 2aede780fb80..acf2196b1e9b 100644
---- a/arch/arm64/kernel/kgdb.c
-+++ b/arch/arm64/kernel/kgdb.c
-@@ -224,6 +224,8 @@ int kgdb_arch_handle_exception(int exception_vector, int signo,
- 		 */
- 		if (!kernel_active_single_step())
- 			kernel_enable_single_step(linux_regs);
-+		else
-+			kernel_regs_reset_single_step(linux_regs);
- 		err = 0;
- 		break;
- 	default:
--- 
-2.25.1
-
+>
+> Potin Lai (6):
+>   ARM: dts: aspeed: bletchley: enable ehci0 device node
+>   ARM: dts: aspeed: bletchley: switch spi2 driver to aspeed-smc
+>   ARM: dts: aspeed: bletchley: Enable mdio0 bus
+>   ARM: dts: aspeed: bletchley: update gpio0 line names
+>   ARM: dts: aspeed: bletchley: add pca9536 node on each sled
+>   ARM: dts: aspeed: bletchley: add eeprom node on each sled
+>
+>  .../dts/aspeed-bmc-facebook-bletchley.dts     | 180 ++++++++++++++----
+>  1 file changed, 145 insertions(+), 35 deletions(-)
+>
+> --
+> 2.17.1
+>

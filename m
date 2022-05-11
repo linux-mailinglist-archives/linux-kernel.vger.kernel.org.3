@@ -2,116 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A12523B48
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAFFD523B4E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345376AbiEKRR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 13:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
+        id S1345421AbiEKRRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 13:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242783AbiEKRRX (ORCPT
+        with ESMTP id S242783AbiEKRRe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 13:17:23 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BC130F71;
-        Wed, 11 May 2022 10:17:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652289443; x=1683825443;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=WHDdURNms3aWfdEJX5KkrqUkQcS2EWtnqEvYYDuGX0w=;
-  b=Xtz+u/eQOQ/mQueXE6vq3Vk3ZOmrQFWFEKW8yuiNkEiCC+RrT8dEMFrk
-   o0GcL62sAMS39vUUHzqRVA344/GNhRjPrIfhdpWT76gxBOUzuR07mW49E
-   0lD3ajNvZzc5dDAmHXkls0mGgAGIluZsmsJSn5evTXlIBmzmgn1I/hr3X
-   apRBymW7oRFIWXXKjS9HEOvU4Spl5QB+THLtUt0xtzZhh2TZ+TolLmppC
-   JX9ALB1MILvgvYxxzNiT5CuXM8F7gNyEiuh9PQiEd0YZCPe+GnxFUs/0p
-   peuRSyb1C+BzH9u9kNGozTMvTwLJ//FDJzbwyl8iagqVGURjjb+ixuO5z
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="250288454"
-X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
-   d="scan'208";a="250288454"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 10:17:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
-   d="scan'208";a="636495042"
-Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
-  by fmsmga004.fm.intel.com with ESMTP; 11 May 2022 10:17:22 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Wed, 11 May 2022 10:17:22 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Wed, 11 May 2022 10:17:21 -0700
-Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
- fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.027;
- Wed, 11 May 2022 10:17:21 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-CC:     Jane Chu <jane.chu@oracle.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>, david <david@fromorbit.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        X86 ML <x86@kernel.org>,
-        "Verma, Vishal L" <vishal.l.verma@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        device-mapper development <dm-devel@redhat.com>,
-        "Weiny, Ira" <ira.weiny@intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vivek Goyal <vgoyal@redhat.com>, Jue Wang <juew@google.com>
-Subject: RE: [PATCH v9 3/7] mce: fix set_mce_nospec to always unmap the whole
- page
-Thread-Topic: [PATCH v9 3/7] mce: fix set_mce_nospec to always unmap the whole
- page
-Thread-Index: AQHYVqBhtO9kfcaX30Okv6G3eRqhwq0Znj6AgABQagCAABkaEA==
-Date:   Wed, 11 May 2022 17:17:21 +0000
-Message-ID: <5aa1c9aacc5a4086a904440641062669@intel.com>
-References: <20220422224508.440670-1-jane.chu@oracle.com>
- <20220422224508.440670-4-jane.chu@oracle.com>
- <CAPcyv4i7xi=5O=HSeBEzvoLvsmBB_GdEncbasMmYKf3vATNy0A@mail.gmail.com>
- <CAPcyv4id8AbTFpO7ED_DAPren=eJQHwcdY8Mjx18LhW+u4MdNQ@mail.gmail.com>
- <Ynt3WlpcJwuqffDX@zn.tnic>
-In-Reply-To: <Ynt3WlpcJwuqffDX@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.401.20
-x-originating-ip: [10.1.200.100]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 11 May 2022 13:17:34 -0400
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7513566F9A;
+        Wed, 11 May 2022 10:17:33 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id i11so5238623ybq.9;
+        Wed, 11 May 2022 10:17:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vD+1JoRhTRHmBfAogbA1m801BvLZBfvraleqvaICUvk=;
+        b=CCh/ASH6OlwWTkfJXL58tKuzzwcGplXvhylbkD561mWi28rTvYIBhbQLFAqN9DZ3K1
+         9mIrrxbV8zutxfa51cyQ3W3LQGA8U7LsHnQnkSagDvn9F+vHTXoJmpVHavivWUOTmruQ
+         bQUD625yA84Z5MJEpqYMQY0pgJWbo2MExVFY0YHKRDwjkmnar4nKzAP58uIfgbs3TThg
+         SeQ+O/lcjmvTZyaM6Z0YVbmhPM+NU0ySLb7T7U1CcW0NXZHumImuU0Ikkbfa088wQEaZ
+         QRGksgaUSJJGllsfxktN4MOfhaj5kQlG2e3qPLn+6bsVxmiQRQ7/Xep/mEW+DnbXpcgc
+         FOhQ==
+X-Gm-Message-State: AOAM530XoohX0PglpVtdts2sOhwTarxumNputD/W1Gz7aCiyg049Dunf
+        rjMGOG6jK7hJ+4OFwGlqR1V2knoWH4vIsg4qI8k=
+X-Google-Smtp-Source: ABdhPJw4RNg1Tn0oZMYT4uWeN79BPHq44LwxtO1hn5Q/54sZe0nYI0IhXcgbmvtLDmAhYfJGrVDpWcBz14WgiU/yxxA=
+X-Received: by 2002:a25:d288:0:b0:64b:4bb5:32be with SMTP id
+ j130-20020a25d288000000b0064b4bb532bemr1088503ybg.633.1652289452685; Wed, 11
+ May 2022 10:17:32 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220426144448.43682-1-pierre.gondois@arm.com> <8ee5dfd0-558b-5ad6-63d2-b142550f04a3@arm.com>
+In-Reply-To: <8ee5dfd0-558b-5ad6-63d2-b142550f04a3@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 11 May 2022 19:17:21 +0200
+Message-ID: <CAJZ5v0i0BTOFZ8Rhh_da5_mgZQW0+qCoeiDpWLwVJfJwjgYAqg@mail.gmail.com>
+Subject: Re: [PATCH v1] PM: EM: Decrement policy counter
+To:     Vincent Donnefort <vincent.donnefort@arm.com>,
+        Pierre Gondois <pierre.gondois@arm.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Ionela Voinescu <Ionela.Voinescu@arm.com>,
+        Dietmar Eggemann <Dietmar.Eggemann@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBJIC0ganVzdCBsaWtlIHlvdSAtIGFtIHdhaXRpbmcgZm9yIFRvbnkgdG8gc2F5IHdoZXRoZXIg
-aGUgc3RpbGwgbmVlZHMNCj4gdGhpcyB3aG9sZV9wYWdlKCkgdGhpbmcuIEkgYWxyZWFkeSBzdWdn
-ZXN0ZWQgcmVtb3ZpbmcgaXQgc28gSSdtIGZpbmUNCj4gd2l0aCB0aGlzIHBhdGNoLg0KDQpJSVJD
-IHRoaXMgbmV3IHBhdGNoIGVmZmVjdGl2ZWx5IHJldmVydHMgYmFjayB0byB0aGUgb3JpZ2luYWwg
-YmVoYXZpb3IgdGhhdA0KSSBpbXBsZW1lbnRlZCBiYWNrIGF0IHRoZSBkYXduIG9mIHRpbWUuIEku
-ZS4ganVzdCBhbHdheXMgbWFyayB0aGUgd2hvbGUNCnBhZ2UgIm5vdCBwcmVzZW50IiBhbmQgZG9u
-J3QgdHJ5IHRvIG1lc3Mgd2l0aCBVQyBtYXBwaW5ncyB0byBhbGxvdw0KcGFydGlhbCAoYnV0IG5v
-bi1zcGVjdWxhdGl2ZSkgYWNjZXNzIHRvIHRoZSBub3QtcG9pc29uZWQgcGFydHMgb2YgdGhlDQpw
-YWdlLg0KDQpJZiB0aGF0IGlzIHRoZSBjYXNlIC4uLiB0aGVuIEFja2VkLWJ5OiBUb255IEx1Y2sg
-PHRvbnkubHVja0BpbnRlbC5jb20+DQoNCklmIEkndmUgbWlzdW5kZXJzdG9vZCAuLi4gdGhlbiBw
-bGVhc2UgZXhwbGFpbiB3aGF0IGl0IGlzIGRvaW5nLg0KDQpUaGFua3MNCg0KLVRvbnkNCg==
+On Tue, Apr 26, 2022 at 5:40 PM Vincent Donnefort
+<vincent.donnefort@arm.com> wrote:
+>
+> On 26/04/2022 15:44, Pierre Gondois wrote:
+> > From: Pierre Gondois <Pierre.Gondois@arm.com>
+> >
+> > Fixes: e458716a92b57 ("PM: EM: Mark inefficiencies in CPUFreq")
+> > In the above commit, cpufreq_cpu_get() is called without
+> > a cpufreq_cpu_put(), permanently increasing the reference counts
+> > of the policy struct.
+> > Decrement the reference count once the policy struct is not used
+> > anymore.
+>
+>
+> Not sure if the tag there will be caught properly. Usually it goes on
+> top of the Signed-off-by.
+>
+> While at it:
+>
+> Reviewed-by: Vincent Donnefort <vincent.donnefort@arm.com>
+>
+> Thanks for fixing this.
+
+Applied as 5.19 material, thanks!

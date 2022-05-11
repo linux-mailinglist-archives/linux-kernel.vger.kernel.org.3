@@ -2,86 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC32523588
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ABE6523591
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244788AbiEKObX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 10:31:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45444 "EHLO
+        id S244703AbiEKOcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 10:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244700AbiEKOa6 (ORCPT
+        with ESMTP id S244694AbiEKOcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 10:30:58 -0400
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF01D53B66;
-        Wed, 11 May 2022 07:30:56 -0700 (PDT)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-ed9ac77cbbso3041160fac.1;
-        Wed, 11 May 2022 07:30:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Mp6dTbokvQGCqhdm89KjWBFi8stC9bHFTBWdjBNBqBw=;
-        b=hP9hCRHNFua4ZCvi6c0rVeP2fEfLZ3Y1zqxuY86oPfL6JDJtjWwaK267BVWNqxkuxK
-         dnWlsVRC2bsKR9X+NHO0h9bvObkxiNoCkEFwavhQP4ceY0n7+YVhf4j4u7InjNl+zJjX
-         lgdmWKZu+9tGaDIPJBSpslt2Je65ni7p0wu40eKyTsHz0/qzGZbtBY4FNfT0y5eE6KfQ
-         Bm8nqPQUzt/J6mXVFc9qiTe4xUGLelqBNnuxALBHRfo7pydDT0/erhh9HwVOjijXn8hr
-         sAi8RFmJBolGoe4jyEefJQT93BHedZTHSB2IHEC+7Uv7D1mSijHiLHBKN7inSnDaPLBl
-         dkbA==
-X-Gm-Message-State: AOAM533AWLttiZ44V3LvcZ0nvFEwN5cFy4Fx0OtpfnHht8DoQyHdZREi
-        hBpIt55YAdyLsm31JtICZQ==
-X-Google-Smtp-Source: ABdhPJzrzFc0fZ7+LrYKUTYDibPYbzEg//RObkHsFf1tLCR7BDw2r72XuTFEFO0zWdV4Qjlt6iDktg==
-X-Received: by 2002:a05:6870:2e06:b0:ee:e90:7e65 with SMTP id oi6-20020a0568702e0600b000ee0e907e65mr2780364oab.49.1652279456231;
-        Wed, 11 May 2022 07:30:56 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 22-20020aca2116000000b00325cda1ff8esm803219oiz.13.2022.05.11.07.30.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 07:30:55 -0700 (PDT)
-Received: (nullmailer pid 263258 invoked by uid 1000);
-        Wed, 11 May 2022 14:30:54 -0000
-Date:   Wed, 11 May 2022 09:30:54 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     p.zabel@pengutronix.de, daniel@ffwll.ch, robh+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org, chunkuang.hu@kernel.org,
-        xinlei.lee@mediatek.com, dri-devel@lists.freedesktop.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-        airlied@linux.ie, matthias.bgg@gmail.com, jitao.shi@mediatek.com,
-        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v6 1/4] dt-bindings: display: mediatek: dsi: Convert
- dsi_dtbinding to .yaml
-Message-ID: <20220511143054.GA263204-robh@kernel.org>
-References: <20220504091923.2219-1-rex-bc.chen@mediatek.com>
- <20220504091923.2219-2-rex-bc.chen@mediatek.com>
+        Wed, 11 May 2022 10:32:12 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527B35AEF9
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:32:11 -0700 (PDT)
+Received: from mail-yb1-f175.google.com ([209.85.219.175]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1M1qfu-1nmaSP1QVc-002CQH for <linux-kernel@vger.kernel.org>; Wed, 11 May
+ 2022 16:32:09 +0200
+Received: by mail-yb1-f175.google.com with SMTP id i38so4307096ybj.13
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:32:09 -0700 (PDT)
+X-Gm-Message-State: AOAM532P+RNLufug+EOuyGH0/0qb8/6NSaNmqDNdl1++Tw6Y5NFiTcLE
+        UaODPs9KbYrlU5YZcnrp3etFSgPqKvDLmVrx0LE=
+X-Google-Smtp-Source: ABdhPJxaOxs7Cvyz95djOd/9PFJGLZIvCztyvC00pvhe69fN5VCHZPMM6UvxixpNKUFijbzu95cTBJHGpgaLJNAHgSI=
+X-Received: by 2002:a25:31c2:0:b0:641:660f:230f with SMTP id
+ x185-20020a2531c2000000b00641660f230fmr23401326ybx.472.1652279528106; Wed, 11
+ May 2022 07:32:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220504091923.2219-2-rex-bc.chen@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220506192957.24889-1-nick.hawkins@hpe.com> <CAK8P3a045Di_zRomezeah0ZoSGPw0Z6YoYkZtoxx1qOXAtKbbw@mail.gmail.com>
+ <7C103AEB-3111-4AE6-9645-CF590388A879@hpe.com> <CAK8P3a0OS+4XTG9VmfPwbuQoT+_G5-fSatbJ0g8Y7Y+O6-3YLQ@mail.gmail.com>
+ <20220510141124.GB28104@willie-the-truck> <PH0PR84MB171830414ADC0DD69BD4116788C89@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+ <CAK8P3a1AG5RXW74LbskwMh1yJzXUjrzdL=iqaVz_7W2hExVuGw@mail.gmail.com> <YnvIGOpL06ZtbJgR@shell.armlinux.org.uk>
+In-Reply-To: <YnvIGOpL06ZtbJgR@shell.armlinux.org.uk>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 11 May 2022 16:31:51 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1GX=PgJU8UtH2u1yj0STFMv+9tr+pZBV4vvW+1iEQLDg@mail.gmail.com>
+Message-ID: <CAK8P3a1GX=PgJU8UtH2u1yj0STFMv+9tr+pZBV4vvW+1iEQLDg@mail.gmail.com>
+Subject: Re: [PATCH v1] ARM: A9: Add ARM ERRATA 764319 workaround
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "Hawkins, Nick" <nick.hawkins@hpe.com>,
+        Will Deacon <will@kernel.org>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Joel Stanley <joel@jms.id.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:8Salp2wJZj3Gzv6vVdggpn7TUtptCLsLTTuUDCj7r4icscZN/CS
+ 0qp90+/cRHHcx9ZSH4qlYdRBFf0slYJBcIfW/+/lP1Zh+gmR95umN1jgK42ETrm4e+QHWdi
+ h/zUAvW5C1jLOVUUwbaZAmq5yjn2cSdm/nBfidGaXyHD7edbthX5v/KqStW7kB5vmVU3Dps
+ xb7elaAFTwSilHoy989aw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:9k/ndWWP8ak=:rev2PVL3zuqftvezxHsYiG
+ skDjXfF21sXd4EJbJwMuR5GT2LGNa9Gext7Mfw4A3nB5d8i0FCRJqpRQaQKJul8kqIW9vkwke
+ mD4Kdk3ZjtUVtFzytKa/1+uge9rw9AZ7e+jp8tpik9bCUCMCdt1o3S9OqX3VfedWvYPSItotv
+ JZYRvDdQwOhLcgez/AkITzoI6gsECR9w4bSFfI5tgO6z6eDXtGMYVA8C9/1o17b06yW6MKXmz
+ 8U5f6irrkkOaaXhborBwkpBa1QnD7hmp8TzSmAnjtImo8TyJWMVXexryl94lKfnRy7x8GWXfp
+ bEQWV2BiHyltzkxyugpBviWawOYXtLTZw+9ZYLDsXBGXeH3MXn4aCm6XrHR17J9T0COF86wXM
+ H/RzLer6OUXPSU1CysZcihijsJI/sZyR0YYgi1T0u9DGpuPLeC72iCSDWtLBVXfoTEDOGAojC
+ XTzQ5fK99ZUDKpalf8pX97TIvw/BSx4twcVLtz9qIhc/eeBmwdxkxHKvYOq4J+ALgadpZXced
+ oZKI+oXUawDKIU9/CIu9aq7M3auY49k2/uhIXSMDBw9128AFrdgE5BrtLkZDzedvoqCVcvHs/
+ N2qoEo57wKxZ24oOZTVXvxEGbQUa+2yaVN39ggh9ObGeMcDYV2b0rXvXG8Qy0Vu1N+2ElYP6K
+ bC5YpUE6H964R7QW/cAlnpBt6RvX5lUH9fPI3HD2WDmawWOP3LjI9eCBCt41NTzIbtmg=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 04 May 2022 17:19:20 +0800, Rex-BC Chen wrote:
-> From: Xinlei Lee <xinlei.lee@mediatek.com>
-> 
-> Convert mediatek,dsi.txt to mediatek,dsi.yaml format
-> 
-> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> ---
->  .../display/mediatek/mediatek,dsi.txt         |  62 ----------
->  .../display/mediatek/mediatek,dsi.yaml        | 115 ++++++++++++++++++
->  2 files changed, 115 insertions(+), 62 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
->  create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yaml
-> 
+On Wed, May 11, 2022 at 4:28 PM Russell King (Oracle)
+<linux@armlinux.org.uk> wrote:
+>
+> On Wed, May 11, 2022 at 02:45:27PM +0200, Arnd Bergmann wrote:
+> > If it doesn't work, then there is no point trying. You could try
+> > changing the exception handling so it searches the ex_table for
+> > Undefined Instruction exceptions as well, but that's probably more
+> > complicated.
+>
+> What's the point when we have the undef hook?
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+It seemed a little easier to follow the code flow if things are in
+one place.
+
+        Arnd

@@ -2,143 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F93523CF6
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:59:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B35DE523CFF
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:03:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346521AbiEKS7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 14:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
+        id S1346559AbiEKTDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 15:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346513AbiEKS7j (ORCPT
+        with ESMTP id S241347AbiEKTDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 14:59:39 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CEED6D4C3
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:59:38 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id v11so2760432pff.6
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:59:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=2MbxQToswSlU3uGoWcNi5INJYQyZuFk9/eAJQ7cdhmM=;
-        b=CAnupYTRbk5GC5fKicsn72UhgiuO5+FGnHpN87ZAcpAMVTT4w/YH0sYOJ9/Tc0RzxO
-         lQCza6ElQrlD7hiEde2IBjhNwEFNRpfIueSDbPkO7C+mO/Nl7pyoMf/XiMK/Bs8vcn+s
-         31Yx8MEdBlvr8VlIy/C27slzdi8rukc9+gAXnIE284BO3FYVBjNKVIlJ7W0eB5J9VuYJ
-         8KXyHs1ICf3Hn/Q1lEQWNtVn8DP8lwdxoO+lq9VY7lOInslCI7HV00mzbUq8bxf57lVE
-         uVZrHtFwPw3FGwLhoXTPPLgl5vO4eQnTL0pqdJZsUITCwcR3xQVeYjkdmHCnGk0PH94h
-         BN/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=2MbxQToswSlU3uGoWcNi5INJYQyZuFk9/eAJQ7cdhmM=;
-        b=5JUyPQBT8DDyMVrmhy2YAMg1du+07v2FTvWTsAKF84MlavAQ7CK+vJdcwbqXusy2oW
-         hKeOWso9QH9oV1TYTpHr7KBnEcFqLVm0WzY25k94GuMylil82TwmlZxedsemmBY2nBMN
-         DWdIA3a3Rfz3Q36qCMmaFmSvtiq2I7VpvpmwQTiWsSVCzn8JSSvksI0ZBlHTCv8ALcPk
-         7aCQmdRiDVDFBrw8MyjlPTR0P2hvPu6EdW9exL60fIfBbBiZLv9O1TwPqNboVqURCD2+
-         XxDnRUyICt3yTUZikMkzyiba+5aormpyJ8EG7oOiLul1W69ehv/FkatRP4B1KawT++tZ
-         Ecng==
-X-Gm-Message-State: AOAM533yU2Nn6LtXEYk2sJKy9V0JaYdM8TlgAPiRW/N0tT9w7t57HBMk
-        qFeKLlIndqqUrqvNfwSuVtu84A==
-X-Google-Smtp-Source: ABdhPJz9bBTfcx7W1OwKidWuK66EB5cdlNK1lVelNf4ILnzBY58KVHr7ms6mzbrWQdITVzEymsyxoA==
-X-Received: by 2002:a63:5552:0:b0:3c2:363b:abe1 with SMTP id f18-20020a635552000000b003c2363babe1mr21396007pgm.304.1652295577623;
-        Wed, 11 May 2022 11:59:37 -0700 (PDT)
-Received: from localhost.localdomain ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id a19-20020a17090aa51300b001d5c571f487sm280709pjq.25.2022.05.11.11.59.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 11:59:37 -0700 (PDT)
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-To:     linkinjeon@kernel.org
-Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+a4087e40b9c13aad7892@syzkaller.appspotmail.com
-Subject: [PATCH v2 2/2] exfat: check if cluster num is valid
-Date:   Wed, 11 May 2022 11:59:09 -0700
-Message-Id: <20220511185909.175110-2-tadeusz.struk@linaro.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220511185909.175110-1-tadeusz.struk@linaro.org>
-References: <20220511185909.175110-1-tadeusz.struk@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 11 May 2022 15:03:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B11861296
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:03:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8FEDB8260A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 19:03:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C577C340EE
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 19:03:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652295816;
+        bh=sgS8I586wmxDsWEfk8EYenY4Nf+IiynsiclSqvw9c1I=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=APM+OUuxz0Q71LKdL40gVite+fbwNKwg6+VMNJLoq/G6tlH1XJbvRYImhu+2++Umi
+         JsOeeZFuukrZVpnHB7HXoe1NrSLDWxH/RLqopHOMjeeVHSZpLUiMgjWNb7LW75o6BX
+         QRTx7oIxDHvPsEVw7sugtR6TtZC83Y2u/KzGScwYZBYIsXxmKIXZfPazja0bRPMhAi
+         3qbwb3bvfTnibHOz/Z1/VTrQnIxJRM3Yxp/zmyeqCNnwHxLjoR299kQpjQNAGf+bnB
+         lZ9NfJuKXaAKp4FIomshX2MjRHBnx8ZulNzODN2Kc6jrm2882UyovgNnlC0iGZYCi7
+         gCph4X0krdV0A==
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 1D84A27C0054;
+        Wed, 11 May 2022 15:03:35 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute2.internal (MEProxy); Wed, 11 May 2022 15:03:35 -0400
+X-ME-Sender: <xms:hgh8Yu-dz_mlCRNjfcHn9MpXJJV3pxMqwGNHu0olOOtuPbqGIDkAYA>
+    <xme:hgh8YusUlQfohxBXD6x1B10kJZ82VE59cjGeDiMm0IH9mHvL-KL8LCK7yTac8JPWu
+    fmnyHBIqU6Pdu54NCM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgeehgdduvdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
+    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepvdfhuedvtdfhudffhfekkefftefghfeltdelgeffteehueegjeff
+    udehgfetiefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
+    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
+    igrdhluhhtohdruhhs
+X-ME-Proxy: <xmx:hgh8YkBiSTUpSJDR9W0K_D3Zni7UPGuXHNwVuPtlVuFluNanzWfynw>
+    <xmx:hgh8YmfBZ_YXPenT3oE94DDVrH6lERAtxmE4KjRjgyswkU4wEXADUA>
+    <xmx:hgh8YjOnJ_vEy9VgIikDXF1o_SSSjBleedcopheJOUpv5ugKYz_iEg>
+    <xmx:hwh8Yp3yuDyBI5CFW6tKvuSTODiqwZhhasMLOaDnJGFgU6XVauuJsw>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B961331A005D; Wed, 11 May 2022 15:03:34 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-591-gfe6c3a2700-fm-20220427.001-gfe6c3a27
+Mime-Version: 1.0
+Message-Id: <7c87b9f7-0a26-41cf-ba34-3dbd37caa2b8@www.fastmail.com>
+In-Reply-To: <87o803dijt.fsf@oldenburg.str.redhat.com>
+References: <898932fe61db6a9d61bc2458fa2f6049f1ca9f5c.1652290558.git.luto@kernel.org>
+ <87o803dijt.fsf@oldenburg.str.redhat.com>
+Date:   Wed, 11 May 2022 12:03:14 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Florian Weimer" <fweimer@redhat.com>
+Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "Kees Cook" <keescook@chromium.org>
+Subject: Re: [PATCH] x86/vsyscall: Remove CONFIG_LEGACY_VSYSCALL_EMULATE
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzbot reported slab-out-of-bounds read in exfat_clear_bitmap.
-This was triggered by reproducer calling truncute with size 0,
-which causes the following trace:
 
-BUG: KASAN: slab-out-of-bounds in exfat_clear_bitmap+0x147/0x490 fs/exfat/balloc.c:174
-Read of size 8 at addr ffff888115aa9508 by task syz-executor251/365
 
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack_lvl+0x1e2/0x24b lib/dump_stack.c:118
- print_address_description+0x81/0x3c0 mm/kasan/report.c:233
- __kasan_report mm/kasan/report.c:419 [inline]
- kasan_report+0x1a4/0x1f0 mm/kasan/report.c:436
- __asan_report_load8_noabort+0x14/0x20 mm/kasan/report_generic.c:309
- exfat_clear_bitmap+0x147/0x490 fs/exfat/balloc.c:174
- exfat_free_cluster+0x25a/0x4a0 fs/exfat/fatent.c:181
- __exfat_truncate+0x99e/0xe00 fs/exfat/file.c:217
- exfat_truncate+0x11b/0x4f0 fs/exfat/file.c:243
- exfat_setattr+0xa03/0xd40 fs/exfat/file.c:339
- notify_change+0xb76/0xe10 fs/attr.c:336
- do_truncate+0x1ea/0x2d0 fs/open.c:65
+On Wed, May 11, 2022, at 11:35 AM, Florian Weimer wrote:
+> * Andy Lutomirski:
+>
+>> CONFIG_LEGACY_VSYSCALL_EMULATE is, as far as I know, only needed for the
+>> combined use of exotic and outdated debugging mechanisms with outdated
+>> binaries.  At this point, no one should be using it.  We would like to
+>> implement dynamic switching of vsyscalls, but this is much more
+>> complicated to support in EMULATE mode than XONLY mode.
+>>
+>> So let's force all the distros off of EMULATE mode.  If anyone actually
+>> needs it, they can set vsyscall=emulate, and we can then get away with
+>> refusing to support newer security models if that option is set.
+>>
+>> Cc: x86@kernel.org
+>> Cc: Kees Cook <keescook@chromium.org>
+>> Cc: Florian Weimer <fweimer@redhat.com>
+>> Signed-off-by: Andy Lutomirski <luto@kernel.org>
+>
+> Sounds a good idea to me.
+>
+> Acked-by: Florian Weimer <fweimer@redhat.com>
+>
+> Regarding the mechanics, is it customary to remove the actual code (the
+> EMULATE enum constant) in later commits?
+>
 
-Add checks to validate if cluster number is within valid range in
-exfat_clear_bitmap() and exfat_set_bitmap()
-
-Cc: Namjae Jeon <linkinjeon@kernel.org>
-Cc: Sungjong Seo <sj1557.seo@samsung.com>
-Cc: linux-fsdevel@vger.kernel.org
-Cc: stable@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-
-Link: https://syzkaller.appspot.com/bug?id=50381fc73821ecae743b8cf24b4c9a04776f767c
-Reported-by: syzbot+a4087e40b9c13aad7892@syzkaller.appspotmail.com
-Fixes: 1e49a94cf707 ("exfat: add bitmap operations")
-Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
----
-v2:
- - Use is_valid_cluster() helper to validate clu
----
- fs/exfat/balloc.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/fs/exfat/balloc.c b/fs/exfat/balloc.c
-index 03f142307174..92f5b5b5a0d0 100644
---- a/fs/exfat/balloc.c
-+++ b/fs/exfat/balloc.c
-@@ -149,6 +149,9 @@ int exfat_set_bitmap(struct inode *inode, unsigned int clu, bool sync)
- 	struct exfat_sb_info *sbi = EXFAT_SB(sb);
- 
- 	WARN_ON(clu < EXFAT_FIRST_CLUSTER);
-+	if (!is_valid_cluster(sbi, clu))
-+		return -EINVAL;
-+
- 	ent_idx = CLUSTER_TO_BITMAP_ENT(clu);
- 	i = BITMAP_OFFSET_SECTOR_INDEX(sb, ent_idx);
- 	b = BITMAP_OFFSET_BIT_IN_SECTOR(sb, ent_idx);
-@@ -167,6 +170,9 @@ void exfat_clear_bitmap(struct inode *inode, unsigned int clu, bool sync)
- 	struct exfat_mount_options *opts = &sbi->options;
- 
- 	WARN_ON(clu < EXFAT_FIRST_CLUSTER);
-+	if (!is_valid_cluster(sbi, clu))
-+		return;
-+
- 	ent_idx = CLUSTER_TO_BITMAP_ENT(clu);
- 	i = BITMAP_OFFSET_SECTOR_INDEX(sb, ent_idx);
- 	b = BITMAP_OFFSET_BIT_IN_SECTOR(sb, ent_idx);
--- 
-2.36.1
-
+Might be several versions later. This patch intentionally still supports booting with vsyscall=emulate.

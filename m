@@ -2,178 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF9D523B4F
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A319523B50
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345410AbiEKRRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 13:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51138 "EHLO
+        id S233456AbiEKRRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 13:17:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345395AbiEKRRn (ORCPT
+        with ESMTP id S1345414AbiEKRRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 13:17:43 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1038B68FBC;
-        Wed, 11 May 2022 10:17:34 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-ed9ac77cbbso3622896fac.1;
-        Wed, 11 May 2022 10:17:34 -0700 (PDT)
+        Wed, 11 May 2022 13:17:50 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD52930F71;
+        Wed, 11 May 2022 10:17:46 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id m23so3523953ljc.0;
+        Wed, 11 May 2022 10:17:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=6KyyMkeo+AlJ0nOsy4nLJ1EEoBetcYQI533KSovi9IQ=;
-        b=dqHlKdpugl+Lt+eshvhbrTej6F20MWqj4mrStBx72ebHKnocMaiudq80COa4hILLwu
-         w/d+K0syWHZgajRyt7DlYED6M1B1nw37ql3s2sRPfJ64eDweK7OGG9uk4TgqWazhKWQK
-         IG27Aee4rt/8VZpRSd/EhpQhTwpWJg1wd3Y9vjkVccsf1PBM8o+NWcKoosMT1UrmVhtm
-         wx7ZAW212rJ6tl84HSUcrFCbtwqIPe0q4duIKxagafA8pQnfUcqXtiR9gws8g+4hJ5w+
-         MctGYYbiI+Y+7DLR32NWAdj0ywJ4RtDuuZ0vh9OBHRl3YPfmAMhnsNuCCv0xoHrPY1G7
-         pGgQ==
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4shk/CFdwB+jdtX/kM3BN61QJ7y5MajfTZDkj9q4lg0=;
+        b=m7eZoto43lLIN9BJFMhFHJBsXpjcS7x2NanD1SJhIOCOr6I9zVU4W780Azz7tEbJO/
+         tITybLX7GrDPCTevuEeetGO4vnjJkfrJCmM4ifKOkG5WUIeeZn6xns4pVWp+QFY7lYyt
+         f19Qi1fubXRm4XPIDgQUcjgFFE3Em7BwCxklzJN8iuvP+RdKZfPBR5ErQ4w7My3mhqz5
+         3MQdhy4caYOKfS6x/PZrfeJWOOWNJKG+KgKZTSg3J/Xb+bjxLjVJKLeSDpcEznlmpqGa
+         Ig4gimOdo1RKNFYoxTF8XNWDsi+d4jPd74U9EHmZfBbA48HLEmDtCIdfct63VYpaFQ84
+         RHSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=6KyyMkeo+AlJ0nOsy4nLJ1EEoBetcYQI533KSovi9IQ=;
-        b=NPXkvDrYVxs6R+dkSEMWBl3mS2JPWYOsKOwqVlLYv0cPgh0z90agDxvhMuDt4CUpwB
-         4EEmqFHTrAoX0KqtGcv5uXg3h9q947nip0qX3eU6pzufreW6+VnfCylEX8/AQUR+3w4O
-         rtTkm4QhEsyzvVEkL+zQ2jAhm+QmnwzPm6Va3hu8R0/ho3qVa7Zk20EK+xb3l93RBlkL
-         vQQxlXE3uhz82yKfpdnJzZSYUxvPWyGQz1XFCmit+2bJ8J9spNQ7+x1Ti8n5MxNCdsz0
-         ztm9K8+i7BB0XADrVyIcZq8/tSYGh3YfjOjqXUVfcGD2AxdPXp+5kYV/lFcHsHHqeGdY
-         3dlQ==
-X-Gm-Message-State: AOAM5339sS7HHejGl0972fIFwSZUR6pTl7A8x6rIKNCQ13dUtwRQPXTA
-        gLdqk7k/COHzLExIE7KifOg=
-X-Google-Smtp-Source: ABdhPJxR6N0xVPBDvw47sZ2LDM5btOtf+0ie7Vjo27VUnR+DXIE9tDW6vaoMtPS6MoeLN7FLvAa+8w==
-X-Received: by 2002:a05:6870:1781:b0:e2:f30d:3a6c with SMTP id r1-20020a056870178100b000e2f30d3a6cmr3288738oae.142.1652289454084;
-        Wed, 11 May 2022 10:17:34 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p132-20020aca5b8a000000b00325cda1ff9fsm946219oib.30.2022.05.11.10.17.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 10:17:33 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8c84428c-2740-4046-74c9-298b854944d0@roeck-us.net>
-Date:   Wed, 11 May 2022 10:17:30 -0700
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4shk/CFdwB+jdtX/kM3BN61QJ7y5MajfTZDkj9q4lg0=;
+        b=Mf8lbgkMyNnowyqmaGURuILaph1IeQRf3TXDCwlZX33AkG/W1kbqWLurzq8IRMzwiu
+         sPybgzdQ/WBuWJBx2TNNng2QGIFVYFh1haoggGqEhUGge4MD/F5u8cW7t3pX86/JZpKV
+         lho4ucXvxuQGbYIodIbYFzw0Cpmtrzy5t/D9pcdFD96fVsAgiR1nINSf0UyjHA8+ntaB
+         ZWrEkl/e4xbu1aWbdtQsVK/zE0jk1+RQOGaO7UhUdO93xsmIByD/9Fy4KPjyjTeaHZi2
+         X1qvlWi6nb0zsBdsJ5TL2Xw2RvnqHWaBWasusvyApjY7vMQTVlpcNNxjLB+ucHEegaxx
+         W0JQ==
+X-Gm-Message-State: AOAM5327WmDf1udUmJFI8G7mws3ZdynVfjhq6ekQN94b7boxJpNYl3Zf
+        GhzC82wrB77HQMOCokRP0Z4=
+X-Google-Smtp-Source: ABdhPJyFQOEeDsyyyxoVt+Ott5Ta5VwX0FzCm1OMpBV4EYO/VTXxfI+8bDid7mPvGwZIPaFNt2RdEA==
+X-Received: by 2002:a05:651c:158b:b0:250:a056:7e48 with SMTP id h11-20020a05651c158b00b00250a0567e48mr17856727ljq.64.1652289464987;
+        Wed, 11 May 2022 10:17:44 -0700 (PDT)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id t12-20020a2e9d0c000000b0024f3d1daecesm441662lji.86.2022.05.11.10.17.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 10:17:44 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
+Date:   Wed, 11 May 2022 19:17:42 +0200
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Alison Chaiken <achaiken@aurora.tech>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH] rcu/nocb: Add an option to ON/OFF an offloading from RT
+ context
+Message-ID: <Ynvvto4xcK1dn8iA@pc638.lan>
+References: <CAEXW_YQ9t8gxp9cKCpba+e4NZ6ohPr8jHxJYuqRBFRtvSDa0Lw@mail.gmail.com>
+ <20220509033740.GM1790663@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YSbWetMt2_-m4G9Nt5S8ybATihB+5FMJMMo3jKDG4pPjg@mail.gmail.com>
+ <20220509181417.GO1790663@paulmck-ThinkPad-P17-Gen-1>
+ <YnldSkaWu40cVimj@pc638.lan>
+ <20220510100135.62a4f7df@gandalf.local.home>
+ <Ynu8rM42aSyGN7li@pc638.lan>
+ <20220511102957.56bd582b@gandalf.local.home>
+ <YnvNbRcd3KRfQW3C@pc638.lan>
+ <YnvN3PPds3BlZ5fi@pc638.lan>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     Sam Ravnborg <sam@ravnborg.org>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Helge Deller <deller@gmx.de>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel test robot <lkp@intel.com>,
-        Jens Frederich <jfrederich@gmail.com>,
-        Jon Nettleton <jon.nettleton@gmail.com>,
-        linux-staging@lists.linux.dev,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthew Wilcox <willy@infradead.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Zheyu Ma <zheyuma97@gmail.com>
-References: <20220511112438.1251024-1-javierm@redhat.com>
- <20220511113230.1252910-1-javierm@redhat.com> <YnvrxICnisXU6I1y@ravnborg.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v5 7/7] fbdev: Make registered_fb[] private to fbmem.c
-In-Reply-To: <YnvrxICnisXU6I1y@ravnborg.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnvN3PPds3BlZ5fi@pc638.lan>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/11/22 10:00, Sam Ravnborg wrote:
-> Hi Javier.
+> > On Wed, May 11, 2022 at 10:29:57AM -0400, Steven Rostedt wrote:
+> > > On Wed, 11 May 2022 15:39:56 +0200
+> > > Uladzislau Rezki <urezki@gmail.com> wrote:
+> > > 
+> > > > <snip>
+> > > >  rcuop/6-54  [000] .N..  183.753018: rcu_invoke_callback:  rcu_preempt rhp=0xffffff88ffd440b0 func=__d_free.cfi_jt
+> > > >  rcuop/6-54  [000] .N..  183.753020: rcu_invoke_callback:  rcu_preempt rhp=0xffffff892ffd8400 func=inode_free_by_rcu.cfi_jt
+> > > >  rcuop/6-54  [000] .N..  183.753021: rcu_invoke_callback:  rcu_preempt rhp=0xffffff89327cd708 func=i_callback.cfi_jt
+> > > >  ... 
+> > > >  rcuop/6-54  [000] .N..  183.755941: rcu_invoke_callback:  rcu_preempt rhp=0xffffff8993c5a968 func=i_callback.cfi_jt
+> > > >  rcuop/6-54  [000] .N..  183.755942: rcu_invoke_callback:  rcu_preempt rhp=0xffffff8993c4bd20 func=__d_free.cfi_jt
+> > > >  rcuop/6-54  [000] dN..  183.755944: rcu_batch_end:        rcu_preempt CBs-invoked=2112 idle=>c<>c<>c<>c<
+> > > >  rcuop/6-54  [000] dN..  183.755946: rcu_utilization:      Start context switch
+> > > >  rcuop/6-54  [000] dN..  183.755946: rcu_utilization:      End context switch
+> > > > <snip>
+> > > > 
+> > > > i spent some time in order to understand why the context was not switched,
+> > > > even though the "rcuop" kthread was marked as TIF_NEED_RESCHED and an IPI
+> > > > was sent to the CPU_0 to reschedule. The last "." in latency field shows
+> > > > that a context has not disabled any preemption. So everything should be fine.
+> > > > 
+> > > > An explanation is that a local_bh_disable() modifies the current_thread_info()->preempt.count
+> > > > so a task becomes non preemtable but the ftrace does not provide any signal about
+> > > > it. So i was fooled for some time by my tracer logs.
+> > > > 
+> > > > Do you have any thoughts about it? Should it be solved or signaled
+> > > > somehow that a task in fact is not preemtable if a counter > 0?
+> > > 
+> > > Hmm, it should show it in the first part (where the 'd' is). Is this a
+> > > snapshot from the kernel or from trace-cmd?
+> > > 
+> > I do both and the behavior is the same. But the above one looks like a
+> > kernel trace output, the trace-cmd snapshot looks differently. So you
+> > mean "s" has to be there then?
+> > 
+> > <snip>
+> > 	entry->preempt_count		= pc & 0xff;
+> > 	entry->pid			= (tsk) ? tsk->pid : 0;
+> > 	entry->type			= type;
+> > 	entry->flags =
+> > #ifdef CONFIG_TRACE_IRQFLAGS_SUPPORT
+> > 		(irqs_disabled_flags(flags) ? TRACE_FLAG_IRQS_OFF : 0) |
+> > #else
+> > 		TRACE_FLAG_IRQS_NOSUPPORT |
+> > #endif
+> > 		((pc & NMI_MASK    ) ? TRACE_FLAG_NMI     : 0) |
+> > 		((pc & HARDIRQ_MASK) ? TRACE_FLAG_HARDIRQ : 0) |
+> > 		((pc & SOFTIRQ_OFFSET) ? TRACE_FLAG_SOFTIRQ : 0) |
+> > 		(tif_need_resched() ? TRACE_FLAG_NEED_RESCHED : 0) |
+> > 		(test_preempt_need_resched() ? TRACE_FLAG_PREEMPT_RESCHED : 0);
+> > <snip>
+> > 
+> > BTW, i am not the 5.10 kernel. I have not checked the latest kernel
+> > and what ftrace reports under holding local_bh_disable().
+> >
+> Sorry, the was a typo. I am checking 5.10 kernel and the trace was taken
+> on that kernel.
 > 
-> On Wed, May 11, 2022 at 01:32:30PM +0200, Javier Martinez Canillas wrote:
->> From: Daniel Vetter <daniel.vetter@ffwll.ch>
->>
->> Well except when the olpc dcon fbdev driver is enabled, that thing
->> digs around in there in rather unfixable ways.
->>
->> Cc oldc_dcon maintainers as fyi.
-> 
-> Another way to fix this is to mark FB_OLPC_DCON and add a TODO entry to
-> fix this. We are really not supposed to carry such special code around
-> to keep staging working.
-> 
-> I know this may not be a popular viewpoint, but just look at the ugly
-> workarounds required here.
-> 
-> 	Sam
-> 
-> 
->>
->> v2: I typoed the config name (0day)
->>
->> Cc: kernel test robot <lkp@intel.com>
->> Cc: Jens Frederich <jfrederich@gmail.com>
->> Cc: Jon Nettleton <jon.nettleton@gmail.com>
->> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Cc: linux-staging@lists.linux.dev
->> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
->> Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
->> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
->> Cc: Daniel Vetter <daniel@ffwll.ch>
->> Cc: Helge Deller <deller@gmx.de>
->> Cc: Matthew Wilcox <willy@infradead.org>
->> Cc: Sam Ravnborg <sam@ravnborg.org>
->> Cc: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
->> Cc: Zhen Lei <thunder.leizhen@huawei.com>
->> Cc: Alex Deucher <alexander.deucher@amd.com>
->> Cc: Xiyu Yang <xiyuyang19@fudan.edu.cn>
->> Cc: linux-fbdev@vger.kernel.org
->> Cc: Zheyu Ma <zheyuma97@gmail.com>
->> Cc: Guenter Roeck <linux@roeck-us.net>
->> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
->> ---
->>
->> (no changes since v1)
->>
->>   drivers/video/fbdev/core/fbmem.c | 8 ++++++--
->>   include/linux/fb.h               | 7 +++----
->>   2 files changed, 9 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
->> index 265efa189bcc..6cab5f4c1fb3 100644
->> --- a/drivers/video/fbdev/core/fbmem.c
->> +++ b/drivers/video/fbdev/core/fbmem.c
->> @@ -50,10 +50,14 @@
->>   static DEFINE_MUTEX(registration_lock);
->>   
->>   struct fb_info *registered_fb[FB_MAX] __read_mostly;
->> -EXPORT_SYMBOL(registered_fb);
->> -
->>   int num_registered_fb __read_mostly;
->> +#if IS_ENABLED(CONFIG_FB_OLPC_DCON)
->> +EXPORT_SYMBOL(registered_fb);
->>   EXPORT_SYMBOL(num_registered_fb);
->> +#endif
-> 
-> It is stuff like this I refer to as "ugly" in the comment above.
-> 
+OK. It was added on the latest kernel:
 
-My "solution" for that kind of thing is to use a namespace,
-such as
+root@pc638:/home/urezki# cat /sys/kernel/debug/tracing/trace_pipe
+  vmalloc_test/0-1296    [062] b....    18.157470: 0xffffffffc044e5dc: -> in the local_bh_disable()
 
-EXPORT_SYMBOL_NS(registered_fb, FB_OLPC_DCON);
-EXPORT_SYMBOL_NS(num_registered_fb, FB_OLPC_DCON);
+root@pc638:/home/urezki# cat /sys/kernel/debug/tracing/trace
+# tracer: nop
+#
+# entries-in-buffer/entries-written: 0/0   #P:64
+#
+#                                _-----=> irqs-off/BH-disabled
+#                               / _----=> need-resched
+#                              | / _---=> hardirq/softirq
+#                              || / _--=> preempt-depth
+#                              ||| / _-=> migrate-disable
+#                              |||| /     delay
+#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+#              | |         |   |||||     |         |
+root@pc638:/home/urezki# uname -a
+Linux pc638 5.17.0-rc2-next-20220201 #63 SMP PREEMPT Tue May 10 20:39:08 CEST 2022 x86_64 GNU/Linux
+root@pc638:/home/urezki#
 
-and import it from the offending code. That avoids ifdefs
-while at the same time limiting the use of the symbols
-to the expected scope. Of course that could be abused but
-that abuse would be obvious.
+so it shows *bh* disabled sections.
 
-Guenter
+--
+Uladzislau Rezki

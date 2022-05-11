@@ -2,190 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C83523723
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A37ED52372D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:24:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbiEKPXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42032 "EHLO
+        id S244825AbiEKPYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343580AbiEKPXb (ORCPT
+        with ESMTP id S1343607AbiEKPYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:23:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D5D722404B
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:23:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652282609;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QSwu7xqkqoNLt+H1Fs+CQIumcyQcOiTFfolxhe68oB0=;
-        b=bGGJXIaxT4eTG53R4qklI3Dc/tE+pP3NP5Cyn91Y58jply+yIltKxyEVhzhKnmTI62Tws/
-        ulxV/GAunXDUdSxQybYeLYeYKksO1/NuZxXFUNtragfnWYbqqlDN14eVAf5G/bsWHXHmNV
-        ocpfLCjaKFjaXHvT4sdAgzOuZQmaYA4=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-59-KxBzYXLgOU2XJmgfP0SttA-1; Wed, 11 May 2022 11:23:27 -0400
-X-MC-Unique: KxBzYXLgOU2XJmgfP0SttA-1
-Received: by mail-wm1-f69.google.com with SMTP id k16-20020a7bc310000000b0038e6cf00439so841552wmj.0
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:23:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=QSwu7xqkqoNLt+H1Fs+CQIumcyQcOiTFfolxhe68oB0=;
-        b=4CJ5gJoJOuZ6V66YF2J+mPlXEe6dgGkiJQVY7aOBGMzBNqB2HeN7ts8AiQuaGwJcwM
-         NlNAtyAuBAjCwIMEbvSRcn1DhoeH4EbcnsT93BoxoxQR3buP7b3W2c55jwehfLjrhew6
-         9gvDs+NK9aQ74ACEZpltEYfW0NMjoCJL13P9hkZOxI8IjBii5T/m+sNhJ5/pPbMbzPJR
-         pCF8G3f5jI8JqwuMH//W4TqgACR2DBdW1UIe2DNho6Ae/W5zuDm7bu70MRVbDbq7epKC
-         QnOzYx4dveT6PAMUIH0iNO1xn7Hj8sDBq9kqilP30FxpL4PuLgWMTtST4wlFT5ut7f/s
-         28HA==
-X-Gm-Message-State: AOAM533eCHmuZevQGivbndnZkA+IM4oyBBp5EJ10oPTQjXPQZMxUpX2Z
-        yj9YDSDL3/wzSwN7yl4Ew0+j8zsXFt1wCKCTMwwcgZNrUPD0FvGOtmTL5WoE1Zbts5xW8t3BiPB
-        yHiySg1EUJOtxSLOrmzVNQ0Cc
-X-Received: by 2002:a05:6000:144e:b0:20c:ab37:70f3 with SMTP id v14-20020a056000144e00b0020cab3770f3mr23119861wrx.682.1652282606801;
-        Wed, 11 May 2022 08:23:26 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzXmrCQHyV0Vzn7S9Pf5AXsxOTUZnIuFnjQeZxtcrP3EcXVkDoAgCyGtUebE34qnyln2EmSPQ==
-X-Received: by 2002:a05:6000:144e:b0:20c:ab37:70f3 with SMTP id v14-20020a056000144e00b0020cab3770f3mr23119840wrx.682.1652282606497;
-        Wed, 11 May 2022 08:23:26 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c701:700:2393:b0f4:ef08:bd51? (p200300cbc70107002393b0f4ef08bd51.dip0.t-ipconnect.de. [2003:cb:c701:700:2393:b0f4:ef08:bd51])
-        by smtp.gmail.com with ESMTPSA id i10-20020a5d630a000000b0020c5253d8d4sm1956738wru.32.2022.05.11.08.23.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 08:23:25 -0700 (PDT)
-Message-ID: <4cf144a9-fff5-d993-4fcb-7f2dfa6e71bb@redhat.com>
-Date:   Wed, 11 May 2022 17:23:25 +0200
+        Wed, 11 May 2022 11:24:08 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7B34EDE2;
+        Wed, 11 May 2022 08:24:05 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nooBr-0003aM-1O; Wed, 11 May 2022 17:23:53 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Peter Geis <pgwipeout@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Marc Zyngier <maz@kernel.org>, PCI <linux-pci@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Subject: Re: [PATCH v9 2/5] PCI: rockchip-dwc: Reset core at driver probe
+Date:   Wed, 11 May 2022 17:23:28 +0200
+Message-ID: <1860493.taCxCBeP46@diego>
+In-Reply-To: <YnvPdSPUm85Bg9zE@lpieralisi>
+References: <20220429123832.2376381-1-pgwipeout@gmail.com> <CAMdYzYqdDPUFPhAZqA71dLaf6rT9CwFqQ1dFMRbGpVMyzgT8bg@mail.gmail.com> <YnvPdSPUm85Bg9zE@lpieralisi>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-US
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     ying.huang@intel.com, hch@lst.de, dhowells@redhat.com,
-        cl@linux.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, mike.kravetz@oracle.com,
-        naoya.horiguchi@nec.com
-References: <20220425132723.34824-1-linmiaohe@huawei.com>
- <20220425132723.34824-3-linmiaohe@huawei.com>
- <525298ad-5e6a-2f8d-366d-4dcb7eebd093@redhat.com>
- <f5f933dc-450c-f3ac-34e6-d6dc1d901efd@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v2 2/4] mm/migration: remove unneeded lock page and
- PageMovable check
-In-Reply-To: <f5f933dc-450c-f3ac-34e6-d6dc1d901efd@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.05.22 10:51, Miaohe Lin wrote:
-> On 2022/4/29 18:07, David Hildenbrand wrote:
->> On 25.04.22 15:27, Miaohe Lin wrote:
->>> When non-lru movable page was freed from under us, __ClearPageMovable must
->>> have been done. Even if it's not done, ClearPageIsolated here won't hurt
->>> as page will be freed anyway. So we can thus remove unneeded lock page and
->>> PageMovable check here.
->>>
->>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->>> Reviewed-by: Christoph Hellwig <hch@lst.de>
->>> ---
->>>  mm/migrate.c | 8 ++------
->>>  1 file changed, 2 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/mm/migrate.c b/mm/migrate.c
->>> index b779646665fe..0fc4651b3e39 100644
->>> --- a/mm/migrate.c
->>> +++ b/mm/migrate.c
->>> @@ -1093,12 +1093,8 @@ static int unmap_and_move(new_page_t get_new_page,
->>>  		/* page was freed from under us. So we are done. */
->>>  		ClearPageActive(page);
->>>  		ClearPageUnevictable(page);
->>> -		if (unlikely(__PageMovable(page))) {
->>> -			lock_page(page);
->>> -			if (!PageMovable(page))
->>> -				ClearPageIsolated(page);
->>> -			unlock_page(page);
->>> -		}
->>> +		if (unlikely(__PageMovable(page)))
->>> +			ClearPageIsolated(page);
->>>  		goto out;
->>>  	}
->>
->> Hm, that code+change raises a couple of questions.
->>
->> We're doing here the same as in putback_movable_pages(). So I guess the
->> difference here is that the caller did release the reference while the
->> page was isolated, while we don't assume the same in
->> putback_movable_pages().
+Am Mittwoch, 11. Mai 2022, 17:00:05 CEST schrieb Lorenzo Pieralisi:
+> On Wed, May 11, 2022 at 10:26:20AM -0400, Peter Geis wrote:
+> > On Wed, May 11, 2022 at 9:50 AM Lorenzo Pieralisi
+> > <lorenzo.pieralisi@arm.com> wrote:
+> > >
+> > > On Fri, Apr 29, 2022 at 08:38:28AM -0400, Peter Geis wrote:
+> > > > The PCIe controller is in an unknown state at driver probe. This can
+> > > > lead to undesireable effects when the driver attempts to configure the
+> > > > controller.
+> > > >
+> > > > Prevent issues in the future by resetting the core during probe.
+> > > >
+> > > > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> > > > Tested-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+> > > > ---
+> > > >  drivers/pci/controller/dwc/pcie-dw-rockchip.c | 23 ++++++++-----------
+> > > >  1 file changed, 10 insertions(+), 13 deletions(-)
+> > >
+> > > I fear that the controller reset behaviour is bootloader/firmware
+> > > dependent.
+> > >
+> > > Are we sure we are not triggering any regressions by resetting the
+> > > controller in the middle of probe (aka is the driver implicitly
+> > > relying on existing behaviour on systems that are not the ones
+> > > you are testing on) ?
+> > >
+> > > Just asking, the rockchip maintainers should be able to answer this
+> > > question.
+> > 
+> > This is a new driver with no current users, this series enables the
+> > first user. It does not support ACPI nor any sort of handoff at this
+> > time.
 > 
-> Agree.
+> Ok. I will take patches [1-3], dts changes will have to go via
+> platform trees, I hope that's fine.
+
+yep, that sounds great and I'll pick the dts patches then :-)
+
+Thanks
+Heiko
+
+> > > > diff --git a/drivers/pci/controller/dwc/pcie-dw-rockchip.c b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
+> > > > index c9b341e55cbb..faedbd6ebc20 100644
+> > > > --- a/drivers/pci/controller/dwc/pcie-dw-rockchip.c
+> > > > +++ b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
+> > > > @@ -152,6 +152,11 @@ static int rockchip_pcie_resource_get(struct platform_device *pdev,
+> > > >       if (IS_ERR(rockchip->rst_gpio))
+> > > >               return PTR_ERR(rockchip->rst_gpio);
+> > > >
+> > > > +     rockchip->rst = devm_reset_control_array_get_exclusive(&pdev->dev);
+> > > > +     if (IS_ERR(rockchip->rst))
+> > > > +             return dev_err_probe(&pdev->dev, PTR_ERR(rockchip->rst),
+> > > > +                                  "failed to get reset lines\n");
+> > > > +
+> > > >       return 0;
+> > > >  }
+> > > >
+> > > > @@ -182,18 +187,6 @@ static void rockchip_pcie_phy_deinit(struct rockchip_pcie *rockchip)
+> > > >       phy_power_off(rockchip->phy);
+> > > >  }
+> > > >
+> > > > -static int rockchip_pcie_reset_control_release(struct rockchip_pcie *rockchip)
+> > > > -{
+> > > > -     struct device *dev = rockchip->pci.dev;
+> > > > -
+> > > > -     rockchip->rst = devm_reset_control_array_get_exclusive(dev);
+> > > > -     if (IS_ERR(rockchip->rst))
+> > > > -             return dev_err_probe(dev, PTR_ERR(rockchip->rst),
+> > > > -                                  "failed to get reset lines\n");
+> > > > -
+> > > > -     return reset_control_deassert(rockchip->rst);
+> > > > -}
+> > > > -
+> > > >  static const struct dw_pcie_ops dw_pcie_ops = {
+> > > >       .link_up = rockchip_pcie_link_up,
+> > > >       .start_link = rockchip_pcie_start_link,
+> > > > @@ -222,6 +215,10 @@ static int rockchip_pcie_probe(struct platform_device *pdev)
+> > > >       if (ret)
+> > > >               return ret;
+> > > >
+> > > > +     ret = reset_control_assert(rockchip->rst);
+> > > > +     if (ret)
+> > > > +             return ret;
+> > > > +
+> > > >       /* DON'T MOVE ME: must be enable before PHY init */
+> > > >       rockchip->vpcie3v3 = devm_regulator_get_optional(dev, "vpcie3v3");
+> > > >       if (IS_ERR(rockchip->vpcie3v3)) {
+> > > > @@ -241,7 +238,7 @@ static int rockchip_pcie_probe(struct platform_device *pdev)
+> > > >       if (ret)
+> > > >               goto disable_regulator;
+> > > >
+> > > > -     ret = rockchip_pcie_reset_control_release(rockchip);
+> > > > +     ret = reset_control_deassert(rockchip->rst);
+> > > >       if (ret)
+> > > >               goto deinit_phy;
+> > > >
+> > > > --
+> > > > 2.25.1
+> > > >
 > 
->>
->>
->> Shouldn't whoever owned the page have cleared that? IOW, is it even
->> valid that we see a movable or isolated page here (WARN/BUG?)?
->>
->> At least for balloon compaction, I remember that __PageMovable() is
->> properly cleared before freeing it via balloon_page_delete().
-> 
-> z3fold, zsmalloc will do __ClearPageMovable when the page is going to be released.
-> So I think we shouldn't see a movable page here:
-> 
-> void __ClearPageMovable(struct page *page)
-> {
-> 	VM_BUG_ON_PAGE(!PageMovable(page), page);
-> 	/*
-> 	 * Clear registered address_space val with keeping PAGE_MAPPING_MOVABLE
-> 	 * flag so that VM can catch up released page by driver after isolation.
-> 	 * With it, VM migration doesn't try to put it back.
-> 	 */
-> 	page->mapping = (void *)((unsigned long)page->mapping &
-> 				PAGE_MAPPING_MOVABLE);
-> }
-> 
-> But it seems there is no guarantee for PageIsolated flag. Or am I miss something?
 
-At least the code we have now:
 
-if (unlikely(__PageMovable(page)))
-	ClearPageIsolated(page);
 
-Should be dead code. So PG_isolated could remain set.
-
-If PG_isolated is still set, it will get cleared in the buddy when
-freeing the page via
-
-	page->flags &= ~PAGE_FLAGS_CHECK_AT_PREP;
-
-> 
->>
->>
->> Also, I am not sure how reliable that page count check is here: if we'd
->> have another speculative reference to the page, we might see
->> "page_count(page) > 1" and not take that path, although the previous
->> owner released the last reference.
-> 
-> IIUC, there should not be such speculative reference. The driver should have taken care
-> of it.
-
-How can you prevent any kind of speculative references?
-
-See isolate_movable_page() as an example, which grabs a speculative
-reference to then find out that the page is already isolated by someone
-else, to then back off.
-
--- 
-Thanks,
-
-David / dhildenb
 

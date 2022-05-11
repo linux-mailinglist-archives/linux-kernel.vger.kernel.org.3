@@ -2,67 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4074C522BE8
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 07:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93899522BEB
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 07:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238358AbiEKFvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 01:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55614 "EHLO
+        id S239547AbiEKFv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 01:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232213AbiEKFuy (ORCPT
+        with ESMTP id S232213AbiEKFvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 01:50:54 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2B215FC4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:50:52 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id y76so1973452ybe.1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:50:52 -0700 (PDT)
+        Wed, 11 May 2022 01:51:53 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663F285656;
+        Tue, 10 May 2022 22:51:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=i/cmIo8hUUQB29G/bFPFhyTqE0aa42/t3jwUy676e7s=;
-        b=PEKY1QODat+pSynvEbn5vudpvOgJ5UivB3aa+dBsz9LwnspE0wvsCD1rBSfssX0SQN
-         Hw2o96HEoJljKYWdPKnc/NITeXpfTtdzwDIVXp8Ra2rM/Niozak1TFwtLqDZ7HXR84ri
-         BmOGm4QmQaPxPtcGYGqg3QB5/e5uXGOmjm3pL/wkZtGBEL+DxEecco476rp01W7vKdfs
-         c8vcz9owwW2hFSoDmQa1TSrZMOCQQJrIa3/Ii9ThCnldZKsuAXFcQHXu43xDEgFzWfJ4
-         5xNfQDCHNcfZ2ai5Y3SchsZdltYaziqo+IsHiFUbu3aDBwkU5zuDF8xsV4EfFR1/WuLc
-         bEDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=i/cmIo8hUUQB29G/bFPFhyTqE0aa42/t3jwUy676e7s=;
-        b=HkxyGLxQ7cOjWCCYhIexAtR8Jv8Wzcg40u1AZ+bOjAnOJWYmyVsWaHAHoQQzTb2cCv
-         B0OcDd3t7c5k9w1mLaerlL6h6KvWCPDM85RNTDWqaMgcbjq0dsRs2wmNtpW3rLje0oxP
-         ZwfJo8uF0jpq/NMMaIPCnUmfyaBQ54VYywUXmI0u0TRH8m5xm5GZJF4NyLPbkUAEYT34
-         Bn26drss4HHaQDLkljt8+LN0iJ/60FBbIWqCJypz9ycFkREMt6PWlDWxTUj4F2+1EF4E
-         c9LBQFq89brNkV0Cme0GAwoYm4HV+FYAeehKZ6vZ5l7ldkG27ks5kerLK9jWeel7H0Sd
-         rzDQ==
-X-Gm-Message-State: AOAM530DhbrckgjmiVuv+lm18Q3NcNFkvTbklLTUUG1lYjyLSdI9JbWJ
-        ssjqj5Ee+nv0J7/m/D1yvwLy/c2Ae95cdof1dCKKTA==
-X-Google-Smtp-Source: ABdhPJyle61m8Y26NS30DOixvoiCtG0BEYxkH5OFZr2v1bKtkdITdjswXJueiMdAwp+DVsOQje0HWXSOUNhFPrqBe0c=
-X-Received: by 2002:a25:8045:0:b0:64a:8419:28d3 with SMTP id
- a5-20020a258045000000b0064a841928d3mr20430735ybn.494.1652248251303; Tue, 10
- May 2022 22:50:51 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652248309; x=1683784309;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=y7Ma3NU4R9DKob8KaqtrYsX/Lg7x0p6qjlq2IolMo3A=;
+  b=ybP8OunGnSp4Cg6yf4bFIX+cEWMCEBXkaTINbzLmQw8dp922yf+Pvt0s
+   6cP+R7cHE7BRGAJRIEMISBcU2NPJHlAq8fZEghVjNZCw8epRA8+P8YfFq
+   R1C9WYF/U+RoHAEIJHyTy2aqqJEXTUww8Tcf2z2IOfQIE9bEZK9sjVQ+D
+   w=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 10 May 2022 22:51:49 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 22:51:50 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 10 May 2022 22:51:50 -0700
+Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 10 May
+ 2022 22:51:46 -0700
+Subject: Re: [PATCH] remoteproc: qcom_q6v5_mss: map/unmap metadata region
+ before/after use
+To:     Matthias Kaehlcke <mka@chromium.org>
+CC:     <bjorn.andersson@linaro.org>, <arnd@arndb.de>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <sboyd@kernel.org>, <agross@kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <mathieu.poirier@linaro.org>
+References: <1651845086-16535-1-git-send-email-quic_sibis@quicinc.com>
+ <YnVj7fxUbTqkJpdz@google.com>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+Message-ID: <d6dca8a1-0986-1d56-f0bd-131bda4b1381@quicinc.com>
+Date:   Wed, 11 May 2022 11:21:43 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20220510130732.861729621@linuxfoundation.org>
-In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 11 May 2022 11:20:39 +0530
-Message-ID: <CA+G9fYukXF8L0bFG4tzWT8SeLW+Z9JjNgL5K9kQnO1Q0pkF9FA@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/70] 5.10.115-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <YnVj7fxUbTqkJpdz@google.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,162 +70,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 May 2022 at 18:56, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.115 release.
-> There are 70 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.115-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hey Matthias,
+Thanks for taking time to review the patch.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+On 5/6/22 11:37 PM, Matthias Kaehlcke wrote:
+> On Fri, May 06, 2022 at 07:21:26PM +0530, Sibi Sankar wrote:
+>> The application processor accessing the dynamically assigned metadata
+>> region after assigning it to the remote Q6 would lead to an XPU violation.
+>> Fix this by un-mapping the metadata region post firmware header copy. The
+>> metadata region is freed only after the modem Q6 is done with fw header
+>> authentication.
+>>
+>> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> 
+> Should this have a 'Fixes:' tag
+It ideally should have but similar to what we did for mba and mpss
+region map/unmap, it would be a ugly backport since it would point to
+the very first commit. We can agree to do a backport if it's ever
+reported upstream on any of the older SoCs.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+-Sibi
 
-## Build
-* kernel: 5.10.115-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: b2286cf7a6972650a6163f327d11695fa11ef6c9
-* git describe: v5.10.113-201-gb2286cf7a697
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.113-201-gb2286cf7a697
-
-## Test Regressions (compared to v5.10.113-3-gbc311a966773)
-No test regressions found.
-
-## Metric Regressions (compared to v5.10.113-3-gbc311a966773)
-No metric regressions found.
-
-## Test Fixes (compared to v5.10.113-3-gbc311a966773)
-No test fixes found.
-
-## Metric Fixes (compared to v5.10.113-3-gbc311a966773)
-No metric fixes found.
-
-## Test result summary
-total: 97056, pass: 82218, fail: 649, skip: 13165, xfail: 1024
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 291 total, 291 passed, 0 failed
-* arm64: 41 total, 41 passed, 0 failed
-* i386: 39 total, 39 passed, 0 failed
-* mips: 37 total, 37 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 60 total, 51 passed, 9 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 41 total, 41 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> 
+>> ---
+>>   drivers/remoteproc/qcom_q6v5_mss.c | 43 +++++++++++++++++++++++++++++++-------
+>>   1 file changed, 35 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
+>> index af217de75e4d..eb34a258b67b 100644
+>> --- a/drivers/remoteproc/qcom_q6v5_mss.c
+>> +++ b/drivers/remoteproc/qcom_q6v5_mss.c
+>> @@ -10,6 +10,7 @@
+>>   #include <linux/clk.h>
+>>   #include <linux/delay.h>
+>>   #include <linux/devcoredump.h>
+>> +#include <linux/dma-map-ops.h>
+>>   #include <linux/dma-mapping.h>
+>>   #include <linux/interrupt.h>
+>>   #include <linux/kernel.h>
+>> @@ -932,27 +933,52 @@ static void q6v5proc_halt_axi_port(struct q6v5 *qproc,
+>>   static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
+>>   				const char *fw_name)
+>>   {
+>> -	unsigned long dma_attrs = DMA_ATTR_FORCE_CONTIGUOUS;
+>> +	unsigned long dma_attrs = DMA_ATTR_FORCE_CONTIGUOUS | DMA_ATTR_NO_KERNEL_MAPPING;
+>> +	unsigned long flags = VM_DMA_COHERENT | VM_FLUSH_RESET_PERMS;
+>> +	struct page **pages;
+>> +	struct page *page;
+>>   	dma_addr_t phys;
+>>   	void *metadata;
+>>   	int mdata_perm;
+>>   	int xferop_ret;
+>>   	size_t size;
+>> -	void *ptr;
+>> +	void *vaddr;
+>> +	int count;
+>>   	int ret;
+>> +	int i;
+>>   
+>>   	metadata = qcom_mdt_read_metadata(fw, &size, fw_name, qproc->dev);
+>>   	if (IS_ERR(metadata))
+>>   		return PTR_ERR(metadata);
+>>   
+>> -	ptr = dma_alloc_attrs(qproc->dev, size, &phys, GFP_KERNEL, dma_attrs);
+>> -	if (!ptr) {
+>> -		kfree(metadata);
+>> +	page = dma_alloc_attrs(qproc->dev, size, &phys, GFP_KERNEL, dma_attrs);
+>> +	if (!page) {
+>>   		dev_err(qproc->dev, "failed to allocate mdt buffer\n");
+>> -		return -ENOMEM;
+>> +		ret = -ENOMEM;
+>> +		goto free_metadata;
+>> +	}
+>> +
+>> +	count = PAGE_ALIGN(size) >> PAGE_SHIFT;
+>> +	pages = kmalloc_array(count, sizeof(struct page *), GFP_KERNEL);
+>> +	if (!pages) {
+>> +		ret = -ENOMEM;
+>> +		goto free_metadata;
+>>   	}
+>>   
+>> -	memcpy(ptr, metadata, size);
+>> +	for (i = 0; i < count; i++)
+>> +		pages[i] = nth_page(page, i);
+>> +
+>> +	vaddr = vmap(pages, count, flags, dma_pgprot(qproc->dev, PAGE_KERNEL, dma_attrs));
+>> +	kfree(pages);
+>> +	if (!vaddr) {
+>> +		dev_err(qproc->dev, "unable to map memory region: %pa+%zx\n", &phys, size);
+>> +		ret = -EBUSY;
+>> +		goto free_metadata;
+>> +	}
+>> +
+>> +	memcpy(vaddr, metadata, size);
+>> +
+>> +	vunmap(vaddr);
+>>   
+>>   	/* Hypervisor mapping to access metadata by modem */
+>>   	mdata_perm = BIT(QCOM_SCM_VMID_HLOS);
+>> @@ -982,7 +1008,8 @@ static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
+>>   			 "mdt buffer not reclaimed system may become unstable\n");
+>>   
+>>   free_dma_attrs:
+>> -	dma_free_attrs(qproc->dev, size, ptr, phys, dma_attrs);
+>> +	dma_free_attrs(qproc->dev, size, page, phys, dma_attrs);
+>> +free_metadata:
+>>   	kfree(metadata);
+>>   
+>>   	return ret < 0 ? ret : 0;
+>> -- 
+>> 2.7.4
+>>

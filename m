@@ -2,62 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCABD523DB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5318A523DBC
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347069AbiEKTkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 15:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
+        id S1347098AbiEKTlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 15:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347082AbiEKTkg (ORCPT
+        with ESMTP id S243834AbiEKTls (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 15:40:36 -0400
-Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BEF021936A
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:40:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1652298027;
-        bh=VvsSj+I3QLO+GT/1Y+Fy8QHCuIf/f9a+/vykm0pmAPo=;
-        h=X-UI-Sender-Class:Date:From:Subject:To;
-        b=caKufFHpFZ/ya4QCGYXAnqfuVYr8zimRiJIqWarKdQCzjXq+eMOTNAurVWV9NiGXU
-         SY0Qy1XAGIS6esFR2qhEphr2/CwNZjyXGoBqPLdNDYAFNt1+dmpBWL9pE/MduN2Q2K
-         QQ3Z3ttML8D4Ken6So43p39J05xgFrlcsOcYg7r4=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [10.8.110.13] ([143.244.37.9]) by mail.gmx.net (mrgmx104
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1N9MpY-1nsOwp15SW-015L7Q for
- <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 21:40:27 +0200
-Message-ID: <6e63294b-399c-4c56-deb6-2997e2f87bc8@gmx.com>
-Date:   Wed, 11 May 2022 19:40:26 +0000
+        Wed, 11 May 2022 15:41:48 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4E0580EC
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:41:47 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id 3so2152884ily.2
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:41:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=e6i5T44uBpL6AH4I/98oODY9bH1Is0dBLxkQo/1EB5I=;
+        b=NV45U4dimIdg5fnEMlw5FkUkyo9qiI0LoJ4np3NyKvcVdzH/miMO0UrvorTqwMt75m
+         XQasmnHC9+eLUC5853ttxRBCuP24I2ACx2h7f1nsmBqXZGiuMf588DkRZk1PNNOYZm8j
+         RSetA5ZB4qojthI02mobgxfll0xfzcX6xoLHBtntk5nwufJd5Cn4l/nXUnjVHK/BauX2
+         b3Z4xtnuFSCJp/kP0p0R79lf2VgBAnqr5OFi+T5S/h7xGNWsVHkHHCQ2Cx8anmjqVG9m
+         gpJmOvo96vnRLjWAiA4CffOv/v4FMa9atWfIoZRMd7B+IS4/7RFbjYkDIHuuUpTlex7A
+         ODNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=e6i5T44uBpL6AH4I/98oODY9bH1Is0dBLxkQo/1EB5I=;
+        b=Wkz6+YSUv26Tk/OAODRPohHGOp9s2Hcouc+y3CgoHJVPlZhKpUBCbEwhkDEcYMbyqy
+         SrVaL+1bA45dS5EuNxUusA1QzWHXaLhONlqRRa1PN8wyZEN9eAU7/p+TTPkE6mRdKa+A
+         9GZ9CpFOjy4H8HDYKRKczrk3vLmfnoWVo8ms52eDtDmxFRtXEM6HHox2I7UUpJqmtUIN
+         nvQPbc+6/gzQ4ijYkmOJktL4k3l2U0foYxYd4GoiWxwU3rYugZJNkIUiMyL36oud2/ej
+         BacL5WPXzyatd6RdG9f+ffUHWBQshj58pbEjniPcf6X3r3DpDQslhF3cfogM+UgDU4S+
+         EFOw==
+X-Gm-Message-State: AOAM532JYacwy3zZ0NIWcdNLndG67RLDvpZjaTvxvmHqS8SV+yYHD99f
+        ufFhd+UXh7fiTlXLfM+7r1QSI9uSbkqD6ckfDh4=
+X-Google-Smtp-Source: ABdhPJwOL6t+Fg41y5fXBvxfCHaA9Qa/Z1pcr3eNcSRB5Zy7KsO6KaLemRJdrQZqW75WrQx7i2lxkjR2M6MSe7YEL+E=
+X-Received: by 2002:a05:6e02:1c82:b0:2cf:1836:2579 with SMTP id
+ w2-20020a056e021c8200b002cf18362579mr12843180ill.237.1652298107403; Wed, 11
+ May 2022 12:41:47 -0700 (PDT)
 MIME-Version: 1.0
-From:   "Artem S. Tashkinov" <aros@gmx.com>
-Subject: Linux swap file and LUKS
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:zg+vUbgnbWFN5YGjshGF+GQYkk/jwb6qZMTHkn7N1Ua5DbBAzbK
- FkIDTY/171FEMz5tcPmH9wRvMTa1heBtnPbw2OP9sf9u0LN+0owGQ+S8scW3FMUbAwXuz9D
- DKLhP1MTE+QYFcRwbPcceRIPky4YM7T3bXc3LnVWQvje45OckZM9k7rOemFHs6G3c5J1CaL
- N6RnQ+ad6yOer9ZNqPFUw==
-X-UI-Out-Filterresults: junk:10;V03:K0:KigoD8omvAA=:9pIV6fDIDc9XDNQqj/GtuaeZ
- NoczLO4B9czg86Zwv+GA0Pssi190/jZYfbGnz8ZB/qwOP0I5qnlByna+TX0ugdANAKOwsy0wI
- Kg1BDjJ625t5refy95Hk7ZiOu8v80ZhJkJln8QdorIQIs6ASBAVu1bBDbkV+K5MsAo+hfjS79
- nD312rprYHgVOa3bNiwGbUeWmrilK0J9n3n4LsdBt9rI83UI/NYtCAOIJt++QPhmEOBM1+tM8
- kBwtggEBuYaKuFbXBW35ORGG+npK6NzKG5U1EdY7TYso5pqyup1LNiZM8O3WQPqs/bUxAQQCj
- o9VWkjXuIEwSL/+KZJbxemOmQkRdJPSU5RaOsAfcjsq8c9OjZ/JeWB/WkPL4rO+Of6QdExtaJ
- QP3HzBiNKWvbOL9TUksOzDAEq0RCNZOUaA/2YZLlz770jVV+M+/u5K+3y+6wMphjjd0RvWsOL
- THi5JTfaZR9r3Ezi1HWSBfHqWa4Od2h70iyWL3LLYmphjKFMEncdeCYCxLfOSR7ceXfhtstre
- C8rg42G+jFA3SaFWuY7e8kfrQNadPEs7VaXrOx1C5xIqgYh/kLir28s8OsZZJb4kM0QRDbq+A
- kHESQczmJ2ogUc6L7sSs2SUhvUKaP+rqfk00Vo53pceOku++7fS/ryBDGyaozP6qisdcrF2Ib
- xUOgN1KEhDuEFkQh1lOm7il0U2uF5/dt56UNGqJhAaq8gP/Cn6bTok3N+D2DF08g6B3Q0QFAP
- uTjBOOOOwWY5wb7GgyydCmn/te1EyFHUY1IcrisOLNinn2pABx74O+zz0YCt7KYOV93GPNgG8
- G20SnVhCKWrJ//wwfFZ/dfgE/YSJAEJBHJqMKqKGVE9GdcOtPrtyrQhiJYqLs4qOqS3n+vgWB
- ZeocEIx22bZZ+r6ko/KLNTORfjJ1wwt+T3EsZAWkEOssY8ZT8CP9GpNGyHFtXAibIGEiF4qut
- V02uETNXPH1ee7nG02DERgGm/jQQ7OMvhbKPSK/cwUjG35mjPidTMU8YclPsq2CXE+Jbx6w9j
- duEzTZvhcjj3gdbcVCr+Hegi3Ol/PxTvd8oqyHpqpLTq2eaFaWzuW6tVItsazpwNgiqmuy6nz
- PItzFJQFj08+OPzkIHbj0v7n/QQYiOwwiuVnh0UM3unspWu3S/pOAuMy4Eg1Fy7wtsWwmgWpK
- 4M4=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220511072747.3960-1-jiangshanlai@gmail.com> <20220511072747.3960-2-jiangshanlai@gmail.com>
+ <CAKwvOdmF_5KudQbC8j5hJT1CqxvYtMneZxb1Si3A2uNxopk3yQ@mail.gmail.com>
+ <CANiq72kc02DbgVdKusDUeCkxVoQoOGMLnEJnzf-Gn=BiQUggLw@mail.gmail.com> <CAKwvOdmVj006evgychajuUV4DqL4QXohHmYiE6To9traPKcr5w@mail.gmail.com>
+In-Reply-To: <CAKwvOdmVj006evgychajuUV4DqL4QXohHmYiE6To9traPKcr5w@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 11 May 2022 21:41:36 +0200
+Message-ID: <CANiq72n8ccBSSt5N2EDZTGf6PoZxUmf3ESK0-zdMaDsY6BJ-6Q@mail.gmail.com>
+Subject: Re: [PATCH 1/7] x86/entry: Introduce __entry_text for entry code
+ written in C
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Marco Elver <elver@google.com>, Hao Luo <haoluo@google.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,17 +90,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, May 11, 2022 at 9:34 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> Yeah, nvm, I missed the bottom #define for some reason.
 
-The man-page of swapon says:
+No worries, I got worried there could be a change of behavior I did
+not know about the order of those... (in which case we should really
+document it! :)
 
-      The swap file implementation in the kernel expects to be able to
-write to the file directly, without the assistance of the filesystem.
-
-Does that mean that if the user has a LUKS volume with a partition on
-it, in the end the swapfile on this partition will end up unecrypted?
-
-Could someone please explain it in more details?
-
-Regards,
-Artem
+Cheers,
+Miguel

@@ -2,150 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D33B0523BA1
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:34:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F9CA523BAC
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:36:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345648AbiEKRer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 13:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
+        id S1345663AbiEKRgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 13:36:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345632AbiEKReo (ORCPT
+        with ESMTP id S1345652AbiEKRf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 13:34:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 53DD323023B
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:34:43 -0700 (PDT)
+        Wed, 11 May 2022 13:35:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 627AD62CDF
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:35:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652290482;
+        s=mimecast20190719; t=1652290556;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=i8Xj3Dw4/gCq/23hJZh6ANAQmyEIEWC62NCXFqWSvVM=;
-        b=Ezxi5RRNDrPv5dcPyIG+2TzEMKcC5AyUyCGpkCu1fFnjkO0MoRfOFaiQhUSEJIOvJ6uok6
-        ttMxE+esQlMDaTHRhtWH52dEVfjl9QCo8B26oIuUsANB07HMzi/0YQYxFwK82gYhLIbJEk
-        yWmnzulrAjbBNBNVWt2CEc+tvxNxUYw=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=RHJ9jDCm2aZov2g6klEdi92ZsrYHfyKzIwTmWcp9UH8=;
+        b=NGJbLnGGiDFyIX+Hl7BzT6EPOfvGrBeehd963Ns6mcWO1tiZ/pbENRbDTeSbBEdUJe3l31
+        xvDggPY0LDlNY5FKZAsSpzoBxgaQPD/FQ+WmbS7AajKtAgDLLiPogHzmMZyzeYkK1jWisx
+        KbZYFLhum9M/aQYDBM2DPlQbE7AzZ+s=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-140-7uYBQKA4OL6gg9kJp3ecbg-1; Wed, 11 May 2022 13:34:41 -0400
-X-MC-Unique: 7uYBQKA4OL6gg9kJp3ecbg-1
-Received: by mail-wr1-f69.google.com with SMTP id u17-20020a056000161100b0020cda98f292so1092003wrb.21
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:34:41 -0700 (PDT)
+ us-mta-527-G6Sjhx2aOZayRGAIami5_A-1; Wed, 11 May 2022 13:35:55 -0400
+X-MC-Unique: G6Sjhx2aOZayRGAIami5_A-1
+Received: by mail-wm1-f69.google.com with SMTP id 26-20020a05600c021a00b003940660c053so930859wmi.2
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:35:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:to:cc:references:from:organization:in-reply-to
          :content-transfer-encoding;
-        bh=i8Xj3Dw4/gCq/23hJZh6ANAQmyEIEWC62NCXFqWSvVM=;
-        b=wKV/YRsdrelLBWzGkW8z8gYiOaL4BBEPLqYWcL216TrOkD9nQENYBKH+RGHQA+aKCX
-         J8nco+3aoxSqVFcwa6H4iXoltKFSUgPZ9zMXC1TSayNDrUks4Xkei+GwCJhVj1+BWKTP
-         Ul2XrTmWu6xSdkegrmrf/dkYUZ+D3TOqfjK51VYUutTwXMrB8GVSi+J+mi8R7+XfBpFx
-         R6rqLrIFTxprhcUO8Ekqkep6dhEpdKfQkRLXzots5/oYGNUvotJrg585im51ERA+7UOy
-         L/DDoYIKuo317Khp+v78khx5dVdIEUYTzaZfKsuyTXcuEtZKjeS91eQstV37cqYuJnwJ
-         4j9Q==
-X-Gm-Message-State: AOAM531W+Emsbwqd7oJtfo6bm6vKJoWz8CQNvc6r20BOv9BPxS5/C8Ll
-        GSXOycsM1xUkDCq3U+7rh219GOECpOpQ02sl8D3jK4jA8WpimbJsOr/F3GMN41qCJ50gAAhds2k
-        3PQB8pWNGDNv8uAf+VWKHLxM8
-X-Received: by 2002:a05:6000:1d90:b0:20c:9efd:bd6b with SMTP id bk16-20020a0560001d9000b0020c9efdbd6bmr24725763wrb.605.1652290480061;
-        Wed, 11 May 2022 10:34:40 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzMcxwINjwFHTGmrXrt5Rnjg0TtWgmfEnHBfAnBCyS2Fe9WQndQMx9qSymE6rAgB6QbCz2//w==
-X-Received: by 2002:a05:6000:1d90:b0:20c:9efd:bd6b with SMTP id bk16-20020a0560001d9000b0020c9efdbd6bmr24725736wrb.605.1652290479835;
-        Wed, 11 May 2022 10:34:39 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id g17-20020adfe411000000b0020c5253d91esm2156204wrm.106.2022.05.11.10.34.38
+        bh=RHJ9jDCm2aZov2g6klEdi92ZsrYHfyKzIwTmWcp9UH8=;
+        b=UFq/dFx2Wh1yiiHecZURlU3F53PwQLQ0OiLdVlBUhLtoHj9ktgESrzTEgvVeDJe5/O
+         fQbWdo/GjMLhEo/mefkci3AS2hROA42XGzJ+I4A8UynlLhdGmnveK+hSLfe2HiZ6hWvM
+         Y449AqIsfezsk9LjRuRnH1Ds7x9e//e2fq74Nk12WTvr6U/YUzS7pa3dOlhPsF95FW5y
+         YzTHntlZp6cmUcOVnJ63zo/DsFkXvFoKG4jMEnU5kf544DQTca7yfGXup2++utcIObHK
+         sHeyjuHlbROHfcej0a+hh/sAp14gTLpgXO/+kMeBwRQg2V0BSfMpZeLbzNXs4d9E432Y
+         OyAw==
+X-Gm-Message-State: AOAM530wZbh9LhvLiFeZvhMM0Li1X0WYF4oqFI1T7Wk3KAMhNaSQNFhw
+        QnwzlQ0VxACpk7n7gf6ApCegXmuvmKAAs996eJyVBMr6f9inUZPToLofwuSLZU8RqSoY8K2F2gP
+        JO5db/u4whcbitjlJ6BouDaxW
+X-Received: by 2002:a05:6000:1f0f:b0:20c:87b6:df9d with SMTP id bv15-20020a0560001f0f00b0020c87b6df9dmr25088261wrb.115.1652290553803;
+        Wed, 11 May 2022 10:35:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxowLcNuhjX33XV+v3YeRfpwZS/+uKcfuTSz0ColENR5G1SBprMZ1XzQiN/ReI3dYYeeSg9JA==
+X-Received: by 2002:a05:6000:1f0f:b0:20c:87b6:df9d with SMTP id bv15-20020a0560001f0f00b0020c87b6df9dmr25088227wrb.115.1652290553449;
+        Wed, 11 May 2022 10:35:53 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c701:700:2393:b0f4:ef08:bd51? (p200300cbc70107002393b0f4ef08bd51.dip0.t-ipconnect.de. [2003:cb:c701:700:2393:b0f4:ef08:bd51])
+        by smtp.gmail.com with ESMTPSA id u12-20020a7bc04c000000b003942a244ed6sm387130wmc.27.2022.05.11.10.35.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 10:34:39 -0700 (PDT)
-Message-ID: <48f164af-99d2-9e74-e307-003be0677384@redhat.com>
-Date:   Wed, 11 May 2022 19:34:38 +0200
+        Wed, 11 May 2022 10:35:52 -0700 (PDT)
+Message-ID: <f1c904e7-0b16-2893-eb25-0b968817fb8c@redhat.com>
+Date:   Wed, 11 May 2022 19:35:50 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
-Subject: Re: [PATCH v5 7/7] fbdev: Make registered_fb[] private to fbmem.c
+Subject: Re: [PATCH v4 3/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
+ unmapping
 Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>, Sam Ravnborg <sam@ravnborg.org>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Helge Deller <deller@gmx.de>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel test robot <lkp@intel.com>,
-        Jens Frederich <jfrederich@gmail.com>,
-        Jon Nettleton <jon.nettleton@gmail.com>,
-        linux-staging@lists.linux.dev,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthew Wilcox <willy@infradead.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Zheyu Ma <zheyuma97@gmail.com>
-References: <20220511112438.1251024-1-javierm@redhat.com>
- <20220511113230.1252910-1-javierm@redhat.com> <YnvrxICnisXU6I1y@ravnborg.org>
- <8c84428c-2740-4046-74c9-298b854944d0@roeck-us.net>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <8c84428c-2740-4046-74c9-298b854944d0@roeck-us.net>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        akpm@linux-foundation.org, mike.kravetz@oracle.com
+Cc:     catalin.marinas@arm.com, will@kernel.org, songmuchun@bytedance.com,
+        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org
+References: <cover.1652270205.git.baolin.wang@linux.alibaba.com>
+ <0a2e547238cad5bc153a85c3e9658cb9d55f9cac.1652270205.git.baolin.wang@linux.alibaba.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <0a2e547238cad5bc153a85c3e9658cb9d55f9cac.1652270205.git.baolin.wang@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Guenter,
-
-On 5/11/22 19:17, Guenter Roeck wrote:
-> On 5/11/22 10:00, Sam Ravnborg wrote:
-
-[snip]
-
->>>   struct fb_info *registered_fb[FB_MAX] __read_mostly;
->>> -EXPORT_SYMBOL(registered_fb);
->>> -
->>>   int num_registered_fb __read_mostly;
->>> +#if IS_ENABLED(CONFIG_FB_OLPC_DCON)
->>> +EXPORT_SYMBOL(registered_fb);
->>>   EXPORT_SYMBOL(num_registered_fb);
->>> +#endif
->>
->> It is stuff like this I refer to as "ugly" in the comment above.
->>
+On 11.05.22 14:04, Baolin Wang wrote:
+> On some architectures (like ARM64), it can support CONT-PTE/PMD size
+> hugetlb, which means it can support not only PMD/PUD size hugetlb:
+> 2M and 1G, but also CONT-PTE/PMD size: 64K and 32M if a 4K page
+> size specified.
 > 
-> My "solution" for that kind of thing is to use a namespace,
-> such as
+> When unmapping a hugetlb page, we will get the relevant page table
+> entry by huge_pte_offset() only once to nuke it. This is correct
+> for PMD or PUD size hugetlb, since they always contain only one
+> pmd entry or pud entry in the page table.
 > 
-> EXPORT_SYMBOL_NS(registered_fb, FB_OLPC_DCON);
-> EXPORT_SYMBOL_NS(num_registered_fb, FB_OLPC_DCON);
->
+> However this is incorrect for CONT-PTE and CONT-PMD size hugetlb,
+> since they can contain several continuous pte or pmd entry with
+> same page table attributes, so we will nuke only one pte or pmd
+> entry for this CONT-PTE/PMD size hugetlb page.
+> 
+> And now try_to_unmap() is only passed a hugetlb page in the case
+> where the hugetlb page is poisoned. Which means now we will unmap
+> only one pte entry for a CONT-PTE or CONT-PMD size poisoned hugetlb
+> page, and we can still access other subpages of a CONT-PTE or CONT-PMD
+> size poisoned hugetlb page, which will cause serious issues possibly.
+> 
+> So we should change to use huge_ptep_clear_flush() to nuke the
+> hugetlb page table to fix this issue, which already considered
+> CONT-PTE and CONT-PMD size hugetlb.
+> 
+> We've already used set_huge_swap_pte_at() to set a poisoned
+> swap entry for a poisoned hugetlb page. Meanwhile adding a VM_BUG_ON()
+> to make sure the passed hugetlb page is poisoned in try_to_unmap().
+> 
+> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+> ---
+>  mm/rmap.c | 39 ++++++++++++++++++++++-----------------
+>  1 file changed, 22 insertions(+), 17 deletions(-)
+> 
+> diff --git a/mm/rmap.c b/mm/rmap.c
+> index 4e96daf..219e287 100644
+> --- a/mm/rmap.c
+> +++ b/mm/rmap.c
+> @@ -1528,6 +1528,11 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+>  
+>  		if (folio_test_hugetlb(folio)) {
+>  			/*
+> +			 * The try_to_unmap() is only passed a hugetlb page
+> +			 * in the case where the hugetlb page is poisoned.
+> +			 */
+> +			VM_BUG_ON_PAGE(!PageHWPoison(subpage), subpage);
+> +			/*
+>  			 * huge_pmd_unshare may unmap an entire PMD page.
+>  			 * There is no way of knowing exactly which PMDs may
+>  			 * be cached for this mm, so we must flush them all.
+> @@ -1562,28 +1567,28 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+>  					break;
+>  				}
+>  			}
+> +			pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
+>  		} else {
+>  			flush_cache_page(vma, address, pte_pfn(*pvmw.pte));
+> -		}
+> -
+> -		/*
+> -		 * Nuke the page table entry. When having to clear
+> -		 * PageAnonExclusive(), we always have to flush.
+> -		 */
+> -		if (should_defer_flush(mm, flags) && !anon_exclusive) {
+>  			/*
+> -			 * We clear the PTE but do not flush so potentially
+> -			 * a remote CPU could still be writing to the folio.
+> -			 * If the entry was previously clean then the
+> -			 * architecture must guarantee that a clear->dirty
+> -			 * transition on a cached TLB entry is written through
+> -			 * and traps if the PTE is unmapped.
+> +			 * Nuke the page table entry. When having to clear
+> +			 * PageAnonExclusive(), we always have to flush.
+>  			 */
+> -			pteval = ptep_get_and_clear(mm, address, pvmw.pte);
+> +			if (should_defer_flush(mm, flags) && !anon_exclusive) {
+> +				/*
+> +				 * We clear the PTE but do not flush so potentially
+> +				 * a remote CPU could still be writing to the folio.
+> +				 * If the entry was previously clean then the
+> +				 * architecture must guarantee that a clear->dirty
+> +				 * transition on a cached TLB entry is written through
+> +				 * and traps if the PTE is unmapped.
+> +				 */
+> +				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
+>  
+> -			set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
+> -		} else {
+> -			pteval = ptep_clear_flush(vma, address, pvmw.pte);
+> +				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
+> +			} else {
+> +				pteval = ptep_clear_flush(vma, address, pvmw.pte);
+> +			}
+>  		}
+>  
+>  		/*
 
-Using a namespace in this case is indeed a great idea I think.
+LGTM
 
-I've used in the past to limit the export of a symbol for within a driver
-that could be scattered across different compilations units, but it never
-occurred to me using it to limit symbols exported by core code.
- 
-> and import it from the offending code. That avoids ifdefs
-> while at the same time limiting the use of the symbols
-> to the expected scope. Of course that could be abused but
-> that abuse would be obvious.
->
-
-Agreed. For the next revision, besides using an namespaced export symbol
-as you suggested, I'll include a comment to make clear that it shouldn't
-by any other driver and FB_OLPC_DCON fixed instead.
-
+Acked-by: David Hildenbrand <david@redhat.com>
 
 -- 
-Best regards,
+Thanks,
 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+David / dhildenb
 

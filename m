@@ -2,88 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE43E523BBD
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C9E2523BBF
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345702AbiEKRji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 13:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47058 "EHLO
+        id S1345721AbiEKRkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 13:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245036AbiEKRja (ORCPT
+        with ESMTP id S245036AbiEKRka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 13:39:30 -0400
-Received: from mailrelay2-1.pub.mailoutpod1-cph3.one.com (mailrelay2-1.pub.mailoutpod1-cph3.one.com [46.30.210.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92151D5010
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:39:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=iALarvYr6q24+R4Th1G4RXSh7gnuFWx7r3JvoYpd3xk=;
-        b=W9xFVeO8LlGUfyYNl9YjYZ9ZctbU8etMQKk6mgK5eNNMwHdKmpY1Rnlvs/tcMhZuFNDgDDj5D5xXp
-         rKFTaUrT9umvFG6ucNypFltBnfVrVGggs0wfStO2aYLtgvujAgsIla6xNkv1J4JbPo7Nha+k4HgVA3
-         F5yO8ZUKqcdNeVVLUDs/WW1trNoqLrkN+qpGV7A3u5imlgspD7rOfqkhXJePu5ye7AE1s8tzCvPZAB
-         doXWdIYAX+qAJv1VW7krOJtgjK5BfTOEWbaGvw0iSuO6eye4XNUjcp/w+FnCMSfiK5ULbPTmD+h+ES
-         nGeCfompngqVHV83tGs3mGxM8k8xXpA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=iALarvYr6q24+R4Th1G4RXSh7gnuFWx7r3JvoYpd3xk=;
-        b=hImXde1zDvSVJkx15NBS5pKNiZbhkQkuYrmlHkQ98BvXln9AlcTSZH6xC64Y7s7D/j8PJ2tjjUnDu
-         FOqhaicBQ==
-X-HalOne-Cookie: e2cdac57c96ca2243c1cd42b5ad62a44227cc89d
-X-HalOne-ID: 4cacf8ba-d151-11ec-a908-d0431ea8a290
-Received: from mailproxy3.cst.dirpod4-cph3.one.com (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        by mailrelay2.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id 4cacf8ba-d151-11ec-a908-d0431ea8a290;
-        Wed, 11 May 2022 17:39:25 +0000 (UTC)
-Date:   Wed, 11 May 2022 19:39:23 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Joel Selvaraj <jo@jsfamily.in>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hao Fang <fanghao11@huawei.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] drm/panel: introduce ebbg,ft8719 panel
-Message-ID: <Ynv0y6xmtnE+33/y@ravnborg.org>
-References: <cover.1652245767.git.jo@jsfamily.in>
- <BY5PR02MB70098FF9BDEDE264B78CFCE0D9C89@BY5PR02MB7009.namprd02.prod.outlook.com>
+        Wed, 11 May 2022 13:40:30 -0400
+Received: from smtp-42ac.mail.infomaniak.ch (smtp-42ac.mail.infomaniak.ch [84.16.66.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A00A231CBA
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:40:29 -0700 (PDT)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Kz2Hb53XRzMqGVb;
+        Wed, 11 May 2022 19:40:27 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Kz2HZ3RQVzlhMC3;
+        Wed, 11 May 2022 19:40:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1652290827;
+        bh=huDBKAvemFeLNSrEns2wEl+ddvdp4cf6NbrovNveSNg=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=uvBYf/7oUC9cw4mua9tQliavsBgd2bFRUl5Vb6dMxCNtPZC4iavHWJdKOw1NuNAuS
+         +GPmHKWQ2zgGjk1x9sdhyUGWHYTGAB3FygfxEioo20QiWaQv3JHE/Jr0MD53J6leDn
+         B8qR2+LO68yIaUBZ8V/a3rh6enWChJ3Fa45whE/Y=
+Message-ID: <9c5eb09f-8f7d-2339-c8bb-4b908d7abab0@digikod.net>
+Date:   Wed, 11 May 2022 19:40:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BY5PR02MB70098FF9BDEDE264B78CFCE0D9C89@BY5PR02MB7009.namprd02.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: 
+Content-Language: en-US
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Brian Norris <briannorris@chromium.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        Joe Perches <joe@perches.com>,
+        Kees Cook <keescook@chromium.org>,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Paul Moore <paul@paul-moore.com>, Tom Rix <trix@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+References: <20220506160106.522341-1-mic@digikod.net>
+ <152da06a-330d-3125-6f41-262e0751f41b@digikod.net>
+ <CANiq72mST6rfJDVGGT2+=_FUCXwms6N8mo2eoLzQ6KW64M9BtQ@mail.gmail.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [PATCH v2 0/5] Fix clang-format configuration according to
+ checkpatch.pl
+In-Reply-To: <CANiq72mST6rfJDVGGT2+=_FUCXwms6N8mo2eoLzQ6KW64M9BtQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joel,
-On Wed, May 11, 2022 at 10:58:11AM +0530, Joel Selvaraj wrote:
-> Add DRM panel driver for EBBG FT8719 6.18" 2246x1080 DSI video mode
-> panel, which can be found on some Xiaomi Poco F1 phones. The panel's
-> backlight is managed through QCOM WLED driver.
+
+On 11/05/2022 17:29, Miguel Ojeda wrote:
+> Hi Mickaël,
 > 
-> Signed-off-by: Joel Selvaraj <jo@jsfamily.in>
+> On Wed, May 11, 2022 at 4:19 PM Mickaël Salaün <mic@digikod.net> wrote:
+>>
+>> Miguel, what do you think about this series? Do you plan to take it for
+>> the next merge window? FYI, I plan to use it for Landlock [1] and send
+>> it for the next merge window. Could you publish your pending
+>> clang-format changes so that I can make sure everything is OK?
+> 
+> It looked good to me overall (though it indeed conflicts with what I
+> was doing) -- I will take it for the next merge window.
 
-Driver looks good:
-Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+Good. Please keep me in the loop, I would like to try your changes as 
+soon as possible (before you make a PR).
 
-I expect someone else to pick it up and apply.
+> I am thinking
+> of putting Brian as author and you as Co-developed-by for the last one
+> to be fair (Brian: is this OK with you too?).
 
-	Sam
+Looks fair.

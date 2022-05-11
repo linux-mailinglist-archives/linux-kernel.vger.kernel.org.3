@@ -2,87 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56061522E39
+	by mail.lfdr.de (Postfix) with ESMTP id D236E522E3A
 	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:22:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243606AbiEKIWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 04:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
+        id S243590AbiEKIWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 04:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243583AbiEKIWg (ORCPT
+        with ESMTP id S243574AbiEKIW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 04:22:36 -0400
-Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9E63DA5A;
-        Wed, 11 May 2022 01:22:30 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTPS id 24B8LfE9037644
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
-        Wed, 11 May 2022 16:21:42 +0800 (CST)
-        (envelope-from zhaoyang.huang@unisoc.com)
-Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Wed, 11 May 2022 16:21:42 +0800
-From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <xuewen.yan@unisoc.com>,
-        <ke.wang@unisoc.com>, <ben.dai@unisoc.com>,
-        <shian.wang@unisoc.com>, <linux-rt-users@vger.kernel.org>
-Subject: [RFC PATCH] kernel: locking: rwsem optimization for rtlinux
-Date:   Wed, 11 May 2022 16:21:21 +0800
-Message-ID: <1652257281-11494-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Mailer: git-send-email 1.9.1
+        Wed, 11 May 2022 04:22:28 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B7B35DE0
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 01:22:27 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id gh6so2580288ejb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 01:22:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=IIOcJgbS1/hMQQvn2DCFX+BHhbtb4xhB0glTejG9nd0=;
+        b=nN+tvnytLjTaJLXUpNkGlrL31C7UW1pB6NFTtmXaTXEc/E6YrG1OIKgpwVMC8S+kVK
+         D0zGHuOSWn6VMDT5RVsCrOPzqDPn+ynX+2xgsLJ+esu5HFhKI1L1FfojyWFbLtSNbXuS
+         1qXyVZ1jTq1c48DPsEHHWi1ElZ8UTZzr57W1iPjRSdUmmWlSe8Hm8Pc0jYi+i4kpwRAW
+         hH+yxI/z9Cc1NoWL0nAk+IMz8mhUv1TWwTqWJaA1lqsWAnJvZ/pbzRI35MVvlcqiK0bh
+         yq9FIOhP2dWozNqsyasJ2s6B/nnu1uuSBahdmKMJDmas8sdvCmBeg2zvG6YZlvRLOBiP
+         0WMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IIOcJgbS1/hMQQvn2DCFX+BHhbtb4xhB0glTejG9nd0=;
+        b=BEEUc4ryW373BqSOCD7Ap20Xscd5HOszqgbvDq9iZ6uBrSbj2kPiuChXYBaQ44Fs/W
+         anQx0O4FfNE9ZWpn0yWoLNSqamGLnWwt4hBJX/bayzdSsowFEIazhkPhYZLufTbl4sQE
+         AsJuYUuD3mdSUekByUdhZCZYe314WpwzyyhBCCHj8nMqIPi7jcXPqpvFW33zUvhRkFPR
+         0sioZdc8oAFOy6/JKqyuZ8Z5PAZ/+XLToi3tn9lZiNSShVmCLbNr7jXvdl6i2Efr9Fv0
+         GG7HfsBY8CYViqQ6JbUL2LAK5uQ+ZHKmx3UoLOL4nUn16o4FsHR/MNSQxhqae7FwLARP
+         C58w==
+X-Gm-Message-State: AOAM531BXW23vPNkcD73DKhzrZvKGWclmuSmMYdEv9w+RgKzi0efLVmi
+        g+MVwRwbr3b/2B+eftR+VexraA==
+X-Google-Smtp-Source: ABdhPJyQl+2i2St5QQZxqWfls/5xIarQ0xgPypRKf/p7aX8oprL7xHpOkr9jt2CVt3KlxWwPkWf+7Q==
+X-Received: by 2002:a17:907:16a2:b0:6f4:eeb1:f7de with SMTP id hc34-20020a17090716a200b006f4eeb1f7demr23680710ejc.446.1652257345815;
+        Wed, 11 May 2022 01:22:25 -0700 (PDT)
+Received: from [192.168.0.254] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id q20-20020a17090676d400b006f3ef214dddsm686150ejn.67.2022.05.11.01.22.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 01:22:25 -0700 (PDT)
+Message-ID: <7783d64c-e48c-5e3d-9560-51197234051a@linaro.org>
+Date:   Wed, 11 May 2022 10:22:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.65]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 24B8LfE9037644
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 2/3] dt-bindings: display: Add bindings for EBBG FT8719
+Content-Language: en-US
+To:     Joel Selvaraj <jo@jsfamily.in>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hao Fang <fanghao11@huawei.com>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <cover.1652245767.git.jo@jsfamily.in>
+ <BY5PR02MB7009F6D4CC6CA1C433912C56D9C89@BY5PR02MB7009.namprd02.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <BY5PR02MB7009F6D4CC6CA1C433912C56D9C89@BY5PR02MB7009.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+On 11/05/2022 07:28, Joel Selvaraj wrote:
+> Add bindings for the EBBG FT8719 6.18" 2246x1080 DSI video mode panel,
+> which can be found on some Xiaomi Poco F1 phones. The backlight is
+> managed through the QCOM WLED driver.
+> 
+> Signed-off-by: Joel Selvaraj <jo@jsfamily.in>
 
-With regard to rtlinux, releasing the lock to RT waiter could be helpful to
-increase its responding time even if cfs writer listed at the head of the
-wait_list.
 
-Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
----
- kernel/locking/rwsem-xadd.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/kernel/locking/rwsem-xadd.c b/kernel/locking/rwsem-xadd.c
-index e795908..1b3f836 100644
---- a/kernel/locking/rwsem-xadd.c
-+++ b/kernel/locking/rwsem-xadd.c
-@@ -138,6 +138,18 @@ static void __rwsem_mark_wake(struct rw_semaphore *sem,
- 	waiter = list_first_entry(&sem->wait_list, struct rwsem_waiter, list);
- 
- 	if (waiter->type == RWSEM_WAITING_FOR_WRITE) {
-+		if ((waiter->task->policy != SCHED_NORMAL)
-+			&&(waiter->task->policy != SCHED_BATCH))
-+			;
-+		else {
-+			list_for_each_entry(tmp, sem->wait_list.next, list) {
-+				if ((tmp->task->policy != SCHED_NORMAL)
-+					&&(tmp->task->policy != SCHED_BATCH)) {
-+					wake_q_add(wake_q, tmp->task);
-+					return;
-+				}
-+			}
-+		}
- 		if (wake_type == RWSEM_WAKE_ANY) {
- 			/*
- 			 * Mark writer at the front of the queue for wakeup.
--- 
-1.9.1
 
+Best regards,
+Krzysztof

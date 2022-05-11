@@ -2,76 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EB3C5231AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 214F25231A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:31:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236755AbiEKL3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 07:29:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45744 "EHLO
+        id S231186AbiEKL3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 07:29:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbiEKL3f (ORCPT
+        with ESMTP id S235712AbiEKL3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 07:29:35 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CCA1CFC8;
-        Wed, 11 May 2022 04:29:33 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id A983D22205;
-        Wed, 11 May 2022 13:29:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1652268571;
+        Wed, 11 May 2022 07:29:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25558235C04
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:29:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652268579;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BkNNwCEY07bXhaxvT88gmFnBsLwGa+MxAaNVTYayNy8=;
-        b=GMfr3nznop6C1C9VfDvxzSNy3e1tI0j7PTD1n6cB1FFsXC+8eXKmCyaaeADN9vBge4RKHC
-        26Q5lIhCf6T/PSBRfJNC13/iFo5tbuhGvBJDvpTFdc1HHHR21Y3N/okug4NZTGL/+MWX8B
-        lM9xB+MPHyMZpD3kU1mMtzHKLPFuy5g=
+        bh=RfFVtWrguQUq5m+0EioS7ITOQ+/4JKsc3d9RLIfqY9A=;
+        b=SY8SmRhPXw6NEFJb0CLO9pMaw3H7fcqGnYF9aPoEeeOs8SGMg3XakynDGTTHPbmucVWbE3
+        cvSOQ/IVeQTkA/sF12Bg191KCN3w1aeFFInFODjtG2zAqxJnsOODoXPdYaw1Pu2GY97IPV
+        D8S/TrPXuBJhvDs9J0ZEdo3WDH+Q5Xo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-259-QgjKKuFLNCKfHcoqALwGCg-1; Wed, 11 May 2022 07:29:36 -0400
+X-MC-Unique: QgjKKuFLNCKfHcoqALwGCg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B7F493C10227;
+        Wed, 11 May 2022 11:29:35 +0000 (UTC)
+Received: from starship (unknown [10.40.192.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2D8B7146938F;
+        Wed, 11 May 2022 11:29:32 +0000 (UTC)
+Message-ID: <5fd97722d15ef6a38622adceb65295afa72a9a8f.camel@redhat.com>
+Subject: Re: [PATCH v3 16/34] KVM: x86: hyper-v: L2 TLB flush
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 11 May 2022 14:29:32 +0300
+In-Reply-To: <20220414132013.1588929-17-vkuznets@redhat.com>
+References: <20220414132013.1588929-1-vkuznets@redhat.com>
+         <20220414132013.1588929-17-vkuznets@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Wed, 11 May 2022 13:29:30 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        =?UTF-8?Q?Horia_Geant=C4=83?= <horia.geanta@nxp.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        James Bottomley <jejb@linux.ibm.com>, kernel@pengutronix.de,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        David Gstir <david@sigma-star.at>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Andreas Rammhold <andreas@rammhold.de>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v9 0/7] KEYS: trusted: Introduce support for NXP
- CAAM-based trusted keys
-In-Reply-To: <3a8c493b-b19c-4490-85b4-22d240bfd06e@pengutronix.de>
-References: <20220506062553.1068296-1-a.fatoum@pengutronix.de>
- <49e1738c55c73819ee0e2cac0be74d81@walle.cc>
- <3a8c493b-b19c-4490-85b4-22d240bfd06e@pengutronix.de>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <b7efa4578d7eeacf6e1696208c250bc8@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,101 +68,298 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Am 2022-05-11 12:47, schrieb Ahmad Fatoum:
-> On 06.05.22 12:52, Michael Walle wrote:
->> Am 2022-05-06 08:25, schrieb Ahmad Fatoum:
->>> Series applies on top of v5.18-rc5. Would be great if this could make 
->>> it
->>> into v5.19.
->>> 
->>> v8 was here:
->>> https://lore.kernel.org/linux-integrity/09e2552c-7392-e1da-926b-53c7db0b118d@pengutronix.de
->>> 
->>> Changelog is beneath each individual patch. Compared to v8, only code
->>> change is checking whether CAAM can support blobbing at init-time as
->>> apparently some Layerscape SoCs are available in a non-E(ncryption)
->>> variant that doesn't do AES. Previously, adding trusted keys on such
->>> SoCs would return an error with a cryptic error message.
->>> 
->>> 
->>> The Cryptographic Acceleration and Assurance Module (CAAM) is an IP 
->>> core
->>> built into many newer i.MX and QorIQ SoCs by NXP.
->>> 
->>> Its blob mechanism can AES encrypt/decrypt user data using a unique
->>> never-disclosed device-specific key.
->>> 
->>> There has been multiple discussions on how to represent this within 
->>> the kernel:
->>> 
->>> The Cryptographic Acceleration and Assurance Module (CAAM) is an IP 
->>> core
->>> built into many newer i.MX and QorIQ SoCs by NXP.
->>> 
->>> Its blob mechanism can AES encrypt/decrypt user data using a unique
->>> never-disclosed device-specific key. There has been multiple
->>> discussions on how to represent this within the kernel:
->>> 
->>>  - [RFC] crypto: caam - add red blobifier
->>>    Steffen implemented[1] a PoC sysfs driver to start a discussion on 
->>> how to
->>>    best integrate the blob mechanism.
->>>    Mimi suggested that it could be used to implement trusted keys.
->>>    Trusted keys back then were a TPM-only feature.
->>> 
->>>  - security/keys/secure_key: Adds the secure key support based on 
->>> CAAM.
->>>    Udit Agarwal added[2] a new "secure" key type with the CAAM as 
->>> backend.
->>>    The key material stays within the kernel only.
->>>    Mimi and James agreed that this needs a generic interface, not 
->>> specific
->>>    to CAAM. Mimi suggested trusted keys. Jan noted that this could 
->>> serve as
->>>    basis for TEE-backed keys.
->>> 
->>>  - [RFC] drivers: crypto: caam: key: Add caam_tk key type
->>>    Franck added[3] a new "caam_tk" key type based on Udit's work. 
->>> This time
->>>    it uses CAAM "black blobs" instead of "red blobs", so key material 
->>> stays
->>>    within the CAAM and isn't exposed to kernel in plaintext.
->>>    James voiced the opinion that there should be just one user-facing 
->>> generic
->>>    wrap/unwrap key type with multiple possible handlers.
->>>    David suggested trusted keys.
->>> 
->>>  - Introduce TEE based Trusted Keys support
->>>    Sumit reworked[4] trusted keys to support multiple possible 
->>> backends with
->>>    one chosen at boot time and added a new TEE backend along with 
->>> TPM.
->>>    This now sits in Jarkko's master branch to be sent out for v5.13
->>> 
->>> This patch series builds on top of Sumit's rework to have the CAAM as
->>> yet another
->>> trusted key backend.
->>> 
->>> The CAAM bits are based on Steffen's initial patch from 2015. His 
->>> work had been
->>> used in the field for some years now, so I preferred not to deviate
->>> too much from it.
->>> 
->>> This series has been tested with dmcrypt[5] on an i.MX6Q/DL and an 
->>> i.MX8M[6].
->>> 
->>> Looking forward to your feedback.
->> 
->> For the whole series:
->> 
->> Tested-by: Michael Walle <michael@walle.cc> # on ls1028a (non-E and E)
+On Thu, 2022-04-14 at 15:19 +0200, Vitaly Kuznetsov wrote:
+> Handle L2 TLB flush requests by going through all vCPUs and checking
+> whether there are vCPUs running the same VM_ID with a VP_ID specified
+> in the requests. Perform synthetic exit to L2 upon finish.
 > 
-> Thanks! Did you test checkpatch.pl and make htmldocs/pdfdocs too
-> or should I add the Tested-by just for the first 5 patches?
+> Note, while checking VM_ID/VP_ID of running vCPUs seem to be a bit
+> racy, we count on the fact that KVM flushes the whole L2 VPID upon
+> transition. Also, KVM_REQ_HV_TLB_FLUSH request needs to be done upon
+> transition between L1 and L2 to make sure all pending requests are
+> always processed.
+> 
+> For the reference, Hyper-V TLFS refers to the feature as "Direct
+> Virtual Flush".
+> 
+> Note, nVMX/nSVM code does not handle VMCALL/VMMCALL from L2 yet.
+> 
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/kvm/hyperv.c | 73 ++++++++++++++++++++++++++++++++++++-------
+>  arch/x86/kvm/hyperv.h |  3 --
+>  arch/x86/kvm/trace.h  | 21 ++++++++-----
+>  3 files changed, 74 insertions(+), 23 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+> index e9793d36acca..79aabe0c33ec 100644
+> --- a/arch/x86/kvm/hyperv.c
+> +++ b/arch/x86/kvm/hyperv.c
+> @@ -34,6 +34,7 @@
+>  #include <linux/eventfd.h>
+>  
+>  #include <asm/apicdef.h>
+> +#include <asm/mshyperv.h>
+>  #include <trace/events/kvm.h>
+>  
+>  #include "trace.h"
+> @@ -1842,9 +1843,10 @@ static inline int hv_tlb_flush_ring_free(struct kvm_vcpu_hv *hv_vcpu,
+>  	return read_idx - write_idx - 1;
+>  }
+>  
+> -static void hv_tlb_flush_ring_enqueue(struct kvm_vcpu *vcpu, u64 *entries, int count)
+> +static void hv_tlb_flush_ring_enqueue(struct kvm_vcpu *vcpu,
+> +				      struct kvm_vcpu_hv_tlb_flush_ring *tlb_flush_ring,
+> +				      u64 *entries, int count)
+>  {
+> -	struct kvm_vcpu_hv_tlb_flush_ring *tlb_flush_ring;
+>  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+>  	int ring_free, write_idx, read_idx;
+>  	unsigned long flags;
+> @@ -1853,9 +1855,6 @@ static void hv_tlb_flush_ring_enqueue(struct kvm_vcpu *vcpu, u64 *entries, int c
+>  	if (!hv_vcpu)
+>  		return;
+>  
+> -	/* kvm_hv_flush_tlb() is not ready to handle requests for L2s yet */
+> -	tlb_flush_ring = &hv_vcpu->tlb_flush_ring[HV_L1_TLB_FLUSH_RING];
+> -
+>  	spin_lock_irqsave(&tlb_flush_ring->write_lock, flags);
+>  
+>  	/*
+> @@ -1974,6 +1973,7 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>  	struct hv_tlb_flush_ex flush_ex;
+>  	struct hv_tlb_flush flush;
+>  	DECLARE_BITMAP(vcpu_mask, KVM_MAX_VCPUS);
+> +	struct kvm_vcpu_hv_tlb_flush_ring *tlb_flush_ring;
+>  	/*
+>  	 * Normally, there can be no more than 'KVM_HV_TLB_FLUSH_RING_SIZE - 1'
+>  	 * entries on the TLB Flush ring as when 'read_idx == write_idx' the
+> @@ -2018,7 +2018,8 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>  		}
+>  
+>  		trace_kvm_hv_flush_tlb(flush.processor_mask,
+> -				       flush.address_space, flush.flags);
+> +				       flush.address_space, flush.flags,
+> +				       is_guest_mode(vcpu));
+>  
+>  		valid_bank_mask = BIT_ULL(0);
+>  		sparse_banks[0] = flush.processor_mask;
+> @@ -2049,7 +2050,7 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>  		trace_kvm_hv_flush_tlb_ex(flush_ex.hv_vp_set.valid_bank_mask,
+>  					  flush_ex.hv_vp_set.format,
+>  					  flush_ex.address_space,
+> -					  flush_ex.flags);
+> +					  flush_ex.flags, is_guest_mode(vcpu));
+>  
+>  		valid_bank_mask = flush_ex.hv_vp_set.valid_bank_mask;
+>  		all_cpus = flush_ex.hv_vp_set.format !=
+> @@ -2083,23 +2084,54 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>  		tlb_flush_entries = __tlb_flush_entries;
+>  	}
+>  
+> +	tlb_flush_ring = kvm_hv_get_tlb_flush_ring(vcpu);
+> +
+>  	/*
+>  	 * vcpu->arch.cr3 may not be up-to-date for running vCPUs so we can't
+>  	 * analyze it here, flush TLB regardless of the specified address space.
+>  	 */
+> -	if (all_cpus) {
+> +	if (all_cpus && !is_guest_mode(vcpu)) {
+>  		kvm_for_each_vcpu(i, v, kvm)
+> -			hv_tlb_flush_ring_enqueue(v, tlb_flush_entries, hc->rep_cnt);
+> +			hv_tlb_flush_ring_enqueue(v, tlb_flush_ring,
+> +						  tlb_flush_entries, hc->rep_cnt);
+>  
+>  		kvm_make_all_cpus_request(kvm, KVM_REQ_HV_TLB_FLUSH);
+> -	} else {
+> +	} else if (!is_guest_mode(vcpu)) {
+>  		sparse_set_to_vcpu_mask(kvm, sparse_banks, valid_bank_mask, vcpu_mask);
+>  
+>  		for_each_set_bit(i, vcpu_mask, KVM_MAX_VCPUS) {
+>  			v = kvm_get_vcpu(kvm, i);
+>  			if (!v)
+>  				continue;
+> -			hv_tlb_flush_ring_enqueue(v, tlb_flush_entries, hc->rep_cnt);
+> +			hv_tlb_flush_ring_enqueue(v, tlb_flush_ring,
+> +						  tlb_flush_entries, hc->rep_cnt);
+> +		}
+> +
+> +		kvm_make_vcpus_request_mask(kvm, KVM_REQ_HV_TLB_FLUSH, vcpu_mask);
+> +	} else {
+> +		struct kvm_vcpu_hv *hv_v;
+> +
+> +		bitmap_zero(vcpu_mask, KVM_MAX_VCPUS);
+> +
+> +		kvm_for_each_vcpu(i, v, kvm) {
+> +			hv_v = to_hv_vcpu(v);
+> +
+> +			/*
+> +			 * TLB is fully flushed on L2 VM change: either by KVM
+> +			 * (on a eVMPTR switch) or by L1 hypervisor (in case it
+> +			 * re-purposes the active eVMCS for a different VM/VP).
+> +			 */
+> +			if (!hv_v || hv_v->nested.vm_id != hv_vcpu->nested.vm_id)
+> +				continue;
 
-I just tested the series on the mentioned hardware. So no htmldocs
-or checkpatch.pl.
+This is indeed racy, but I think it is OK.
 
--michael
+Nitpick:
+
+I think that this does need a better comment on why the race is OK.
+The current comment explains that we flush the TLB but doesn't explain
+why that is sufficient.
+
+I would probably write something like that:
+
+
+"This races with nested vCPUs entering/exiting and/or migrating between
+the L1's vCPUs.
+
+However the only case when we want to actually flush the TLB
+of the target nested vCPU is when it was running non-stop on same L1 vCPU
+since the moment the flush request was created and till now.
+
+Otherwise either the target nested vCPU is not running and it will flush
+its TLB, once it runs again, or it already flushed its TLB by exiting
+to L1 and entring itself again (possibly on a different L1 vCPU)"
+
+
+
+> +
+> +			if (!all_cpus &&
+> +			    !hv_is_vp_in_sparse_set(hv_v->nested.vp_id, valid_bank_mask,
+> +						    sparse_banks))
+> +				continue;
+> +
+> +			__set_bit(i, vcpu_mask);
+> +			hv_tlb_flush_ring_enqueue(v, tlb_flush_ring,
+> +						  tlb_flush_entries, hc->rep_cnt);
+
+
+
+>  		}
+>  
+>  		kvm_make_vcpus_request_mask(kvm, KVM_REQ_HV_TLB_FLUSH, vcpu_mask);
+> @@ -2287,10 +2319,27 @@ static void kvm_hv_hypercall_set_result(struct kvm_vcpu *vcpu, u64 result)
+>  
+>  static int kvm_hv_hypercall_complete(struct kvm_vcpu *vcpu, u64 result)
+>  {
+> +	int ret;
+> +
+>  	trace_kvm_hv_hypercall_done(result);
+>  	kvm_hv_hypercall_set_result(vcpu, result);
+>  	++vcpu->stat.hypercalls;
+> -	return kvm_skip_emulated_instruction(vcpu);
+> +	ret = kvm_skip_emulated_instruction(vcpu);
+> +
+> +	if (unlikely(hv_result_success(result) && is_guest_mode(vcpu)
+> +		     && kvm_hv_is_tlb_flush_hcall(vcpu))) {
+> +		struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> +		u32 tlb_lock_count;
+> +
+> +		if (unlikely(kvm_read_guest(vcpu->kvm, hv_vcpu->nested.pa_page_gpa,
+> +					    &tlb_lock_count, sizeof(tlb_lock_count))))
+> +			kvm_inject_gp(vcpu, 0);
+> +
+> +		if (tlb_lock_count)
+> +			kvm_x86_ops.nested_ops->post_hv_l2_tlb_flush(vcpu);
+> +	}
+> +
+> +	return ret;
+>  }
+>  
+>  static int kvm_hv_hypercall_complete_userspace(struct kvm_vcpu *vcpu)
+> diff --git a/arch/x86/kvm/hyperv.h b/arch/x86/kvm/hyperv.h
+> index ca67c18cef2c..f593c9fd1dee 100644
+> --- a/arch/x86/kvm/hyperv.h
+> +++ b/arch/x86/kvm/hyperv.h
+> @@ -154,9 +154,6 @@ static inline struct kvm_vcpu_hv_tlb_flush_ring *kvm_hv_get_tlb_flush_ring(struc
+>  	int i = !is_guest_mode(vcpu) ? HV_L1_TLB_FLUSH_RING :
+>  		HV_L2_TLB_FLUSH_RING;
+>  
+> -	/* KVM does not handle L2 TLB flush requests yet */
+> -	WARN_ON_ONCE(i != HV_L1_TLB_FLUSH_RING);
+> -
+>  	return &hv_vcpu->tlb_flush_ring[i];
+>  }
+>  
+> diff --git a/arch/x86/kvm/trace.h b/arch/x86/kvm/trace.h
+> index e3a24b8f04be..af7896182935 100644
+> --- a/arch/x86/kvm/trace.h
+> +++ b/arch/x86/kvm/trace.h
+> @@ -1479,38 +1479,41 @@ TRACE_EVENT(kvm_hv_timer_state,
+>   * Tracepoint for kvm_hv_flush_tlb.
+>   */
+>  TRACE_EVENT(kvm_hv_flush_tlb,
+> -	TP_PROTO(u64 processor_mask, u64 address_space, u64 flags),
+> -	TP_ARGS(processor_mask, address_space, flags),
+> +	TP_PROTO(u64 processor_mask, u64 address_space, u64 flags, bool guest_mode),
+> +	TP_ARGS(processor_mask, address_space, flags, guest_mode),
+>  
+>  	TP_STRUCT__entry(
+>  		__field(u64, processor_mask)
+>  		__field(u64, address_space)
+>  		__field(u64, flags)
+> +		__field(bool, guest_mode)
+>  	),
+>  
+>  	TP_fast_assign(
+>  		__entry->processor_mask = processor_mask;
+>  		__entry->address_space = address_space;
+>  		__entry->flags = flags;
+> +		__entry->guest_mode = guest_mode;
+>  	),
+>  
+> -	TP_printk("processor_mask 0x%llx address_space 0x%llx flags 0x%llx",
+> +	TP_printk("processor_mask 0x%llx address_space 0x%llx flags 0x%llx %s",
+>  		  __entry->processor_mask, __entry->address_space,
+> -		  __entry->flags)
+> +		  __entry->flags, __entry->guest_mode ? "(L2)" : "")
+>  );
+>  
+>  /*
+>   * Tracepoint for kvm_hv_flush_tlb_ex.
+>   */
+>  TRACE_EVENT(kvm_hv_flush_tlb_ex,
+> -	TP_PROTO(u64 valid_bank_mask, u64 format, u64 address_space, u64 flags),
+> -	TP_ARGS(valid_bank_mask, format, address_space, flags),
+> +	TP_PROTO(u64 valid_bank_mask, u64 format, u64 address_space, u64 flags, bool guest_mode),
+> +	TP_ARGS(valid_bank_mask, format, address_space, flags, guest_mode),
+>  
+>  	TP_STRUCT__entry(
+>  		__field(u64, valid_bank_mask)
+>  		__field(u64, format)
+>  		__field(u64, address_space)
+>  		__field(u64, flags)
+> +		__field(bool, guest_mode)
+>  	),
+>  
+>  	TP_fast_assign(
+> @@ -1518,12 +1521,14 @@ TRACE_EVENT(kvm_hv_flush_tlb_ex,
+>  		__entry->format = format;
+>  		__entry->address_space = address_space;
+>  		__entry->flags = flags;
+> +		__entry->guest_mode = guest_mode;
+>  	),
+>  
+>  	TP_printk("valid_bank_mask 0x%llx format 0x%llx "
+> -		  "address_space 0x%llx flags 0x%llx",
+> +		  "address_space 0x%llx flags 0x%llx %s",
+>  		  __entry->valid_bank_mask, __entry->format,
+> -		  __entry->address_space, __entry->flags)
+> +		  __entry->address_space, __entry->flags,
+> +		  __entry->guest_mode ? "(L2)" : "")
+>  );
+>  
+>  /*
+
+
+Looks OK, I might have missed something.
+
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+
+Best regards,
+	Maxim Levitsky
+
+
+

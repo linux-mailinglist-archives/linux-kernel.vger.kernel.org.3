@@ -2,113 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABBFA522AC4
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 06:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F324522AF6
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 06:25:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231375AbiEKEVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 00:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37066 "EHLO
+        id S232769AbiEKEZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 00:25:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbiEKEVL (ORCPT
+        with ESMTP id S230139AbiEKEZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 00:21:11 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E751A3B3F7
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 21:21:08 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id v10so718121pgl.11
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 21:21:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jl1GZmm7QuKAbToF+dPGx7IgxaH6ShvhQAX01HB3wCc=;
-        b=ltUc6hKbTACE4zlFPJKf6Z+hO3WQcTTeuwKVHECbtUXdc3XEatIzd0n7tiO638vGBN
-         d/gZVhxS756AE2mPE3v7qYCixusH6wSltbX2Thocw8XnHb21P3uuEQBLfUeJnIrOH4Eb
-         u58jlZJltai+LVOH5tktxfMFkiDVx3LdYDF539tWHb2I/zqOJOpnW3wOvkCZGgcpn+Sw
-         MGS3qyclt4YGl06g+pdoTt82yqLPYimOr49UnkrgN4o98xHzmXwhJL/1vydGGNGYpLjh
-         eh/n2GFpyXsYuS+ZkiPitXl6gdr0JSVEkfwkCEd0sbz377Yo6JrzXqqW4AOxftLzp6Tm
-         I2GA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jl1GZmm7QuKAbToF+dPGx7IgxaH6ShvhQAX01HB3wCc=;
-        b=H3BpUZqhx9hlH2H1nEjnHsmcy9dmvs1LP3c2b/YmRfkx8OyDT9z8MNz+N10Ibdgl8t
-         qZF09CGzXFjPWelF96iQRVfpmxrER99d3qs7uwJ6NDRjozOgIJvKZqneko4UtLQd8E8n
-         Ip0cDygk9H2X5Fd2X0R1W/UMpNcklUfzIm1UnN/z4WaOXyV0RRbgpKZWrqHoI48gOI7Z
-         m6C7bdRz9w4q2l2SLj8uHs42jkMoS5MGnadjDf1j3IaNO93OrZsy9aFECDacf2Aiesbq
-         WMXKCZ0y0JX8PaiZNrDHns6OKIERlXAoDvQMEZIicp7+FDlMTJU8H1FhabFoqn4p+KoZ
-         3oLQ==
-X-Gm-Message-State: AOAM5311XuLn+88jGTy5BPI/0xQ5iYaLDlOQHe8IjIclYJ+WNdSwZkOl
-        R7EtPGt0pSVM/wkx97cXZRl5UWX7zsi57NoPsV4xhA==
-X-Google-Smtp-Source: ABdhPJw956CGNInPJoX0Sue0mYEmFyYdP4GE5ILyG00rRUkMD+8mKrIiV5I/p/QBznNriBkyTAqhRy7FXF8Omnk+4mA=
-X-Received: by 2002:a05:6a00:22d4:b0:510:6d75:e3da with SMTP id
- f20-20020a056a0022d400b005106d75e3damr23699430pfj.3.1652242868060; Tue, 10
- May 2022 21:21:08 -0700 (PDT)
+        Wed, 11 May 2022 00:25:13 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE383CA44;
+        Tue, 10 May 2022 21:25:11 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: tomeu)
+        with ESMTPSA id 814831F44A6E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652243109;
+        bh=k4CAo9Y95waZZqgDc5richqC5rLeJJTWfy44Q601/Q0=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=niWJrFanqGGREze6rfJDFHgENDAnnMzMPF1kW1PppuLMKTJrCqRH5Manut/a+mBZi
+         qfP5A2JO/4AMj55JBTKCwMaOOFmcM6hoWeaQkyAuWSnmN5h0BpzX/+4r3DlUGq0V8Y
+         LofZuROKTHNgs6pUHlJhdSIjqDzNtoy0ppPHE1sj7Roqwqw1AADwNS1IMfkPgMASJb
+         9tgcrydqEl4JdMpTAomltpPNZib56Y29L7FNr29pTB0iqZrqiVefgbYjbxEmWAsmwr
+         YsUxUW4/t1xacp3+wVJ2CBqyqw/XtAH+cUPfmfAYFOIrLXLHAj3CTroxJ7HX9R0mw8
+         FXYT9MeAeEEnA==
+Subject: Re: [Freedreno] [RFC v2] drm/msm: Add initial ci/ subdirectory
+To:     Jessica Zhang <quic_jesszhan@quicinc.com>
+Cc:     linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org
+References: <20220510070140.45407-1-tomeu.vizoso@collabora.com>
+ <20220510141329.54414-1-tomeu.vizoso@collabora.com>
+ <e4e03cd8-3ebc-e5e1-e7d0-6bdc038049b5@quicinc.com>
+From:   Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Message-ID: <33ab308f-f0a1-b5b9-1bcb-b4387f5a4152@collabora.com>
+Date:   Wed, 11 May 2022 06:25:05 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <20220508143620.1775214-1-ruansy.fnst@fujitsu.com>
- <20220511000352.GY27195@magnolia> <20220511014818.GE1098723@dread.disaster.area>
- <CAPcyv4h0a3aT3XH9qCBW3nbT4K3EwQvBSD_oX5W=55_x24-wFA@mail.gmail.com> <20220510192853.410ea7587f04694038cd01de@linux-foundation.org>
-In-Reply-To: <20220510192853.410ea7587f04694038cd01de@linux-foundation.org>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Tue, 10 May 2022 21:20:57 -0700
-Message-ID: <CAPcyv4ip6N6jvdb3LRjPnVr6xaFjiVg1OCE95pu9RiMG5_VNPw@mail.gmail.com>
-Subject: Re: [PATCHSETS] v14 fsdax-rmap + v11 fsdax-reflink
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Shiyang Ruan <ruansy.fnst@fujitsu.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jane Chu <jane.chu@oracle.com>,
-        Goldwyn Rodrigues <rgoldwyn@suse.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>, linmiaohe@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <e4e03cd8-3ebc-e5e1-e7d0-6bdc038049b5@quicinc.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 7:29 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Tue, 10 May 2022 18:55:50 -0700 Dan Williams <dan.j.williams@intel.com> wrote:
->
-> > > It'll need to be a stable branch somewhere, but I don't think it
-> > > really matters where al long as it's merged into the xfs for-next
-> > > tree so it gets filesystem test coverage...
-> >
-> > So how about let the notify_failure() bits go through -mm this cycle,
-> > if Andrew will have it, and then the reflnk work has a clean v5.19-rc1
-> > baseline to build from?
->
-> What are we referring to here?  I think a minimal thing would be the
-> memremap.h and memory-failure.c changes from
-> https://lkml.kernel.org/r/20220508143620.1775214-4-ruansy.fnst@fujitsu.com ?
+On 5/10/22 9:39 PM, Jessica Zhang wrote:
+> 
+> 
+> On 5/10/2022 7:13 AM, Tomeu Vizoso wrote:
+>> +igt@kms_atomic_interruptible@legacy-setmode@pipe-a-edp-1
+>> +igt@kms_atomic_interruptible@atomic-setmode@pipe-a-edp-1
+>> +igt@kms_atomic_interruptible@legacy-dpms@pipe-a-edp-1
+>> +igt@kms_atomic_interruptible@legacy-pageflip@pipe-a-edp-1
+>> +igt@kms_atomic_interruptible@legacy-cursor@pipe-a-edp-1
+>> +igt@kms_atomic_interruptible@universal-setplane-primary@pipe-a-edp-1
+>> +igt@kms_atomic_interruptible@universal-setplane-cursor@pipe-a-edp-1
+> 
+> I see that there are some KMS subtests/tests are missing such as 
+> kms_atomic_transition -- are they unstable across all boards?
+> 
+>  From what I've seen, kms_atomic_transition is unstable only on Trogdor, 
+> but has stable results on other boards.
 
-Latest is here:
-https://lore.kernel.org/all/20220508143620.1775214-1-ruansy.fnst@fujitsu.com/
+I don't know of a good reason for not having the tests in this list. 
+Developers can follow the instructions at "How to expand coverage" to 
+add tests if the driver can consistently pass (or fail) them.
 
-> Sure, I can scoot that into 5.19-rc1 if you think that's best.  It
-> would probably be straining things to slip it into 5.19.
+There is ongoing work to have a test runner that will better handle 
+flaky tests, which will make it possible to expand the list without 
+having to resort to per-soc test lists.
 
-Hmm, if it's straining things and XFS will also target v5.20 I think
-the best course for all involved is just wait. Let some of the current
-conflicts in -mm land in v5.19 and then I can merge the DAX baseline
-and publish a stable branch for XFS and BTRFS to build upon for v5.20.
+>> +igt@kms_addfb_basic@size-max,pass
+>> +igt@kms_addfb_basic@too-wide,pass
+>> +igt@kms_addfb_basic@too-high,dmesg-warn
+> 
+> For test results on Trogdor, is is possible to have them be 
+> success/fail/skip only?
+> 
+> Results such as dmesg-warn/dmesg-fail are igt_runner specific and 
+> because there isn't support for igt_runner on ChromeOS, they will be 
+> difficult to replicate and debug.
 
-> The use of EOPNOTSUPP is a bit suspect, btw.  It *sounds* like the
-> right thing, but it's a networking errno.  I suppose livable with if it
-> never escapes the kernel, but if it can get back to userspace then a
-> user would be justified in wondering how the heck a filesystem
-> operation generated a networking errno?
+As Rob said later, it's probably better to drop that distinction. Maybe 
+at some future point we will want to track expected kmsg output but I 
+think there are lots of work to do before that makes sense.
+
+Will do that in a v3.
+
+>> +igt@kms_universal_plane@universal-plane-pipe-a-functional,skip
+>> +igt@kms_universal_plane@disable-primary-vs-flip-pipe-a,pass
+>> +igt@kms_universal_plane@disable-primary-vs-flip-pipe-b,fail
+> 
+> We could probably skip checking the results for kms_universal_plane on 
+> Trogdor for now, since this is a test affected by the hack regression. 
+> There is an IGT patch in the works for fixing the 
+> disable-primary-vs-flip-pipe-b failure, so it should be updated pretty 
+> soon too.
+
+So, how this should work is for the patch that fixes that bug to update 
+also the expectation files (see "How to update test expectations" in the 
+docs). In this case though, the fix is likely to land before this patch, 
+so I will just update the expectations once I rebase and the fix is 
+brought into my branch.
+
+Thanks for the feedback!
+
+Tomeu

@@ -2,144 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51523522D78
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F22F1522D7A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243054AbiEKHgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 03:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57396 "EHLO
+        id S243091AbiEKHhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 03:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243059AbiEKHgv (ORCPT
+        with ESMTP id S243045AbiEKHgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 03:36:51 -0400
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10619532F5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:36:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1652254603; x=1683790603;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=Alb1xrnJhldpzE9osSqFp3an/3P5dB47J8vJc3iL0z8=;
-  b=f3lA6/aRCUXEm9lxOrGboeop/J18eHWM1w+2Ms0jAkA1cM+y0o52Gejv
-   3Eq4OsZgoLYGZixwBL1T/YYIcg8/4sRxKa+k/LSd6skAQX6k14BYyGVEj
-   daX5T20oY2jq4tITEKogBaviokrebtlbxRCNPcEjQ+EcrhLVr40s8q5mn
-   ejtCAvMUx+j2z2uf4Jjubq/m5/7voIA/yaPXbTUwAHurATBRvVforYpAt
-   EGwlUUv7qQk+OE8xcSg+kmxQ8mC5JKsWH3sfVbV/Oy0B+aGxcTo5+F4dd
-   kC9KeyG1NEP2dol3/blzZ+3Ej4y+qYGsALh51biDpulj2ViolwCEhIlQs
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.91,216,1647273600"; 
-   d="scan'208";a="200041027"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 11 May 2022 15:36:40 +0800
-IronPort-SDR: KxjJQLqQGusJyqhrTXrzzKdHcykNSQpgCafWiv7qeSr4sFBqtshLPqrNkutXWqtiapzBrtG4pp
- /Q/ZYHuyzS3zU/MdYoJolAA5R3GkHpEFGNdMiTiLq5D1IOF+6C7mAKEKieM3thCZVBsycGPort
- v9osfcTm6Hl1AAUTivFGoNJ0tgX8eaHvhUWIf7KPhdDm7XvsQ1XnHsGNbUIoZfPLSvN4IUNelP
- hVZsAb6nlLOujW7dMTWuyFEVL2J5/fPTNxMMusy0PTJ2W5uw1EvxHTt//s/r6TuC7/8YG8fhxW
- 8eYzk9QBZ8tKIipiOYGTXk3Y
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 11 May 2022 00:05:24 -0700
-IronPort-SDR: 6lsCvq1HWaPv/ykdIDYIxRuXSsN7O+QjwvT8zndQdEbJVOh1s7PQh1wWvhDaC7WYHRAc9yPadJ
- ndVGFubImyJyb3FLmQT2XuJr5KWblZplEbkCfS786Sc0eF2d4q2T5WUUs35l3TCt2FzGyy95iH
- vvChvKzhPnxN3HSLmNVbThKnw+XK+pIE7xIzQPKT1+rTY+8lVQE+tNcWMIkfgdo6Im8gr0bFh2
- ToF6jqyqOYPGh/rnvaujgKafMceswijr2WAIg175omX19smDSSrRUN9UzvbRR5Jhuv1LTSfJDm
- Db8=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 11 May 2022 00:36:42 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Kymtw6pVLz1SVp1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:36:40 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1652254600; x=1654846601; bh=Alb1xrnJhldpzE9osSqFp3an/3P5dB47J8v
-        Jc3iL0z8=; b=iPLP+9bmh/sFRDsMlN+61U1UJdWQoEHUHr0wBj2xpGR4NfO9Qnh
-        D+BLwpemayAbg3CNkK3Vyi5moF5RlN2y6Rx99yhj/em7ldb3F5OXFy7RivHw1/ei
-        xG/MoansLkmsDPcsJvDSY/mDgdJX6g9vfj21+DZKWRB6tIquVLmKsOqp8EkPTD4B
-        vn6MonKHv0be5DwoqvInLNRgXBRm1vSpBxYQyc7PgwmTJAlaw34Vi57d2xfEKtM4
-        YefRD/Vt/Fxdhj/9+INTW/LYzXmAH2PtghuKol1ru68h6/ooqdP5DJO08Z4HEUVZ
-        zRqkvdWiubI7LfsnpmZ96wBIulR/d7pViqQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id kAkBEvfhSukS for <linux-kernel@vger.kernel.org>;
-        Wed, 11 May 2022 00:36:40 -0700 (PDT)
-Received: from [192.168.10.49] (unknown [10.225.164.111])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Kymtv0jPxz1Rvlc;
-        Wed, 11 May 2022 00:36:38 -0700 (PDT)
-Message-ID: <6122a113-9ea2-c3b3-153d-dac1f6a38dbb@opensource.wdc.com>
-Date:   Wed, 11 May 2022 09:36:36 +0200
+        Wed, 11 May 2022 03:36:52 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB0356C18
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:36:49 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id g28so2315548ybj.10
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:36:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ye0GeoFlH0Q5xQn/Exi4I46k1+mTgeZ6ainsE7f2pPw=;
+        b=mvVvcnzCo/y23SA18SaXjXk0Omw4MackwuHVWKPq8e1TXTCOGgfj8MuNY/3cRGCg6r
+         lgK318RmKvj0bklEoFCIX+kf0Z58pQtq6BcChCOVP0mPTcuzVJmfVo03h7xAHY5jIvgC
+         eUpbBCO1VNuneayutgr0JkXTI5W5Llhid1Whk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ye0GeoFlH0Q5xQn/Exi4I46k1+mTgeZ6ainsE7f2pPw=;
+        b=iskVUjv+d+j/PK3NCSZ0tCzu0y9cIp9maUoHg1DFEltj2SmhLlrYSlDVR9XkB3NX1A
+         0Z4/xgGFTYMQliOVpquyDaWEiEhxNjlNwf0eAZuCZEE8zwkJu6o8OuHqZo7oFfuf4kPJ
+         CPjmS/Vnx0Fyh4GyRrIi/7nS45+OOS723HqsXhojRdesrLGm9bNnoNHO7V5fjRMPiEfs
+         qKuXHUnv+iEZx7weC7Rk//iXTIBPQoVVmoJ5VYMkVVBLsse4A6B/bDAjeHkQI1O6L0sw
+         FqN3vNZ9tRPVL3cKW0bb3fBKoY3XZYXoITwEtepS5q4DLyTWASomsdC9Hy4KopKyWSmG
+         kiYQ==
+X-Gm-Message-State: AOAM530u7fx0dxQMDqKYNXzZJrSd29IEACvucyAmIJ26Ka+kn1kVoKmA
+        IJm4hDQbSxZo6twJYh6kc5VKWsd+nNHEuu0QV98dRPpNXo7YVA==
+X-Google-Smtp-Source: ABdhPJzH752naca/2nfIKHi0Us0BMTyPVVIH6KS0gNXC2QtPtLP90uuE7ynZRBY+KWktBYt275klxJrDQSjx3EOCl2w=
+X-Received: by 2002:a25:20a:0:b0:645:74e4:8cc9 with SMTP id
+ 10-20020a25020a000000b0064574e48cc9mr21733176ybc.518.1652254608456; Wed, 11
+ May 2022 00:36:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH] ata: pata_octeon_cf: Fix refcount leak in octeon_cf_probe
-Content-Language: en-US
-To:     Miaoqian Lin <linmq006@gmail.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Jeff Garzik <jgarzik@redhat.com>,
-        David Daney <david.daney@cavium.com>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220511062723.56652-1-linmq006@gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220511062723.56652-1-linmq006@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220511013057.245827-1-dlunev@chromium.org> <CAJfpegsmyY+D4kK3ov51FLGA=RkyGDKMcYiMo2zBqYuFNs78JQ@mail.gmail.com>
+In-Reply-To: <CAJfpegsmyY+D4kK3ov51FLGA=RkyGDKMcYiMo2zBqYuFNs78JQ@mail.gmail.com>
+From:   Daniil Lunev <dlunev@chromium.org>
+Date:   Wed, 11 May 2022 17:36:37 +1000
+Message-ID: <CAONX=-dqY64VkqF6cNYvm8t-ad8XRqDhELP9icfPTPD2iLobLA@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Prevent re-use of FUSE superblock after force unmount
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     linux-fsdevel@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/05/11 8:27, Miaoqian Lin wrote:
-> of_find_device_by_node() takes reference, we should use put_device()
-> to release it when not need anymore.
-> Add missing put_device() in error path to avoid refcount
-> leak.
-> 
-> Fixes: 43f01da0f279 ("MIPS/OCTEON/ata: Convert pata_octeon_cf.c to use device tree.")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
->  drivers/ata/pata_octeon_cf.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/ata/pata_octeon_cf.c b/drivers/ata/pata_octeon_cf.c
-> index 6b5ed3046b44..65688459acf1 100644
-> --- a/drivers/ata/pata_octeon_cf.c
-> +++ b/drivers/ata/pata_octeon_cf.c
-> @@ -857,12 +857,14 @@ static int octeon_cf_probe(struct platform_device *pdev)
->  				res_dma = platform_get_resource(dma_dev, IORESOURCE_MEM, 0);
->  				if (!res_dma) {
->  					of_node_put(dma_node);
-> +					put_device(&dma_dev->dev);
->  					return -EINVAL;
->  				}
->  				cf_port->dma_base = (u64)devm_ioremap(&pdev->dev, res_dma->start,
->  									 resource_size(res_dma));
->  				if (!cf_port->dma_base) {
->  					of_node_put(dma_node);
-> +					put_device(&dma_dev->dev);
->  					return -EINVAL;
->  				}
->  
+On Wed, May 11, 2022 at 5:07 PM Miklos Szeredi <miklos@szeredi.hu> wrote:
+>
+> On Wed, 11 May 2022 at 03:31, Daniil Lunev <dlunev@chromium.org> wrote:
+> >
+> > Force unmount of fuse severes the connection between FUSE driver and its
+> > userspace counterpart.
+>
+> Why is forced umount being used in the first place?
 
-The extra reference should also be dropped at the end of the "if (dma_node)"
-too, no ? Otherwise, early returns due to errors after that "if (dma_node)" will
-also leak the extra ref.
+To correctly suspend-resume. We have been using this force unmount historically
+to circumvent the suspend-resume issues which periodically occur with fuse.
+We observe FUSE rejecting to remount the device because of the issue this
+patchset attempts to address after the resume if there are still open
+file handles
+holding old super blocks. I am not sure if fuse's interaction with suspend is
+something that has been resolved systematically (we are also trying to
+figure that
+out). Regardless of that, doing force unmount of a mount point is a legitimate
+operation, and with FUSE it may leave the system in a state that is returning
+errors for other legitimate operations.
 
-Note that looking around at places where of_find_device_by_node() is being used,
-very few users call put_device()... Looks like there are lots of device ref
-leaks with that.
-
--- 
-Damien Le Moal
-Western Digital Research
+Thanks,
+Daniil

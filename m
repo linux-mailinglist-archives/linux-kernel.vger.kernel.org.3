@@ -2,108 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 455EF522BA2
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 07:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0430A522BA8
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 07:28:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238765AbiEKF14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 01:27:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
+        id S238998AbiEKF2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 01:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbiEKF1x (ORCPT
+        with ESMTP id S230153AbiEKF2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 01:27:53 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F8912FC00
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:27:52 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d22so812623plr.9
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:27:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xhdm254L1jYhgvQgbJzDhHX/1k7BNUYa5TibU3+NCCw=;
-        b=pZ7INeRKE7ikbL0Wp1J2nkeg5H+ixeNlVyt8PYCddh2qShvjPh+hek64IhQ72pjYiI
-         7emBeRFo+ZBiSd6HXcaXOmhC+lL3WiJqfw6jXaPXvYjcjTJk8+EAcrW7nBNknBW8MamG
-         y3IM79TAD97U/nTxtEo9yvf5XYzIF4gzw+u7IgzhoT3ceHSuOUOwpuYMb/KzCmOlru5l
-         9aNHlqiUqt3TaR84XMjujDYI71Svp937IGTCm9Oiuv+bXoeSRUiGHWiNMlWtcPUtFmKD
-         BYh9nNVtPT2zfyA8wsUHIo3lHKyxQV33wgLC9Voh85/bQ8qPt9QSI43AUrUeQuBnwwSu
-         gbdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xhdm254L1jYhgvQgbJzDhHX/1k7BNUYa5TibU3+NCCw=;
-        b=usqZVnPHSTF9lIQYC9mrYRS8agkhDm/PBTf9SvvfFYjM0+fnoSg1RL3UdVlFi+5Yho
-         646xkEmyXx8r6mPT2Gg0JW+ZhSVTvTHtkIHmS0/hlgAoWozfdBLUzk4xv2x1Adi9XNL4
-         ncPemwVP4KbE8rr6UW/sp3FzwWO3Ug28pNrOcZDwBil0hjET92uinueEcmt2RTjO0/Ho
-         cK2efK4+aEjNUCMpwaweJVbL5J9a5RIt/274MU1QWVMbfB5ZoOR/FVQTRAXiNKOiAhAW
-         ZYnoCeg31EYYHrfpCCvpL2SW4k5zMWTrCcUPrHZ0CgyepWhTdvVX7sewThH78g3ieK42
-         zAwA==
-X-Gm-Message-State: AOAM5310X5Fz7WQur4GFD9n3x6xVrQE/WDaw5twihHyFjvdw9PcC8Hoq
-        ThsfSxH1eig17SrAPBGRFMY=
-X-Google-Smtp-Source: ABdhPJxp27enUzauf894HfT9NP3kw4axhqglDt0NeLn5w5FytMmzOkolsl2i+qdZja+aIx6uEVmDBQ==
-X-Received: by 2002:a17:902:7fc2:b0:153:3c90:17b9 with SMTP id t2-20020a1709027fc200b001533c9017b9mr24081383plb.61.1652246872324;
-        Tue, 10 May 2022 22:27:52 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id s12-20020a170902c64c00b0015e8d4eb2e6sm588632pls.304.2022.05.10.22.27.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 22:27:51 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Ye Guojin <ye.guojin@zte.com.cn>, alsa-devel@alsa-project.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] ASoC: imx-hdmi: Fix refcount leak in imx_hdmi_probe
-Date:   Wed, 11 May 2022 09:27:40 +0400
-Message-Id: <20220511052740.46903-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 11 May 2022 01:28:43 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02olkn2084.outbound.protection.outlook.com [40.92.44.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225DF2438E9;
+        Tue, 10 May 2022 22:28:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FyjvYBS9LiUkBAIebg7Th1g3bsU7d10umVMSWB4bv+cpHl2h1BvDOQ2h46LEF++w7P6Oms/Eh4J5gxV4X3rxws1BTKue6BKzqhcNr/d9wa8rASbDo/Z3/QecHE7XEZPBOJC2RlZdztDexCYd6JOcWaSJqK0+hNwVIvsCAqNZPkHHwOyU609LtL0dBqR6BRya9+dT9s2FOBcbh16s9BYbGdhSy19khXUadZ8MzWyBrwOD7G2q0P95JqXGd3GUhbY4fB4K7pJsJDtW3XSb5eOjXffL44SKG5TtScpQe5BV/uJk0NHw7RdfbIVQntZinjF9SBzJaNZWXLBpq1iEBYNehQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bB1pL3u/luXjA3VfglqgqHt+krdJRQy+38r7T7uIm8g=;
+ b=LncRzqvEFGEF6PlyisRWbAGhI2W3sAWW4fbMWGzjFfcUx0DEWmEJf6vTyhBavhww6LFKpYn17NMTi1sQID9EIgEuX+fd3CDXdz8nss9K/Mtavs6KGU08Xi1OaYEdlpsldl8Rd0yNx+YXDFS42D4gIba8Q8mz+sTGjoMJTb91ztIX8h8oz4NSA0220wvXFoQaJ8qf/4JigbKzIVO6eMY9nd01/CPXE3//VCeTkIBfwGNwoQNT3phlkPNoh40xcyCKeT6xjIiazrxFy9PN6BI2oQjxXAZ/mRstU6KFExxLnru5lOZjRGjcx8SOl9tjTWhqk1yJ1c93YrJdcOy70HpF3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from BY5PR02MB7009.namprd02.prod.outlook.com (2603:10b6:a03:236::13)
+ by PH0PR02MB8407.namprd02.prod.outlook.com (2603:10b6:510:10a::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13; Wed, 11 May
+ 2022 05:28:35 +0000
+Received: from BY5PR02MB7009.namprd02.prod.outlook.com
+ ([fe80::303a:ab1:17c1:2d16]) by BY5PR02MB7009.namprd02.prod.outlook.com
+ ([fe80::303a:ab1:17c1:2d16%9]) with mapi id 15.20.5227.023; Wed, 11 May 2022
+ 05:28:35 +0000
+From:   Joel Selvaraj <jo@jsfamily.in>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hao Fang <fanghao11@huawei.com>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Joel Selvaraj <jo@jsfamily.in>
+Subject: [PATCH v2 0/3] Introduce EBBG FT8719 DRM panel driver
+Date:   Wed, 11 May 2022 10:58:08 +0530
+Message-ID: <BY5PR02MB70098599813F51B07057AE4CD9C89@BY5PR02MB7009.namprd02.prod.outlook.com>
+X-Mailer: git-send-email 2.36.1
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-TMN:  [MrTlRE9vkdSuGVkXiWQOOSB4Zmkth5oqtc6jbcgsGx4AFGHjERcDIPj3Xhxxx0LL]
+X-ClientProxiedBy: PN2PR01CA0092.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:27::7) To BY5PR02MB7009.namprd02.prod.outlook.com
+ (2603:10b6:a03:236::13)
+X-Microsoft-Original-Message-ID: <cover.1652245767.git.jo@jsfamily.in>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 634cbcdd-4c07-47dc-9462-08da330f176d
+X-MS-TrafficTypeDiagnostic: PH0PR02MB8407:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iqzG9YocUUFovDavDbIHnazG5N+pshkefI1VMOMjc9Fc29xVAxnGXf+ksgQ5KC4JpYnQGwVZbGWQMgZ/a1xZKeGiEquxYKpJG+KzmsR5mxxaBDQix819I+d2gz/DrjP8oFvFe/GJB0nha5zGhhGc5NMOAZgWer9s7hDNt8OVFDsNWbCaRHON0CeYdxEMtsj/n5YbWLAZzNlyZrdewPt0XKxcim/Oa+ZUY4OL3npUlCOHoOaFb4fK0JtRmuK1jGpd68lQcz9hy/hClJEM1mwIpzasce72QSgU5crP7tF7Ry2NLgIgJSu3KWlenD5vgsna1kGPjnA6Txq//feT1HuVkBCzjN+b6rajFPG/P0mqtUln9yZuT4HugeGrIPRei6v3lKfGnjCjv50k9h7BE+1EqOLsUOQV6JpIaRSHHuXKXITruiVmQQht6miTL89Ls3pgItLcikzYkzVC0OBi8tVUbtbf2kiMfPnF2CXtw9bg9GJu6ESerm3gLVEjHsf9o21Gu0qqbKiV+8SlnUhxD/eOsanne5/9XVGSZJ3YxOjFQbxQhRq8b3qbUtpaiWPwdF5Te7lsfKrCD26b1/MugGSkfLkQS9cbk6daqUCquNeP83hXuooRSNvSlTFT3cu2R8k/VsBRORb41IUgY9ZMkbxMgA3RNWK9rLSSZsUqLUHbGQ4=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?URhDQXlFS6TGjSEuBlv20LKwDbPpCurfFioXe71cPU5qLtQ5OJY+gvHalarJ?=
+ =?us-ascii?Q?1WNJkrh8NNlc70LpKMjWml8wMAe9YNTj3BIp0RVcgC3fjVZfRH0AmWHYvBVQ?=
+ =?us-ascii?Q?qk1KTDxFD/qCBWIbW7opOGlJ4CgoZdLEdSfZMxhTwaYc8pCu/WvW4OScROI4?=
+ =?us-ascii?Q?pw2qczphA1LQfOTB4ABwYFSnzqeIOXR/M0F7B1Twk/9faMYaY+9SGqgGhCtX?=
+ =?us-ascii?Q?S5aC/tc45/Z9Dj/MmYdtF6iLMr5e6i4Tdt3LR/Kjo35Jf4IMibXszhBFxSfe?=
+ =?us-ascii?Q?JlnfZRnk/UuJFa0esC5rMrSvc4ObGuZJ9OjqrH0SzcsECXNJ/+T4Kii4kUvQ?=
+ =?us-ascii?Q?7efdS4k8PRrP1LJMVCDzXLUgx3wkJrjhFuRZVGibun3lQbVri9dc2Ty0/PGh?=
+ =?us-ascii?Q?mZW56J9TuDYu1yVa6YjsQLu9lh8sYK8AybFyIaB9oAJ0sGc53sraQY83NeFE?=
+ =?us-ascii?Q?Fu9/yfqtposfIrORI97eXxhiO4GVI5bVGfZTwKBNnY7kSd953XOtzKTN02ej?=
+ =?us-ascii?Q?JahePFUxxfLla9AYdffNDrWvXpNRQCAcT580PIDPqmMdtBIhhBcUALLpZQia?=
+ =?us-ascii?Q?evhtlCH+u1DvlwhcBm71Dz7zd7hTzXM8nV8fXtJttIZCdPBvIU+gwSJnmlYj?=
+ =?us-ascii?Q?R7R6W47Noe2cfJxPWsqCD7e7NiBweK8VgogotmWtKyzB84z4alUpIMfOlM2U?=
+ =?us-ascii?Q?tbkvOkzIo8h/ZBAAZ+efteoa30qse4+L+kdGkYH/q1byoEMbVXeg4J54StiJ?=
+ =?us-ascii?Q?n/0GNIbbchE0eUUG0qi7LvoiOYoeWvStReDULHr1SFTpBgqYQsAuEWK7TGdU?=
+ =?us-ascii?Q?3SBLpBcZRjYK3bLhT03WdiV7z6WxpHE4J394vzPj53bO0zB8JceaOAfKVRYv?=
+ =?us-ascii?Q?IPGS1JPgCVw2Rx85motrm7XAMYtFFU5H5ihnUULia04xXfpFRYox1dgO12sq?=
+ =?us-ascii?Q?DXw9APSj3cpxDgwPOMHp67u8/jqmGIleVTSCsUMT42G1Xdu8AQMkJzCLZpE4?=
+ =?us-ascii?Q?APlLQeYnC9ZMFLonVnKIRTv2fkdjZrRGxg8IEDQdl+QZHsWvN39SoKRxOrd6?=
+ =?us-ascii?Q?RFc36wcwRLX0GtCsR7Tv2hij0nzb0Tf2c97TmqDFgg5wejhJmFtnrjBl2j4H?=
+ =?us-ascii?Q?R2k6EE6KH/OjcZo4UdeF44Qt0RVptM17+Tl5of3zY0+2Oc+X+yrPSvkU8Vag?=
+ =?us-ascii?Q?ZEJfnXyB9qAr5orEXu4vpc11DbMOVXBV2TkPQOASZIZWT2TwQ/YszlXfj8p6?=
+ =?us-ascii?Q?raq24gzr+1qsD6Z2jkOJgEywPbpuE4jFinxOJiHWEqtFUTgh6b0inCw1gRTi?=
+ =?us-ascii?Q?UlyuVv/n+wJF+VzjszU1vThMav5N08JAt9ZmdZZoDsMYKs81l9ZT4p3dREad?=
+ =?us-ascii?Q?xg69vPy8AbrjxU4o1WIjwCpNTmnWf2uxNr7VM90feE0vhyL2ua9L1RJZ1vXk?=
+ =?us-ascii?Q?2qFL694mr7ICi69ETBrR7YU6JA9iAHLrUvGuBpvMJ3tHw+iPgEFmHA=3D=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-99c3d.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 634cbcdd-4c07-47dc-9462-08da330f176d
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR02MB7009.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2022 05:28:35.1001
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR02MB8407
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_find_device_by_node() takes reference, we should use put_device()
-to release it. when devm_kzalloc() fails, it doesn't have a
-put_device(), it will cause refcount leak.
-Add missing put_device() to fix this.
+Add bindings and DRM panel driver for EBBG FT8719 6.18" 2246x1080 DSI
+video mode panel, which can be found on some Xiaomi Poco F1 phones.
+The panel's backlight is managed through QCOM WLED driver.
 
-Fixes: 6a5f850aa83a ("ASoC: fsl: Add imx-hdmi machine driver")
-Fixes: f670b274f7f6 ("ASoC: imx-hdmi: add put_device() after of_find_device_by_node()")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- sound/soc/fsl/imx-hdmi.c | 1 +
- 1 file changed, 1 insertion(+)
+The driver is built using linux-mdss-dsi-panel-driver-generator[1], and
+additionally support for handling regulators and linking external
+backlight is added.
 
-diff --git a/sound/soc/fsl/imx-hdmi.c b/sound/soc/fsl/imx-hdmi.c
-index 929f69b758af..ec149dc73938 100644
---- a/sound/soc/fsl/imx-hdmi.c
-+++ b/sound/soc/fsl/imx-hdmi.c
-@@ -126,6 +126,7 @@ static int imx_hdmi_probe(struct platform_device *pdev)
- 	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
- 	if (!data) {
- 		ret = -ENOMEM;
-+		put_device(&cpu_pdev->dev);
- 		goto fail;
- 	}
- 
+[1] https://github.com/msm8916-mainline/linux-mdss-dsi-panel-driver-generator
+
+Changes in v2: (Krzysztof Kozlowski's Suggestions)
+ - dt-bindings: specify maxItems for reg
+ - dt-bindings: cleanup and simplify the panel properties
+ - dt-bindings: in example change "|+" to "|' and "dsi0" to "dsi"
+
+Joel Selvaraj (3):
+  dt-bindings: vendor-prefixes: Add prefix for EBBG
+  dt-bindings: display: Add bindings for EBBG FT8719
+  drm/panel: introduce ebbg,ft8719 panel
+
+ .../bindings/display/panel/ebbg,ft8719.yaml   |  74 ++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |   7 +
+ drivers/gpu/drm/panel/Kconfig                 |  11 +
+ drivers/gpu/drm/panel/Makefile                |   1 +
+ drivers/gpu/drm/panel/panel-ebbg-ft8719.c     | 362 ++++++++++++++++++
+ 6 files changed, 457 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/panel/ebbg,ft8719.yaml
+ create mode 100644 drivers/gpu/drm/panel/panel-ebbg-ft8719.c
+
 -- 
-2.25.1
+2.36.1
 

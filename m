@@ -2,90 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87CD252341D
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 264ED523416
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243756AbiEKNV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:21:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
+        id S242281AbiEKNUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243779AbiEKNUB (ORCPT
+        with ESMTP id S243735AbiEKNT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:20:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EEBE2469DF
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:19:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CE4261CB0
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 13:19:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75275C34111;
-        Wed, 11 May 2022 13:19:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652275195;
-        bh=ZeV3gMfU+a1WJKfFQfnsBBxgRnqLCEoRt8Ufidruioo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RtaP+Us29DU+hM5bw51wQRbzIjbAceM+GvsOrOBoOs/c1EE+1ubdJs4DZAmZ2WK30
-         GdIZAwgrmBlOJRiiZEYOQwLcZyKAOODTXgIwxlncDqk+79Gh5RhaZYMropUfvYUBt6
-         wEQ1iVX4ldB4sLI/sVeb7hXk7sZhGlBbQ5ER724uZjnBkun5UbScCPWT6B6s3DIYYn
-         J4TC16P1SWSBTNb5t/zGtHKsg3SiX0S58iZit/lvYv5hfefKly1u9ANoFQ4An964kn
-         PY4xFfOOX8CQ7flf+q+6S/wbcfo5+VkvUfsVAbEa5pU5F3q83PDh7PuEE0ah/qECEN
-         8sF9BvEuTcFeQ==
-From:   Oded Gabbay <ogabbay@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH 3/3] habanalabs: return -EFAULT on copy_to_user error
-Date:   Wed, 11 May 2022 16:19:48 +0300
-Message-Id: <20220511131948.1156471-3-ogabbay@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220511131948.1156471-1-ogabbay@kernel.org>
-References: <20220511131948.1156471-1-ogabbay@kernel.org>
+        Wed, 11 May 2022 09:19:58 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5BB239D9C;
+        Wed, 11 May 2022 06:19:53 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id w130so2723848oig.0;
+        Wed, 11 May 2022 06:19:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xTKoqmkJyd5jKlpEWOxjT/YXWFjjUDfLBGo4J9TZy7g=;
+        b=kKYtw5KYvJu3JDMAeeeiZQqbGYik4wVt1sIFGpnkGAZMDSekQOJaQt1FVeZwvRPCmG
+         G+PakaqZkpjmITjjoQLpTwQMI7+ZO9IvF/2NzRDjU9BSR/gafqIkbspnhnUj1OZKVymj
+         b1A4z2AzqbGwV0a64HBw87knlUST8jNwz3NWjKY6JFjPaIy39i+VOSWk9XvAxZ9rI0hh
+         akciP2cBFm9m6NuppgLPV+ajLMEGHhEV4gGe9TwcLwCA/Ezmy273YjF8fPWz1NBTkPnM
+         OMwJ9lK3CLD6axBvSfTqNVTOkPyLep2ZEDKTSwxp3DXU9vQ7HIzZKekkp7L7YAVS68wc
+         umIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xTKoqmkJyd5jKlpEWOxjT/YXWFjjUDfLBGo4J9TZy7g=;
+        b=P7BBEeNvdWUgFMOSXWoSJxppobE+FmTxHxqyT/MIDuR1cHJ9TTp4ASI5HlMiKOZ7Qh
+         C2ZAfm/4gcxOc+zTDuKmBfhUaUja8PxeUWWAv3thRKh9xgdFkgHwIykmVJj/iP6b8mrS
+         oiVZKSn89b9Mf4QE1ZwcjUtS1qhp3nzLdOQU907eY4n3ciebJ/ptaLCsxrKfO4uLwWhu
+         w3BpQK2ifXS09WYF+B2taaIjK27EagXeEP606q3Z0x7qTZq1MS+dG3kSSsXyT0u4F60A
+         CME/M+b+Lkv5TescW70hBpxw4iwHAc4yIeqfx8dcBa3JqyQJkSGSUtCqN8mQrQdVyMrf
+         vqbA==
+X-Gm-Message-State: AOAM532LskvW50cvrZy1NO+of2KaLfDnGXnQAU7aYIpjpqm4d7Jl7Kix
+        0Y6W/pAGlMUYRQj6jsjaxAnGrqTcdC6PYQ==
+X-Google-Smtp-Source: ABdhPJwBIaXef/tEui+TOYaLAsav+BgIvyBQIyRvhutgluQotb5jEVONp6I43z5A0+6UPgrVnek+iA==
+X-Received: by 2002:a05:6808:1ce:b0:325:7a0c:b315 with SMTP id x14-20020a05680801ce00b003257a0cb315mr2346533oic.40.1652275192877;
+        Wed, 11 May 2022 06:19:52 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r9-20020a056870438900b000e92d5a54ffsm554131oah.26.2022.05.11.06.19.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 06:19:52 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <31fd924f-0b3e-a47b-1ee5-fd321c5f0f17@roeck-us.net>
+Date:   Wed, 11 May 2022 06:19:50 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] watchdog: ts4800_wdt: Fix refcount leak in
+ ts4800_wdt_probe
+Content-Language: en-US
+To:     Miaoqian Lin <linmq006@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Damien Riegel <damien.riegel@savoirfairelinux.com>,
+        Rob Herring <robh@kernel.org>, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220511114203.47420-1-linmq006@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220511114203.47420-1-linmq006@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If copy_to_user failed in info ioctl, we always return -EFAULT so the
-user will know there was an error.
+On 5/11/22 04:42, Miaoqian Lin wrote:
+> of_parse_phandle() returns a node pointer with refcount
+> incremented, we should use of_node_put() on it when done.
+> Add  missing of_node_put() in some error paths.
+> 
+> Fixes: bf9006399939 ("watchdog: ts4800: add driver for TS-4800 watchdog")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
----
- drivers/misc/habanalabs/common/habanalabs_ioctl.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-diff --git a/drivers/misc/habanalabs/common/habanalabs_ioctl.c b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-index 51fa56287309..8fd2b427863f 100644
---- a/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-+++ b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-@@ -118,7 +118,6 @@ static int hw_events_info(struct hl_device *hdev, bool aggregate,
- 
- static int events_info(struct hl_fpriv *hpriv, struct hl_info_args *args)
- {
--	int rc;
- 	u32 max_size = args->return_size;
- 	u64 events_mask;
- 	void __user *out = (void __user *) (uintptr_t) args->return_pointer;
-@@ -131,8 +130,7 @@ static int events_info(struct hl_fpriv *hpriv, struct hl_info_args *args)
- 	hpriv->notifier_event.events_mask = 0;
- 	mutex_unlock(&hpriv->notifier_event.lock);
- 
--	rc = copy_to_user(out, &events_mask, sizeof(u64));
--	return rc;
-+	return copy_to_user(out, &events_mask, sizeof(u64)) ? -EFAULT : 0;
- }
- 
- static int dram_usage_info(struct hl_fpriv *hpriv, struct hl_info_args *args)
--- 
-2.25.1
+> ---
+>   drivers/watchdog/ts4800_wdt.c | 5 ++++-
+>   1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/ts4800_wdt.c b/drivers/watchdog/ts4800_wdt.c
+> index c137ad2bd5c3..0ea554c7cda5 100644
+> --- a/drivers/watchdog/ts4800_wdt.c
+> +++ b/drivers/watchdog/ts4800_wdt.c
+> @@ -125,13 +125,16 @@ static int ts4800_wdt_probe(struct platform_device *pdev)
+>   	ret = of_property_read_u32_index(np, "syscon", 1, &reg);
+>   	if (ret < 0) {
+>   		dev_err(dev, "no offset in syscon\n");
+> +		of_node_put(syscon_np);
+>   		return ret;
+>   	}
+>   
+>   	/* allocate memory for watchdog struct */
+>   	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+> -	if (!wdt)
+> +	if (!wdt) {
+> +		of_node_put(syscon_np);
+>   		return -ENOMEM;
+> +	}
+>   
+>   	/* set regmap and offset to know where to write */
+>   	wdt->feed_offset = reg;
 

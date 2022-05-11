@@ -2,63 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D3DF522BDD
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 07:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D8C522BE0
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 07:45:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234295AbiEKFof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 01:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
+        id S237256AbiEKFpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 01:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240481AbiEKFob (ORCPT
+        with ESMTP id S234807AbiEKFpB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 01:44:31 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E95244F1C
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:44:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652247870; x=1683783870;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=O/LKqF2r6cXVe/FaTSWKC+U4U0uUtqbT/QPMs+Ecj98=;
-  b=Pc64qkSZ94IswpUrL9xJ6H8Ug8edWuyvHkMlz9AS8X35bSCRpBq+IlR+
-   BiYIUy2LD87lfzrKE1YlGzlyuBztQyPcT/wyXc6MOg1y3GkkRKQpTOkFp
-   mhVD+63bpFd7+VsOabPrmVtRabzw+6Hd97iJTzeVDmsmQUt2mullJmLs/
-   l771dfZFv+DvkkxgohUEZjLAPfFGtCmpFxjkhwGDHSZhSjI7bRV4EtX4n
-   X/nFzFpmM7oDS3b4zlmCkoAk4zIj7o6VLG67eEwyKz9BjwZDcaNE2wvFd
-   ns0WDn1A/xFlALbd5ftbL0xCiEEbShrCZIHv5Ho3Uqle461vyz+61pGzd
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="269529367"
-X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
-   d="scan'208";a="269529367"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 22:44:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
-   d="scan'208";a="520368411"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 10 May 2022 22:44:28 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nof99-000IlQ-Tx;
-        Wed, 11 May 2022 05:44:27 +0000
-Date:   Wed, 11 May 2022 13:43:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Icenowy Zheng <icenowy@aosc.io>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Maxime Ripard <maxime@cerno.tech>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Torsten Duwe <duwe@suse.de>,
-        Andrzej Hajda <a.hajda@samsung.com>
-Subject: drivers/gpu/drm/bridge/analogix/analogix-anx78xx.c:50:17: warning:
- 'anx781x_i2c_addresses' defined but not used
-Message-ID: <202205111306.DCEG8q0G-lkp@intel.com>
+        Wed, 11 May 2022 01:45:01 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6807C24560B
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:45:00 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id m128so1920389ybm.5
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:45:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=moTIUyykDQCdL3n8ZzydQdIRd//nN7iJ29JUpOBGZxc=;
+        b=Al98zbbolcn+CsjwdUCiVUwDf4CocyMFxOjxRmpclefT2Ssd9u8c5dijSFL0rLOHIt
+         Z7F/Rom7lyUs2bLArdQ6Vo+TyK2Exfc/liDHeiP+oWCRpdkYgeJii8cB0slc3Y9q8Ub+
+         kkuB0c5aAoqFx7hGv+1RuOMjIS5FvxkbnZyoeZDinQ4An6ualc+KPRet1HHTTWUkcQ8P
+         ngC0eChXDNXU05nYNTb7vjPFH27jKGD+KVnskG6YeeCRNk+tqGiQvM+nRqFRRWjpZg6D
+         100tXpxiXiLjD1zgzVs+irnP0yzkt5lk5s95HNE0XcjQiLWajhfNgA+GCymq4DJJAQXY
+         ZWNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=moTIUyykDQCdL3n8ZzydQdIRd//nN7iJ29JUpOBGZxc=;
+        b=ty63bKQsCc59fjLl6h2y2wiQTLGGortMswRVhyt4Fnwsz5gG0n7XpgEIWu+c+2MlTl
+         qxafhf0BZG/9lphCp22RPGVk3lW9FdfUu1nnIFqF0waN6prUorw9f1cKaP0TnzHWKonn
+         2qYML2nyEds7FP3KHysSD1axyKqFMvElFKucu8BZ9KLmBgGJEucSoFdVrJwXC7vcmyvS
+         aFW52A0S6DZGAlbgjmKQNK8d94YRANTLfz6Xv33xF3HDvDjbXRBlfV2LGxcHfkqd9XgE
+         giBu8x2Kn7e4GEzNBeZ72KctGXirWhMTmtD+r7cYjRLaxBqhFUMXQxPoApGpMhJgC1uS
+         f7Sg==
+X-Gm-Message-State: AOAM531GMnmFooXkLICsOFHHFDLBIhAfoCoKECg+yIFlLeJ79Bw59I+Y
+        KH5nC2nChiON1mfQIQ87Sqz+femKvHVJ1yOIDQTYmg==
+X-Google-Smtp-Source: ABdhPJxfVIpuN4xZ2G4qI6DKfJkt5b7fQrIRjGDfAvjflEDG9KlfOl9Ojs0SfELUMElw8lYidXTyCcUizjhG1vETiCY=
+X-Received: by 2002:a05:6902:704:b0:649:cadc:bcf0 with SMTP id
+ k4-20020a056902070400b00649cadcbcf0mr21928845ybt.537.1652247899499; Tue, 10
+ May 2022 22:44:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20220510130729.852544477@linuxfoundation.org>
+In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 11 May 2022 11:14:48 +0530
+Message-ID: <CA+G9fYsLHinM7+LLczS7Exf=mrxkNk6dCNCWEV4zZVc48Fd7Tg@mail.gmail.com>
+Subject: Re: [PATCH 5.4 00/52] 5.4.193-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,60 +71,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   feb9c5e19e913b53cb536a7aa7c9f20107bb51ec
-commit: 5d97408e0d70a7c7c5942ba95260bab7c9e21eb4 drm/bridge: move ANA78xx driver to analogix subdirectory
-date:   2 years, 6 months ago
-config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220511/202205111306.DCEG8q0G-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5d97408e0d70a7c7c5942ba95260bab7c9e21eb4
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 5d97408e0d70a7c7c5942ba95260bab7c9e21eb4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/bridge/analogix/
+On Tue, 10 May 2022 at 18:54, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.193 release.
+> There are 52 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.4.193-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-All warnings (new ones prefixed by >>):
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
->> drivers/gpu/drm/bridge/analogix/analogix-anx78xx.c:50:17: warning: 'anx781x_i2c_addresses' defined but not used [-Wunused-const-variable=]
-      50 | static const u8 anx781x_i2c_addresses[] = {
-         |                 ^~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/bridge/analogix/analogix-anx78xx.c:42:17: warning: 'anx7808_i2c_addresses' defined but not used [-Wunused-const-variable=]
-      42 | static const u8 anx7808_i2c_addresses[] = {
-         |                 ^~~~~~~~~~~~~~~~~~~~~
+## Build
+* kernel: 5.4.193-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.4.y
+* git commit: 52d5d4c85d2dc5c74edaba054d60cdfbda5e9808
+* git describe: v5.4.191-138-g52d5d4c85d2d
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y-sanity/build=
+/v5.4.191-138-g52d5d4c85d2d
 
+## Test Regressions (compared to v5.4.192-33-g7dae5fe9ddc0)
+No test regressions found.
 
-vim +/anx781x_i2c_addresses +50 drivers/gpu/drm/bridge/analogix/analogix-anx78xx.c
+## Metric Regressions (compared to v5.4.192-33-g7dae5fe9ddc0)
+No metric regressions found.
 
-0647e7dd3f7ab2e drivers/gpu/drm/bridge/analogix-anx78xx.c Enric Balletbo i Serra 2016-05-02  41  
-025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22 @42  static const u8 anx7808_i2c_addresses[] = {
-025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  43  	[I2C_IDX_TX_P0] = 0x78,
-025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  44  	[I2C_IDX_TX_P1] = 0x7a,
-025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  45  	[I2C_IDX_TX_P2] = 0x72,
-025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  46  	[I2C_IDX_RX_P0] = 0x7e,
-025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  47  	[I2C_IDX_RX_P1] = 0x80,
-025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  48  };
-025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  49  
-025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22 @50  static const u8 anx781x_i2c_addresses[] = {
-025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  51  	[I2C_IDX_TX_P0] = 0x70,
-025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  52  	[I2C_IDX_TX_P1] = 0x7a,
-025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  53  	[I2C_IDX_TX_P2] = 0x72,
-025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  54  	[I2C_IDX_RX_P0] = 0x7e,
-025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  55  	[I2C_IDX_RX_P1] = 0x80,
-0647e7dd3f7ab2e drivers/gpu/drm/bridge/analogix-anx78xx.c Enric Balletbo i Serra 2016-05-02  56  };
-0647e7dd3f7ab2e drivers/gpu/drm/bridge/analogix-anx78xx.c Enric Balletbo i Serra 2016-05-02  57  
+## Test Fixes (compared to v5.4.192-33-g7dae5fe9ddc0)
+No test fixes found.
 
-:::::: The code at line 50 was first introduced by commit
-:::::: 025910db8057f60d2d2aa11002f7751e3eb66588 drm/bridge: analogix-anx78xx: add support for 7808 addresses
+## Metric Fixes (compared to v5.4.192-33-g7dae5fe9ddc0)
+No metric fixes found.
 
-:::::: TO: Brian Masney <masneyb@onstation.org>
-:::::: CC: Andrzej Hajda <a.hajda@samsung.com>
+## Test result summary
+total: 86221, pass: 72108, fail: 671, skip: 12451, xfail: 991
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 290 total, 290 passed, 0 failed
+* arm64: 40 total, 34 passed, 6 failed
+* i386: 19 total, 19 passed, 0 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 60 total, 54 passed, 6 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 40 total, 40 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

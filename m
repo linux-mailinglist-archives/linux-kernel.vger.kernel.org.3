@@ -2,126 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FCFE522A29
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 05:06:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0FD5522A2B
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 05:06:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232700AbiEKDGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 23:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38802 "EHLO
+        id S233621AbiEKDGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 23:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiEKDGA (ORCPT
+        with ESMTP id S233983AbiEKDGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 23:06:00 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF411289B3
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 20:05:59 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id l11-20020a17090a49cb00b001d923a9ca99so864316pjm.1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 20:05:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zeXQEtR41vW8oV0uB8lf+EcTnJUokpOmF2JIIH/qaxo=;
-        b=MQ8A09vGXiI6pmL3YaUyeC5Oqv1jMNQWEZ8p2FpvrjTyzhUK2OhV196QHRtaU9G1Z8
-         6vcc6nMoCKaCDu+yGcqz1uEFPpi2sFW9cEuy7seO2OtcoXI2GWopNAsnDWk2330MWATX
-         tKmnG9iUTpFc5bbNu/Zo+puitiblgj1awr/jY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zeXQEtR41vW8oV0uB8lf+EcTnJUokpOmF2JIIH/qaxo=;
-        b=MKtvuMt/W1/8Q+ZKsSRJQ4Yttf8orkjdpwDj5qVjJ1YraEwpGGcFG2vmUz24fLhxId
-         bAXYT7umH7Azg14GvpJxTypQvoK1eb/aHoRV/ewZ4lu3PANMTlirTge1oWvxvFcyUtLA
-         sgBvdRCWxO5XwN/ieXi4YuXLWVzZ4EeQ+n8gNCcdTpfYaSI6IEK0DicAfazEkp7G/iP2
-         wx2ioyMi8HHNw9ACCpuwJV4R0TegGSbvlBcJE5BVqnhscHnuBPkgFJzQQlyspxUtBv4s
-         raE73rj60kReDqyF7wW1NbFmrKzAYL3bico2vJbXFfHLgv+7HQIMxRsSYYvmiGCZFXZD
-         Geug==
-X-Gm-Message-State: AOAM531fQeuPIa1mQSG3PvhfIgkWAqBekJXR5Iilq49ZnvduE7LepDrG
-        sKvXbbc5cO3dxNRIaQAwlmVq3g==
-X-Google-Smtp-Source: ABdhPJxLwv6ESDyVK2tUjxF2N76LlATJd4VPEY3UK/13lQBjg60uUZ5/EhmzInRXXzPNiEDUhotLmQ==
-X-Received: by 2002:a17:903:230e:b0:15e:d0a1:922f with SMTP id d14-20020a170903230e00b0015ed0a1922fmr23587196plh.75.1652238359188;
-        Tue, 10 May 2022 20:05:59 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id v6-20020a1709029a0600b0015e8d4eb201sm372188plp.75.2022.05.10.20.05.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 20:05:58 -0700 (PDT)
-Date:   Tue, 10 May 2022 20:05:58 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Alexander Popov <alex.popov@linux.com>,
-        linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org,
-        catalin.marinas@arm.com, linux-kernel@vger.kernel.org,
-        luto@kernel.org, will@kernel.org
-Subject: Re: [PATCH v2 05/13] stackleak: clarify variable names
-Message-ID: <202205102001.7EB50CBE18@keescook>
-References: <20220427173128.2603085-1-mark.rutland@arm.com>
- <20220427173128.2603085-6-mark.rutland@arm.com>
- <e1cf0177-40a0-ffca-6be4-57fd97860c4a@linux.com>
- <YnpiPWYqkA7RW3lm@FVFF77S0Q05N>
+        Tue, 10 May 2022 23:06:34 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC25542ED5;
+        Tue, 10 May 2022 20:06:32 -0700 (PDT)
+Date:   Tue, 10 May 2022 20:06:24 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1652238390;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=N9oPpCxajvjGUrmg0f6gckutPEOOPZaEku255Vyx78E=;
+        b=ctkko5zKqXKRqBvkI7AzNbCPvjk+mTf48++bYM8Vcq12dt+8H2aFcWCV2RRm0dO0MO8OB8
+        Ba3SyHMRE06mHqGuEi54JOaGxRgkuyMtv6h+EXp/ar9SvCbnAIfMlnyYueJ9jdGUKnfPKe
+        s3kYwBI2w4ZRgaXnU6KOHUMVmTVg09M=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Shakeel Butt <shakeelb@google.com>, kernel@openvz.org,
+        Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tejun Heo <tj@kernel.org>
+Subject: Re: kernfs memcg accounting
+Message-ID: <YnsoMEuWjlpDcmt3@carbon>
+References: <7e867cb0-89d6-402c-33d2-9b9ba0ba1523@openvz.org>
+ <20220427140153.GC9823@blackbody.suse.cz>
+ <7509fa9f-9d15-2f29-cb2f-ac0e8d99a948@openvz.org>
+ <YnBLge4ZQNbbxufc@blackbook>
+ <52a9f35b-458b-44c4-7fc8-d05c8db0c73f@openvz.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <YnpiPWYqkA7RW3lm@FVFF77S0Q05N>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <52a9f35b-458b-44c4-7fc8-d05c8db0c73f@openvz.org>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 02:01:49PM +0100, Mark Rutland wrote:
-> On Sun, May 08, 2022 at 11:49:46PM +0300, Alexander Popov wrote:
-> > On 27.04.2022 20:31, Mark Rutland wrote:
-> > > The logic within __stackleak_erase() can be a little hard to follow, as
-> > > `boundary` switches from being the low bound to the high bound mid way
-> > > through the function, and `kstack_ptr` is used to represent the start of
-> > > the region to erase while `boundary` represents the end of the region to
-> > > erase.
-> > > 
-> > > Make this a little clearer by consistently using clearer variable names.
-> > > The `boundary` variable is removed, the bounds of the region to erase
-> > > are described by `erase_low` and `erase_high`, and bounds of the task
-> > > stack are described by `task_stack_low` and `task_stck_high`.
+On Wed, May 04, 2022 at 12:00:18PM +0300, Vasily Averin wrote:
+> On 5/3/22 00:22, Michal Koutný wrote:
+> > When struct mem_cgroup charging was introduced, there was a similar
+> > discussion [1].
+> 
+> Thank you, I'm missed this patch, it was very interesting and useful.
+> I would note though, that OpenVZ and LXC have another usecase:
+> we have separate and independent systemd instances inside OS containers.
+> So container's cgroups are created not in host's root memcg but 
+> inside accountable container's root memcg.  
+> 
+> > I can see following aspects here:
+> > 1) absolute size of kernfs_objects,
+> > 2) practical difference between a) and b),
+> > 3) consistency with memcg,
+> > 4) v1 vs v2 behavior.
+> ...
+> > How do these reasonings align with your original intention of net
+> > devices accounting? (Are the creators of net devices inside the
+> > container?)
+> 
+> It is possible to create netdevice in one namespace/container 
+> and then move them to another one, and this possibility is widely used.
+> With my patch memory allocated by these devices will be not accounted
+> to new memcg, however I do not think it is a problem.
+> My patches protect the host mostly from misuse, when someone creates
+> a huge number of nedevices inside a container.
+> 
+> >> Do you think it is incorrect and new kernfs node should be accounted
+> >> to memcg of parent cgroup, as mem_cgroup_css_alloc()-> mem_cgroup_alloc() does?
 > > 
-> > A typo here in `task_stck_high`.
+> > I don't think either variant is incorrect. I'd very much prefer the
+> > consistency with memcg behavior (variant a)) but as I've listed the
+> > arguments above, it seems such a consistency can't be easily justified.
 > 
-> Ah; whoops.
+> From my point of view it is most important to account allocated memory
+> to any cgroup inside container. Select of proper memcg is a secondary goal here.
+> Frankly speaking I do not see a big difference between memcg of current process,
+> memcg of newly created child and memcg of its parent.
+> 
+> As far as I understand, Roman chose the parent memcg because it was a special
+> case of creating a new memory group. He temporally changed active memcg
+> in mem_cgroup_css_alloc() and properly accounted all required memcg-specific
+> allocations.
 
-No worries; I fixed this when I took the patch.
+My primary goal was to apply the memory pressure on memory cgroups with a lot
+of (dying) children cgroups. On a multi-cpu machine a memory cgroup structure
+is way larger than a page, so a cgroup which looks small can be really large
+if we calculate the amount of memory taken by all children memcg internals.
 
-> > That was also the main reason why I reused the 'boundary' variable: I wanted
-> > the compiler to allocate it in the register and I avoided creating many
-> > local variables.
-> >
-> > Mark, did your refactoring make the compiler allocate local variables on the
-> > stack instead of the registers?
-> 
-> Considering the whole series, testing with GCC 11.1.0:
-> 
-> * On arm64:
->      before: stackleak_erase() uses 48 bytes of stack
->      after: stackleak_erase() uses 0 bytes of stack
-> 
->      Note: this is entirely due to patch 1; arm64 has enough GPRs that it
->      doesn't need to use the stack.
-> 
-> * On x86_64:
->      before: stackleak_erase() uses 0 bytes of stack
->      after:  stackleak_erase() uses 0 bytes of stack
-> 
-> * On i386
->      before: stackleak_erase() uses 8 bytes of stach
->      after:  stackleak_erase() uses 16 bytes of stack
-> 
-> The i386 case isn't ideal, but given that those bytes will easily be used by
-> the entry triage code before getting to any syscall handling, I don't believe
-> that's an issue in practice.
+Applying this pressure to another cgroup (e.g. the one which contains systemd)
+doesn't help to reclaim any pages which are pinning the dying cgroups.
 
-I am biased and totally fine with choosing a solution where 64-bit
-improvement comes at a 32-bit cost.
+For other controllers (maybe blkcg aside, idk) it shouldn't matter, because
+there is no such problem there.
 
--- 
-Kees Cook
+For consistency reasons I'd suggest to charge all *large* allocations
+(e.g. percpu) to the parent cgroup. Small allocations can be ignored.
+
+Thanks!

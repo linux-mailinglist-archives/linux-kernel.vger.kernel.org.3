@@ -2,153 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C13D3522CB1
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 08:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E054522CB8
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242360AbiEKG6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 02:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
+        id S242478AbiEKHBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 03:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233352AbiEKG6R (ORCPT
+        with ESMTP id S242416AbiEKHBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 02:58:17 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F81D994FA
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 23:58:15 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id l11-20020a17090a49cb00b001d923a9ca99so1255420pjm.1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 23:58:15 -0700 (PDT)
+        Wed, 11 May 2022 03:01:41 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D45E56405
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:01:38 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2f4dfd09d7fso10472077b3.0
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:01:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=K6wA7u9nlH2LdboqPtaGVfPJPki2AKRQH5484bIHWMg=;
-        b=pgjJK2J39T3beCax1II7a6Dqfmdllwbq+uAase9DTEpHkBGCFCCvVu8HbOEwWKI9T0
-         /pih1l6aBpvIl9mSeaXn6BOyuf0MdTOFcY+6lMQf4IMdGYEGbkWgReR5kHEX7G2x9PN/
-         qeU/D5dc0FTYlZCoBy87ORI12sLce4/ykfmoeKovnUp0pNWv8y5tZA3DL4prCrdrV7Ts
-         n8bXfTG4Hbs4qw8+LlUw1N4qmDjpFNIzKoazkMlomEYbDDFlklO7LH+mb1jrY09jh6ey
-         UGfDlNBYejMGhVfof1VA1t/YDu/cgnD2E57oQDnyAfhRzqYYykMJRkAjwOe78YX4hoUM
-         ojxg==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=NAsDtBmU2OgI3N2OOYVSrhImShkhZd5HyHIxRIc0E/4=;
+        b=U8RCrW8+Yjn/wgcQOIYzzbAstXL9qyLNQ2FILySewotlZ1IO849+9WLjTbiNuCX8Er
+         Ij9OQ35Qp20XpJUf6mROtP5zM+ndT6BOTe7nK5AQtUvfSm9XxSPuBW5mCTh9t4JWk98J
+         Q4FmNAc/r0Z0FhOeFM+b8unLyApQCsb96U2/uM5emYaD5Dfh9XEcPSnyFAa2VZJi6YHU
+         Cda0T9KALbpdEUAVtOV6BIHCMDE0UHkK1mer694Uqf9ekzKCkyWmudaj39y+I82o9FRM
+         XAKOJnMKuJstgcdJ2bP1ImVc/X/mYPff0JvAuzgVtCXJE3Jw2DEW7HypOlNZnvDIZAsH
+         F3WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=K6wA7u9nlH2LdboqPtaGVfPJPki2AKRQH5484bIHWMg=;
-        b=5Bw1eB+WPIO7etBlolHuvsLDy7rEismjJ8mHyDpOUK5gPO5dl0c6pHS+QsNzJKk5eE
-         pylcTOG7SgJAog3/FULhxWjnWiMJrgxsTBTQDFu/EmA7c+SkUiFL+4CEDlCxXbaocJnW
-         cXzEO9ypto6rRhUXEKILxnGNPFpmi39zL+49sAVb/unC5LTpeonxBjT44wEV9c92OU+g
-         KZMkcZzql0Qo3CZ4mFZBUVeJ7sD77ciY1Xih6AfzARR4EdB//Ba7vUa7Nk4X5yGfhqPI
-         Cj1G1ScAnXUBqivIKKeGOsDAKfy/plfX1UBR3SMTDg7D3y3bOP3/QNzxKv0ukxngyEwY
-         RCYg==
-X-Gm-Message-State: AOAM531XfJsodaOR/NX1+jMLmVnDyvQF8aer9xHRJrSgnacNZINxNfhJ
-        Ur+iaMb0h7PjI9O5JS8uPcUScL5jQaAHfquCEYs=
-X-Google-Smtp-Source: ABdhPJycTqz9MfSxmTeQC3NNqRXwnBmg1ggt7GaNqU7Xvy/Afslm0yAQen3gRZ0c3GVtCC7vQ2id5Q==
-X-Received: by 2002:a17:902:c2cf:b0:15f:1396:f54e with SMTP id c15-20020a170902c2cf00b0015f1396f54emr12870792pla.161.1652252294808;
-        Tue, 10 May 2022 23:58:14 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id u18-20020a62ed12000000b0050dc76281a3sm766115pfh.125.2022.05.10.23.58.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 23:58:14 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Richard Zhao <richard.zhao@linaro.org>,
-        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] ASoC: fsl: Fix refcount leak in imx_sgtl5000_probe
-Date:   Wed, 11 May 2022 10:58:03 +0400
-Message-Id: <20220511065803.3957-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=NAsDtBmU2OgI3N2OOYVSrhImShkhZd5HyHIxRIc0E/4=;
+        b=f3SjHlP1vIeM2TPF23iv7T8GNpHO/LP2Vba6+oupY3yehxr26aq88yRVUhxljIke75
+         1yhtsfBzNQ1TYS7edux5F7OUDIkw6ZUpBrxONnyDydeEJBTCYKnZTD/fXhXluUjfHTb7
+         AJGI6DLm50zxQguNlznbzvll8KBmBHSB9xiqKm9jiHHDf7OCItwqtgrjAse6LD9M3RbV
+         2FkqpJvAhctxnRH1XnXWGCqEKWq9AMGYRadjMrMbSG1xDoyQAY5XyxubLkSD4iA/xgPC
+         IIXDyqjQ6INzjz0uTTqHBhWfMMBpB/gO7amkve/p1ETwndtp/8Q4aw9NaNJ6x7fDbQtY
+         UYrQ==
+X-Gm-Message-State: AOAM532uolNNyxYGge79MFmkEb3tefDJfzm+tv5TaxEQ09k0dGgEC+cC
+        gFSSigpQctpu2P0O6yna7uIHVFUg0GSS
+X-Google-Smtp-Source: ABdhPJwU4Jwffn6g4l/pH1fEXk9F+avTtorT4Pqr2TpYmFkYs0lyFCsfgyeFFaXwvAabbMAnregKh0qs2tlf
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:b6c9:16a6:f912:39d5])
+ (user=irogers job=sendgmr) by 2002:a0d:edc7:0:b0:2f8:f300:df2b with SMTP id
+ w190-20020a0dedc7000000b002f8f300df2bmr23506929ywe.515.1652252497609; Wed, 11
+ May 2022 00:01:37 -0700 (PDT)
+Date:   Wed, 11 May 2022 00:01:26 -0700
+Message-Id: <20220511070133.710721-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
+Subject: [PATCH 0/7] Rewrite jevents program in python
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Felix Fietkau <nbd@nbd.name>, Qi Liu <liuqi115@huawei.com>,
+        Like Xu <likexu@tencent.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Nick Forrington <nick.forrington@arm.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>, Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        ananth.narayan@amd.com, ravi.bangoria@amd.com,
+        santosh.shukla@amd.com, sandipan.das@amd.com,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Kshipra Bopardikar <kshipra.bopardikar@intel.com>
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_find_i2c_device_by_node() takes a reference,
-In error paths, we should call put_device() to drop
-the reference to aviod refount leak.
+New architectures bring new complexity, such as Intel's hybrid
+models. jevents provides an alternative to specifying events in the
+kernel and exposing them through sysfs, however, it is difficult to
+work with. For example, an error in the json input would yield an
+error message but no json file or location. It is also a challenge to
+update jsmn.c given its forked nature.
 
-Fixes: 81e8e4926167 ("ASoC: fsl: add sgtl5000 clock support for imx-sgtl5000")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- sound/soc/fsl/imx-sgtl5000.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+The changes here switch from jevents.c to a rewrite in python called
+jevents.py. This means there is a build time dependency on python, but
+such a dependency already exists for asciidoc (used to generate perf's
+man pages).
 
-diff --git a/sound/soc/fsl/imx-sgtl5000.c b/sound/soc/fsl/imx-sgtl5000.c
-index 8daced42d55e..580a0d963f0e 100644
---- a/sound/soc/fsl/imx-sgtl5000.c
-+++ b/sound/soc/fsl/imx-sgtl5000.c
-@@ -120,19 +120,19 @@ static int imx_sgtl5000_probe(struct platform_device *pdev)
- 	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
- 	if (!data) {
- 		ret = -ENOMEM;
--		goto fail;
-+		goto put_device;
- 	}
- 
- 	comp = devm_kzalloc(&pdev->dev, 3 * sizeof(*comp), GFP_KERNEL);
- 	if (!comp) {
- 		ret = -ENOMEM;
--		goto fail;
-+		goto put_device;
- 	}
- 
- 	data->codec_clk = clk_get(&codec_dev->dev, NULL);
- 	if (IS_ERR(data->codec_clk)) {
- 		ret = PTR_ERR(data->codec_clk);
--		goto fail;
-+		goto put_device;
- 	}
- 
- 	data->clk_frequency = clk_get_rate(data->codec_clk);
-@@ -158,10 +158,10 @@ static int imx_sgtl5000_probe(struct platform_device *pdev)
- 	data->card.dev = &pdev->dev;
- 	ret = snd_soc_of_parse_card_name(&data->card, "model");
- 	if (ret)
--		goto fail;
-+		goto put_device;
- 	ret = snd_soc_of_parse_audio_routing(&data->card, "audio-routing");
- 	if (ret)
--		goto fail;
-+		goto put_device;
- 	data->card.num_links = 1;
- 	data->card.owner = THIS_MODULE;
- 	data->card.dai_link = &data->dai;
-@@ -174,7 +174,7 @@ static int imx_sgtl5000_probe(struct platform_device *pdev)
- 	ret = devm_snd_soc_register_card(&pdev->dev, &data->card);
- 	if (ret) {
- 		dev_err_probe(&pdev->dev, ret, "snd_soc_register_card failed\n");
--		goto fail;
-+		goto put_device;
- 	}
- 
- 	of_node_put(ssi_np);
-@@ -182,6 +182,8 @@ static int imx_sgtl5000_probe(struct platform_device *pdev)
- 
- 	return 0;
- 
-+put_device:
-+	put_device(&codec_dev->dev);
- fail:
- 	if (data && !IS_ERR(data->codec_clk))
- 		clk_put(data->codec_clk);
+A challenge with this code is in avoiding regressions. For this reason
+the jevents.py produces identical output to jevents.c, validated with a
+test script and build target.
+
+A difference in the python to the C approach is that the python loads
+an entire json file in to memory, while the C code works from token to
+token. In some cases the C approach was sensitive to the order of
+dictionary items in the json file. To ensure matching output there are
+two changes made to jevents.c to cause it to read all values before
+creating output.
+
+The changes also found a bug in Ivytown's UNC_M_ACT_COUNT.RD event
+encoding, as well as unnecessary whitespace introduced in Alderlake's
+metrics. In these cases the json input is fixed.
+
+Ian Rogers (7):
+  perf jevents: Append PMU description later
+  perf vendor events: Fix Alderlake metric groups
+  perf vendor events: Fix Ivytown UNC_M_ACT_COUNT.RD umask
+  perf jevents: Modify match field
+  perf jevents: Add python converter script
+  perf jevents: Switch build to use jevents.py
+  perf jevents: Remove jevents.c
+
+ tools/perf/Makefile.perf                      |   13 +-
+ tools/perf/pmu-events/Build                   |    9 +-
+ .../arch/x86/alderlake/adl-metrics.json       |   32 -
+ .../arch/x86/ivytown/uncore-memory.json       |    3 +-
+ tools/perf/pmu-events/jevents.c               | 1322 -----------------
+ tools/perf/pmu-events/jevents.py              |  392 +++++
+ tools/perf/pmu-events/jsmn.h                  |   68 -
+ tools/perf/pmu-events/json.c                  |  162 --
+ tools/perf/pmu-events/json.h                  |   39 -
+ tools/perf/tests/pmu-events.c                 |   30 +-
+ 10 files changed, 412 insertions(+), 1658 deletions(-)
+ delete mode 100644 tools/perf/pmu-events/jevents.c
+ create mode 100755 tools/perf/pmu-events/jevents.py
+ delete mode 100644 tools/perf/pmu-events/jsmn.h
+ delete mode 100644 tools/perf/pmu-events/json.c
+ delete mode 100644 tools/perf/pmu-events/json.h
+
 -- 
-2.25.1
+2.36.0.512.ge40c2bad7a-goog
 

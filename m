@@ -2,93 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC88523465
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D648523467
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243917AbiEKNhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54718 "EHLO
+        id S243916AbiEKNh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243888AbiEKNh0 (ORCPT
+        with ESMTP id S244014AbiEKNhu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:37:26 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A5A666BD;
-        Wed, 11 May 2022 06:37:24 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24B9kBLM020873;
-        Wed, 11 May 2022 06:37:22 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=pfpt0220;
- bh=Cuxao/Cs7zjSSejDLbRlnXlWLx6Anw6Uo7EA8Lvp4rA=;
- b=PHTO4bLNCMkFm+hWrtWinA0x53gB2NgUzNY8/1L3HOiS/vmmI0Ea6FfEmQqYlyiAI1qe
- APRnZvwtOnm9vDCYpxkXUtP9UIJ/b/tNQlXtrpdQ5oeeobo5aZIBpLClYvyZKv6ovAIj
- T7rbijZeKayDIyVgbM6ZE3g3kUdfNZZOTfKdE4MZeLT/Vk2nODut6ZZbtAHwdTposHJe
- rjPiK7K9bNJN7jeb4utNZ8Nao7fc2ncYPWOrvnj6r+SjC6miSGkzwInkZduewxhULSVl
- wzwH4pGGvJ3hW+nfIfnCifUeLYyL6JmxQL1irtGEI1S+zU7PMsDlJ04aozonJFduUTRE JQ== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3g0at20uaf-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 11 May 2022 06:37:22 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 11 May
- 2022 06:37:20 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 11 May 2022 06:37:20 -0700
-Received: from localhost.localdomain (unknown [10.110.150.250])
-        by maili.marvell.com (Postfix) with ESMTP id 540A63F7095;
-        Wed, 11 May 2022 06:37:20 -0700 (PDT)
-From:   Piyush Malgujar <pmalgujar@marvell.com>
-To:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <sgarapati@marvell.com>, <sbalcerak@marvell.com>,
-        <cchavva@marvell.com>, Piyush Malgujar <pmalgujar@marvell.com>
-Subject: [PATCH 3/3] drivers: i2c: thunderx: Allow driver to work with ACPI defined TWSI controllers
-Date:   Wed, 11 May 2022 06:36:59 -0700
-Message-ID: <20220511133659.29176-4-pmalgujar@marvell.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220511133659.29176-1-pmalgujar@marvell.com>
-References: <20220511133659.29176-1-pmalgujar@marvell.com>
+        Wed, 11 May 2022 09:37:50 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2503766C82
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:37:40 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id a191so1832266pge.2
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:37:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZddwKY35pUrh6R5AAj9OCEj0zF8sOKGHECLF2uLCy64=;
+        b=jvnIeRP3G/HbVmLPD7w6dkgxT0piYIz88WFV06yyQu91PXBZ2cPblZHFShL3Kk7iJg
+         SylzzqYDiMsmjkqyRYPPIMdPBTxPdba7UNRLnZb+aJD3siim0k+8zAK9bOcohRQ4fBnx
+         C8/xCp0aqJpv2AiKulUVIAkeKPBFdYNmbOF4iI2ZN4GcGZHpbI6HqCqy9VQUWP5HGSuH
+         S9Np3y3ao934wf7u5wpJIulciBzXm9tQDBDP8MX9lNrBy0cxldKW5lIXvmmMBsAPJe3T
+         dUbZMZBqzCGCEAaGIdVcUu/l+xmzKkmYoOSJXh5Pk1V+frCY+JqgiDIQJCVJxC99LKl8
+         u85g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZddwKY35pUrh6R5AAj9OCEj0zF8sOKGHECLF2uLCy64=;
+        b=CcADzU94zMlFBGhQaz6eUDk1EXuN2ARlEIhKwaPAErwNVSwet7WwFszPPdzttfIK1r
+         Q+wsrhrOv6F70E8By2jvahDExxSM+v5CKHB2Rsds+Zu0oxSmjMfofP83zHw5UuNIjRIu
+         Bnco5r27qcBMGDFjJ8ABQWycRItAzmFgFAMcYJaSrV8KFZnk2jV8Vc2rlbv9y+2I24gk
+         a33a6//kRGr2WdhdjwJhKJHaeUapLlN1EkKge2eyZZTZYvlDexU0SebbimO7TlaCj7ka
+         K8YeLN6GGDPbirDkwihfxyhXKyINPk6VfY1kU1qmS5eIercLST9zFmJObU8aZ2irgVvM
+         bvzw==
+X-Gm-Message-State: AOAM530Plq4DDvcJV+ZnLFusL0WnVm87yyGX1o7qU4wK732vqU1knvmE
+        0Qqb1+RhLZDBGzGZj2MhE/Y=
+X-Google-Smtp-Source: ABdhPJxL4qPnoibT3RMP2XXaUwIm8HlwdKX4ysIXOXXWBN6ZnU+aVvmJ/CK4tHzv9bgNCDSgwTbrvg==
+X-Received: by 2002:aa7:83d0:0:b0:50c:eb2b:8e8a with SMTP id j16-20020aa783d0000000b0050ceb2b8e8amr25314048pfn.31.1652276260106;
+        Wed, 11 May 2022 06:37:40 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id o16-20020a170902d4d000b0015e8d4eb299sm1971367plg.227.2022.05.11.06.37.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 06:37:39 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: mxs-saif: Fix refcount leak in mxs_saif_probe
+Date:   Wed, 11 May 2022 17:37:22 +0400
+Message-Id: <20220511133725.39039-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: J1j3R9mGARKXaQ6nv0-gWUftY3zAhRvZ
-X-Proofpoint-GUID: J1j3R9mGARKXaQ6nv0-gWUftY3zAhRvZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-11_05,2022-05-11_01,2022-02-23_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to i2c->adap.dev.fwnode not being set, ACPI_COMPANION() wasn't properly
-found for TWSI controllers.
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when done.
 
-Signed-off-by: Szymon Balcerak <sbalcerak@marvell.com>
-Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
+Fixes: 08641c7c74dd ("ASoC: mxs: add device tree support for mxs-saif")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- drivers/i2c/busses/i2c-thunderx-pcidrv.c | 1 +
+ sound/soc/mxs/mxs-saif.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/i2c/busses/i2c-thunderx-pcidrv.c b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-index 5621e983406b0bebf9c5c9e30921e45f3f15909b..3dd5a4d798f99e9b5282360cf9d5840042fc8dcc 100644
---- a/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-@@ -220,6 +220,7 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
- 	i2c->adap.bus_recovery_info = &octeon_i2c_recovery_info;
- 	i2c->adap.dev.parent = dev;
- 	i2c->adap.dev.of_node = pdev->dev.of_node;
-+	i2c->adap.dev.fwnode = dev->fwnode;
- 	snprintf(i2c->adap.name, sizeof(i2c->adap.name),
- 		 "Cavium ThunderX i2c adapter at %s", dev_name(dev));
- 	i2c_set_adapdata(&i2c->adap, i2c);
+diff --git a/sound/soc/mxs/mxs-saif.c b/sound/soc/mxs/mxs-saif.c
+index 879c1221a809..7afe1a1acc56 100644
+--- a/sound/soc/mxs/mxs-saif.c
++++ b/sound/soc/mxs/mxs-saif.c
+@@ -754,6 +754,7 @@ static int mxs_saif_probe(struct platform_device *pdev)
+ 		saif->master_id = saif->id;
+ 	} else {
+ 		ret = of_alias_get_id(master, "saif");
++		of_node_put(master);
+ 		if (ret < 0)
+ 			return ret;
+ 		else
 -- 
-2.17.1
+2.25.1
 

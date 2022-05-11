@@ -2,89 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9E2523BBF
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:40:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED30523BC2
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345721AbiEKRkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 13:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
+        id S1345722AbiEKRl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 13:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245036AbiEKRka (ORCPT
+        with ESMTP id S1345733AbiEKRlO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 13:40:30 -0400
-Received: from smtp-42ac.mail.infomaniak.ch (smtp-42ac.mail.infomaniak.ch [84.16.66.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A00A231CBA
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:40:29 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Kz2Hb53XRzMqGVb;
-        Wed, 11 May 2022 19:40:27 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Kz2HZ3RQVzlhMC3;
-        Wed, 11 May 2022 19:40:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1652290827;
-        bh=huDBKAvemFeLNSrEns2wEl+ddvdp4cf6NbrovNveSNg=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=uvBYf/7oUC9cw4mua9tQliavsBgd2bFRUl5Vb6dMxCNtPZC4iavHWJdKOw1NuNAuS
-         +GPmHKWQ2zgGjk1x9sdhyUGWHYTGAB3FygfxEioo20QiWaQv3JHE/Jr0MD53J6leDn
-         B8qR2+LO68yIaUBZ8V/a3rh6enWChJ3Fa45whE/Y=
-Message-ID: <9c5eb09f-8f7d-2339-c8bb-4b908d7abab0@digikod.net>
-Date:   Wed, 11 May 2022 19:40:25 +0200
+        Wed, 11 May 2022 13:41:14 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E827E219F69;
+        Wed, 11 May 2022 10:41:09 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id p18so3426277edr.7;
+        Wed, 11 May 2022 10:41:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2Ke+AGfzv6tvoEFSxFKuURhI7WvGdekzVHjZqAbbO8s=;
+        b=G9wqQwuFFHa1lknmirIg8grgSmlGhY4vOMeTI7ajMbQFOkPDfAjxkC53pYWGPJ2cZF
+         JYFgcz/9NdUz5O/wqsbhfPi2zN/aY/XE8j2tiIE+GNsGbyuPFnW8P1tp2iJW3pJ7hdxQ
+         0IWMmg6WoVXdfvmSzYuR0vhQNDCC0PHJKULu799/jK8hUupfLZ4wSeZ7OW6yle+knuIx
+         wKXck2gICgiHyMkOEoopjNhzgzuCsUiXl0Fc8RjVEZqu59KvypFwP3AWHlhIyW+2eUvJ
+         9/csBr94Q6HkyJhoRRrkcPuuXe8cn9wJZuWneLmHD2vUIG70ZoAZdfhxmnMfAxo/8/s1
+         RtmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2Ke+AGfzv6tvoEFSxFKuURhI7WvGdekzVHjZqAbbO8s=;
+        b=IyTEu0BCJo1oB/cUJnUAJCpi9etJdWOi4APkhpkhnU3OK4KyJvQw2Sbnthwgb7Kxu1
+         UKcGilb7cwwvXQo510/KQU4oxvdmispBYROdmkre/SAUi3kWcfnVzHZNDVsx9jZ6qW6A
+         XtbkR1ReBjaHUJEssFgr2CaAsbCF4eQCrYlHRIhuDXjMV2ieCMxOiVhDeWeo3CCExoLV
+         3mNFTUP4FdL/nD0Ux8TQXNYC+y3JFOvCI8tJZTFpUk956cYjQVPlvDNuNC3DquaSCo+L
+         m2IMd6Ovc74Evo611BIhymOWbwjpiRDLSWzd4wDwywGCgK6oToRl24HAOKpgtVRzqzhP
+         ZEnA==
+X-Gm-Message-State: AOAM533bLk4qWjQvGFDPtfc/i5dIJE2ibDasrobjBAftnPcZbBzuO9TQ
+        HHeUQgZvcfSS74UGlrwTBImL5b8PiyHNmllKooQ=
+X-Google-Smtp-Source: ABdhPJypHOUVtZ/mWQM6O1I1uprLxF37dkIpuFfu2UGbONcylK6L0+EILGXJ8zFdWrxtLQMY1Q94ZDxv7qrd1l5g0T4=
+X-Received: by 2002:a05:6402:1d4c:b0:427:d1f5:3a41 with SMTP id
+ dz12-20020a0564021d4c00b00427d1f53a41mr29873435edb.218.1652290868261; Wed, 11
+ May 2022 10:41:08 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: 
-Content-Language: en-US
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Brian Norris <briannorris@chromium.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        Joe Perches <joe@perches.com>,
-        Kees Cook <keescook@chromium.org>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Paul Moore <paul@paul-moore.com>, Tom Rix <trix@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-References: <20220506160106.522341-1-mic@digikod.net>
- <152da06a-330d-3125-6f41-262e0751f41b@digikod.net>
- <CANiq72mST6rfJDVGGT2+=_FUCXwms6N8mo2eoLzQ6KW64M9BtQ@mail.gmail.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [PATCH v2 0/5] Fix clang-format configuration according to
- checkpatch.pl
-In-Reply-To: <CANiq72mST6rfJDVGGT2+=_FUCXwms6N8mo2eoLzQ6KW64M9BtQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <YnoJ0k6eIUiwjXSZ@debian-BULLSEYE-live-builder-AMD64>
+ <CAHp75Vd574LCnEq-KX=WHnnDyrjZgGu6W9wNEbnw79FBpyx=Lw@mail.gmail.com> <8bd83f45-5278-e817-3f65-88fafd0ad3f4@collabora.com>
+In-Reply-To: <8bd83f45-5278-e817-3f65-88fafd0ad3f4@collabora.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 11 May 2022 19:40:31 +0200
+Message-ID: <CAHp75VcQYncfCv-2GE0a0e=0iOLBC6wMvoH8pFCirN3NyLzdhw@mail.gmail.com>
+Subject: Re: [PATCH RESEND v11] platform/chrome: Add ChromeOS ACPI device driver
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <eballetbo@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Dmitry Torokhov <dtor@chromium.org>,
+        Gwendal Grignou <gwendal@chromium.org>, vbendeb@chromium.org,
+        Andy Shevchenko <andy@infradead.org>,
+        Ayman Bagabas <ayman.bagabas@gmail.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        =?UTF-8?Q?Bla=C5=BE_Hrastnik?= <blaz@mxxn.io>,
+        Darren Hart <dvhart@infradead.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jeremy Soller <jeremy@system76.com>,
+        Mattias Jacobsson <2pi@mok.nu>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Rajat Jain <rajatja@google.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        chrome-platform@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 11, 2022 at 5:59 PM Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+> On 5/10/22 2:33 PM, Andy Shevchenko wrote:
+> > On Tue, May 10, 2022 at 8:44 AM Muhammad Usama Anjum
+> > <usama.anjum@collabora.com> wrote:
 
-On 11/05/2022 17:29, Miguel Ojeda wrote:
-> Hi Mickaël,
-> 
-> On Wed, May 11, 2022 at 4:19 PM Mickaël Salaün <mic@digikod.net> wrote:
->>
->> Miguel, what do you think about this series? Do you plan to take it for
->> the next merge window? FYI, I plan to use it for Landlock [1] and send
->> it for the next merge window. Could you publish your pending
->> clang-format changes so that I can make sure everything is OK?
-> 
-> It looked good to me overall (though it indeed conflicts with what I
-> was doing) -- I will take it for the next merge window.
+...
 
-Good. Please keep me in the loop, I would like to try your changes as 
-soon as possible (before you make a PR).
+> >> +       static struct attribute *attrs_##_group[] = {                                   \
+> >> +               &dev_attr_0_##_group.attr,                                              \
+> >> +               &dev_attr_1_##_group.attr,                                              \
+> >> +               &dev_attr_2_##_group.attr,                                              \
+> >> +               &dev_attr_3_##_group.attr,                                              \
+> >> +               NULL                                                                    \
 
-> I am thinking
-> of putting Brian as author and you as Co-developed-by for the last one
-> to be fair (Brian: is this OK with you too?).
+(1)
 
-Looks fair.
+> >> +       };                                                                              \
+> >> +       static const struct attribute_group attr_group_##_group = {                     \
+> >> +               .name = _name,                                                          \
+> >> +               .is_visible = attr_is_visible_gpio_##_num,                              \
+> >
+> >> +               .attrs = attrs_##_group                                                 \
+> >
+> > Keep a comma here.
+
+> Is there any particular reason for it?
+
+Yes, if it's not a terminator entry, like (1), the comma would help to
+avoid unneeded churm in the future in case someone wants to add
+another initialization member.
+
+> If there is, I'll add commas to
+> all the structures.
+
+It depends if it is a terminator entry or not, so please check
+carefully where to add and where not (the latter example is (1) where
+comma is not needed and theoretically might add a confusion).
+
+-- 
+With Best Regards,
+Andy Shevchenko

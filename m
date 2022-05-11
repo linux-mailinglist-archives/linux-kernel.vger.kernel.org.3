@@ -2,153 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59CC6523A6F
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BF0A523A79
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235739AbiEKQgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 12:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48492 "EHLO
+        id S1344876AbiEKQj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 12:39:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344879AbiEKQgF (ORCPT
+        with ESMTP id S231387AbiEKQj0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 12:36:05 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BACB25C54;
-        Wed, 11 May 2022 09:36:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gP4j0VTBaqd67iq071u/RwrWUu7NK1QjS14KvP0f4w4=; b=zH/IvvnLcd9KhzvxLczeTFaKMf
-        23ILOEtzst/8t24joEjQ3SQwZAMbZsO1vFO8h87wRSRBbvR58MoRTfBUHTqsQHUNqfjflkc9Em7Db
-        49FxfXeoOfG+SZQJKKYotIGO7lfCuKDvrgIw2YpIIT3rqYFAU5CVeOHNf5zpzj+H8twh/wmd9zm+j
-        CfL+/YOGpkYTdJ19qlMpQu3zi2E5dRQxmne2zF2FrkhxRDeoiQT7LZaeYsOURJGPdrDeAxi6n25hS
-        oGkMiaariQgL+O8+oMwVL5NaJ3RU/CrDEnIbHOMf6edFAYtQ/dCQLOhF+ebrZuVehVo+q9f+t86k/
-        nlwm2aRw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nopJb-007oQt-D3; Wed, 11 May 2022 16:35:55 +0000
-Date:   Wed, 11 May 2022 09:35:55 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        fnovak@us.ibm.com, linuxppc-dev@ozlabs.org,
-        christophe.leroy@csgroup.eu
-Subject: Re: request_module DoS
-Message-ID: <Ynvl6wCQRFdYsHar@bombadil.infradead.org>
-References: <YnXiuhdZ49pKL/dK@gondor.apana.org.au>
- <874k1zt0ec.fsf@mpe.ellerman.id.au>
- <Ynk9j6DQmVGAA3Jf@bombadil.infradead.org>
+        Wed, 11 May 2022 12:39:26 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E46A6E8EE;
+        Wed, 11 May 2022 09:39:25 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id i27so5183520ejd.9;
+        Wed, 11 May 2022 09:39:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=wuJ85LzoJRTqUhxUdivNhhyhKIi6qZtS9mW54zLXzCI=;
+        b=iiKpqEho+iTsam9OSQMO7b0tE1w9WoUryaoiVxDtMeerHmXp30BR6A59hYZ1uoN+L+
+         cct+2DPf3NvH2LBE7HppPi4ZjBp7n755AdOSmQ98GHrt28pXEd8Qsn3pk/8zu8BP9NpU
+         72jRXVhdkkNo2t5Cgj4k8MkLpI1YnqVglZPeZN5Zh+UfM8HnEaFsT8uAEH706wQRRqpo
+         wZ1AMGdA9WEIvxJY2NMECCM8fUKWeKdAqVCsx3ArMu+Y9cIeWnIwdPOO5IncTe5uX7vg
+         ItbnLe67bUwKKD5GG8z5SQWR0kaLnukpldz07VITIdhIYXqjEM6C7odJ9VGLZXLGFZfC
+         pupA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=wuJ85LzoJRTqUhxUdivNhhyhKIi6qZtS9mW54zLXzCI=;
+        b=wBD+YUOE/rsHQTV0yiabq9yQ1VKW08fdpjmpTgBlqc1gCoXMVGEGBI769ofuDGdEuP
+         pHfj/TvN/I0UCXZCwpz3aXbMeksn0OCTomHq1tf3ylc0pNVB/qMSwcCx+COUJibC2jY5
+         daPY3tJwHLTtSsaArK0VaWs1A1qp18DDd0Y+abGDQNKsJ8jmmsjVPiZI4rZXlpHWBSjs
+         9tLpsQ1WzinX3UpSU/L7mlWGerHH80XtRyUt8XlvLRG0jfLtR99TtUOjryBaGrhWs4Po
+         UvbzpobQKb1RfrAULKC3uqCyP5gvOD1MQX3U4NtbAAOez5FkyDQaiw2xoVpgt3vCsH/P
+         LsMQ==
+X-Gm-Message-State: AOAM531mPF7rfDyEZogeU6OyG/HgIte3JkEnCAsOo4O26H4VWV2RYdoK
+        /mE1vQPCn8v8/R9EkjpPxwM=
+X-Google-Smtp-Source: ABdhPJwVdUjdYNHQDUWiDOlIQIJ3TgAkOAOMXfzEukY8HEFYvt3YDNxs1GNlFUSIle37aTchXgIIDQ==
+X-Received: by 2002:a17:906:4fd5:b0:6f8:5aa9:6f13 with SMTP id i21-20020a1709064fd500b006f85aa96f13mr21390266ejw.267.1652287164116;
+        Wed, 11 May 2022 09:39:24 -0700 (PDT)
+Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
+        by smtp.gmail.com with ESMTPSA id a7-20020a170906670700b006f3ef214e31sm1137536ejp.151.2022.05.11.09.39.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 09:39:23 -0700 (PDT)
+From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] dt-bindings: media: rockchip-vpu: Add RK3568 VEPU compatible
+Date:   Wed, 11 May 2022 18:37:54 +0200
+Message-ID: <2486415.XAZu0pfo7u@archbook>
+In-Reply-To: <bc4c395d-4e21-1d15-96be-00a5cad1d6f7@linaro.org>
+References: <20220511155309.2637-1-frattaroli.nicolas@gmail.com> <20220511155309.2637-2-frattaroli.nicolas@gmail.com> <bc4c395d-4e21-1d15-96be-00a5cad1d6f7@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ynk9j6DQmVGAA3Jf@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 09:13:03AM -0700, Luis Chamberlain wrote:
-> On Mon, May 09, 2022 at 09:23:39PM +1000, Michael Ellerman wrote:
-> > Herbert Xu <herbert@gondor.apana.org.au> writes:
-> > > Hi:
-> > >
-> > > There are some code paths in the kernel where you can reliably
-> > > trigger a request_module of a non-existant module.  For example,
-> > > if you attempt to load a non-existent crypto algorithm, or create
-> > > a socket of a non-existent network family, it will result in a
-> > > request_module call that is guaranteed to fail.
-> > >
-> > > As user-space can do this repeatedly, it can quickly overwhelm
-> > > the concurrency limit in kmod.  This in itself is expected,
-> > > however, at least on some platforms this appears to result in
-> > > a live-lock.  Here is an example triggered by stress-ng on ppc64:
-> > >
-> > > [  529.853264] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128l, throttling...
-> > ...
-> > > [  580.414590] __request_module: 25 callbacks suppressed
-> > > [  580.414597] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-> > > [  580.423082] watchdog: CPU 784 self-detected hard LOCKUP @ plpar_hcall_norets_notrace+0x18/0x2c
-> > > [  580.423097] watchdog: CPU 784 TB:1297691958559475, last heartbeat TB:1297686321743840 (11009ms ago)
-> > > [  580.423099] Modules linked in: cast6_generic cast5_generic cast_common camellia_generic blowfish_generic blowfish_common tun nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 rfkill bonding tls ip_set nf_tables nfnetlink pseries_rng binfmt_misc drm drm_panel_orientation_quirks xfs libcrc32c sd_mod t10_pi sg ibmvscsi ibmveth scsi_transport_srp vmx_crypto dm_mirror dm_region_hash dm_log dm_mod fuse
-> > > [  580.423136] CPU: 784 PID: 77071 Comm: stress-ng Kdump: loaded Not tainted 5.14.0-55.el9.ppc64le #1
-> > > [  580.423139] NIP:  c0000000000f8ff4 LR: c0000000001f7c38 CTR: 0000000000000000
-> > > [  580.423140] REGS: c0000043fdd7bd60 TRAP: 0900   Not tainted  (5.14.0-55.el9.ppc64le)
-> > > [  580.423142] MSR:  800000000280b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE>  CR: 28008202  XER: 20040000
-> > > [  580.423148] CFAR: 0000000000000c00 IRQMASK: 1 
-> > >                GPR00: 0000000028008202 c0000044c46b3850 c000000002a46f00 0000000000000000 
-> > >                GPR04: ffffffffffffffff 0000000000000000 0000000000000010 c000000002a83060 
-> > >                GPR08: 0000000000000000 0000000000000001 0000000000000001 0000000000000000 
-> > >                GPR12: c0000000001b9530 c0000043ffe16700 0000000200000117 0000000010185ea8 
-> > >                GPR16: 0000000010212150 0000000010186198 00000000101863a0 000000001021b3c0 
-> > >                GPR20: 0000000000000001 0000000000000000 0000000000000001 00000000000000ff 
-> > >                GPR24: c0000043f4a00e14 c0000043fafe0e00 000000000c440000 0000000000000000 
-> > >                GPR28: c0000043f4a00e00 c0000043f4a00e00 c0000000021e0e00 c000000002561aa0 
-> > > [  580.423166] NIP [c0000000000f8ff4] plpar_hcall_norets_notrace+0x18/0x2c
-> > > [  580.423168] LR [c0000000001f7c38] __pv_queued_spin_lock_slowpath+0x528/0x530
-> > > [  580.423173] Call Trace:
-> > > [  580.423174] [c0000044c46b3850] [0000000100006b60] 0x100006b60 (unreliable)
-> > > [  580.423177] [c0000044c46b3910] [c000000000ea6948] _raw_spin_lock_irqsave+0xa8/0xc0
-> > > [  580.423182] [c0000044c46b3940] [c0000000001dd7c0] prepare_to_wait_event+0x40/0x200
-> > > [  580.423185] [c0000044c46b39a0] [c00000000019e9e0] __request_module+0x320/0x510
-> > > [  580.423188] [c0000044c46b3ac0] [c0000000006f1a14] crypto_alg_mod_lookup+0x1e4/0x2e0
-> > > [  580.423192] [c0000044c46b3b60] [c0000000006f2178] crypto_alloc_tfm_node+0xa8/0x1a0
-> > > [  580.423194] [c0000044c46b3be0] [c0000000006f84f8] crypto_alloc_aead+0x38/0x50
-> > > [  580.423196] [c0000044c46b3c00] [c00000000072cba0] aead_bind+0x70/0x140
-> > > [  580.423199] [c0000044c46b3c40] [c000000000727824] alg_bind+0xb4/0x210
-> > > [  580.423201] [c0000044c46b3cc0] [c000000000bc2ad4] __sys_bind+0x114/0x160
-> > > [  580.423205] [c0000044c46b3d90] [c000000000bc2b48] sys_bind+0x28/0x40
-> > > [  580.423207] [c0000044c46b3db0] [c000000000030880] system_call_exception+0x160/0x300
-> > > [  580.423209] [c0000044c46b3e10] [c00000000000c168] system_call_vectored_common+0xe8/0x278
-> > > [  580.423213] --- interrupt: 3000 at 0x7fff9b824464
-> > > [  580.423214] NIP:  00007fff9b824464 LR: 0000000000000000 CTR: 0000000000000000
-> > > [  580.423215] REGS: c0000044c46b3e80 TRAP: 3000   Not tainted  (5.14.0-55.el9.ppc64le)
-> > > [  580.423216] MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 42004802  XER: 00000000
-> > > [  580.423221] IRQMASK: 0 
-> > >                GPR00: 0000000000000147 00007fffdcff2780 00007fff9b917100 0000000000000004 
-> > >                GPR04: 00007fffdcff27e0 0000000000000058 0000000000000000 0000000000000000 
-> > >                GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> > >                GPR12: 0000000000000000 00007fff9bc9efe0 0000000200000117 0000000010185ea8 
-> > >                GPR16: 0000000010212150 0000000010186198 00000000101863a0 000000001021b3c0 
-> > >                GPR20: 0000000000000004 00007fffdcff2a00 0000000300000117 00000000101862b8 
-> > >                GPR24: 0000000000000004 0000000046401570 0000000046401120 0000000046404650 
-> > >                GPR28: 0000000000000020 0000000000000020 0000000000000060 0000000046404bf0 
-> > > [  580.423236] NIP [00007fff9b824464] 0x7fff9b824464
-> > > [  580.423237] LR [0000000000000000] 0x0
-> > > [  580.423238] --- interrupt: 3000
-> > > [  580.423239] Instruction dump:
-> > > [  580.423241] e8690000 7c0803a6 3884fff8 78630100 78840020 4bfffeb8 3c4c0295 3842df24 
-> > > [  580.423244] 7c421378 7c000026 90010008 44000022 <38800000> 988d0931 80010008 7c0ff120 
-> > >
-> > > Would it be possible to modify kmod so that in such cases that
-> > > request_module calls fail more quickly rather than repeatedly
-> > > obtaining a spinlock that appears to be under high contention?
+On Mittwoch, 11. Mai 2022 18:00:09 CEST Krzysztof Kozlowski wrote:
+> On 11/05/2022 17:53, Nicolas Frattaroli wrote:
+> > The RK3568 and RK3566 have a Hantro VPU node solely dedicated to
+> > encoding. This patch adds a compatible for it, and also allows
+> > the bindings to only come with a vepu interrupt.
 > > 
-> > If you run stress-ng with a timeout does the system eventually recover?
+> > Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+> > ---
+> >  .../devicetree/bindings/media/rockchip-vpu.yaml | 17 ++++++++++++++++-
+> >  1 file changed, 16 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
+> > index bacb60a34989..965ca80b5cea 100644
+> > --- a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
+> > +++ b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
+> > @@ -22,6 +22,7 @@ properties:
+> >            - rockchip,rk3288-vpu
+> >            - rockchip,rk3328-vpu
+> >            - rockchip,rk3399-vpu
+> > +          - rockchip,rk3568-vepu
+> >            - rockchip,px30-vpu
+> >        - items:
+> >            - const: rockchip,rk3188-vpu
+> > @@ -39,7 +40,9 @@ properties:
+> >  
+> >    interrupt-names:
+> >      oneOf:
+> > -      - const: vdpu
+> > +      - enum:
+> > +          - vdpu
+> > +          - vepu
+> >        - items:
+> >            - const: vepu
+> >            - const: vdpu
+> > @@ -76,6 +79,18 @@ required:
+> >  
+> >  additionalProperties: false
+> >  
+> > +allOf:
+> > +  # compatibles that end in -vepu should only have the vepu interrupt
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            pattern: "^[a-zA-Z0-9\\-,_.]+\\-vepu$"
 > 
-> OK the respective stress-ng test should be something like:
-> 
-> ./stress-ng --af-alg 8192
-> 
-> I had left this running overnight on x86_64 without issues:
-> 
-> sudo ./tools/testing/selftests/kmod/kmod.sh -t 0009
-> 
-> Going to leave the above stress-ng call running in a loop to see
-> if I can reproduce the live lock on x86_64.
+> Why not listing the compatible how I asked? This is the common way of
+> handling allOf:if:then per variant.
 
-The following loop has been running on 5.18.0-rc5-next-20220506 since
-May 9 without any issues on x86_64:
+Because I was afraid that if this wasn't general enough to apply to all
+future vepu-only instances of Hantro, then my patch might be bikeshed
+into requiring a v4. Clearly, my worries had the opposite effect.
 
-while true; do sudo ./stress-ng --af-alg 8192; done
+Also because I thought it was cool to use a pattern for this to enforce
+consistent naming in the bindings.
 
-Can someone try this on ppc64le system? At this point I am not convinced
-this issue is generic.
+> 
+> https://lore.kernel.org/all/ea94f18d-3172-98bb-0892-a98236a08018@linaro.org/
+> 
+> Your patches do not apply on next, so the set might not have been tested
+> by Rob's bot.
 
-  Luis
+Good to know. Once I send out v4 in a few days and maybe after some more
+opinions so I can stop bombarding the mailing list with tiny revisions
+of the same patch set, I will base it on linux-next.
+
+I'm happy to report though that this passes dt_binding_check with W=1
+without adding any new warnings. I do actually run those checks (and
+checkpatch) before submitting.
+
+> 
+> Best regards,
+> Krzysztof
+> 
+
+Regards,
+Nicolas Frattaroli
+
+

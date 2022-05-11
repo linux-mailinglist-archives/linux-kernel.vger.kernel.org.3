@@ -2,84 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A905C522BD6
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 07:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D3DF522BDD
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 07:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241940AbiEKFmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 01:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57506 "EHLO
+        id S234295AbiEKFof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 01:44:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232431AbiEKFmo (ORCPT
+        with ESMTP id S240481AbiEKFob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 01:42:44 -0400
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98E6244F19
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:42:42 -0700 (PDT)
-Received: by mail-ua1-x92e.google.com with SMTP id p1so386895uak.1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:42:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vGxPmJDM+cvx1KDtqTZS+UTdKLlUMP0zI7c+wSVmsgY=;
-        b=MYGn0ZQ3a43eA+HINVZpZPpyE4SoDYREVL72759FD4eYh5rz+qlhLlfCmgCWrpcmBi
-         evBpYgzn2guWEhSpqz6CJ98/Ltf4fUmuFSfsW6iDEMBcu8gvPaRykbJmS19i78/kBMAR
-         uU22AwG7xDYnFhs+qFjmYzrgMM8gBmdaGmY9llctP9UQpK5dE9uQlFxkMDWj1TbPgeBM
-         InNWP1EFZTG6Ech3/sS5J/POD/aDZ8JWWP/HBAS5KrHoTTRapVEawmHJrWAq8crPfzAn
-         +e/mi1ounO+JP2PYmP74INHWma6QVm8Ay92juLa3gq7ne6QxfS8gE5NVXCMhh3XDto8V
-         VD1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vGxPmJDM+cvx1KDtqTZS+UTdKLlUMP0zI7c+wSVmsgY=;
-        b=jYNcHo1K2uIctFyFw1hRR+42FP3W1qk9K2VN56Gu8Q6F+biFduqAO44AsTwkN0aRT0
-         qmfrfqHzPIJIoACjZGBnil49BFCpV26CRwTotv+jiiR/qX9SSXAJtKatwAgUSfdwBUma
-         +spyVOT70kXoaCNdlaspxeOgNnAd+5r5ETQrg73pNRqgiFZUsPPFutIC8EOpqiKTXJGB
-         z5w7brGhHfK9cwezuZ1xQRjRSfmqGReE8U9R2bu6chRif/Ll2hteOtlrD0XtxpsMhBO3
-         Upjdboo39WW3/HNrVdS0IIiyaCeDUy7NKgOoWMlzY2EsAw6u3Pj9qaAu2X20VIrEILSg
-         e6GQ==
-X-Gm-Message-State: AOAM533buJCQs7M8dWqd0x8e5K2lKy4Fy/GvIaTv3xli1j4RF1bF0GG1
-        UZ+6yuI3ZLxJAtepeZpm/wqd3B88Jkt1cs4A7+tAJw==
-X-Google-Smtp-Source: ABdhPJzFPFltZtUFX4vhtGVjtORhdG+McAS0oa6PaWPDH5huwZItLsFCY18KX/JXOqEtg34hf3vp8BO60wHDIsdtDg4=
-X-Received: by 2002:ab0:349a:0:b0:35c:b898:a733 with SMTP id
- c26-20020ab0349a000000b0035cb898a733mr12723212uar.85.1652247761972; Tue, 10
- May 2022 22:42:41 -0700 (PDT)
+        Wed, 11 May 2022 01:44:31 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E95244F1C
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:44:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652247870; x=1683783870;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=O/LKqF2r6cXVe/FaTSWKC+U4U0uUtqbT/QPMs+Ecj98=;
+  b=Pc64qkSZ94IswpUrL9xJ6H8Ug8edWuyvHkMlz9AS8X35bSCRpBq+IlR+
+   BiYIUy2LD87lfzrKE1YlGzlyuBztQyPcT/wyXc6MOg1y3GkkRKQpTOkFp
+   mhVD+63bpFd7+VsOabPrmVtRabzw+6Hd97iJTzeVDmsmQUt2mullJmLs/
+   l771dfZFv+DvkkxgohUEZjLAPfFGtCmpFxjkhwGDHSZhSjI7bRV4EtX4n
+   X/nFzFpmM7oDS3b4zlmCkoAk4zIj7o6VLG67eEwyKz9BjwZDcaNE2wvFd
+   ns0WDn1A/xFlALbd5ftbL0xCiEEbShrCZIHv5Ho3Uqle461vyz+61pGzd
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="269529367"
+X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
+   d="scan'208";a="269529367"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 22:44:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
+   d="scan'208";a="520368411"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 10 May 2022 22:44:28 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nof99-000IlQ-Tx;
+        Wed, 11 May 2022 05:44:27 +0000
+Date:   Wed, 11 May 2022 13:43:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Icenowy Zheng <icenowy@aosc.io>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Maxime Ripard <maxime@cerno.tech>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Torsten Duwe <duwe@suse.de>,
+        Andrzej Hajda <a.hajda@samsung.com>
+Subject: drivers/gpu/drm/bridge/analogix/analogix-anx78xx.c:50:17: warning:
+ 'anx781x_i2c_addresses' defined but not used
+Message-ID: <202205111306.DCEG8q0G-lkp@intel.com>
 MIME-Version: 1.0
-References: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
- <CAHbLzkq1YXXLMiREpGnzhJjPssu4WpSsnkTmrLJ=hAEhZVUr9w@mail.gmail.com>
- <CAAPL-u-r2Pc_MaHQmKKNH_icAa_fH1COWb5qSPpr8xffREQ_cQ@mail.gmail.com>
- <CAHbLzkrit3SDQUWPQ_RtTO_xFqxoqR9LpY=72afERapUgkjxZg@mail.gmail.com>
- <1642ab64-7957-e1e6-71c5-ceab9c23bf41@huawei.com> <CAHbLzkqBVdaT5wwPuCXUMb8DwLEzHPaQwCKXsjsPBRTgZAAgnw@mail.gmail.com>
- <c272e43d-47c5-d7d4-cb17-95dc6f28f5cd@huawei.com> <e1bf6346-fd93-13ee-0b38-c1d956df0e99@linux.ibm.com>
-In-Reply-To: <e1bf6346-fd93-13ee-0b38-c1d956df0e99@linux.ibm.com>
-From:   Wei Xu <weixugc@google.com>
-Date:   Tue, 10 May 2022 22:42:30 -0700
-Message-ID: <CAAPL-u-Q1_19TM-J-QD9QWXGcp6A9xJS126xO54H83u+c569Tg@mail.gmail.com>
-Subject: Re: RFC: Memory Tiering Kernel Interfaces
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-Cc:     Hesham Almatary <hesham.almatary@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Greg Thelen <gthelen@google.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Michal Hocko <mhocko@kernel.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,154 +66,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 5:10 AM Aneesh Kumar K V
-<aneesh.kumar@linux.ibm.com> wrote:
->
-> On 5/10/22 3:29 PM, Hesham Almatary wrote:
-> > Hello Yang,
-> >
-> > On 5/10/2022 4:24 AM, Yang Shi wrote:
-> >> On Mon, May 9, 2022 at 7:32 AM Hesham Almatary
-> >> <hesham.almatary@huawei.com> wrote:
->
->
-> ...
->
-> >>>
-> >>> node 0 has a CPU and DDR memory in tier 0, node 1 has GPU and DDR memory
-> >>> in tier 0,
-> >>> node 2 has NVMM memory in tier 1, node 3 has some sort of bigger memory
-> >>> (could be a bigger DDR or something) in tier 2. The distances are as
-> >>> follows:
-> >>>
-> >>> --------------          --------------
-> >>> |   Node 0   |          |   Node 1   |
-> >>> |  -------   |          |  -------   |
-> >>> | |  DDR  |  |          | |  DDR  |  |
-> >>> |  -------   |          |  -------   |
-> >>> |            |          |            |
-> >>> --------------          --------------
-> >>>          | 20               | 120    |
-> >>>          v                  v        |
-> >>> ----------------------------       |
-> >>> | Node 2     PMEM          |       | 100
-> >>> ----------------------------       |
-> >>>          | 100                       |
-> >>>          v                           v
-> >>> --------------------------------------
-> >>> | Node 3    Large mem                |
-> >>> --------------------------------------
-> >>>
-> >>> node distances:
-> >>> node   0    1    2    3
-> >>>      0  10   20   20  120
-> >>>      1  20   10  120  100
-> >>>      2  20  120   10  100
-> >>>      3  120 100  100   10
-> >>>
-> >>> /sys/devices/system/node/memory_tiers
-> >>> 0-1
-> >>> 2
-> >>> 3
-> >>>
-> >>> N_TOPTIER_MEMORY: 0-1
-> >>>
-> >>>
-> >>> In this case, we want to be able to "skip" the demotion path from Node 1
-> >>> to Node 2,
-> >>>
-> >>> and make demotion go directely to Node 3 as it is closer, distance wise.
-> >>> How can
-> >>>
-> >>> we accommodate this scenario (or at least not rule it out as future
-> >>> work) with the
-> >>>
-> >>> current RFC?
-> >> If I remember correctly NUMA distance is hardcoded in SLIT by the
-> >> firmware, it is supposed to reflect the latency. So I suppose it is
-> >> the firmware's responsibility to have correct information. And the RFC
-> >> assumes higher tier memory has better performance than lower tier
-> >> memory (latency, bandwidth, throughput, etc), so it sounds like a
-> >> buggy firmware to have lower tier memory with shorter distance than
-> >> higher tier memory IMHO.
-> >
-> > You are correct if you're assuming the topology is all hierarchically
-> >
-> > symmetric, but unfortuantely, in real hardware (e.g., my example above)
-> >
-> > it is not. The distance/latency between two nodes in the same tier
-> >
-> > and a third node, is different. The firmware still provides the correct
-> >
-> > latency, but putting a node in a tier is up to the kernel/user, and
-> >
-> > is relative: e.g., Node 3 could belong to tier 1 from Node 1's
-> >
-> > perspective, but to tier 2 from Node 0's.
-> >
-> >
-> > A more detailed example (building on my previous one) is when having
-> >
-> > the GPU connected to a switch:
-> >
-> > ----------------------------
-> > | Node 2     PMEM          |
-> > ----------------------------
-> >        ^
-> >        |
-> > --------------          --------------
-> > |   Node 0   |          |   Node 1   |
-> > |  -------   |          |  -------   |
-> > | |  DDR  |  |          | |  DDR  |  |
-> > |  -------   |          |  -------   |
-> > |    CPU     |          |    GPU     |
-> > --------------          --------------
-> >         |                  |
-> >         v                  v
-> > ----------------------------
-> > |         Switch           |
-> > ----------------------------
-> >         |
-> >         v
-> > --------------------------------------
-> > | Node 3    Large mem                |
-> > --------------------------------------
-> >
-> > Here, demoting from Node 1 to Node 3 directly would be faster as
-> >
-> > it only has to go through one hub, compared to demoting from Node 1
-> >
-> > to Node 2, where it goes through two hubs. I hope that example
-> >
-> > clarifies things a little bit.
-> >
->
-> Alistair mentioned that we want to consider GPU memory to be expensive
-> and want to demote from GPU to regular DRAM. In that case for the above
-> case we should end up with
->
->
-> tier 0 - > Node3
-> tier 1 ->  Node0, Node1
-> tier 2 ->  Node2
->
-> Hence
->
->   node 0: allowed=2
->   node 1: allowed=2
->   node 2: allowed = empty
->   node 3: allowed = 0-1 , based on fallback order 1, 0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   feb9c5e19e913b53cb536a7aa7c9f20107bb51ec
+commit: 5d97408e0d70a7c7c5942ba95260bab7c9e21eb4 drm/bridge: move ANA78xx driver to analogix subdirectory
+date:   2 years, 6 months ago
+config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220511/202205111306.DCEG8q0G-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5d97408e0d70a7c7c5942ba95260bab7c9e21eb4
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 5d97408e0d70a7c7c5942ba95260bab7c9e21eb4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/bridge/analogix/
 
-If we have 3 tiers as defined above, then we'd better to have:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-node 0: allowed = 2
-node 1: allowed = 2
-node 2: allowed = empty
-node 3: allowed = 0-2, based on fallback order: 1,0,2
+All warnings (new ones prefixed by >>):
 
-The firmware should provide the node distance values to reflect that
-PMEM is slowest and should have the largest distance away from node 3.
+>> drivers/gpu/drm/bridge/analogix/analogix-anx78xx.c:50:17: warning: 'anx781x_i2c_addresses' defined but not used [-Wunused-const-variable=]
+      50 | static const u8 anx781x_i2c_addresses[] = {
+         |                 ^~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/bridge/analogix/analogix-anx78xx.c:42:17: warning: 'anx7808_i2c_addresses' defined but not used [-Wunused-const-variable=]
+      42 | static const u8 anx7808_i2c_addresses[] = {
+         |                 ^~~~~~~~~~~~~~~~~~~~~
 
-> -aneesh
->
->
+
+vim +/anx781x_i2c_addresses +50 drivers/gpu/drm/bridge/analogix/analogix-anx78xx.c
+
+0647e7dd3f7ab2e drivers/gpu/drm/bridge/analogix-anx78xx.c Enric Balletbo i Serra 2016-05-02  41  
+025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22 @42  static const u8 anx7808_i2c_addresses[] = {
+025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  43  	[I2C_IDX_TX_P0] = 0x78,
+025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  44  	[I2C_IDX_TX_P1] = 0x7a,
+025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  45  	[I2C_IDX_TX_P2] = 0x72,
+025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  46  	[I2C_IDX_RX_P0] = 0x7e,
+025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  47  	[I2C_IDX_RX_P1] = 0x80,
+025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  48  };
+025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  49  
+025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22 @50  static const u8 anx781x_i2c_addresses[] = {
+025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  51  	[I2C_IDX_TX_P0] = 0x70,
+025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  52  	[I2C_IDX_TX_P1] = 0x7a,
+025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  53  	[I2C_IDX_TX_P2] = 0x72,
+025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  54  	[I2C_IDX_RX_P0] = 0x7e,
+025910db8057f60 drivers/gpu/drm/bridge/analogix-anx78xx.c Brian Masney           2019-09-22  55  	[I2C_IDX_RX_P1] = 0x80,
+0647e7dd3f7ab2e drivers/gpu/drm/bridge/analogix-anx78xx.c Enric Balletbo i Serra 2016-05-02  56  };
+0647e7dd3f7ab2e drivers/gpu/drm/bridge/analogix-anx78xx.c Enric Balletbo i Serra 2016-05-02  57  
+
+:::::: The code at line 50 was first introduced by commit
+:::::: 025910db8057f60d2d2aa11002f7751e3eb66588 drm/bridge: analogix-anx78xx: add support for 7808 addresses
+
+:::::: TO: Brian Masney <masneyb@onstation.org>
+:::::: CC: Andrzej Hajda <a.hajda@samsung.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

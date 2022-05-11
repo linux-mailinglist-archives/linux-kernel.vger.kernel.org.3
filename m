@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B93C523F7B
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 23:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B60A523F7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 23:34:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348188AbiEKVdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 17:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37478 "EHLO
+        id S1348205AbiEKVes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 17:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236560AbiEKVdk (ORCPT
+        with ESMTP id S236560AbiEKVep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 17:33:40 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03F672212
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 14:33:38 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id v59so6350578ybi.12
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 14:33:38 -0700 (PDT)
+        Wed, 11 May 2022 17:34:45 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFE072225;
+        Wed, 11 May 2022 14:34:44 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id bq30so5821491lfb.3;
+        Wed, 11 May 2022 14:34:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=5RG02r69eZnKTp9Uzlr2A3sSYsmG309qXgqnZxLCnOc=;
-        b=ZrW1SBuyknTH0Pvt02TKD642XSK4dDYF44OjGQ0VBMY4sqk8wmxHJjX1Sq/cLJLTEy
-         ZRo1N2cbFel7Rt1paK08Ddr/wL4a+R4+RWkVw3ZDGEv6TDV1RcMP3sse78Qo6IOf56cr
-         tmGyd+/mxw6P1s0u6L9aQ9Ss0V1HFUr7Oqnrk=
+        bh=dkXitGd+HBwWP0BrRmMn4GOcEWAupdlYdgwnIyYYKm8=;
+        b=DkVXOGzNB1qNE0XvArz6clezkHzUFTA+/bHkUwLQbjO2pg/YLc4Rimbv8c1sie5NCN
+         PvwjLDJtWhuIvvl63J9+V1eioKpHzAIqNijLXV21lcU1KY72dLv+Do4/d/p5R1jfD8LT
+         SByT8e9K914f6sWXbZxkEgh7aLr605RIY1PddkpXywnE7eQ7n00vLyYVPc5wBDoJp4aw
+         q7CgeMKGhlRxD/UZt5E2Qb7GzG6n4e5vhC8aEV587MYK592tDnF5iKG63gz2MN/wFr7T
+         NpBx78okZh8ocaxv3znzdI9tO2TSNTqB6sU08geGcliRcBEXXSi2LmFMeOdKxgleu0xY
+         RwjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=5RG02r69eZnKTp9Uzlr2A3sSYsmG309qXgqnZxLCnOc=;
-        b=ZjiuGWLBs7lZoS5EZ9dTT8xX/hbFAa1O+mTZQ2Hl2ZEv5bcbfZOZZL7COfFJMWbYCP
-         k8RUNa6Djy9OyRSuqRYCPD1lCwlU5e128qaIZL/tQjXNmaPvAKXstmDEk0+n3LDCG8bj
-         KBW2Z1Qby8MuOoAsTB48Iso0BgAlcWJy8W/YBrcfkefdgD5cxAvVjXwdRXjs5FGaEcW1
-         XCZY2ChZhdKBzyuw9yuTmH4/fNnRL6Yqwyby/IQCshmVy6zkXyknb6gX7xhGNVxogmjK
-         hK6HVxHDmm0+ITpD2O/KKmvhAgpli+2gB4+V2zYRqTq3IAbrkAuuRprLoMp7aIawaguy
-         NBYw==
-X-Gm-Message-State: AOAM5304PaLJakhN1jML78V+dUUDNC/oFyOLIagsIoedSrZlbmMKWtbN
-        jCw4hPLYm+50fHiz/CyNmq3AK8pyir/EFlUx40I4jA==
-X-Google-Smtp-Source: ABdhPJzEB57fAMxgOo9ba2pK7f/rTinG6jPYMk20py7TIAICbHPPVFQCBw04WKIepQxKEdocoDhnMK4io1vjkVbiSgY=
-X-Received: by 2002:a25:2a4c:0:b0:648:6a80:9cff with SMTP id
- q73-20020a252a4c000000b006486a809cffmr26542192ybq.507.1652304817908; Wed, 11
- May 2022 14:33:37 -0700 (PDT)
+        bh=dkXitGd+HBwWP0BrRmMn4GOcEWAupdlYdgwnIyYYKm8=;
+        b=lbzJH5JcknO18K4jPP7+pRm1ru5m1b09NOgvogkYN2aS8+A4tgHHmuyhz3OTE/XqU1
+         UelxNPdOThPcv3z5W7CL6ngL2U4dcTLsa81A9FaUqnK8BYfaY9mOkgtVHBercWQFVV7g
+         H7j/nRIMd8QTasYspdtH5s5bRSd7A1/rSeqHZLaS3pT7lP20GMC4aLMKzVHXPWDuLtId
+         nC/coyGME4/hgtC3mWozCjsOriTNnKlLz0Mvcw54VOSYKUc+XqMbxsu7tL/7szinkqJJ
+         s3IIum1um4PVhyX+7gEnOo3zChqfnXyr7rJx12PhtEAQ82e1ZsH53RX+SK/GYKkypzIF
+         2kzw==
+X-Gm-Message-State: AOAM533UoRP6ZpBl/dkG9Vof1wsT8EgovfZf/3jKQmXfQIon4SLNqNdU
+        2EhPfxtz23zd2Rz9v6V54RBiU9l5gNWOg7bVw/0=
+X-Google-Smtp-Source: ABdhPJytbw5z0Ik8FAPUOw+tWwgubew6nL311yZ3ED/hQRTLcKxwAZrZ+D/r8tlUcZ6OBNpMjKduuQT/1Z4sD0iNfps=
+X-Received: by 2002:a05:6512:34cc:b0:472:5c4e:34cb with SMTP id
+ w12-20020a05651234cc00b004725c4e34cbmr21704041lfr.94.1652304883056; Wed, 11
+ May 2022 14:34:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220511013057.245827-1-dlunev@chromium.org> <20220511113050.1.Ifc059f4eca1cce3e2cc79818467c94f65e3d8dde@changeid>
- <YnvOFt3sC/XLJj05@infradead.org>
-In-Reply-To: <YnvOFt3sC/XLJj05@infradead.org>
-From:   Daniil Lunev <dlunev@chromium.org>
-Date:   Thu, 12 May 2022 07:33:27 +1000
-Message-ID: <CAONX=-cW9Or1eEVUg3H669tEDW+1v16zZUGRQCaF3DAuLmgFvw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] fs/super: Add a flag to mark super block defunc
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     linux-fsdevel@vger.kernel.org, fuse-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>
+References: <20220510191549.76105-1-mosescb.dev@gmail.com> <20220511205959.10514-1-mosescb.dev@gmail.com>
+In-Reply-To: <20220511205959.10514-1-mosescb.dev@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 11 May 2022 23:34:06 +0200
+Message-ID: <CAHp75Vcy7+ebAeCfUx5w3i1_=G6n2HkdzXtQcRBFv87X2wZ3vQ@mail.gmail.com>
+Subject: Re: [PATCH v2] drivers: gpio: zevio: drop of_gpio.h header
+To:     Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,37 +68,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 12:54 AM Christoph Hellwig <hch@infradead.org> wrote:
+On Wed, May 11, 2022 at 11:00 PM Moses Christopher Bollavarapu
+<mosescb.dev@gmail.com> wrote:
 >
-> On Wed, May 11, 2022 at 11:30:56AM +1000, Daniil Lunev wrote:
-> > File system can mark a block "defunc" in order to prevent matching
-> > against it in a new mount.
->
-> Why use a bool instead of using s_iflags?
-Oh, I was looking at the flag field, but for some reason got confused
-about its values.
-Looking again, I totally can use it. However, the other option, that
-Miklos proposed in
-a thread on the cover letter mail, is to remove the superblock from
-"type->fs_supers".
-I plan to upload a new version with that option. Which of those two
-would you prefer?
+> Remove of_gpio.h header file, replace of_* functions and structs
+> with appropriate alternatives.
 
-> Also I suspect we should never reuse a force mounted superblock,
-> but at least for block devices we should also not allow allocating
-> a new one for that case but just refuse the mount.
-Re-use of a force unmounted superblock "just works" for at least ext4
-- in fact, it
-continues to work as if nothing happened to it. Changing that may
-break existing use
-cases. For FUSE that unfortunately unachievable, given the daemon is
-disconnected
-from the driver and likely killed after force unmount, but ability to
-re-mount is essential,
-because force unmount is the only way to reliably achieve suspend
-while using FUSE,
-and if re-mount doesn't work, the connected device/share is missing
-after resume.
+...
 
-Thanks,
-Daniil
+>  V1 -> V2: Move gpio_chip member to top of the struct
+>            Use dev_error_probe instead of dev_err
+>            Minor style fixes
+
+Almost, see below.
+
+...
+
+> +       controller->regs = devm_platform_ioremap_resource(pdev, 0);
+> +       if (IS_ERR(controller->regs))
+> +               dev_err_probe(&pdev->dev, PTR_ERR(controller->regs),
+> +                             "failed to ioremap memory resource\n");
+
+You forgot 'return'.
+
+-- 
+With Best Regards,
+Andy Shevchenko

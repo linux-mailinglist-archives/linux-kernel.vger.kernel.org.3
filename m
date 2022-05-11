@@ -2,220 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65D30523FDD
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 00:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3543D523FEC
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 00:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348510AbiEKWBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 18:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
+        id S1348532AbiEKWEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 18:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348491AbiEKWA0 (ORCPT
+        with ESMTP id S230266AbiEKWEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 18:00:26 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB196007A
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 15:00:25 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id cq17-20020a17090af99100b001dc0386cd8fso3204797pjb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 15:00:25 -0700 (PDT)
+        Wed, 11 May 2022 18:04:14 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97F115FEC
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 15:04:13 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-ed8a3962f8so4526418fac.4
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 15:04:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=D5SurJpUmUyUTQiXKAAH3s2OixX5X/Dh+DRBGj6sQq8=;
-        b=AieuhOp54sEXTSBIq87rL7ACgyRBcRywwTc41hbL79gBhvqSgPCx3I0yHoWdIgDyc7
-         eo/f/U2zQHtVTQ+RiA9V7rVMa/6F3FsJp84Ml4RD7r7v7k4tDwWITCxDa60kRuZpcBxb
-         OCqwWyGTx6JAtA1QsuFsX6HC6e1DZCrYnkwriKspBI/hO4A78lsLNDa+E2yPk3EGCAWY
-         mSdCZB9X9WMxSadXTtr7SEqN8EPNZxOmpuDVN2qdtcIo7Kx8V7og6pDaRWj5CFK/RbS9
-         ao5siyOekhd+9k1r+5xX7UiYhEs7F4iti7PNPOWrJWB04OX222MNwi1zdNwIeV+H/nBu
-         Aflw==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=36iz89P09ojYrmbM5f1H/QsMT0+rmWkuU11oOzTk+Ho=;
+        b=e1Tq7sW4VPNVTH04wWKgTBIYHtwcLCkVzIBe8Z3juTk4EnXptXqkLVO6IC764LIGqK
+         QGrBAh5GOJdMXMylCB2rPsbo7E06IkKoN9lEerUhcn+6bnGvmdt6JWLDWv39N/2B31Ee
+         ifot5DzM5pkuOvvFdNQxrtyfAC5Hjy9XNexUA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=D5SurJpUmUyUTQiXKAAH3s2OixX5X/Dh+DRBGj6sQq8=;
-        b=SvY/BE/wHfpy7F1gFwB+iGBkN4/U4DUQG47z6Yd1EFBeUp03e0gWQa2ggg3UlWUZvs
-         DOffwLiP/X8S2W7W4eCzggQRKIVOlNzZ75WUdUo5ZOn4uqLKHyxNhck3s32ieon34fX2
-         +is6jnDURcTjIFa8q2/rCbDS+QB2HmMrFcAiV95Za+evwzCWaqlM28Zxflk+2/kU/Ng2
-         IsebE3qDgi3QPQWgNYCPITIBf7L0hdqnCHMS5KakzvbFK1i9sDDKOMCZeZL+I5XxfA2+
-         F2gztiI5GIpKakHYstITlFe6/LJ5CVvBhWCg3p4UoEHA3WNjVF3NP+lxauBUFWR1HJ4S
-         nv5Q==
-X-Gm-Message-State: AOAM533celL+jVDk3hWIyirUQAoTUkhZ44j1QiAEIp9zc1wAE+E6USfE
-        fNBP+OQGxNo9whiwB+9CyroEszSZdPo4lA==
-X-Google-Smtp-Source: ABdhPJzFFKUm99dN1QtEVzrxVoJkVRpyRlIrHCkqxkH/uAYhdcWXCFOSF1IQUPIvgIh/EKuiTizl1g==
-X-Received: by 2002:a17:902:f70c:b0:14e:f1a4:d894 with SMTP id h12-20020a170902f70c00b0014ef1a4d894mr27207160plo.65.1652306424676;
-        Wed, 11 May 2022 15:00:24 -0700 (PDT)
-Received: from atishp.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id r23-20020a62e417000000b0050dc762816asm2261303pfh.68.2022.05.11.15.00.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 15:00:24 -0700 (PDT)
-From:   Atish Patra <atishp@rivosinc.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Atish Patra <atishp@rivosinc.com>,
-        Alistair Francis <alistair.francis@wdc.com>,
-        Bin Meng <bin.meng@windriver.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, qemu-devel@nongnu.org,
-        qemu-riscv@nongnu.org
-Subject: [PATCH v8 12/12] target/riscv: Update the privilege field for sscofpmf CSRs
-Date:   Wed, 11 May 2022 14:59:56 -0700
-Message-Id: <20220511215956.2351243-13-atishp@rivosinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220511215956.2351243-1-atishp@rivosinc.com>
-References: <20220511215956.2351243-1-atishp@rivosinc.com>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=36iz89P09ojYrmbM5f1H/QsMT0+rmWkuU11oOzTk+Ho=;
+        b=reiIlKsNTL82+PuQ8Xivc+0tViVbbcOAvdj+SPJ3EHKZxIOfb9AK0gti7QCLMrsMwi
+         iGdMNH7QsT9ZaGIE/BVvHgWWCaq+RlSqwfnlYq0FclSpFU4DmIv69g7w84IfIJ3RDp8u
+         +W3KgX4MtpNCt0889O1p/mGN7hSsBgOvgazUc0pBEVQA9v8BERiOvJlNSr6HDp/GoNyi
+         7w7akn/sgi03se0VzJjfBHaT1Ft0clgAvWnMLvsFeTJAHw9o3ZIWLF2poP/ekp+dPV0n
+         npPcS4D3ACc08mMjkxCWowDIluydmNmS0hEkNz1Xa+OJK/q+Mtp0aVe+EIElefNtz+cJ
+         zrog==
+X-Gm-Message-State: AOAM532/6jozOkM43DSo6a4A2uZ3Fx2aEqBq6+O66Lhv6wfyOe2Dd1eX
+        4UDDmW86Rp/9DC23+LnoS0StizSQ0EzAe6IMok7VFQ==
+X-Google-Smtp-Source: ABdhPJzw3oVKCKyN2EqwMU4CV86X7Qc6lhRr4OE1Ty+q7OzIPM+vgj64ZYEKlp7szGeXEs42G0fteoQQhBd08816Sp0=
+X-Received: by 2002:a05:6870:558e:b0:e1:db7c:26aa with SMTP id
+ n14-20020a056870558e00b000e1db7c26aamr3966022oao.63.1652306653122; Wed, 11
+ May 2022 15:04:13 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 11 May 2022 15:04:12 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAE-0n517iAS9KSdunMX18LpqDrQ4ac-yRCZq82j-XdExaGjCXA@mail.gmail.com>
+References: <20220412194505.614002-1-swboyd@chromium.org> <YnKvoh+h07at8b65@builder.lan>
+ <CAE-0n517iAS9KSdunMX18LpqDrQ4ac-yRCZq82j-XdExaGjCXA@mail.gmail.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 11 May 2022 15:04:12 -0700
+Message-ID: <CAE-0n53eXiz74iCHHQaC-eDFkuui9Y1xXvuqd2g0UnrwbYhZTg@mail.gmail.com>
+Subject: Re: [PATCH] clk: qcom: rpmh: Set wake/sleep state for BCM clks
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        patches@lists.linux.dev, Alex Elder <elder@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sscofpmf extension was ratified as a part of priv spec v1.12.
-Mark the csr_ops accordingly.
+Quoting Stephen Boyd (2022-05-06 16:24:15)
+> Quoting Bjorn Andersson (2022-05-04 09:53:54)
+> > On Tue 12 Apr 14:45 CDT 2022, Stephen Boyd wrote:
+> >
+> > > Set the wake and sleep state for BCM clks here, not just the active
+> > > state, as the active only state is dropped when CPUs go to deep idle.
+> > > This ensures the clk is always on when the driver thinks it is on.
+> > >
+> > > This was found by inspection, and could very well be incorrect if the
+> > > RPMh hardware copies over the active only state to the sleep and wake
+> > > states.
+> > >
+> >
+> > Taking another look at this patch and now it makes perfect sense to me.
+> > Sorry for not grasping the problem earlier.
+> >
+> > Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> >
+> >
+> > Will you take this in fixes, or do you want me to pick it for 5.19?
+> >
+>
+> I'm waiting for Taniya to reply. For all I know this has no effect
+> because there's some sort of copy/paste from one state to another. Until
+> then it doesn't seem like we should do anything.
 
-Signed-off-by: Atish Patra <atishp@rivosinc.com>
----
- target/riscv/csr.c | 90 ++++++++++++++++++++++++++++++----------------
- 1 file changed, 60 insertions(+), 30 deletions(-)
-
-diff --git a/target/riscv/csr.c b/target/riscv/csr.c
-index 368e72ae4f25..6d6ccf995608 100644
---- a/target/riscv/csr.c
-+++ b/target/riscv/csr.c
-@@ -4009,63 +4009,92 @@ riscv_csr_operations csr_ops[CSR_TABLE_SIZE] = {
-                                                        write_mhpmevent },
- 
-     [CSR_MHPMEVENT3H]    = { "mhpmevent3h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                          write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT4H]    = { "mhpmevent4h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                          write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT5H]    = { "mhpmevent5h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                          write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT6H]    = { "mhpmevent6h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                          write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT7H]    = { "mhpmevent7h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                          write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT8H]    = { "mhpmevent8h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                          write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT9H]    = { "mhpmevent9h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                          write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT10H]   = { "mhpmevent10h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                           write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT11H]   = { "mhpmevent11h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                           write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT12H]   = { "mhpmevent12h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                           write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT13H]   = { "mhpmevent13h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                           write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT14H]   = { "mhpmevent14h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                           write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT15H]   = { "mhpmevent15h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                           write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT16H]   = { "mhpmevent16h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                           write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT17H]   = { "mhpmevent17h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                           write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT18H]   = { "mhpmevent18h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                           write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT19H]   = { "mhpmevent19h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                           write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT20H]   = { "mhpmevent20h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                           write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT21H]   = { "mhpmevent21h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                           write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT22H]   = { "mhpmevent22h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                           write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT23H]   = { "mhpmevent23h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                           write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT24H]   = { "mhpmevent24h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                           write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT25H]   = { "mhpmevent25h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                           write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT26H]   = { "mhpmevent26h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                           write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT27H]   = { "mhpmevent27h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                           write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT28H]   = { "mhpmevent28h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                           write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT29H]   = { "mhpmevent29h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                           write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT30H]   = { "mhpmevent30h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                           write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
-     [CSR_MHPMEVENT31H]   = { "mhpmevent31h",    sscofpmf,  read_mhpmeventh,
--                                                       write_mhpmeventh},
-+                                                           write_mhpmeventh,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
- 
-     [CSR_HPMCOUNTER3H]   = { "hpmcounter3h",   ctr32,  read_hpmcounterh },
-     [CSR_HPMCOUNTER4H]   = { "hpmcounter4h",   ctr32,  read_hpmcounterh },
-@@ -4155,7 +4184,8 @@ riscv_csr_operations csr_ops[CSR_TABLE_SIZE] = {
-                                                        write_mhpmcounterh },
-     [CSR_MHPMCOUNTER31H] = { "mhpmcounter31h", mctr32,  read_hpmcounterh,
-                                                        write_mhpmcounterh },
--    [CSR_SCOUNTOVF]      = { "scountovf", sscofpmf,  read_scountovf },
-+    [CSR_SCOUNTOVF]      = { "scountovf", sscofpmf,  read_scountovf,
-+                                         .min_priv_ver = PRIV_VERSION_1_12_0 },
- 
- #endif /* !CONFIG_USER_ONLY */
- };
--- 
-2.25.1
-
+Taniya told me that if there's no sleep or wake state set then active
+state remains even when the subsystem is in sleep. Not exactly
+copy/paste but at least it is consistent. We need a comment here so this
+doesn't come up again.

@@ -2,88 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ABE6523591
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB78523590
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244703AbiEKOcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 10:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50038 "EHLO
+        id S233146AbiEKOcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 10:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244694AbiEKOcM (ORCPT
+        with ESMTP id S242761AbiEKOcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 10:32:12 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527B35AEF9
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:32:11 -0700 (PDT)
-Received: from mail-yb1-f175.google.com ([209.85.219.175]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M1qfu-1nmaSP1QVc-002CQH for <linux-kernel@vger.kernel.org>; Wed, 11 May
- 2022 16:32:09 +0200
-Received: by mail-yb1-f175.google.com with SMTP id i38so4307096ybj.13
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:32:09 -0700 (PDT)
-X-Gm-Message-State: AOAM532P+RNLufug+EOuyGH0/0qb8/6NSaNmqDNdl1++Tw6Y5NFiTcLE
-        UaODPs9KbYrlU5YZcnrp3etFSgPqKvDLmVrx0LE=
-X-Google-Smtp-Source: ABdhPJxaOxs7Cvyz95djOd/9PFJGLZIvCztyvC00pvhe69fN5VCHZPMM6UvxixpNKUFijbzu95cTBJHGpgaLJNAHgSI=
-X-Received: by 2002:a25:31c2:0:b0:641:660f:230f with SMTP id
- x185-20020a2531c2000000b00641660f230fmr23401326ybx.472.1652279528106; Wed, 11
- May 2022 07:32:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220506192957.24889-1-nick.hawkins@hpe.com> <CAK8P3a045Di_zRomezeah0ZoSGPw0Z6YoYkZtoxx1qOXAtKbbw@mail.gmail.com>
- <7C103AEB-3111-4AE6-9645-CF590388A879@hpe.com> <CAK8P3a0OS+4XTG9VmfPwbuQoT+_G5-fSatbJ0g8Y7Y+O6-3YLQ@mail.gmail.com>
- <20220510141124.GB28104@willie-the-truck> <PH0PR84MB171830414ADC0DD69BD4116788C89@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
- <CAK8P3a1AG5RXW74LbskwMh1yJzXUjrzdL=iqaVz_7W2hExVuGw@mail.gmail.com> <YnvIGOpL06ZtbJgR@shell.armlinux.org.uk>
-In-Reply-To: <YnvIGOpL06ZtbJgR@shell.armlinux.org.uk>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 11 May 2022 16:31:51 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1GX=PgJU8UtH2u1yj0STFMv+9tr+pZBV4vvW+1iEQLDg@mail.gmail.com>
-Message-ID: <CAK8P3a1GX=PgJU8UtH2u1yj0STFMv+9tr+pZBV4vvW+1iEQLDg@mail.gmail.com>
-Subject: Re: [PATCH v1] ARM: A9: Add ARM ERRATA 764319 workaround
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "Hawkins, Nick" <nick.hawkins@hpe.com>,
-        Will Deacon <will@kernel.org>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Joel Stanley <joel@jms.id.au>
+        Wed, 11 May 2022 10:32:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 406D55908A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:32:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652279523;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KQL38nXvdPxHenWCxul6vJpMbxtsuEI7iyeGKqIARSU=;
+        b=Reg1twyRUW4kVgwUxoNiYNu+VB+I17ilDkXrmEMZ0FTBawCg1686JfRutCZCmtgRsL33cR
+        NbyWr4xTm+VxbQ8Nxb560gkrDkpCjrUk+QUdrlzB2esybKt3RJMwbzwaddyBeOOpHeoXL9
+        LB/+GL8VLJmUBdbkBTqappjdOKq+xNQ=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-154-yarXPV__O3GcsEdY0Fjeig-1; Wed, 11 May 2022 10:32:02 -0400
+X-MC-Unique: yarXPV__O3GcsEdY0Fjeig-1
+Received: by mail-qk1-f199.google.com with SMTP id x191-20020a3763c8000000b0069fb66f3901so1960116qkb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:32:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=KQL38nXvdPxHenWCxul6vJpMbxtsuEI7iyeGKqIARSU=;
+        b=x/8Xetct3wFNJyH/7Yp5pcFCynwa7SLH9qUohiEjLxH8ak0mC5MAL5R9T2AhdQkCm7
+         z1ghTpJKw7A2bce2Cy9RPTu5wzu66153GQNN9hZWUPwCtLGNbHSWKDGJvmcrZ1YvNodT
+         2gW6jTHwAinL6+l0ZEW2PVn0AQchodTDIEE1SWO6UxBmmKDAFgaBjan8s3sGoWFaWU5q
+         47K5ezG/CEEwCZ0mL9PsGWk2SbBOwvmZfrCcz8dPKukHQKCSi1dRQjrYVbFLhgoGjQ0s
+         1i5wxnmgWYIF5k6R8+ju/oTg6azl94rz7pNqUeTMuOhWuWFgM1ykW1m3kxZGG3o2U4dr
+         dOkQ==
+X-Gm-Message-State: AOAM530KuvwU5VoqD8OxAQnk75AvvSN4/1MV29mGGgCCkbI3OOTVywhl
+        YNL0v9tVpnCIw6wlln4hbsQDWg7A2o5mzYw3wIwYvE49ceNYJZYwIZrINXccqICVC6GGNJexQwd
+        OzO76fw4wazUOx+h6FN4riFlF
+X-Received: by 2002:a05:620a:42:b0:6a0:c64c:35ae with SMTP id t2-20020a05620a004200b006a0c64c35aemr5484449qkt.607.1652279521839;
+        Wed, 11 May 2022 07:32:01 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxh4shODUQfLsPm7eUgpyznqBw9eckUeZuWJ+m7D2DbOJd2o74zl6AbM8GLCYVbcGb4/1G9ag==
+X-Received: by 2002:a05:620a:42:b0:6a0:c64c:35ae with SMTP id t2-20020a05620a004200b006a0c64c35aemr5484418qkt.607.1652279521576;
+        Wed, 11 May 2022 07:32:01 -0700 (PDT)
+Received: from m8.users.ipa.redhat.com (cpe-158-222-141-151.nyc.res.rr.com. [158.222.141.151])
+        by smtp.gmail.com with ESMTPSA id i3-20020ac860c3000000b002f39b99f682sm1213342qtm.28.2022.05.11.07.32.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 07:32:01 -0700 (PDT)
+Message-ID: <503184f1d3d0a5b42057cd550ba2baf695183687.camel@redhat.com>
+Subject: Re: [PATCH 2/2] random: add fork_event sysctl for polling VM forks
+From:   Simo Sorce <simo@redhat.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Alexander Graf <graf@amazon.com>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        Torben Hansen <htorben@amazon.co.uk>,
+        Jann Horn <jannh@google.com>
+Date:   Wed, 11 May 2022 10:32:00 -0400
+In-Reply-To: <Ynu35I4KMW7gMZW3@zx2c4.com>
+References: <20220502140602.130373-1-Jason@zx2c4.com>
+         <20220502140602.130373-2-Jason@zx2c4.com>
+         <8f305036248cae1d158c4e567191a957a1965ad1.camel@redhat.com>
+         <YnsO1JGQm5FEkbJt@zx2c4.com>
+         <f6a4a5ccb126053534bebe4b070fc1384839e919.camel@redhat.com>
+         <Ynu35I4KMW7gMZW3@zx2c4.com>
+Organization: Red Hat
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:8Salp2wJZj3Gzv6vVdggpn7TUtptCLsLTTuUDCj7r4icscZN/CS
- 0qp90+/cRHHcx9ZSH4qlYdRBFf0slYJBcIfW/+/lP1Zh+gmR95umN1jgK42ETrm4e+QHWdi
- h/zUAvW5C1jLOVUUwbaZAmq5yjn2cSdm/nBfidGaXyHD7edbthX5v/KqStW7kB5vmVU3Dps
- xb7elaAFTwSilHoy989aw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:9k/ndWWP8ak=:rev2PVL3zuqftvezxHsYiG
- skDjXfF21sXd4EJbJwMuR5GT2LGNa9Gext7Mfw4A3nB5d8i0FCRJqpRQaQKJul8kqIW9vkwke
- mD4Kdk3ZjtUVtFzytKa/1+uge9rw9AZ7e+jp8tpik9bCUCMCdt1o3S9OqX3VfedWvYPSItotv
- JZYRvDdQwOhLcgez/AkITzoI6gsECR9w4bSFfI5tgO6z6eDXtGMYVA8C9/1o17b06yW6MKXmz
- 8U5f6irrkkOaaXhborBwkpBa1QnD7hmp8TzSmAnjtImo8TyJWMVXexryl94lKfnRy7x8GWXfp
- bEQWV2BiHyltzkxyugpBviWawOYXtLTZw+9ZYLDsXBGXeH3MXn4aCm6XrHR17J9T0COF86wXM
- H/RzLer6OUXPSU1CysZcihijsJI/sZyR0YYgi1T0u9DGpuPLeC72iCSDWtLBVXfoTEDOGAojC
- XTzQ5fK99ZUDKpalf8pX97TIvw/BSx4twcVLtz9qIhc/eeBmwdxkxHKvYOq4J+ALgadpZXced
- oZKI+oXUawDKIU9/CIu9aq7M3auY49k2/uhIXSMDBw9128AFrdgE5BrtLkZDzedvoqCVcvHs/
- N2qoEo57wKxZ24oOZTVXvxEGbQUa+2yaVN39ggh9ObGeMcDYV2b0rXvXG8Qy0Vu1N+2ElYP6K
- bC5YpUE6H964R7QW/cAlnpBt6RvX5lUH9fPI3HD2WDmawWOP3LjI9eCBCt41NTzIbtmg=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 4:28 PM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
->
-> On Wed, May 11, 2022 at 02:45:27PM +0200, Arnd Bergmann wrote:
-> > If it doesn't work, then there is no point trying. You could try
-> > changing the exception handling so it searches the ex_table for
-> > Undefined Instruction exceptions as well, but that's probably more
-> > complicated.
->
-> What's the point when we have the undef hook?
+Hi Jason,
 
-It seemed a little easier to follow the code flow if things are in
-one place.
+On Wed, 2022-05-11 at 15:19 +0200, Jason A. Donenfeld wrote:
+> Please don't dismiss this. I realize you have your one single use case
+> in mind, but there are others, and the distinction you gave for why we
+> should dismiss the others to focus on yours doesn't really make any
+> sense. Here's why:
 
-        Arnd
+I do not think I am dismissing any other use cases, clearly anything
+that depend on unique random numbers for security is impacted, but I
+tend to focus where we can get the biggest impact. 
+
+> In my email I pointed out two places where VM forks impact crypto in bad
+> ways:
+> 
+> - Session keys, wrt nonce reuse.
+> 
+> - Random nonces, wrt nonce reuse.
+> 
+> There are other problems that arise from VM forks too. But these stand
+> out because they are both quite catastrophic, whether it's duplicated
+> ECDSA random nonces, or whether it's the same session key used with the
+> same sequential counter to encrypt different plaintexts with something
+> like AES-GCM or ChaCha20Poly1305. These are both very, very bad things.
+> 
+> And both things happen in:
+> 
+> - Libraries: crypto lib random number generators (e.g. OpenSSL), crypto
+>   lib session keys (e.g. any TLS library).
+> 
+> - Applications: application level random number generators (e.g.
+>   Bitcoin Core *facepalm*), application level session keys (e.g.
+>   OpenSSH).
+
+Yes, some applications that are involved with security do have their
+own application level PRNGs, clearly they will have to either stop
+using customized PRNGs and use the library provided ones (or even just
+/dev/urandom if their needs are no performance critical) or adjust
+their own PRNGs to be safe using whatever mechanism will be provided.
+
+> So I don't think the "library vs application" distinction is really
+> meaningful here. Rather, things kind of fall apart all over the place
+> for a variety of reasons on VM fork.
+
+I am not really making a library vs application distinction, what I am
+saying is that the library uses case has a set of tighter constraints
+than the application one. Basically anything a library can use an
+application can as well, while the contrary is not true. Therefore it
+if we resolve the library problem, applications will have a solution as
+well.
+
+> > > - https://lore.kernel.org/lkml/YnA5CUJKvqmXJxf2@zx2c4.com/
+> > > - https://lore.kernel.org/lkml/Yh4+9+UpanJWAIyZ@zx2c4.com/
+> > > - https://lore.kernel.org/lkml/CAHmME9qHGSF8w3DoyCP+ud_N0MAJ5_8zsUWx=rxQB1mFnGcu9w@mail.gmail.com/
+> > 
+> > 4c does sound like a decent solution, it is semantically identical to
+> 
+> It does, yeah, but realistically it's never going to happen. I don't
+> think there's a near- or medium-term chance of changing hypervisor
+> semantics again. That means for 4-like solutions, there's 4a and 4b.
+
+I think 4a and 4b are fine mechanisms too, 4c is just more efficient,
+and potentially optimizable in HW.
+That said I think 3 (vDSO) is also a fine solution, and would not be
+disappointed if 3 was chosen over 4.
+
+I am not really after evaluating how it is done below the kernel
+boundary. As long as the effects are the same, semantically, from the
+user space pov.
+
+> By the way, that email of mine has inaccuracy in it. I complain about
+> being in irq context, but it turns out not to be the case; we're inside
+> of a kthread during the notification, which means we have a lot more
+> options on what we can do.
+> 
+> If 4 is the solution that appeals to you most, do you want to try your
+> hand at a RFC patch for it? I don't yet know if that's the best
+> direction to take, but the devil is kind of in the details, so it might
+> be interesting to see how it pans out.
+
+I think it would be prudent to agree on the correct mechanisms before
+venturing into potentially invasive patches.
+
+Simo.
+
+-- 
+Simo Sorce
+RHEL Crypto Team
+Red Hat, Inc
+
+
+

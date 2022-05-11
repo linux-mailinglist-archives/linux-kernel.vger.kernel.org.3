@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B146522A9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 05:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 057A0522A97
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 05:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236779AbiEKDzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 23:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
+        id S241896AbiEKDzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 23:55:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238686AbiEKDzc (ORCPT
+        with ESMTP id S239579AbiEKDzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 23:55:32 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103A72108BC
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 20:55:31 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id x18so671575plg.6
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 20:55:31 -0700 (PDT)
+        Tue, 10 May 2022 23:55:33 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34C3213324
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 20:55:32 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 202so687400pgc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 20:55:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=fastly.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=OGmy4QLI/8fGmA3FerkRtku5TKK3UOkAtDIIlXf/W7s=;
-        b=Lvz2NFU0wxJq7i37Ze4DZNA+uM0xodpQ2/GD0sncaN3Rc26o53fkHgOXTmfUTOGYMe
-         PQ8YhJRQE2joOk55gZTNRlr0yhTfNgbEswFespAwO54TVWi3uXnQh34OkhOecNRke75l
-         vkqlDGGRVgUjE7Hj88oeaMjrx58TpDNV9ffOA=
+        bh=tkAZPhAkhghXKAcrYQ097N+yUjSoD43IH6MO8WVhkW0=;
+        b=XTIXKAsQLSW9h7YC+Hl0jhrCRlhJoL7ZN43rl4HojAKB6QTZDyKFGdsQ3+/4q11Gf9
+         1yrehn7dms/+YB3orW/WWboVn+fzhaRuXuXvjIXG6v7vC15AgKmlBlD8gilh49cnbXYJ
+         dkZW2WjQK5eGZGAmm374sgwDgQoibYPvNPMlg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=OGmy4QLI/8fGmA3FerkRtku5TKK3UOkAtDIIlXf/W7s=;
-        b=4kSNnlZGqG+7/nhTCm5kQ4sIW26Ke8wMkPdJMUgoLNHbLYXApWMOfmPLggVTQYOIFt
-         fI4sHTbV6DC/HV2WmXJJluJh1T1uOISJBWRC1m3PJ+YK1O1vNDKl8G25Agy45vKFrbvQ
-         DW7wP2K8smhu5GHiAFTkowSHzM9wXCcx9Lw6EQYCyXNvaJNpB8K6crYmVMV8pgPvg91O
-         KQIpqA07rhFrifID6H3Ny1IjzyHTEFTjyhPzfbbiNoEtkip9+P/bnDEmicgs3iJMTkpR
-         ZcaV5TodIYSnKKpwE9Ucdhvh0aEGKJgbwxu2GxngZ0BAap1HiIEKKhrTdMP0/zjQsBKM
-         v9Ug==
-X-Gm-Message-State: AOAM531JZ3VYzgYYIQ9d/QWrAUh3GXTFuJoP7hvw7nITHDWrs0bDPvdj
-        17mPzQ5G/P+L0GoL+2cpS+sD2s7/c58upQ==
-X-Google-Smtp-Source: ABdhPJzw3DCldBbT9UirZQI+OHb9LG4rGmq8XkuDK/k9AREZfDPPdxjaEuFH1i4LKnAoxp/vAOJzyw==
-X-Received: by 2002:a17:90b:14ce:b0:1dc:eff5:52b6 with SMTP id jz14-20020a17090b14ce00b001dceff552b6mr3169500pjb.148.1652241330638;
-        Tue, 10 May 2022 20:55:30 -0700 (PDT)
+        bh=tkAZPhAkhghXKAcrYQ097N+yUjSoD43IH6MO8WVhkW0=;
+        b=t1C/oga0umC6+5Hxn5nWw72jhpEGtS4H38+rS4JdDFD2oJO8sPaLDrdSKErAMfcjK2
+         4EWcyS3XbLtjJnwdR64sT6Kz7UE/Z+/rwJdZTBaQNqmbeVenA5d9dURtdFNM1pBZ2bOG
+         f/b3laMYVADcbTSE+A/MlC+0RlPlBsN8atSa0/nhRasC7lMWh4N8KfCymX9Tid22WgIL
+         1kHA4RW4LDOYR2urqYEmxj94AgNhyClQrXW8uO6zvhTig2e2u18WEPxo3wYS9x+HpED+
+         QR77/ThJi/Zjzftvi9tpx7bs+7YmhLG2Wm/Dgl3BnfRD/Z5Zdcht1pDoTwJlnBgyHmwF
+         HYsw==
+X-Gm-Message-State: AOAM531D25sDMSEsqySnQTAwFr3qANMt05LKKl2wJLDYAnpU8HOkUKi/
+        P3fwQVfIJ2w4amtpjSX45s5ZtA==
+X-Google-Smtp-Source: ABdhPJxYgsPGtWhs7POp5A5xnYfBle+QWXILF7HGaYr8jorK2248KV18yTDhWf6EaGfBzvQ3RnPdig==
+X-Received: by 2002:a05:6a00:10cc:b0:505:ada6:e03e with SMTP id d12-20020a056a0010cc00b00505ada6e03emr23348965pfu.45.1652241332539;
+        Tue, 10 May 2022 20:55:32 -0700 (PDT)
 Received: from localhost.localdomain (c-73-223-190-181.hsd1.ca.comcast.net. [73.223.190.181])
-        by smtp.gmail.com with ESMTPSA id d7-20020a170903230700b0015e8d4eb1f7sm442789plh.65.2022.05.10.20.55.28
+        by smtp.gmail.com with ESMTPSA id d7-20020a170903230700b0015e8d4eb1f7sm442789plh.65.2022.05.10.20.55.31
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 10 May 2022 20:55:30 -0700 (PDT)
+        Tue, 10 May 2022 20:55:32 -0700 (PDT)
 From:   Joe Damato <jdamato@fastly.com>
 To:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
         linux-kernel@vger.kernel.org, x86@kernel.org,
         Alexander Viro <viro@zeniv.linux.org.uk>
 Cc:     Joe Damato <jdamato@fastly.com>
-Subject: [RFC,net-next 2/6] iov_iter: Allow custom copyin function
-Date:   Tue, 10 May 2022 20:54:23 -0700
-Message-Id: <1652241268-46732-3-git-send-email-jdamato@fastly.com>
+Subject: [RFC,net-next 3/6] iov_iter: Add a nocache copy iov iterator
+Date:   Tue, 10 May 2022 20:54:24 -0700
+Message-Id: <1652241268-46732-4-git-send-email-jdamato@fastly.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1652241268-46732-1-git-send-email-jdamato@fastly.com>
 References: <1652241268-46732-1-git-send-email-jdamato@fastly.com>
@@ -65,76 +65,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When calling copy_page_from_iter_iovec, allow callers to specify the copy
-function they'd like to use.
+Add copy_page_from_iter_nocache, which wraps copy_page_from_iter_iovec and
+passes in a custom copyin function: __copy_from_user_nocache.
 
-The only caller is updated to pass raw_copy_from_user.
+This allows callers of copy_page_from_iter_nocache to copy data without
+disturbing the CPU cache.
 
 Signed-off-by: Joe Damato <jdamato@fastly.com>
 ---
- lib/iov_iter.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ include/linux/uio.h |  2 ++
+ lib/iov_iter.c      | 20 ++++++++++++++++++++
+ 2 files changed, 22 insertions(+)
 
+diff --git a/include/linux/uio.h b/include/linux/uio.h
+index 739285f..58c7946 100644
+--- a/include/linux/uio.h
++++ b/include/linux/uio.h
+@@ -142,6 +142,8 @@ size_t copy_page_to_iter(struct page *page, size_t offset, size_t bytes,
+ 			 struct iov_iter *i);
+ size_t copy_page_from_iter(struct page *page, size_t offset, size_t bytes,
+ 			 struct iov_iter *i);
++size_t copy_page_from_iter_nocache(struct page *page, size_t offset, size_t bytes,
++			 struct iov_iter *i);
+ 
+ size_t _copy_to_iter(const void *addr, size_t bytes, struct iov_iter *i);
+ size_t _copy_from_iter(void *addr, size_t bytes, struct iov_iter *i);
 diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-index 6dd5330..ef22ec1 100644
+index ef22ec1..985bf58 100644
 --- a/lib/iov_iter.c
 +++ b/lib/iov_iter.c
-@@ -253,7 +253,9 @@ static size_t copy_page_to_iter_iovec(struct page *page, size_t offset, size_t b
+@@ -895,6 +895,26 @@ size_t copy_page_to_iter(struct page *page, size_t offset, size_t bytes,
  }
+ EXPORT_SYMBOL(copy_page_to_iter);
  
- static size_t copy_page_from_iter_iovec(struct page *page, size_t offset, size_t bytes,
--			 struct iov_iter *i)
-+			 struct iov_iter *i,
-+			 unsigned long (*_copyin)(void *to, const void __user *from,
-+						 unsigned long n))
++size_t copy_page_from_iter_nocache(struct page *page, size_t offset, size_t
++		bytes, struct iov_iter *i)
++{
++	if (unlikely(!page_copy_sane(page, offset, bytes)))
++		return 0;
++	if (unlikely(iov_iter_is_pipe(i) || iov_iter_is_discard(i))) {
++		WARN_ON(1);
++		return 0;
++	}
++	if (iov_iter_is_bvec(i) || iov_iter_is_kvec(i) || iov_iter_is_xarray(i)) {
++		void *kaddr = kmap_atomic(page);
++		size_t wanted = _copy_from_iter_nocache(kaddr + offset, bytes, i);
++
++		kunmap_atomic(kaddr);
++		return wanted;
++	} else
++		return copy_page_from_iter_iovec(page, offset, bytes, i,
++				__copy_from_user_nocache);
++}
++
+ size_t copy_page_from_iter(struct page *page, size_t offset, size_t bytes,
+ 			 struct iov_iter *i)
  {
- 	size_t skip, copy, left, wanted;
- 	const struct iovec *iov;
-@@ -278,7 +280,7 @@ static size_t copy_page_from_iter_iovec(struct page *page, size_t offset, size_t
- 		to = kaddr + offset;
- 
- 		/* first chunk, usually the only one */
--		left = copyin(to, buf, copy);
-+		left = _copyin(to, buf, copy);
- 		copy -= left;
- 		skip += copy;
- 		to += copy;
-@@ -288,7 +290,7 @@ static size_t copy_page_from_iter_iovec(struct page *page, size_t offset, size_t
- 			iov++;
- 			buf = iov->iov_base;
- 			copy = min(bytes, iov->iov_len);
--			left = copyin(to, buf, copy);
-+			left = _copyin(to, buf, copy);
- 			copy -= left;
- 			skip = copy;
- 			to += copy;
-@@ -307,7 +309,7 @@ static size_t copy_page_from_iter_iovec(struct page *page, size_t offset, size_t
- 
- 	kaddr = kmap(page);
- 	to = kaddr + offset;
--	left = copyin(to, buf, copy);
-+	left = _copyin(to, buf, copy);
- 	copy -= left;
- 	skip += copy;
- 	to += copy;
-@@ -316,7 +318,7 @@ static size_t copy_page_from_iter_iovec(struct page *page, size_t offset, size_t
- 		iov++;
- 		buf = iov->iov_base;
- 		copy = min(bytes, iov->iov_len);
--		left = copyin(to, buf, copy);
-+		left = _copyin(to, buf, copy);
- 		copy -= left;
- 		skip = copy;
- 		to += copy;
-@@ -899,7 +901,7 @@ size_t copy_page_from_iter(struct page *page, size_t offset, size_t bytes,
- 	if (unlikely(!page_copy_sane(page, offset, bytes)))
- 		return 0;
- 	if (likely(iter_is_iovec(i)))
--		return copy_page_from_iter_iovec(page, offset, bytes, i);
-+		return copy_page_from_iter_iovec(page, offset, bytes, i, raw_copy_from_user);
- 	if (iov_iter_is_bvec(i) || iov_iter_is_kvec(i) || iov_iter_is_xarray(i)) {
- 		void *kaddr = kmap_local_page(page);
- 		size_t wanted = _copy_from_iter(kaddr + offset, bytes, i);
 -- 
 2.7.4
 

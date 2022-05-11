@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE64C52359E
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7632D5235A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:35:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244771AbiEKOec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 10:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59882 "EHLO
+        id S244735AbiEKOfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 10:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244741AbiEKOeU (ORCPT
+        with ESMTP id S240207AbiEKOe7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 10:34:20 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A8513CA0D;
-        Wed, 11 May 2022 07:33:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652279632; x=1683815632;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jDhbXouhq/tEBUHIK3VOhtLf48Jd+FB2EOUwZcQlPLs=;
-  b=QiVJ1Tb93iT8kBrDIj1cz6OI3Yp+BxDPeEZIwAzSFngx3doY3wUwDTga
-   xWMYimJrl33wn0Zm0DzTVhWA2ClNyP24wbBlhSt2mxJNuaDWrDTYyEkmw
-   b3CoVc/HJqgLWWdiBddFhgqhea+9DRoywn3/ojx1hG1FvVtYIqSkJ9Lch
-   xU5cLqe+ehDA6b3YQwFdVOghki7Yt5LK4DyDWZKN8tSywbJoy42PouhcG
-   kCJSp4Hg0Rw0sJo9cbfR/Lm6+fC9wc49006Gwlbt6zhSF9wEX78gdy0vZ
-   AFR8UcVnrE/KxvOx3eeZ6+irZK74iJ59OVgRw3gIWB8isGC2yL+8BNWtR
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="250243383"
-X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
-   d="scan'208";a="250243383"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 07:33:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
-   d="scan'208";a="636434725"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 11 May 2022 07:33:49 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nonPQ-000JBm-OR;
-        Wed, 11 May 2022 14:33:48 +0000
-Date:   Wed, 11 May 2022 22:33:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Miaoqian Lin <linmq006@gmail.com>, Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Doug Thompson <dougthompson@xmission.com>,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-media@vger.kernel.org, linmq006@gmail.com
-Subject: Re: [PATCH] EDAC: Fix some refcount leaks
-Message-ID: <202205112212.TdxIloxH-lkp@intel.com>
-References: <20220511081402.19784-1-linmq006@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220511081402.19784-1-linmq006@gmail.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Wed, 11 May 2022 10:34:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BAB6A02A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:34:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B0C8B82073
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 14:34:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D091C34113;
+        Wed, 11 May 2022 14:34:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652279696;
+        bh=t7NtYe4g+ZzXlwVJbcVCuf8BrT1ifHZjftu0dkcPeDU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=To96SnoomjvJcuaMcVymixOJKBqwvB0ITJ+cp+vmiv8nwaFwLDwKSKJ/Sr+oLcrR5
+         TyQh9/nvJJtSIxdnQPCdaQkXOAxZGiMSemQmOsGMGmspApEEZuYY8eAnpZHNiEOJh2
+         bpiKc+VpbVcbtRQravcMqQ5F7cgSyzOiRHSxmdTqw60/TuZmyFIZBBWuWltVhIg/wk
+         DWH8JzHRc0JiNYk0Ox5rmApFMwqjD6cTikfNyrQ6dFkNv1TD3RrveXHQtpdMY7apuK
+         beMKIK9UmoQYfJqU/T3YtjEQTPCtKKJJ5fFRo6WpIPsD7RtQngDab7O2rctMyb20+M
+         ti4O54qXJ/VNg==
+Date:   Wed, 11 May 2022 23:34:50 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        cj.chengjian@huawei.com, huawei.libin@huawei.com,
+        xiexiuqi@huawei.com, liwei391@huawei.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        catalin.marinas@arm.com, will@kernel.org, zengshun.wu@outlook.com,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [RFC PATCH -next v2 3/4] arm64/ftrace: support dynamically
+ allocated trampolines
+Message-Id: <20220511233450.40136cdf6a53eb32cd825be8@kernel.org>
+In-Reply-To: <20220510104446.6d23b596@gandalf.local.home>
+References: <YmFXrBG5AmX3+4f8@lakrids>
+        <20220421100639.03c0d123@gandalf.local.home>
+        <YmF0xYpTMoWOIl00@lakrids>
+        <20220421114201.21228eeb@gandalf.local.home>
+        <YmGF/OpIhAF8YeVq@lakrids>
+        <20220421130648.56b21951@gandalf.local.home>
+        <YmJ/l4vJoEpFt68l@FVFF77S0Q05N>
+        <20220422114541.34d71ad9@gandalf.local.home>
+        <YmLlmaXF00hPkOID@lakrids>
+        <20220426174749.b5372c5769af7bf901649a05@kernel.org>
+        <YnJUTuOIX9YoJq23@FVFF77S0Q05N>
+        <20220505121538.04773ac98e2a8ba17f675d39@kernel.org>
+        <20220509142203.6c4f2913@gandalf.local.home>
+        <20220510181012.d5cba23a2547f14d14f016b9@kernel.org>
+        <20220510104446.6d23b596@gandalf.local.home>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,116 +75,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miaoqian,
+On Tue, 10 May 2022 10:44:46 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Thank you for the patch! Yet something to improve:
+> On Tue, 10 May 2022 18:10:12 +0900
+> Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> 
+> > >
+> > > This was suggested by both Peter Zijlstra and Thomas Gleixner when I
+> > > introduced FTRACE_WITH_ARGS, where all functions can now get the arguments
+> > > from fregs, but not the full pt_regs.  
+> > 
+> > Hmm, I thought the ftrace_get_regs() is the all-or-nothing interface, or
+> > is there any way to get the arguments from fregs?
+> 
+> Not yet generically. But that can easily be added. If you look at x86 live
+> patching, since it is arch specific, it just took the regs parameter
+> directly, knowing that the args were already set up. That is, ftrace_regs is
+> just a wrapper around pt_regs with just the regs for the arguments and stack
+> initialized. If you get regs from ftrace_get_regs(fregs) it will return
+> NULL if it wasn't full set of regs. But we can add generic functions to get
+> the parameters.
+> 
+> That is, we can create a ftrace_get_kernel_argument() function that takes
+> fregs instead of pt_regs, and produce the same thing as
+> regs_get_kernel_argument().
+> 
+> x86 live kernel patching has this:
+> 
+> arch/x86/include/asm/ftrace.h:
+> 
+>  #define ftrace_instruction_pointer_set(fregs, _ip)     \
+>        do { (fregs)->regs.ip = (_ip); } while (0)
+> 
+> 
+> arch/x86/include/asm/livepatch.h:
+> 
+>  static inline void klp_arch_set_pc(struct ftrace_regs *fregs, unsigned long ip)
+>  {
+>         ftrace_instruction_pointer_set(fregs, ip);
+>  }
+> 
+> Where fregs is not a full set of regs.
 
-[auto build test ERROR on ras/edac-for-next]
-[also build test ERROR on linux/master linus/master v5.18-rc6 next-20220511]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+OK, so fregs::regs will have a subset of pt_regs, and accessibility of
+the registers depends on the architecture. If we can have a checker like
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Miaoqian-Lin/EDAC-Fix-some-refcount-leaks/20220511-161440
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git edac-for-next
-config: arm64-randconfig-r032-20220509 (https://download.01.org/0day-ci/archive/20220511/202205112212.TdxIloxH-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/e5e3d8b94764dd1abe3c99881483c3f6dee8030a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Miaoqian-Lin/EDAC-Fix-some-refcount-leaks/20220511-161440
-        git checkout e5e3d8b94764dd1abe3c99881483c3f6dee8030a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/edac/
+ftrace_regs_exist(fregs, reg_offset)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+kprobe on ftrace or fprobe user (BPF) can filter user's requests.
+I think I can introduce a flag for kprobes so that user can make a
+kprobe handler only using a subset of registers. 
+Maybe similar filter code is also needed for BPF 'user space' library
+because this check must be done when compiling BPF.
 
-All errors (new ones prefixed by >>):
-
->> drivers/edac/edac_device_sysfs.c:640:8: error: use of undeclared label 'edac_device_create_instance'
-                   goto edac_device_create_instance;
-                        ^
-   1 error generated.
+Thank you,
 
 
-vim +/edac_device_create_instance +640 drivers/edac/edac_device_sysfs.c
+> > 
+> > > If a ftrace_ops has the REGS flag set
+> > > (using ftrace_regs_caller), the ftrace_get_regs(fregs) will return the
+> > > pt_regs, or it will return NULL if ftrace_regs_caller was not used.
+> > > 
+> > > This way the same parameter can provide full pt_regs or a subset, and have
+> > > an generic interface to tell the difference.  
+> > 
+> > If it can provide a partial (subset of) pt_regs, that could be good for me
+> > too, since at least kprobe-events on ftrace can check the traced register
+> > is in the subset or not and reject it if it doesn't saved.
+> 
+> That's exactly the use case for ftrace_regs.
+> 
+> -- Steve
 
-   604	
-   605	/*
-   606	 * edac_device_create_instance
-   607	 *	create just one instance of an edac_device 'instance'
-   608	 */
-   609	static int edac_device_create_instance(struct edac_device_ctl_info *edac_dev,
-   610					int idx)
-   611	{
-   612		int i, j;
-   613		int err;
-   614		struct edac_device_instance *instance;
-   615		struct kobject *main_kobj;
-   616	
-   617		instance = &edac_dev->instances[idx];
-   618	
-   619		/* Init the instance's kobject */
-   620		memset(&instance->kobj, 0, sizeof(struct kobject));
-   621	
-   622		instance->ctl = edac_dev;
-   623	
-   624		/* bump the main kobject's reference count for this controller
-   625		 * and this instance is dependent on the main
-   626		 */
-   627		main_kobj = kobject_get(&edac_dev->kobj);
-   628		if (!main_kobj) {
-   629			err = -ENODEV;
-   630			goto err_out;
-   631		}
-   632	
-   633		/* Formally register this instance's kobject under the edac_device */
-   634		err = kobject_init_and_add(&instance->kobj, &ktype_instance_ctrl,
-   635					   &edac_dev->kobj, "%s", instance->name);
-   636		if (err != 0) {
-   637			edac_dbg(2, "Failed to register instance '%s'\n",
-   638				 instance->name);
-   639			kobject_put(main_kobj);
- > 640			goto edac_device_create_instance;
-   641		}
-   642	
-   643		edac_dbg(4, "now register '%d' blocks for instance %d\n",
-   644			 instance->nr_blocks, idx);
-   645	
-   646		/* register all blocks of this instance */
-   647		for (i = 0; i < instance->nr_blocks; i++) {
-   648			err = edac_device_create_block(edac_dev, instance,
-   649							&instance->blocks[i]);
-   650			if (err) {
-   651				/* If any fail, remove all previous ones */
-   652				for (j = 0; j < i; j++)
-   653					edac_device_delete_block(edac_dev,
-   654								&instance->blocks[j]);
-   655				goto err_release_instance_kobj;
-   656			}
-   657		}
-   658		kobject_uevent(&instance->kobj, KOBJ_ADD);
-   659	
-   660		edac_dbg(4, "Registered instance %d '%s' kobject\n",
-   661			 idx, instance->name);
-   662	
-   663		return 0;
-   664	
-   665		/* error unwind stack */
-   666	err_release_instance_kobj:
-   667		kobject_put(&instance->kobj);
-   668	
-   669	err_out:
-   670		return err;
-   671	}
-   672	
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Masami Hiramatsu <mhiramat@kernel.org>

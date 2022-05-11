@@ -2,46 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1565152349B
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C41F852349D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244103AbiEKNrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33174 "EHLO
+        id S244124AbiEKNrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:47:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244090AbiEKNqi (ORCPT
+        with ESMTP id S244156AbiEKNrZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:46:38 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 75B088B0A6;
-        Wed, 11 May 2022 06:46:37 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 39E16ED1;
-        Wed, 11 May 2022 06:46:37 -0700 (PDT)
-Received: from pierre123.arm.com (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A4FDC3F66F;
-        Wed, 11 May 2022 06:46:34 -0700 (PDT)
-From:   Pierre Gondois <pierre.gondois@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ionela.Voinescu@arm.com, Dietmar.Eggemann@arm.com,
-        Pierre Gondois <Pierre.Gondois@arm.com>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Robert Moore <robert.moore@intel.com>,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        devel@acpica.org
-Subject: [PATCH v1 5/5] cpufreq: CPPC: Enable dvfs_possible_from_any_cpu
-Date:   Wed, 11 May 2022 15:45:59 +0200
-Message-Id: <20220511134559.1466925-5-pierre.gondois@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220511134559.1466925-1-pierre.gondois@arm.com>
-References: <20220511134559.1466925-1-pierre.gondois@arm.com>
+        Wed, 11 May 2022 09:47:25 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A682219367;
+        Wed, 11 May 2022 06:47:18 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id D6CEA21A97;
+        Wed, 11 May 2022 13:47:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1652276836; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=itd3Sa1CpZiLCS1ZDb1vqIIXnJVKe6EqK2Q/rkked3Q=;
+        b=pLilFkUDuwCHQ06I9/LEHv6rCi0DznqXDGfK76DXFxgw6UNeOzlzVRC6O22yHkc12xN2gf
+        lFDgWu+g3C/HkW4H97D8nGjRbi55x9srzwFVYGsS4ZmeXdrQtsearXTyM48hXaoOIcM0ef
+        mVDoRMM3N2hj3teqWMdqpHCvBR9k3bg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1652276836;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=itd3Sa1CpZiLCS1ZDb1vqIIXnJVKe6EqK2Q/rkked3Q=;
+        b=oY5XOjAd/sEDKcBkY4b9nI1t+xwGGLaQ0bF5KkiGHjIehtO5DAbknG0TR8VSFuTb6tLsDB
+        JsPyrxGlfq6c8gBg==
+Received: from quack3.suse.cz (unknown [10.163.43.118])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 89D192C141;
+        Wed, 11 May 2022 13:47:16 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id B9939A062A; Wed, 11 May 2022 15:47:10 +0200 (CEST)
+Date:   Wed, 11 May 2022 15:47:10 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Ye Bin <yebin10@huawei.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz
+Subject: Re: [PATCH -next v2] ext4: fix bug_on in ext4_writepages
+Message-ID: <20220511134710.4ggvxuxg7dwf7tkp@quack3.lan>
+References: <20220510100228.1172227-1-yebin10@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220510100228.1172227-1-yebin10@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,32 +64,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pierre Gondois <Pierre.Gondois@arm.com>
+On Tue 10-05-22 18:02:28, Ye Bin wrote:
+> we got issue as follows:
+> EXT4-fs error (device loop0): ext4_mb_generate_buddy:1141: group 0, block bitmap and bg descriptor inconsistent: 25 vs 31513 free cls
+> ------------[ cut here ]------------
+> kernel BUG at fs/ext4/inode.c:2708!
+> invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
+> CPU: 2 PID: 2147 Comm: rep Not tainted 5.18.0-rc2-next-20220413+ #155
+> RIP: 0010:ext4_writepages+0x1977/0x1c10
+> RSP: 0018:ffff88811d3e7880 EFLAGS: 00010246
+> RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffff88811c098000
+> RDX: 0000000000000000 RSI: ffff88811c098000 RDI: 0000000000000002
+> RBP: ffff888128140f50 R08: ffffffffb1ff6387 R09: 0000000000000000
+> R10: 0000000000000007 R11: ffffed10250281ea R12: 0000000000000001
+> R13: 00000000000000a4 R14: ffff88811d3e7bb8 R15: ffff888128141028
+> FS:  00007f443aed9740(0000) GS:ffff8883aef00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000000020007200 CR3: 000000011c2a4000 CR4: 00000000000006e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  do_writepages+0x130/0x3a0
+>  filemap_fdatawrite_wbc+0x83/0xa0
+>  filemap_flush+0xab/0xe0
+>  ext4_alloc_da_blocks+0x51/0x120
+>  __ext4_ioctl+0x1534/0x3210
+>  __x64_sys_ioctl+0x12c/0x170
+>  do_syscall_64+0x3b/0x90
+> 
+> It may happen as follows:
+> 1. write inline_data inode
+> vfs_write
+>   new_sync_write
+>     ext4_file_write_iter
+>       ext4_buffered_write_iter
+>         generic_perform_write
+>           ext4_da_write_begin
+>             ext4_da_write_inline_data_begin -> If inline data size too
+>             small will allocate block to write, then mapping will has
+>             dirty page
+>                 ext4_da_convert_inline_data_to_extent ->clear EXT4_STATE_MAY_INLINE_DATA
+> 2. fallocate
+> do_vfs_ioctl
+>   ioctl_preallocate
+>     vfs_fallocate
+>       ext4_fallocate
+>         ext4_convert_inline_data
+>           ext4_convert_inline_data_nolock
+>             ext4_map_blocks -> fail will goto restore data
+>             ext4_restore_inline_data
+>               ext4_create_inline_data
+>               ext4_write_inline_data
+>               ext4_set_inode_state -> set inode EXT4_STATE_MAY_INLINE_DATA
+> 3. writepages
+> __ext4_ioctl
+>   ext4_alloc_da_blocks
+>     filemap_flush
+>       filemap_fdatawrite_wbc
+>         do_writepages
+>           ext4_writepages
+>             if (ext4_has_inline_data(inode))
+>               BUG_ON(ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA))
+> 
+> The root cause of this issue is we destory inline data until call ext4_writepages
+> under delay allocation mode. But there maybe already covert from inline to extent.
+> To solved this issue, we call filemap_flush firstly.
+> 
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
+> ---
+>  fs/ext4/inline.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
+> index 6d253edebf9f..130ed5d83734 100644
+> --- a/fs/ext4/inline.c
+> +++ b/fs/ext4/inline.c
+> @@ -2002,6 +2002,14 @@ int ext4_convert_inline_data(struct inode *inode)
+>  	if (!ext4_has_inline_data(inode)) {
+>  		ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
+>  		return 0;
+> +	} else if (test_opt(inode->i_sb, DELALLOC) && !S_ISDIR(inode->i_mode)) {
+> +		error = filemap_flush(inode->i_mapping);
 
-The communication mean of the _CPC desired performance can be
-PCC, System Memory, System IO, or Functional Fixed Hardware (FFH).
+This is actually an interesting option and I kind of like it but shouldn't
+we restrict this to the situation when EXT4_STATE_MAY_INLINE_DATA is clear?
+Otherwise we would be writing out inline data to the inode unnecessarily
+for each ext4_convert_inline_data() call.
 
-PCC, SystemMemory and SystemIo address spaces are available from any
-CPU. Thus, dvfs_possible_from_any_cpu should be enabled in such case.
-For FFH, let the FFH implementation do smp_call_function_*() calls.
-
-Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
----
- drivers/cpufreq/cppc_cpufreq.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index 000a0c610c30..ad1535fbf389 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -558,6 +558,7 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
- 	}
- 
- 	policy->fast_switch_possible = cppc_allow_fast_switch();
-+	policy->dvfs_possible_from_any_cpu = true;
- 
- 	/*
- 	 * If 'highest_perf' is greater than 'nominal_perf', we assume CPU Boost
+								Honza
 -- 
-2.25.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

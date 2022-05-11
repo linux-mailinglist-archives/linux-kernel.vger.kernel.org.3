@@ -2,112 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA41522929
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 03:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7D152292E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 03:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240697AbiEKBs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 21:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
+        id S236227AbiEKBvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 21:51:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233599AbiEKBsZ (ORCPT
+        with ESMTP id S233927AbiEKBvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 21:48:25 -0400
-Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E84495E162;
-        Tue, 10 May 2022 18:48:23 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-2-147.pa.nsw.optusnet.com.au [49.181.2.147])
-        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id C137810E66A0;
-        Wed, 11 May 2022 11:48:19 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1nobSc-00AVtI-9Y; Wed, 11 May 2022 11:48:18 +1000
-Date:   Wed, 11 May 2022 11:48:18 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        nvdimm@lists.linux.dev, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, dan.j.williams@intel.com,
-        hch@infradead.org, jane.chu@oracle.com, rgoldwyn@suse.de,
-        viro@zeniv.linux.org.uk, willy@infradead.org,
-        naoya.horiguchi@nec.com, linmiaohe@huawei.com
-Subject: Re: [PATCHSETS] v14 fsdax-rmap + v11 fsdax-reflink
-Message-ID: <20220511014818.GE1098723@dread.disaster.area>
-References: <20220508143620.1775214-1-ruansy.fnst@fujitsu.com>
- <20220511000352.GY27195@magnolia>
+        Tue, 10 May 2022 21:51:00 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBCF4B420;
+        Tue, 10 May 2022 18:50:58 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d25so684579pfo.10;
+        Tue, 10 May 2022 18:50:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gDEht+gkZiFkbTmjk2YIJFInJDJINDJuhv19NAbiPEI=;
+        b=kJP+MLdy+ZDkYB4W4jB7vih5rEYiuEhzvE0wbq/MKspTIXFKGVsFJKAlsZq/dQYfLa
+         He08B6vK4RpECvZUiGdE+rTwsejMkIiwlS226qSnLV+HMisXLRlhu7TrL7svyLZxyrhr
+         +Jd0O/URbOA5cRdynLkgFEmoCMJ1ntssdddlcRlGecNTxq5bKKrlYknhWw5NX6kSuhi6
+         z2I2b4jTY7SeFQu4bgEs4RzaYn8y1LGg58K3UdARrfL0YE3pVG2gW1dyB4rz/Q04l/I2
+         rjdr5wqUlQDmXNjeyczCDuaCTGg8zdF2yD1JGXwUTFYYbXxlZ+ZyDiwFsJyCJNIY/yIx
+         T41w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gDEht+gkZiFkbTmjk2YIJFInJDJINDJuhv19NAbiPEI=;
+        b=0pG1NPjhx0NloGQEOkbmVPAINLV6GuVXMmer9h3R94HOgH/PJR6jzMIyLadzRgZNDK
+         CJiDnWKGkOIqUbyCepByB5jRXn+oZUUyNxs9YVVyOnsa/6I+DJh9MquR95Iv4m6x0JsU
+         zKobxQVwAb+tBSW+W0taU+ebpNZbcVddxhkAYs+TEJ47vCAeOOMo/SPqGLHhBhRcSHj3
+         UXqi9S+NpedtC6HpP1+I3/ctdZgzm7c8JdUnQwQNpNI6YX0vJu+mwH6isEoA1n0a63nT
+         jaqUvcpROVAcY9xr9omiURFxqFkhrZPjto28NRQK21JPUp7uhTNQuhkDl7w618HxWsiA
+         HkDg==
+X-Gm-Message-State: AOAM532u4GIls2zfCAeqx9MCZu+5WHjkOttgODD/3a/qIWOs66sVQRBs
+        8s3IIAlBNlRe3DkmhvKwp0dcmwqvI2WXVDWnra8=
+X-Google-Smtp-Source: ABdhPJwHLWCu0w3nBjf8E2zmucAMqA0ssK6lbH8hS3PAX6kZ6GBj4x6mIXJvCnP7581tIsNxItrsUnDK6zYX6HY2nbI=
+X-Received: by 2002:a63:114c:0:b0:3c2:3346:3c2b with SMTP id
+ 12-20020a63114c000000b003c233463c2bmr18865428pgr.226.1652233858137; Tue, 10
+ May 2022 18:50:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220511000352.GY27195@magnolia>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=e9dl9Yl/ c=1 sm=1 tr=0 ts=627b15e7
-        a=ivVLWpVy4j68lT4lJFbQgw==:117 a=ivVLWpVy4j68lT4lJFbQgw==:17
-        a=kj9zAlcOel0A:10 a=oZkIemNP1mAA:10 a=VwQbUJbxAAAA:8 a=omOdbC7AAAAA:8
-        a=7-415B0cAAAA:8 a=AXPICKo_Apo_Re-Q38cA:9 a=CjuIK1q_8ugA:10
-        a=AjGcO6oz07-iQ99wixmX:22 a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+From:   Zan Aziz <zanaziz313@gmail.com>
+Date:   Tue, 10 May 2022 19:50:46 -0600
+Message-ID: <CAFU3qoatKAhtpF2h62P3jM=F77UgHGuaRNUrBWs2CrwBvCRzZA@mail.gmail.com>
+Subject: Re: [PATCH 5.17 000/140] 5.17.7-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 05:03:52PM -0700, Darrick J. Wong wrote:
-> On Sun, May 08, 2022 at 10:36:06PM +0800, Shiyang Ruan wrote:
-> > This is a combination of two patchsets:
-> >  1.fsdax-rmap: https://lore.kernel.org/linux-xfs/20220419045045.1664996-1-ruansy.fnst@fujitsu.com/
-> >  2.fsdax-reflink: https://lore.kernel.org/linux-xfs/20210928062311.4012070-1-ruansy.fnst@fujitsu.com/
-> > 
-> >  Changes since v13 of fsdax-rmap:
-> >   1. Fixed mistakes during rebasing code to latest next-
-> >   2. Rebased to next-20220504
-> > 
-> >  Changes since v10 of fsdax-reflink:
-> >   1. Rebased to next-20220504 and fsdax-rmap
-> >   2. Dropped a needless cleanup patch: 'fsdax: Convert dax_iomap_zero to
-> >       iter model'
-> >   3. Fixed many conflicts during rebasing
-> >   4. Fixed a dedupe bug in Patch 05: the actuall length to compare could be
-> >       shorter than smap->length or dmap->length.
-> >   PS: There are many changes during rebasing.  I think it's better to
-> >       review again.
-> > 
-> > ==
-> > Shiyang Ruan (14):
-> >   fsdax-rmap:
-> >     dax: Introduce holder for dax_device
-> >     mm: factor helpers for memory_failure_dev_pagemap
-> >     pagemap,pmem: Introduce ->memory_failure()
-> >     fsdax: Introduce dax_lock_mapping_entry()
-> >     mm: Introduce mf_dax_kill_procs() for fsdax case
-> 
-> Hmm.  This patchset touches at least the dax, pagecache, and xfs
-> subsystems.  Assuming it's too late for 5.19, how should we stage this
-> for 5.20?
+On Tue, May 10, 2022 at 10:21 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.17.7 release.
+> There are 140 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.7-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Yeah, it's past my "last date for this merge cycle" which was
--rc6. I expected stuff might slip a little - as it has with the LARP
-code - but I don't have the time and bandwidth to start working
-on merging another feature from scratch before the merge window
-comes around.
+Hi Greg,
 
-Getting the dax+reflink stuff in this cycle was always an optimistic
-stretch, but I wanted to try so that there was no doubt it would be
-ready for merge in the next cycle...
+Compiled and booted on my test system Lenovo P50s: Intel Core i7
+No emergency and critical messages in the dmesg
 
-> I could just add the entire series to iomap-5.20-merge and base the
-> xfs-5.20-merge off of that?  But I'm not sure what else might be landing
-> in the other subsystems, so I'm open to input.
+./perf bench sched all
+# Running sched/messaging benchmark...
+# 20 sender and receiver processes per group
+# 10 groups == 400 processes run
 
-It'll need to be a stable branch somewhere, but I don't think it
-really matters where al long as it's merged into the xfs for-next
-tree so it gets filesystem test coverage...
+     Total time: 0.589 [sec]
 
-Cheers,
+# Running sched/pipe benchmark...
+# Executed 1000000 pipe operations between two processes
 
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+     Total time: 7.285 [sec]
+
+       7.285558 usecs/op
+         137257 ops/sec
+
+Tested-by: Zan Aziz <zanaziz313@gmail.com>
+
+Thanks
+-Zan

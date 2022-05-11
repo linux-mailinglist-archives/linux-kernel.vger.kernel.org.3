@@ -2,106 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF8425230A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:26:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5AAD5230A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242046AbiEKK0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 06:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50246 "EHLO
+        id S238394AbiEKK2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 06:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242192AbiEKK0Y (ORCPT
+        with ESMTP id S239660AbiEKK0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 06:26:24 -0400
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [IPv6:2001:67c:2050:0:465::202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0F828716
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:26:18 -0700 (PDT)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 11 May 2022 06:26:35 -0400
+Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF88628716
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:26:24 -0700 (PDT)
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 4Kyrfk14BNz1r0mV;
+        Wed, 11 May 2022 12:26:20 +0200 (CEST)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 4Kyrfh40nLz1qqkB;
+        Wed, 11 May 2022 12:26:20 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id NxkthguitX5R; Wed, 11 May 2022 12:26:19 +0200 (CEST)
+X-Auth-Info: tXIHxX5ZHslhb42XaJY3rZb8wZNgDXNyXF/IBEZkdDkmhIoND3kQLJkAM1OSuDJZ
+Received: from igel.home (ppp-46-244-167-40.dynamic.mnet-online.de [46.244.167.40])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4KyrfS4WZhz9spJ;
-        Wed, 11 May 2022 12:26:08 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1652264768;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=y/E1vKB93vrG/DjRCzLKzwqBALm4NpArvjus/ourHbI=;
-        b=k8G6LO/DA2hkLYEA4a/jti/zyEqH+lLwPnhhAIg00NLSzA8dFGBzwZhjEyddtDJLG3Vqtx
-        3Hfgh/KESeU2q0Gw3XmFYEv5SohRvJ9OmQ0KtNd+AsM/0RZ4CtNKQKLVz3qvG7MNiLRA/8
-        hV5lPw77oNCmAbG/y34GKc2R3BkkcJkYNWyp7x4MuZlJmMDy7hV6XZvhZ48GrkYg/y6kP/
-        Pe25JiyS+7TgQAiMk6Nv3aOyN9XhrIOaN1xn89Fs+TB070DOxvp+q8L1+fIyUGWK67T+KX
-        bnk1uVDGBkRI0+yZao76NBnnBcpEyLkexJXAszQCzAVpSOj9nfjih2CEcl0QKA==
-Message-ID: <1255a66a-121d-988a-19a7-316f703cb37d@mailbox.org>
-Date:   Wed, 11 May 2022 12:26:05 +0200
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Wed, 11 May 2022 12:26:19 +0200 (CEST)
+Received: by igel.home (Postfix, from userid 1000)
+        id 073C12C36A0; Wed, 11 May 2022 12:26:19 +0200 (CEST)
+From:   Andreas Schwab <schwab@linux-m68k.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Greg Ungerer <gerg@uclinux.org>, linux-m68k@lists.linux-m68k.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] m68k: math-emu: Fix dependencies of math emulation support
+References: <e0a9cf982a80f14efbf01cdc38e31128a9f41999.1652262437.git.geert@linux-m68k.org>
+X-Yow:  I guess it was all a DREAM..  or an episode of HAWAII FIVE-O...
+Date:   Wed, 11 May 2022 12:26:18 +0200
+In-Reply-To: <e0a9cf982a80f14efbf01cdc38e31128a9f41999.1652262437.git.geert@linux-m68k.org>
+        (Geert Uytterhoeven's message of "Wed, 11 May 2022 11:48:48 +0200")
+Message-ID: <875ymcwek5.fsf@igel.home>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: Adding CI results to the kernel tree was Re: [RFC v2] drm/msm:
- Add initial ci/ subdirectory
-Content-Language: en-CA
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Airlie <airlied@gmail.com>
-Cc:     freedreno <freedreno@lists.freedesktop.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Jonathan Corbet <corbet@lwn.net>, Sean Paul <sean@poorly.run>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20220510070140.45407-1-tomeu.vizoso@collabora.com>
- <20220510141329.54414-1-tomeu.vizoso@collabora.com>
- <CAPM=9tzLR-wsLhg2ikGjoK06s-ju5XWa1rtPPiUpN=pwD1vgtA@mail.gmail.com>
- <YntWQIXSqMCd6TYV@kroah.com>
-From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>
-In-Reply-To: <YntWQIXSqMCd6TYV@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-MBO-RS-META: f1u1x9t1eq9gx7t66636ikwanw7e56pm
-X-MBO-RS-ID: 8072a6e3cb6bccf98f1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-11 08:22, Greg Kroah-Hartman wrote:
-> On Wed, May 11, 2022 at 03:06:47PM +1000, Dave Airlie wrote:
->>> And use it to store expectations about what the drm/msm driver is
->>> supposed to pass in the IGT test suite.
->>
->> I wanted to loop in Linus/Greg to see if there are any issues raised
->> by adding CI results file to the tree in their minds, or if any other
->> subsystem has done this already, and it's all fine.
-> 
-> Why does the results need to be added to the tree?  Shouldn't they be
-> either "all is good" or "constantly changing and a constant churn"?
-> 
->> I think this is a good thing after our Mesa experience, but Mesa has a
->> lot tighter integration here, so I want to get some more opinions
->> outside the group.
-> 
-> For systems that have "tight integration" this might make sense as proof
-> that all is working for a specific commit, but I can't see how this will
-> help the kernel out much.
-> 
-> What are you going to do with these results being checked in all the
-> time?
+On Mai 11 2022, Geert Uytterhoeven wrote:
 
-Having the expected results in the tree keeps them consistent with the driver code itself, and allows putting in place gating CI to prevent merging driver changes which make any of the tests deviate from the expected result.
+> Drop the dependency on MMU, as the code should work fine on 68020 and up
+> without MMU (which are not yet supported by Linux, though).
+> Add dependencies on M68K_CLASSIC (to rule out Coldfire) and FPU (to rule
+> out 68xxx below 68020).
 
-Keeping them separate inevitably results in divergence between the driver code and the expected test results, which would result in spurious failures of such CI.
-
-
-I expect the main complication for the kernel will be due to driver changes merged via different trees, e.g. for cross-subsystem reworks. Since those will not go through the same CI, they may accidentally introduce inconsistencies. The ideal solution for this IMO would be centralizing CI such that the same gating tests have to pass regardless of how the code is merged. But there's likely quite a long way to go until we get there. :)
-
+Depending on FPU looks strange, since that is supposed to be an FPU
+emulation, for CPUs that _lack_ an FPU (ie. 680[23]0 without the
+6888[12], or 68LC0[46]0).
 
 -- 
-Earthling Michel Dänzer            |                  https://redhat.com
-Libre software enthusiast          |         Mesa and Xwayland developer
+Andreas Schwab, schwab@linux-m68k.org
+GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+"And now for something completely different."

@@ -2,83 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C810E5234C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C255234C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239953AbiEKNyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
+        id S243982AbiEKNzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244216AbiEKNyI (ORCPT
+        with ESMTP id S244224AbiEKNza (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:54:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FED434B95
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:54:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652277245;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yiBquU9ycutIGVQ+Lafkd382/sLMfLYmiUneQuM6tdo=;
-        b=d1KUMZBHHjdjA3axPTvahqtKQA6qxLvSs9pCFpW16TNcqrgTTTlguClzu1Lv3DhUEcIOPZ
-        nvUajJGjD350Bo2irqRvr8eGHo6IoOS2c9zbKld2ConKKUHdnB3+6BPYn1UOgfASmEDqG9
-        bqyTztglUdaY362MMzu4q3znBR4+Ib4=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-450-d3z9dT_rMFCYASVnl7vJag-1; Wed, 11 May 2022 09:54:04 -0400
-X-MC-Unique: d3z9dT_rMFCYASVnl7vJag-1
-Received: by mail-ej1-f71.google.com with SMTP id nb10-20020a1709071c8a00b006e8f89863ceso1187588ejc.18
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:54:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=yiBquU9ycutIGVQ+Lafkd382/sLMfLYmiUneQuM6tdo=;
-        b=SRWYqN6L0kKKhRXktBKIDRGWNDzh/lAQYphr4nxXQLhpyAK0RM0SkZAiLZci8oEAxF
-         tUKR0zouJa/ZH4Fn7R4zVPyhFX0xZCnmbkWcxrM5tYIm7OSplNxoTtQPd7ExGx/G41Tk
-         eiuJ39KQhsq1Po1/n5uGNqyTLSjgIecBjkUoOkoYL6C92REB7kJSkuXYEzrLD0T2+5/y
-         WI76cd3nTPExfcmK2x8ZK6Q4m/Ssa3wIG2yw7WXG0wZIBTR807BXN5cyH8rn2EDbbw3g
-         n+n2LPreTNhX++kGumGwDlVwfMrGJP/FZxQsvJGBfuW3RJ6NjFEqvZmTQlaHtSW+tNoQ
-         CMFQ==
-X-Gm-Message-State: AOAM533gx1JTq3NZ8nCK/vqqKM0pGALW1fJgqWHpI2tQj1jLgSGlg38m
-        OlBg5bbKy4kWfXl/QT3bIF7Yp6my2/7vJvy3EWGYDJrRzDZ6tlP12PpSzgvw2uwFNouyiBMhxE+
-        jepY8+whOMzHQzKKJrtueK6xA
-X-Received: by 2002:a05:6402:2078:b0:428:1071:d9b2 with SMTP id bd24-20020a056402207800b004281071d9b2mr29798745edb.302.1652277242271;
-        Wed, 11 May 2022 06:54:02 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyFNGrXEYB8j4ZnML/DgDYxNGSibD3TzmU9JnkCNgK/+z8cTd0gXxgIxWKyb7My6aTgwuk7Gw==
-X-Received: by 2002:a05:6402:2078:b0:428:1071:d9b2 with SMTP id bd24-20020a056402207800b004281071d9b2mr29798734edb.302.1652277242095;
-        Wed, 11 May 2022 06:54:02 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id b22-20020a170906491600b006f3ef214e2esm1034769ejq.148.2022.05.11.06.54.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 06:54:01 -0700 (PDT)
-Message-ID: <7d9d5f72-21ed-070e-c063-1cd7ae6671ec@redhat.com>
-Date:   Wed, 11 May 2022 15:53:58 +0200
+        Wed, 11 May 2022 09:55:30 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD35934B95
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:55:27 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nomoF-0004ZM-Uv; Wed, 11 May 2022 15:55:23 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id AFAD17BD65;
+        Wed, 11 May 2022 13:55:22 +0000 (UTC)
+Date:   Wed, 11 May 2022 15:55:22 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Devid Antonio Filoni <devid.filoni@egluetechnologies.com>,
+        kernel@pengutronix.de, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Jander <david@protonic.nl>
+Subject: Re: [PATCH 1/1] can: skb: add and set local_origin flag
+Message-ID: <20220511135522.2qvhtokb4j5qvr3j@pengutronix.de>
+References: <20220511121913.2696181-1-o.rempel@pengutronix.de>
+ <b631b022-72d5-9160-fd13-f33c80dbbe59@hartkopp.net>
+ <20220511130540.yowjdvzftq2jutiw@pengutronix.de>
+ <6f541d66-f52e-13e0-bfe9-91918af11503@hartkopp.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 1/2] KVM: LAPIC: Disarm LAPIC timer includes pending
- timer around TSC deadline switch
-Content-Language: en-US
-To:     Wanpeng Li <kernellwp@gmail.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>
-References: <1652236710-36524-1-git-send-email-wanpengli@tencent.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <1652236710-36524-1-git-send-email-wanpengli@tencent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="khciasqr7ullk2e4"
+Content-Disposition: inline
+In-Reply-To: <6f541d66-f52e-13e0-bfe9-91918af11503@hartkopp.net>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,13 +60,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/11/22 04:38, Wanpeng Li wrote:
-> 
-> Fixes: 4427593258 (KVM: x86: thoroughly disarm LAPIC timer around TSC deadline switch)
-> Signed-off-by: Wanpeng Li<wanpengli@tencent.com>
-> ---
 
-Please write a testcase for this.
+--khciasqr7ullk2e4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Paolo
+On 11.05.2022 15:24:00, Oliver Hartkopp wrote:
+> > Another use where skb->sk breaks is sending CAN frames with SO_TXTIME
+> > with the sched_etf.
+> >=20
+> > I have a patched version of cangen that uses SO_TXTIME. It attaches a
+> > time to transmit to a CAN frame when sending it. If you send 10 frames,
+> > each 100ms after the other and then exit the program, the first CAN
+> > frames show up as TX'ed while the others (after closing the socket) show
+> > up as RX'ed CAN frames in candump.
+>=20
+> Hm, this could be an argument for the origin flag.
+>=20
+> But I'm more scared about your described behaviour. What happens if
+> the socket is still open?
 
+SO_TXTIME makes an existing race window really, really, really wide.
+
+The race window is between sendmsg() returning to user space and
+can_put_echo_skb() -> can_create_echo_skb() -> can_skb_set_owner(). In
+can_skb_set_owner() a reference to the socket is taken, if the socket is
+not closed:
+
+| https://elixir.bootlin.com/linux/v5.17.6/source/include/linux/can/skb.h#L=
+75
+
+If the socket closes _after_ sendmsg(), but _before_ the driver calls
+can_put_echo_skb() the CAN frame will have no socket reference and show
+up as RX'ed.
+
+> There obviously must be some instance removing the sk reference, right??
+
+No. That's all fine. We fixes that in:
+
+| https://lore.kernel.org/all/20210226092456.27126-1-o.rempel@pengutronix.d=
+e/
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--khciasqr7ullk2e4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJ7wEcACgkQrX5LkNig
+0105rAf/QPg7zb8QkTDLqj1iZbifsl8tCH6+c1va4al8KU+2e3N/+c+3RnUDWMdv
+ZoQuH7xMhwp2EbWkz7dWtuJa3TCwUk6YdLrBeQrUM5hHJP9KPR9tSolTgdBQTNaS
+U54XE/8kTB+aeMqVwuUlql0GhoRbEPTXPeLEdM1R7cHDhgM0y/O++na6w+DkeFgD
+WwJvKuCjCdpL+spbYr1hhk87BC66ScPkLu0amIlfyRalf2sPFXxfWQ0VjVTbKjeO
+4ltvGceoZi+SIXIgTHiys5rXcjlQTr++CnUf2/6LWyYwgZJeBCeIznn15VEDEoqB
+Ha4GZtxGwjAOpMAsevwZDsOt/27uwQ==
+=PeBy
+-----END PGP SIGNATURE-----
+
+--khciasqr7ullk2e4--

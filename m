@@ -2,100 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEFFF523A61
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9935E523A65
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344789AbiEKQba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 12:31:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59554 "EHLO
+        id S1344796AbiEKQdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 12:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344804AbiEKQbX (ORCPT
+        with ESMTP id S230245AbiEKQdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 12:31:23 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF06F239B3A
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:31:19 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id jt15so2464677qvb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:31:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5AW0aZoxHCN1VcWSiLevVsA+4vTrs8hedKoXKC8swoo=;
-        b=PeLfiEM2fdaGSYbtJQ/sHoHI/+L6Xi/cs5SHyHuC/SxKcebTKwmGKdh+4cqV5wbSFf
-         oQ2ZNFFCCuTMZtRNOUp4GIVnzh0u64rEZXI5WIL7iXphKrgMdGVWPA+e0JyTQz6N50p9
-         oTxSqjvYV4ZKuaTVTHUcSVX+Pcmcvz60odUTY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5AW0aZoxHCN1VcWSiLevVsA+4vTrs8hedKoXKC8swoo=;
-        b=DmiHm1KaU99JiPIPFY833BpGeKqhJMB0UYv3U3heyKqiM6sigbotaPjt8Za/CdP4Mh
-         HSPy4LSY+YFxU1UHfd9Hz5JPhaHcto85JtI0YSYNZlNs+EpI3EG17OtZhfaTm/IZPyey
-         aUuicvYDlmlLQD/01djZvs9gvXfWUNuLkzRiLMPpAdcgGG/u4JUXDicJA/dtVCTUMUTN
-         SlTmkW74paizVut7JgdiekWpYTJvJQdLshSzkQfWjBpChK66E79C2OIJY8t9+d5TvfZa
-         TybPLGUn84XOA+IS8sUKVHVHzSiS75H6hxj8NdSYShfz9aVGFx7yptV3lhha+mEHhQ8B
-         iLpA==
-X-Gm-Message-State: AOAM532xkQGJfvy48qld7vUnU8I9Zf+TjZ9sBhnTIPCB6Z9HtU9xPYgc
-        0oe/N80uuaFPY5fg0gSYgl02l9Aka16ZMg==
-X-Google-Smtp-Source: ABdhPJwCY37vGnZ+DMy0b1A6UZRgARNdpOdQuhqhLyeMoiUh4C59xvmwsBczXp7zrc+YeSQS3oD8Xg==
-X-Received: by 2002:a05:6214:5008:b0:45b:82:6ef with SMTP id jo8-20020a056214500800b0045b008206efmr17026158qvb.87.1652286678916;
-        Wed, 11 May 2022 09:31:18 -0700 (PDT)
-Received: from meerkat.local (bras-base-mtrlpq5031w-grc-32-216-209-220-127.dsl.bell.ca. [216.209.220.127])
-        by smtp.gmail.com with ESMTPSA id k14-20020a05620a414e00b0069fc2a7e7a5sm1546889qko.75.2022.05.11.09.31.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 09:31:18 -0700 (PDT)
-Date:   Wed, 11 May 2022 12:31:16 -0400
-From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        KVM list <kvm@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        mie@igel.co.jp
-Subject: Re: [GIT PULL] virtio: last minute fixup
-Message-ID: <20220511163116.fpw2lvrkjbxmiesz@meerkat.local>
-References: <20220510082351-mutt-send-email-mst@kernel.org>
- <CAHk-=wjPR+bj7P1O=MAQWXp0Mx2hHuNQ1acn6gS+mRo_kbo5Lg@mail.gmail.com>
- <YnrxTMVRtDnGA/EK@dev-arch.thelio-3990X>
- <CAHk-=wgAk3NEJ2PHtb0jXzCUOGytiHLq=rzjkFKfpiuH-SROgA@mail.gmail.com>
- <20220511125140.ormw47yluv4btiey@meerkat.local>
- <87a6bo89w4.fsf@mpe.ellerman.id.au>
+        Wed, 11 May 2022 12:33:47 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3932380CF;
+        Wed, 11 May 2022 09:33:46 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 24BGXX7f009557
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 May 2022 12:33:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1652286817; bh=u4YJZkrwuA5TwAFYHV5X/DQbtQlicwtWK2DS81WD6i4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=dgsxiMXq70eE2Dqt2p2XSXNv1t+dqrJ9XkUY+ZxbspLF81wBf8+TD+tUDHP8/VpCx
+         vGQpZ+52SIYtlplzvIpaHtsTUn9y28aJr+BND3lPah4kBKUEqW4XcIcMptMqBGH3LS
+         gVypFI/T91iQyzBgO7b7JTGsP7YzUFJKl/ZJoAscnV5I7VGDEhkXKR680Kk7ZX+Kj8
+         jlhQfsEDFEGPYT+Ab2b5DtGwc1GrQ1l5Cs2zS7Y1pz23hCCq0TKMU4go/HyUQiDxC9
+         TMzgL+BanRwQg+xi9Ke8S1BbzignZWQXm015AiK8Z4kluHwEmJETW479oF+duV8Sf+
+         o137FZ9EpGoaw==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 436D515C3F0C; Wed, 11 May 2022 12:33:33 -0400 (EDT)
+Date:   Wed, 11 May 2022 12:33:33 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Shaun Tancheff <shaun.tancheff@hpe.com>
+Cc:     shaun@tancheff.com, Andreas Dilger <adilger.kernel@dilger.ca>,
+        "open list:EXT4 FILE SYSTEM" <linux-ext4@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] Shrink fast commit buffer when not used
+Message-ID: <YnvlXdkSsMwUE3Iy@mit.edu>
+References: <20220407124244.2014497-1-shaun.tancheff@hpe.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87a6bo89w4.fsf@mpe.ellerman.id.au>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220407124244.2014497-1-shaun.tancheff@hpe.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 11:40:59PM +1000, Michael Ellerman wrote:
-> > I think we should simply disambiguate the trailer added by tooling like b4.
-> > Instead of using Link:, it can go back to using Message-Id, which is already
-> > standard with git -- it's trivial for git.kernel.org to link them to
-> > lore.kernel.org.
+On Thu, Apr 07, 2022 at 07:42:44PM +0700, Shaun Tancheff wrote:
+> Shrink the fast-commit buffer when the feature is not
+> enabled. By default the fast-commit buffer will allocate 256
+> blocks if s_num_fc_blks is 0. Set s_num_fc_blks to a smaller
+> value (> 0) to avoid allocating a large unused buffer, this
+> also makes more journal credits available when fast commit
+> is not used.
 > 
-> But my mailer, editor and terminal don't know what to do with a Message-Id.
-> 
-> Whereas they can all open an https link.
-> 
-> Making people paste message ids into lore to see the original submission
-> is not a win. People make enough fun of us already for still using email
-> to submit patches, let's not make their job any easier :)
+> Signed-off-by: Shaun Tancheff <shaun.tancheff@hpe.com>
 
-Okay, I'm fine with using a dedicated trailer for this purpose, perhaps an
-"Archived-At"? That's a real header that was proposed by IETF for similar
-purposes. E.g.:
+The journal->j_superblock data structure is stored on disk, so when
+you make this change, it's can and will get written back to disk, at
+which point the s_num_fc_blks is permanently strunk.  If the file
+system might be mounted with the mount option data=journal mode,
+fast_commit will be disabled; but it might be subsequently mounted
+without this mount option.
 
-    Archived-at: https://lore.kernel.org/r/CAHk-=wgAk3NEJ2PHtb0jXzCUOGytiHLq=rzjkFKfpiuH-SROgA@mail.gmail.com
+Why do you believe this patch is necessary?  If there is a file system
+which is only going to be mounted using data=journal, the file system
+should simply not be formwatted with the fast_commit option.
 
--K
+       	      	     		     	 - Ted

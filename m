@@ -2,54 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF9E6523195
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4861452318B
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235690AbiEKL27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 07:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41676 "EHLO
+        id S235303AbiEKL1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 07:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239732AbiEKL2s (ORCPT
+        with ESMTP id S232535AbiEKL1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 07:28:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6C823E280;
-        Wed, 11 May 2022 04:28:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 11 May 2022 07:27:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 869F921E18
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:27:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652268438;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DIkuzLv3fAIZ/ecXsuVyp5d8TYyCyoMlaS3CF1XN0YU=;
+        b=HkSblMsIdVFCSI0S1jVVRr+HWtFSaeTj2pnnYkbz/qPJZV7p4lx9hHO6eB93nGkKNjTldR
+        tLYLFuZ8qIR1PwrDq+HHDrVE+d1aRQtkQ0N7ocPkc6ln0xBACS6zpjoYKcwTaNHn4Yvivb
+        rEHqnKjYvFWau0j3clwtwAowVPPfj7E=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-19-gg3zaShyOb6w2Bx6c0m51w-1; Wed, 11 May 2022 07:27:15 -0400
+X-MC-Unique: gg3zaShyOb6w2Bx6c0m51w-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96B99B82075;
-        Wed, 11 May 2022 11:28:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02FADC340F2;
-        Wed, 11 May 2022 11:28:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652268511;
-        bh=N5xgX5dJUJXdldanftjWLLJPgFd3eQMkcEKdIzdEgh8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JmM9kI5Lc350ttS7YDauDlzfANOfilw5gnBVzp7rR8aBAFFpaSNnjXCOXz7bfuO/S
-         pHFgS7p0O19paJxLFKb5lZKZGSvVd5TXYmgoZX3tVKVxyU0IXJ6OEraHFJykGmUpHb
-         9PAqeONJVRxGaP+rBFTESq1XPBtcq25z5h/8cSDS8d6tr9gu/cFXDXJrgpCIe7VrP9
-         WdEguRYDE5Bo6C/dC7gmnbQaTGkxwhJm0y+frZEjQeyf9XnUAitZZV2/ZeQWT/cPHA
-         lGoIfC4yboBXZaygS0czOnIHNiotve7/0gT1DXWkdDEmR0M0b+SZd1AKfbVzdcbqaM
-         UiClxVqQGkyfw==
-Date:   Wed, 11 May 2022 14:27:01 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lukas@wunner.de,
-        p.rosenberger@kunbus.com, Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Subject: Re: [PATCH v4 2/6] tpm, tpm_tis: Claim and release locality only once
-Message-ID: <YnudhZZGXf87U3bd@kernel.org>
-References: <20220509080559.4381-1-LinoSanfilippo@gmx.de>
- <20220509080559.4381-3-LinoSanfilippo@gmx.de>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 346832932489;
+        Wed, 11 May 2022 11:27:14 +0000 (UTC)
+Received: from starship (unknown [10.40.192.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E698FC07F51;
+        Wed, 11 May 2022 11:27:11 +0000 (UTC)
+Message-ID: <30b0e63c0a2d3c3c40edb47af6d80e452f1e69fa.camel@redhat.com>
+Subject: Re: [PATCH v3 13/34] KVM: nSVM: Keep track of Hyper-V
+ hv_vm_id/hv_vp_id
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 11 May 2022 14:27:10 +0300
+In-Reply-To: <20220414132013.1588929-14-vkuznets@redhat.com>
+References: <20220414132013.1588929-1-vkuznets@redhat.com>
+         <20220414132013.1588929-14-vkuznets@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220509080559.4381-3-LinoSanfilippo@gmx.de>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,19 +69,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 10:05:55AM +0200, Lino Sanfilippo wrote:
-> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+On Thu, 2022-04-14 at 15:19 +0200, Vitaly Kuznetsov wrote:
+> Similar to nSVM, KVM needs to know L2's VM_ID/VP_ID and Partition
+> assist page address to handle L2 TLB flush requests.
 > 
-> It is not necessary to claim and release the default locality for each TPM
-> command. Instead claim the locality once at driver startup and release it
-> at driver shutdown.
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/kvm/svm/hyperv.h | 16 ++++++++++++++++
+>  arch/x86/kvm/svm/nested.c |  2 ++
+>  2 files changed, 18 insertions(+)
 > 
-> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> diff --git a/arch/x86/kvm/svm/hyperv.h b/arch/x86/kvm/svm/hyperv.h
+> index 7d6d97968fb9..8cf702fed7e5 100644
+> --- a/arch/x86/kvm/svm/hyperv.h
+> +++ b/arch/x86/kvm/svm/hyperv.h
+> @@ -9,6 +9,7 @@
+>  #include <asm/mshyperv.h>
+>  
+>  #include "../hyperv.h"
+> +#include "svm.h"
+>  
+>  /*
+>   * Hyper-V uses the software reserved 32 bytes in VMCB
+> @@ -32,4 +33,19 @@ struct hv_enlightenments {
+>   */
+>  #define VMCB_HV_NESTED_ENLIGHTENMENTS VMCB_SW
+>  
+> +static inline void nested_svm_hv_update_vm_vp_ids(struct kvm_vcpu *vcpu)
+> +{
+> +	struct vcpu_svm *svm = to_svm(vcpu);
+> +	struct hv_enlightenments *hve =
+> +		(struct hv_enlightenments *)svm->nested.ctl.reserved_sw;
 
-We are doing what we're being because of Intel TXT:
+Small nitpick:
 
-https://lore.kernel.org/tpmdd-devel/20170315055738.11088-1-jarkko.sakkinen@iki.fi/
+Can we use this as an opportunity to rename the 'reserved_sw' to \
+'hv_enlightenments' or something, because that is what it is?
 
-Unfortunately cannot accept this change.
+Also the reserved_sw is an array, which is confusing, since from first look,
+it looks like we have a pointer dereference here.
 
-BR, Jarkko
+
+
+> +	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> +
+> +	if (!hv_vcpu)
+> +		return;
+> +
+> +	hv_vcpu->nested.pa_page_gpa = hve->partition_assist_page;
+> +	hv_vcpu->nested.vm_id = hve->hv_vm_id;
+> +	hv_vcpu->nested.vp_id = hve->hv_vp_id;
+> +}
+> +
+>  #endif /* __ARCH_X86_KVM_SVM_HYPERV_H__ */
+> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+> index bed5e1692cef..2d1a76343404 100644
+> --- a/arch/x86/kvm/svm/nested.c
+> +++ b/arch/x86/kvm/svm/nested.c
+> @@ -826,6 +826,8 @@ int nested_svm_vmrun(struct kvm_vcpu *vcpu)
+>  
+>  	svm->nested.nested_run_pending = 1;
+>  
+> +	nested_svm_hv_update_vm_vp_ids(vcpu);
+> +
+>  	if (enter_svm_guest_mode(vcpu, vmcb12_gpa, vmcb12, true))
+>  		goto out_exit_err;
+>  
+
+That won't work after migration, since this won't be called
+if we migrate with nested guest running.
+
+
+I think that nested_svm_hv_update_vm_vp_ids should be called 
+from enter_svm_guest_mode.
+
+
+Best regards,
+	Maxim Levitsky
+

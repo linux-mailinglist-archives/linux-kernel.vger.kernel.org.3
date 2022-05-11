@@ -2,128 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A884152370A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BEFF52370C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343505AbiEKPUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:20:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59078 "EHLO
+        id S245742AbiEKPUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343539AbiEKPUm (ORCPT
+        with ESMTP id S1343509AbiEKPUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 11 May 2022 11:20:42 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9802E224684
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:20:30 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id z2so4776168ejj.3
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:20:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=geKshak1zwJUIf6OJmXvrC7YdZBGtitn11Vxo6ekyyA=;
-        b=l20H3mA7oW2a+08LERco53HKdKbo219aB2WAapCII+6f+y9IzHx4HswyXM1KzGYjvO
-         bzH58mV2hjC7NGckBKnwPYTxLnai4AVKm610If4TLKWKSBjeDLKw45Ih/1OOwktZPb4J
-         tttTyazCCkuV0Udgr/mC7OfZiv4pt1gs0XPZNq51YAN7PnsJ8t5FOw+KlyUK8CKP7QlZ
-         oB85sNr0d9Ww/tDpirsFMJX6WRtjgAEQe7MWx+rCxBO/4kj4kLuWryMRhb/x1bKFn1dh
-         CU2j1xYQKKPrr5rZmW3Wo0UtPGq5M/m4zb83+fuiFaR8i5j5rV3o3gOzFoMRcBv4QOxY
-         7GoA==
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53237224066;
+        Wed, 11 May 2022 08:20:32 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-ed9a75c453so3159779fac.11;
+        Wed, 11 May 2022 08:20:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=geKshak1zwJUIf6OJmXvrC7YdZBGtitn11Vxo6ekyyA=;
-        b=Eyn+PXcaK00K6Krb0IIrvBSU5jzXsUglhp5SGS9oYL3HUIxaiWdiIhRlsVr8SKgKrt
-         G5O3TJB77v5FoDVcFiWeQ08SHCH/5CBUEK5d6HShy0cBsxc0pBzdKTGpbhffnO+5Q02e
-         Ls3HS/R2tf1O7FwJIvlqR2mq6oqhKnv5nOzH1w5wxRDewXKSMa9iNCNSf5/NK9BAwJCJ
-         lTNX5AQeItvQ84tWFFFP1AtO7eV+DLzM1TpCA2ort0SQC0Anrv1kmTswfzGDnjqwYI9m
-         HKvYtF2PTi5RZvbYIaIIeIx4/yRe0OjxgNjPfSBY9sbRkVEHZrB9VFQ0i2Y3OK7azotR
-         2eCQ==
-X-Gm-Message-State: AOAM533cqdLBY9qYEPPrUJgUy4C7vlSC0xyeXgYTDks3BZi7PogF3e+S
-        9LnxtAPg/oh+/hCXg6ZuVOEJI1fA2N1QBEfv
-X-Google-Smtp-Source: ABdhPJzp4+SiFl11hXg8UOEugmLgp6eOUHjNYxsYVthXNxpX+8C9Ahj3caDgh9Ngw0AFLp/1Je3bpQ==
-X-Received: by 2002:a17:907:7e99:b0:6fd:c2a2:9620 with SMTP id qb25-20020a1709077e9900b006fdc2a29620mr6120374ejc.554.1652282428949;
-        Wed, 11 May 2022 08:20:28 -0700 (PDT)
-Received: from [192.168.0.154] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id m4-20020a1709060d8400b006f3ef214e2csm1079710eji.146.2022.05.11.08.20.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 08:20:28 -0700 (PDT)
-Message-ID: <78cc1d8a-e8c4-bb6a-1058-ab912b90ebe4@linaro.org>
-Date:   Wed, 11 May 2022 17:20:27 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=5ZJJEi0T6avsQcNuZ76OzoU8pxCTrsB//m+bCucO+9U=;
+        b=NFSxyyvOEp4jn7x6TxNuF5z/tIPDEPmNR2u+m7Qw62L1ds/YtrBGl5vTJunHjtuTyR
+         zfUvvXWWmaxoScee4LtOa9FzDVmEIUuXKbrQNizI0oaGtKFVl6VTnTPYzn5156RmowOn
+         PmH8pT5Qy8Cwlz7v2KNswHmz/gNwaUlrhEYSJTMjKUuZJSMLOIyfh5EeUPhA2YRCA1UH
+         UjQhVWKjKPwNWJdAv+Yef5KCiiWQRkme49+zHf1Ds7THFU6wxUICj4PtthI6tZf78Rv5
+         /Yqe8WoRbgTtfARxfj3HwW23jvW+DfGNHseiCJcsOtcUXIpGGuH/AhmYDG2yC3eZVdbr
+         JAJA==
+X-Gm-Message-State: AOAM5327wIeMvKv6ChIBMx8/0K8X2Vwt1KYbYU5RcWybMr8gyr7UutIo
+        B1okarzWc20YAdRDZtiKPQ==
+X-Google-Smtp-Source: ABdhPJzHG2G6iJ/w1YHF54ZZrwalnAdU7u6SfKtXTyPPxCiPfEfPDWLIDd8rgbeHklBkkzoPAseC1A==
+X-Received: by 2002:a05:6870:818a:b0:f1:1223:3afd with SMTP id k10-20020a056870818a00b000f112233afdmr1711883oae.271.1652282431852;
+        Wed, 11 May 2022 08:20:31 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q2-20020a4adc42000000b0035eb4e5a6b3sm1031492oov.9.2022.05.11.08.20.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 08:20:31 -0700 (PDT)
+Received: (nullmailer pid 333836 invoked by uid 1000);
+        Wed, 11 May 2022 15:20:29 -0000
+Date:   Wed, 11 May 2022 10:20:29 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?iso-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v4 03/12] dt-bindings: net: pcs: add bindings
+ for Renesas RZ/N1 MII converter
+Message-ID: <20220511152029.GA330075-robh@kernel.org>
+References: <20220509131900.7840-1-clement.leger@bootlin.com>
+ <20220509131900.7840-4-clement.leger@bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v4 2/3] dt-bindings: nvmem: mediatek: document deprecated
- efuse property
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Lala Lin <lala.lin@mediatek.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Allen-kh Cheng <allen-kh.cheng@mediatek.corp-partner.google.com>
-References: <20220510132637.5864-1-allen-kh.cheng@mediatek.com>
- <20220510132637.5864-3-allen-kh.cheng@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220510132637.5864-3-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220509131900.7840-4-clement.leger@bootlin.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/05/2022 15:26, Allen-KH Cheng wrote:
-> From: Allen-kh Cheng <allen-kh.cheng@mediatek.corp-partner.google.com>
+On Mon, May 09, 2022 at 03:18:51PM +0200, Clément Léger wrote:
+> This MII converter can be found on the RZ/N1 processor family. The MII
+> converter ports are declared as subnodes which are then referenced by
+> users of the PCS driver such as the switch.
 > 
-> We mark mediatek,mt8173-efuse and mediatek,efuse as deprecated to
-> prevent them from being the single compatible in the future.
-> 
-> The mediatek,efuse compatible should be used as generic fallback for
-> all MediaTek chipsets.
-> 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
 > ---
->  .../devicetree/bindings/nvmem/mediatek,efuse.yaml | 15 +++++++++------
->  1 file changed, 9 insertions(+), 6 deletions(-)
+>  .../bindings/net/pcs/renesas,rzn1-miic.yaml   | 162 ++++++++++++++++++
+>  include/dt-bindings/net/pcs-rzn1-miic.h       |  33 ++++
+>  2 files changed, 195 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/pcs/renesas,rzn1-miic.yaml
+>  create mode 100644 include/dt-bindings/net/pcs-rzn1-miic.h
 > 
-> diff --git a/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
-> index 529f5888d93f..04ecf5980b2e 100644
-> --- a/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
-> +++ b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
-> @@ -16,16 +16,18 @@ allOf:
->  properties:
->    compatible:
->      oneOf:
-> -      - enum:
-> -          - mediatek,mt8173-efuse
-> -          - mediatek,efuse
-> +      - const: mediatek,mt8173-efuse # Don't use this in new dts files
-> +        deprecated: true
-> +      - const: mediatek,efuse
-> +        deprecated: true
->          description:
-> -          Only mt8173 SoC-specific compatible with generic fallback should be
-> -          used
-> +          Please use mediatek,efuse as generic fallback to enable the MediaTek
-> +          eFuse support.
+> diff --git a/Documentation/devicetree/bindings/net/pcs/renesas,rzn1-miic.yaml b/Documentation/devicetree/bindings/net/pcs/renesas,rzn1-miic.yaml
+> new file mode 100644
+> index 000000000000..c3f5f772c885
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/pcs/renesas,rzn1-miic.yaml
+> @@ -0,0 +1,162 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/pcs/renesas,rzn1-miic.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Renesas RZ/N1 MII converter
+> +
+> +maintainers:
+> +  - Clément Léger <clement.leger@bootlin.com>
+> +
+> +description: |
+> +  This MII converter is present on the Renesas RZ/N1 SoC family. It is
+> +  responsible to do MII passthrough or convert it to RMII/RGMII.
+> +
+> +properties:
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+> +
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - renesas,r9a06g032-miic
+> +      - const: renesas,rzn1-miic
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: MII reference clock
+> +      - description: RGMII reference clock
+> +      - description: RMII reference clock
+> +      - description: AHB clock used for the MII converter register interface
+> +
+> +  renesas,miic-switch-portin:
+> +    description: MII Switch PORTIN configuration. This value should use one of
+> +      the values defined in dt-bindings/net/pcs-rzn1-miic.h.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [1, 2]
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +patternProperties:
+> +  "^mii-conv@[0-9]+$":
 
-Now I see the change, it's a bit surprising to have it in separate
-patch, but ok. In such case, in your first patch don't add this
-description. There is no point to add a description which immediately
-you change in next patch.
+^mii-conv@[0-5]$
 
+> +    type: object
+> +    description: MII converter port
+> +
+> +    properties:
+> +      reg:
+> +        description: MII Converter port number.
+> +        enum: [1, 2, 3, 4, 5]
+> +
+> +      renesas,miic-input:
+> +        description: Converter input port configuration. This value should use
+> +          one of the values defined in dt-bindings/net/pcs-rzn1-miic.h.
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +    required:
+> +      - reg
+> +      - renesas,miic-input
+> +
+> +    additionalProperties: false
+> +
+> +    allOf:
+> +      - if:
+> +          properties:
+> +            reg:
+> +              const: 1
+> +        then:
+> +          properties:
+> +            renesas,miic-input:
+> +              enum: [0]
 
-Best regards,
-Krzysztof
+const: 0
+
+With those fixes,
+
+Reviewed-by: Rob Herring <robh@kernel.org>

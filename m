@@ -2,132 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3FB4523A40
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71123523A49
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344713AbiEKQYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 12:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36464 "EHLO
+        id S1344727AbiEKQ0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 12:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235631AbiEKQYn (ORCPT
+        with ESMTP id S1344796AbiEKQ0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 12:24:43 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BC66A42E;
-        Wed, 11 May 2022 09:24:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=GUx22QWRIdRq3isbQ/KOmjL53RGwGZCiPHsPEnUFiNI=; b=kf0KRlAqJk1zkf1t7YYHIeELIh
-        qXIiW9yEkHC1o+CaK0S8ENApBE4oN8dxsWzgdyynYAb7VGhY/p9yPjG1Qn0yd9EqR2ZFmjlrCdHFc
-        AAhqfaUowGtnHxyyYGg90iinjfBPyaCAaIzucLzXcYzymMgf3WbU5goEzmyD1uWdIS+pWCukmGvIs
-        zYzpShYQaNsIuMZ/5kyjD6MgZBP6e2I7Gbj9KxHgTRqX6IdWPaFkGF7HBYHTPdODXskyD/TzBUr0n
-        JknMKdpnCFnqqBlq4j2u8ASBBsXf3Fkbf0DEQh3VccO9fRBFwHFV+D7uNCUeBIcMbghBFpNHdJCDQ
-        zFoSlyyA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nop8b-007mFo-Jb; Wed, 11 May 2022 16:24:33 +0000
-Date:   Wed, 11 May 2022 09:24:33 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Song Liu <songliubraving@fb.com>, bpf <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
-        Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH] bpf.h: fix clang compiler warning with
- unpriv_ebpf_notify()
-Message-ID: <YnvjQfhtJzWg64Lu@bombadil.infradead.org>
-References: <20220509203623.3856965-1-mcgrof@kernel.org>
- <YnvdOAaYmhNiA5WN@bombadil.infradead.org>
- <CAADnVQLCvjqphpJDkz-5bpJLs3k_PRH1JcwehCRLrWYvsA9ENw@mail.gmail.com>
- <YnvflsM1t5vL/ViP@bombadil.infradead.org>
- <3e3ed3d1-937b-a715-376d-43a8b7485f68@iogearbox.net>
+        Wed, 11 May 2022 12:26:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FC8831367
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:26:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652286376;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oEtf9aEeYwcmbS2Abb6hgTNVW6CzU6LHwK+SuywPU4E=;
+        b=hOMCVuaKkidY5s+DrgZRgGVDBxqk9XpCaXCYzEhpvQWWZevV3KHFWpeJ1GpnqBcy3yWvw9
+        OA8gnxeEsF2vVkm8F+Sk+o0ub58xiWf52JfrYZpk4vrMWf3eL+7ks1TQJJX5Mb+G6G3lMP
+        T8ZscixYZ0OHGvuuD+pmLXon4DhTOKU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-588-vGclDIA-Or2DVEoORY-m7Q-1; Wed, 11 May 2022 12:26:13 -0400
+X-MC-Unique: vGclDIA-Or2DVEoORY-m7Q-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 90B9B1D32371;
+        Wed, 11 May 2022 16:26:12 +0000 (UTC)
+Received: from starship (unknown [10.40.192.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 143462026D6A;
+        Wed, 11 May 2022 16:26:06 +0000 (UTC)
+Message-ID: <858cdb9c2c1cc1deda179fc534ad42de1275920f.camel@redhat.com>
+Subject: Re: [PATCH v4 10/15] KVM: SVM: Introduce helper functions to
+ (de)activate AVIC and x2AVIC
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
+        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com,
+        kernel test robot <lkp@intel.com>
+Date:   Wed, 11 May 2022 19:26:05 +0300
+In-Reply-To: <3fa12834-d144-54d8-0bf8-8a72e726db99@amd.com>
+References: <20220508023930.12881-1-suravee.suthikulpanit@amd.com>
+         <20220508023930.12881-11-suravee.suthikulpanit@amd.com>
+         <a60d885cf4b0b11aca730273ff317546362bff83.camel@redhat.com>
+         <3fa12834-d144-54d8-0bf8-8a72e726db99@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3e3ed3d1-937b-a715-376d-43a8b7485f68@iogearbox.net>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 06:17:26PM +0200, Daniel Borkmann wrote:
-> On 5/11/22 6:08 PM, Luis Chamberlain wrote:
-> > On Wed, May 11, 2022 at 09:03:13AM -0700, Alexei Starovoitov wrote:
-> > > On Wed, May 11, 2022 at 8:58 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > > > On Mon, May 09, 2022 at 01:36:23PM -0700, Luis Chamberlain wrote:
-> > > > > The recent commit "bpf: Move BPF sysctls from kernel/sysctl.c to BPF core"
-> > > > > triggered 0-day to issue an email for what seems to have been an old
-> > > > > clang warning. So this issue should have existed before as well, from
-> > > > > what I can tell. The issue is that clang expects a forward declaration
-> > > > > for routines declared as weak while gcc does not.
-> > > > > 
-> > > > > This can be reproduced with 0-day's x86_64-randconfig-c007
-> > > > > https://download.01.org/0day-ci/archive/20220424/202204240008.JDntM9cU-lkp@intel.com/config
-> > > > > 
-> > > > > And using:
-> > > > > 
-> > > > > COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=x86_64 SHELL=/bin/bash kernel/bpf/syscall.o
-> > > > > Compiler will be installed in /home/mcgrof/0day
-> > > > > make --keep-going HOSTCC=/home/mcgrof/0day/clang/bin/clang CC=/home/mcgrof/0day/clang/bin/clang LD=/home/mcgrof/0day/clang/bin/ld.lld HOSTLD=/home/mcgrof/0day/clang/bin/ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump OBJSIZE=llvm-size READELF=llvm-readelf HOSTCXX=clang++ HOSTAR=llvm-ar CROSS_COMPILE=x86_64-linux-gnu- --jobs=24 W=1 ARCH=x86_64 SHELL=/bin/bash kernel/bpf/syscall.o
-> > > > >    DESCEND objtool
-> > > > >    CALL    scripts/atomic/check-atomics.sh
-> > > > >    CALL    scripts/checksyscalls.sh
-> > > > >    CC      kernel/bpf/syscall.o
-> > > > > kernel/bpf/syscall.c:4944:13: warning: no previous prototype for function 'unpriv_ebpf_notify' [-Wmissing-prototypes]
-> > > > > void __weak unpriv_ebpf_notify(int new_state)
-> > > > >              ^
-> > > > > kernel/bpf/syscall.c:4944:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-> > > > > void __weak unpriv_ebpf_notify(int new_state)
-> > > > > ^
-> > > > > static
-> > > > > 
-> > > > > Fixes: 2900005ea287 ("bpf: Move BPF sysctls from kernel/sysctl.c to BPF core")
-> > > > > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> > > > > ---
-> > > > > 
-> > > > > Daniel,
-> > > > > 
-> > > > > Given what we did fore 2900005ea287 ("bpf: Move BPF sysctls from
-> > > > > kernel/sysctl.c to BPF core") where I had pulled pr/bpf-sysctl a
-> > > > > while ago into sysctl-next and then merged the patch in question,
-> > > > > should I just safely carry this patch onto sysctl-next? Let me know
-> > > > > how you'd like to proceed.
-> > > > > 
-> > > > > Also, it wasn't clear if putting this forward declaration on
-> > > > > bpf.h was your ideal preference.
-> > > > 
-> > > > After testing this on sysctl-testing without issues going to move this
-> > > > to sysctl-next now.
-> > > 
-> > > Hmm. No.
-> > > A similar patch should be in tip already. You have to wait
-> > > for it to go through Linus's tree and back to whatever tree you use.
+On Wed, 2022-05-11 at 22:37 +0700, Suravee Suthikulpanit wrote:
+> Maxim,
+> 
+> On 5/9/22 8:42 PM, Maxim Levitsky wrote:
+> > ...
 > > 
-> > I'm a bit confused, the patch in question which my patch fixes should only
-> > be in my sysctl-next tree at this point, not in Linus's tree.
+> > So I did some testing, and reviewed this code again with regard to nesting,
+> > and now I see that it has CVE worthy bug, so have to revoke my Reviewed-By.
+> > 
+> > This is what happens:
+> > 
+> > On nested VM entry, *request to inhibit AVIC is done*, and then nested msr bitmap
+> > is calculated, still with all X2AVIC msrs open,
+> > 
+> > 1. nested_svm_vmrun -> enter_svm_guest_mode -> kvm_make_request(KVM_REQ_APICV_UPDATE, vcpu);
+> > 2. nested_svm_vmrun -> nested_svm_vmrun_msrpm
+> > 
+> > But the nested guest will be entered without AVIC active
+> > (since we don't yet support nested avic and it is optional anyway), thus if the nested guest
+> > also doesn't intercept those msrs, it will gain access to the *host* x2apic msrs. Ooops.
 > 
-> Borislav was planning to route it via tip tree, maybe confusion was that the
-> fix in the link below is from Josh:
+> Shouldn't this be changed to intercept the x2APIC msrs because of the following logic?
 > 
-> https://lore.kernel.org/bpf/CAADnVQKjfQMG_zFf9F9P7m0UzqESs7XoRy=udqrDSodxa8yBpg@mail.gmail.com/
+> kvm_make_request(KVM_REQ_APICV_UPDATE, vcpu)
+>      kvm_vcpu_update_apicv(vcpu)
+>          static_call(kvm_x86_refresh_apicv_exec_ctrl)(vcpu)
+>              avic_deactivate_vmcb()
+>                  svm_set_x2apic_msr_interception(true)
 
-Ah, Josh posted a fix for the same compile warning.
+Nope because the above only updates L1 msr intercept bitmap, while 'merged'
+msr bitmap that L2 uses still has those msrs open.
 
-> But I presume this is routed as fix to Linus, so should land in both sysctl
-> and bpf tree at some point after re-sync.
+Other and better way to fix it would be to fix set_msr_interception
+to update the merged bitmap as well.
 
-It may be the case indeed that the code in question was triggering a
-compile warning without the patch I have merged which moves the BPF
-sysctls ("bpf: Move BPF sysctls from kernel/sysctl.c to BPF core").
+I think I will post a patch series to clean up this mess soon.
 
-So I'll just drop my fix.
+Best regards,
+	Maxim Levitsky
 
-  Luis
+> 
+> > I think the easist way to fix this for now, is to make nested_svm_vmrun_msrpm
+> > never open access to x2apic msrs regardless of the host bitmap value, but in the long
+> > term the whole thing needs to be refactored.
+> 
+> Agree.
+> 
+> > Another thing I noted is that avic_deactivate_vmcb should not touch avic msrs
+> > when avic_mode == AVIC_MODE_X1, it is just a waste of time.
+> 
+> We can add the check.
+> 
+> > Also updating these msr intercepts is pointless if the guest doesn't use x2apic.
+> 
+> We can also add the check.
+> 
+> Best Regards,
+> Suravee
+> 
+
+

@@ -2,124 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D404B52412F
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 01:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A10524132
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 01:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349463AbiEKXpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 19:45:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53466 "EHLO
+        id S1349474AbiEKXsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 19:48:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349452AbiEKXpj (ORCPT
+        with ESMTP id S1349468AbiEKXsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 19:45:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FC36211F
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:45:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81066B82642
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 23:45:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 266A4C340EE;
-        Wed, 11 May 2022 23:45:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652312735;
-        bh=b6mgKJpVJA/b7+VDSLPzDbu9hDNiACAHNnivpAnLRXQ=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=NQu3DKyBmK8FcoCK67b8nygpYZHdzwkv8l49/7YNJqI22QYKFW0YKFLz6fh2Gdq/6
-         lK3q+K1EwN5AW1fTyV+603TNksBJI5aOD4KVFaI5dfkrZIVyt5NT01tyNhaaZIe0sW
-         yiUchbbd2TNRSP5ZG0vEMhwj3svStRjxS3MS7uyzG1dPbyw7z6aHBOZs04GGEZZpry
-         Bvh0r3gnZQ32rAUsXBn4hPVPmdeJoFAcXJ4acEkAICBfqU7TTaSFjzirHp2GuFq1lh
-         wFytBIQfJim9nuY9bq/wx1UNNDgNzDRR/WL+LAjvbCirBnA9VLdpmKCHkythUmn7dD
-         OJKYM0sxY6jMg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id BAFD55C05FC; Wed, 11 May 2022 16:45:34 -0700 (PDT)
-Date:   Wed, 11 May 2022 16:45:34 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        John Dias <joaodias@google.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v4] mm: fix is_pinnable_page against on cma page
-Message-ID: <20220511234534.GG1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <Ynr10y6pkH6WwbQo@google.com>
- <bb6e76f1-2cbc-893d-c8ab-3ecd3fcae2a5@nvidia.com>
- <Ynr+wTCQpyh8+vOD@google.com>
- <2ffa7670-04ea-bb28-28f8-93a9b9eea7e8@nvidia.com>
- <YnwupNzDNv7IbjRQ@google.com>
- <54b5d177-f2f4-cef2-3a68-cd3b0b276f86@nvidia.com>
- <Ynw6mauQuNhrOAHy@google.com>
- <f7bcda22-8ffe-67be-36bc-fcde58d8884a@nvidia.com>
- <YnxCCPZUfgQNXSg6@google.com>
- <8f083802-7ab0-15ec-b37d-bc9471eea0b1@nvidia.com>
+        Wed, 11 May 2022 19:48:50 -0400
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE506D94B
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:48:49 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id i38so6787487ybj.13
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:48:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nx909cyDSz1kOHBajJFffqLizYo8FoW6mi/SsXv4eI8=;
+        b=5HBX81ARLl1JQyEuibxDY1L+9ag8C191xh5Hfk2PolkC8ynt7vzU230cvn1+rRrqfb
+         kZnDXGTnmKYz4I2GdVKQFygN35ozFrxQ8YgS4MqiOnrc+NVSe9Pi+vj+iP4VH0UyIfub
+         z3JAGuY6rwuZYYFOHUxS6NeMNCxUVDRfACJ4ugla8DqBd4hKA6JSm/wFjDgXEfiIrMmj
+         3nsZe+RYm/mJeJJvhB/vd5VkvCtyEgFVpBDRQS2IOVkDgLdrMruOP7kHd2LclOpOk2Ae
+         3U6AvbS8Q0a6gN3nRX8NZGfNyDC44dQ4ZdSJL3S6vxUTrOiNLpaUsoUCMAN+R9tOaf6X
+         7f9w==
+X-Gm-Message-State: AOAM533I+3DJY4B3RLGxdqHZtjsAmYLNpnY5VRmQVXyLLxwfy5IwudmW
+        gDHLH4xp7sGx22RoFSbEu+MOIaSTUhAful0YBpk=
+X-Google-Smtp-Source: ABdhPJwhjev8MxEiGT4pCSdx09sa2oBOZQ3xaqEP2HwK5AwmnzmPp6GdMVyoTNBwJsQijA5by8ol+xmQ7dnBzi488+E=
+X-Received: by 2002:a25:6906:0:b0:64a:8266:cedd with SMTP id
+ e6-20020a256906000000b0064a8266ceddmr24520607ybc.151.1652312929069; Wed, 11
+ May 2022 16:48:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8f083802-7ab0-15ec-b37d-bc9471eea0b1@nvidia.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+ <20220511160319.1045812-2-mailhol.vincent@wanadoo.fr> <CAKwvOdnH_gYv4qRN9pKY7jNTQK95xNeH1w1KZJJmvCkh8xJLBg@mail.gmail.com>
+In-Reply-To: <CAKwvOdnH_gYv4qRN9pKY7jNTQK95xNeH1w1KZJJmvCkh8xJLBg@mail.gmail.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Thu, 12 May 2022 08:48:37 +0900
+Message-ID: <CAMZ6RqL-CPzvmbUvgp4W+nATvCu8c=6xe9j4+ALP7=nt2h+dMg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] x86/asm/bitops: ffs: use __builtin_ffs to evaluate
+ constant expressions
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
+        Jan Beulich <JBeulich@suse.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 04:13:10PM -0700, John Hubbard wrote:
-> On 5/11/22 16:08, Minchan Kim wrote:
-> > > OK, so the code checks the wrong item each time. But the code really
-> > > only needs to know "is either _CMA or _ISOLATE set?". And so you
-> > 
-> > Yes.
-> > 
-> > > can just sidestep the entire question by writing it like this:
-> > > 
-> > > int mt = get_pageblock_migratetype(page);
-> > > 
-> > > if (mt & (MIGRATE_ISOLATE | MIGRATE_CMA))
-> > > 	return false;
-> > 
-> > I am confused. Isn't it same question?
-> > 
-> >                                                      set_pageblock_migratetype(MIGRATE_ISOLATE)
-> > if (get_pageblock_migrate(page) & MIGRATE_CMA)
-> > 
-> >                                                      set_pageblock_migratetype(MIGRATE_CMA)
-> > 
-> > if (get_pageblock_migrate(page) & MIGRATE_ISOLATE)
-> 
-> Well no, because the "&" operation is a single operation on the CPU, and
-> isn't going to get split up like that.
+On Thu. 12 May 2022 at 06:35, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> On Wed, May 11, 2022 at 9:03 AM Vincent Mailhol
+> <mailhol.vincent@wanadoo.fr> wrote:
+> >
+> > For x86_64, the current ffs() implementation does not produce
+> > optimized code when called with a constant expression. On the
+> > contrary, the __builtin_ffs() function of both GCC and clang is able
+> > to simplify the expression into a single instruction.
+> >
+> > * Example *
+> >
+> > Let's consider two dummy functions foo() and bar() as below:
+> >
+> > | #include <linux/bitops.h>
+> > | #define CONST 0x01000000
+> > |
+> > | unsigned int foo(void)
+> > | {
+> > |       return ffs(CONST);
+> > | }
+> > |
+> > | unsigned int bar(void)
+> > | {
+> > |       return __builtin_ffs(CONST);
+> > | }
+> >
+> > GCC would produce below assembly code:
+>
+> Thanks for the patch! LGTM.
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+> >
+> > | 0000000000000000 <foo>:
+> > |    0: ba 00 00 00 01          mov    $0x1000000,%edx
+> > |    5: b8 ff ff ff ff          mov    $0xffffffff,%eax
+> > |    a: 0f bc c2                bsf    %edx,%eax
+> > |    d: 83 c0 01                add    $0x1,%eax
+> > |   10: c3                      ret
+>
+> This should be the end of foo.  I...actually don't know what's at the
+> end here. But I don't think the region from here...
+>
+> > |   11: 66 66 2e 0f 1f 84 00    data16 cs nopw 0x0(%rax,%rax,1)
+> > |   18: 00 00 00 00
+> > |   1c: 0f 1f 40 00             nopl   0x0(%rax)
+>
+> ...to here is relevant.
 
-Chiming in a bit late...
+I do not know either. I was hesitating to redact this part but finally
+sent it to be verbatim.
 
-The usual way that this sort of thing causes trouble is if there is a
-single store instruction that changes the value from MIGRATE_ISOLATE
-to MIGRATE_CMA, and if the compiler decides to fetch twice, AND twice,
-and then combine the results.  This could give a zero outcome where the
-underlying variable never had the value zero.
+I will redact this in v3.
 
-Is this sort of thing low probability?
+> > |
+> > | 0000000000000020 <bar>:
+> > |   20: b8 19 00 00 00          mov    $0x19,%eax
+> > |   25: c3                      ret
+> >
+> > And clang would produce:
+> >
+> > | 0000000000000000 <foo>:
+> > |    0: b8 ff ff ff ff          mov    $0xffffffff,%eax
+> > |    5: 0f bc 05 00 00 00 00    bsf    0x0(%rip),%eax        # c <foo+0xc>
+> > |    c: 83 c0 01                add    $0x1,%eax
+> > |    f: c3                      ret
+>
+> Weird, so I just tried this:
+> ```
+> $ cat /tmp/x.c
+> #define CONST 0x01000000
+>
+> unsigned ffs (int x) {
+>   int r;
+>   asm("bsfl %1,%0"
+>       : "=r" (r)
+>       : "rm" (x), "0" (-1));
+>   return r;
+> }
+>
+> unsigned int foo(void) {
+>   return ffs(CONST);
+> }
+>
+> unsigned int bar(void) {
+>   return __builtin_ffs(CONST);
+> }
+> $ clang /tmp/x.c -O2 -o /tmp/x.o -c && llvm-objdump -dr /tmp/x.o
+> --disassemble-symbols=foo
+> ...
+> 0000000000000010 <foo>:
+>       10: b8 19 00 00 00                movl    $25, %eax
+>       15: c3                            retq
+>       16: 66 2e 0f 1f 84 00 00 00 00 00 nopw    %cs:(%rax,%rax)
+> ```
+> but if we make `ffs` `static`, we get:
+> ```
+> 0000000000000000 <foo>:
+>        0: b8 ff ff ff ff                movl    $4294967295, %eax
+>  # imm = 0xFFFFFFFF
+>        5: 0f bc 05 00 00 00 00          bsfl    (%rip), %eax
+>  # 0xc <foo+0xc>
+>                 0000000000000008:  R_X86_64_PC32        .LCPI0_0-0x4
+>        c: c3                            retq
+>        d: 0f 1f 00                      nopl    (%rax)
+> ```
+> Which is very interesting to me; it looks like constant propagation
+> actually hurt optimization, we lost that this was a libcall which we
+> could have optimized.
+>
+> As in LLVM does:
+> 1. sink CONST into ffs; it's static and has one caller
+> 2. delete x parameter; it's unused
+> 3. now libcall optimization just sees a call to ffs with no params,
+> that doesn't match the signature of libc.
+>
+> Your change should fix that since we don't even call a function named
+> ffs if we have a constant (explicitly, or via optimization). Filed
+> https://github.com/llvm/llvm-project/issues/55394
 
-Definitely.
+Great! Didn't realize my patch had so many side benefits.
+Will add a one sentence remark in v3 and point to your message.
 
-Isn't this sort of thing prohibited?
-
-Definitely not.
-
-So what you have will likely work for at least a while longer, but it
-is not guaranteed and it forces you to think a lot harder about what
-the current implementations of the compiler can and cannot do to you.
-
-The following LWN article goes through some of the possible optimizations
-(vandalisms?) in this area: https://lwn.net/Articles/793253/
-
-In the end, it is your code, so you get to decide how much you would
-like to keep track of what compilers get up to over time.  ;-)
-
-							Thanx, Paul
+Thanks!

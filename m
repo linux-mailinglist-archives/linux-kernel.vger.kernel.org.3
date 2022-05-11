@@ -2,41 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE3D522FC4
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FFEB522FB7
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:44:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234663AbiEKJoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 05:44:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41602 "EHLO
+        id S233968AbiEKJn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 05:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234489AbiEKJmP (ORCPT
+        with ESMTP id S243952AbiEKJmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 05:42:15 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 000592657C;
-        Wed, 11 May 2022 02:41:06 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.91,216,1647270000"; 
-   d="scan'208";a="119357492"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 11 May 2022 18:41:06 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 650F54236226;
-        Wed, 11 May 2022 18:41:03 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH] pinctrl: renesas: pinctrl-rzg2l: Return -EINVAL for pins which have input disabled
-Date:   Wed, 11 May 2022 10:40:57 +0100
-Message-Id: <20220511094057.3151-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Wed, 11 May 2022 05:42:08 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0162113D1F
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:41:12 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id bv19so2861058ejb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:41:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=m0rKCtYWChKn67KUygwJk8Gq46fVsoVyqlFOLEWYRWU=;
+        b=TeWleuC25TI3U2UqoBqmnhTyrGAxfabSM2EnxHHqcAMjy/gpq8WgbWvjWWzenqfJvI
+         KhChVKX5sRQfrmarq20QMbTDOWenRR6knwUO/Zz+ESlF9djucufVKCCkjHf+tY9/d5Nq
+         7T8MhctInyM0LXJGblFoBhch7p9zgThu5sLEU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m0rKCtYWChKn67KUygwJk8Gq46fVsoVyqlFOLEWYRWU=;
+        b=JdDJUcGhI7DX915yi5P33CIBEs3aIWMqHn+dmpLs1NKBJE9TBy8y77IxR1VxgNGza4
+         SRb1cH0MtGUxTf8ZDi/4zxbXICexX1Dw07kc3Zbtwesg6LJqZdCI6V16Pgspk9CbQXfA
+         pXv8dSsW6veOHgpifbT32lD3ZfP0HBWoEyPbwWo1+XvWD4XsBV8MQblyC0Uq6B1mGzub
+         BLRsDGoRWZ4vIPU/BybBJyA8X9GKkirRNREk8U136GWYZSd8iz9iAoPTNnetfvhNW89+
+         bnw65Hli6TDOO32Hyp2RuuX4obOIGwYwdh5gSuBN7mh3VRIStPTfBy4ri66WelDkGWYc
+         brzg==
+X-Gm-Message-State: AOAM530kwLh6FtkFAbXFo6zcj4JUZisR4EEIJ5If8Yo3+Y4LRYg/YxOy
+        Dqm9krbPHO3YOfqyYHrmWDCOQ+otIvCND9gRmoe5Wg==
+X-Google-Smtp-Source: ABdhPJzEs5wOirJoUjRohPu2Nu5O2fRdKW703nAvdWb0P4NRYWnqd2+VtbPGyOZktRLlt3x5BXJrdDXXwJI6pWqUb2U=
+X-Received: by 2002:a17:906:8982:b0:6f3:95f4:4adf with SMTP id
+ gg2-20020a170906898200b006f395f44adfmr23250807ejc.524.1652262070760; Wed, 11
+ May 2022 02:41:10 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220502102521.22875-1-dharamhans87@gmail.com>
+ <YnLRnR3Xqu0cYPdb@redhat.com> <CACUYsyEsRph+iFC_fj3F6Ceqhq7NCTuFPH3up8R6C+_bGHktZg@mail.gmail.com>
+ <YnPI6f2fRZUXbCFP@redhat.com> <882fbf7f-a56b-1e82-a158-9e2186ec7c4c@ddn.com> <YnQsizX5Q1sMnlI2@redhat.com>
+In-Reply-To: <YnQsizX5Q1sMnlI2@redhat.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Wed, 11 May 2022 11:40:59 +0200
+Message-ID: <CAJfpegseGaWHkjdQj7XiR=TQNFpPZzDF_rTXces2oRz=x0N7OA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] FUSE: Implement atomic lookup + open/create
+To:     Vivek Goyal <vgoyal@redhat.com>
+Cc:     Bernd Schubert <bschubert@ddn.com>,
+        Dharmendra Hans <dharamhans87@gmail.com>,
+        linux-fsdevel@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,30 +68,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pin status reported by pinconf-pins file always reported pin status as
-"input enabled" even for pins which had input disabled. Fix this by
-returning -EINVAL for the pins which have input disabled.
+On Thu, 5 May 2022 at 21:59, Vivek Goyal <vgoyal@redhat.com> wrote:
 
-Fixes: c4c4637eb57f2 ("pinctrl: renesas: Add RZ/G2L pin and gpio controller driver")
-Reported-by: Phil Edworthy <phil.edworthy@renesas.com>
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
- drivers/pinctrl/renesas/pinctrl-rzg2l.c | 2 ++
- 1 file changed, 2 insertions(+)
+> Oh, I have no issues with the intent. I will like to see cut in network
+> traffic too (if we can do this without introducing problems). My primary
+> interest is that this kind of change should benefit virtiofs as well.
 
-diff --git a/drivers/pinctrl/renesas/pinctrl-rzg2l.c b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-index af2c739cdbaa..a63535ea47f5 100644
---- a/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-+++ b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-@@ -527,6 +527,8 @@ static int rzg2l_pinctrl_pinconf_get(struct pinctrl_dev *pctldev,
- 		if (!(cfg & PIN_CFG_IEN))
- 			return -EINVAL;
- 		arg = rzg2l_read_pin_config(pctrl, IEN(port_offset), bit, IEN_MASK);
-+		if (!arg)
-+			return -EINVAL;
- 		break;
- 
- 	case PIN_CONFIG_POWER_SOURCE: {
--- 
-2.25.1
+One issue with that appears to be checking permissions.   AFAIU this
+patchset only enables the optimization if default_permissions is
+turned off (i.e. all permission checking is done by the server).  But
+virtiofs uses the default_permissions model.
 
+I'm not quite sure about this limitation, guessing that it's related
+to the fact that the permissions may be stale at the time of checking?
+
+Thanks,
+Miklos

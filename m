@@ -2,145 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0759452405C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 00:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1201A52405D
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 00:38:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348844AbiEKWhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 18:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
+        id S1348854AbiEKWiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 18:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348832AbiEKWhQ (ORCPT
+        with ESMTP id S1346776AbiEKWiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 18:37:16 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4EB69726
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 15:37:15 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id gj17-20020a17090b109100b001d8b390f77bso6189951pjb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 15:37:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nehdr7PITXzy3bqyFSTIHEYGzvy9BmPaO54SUkuQJus=;
-        b=Yt4rmSeljKAy4zVAJt38bsEUP+R/ch5xnFMH1IcPKPcH9fhCkYfitu2Bz7DZr64Zgs
-         zS0pxud8f1P0frTY4URR6vlv3jGV2gOh3d2DoucZdDjS4qr2Ga274DQHMeLlYcGIMbIn
-         XPEghnlayuephnbpvOaYmlbtLLreK1cfBskDVzqqLxbBiJPmBPOKPyQ63VJRnRRBugWA
-         4hnNM8TnPq6TnqkREYiyo66NBdJtZhaV8tqUioqmgbIp4nEUvzcPr/S0Ax+iNvOKKsnL
-         YE2/8Lb1fsSmQbLe6bDPxO0Pc2BxY+we5Y4fvoti9aZSjgjwqfd7JrSBugkX4K1Tp87B
-         tAZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=nehdr7PITXzy3bqyFSTIHEYGzvy9BmPaO54SUkuQJus=;
-        b=sg/tj03u8OQNudMvB4zgaTf1WgBDh8cboUe7vixa0CJMI4Zle7bEZhWUSfcm8mD1d4
-         71wJv+uIqkQCMPeQI97Q8T5/JbCIdfjH40T7IVStS19aX8FlOqWcCuFQxwj9q4iU45AJ
-         g/ghK978REG4I2m7ibevfrOdQCZ4zjVkMoSC1SMo49SCa7OBzqUGDeZQwnnoH8TEP6QQ
-         wS8Oui1Yz71MpLDC6ordpKLecVh09dT0/2maa4ZcewXY0M6O3rxcc8SolR3SfNuEHKgF
-         83ou4SMaI/pjnlWrZjwgTUIIVt4sSChJHk5RcNs2S248atkwoCjxBKPDhgjRIb+X5col
-         G18w==
-X-Gm-Message-State: AOAM533GxrhbqQaMI+tDOGQPG5L7gXvFPJq+/PL+1Lfl2WnWxbQdzW/f
-        B3uY3YwsRrkvxWuMpC4VNPI=
-X-Google-Smtp-Source: ABdhPJzyASJ01em+i4TBSflUo8jGKENF4EVaVlb3eN6NoOzTtMFrNN1ofuibrUqvb/9Z2fzC0MC73Q==
-X-Received: by 2002:a17:902:bb92:b0:153:4eae:c77e with SMTP id m18-20020a170902bb9200b001534eaec77emr27112543pls.93.1652308635389;
-        Wed, 11 May 2022 15:37:15 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:69ef:9c87:7816:4f74])
-        by smtp.gmail.com with ESMTPSA id l7-20020a170902f68700b0015e8d4eb2e9sm2469090plg.307.2022.05.11.15.37.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 15:37:15 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Wed, 11 May 2022 15:37:13 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        John Dias <joaodias@google.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v4] mm: fix is_pinnable_page against on cma page
-Message-ID: <Ynw6mauQuNhrOAHy@google.com>
-References: <20220510211743.95831-1-minchan@kernel.org>
- <857d21da-5de2-fa3e-b1ce-41cc1cfb0191@nvidia.com>
- <Ynr10y6pkH6WwbQo@google.com>
- <bb6e76f1-2cbc-893d-c8ab-3ecd3fcae2a5@nvidia.com>
- <Ynr+wTCQpyh8+vOD@google.com>
- <2ffa7670-04ea-bb28-28f8-93a9b9eea7e8@nvidia.com>
- <YnwupNzDNv7IbjRQ@google.com>
- <54b5d177-f2f4-cef2-3a68-cd3b0b276f86@nvidia.com>
+        Wed, 11 May 2022 18:38:24 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C016D194
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 15:38:19 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 24BMbjUw028543
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 May 2022 18:37:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1652308668; bh=a5WVc9xN2WEUAgzaf5a+6cwVxtHNBOl0YNd8b5JP2uM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=WSk0IpVUOe5Hu8Q+0eFmpHIbop210WCSWVgXcn6SMRlmuM2OjIm9VCpbjz1UodUJh
+         An9FD80T5EU2z/Jso/tVQTBqCus2EQw7U2Qvuwt3Y2+pf4DCU7hcVx67KG/dEEihkd
+         +iACUiH4C7xbmJICr7QyT9cgBXMJfux6Enl3tiOTpKs4mrvv32adze16p1uMxFre5B
+         0txTrUds+frqaTjhDLFprF1BJrD/YMpi9LICqGJ3Xbsv3KshrUqnH4L9cJr3qc50Wb
+         tlnZKXCsoo1oxRXGT0WM6+f1blmpb0PgFo3h4KZM1jNNx3cuteMz6SkSz59earmfrL
+         s5brHw7vu7/4w==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 1AC1E15C3F0C; Wed, 11 May 2022 18:37:45 -0400 (EDT)
+Date:   Wed, 11 May 2022 18:37:45 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Zhangfei Gao <zhangfei.gao@foxmail.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>
+Subject: Re: Link: tag and links to submission and reports (was: Re: [GIT
+ pull] core/urgent for v5.18-rc6)
+Message-ID: <Ynw6ucTIyJgpr2AG@mit.edu>
+References: <165201148069.536527.1960632033331546251.tglx@xen13>
+ <CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com>
+ <ff841fdc-4db7-7a3d-8caf-d0cddd0dfa31@leemhuis.info>
+ <Ynt1z0eZ19eMqp8I@zn.tnic>
+ <YnvbLx9FKgQwZJ/F@mit.edu>
+ <CAHk-=wgUVHucyjp6M7qmn8b=aqwucfS4SQpqOCR5sKr16zoO5g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <54b5d177-f2f4-cef2-3a68-cd3b0b276f86@nvidia.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAHk-=wgUVHucyjp6M7qmn8b=aqwucfS4SQpqOCR5sKr16zoO5g@mail.gmail.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 03:25:49PM -0700, John Hubbard wrote:
-> On 5/11/22 2:46 PM, Minchan Kim wrote:
-> > > I read that, but there was never any real justification there for needing
-> > > to prevent a re-read of mt, just a preference: "I'd like to keep use the local
-> > > variable mt's value in folloing conditions checks instead of refetching
-> > > the value from get_pageblock_migratetype."
-> > > 
-> > > But I don't believe that there is any combination of values of mt that
-> > > will cause a problem here.
-> > > 
-> > > I also think that once we pull in experts, they will tell us that the
-> > > compiler is not going to re-run a non-trivial function to re-fetch a
-> > > value, but I'm not one of those experts, so that's still arguable. But
-> > > imagine what the kernel code would look like if every time we call
-> > > a large function, we have to consider if it actually gets called some
-> > > arbitrary number of times, due to (anti-) optimizations by the compiler.
-> > > This seems like something that is not really happening.
-> > 
-> > Maybe, I might be paranoid since I have heard too subtle things
-> > about how compiler could changes high level language code so wanted
-> > be careful especially when we do lockless-stuff.
-> > 
-> > Who cares when we change the large(?) function to small(?) function
-> > later on? I'd like to hear from experts to decide it.
-> > 
+On Wed, May 11, 2022 at 08:55:34AM -0700, Linus Torvalds wrote:
+> On Wed, May 11, 2022 at 8:50 AM Theodore Ts'o <tytso@mit.edu> wrote:
+> >
+> > I would argue that it should be the patch submitter's responsibility
+> > to explicitly add a URL to the problem report.
 > 
-> Yes. But one thing that is still unanswered, that I think you can
-> answer, is: even if the compiler *did* re-read the mt variable, what
-> problems could that cause? I claim "no problems", because there is
-> no combination of 0, _CMA, _ISOLATE, _CMA|ISOLATE that will cause
-> problems here.
+> I agree in the perfect case.
+> 
+> But in practice, we have a lot more patch submitters than we have
+> maintainers, and not all "leaf developers" necessarily know how to do
+> everything.
+> 
+> So the maintainer should probably expect to fix things up. Not always,
+> but also not a "the developer should have done this, so I won't do it"
 
-What scenario I am concerning with __READ_ONCE so compiler
-inlining get_pageblock_migratetype two times are
+Sure... but *because* maintainers are significantly outnumbered by the
+patch submitters, what we should document is that it is the
+developer's responsibility to provide the link, just as it is the
+developer's responsibility to at least *try* to write a clear commit
+description.
 
-        CPU 0                                                       CPU 1
-                                                                alloc_contig_range
-is_pinnable_page                                                start_isolate_page_range
-                                                                  set_pageblock_migratetype(MIGRATE_ISOLATE)
-   if (get_pageeblock_migratetype(page) == MIGRATE_CMA)    
-       so it's false
-                                                                undo:
-                                                                  set_pageblock_migratetype(MIGRATE_CMA)
-     
-   if (get_pageeblock_migratetype(page) == MIGRATE_ISOLATE) 
-       so it's false
+> This isn't so different from the fact that not everybody writes
+> English proficiently - people do hopefully end up fixing things up as
+> they get passed onwards.
 
-In the end, CMA memory would be pinned by CPU 0 process
-so CMA allocation keep failed until the process release the
-refcount.
+Maintainers can be the backstop, sure, but if we are trying to make
+Maintainers scale well, developers should at least feel obligated to
+**try** to lighten the load on maintainers to the limits of their
+ability.
 
-> 
-> Any if that's true, then we can leave the experts alone, because
-> the answer is there without knowing what happens exactly to mt.
-> 
-> thanks,
-> 
-> -- 
-> John Hubbard
-> NVIDIA
-> 
+And I have a bit more sympathy over someone who doesn't speak English
+as their first language, over someone who can't be bothered to look up
+a bug report link or a Syzkaller ID.
+
+I guess we could always NACK such a patch until they provide that
+information, but if it's for a critical bug fix, that's not
+necessarily a good alternative either.  I guess that's why the
+Maintainers get paid the big bucks....
+
+					- Ted

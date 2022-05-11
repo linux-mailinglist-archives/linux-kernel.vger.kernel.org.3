@@ -2,208 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCCD1523106
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3454452310A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238325AbiEKKxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 06:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58920 "EHLO
+        id S232433AbiEKK4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 06:56:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiEKKxo (ORCPT
+        with ESMTP id S229819AbiEKK4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 06:53:44 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2086.outbound.protection.outlook.com [40.107.237.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F98880D1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:53:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BAOrvY0N3H2TzVAgyV6gskOoJL/T0v2Xq8gfK0nxqoi1Brs30i7HZT7dhoSwGrT6Fc1M47jDtGLmzS8Uo0Dm4+rK41UFKx0u1QTc+13zG2upUny/PnPtcrc2zvdog7EPy5v+Q2ael1oaaLiK++iohFxYM3VWE5eGoqsg7PTsQ+c60baNH0zkYO7w1dT/HbgvgbaTH6D5GvyhpMtFVZp/kun8VbsTAIAZP7FL5wOwX0iVjUbsvum5OfwqbrQsBz91xnlezaIU7VO5QeP3RWHM+QNRLuURR54XlR9DjRd2liYZuCq7fbUVsGy/Vet/U4FXW4MLtwZE5N+WvJcWhFfxOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=E7yKNbywr5Ls0XQMeN+yvFs8TLnER6AWC/iZUTUpXzM=;
- b=FMBQAo21b8NMRutxP7oiIqjea7Sv+E2GDLEubCzwWC/nmlJrjsffmNQaQOZeZTScTmulaOHfieUquklZh6Due/Wjkx7UP+kPkgtTYGj0nwKKv7lf8CVdmziITBLobZ1r+lje11IQStEsyLv1zKultuwwicBXxqSYTfNZ2Y+lnA7Fe6QBrQdYy1PPAg1WkGeMhIwZAEXBEuQBF2U2oabPFppwFWuBcsMcuN+ZIVdJq01SAPfiQYAItfbdn3osk0ENzSx5x216Gwb/rRwfpxZzQpw1g3NXrYxSP1roUJAr0glm+yPVsgnlvTA8N55HTagOmiZQhMhbTNd/3Gdmm59G5w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=E7yKNbywr5Ls0XQMeN+yvFs8TLnER6AWC/iZUTUpXzM=;
- b=NzAjvdwsgEcPn5b0UfH+S5AHCTCSfUklmpJPIB/elbM8hNh1eWfqyq5MIDfFhuWZO40a8Fovvn4mnIpGSxZcSvUcxZ2KVna+4lIcxL5b+grAgXchbjtC5pEz7XHZKZ4UwtLGNbFXhPf5tndaqF3gAHPftXgcnMyD+6n4Ci0BAp6NOcNv2bc5cj9V+NPiUw05R2v47c2EGAt99+78v3kaVzMtJNPAi3ENme0cV4ULej0raFVeJvRiv70cQfWEyCubfNBakv96cFI0/8V+5WEbIEZIMheEI3VNwgosQlVWQyEp7QRTJnEyEOOjoTlPHbKHBAH/kXQJ0yJvQhWUP9HSVw==
-Received: from DM8PR12MB5400.namprd12.prod.outlook.com (2603:10b6:8:3b::12) by
- BYAPR12MB3237.namprd12.prod.outlook.com (2603:10b6:a03:13a::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.22; Wed, 11 May
- 2022 10:53:40 +0000
-Received: from DM8PR12MB5400.namprd12.prod.outlook.com
- ([fe80::a196:bbcc:de9d:50a5]) by DM8PR12MB5400.namprd12.prod.outlook.com
- ([fe80::a196:bbcc:de9d:50a5%9]) with mapi id 15.20.5250.013; Wed, 11 May 2022
- 10:53:40 +0000
-From:   Eli Cohen <elic@nvidia.com>
-To:     Jason Wang <jasowang@redhat.com>
-CC:     mst <mst@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Si-Wei Liu <si-wei.liu@oracle.com>
-Subject: RE: [PATCH] vdpa: Warn if MTU configured is too low
-Thread-Topic: [PATCH] vdpa: Warn if MTU configured is too low
-Thread-Index: AQHYZRPaxDNnxWhxK0yF85+cFflWj60ZanOAgAAHJsCAAAU/gIAACXXQ
-Date:   Wed, 11 May 2022 10:53:40 +0000
-Message-ID: <DM8PR12MB54000E4C886217D41415F357ABC89@DM8PR12MB5400.namprd12.prod.outlook.com>
-References: <20220511084804.82482-1-elic@nvidia.com>
- <CACGkMEt9h=hGH9cGj=NNLrGtvg2PguS8-pe4trxNUQOxmTRsog@mail.gmail.com>
- <DM8PR12MB5400BC33A5ABD2FCBD0CA852ABC89@DM8PR12MB5400.namprd12.prod.outlook.com>
- <CACGkMEvTTyT=RFp3aAL+8XcL229Fw=pW9_7zNntrUViriUHuNw@mail.gmail.com>
-In-Reply-To: <CACGkMEvTTyT=RFp3aAL+8XcL229Fw=pW9_7zNntrUViriUHuNw@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ec00fd8d-31f2-4b38-c82b-08da333c8264
-x-ms-traffictypediagnostic: BYAPR12MB3237:EE_
-x-microsoft-antispam-prvs: <BYAPR12MB3237879BB186D525FD996BCCABC89@BYAPR12MB3237.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: CNYbDgbMAvl2sA0mtiuZzP3POWwgSLAEKSr9hF/OL4NJHKrm0thMdZSEkGiHrCzzTycnU+zw4y3G46YIs9Zi65cpUWM3zwCdwpRIwvV80Co7/ZyF5V/Ya6Mt1O0A9p6omyhGY6OB378i4dW4lZbQEZ3RSMj4j/hrBHCxtb5fbsOx92MLC+Ni72CBKTUumpsot4HLa3GWapc3GKWc1yuKl8uTpPLhgzIIbPDeuyPz8Od3f4tjRb7ON4Tz82H2agDBaxE9b4mWxiFNA4hXNTTVKMj9J2GCJrcWNzodijsWXMLfcVf487uxZTW+dZDv5KUt+IuqBOC5kFiJV8S2UHPI7HIpsrr+YAFA2N99XS8p+7crnmvWDaIovvil19/3ynGU3R4pMxbMA11OqGWfQq8I3e3Ea6PjSVtm7msCRBUyPPINqIUQyM9BTRt7o9v6zpcY8UHEVplnPjHbhRAFuW8tLZBS/hxv8f3vIot/R9kYOnOmuI5sf+3/Qwz130Xh2wBLfBBITIPOgsZbI26dd6VmjY6nesB34lNMY6IG1fdiJQ9KmgCou19DRWk3Pr56O1jNkuXcThix8sPfq2xXrR2LL86DpLyOdA06ATRO8WhfX2uv4g5YOjrTk7c1trQyKQWgy24nWbt+2ew/0/jiFoUxlka48Ge1DGOT4qBsdJ1SeJWwX5EBkrqYGk1yIg1Q9b2mOVLnlwSa30yYZHVuGc6E5A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5400.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(86362001)(6506007)(52536014)(8936002)(33656002)(5660300002)(7696005)(508600001)(53546011)(71200400001)(83380400001)(38070700005)(122000001)(26005)(9686003)(38100700002)(55016003)(186003)(316002)(66476007)(66946007)(54906003)(66556008)(76116006)(66446008)(8676002)(64756008)(6916009)(4326008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YnFUZm5HOUp0T3Q5QzRaenRnbnVVaFdCRGRIcDg5RzYyZFF0ZW9TNE14anJN?=
- =?utf-8?B?Zmx6Vk5YdldyUjlibjRjQ2txVWRpaGZHRkxrRWlxVCsvVldJOWd6dUE5M2RL?=
- =?utf-8?B?T0w1WFRZb1pjektyU2tFVTQ2dDJvRjd4dGRjVE82US9QeHBMV0NKMVRRYUtk?=
- =?utf-8?B?TDJlTDFNQ0tJZ0c3THJ2VGJpUnkyeDEvTDd5UmRCbXB3SFhTUzhFb0ZISWR1?=
- =?utf-8?B?eldSNTZBbXBXNDZONzA3Qy94bmYyOXpUeEVBVTQ3aUdwWHp3RXh0RG82RGRq?=
- =?utf-8?B?Wmdpa3BjdUhCRWkwOUt1N29wbDRaMU9rRnN0YkJaNDk5SVgyb2NSTlFETFRx?=
- =?utf-8?B?U3dHM3V6Z1IzSjZBbXJjNUpscjZmOGF1UjMxZ1huaXU3NmdXOVAxWWxRdmRB?=
- =?utf-8?B?d0dUVkpYcU1tbnQ5a1NSY0U1amZXVVE0L3hqL3VTSkpaZ0pXSFhtQ24zYjRt?=
- =?utf-8?B?K2VWUlpYTFdBZjA1ZGd2UFVMa0NTaWZZOExyMkE0VzNIQUF3Ym9TTi9PUGRB?=
- =?utf-8?B?TWZ4Y0pkTUlNRjlxTFBHb2JkcjBXVkhsVzdZTmZrd0txdWd4cFJvWi9KdTFC?=
- =?utf-8?B?MXcyNkNOZ09tV3p3cFoxYmpEdjgweG1WYjNySHpGRnpzbG1mTGxGdmtXMFor?=
- =?utf-8?B?cGFQNVhqL2l6aGV3NEZKSG5XMDFoNEZrSjY0V0VBalRWem9sQUJWdUYxQi9U?=
- =?utf-8?B?VVhhMUI2aGxOcVowMGNyNXJJbzVYdXZTV1pKclY5L3EwMDRzd0NiUlV3SHFB?=
- =?utf-8?B?Z2ZwMkEralcrME9PWllVd3dHN0lEakxUV3Z1NHBRWEJrVUtLUnBNWGk1dzhK?=
- =?utf-8?B?K25RZG1vZWE5eUlKVmszbDNPUTV4T0xTaTJhblkxVTJ0Slg0aEErcWhqM0sx?=
- =?utf-8?B?Ykh6R3ZGS2d4ZTNTVCs0T3gwTnVjL3hTaFVVTW5rVHRmaHBsVEJXZndYZi9u?=
- =?utf-8?B?ZkpNN251ZGxEeEpZMGN4VC9rV0EvMG9aSzR1dXlHcVViR29sQTVuRDhSaWNs?=
- =?utf-8?B?RWFYVXlabWlzWXhlT2c0N01Dalg1NUt4bS94Vlo5azF1aDB2eUdqRkFON0dx?=
- =?utf-8?B?SHVjOFI3ZXZGVTdrMERFYzZlNFo5QnU1MjNMWVp6d0dad1NhM3NwRFdQemU0?=
- =?utf-8?B?SHJ5Z2tndE1oZ0VnMkhXaGdNMmJzMTI0K2Z2Y3BjaTNxQlJHWmM5VlBuYjUw?=
- =?utf-8?B?WnE3QVlSZHRGYnY2aFpXRGpvYmhSUG82TGNDMUFsaHdkRHYvK1cwZ0Y1L25M?=
- =?utf-8?B?d3VhWEJjT2tiNU53UzhKK3ZEVDNFcFAybmJ0T0xPZGRCUWN3enFOVlJPcGxy?=
- =?utf-8?B?TWtXdDRJVmZlRTRGQnVPZWpLQTBWWjhMVVpuVDVnNjdZaG1ESlhlc0loNFpF?=
- =?utf-8?B?dCtNYXVPN1FhRjFMK0NtY0ZhRTVWTGtIWGVBcE9Uc0x1aFlOVXdwbTE0c3FU?=
- =?utf-8?B?a2VPUU94VHY5QmM2dHpyWDE2RExFZ3NRNnZKWUNYUTF2RnVIRWJMbEpoa1FT?=
- =?utf-8?B?NWFNYUhQKy9sNTJpNUV6T0o4L096Q3VSZW1yQlgza3EwdE9rVDUvZjhzUUJs?=
- =?utf-8?B?TTZ1K2ViU3pkeWQvUkp3WFl3TEVhZDlCbmY1ZTdhQ3hKRkM0ZVVFUDFaN2g2?=
- =?utf-8?B?L3p4QjlQa0xuT3ZROTFJdHJWN1VocXR4c2ZrS0ZMK3RjUzlyT1IyaWl2S21K?=
- =?utf-8?B?WUtiYWhIdUl5Y0g0WmhVQkxIM0VVa0svcUpkZ0hKTjZCL0tGbDB3c2hPM3lJ?=
- =?utf-8?B?Z0xVdXNORkNmWUR0NWEwbnFWaEZMaE1XWXlURDVHYXE2Y1JxcklmVndrcllx?=
- =?utf-8?B?NkxHSWtpdSsvSEdxMUMxZ1NsWjJGa09zeUZDMUFTeStTdHVxZnZjUkp5MVJq?=
- =?utf-8?B?dFlJOWwyaXR2NDBMdVZYd0FOdWlWYi8wZ0c5Z0FZSGU5VW53WW5KRVpHUWhC?=
- =?utf-8?B?cnhvSUNDZ1BXR3JwUkt6SXNNK1dMUTFVU0tmdFg4NlRtUE1IZmhUWVlZL2Y4?=
- =?utf-8?B?TG5reS8vU3cvU1lEaXhtdExXdWtaemdVZGhYRkRnbzRQSGZoSG5CNG9saEhN?=
- =?utf-8?B?U05yajRLMkJyWjlTUXFxVnYrUUpLMFJQMTM1cjI3Mm80UTdOVk5KTnRyd3V2?=
- =?utf-8?B?bmdpaGwyOFdmdmptakdjQXdXcjZ5bnJyRFJteHJwOVdzbkJDSUZUQXFFcEZO?=
- =?utf-8?B?cmY0L1FVY084eUcvNjB2ZWtzaXZsM1hHUjQ2eFFRajlPakJrazVrZmE1TkEv?=
- =?utf-8?B?QmZYSkpYa1A2WUdHWWdsLzdiT3haaGxNL2daY0duU0VvTkQyMEE4WllXT1dl?=
- =?utf-8?Q?oQW6xxL+ck94sHc6Ji?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 11 May 2022 06:56:47 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DA135ABC
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:56:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652266604; x=1683802604;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=owyTCCcmnJo+T4Ingx7H5FSHvJQhxhbripOAra61JMc=;
+  b=bnLV2v7fsGjri4586xp29ATG9sTr8nI5BVHYDX37JYH5cRiDxYkYdxQy
+   ObETz/n23MmBt0Fsd0oaTqqkjUwxSufDB6Sd7RYAZcidsaKAZHmT9d/k8
+   t3qna9IuUvevZkkL/VIGzRQeyriBjVfDhqyMT1d+m3i/Qo0g8adqIOpmu
+   X3Q+RmZV1A8Sgwd4yLczuVacLJuUTO/ghFteGGDTt2a7b5aEFZNYPKlPd
+   bdsV9YqHkcwY2ZenSYDASf5tn3ydgMAYmMvEGHayLMk41F2RjjHS3zKmF
+   +QYM8uaWBNi7IJC0iofWsz377AQ6viK5KdVCfNAgsk5UHLIuVREZzX0Sj
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="250193171"
+X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
+   d="scan'208";a="250193171"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 03:56:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
+   d="scan'208";a="553278726"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 11 May 2022 03:56:41 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nok1J-000J12-44;
+        Wed, 11 May 2022 10:56:41 +0000
+Date:   Wed, 11 May 2022 18:56:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hao Xu <howeyxu@tencent.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Subject: [ammarfaizi2-block:axboe/linux-block/fastpoll-mshot 89/98]
+ fs/io_uring.c:6075:2: error: call to undeclared function '__io_poll_clean';
+ ISO C99 and later do not support implicit function declarations
+Message-ID: <202205111808.7jOLZqcw-lkp@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5400.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ec00fd8d-31f2-4b38-c82b-08da333c8264
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 May 2022 10:53:40.4418
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZJmCv8gBVt/roicuFewBzSsxtBKyeXrrQqgbooYB40k7jo4B7ZSk/4iI35QwENLQ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3237
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBKYXNvbiBXYW5nIDxqYXNvd2Fu
-Z0ByZWRoYXQuY29tPg0KPiBTZW50OiBXZWRuZXNkYXksIE1heSAxMSwgMjAyMiAxOjE5IFBNDQo+
-IFRvOiBFbGkgQ29oZW4gPGVsaWNAbnZpZGlhLmNvbT4NCj4gQ2M6IG1zdCA8bXN0QHJlZGhhdC5j
-b20+OyB2aXJ0dWFsaXphdGlvbiA8dmlydHVhbGl6YXRpb25AbGlzdHMubGludXgtZm91bmRhdGlv
-bi5vcmc+OyBsaW51eC1rZXJuZWwgPGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc+OyBTaS0N
-Cj4gV2VpIExpdSA8c2ktd2VpLmxpdUBvcmFjbGUuY29tPg0KPiBTdWJqZWN0OiBSZTogW1BBVENI
-XSB2ZHBhOiBXYXJuIGlmIE1UVSBjb25maWd1cmVkIGlzIHRvbyBsb3cNCj4gDQo+IE9uIFdlZCwg
-TWF5IDExLCAyMDIyIGF0IDY6MDIgUE0gRWxpIENvaGVuIDxlbGljQG52aWRpYS5jb20+IHdyb3Rl
-Og0KPiA+DQo+ID4gPiBGcm9tOiBKYXNvbiBXYW5nIDxqYXNvd2FuZ0ByZWRoYXQuY29tPg0KPiA+
-ID4gU2VudDogV2VkbmVzZGF5LCBNYXkgMTEsIDIwMjIgMTI6MzQgUE0NCj4gPiA+IFRvOiBFbGkg
-Q29oZW4gPGVsaWNAbnZpZGlhLmNvbT4NCj4gPiA+IENjOiBtc3QgPG1zdEByZWRoYXQuY29tPjsg
-dmlydHVhbGl6YXRpb24gPHZpcnR1YWxpemF0aW9uQGxpc3RzLmxpbnV4LWZvdW5kYXRpb24ub3Jn
-PjsgbGludXgta2VybmVsIDxsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnPjsgU2ktDQo+ID4g
-PiBXZWkgTGl1IDxzaS13ZWkubGl1QG9yYWNsZS5jb20+DQo+ID4gPiBTdWJqZWN0OiBSZTogW1BB
-VENIXSB2ZHBhOiBXYXJuIGlmIE1UVSBjb25maWd1cmVkIGlzIHRvbyBsb3cNCj4gPiA+DQo+ID4g
-PiBPbiBXZWQsIE1heSAxMSwgMjAyMiBhdCA0OjQ4IFBNIEVsaSBDb2hlbiA8ZWxpY0BudmlkaWEu
-Y29tPiB3cm90ZToNCj4gPiA+ID4NCj4gPiA+ID4gRm9sbG93aW5nIHRoZSByZWNvbW1lbmRhdGlv
-biBpbiB2aXJpbyBzcGVjIDEuMSwgYSBkZXZpY2Ugb2ZmZXJpbmcNCj4gPiA+ID4gVklSVElPX05F
-VF9GX01UVSBzaG91bGQgc2V0IHRoZSBtdHUgdG8gYXQgbGVhc3QgMTI4MCBieXRlcy4NCj4gPiA+
-ID4NCj4gPiA+ID4gUHJpbnQgYSB3YXJuaW5nIGlmIHRoaXMgcmVjb21tZW5kYXRpb24gaXMgbm90
-IG1ldC4NCj4gPiA+ID4NCj4gPiA+ID4gU2lnbmVkLW9mZi1ieTogRWxpIENvaGVuIDxlbGljQG52
-aWRpYS5jb20+DQo+ID4gPg0KPiA+ID4gSSB3b25kZXIgd2h5IGl0J3MgYSBtdXN0Pw0KPiA+DQo+
-ID4gSXQncyBkZWZpbml0ZWx5IG5vdCBhIG11c3QgYnV0IEkgdGhvdWdodCBpZiB0aGUgc3BlYyBz
-YXlzICJzaG91bGQiIGl0IGRlc2VydmVzIGEgd2FybmluZw0KPiANCj4gUmlnaHQuDQo+IA0KPiA+
-IGJ1dCB3ZSBjYW4gZHJvcCB0aGlzIGlmIHlvdSB0aGluayB0aGUgd2FybmluZyBpcyBub3QgaW4g
-cGxhY2UuDQo+IA0KPiBJIHJlbWVtYmVyIG5ldGxpbmsgaGFzIGFuIGV4dHJhIGxvZyBidWZmZXIs
-IEkgd29uZGVyIGlmIGl0J3MgYmV0dGVyIHRvDQo+IHdhcm4gdGhlcmU/DQo+IA0KDQpZb3UgbWVh
-biB1c2UgTkxfU0VUX0VSUl9NU0dfTU9EKGluZm8tPmV4dGFjaywgIk1UVSBpcyBiZWxvdyByZWNv
-bW1lbmRlZCB2YWx1ZVxuIikgPw0KZG1lc2cgc3RheXMgY2xlYW4gYnV0IHRoZSB1c2VyIGdldHMg
-YSB3YXJuaW5nDQoNCj4gPg0KPiA+ID4NCj4gPiA+ID4gLS0tDQo+ID4gPiA+ICBkcml2ZXJzL3Zk
-cGEvdmRwYS5jIHwgOSArKysrKysrKy0NCj4gPiA+ID4gIDEgZmlsZSBjaGFuZ2VkLCA4IGluc2Vy
-dGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4gPiA+ID4NCj4gPiA+ID4gZGlmZiAtLWdpdCBhL2Ry
-aXZlcnMvdmRwYS92ZHBhLmMgYi9kcml2ZXJzL3ZkcGEvdmRwYS5jDQo+ID4gPiA+IGluZGV4IDkx
-ZjRjMTNjN2M3Yy4uOTYxMTY4ZmU5MDk0IDEwMDY0NA0KPiA+ID4gPiAtLS0gYS9kcml2ZXJzL3Zk
-cGEvdmRwYS5jDQo+ID4gPiA+ICsrKyBiL2RyaXZlcnMvdmRwYS92ZHBhLmMNCj4gPiA+ID4gQEAg
-LTU4Myw2ICs1ODMsOSBAQCB2ZHBhX25sX2NtZF9tZ210ZGV2X2dldF9kdW1waXQoc3RydWN0IHNr
-X2J1ZmYgKm1zZywgc3RydWN0IG5ldGxpbmtfY2FsbGJhY2sgKmNiKQ0KPiA+ID4gPiAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICBCSVRfVUxMKFZEUEFfQVRUUl9ERVZfTkVUX0NGR19N
-VFUpICAgICB8IFwNCj4gPiA+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgQklU
-X1VMTChWRFBBX0FUVFJfREVWX05FVF9DRkdfTUFYX1ZRUCkpDQo+ID4gPiA+DQo+ID4gPiA+ICsv
-KiBSZWNvbW1lbmRlZCB2aXJ0aW8gc3BlYyAxLjEgc2VjdGlvbiA1LjEuNC4xICovDQo+ID4gPiA+
-ICsjZGVmaW5lIFZJUlRJT19NSU5fUFJFRkVSUkVEX01UVSAxMjgwDQo+ID4gPiA+ICsNCj4gPiA+
-ID4gIHN0YXRpYyBpbnQgdmRwYV9ubF9jbWRfZGV2X2FkZF9zZXRfZG9pdChzdHJ1Y3Qgc2tfYnVm
-ZiAqc2tiLCBzdHJ1Y3QgZ2VubF9pbmZvICppbmZvKQ0KPiA+ID4gPiAgew0KPiA+ID4gPiAgICAg
-ICAgIHN0cnVjdCB2ZHBhX2Rldl9zZXRfY29uZmlnIGNvbmZpZyA9IHt9Ow0KPiA+ID4gPiBAQCAt
-NjM0LDYgKzYzNywxMCBAQCBzdGF0aWMgaW50IHZkcGFfbmxfY21kX2Rldl9hZGRfc2V0X2RvaXQo
-c3RydWN0IHNrX2J1ZmYgKnNrYiwgc3RydWN0IGdlbmxfaW5mbyAqaQ0KPiA+ID4gPiAgICAgICAg
-ICAgICAgICAgZXJyID0gUFRSX0VSUihtZGV2KTsNCj4gPiA+ID4gICAgICAgICAgICAgICAgIGdv
-dG8gZXJyOw0KPiA+ID4gPiAgICAgICAgIH0NCj4gPiA+ID4gKyAgICAgICBpZiAoKG1kZXYtPnN1
-cHBvcnRlZF9mZWF0dXJlcyAmIEJJVF9VTEwoVklSVElPX05FVF9GX01UVSkpICYmDQo+ID4gPiA+
-ICsgICAgICAgICAgIChjb25maWcubWFzayAmIEJJVF9VTEwoVkRQQV9BVFRSX0RFVl9ORVRfQ0ZH
-X01UVSkgJiYNCj4gPiA+ID4gKyAgICAgICAgICAgY29uZmlnLm5ldC5tdHUgPCBWSVJUSU9fTUlO
-X1BSRUZFUlJFRF9NVFUpKQ0KPiA+ID4NCj4gPiA+IFNob3VsZCBiZSA8PSA/DQo+ID4NCj4gPiBJ
-IGRvbid0IHRoaW5rIHNvLiBJZiBpdCBlcXVhbHMgMTI4MCB5b3UgZG9uJ3Qgd2FudCB0byB3YXJu
-Lg0KPiANCj4gWWVzLCB5b3UncmUgcmlnaHQuDQo+IA0KPiBUaGFua3MNCj4gDQo+ID4NCj4gPiA+
-DQo+ID4gPiBUaGFua3MNCj4gPiA+DQo+ID4gPiA+ICsgICAgICAgICAgICAgICBwcl93YXJuKCJN
-VFUgaXMgYmVsb3cgcmVjb21tZW5kZWQgdmFsdWVcbiIpOw0KPiA+ID4gPiAgICAgICAgIGlmICgo
-Y29uZmlnLm1hc2sgJiBtZGV2LT5jb25maWdfYXR0cl9tYXNrKSAhPSBjb25maWcubWFzaykgew0K
-PiA+ID4gPiAgICAgICAgICAgICAgICAgTkxfU0VUX0VSUl9NU0dfTU9EKGluZm8tPmV4dGFjaywN
-Cj4gPiA+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAiQWxsIHByb3ZpZGVk
-IGF0dHJpYnV0ZXMgYXJlIG5vdCBzdXBwb3J0ZWQiKTsNCj4gPiA+ID4gQEAgLTExMzUsNyArMTE0
-Miw3IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3QgbmxhX3BvbGljeSB2ZHBhX25sX3BvbGljeVtWRFBB
-X0FUVFJfTUFYICsgMV0gPSB7DQo+ID4gPiA+ICAgICAgICAgW1ZEUEFfQVRUUl9ERVZfTkFNRV0g
-PSB7IC50eXBlID0gTkxBX1NUUklORyB9LA0KPiA+ID4gPiAgICAgICAgIFtWRFBBX0FUVFJfREVW
-X05FVF9DRkdfTUFDQUREUl0gPSBOTEFfUE9MSUNZX0VUSF9BRERSLA0KPiA+ID4gPiAgICAgICAg
-IC8qIHZpcnRpbyBzcGVjIDEuMSBzZWN0aW9uIDUuMS40LjEgZm9yIHZhbGlkIE1UVSByYW5nZSAq
-Lw0KPiA+ID4gPiAtICAgICAgIFtWRFBBX0FUVFJfREVWX05FVF9DRkdfTVRVXSA9IE5MQV9QT0xJ
-Q1lfTUlOKE5MQV9VMTYsIDY4KSwNCj4gPiA+ID4gKyAgICAgICBbVkRQQV9BVFRSX0RFVl9ORVRf
-Q0ZHX01UVV0gPSBOTEFfUE9MSUNZX01JTihOTEFfVTE2LCBFVEhfTUlOX01UVSksDQo+ID4gPiA+
-ICB9Ow0KPiA+ID4gPg0KPiA+ID4gPiAgc3RhdGljIGNvbnN0IHN0cnVjdCBnZW5sX29wcyB2ZHBh
-X25sX29wc1tdID0gew0KPiA+ID4gPiAtLQ0KPiA+ID4gPiAyLjM1LjENCj4gPiA+ID4NCj4gPg0K
-DQo=
+tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/fastpoll-mshot
+head:   e721cdc172fd3aa845e4a0850cb5f9aefd8f3591
+commit: e2959ad0f1aa6081772c3d9c703497c15d9c6039 [89/98] io_uring: add a helper for poll clean
+config: s390-randconfig-c005-20220509 (https://download.01.org/0day-ci/archive/20220511/202205111808.7jOLZqcw-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/e2959ad0f1aa6081772c3d9c703497c15d9c6039
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block axboe/linux-block/fastpoll-mshot
+        git checkout e2959ad0f1aa6081772c3d9c703497c15d9c6039
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from fs/io_uring.c:60:
+   In file included from include/linux/blk-mq.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from fs/io_uring.c:60:
+   In file included from include/linux/blk-mq.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from fs/io_uring.c:60:
+   In file included from include/linux/blk-mq.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> fs/io_uring.c:6075:2: error: call to undeclared function '__io_poll_clean'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           __io_poll_clean(req);
+           ^
+   fs/io_uring.c:6075:2: note: did you mean '__io_fill_cqe'?
+   fs/io_uring.c:2162:20: note: '__io_fill_cqe' declared here
+   static inline bool __io_fill_cqe(struct io_ring_ctx *ctx, u64 user_data,
+                      ^
+   12 warnings and 1 error generated.
+
+
+vim +/__io_poll_clean +6075 fs/io_uring.c
+
+  6066	
+  6067	static void io_apoll_task_func(struct io_kiocb *req, bool *locked)
+  6068	{
+  6069		int ret;
+  6070	
+  6071		ret = io_poll_check_events(req, locked);
+  6072		if (ret > 0)
+  6073			return;
+  6074	
+> 6075		__io_poll_clean(req);
+  6076	
+  6077		if (!ret)
+  6078			io_req_task_submit(req, locked);
+  6079		else
+  6080			io_req_complete_failed(req, ret);
+  6081	}
+  6082	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

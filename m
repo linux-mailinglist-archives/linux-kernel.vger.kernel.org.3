@@ -2,94 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D285228EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 03:26:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC07A5228D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 03:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240337AbiEKB0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 21:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51486 "EHLO
+        id S240157AbiEKBQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 21:16:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238569AbiEKB0j (ORCPT
+        with ESMTP id S240206AbiEKBQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 21:26:39 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA686FD00;
-        Tue, 10 May 2022 18:26:37 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id i27so1074958ejd.9;
-        Tue, 10 May 2022 18:26:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bRbUgRTaSaGKFWOQVW0vsPy+my+VkFAnyFE5K6q7L9M=;
-        b=qhyR8P53avM7dqw0RfzKOnZGncdneWha7XFdoMznIeUAqy1T8E3ckkbnYsVgq5Sd+8
-         NKSqqzlLMedZ/ub9Dv+oUWfz+X9M6TikmUvhqrFYZdoY6WuMacjhdqGw0H5tCyuyJtmI
-         WbiRGrmCZqFjSg+0swBR0xzI+xbbNVf2PPKn68hxD9yalmWVBam9AfTFcoKTj3DAnDb4
-         HJkFdrAZAS0edWDdl5FyteiJ9GEzpfwR8bmURf43vXsoQ5wepFu/h98uRb1Qgv7j/M7S
-         j7wwbbZNGoHEuB/7EfR/6TXFOUyrzCCNsg1cTf5IGSruAF757k3gjr2U9932Tdd6slri
-         MruQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bRbUgRTaSaGKFWOQVW0vsPy+my+VkFAnyFE5K6q7L9M=;
-        b=zVNP90XOTHigLJ0W2wNT0hmnLxxO/5F6XgqKHZlQ4X0KnA5lgaQGZ4Tyxa2ZARS3GQ
-         n23FYuN1GfnSz/KxB/VndCs+KFRtZHyHrWxTbwpeka0I+2W3HFJ1qsiyTbCYq+VdboM/
-         TC5BYB9EPkoGpMiYQRGKuEY5U5N1wHicVd0MZIOP0clvbZlCTW0UQYU/7v2Hia3jyUXR
-         bpVpM00D2W5eKmU+3ZeFpWvk3o5f/wEqQld8yZOyIZSINSbbICKIOqAQepIhAM58jvIm
-         AJk4s6Yz79x33LyHmxSLqlCwj+wU4C6IzlfqUH8+/p2qdQI/wKOnF/LXCJU46Kgz6dUN
-         ObIA==
-X-Gm-Message-State: AOAM532ODFoiLzjLoKuBzJOOwlVfXE//8cLzIHn24OC6a1txDUFgNh3A
-        KEDYvx686BkGsZiG37am4PD4t02vnYtwvypc10M1r++hLas=
-X-Google-Smtp-Source: ABdhPJzGF0MlZtd+4qPm8c00mpqbAg80KAzF9urrIpJUUz5MriRD5cxJF5uvWXYBkvG8VM2ceU378E1aIuzhDzE/YP0=
-X-Received: by 2002:a17:906:c14b:b0:6f8:e6bb:f8d5 with SMTP id
- dp11-20020a170906c14b00b006f8e6bbf8d5mr15304336ejc.4.1652232396394; Tue, 10
- May 2022 18:26:36 -0700 (PDT)
+        Tue, 10 May 2022 21:16:15 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBD0275F7;
+        Tue, 10 May 2022 18:16:13 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KycQX0Q2Kz1JC3x;
+        Wed, 11 May 2022 09:15:00 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 11 May 2022 09:16:11 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 11 May
+ 2022 09:16:11 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+CC:     <wsa@kernel.org>
+Subject: [PATCH v2] i2c: core: Fix possible memleak in i2c_new_client_device()
+Date:   Wed, 11 May 2022 09:27:38 +0800
+Message-ID: <20220511012738.3031346-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220509111126.7032-1-max.oss.09@gmail.com> <20220509111126.7032-3-max.oss.09@gmail.com>
-In-Reply-To: <20220509111126.7032-3-max.oss.09@gmail.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Tue, 10 May 2022 22:26:24 -0300
-Message-ID: <CAOMZO5AGLnf8-c3Birfs8nONMCOX9ZX2dwzfpnH+EseWyVVSpg@mail.gmail.com>
-Subject: Re: [PATCH v1 2/3] ARM: dts: imx6qdl-colibri: Mux mclk for sgtl5000
- with the codec node
-To:     Max Krummenacher <max.oss.09@gmail.com>
-Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 9, 2022 at 8:12 AM Max Krummenacher <max.oss.09@gmail.com> wrote:
->
-> From: Max Krummenacher <max.krummenacher@toradex.com>
->
-> Move the pin muxing for MCLK used by the codec to the codec node
-> instead of placing it inside the audmux pinctrl group.
->
-> While no negative effects have been observed this should make sure that
-> MCLK is provided when the codec driver is probed.
->
-> Follows commit fa51e1dc4b91 ("ARM: dts: imx6qdl-apalis: Fix sgtl5000
-> detection issue")
->
-> Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+I got memory leak as follows when doing fault injection test:
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+unreferenced object 0xffff888014aec078 (size 8):
+  comm "xrun", pid 356, jiffies 4294910619 (age 16.332s)
+  hex dump (first 8 bytes):
+    31 2d 30 30 31 63 00 00                          1-001c..
+  backtrace:
+    [<00000000eb56c0a9>] __kmalloc_track_caller+0x1a6/0x300
+    [<000000000b220ea3>] kvasprintf+0xad/0x140
+    [<00000000b83203e5>] kvasprintf_const+0x62/0x190
+    [<000000002a5eab37>] kobject_set_name_vargs+0x56/0x140
+    [<00000000300ac279>] dev_set_name+0xb0/0xe0
+    [<00000000b66ebd6f>] i2c_new_client_device+0x7e4/0x9a0
+
+In error path after calling dev_set_name() which called by
+i2c_dev_set_name(), the put_device() should be used to give up
+the device reference, then the name allocated in dev_set_name()
+will be freed in kobject_cleanup().
+In this patch, I splited device_register() into device_initialize()
+and device_add() to make the code more clear.
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+v2:
+  split device_register() into device_initialize() and device_add()
+---
+ drivers/i2c/i2c-core-base.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index d43db2c3876e..e7dded8b037b 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -928,6 +928,11 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
+ 	client->flags = info->flags;
+ 	client->addr = info->addr;
+ 
++	client->dev.parent = &client->adapter->dev;
++	client->dev.bus = &i2c_bus_type;
++	client->dev.type = &i2c_client_type;
++	device_initialize(&client->dev);
++
+ 	client->init_irq = info->irq;
+ 	if (!client->init_irq)
+ 		client->init_irq = i2c_dev_irq_from_resources(info->resources,
+@@ -947,9 +952,6 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
+ 	if (status)
+ 		goto out_err;
+ 
+-	client->dev.parent = &client->adapter->dev;
+-	client->dev.bus = &i2c_bus_type;
+-	client->dev.type = &i2c_client_type;
+ 	client->dev.of_node = of_node_get(info->of_node);
+ 	client->dev.fwnode = info->fwnode;
+ 
+@@ -966,7 +968,7 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
+ 		}
+ 	}
+ 
+-	status = device_register(&client->dev);
++	status = device_add(&client->dev);
+ 	if (status)
+ 		goto out_remove_swnode;
+ 
+@@ -984,7 +986,7 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
+ 		"Failed to register i2c client %s at 0x%02x (%d)\n",
+ 		client->name, client->addr, status);
+ out_err_silent:
+-	kfree(client);
++	put_device(&client->dev);
+ 	return ERR_PTR(status);
+ }
+ EXPORT_SYMBOL_GPL(i2c_new_client_device);
+-- 
+2.25.1
+

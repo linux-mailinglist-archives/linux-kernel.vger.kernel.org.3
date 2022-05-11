@@ -2,77 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F50652299A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 04:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8589F52299F
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 04:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234226AbiEKCXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 22:23:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54218 "EHLO
+        id S239396AbiEKCZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 22:25:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiEKCXP (ORCPT
+        with ESMTP id S229783AbiEKCZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 22:23:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B6DD14C760
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 19:23:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652235793;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NoNShCUgG/r5sx7GtSLhujeTcuOeCXLnixMsESYMdzg=;
-        b=iXiclLQi4KTDv51QJYRE2qBUztX1u5nCbw06Ohod28B8yoQNpGmq3PhqA5nWsYoICf+pgf
-        R0C6JMZZ8j/H6ugX3TeC8ebnadSDFUxGgx6AYWBrutLJyKco7ivIFYurlqhaRFgaVAANuw
-        45aQbAiQRamok/XooFJHy3hc0CCFKyQ=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-433-u2Fj0teqMjOEoX3dK9jImg-1; Tue, 10 May 2022 22:23:12 -0400
-X-MC-Unique: u2Fj0teqMjOEoX3dK9jImg-1
-Received: by mail-lj1-f199.google.com with SMTP id j20-20020a2e8014000000b00250baa159ceso176731ljg.18
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 19:23:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NoNShCUgG/r5sx7GtSLhujeTcuOeCXLnixMsESYMdzg=;
-        b=K29p9tLEKBvx4ybzNoSDSDMghGU+AkY40ufyjIQP92snLLuJMANEAOR98+agfjY04N
-         ZxcfeRenjz8dD5wb6ItFAdTeRgxtnsYzr0WwagiSbhYlGu/3Nsgd35JC6XtcqOKCEQrG
-         waHtjrBf3IGZp7ZnqIeU6sSrZl+uXOnseZeDk9f85Ksgj3diy4ytkG0N5eeLYzfeAXb8
-         7mXRX8LuRIkLbxKTVjMG5DcWODBnKWLmmx+GN0eHKMaCdrA9yNSb2ggri1036Lul3R+M
-         8TCa9coi4He/OmciyvUsC8NrgIyvSr2dLCFo9ceGCScUJbdsqtQA6PAUPLZ5dpCfxny0
-         6plQ==
-X-Gm-Message-State: AOAM531kT6m0B1uCZtw5diQ0U1zJKf9ecw6PZL6VoPmRF2uB653v3n05
-        0zrs/yPQ3dBToi7dI7Y114UNNbQ7etYXa3fRLSdTgTXMgPBS03qNk+P7OnamZ/9losBG4+nqOlF
-        XAk22USy8usHginyfKjiU+i++Du0j4eRaHUHIJ5Bv
-X-Received: by 2002:a19:ca50:0:b0:471:f556:92b with SMTP id h16-20020a19ca50000000b00471f556092bmr18193781lfj.587.1652235790480;
-        Tue, 10 May 2022 19:23:10 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyfn5RF53v2JjmJJQkV8pzwLGeqEl3ZHCNTpF3vbu92pgelfIJ4hMyyAb1vY2XGHUKz6rIPN4WAR3mln3WzRxs=
-X-Received: by 2002:a19:ca50:0:b0:471:f556:92b with SMTP id
- h16-20020a19ca50000000b00471f556092bmr18193766lfj.587.1652235790258; Tue, 10
- May 2022 19:23:10 -0700 (PDT)
+        Tue, 10 May 2022 22:25:24 -0400
+Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8CC7B1FD870;
+        Tue, 10 May 2022 19:25:22 -0700 (PDT)
+IronPort-Data: =?us-ascii?q?A9a23=3AWvaHDKjfMAqDRRwuS/2JfpYUX161jBEKZh0ujC4?=
+ =?us-ascii?q?5NGQNrF6WrkUPm2QfCzuGMquLZGKkLdEjbIrgpkoH68ODx99iGwdl/nw8FHgiR?=
+ =?us-ascii?q?ejtX4rAdhiqV8+xwmwvdGo+toNGLICowPkcFhcwnT/wdOixxZVA/fvQHOCkUra?=
+ =?us-ascii?q?dYnkZqTJME0/NtzoywobVvaY42bBVMyvV0T/Di5W31G2NglaYAUpIg063ky6Di?=
+ =?us-ascii?q?dyp0N8uUvPSUtgQ1LPWvyF94JvyvshdJVOgKmVfNrbSq+ouUNiEEm3lExcFUrt?=
+ =?us-ascii?q?Jk57wdAsEX7zTIROTzHFRXsBOgDAb/mprjPl9b6FaNC+7iB3Q9zx14M9QvJqrW?=
+ =?us-ascii?q?EEnOLbQsOoAURhECDw4NqpDkFPCCSHl7ZXPlRGZLhMAxN0rVinaJ7Yw9u9pAG1?=
+ =?us-ascii?q?m++YfLTcXZBGfwemxxdqTTuhqg8UqK8nmFIMCs25tzHfSCvNOaZDIQ43L49FC1?=
+ =?us-ascii?q?Ts9j8wIGuzRD+IGaD5rfTzBZRNVM1saAZ54m/2n7lHzejseqhSKpK4z4mHW1yR?=
+ =?us-ascii?q?w1qTgNJzefdnibclXgUGeqUrF8n7/DxVcM8aQoRKB83SxlqrKmAv4RosZF/u/7?=
+ =?us-ascii?q?PECqFuNym0WDTUSVECnur+9i0ijS5RTJlJ80iolrYA271DtQtSVdxuxp2+N+B4?=
+ =?us-ascii?q?bQdtfDuY66SmLx6GS6AGcbkAGRzhMLtcmqecxXzUh0lLPlNTsbRR1v7qRRW2M8?=
+ =?us-ascii?q?J+PsCi/fyQYRUcGZCkZXU4L+NXuvow3pgzAQ8wlE6OviNDxXzbqzFiiqCk4mqV?=
+ =?us-ascii?q?WjsMR0ai/1U7IjijqpZXTSAMxoALNUQqN6gJ/eZ7gd4KzwUbU4OwGL4uDSFSF+?=
+ =?us-ascii?q?n8elKC28uEUCrmfmSqMXqMJHbe097CCKjKanF0HInWL31xB4Fb6JcYJvm44fxw?=
+ =?us-ascii?q?vb645lfbSSBe7kWtsCFV7ZhNGtZNKXr8=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A2gRIpqywAbaW80CDHsAHKrPwEL1zdoMgy1kn?=
+ =?us-ascii?q?xilNoH1uA6ilfqWV8cjzuiWbtN9vYhsdcLy7WZVoIkmskKKdg7NhXotKNTOO0A?=
+ =?us-ascii?q?SVxepZnOnfKlPbexHWx6p00KdMV+xEAsTsMF4St63HyTj9P9E+4NTvysyVuds?=
+ =?us-ascii?q?=3D?=
+X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
+   d="scan'208";a="124142475"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 11 May 2022 10:25:21 +0800
+Received: from G08CNEXMBPEKD06.g08.fujitsu.local (unknown [10.167.33.206])
+        by cn.fujitsu.com (Postfix) with ESMTP id 1CE594D1718C;
+        Wed, 11 May 2022 10:25:20 +0800 (CST)
+Received: from G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) by
+ G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Wed, 11 May 2022 10:25:18 +0800
+Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
+ G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Wed, 11 May 2022 10:25:19 +0800
+Received: from irides.mr.mr (10.167.225.141) by
+ G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Wed, 11 May 2022 10:25:17 +0800
+From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
+        <nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
+        <linux-fsdevel@vger.kernel.org>
+CC:     <djwong@kernel.org>, <dan.j.williams@intel.com>,
+        <david@fromorbit.com>, <hch@infradead.org>, <jane.chu@oracle.com>,
+        <rgoldwyn@suse.de>, <viro@zeniv.linux.org.uk>,
+        <willy@infradead.org>, <naoya.horiguchi@nec.com>,
+        <linmiaohe@huawei.com>, Christoph Hellwig <hch@lst.de>
+Subject: [PATCH v11.1 06/07] xfs: support CoW in fsdax mode
+Date:   Wed, 11 May 2022 10:25:17 +0800
+Message-ID: <20220511022517.2087361-1-ruansy.fnst@fujitsu.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220508143620.1775214-14-ruansy.fnst@fujitsu.com>
+References: <20220508143620.1775214-14-ruansy.fnst@fujitsu.com>
 MIME-Version: 1.0
-References: <20220507071954.14455-1-jasowang@redhat.com> <875ymd3fd1.fsf@redhat.com>
-In-Reply-To: <875ymd3fd1.fsf@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 11 May 2022 10:22:59 +0800
-Message-ID: <CACGkMEvfkUpsY4LRTuH7w18DZdq+w3=Ef6b-0sG0XvzVUVKdzg@mail.gmail.com>
-Subject: Re: [PATCH V4 0/9] rework on the IRQ hardening of virtio
-To:     Cornelia Huck <cohuck@redhat.com>
-Cc:     mst <mst@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        eperezma <eperezma@redhat.com>, Cindy Lu <lulu@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-yoursite-MailScanner-ID: 1CE594D1718C.A0FAA
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,126 +81,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 5:29 PM Cornelia Huck <cohuck@redhat.com> wrote:
->
-> On Sat, May 07 2022, Jason Wang <jasowang@redhat.com> wrote:
->
-> > Hi All:
-> >
-> > This is a rework on the IRQ hardening for virtio which is done
-> > previously by the following commits are reverted:
-> >
-> > 9e35276a5344 ("virtio_pci: harden MSI-X interrupts")
-> > 080cd7c3ac87 ("virtio-pci: harden INTX interrupts")
-> >
-> > The reason is that it depends on the IRQF_NO_AUTOEN which may conflict
-> > with the assumption of the affinity managed IRQ that is used by some
-> > virtio drivers. And what's more, it is only done for virtio-pci but
-> > not other transports.
-> >
-> > In this rework, I try to implement a general virtio solution which
-> > borrows the idea of the INTX hardening by re-using per virtqueue
-> > boolean vq->broken and toggle it in virtio_device_ready() and
-> > virtio_reset_device(). Then we can simply reuse the existing checks in
-> > the vring_interrupt() and return early if the driver is not ready.
-> >
-> > Note that, I only did compile test on ccw and MMIO transport.
->
-> Lockdep is unhappy with the ccw parts:
->
-> ================================
-> WARNING: inconsistent lock state
-> 5.18.0-rc6+ #191 Not tainted
-> --------------------------------
-> inconsistent {IN-HARDIRQ-R} -> {HARDIRQ-ON-W} usage.
-> kworker/u4:0/9 [HC0[0]:SC0[0]:HE1:SE1] takes:
-> 00000000058e9618 (&vcdev->irq_lock){+-..}-{2:2}, at: virtio_ccw_synchronize_cbs+0x4e/0x60
-> {IN-HARDIRQ-R} state was registered at:
->   __lock_acquire+0x442/0xc20
->   lock_acquire.part.0+0xdc/0x228
->   lock_acquire+0xa6/0x1b0
->   _raw_read_lock_irqsave+0x72/0x100
->   virtio_ccw_int_handler+0x84/0x238
->   ccw_device_call_handler+0x72/0xd0
->   ccw_device_irq+0x7a/0x198
->   do_cio_interrupt+0x11c/0x1d0
->   __handle_irq_event_percpu+0xc2/0x318
->   handle_irq_event_percpu+0x26/0x68
->   handle_percpu_irq+0x64/0x88
->   generic_handle_irq+0x40/0x58
->   do_irq_async+0x56/0xb0
->   do_io_irq+0x82/0x160
->   io_int_handler+0xe6/0x120
->   rcu_read_lock_sched_held+0x3e/0xb0
->   lock_acquired+0x12e/0x208
->   new_inode+0x3e/0xd0
->   debugfs_get_inode+0x22/0x68
->   __debugfs_create_file+0x78/0x1c0
->   debugfs_create_file_unsafe+0x36/0x58
->   debugfs_create_u32+0x38/0x68
->   sched_init_debug+0xb0/0x1c0
->   do_one_initcall+0x108/0x280
->   do_initcalls+0x124/0x148
->   kernel_init_freeable+0x242/0x280
->   kernel_init+0x2e/0x158
->   __ret_from_fork+0x3c/0x50
->   ret_from_fork+0xa/0x40
-> irq event stamp: 539789
-> hardirqs last  enabled at (539789): [<0000000000d9c632>] _raw_spin_unlock_irqrestore+0x72/0x88
-> hardirqs last disabled at (539788): [<0000000000d9c2b6>] _raw_spin_lock_irqsave+0x96/0xd0
-> softirqs last  enabled at (539568): [<0000000000d9e0d4>] __do_softirq+0x434/0x588
-> softirqs last disabled at (539503): [<000000000018cd66>] __irq_exit_rcu+0x146/0x170
->
-> other info that might help us debug this:
->  Possible unsafe locking scenario:
->
->        CPU0
->        ----
->   lock(&vcdev->irq_lock);
->   <Interrupt>
->     lock(&vcdev->irq_lock);
->
->  *** DEADLOCK ***
+In fsdax mode, WRITE and ZERO on a shared extent need CoW performed.
+After that, new allocated extents needs to be remapped to the file.
+So, add a CoW identification in ->iomap_begin(), and implement
+->iomap_end() to do the remapping work.
 
-It looks to me we need to use write_lock_irq()/write_unlock_irq() to
-do the synchronization.
+Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+---
+ fs/xfs/xfs_file.c  | 33 ++++++++++++++++++++++++++++-----
+ fs/xfs/xfs_iomap.c | 30 +++++++++++++++++++++++++++++-
+ fs/xfs/xfs_iomap.h |  1 +
+ 3 files changed, 58 insertions(+), 6 deletions(-)
 
-And we probably need to keep the
-read_lock_irqsave()/read_lock_irqrestore() logic since I can see the
-virtio_ccw_int_handler() to be called from process context (e.g from
-the io_subchannel_quiesce()).
+diff --git a/fs/xfs/xfs_file.c b/fs/xfs/xfs_file.c
+index af954a5b71f8..fe9f92586acf 100644
+--- a/fs/xfs/xfs_file.c
++++ b/fs/xfs/xfs_file.c
+@@ -25,6 +25,7 @@
+ #include "xfs_iomap.h"
+ #include "xfs_reflink.h"
+ 
++#include <linux/dax.h>
+ #include <linux/falloc.h>
+ #include <linux/backing-dev.h>
+ #include <linux/mman.h>
+@@ -669,7 +670,7 @@ xfs_file_dax_write(
+ 	pos = iocb->ki_pos;
+ 
+ 	trace_xfs_file_dax_write(iocb, from);
+-	ret = dax_iomap_rw(iocb, from, &xfs_direct_write_iomap_ops);
++	ret = dax_iomap_rw(iocb, from, &xfs_dax_write_iomap_ops);
+ 	if (ret > 0 && iocb->ki_pos > i_size_read(inode)) {
+ 		i_size_write(inode, iocb->ki_pos);
+ 		error = xfs_setfilesize(ip, pos, ret);
+@@ -1254,6 +1255,31 @@ xfs_file_llseek(
+ 	return vfs_setpos(file, offset, inode->i_sb->s_maxbytes);
+ }
+ 
++#ifdef CONFIG_FS_DAX
++int
++xfs_dax_fault(
++	struct vm_fault		*vmf,
++	enum page_entry_size	pe_size,
++	bool			write_fault,
++	pfn_t			*pfn)
++{
++	return dax_iomap_fault(vmf, pe_size, pfn, NULL,
++			(write_fault && !vmf->cow_page) ?
++				&xfs_dax_write_iomap_ops :
++				&xfs_read_iomap_ops);
++}
++#else
++int
++xfs_dax_fault(
++	struct vm_fault		*vmf,
++	enum page_entry_size	pe_size,
++	bool			write_fault,
++	pfn_t			*pfn)
++{
++	return 0;
++}
++#endif
++
+ /*
+  * Locking for serialisation of IO during page faults. This results in a lock
+  * ordering of:
+@@ -1285,10 +1311,7 @@ __xfs_filemap_fault(
+ 		pfn_t pfn;
+ 
+ 		xfs_ilock(XFS_I(inode), XFS_MMAPLOCK_SHARED);
+-		ret = dax_iomap_fault(vmf, pe_size, &pfn, NULL,
+-				(write_fault && !vmf->cow_page) ?
+-				 &xfs_direct_write_iomap_ops :
+-				 &xfs_read_iomap_ops);
++		ret = xfs_dax_fault(vmf, pe_size, write_fault, &pfn);
+ 		if (ret & VM_FAULT_NEEDDSYNC)
+ 			ret = dax_finish_sync_fault(vmf, pe_size, pfn);
+ 		xfs_iunlock(XFS_I(inode), XFS_MMAPLOCK_SHARED);
+diff --git a/fs/xfs/xfs_iomap.c b/fs/xfs/xfs_iomap.c
+index 5a393259a3a3..4c07f5e718fb 100644
+--- a/fs/xfs/xfs_iomap.c
++++ b/fs/xfs/xfs_iomap.c
+@@ -773,7 +773,8 @@ xfs_direct_write_iomap_begin(
+ 
+ 		/* may drop and re-acquire the ilock */
+ 		error = xfs_reflink_allocate_cow(ip, &imap, &cmap, &shared,
+-				&lockmode, flags & IOMAP_DIRECT);
++				&lockmode,
++				(flags & IOMAP_DIRECT) || IS_DAX(inode));
+ 		if (error)
+ 			goto out_unlock;
+ 		if (shared)
+@@ -867,6 +868,33 @@ const struct iomap_ops xfs_direct_write_iomap_ops = {
+ 	.iomap_begin		= xfs_direct_write_iomap_begin,
+ };
+ 
++static int
++xfs_dax_write_iomap_end(
++	struct inode		*inode,
++	loff_t			pos,
++	loff_t			length,
++	ssize_t			written,
++	unsigned		flags,
++	struct iomap		*iomap)
++{
++	struct xfs_inode	*ip = XFS_I(inode);
++
++	if (!xfs_is_cow_inode(ip))
++		return 0;
++
++	if (!written) {
++		xfs_reflink_cancel_cow_range(ip, pos, length, true);
++		return 0;
++	}
++
++	return xfs_reflink_end_cow(ip, pos, written);
++}
++
++const struct iomap_ops xfs_dax_write_iomap_ops = {
++	.iomap_begin	= xfs_direct_write_iomap_begin,
++	.iomap_end	= xfs_dax_write_iomap_end,
++};
++
+ static int
+ xfs_buffered_write_iomap_begin(
+ 	struct inode		*inode,
+diff --git a/fs/xfs/xfs_iomap.h b/fs/xfs/xfs_iomap.h
+index e88dc162c785..c782e8c0479c 100644
+--- a/fs/xfs/xfs_iomap.h
++++ b/fs/xfs/xfs_iomap.h
+@@ -51,5 +51,6 @@ extern const struct iomap_ops xfs_direct_write_iomap_ops;
+ extern const struct iomap_ops xfs_read_iomap_ops;
+ extern const struct iomap_ops xfs_seek_iomap_ops;
+ extern const struct iomap_ops xfs_xattr_iomap_ops;
++extern const struct iomap_ops xfs_dax_write_iomap_ops;
+ 
+ #endif /* __XFS_IOMAP_H__*/
+-- 
+2.35.1
 
-Thanks
 
->
-> 2 locks held by kworker/u4:0/9:
->  #0: 000000000288d948 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x1ea/0x658
->  #1: 000003800004bdc8 ((work_completion)(&entry->work)){+.+.}-{0:0}, at: process_one_work+0x1ea/0x658
->
-> stack backtrace:
-> CPU: 1 PID: 9 Comm: kworker/u4:0 Not tainted 5.18.0-rc6+ #191
-> Hardware name: QEMU 8561 QEMU (KVM/Linux)
-> Workqueue: events_unbound async_run_entry_fn
-> Call Trace:
->  [<0000000000d8af22>] dump_stack_lvl+0x92/0xd0
->  [<00000000002032ac>] mark_lock_irq+0x864/0x968
->  [<0000000000203670>] mark_lock.part.0+0x2c0/0x790
->  [<0000000000203cea>] mark_usage+0x10a/0x178
->  [<000000000020692a>] __lock_acquire+0x442/0xc20
->  [<0000000000207cc4>] lock_acquire.part.0+0xdc/0x228
->  [<0000000000207eb6>] lock_acquire+0xa6/0x1b0
->  [<0000000000d9c774>] _raw_write_lock+0x54/0xa8
->  [<0000000000d5a1f6>] virtio_ccw_synchronize_cbs+0x4e/0x60
->  [<00000000008eec04>] register_virtio_device+0xdc/0x1b0
->  [<0000000000d5aabe>] virtio_ccw_online+0x246/0x2e8
->  [<0000000000c9fecc>] ccw_device_set_online+0x1c4/0x540
->  [<0000000000d5a05e>] virtio_ccw_auto_online+0x26/0x50
->  [<00000000001ba2b0>] async_run_entry_fn+0x40/0x108
->  [<00000000001ab9b4>] process_one_work+0x2a4/0x658
->  [<00000000001abdd0>] worker_thread+0x68/0x440
->  [<00000000001b4668>] kthread+0x128/0x130
->  [<0000000000102fac>] __ret_from_fork+0x3c/0x50
->  [<0000000000d9d3aa>] ret_from_fork+0xa/0x40
-> INFO: lockdep is turned off.
->
 

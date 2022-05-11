@@ -2,92 +2,330 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508E0523155
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13512523158
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234323AbiEKLTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 07:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39176 "EHLO
+        id S230292AbiEKLUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 07:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232140AbiEKLT2 (ORCPT
+        with ESMTP id S234983AbiEKLUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 07:19:28 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE71F703C1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:19:27 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id v59so3293122ybi.12
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:19:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yQGeRKstKMwle+FFENjDqj/4DWnPwpCL9cdUs5k3wq8=;
-        b=cl6G1xs8S2DBnMExmfplmkS+v3ZwHXxin4dhUJqoE+TixyjEpJFSmHj/6I8mWpYkWM
-         /ZoJFQlqyvcjR24HJ93y579e3MR2Oy0Do+2rFAYonByg4rWr1eZrCOk5tJdYvvXkvREw
-         J7hs16H3XaOmewYXqPuVKzAzHvlGgnGBIMIIs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yQGeRKstKMwle+FFENjDqj/4DWnPwpCL9cdUs5k3wq8=;
-        b=zrwgRplqePZzbjXfEElRjEL1gEACRNgeeKFkFe1hoMsRoSUYrRIKckKzDAUcdfil7A
-         66kQgf3y8inmac+Y+FPIbODTuPlvby9nJAocvxgaHKL5EuxoxWZzffgRzMTv/NB/35IV
-         hzBFU9XaJE6pGxHqi+PUFqHYDrbjUZgxtrMFdeYKPHNsQLumxo00/nCyWv35T/WkAkSR
-         1pmwIlp/YPq8lvAy3HjXL6xAwXuVQ9pGSdnyi4EEuAzb6KE7RQ+WRRlcJ0v4lO9094FU
-         hGR9m8/b0M6lnrsJrxAZI5D120G8kffxuXLs3B5bA2bHT5vwRWp0Psmie8CaNV6U2bdo
-         XE4Q==
-X-Gm-Message-State: AOAM533HWCvMC4msS6ZjmGJUsLJBIsPQdKX7EselatUjL7967FSxajPE
-        q9o+IwBgAl992QIgPiNcJ4+Jpoi82s/0f+eNNcNYOQ==
-X-Google-Smtp-Source: ABdhPJy6dJ80HM/NWK6pxo9H8JX41aVVI3gTyJa9azUE6OxSQWZloSGluI7DV3dtaIWgbmFLH/QzRxwBbp1tFvNfzdM=
-X-Received: by 2002:a25:cfc5:0:b0:647:39d4:49f5 with SMTP id
- f188-20020a25cfc5000000b0064739d449f5mr22874248ybg.595.1652267966978; Wed, 11
- May 2022 04:19:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220511013057.245827-1-dlunev@chromium.org> <CAJfpegsmyY+D4kK3ov51FLGA=RkyGDKMcYiMo2zBqYuFNs78JQ@mail.gmail.com>
- <CAONX=-dqY64VkqF6cNYvm8t-ad8XRqDhELP9icfPTPD2iLobLA@mail.gmail.com>
- <CAJfpegvUZheWb3eJwVrpBDYzwQH=zQsuq9R8mpcXb3fqzzEdiQ@mail.gmail.com>
- <CAONX=-cxA-tZOSo33WK9iJU61yeDX8Ct_PwOMD=5WXLYTJ-Mjg@mail.gmail.com> <CAJfpegsNwsWJC+x8jL6kDzYhENQQ+aUYAV9wkdpQNT-FNMXyAg@mail.gmail.com>
-In-Reply-To: <CAJfpegsNwsWJC+x8jL6kDzYhENQQ+aUYAV9wkdpQNT-FNMXyAg@mail.gmail.com>
-From:   Daniil Lunev <dlunev@chromium.org>
-Date:   Wed, 11 May 2022 21:19:16 +1000
-Message-ID: <CAONX=-d9nfYpPkbiVcaEsCQT1ZpwAN5ry8BYKBA6YoBvm7tPfg@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Prevent re-use of FUSE superblock after force unmount
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     linux-fsdevel@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>
+        Wed, 11 May 2022 07:20:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 377EC7355C
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:20:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652268003;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HT/aayjtxnxri+I4R2eJXKoETFsrCiTHMp8tjP4NNzY=;
+        b=JOcaA5rbKtKanwIwy+lA+1D5KSTHmxjgVIOiuM4IEuciZ4ftG29s1muuF4wZncAvz6gi/V
+        qm3czu+D7HZgeFN1YduY6dazWN2l82nbfgR9hd+xdAKHwjWT5nCeHpHTA4QsUjda47F8QS
+        fm8JwYHFoD8JfxdhaX05Steg64ELXdI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-203-Hqh_b0vUPcO_PQdRSECnMw-1; Wed, 11 May 2022 07:19:59 -0400
+X-MC-Unique: Hqh_b0vUPcO_PQdRSECnMw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 53BD2100BAA1;
+        Wed, 11 May 2022 11:19:59 +0000 (UTC)
+Received: from starship (unknown [10.40.192.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0DCD040CF8E4;
+        Wed, 11 May 2022 11:19:56 +0000 (UTC)
+Message-ID: <fdcba8b4aed2956e9bfc92ada2170f481a85a362.camel@redhat.com>
+Subject: Re: [PATCH v3 02/34] KVM: x86: hyper-v: Introduce TLB flush ring
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 11 May 2022 14:19:55 +0300
+In-Reply-To: <20220414132013.1588929-3-vkuznets@redhat.com>
+References: <20220414132013.1588929-1-vkuznets@redhat.com>
+         <20220414132013.1588929-3-vkuznets@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> At a glance it's a gross hack.   I can think of more than one way in
-> which this could be achieved without adding a new field to struct
-> super_block.
-Can you advise what would be a better way to achieve that?
+On Thu, 2022-04-14 at 15:19 +0200, Vitaly Kuznetsov wrote:
+> To allow flushing individual GVAs instead of always flushing the whole
+> VPID a per-vCPU structure to pass the requests is needed. Introduce a
+> simple ring write-locked structure to hold two types of entries:
+> individual GVA (GFN + up to 4095 following GFNs in the lower 12 bits)
+> and 'flush all'.
+> 
+> The queuing rule is: if there's not enough space on the ring to put
+> the request and leave at least 1 entry for 'flush all' - put 'flush
+> all' entry.
+> 
+> The size of the ring is arbitrary set to '16'.
+> 
+> Note, kvm_hv_flush_tlb() only queues 'flush all' entries for now so
+> there's very small functional change but the infrastructure is
+> prepared to handle individual GVA flush requests.
 
-> But...  what I'd really prefer is if the underlying issue of fuse vs.
-> suspend was properly addressed instead of adding band-aids.  And that
-> takes lots more resources, for sure, and the result is not guaranteed.
-> But you could at least give it a try.
-We do have a limited success with userspace level sequencing of processes,
-but on the kernel level - it is all quite untrivial, as you mentioned.
-I did some
-research, and what I found pretty much a 9 years old thread which went
-nowhere at the end [1]. We would also prefer if suspend just worked (and
-we have a person looking into what is actually breaking with suspend), but
-there is an unbounded amount of time for how long the investigation and
-search for a solution may be ongoing given the complexity of the problem,
-and in the meantime there is no way to work around the problem.
+As I see from this patch, also the code doesn't process the requests
+from the ring buffer yet, but rather just ignores it completely,
+and resets the whole ring buffer (kvm_hv_vcpu_empty_flush_tlb)
+Maybe you should mention it here.
 
-Thanks,
-Daniil
 
-[1] https://linux-kernel.vger.kernel.narkive.com/UeBWfN1V/patch-fuse-make-fuse-daemon-frozen-along-with-kernel-threads
+> 
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h | 16 +++++++
+>  arch/x86/kvm/hyperv.c           | 83 +++++++++++++++++++++++++++++++++
+>  arch/x86/kvm/hyperv.h           | 13 ++++++
+>  arch/x86/kvm/x86.c              |  5 +-
+>  arch/x86/kvm/x86.h              |  1 +
+>  5 files changed, 116 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 1de3ad9308d8..b4dd2ff61658 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -578,6 +578,20 @@ struct kvm_vcpu_hv_synic {
+>  	bool dont_zero_synic_pages;
+>  };
+>  
+> +#define KVM_HV_TLB_FLUSH_RING_SIZE (16)
+> +
+> +struct kvm_vcpu_hv_tlb_flush_entry {
+> +	u64 addr;
+> +	u64 flush_all:1;
+> +	u64 pad:63;
+> +};
+
+Have you considered using kfifo.h library instead?
+
+> +
+> +struct kvm_vcpu_hv_tlb_flush_ring {
+> +	int read_idx, write_idx;
+> +	spinlock_t write_lock;
+> +	struct kvm_vcpu_hv_tlb_flush_entry entries[KVM_HV_TLB_FLUSH_RING_SIZE];
+> +};
+> +
+>  /* Hyper-V per vcpu emulation context */
+>  struct kvm_vcpu_hv {
+>  	struct kvm_vcpu *vcpu;
+> @@ -597,6 +611,8 @@ struct kvm_vcpu_hv {
+>  		u32 enlightenments_ebx; /* HYPERV_CPUID_ENLIGHTMENT_INFO.EBX */
+>  		u32 syndbg_cap_eax; /* HYPERV_CPUID_SYNDBG_PLATFORM_CAPABILITIES.EAX */
+>  	} cpuid_cache;
+> +
+> +	struct kvm_vcpu_hv_tlb_flush_ring tlb_flush_ring;
+>  };
+>  
+>  /* Xen HVM per vcpu emulation context */
+> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+> index b402ad059eb9..fb716cf919ed 100644
+> --- a/arch/x86/kvm/hyperv.c
+> +++ b/arch/x86/kvm/hyperv.c
+> @@ -29,6 +29,7 @@
+>  #include <linux/kvm_host.h>
+>  #include <linux/highmem.h>
+>  #include <linux/sched/cputime.h>
+> +#include <linux/spinlock.h>
+>  #include <linux/eventfd.h>
+>  
+>  #include <asm/apicdef.h>
+> @@ -954,6 +955,8 @@ static int kvm_hv_vcpu_init(struct kvm_vcpu *vcpu)
+>  
+>  	hv_vcpu->vp_index = vcpu->vcpu_idx;
+>  
+> +	spin_lock_init(&hv_vcpu->tlb_flush_ring.write_lock);
+> +
+>  	return 0;
+>  }
+>  
+> @@ -1789,6 +1792,74 @@ static u64 kvm_get_sparse_vp_set(struct kvm *kvm, struct kvm_hv_hcall *hc,
+>  			      var_cnt * sizeof(*sparse_banks));
+>  }
+>  
+> +static inline int hv_tlb_flush_ring_free(struct kvm_vcpu_hv *hv_vcpu,
+> +					 int read_idx, int write_idx)
+> +{
+> +	if (write_idx >= read_idx)
+> +		return KVM_HV_TLB_FLUSH_RING_SIZE - (write_idx - read_idx) - 1;
+> +
+> +	return read_idx - write_idx - 1;
+> +}
+> +
+> +static void hv_tlb_flush_ring_enqueue(struct kvm_vcpu *vcpu)
+> +{
+> +	struct kvm_vcpu_hv_tlb_flush_ring *tlb_flush_ring;
+> +	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> +	int ring_free, write_idx, read_idx;
+> +	unsigned long flags;
+> +
+> +	if (!hv_vcpu)
+> +		return;
+> +
+> +	tlb_flush_ring = &hv_vcpu->tlb_flush_ring;
+> +
+> +	spin_lock_irqsave(&tlb_flush_ring->write_lock, flags);
+> +
+> +	/*
+> +	 * 'read_idx' is updated by the vCPU which does the flush, this
+> +	 * happens without 'tlb_flush_ring->write_lock' being held; make
+> +	 * sure we read it once.
+> +	 */
+> +	read_idx = READ_ONCE(tlb_flush_ring->read_idx);
+> +	/*
+> +	 * 'write_idx' is only updated here, under 'tlb_flush_ring->write_lock'.
+> +	 * allow the compiler to re-read it, it can't change.
+> +	 */
+> +	write_idx = tlb_flush_ring->write_idx;
+> +
+> +	ring_free = hv_tlb_flush_ring_free(hv_vcpu, read_idx, write_idx);
+> +	/* Full ring always contains 'flush all' entry */
+> +	if (!ring_free)
+> +		goto out_unlock;
+> +
+> +	tlb_flush_ring->entries[write_idx].addr = 0;
+> +	tlb_flush_ring->entries[write_idx].flush_all = 1;
+> +	/*
+> +	 * Advance write index only after filling in the entry to
+> +	 * synchronize with lockless reader.
+> +	 */
+> +	smp_wmb();
+> +	tlb_flush_ring->write_idx = (write_idx + 1) % KVM_HV_TLB_FLUSH_RING_SIZE;
+> +
+> +out_unlock:
+> +	spin_unlock_irqrestore(&tlb_flush_ring->write_lock, flags);
+> +}
+> +
+> +void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu)
+> +{
+> +	struct kvm_vcpu_hv_tlb_flush_ring *tlb_flush_ring;
+> +	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> +
+> +	kvm_vcpu_flush_tlb_guest(vcpu);
+> +
+> +	if (!hv_vcpu)
+> +		return;
+> +
+> +	tlb_flush_ring = &hv_vcpu->tlb_flush_ring;
+> +
+> +	tlb_flush_ring->read_idx = tlb_flush_ring->write_idx;
+> +}
+> +
+>  static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>  {
+>  	struct kvm *kvm = vcpu->kvm;
+> @@ -1797,6 +1868,8 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>  	DECLARE_BITMAP(vcpu_mask, KVM_MAX_VCPUS);
+>  	u64 valid_bank_mask;
+>  	u64 sparse_banks[KVM_HV_MAX_SPARSE_VCPU_SET_BITS];
+> +	struct kvm_vcpu *v;
+> +	unsigned long i;
+>  	bool all_cpus;
+>  
+>  	/*
+> @@ -1876,10 +1949,20 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>  	 * analyze it here, flush TLB regardless of the specified address space.
+>  	 */
+>  	if (all_cpus) {
+> +		kvm_for_each_vcpu(i, v, kvm)
+> +			hv_tlb_flush_ring_enqueue(v);
+> +
+>  		kvm_make_all_cpus_request(kvm, KVM_REQ_HV_TLB_FLUSH);
+>  	} else {
+>  		sparse_set_to_vcpu_mask(kvm, sparse_banks, valid_bank_mask, vcpu_mask);
+>  
+> +		for_each_set_bit(i, vcpu_mask, KVM_MAX_VCPUS) {
+> +			v = kvm_get_vcpu(kvm, i);
+> +			if (!v)
+> +				continue;
+> +			hv_tlb_flush_ring_enqueue(v);
+> +		}
+> +
+>  		kvm_make_vcpus_request_mask(kvm, KVM_REQ_HV_TLB_FLUSH, vcpu_mask);
+>  	}
+>  
+> diff --git a/arch/x86/kvm/hyperv.h b/arch/x86/kvm/hyperv.h
+> index da2737f2a956..6847caeaaf84 100644
+> --- a/arch/x86/kvm/hyperv.h
+> +++ b/arch/x86/kvm/hyperv.h
+> @@ -147,4 +147,17 @@ int kvm_vm_ioctl_hv_eventfd(struct kvm *kvm, struct kvm_hyperv_eventfd *args);
+>  int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
+>  		     struct kvm_cpuid_entry2 __user *entries);
+>  
+> +
+> +static inline void kvm_hv_vcpu_empty_flush_tlb(struct kvm_vcpu *vcpu)
+> +{
+> +	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> +
+> +	if (!hv_vcpu)
+> +		return;
+> +
+> +	hv_vcpu->tlb_flush_ring.read_idx = hv_vcpu->tlb_flush_ring.write_idx;
+> +}
+> +void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu);
+> +
+> +
+>  #endif
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index f633cff8cd7f..e5aec386d299 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -3324,7 +3324,7 @@ static void kvm_vcpu_flush_tlb_all(struct kvm_vcpu *vcpu)
+>  	static_call(kvm_x86_flush_tlb_all)(vcpu);
+>  }
+>  
+> -static void kvm_vcpu_flush_tlb_guest(struct kvm_vcpu *vcpu)
+> +void kvm_vcpu_flush_tlb_guest(struct kvm_vcpu *vcpu)
+>  {
+>  	++vcpu->stat.tlb_flush;
+>  
+> @@ -3362,7 +3362,8 @@ void kvm_service_local_tlb_flush_requests(struct kvm_vcpu *vcpu)
+>  
+>  	if (kvm_check_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu)) {
+>  		kvm_vcpu_flush_tlb_guest(vcpu);
+> -		kvm_clear_request(KVM_REQ_HV_TLB_FLUSH, vcpu);
+> +		if (kvm_check_request(KVM_REQ_HV_TLB_FLUSH, vcpu))
+> +			kvm_hv_vcpu_empty_flush_tlb(vcpu);
+>  	} else if (kvm_check_request(KVM_REQ_HV_TLB_FLUSH, vcpu)) {
+>  		kvm_vcpu_flush_tlb_guest(vcpu);
+>  	}
+> diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
+> index 588792f00334..2324f496c500 100644
+> --- a/arch/x86/kvm/x86.h
+> +++ b/arch/x86/kvm/x86.h
+> @@ -58,6 +58,7 @@ static inline unsigned int __shrink_ple_window(unsigned int val,
+>  
+>  #define MSR_IA32_CR_PAT_DEFAULT  0x0007040600070406ULL
+>  
+> +void kvm_vcpu_flush_tlb_guest(struct kvm_vcpu *vcpu);
+>  void kvm_service_local_tlb_flush_requests(struct kvm_vcpu *vcpu);
+>  int kvm_check_nested_events(struct kvm_vcpu *vcpu);
+>  
+
+
+Overall looks good to me. I might have missed something though.
+
+Best regards,
+	Maxim Levitsky
+
+

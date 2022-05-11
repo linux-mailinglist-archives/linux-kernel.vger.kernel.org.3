@@ -2,74 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B6252374C
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 461F0523752
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:29:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244919AbiEKP1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59494 "EHLO
+        id S1343657AbiEKP3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235284AbiEKP1o (ORCPT
+        with ESMTP id S232535AbiEKP31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:27:44 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86AF9377D2
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:27:43 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id p18so2993237edr.7
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:27:43 -0700 (PDT)
+        Wed, 11 May 2022 11:29:27 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABF5506FC
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:29:26 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id j6so4754818ejc.13
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:29:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=+uroO/vY6XG1xI1X9Ud5Dc476KAfJP3kX2168zNzYO4=;
-        b=fk1P5MGNZl3h9gT/nk2Obg3HmrryEHaslAi7OhrMkdNeVA7xAZBZr30WxMACYnUOyn
-         7UkJGnNIy0nvFOqAmuFyuvYCrHTBjjmmjEaWyarProKucTZzxeRY+UoqKHheTPgwyY/P
-         5/PUCzZ6A3xEXfap2TCG6EHAZgOCOl5Xh0eFKeDgO1oDfYR+5VwEA6oJDSEPIpPEZLEo
-         sDO5y+6zTdcMaUbYDU2e/sj9nUsPpYNHnCYiqfVU3SuBFjR4ABn/oDvsysAlU9CDU3nx
-         QD6H/Gk4grGiQchcEvi6PxhHdhzKBbq3PsPqdsBiDUU08NHEyYqUZcaYWgaAbtY8wcyw
-         lWYA==
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=s+PYKCP0VxPrhof8W+toqvnXxAanU57RHAbD7l77DgI=;
+        b=IWTe7UipHXQkBN8PdQfhJC1eMRMEYnSbXPR8Gdz7PRuj3FyFpxp/OcxjNKk1YOUxPC
+         Sh88iSHptcwPaLwBscMWki+R+mE7FH3earfGNcNIjBpBaTU+jR9FL/RV4MJGuV91A3B+
+         P9NN3stKCccQpdjCLGt03mky+yGrtKPQFXvgk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+uroO/vY6XG1xI1X9Ud5Dc476KAfJP3kX2168zNzYO4=;
-        b=50BSJoWSnq4FWGX3IYUPyTr0HEb3I8JDVp/Rqimk7pcsz3IEWAw9M2M2EXfzhPJk8L
-         5ObP6Vd0NdU7q49EWc1prDzSYpM4J/ErAR2QDWPC2KwRcB+1SvXvH0RfUEhBnnA5x9lP
-         nK7/sP1bHutc7m7fly7DH9sSHBERypUkI7COGokZWEViFDmvJNKgw/AcolcInoSGbeg5
-         9Ik2S8KVKuluBwW1RTBuWhUZ6TkklKRXeojNdfOENC0gGB/7zNkDOQODrwTx1CKAkXPL
-         +2/2ETveY6ethum/gMNmXVRIJFIwomtowYiFeLksvRa/XUMI9blRgTMFM81oiam1rojo
-         yX8w==
-X-Gm-Message-State: AOAM532w/0m6lBIJwLai32EhDmXcupLV7vQhpzT7r1yNr6iV2K3y3xf6
-        aJ1aRBD9bWGlOR9S1Hq5vV3HKg==
-X-Google-Smtp-Source: ABdhPJy96CstkysGFwN7nKsEZRY2/Sn2Wy/P5Gpj3mO5AwWu9FxTZSfFYCIVl9B5iV03G2Qb26uzaA==
-X-Received: by 2002:a50:9f06:0:b0:425:c1ba:5037 with SMTP id b6-20020a509f06000000b00425c1ba5037mr30308853edf.285.1652282862097;
-        Wed, 11 May 2022 08:27:42 -0700 (PDT)
-Received: from [192.168.0.154] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id bd23-20020a056402207700b0042617ba63a3sm1291335edb.45.2022.05.11.08.27.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 08:27:41 -0700 (PDT)
-Message-ID: <75ce6291-77c7-c932-e8bb-a8bbae02431d@linaro.org>
-Date:   Wed, 11 May 2022 17:27:40 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=s+PYKCP0VxPrhof8W+toqvnXxAanU57RHAbD7l77DgI=;
+        b=7Ukiydi5k+R5vZfnTBP/AhWDnNTmcSVQjXXIK7fDVwzOzAIdru7BP3vour3UObnUDZ
+         DsqXYSu4qSJtnRXCFEDFmdwZYGMdAmW6EQ3OiD/x46lyF25udgcnfKVhxN/7Uhy8GeOg
+         CUCYUcK/Wp12SrHrYwTP+gQbcGYBfMXFZHDFrtLZUR+PH+go6fAbaOl8jJ2hiOfGeqmz
+         DX79RkfQowxhpNTJqKwE6Fpkf8nWKIpmf4uk2Rvt9P/UoLaBsBo3QtIxH2wYYFPt+kpU
+         iK9lnkbghrQUAEBYN60iyorEvjXzjXx4XvhJBWgltzUgZZel7T8UzL+G26L2qVeOQgi+
+         5bbg==
+X-Gm-Message-State: AOAM532NRMxAW0FJ7vYJ7IYQwVS4n/riFQ5VywtGE9TZL46SwCa2kQ0H
+        CdATDK6nX71ziA8etG8RgTUmyw==
+X-Google-Smtp-Source: ABdhPJzmlpdWZcTGU3RHeV4fO0NfsUHwc/ReUopPeDyKHr8b/GmCISDJ3mmVCUJ5IGl+9IXtrW0lxQ==
+X-Received: by 2002:a17:906:a888:b0:6f3:e990:e554 with SMTP id ha8-20020a170906a88800b006f3e990e554mr25472357ejb.19.1652282964566;
+        Wed, 11 May 2022 08:29:24 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id p22-20020a1709060e9600b006f3ef214dd0sm1106685ejf.54.2022.05.11.08.29.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 08:29:23 -0700 (PDT)
+Date:   Wed, 11 May 2022 17:29:21 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Christian =?iso-8859-1?Q?K=F6nig?= 
+        <ckoenig.leichtzumerken@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Stone <daniel@fooishbar.org>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v4 10/15] drm/shmem-helper: Take reservation lock instead
+ of drm_gem_shmem locks
+Message-ID: <YnvWUbh5QDDs6u2B@phenom.ffwll.local>
+Mail-Followup-To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Stone <daniel@fooishbar.org>,
+        David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>, Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dmitry Osipenko <digetx@gmail.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+References: <8f932ab0-bb72-8fea-4078-dc59e9164bd4@collabora.com>
+ <YnI3lE0TxLfZaQjE@phenom.ffwll.local>
+ <01506516-ab2f-cb6e-7507-f2a3295efb59@collabora.com>
+ <YnOHAh9I1ds4+1J+@phenom.ffwll.local>
+ <83e68918-68de-c0c6-6f9b-e94d34b19383@collabora.com>
+ <YnkaUk0mZNuPsZ5r@phenom.ffwll.local>
+ <4d08b382-0076-1ea2-b565-893d50b453cb@collabora.com>
+ <YnuziJDmXVR09UzP@phenom.ffwll.local>
+ <56787b70-fb64-64da-6006-d3aa3ed59d12@gmail.com>
+ <3a362c32-870c-1d73-bba6-bbdcd62dc326@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/2] dt-bindings: microchip-otpc: document Microchip OTPC
-Content-Language: en-US
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
-        srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
-        krzk+dt@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220510094457.4070764-1-claudiu.beznea@microchip.com>
- <20220510094457.4070764-2-claudiu.beznea@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220510094457.4070764-2-claudiu.beznea@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3a362c32-870c-1d73-bba6-bbdcd62dc326@collabora.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,132 +124,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/05/2022 11:44, Claudiu Beznea wrote:
-> Document Microchip OTP controller.
+On Wed, May 11, 2022 at 06:14:00PM +0300, Dmitry Osipenko wrote:
+> On 5/11/22 17:24, Christian König wrote:
+> > Am 11.05.22 um 15:00 schrieb Daniel Vetter:
+> >> On Tue, May 10, 2022 at 04:39:53PM +0300, Dmitry Osipenko wrote:
+> >>> [SNIP]
+> >>> Since vmapping implies implicit pinning, we can't use a separate lock in
+> >>> drm_gem_shmem_vmap() because we need to protect the
+> >>> drm_gem_shmem_get_pages(), which is invoked by drm_gem_shmem_vmap() to
+> >>> pin the pages and requires the dma_resv_lock to be locked.
+> >>>
+> >>> Hence the problem is:
+> >>>
+> >>> 1. If dma-buf importer holds the dma_resv_lock and invokes
+> >>> dma_buf_vmap() -> drm_gem_shmem_vmap(), then drm_gem_shmem_vmap() shall
+> >>> not take the dma_resv_lock.
+> >>>
+> >>> 2. Since dma-buf locking convention isn't specified, we can't assume
+> >>> that dma-buf importer holds the dma_resv_lock around dma_buf_vmap().
+> >>>
+> >>> The possible solutions are:
+> >>>
+> >>> 1. Specify the dma_resv_lock convention for dma-bufs and make all
+> >>> drivers to follow it.
+> >>>
+> >>> 2. Make only DRM drivers to hold dma_resv_lock around dma_buf_vmap().
+> >>> Other non-DRM drivers will get the lockdep warning.
+> >>>
+> >>> 3. Make drm_gem_shmem_vmap() to take the dma_resv_lock and get deadlock
+> >>> if dma-buf importer holds the lock.
+> >>>
+> >>> ...
+> >> Yeah this is all very annoying.
+> > 
+> > Ah, yes that topic again :)
+> > 
+> > I think we could relatively easily fix that by just defining and
+> > enforcing that the dma_resv_lock must have be taken by the caller when
+> > dma_buf_vmap() is called.
+> > 
+> > A two step approach should work:
+> > 1. Move the call to dma_resv_lock() into the dma_buf_vmap() function and
+> > remove all lock taking from the vmap callback implementations.
+> > 2. Move the call to dma_resv_lock() into the callers of dma_buf_vmap()
+> > and enforce that the function is called with the lock held.
 > 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> ---
->  .../bindings/nvmem/microchip-otpc.yaml        | 55 +++++++++++++++++++
->  include/dt-bindings/nvmem/microchip,otpc.h    | 18 ++++++
->  2 files changed, 73 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/nvmem/microchip-otpc.yaml
->  create mode 040000 include/dt-bindings/nvmem
->  create mode 100644 include/dt-bindings/nvmem/microchip,otpc.h
+> I've doubts about the need to move out the dma_resv_lock() into the
+> callers of dma_buf_vmap()..
 > 
-> diff --git a/Documentation/devicetree/bindings/nvmem/microchip-otpc.yaml b/Documentation/devicetree/bindings/nvmem/microchip-otpc.yaml
-> new file mode 100644
-> index 000000000000..a8df7fee5c2b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/nvmem/microchip-otpc.yaml
+> I looked through all the dma_buf_vmap() users and neither of them
+> interacts with dma_resv_lock() at all, i.e. nobody takes the lock
+> in/outside of dma_buf_vmap(). Hence it's easy and more practical to make
+> dma_buf_mmap/vmap() to take the dma_resv_lock by themselves.
 
-vendor,device.yaml
-device should not be a wildcard but first compatible, so
-microchip,sama7g5-otpc.yaml
+i915_gem_dmabuf_vmap -> i915_gem_object_pin_map_unlocked ->
+  i915_gem_object_lock -> dma_resv_lock
 
+And all the ttm drivers should work similarly. So there's definitely
+drivers which grab dma_resv_lock from their vmap callback.
 
-> @@ -0,0 +1,55 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/nvmem/microchip-otpc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microchip SAMA7G5 OTP Controller (OTPC) device tree bindings
+> It's unclear to me which driver may ever want to do the mapping under
+> the dma_resv_lock. But if we will ever have such a driver that will need
+> to map imported buffer under dma_resv_lock, then we could always add the
+> dma_buf_vmap_locked() variant of the function. In this case the locking
+> rule will sound like this:
+> 
+> "All dma-buf importers are responsible for holding the dma-reservation
+> lock around the dmabuf->ops->mmap/vmap() calls."
+> 
+> > It shouldn't be that hard to clean up. The last time I looked into it my
+> > main problem was that we didn't had any easy unit test for it.
+> 
+> Do we have any tests for dma-bufs at all? It's unclear to me what you
+> are going to test in regards to the reservation locks, could you please
+> clarify?
 
-s/device tree bindings//
+Unfortunately not really :-/ Only way really is to grab a driver which
+needs vmap (those are mostly display drivers) on an imported buffer, and
+see what happens.
 
-> +
-> +maintainers:
-> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
-> +
-> +description: |
-> +  This binding represents the OTP controller found on SAMA7G5 SoC.
-
-Entire description is duplicating title. Please describe the hardware or
-skip it.
-
-OTOH, you should mention the header, for example in description.
-
-> +
-> +allOf:
-> +  - $ref: "nvmem.yaml#"
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: microchip,sama7g5-otpc
-> +      - const: syscon
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 1
-
-These come from nvmem.yaml.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/at91.h>
-
-How the clock is used here?
-
-> +    #include <dt-bindings/nvmem/microchip,otpc.h>
-> +
-> +    otpc: efuse@e8c00000 {
-> +        compatible = "microchip,sama7g5-otpc", "syscon";
-> +        reg = <0xe8c00000 0xec>;
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +
-> +        temperature_calib: calib@1 {
-> +            reg = <OTP_PKT(1) OTP_PKT_SAMA7G5_TEMP_CALIB_LEN>;
-> +        };
-> +    };
-> +
-> +...
-> diff --git a/include/dt-bindings/nvmem/microchip,otpc.h b/include/dt-bindings/nvmem/microchip,otpc.h
-> new file mode 100644
-> index 000000000000..44b6ed3b8f18
-> --- /dev/null
-> +++ b/include/dt-bindings/nvmem/microchip,otpc.h
-> @@ -0,0 +1,18 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-
-Same license as bindings.
-
-> +
-> +#ifndef _DT_BINDINGS_NVMEM_MICROCHIP_OTPC_H
-> +#define _DT_BINDINGS_NVMEM_MICROCHIP_OTPC_H
-> +
-> +/*
-> + * Need to have it as a multiple of 4 as NVMEM memory is registered with
-> + * stride = 4.
-> + */
-> +#define OTP_PKT(id)			((id) * 4)
-
-Do I get it correctly - the offset or register address is now part of a
-binding? You write here "id", however you use it as part of "reg", so
-it's confusing.
-
-> +
-> +/*
-> + * Temperature calibration packet length for SAMA7G5: 1 words header,
-> + * 18 words payload.
-> + */
-> +#define OTP_PKT_SAMA7G5_TEMP_CALIB_LEN	(19 * 4)
-
-Length of some memory region also does not look like job for bindings.
-
-Best regards,
-Krzysztof
+2nd best is liberally sprinkling lockdep annotations all over the place
+and throwing it at intel ci (not sure amd ci is accessible to the public)
+and then hoping that's good enough. Stuff like might_lock and
+dma_resv_assert_held.
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

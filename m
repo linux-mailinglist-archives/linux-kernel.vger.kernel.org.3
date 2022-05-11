@@ -2,124 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E26523B15
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A6CA523B1F
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:07:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345305AbiEKRDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 13:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
+        id S1345303AbiEKRHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 13:07:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345296AbiEKRDP (ORCPT
+        with ESMTP id S229967AbiEKRHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 13:03:15 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2716B019
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:03:13 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2ef5380669cso28435257b3.9
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:03:13 -0700 (PDT)
+        Wed, 11 May 2022 13:07:19 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792382AC5E
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:07:18 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id c62so2637566vsc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:07:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=IpFPdO/uhoos0ytjMYOded4nPoWVZB+GddWGBdrYbMs=;
-        b=DftVrELHUbG6fAglpJBSkYraK/JxtyLTYij8BRwZtbKjUIRS9rXC3CRLLTATNg0yT6
-         /BV+kAxtxbvLKnrVBCq0rp4iVtB/4xhip7cMbKBqncF40dKtWBU/O75l6+6mtUQuc9Jf
-         7OqdNr68dN+aTIx2kNYySQZF4SNazr9zk17XEMjMRw6dwpWf8ZA09XtvmjNzAv1U0y1d
-         GEKn6XWp/zxkLAVu5hg1NlJ4KHcUSYtjiCCzmG5lBNHBzItUWlQVzKhpeEGOwAitnl8d
-         uP2bBRoM5MySUSBzHeW1tUa+DBONyCkjwtBe+nX1wiLYnPvzR87oYgJ7gr9jdyn54zaf
-         II6Q==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uPjT4Tguvue9a0veAerAix8NTcDtIksBUNaqTLtFpVY=;
+        b=oxIxs731TckUq39OFqmh2ZtrR6f8sLVnMrH18gQRtD6lH2xniXwZqEBcvirowpPT7d
+         a4x7dACQZsVurhabC77aNfJYHlYNWiwSdacEph6jwylnQ/D/zi0vu+ruzbjx1Fy3Ba8K
+         PNccUNTcP/Dc6LLMaRs1Xq87UhYHnt7WjycpTHB8EECy1zTo1fTqvbCMGN/86vK7Ws0d
+         QE3J+hwb9IszsXRf0INIKjPqY8PdPOSPSlffenAEgYETCUqlqjhJMLOOonyZNn2n3877
+         kqgrAn87aa0PkNl0o1pcUg86V7xx1LL1PUSYkWq9wKIBEAR7MWU1J02p4/OLmx2kngx/
+         9yhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=IpFPdO/uhoos0ytjMYOded4nPoWVZB+GddWGBdrYbMs=;
-        b=LP8cKcVPVqlUlIK6G/EwBmNoXec6uhuSGAvo5PemDN8J4zortoGqGk+xw/4LoxM/VQ
-         t3ZXVTjSAtjC49wxSoTItSux+g7HN0I6S49tWgtE6xFeUF/HwqgiCXgYUY+0Nzdv5Jzo
-         m7fFTGuSAROAZRxoSKfIfhHO/vA6k7tOIAOewUgNM40mSNwL/obnEDsvKZTqgVM1Q2vL
-         7pw6A7e2A5kBbyEb+hPEDz6Q5swGKwgB23sAZj5YbF14wyN+2UMjxdcrmF6ZQm9bQopa
-         yv2Y4vDt8s+js/13h+9J6aSHzUtFbrtc3Rvb7YADlQlALVB7Cz5AS/ZV7XJkkkRUgbTp
-         vJ2w==
-X-Gm-Message-State: AOAM531OAixBxXyxONhLkg3QikZCeb6YboqH8OVYz6A+munJ16B2stFm
-        mGdfoKw6vbejhOhBE4HGp3mOXA2GiOjlZ2G8Vt90PhRv2PuNZw==
-X-Google-Smtp-Source: ABdhPJwPNDG2qz9xm6hazjQfNV88Bgu3tDJb25KA7U+2Gg82o7sTH39Xql9UQcRPBTAYCAQHCh1Bu4zryk5beAVHzQY=
-X-Received: by 2002:a0d:d88c:0:b0:2f7:bb41:1bd0 with SMTP id
- a134-20020a0dd88c000000b002f7bb411bd0mr25670953ywe.199.1652288592004; Wed, 11
- May 2022 10:03:12 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uPjT4Tguvue9a0veAerAix8NTcDtIksBUNaqTLtFpVY=;
+        b=qoBBI60RcLtRZqyhe3ob42Gazc0213MAanrwASqlYKTaeH8LGzjp/3LMWAcKNL3v5Q
+         KjoNP2jj1ahM4PN1eC5YuSwLSLWMtLkiFLa7ZnF59aVDVZRRrHleZrMP4k9CibbF+Xui
+         e0KI+v+hGQwxHtxpxrGV0WjxzrvxNPSv/dXCZYPsrW7MBjJTKPL0l0Csd2mGqO96wjPF
+         L3ANkwImEDyp7/D4xzjMSbRnvzNIDovLJ+KXeyc7WOXn2Zmb1DXlDCeOAMEh0iHC87C0
+         OGVkGNCg7DOIwx463Jxex8+tG+7NJLuuLkjSGrAszfZ3ZnyTp3tiCO9gdY94+pYSsTWl
+         Ephg==
+X-Gm-Message-State: AOAM531IpXlwEuIpRIy7+bQDFEUHvvCZ7ReueHguJoufNPI8LFSwx+UA
+        5jjGt7IJzbvIl/5Bvt6KCD9MmbtP13ahoTIu/RGonHMmekr+2w==
+X-Google-Smtp-Source: ABdhPJw7/UQbmPRX/v1nQHdA2Ljp9qeqEevxnUd5JK3u+Rv8Kd8WJ8JVe2T3su6fZVja5UUUE8F4tLMIDm9wdTwYsMM=
+X-Received: by 2002:a05:6102:3ecf:b0:320:7c27:5539 with SMTP id
+ n15-20020a0561023ecf00b003207c275539mr15026770vsv.59.1652288836875; Wed, 11
+ May 2022 10:07:16 -0700 (PDT)
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 11 May 2022 22:33:00 +0530
-Message-ID: <CA+G9fYtKJ_a2rLSvxsYFrkUjNHpGeTn_xsL8kyz=-pBoeA+eXA@mail.gmail.com>
-Subject: [next] mm: overcommit_memory: failed - TFAIL: alloc passed, expected
- to fail
-To:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, lkft-triage@lists.linaro.org,
-        LTP List <ltp@lists.linux.it>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Peter Xu <peterx@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Ganesan Rajagopal <rganesan@arista.com>,
+References: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
+ <CAHbLzkq1YXXLMiREpGnzhJjPssu4WpSsnkTmrLJ=hAEhZVUr9w@mail.gmail.com>
+ <CAAPL-u-r2Pc_MaHQmKKNH_icAa_fH1COWb5qSPpr8xffREQ_cQ@mail.gmail.com>
+ <87tua3h5r1.fsf@nvdebian.thelocal> <CAAPL-u-0HwL6p1SA73LPfFyywG55QqE9O+q=83fhShoJAVVxyQ@mail.gmail.com>
+ <875ymerl81.fsf@nvdebian.thelocal> <87fslhhb2l.fsf@linux.ibm.com>
+ <CAAPL-u9FvCfgA7xsqStLNZ=W03iyWBmvHrpVzPKyitsGN2v_KQ@mail.gmail.com> <68333b21a58604f3fd0e660f1a39921ae22849d8.camel@intel.com>
+In-Reply-To: <68333b21a58604f3fd0e660f1a39921ae22849d8.camel@intel.com>
+From:   Wei Xu <weixugc@google.com>
+Date:   Wed, 11 May 2022 10:07:05 -0700
+Message-ID: <CAAPL-u80BFYTKK=0HRBXOeDTULyPOtbgu5V3fEYDOczTMxgJ1g@mail.gmail.com>
+Subject: Re: RFC: Memory Tiering Kernel Interfaces
+To:     "ying.huang@intel.com" <ying.huang@intel.com>
+Cc:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Greg Thelen <gthelen@google.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Michal Hocko <mhocko@kernel.org>,
         Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Michal Hocko <mhocko@suse.com>
+        Brice Goglin <brice.goglin@gmail.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following LTP test regressions were noticed on Linux next-20220511 tag on
-all the devices.
+On Wed, May 11, 2022 at 12:49 AM ying.huang@intel.com
+<ying.huang@intel.com> wrote:
+>
+> On Tue, 2022-05-10 at 22:30 -0700, Wei Xu wrote:
+> > On Tue, May 10, 2022 at 4:38 AM Aneesh Kumar K.V
+> > <aneesh.kumar@linux.ibm.com> wrote:
+> > >
+> > > Alistair Popple <apopple@nvidia.com> writes:
+> > >
+> > > > Wei Xu <weixugc@google.com> writes:
+> > > >
+> > > > > On Thu, May 5, 2022 at 5:19 PM Alistair Popple <apopple@nvidia.com> wrote:
+> > > > > >
+> > > > > > Wei Xu <weixugc@google.com> writes:
+> > > > > >
+> > > > > > [...]
+> > > > > >
+> > > > > > > > >
+> > > > > > > > >
+> > > > > > > > > Tiering Hierarchy Initialization
+> > > > > > > > > `=============================='
+> > > > > > > > >
+> > > > > > > > > By default, all memory nodes are in the top tier (N_TOPTIER_MEMORY).
+> > > > > > > > >
+> > > > > > > > > A device driver can remove its memory nodes from the top tier, e.g.
+> > > > > > > > > a dax driver can remove PMEM nodes from the top tier.
+> > > > > > > >
+> > > > > > > > With the topology built by firmware we should not need this.
+> > > > > >
+> > > > > > I agree that in an ideal world the hierarchy should be built by firmware based
+> > > > > > on something like the HMAT. But I also think being able to override this will be
+> > > > > > useful in getting there. Therefore a way of overriding the generated hierarchy
+> > > > > > would be good, either via sysfs or kernel boot parameter if we don't want to
+> > > > > > commit to a particular user interface now.
+> > > > > >
+> > > > > > However I'm less sure letting device-drivers override this is a good idea. How
+> > > > > > for example would a GPU driver make sure it's node is in the top tier? By moving
+> > > > > > every node that the driver does not know about out of N_TOPTIER_MEMORY? That
+> > > > > > could get messy if say there were two drivers both of which wanted their node to
+> > > > > > be in the top tier.
+> > > > >
+> > > > > The suggestion is to allow a device driver to opt out its memory
+> > > > > devices from the top-tier, not the other way around.
+> > > >
+> > > > So how would demotion work in the case of accelerators then? In that
+> > > > case we would want GPU memory to demote to DRAM, but that won't happen
+> > > > if both DRAM and GPU memory are in N_TOPTIER_MEMORY and it seems the
+> > > > only override available with this proposal would move GPU memory into a
+> > > > lower tier, which is the opposite of what's needed there.
+> > >
+> > > How about we do 3 tiers now. dax kmem devices can be registered to
+> > > tier 3. By default all numa nodes can be registered at tier 2 and HBM or
+> > > GPU can be enabled to register at tier 1. ?
+> >
+> > This makes sense.  I will send an updated RFC based on the discussions so far.
+>
+> Are these tier number fixed?  If so, it appears strange that the
+> smallest tier number is 0 on some machines, but 1 on some other
+> machines.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+When the kernel is configured to allow 3 tiers, we can always show all
+the 3 tiers. It is just that some tiers (e.g. tier 0) may be empty on
+some machines.
 
-Regressions found on x86 and arm64.
+BTW, the userspace should not assume a specific meaning of a
+particular tier id because it can change depending on the number of
+tiers that the kernel is configured with.  For example, the userspace
+should not assume that tier-2 always means PMEM nodes.  In a system
+with 4 tiers, PMEM nodes may be in tier-3, not tier-2.
 
-   ltp-mm-tests/overcommit_memory04
-   ltp-mm-tests/overcommit_memory06
-   ltp-mm-tests/overcommit_memory03
-   ltp-mm-tests/min_free_kbytes
-   ltp-mm-tests/overcommit_memory01
-   ltp-mm-tests/oom01
-   ltp-mm-tests/overcommit_memory05
-
-
-mem.c:154: TFAIL: victim signalled: (9) SIGKILL
-overcommit_memory.c:203: TFAIL: alloc passed, expected to fail
-overcommit_memory.c:176: TINFO: malloc 7102100 kB successfully
-overcommit_memory.c:203: TFAIL: alloc passed, expected to fail
-overcommit_memory.c:176: TINFO: malloc 3523530 kB successfully
-
-overcommit_memory.c:203: TFAIL: alloc passed, expected to fail
-overcommit_memory.c:176: TINFO: malloc 8456472 kB successfully
-overcommit_memory.c:203: TFAIL: alloc passed, expected to fail
-overcommit_memory.c:176: TINFO: malloc 4283276 kB successfully
-overcommit_memory.c:203: TFAIL: alloc passed, expected to fail
-overcommit_memory.c:176: TINFO: malloc 2114118 kB successfully
-
-
-metadata:
-  git_ref: master
-  git_repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-  git_sha: 6107040c99d5dfc920721c198d45ed2d639b113a
-  git_describe: next-20220511
-  kernel_version: 5.18.0-rc6
-  kernel-config: https://builds.tuxbuild.com/291BWBU964yoppGqYfnVF8AJMg4/config
-  build-url: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/pipelines/536448964
-  artifact-location: https://builds.tuxbuild.com/291BWBU964yoppGqYfnVF8AJMg4
-  toolchain: gcc-11
-
-
-Full test log on x86:
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220511/testrun/9438084/suite/ltp-mm-tests/test/overcommit_memory01/log
-https://lkft.validation.linaro.org/scheduler/job/5012581#L10525
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> Best Regards,
+> Huang, Ying
+>
+>

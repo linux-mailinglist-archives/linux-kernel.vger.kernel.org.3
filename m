@@ -2,69 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A1AD52368D
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70312523681
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245431AbiEKPBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:01:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244143AbiEKPA6 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S241447AbiEKPA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 11 May 2022 11:00:58 -0400
-X-Greylist: delayed 179 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 11 May 2022 08:00:55 PDT
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502C3BD5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:00:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1652281071;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=xaR6s5/QWptKMXOs5sooqJ3794ArNGAXxaZwjDyLBPo=;
-    b=LEDCh8kMG+ELS3FDK2MfiSK2mxTqus3ky7xLwfN9SLuEW8lTukm9YjP1F8TNol+ZK1
-    1JFPZH/+nFX+AbmC3+g8N1qUME4meOPEeOaiNLJUvO5koaHRGOLVW3UEk3+Z3qd7Ws1c
-    XcraidpU/1W9+jWegmV/JFayi2nf023bKy4agL0yWkng2L9L/4rsLiW3i9TAt5+54GNr
-    MLVFDHR7KB4cjJc6eVNkoROSZ2JDhbFhwXL2jmNQ859QdqfCNo9KGrhISqfuVITkEoOW
-    ZnQgi9SNtX4k3HqrOdBYImwDTV7QI1Lg5HeQlaMH3n1wV6h+r0GGaJZFR2CmJqry27H0
-    lj2Q==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdBqPeOuh2koeKQvJnLjhchY2TXGXhEF98MlNg=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cff:5b00:9642:f755:5daa:777e]
-    by smtp.strato.de (RZmta 47.42.2 AUTH)
-    with ESMTPSA id 4544c9y4BEvoybs
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 11 May 2022 16:57:50 +0200 (CEST)
-Message-ID: <3c6bf83c-0d91-ea43-1a5d-27df7db1fb08@hartkopp.net>
-Date:   Wed, 11 May 2022 16:57:50 +0200
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37970 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245581AbiEKPAa (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 11 May 2022 11:00:30 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C02122241A;
+        Wed, 11 May 2022 08:00:11 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 15FE5ED1;
+        Wed, 11 May 2022 08:00:11 -0700 (PDT)
+Received: from lpieralisi (unknown [10.57.1.148])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 24F493F66F;
+        Wed, 11 May 2022 08:00:09 -0700 (PDT)
+Date:   Wed, 11 May 2022 16:00:05 +0100
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Marc Zyngier <maz@kernel.org>, PCI <linux-pci@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Subject: Re: [PATCH v9 2/5] PCI: rockchip-dwc: Reset core at driver probe
+Message-ID: <YnvPdSPUm85Bg9zE@lpieralisi>
+References: <20220429123832.2376381-1-pgwipeout@gmail.com>
+ <20220429123832.2376381-3-pgwipeout@gmail.com>
+ <Ynu/D4hXTRVy9IBF@lpieralisi>
+ <CAMdYzYqdDPUFPhAZqA71dLaf6rT9CwFqQ1dFMRbGpVMyzgT8bg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/1] can: skb: add and set local_origin flag
-Content-Language: en-US
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Devid Antonio Filoni <devid.filoni@egluetechnologies.com>,
-        kernel@pengutronix.de, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Jander <david@protonic.nl>
-References: <20220511121913.2696181-1-o.rempel@pengutronix.de>
- <b631b022-72d5-9160-fd13-f33c80dbbe59@hartkopp.net>
- <20220511132421.7o5a3po32l3w2wcr@pengutronix.de>
- <20220511143620.kphwgp2vhjyoecs5@pengutronix.de>
- <002d234f-a7d6-7b1a-72f4-157d7a283446@hartkopp.net>
- <20220511145437.oezwkcprqiv5lfda@pengutronix.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20220511145437.oezwkcprqiv5lfda@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMdYzYqdDPUFPhAZqA71dLaf6rT9CwFqQ1dFMRbGpVMyzgT8bg@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,59 +54,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/11/22 16:54, Marc Kleine-Budde wrote:
-> On 11.05.2022 16:50:06, Oliver Hartkopp wrote:
->>
->>
->> On 5/11/22 16:36, Marc Kleine-Budde wrote:
->>> On 11.05.2022 15:24:21, Marc Kleine-Budde wrote:
->>>> On 11.05.2022 14:38:32, Oliver Hartkopp wrote:
->>>>> IMO this patch does not work as intended.
->>>>>
->>>>> You probably need to revisit every place where can_skb_reserve() is used,
->>>>> e.g. in raw_sendmsg().
->>>>
->>>> And the loopback for devices that don't support IFF_ECHO:
->>>>
->>>> | https://elixir.bootlin.com/linux/latest/source/net/can/af_can.c#L257
->>>
->>> BTW: There is a bug with interfaces that don't support IFF_ECHO.
->>>
->>> Assume an invalid CAN frame is passed to can_send() on an interface that
->>> doesn't support IFF_ECHO. The above mentioned code does happily generate
->>> an echo frame and it's send, even if the driver drops it, due to
->>> can_dropped_invalid_skb(dev, skb).
->>>
->>> The echoed back CAN frame is treated in raw_rcv() as if the headroom is valid:
->>>
->>> | https://elixir.bootlin.com/linux/v5.17.6/source/net/can/raw.c#L138
->>>
->>> But as far as I can see the can_skb_headroom_valid() check never has
->>> been done. What about this patch?
->>>
->>> index 1fb49d51b25d..fda4807ad165 100644
->>> --- a/net/can/af_can.c
->>> +++ b/net/can/af_can.c
->>> @@ -255,6 +255,9 @@ int can_send(struct sk_buff *skb, int loop)
->>>                    */
->>>                   if (!(skb->dev->flags & IFF_ECHO)) {
->>> +                       if (can_dropped_invalid_skb(dev, skb))
->>> +                               return -EINVAL;
->>> +
->>
->> Good point!
->>
->> But please check the rest of the code.
->> You need 'goto inval_skb;' instead of the return ;-)
+On Wed, May 11, 2022 at 10:26:20AM -0400, Peter Geis wrote:
+> On Wed, May 11, 2022 at 9:50 AM Lorenzo Pieralisi
+> <lorenzo.pieralisi@arm.com> wrote:
+> >
+> > On Fri, Apr 29, 2022 at 08:38:28AM -0400, Peter Geis wrote:
+> > > The PCIe controller is in an unknown state at driver probe. This can
+> > > lead to undesireable effects when the driver attempts to configure the
+> > > controller.
+> > >
+> > > Prevent issues in the future by resetting the core during probe.
+> > >
+> > > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> > > Tested-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+> > > ---
+> > >  drivers/pci/controller/dwc/pcie-dw-rockchip.c | 23 ++++++++-----------
+> > >  1 file changed, 10 insertions(+), 13 deletions(-)
+> >
+> > I fear that the controller reset behaviour is bootloader/firmware
+> > dependent.
+> >
+> > Are we sure we are not triggering any regressions by resetting the
+> > controller in the middle of probe (aka is the driver implicitly
+> > relying on existing behaviour on systems that are not the ones
+> > you are testing on) ?
+> >
+> > Just asking, the rockchip maintainers should be able to answer this
+> > question.
 > 
-> Why? To free the skb? That's what can_dropped_invalid_skb() does, too:
-> 
-> | https://elixir.bootlin.com/linux/v5.17.6/source/include/linux/can/skb.h#L130
-> 
+> This is a new driver with no current users, this series enables the
+> first user. It does not support ACPI nor any sort of handoff at this
+> time.
 
-My bad!
+Ok. I will take patches [1-3], dts changes will have to go via
+platform trees, I hope that's fine.
 
-Pointing you not reading the code ... should better have looked myself :-D
+Thanks,
+Lorenzo
 
+> > Thanks,
+> > Lorenzo
+> >
+> > > diff --git a/drivers/pci/controller/dwc/pcie-dw-rockchip.c b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
+> > > index c9b341e55cbb..faedbd6ebc20 100644
+> > > --- a/drivers/pci/controller/dwc/pcie-dw-rockchip.c
+> > > +++ b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
+> > > @@ -152,6 +152,11 @@ static int rockchip_pcie_resource_get(struct platform_device *pdev,
+> > >       if (IS_ERR(rockchip->rst_gpio))
+> > >               return PTR_ERR(rockchip->rst_gpio);
+> > >
+> > > +     rockchip->rst = devm_reset_control_array_get_exclusive(&pdev->dev);
+> > > +     if (IS_ERR(rockchip->rst))
+> > > +             return dev_err_probe(&pdev->dev, PTR_ERR(rockchip->rst),
+> > > +                                  "failed to get reset lines\n");
+> > > +
+> > >       return 0;
+> > >  }
+> > >
+> > > @@ -182,18 +187,6 @@ static void rockchip_pcie_phy_deinit(struct rockchip_pcie *rockchip)
+> > >       phy_power_off(rockchip->phy);
+> > >  }
+> > >
+> > > -static int rockchip_pcie_reset_control_release(struct rockchip_pcie *rockchip)
+> > > -{
+> > > -     struct device *dev = rockchip->pci.dev;
+> > > -
+> > > -     rockchip->rst = devm_reset_control_array_get_exclusive(dev);
+> > > -     if (IS_ERR(rockchip->rst))
+> > > -             return dev_err_probe(dev, PTR_ERR(rockchip->rst),
+> > > -                                  "failed to get reset lines\n");
+> > > -
+> > > -     return reset_control_deassert(rockchip->rst);
+> > > -}
+> > > -
+> > >  static const struct dw_pcie_ops dw_pcie_ops = {
+> > >       .link_up = rockchip_pcie_link_up,
+> > >       .start_link = rockchip_pcie_start_link,
+> > > @@ -222,6 +215,10 @@ static int rockchip_pcie_probe(struct platform_device *pdev)
+> > >       if (ret)
+> > >               return ret;
+> > >
+> > > +     ret = reset_control_assert(rockchip->rst);
+> > > +     if (ret)
+> > > +             return ret;
+> > > +
+> > >       /* DON'T MOVE ME: must be enable before PHY init */
+> > >       rockchip->vpcie3v3 = devm_regulator_get_optional(dev, "vpcie3v3");
+> > >       if (IS_ERR(rockchip->vpcie3v3)) {
+> > > @@ -241,7 +238,7 @@ static int rockchip_pcie_probe(struct platform_device *pdev)
+> > >       if (ret)
+> > >               goto disable_regulator;
+> > >
+> > > -     ret = rockchip_pcie_reset_control_release(rockchip);
+> > > +     ret = reset_control_deassert(rockchip->rst);
+> > >       if (ret)
+> > >               goto deinit_phy;
+> > >
+> > > --
+> > > 2.25.1
+> > >

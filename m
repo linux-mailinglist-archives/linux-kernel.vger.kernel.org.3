@@ -2,87 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D02523E89
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 22:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD116523E7C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 22:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347055AbiEKULy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 16:11:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
+        id S239228AbiEKULn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 16:11:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241053AbiEKUK7 (ORCPT
+        with ESMTP id S1347631AbiEKULN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 16:10:59 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62232CC98;
-        Wed, 11 May 2022 13:10:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1652299823;
-        bh=rBD/54OGORHu5g6jadCEHPsFOTceD/67+Fe7usVP7p8=;
-        h=X-UI-Sender-Class:Date:In-Reply-To:References:Subject:Reply-to:To:
-         CC:From;
-        b=ZSsfderyogWJZrYK9niYNnVJVTFkdzsvfAVrlCpbR7XUbBU1/tF36Pe061+pso463
-         2sIBACOd5v4AQedtBR1XgrBxyCpqdib/KacP979R1brutN4MeKR/ZvtsVG6rTZY3Hi
-         j+iLz1CdMzEzZxxYEYgwsf7AaioS4LZxQYQ9R2U8=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from frank-s9 ([157.180.226.179]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N33Il-1nutRi0pbh-013LOo; Wed, 11
- May 2022 22:10:23 +0200
-Date:   Wed, 11 May 2022 22:10:19 +0200
-User-Agent: K-9 Mail for Android
-In-Reply-To: <9E2565E4-DBF3-4324-BE1F-4C20C6FB95EA@gmail.com>
-References: <20220416135458.104048-1-linux@fw-web.de> <9E2565E4-DBF3-4324-BE1F-4C20C6FB95EA@gmail.com>
+        Wed, 11 May 2022 16:11:13 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E7941333
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 13:11:13 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id p8so2898868pfh.8
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 13:11:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uHI42L1gavukyJJ1KaKxOCH5Tc7LTCJwrgzmo7gt+ic=;
+        b=CEnMlJz8RXwI1S1rRNYUHG8Wa9Fd9wdk3GcqUX3T6ZUKNP1zj6Bmc1A+yJqZswX752
+         RqFVwmq5HfEaZdJ4WhyLAsjibiPeAkeBU1i0NWItqFrCO4QR2sfXQ1YpkyqCz+HXemLv
+         GH1RZhqVGNf11iQygLdb3UoSuoJSgpztZscPBUZhUsDPh6KAjL+8YaL6fo2CzZEXClrE
+         P+F8ulhEdJrmMXuGqfHTt5MU27wE3NF+LSzQS2hvtyESprlM1nUt2KJt43fNzqKuF/YM
+         fUhILt1tkCXbj6Nj1W4JBnSz2rULdW0pbRqTKw9ZOYXtOCM1Ef3/e1Ukq3rgVBHEBw1y
+         ShMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uHI42L1gavukyJJ1KaKxOCH5Tc7LTCJwrgzmo7gt+ic=;
+        b=7a4lIHmKbe+VunZMmg5jXoPJOpRJ7CJvzNZCyn6ne8Hh2zvi5gTXyuGeKdXl37ApD1
+         AtAJb3AEn0RlRFZA0rjqEXANdya/slH1JJSGBbllunQY2Bc8/ldlhu2ZeZIlPGsHNUc9
+         7r0MsmNFcgrWN9NGbesaMhcS5Ey/eO1+Ucr5uw9KHslwR0/dPfiZ3rrNT9Ul+EWpxsQ5
+         2ukqbbm+AePJe8MWvhTP0H+mWoPFegGkdh554MKCzzZfYxR0ZOSJoD49wi2O4ap7qNek
+         OqI5MjazaP+vRm8ZwrKcu4DAt+Ct0tRN91DGC1NIGKUGuJd3QKpYcBia3JOAVqsPYJdu
+         u2hw==
+X-Gm-Message-State: AOAM530GuUqWep2wQ/MZWZP2sHq68i6vMuzFbiTuS4QQ1RNADkUHWv11
+        i3c6GaMqTs4a8jsZo3472TjXB1LD0pejOw==
+X-Google-Smtp-Source: ABdhPJxZo3l4QSHHKIjLb5Kep83BUBaCLt4ROcFAozCa4OPaPAafueGKZdyhwYYs+u+RkiK76fP3Ug==
+X-Received: by 2002:a63:6886:0:b0:3c5:11f4:f055 with SMTP id d128-20020a636886000000b003c511f4f055mr22407664pgc.44.1652299872589;
+        Wed, 11 May 2022 13:11:12 -0700 (PDT)
+Received: from atishp.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id c13-20020a170902c2cd00b0015e8d4eb2e5sm2259005pla.303.2022.05.11.13.11.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 13:11:12 -0700 (PDT)
+From:   Atish Patra <atishp@rivosinc.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Atish Patra <atishp@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        devicetree@vger.kernel.org, Jisheng Zhang <jszhang@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-riscv@lists.infradead.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: [PATCH 1/2] RISC-V: Fix counter restart during overflow for RV32
+Date:   Wed, 11 May 2022 13:11:06 -0700
+Message-Id: <20220511201107.2311757-1-atishp@rivosinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [RFC/RFT 0/6] RK3568 PCIe V3 support
-Reply-to: frank-w@public-files.de
-To:     Piotr Oniszczuk <piotr.oniszczuk@gmail.com>,
-        Frank Wunderlich <linux@fw-web.de>,
-        Peter Geis <pgwipeout@gmail.com>
-CC:     "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-phy@lists.infradead.org,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-pci@vger.kernel.org
-From:   Frank Wunderlich <frank-w@public-files.de>
-Message-ID: <A93F0CED-D363-4B16-BB49-2EFB569F0EFE@public-files.de>
-X-Provags-ID: V03:K1:xhkaGCZurrZq98AQosYA1qdyfC2dWrfKqJ5+bZbZfcK7P8zcRjz
- AJs3LMH3ZRysCQK+yzpB9g5BzhV12dHBLpsi0IEhxg6r/jWwfIUFv9liVu1Cq/HrCNpgb1F
- SBZltFMe5jjMHL6cgsK3URh38YciE7y9fbSuq6WjdQ5Nvs4LlfUQQyyFXTYbNX7aYA5Dj1h
- L3+HRpoCa/YhN8u4q8sZw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:f8GKdfj5I5U=:pmOHV7GH1K2ZeSmVuoMme3
- jNezhOBNBQbA7T9Uaeeyedhb5G5H5fyYCPLo0Wel2zSyXl/PqQK0ZofTaMyAAgPrZ1lXgeNAV
- CM+Q6M5yJz/aWyuCVnNG1kFCXT90+LfFfw4WjlGoqN8wA6Zt0KivAL0L+nVV//3vLNF/hMxQT
- hbZPuNXNm7EWb4ZsvKW73eDuvnwR4HxBIkso8qZjw7O3dtx04d+qV/921GTdn1Lvjrxo9eWnU
- lTleUvV6nA9AlZsT+5ag10GXEha563xzQosN/yIs6JtZkuX5hdgr3/+yd3/BTxawmysR+Oc/g
- U8lfg2EdycTjk9C/AIedAAHUv8AS5KRBslER4usE3NQUqSArIwZ7aCnIclPcDbjPe7oCw0OVu
- 5noW4sfkxUiQOHpXDB8u+LrMVv6YFBfqp2vVU//UvWjF0oRc6DJFiQcCeSUYZ3dmYBNdQbj3n
- m63lDib6xOGd6S2vWoPlLeYFEl09s5T9DDmT9d70PS0IJ4Oz+l7z0KguW/154FTnekCmXk+ir
- cpsdGCHXIv3ZuVft30EBJsGjFX4Lol2OsgJFx2s1ZElKDOw6CNXH7xG+UdIsHLD7R/qyyRCth
- qCeDc+xqjE2PZ5cCIkNeGHYr7kz0+7/unoWwf9SLI5koWf/6L/ro9HBzoT47bbzTPLI0tjmGP
- PIDStSVCLHDWLe7zWfndcA4Awf5uDCj2pNtsfdTf75fWMyvYi+ufj0dmGozDL/x4BV7s80djS
- rr8W7kX/YZymGoLXbZmspf6Uuvd6q1GTyDdgy1HM1q4ebHsOWzqaEFuUwfSNT1/8N6Nzgl+T3
- EuUjWgWTgWlFUGNHD7P0bNLENjBs+xqjhfAIGeFQkqhWyG7qusH0bUiT2dPSf/lTmcxY+OQaq
- iwXQ+wSDQfSalcwVnucUmPxTkOzPvcFbQ3JzxULGD4wtQWN9M+1SMJ7R3B50hMYR0AFj3dbwU
- et+0B7Mn84oAjle9NCRO8cfWbg548IHUceoWdZABh45avPdP9/XF9/KRv8fTUr2zTGcxkCFLK
- 3VY0A2m5ltuf1BnwHCmzhLacRnWfseSZ2Z++qtpKZjqlp1sp0Lo/SJFqfczGbx3ptQwm7Pt/a
- sq7Y5u2Y2zfVg6bVtW+6Oj3+yZRwHxBipbPRTxv15nD60Ec/AnUW+6cjQ==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,20 +76,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 11=2E Mai 2022 21:26:09 MESZ schrieb Piotr Oniszczuk <piotr=2Eoniszczuk@=
-gmail=2Ecom>:
+Pass the upper half of the initial value of the counter correctly
+for RV32.
 
->Frank, Peter
->
->FYI:=20
->This series gives me nicely working PCI-e WiFi M2 iwl7265 module on
->rock3-a=2E
->Great work!
+Fixes: 4905ec2fb7e6 ("RISC-V: Add sscofpmf extension support")
 
-Hi,
+Signed-off-by: Atish Patra <atishp@rivosinc.com>
+---
+ drivers/perf/riscv_pmu_sbi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Peter recently made some fixes and improvements=2E I plan to send new vers=
-ion soon=2E
+diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
+index a1317a483512..24cea59612be 100644
+--- a/drivers/perf/riscv_pmu_sbi.c
++++ b/drivers/perf/riscv_pmu_sbi.c
+@@ -526,7 +526,7 @@ static inline void pmu_sbi_start_overflow_mask(struct riscv_pmu *pmu,
+ 			max_period = riscv_pmu_ctr_get_width_mask(event);
+ 			init_val = local64_read(&hwc->prev_count) & max_period;
+ 			sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_START, idx, 1,
+-				  flag, init_val, 0, 0);
++				  flag, init_val, init_val >> 32, 0);
+ 		}
+ 		ctr_ovf_mask = ctr_ovf_mask >> 1;
+ 		idx++;
+-- 
+2.25.1
 
-You're welcome to test it on your board and give a Tested-by tag
-regards Frank

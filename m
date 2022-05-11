@@ -2,110 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABAAD523511
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE220523512
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244435AbiEKOJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 10:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60140 "EHLO
+        id S231625AbiEKOKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 10:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244423AbiEKOJh (ORCPT
+        with ESMTP id S244423AbiEKOKK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 10:09:37 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4939E69B5F;
-        Wed, 11 May 2022 07:09:36 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 24BE9Gjr002743
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 May 2022 10:09:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1652278159; bh=G8lq57C33xdM0wjJu4yfZma67g+kI57dmaN+DwjnBFc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=VfgBhpdTnTp/WHZyVCzqSg2j1jHJwp4KLsOmzy+xtpRM2YUztUSbc0YRwNW74f6QL
-         eqnpmmjwDJUgN3abtPmKvL7cssA7tI1bHUQS3dFFE+w6cFU6cvnyUC/1ppqd18I0pe
-         NGmjm7Mkwo8GcDSDFZU2wE9dds/EE/z8Ahq1S+9uXiKyX7Nbn6itzG8zyVADzPJ4Y0
-         8z05XLqXtIEHPEQug4yKUaAD2p+4RUxWwemKy+uVciYzeL9z09xviGyISRtDlnfJnV
-         xGOY6+0DUpreDW7+/9oaU/gJv+vXmSkpmpI9jcruw8RBwv+N9fkordUwypKNmsvthh
-         TGnSvrZCxElSg==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 0868615C3F0C; Wed, 11 May 2022 10:09:16 -0400 (EDT)
-Date:   Wed, 11 May 2022 10:09:16 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     yebin <yebin10@huawei.com>
-Cc:     Jan Kara <jack@suse.cz>, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lczerner@redhat.com
-Subject: Re: [PATCH -next] ext4: fix warning in ext4_handle_inode_extension
-Message-ID: <YnvDjHFAeZWEDne1@mit.edu>
-References: <20220326065351.761952-1-yebin10@huawei.com>
- <20220329092810.j5ngxckygut6mxo2@quack3.lan>
- <6244482D.4090603@huawei.com>
- <20220330133015.yxfnnw564wgehjc3@quack3.lan>
- <62578B0C.9000803@huawei.com>
+        Wed, 11 May 2022 10:10:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 08E6669CC9
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:10:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652278207;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ev676VUr9wmt9ONW4BmfvB1amD9N31g0cQC0WiK8AG8=;
+        b=W8RPjYSi2d0RfdXpcJfYuQm9VaL8QA6perUv4Jl9JkEmRg2IoDXcR6Z4kV09vboIBpJhLR
+        lUeM3P3RUlnKstojXUhktjIDZe69UE82jz81TdXXH5YoCodXXu4zyjD2CerembeVm4MVM6
+        0h2xyjxySd1wk+zrub60caKQOzwaE60=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-459-YbrC7e3iORe7v3UcqloEiw-1; Wed, 11 May 2022 10:10:06 -0400
+X-MC-Unique: YbrC7e3iORe7v3UcqloEiw-1
+Received: by mail-wr1-f70.google.com with SMTP id v16-20020adfd190000000b0020c8fb5106dso882400wrc.19
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:10:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=Ev676VUr9wmt9ONW4BmfvB1amD9N31g0cQC0WiK8AG8=;
+        b=mS08NcP+1beI4cZ47IftyJp5DdbMzZuc5AThq9uKYMQxeDH0wMqBDRFDop/Y5qlK/5
+         l6LYTCU2rqS9gsfPSu0rjy7Fx1Suo+++a5QBLd1Gh4HeZTH3TCiWZ1HYB89re/bJ6m/3
+         C+jIrgAmgDBjaor7VdDjIwY6bsAQfGw7ktjgwFnkpKcjcO8DgcUKfo+WLtY/UGOuFyX0
+         6l1x3o6R7VTk+1zZNyvtr3r+v0A/fZobqMy4BIhiCb/mLeaLLE5JFQDkqin9QgWyzQcA
+         YW1nUeCVt3a8Fp0GEa0tlOTAVJYXZAAhWnj0u+IxKoZvfxbx96MIiBRhQDYhVCs1ziro
+         ksuA==
+X-Gm-Message-State: AOAM532TaJY11YKJuWhHJVT+lEy5jYPIoU3gCW0CYqU1dv5Vw0Wj6JHU
+        EvDoDIYvxnXWF8lFNTdCy7TqMQNavfmayh/QDwFY8jyHiMJUs7/eHvbXl4Y0odnYrJpiyLvWu+E
+        vmTFZlW7WtjMqA6hilkI7TJkM
+X-Received: by 2002:a5d:58e3:0:b0:20c:d508:43d4 with SMTP id f3-20020a5d58e3000000b0020cd50843d4mr8019625wrd.51.1652278204612;
+        Wed, 11 May 2022 07:10:04 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx5vDyAabZnjYe0byGB1ke4GqIFdgws2r135MZoMpimSnI+mAcz55IM3J9Sdt+pmYfr4ruCAQ==
+X-Received: by 2002:a5d:58e3:0:b0:20c:d508:43d4 with SMTP id f3-20020a5d58e3000000b0020cd50843d4mr8019609wrd.51.1652278204393;
+        Wed, 11 May 2022 07:10:04 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id ay7-20020a05600c1e0700b003945781b725sm5894140wmb.37.2022.05.11.07.10.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 07:10:03 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Yajun Deng <yajun.deng@linux.dev>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com
+Cc:     linux-kernel@vger.kernel.org, Yajun Deng <yajun.deng@linux.dev>
+Subject: Re: [PATCH] sched/rt: fix the case where sched_rt_period_us is
+ non-positive
+In-Reply-To: <xhsmhsfpg1b9s.mognet@vschneid.remote.csb>
+References: <20220511112140.103579-1-yajun.deng@linux.dev>
+ <xhsmhsfpg1b9s.mognet@vschneid.remote.csb>
+Date:   Wed, 11 May 2022 15:10:03 +0100
+Message-ID: <xhsmhpmkk17pg.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <62578B0C.9000803@huawei.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 10:46:36AM +0800, yebin wrote:
-> To be honest, I don't know syzkaller how to inject the NOMEM
-> fault. If syzkaller rely on the memory fault injection mode provided
-> by the kernel, should report null pointer access. Anyway, If inject
-> a single point of IO fault, we still have to face the same
-> situation.
+On 11/05/22 13:53, Valentin Schneider wrote:
+> On 11/05/22 19:21, Yajun Deng wrote:
+>> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+>> index b491a0f8c25d..f20389aa6731 100644
+>> --- a/kernel/sched/rt.c
+>> +++ b/kernel/sched/rt.c
+>> @@ -37,6 +37,7 @@ static struct ctl_table sched_rt_sysctls[] = {
+>>               .maxlen         = sizeof(unsigned int),
+>>               .mode           = 0644,
+>>               .proc_handler   = sched_rt_handler,
+>> +		.extra1		= SYSCTL_ONE,
+>>       },
+>
+> Err, what kernel is this based on? AFAICT those have always lived in
+> kernel/sysctl.c, not kernel/sched/rt.c
+>
 
-Was this patch in response to a syzkaller report?  There wasn't a
-Reported-by tag indicating that this came from syzkaller.  If it did,
-and it came from syzkaller run by the syzkaller team (e.g., at
-https://syzkaller.appspot.com/upstream) could you include a reference
-to the syzkaller report?
+Nevermind, Peter pointed out this has recently been changed and is apparent
+in linux-next.
 
-> On 2022/3/30 21:30, Jan Kara wrote:
-> > > Do you mean call jbd2_abort in ext4_reserve_inode_write() ?
-> > Yes.
-> > 
-> > > If we abort journal when metadata is not guaranteed to be consistent. The
-> > > mode of ‘errors=continue’ is unnecessary.
-> > Well, firstly, errors=continue was always the best effort. There are no
-> > guarantees which failures we are able to withstand and which not.
-
-That's true; however, in general, if we can back out and recover from
-the error, we should, so that errors=continue can work.  If we think
-that continuing will result in far more file system corruption and/or
-the error is from the journalling infrastructure itself, then aborting
-the journal makes sense.
-
-> > There are
-> > almost 80 callsites of ext4_mark_inode_dirty() and honestly I suspect that
-> > e.g. inconsistent states resulting from extent tree manipulations being
-> > aborted in the middle due to ext4_ext_dirty() failing due to ENOMEM will
-> > also trigger all sorts of "interesting" behavior. So that's why I'd rather
-> > abort the journal than try to continue when we almost certainly now we
-> > cannot.
-
-It would not be a bad thing for us to audit all of the callers of
-ext4_mark_inode_dirty() and ext4_reserve_inode_write().  We are
-getting things right in at least some of the callers (for example:
-ext4_mkdir).
-
-In any case, I'll take this patch, but if this was in response to a
-syzkaller report, please let me know with the syzkaller ID is, so I
-can update the commit before I send a pull request to Linus.
-
-Thanks!
-
-							- Ted
-							

@@ -2,147 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF26352341E
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B135F523422
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243764AbiEKNVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
+        id S234865AbiEKNWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:22:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243738AbiEKNU7 (ORCPT
+        with ESMTP id S243843AbiEKNVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:20:59 -0400
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CB923979F;
-        Wed, 11 May 2022 06:20:08 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id v59so3906547ybi.12;
-        Wed, 11 May 2022 06:20:08 -0700 (PDT)
+        Wed, 11 May 2022 09:21:42 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B966B4507F;
+        Wed, 11 May 2022 06:20:50 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id i5so2930983wrc.13;
+        Wed, 11 May 2022 06:20:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oxBAEgkqPwjl7j2IRT0qwSbmvKmtMj9Uu/0rfJ9C3HY=;
+        b=BFtrKj/WbzGddmQvEk3VMnzWRw/Gm8bqNWgAL4/V5F5ORGU/W+I2X+NRXETzGq4amf
+         6zH2AEWErpG7i8W7RiUS4//aVUpKqlh0Sr/aMR+7ASspn0/PCyZ03Qdvt0F+2t48G/kq
+         5CCvXmXubgkQQZvMu0/F4ff5eesEhAHHwFAWhJYWcFHKLwjlOa26aQT/lAOB2i18VVYN
+         5QtKqLq4MZW7MZONTfYwK+HQBCO0oh6XpFj90Ac2Hlf8u2LliKuINKVPSPPTpyYgnm5R
+         qyl64VtVW2CszZWmkOjshlLFYkcQVOBoXLciBSPETQvRTgDhgJDodoxEzbMVqqSzhQq7
+         F7Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lPcFmOfBb0IAWaOSqE2Bx+EAh22wxVBQU4MZcbQtQDs=;
-        b=7X/WLawAJv4UYTgNYNbmSNyR+hmRHfJeOqXgodQmf+Lq/7MF9dVQFKtaQ99xQCEJOC
-         SXhRPK/FY6Lj6akRh/xiPjhIHxeKvoKFNsgTtfd6UHe9wymDyM2tlC0fBw0l7R3wPhmo
-         q0KHDTXCImhpBNk85cesArV72mCKbvwEbyTINOmeSF5gk5vbmc9jMez/YRqQaHk6Yojx
-         Ozk0EdnTYEY3is5VOVokIwV4rKDtsNCEGDPyFTbbZvx/YOQe2AHw53loTvsJ130eCFkL
-         dkMU+nEK2gOZn0sOnWcBlxRXA8AS8MM88tlk6VRQjqj0+0gafS9x1HJSdZeGYe4KMTdI
-         WVgg==
-X-Gm-Message-State: AOAM532TjmAuFt9S6teMHYbJz6QeXFmH1W61J7+0ktYGEdp6ldUFKtzl
-        /Eu2+FqzwZo7tSF2LTHLHB71FvYcQ9Glh/hRD1Y=
-X-Google-Smtp-Source: ABdhPJzuSeISNyAQbkHgmRVOZUc8DuN07Iysy3COQorKIdjj24Gic9TrcIsZxaQN4MUKF0X25jCZV/FEuEUdxZXPwog=
-X-Received: by 2002:a25:3795:0:b0:648:fa25:5268 with SMTP id
- e143-20020a253795000000b00648fa255268mr25012294yba.153.1652275207937; Wed, 11
- May 2022 06:20:07 -0700 (PDT)
+        bh=oxBAEgkqPwjl7j2IRT0qwSbmvKmtMj9Uu/0rfJ9C3HY=;
+        b=4qm8l33olZrcGsnsIzuGdNiqJe0fssUC3Z0Ksa13XkMYEU36yZexRSchvNdB6TFNIG
+         mZSKLo92MecxLcKxvmYTk2GBfa795dJaNYAnXW1rVOPujh/IlBRM0T9LIRJG522gYI7X
+         GJeDKZKdckR89y/my8caoS+kfWsCkthUbnDxa+uBggDb8XOTVPsL00uD847iQlicpXtY
+         irn7yNx4IN6V08/NMlLv2yvsL2BlxtE4ZNNp6ECEpPn9RgoSp/ADwag+SKXlGHtGum+6
+         JLuXaGUi8OH1F+w3litIguEdNI/qrj4nwE4eXrwvmcFusaPGtXObFGivTY4QUk46SZ0M
+         BT0g==
+X-Gm-Message-State: AOAM530jsTnVzImicnzxCmB80j9LMPc8TbhnFp46sWFTxXFHdGgEFsRH
+        ZExa0fNc7m9zZ+gcVD1wW0Kd2YBDB6gwoep2UU8cVeSb
+X-Google-Smtp-Source: ABdhPJwMEuHOME5RAqLJg1dKTW2d5wEp9Fa+vDbBzf5cIsjIT1fvYzWr1ATGYW77vkjZEgwUvYYcJm1ccXNbRGIpIUw=
+X-Received: by 2002:a05:6000:1a87:b0:20c:687f:6d10 with SMTP id
+ f7-20020a0560001a8700b0020c687f6d10mr22188924wry.574.1652275246816; Wed, 11
+ May 2022 06:20:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220510035259.5ep52sgahd2a6rie@vireshk-i7> <20220510154236.88753-1-schspa@gmail.com>
- <20220511043515.fn2gz6q3kcpdai5p@vireshk-i7> <CAMA88TpefB=rnqea2u1zEvNUJNE_kdj4mYito7SGCuMj-o071Q@mail.gmail.com>
- <20220511122114.wccgyur6g3qs6fps@vireshk-i7> <CAJZ5v0gN_yDFpvCXRXv8rN-i3TugCi-HKpBKK2z4eWU0Zm1GUg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0gN_yDFpvCXRXv8rN-i3TugCi-HKpBKK2z4eWU0Zm1GUg@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 11 May 2022 15:19:56 +0200
-Message-ID: <CAJZ5v0id+7vkqMQEyVRe29oF_dRtzZ0EhoYUn8=yzeENDeABJw@mail.gmail.com>
-Subject: Re: [PATCH v3] cpufreq: fix race on cpufreq online
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Schspa Shi <schspa@gmail.com>,
+References: <20220510141329.54414-1-tomeu.vizoso@collabora.com> <20220511061533.56881-1-tomeu.vizoso@collabora.com>
+In-Reply-To: <20220511061533.56881-1-tomeu.vizoso@collabora.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Wed, 11 May 2022 06:20:36 -0700
+Message-ID: <CAF6AEGts6cKOrmRruo8uSXSW=Kq58VZxdPuS13Q7jVajbvga-g@mail.gmail.com>
+Subject: Re: [RFC v3] drm/msm: Add initial ci/ subdirectory
+To:     Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Corbet <corbet@lwn.net>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-doc@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 2:59 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+On Tue, May 10, 2022 at 11:15 PM Tomeu Vizoso
+<tomeu.vizoso@collabora.com> wrote:
 >
-> On Wed, May 11, 2022 at 2:21 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> >
-> > On 11-05-22, 16:10, Schspa Shi wrote:
-> > > Viresh Kumar <viresh.kumar@linaro.org> writes:
-> > > > I am not sure, but maybe there were issues in calling init() with rwsem held, as
-> > > > it may want to call some API from there.
-> > > >
-> > >
-> > > I have checked all the init() implement of the fellowing files, It should be OK.
-> > > Function find command:
-> > >   ag "init[\s]+=" drivers/cpufreq
-> > >
-> > > All the init() implement only initialize policy object without holding this lock
-> > > and won't call cpufreq APIs need to hold this lock.
-> >
-> > Okay, we can see if someone complains later then :)
-> >
-> > > > I don't think you can do that safely. offline() or exit() may depend on
-> > > > policy->cpus being set to all CPUs.
-> > > OK, I will move this after exit(). and there will be no effect with those
-> > > two APIs. But policy->cpus must be clear before release policy->rwsem.
-> >
-> > Hmm, I don't think depending on the values of policy->cpus is a good idea to be
-> > honest. This design is inviting bugs to come in at another place. We need a
-> > clear flag for this, a new flag or something like policy_list.
-
-Why?
-
-> > Also I see the same bug happening while the policy is removed. The kobject is
-> > put after the rwsem is dropped.
-
-This shouldn't be a problem because of the wait_for_completion() in
-cpufreq_policy_put_kobj().  It is known that cpufreq_sysfs_release()
-has run when cpufreq_policy_put_kobj() returns, so it is safe to free
-the policy then.
-
-> > > >  static inline bool policy_is_inactive(struct cpufreq_policy *policy)
-> > > >  {
-> > > > -     return cpumask_empty(policy->cpus);
-> > > > +     return unlikely(cpumask_empty(policy->cpus) ||
-> > > > +                     list_empty(&policy->policy_list));
-> > > >  }
-> > > >
-> > >
-> > > I don't think this fully solves my problem.
-> > > 1. There is some case which cpufreq_online failed after the policy is added to
-> > >    cpufreq_policy_list.
-> >
-> > And I missed that :(
-> >
-> > > 2. policy->policy_list is not protected by &policy->rwsem, and we
-> > > can't relay on this to
-> > >    indict the policy is fine.
-> >
-> > Ahh..
-> >
-> > > >From this point of view, we can fix this problem through the state of
-> > > this linked list.
-> > > But the above two problems need to be solved first.
-> >
-> > I feel overriding policy_list for this is going to make it complex/messy.
-> >
-> > Maybe something like this then:
+> And use it to store expectations about what the drm/msm driver is
+> supposed to pass in the IGT test suite.
 >
-> There are two things.
+> Also include a configuration file that points to the out-of-tree CI
+> scripts.
 >
-> One is the possible race with respect to the sysfs access occurring
-> during failing initialization and the other is that ->offline() or
-> ->exit() can be called with or without holding the policy rwsem
-> depending on the code path.
+> By storing the test expectations along the code we can make sure both
+> stay in sync with each other, and so we can know when a code change
+> breaks those expectations.
 >
-> Namely, cpufreq_offline() calls them under the policy rwsem, but
-> cpufreq_remove_dev() calls ->exit() outside the rwsem.  Also they are
-> called outside the rwsem in cpufreq_online().
+> This will allow all contributors to drm/msm to reuse the infrastructure
+> already in gitlab.freedesktop.org to test the driver on several
+> generations of the hardware.
 >
-> Moreover, ->offline() and ->exit() cannot expect policy->cpus to be
-> populated, because they are called when it is empty from
-> cpufreq_offline().
+> v2:
+>   - Fix names of result expectation files to match SoC
+>   - Don't execute tests that are going to skip on all boards
 >
-> So the $subject patch is correct AFAICS even though it doesn't address
-> all of the above.
+> v3:
+>   - Remove tracking of dmesg output during test execution
+>
+> Signed-off-by: Tomeu Vizoso <tomeu.vizoso@collabora.com>
+> ---
+>  Documentation/gpu/msm_automated_testing.rst   |  70 +++++++++
+>  drivers/gpu/drm/msm/ci/gitlab-ci.yml          |  11 ++
+>  drivers/gpu/drm/msm/ci/msm.testlist           | 144 ++++++++++++++++++
+>  .../gpu/drm/msm/ci/msm_apq8016_results.txt    | 141 +++++++++++++++++
+>  .../gpu/drm/msm/ci/msm_apq8096_results.txt    | 141 +++++++++++++++++
+>  drivers/gpu/drm/msm/ci/msm_sc7180_results.txt | 142 +++++++++++++++++
+>  drivers/gpu/drm/msm/ci/msm_sdm845_results.txt | 142 +++++++++++++++++
+>  7 files changed, 791 insertions(+)
+>  create mode 100644 Documentation/gpu/msm_automated_testing.rst
+>  create mode 100644 drivers/gpu/drm/msm/ci/gitlab-ci.yml
+>  create mode 100644 drivers/gpu/drm/msm/ci/msm.testlist
+>  create mode 100644 drivers/gpu/drm/msm/ci/msm_apq8016_results.txt
+>  create mode 100644 drivers/gpu/drm/msm/ci/msm_apq8096_results.txt
+>  create mode 100644 drivers/gpu/drm/msm/ci/msm_sc7180_results.txt
+>  create mode 100644 drivers/gpu/drm/msm/ci/msm_sdm845_results.txt
+>
 
-TBH, I'm not sure why show() doesn't check policy_is_inactive() under the rwsem.
+[snip]
 
-Moreover, I'm not sure why the locking dance in store() is necessary.
+> diff --git a/drivers/gpu/drm/msm/ci/gitlab-ci.yml b/drivers/gpu/drm/msm/ci/gitlab-ci.yml
+> new file mode 100644
+> index 000000000000..9b7caa7fcab2
+> --- /dev/null
+> +++ b/drivers/gpu/drm/msm/ci/gitlab-ci.yml
+> @@ -0,0 +1,11 @@
+> +variables:
+> +  # Change this to use your fork of drm-ci
+> +  DRM_CI_PROJECT_PATH: &drm-ci-project-path gfx-ci/drm-ci
+> +  DRM_CI_COMMIT_SHA: &drm-ci-commit-sha msm
+
+btw, shouldn't we list an exact commit sha (or tag) for drm-ci, or am
+I overlooking something?  We want to be able to uprev the drm-ci
+version (and therefore igt version) in sync with any necessary updates
+to the expectations
+
+BR,
+-R
+
+> +
+> +include:
+> +  - project: *drm-ci-project-path
+> +    ref: *drm-ci-commit-sha
+> +    file:
+> +      - '.msm-gitlab-ci.yml'
+> +      - '.gitlab-ci.yml'

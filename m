@@ -2,206 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47865522820
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 02:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D721522829
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 02:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239096AbiEKAFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 20:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47932 "EHLO
+        id S234290AbiEKAIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 20:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231839AbiEKAFA (ORCPT
+        with ESMTP id S239154AbiEKAIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 20:05:00 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433D1248E3A
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 17:04:59 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id q18so260107pln.12
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 17:04:59 -0700 (PDT)
+        Tue, 10 May 2022 20:08:22 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87992B26C
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 17:08:21 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id v10-20020a17090a0c8a00b001c7a548e4f7so2036215pja.2
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 17:08:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZchoqzQKbQQ0HkN8pkgXJH0p5sZcEYr4VEaC4c3fZv0=;
-        b=Tm4Ct/yLf05DymgN6mV0U11Xeko5sOECiRgXCosO/olG5NK32Q/dzN+FXG3OMMYauZ
-         7+Irsp9mnIlzsxodeL14fWjKfV8MdCVM++HPh+a9HMHBEAOAKBCe723qvaq8RN9ZLe66
-         kX6gg57f7qsbux6WOtEvbFTvd9cwXIVQdYUfE=
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=dNbuTkyCU7vGFCoTsA664uRiY2J5liUoITH0qkWIFzA=;
+        b=UnseLFLzO9W0l5JlYK+1pZQ6JC+DosIx+0fntsgSeA0m3izeVHHQFC90U1vn8Jk/DQ
+         B1CsUwqVqGZB26akMlbFTPJiv40VFo8/7Yu+nx+k++gC1z/dfsdOWogC/LBsKml0Gs4a
+         eo7bS1PVA3oUB4f8Rg1KR+9xoN/I7+UVhR1chUV765VUhChynWt3VHWlw0r3R1coIf5p
+         mOwQiMF2ZcqdTYvdP/pNU2CKCnCVpiWWfjLucUJwCkAcebr6qKMZ7qnQCdiFfuxWFIMq
+         kZ89TKd8QzQ98UH+HWxLk9p1AiyRJtXF1iS5Yo0Y4GFDIfuPxXDX0ZvEPfoLO6G0dmYd
+         iDvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZchoqzQKbQQ0HkN8pkgXJH0p5sZcEYr4VEaC4c3fZv0=;
-        b=UA1B06At/GXRSIAHUOU6TennAV3ER9CG+R8JPBRvj4mYoAPXKFDPnqkmyVa3vGCjQk
-         r6GB2rNL25C39vmYK6fZ5Ts11IzPI2/5TCjMh1pwDPLI2tnFj1rMa6MorSgOtLvPu4BB
-         lh+KjjRVQFvYRnaiev1y+0DyI6L0YaPDDjKVCUw+Z9/20QM+SMCX01VS9/M7l2MGsXo5
-         u5LceT5sACZFKstAfTa2yCgN5wE7lSYhLeHHEg9g3yOUtSkyDrpEFDu9KskBM6dXcjgk
-         QuO3hxV71cPoqPlUo9gVByeHYshQZayYzSQDq8vCcAypg19XGmo5QlL/319Z4RBjKkjw
-         dmCg==
-X-Gm-Message-State: AOAM5319JwnSsL7TSz+L/VyW5sC2DHk/UP+5QjCRwNIQePmwcP4dYAXu
-        z1sqU0Z9GX4N7FB356WoR2dTzQ==
-X-Google-Smtp-Source: ABdhPJzYKPRjsS265QVn9SJMMbFfgmvXxQIW1Nk7jN2bzvqGgd+9VottH0k7ZuOcUwn0zEbmbuhd6Q==
-X-Received: by 2002:a17:90b:1b0d:b0:1dc:672e:c8c2 with SMTP id nu13-20020a17090b1b0d00b001dc672ec8c2mr2413297pjb.96.1652227498758;
-        Tue, 10 May 2022 17:04:58 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id v1-20020aa78081000000b0050dc7628191sm130081pff.107.2022.05.10.17.04.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 17:04:58 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] gcc-plugins: randstruct: Remove cast exception handling
-Date:   Tue, 10 May 2022 17:04:56 -0700
-Message-Id: <20220511000456.3628751-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4672; h=from:subject; bh=sxL2eDYL0WKROpn9RSAKksfRkZnvvnEFvCZ/CKvb7mk=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiev2oabvR4A3+JQQt/oBAOfuC7eY8RMBUyosqzaYa LPbHKf2JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYnr9qAAKCRCJcvTf3G3AJsxqD/ wNW8LHqJ04IT2OIsBy0JnUcUK59JPeTHe+dz+4Bep+SE4VzFi2arz0x1JRYdv3QZ4scpIyBAg2/of7 WoHnmJG+9DA4gyUz+RWk877MdDAbnpebI0qB/Q9Z7QkONT9FbGaFywqHSG4J2T1A3K+hmoOvSKWAGM cx6+Ka1UYjYlOjBUSj4MCqDW+t2Yz4iOY85nNTHXkbh8WCKgwK7rF02xlki87zH/23uyBeu6On6bQo BimMMSG3fnTy1BBmniUzrKzjA/QGve7buUVaAesDVY1cJRyCMJk7t9uAzsvJ/Izl+jEzFvmYtoarlp naydl6DkGBsgytwU+OlOFNPsqK6kRUWL0uoJfAQDWVu3Vzu82pkMQdc09UyWtiUFQiR/fbVGdTTbW/ p8qj0DnUhUZOoW77d58d90nhjL9UVzbjexj4os/2ifIrukOAV8HRBrbxUCspV6ePXkDZEYbM6E6f6w 9l8emKJHZ3rGA2X+XINHOHc3Dh8+5YS8ydLAPsvbhKicjUD/klxnzoUTA+FMYA6wGS1u+WLfKHrgb6 Tfj4TL92vXCJ4VS0LrYo9z+GN7BjAuCqYSrlZ9vJR+wFr36sOahRUeHK51C+mXeKDvapboK8GCdrkG rww0XJEswFgE7mVFi+fp3ZPkZ8lz9gynh8GH1FKwKwe1rMtstYH8SiUHOwmQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=dNbuTkyCU7vGFCoTsA664uRiY2J5liUoITH0qkWIFzA=;
+        b=AlCyYzNJzQa05659/0zdoGkXxexxU4nqwa43uFXKl9McNoYvcmgMgB4pCGE93xBC5N
+         9mhbO0c7Zn5QZjBc11ZqMXy7Y1AAEnIGs+G30Uxlzmr9wLX++hsUy9PU3QHunpKkd0h3
+         Jo4HNFCWClzMGDxj7hllZlwZ0p+o+G9+cy2OrpK/FSTAY/kqcQ3TKar2Ad78lEGIV3k1
+         yrcw38ddNaWHl9nRX/aXu3n2ApgaeT9UQAbs/jUDtx33DXcxgt7oWHbCRhzKVImiIhBE
+         oHKmfbkR08DKuGHCgjDRchrDBWe1FXHcii49k/WcchmZMSiXKawIXtsPUTZViiUJ7bHM
+         eDdw==
+X-Gm-Message-State: AOAM532basKuFDujQP5wclElk+85XZPxeJ72gFcuSMOdrhxHBy5MtCUD
+        ZS9gYi/0Hb3GurJvoOXKZw0mH433P3ESSqiq
+X-Google-Smtp-Source: ABdhPJw3owLfgfZAtsGQO5jBYr1h8XAIQ4b1CvTrkLICgc6kV0PqhJkSCXusqz878VEn6FCZQ/2+GaJT1BOXVRec
+X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
+ (user=vannapurve job=sendgmr) by 2002:a17:90a:e510:b0:1d9:ee23:9fa1 with SMTP
+ id t16-20020a17090ae51000b001d9ee239fa1mr55515pjy.0.1652227700562; Tue, 10
+ May 2022 17:08:20 -0700 (PDT)
+Date:   Wed, 11 May 2022 00:08:02 +0000
+Message-Id: <20220511000811.384766-1-vannapurve@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
+Subject: [RFC V2 PATCH 0/8] selftests: KVM: selftests for fd-based approach of
+ supporting private memory
+From:   Vishal Annapurve <vannapurve@google.com>
+To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, shauh@kernel.org, yang.zhong@intel.com,
+        drjones@redhat.com, ricarkol@google.com, aaronlewis@google.com,
+        wei.w.wang@intel.com, kirill.shutemov@linux.intel.com,
+        corbet@lwn.net, hughd@google.com, jlayton@kernel.org,
+        bfields@fieldses.org, akpm@linux-foundation.org,
+        chao.p.peng@linux.intel.com, yu.c.zhang@linux.intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com,
+        michael.roth@amd.com, qperret@google.com, steven.price@arm.com,
+        ak@linux.intel.com, david@redhat.com, luto@kernel.org,
+        vbabka@suse.cz, marcorr@google.com, erdemaktas@google.com,
+        pgonda@google.com, nikunj@amd.com, seanjc@google.com,
+        diviness@google.com, Vishal Annapurve <vannapurve@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With all randstruct exceptions removed, remove all the exception
-handling code. Any future warnings are likely to be shared between
-this plugin and Clang randstruct, and will need to be addressed in a
-more wholistic fashion.
+This v2 series implements selftests targeting the feature floated by Chao
+via:
+https://lore.kernel.org/linux-mm/20220310140911.50924-1-chao.p.peng@linux.intel.com/
 
-Cc: Christoph Hellwig <hch@infradead.org>
-Cc: linux-hardening@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-This depends on the other patches that remove the exception entries:
-https://lore.kernel.org/linux-hardening/20220510235817.3627784-1-keescook@chromium.org/
-https://lore.kernel.org/linux-hardening/20220510205729.3574400-1-keescook@chromium.org/
-https://lore.kernel.org/linux-hardening/20220511000109.3628404-1-keescook@chromium.org/
----
- scripts/gcc-plugins/randomize_layout_plugin.c | 79 +------------------
- 1 file changed, 3 insertions(+), 76 deletions(-)
+Below changes aim to test the fd based approach for guest private memory
+in context of normal (non-confidential) VMs executing on non-confidential
+platforms.
 
-diff --git a/scripts/gcc-plugins/randomize_layout_plugin.c b/scripts/gcc-plugins/randomize_layout_plugin.c
-index 2ca768d88a68..ea2aea570404 100644
---- a/scripts/gcc-plugins/randomize_layout_plugin.c
-+++ b/scripts/gcc-plugins/randomize_layout_plugin.c
-@@ -39,16 +39,6 @@ static struct plugin_info randomize_layout_plugin_info = {
- 			  "performance-mode\tenable cacheline-aware layout randomization\n"
- };
- 
--struct whitelist_entry {
--	const char *pathname;
--	const char *lhs;
--	const char *rhs;
--};
--
--static const struct whitelist_entry whitelist[] = {
--	{ }
--};
--
- /* from old Linux dcache.h */
- static inline unsigned long
- partial_name_hash(unsigned long c, unsigned long prevhash)
-@@ -734,60 +724,6 @@ static void handle_local_var_initializers(void)
- 	}
- }
- 
--static bool type_name_eq(gimple stmt, const_tree type_tree, const char *wanted_name)
--{
--	const char *type_name;
--
--	if (type_tree == NULL_TREE)
--		return false;
--
--	switch (TREE_CODE(type_tree)) {
--	case RECORD_TYPE:
--		type_name = TYPE_NAME_POINTER(type_tree);
--		break;
--	case INTEGER_TYPE:
--		if (TYPE_PRECISION(type_tree) == CHAR_TYPE_SIZE)
--			type_name = "char";
--		else {
--			INFORM(gimple_location(stmt), "found non-char INTEGER_TYPE cast comparison: %qT\n", type_tree);
--			debug_tree(type_tree);
--			return false;
--		}
--		break;
--	case POINTER_TYPE:
--		if (TREE_CODE(TREE_TYPE(type_tree)) == VOID_TYPE) {
--			type_name = "void *";
--			break;
--		} else {
--			INFORM(gimple_location(stmt), "found non-void POINTER_TYPE cast comparison %qT\n", type_tree);
--			debug_tree(type_tree);
--			return false;
--		}
--	default:
--		INFORM(gimple_location(stmt), "unhandled cast comparison: %qT\n", type_tree);
--		debug_tree(type_tree);
--		return false;
--	}
--
--	return strcmp(type_name, wanted_name) == 0;
--}
--
--static bool whitelisted_cast(gimple stmt, const_tree lhs_tree, const_tree rhs_tree)
--{
--	const struct whitelist_entry *entry;
--	expanded_location xloc = expand_location(gimple_location(stmt));
--
--	for (entry = whitelist; entry->pathname; entry++) {
--		if (!strstr(xloc.file, entry->pathname))
--			continue;
--
--		if (type_name_eq(stmt, lhs_tree, entry->lhs) && type_name_eq(stmt, rhs_tree, entry->rhs))
--			return true;
--	}
--
--	return false;
--}
--
- /*
-  * iterate over all statements to find "bad" casts:
-  * those where the address of the start of a structure is cast
-@@ -864,10 +800,7 @@ static unsigned int find_bad_casts_execute(void)
- #ifndef __DEBUG_PLUGIN
- 				if (lookup_attribute("randomize_performed", TYPE_ATTRIBUTES(ptr_lhs_type)))
- #endif
--				{
--					if (!whitelisted_cast(stmt, ptr_lhs_type, ptr_rhs_type))
--						MISMATCH(gimple_location(stmt), "rhs", ptr_lhs_type, ptr_rhs_type);
--				}
-+				MISMATCH(gimple_location(stmt), "rhs", ptr_lhs_type, ptr_rhs_type);
- 				continue;
- 			}
- 
-@@ -890,10 +823,7 @@ static unsigned int find_bad_casts_execute(void)
- #ifndef __DEBUG_PLUGIN
- 				if (lookup_attribute("randomize_performed", TYPE_ATTRIBUTES(op0_type)))
- #endif
--				{
--					if (!whitelisted_cast(stmt, ptr_lhs_type, op0_type))
--						MISMATCH(gimple_location(stmt), "op0", ptr_lhs_type, op0_type);
--				}
-+				MISMATCH(gimple_location(stmt), "op0", ptr_lhs_type, op0_type);
- 			} else {
- 				const_tree ssa_name_var = SSA_NAME_VAR(rhs1);
- 				/* skip bogus type casts introduced by container_of */
-@@ -903,10 +833,7 @@ static unsigned int find_bad_casts_execute(void)
- #ifndef __DEBUG_PLUGIN
- 				if (lookup_attribute("randomize_performed", TYPE_ATTRIBUTES(ptr_rhs_type)))
- #endif
--				{
--					if (!whitelisted_cast(stmt, ptr_lhs_type, ptr_rhs_type))
--						MISMATCH(gimple_location(stmt), "ssa", ptr_lhs_type, ptr_rhs_type);
--				}
-+				MISMATCH(gimple_location(stmt), "ssa", ptr_lhs_type, ptr_rhs_type);
- 			}
- 
- 		}
+priv_memfd_test.c file adds a suite of selftests to access private memory
+from the guest via private/shared accesses and checking if the contents
+can be leaked to/accessed by vmm via shared memory view.
+
+Updates in V2:
+1) Tests are added to exercise implicit/explicit memory conversion paths.
+2) Test is added to exercise UPM feature without double memory allocation.
+
+This series has dependency on following patches:
+1) V5 series patches from Chao mentioned above.
+2) https://github.com/vishals4gh/linux/commit/b9adedf777ad84af39042e9c19899600a4add68a
+  - Fixes host kernel crash with current implementation
+3) https://github.com/vishals4gh/linux/commit/0577e351ee36d52c1f6cdcb1b8de7aa6b5f760fe
+  - Confidential platforms along with the confidentiality aware software stack
+    support a notion of private/shared accesses from the confidential VMs.
+    Generally, a bit in the GPA conveys the shared/private-ness of the access.
+
+    Non-confidential platforms don't have a notion of private or shared accesses
+    from the guest VMs. To support this notion, KVM_HC_MAP_GPA_RANGE is modified
+    to allow marking an access from a VM within a GPA range as always shared or
+    private. There is an ongoing discussion about adding support for
+    software-only confidential VMs, which should replace this patch.
+4) https://github.com/vishals4gh/linux/commit/8d46aea9a7d72e4b1b998066ce0dde085fb963a7
+  - Temporary placeholder to be able to test memory conversion paths
+    till the memory conversion exit error code is finalized.
+5) https://github.com/vishals4gh/linux/commit/4c36706477c62d9416d635fa6ac4ef6484014dfc
+  - Fixes GFN calculation during memory conversion path.
+
+Github link for the patches posted as part of this series:
+https://github.com/vishals4gh/linux/commits/priv_memfd_selftests_rfc_v2
+
+Austin Diviness (1):
+  selftests: kvm: Add hugepage support to priv_memfd_test suite.
+
+Vishal Annapurve (7):
+  selftests: kvm: Fix inline assembly for hypercall
+  selftests: kvm: Add a basic selftest to test private memory
+  selftests: kvm: priv_memfd_test: Add support for memory conversion
+  selftests: kvm: priv_memfd_test: Add shared access test
+  selftests: kvm: Add implicit memory conversion tests
+  selftests: kvm: Add KVM_HC_MAP_GPA_RANGE hypercall test
+  selftests: kvm: priv_memfd: Add test avoiding double allocation
+
+ tools/testing/selftests/kvm/Makefile          |    1 +
+ .../selftests/kvm/lib/x86_64/processor.c      |    2 +-
+ tools/testing/selftests/kvm/priv_memfd_test.c | 1359 +++++++++++++++++
+ 3 files changed, 1361 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/kvm/priv_memfd_test.c
+
 -- 
-2.32.0
+2.36.0.512.ge40c2bad7a-goog
 

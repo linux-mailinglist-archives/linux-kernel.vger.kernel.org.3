@@ -2,102 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C09DF5231E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 673885231E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237005AbiEKLfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 07:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
+        id S240401AbiEKLfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 07:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232991AbiEKLfP (ORCPT
+        with ESMTP id S239248AbiEKLfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 07:35:15 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E7863380
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:35:14 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 31so1541652pgp.8
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:35:14 -0700 (PDT)
+        Wed, 11 May 2022 07:35:21 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94319237B8B;
+        Wed, 11 May 2022 04:35:20 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id bs17so2070911qkb.0;
+        Wed, 11 May 2022 04:35:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=8MZ56pDFwVnKOXfifpZSPr/1GPpet0KvHNF4wyHnxkM=;
-        b=kqXr5s4dDIf9h5PnDYgt2/AU2H37ORdYS7RRO+BDROwYpLNWtj0EwKL7BDMfiaG81o
-         6DAsreuSeFa96GQqEyYYi2STqkMUfcaqz200VYX39t4vOyJWK8JrZ78gvz6eh6Os9aB4
-         UhnvG9wzD+6UoyG7qOCim2SKGqbtSzcDPmoc/T9k71tT2IMAMtgjYsZTkku5jzCFBoK2
-         XjmZ8GIs5oz2VKCH9+5SetlGLh86g5SLntGL9RENCMBK0hjaxHtq/TPuQIdzzfU60LCG
-         AtT88GzsslyN5ekx0a0P2MIsfRQrk6ZSvrkd8gqNKHTe0f+G5jOlDunorJXjlz51p5BN
-         qCLg==
+        bh=fIWpbH8Qkfx6CtZf98GRcpag46QLNFxJDLii79V6Ww4=;
+        b=iwUFlCXpNjAisVEfnwmlAdOatVcSnAwwbuVcsltGQ/5e2qlxjuvMvHFH0zjH653Mbe
+         P10WcoYwALsqMADv3kofz5Iv36VCkh+MBGhmZIVf+tfXY4c6t/nPYMTWollwMNTd8SA1
+         axrtWIBOwW4r+pvlA76424OgOCu0uMq70lLVLEb+qqhnND16vEEjQS5J1IpkudyWrFy4
+         5TlJT9hljT5a5CrhxTLXnu0mHPi/Gd9oa/44/w52HsA6upKYCtvyhYOLlUSUSNn9AO6J
+         FrVO5m0S9T8BVuuyUXNKoMtg808X7troFbx1f36TKqFRqd8P4T0doH2AqrtBrlJleTDW
+         O5Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=8MZ56pDFwVnKOXfifpZSPr/1GPpet0KvHNF4wyHnxkM=;
-        b=zl+HXU798+rzq0RReh26ckZ9QFzxAl5eenviURsYHcnxFU6MMME+BviAyvCjfx2ho2
-         QGb9o9Rrfb4nanWnwhYi3oC1XBr5yC5wpttkwNWlfTJxY8vn95c+Je4ewCoPgpp6ojzk
-         KZXZaGtWsMpkGw9gApsmxINA4ZbX0RSx0rKFtpwrwlQVYayDT0i5fW0lJt4l9UbZvHZK
-         rHPQloV/txd8l9gnfrNvWbhzvBT/odhoBFf7rVMBi7cErqCwrxo9UxDQlfHucBJ9uv3D
-         H7aFAAkgR9G6hXtuIFb7qVjaJVsdD81/jPVgJd2gSWuy92r6/kEMxRRrJQhrU97iM0Bt
-         6QwQ==
-X-Gm-Message-State: AOAM531byZcDl/vLx9z2WH3akhCX+5VkeUcptUkHrCRTLPZmKE1fFQtE
-        KFgeo3/uMuWlffVmEWfzDv4=
-X-Google-Smtp-Source: ABdhPJxW6/PVUjOeQiDdk0es/i/xNSOdHBeITEkkMZvP6SketwG4tsot6BkXexicQMVtkZjPNXSzUQ==
-X-Received: by 2002:a65:6d09:0:b0:3aa:1ecf:8848 with SMTP id bf9-20020a656d09000000b003aa1ecf8848mr20722322pgb.55.1652268914012;
-        Wed, 11 May 2022 04:35:14 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id s2-20020a17090302c200b0015e8d4eb23esm1584594plk.136.2022.05.11.04.35.11
+        bh=fIWpbH8Qkfx6CtZf98GRcpag46QLNFxJDLii79V6Ww4=;
+        b=Ekv6pEGrRM9z70wvcLuRA3Cvnk1EQmeuCj49tW3am/hNaxf57DsWzPseZaYTx/4nUw
+         cj8gWUzNgfxXfwEE6uH8ZT/b+2iDKOKZ/IgySRmEK7pzAFAZrnQqkfPkpLyQK9WrznMP
+         /qIlbb9G2OBoBNWaaZgOdgKnjwgD+jzA/hyFseDKX0Dcxs01XVQBcblVxaQYoFI41PgO
+         l1FcVgJxch5DID34r9L3Vt+I52n1POeC9WCeF+JDN2H2Ut64AZaC6ARapHlKB9pPoDC+
+         uixd3Bi/eEVxy2u5v+lUkwWQ8kkuRVz4V3D8kDFt9y4BOJ/F0ErhdKCECQG0J727pvnx
+         6hRA==
+X-Gm-Message-State: AOAM532G3RBVHtOfosO2uW3o4IPVtQ4uXTAICtzhQMvkNcYweyHNzqJt
+        4jZ95FwsvJxlyWJkGqHdP+bcL167cHZ9nA==
+X-Google-Smtp-Source: ABdhPJzmxu38yPKnQkUR29DXmgeEH2Q7/lQoPhE5QKvfpHBeWFD/QSRUEnuuqI6W5KyHPA4iWJ4xBw==
+X-Received: by 2002:a05:620a:254e:b0:680:a307:8a33 with SMTP id s14-20020a05620a254e00b00680a3078a33mr18549892qko.304.1652268919643;
+        Wed, 11 May 2022 04:35:19 -0700 (PDT)
+Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
+        by smtp.gmail.com with ESMTPSA id bw26-20020a05622a099a00b002f39b99f6basm953377qtb.84.2022.05.11.04.35.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 04:35:13 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Robin Gong <b38343@freescale.com>, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] regulator: pfuze100: Fix refcount leak in pfuze_parse_regulators_dt
-Date:   Wed, 11 May 2022 15:35:05 +0400
-Message-Id: <20220511113506.45185-1-linmq006@gmail.com>
+        Wed, 11 May 2022 04:35:19 -0700 (PDT)
+From:   Peter Geis <pgwipeout@gmail.com>
+To:     linux-rockchip@lists.infradead.org
+Cc:     Heiko Stuebner <heiko@sntech.de>, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Peter Geis <pgwipeout@gmail.com>
+Subject: [PATCH v2 0/3] add Pine64 touch panel support to rockpro64
+Date:   Wed, 11 May 2022 07:35:13 -0400
+Message-Id: <20220511113517.4172962-1-pgwipeout@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_node_get() returns a node with refcount incremented.
-Calling of_node_put() to drop the reference when not needed anymore.
+Good Morning,
 
-Fixes: 3784b6d64dc5 ("regulator: pfuze100: add pfuze100 regulator driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/regulator/pfuze100-regulator.c | 2 ++
- 1 file changed, 2 insertions(+)
+Apologies Heiko on taking so long for this v2.
 
-diff --git a/drivers/regulator/pfuze100-regulator.c b/drivers/regulator/pfuze100-regulator.c
-index d60d7d1b7fa2..aa55cfca9e40 100644
---- a/drivers/regulator/pfuze100-regulator.c
-+++ b/drivers/regulator/pfuze100-regulator.c
-@@ -521,6 +521,7 @@ static int pfuze_parse_regulators_dt(struct pfuze_chip *chip)
- 	parent = of_get_child_by_name(np, "regulators");
- 	if (!parent) {
- 		dev_err(dev, "regulators node not found\n");
-+		of_node_put(np);
- 		return -EINVAL;
- 	}
- 
-@@ -550,6 +551,7 @@ static int pfuze_parse_regulators_dt(struct pfuze_chip *chip)
- 	}
- 
- 	of_node_put(parent);
-+	of_node_put(np);
- 	if (ret < 0) {
- 		dev_err(dev, "Error parsing regulator init data: %d\n",
- 			ret);
+This patch series adds support for the Pine64 touch panel to the
+rockpro64 single board computer.
+This panel attaches to the dsi port and includes an i2c touch screen.
+
+The first two patches involve making the reset pin to the Feiyang
+fy07024di26a30d panel optional. On the rockpro64 and quartz64-a this pin
+is tied to dvdd and automatically comes high when power is applied.
+The third patch adds the device tree nodes to rockpro64 to permit the
+panel to be used.
+
+Changelog:
+v2:
+- Drop patch 4 so we don't "enable" the nodes
+- Drop the unnecessary null checks
+- Rebase to 5.18-rc1
+
+Peter Geis (3):
+  dt-bindings: display: panel: feiyang, fy07024di26a30d: make reset gpio
+    optional
+  drm/panel: feiyang-fy07024di26a30d: make reset gpio optional
+  arm64: dts: rockchip: add pine64 touch panel display to rockpro64
+
+ .../panel/feiyang,fy07024di26a30d.yaml        |  1 -
+ .../boot/dts/rockchip/rk3399-rockpro64.dtsi   | 80 ++++++++++++++++++-
+ .../drm/panel/panel-feiyang-fy07024di26a30d.c |  2 +-
+ 3 files changed, 77 insertions(+), 6 deletions(-)
+
 -- 
 2.25.1
 

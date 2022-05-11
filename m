@@ -2,81 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2F0523577
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A25523579
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242519AbiEKO3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 10:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
+        id S244644AbiEKO3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 10:29:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231862AbiEKO27 (ORCPT
+        with ESMTP id S231251AbiEKO3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 10:28:59 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF308CCD2
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:28:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=XdwozKPcqTzwOXE+Ovf1o8hV0Egb8ylr4ZAv2wxgADs=; b=LBxwO6l24WTPEFmT7PduW4SHk1
-        YaZvpRb2Z44mivsVnrdNHDFivsXGQkXWXGchFUTT5K+NqXxxKht8HA7TNWyZIUsNUqETqQpVzUuIA
-        1yTjOmPTuFR3WUC1m8kFyO32xj0DdnH+JEBEZ7kt0YyUNBWTpdy9pZCVNQ6hsRVOANE8DpGvym78s
-        5W1qAJOEUFIXCPQFQFT79LPO5H9U8Pv52BmtbWa8rnDrZ3M+kNNt0afpamuoasdFqoZvpNUlz70vE
-        4EuWsH66cY00kb/rOSjVGBZiU+PIxiqM7mEwSdoceZ3p0Q9ypfzNFg643KRva0txISLteEzF8Xdsr
-        24Cf/E7w==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60686)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nonKY-0006wD-1i; Wed, 11 May 2022 15:28:46 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nonKS-0007BR-Ib; Wed, 11 May 2022 15:28:40 +0100
-Date:   Wed, 11 May 2022 15:28:40 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
-        Will Deacon <will@kernel.org>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Joel Stanley <joel@jms.id.au>
-Subject: Re: [PATCH v1] ARM: A9: Add ARM ERRATA 764319 workaround
-Message-ID: <YnvIGOpL06ZtbJgR@shell.armlinux.org.uk>
-References: <20220506192957.24889-1-nick.hawkins@hpe.com>
- <CAK8P3a045Di_zRomezeah0ZoSGPw0Z6YoYkZtoxx1qOXAtKbbw@mail.gmail.com>
- <7C103AEB-3111-4AE6-9645-CF590388A879@hpe.com>
- <CAK8P3a0OS+4XTG9VmfPwbuQoT+_G5-fSatbJ0g8Y7Y+O6-3YLQ@mail.gmail.com>
- <20220510141124.GB28104@willie-the-truck>
- <PH0PR84MB171830414ADC0DD69BD4116788C89@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
- <CAK8P3a1AG5RXW74LbskwMh1yJzXUjrzdL=iqaVz_7W2hExVuGw@mail.gmail.com>
+        Wed, 11 May 2022 10:29:00 -0400
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552188FD4C;
+        Wed, 11 May 2022 07:28:59 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id e12so4300750ybc.11;
+        Wed, 11 May 2022 07:28:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qTQsWzO3YZW4uR9nq/l9n7qJaYMCw4ErgRQiynA4kEg=;
+        b=ZV0Iae6vKejP0m7BWxQuZsPkeeRuFbUVZ4SDI5/u8Vdk1B5C9CwB1HSzxi3hk33WBU
+         q5DsrcsuH6Fa4pRndQk36T/x/DYCxrmnYdnY+H68/yCk27bN520vRTXQgI5EirAZZWAf
+         fgAwgrau/eEqP7nwxkZBiE1LYKR05znvEUbEX27o+WxK88L4D6fnCL5JHtIrMzV4KhXE
+         9n/jFcrM4o2civTiMod3BLQ+fYPe6H5seWtuH5mEIAmoEySBkY5swQy+gHxMzzNzvVm2
+         Vi2aMxVmzP5XApbqOZa9expa3FvdYwaodeLV/Pl4QvTKs4X7qwE2Lb+dij/wmbV3gqdf
+         An4Q==
+X-Gm-Message-State: AOAM533Ll7PzdEMWfWE9S3iYAjmxK14HCc4AOdpj9ZaXE6o8KVy4xEbG
+        jRXjTIKbwG15qZwz5ci7GyQKLZRQIeaIPhrAs3I=
+X-Google-Smtp-Source: ABdhPJzUF1Hmo7chhIyI7QmLnOOhTeYUSu+/KrSyvQOVI3jgtw6tpn8zgdQR8STtyAp27JjupRvIDytVxTu6nPU33Lw=
+X-Received: by 2002:a25:cb4b:0:b0:645:d702:eb15 with SMTP id
+ b72-20020a25cb4b000000b00645d702eb15mr22026644ybg.500.1652279338443; Wed, 11
+ May 2022 07:28:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a1AG5RXW74LbskwMh1yJzXUjrzdL=iqaVz_7W2hExVuGw@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220511130240.790771-1-zhaojunkui2008@126.com>
+In-Reply-To: <20220511130240.790771-1-zhaojunkui2008@126.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 11 May 2022 23:28:47 +0900
+Message-ID: <CAMZ6RqJpgUkr0i4X4w5GxYKgiu9aX8KvQ3fJ9OB0Ob3kbL2abw@mail.gmail.com>
+Subject: Re: [PATCH v2] usb/peak_usb: cleanup code
+To:     Bernard Zhao <zhaojunkui2008@126.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bernard@vivo.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 02:45:27PM +0200, Arnd Bergmann wrote:
-> If it doesn't work, then there is no point trying. You could try
-> changing the exception handling so it searches the ex_table for
-> Undefined Instruction exceptions as well, but that's probably more
-> complicated.
+On Wed. 11 May 2022 at 22:02, Bernard Zhao <zhaojunkui2008@126.com> wrote:
+> The variable fi and bi only used in branch if (!dev->prev_siblings)
+> , fi & bi not kmalloc in else branch, so move kfree into branch
+> if (!dev->prev_siblings),this change is to cleanup the code a bit.
+>
+> Signed-off-by: Bernard Zhao <zhaojunkui2008@126.com>
+>
+> ---
+> Changes since V1:
+> * move all the content of the if (!dev->prev_siblings) to a new
+> function.
+> ---
+>  drivers/net/can/usb/peak_usb/pcan_usb_pro.c | 57 +++++++++++++--------
+>  1 file changed, 36 insertions(+), 21 deletions(-)
+>
+> diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
+> index ebe087f258e3..5e472fe086a8 100644
+> --- a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
+> +++ b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
+> @@ -841,32 +841,28 @@ static int pcan_usb_pro_stop(struct peak_usb_device *dev)
+>         return 0;
+>  }
+>
+> -/*
+> - * called when probing to initialize a device object.
+> - */
+> -static int pcan_usb_pro_init(struct peak_usb_device *dev)
+> +static int pcan_usb_pro_init_first_channel(struct peak_usb_device *dev, struct pcan_usb_pro_interface **usb_if)
+>  {
+> -       struct pcan_usb_pro_device *pdev =
+> -                       container_of(dev, struct pcan_usb_pro_device, dev);
+> -       struct pcan_usb_pro_interface *usb_if = NULL;
+> -       struct pcan_usb_pro_fwinfo *fi = NULL;
+> -       struct pcan_usb_pro_blinfo *bi = NULL;
+> +       struct pcan_usb_pro_interface *pusb_if = NULL;
 
-What's the point when we have the undef hook?
+Nitpick but I would expect the argument of the function to be named pusb_if:
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+struct pcan_usb_pro_interface **pusb_if
+
+And this variable to be call usb_if:
+
+struct pcan_usb_pro_interface *usb_if = NULL;
+
+This is to be consistent with pcan_usb_pro_init() where the single
+pointer is also named usb_if (and not pusb_if).
+
+Also, you might as well consider not using and intermediate variable
+and just do *pusb_if throughout all this helper function instead.
+
+>         int err;
+>
+>         /* do this for 1st channel only */
+>         if (!dev->prev_siblings) {
+> +               struct pcan_usb_pro_fwinfo *fi = NULL;
+> +               struct pcan_usb_pro_blinfo *bi = NULL;
+> +
+>                 /* allocate netdevices common structure attached to first one */
+> -               usb_if = kzalloc(sizeof(struct pcan_usb_pro_interface),
+> +               pusb_if = kzalloc(sizeof(struct pcan_usb_pro_interface),
+>                                  GFP_KERNEL);
+>                 fi = kmalloc(sizeof(struct pcan_usb_pro_fwinfo), GFP_KERNEL);
+>                 bi = kmalloc(sizeof(struct pcan_usb_pro_blinfo), GFP_KERNEL);
+> -               if (!usb_if || !fi || !bi) {
+> +               if (!pusb_if || !fi || !bi) {
+>                         err = -ENOMEM;
+>                         goto err_out;
+
+Did you test that code? Here, you are keeping the original err_out
+label, correct? Aren't the variables fi and bi out of scope after the
+err_out label?
+
+>                 }
+>
+>                 /* number of ts msgs to ignore before taking one into account */
+> -               usb_if->cm_ignore_count = 5;
+> +               pusb_if->cm_ignore_count = 5;
+>
+>                 /*
+>                  * explicit use of dev_xxx() instead of netdev_xxx() here:
+> @@ -903,18 +899,14 @@ static int pcan_usb_pro_init(struct peak_usb_device *dev)
+>                      pcan_usb_pro.name,
+>                      bi->hw_rev, bi->serial_num_hi, bi->serial_num_lo,
+>                      pcan_usb_pro.ctrl_count);
+> +
+> +               kfree(bi);
+> +               kfree(fi);
+>         } else {
+> -               usb_if = pcan_usb_pro_dev_if(dev->prev_siblings);
+> +               pusb_if = pcan_usb_pro_dev_if(dev->prev_siblings);
+>         }
+
+Sorry if I was not clear but I was thinking of just moving the if
+block in a new function and leaving the else part of the original one
+(c.f. below). This way, you lose one level on indentation and you can
+have the declaration, the kmalloc() and the err_out label all at the
+same indentation level in the function's main block.
+
+> -       pdev->usb_if = usb_if;
+> -       usb_if->dev[dev->ctrl_idx] = dev;
+> -
+> -       /* set LED in default state (end of init phase) */
+> -       pcan_usb_pro_set_led(dev, PCAN_USBPRO_LED_DEVICE, 1);
+> -
+> -       kfree(bi);
+> -       kfree(fi);
+> +       *usb_if = pusb_if;
+>
+>         return 0;
+>
+> @@ -926,6 +918,29 @@ static int pcan_usb_pro_init(struct peak_usb_device *dev)
+>         return err;
+>  }
+>
+> +/*
+> + * called when probing to initialize a device object.
+> + */
+> +static int pcan_usb_pro_init(struct peak_usb_device *dev)
+> +{
+> +       struct pcan_usb_pro_device *pdev =
+> +                       container_of(dev, struct pcan_usb_pro_device, dev);
+> +       struct pcan_usb_pro_interface *usb_if = NULL;
+> +       int err;
+> +
+> +       err = pcan_usb_pro_init_first_channel(dev, &usb_if);
+> +       if (err)
+> +               return err;
+
+I was thinking of this:
+
+        if (!dev->prev_siblings) {
+              err = pcan_usb_pro_init_first_channel(dev, &usb_if);
+              if (err)
+                     return err;
+       } else {
+               usb_if = pcan_usb_pro_dev_if(dev->prev_siblings);
+        }
+> +
+> +       pdev->usb_if = usb_if;
+> +       usb_if->dev[dev->ctrl_idx] = dev;
+> +
+> +       /* set LED in default state (end of init phase) */
+> +       pcan_usb_pro_set_led(dev, PCAN_USBPRO_LED_DEVICE, 1);
+> +
+> +       return 0;
+> +}
+> +
+>  static void pcan_usb_pro_exit(struct peak_usb_device *dev)
+>  {
+>         struct pcan_usb_pro_device *pdev =
+> --
+> 2.33.1
+>

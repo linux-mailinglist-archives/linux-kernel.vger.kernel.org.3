@@ -2,97 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D517522D5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0B4522CD9
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238926AbiEKH3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 03:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
+        id S242598AbiEKHIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 03:08:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237592AbiEKH3G (ORCPT
+        with ESMTP id S241099AbiEKHID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 03:29:06 -0400
-X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 11 May 2022 00:29:04 PDT
-Received: from esa2.hc1455-7.c3s2.iphmx.com (esa2.hc1455-7.c3s2.iphmx.com [207.54.90.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B9F1DEC49
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:29:03 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="72307277"
-X-IronPort-AV: E=Sophos;i="5.91,216,1647270000"; 
-   d="scan'208";a="72307277"
-Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
-  by esa2.hc1455-7.c3s2.iphmx.com with ESMTP; 11 May 2022 16:27:59 +0900
-Received: from oym-m2.gw.nic.fujitsu.com (oym-nat-oym-m2.gw.nic.fujitsu.com [192.168.87.59])
-        by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id F2B8CD646B
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:27:57 +0900 (JST)
-Received: from m3002.s.css.fujitsu.com (msm3.b.css.fujitsu.com [10.128.233.104])
-        by oym-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 43885BDC5F
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:27:57 +0900 (JST)
-Received: from localhost.localdomain (unknown [10.125.5.220])
-        by m3002.s.css.fujitsu.com (Postfix) with ESMTP id ECF07200B31F;
-        Wed, 11 May 2022 16:27:56 +0900 (JST)
-From:   Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
-To:     linmiaohe@huawei.com
-Cc:     akpm@linux-foundation.org, aquini@redhat.com, ddutile@redhat.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        mgorman@techsingularity.net, vvghjk1234@gmail.com,
-        yamamoto.rei@jp.fujitsu.com
-Subject: Re: [PATCH] mm, compaction: fast_find_migrateblock() should return pfn in the target zone
-Date:   Wed, 11 May 2022 16:07:10 +0900
-Message-Id: <20220511070710.5576-1-yamamoto.rei@jp.fujitsu.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <2c2900eb-886a-5bbe-f7c7-9d74a6399893@huawei.com>
-References: <2c2900eb-886a-5bbe-f7c7-9d74a6399893@huawei.com>
+        Wed, 11 May 2022 03:08:03 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8FBA3087
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:07:56 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id g23so1328281edy.13
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:07:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yp55JvrZnoapZhhPg9nglUGsDWim50kPROdVVnou5Nw=;
+        b=Tbvi5ltsARlvIdW+yMDCQBzBIclvAZymsXsV9F1mkVq/BGVV8KVRlVGR6iMnl9HDR+
+         3AKJz2+/ZQxFAD9NoQksKZ+KbajOTvsmF7dhsfCekiiBg+WWkAZFgG6ZoFT+rfNm9BMv
+         jQrOD8jcc8q0YMiBHGx8DDTqA6mFaBTeMhQLU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yp55JvrZnoapZhhPg9nglUGsDWim50kPROdVVnou5Nw=;
+        b=g1/Xn2CZO7nVaUlSXD1lnMgrsjnknvzPvrJRvrgTKXlS8j4NQpdZ2vxgobGNtV/eIr
+         AcCkRF40dXu0wGK4OnpTu/NrigHKhGd7M/3fVbc2jsFUK1+LvqXAexEaqMUUpOVy+810
+         4af7G9l6L2T11+vnJ9htqnYIOdcpWBbStah+42j0TC2NPv5dk9PLbzI94xpGglmo5CFh
+         knsH5E0CFLZ45hMOxpdErgNyCT6v4hIXYCiz8QlKA733JHuQ3GvELplPZ8ReG184+L3/
+         Gg0qkBWf4NDMfEsUp9Izm/9Gc3PmEXBG+yxvjwnFH4OZnH6mlPK5SX1vu8K6I7Hhi1ct
+         8+XQ==
+X-Gm-Message-State: AOAM531rl0Qj+Ksx/hCJxZuQNXIEpdqiFxH/aXbevDtvaBz1PRLQ1VKO
+        IEFEEbBWSgqeoXMw8BrEkS7MZjrPGpakWRJttmu/PU/IMcd2DQ==
+X-Google-Smtp-Source: ABdhPJxes41Q7Oqs4oy9VMmXMdOFiEdoAK5Ep3Ngad2GkTjCm6BDzEGO5c+BibRshNVGl0pSqC5e8tq6q6OWavesbug=
+X-Received: by 2002:a05:6402:42c4:b0:426:a7a8:348f with SMTP id
+ i4-20020a05640242c400b00426a7a8348fmr27535912edc.341.1652252874751; Wed, 11
+ May 2022 00:07:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220511013057.245827-1-dlunev@chromium.org>
+In-Reply-To: <20220511013057.245827-1-dlunev@chromium.org>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Wed, 11 May 2022 09:07:43 +0200
+Message-ID: <CAJfpegsmyY+D4kK3ov51FLGA=RkyGDKMcYiMo2zBqYuFNs78JQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Prevent re-use of FUSE superblock after force unmount
+To:     Daniil Lunev <dlunev@chromium.org>
+Cc:     linux-fsdevel@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 May 2022 14:25:34 Miaohe Lin wrote:
-> On 2022/5/11 12:43, Rei Yamamoto wrote:
->> Prevent returning a pfn outside the target zone in case that not
->> aligned with pageblock boundary.
->> Otherwise isolate_migratepages_block() would handle pages not in
->> the target zone.
->> 
+On Wed, 11 May 2022 at 03:31, Daniil Lunev <dlunev@chromium.org> wrote:
 >
-> IIUC, the sole caller isolate_migratepages will ensure the pfn won't outside
-> the target zone. So the below code change might not be necessary. Or am I miss
-> something ?
+> Force unmount of fuse severes the connection between FUSE driver and its
+> userspace counterpart.
 
-While block_start_pfn is ensured, this variable is not used as the argument for 
-isolate_migratepages_block():
-  -----
-  static isolate_migrate_t isolate_migratepages(struct compact_control *cc)
-  {
-  :
-          low_pfn = fast_find_migrateblock(cc);
-          block_start_pfn = pageblock_start_pfn(low_pfn);
-          if (block_start_pfn < cc->zone->zone_start_pfn)
-                  block_start_pfn = cc->zone->zone_start_pfn;  <--- block_start_pfn is ensured not outside 
-                                                                    the target zone
-  :
-          block_end_pfn = pageblock_end_pfn(low_pfn);
-  :
-          for (; block_end_pfn <= cc->free_pfn;
-                          fast_find_block = false,
-                          cc->migrate_pfn = low_pfn = block_end_pfn,
-                          block_start_pfn = block_end_pfn,
-                          block_end_pfn += pageblock_nr_pages) {
-  :
-                  if (isolate_migratepages_block(cc, low_pfn, block_end_pfn,  <--- low_pfn is passed as 
-                                                                                   the argument
-                                                  isolate_mode))
-                          return ISOLATE_ABORT;
-  -----
-
-So, the low_pfn passed to isolate_migratepages_block() can be outside the target zone.
+Why is forced umount being used in the first place?
 
 Thanks,
-Rei
+Miklos

@@ -2,119 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 270A2522E8A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:37:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A675E522E8C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbiEKIhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 04:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47804 "EHLO
+        id S243742AbiEKIhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 04:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238431AbiEKIhP (ORCPT
+        with ESMTP id S235558AbiEKIhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 04:37:15 -0400
-Received: from qproxy6-pub.mail.unifiedlayer.com (qproxy6-pub.mail.unifiedlayer.com [69.89.23.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C9168312
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 01:37:14 -0700 (PDT)
-Received: from outbound-ss-820.bluehost.com (outbound-ss-820.bluehost.com [69.89.24.241])
-        by qproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id 5742B8029178
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:37:13 +0000 (UTC)
-Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
-        by progateway2.mail.pro1.eigbox.com (Postfix) with ESMTP id 37F8B100483F4
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:37:12 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id ohqJnbiLGkku4ohqKnqjqA; Wed, 11 May 2022 08:37:12 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=ANANYO9+ c=1 sm=1 tr=0 ts=627b75b8
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=oZkIemNP1mAA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=PTOzKl9DnjhxoL6Ic-UA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=43dWgX/fyUBDeEofeV/EXVJM1ccF/W8TZLORYXiipsI=; b=P3rN5bfEqYwjp3WS7a/EljohYD
-        6YoWUlo0Iu3IhzzawBiQHgBb+akF0DB5WadOhoODnxw3f/TpgnmKQyc5z0mFXQ/zq+k+U7ZahAIsp
-        P6aa1oX2ZYZLEaNU+0RtVZ5jOIy2HFdZdTjmaRAa6ORYs3eKZ0VDj0QqClAP4DE7sm6OMQTbilqsN
-        SlJoRQSRkQXx9lNNiFSqsbNaufQda2PQJVEwexWAVizEwnMqVN7jQHxWvGQpClv8p0T/JMpdqSErR
-        Ynbl1gYgvF3kQdyiiQQ1v6NahkF0RZn/R5zjRId+M4FQji3ez4S2+GGG7Fvj5H/FaZWXf/f+baQc5
-        pxmyxKKw==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:50436 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1nohqI-001r0p-W3; Wed, 11 May 2022 02:37:11 -0600
-Subject: Re: [PATCH 5.15 000/135] 5.15.39-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220510130740.392653815@linuxfoundation.org>
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <ec807329-3c34-848b-f873-fb4671a22ca7@w6rz.net>
-Date:   Wed, 11 May 2022 01:37:09 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 11 May 2022 04:37:40 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116E06830D
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 01:37:38 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4CCBD1EC04EC;
+        Wed, 11 May 2022 10:37:33 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1652258253;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=UoVloFQ4Xl9HFnel7GHmF03+TGYLyO7LWlQCnb+R35I=;
+        b=l3dOoSVxhX8OxWdn5IvEm2BlTXW/eeco/jsN6n5am2usrsuXp/1qIrhCmDvfGIDGxdLrSW
+        HoPE4JYoKvvzTBo12ko8GO/V72BQl/ZwD9SaDNlGSV8Ow8com9tCiEy+w7gBmsDSUjcjj0
+        wqEW2UgtiOLnWs/Gixx0/k7xVWRYdkc=
+Date:   Wed, 11 May 2022 10:37:35 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Zhangfei Gao <zhangfei.gao@foxmail.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>
+Subject: Re: Link: tag and links to submission and reports (was: Re: [GIT
+ pull] core/urgent for v5.18-rc6)
+Message-ID: <Ynt1z0eZ19eMqp8I@zn.tnic>
+References: <165201148069.536527.1960632033331546251.tglx@xen13>
+ <CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com>
+ <ff841fdc-4db7-7a3d-8caf-d0cddd0dfa31@leemhuis.info>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1nohqI-001r0p-W3
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:50436
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ff841fdc-4db7-7a3d-8caf-d0cddd0dfa31@leemhuis.info>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/10/22 6:06 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.39 release.
-> There are 135 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.39-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Tue, May 10, 2022 at 01:27:54PM +0200, Thorsten Leemhuis wrote:
+> Many thx for reminding people about the tag.  FWIW, that's a problem in
+> a lot or subsystems and makes my regression tracking efforts hard, as my
+> tracking bot relies on the 'Link:' tag. If it's missing I thus have to
+> manually search if patches were posted or committed to fix a regression,
+> which makes the tracking hard and annoying. :-/
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Here's my experience with the Link thing:
 
-Tested-by: Ron Economos <re@w6rz.net>
+So it is trivial to take the Message-ID and turn it into a link tag and
+our automation does that.
 
+- Now, it is not a problem when that link tag points to a patch which is
+part of the thread which contains the initial bug report - you just go
+up-thread.
+
+- If the link tag points to a patch which is version N and it is the
+version which passed all review and gets committed, it is a bit harder
+to find the previous versions and find the whole discussion how it all
+arrived at version N. You can search by the Subject, ofc, which, if it
+hasn't been changed, will give you the previous threads. And so on ...
+
+- The problem is when the discussion happened somewhere and the patch
+got submitted separately. I can't think of a good way to automate
+that so we have to pay attention and fix the link tag by hand and add
+the relevant one. And I try to do that when I'm especially awake when
+applying the patch.
+
+So I think we should simply pay attention to making sure the link tags
+point to the relevant discussion. And we even document that:
+
+ "If related discussions or any other background information behind the
+ change can be found on the web, add 'Link:' tags pointing to it."
+
+so we better follow through with it.
+
+:-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

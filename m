@@ -2,93 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E930523808
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:04:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA0E52380A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbiEKQE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 12:04:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45878 "EHLO
+        id S1344302AbiEKQEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 12:04:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344241AbiEKQEJ (ORCPT
+        with ESMTP id S1344303AbiEKQEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 12:04:09 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E0719C3A4
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:04:08 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id bv19so5011357ejb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:04:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wQ+4WhV6k9PLSLRu2ycXl8Jd/rTXVtAwxYwfDpJmHeQ=;
-        b=FQkLZaRRby2FjgefqVXwZG5cd45AVoW5mBxIPs4/ACAjlfIUckJBfr7AgNJi1sA2PE
-         ReehVHy+e71raZyAeffWYbk7GbIefoArYARSe77wZVjnD+2Lo9wxrNlVlhwG9W+YXezH
-         UKayJlTm+Q5LNRo3yWmDq1Oe0fUV42F59X2waMA6k5OADRwy1mCKDOztRyTvlDazQtKy
-         ipFNeMcr3uMJvngEOqbq68KVUZ8xU9bvzXIeGbWMwzpaDofS6Snx/XEqAJgtqn44AU6+
-         aUfO0pbfTmbtc5tf0dsM3GASHxBAoc1kg8Og7SFY40rubqtkzTDwV9bZQnurARlWEfaf
-         rcdQ==
+        Wed, 11 May 2022 12:04:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5687419CECC
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:04:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652285056;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/5E5ae+fiX+8fhds4+yHVslnnnzZ+qVMHnlGIRP/rgo=;
+        b=OtxltTT9GD8rlYeUvSWVBdmXHc2GykIiWQq7CFseHY+ywjhvt6MylqJkikMFVQYaEgc9rJ
+        ThNXqdgWBcL964UcqsQbrDnXXEGGbiArzFe7OR8MqgMd08hfxUkOn0hWc5qpXdHxEP/sWd
+        uD0ODCtYZ3rnQ0XZdQ7GrYbj0nk8BrI=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-367-dU1fsjFGNTaCZ6Q27RdIcA-1; Wed, 11 May 2022 12:04:13 -0400
+X-MC-Unique: dU1fsjFGNTaCZ6Q27RdIcA-1
+Received: by mail-ed1-f70.google.com with SMTP id cz24-20020a0564021cb800b00425dfdd7768so1613039edb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:04:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=wQ+4WhV6k9PLSLRu2ycXl8Jd/rTXVtAwxYwfDpJmHeQ=;
-        b=GbDQbHAPNd5P8ZFku5IWEZCPkIkN2ujw2m1japUadDpJWbOP1KEHR7L3JbDkPDFD5S
-         GDAF/4bnYgFZ17QGjuFoXgECxd2JF+2Dw0Z1GuvYsWeneZXm3Xa34PH/6fAUfD2H0fzo
-         zPZqbeUzxLp8UUi2yIrPtbRiXAdYgTgn2wPEIQF73IWhKWTvjXZXo+3poTy/RjQFbVfU
-         h81x5TgfiLTC8cXDe/NnwuS7Nlvy2kkwDhe5jLWvu5CX9jmU/lOIlI6W6l36qmGOXXOq
-         bDhp56xL6FUW4vqkNio+4hzwsdRvlTyjMzLjqYJKcAnUKNF3AV2d1cQjNmuUb+QW8Xma
-         +RRA==
-X-Gm-Message-State: AOAM530iFIS9GYsQqW964fn/cwebK4EPQB/aU4SEA7ikSrIWSGbUO1ar
-        zVbCPthhAhBIhiJmw7N4h1CqPA==
-X-Google-Smtp-Source: ABdhPJyzXUV5jsqnDfWfN4VVucH3ddXpg1wmvj8zlxv9ouygUIznS3UcqdagiJVmiKJiJn3K6R3VJA==
-X-Received: by 2002:a17:906:dc93:b0:6f4:6a27:41ed with SMTP id cs19-20020a170906dc9300b006f46a2741edmr25797324ejc.36.1652285047009;
-        Wed, 11 May 2022 09:04:07 -0700 (PDT)
-Received: from [192.168.0.155] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id f19-20020a50ee93000000b0042617ba63b1sm1325703edr.59.2022.05.11.09.04.05
+        bh=/5E5ae+fiX+8fhds4+yHVslnnnzZ+qVMHnlGIRP/rgo=;
+        b=HmNrnt5qH+HNioVvWxDMjXpEXLaJ96/PZzdPZimBce8RTeLYEHC78yz2HFmQ4mkjJ3
+         XKaKLJiVa0uA4A9C34eNGw8vKe0kW2KNH6tknz1tnUlxXgVmsfszHvpD9si1P1OQbhKC
+         auQKMeuwwj9U9PrN4b2NzEYuDBxPmAVdln95XgJMN8zduBy3oXFeQ2a5vdv75Um9xxZa
+         1GHJumDz+AihzL+GO2OOwNlUVyWpm4aDy7KcH94maguCUi7uD6RDPGiTX/0lXUjYgKv5
+         OxhbsFhqJlis/Dth83gYEH54OG27cVxju5NfRNAEUNB1veToK7jcMdPxzIjyJP6MOwH0
+         7oXA==
+X-Gm-Message-State: AOAM530jBu8Tvl1RfkJ0ZHB0JV7SKGv2ZnOqhlzT9P8WMuOkHOeLdDiz
+        5hl4waAl00B6ph5TCbEwG7G0w+3f/5/0e+maYlPX/DP9PaXYTqcxK4TkR46KF7A+WwarMHZ9mqB
+        AqyMEu/6NwoIXVacYCn7BeHPy
+X-Received: by 2002:a17:907:2cc4:b0:6f5:28ea:83f with SMTP id hg4-20020a1709072cc400b006f528ea083fmr24163748ejc.255.1652285052540;
+        Wed, 11 May 2022 09:04:12 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw4FYhwaUmeTEVBmeSUYIufRa7f3HQ22CFzDmAHIL5LOnpIxLtX0aUZqjA+oZOOPoQ2QWcJwg==
+X-Received: by 2002:a17:907:2cc4:b0:6f5:28ea:83f with SMTP id hg4-20020a1709072cc400b006f528ea083fmr24163736ejc.255.1652285052373;
+        Wed, 11 May 2022 09:04:12 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id k8-20020a1709065fc800b006f3ef214e71sm1121435ejv.215.2022.05.11.09.04.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 09:04:06 -0700 (PDT)
-Message-ID: <9dd9d22c-6933-3790-35e8-8de197d05d39@linaro.org>
-Date:   Wed, 11 May 2022 18:04:05 +0200
+        Wed, 11 May 2022 09:04:12 -0700 (PDT)
+Message-ID: <6c848c9f-5099-b565-0d33-2ab4c6b9fff0@redhat.com>
+Date:   Wed, 11 May 2022 18:04:11 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 2/3] MIPS: Loongson64: DTS: Add Loongson-2K1000 DTS
- related smp support
+ Thunderbird/91.8.0
+Subject: Re: [PATCH V2] toshiba_acpi: use kobj_to_dev()
 Content-Language: en-US
-To:     Qing Zhang <zhangqing@loongson.cn>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yangtiezhu@loongson.cn
-References: <20220511083007.17700-1-zhangqing@loongson.cn>
- <20220511083007.17700-2-zhangqing@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220511083007.17700-2-zhangqing@loongson.cn>
+To:     cgel.zte@gmail.com, andy.shevchenko@gmail.com
+Cc:     chi.minghao@zte.com.cn, coproscefalo@gmail.com,
+        linux-kernel@vger.kernel.org, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org, zealci@zte.com.cn
+References: <CAHp75VfzbWAS6phV3eB7ehe50NrXitkuS54sYjdVK-OqqYVieA@mail.gmail.com>
+ <20220511021638.1488650-1-chi.minghao@zte.com.cn>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220511021638.1488650-1-chi.minghao@zte.com.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/05/2022 10:30, Qing Zhang wrote:
-> Add the device tree node and connect it to the CPU nodes.
+Hi,
 
+On 5/11/22 04:16, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+> 
+> Use kobj_to_dev() instead of open-coding it.
+> 
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+
+Thank you for your patch, I've applied this patch to my review-hans 
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
+
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
+
+Regards,
+
+Hans
+
+
+
+> ---
+> v1->v2:
+> 	remove Reported-by: Zeal Robot <zealci@zte.com.cn>
+> 
+>  drivers/platform/x86/toshiba_acpi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/x86/toshiba_acpi.c
+> b/drivers/platform/x86/toshiba_acpi.c
+> index f113dec98e21..0fc9e8b8827b 100644
+> --- a/drivers/platform/x86/toshiba_acpi.c
+> +++ b/drivers/platform/x86/toshiba_acpi.c
+> @@ -2353,7 +2353,7 @@ static struct attribute *toshiba_attributes[] = {
+>  static umode_t toshiba_sysfs_is_visible(struct kobject *kobj,
+>  					struct attribute *attr, int idx)
+>  {
+> -	struct device *dev = container_of(kobj, struct device, kobj);
+> +	struct device *dev = kobj_to_dev(kobj);
+>  	struct toshiba_acpi_dev *drv = dev_get_drvdata(dev);
+>  	bool exists = true;
 >  
-> +	ipi: interrupt-controller@1fe11000 {
-> +		compatible = "loongson, mmio-ipi";
 
-No spaces in compatibles. The compatible needs bindings.
-
-
-Best regards,
-Krzysztof

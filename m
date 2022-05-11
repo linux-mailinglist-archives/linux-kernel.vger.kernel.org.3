@@ -2,60 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 404DF523542
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:19:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D57DF52355C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244514AbiEKOTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 10:19:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38516 "EHLO
+        id S244633AbiEKOZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 10:25:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234147AbiEKOTd (ORCPT
+        with ESMTP id S230496AbiEKOZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 10:19:33 -0400
-Received: from smtp-bc0f.mail.infomaniak.ch (smtp-bc0f.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc0f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1194566221
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:19:30 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Kyxqh0RDQzMqHtD;
-        Wed, 11 May 2022 16:19:28 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Kyxqd6C0Lzlj4cK;
-        Wed, 11 May 2022 16:19:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1652278768;
-        bh=/n5oEC4CvxILBZQp6ChxximF4mWD7I5QTdFgyCOlYJY=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=h36XxvDcJBu2sTf7wBmxnAMEehwmVxMmhHKFTptP/LIZsqf5FuDGv21jJRbdukTH1
-         UjD0Vu6rGibTzYk/3q+3g9c8NVI/S6oNeLJZ08bF9Ks7g+L2BRuDkE9Yk/0kSh2ZCE
-         igV3+abVFVmazKYhYyCl8ju9vWlU5ztV3HAtmGLk=
-Message-ID: <152da06a-330d-3125-6f41-262e0751f41b@digikod.net>
-Date:   Wed, 11 May 2022 16:19:10 +0200
-MIME-Version: 1.0
-User-Agent: 
-Content-Language: en-US
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Andy Whitcroft <apw@canonical.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        Joe Perches <joe@perches.com>,
-        Kees Cook <keescook@chromium.org>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Paul Moore <paul@paul-moore.com>, Tom Rix <trix@redhat.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20220506160106.522341-1-mic@digikod.net>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [PATCH v2 0/5] Fix clang-format configuration according to
- checkpatch.pl
-In-Reply-To: <20220506160106.522341-1-mic@digikod.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        Wed, 11 May 2022 10:25:21 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4AD40914
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:25:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Subject:Cc:To:From:Date:Message-ID:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=TDQU1UGI09RlXaAf1o727CVhHO69kh+DBTvWQI/Upls=; b=BJcALieOwlUWH2ydJVzc3iJOXy
+        +mfUCNJQ5QvQwd/oR6Aa9QRl48BDFVLQHhKHQHH+jZmUt71ANm/AbT/5QYhxt3XXhd8Lldir1eX6b
+        Ht/XhwZi4kx7N96eNAzJH6gHgo/lu1Tc5dAgK2JeOJggis/HHyUHhaUo15P3E1FEa2UGoosK8h7WK
+        97A6mQ4/xmLL5m6WenddPkGvL2ebibIv+XL2QxWSjz8m/NELcxceKDSFDzKJtQj5FPEu+ikvtRTfZ
+        //TnAOe74ac9FShTC89oLxapHG/NK+4I+e3NbpNonLUDBrc5AGv3Iv9aJFAlQRYk9khdl+/P4sp8v
+        JhDYedow==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nonH5-00DBu3-1R; Wed, 11 May 2022 14:25:11 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 362B73004B5;
+        Wed, 11 May 2022 16:25:09 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id 1A6DB20245607; Wed, 11 May 2022 16:25:09 +0200 (CEST)
+Message-ID: <20220511142037.353492804@infradead.org>
+User-Agent: quilt/0.66
+Date:   Wed, 11 May 2022 16:20:37 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     x86@kernel.org, kan.liang@linux.intel.com, eranian@google.com
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org
+Subject: [PATCH 0/5] perf/x86: Some cleanups
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,41 +56,5 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Miguel, what do you think about this series? Do you plan to take it for 
-the next merge window? FYI, I plan to use it for Landlock [1] and send 
-it for the next merge window. Could you publish your pending 
-clang-format changes so that I can make sure everything is OK?
+While staring at the code recently I collected some cleanups.
 
-[1] https://lore.kernel.org/r/20220506160513.523257-1-mic@digikod.net
-
-On 06/05/2022 18:01, Mickaël Salaün wrote:
-> Hi,
-> 
-> This series brings some improvements to the clang-format configuration
-> to make it compatible with the checkpatch.pl rules:
-> https://lore.kernel.org/r/8b6b252b-47a6-9d52-f0bd-10d3bc4ad244@digikod.net
-> 
-> I also found that the for_each issue has already been talk about here:
-> https://lore.kernel.org/lkml/CAHmME9ofzanQTBD_WYBRW49d+gM77rCdh8Utdk4+PM9n_bmKwA@mail.gmail.com/
-> 
-> I use these changes for Landlock.
-> 
-> This is based on v5.18-rc5.
-> 
-> Previous version:
-> https://lore.kernel.org/r/20220412153906.428179-1-mic@digikod.net
-> 
-> Regards,
-> 
-> Mickaël Salaün (5):
->    clang-format: Update and extend the for_each list with tools/
->    clang-format: Update to clang-format >= 6
->    clang-format: Fix goto labels indentation
->    clang-format: Fix empty curly braces
->    clang-format: Fix space after for_each macros
-> 
->   .clang-format | 216 +++++++++++++++++++++++++++++++++++++++-----------
->   1 file changed, 169 insertions(+), 47 deletions(-)
-> 
-> 
-> base-commit: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a

@@ -2,130 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71123523A49
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F10523A4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344727AbiEKQ0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 12:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
+        id S1344745AbiEKQ3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 12:29:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344796AbiEKQ0S (ORCPT
+        with ESMTP id S234814AbiEKQ24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 12:26:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FC8831367
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:26:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652286376;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oEtf9aEeYwcmbS2Abb6hgTNVW6CzU6LHwK+SuywPU4E=;
-        b=hOMCVuaKkidY5s+DrgZRgGVDBxqk9XpCaXCYzEhpvQWWZevV3KHFWpeJ1GpnqBcy3yWvw9
-        OA8gnxeEsF2vVkm8F+Sk+o0ub58xiWf52JfrYZpk4vrMWf3eL+7ks1TQJJX5Mb+G6G3lMP
-        T8ZscixYZ0OHGvuuD+pmLXon4DhTOKU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-588-vGclDIA-Or2DVEoORY-m7Q-1; Wed, 11 May 2022 12:26:13 -0400
-X-MC-Unique: vGclDIA-Or2DVEoORY-m7Q-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 90B9B1D32371;
-        Wed, 11 May 2022 16:26:12 +0000 (UTC)
-Received: from starship (unknown [10.40.192.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 143462026D6A;
-        Wed, 11 May 2022 16:26:06 +0000 (UTC)
-Message-ID: <858cdb9c2c1cc1deda179fc534ad42de1275920f.camel@redhat.com>
-Subject: Re: [PATCH v4 10/15] KVM: SVM: Introduce helper functions to
- (de)activate AVIC and x2AVIC
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com,
-        kernel test robot <lkp@intel.com>
-Date:   Wed, 11 May 2022 19:26:05 +0300
-In-Reply-To: <3fa12834-d144-54d8-0bf8-8a72e726db99@amd.com>
-References: <20220508023930.12881-1-suravee.suthikulpanit@amd.com>
-         <20220508023930.12881-11-suravee.suthikulpanit@amd.com>
-         <a60d885cf4b0b11aca730273ff317546362bff83.camel@redhat.com>
-         <3fa12834-d144-54d8-0bf8-8a72e726db99@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 11 May 2022 12:28:56 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981C82380EA
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:28:54 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id i19so5102537eja.11
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:28:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=QqzHC4zviczliZl2lLCxrl5rJkRbECBgInAGwGkD9yg=;
+        b=aGEFad1EDE0DpwKvGqYp9ytIwe1hZZbJM5cXMCKj0eWfdc1tZurMgVXSuUztlCVnft
+         vUlxjPa2RxbThLg9fJVZiOZA/be0z/jCvUuheZsVEvMi6dCVYoK4y2fz7W7VSlPrgDQa
+         Y9BI/mX6xu5cafzHd52vqZIo33+AW1NaZ4uUmvHetgRFBp9dv0MnQLQKqcZOiPaGsz8R
+         yZFi3rW/+ogXRT2DpEvPAq0cy5qT5mkHg1pBIezbuMWX1en1nsGLS41cLFt6aTA+mDjh
+         /J+PiIGFzDFcuqIoh/I0DZltweiP2qNS5DhhCSZlDc7ySAWJ1vLGQYiYSaqyOuPJYEgZ
+         fXng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QqzHC4zviczliZl2lLCxrl5rJkRbECBgInAGwGkD9yg=;
+        b=1qasngUjWn1oy8x4Tpq31AqiKTN8n/aLHr1UWCyrK9kGf9Cnj9+bWlz7NGozNtfTGp
+         H9y8RL4TJoxCV+j7+ESIDAcqgwrQANKtVSS8+Mq1Fwc211bb8MHGfBNmyqN6X/SLjPn2
+         U4HsxdjJBj0Ebh+dnKc1sEdvD02/vo2na4lPuFVW20amCyXdbQO6i32j8o+7Ekkn/08N
+         IdqsxXYzfWFfmSLeDXfZ4RSDql5NAx7XPZD1pYLpE/Hu0qagNn4nf0Bnzca3tDve+JMK
+         se6hqJLC4UUlRA87oJW7rrbb0iCv3nAFFCPjaElHf4d6qOAD4h1I4bm9fPO84w+3/5iT
+         hrLw==
+X-Gm-Message-State: AOAM53150gLnmyvEhABrHZzlI/wh7RIQBmWSwMv27okGOOIIE9zey7TG
+        SzUdPvDEUKC7AwHphb0E31sI7A==
+X-Google-Smtp-Source: ABdhPJza79RRbAKYTDu5tTXN4HO0mglLsTFqQ57AwDP/1BmnOVX2fWPwZq7D4wi4X8xf/GlOEW8CHg==
+X-Received: by 2002:a17:907:94c4:b0:6f9:f69f:2fd5 with SMTP id dn4-20020a17090794c400b006f9f69f2fd5mr16811024ejc.347.1652286533120;
+        Wed, 11 May 2022 09:28:53 -0700 (PDT)
+Received: from [192.168.0.155] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id o9-20020aa7c7c9000000b00427afbbf5e8sm1398908eds.11.2022.05.11.09.28.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 09:28:52 -0700 (PDT)
+Message-ID: <d7f124a7-a338-8ada-8d68-9434059db9fc@linaro.org>
+Date:   Wed, 11 May 2022 18:28:51 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH V2 1/2] dt-bindings: rtc: Add TI K3 RTC description
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Andrew Davis <afd@ti.com>
+References: <20220511002600.27964-1-nm@ti.com>
+ <20220511002600.27964-2-nm@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220511002600.27964-2-nm@ti.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-05-11 at 22:37 +0700, Suravee Suthikulpanit wrote:
-> Maxim,
+On 11/05/2022 02:25, Nishanth Menon wrote:
+> This adds the documentation for the devicetree bindings of the Texas
+> Instruments RTC modules on K3 family of SoCs such as AM62x SoCs or
+> newer.
 > 
-> On 5/9/22 8:42 PM, Maxim Levitsky wrote:
-> > ...
-> > 
-> > So I did some testing, and reviewed this code again with regard to nesting,
-> > and now I see that it has CVE worthy bug, so have to revoke my Reviewed-By.
-> > 
-> > This is what happens:
-> > 
-> > On nested VM entry, *request to inhibit AVIC is done*, and then nested msr bitmap
-> > is calculated, still with all X2AVIC msrs open,
-> > 
-> > 1. nested_svm_vmrun -> enter_svm_guest_mode -> kvm_make_request(KVM_REQ_APICV_UPDATE, vcpu);
-> > 2. nested_svm_vmrun -> nested_svm_vmrun_msrpm
-> > 
-> > But the nested guest will be entered without AVIC active
-> > (since we don't yet support nested avic and it is optional anyway), thus if the nested guest
-> > also doesn't intercept those msrs, it will gain access to the *host* x2apic msrs. Ooops.
+> Signed-off-by: Nishanth Menon <nm@ti.com>
+> ---
+> Changes since V1:
+> Krzysztof's comments addressed:
+> * $subject updated
+> * assigned-clocks* dropped
+> * Dropped the un-necessary quotes
+> * Dropped the extra example, which serves no purpose now.
+> * compatible is just an enum now.
 > 
-> Shouldn't this be changed to intercept the x2APIC msrs because of the following logic?
+> V1: https://lore.kernel.org/all/20220412073138.25027-2-nm@ti.com/
 > 
-> kvm_make_request(KVM_REQ_APICV_UPDATE, vcpu)
->      kvm_vcpu_update_apicv(vcpu)
->          static_call(kvm_x86_refresh_apicv_exec_ctrl)(vcpu)
->              avic_deactivate_vmcb()
->                  svm_set_x2apic_msr_interception(true)
+>  .../devicetree/bindings/rtc/ti,k3-rtc.yaml    | 61 +++++++++++++++++++
+>  1 file changed, 61 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/ti,k3-rtc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/ti,k3-rtc.yaml b/Documentation/devicetree/bindings/rtc/ti,k3-rtc.yaml
+> new file mode 100644
+> index 000000000000..444e18df6231
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/ti,k3-rtc.yaml
+> @@ -0,0 +1,61 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/ti,k3-rtc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Texas Instruments K3 Real Time Clock
+> +
+> +maintainers:
+> +  - Nishanth Menon <nm@ti.com>
+> +
+> +description: |
+> +  This RTC appears in the AM62x family of SoCs.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ti,am62-rtc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: VBUS Interface clock
+> +      - description: 32k Clock source (external or internal).
+> +
+> +  clock-names:
+> +    items:
+> +      - const: vbus
+> +      - const: osc32k
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  wakeup-source: true
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +
+> +additionalProperties: false
 
-Nope because the above only updates L1 msr intercept bitmap, while 'merged'
-msr bitmap that L2 uses still has those msrs open.
+I didn't brought it earlier (I assumed you used existing RTC examples
+for your schema): why this is not including generic rtc.yaml schema?
+Isn't this a RTC?
 
-Other and better way to fix it would be to fix set_msr_interception
-to update the merged bitmap as well.
-
-I think I will post a patch series to clean up this mess soon.
 
 Best regards,
-	Maxim Levitsky
-
-> 
-> > I think the easist way to fix this for now, is to make nested_svm_vmrun_msrpm
-> > never open access to x2apic msrs regardless of the host bitmap value, but in the long
-> > term the whole thing needs to be refactored.
-> 
-> Agree.
-> 
-> > Another thing I noted is that avic_deactivate_vmcb should not touch avic msrs
-> > when avic_mode == AVIC_MODE_X1, it is just a waste of time.
-> 
-> We can add the check.
-> 
-> > Also updating these msr intercepts is pointless if the guest doesn't use x2apic.
-> 
-> We can also add the check.
-> 
-> Best Regards,
-> Suravee
-> 
-
-
+Krzysztof

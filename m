@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B68522FAD
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:44:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A0B5522FC2
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:46:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbiEKJmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 05:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41454 "EHLO
+        id S238064AbiEKJoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 05:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233551AbiEKJmM (ORCPT
+        with ESMTP id S233903AbiEKJmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 05:42:12 -0400
+        Wed, 11 May 2022 05:42:13 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A56205EE;
-        Wed, 11 May 2022 02:41:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000DFB7F0;
+        Wed, 11 May 2022 02:41:24 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: shreeya)
-        with ESMTPSA id B695A1F4406C
+        with ESMTPSA id 60F9E1F4411E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652262078;
-        bh=UNeNPgpw1R6Fw0IfN3Kfn3Etg70pun757On7XIN528E=;
+        s=mail; t=1652262082;
+        bh=efQV6wOQ/+4sLk2YyItzck+550O5spxUnUdwhl8aHLc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GTvQde7cLXTWQvjGfBvf2uqJRH3QaSF8ue5Ct5KFK/d6gOnYCp8X6DhpfYR4cWje6
-         gDWaLWjdAniSw1NLNn4aJTLyCxlheLJlgNFBETvCJEYuddhsz6UcHlIqcbCrieBruG
-         /g1bqQIcreeoDGk8aeM36q2B4nzVfQWP1TiwHHGOJMdMxa3eXc+ogGsriIJa6FMNjl
-         EDicNGlBSAgc3YnY52pe0tQJaSulVm1M8xPWM1fHA3nr4TuMWjpjnpy6Op1s3qC5V/
-         yWy6+7EJ/Cn3267/5aKjjPByB//tMppBxF6F6mrCvLqbRd0MedZ+93vMtHCott6e35
-         2sUdg7K6hkSBg==
+        b=Cz8pEFlCI2uILd21k+6Mc+/GVk3PUXTQ2f6u/3yc25pGdeCpU1XKJ2tMMbA0UBZuR
+         F97jAu3ihGkCNx+ohIRsTEFB5WF514XVKu4rS3XEHslzQzDXjH/r8fg0gcHNde72eC
+         c8LKgUbOZTEAt9ZNxMdOUI9I+rspx9bihUhsqeKRRUvKhF5CIzgTBinGhUXpkf01BY
+         fgxBqABbd8i8iL8EAausTb65T5HmTTsJVS8xnZtzyQ/8Hedfgwl60hvlN+Gp9tBUxk
+         2R4kegYykdHI/q2f+zfBmqnh2Onymiwjlqf9winN4T0v0hDLGMS2KAZJ8AcqSw8vA0
+         IIDtZOMaeK+PA==
 From:   Shreeya Patel <shreeya.patel@collabora.com>
 To:     jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
         Zhigang.Shi@liteon.com, krisman@collabora.com
 Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, kernel@collabora.com,
         alvaro.soliverez@collabora.com,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH v4 1/3] dt-bindings: vendor-prefixes: Add 'ltr' as deprecated vendor prefix
-Date:   Wed, 11 May 2022 15:10:22 +0530
-Message-Id: <20220511094024.175994-2-shreeya.patel@collabora.com>
+        Shreeya Patel <shreeya.patel@collabora.com>
+Subject: [PATCH v4 2/3] dt-bindings: Document ltrf216a light sensor bindings
+Date:   Wed, 11 May 2022 15:10:23 +0530
+Message-Id: <20220511094024.175994-3-shreeya.patel@collabora.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220511094024.175994-1-shreeya.patel@collabora.com>
 References: <20220511094024.175994-1-shreeya.patel@collabora.com>
@@ -54,44 +53,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'liteon' is the correct vendor prefix for devices released by
-LITE-ON Technology Corp. But one of the released device which uses
-ltr216a light sensor exposes the vendor prefix name as 'ltr' through
-ACPI.
+Add devicetree bindings for ltrf216a ambient light sensor.
 
-Hence, add 'ltr' as a deprecated vendor prefix which would suppress the
-following warning in case the compatible string used in ltrf216a driver
-is "ltr,ltrf216a"
-
-WARNING: DT compatible string vendor "ltr" appears un-documented --
-check ./Documentation/devicetree/bindings/vendor-prefixes.yaml
-364: FILE: drivers/iio/light/ltrf216a.c:313:
-+    { .compatible = "ltr,ltrf216a" },
-
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
 ---
 
+Changes in v3
+  - Fix indentation in the example section
+
 Changes in v2
-  - Add vendor prefix name as per the alphabetical order.
+  - Take over the maintainership for the bindings
+  - Add interrupt and power supply property in DT bindings
 
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 01430973ecec..02f94fba03b6 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -716,6 +716,9 @@ patternProperties:
-     description: Loongson Technology Corporation Limited
-   "^lsi,.*":
-     description: LSI Corp. (LSI Logic)
-+  "^ltr,.*":
-+    description: LITE-ON Technology Corp.
-+    deprecated: true
-   "^lwn,.*":
-     description: Liebherr-Werk Nenzing GmbH
-   "^lxa,.*":
+ .../bindings/iio/light/liteon,ltrf216a.yaml   | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml
+
+diff --git a/Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml b/Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml
+new file mode 100644
+index 000000000000..1389639cd7fd
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml
+@@ -0,0 +1,51 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/light/liteon,ltrf216a.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: LTRF216A Ambient Light Sensor
++
++maintainers:
++  - Shreeya Patel <shreeya.patel@collabora.com>
++
++description:
++  Ambient light sensing with an i2c interface.
++
++properties:
++  compatible:
++    oneOf:
++      - const: liteon,ltrf216a
++      - const: ltr,ltrf216a
++        deprecated: true
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  vdd-supply:
++    description: Regulator that provides power to the sensor.
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        light-sensor@53 {
++            compatible = "liteon,ltrf216a";
++            reg = <0x53>;
++            vdd-supply = <&vdd_regulator>;
++            interrupt-parent = <&gpio0>;
++            interrupts = <5 IRQ_TYPE_LEVEL_LOW>;
++        };
++    };
 -- 
 2.30.2
 

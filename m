@@ -2,219 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B50C6522D2E
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:24:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1966B522D29
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242884AbiEKHYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 03:24:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45038 "EHLO
+        id S231971AbiEKHYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 03:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242867AbiEKHY3 (ORCPT
+        with ESMTP id S241439AbiEKHYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 03:24:29 -0400
-Received: from mailgw.felk.cvut.cz (mailgw.felk.cvut.cz [147.32.82.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFCD1C0F25;
-        Wed, 11 May 2022 00:24:27 -0700 (PDT)
-Received: from mailgw.felk.cvut.cz (localhost.localdomain [127.0.0.1])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTP id D7A8930322EA;
-        Wed, 11 May 2022 09:23:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        cmp.felk.cvut.cz; h=cc:cc:content-transfer-encoding:content-type
-        :content-type:date:from:from:in-reply-to:message-id:mime-version
-        :references:reply-to:subject:subject:to:to; s=felkmail; bh=noksS
-        6avucQChdNExBN5UJBtftQ5wnHW8uU3NUv5UFE=; b=PE6+UwTWyGs26TfPsDLKq
-        a0T3t7uh5yN/A69uWtzKAAaKnjZwpSreGL3ooSQLpImH/Uq9EFSpkudO9f9JlK4Z
-        Vw13M+68LotaYaytGCnuqQSzvAnHL7POSZfEEolfyz2VBRDobJNVqyqZMf0sObk0
-        RB8ij9cnj+qfE4wKYZA2hMVS6J7YiXw72OMBPoCABD3U6fkOHjHobBv98lI4VS0r
-        FgnbwlVq0Eqmv4oFfdGqIzihd6gH81+QF22iwFdWMXbiUTy+wAKZLQR/vEoeFd8a
-        qBUQoB8AwFxOKGHq0iJW33FiEvNUQ9yJJtxDwm+0xKi8Gh23e88N3w5ECgQQVn2r
-        Q==
-Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTPS id DDF8F30322D3;
-        Wed, 11 May 2022 09:23:54 +0200 (CEST)
-Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
-        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 24B7NsBG027064;
-        Wed, 11 May 2022 09:23:54 +0200
-Received: (from pisa@localhost)
-        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 24B7Nshg027063;
-        Wed, 11 May 2022 09:23:54 +0200
-X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
-From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Subject: Re: [PATCH net-next] docs: ctucanfd: Use 'kernel-figure' directive instead of 'figure'
-Date:   Wed, 11 May 2022 09:23:24 +0200
-User-Agent: KMail/1.9.10
-Cc:     "Marc Kleine-Budde" <mkl@pengutronix.de>,
-        Martin Jerabek <martin.jerabek01@gmail.com>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <05d491d4-c498-9bab-7085-9c892b636d68@gmail.com> <202205101825.15126.pisa@cmp.felk.cvut.cz> <268372a9-2f6a-74f3-29ea-c51536a73dba@gmail.com>
-In-Reply-To: <268372a9-2f6a-74f3-29ea-c51536a73dba@gmail.com>
-X-KMail-QuotePrefix: > 
+        Wed, 11 May 2022 03:24:03 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC211B093F
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:24:00 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id ba17so1453357edb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:24:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=cCXXWwJzIMdAZKFOw/mKJ0j8XdlH3CZr6xlDP/lClgM=;
+        b=MGS8DP7QyP0OM8eXixWMdJDSacfGLRKfeKa8pHid+EQsK5/L/vC91MQ1DquPtnDlDO
+         tE7wI6UN1Lt8uLv0EGczgwwWsF23scuc2CMh7ReucyBPjfRV/XlSL9kuWjljTtMc8TwR
+         41cZ4XxvubKLrUVusIxYlq5WLYSLzjUscSPIFbbx1Yc5S3GRiYUgWeLtitYEdpbsRTPv
+         QclNJGyyCuMFp6e+nku1Gz6J+b32FlgbqA9qFGoCRJEjEEclRF34tfBUH6vlvzuPIDf6
+         4NBok55o2Ndro11jMCz1p+ITNXYepTQT6huIkWKbs1CtXp6IAAO6kJ1lAOOTXRAvlFgy
+         a/dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cCXXWwJzIMdAZKFOw/mKJ0j8XdlH3CZr6xlDP/lClgM=;
+        b=UfAmGgxu+E5feoMD4YSKFSc/dIH7mLFF0M5KK/T0tFlxWjVWRmanHD0feV8i9aP52w
+         SX4KA/q4xf9N2xEeuRHl3kIgZ4nSyE/+qgwsbXDhe1Xfp1Rleu7dM6WatXjTuMuJR2c7
+         /1wc12vxDI9f6WbJogvF5K7xCUs1Sm5xlYvygtqxldfzDOJMX/AlRbaDfVPhK//5sYMv
+         HBsJzgNUiAIDPuEAI1K9v6N/uqg7SSUykOYiA2FuDHf2mm17B0yfTLoqwSoW4teEBUvI
+         1ziOf6Zj3b4/FSV8xZulJJXS2/1R23eHh1HGp4A0Vu94utJNIF3oxeA4oc+/kJKicH6b
+         4Ihg==
+X-Gm-Message-State: AOAM530iy2e3eNP81TeyvGb5SUrlJrkGLfTuA7oxFOEbwNFCf67J3VAA
+        4tbwEC1XyKZ4Djk1gb9XfAWcEw==
+X-Google-Smtp-Source: ABdhPJyBEz8ER0lMbS2x4R8+BOYqgNo0DIdwGqHile4MHvdF4zsqCX08J9gREnSEPHC5no2E7MFIXA==
+X-Received: by 2002:a05:6402:4304:b0:427:cb08:b085 with SMTP id m4-20020a056402430400b00427cb08b085mr27485799edc.194.1652253839068;
+        Wed, 11 May 2022 00:23:59 -0700 (PDT)
+Received: from [192.168.0.253] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id c6-20020aa7c746000000b0042617ba63b9sm717411eds.67.2022.05.11.00.23.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 00:23:58 -0700 (PDT)
+Message-ID: <7376f263-3443-06a0-5ef6-d11be1acd836@linaro.org>
+Date:   Wed, 11 May 2022 09:23:57 +0200
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: inline
-Message-Id: <202205110923.24202.pisa@cmp.felk.cvut.cz>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] dt-bindings: gpio: gpio-mvebu: convert txt binding to
+ YAML
+Content-Language: en-US
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "brgl@bgdev.pl" <brgl@bgdev.pl>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>
+Cc:     "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>
+References: <20220510094404.1020307-1-chris.packham@alliedtelesis.co.nz>
+ <6db35313-5dcd-c9f2-724c-d157a835c9fc@linaro.org>
+ <eaea4c27-05b3-d26f-d091-99e07d14aae6@alliedtelesis.co.nz>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <eaea4c27-05b3-d26f-d091-99e07d14aae6@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Akira,
+On 10/05/2022 22:55, Chris Packham wrote:
+> (sigh resend, Thunderbird decided that this needed html)
+> 
+> On 11/05/22 01:40, Krzysztof Kozlowski wrote:
+>>> +  marvell,pwm-offset:
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +    description: Offset in the register map for the pwm registers (in bytes)
+>> It's the same as offset. Why allowing both? Isn't one deprecated?
+>>
+> This one is in addition to offset. The "offset" is for the gpio 
+> registers "marvell,pwm-offset" is for a separate pwm related register 
+> that is not in the same contiguous block.
 
-On Wednesday 11 of May 2022 01:34:58 Akira Yokosawa wrote:
-> On Tue, 10 May 2022 18:25:15 +0200,
->
-> Pavel Pisa wrote:
-> > Hello Akira,
-=2E..
-> > I have not noticed that there is kernel-figure
-> > option. We have setup own Sphinx 1.4.9 based build for driver
-> > documentation out of the tree compilation, I am not sure if that
-> > would work with this option but if not we keep this version
-> > modified. There are required modification for sources location anyway...
-> >
-> > https://canbus.pages.fel.cvut.cz/ctucanfd_ip_core/doc/linux_driver/buil=
-d/
-> >ctucanfd-driver.html
->
-> You might want to see kernel's doc-guide at
->
->     https://www.kernel.org/doc/html/latest/doc-guide/sphinx.html
->
-> , or its source
->
->     Documentation/doc-guide/sphinx.rst
+I see now different in the description. Egh, confusing. But the
+confusion was done earlier, so let it be.
 
-I think I have read it in 2019 when I have managed to switch
-to kernel format documentation in out of the tree driver build
-
-https://gitlab.fel.cvut.cz/canbus/ctucanfd_ip_core/-/commit/09983d11ab34977=
-104d2be0b1376d4c93d9a01cb
-
-Then I have enhanced documentation text and picture
-from Martin Jerabek's thesis etc..
-
-> >> The directive of "code:: raw" causes a warning from both
-> >> "make htmldocs" and "make pdfdocs", which reads:
-> >>
-> >>     [...]/can/ctu/ctucanfd-driver.rst:75: WARNING: Pygments lexer name
-> >>     'raw' is not known
-> >
-> > Strange I have not seen any warning when building htmldocs
-> > in my actual linux kernel tree. I have cleaned docs to be warnings
-> > free, but it is possible that I have another tools versions.
->
-> Well, I don't think "make htmldocs" runs with Sphinx 1.4.9.
-
-This is Sphinx version reported by out of tree documentation build.
-It can be hidden in one of dockers which are used by gitlabrunner
-for CI. When I find some time I can look for update.
-
-> You mean 1.7.9?
-
-My local net-next make htmldocs generated pages report Sphinx version 1.8.4.
-
-So this seems to be a mix, but I agree that it is important to clean
-docs in the state when it works for each not totally archaic setup.
-
-Thanks for the feedback,
-
-                Pavel
-=2D-=20
-                Pavel Pisa
-    phone:      +420 603531357
-    e-mail:     pisa@cmp.felk.cvut.cz
-    Department of Control Engineering FEE CVUT
-    Karlovo namesti 13, 121 35, Prague 2
-    university: http://control.fel.cvut.cz/
-    personal:   http://cmp.felk.cvut.cz/~pisa
-    projects:   https://www.openhub.net/accounts/ppisa
-    CAN related:http://canbus.pages.fel.cvut.cz/
-    Open Technologies Research Education and Exchange Services
-    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
-
-=20
-
-> Then the above mentioned warning is not shown.
-> I see the warning with Sphinx versions 2.4.4. and 4.5.0.
->
-> I'll amend the changelog to mention the Sphinx versions and
-> post as v2.
->
->         Thanks, Akira
->
-> > Anyway thanks for cleanup.
-> >
-> >> A plain literal-block marker should suffice where no syntax
-> >> highlighting is intended.
-> >>
-> >> Fix the issues by using suitable directive and marker.
-> >>
-> >> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-> >> Fixes: c3a0addefbde ("docs: ctucanfd: CTU CAN FD open-source IP core
-> >> documentation.") Cc: Pavel Pisa <pisa@cmp.felk.cvut.cz>
-> >> Cc: Martin Jerabek <martin.jerabek01@gmail.com>
-> >> Cc: Ondrej Ille <ondrej.ille@gmail.com>
-> >> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-> >
-> > Acked-by: Pavel Pisa <pisa@cmp.felk.cvut.cz>
-> >
-> >> ---
-> >>  .../networking/device_drivers/can/ctu/ctucanfd-driver.rst     | 4 ++--
-> >>  1 file changed, 2 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git
-> >> a/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst
-> >> b/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst
-> >> index 2fde5551e756..40c92ea272af 100644
-> >> ---
-> >> a/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst
-> >> +++
-> >> b/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst =
-@@
-> >> -72,7 +72,7 @@ it is reachable (on which bus it resides) and its
-> >> configuration =E2=80=93 registers address, interrupts and so on. An ex=
-ample of
-> >> such a device tree is given in .
-> >>
-> >> -.. code:: raw
-> >> +::
-> >>
-> >>             / {
-> >>                 /* ... */
-> >> @@ -451,7 +451,7 @@ the FIFO is maintained, together with priority
-> >> rotation, is depicted in
-> >>
-> >>
-> >>
-> >> -.. figure:: fsm_txt_buffer_user.svg
-> >> +.. kernel-figure:: fsm_txt_buffer_user.svg
-> >>
-> >>     TX Buffer states with possible transitions
-
-
-=2D-=20
-Yours sincerely
-
-                Pavel Pisa
-    phone:      +420 603531357
-    e-mail:     pisa@cmp.felk.cvut.cz
-    Department of Control Engineering FEE CVUT
-    Karlovo namesti 13, 121 35, Prague 2
-    university: http://control.fel.cvut.cz/
-    personal:   http://cmp.felk.cvut.cz/~pisa
-    projects:   https://www.openhub.net/accounts/ppisa
-    CAN related:http://canbus.pages.fel.cvut.cz/
-    Open Technologies Research Education and Exchange Services
-    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
-
+Best regards,
+Krzysztof

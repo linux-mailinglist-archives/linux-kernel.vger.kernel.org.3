@@ -2,130 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B97F5234E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D85295234EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244301AbiEKOBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 10:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53734 "EHLO
+        id S244289AbiEKOCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 10:02:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244303AbiEKOAz (ORCPT
+        with ESMTP id S231196AbiEKOCP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 10:00:55 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC0F13D6B
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:00:52 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id m1so3125418wrb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:00:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PP4n1NdHg9QHiLkwHMI2DKYBSLICDPjo1UeB4YFK0mk=;
-        b=RGNbqfeCmMq8/GNn84N/gizYPcA6O+qs/CXjLRVFfORFtL57JhKm/rqDxHgwa7Kxev
-         09VAjndF+7UPP9e3k/hqmnpF9kwYKmRrWFrfptFOZJMsyNBnu8laZwLsR28TNYB2CkSk
-         R/Qru62yOUTw4XuILJO2xSuo06HcqnBb+9oVCdXajAwh2W656pVovIXTBYgcuUJFm9uH
-         /UzzBmkUamX9E+sUL9CL64I0rXt5bk9Bxp1ZFAx6N+ZnZpzhWE7IPifPRcG0JNyqXZCF
-         ww0csyq3V81VY3ytIW52dcmrckU/lbLMPq+odPBqYfNvdHpy1lBW7tKgQFHNT8Znd4JT
-         XR8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PP4n1NdHg9QHiLkwHMI2DKYBSLICDPjo1UeB4YFK0mk=;
-        b=XjZn/j08nRkt83CHiU0+cjfxj47lDje5d9gZq74llgu5t8u6JVYOJe64eDF9OWdBqQ
-         LNd/6YpMSnInoYJiJKXSWunrazziq2fm8kq001YTF+k+RTbwtn+1e6CAxOGpmK7GoMVY
-         J7vULdvYHllZS0TWaW6KNs11B1y2umCGugcrcuBBn1sB9lzceIXVrTor6Fo+Tsm7bfsf
-         J9t3Tgxgpt3Q+Rw+IJryTty1seR44vGcnYqlbC4u02oW5ZtRAuZdez+EIYgNmgYN7AcS
-         6024XcURKn9tjzXl1mE7zUvOsZf7RSA6RomgvPkmpR/Ua4UNp2kZY6kZvTP7tE70Q/QD
-         1j9g==
-X-Gm-Message-State: AOAM532eIwJJnDrqmvkULqnLWOveuB7YOdq0p5dDsLsZekaXPKqdoPmZ
-        NcHe+7SUVxkl0XNS9VKXe0u0B1VXJbToRA5B7CpgxA==
-X-Google-Smtp-Source: ABdhPJzoiIi5nrpAkY7EXcpSj6fVqXUrBgWe6ZyE5mPWu6R1BrCGDnOr1htd4VMNmJtK2fE3vOHJ1wHCYeMur97WtWo=
-X-Received: by 2002:a5d:598f:0:b0:20c:83c9:b05b with SMTP id
- n15-20020a5d598f000000b0020c83c9b05bmr22757965wri.343.1652277651154; Wed, 11
- May 2022 07:00:51 -0700 (PDT)
+        Wed, 11 May 2022 10:02:15 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB0C62202
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:02:11 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24BDKVnd029848;
+        Wed, 11 May 2022 14:01:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=qsQ5SKdZ0ioW8fqIOFzLQJ9VmnLyw+WheucOVyOqJyg=;
+ b=k4Rx4Nf8+Bx/Ryz55H7dbjXRRxBo1ea4Oy+RBhUJOBmxr+uRIels04vcd5/UKx2vUmzg
+ lWw27swv7KYIMoypYXbP1VVWDVwafJeVToYGHy5ZIIcz8wv8rnjMPurpIAQsDSkIgS71
+ 8DPKmjlZCh8MZcj3wBpUmaLpofdoOIW40lj4DArBvIZUZFOijQKDlpoAOV0PNZa+SuWI
+ Ni/NXHJi7vWDtdhONEEUJ9FmZB+xhl4kQAY6iAjl67lq97vfLWC8uYat/w3RBwOQgscb
+ 7kJEokRQVoWWox8teCjVLXl9rQ3LpVqlRqEbN9SM7GdLH2TgwLTg5NH7fiNLhGyy8Avs 5w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g0dxq8t7x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 May 2022 14:01:55 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24BDjBOt035787;
+        Wed, 11 May 2022 14:01:54 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g0dxq8t6t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 May 2022 14:01:54 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24BDvLUM009481;
+        Wed, 11 May 2022 14:01:52 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06fra.de.ibm.com with ESMTP id 3fwg1hvb3k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 May 2022 14:01:52 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24BE1nhq57868570
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 11 May 2022 14:01:49 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A0E115204F;
+        Wed, 11 May 2022 14:01:49 +0000 (GMT)
+Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.152.224.205])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 37EDD5204E;
+        Wed, 11 May 2022 14:01:49 +0000 (GMT)
+Date:   Wed, 11 May 2022 16:01:47 +0200
+From:   Halil Pasic <pasic@linux.ibm.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>, mst <mst@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, eperezma <eperezma@redhat.com>,
+        Cindy Lu <lulu@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Halil Pasic <pasic@linux.ibm.com>
+Subject: Re: [PATCH V4 0/9] rework on the IRQ hardening of virtio
+Message-ID: <20220511160147.46cbf2fb.pasic@linux.ibm.com>
+In-Reply-To: <CACGkMEvfkUpsY4LRTuH7w18DZdq+w3=Ef6b-0sG0XvzVUVKdzg@mail.gmail.com>
+References: <20220507071954.14455-1-jasowang@redhat.com>
+        <875ymd3fd1.fsf@redhat.com>
+        <CACGkMEvfkUpsY4LRTuH7w18DZdq+w3=Ef6b-0sG0XvzVUVKdzg@mail.gmail.com>
+Organization: IBM
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20220511070133.710721-1-irogers@google.com> <20220511073501.GW76023@worktop.programming.kicks-ass.net>
- <CAP-5=fVoZSusNWfpYDpHvbxF=J0-a2jF+TpxEYLxmtWx6QFZ7A@mail.gmail.com> <20220511135605.GA76023@worktop.programming.kicks-ass.net>
-In-Reply-To: <20220511135605.GA76023@worktop.programming.kicks-ass.net>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 11 May 2022 07:00:35 -0700
-Message-ID: <CAP-5=fXjW7L+dfW9wfHuG70Ne6rWAHwx1krQUTiB7xEyJ-rmMA@mail.gmail.com>
-Subject: Re: [PATCH 0/7] Rewrite jevents program in python
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Felix Fietkau <nbd@nbd.name>, Qi Liu <liuqi115@huawei.com>,
-        Like Xu <likexu@tencent.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Nick Forrington <nick.forrington@arm.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>, Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        ananth.narayan@amd.com, ravi.bangoria@amd.com,
-        santosh.shukla@amd.com, sandipan.das@amd.com,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Kshipra Bopardikar <kshipra.bopardikar@intel.com>,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: YwY84jtz4mZc8wDYsffoaslHaMgif1_C
+X-Proofpoint-ORIG-GUID: HB8f3CTnTA7Z_CM9GzFj0wrmdbOigrtX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-11_05,2022-05-11_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ adultscore=0 mlxlogscore=917 clxscore=1015 mlxscore=0 lowpriorityscore=0
+ priorityscore=1501 suspectscore=0 impostorscore=0 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205110063
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 6:56 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Wed, May 11, 2022 at 06:50:59AM -0700, Ian Rogers wrote:
-> > On Wed, May 11, 2022 at 12:35 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > >
-> > > On Wed, May 11, 2022 at 12:01:26AM -0700, Ian Rogers wrote:
-> > >
-> > > > The changes here switch from jevents.c to a rewrite in python called
-> > > > jevents.py. This means there is a build time dependency on python, but
-> > > > such a dependency already exists for asciidoc (used to generate perf's
-> > > > man pages).
-> > >
-> > > You mean just building perf (not the docs) will now require snake stuff?
-> > >
-> > > That's very tedious :/ I don't typically have snakes on my machines.
-> >
-> > Hi Peter,
-> >
-> > You're right that after these changes python is a build requirement
-> > for jevents. We could keep the C code around for the case that python
-> > isn't there, but I want to do things like remove the string
-> > relocations, sort the events by name so we don't linearly search, etc.
-> > which would be a massive chore to keep alive on the C side. An
-> > alternative would be to have an empty pmu-events.c file that is used
-> > for this case. If you wanted to keep things in C and have jevents like
-> > event names, you could use the empty version and link in libpfm4.
->
-> I'm not normally linking to libpfm4. All I really care about is that I
-> can still build a bare cli perf (not even tui). If all the snake stuff
-> is purely optional and it just disables some features, but I do get a
-> perf out at the end, then I'm all good.
->
+On Wed, 11 May 2022 10:22:59 +0800
+Jason Wang <jasowang@redhat.com> wrote:
 
-Great! I'll add a conditional "empty" file version for this case.
+> >        CPU0
+> >        ----
+> >   lock(&vcdev->irq_lock);
+> >   <Interrupt>
+> >     lock(&vcdev->irq_lock);
+> >
+> >  *** DEADLOCK ***  
+> 
+> It looks to me we need to use write_lock_irq()/write_unlock_irq() to
+> do the synchronization.
+> 
+> And we probably need to keep the
+> read_lock_irqsave()/read_lock_irqrestore() logic since I can see the
+> virtio_ccw_int_handler() to be called from process context (e.g from
+> the io_subchannel_quiesce()).
+> 
 
-Thanks,
-Ian
+Sounds correct.
+
+Regards,
+Halil

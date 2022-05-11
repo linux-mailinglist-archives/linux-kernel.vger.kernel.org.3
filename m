@@ -2,55 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30760522DA9
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 184AD522DB0
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243143AbiEKHwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 03:52:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
+        id S243169AbiEKHxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 03:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiEKHwV (ORCPT
+        with ESMTP id S229523AbiEKHxj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 03:52:21 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BA73B3D5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:52:21 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1noh8j-0006DI-Pe; Wed, 11 May 2022 09:52:09 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1noh8g-001dz6-Ds; Wed, 11 May 2022 09:52:05 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1noh8e-008yob-6o; Wed, 11 May 2022 09:52:04 +0200
-Date:   Wed, 11 May 2022 09:52:02 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, thierry.reding@gmail.com,
-        lee.jones@linaro.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: gpio: gpio-mvebu: convert txt binding to
- YAML
-Message-ID: <20220511075202.7apknuj4akogbck6@pengutronix.de>
-References: <20220511013737.1194344-1-chris.packham@alliedtelesis.co.nz>
+        Wed, 11 May 2022 03:53:39 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7F93EBA2;
+        Wed, 11 May 2022 00:53:36 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24B7rVFu076044;
+        Wed, 11 May 2022 02:53:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1652255611;
+        bh=EJnEbmFbApVtiN+wXk9HgVlWHxYzSRSEn+KPA8du8EE=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=I01caZygZx+nc8YVzLxhhubUUiAH9hfugIuapzejfAot/2LVYJCI2l50InXRAX6Nt
+         wkB1t5YkvrUAsicovdF1Fi0D79ZQIhtJHzj/NSHOAyy7uOf+o0llALAj7LNDgH8/dZ
+         21jJNZ6bD9B5UgGoqLJ45RDiYRszJwUQhAeyrmU8=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24B7rVbT002016
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 11 May 2022 02:53:31 -0500
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 11
+ May 2022 02:53:30 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 11 May 2022 02:53:31 -0500
+Received: from [172.24.223.48] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24B7rRRH068143;
+        Wed, 11 May 2022 02:53:28 -0500
+Message-ID: <117f175f-62d1-17b5-742b-bcb250b7866f@ti.com>
+Date:   Wed, 11 May 2022 13:23:27 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tw3ilu4f5ovextuf"
-Content-Disposition: inline
-In-Reply-To: <20220511013737.1194344-1-chris.packham@alliedtelesis.co.nz>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v6 1/4] dt-bindings: thermal: k3-j72xx: Add VTM bindings
+ documentation
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <robh+dt@kernel.org>, <daniel.lezcano@linaro.org>,
+        <rui.zhang@intel.com>, <amitk@kernel.org>, <kristo@kernel.org>,
+        <vigneshr@ti.com>
+CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220427064635.24898-1-j-keerthy@ti.com>
+ <20220427064635.24898-2-j-keerthy@ti.com>
+ <5859fed0-82b7-95eb-5719-9b0016916c50@ti.com>
+ <eb0745a6-ecf2-4b70-368b-9ad8a322f208@linaro.org>
+From:   "J, KEERTHY" <j-keerthy@ti.com>
+In-Reply-To: <eb0745a6-ecf2-4b70-368b-9ad8a322f208@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,46 +74,56 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---tw3ilu4f5ovextuf
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hello,
+On 5/9/2022 12:12 PM, Krzysztof Kozlowski wrote:
+> On 09/05/2022 05:18, J, KEERTHY wrote:
+>>
+>>
+>> On 4/27/2022 12:16 PM, Keerthy wrote:
+>>> Add VTM bindings documentation. In the Voltage Thermal
+>>> Management Module(VTM), K3 J72XX supplies a voltage
+>>> reference and a temperature sensor feature that are gathered in the band
+>>> gap voltage and temperature sensor (VBGAPTS) module. The band
+>>> gap provides current and voltage reference for its internal
+>>> circuits and other analog IP blocks. The analog-to-digital
+>>> converter (ADC) produces an output value that is proportional
+>>> to the silicon temperature.
+>>
+>> Hi krzysztof,
+>>
+>> Any comments on this version?
+> 
+> You got Rob's review, so you don't need also mine.
+> 
+> If you want, then in general look okay, except the description for "reg"
+> you could split per items:
+> 
+> reg:
+>    items:
+>      - description: VTM cfg1 register space
+>      - description: VTM cfg2 register space
+>      - description: efuse register space
+> 
+> It's more obvious what items you expect.
 
-On Wed, May 11, 2022 at 01:37:37PM +1200, Chris Packham wrote:
-> +  "#pwm-cells":
-> +    description:
-> +      The first cell is the GPIO line number. The second cell is the per=
-iod
-> +      in nanoseconds.
-> +    const: 2
+Hi Krzysztof,
 
-I wonder if the binding [cs]hould allow 3, too. After a quick look in
-the driver code I think 3 would be supported out of the box.
-That's a low prio thing though (the driver doesn't support polarity
-anyhow) and this is orthogonal to this 1:1 conversion patch.
+DTEX 
+Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.example.dts
+Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml: found 
+duplicate key "description" with value "VTM cfg2 register space" 
+(original value: "VTM cfg1 register space")
+Documentation/devicetree/bindings/Makefile:26: recipe for target 
+'Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.example.dts' 
+failed
+make[1]: *** 
+[Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.example.dts] Er
 
-Best regards
-Uwe
+I believe multiple instances of description is failing. So can i keep 
+the description as is?
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+- Keerthy
 
---tw3ilu4f5ovextuf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmJ7ax8ACgkQwfwUeK3K
-7AlUHAgAhQgz6V4xlZTQp+faj6HQmAaQxuZIS2HsEo++6hf2WJHNSn2cfdBi0sF3
-GMGJpF08sdONzDpQURk5MBePB2QXQM/YwuVuYTzOEMW33YBlmxP8WqzmEUcxAXSn
-hPNvPzbrhA17X2SMrdq582fK3j+EYaASwj7gfKBI3hOayJJLLdQ7axOyy2JVRVYF
-mOdV1TMjjlogoyaccKb1bvaajTxGvIE0ZcuwFPEEYPQnKfMIpIwi0ce5TYuAv0ZZ
-LABxHURY3Vl08sYJGGD9rDO+7VTwnxW4ua0RjUR3Wve9K9CbxuASM4Ei8hLPBPju
-IZYq6Iyu+Jemj2c5F15Mi5jhxZRHNA==
-=S1PG
------END PGP SIGNATURE-----
-
---tw3ilu4f5ovextuf--
+> 
+> Best regards,
+> Krzysztof

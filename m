@@ -2,56 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB205231A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:31:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2663E5231A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237072AbiEKLaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 07:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47608 "EHLO
+        id S234600AbiEKLbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 07:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231946AbiEKLaQ (ORCPT
+        with ESMTP id S237916AbiEKLak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 07:30:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4760C21E20;
-        Wed, 11 May 2022 04:30:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 11 May 2022 07:30:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D0F472415EF
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:30:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652268630;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wohS2fd8iJK+nOu4KauEQg//cRaTs75yj08GCIBle5g=;
+        b=AJxXfDCgaNzYsH4bF7s9T+X7TPWz/wZ+ERMab7POHimDXheMBC10rLE8MDOf0JORcpLzdk
+        Zr629T+1YO8AXZnDGONQfcDkFTYRNrjqQQVYhTEZxdn6JLx/Js5DRm4XCJ3esiAFzNOPh8
+        BTlP/UMy+MpFklvO058smzbZACkX3XE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-642-25UsvugIN9usLHru1ARIcQ-1; Wed, 11 May 2022 07:30:27 -0400
+X-MC-Unique: 25UsvugIN9usLHru1ARIcQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D16A61882;
-        Wed, 11 May 2022 11:30:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D07D3C340F3;
-        Wed, 11 May 2022 11:30:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652268613;
-        bh=39CRATfpjuCjHAa2PbIoSrt715Y4+38r0j0d01uPD4k=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=P4qznh5VKtagjojaCavJmje0gInPrmoKyCAw2G4C9OY2VH2L4ye9Qz+cy9AXCujVX
-         bBu+PLaZffF7m++Rcpae7gFIpzEaZWDEk0TmJSh8jvj3PqdWS+QFY/3okVoj+0AyDB
-         YEsqHUfzIlbF6fXOphQRbf/vAtHLCOrEAD9Z6R3sebDDGCVAztR5phEX92WljwWggD
-         Et6WfXETdtbnjwdgUrBFnwXfcVMl81d8iPB22EODs17Gs6OsCtvvD+EhnIc0aBJm6D
-         K7LMd1NTYz8aJKhFIjLs18FiSjZZsw/wi1ABijl3mPRumhRNwypbwC7XQO9YYp2PuF
-         ITBGhCSRNTzDQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A679DF03931;
-        Wed, 11 May 2022 11:30:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 23770801210;
+        Wed, 11 May 2022 11:30:27 +0000 (UTC)
+Received: from starship (unknown [10.40.192.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 72C8214693A5;
+        Wed, 11 May 2022 11:30:24 +0000 (UTC)
+Message-ID: <a060d2f84fb207af7d96cb955dd676c1d87f6adb.camel@redhat.com>
+Subject: Re: [PATCH v3 18/34] x86/hyperv: Fix 'struct hv_enlightened_vmcs'
+ definition
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 11 May 2022 14:30:23 +0300
+In-Reply-To: <20220414132013.1588929-19-vkuznets@redhat.com>
+References: <20220414132013.1588929-1-vkuznets@redhat.com>
+         <20220414132013.1588929-19-vkuznets@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 0/4 V2] net: atlantic: more fuzzing fixes
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165226861367.11801.13863078014011642254.git-patchwork-notify@kernel.org>
-Date:   Wed, 11 May 2022 11:30:13 +0000
-References: <20220510022826.2388423-1-grundler@chromium.org>
-In-Reply-To: <20220510022826.2388423-1-grundler@chromium.org>
-To:     Grant Grundler <grundler@chromium.org>
-Cc:     irusskikh@marvell.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, aashay@google.com, yich@google.com,
-        enlightened@google.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,38 +69,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Mon,  9 May 2022 19:28:22 -0700 you wrote:
-> The Chrome OS fuzzing team posted a "Fuzzing" report for atlantic driver
-> in Q4 2021 using Chrome OS v5.4 kernel and "Cable Matters
-> Thunderbolt 3 to 10 Gb Ethernet" (b0 version):
->     https://docs.google.com/document/d/e/2PACX-1vT4oCGNhhy_AuUqpu6NGnW0N9HF_jxf2kS7raOpOlNRqJNiTHAtjiHRthXYSeXIRTgfeVvsEt0qK9qK/pub
+On Thu, 2022-04-14 at 15:19 +0200, Vitaly Kuznetsov wrote:
+> Section 1.9 of TLFS v6.0b says:
 > 
-> It essentially describes four problems:
-> 1) validate rxd_wb->next_desc_ptr before populating buff->next
-> 2) "frag[0] not initialized" case in aq_ring_rx_clean()
-> 3) limit iterations handling fragments in aq_ring_rx_clean()
-> 4) validate hw_head_ in hw_atl_b0_hw_ring_tx_head_update()
+> "All structures are padded in such a way that fields are aligned
+> naturally (that is, an 8-byte field is aligned to an offset of 8 bytes
+> and so on)".
 > 
-> [...]
+> 'struct enlightened_vmcs' has a glitch:
+> 
+> ...
+>         struct {
+>                 u32                nested_flush_hypercall:1; /*   836: 0  4 */
+>                 u32                msr_bitmap:1;         /*   836: 1  4 */
+>                 u32                reserved:30;          /*   836: 2  4 */
+>         } hv_enlightenments_control;                     /*   836     4 */
+>         u32                        hv_vp_id;             /*   840     4 */
+>         u64                        hv_vm_id;             /*   844     8 */
+>         u64                        partition_assist_page; /*   852     8 */
+> ...
+> 
+> And the observed values in 'partition_assist_page' make no sense at
+> all. Fix the layout by padding the structure properly.
+> 
+> Fixes: 68d1eb72ee99 ("x86/hyper-v: define struct hv_enlightened_vmcs and clean field bits")
+> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/include/asm/hyperv-tlfs.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+> index 5225a85c08c3..e7ddae8e02c6 100644
+> --- a/arch/x86/include/asm/hyperv-tlfs.h
+> +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> @@ -548,7 +548,7 @@ struct hv_enlightened_vmcs {
+>  	u64 guest_rip;
+>  
+>  	u32 hv_clean_fields;
+> -	u32 hv_padding_32;
+> +	u32 padding32_1;
+>  	u32 hv_synthetic_controls;
+>  	struct {
+>  		u32 nested_flush_hypercall:1;
+> @@ -556,7 +556,7 @@ struct hv_enlightened_vmcs {
+>  		u32 reserved:30;
+>  	}  __packed hv_enlightenments_control;
+>  	u32 hv_vp_id;
+> -
+> +	u32 padding32_2;
+>  	u64 hv_vm_id;
+>  	u64 partition_assist_page;
+>  	u64 padding64_4[4];
 
-Here is the summary with links:
-  - [1/4] net: atlantic: fix "frag[0] not initialized"
-    https://git.kernel.org/netdev/net/c/62e0ae0f4020
-  - [2/4] net: atlantic: reduce scope of is_rsc_complete
-    https://git.kernel.org/netdev/net/c/79784d77ebbd
-  - [3/4] net: atlantic: add check for MAX_SKB_FRAGS
-    https://git.kernel.org/netdev/net/c/6aecbba12b5c
-  - [4/4] net: atlantic: verify hw_head_ lies within TX buffer ring
-    https://git.kernel.org/netdev/net/c/2120b7f4d128
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Makes sense.
 
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+
+Best regards,
+	Maxim Levitsky
 

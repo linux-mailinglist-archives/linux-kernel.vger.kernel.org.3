@@ -2,44 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C01522A82
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 05:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7188522A85
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 05:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239618AbiEKDoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 23:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54182 "EHLO
+        id S239575AbiEKDsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 23:48:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbiEKDoN (ORCPT
+        with ESMTP id S230296AbiEKDsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 23:44:13 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8499B183;
-        Tue, 10 May 2022 20:44:11 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R651e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=chengyou@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VCu1bA1_1652240648;
-Received: from 30.43.105.194(mailfrom:chengyou@linux.alibaba.com fp:SMTPD_---0VCu1bA1_1652240648)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 11 May 2022 11:44:09 +0800
-Message-ID: <b37c53a7-86df-0283-1a77-c31af108d39f@linux.alibaba.com>
-Date:   Wed, 11 May 2022 11:44:07 +0800
+        Tue, 10 May 2022 23:48:08 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0217816ABC5;
+        Tue, 10 May 2022 20:48:07 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 71BB9106F;
+        Tue, 10 May 2022 20:48:07 -0700 (PDT)
+Received: from [192.168.0.8] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2029B3F5A1;
+        Tue, 10 May 2022 20:48:00 -0700 (PDT)
+Message-ID: <6322e2d1-eaa0-e5ee-84b1-5c4a5ce522f3@arm.com>
+Date:   Wed, 11 May 2022 09:19:00 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH v2 2/2] RDMA/rxe: Generate error completion for error
- requester state
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH V5 0/8] perf: Expand perf_branch_entry
 Content-Language: en-US
-To:     Li Zhijian <lizhijian@fujitsu.com>,
-        Zhu Yanjun <zyjzyj2000@gmail.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-rdma@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20220511023030.229212-1-lizhijian@fujitsu.com>
- <20220511023030.229212-3-lizhijian@fujitsu.com>
-From:   Cheng Xu <chengyou@linux.alibaba.com>
-In-Reply-To: <20220511023030.229212-3-lizhijian@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        peterz@infradead.org, Robin Murphy <robin.murphy@arm.com>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        James Clark <james.clark@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+References: <20220404045046.634522-1-anshuman.khandual@arm.com>
+ <f469f253-9ccc-d55b-731d-3ecc8d685104@arm.com>
+ <a304d9e4-2632-1ba9-249f-1d87c90f82de@arm.com> <YmqagfywsvGXaIVl@kernel.org>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <YmqagfywsvGXaIVl@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,53 +59,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 5/11/22 10:30 AM, Li Zhijian wrote:
-> SoftRoCE always returns success when user space is posting a new wqe where
-> it usually just enqueues a wqe.
+On 4/28/22 19:15, Arnaldo Carvalho de Melo wrote:
+> Em Mon, Apr 18, 2022 at 12:17:53PM +0530, Anshuman Khandual escreveu:
+>> On 4/11/22 11:16, Anshuman Khandual wrote:
+>>> On 4/4/22 10:20, Anshuman Khandual wrote:
+>>>> - Rebased series on v5.18-rc1
+>>>
+>>> Gentle ping, any updates on this series ?
+>>
+>> Gentle ping, any updates on this series ?
+>>
+>> I have posted BRBE RFC V2 accommodating all these new perf ABI changes being
+>> proposed here. I would really appreciate reviews and/or suggestions on this
+>> series, which is essential and also prerequisite for the BRBE driver itself.
+>>
+>> https://lore.kernel.org/all/20220412115455.293119-1-anshuman.khandual@arm.com/
 > 
-> Once the requester state becomes QP_STATE_ERROR, we should generate error
-> completion for all subsequent wqe. So the user is able to poll the
-> completion event to check if the former wqe is handled correctly.
-> 
-> Here we check QP_STATE_ERROR after req_next_wqe() so that the completion
-> can associate with its wqe.
-> 
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-> ---
->   drivers/infiniband/sw/rxe/rxe_req.c | 10 +++++++++-
->   1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/infiniband/sw/rxe/rxe_req.c b/drivers/infiniband/sw/rxe/rxe_req.c
-> index 8bdd0b6b578f..ed6a486c4343 100644
-> --- a/drivers/infiniband/sw/rxe/rxe_req.c
-> +++ b/drivers/infiniband/sw/rxe/rxe_req.c
-> @@ -624,7 +624,7 @@ int rxe_requester(void *arg)
->   	rxe_get(qp);
->   
->   next_wqe:
-> -	if (unlikely(!qp->valid || qp->req.state == QP_STATE_ERROR))
-> +	if (unlikely(!qp->valid))
->   		goto exit;
->   
->   	if (unlikely(qp->req.state == QP_STATE_RESET)) {
-> @@ -646,6 +646,14 @@ int rxe_requester(void *arg)
->   	if (unlikely(!wqe))
->   		goto exit;
->   
-> +	if (qp->req.state == QP_STATE_ERROR) {
-> +		/*
-> +		 * Generate an error completion so that user space is able to
-> +		 * poll this completion.
-> +		 */
-> +		goto err;
-> +	}
-> +
+> Has the kernel bits been merged? When that happens I'll cherry pick the
+No, this series is still waiting for reviews for the kernel changes.
 
-Should this still use unlikely(...) ? Because the original judgement has
-a unlikely surrounded.
+> tools/ ones.
 
-Cheng Xu
+Sure.
 
->   	if (wqe->mask & WR_LOCAL_OP_MASK) {
->   		ret = rxe_do_local_ops(qp, wqe);
->   		if (unlikely(ret))
+> 
+> In future series, please, on the final patch submission, please send two
+> series, one for the kernel and another for tooling.
+
+Sure, will do.

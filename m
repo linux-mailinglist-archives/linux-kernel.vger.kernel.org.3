@@ -2,91 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35CD2523F39
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 23:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0C0523F38
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 23:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347997AbiEKVHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 17:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56664 "EHLO
+        id S238964AbiEKVHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 17:07:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347993AbiEKVHc (ORCPT
+        with ESMTP id S1347976AbiEKVHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 17:07:32 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7D479802
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 14:07:31 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id ba17so4003506edb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 14:07:31 -0700 (PDT)
+        Wed, 11 May 2022 17:07:24 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A3769734;
+        Wed, 11 May 2022 14:07:22 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so3139608pjq.2;
+        Wed, 11 May 2022 14:07:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0kVKJUKY0e+cQ43QKG8tA8Ts0yUQGOsHr9Kzh22Y3Mo=;
-        b=AOxXWxawM52NCXw7DMV9Y8SiCoLTKDC1ubtjLFvEh6wOf8r2IJiWTavY4UbIv8V8BS
-         c4t28E5ZtmgXYtHNVy2N2vnH5sC+e3FE1jc3K4TIJHZmtBjT9TnVavqBI1K5sIQYiP47
-         EJ2XRCH9/F71QUEkwF5tecVg9zjB0xCr06rChN2QuAdf8tYc37uuvjA+8Js+yOsbHRHI
-         1iaR6hC6dY1EmE3gnifZMw+wO3iX6Thu2ivke5cyPLbZc9SAw0aE3NPr1FlOEWQ5jayx
-         uXM+rRCU9CPvbZTQSYjPfOQD5F5cwc3oBdLNDBgUMIqgboe5EdKB0qRWqr3wM9I/Gyfr
-         oY1A==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=b6r4iHXphce3qNrnt+WRxrpdsuktB8YXEoXsfGUyHyI=;
+        b=d4IUXwD6gNj+uMj33TgTBflRj0rCzQNCBSP2h/Dsw1Iic+6tmFza6E33WjBeogUxoZ
+         AXIYPxoDF965KU6BDZsGazc/wZ4G/Xp0tjVwjWHxKvKOSk8krMWdCH3KZmJ0zX1z8lJf
+         kqh/21TsYPw21f4ZKwa9Cl3uxGSMGvlmNBquUpHI64w58P2SZ8BEnXTSeBmJbBuVziKM
+         8VnV7k8BAdJUdtCI7BNzD4gGGjiid1w5DE14hFWu4z/nipkb4+MkQPaWeZ78lOp/nNgF
+         Pl4/leS3mZ0ZiMOHxGhjI8LgV2DbiD6+rptjSoAfZiNdAKlq0J5CHsInL7e7fkXIGZmj
+         0v4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0kVKJUKY0e+cQ43QKG8tA8Ts0yUQGOsHr9Kzh22Y3Mo=;
-        b=IthE4VXVioXcCleFcBJUc6witmL1ks1x0bcS8CnKKJ2dMkg9G87VKolAthwuMlExg9
-         xZoyjvdibey1ko+r1dDbslZSN0larhgJlDFc2dQt3WoKk/X8FBTiNhUGrmseY3Cvadw+
-         xNXGf1Z0WarM9HTQlrLc0oTi/7uP3O95eH924JjHfDMhiKgVD8UCBxcgYhWewL5EyBov
-         9iXkCwlmZhH9UEqVS6rsAphShvUQNIsmXgTy84QbdGRd33FRYE11dRWft3+lU10J95TQ
-         dhSdIJ0SqC5GThKyycmCOCAi4Z0PwuiAO5mDSqoU+TMSmvZLMITqT27fwvH9PQzNTNGs
-         HgwQ==
-X-Gm-Message-State: AOAM532adZktYF5TJeW20CGYPGxjZpLCcVftABNoSyms0jE8E/ImQ6Y4
-        HmEVCmZgFFX+I/XbO+FzGHdQaKV6mdH4fBdDcWqYYQ==
-X-Google-Smtp-Source: ABdhPJw5z/zylvurJ69+rKnIACKIjwvRuCqXEy0EiR9R3MwUQuLMSYjLa/gITaGkzrvjqEeJUn7kfJZGLcaXGph2ZiU=
-X-Received: by 2002:aa7:c54d:0:b0:425:d8c9:efc6 with SMTP id
- s13-20020aa7c54d000000b00425d8c9efc6mr31270761edr.48.1652303249575; Wed, 11
- May 2022 14:07:29 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=b6r4iHXphce3qNrnt+WRxrpdsuktB8YXEoXsfGUyHyI=;
+        b=yG4sJACYvMFxOzgf7HuEIz/VwsmQcl1lv6gdVrI2c8xxjxORtdiPRk/T7fQ9tteS2z
+         AJ8TaXCzBClhfUHRzZOoCSTk8HofbVp2sFVSJghQHSY5lQlIXFNBa3Noe2p10EuOm3wA
+         SUzqFs2tAjSHp17EXA8DHYkiFSPTjHmCUbKytD30k0lQy4lrDFegO+LnyFUitR4mDair
+         EwnKZOkmUqUjowU2YFptSobksTpb4P+22OAg4IZZEkJYXKnk5nyo9DzM8l7CWDyAqBoz
+         +c8m9Z61XaKM2HmsFu4m3Y9LZ1zI0qFffnf3BaYT+82v/CFWwmU3tCcugvCtYAvkPHYS
+         ycWw==
+X-Gm-Message-State: AOAM533TfmZpJwK9gKN/UoVdrO74Bv3ZLEwg7MoLDXKqwW+BUWxx2UuS
+        Af8ispytLjvrMm5PhJ36OOk=
+X-Google-Smtp-Source: ABdhPJw/H8QUlaG/k/sM5buMEEA7It/aboEPNCK6XBNNFa2imfElrbbgBDOeD4Oqn5yTRTrjuxAgLA==
+X-Received: by 2002:a17:90a:d497:b0:1dc:9cbe:6a47 with SMTP id s23-20020a17090ad49700b001dc9cbe6a47mr7218865pju.108.1652303241630;
+        Wed, 11 May 2022 14:07:21 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:69ef:9c87:7816:4f74])
+        by smtp.gmail.com with ESMTPSA id p5-20020a170902b08500b0015e8d4eb1d6sm2361601plr.32.2022.05.11.14.07.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 14:07:21 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Wed, 11 May 2022 14:07:19 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     Sultan Alsawaf <sultan@kerneltoast.com>
+Cc:     stable@vger.kernel.org, Nitin Gupta <ngupta@vflare.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] zsmalloc: Fix races between asynchronous zspage free and
+ page migration
+Message-ID: <Ynwlh3RT0PAYpWpD@google.com>
+References: <20220509024703.243847-1-sultan@kerneltoast.com>
+ <Ynv53fkx8cG0ixaE@google.com>
+ <YnwTfBLn+6vYSe59@sultan-box.localdomain>
 MIME-Version: 1.0
-References: <20220405190619.540177-1-dlatypov@google.com> <06087446-c053-7099-b8f1-40a467781186@redhat.com>
- <CAGS_qxqFqM=4w1xEB_bmznMAh3r19Ou9TjYR8gGetG1ypo7W5A@mail.gmail.com>
-In-Reply-To: <CAGS_qxqFqM=4w1xEB_bmznMAh3r19Ou9TjYR8gGetG1ypo7W5A@mail.gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 11 May 2022 17:07:17 -0400
-Message-ID: <CAFd5g46zWQRD7YBwR0odeuSYm3zVvHTfSSsFy0Bv5pPevGsR6Q@mail.gmail.com>
-Subject: Re: [PATCH] lib/Kconfig.debug: change KUnit tests to default to KUNIT_ALL_TESTS
-To:     Nico Pache <npache@redhat.com>
-Cc:     Daniel Latypov <dlatypov@google.com>, davidgow@google.com,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnwTfBLn+6vYSe59@sultan-box.localdomain>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 2:54 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> On Mon, Apr 18, 2022 at 1:43 PM Nico Pache <npache@redhat.com> wrote:
-> >
->
-> <snip>
->
-> > I have tried posting something similar in the past!
-> > https://lore.kernel.org/lkml/f427ed5cbc08da83086c504fbb3ad1bab50340cd.1618388989.git.npache@redhat.com/
+On Wed, May 11, 2022 at 12:50:20PM -0700, Sultan Alsawaf wrote:
+> On Wed, May 11, 2022 at 11:01:01AM -0700, Minchan Kim wrote:
+> > On Sun, May 08, 2022 at 07:47:02PM -0700, Sultan Alsawaf wrote:
+> > > Cc: stable@vger.kernel.org
+> > > Fixes: 48b4800a1c6a ("zsmalloc: page migration support")
+> > 
+> > Shouldn't the fix be Fixes: 77ff465799c6 ("zsmalloc: zs_page_migrate: skip
+> > unnecessary loops but not return -EBUSY if zspage is not inuse)?
+> > Because we didn't migrate ZS_EMPTY pages before.
+> 
+> Hi,
+> 
+> Yeah, 77ff465799c6 indeed seems like the commit that introduced the bug.
+> 
+> > I couldn't get the point here. Why couldn't we simple lock zspage migration?
+> > 
+> > diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
+> > index 9152fbde33b5..05ff2315b7b1 100644
+> > --- a/mm/zsmalloc.c
+> > +++ b/mm/zsmalloc.c
+> > @@ -1987,7 +1987,10 @@ static void async_free_zspage(struct work_struct *work)
+> >  
+> >         list_for_each_entry_safe(zspage, tmp, &free_pages, list) {
+> >                 list_del(&zspage->list);
+> > +
+> > +               migrate_read_lock(zspage);
+> >                 lock_zspage(zspage);
+> > +               migrate_read_unlock(zspage);
+> >  
+> >                 get_zspage_mapping(zspage, &class_idx, &fullness);
+> >                 VM_BUG_ON(fullness != ZS_EMPTY);
+> 
+> There are two problems with this:
+> 1. migrate_read_lock() is a rwlock and lock_page() can sleep.
+> 2. This will cause a deadlock because it violates the lock ordering in
+>    zs_page_migrate(), since zs_page_migrate() takes migrate_write_lock() under
+>    the page lock.
+> 
 
-Ooops, sorry, we should probably go back and pull those in as well.
+That's true. Thanks!
 
-Thanks for your fixes, and sorry for not picking them up.
+Then, how about this?
 
-> Aha, so that's why I vaguely thought someone had already done this.
->
-> >
-> > Reviewed-by: Nico Pache <npache@redhat.com>
-> > Acked-by: Nico Pache <npache@redhat.com>
->
-> Thanks!
+diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
+index 9152fbde33b5..2f205c18aee4 100644
+--- a/mm/zsmalloc.c
++++ b/mm/zsmalloc.c
+@@ -1716,12 +1716,31 @@ static enum fullness_group putback_zspage(struct size_class *class,
+  * To prevent zspage destroy during migration, zspage freeing should
+  * hold locks of all pages in the zspage.
+  */
+-static void lock_zspage(struct zspage *zspage)
++static void lock_zspage(struct zs_pool *pool, struct zspage *zspage)
+ {
+-       struct page *page = get_first_page(zspage);
+-
++       struct page *page;
++       int nr_locked;
++       struct page *locked_pages[ZS_MAX_PAGES_PER_ZSPAGE];
++       struct address_space *mapping;
++retry:
++       nr_locked = 0;
++       memset(locked_pages, 0, sizeof(struct page) * ARRAY_SIZE(locked_pages));
++       page = get_first_page(zspage);
+        do {
+                lock_page(page);
++               locked_pages[nr_locked++] = page;
++               /*
++                * subpage in the zspage could be migrated under us so
++                * verify it. Once it happens, retry the lock sequence.
++                */
++               mapping = page_mapping(page)
++               if (mapping != pool->inode->i_mapping ||
++                   page_private(page) != (unsigned long)zspage) {
++                       do {
++                               unlock_page(locked_pages[--nr_locked]);
++                       } while (nr_locked > 0)
++                       goto retry;
++               }
+        } while ((page = get_next_page(page)) != NULL);
+ }
+
+@@ -1987,7 +2006,7 @@ static void async_free_zspage(struct work_struct *work)
+
+        list_for_each_entry_safe(zspage, tmp, &free_pages, list) {
+                list_del(&zspage->list);
+-               lock_zspage(zspage);
++               lock_zspage(pool, zspage);
+
+                get_zspage_mapping(zspage, &class_idx, &fullness);
+                VM_BUG_ON(fullness != ZS_EMPTY);
+
+

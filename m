@@ -2,237 +2,551 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B08C5235BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0F75235B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244852AbiEKOi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 10:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48972 "EHLO
+        id S244836AbiEKOiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 10:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237732AbiEKOix (ORCPT
+        with ESMTP id S235769AbiEKOh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 10:38:53 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7098F53B51;
-        Wed, 11 May 2022 07:38:52 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24BDaF7C023694;
-        Wed, 11 May 2022 14:36:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=GjLuT6Wo5NilNILvCP71RUavjE9XH/ZimsxunJAvGN0=;
- b=QChsTixDBBFZ02Jc3zKi29IqlpD+raM39B7lD+8gPpFlnytmCw9ZYO4xzEFqMlRLoTvt
- 7YRVxLzj3Gro5CEISWxEWvG/WMgRtogc2J42kI/+GKkFBJ19o2KQufiHmEoYVZoKzi6R
- votigqBLPOvWuMbJYWhW2fy+w14FUR9oZ7wnL6FhDnkpQD18pLQexBd09sgFIGOdh3im
- loZ//oyEJxB0dwoHvW7uOs8Rnsg3FSkBeXax7dtU+L7s4+p7qlEFcnXp4Bp5cBUlMuPb
- jhDqeQrVLENA2G/5ustzOMXJ5Q0kqMr1jmNsTFibMSXoiezRRcUz7o5SJAhBAwu/OPgP dQ== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fwhatj1a0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 11 May 2022 14:36:41 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24BEa7lX038727;
-        Wed, 11 May 2022 14:36:39 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2177.outbound.protection.outlook.com [104.47.57.177])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fwf7apey8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 11 May 2022 14:36:39 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XSE5rnxRq8TSJ5pHlATG89OxVmE91MTXfNKJECExQFUVcylyImrUnNe5Ui5wok6miPTTmKImWBv9MTs0MxCfixx+ZYe2x/0ZyQhns3g1oeLZIv2b3gRjXCi1lS5C8bUdYpt1cRetLqXGXWkmsnv8g7ltcX3XdQ8fxYN3c9oeCKM/8aoyF2d3okzoJr7vh36FDErOhW1mWjxIRjCqaLT9wUc71737ks9llhGFV5g0ZI5OUJwbXnmz+r5dGHMbrTE0eOlGiZs3nmobSlU7Sw/LhTu8j3X97iswjd3OHarbDadTm8en4E8sepXXmLU0svI+soYQsnaGwcvSw8UgV9YfHQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GjLuT6Wo5NilNILvCP71RUavjE9XH/ZimsxunJAvGN0=;
- b=gd7+K8LCfZAoH9Zmit11vXChaJmv7zwCaAdvCqKSOjIualo2YjT+JJyvctXNGYUszZ3J/RrIwrQXZvBBat6n8fLJ4Iu9eRZCXo4q9VrR+hJS2bu920Z1/w//n7juTcQaLpYM1iEaIw9oZA82adlxClrqSaYm9Vy3S7Nfnv32S/B083SfIwe31Sv1jubo8WqaloS9NlORXo1gkmMzCtegyuj1jT0pj2s8vLvDOAPMiwdHmy4gOnPyeT9mrIy5g+KRDSpgo5/eReS4ojUCBSopMv+AHNIa994lEWGHs2nq9e36wOE7izWZEhA5Uv58auSpabURQxFT900QJvyN5Lr7gg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GjLuT6Wo5NilNILvCP71RUavjE9XH/ZimsxunJAvGN0=;
- b=CGlA5pH2tmRMLQu9cRQvxcQsRqy+YVUrw9JE2AZxkv2iDYcH+fZ/aMpJakWVx0eiu76pCrEyuX8r0+M7pu0+oMgOTCbHhIF9NVtRgc68tIKAPYTORv4rq5FSsPaLn16nGGrQpQHfLKoYJAi4eAgq/Xr6iuE3vfZlLwUZxiEo5ts=
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com (2603:10b6:408:117::24)
- by BL0PR10MB2817.namprd10.prod.outlook.com (2603:10b6:208:77::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.22; Wed, 11 May
- 2022 14:36:37 +0000
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::ed81:8458:5414:f59f]) by BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::ed81:8458:5414:f59f%8]) with mapi id 15.20.5227.023; Wed, 11 May 2022
- 14:36:37 +0000
-From:   Chuck Lever III <chuck.lever@oracle.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     Wolfgang Walter <linux@stwm.de>,
-        linux-stable <stable@vger.kernel.org>,
-        Trond Myklebust <trondmy@gmail.com>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: 5.4.188 and later: massive performance regression with nfsd
-Thread-Topic: 5.4.188 and later: massive performance regression with nfsd
-Thread-Index: AQHYZR5cM0piVXjf4kWw2Fv1L4O8aq0Zna6AgAAbcgCAAAISgIAAA5uA
-Date:   Wed, 11 May 2022 14:36:37 +0000
-Message-ID: <0F5EA15D-08A0-4D3E-B5A9-D62C49BF2B56@oracle.com>
-References: <f8d9b9112607df4807fba8948ac6e145@stwm.de>
- <YnuuLZe6h80KCNhd@kroah.com>
- <6A15DEE1-CAC9-4C64-8643-AD28EA423046@oracle.com>
- <YnvG71v4Ay560D+X@kroah.com>
-In-Reply-To: <YnvG71v4Ay560D+X@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3654.120.0.1.13)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2be9359c-6039-49e4-5d0f-08da335ba7db
-x-ms-traffictypediagnostic: BL0PR10MB2817:EE_
-x-microsoft-antispam-prvs: <BL0PR10MB2817ADF9F050AB93EA8CB0B993C89@BL0PR10MB2817.namprd10.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: z1UGxY6A7OpXUT8FviPyhArQR5LP92hOl2MjAt3GBr06IVSmX3jtfY6SpS8l1rtU1+q4t0KryuY2U9QHhqVSucXb3rnPQ7fi4c/4bP3bM6/7rz8fAsxCLeyNtB7ndcE+e9YCHygYdLPy8s169gOQ7C0wOosI6/omgfm0rYj4BduQBOLOnpSKKWQnj4/fGvHB8XRxNdovgIuo4ukTR3UTxkePTohKtNl99e1ONrIb4Ufx5+4Wc7AhaYfpq0t9MUB85hlFH0ya3dvNCD5cbqJktFWVcyjgObVvbObbhYquHG0XDTGDm0UkfS6tjCTMXQE2rSlIRJHwqE1wLxxv10qJN9J+x9r6EViUVfreNIZHhyeEw9NbW4knBsJ9kaUiEQri3MdhDQfpSXDg34c5Gea1cyliDh22fja86Os0x9yfvEmlhHSdnY59Sx+XKbZdu4rHinMC0OOygMUVdT9HFMxua+S5EoOsnS7vZll2HBXu2rIhd3PlQtV0xmUPHOwqAISXDMG21tYNkpSHfW/VsrOlCa0OC0JSK1YzvLK5nDta7X5XZ/jU7DEBE6WSw958GtlwWdcKvxPUS2vvitUIfWe2/0k96wQ1vZA9D4jaziZe118JJG/Nz6Y8Il8ugHDE0VYZJkNs37Fl4YK0YT6bHdsAS9CLPLTrhj/3XE76I/wLJxCE63WEwBCBhM5eZf60PdFTYWSeA+sqSaOycIJkt8/nbmEqX4ZA+bWvt1j349BnM2TS4w0fg9kAj+7KVCBQTTSxQcXlt61R1JxqImg0e7C/vg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5128.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38070700005)(33656002)(5660300002)(83380400001)(2906002)(38100700002)(6486002)(186003)(36756003)(4326008)(8936002)(86362001)(316002)(8676002)(91956017)(2616005)(76116006)(66446008)(66476007)(66946007)(6916009)(54906003)(66556008)(64756008)(6506007)(26005)(508600001)(71200400001)(122000001)(53546011)(6512007)(14583001)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?dX4xffypR7mKyOaKzTLo1Qr9EpRAseL4/e4dpwDDwLPZpyzgcLhtL5zcLLIX?=
- =?us-ascii?Q?m7P2/bpZaSwlgDXG8yOGpS0vjlHa73iY8HstvgkY2vfui3gQfySQHcw1aw9R?=
- =?us-ascii?Q?otwfGrKjk9PRcb9Afspx9i5zoRv8MnRr19p4rEerPjZTxoag3pA6w8GcV+kk?=
- =?us-ascii?Q?GhVNm3SuxSwV+PXkixb9DnV4zrkb22IUA7ifOFVFWL9kNKhbtIxyhYn2LXC0?=
- =?us-ascii?Q?DQXH1OhnMOeXfnPakPLpSUBEtyuDumhZ7kCq15/gk2/RoVyFBxB/5K3ZT/p1?=
- =?us-ascii?Q?De0D99HnuTAHpfGMDbD4roZVD6I1Gx+hP5XI9uT94+jlTFcKpi2kR27WeCPF?=
- =?us-ascii?Q?cwO8PvxJbRptfQfV3PPIeYqmqII1ism85+1W2jqpj33+em7iI74cldoloB2L?=
- =?us-ascii?Q?H1MNiug6NTl9YGaipTsKN2lkLtQnUoo14s2eDUNJ8DAYMdKAgH5StkJYu2D5?=
- =?us-ascii?Q?0FAX62YjXaPlUGCYq/d9yackGSeEjvAB6qYfWl+lWvy7D9Y5kJ2bwAtKImTz?=
- =?us-ascii?Q?NpvsP7oiGPhRwmkZT1rrZIKLmvYJzATCOf2v0Gl+XuSQGp/bix7mwuaXirph?=
- =?us-ascii?Q?L5Fk4p4OjeeJI3WJidlxxCxsOG8adYq6Bg5ltJxYZtMwzfs9rAlxuKlMuwku?=
- =?us-ascii?Q?/Ups8xaGJcWCqkaUDq+V4wn4sQklSMHERjsLE9QgpJNnTiLEor7B25cKVchO?=
- =?us-ascii?Q?mQ2oi9ekL/NQ3uySBPtrM9/eGzvdHwwUQ9Oa4iBHHrbjYxujU4RGv3orkDf3?=
- =?us-ascii?Q?CZEUL8bwXTi1kwdLAK/7yxCtGE8f+UgZGV8GQvWvcB+VhpEOty3D3tjsErmA?=
- =?us-ascii?Q?UYLUVCa5RPh7TDtccswndnycNxuOItucewlvS/e3T69s8vp7IW/AyiqY1S1k?=
- =?us-ascii?Q?QjdJhyc2+cMQZ9TJRA+ZrpZZyV55AAsVc37+yxeO//OzKUIU/6jD10U8i+dR?=
- =?us-ascii?Q?EyKC1Wuui10/y8mrvzrpHZ8+spzkgjyGmM4m8cyv5fu83BLBDia0TAFJE9N8?=
- =?us-ascii?Q?l+IjM8z3TfDNhbJJn/QrwREeWzj95c5CilfHLauJ/7V1cIMlBsKON2OSLKV2?=
- =?us-ascii?Q?yq4fznWsGnf+pkfJwy/FElwkhNbZveYOAkumVsp67pNTVPP7ws9k3QDhaCFM?=
- =?us-ascii?Q?vII8EUEbxTQ8REqdXI3JwDPqYIv8dBjHXIyH7v9aqTWDF1NC9xJSmK9n+AY2?=
- =?us-ascii?Q?9OB4FelRTJg5Ym3SWSDo1+TV/XRF7RiHrF6mVeask5iJqT9wUZCSTFEruSth?=
- =?us-ascii?Q?9rfHf7BwNiaBU2AqxERU1x2NOfh36LTLiF68vTwdXU7+VNc5lzHcb69IVgV1?=
- =?us-ascii?Q?EedjVKw0GmLA9m0ysPjWFp/+1hHZKo9ab/uL3v3Gjwh/qfh7/cUrMG3l6jHw?=
- =?us-ascii?Q?vOhh4RZG5+oxBt72KrgAyIlhl4iA2gQgZbJHCP87zpn6cNio/nCqfQ3rPKHF?=
- =?us-ascii?Q?kyQr+idjqU3ePC1Yjdb+D1N+BeigXvcueIy70pMvkiAFYrvD4jNf2Q9Ktvp7?=
- =?us-ascii?Q?Xh12sltIpwN4I9hwZDyDAkEvT3cZNGeM2FTzoRDf//uRK6q+jrvVFVwoRpk/?=
- =?us-ascii?Q?ftdbT8q5ClQU4vamfTtimokJtO5ZlSm1ZOCLRB+JVeeGuAjbHJ9Gh+kkDVdA?=
- =?us-ascii?Q?e1B4deNpVoUjpX08xdhm1XLkv8F+Gtj11nX02Fuoebg7OTtTdkTAUdUU93cf?=
- =?us-ascii?Q?HGiRwbCNtqiusrabrnyLULjuL3CstNswBZF2wPgjeCdWOLL0a5IA1ZZQKOJO?=
- =?us-ascii?Q?AYyTU2Phah9PSBJNhzedBMBtL3F1Bu0=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <93440AC397C1D948B352E8A2FEC2142C@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Wed, 11 May 2022 10:37:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4624EA18;
+        Wed, 11 May 2022 07:37:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 697C26121D;
+        Wed, 11 May 2022 14:37:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74B20C34116;
+        Wed, 11 May 2022 14:37:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652279876;
+        bh=wRJpDokbT09JoxdEz3qkThYC2F/0ZTNg1AOWctYJMSs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=q4V4bgTZiX/taCIvVcOREIB5ZXlmOfkWli9h6tmhqT2Hz64PJLa8Eyp4fJqvbW9sm
+         8ZbSkCHcy/bbG0NesPyx4nKlwf3RsAb+B83AWQn5sgqKcHzXz8qltAc0eZ35zdBSZY
+         ovzbo5kqiZ9sixMcOsv5HRxbizW4gKvZar2ziWR7uRCren3Ab1xbAelUc079P934zl
+         Dhr2sOv8jIi1uSObVRzLc4KyQK0+gz9oXTmxsEmzdXietnl+gmjKoFJ+4ByCxg8FxF
+         xOS50NDRvnJ9oxQVFmtEeVb01zsPUdDhLp+wlYgCIkcGEU83zdJpZ0dRgjrSQdZxy5
+         3NpzQv+sLGwzA==
+Received: by pali.im (Postfix)
+        id A707C21A6; Wed, 11 May 2022 16:37:53 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, Marek Behun <marek.behun@nic.cz>,
+        Josef Schlehofer <josef.schlehofer@nic.cz>
+Subject: [PATCH] powerpc: dts: Add DTS file for CZ.NIC Turris 1.x routers
+Date:   Wed, 11 May 2022 16:37:12 +0200
+Message-Id: <20220511143712.22550-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5128.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2be9359c-6039-49e4-5d0f-08da335ba7db
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 May 2022 14:36:37.7089
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8tJ/B+HZ+KSz9q4qf6NptG8kXfe7LCjRPhFPsu7v4+28F49uPRW0ikzfAbZhX3HCrt6klAxaz+vVMrDchXW7KA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR10MB2817
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
- definitions=2022-05-11_07:2022-05-11,2022-05-11 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=999
- spamscore=0 bulkscore=0 adultscore=0 suspectscore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205110068
-X-Proofpoint-GUID: dWP2pE2Tlh_B-OUnLuUJgD8LqK8AWo3r
-X-Proofpoint-ORIG-GUID: dWP2pE2Tlh_B-OUnLuUJgD8LqK8AWo3r
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+CZ.NIC Turris 1.0 and 1.1 are open source routers, they have dual-core
+PowerPC Freescale P2020 CPU and are based on Freescale P2020RDB-PC-A board.
+Hardware design is fully open source, all firmware and hardware design
+files are available at Turris project website:
 
+https://docs.turris.cz/hw/turris-1x/turris-1x/
+https://project.turris.cz/en/hardware.html
 
-> On May 11, 2022, at 10:23 AM, Greg KH <gregkh@linuxfoundation.org> wrote:
->=20
-> On Wed, May 11, 2022 at 02:16:19PM +0000, Chuck Lever III wrote:
->>=20
->>=20
->>> On May 11, 2022, at 8:38 AM, Greg KH <gregkh@linuxfoundation.org> wrote=
-:
->>>=20
->>> On Wed, May 11, 2022 at 12:03:13PM +0200, Wolfgang Walter wrote:
->>>> Hi,
->>>>=20
->>>> starting with 5.4.188 wie see a massive performance regression on our
->>>> nfs-server. It basically is serving requests very very slowly with cpu
->>>> utilization of 100% (with 5.4.187 and earlier it is 10%) so that it is
->>>> unusable as a fileserver.
->>>>=20
->>>> The culprit are commits (or one of it):
->>>>=20
->>>> c32f1041382a88b17da5736886da4a492353a1bb "nfsd: cleanup
->>>> nfsd_file_lru_dispose()"
->>>> 628adfa21815f74c04724abc85847f24b5dd1645 "nfsd: Containerise filecache
->>>> laundrette"
->>>>=20
->>>> (upstream 36ebbdb96b694dd9c6b25ad98f2bbd263d022b63 and
->>>> 9542e6a643fc69d528dfb3303f145719c61d3050)
->>>>=20
->>>> If I revert them in v5.4.192 the kernel works as before and performanc=
-e is
->>>> ok again.
->>>>=20
->>>> I did not try to revert them one by one as any disruption of our nfs-s=
-erver
->>>> is a severe problem for us and I'm not sure if they are related.
->>>>=20
->>>> 5.10 and 5.15 both always performed very badly on our nfs-server in a
->>>> similar way so we were stuck with 5.4.
->>>>=20
->>>> I now think this is because of 36ebbdb96b694dd9c6b25ad98f2bbd263d022b6=
-3
->>>> and/or 9542e6a643fc69d528dfb3303f145719c61d3050 though I didn't tried =
-to
->>>> revert them in 5.15 yet.
->>>=20
->>> Odds are 5.18-rc6 is also a problem?
->>=20
->> We believe that
->>=20
->> 6b8a94332ee4 ("nfsd: Fix a write performance regression")
->>=20
->> addresses the performance regression. It was merged into 5.18-rc.
->=20
-> And into 5.17.4 if someone wants to try that release.
+Signed-off-by: Pali Rohár <pali@kernel.org>
+---
+ arch/powerpc/boot/dts/turris1x.dts | 470 +++++++++++++++++++++++++++++
+ 1 file changed, 470 insertions(+)
+ create mode 100644 arch/powerpc/boot/dts/turris1x.dts
 
-I don't have a lot of time to backport this one myself, so
-I welcome anyone who wants to apply that commit to their
-favorite LTS kernel and test it for us.
-
-
->>> If so, I'll just wait for the fix to get into Linus's tree as this does
->>> not seem to be a stable-tree-only issue.
->>=20
->> Unfortunately I've received a recent report that the fix introduces
->> a "sleep while spinlock is held" for NFSv4.0 in rare cases.
->=20
-> Ick, not good, any potential fixes for that?
-
-Not yet. I was at LSF last week, so I've just started digging
-into this one. I've confirmed that the report is a real bug,
-but we still don't know how hard it is to hit it with real
-workloads.
-
-
---
-Chuck Lever
-
-
+diff --git a/arch/powerpc/boot/dts/turris1x.dts b/arch/powerpc/boot/dts/turris1x.dts
+new file mode 100644
+index 000000000000..2a624f117586
+--- /dev/null
++++ b/arch/powerpc/boot/dts/turris1x.dts
+@@ -0,0 +1,470 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Turris 1.x Device Tree Source
++ *
++ * Copyright 2013 - 2022 CZ.NIC z.s.p.o. (http://www.nic.cz/)
++ *
++ * Pinout, Schematics and Altium hardware design files are open source
++ * and available at: https://docs.turris.cz/hw/turris-1x/turris-1x/
++ */
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/interrupt-controller/irq.h>
++#include <dt-bindings/leds/common.h>
++/include/ "fsl/p2020si-pre.dtsi"
++
++/ {
++	model = "Turris 1.x";
++	compatible = "cznic,turris1x", "fsl,P2020RDB-PC"; /* fsl,P2020RDB-PC is required for booting Linux */
++
++	aliases {
++		ethernet0 = &enet0;
++		ethernet1 = &enet1;
++		ethernet2 = &enet2;
++		serial0 = &serial0;
++		serial1 = &serial1;
++		pci0 = &pci0;
++		pci1 = &pci1;
++		pci2 = &pci2;
++		spi0 = &spi0;
++	};
++
++	memory {
++		device_type = "memory";
++	};
++
++	soc: soc@ffe00000 {
++		ranges = <0x0 0x0 0xffe00000 0x00100000>;
++
++		i2c@3000 {
++			/* PCA9557PW GPIO controller for boot config */
++			gpio-controller@18 {
++				compatible = "nxp,pca9557";
++				label = "bootcfg";
++				reg = <0x18>;
++				#gpio-cells = <2>;
++				gpio-controller;
++				polarity = <0x00>;
++			};
++
++			/* STM32F030R8T6 MCU for power control */
++			power-control@32 {
++				/*
++				 * Turris Power Control firmware runs on STM32F0 MCU.
++				 * This firmware is open source and available at:
++				 * https://gitlab.nic.cz/turris/hw/turris_power_control
++				 */
++				reg = <0x32>;
++			};
++
++			/* SA56004ED temperature control */
++			temperature-sensor@4c {
++				compatible = "nxp,sa56004";
++				reg = <0x4c>;
++				interrupt-parent = <&gpio>;
++				interrupts = <12 IRQ_TYPE_LEVEL_LOW>, /* GPIO12 - ALERT pin */
++					     <13 IRQ_TYPE_LEVEL_LOW>; /* GPIO13 - CRIT pin */
++			};
++
++			/* DDR3 SPD/EEPROM */
++			eeprom@52 {
++				compatible = "atmel,spd";
++				reg = <0x52>;
++			};
++
++			/* ATSHA204-TH-DA-T crypto module */
++			crypto@64 {
++				compatible = "atmel,atsha204";
++				reg = <0x64>;
++			};
++
++			/* IDT6V49205BNLGI clock generator */
++			clock-generator@69 {
++				compatible = "idt,6v49205b";
++				reg = <0x69>;
++			};
++
++			/* MCP79402-I/ST Protected EEPROM */
++			eeprom@57 {
++				reg = <0x57>;
++			};
++
++			/* MCP79402-I/ST RTC */
++			rtc@6f {
++				compatible = "microchip,mcp7940x";
++				reg = <0x6f>;
++				interrupt-parent = <&gpio>;
++				interrupts = <14 0>; /* GPIO14 - MFP pin */
++			};
++		};
++
++		/* SPI on connector P1 */
++		spi0: spi@7000 {
++		};
++
++		gpio: gpio-controller@fc00 {
++			#interrupt-cells = <2>;
++			interrupt-controller;
++		};
++
++		/* Connected to SMSC USB2412-DZK 2-Port USB 2.0 Hub Controller */
++		usb@22000 {
++			phy_type = "ulpi";
++			dr_mode = "host";
++		};
++
++		enet0: ethernet@24000 {
++			/* Connected to port 6 of QCA8337N-AL3C switch */
++			phy-connection-type = "rgmii-id";
++
++			fixed-link {
++				speed = <1000>;
++				full-duplex;
++			};
++		};
++
++		mdio@24520 {
++			/* QCA8337N-AL3C switch with integrated ethernet PHYs for LAN ports */
++			switch@10 {
++				compatible = "qca,qca8337";
++				interrupts = <2 1 0 0>;
++				reg = <0x10>;
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++						label = "cpu1";
++						ethernet = <&enet1>;
++						phy-mode = "rgmii-id";
++
++						fixed-link {
++							speed = <1000>;
++							full-duplex;
++						};
++					};
++
++					port@1 {
++						reg = <1>;
++						label = "lan5";
++					};
++
++					port@2 {
++						reg = <2>;
++						label = "lan4";
++					};
++
++					port@3 {
++						reg = <3>;
++						label = "lan3";
++					};
++
++					port@4 {
++						reg = <4>;
++						label = "lan2";
++					};
++
++					port@5 {
++						reg = <5>;
++						label = "lan1";
++					};
++
++					port@6 {
++						reg = <6>;
++						label = "cpu0";
++						ethernet = <&enet0>;
++						phy-mode = "rgmii-id";
++
++						fixed-link {
++							speed = <1000>;
++							full-duplex;
++						};
++					};
++				};
++			};
++
++			/* KSZ9031RNXCA ethernet phy for WAN port */
++			phy: ethernet-phy@7 {
++				interrupts = <3 1 0 0>;
++				reg = <0x7>;
++			};
++		};
++
++		ptp_clock@24e00 {
++			fsl,tclk-period = <5>;
++			fsl,tmr-prsc = <200>;
++			fsl,tmr-add = <0xcccccccd>;
++			fsl,tmr-fiper1 = <0x3b9ac9fb>;
++			fsl,tmr-fiper2 = <0x0001869b>;
++			fsl,max-adj = <249999999>;
++		};
++
++		enet1: ethernet@25000 {
++			/* Connected to port 0 of QCA8337N-AL3C switch */
++			phy-connection-type = "rgmii-id";
++
++			fixed-link {
++				speed = <1000>;
++				full-duplex;
++			};
++		};
++
++		mdio@25520 {
++			status = "disabled";
++		};
++
++		enet2: ethernet@26000 {
++			/* Connected to KSZ9031RNXCA ethernet phy (WAN port) */
++			label = "wan";
++			phy-handle = <&phy>;
++			phy-connection-type = "rgmii-id";
++		};
++
++		mdio@26520 {
++			status = "disabled";
++		};
++
++		sdhc@2e000 {
++			bus-width = <4>;
++			cd-gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
++		};
++	};
++
++	lbc: localbus@ffe05000 {
++		reg = <0 0xffe05000 0 0x1000>;
++
++		ranges = <0x0 0x0 0x0 0xef000000 0x01000000>, /* NOR */
++			 <0x1 0x0 0x0 0xff800000 0x00040000>, /* NAND */
++			 <0x3 0x0 0x0 0xffa00000 0x00020000>; /* CPLD */
++
++		/* S29GL128P90TFIR10 NOR */
++		nor@0,0 {
++			compatible = "cfi-flash";
++			reg = <0x0 0x0 0x01000000>;
++			bank-width = <2>;
++			device-width = <1>;
++
++			partitions {
++				compatible = "fixed-partitions";
++				#address-cells = <1>;
++				#size-cells = <1>;
++
++				partition@0 {
++					/* 128 kB for Device Tree Blob */
++					reg = <0x00000000 0x00020000>;
++					label = "dtb";
++				};
++
++				partition@20000 {
++					/* 1.7 MB for Rescue Linux Kernel Image */
++					reg = <0x00020000 0x001a0000>;
++					label = "rescue-kernel";
++				};
++
++				partition@1c0000 {
++					/* 1.5 MB for Rescue JFFS2 Root File System */
++					reg = <0x001c0000 0x00180000>;
++					label = "rescue-rootfs";
++				};
++
++				partition@340000 {
++					/* 11 MB for TAR.XZ Backup with content of NAND Root File System */
++					reg = <0x00340000 0x00b00000>;
++					label = "backup-rootfs";
++				};
++
++				partition@e40000 {
++					/* 768 kB for Certificates JFFS2 File System */
++					reg = <0x00e40000 0x000c0000>;
++					label = "certificates";
++				};
++
++				/* free unused space 0x00f00000-0x00f20000 */
++
++				partition@f20000 {
++					/* 128 kB for U-Boot Environment Variables */
++					reg = <0x00f20000 0x00020000>;
++					label = "u-boot-env";
++				};
++
++				partition@f40000 {
++					/* 768 kB for U-Boot Bootloader Image */
++					reg = <0x00f40000 0x000c0000>;
++					label = "u-boot";
++				};
++			};
++		};
++
++		/* MT29F2G08ABAEAWP:E NAND */
++		nand@1,0 {
++			compatible = "fsl,p2020-fcm-nand", "fsl,elbc-fcm-nand";
++			reg = <0x1 0x0 0x00040000>;
++			nand-ecc-mode = "soft";
++			nand-ecc-algo = "bch";
++
++			partitions {
++				compatible = "fixed-partitions";
++				#address-cells = <1>;
++				#size-cells = <1>;
++
++				partition@0 {
++					/* 256 MB for UBI with one volume: UBIFS Root File System */
++					reg = <0x00000000 0x10000000>;
++					label = "rootfs";
++				};
++			};
++		};
++
++		/* LCMXO1200C-3FTN256C FPGA */
++		cpld@3,0 {
++			/*
++			 * Turris CPLD firmware which runs on this Lattice FPGA,
++			 * is extended version of P1021RDB-PC CPLD v4.1 firmware.
++			 * It is backward compatible with its original version
++			 * and the only extension is support for Turris LEDs.
++			 * Turris CPLD firmware is open source and available at:
++			 * https://gitlab.nic.cz/turris/hw/turris_cpld/-/blob/master/CZ_NIC_Router_CPLD.v
++			 */
++			compatible = "cznic,turris1x-cpld", "fsl,p1021rdb-pc-cpld", "simple-bus";
++			reg = <0x3 0x0 0x30>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0x0 0x3 0x0 0x00020000>;
++
++			/* MAX6370KA+T watchdog */
++			watchdog@2 {
++				/*
++				 * CPLD firmware maps SET0, SET1 and SET2
++				 * input logic of MAX6370KA+T chip to CPLD
++				 * memory space at byte offset 0x2. WDI
++				 * input logic is outside of the CPLD and
++				 * connected via external GPIO.
++				 */
++				compatible = "maxim,max6370";
++				reg = <0x02 0x01>;
++				gpios = <&gpio 11 GPIO_ACTIVE_LOW>;
++			};
++
++			led-controller@13 {
++				/*
++				 * LEDs are controlled by CPLD firmware.
++				 * All five LAN LEDs share common RGB settings
++				 * and so it is not possible to set different
++				 * colors on different LAN ports.
++				 */
++				compatible = "cznic,turris1x-leds";
++				reg = <0x13 0x1d>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				multi-led@0 {
++					reg = <0x0>;
++					color = <LED_COLOR_ID_RGB>;
++					function = LED_FUNCTION_WAN;
++				};
++
++				multi-led@1 {
++					reg = <0x1>;
++					color = <LED_COLOR_ID_RGB>;
++					function = LED_FUNCTION_LAN;
++					function-enumerator = <5>;
++				};
++
++				multi-led@2 {
++					reg = <0x2>;
++					color = <LED_COLOR_ID_RGB>;
++					function = LED_FUNCTION_LAN;
++					function-enumerator = <4>;
++				};
++
++				multi-led@3 {
++					reg = <0x3>;
++					color = <LED_COLOR_ID_RGB>;
++					function = LED_FUNCTION_LAN;
++					function-enumerator = <3>;
++				};
++
++				multi-led@4 {
++					reg = <0x4>;
++					color = <LED_COLOR_ID_RGB>;
++					function = LED_FUNCTION_LAN;
++					function-enumerator = <2>;
++				};
++
++				multi-led@5 {
++					reg = <0x5>;
++					color = <LED_COLOR_ID_RGB>;
++					function = LED_FUNCTION_LAN;
++					function-enumerator = <1>;
++				};
++
++				multi-led@6 {
++					reg = <0x6>;
++					color = <LED_COLOR_ID_RGB>;
++					function = LED_FUNCTION_WLAN;
++				};
++
++				multi-led@7 {
++					reg = <0x7>;
++					color = <LED_COLOR_ID_RGB>;
++					function = LED_FUNCTION_POWER;
++				};
++			};
++		};
++	};
++
++	pci2: pcie@ffe08000 {
++		/*
++		 * PCIe bus for on-board TUSB7340RKM USB 3.0 xHCI controller.
++		 * This xHCI controller is available only on Turris 1.1 boards.
++		 * Turris 1.0 boards have nothing connected to this PCIe bus,
++		 * so system would see only PCIe Root Port of this PCIe Root
++		 * Complex. TUSB7340RKM xHCI controller has four SuperSpeed
++		 * channels. Channel 0 is connected to the front USB 3.0 port,
++		 * channel 1 (but only USB 2.0 subset) to USB 2.0 pins on mPCIe
++		 * slot 1 (CN5), channels 2 and 3 to connector P600.
++		 *
++		 * P2020 PCIe Root Port uses 1MB of PCIe MEM and xHCI controller
++		 * uses 64kB + 8kB of PCIe MEM. No PCIe IO is used or required.
++		 * So allocate 2MB of PCIe MEM for this PCIe bus.
++		 */
++		reg = <0 0xffe08000 0 0x1000>;
++		ranges = <0x02000000 0x0 0xc0000000 0 0xc0000000 0x0 0x00200000>, /* MEM */
++			 <0x01000000 0x0 0x00000000 0 0xffc20000 0x0 0x00010000>; /* IO */
++
++		pcie@0 {
++			ranges;
++		};
++	};
++
++	pci1: pcie@ffe09000 {
++		/* PCIe bus on mPCIe slot 2 (CN6) for expansion mPCIe card */
++		reg = <0 0xffe09000 0 0x1000>;
++		ranges = <0x02000000 0x0 0xa0000000 0 0xa0000000 0x0 0x20000000>, /* MEM */
++			 <0x01000000 0x0 0x00000000 0 0xffc10000 0x0 0x00010000>; /* IO */
++
++		pcie@0 {
++			ranges;
++		};
++	};
++
++	pci0: pcie@ffe0a000 {
++		/*
++		 * PCIe bus on mPCIe slot 1 (CN5) for expansion mPCIe card.
++		 * Turris 1.1 boards have in this mPCIe slot additional USB 2.0
++		 * pins via channel 1 of TUSB7340RKM xHCI controller and also
++		 * additional SIM card slot, both for USB-based WWAN cards.
++		 */
++		reg = <0 0xffe0a000 0 0x1000>;
++		ranges = <0x02000000 0x0 0x80000000 0 0x80000000 0x0 0x20000000>, /* MEM */
++			 <0x01000000 0x0 0x00000000 0 0xffc00000 0x0 0x00010000>; /* IO */
++
++		pcie@0 {
++			ranges;
++		};
++	};
++};
++
++/include/ "fsl/p2020si-post.dtsi"
+-- 
+2.20.1
 

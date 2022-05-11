@@ -2,112 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 069B5522F34
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74F7F522F48
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239521AbiEKJT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 05:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53846 "EHLO
+        id S239648AbiEKJV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 05:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231270AbiEKJTz (ORCPT
+        with ESMTP id S239576AbiEKJVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 05:19:55 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55EAF994FA;
-        Wed, 11 May 2022 02:19:54 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id c12so1761267edv.10;
-        Wed, 11 May 2022 02:19:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0FWrA/1HzsR1Fw7JiPrCjDIP8RO6iLoamwA8NVbBFUo=;
-        b=Kh6KdaD3Nhovfjm7JjbOXwHoQ0DWkIiuyZ9Ryxi3zqwlh2155hYLOYHNjSdCulB6rM
-         mLwubuJGzueqRvehPlqLSJcbWilLD5nDJe8cM7MMpV2tqtzmwnkYq0KPDa4XB87BLU+b
-         Ih35NwEYpri6s3gzhIaxoicAlqeGe6xluEnB1NTg3aPmGVRasxlqrBEjhKjGAqQ6A7my
-         0miUYrGrITe+fH7qExkXsYgN5X4zoGPFlfRulnBSa60vPo7DHkMKPrH45I5aJbtl3Icy
-         WZrKo2mpbBU/GIErsrDThWA8VzpYsN1t6z1+atKnyYGvz2Lsn+nfY9ZlVxrVYJeq0cP0
-         WahQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0FWrA/1HzsR1Fw7JiPrCjDIP8RO6iLoamwA8NVbBFUo=;
-        b=r6whHcXXYnhV1sgC9yvQmhSrcS8OITm6QDK4Mm0P7SvdDjI9KDewP5pH+D7VdXU3Qb
-         na437s03B03nB2I9YqMWL/kjUZliZJUMNnh9gz36aXp3udvohEYWGo6YvbBL+UUak5Ta
-         1OOlVp2lghDh1IK77fnhjR+NlPHCmm2ZGa4jl8xF/fXBLIT+kQRLyusyVftVR4RyHbVi
-         kBaNaHiYgJq4nVJqRNvziCnZFtslaJEMnDKys4FSiePT3AtUgbh43qE2p8PDZurTgYHD
-         gmWhBKJLxIHn5lmrWXxbNVi1KsRZnRQt3Rv0LTiVCTHNGgaZ/0OJchoRsJU77c0+a8vd
-         NnoA==
-X-Gm-Message-State: AOAM531z4TFpcrNVtCB7skboD82itEy1Sqhi+s033BsmGPFt2y1udcxi
-        +nBg34DwzZL1vHIg+TcrZ2+OH1kH7iMCThX1UeI=
-X-Google-Smtp-Source: ABdhPJyAjMMACQ/bMvn1oWN7KSjTqhuM5w1KxcOEaFqspEIDacs06uc3fJkNWxX1AYsfrzNZC7aM8vxNcKf/ufHeAbg=
-X-Received: by 2002:aa7:d350:0:b0:425:e029:da56 with SMTP id
- m16-20020aa7d350000000b00425e029da56mr27783655edr.296.1652260792848; Wed, 11
- May 2022 02:19:52 -0700 (PDT)
+        Wed, 11 May 2022 05:21:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA0C3F8BB
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:21:49 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1noiWz-0001tq-95; Wed, 11 May 2022 11:21:17 +0200
+Message-ID: <fd7a6a34-4064-19f0-2d4d-d867a371422a@pengutronix.de>
+Date:   Wed, 11 May 2022 11:21:12 +0200
 MIME-Version: 1.0
-References: <CAHp75VfzbWAS6phV3eB7ehe50NrXitkuS54sYjdVK-OqqYVieA@mail.gmail.com>
- <20220511021638.1488650-1-chi.minghao@zte.com.cn>
-In-Reply-To: <20220511021638.1488650-1-chi.minghao@zte.com.cn>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 11 May 2022 11:19:16 +0200
-Message-ID: <CAHp75Ve3ur6_jpd_wOP29CEJF8VvyG+e_Wn7dfa8N=vRHedoKQ@mail.gmail.com>
-Subject: Re: [PATCH V2] toshiba_acpi: use kobj_to_dev()
-To:     cgel.zte@gmail.com
-Cc:     Minghao Chi <chi.minghao@zte.com.cn>,
-        Azael Avalos <coproscefalo@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Gross <markgross@kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Zeal Robot <zealci@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [EXT] [PATCH v9 3/7] crypto: caam - determine whether CAAM
+ supports blob encap/decap
+Content-Language: en-US
+To:     Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Horia Geanta <horia.geanta@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Michael Walle <michael@walle.cc>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        David Gstir <david@sigma-star.at>,
+        Richard Weinberger <richard@nod.at>,
+        Franck Lenormand <franck.lenormand@nxp.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+References: <20220506062553.1068296-1-a.fatoum@pengutronix.de>
+ <20220506062553.1068296-4-a.fatoum@pengutronix.de>
+ <DU2PR04MB8630501008F661C596C0106295C69@DU2PR04MB8630.eurprd04.prod.outlook.com>
+ <5e7c0b3c9bc285f1cf9f7b20f055aa376e1688cc.camel@pengutronix.de>
+ <DU2PR04MB8630A6F925454E5C007FA3EA95C89@DU2PR04MB8630.eurprd04.prod.outlook.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <DU2PR04MB8630A6F925454E5C007FA3EA95C89@DU2PR04MB8630.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 4:16 AM <cgel.zte@gmail.com> wrote:
->
-> From: Minghao Chi <chi.minghao@zte.com.cn>
->
-> Use kobj_to_dev() instead of open-coding it.
+Hello Pankaj,
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+On 11.05.22 11:16, Pankaj Gupta wrote:
+>> -----Original Message-----
+>> From: Ahmad Fatoum <a.fatoum@pengutronix.de>
+>>>> +       if (ctrlpriv->era < 10) {
+>>>>                 rng_vid = (rd_reg32(&ctrl->perfmon.cha_id_ls) &
+>>>>                            CHA_ID_LS_RNG_MASK) >>
+>>>> CHA_ID_LS_RNG_SHIFT;
+>>>
+>>> Check for AES CHAs for Era < 10, should be added.
+>>
+>> Do I need this? I only do this check for Era >= 10, because apparently there are
+>> Layerscape non-E processors that indicate BLOB support via CTPR_LS_BLOB, but
+>> fail at runtime. Are there any Era < 10 SoCs that are similarly broken?
+>>
+> 
+> For non-E variants, it might happen that Blob protocol is enabled, but number of AES CHA are zero.
 
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> ---
-> v1->v2:
->         remove Reported-by: Zeal Robot <zealci@zte.com.cn>
->
->  drivers/platform/x86/toshiba_acpi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/platform/x86/toshiba_acpi.c
-> b/drivers/platform/x86/toshiba_acpi.c
-> index f113dec98e21..0fc9e8b8827b 100644
-> --- a/drivers/platform/x86/toshiba_acpi.c
-> +++ b/drivers/platform/x86/toshiba_acpi.c
-> @@ -2353,7 +2353,7 @@ static struct attribute *toshiba_attributes[] = {
->  static umode_t toshiba_sysfs_is_visible(struct kobject *kobj,
->                                         struct attribute *attr, int idx)
->  {
-> -       struct device *dev = container_of(kobj, struct device, kobj);
-> +       struct device *dev = kobj_to_dev(kobj);
->         struct toshiba_acpi_dev *drv = dev_get_drvdata(dev);
->         bool exists = true;
->
-> --
-> 2.25.1
->
->
+Do you know any SoC where this is the case?
+(i.e. era < 10 && CTPR_LS_BLOB && AES_CHA == 0) 
+
+> If the output of below expression is > 0, then only blob_present should be marked present or true.
+> For era > 10, you handled. But for era < 10, please add the below code.
+> 	
+> (rd_reg32(&priv->ctrl->perfmon.cha_num_ls) &
+>                            CHA_ID_LS_AES_MASK) >> CHA_ID_LS_AES_SHIFT;
+
+Sorry, I am not fond of adding quirk handling for Hardware that might
+not even exist.
+
+Cheers,
+Ahmad
+
+> 
+>> Cheers,
+>> Ahmad
+> 
 
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

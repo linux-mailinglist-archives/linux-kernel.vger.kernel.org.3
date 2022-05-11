@@ -2,434 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16389523765
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BD3352375B
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343770AbiEKPfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57964 "EHLO
+        id S242366AbiEKPbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343773AbiEKPfP (ORCPT
+        with ESMTP id S240224AbiEKPbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:35:15 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E782D6AA4A
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:35:12 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id p189so1445722wmp.3
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:35:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZuWVk+FdZdvE+5pO8+zGgR5HjRlcwSWdU2pKMiDLQBk=;
-        b=XVDZLFC8pV2IG9+ehZMtO/oqDJcnZWwu0qOzO4D8evXhT3LZ5fTv620GNrhvSscOuf
-         b7d/iWrz3zjr0mU602XpCWChcqNfwJdDyUwHouK5WBDcFYtbymNGDVSnh2CMxE+mkBTG
-         zlsbh1jpHjpJmoP2roQ5z3k1PNbo7FCqSWXm+nfCUZGBF4VGwNYwaRrM5wV/VeFiXs66
-         cNttqpEhfi8yUPeb82nLSpd48i3fbdjDBUJPJWg6TBHsdvXPa1FtMdPNn/x2T7Z2yrPU
-         quvlOPlgAG7IfIw6ltsf8QNyQxXW+2GecJbCtqNhgaqmp2Uzu49qpv3JbEVqJJbbBZCY
-         OP3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZuWVk+FdZdvE+5pO8+zGgR5HjRlcwSWdU2pKMiDLQBk=;
-        b=W8XqkWMweUbjV4IJZExR0aitw0pned0b03IqnCHAEtQB0wyDERbJqk7gfNqtDiu6n5
-         MqhjdAXWXrvBAau97X0afXnkTOhAuw4hAEAkkR8mrw6+W4pUj0DVBIGhvPl108qq2mWM
-         qDETqsxpGbmwvfulQS4+wZELhr953xzm8o/qRN4uhfnFDreapDfbzz/ljZJXmGvj9Yon
-         AVg365B3d5eDiaLmVWegHPW5+FmsyuXeFpFDgb4TXfKlqsIOcR4dKsMcsq1d8iw9q6bn
-         RRZZjM0xjwmcnZ2Fe3haLXwsAJ04AzTFytDxo7OzIm4Jr8yZIzimXeAWofs7RLVFR9xC
-         34jA==
-X-Gm-Message-State: AOAM533BCTVEfkT0kFugHx2jIUcePF6y7Im4f5KyU/wUXngfXVzYds8J
-        ej9U828hK6WSm9TbfWueEBivF75NVNBm0dAxJBsXwQ==
-X-Google-Smtp-Source: ABdhPJze3VeRz1msOIu6dGx7hx3zjTnq6Zamjp07eedtQ0dSjOWy+lJHUSKllgAz+1V6bAALs2DyIhwtQTdKrZb61Jo=
-X-Received: by 2002:a05:600c:19cc:b0:394:8dc2:a23b with SMTP id
- u12-20020a05600c19cc00b003948dc2a23bmr5452721wmq.182.1652283311217; Wed, 11
- May 2022 08:35:11 -0700 (PDT)
+        Wed, 11 May 2022 11:31:36 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7060B53E29;
+        Wed, 11 May 2022 08:31:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652283095; x=1683819095;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Ndczgwyznivdqv1iFCHWhopQvKb+2Iqd5Yk+4O3ea9c=;
+  b=aUKdevAP1zBomDOXOkOhphGq5H4HUjh0MTWzI5wobT7G81nxLe+8P5KA
+   mslzsR3lcxHFNhOmHPLYc6+TNFqkdUX+k+hhVH9wd4ItfNpjEdYq/AhtY
+   tXDFNRkCqgcKhdBokaki0CSHyF2cIIdm3V0UI2g+qKy4yRvq6p0yL/V/D
+   BV/NL3DUqVJon9ayqBRl5B9CEgbQ6ca/eyXkFx/YJ8lSS8FJeulqtITwc
+   dYDyNvyIQ33oPQlrKNfzLCpa6ktzfHf2jA7z9CrbwWlAL0GnHApex/f/V
+   nvdOSr6Y4oZCZE3fAmpCqR+qVAOymvA8e5mZH7LLUEau6dv4ieW0Mhmv4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="330330913"
+X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
+   d="scan'208";a="330330913"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 08:31:33 -0700
+X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
+   d="scan'208";a="895392286"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 08:31:32 -0700
+Date:   Wed, 11 May 2022 08:35:18 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     iommu@lists.linux-foundation.org,
+        LKML <linux-kernel@vger.kernel.org>, dmaengine@vger.kernel.org,
+        Joerg Roedel <joro@8bytes.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>, vkoul@kernel.org,
+        robin.murphy@arm.com, will@kernel.org, Yi Liu <yi.l.liu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        Raj Ashok <ashok.raj@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v3 1/4] iommu/vt-d: Implement domain ops for
+ attach_dev_pasid
+Message-ID: <20220511082958.79d5d8ee@jacob-builder>
+In-Reply-To: <20220511115427.GU49344@nvidia.com>
+References: <20220510210704.3539577-1-jacob.jun.pan@linux.intel.com>
+ <20220510210704.3539577-2-jacob.jun.pan@linux.intel.com>
+ <20220510232121.GP49344@nvidia.com>
+ <20220510172309.3c4e7512@jacob-builder>
+ <20220511115427.GU49344@nvidia.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220505155745.1690906-1-dvyukov@google.com>
-In-Reply-To: <20220505155745.1690906-1-dvyukov@google.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 11 May 2022 08:34:58 -0700
-Message-ID: <CAP-5=fVDs-AQvhXbZM9ksRqMdfS00Mpn8LDRZUppJb76TCkrAg@mail.gmail.com>
-Subject: Re: [PATCH] tools/perf: add breakpoint benchmarks
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, elver@google.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 5, 2022 at 8:58 AM Dmitry Vyukov <dvyukov@google.com> wrote:
->
-> Add 2 benchmarks:
-> 1. Performance of thread creation/exiting in presence of breakpoints.
-> 2. Performance of breakpoint modification in presence of threads.
->
-> The benchmarks capture use cases that we are interested in:
-> using inheritable breakpoints in large highly-threaded applications.
-> The benchmarks show significant slowdown imposed by breakpoints
-> (even when they don't fire).
->
-> Testing on Intel 8173M with 112 HW threads show:
->
-> perf bench --repeat=56 breakpoint thread --breakpoints=0 --parallelism=56 --threads=20
->       78.675000 usecs/op
-> perf bench --repeat=56 breakpoint thread --breakpoints=4 --parallelism=56 --threads=20
->    12967.135714 usecs/op
-> That's 165x slowdown due to presence of the breakpoints.
->
-> perf bench --repeat=20000 breakpoint enable --passive=0 --active=0
->        1.433250 usecs/op
-> perf bench --repeat=20000 breakpoint enable --passive=224 --active=0
->      585.318400 usecs/op
-> perf bench --repeat=20000 breakpoint enable --passive=0 --active=111
->      635.953000 usecs/op
-> That's 408x and 444x slowdown due to presence of threads.
->
-> Profiles show some overhead in toggle_bp_slot,
-> but also very high contention:
->
->     90.83%  breakpoint-thre  [kernel.kallsyms]  [k] osq_lock
->      4.69%  breakpoint-thre  [kernel.kallsyms]  [k] mutex_spin_on_owner
->      2.06%  breakpoint-thre  [kernel.kallsyms]  [k] __reserve_bp_slot
->      2.04%  breakpoint-thre  [kernel.kallsyms]  [k] toggle_bp_slot
->
->     79.01%  breakpoint-enab  [kernel.kallsyms]  [k] smp_call_function_single
->      9.94%  breakpoint-enab  [kernel.kallsyms]  [k] llist_add_batch
->      5.70%  breakpoint-enab  [kernel.kallsyms]  [k] _raw_spin_lock_irq
->      1.84%  breakpoint-enab  [kernel.kallsyms]  [k] event_function_call
->      1.12%  breakpoint-enab  [kernel.kallsyms]  [k] send_call_function_single_ipi
->      0.37%  breakpoint-enab  [kernel.kallsyms]  [k] generic_exec_single
->      0.24%  breakpoint-enab  [kernel.kallsyms]  [k] __perf_event_disable
->      0.20%  breakpoint-enab  [kernel.kallsyms]  [k] _perf_event_enable
->      0.18%  breakpoint-enab  [kernel.kallsyms]  [k] toggle_bp_slot
->
-> Signed-off-by: Dmitry Vyukov <dvyukov@google.com>
+Hi Jason,
 
-Acked-by: Ian Rogers <irogers@google.com>
+On Wed, 11 May 2022 08:54:27 -0300, Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-> Cc: linux-perf-users@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> ---
->  tools/perf/bench/Build        |   1 +
->  tools/perf/bench/bench.h      |   2 +
->  tools/perf/bench/breakpoint.c | 235 ++++++++++++++++++++++++++++++++++
->  tools/perf/builtin-bench.c    |   8 ++
->  4 files changed, 246 insertions(+)
->  create mode 100644 tools/perf/bench/breakpoint.c
->
-> diff --git a/tools/perf/bench/Build b/tools/perf/bench/Build
-> index 61d45fcb4057c..6b6155a8ad096 100644
-> --- a/tools/perf/bench/Build
-> +++ b/tools/perf/bench/Build
-> @@ -14,6 +14,7 @@ perf-y += kallsyms-parse.o
->  perf-y += find-bit-bench.o
->  perf-y += inject-buildid.o
->  perf-y += evlist-open-close.o
-> +perf-y += breakpoint.o
->
->  perf-$(CONFIG_X86_64) += mem-memcpy-x86-64-asm.o
->  perf-$(CONFIG_X86_64) += mem-memset-x86-64-asm.o
-> diff --git a/tools/perf/bench/bench.h b/tools/perf/bench/bench.h
-> index b3480bc33fe84..6cefb4315d75e 100644
-> --- a/tools/perf/bench/bench.h
-> +++ b/tools/perf/bench/bench.h
-> @@ -49,6 +49,8 @@ int bench_synthesize(int argc, const char **argv);
->  int bench_kallsyms_parse(int argc, const char **argv);
->  int bench_inject_build_id(int argc, const char **argv);
->  int bench_evlist_open_close(int argc, const char **argv);
-> +int bench_breakpoint_thread(int argc, const char **argv);
-> +int bench_breakpoint_enable(int argc, const char **argv);
->
->  #define BENCH_FORMAT_DEFAULT_STR       "default"
->  #define BENCH_FORMAT_DEFAULT           0
-> diff --git a/tools/perf/bench/breakpoint.c b/tools/perf/bench/breakpoint.c
-> new file mode 100644
-> index 0000000000000..56936fea246d7
-> --- /dev/null
-> +++ b/tools/perf/bench/breakpoint.c
-> @@ -0,0 +1,235 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <subcmd/parse-options.h>
-> +#include <linux/hw_breakpoint.h>
-> +#include <linux/perf_event.h>
-> +#include <linux/time64.h>
-> +#include <sys/syscall.h>
-> +#include <sys/ioctl.h>
-> +#include <sys/time.h>
-> +#include <pthread.h>
-> +#include <stddef.h>
-> +#include <stdlib.h>
-> +#include <unistd.h>
-> +#include <stdio.h>
-> +#include <errno.h>
-> +#include "bench.h"
-> +#include "futex.h"
-> +
-> +struct {
-> +       unsigned int nbreakpoints;
-> +       unsigned int nparallel;
-> +       unsigned int nthreads;
-> +} thread_params = {
-> +       .nbreakpoints = 1,
-> +       .nparallel = 1,
-> +       .nthreads = 1,
-> +};
-> +
-> +static const struct option thread_options[] = {
-> +       OPT_UINTEGER('b', "breakpoints", &thread_params.nbreakpoints,
-> +               "Specify amount of breakpoints"),
-> +       OPT_UINTEGER('p', "parallelism", &thread_params.nparallel, "Specify amount of parallelism"),
-> +       OPT_UINTEGER('t', "threads", &thread_params.nthreads, "Specify amount of threads"),
-> +       OPT_END()
-> +};
-> +
-> +static const char * const thread_usage[] = {
-> +       "perf bench breakpoint thread <options>",
-> +       NULL
-> +};
-> +
-> +struct breakpoint {
-> +       int fd;
-> +       char watched;
-> +};
-> +
-> +static int breakpoint_setup(void *addr)
-> +{
-> +       struct perf_event_attr attr = {0};
-> +
-> +       attr.type = PERF_TYPE_BREAKPOINT;
-> +       attr.size = sizeof(attr);
-> +       attr.inherit = 1;
-> +       attr.exclude_kernel = 1;
-> +       attr.exclude_hv = 1;
-> +       attr.bp_addr = (uint64_t)addr;
-> +       attr.bp_type = HW_BREAKPOINT_RW;
-> +       attr.bp_len = HW_BREAKPOINT_LEN_1;
-> +       return syscall(SYS_perf_event_open, &attr, 0, -1, -1, 0);
-> +}
-> +
-> +static void *passive_thread(void *arg)
-> +{
-> +       unsigned int *done = (unsigned int *)arg;
-> +
-> +       while (!__atomic_load_n(done, __ATOMIC_RELAXED))
+> On Tue, May 10, 2022 at 05:23:09PM -0700, Jacob Pan wrote:
+> 
+> > > > diff --git a/include/linux/intel-iommu.h
+> > > > b/include/linux/intel-iommu.h index 5af24befc9f1..55845a8c4f4d
+> > > > 100644 +++ b/include/linux/intel-iommu.h
+> > > > @@ -627,6 +627,7 @@ struct device_domain_info {
+> > > >  	struct intel_iommu *iommu; /* IOMMU used by this device */
+> > > >  	struct dmar_domain *domain; /* pointer to domain */
+> > > >  	struct pasid_table *pasid_table; /* pasid table */
+> > > > +	ioasid_t pasid; /* DMA request with PASID */    
+> > > 
+> > > And this seems wrong - the DMA API is not the only user of
+> > > attach_dev_pasid, so there should not be any global pasid for the
+> > > device.
+> > >   
+> > True but the attach_dev_pasid() op is domain type specific. i.e. DMA API
+> > has its own attach_dev_pasid which is different than sva domain
+> > attach_dev_pasid().  
+> 
+> Huh? The intel driver shares the same ops between UNMANAGED and DMA -
+> and in general I do not think we should be putting special knowledge
+> about the DMA domains in the drivers. Drivers should continue to treat
+> them identically to UNMANAGED.
+> 
+OK, other than SVA domain, the rest domain types share the same default ops.
+I agree that the default ops should be the same for UNMANAGED, IDENTITY, and
+DMA domain types. Minor detail is that we need to treat IDENTITY domain
+slightly different when it comes down to PASID entry programming.
 
-Note, this may be the first change with atomics since Linux moved to
-C11 which may make the use of stdatomic.h more idiomatic. Just
-flagging for potential future cleanup.
+If not global, perhaps we could have a list of pasids (e.g. xarray) attached
+to the device_domain_info. The TLB flush logic would just go through the
+list w/o caring what the PASIDs are for. Does it make sense to you?
+
+> > device_domain_info is only used by DMA API.  
+> 
+> Huh?
+My mistake, i meant the device_domain_info.pasid is only used by DMA API
+
+>  
+> > > I suspect this should be a counter of # of pasid domains attached so
+> > > that the special flush logic triggers
+> > >   
+> > This field is only used for devTLB, so it is per domain-device. struct
+> > device_domain_info is allocated per device-domain as well. Sorry, I
+> > might have totally missed your point.  
+> 
+> You can't store a single pasid in the driver like this, since the only
+> thing it does is trigger the flush logic just count how many pasids
+> are used by the device-domain and trigger pasid flush if any pasids
+> are attached
+> 
+Got it, will put the pasids in an xa as described above.
+
+> > > And rely on the core code to worry about assigning only one domain per
+> > > pasid - this should really be a 'set' function.  
+> >
+> > Yes, in this set the core code (in dma-iommu.c) only assign one PASID
+> > per DMA domain type.
+> > 
+> > Are you suggesting the dma-iommu API should be called
+> > iommu_set_dma_pasid instead of iommu_attach_dma_pasid?  
+> 
+> No that API is Ok - the driver ops API should be 'set' not attach/detach
+> 
+Sounds good, this operation has little in common with
+domain_ops.dev_attach_pasid() used by SVA domain. So I will add a new
+domain_ops.dev_set_pasid()
+
 
 Thanks,
-Ian
 
-> +               futex_wait(done, 0, NULL, 0);
-> +       return NULL;
-> +}
-> +
-> +static void *active_thread(void *arg)
-> +{
-> +       unsigned int *done = (unsigned int *)arg;
-> +
-> +       while (!__atomic_load_n(done, __ATOMIC_RELAXED));
-> +       return NULL;
-> +}
-> +
-> +static void *breakpoint_thread(void *arg)
-> +{
-> +       unsigned int i, done;
-> +       int *repeat = (int *)arg;
-> +       pthread_t *threads;
-> +
-> +       threads = calloc(thread_params.nthreads, sizeof(threads[0]));
-> +       while (__atomic_fetch_sub(repeat, 1, __ATOMIC_RELAXED) > 0) {
-> +               done = 0;
-> +               for (i = 0; i < thread_params.nthreads; i++) {
-> +                       if (pthread_create(&threads[i], NULL, passive_thread, &done))
-> +                               exit((perror("pthread_create"), EXIT_FAILURE));
-> +               }
-> +               __atomic_store_n(&done, 1, __ATOMIC_RELAXED);
-> +               futex_wake(&done, thread_params.nthreads, 0);
-> +               for (i = 0; i < thread_params.nthreads; i++)
-> +                       pthread_join(threads[i], NULL);
-> +       }
-> +       free(threads);
-> +       return NULL;
-> +}
-> +
-> +// The benchmark creates nbreakpoints inheritable breakpoints,
-> +// then starts nparallel threads which create and join bench_repeat batches of nthreads threads.
-> +int bench_breakpoint_thread(int argc, const char **argv)
-> +{
-> +       unsigned int i, result_usec;
-> +       int repeat = bench_repeat;
-> +       struct breakpoint *breakpoints;
-> +       pthread_t *parallel;
-> +       struct timeval start, stop, diff;
-> +
-> +       if (parse_options(argc, argv, thread_options, thread_usage, 0)) {
-> +               usage_with_options(thread_usage, thread_options);
-> +               exit(EXIT_FAILURE);
-> +       }
-> +       breakpoints = calloc(thread_params.nbreakpoints, sizeof(breakpoints[0]));
-> +       parallel = calloc(thread_params.nparallel, sizeof(parallel[0]));
-> +       for (i = 0; i < thread_params.nbreakpoints; i++) {
-> +               breakpoints[i].fd = breakpoint_setup(&breakpoints[i].watched);
-> +               if (breakpoints[i].fd == -1)
-> +                       exit((perror("perf_event_open"), EXIT_FAILURE));
-> +       }
-> +       gettimeofday(&start, NULL);
-> +       for (i = 0; i < thread_params.nparallel; i++) {
-> +               if (pthread_create(&parallel[i], NULL, breakpoint_thread, &repeat))
-> +                       exit((perror("pthread_create"), EXIT_FAILURE));
-> +       }
-> +       for (i = 0; i < thread_params.nparallel; i++)
-> +               pthread_join(parallel[i], NULL);
-> +       gettimeofday(&stop, NULL);
-> +       timersub(&stop, &start, &diff);
-> +       for (i = 0; i < thread_params.nbreakpoints; i++)
-> +               close(breakpoints[i].fd);
-> +       free(parallel);
-> +       free(breakpoints);
-> +       switch (bench_format) {
-> +       case BENCH_FORMAT_DEFAULT:
-> +               printf("# Created/joined %d threads with %d breakpoints and %d parallelism\n",
-> +                       bench_repeat, thread_params.nbreakpoints, thread_params.nparallel);
-> +               printf(" %14s: %lu.%03lu [sec]\n\n", "Total time",
-> +                       (long)diff.tv_sec, (long)(diff.tv_usec / USEC_PER_MSEC));
-> +               result_usec = diff.tv_sec * USEC_PER_SEC + diff.tv_usec;
-> +               printf(" %14lf usecs/op\n",
-> +                       (double)result_usec / bench_repeat / thread_params.nthreads);
-> +               printf(" %14lf usecs/op/cpu\n",
-> +                       (double)result_usec / bench_repeat /
-> +                       thread_params.nthreads * thread_params.nparallel);
-> +               break;
-> +       case BENCH_FORMAT_SIMPLE:
-> +               printf("%lu.%03lu\n", (long)diff.tv_sec, (long)(diff.tv_usec / USEC_PER_MSEC));
-> +               break;
-> +       default:
-> +               fprintf(stderr, "Unknown format: %d\n", bench_format);
-> +               exit(EXIT_FAILURE);
-> +       }
-> +       return 0;
-> +}
-> +
-> +struct {
-> +       unsigned int npassive;
-> +       unsigned int nactive;
-> +} enable_params = {
-> +       .nactive = 0,
-> +       .npassive = 0,
-> +};
-> +
-> +static const struct option enable_options[] = {
-> +       OPT_UINTEGER('p', "passive", &enable_params.npassive, "Specify amount of passive threads"),
-> +       OPT_UINTEGER('a', "active", &enable_params.nactive, "Specify amount of active threads"),
-> +       OPT_END()
-> +};
-> +
-> +static const char * const enable_usage[] = {
-> +       "perf bench breakpoint enable <options>",
-> +       NULL
-> +};
-> +
-> +// The benchmark creates an inheritable breakpoint,
-> +// then starts npassive threads that block and nactive threads that actively spin
-> +// and then disables and enables the breakpoint bench_repeat times.
-> +int bench_breakpoint_enable(int argc, const char **argv)
-> +{
-> +       unsigned int i, nthreads, result_usec, done = 0;
-> +       char watched;
-> +       int fd;
-> +       pthread_t *threads;
-> +       struct timeval start, stop, diff;
-> +
-> +       if (parse_options(argc, argv, enable_options, enable_usage, 0)) {
-> +               usage_with_options(enable_usage, enable_options);
-> +               exit(EXIT_FAILURE);
-> +       }
-> +       fd = breakpoint_setup(&watched);
-> +       if (fd == -1)
-> +               exit((perror("perf_event_open"), EXIT_FAILURE));
-> +       nthreads = enable_params.npassive + enable_params.nactive;
-> +       threads = calloc(nthreads, sizeof(threads[0]));
-> +       for (i = 0; i < nthreads; i++) {
-> +               if (pthread_create(&threads[i], NULL,
-> +                       i < enable_params.npassive ? passive_thread : active_thread, &done))
-> +                       exit((perror("pthread_create"), EXIT_FAILURE));
-> +       }
-> +       usleep(10000);  // let the threads block
-> +       gettimeofday(&start, NULL);
-> +       for (i = 0; i < bench_repeat; i++) {
-> +               if (ioctl(fd, PERF_EVENT_IOC_DISABLE, 0))
-> +                       exit((perror("ioctl(PERF_EVENT_IOC_DISABLE)"), EXIT_FAILURE));
-> +               if (ioctl(fd, PERF_EVENT_IOC_ENABLE, 0))
-> +                       exit((perror("ioctl(PERF_EVENT_IOC_ENABLE)"), EXIT_FAILURE));
-> +       }
-> +       gettimeofday(&stop, NULL);
-> +       timersub(&stop, &start, &diff);
-> +       __atomic_store_n(&done, 1, __ATOMIC_RELAXED);
-> +       futex_wake(&done, enable_params.npassive, 0);
-> +       for (i = 0; i < nthreads; i++)
-> +               pthread_join(threads[i], NULL);
-> +       free(threads);
-> +       close(fd);
-> +       switch (bench_format) {
-> +       case BENCH_FORMAT_DEFAULT:
-> +               printf("# Enabled/disabled breakpoint %d time with %d passive and %d active threads\n",
-> +                       bench_repeat, enable_params.npassive, enable_params.nactive);
-> +               printf(" %14s: %lu.%03lu [sec]\n\n", "Total time",
-> +                       (long)diff.tv_sec, (long)(diff.tv_usec / USEC_PER_MSEC));
-> +               result_usec = diff.tv_sec * USEC_PER_SEC + diff.tv_usec;
-> +               printf(" %14lf usecs/op\n", (double)result_usec / bench_repeat);
-> +               break;
-> +       case BENCH_FORMAT_SIMPLE:
-> +               printf("%lu.%03lu\n", (long)diff.tv_sec, (long)(diff.tv_usec / USEC_PER_MSEC));
-> +               break;
-> +       default:
-> +               fprintf(stderr, "Unknown format: %d\n", bench_format);
-> +               exit(EXIT_FAILURE);
-> +       }
-> +       return 0;
-> +}
-> diff --git a/tools/perf/builtin-bench.c b/tools/perf/builtin-bench.c
-> index d291f3a8af5f2..334ab897aae3b 100644
-> --- a/tools/perf/builtin-bench.c
-> +++ b/tools/perf/builtin-bench.c
-> @@ -92,6 +92,13 @@ static struct bench internals_benchmarks[] = {
->         { NULL,         NULL,                                   NULL                    }
->  };
->
-> +static struct bench breakpoint_benchmarks[] = {
-> +       { "thread", "Benchmark thread start/finish with breakpoints", bench_breakpoint_thread},
-> +       { "enable", "Benchmark breakpoint enable/disable", bench_breakpoint_enable},
-> +       { "all", "Run all breakpoint benchmarks", NULL},
-> +       { NULL, NULL, NULL },
-> +};
-> +
->  struct collection {
->         const char      *name;
->         const char      *summary;
-> @@ -110,6 +117,7 @@ static struct collection collections[] = {
->         {"epoll",       "Epoll stressing benchmarks",                   epoll_benchmarks        },
->  #endif
->         { "internals",  "Perf-internals benchmarks",                    internals_benchmarks    },
-> +       { "breakpoint", "Breakpoint benchmarks",                        breakpoint_benchmarks   },
->         { "all",        "All benchmarks",                               NULL                    },
->         { NULL,         NULL,                                           NULL                    }
->  };
->
-> base-commit: bd24325684029a48f20a188b899eb84900d0bc9c
-> --
-> 2.36.0.464.gb9c8b46e94-goog
->
+Jacob

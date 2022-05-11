@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 231CB523A91
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB7C523A98
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243544AbiEKQqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 12:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60802 "EHLO
+        id S1344987AbiEKQqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 12:46:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231752AbiEKQqm (ORCPT
+        with ESMTP id S1344964AbiEKQqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 12:46:42 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C165C3E5DE
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:46:41 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id l16so3380068oil.6
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:46:41 -0700 (PDT)
+        Wed, 11 May 2022 12:46:50 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4594A914
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:46:49 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-e2fa360f6dso3520027fac.2
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:46:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=W61e8Beb9C0rrwvWLXvghQlyTT+OB/E10KtzePQGPL4=;
-        b=qC9ruXYKycYwwp57PRsAW7znvOrSbuqcW3DHuxmCh8nzW+k7q0H4EMctn5Db56iE9w
-         BQUNkHYBv0e1KN8wS5B4c2X+nV6NdLj1L4+1sX5mdPb/HhrVcO7hftDDTa6Ivf8VhygV
-         zYT2wAKPWZTlwaSOMHoTgc+0Ds3IOtsZe823PbdqC/ZytU6UZCucfxBpiXtxoHVJw9Nk
-         pGaXtQOIXbfEt6GDSauFwDf8DnFn2HVx4NjifRnqW2BscLvu8RGaq1RkZn+PAVSUG1yn
-         UgabdoqhuYNsW4wT9mH483cVT0UhHo4AmOtsiAbsMTgLCs8NNkxmzPOW0oUCMwTiCRlO
-         5xKw==
+        bh=wsALrmg81reRYjusfhpQJi5XuwMynf7MqUJQVdaBvHw=;
+        b=OiBTGgjVA2lJSpPdzWVWyduwfMWVgS3jcA03WIu9eLReYnjSMcZJlIyJKyeRgO5krA
+         r9ea6y6JudBS7Kn3X87k0vglWNIeOU1ZbpxwzgRp0gPXMe2qk+Wr1WHDptWY8aW97bOB
+         IHI5WravnVge1twk44jV/GaM4hH9tAS0QwyNt8gUcvXqPd46MNcfFFPcoN9dOozTheJr
+         JIqgPTicoH6Qnb6gRUflB1wldcRQfY3LFJX6HsFfFfC13bxNc8W8c81R5yTBhkvhw4aR
+         nxluWjLCGQEa5ps2SyESVR8UjmNJIV4X5NyoitNyD/7k/blHjjYdyIh4TqYkJk0i2oAW
+         8dGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=W61e8Beb9C0rrwvWLXvghQlyTT+OB/E10KtzePQGPL4=;
-        b=kXivjcC4Dma3/N2oHGU3Ji1oWVdNVIzQti3FDAsmlN0fyKH+A3uHjVYwuE+JGZT5Q0
-         QZy8LfzWo0egavZCSTyxo/iIiNZhfjlJdxCviuuEWj7fEotZYDCXa2oO8owlG9Hs9UiU
-         QXlaUGA/YlRW8zDx6AWbugif8s42TQbbz/js+8wcbLUHcv7T2vnrbN/VWFRL6Cy+TvUx
-         9wYt5ECuJRpw15myGg1umlIW5RuvletNoUOZEqtS3UeuvoaMi5fUVMdpatteNoQfaKaD
-         DSmfUauNVaflU/bSK1fJAYJ/I/e2J+4HJc35Z/4qhFHw1sv5+D+VrXMubo0JBG33anid
-         pMdg==
-X-Gm-Message-State: AOAM531rwyacpRryXYbi9/IW1X/CWy1PLIsvjDjboqzsbTwVsWwqmygL
-        xUxjki7HMzkJbZwzg9wcOUuH8d9ysUh09nzSG5VR7A==
-X-Google-Smtp-Source: ABdhPJxCJQhYe8mNvl+SI2wOrKJVTqqrGltMynBtx7qbJZ2lNzlNv9Ueg8nAxnwgbCGZ3s25dNuNfz9A2qGigUkeOiw=
-X-Received: by 2002:a05:6808:a11:b0:325:e5c1:5912 with SMTP id
- n17-20020a0568080a1100b00325e5c15912mr3000582oij.204.1652287600719; Wed, 11
- May 2022 09:46:40 -0700 (PDT)
+        bh=wsALrmg81reRYjusfhpQJi5XuwMynf7MqUJQVdaBvHw=;
+        b=LbkntS3ra7xCUi0uBnqZdHT+DYCe9vCppbzj/82vd8l45BvP7Ixn9dMYCqE5Pyvuf6
+         RvPv4imd8LTzyJKUyZjcYtQmx6/g1OEFJGlMpPO51BF1sU4znSxH2nJDWA13XMHIJHhd
+         hgknN+pXnNsNwcBKYTSVqgOYmQ2HVjOohMbiRCkRTEBXhhQQW/11B90fApOf7ykwV66K
+         bThYo4W4HHle2jEP2cx59lx91L1ZOZJ/W5oiD2JtAoTbCTUG63qtjUucTq4fvOHskvUS
+         1/hCbYZ2NDCD1Vi3K6H/WaGiHwoULJVvkJAunBjyPeP61jdn4scXZH+2D61YNAQt1DqB
+         opOA==
+X-Gm-Message-State: AOAM533K2ZcDFBXQcF689c/m1ia5q2mjzLsIkxg4sF1Ml9m9uafqAzbj
+        4yEYLg/GPEOcFHRJdWVYASVQJwCUXgkF7HrBSopZoQ==
+X-Google-Smtp-Source: ABdhPJyWYH+3XpILMiqfUguaryFLVncf2b1K4SozxQE9uQLrNaRZ/XJUcnZx2EvNvynKBLmq1vEfBjt7k1rHfrXnVHY=
+X-Received: by 2002:a05:6870:f719:b0:d6:e0c0:af42 with SMTP id
+ ej25-20020a056870f71900b000d6e0c0af42mr3050194oab.165.1652287608355; Wed, 11
+ May 2022 09:46:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220412195846.3692374-1-zhanwei@google.com> <YnmqgFkhqWklrQIw@google.com>
-In-Reply-To: <YnmqgFkhqWklrQIw@google.com>
+References: <20220412195846.3692374-1-zhanwei@google.com> <20220412195846.3692374-2-zhanwei@google.com>
+ <Ynmp2AEOQvWw+CYK@google.com>
+In-Reply-To: <Ynmp2AEOQvWw+CYK@google.com>
 From:   Wei Zhang <zhanwei@google.com>
 Date:   Wed, 11 May 2022 18:45:00 +0200
-Message-ID: <CAN86XOYNpzEUN0aL9g=_GQFz5zdXX9Pvcs_TDmBVyJZDTfXREg@mail.gmail.com>
-Subject: Re: [PATCH 0/2] KVM: x86: Fix incorrect VM-exit profiling
+Message-ID: <CAN86XOag4ROk30DWVdRDV6CKwj9jo+MWaVEoc0mLb13Y2uoVbw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] KVM: x86: allow guest to send its _stext for kvm profiling
 To:     Sean Christopherson <seanjc@google.com>
 Cc:     Suleiman Souhlal <suleiman@google.com>,
         Sangwhan Moon <sxm@google.com>, Ingo Molnar <mingo@redhat.com>,
@@ -73,23 +74,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yes, the profiling is about finding out which instructions in the
-guest trigger VM exits and the corresponding frequencies.
-
-Basically this will give a histogram array in /proc/profile. So if
-'array[A] == T', we know that the instruction at (_stext + A) triggers
-VM exits T times. readprofile command could read the information and
-show a summary.
-
-
-
-
-On Tue, May 10, 2022 at 1:57 AM Sean Christopherson <seanjc@google.com> wrote:
+On Tue, May 10, 2022 at 1:55 AM Sean Christopherson <seanjc@google.com> wrote:
 >
 > On Tue, Apr 12, 2022, Wei Zhang wrote:
-> > The profile=kvm boot option has been useful because it provides a
-> > convenient approach to profile VM exits.
+> > The profiling buffer is indexed by (pc - _stext) in do_profile_hits(),
+> > which doesn't work for KVM profiling because the pc represents an address
+> > in the guest kernel. readprofile is broken in this case, unless the guest
+> > kernel happens to have the same _stext as the host kernel.
+> >
+> > This patch adds a new hypercall so guests could send its _stext to the
+> > host, which will then be used to adjust the calculation for KVM profiling.
 >
-> What exactly are you profiling?  Where the guest executing at any given exit?  Mostly
-> out of curiosity, but also in the hope that we might be able to replace profiling with
-> a dedicated KVM stat(s).
+> Disclaimer, I know nothing about using profiling.
+>
+> Why not just omit the _stext adjustment and profile the raw guest RIP?  It seems
+> like userspace needs to know about the guest layout in order to make use of profling
+> info, so why not report raw info and let host userspace do all adjustments?
+
+It's hard to store raw IPs if we want to reuse the existing profiling
+facility. The profiling function is initially used to store the
+current IP at each clock tick for the host kernel.
+
+The original design avoided the trouble of storing raw IPs by creating
+a buffer array with a length of (_etext - _stext) and do buffer[IP -
+_stext]++ at each clock tick. In the user space, the readprofile
+command could read it from /proc/profile and tell us roughly how many
+ticks occurred in each kernel function with a map file. (IP - _stext)
+has a clear meaning here since it gives us an offset with respect to
+the start of the text segment. This gets tricky after the profile=kvm
+boot option was introduced
+(https://github.com/torvalds/linux/commit/07031e14) because (IP -
+_stext) is no longer meaningful.
+
+I think raw guest IPs are easy to consume by userspace tools. But we
+probably need to go with a different approach if we want to store raw
+guest IPs.

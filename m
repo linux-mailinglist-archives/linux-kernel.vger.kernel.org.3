@@ -2,111 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 407C4523E6C
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 22:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB6C1523E6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 22:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244787AbiEKUGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 16:06:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
+        id S1347568AbiEKUHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 16:07:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbiEKUGi (ORCPT
+        with ESMTP id S244202AbiEKUHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 16:06:38 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A988233363;
-        Wed, 11 May 2022 13:06:37 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id m1so4430407wrb.8;
-        Wed, 11 May 2022 13:06:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=W6YNSoA5Dua0+s/FF7SpEIcKqn99xdL9v6a8e8wASjE=;
-        b=huVs1irgBIkg9Eul0wYK5EYPJx3b0ncqN0x9QsTfJvBcQ2t5FOtXmqR45KnVbSBCt0
-         tRVR32t6absZdZ99QabYYfqRY9JvV5eBYNqMncuhU2tTBEa3Jx27JsNQ5Qk/8J/I1Rqd
-         uiZxKXViZRvewgUcnsIcC3Lbrm8xA1GbN6EW0FjiDtQoz/UCGHm8rUNxBJguevCQ8bby
-         hbqSts8HPIVGxqadiiBHoU5HXVcqmZGmu8SOnw+2/jhm12VXAimJtNgdng9UB3jfuSIq
-         6e1eUh5wALaSoHtArYquH1ViBA4Y+EuTOUaXV46Htl6nWhXkQD9cVPMgbXCnlOic3bq7
-         XXOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W6YNSoA5Dua0+s/FF7SpEIcKqn99xdL9v6a8e8wASjE=;
-        b=jIbk90YdUXfXvJZ8ACJopqiFLW53MdJ1ZBNfinMfZzq1Q9dsnQc/MonA3T6WsAU7cO
-         RVQKq2yvIyyM8DrG3mLon9itHq4PlxZgiTcG/hf+n1ee74HYm3h4KJsbEVgoVvxCrPsu
-         cTzxpxs0RgpI3DgJX3FhgYrCmmuMALv9HQYwSDqRsCoRje6j34gus6G0J3/nnefiMrom
-         bGQrAxDC/EJdkLqw1Lxr1+QQbg4zIebyGRExAUmQuvCCxn8rmENi4g0rLGeCAVoSm3xF
-         ouA9g+/ip7jECnhJ3NNGm1cN7R43Y4qHc0A5kRjZ0NoP6Fyq48ZEoKaQubD2uVW+xHKa
-         pDVw==
-X-Gm-Message-State: AOAM530RVgx+jmsPzKj9Oqa0FkGjdL/YX4TxAB1Cfd9+9WnKj1jEQ/xs
-        ZBnySnD8853MWCBnco9Z96cN9YfzowL9mF6Tj4g39n6z
-X-Google-Smtp-Source: ABdhPJztZ9XbUj0FLLKnjaG49uOatzw5PqIll6Yx+Z6ecof8fZ/Xg+4CXVkwVcsz/BnqI+EDtAS88Q5dTYmp2/hyOH8=
-X-Received: by 2002:a05:6000:156e:b0:20c:5218:8907 with SMTP id
- 14-20020a056000156e00b0020c52188907mr24120425wrz.297.1652299596131; Wed, 11
- May 2022 13:06:36 -0700 (PDT)
+        Wed, 11 May 2022 16:07:11 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777BB50461
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 13:07:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5MYsnYRSKK7Ebe+ni7U3mTFvHRE4ANXZttj+MDUakS4=; b=M+jtpgiGBiLZ9Re3/fTGn+jI0s
+        GOsXZG7vzknZbCGBsUerzHMyQiq0Tmqx8y6iFrrSMEUnb/6TjpV2vgn09iVwQB9No5CNGDDAlu+t3
+        CnEOdIxLE3k2tlfEnJlML97wt2PswUc936w0aPeTRNDEFH9RKii+EyNpqlrUoaeiR+PmA1ZVsqgnl
+        xCj654dlb6OGEAQw+7wVcx+8w8Klyso7fEQ+nn2/ThIcop4muzLFLnoEaHSm0B1Nz3kCmX+jTzWyb
+        +kvQjNHd+nDnDrLMq6fKOP1JUeJDd1JDY3iZIszNXPDBarJHsTTbRZoQqF5pwwpLWr8coKJCaRs3t
+        smZVFjIw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nosbr-00DGOs-FG; Wed, 11 May 2022 20:06:59 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 44BF0980EBE; Wed, 11 May 2022 22:06:57 +0200 (CEST)
+Date:   Wed, 11 May 2022 22:06:57 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+Cc:     x86@kernel.org, eranian@google.com, linux-kernel@vger.kernel.org,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org
+Subject: Re: [PATCH 4/5] perf/x86: Change x86_pmu::limit_period signature
+Message-ID: <20220511200657.GB76023@worktop.programming.kicks-ass.net>
+References: <20220511142037.353492804@infradead.org>
+ <20220511142345.289907761@infradead.org>
+ <208c46f9-ca5e-5825-3b4f-a805054315f4@linux.intel.com>
 MIME-Version: 1.0
-References: <20220510070140.45407-1-tomeu.vizoso@collabora.com>
- <20220510141329.54414-1-tomeu.vizoso@collabora.com> <CAPM=9tzLR-wsLhg2ikGjoK06s-ju5XWa1rtPPiUpN=pwD1vgtA@mail.gmail.com>
- <CAHk-=wg8YgH1h3wrm9CtXff7rSewa+NE0Z5upb1GOE8XiTL9HA@mail.gmail.com>
- <CAF6AEGusO9XAqHNatJLgV+wpVoyyLg1vHtUsnSkAxJeV7n3WNg@mail.gmail.com> <CAHk-=wjbE0f2AGroB1Hy=fx2fh7cRpS0wNdB46Ybk14Mb0b5Jw@mail.gmail.com>
-In-Reply-To: <CAHk-=wjbE0f2AGroB1Hy=fx2fh7cRpS0wNdB46Ybk14Mb0b5Jw@mail.gmail.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Wed, 11 May 2022 13:06:23 -0700
-Message-ID: <CAF6AEGvNfC6=o63hH7eoSzT5JmF5C73sDyYXJj-hecS_cgRjHg@mail.gmail.com>
-Subject: Re: Adding CI results to the kernel tree was Re: [RFC v2] drm/msm:
- Add initial ci/ subdirectory
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Dave Airlie <airlied@gmail.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Corbet <corbet@lwn.net>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <208c46f9-ca5e-5825-3b4f-a805054315f4@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 12:08 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Wed, May 11, 2022 at 11:40 AM Rob Clark <robdclark@gmail.com> wrote:
-> >
-> > It is missing in this revision of the RFC, but the intention is to
-> > have the gitlab-ci.yml point to a specific commit SHA in the
-> > gfx-ci/drm-ci[1] tree, to solve the problem of keeping the results in
-> > sync with the expectations.  Ie. a kernel commit would control moving
-> > to a new version of i-g-t (and eventually deqp and/or piglit), and at
-> > the same time make any necessary updates in the expectations files.
->
-> Wouldn't it then be better to just have the expectation files in the
-> ci tree too?
+On Wed, May 11, 2022 at 01:47:06PM -0400, Liang, Kan wrote:
+> > @@ -1386,19 +1387,14 @@ int x86_perf_event_set_period(struct per
+> >   		hwc->last_period = period;
+> >   		ret = 1;
+> >   	}
+> > -	/*
+> > -	 * Quirk: certain CPUs dont like it if just 1 hw_event is left:
+> > -	 */
+> > -	if (unlikely(left < 2))
+> > -		left = 2;
+> > 
+> 
+> Is the quirk accidentally deleted?
+> We should still need the quirk for certain CPUs.
 
-The main reason is that we would frequently have situations where both
--next and -fixes pointing at the same ci tree commit, but with
-differing expectations.  If we kept the expectations in the ci tree,
-we'd end up frequently updating the ci tree and then updating the
-kernel tree to point to the appropriate ci tree version.
+No, but I did forget to write about it in the Changelog :/
 
-Additionally, on the mesa side, it has been useful to squash the
-expectations update into the commit that fixed a bug or added a
-feature.  It provides a connection in git history between code and
-test results.
+IIRC it was Nehalem that triggered that and that should now be covered
+by nhm_limit_period().
 
-BR,
--R
+Or are you aware of more machines that need this?
+
+Anyway, perhaps this should be its own separate commit.
+
+

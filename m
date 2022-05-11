@@ -2,158 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BF0A523A79
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A5A0523A74
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344876AbiEKQj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 12:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
+        id S1344852AbiEKQi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 12:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbiEKQj0 (ORCPT
+        with ESMTP id S229538AbiEKQiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 12:39:26 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E46A6E8EE;
-        Wed, 11 May 2022 09:39:25 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id i27so5183520ejd.9;
-        Wed, 11 May 2022 09:39:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=wuJ85LzoJRTqUhxUdivNhhyhKIi6qZtS9mW54zLXzCI=;
-        b=iiKpqEho+iTsam9OSQMO7b0tE1w9WoUryaoiVxDtMeerHmXp30BR6A59hYZ1uoN+L+
-         cct+2DPf3NvH2LBE7HppPi4ZjBp7n755AdOSmQ98GHrt28pXEd8Qsn3pk/8zu8BP9NpU
-         72jRXVhdkkNo2t5Cgj4k8MkLpI1YnqVglZPeZN5Zh+UfM8HnEaFsT8uAEH706wQRRqpo
-         wZ1AMGdA9WEIvxJY2NMECCM8fUKWeKdAqVCsx3ArMu+Y9cIeWnIwdPOO5IncTe5uX7vg
-         ItbnLe67bUwKKD5GG8z5SQWR0kaLnukpldz07VITIdhIYXqjEM6C7odJ9VGLZXLGFZfC
-         pupA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=wuJ85LzoJRTqUhxUdivNhhyhKIi6qZtS9mW54zLXzCI=;
-        b=wBD+YUOE/rsHQTV0yiabq9yQ1VKW08fdpjmpTgBlqc1gCoXMVGEGBI769ofuDGdEuP
-         pHfj/TvN/I0UCXZCwpz3aXbMeksn0OCTomHq1tf3ylc0pNVB/qMSwcCx+COUJibC2jY5
-         daPY3tJwHLTtSsaArK0VaWs1A1qp18DDd0Y+abGDQNKsJ8jmmsjVPiZI4rZXlpHWBSjs
-         9tLpsQ1WzinX3UpSU/L7mlWGerHH80XtRyUt8XlvLRG0jfLtR99TtUOjryBaGrhWs4Po
-         UvbzpobQKb1RfrAULKC3uqCyP5gvOD1MQX3U4NtbAAOez5FkyDQaiw2xoVpgt3vCsH/P
-         LsMQ==
-X-Gm-Message-State: AOAM531mPF7rfDyEZogeU6OyG/HgIte3JkEnCAsOo4O26H4VWV2RYdoK
-        /mE1vQPCn8v8/R9EkjpPxwM=
-X-Google-Smtp-Source: ABdhPJwVdUjdYNHQDUWiDOlIQIJ3TgAkOAOMXfzEukY8HEFYvt3YDNxs1GNlFUSIle37aTchXgIIDQ==
-X-Received: by 2002:a17:906:4fd5:b0:6f8:5aa9:6f13 with SMTP id i21-20020a1709064fd500b006f85aa96f13mr21390266ejw.267.1652287164116;
-        Wed, 11 May 2022 09:39:24 -0700 (PDT)
-Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id a7-20020a170906670700b006f3ef214e31sm1137536ejp.151.2022.05.11.09.39.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 09:39:23 -0700 (PDT)
-From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] dt-bindings: media: rockchip-vpu: Add RK3568 VEPU compatible
-Date:   Wed, 11 May 2022 18:37:54 +0200
-Message-ID: <2486415.XAZu0pfo7u@archbook>
-In-Reply-To: <bc4c395d-4e21-1d15-96be-00a5cad1d6f7@linaro.org>
-References: <20220511155309.2637-1-frattaroli.nicolas@gmail.com> <20220511155309.2637-2-frattaroli.nicolas@gmail.com> <bc4c395d-4e21-1d15-96be-00a5cad1d6f7@linaro.org>
+        Wed, 11 May 2022 12:38:21 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7566D940;
+        Wed, 11 May 2022 09:38:19 -0700 (PDT)
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nopLr-000DJc-HZ; Wed, 11 May 2022 18:38:15 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nopLr-000Nn4-9W; Wed, 11 May 2022 18:38:15 +0200
+Subject: Re: [PATCH] bpf.h: fix clang compiler warning with
+ unpriv_ebpf_notify()
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Song Liu <songliubraving@fb.com>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+        Borislav Petkov <bp@alien8.de>
+References: <20220509203623.3856965-1-mcgrof@kernel.org>
+ <YnvdOAaYmhNiA5WN@bombadil.infradead.org>
+ <CAADnVQLCvjqphpJDkz-5bpJLs3k_PRH1JcwehCRLrWYvsA9ENw@mail.gmail.com>
+ <YnvflsM1t5vL/ViP@bombadil.infradead.org>
+ <3e3ed3d1-937b-a715-376d-43a8b7485f68@iogearbox.net>
+ <YnvjQfhtJzWg64Lu@bombadil.infradead.org>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <37d158e1-47de-0f72-b23c-c2805976afc6@iogearbox.net>
+Date:   Wed, 11 May 2022 18:38:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YnvjQfhtJzWg64Lu@bombadil.infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26538/Wed May 11 10:06:03 2022)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mittwoch, 11. Mai 2022 18:00:09 CEST Krzysztof Kozlowski wrote:
-> On 11/05/2022 17:53, Nicolas Frattaroli wrote:
-> > The RK3568 and RK3566 have a Hantro VPU node solely dedicated to
-> > encoding. This patch adds a compatible for it, and also allows
-> > the bindings to only come with a vepu interrupt.
-> > 
-> > Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-> > ---
-> >  .../devicetree/bindings/media/rockchip-vpu.yaml | 17 ++++++++++++++++-
-> >  1 file changed, 16 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-> > index bacb60a34989..965ca80b5cea 100644
-> > --- a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-> > +++ b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-> > @@ -22,6 +22,7 @@ properties:
-> >            - rockchip,rk3288-vpu
-> >            - rockchip,rk3328-vpu
-> >            - rockchip,rk3399-vpu
-> > +          - rockchip,rk3568-vepu
-> >            - rockchip,px30-vpu
-> >        - items:
-> >            - const: rockchip,rk3188-vpu
-> > @@ -39,7 +40,9 @@ properties:
-> >  
-> >    interrupt-names:
-> >      oneOf:
-> > -      - const: vdpu
-> > +      - enum:
-> > +          - vdpu
-> > +          - vepu
-> >        - items:
-> >            - const: vepu
-> >            - const: vdpu
-> > @@ -76,6 +79,18 @@ required:
-> >  
-> >  additionalProperties: false
-> >  
-> > +allOf:
-> > +  # compatibles that end in -vepu should only have the vepu interrupt
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            pattern: "^[a-zA-Z0-9\\-,_.]+\\-vepu$"
+On 5/11/22 6:24 PM, Luis Chamberlain wrote:
+> On Wed, May 11, 2022 at 06:17:26PM +0200, Daniel Borkmann wrote:
+>> On 5/11/22 6:08 PM, Luis Chamberlain wrote:
+>>> On Wed, May 11, 2022 at 09:03:13AM -0700, Alexei Starovoitov wrote:
+>>>> On Wed, May 11, 2022 at 8:58 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+>>>>> On Mon, May 09, 2022 at 01:36:23PM -0700, Luis Chamberlain wrote:
+>>>>>> The recent commit "bpf: Move BPF sysctls from kernel/sysctl.c to BPF core"
+>>>>>> triggered 0-day to issue an email for what seems to have been an old
+>>>>>> clang warning. So this issue should have existed before as well, from
+>>>>>> what I can tell. The issue is that clang expects a forward declaration
+>>>>>> for routines declared as weak while gcc does not.
+>>>>>>
+>>>>>> This can be reproduced with 0-day's x86_64-randconfig-c007
+>>>>>> https://download.01.org/0day-ci/archive/20220424/202204240008.JDntM9cU-lkp@intel.com/config
+>>>>>>
+>>>>>> And using:
+>>>>>>
+>>>>>> COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=x86_64 SHELL=/bin/bash kernel/bpf/syscall.o
+>>>>>> Compiler will be installed in /home/mcgrof/0day
+>>>>>> make --keep-going HOSTCC=/home/mcgrof/0day/clang/bin/clang CC=/home/mcgrof/0day/clang/bin/clang LD=/home/mcgrof/0day/clang/bin/ld.lld HOSTLD=/home/mcgrof/0day/clang/bin/ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump OBJSIZE=llvm-size READELF=llvm-readelf HOSTCXX=clang++ HOSTAR=llvm-ar CROSS_COMPILE=x86_64-linux-gnu- --jobs=24 W=1 ARCH=x86_64 SHELL=/bin/bash kernel/bpf/syscall.o
+>>>>>>     DESCEND objtool
+>>>>>>     CALL    scripts/atomic/check-atomics.sh
+>>>>>>     CALL    scripts/checksyscalls.sh
+>>>>>>     CC      kernel/bpf/syscall.o
+>>>>>> kernel/bpf/syscall.c:4944:13: warning: no previous prototype for function 'unpriv_ebpf_notify' [-Wmissing-prototypes]
+>>>>>> void __weak unpriv_ebpf_notify(int new_state)
+>>>>>>               ^
+>>>>>> kernel/bpf/syscall.c:4944:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>>>>>> void __weak unpriv_ebpf_notify(int new_state)
+>>>>>> ^
+>>>>>> static
+>>>>>>
+>>>>>> Fixes: 2900005ea287 ("bpf: Move BPF sysctls from kernel/sysctl.c to BPF core")
+>>>>>> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+>>>>>> ---
+>>>>>>
+>>>>>> Daniel,
+>>>>>>
+>>>>>> Given what we did fore 2900005ea287 ("bpf: Move BPF sysctls from
+>>>>>> kernel/sysctl.c to BPF core") where I had pulled pr/bpf-sysctl a
+>>>>>> while ago into sysctl-next and then merged the patch in question,
+>>>>>> should I just safely carry this patch onto sysctl-next? Let me know
+>>>>>> how you'd like to proceed.
+>>>>>>
+>>>>>> Also, it wasn't clear if putting this forward declaration on
+>>>>>> bpf.h was your ideal preference.
+>>>>>
+>>>>> After testing this on sysctl-testing without issues going to move this
+>>>>> to sysctl-next now.
+>>>>
+>>>> Hmm. No.
+>>>> A similar patch should be in tip already. You have to wait
+>>>> for it to go through Linus's tree and back to whatever tree you use.
+>>>
+>>> I'm a bit confused, the patch in question which my patch fixes should only
+>>> be in my sysctl-next tree at this point, not in Linus's tree.
+>>
+>> Borislav was planning to route it via tip tree, maybe confusion was that the
+>> fix in the link below is from Josh:
+>>
+>> https://lore.kernel.org/bpf/CAADnVQKjfQMG_zFf9F9P7m0UzqESs7XoRy=udqrDSodxa8yBpg@mail.gmail.com/
 > 
-> Why not listing the compatible how I asked? This is the common way of
-> handling allOf:if:then per variant.
-
-Because I was afraid that if this wasn't general enough to apply to all
-future vepu-only instances of Hantro, then my patch might be bikeshed
-into requiring a v4. Clearly, my worries had the opposite effect.
-
-Also because I thought it was cool to use a pattern for this to enforce
-consistent naming in the bindings.
-
+> Ah, Josh posted a fix for the same compile warning.
 > 
-> https://lore.kernel.org/all/ea94f18d-3172-98bb-0892-a98236a08018@linaro.org/
+>> But I presume this is routed as fix to Linus, so should land in both sysctl
+>> and bpf tree at some point after re-sync.
 > 
-> Your patches do not apply on next, so the set might not have been tested
-> by Rob's bot.
+> It may be the case indeed that the code in question was triggering a
+> compile warning without the patch I have merged which moves the BPF
+> sysctls ("bpf: Move BPF sysctls from kernel/sysctl.c to BPF core").
 
-Good to know. Once I send out v4 in a few days and maybe after some more
-opinions so I can stop bombarding the mailing list with tiny revisions
-of the same patch set, I will base it on linux-next.
+Yes, it was indeed independent of the move.
 
-I'm happy to report though that this passes dt_binding_check with W=1
-without adding any new warnings. I do actually run those checks (and
-checkpatch) before submitting.
+> So I'll just drop my fix.
 
-> 
-> Best regards,
-> Krzysztof
-> 
-
-Regards,
-Nicolas Frattaroli
-
-
+Agree, that's the best way forward, thanks Luis!

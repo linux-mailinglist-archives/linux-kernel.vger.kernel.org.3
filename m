@@ -2,105 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE5E5237DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D88AE5237E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344260AbiEKP4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41060 "EHLO
+        id S1344142AbiEKP6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344116AbiEKPzz (ORCPT
+        with ESMTP id S1344129AbiEKPz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:55:55 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015AE2DE8
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:55:53 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id i19so4911829eja.11
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:55:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4l19L6fTMT+2abs+HVT48B36V7g+rXx3Nn4f/wCqyd8=;
-        b=D91q8Wyo1ALfiHRP4ScLq7BqPgwaUuS/VfK4gJdCec3fBY8DVmQSqW6ZPF8okCRFOY
-         j3sqTbLKdhBH8NNQaT8XJmdepHbhLmCroUXchv6gct/lJWtjy4LqNVbF292jdiAFI3/X
-         3dufOa9MeWHPHOpS6z4M/YUeJg7Di5KISRdOU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4l19L6fTMT+2abs+HVT48B36V7g+rXx3Nn4f/wCqyd8=;
-        b=CraPG8A8CXgioZERkRw+4tugmIAARnqXxTX0OQgXzIpPLJog8P9NMW2suG/BCeRPiX
-         kBSsCFpEXaiIz+1ug8NlA9iNTYDS0vKpcWFOeLtqPhSX43O9TDPf7Ppkj/81iQuvjOmi
-         84fxIxHpvw9oSqawaHI4K7lPxMNsj2KKdCZSiAtcg5LG0ETJyNllMup2fg9m5oxV3i4n
-         Xrn4HlPXLZQjaxKrgL5fDMX2CdgpI7P/SZZrS6BXg4Qy36IkOfwJYnFP/a2lXHI4+f+E
-         IGx02Rn1KetOBX1JJWc+VUYU9Au5Go27EZDxiP2B1BdQQv9YdL1GVBGYsqjo2p4qbEDR
-         3QEA==
-X-Gm-Message-State: AOAM531j6dtsLj5Bpvu8A2nS3nMQ6rJyqQztRi/K3l5zzwe3GXy6ZgbW
-        8SnU9V+kTcFakl+dcwDW7WF646Sz1XaDsqJFVAU=
-X-Google-Smtp-Source: ABdhPJzmvZYE2EbOpPFvqH/oijzbXXGAG8j+rC5+f/JgjH25J6S2+Y+Uf0BeIqNCQSWc30ySpbG6Cw==
-X-Received: by 2002:a17:906:c284:b0:6f4:dcc3:7939 with SMTP id r4-20020a170906c28400b006f4dcc37939mr24566150ejz.444.1652284552234;
-        Wed, 11 May 2022 08:55:52 -0700 (PDT)
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
-        by smtp.gmail.com with ESMTPSA id jj10-20020a170907984a00b006f3ef214e70sm1084348ejc.214.2022.05.11.08.55.50
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 08:55:51 -0700 (PDT)
-Received: by mail-wr1-f52.google.com with SMTP id u3so3638916wrg.3
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:55:50 -0700 (PDT)
-X-Received: by 2002:a5d:6dad:0:b0:20c:4dc1:e247 with SMTP id
- u13-20020a5d6dad000000b0020c4dc1e247mr23326807wrs.274.1652284550591; Wed, 11
- May 2022 08:55:50 -0700 (PDT)
+        Wed, 11 May 2022 11:55:57 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B2D9FD7
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:55:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652284555; x=1683820555;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LFcw0j01w3IpEoyEw/QzyrHm8FNlUD6f0jmiMKbeBL0=;
+  b=OuLP/s2XrjZg9JHcIjz5E8fGOQatGAWKIitLFCu9MP08HDGKi0DiNXvM
+   lVmuLxWenUzUzCIVkIUCA9Yu6wPLJMoqeBlcWnWufqgzUKAJApaUD7MNw
+   HQ7ahRd5jpbVmxyvsMS59rBGgntSuMXoPMbySEYIQD7SEzoa83xunjBVQ
+   zliY+Hzyxck1JGQhO8GEjMuapECWaOer1FmrJ04IEKIQ4p1TIe6d7WrRY
+   y5HAZfuuxlTqrIsT/n82o1Fn+fwfpr5PGo8q4qtAsPYlELtMs3wVe/DNc
+   bCngG8C4yo73MRwn7WYG5cltPBRTc10qME6iqGilYSpWT1maZitkRrthu
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="250265178"
+X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
+   d="scan'208";a="250265178"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 08:55:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
+   d="scan'208";a="542365197"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 11 May 2022 08:55:52 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1noogq-000JG6-2D;
+        Wed, 11 May 2022 15:55:52 +0000
+Date:   Wed, 11 May 2022 23:55:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Greg Ungerer <gerg@linux-m68k.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: arch/m68k/math-emu/fp_movem.S:137: Error: scale factor invalid on
+ this architecture; needs cpu32 or 68020 or higher -- statement `lea
+ (-12,%a1,%d0*8),%a1' ignored
+Message-ID: <202205112329.yal6dyLU-lkp@intel.com>
 MIME-Version: 1.0
-References: <165201148069.536527.1960632033331546251.tglx@xen13>
- <CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com>
- <ff841fdc-4db7-7a3d-8caf-d0cddd0dfa31@leemhuis.info> <Ynt1z0eZ19eMqp8I@zn.tnic>
- <YnvbLx9FKgQwZJ/F@mit.edu>
-In-Reply-To: <YnvbLx9FKgQwZJ/F@mit.edu>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 11 May 2022 08:55:34 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgUVHucyjp6M7qmn8b=aqwucfS4SQpqOCR5sKr16zoO5g@mail.gmail.com>
-Message-ID: <CAHk-=wgUVHucyjp6M7qmn8b=aqwucfS4SQpqOCR5sKr16zoO5g@mail.gmail.com>
-Subject: Re: Link: tag and links to submission and reports (was: Re: [GIT
- pull] core/urgent for v5.18-rc6)
-To:     "Theodore Ts'o" <tytso@mit.edu>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Zhangfei Gao <zhangfei.gao@foxmail.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 8:50 AM Theodore Ts'o <tytso@mit.edu> wrote:
->
-> I would argue that it should be the patch submitter's responsibility
-> to explicitly add a URL to the problem report.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   feb9c5e19e913b53cb536a7aa7c9f20107bb51ec
+commit: b47c7b6f9f97f3e5596c348bea433ed09cad131d m68k: allow ColdFire m5441x parts to run with MMU enabled
+date:   4 years, 6 months ago
+config: m68k-buildonly-randconfig-r003-20220511 (https://download.01.org/0day-ci/archive/20220511/202205112329.yal6dyLU-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b47c7b6f9f97f3e5596c348bea433ed09cad131d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout b47c7b6f9f97f3e5596c348bea433ed09cad131d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
 
-I agree in the perfect case.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-But in practice, we have a lot more patch submitters than we have
-maintainers, and not all "leaf developers" necessarily know how to do
-everything.
+All errors (new ones prefixed by >>):
 
-So the maintainer should probably expect to fix things up. Not always,
-but also not a "the developer should have done this, so I won't do it"
+   arch/m68k/math-emu/fp_movem.S: Assembler messages:
+   arch/m68k/math-emu/fp_movem.S:54: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#24,#8},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:56: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#25,#3},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:61: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `addq.w #1,%d1' ignored
+   arch/m68k/math-emu/fp_movem.S:62: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `lsr.b #1,%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:81: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#10,#3},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:81: Error: invalid operand mode for this architecture; needs 68020 or higher -- statement `jmp ([0f:w,%pc,%d0*4])' ignored
+   arch/m68k/math-emu/fp_movem.S:90: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#13,#3},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:95: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#13,#3},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:95: Error: invalid index size for coldfire -- statement `lea (%a0,%d1.w*4),%a0' ignored
+   arch/m68k/math-emu/fp_movem.S:95: Error: invalid index size for coldfire -- statement `lea (%a0,%d1.w*8),%a0' ignored
+   arch/m68k/math-emu/fp_movem.S:99: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#13,#3},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:99: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `neg.w %d1' ignored
+   arch/m68k/math-emu/fp_movem.S:99: Error: invalid index size for coldfire -- statement `lea (%a0,%d1.w*4),%a0' ignored
+   arch/m68k/math-emu/fp_movem.S:99: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `add.w %d1,%d1' ignored
+   arch/m68k/math-emu/fp_movem.S:99: Error: invalid index size for coldfire -- statement `lea (%a0,%d1.w*4),%a0' ignored
+   arch/m68k/math-emu/fp_movem.S:105: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#13,#3},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:105: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `movesw %sp@((48)+4)@(0),%a1' ignored
+   arch/m68k/math-emu/fp_movem.S:109: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#13,#3},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:109: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `movesw %sp@((48)+4)@(0),%d2' ignored
+   arch/m68k/math-emu/fp_movem.S:109: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `add.w %d0,%a1' ignored
+   arch/m68k/math-emu/fp_movem.S:109: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#17,#3},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:109: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `rol.w #7,%d1' ignored
+   arch/m68k/math-emu/fp_movem.S:109: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `and.w #3,%d1' ignored
+   arch/m68k/math-emu/fp_movem.S:109: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#26,#2},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:109: Error: invalid operand mode for this architecture; needs 68020 or higher -- statement `jmp ([0f:w,%pc,%d0*4])' ignored
+   arch/m68k/math-emu/fp_movem.S:109: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `movesw %sp@((48)+4)@(0),%a0' ignored
+   arch/m68k/math-emu/fp_movem.S:109: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `movesl %sp@((48)+4)@(0),%a0' ignored
+   arch/m68k/math-emu/fp_movem.S:109: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `moves.l (%a1),%a1' ignored
+   arch/m68k/math-emu/fp_movem.S:109: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#17,#3},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:109: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `rol.w #7,%d1' ignored
+   arch/m68k/math-emu/fp_movem.S:109: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `and.w #3,%d1' ignored
+   arch/m68k/math-emu/fp_movem.S:109: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `and.w %d2,%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:109: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `moves.l (%a1),%a1' ignored
+   arch/m68k/math-emu/fp_movem.S:109: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#30,#2},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:109: Error: invalid operand mode for this architecture; needs 68020 or higher -- statement `jmp ([0f:w,%pc,%d0*4])' ignored
+   arch/m68k/math-emu/fp_movem.S:109: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `movesw %sp@((48)+4)@(0),%a0' ignored
+   arch/m68k/math-emu/fp_movem.S:109: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `movesl %sp@((48)+4)@(0),%a0' ignored
+   arch/m68k/math-emu/fp_movem.S:113: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#13,#3},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:114: Error: invalid operand mode for this architecture; needs 68020 or higher -- statement `jmp ([0f:w,%pc,%d0*4])' ignored
+   arch/m68k/math-emu/fp_movem.S:124: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `movesw %sp@((48)+4)@(0),%a0' ignored
+   arch/m68k/math-emu/fp_movem.S:128: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `movesl %sp@((48)+4)@(0),%a0' ignored
+>> arch/m68k/math-emu/fp_movem.S:137: Error: scale factor invalid on this architecture; needs cpu32 or 68020 or higher -- statement `lea (-12,%a1,%d0*8),%a1' ignored
+   arch/m68k/math-emu/fp_movem.S:144: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `moves.l (%a0)+,%d2' ignored
+   arch/m68k/math-emu/fp_movem.S:147: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `lsr.w #1,%d2' ignored
+   arch/m68k/math-emu/fp_movem.S:149: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `moves.l (%a0)+,%d2' ignored
+   arch/m68k/math-emu/fp_movem.S:151: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `moves.l (%a0),%d2' ignored
+   arch/m68k/math-emu/fp_movem.S:157: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `lsl.b #1,%d1' ignored
+   arch/m68k/math-emu/fp_movem.S:164: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `lsl.w #1,%d2' ignored
+   arch/m68k/math-emu/fp_movem.S:167: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `moves.l %d2,(%a0)+' ignored
+   arch/m68k/math-emu/fp_movem.S:169: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `moves.l %d2,(%a0)+' ignored
+   arch/m68k/math-emu/fp_movem.S:171: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `moves.l %d2,(%a0)' ignored
+   arch/m68k/math-emu/fp_movem.S:176: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `lsl.b #1,%d1' ignored
+   arch/m68k/math-emu/fp_movem.S:206: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#19,#3},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:210: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `addq.w #1,%d1' ignored
+   arch/m68k/math-emu/fp_movem.S:225: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#10,#3},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:225: Error: invalid operand mode for this architecture; needs 68020 or higher -- statement `jmp ([0f:w,%pc,%d0*4])' ignored
+   arch/m68k/math-emu/fp_movem.S:233: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#13,#3},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:235: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfffo %d2{#19,#3},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:236: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `sub.w #19,%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:237: Error: byte displacement out of range -- statement `lea ((944+36+96),%a2,%d0.w*4),%a1' ignored
+   arch/m68k/math-emu/fp_movem.S:249: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#13,#3},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:261: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#13,#3},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:265: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#13,#3},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:265: Error: invalid index size for coldfire -- statement `lea (%a0,%d1.w*4),%a0' ignored
+   arch/m68k/math-emu/fp_movem.S:269: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#13,#3},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:269: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `neg.w %d1' ignored
+   arch/m68k/math-emu/fp_movem.S:269: Error: invalid index size for coldfire -- statement `lea (%a0,%d1.w*4),%a0' ignored
+   arch/m68k/math-emu/fp_movem.S:273: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#13,#3},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:273: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `movesw %sp@((48)+4)@(0),%a1' ignored
+   arch/m68k/math-emu/fp_movem.S:277: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#13,#3},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:277: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `movesw %sp@((48)+4)@(0),%d2' ignored
+   arch/m68k/math-emu/fp_movem.S:277: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `add.w %d0,%a1' ignored
+   arch/m68k/math-emu/fp_movem.S:277: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#17,#3},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:277: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `rol.w #7,%d1' ignored
+   arch/m68k/math-emu/fp_movem.S:277: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `and.w #3,%d1' ignored
+   arch/m68k/math-emu/fp_movem.S:277: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#26,#2},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:277: Error: invalid operand mode for this architecture; needs 68020 or higher -- statement `jmp ([0f:w,%pc,%d0*4])' ignored
+   arch/m68k/math-emu/fp_movem.S:277: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `movesw %sp@((48)+4)@(0),%a0' ignored
+   arch/m68k/math-emu/fp_movem.S:277: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `movesl %sp@((48)+4)@(0),%a0' ignored
+   arch/m68k/math-emu/fp_movem.S:277: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `moves.l (%a1),%a1' ignored
+   arch/m68k/math-emu/fp_movem.S:277: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#17,#3},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:277: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `rol.w #7,%d1' ignored
+   arch/m68k/math-emu/fp_movem.S:277: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `and.w #3,%d1' ignored
+   arch/m68k/math-emu/fp_movem.S:277: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `and.w %d2,%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:277: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `moves.l (%a1),%a1' ignored
+   arch/m68k/math-emu/fp_movem.S:277: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#30,#2},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:277: Error: invalid operand mode for this architecture; needs 68020 or higher -- statement `jmp ([0f:w,%pc,%d0*4])' ignored
+   arch/m68k/math-emu/fp_movem.S:277: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `movesw %sp@((48)+4)@(0),%a0' ignored
+   arch/m68k/math-emu/fp_movem.S:277: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `movesl %sp@((48)+4)@(0),%a0' ignored
+   arch/m68k/math-emu/fp_movem.S:281: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu %d2{#13,#3},%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:282: Error: invalid operand mode for this architecture; needs 68020 or higher -- statement `jmp ([0f:w,%pc,%d0*4])' ignored
+   arch/m68k/math-emu/fp_movem.S:292: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `movesw %sp@((48)+4)@(0),%a0' ignored
+   arch/m68k/math-emu/fp_movem.S:296: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `movesl %sp@((48)+4)@(0),%a0' ignored
+   arch/m68k/math-emu/fp_movem.S:301: Error: invalid index size for coldfire -- statement `lea (%a0,%d1.w*4),%a1' ignored
+   arch/m68k/math-emu/fp_movem.S:328: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `moves.l (%a0)+,%d0' ignored
+   arch/m68k/math-emu/fp_movem.S:331: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `lsl.b #1,%d1' ignored
+   arch/m68k/math-emu/fp_movem.S:339: Error: invalid instruction for this architecture; needs 68010 or higher (68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `moves.l %d0,(%a0)+' ignored
+   arch/m68k/math-emu/fp_movem.S:341: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `lsl.b #1,%d1' ignored
+   arch/m68k/math-emu/fp_movem.S:346: Error: operands mismatch -- statement `and.l #0x0000fff0,((944+36+96),%a2)' ignored
+   arch/m68k/math-emu/fp_movem.S:347: Error: operands mismatch -- statement `and.l #0x0ffffff8,((944+36+100),%a2)' ignored
 
-This isn't so different from the fact that not everybody writes
-English proficiently - people do hopefully end up fixing things up as
-they get passed onwards.
 
-               Linus
+vim +137 arch/m68k/math-emu/fp_movem.S
+
+^1da177e4c3f41 Linus Torvalds 2005-04-16  130  
+^1da177e4c3f41 Linus Torvalds 2005-04-16  131  fpr_do_movem:
+^1da177e4c3f41 Linus Torvalds 2005-04-16  132  	swap	%d1			| get fpu register list
+^1da177e4c3f41 Linus Torvalds 2005-04-16  133  	lea	(FPD_FPREG,FPDATA),%a1
+^1da177e4c3f41 Linus Torvalds 2005-04-16  134  	moveq	#12,%d0
+^1da177e4c3f41 Linus Torvalds 2005-04-16  135  	btst	#12,%d2
+^1da177e4c3f41 Linus Torvalds 2005-04-16  136  	jne	1f
+^1da177e4c3f41 Linus Torvalds 2005-04-16 @137  	lea	(-12,%a1,%d0*8),%a1
+^1da177e4c3f41 Linus Torvalds 2005-04-16  138  	neg.l	%d0
+^1da177e4c3f41 Linus Torvalds 2005-04-16  139  1:	btst	#13,%d2
+^1da177e4c3f41 Linus Torvalds 2005-04-16  140  	jne	4f
+^1da177e4c3f41 Linus Torvalds 2005-04-16  141  	| move register from memory into fpu
+^1da177e4c3f41 Linus Torvalds 2005-04-16  142  	jra	3f
+^1da177e4c3f41 Linus Torvalds 2005-04-16  143  1:	printf	PMOVEM,"(%p>%p)",2,%a0,%a1
+^1da177e4c3f41 Linus Torvalds 2005-04-16  144  	getuser.l (%a0)+,%d2,fp_err_ua1,%a0
+^1da177e4c3f41 Linus Torvalds 2005-04-16  145  	lsr.l	#8,%d2
+^1da177e4c3f41 Linus Torvalds 2005-04-16  146  	lsr.l	#7,%d2
+^1da177e4c3f41 Linus Torvalds 2005-04-16  147  	lsr.w	#1,%d2
+^1da177e4c3f41 Linus Torvalds 2005-04-16  148  	move.l	%d2,(%a1)+
+^1da177e4c3f41 Linus Torvalds 2005-04-16  149  	getuser.l (%a0)+,%d2,fp_err_ua1,%a0
+^1da177e4c3f41 Linus Torvalds 2005-04-16  150  	move.l	%d2,(%a1)+
+^1da177e4c3f41 Linus Torvalds 2005-04-16  151  	getuser.l (%a0),%d2,fp_err_ua1,%a0
+^1da177e4c3f41 Linus Torvalds 2005-04-16  152  	move.l	%d2,(%a1)
+^1da177e4c3f41 Linus Torvalds 2005-04-16  153  	subq.l	#8,%a0
+^1da177e4c3f41 Linus Torvalds 2005-04-16  154  	subq.l	#8,%a1
+^1da177e4c3f41 Linus Torvalds 2005-04-16  155  	add.l	%d0,%a0
+^1da177e4c3f41 Linus Torvalds 2005-04-16  156  2:	add.l	%d0,%a1
+^1da177e4c3f41 Linus Torvalds 2005-04-16  157  3:	lsl.b	#1,%d1
+^1da177e4c3f41 Linus Torvalds 2005-04-16  158  	jcs	1b
+^1da177e4c3f41 Linus Torvalds 2005-04-16  159  	jne	2b
+^1da177e4c3f41 Linus Torvalds 2005-04-16  160  	jra	5f
+^1da177e4c3f41 Linus Torvalds 2005-04-16  161  	| move register from fpu into memory
+^1da177e4c3f41 Linus Torvalds 2005-04-16  162  1:	printf	PMOVEM,"(%p>%p)",2,%a1,%a0
+^1da177e4c3f41 Linus Torvalds 2005-04-16  163  	move.l	(%a1)+,%d2
+^1da177e4c3f41 Linus Torvalds 2005-04-16  164  	lsl.w	#1,%d2
+^1da177e4c3f41 Linus Torvalds 2005-04-16  165  	lsl.l	#7,%d2
+^1da177e4c3f41 Linus Torvalds 2005-04-16  166  	lsl.l	#8,%d2
+^1da177e4c3f41 Linus Torvalds 2005-04-16  167  	putuser.l %d2,(%a0)+,fp_err_ua1,%a0
+^1da177e4c3f41 Linus Torvalds 2005-04-16  168  	move.l	(%a1)+,%d2
+^1da177e4c3f41 Linus Torvalds 2005-04-16  169  	putuser.l %d2,(%a0)+,fp_err_ua1,%a0
+^1da177e4c3f41 Linus Torvalds 2005-04-16  170  	move.l	(%a1),%d2
+^1da177e4c3f41 Linus Torvalds 2005-04-16  171  	putuser.l %d2,(%a0),fp_err_ua1,%a0
+^1da177e4c3f41 Linus Torvalds 2005-04-16  172  	subq.l	#8,%a1
+^1da177e4c3f41 Linus Torvalds 2005-04-16  173  	subq.l	#8,%a0
+^1da177e4c3f41 Linus Torvalds 2005-04-16  174  	add.l	%d0,%a0
+^1da177e4c3f41 Linus Torvalds 2005-04-16  175  2:	add.l	%d0,%a1
+^1da177e4c3f41 Linus Torvalds 2005-04-16  176  4:	lsl.b	#1,%d1
+^1da177e4c3f41 Linus Torvalds 2005-04-16  177  	jcs	1b
+^1da177e4c3f41 Linus Torvalds 2005-04-16  178  	jne	2b
+^1da177e4c3f41 Linus Torvalds 2005-04-16  179  5:
+^1da177e4c3f41 Linus Torvalds 2005-04-16  180  	printf	PDECODE,"\n"
+^1da177e4c3f41 Linus Torvalds 2005-04-16  181  #if 0
+^1da177e4c3f41 Linus Torvalds 2005-04-16  182  	lea	(FPD_FPREG,FPDATA),%a0
+^1da177e4c3f41 Linus Torvalds 2005-04-16  183  	printf	PMOVEM,"fp:"
+^1da177e4c3f41 Linus Torvalds 2005-04-16  184  	printx	PMOVEM,%a0@(0)
+^1da177e4c3f41 Linus Torvalds 2005-04-16  185  	printx	PMOVEM,%a0@(12)
+^1da177e4c3f41 Linus Torvalds 2005-04-16  186  	printf	PMOVEM,"\n   "
+^1da177e4c3f41 Linus Torvalds 2005-04-16  187  	printx	PMOVEM,%a0@(24)
+^1da177e4c3f41 Linus Torvalds 2005-04-16  188  	printx	PMOVEM,%a0@(36)
+^1da177e4c3f41 Linus Torvalds 2005-04-16  189  	printf	PMOVEM,"\n   "
+^1da177e4c3f41 Linus Torvalds 2005-04-16  190  	printx	PMOVEM,%a0@(48)
+^1da177e4c3f41 Linus Torvalds 2005-04-16  191  	printx	PMOVEM,%a0@(60)
+^1da177e4c3f41 Linus Torvalds 2005-04-16  192  	printf	PMOVEM,"\n   "
+^1da177e4c3f41 Linus Torvalds 2005-04-16  193  	printx	PMOVEM,%a0@(72)
+^1da177e4c3f41 Linus Torvalds 2005-04-16  194  	printx	PMOVEM,%a0@(84)
+^1da177e4c3f41 Linus Torvalds 2005-04-16  195  	printf	PMOVEM,"\n"
+^1da177e4c3f41 Linus Torvalds 2005-04-16  196  #endif
+^1da177e4c3f41 Linus Torvalds 2005-04-16  197  	jra	fp_end
+^1da177e4c3f41 Linus Torvalds 2005-04-16  198  
+
+:::::: The code at line 137 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

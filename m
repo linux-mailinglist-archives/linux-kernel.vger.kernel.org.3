@@ -2,94 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7B3523813
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E4652381A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344337AbiEKQFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 12:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50000 "EHLO
+        id S1344292AbiEKQGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 12:06:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344292AbiEKQE6 (ORCPT
+        with ESMTP id S1344376AbiEKQGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 12:04:58 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CD61BDDBF
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:04:57 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id y21so3157566edo.2
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:04:57 -0700 (PDT)
+        Wed, 11 May 2022 12:06:14 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F33E1FD1F8
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:06:11 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id w3so2622006qkb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:06:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zhzfElQRl5MOkLkJ5Z0UWKiVUuIziFKhS18iDfIQ4VY=;
-        b=nbBvrJTpjfdQgQcGrof/Mf8rRIBeGm72yj2414PXTgwzzM37ucAsLmIgO6xt2snePR
-         T89cewY4ERjSp3S0c5tqD7GPbijb/WEUswgV1D6X/3+FxEnlVDUceKORFlsg5oSbLJgw
-         CZMMS5dxlRh33/MGGRQrpTKYn6MtWPj9vT0hxl/cBulCMRAAbDWE+T3evOXFE1GD3nP8
-         Z0gmEjsTyGW/z0kYpP4qAuPdgo7N+yUPi9/3gctg95qihtv82EinJGQKydQCo6hP4puO
-         7A/w3sQ+H3gl8UskKu/ovK0sNeb8gcUKmU0Kx+BH0Z/KDljivTqLc2pc/dpwKAjY/Z3W
-         Pvpg==
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=i1rCbHfkAN9rnO7k+gMp49GDtews0B+5rgBcVRfpEJQ=;
+        b=JCFbzdCjR81xakMgGugtCRzq5Q4LM3Jvs4VWo6S82xjXOoixOM9qQ4WVRQPf9ySRj7
+         +bg3EIEY9hIWd+e2aKSuusDmNBhiom5Wr/DuVOaivRMn3khnbgH4SDZrq5YFk67m82Qh
+         U976ZAXbIoHkhWeseJj8NmKoPhNbGUmkB0lbkjnR+sMXurQpyFIkIy3uyGhhGqmUm00l
+         k4j9uA8hf04YYmIQbM/DOGP38EQNM/3ypQld3WP5pXm3lYMd2iPpISFLNw5fYMJZUcat
+         QbPCHCW0IsM27JKvkbNAVDf7V9KljUIYOmDo+mqmLhjsW5RpGWjHImUYXnUGZK8I++GT
+         XeDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zhzfElQRl5MOkLkJ5Z0UWKiVUuIziFKhS18iDfIQ4VY=;
-        b=Qll5eXXc6Uo0aw9gmf3RnQ0d7nkFBaapseyRLAwk5Dj17A038TnXyKPBv/kP4ryE7w
-         1oFlyf9Og0abj6dmh0GQn71M/gTmKs0Fj9IiDY5z6QFBBBfhW15O7SKdV9UPH28reRnV
-         Vz9EmwHgQ9Eom+rKqyBkAJaz56g8q52Z+liKXukDYBflqIk02BaOYyAtPX6IfarTGj8v
-         g66J78PB8+SWdZdB5DqjJF87i2iGSwrRDRJkHUgh7/GRk7WpScZnzv8Atk59RcxHTy7Q
-         YiE3vDosIdlhTnK2bDYVQpMI9Geru5cK555S6MBjIRvON9B5o5VCfxJ26j1rvtfBiSNZ
-         2dww==
-X-Gm-Message-State: AOAM531uZ3l6U1typz4XojG3EfP8RQNgnRESyCNHrqjK4xt5EMw1iv7e
-        pcjyWFdrfUfzOhqmSVMN4OYjhA==
-X-Google-Smtp-Source: ABdhPJylosVXnllzRYYq4Rr99hTBaIEh1oMCfb0vAxNTKIJltsYhWZ/ZYXhkKEM5ikATzaLSX3oMNg==
-X-Received: by 2002:a05:6402:3585:b0:427:ccd4:bec3 with SMTP id y5-20020a056402358500b00427ccd4bec3mr30011053edc.2.1652285096044;
-        Wed, 11 May 2022 09:04:56 -0700 (PDT)
-Received: from [192.168.0.155] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id d2-20020a50fe82000000b0042617ba63cesm1345920edt.88.2022.05.11.09.04.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 09:04:55 -0700 (PDT)
-Message-ID: <012b7b4d-c9a5-9656-0a21-45bb8e0c7795@linaro.org>
-Date:   Wed, 11 May 2022 18:04:54 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=i1rCbHfkAN9rnO7k+gMp49GDtews0B+5rgBcVRfpEJQ=;
+        b=aFShpCk+Oaa6kK5oeMAGZur2xCK1laubtOCEkXxHDTSwLAafCj599eZkTOuQsNmkHN
+         EXNeE+0NB7qGzxQRunwX+SY4ueQwamVoisrpCqIAKweOLylDg3F8V/Kg2SS4UWEs2NRX
+         30xdwkn1QC2HM8c4YoxLpjIAEU/MMJG63bsmzyXgzCvSFKWqljufixUCOAwMnmqmhNR/
+         m2pU9ZO4UeIV1FDZax3RE92uA36yJwhJ+JpkUNG68e+zpX0EYWKdVqYdxfIZpxTkkqTI
+         q3UwcebgZkQaf0d0/jXkrlbfa1DYCTW+oNUKC+QdMhnfpyGgTfcU+2UwQ65/Ke9mfnZU
+         kcow==
+X-Gm-Message-State: AOAM530u1CZikjGjmoqQwgmUWy8mGMhLH4u0bWr9cKeOl9/35p0hZccz
+        sxau95A4yVcWyREq4og9ndDnyQ==
+X-Google-Smtp-Source: ABdhPJz2aaYVc0+ASruDdKXHpd978CaW62sak13ZcVKAQHXBTUkTRF/7i3rl6sYNDBscruJrho8sMQ==
+X-Received: by 2002:a05:620a:44ca:b0:6a0:40f7:72fe with SMTP id y10-20020a05620a44ca00b006a040f772femr20008016qkp.299.1652285170218;
+        Wed, 11 May 2022 09:06:10 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::1:14fe])
+        by smtp.gmail.com with ESMTPSA id y26-20020ac87c9a000000b002f3f478eaa9sm602701qtv.50.2022.05.11.09.06.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 09:06:09 -0700 (PDT)
+Date:   Wed, 11 May 2022 12:06:09 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the mm tree
+Message-ID: <Ynve8dg4zJyhH2gW@cmpxchg.org>
+References: <20220511202045.45d84077@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/3] MIPS: Loongson64: Add Loongson-2K1000 SMP support
-Content-Language: en-US
-To:     Qing Zhang <zhangqing@loongson.cn>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yangtiezhu@loongson.cn
-References: <20220511083007.17700-1-zhangqing@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220511083007.17700-1-zhangqing@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511202045.45d84077@canb.auug.org.au>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/05/2022 10:30, Qing Zhang wrote:
-> +		if (loongson_sysconf.nr_cpus >= NR_CPUS)
-> +			break;
-> +
-> +		hwids[loongson_sysconf.nr_cpus] = hwid;
-> +		loongson_sysconf.nr_cpus++;
-> +
-> +		np = of_find_compatible_node(NULL, NULL, "loongson, mmio-ipi");
+On Wed, May 11, 2022 at 08:20:45PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the mm tree, today's linux-next build (htmldocs) produced
+> these warnings:
+> 
+> Documentation/filesystems/proc.rst:1155: WARNING: Definition list ends without a blank line; unexpected unindent.
+> Documentation/filesystems/proc.rst:1161: WARNING: Unexpected indentation.
+> Documentation/filesystems/proc.rst:1162: WARNING: Block quote ends without a blank line; unexpected unindent.
+> Documentation/filesystems/proc.rst:1165: WARNING: Unexpected indentation.
+> 
+> Introduced by commit
+> 
+>   9e43c820f7b2 ("Documentation: filesystems: proc: update meminfo section")
 
-Please document compatibles in the bindings.
+The patch below fixes it. The html output looks good too.
 
+Andrew, could you please pick this up as delta for    ^^^ ? Thanks!
 
+Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+---
 
-Best regards,
-Krzysztof
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index 736ed384750c..9749ff8c0ecf 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -1146,16 +1146,9 @@ CmaTotal
+               Memory reserved for the Contiguous Memory Allocator (CMA)
+ CmaFree
+               Free remaining memory in the CMA reserves
+-HugePages_Total
+-HugePages_Free
+-HugePages_Rsvd
+-HugePages_Surp
+-Hugepagesize
+-Hugetlb
++HugePages_Total, HugePages_Free, HugePages_Rsvd, HugePages_Surp, Hugepagesize, Hugetlb
+               See Documentation/admin-guide/mm/hugetlbpage.rst.
+-DirectMap4k
+-DirectMap2M
+-DirectMap1G
++DirectMap4k, DirectMap2M, DirectMap1G
+               Breakdown of page table sizes used in the kernel's
+               identity mapping of RAM
+ 

@@ -2,57 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6FE05229DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 04:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8FE1522996
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 04:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239339AbiEKCcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 22:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52826 "EHLO
+        id S241158AbiEKCX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 22:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241541AbiEKCag (ORCPT
+        with ESMTP id S236215AbiEKCXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 22:30:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97FEB223865;
-        Tue, 10 May 2022 19:30:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C657C61B8C;
-        Wed, 11 May 2022 02:30:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2567CC385D8;
-        Wed, 11 May 2022 02:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652236212;
-        bh=za8c6QfqMEnkEPDAQWWy5CRNgJf8Ry8Evlv2S0C6WZA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=hGbGYL2DMJBSOGpssHCTX6FvGf+mokdSJ/DuZyMAXyYfXMiv8vtdCPAzwwndCPfOe
-         UkpigM/mWOpekCjPivze67wdAElsqwYWsZDuniyrefSc/VzqH9bBcne91hamjmFhMZ
-         54VdOz/eJvsAjeuIE6a6yOy3PP9kD7E20k4KvAsfubNsTSvBfuqFy4yJBwv+KCRReR
-         q6bRkpY2S3oHFPyB9F4u3p3AZ6WfO3F0+Amrvx39jHxk38YPA7bqrC/VcECrgzgIIA
-         Y2cgHaIul+YV2BFUYJoJivUHCiZBt0oLWsioyGlCL/8++PHfElx0E/gv93nYcYU5/8
-         SnRZ67Vd6zeFQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0BC74F0392C;
-        Wed, 11 May 2022 02:30:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 10 May 2022 22:23:38 -0400
+Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30FE215C1B5;
+        Tue, 10 May 2022 19:23:37 -0700 (PDT)
+IronPort-Data: =?us-ascii?q?A9a23=3A17x7wq21Y2L4QGYB9PbD5Qpzkn2cJEfYwER7XOP?=
+ =?us-ascii?q?LsXnJ0DMg12MPxmEWXDuAaKuONGP2LttwOti18x4AvpCDydM2QQE+nZ1PZygU8?=
+ =?us-ascii?q?JKaX7x1DatR0xu6d5SFFAQ+hyknQoGowPscEzmM9n9BDpC79SMmjfvQH+KlYAL?=
+ =?us-ascii?q?5EnsZqTFMGX5JZS1Ly7ZRbr5A2bBVMivV0T/Ai5S31GyNh1aYBlkpB5er83uDi?=
+ =?us-ascii?q?hhdVAQw5TTSbdgT1LPXeuJ84Jg3fcldJFOgKmVY83LTegrN8F251juxExYFAdX?=
+ =?us-ascii?q?jnKv5c1ERX/jZOg3mZnh+AvDk20Yd4HdplPtT2Pk0MC+7jx2NnsJxyddMvJqYR?=
+ =?us-ascii?q?xorP7HXhaIWVBww/yRWZPcaoeOdfSPj2SCU5wicG5f2+N18HUMkLI9Cor4vKW5?=
+ =?us-ascii?q?L/P0cbjsKa3irg+Ow3aL+SeR2gMknBNfkMZlZuXx6yzzdS/E8TvjrR6TM+M8dx?=
+ =?us-ascii?q?js1j+hQEvvEIckUczxiaFLHeRInElUYB7osneqwiz/0elVlRPi9zUYsyzGLilU?=
+ =?us-ascii?q?vj/62a5yIEuFmjP59xi6wzl8qNUyjav3CCOGi9A=3D=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AKmn0IK7wHUSVs7PKhAPXwPTXdLJyesId70hD?=
+ =?us-ascii?q?6qkRc20wTiX8ra2TdZsguyMc9wx6ZJhNo7G90cq7MBbhHPxOkOos1N6ZNWGIhI?=
+ =?us-ascii?q?LCFvAB0WKN+V3dMhy73utc+IMlSKJmFeD3ZGIQse/KpCW+DPYsqePqzJyV?=
+X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
+   d="scan'208";a="124142434"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 11 May 2022 10:23:32 +0800
+Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
+        by cn.fujitsu.com (Postfix) with ESMTP id 7B4064D1716F;
+        Wed, 11 May 2022 10:23:27 +0800 (CST)
+Received: from G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) by
+ G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Wed, 11 May 2022 10:23:27 +0800
+Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
+ G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Wed, 11 May 2022 10:23:27 +0800
+Received: from localhost.localdomain (10.167.225.141) by
+ G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Wed, 11 May 2022 10:23:25 +0800
+From:   Li Zhijian <lizhijian@fujitsu.com>
+To:     Zhu Yanjun <zyjzyj2000@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        <linux-rdma@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, Li Zhijian <lizhijian@fujitsu.com>
+Subject: [PATCH v2 0/2] RDMA/rxe: Fix no completion event issue
+Date:   Wed, 11 May 2022 10:30:28 +0800
+Message-ID: <20220511023030.229212-1-lizhijian@fujitsu.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] net: stmmac: fix missing pci_disable_device() on error in
- stmmac_pci_probe()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165223621204.26540.11895833024977665930.git-patchwork-notify@kernel.org>
-Date:   Wed, 11 May 2022 02:30:12 +0000
-References: <20220510031316.1780409-1-yangyingliang@huawei.com>
-In-Reply-To: <20220510031316.1780409-1-yangyingliang@huawei.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org,
-        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-yoursite-MailScanner-ID: 7B4064D1716F.AB924
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: lizhijian@fujitsu.com
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,28 +67,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Since RXE always posts RDMA_WRITE successfully, it's observed that
+no more completion occurs after a few incorrect posts. Actually, it
+will block the polling. we can easily reproduce it by the below pattern.
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+a. post correct RDMA_WRITE
+b. poll completion event
+while true {
+  c. post incorrect RDMA_WRITE(wrong rkey for example)
+  d. poll completion event <<<< block after 2 incorrect RDMA_WRITE posts
+}
 
-On Tue, 10 May 2022 11:13:16 +0800 you wrote:
-> Switch to using pcim_enable_device() to avoid missing pci_disable_device().
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->   v2: switch to using pcim_enable_device()
-> 
-> [...]
+Li Zhijian (2):
+  RDMA/rxe: Update wqe_index for each wqe error completion
+  RDMA/rxe: Generate error completion for error requester state
 
-Here is the summary with links:
-  - [v2] net: stmmac: fix missing pci_disable_device() on error in stmmac_pci_probe()
-    https://git.kernel.org/netdev/net/c/0807ce0b0104
+ drivers/infiniband/sw/rxe/rxe_req.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.31.1
+
 
 

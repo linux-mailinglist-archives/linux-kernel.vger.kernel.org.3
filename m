@@ -2,121 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0FD5522A2B
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 05:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7546F522A23
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 04:57:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233621AbiEKDGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 23:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40892 "EHLO
+        id S234820AbiEKC5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 22:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233983AbiEKDGe (ORCPT
+        with ESMTP id S229608AbiEKC5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 23:06:34 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC25542ED5;
-        Tue, 10 May 2022 20:06:32 -0700 (PDT)
-Date:   Tue, 10 May 2022 20:06:24 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1652238390;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=N9oPpCxajvjGUrmg0f6gckutPEOOPZaEku255Vyx78E=;
-        b=ctkko5zKqXKRqBvkI7AzNbCPvjk+mTf48++bYM8Vcq12dt+8H2aFcWCV2RRm0dO0MO8OB8
-        Ba3SyHMRE06mHqGuEi54JOaGxRgkuyMtv6h+EXp/ar9SvCbnAIfMlnyYueJ9jdGUKnfPKe
-        s3kYwBI2w4ZRgaXnU6KOHUMVmTVg09M=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Shakeel Butt <shakeelb@google.com>, kernel@openvz.org,
-        Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
-        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tejun Heo <tj@kernel.org>
-Subject: Re: kernfs memcg accounting
-Message-ID: <YnsoMEuWjlpDcmt3@carbon>
-References: <7e867cb0-89d6-402c-33d2-9b9ba0ba1523@openvz.org>
- <20220427140153.GC9823@blackbody.suse.cz>
- <7509fa9f-9d15-2f29-cb2f-ac0e8d99a948@openvz.org>
- <YnBLge4ZQNbbxufc@blackbook>
- <52a9f35b-458b-44c4-7fc8-d05c8db0c73f@openvz.org>
+        Tue, 10 May 2022 22:57:05 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD7849F35;
+        Tue, 10 May 2022 19:57:03 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kyfgk0rclzbng6;
+        Wed, 11 May 2022 10:56:34 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 11 May 2022 10:57:02 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 11 May
+ 2022 10:57:01 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <netdev@vger.kernel.org>
+CC:     <nbd@nbd.name>, <davem@davemloft.net>, <kuba@kernel.org>
+Subject: [PATCH] net: ethernet: mediatek: ppe: fix wrong size passed to memset()
+Date:   Wed, 11 May 2022 11:08:29 +0800
+Message-ID: <20220511030829.3308094-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <52a9f35b-458b-44c4-7fc8-d05c8db0c73f@openvz.org>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 12:00:18PM +0300, Vasily Averin wrote:
-> On 5/3/22 00:22, Michal Koutný wrote:
-> > When struct mem_cgroup charging was introduced, there was a similar
-> > discussion [1].
-> 
-> Thank you, I'm missed this patch, it was very interesting and useful.
-> I would note though, that OpenVZ and LXC have another usecase:
-> we have separate and independent systemd instances inside OS containers.
-> So container's cgroups are created not in host's root memcg but 
-> inside accountable container's root memcg.  
-> 
-> > I can see following aspects here:
-> > 1) absolute size of kernfs_objects,
-> > 2) practical difference between a) and b),
-> > 3) consistency with memcg,
-> > 4) v1 vs v2 behavior.
-> ...
-> > How do these reasonings align with your original intention of net
-> > devices accounting? (Are the creators of net devices inside the
-> > container?)
-> 
-> It is possible to create netdevice in one namespace/container 
-> and then move them to another one, and this possibility is widely used.
-> With my patch memory allocated by these devices will be not accounted
-> to new memcg, however I do not think it is a problem.
-> My patches protect the host mostly from misuse, when someone creates
-> a huge number of nedevices inside a container.
-> 
-> >> Do you think it is incorrect and new kernfs node should be accounted
-> >> to memcg of parent cgroup, as mem_cgroup_css_alloc()-> mem_cgroup_alloc() does?
-> > 
-> > I don't think either variant is incorrect. I'd very much prefer the
-> > consistency with memcg behavior (variant a)) but as I've listed the
-> > arguments above, it seems such a consistency can't be easily justified.
-> 
-> From my point of view it is most important to account allocated memory
-> to any cgroup inside container. Select of proper memcg is a secondary goal here.
-> Frankly speaking I do not see a big difference between memcg of current process,
-> memcg of newly created child and memcg of its parent.
-> 
-> As far as I understand, Roman chose the parent memcg because it was a special
-> case of creating a new memory group. He temporally changed active memcg
-> in mem_cgroup_css_alloc() and properly accounted all required memcg-specific
-> allocations.
+'foe_table' is a pointer, the real size of struct mtk_foe_entry
+should be pass to memset().
 
-My primary goal was to apply the memory pressure on memory cgroups with a lot
-of (dying) children cgroups. On a multi-cpu machine a memory cgroup structure
-is way larger than a page, so a cgroup which looks small can be really large
-if we calculate the amount of memory taken by all children memcg internals.
+Fixes: ba37b7caf1ed ("net: ethernet: mtk_eth_soc: add support for initializing the PPE")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/net/ethernet/mediatek/mtk_ppe.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applying this pressure to another cgroup (e.g. the one which contains systemd)
-doesn't help to reclaim any pages which are pinning the dying cgroups.
+diff --git a/drivers/net/ethernet/mediatek/mtk_ppe.c b/drivers/net/ethernet/mediatek/mtk_ppe.c
+index 3ad10c793308..66298e2235c9 100644
+--- a/drivers/net/ethernet/mediatek/mtk_ppe.c
++++ b/drivers/net/ethernet/mediatek/mtk_ppe.c
+@@ -395,7 +395,7 @@ static void mtk_ppe_init_foe_table(struct mtk_ppe *ppe)
+ 	static const u8 skip[] = { 12, 25, 38, 51, 76, 89, 102 };
+ 	int i, k;
+ 
+-	memset(ppe->foe_table, 0, MTK_PPE_ENTRIES * sizeof(ppe->foe_table));
++	memset(ppe->foe_table, 0, MTK_PPE_ENTRIES * sizeof(*ppe->foe_table));
+ 
+ 	if (!IS_ENABLED(CONFIG_SOC_MT7621))
+ 		return;
+-- 
+2.25.1
 
-For other controllers (maybe blkcg aside, idk) it shouldn't matter, because
-there is no such problem there.
-
-For consistency reasons I'd suggest to charge all *large* allocations
-(e.g. percpu) to the parent cgroup. Small allocations can be ignored.
-
-Thanks!

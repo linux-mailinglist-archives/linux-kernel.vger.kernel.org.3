@@ -2,178 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7134E523C26
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3C0523C28
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:01:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346050AbiEKSBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 14:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38924 "EHLO
+        id S1346063AbiEKSBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 14:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346068AbiEKSBG (ORCPT
+        with ESMTP id S1346027AbiEKSBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 14:01:06 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6119938196;
-        Wed, 11 May 2022 11:01:04 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id r71so2113635pgr.0;
-        Wed, 11 May 2022 11:01:04 -0700 (PDT)
+        Wed, 11 May 2022 14:01:17 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0B551E50
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:01:15 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id b18so4904071lfv.9
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:01:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=x6ZYfx/FmTGeNp3axjnUCK+9peN+HxRl/Crr+HjHafo=;
-        b=kdxcJwBXu9IAQwLPKaeCqP7YPp/1DBAqxphMpSVyqGIqOa0OSxCCNVw8XUUQLIk8Iq
-         RmqMcKeTnf3XhIKp34f5vPjEPHY+pI+zBYIX7nUKXY4ruJR3uRxJ2gdDcFsX6Nvc/jqE
-         6xuYNWxiDv9gtug8krZRcaETvQGEKG7avfoTf4IzT4viPi2ryVvtHDzL9l+/e1iRi38E
-         Fwgg3ktWJTVcSHJ5fLByxGNbVzPQBYrW/vWgnVG3mZxTgZqxsO4BQiRLafCfvEubxyYu
-         OU5++CwStDqEjRdoqB8LhUOykxzPMGvgGcnLdiTPBtpaN+NIo9u37frPazQWFkRGMoQh
-         7/gg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vapj0kW4KwHiPms6GfxtxLcmGObJK471bDUmNzQRuog=;
+        b=BFD5fz+C7GTIOPRH8A7H7w72GvFbrLP4mTnO1BVj2UVwNJd6mVAlOOCMUTtqhGxUt0
+         VxLr9shPiDClWFiSXLImqDCVH8Jko3dbCW1ioEQ7whrSgDTzpFsPGFAQgjnkC/8x3t10
+         DSUiXJE5fJ5eMMA78q4HZU5jhfq/qUkGnqA9DMyAHKRerVelAj1X4WHCXw5/HhbX4mLV
+         3lB5D0c2VpPuoPt9wqtpYe6qFT+7onxnil8dOeCdK1i54YqCN4cSR4fP0Gcg17PRIYk2
+         SoFB5GfleAb54SzI+XQdfvjbQ0CkD7Y70NfFk7ESmAerbbsrcDa4r/Znf43bVqgAvUtX
+         zzAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=x6ZYfx/FmTGeNp3axjnUCK+9peN+HxRl/Crr+HjHafo=;
-        b=KIw3sRw9QGUDNaC+7OGWCnqeauT93LMrNeicB5zi2iVLujpiSkrqGZF61sHadMrgUQ
-         XWXl/m+aN4q7s0VviRNKC9RjSFP1lYlDSAlra8VIkYJzVHGgRs0gCMJA9lao+jb9Cz8f
-         vZ+Sqwor2sBqJFEKsTDm1sgcosvBEOscKYtGc9hrd4nHjf1vmaNaSOH+bc+hze4vsLb+
-         oaA/yUyJAA/vcGm4VHGkWlF+yGwobS4urrvq7IGbUkv2PVPyOwgYVyYgRmMXHXkJ24pJ
-         5qNjkr/0ZPuswx2CTuJoc0cc8Q5NWMRZ4RWNtoDU8UlM38oNBtfHWWyGepFBsYuGnJ6i
-         iVIA==
-X-Gm-Message-State: AOAM533FqbPL62MMbi7PAeRNRlicMuavWxe9O/G7tdXEGfSqVB8LeVBn
-        H8nMLZgBh6DJdCH1DwOKvMU96xJEkDc=
-X-Google-Smtp-Source: ABdhPJxLiD0hYeL6U2Xb/mgBAeEQ9rqMsPYLjeZwvpkGd/pYpUn7M+ZShhJi3ZLNLXB8LHNzFIIM4w==
-X-Received: by 2002:a65:4c8e:0:b0:3aa:24bf:9e63 with SMTP id m14-20020a654c8e000000b003aa24bf9e63mr21840616pgt.592.1652292063854;
-        Wed, 11 May 2022 11:01:03 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:69ef:9c87:7816:4f74])
-        by smtp.gmail.com with ESMTPSA id y3-20020a626403000000b0050dc76281b6sm2130000pfb.144.2022.05.11.11.01.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 11:01:03 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Wed, 11 May 2022 11:01:01 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Sultan Alsawaf <sultan@kerneltoast.com>
-Cc:     stable@vger.kernel.org, Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] zsmalloc: Fix races between asynchronous zspage free and
- page migration
-Message-ID: <Ynv53fkx8cG0ixaE@google.com>
-References: <20220509024703.243847-1-sultan@kerneltoast.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vapj0kW4KwHiPms6GfxtxLcmGObJK471bDUmNzQRuog=;
+        b=VVpcNlyqOGOHgD1DEr1UZxEEL8Y0pw/jymW0waum2ilrgyLGp+3XHMMWGPcnvdL9KK
+         sT6Im0TmtI8SwmBsRupda1sWALtiNuRP/3wH3PFjmt7NA6ekQZoGwReA2oW4FkUt0RJj
+         7Vo1y97d7jLrJFT+EaiUdKCEnPmpati7uZy9QnXmkF6aYHe0Moot511rphS3sah/Vp66
+         uMyrW7oR9hgLI0417UsrbaHMLbTS2+oVHi8LonbgbEGb1h2dWahRJ/rzmAg84XIMdKvU
+         jlu0U7Nr1Wnk8JCZBRPDSVXkI8kJmzntC9+LqgeRYOCjK5CXi0zsSLuW4ylxdsJ5DZ8H
+         79Hg==
+X-Gm-Message-State: AOAM532lueziy0Gjy5xnSGO3bD51YAADe9XmPInuTGbWNuMHVpTORT5d
+        6+iIsyNWqeSZwrdKldAVXdKNnFZAYmIxt57Y7+z5Fw==
+X-Google-Smtp-Source: ABdhPJw18n/anGk78kJcfwbuCm1c1DJCRW8ONkjNYYHy9a4WHBpUUwKabm1HCH5hU465b4Sn61BD1WIu+IYeBknLcys=
+X-Received: by 2002:a05:6512:1291:b0:473:b522:ef58 with SMTP id
+ u17-20020a056512129100b00473b522ef58mr20617140lfs.190.1652292073536; Wed, 11
+ May 2022 11:01:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220509024703.243847-1-sultan@kerneltoast.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220511072747.3960-1-jiangshanlai@gmail.com> <20220511072747.3960-2-jiangshanlai@gmail.com>
+In-Reply-To: <20220511072747.3960-2-jiangshanlai@gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 11 May 2022 11:01:02 -0700
+Message-ID: <CAKwvOdmF_5KudQbC8j5hJT1CqxvYtMneZxb1Si3A2uNxopk3yQ@mail.gmail.com>
+Subject: Re: [PATCH 1/7] x86/entry: Introduce __entry_text for entry code
+ written in C
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Marco Elver <elver@google.com>, Hao Luo <haoluo@google.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 08, 2022 at 07:47:02PM -0700, Sultan Alsawaf wrote:
-> From: Sultan Alsawaf <sultan@kerneltoast.com>
-> 
-> The asynchronous zspage free worker tries to lock a zspage's entire page
-> list without defending against page migration. Since pages which haven't
-> yet been locked can concurrently migrate off the zspage page list while
-> lock_zspage() churns away, lock_zspage() can suffer from a few different
-> lethal races. It can lock a page which no longer belongs to the zspage and
-> unsafely dereference page_private(), it can unsafely dereference a torn
-> pointer to the next page (since there's a data race), and it can observe a
-> spurious NULL pointer to the next page and thus not lock all of the
-> zspage's pages (since a single page migration will reconstruct the entire
-> page list, and create_page_chain() unconditionally zeroes out each list
-> pointer in the process).
-> 
-> Fix the races by using migrate_read_lock() in lock_zspage() to synchronize
-> with page migration.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 48b4800a1c6a ("zsmalloc: page migration support")
-
-Shouldn't the fix be Fixes: 77ff465799c6 ("zsmalloc: zs_page_migrate: skip
-unnecessary loops but not return -EBUSY if zspage is not inuse)?
-Because we didn't migrate ZS_EMPTY pages before.
-
-> Signed-off-by: Sultan Alsawaf <sultan@kerneltoast.com>
+On Wed, May 11, 2022 at 12:27 AM Lai Jiangshan <jiangshanlai@gmail.com> wrote:
+>
+> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+>
+> Some entry code will be implemented in C files.
+> Introduce __entry_text to set them in .entry.text section.
+>
+> The new __entry_text disables instrumentation like noinstr, so
+> __noinstr_section() is added for noinstr and the new __entry_text.
+>
+> Note, entry code can not access to %gs before the %gs base is switched
+> to kernel %gs base, so stack protector can not be used on the C entry
+> code.  But __entry_text doesn't disable stack protector since some
+> compilers might not support function level granular attribute to
+> disable stack protector.  It will be disabled in C file level.
+>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 > ---
->  mm/zsmalloc.c | 37 +++++++++++++++++++++++++++++++++----
->  1 file changed, 33 insertions(+), 4 deletions(-)
-> 
-> diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-> index 9152fbde33b5..5d5fc04385b8 100644
-> --- a/mm/zsmalloc.c
-> +++ b/mm/zsmalloc.c
-> @@ -1718,11 +1718,40 @@ static enum fullness_group putback_zspage(struct size_class *class,
->   */
->  static void lock_zspage(struct zspage *zspage)
->  {
-> -	struct page *page = get_first_page(zspage);
-> +	struct page *curr_page, *page;
->  
-> -	do {
-> -		lock_page(page);
-> -	} while ((page = get_next_page(page)) != NULL);
-> +	/*
-> +	 * Pages we haven't locked yet can be migrated off the list while we're
-> +	 * trying to lock them, so we need to be careful and only attempt to
-> +	 * lock each page under migrate_read_lock(). Otherwise, the page we lock
-> +	 * may no longer belong to the zspage. This means that we may wait for
-> +	 * the wrong page to unlock, so we must take a reference to the page
-> +	 * prior to waiting for it to unlock outside migrate_read_lock().
-
-I couldn't get the point here. Why couldn't we simple lock zspage migration?
-
-diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-index 9152fbde33b5..05ff2315b7b1 100644
---- a/mm/zsmalloc.c
-+++ b/mm/zsmalloc.c
-@@ -1987,7 +1987,10 @@ static void async_free_zspage(struct work_struct *work)
- 
-        list_for_each_entry_safe(zspage, tmp, &free_pages, list) {
-                list_del(&zspage->list);
-+
-+               migrate_read_lock(zspage);
-                lock_zspage(zspage);
-+               migrate_read_unlock(zspage);
- 
-                get_zspage_mapping(zspage, &class_idx, &fullness);
-                VM_BUG_ON(fullness != ZS_EMPTY);
-
-
-> +	 */
-> +	while (1) {
-> +		migrate_read_lock(zspage);
-> +		page = get_first_page(zspage);
-> +		if (trylock_page(page))
-> +			break;
-> +		get_page(page);
-> +		migrate_read_unlock(zspage);
-> +		wait_on_page_locked(page);
-> +		put_page(page);
-> +	}
+>  arch/x86/include/asm/idtentry.h | 3 +++
+>  include/linux/compiler_types.h  | 8 +++++---
+>  2 files changed, 8 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
+> index 72184b0b2219..acc4c99f801c 100644
+> --- a/arch/x86/include/asm/idtentry.h
+> +++ b/arch/x86/include/asm/idtentry.h
+> @@ -13,6 +13,9 @@
+>
+>  #include <asm/irq_stack.h>
+>
+> +/* Entry code written in C. */
+> +#define __entry_text __noinstr_section(".entry.text")
 > +
-> +	curr_page = page;
-> +	while ((page = get_next_page(curr_page))) {
-> +		if (trylock_page(page)) {
-> +			curr_page = page;
-> +		} else {
-> +			get_page(page);
-> +			migrate_read_unlock(zspage);
-> +			wait_on_page_locked(page);
-> +			put_page(page);
-> +			migrate_read_lock(zspage);
-> +		}
-> +	}
-> +	migrate_read_unlock(zspage);
->  }
->  
->  static int zs_init_fs_context(struct fs_context *fc)
-> -- 
-> 2.36.0
-> 
+>  /**
+>   * DECLARE_IDTENTRY - Declare functions for simple IDT entry points
+>   *                   No error code pushed by hardware
+> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> index 1c2c33ae1b37..8c7e81efe9bf 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -225,9 +225,11 @@ struct ftrace_likely_data {
+>  #endif
+>
+>  /* Section for code which can't be instrumented at all */
+> -#define noinstr                                                                \
+> -       noinline notrace __attribute((__section__(".noinstr.text")))    \
+> -       __no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage
+> +#define __noinstr_section(section)                             \
+> +       noinline notrace __section(section) __no_profile        \
+> +       __no_kcsan __no_sanitize_address __no_sanitize_coverage
+> +
+> +#define noinstr __noinstr_section(".noinstr.text")
+
+I haven't looked at the rest of the series, but isn't `noinstr` used
+in a bunch of places? Wont this commit break all those uses or at
+least make it break bisection?
+
+Also, my suggestion was simply not to open code
+__attribute__((section(""))). Does this work?
+
+```
+diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
+index 7924f27f5c8b..10ec7039e17d 100644
+--- a/arch/x86/include/asm/idtentry.h
++++ b/arch/x86/include/asm/idtentry.h
+@@ -13,6 +13,9 @@
+
+ #include <asm/irq_stack.h>
+
++/* Entry code written in C. Override the section used by noinstr. */
++#define __entry_text noinstr __section(".entry.text")
++
+ /**
+  * DECLARE_IDTENTRY - Declare functions for simple IDT entry points
+  *                   No error code pushed by hardware
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index 1c2c33ae1b37..ce623099eb21 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -226,8 +226,8 @@ struct ftrace_likely_data {
+
+ /* Section for code which can't be instrumented at all */
+ #define noinstr
+         \
+-       noinline notrace __attribute((__section__(".noinstr.text")))    \
+-       __no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage
++       noinline notrace __section(".noinstr.text") __no_kcsan          \
++       __no_sanitize_address __no_profile __no_sanitize_coverage
+
+ #endif /* __KERNEL__ */
+```
+-- 
+Thanks,
+~Nick Desaulniers

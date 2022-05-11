@@ -2,69 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7AB1523E48
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 22:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE460523E43
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 22:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347518AbiEKUC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 16:02:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60006 "EHLO
+        id S1347491AbiEKUCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 16:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347496AbiEKUCS (ORCPT
+        with ESMTP id S241316AbiEKUCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 16:02:18 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B821D48C7;
-        Wed, 11 May 2022 13:02:16 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id w24so3836647edx.3;
-        Wed, 11 May 2022 13:02:16 -0700 (PDT)
+        Wed, 11 May 2022 16:02:11 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46B16350A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 13:02:10 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id y14-20020a9d460e000000b00605ee347da1so1217674ote.8
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 13:02:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Kjm5oS3T2QJVIaXZ5HMZbY1xpEdNpJDDRAUvlhwNL3U=;
-        b=fWLBtbzzyS2l1AlhhPCQYPbP0/60RK4VuD7QGsdqBsun6IeBZ6VTM5h24bDkrGOSlr
-         lJrBNXdfN4rJXa0yKhXjdEDaWxrDgdI+4G6soL2J+jOZwz5Lt4asExh7ji6syOUh5fWD
-         P0ir99Ci4OoyAGJJMxErxke1NVt3tUuzD3aebDWaj+AvgZ/K3vWFcd/hx9riGmx5F9B9
-         ufNribfsGhluK6DJsCdb6FE9NZ0Er3WFJ24uFmDoZspty1JQS0h8vT3l8gfltWEbh43v
-         hQfndi/TW5GFxdS1q0BmyH7oXU7DR++pXUHbOd2HGgYgqLMfgYdph9MCybFMPiD5Oys/
-         YMhw==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=ZiUnLeYbAAtBNeslKJ9kDfYPeiKddn2ujL9ZO9dbSss=;
+        b=bD2jJUxhWqh1lySszIE6XLnaP0Rc3hQKNhJYPj+1QAWKz166Ne05+bVaF9Ip0b6RNp
+         39+W5UNlxspOsU6LgoLlexDdWL8RmmShTWAPFeqztyIjMs6ce3dbUqnfajF+meUDTiBj
+         mgkc3OkV+pyIX2EXl8ByYXT+ExNA+K16yEWXY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Kjm5oS3T2QJVIaXZ5HMZbY1xpEdNpJDDRAUvlhwNL3U=;
-        b=ssgOTGYqLjtS9ooR6mr6cV+hR5MGmwuRHLNzZqfIh6KRKp7vOxPT0Sada0o9et2t2v
-         SbUjEEARBENwt8b/3rtk6ZpqlJKUxfPQ7QL3WZJ+BrXw8KEQl/VEAnYoy1dd0KOVEWYs
-         leBJB6Enbau5CYd19xDzTRYKmWa19ghy0b3L2ryZKGXqhnEqQc4QVIIPEqDrRkg0zwoA
-         jkF/ykx+JW2TfTN6UPjOkgycDeOo0GbLftoMN6XVheTdtWkqxYC7UEJiVMsdiyUUPtQT
-         ZRxhpZY5uidnXR1bpwyZlxo/l9wrrZ6cREuLBGYv15OyrpuI8yPYP81zLB8m6bmXm1At
-         OKpw==
-X-Gm-Message-State: AOAM533xV/sq7izbeSIcD5QP4eg5lJuaAYS9UwIKu6bNihEZ/Vv1Fr93
-        ie4JTgDetVSP6h0LKs+qd54=
-X-Google-Smtp-Source: ABdhPJwuzCry90j1P+q2DVpYYiCsCxEejAfdbC7nAd7VZk2GginTD4rVQkbU+m7YqZcYCq5h35e5fg==
-X-Received: by 2002:a05:6402:d0e:b0:413:3d99:f2d6 with SMTP id eb14-20020a0564020d0e00b004133d99f2d6mr31504260edb.189.1652299335444;
-        Wed, 11 May 2022 13:02:15 -0700 (PDT)
-Received: from kista.localdomain (cpe1-3-76.cable.triera.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id s8-20020a170906060800b006f3ef214e0esm1347602ejb.116.2022.05.11.13.02.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 13:02:14 -0700 (PDT)
-From:   Jernej Skrabec <jernej.skrabec@gmail.com>
-To:     mturquette@baylibre.com, sboyd@kernel.org, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com
-Cc:     wens@csie.org, samuel@sholland.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] Revert "clk: sunxi-ng: sun6i-rtc: Add support for H6"
-Date:   Wed, 11 May 2022 22:02:06 +0200
-Message-Id: <20220511200206.2458274-1-jernej.skrabec@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=ZiUnLeYbAAtBNeslKJ9kDfYPeiKddn2ujL9ZO9dbSss=;
+        b=452Xo4yd1dn5tryrlf5Sa0D4ZWKObOUSWeCXU+101Rh3BaXveVAydr9K3pOAO/m6Xn
+         3N/SAqQWY3COvGUSkK2t6NHRdDT0FsZ4qazyhTNSXRmfd7qAHGMRzKm+qZ+M+XO8fjSa
+         qCZ6qZ6gCUqrBhdIAlB84Q2TYfXpUoTz2ADVeNsqSzjqL8wTFLgg2/w7rjojuvlHiWNU
+         PnAd6PgolqF/uzPJSQg++mjoeh0sUZghFUnfFqtuOnz6DyWRQzwzh8h+/pHFXw2hkUE3
+         ZC22htdsWoe6qTZS7KwnfE0spuQCCIbMm9hZhZRtZb+45vtNZl1lu7824UGtejtCndv3
+         iJ6A==
+X-Gm-Message-State: AOAM5337JDOF8uDlUeOAbyDoxfoS6oPX/KkeD9vnqJMythDHNWL28i37
+        PYo5XZ0dlq6qbcvX01RAGv/ZXvG5WXlcU2nHVjuc7Q==
+X-Google-Smtp-Source: ABdhPJzQSi37hJE4uy4An6c89r8omucO8AAe2OanTEc2+fADtdfeWbzQmb0Q/jsDaV/PniOYPvDHQ45PkpNAOpxBjrQ=
+X-Received: by 2002:a05:6830:13ce:b0:606:702b:87f0 with SMTP id
+ e14-20020a05683013ce00b00606702b87f0mr8503289otq.159.1652299330101; Wed, 11
+ May 2022 13:02:10 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 11 May 2022 13:02:09 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <87sfphpwvy.ffs@tglx>
+References: <20220504223148.644228-1-swboyd@chromium.org> <87sfphpwvy.ffs@tglx>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 11 May 2022 13:02:09 -0700
+Message-ID: <CAE-0n51KTiQjVqJgFe3S9qCiTM+2jdqyVZ1trNO1KanbQJccyA@mail.gmail.com>
+Subject: Re: [PATCH] timers: Provide a better debugobjects hint for delayed works
+To:     John Stultz <john.stultz@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Guenter Roeck <groeck@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,88 +69,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 1738890a3165ccd0da98ebd3e2d5f9b230d5afa8.
+Quoting Thomas Gleixner (2022-05-10 02:20:01)
+> On Wed, May 04 2022 at 15:31, Stephen Boyd wrote:
+> > ---
+> > I have an alternative approach which is to treat delayed works with a
+> > different debug_obj_descr structure but it basically boils down to
+> > another version of timer debugobjects in the workqueue code. The idea is
+> > to make the delayed work active once the timer is queued and then
+> > convert it over from a delayed work descriptor to a work descriptor once
+> > the timer runs delayed_work_timer_fn() or when we pull it off to flush
+> > out.
+>
+> Nah.
 
-Commit 1738890a3165 ("clk: sunxi-ng: sun6i-rtc: Add support for H6")
-breaks HDMI output on Tanix TX6 mini board. Exact reason isn't known,
-but because that commit doesn't actually improve anything, let's just
-revert it.
+:)
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
----
- drivers/clk/sunxi-ng/ccu-sun6i-rtc.c | 15 ---------------
- drivers/rtc/rtc-sun6i.c              | 17 +++++++++++++++++
- 2 files changed, 17 insertions(+), 15 deletions(-)
+>
+> >  #include <linux/uaccess.h>
+> >  #include <asm/unistd.h>
+> > @@ -617,7 +618,17 @@ static const struct debug_obj_descr timer_debug_descr;
+> >
+> >  static void *timer_debug_hint(void *addr)
+> >  {
+> > -     return ((struct timer_list *) addr)->function;
+> > +     struct timer_list *timer = addr;
+> > +
+> > +     if (timer->function == delayed_work_timer_fn) {
+> > +             struct delayed_work *dwork;
+> > +
+> > +             dwork = container_of(timer, struct delayed_work, timer);
+> > +
+> > +             return dwork->work.func;
+> > +     }
+>
+> The same issue exists for kthread_delayed_work_timer_fn.
+>
+> So maybe something like the uncompiled/untested below.
 
-diff --git a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-index 2f3ddc908ebd..d65398497d5f 100644
---- a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-+++ b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-@@ -298,10 +298,6 @@ static const struct sunxi_ccu_desc sun6i_rtc_ccu_desc = {
- 	.hw_clks	= &sun6i_rtc_ccu_hw_clks,
- };
- 
--static const struct clk_parent_data sun50i_h6_osc32k_fanout_parents[] = {
--	{ .hw = &osc32k_clk.common.hw },
--};
--
- static const struct clk_parent_data sun50i_h616_osc32k_fanout_parents[] = {
- 	{ .hw = &osc32k_clk.common.hw },
- 	{ .fw_name = "pll-32k" },
-@@ -314,13 +310,6 @@ static const struct clk_parent_data sun50i_r329_osc32k_fanout_parents[] = {
- 	{ .hw = &osc24M_32k_clk.common.hw }
- };
- 
--static const struct sun6i_rtc_match_data sun50i_h6_rtc_ccu_data = {
--	.have_ext_osc32k	= true,
--	.have_iosc_calibration	= true,
--	.osc32k_fanout_parents	= sun50i_h6_osc32k_fanout_parents,
--	.osc32k_fanout_nparents	= ARRAY_SIZE(sun50i_h6_osc32k_fanout_parents),
--};
--
- static const struct sun6i_rtc_match_data sun50i_h616_rtc_ccu_data = {
- 	.have_iosc_calibration	= true,
- 	.rtc_32k_single_parent	= true,
-@@ -335,10 +324,6 @@ static const struct sun6i_rtc_match_data sun50i_r329_rtc_ccu_data = {
- };
- 
- static const struct of_device_id sun6i_rtc_ccu_match[] = {
--	{
--		.compatible	= "allwinner,sun50i-h6-rtc",
--		.data		= &sun50i_h6_rtc_ccu_data,
--	},
- 	{
- 		.compatible	= "allwinner,sun50i-h616-rtc",
- 		.data		= &sun50i_h616_rtc_ccu_data,
-diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
-index 5b3e4da63406..5252ce4cbda4 100644
---- a/drivers/rtc/rtc-sun6i.c
-+++ b/drivers/rtc/rtc-sun6i.c
-@@ -370,6 +370,23 @@ CLK_OF_DECLARE_DRIVER(sun8i_h3_rtc_clk, "allwinner,sun8i-h3-rtc",
- CLK_OF_DECLARE_DRIVER(sun50i_h5_rtc_clk, "allwinner,sun50i-h5-rtc",
- 		      sun8i_h3_rtc_clk_init);
- 
-+static const struct sun6i_rtc_clk_data sun50i_h6_rtc_data = {
-+	.rc_osc_rate = 16000000,
-+	.fixed_prescaler = 32,
-+	.has_prescaler = 1,
-+	.has_out_clk = 1,
-+	.export_iosc = 1,
-+	.has_losc_en = 1,
-+	.has_auto_swt = 1,
-+};
-+
-+static void __init sun50i_h6_rtc_clk_init(struct device_node *node)
-+{
-+	sun6i_rtc_clk_init(node, &sun50i_h6_rtc_data);
-+}
-+CLK_OF_DECLARE_DRIVER(sun50i_h6_rtc_clk, "allwinner,sun50i-h6-rtc",
-+		      sun50i_h6_rtc_clk_init);
-+
- /*
-  * The R40 user manual is self-conflicting on whether the prescaler is
-  * fixed or configurable. The clock diagram shows it as fixed, but there
--- 
-2.36.1
+Cool. Looks good to me. One problem below.
 
+>
+> Thanks,
+>
+>         tglx
+> ---
+> --- a/kernel/time/timer.c
+> +++ b/kernel/time/timer.c
+> @@ -638,9 +638,35 @@ static void internal_add_timer(struct ti
+>
+>  static const struct debug_obj_descr timer_debug_descr;
+>
+> +struct timer_hint {
+> +       void    (*function)(struct timer_list *);
+> +       long    offset;
+> +};
+> +
+> +#define TIMER_HINT(fn, container, timr, hintfn)                        \
+> +       {                                                       \
+> +               .function = fn,                                 \
+> +               .offset   = offsetof(container, hintfn) -       \
+> +                           offsetof(container, timr)   \
+> +       }
+> +
+> +static const struct timer_hint timer_hints[] = {
+> +       TIMER_HINT(delayed_work_timer_fn,
+> +                  struct delayed_work, timer, work.func),
+> +       TIMER_HINT(kthread_delayed_work_timer_fn,
+> +                  struct kthread_delayed_work, timer, work.func),
+> +};
+> +
+>  static void *timer_debug_hint(void *addr)
+>  {
+> -       return ((struct timer_list *) addr)->function;
+> +       struct timer_list *timer = addr;
+> +       int i;
+> +
+> +       for (i = 0; i < ARRAY_SIZE(timer_hints); i++) {
+> +               if (timer_hints[i].function == timer->function)
+> +                       return addr + timer_hints[i].offset;
+
+This locates the correct address of the function pointer 'work.func' but
+it needs to be dereferenced to return the function's address instead of
+the pointer to the function. We don't really care about the function
+signature so we could cast it to a void function pointer and deref:
+
+                      void (**fn)(void) = addr + timer_hints[i].offset;
+
+		      return *fn;
+
+I'll send this version of the patch.

@@ -2,217 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA861523353
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 14:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1FB523358
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 14:49:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240645AbiEKMrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 08:47:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42226 "EHLO
+        id S242640AbiEKMtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 08:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237096AbiEKMrH (ORCPT
+        with ESMTP id S237096AbiEKMtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 08:47:07 -0400
-Received: from outbound-smtp51.blacknight.com (outbound-smtp51.blacknight.com [46.22.136.235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457FA4F459
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 05:47:04 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
-        by outbound-smtp51.blacknight.com (Postfix) with ESMTPS id 1D9D8FB469
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 13:47:03 +0100 (IST)
-Received: (qmail 15750 invoked from network); 11 May 2022 12:47:02 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 11 May 2022 12:47:02 -0000
-Date:   Wed, 11 May 2022 13:47:00 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Subject: Re: [RFC PATCH 0/6] Drain remote per-cpu directly v2
-Message-ID: <20220511124700.GF3441@techsingularity.net>
-References: <20220509130805.20335-1-mgorman@techsingularity.net>
- <Ynk6O4WAut0Ejl7Z@google.com>
- <20220510092733.GE3441@techsingularity.net>
- <YnqrMckyHH3qvkdv@google.com>
+        Wed, 11 May 2022 08:49:18 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374645EBF4;
+        Wed, 11 May 2022 05:49:16 -0700 (PDT)
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 2C05061E6478B;
+        Wed, 11 May 2022 14:49:13 +0200 (CEST)
+Message-ID: <6246d753-00cb-b5dc-f5fc-d041a8e78718@molgen.mpg.de>
+Date:   Wed, 11 May 2022 14:49:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <YnqrMckyHH3qvkdv@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [Intel-wired-lan] [PATCH 2/2] igb: Make DMA faster when CPU is
+ active on the PCIe link
+Content-Language: en-US
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        intel-wired-lan@lists.osuosl.org, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+References: <20220511122806.2146847-1-kai.heng.feng@canonical.com>
+ <20220511122806.2146847-2-kai.heng.feng@canonical.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20220511122806.2146847-2-kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 11:13:05AM -0700, Minchan Kim wrote:
-> > Yes, but as reclaim is not fundamentally altered the main difference
-> > in behavious is that work is done inline instead of being deferred to a
-> > workqueue. That means in some cases, system CPU usage of a task will be
-> > higher because it's paying the cost directly.
-> 
-> Sure but the reclaim path is already expensive so I doubt we could
-> see the sizable measurement on the system CPU usage.
-> 
+Dear Kai-Hang,
 
-It would be difficult to distinguish from the noise.
 
-> What I wanted to see was whether we have regression due to adding
-> spin_lock/unlock instructions in hot path. Due to squeeze it to
-> a cacheline, I expected the regression would be just marginal.
-> 
+Thank you for the patch.
 
-Ah, yes, I did test for this. page-fault-test hits the relevant paths
-very heavily and did show minor differences.
 
-                                     5.18.0-rc1               5.18.0-rc1
-                                        vanilla         mm-pcpdrain-v2r1
-Hmean     faults/sec-1   886331.5718 (   0.00%)   885462.7479 (  -0.10%)
-Hmean     faults/sec-3  2337706.1583 (   0.00%)  2332130.4909 *  -0.24%*
-Hmean     faults/sec-5  2851594.2897 (   0.00%)  2844123.9307 (  -0.26%)
-Hmean     faults/sec-7  3543251.5507 (   0.00%)  3516889.0442 *  -0.74%*
-Hmean     faults/sec-8  3947098.0024 (   0.00%)  3916162.8476 *  -0.78%*
-Stddev    faults/sec-1     2302.9105 (   0.00%)     2065.0845 (  10.33%)
-Stddev    faults/sec-3     7275.2442 (   0.00%)     6033.2620 (  17.07%)
-Stddev    faults/sec-5    24726.0328 (   0.00%)    12525.1026 (  49.34%)
-Stddev    faults/sec-7     9974.2542 (   0.00%)     9543.9627 (   4.31%)
-Stddev    faults/sec-8     9468.0191 (   0.00%)     7958.2607 (  15.95%)
-CoeffVar  faults/sec-1        0.2598 (   0.00%)        0.2332 (  10.24%)
-CoeffVar  faults/sec-3        0.3112 (   0.00%)        0.2587 (  16.87%)
-CoeffVar  faults/sec-5        0.8670 (   0.00%)        0.4404 (  49.21%)
-CoeffVar  faults/sec-7        0.2815 (   0.00%)        0.2714 (   3.60%)
-CoeffVar  faults/sec-8        0.2399 (   0.00%)        0.2032 (  15.28%)
+Am 11.05.22 um 14:28 schrieb Kai-Heng Feng:
+> We found Intel I210 can only achieve ~750Mbps Tx speed on some
+> platforms. The RR2DCDELAY shows around 0x2xxx DMA delay, which will be
 
-There is a small hit in the number of faults per second but it's within
-the noise and the results are more stable with the series so I'd mark it
-down as a small but potentially measurable impact.
+Please give an example platform, where it works and where it does not.
 
-> > 
-> > The workloads I used just hit reclaim directly to make sure it's
-> > functionally not broken. There is no change in page aging decisions,
-> > only timing of drains. I didn't check interference of a heavy workload
-> > interfering with a CPU-bound workload running on NOHZ CPUs as I assumed
-> > both you and Nicolas had a test case ready to use.
-> 
-> The my workload is not NOHZ CPUs but run apps under heavy memory
-> pressure so they goes to direct reclaim and be stuck on drain_all_pages
-> until work on workqueue run.
-> 
-> unit: nanosecond
-> max(dur)        avg(dur)                count(dur)
-> 166713013       487511.77786438033      1283
-> 
-> From traces, system encountered the drain_all_pages 1283 times and
-> worst case was 166ms and avg was 487us.
-> 
-> The other problem was alloc_contig_range in CMA. The PCP draining
-> takes several hundred millisecond sometimes though there is no
-> memory pressure or a few of pages to be migrated out but CPU were
-> fully booked.
-> 
-> Your patch perfectly removed those wasted time.
-> 
+How did you test transfer speed?
 
-Those stalls are painful and it's a direct impact where a workload does
-not make progress. The NOHZ stall is different in that it's worried
-about interference. Both problems should have the same solution.
+> significantly lower when 1) ASPM is disabled or 2) SoC package c-state
+> stays above PC3. When the RR2DCDELAY is around 0x1xxx the Tx speed can
+> reach to ~950Mbps.
+> 
+> According to the I210 datasheet "8.26.1 PCIe Misc. Register - PCIEMISC",
+> "DMA Idle Indication" doesn't seem to tie to DMA coalesce anymore, so
+> set it to 1b for "DMA is considered idle when there is no Rx or Tx AND
+> when there are no TLPs indicating that CPU is active detected on the
+> PCIe link (such as the host executes CSR or Configuration register read
+> or write operation)" and performing Tx should also fall under "active
+> CPU on PCIe link" case.
+> 
+> In addition to that, commit b6e0c419f040 ("igb: Move DMA Coalescing init
+> code to separate function.") seems to wrongly changed from enabling
+> E1000_PCIEMISC_LX_DECISION to disabling it, also fix that.
 
-Do you mind if I quote these paragraphs in the leader to v3?
+Please split this into a separate commit with Fixes tag, and maybe the 
+commit author in Cc.
 
-> > Which ones are of concern?
-> > 
-> > Some of the page->lru references I left alone in the init paths simply
-> > because in those contexts, the page wasn't on a buddy or PCP list. In
-> > free_unref_page_list the page is not on the LRU, it's just been isolated
-> > from the LRU. In alloc_pages_bulk, it's not on a buddy, pcp or LRU list
-> > and is just a list placeholder so I left it alone. In
-> > free_tail_pages_check the context was a page that was likely previously
-> > on a LRU.
-> 
-> Just nits: all are list macros.
-> 
-> free_pcppages_bulk's list_last_entry should be pcp_list.
-> 
-> mark_free_pages's list_for_each_entry should be buddy_list
-> 
-> __rmqueue_pcplist's list_first_enty should be pcp_list.
-> 
 
-Ah, you're completely correct.
+Kind regards,
 
-> > 
-> > > since I have
-> > > tested these patchset in my workload and didn't spot any other
-> > > problems.
-> > > 
-> > 
-> > Can you describe this workload, is it available anywhere and does it
-> > require Android to execute?
-> 
-> I wrote down above. It runs on Android but I don't think it's
-> android specific issue but anyone could see such a long latency
-> from PCP draining once one of cores are monopolized by higher
-> priority processes or too many pending kworks.
-> 
+Paul
 
-Yeah, I agree it's not an Android-specific problem. It could be detected by
-tracing the time spent in drain_all_pages for any arbitrary workload. The
-BCC funclatency tool could measure it.
 
-> > 
-> > If you have positive results, it would be appreciated if you could post
-> > them or just note in a Tested-by/Acked-by that it had a measurable impact
-> > on the reclaim/cma path.
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+>   drivers/net/ethernet/intel/igb/igb_main.c | 12 +++++-------
+>   1 file changed, 5 insertions(+), 7 deletions(-)
 > 
-> Sure.
-> 
-> All patches in this series.
-> 
-> Tested-by: Minchan Kim <minchan@kernel.org>
-> Acked-by: Minchan Kim <minchan@kernel.org>
-> 
-
-Thanks, I've added that to all the patches. I'll wait another day for
-more feedback before sending out a v3. The following is the diff between
-v2 and v3 based on your feedback.
-
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 4ac39d30ec8f..0f5a6a5b0302 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -1497,7 +1497,7 @@ static void free_pcppages_bulk(struct zone *zone, int count,
- 		do {
- 			int mt;
- 
--			page = list_last_entry(list, struct page, lru);
-+			page = list_last_entry(list, struct page, pcp_list);
- 			mt = get_pcppage_migratetype(page);
- 
- 			/* must delete to avoid corrupting pcp list */
-@@ -3276,7 +3276,7 @@ void mark_free_pages(struct zone *zone)
- 
- 	for_each_migratetype_order(order, t) {
- 		list_for_each_entry(page,
--				&zone->free_area[order].free_list[t], lru) {
-+				&zone->free_area[order].free_list[t], buddy_list) {
- 			unsigned long i;
- 
- 			pfn = page_to_pfn(page);
-@@ -3761,7 +3761,7 @@ struct page *__rmqueue_pcplist(struct zone *zone, unsigned int order,
- 			}
- 		}
- 
--		page = list_first_entry(list, struct page, lru);
-+		page = list_first_entry(list, struct page, pcp_list);
- 		list_del(&page->pcp_list);
- 		pcp->count -= 1 << order;
- 	} while (check_new_pcp(page, order));
-
--- 
-Mel Gorman
-SUSE Labs
+> diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
+> index 34b33b21e0dcd..eca797dded429 100644
+> --- a/drivers/net/ethernet/intel/igb/igb_main.c
+> +++ b/drivers/net/ethernet/intel/igb/igb_main.c
+> @@ -9897,11 +9897,10 @@ static void igb_init_dmac(struct igb_adapter *adapter, u32 pba)
+>   	struct e1000_hw *hw = &adapter->hw;
+>   	u32 dmac_thr;
+>   	u16 hwm;
+> +	u32 reg;
+>   
+>   	if (hw->mac.type > e1000_82580) {
+>   		if (adapter->flags & IGB_FLAG_DMAC) {
+> -			u32 reg;
+> -
+>   			/* force threshold to 0. */
+>   			wr32(E1000_DMCTXTH, 0);
+>   
+> @@ -9934,7 +9933,6 @@ static void igb_init_dmac(struct igb_adapter *adapter, u32 pba)
+>   			/* Disable BMC-to-OS Watchdog Enable */
+>   			if (hw->mac.type != e1000_i354)
+>   				reg &= ~E1000_DMACR_DC_BMC2OSW_EN;
+> -
+>   			wr32(E1000_DMACR, reg);
+>   
+>   			/* no lower threshold to disable
+> @@ -9951,12 +9949,12 @@ static void igb_init_dmac(struct igb_adapter *adapter, u32 pba)
+>   			 */
+>   			wr32(E1000_DMCTXTH, (IGB_MIN_TXPBSIZE -
+>   			     (IGB_TX_BUF_4096 + adapter->max_frame_size)) >> 6);
+> +		}
+>   
+> -			/* make low power state decision controlled
+> -			 * by DMA coal
+> -			 */
+> +		if (hw->mac.type >= e1000_i210 ||
+> +		    (adapter->flags & IGB_FLAG_DMAC)) {
+>   			reg = rd32(E1000_PCIEMISC);
+> -			reg &= ~E1000_PCIEMISC_LX_DECISION;
+> +			reg |= E1000_PCIEMISC_LX_DECISION;
+>   			wr32(E1000_PCIEMISC, reg);
+>   		} /* endif adapter->dmac is not disabled */
+>   	} else if (hw->mac.type == e1000_82580) {

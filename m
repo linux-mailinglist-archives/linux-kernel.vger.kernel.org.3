@@ -2,116 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69DE523B62
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C6D523B67
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345451AbiEKRVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 13:21:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36336 "EHLO
+        id S1345472AbiEKRVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 13:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240438AbiEKRVT (ORCPT
+        with ESMTP id S1345454AbiEKRVi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 13:21:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E5EA2016C7
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 10:21:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652289676;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kriPN3St3WJzr3K/vgIhsu3qaI3q8csTyZqCy+0mias=;
-        b=Lx0XnctE0Wt6k/jNm1WhCKnAeYsgXeVjxx2hT5o+J0KXkDyqrSshjWeeyw04YM7ZvfDAs7
-        pYr63hY1DZC1BNRo2//x4byizuxQ2jioF2vNNiNZiCgdCDUZnmxry8KU216ya4q40qAoxM
-        fAXA6CJZLxR0//LFuH+4Gz44pTIFO30=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-187-dyuBveCGMUCIFfZlJaWKLA-1; Wed, 11 May 2022 13:21:15 -0400
-X-MC-Unique: dyuBveCGMUCIFfZlJaWKLA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8AF9A185A7BA;
-        Wed, 11 May 2022 17:21:14 +0000 (UTC)
-Received: from horse.redhat.com (unknown [10.22.18.223])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F2C2A54CE52;
-        Wed, 11 May 2022 17:21:13 +0000 (UTC)
-Received: by horse.redhat.com (Postfix, from userid 10451)
-        id A6CA3220463; Wed, 11 May 2022 13:21:13 -0400 (EDT)
-Date:   Wed, 11 May 2022 13:21:13 -0400
-From:   Vivek Goyal <vgoyal@redhat.com>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Bernd Schubert <bschubert@ddn.com>,
-        Dharmendra Hans <dharamhans87@gmail.com>,
-        linux-fsdevel@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/3] FUSE: Implement atomic lookup + open/create
-Message-ID: <YnvwiZ+s+y3VDUMW@redhat.com>
-References: <20220502102521.22875-1-dharamhans87@gmail.com>
- <YnLRnR3Xqu0cYPdb@redhat.com>
- <CACUYsyEsRph+iFC_fj3F6Ceqhq7NCTuFPH3up8R6C+_bGHktZg@mail.gmail.com>
- <YnPI6f2fRZUXbCFP@redhat.com>
- <882fbf7f-a56b-1e82-a158-9e2186ec7c4c@ddn.com>
- <YnQsizX5Q1sMnlI2@redhat.com>
- <CAJfpegseGaWHkjdQj7XiR=TQNFpPZzDF_rTXces2oRz=x0N7OA@mail.gmail.com>
+        Wed, 11 May 2022 13:21:38 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BDC5320CA48;
+        Wed, 11 May 2022 10:21:35 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 338961042;
+        Wed, 11 May 2022 10:21:35 -0700 (PDT)
+Received: from donnerap.arm.com (donnerap.cambridge.arm.com [10.1.197.42])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0D2D73F73D;
+        Wed, 11 May 2022 10:21:33 -0700 (PDT)
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Mark Brown <broonie@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] kselftest/arm64: bti: force static linking
+Date:   Wed, 11 May 2022 18:21:29 +0100
+Message-Id: <20220511172129.2078337-1-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJfpegseGaWHkjdQj7XiR=TQNFpPZzDF_rTXces2oRz=x0N7OA@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 11:40:59AM +0200, Miklos Szeredi wrote:
-> On Thu, 5 May 2022 at 21:59, Vivek Goyal <vgoyal@redhat.com> wrote:
-> 
-> > Oh, I have no issues with the intent. I will like to see cut in network
-> > traffic too (if we can do this without introducing problems). My primary
-> > interest is that this kind of change should benefit virtiofs as well.
-> 
-> One issue with that appears to be checking permissions.   AFAIU this
-> patchset only enables the optimization if default_permissions is
-> turned off (i.e. all permission checking is done by the server).  But
-> virtiofs uses the default_permissions model.
+The "bti" selftests are built with -nostdlib, which apparently
+automatically creates a statically linked binary, which is what we want
+and need for BTI (to avoid interactions with the dynamic linker).
 
-IIUC, only 3rd patch mentions that default_permission should be turned
-off. IOW, first patch where lookup + create + open is a single operation
-and second patch which does "lookup + open" in a single operation does
-not seem to require that default_permissions are not in effect.
+However this is not true when building a PIE binary, which some
+toolchains (Ubuntu) configure as the default.
+When compiling btitest with such a toolchain, it will create a
+dynamically linked binary, which will probably fail some tests, as the
+dynamic linker might not support BTI:
+===================
+TAP version 13
+1..18
+not ok 1 nohint_func/call_using_br_x0
+not ok 2 nohint_func/call_using_br_x16
+not ok 3 nohint_func/call_using_blr
+....
+===================
 
-So if first two patches work fine, I think virtiofs should benefit too.
-(IMHO, 3rd patch is too hacky anyway)
+To make sure we create static binaries, add an explicit -static on the
+linker command line. This forces static linking even if the toolchain
+defaults to PIE builds, and fixes btitest runs on BTI enabled machines.
 
-W.r.t permission checks, looks like may_open() will finally be called
-after ->atomic_open(). So even if we open the file, we should still be
-able to check whether we have permissions to open the file or not
-after the fact.
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+---
+ tools/testing/selftests/arm64/bti/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-fs/namei.c
-
-path_openat()
-{
-	open_last_lookups()  <--- This calls ->atomic_open()
-	do_open()  <--- This calls may_open()
-}
-
-Thanks
-Vivek
-
-> 
-> I'm not quite sure about this limitation, guessing that it's related
-> to the fact that the permissions may be stale at the time of checking?
-> 
-> Thanks,
-> Miklos
-> 
+diff --git a/tools/testing/selftests/arm64/bti/Makefile b/tools/testing/selftests/arm64/bti/Makefile
+index 73e013c082a65..dafa1c2aa5c47 100644
+--- a/tools/testing/selftests/arm64/bti/Makefile
++++ b/tools/testing/selftests/arm64/bti/Makefile
+@@ -39,7 +39,7 @@ BTI_OBJS =                                      \
+ 	teststubs-bti.o                         \
+ 	trampoline-bti.o
+ gen/btitest: $(BTI_OBJS)
+-	$(CC) $(CFLAGS_BTI) $(CFLAGS_COMMON) -nostdlib -o $@ $^
++	$(CC) $(CFLAGS_BTI) $(CFLAGS_COMMON) -nostdlib -static -o $@ $^
+ 
+ NOBTI_OBJS =                                    \
+ 	test-nobti.o                         \
+@@ -50,7 +50,7 @@ NOBTI_OBJS =                                    \
+ 	teststubs-nobti.o                       \
+ 	trampoline-nobti.o
+ gen/nobtitest: $(NOBTI_OBJS)
+-	$(CC) $(CFLAGS_BTI) $(CFLAGS_COMMON) -nostdlib -o $@ $^
++	$(CC) $(CFLAGS_BTI) $(CFLAGS_COMMON) -nostdlib -static -o $@ $^
+ 
+ # Including KSFT lib.mk here will also mangle the TEST_GEN_PROGS list
+ # to account for any OUTPUT target-dirs optionally provided by
+-- 
+2.25.1
 

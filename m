@@ -2,68 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD811523567
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8322F52356C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244687AbiEKO0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 10:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56922 "EHLO
+        id S244611AbiEKO1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 10:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235400AbiEKO0m (ORCPT
+        with ESMTP id S241417AbiEKO1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 10:26:42 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA6636AA67;
-        Wed, 11 May 2022 07:26:41 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7C256ED1;
-        Wed, 11 May 2022 07:26:41 -0700 (PDT)
-Received: from e123427-lin.arm.com (unknown [10.57.1.148])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7D14B3F66F;
-        Wed, 11 May 2022 07:26:38 -0700 (PDT)
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     ryder.lee@mediatek.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, jianjun.wang@mediatek.com,
-        linux-kernel@vger.kernel.org, robh@kernel.org,
-        kernel@collabora.com, p.zabel@pengutronix.de,
-        matthias.bgg@gmail.com, bhelgaas@google.com,
-        nfraprado@collabora.com, kw@linux.com
-Subject: Re: [PATCH] PCI: mediatek-gen3: Assert resets to ensure expected init state
-Date:   Wed, 11 May 2022 15:26:27 +0100
-Message-Id: <165227916327.28061.3388397168727783283.b4-ty@arm.com>
+        Wed, 11 May 2022 10:27:23 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD0F66F8A;
+        Wed, 11 May 2022 07:27:22 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 24BER4kl013498
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 May 2022 10:27:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1652279226; bh=8hgmElPz0t7OufSsTjC6m8Fq4s3uDD1h1JE9Mns8WZY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=RVOUih5Qajf8B9PG5732u2VscEjQ0g/gRbu9NoeL+w0DPlPSj2zvQwUO76SFWdOc/
+         1t0SsPQ2NnRorXMbpiI1reHynmq81gzipa/fx5yMaRER28qmosjrS3mJgW+f8YdNY9
+         Eu6zxxTv6L0yrJYVo/arE3Vc6gQTEvW/TFm6Osez0cKFC80SeDHZXL+MM6W+u9C/+L
+         AMhdLYNEXvvj2/odi0RQYf4W3dya7DdAeZ6wnimAdttxURtyXqTxiGdC7VkPT/Tgn8
+         FCMDQEzmRXlB43iC6gI+y/CEH923b3uAp+qiUPEiKxg53PodZP0oI4ZADvVzMf6gu7
+         68neOQZYM8p1w==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 51D9D15C3F0C; Wed, 11 May 2022 10:27:04 -0400 (EDT)
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        Ye Bin <yebin10@huawei.com>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, linux-kernel@vger.kernel.org,
+        lczerner@redhat.com, jack@suse.cz
+Subject: Re: [PATCH -next] ext4: fix warning in ext4_handle_inode_extension
+Date:   Wed, 11 May 2022 10:27:02 -0400
+Message-Id: <165227918943.390808.17562773461897886007.b4-ty@mit.edu>
 X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220404144858.92390-1-angelogioacchino.delregno@collabora.com>
-References: <20220404144858.92390-1-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220326065351.761952-1-yebin10@huawei.com>
+References: <20220326065351.761952-1-yebin10@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Apr 2022 16:48:58 +0200, AngeloGioacchino Del Regno wrote:
-> The controller may have been left out of reset by the bootloader,
-> in which case, before the powerup sequence, the controller will be
-> found preconfigured with values that were set before booting the
-> kernel: this produces a controller failure, with the result of
-> a failure during the mtk_pcie_startup_port() sequence as the PCIe
-> link never gets up.
+On Sat, 26 Mar 2022 14:53:51 +0800, Ye Bin wrote:
+> We got issue as follows:
+> EXT4-fs error (device loop0) in ext4_reserve_inode_write:5741: Out of memory
+> EXT4-fs error (device loop0): ext4_setattr:5462: inode #13: comm syz-executor.0: mark_inode_dirty error
+> EXT4-fs error (device loop0) in ext4_setattr:5519: Out of memory
+> EXT4-fs error (device loop0): ext4_ind_map_blocks:595: inode #13: comm syz-executor.0: Can't allocate blocks for non-extent mapped inodes with bigalloc
+> ------------[ cut here ]------------
+> WARNING: CPU: 1 PID: 4361 at fs/ext4/file.c:301 ext4_file_write_iter+0x11c9/0x1220
+> Modules linked in:
+> CPU: 1 PID: 4361 Comm: syz-executor.0 Not tainted 5.10.0+ #1
+> RIP: 0010:ext4_file_write_iter+0x11c9/0x1220
+> RSP: 0018:ffff924d80b27c00 EFLAGS: 00010282
+> RAX: ffffffff815a3379 RBX: 0000000000000000 RCX: 000000003b000000
+> RDX: ffff924d81601000 RSI: 00000000000009cc RDI: 00000000000009cd
+> RBP: 000000000000000d R08: ffffffffbc5a2c6b R09: 0000902e0e52a96f
+> R10: ffff902e2b7c1b40 R11: ffff902e2b7c1b40 R12: 000000000000000a
+> R13: 0000000000000001 R14: ffff902e0e52aa10 R15: ffffffffffffff8b
+> FS:  00007f81a7f65700(0000) GS:ffff902e3bc80000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffffffffff600400 CR3: 000000012db88001 CR4: 00000000003706e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  do_iter_readv_writev+0x2e5/0x360
+>  do_iter_write+0x112/0x4c0
+>  do_pwritev+0x1e5/0x390
+>  __x64_sys_pwritev2+0x7e/0xa0
+>  do_syscall_64+0x37/0x50
+>  entry_SYSCALL_64_after_hwframe+0x44/0xa9
 > 
 > [...]
 
-Applied to pci/mediatek, thanks!
+Applied, thanks!
 
-[1/1] PCI: mediatek-gen3: Assert resets to ensure expected init state
-      https://git.kernel.org/lpieralisi/pci/c/1d565935e3
+[1/1] ext4: fix warning in ext4_handle_inode_extension
+      commit: f3e076d26874f4d54126c07ba51d8dd407008697
 
-Thanks,
-Lorenzo
+Best regards,
+-- 
+Theodore Ts'o <tytso@mit.edu>

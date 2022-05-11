@@ -2,103 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576A0523455
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF17523457
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243829AbiEKNfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:35:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47950 "EHLO
+        id S243869AbiEKNgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiEKNff (ORCPT
+        with ESMTP id S243872AbiEKNgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:35:35 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27F01A4D3D;
-        Wed, 11 May 2022 06:35:34 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id dk23so4090357ejb.8;
-        Wed, 11 May 2022 06:35:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ms4IDLqZyPZEHxNrMd0btLhoMLeIHNUPT9ze1DMC0rY=;
-        b=b6PqNPlOT1b5n0ZwMSJFTOWuIVZybJXt7gUtC32lfxydPEwh8eTC/LgwvVWE/S0YoO
-         z/RvEfLIOhASm7OpJiz0iqKj8nap0nKnyh2+32Ej6sur1kmI5NH6ivKXO/cVEeSkfmBt
-         eOPtXXafMPkPhN0ozaoPgjbl4KgX46Kqe6tbD6Isu+jwUxF9v6jdjkDD+AyodduLapA0
-         Hobs6Vq0yDDLibD0QzWiK40cgI9Lj9b/03XNgKFokA7r4o0FiW/z4Wsjna8IC1KKgyV7
-         IAQxy+Y5z8vGSuq1/ez7/ROSlVUTjKQDoBgo3+HwsYmYLZ2H5aEYc+1zFaUQOL0LUVlJ
-         9apw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ms4IDLqZyPZEHxNrMd0btLhoMLeIHNUPT9ze1DMC0rY=;
-        b=nqsID0vInnUeIiY7hvuC3gXM5T9WRrQlX3Q70tvEBXTtdLKqzJAb3Dh8Z2NBbKv4hC
-         K5FfeiboI68LkovPWzO8xJzsjulnFehOhLvAbb5Icx//Y6SfxpBNOIVxiY2OssQJUOWl
-         xXqr4/xBFGWNs2EZ1JVLcp0puwupNvNt0OVZTOXgsUjVhpiAkWaW6d9LZqRnia6lffF+
-         cCToPzwmbEcGDs/peyKhOrUuc4bafBAscYi3pnf1QEH9iBvZm0pehuY1v1BT/tN+nDjv
-         5/eZTL62NRopmZ/yOhz/US/eq1rDeusEETLl778ZdnmDS+78B5FJSR1U1gjRrC4Xa37R
-         7N7w==
-X-Gm-Message-State: AOAM533q8+tFJxNvZtBjTVCjHrPWhPMD80758u6IbpkHZ1EztRIDP6O0
-        UqsVQOVmsX0YpfTF4HMOQvZskxZf8RLTUeER85w=
-X-Google-Smtp-Source: ABdhPJwm48w9xaikhsGpSBVYiaDfH3RoQAMGR695rlQUewHzVEO1FE9SMr/7XxcFVYHqMbN3+K6odlfP/wdn05UafQs=
-X-Received: by 2002:a17:907:9720:b0:6f4:31d4:925f with SMTP id
- jg32-20020a170907972000b006f431d4925fmr24761326ejc.658.1652276133336; Wed, 11
- May 2022 06:35:33 -0700 (PDT)
+        Wed, 11 May 2022 09:36:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728E7193FC
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:36:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05AAB61BF3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 13:36:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05143C34110;
+        Wed, 11 May 2022 13:35:58 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="JXu/c1yF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1652276157;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=U2b6O7wlGoOuZ+vlwUPed/7D6Hm5L5yvD+oSIqSTMak=;
+        b=JXu/c1yFt16MmF9DQgOXA6W+ISRsoFc5CXVH46qcrrewAPQc71J16m3OIVSHKoCsgtS9/e
+        xrlRoc32l9eYtYXxKjzjcRi9uEIrAF68g9eTcCnNMse6WlGPaj0A3gVqNUVFUX8rfVHsEl
+        k2XYW+oDqpdPXRYCGPsJ9cSCX64/Aj0=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4dd239f1 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 11 May 2022 13:35:56 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     openrisc@lists.librecores.org, linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Stafford Horne <shorne@gmail.com>
+Subject: [PATCH v2] openrisc: remove bogus nops and shutdowns
+Date:   Wed, 11 May 2022 15:35:50 +0200
+Message-Id: <20220511133550.143236-1-Jason@zx2c4.com>
+In-Reply-To: <YnMKHdRy/GkAB+9e@zx2c4.com>
+References: <YnMKHdRy/GkAB+9e@zx2c4.com>
 MIME-Version: 1.0
-References: <20220511115911.54960-1-max.oss.09@gmail.com> <20220511115911.54960-4-max.oss.09@gmail.com>
- <CAOMZO5AboNfb_E-4QVurZ6UTYephsOakW0QrAU8xRAMe8_zRow@mail.gmail.com> <CAEHkU3U=58qittoNazqXrkYKO9gs7VU3VW_67823fs+dt6r6eA@mail.gmail.com>
-In-Reply-To: <CAEHkU3U=58qittoNazqXrkYKO9gs7VU3VW_67823fs+dt6r6eA@mail.gmail.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Wed, 11 May 2022 10:35:20 -0300
-Message-ID: <CAOMZO5BkcpNN+UVLTq+1-y7KdqDC9GAX5_FFqb930OaCewT_jg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] ARM: dts: imx6qdl-colibri: backlight pwm: Simplify
- inverted backlight
-To:     Max Krummenacher <max.oss.09@gmail.com>
-Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 10:32 AM Max Krummenacher <max.oss.09@gmail.com> wrote:
+Nop 42 is some leftover debugging thing by the looks of it. Nop 1 will
+shut down the simulator, which isn't what we want, since it makes it
+impossible to handle errors.
 
-> I disagree. Just setting the invert without at the same changing the
-> brightness-levels does
-> change the user experience way more than when one adapts the available
-> duty cycles
-> at the same time.
->
-> With the change to use the PWM with inverted polarity the PWM signals
-> is inverted to
-> how it was before this patch. Keeping the brightness-levels will then
-> have a big brightness
-> jump from 0 to 127 duty cycle, the other 6 steps will then be barely noticable.
->
-> I.e. before the change the brightness for level [0..7] was
-> ['off', 128/255, 64/255, 32/255, 16/255, 8/255, 4/255, 'off'],
-> if one only inverts the polarity it will be
-> ['off', 128/255, 191/255, 223/255, 239/255, 247/255, 255/255].
-> With the proposed patch it will be
-> ['off', 4/255, 8/255, 16/255, 32/255, 64/255, 128/255, 255/255].
+Cc: Stafford Horne <shorne@gmail.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+Changes v1->v2:
+- Fixed typo in commit message.
 
-Ok, please add an explanation to the commit log as to why you are
-changing the brightness levels
-like you did here. Thanks
+ arch/openrisc/mm/fault.c | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/arch/openrisc/mm/fault.c b/arch/openrisc/mm/fault.c
+index 80bb66ad42f6..860da58d7509 100644
+--- a/arch/openrisc/mm/fault.c
++++ b/arch/openrisc/mm/fault.c
+@@ -223,8 +223,6 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long address,
+ 	{
+ 		const struct exception_table_entry *entry;
+ 
+-		__asm__ __volatile__("l.nop 42");
+-
+ 		if ((entry = search_exception_tables(regs->pc)) != NULL) {
+ 			/* Adjust the instruction pointer in the stackframe */
+ 			regs->pc = entry->fixup;
+@@ -252,9 +250,6 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long address,
+ 	 */
+ 
+ out_of_memory:
+-	__asm__ __volatile__("l.nop 42");
+-	__asm__ __volatile__("l.nop 1");
+-
+ 	mmap_read_unlock(mm);
+ 	if (!user_mode(regs))
+ 		goto no_context;
+-- 
+2.35.1
+

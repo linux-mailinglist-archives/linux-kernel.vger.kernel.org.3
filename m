@@ -2,367 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D6E52308E
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B61D523090
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:18:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232245AbiEKKR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 06:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49042 "EHLO
+        id S232450AbiEKKSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 06:18:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiEKKRv (ORCPT
+        with ESMTP id S231633AbiEKKSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 06:17:51 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5511275D9
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:17:49 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2f7ca2ce255so15029197b3.7
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:17:49 -0700 (PDT)
+        Wed, 11 May 2022 06:18:18 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D12E26AD3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:18:13 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24B8ovvi003183;
+        Wed, 11 May 2022 10:18:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
+ bh=phL6nBEsM26PAnolFtMCilckhd/ab/avxAVOPvIFugY=;
+ b=T2k/nGhFsrzXlfODlWriCcsDcgwaqP0UfMM75KGpv9+Zngj5hX0vTS20OdwHZbrD+BrD
+ xjgoLeWFL3B4SKx+xjf/B72xcPudlbvgYNmtLIXz0zVotcBPotBXC2qE7IOZGdSVuFPy
+ ia22B9/PYlFfUZdwPp7t5rhm+K4jUE8WgcNwE46mn1BReANgU8mN44o4N/yOe647lP7Y
+ U22YhsevGdC3gQ79XE/2lsOgCXXjZoteyl/jXEOGa+SPoAKpjeJfS92SXntGp2HpJy9R
+ m4JslIo3hi3FPsWjdC10UkeLI25VAHee9OwR7IwpVKodCjjHPZRgzDKDAJ/gDMY0IGVA 4Q== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3g0a04g71p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 11 May 2022 10:18:06 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24BAFS3C029901;
+        Wed, 11 May 2022 10:18:05 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2169.outbound.protection.outlook.com [104.47.55.169])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fwf73ejtx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 11 May 2022 10:18:05 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nQYq+Bh+UiAUplUu97pCZKRSNqLW5BiArL6ytNaiTM+XUGRCt37Ix53rGJqkppsvFPJv8QQQdHcuoUElPQMAovKtlcqPn32lcBx+MR70SOeyX0NOt9fyDupefpi8jeruSxeNcMALVi5eTqU4DwXnMwC2AuiwVCBB0TbVnKIPMd9ffdhcTYLn8AryHJcVhlXDUBwVg0e+8saG8rzgPxUixO1+Vq3zy4bTRBBgOGQGmjcnLcI2hNAm7NuDA4vB6rXSfXA6qP/SSKVUmikgsKE5zkAqb2d/9dAkjeyO9ex6NtnoN4/kudll9Byor+8R1dORQtipCYGV/nXv7MhoyZXl6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=phL6nBEsM26PAnolFtMCilckhd/ab/avxAVOPvIFugY=;
+ b=BJ1M/yyxBayy1eLArvw3cO/qOcA5xWB6Kc9WNhDfJpkKpablwv9iPXqTYUr1MOYgDx4aZogKRI2A5mAnqgpY8bF3rfyC5FVY/ZZ7c0XR4LiZz6KhFfgYcVt0/NyQlSYkDvZ7xIQ5cbNTOadmsoZbIid3RIPfGD4qA9BAiWJOIa7c3cUGpsRwAg0kPTANG3DvRyQD/EbKS5/rXJLG3cn1r/R9PNl7YxHE4zNvjfrlEeu8LJ2gVFKKCWCEPqzkNYC3xLd0pEFSl1SOPLlvDHFrI/d5xq5p0nxwjNbJB0vgbrLAl2YaU+HrKkZ+OBg+f8WEYbvj/cvjWwbNQ4GlS+lHgA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y0yk23I1nDnNSowekKcj7K4w/pPnlPvOTvgMIkY+JzY=;
-        b=FqMrW5EntG3ipuoiwVfOM67aT5Gm1MK/Dj1UfRMNCyHfNATyiSW3ZrDxrwwGBSGwX2
-         uRYIGTz6w1YHw1we3DmY4r74fBIcLk/JZZGJmJR3zIoIZ4ZvQeyRD5hwjFODucoaulyB
-         sBZ/ogDveNZh7mMCrLcTz/3qEMkdywakcMfSQX2j+j0Dr0aZc+Yfh2AuRTWnTxRKZ5My
-         ynKDHOBMfqzpfnIr288h41cfsJmxw1zaWJoSs/BA8tVOJHSVFGKvOs7xR8n5MwqnPdqT
-         Dc9CZ9Rf0XHLG2p1e6MJ+KLI68DYjCyEFyMhFePNlgiG+e326oKWPlqv0uckDZ3UuVh6
-         CS0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y0yk23I1nDnNSowekKcj7K4w/pPnlPvOTvgMIkY+JzY=;
-        b=pA7aF5cVl4ERImvbiQHa06vkHatQagDTGvmvaIjBb+j+E9XDE62KZmajjxSaXFICSl
-         HYaFZWXa9+0DfgnUcUIWGEf8RK9Ja46EypBM7Tr+AIjgCGPjd+mKt2YyGKUnJpy+O2ni
-         E4c5vmTE+e/SdzW3EGCFMVAn3KCUBur9XohGHFCruI+wLOZpzp1lIwq+bIOLizwvVwJ2
-         jJAJid3cw1n4ic8gxv9FsOynK9y+KL1TbVxWA09u6NNDdhHpZLykSRQwNbmYhLSiXVSC
-         yPxtEejhXzj4ATBf2iNMG9VnRu9vQjLvVxAnpCSmdMkIeWBw3nMG0/Bd5OlRrtzpRevz
-         Y/KA==
-X-Gm-Message-State: AOAM531XsnnAy8srgP7KeZj16iCoRI3bhu2FmwbI3vlqj37qE43m9AkJ
-        pseyU4UeVDYKxdFAZ3/VnlRqiWuWRLAeP0NGV8EizQ==
-X-Google-Smtp-Source: ABdhPJz4aj17AwoY38RDYc+QLTaQW0WnUvtR/e0tNCPlOO+Qtzk0GrHuH0MhHzWeNLwkVtFwq3xsT3GaGDExEy0dRyc=
-X-Received: by 2002:a81:1985:0:b0:2f7:c16b:3afd with SMTP id
- 127-20020a811985000000b002f7c16b3afdmr23752186ywz.113.1652264269024; Wed, 11
- May 2022 03:17:49 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=phL6nBEsM26PAnolFtMCilckhd/ab/avxAVOPvIFugY=;
+ b=cwKRvknVp12cDH8GETPdqSHT6oBMf4XbSaMZAwTEG+RuCPRRtDhdBqrsOnvaQv8X9Jwz+gUuF7o7/R7i4V+DQlxNAa8pyFs1zNSwisHDv4pdfSVb4w5GDWfIpbBtWP0EYbTXNGXCYsJT2hP9ES8SabL0/OcqiZaS92wCYguAj7Q=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by MWHPR10MB1293.namprd10.prod.outlook.com
+ (2603:10b6:300:21::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.20; Wed, 11 May
+ 2022 10:18:03 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::c053:117c:bd99:89ba]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::c053:117c:bd99:89ba%5]) with mapi id 15.20.5250.013; Wed, 11 May 2022
+ 10:18:02 +0000
+Date:   Wed, 11 May 2022 13:17:51 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     kbuild@lists.01.org, Michael Walle <michael@walle.cc>
+Cc:     lkp@intel.com, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Pratyush Yadav <p.yadav@ti.com>
+Subject: [mtd:spi-nor/next 16/18] drivers/mtd/spi-nor/debugfs.c:84
+ spi_nor_params_show() warn: '%ph' cannot be followed by 'n'
+Message-ID: <202205110320.WNi7ZQaB-lkp@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: MRXP264CA0009.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:500:15::21) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-References: <20220510155744.812471-1-y.oudjana@protonmail.com> <20220510155940.812565-1-y.oudjana@protonmail.com>
-In-Reply-To: <20220510155940.812565-1-y.oudjana@protonmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 11 May 2022 13:17:38 +0300
-Message-ID: <CAA8EJprE-p6m4iAWuo=881=T25AekhsueUxU0LazRMVKBZ26zA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] clk: qcom: msm8996-cpu: Add CBF support
-To:     Yassine Oudjana <yassine.oudjana@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d104801c-10fc-4eea-cefd-08da333787e1
+X-MS-TrafficTypeDiagnostic: MWHPR10MB1293:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR10MB1293DE21AC8B00A54E308D1C8EC89@MWHPR10MB1293.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: d8FszbvE4fv9mV9Q6VrhRL1o938dbpkOFVQVQrn3yT6k1KtTyiA0j6IkGDuWtqFHWM/tE82TfKDo36uSu+qMSO5+klUEuFojlt+nmXiGB8c4tmS2vobUvyH0gc73Ftel9vjDsW3wOK4rNLtZRvm4avUyq0lzZ6h71qThfRgDUXb+u/RYgYFU48pNGEqDqjODjSm1mPOODhyHe4pBWRJINWuXmnovjeOHTxpPdBAg/03rsVFGsNCZt0enW+xlvkxv5bSeEcaQP+aqN7o2jHrp//u3bHWQVpISzldvdMlJqkS1jagpZxiv9R4T4oX8ZL9DR6Lvj8F4iorgcQMrEaQOFcSLXaAns6ow20yAvd5uZ6V0G5Vol3A6VuBL+P2cMVVto/4ylUVylQM/D+oinLZLUJli9NYNrZMyc+Zj+cZooJN519U3jY8UGMyxvBzo66oyS4U+3F11LGnOAKd9/tKwwk/VGyvp38YAUTakiED1Cq9uKMbJubFkOc/EHaMEj+kcWdGW+FbKcIHt7v3ROExvLjf09YII8MQJKXJAFUkuN19TuYTxtAjaYtGWQGCjWmQK9q18/CnAGVWM42oheBRQZ4gV3cF7EZJOALkTleFZNvQjXJvCeyHl2lIW9FedfvLE1IqByhSAPKyUgxeI/SXHdqdPvOCwaRDgAkgVKTZcX3uYYyaxQGBC10I5ATb8ry+09YmRuFK7WGgN0+NariJvRE3XJB2/WnJ2YMTvxAWCYFok4/cUvIpjgj/I4IxvGdd3hqU5qMYrDJwrq/M/oDtkam63TzzOWyseCwU3WrOt+fEkhXGgDafkmp0aF792vZlKzumO7VEf02gLsnzk+3/6ow==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8676002)(66476007)(66556008)(316002)(6916009)(4326008)(8936002)(83380400001)(6486002)(36756003)(2906002)(5660300002)(44832011)(966005)(66946007)(186003)(6512007)(26005)(9686003)(1076003)(6666004)(508600001)(6506007)(86362001)(38100700002)(38350700002)(52116002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IFBTWZQBRriPp2wTFuesx87UgeVqBOWFylPgxpPA+fBsJ+LY9l5s3g6vaha3?=
+ =?us-ascii?Q?An1LDkFtbGhs87s17BfHEx+aN4ch7/LNop2xYcdxSVEf8ZfaEuJUuOX+sqSC?=
+ =?us-ascii?Q?QUI+poAKX5MGSIFu4rsyYfXARSnWI3/+gdsos3rXyOqBgVq0e1Mg3IDFhM/B?=
+ =?us-ascii?Q?UA1u8OZZoJMfXVKSnLgWZuxzymwBpTvXWUJrIZLBJxVJb01sA+DulAtuvSLs?=
+ =?us-ascii?Q?DsoMdO4sAXRwq7zdmSs70Op9pk6QN+BpqNmFDoEznEtK7pkbjmw8othYHvCw?=
+ =?us-ascii?Q?f1KI8+qtPCxsnY7OEZw6PnSeRn2IP5zZ4IsBYWwkQ+aYBBkdgxaaC3/xfOdB?=
+ =?us-ascii?Q?Fh+qzIeQ4xa0Rcdv1YDv/xHLJrw1cDVexW5DbGAQN0pMgLof1dlyHwDYZYjv?=
+ =?us-ascii?Q?PtJ0hruY7cgEAbi16szvDAPbIryWMD4vrM5oS3CqY5Y136lKDNXex+u36m2F?=
+ =?us-ascii?Q?DQaA+RyNC9nzrtjOeobabGIRZ+flHHR/bwDgow+tNuHjlCmyFdRrhDLGYmuX?=
+ =?us-ascii?Q?XPb6nv4VlnT1mQJsqpMnW8ki073q2P742UbDcJqiPmK06sjyKUc2sqiv4cY1?=
+ =?us-ascii?Q?WRVvPR1GkzTyT2U2xpi1dzfx2n6uVfKjiC6OEZv6p7Fu2mRb/w9Tp/1c4PmJ?=
+ =?us-ascii?Q?GhNMB0YkWzMdyqPV2K/6+5tKBD2ZwNQmnWLKuATESJDYTo7BiqtPK+qmlKmd?=
+ =?us-ascii?Q?8HjPfu8AnUMexIqO6aovApTEnYWTB/UjrfJpHf2WFvbh9ZwtWgZjFooTg/w9?=
+ =?us-ascii?Q?BNRG2MKcLjBdyjVHv1mDVqXKO+2Dv84naO1SL1gu+W7HxqKm4oe6daZLKA6k?=
+ =?us-ascii?Q?zmOEo0H0D9dFNqGPIe2k/cGKrsePuSkrkwQBQg8JBQq7NdHjIaTHBY/FU3L9?=
+ =?us-ascii?Q?Bo4uCbDPwzeNLfdydlWvF+o1NIX5c2ZnB49jc1wWRGKnwEz0/Xlx1ERDCmlM?=
+ =?us-ascii?Q?8dqzkpvbbJLL1xWvBMC5QyIijBPFoLlz7r2zcPF3oGFgu0K/p5pttxgqVZHb?=
+ =?us-ascii?Q?gvzWKotgertvNTgw3dFKiLR/w8kE85OpDVsVVd5q/BcGwKqtMHDNx0nj3oGH?=
+ =?us-ascii?Q?09WmJoyy6+Nen+K3Cj7uvVE9L+1phBZrJ1J+xPNzV6/MRA5dOGyuZi78XprP?=
+ =?us-ascii?Q?HZRO/HSk2bKVLo7zbwxf9hCRPwtP+9KTx4FRyUntWUm2dUi9cYLGl8egb/za?=
+ =?us-ascii?Q?Fndlmi0WwwBIl8BHejbwod6yFHDS5s8SlYQLQdlUBJP3OhIDyM5eVYdPg+PD?=
+ =?us-ascii?Q?hYhceuGsIN991gYEa9UIwN+uab++7e+WRV4UwkA2Dvv0MWIoMZAZZIoihXj6?=
+ =?us-ascii?Q?vjAow8Pt2bTV35P75V4SAYIg3XYgAqOp1RqcdxewG+eQymfu1Fk0e9PZwzFt?=
+ =?us-ascii?Q?fe+teRLjcAAugjnNms6K5SZIkCgljLsWNkJXmw/CrJL2wwPE2gwPGVCN2/N9?=
+ =?us-ascii?Q?635UB5DPO/yjJezYC4qcUFg8gQsuiexkTAjYehuDYD0q6Udoa2VCV0I1x92s?=
+ =?us-ascii?Q?S1ya3ZGl0fh2RBIk1/Pi9Ty+bxI8Ci2aD5V2nBvD9fwWIPjUClQt0evNquLh?=
+ =?us-ascii?Q?2r9+VYLNoZw3SHbQfP3hUAX8cO4J9KG3dq9UvsP+Ga9j8niiNd7kRpSrIntv?=
+ =?us-ascii?Q?MSqOpA4L2gvr9nOUmsJjIAXogcIAnVT2SyBxLE4U4JjlyRj007v+pjLMQj7q?=
+ =?us-ascii?Q?fXxEBuiJIPmPo510K9PLu6HnX/7YudodRz39fFi403N3CIS/mopzHHht8uwe?=
+ =?us-ascii?Q?wGvhf6B816alkS9qrgjqFYRb7kE6J/E=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d104801c-10fc-4eea-cefd-08da333787e1
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2022 10:18:02.5724
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1xeXR9H4yMZiboVr08d8k+E9GCS2j0+rtLut/Yr1VGh/3IRuOEpIL1v+mIHn89ko1KMxg7xEEK8R4VUcjgwWEgPqT25ZJ2Y+zUjoIpB3q3M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1293
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
+ definitions=2022-05-11_03:2022-05-11,2022-05-11 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 phishscore=0
+ adultscore=0 bulkscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205110047
+X-Proofpoint-GUID: FadCfQ2bqCIFrw9qtQQ-JzVL4IM-v-iE
+X-Proofpoint-ORIG-GUID: FadCfQ2bqCIFrw9qtQQ-JzVL4IM-v-iE
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git spi-nor/next
+head:   cdbc44dbb2c73d8bafa1a8ae0d780608be5dbd40
+commit: 0257be79fc4a16a3252ce80aa13b3640f728c425 [16/18] mtd: spi-nor: expose internal parameters via debugfs
+config: x86_64-randconfig-m001-20220509 (https://download.01.org/0day-ci/archive/20220511/202205110320.WNi7ZQaB-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
 
-On Tue, 10 May 2022 at 19:05, Yassine Oudjana <yassine.oudjana@gmail.com> wrote:
->
-> From: Konrad Dybcio <konrad.dybcio@somainline.org>
->
-> Add the required code to support the CBF clock, which is responsible for
-> core cluster interconnect frequency on msm8996.
->
-> Somewhat based on AngeloGioacchino del Regno's work at:
-> https://github.com/sonyxperiadev/kernel/blob/aosp/LE.UM.2.3.2.r1.4/drivers/clk/qcom/clk-cpu-8996.c
->
-> This fixes the issue with booting with all 4 cores enabled.
->
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> Signed-off-by: Yassine Oudjana <yassine.oudjana@gmail.com>
-> ---
->  drivers/clk/qcom/clk-cpu-8996.c | 162 +++++++++++++++++++++++++++++++-
->  1 file changed, 159 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/clk/qcom/clk-cpu-8996.c b/drivers/clk/qcom/clk-cpu-8996.c
-> index 4a4fde8dd12d..8afc271f92d0 100644
-> --- a/drivers/clk/qcom/clk-cpu-8996.c
-> +++ b/drivers/clk/qcom/clk-cpu-8996.c
-> @@ -68,10 +68,19 @@ enum _pmux_input {
->         NUM_OF_PMUX_INPUTS
->  };
->
-> +enum {
-> +       CBF_PLL_INDEX = 1,
-> +       CBF_DIV_2_INDEX,
-> +       CBF_SAFE_INDEX
-> +};
-> +
->  #define DIV_2_THRESHOLD                600000000
->  #define PWRCL_REG_OFFSET 0x0
->  #define PERFCL_REG_OFFSET 0x80000
->  #define MUX_OFFSET     0x40
-> +#define CBF_REG_OFFSET 0x0
-> +#define CBF_PLL_OFFSET 0xf000
-> +#define CBF_MUX_OFFSET 0x18
->  #define ALT_PLL_OFFSET 0x100
->  #define SSSCTL_OFFSET 0x160
->
-> @@ -98,6 +107,17 @@ static const u8 alt_pll_regs[PLL_OFF_MAX_REGS] = {
->         [PLL_OFF_STATUS] = 0x28,
->  };
->
-> +static const u8 cbf_pll_regs[PLL_OFF_MAX_REGS] = {
-> +       [PLL_OFF_L_VAL] = 0x08,
-> +       [PLL_OFF_ALPHA_VAL] = 0x10,
-> +       [PLL_OFF_USER_CTL] = 0x18,
-> +       [PLL_OFF_CONFIG_CTL] = 0x20,
-> +       [PLL_OFF_CONFIG_CTL_U] = 0x24,
-> +       [PLL_OFF_TEST_CTL] = 0x30,
-> +       [PLL_OFF_TEST_CTL_U] = 0x34,
-> +       [PLL_OFF_STATUS] = 0x28,
-> +};
-> +
->  /* PLLs */
->
->  static const struct alpha_pll_config hfpll_config = {
-> @@ -111,6 +131,17 @@ static const struct alpha_pll_config hfpll_config = {
->         .early_output_mask = BIT(3),
->  };
->
-> +static const struct alpha_pll_config cbfpll_config = {
-> +       .l = 72,
-> +       .config_ctl_val = 0x200d4aa8,
-> +       .config_ctl_hi_val = 0x006,
-> +       .pre_div_mask = BIT(12),
-> +       .post_div_mask = 0x3 << 8,
-> +       .post_div_val = 0x1 << 8,
-> +       .main_output_mask = BIT(0),
-> +       .early_output_mask = BIT(3),
-> +};
-> +
->  static struct clk_alpha_pll perfcl_pll = {
->         .offset = PERFCL_REG_OFFSET,
->         .regs = prim_pll_regs,
-> @@ -135,6 +166,18 @@ static struct clk_alpha_pll pwrcl_pll = {
->         },
->  };
->
-> +static struct clk_alpha_pll cbf_pll = {
-> +       .offset = CBF_PLL_OFFSET,
-> +       .regs = cbf_pll_regs,
-> +       .flags = SUPPORTS_DYNAMIC_UPDATE | SUPPORTS_FSM_MODE,
-> +       .clkr.hw.init = &(struct clk_init_data){
-> +               .name = "cbf_pll",
-> +               .parent_names = (const char *[]){ "xo" },
-> +               .num_parents = 1,
-> +               .ops = &clk_alpha_pll_huayra_ops,
-> +       },
-> +};
-> +
->  static const struct pll_vco alt_pll_vco_modes[] = {
->         VCO(3,  250000000,  500000000),
->         VCO(2,  500000000,  750000000),
-> @@ -194,6 +237,9 @@ struct clk_cpu_8996_mux {
->  static int cpu_clk_notifier_cb(struct notifier_block *nb, unsigned long event,
->                                void *data);
->
-> +static int cbf_clk_notifier_cb(struct notifier_block *nb, unsigned long event,
-> +                              void *data);
-> +
->  #define to_clk_cpu_8996_mux_nb(_nb) \
->         container_of(_nb, struct clk_cpu_8996_mux, nb)
->
-> @@ -329,6 +375,35 @@ static struct clk_cpu_8996_mux perfcl_pmux = {
->         },
->  };
->
-> +static struct clk_cpu_8996_mux cbf_mux = {
-> +       .reg = CBF_REG_OFFSET + CBF_MUX_OFFSET,
-> +       .shift = 0,
-> +       .width = 2,
-> +       .pll = &cbf_pll.clkr.hw,
-> +       .nb.notifier_call = cbf_clk_notifier_cb,
-> +       .clkr.hw.init = &(struct clk_init_data) {
-> +               .name = "cbf_mux",
-> +               .parent_names = (const char *[]){
-> +                       "xo",
-> +                       "cbf_pll",
-> +                       "cbf_pll_main",
-> +               },
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-parent_data please.
+smatch warnings:
+drivers/mtd/spi-nor/debugfs.c:84 spi_nor_params_show() warn: '%ph' cannot be followed by 'n'
 
-> +               .num_parents = 3,
-> +               .ops = &clk_cpu_8996_mux_ops,
-> +               /* CPU clock is critical and should never be gated */
-> +               .flags = CLK_SET_RATE_PARENT | CLK_IS_CRITICAL,
-> +       },
-> +};
-> +
-> +static const struct regmap_config cbf_msm8996_regmap_config = {
-> +       .reg_bits               = 32,
-> +       .reg_stride             = 4,
-> +       .val_bits               = 32,
-> +       .max_register           = 0x10000,
-> +       .fast_io                = true,
-> +       .val_format_endian      = REGMAP_ENDIAN_LITTLE,
-> +};
-> +
->  static const struct regmap_config cpu_msm8996_regmap_config = {
->         .reg_bits               = 32,
->         .reg_stride             = 4,
-> @@ -397,6 +472,35 @@ static int qcom_cpu_clk_msm8996_register_clks(struct device *dev,
->         return ret;
->  }
->
-> +static struct clk_regmap *cbf_msm8996_clks[] = {
-> +       &cbf_pll.clkr,
-> +       &cbf_mux.clkr,
-> +};
-> +
-> +static int qcom_cbf_clk_msm8996_register_clks(struct device *dev,
-> +                                             struct regmap *regmap)
-> +{
-> +       int ret;
-> +
-> +       cbf_mux.pll_div_2 = clk_hw_register_fixed_factor(dev, "cbf_pll_main",
-> +                                                     "cbf_pll", CLK_SET_RATE_PARENT,
-> +                                                     1, 2);
-> +       if (IS_ERR(cbf_mux.pll_div_2)) {
-> +               dev_err(dev, "Failed to initialize cbf_pll_main\n");
-> +               return PTR_ERR(cbf_mux.pll_div_2);
-> +       }
-> +
-> +       ret = devm_clk_register_regmap(dev, cbf_msm8996_clks[0]);
-> +       ret = devm_clk_register_regmap(dev, cbf_msm8996_clks[1]);
-> +
-> +       clk_alpha_pll_configure(&cbf_pll, regmap, &cbfpll_config);
-> +       clk_set_rate(cbf_pll.clkr.hw.clk, 614400000);
-> +       clk_prepare_enable(cbf_pll.clkr.hw.clk);
-> +       clk_notifier_register(cbf_mux.clkr.hw.clk, &cbf_mux.nb);
-> +
-> +       return ret;
-> +}
-> +
->  static int qcom_cpu_clk_msm8996_unregister_clks(void)
->  {
->         int ret = 0;
-> @@ -409,8 +513,13 @@ static int qcom_cpu_clk_msm8996_unregister_clks(void)
->         if (ret)
->                 return ret;
->
-> +       ret = clk_notifier_unregister(cbf_mux.clkr.hw.clk, &cbf_mux.nb);
-> +       if (ret)
-> +               return ret;
-> +
->         clk_hw_unregister(perfcl_smux.pll);
->         clk_hw_unregister(pwrcl_smux.pll);
-> +       clk_hw_unregister(cbf_mux.pll);
->
->         return 0;
->  }
-> @@ -481,14 +590,48 @@ static int cpu_clk_notifier_cb(struct notifier_block *nb, unsigned long event,
->         return notifier_from_errno(ret);
->  };
->
-> +static int cbf_clk_notifier_cb(struct notifier_block *nb, unsigned long event,
-> +                              void *data)
-> +{
-> +       struct clk_cpu_8996_mux *cbfclk = to_clk_cpu_8996_mux_nb(nb);
-> +       struct clk_notifier_data *cnd = data;
-> +       struct clk_hw *parent;
-> +       int ret;
-> +
-> +       switch (event) {
-> +       case PRE_RATE_CHANGE:
-> +               parent = clk_hw_get_parent_by_index(&cbfclk->clkr.hw, CBF_DIV_2_INDEX);
-> +               ret = clk_cpu_8996_mux_set_parent(&cbfclk->clkr.hw, CBF_DIV_2_INDEX);
-> +
-> +               if (cnd->old_rate > DIV_2_THRESHOLD && cnd->new_rate < DIV_2_THRESHOLD)
-> +                       ret = clk_set_rate(parent->clk, cnd->old_rate / 2);
-> +               break;
-> +       case POST_RATE_CHANGE:
-> +               if (cnd->new_rate < DIV_2_THRESHOLD)
-> +                       ret = clk_cpu_8996_mux_set_parent(&cbfclk->clkr.hw, CBF_DIV_2_INDEX);
-> +               else {
-> +                       parent = clk_hw_get_parent_by_index(&cbfclk->clkr.hw, CBF_PLL_INDEX);
-> +                       ret = clk_set_rate(parent->clk, cnd->new_rate);
-> +                       ret = clk_cpu_8996_mux_set_parent(&cbfclk->clkr.hw, CBF_PLL_INDEX);
-> +               }
-> +               break;
-> +       default:
-> +               ret = 0;
-> +               break;
-> +       }
-> +
-> +       return notifier_from_errno(ret);
-> +};
-> +
->  static int qcom_cpu_clk_msm8996_driver_probe(struct platform_device *pdev)
->  {
-> -       struct regmap *regmap;
-> +       struct regmap *regmap, *regmap_cbf;
->         struct clk_hw_onecell_data *data;
->         struct device *dev = &pdev->dev;
-> +       static void __iomem *cbf_base;
->         int ret;
->
-> -       data = devm_kzalloc(dev, struct_size(data, hws, 2), GFP_KERNEL);
-> +       data = devm_kzalloc(dev, struct_size(data, hws, 3), GFP_KERNEL);
->         if (!data)
->                 return -ENOMEM;
->
-> @@ -506,9 +649,22 @@ static int qcom_cpu_clk_msm8996_driver_probe(struct platform_device *pdev)
->
->         qcom_cpu_clk_msm8996_acd_init(base);
->
-> +       cbf_base = devm_platform_ioremap_resource(pdev, 1);
-> +       if (IS_ERR(cbf_base))
-> +               return PTR_ERR(cbf_base);
+vim +84 drivers/mtd/spi-nor/debugfs.c
 
-So, if the reg1 is not provided, thr driver will error out, breaking
-the compatibility with existing dts files.
-I'd suggest making reg1 optional (you can add a warning printk
-demanding the dts to be updated).
+0257be79fc4a16 Michael Walle 2022-04-29   73  static int spi_nor_params_show(struct seq_file *s, void *data)
+0257be79fc4a16 Michael Walle 2022-04-29   74  {
+0257be79fc4a16 Michael Walle 2022-04-29   75  	struct spi_nor *nor = s->private;
+0257be79fc4a16 Michael Walle 2022-04-29   76  	struct spi_nor_flash_parameter *params = nor->params;
+0257be79fc4a16 Michael Walle 2022-04-29   77  	struct spi_nor_erase_map *erase_map = &params->erase_map;
+0257be79fc4a16 Michael Walle 2022-04-29   78  	struct spi_nor_erase_region *region;
+0257be79fc4a16 Michael Walle 2022-04-29   79  	const struct flash_info *info = nor->info;
+0257be79fc4a16 Michael Walle 2022-04-29   80  	char buf[16], *str;
+0257be79fc4a16 Michael Walle 2022-04-29   81  	int i;
+0257be79fc4a16 Michael Walle 2022-04-29   82  
+0257be79fc4a16 Michael Walle 2022-04-29   83  	seq_printf(s, "name\t\t%s\n", info->name);
+0257be79fc4a16 Michael Walle 2022-04-29  @84  	seq_printf(s, "id\t\t%*phn\n", info->id_len, info->id);
 
-> +       regmap_cbf = devm_regmap_init_mmio(dev, cbf_base, &cbf_msm8996_regmap_config);
-> +       if (IS_ERR(regmap_cbf))
-> +               return PTR_ERR(regmap_cbf);
-> +
-> +       ret = qcom_cbf_clk_msm8996_register_clks(dev, regmap_cbf);
-> +       if (ret)
-> +               return ret;
-> +
->         data->hws[0] = &pwrcl_pmux.clkr.hw;
->         data->hws[1] = &perfcl_pmux.clkr.hw;
-> -       data->num = 2;
-> +       data->hws[2] = &cbf_mux.clkr.hw;
-> +       data->num = 3;
->
->         return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get, data);
->  }
-> --
-> 2.36.0
->
+Maybe N was intended instead of n?  (I have no idea).
 
+0257be79fc4a16 Michael Walle 2022-04-29   85  	string_get_size(params->size, 1, STRING_UNITS_2, buf, sizeof(buf));
+0257be79fc4a16 Michael Walle 2022-04-29   86  	seq_printf(s, "size\t\t%s\n", buf);
+0257be79fc4a16 Michael Walle 2022-04-29   87  	seq_printf(s, "write size\t%u\n", params->writesize);
+0257be79fc4a16 Michael Walle 2022-04-29   88  	seq_printf(s, "page size\t%u\n", params->page_size);
+0257be79fc4a16 Michael Walle 2022-04-29   89  	seq_printf(s, "address width\t%u\n", nor->addr_width);
+0257be79fc4a16 Michael Walle 2022-04-29   90  
+0257be79fc4a16 Michael Walle 2022-04-29   91  	seq_puts(s, "flags\t\t");
 
 -- 
-With best wishes
-Dmitry
+0-DAY CI Kernel Test Service
+https://01.org/lkp
+

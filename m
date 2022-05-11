@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF490522FC1
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83B68522FAD
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241550AbiEKJog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 05:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41606 "EHLO
+        id S230495AbiEKJmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 05:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234189AbiEKJmO (ORCPT
+        with ESMTP id S233551AbiEKJmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 05:42:14 -0400
+        Wed, 11 May 2022 05:42:12 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0148DDED5;
-        Wed, 11 May 2022 02:41:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A56205EE;
+        Wed, 11 May 2022 02:41:19 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: shreeya)
-        with ESMTPSA id D06A41F43FDC
+        with ESMTPSA id B695A1F4406C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652262066;
-        bh=+2usJXmX9v+EVeE5jSEdCqwLDL5071aGc+5kYIF6aq8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=eCD9cZO350OL4oMGSCPh14Ukp+DQnX4Dz1Xs2PDxNK7HHQBoYeWl6kldHZTtcAmMy
-         S8QLpDN6D4aWQlYXXTez3FbaLqE2vuvmr72p3TakhBNIgGUxblCue4OgInDkCyxr3q
-         GnUURc/peFkCrFWv6WiywWGb8GIj93GhLPNWayfH4/6+gEvIXAYiBoO3qgHLFruAzW
-         lEt69fWLzRqJ0Lidwf817KgciRb/5X4SaJHbLhAhe5Qq3ExXa0xNbs0XQifCvFiPn5
-         MhYw40gIxyOPC2Jdh6tC3V3Ehd9O4jIDnRc+2emng0CSUxBbUj5xJ8PL6UmHFTzriy
-         g/Of/coNH8nnQ==
+        s=mail; t=1652262078;
+        bh=UNeNPgpw1R6Fw0IfN3Kfn3Etg70pun757On7XIN528E=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=GTvQde7cLXTWQvjGfBvf2uqJRH3QaSF8ue5Ct5KFK/d6gOnYCp8X6DhpfYR4cWje6
+         gDWaLWjdAniSw1NLNn4aJTLyCxlheLJlgNFBETvCJEYuddhsz6UcHlIqcbCrieBruG
+         /g1bqQIcreeoDGk8aeM36q2B4nzVfQWP1TiwHHGOJMdMxa3eXc+ogGsriIJa6FMNjl
+         EDicNGlBSAgc3YnY52pe0tQJaSulVm1M8xPWM1fHA3nr4TuMWjpjnpy6Op1s3qC5V/
+         yWy6+7EJ/Cn3267/5aKjjPByB//tMppBxF6F6mrCvLqbRd0MedZ+93vMtHCott6e35
+         2sUdg7K6hkSBg==
 From:   Shreeya Patel <shreeya.patel@collabora.com>
 To:     jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
         Zhigang.Shi@liteon.com, krisman@collabora.com
 Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, kernel@collabora.com,
         alvaro.soliverez@collabora.com,
-        Shreeya Patel <shreeya.patel@collabora.com>
-Subject: [PATCH v4 0/3] Add LTRF216A Driver
-Date:   Wed, 11 May 2022 15:10:21 +0530
-Message-Id: <20220511094024.175994-1-shreeya.patel@collabora.com>
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH v4 1/3] dt-bindings: vendor-prefixes: Add 'ltr' as deprecated vendor prefix
+Date:   Wed, 11 May 2022 15:10:22 +0530
+Message-Id: <20220511094024.175994-2-shreeya.patel@collabora.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220511094024.175994-1-shreeya.patel@collabora.com>
+References: <20220511094024.175994-1-shreeya.patel@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -51,54 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset adds support for ltrf216a Ambient Light Sensor
-and documents the DT bindings for the same.
+'liteon' is the correct vendor prefix for devices released by
+LITE-ON Technology Corp. But one of the released device which uses
+ltr216a light sensor exposes the vendor prefix name as 'ltr' through
+ACPI.
 
+Hence, add 'ltr' as a deprecated vendor prefix which would suppress the
+following warning in case the compatible string used in ltrf216a driver
+is "ltr,ltrf216a"
 
-Changes in v4
-  - Add more descriptive comment for mutex lock
-  - Fix mutex locking in read_raw()
-  - Use i2c_smbus_read_i2c_block_data()
+WARNING: DT compatible string vendor "ltr" appears un-documented --
+check ./Documentation/devicetree/bindings/vendor-prefixes.yaml
+364: FILE: drivers/iio/light/ltrf216a.c:313:
++    { .compatible = "ltr,ltrf216a" },
 
-Changes in v3
-  - Use u16 instead of u8 for int_time_fac
-  - Reorder headers in ltrf216a.c file
-  - Remove int_time_mapping table and use int_time_available
-  - Fix indentation in the bindings file.
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+---
 
 Changes in v2
-  - Add support for 25ms and 50ms integration time.
-  - Rename some of the macros as per names given in datasheet
-  - Add a comment for the mutex lock
-  - Use read_avail callback instead of attributes and set the
-    appropriate _available bit.
-  - Use FIELD_PREP() at appropriate places.
-  - Add a constant lookup table for integration time and reg val
-  - Use BIT() macro for magic numbers.
-  - Improve error handling at few places.
-  - Use get_unaligned_le24() and div_u64()
-  - Use probe_new() callback and devm functions
-  - Return errors in probe using dev_err_probe()
-  - Use DEFINE_SIMPLE_DEV_PM_OPS()
-  - Correct the formula for lux to use 0.45 instead of 0.8
-  - Add interrupt and power supply property in DT bindings
   - Add vendor prefix name as per the alphabetical order.
 
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Shreeya Patel (3):
-  dt-bindings: vendor-prefixes: Add 'ltr' as deprecated vendor prefix
-  dt-bindings: Document ltrf216a light sensor bindings
-  iio: light: Add support for ltrf216a sensor
-
- .../bindings/iio/light/liteon,ltrf216a.yaml   |  51 +++
- .../devicetree/bindings/vendor-prefixes.yaml  |   3 +
- drivers/iio/light/Kconfig                     |  10 +
- drivers/iio/light/Makefile                    |   1 +
- drivers/iio/light/ltrf216a.c                  | 346 ++++++++++++++++++
- 5 files changed, 411 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml
- create mode 100644 drivers/iio/light/ltrf216a.c
-
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 01430973ecec..02f94fba03b6 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -716,6 +716,9 @@ patternProperties:
+     description: Loongson Technology Corporation Limited
+   "^lsi,.*":
+     description: LSI Corp. (LSI Logic)
++  "^ltr,.*":
++    description: LITE-ON Technology Corp.
++    deprecated: true
+   "^lwn,.*":
+     description: Liebherr-Werk Nenzing GmbH
+   "^lxa,.*":
 -- 
 2.30.2
 

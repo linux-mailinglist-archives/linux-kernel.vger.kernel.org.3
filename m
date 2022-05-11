@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 908E2522CBC
+	by mail.lfdr.de (Postfix) with ESMTP id DC895522CBD
 	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242504AbiEKHCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 03:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
+        id S242416AbiEKHCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 03:02:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242447AbiEKHBq (ORCPT
+        with ESMTP id S242469AbiEKHBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 03:01:46 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0B65BE44
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:01:45 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f7c322f770so9622197b3.20
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:01:45 -0700 (PDT)
+        Wed, 11 May 2022 03:01:49 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468C17305B
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:01:47 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2eb7d137101so9948227b3.12
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:01:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=3xLzWp+VN8d56IUKCn+oZgvctc6ILOg/P6G2GbPqdKc=;
-        b=N8/Nldd50lgxa4UFpEziOLqimjwZJwjurqH31n9cYdBOi0RBAipty9Ako1bpqKqpEX
-         3nmNb18S9Yvbq34OwG5EVj4isGDRt9nu75YwPVXb6E93b2xCV2jcGXqvojKpN/yDfW4l
-         pyhnuj95b3Uy9b1rmrLuzFSNGLjx2PXdQGAY+YQCZ4pAVLCCAFaOns1U4IQ+lnfALzoy
-         zltNPdjfV05fmlZV2Tv8Q8V4A5xGNr8tNXDi1NoMTLYG2sbBXe3nyRgTxdI9FOz4Mzup
-         yq6Mq2rzn+6NrVKeJ/hJ8wRD9FFimIeUb39l3UgOke6JB8FMseM1/8VdxYv0gf2HIjvD
-         ZuVg==
+        bh=rLCQIdDIo0hjvRjcVna27zMmwetjRkxV8oX5TRyw2qw=;
+        b=MmpIllCb4cEgsGmk9jFaxVuPfuNP7dVZUMN6AowLxFrfOAUOuTpxMRaAM4dIiqfQJ+
+         hF7Mg2kFS2aDrHuSKCxlqJd9SgU68/PDP3ps6Q24winnQoTP8AMQiFXB8uPEaCh3bdNu
+         dgD8uo7/C1WU7d3oB82rakji2NeHpoDZLmxAAkrV9H7y/AaZORTo9LbOS8H7Ck+CtIxc
+         BcMttJ/iVmDuowEqjcs464xcnZW9n0DVUxMnFcHcNZ940TICRy1VZhEGwet4jU+3YlgH
+         NAh9HBQsN1aEFrsrAJZjDQaIrsBp5BESIEDP0mZWWgyfq62vC8H2OGs+FG1e4R/EjG/T
+         70VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=3xLzWp+VN8d56IUKCn+oZgvctc6ILOg/P6G2GbPqdKc=;
-        b=GW+X/B6UxZU5n4Lw1UWKrIN7OXxiChAlUvm3AK0ut0KApyeQ39QdktmKyJocyKYfYb
-         f7OlSo/rU3VYuu9lm1tRNyOva9rtY+f8XDW2GgJLeKEWU4xNIA1UiMqOF9lfTFk7FMOA
-         nQIvWHnck+OtRGN2mN/8Ez152nn2+TQ6VBhzQt+OIajyFvLBf9RUlgTcxRWeu68bNsbX
-         GEmH28/LDSw7HNyowcm9URBLYwa05qiORLbUYif0FmzLrQ3knCtr7lLa9xrC1qhSriIX
-         p+AvktkFs3u6xd3X3m/c4GEe8++BfUdH3TXNVE5WsCC8AsrjBz7BKpdzMF8/T8yIKA8N
-         u1XQ==
-X-Gm-Message-State: AOAM533hVmTkO+DlUbWwPboGNDzOYBBCjmUev/Cdw3bREMawVg6b4P8o
-        yk48apsdfDvdVq0z6+VM8H8PVv7SqDg3
-X-Google-Smtp-Source: ABdhPJyU0JGtkMiuWLcINboT3dByokO5rmHxkLIAGVtLVFu/F1k0AkML7xNFVmashRWlC6SkWWWwsV2ym4Mf
+        bh=rLCQIdDIo0hjvRjcVna27zMmwetjRkxV8oX5TRyw2qw=;
+        b=vHfPzde/1IcTTL7nsx/aYcjvK6qie3yHhHYleibLW07Aqr8gU3IHkHQ9/9Z3hpsp71
+         EuahpKqrvFLsypt9LItcalO4+8kuydB8UdBUyUtwgs2g9Qw0fuEAGPtDHjQ0Tf/7YPO8
+         qw/ZRYXkFE8RzvTYPHe2pT4p4/B32OVZvldDGH+yQsZSF0bJfRSxDrR9DwyOXbig1k0d
+         j4Mrfa6jr9JUeIMf4Epw4umTyElwB0NG1ibEIkVdRlzaxBv/YjZdXh4pTVVFO00Aw4x6
+         ODpLJVGAWHr7OobeATgkZ5hNEvL9EjOhimok/FZGpxKEqeHHs/eE2/GhcoQLu66n5x9Y
+         x4Pg==
+X-Gm-Message-State: AOAM531rHbcRqB4NGe1JGkatElm/6ZZGFIoE++QLBEXukNbwrez/gmAT
+        a2mZgLYJEG2i3GFlOiCvML0fRW0u/tcf
+X-Google-Smtp-Source: ABdhPJxdAUdl2TKac8QUPTEi0Tv90G7I07/SQAAXXHb0eqJQy5FdMT1rljNRxuHX+q7nsSy3s1YvPw4wYN4I
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:b6c9:16a6:f912:39d5])
- (user=irogers job=sendgmr) by 2002:a0d:df48:0:b0:2fb:3658:38b0 with SMTP id
- i69-20020a0ddf48000000b002fb365838b0mr22872026ywe.508.1652252504258; Wed, 11
- May 2022 00:01:44 -0700 (PDT)
-Date:   Wed, 11 May 2022 00:01:29 -0700
+ (user=irogers job=sendgmr) by 2002:a81:1606:0:b0:2f7:d623:703 with SMTP id
+ 6-20020a811606000000b002f7d6230703mr22911108yww.501.1652252506406; Wed, 11
+ May 2022 00:01:46 -0700 (PDT)
+Date:   Wed, 11 May 2022 00:01:30 -0700
 In-Reply-To: <20220511070133.710721-1-irogers@google.com>
-Message-Id: <20220511070133.710721-4-irogers@google.com>
+Message-Id: <20220511070133.710721-5-irogers@google.com>
 Mime-Version: 1.0
 References: <20220511070133.710721-1-irogers@google.com>
 X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
-Subject: [PATCH 3/7] perf vendor events: Fix Ivytown UNC_M_ACT_COUNT.RD umask
+Subject: [PATCH 4/7] perf jevents: Modify match field
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -85,37 +85,249 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The event had two umasks with the umask of 3 being correct.
-Note: this change wasn't automatically generated as there is no CSV for
-Ivytown uncore events at:
-https://github.com/intel/event-converter-for-linux-perf
+The match_field function looks for json values to append to the event
+string. As the C code processes these in order the output order matches
+that in the json dictionary. Python json readers read the entire
+dictionary and lose the ordering. To make the python and C output
+comparable makee the C code first read the extra fields then append them
+to the event in an order not determined by their order in the file.
+
+Modify the pmu-events test so that test expectations match the new
+order.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/pmu-events/arch/x86/ivytown/uncore-memory.json | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ tools/perf/pmu-events/jevents.c | 82 ++++++++++++++++++++-------------
+ tools/perf/tests/pmu-events.c   | 24 +++++-----
+ 2 files changed, 62 insertions(+), 44 deletions(-)
 
-diff --git a/tools/perf/pmu-events/arch/x86/ivytown/uncore-memory.json b/tools/perf/pmu-events/arch/x86/ivytown/uncore-memory.json
-index df4b43294fa0..e8917cb59566 100644
---- a/tools/perf/pmu-events/arch/x86/ivytown/uncore-memory.json
-+++ b/tools/perf/pmu-events/arch/x86/ivytown/uncore-memory.json
-@@ -5,8 +5,7 @@
-         "EventCode": "0x1",
-         "EventName": "UNC_M_ACT_COUNT.RD",
-         "PerPkg": "1",
--        "UMask": "0x1",
--        "Umask": "0x3",
-+        "UMask": "0x3",
-         "Unit": "iMC"
-     },
-     {
+diff --git a/tools/perf/pmu-events/jevents.c b/tools/perf/pmu-events/jevents.c
+index e1f7c7afd435..cee61c4ed59e 100644
+--- a/tools/perf/pmu-events/jevents.c
++++ b/tools/perf/pmu-events/jevents.c
+@@ -207,21 +207,6 @@ static struct msrmap {
+ 	{ NULL, NULL }
+ };
+ 
+-static struct field {
+-	const char *field;
+-	const char *kernel;
+-} fields[] = {
+-	{ "UMask",	"umask=" },
+-	{ "CounterMask", "cmask=" },
+-	{ "Invert",	"inv=" },
+-	{ "AnyThread",	"any=" },
+-	{ "EdgeDetect",	"edge=" },
+-	{ "SampleAfterValue", "period=" },
+-	{ "FCMask",	"fc_mask=" },
+-	{ "PortMask",	"ch_mask=" },
+-	{ NULL, NULL }
+-};
+-
+ static void cut_comma(char *map, jsmntok_t *newval)
+ {
+ 	int i;
+@@ -233,21 +218,6 @@ static void cut_comma(char *map, jsmntok_t *newval)
+ 	}
+ }
+ 
+-static int match_field(char *map, jsmntok_t *field, int nz,
+-		       char **event, jsmntok_t *val)
+-{
+-	struct field *f;
+-	jsmntok_t newval = *val;
+-
+-	for (f = fields; f->field; f++)
+-		if (json_streq(map, field, f->field) && nz) {
+-			cut_comma(map, &newval);
+-			addfield(map, event, ",", f->kernel, &newval);
+-			return 1;
+-		}
+-	return 0;
+-}
+-
+ static struct msrmap *lookup_msr(char *map, jsmntok_t *val)
+ {
+ 	jsmntok_t newval = *val;
+@@ -581,6 +551,14 @@ static int json_events(const char *fn,
+ 		jsmntok_t *precise = NULL;
+ 		jsmntok_t *obj = tok++;
+ 		bool configcode_present = false;
++		char *umask = NULL;
++		char *cmask = NULL;
++		char *inv = NULL;
++		char *any = NULL;
++		char *edge = NULL;
++		char *period = NULL;
++		char *fc_mask = NULL;
++		char *ch_mask = NULL;
+ 
+ 		EXPECT(obj->type == JSMN_OBJECT, obj, "expected object");
+ 		for (j = 0; j < obj->size; j += 2) {
+@@ -596,8 +574,23 @@ static int json_events(const char *fn,
+ 			       "Expected string value");
+ 
+ 			nz = !json_streq(map, val, "0");
+-			if (match_field(map, field, nz, &event, val)) {
+-				/* ok */
++			/* match_field */
++			if (json_streq(map, field, "UMask") && nz) {
++				addfield(map, &umask, "", "umask=", val);
++			} else if (json_streq(map, field, "CounterMask") && nz) {
++				addfield(map, &cmask, "", "cmask=", val);
++			} else if (json_streq(map, field, "Invert") && nz) {
++				addfield(map, &inv, "", "inv=", val);
++			} else if (json_streq(map, field, "AnyThread") && nz) {
++				addfield(map, &any, "", "any=", val);
++			} else if (json_streq(map, field, "EdgeDetect") && nz) {
++				addfield(map, &edge, "", "edge=", val);
++			} else if (json_streq(map, field, "SampleAfterValue") && nz) {
++				addfield(map, &period, "", "period=", val);
++			} else if (json_streq(map, field, "FCMask") && nz) {
++				addfield(map, &fc_mask, "", "fc_mask=", val);
++			} else if (json_streq(map, field, "PortMask") && nz) {
++				addfield(map, &ch_mask, "", "ch_mask=", val);
+ 			} else if (json_streq(map, field, "EventCode")) {
+ 				char *code = NULL;
+ 				addfield(map, &code, "", "", val);
+@@ -690,6 +683,23 @@ static int json_events(const char *fn,
+ 		else
+ 			snprintf(buf, sizeof buf, "event=%#llx", eventcode);
+ 		addfield(map, &event, ",", buf, NULL);
++		if (any)
++			addfield(map, &event, ",", any, NULL);
++		if (ch_mask)
++			addfield(map, &event, ",", ch_mask, NULL);
++		if (cmask)
++			addfield(map, &event, ",", cmask, NULL);
++		if (edge)
++			addfield(map, &event, ",", edge, NULL);
++		if (fc_mask)
++			addfield(map, &event, ",", fc_mask, NULL);
++		if (inv)
++			addfield(map, &event, ",", inv, NULL);
++		if (period)
++			addfield(map, &event, ",", period, NULL);
++		if (umask)
++			addfield(map, &event, ",", umask, NULL);
++
+ 		if (je.desc && extra_desc)
+ 			addfield(map, &je.desc, " ", extra_desc, NULL);
+ 		if (je.long_desc && extra_desc)
+@@ -718,6 +728,14 @@ static int json_events(const char *fn,
+ 		je.event = real_event(je.name, event);
+ 		err = func(data, &je);
+ free_strings:
++		free(umask);
++		free(cmask);
++		free(inv);
++		free(any);
++		free(edge);
++		free(period);
++		free(fc_mask);
++		free(ch_mask);
+ 		free(event);
+ 		free(je.desc);
+ 		free(je.name);
+diff --git a/tools/perf/tests/pmu-events.c b/tools/perf/tests/pmu-events.c
+index b74c6ef59e51..f13368569d8b 100644
+--- a/tools/perf/tests/pmu-events.c
++++ b/tools/perf/tests/pmu-events.c
+@@ -63,33 +63,33 @@ static const struct perf_pmu_test_event bp_l2_btb_correct = {
+ static const struct perf_pmu_test_event segment_reg_loads_any = {
+ 	.event = {
+ 		.name = "segment_reg_loads.any",
+-		.event = "umask=0x80,period=200000,event=0x6",
++		.event = "event=0x6,period=200000,umask=0x80",
+ 		.desc = "Number of segment register loads",
+ 		.topic = "other",
+ 	},
+-	.alias_str = "umask=0x80,period=0x30d40,event=0x6",
++	.alias_str = "event=0x6,period=0x30d40,umask=0x80",
+ 	.alias_long_desc = "Number of segment register loads",
+ };
+ 
+ static const struct perf_pmu_test_event dispatch_blocked_any = {
+ 	.event = {
+ 		.name = "dispatch_blocked.any",
+-		.event = "umask=0x20,period=200000,event=0x9",
++		.event = "event=0x9,period=200000,umask=0x20",
+ 		.desc = "Memory cluster signals to block micro-op dispatch for any reason",
+ 		.topic = "other",
+ 	},
+-	.alias_str = "umask=0x20,period=0x30d40,event=0x9",
++	.alias_str = "event=0x9,period=0x30d40,umask=0x20",
+ 	.alias_long_desc = "Memory cluster signals to block micro-op dispatch for any reason",
+ };
+ 
+ static const struct perf_pmu_test_event eist_trans = {
+ 	.event = {
+ 		.name = "eist_trans",
+-		.event = "umask=0x0,period=200000,event=0x3a",
++		.event = "event=0x3a,period=200000,umask=0x0",
+ 		.desc = "Number of Enhanced Intel SpeedStep(R) Technology (EIST) transitions",
+ 		.topic = "other",
+ 	},
+-	.alias_str = "umask=0,period=0x30d40,event=0x3a",
++	.alias_str = "event=0x3a,period=0x30d40,umask=0",
+ 	.alias_long_desc = "Number of Enhanced Intel SpeedStep(R) Technology (EIST) transitions",
+ };
+ 
+@@ -132,13 +132,13 @@ static const struct perf_pmu_test_event uncore_hisi_ddrc_flux_wcmd = {
+ static const struct perf_pmu_test_event unc_cbo_xsnp_response_miss_eviction = {
+ 	.event = {
+ 		.name = "unc_cbo_xsnp_response.miss_eviction",
+-		.event = "umask=0x81,event=0x22",
++		.event = "event=0x22,umask=0x81",
+ 		.desc = "A cross-core snoop resulted from L3 Eviction which misses in some processor core. Unit: uncore_cbox ",
+ 		.topic = "uncore",
+ 		.long_desc = "A cross-core snoop resulted from L3 Eviction which misses in some processor core",
+ 		.pmu = "uncore_cbox",
+ 	},
+-	.alias_str = "umask=0x81,event=0x22",
++	.alias_str = "event=0x22,umask=0x81",
+ 	.alias_long_desc = "A cross-core snoop resulted from L3 Eviction which misses in some processor core",
+ 	.matching_pmu = "uncore_cbox_0",
+ };
+@@ -146,13 +146,13 @@ static const struct perf_pmu_test_event unc_cbo_xsnp_response_miss_eviction = {
+ static const struct perf_pmu_test_event uncore_hyphen = {
+ 	.event = {
+ 		.name = "event-hyphen",
+-		.event = "umask=0x00,event=0xe0",
++		.event = "event=0xe0,umask=0x00",
+ 		.desc = "UNC_CBO_HYPHEN. Unit: uncore_cbox ",
+ 		.topic = "uncore",
+ 		.long_desc = "UNC_CBO_HYPHEN",
+ 		.pmu = "uncore_cbox",
+ 	},
+-	.alias_str = "umask=0,event=0xe0",
++	.alias_str = "event=0xe0,umask=0",
+ 	.alias_long_desc = "UNC_CBO_HYPHEN",
+ 	.matching_pmu = "uncore_cbox_0",
+ };
+@@ -160,13 +160,13 @@ static const struct perf_pmu_test_event uncore_hyphen = {
+ static const struct perf_pmu_test_event uncore_two_hyph = {
+ 	.event = {
+ 		.name = "event-two-hyph",
+-		.event = "umask=0x00,event=0xc0",
++		.event = "event=0xc0,umask=0x00",
+ 		.desc = "UNC_CBO_TWO_HYPH. Unit: uncore_cbox ",
+ 		.topic = "uncore",
+ 		.long_desc = "UNC_CBO_TWO_HYPH",
+ 		.pmu = "uncore_cbox",
+ 	},
+-	.alias_str = "umask=0,event=0xc0",
++	.alias_str = "event=0xc0,umask=0",
+ 	.alias_long_desc = "UNC_CBO_TWO_HYPH",
+ 	.matching_pmu = "uncore_cbox_0",
+ };
 -- 
 2.36.0.512.ge40c2bad7a-goog
 

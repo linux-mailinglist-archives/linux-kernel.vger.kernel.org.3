@@ -2,111 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B35DE523CFF
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:03:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4248F523D02
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346559AbiEKTDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 15:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
+        id S1346565AbiEKTFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 15:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241347AbiEKTDk (ORCPT
+        with ESMTP id S236747AbiEKTFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 15:03:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B11861296
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:03:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8FEDB8260A
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 19:03:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C577C340EE
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 19:03:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652295816;
-        bh=sgS8I586wmxDsWEfk8EYenY4Nf+IiynsiclSqvw9c1I=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=APM+OUuxz0Q71LKdL40gVite+fbwNKwg6+VMNJLoq/G6tlH1XJbvRYImhu+2++Umi
-         JsOeeZFuukrZVpnHB7HXoe1NrSLDWxH/RLqopHOMjeeVHSZpLUiMgjWNb7LW75o6BX
-         QRTx7oIxDHvPsEVw7sugtR6TtZC83Y2u/KzGScwYZBYIsXxmKIXZfPazja0bRPMhAi
-         3qbwb3bvfTnibHOz/Z1/VTrQnIxJRM3Yxp/zmyeqCNnwHxLjoR299kQpjQNAGf+bnB
-         lZ9NfJuKXaAKp4FIomshX2MjRHBnx8ZulNzODN2Kc6jrm2882UyovgNnlC0iGZYCi7
-         gCph4X0krdV0A==
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 1D84A27C0054;
-        Wed, 11 May 2022 15:03:35 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute2.internal (MEProxy); Wed, 11 May 2022 15:03:35 -0400
-X-ME-Sender: <xms:hgh8Yu-dz_mlCRNjfcHn9MpXJJV3pxMqwGNHu0olOOtuPbqGIDkAYA>
-    <xme:hgh8YusUlQfohxBXD6x1B10kJZ82VE59cjGeDiMm0IH9mHvL-KL8LCK7yTac8JPWu
-    fmnyHBIqU6Pdu54NCM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgeehgdduvdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
-    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepvdfhuedvtdfhudffhfekkefftefghfeltdelgeffteehueegjeff
-    udehgfetiefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
-    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
-    igrdhluhhtohdruhhs
-X-ME-Proxy: <xmx:hgh8YkBiSTUpSJDR9W0K_D3Zni7UPGuXHNwVuPtlVuFluNanzWfynw>
-    <xmx:hgh8YmfBZ_YXPenT3oE94DDVrH6lERAtxmE4KjRjgyswkU4wEXADUA>
-    <xmx:hgh8YjOnJ_vEy9VgIikDXF1o_SSSjBleedcopheJOUpv5ugKYz_iEg>
-    <xmx:hwh8Yp3yuDyBI5CFW6tKvuSTODiqwZhhasMLOaDnJGFgU6XVauuJsw>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B961331A005D; Wed, 11 May 2022 15:03:34 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-591-gfe6c3a2700-fm-20220427.001-gfe6c3a27
-Mime-Version: 1.0
-Message-Id: <7c87b9f7-0a26-41cf-ba34-3dbd37caa2b8@www.fastmail.com>
-In-Reply-To: <87o803dijt.fsf@oldenburg.str.redhat.com>
-References: <898932fe61db6a9d61bc2458fa2f6049f1ca9f5c.1652290558.git.luto@kernel.org>
- <87o803dijt.fsf@oldenburg.str.redhat.com>
-Date:   Wed, 11 May 2022 12:03:14 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Florian Weimer" <fweimer@redhat.com>
-Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "Kees Cook" <keescook@chromium.org>
-Subject: Re: [PATCH] x86/vsyscall: Remove CONFIG_LEGACY_VSYSCALL_EMULATE
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 11 May 2022 15:05:15 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCDB661604
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:05:13 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id a21so3693475edb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:05:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=4K/BqknQQ3B81Ri9IMPLTLrHNMzicKZVVfstqbcQoXw=;
+        b=A/KCQGg5ugLO69SideOJEv3eS/RyBeILjrfEq1trEjYp4cb9RZCmIZVFqxyI7WsooG
+         XsWzCAMH5B+G8qNASIFfM8v3cZTbZl3x5TWJGNd90LgqR8xJipz7OP0NHwqKYzKNE3I7
+         MVIOk5NK+bWC0jwrLMNufBwoueLjBB6jdZuiE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=4K/BqknQQ3B81Ri9IMPLTLrHNMzicKZVVfstqbcQoXw=;
+        b=4V3IJG+cueFvWR/UtLuSufTojPkagDyHSjMi23iBqOjXiUIyXj6I12n4BuZYA8dLgH
+         Jpa+bxaSHjhYAocH9C97G2fmASusMxb1a6ALxl0eHBFyu5nAdO3ydhbMUfE+x8ApE9o+
+         5wy0u6LW/eZG3z6e/uodH+H/OdHL52mJFSeBxVzRYiRj4cLe6HTHIBagNznt+hnvusPP
+         di92PTOTIxk6j6Fqi+vzVkXVp58Cky4XwysJHXLF9anacksMXXX97fUqUFph7zHGsxz0
+         Za+Or32LZLkKWRBhDM+1/itEzzdqozlX4xH0NBN8QnTHLiNFqM9KbwPFXHhHXbhQvsIU
+         gOtA==
+X-Gm-Message-State: AOAM530VxrRTAARq5E2sPaV/cD6BNzzZVfuX1DkgcHWV3GqGRODtFRUr
+        jvmS5meoFFgB9dja3O6nw2zQ7A==
+X-Google-Smtp-Source: ABdhPJxzbQWruH8VN9oOr7p/K2/W+DT07g4nY6eAZpa/3zcSLOTXAgDkDgKjcZvZEO42b/8vTn+Ifg==
+X-Received: by 2002:a05:6402:278d:b0:42a:2dc0:744f with SMTP id b13-20020a056402278d00b0042a2dc0744fmr1951646ede.226.1652295912301;
+        Wed, 11 May 2022 12:05:12 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id i26-20020a1709063c5a00b006fa9384a0b5sm1259045ejg.61.2022.05.11.12.05.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 12:05:11 -0700 (PDT)
+Date:   Wed, 11 May 2022 21:05:09 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Christian =?iso-8859-1?Q?K=F6nig?= 
+        <ckoenig.leichtzumerken@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Stone <daniel@fooishbar.org>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v4 10/15] drm/shmem-helper: Take reservation lock instead
+ of drm_gem_shmem locks
+Message-ID: <YnwI5UX/zvmnAHvg@phenom.ffwll.local>
+Mail-Followup-To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Stone <daniel@fooishbar.org>,
+        David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>, Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dmitry Osipenko <digetx@gmail.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+References: <01506516-ab2f-cb6e-7507-f2a3295efb59@collabora.com>
+ <YnOHAh9I1ds4+1J+@phenom.ffwll.local>
+ <83e68918-68de-c0c6-6f9b-e94d34b19383@collabora.com>
+ <YnkaUk0mZNuPsZ5r@phenom.ffwll.local>
+ <4d08b382-0076-1ea2-b565-893d50b453cb@collabora.com>
+ <YnuziJDmXVR09UzP@phenom.ffwll.local>
+ <56787b70-fb64-64da-6006-d3aa3ed59d12@gmail.com>
+ <3a362c32-870c-1d73-bba6-bbdcd62dc326@collabora.com>
+ <YnvWUbh5QDDs6u2B@phenom.ffwll.local>
+ <ba2836d0-9a3a-b879-cb1e-a48aed31637d@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ba2836d0-9a3a-b879-cb1e-a48aed31637d@collabora.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 11, 2022 at 06:40:32PM +0300, Dmitry Osipenko wrote:
+> On 5/11/22 18:29, Daniel Vetter wrote:
+> > On Wed, May 11, 2022 at 06:14:00PM +0300, Dmitry Osipenko wrote:
+> >> On 5/11/22 17:24, Christian König wrote:
+> >>> Am 11.05.22 um 15:00 schrieb Daniel Vetter:
+> >>>> On Tue, May 10, 2022 at 04:39:53PM +0300, Dmitry Osipenko wrote:
+> >>>>> [SNIP]
+> >>>>> Since vmapping implies implicit pinning, we can't use a separate lock in
+> >>>>> drm_gem_shmem_vmap() because we need to protect the
+> >>>>> drm_gem_shmem_get_pages(), which is invoked by drm_gem_shmem_vmap() to
+> >>>>> pin the pages and requires the dma_resv_lock to be locked.
+> >>>>>
+> >>>>> Hence the problem is:
+> >>>>>
+> >>>>> 1. If dma-buf importer holds the dma_resv_lock and invokes
+> >>>>> dma_buf_vmap() -> drm_gem_shmem_vmap(), then drm_gem_shmem_vmap() shall
+> >>>>> not take the dma_resv_lock.
+> >>>>>
+> >>>>> 2. Since dma-buf locking convention isn't specified, we can't assume
+> >>>>> that dma-buf importer holds the dma_resv_lock around dma_buf_vmap().
+> >>>>>
+> >>>>> The possible solutions are:
+> >>>>>
+> >>>>> 1. Specify the dma_resv_lock convention for dma-bufs and make all
+> >>>>> drivers to follow it.
+> >>>>>
+> >>>>> 2. Make only DRM drivers to hold dma_resv_lock around dma_buf_vmap().
+> >>>>> Other non-DRM drivers will get the lockdep warning.
+> >>>>>
+> >>>>> 3. Make drm_gem_shmem_vmap() to take the dma_resv_lock and get deadlock
+> >>>>> if dma-buf importer holds the lock.
+> >>>>>
+> >>>>> ...
+> >>>> Yeah this is all very annoying.
+> >>> Ah, yes that topic again :)
+> >>>
+> >>> I think we could relatively easily fix that by just defining and
+> >>> enforcing that the dma_resv_lock must have be taken by the caller when
+> >>> dma_buf_vmap() is called.
+> >>>
+> >>> A two step approach should work:
+> >>> 1. Move the call to dma_resv_lock() into the dma_buf_vmap() function and
+> >>> remove all lock taking from the vmap callback implementations.
+> >>> 2. Move the call to dma_resv_lock() into the callers of dma_buf_vmap()
+> >>> and enforce that the function is called with the lock held.
+> >> I've doubts about the need to move out the dma_resv_lock() into the
+> >> callers of dma_buf_vmap()..
+> >>
+> >> I looked through all the dma_buf_vmap() users and neither of them
+> >> interacts with dma_resv_lock() at all, i.e. nobody takes the lock
+> >> in/outside of dma_buf_vmap(). Hence it's easy and more practical to make
+> >> dma_buf_mmap/vmap() to take the dma_resv_lock by themselves.
+> > i915_gem_dmabuf_vmap -> i915_gem_object_pin_map_unlocked ->
+> >   i915_gem_object_lock -> dma_resv_lock
+> > 
+> > And all the ttm drivers should work similarly. So there's definitely
+> > drivers which grab dma_resv_lock from their vmap callback.
+> 
+> Grr.. I'll take another look.
+> 
+> >> It's unclear to me which driver may ever want to do the mapping under
+> >> the dma_resv_lock. But if we will ever have such a driver that will need
+> >> to map imported buffer under dma_resv_lock, then we could always add the
+> >> dma_buf_vmap_locked() variant of the function. In this case the locking
+> >> rule will sound like this:
+> >>
+> >> "All dma-buf importers are responsible for holding the dma-reservation
+> >> lock around the dmabuf->ops->mmap/vmap() calls."
+> 
+> Are you okay with this rule?
 
+Yeah I think long-term it's where we want to be, just trying to find
+clever ways to get there.
 
-On Wed, May 11, 2022, at 11:35 AM, Florian Weimer wrote:
-> * Andy Lutomirski:
->
->> CONFIG_LEGACY_VSYSCALL_EMULATE is, as far as I know, only needed for the
->> combined use of exotic and outdated debugging mechanisms with outdated
->> binaries.  At this point, no one should be using it.  We would like to
->> implement dynamic switching of vsyscalls, but this is much more
->> complicated to support in EMULATE mode than XONLY mode.
->>
->> So let's force all the distros off of EMULATE mode.  If anyone actually
->> needs it, they can set vsyscall=emulate, and we can then get away with
->> refusing to support newer security models if that option is set.
->>
->> Cc: x86@kernel.org
->> Cc: Kees Cook <keescook@chromium.org>
->> Cc: Florian Weimer <fweimer@redhat.com>
->> Signed-off-by: Andy Lutomirski <luto@kernel.org>
->
-> Sounds a good idea to me.
->
-> Acked-by: Florian Weimer <fweimer@redhat.com>
->
-> Regarding the mechanics, is it customary to remove the actual code (the
-> EMULATE enum constant) in later commits?
->
+And I think Christian agrees with that?
 
-Might be several versions later. This patch intentionally still supports booting with vsyscall=emulate.
+> >>> It shouldn't be that hard to clean up. The last time I looked into it my
+> >>> main problem was that we didn't had any easy unit test for it.
+> >> Do we have any tests for dma-bufs at all? It's unclear to me what you
+> >> are going to test in regards to the reservation locks, could you please
+> >> clarify?
+> > Unfortunately not really :-/ Only way really is to grab a driver which
+> > needs vmap (those are mostly display drivers) on an imported buffer, and
+> > see what happens.
+> > 
+> > 2nd best is liberally sprinkling lockdep annotations all over the place
+> > and throwing it at intel ci (not sure amd ci is accessible to the public)
+> > and then hoping that's good enough. Stuff like might_lock and
+> > dma_resv_assert_held.
+> 
+> Alright
+
+So throwing it at intel-gfx-ci can't hurt I think, but that only covers
+i915 so doesn't really help with the bigger issue of catching all the
+drivers.
+
+Cheers, Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

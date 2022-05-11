@@ -2,82 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B1F3522F9F
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87725522F98
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbiEKJkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 05:40:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54336 "EHLO
+        id S230346AbiEKJjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 05:39:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234489AbiEKJie (ORCPT
+        with ESMTP id S242976AbiEKJjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 05:38:34 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875E649934
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:37:23 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id e12so2831592ybc.11
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:37:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=J7qdb1hLqH5S/Qijzmj6Il1EkPWwe2L7oUVkXG05Znc=;
-        b=dJOWwBZVi7xQ3DLFYimxYV6NWUkjRtnDp21YC96glDvJ7XtbuAr6oQBhLY6kKOcB1o
-         93nhch2e5dIYHSHu4m2eXJF5vve5qNg+cEsEvIZnd2DvGRWv3WRpaGNNAqH46jgXjfxr
-         3w6cXuxClKtZZDHqrskiHW8HwkPVpJvSgaf/s=
+        Wed, 11 May 2022 05:39:02 -0400
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573F860B8B;
+        Wed, 11 May 2022 02:38:27 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id h16so1443013wrb.2;
+        Wed, 11 May 2022 02:38:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=J7qdb1hLqH5S/Qijzmj6Il1EkPWwe2L7oUVkXG05Znc=;
-        b=pgKBBa/48G6A/Cs+wXl6pA8Ageo6H1ywhHZly1b/El7A5o9qmwVRwj+WttYEKujgVV
-         DBpgU729xJn7xSn93glGAVFsxvF3RkHCWrHbHM5MIe0+7cp++peyrNrxIABPHFd1MixB
-         +fWEkB7xcdAhu3o72/B+mj2EqhzCyQQN/gSfvacfE8v05hxTzeK2J8hFAsjW7n5qgpJO
-         jwCMOm6NnhOjrh5nh9P7g4V5eh1G4Q7LErS4z/hrkosobTTv8U9s6wcjIOkyNtBPAzJ4
-         s0zEgLoFanaJIpWAYmnzw/V8J8OEEv6s8jUX/ZDIGzh7W0uRfbpXMFdCa21/pl4N/UU5
-         Rlmw==
-X-Gm-Message-State: AOAM533xjC96TqOPGaNBezy00We73Oz3WxiWAeXn3YQ6LTU3Wih6gXcl
-        Ij8SnLRIIQBKVbt/6m7ndoKK6EJwL+jTy5kaRaCHmg==
-X-Google-Smtp-Source: ABdhPJx+rswrjLDO8mmFJlrYKb01zVPGHK7SBm118TyWvbFUgfQzKgZC8gEp79UUSYh48Im8RzQ+SCSNDCQpXLSz9rc=
-X-Received: by 2002:a5b:44e:0:b0:64a:c0be:c59c with SMTP id
- s14-20020a5b044e000000b0064ac0bec59cmr15610827ybp.573.1652261841760; Wed, 11
- May 2022 02:37:21 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=lzACg4GskWgzpiC8FnJ6syyhmXEEgXE0lIGs/KbCq9o=;
+        b=jtKfFP1lCqOriGDRrs8EeuSS2fvWnHaFJLntOm0zScTV/rPmrps6rxl3v72KDTi7LO
+         vEh9zC+0vOsL3pEwj0192VQcqij+iraKlP01ZaMcaoW6JRO/IOk32pTaTpxNLqegF0+R
+         WEOEdObBj/buvrnpFVkee+nfPmdtk3D+fkdhRVr5fWpjWcVdMbRpcKR6fRzF+s0M/tt+
+         PD00mRDywuk+RjbH+mh2icRjJXpFk6spKIkXGyWNLyOG1R0vK+vjzuSdIux5Vxv17e1i
+         me9gnlL/jNI2xTosySaSv7087/YcyppdBeo51tZ4z8lrHlbahZNZvYj5pBEorz9Hha3c
+         dXGw==
+X-Gm-Message-State: AOAM531PApvYR3wH8V19cW7kGH/DK8AzoptiEUGpS2SMtTj+ZX2NW3zP
+        X0AaK8wyApdlcVdqe0r9Pf4NtdwHnwE=
+X-Google-Smtp-Source: ABdhPJwoJ97JtoBiACfuZa0lRu3jF4CuA/9qZMyWjZsGxIHdriTf72Obw5v7nF1vuabJn1bt50PEUw==
+X-Received: by 2002:a5d:4b48:0:b0:207:9abd:792a with SMTP id w8-20020a5d4b48000000b002079abd792amr11189756wrs.118.1652261905757;
+        Wed, 11 May 2022 02:38:25 -0700 (PDT)
+Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
+        by smtp.gmail.com with ESMTPSA id e8-20020a5d5308000000b0020c5253d8c2sm1209516wrv.14.2022.05.11.02.38.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 02:38:25 -0700 (PDT)
+Message-ID: <cc73ed8b-b51f-59bc-ef4b-5f7e4ab26828@kernel.org>
+Date:   Wed, 11 May 2022 11:38:24 +0200
 MIME-Version: 1.0
-References: <20220511013057.245827-1-dlunev@chromium.org> <CAJfpegsmyY+D4kK3ov51FLGA=RkyGDKMcYiMo2zBqYuFNs78JQ@mail.gmail.com>
- <CAONX=-dqY64VkqF6cNYvm8t-ad8XRqDhELP9icfPTPD2iLobLA@mail.gmail.com> <CAJfpegvUZheWb3eJwVrpBDYzwQH=zQsuq9R8mpcXb3fqzzEdiQ@mail.gmail.com>
-In-Reply-To: <CAJfpegvUZheWb3eJwVrpBDYzwQH=zQsuq9R8mpcXb3fqzzEdiQ@mail.gmail.com>
-From:   Daniil Lunev <dlunev@chromium.org>
-Date:   Wed, 11 May 2022 19:37:11 +1000
-Message-ID: <CAONX=-cxA-tZOSo33WK9iJU61yeDX8Ct_PwOMD=5WXLYTJ-Mjg@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Prevent re-use of FUSE superblock after force unmount
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     linux-fsdevel@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH -next] tty: serial: max3100: Add missing
+ uart_unregister_driver in max3100_probe
+Content-Language: en-US
+To:     Zheng Bin <zhengbin13@huawei.com>, gregkh@linuxfoundation.org,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     gaochao49@huawei.com
+References: <20220511071523.3128725-1-zhengbin13@huawei.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220511071523.3128725-1-zhengbin13@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> No progress has been made in the past decade with regard to suspend.
-> I mainly put that down to lack of interest.
->
-That is unfortunate.
+On 11. 05. 22, 9:15, Zheng Bin wrote:
+> max3100_probe misses a call uart_unregister_driver in error path,
+> this patch fixes that.
 
-> It is a legitimate operation, but one that is not guaranteed to leave
-> the system in a clean state.
-Sure, I don't think I can argue about it. The current behaviour is a problem,
-however, since there is no other way to ensure the system can suspend
-reliably but force unmount - we try normal unmount first and proceed with
-force if that fails. Do you think that the approach proposed in this patchset
-is a reasonable path to mitigate the issue?
+I believe, that's intentional. Cf. uart_driver_registered.
 
-Thanks,
-Daniil
+> Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
+> ---
+>   drivers/tty/serial/max3100.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/tty/serial/max3100.c b/drivers/tty/serial/max3100.c
+> index 0b5f21fbb53d..6d34ca2a3f7b 100644
+> --- a/drivers/tty/serial/max3100.c
+> +++ b/drivers/tty/serial/max3100.c
+> @@ -752,6 +752,7 @@ static int max3100_probe(struct spi_device *spi)
+>   		if (!max3100s[i])
+>   			break;
+>   	if (i == MAX_MAX3100) {
+> +		uart_unregister_driver(&max3100_uart_driver);
+>   		dev_warn(&spi->dev, "too many MAX3100 chips\n");
+>   		mutex_unlock(&max3100s_lock);
+>   		return -ENOMEM;
+> @@ -759,6 +760,7 @@ static int max3100_probe(struct spi_device *spi)
+> 
+>   	max3100s[i] = kzalloc(sizeof(struct max3100_port), GFP_KERNEL);
+>   	if (!max3100s[i]) {
+> +		uart_unregister_driver(&max3100_uart_driver);
+>   		dev_warn(&spi->dev,
+>   			 "kmalloc for max3100 structure %d failed!\n", i);
+>   		mutex_unlock(&max3100s_lock);
+> --
+> 2.31.1
+> 
+
+
+-- 
+js
+suse labs

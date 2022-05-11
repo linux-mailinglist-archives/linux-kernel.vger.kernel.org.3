@@ -2,71 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 166F5523439
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:28:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8237A523440
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:32:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243786AbiEKN2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41406 "EHLO
+        id S243592AbiEKNc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:32:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243678AbiEKN0I (ORCPT
+        with ESMTP id S232658AbiEKNcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:26:08 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D51BE0E;
-        Wed, 11 May 2022 06:26:04 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 24BDPv53007361
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 May 2022 09:25:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1652275559; bh=abbENq8IYOkc31p6pnrCQWyxwIO3BZIyZtmCWB5OPRU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=HeH4aOpTDpaJiWJvLNgGACAFXgFVu5qorYBNh/xr8wtCmvHqVqhBquLL3LlALBk5C
-         er0AFygPA4IIq1YmJiaFdJVwIm9d5Tn9o8cU9NAQaPXheZtPf0Hnqnu0oS4ZmxLzXj
-         u1mVEZdjxQer8QVYo6+IjvnJxIkrqUP6MAW4cCCVLdOI8JPwuVops76ZeSdlo/PKDL
-         x9/vlSOQiA1H8gjIWX9ozXcm8orry08eGpYpOR9O93Kz6KrK8O0ZQwdzZ1NOidFokd
-         SRqUFlb9niC/ii3zzbZ8SZBmV3XooiqXjTMtvut+q9b+m1Ijh1QLJpzj2kaSAf8YSh
-         Hr5oYa0oXvj6Q==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id B043E15C3F0C; Wed, 11 May 2022 09:25:57 -0400 (EDT)
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     linux-ext4@vger.kernel.org, Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     "Theodore Ts'o" <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH] ext4: Get rid of unused DEFAULT_MB_OPTIMIZE_SCAN
-Date:   Wed, 11 May 2022 09:25:55 -0400
-Message-Id: <165227553566.382666.7632158616841910185.b4-ty@mit.edu>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220315114454.104182-1-ojaswin@linux.ibm.com>
-References: <20220315114454.104182-1-ojaswin@linux.ibm.com>
+        Wed, 11 May 2022 09:32:23 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89C162204;
+        Wed, 11 May 2022 06:32:17 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=tonylu@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VCwIlBX_1652275933;
+Received: from localhost(mailfrom:tonylu@linux.alibaba.com fp:SMTPD_---0VCwIlBX_1652275933)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 11 May 2022 21:32:14 +0800
+Date:   Wed, 11 May 2022 21:32:13 +0800
+From:   Tony Lu <tonylu@linux.alibaba.com>
+To:     Guangguan Wang <guangguan.wang@linux.alibaba.com>
+Cc:     kgraul@linux.ibm.com, davem@davemloft.net, kuba@kernel.org,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 2/2] net/smc: align the connect behaviour with TCP
+Message-ID: <Ynu63ZIz433CYBtb@TonyMac-Alibaba>
+Reply-To: Tony Lu <tonylu@linux.alibaba.com>
+References: <20220509115837.94911-1-guangguan.wang@linux.alibaba.com>
+ <20220509115837.94911-3-guangguan.wang@linux.alibaba.com>
+ <Ynowrcnqb/wv1iNt@TonyMac-Alibaba>
+ <b380e302-5b16-2de0-eca0-9805359daaaa@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b380e302-5b16-2de0-eca0-9805359daaaa@linux.alibaba.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Mar 2022 17:14:54 +0530, Ojaswin Mujoo wrote:
-> After recent changes to the mb_optimize_scan mount option
-> the DEFAULT_MB_OPTIMIZE_SCAN is no longer needed so get
-> rid of it.
+On Tue, May 10, 2022 at 08:58:38PM +0800, Guangguan Wang wrote:
 > 
 > 
+> On 2022/5/10 17:30, Tony Lu wrote:
+> > On Mon, May 09, 2022 at 07:58:37PM +0800, Guangguan Wang wrote:
+> >> Connect with O_NONBLOCK will not be completed immediately
+> >> and returns -EINPROGRESS. It is possible to use selector/poll
+> >> for completion by selecting the socket for writing. After select
+> >> indicates writability, a second connect function call will return
+> >> 0 to indicate connected successfully as TCP does, but smc returns
+> > 
+> > If the connection is established successfully, the following up call of
+> > connect() returns -EISCONN (SS_CONNECTED), which is expected and SMC
+> > does it, same as TCP.
+> > 
+> > In case of misunderstanding, could you append more detailed information?
+> > 
+> > Thanks,
+> > Tony Lu
+> > 
+> 
+> io_uring uses nonblocking connect as follow steps:
+>   1) call connect with nonblocking
+>   2) wait for selector/poll to indicate writability
+>   3) call connect to confirm connection's state
+> 
+> In the third step, tcp changes the socket state from SS_CONNECTING to
+> SS_CONNECTED and returns 0 if the connection is established successfully,
+> but smc returns -EISCONN.
 
-Applied, thanks!
+Based on the steps you list, I am wondering if it is finished in the
+step #1, the call of connect() in step #3 would return -EISCONN. Should
+we check 0 and -EISCONN in  step #3?
 
-[1/1] ext4: Get rid of unused DEFAULT_MB_OPTIMIZE_SCAN
-      commit: 7e0d0d44001506bc42932b5e37baaab84f0397cf
+To fix this issue, I think we should be careful about adding and
+handling sock state, maybe we could push it to net-next and take
+advantage of sock state. And I will test this patch later in our test
+cases.
 
-Best regards,
--- 
-Theodore Ts'o <tytso@mit.edu>
+Thanks,
+Tony Lu

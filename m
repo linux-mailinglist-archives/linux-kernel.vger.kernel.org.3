@@ -2,176 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45FED5233AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:04:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB9452339C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237638AbiEKNEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51878 "EHLO
+        id S231145AbiEKNCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243223AbiEKNE2 (ORCPT
+        with ESMTP id S229454AbiEKNCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:04:28 -0400
-Received: from m15112.mail.126.com (m15112.mail.126.com [220.181.15.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2CC1423725D;
-        Wed, 11 May 2022 06:04:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=cA20v
-        jSQc0xTB5lj5GoeWHAPefqE6IHlE3Nbb8SvDhw=; b=eHhPo9MMLFFQdNOxPzh4R
-        dHDDNEJiYPWGiEIA/opcQbywOmTnsgv8An0DrOvcPjpt6/0guDU/RBEBF7Efdhpy
-        9BHQFyxEAGbhGNcX4VU1HX/Z5CtV00J6rOLs5ty0x1WLp5UBYxjcaLG2a16YAqif
-        PjWeOKI+AHBYdFy7rY5LPs=
-Received: from ubuntu.localdomain (unknown [58.213.83.157])
-        by smtp2 (Coremail) with SMTP id DMmowACXi_3xs3tivSKkBQ--.64503S4;
-        Wed, 11 May 2022 21:02:43 +0800 (CST)
-From:   Bernard Zhao <zhaojunkui2008@126.com>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        Bernard Zhao <zhaojunkui2008@126.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     bernard@vivo.com
-Subject: [PATCH v2] usb/peak_usb: cleanup code
-Date:   Wed, 11 May 2022 06:02:38 -0700
-Message-Id: <20220511130240.790771-1-zhaojunkui2008@126.com>
-X-Mailer: git-send-email 2.33.1
+        Wed, 11 May 2022 09:02:49 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD1C69712
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:02:45 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id p26so3407870lfh.10
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:02:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=95MuJt8/5xkfU9O/tURNa9ZrWheUB9lAAuDXN9qGKtY=;
+        b=QT7rwi+wKWvjRvhdXbfbV1peEgBYom3IFvEK/Pxp3KEZnBxpYoxCKJ9hXIpPgW7yhh
+         6WmmfJQ9eL16ES0yVXNZVMxy1HhjVC6Yt32ixndjHWm8ydrsoMYg0w3NvzIjLfZEOHl2
+         wk42DrxyziWjA3NIU/7rEij169TK5TQUBekKTGrl0XYszrApthy7LzQT21LCyR/uShRF
+         nBZ8o5ua9V8pD/cK3dbiXFDH9oVaLFPGj8vzDxyyqGxmizHrrvsmow9aHtSORsJpJMOW
+         YmJuMvRBaKFJx4n2Zd+yq6cWwlG9eVWT2FN8zsnUMRVMFfmkY1TYkz2KWHaXEg3YcKK9
+         PPtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=95MuJt8/5xkfU9O/tURNa9ZrWheUB9lAAuDXN9qGKtY=;
+        b=1LLcl+SiNBdOiQ3t0N91OZiqqUEtaJ/qFZemWbkYw7/zhrS8vuO76qdYris7uFs+lV
+         qaKS3a9NkZ7FjAm6MPoHGIQ6mUmfXLkEuYAbrn2vkFo0G27Lso2CNC3N/xrJkF8P/jej
+         aiUOwj1FLM2PJhWq+59h0/KTu2j26/nOjRcen2gjU+fv0c6iu4Bqpotk5TsMJdk1M+Zl
+         KB9xsrCdcXlgmedHjno0Pmm9MqKsBfIpf8kfaAEfox59a12ZlceE0L3A/leSjdutgrnw
+         2qPiiKxAn70P0IorqZ2K93NXkhwQqLAOHDgWHIFRG/rxzXyTs+jfCZlIP0oNDguoIKGO
+         ZAyA==
+X-Gm-Message-State: AOAM530wOgDsQN5jhIVFe2yO1vq38VuADtssKWxIfGI9Dkt6gv0/dBU8
+        xaVOmY7NHQXQiHGORg7xXuE/Rk9mRwVG+Ga7QXM=
+X-Google-Smtp-Source: ABdhPJw1WfyIvPQXJF1Sqxy4dB/mobdLl6U5GIRL3fAlvhfT2DpYPIMze/UhmBLIvpH/zwnDnBbNunkH7WkBNP27SrU=
+X-Received: by 2002:a05:6512:2241:b0:471:d2b9:1f00 with SMTP id
+ i1-20020a056512224100b00471d2b91f00mr20638593lfu.342.1652274163515; Wed, 11
+ May 2022 06:02:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DMmowACXi_3xs3tivSKkBQ--.64503S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxZr4DCry7tFWxJr45Zr4xZwb_yoW5KrWDpa
-        1rAFW7Kr4UKF1rG348tr1ku3Way3W8Ka4Skryqqw1F9r1qg393XF95CFySvrs7Z39ru3Wa
-        qa1Utr18Ar1UGr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEv388UUUUU=
-X-Originating-IP: [58.213.83.157]
-X-CM-SenderInfo: p2kd0y5xqn3xasqqmqqrswhudrp/1tbiLRT9qlpD935HVQAAss
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Received: by 2002:a2e:9814:0:0:0:0:0 with HTTP; Wed, 11 May 2022 06:02:42
+ -0700 (PDT)
+Reply-To: nikkifenton79@gmail.com
+From:   Nikki Fenton <cldominique77@gmail.com>
+Date:   Wed, 11 May 2022 15:02:42 +0200
+Message-ID: <CADuPsQ9YQaUK89akt7qMX_VXm8uJbrHsBvNQ0oNYr6K60CArzA@mail.gmail.com>
+Subject: Please Read
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:142 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4994]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [nikkifenton79[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [cldominique77[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [cldominique77[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable fi and bi only used in branch if (!dev->prev_siblings)
-, fi & bi not kmalloc in else branch, so move kfree into branch
-if (!dev->prev_siblings),this change is to cleanup the code a bit.
+Good Day!
 
-Signed-off-by: Bernard Zhao <zhaojunkui2008@126.com>
+Your swift responds will be greatly appreciated. I viewed your profile
+on Linkedin regarding a proposal that has something in common with
+you, reply for more details on my private
+email: nikkifenton79@gmail.com
 
----
-Changes since V1:
-* move all the content of the if (!dev->prev_siblings) to a new
-function.
----
- drivers/net/can/usb/peak_usb/pcan_usb_pro.c | 57 +++++++++++++--------
- 1 file changed, 36 insertions(+), 21 deletions(-)
-
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
-index ebe087f258e3..5e472fe086a8 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
-@@ -841,32 +841,28 @@ static int pcan_usb_pro_stop(struct peak_usb_device *dev)
- 	return 0;
- }
- 
--/*
-- * called when probing to initialize a device object.
-- */
--static int pcan_usb_pro_init(struct peak_usb_device *dev)
-+static int pcan_usb_pro_init_first_channel(struct peak_usb_device *dev, struct pcan_usb_pro_interface **usb_if)
- {
--	struct pcan_usb_pro_device *pdev =
--			container_of(dev, struct pcan_usb_pro_device, dev);
--	struct pcan_usb_pro_interface *usb_if = NULL;
--	struct pcan_usb_pro_fwinfo *fi = NULL;
--	struct pcan_usb_pro_blinfo *bi = NULL;
-+	struct pcan_usb_pro_interface *pusb_if = NULL;
- 	int err;
- 
- 	/* do this for 1st channel only */
- 	if (!dev->prev_siblings) {
-+		struct pcan_usb_pro_fwinfo *fi = NULL;
-+		struct pcan_usb_pro_blinfo *bi = NULL;
-+
- 		/* allocate netdevices common structure attached to first one */
--		usb_if = kzalloc(sizeof(struct pcan_usb_pro_interface),
-+		pusb_if = kzalloc(sizeof(struct pcan_usb_pro_interface),
- 				 GFP_KERNEL);
- 		fi = kmalloc(sizeof(struct pcan_usb_pro_fwinfo), GFP_KERNEL);
- 		bi = kmalloc(sizeof(struct pcan_usb_pro_blinfo), GFP_KERNEL);
--		if (!usb_if || !fi || !bi) {
-+		if (!pusb_if || !fi || !bi) {
- 			err = -ENOMEM;
- 			goto err_out;
- 		}
- 
- 		/* number of ts msgs to ignore before taking one into account */
--		usb_if->cm_ignore_count = 5;
-+		pusb_if->cm_ignore_count = 5;
- 
- 		/*
- 		 * explicit use of dev_xxx() instead of netdev_xxx() here:
-@@ -903,18 +899,14 @@ static int pcan_usb_pro_init(struct peak_usb_device *dev)
- 		     pcan_usb_pro.name,
- 		     bi->hw_rev, bi->serial_num_hi, bi->serial_num_lo,
- 		     pcan_usb_pro.ctrl_count);
-+
-+		kfree(bi);
-+		kfree(fi);
- 	} else {
--		usb_if = pcan_usb_pro_dev_if(dev->prev_siblings);
-+		pusb_if = pcan_usb_pro_dev_if(dev->prev_siblings);
- 	}
- 
--	pdev->usb_if = usb_if;
--	usb_if->dev[dev->ctrl_idx] = dev;
--
--	/* set LED in default state (end of init phase) */
--	pcan_usb_pro_set_led(dev, PCAN_USBPRO_LED_DEVICE, 1);
--
--	kfree(bi);
--	kfree(fi);
-+	*usb_if = pusb_if;
- 
- 	return 0;
- 
-@@ -926,6 +918,29 @@ static int pcan_usb_pro_init(struct peak_usb_device *dev)
- 	return err;
- }
- 
-+/*
-+ * called when probing to initialize a device object.
-+ */
-+static int pcan_usb_pro_init(struct peak_usb_device *dev)
-+{
-+	struct pcan_usb_pro_device *pdev =
-+			container_of(dev, struct pcan_usb_pro_device, dev);
-+	struct pcan_usb_pro_interface *usb_if = NULL;
-+	int err;
-+
-+	err = pcan_usb_pro_init_first_channel(dev, &usb_if);
-+	if (err)
-+		return err;
-+
-+	pdev->usb_if = usb_if;
-+	usb_if->dev[dev->ctrl_idx] = dev;
-+
-+	/* set LED in default state (end of init phase) */
-+	pcan_usb_pro_set_led(dev, PCAN_USBPRO_LED_DEVICE, 1);
-+
-+	return 0;
-+}
-+
- static void pcan_usb_pro_exit(struct peak_usb_device *dev)
- {
- 	struct pcan_usb_pro_device *pdev =
--- 
-2.33.1
-
+Nikki Fenton
+nikkifenton79@gmail.com

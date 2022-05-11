@@ -2,132 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C513652407C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 00:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF95252407D
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 01:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348974AbiEKW7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 18:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44200 "EHLO
+        id S1348978AbiEKXAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 19:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234959AbiEKW7n (ORCPT
+        with ESMTP id S234959AbiEKXA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 18:59:43 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF818A32B
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 15:59:41 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id E72C82C044A;
-        Wed, 11 May 2022 22:59:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1652309977;
-        bh=dbiwv2rHTCHRWVF5902F3Nh4mqpnE8U2uwEkp+IcrNw=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=lFeMiUjX1Yxq4bol/bKkC8pPOSkCWXZjKbKvV7X/XNh2NEpBPxIXqSJUkIk+t4mus
-         jjCmYJUDHeu5bJBzGOkn+8UydxubJ+rpiSz1UQmruoeRQ5TqgrBydToI7Jvq7DslAN
-         fXYDladwGGMCsVUCkqfkhQRK3k+NxB/d+vNcz1V0929B9Uirklm6voBnIKgaAPYsAk
-         9T2OxP1OoQdgM5Rwtjb56rXOTDmTpI/anM3xP2Iq62EwTYyjMUIVTM7YtVj+fowJZW
-         VHDq9hTJYPO0bKIoR/hcEKypR0Vl7v5BuydDiZGuEiAhN3KaQjgPu5aE1Qi8K9rqjo
-         iUBt7l3C6KZSg==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B627c3fd90001>; Thu, 12 May 2022 10:59:37 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
- by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
- Microsoft SMTP Server (TLS) id 15.0.1497.32; Thu, 12 May 2022 10:59:37 +1200
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.033; Thu, 12 May 2022 10:59:37 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vadym Kochan <vadym.kochan@plvision.eu>
-CC:     "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
-        "kostap@marvell.com" <kostap@marvell.com>,
-        "robert.marko@sartura.hr" <robert.marko@sartura.hr>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Elad Nachman <enachman@marvell.com>
-Subject: Re: [PATCH v5 1/2] arm64: dts: marvell: Add Armada 98DX2530 SoC and
- RD-AC5X board
-Thread-Topic: [PATCH v5 1/2] arm64: dts: marvell: Add Armada 98DX2530 SoC and
- RD-AC5X board
-Thread-Index: AQHYZVGaM5HNJyVFK0yMg5+dPH+INq0ZEh4AgABvp4A=
-Date:   Wed, 11 May 2022 22:59:37 +0000
-Message-ID: <c781f7eb-86f2-16c4-1380-b08b974900ff@alliedtelesis.co.nz>
-References: <20220504044624.951841-1-chris.packham@alliedtelesis.co.nz>
- <20220511161003.GE10145@plvision.eu> <YnviMOtXX+us+IA4@lunn.ch>
-In-Reply-To: <YnviMOtXX+us+IA4@lunn.ch>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <138E75DF91EDC7498F0C922C7C0ECE8A@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Wed, 11 May 2022 19:00:28 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BDD58A7CA
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:00:26 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id e3so3616617ios.6
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:00:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=MI1e77NG2MLHV0OL9aS/H9bc3NGijrDFsz/FahQ7nNg=;
+        b=IUC0DpXbEo3chYIKlYqeDAlUPjO7udTU9gR9oVwhGdHmO+uoIp9dMVW5WiOGwngZDt
+         vxBdslP469ph+Ra+rKcFIFnw/LwFad2JT59/afNxvEOieJihVoKxgjxljXNwcgLMrgw4
+         puRSISqD3dYEnNKdaAm1w3tM1N0Nnj5ZAGn5KEjn8D+2FaleZG/A/VtetdP5mOSAf75Q
+         STCsP7ZchBEgZlM8eKQ83Ujhew8xLkNWDsjCUrn2FgB+vz+sNGTptkZmUcO2XR+IAB2/
+         0bKOG67YVweWHm+Z18o7B3JX5Q8sJAmCI1cGExuFy7phuHpvyZYU9Z9Jryvk2yjCCD0t
+         /Cag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=MI1e77NG2MLHV0OL9aS/H9bc3NGijrDFsz/FahQ7nNg=;
+        b=zgtpZlKGNo1Gnnix8xVE1qs/eDsfD0GcVDp7xvbCfBGvkp7oW3k7ts4I37d78iNnlZ
+         Op6GdDJR1HCyp3ZhnjfZlTN0fuUEfp/DqO178q92qLCyzTsKYG8HpLkZ4xCfYJxcZ411
+         J/Yt8zoqjFZlaU++mUw0tlOGkQJSL+NKCPjF2ynZFvY5KHe5Ams37dPKrkaRvHSxXaB3
+         B0ueAneMuF7TcLXMtwqNF94O4bZDhPUyOPNDJClXrwHNWkwerINrK4q6bE9Jgrl9W1H0
+         9YRk1iuM91XR75+H9fa38hq9fuu7YabQG0J7yFWqjy9Sh163gEH2I9hyoDDCsQNEIZwz
+         3UHg==
+X-Gm-Message-State: AOAM533gVL6j0LBYP/KtmZntlRn4l5rXSEiU+lpMlsu/KOP5HoEzruKX
+        GcP976mRnzOSAKXum8VtymtJe3mBVF7nS5sUQE4DBqbSRq4aqA==
+X-Google-Smtp-Source: ABdhPJzeQPZ0ndPHibWDA9Pa+B1O9ILo8wSLnwAD/agF/fMvZIW1nFjFmVTEWe4X68j1/BHEAMuNblh8qjP6hPo1TsU=
+X-Received: by 2002:a05:6638:1487:b0:32b:e970:2acf with SMTP id
+ j7-20020a056638148700b0032be9702acfmr10255965jak.109.1652310025623; Wed, 11
+ May 2022 16:00:25 -0700 (PDT)
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=U+Hs8tju c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=oZkIemNP1mAA:10 a=nlR0Zc3rm02OJYrKWlIA:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
+From:   noman pouigt <variksla@gmail.com>
+Date:   Wed, 11 May 2022 16:00:14 -0700
+Message-ID: <CAES_P+-khQGqec2_xqVEU4m0b9WscvLUinQmPXi6zX_P4mP+hw@mail.gmail.com>
+Subject: Mapping ram memory using ioremap
+To:     linux-kernel@vger.kernel.org,
+        kernelnewbies <kernelnewbies@kernelnewbies.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQpPbiAxMi8wNS8yMiAwNDoyMCwgQW5kcmV3IEx1bm4gd3JvdGU6DQo+IE9uIFdlZCwgTWF5IDEx
-LCAyMDIyIGF0IDA3OjEwOjAzUE0gKzAzMDAsIFZhZHltIEtvY2hhbiB3cm90ZToNCj4+IEhpIENo
-cmlzLA0KPj4NCj4+PiBhcmNoL2FybTY0L2Jvb3QvZHRzL21hcnZlbGwvTWFrZWZpbGUgICAgICAg
-ICAgfCAgIDEgKw0KPj4+IC4uLi9ib290L2R0cy9tYXJ2ZWxsL2FybWFkYS05OGR4MjUzMC5kdHNp
-ICAgICB8IDMxMCArKysrKysrKysrKysrKysrKysNCj4+PiBhcmNoL2FybTY0L2Jvb3QvZHRzL21h
-cnZlbGwvcmQtYWM1eC5kdHMgICAgICAgfCAgOTAgKysrKysNCj4+PiAzIGZpbGVzIGNoYW5nZWQs
-IDQwMSBpbnNlcnRpb25zKCspDQo+PiBNYXJ2ZWxsIGlzIGdvaW5nIHRvIHN0YXJ0IHRoZSB1cHN0
-cmVhbWluZyBvZiBBQzVYIGJvYXJkcyBzdXBwb3J0LA0KVGhhdCdzIGdvb2QgbmV3cy4gSSdtIHBy
-b2JhYmx5IHRoZSBjdXN0b21lciB0aGF0J3MgYmVlbiBuYWdnaW5nIHRoZSANCk1hcnZlbGwgc3Vw
-cG9ydCB0ZWFtLiBCdXQgSSdtIGFsc28gaW1wYXRpZW50IGhlbmNlIEkgc3RhcnRlZCB3b3JraW5n
-IG9uIA0KdGhpcyBzZXJpZXMuIFRoZSBwaW5jdHJsIGFuZCBtdm5ldGEgY2hhbmdlcyBoYXZlIGFs
-cmVhZHkgYmVlbiBhY2NlcHRlZC4NCj4+ICAgd2UgaGF2ZSBhbHNvIHBhdGNoZXMgd2l0aCBzaW1p
-bGFyIC5kdHMoaSkgZmlsZXMNCj4+IGJ1dCB3aXRoIGRpZmZlcmVudCBuYW1pbmc6DQo+Pg0KPj4g
-ICAgICBhYzUuZHRzaQ0KPj4gICAgICBhYzVfcmQuZHRzDQo+PiAgICAgIGFjNV9kYi5kdHMNCj4+
-ICAgICAgYWM1eF9kYi5kdHMNCj4+DQo+PiBXaGF0IGRvIHlvdSB0aGluayBhYm91dCB0byB1c2Ug
-dGhlc2UgbmFtaW5nIHNjaGVtZSA/DQoNClBlcnNvbmFsbHkgSSB0aG91Z2h0IHRoZXknZCBiZSBy
-ZWplY3RlZCB1cHN0cmVhbSBhcyBiZWluZyB0b28gdmFndWUgYW5kIA0KZ2VuZXJpYy4gSSBzZXR0
-bGVkIG9uIGFybWFkYS05OGR4MjUzMCBhcyBJIHNhdyB0aGUgOThkeDI1MzAgbmFtZSB1c2VkIG9u
-IA0KdGhlIE1hcnZlbGwgUG9ydGFsIHRvIHJlZmVyIHRvIHRoZSBDbk0gYmxvY2sgZm9yIHRoZSBB
-QzUvQUM1WC4gSSB3YXMgDQpnb2luZyB0byBjYWxsIHRoZSBib2FyZCBmaWxlICJyZC1hYzV4LTMy
-ZzE2aHZnNmhsZy5kdHMiIGFzIHRoYXQncyB3aGF0IA0KdGhlIHNpbGtzY3JlZW4gb24gdGhlIGJv
-YXJkIEkgaGF2ZSBzYXlzIGJ1dCBJIHNob3J0ZW5lZCBpdCB0byAicmQtYWM1eCIgDQphcyB0aGUg
-c3dpdGNoIHBvcnQgY29uZmlndXJhdGlvbiBpcyBsYXJnZWx5IGlycmVsZXZhbnQgdG8gdGhlIGJv
-YXJkIA0Kc3VwcG9ydCBJJ20gdHJ5aW5nIHRvIGdldCBsYW5kZWQuDQoNCj4gQ2hyaXMgaGFzIGRv
-bmUgYWxsIHRoZSBoYXJkIHdvcmssIGhlIGdldHMgdG8gcGljayB0aGUgbmFtaW5nLiBBbmQgZ2V0
-DQo+IGhpcyBmaWxlcyBtZXJnZWQgZmlyc3QuDQoNCkknbSBub3QgYWdhaW5zdCBjaGFuZ2luZyBp
-ZiB0aGVyZSBpcyBhIGNvbnNlbnN1cy4gT24gYW5vdGhlciB0aHJlYWQgdGhlIA0KaWRlYSBvZiBh
-cm1hZGEtOThkeDI1eHgvYXJtYWRhLTk4ZHgzNXh4IHdhcyBtZW50aW9uZWQuIFRoYXQgbWlnaHQg
-YmUgYSANCnJlYXNvbmFibGUgY29tcHJvbWlzZSAoYWx0aG91Z2ggdGVjaG5pY2FsbHkgdGhlcmUn
-cyBubyBkaWZmZXJlbmNlIGluIHRoZSANCkNQVSBibG9jayBiZXR3ZWVuIHRoZSAyNXh4IGFuZCAz
-NXh4KS4NCg0KPiBIb3dldmVyLCBub3cgdGhhdCBpIGNvbWUgdG8gbG9vayBpbiBhcmNoL2FybTY0
-L2Jvb3QvZHRzL21hcnZlbGwsIGkNCj4gdGhpbmsgbW9zdCBvZiB0aGUgY3VycmVudCBmaWxlbmFt
-ZXMgcHJvcG9zZWQgZG9uJ3QgbWF0Y2ggdGhlIGN1cnJlbnQgbmFtZXMuDQo+DQo+IGFybWFkYS05
-OGR4MjUzMC5kdHNpIGZpdHMgdGhlIGN1cnJlbnQgcGF0dGVybi4NCj4NCj4gSG93ZXZlciwgQ2hy
-aXMncyBib2FyZCBmaWxlcyBzaG91bGQgcHJvYmFibHkgYmUNCj4NCj4gYXJtYWRhLTk4ZHgyNTMw
-LXJkLmR0cw0KPg0KPiBhbmQgdGhlIG90aGVyIGZpbGVzIHNob3VsZCBiZQ0KPg0KPiBhcm1hZGEt
-OThkeDI1MzAtZGIuZHRzDQo+DQo+IGFybWFkYS05OGR4MjUzMC14LWRiLmR0cw0KPg0KPiBXaGF0
-IGRvZXMgdGhlIHggaW4geF9kYiBtZWFuPyBEb2VzIHRoYXQgcmVmZXIgdG8gdGhlIGJvYXJkIG9y
-IHRoZSBTb0M/DQoNClRoZSB4IGlzIGZyb20gQUM1WCBzbyB3ZSdkIGFjdHVhbGx5IGhhdmUgYXJt
-YWRhLTk4ZHgyNXh4LWRiLmR0cyBhbmQgDQphcm1hZGEtOThkeDM1eHgtZGIuZHRzLiBNeSBib2Fy
-ZCB3b3VsZCBiZSBjYWxsZWQgYXJtYWRhLTk4ZHgzNXh4LXJkLmR0cyANCm9yIHBlcmhhcHMgYXJt
-YWRhLTk4ZHgzNTUwLXJkLmR0cy4NCg0K
+We are using part of DRAM as shared memory
+between DSP and SoC. However, DSP
+can only access higher 1GB of DRAM.
+
+In order to map the aforementioned memory
+I tried using ioremap and it blurted out the
+warning as mentioned in this article.
+https://lwn.net/Articles/409700/
+
+What is the alternative to using ioremap to
+map specific RAM memory region for use
+in the driver as shared memory?
+
+I tried memremap + reserved memory as well
+and it failed.

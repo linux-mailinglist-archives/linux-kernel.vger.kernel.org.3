@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA1352341A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87CD252341D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238226AbiEKNVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45424 "EHLO
+        id S243756AbiEKNV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243791AbiEKNUB (ORCPT
+        with ESMTP id S243779AbiEKNUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 11 May 2022 09:20:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BCE2469CF
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EEBE2469DF
         for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:19:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 51AA4B823DC
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 13:19:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23EE4C34112;
-        Wed, 11 May 2022 13:19:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CE4261CB0
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 13:19:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75275C34111;
+        Wed, 11 May 2022 13:19:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652275194;
-        bh=wOtB+Buzvelw0zCj5dXvDag7eeVBFMQDGau1jG60SfY=;
+        s=k20201202; t=1652275195;
+        bh=ZeV3gMfU+a1WJKfFQfnsBBxgRnqLCEoRt8Ufidruioo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TfdtRzpnUjxd3QVcQMFXkqd5eqoQs/Fa7UpZF+7Sm5Ui319U8gT5eI7TWivVlVMSC
-         AUiUJh0GYrhFAP589Ur1NSwYpiaJ1A6o8x8hMTP+X7TZGNL1y0gsFtWW02KNmK0i84
-         NBLHNU78rlwOxPhwAfrVCEpILyMu0srpIKqgC3Y+HFrjrwPqsvoW7+hI2TLzf/Dt2H
-         jX/IG1djAB3Qki7cekm9WXKw1f8vtr8JqVoMS05a07ENiMlrW3E0tmplgXp7t6FiiY
-         VB+1AmAUseh7D+gmuXQXu45YEz+IaneEbadobJVyUkYnDmENWxvq/KQ3sFRmG18kLT
-         j6GO5KpJWST3w==
+        b=RtaP+Us29DU+hM5bw51wQRbzIjbAceM+GvsOrOBoOs/c1EE+1ubdJs4DZAmZ2WK30
+         GdIZAwgrmBlOJRiiZEYOQwLcZyKAOODTXgIwxlncDqk+79Gh5RhaZYMropUfvYUBt6
+         wEQ1iVX4ldB4sLI/sVeb7hXk7sZhGlBbQ5ER724uZjnBkun5UbScCPWT6B6s3DIYYn
+         J4TC16P1SWSBTNb5t/zGtHKsg3SiX0S58iZit/lvYv5hfefKly1u9ANoFQ4An964kn
+         PY4xFfOOX8CQ7flf+q+6S/wbcfo5+VkvUfsVAbEa5pU5F3q83PDh7PuEE0ah/qECEN
+         8sF9BvEuTcFeQ==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>
-Subject: [PATCH 2/3] habanalabs: use NULL for eventfd
-Date:   Wed, 11 May 2022 16:19:47 +0300
-Message-Id: <20220511131948.1156471-2-ogabbay@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: [PATCH 3/3] habanalabs: return -EFAULT on copy_to_user error
+Date:   Wed, 11 May 2022 16:19:48 +0300
+Message-Id: <20220511131948.1156471-3-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220511131948.1156471-1-ogabbay@kernel.org>
 References: <20220511131948.1156471-1-ogabbay@kernel.org>
@@ -53,92 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-eventfd is pointer. As such, it should be initialized to NULL, not to 0.
-
-In addition, no need to initialize it after creation because the
-entire structure is zeroed-out. Also, no need to initialize it before
-release because the entire structure is freed.
+If copy_to_user failed in info ioctl, we always return -EFAULT so the
+user will know there was an error.
 
 Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/common/device.c           | 8 ++------
- drivers/misc/habanalabs/common/habanalabs_drv.c   | 4 ----
- drivers/misc/habanalabs/common/habanalabs_ioctl.c | 4 ++--
- 3 files changed, 4 insertions(+), 12 deletions(-)
+ drivers/misc/habanalabs/common/habanalabs_ioctl.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
-index 315510aaca35..0908ac301c70 100644
---- a/drivers/misc/habanalabs/common/device.c
-+++ b/drivers/misc/habanalabs/common/device.c
-@@ -286,10 +286,8 @@ static void hpriv_release(struct kref *ref)
- 	hdev->compute_ctx_in_release = 0;
- 
- 	/* release the eventfd */
--	if (hpriv->notifier_event.eventfd) {
-+	if (hpriv->notifier_event.eventfd)
- 		eventfd_ctx_put(hpriv->notifier_event.eventfd);
--		hpriv->notifier_event.eventfd = 0;
--	}
- 
- 	mutex_destroy(&hpriv->notifier_event.lock);
- 
-@@ -364,10 +362,8 @@ static int hl_device_release_ctrl(struct inode *inode, struct file *filp)
- 	mutex_unlock(&hdev->fpriv_ctrl_list_lock);
- out:
- 	/* release the eventfd */
--	if (hpriv->notifier_event.eventfd) {
-+	if (hpriv->notifier_event.eventfd)
- 		eventfd_ctx_put(hpriv->notifier_event.eventfd);
--		hpriv->notifier_event.eventfd = 0;
--	}
- 
- 	mutex_destroy(&hpriv->notifier_event.lock);
- 	put_pid(hpriv->taskpid);
-diff --git a/drivers/misc/habanalabs/common/habanalabs_drv.c b/drivers/misc/habanalabs/common/habanalabs_drv.c
-index c97173e9507d..9ead0927208d 100644
---- a/drivers/misc/habanalabs/common/habanalabs_drv.c
-+++ b/drivers/misc/habanalabs/common/habanalabs_drv.c
-@@ -134,8 +134,6 @@ int hl_device_open(struct inode *inode, struct file *filp)
- 	hpriv->hdev = hdev;
- 	filp->private_data = hpriv;
- 	hpriv->filp = filp;
--	hpriv->notifier_event.events_mask = 0;
--	hpriv->notifier_event.eventfd = 0;
- 
- 	mutex_init(&hpriv->notifier_event.lock);
- 	mutex_init(&hpriv->restore_phase_mutex);
-@@ -246,8 +244,6 @@ int hl_device_open_ctrl(struct inode *inode, struct file *filp)
- 	hpriv->hdev = hdev;
- 	filp->private_data = hpriv;
- 	hpriv->filp = filp;
--	hpriv->notifier_event.events_mask = 0;
--	hpriv->notifier_event.eventfd = 0;
- 
- 	mutex_init(&hpriv->notifier_event.lock);
- 	nonseekable_open(inode, filp);
 diff --git a/drivers/misc/habanalabs/common/habanalabs_ioctl.c b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-index d1ef56a8d3ac..51fa56287309 100644
+index 51fa56287309..8fd2b427863f 100644
 --- a/drivers/misc/habanalabs/common/habanalabs_ioctl.c
 +++ b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-@@ -647,7 +647,7 @@ static int eventfd_register(struct hl_fpriv *hpriv, struct hl_info_args *args)
- 	hpriv->notifier_event.eventfd = eventfd_ctx_fdget(args->eventfd);
- 	if (IS_ERR(hpriv->notifier_event.eventfd)) {
- 		rc = PTR_ERR(hpriv->notifier_event.eventfd);
--		hpriv->notifier_event.eventfd = 0;
-+		hpriv->notifier_event.eventfd = NULL;
- 		mutex_unlock(&hpriv->notifier_event.lock);
- 		return rc;
- 	}
-@@ -665,7 +665,7 @@ static int eventfd_unregister(struct hl_fpriv *hpriv, struct hl_info_args *args)
- 	}
+@@ -118,7 +118,6 @@ static int hw_events_info(struct hl_device *hdev, bool aggregate,
  
- 	eventfd_ctx_put(hpriv->notifier_event.eventfd);
--	hpriv->notifier_event.eventfd = 0;
-+	hpriv->notifier_event.eventfd = NULL;
+ static int events_info(struct hl_fpriv *hpriv, struct hl_info_args *args)
+ {
+-	int rc;
+ 	u32 max_size = args->return_size;
+ 	u64 events_mask;
+ 	void __user *out = (void __user *) (uintptr_t) args->return_pointer;
+@@ -131,8 +130,7 @@ static int events_info(struct hl_fpriv *hpriv, struct hl_info_args *args)
+ 	hpriv->notifier_event.events_mask = 0;
  	mutex_unlock(&hpriv->notifier_event.lock);
- 	return 0;
+ 
+-	rc = copy_to_user(out, &events_mask, sizeof(u64));
+-	return rc;
++	return copy_to_user(out, &events_mask, sizeof(u64)) ? -EFAULT : 0;
  }
+ 
+ static int dram_usage_info(struct hl_fpriv *hpriv, struct hl_info_args *args)
 -- 
 2.25.1
 

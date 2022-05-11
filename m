@@ -2,170 +2,357 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C14D052364D
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2167352364E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245235AbiEKOz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 10:55:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245231AbiEKOzZ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S245229AbiEKOzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 11 May 2022 10:55:25 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 965A2200F4F
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:55:23 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24BAW1Ju018362;
-        Wed, 11 May 2022 16:55:08 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : subject
- : from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=selector1;
- bh=+YPIl1+HECBCIFGnFWdVUt+GpcgGMMtibG+mpoeQNc0=;
- b=bSLmsDXRbL88WEdwp57DO3MAA2xNUkKwZ+ReLtxsGg+2rbFq1qzUNkr8szuo0K4kViJW
- H/oJhgbuzjj+Xb/KP+xIVj2b6+/cLkbCT+r963uBsYYRCSrBkTE0XRm9MXCSamf9DNml
- Mt4Xh4okVW683qpN28yWgXXfyYA1AeHzCVuDBMRcHPHZ5bGE/2qm+hj6DTfA5Az+vQeg
- cwqPvh3y/6LemoJL7tYpiZ3nx6ZbtXF0n7px/qwRD0yMv5NftcLlJF5Vx+o8E0imhhq9
- 6/HZSH3jktQ1++ft31T4FcrDO4WRbBP6STXf/draglsWSkR0q2efXNUtineHg3frTNM3 yA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3fwdw9bawu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 May 2022 16:55:08 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7D80F10002A;
-        Wed, 11 May 2022 16:55:07 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 763F7229A9A;
-        Wed, 11 May 2022 16:55:07 +0200 (CEST)
-Received: from [192.168.8.15] (10.75.127.47) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 11 May
- 2022 16:55:04 +0200
-Message-ID: <87d059e62a54e2216acdf4ca3a6a81b8d771af42.camel@foss.st.com>
-Subject: Re: [PATCH 4/7] irqchip/stm32-exti: forward irq_request_resources
- to parent
-From:   Antonio Borneo <antonio.borneo@foss.st.com>
-To:     Marc Zyngier <maz@kernel.org>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Pascal Paillet <p.paillet@foss.st.com>,
-        Ludovic Barre <ludovic.barre@foss.st.com>,
-        "Loic Pallardy" <loic.pallardy@foss.st.com>
-Date:   Wed, 11 May 2022 16:55:03 +0200
-In-Reply-To: <875ymd6xdu.wl-maz@kernel.org>
-References: <20220510164123.557921-1-antonio.borneo@foss.st.com>
-         <20220510164123.557921-4-antonio.borneo@foss.st.com>
-         <875ymd6xdu.wl-maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1 
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56084 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245193AbiEKOzV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 11 May 2022 10:55:21 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AF9209542;
+        Wed, 11 May 2022 07:55:20 -0700 (PDT)
+Date:   Wed, 11 May 2022 16:55:16 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652280918;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=hYeyGvfOKoOlLwg0xBvDzrn+xOFV2zqrKC4RINOZPIU=;
+        b=Hhvsl6XerDQJqg4e5eTMOJmhjEmLKMpBv0VL2zW+E3gYNkLi5YO7Mocc1Kg+ed1CKb1jP/
+        +6XyGmxqmgAtZjAoIG0BZRJC9O0ly75utiLXDWKow8NrkWwOdxXlukXIVMYx372lnZqy/X
+        K38svrMABqaJdlYodUIVe/2lyRVasrLtey6Dqa7Ipaqu0dZON3f9B3Ltbl+29eX0FPF7NB
+        u97EJeGIy0P/0QAok/0EodOmwQvMHDF7wHrkEKETBO5i5BI59vjqeWd8O8iWPDKoiWzAJX
+        VukvVDDbCmTWVPgPLG/u1Sww2wcrf2wsz3O8NWPszwoigltQFiKZ2DnHgYHFYA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652280918;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=hYeyGvfOKoOlLwg0xBvDzrn+xOFV2zqrKC4RINOZPIU=;
+        b=AzSafweYuyOvuLhgE9ppxB/l5LL12WdWk+HZK0WXaG9srkbTzJ343plQIAMT2cb+1RoZux
+        YxelNtDqHGA0Y6DQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [ANNOUNCE] v5.18-rc6-rt7
+Message-ID: <YnvOVA2GbFncWG3K@linutronix.de>
 MIME-Version: 1.0
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-11_07,2022-05-11_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-05-10 at 19:44 +0100, Marc Zyngier wrote:
-> On Tue, 10 May 2022 17:41:20 +0100,
-> Antonio Borneo <antonio.borneo@foss.st.com> wrote:
-> >=20
-> > From: Pascal Paillet <p.paillet@foss.st.com>
-> >=20
-> > Enhance stm32-exti driver to forward request_resources and
-> > release_resources_parent operations to parent.
-> > Do not use irq_request_resources_parent because it returns
-> > an error when the parent does not implement irq_request_resources.
-> >=20
-> > Signed-off-by: Pascal Paillet <p.paillet@foss.st.com>
-> > Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
-> > ---
-> > =C2=A0drivers/irqchip/irq-stm32-exti.c | 14 ++++++++++++++
-> > =C2=A01 file changed, 14 insertions(+)
-> >=20
-> > diff --git a/drivers/irqchip/irq-stm32-exti.c
-> > b/drivers/irqchip/irq-stm32-exti.c
-> > index c8003f4f0457..3f6d524a87fe 100644
-> > --- a/drivers/irqchip/irq-stm32-exti.c
-> > +++ b/drivers/irqchip/irq-stm32-exti.c
-> > @@ -550,6 +550,16 @@ static void stm32_exti_h_unmask(struct
-> > irq_data *d)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0irq_chip_unmask_parent(d);
-> > =C2=A0}
-> > =C2=A0
-> > +static int stm32_exti_h_request_resources(struct irq_data *data)
-> > +{
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0data =3D data->parent_data;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (data->chip->irq_request_=
-resources)
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0return data->chip->irq_request_resources(data);
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
-> > +}
->=20
-> Why do you need to reinvent the whole thing? Why isn't it just:
->=20
-> static int stm32_exti_h_request_resources(struct irq_data *data)
-> {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0irq_chip_request_resource=
-s_parent(data);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
-> }
->=20
-> And this really deserves a comment. I also wonder whether we should
-> change this behaviour to always return 0.
+Dear RT folks!
 
-Marc,
-the stm32-exti sits in the middle of an irq hierarchy, exactly as the
-"Interrupt remapping controller" in the section "Hierarchy IRQ domain"
-in Documentation/core-api/irq/irq-domain.rst
+I'm pleased to announce the v5.18-rc6-rt7 patch set. 
 
-When the "IOAPIC controller" runs a request_*_irq(), it causes calling
-irq_request_resources() of its parent, if the parent implements it.
-There is no automatic propagation in the hierarchy, so it's up to each
-irq_chip in the hierarchy to propagate this call to its parent.
-Using irq_chip_request_resources_parent() fits this use case.
+Changes since v5.18-rc6-rt6:
 
-At the end of the chain, the "Local APIC controller" is not obliged to
-implement the 'optional' irq_request_resources(). And here starts the
-pain:
-irq_chip_request_resources_parent() returns -ENOSYS if the parent does
-not implement the optional irq_request_resources().
-So we need to filter-out the error for unimplemented function, e.g.:
+  - The irq simulator did not invoke the interrupts in hardirq context,
+    as it should.
 
-static int stm32_exti_h_request_resources(struct irq_data *data)
-{
-	int ret;
-	ret =3D irq_chip_request_resources_parent(data);
-	/* not an error if parent does not implement it */
-	return (ret =3D=3D -ENOSYS) ? 0 : ret;
-}
+  - Provide generic_handle_domain_irq_safe(). It has been reported via
+    the kernel bugzilla that the amd-pincrl driver reports interrupts in
+    the wrong context.
 
-but then we cannot discriminate if -ENOSYS comes from missing optional
-irq_request_resources() in parent, or from an error inside parent's
-irq_request_resources(). That's why this patch reimplements the wheel.
+  - rcutorture could miss pending timers because ktimers runs at the
+    same priority as the rcutorture thread. Patch by Frederic
+    Weisbecker.
 
-Shuldn't irq_chip_request_resources_parent() return 0 when the parent
-doesn't implements the optional method, as it's already the case inside
-kernel/irq/manage.c:1390 static int irq_request_resources(struct
-irq_desc *desc)
-?
+  - Since the introduction of timersd in v5.16-rc3-rt7 there can be a in
+    the NO_HZ mode. Patch by Frederic Weisbecker.
 
-Regards,
-Antonio
+  - A small optimisation in iio's stm32-adc driver.
+
+  - An unused macro in lockdep has been removed.
+
+Known issues
+     - Valentin Schneider reported a few splats on ARM64, see
+          https://lkml.kernel.org/r/20210810134127.1394269-1-valentin.schneider@arm.com
+
+The delta patch against v5.18-rc6-rt6 is appended below and can be found here:
+ 
+     https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.18/incr/patch-5.18-rc6-rt6-rt7.patch.xz
+
+You can get this release via the git tree at:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git v5.18-rc6-rt7
+
+The RT patch against v5.18-rc6 can be found here:
+
+    https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.18/older/patch-5.18-rc6-rt7.patch.xz
+
+The split quilt queue is available at:
+
+    https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.18/older/patches-5.18-rc6-rt7.tar.xz
+
+Sebastian
+
+diff --git a/drivers/bcma/driver_gpio.c b/drivers/bcma/driver_gpio.c
+index 1e74ec1c7f231..ed2730a21e7c4 100644
+--- a/drivers/bcma/driver_gpio.c
++++ b/drivers/bcma/driver_gpio.c
+@@ -113,7 +113,7 @@ static irqreturn_t bcma_gpio_irq_handler(int irq, void *dev_id)
+ 		return IRQ_NONE;
+ 
+ 	for_each_set_bit(gpio, &irqs, gc->ngpio)
+-		generic_handle_irq(irq_find_mapping(gc->irq.domain, gpio));
++		generic_handle_domain_irq_safe(gc->irq.domain, gpio);
+ 	bcma_chipco_gpio_polarity(cc, irqs, val & irqs);
+ 
+ 	return IRQ_HANDLED;
+diff --git a/drivers/gpio/gpio-mlxbf2.c b/drivers/gpio/gpio-mlxbf2.c
+index 3d89912a05b87..d4916f32fee73 100644
+--- a/drivers/gpio/gpio-mlxbf2.c
++++ b/drivers/gpio/gpio-mlxbf2.c
+@@ -273,10 +273,8 @@ static irqreturn_t mlxbf2_gpio_irq_handler(int irq, void *ptr)
+ 	pending = readl(gs->gpio_io + YU_GPIO_CAUSE_OR_CAUSE_EVTEN0);
+ 	writel(pending, gs->gpio_io + YU_GPIO_CAUSE_OR_CLRCAUSE);
+ 
+-	for_each_set_bit(level, &pending, gc->ngpio) {
+-		int gpio_irq = irq_find_mapping(gc->irq.domain, level);
+-		generic_handle_irq(gpio_irq);
+-	}
++	for_each_set_bit(level, &pending, gc->ngpio)
++		generic_handle_domain_irq_safe(gc->irq.domain, level);
+ 
+ 	return IRQ_RETVAL(pending);
+ }
+diff --git a/drivers/iio/adc/stm32-adc-core.c b/drivers/iio/adc/stm32-adc-core.c
+index 1426562321575..c8fc97e52fef4 100644
+--- a/drivers/iio/adc/stm32-adc-core.c
++++ b/drivers/iio/adc/stm32-adc-core.c
+@@ -356,7 +356,7 @@ static void stm32_adc_irq_handler(struct irq_desc *desc)
+ 		if ((status & priv->cfg->regs->eoc_msk[i] &&
+ 		     stm32_adc_eoc_enabled(priv, i)) ||
+ 		     (status & priv->cfg->regs->ovr_msk[i]))
+-			generic_handle_irq(irq_find_mapping(priv->domain, i));
++			generic_handle_domain_irq(priv->domain, i);
+ 	}
+ 
+ 	chained_irq_exit(chip, desc);
+diff --git a/drivers/pinctrl/pinctrl-amd.c b/drivers/pinctrl/pinctrl-amd.c
+index 1a7d686494ffb..ce6fa6a76d1f6 100644
+--- a/drivers/pinctrl/pinctrl-amd.c
++++ b/drivers/pinctrl/pinctrl-amd.c
+@@ -638,7 +638,7 @@ static bool do_amd_gpio_irq_handler(int irq, void *dev_id)
+ 			if (!(regval & PIN_IRQ_PENDING) ||
+ 			    !(regval & BIT(INTERRUPT_MASK_OFF)))
+ 				continue;
+-			generic_handle_domain_irq(gc->irq.domain, irqnr + i);
++			generic_handle_domain_irq_safe(gc->irq.domain, irqnr + i);
+ 
+ 			/* Clear interrupt.
+ 			 * We must read the pin register again, in case the
+diff --git a/drivers/platform/x86/intel/int0002_vgpio.c b/drivers/platform/x86/intel/int0002_vgpio.c
+index 617dbf98980ec..97cfbc520a02c 100644
+--- a/drivers/platform/x86/intel/int0002_vgpio.c
++++ b/drivers/platform/x86/intel/int0002_vgpio.c
+@@ -125,8 +125,7 @@ static irqreturn_t int0002_irq(int irq, void *data)
+ 	if (!(gpe_sts_reg & GPE0A_PME_B0_STS_BIT))
+ 		return IRQ_NONE;
+ 
+-	generic_handle_irq(irq_find_mapping(chip->irq.domain,
+-					    GPE0A_PME_B0_VIRT_GPIO_PIN));
++	generic_handle_domain_irq_safe(chip->irq.domain, GPE0A_PME_B0_VIRT_GPIO_PIN);
+ 
+ 	pm_wakeup_hard_event(chip->parent);
+ 
+diff --git a/drivers/ssb/driver_gpio.c b/drivers/ssb/driver_gpio.c
+index 2de3896489c84..897cb8db5084f 100644
+--- a/drivers/ssb/driver_gpio.c
++++ b/drivers/ssb/driver_gpio.c
+@@ -132,7 +132,8 @@ static irqreturn_t ssb_gpio_irq_chipco_handler(int irq, void *dev_id)
+ 		return IRQ_NONE;
+ 
+ 	for_each_set_bit(gpio, &irqs, bus->gpio.ngpio)
+-		generic_handle_irq(ssb_gpio_to_irq(&bus->gpio, gpio));
++		generic_handle_domain_irq_safe(bus->irq_domain, gpio);
++
+ 	ssb_chipco_gpio_polarity(chipco, irqs, val & irqs);
+ 
+ 	return IRQ_HANDLED;
+@@ -330,7 +331,8 @@ static irqreturn_t ssb_gpio_irq_extif_handler(int irq, void *dev_id)
+ 		return IRQ_NONE;
+ 
+ 	for_each_set_bit(gpio, &irqs, bus->gpio.ngpio)
+-		generic_handle_irq(ssb_gpio_to_irq(&bus->gpio, gpio));
++		generic_handle_domain_irq_safe(bus->irq_domain, gpio);
++
+ 	ssb_extif_gpio_polarity(extif, irqs, val & irqs);
+ 
+ 	return IRQ_HANDLED;
+diff --git a/include/linux/interrupt.h b/include/linux/interrupt.h
+index b19a3d00ba787..68cf87ed6177a 100644
+--- a/include/linux/interrupt.h
++++ b/include/linux/interrupt.h
+@@ -624,9 +624,17 @@ extern void raise_softirq_irqoff(unsigned int nr);
+ extern void raise_softirq(unsigned int nr);
+ 
+ #ifdef CONFIG_PREEMPT_RT
++DECLARE_PER_CPU(struct task_struct *, timersd);
++DECLARE_PER_CPU(unsigned long, pending_timer_softirq);
++
+ extern void raise_timer_softirq(void);
+ extern void raise_hrtimer_softirq(void);
+ 
++static inline unsigned int local_pending_timers(void)
++{
++        return __this_cpu_read(pending_timer_softirq);
++}
++
+ #else
+ static inline void raise_timer_softirq(void)
+ {
+@@ -637,6 +645,11 @@ static inline void raise_hrtimer_softirq(void)
+ {
+ 	raise_softirq_irqoff(HRTIMER_SOFTIRQ);
+ }
++
++static inline unsigned int local_pending_timers(void)
++{
++        return local_softirq_pending();
++}
+ #endif
+ 
+ DECLARE_PER_CPU(struct task_struct *, ksoftirqd);
+diff --git a/include/linux/irqdesc.h b/include/linux/irqdesc.h
+index a77584593f7d1..98253955e2ae7 100644
+--- a/include/linux/irqdesc.h
++++ b/include/linux/irqdesc.h
+@@ -169,6 +169,7 @@ int generic_handle_irq_safe(unsigned int irq);
+  * conversion failed.
+  */
+ int generic_handle_domain_irq(struct irq_domain *domain, unsigned int hwirq);
++int generic_handle_domain_irq_safe(struct irq_domain *domain, unsigned int hwirq);
+ int generic_handle_domain_nmi(struct irq_domain *domain, unsigned int hwirq);
+ #endif
+ 
+diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
+index 467b94257105e..3d948f001f182 100644
+--- a/include/linux/lockdep.h
++++ b/include/linux/lockdep.h
+@@ -431,7 +431,6 @@ enum xhlock_context_t {
+ 	XHLOCK_CTX_NR,
+ };
+ 
+-#define lockdep_init_map_crosslock(m, n, k, s) do {} while (0)
+ /*
+  * To initialize a lockdep_map statically use this macro.
+  * Note that _name must not be NULL.
+diff --git a/kernel/irq/irq_sim.c b/kernel/irq/irq_sim.c
+index 0cd02efa3a742..dd76323ea3fd7 100644
+--- a/kernel/irq/irq_sim.c
++++ b/kernel/irq/irq_sim.c
+@@ -181,7 +181,7 @@ struct irq_domain *irq_domain_create_sim(struct fwnode_handle *fwnode,
+ 		goto err_free_bitmap;
+ 
+ 	work_ctx->irq_count = num_irqs;
+-	init_irq_work(&work_ctx->work, irq_sim_handle_irq);
++	work_ctx->work = IRQ_WORK_INIT_HARD(irq_sim_handle_irq);
+ 
+ 	return work_ctx->domain;
+ 
+diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+index 0099b87dd8530..48c34d47255cc 100644
+--- a/kernel/irq/irqdesc.c
++++ b/kernel/irq/irqdesc.c
+@@ -706,6 +706,30 @@ int generic_handle_domain_irq(struct irq_domain *domain, unsigned int hwirq)
+ }
+ EXPORT_SYMBOL_GPL(generic_handle_domain_irq);
+ 
++ /**
++ * generic_handle_irq_safe - Invoke the handler for a HW irq belonging
++ *			     to a domain from any context.
++ * @domain:	The domain where to perform the lookup
++ * @hwirq:	The HW irq number to convert to a logical one
++ *
++ * Returns:	0 on success, a negative value on error.
++ *
++ * This function can be called from any context (IRQ or process context). It
++ * will report an error if not invoked from IRQ context and the irq has been
++ * marked to enforce IRQ-context only.
++ */
++int generic_handle_domain_irq_safe(struct irq_domain *domain, unsigned int hwirq)
++{
++	unsigned long flags;
++	int ret;
++
++	local_irq_save(flags);
++	ret = handle_irq_desc(irq_resolve_mapping(domain, hwirq));
++	local_irq_restore(flags);
++	return ret;
++}
++EXPORT_SYMBOL_GPL(generic_handle_domain_irq_safe);
++
+ /**
+  * generic_handle_domain_nmi - Invoke the handler for a HW nmi belonging
+  *                             to a domain.
+diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+index 55d049c39608f..de306d1406e98 100644
+--- a/kernel/rcu/rcutorture.c
++++ b/kernel/rcu/rcutorture.c
+@@ -3294,6 +3294,12 @@ rcu_torture_init(void)
+ 				WARN_ON_ONCE(!t);
+ 				sp.sched_priority = 2;
+ 				sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
++#ifdef CONFIG_PREEMPT_RT
++				t = per_cpu(timersd, cpu);
++				WARN_ON_ONCE(!t);
++				sp.sched_priority = 2;
++				sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
++#endif
+ 			}
+ 		}
+ 	}
+diff --git a/kernel/softirq.c b/kernel/softirq.c
+index 5b36ebe5e20de..9bf626ebbee65 100644
+--- a/kernel/softirq.c
++++ b/kernel/softirq.c
+@@ -637,13 +637,8 @@ static inline void tick_irq_exit(void)
+ #endif
+ }
+ 
+-static DEFINE_PER_CPU(struct task_struct *, timersd);
+-static DEFINE_PER_CPU(unsigned long, pending_timer_softirq);
+-
+-static unsigned int local_pending_timers(void)
+-{
+-        return __this_cpu_read(pending_timer_softirq);
+-}
++DEFINE_PER_CPU(struct task_struct *, timersd);
++DEFINE_PER_CPU(unsigned long, pending_timer_softirq);
+ 
+ static void wake_timersd(void)
+ {
+diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+index d257721c68b8f..8ac337201dd90 100644
+--- a/kernel/time/tick-sched.c
++++ b/kernel/time/tick-sched.c
+@@ -780,7 +780,7 @@ static void tick_nohz_restart(struct tick_sched *ts, ktime_t now)
+ 
+ static inline bool local_timer_softirq_pending(void)
+ {
+-	return local_softirq_pending() & BIT(TIMER_SOFTIRQ);
++	return local_pending_timers() & BIT(TIMER_SOFTIRQ);
+ }
+ 
+ static ktime_t tick_nohz_next_event(struct tick_sched *ts, int cpu)
+diff --git a/localversion-rt b/localversion-rt
+index 8fc605d806670..045478966e9f1 100644
+--- a/localversion-rt
++++ b/localversion-rt
+@@ -1 +1 @@
+--rt6
++-rt7

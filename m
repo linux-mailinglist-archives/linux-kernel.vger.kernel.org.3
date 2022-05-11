@@ -2,91 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E2C523052
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DFB1523032
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232831AbiEKKJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 06:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50576 "EHLO
+        id S233882AbiEKKEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 06:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241014AbiEKKJX (ORCPT
+        with ESMTP id S234198AbiEKKDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 06:09:23 -0400
-X-Greylist: delayed 359 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 11 May 2022 03:09:13 PDT
-Received: from email.studentenwerk.mhn.de (dresden.studentenwerk.mhn.de [141.84.225.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2C17A828;
-        Wed, 11 May 2022 03:09:12 -0700 (PDT)
-Received: from mailhub.studentenwerk.mhn.de (mailhub.studentenwerk.mhn.de [127.0.0.1])
-        by email.studentenwerk.mhn.de (Postfix) with ESMTPS id 4Kyr7z1hfMzRhSb;
-        Wed, 11 May 2022 12:03:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwm.de; s=stwm-20170627;
-        t=1652263391;
+        Wed, 11 May 2022 06:03:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E8E75DA68
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:03:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652263412;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=paHzsJSUUUK2l3doauEwUmwh24Gg8aqJ/AhHP760snk=;
-        b=Qp5JKFdwGYj8Gar70vooSb2H3bWE0kAS4UYpnePxXIykfKcymrLtiBPn/7Ux5zAKL6MUkD
-        ZQbx+twkue0/4TpKQl+UbCjWIAhbGkX6L7mJez7jwUQ3ySD+cHYwwnoXfiD8AE1LOuOXQF
-        Zd7zp0mc3Mly/9duv2GsTMfspRsupIUj6nD0hh1E8R6zFyKO7xT4YuwGVAu0nTbjIhkNX+
-        wIh40zOoBSCvn/PcE2sAQ6dtDR+0Ykq37clezF892Ak+iW4Wx0FJQbG6s7HPqFy0oFLvA3
-        KIZt83R8J7V2qEt62wEKmWbS5H+O557uF9Vpg08ivGGLStoz+ej7h+LWGyviYA==
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/vtPNJw1+YnhXgRCJ8NELfFcD+FTH1I0JZLJZh7rb18=;
+        b=JN+VbiMoZCOzR+ZMg7f4axfLqwA4zSa/U2pMPwTjQc8/rUMWKDl4AqlIE3xBXTJfzg4HUs
+        VuYonyDBDnStWNQmO+qfc2VtLPYGpToNZZETqVkey/KDltTCRAuYJscfcbDCPeeornxW1i
+        F6ltjOIiL0w1o5qzKROZUwM3nyedRL4=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-517-8wDIHd8PNtyl3o_qIobQbg-1; Wed, 11 May 2022 06:03:31 -0400
+X-MC-Unique: 8wDIHd8PNtyl3o_qIobQbg-1
+Received: by mail-wm1-f71.google.com with SMTP id 26-20020a05600c021a00b003940660c053so514691wmi.2
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:03:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/vtPNJw1+YnhXgRCJ8NELfFcD+FTH1I0JZLJZh7rb18=;
+        b=j1EKHYsuxwDH7drbqoOLLSd8jlVQxx3TILODEpwXzTVRvLWL8VRhJ7I2hGLDL6ZgC8
+         VEhrSJ3xb8k+py6g7yxCVxEtCT43W4C4+2aG6GIxiEczXwHdEqzrl8pEq9m3PQbzJoEK
+         VCDFRC3WbmNmjVMRHux4BSbgSyIxlz6eJZrHOlNp5BnmwmQRwCMpWbo+q5LF7NbJyZh7
+         Lvzqsz9/G6vE0LiJnyeyO9D0M4vcF30CW9u2N1s22+CG3N9Syiw4QbVkgKJ09yqaMrFS
+         xLReyRZDs6z6SyOX2FtQUtBA+WCsTef8PC7UZ870a3gKwxi9yDEcP6yhXk6jIYGAxxfQ
+         3egA==
+X-Gm-Message-State: AOAM532Rd7moRRSc5SohoE18b2MwaBhAGy8n8XR+INLz3yyFvbxZmi8F
+        d+SeBmbxTPFkbRy/uGUa5Orc9xkKqp33bhlqqFw/OErSeCbKsGhhUO5/UaNxwP4IcRk6MgNeD5w
+        /rAJSHAJqDwhXKKQmNzSdAVFxiVMwy6YYderXuuOjubrhPgInNLA1W5ZZvmEVhSmmd/RB9n9wHs
+        s=
+X-Received: by 2002:a05:6000:1707:b0:20c:660c:7c78 with SMTP id n7-20020a056000170700b0020c660c7c78mr22100344wrc.150.1652263410416;
+        Wed, 11 May 2022 03:03:30 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz/mtciUUA/2mXBlfux7nSrDs5vehkcW7+aoBUwQ+SGHeAN3Wa6iGwpRl/7vAo47q2NqMsjgA==
+X-Received: by 2002:a05:6000:1707:b0:20c:660c:7c78 with SMTP id n7-20020a056000170700b0020c660c7c78mr22100313wrc.150.1652263410167;
+        Wed, 11 May 2022 03:03:30 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id n42-20020a05600c3baa00b00394699f803dsm5480419wms.46.2022.05.11.03.03.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 03:03:29 -0700 (PDT)
+Message-ID: <e5408379-ce8f-46dc-0673-71b10743b563@redhat.com>
+Date:   Wed, 11 May 2022 12:03:28 +0200
 MIME-Version: 1.0
-Date:   Wed, 11 May 2022 12:03:13 +0200
-From:   Wolfgang Walter <linux@stwm.de>
-To:     stable@vger.kernel.org, Trond Myklebust <trondmy@gmail.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: 5.4.188 and later: massive performance regression with nfsd
-Message-ID: <f8d9b9112607df4807fba8948ac6e145@stwm.de>
-X-Sender: linux@stwm.de
-Organization: =?UTF-8?Q?Studentenwerk_M=C3=BCnchen?=
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] drm/todo: Add entry for converting kselftests to kunit
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org
+References: <20220509130846.694397-1-javierm@redhat.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20220509130846.694397-1-javierm@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 5/9/22 15:08, Javier Martinez Canillas wrote:
+> Many of the kselftests in DRM can be converted to kunit tests instead,
+> since that framework is more suitable for unit testing.
+> 
+> Suggested-by: Maxime Ripard <maxime@cerno.tech>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> ---
 
-starting with 5.4.188 wie see a massive performance regression on our 
-nfs-server. It basically is serving requests very very slowly with cpu 
-utilization of 100% (with 5.4.187 and earlier it is 10%) so that it is 
-unusable as a fileserver.
+Pushed this to drm-misc (drm-misc-next).
 
-The culprit are commits (or one of it):
-
-c32f1041382a88b17da5736886da4a492353a1bb "nfsd: cleanup 
-nfsd_file_lru_dispose()"
-628adfa21815f74c04724abc85847f24b5dd1645 "nfsd: Containerise filecache 
-laundrette"
-
-(upstream 36ebbdb96b694dd9c6b25ad98f2bbd263d022b63 and 
-9542e6a643fc69d528dfb3303f145719c61d3050)
-
-If I revert them in v5.4.192 the kernel works as before and performance 
-is ok again.
-
-I did not try to revert them one by one as any disruption of our 
-nfs-server is a severe problem for us and I'm not sure if they are 
-related.
-
-5.10 and 5.15 both always performed very badly on our nfs-server in a 
-similar way so we were stuck with 5.4.
-
-I now think this is because of 36ebbdb96b694dd9c6b25ad98f2bbd263d022b63 
-and/or 9542e6a643fc69d528dfb3303f145719c61d3050 though I didn't tried to 
-revert them in 5.15 yet.
-
-
-Regards,
 -- 
-Wolfgang Walter
-Studentenwerk München
-Anstalt des öffentlichen Rechts
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

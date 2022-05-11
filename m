@@ -2,98 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAB1E523DB3
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A97B3523DB6
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347048AbiEKTkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 15:40:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37684 "EHLO
+        id S1347065AbiEKTkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 15:40:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347045AbiEKTjx (ORCPT
+        with ESMTP id S1347061AbiEKTkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 15:39:53 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E5D219F69
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:39:52 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id d6so3760595ede.8
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:39:52 -0700 (PDT)
+        Wed, 11 May 2022 15:40:23 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4227F21A95E
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:40:21 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 16so3867532lju.13
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:40:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KUjfW/kaHDRwhWp5Rt/2AgtSuQq/hXyzExdN5I7ro90=;
-        b=N5Sewa0q9eHV45UM94+DzpGvQdCTPLlQVm2dEzNxjvomA5nCkkBrjpYNctI7qVfxDw
-         zTTnnDEJyOsSB1lBbLOg8zLzUazdA4CE5/w+5mlE77v9ce3pHkQQltOb3x41srT+4OrW
-         xrFq9MjViOUDiGbXn7gV83kszXNflH/WBLH4k=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=s0WHnwC/LKH7P9lNbxHLOT0Ey/YFu5D9xNYFJTYtZ1Q=;
+        b=Fvz5uPtJHUorCw5qkY372eQ60ClhKlpeLwO1xjhAL9PQHj9vflc26CO74tkzg7EmAI
+         FEHbyF3V9YbZQYUmxvm1RNGhLDcIjYqTBqP4pZiVRnOpH7gUtNFeTmFleqdhViv3AS3i
+         q3If8KCbEwTyPf7Uo6YzYZ1DgplKvn07+Q5FTK3v4nApvYHZxE1K0C9zkXE0CAEZsylG
+         /vV6IuLMlkcjNQ0IVy3QsNh5mor400xpsLkIzUSChrp4HwfNkleiWjE/UsdexJvxUSKo
+         7XcpLaapmKfq6RqUk63VDmyq5ZCSDITSYlTLQDsqe8Nq/YlTdnTooSQfbfWhq1VOhG6a
+         uP7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=KUjfW/kaHDRwhWp5Rt/2AgtSuQq/hXyzExdN5I7ro90=;
-        b=24LVyffeAyNkIXrczj+FkjdoouvcBefRRtHwFeT5UPBegu3owQ0H+GdrHkSLkLUp7t
-         Yy0fYA8Et9wQJM4am5G1O/9Xyc0mVw0sN1UqNEZm0pM8EBS7S20IE0l8ZdKD3B5QHkYN
-         mYdtj9XZDp/q6877TLHLLku5PP9TEw+g/YJfWgGhwdBea6rFq/NVh8ixdBZcHBOgcQ/w
-         fO6plsMoD/FhRbLkazpKx/okVgXxJfkBg5BJsPH0rGr1QcKGNf8jZBrxhrqM2yF7xctO
-         /t2nNFEMxbR6ToM5EiVQIo//6im9EGAEH5TwGsyIhgUmLe4psYK20+DPKYQ/FCKI2NSk
-         fOlg==
-X-Gm-Message-State: AOAM532Td4skQfArc0O5D1XNKlmyjD5CLaolM1IBfWlLzipQIOyRKqon
-        4l57U8Y/UFmLM4K5jhabrduRhg==
-X-Google-Smtp-Source: ABdhPJzWesYTj8gmkcmegNXLf0uSlKr9mITbAOCF+I6/YdvNNo+sGdi8tvr8Vq30B8lkClQ7lWiONw==
-X-Received: by 2002:a05:6402:2932:b0:425:d7b3:e0d1 with SMTP id ee50-20020a056402293200b00425d7b3e0d1mr30745307edb.141.1652297990866;
-        Wed, 11 May 2022 12:39:50 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id h11-20020a170906828b00b006f3ef214e44sm1295729ejx.170.2022.05.11.12.39.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 12:39:50 -0700 (PDT)
-Date:   Wed, 11 May 2022 21:39:48 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Dave Airlie <airlied@gmail.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>
-Subject: Re: Adding CI results to the kernel tree was Re: [RFC v2] drm/msm:
- Add initial ci/ subdirectory
-Message-ID: <YnwRBFNyygB0Ub6S@phenom.ffwll.local>
-Mail-Followup-To: Linus Torvalds <torvalds@linux-foundation.org>,
-        Dave Airlie <airlied@gmail.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>
-References: <20220510070140.45407-1-tomeu.vizoso@collabora.com>
- <20220510141329.54414-1-tomeu.vizoso@collabora.com>
- <CAPM=9tzLR-wsLhg2ikGjoK06s-ju5XWa1rtPPiUpN=pwD1vgtA@mail.gmail.com>
- <CAHk-=wg8YgH1h3wrm9CtXff7rSewa+NE0Z5upb1GOE8XiTL9HA@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=s0WHnwC/LKH7P9lNbxHLOT0Ey/YFu5D9xNYFJTYtZ1Q=;
+        b=HnFLRU/2tDDN3hILG8L2dKZWWTsSkAIzuLpJpY4vSUDWO/X1SC2dbGi7VEC7VOrcB5
+         xUF988+ZWl3SPtLTgpL13FoHO8yGsykIX47GVodwVNGgMFeKOeCw3gJnpJD8LGduo1w7
+         B7njBGZtBmmEA6F8mpvWP0yk1BdYE6wWt/QQyWEIQH9n667Cg/HTpod7UXp2ZWcMZYMf
+         0uuw1HYcJPnW5+FcZ4mbirI0o6v3CIMsAeLCN/YTJj5dKbkt3k5P3r18qcn9X82/jGWm
+         5KE1P/fafkdFrG1sO3WW+R7gA7IrSg2sfQyMYWWBmn1S8U8AepIf1xVP7Ah/GHVjwWZJ
+         qNYA==
+X-Gm-Message-State: AOAM533cvzT912ypNcf6zu9YBrXCys3E5VYPPSL3vNGac1BmialX3li9
+        +ryY3FyTxOzvrv7ucpXT9VLgctzgCG6kJZkao1f0NQ==
+X-Google-Smtp-Source: ABdhPJz0NVpIZePVvZ3oOx6+FO7jLpzyA7B8CJCC9CbYcQngiEhIKV2dTdoUVdm176erPVni03DBhy5q0Zs/JvZO3y4=
+X-Received: by 2002:a05:651c:101:b0:250:896d:f870 with SMTP id
+ a1-20020a05651c010100b00250896df870mr17878467ljb.235.1652298019389; Wed, 11
+ May 2022 12:40:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wg8YgH1h3wrm9CtXff7rSewa+NE0Z5upb1GOE8XiTL9HA@mail.gmail.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20220511120532.2228616-1-hca@linux.ibm.com> <20220511120532.2228616-8-hca@linux.ibm.com>
+In-Reply-To: <20220511120532.2228616-8-hca@linux.ibm.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 11 May 2022 12:40:07 -0700
+Message-ID: <CAKwvOdn3Mdn9ek-7EotHmd6Wb7C5rzZnOxAQVtbQEd2LBBZGRg@mail.gmail.com>
+Subject: Re: [PATCH 7/8] s390/boot: do not emit debug info for assembly with
+ llvm's IAS
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Jonas Paulsson <paulsson@linux.vnet.ibm.com>,
+        Ulrich Weigand <ulrich.weigand@de.ibm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andreas Krebbel <krebbel@linux.ibm.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,122 +76,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 10:33:06AM -0700, Linus Torvalds wrote:
-> On Tue, May 10, 2022 at 10:07 PM Dave Airlie <airlied@gmail.com> wrote:
-> >
-> > > And use it to store expectations about what the drm/msm driver is
-> > > supposed to pass in the IGT test suite.
-> >
-> > I wanted to loop in Linus/Greg to see if there are any issues raised
-> > by adding CI results file to the tree in their minds, or if any other
-> > subsystem has done this already, and it's all fine.
-> >
-> > I think this is a good thing after our Mesa experience, but Mesa has a
-> > lot tighter integration here, so I want to get some more opinions
-> > outside the group.
-> 
-> Honestly, my immediate reaction is that I think it might be ok, but
-> 
->  (a) are these things going to absolutely balloon over time?
-> 
->  (b) should these not be separated out?
-> 
-> Those two issues kind of interact.
-> 
-> If it's a small and targeted test-suite, by all means keep it in the
-> kernel, but why not make it part of "tools/testing/selftests"
-> 
-> But if people expect this to balloon and we end up having megabytes of
-> test output, then I really think it should be a separate git tree.
-> 
-> A diffstat like this:
-> 
-> >  7 files changed, 791 insertions(+)
+On Wed, May 11, 2022 at 5:05 AM Heiko Carstens <hca@linux.ibm.com> wrote:
+>
+> Commit ee6d777d3e93 ("s390/decompressor: support extra debug flags")
+> added extra debug flags, in particular debug info is created,
+> depending on config options.
+>
+> With llvm's IAS this causes this compile warning:
+>
+> arch/s390/boot/head.S:38:1: warning: DWARF2 only supports one section per compilation unit
+> .section ".head.text","ax"
+> ^
+>
+> This is a known problem and was addressed with a commit b8a9092330da
+> ("Kbuild: do not emit debug info for assembly with LLVM_IAS=1").
+> Just do the same for s390 to get rid of this warning.
+>
+> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+> ---
+>  arch/s390/Makefile | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/arch/s390/Makefile b/arch/s390/Makefile
+> index c59efc83f020..d73611b35164 100644
+> --- a/arch/s390/Makefile
+> +++ b/arch/s390/Makefile
+> @@ -20,7 +20,9 @@ LDFLAGS_vmlinux       := -pie
+>  endif
+>  aflags_dwarf   := -Wa,-gdwarf-2
 
-Yeah I guess it's good to have some numbers for where this might go. Good
-comparison is probably mesa3d, since it's the same-ish people doing the
-same-ish ci on the same-ish infrastructure, just the userspace part of it.
+^ or can we use a more modern variant of dwarf, like at least dwarf-4?
 
-mesa$ git ls-files | grep ci | xargs cat | wc -l
-123077
+>  KBUILD_AFLAGS_DECOMPRESSOR := $(CLANG_FLAGS) -m64 -D__ASSEMBLY__
+> +ifndef CONFIG_AS_IS_LLVM
+>  KBUILD_AFLAGS_DECOMPRESSOR += $(if $(CONFIG_DEBUG_INFO),$(aflags_dwarf))
+> +endif
+>  KBUILD_CFLAGS_DECOMPRESSOR := $(CLANG_FLAGS) -m64 -O2 -mpacked-stack
+>  KBUILD_CFLAGS_DECOMPRESSOR += -DDISABLE_BRANCH_PROFILING -D__NO_FORTIFY
+>  KBUILD_CFLAGS_DECOMPRESSOR += -fno-delete-null-pointer-checks -msoft-float -mbackchain
+> --
+> 2.32.0
+>
 
-mesa$ git ls-files | grep ci | wc -l
-421
 
-Compared to drivers/gpu it's really not much, and mesa is about the size
-of drivers/gpu if you exclude the massive amount of register headers from
-amd.
-
-And I guess if we do stuff like result file compression like you mentioned
-it should be quite a bit less even.
-
-So yeah if this does take off it wil be substantially more, but I don't
-think it'll ever get to a point where it'll swamp code changes. And if it
-does that's kinda a solid indicator that something really wrong is going
-on.
-
-> is not a problem at all. But I get the feeling that this is just the
-> tip of the iceberg, and people will want to not just have the result
-> files, but start adding actual *input* files that may be largely
-> automated stuff and may be tens of megabytes in size.
-> 
-> Because the result files on their own aren't really self-contained,
-> and then people will want to keep them in sync with the test-files
-> themselves, and start adding those, and now it *really* is likely very
-> unwieldy.
-> 
-> Or if that doesn't happen, and the actual input test files stay in a
-> separate CI repo, and then you end up having random coherency issues
-> with that CI repo, and it all gets to be either horribly messy, or the
-> result files in the kernel end up really stale.
-> 
-> So honestly, I personally don't see a good end result here.  This
-> particular small patch? *This* one looks fine to me, except I really
-> think tools/testing/selftests/gpu would be a much more logical place
-> for it.
-> 
-> But I don't see a way forward that is sane.
-> 
-> Can somebody argue otherwise?
-
-I do personally think we should add a bunch more things here, radically
-putting everything into the drm-ci repo feels a bit much like appeasement
-to get the foot in the door. Like some of the scripts are definitely
-specific to the ci infra on freedesktop.org (or specific hw runners for
-the drivers), and that makes sense to keep in that drm/fd ci repo. But
-other scripts should probably migrate to scripts/ and at least start out
-in a ci/ folder in the kernel.
-
-igt itself might eventually move to tools/testing/selftests/gpu or
-whatever, but that's kinda a huge discussion onto itself. And I haven't
-seen a clear consensus yet among subsystem that these kind of tests (like
-xfs-tests, and I think pretty much ever bigger subsystem that is old
-enough to predate selftests has them somewhere) should all move into
-tools/testing/selftest. Maybe they should, but feels like this is
-orthogonal to ci integration.
-
-Note that mesa3d has the exact same issue going that you're raising, and
-some of those are unfixable because the opengl/vulkan conformance test
-suites are maintained entirely externally by Khronos (and you have to use
-those or you're not conformant to the spec, which renders the point of
-having a shared spec a bit moot). It's messy but workable, and the CI you
-get seems very much to be worth the price.
-
-One idea I tossed out on irc is to move this all under drivers/gpu/ci.
-There's driver specific stuff like the test result/fail lists, and maybe
-those could eventually move out to drivers. But for starting out it might
-be better to keep it all in one place so it's a bit better under control
-and doesn't accidentally become a kranken of some kind. And then make sure
-pieces move to scripts/ or tools/testing/ appropriately.
-
-In general I think any mess this causes is a pretty good indicator that
-something is amiss, like if this causes messy history due to tests
-flipping too much and causing issues then that also indicates an issue
-with the kernel or testcase quality itself. And it might be good to shine
-more light on that stuff.
-
-Cheers, Daniel
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Thanks,
+~Nick Desaulniers

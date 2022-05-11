@@ -2,157 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C41F852349D
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1243B5234A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244124AbiEKNrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:47:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36654 "EHLO
+        id S237428AbiEKNsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:48:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244156AbiEKNrZ (ORCPT
+        with ESMTP id S231463AbiEKNsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:47:25 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A682219367;
-        Wed, 11 May 2022 06:47:18 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id D6CEA21A97;
-        Wed, 11 May 2022 13:47:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1652276836; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=itd3Sa1CpZiLCS1ZDb1vqIIXnJVKe6EqK2Q/rkked3Q=;
-        b=pLilFkUDuwCHQ06I9/LEHv6rCi0DznqXDGfK76DXFxgw6UNeOzlzVRC6O22yHkc12xN2gf
-        lFDgWu+g3C/HkW4H97D8nGjRbi55x9srzwFVYGsS4ZmeXdrQtsearXTyM48hXaoOIcM0ef
-        mVDoRMM3N2hj3teqWMdqpHCvBR9k3bg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1652276836;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=itd3Sa1CpZiLCS1ZDb1vqIIXnJVKe6EqK2Q/rkked3Q=;
-        b=oY5XOjAd/sEDKcBkY4b9nI1t+xwGGLaQ0bF5KkiGHjIehtO5DAbknG0TR8VSFuTb6tLsDB
-        JsPyrxGlfq6c8gBg==
-Received: from quack3.suse.cz (unknown [10.163.43.118])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 11 May 2022 09:48:17 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A9024F3D
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 06:48:16 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 89D192C141;
-        Wed, 11 May 2022 13:47:16 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id B9939A062A; Wed, 11 May 2022 15:47:10 +0200 (CEST)
-Date:   Wed, 11 May 2022 15:47:10 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Ye Bin <yebin10@huawei.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz
-Subject: Re: [PATCH -next v2] ext4: fix bug_on in ext4_writepages
-Message-ID: <20220511134710.4ggvxuxg7dwf7tkp@quack3.lan>
-References: <20220510100228.1172227-1-yebin10@huawei.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kyx7c6Gtxz4xXS;
+        Wed, 11 May 2022 23:48:12 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1652276895;
+        bh=h4GsJHInoEmk4VosvrifFlBFgfvEydQXp/Z8HDdJba0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Bil9WRONdl9jfvolbTZd1gifCX6q11Kt7gVHiisrZUWqNuaI0H2scNc2YMKlTSJT8
+         YT0FrAz7Qexhp1uUkeep0dfxCiw+nuZQKxbyVdhbDtdLMTTNtfla+Ove9+L1l1H+Bc
+         F8gdYdqQrFm18aHu6uuTuwfdFvqzFvCSiHonaVLDkRG2YXYaEJFEAVP8MVC1jhBip1
+         fw9wp9StQZDUymihehKjk43rWgE6oqiFQwMmqXfKZUrqsnajluEMQQYuy2TDyWQ2Bx
+         OElYdv46mnVXyRtj1TfKlBr1QtdRWTSvAPIPbybp2xj4kSgVXRM72VSW7DA6+9MAqF
+         klf9+CSDWFy3A==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Borislav Petkov <bp@alien8.de>,
+        Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Zhangfei Gao <zhangfei.gao@foxmail.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>
+Subject: Re: Link: tag and links to submission and reports (was: Re: [GIT
+ pull] core/urgent for v5.18-rc6)
+In-Reply-To: <Ynt1z0eZ19eMqp8I@zn.tnic>
+References: <165201148069.536527.1960632033331546251.tglx@xen13>
+ <CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com>
+ <ff841fdc-4db7-7a3d-8caf-d0cddd0dfa31@leemhuis.info>
+ <Ynt1z0eZ19eMqp8I@zn.tnic>
+Date:   Wed, 11 May 2022 23:48:11 +1000
+Message-ID: <877d6s89k4.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220510100228.1172227-1-yebin10@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 10-05-22 18:02:28, Ye Bin wrote:
-> we got issue as follows:
-> EXT4-fs error (device loop0): ext4_mb_generate_buddy:1141: group 0, block bitmap and bg descriptor inconsistent: 25 vs 31513 free cls
-> ------------[ cut here ]------------
-> kernel BUG at fs/ext4/inode.c:2708!
-> invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
-> CPU: 2 PID: 2147 Comm: rep Not tainted 5.18.0-rc2-next-20220413+ #155
-> RIP: 0010:ext4_writepages+0x1977/0x1c10
-> RSP: 0018:ffff88811d3e7880 EFLAGS: 00010246
-> RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffff88811c098000
-> RDX: 0000000000000000 RSI: ffff88811c098000 RDI: 0000000000000002
-> RBP: ffff888128140f50 R08: ffffffffb1ff6387 R09: 0000000000000000
-> R10: 0000000000000007 R11: ffffed10250281ea R12: 0000000000000001
-> R13: 00000000000000a4 R14: ffff88811d3e7bb8 R15: ffff888128141028
-> FS:  00007f443aed9740(0000) GS:ffff8883aef00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000020007200 CR3: 000000011c2a4000 CR4: 00000000000006e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  do_writepages+0x130/0x3a0
->  filemap_fdatawrite_wbc+0x83/0xa0
->  filemap_flush+0xab/0xe0
->  ext4_alloc_da_blocks+0x51/0x120
->  __ext4_ioctl+0x1534/0x3210
->  __x64_sys_ioctl+0x12c/0x170
->  do_syscall_64+0x3b/0x90
-> 
-> It may happen as follows:
-> 1. write inline_data inode
-> vfs_write
->   new_sync_write
->     ext4_file_write_iter
->       ext4_buffered_write_iter
->         generic_perform_write
->           ext4_da_write_begin
->             ext4_da_write_inline_data_begin -> If inline data size too
->             small will allocate block to write, then mapping will has
->             dirty page
->                 ext4_da_convert_inline_data_to_extent ->clear EXT4_STATE_MAY_INLINE_DATA
-> 2. fallocate
-> do_vfs_ioctl
->   ioctl_preallocate
->     vfs_fallocate
->       ext4_fallocate
->         ext4_convert_inline_data
->           ext4_convert_inline_data_nolock
->             ext4_map_blocks -> fail will goto restore data
->             ext4_restore_inline_data
->               ext4_create_inline_data
->               ext4_write_inline_data
->               ext4_set_inode_state -> set inode EXT4_STATE_MAY_INLINE_DATA
-> 3. writepages
-> __ext4_ioctl
->   ext4_alloc_da_blocks
->     filemap_flush
->       filemap_fdatawrite_wbc
->         do_writepages
->           ext4_writepages
->             if (ext4_has_inline_data(inode))
->               BUG_ON(ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA))
-> 
-> The root cause of this issue is we destory inline data until call ext4_writepages
-> under delay allocation mode. But there maybe already covert from inline to extent.
-> To solved this issue, we call filemap_flush firstly.
-> 
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
-> ---
->  fs/ext4/inline.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
-> index 6d253edebf9f..130ed5d83734 100644
-> --- a/fs/ext4/inline.c
-> +++ b/fs/ext4/inline.c
-> @@ -2002,6 +2002,14 @@ int ext4_convert_inline_data(struct inode *inode)
->  	if (!ext4_has_inline_data(inode)) {
->  		ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
->  		return 0;
-> +	} else if (test_opt(inode->i_sb, DELALLOC) && !S_ISDIR(inode->i_mode)) {
-> +		error = filemap_flush(inode->i_mapping);
+Borislav Petkov <bp@alien8.de> writes:
+> On Tue, May 10, 2022 at 01:27:54PM +0200, Thorsten Leemhuis wrote:
+>> Many thx for reminding people about the tag.  FWIW, that's a problem in
+>> a lot or subsystems and makes my regression tracking efforts hard, as my
+>> tracking bot relies on the 'Link:' tag. If it's missing I thus have to
+>> manually search if patches were posted or committed to fix a regression,
+>> which makes the tracking hard and annoying. :-/
+>
+> Here's my experience with the Link thing:
+>
+> So it is trivial to take the Message-ID and turn it into a link tag and
+> our automation does that.
+>
+> - Now, it is not a problem when that link tag points to a patch which is
+> part of the thread which contains the initial bug report - you just go
+> up-thread.
+>
+> - If the link tag points to a patch which is version N and it is the
+> version which passed all review and gets committed, it is a bit harder
+> to find the previous versions and find the whole discussion how it all
+> arrived at version N. You can search by the Subject, ofc, which, if it
+> hasn't been changed, will give you the previous threads. And so on ...
+>
+> - The problem is when the discussion happened somewhere and the patch
+> got submitted separately. I can't think of a good way to automate
+> that so we have to pay attention and fix the link tag by hand and add
+> the relevant one. And I try to do that when I'm especially awake when
+> applying the patch.
 
-This is actually an interesting option and I kind of like it but shouldn't
-we restrict this to the situation when EXT4_STATE_MAY_INLINE_DATA is clear?
-Otherwise we would be writing out inline data to the inode unnecessarily
-for each ext4_convert_inline_data() call.
+That doesn't scale though, it puts more work on maintainers, who already
+don't have enough time.
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+The *submitter* should be putting all the relevant info in the patch,
+including any links to other discussions, previous versions etc. etc.
+
+Then the maintainer can automatically add the "Link:" tag pointing to
+the submission, and everything is there in the archive.
+
+One advantage of linking back to the original submission is that if the
+patch doesn't have all the relevant info, anyone can post replies adding
+context or linking to other places, even after the patch has been
+committed.
+
+cheers

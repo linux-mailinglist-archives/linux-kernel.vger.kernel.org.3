@@ -2,155 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B7FA523718
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:22:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2D952371C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343536AbiEKPWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36818 "EHLO
+        id S1343551AbiEKPXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:23:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234099AbiEKPWZ (ORCPT
+        with ESMTP id S242665AbiEKPXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:22:25 -0400
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C747338BF0;
-        Wed, 11 May 2022 08:22:24 -0700 (PDT)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-edf3b6b0f2so3177557fac.9;
-        Wed, 11 May 2022 08:22:24 -0700 (PDT)
+        Wed, 11 May 2022 11:23:01 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B80F54BCA
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:23:00 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id fu47so2229998qtb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:23:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=w9MfWQzcSMrfAB8m54hQ3mQgRCuKTad5K055CRIl8Vo=;
+        b=QHywmB7fZKi72sdflTBtW+kFZJRQSuZqWDaMwXqm9WlGt+siby1JuJMbb4mVAD3aS5
+         iejYTkI59BMc6y/oIXBVWa/9MeazGxDgdZ6JnQ4acVJEzufjZQsDtznMDuu+1warN0qK
+         MYfH0+Of2lno/uFNjSHx3f2rOG+DoVkqmq+h1Yo5O5S0KFbMpMU866O+NGrpTpFVmwIo
+         rZFIV/+obJD9S6I2t67nE7tVzhD3t8tjCZrDfcCgTj2X/3gaPOBFQPCIDW6o9dE/fle5
+         3WnODSV3b58gj79dPkcuaodpP+ksbzv8GPwBbBm1Po7hU8tSatFR5ZUjnyObXnudlq7S
+         4jDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=rhJcAYT2QdBia85ebx0FyNn9tOMltMRrwz+BQyPIYtM=;
-        b=f9T4UlkhVvQcQERkfdiLhpQo6lsqT6liHTYZau8kQIv5+kuDqBJGc1WVxu4rUUXT+b
-         khU2bL0c87TmjMapkGh2GVVzk609+E0ToxRVUfLnT9NJ3E1XsTMjWtiAAGD3rPKWjhO+
-         ur1iujzwhz/HC7Cbp0xHOzhKR4x4yAfD0A9L5EQsZuFe3eccDfEY2VEPCQ6of0UhuTV3
-         LmPUF8Sadp9Y9bhprclt2eUGOZevrRlYSTg4V2kTqDbWbTwC9oXK7jaTDRKW3IK2DWaV
-         RBPT3nRTmQw+3q7XwHV2NOT1nqxYY+vfpIQZRNMwxoG7MZ8SsedjtKf6k2YlNwiNOAYQ
-         hj9Q==
-X-Gm-Message-State: AOAM533p3tYT9pIO1dZWCYN8lLvqyRYDIB5OC9Y2xNy0qgI/t/8BV8Sq
-        Ya9WycIxB4V/X3oWPEtuRA==
-X-Google-Smtp-Source: ABdhPJz+g2OvLutFR2r2Zj+9Qd1sDp5db3Fn1YBWm3l1Xgzc15luw7rLt71fRlE7myTrIrQhtBG5IQ==
-X-Received: by 2002:a05:6870:11d0:b0:e6:4f7:f6b with SMTP id 16-20020a05687011d000b000e604f70f6bmr3003921oav.104.1652282544053;
-        Wed, 11 May 2022 08:22:24 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b13-20020a056830104d00b0060603221270sm897581otp.64.2022.05.11.08.22.22
+         :mime-version:content-disposition:in-reply-to;
+        bh=w9MfWQzcSMrfAB8m54hQ3mQgRCuKTad5K055CRIl8Vo=;
+        b=KXWOw4HrafsOBi/x25t3DJLhRvpL22792w6/vpwULVVZIqo55i3VIpXKmll+1ONpcO
+         gV8okZxgo2UdaThmyr5cWBJRKHtR9WLPPABG3Rl+dm89x7RnfWndaubn8SEZWS8oDnS/
+         ufnPwKte+aoM4wrwiMqzyLt+oMjQrKNZ52LEqcwjaA3nDS65haEBhnfEAthtTpUgdrw0
+         bGxSN9KaYa2GPzSD33BWoj8bwYOGpm9V033G5CUdjuxUmbJNOHwg2sZLoSUZ5P3OBLKs
+         qB/0Tl48f8GgIOguCOIYuEYBoahzbr274Ie6Lt0RgDHgllw+YOORnWY1J20khSO7tGBw
+         Zd9g==
+X-Gm-Message-State: AOAM531BBBUknB5PjxMHgP+OezyQwee0ojKeQg1PlgOMa5ogYEVuQBAt
+        EYFGt9rqJWzF00ipRpa4VPpTAL77j6UZbQ==
+X-Google-Smtp-Source: ABdhPJygx90TKioxIedyEuaaHYWfH4OHP1lN+qlpZAjVyMK6tPk/6Hw911lnpLax7mo7cs7O9mkw+g==
+X-Received: by 2002:a05:622a:355:b0:2f3:b955:fa2d with SMTP id r21-20020a05622a035500b002f3b955fa2dmr24143416qtw.132.1652282579247;
+        Wed, 11 May 2022 08:22:59 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::1:14fe])
+        by smtp.gmail.com with ESMTPSA id bl34-20020a05620a1aa200b0069fc13ce1f3sm1468229qkb.36.2022.05.11.08.22.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 08:22:23 -0700 (PDT)
-Received: (nullmailer pid 336352 invoked by uid 1000);
-        Wed, 11 May 2022 15:22:21 -0000
-Date:   Wed, 11 May 2022 10:22:21 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?iso-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v4 05/12] dt-bindings: net: dsa: add bindings
- for Renesas RZ/N1 Advanced 5 port switch
-Message-ID: <20220511152221.GA334055-robh@kernel.org>
-References: <20220509131900.7840-1-clement.leger@bootlin.com>
- <20220509131900.7840-6-clement.leger@bootlin.com>
+        Wed, 11 May 2022 08:22:58 -0700 (PDT)
+Date:   Wed, 11 May 2022 11:22:58 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Minchan Kim <minchan@kernel.org>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com
+Subject: Re: [PATCH v2 3/6] mm: Kconfig: group swap, slab, hotplug and thp
+ options into submenus
+Message-ID: <YnvU0hwCfQ11P8Ce@cmpxchg.org>
+References: <20220510152847.230957-1-hannes@cmpxchg.org>
+ <20220510152847.230957-4-hannes@cmpxchg.org>
+ <20220510154037.c7916ee9d7de90eedd12f92c@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220509131900.7840-6-clement.leger@bootlin.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220510154037.c7916ee9d7de90eedd12f92c@linux-foundation.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 03:18:53PM +0200, Clément Léger wrote:
-> Add bindings for Renesas RZ/N1 Advanced 5 port switch. This switch is
-> present on Renesas RZ/N1 SoC and was probably provided by MoreThanIP.
-> This company does not exists anymore and has been bought by Synopsys.
-> Since this IP can't be find anymore in the Synospsy portfolio, lets use
-> Renesas as the vendor compatible for this IP.
+On Tue, May 10, 2022 at 03:40:37PM -0700, Andrew Morton wrote:
+> On Tue, 10 May 2022 11:28:44 -0400 Johannes Weiner <hannes@cmpxchg.org> wrote:
 > 
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
-> ---
->  .../bindings/net/dsa/renesas,rzn1-a5psw.yaml  | 132 ++++++++++++++++++
->  1 file changed, 132 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
+> > There are several clusters of related config options spread throughout
+> > the mostly flat MM submenu. Group them together and put specialization
+> > options into further subdirectories to make the MM submenu a bit more
+> > organized and easier to navigate.
 > 
-> diff --git a/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml b/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
-> new file mode 100644
-> index 000000000000..f0f6748e1f01
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
-> @@ -0,0 +1,132 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/dsa/renesas,rzn1-a5psw.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Renesas RZ/N1 Advanced 5 ports ethernet switch
-> +
-> +maintainers:
-> +  - Clément Léger <clement.leger@bootlin.com>
-> +
-> +description: |
-> +  The advanced 5 ports switch is present on the Renesas RZ/N1 SoC family and
-> +  handles 4 ports + 1 CPU management port.
-> +
-> +allOf:
-> +  - $ref: dsa.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - renesas,r9a06g032-a5psw
-> +      - const: renesas,rzn1-a5psw
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  mdio:
-> +    $ref: /schemas/net/mdio.yaml#
-> +    unevaluatedProperties: false
-> +
-> +  clocks:
-> +    items:
-> +      - description: AHB clock used for the switch register interface
-> +      - description: Switch system clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: hclk
-> +      - const: clk
-> +
-> +patternProperties:
-> +  "^ethernet-ports$":
+> Causes
+> 
+> hp2:/usr/src/25> make allnoconfig
 
-Move to 'properties', not a pattern.
-
-With that,
-
-Reviewed-by: Rob Herring <robh@kernel.org>
+My bad. I'll respin those on top of the others and add allnoconfig
+builds to my testing routine. Thanks.

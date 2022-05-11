@@ -2,150 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C8F523DEC
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5FA3523DEF
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345915AbiEKTsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 15:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35648 "EHLO
+        id S244772AbiEKTs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 15:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347374AbiEKTsH (ORCPT
+        with ESMTP id S240080AbiEKTss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 15:48:07 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65997F61C1;
-        Wed, 11 May 2022 12:47:50 -0700 (PDT)
-Date:   Wed, 11 May 2022 19:47:47 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652298468;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1FrofJeH8+YlqGe3v/PhOdED1A/YchY+wAkMIrlJCJ4=;
-        b=hk/2qcXifHKCqHGexFklQ1FwBKHZXXqUbyaLZp84SXfsSmf13za2IFx0yMX//ASFz9e0n+
-        Q4rxmiB/nFZHtBOWK4/XMOhPuFjW2IeQyhGcdsuJaJrWsS8ktxDAD3gpV5V/ShhM25C15W
-        lM6CeqnJqsCplJD5OkgPW6s5LRdzboZc/fEJ9ZmKPuaXFqu4DtrBZ/O+irDgJ5qm+T7PA5
-        60ujGeNSHbXqb5G0Klp3drt3+0rvGAdAwch72WwK8ELQnEv1jGeq5CKbxNsY3F/sjiuK3M
-        cp6CkL/70H+LxZGnb/vaTSzB1bCnh7oGkp0GFzdufQU4cbjHpMcbV+EYq3J1lA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652298468;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1FrofJeH8+YlqGe3v/PhOdED1A/YchY+wAkMIrlJCJ4=;
-        b=E65oVB2yTCkkzgnqAy/OX3yqKsde+HubQCIwaJ2lFWfiJ6FEoflsNU5YOWBPDcunOevLcv
-        NmBoGzmYTWVdNOAA==
-From:   "tip-bot2 for Andy Lutomirski" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/vdso] x86/vsyscall: Remove CONFIG_LEGACY_VSYSCALL_EMULATE
-Cc:     Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@suse.de>,
-        Kees Cook <keescook@chromium.org>,
-        Florian Weimer <fweimer@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <898932fe61db6a9d61bc2458fa2f6049f1ca9f5c.1652290558.git.luto@kernel.org>
-References: <898932fe61db6a9d61bc2458fa2f6049f1ca9f5c.1652290558.git.luto@kernel.org>
+        Wed, 11 May 2022 15:48:48 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC16207915
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:48:47 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id m23so3988652ljc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:48:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=viN6sY+f+N6S/Prtk7UnuYOXqrply8ByGnamSFChEnk=;
+        b=LqEw+RL5CYtKiuGwKItpr/vP15rmt1WIf8mKYuC78DH3jcI9PUi2AVINwFyLUIVAk1
+         lKDJ6Ej4LU2UtrCjIAjplO0BZgnmMNwpiaWC0vxqFyPLryYhgVyms39EYjp2s11jdzd9
+         g5aAClMb7Q5z3ObDP3+0PhYuW2rd98/gkBZ/h0q3XfNCje3MUS9C4Nw50sbngNzFfVon
+         2Tc6E4kzU73Nm9j8FpqUQNTJ6TkzTAAWeFfNhEiMY98XWYhAINVbCG/gjU5SpybVt03I
+         PeFXmrDcG5qm4gLyyBK4J7stH+L2qr6NnjHbP82lmlYXmOypntABiIbBtd2BIxRnMAOr
+         HtJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=viN6sY+f+N6S/Prtk7UnuYOXqrply8ByGnamSFChEnk=;
+        b=COC/Fuze49bTBhBX1oVOzG2nsBZ34dHuEMl81LVhBc6MiNHxerYnj/FXhqPzqmJ3zJ
+         y2e8yjcV8ydLp85oHCCN/AxpKRv2IRxMUE++PTM7vd/KamSNd6dlJ2XTQdYKMNmebw9R
+         YCN62yWRoAhG8UAcrB/zLZ2n2IwJy97d8YitxrQiPHfTPCxD3ce9J2/qzAX3XsHAYVkD
+         Hr8R1oBkIODP66NgLcx/stIr0OiGiF04Fo3STADK0VCt210k6/Io4GeYG6FUnN84mGm9
+         4s5+m2RUzii7ZMdNryk9hPW6feYn54Ngp7A+hiPm7RCjWMJAtMM7TWfndpZumLdms23P
+         KIjw==
+X-Gm-Message-State: AOAM532JFJbLAPAXwxqZzOxkbx9ZFnxXNpm2mwaPv4dLGneB5HnEHYEn
+        wJXRoJm04fifsHr9kJPyx6HIQ+J8FSEFzdgLaXNnFw==
+X-Google-Smtp-Source: ABdhPJxYEkh+IGZ8j3Rp59ahCR4uKEBHb3CjX7DDoNNpVo1R2zxZ/WC02y+NpOYgA4HkmUhGag0f/NUNZwgjrybgMrI=
+X-Received: by 2002:a05:651c:1a09:b0:250:5bd1:6daf with SMTP id
+ by9-20020a05651c1a0900b002505bd16dafmr17385580ljb.468.1652298525759; Wed, 11
+ May 2022 12:48:45 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <165229846773.4207.18182599891283244875.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220511120532.2228616-1-hca@linux.ibm.com>
+In-Reply-To: <20220511120532.2228616-1-hca@linux.ibm.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 11 May 2022 12:48:34 -0700
+Message-ID: <CAKwvOdkXy0nhS-S+dOAsSO+mpj2dCuZ4aUTe=upPV8epfTA7Aw@mail.gmail.com>
+Subject: Re: [PATCH 0/8] s390: allow to build with llvm's integrated assembler
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Jonas Paulsson <paulsson@linux.vnet.ibm.com>,
+        Ulrich Weigand <ulrich.weigand@de.ibm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andreas Krebbel <krebbel@linux.ibm.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/vdso branch of tip:
+On Wed, May 11, 2022 at 5:05 AM Heiko Carstens <hca@linux.ibm.com> wrote:
+>
+> A couple of patches which in result make it finally possible to build the
+> kernel for s390 with llvm's integrated assembler. Several configs build
+> without errors or warnings, and the kernel also works as expected.
+>
+> Note that patch 6 ("s390/boot: workaround llvm IAS bug") reveals a
+> miscompile. This looks like a bug in the instruction definitions of the mvc
+> and clc instructions(?). I'd like to ask people to look into this, since
+> this silently generated broken code.
+>
+> This patch series is based on linux-next, which contains two additional
+> required s390 specific patches to make llvm's IAS work.
 
-Commit-ID:     bf00745e7791fe2ba7941aeead8528075a158bbe
-Gitweb:        https://git.kernel.org/tip/bf00745e7791fe2ba7941aeead8528075a158bbe
-Author:        Andy Lutomirski <luto@kernel.org>
-AuthorDate:    Wed, 11 May 2022 10:38:53 -07:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 11 May 2022 20:39:31 +02:00
+I did a quick test of just a defconfig via:
+$ ARCH=s390 CROSS_COMPILE=s390x-linux-gnu- make CC=clang -j72 defconfig all
+and this assembled then booted in qemu for me. Thanks for the work
+that went into this!
 
-x86/vsyscall: Remove CONFIG_LEGACY_VSYSCALL_EMULATE
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
 
-CONFIG_LEGACY_VSYSCALL_EMULATE is, as far as I know, only needed for the
-combined use of exotic and outdated debugging mechanisms with outdated
-binaries. At this point, no one should be using it. Eventually, dynamic
-switching of vsyscalls will be implemented, but this is much more
-complicated to support in EMULATE mode than XONLY mode.
+Sounds like Nathan is doing additional testing as well.
 
-So let's force all the distros off of EMULATE mode. If anyone actually
-needs it, they can set vsyscall=emulate, and the kernel can then get
-away with refusing to support newer security models if that option is
-set.
+>
+> Thanks,
+> Heiko
+>
+> Heiko Carstens (8):
+>   s390/alternatives: provide identical sized orginal/alternative sequences
+>   s390/alternatives: remove padding generation code
+>   s390/entry: shorten OUTSIDE macro
+>   s390/entry: workaround llvm's IAS limitations
+>   s390/purgatory: workaround llvm's IAS limitations
+>   s390/boot: workaround llvm IAS bug
+>   s390/boot: do not emit debug info for assembly with llvm's IAS
+>   scripts/min-tool-version.sh: raise minimum clang version to 14.0.0 for s390
+>
+>  arch/s390/Makefile                      |  2 +
+>  arch/s390/boot/head.S                   | 34 +++++----
+>  arch/s390/include/asm/alternative-asm.h | 76 +++-----------------
+>  arch/s390/include/asm/alternative.h     | 93 ++++++-------------------
+>  arch/s390/include/asm/spinlock.h        |  2 +-
+>  arch/s390/kernel/alternative.c          | 61 +---------------
+>  arch/s390/kernel/entry.S                | 39 +++++++----
+>  arch/s390/lib/spinlock.c                |  4 +-
+>  arch/s390/purgatory/head.S              | 29 ++++++--
+>  scripts/min-tool-version.sh             |  3 +-
+>  10 files changed, 104 insertions(+), 239 deletions(-)
+>
+> --
+> 2.32.0
+>
 
-  [ bp: Remove "we"s. ]
 
-Signed-off-by: Andy Lutomirski <luto@kernel.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Acked-by: Florian Weimer <fweimer@redhat.com>
-Link: https://lore.kernel.org/r/898932fe61db6a9d61bc2458fa2f6049f1ca9f5c.1652290558.git.luto@kernel.org
----
- arch/x86/Kconfig                      | 18 +++---------------
- arch/x86/entry/vsyscall/vsyscall_64.c |  2 +-
- 2 files changed, 4 insertions(+), 16 deletions(-)
-
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 4bed3ab..68c6696 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -2326,7 +2326,9 @@ choice
- 	  it can be used to assist security vulnerability exploitation.
- 
- 	  This setting can be changed at boot time via the kernel command
--	  line parameter vsyscall=[emulate|xonly|none].
-+	  line parameter vsyscall=[emulate|xonly|none].  Emulate mode
-+	  is deprecated and can only be enabled using the kernel command
-+	  line.
- 
- 	  On a system with recent enough glibc (2.14 or newer) and no
- 	  static binaries, you can say None without a performance penalty
-@@ -2334,20 +2336,6 @@ choice
- 
- 	  If unsure, select "Emulate execution only".
- 
--	config LEGACY_VSYSCALL_EMULATE
--		bool "Full emulation"
--		help
--		  The kernel traps and emulates calls into the fixed vsyscall
--		  address mapping. This makes the mapping non-executable, but
--		  it still contains readable known contents, which could be
--		  used in certain rare security vulnerability exploits. This
--		  configuration is recommended when using legacy userspace
--		  that still uses vsyscalls along with legacy binary
--		  instrumentation tools that require code to be readable.
--
--		  An example of this type of legacy userspace is running
--		  Pin on an old binary that still uses vsyscalls.
--
- 	config LEGACY_VSYSCALL_XONLY
- 		bool "Emulate execution only"
- 		help
-diff --git a/arch/x86/entry/vsyscall/vsyscall_64.c b/arch/x86/entry/vsyscall/vsyscall_64.c
-index fd2ee94..4af81df 100644
---- a/arch/x86/entry/vsyscall/vsyscall_64.c
-+++ b/arch/x86/entry/vsyscall/vsyscall_64.c
-@@ -48,7 +48,7 @@ static enum { EMULATE, XONLY, NONE } vsyscall_mode __ro_after_init =
- #elif defined(CONFIG_LEGACY_VSYSCALL_XONLY)
- 	XONLY;
- #else
--	EMULATE;
-+	#error VSYSCALL config is broken
- #endif
- 
- static int __init vsyscall_setup(char *str)
+-- 
+Thanks,
+~Nick Desaulniers

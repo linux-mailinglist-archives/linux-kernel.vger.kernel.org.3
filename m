@@ -2,76 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B3025231BA
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2A85231BB
 	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238377AbiEKLcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 07:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53682 "EHLO
+        id S239227AbiEKLcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 07:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238231AbiEKLcC (ORCPT
+        with ESMTP id S235872AbiEKLcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 07:32:02 -0400
+        Wed, 11 May 2022 07:32:06 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 281EF532DF
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:32:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 293DA40E4F
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:32:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652268719;
+        s=mimecast20190719; t=1652268723;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=R2kp5jYCNfGNB7HC1VHLTEN7JTAmf+2Dpd6yPG+mBtE=;
-        b=Ecdsr7AeyDSTqFCvjXiC0AN5cMo3nw00K/ohBrxurtf7PB9IV1UVKK9FYVXCtWvSWRbWD6
-        CvfsugkuU4dh/uqXECOywz3+bKFPi5qosrEsGqhQoqvXzEX6zS8NfRPyBGy5jYyEN8tyUE
-        TVr54hEfKvG/3y4fG9eCykNhPj8W4vU=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=+BJJMERzVy0p73QO0H4njt1EJ0ruBqyO5Hp/+L0nhYE=;
+        b=g5vdD1ZO7AQisVOvhsuSqrYp2eW+LynFf2PJfrttFR2IG4Ao7ovi0JcSYim+fBIH697MlS
+        zjYqvExNka3JIJLrLuaGsGSGSn58zr5l+g/NulpOmFdvMKEOxAwGSfXrw1xrc6k4DsAzTA
+        EOLtiLYlapJbxktAj7PGmtjDBkGJpPg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-325-keFY4OJCN66s44MnPOK7OQ-1; Wed, 11 May 2022 07:31:50 -0400
-X-MC-Unique: keFY4OJCN66s44MnPOK7OQ-1
-Received: by mail-wm1-f70.google.com with SMTP id 205-20020a1c02d6000000b003928cd3853aso2694355wmc.9
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:31:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=R2kp5jYCNfGNB7HC1VHLTEN7JTAmf+2Dpd6yPG+mBtE=;
-        b=Z3M/ApB8aTBFhLftPDBdewOWAWMBhsRj6zVU5D99ZSw0IdsowUGD8b7gGGQVRriC+S
-         VT7VjXEZApsSmGum3T72c3Azs4W+78eZpRQNJxe0tP4o/TFDCtkUbK3z8KnsNR3hm5u7
-         yFHT3AhPV6/jwXZe1iLHK0sXzXbXU5MAh0HH+x07tKU0XlZ1PORJAsowqvtDd/kdrXlL
-         t7em4AAxUAk9FiC/n6HWJAEhljPceWpPu382bleIBN9hEN+vnBeZ/ZiSdbmNfQrLbbrY
-         I76rofaZ20R0GeOvTdcDYQSDqBz9owZ4D/5lett2f8fmyydY9F28+A///WIF5oBKsTow
-         co5A==
-X-Gm-Message-State: AOAM532vkAhMzkKMoBbidbVbxUapNvNV/QXnAJxYDdB7pxZAGxhtkaFC
-        MRt/dmVAQdUe8FAdpxr8THWj1/UNmdrzumi+ZviJcx86GSJPkA/gxIVjwC51BsZsQ0yrVOaxs3Z
-        fcMUb7wisZsU3hn5r6+C1qHhnGEnkw0T4yoz1aT1tfQHEoe18QBruH/YLkhM3jqkosH7pXmTMDh
-        s=
-X-Received: by 2002:a1c:4d10:0:b0:394:788a:24d7 with SMTP id o16-20020a1c4d10000000b00394788a24d7mr4323377wmh.113.1652268709343;
-        Wed, 11 May 2022 04:31:49 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxVdOZ6jj+GkTcslb2h+9g+NLK3aby//uMM8giiBszt74nPvf6lrNJh9rn58+o3dxXtHD+dwg==
-X-Received: by 2002:a1c:4d10:0:b0:394:788a:24d7 with SMTP id o16-20020a1c4d10000000b00394788a24d7mr4323344wmh.113.1652268709014;
-        Wed, 11 May 2022 04:31:49 -0700 (PDT)
-Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id e8-20020a5d5308000000b0020c5253d8c2sm1450213wrv.14.2022.05.11.04.31.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 04:31:48 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Helge Deller <deller@gmx.de>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v5 5/7] fbdev: Disable sysfb device registration when removing conflicting FBs
-Date:   Wed, 11 May 2022 13:31:44 +0200
-Message-Id: <20220511113144.1252729-1-javierm@redhat.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220511112438.1251024-1-javierm@redhat.com>
-References: <20220511112438.1251024-1-javierm@redhat.com>
+ us-mta-489-0LZSZk8SP1inhSyRCm4c9Q-1; Wed, 11 May 2022 07:32:00 -0400
+X-MC-Unique: 0LZSZk8SP1inhSyRCm4c9Q-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9F73C397968A;
+        Wed, 11 May 2022 11:31:59 +0000 (UTC)
+Received: from starship (unknown [10.40.192.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5C09E40CF8E4;
+        Wed, 11 May 2022 11:31:57 +0000 (UTC)
+Message-ID: <3d25a230ec31161823c6320ceef77ab0c331e3d1.camel@redhat.com>
+Subject: Re: [PATCH v3 19/34] KVM: nVMX: hyper-v: Enable L2 TLB flush
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 11 May 2022 14:31:56 +0300
+In-Reply-To: <20220414132013.1588929-20-vkuznets@redhat.com>
+References: <20220414132013.1588929-1-vkuznets@redhat.com>
+         <20220414132013.1588929-20-vkuznets@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -82,72 +68,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The platform devices registered by sysfb match with firmware-based DRM or
-fbdev drivers, that are used to have early graphics using a framebuffer
-provided by the system firmware.
+On Thu, 2022-04-14 at 15:19 +0200, Vitaly Kuznetsov wrote:
+> Enable L2 TLB flush feature on nVMX when:
+> - Enlightened VMCS is in use.
+> - The feature flag is enabled in eVMCS.
+> - The feature flag is enabled in partition assist page.
+> 
+> Perform synthetic vmexit to L1 after processing TLB flush call upon
+> request (HV_VMX_SYNTHETIC_EXIT_REASON_TRAP_AFTER_FLUSH).
+> 
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/kvm/vmx/evmcs.c  | 20 ++++++++++++++++++++
+>  arch/x86/kvm/vmx/evmcs.h  | 10 ++++++++++
+>  arch/x86/kvm/vmx/nested.c | 16 ++++++++++++++++
+>  3 files changed, 46 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/vmx/evmcs.c b/arch/x86/kvm/vmx/evmcs.c
+> index e390e67496df..e0cb2e223daa 100644
+> --- a/arch/x86/kvm/vmx/evmcs.c
+> +++ b/arch/x86/kvm/vmx/evmcs.c
+> @@ -6,6 +6,7 @@
+>  #include "../hyperv.h"
+>  #include "../cpuid.h"
+>  #include "evmcs.h"
+> +#include "nested.h"
+>  #include "vmcs.h"
+>  #include "vmx.h"
+>  #include "trace.h"
+> @@ -438,6 +439,25 @@ int nested_enable_evmcs(struct kvm_vcpu *vcpu,
+>  	return 0;
+>  }
+>  
+> +bool nested_evmcs_l2_tlb_flush_enabled(struct kvm_vcpu *vcpu)
+> +{
+> +	struct vcpu_vmx *vmx = to_vmx(vcpu);
+> +	struct hv_enlightened_vmcs *evmcs = vmx->nested.hv_evmcs;
+> +	struct hv_vp_assist_page assist_page;
+> +
+> +	if (!evmcs)
+> +		return false;
+> +
+> +	if (!evmcs->hv_enlightenments_control.nested_flush_hypercall)
+> +		return false;
+> +
+> +	if (unlikely(!kvm_hv_get_assist_page(vcpu, &assist_page)))
+> +		return false;
+> +
+> +	return assist_page.nested_control.features.directhypercall;
+> +}
+> +
+>  void vmx_post_hv_l2_tlb_flush(struct kvm_vcpu *vcpu)
+>  {
+> +	nested_vmx_vmexit(vcpu, HV_VMX_SYNTHETIC_EXIT_REASON_TRAP_AFTER_FLUSH, 0, 0);
+>  }
+> diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
+> index b120b0ead4f3..ddbdb557cc53 100644
+> --- a/arch/x86/kvm/vmx/evmcs.h
+> +++ b/arch/x86/kvm/vmx/evmcs.h
+> @@ -65,6 +65,15 @@ DECLARE_STATIC_KEY_FALSE(enable_evmcs);
+>  #define EVMCS1_UNSUPPORTED_VMENTRY_CTRL (VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL)
+>  #define EVMCS1_UNSUPPORTED_VMFUNC (VMX_VMFUNC_EPTP_SWITCHING)
+>  
+> +/*
+> + * Note, Hyper-V isn't actually stealing bit 28 from Intel, just abusing it by
+> + * pairing it with architecturally impossible exit reasons.  Bit 28 is set only
+> + * on SMI exits to a SMI transfer monitor (STM) and if and only if a MTF VM-Exit
+> + * is pending.  I.e. it will never be set by hardware for non-SMI exits (there
+> + * are only three), nor will it ever be set unless the VMM is an STM.
 
-DRM or fbdev drivers later are probed and remove all conflicting framebuffers,
-leading to these platform devices for generic drivers to be unregistered.
+I am sure that this will backfire this way or another. Their fault though...
 
-But the current solution has a race, since the sysfb_init() function could
-be called after a DRM or fbdev driver is probed and request to unregister
-the devices for drivers with conflicting framebuffes.
 
-To prevent this, disable any future sysfb platform device registration by
-calling sysfb_disable(), if a driver requests to remove the conflicting
-framebuffers.
+I also wonder why they need that synthetic VM exit, it's in the spec,
+but why I don't fully understand. Their fault as well though.
 
-Suggested-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
----
+The flag that controls it is 'TlbLockCount', I wonder what it means...
 
-Changes in v5:
-- Move the sysfb_disable() call at conflicting framebuffers again to
-  avoid the need of a DRIVER_FIRMWARE capability flag.
-- Add Daniel Vetter's Reviewed-by tag again since reverted to the old
-  patch that he already reviewed in v2.
+> + */
+> +#define HV_VMX_SYNTHETIC_EXIT_REASON_TRAP_AFTER_FLUSH 0x10000031
+> +
+>  struct evmcs_field {
+>  	u16 offset;
+>  	u16 clean_field;
+> @@ -244,6 +253,7 @@ int nested_enable_evmcs(struct kvm_vcpu *vcpu,
+>  			uint16_t *vmcs_version);
+>  void nested_evmcs_filter_control_msr(u32 msr_index, u64 *pdata);
+>  int nested_evmcs_check_controls(struct vmcs12 *vmcs12);
+> +bool nested_evmcs_l2_tlb_flush_enabled(struct kvm_vcpu *vcpu);
+>  void vmx_post_hv_l2_tlb_flush(struct kvm_vcpu *vcpu);
+>  
+>  #endif /* __KVM_X86_VMX_EVMCS_H */
+> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> index cc6c944b5815..3e2ef5edad4a 100644
+> --- a/arch/x86/kvm/vmx/nested.c
+> +++ b/arch/x86/kvm/vmx/nested.c
+> @@ -1170,6 +1170,17 @@ static void nested_vmx_transition_tlb_flush(struct kvm_vcpu *vcpu,
+>  {
+>  	struct vcpu_vmx *vmx = to_vmx(vcpu);
+>  
+> +	/*
+> +	 * KVM_REQ_HV_TLB_FLUSH flushes entries from either L1's VP_ID or
+> +	 * L2's VP_ID upon request from the guest. Make sure we check for
+> +	 * pending entries for the case when the request got misplaced (e.g.
+> +	 * a transition from L2->L1 happened while processing L2 TLB flush
+> +	 * request or vice versa). kvm_hv_vcpu_flush_tlb() will not flush
+> +	 * anything if there are no requests in the corresponding buffer.
+> +	 */
+> +	if (to_hv_vcpu(vcpu))
+> +		kvm_make_request(KVM_REQ_HV_TLB_FLUSH, vcpu);
+> +
+>  	/*
+>  	 * If vmcs12 doesn't use VPID, L1 expects linear and combined mappings
+>  	 * for *all* contexts to be flushed on VM-Enter/VM-Exit, i.e. it's a
+> @@ -5997,6 +6008,11 @@ static bool nested_vmx_l0_wants_exit(struct kvm_vcpu *vcpu,
+>  		 * Handle L2's bus locks in L0 directly.
+>  		 */
+>  		return true;
+> +	case EXIT_REASON_VMCALL:
+> +		/* Hyper-V L2 TLB flush hypercall is handled by L0 */
+> +		return kvm_hv_l2_tlb_flush_exposed(vcpu) &&
+> +			nested_evmcs_l2_tlb_flush_enabled(vcpu) &&
+> +			kvm_hv_is_tlb_flush_hcall(vcpu);
+>  	default:
+>  		break;
+>  	}
 
-Changes in v3:
-- Call sysfb_disable() when a DRM dev and a fbdev are registered rather
-  than when conflicting framebuffers are removed (Thomas Zimmermann).
-- Call sysfb_disable() when a fbdev framebuffer is registered rather
-  than when conflicting framebuffers are removed (Thomas Zimmermann).
-- Drop Daniel Vetter's Reviewed-by tag since patch changed a lot.
 
-Changes in v2:
-- Explain in the commit message that fbmem has to unregister the device
-  as fallback if a driver registered the device itself (Daniel Vetter).
-- Also explain that fallback in a comment in the code (Daniel Vetter).
-- Don't encode in fbmem the assumption that sysfb will always register
-  platform devices (Daniel Vetter).
-- Add a FIXME comment about drivers registering devices (Daniel Vetter).
 
- drivers/video/fbdev/core/fbmem.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Looks good,
 
-diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
-index 9b035ef4d552..265efa189bcc 100644
---- a/drivers/video/fbdev/core/fbmem.c
-+++ b/drivers/video/fbdev/core/fbmem.c
-@@ -1789,6 +1789,17 @@ int remove_conflicting_framebuffers(struct apertures_struct *a,
- 	if (do_free)
- 		kfree(a);
- 
-+	/*
-+	 * If a driver asked to unregister a platform device registered by
-+	 * sysfb, then can be assumed that this is a driver for a display
-+	 * that is set up by the system firmware and has a generic driver.
-+	 *
-+	 * Drivers for devices that don't have a generic driver will never
-+	 * ask for this, so let's assume that a real driver for the display
-+	 * was already probed and prevent sysfb to register devices later.
-+	 */
-+	sysfb_disable();
-+
- 	return 0;
- }
- EXPORT_SYMBOL(remove_conflicting_framebuffers);
--- 
-2.35.1
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+
+Best regards,
+	Maxim Levitsky
 

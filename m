@@ -2,65 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B60A523F7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 23:34:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB9D2523F80
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 23:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348205AbiEKVes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 17:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40840 "EHLO
+        id S1348246AbiEKVgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 17:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236560AbiEKVep (ORCPT
+        with ESMTP id S1348221AbiEKVg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 17:34:45 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFE072225;
-        Wed, 11 May 2022 14:34:44 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id bq30so5821491lfb.3;
-        Wed, 11 May 2022 14:34:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dkXitGd+HBwWP0BrRmMn4GOcEWAupdlYdgwnIyYYKm8=;
-        b=DkVXOGzNB1qNE0XvArz6clezkHzUFTA+/bHkUwLQbjO2pg/YLc4Rimbv8c1sie5NCN
-         PvwjLDJtWhuIvvl63J9+V1eioKpHzAIqNijLXV21lcU1KY72dLv+Do4/d/p5R1jfD8LT
-         SByT8e9K914f6sWXbZxkEgh7aLr605RIY1PddkpXywnE7eQ7n00vLyYVPc5wBDoJp4aw
-         q7CgeMKGhlRxD/UZt5E2Qb7GzG6n4e5vhC8aEV587MYK592tDnF5iKG63gz2MN/wFr7T
-         NpBx78okZh8ocaxv3znzdI9tO2TSNTqB6sU08geGcliRcBEXXSi2LmFMeOdKxgleu0xY
-         RwjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dkXitGd+HBwWP0BrRmMn4GOcEWAupdlYdgwnIyYYKm8=;
-        b=lbzJH5JcknO18K4jPP7+pRm1ru5m1b09NOgvogkYN2aS8+A4tgHHmuyhz3OTE/XqU1
-         UelxNPdOThPcv3z5W7CL6ngL2U4dcTLsa81A9FaUqnK8BYfaY9mOkgtVHBercWQFVV7g
-         H7j/nRIMd8QTasYspdtH5s5bRSd7A1/rSeqHZLaS3pT7lP20GMC4aLMKzVHXPWDuLtId
-         nC/coyGME4/hgtC3mWozCjsOriTNnKlLz0Mvcw54VOSYKUc+XqMbxsu7tL/7szinkqJJ
-         s3IIum1um4PVhyX+7gEnOo3zChqfnXyr7rJx12PhtEAQ82e1ZsH53RX+SK/GYKkypzIF
-         2kzw==
-X-Gm-Message-State: AOAM533UoRP6ZpBl/dkG9Vof1wsT8EgovfZf/3jKQmXfQIon4SLNqNdU
-        2EhPfxtz23zd2Rz9v6V54RBiU9l5gNWOg7bVw/0=
-X-Google-Smtp-Source: ABdhPJytbw5z0Ik8FAPUOw+tWwgubew6nL311yZ3ED/hQRTLcKxwAZrZ+D/r8tlUcZ6OBNpMjKduuQT/1Z4sD0iNfps=
-X-Received: by 2002:a05:6512:34cc:b0:472:5c4e:34cb with SMTP id
- w12-20020a05651234cc00b004725c4e34cbmr21704041lfr.94.1652304883056; Wed, 11
- May 2022 14:34:43 -0700 (PDT)
+        Wed, 11 May 2022 17:36:28 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23586369FF
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 14:36:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652304985; x=1683840985;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=HzjNOurWeSBIuFt076q8UcoyxyCPznKjLZ/kwEEI8Dg=;
+  b=cl1sj1NvJKA4Mr4Zu1Z5OAFZ0mwJ5UrVZ5J/K1VfH7VWpCK8E+efzWu7
+   cMOEh6LPsdC+4hCNZh5Gw5mjsMJFCvvCLYb1YRHRBnae3PWTGLPCMgbFH
+   Pxfq6bkeyf+OM2/p0QMWRM1chwIrmG9LJ02kcZf60fYW8G9NYqGMIgZxj
+   m23kaaX5kPmMirpvY0ZZ5V2CmeEIOvfhTDankLcxPgbRyippEFj/5JQPg
+   F5yQJUE7vGAm2QEI80h8zcSTh+Z/bry1/Bv+Sc4IFodKCsPXmqXtWrrpx
+   vvLI6CdlLpa8SVvNF9ZPY/6BjrKIVjr3L3kGGFqaDiyp/nn4lknt0NtQn
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="356245311"
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="356245311"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 14:36:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="624128100"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 11 May 2022 14:36:22 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nou0L-000Jbg-DR;
+        Wed, 11 May 2022 21:36:21 +0000
+Date:   Thu, 12 May 2022 05:35:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+        Borislav Petkov <bp@suse.de>
+Subject: [ammarfaizi2-block:stable/linux-stable-rc/queue/5.15 141/150] ld:
+ arch/x86/entry/vsyscall/vsyscall_64.o:undefined reference to
+ `__x86_indirect_alt_call_rbp'
+Message-ID: <202205120544.3A1KXfVz-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220510191549.76105-1-mosescb.dev@gmail.com> <20220511205959.10514-1-mosescb.dev@gmail.com>
-In-Reply-To: <20220511205959.10514-1-mosescb.dev@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 11 May 2022 23:34:06 +0200
-Message-ID: <CAHp75Vcy7+ebAeCfUx5w3i1_=G6n2HkdzXtQcRBFv87X2wZ3vQ@mail.gmail.com>
-Subject: Re: [PATCH v2] drivers: gpio: zevio: drop of_gpio.h header
-To:     Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,29 +65,338 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 11:00 PM Moses Christopher Bollavarapu
-<mosescb.dev@gmail.com> wrote:
->
-> Remove of_gpio.h header file, replace of_* functions and structs
-> with appropriate alternatives.
+tree:   https://github.com/ammarfaizi2/linux-block stable/linux-stable-rc/queue/5.15
+head:   305e905f70311e1b49cc730931a19c3e364f4d8c
+commit: e489fafb822841cfbc89b389757f81e14ede0fd8 [141/150] x86/retpoline: Remove unused replacement symbols
+config: x86_64-randconfig-a011-20220509 (https://download.01.org/0day-ci/archive/20220512/202205120544.3A1KXfVz-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/ammarfaizi2/linux-block/commit/e489fafb822841cfbc89b389757f81e14ede0fd8
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block stable/linux-stable-rc/queue/5.15
+        git checkout e489fafb822841cfbc89b389757f81e14ede0fd8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-...
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->  V1 -> V2: Move gpio_chip member to top of the struct
->            Use dev_error_probe instead of dev_err
->            Minor style fixes
+All errors (new ones prefixed by >>):
 
-Almost, see below.
-
-...
-
-> +       controller->regs = devm_platform_ioremap_resource(pdev, 0);
-> +       if (IS_ERR(controller->regs))
-> +               dev_err_probe(&pdev->dev, PTR_ERR(controller->regs),
-> +                             "failed to ioremap memory resource\n");
-
-You forgot 'return'.
+   ld: init/main.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: init/main.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: init/main.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: init/main.o:(.altinstructions+0x28): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: arch/x86/entry/entry_64.o:(.altinstructions+0xb8): undefined reference to `__x86_indirect_alt_call_rbx'
+   ld: arch/x86/entry/common.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rax'
+>> ld: arch/x86/entry/vsyscall/vsyscall_64.o:(.altinstructions+0x40): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: arch/x86/events/core.o:(.altinstructions+0x28): undefined reference to `__x86_indirect_alt_call_rdx'
+   ld: arch/x86/events/core.o:(.altinstructions+0x34): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x40): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x4c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x58): undefined reference to `__x86_indirect_alt_call_rdx'
+   ld: arch/x86/events/core.o:(.altinstructions+0x64): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x70): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x7c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x88): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x94): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0xa0): more undefined references to `__x86_indirect_alt_call_rax' follow
+   ld: arch/x86/events/core.o:(.altinstructions+0xb8): undefined reference to `__x86_indirect_alt_call_rdx'
+   ld: arch/x86/events/core.o:(.altinstructions+0xc4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0xd0): undefined reference to `__x86_indirect_alt_call_rdx'
+   ld: arch/x86/events/core.o:(.altinstructions+0xdc): undefined reference to `__x86_indirect_alt_call_rdx'
+   ld: arch/x86/events/core.o:(.altinstructions+0xe8): undefined reference to `__x86_indirect_alt_call_rdx'
+   ld: arch/x86/events/core.o:(.altinstructions+0xf4): undefined reference to `__x86_indirect_alt_call_rdx'
+   ld: arch/x86/events/core.o:(.altinstructions+0x100): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x10c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x118): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x124): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x130): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x13c): undefined reference to `__x86_indirect_alt_call_rdx'
+   ld: arch/x86/events/core.o:(.altinstructions+0x148): undefined reference to `__x86_indirect_alt_call_rdx'
+   ld: arch/x86/events/core.o:(.altinstructions+0x154): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x160): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x16c): undefined reference to `__x86_indirect_alt_call_rdx'
+   ld: arch/x86/events/core.o:(.altinstructions+0x178): undefined reference to `__x86_indirect_alt_call_rdx'
+   ld: arch/x86/events/core.o:(.altinstructions+0x184): undefined reference to `__x86_indirect_alt_call_rdx'
+   ld: arch/x86/events/core.o:(.altinstructions+0x190): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x19c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x1a8): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x1b4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x1c0): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x1cc): more undefined references to `__x86_indirect_alt_call_rax' follow
+   ld: arch/x86/events/core.o:(.altinstructions+0x214): undefined reference to `__x86_indirect_alt_call_rdx'
+   ld: arch/x86/events/core.o:(.altinstructions+0x220): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x22c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x238): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x244): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x250): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/core.o:(.altinstructions+0x25c): more undefined references to `__x86_indirect_alt_call_rax' follow
+   ld: arch/x86/events/core.o:(.altinstructions+0x274): undefined reference to `__x86_indirect_alt_call_rdx'
+   ld: arch/x86/events/core.o:(.altinstructions+0x280): undefined reference to `__x86_indirect_alt_call_rdx'
+>> ld: arch/x86/events/probe.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/amd/core.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rdx'
+>> ld: arch/x86/events/amd/core.o:(.altinstructions+0x28): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/amd/ibs.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rbx'
+   ld: arch/x86/events/amd/ibs.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/intel/core.o:(.altinstructions+0x34): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/intel/core.o:(.altinstructions+0x40): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/intel/core.o:(.altinstructions+0x4c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/intel/core.o:(.altinstructions+0x58): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/intel/core.o:(.altinstructions+0x64): more undefined references to `__x86_indirect_alt_call_rax' follow
+   ld: arch/x86/events/intel/core.o:(.altinstructions+0x88): undefined reference to `__x86_indirect_alt_call_rdx'
+   ld: arch/x86/events/intel/core.o:(.altinstructions+0x94): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/intel/core.o:(.altinstructions+0xa0): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/intel/core.o:(.altinstructions+0xac): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/intel/core.o:(.altinstructions+0xb8): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/intel/core.o:(.altinstructions+0xc4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/events/intel/core.o:(.altinstructions+0xd0): more undefined references to `__x86_indirect_alt_call_rax' follow
+   ld: arch/x86/kernel/irq.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_jmp_rax'
+   ld: arch/x86/kernel/irq.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_jmp_rax'
+   ld: arch/x86/kernel/irq.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_jmp_rax'
+   ld: arch/x86/kernel/irq.o:(.altinstructions+0x28): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/irq.o:(.altinstructions+0x34): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/irq.o:(.altinstructions+0x40): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/irq.o:(.altinstructions+0x4c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/irq.o:(.altinstructions+0x58): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/irq.o:(.altinstructions+0x64): more undefined references to `__x86_indirect_alt_call_rax' follow
+>> ld: arch/x86/kernel/x86_init.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_jmp_rax'
+   ld: arch/x86/kernel/irq_work.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_jmp_rax'
+   ld: arch/x86/kernel/irq_work.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/irq_work.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/tsc.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/tsc.o:(.altinstructions+0x28): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/rtc.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_jmp_rax'
+   ld: arch/x86/kernel/rtc.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/process.o:(.altinstructions+0x124): undefined reference to `__x86_indirect_alt_jmp_rax'
+>> ld: arch/x86/kernel/fpu/core.o:(.altinstructions+0xd0): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: arch/x86/kernel/fpu/core.o:(.altinstructions+0xdc): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: arch/x86/kernel/fpu/core.o:(.altinstructions+0xe8): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: arch/x86/kernel/fpu/core.o:(.altinstructions+0xf4): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: arch/x86/kernel/fpu/core.o:(.altinstructions+0x100): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: arch/x86/kernel/fpu/core.o:(.altinstructions+0x10c): more undefined references to `__x86_indirect_alt_call_rbp' follow
+>> ld: arch/x86/kernel/ptrace.o:(.altinstructions+0x34): undefined reference to `__x86_indirect_alt_call_r10'
+   ld: arch/x86/kernel/ptrace.o:(.altinstructions+0x40): undefined reference to `__x86_indirect_alt_call_r10'
+   ld: arch/x86/kernel/stacktrace.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rbx'
+   ld: arch/x86/kernel/stacktrace.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rbx'
+   ld: arch/x86/kernel/stacktrace.o:(.altinstructions+0x28): undefined reference to `__x86_indirect_alt_call_rbx'
+>> ld: arch/x86/kernel/stacktrace.o:(.altinstructions+0x34): undefined reference to `__x86_indirect_alt_call_r12'
+   ld: arch/x86/kernel/stacktrace.o:(.altinstructions+0x40): undefined reference to `__x86_indirect_alt_call_r12'
+   ld: arch/x86/kernel/cpu/common.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/cpu/common.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/cpu/common.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rax'
+>> ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0x64): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0x70): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0x7c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0x88): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0x94): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0xa0): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0xac): more undefined references to `__x86_indirect_alt_call_rax' follow
+   ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0xb8): undefined reference to `__x86_indirect_alt_call_r15'
+   ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0xc4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0xd0): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0xdc): undefined reference to `__x86_indirect_alt_call_r15'
+   ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0xe8): undefined reference to `__x86_indirect_alt_call_r15'
+   ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0xf4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0x100): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0x10c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0x118): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0x124): undefined reference to `__x86_indirect_alt_call_rax'
+>> ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0x130): undefined reference to `__x86_indirect_alt_call_r14'
+   ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0x13c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0x148): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0x154): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0x160): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0x16c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/cpu/mce/core.o:(.altinstructions+0x178): more undefined references to `__x86_indirect_alt_call_rax' follow
+   ld: arch/x86/kernel/cpu/microcode/core.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: arch/x86/kernel/cpu/microcode/core.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/cpu/microcode/core.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/cpu/microcode/core.o:(.altinstructions+0x28): undefined reference to `__x86_indirect_alt_call_r12'
+   ld: arch/x86/kernel/cpu/microcode/core.o:(.altinstructions+0x34): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: arch/x86/kernel/cpu/microcode/core.o:(.altinstructions+0x40): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/cpu/microcode/core.o:(.altinstructions+0x4c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/acpi/boot.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/acpi/boot.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/acpi/boot.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/reboot.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_jmp_rax'
+   ld: arch/x86/kernel/reboot.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_jmp_rax'
+   ld: arch/x86/kernel/reboot.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_jmp_rax'
+   ld: arch/x86/kernel/reboot.o:(.altinstructions+0x28): undefined reference to `__x86_indirect_alt_jmp_rax'
+   ld: arch/x86/kernel/reboot.o:(.altinstructions+0x34): undefined reference to `__x86_indirect_alt_jmp_rax'
+   ld: arch/x86/kernel/reboot.o:(.altinstructions+0x40): more undefined references to `__x86_indirect_alt_jmp_rax' follow
+>> ld: arch/x86/kernel/reboot.o:(.altinstructions+0x70): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/reboot.o:(.altinstructions+0x7c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/reboot.o:(.altinstructions+0x88): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/apic/apic.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/apic/apic.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/apic/apic.o:(.altinstructions+0x1c): more undefined references to `__x86_indirect_alt_call_rax' follow
+   ld: arch/x86/kernel/apic/ipi.o:(.altinstructions+0x64): undefined reference to `__x86_indirect_alt_call_r13'
+>> ld: arch/x86/kernel/apic/ipi.o:(.altinstructions+0x70): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/apic/ipi.o:(.altinstructions+0x7c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/apic/ipi.o:(.altinstructions+0x88): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/apic/vector.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/apic/vector.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_r12'
+   ld: arch/x86/kernel/apic/vector.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/apic/vector.o:(.altinstructions+0x28): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/apic/vector.o:(.altinstructions+0x34): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/apic/hw_nmi.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/apic/io_apic.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/apic/io_apic.o:(.altinstructions+0x10): more undefined references to `__x86_indirect_alt_call_rax' follow
+   ld: arch/x86/kernel/crash.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rbx'
+>> ld: arch/x86/kernel/kprobes/core.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/kprobes/core.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/kprobes/core.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rax'
+>> ld: arch/x86/kernel/module.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/module.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/module.o:(.altinstructions+0x1c): more undefined references to `__x86_indirect_alt_call_rax' follow
+   ld: arch/x86/kernel/early_printk.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_jmp_rax'
+   ld: arch/x86/kernel/early_printk.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/hpet.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/hpet.o:(.altinstructions+0x28): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/kernel/kvm.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_jmp_rax'
+   ld: arch/x86/kernel/kvm.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/mm/init.o:(.altinstructions+0x28): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/mm/init_64.o:(.altinstructions+0x244): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/mm/init_64.o:(.altinstructions+0x250): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/mm/init_64.o:(.altinstructions+0x25c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/mm/fault.o:(.altinstructions+0xac): more undefined references to `__x86_indirect_alt_call_rax' follow
+>> ld: arch/x86/crypto/aegis128-aesni-glue.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_r15'
+>> ld: arch/x86/crypto/aegis128-aesni-glue.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rbx'
+>> ld: arch/x86/crypto/sha1_ssse3_glue.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/crypto/sha1_ssse3_glue.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/crypto/sha1_ssse3_glue.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/crypto/sha1_ssse3_glue.o:(.altinstructions+0x28): undefined reference to `__x86_indirect_alt_call_rax'
+>> ld: arch/x86/crypto/sha1_ssse3_glue.o:(.altinstructions+0x34): undefined reference to `__x86_indirect_alt_call_rbx'
+   ld: arch/x86/crypto/sha1_ssse3_glue.o:(.altinstructions+0x40): undefined reference to `__x86_indirect_alt_call_rbx'
+   ld: arch/x86/crypto/sm4_aesni_avx_glue.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/crypto/sm4_aesni_avx_glue.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: arch/x86/crypto/sm4_aesni_avx_glue.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rax'
+>> ld: kernel/fork.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: kernel/fork.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: kernel/fork.o:(.altinstructions+0x28): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/fork.o:(.altinstructions+0x34): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/fork.o:(.altinstructions+0x40): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/fork.o:(.altinstructions+0x4c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/panic.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/panic.o:(.altinstructions+0x10): more undefined references to `__x86_indirect_alt_call_rax' follow
+>> ld: kernel/cpu.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: kernel/cpu.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: kernel/cpu.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: kernel/cpu.o:(.altinstructions+0x28): undefined reference to `__x86_indirect_alt_call_r14'
+   ld: kernel/cpu.o:(.altinstructions+0x34): undefined reference to `__x86_indirect_alt_call_r14'
+   ld: kernel/cpu.o:(.altinstructions+0x40): undefined reference to `__x86_indirect_alt_call_r14'
+   ld: kernel/cpu.o:(.altinstructions+0x4c): undefined reference to `__x86_indirect_alt_call_rbx'
+   ld: kernel/softirq.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/softirq.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/softirq.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/softirq.o:(.altinstructions+0x28): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/softirq.o:(.altinstructions+0x34): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/softirq.o:(.altinstructions+0x40): more undefined references to `__x86_indirect_alt_call_rax' follow
+   ld: kernel/resource.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_r14'
+>> ld: kernel/resource.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: kernel/resource.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: kernel/resource.o:(.altinstructions+0x28): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/resource.o:(.altinstructions+0x34): undefined reference to `__x86_indirect_alt_call_r12'
+   ld: kernel/sysctl.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sysctl.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sysctl.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sysctl.o:(.altinstructions+0x28): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/ptrace.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_r14'
+   ld: kernel/signal.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: kernel/signal.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: kernel/signal.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/umh.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/umh.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/umh.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/umh.o:(.altinstructions+0x28): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/workqueue.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: kernel/workqueue.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: kernel/workqueue.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: kernel/workqueue.o:(.altinstructions+0x28): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: kernel/workqueue.o:(.altinstructions+0x34): undefined reference to `__x86_indirect_alt_call_rbx'
+   ld: kernel/workqueue.o:(.altinstructions+0x40): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/task_work.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: kernel/task_work.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/params.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/params.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/params.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/params.o:(.altinstructions+0x28): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/params.o:(.altinstructions+0x34): undefined reference to `__x86_indirect_alt_call_r12'
+   ld: kernel/params.o:(.altinstructions+0x40): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/params.o:(.altinstructions+0x4c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/params.o:(.altinstructions+0x58): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/params.o:(.altinstructions+0x64): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/params.o:(.altinstructions+0x70): undefined reference to `__x86_indirect_alt_call_rbp'
+   ld: kernel/kthread.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/kthread.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/kthread.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rbx'
+   ld: kernel/nsproxy.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/nsproxy.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/nsproxy.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/notifier.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/notifier.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/notifier.o:(.altinstructions+0x1c): more undefined references to `__x86_indirect_alt_call_rax' follow
+   ld: kernel/async.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_r12'
+   ld: kernel/async.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/smpboot.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_r12'
+   ld: kernel/smpboot.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/smpboot.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_r12'
+   ld: kernel/smpboot.o:(.altinstructions+0x28): undefined reference to `__x86_indirect_alt_call_r12'
+   ld: kernel/smpboot.o:(.altinstructions+0x34): undefined reference to `__x86_indirect_alt_call_rbx'
+   ld: kernel/smpboot.o:(.altinstructions+0x40): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/regset.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_jmp_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_jmp_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x28): undefined reference to `__x86_indirect_alt_jmp_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x34): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x40): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x4c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x58): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x64): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x70): more undefined references to `__x86_indirect_alt_call_rax' follow
+   ld: kernel/sched/core.o:(.altinstructions+0x25c): undefined reference to `__x86_indirect_alt_call_rdx'
+   ld: kernel/sched/core.o:(.altinstructions+0x268): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x274): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x280): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x28c): undefined reference to `__x86_indirect_alt_call_rcx'
+   ld: kernel/sched/core.o:(.altinstructions+0x298): undefined reference to `__x86_indirect_alt_call_rdx'
+   ld: kernel/sched/core.o:(.altinstructions+0x2a4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x2b0): undefined reference to `__x86_indirect_alt_call_r13'
+   ld: kernel/sched/core.o:(.altinstructions+0x2bc): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x2c8): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x2d4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x2e0): undefined reference to `__x86_indirect_alt_call_rbx'
+   ld: kernel/sched/core.o:(.altinstructions+0x2ec): undefined reference to `__x86_indirect_alt_call_rbx'
+   ld: kernel/sched/core.o:(.altinstructions+0x2f8): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x304): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x310): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x31c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x328): undefined reference to `__x86_indirect_alt_call_rdx'
+   ld: kernel/sched/core.o:(.altinstructions+0x334): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x340): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x34c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x358): undefined reference to `__x86_indirect_alt_call_r10'
+   ld: kernel/sched/core.o:(.altinstructions+0x364): undefined reference to `__x86_indirect_alt_call_rdx'
+   ld: kernel/sched/core.o:(.altinstructions+0x370): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x37c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x388): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x394): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x3a0): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/core.o:(.altinstructions+0x3ac): more undefined references to `__x86_indirect_alt_call_rax' follow
+   ld: kernel/sched/core.o:(.altinstructions+0x3e8): undefined reference to `__x86_indirect_alt_call_rdx'
+   ld: kernel/sched/fair.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/fair.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/fair.o:(.altinstructions+0x1c): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/fair.o:(.altinstructions+0x28): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/fair.o:(.altinstructions+0x34): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/rt.o:(.altinstructions+0x4): more undefined references to `__x86_indirect_alt_call_rax' follow
+   ld: kernel/sched/wait_bit.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_r15'
+   ld: kernel/sched/wait_bit.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_r15'
+   ld: kernel/sched/psi.o:(.altinstructions+0x4): undefined reference to `__x86_indirect_alt_call_rax'
+   ld: kernel/sched/psi.o:(.altinstructions+0x10): undefined reference to `__x86_indirect_alt_call_rax'
 
 -- 
-With Best Regards,
-Andy Shevchenko
+0-DAY CI Kernel Test Service
+https://01.org/lkp

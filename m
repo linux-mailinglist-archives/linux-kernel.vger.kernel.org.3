@@ -2,524 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1A1523885
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE8B5238BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344688AbiEKQRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 12:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38636 "EHLO
+        id S1344623AbiEKQT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 12:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241166AbiEKQRQ (ORCPT
+        with ESMTP id S1344587AbiEKQTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 12:17:16 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3E72CC8C;
-        Wed, 11 May 2022 09:17:03 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id a15-20020a17090ad80f00b001dc2e23ad84so5365847pjv.4;
-        Wed, 11 May 2022 09:17:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ZBJKZIsVMsFKHOYwovHJla2knjXCDedlt+wjbXlZFEw=;
-        b=QfFjHLv0s3dOvr2zX8dOoxKGo+oPkncDzpEXD5i/0R2k1Amvn/z/1pWMGEsJoYAQJt
-         BAqC9FlB8PnmrjnzLtkhPgXjFKEY1h7dq21UmiUakxJyR3iKN+mCbRNeAxppdKwQlOrq
-         EkAroyPY00i4B31fMUvhjvx5H9B54O2E50vhU79xHy/BM9qb7LVD/H9q5HifjewbW7i+
-         PwR+qGAZsjVYXOME0OY0l3n1yXwbIJ/RVtHIBFMnDZ1OeGYJ5ws13n0wCxdsRIJB6Ofs
-         ui9fQOfhM5FQHkgKGMKmfVyuvPCxpVbzoOmwkqwMsExDTnZmp3CBswHVEQbNDNIpVnSG
-         42bQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ZBJKZIsVMsFKHOYwovHJla2knjXCDedlt+wjbXlZFEw=;
-        b=tZ08RvklxBeqLjRh0vxE9RlKVRfk3eRzr4cgmDH1GMKhv8HTVAnBB4JfX3TG1igRKY
-         JWMujM+SOCY+jRaT1ticpH3dctaJCnKZo2ysKWxTHy+AO984e5aV6X4QoRGsUM9acqcS
-         v86yALsc09HpDeZMWpQleiXzmQMbMoRQBYGS30i6NY86H3Q8rczYm0s1RB50l2mE+BFw
-         KuTFAkTfTvPiUjnD8p60cTEiEH3HLqZsdtsOs62alfxg0pm33M000x8ZHS4p0R3dmxhl
-         +1XtCotorbBDDN2ESjA4NxDM9CQRQxwisBDAw0eWV02tLbiUsskTq5K7T95K5VCrCaOB
-         tb6Q==
-X-Gm-Message-State: AOAM531TpSTgebKmNh8UWWN8EeRRLYuaamjOtyVTq1GKBwV5OYFFJnDO
-        ei/7jny1uuOaT0VjI5BRtIR786FsgWvdyn6h
-X-Google-Smtp-Source: ABdhPJwxI08p83XE/Dos9iEQkLfNw4eXNlmTKOWVJXbcZ4PNRiJ9Pm5Tdd7F7r1+vZzTyCJ4FWBIng==
-X-Received: by 2002:a17:90a:c08a:b0:1d9:88de:d192 with SMTP id o10-20020a17090ac08a00b001d988ded192mr6165192pjs.8.1652285822231;
-        Wed, 11 May 2022 09:17:02 -0700 (PDT)
-Received: from skynet-linux.local ([49.204.239.218])
-        by smtp.googlemail.com with ESMTPSA id x7-20020a17090a1f8700b001ded49491basm220322pja.2.2022.05.11.09.16.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 09:17:01 -0700 (PDT)
-From:   Sireesh Kodali <sireeshkodali1@gmail.com>
-To:     linux-remoteproc@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, bjorn.andersson@linaro.org,
-        devicetree@vger.kernel.org, phone-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sireesh Kodali <sireeshkodali1@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: [PATCH 9/9] arm64: dts: qcom: msm8953: Add remote processor nodes
-Date:   Wed, 11 May 2022 21:46:02 +0530
-Message-Id: <20220511161602.117772-10-sireeshkodali1@gmail.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220511161602.117772-1-sireeshkodali1@gmail.com>
-References: <20220511161602.117772-1-sireeshkodali1@gmail.com>
+        Wed, 11 May 2022 12:19:54 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A92237240
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:19:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652285992; x=1683821992;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KZA+b2KwiXUtSRcO3dJQiKs6XgHBt2Eu3grD6WobVio=;
+  b=V6VrCeIEfTKVedERGis/zwpXZGkhblf+MrY/OLI7LTTJj2NjQZBPcdLj
+   9JWF7dbBQTZrrcT9TleLWb4UMMaipYv+QH6Pa3Go/ivsQH1DFCnP+xmba
+   gDl/JpLVJMjnDOrc5kj6PSAITPjJmsG9sk0XYoNqKpLstcNi5CEO7hT25
+   99ZxltVbgZEn38TAiGjAzIojfrW/tI3oYHACx6VQ+BjQGlIGN5o8959CK
+   Fzr7vYAcjRA4PILAyAf0HzRDwfzlFTX9o5nsyDHscwYZKPlSndYP9Hp8e
+   gW3diIA5x5sNk3ceBmkzw1u17Kz9ZQ2Jwgxlq3uvjOAuWPq9aC2rB2l0O
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="249641600"
+X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
+   d="scan'208";a="249641600"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 09:16:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
+   d="scan'208";a="602998585"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 11 May 2022 09:16:57 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nop1E-000JHr-Ne;
+        Wed, 11 May 2022 16:16:56 +0000
+Date:   Thu, 12 May 2022 00:16:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [intel-tdx:guest-unaccepted-memory 3/15] mm/page_alloc.c:1183:12:
+ warning: 'page_needs_acceptance' is used uninitialized
+Message-ID: <202205120007.cudgBgVI-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds the modem (q6v5_mss), WiFi (wcnss-pil) and audio DSP
-(q6v5_pas) remote processor nodes for the MSM8953 platform. It also adds
-the coresponding SMP2P, SMSM and pinctrl nodes that are needed by these
-remote processors.
+tree:   https://github.com/intel/tdx.git guest-unaccepted-memory
+head:   83a8442434ff3bbf432df7508f1fefd447ca2c86
+commit: 0845556ccd9555f5245d3bdd6cb646c2ea3fa9c2 [3/15] mm: Add support for unaccepted memory
+config: x86_64-randconfig-a016-20220509 (https://download.01.org/0day-ci/archive/20220512/202205120007.cudgBgVI-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel/tdx/commit/0845556ccd9555f5245d3bdd6cb646c2ea3fa9c2
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-unaccepted-memory
+        git checkout 0845556ccd9555f5245d3bdd6cb646c2ea3fa9c2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
----
- arch/arm64/boot/dts/qcom/msm8953.dtsi | 378 ++++++++++++++++++++++++++
- 1 file changed, 378 insertions(+)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8953.dtsi b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-index 431228faacdd..04e285e442ff 100644
---- a/arch/arm64/boot/dts/qcom/msm8953.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-@@ -2,9 +2,13 @@
- /* Copyright (c) 2022, The Linux Foundation. All rights reserved. */
- 
- #include <dt-bindings/clock/qcom,gcc-msm8953.h>
-+#include <dt-bindings/clock/qcom,rpmcc.h>
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/power/qcom-rpmpd.h>
-+#include <dt-bindings/soc/qcom,apr.h>
-+#include <dt-bindings/sound/qcom,q6dsp-lpass-ports.h>
-+#include <dt-bindings/sound/qcom,q6asm.h>
- #include <dt-bindings/thermal/thermal.h>
- 
- / {
-@@ -384,6 +388,80 @@ rpmpd_opp_turbo: opp9 {
- 		};
- 	};
- 
-+	modem-smp2p {
-+		compatible = "qcom,smp2p";
-+		qcom,smem = <435>, <428>;
-+
-+		interrupts = <GIC_SPI 27 IRQ_TYPE_EDGE_RISING>;
-+
-+		qcom,ipc = <&apcs 8 14>;
-+
-+		qcom,local-pid = <0>;
-+		qcom,remote-pid = <1>;
-+
-+		modem_smp2p_out: master-kernel {
-+			qcom,entry-name = "master-kernel";
-+
-+			#qcom,smem-state-cells = <1>;
-+		};
-+
-+		modem_smp2p_in: slave-kernel {
-+			qcom,entry-name = "slave-kernel";
-+
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+	};
-+
-+	adsp-smp2p {
-+		compatible = "qcom,smp2p";
-+		qcom,smem = <443>, <429>;
-+
-+		interrupts = <GIC_SPI 291 IRQ_TYPE_EDGE_RISING>;
-+
-+		mboxes = <&apcs 10>;
-+
-+		qcom,local-pid = <0>;
-+		qcom,remote-pid = <2>;
-+
-+		smp2p_adsp_out: master-kernel {
-+			qcom,entry-name = "master-kernel";
-+			#qcom,smem-state-cells = <1>;
-+		};
-+
-+		smp2p_adsp_in: slave-kernel {
-+			qcom,entry-name = "slave-kernel";
-+
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+	};
-+
-+	wcnss-smp2p {
-+		compatible = "qcom,smp2p";
-+		qcom,smem = <451>, <431>;
-+
-+		interrupts = <GIC_SPI 143 IRQ_TYPE_EDGE_RISING>;
-+
-+		qcom,ipc = <&apcs 8 18>;
-+
-+		qcom,local-pid = <0>;
-+		qcom,remote-pid = <4>;
-+
-+		wcnss_smp2p_out: master-kernel {
-+			qcom,entry-name = "master-kernel";
-+
-+			#qcom,smem-state-cells = <1>;
-+		};
-+
-+		wcnss_smp2p_in: slave-kernel {
-+			qcom,entry-name = "slave-kernel";
-+
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+	};
-+
- 	smsm {
- 		compatible = "qcom,smsm";
- 
-@@ -398,6 +476,22 @@ apps_smsm: apps@0 {
- 
- 			#qcom,smem-state-cells = <1>;
- 		};
-+
-+		hexagon_smsm: hexagon@1 {
-+			reg = <1>;
-+			interrupts = <GIC_SPI 26 IRQ_TYPE_EDGE_RISING>;
-+
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+
-+		wcnss_smsm: wcnss@6 {
-+			reg = <6>;
-+			interrupts = <GIC_SPI 144 IRQ_TYPE_EDGE_RISING>;
-+
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
- 	};
- 
- 	soc: soc@0 {
-@@ -688,6 +782,59 @@ i2c_8_sleep: i2c-8-sleep-pins {
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
-+
-+			wcnss_default: wcnss-default-pins {
-+				wcss_wlan2 {
-+					pins = "gpio76";
-+					function = "wcss_wlan2";
-+				};
-+				wcss_wlan1 {
-+					pins = "gpio77";
-+					function = "wcss_wlan1";
-+				};
-+				wcss_wlan0 {
-+					pins = "gpio78";
-+					function = "wcss_wlan0";
-+				};
-+				wcss_wlan {
-+					pins = "gpio79", "gpio80";
-+					function = "wcss_wlan";
-+				};
-+
-+				pinconf {
-+					pins = "gpio76", "gpio77", "gpio78",
-+					     "gpio79", "gpio80";
-+					drive-strength = <6>;
-+					bias-pull-up;
-+				};
-+			};
-+
-+			wcnss_sleep: wcnss-sleep-pins {
-+				wcss_wlan2 {
-+					pins = "gpio76";
-+					function = "wcss_wlan2";
-+				};
-+				wcss_wlan1 {
-+					pins = "gpio77";
-+					function = "wcss_wlan1";
-+				};
-+				wcss_wlan0 {
-+					pins = "gpio78";
-+					function = "wcss_wlan0";
-+				};
-+				wcss_wlan {
-+					pins = "gpio79", "gpio80";
-+					function = "wcss_wlan";
-+				};
-+
-+				pinconf {
-+					pins = "gpio76", "gpio77",
-+					     "gpio78", "gpio79",
-+					     "gpio80";
-+					drive-strength = <2>;
-+					bias-pull-down;
-+				};
-+			};
- 		};
- 
- 		gcc: clock-controller@1800000 {
-@@ -745,6 +892,59 @@ spmi_bus: spmi@200f000 {
- 			#size-cells = <0>;
- 		};
- 
-+		modem: remoteproc@4080000 {
-+			compatible = "qcom,msm8953-mss-pil";
-+			reg = <0x4080000 0x100>,
-+			    <0x4020000 0x040>;
-+
-+			reg-names = "qdsp6", "rmb";
-+
-+			interrupts-extended = <&intc 0 24 1>,
-+					      <&modem_smp2p_in 0 0>,
-+					      <&modem_smp2p_in 1 0>,
-+					      <&modem_smp2p_in 2 0>,
-+					      <&modem_smp2p_in 3 0>;
-+			interrupt-names = "wdog", "fatal", "ready",
-+					  "handover", "stop-ack";
-+
-+			clocks = <&gcc GCC_MSS_CFG_AHB_CLK>,
-+				 <&gcc GCC_MSS_Q6_BIMC_AXI_CLK>,
-+				 <&gcc GCC_BOOT_ROM_AHB_CLK>,
-+				 <&xo_board>;
-+			clock-names = "iface", "bus", "mem", "xo";
-+
-+			power-domains = <&rpmpd MSM8953_VDDCX>, <&rpmpd MSM8953_VDDMX>;
-+			power-domain-names = "cx", "mx";
-+
-+			qcom,smem-states = <&modem_smp2p_out 0>;
-+			qcom,smem-state-names = "stop";
-+
-+			resets = <&gcc GCC_MSS_BCR>;
-+			reset-names = "mss_restart";
-+
-+			qcom,halt-regs = <&tcsr 0x18000 0x19000 0x1a000>;
-+
-+			status = "okay";
-+
-+			mba {
-+				memory-region = <&mba_mem>;
-+			};
-+
-+			mpss {
-+				memory-region = <&mpss_mem>;
-+			};
-+
-+			smd-edge {
-+				interrupts = <GIC_SPI 25 IRQ_TYPE_EDGE_RISING>;
-+
-+				qcom,smd-edge = <0>;
-+				qcom,ipc = <&apcs 8 12>;
-+				qcom,remote-pid = <1>;
-+
-+				label = "modem";
-+			};
-+		};
-+
- 		usb3: usb@70f8800 {
- 			compatible = "qcom,msm8953-dwc3", "qcom,dwc3";
- 			reg = <0x70f8800 0x400>;
-@@ -1057,6 +1257,74 @@ i2c_8: i2c@7af8000 {
- 			status = "disabled";
- 		};
- 
-+		pronto: remoteproc@a21b000 {
-+			compatible = "qcom,pronto-v3-pil", "qcom,pronto";
-+			reg = <0xa204000 0x2000>,
-+			      <0xa202000 0x1000>,
-+			      <0xa21b000 0x3000>;
-+			reg-names = "ccu", "dxe", "pmu";
-+
-+			memory-region = <&wcnss_fw_mem>;
-+
-+			interrupts-extended = <&intc 0 149 IRQ_TYPE_EDGE_RISING>,
-+					      <&wcnss_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
-+					      <&wcnss_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
-+					      <&wcnss_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
-+					      <&wcnss_smp2p_in 3 IRQ_TYPE_EDGE_RISING>;
-+			interrupt-names = "wdog", "fatal", "ready", "handover", "stop-ack";
-+
-+			power-domains = <&rpmpd MSM8953_VDDCX>, <&rpmpd MSM8953_VDDMX>;
-+			power-domain-names = "cx", "mx";
-+
-+			qcom,state = <&wcnss_smp2p_out 0>;
-+			qcom,state-names = "stop";
-+
-+			pinctrl-names = "default", "sleep";
-+			pinctrl-0 = <&wcnss_default>;
-+			pinctrl-1 = <&wcnss_sleep>;
-+
-+			status = "okay";
-+
-+			iris: iris {
-+				compatible = "qcom,wcn3660b";
-+
-+				clocks = <&rpmcc RPM_SMD_RF_CLK2>;
-+				clock-names = "xo";
-+			};
-+
-+			smd-edge {
-+				interrupts = <GIC_SPI 142 IRQ_TYPE_EDGE_RISING>;
-+
-+				qcom,ipc = <&apcs 8 17>;
-+				qcom,smd-edge = <6>;
-+				qcom,remote-pid = <4>;
-+
-+				label = "pronto";
-+
-+				wcnss {
-+					compatible = "qcom,wcnss";
-+					qcom,smd-channels = "WCNSS_CTRL";
-+
-+					qcom,mmio = <&pronto>;
-+
-+					bt {
-+						compatible = "qcom,wcnss-bt";
-+					};
-+
-+					wifi {
-+						compatible = "qcom,wcnss-wlan";
-+
-+						interrupts = <GIC_SPI 145 IRQ_TYPE_LEVEL_HIGH>,
-+							     <GIC_SPI 146 IRQ_TYPE_LEVEL_HIGH>;
-+						interrupt-names = "tx", "rx";
-+
-+						qcom,smem-states = <&apps_smsm 10>, <&apps_smsm 9>;
-+						qcom,smem-state-names = "tx-enable", "tx-rings-empty";
-+					};
-+				};
-+			};
-+		};
-+
- 		intc: interrupt-controller@b000000 {
- 			compatible = "qcom,msm-qgic2";
- 			interrupt-controller;
-@@ -1070,6 +1338,116 @@ apcs: mailbox@b011000 {
- 			#mbox-cells = <1>;
- 		};
- 
-+		lpass: remoteproc@c200000 {
-+			compatible = "qcom,msm8953-adsp-pil";
-+			reg = <0xc200000 0x100>;
-+
-+			interrupts-extended = <&intc 0 293 IRQ_TYPE_EDGE_RISING>,
-+					      <&smp2p_adsp_in 0 IRQ_TYPE_EDGE_RISING>,
-+					      <&smp2p_adsp_in 1 IRQ_TYPE_EDGE_RISING>,
-+					      <&smp2p_adsp_in 2 IRQ_TYPE_EDGE_RISING>,
-+					      <&smp2p_adsp_in 3 IRQ_TYPE_EDGE_RISING>;
-+			interrupt-names = "wdog", "fatal", "ready",
-+					  "handover", "stop-ack";
-+			clocks = <&xo_board>;
-+			clock-names = "xo";
-+
-+			power-domains = <&rpmpd MSM8953_VDDCX>;
-+			power-domain-names = "cx";
-+
-+			memory-region = <&adsp_fw_mem>;
-+
-+			qcom,smem-states = <&smp2p_adsp_out 0>;
-+			qcom,smem-state-names = "stop";
-+
-+			smd-edge {
-+				interrupts = <GIC_SPI 289 IRQ_TYPE_EDGE_RISING>;
-+
-+				label = "lpass";
-+				mboxes = <&apcs 8>;
-+				qcom,smd-edge = <1>;
-+				qcom,remote-pid = <2>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				apr {
-+					compatible = "qcom,apr-v2";
-+					qcom,smd-channels = "apr_audio_svc";
-+					qcom,apr-domain = <APR_DOMAIN_ADSP>;
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					q6core {
-+						reg = <APR_SVC_ADSP_CORE>;
-+						compatible = "qcom,q6core";
-+					};
-+
-+					q6afe: q6afe {
-+						compatible = "qcom,q6afe";
-+						reg = <APR_SVC_AFE>;
-+						q6afedai: dais {
-+							compatible = "qcom,q6afe-dais";
-+							#address-cells = <1>;
-+							#size-cells = <0>;
-+							#sound-dai-cells = <1>;
-+
-+							dai@16 {
-+								reg = <PRIMARY_MI2S_RX>;
-+								qcom,sd-lines = <0 1>;
-+							};
-+
-+							dai@21 {
-+								reg = <TERTIARY_MI2S_TX>;
-+								qcom,sd-lines = <0 1>;
-+							};
-+						};
-+						q6afecc: clock-controller {
-+							compatible = "qcom,q6afe-clocks";
-+							#clock-cells = <2>;
-+						};
-+					};
-+
-+					q6asm: q6asm {
-+						compatible = "qcom,q6asm";
-+						reg = <APR_SVC_ASM>;
-+						q6asmdai: dais {
-+							compatible = "qcom,q6asm-dais";
-+							#address-cells = <1>;
-+							#size-cells = <0>;
-+							#sound-dai-cells = <1>;
-+
-+							dai@0 {
-+								reg = <MSM_FRONTEND_DAI_MULTIMEDIA1>;
-+							};
-+
-+							dai@1 {
-+								reg = <MSM_FRONTEND_DAI_MULTIMEDIA2>;
-+							};
-+
-+							dai@2 {
-+								reg = <MSM_FRONTEND_DAI_MULTIMEDIA3>;
-+							};
-+
-+							dai@3 {
-+								reg = <MSM_FRONTEND_DAI_MULTIMEDIA4>;
-+								is-compress-dai;
-+							};
-+						};
-+					};
-+
-+					q6adm: q6adm {
-+						compatible = "qcom,q6adm";
-+						reg = <APR_SVC_ADM>;
-+						q6routing: routing {
-+							compatible = "qcom,q6adm-routing";
-+							#sound-dai-cells = <0>;
-+						};
-+					};
-+				};
-+			};
-+
-+		};
-+
- 		timer@b120000 {
- 			compatible = "arm,armv7-timer-mem";
- 			reg = <0xb120000 0x1000>;
+All warnings (new ones prefixed by >>):
+
+   mm/page_alloc.c: In function '__free_one_page':
+>> mm/page_alloc.c:1183:12: warning: 'page_needs_acceptance' is used uninitialized [-Wuninitialized]
+    1183 |         if (!page_needs_acceptance && (fpi_flags & FPI_UNACCEPTED_SLOWPATH))
+         |            ^
+
+
+vim +/page_needs_acceptance +1183 mm/page_alloc.c
+
+  1056	
+  1057	/*
+  1058	 * Freeing function for a buddy system allocator.
+  1059	 *
+  1060	 * The concept of a buddy system is to maintain direct-mapped table
+  1061	 * (containing bit values) for memory blocks of various "orders".
+  1062	 * The bottom level table contains the map for the smallest allocatable
+  1063	 * units of memory (here, pages), and each level above it describes
+  1064	 * pairs of units from the levels below, hence, "buddies".
+  1065	 * At a high level, all that happens here is marking the table entry
+  1066	 * at the bottom level available, and propagating the changes upward
+  1067	 * as necessary, plus some accounting needed to play nicely with other
+  1068	 * parts of the VM system.
+  1069	 * At each level, we keep a list of pages, which are heads of continuous
+  1070	 * free pages of length of (1 << order) and marked with PageBuddy.
+  1071	 * Page's order is recorded in page_private(page) field.
+  1072	 * So when we are allocating or freeing one, we can derive the state of the
+  1073	 * other.  That is, if we allocate a small block, and both were
+  1074	 * free, the remainder of the region must be split into blocks.
+  1075	 * If a block is freed, and its buddy is also free, then this
+  1076	 * triggers coalescing into a block of larger size.
+  1077	 *
+  1078	 * -- nyc
+  1079	 */
+  1080	
+  1081	static inline void __free_one_page(struct page *page,
+  1082			unsigned long pfn,
+  1083			struct zone *zone, unsigned int order,
+  1084			int migratetype, fpi_t fpi_flags)
+  1085	{
+  1086		struct capture_control *capc = task_capc(zone);
+  1087		unsigned int max_order = pageblock_order;
+  1088		unsigned long buddy_pfn;
+  1089		unsigned long combined_pfn;
+  1090		struct page *buddy;
+  1091		bool to_tail;
+  1092		bool page_needs_acceptance;
+  1093	
+  1094		VM_BUG_ON(!zone_is_initialized(zone));
+  1095		VM_BUG_ON_PAGE(page->flags & PAGE_FLAGS_CHECK_AT_PREP, page);
+  1096	
+  1097		VM_BUG_ON(migratetype == -1);
+  1098		if (likely(!is_migrate_isolate(migratetype)))
+  1099			__mod_zone_freepage_state(zone, 1 << order, migratetype);
+  1100	
+  1101		VM_BUG_ON_PAGE(pfn & ((1 << order) - 1), page);
+  1102		VM_BUG_ON_PAGE(bad_range(zone, page), page);
+  1103	
+  1104		if (PageUnaccepted(page)) {
+  1105			page_needs_acceptance = true;
+  1106			__ClearPageUnaccepted(page);
+  1107		}
+  1108	
+  1109	continue_merging:
+  1110		while (order < max_order) {
+  1111			if (compaction_capture(capc, page, order, migratetype)) {
+  1112				__mod_zone_freepage_state(zone, -(1 << order),
+  1113									migratetype);
+  1114				return;
+  1115			}
+  1116			buddy_pfn = __find_buddy_pfn(pfn, order);
+  1117			buddy = page + (buddy_pfn - pfn);
+  1118	
+  1119			if (!page_is_buddy(page, buddy, order))
+  1120				goto done_merging;
+  1121			/*
+  1122			 * Our buddy is free or it is CONFIG_DEBUG_PAGEALLOC guard page,
+  1123			 * merge with it and move up one order.
+  1124			 */
+  1125			if (page_is_guard(buddy))
+  1126				clear_page_guard(zone, buddy, order, migratetype);
+  1127			else
+  1128				del_page_from_free_list(buddy, zone, order);
+  1129	
+  1130			/* Mark page unaccepted if any of merged pages were unaccepted */
+  1131			if (PageUnaccepted(buddy)) {
+  1132				page_needs_acceptance = true;
+  1133				__ClearPageUnaccepted(buddy);
+  1134			}
+  1135	
+  1136			combined_pfn = buddy_pfn & pfn;
+  1137			page = page + (combined_pfn - pfn);
+  1138			pfn = combined_pfn;
+  1139			order++;
+  1140		}
+  1141		if (order < MAX_ORDER - 1) {
+  1142			/* If we are here, it means order is >= pageblock_order.
+  1143			 * We want to prevent merge between freepages on pageblock
+  1144			 * without fallbacks and normal pageblock. Without this,
+  1145			 * pageblock isolation could cause incorrect freepage or CMA
+  1146			 * accounting or HIGHATOMIC accounting.
+  1147			 *
+  1148			 * We don't want to hit this code for the more frequent
+  1149			 * low-order merging.
+  1150			 */
+  1151			int buddy_mt;
+  1152	
+  1153			buddy_pfn = __find_buddy_pfn(pfn, order);
+  1154			buddy = page + (buddy_pfn - pfn);
+  1155	
+  1156			if (!page_is_buddy(page, buddy, order))
+  1157				goto done_merging;
+  1158			buddy_mt = get_pageblock_migratetype(buddy);
+  1159	
+  1160			if (migratetype != buddy_mt
+  1161					&& (!migratetype_is_mergeable(migratetype) ||
+  1162						!migratetype_is_mergeable(buddy_mt)))
+  1163				goto done_merging;
+  1164			max_order = order + 1;
+  1165			goto continue_merging;
+  1166		}
+  1167	
+  1168	done_merging:
+  1169		set_buddy_order(page, order);
+  1170	
+  1171		/*
+  1172		 * The page gets marked as PageUnaccepted() if any of merged-in pages
+  1173		 * is PageUnaccepted().
+  1174		 *
+  1175		 * New pages, just being added to buddy allocator, do not have
+  1176		 * PageUnaccepted() set. FPI_UNACCEPTED_SLOWPATH indicates that the
+  1177		 * page is new and page_is_unaccepted() check is required to
+  1178		 * determinate if acceptance is required.
+  1179		 *
+  1180		 * Avoid calling page_is_unaccepted() if it is known that the page
+  1181		 * needs acceptance. It can be costly.
+  1182		 */
+> 1183		if (!page_needs_acceptance && (fpi_flags & FPI_UNACCEPTED_SLOWPATH))
+  1184			page_needs_acceptance = page_is_unaccepted(page, order);
+  1185		if (page_needs_acceptance)
+  1186			__SetPageUnaccepted(page);
+  1187	
+  1188		if (fpi_flags & FPI_TO_TAIL)
+  1189			to_tail = true;
+  1190		else if (is_shuffle_order(order))
+  1191			to_tail = shuffle_pick_tail();
+  1192		else
+  1193			to_tail = buddy_merge_likely(pfn, buddy_pfn, page, order);
+  1194	
+  1195		if (to_tail)
+  1196			add_to_free_list_tail(page, zone, order, migratetype);
+  1197		else
+  1198			add_to_free_list(page, zone, order, migratetype);
+  1199	
+  1200		/* Notify page reporting subsystem of freed page */
+  1201		if (!(fpi_flags & FPI_SKIP_REPORT_NOTIFY))
+  1202			page_reporting_notify_free(order);
+  1203	}
+  1204	
+
 -- 
-2.36.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

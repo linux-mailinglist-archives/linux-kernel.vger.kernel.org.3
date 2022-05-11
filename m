@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E024A52366F
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63FB8523679
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245283AbiEKO6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 10:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35546 "EHLO
+        id S245514AbiEKO7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 10:59:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245329AbiEKO5j (ORCPT
+        with ESMTP id S245338AbiEKO5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 10:57:39 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087AB67D3D
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:57:34 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id g16so2976553lja.3
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:57:34 -0700 (PDT)
+        Wed, 11 May 2022 10:57:41 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5378920CDAE
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:57:37 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id o22so2055642ljp.8
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 07:57:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=L4Cgf9CCBKn83g7/KBEuaNwcj4g0FN5Zjd21HT3ZAg8=;
-        b=hARKzpbiibT8wZ6cRWUlNHAwxXB5ahdvlALYyO4z7iYJ/yCSbhsYiJtQI0b061QvaB
-         T0z3ZQBb4q5fHOnw2qdaT6iHhDbxL9q+Mfdv+7f5P3zo0BnrSW2LBdN/g4WTJCgC44qA
-         JxLCfL9Ul1vPV6g2KIum0DMTwuxO+LzCHqvfATvnDhMZ92PnVR3U++ebLHY+eVrpB9zO
-         /zmiXe6AH03O6DIUVtjYFgtNkPSZw0Pg1/L402McRSqNE3wzsKg1O81tG+7rDoCKFny9
-         DEMiwBxLQTU5nZEqNitXnECE0negcXRGO3zmI6Rd0kjVRyl/l4fGxzoQRl2xZAXdhlM6
-         30pg==
+        bh=PO0ibnivlYlQHsSzGsoFDn9GSobE9qvHUHbEZcsOBy0=;
+        b=eZKENx22PLLnXCK4/RWqmJUBzs4H+TVmExklvHsjsUlgPBN81qUOsWlzGDaoO3K+Cy
+         b0UldU/sshvcS11Ya4efKtzTB/3qoymbAcHWQ5ohd1pUzs6mXaQplzOJP+RkZSg88zZi
+         m04gMKBge8gTwQPBwn0ejNIEASf8HrdnnoaeYERmzOfXNw1F371WCYnYEr1wdgBpZj1M
+         HESDDiz954jB4oZYQ2ekP/uznn5f5+8J+XIxmCv93rfH42upje90xP5wt++16rYvutpg
+         Fqi+XGoRDLEndtES+TCdYJR3dCT9d1odLgs+1JnJ1Zr4PA1puOUi0U1pG9jr84+6Ihwf
+         jPGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=L4Cgf9CCBKn83g7/KBEuaNwcj4g0FN5Zjd21HT3ZAg8=;
-        b=Mfs/KStHXrkN8YFv8r8mrGMEdRdwtobZUEGhKs2UPSLggXKzWCYFEVl/yk4YokgKtu
-         dUKL8G22q/7CBNs9NNh57Qg83vOLvroMdyPbu8dtXgJLKvsBmkTSJ/OoLPUtISQhZGP9
-         4hk1Y4UhCeNCXGQJyc4IMqRGVLoby63BVPZ+eBcActZSLxmt22VomVBbmoVjsEzgqXyw
-         gBUycZ9rkEZDs9Z2323g4BBWnlhcA+RIEqPkxK0D3zR9r78v+F1xNI5XrLVbnwkNTonK
-         zMn788+EzkgVPDHVhzSTmuRGAODKmgmiDRIz3myAqe7ojxouE9LDfIFb3tztD33V72cM
-         7PTw==
-X-Gm-Message-State: AOAM532SSeqDuqKKKfoAFDPRylJMJVtOpun2F2Ojhlf19+5a9Edut4uo
-        fSaKSh8pKct40QniGuAxJu+cVw==
-X-Google-Smtp-Source: ABdhPJySa48Kx14B5FTFLVO2CgILH59wgRXZtob6dJ+mULnBA+aIcSCJKYUHN/PjPYbiMNiuK1hb+A==
-X-Received: by 2002:a2e:9ad2:0:b0:24f:435:19c5 with SMTP id p18-20020a2e9ad2000000b0024f043519c5mr16893662ljj.281.1652281054470;
-        Wed, 11 May 2022 07:57:34 -0700 (PDT)
+        bh=PO0ibnivlYlQHsSzGsoFDn9GSobE9qvHUHbEZcsOBy0=;
+        b=jy9V3j7ZlX5HhUIwEjL9oIjUuSaQ2NUodg5QsA7Fv0l742O9agdw8Y8z3sHts1wsnc
+         422rEKbFbi90CEErwuYl/Qjm0Q31ZVTBwWfPBen1xpCNMLnd0ko5efMQxZ1pn1SiPCRo
+         MtNaYAfIW6IFai+O4lZbaQVWIzwOWd2OwOj4ftu49Fbw36YeReQM7hwfzvAhqJk2A/tD
+         opKGIbOWs9sjP7HtSddypR47c1Vc8wo8G7Vkcwudzs+AgEAUL+S8Cvf1aIpGEOM+sMv2
+         C7O+4nqA+ZGwp/mdSKuYco6On9uqou0SNR77s+mpuW8MPf8rMA45YvFzb1kTSzwpyM6j
+         ynmQ==
+X-Gm-Message-State: AOAM531Kav4jagV/LMWPffbhCb2e4J5ubLup0NOSwfKEfm0t2C6hdiu4
+        UxRtY15ELo2cVHCIw94VKTRBYw==
+X-Google-Smtp-Source: ABdhPJxZphuNVJWtuCo9Ewl3xjNfgWKEwCNvRcPem+7IU9+w73SPhap+pUAL2jolkDfLctkvmSy/6Q==
+X-Received: by 2002:a05:651c:1994:b0:250:5b1c:69e7 with SMTP id bx20-20020a05651c199400b002505b1c69e7mr17054484ljb.192.1652281056576;
+        Wed, 11 May 2022 07:57:36 -0700 (PDT)
 Received: from localhost.localdomain (h-98-128-181-154.NA.cust.bahnhof.se. [98.128.181.154])
-        by smtp.gmail.com with ESMTPSA id z26-20020a19f71a000000b0047255d210f3sm320793lfe.34.2022.05.11.07.57.33
+        by smtp.gmail.com with ESMTPSA id z26-20020a19f71a000000b0047255d210f3sm320793lfe.34.2022.05.11.07.57.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 07:57:33 -0700 (PDT)
+        Wed, 11 May 2022 07:57:35 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
 Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
@@ -59,9 +59,9 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Kevin Hilman <khilman@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 09/14] PM: domains: Fixup QoS latency measurements for IRQ safe devices in genpd
-Date:   Wed, 11 May 2022 16:56:59 +0200
-Message-Id: <20220511145704.698189-10-ulf.hansson@linaro.org>
+Subject: [PATCH 10/14] PM: domains: Fix initialization of genpd's next_wakeup
+Date:   Wed, 11 May 2022 16:57:00 +0200
+Message-Id: <20220511145704.698189-11-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220511145704.698189-1-ulf.hansson@linaro.org>
 References: <20220511145704.698189-1-ulf.hansson@linaro.org>
@@ -77,40 +77,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When an IRQ safe device is attached to a non-IRQ safe PM domain, genpd
-needs to prevent the PM domain from being powered off. However, genpd still
-allows the device to be runtime suspended/resumed, hence it's also
-reasonable to think that a governor may be used to validate the QoS latency
-constraints.
+In the genpd governor we walk the list of child-domains to take into
+account their next_wakeup. If the child-domain itself, doesn't have a
+governor assigned to it, we can end up using the next_wakeup value before
+it has been properly initialized. To prevent a possible incorrect behaviour
+in the governor, let's initialize next_wakeup to KTIME_MAX.
 
-Unfortunately, genpd_runtime_resume() treats the configuration above, as a
-reason to skip measuring the QoS resume latency for the device. This is a
-legacy behaviour that was earlier correct, but should have been changed
-when genpd was transformed into its current behaviour around how it manages
-IRQ safe devices. Luckily, there's no report about problems, so let's just
-fixup the behaviour.
-
+Fixes: c79aa080fb0f ("PM: domains: use device's next wakeup to determine domain idle state")
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- drivers/base/power/domain.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/base/power/domain.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 2cdfbe48dde0..48101232fcb9 100644
+index 48101232fcb9..9922fd763739 100644
 --- a/drivers/base/power/domain.c
 +++ b/drivers/base/power/domain.c
-@@ -970,10 +970,8 @@ static int genpd_runtime_resume(struct device *dev)
- 	 * As we don't power off a non IRQ safe domain, which holds
- 	 * an IRQ safe device, we don't need to restore power to it.
- 	 */
--	if (irq_safe_dev_in_sleep_domain(dev, genpd)) {
--		timed = false;
-+	if (irq_safe_dev_in_sleep_domain(dev, genpd))
- 		goto out;
--	}
- 
- 	genpd_lock(genpd);
- 	ret = genpd_power_on(genpd, 0);
+@@ -2007,6 +2007,7 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+ 	genpd->device_count = 0;
+ 	genpd->max_off_time_ns = -1;
+ 	genpd->max_off_time_changed = true;
++	genpd->next_wakeup = KTIME_MAX;
+ 	genpd->provider = NULL;
+ 	genpd->has_provider = false;
+ 	genpd->accounting_time = ktime_get_mono_fast_ns();
 -- 
 2.25.1
 

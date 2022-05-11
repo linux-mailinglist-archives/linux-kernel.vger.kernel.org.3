@@ -2,79 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58A35524105
+	by mail.lfdr.de (Postfix) with ESMTP id 0D365524104
 	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 01:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349226AbiEKXZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 19:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
+        id S1349292AbiEKXZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 19:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245183AbiEKXZH (ORCPT
+        with ESMTP id S1349243AbiEKXZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 19:25:07 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 775CC202B31
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:25:05 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id j4so6125173lfh.8
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:25:05 -0700 (PDT)
+        Wed, 11 May 2022 19:25:14 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D5920956D
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:25:12 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 202so3055953pgc.9
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:25:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=7ee9VsqZs3R0q1Ol8XBVP7c4JuwLiaeH0j2GOCI20bk=;
-        b=TXIawwqIYCwHSUzBurh+oUQrTGWcpvKzU+K/HwaFRZzf9TqYELeMMsAai6Kvqlwtnj
-         yYMSBGuACItmDIvqAk59lsZ6CWBbnyDx7jm8HSnPnngw0TtjA9volohqPAFFsCsqM4sV
-         KjcbHpN+CJIcMIPcoZexrs2Tq31vUZXYVa7zme0/DUCM7sDnAHvkWuszFyhFFVwVQ4ve
-         E5bZxs2l6Z0I8LJDXxcYmLzNHAM7IFGrOOChR7TWK9ylveLt6pS57zb21m+8pbBVd9Js
-         L5APxcJKw0O2b5I6cRKu8Bp3vp6Z5zqTQmm5Mb0V8TXQUOIQ8sc6stX299BzezbxhSdg
-         5aKw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/ki49xHqa46J2jAs7ta/eJtZ8QS3SBu8XEWl7+OO2No=;
+        b=FhScX8YR/t+vuAsu1redHAA4dDPOcMsoT3Bq+dzybnZ3agrhS1LJ82u+gJrbLnbC8A
+         hrKKxi5iv3ybGmAYitDOps4nXz87M944fN4oMkhk1uFkNFlc6EYWAzxfJfrLwTCTuLes
+         4rZNEMAUENDzVKr1twRJ/olrDDqwPfrLj0+3k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7ee9VsqZs3R0q1Ol8XBVP7c4JuwLiaeH0j2GOCI20bk=;
-        b=YKWnRgvLbQ5rceaj2bn/NtntkOcfMCpJvOg6ttPdA3HhlbOVZPha8zuWflyGEMaXPl
-         2JqBKxF6d3DL3J/fd26xYymPgTnLhY+6BcLLZySfrGHvuB6jZeF/cfbenjgoY+MpC+k4
-         2UvN097EpUvDyf9F4RrJ8OcnJheNX6t65UyWUUeeqg3kGRAl8VZRvJmcd0eHmYPPV08D
-         hFF2gfFNiyV48L0KdL4UvKEuj+ujp7SitGP6LksAO8QBAFcfjGVvc8E5Vvs6WI+9nLXW
-         P2oKhJJL5jUqz9H/9tntmhAokH7lmzVJfMyBjVN9mWGExCN9fdRW8G40WDeKsidVZpDX
-         B/tw==
-X-Gm-Message-State: AOAM530St4/pNLZsMKpskuXQgd1X/ILXDzakmOYlZiJJ990qD9MlWcw+
-        6g034cD5XnfxajMvXClBrjSmXw==
-X-Google-Smtp-Source: ABdhPJwQxJtLD6fYIqLpAZafjT/9q2YUVoO6GuZlPL5rawsjVyr2hZx94fTbNxBt3M/94vPZXYVH3w==
-X-Received: by 2002:a05:6512:150a:b0:474:bb9:5174 with SMTP id bq10-20020a056512150a00b004740bb95174mr17407643lfb.207.1652311503777;
-        Wed, 11 May 2022 16:25:03 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id i3-20020a05651c120300b0024f3d1daedasm576957lja.98.2022.05.11.16.25.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 16:25:03 -0700 (PDT)
-Message-ID: <67a91eca-a116-7db8-f905-25750d8bf4b6@linaro.org>
-Date:   Thu, 12 May 2022 02:25:02 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2] Revert "drm/msm/dsi: move DSI host powerup to modeset
- time"
-Content-Language: en-GB
-To:     Douglas Anderson <dianders@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/ki49xHqa46J2jAs7ta/eJtZ8QS3SBu8XEWl7+OO2No=;
+        b=3Oh+K+W3Fn2KWNAs9sAxRqaOSEdFdzuOIOagZWpBWRiygsUnEKRFf0561+1GEXsbd5
+         U69ZP6dn+2pJe1QSAVC5RB4IPYnV8zGqKWU8n+Fy3Jh3eBEc72NGdi3QWwjbSVFCu2/s
+         j/ZZZ+tS+/bQwySnzliq5nKXWyp9KERrWaB/P1T5nWwvqke8HyYAT0JMOyoJKTeaSZIl
+         gE507D7x3FZ+zxmNEf7tf3k3pp8PVJ4h0+cccbo+PDzn2F9blLCaL7IgVzshKb/ge8eO
+         2QNbKWrmPV9ujnYj6DW1eZYSLvAAN0cUdaxgJSa3E2dqxvqpPvAuuwJSuvpP86d8RY3A
+         2OGg==
+X-Gm-Message-State: AOAM532COuaF0jOJyaRvgOtAFQPXfKFp79h8t2UTyjTzsl6PDPh6OAwP
+        dBZwtj+J02f/DyB2VbdIsY+MWA==
+X-Google-Smtp-Source: ABdhPJzMcvdao9wgCqtHsLuaqbFD5VrRt/A5zEaBjVmcMJGr1jzZWaoQvr9OGs1D6j+yLudNM/YImA==
+X-Received: by 2002:a63:d408:0:b0:3c6:e382:c157 with SMTP id a8-20020a63d408000000b003c6e382c157mr10022534pgh.470.1652311512304;
+        Wed, 11 May 2022 16:25:12 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id e11-20020a63370b000000b003c14af5061esm407098pga.54.2022.05.11.16.25.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 16:25:11 -0700 (PDT)
+Date:   Wed, 11 May 2022 16:25:11 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>, Du Cheng <ducheng2@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        William Kucharski <william.kucharski@oracle.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org,
+        linux-mm@kvack.org, linux-hardening@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220511161539.v2.1.Ia196e35ad985059e77b038a41662faae9e26f411@changeid>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220511161539.v2.1.Ia196e35ad985059e77b038a41662faae9e26f411@changeid>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Subject: Re: [PATCH] niu: Silence randstruct warnings
+Message-ID: <202205111624.60295F3A2@keescook>
+References: <20220510205729.3574400-1-keescook@chromium.org>
+ <20220511151647.7290adbe@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511151647.7290adbe@kernel.org>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,117 +77,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2022 02:15, Douglas Anderson wrote:
-> This reverts commit 7d8e9a90509f1bd1d193a0c93cb8d1dbad9049fb.
+On Wed, May 11, 2022 at 03:16:47PM -0700, Jakub Kicinski wrote:
+> On Tue, 10 May 2022 13:57:29 -0700 Kees Cook wrote:
+> > Clang randstruct gets upset when it sees struct addresspace (which is
+> > randomized) being assigned to a struct page (which is not randomized):
+> > 
+> > drivers/net/ethernet/sun/niu.c:3385:12: error: casting from randomized structure pointer type 'struct address_space *' to 'struct page *'
+> >                         *link = (struct page *) page->mapping;
+> >                                 ^
+> > 
+> > It looks like niu.c is looking for an in-line place to chain its allocated
+> > pages together and is overloading the "mapping" member, as it is unused.
+> > This is very non-standard, and is expected to be cleaned up in the
+> > future[1], but there is no "correct" way to handle it today.
+> > 
+> > No meaningful machine code changes result after this change, and source
+> > readability is improved.
+> > 
+> > Drop the randstruct exception now that there is no "confusing" cross-type
+> > assignment.
+> > 
+> > [1] https://lore.kernel.org/lkml/YnqgjVoMDu5v9PNG@casper.infradead.org/
+> > 
+> > Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+> > Cc: Christoph Hellwig <hch@infradead.org>
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Paolo Abeni <pabeni@redhat.com>
+> > Cc: Du Cheng <ducheng2@gmail.com>
+> > Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> > Cc: Vlastimil Babka <vbabka@suse.cz>
+> > Cc: William Kucharski <william.kucharski@oracle.com>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Nathan Chancellor <nathan@kernel.org>
+> > Cc: netdev@vger.kernel.org
+> > Cc: linux-mm@kvack.org
+> > Cc: linux-hardening@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
 > 
-> The patch causes sc7180 Chromebooks that use the parade-ps8640 bridge
-> chip to fail to turn the display back on after it turns off.
-> 
-> Let's revert to get these devices back to a working state. It seems
-> like the DSI powerup problem is somewhat common and probably we should
-> land something more general like Dave Stevenson's series [1] that
-> would give more flexibility.
-> 
-> [1] https://lore.kernel.org/r/cover.1646406653.git.dave.stevenson@raspberrypi.com
-> 
-> Fixes: 7d8e9a90509f ("drm/msm/dsi: move DSI host powerup to modeset time")
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> 
-> Changes in v2:
-> - Remove the mud from my face.
+> I presume you prefer to take this one via your tree too, so:
 
-As stated, I'm for this revert, but after getting the mentioned patchset 
-in. Will that work for you? If not, I'd prefer to land a patch adding 
-modparam to powerup the DSI during the mode_set or during the pre_enabel().
+Yeah, that's easiest for the exception removals.
 
-> 
->   drivers/gpu/drm/msm/dsi/dsi_manager.c | 43 ++++++++-------------------
->   1 file changed, 12 insertions(+), 31 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_manager.c b/drivers/gpu/drm/msm/dsi/dsi_manager.c
-> index 50b987658b1f..8d51711a3417 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_manager.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_manager.c
-> @@ -315,12 +315,13 @@ dsi_mgr_connector_best_encoder(struct drm_connector *connector)
->   	return msm_dsi_get_encoder(msm_dsi);
->   }
->   
-> -static void dsi_mgr_bridge_power_on(struct drm_bridge *bridge)
-> +static void dsi_mgr_bridge_pre_enable(struct drm_bridge *bridge)
->   {
->   	int id = dsi_mgr_bridge_get_id(bridge);
->   	struct msm_dsi *msm_dsi = dsi_mgr_get_dsi(id);
->   	struct msm_dsi *msm_dsi1 = dsi_mgr_get_dsi(DSI_1);
->   	struct mipi_dsi_host *host = msm_dsi->host;
-> +	struct drm_panel *panel = msm_dsi->panel;
->   	struct msm_dsi_phy_shared_timings phy_shared_timings[DSI_MAX];
->   	bool is_bonded_dsi = IS_BONDED_DSI();
->   	int ret;
-> @@ -361,34 +362,6 @@ static void dsi_mgr_bridge_power_on(struct drm_bridge *bridge)
->   	if (is_bonded_dsi && msm_dsi1)
->   		msm_dsi_host_enable_irq(msm_dsi1->host);
->   
-> -	return;
-> -
-> -host1_on_fail:
-> -	msm_dsi_host_power_off(host);
-> -host_on_fail:
-> -	dsi_mgr_phy_disable(id);
-> -phy_en_fail:
-> -	return;
-> -}
-> -
-> -static void dsi_mgr_bridge_pre_enable(struct drm_bridge *bridge)
-> -{
-> -	int id = dsi_mgr_bridge_get_id(bridge);
-> -	struct msm_dsi *msm_dsi = dsi_mgr_get_dsi(id);
-> -	struct msm_dsi *msm_dsi1 = dsi_mgr_get_dsi(DSI_1);
-> -	struct mipi_dsi_host *host = msm_dsi->host;
-> -	struct drm_panel *panel = msm_dsi->panel;
-> -	bool is_bonded_dsi = IS_BONDED_DSI();
-> -	int ret;
-> -
-> -	DBG("id=%d", id);
-> -	if (!msm_dsi_device_connected(msm_dsi))
-> -		return;
-> -
-> -	/* Do nothing with the host if it is slave-DSI in case of bonded DSI */
-> -	if (is_bonded_dsi && !IS_MASTER_DSI_LINK(id))
-> -		return;
-> -
->   	/* Always call panel functions once, because even for dual panels,
->   	 * there is only one drm_panel instance.
->   	 */
-> @@ -423,7 +396,17 @@ static void dsi_mgr_bridge_pre_enable(struct drm_bridge *bridge)
->   	if (panel)
->   		drm_panel_unprepare(panel);
->   panel_prep_fail:
-> +	msm_dsi_host_disable_irq(host);
-> +	if (is_bonded_dsi && msm_dsi1)
-> +		msm_dsi_host_disable_irq(msm_dsi1->host);
->   
-> +	if (is_bonded_dsi && msm_dsi1)
-> +		msm_dsi_host_power_off(msm_dsi1->host);
-> +host1_on_fail:
-> +	msm_dsi_host_power_off(host);
-> +host_on_fail:
-> +	dsi_mgr_phy_disable(id);
-> +phy_en_fail:
->   	return;
->   }
->   
-> @@ -569,8 +552,6 @@ static void dsi_mgr_bridge_mode_set(struct drm_bridge *bridge,
->   	msm_dsi_host_set_display_mode(host, adjusted_mode);
->   	if (is_bonded_dsi && other_dsi)
->   		msm_dsi_host_set_display_mode(other_dsi->host, adjusted_mode);
-> -
-> -	dsi_mgr_bridge_power_on(bridge);
->   }
->   
->   static enum drm_mode_status dsi_mgr_bridge_mode_valid(struct drm_bridge *bridge,
+> Acked-by: Jakub Kicinski <kuba@kernel.org>
 
+Thanks!
 
 -- 
-With best wishes
-Dmitry
+Kees Cook

@@ -2,173 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E77C5522F09
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF52522F0E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234703AbiEKJM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 05:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57584 "EHLO
+        id S240075AbiEKJNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 05:13:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbiEKJMv (ORCPT
+        with ESMTP id S238147AbiEKJNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 05:12:51 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2B274862
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:12:48 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id w24so1776309edx.3
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:12:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=iSM4KiWX5xiHYNImgQ6cDdJf0LCKtuaDlzcLfop++Jc=;
-        b=FM/vJ5D6P9x5+MqRB5GdGmrNf9cYDyJXebGhlNhF2u1A7m2Q+A93DNdO8nK1CBEXer
-         zqeo1Rkj7fSn7aO7BsPCAjVkbeq1WnvazQSNJeLEGXJzEr9BrC6MptVVEkqRqLDGqy9R
-         ctQbLtbuvZ0bdkBsXU1A1mkJ5FBorUWEZZI9KYJiL/koaHgU+0cm2wnXhQV0KSO0mq5O
-         rAQnl9p0rTja6EPjoI73YbS2GoLZZ5fKSQBQMDLQRaSLpVa3lHf6+czUrqLjcSkyzkfy
-         90h3XmzZ9y/bIriHXMRqYwCUCiUTbZMVemBEwuFENyHguqz3IH6U79m8+QWZZgn6nEMk
-         WHBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=iSM4KiWX5xiHYNImgQ6cDdJf0LCKtuaDlzcLfop++Jc=;
-        b=Sd7vsgsla/Oxf1ITcbxJIEG/PkG5eUsnuzfQ9lvLMQXJHVG4G1rj9PZhsFLjsAJAbz
-         ZN2jQhZQfG/e+NdamSMgKJpTZPvVbox1l6bhJZNWxtUpFC1I9QoLHse2ZSFUYgUO2f6q
-         8U7Kwy87kk2NlR4XZ//voxg7OvyrnboxiaWku6l2V27fMxoer2Qljlgq86zh2sRKEIcd
-         Nxy8TdP2YwzG+Mt2dhPLnEHl1dwMa9KZxoLkpHqYiyMZc3UmUod824Woc5uBwrmM3sNQ
-         6lGooKY0JUp4lFyWcZqek5fzLlVLPo/3Kzm6ph+y8IoBuIhlWVp3+LWtt1X5dJWpZ39B
-         3dUg==
-X-Gm-Message-State: AOAM531L5aR1l8WFNXrueqKBTi+xzHLhH6RwTYOoJY3baZny0ysX80v7
-        HCChvG1VFc0WslaRYtdmDaVONQ==
-X-Google-Smtp-Source: ABdhPJwAJshh0pyoM8iVsERACEz5gij6am1vxgOpfUotlGosF/fppxLJBLF71r5SRAXCzg2PJZXhpA==
-X-Received: by 2002:a05:6402:f13:b0:428:a849:d0c1 with SMTP id i19-20020a0564020f1300b00428a849d0c1mr11917128eda.346.1652260367481;
-        Wed, 11 May 2022 02:12:47 -0700 (PDT)
-Received: from [192.168.0.152] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id cb13-20020a0564020b6d00b0042617ba639asm893261edb.36.2022.05.11.02.12.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 02:12:46 -0700 (PDT)
-Message-ID: <66796853-efe7-f661-9637-ac6cfefc68e5@linaro.org>
-Date:   Wed, 11 May 2022 11:12:45 +0200
+        Wed, 11 May 2022 05:13:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9FE087A0D
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:13:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652260392;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CApB4fCuR2UMK3BwvDisU285t77/lsZs+p+hWazswkg=;
+        b=Qt5Brd+6XFVzoaP1eyYZWhdf5iv/Q/Z63vYdkaJg5738NThwOETumfhWqkB9h4eL3/Yzv3
+        ebILihLmXauZJLyrjk2aUbq1UxFolFFR6GJ1aS5q99tfsA/e3nSjq0q19JWoEJGPLnLgaG
+        ucYMu7tifJEhVOGil+tegoa5X1Km/kc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-408-w86mAJb8NkywTkN4SXEPWg-1; Wed, 11 May 2022 05:13:09 -0400
+X-MC-Unique: w86mAJb8NkywTkN4SXEPWg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AAF33866DF4;
+        Wed, 11 May 2022 09:13:08 +0000 (UTC)
+Received: from localhost (unknown [10.39.193.115])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 23FE41461258;
+        Wed, 11 May 2022 09:13:07 +0000 (UTC)
+From:   Cornelia Huck <cohuck@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        eperezma <eperezma@redhat.com>, Cindy Lu <lulu@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>
+Subject: Re: [PATCH V4 6/9] virtio-ccw: implement synchronize_cbs()
+In-Reply-To: <CACGkMEtPk9P4KhJ5wTOLj9CZoKDx9-X_5uLRVBag692x4s9SrA@mail.gmail.com>
+Organization: Red Hat GmbH
+References: <20220507071954.14455-1-jasowang@redhat.com>
+ <20220507071954.14455-7-jasowang@redhat.com>
+ <20220510072451-mutt-send-email-mst@kernel.org>
+ <CACGkMEvWFyEqeeXYEmbU4TWtnj9Ku6J7jLK_7MueuFvpR7FiGg@mail.gmail.com>
+ <87r150bi0d.fsf@redhat.com>
+ <CACGkMEtPk9P4KhJ5wTOLj9CZoKDx9-X_5uLRVBag692x4s9SrA@mail.gmail.com>
+User-Agent: Notmuch/0.34 (https://notmuchmail.org)
+Date:   Wed, 11 May 2022 11:13:06 +0200
+Message-ID: <87lev8bffh.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v4 1/2] dt-bindings: remoteproc: mediatek: Make l1tcm reg
- exclusive to mt819x
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Tzung-Bi Shih <tzungbi@google.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org
-References: <20220506213226.257859-1-nfraprado@collabora.com>
- <20220506213226.257859-2-nfraprado@collabora.com>
- <d3e027ca-9ccf-cf91-2414-85d2b9b680f0@linaro.org>
- <20220510165016.r7nyck2abt5m4djp@notapiano>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220510165016.r7nyck2abt5m4djp@notapiano>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/05/2022 18:50, Nícolas F. R. A. Prado wrote:
->>> Also I had to add a description to the global reg-names, since it
->>> couldn't be neither missing nor empty.
+On Wed, May 11 2022, Jason Wang <jasowang@redhat.com> wrote:
+
+> On Wed, May 11, 2022 at 4:17 PM Cornelia Huck <cohuck@redhat.com> wrote:
 >>
->> It is possible:
->> https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/example-schema.yaml#L91
+>> On Wed, May 11 2022, Jason Wang <jasowang@redhat.com> wrote:
 >>
->> Keep constraints and list of names in properties. Then in allOf:if:then
->> raise minItems or lower maxItems, depending on the variant.
-> 
-> Hi Krzysztof,
-> 
-> that example only shows setting minItems to override the default value, but the
-> issue here is that it's not possible to override minItems/maxItems (after
-> they're already set, even if implicitly) with a different value in the if.
+>> > On Tue, May 10, 2022 at 7:28 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>> >>
+>> >> On Sat, May 07, 2022 at 03:19:51PM +0800, Jason Wang wrote:
+>> >> > @@ -1106,6 +1130,7 @@ static void virtio_ccw_int_handler(struct ccw_device *cdev,
+>> >> >                       vcdev->err = -EIO;
+>> >> >       }
+>> >> >       virtio_ccw_check_activity(vcdev, activity);
+>> >> > +     read_lock_irqsave(&vcdev->irq_lock, flags);
+>> >> >       for_each_set_bit(i, indicators(vcdev),
+>> >> >                        sizeof(*indicators(vcdev)) * BITS_PER_BYTE) {
+>> >> >               /* The bit clear must happen before the vring kick. */
+>> >>
+>> >> Cornelia sent a lockdep trace on this.
+>> >>
+>> >> Basically I think this gets the irqsave/restore logic wrong.
+>> >> It attempts to disable irqs in the handler (which is an interrupt
+>> >> anyway).
+>> >
+>> > The reason I use irqsave/restore is that it can be called from process
+>> > context (if I was not wrong), e.g from io_subchannel_quiesce().
+>>
+>> io_subchannel_quiesce() should disable interrupts, though? Otherwise, it
+>> would be a bug.
+>
+> Right, it was protected by a spin_lock_irq(), but I can see other
+> cdev->handler() in e.g device_fsm.c, the irq status is not obvious, do
+> they have the same assumption which IRQ is disabled?
 
-No, this example shows exactly what you need in first step - make one
-item on the list optional.
+Yes, that should be the case for any invocations via the fsm as well.
 
-There are several other examples for the entire picture or different
-aproach:
-https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/example-schema.yaml#L91
+It's been some time since I've worked on that part of the code, though,
+so let's cc: the s390 cio maintainers so that they can speak up if I'm
+wrong.
 
-https://elixir.bootlin.com/linux/v5.18-rc2/source/Documentation/devicetree/bindings/clock/samsung,exynos7885-clock.yaml#L53
-
-> 
-> That is:
-> 
-> 	properties:
-> 	  reg-names:
-> 	    items:
-> 	      - const: sram
-> 	      - const: cfg
-> 	      - const: l1tcm
-
-You did not use the example I gave you. Where is the minItems?
-
-> 
-> 	if:
-> 	  properties:
-> 	    compatible:
-> 	      enum:
-> 		- mediatek,mt8183-scp
-> 		- mediatek,mt8186-scp
-> 	then:
-> 	  properties:
-> 	    reg-names:
-> 	      minItems: 2
-> 	      maxItems: 2
-> 
-> Generates the error on dtbs_check:
-> 
-> /home/nfraprado/ext/git/linux/arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtb: scp@10500000: reg-names: ['sram', 'cfg'] is too short
-
-Missing minItems in first properties.
-
-> 
-> I believe the tooling is implicitly adding
-> 
-> 	      minItems: 3
-> 	      maxItems: 3
-> 
-> to the common reg-names, and since it's not possible to override them, the
-> override to 2 doesn't work so they are kept at 3, causing the error.
-> 
-> Moving the minItems/maxItems to the common reg-names as a test gives:
-
-You cannot just. You need it in both places.
-
-> 
-> /home/nfraprado/ext/git/linux/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml: properties:reg-names: {'minItems': 2, 'maxItems': 2, 'items': [{'const': 'sram'}, {'const': 'cfg'}, {'const': 'l1tcm'}]} should not be valid under {'required': ['maxItems']}
-> 	hint: "maxItems" is not needed with an "items" list
-> 
-> That error, plus looking in the items meta-schema, suggests me that maxItems
-> isn't supposed to be set lower then the length of items. So even if the
-> minItems/maxItems override is fixed, there's still this issue. It seems like
-> defining the reg-names list separetely in each if branch is indeed the right way
-> to go.
-
-
-
-Best regards,
-Krzysztof

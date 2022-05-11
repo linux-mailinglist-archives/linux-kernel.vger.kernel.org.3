@@ -2,101 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 211BC523240
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E81523242
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233731AbiEKL5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 07:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34154 "EHLO
+        id S236949AbiEKL6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 07:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231463AbiEKL5s (ORCPT
+        with ESMTP id S234668AbiEKL6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 07:57:48 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E2C3CA52
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:57:47 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id s14so1648080plk.8
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:57:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JuyEEIl+kSH13w3QvsAw78KVrS/aC3OrU8hhY1kBTo8=;
-        b=mvV5OR1yn5Gd6XqCzeeWK167aziIFzwu/d7rlxB2BSIfVeOJtsdEvnf0mvw0CZhiZN
-         41c3/2PgCfY2XcNIDKpFVPiVB11aspc0gRhdL1JajWoNtC6tpSc/rcOji/Tnq/wFshxi
-         /zbc+4zP03jGYSKEp3ItxgFjP6zWTfQhumA0RNN8LUVE5e5i4lqli3aBHMvgg7VQ319m
-         x5MTmrJn6L+x9Oda37K//fPtLHwLuVft9/NGfEDlh94wywTNPBEPQz8eJI6Yk36GR2xv
-         Myr2oS4wTvmItowq9/Qo4gzB+ZgHJRi1hyjgWgvolDR8REzfknzyNnNoDRnhYNqPHqTA
-         GEmA==
+        Wed, 11 May 2022 07:58:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E1A03B287
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:58:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652270280;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ej854CR7sjtYFdE3sImjC64n7WhVCOgxuIOus5Vy29E=;
+        b=HeCmakqNXK2XGhwnkqTocE1A2H4OwbHetcW9BasBJzKgbzCHKmXdc735Ni0c5VF7zFw/qo
+        zehGkshs7LfPfi4/hdmZC9bIrJMGua+tzp2iwWOnT/5wTM+2Ow3UZSl2FK66G0FNh+hhGZ
+        bzaIb5kF+Q6PMLSfWVQx17YCkalujbc=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-541-NJ6SpJTvNjONdSjaUbFOSA-1; Wed, 11 May 2022 07:57:51 -0400
+X-MC-Unique: NJ6SpJTvNjONdSjaUbFOSA-1
+Received: by mail-wr1-f72.google.com with SMTP id u11-20020a056000038b00b0020c9ea8b64fso764638wrf.2
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:57:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=JuyEEIl+kSH13w3QvsAw78KVrS/aC3OrU8hhY1kBTo8=;
-        b=iri4VLnydnOIa6/Iw0+EJ3dKVUOrui9x5dK5eurPSec2YZHuIcWzeEG+L7zCnI1F03
-         X5Y8pRUeVkXzmgvroT0GlcIwVz99S4HHomTewiAgIRTpLJWpuCZ9u5riZIc/EuKhvkEC
-         cq05Lp3XemJdHJGsu+Bz6sn51wFPr5t+MSgPtFiRsraP0MjbDe84hNZBXCWK8Bf60kxr
-         lQ7EIKSlKS13Qbjm81dDuBIymVVhewLpVo4mDVadQ51QiXFmL6svWdstdaNHoprlmwVp
-         XNBJoDViYwzmXVd0H0fpfTVwwrr5SFOLpKeqRoH+mmAQplrCS1YY/x+pN5ufEBhA3Q2C
-         iuUg==
-X-Gm-Message-State: AOAM532weuuCKdI7sVIAjHOZaXTyTcrIzn8NgvH/ZvBXSi76NhxhU26O
-        4SSnQi1JBZfJDarJBtVFJXMt583PzH0GFkNxOfw=
-X-Google-Smtp-Source: ABdhPJyQQn3g4evuu1+8KTA+W2K0DNrLUnQqVlb/1fyPhJoqj4ZTGS7rEz/IPNl/xwvoutB9+kCf8A==
-X-Received: by 2002:a17:90a:e7cb:b0:1dc:6602:7178 with SMTP id kb11-20020a17090ae7cb00b001dc66027178mr4990519pjb.175.1652270267254;
-        Wed, 11 May 2022 04:57:47 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id v3-20020a62a503000000b0050dc7628179sm1533854pfm.83.2022.05.11.04.57.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 04:57:46 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Jeremy Kerr <jk@ozlabs.org>, Joel Stanley <joel@jms.id.au>,
-        Alistar Popple <alistair@popple.id.au>,
-        Eddie James <eajames@linux.ibm.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linux-fsi@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] fsi: master-ast-cf: Fix refcount leak in fsi_master_acf_probe
-Date:   Wed, 11 May 2022 15:57:39 +0400
-Message-Id: <20220511115739.52836-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=Ej854CR7sjtYFdE3sImjC64n7WhVCOgxuIOus5Vy29E=;
+        b=fYPCbSLHfJX4EfeoCKesCUqYI44ur1QtKp6tMR4R36hLlPbG5VEqMpRc6ox2rdg5Ig
+         DK1C6DxVOwCA29dNqIH4o/YMxLmxv8Ub8+8UHgWJkO5UZZGnEG/8LtmSYdHtYwb4ynt+
+         b3GNIuqoN8325wabutDT39/5LxevjJn24J2tXZeSF4LCpUXAyFrVlzgakHlp4cn1iR1B
+         NAsilCpgXFPGcPMu4eeJ8SAukdS0u8F1+j1SzZz8eZQ4GpkadgABF+2x6rmDakZOCflg
+         1TKXs/3C3d/NPWNXhrFzq8i2NsWgjjiSdmy/xpkVHPzXryocgPFmLq0gPRm5SWDAldbw
+         s1tw==
+X-Gm-Message-State: AOAM532Dy64RoVhc9WT85LmdjO61Tmi6kMLkh8yEKkkDymhdMFs3OmtK
+        LskrEsz+pn3piJtbNc6rrq364Eu1E9h4Q5zZCPBe3jCAYTjR2PrgInuHjwj88aHfMPGj9vu/ZRl
+        feiUniEaYdfcrxIFqMaqyG7iC
+X-Received: by 2002:a05:6000:2cc:b0:20c:5c31:1120 with SMTP id o12-20020a05600002cc00b0020c5c311120mr22951568wry.105.1652270270703;
+        Wed, 11 May 2022 04:57:50 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzwx9aLP2JJ/CLGyt+kNia9KejENyTsMYfDrJSFT3ZMYJR/pCAxu1qiLtl7C2ddCWenOmQ+cA==
+X-Received: by 2002:a05:6000:2cc:b0:20c:5c31:1120 with SMTP id o12-20020a05600002cc00b0020c5c311120mr22951554wry.105.1652270270492;
+        Wed, 11 May 2022 04:57:50 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id t16-20020a5d49d0000000b0020c5253d8edsm1498471wrs.57.2022.05.11.04.57.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 04:57:50 -0700 (PDT)
+Message-ID: <4727ce99-7107-d806-cbea-cd45c6ce6106@redhat.com>
+Date:   Wed, 11 May 2022 13:57:49 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v5 3/7] fbdev: Restart conflicting fb removal loop when
+ unregistering devices
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org
+Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Helge Deller <deller@gmx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20220511112438.1251024-1-javierm@redhat.com>
+ <20220511113039.1252432-1-javierm@redhat.com>
+ <2156c28c-9c9c-555e-ce19-933cdc8d5e74@suse.de>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <2156c28c-9c9c-555e-ce19-933cdc8d5e74@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
+Hello Thomas,
 
-Fixes: 6a794a27daca ("fsi: master-ast-cf: Add new FSI master using Aspeed ColdFire")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/fsi/fsi-master-ast-cf.c | 2 ++
- 1 file changed, 2 insertions(+)
+On 5/11/22 13:47, Thomas Zimmermann wrote:
+> Hi Javier
+> 
+> Am 11.05.22 um 13:30 schrieb Javier Martinez Canillas:
+>> Drivers that want to remove registered conflicting framebuffers prior to
+>> register their own framebuffer, calls remove_conflicting_framebuffers().
+>>
+>> This function takes the registration_lock mutex, to prevent a races when
+>> drivers register framebuffer devices. But if a conflicting framebuffer
+>> device is found, the underlaying platform device is unregistered and this
+>> will lead to the platform driver .remove callback to be called, which in
+>> turn will call to the unregister_framebuffer() that takes the same lock.
+>>
+>> To prevent this, a struct fb_info.forced_out field was used as indication
+>> to unregister_framebuffer() whether the mutex has to be grabbed or not.
+>>
+>> A cleaner solution is to drop the lock before platform_device_unregister()
+>> so unregister_framebuffer() can take it when called from the fbdev driver,
+>> and just grab the lock again after the device has been registered and do
+>> a removal loop restart.
+>>
+>> Since the framebuffer devices will already be removed, the loop would just
+>> finish when no more conflicting framebuffers are found.
+>>
+>> Suggested-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+>> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+>> Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+> 
+> I'd like to shrink this patchset. This looks like it can be merged 
 
-diff --git a/drivers/fsi/fsi-master-ast-cf.c b/drivers/fsi/fsi-master-ast-cf.c
-index 24292acdbaf8..3e6cacdc1bfe 100644
---- a/drivers/fsi/fsi-master-ast-cf.c
-+++ b/drivers/fsi/fsi-master-ast-cf.c
-@@ -1326,10 +1326,12 @@ static int fsi_master_acf_probe(struct platform_device *pdev)
- 		if (IS_ERR(master->cvic)) {
- 			rc = PTR_ERR(master->cvic);
- 			dev_err(&pdev->dev, "Error %d mapping CVIC\n", rc);
-+			of_node_put(np);
- 			goto err_free;
- 		}
- 		rc = of_property_read_u32(np, "copro-sw-interrupts",
- 					  &master->cvic_sw_irq);
-+		of_node_put(np);
- 		if (rc) {
- 			dev_err(&pdev->dev, "Can't find coprocessor SW interrupt\n");
- 			goto err_free;
+Same. At least this version dropped a few patches that we had in v4
+(related to DRM_FIRMWARE capability flag).
+
+> immediately?
+>
+
+Yes, this one is independent of the others and could be merged already.
+
+> Best regards
+> Thomas
+> 
+
 -- 
-2.25.1
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

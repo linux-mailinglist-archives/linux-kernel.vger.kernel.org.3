@@ -2,100 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D038523BC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B05523BC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 19:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345736AbiEKRl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 13:41:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53878 "EHLO
+        id S1345742AbiEKRma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 13:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245572AbiEKRlz (ORCPT
+        with ESMTP id S231907AbiEKRm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 13:41:55 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2087521A953;
-        Wed, 11 May 2022 10:41:53 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:39398)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1noqLQ-00FuHr-O2; Wed, 11 May 2022 11:41:52 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37824 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1noqLO-001d7U-Ly; Wed, 11 May 2022 11:41:52 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-arch@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Al Viro <viro@ZenIV.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        =?utf-8?B?0JzQsNC60YHQuNC8INCa0YPRgtGP0LLQuNC9?= 
-        <maximkabox13@gmail.com>
-References: <87mtfu4up3.fsf@email.froward.int.ebiederm.org>
-        <20220506141512.516114-1-ebiederm@xmission.com> <87fslhpi58.ffs@tglx>
-        <87v8udwhc6.fsf@email.froward.int.ebiederm.org>
-Date:   Wed, 11 May 2022 12:41:44 -0500
-In-Reply-To: <87v8udwhc6.fsf@email.froward.int.ebiederm.org> (Eric
-        W. Biederman's message of "Tue, 10 May 2022 10:14:01 -0500")
-Message-ID: <87ilqcuftz.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 11 May 2022 13:42:27 -0400
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BE521A957;
+        Wed, 11 May 2022 10:42:26 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2f7c57ee6feso30056367b3.2;
+        Wed, 11 May 2022 10:42:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NqQEfmUOxEoKhZuqO9SUs7ykPGMa11we1uD8EpZuUrM=;
+        b=oRJbhv44scWvji3LPDirPqzaKf3er+x/UgzeEbjFNHeELDLy9o8Jh+Wv504YiLliRN
+         oBQ7061lxR3tiMN0Y2zAJ/byB85xq0X90/Ok7G+LoXRIwQL4HuIhe+2FvgMn8JJVzNRo
+         6nccu85cPM0nlI0v0tDawFVARc3C0B3MgzuDeM8Q7yJHMjB//5KGZSSQK5ANgPV4H4Or
+         BfjJQHv9mUXcZMuZoKNBU9HjGOI02V3cI0hHAfRaHqSfay2a8sWN13C5X0guFS0W/xLM
+         K+gRzYM5o6H4ZY85ORaiKgW7KTJN2tBYIxAQ8IURR20PHqj7FFYpRe2qRZHV4hCygQR6
+         R6Fw==
+X-Gm-Message-State: AOAM533gNNmu8Qr4JZHFcJzNp3+4WXSX6SFoAAT+ABfb2+LLIY5JpIpc
+        dgmktp4Ci8v1zsapuLM2n8DEtQkPFbaWu4DiASkkPT4A
+X-Google-Smtp-Source: ABdhPJxNK5W1RzVC6npP/iYVW+ODznFZpQ04sFEN216pHzVWk+PZuzwiPqhNzZ9GhECrAl/pfnmc/p4R/72BCOhC+cQ=
+X-Received: by 2002:a0d:edc7:0:b0:2f8:f300:df2b with SMTP id
+ w190-20020a0dedc7000000b002f8f300df2bmr26313215ywe.515.1652290946149; Wed, 11
+ May 2022 10:42:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1noqLO-001d7U-Ly;;;mid=<87ilqcuftz.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1/WkcezZ++DvlUbGu03UhymtxgbMnY4ZO0=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <20220506135009.22246-1-sumeet.r.pawnikar@intel.com>
+In-Reply-To: <20220506135009.22246-1-sumeet.r.pawnikar@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 11 May 2022 19:42:15 +0200
+Message-ID: <CAJZ5v0hmQAobWte1-zeVS8_e8Dw2uL9eHat875d9UzuHYdmAgQ@mail.gmail.com>
+Subject: Re: [PATCH] drivers/thermal/intel: Add TCC cooling support for
+ RaptorLake platform
+To:     Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa03 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;Thomas Gleixner <tglx@linutronix.de>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1440 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 4.3 (0.3%), b_tie_ro: 3.1 (0.2%), parse: 0.69
-        (0.0%), extract_message_metadata: 10 (0.7%), get_uri_detail_list: 0.66
-        (0.0%), tests_pri_-1000: 13 (0.9%), tests_pri_-950: 1.06 (0.1%),
-        tests_pri_-900: 0.78 (0.1%), tests_pri_-90: 238 (16.5%), check_bayes:
-        232 (16.1%), b_tokenize: 4.1 (0.3%), b_tok_get_all: 6 (0.4%),
-        b_comp_prob: 1.31 (0.1%), b_tok_touch_all: 218 (15.2%), b_finish: 0.77
-        (0.1%), tests_pri_0: 1158 (80.4%), check_dkim_signature: 0.36 (0.0%),
-        check_dkim_adsp: 2.0 (0.1%), poll_dns_idle: 0.17 (0.0%), tests_pri_10:
-        2.9 (0.2%), tests_pri_500: 9 (0.7%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 1/7] kthread: Don't allocate kthread_struct for init and
- umh
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Eric W. Biederman" <ebiederm@xmission.com> writes:
-
-> Thomas Gleixner <tglx@linutronix.de> writes:
+On Fri, May 6, 2022 at 3:52 PM Sumeet Pawnikar
+<sumeet.r.pawnikar@intel.com> wrote:
 >
->> I'm worried that there are more of these issues lurking. Haven't looked
->> yet.
+> Add TCC cooling support for the RaptorLake platform
 >
-> I looked earlier and I missed this one.  I am going to look again today,
-> along with applying the obvious fix to task_tick_numa.
+> Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+> ---
+>  drivers/thermal/intel/intel_tcc_cooling.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/thermal/intel/intel_tcc_cooling.c b/drivers/thermal/intel/intel_tcc_cooling.c
+> index cd80c7db4073..a9596e7562ea 100644
+> --- a/drivers/thermal/intel/intel_tcc_cooling.c
+> +++ b/drivers/thermal/intel/intel_tcc_cooling.c
+> @@ -81,6 +81,7 @@ static const struct x86_cpu_id tcc_ids[] __initconst = {
+>         X86_MATCH_INTEL_FAM6_MODEL(COMETLAKE, NULL),
+>         X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE, NULL),
+>         X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L, NULL),
+> +       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE, NULL),
+>         {}
+>  };
+>
+> --
 
-So I have just looked again and I don't see anything.  There are a
-couple of subtle issues on x86.  Especially with saving floating
-point but as I read the code copy_thread initializes things
-properly so that code that doesn't touch floating point registers
-doesn't need to do anything.
+Applied as 5.19 material with some edits in the subject and a new changelog.
 
-The important thing for lurking issues is that even if I missed
-something practically all of the uses of PF_KTHREAD are on x86
-or generic code so they should be flushed out quickly.
-
-Eric
-
+Thanks!

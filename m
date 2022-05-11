@@ -2,78 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A4F522FEF
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAEF7522FCC
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231435AbiEKJwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 05:52:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49472 "EHLO
+        id S233595AbiEKJrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 05:47:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236413AbiEKJwN (ORCPT
+        with ESMTP id S236182AbiEKJq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 05:52:13 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B1435D5F7;
-        Wed, 11 May 2022 02:51:56 -0700 (PDT)
-Received: from localhost.localdomain (unknown [112.20.109.92])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxitiZhXtir_oQAA--.45431S2;
-        Wed, 11 May 2022 17:44:58 +0800 (CST)
-From:   Yanteng Si <siyanteng@loongson.cn>
-To:     corbet@lwn.net, alexs@kernel.org, seakeel@gmail.com
-Cc:     Yanteng Si <siyanteng@loongson.cn>, chenhuacai@kernel.org,
-        jiaxun.yang@flygoat.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, siyanteng01@gmail.com
-Subject: [PATCH] MAINTAINERS: Become the docs/zh_CN maintainer
-Date:   Wed, 11 May 2022 17:46:33 +0800
-Message-Id: <20220511094633.2002194-1-siyanteng@loongson.cn>
-X-Mailer: git-send-email 2.27.0
+        Wed, 11 May 2022 05:46:59 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A112B1B9
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:46:57 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id g16so1878047lja.3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 02:46:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :content-language:content-transfer-encoding;
+        bh=WHZoD4vvX9VyNiaR95wWgtu4Xn3fEVjHGLKQ6WEC6Eg=;
+        b=g9SsvUoB+GmiIOh0IKTIcEseW9w4TeMEkNh+KjPytdfqUo2MV/bSDsAGbgdGOhBoWU
+         Ttu7o4qLG2nkA8A2g7AcZbRkTERO3MZdkv1hhD+mWxK426uKRHv/OkrKUO4gjrdyh8Pm
+         XIpBhRXa4Hr8/UYhW3jbR5mIgg6hmtK5l98oDTQJk+auR4D+BwmBkhvT8J9eBaaZHCbM
+         bzC7DHTrJM4kZTEMKL3CBeM+zNtVtimCM2TQzCeYNzzIgBcSnRUfPKku9ahhNIPlwFzU
+         6KFWklX7985o5S9GmmIu/AB7E3UyGS0FPV1tzNJPCLqaBfp+xu5INiPSxRnYL7fQ0jvg
+         K0OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:content-language:content-transfer-encoding;
+        bh=WHZoD4vvX9VyNiaR95wWgtu4Xn3fEVjHGLKQ6WEC6Eg=;
+        b=5EEwHl+ULGcc4HwkfDsxZvfFZL8+mOJOnU1rOVEQTZUCFuOsMMKNaTV/UpmyIgY3LA
+         VFqI4vMbZiykkGjdnE92150qCO3+obO1mUREp4WxAC6NpWMPw9g/P+Chs4Uln6AT42d8
+         pzYz14W0uRb2557QzFQuCLUVnMWg23DpPkxqO8axO1K5AJ16z/p3nAwSNDMYY8V55lMW
+         82+TJyfyy9l1S0Sf0gW32V12ck3gWbh7A5SoPFu6ocEbYnnhyQb7Wdbhs+nsGMQ/AM5f
+         OJ2EgxBzelUYasqObTDTQjUOkaEskgHemd7IYDHyJQnqlEfsW9uiYFJbE8Ss3k+9wV8J
+         Vcqw==
+X-Gm-Message-State: AOAM531jTj4tE6Cuq93l6DyCqXZYY4nE3yWgrzFs/jhoNC5yZ+6wViOW
+        bodzgy24FmG7FB00lwrnRsswOw==
+X-Google-Smtp-Source: ABdhPJwDmbG/i31cIlNcRD643zqDl0e/auWZDPj7LFoRorbOkHNQ7Qq1FedY4a9/lJLQF14gpv7tcg==
+X-Received: by 2002:a2e:8e84:0:b0:24f:1d40:ceb0 with SMTP id z4-20020a2e8e84000000b0024f1d40ceb0mr17007899ljk.292.1652262415349;
+        Wed, 11 May 2022 02:46:55 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.177])
+        by smtp.gmail.com with ESMTPSA id q6-20020a05651232a600b0047255d210d5sm206379lfe.4.2022.05.11.02.46.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 02:46:54 -0700 (PDT)
+Message-ID: <e85d7ff2-fd10-53f8-c24e-ba0458439c1b@openvz.org>
+Date:   Wed, 11 May 2022 12:46:53 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9AxitiZhXtir_oQAA--.45431S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYY7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
-        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8I
-        cVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87
-        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
-        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72
-        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7
-        MxkIecxEwVAFwVW8uwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
-        026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
-        Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
-        vEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280
-        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyT
-        uYvjfUeLvtDUUUU
-X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+From:   Vasily Averin <vvs@openvz.org>
+Subject: [PATCH mm] tracing: incorrect isolate_mote_t cast in
+ mm_vmscan_lru_isolate
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's time to become a maintainer of Chinese documentation, and Yanteng's plan
-is to help everyone with the utmost enthusiasm and patience.
+Fixes following sparse warnings:
 
-Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
+  CHECK   mm/vmscan.c
+mm/vmscan.c: note: in included file (through
+include/trace/trace_events.h, include/trace/define_trace.h,
+include/trace/events/vmscan.h):
+./include/trace/events/vmscan.h:281:1: sparse: warning:
+ cast to restricted isolate_mode_t
+./include/trace/events/vmscan.h:281:1: sparse: warning:
+ restricted isolate_mode_t degrades to integer
+
+Signed-off-by: Vasily Averin <vvs@openvz.org>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ include/trace/events/vmscan.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e8c52d0192a6..74969c0a60ea 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4619,6 +4619,7 @@ F:	Documentation/dev-tools/checkpatch.rst
+diff --git a/include/trace/events/vmscan.h b/include/trace/events/vmscan.h
+index 408c86244d64..d2123dd960d5 100644
+--- a/include/trace/events/vmscan.h
++++ b/include/trace/events/vmscan.h
+@@ -297,7 +297,7 @@ TRACE_EVENT(mm_vmscan_lru_isolate,
+ 		__field(unsigned long, nr_scanned)
+ 		__field(unsigned long, nr_skipped)
+ 		__field(unsigned long, nr_taken)
+-		__field(isolate_mode_t, isolate_mode)
++		__field(unsigned int, isolate_mode)
+ 		__field(int, lru)
+ 	),
  
- CHINESE DOCUMENTATION
- M:	Alex Shi <alexs@kernel.org>
-+M:	Yanteng Si <siyanteng@loongson.cn>
- S:	Maintained
- F:	Documentation/translations/zh_CN/
+@@ -308,7 +308,7 @@ TRACE_EVENT(mm_vmscan_lru_isolate,
+ 		__entry->nr_scanned = nr_scanned;
+ 		__entry->nr_skipped = nr_skipped;
+ 		__entry->nr_taken = nr_taken;
+-		__entry->isolate_mode = isolate_mode;
++		__entry->isolate_mode = (__force unsigned int)isolate_mode;
+ 		__entry->lru = lru;
+ 	),
  
 -- 
-2.27.0
+2.31.1
 

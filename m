@@ -2,65 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BEEC5230C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A900A5230CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238357AbiEKKjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 06:39:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37018 "EHLO
+        id S232832AbiEKKjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 06:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239126AbiEKKi5 (ORCPT
+        with ESMTP id S239593AbiEKKi6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 06:38:57 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA2098F63;
-        Wed, 11 May 2022 03:38:23 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id dk23so3128918ejb.8;
-        Wed, 11 May 2022 03:38:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qGHv9j0c8V71tfmlaFQcyFp3f+ZWH+JBhoP8avbzoug=;
-        b=nhVubC7qARrrpeceYAKhtv4b7NZJqmzIWHFuh6v/Lde+nrh6wrRWlve0I2UADLlyss
-         XH+QLgL9NO4nEcG6NwP3AXO3LfSrHrOOM614swoNJdGFNluhpr0gt+BYZSyPQvEVRKc0
-         BfGJBw3M9/AEX4Zhgim79i2vd+OG1RkdRXMF109JZGoycVjsuigZVSlN8aFy5u3Z+ddP
-         UgBztuWuoXI2ZHwpFy95ba9iVJzQBPhpXxuQdKT0jbBkzDCbKOevXvuslyWD/Z6NEpis
-         jepA7fS6SgVB7TLDI/ntHfc9ud059V9+iQPz/O55RzSqZ9aYNQPBC2kxggjcmPizaOyy
-         jjug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qGHv9j0c8V71tfmlaFQcyFp3f+ZWH+JBhoP8avbzoug=;
-        b=EpWPNKPuPWxml5YZTVJRc1v2T6i4uHhsObSNok17ajBdSZx3PWN+yuzRT+6vlJ6Hxg
-         JTpobRdKC5n4szDHDFG9W5AUNCwOM9gzMG0mUdGRgg06+hy6vZIMW9fk7nECn4a7UPu9
-         YadvVsyae/cMvFErshVgbTyPh8ZTX2lBhI08Fs8h/iD51J23uMlWeSzyemGB/Ov3vDwm
-         HqTbGNEiP4R4MaPBtObSXN7cOvAg8e3pTZnA4xczj8UVlkaDSvtPLU7FETi5Nu4SeDvC
-         CCYRpr70kPvlxYAhmTJM1H4RkL9C0rbtA82BglUksOMKg2g+r2VHwOUbDc5/bUgxuCWZ
-         baCw==
-X-Gm-Message-State: AOAM530QA3RrsPbE2J/BATexam8Xt4ekkrV6HMnEjLrDaYSdoGiaAEN0
-        8jINanwpFyEgL8jKjK1mSjxW0pKxFpPkDhYKNgE=
-X-Google-Smtp-Source: ABdhPJxpw5GHTo4RP+D7jwBpREG5piaO3Cc5XUYt9RsTu28/AwACOgKxI7fz0K6cpNHhFfq83O0FowVcYp8GOWZ2KLw=
-X-Received: by 2002:a17:906:3ce9:b0:6ef:a8aa:ab46 with SMTP id
- d9-20020a1709063ce900b006efa8aaab46mr23697429ejh.579.1652265502402; Wed, 11
- May 2022 03:38:22 -0700 (PDT)
+        Wed, 11 May 2022 06:38:58 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFBE9BAC7;
+        Wed, 11 May 2022 03:38:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1652265507; x=1683801507;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=4d2r++ODIwPQnQR41o2Hor18zKmdz4y8vNW8f6xrvKA=;
+  b=H1g6D/aVRyYCsnV5TEIcs/9I4+U0cNos7H3G9IcVmwMy2553Dv3kSpWH
+   fMHvQVpJH2HM7RiT0fLsensGi74o4+DTXFAfpuiGutjPPPlWcwn3Mw0mD
+   xrLLSswc4VA018NReWmPOsgq7l6Tl1eeJ9nQNIAuL/gb+qI0dse0yIaF3
+   9ym+sl36uR5RQnVbsOl/J6GzZJ1m9+bi4CEg55IEp3+PBuyVWQW/LOSGG
+   zVd6eHeh+xF4GBLiwHRGEmWZDmqbQW3PYVVxKfLmVQ2n+vu75L4POn6CA
+   89uUBuJJId2WxSDxuQJXeD/Ppu4p7B1yE4jINz3ypChqwtaWhYRB5lWmC
+   g==;
+X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
+   d="scan'208";a="158596612"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 May 2022 03:38:27 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 11 May 2022 03:38:26 -0700
+Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Wed, 11 May 2022 03:38:21 -0700
+From:   Arun Ramadoss <arun.ramadoss@microchip.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     Russell King <linux@armlinux.org.uk>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        <UNGLinuxDriver@microchip.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Marek Vasut <marex@denx.de>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>
+Subject: [RFC Patch net-next 1/9] net: dsa: microchip: ksz8795: update the port_cnt value in ksz_chip_data
+Date:   Wed, 11 May 2022 16:07:47 +0530
+Message-ID: <20220511103755.12553-2-arun.ramadoss@microchip.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20220511103755.12553-1-arun.ramadoss@microchip.com>
+References: <20220511103755.12553-1-arun.ramadoss@microchip.com>
 MIME-Version: 1.0
-References: <20220510191549.76105-1-mosescb.dev@gmail.com>
-In-Reply-To: <20220510191549.76105-1-mosescb.dev@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 11 May 2022 12:37:46 +0200
-Message-ID: <CAHp75VdAyA=JkY6tjzRvHNwXZie9H4nrn6ct3qzuyUWgNeW21w@mail.gmail.com>
-Subject: Re: [PATCH] drivers: gpio: zevio: drop of_gpio.h header
-To:     Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,54 +73,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 12:31 AM Moses Christopher Bollavarapu
-<mosescb.dev@gmail.com> wrote:
+The port_cnt value in the structure is not used in the switch_init.
+Instead it uses the fls(chip->cpu_port), this is due to one of port in
+the ksz8794 unavailable. The cpu_port for the 8794 is 0x10, fls(0x10) =
+5, hence updating it directly in the ksz_chip_data structure in order to
+same with all the other switches in ksz8795.c and ksz9477.c files.
 
-I like the idea and the patch, but a few comments below.
+Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+---
+ drivers/net/dsa/microchip/ksz8795.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-> remove of_gpio.h header file, replace of_* functions and structs
-> with appropriate alternatives
-
-Please respect English grammar, i.e. Capital letters at the beginning
-of the sentences and period at the ends.
-
-...
-
->  struct zevio_gpio {
->         spinlock_t              lock;
-> -       struct of_mm_gpio_chip  chip;
-> +       struct gpio_chip        chip;
-> +       void __iomem            *regs;
-
-While at it, please move the chip member to be the first one. It will
-optimize container_of() in case it's being called against a zevio_gpio
-object instance.
-
->  };
-
-...
-
-> +       controller->regs = devm_platform_ioremap_resource(pdev, 0);
-> +       if (IS_ERR(controller->regs)) {
-
-> +               dev_err(&pdev->dev, "failed to ioremap memory resource\n");
-> +               return PTR_ERR(controller->regs);
-
-return dev_err_probe(&pdev->dev, ...);
-
-> +       }
-
-...
-
-> +       status = devm_gpiochip_add_data(&pdev->dev,
-> +                                       &(controller->chip),
-
-Too many parentheses.
-
-> +                                       controller);
-
-Also, combine all of them to be located on a single line.
-
+diff --git a/drivers/net/dsa/microchip/ksz8795.c b/drivers/net/dsa/microchip/ksz8795.c
+index f91deea9368e..83bcabf2dc54 100644
+--- a/drivers/net/dsa/microchip/ksz8795.c
++++ b/drivers/net/dsa/microchip/ksz8795.c
+@@ -1607,6 +1607,7 @@ static const struct ksz_chip_data ksz8_switch_chips[] = {
+ 		 * KSZ8794   0,1,2      4
+ 		 * KSZ8795   0,1,2,3    4
+ 		 * KSZ8765   0,1,2,3    4
++		 * port_cnt is configured as 5, even though it is 4
+ 		 */
+ 		.chip_id = 0x8794,
+ 		.dev_name = "KSZ8794",
+@@ -1614,7 +1615,7 @@ static const struct ksz_chip_data ksz8_switch_chips[] = {
+ 		.num_alus = 0,
+ 		.num_statics = 8,
+ 		.cpu_ports = 0x10,	/* can be configured as cpu port */
+-		.port_cnt = 4,		/* total cpu and user ports */
++		.port_cnt = 5,		/* total cpu and user ports */
+ 		.ksz87xx_eee_link_erratum = true,
+ 	},
+ 	{
+@@ -1653,7 +1654,7 @@ static int ksz8_switch_init(struct ksz_device *dev)
+ 			dev->num_vlans = chip->num_vlans;
+ 			dev->num_alus = chip->num_alus;
+ 			dev->num_statics = chip->num_statics;
+-			dev->port_cnt = fls(chip->cpu_ports);
++			dev->port_cnt = chip->port_cnt;
+ 			dev->cpu_port = fls(chip->cpu_ports) - 1;
+ 			dev->phy_port_cnt = dev->port_cnt - 1;
+ 			dev->cpu_ports = chip->cpu_ports;
 -- 
-With Best Regards,
-Andy Shevchenko
+2.33.0
+

@@ -2,118 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 264ED523416
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF26352341E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 15:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242281AbiEKNUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 09:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44966 "EHLO
+        id S243764AbiEKNVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 09:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243735AbiEKNT6 (ORCPT
+        with ESMTP id S243738AbiEKNU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 09:19:58 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5BB239D9C;
-        Wed, 11 May 2022 06:19:53 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id w130so2723848oig.0;
-        Wed, 11 May 2022 06:19:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xTKoqmkJyd5jKlpEWOxjT/YXWFjjUDfLBGo4J9TZy7g=;
-        b=kKYtw5KYvJu3JDMAeeeiZQqbGYik4wVt1sIFGpnkGAZMDSekQOJaQt1FVeZwvRPCmG
-         G+PakaqZkpjmITjjoQLpTwQMI7+ZO9IvF/2NzRDjU9BSR/gafqIkbspnhnUj1OZKVymj
-         b1A4z2AzqbGwV0a64HBw87knlUST8jNwz3NWjKY6JFjPaIy39i+VOSWk9XvAxZ9rI0hh
-         akciP2cBFm9m6NuppgLPV+ajLMEGHhEV4gGe9TwcLwCA/Ezmy273YjF8fPWz1NBTkPnM
-         OMwJ9lK3CLD6axBvSfTqNVTOkPyLep2ZEDKTSwxp3DXU9vQ7HIzZKekkp7L7YAVS68wc
-         umIQ==
+        Wed, 11 May 2022 09:20:59 -0400
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CB923979F;
+        Wed, 11 May 2022 06:20:08 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id v59so3906547ybi.12;
+        Wed, 11 May 2022 06:20:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xTKoqmkJyd5jKlpEWOxjT/YXWFjjUDfLBGo4J9TZy7g=;
-        b=P7BBEeNvdWUgFMOSXWoSJxppobE+FmTxHxqyT/MIDuR1cHJ9TTp4ASI5HlMiKOZ7Qh
-         C2ZAfm/4gcxOc+zTDuKmBfhUaUja8PxeUWWAv3thRKh9xgdFkgHwIykmVJj/iP6b8mrS
-         oiVZKSn89b9Mf4QE1ZwcjUtS1qhp3nzLdOQU907eY4n3ciebJ/ptaLCsxrKfO4uLwWhu
-         w3BpQK2ifXS09WYF+B2taaIjK27EagXeEP606q3Z0x7qTZq1MS+dG3kSSsXyT0u4F60A
-         CME/M+b+Lkv5TescW70hBpxw4iwHAc4yIeqfx8dcBa3JqyQJkSGSUtCqN8mQrQdVyMrf
-         vqbA==
-X-Gm-Message-State: AOAM532LskvW50cvrZy1NO+of2KaLfDnGXnQAU7aYIpjpqm4d7Jl7Kix
-        0Y6W/pAGlMUYRQj6jsjaxAnGrqTcdC6PYQ==
-X-Google-Smtp-Source: ABdhPJwBIaXef/tEui+TOYaLAsav+BgIvyBQIyRvhutgluQotb5jEVONp6I43z5A0+6UPgrVnek+iA==
-X-Received: by 2002:a05:6808:1ce:b0:325:7a0c:b315 with SMTP id x14-20020a05680801ce00b003257a0cb315mr2346533oic.40.1652275192877;
-        Wed, 11 May 2022 06:19:52 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r9-20020a056870438900b000e92d5a54ffsm554131oah.26.2022.05.11.06.19.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 06:19:52 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <31fd924f-0b3e-a47b-1ee5-fd321c5f0f17@roeck-us.net>
-Date:   Wed, 11 May 2022 06:19:50 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lPcFmOfBb0IAWaOSqE2Bx+EAh22wxVBQU4MZcbQtQDs=;
+        b=7X/WLawAJv4UYTgNYNbmSNyR+hmRHfJeOqXgodQmf+Lq/7MF9dVQFKtaQ99xQCEJOC
+         SXhRPK/FY6Lj6akRh/xiPjhIHxeKvoKFNsgTtfd6UHe9wymDyM2tlC0fBw0l7R3wPhmo
+         q0KHDTXCImhpBNk85cesArV72mCKbvwEbyTINOmeSF5gk5vbmc9jMez/YRqQaHk6Yojx
+         Ozk0EdnTYEY3is5VOVokIwV4rKDtsNCEGDPyFTbbZvx/YOQe2AHw53loTvsJ130eCFkL
+         dkMU+nEK2gOZn0sOnWcBlxRXA8AS8MM88tlk6VRQjqj0+0gafS9x1HJSdZeGYe4KMTdI
+         WVgg==
+X-Gm-Message-State: AOAM532TjmAuFt9S6teMHYbJz6QeXFmH1W61J7+0ktYGEdp6ldUFKtzl
+        /Eu2+FqzwZo7tSF2LTHLHB71FvYcQ9Glh/hRD1Y=
+X-Google-Smtp-Source: ABdhPJzuSeISNyAQbkHgmRVOZUc8DuN07Iysy3COQorKIdjj24Gic9TrcIsZxaQN4MUKF0X25jCZV/FEuEUdxZXPwog=
+X-Received: by 2002:a25:3795:0:b0:648:fa25:5268 with SMTP id
+ e143-20020a253795000000b00648fa255268mr25012294yba.153.1652275207937; Wed, 11
+ May 2022 06:20:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] watchdog: ts4800_wdt: Fix refcount leak in
- ts4800_wdt_probe
-Content-Language: en-US
-To:     Miaoqian Lin <linmq006@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Damien Riegel <damien.riegel@savoirfairelinux.com>,
-        Rob Herring <robh@kernel.org>, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220511114203.47420-1-linmq006@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220511114203.47420-1-linmq006@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+References: <20220510035259.5ep52sgahd2a6rie@vireshk-i7> <20220510154236.88753-1-schspa@gmail.com>
+ <20220511043515.fn2gz6q3kcpdai5p@vireshk-i7> <CAMA88TpefB=rnqea2u1zEvNUJNE_kdj4mYito7SGCuMj-o071Q@mail.gmail.com>
+ <20220511122114.wccgyur6g3qs6fps@vireshk-i7> <CAJZ5v0gN_yDFpvCXRXv8rN-i3TugCi-HKpBKK2z4eWU0Zm1GUg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gN_yDFpvCXRXv8rN-i3TugCi-HKpBKK2z4eWU0Zm1GUg@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 11 May 2022 15:19:56 +0200
+Message-ID: <CAJZ5v0id+7vkqMQEyVRe29oF_dRtzZ0EhoYUn8=yzeENDeABJw@mail.gmail.com>
+Subject: Re: [PATCH v3] cpufreq: fix race on cpufreq online
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Schspa Shi <schspa@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/11/22 04:42, Miaoqian Lin wrote:
-> of_parse_phandle() returns a node pointer with refcount
-> incremented, we should use of_node_put() on it when done.
-> Add  missing of_node_put() in some error paths.
-> 
-> Fixes: bf9006399939 ("watchdog: ts4800: add driver for TS-4800 watchdog")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+On Wed, May 11, 2022 at 2:59 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Wed, May 11, 2022 at 2:21 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> > On 11-05-22, 16:10, Schspa Shi wrote:
+> > > Viresh Kumar <viresh.kumar@linaro.org> writes:
+> > > > I am not sure, but maybe there were issues in calling init() with rwsem held, as
+> > > > it may want to call some API from there.
+> > > >
+> > >
+> > > I have checked all the init() implement of the fellowing files, It should be OK.
+> > > Function find command:
+> > >   ag "init[\s]+=" drivers/cpufreq
+> > >
+> > > All the init() implement only initialize policy object without holding this lock
+> > > and won't call cpufreq APIs need to hold this lock.
+> >
+> > Okay, we can see if someone complains later then :)
+> >
+> > > > I don't think you can do that safely. offline() or exit() may depend on
+> > > > policy->cpus being set to all CPUs.
+> > > OK, I will move this after exit(). and there will be no effect with those
+> > > two APIs. But policy->cpus must be clear before release policy->rwsem.
+> >
+> > Hmm, I don't think depending on the values of policy->cpus is a good idea to be
+> > honest. This design is inviting bugs to come in at another place. We need a
+> > clear flag for this, a new flag or something like policy_list.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Why?
 
-> ---
->   drivers/watchdog/ts4800_wdt.c | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/ts4800_wdt.c b/drivers/watchdog/ts4800_wdt.c
-> index c137ad2bd5c3..0ea554c7cda5 100644
-> --- a/drivers/watchdog/ts4800_wdt.c
-> +++ b/drivers/watchdog/ts4800_wdt.c
-> @@ -125,13 +125,16 @@ static int ts4800_wdt_probe(struct platform_device *pdev)
->   	ret = of_property_read_u32_index(np, "syscon", 1, &reg);
->   	if (ret < 0) {
->   		dev_err(dev, "no offset in syscon\n");
-> +		of_node_put(syscon_np);
->   		return ret;
->   	}
->   
->   	/* allocate memory for watchdog struct */
->   	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
-> -	if (!wdt)
-> +	if (!wdt) {
-> +		of_node_put(syscon_np);
->   		return -ENOMEM;
-> +	}
->   
->   	/* set regmap and offset to know where to write */
->   	wdt->feed_offset = reg;
+> > Also I see the same bug happening while the policy is removed. The kobject is
+> > put after the rwsem is dropped.
 
+This shouldn't be a problem because of the wait_for_completion() in
+cpufreq_policy_put_kobj().  It is known that cpufreq_sysfs_release()
+has run when cpufreq_policy_put_kobj() returns, so it is safe to free
+the policy then.
+
+> > > >  static inline bool policy_is_inactive(struct cpufreq_policy *policy)
+> > > >  {
+> > > > -     return cpumask_empty(policy->cpus);
+> > > > +     return unlikely(cpumask_empty(policy->cpus) ||
+> > > > +                     list_empty(&policy->policy_list));
+> > > >  }
+> > > >
+> > >
+> > > I don't think this fully solves my problem.
+> > > 1. There is some case which cpufreq_online failed after the policy is added to
+> > >    cpufreq_policy_list.
+> >
+> > And I missed that :(
+> >
+> > > 2. policy->policy_list is not protected by &policy->rwsem, and we
+> > > can't relay on this to
+> > >    indict the policy is fine.
+> >
+> > Ahh..
+> >
+> > > >From this point of view, we can fix this problem through the state of
+> > > this linked list.
+> > > But the above two problems need to be solved first.
+> >
+> > I feel overriding policy_list for this is going to make it complex/messy.
+> >
+> > Maybe something like this then:
+>
+> There are two things.
+>
+> One is the possible race with respect to the sysfs access occurring
+> during failing initialization and the other is that ->offline() or
+> ->exit() can be called with or without holding the policy rwsem
+> depending on the code path.
+>
+> Namely, cpufreq_offline() calls them under the policy rwsem, but
+> cpufreq_remove_dev() calls ->exit() outside the rwsem.  Also they are
+> called outside the rwsem in cpufreq_online().
+>
+> Moreover, ->offline() and ->exit() cannot expect policy->cpus to be
+> populated, because they are called when it is empty from
+> cpufreq_offline().
+>
+> So the $subject patch is correct AFAICS even though it doesn't address
+> all of the above.
+
+TBH, I'm not sure why show() doesn't check policy_is_inactive() under the rwsem.
+
+Moreover, I'm not sure why the locking dance in store() is necessary.

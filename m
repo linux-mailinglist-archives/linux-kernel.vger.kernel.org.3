@@ -2,229 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BADC523E25
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00896523E26
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347409AbiEKT6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 15:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49046 "EHLO
+        id S1347445AbiEKT61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 15:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245113AbiEKT6Q (ORCPT
+        with ESMTP id S1347401AbiEKT6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 15:58:16 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9911F9A0C;
-        Wed, 11 May 2022 12:58:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1652299081;
-        bh=DnQi+kYGURjHNKQ+4HyqoMBrfpTbkeC+W88d7BnxadA=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=XaeAFU5cHhFJWlL+ynCzu4CxMhRIval4oYAoM+7gtsOqTbiBj4gJ8ahbTvwNoR0Xs
-         t1YaY3SsfiusNCL8vS8bubCKL2DwmrCBVH1dwSJf+d6lt1bE80nA/wiGQzIAKY5gGz
-         kPPxVWG2FHkwe7MVqaoXV52j5FfwQCBgr6ROQghM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.33] ([46.223.3.12]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MBm1U-1ncoir0WmC-00CC6e; Wed, 11
- May 2022 21:58:01 +0200
-Subject: Re: [PATCH v4 6/6] tpm, tpm_tis: Only enable supported IRQs
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lukas@wunner.de,
-        p.rosenberger@kunbus.com, Lino Sanfilippo <l.sanfilippo@kunbus.com>
-References: <20220509080559.4381-1-LinoSanfilippo@gmx.de>
- <20220509080559.4381-7-LinoSanfilippo@gmx.de> <YnvRXiMxMRF3mIb8@kernel.org>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <e5081429-d313-ade2-0dda-b7ac88ebf4f9@gmx.de>
-Date:   Wed, 11 May 2022 21:58:00 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 11 May 2022 15:58:17 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887D71FE3CC;
+        Wed, 11 May 2022 12:58:16 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id 704CE1F42CF0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652299095;
+        bh=VybsRpIInZnb23XCmY8eSSZVRgUv+vJS2d+gxTZzyMg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j8wMtlkCxSaNmzjizBSjnADY75+vjTGMWLc+zi5Fxx6sc4wJjtayy58JkRAs8fT7e
+         4Rt8A5tKkEgNPnXQ9Ksr8bCdqHvHp+bRpyIguyfczgcj676e5hA9c6/P//4l69cE7c
+         dMAfscqTl5kKnZmPY8QPlGwqtX9jAcLEE/jwH4L3sJQu+SqNpSHccUgNdZa3BDH8E2
+         Ui7yrvHs1AaYfAYCQLZF8NObtMGIYZMpqWw0wIb5wiu69upT5wFBK+OZ8zkr2JqmMh
+         GoNP6eOXuzOblu7tVaHwB5ztD399ZdVK7hFxI8Uhd6KQ3/4S+I5a4HCChbQJUCVmot
+         SZEL6KntEyazg==
+Date:   Wed, 11 May 2022 15:58:10 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Tzung-Bi Shih <tzungbi@google.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] dt-bindings: remoteproc: mediatek: Make l1tcm reg
+ exclusive to mt819x
+Message-ID: <20220511195810.jgeoukpj7bz3ng2h@notapiano>
+References: <20220506213226.257859-1-nfraprado@collabora.com>
+ <20220506213226.257859-2-nfraprado@collabora.com>
+ <d3e027ca-9ccf-cf91-2414-85d2b9b680f0@linaro.org>
+ <20220510165016.r7nyck2abt5m4djp@notapiano>
+ <66796853-efe7-f661-9637-ac6cfefc68e5@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <YnvRXiMxMRF3mIb8@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:VrLsUIij1zuxMSkL4gXWVBDdedrrX5LON4oknD+NladcBShhD12
- HOQWEkxL6k822imPobS8j9Hqh8ko4JFbIBiVEvoJ3GS1PoGyh7uSFM+MmOVIsJjspNT8o87
- vKb32pEX+UQsETuroodq/SW+e5+VQiG9NcyjdMAd2TV01SEAZo2bPAN7666FsQfTjgMI5tC
- MQlABrAKyUE9Y7ZzlkwEg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:L8hxUCebOv8=:Jo1zory9tW1IhkGMV/VjyX
- 7z1Tp7sMV9vl5xKayZUFfTNG5R3LFLWEbkJDE8xsMhxRn6fj+6v4QmvB9LEdPuKc9Re2OWrc2
- pCUmv7QXEnMcVJ6/DJIuBptaxgl8deMJ9FIH6kZN0ne+//PRRYxbLT8QBr9m3jOQr//CRY4WK
- AGDHwLqp7Wo7IMSRMNo4oo20zM+ajI9Y1MA25MIiYl/5YozamTHlHr+TKq28E2BJLrkKj6N0R
- GijHQiPZczeL8gCMLnk6fwInquAGTE4Ot64Ibl45CGv+Az7dYLb5tBijtXYnIcjhQotZDHsSC
- auowTjuS6CWqLKnNRkrGx9WNXc8J1H+DzTaTr2fWbiL3E5RBlVKzxLgWHP2PRM/dghbDnNhsz
- u72HeChyQyFM2VFjjguTsN8RvYOr8yPw3/KTsNWyGiKqs4We8YtY0VQk0/srjal5SHOl9wjm3
- 6t5n0voPi4ypwbhWxSceEiGgLjWjPT3NsQB/gcWZLtcYxfZ6puP/3QmAGDKzMH+G2Gtqk3FRC
- XRIUqGDko9nFFNU2APWha58rJxb9U1xa3IZE5wVvEdEUXE5OrO0MgLk20NJ6Jf3dAhYwuAiJ+
- hGWXE9ZmlGpCqNP64li9rCCEHBfL17iRarRc7s+XrM6WUSPowF5hgnFoHTcYgbojVtToCza8L
- xiL8RVe4YVh6KikDvwpY3VUcVxZwfAmKPuytUtchHySe5dovYqUtdptfHJaZKdFKn/jLrM8G4
- 249IuzxKwCZX3iqI4BjieOB+xQaVye7qK+8pSmXXr7pco/bCJG/bSCJXimVxw2FoQPJMw22d1
- PyA/NYKshtjUMk5UG0QGe1t608RfjPg/RJ1cTObQGkfX4Or6PNmqqzpWRVFyP4olprq9teaHw
- BJcxRWrKvGCq8sbHHMv6BAr3EcTcKSMS37CS2Xj40Z3KvML/LN/qeoRZl1T26IBn33ADYVnb7
- GXBMPfc28ycHA2jQ6E7IqmLNuYQfO7itgDzp7lcJG5dwVRMTeQWJNPG/SsDPNXEYW3ItJ4hwf
- 1XR0ud0g6WVO1lvNI55xJZ0qfL0fEuCtHz5SaVPxJ4WDOlq6d+jTxhnHVsJjmpDhj11BFA52V
- N7VQQX6h7A6KGY=
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <66796853-efe7-f661-9637-ac6cfefc68e5@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11.05.22 at 17:08, Jarkko Sakkinen wrote:
-> On Mon, May 09, 2022 at 10:05:59AM +0200, Lino Sanfilippo wrote:
->> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->>
->> Instead of blindly trying to enable all possible interrupts, use the re=
-sult
->> from the capability query and request only the interrupts that are actu=
-ally
->> supported.
->>
->> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->> ---
->>  drivers/char/tpm/tpm_tis_core.c | 67 ++++++++++++++++++---------------
->>  drivers/char/tpm/tpm_tis_core.h |  1 +
->>  2 files changed, 37 insertions(+), 31 deletions(-)
->>
->> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis=
-_core.c
->> index 4c65718feb7d..784e153e2895 100644
->> --- a/drivers/char/tpm/tpm_tis_core.c
->> +++ b/drivers/char/tpm/tpm_tis_core.c
->> @@ -976,13 +976,46 @@ int tpm_tis_core_init(struct device *dev, struct =
-tpm_tis_data *priv, int irq,
->>  		goto out_err;
->>  	}
->>
->> +	/* Figure out the capabilities */
->> +	rc =3D tpm_tis_read32(priv, TPM_INTF_CAPS(priv->locality), &intfcaps)=
-;
->> +	if (rc < 0)
->> +		goto out_err;
->> +
->> +	dev_dbg(dev, "TPM interface capabilities (0x%x):\n",
->> +		intfcaps);
->> +	if (intfcaps & TPM_INTF_BURST_COUNT_STATIC)
->> +		dev_dbg(dev, "\tBurst Count Static\n");
->> +	if (intfcaps & TPM_INTF_CMD_READY_INT) {
->> +		priv->supported_irqs |=3D TPM_INTF_CMD_READY_INT;
->> +		dev_dbg(dev, "\tCommand Ready Int Support\n");
->> +	}
->> +	if (intfcaps & TPM_INTF_INT_EDGE_FALLING)
->> +		dev_dbg(dev, "\tInterrupt Edge Falling\n");
->> +	if (intfcaps & TPM_INTF_INT_EDGE_RISING)
->> +		dev_dbg(dev, "\tInterrupt Edge Rising\n");
->> +	if (intfcaps & TPM_INTF_INT_LEVEL_LOW)
->> +		dev_dbg(dev, "\tInterrupt Level Low\n");
->> +	if (intfcaps & TPM_INTF_INT_LEVEL_HIGH)
->> +		dev_dbg(dev, "\tInterrupt Level High\n");
->> +	if (intfcaps & TPM_INTF_LOCALITY_CHANGE_INT) {
->> +		priv->supported_irqs |=3D TPM_INTF_LOCALITY_CHANGE_INT;
->> +		dev_dbg(dev, "\tLocality Change Int Support\n");
->> +	}
->> +	if (intfcaps & TPM_INTF_STS_VALID_INT) {
->> +		priv->supported_irqs |=3D TPM_INTF_STS_VALID_INT;
->> +		dev_dbg(dev, "\tSts Valid Int Support\n");
->> +	}
->> +	if (intfcaps & TPM_INTF_DATA_AVAIL_INT) {
->> +		priv->supported_irqs |=3D TPM_INTF_DATA_AVAIL_INT;
->> +		dev_dbg(dev, "\tData Avail Int Support\n");
->> +	}
->> +
->>  	/* Take control of the TPM's interrupt hardware and shut it off */
->>  	rc =3D tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask)=
-;
->>  	if (rc < 0)
->>  		goto out_err;
->>
->> -	intmask |=3D TPM_INTF_CMD_READY_INT | TPM_INTF_LOCALITY_CHANGE_INT |
->> -		   TPM_INTF_DATA_AVAIL_INT | TPM_INTF_STS_VALID_INT;
->> +	intmask |=3D priv->supported_irqs;
->>  	intmask &=3D ~TPM_GLOBAL_INT_ENABLE;
->>
->>  	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
->> @@ -1009,32 +1042,6 @@ int tpm_tis_core_init(struct device *dev, struct=
- tpm_tis_data *priv, int irq,
->>  		goto out_err;
->>  	}
->>
->> -	/* Figure out the capabilities */
->> -	rc =3D tpm_tis_read32(priv, TPM_INTF_CAPS(priv->locality), &intfcaps)=
-;
->> -	if (rc < 0)
->> -		goto out_err;
->> -
->> -	dev_dbg(dev, "TPM interface capabilities (0x%x):\n",
->> -		intfcaps);
->> -	if (intfcaps & TPM_INTF_BURST_COUNT_STATIC)
->> -		dev_dbg(dev, "\tBurst Count Static\n");
->> -	if (intfcaps & TPM_INTF_CMD_READY_INT)
->> -		dev_dbg(dev, "\tCommand Ready Int Support\n");
->> -	if (intfcaps & TPM_INTF_INT_EDGE_FALLING)
->> -		dev_dbg(dev, "\tInterrupt Edge Falling\n");
->> -	if (intfcaps & TPM_INTF_INT_EDGE_RISING)
->> -		dev_dbg(dev, "\tInterrupt Edge Rising\n");
->> -	if (intfcaps & TPM_INTF_INT_LEVEL_LOW)
->> -		dev_dbg(dev, "\tInterrupt Level Low\n");
->> -	if (intfcaps & TPM_INTF_INT_LEVEL_HIGH)
->> -		dev_dbg(dev, "\tInterrupt Level High\n");
->> -	if (intfcaps & TPM_INTF_LOCALITY_CHANGE_INT)
->> -		dev_dbg(dev, "\tLocality Change Int Support\n");
->> -	if (intfcaps & TPM_INTF_STS_VALID_INT)
->> -		dev_dbg(dev, "\tSts Valid Int Support\n");
->> -	if (intfcaps & TPM_INTF_DATA_AVAIL_INT)
->> -		dev_dbg(dev, "\tData Avail Int Support\n");
->> -
->>  	/* INTERRUPT Setup */
->>  	init_waitqueue_head(&priv->read_queue);
->>  	init_waitqueue_head(&priv->int_queue);
->> @@ -1101,9 +1108,7 @@ static void tpm_tis_reenable_interrupts(struct tp=
-m_chip *chip)
->>  	if (rc < 0)
->>  		goto out;
->>
->> -	intmask |=3D TPM_INTF_CMD_READY_INT
->> -	    | TPM_INTF_LOCALITY_CHANGE_INT | TPM_INTF_DATA_AVAIL_INT
->> -	    | TPM_INTF_STS_VALID_INT | TPM_GLOBAL_INT_ENABLE;
->> +	intmask |=3D priv->supported_irqs | TPM_GLOBAL_INT_ENABLE;
->>
->>  	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
->>
->> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis=
-_core.h
->> index c8972ea8e13e..3d6b05c6fdba 100644
->> --- a/drivers/char/tpm/tpm_tis_core.h
->> +++ b/drivers/char/tpm/tpm_tis_core.h
->> @@ -97,6 +97,7 @@ struct tpm_tis_data {
->>  	u16 manufacturer_id;
->>  	int locality;
->>  	int irq;
->> +	unsigned int supported_irqs;
->>  	unsigned long irqtest_flags;
->>  	unsigned long flags;
->>  	void __iomem *ilb_base_addr;
->> --
->> 2.36.0
->>
->
-> Does the existing code cause issues in a some specific environment?
->
-> BR, Jarkko
->
+On Wed, May 11, 2022 at 11:12:45AM +0200, Krzysztof Kozlowski wrote:
+> On 10/05/2022 18:50, Nícolas F. R. A. Prado wrote:
+> >>> Also I had to add a description to the global reg-names, since it
+> >>> couldn't be neither missing nor empty.
+> >>
+> >> It is possible:
+> >> https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/example-schema.yaml#L91
+> >>
+> >> Keep constraints and list of names in properties. Then in allOf:if:then
+> >> raise minItems or lower maxItems, depending on the variant.
+> > 
+> > Hi Krzysztof,
+> > 
+> > that example only shows setting minItems to override the default value, but the
+> > issue here is that it's not possible to override minItems/maxItems (after
+> > they're already set, even if implicitly) with a different value in the if.
+> 
+> No, this example shows exactly what you need in first step - make one
+> item on the list optional.
+> 
+> There are several other examples for the entire picture or different
+> aproach:
+> https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/example-schema.yaml#L91
+> 
+> https://elixir.bootlin.com/linux/v5.18-rc2/source/Documentation/devicetree/bindings/clock/samsung,exynos7885-clock.yaml#L53
+> 
+> > 
+> > That is:
+> > 
+> > 	properties:
+> > 	  reg-names:
+> > 	    items:
+> > 	      - const: sram
+> > 	      - const: cfg
+> > 	      - const: l1tcm
+> 
+> You did not use the example I gave you. Where is the minItems?
+> 
+> > 
+> > 	if:
+> > 	  properties:
+> > 	    compatible:
+> > 	      enum:
+> > 		- mediatek,mt8183-scp
+> > 		- mediatek,mt8186-scp
+> > 	then:
+> > 	  properties:
+> > 	    reg-names:
+> > 	      minItems: 2
+> > 	      maxItems: 2
+> > 
+> > Generates the error on dtbs_check:
+> > 
+> > /home/nfraprado/ext/git/linux/arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtb: scp@10500000: reg-names: ['sram', 'cfg'] is too short
+> 
+> Missing minItems in first properties.
+> 
+> > 
+> > I believe the tooling is implicitly adding
+> > 
+> > 	      minItems: 3
+> > 	      maxItems: 3
+> > 
+> > to the common reg-names, and since it's not possible to override them, the
+> > override to 2 doesn't work so they are kept at 3, causing the error.
+> > 
+> > Moving the minItems/maxItems to the common reg-names as a test gives:
+> 
+> You cannot just. You need it in both places.
 
-Not that I know of. This patch is not supposed to be a bugfix but an impro=
-vement of
-the existing code by using the information about supported interrupts whic=
-h is collected during
-the capability query. After the query we know exactly which irqs are suppo=
-rted, so why not use
-this knowledge when setting the irq mask?
+OK, now I get it. I sent v5 addressing this.
 
-Regards,
-Lino
+Thanks,
+Nícolas
 
+> 
+> > 
+> > /home/nfraprado/ext/git/linux/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml: properties:reg-names: {'minItems': 2, 'maxItems': 2, 'items': [{'const': 'sram'}, {'const': 'cfg'}, {'const': 'l1tcm'}]} should not be valid under {'required': ['maxItems']}
+> > 	hint: "maxItems" is not needed with an "items" list
+> > 
+> > That error, plus looking in the items meta-schema, suggests me that maxItems
+> > isn't supposed to be set lower then the length of items. So even if the
+> > minItems/maxItems override is fixed, there's still this issue. It seems like
+> > defining the reg-names list separetely in each if branch is indeed the right way
+> > to go.
+> 
+> 
+> 
+> Best regards,
+> Krzysztof

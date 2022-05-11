@@ -2,314 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13728522F1C
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:16:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69863522F22
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 11:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235575AbiEKJQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 05:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40492 "EHLO
+        id S237942AbiEKJRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 05:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240976AbiEKJQN (ORCPT
+        with ESMTP id S240329AbiEKJRK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 05:16:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD7F2182B;
-        Wed, 11 May 2022 02:16:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D84EDB8214F;
-        Wed, 11 May 2022 09:16:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 997C6C340EB;
-        Wed, 11 May 2022 09:16:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652260567;
-        bh=5Va5HOpXAM/hH9BBm5/LpiUFnaEkuG8P9DfnwvtHNmg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O/tOn+cwpbUTzmT7dHHtp7mjGYIstHXbfbn9WJ91+f0fWAUrgEMbXqjsuDb6a99Fp
-         wnViv0rVfN5iCvLDwrYxoHaC8c5PzMczurQmENEyJsYg6VMKmVHkxW0KJDa/BXdGBI
-         HpIpTY5Wt57PcUUcj0aELORd6vNNzLLXShzrq6vlWk4zRQEkGLRKflAYwI4PktDzkN
-         Coai3N/OO+1kUmhFN1z8UHrQ6XWyON09m46/rSe32BjcmutxI5i2wLmlbofpSKfAuq
-         f2XakiM4+Vx+0YxpGliXvNCMf65qzGY9ZnTMfaqNIH/OBAJQVq4Amd39rqX1mKVGoE
-         GJZJ/JVfxCOtQ==
-Date:   Wed, 11 May 2022 11:16:00 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-fsdevel@vger.kernel.org,
-        Theodore Ts'o <tytso@mit.edu>, Karel Zak <kzak@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        Ian Kent <raven@themaw.net>,
+        Wed, 11 May 2022 05:17:10 -0400
+Received: from EUR02-VE1-obe.outbound.protection.outlook.com (mail-eopbgr20080.outbound.protection.outlook.com [40.107.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7301C5EBD8;
+        Wed, 11 May 2022 02:16:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KaBfZm7NoIM/d11InIQ+vWJXOV9K+qBZHqCBlDcy4AxjFXPwn9rR22g2XC93zprinIEJhX8DtJ64Tp8/p1eSLqnJ1JdTBOjYJpJw2O6JM0brapYWr21mJJO2OEyhbVQLX/Ya2m3s9Tw5ehdlyfE2n8ZRrdP6pXp6HM9CrKTiY8fsNR+a3UG5K6ZD1gwlAo9nKfYmioN0LFvIrrzVlObOO0Ok7fgF0Q7wlkWo2SX980GPYCh4lhvOQ5azk9UEglzJmX/804RVLIJmCd11ACSEFcboFmZMROxPx5nM6YVi7WvB3F11i9zBmH/H5Mhhvaac1MLp355djXUI1K5oh3wX+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ecGj0Wzday1OZHRx3U12Wb/KmsHKwp7qfRhlmF8aBCg=;
+ b=O60s6x924mZpPPCzTIbaEN/l+kTUqvzNMbRiJQEMWb2atNVDGCPLVzNy1Y+2ODWz0MBUtaRbIbgws13kIUTm1vFOsnKv4cbAWml3cxM/SARgeFgBi2ADPBRDHdcQ86QokkeGniAl8HNkJ5O5sVIm5RAhqDhjUtgelMzJPFhc1THDOHlANWVPxItk+zvwNg4xu5cv33kxVdsLN55gX2wVUydWdhW777ZpZ3WW8LSurY2uswD03R3jxbKifgYconaNs30eu9x65izPuoASFhrRgbHKPW60HY40JwMzJlladtx3ZQVQxLgFxp0vFDKd2iwYzW/e/uxrtA+sy8RC2nh8UA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ecGj0Wzday1OZHRx3U12Wb/KmsHKwp7qfRhlmF8aBCg=;
+ b=WNHNLGx/8RspWkYYDVs9diZ18z74GqLXjUf7FylnDaRDdQWDlCIpmIAmnctqJvW5qZzYgepcZ7j4IZ7rBbyLXv5M0hfjg6hAQB5w92DJZqL3+JE/FjOchIAaQv+wIIMIiU+WK8/qXeOpDt5BY/vT2fTOJICCeQmNUSnyvRdOx1Y=
+Received: from DU2PR04MB8630.eurprd04.prod.outlook.com (2603:10a6:10:2dd::15)
+ by PAXPR04MB8286.eurprd04.prod.outlook.com (2603:10a6:102:1cd::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13; Wed, 11 May
+ 2022 09:16:55 +0000
+Received: from DU2PR04MB8630.eurprd04.prod.outlook.com
+ ([fe80::b454:80f3:ce2c:6fbc]) by DU2PR04MB8630.eurprd04.prod.outlook.com
+ ([fe80::b454:80f3:ce2c:6fbc%4]) with mapi id 15.20.5250.013; Wed, 11 May 2022
+ 09:16:55 +0000
+From:   Pankaj Gupta <pankaj.gupta@nxp.com>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Horia Geanta <horia.geanta@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Michael Walle <michael@walle.cc>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
         David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
-Message-ID: <20220511091600.ohjve547itnadav5@wittgenstein>
-References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
- <20220509124815.vb7d2xj5idhb2wq6@wittgenstein>
- <20220510005533.GA2306852@dread.disaster.area>
- <20220510124033.lobf33hxey4quza3@wittgenstein>
- <20220511004200.GE2306852@dread.disaster.area>
+        James Morris <jmorris@namei.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        David Gstir <david@sigma-star.at>,
+        Richard Weinberger <richard@nod.at>,
+        Franck Lenormand <franck.lenormand@nxp.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Subject: RE: [EXT] [PATCH v9 3/7] crypto: caam - determine whether CAAM
+ supports blob encap/decap
+Thread-Topic: [EXT] [PATCH v9 3/7] crypto: caam - determine whether CAAM
+ supports blob encap/decap
+Thread-Index: AQHYYRI97Pupc5Ww9UOAxVboSwK5L60WgJwggAAH1wCAAuOogA==
+Date:   Wed, 11 May 2022 09:16:55 +0000
+Message-ID: <DU2PR04MB8630A6F925454E5C007FA3EA95C89@DU2PR04MB8630.eurprd04.prod.outlook.com>
+References: <20220506062553.1068296-1-a.fatoum@pengutronix.de>
+         <20220506062553.1068296-4-a.fatoum@pengutronix.de>
+         <DU2PR04MB8630501008F661C596C0106295C69@DU2PR04MB8630.eurprd04.prod.outlook.com>
+ <5e7c0b3c9bc285f1cf9f7b20f055aa376e1688cc.camel@pengutronix.de>
+In-Reply-To: <5e7c0b3c9bc285f1cf9f7b20f055aa376e1688cc.camel@pengutronix.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: efb53979-30d8-4151-060a-08da332efe6f
+x-ms-traffictypediagnostic: PAXPR04MB8286:EE_
+x-microsoft-antispam-prvs: <PAXPR04MB8286A698173B77C9E991F9D795C89@PAXPR04MB8286.eurprd04.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: So4EBMlvN4QiMbMEwxg6/BFxBqS4gjCmOnqtFfVwj1iYJvSjgaVP855C6a2JlayYjfvMdPu9FAisVzGvO5EsuujZfNXcRXGGSmvJBvh9ewJniCJ/JeVc6+8ty1Xutv/WCvDJksxup3qT2Uv93IenTCtZ1WCiBp/cLdkeEarPdcAfeU3CPowIGTPwX60uwTViFJK4epRedM8fMs7QxT8UfxpemcLe1dJnQW1oFmCw8Vwf7e1vsuqn6vqPm1Qwe5Pg5Zv6nvSbfx0VGGZ/mE4d2Cc1VEG7dj6i228JsOl7AabOyamdgVhjooGOHrWGM4VAEPQP6nU4rFdG7RRIvBm1CRKrzq5QCiiu7qwEE/PtE/zqBP21lvuGHOCWkQ8e5xoB0KG2oQ2fmpuZTkSjdnFrrdXMELHQC3Rlai5I40XWSyDhFQZQEMC+Bs6/2KtGk7FYQTgq5cUkV6R3zFnprxfPgf6uczcQH4PUJlikbuuWrjdx4Xix9oUrmlRXCM38c9l0ePn10C+TvQMjXNcqNTkEKZE+VMmYPT/eUjXS43l8YWAUrXrZv7jg4IhHHYYijlXxCwHoIHboGEpYPG+ntLfTEHXc20zmu37JAWxNfsdm1J81pM+y5vD0RWJ/2XCPwlIY8/+UDvcVQ5RKAMCzQdJcTGG9SSFfJfcea+K++FK7atVPNnqQU/WhD4vqTQ+ZF93qb9F3N3Wp0HBp41ztM7BPXw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8630.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(71200400001)(4326008)(9686003)(64756008)(66446008)(66476007)(66556008)(76116006)(2906002)(83380400001)(8676002)(5660300002)(52536014)(8936002)(33656002)(186003)(7416002)(508600001)(66946007)(110136005)(53546011)(54906003)(6506007)(122000001)(55016003)(316002)(38100700002)(38070700005)(26005)(7696005)(86362001)(55236004)(44832011);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Q0NGSU12c0dpZFJ3c3ltaXlSUW5Cb2tuMmJzeGx6bW0rMWtueERtNit0WVBS?=
+ =?utf-8?B?Z0RXTGliamNRKzltSTZZeDlwK3Z6RTJaYmhGaUdLMDlNWWRQaW5ZWVkyc0RI?=
+ =?utf-8?B?MUlITzk4cmJTbFQ5R29xNWhwNlFTM2R0cFZieVJpU2w5MnZQWTluSW9mc0I1?=
+ =?utf-8?B?OVR5bWk3SHRMcStjVGJ3ZmNsN2I0SXIzbWZodmlRbEM0VWt4RGtjM2JucENM?=
+ =?utf-8?B?Y3MxVDlMR0NkcjRKeUQvRWVseFBabERuU3RyaVFBdGR2SG5yRkFrdXA0S09x?=
+ =?utf-8?B?ODZCaEpqWm5QMThLZlFteEV4UEdlNjlRcyswN3FYSEhzME5uSEk5S3dNNzR1?=
+ =?utf-8?B?czJCTE5qWUtwTmNKMDF0QnRSUVlVcmk3VmZkQklkNkoxNTIrYVZkQ2Q0QTht?=
+ =?utf-8?B?aDdBcFpyYk0wWW56anFKd2h5SktwWllyZDFsd1ZmRzQ3TXk0L2V0bEJJVzhz?=
+ =?utf-8?B?SmpEZDdjYnpqdmhRL0VXeVNzaEdTMHFJZzVCSkhwRmpVYzkrdEJneDM4QnVs?=
+ =?utf-8?B?cW1KUGtGWFRnT2Q0Y2RqZ2NoZDQ2aFF0MHFhcEJ4QkttS3NFWjFkaGNWeDJn?=
+ =?utf-8?B?c0d4bUZLTnZqMmM3MEcwd0tJclJrZGpjb21oK3VHaWlCTnNNcEJCa2tHSUho?=
+ =?utf-8?B?b2gwbnRhdXNaMzg4QWJLRFFjb3dta005Y2I3Nm5RYkNpZUNxVnlwd2NCM3Bt?=
+ =?utf-8?B?VFhyOGlaNVhuQUMxRUkvWUxqWHlDM1cxaVl2b3AyZy9tUllXRGtoM0c5TlBN?=
+ =?utf-8?B?bFZsRkpld3NvR0ZhUUdMS2tsZHAzRFFlaDJUMG1IN1p6MXh1VWcwQVhyWlov?=
+ =?utf-8?B?dnh1Myt0Q1g5WkZRSWZsVk9Bek1OMEtsZzN4LzkwR0NHMVo3Y0Y2Vy9Ueldh?=
+ =?utf-8?B?aUdhOXRvTmRIVkpqSFFpTVA4TGJJalphKzJzRitvZFo5ME1TOTIxTm8yQ04y?=
+ =?utf-8?B?YTRFVk9qaEJCQ1UxM3hHdjh6dU1DSVB3dnFjQ3IvRm05cmU5eHlua0RQMzJ4?=
+ =?utf-8?B?YzJ6dXp4bnhXQmVjT3U5N3FCWlJvcHdoTU4yeWdLV1NSSFpISml5WUtkc2hm?=
+ =?utf-8?B?YjYySG1kNGxnV3VVeWZCOWVEUlU0c3hrS1lRRVExYk1vUmhZWmM2cVhxUXFP?=
+ =?utf-8?B?cXBoc0N3V0lWSXJtcm5hQnZyZ29ueUY0RlAzbFdZM3RCdTduQlIwZ2JvaFlC?=
+ =?utf-8?B?RlVoeW9SZkZJc3F0WTFFdXYxRUdMZUF0OENjNDFqclFadXJGdjZ5emFNc3kr?=
+ =?utf-8?B?R1JnQU1NNURVakwxTWFrbnl0NncxRVV3Nm95V2tOSnorR3o4cUFwbFRqcWJT?=
+ =?utf-8?B?V3BoS3JRcHkrNTVFc09uYlNxYXlUSk9VZ3RpSEowUjVIZmdDbEswd0F5YXFX?=
+ =?utf-8?B?d2RWVGNyV1QxRGFDOUhTbXVxUFhjaVkyTDBXM1UrQTg5SVZheGdvc1ZwQ0Nu?=
+ =?utf-8?B?YkJPSzdndHEzYW54aVJLSEQ4ejlrbTI1UnJWaVZKaDlaNEh1R0UrL0hWR0Z6?=
+ =?utf-8?B?L1U3d2Q2STZkakQ2SWFZM0hhWnJHN1hhTzMyMVVPMzFHU2kxZUNlQVJYdkd6?=
+ =?utf-8?B?Zm16c0NHVXl0anJtVFpBbU50VzBuZjJFVnF6VXV6Z0JtSUhhMEdzTWxzbXd4?=
+ =?utf-8?B?RFZLOHovbVpHdG9mZXZBaFIzdVEzSit1c1ZnQUMyU3VoK1pkWEp1VjZYRVY0?=
+ =?utf-8?B?M3RTdmI4dWNERFE3YXFyRUZaalBxNDB3WkdWQ3ptNWNoMHkvRXg5L3QvaUNp?=
+ =?utf-8?B?anUrazdYYzg0OUdCbGpxQnJLTzByRkRaVjg4MVdQOHBwUmwwckNrZ0VvYkFa?=
+ =?utf-8?B?TkxDczJzamNXYVhpWktNUGZrUFRSckJsYmxaV3ZsQitYVFhQdE8vaVJSS2Jp?=
+ =?utf-8?B?bDRhbjNadVdVTHl4YnFpTzdGbFhvSU1ybHhMaGJXR2Q4ZGNpOTdXQjh3YnJU?=
+ =?utf-8?B?ZTEyaXd4S3c5KzBoWHZjVnJqZHhrUmxTU055TDA0RDY0USswUXZFQklWaGUr?=
+ =?utf-8?B?ekRxc29hL3FZZjN2cGZZSlhuQzlxQVAwR1U5WEp1clMvQ3BaL1dZTVV5cGdz?=
+ =?utf-8?B?eVEyWEdPRFc0THBPOUliVXh1Z2NRZzQra21OZXRUb2lUMXhxK0ZqcklmeHNL?=
+ =?utf-8?B?Z0hObGFqVXMyZzQxL3RRN1drSzVEbE0ySTQ3OWZiVDhxVmNHeExrSllIK0Np?=
+ =?utf-8?B?eS84enRCY3hHUk1hVWd6endLbmFQT2IySms3My84Tis4M20wUE1CMjNyRmhv?=
+ =?utf-8?B?MURWY2pxdEFmNE91ZDNqc1ExZE8yNmdLNGZIVEpxOWNTR1d6WkljKzFxL1hk?=
+ =?utf-8?B?QklvTXYvNHN0YVQ5TzBYSkNXQnNFNEFZajIyZHJ6NkdoNzRQTkVBdz09?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220511004200.GE2306852@dread.disaster.area>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8630.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: efb53979-30d8-4151-060a-08da332efe6f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 May 2022 09:16:55.6234
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: cgcHocwHUYYYpW0ql79rbzwkpV2D+Lla+Ot4IcZ4SG7LI83tbThmGtCSBXRWWqk1j/XCgs9mCkeyycfOr0s/5w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8286
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 10:42:00AM +1000, Dave Chinner wrote:
-> On Tue, May 10, 2022 at 02:40:33PM +0200, Christian Brauner wrote:
-> > On Tue, May 10, 2022 at 10:55:33AM +1000, Dave Chinner wrote:
-> > > On Mon, May 09, 2022 at 02:48:15PM +0200, Christian Brauner wrote:
-> > > > On Tue, May 03, 2022 at 02:23:23PM +0200, Miklos Szeredi wrote:
-> > > >   I really think users would love to have an interfact where they can
-> > > >   get a struct with binary info back.
-> > > 
-> > > No. Not for kernel informational interfaces. We have ioctls and
-> > 
-> > That feels like semantics. statx is in all sensible readings of the
-> > words a kernel informational interface.
-> 
-> statx is an special purpose binary syscall interface for returning
-> inode specific information, it's not an abstract, generic
-> informational interface.
-
-I want the ability to also have a statx like interface for some basic
-mount information is what I'm saying; so a special-purpose interface. I
-nowhere argued that statx is a _generic_ information interface.
-
-> 
-> > I'm really looking at this from the perspective of someone who uses
-> > these interfaces regularly in userspace and a text-based interface for
-> > very basic information such as detailed information about a mount is
-> > cumbersome. I know people like to "counter" with "parsing strings is
-> > easy" but it remains a giant pain for userspace; at least for basic
-> > info.
-> 
-> As I said last reply, you are making all the same arguements against
-> text based information interfaces that were made against proc and
-> sysfs a long long time again. they weren't convincing a couple of
-> decades ago, and there aren't really convincing now. Text-based
-
-I'm not in general opposed to an interface that allows to retrieve
-text-based values. I mentioned this earlier in the thread more than
-once. Also, we're not talking about pseudo-filesystems here.
-
-I'm saying I want the ability to get some basic information in binary
-form. Whether it's as part of this interface or another.
-
-Also, *xattr() interfaces aren't really just text-based as you've
-mentioned yourself. They return binary data such as struct
-vfs_ns_cap_data or struct posix_acl_xattr_entry.
-
-> key/value data is hard to screw up in the long run, binary
-> interfaces have a habit of biting hard whenever the contents of
-> the binary structure needs to change...
-
-I partially agree. If we're talking about a netlink like protocol with
-complex structs, sure. If we're talking about statx or openat2 then I
-don't think so. These are not structs that constantly change and newer
-system calls are designed with extensions in mind.
-
-I also think there's a misunderstanding here: I really want to stress
-that I'm not arguing for the necessity for a generic binary information
-retrieval interface. I also mentioned this earlier. I really just want
-the ability to still have some well-defined, special-purpose binary
-interface similar to e.g. statx that isn't rejected with the argument
-that you can get it text-based from *xattr. And I think others have
-agreed in other parts of the thread that is still ok. If that's is
-indeed true I'm content.
-
-> 
-> > > >   Imho, xattrs are a bit like a wonky version of streams already (One of
-> > > >   the reasons I find them quite unpleasant.). Making mount and other
-> > > >   information retrievable directly through the getxattr() interface will
-> > > >   turn them into a full-on streams implementation imho. I'd prefer not
-> > > >   to do that (Which is another reason I'd prefer at least a separate
-> > > >   system call.).
-> > > 
-> > > And that's a total misunderstanding of what xattrs are.
-> > > 
-> > > Alternate data streams are just {file,offset} based data streams
-> > > accessed via ithe same read/write() mechanisms as the primary data
-> > > stream.
-> > 
-> > That's why I said "wonky". But I'm not going to argue this point. I
-> > think you by necessity have wider historical context on these things
-> > that I lack. But I don't find it unreasonable to also see them as an
-> > additional information channel.
-> > 
-> > Sure, they are a generic key=value store for anything _in principle_. In
-> > practice however xattrs are very much perceived and used as information
-> > storage on files, a metadata side-channel if you will.
-> 
-> That's how *you* perceive them, not how everyone perceives them.
-
-I mean, this is as an argument we can't bring to a conclusion or that
-will bring us forward in understanding each other. All I could reply to
-that is "No, that's how *you* perceive them." in return. I don't know
-how this would help.
-
-Let's put it this way, if you go into userspace and ask users of xattrs
-what they think xattrs are then they will not come up with a technical
-definition for a completely generic key=value interface based on
-filesystem btree consideration. They will see them as specific
-attributes on files speaking from experience.
-
-> 
-> > All I'm claiming here is that it will confuse the living hell out of
-> > users if the getxattr() api suddenly is used not to just set and get
-> > information associated with inodes but to also provides filesystem or
-> > mount information.
-> 
-> Why would it confuse people? The xattr namespace is already well
-> known to be heirarchical and context dependent based on the intial
-> name prefix (user, security, btrfs, trusted, etc). i.e. if you don't
-> know that the context the xattr acts on is determined by the initial
-> name prefix, then you need to read the xattr(7) man page again:
-
-I take it this is a rhetorical device here and you know that I've not
-just patched these codepaths multiple times in the kernel but also
-extensively programmed with xattrs in userspace for various container
-projects.
-
-The reasons why I think it confuses people I already explained in
-various parts earlier in the thread. And there are at least two replies
-to this thread that find it confusing as well. If you can't relate to
-any of these reasons then me reiterating them won't bring this forward.
-
-> 
-> Extended attribute namespaces
-> 
-> 	Attribute  names  are  null-terminated  strings.   The
-> 	attribute name is always specified in the fully qualified
-> 	namespace.attribute form, for example, user.mime_type,
-> 	trusted.md5sum, system.posix_acl_access, or
-> 	security.selinux.
-> 
-> 	The namespace mechanism is used to define different classes
-> 	of extended attributes.  These different classes exist for
-> 	several reasons;  for  example, the permissions and
-> 	capabilities required for manipulating extended attributes
-> 	of one namespace may differ to another.
-> 
-> 	Currently,  the  security, system, trusted, and user
-> 	extended attribute classes are defined as described below.
-> 	Additional classes may be added in the future.
-> 
-> > That's a totally a totally differnet type of information. Sure, it may
-> > fit well in the key=value scheme because the xattr key=value _interface_
-> > is generic but that's a very technical argument.
-> 
-> Yet adding a new xattr namespace for a new class of information that
-> is associated the mount that the path/inode/fd is associated with is
-> exactly what the xattr namespaces are intended to allow. And it is
-> clearly documented that new classes "may be added in the future".
-
-Fwiw, I don't think the "Additional classes may be added in the future."
-means that this interface in principle can be used to retrieve any
-key=value based information. If that was really the case then xattr(7)
-should really put your definition below on to their.
-
-> 
-> I just don't see where the confusion would come from...
-
-Again, there's people who can relate to the arguments even on this
-thread but if you can't relate to any of them at all and can't see where
-we're coming from than me reiterating all of it once more won't help.
-
-> 
-> > 
-> > I'm looking at this from the experience of a user of the API for a
-> > moment and in code they'd do in one place:
-> > 
-> > getxattr('/super/special/binary', "security.capability", ...);
-> > 
-> > and then in another place they do:
-> > 
-> > getxattr('/path/to/some/mount', "mntns:info", ...);
-> > 
-> > that is just flatout confusing.
-> 
-> Why? Both are getting different classes of key/value information
-> that is specific to the given path. Just because on is on-disk and
-> the other is ephemeral doesn't make it in any way confusing. This is
-> exactly what xattr namesapces are intended to support...
-> 
-> > > Xattrs provide an *atomic key-value object store API*, not an offset
-> > > based data stream API. They are completely different beasts,
-> > > intended for completely different purposes. ADS are redundant when you
-> > > have directories and files, whilst an atomic key-value store is
-> > > something completely different.
-> > > 
-> > > You do realise we have an independent, scalable, ACID compliant
-> > > key-value object store in every inode in an XFS filesystem, right?
-> > 
-> > So far this was a really mail with good background information but I'm
-> > struggling to make sense of what that last sentence is trying to tell
-> > me. :)
-> 
-> That people in the past have built large scale data storage
-> applications that use XFS inodes as key based object stores, not as
-> a offset based data stream. Who needs atomic write() functionality
-> when you have ACID set and replace operations for named objects?
-> 
-> The reality is that modern filesystems are really just btree based
-> object stores with high performance transaction engines overlaid
-> with a POSIX wrapper. And in the case of xattrs, we effectively
-> expose that btree based key-value database functionality directly to
-> userspace....
-> 
-> Stop thinking like xattrs are some useless metadata side channel,
-
-I did say they are a "metadata side channel"; I very much never called
-them "useless".
-(I don't like it a lot that a subset of them - posix acls - store
-additional {g,u}id information on disk but that's a totally different
-topic.)
-
-> and start thinking of them as an atomic object store that stores and
-> retreives millions of small (< 1/2 the filesystem block size) named
-> objects far space effciently than a directory structure full of
-> small files indexed by object hash.
-
-What you outline is the perspective of a probably +20 years kernel and
-very low-level system software developer. I appreciate that perspective
-and I can very much appreciate that this is how we can conceptualize
-xattrs in the kernel.
-
-But on the other side of the equation is userspace and it can't be the
-expectation that this is how they conceptualize the *xattr() kernel
-interfaces based on the manpage or system call. This is so generic that
-it becomes meaningless.
-
-By this definition we can just start retrieving any type of information
-via this interface all across the kernel. And you'd probably argue that
-in principle we could. But then we can also just go back to calling it
-getvalues().
-
-I think that's another part of the disconnect between our viewpoints:
-you perceive the *xattr() interfaces as a super generic retrieval method
-for an abstract key=value storage. And so adding anything in there is
-fine as long as it has key=value semantics. I find that to be a shift in
-how the *xattr() interfaces are currently used and even how they are
-defined.
-
-I think we've pretty much tried to explain our viewpoints in detail and
-we don't seem to be getting to common ground for some of it and as I
-said somewhere else in the thread I have no intention of blocking this
-if people want this interface including making this a direct part of
-getxattr() and Linus accepts it.
+SGkgQWhtYWQsDQoNCkNvbW1lbnRzIGluLWxpbmUuDQoNClJlZ2FyZHMNClBhbmthag0KDQo+IC0t
+LS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IEFobWFkIEZhdG91bSA8YS5mYXRvdW1A
+cGVuZ3V0cm9uaXguZGU+DQo+IFNlbnQ6IE1vbmRheSwgTWF5IDksIDIwMjIgNjozNCBQTQ0KPiBU
+bzogUGFua2FqIEd1cHRhIDxwYW5rYWouZ3VwdGFAbnhwLmNvbT47IEhvcmlhIEdlYW50YQ0KPiA8
+aG9yaWEuZ2VhbnRhQG54cC5jb20+OyBIZXJiZXJ0IFh1IDxoZXJiZXJ0QGdvbmRvci5hcGFuYS5v
+cmcuYXU+OyBEYXZpZCBTLg0KPiBNaWxsZXIgPGRhdmVtQGRhdmVtbG9mdC5uZXQ+DQo+IENjOiBr
+ZXJuZWxAcGVuZ3V0cm9uaXguZGU7IE1pY2hhZWwgV2FsbGUgPG1pY2hhZWxAd2FsbGUuY2M+OyBK
+YW1lcw0KPiBCb3R0b21sZXkgPGplamJAbGludXguaWJtLmNvbT47IEphcmtrbyBTYWtraW5lbiA8
+amFya2tvQGtlcm5lbC5vcmc+OyBNaW1pDQo+IFpvaGFyIDx6b2hhckBsaW51eC5pYm0uY29tPjsg
+RGF2aWQgSG93ZWxscyA8ZGhvd2VsbHNAcmVkaGF0LmNvbT47IEphbWVzDQo+IE1vcnJpcyA8am1v
+cnJpc0BuYW1laS5vcmc+OyBFcmljIEJpZ2dlcnMgPGViaWdnZXJzQGtlcm5lbC5vcmc+OyBTZXJn
+ZSBFLg0KPiBIYWxseW4gPHNlcmdlQGhhbGx5bi5jb20+OyBKYW4gTHVlYmJlIDxqLmx1ZWJiZUBw
+ZW5ndXRyb25peC5kZT47IERhdmlkIEdzdGlyDQo+IDxkYXZpZEBzaWdtYS1zdGFyLmF0PjsgUmlj
+aGFyZCBXZWluYmVyZ2VyIDxyaWNoYXJkQG5vZC5hdD47IEZyYW5jaw0KPiBMZW5vcm1hbmQgPGZy
+YW5jay5sZW5vcm1hbmRAbnhwLmNvbT47IE1hdHRoaWFzIFNjaGlmZmVyDQo+IDxtYXR0aGlhcy5z
+Y2hpZmZlckBldy50cS1ncm91cC5jb20+OyBTdW1pdCBHYXJnIDxzdW1pdC5nYXJnQGxpbmFyby5v
+cmc+Ow0KPiBsaW51eC1pbnRlZ3JpdHlAdmdlci5rZXJuZWwub3JnOyBrZXlyaW5nc0B2Z2VyLmtl
+cm5lbC5vcmc7IGxpbnV4LQ0KPiBjcnlwdG9Admdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxA
+dmdlci5rZXJuZWwub3JnOyBsaW51eC1zZWN1cml0eS0NCj4gbW9kdWxlQHZnZXIua2VybmVsLm9y
+Zw0KPiBTdWJqZWN0OiBSZTogW0VYVF0gW1BBVENIIHY5IDMvN10gY3J5cHRvOiBjYWFtIC0gZGV0
+ZXJtaW5lIHdoZXRoZXIgQ0FBTQ0KPiBzdXBwb3J0cyBibG9iIGVuY2FwL2RlY2FwDQo+IA0KPiBD
+YXV0aW9uOiBFWFQgRW1haWwNCj4gDQo+IEhlbGxvIFBhbmthaiwNCj4gDQo+IE9uIE1vbiwgMjAy
+Mi0wNS0wOSBhdCAxMjozOSArMDAwMCwgUGFua2FqIEd1cHRhIHdyb3RlOg0KPiA+ID4gLSAgICAg
+ICBpZiAoY3RybHByaXYtPmVyYSA8IDEwKQ0KPiA+ID4gKyAgICAgICBjb21wX3BhcmFtcyA9IHJk
+X3JlZzMyKCZjdHJsLT5wZXJmbW9uLmNvbXBfcGFybXNfbHMpOw0KPiA+ID4gKyAgICAgICBjdHJs
+cHJpdi0+YmxvYl9wcmVzZW50ID0gISEoY29tcF9wYXJhbXMgJiBDVFBSX0xTX0JMT0IpOw0KPiA+
+ID4gKw0KPiA+ID4gKyAgICAgICBpZiAoY3RybHByaXYtPmVyYSA8IDEwKSB7DQo+ID4gPiAgICAg
+ICAgICAgICAgICAgcm5nX3ZpZCA9IChyZF9yZWczMigmY3RybC0+cGVyZm1vbi5jaGFfaWRfbHMp
+ICYNCj4gPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIENIQV9JRF9MU19STkdfTUFTSykg
+Pj4NCj4gPiA+IENIQV9JRF9MU19STkdfU0hJRlQ7DQo+ID4NCj4gPiBDaGVjayBmb3IgQUVTIENI
+QXMgZm9yIEVyYSA8IDEwLCBzaG91bGQgYmUgYWRkZWQuDQo+IA0KPiBEbyBJIG5lZWQgdGhpcz8g
+SSBvbmx5IGRvIHRoaXMgY2hlY2sgZm9yIEVyYSA+PSAxMCwgYmVjYXVzZSBhcHBhcmVudGx5IHRo
+ZXJlIGFyZQ0KPiBMYXllcnNjYXBlIG5vbi1FIHByb2Nlc3NvcnMgdGhhdCBpbmRpY2F0ZSBCTE9C
+IHN1cHBvcnQgdmlhIENUUFJfTFNfQkxPQiwgYnV0DQo+IGZhaWwgYXQgcnVudGltZS4gQXJlIHRo
+ZXJlIGFueSBFcmEgPCAxMCBTb0NzIHRoYXQgYXJlIHNpbWlsYXJseSBicm9rZW4/DQo+IA0KDQpG
+b3Igbm9uLUUgdmFyaWFudHMsIGl0IG1pZ2h0IGhhcHBlbiB0aGF0IEJsb2IgcHJvdG9jb2wgaXMg
+ZW5hYmxlZCwgYnV0IG51bWJlciBvZiBBRVMgQ0hBIGFyZSB6ZXJvLg0KSWYgdGhlIG91dHB1dCBv
+ZiBiZWxvdyBleHByZXNzaW9uIGlzID4gMCwgdGhlbiBvbmx5IGJsb2JfcHJlc2VudCBzaG91bGQg
+YmUgbWFya2VkIHByZXNlbnQgb3IgdHJ1ZS4NCkZvciBlcmEgPiAxMCwgeW91IGhhbmRsZWQuIEJ1
+dCBmb3IgZXJhIDwgMTAsIHBsZWFzZSBhZGQgdGhlIGJlbG93IGNvZGUuDQoJDQoocmRfcmVnMzIo
+JnByaXYtPmN0cmwtPnBlcmZtb24uY2hhX251bV9scykgJg0KICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgQ0hBX0lEX0xTX0FFU19NQVNLKSA+PiBDSEFfSURfTFNfQUVTX1NISUZUOw0KDQo+IENo
+ZWVycywNCj4gQWhtYWQNCg0K

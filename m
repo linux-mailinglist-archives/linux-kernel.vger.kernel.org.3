@@ -2,269 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F2E5240FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 01:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDEC5240FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 01:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349256AbiEKXY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 19:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
+        id S1349480AbiEKXYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 19:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349465AbiEKXYI (ORCPT
+        with ESMTP id S1349494AbiEKXYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 19:24:08 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4830D6213A
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:22:44 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id a21so4300210edb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:22:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=h+W2uqkvSL6U5jn2MaeFHt2XSCx3i+exVEBv5pf2t0s=;
-        b=p4EkiWxjIQeox8PBlqp+ZcAP4vTVS+9knd4t+eQLjFArs98erdGnkuCkI0BYQr18d4
-         jWmPkNcqgWzRI5FA3YTcNLY36l+6T7Wes6hXHud08yyT2gAUlAhEVd7DAo2tT/PyK7l4
-         aixSO7/N+eLnhVLPC20xZqDXAS3mHKX8lSDWnSM/59ETR7rTULy50JXLwCCOVnB0nniC
-         d6L5cxLOUklG1Nup9A5SQx+C3KrfWWDOIK6eOWOvWXGaM4Qp5mmvM47tA+5wz0tdw4fJ
-         i9y+3kj5Qd0AaHnvOGBtHzHo2bD569jg4Fh+BvbsTBsnIoxdLD89hv+JJlmFF+C7J7mA
-         Sk3A==
+        Wed, 11 May 2022 19:24:13 -0400
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35ACAD60
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:24:11 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id j2so6885933ybu.0
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 16:24:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=h+W2uqkvSL6U5jn2MaeFHt2XSCx3i+exVEBv5pf2t0s=;
-        b=i/LdEWhkRJ6nV3Pc0GV63MzgZhN27qIU3SWh9eKeyLkll09YcdDEegViv47EYX/F52
-         cF+1O3zH1pnKOD9wS7XzQLgx5pT2eMxf3mp70uuHj6nEW05k4y7bd73ntadVsfV4WhnX
-         dMfYol6pI1JRmCbM/xq0WAz+TAR6wf5I3PpzsguS+PWUl0O0JnvWNUnuErWPzrNkd5re
-         8r7wga3tZCIzXKlOLxWGKpBqSYt14s72l09N84lc9eaWPqqRqTZ1qQ3vxWW0GXd4Y0M6
-         DgscsfQMl1Uu6X0ssporNz/jqU0Z4vfc74AAoehgyjHsmayMfHfIO1mTqsX8BRaABmFL
-         Ryig==
-X-Gm-Message-State: AOAM530pxL7J5PbdXhGcXMNqMoGNJTKlnlyDT1Wa1OT+JW7ZTQvAAQye
-        +w9MxQ1oMduLqNiRA1HdMN/mMvxbPCryzUGrdjNhhA==
-X-Google-Smtp-Source: ABdhPJxv3RcmiWoN4KAIHvKOv1TuEje4H2x0E+LVOK4OxIM31BAHdXVfcuy8yWPZJVH25UGhnVtvIlUyox6Q0kDGBm4=
-X-Received: by 2002:a05:6402:1148:b0:416:a4fb:3c2e with SMTP id
- g8-20020a056402114800b00416a4fb3c2emr31968096edw.182.1652311362565; Wed, 11
- May 2022 16:22:42 -0700 (PDT)
+        bh=oy3Pm5sCLuohvb8vkD/fkUbAx0+U5niUi5E5iwOTC80=;
+        b=Fc0G6AHCdIjYaiOyRQwi3V3I8t8+47LOCFwdm8KVUd7v9EgOiOkv5nII2+8OBja5At
+         1mUeZmaB7Bw0eqPHM+3QB2o/8tp1mQfvNcA1IKEpOh5LhPiI1YAISke81HYFq3EwVsGv
+         tACgvSrytn+uIlS/usnLt1ARLyUHxJP/GEzL7Hp2954V9VEU1KbQSuPIRcXKkhY21bGB
+         nfWWnqlzVROARvlR8onos5v4ZJWDyKpNbwO3XODEuuzSHWEaKkU1DYsTgpTRfQRPeFW9
+         HWhoO7ZVf6EDLbeFSZKmnCLTS/zhTbyptHNPmkroLHzfqJzJNdJndoEYd7NejZ5og8M7
+         micw==
+X-Gm-Message-State: AOAM533eIdmQ6biwwyJmBBRnhNdT8Pxm6K+Yy/PQEdDNRtlVd3JAfhqD
+        UdhLxKx8/J1bIP5L+VmaGjjvC8DIAbrykQSYAzI=
+X-Google-Smtp-Source: ABdhPJyVDRbFRlLmXJHpnwBSAwDxCMiSkisNBqSmSTztcJmphl3CHpb5Ya+K6Txjjw+vGr104VZX3qvLzgIdCyttuZ4=
+X-Received: by 2002:a25:cb4b:0:b0:645:d702:eb15 with SMTP id
+ b72-20020a25cb4b000000b00645d702eb15mr24152368ybg.500.1652311449899; Wed, 11
+ May 2022 16:24:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220420203020.1412886-1-dlatypov@google.com>
-In-Reply-To: <20220420203020.1412886-1-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 11 May 2022 19:22:31 -0400
-Message-ID: <CAFd5g454KM9-45NEjUN3JWTZmpajHY9to=CW7Ecg6z_5xorU+w@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: stop using a shell to run kernel under QEMU
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+ <20220511160319.1045812-3-mailhol.vincent@wanadoo.fr> <CAKwvOdmDL3CiL11TCXQDJ2tKDbLC+72-TxXOvyO9kA6KKiruKQ@mail.gmail.com>
+In-Reply-To: <CAKwvOdmDL3CiL11TCXQDJ2tKDbLC+72-TxXOvyO9kA6KKiruKQ@mail.gmail.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Thu, 12 May 2022 08:23:58 +0900
+Message-ID: <CAMZ6RqJjYEpSL3bR59G4h74F_xGhns2cv_mHiG_yeLSgqrhjuQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to
+ evaluate constant expressions
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
+        Jan Beulich <JBeulich@suse.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 4:30 PM Daniel Latypov <dlatypov@google.com> wrote:
+On Thu. 12 May 2022 at 07:20, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> On Wed, May 11, 2022 at 9:04 AM Vincent Mailhol
+> <mailhol.vincent@wanadoo.fr> wrote:
+> >
+> > __ffs(x) is equivalent to (unsigned long)__builtin_ctzl(x) and ffz(x)
+> > is equivalent to (unsigned long)__builtin_ctzl(~x). Because
+> > __builting_ctzl() returns an int, a cast to (unsigned long) is
+> > necessary to avoid potential warnings on implicit casts.
+> >
+> > For x86_64, the current __ffs() and ffz() implementations do not
+> > produce optimized code when called with a constant expression. On the
+> > contrary, the __builtin_ctzl() gets simplified into a single
+> > instruction.
+> >
+> > However, for non constant expressions, the __ffs() and ffz() asm
+> > versions of the kernel remains slightly better than the code produced
+> > by GCC (it produces a useless instruction to clear eax).
+> >
+> > This patch uses the __builtin_constant_p() to select between the
+> > kernel's __ffs()/ffz() and the __builtin_ctzl() depending on whether
+> > the argument is constant or not.
+> >
+> > ** Statistics **
+> >
+> > On a allyesconfig, before applying this patch...:
+> >
+> > | $ objdump -d vmlinux.o | grep tzcnt | wc -l
+> > | 3607
+> >
+> > ...and after:
+> >
+> > | $ objdump -d vmlinux.o | grep tzcnt | wc -l
+> > | 2600
+> >
+> > So, roughly 27.9% of the call to either __ffs() or ffz() were using
+> > constant expression and were optimized out.
+> >
+> > (tests done on linux v5.18-rc5 x86_64 using GCC 11.2.1)
+> >
+> > Note: on x86_64, the asm bsf instruction produces tzcnt when used with
+> > the ret prefix (which is why we grep tzcnt instead of bsf in above
+> > benchmark). c.f. [1]
+> >
+> > [1] commit e26a44a2d618 ("x86: Use REP BSF unconditionally")
+> > http://lkml.kernel.org/r/5058741E020000780009C014@nat28.tlf.novell.com
+> >
+> > CC: Nick Desaulniers <ndesaulniers@google.com>
+> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 >
-> Note: this potentially breaks custom qemu_configs if people are using
-> them! But the fix for them is simple, don't specify multiple arguments
-> in one string and don't add on a redundant ''.
+> Patch LGTM, though I find the location of the double unscores in the
+> names slightly against my taste.
 >
-> It feels a bit iffy to be using a shell in the first place.
+> > ---
+> >  arch/x86/include/asm/bitops.h | 38 ++++++++++++++++++++++-------------
+> >  1 file changed, 24 insertions(+), 14 deletions(-)
+> >
+> > diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
+> > index 6ed979547086..7cf5374ce403 100644
+> > --- a/arch/x86/include/asm/bitops.h
+> > +++ b/arch/x86/include/asm/bitops.h
+> > @@ -224,13 +224,7 @@ static __always_inline bool variable_test_bit(long nr, volatile const unsigned l
+> >          ? constant_test_bit((nr), (addr))      \
+> >          : variable_test_bit((nr), (addr)))
+> >
+> > -/**
+> > - * __ffs - find first set bit in word
+> > - * @word: The word to search
+> > - *
+> > - * Undefined if no bit exists, so code should check against 0 first.
+> > - */
+> > -static __always_inline unsigned long __ffs(unsigned long word)
+> > +static __always_inline unsigned long __variable_ffs(unsigned long word)
 >
-> There's the usual shenanigans where people could pass in arbitrary shell
-> commands via --kernel_arg (since we're just adding '' around the
-> kernel_cmdline) or via a custom qemu_config.
-> This isn't too much of a concern given the nature of this script (and
-> the qemu_config file is in python, you can do w/e you want already).
->
-> But it does have some other drawbacks.
->
-> One example of a kunit-specific pain point:
-> If the relevant qemu binary is missing, we get output like this:
-> > /bin/sh: line 1: qemu-system-aarch64: command not found
-> This in turn results in our KTAP parser complaining about
-> missing/invalid KTAP, but we don't directly show the error!
-> It's even more annoying to debug when you consider --raw_output only
-> shows KUnit output by default, i.e. you need --raw_output=all to see it.
->
-> Whereas directly invoking the binary, Python will raise a
-> FileNotFoundError for us, which is a noisier but more clear.
->
-> Making this change requires
-> * splitting parameters like ['-m 256'] into ['-m', '256'] in
->   kunit/qemu_configs/*.py
-> * change [''] to [] in kunit/qemu_configs/*.py since otherwise
->   QEMU fails w/ 'Device needs media, but drive is empty'
-> * dropping explicit quoting of the kernel cmdline
-> * using shlex.quote() when we print what command we're running
->   so the user can copy-paste and run it
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> How about `variable___ffs`? Patch 1/2 used `variable_ffs` for `ffs`?
 
-One issue I noticed below, otherwise:
+On a first glance, having the triple underscores in the middle of the
+name seemed odd. On second thought, it is more consistent with the
+rest, and I finally like the idea. Will be adopted in v3.
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-
-> ---
->  tools/testing/kunit/kunit_kernel.py         | 18 ++++++++++--------
->  tools/testing/kunit/qemu_configs/alpha.py   |  2 +-
->  tools/testing/kunit/qemu_configs/arm.py     |  2 +-
->  tools/testing/kunit/qemu_configs/arm64.py   |  2 +-
->  tools/testing/kunit/qemu_configs/i386.py    |  2 +-
->  tools/testing/kunit/qemu_configs/powerpc.py |  2 +-
->  tools/testing/kunit/qemu_configs/riscv.py   |  6 +++---
->  tools/testing/kunit/qemu_configs/s390.py    |  4 ++--
->  tools/testing/kunit/qemu_configs/sparc.py   |  2 +-
->  tools/testing/kunit/qemu_configs/x86_64.py  |  2 +-
->  10 files changed, 22 insertions(+), 20 deletions(-)
+> >  {
+> >         asm("rep; bsf %1,%0"
+> >                 : "=r" (word)
+> > @@ -238,13 +232,18 @@ static __always_inline unsigned long __ffs(unsigned long word)
+> >         return word;
+> >  }
+> >
+> > -/**
+> > - * ffz - find first zero bit in word
+> > - * @word: The word to search
+> > - *
+> > - * Undefined if no zero exists, so code should check against ~0UL first.
+> > - */
+> > -static __always_inline unsigned long ffz(unsigned long word)
+> > +/**
+> > + * __ffs - find first set bit in word
+> > + * @word: The word to search
+> > + *
+> > + * Undefined if no bit exists, so code should check against 0 first.
+> > + */
+> > +#define __ffs(word)                            \
+> > +       (__builtin_constant_p(word) ?           \
+> > +        (unsigned long)__builtin_ctzl(word) :  \
+> > +        __variable_ffs(word))
+> > +
+> > +static __always_inline unsigned long __variable_ffz(unsigned long word)
 >
-> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-> index 483f78e15ce9..1b9c4922a675 100644
-> --- a/tools/testing/kunit/kunit_kernel.py
-> +++ b/tools/testing/kunit/kunit_kernel.py
-> @@ -11,6 +11,7 @@ import importlib.util
->  import logging
->  import subprocess
->  import os
-> +import shlex
->  import shutil
->  import signal
->  import threading
-> @@ -118,16 +119,17 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
->                                 '-nodefaults',
->                                 '-m', '1024',
->                                 '-kernel', kernel_path,
-> -                               '-append', '\'' + ' '.join(params + [self._kernel_command_line]) + '\'',
-> +                               '-append', ' '.join(params + [self._kernel_command_line]),
->                                 '-no-reboot',
->                                 '-nographic',
-> -                               '-serial stdio'] + self._extra_qemu_params
-> -               print('Running tests with:\n$', ' '.join(qemu_command))
-> -               return subprocess.Popen(' '.join(qemu_command),
-> -                                          stdin=subprocess.PIPE,
-> -                                          stdout=subprocess.PIPE,
-> -                                          stderr=subprocess.STDOUT,
-> -                                          text=True, shell=True, errors='backslashreplace')
-> +                               '-serial', 'stdio'] + self._extra_qemu_params
-> +               # Note: shlex.join() does what we want, but requires python 3.8+.
-> +               print('Running tests with:\n$', ' '.join(shlex.quote(arg) for arg in qemu_command))
-> +               return subprocess.Popen(qemu_command,
-> +                                       stdin=subprocess.PIPE,
-> +                                       stdout=subprocess.PIPE,
-> +                                       stderr=subprocess.STDOUT,
-> +                                       text=True, errors='backslashreplace')
+> `ffz` had no underscore. Regardless of `__ffs`, this should definitely
+> be `variable_ffz` IMO.
+
+ACK.
+
+> >  {
+> >         asm("rep; bsf %1,%0"
+> >                 : "=r" (word)
+> > @@ -252,6 +251,17 @@ static __always_inline unsigned long ffz(unsigned long word)
+> >         return word;
+> >  }
+> >
+> > +/**
+> > + * ffz - find first zero bit in word
+> > + * @word: The word to search
+> > + *
+> > + * Undefined if no zero exists, so code should check against ~0UL first.
+> > + */
+> > +#define ffz(word)                              \
+> > +       (__builtin_constant_p(word) ?           \
+> > +        (unsigned long)__builtin_ctzl(~word) : \
+> > +        __variable_ffz(word))
+> > +
+> >  /*
+> >   * __fls: find last set bit in word
+> >   * @word: The word to search
+> > --
+> > 2.35.1
+> >
 >
->  class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
->         """An abstraction over command line operations performed on a source tree."""
-> diff --git a/tools/testing/kunit/qemu_configs/alpha.py b/tools/testing/kunit/qemu_configs/alpha.py
-> index 5d0c0cff03bd..3ac846e03a6b 100644
-> --- a/tools/testing/kunit/qemu_configs/alpha.py
-> +++ b/tools/testing/kunit/qemu_configs/alpha.py
-> @@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
->                            qemu_arch='alpha',
->                            kernel_path='arch/alpha/boot/vmlinux',
->                            kernel_command_line='console=ttyS0',
-> -                          extra_qemu_params=[''])
-> +                          extra_qemu_params=[])
-> diff --git a/tools/testing/kunit/qemu_configs/arm.py b/tools/testing/kunit/qemu_configs/arm.py
-> index b9c2a35e0296..db2160200566 100644
-> --- a/tools/testing/kunit/qemu_configs/arm.py
-> +++ b/tools/testing/kunit/qemu_configs/arm.py
-> @@ -10,4 +10,4 @@ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y''',
->                            qemu_arch='arm',
->                            kernel_path='arch/arm/boot/zImage',
->                            kernel_command_line='console=ttyAMA0',
-> -                          extra_qemu_params=['-machine virt'])
-> +                          extra_qemu_params=['-machine', 'virt'])
-> diff --git a/tools/testing/kunit/qemu_configs/arm64.py b/tools/testing/kunit/qemu_configs/arm64.py
-> index 517c04459f47..67d04064f785 100644
-> --- a/tools/testing/kunit/qemu_configs/arm64.py
-> +++ b/tools/testing/kunit/qemu_configs/arm64.py
-> @@ -9,4 +9,4 @@ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y''',
->                            qemu_arch='aarch64',
->                            kernel_path='arch/arm64/boot/Image.gz',
->                            kernel_command_line='console=ttyAMA0',
-> -                          extra_qemu_params=['-machine virt', '-cpu cortex-a57'])
-> +                          extra_qemu_params=['-machine', 'virt', '-cpu', 'cortex-a57'])
-> diff --git a/tools/testing/kunit/qemu_configs/i386.py b/tools/testing/kunit/qemu_configs/i386.py
-> index aed3ffd3937d..52b80be40e4b 100644
-> --- a/tools/testing/kunit/qemu_configs/i386.py
-> +++ b/tools/testing/kunit/qemu_configs/i386.py
-> @@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
->                            qemu_arch='x86_64',
->                            kernel_path='arch/x86/boot/bzImage',
->                            kernel_command_line='console=ttyS0',
-> -                          extra_qemu_params=[''])
-> +                          extra_qemu_params=[])
-> diff --git a/tools/testing/kunit/qemu_configs/powerpc.py b/tools/testing/kunit/qemu_configs/powerpc.py
-> index 35e9de24f0db..6c901149726b 100644
-> --- a/tools/testing/kunit/qemu_configs/powerpc.py
-> +++ b/tools/testing/kunit/qemu_configs/powerpc.py
-> @@ -9,4 +9,4 @@ CONFIG_HVC_CONSOLE=y''',
->                            qemu_arch='ppc64',
->                            kernel_path='vmlinux',
->                            kernel_command_line='console=ttyS0',
-> -                          extra_qemu_params=['-M pseries', '-cpu power8'])
-> +                          extra_qemu_params=['-M', ' pseries', '-cpu', 'power8'])
-
-This should be '-M', 'pseries', not '-M', ' pseries', (you left an
-extra space in.
-
-Note this actually breaks QEMU on my machine.
-
-> diff --git a/tools/testing/kunit/qemu_configs/riscv.py b/tools/testing/kunit/qemu_configs/riscv.py
-> index 9e528087cd7c..b882fde39435 100644
-> --- a/tools/testing/kunit/qemu_configs/riscv.py
-> +++ b/tools/testing/kunit/qemu_configs/riscv.py
-> @@ -26,6 +26,6 @@ CONFIG_SERIAL_EARLYCON_RISCV_SBI=y''',
->                            kernel_path='arch/riscv/boot/Image',
->                            kernel_command_line='console=ttyS0',
->                            extra_qemu_params=[
-> -                                          '-machine virt',
-> -                                          '-cpu rv64',
-> -                                          '-bios opensbi-riscv64-generic-fw_dynamic.bin'])
-> +                                          '-machine', 'virt',
-> +                                          '-cpu', 'rv64',
-> +                                          '-bios', 'opensbi-riscv64-generic-fw_dynamic.bin'])
-> diff --git a/tools/testing/kunit/qemu_configs/s390.py b/tools/testing/kunit/qemu_configs/s390.py
-> index e310bd521113..98fa4fb60c0a 100644
-> --- a/tools/testing/kunit/qemu_configs/s390.py
-> +++ b/tools/testing/kunit/qemu_configs/s390.py
-> @@ -10,5 +10,5 @@ CONFIG_MODULES=y''',
->                            kernel_path='arch/s390/boot/bzImage',
->                            kernel_command_line='console=ttyS0',
->                            extra_qemu_params=[
-> -                                          '-machine s390-ccw-virtio',
-> -                                          '-cpu qemu',])
-> +                                          '-machine', 's390-ccw-virtio',
-> +                                          '-cpu', 'qemu',])
-> diff --git a/tools/testing/kunit/qemu_configs/sparc.py b/tools/testing/kunit/qemu_configs/sparc.py
-> index 27f474e7ad6e..e975c4331a7c 100644
-> --- a/tools/testing/kunit/qemu_configs/sparc.py
-> +++ b/tools/testing/kunit/qemu_configs/sparc.py
-> @@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
->                            qemu_arch='sparc',
->                            kernel_path='arch/sparc/boot/zImage',
->                            kernel_command_line='console=ttyS0 mem=256M',
-> -                          extra_qemu_params=['-m 256'])
-> +                          extra_qemu_params=['-m', '256'])
-> diff --git a/tools/testing/kunit/qemu_configs/x86_64.py b/tools/testing/kunit/qemu_configs/x86_64.py
-> index 77ab1aeee8a3..dc7949076863 100644
-> --- a/tools/testing/kunit/qemu_configs/x86_64.py
-> +++ b/tools/testing/kunit/qemu_configs/x86_64.py
-> @@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
->                            qemu_arch='x86_64',
->                            kernel_path='arch/x86/boot/bzImage',
->                            kernel_command_line='console=ttyS0',
-> -                          extra_qemu_params=[''])
-> +                          extra_qemu_params=[])
 >
-> base-commit: 59729170afcd4900e08997a482467ffda8d88c7f
 > --
-> 2.36.0.rc0.470.gd361397f0d-goog
->
+> Thanks,
+> ~Nick Desaulniers

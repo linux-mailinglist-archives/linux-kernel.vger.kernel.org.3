@@ -2,91 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B161523A37
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69661523A3A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344662AbiEKQXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 12:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60530 "EHLO
+        id S241257AbiEKQXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 12:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244060AbiEKQXj (ORCPT
+        with ESMTP id S1344687AbiEKQXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 12:23:39 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D88E60BA1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:23:38 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id m20so5078812ejj.10
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:23:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=POdbBUuLUOeD8dnJi9C2So78rhobliTsIgeT1Jg08bk=;
-        b=gbgLI2yp/3VCBc7DlaQPxNdeiz65WMkVuJXn1mPLH0mQQ1ZRV2z74XHm/flUlawuiI
-         Vf1/8rHCM/p0dFcR/CxKOJPqxWMPYXUtZYqUZvVeTRrYUur/kAi0pk3APCvJZuSE1dIh
-         mF5e4Xcl+DYTO6tg7veoz5qFwfthauZyE+Kn2wDQIcxkHbLInY8Qg2vj3/7AEfRF84Df
-         S6FZXxkasSWS0s47QTiqqjptEEojp7c9ACoJP1KD7xp0QfvNQJTgbpMtFEjyU2/oQykk
-         9h1BNdmfXmpA2f/Z8q6G2hgoloXuy5lrshBqAgxpQBu/NeRfVzyf6Zy3v6IkntTsFzcL
-         5DSw==
+        Wed, 11 May 2022 12:23:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B5CBE6EC65
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:23:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652286228;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xzVb9aUm7dZUVaR978hRNFMSk49T/5qOVU61ny8xUgA=;
+        b=OQ95w15itRNkBGw006qixieGo1L+0BPfET2tx0aS7Xd/4QsfAA/W5xguRQ8dc6PE1ho4B4
+        28RrKKwciBpQ0MzeWVweDmzDPDtUNoC7IJWUvDMQnlAJEqYwAPyosoR/FOlJ7gJqcqfLqf
+        iY0A72x6wvqWpxs4yOTE08JOmm6TDUk=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-575-nZYTBHBsOPWplC1kiGATow-1; Wed, 11 May 2022 12:23:47 -0400
+X-MC-Unique: nZYTBHBsOPWplC1kiGATow-1
+Received: by mail-wr1-f69.google.com with SMTP id p10-20020adfaa0a000000b0020c4829af5fso1026901wrd.16
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:23:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=POdbBUuLUOeD8dnJi9C2So78rhobliTsIgeT1Jg08bk=;
-        b=cA+SR1iWvzTNcOZ2TN0R3clnC2N2xUqtF3e759tbGW6TE4IH7TgQXCdB3tMZjYXHcY
-         koPj25Hm9V92im3NULzcWoBH1Eu7Ys9fQWRgfj1ZpBXEZIw6wnduRUXowfQy0RYpkjQT
-         aMOtl5XyxMMXs9GE6jfJBvfVBoLSqT7ab0oZf+8LMb1AVT1fQFe8WjzgW2HuvmW2v2bo
-         XpI6RItRIKRT5+oqWllkhPuXiSoP8GIjVFqj3vVdTylp5obPNe7ZqMxVqHHIYlOOIO0z
-         /vX05wrRTPByjVWjFvafWDWoSPMpPK7BH9gkgJba4c0+r2tX7GXJgz28CBmaHuBiQ5fZ
-         eISQ==
-X-Gm-Message-State: AOAM530NggV6U8AY/dYFhGD6hSTd0p0wYjL3/dFDxkit2MNmJgTw2H60
-        Xk8rONjiwhSwFf/mEBc9Q4e+0lYzLGcvSnkRrF+PRg==
-X-Google-Smtp-Source: ABdhPJxVpcJI5J1XjN8yl3eLnyQ1rHrvKD4tRUFk0C2I3SD6mc/x46SCPzGa2lPgn91Y3rMniYGyUgadmrlhuQUO0HQ=
-X-Received: by 2002:a17:907:9711:b0:6f4:6989:6afb with SMTP id
- jg17-20020a170907971100b006f469896afbmr26603981ejc.618.1652286216547; Wed, 11
- May 2022 09:23:36 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=xzVb9aUm7dZUVaR978hRNFMSk49T/5qOVU61ny8xUgA=;
+        b=HcxmsQqby+gI261qRXAmSwZEzSRaGUyJHCQvLRtY/6RhWVd+4Y7rv5pqRouo08rP6Q
+         Akfo0EG5m6AnX2sm6iyoRpOkhrP+/PC17BLBp0gA8I1zgeLDScJMCcTzd88+FlF+foRL
+         l1YglaSSn/7FD7vLZ/cqBl50mmY6xoTugQ7G0A0w0xBxnRlPAFKQDOkuhQFGm8sDQotm
+         0Ol4E+XixID+q3YeMt7uHRrXJQJsSSpZ5MxWJxNnc2OQeWgJSSYlSZDr+wxLXf8rRCva
+         +Lr/uNL/osaWV4zuPDfBBasRzMwWLtJyWZjk3I4znyENSuaXQpmlSnb6Rtlo/pmLgBEq
+         1xuw==
+X-Gm-Message-State: AOAM5334rutVH0HOBgMWuAZuZR9f9O+FYNEd5jh9uji7iFQAGLoYHPt9
+        EYEVM1ZtgQO3jsIvSY8SFx2OrJyp/sqWA9QjDb2je1NZx720T/e2aGDzPaX1U5zR12HQt5511lq
+        5nQVcABGP4J6uwAykz7cQdFa5
+X-Received: by 2002:a5d:5143:0:b0:20c:d517:d321 with SMTP id u3-20020a5d5143000000b0020cd517d321mr8643345wrt.468.1652286226351;
+        Wed, 11 May 2022 09:23:46 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwdiw9S/CTJAMmC+rAXMnyELFp8v1yYDXpfEZqwvfLhPJcSNLTGFikKsKJjOk6LDmY2et/HwA==
+X-Received: by 2002:a5d:5143:0:b0:20c:d517:d321 with SMTP id u3-20020a5d5143000000b0020cd517d321mr8643318wrt.468.1652286226063;
+        Wed, 11 May 2022 09:23:46 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c701:700:2393:b0f4:ef08:bd51? (p200300cbc70107002393b0f4ef08bd51.dip0.t-ipconnect.de. [2003:cb:c701:700:2393:b0f4:ef08:bd51])
+        by smtp.gmail.com with ESMTPSA id o15-20020a5d684f000000b0020c5253d8fesm2109855wrw.74.2022.05.11.09.23.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 09:23:45 -0700 (PDT)
+Message-ID: <a53fb3e9-23fb-9b58-b1c5-ad6e39884330@redhat.com>
+Date:   Wed, 11 May 2022 18:23:44 +0200
 MIME-Version: 1.0
-References: <YnoJ0k6eIUiwjXSZ@debian-BULLSEYE-live-builder-AMD64>
- <CAHp75Vd574LCnEq-KX=WHnnDyrjZgGu6W9wNEbnw79FBpyx=Lw@mail.gmail.com> <8bd83f45-5278-e817-3f65-88fafd0ad3f4@collabora.com>
-In-Reply-To: <8bd83f45-5278-e817-3f65-88fafd0ad3f4@collabora.com>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Wed, 11 May 2022 09:23:24 -0700
-Message-ID: <CABXOdTe1N7iRTVrCZSgQo=dazofWByM_W6EZgWixLj=Z8Xg0ag@mail.gmail.com>
-Subject: Re: [PATCH RESEND v11] platform/chrome: Add ChromeOS ACPI device driver
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <eballetbo@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Collabora Kernel ML <kernel@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Dmitry Torokhov <dtor@chromium.org>,
-        Gwendal Grignou <gwendal@chromium.org>, vbendeb@chromium.org,
-        Andy Shevchenko <andy@infradead.org>,
-        Ayman Bagabas <ayman.bagabas@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        =?UTF-8?Q?Bla=C5=BE_Hrastnik?= <blaz@mxxn.io>,
-        Darren Hart <dvhart@infradead.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jeremy Soller <jeremy@system76.com>,
-        Mattias Jacobsson <2pi@mok.nu>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Rajat Jain <rajatja@google.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        chrome-platform@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 1/1] Revert "mm/cma.c: remove redundant cma_mutex lock"
+Content-Language: en-US
+To:     Dong Aisheng <aisheng.dong@nxp.com>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        dongas86@gmail.com, linux-imx@nxp.com, akpm@linux-foundation.org,
+        m.szyprowski@samsung.com, lecopzer.chen@mediatek.com,
+        vbabka@suse.cz, stable@vger.kernel.org, minchan@kernel.org
+References: <20220509094551.3596244-1-aisheng.dong@nxp.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220509094551.3596244-1-aisheng.dong@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,139 +84,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 8:59 AM Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
->
-> Hi Andy,
->
-> Thank you for reviewing.
->
-> On 5/10/22 2:33 PM, Andy Shevchenko wrote:
-> > On Tue, May 10, 2022 at 8:44 AM Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:
-> >>
-> >> From: Enric Balletbo i Serra <enric.balletbo@collabora.com>
-> >>
-> >> The x86 Chromebooks have the ChromeOS ACPI device. This driver attaches
-> >> to the ChromeOS ACPI device and exports the values reported by ACPI in a
-> >> sysfs directory. This data isn't present in ACPI tables when read
-> >> through ACPI tools, hence a driver is needed to do it. The driver gets
-> >> data from firmware using the ACPI component of the kernel. The ACPI values
-> >> are presented in string form (numbers as decimal values) or binary
-> >> blobs, and can be accessed as the contents of the appropriate read only
-> >> files in the standard ACPI device's sysfs directory tree. This data is
-> >> consumed by the ChromeOS user space.
-> >
-> >> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> >> Cc: Hans de Goede <hdegoede@redhat.com>
-> >
-> > You can use --cc parameter to `git send-email` instead of putting
-> > these lines in the commit message.
-> >
-> > ...
-> >
-> >> +#define DEV_ATTR(_var, _name)                                  \
-> >> +       static struct device_attribute dev_attr_##_var =        \
-> >> +               __ATTR(_name, 0444, chromeos_first_level_attr_show, NULL);
-> >> +
-> >
-> > Why not ATTR_RO()?
-> It'll not work as attribute name has . in it.
->
-> >
-> > ...
-> >
-> >> +#define GPIO_ATTR_GROUP(_group, _name, _num)                                           \
-> >> +       static umode_t attr_is_visible_gpio_##_num(struct kobject *kobj,                \
-> >> +                                                  struct attribute *attr, int n)       \
-> >> +       {                                                                               \
-> >> +               if (_num < chromeos_acpi_gpio_groups)                                   \
-> >> +                       return attr->mode;                                              \
-> >
-> >> +               else                                                                    \
-> >
-> > Redundant.
-> We are deciding on run time that how many GPIO attribute groups need to
-> be shown. chromeos_acpi_gpio_groups is set at run time. I don't see why
-> `else` can be redundant here.
->
+On 09.05.22 11:45, Dong Aisheng wrote:
+> This reverts commit a4efc174b382fcdb62e2d90d39e78a274a975e38 which
+> introduced a regression issue that when there're multiple processes
+> allocating dma memory in parallel by calling dma_alloc_coherent(), it
+> may fail sometimes as follows:
+> 
+> Error log:
+> cma: cma_alloc: linux,cma: alloc failed, req-size: 148 pages, ret: -16
+> cma: number of available pages:
+> 3@125+20@172+12@236+4@380+32@736+17@2287+23@2473+20@36076+99@40477+108@40852+44@41108+20@41196+108@41364+108@41620+
+> 108@42900+108@43156+483@44061+1763@45341+1440@47712+20@49324+20@49388+5076@49452+2304@55040+35@58141+20@58220+20@58284+
+> 7188@58348+84@66220+7276@66452+227@74525+6371@75549=> 33161 free of 81920 total pages
+> 
+> When issue happened, we saw there were still 33161 pages (129M) free CMA
+> memory and a lot available free slots for 148 pages in CMA bitmap that we
+> want to allocate.
+> 
+> When dumping memory info, we found that there was also ~342M normal memory,
+> but only 1352K CMA memory left in buddy system while a lot of pageblocks
+> were isolated.
+> 
+> Memory info log:
+> Normal free:351096kB min:30000kB low:37500kB high:45000kB reserved_highatomic:0KB
+> 	    active_anon:98060kB inactive_anon:98948kB active_file:60864kB inactive_file:31776kB
+> 	    unevictable:0kB writepending:0kB present:1048576kB managed:1018328kB mlocked:0kB
+> 	    bounce:0kB free_pcp:220kB local_pcp:192kB free_cma:1352kB lowmem_reserve[]: 0 0 0
+> Normal: 78*4kB (UECI) 1772*8kB (UMECI) 1335*16kB (UMECI) 360*32kB (UMECI) 65*64kB (UMCI)
+> 	36*128kB (UMECI) 16*256kB (UMCI) 6*512kB (EI) 8*1024kB (UEI) 4*2048kB (MI) 8*4096kB (EI)
+> 	8*8192kB (UI) 3*16384kB (EI) 8*32768kB (M) = 489288kB
+> 
+> The root cause of this issue is that since commit a4efc174b382
+> ("mm/cma.c: remove redundant cma_mutex lock"), CMA supports concurrent
+> memory allocation. It's possible that the memory range process A trying
+> to alloc has already been isolated by the allocation of process B during
+> memory migration.
+> 
+> The problem here is that the memory range isolated during one allocation
+> by start_isolate_page_range() could be much bigger than the real size we
+> want to alloc due to the range is aligned to MAX_ORDER_NR_PAGES.
+> 
+> Taking an ARMv7 platform with 1G memory as an example, when MAX_ORDER_NR_PAGES
+> is big (e.g. 32M with max_order 14) and CMA memory is relatively small
+> (e.g. 128M), there're only 4 MAX_ORDER slot, then it's very easy that
+> all CMA memory may have already been isolated by other processes when
+> one trying to allocate memory using dma_alloc_coherent().
+> Since current CMA code will only scan one time of whole available CMA
+> memory, then dma_alloc_coherent() may easy fail due to contention with
+> other processes.
+> 
+> This patch simply falls back to the original method that using cma_mutex
+> to make alloc_contig_range() run sequentially to avoid the issue.
+> 
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+> Cc: Lecopzer Chen <lecopzer.chen@mediatek.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> Cc: Minchan Kim <minchan@kernel.org>
+> CC: stable@vger.kernel.org # 5.11+
+> Fixes: a4efc174b382 ("mm/cma.c: remove redundant cma_mutex lock")
+> Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
+> ---
+> Patch is based on
+> git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-stable
+> ---
+>  mm/cma.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/cma.c b/mm/cma.c
+> index eaa4b5c920a2..4a978e09547a 100644
+> --- a/mm/cma.c
+> +++ b/mm/cma.c
+> @@ -37,6 +37,7 @@
+>  
+>  struct cma cma_areas[MAX_CMA_AREAS];
+>  unsigned cma_area_count;
+> +static DEFINE_MUTEX(cma_mutex);
+>  
+>  phys_addr_t cma_get_base(const struct cma *cma)
+>  {
+> @@ -468,9 +469,10 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
+>  		spin_unlock_irq(&cma->lock);
+>  
+>  		pfn = cma->base_pfn + (bitmap_no << cma->order_per_bit);
+> +		mutex_lock(&cma_mutex);
+>  		ret = alloc_contig_range(pfn, pfn + count, MIGRATE_CMA,
+>  				     GFP_KERNEL | (no_warn ? __GFP_NOWARN : 0));
+> -
+> +		mutex_unlock(&cma_mutex);
+>  		if (ret == 0) {
+>  			page = pfn_to_page(pfn);
+>  			break;
 
-else after return is _always_ unnecessary (and results in static
-analyzer messages).
 
-> >
-> >> +                       return 0;                                                       \
-> >> +       }                                                                               \
-> >> +       static ssize_t chromeos_attr_show_gpio_##_num(struct device *dev,               \
-> >> +                                                     struct device_attribute *attr,    \
-> >> +                                                     char *buf)                        \
-> >> +       {                                                                               \
-> >> +               char name[ACPI_ATTR_NAME_LEN + 1];                                      \
-> >> +               int ret, num;                                                           \
-> >> +                                                                                       \
-> >> +               ret = parse_attr_name(attr->attr.name, name, &num);                     \
-> >> +               if (ret)                                                                \
-> >> +                       return ret;                                                     \
-> >
-> >> +               ret = chromeos_acpi_evaluate_method(dev, _num, num, name, buf);         \
-> >> +               if (ret < 0)                                                            \
-> >> +                       ret = 0;                                                        \
-> >
-> > Below I saw the same code, why is the error ignored?
-> >
-> I'll return the error in both places.
->
-> >> +               return ret;                                                             \
-> >> +       }                                                                               \
-> >> +       static struct device_attribute dev_attr_0_##_group =                            \
-> >> +               __ATTR(GPIO.0, 0444, chromeos_attr_show_gpio_##_num, NULL);             \
-> >> +       static struct device_attribute dev_attr_1_##_group =                            \
-> >> +               __ATTR(GPIO.1, 0444, chromeos_attr_show_gpio_##_num, NULL);             \
-> >> +       static struct device_attribute dev_attr_2_##_group =                            \
-> >> +               __ATTR(GPIO.2, 0444, chromeos_attr_show_gpio_##_num, NULL);             \
-> >> +       static struct device_attribute dev_attr_3_##_group =                            \
-> >> +               __ATTR(GPIO.3, 0444, chromeos_attr_show_gpio_##_num, NULL);             \
-> >> +                                                                                       \
-> >> +       static struct attribute *attrs_##_group[] = {                                   \
-> >> +               &dev_attr_0_##_group.attr,                                              \
-> >> +               &dev_attr_1_##_group.attr,                                              \
-> >> +               &dev_attr_2_##_group.attr,                                              \
-> >> +               &dev_attr_3_##_group.attr,                                              \
-> >> +               NULL                                                                    \
-> >> +       };                                                                              \
-> >> +       static const struct attribute_group attr_group_##_group = {                     \
-> >> +               .name = _name,                                                          \
-> >> +               .is_visible = attr_is_visible_gpio_##_num,                              \
-> >
-> >> +               .attrs = attrs_##_group                                                 \
-> >
-> > Keep a comma here.
-> Is there any particular reason for it? If there is, I'll add commas to
-> all the structures.
-> ...
-> >
-> > ...
-> >
-> >> +static int parse_attr_name(const char *name, char *attr_name, int *attr_num)
-> >> +{
-> >> +       int ret = 0;
-> >> +
-> >> +       strscpy(attr_name, name, ACPI_ATTR_NAME_LEN + 1);
-> >> +
-> >> +       if (strlen(name) > ACPI_ATTR_NAME_LEN)
-> >
-> > This seems strange, esp. taking into account that strscpy() returns that.
-> >
-> > int ret;
-> >
-> > ret = strscpy(...);
-> > if (ret == -E2BIG)
-> >   return kstrtoint(...);
-> >
-> > return 0;
-> This is very nice way to do it. I'll update.
-> ...
->
-> --
-> Muhammad Usama Anjum
+Acked-by: David Hildenbrand <david@redhat.com>
+
+-- 
+Thanks,
+
+David / dhildenb
+

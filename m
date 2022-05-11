@@ -2,551 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC0F75235B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 295425235B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 16:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244836AbiEKOiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 10:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
+        id S244861AbiEKOiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 10:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235769AbiEKOh7 (ORCPT
+        with ESMTP id S244794AbiEKOiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 10:37:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4624EA18;
-        Wed, 11 May 2022 07:37:57 -0700 (PDT)
+        Wed, 11 May 2022 10:38:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11EA351581;
+        Wed, 11 May 2022 07:38:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 697C26121D;
-        Wed, 11 May 2022 14:37:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74B20C34116;
+        by ams.source.kernel.org (Postfix) with ESMTPS id C7418B8242D;
+        Wed, 11 May 2022 14:37:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4790FC34114;
         Wed, 11 May 2022 14:37:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652279876;
-        bh=wRJpDokbT09JoxdEz3qkThYC2F/0ZTNg1AOWctYJMSs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=q4V4bgTZiX/taCIvVcOREIB5ZXlmOfkWli9h6tmhqT2Hz64PJLa8Eyp4fJqvbW9sm
-         8ZbSkCHcy/bbG0NesPyx4nKlwf3RsAb+B83AWQn5sgqKcHzXz8qltAc0eZ35zdBSZY
-         ovzbo5kqiZ9sixMcOsv5HRxbizW4gKvZar2ziWR7uRCren3Ab1xbAelUc079P934zl
-         Dhr2sOv8jIi1uSObVRzLc4KyQK0+gz9oXTmxsEmzdXietnl+gmjKoFJ+4ByCxg8FxF
-         xOS50NDRvnJ9oxQVFmtEeVb01zsPUdDhLp+wlYgCIkcGEU83zdJpZ0dRgjrSQdZxy5
-         3NpzQv+sLGwzA==
-Received: by pali.im (Postfix)
-        id A707C21A6; Wed, 11 May 2022 16:37:53 +0200 (CEST)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, Marek Behun <marek.behun@nic.cz>,
-        Josef Schlehofer <josef.schlehofer@nic.cz>
-Subject: [PATCH] powerpc: dts: Add DTS file for CZ.NIC Turris 1.x routers
-Date:   Wed, 11 May 2022 16:37:12 +0200
-Message-Id: <20220511143712.22550-1-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        s=k20201202; t=1652279878;
+        bh=+EwM9/Fo/mYHUrlVBMU+VRCENMG+agU2bXee/mgnCV8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oivTdHg0ETsFfYJ3nLcAkKMxQ0DDelY3MOQqxmOwu5Xuv22ns3iZdX45d3cAK7+gA
+         Drnv1xYGqunk1VYAvfQrEnWxX7yE2xkTN9e1KfddBiCN3mAwL3f6DfrJaK6WQu1ULj
+         R+yHyy8Jwl4ab3b5AxKaHsVWivIS8vlYpjD1fX6ud5I8IPbdqvKya+zboCzBQO9+CC
+         FkWxj+PybERog6k6gyAWL+OGBO5AQ59i5DWruA/S8fs1QdRO0+mqbP5ngzmYGyk/nM
+         Jowgp9Xe/3mCaMVPGsw7O1QHK+cJV9R0BBGohbDBjcvMUwyp/hYsgYwMruZRMuv0pC
+         bePN1FXBaE7DA==
+Date:   Wed, 11 May 2022 17:37:50 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Conor.Dooley@microchip.com, sfr@canb.auug.org.au,
+        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: linux-next: Tree for May 3
+Message-ID: <YnvKPu5uQ8rqEcvV@kernel.org>
+References: <20220509141122.GA14555@lst.de>
+ <dd946220-eaf6-773a-06b4-307cda466c9c@microchip.com>
+ <505d41d1-1bc8-c8bc-5ebb-8a2b7934f3de@microchip.com>
+ <20220511062232.GA32524@lst.de>
+ <102578f2-5c10-e9c2-c1ef-e76ba90d011e@microchip.com>
+ <20220511064832.GA761@lst.de>
+ <2c0e2fbe-4e45-4acc-c2a7-4f4dcf9161a3@microchip.com>
+ <20220511123724.GA25121@lst.de>
+ <YnvDdPz4S5IJ7l/5@kernel.org>
+ <20220511141034.GA31732@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511141034.GA31732@lst.de>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CZ.NIC Turris 1.0 and 1.1 are open source routers, they have dual-core
-PowerPC Freescale P2020 CPU and are based on Freescale P2020RDB-PC-A board.
-Hardware design is fully open source, all firmware and hardware design
-files are available at Turris project website:
+On Wed, May 11, 2022 at 04:10:34PM +0200, Christoph Hellwig wrote:
+> On Wed, May 11, 2022 at 05:08:52PM +0300, Mike Rapoport wrote:
+> > I guess the default to use memblock_alloc_low() backfires on system with
+> > physical memory living at 0x1000200000:
+> > 
+> > [    0.000000] Early memory node ranges
+> > [    0.000000]   node   0: [mem 0x0000001000200000-0x000000103fffffff]
+> > 
+> > The default limit for "low" memory is 0xffffffff and there is simply no
+> > memory there.
+> 
+> Is there any way to ask memblock for a specific address limit?
+> swiotlb just wants <= 32-bit by default.  With the little caveat
+> that it should be 32-bit addressable for all devices, and we don't
+> know the physical to dma address mapping at time of allocation.
 
-https://docs.turris.cz/hw/turris-1x/turris-1x/
-https://project.turris.cz/en/hardware.html
+There is 
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
----
- arch/powerpc/boot/dts/turris1x.dts | 470 +++++++++++++++++++++++++++++
- 1 file changed, 470 insertions(+)
- create mode 100644 arch/powerpc/boot/dts/turris1x.dts
+void *memblock_alloc_try_nid(phys_addr_t size, phys_addr_t align,
+			     phys_addr_t min_addr, phys_addr_t max_addr,
+			     int nid);
 
-diff --git a/arch/powerpc/boot/dts/turris1x.dts b/arch/powerpc/boot/dts/turris1x.dts
-new file mode 100644
-index 000000000000..2a624f117586
---- /dev/null
-+++ b/arch/powerpc/boot/dts/turris1x.dts
-@@ -0,0 +1,470 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Turris 1.x Device Tree Source
-+ *
-+ * Copyright 2013 - 2022 CZ.NIC z.s.p.o. (http://www.nic.cz/)
-+ *
-+ * Pinout, Schematics and Altium hardware design files are open source
-+ * and available at: https://docs.turris.cz/hw/turris-1x/turris-1x/
-+ */
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/leds/common.h>
-+/include/ "fsl/p2020si-pre.dtsi"
-+
-+/ {
-+	model = "Turris 1.x";
-+	compatible = "cznic,turris1x", "fsl,P2020RDB-PC"; /* fsl,P2020RDB-PC is required for booting Linux */
-+
-+	aliases {
-+		ethernet0 = &enet0;
-+		ethernet1 = &enet1;
-+		ethernet2 = &enet2;
-+		serial0 = &serial0;
-+		serial1 = &serial1;
-+		pci0 = &pci0;
-+		pci1 = &pci1;
-+		pci2 = &pci2;
-+		spi0 = &spi0;
-+	};
-+
-+	memory {
-+		device_type = "memory";
-+	};
-+
-+	soc: soc@ffe00000 {
-+		ranges = <0x0 0x0 0xffe00000 0x00100000>;
-+
-+		i2c@3000 {
-+			/* PCA9557PW GPIO controller for boot config */
-+			gpio-controller@18 {
-+				compatible = "nxp,pca9557";
-+				label = "bootcfg";
-+				reg = <0x18>;
-+				#gpio-cells = <2>;
-+				gpio-controller;
-+				polarity = <0x00>;
-+			};
-+
-+			/* STM32F030R8T6 MCU for power control */
-+			power-control@32 {
-+				/*
-+				 * Turris Power Control firmware runs on STM32F0 MCU.
-+				 * This firmware is open source and available at:
-+				 * https://gitlab.nic.cz/turris/hw/turris_power_control
-+				 */
-+				reg = <0x32>;
-+			};
-+
-+			/* SA56004ED temperature control */
-+			temperature-sensor@4c {
-+				compatible = "nxp,sa56004";
-+				reg = <0x4c>;
-+				interrupt-parent = <&gpio>;
-+				interrupts = <12 IRQ_TYPE_LEVEL_LOW>, /* GPIO12 - ALERT pin */
-+					     <13 IRQ_TYPE_LEVEL_LOW>; /* GPIO13 - CRIT pin */
-+			};
-+
-+			/* DDR3 SPD/EEPROM */
-+			eeprom@52 {
-+				compatible = "atmel,spd";
-+				reg = <0x52>;
-+			};
-+
-+			/* ATSHA204-TH-DA-T crypto module */
-+			crypto@64 {
-+				compatible = "atmel,atsha204";
-+				reg = <0x64>;
-+			};
-+
-+			/* IDT6V49205BNLGI clock generator */
-+			clock-generator@69 {
-+				compatible = "idt,6v49205b";
-+				reg = <0x69>;
-+			};
-+
-+			/* MCP79402-I/ST Protected EEPROM */
-+			eeprom@57 {
-+				reg = <0x57>;
-+			};
-+
-+			/* MCP79402-I/ST RTC */
-+			rtc@6f {
-+				compatible = "microchip,mcp7940x";
-+				reg = <0x6f>;
-+				interrupt-parent = <&gpio>;
-+				interrupts = <14 0>; /* GPIO14 - MFP pin */
-+			};
-+		};
-+
-+		/* SPI on connector P1 */
-+		spi0: spi@7000 {
-+		};
-+
-+		gpio: gpio-controller@fc00 {
-+			#interrupt-cells = <2>;
-+			interrupt-controller;
-+		};
-+
-+		/* Connected to SMSC USB2412-DZK 2-Port USB 2.0 Hub Controller */
-+		usb@22000 {
-+			phy_type = "ulpi";
-+			dr_mode = "host";
-+		};
-+
-+		enet0: ethernet@24000 {
-+			/* Connected to port 6 of QCA8337N-AL3C switch */
-+			phy-connection-type = "rgmii-id";
-+
-+			fixed-link {
-+				speed = <1000>;
-+				full-duplex;
-+			};
-+		};
-+
-+		mdio@24520 {
-+			/* QCA8337N-AL3C switch with integrated ethernet PHYs for LAN ports */
-+			switch@10 {
-+				compatible = "qca,qca8337";
-+				interrupts = <2 1 0 0>;
-+				reg = <0x10>;
-+
-+				ports {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					port@0 {
-+						reg = <0>;
-+						label = "cpu1";
-+						ethernet = <&enet1>;
-+						phy-mode = "rgmii-id";
-+
-+						fixed-link {
-+							speed = <1000>;
-+							full-duplex;
-+						};
-+					};
-+
-+					port@1 {
-+						reg = <1>;
-+						label = "lan5";
-+					};
-+
-+					port@2 {
-+						reg = <2>;
-+						label = "lan4";
-+					};
-+
-+					port@3 {
-+						reg = <3>;
-+						label = "lan3";
-+					};
-+
-+					port@4 {
-+						reg = <4>;
-+						label = "lan2";
-+					};
-+
-+					port@5 {
-+						reg = <5>;
-+						label = "lan1";
-+					};
-+
-+					port@6 {
-+						reg = <6>;
-+						label = "cpu0";
-+						ethernet = <&enet0>;
-+						phy-mode = "rgmii-id";
-+
-+						fixed-link {
-+							speed = <1000>;
-+							full-duplex;
-+						};
-+					};
-+				};
-+			};
-+
-+			/* KSZ9031RNXCA ethernet phy for WAN port */
-+			phy: ethernet-phy@7 {
-+				interrupts = <3 1 0 0>;
-+				reg = <0x7>;
-+			};
-+		};
-+
-+		ptp_clock@24e00 {
-+			fsl,tclk-period = <5>;
-+			fsl,tmr-prsc = <200>;
-+			fsl,tmr-add = <0xcccccccd>;
-+			fsl,tmr-fiper1 = <0x3b9ac9fb>;
-+			fsl,tmr-fiper2 = <0x0001869b>;
-+			fsl,max-adj = <249999999>;
-+		};
-+
-+		enet1: ethernet@25000 {
-+			/* Connected to port 0 of QCA8337N-AL3C switch */
-+			phy-connection-type = "rgmii-id";
-+
-+			fixed-link {
-+				speed = <1000>;
-+				full-duplex;
-+			};
-+		};
-+
-+		mdio@25520 {
-+			status = "disabled";
-+		};
-+
-+		enet2: ethernet@26000 {
-+			/* Connected to KSZ9031RNXCA ethernet phy (WAN port) */
-+			label = "wan";
-+			phy-handle = <&phy>;
-+			phy-connection-type = "rgmii-id";
-+		};
-+
-+		mdio@26520 {
-+			status = "disabled";
-+		};
-+
-+		sdhc@2e000 {
-+			bus-width = <4>;
-+			cd-gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+
-+	lbc: localbus@ffe05000 {
-+		reg = <0 0xffe05000 0 0x1000>;
-+
-+		ranges = <0x0 0x0 0x0 0xef000000 0x01000000>, /* NOR */
-+			 <0x1 0x0 0x0 0xff800000 0x00040000>, /* NAND */
-+			 <0x3 0x0 0x0 0xffa00000 0x00020000>; /* CPLD */
-+
-+		/* S29GL128P90TFIR10 NOR */
-+		nor@0,0 {
-+			compatible = "cfi-flash";
-+			reg = <0x0 0x0 0x01000000>;
-+			bank-width = <2>;
-+			device-width = <1>;
-+
-+			partitions {
-+				compatible = "fixed-partitions";
-+				#address-cells = <1>;
-+				#size-cells = <1>;
-+
-+				partition@0 {
-+					/* 128 kB for Device Tree Blob */
-+					reg = <0x00000000 0x00020000>;
-+					label = "dtb";
-+				};
-+
-+				partition@20000 {
-+					/* 1.7 MB for Rescue Linux Kernel Image */
-+					reg = <0x00020000 0x001a0000>;
-+					label = "rescue-kernel";
-+				};
-+
-+				partition@1c0000 {
-+					/* 1.5 MB for Rescue JFFS2 Root File System */
-+					reg = <0x001c0000 0x00180000>;
-+					label = "rescue-rootfs";
-+				};
-+
-+				partition@340000 {
-+					/* 11 MB for TAR.XZ Backup with content of NAND Root File System */
-+					reg = <0x00340000 0x00b00000>;
-+					label = "backup-rootfs";
-+				};
-+
-+				partition@e40000 {
-+					/* 768 kB for Certificates JFFS2 File System */
-+					reg = <0x00e40000 0x000c0000>;
-+					label = "certificates";
-+				};
-+
-+				/* free unused space 0x00f00000-0x00f20000 */
-+
-+				partition@f20000 {
-+					/* 128 kB for U-Boot Environment Variables */
-+					reg = <0x00f20000 0x00020000>;
-+					label = "u-boot-env";
-+				};
-+
-+				partition@f40000 {
-+					/* 768 kB for U-Boot Bootloader Image */
-+					reg = <0x00f40000 0x000c0000>;
-+					label = "u-boot";
-+				};
-+			};
-+		};
-+
-+		/* MT29F2G08ABAEAWP:E NAND */
-+		nand@1,0 {
-+			compatible = "fsl,p2020-fcm-nand", "fsl,elbc-fcm-nand";
-+			reg = <0x1 0x0 0x00040000>;
-+			nand-ecc-mode = "soft";
-+			nand-ecc-algo = "bch";
-+
-+			partitions {
-+				compatible = "fixed-partitions";
-+				#address-cells = <1>;
-+				#size-cells = <1>;
-+
-+				partition@0 {
-+					/* 256 MB for UBI with one volume: UBIFS Root File System */
-+					reg = <0x00000000 0x10000000>;
-+					label = "rootfs";
-+				};
-+			};
-+		};
-+
-+		/* LCMXO1200C-3FTN256C FPGA */
-+		cpld@3,0 {
-+			/*
-+			 * Turris CPLD firmware which runs on this Lattice FPGA,
-+			 * is extended version of P1021RDB-PC CPLD v4.1 firmware.
-+			 * It is backward compatible with its original version
-+			 * and the only extension is support for Turris LEDs.
-+			 * Turris CPLD firmware is open source and available at:
-+			 * https://gitlab.nic.cz/turris/hw/turris_cpld/-/blob/master/CZ_NIC_Router_CPLD.v
-+			 */
-+			compatible = "cznic,turris1x-cpld", "fsl,p1021rdb-pc-cpld", "simple-bus";
-+			reg = <0x3 0x0 0x30>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0x3 0x0 0x00020000>;
-+
-+			/* MAX6370KA+T watchdog */
-+			watchdog@2 {
-+				/*
-+				 * CPLD firmware maps SET0, SET1 and SET2
-+				 * input logic of MAX6370KA+T chip to CPLD
-+				 * memory space at byte offset 0x2. WDI
-+				 * input logic is outside of the CPLD and
-+				 * connected via external GPIO.
-+				 */
-+				compatible = "maxim,max6370";
-+				reg = <0x02 0x01>;
-+				gpios = <&gpio 11 GPIO_ACTIVE_LOW>;
-+			};
-+
-+			led-controller@13 {
-+				/*
-+				 * LEDs are controlled by CPLD firmware.
-+				 * All five LAN LEDs share common RGB settings
-+				 * and so it is not possible to set different
-+				 * colors on different LAN ports.
-+				 */
-+				compatible = "cznic,turris1x-leds";
-+				reg = <0x13 0x1d>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				multi-led@0 {
-+					reg = <0x0>;
-+					color = <LED_COLOR_ID_RGB>;
-+					function = LED_FUNCTION_WAN;
-+				};
-+
-+				multi-led@1 {
-+					reg = <0x1>;
-+					color = <LED_COLOR_ID_RGB>;
-+					function = LED_FUNCTION_LAN;
-+					function-enumerator = <5>;
-+				};
-+
-+				multi-led@2 {
-+					reg = <0x2>;
-+					color = <LED_COLOR_ID_RGB>;
-+					function = LED_FUNCTION_LAN;
-+					function-enumerator = <4>;
-+				};
-+
-+				multi-led@3 {
-+					reg = <0x3>;
-+					color = <LED_COLOR_ID_RGB>;
-+					function = LED_FUNCTION_LAN;
-+					function-enumerator = <3>;
-+				};
-+
-+				multi-led@4 {
-+					reg = <0x4>;
-+					color = <LED_COLOR_ID_RGB>;
-+					function = LED_FUNCTION_LAN;
-+					function-enumerator = <2>;
-+				};
-+
-+				multi-led@5 {
-+					reg = <0x5>;
-+					color = <LED_COLOR_ID_RGB>;
-+					function = LED_FUNCTION_LAN;
-+					function-enumerator = <1>;
-+				};
-+
-+				multi-led@6 {
-+					reg = <0x6>;
-+					color = <LED_COLOR_ID_RGB>;
-+					function = LED_FUNCTION_WLAN;
-+				};
-+
-+				multi-led@7 {
-+					reg = <0x7>;
-+					color = <LED_COLOR_ID_RGB>;
-+					function = LED_FUNCTION_POWER;
-+				};
-+			};
-+		};
-+	};
-+
-+	pci2: pcie@ffe08000 {
-+		/*
-+		 * PCIe bus for on-board TUSB7340RKM USB 3.0 xHCI controller.
-+		 * This xHCI controller is available only on Turris 1.1 boards.
-+		 * Turris 1.0 boards have nothing connected to this PCIe bus,
-+		 * so system would see only PCIe Root Port of this PCIe Root
-+		 * Complex. TUSB7340RKM xHCI controller has four SuperSpeed
-+		 * channels. Channel 0 is connected to the front USB 3.0 port,
-+		 * channel 1 (but only USB 2.0 subset) to USB 2.0 pins on mPCIe
-+		 * slot 1 (CN5), channels 2 and 3 to connector P600.
-+		 *
-+		 * P2020 PCIe Root Port uses 1MB of PCIe MEM and xHCI controller
-+		 * uses 64kB + 8kB of PCIe MEM. No PCIe IO is used or required.
-+		 * So allocate 2MB of PCIe MEM for this PCIe bus.
-+		 */
-+		reg = <0 0xffe08000 0 0x1000>;
-+		ranges = <0x02000000 0x0 0xc0000000 0 0xc0000000 0x0 0x00200000>, /* MEM */
-+			 <0x01000000 0x0 0x00000000 0 0xffc20000 0x0 0x00010000>; /* IO */
-+
-+		pcie@0 {
-+			ranges;
-+		};
-+	};
-+
-+	pci1: pcie@ffe09000 {
-+		/* PCIe bus on mPCIe slot 2 (CN6) for expansion mPCIe card */
-+		reg = <0 0xffe09000 0 0x1000>;
-+		ranges = <0x02000000 0x0 0xa0000000 0 0xa0000000 0x0 0x20000000>, /* MEM */
-+			 <0x01000000 0x0 0x00000000 0 0xffc10000 0x0 0x00010000>; /* IO */
-+
-+		pcie@0 {
-+			ranges;
-+		};
-+	};
-+
-+	pci0: pcie@ffe0a000 {
-+		/*
-+		 * PCIe bus on mPCIe slot 1 (CN5) for expansion mPCIe card.
-+		 * Turris 1.1 boards have in this mPCIe slot additional USB 2.0
-+		 * pins via channel 1 of TUSB7340RKM xHCI controller and also
-+		 * additional SIM card slot, both for USB-based WWAN cards.
-+		 */
-+		reg = <0 0xffe0a000 0 0x1000>;
-+		ranges = <0x02000000 0x0 0x80000000 0 0x80000000 0x0 0x20000000>, /* MEM */
-+			 <0x01000000 0x0 0x00000000 0 0xffc00000 0x0 0x00010000>; /* IO */
-+
-+		pcie@0 {
-+			ranges;
-+		};
-+	};
-+};
-+
-+/include/ "fsl/p2020si-post.dtsi"
+that lets caller to specify min and max limits
+
+Presuming that devices see [0x1000200000-0x103fffffff] as
+[0x200000-0x3fffffff] we may try something like
+
+	min = memblock_start_of_DRAM();
+	max = min + 0xffffffff;
+
+	if (flags & SWIOTLB_ANY)
+		max = MEMBLOCK_ALLOC_ACCESSIBLE;
+
+	tlb = memblock_alloc_try_nid(bytes, PAGE_SIZE, min, max, NUMA_NO_NODE);
+
 -- 
-2.20.1
-
+Sincerely yours,
+Mike.

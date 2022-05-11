@@ -2,71 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01845522D9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B04E522D9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 09:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243095AbiEKHrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 03:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37386 "EHLO
+        id S239081AbiEKHs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 03:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238103AbiEKHrW (ORCPT
+        with ESMTP id S229579AbiEKHsw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 03:47:22 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2244E7356F;
-        Wed, 11 May 2022 00:47:20 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24B4hxge021004;
-        Wed, 11 May 2022 09:47:04 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=1ai4dm2l20Sc9AImn6T6dcp7p4IL4yIAR2T4CFSl3Aw=;
- b=z9jheGbqV4h2/VUvjiY0HUqshCihxPXcmCgImnv3QLcsn8Tl00SUKi/gW62lk5vsz3zE
- LaBHpevyphqk9qn18IwBfDZyJlfuR4UUIA8fjBjlibMXujjscifCFpRPFfxyVK4evvRi
- Amls0cYvjASZXNuJZKiV/flgFRlgGMmOtWjznfwlApqdYn+6zbW3UM39h8hmxmglMhUw
- Q6MR07HbL8RcW8B/K2GiRN61BKDKDkzmoPx9hH4izHnFu2GofwjVmzxHTsvOMAK7FrI+
- YfjHoGKL9RiSSjykNUjQ9TJLfTTxeYoUJLcKiJLtTVaakvwPK11CzdDhP43OYOHFmtwG HQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3fwe6kwhse-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 May 2022 09:47:04 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C3EFA100034;
-        Wed, 11 May 2022 09:47:03 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BE1DF2128DB;
-        Wed, 11 May 2022 09:47:03 +0200 (CEST)
-Received: from localhost (10.75.127.46) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 11 May
- 2022 09:47:03 +0200
-From:   <patrice.chotard@foss.st.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>,
-        <patrice.chotard@foss.st.com>
-Subject: [PATCH 3/3] spi: stm32-qspi: Remove SR_BUSY bit check before sending command
-Date:   Wed, 11 May 2022 09:46:44 +0200
-Message-ID: <20220511074644.558874-4-patrice.chotard@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220511074644.558874-1-patrice.chotard@foss.st.com>
-References: <20220511074644.558874-1-patrice.chotard@foss.st.com>
+        Wed, 11 May 2022 03:48:52 -0400
+Received: from mail.pcs.gmbh (mail.pcs.gmbh [89.27.162.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4362DBA99A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 00:48:49 -0700 (PDT)
+Received: from mail.csna.de (mail.csna.de [89.27.162.50])
+        by mail.pcs.gmbh with ESMTPA
+        ; Wed, 11 May 2022 09:48:47 +0200
+Received: from EXCHANGE2019.pcs.ditec.de (mail.pcs.com [89.27.162.5])
+        by mail.csna.de with ESMTPA
+        ; Wed, 11 May 2022 09:48:46 +0200
+Received: from EXCHANGE2019.pcs.ditec.de (192.168.8.214) by
+ EXCHANGE2019.pcs.ditec.de (192.168.8.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 11 May 2022 09:48:47 +0200
+Received: from lxtpfaff.pcs.ditec.de (192.168.9.96) by
+ EXCHANGE2019.pcs.ditec.de (192.168.8.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22
+ via Frontend Transport; Wed, 11 May 2022 09:48:47 +0200
+Date:   Wed, 11 May 2022 09:48:47 +0200
+From:   Thomas Pfaff <tpfaff@pcs.com>
+To:     Jiri Slaby <jirislaby@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] tty: Remove pointless synchronize_irq() in
+ uart_port_shutdown()
+In-Reply-To: <91c006d0-c6ff-71fa-f0c3-22cf1896fc02@kernel.org>
+Message-ID: <d157042-39ed-7b56-a40-e0c6c1e3f3db@pcs.com>
+References: <4fe2d4a1-fc6a-c7fa-d884-5ebd01bebd3@pcs.com> <91c006d0-c6ff-71fa-f0c3-22cf1896fc02@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-11_02,2022-05-10_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset="US-ASCII"
+X-KSE-ServerInfo: EXCHANGE2019.pcs.ditec.de, 9
+X-KSE-AntiSpam-Interceptor-Info: white sender email list
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 11.05.2022 06:00:00
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,31 +57,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-Waiting for SR_BUSY bit when receiving a new command is not needed.
-SR_BUSY bit is already managed in the previous command treatment.
 
-Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
----
- drivers/spi/spi-stm32-qspi.c | 4 ----
- 1 file changed, 4 deletions(-)
+On Wed, 11 May 2022, Jiri Slaby wrote:
 
-diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
-index 1660ca5bd1c5..c0239e405c39 100644
---- a/drivers/spi/spi-stm32-qspi.c
-+++ b/drivers/spi/spi-stm32-qspi.c
-@@ -369,10 +369,6 @@ static int stm32_qspi_send(struct spi_mem *mem, const struct spi_mem_op *op)
- 		op->dummy.buswidth, op->data.buswidth,
- 		op->addr.val, op->data.nbytes);
- 
--	err = stm32_qspi_wait_nobusy(qspi);
--	if (err)
--		goto abort;
--
- 	cr = readl_relaxed(qspi->io_base + QSPI_CR);
- 	cr &= ~CR_PRESC_MASK & ~CR_FSEL;
- 	cr |= FIELD_PREP(CR_PRESC_MASK, flash->presc);
--- 
-2.25.1
+> On 10. 05. 22, 15:54, Thomas Pfaff wrote:
+> > From: Thomas Pfaff <tpfaff@pcs.com>
+> > 
+> > Calling synchronize_irq() after free_irq() is pointless, the context to
+> > the irq is already lost.
+> > It was noticed while creating the bugfix "genirq: Synchronize interrupt
+> > thread startup".
+> 
+> That's correct for most drivers. But some drivers don't call free_irq() in
+> ->shutdown(). So you likely have to move the synchronization to them. By a
+> quick grep, I found icom, jsm, sccnxp, sifive, sunhv, and sunzilog.
+> 
+
+Sorry, I did not check all the drivers.
+Then I would keep it in serial_core, as it does not hurt anymore.
+
+Thanks,
+    Thomas
+
 

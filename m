@@ -2,51 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6535522DE0
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3BEF522DE4
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 10:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242130AbiEKIJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 04:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
+        id S243327AbiEKIKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 04:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233633AbiEKIJS (ORCPT
+        with ESMTP id S233633AbiEKIKA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 04:09:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1529C2E0;
-        Wed, 11 May 2022 01:09:16 -0700 (PDT)
+        Wed, 11 May 2022 04:10:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECB19C2E0
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 01:09:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30E4D61A00;
-        Wed, 11 May 2022 08:09:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63A6FC385DB;
-        Wed, 11 May 2022 08:09:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABC3C61A3D
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:09:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17280C385DB;
+        Wed, 11 May 2022 08:09:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652256555;
-        bh=Y+Ia4l60OdZb53bKEre3+7c6IYHAuawdxs89/G063l4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u1y/tduN3NYd2a1Qt8SFP3DOzm7mGXeZuFL3MU7g9j0gR9QNqz97VTUdc5LP6wDx1
-         Ly81YR2IrrLO4idAVyTPxr8tKOQwjoQvShvvPsQma9RvwsYSJvf4ZB2F8kC1wTgY39
-         T1bYdHk6NVAQr8DyG7npkaatv90RPNo5jYb25cQ2K3zE7uhZhkXJhg1wi6wocgV/vN
-         VOZ3FYWcHCHwCkxNa8rrGjqPu4uC8x2J5xrjMsldYvc6Iy5f9yltV94GRse1DuMN+v
-         iv/6fFGFPseIKYbziHNz1TD+vxqHNep6KvRyeQuzeZnooPebet5S83yntyQATDc61R
-         epxJXVhj1jdiQ==
-Date:   Wed, 11 May 2022 01:09:13 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Theodore Ts'o <tytso@mit.edu>,
-        Nadia Heninger <nadiah@cs.ucsd.edu>,
-        Tom Ristenpart <ristenpart@cornell.edu>
-Subject: Re: [PATCH] random: do not pretend to handle premature next security
- model
-Message-ID: <YntvKcp5PYDUKoFE@sol.localdomain>
-References: <20220504113025.285784-1-Jason@zx2c4.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220504113025.285784-1-Jason@zx2c4.com>
+        s=k20201202; t=1652256598;
+        bh=FVh96bdERwMwqAkQyYyRnk6K/ep94wX0XFLfJEym+cM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iJ1axJyM4OoVOVXWrUWJWgalkzdJrg8vdUgHhLNZyhrb9hR4j3wOVNEGMMnCjrfSo
+         4/HKJ8Il5TRRp9TS2Dq9XY2UMPvQs2PPSjcm0UEvTb2yqFWA6/jkAjTitCMDn1K0Sy
+         032dD9XBXxCjiRBP89Gz6AXrnHakLOZkETxewYphqv6so3v+5LChhIYrqtUNzJ+p2f
+         FURE+6mIYrrkiOk8Tpub/P4uCtf+TLzbSnlxAVadc0ox9OwHoNNDEQx4ZOs9pR4L3U
+         7hZAJLK/L0lv0uhrnBQAaTYcCTfPfZIidGhkCpUhaYBQ3btQ5wFPqJ4VsNMJlRGpg8
+         b33ij/WUNm+NQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nohPv-00ATrM-Gm; Wed, 11 May 2022 09:09:55 +0100
+Date:   Wed, 11 May 2022 09:09:55 +0100
+Message-ID: <8735hg7ang.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Antonio Borneo <antonio.borneo@foss.st.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Ludovic Barre <ludovic.barre@foss.st.com>,
+        Loic Pallardy <loic.pallardy@foss.st.com>,
+        Pascal Paillet <p.paillet@foss.st.com>
+Subject: Re: [PATCH 1/7] irqchip/stm32-exti: set_affinity return IRQ_SET_MASK_OK_DONE if no parent
+In-Reply-To: <05d9a88de4a7c415545043fab1e577e7f6151b8c.camel@foss.st.com>
+References: <20220510164123.557921-1-antonio.borneo@foss.st.com>
+        <878rr96xuo.wl-maz@kernel.org>
+        <05d9a88de4a7c415545043fab1e577e7f6151b8c.camel@foss.st.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: antonio.borneo@foss.st.com, tglx@linutronix.de, mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org, ludovic.barre@foss.st.com, loic.pallardy@foss.st.com, p.paillet@foss.st.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,101 +75,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 01:30:25PM +0200, Jason A. Donenfeld wrote:
-> Per the thread linked below, "premature next" is not considered to be a
-> realistic threat model, and leads to more serious security problems.
-> 
-> "Premature next" is the scenario in which:
-> 
-> - Attacker compromises the current state of a fully initialized RNG via
->   some kind of infoleak.
-> - New bits of entropy are added directly to the key used to generate the
->   /dev/urandom stream, without any buffering or pooling.
-> - Attacker then, somehow having read access to /dev/urandom, samples RNG
->   output and brute forces the individual new bits that were added.
-> - Result: the RNG never "recovers" from the initial compromise, a
->   so-called violation of what academics term "post-compromise security".
-> 
-> The usual solutions to this involve some form of delaying when entropy
-> gets mixed into the crng. With Fortuna, this involves multiple input
-> buckets. With what the Linux RNG was trying to do prior, this involves
-> entropy estimation.
-> 
-> However, by delaying when entropy gets mixed in, it also means that RNG
-> compromises are extremely dangerous during the window of time before
-> the RNG has gathered enough entropy, during which time nonces may become
-> predictable (or repeated), ephemeral keys may not be secret, and so
-> forth. Moreover, it's unclear how realistic "premature next" is from an
-> attack perspective, if these attacks even make sense in practice.
-> 
-> Put together -- and discussed in more detail in the thread below --
-> these constitute grounds for just doing away with the current code that
-> pretends to handle premature next. I say "pretends" because it wasn't
-> doing an especially great job at it either; should we change our mind
-> about this direction, we would probably implement Fortuna to "fix" the
-> "problem", in which case, removing the pretend solution still makes
-> sense.
-> 
-> This also reduces the crng reseed period from 5 minutes down to 1
-> minute. The rationale from the thread might lead us toward reducing that
-> even further in the future (or even eliminating it), but that remains a
-> topic of a future commit.
-> 
-> At a high level, this patch changes semantics from:
-> 
->     Before: Seed for the first time after 256 "bits" of estimated
->     entropy have been accumulated since the system booted. Thereafter,
->     reseed once every five minutes, but only if 256 new "bits" have been
->     accumulated since the last reseeding.
-> 
->     After: Seed for the first time after 256 "bits" of estimated entropy
->     have been accumulated since the system booted. Thereafter, reseed
->     once every minute.
-> 
-> Most of this patch is renaming and removing: POOL_MIN_BITS becomes
-> POOL_INIT_BITS, credit_entropy_bits() becomes credit_init_bits(),
-> crng_reseed() loses its "force" parameter since it's now always true,
-> the drain_entropy() function no longer has any use so it's removed,
-> entropy estimation is skipped if we've already init'd, the various
-> notifiers for "low on entropy" are now only active prior to init, and
-> finally, some documentation comments are cleaned up here and there.
-> 
-> Link: https://lore.kernel.org/lkml/YmlMGx6+uigkGiZ0@zx2c4.com/
-> Cc: Theodore Ts'o <tytso@mit.edu>
-> Cc: Nadia Heninger <nadiah@cs.ucsd.edu>
-> Cc: Tom Ristenpart <ristenpart@cornell.edu>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+On Wed, 11 May 2022 07:39:43 +0100,
+Antonio Borneo <antonio.borneo@foss.st.com> wrote:
+>=20
+> Hi Marc,
+>=20
+> On Tue, 2022-05-10 at 19:34 +0100, Marc Zyngier wrote:
+> > Antonio,
+> >=20
+> > On Tue, 10 May 2022 17:41:17 +0100,
+> > Antonio Borneo <antonio.borneo@foss.st.com> wrote:
+> > >=20
+> > > From: Ludovic Barre <ludovic.barre@foss.st.com>
+> > >=20
+> > > If no parent, there is no specific action to do in
+> > > stm32 irqchip, and so return IRQ_SET_MASK_OK_DONE.
+> > >=20
+> > > Signed-off-by: Ludovic Barre <ludovic.barre@foss.st.com>
+> > > Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+> > > ---
+> > > =C2=A0drivers/irqchip/irq-stm32-exti.c | 2 +-
+> > > =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
+> > >=20
+> > > diff --git a/drivers/irqchip/irq-stm32-exti.c
+> > > b/drivers/irqchip/irq-stm32-exti.c
+> > > index 9d18f47040eb..10c9c742c216 100644
+> > > --- a/drivers/irqchip/irq-stm32-exti.c
+> > > +++ b/drivers/irqchip/irq-stm32-exti.c
+> > > @@ -614,7 +614,7 @@ static int stm32_exti_h_set_affinity(struct
+> > > irq_data *d,
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (d->parent_data->c=
+hip)
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0return irq_chip_set_affinity_parent(d, dest,
+> > > force);
+> > > =C2=A0
+> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return -EINVAL;
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return IRQ_SET_MASK_OK_DON=
+E;
+> > > =C2=A0}
+> > > =C2=A0
+> > > =C2=A0static int __maybe_unused stm32_exti_h_suspend(void)
+> >=20
+> > <rant>
+> > Can you *please* use a cover-letter when sending more that a single
+> > patch? I expect there is an overarching motive to this series. Where
+> > is it described?
+> >=20
+> > Also, please look at the way the subject lines are written for most
+> > irqchip patches:
+> >=20
+> > irqchip/foo: Frobify the bar callback return value
+> >=20
+> > Note the capital letter after the ':', and the fact that it starts
+> > with a verb. Here, I would have liked to see:
+> >=20
+> > irqchip/stm32-exti: Fix set_affinity() return value
+> >=20
+> > and leave the meat of the description to the commit log (instead of
+> > saying the exact same thing twice).
+> > </rant>
+>=20
+> thanks for your review and the hints on this series.
+> I will shortly send a V2.
 
-This looks good to me; thanks for cleaning this up!  Feel free to add:
+No rush. I'm about to close the 5.19 irqchip tree.
 
-	Reviewed-by: Eric Biggers <ebiggers@google.com>
+Thanks,
 
-A couple very minor comments:
+	M.
 
->   * The high level overview is that there is one input pool, into which
-> - * various pieces of data are hashed. Some of that data is then "credited" as
-> - * having a certain number of bits of entropy. When enough bits of entropy are
-> - * available, the hash is finalized and handed as a key to a stream cipher that
-> - * expands it indefinitely for various consumers. This key is periodically
-> - * refreshed as the various entropy collectors, described below, add data to the
-> - * input pool and credit it. There is currently no Fortuna-like scheduler
-> - * involved, which can lead to malicious entropy sources causing a premature
-> - * reseed, and the entropy estimates are, at best, conservative guesses.
-> + * various pieces of data are hashed. Prior to initialization, some of that
-> + * data is then "credited" as having a certain number of bits of entropy.
-> + * When enough bits of entropy are available, the hash is finalized and
-> + * handed as a key to a stream cipher that expands it indefinitely for
-> + * various consumers. This key is periodically refreshed as the various
-> + * entropy collectors, described below, add data to the input pool and
-> + * credit it.
-
-The words "and credit it" at the end of this paragraph shouldn't be there.
-
-> +      /*
-> +       * If the base_crng is old enough, we try to reseed, which in turn
-> +       * bumps the generation counter that we check below.
-> +       */
-
-This should say "reseed" instead of "try to reseed".
-
-- Eric
+--=20
+Without deviation from the norm, progress is not possible.

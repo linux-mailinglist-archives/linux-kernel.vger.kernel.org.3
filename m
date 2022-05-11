@@ -2,281 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B04D8523F45
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 23:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A194D523F49
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 23:11:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348018AbiEKVKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 17:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
+        id S1348020AbiEKVLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 17:11:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346609AbiEKVKA (ORCPT
+        with ESMTP id S1348047AbiEKVLE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 17:10:00 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA0ABA9A6
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 14:09:58 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id s18-20020a056830149200b006063fef3e17so1329245otq.12
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 14:09:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=W+mg85xftnZcZLJB7N4iafdGzrp/QjjiMVJKxOSbpks=;
-        b=Uycrwff8UYpk839P/stLXQqgDArYSC9aT0hu3UL5vYIodeRRwr5aCDFjwONRkyBgyd
-         SqoqljAmoqtNL/sDF0CiCado1OJDn8pUw3DKVEXYMFC9swsCKS2bz5vz1adA77j/n5W6
-         +nZdVIcSHk9a8stIQmD1cbsPC8PF5OZ+Jj5AM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W+mg85xftnZcZLJB7N4iafdGzrp/QjjiMVJKxOSbpks=;
-        b=UjXMSaAscYAYIhQTvgdxedOzSrytku9MI+XwBnnZBKPAcbehsVbf5xN1tK5QNWIzSG
-         +O6N8UqcLVlgM+qFYKPT438xDWAmKNefp59+AX4vDT6mBHK2/AcEacNbsta7bRmFSClu
-         u9z8jGIeA2ym1nSFGvTmlyaVyiuXDfCBdJxgDZXJw8lfSujOorvNmVsLC+SBzbTBO1zM
-         5KHOxfE76o5TbyopmCxNZpF3GmdT7/gZaeCge+FVKC4q2KhLBvHoX26jeiHsNR+wwcXO
-         aCdpYGYG4Vq7tXAKr//Z5PqEPsaIpvxC73Fdr+bf24ZfBY/B0rjjCaJtxmTCpoQsHwfV
-         Y4Ow==
-X-Gm-Message-State: AOAM532ecoOdCt8XFDEEXtK7DjHZx1i3h6OXw7A+G+x4Q/RA1DtDoZta
-        dcA82ux5TAQpgDyUXf5hL1BqVkODXKxiNtA5M7CT/A==
-X-Google-Smtp-Source: ABdhPJza+0hoHpKhXD8T9wB4il3M8kQds1a/XzX8BA9ArBGXW/HS4/WRO2wAqQ4k0ro1zL/BC7tk9sp6TbK3kZMb64E=
-X-Received: by 2002:a9d:12a:0:b0:605:d26d:3223 with SMTP id
- 39-20020a9d012a000000b00605d26d3223mr10539101otu.301.1652303397783; Wed, 11
- May 2022 14:09:57 -0700 (PDT)
+        Wed, 11 May 2022 17:11:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E29B5FF3A;
+        Wed, 11 May 2022 14:11:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C100161BA0;
+        Wed, 11 May 2022 21:11:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17E4AC340EE;
+        Wed, 11 May 2022 21:11:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652303460;
+        bh=O3d94XNcE8vut9SCbZRM8trovJFtWJ9oUgdeGDAn0gE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=s2LEzneqAT8nGJymba4QUHnkUfSxEprnr1aYS/9hYKfoq8YIC26gJzw5VeU8n5wGw
+         VbCvX/qKtD02Ifzl4LVMcxWmO1gq4JoGx7omk+sYJ1TpY3uRvD6i23WKkVl+SvsgzD
+         eSIF38Hn6v+GXf1wXqNquUzai/kcb7pDeKcb4hdU1Mwm1OPqsIjjwElnSO3LhheBX6
+         Nbx433opzqOxl3FaEemHCBpMJFA+5MTfuNffeymLk+luzlUBC27YV7s9Qb6WDMjgoR
+         cWC44UAHxmQuVM6hgVHBulaeM7LasZBlX9qQEUl9jsZ4y968ACw8ho8bOEAzq0NSDP
+         Ae9Mo3yccdFuQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id A216E5C05FC; Wed, 11 May 2022 14:10:59 -0700 (PDT)
+Date:   Wed, 11 May 2022 14:10:59 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH v2 1/1] rcu/nocb: Add an option to ON/OFF an offloading
+ from RT context
+Message-ID: <20220511211059.GF1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220511085703.101596-1-urezki@gmail.com>
 MIME-Version: 1.0
-References: <20220510070140.45407-1-tomeu.vizoso@collabora.com>
- <20220510141329.54414-1-tomeu.vizoso@collabora.com> <e4e03cd8-3ebc-e5e1-e7d0-6bdc038049b5@quicinc.com>
- <CAF6AEGueadnRMiatO3MoHS+NTQ1o1sgcV0cVjJM3iu-6JUNmNw@mail.gmail.com>
- <CAKMK7uGRuCZwF6m02tcxxrgQGaijsYaNkowjxR+cw0JM3UpDkQ@mail.gmail.com>
- <CAF6AEGthpxPLxyt_i-aUFgW485hA5qw+xXcJ3gKQUJ+fM=ZBhg@mail.gmail.com>
- <CAKMK7uGQvay9-twVuEKJe7Hz88iQGBP+bdO+3tKJnsjZsnfV9Q@mail.gmail.com> <CAF6AEGu1tzz5NgLzXC9X5NwX8XxgJUkJ5CJ5Au8Wt2ZeD815gQ@mail.gmail.com>
-In-Reply-To: <CAF6AEGu1tzz5NgLzXC9X5NwX8XxgJUkJ5CJ5Au8Wt2ZeD815gQ@mail.gmail.com>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Wed, 11 May 2022 23:09:46 +0200
-Message-ID: <CAKMK7uHR0kUgJQEaa8_7uxWM5ukfdXykFC456oJUKXfvUnBQJw@mail.gmail.com>
-Subject: Re: [Freedreno] [RFC v2] drm/msm: Add initial ci/ subdirectory
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511085703.101596-1-urezki@gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 May 2022 at 22:32, Rob Clark <robdclark@gmail.com> wrote:
->
-> On Wed, May 11, 2022 at 12:14 PM Daniel Vetter <daniel@ffwll.ch> wrote:
-> >
-> > On Wed, 11 May 2022 at 19:46, Rob Clark <robdclark@gmail.com> wrote:
-> > >
-> > > On Wed, May 11, 2022 at 10:12 AM Daniel Vetter <daniel@ffwll.ch> wrote:
-> > > >
-> > > > On Tue, 10 May 2022 at 22:26, Rob Clark <robdclark@gmail.com> wrote:
-> > > > >
-> > > > > On Tue, May 10, 2022 at 12:39 PM Jessica Zhang
-> > > > > <quic_jesszhan@quicinc.com> wrote:
-> > > > > >
-> > > > > >
-> > > > > >
-> > > > > > On 5/10/2022 7:13 AM, Tomeu Vizoso wrote:
-> > > > > > > And use it to store expectations about what the drm/msm driver is
-> > > > > > > supposed to pass in the IGT test suite.
-> > > > > > >
-> > > > > > > Also include a configuration file that points to the out-of-tree CI
-> > > > > > > scripts.
-> > > > > > >
-> > > > > > > By storing the test expectations along the code we can make sure both
-> > > > > > > stay in sync with each other, and so we can know when a code change
-> > > > > > > breaks those expectations.
-> > > > > > >
-> > > > > > > This will allow all contributors to drm/msm to reuse the infrastructure
-> > > > > > > already in gitlab.freedesktop.org to test the driver on several
-> > > > > > > generations of the hardware.
-> > > > > > >
-> > > > > > > v2:
-> > > > > > >    - Fix names of result expectation files to match SoC
-> > > > > > >    - Don't execute tests that are going to skip on all boards
-> > > > > > >
-> > > > > > > Signed-off-by: Tomeu Vizoso <tomeu.vizoso@collabora.com>
-> > > > > > > ---
-> > > > > > >   Documentation/gpu/msm_automated_testing.rst   |  70 +++++++++
-> > > > > > >   drivers/gpu/drm/msm/ci/gitlab-ci.yml          |  11 ++
-> > > > > > >   drivers/gpu/drm/msm/ci/msm.testlist           | 148 ++++++++++++++++++
-> > > > > > >   .../gpu/drm/msm/ci/msm_apq8016_results.txt    | 140 +++++++++++++++++
-> > > > > > >   .../gpu/drm/msm/ci/msm_apq8096_results.txt    | 140 +++++++++++++++++
-> > > > > > >   drivers/gpu/drm/msm/ci/msm_sc7180_results.txt | 141 +++++++++++++++++
-> > > > > > >   drivers/gpu/drm/msm/ci/msm_sdm845_results.txt | 141 +++++++++++++++++
-> > > > > > >   7 files changed, 791 insertions(+)
-> > > > > > >   create mode 100644 Documentation/gpu/msm_automated_testing.rst
-> > > > > > >   create mode 100644 drivers/gpu/drm/msm/ci/gitlab-ci.yml
-> > > > > > >   create mode 100644 drivers/gpu/drm/msm/ci/msm.testlist
-> > > > > > >   create mode 100644 drivers/gpu/drm/msm/ci/msm_apq8016_results.txt
-> > > > > > >   create mode 100644 drivers/gpu/drm/msm/ci/msm_apq8096_results.txt
-> > > > > > >   create mode 100644 drivers/gpu/drm/msm/ci/msm_sc7180_results.txt
-> > > > > > >   create mode 100644 drivers/gpu/drm/msm/ci/msm_sdm845_results.txt
-> > > > > > >
-> > >
-> > > [snip]
-> > >
-> > > > > > > diff --git a/drivers/gpu/drm/msm/ci/msm_sc7180_results.txt b/drivers/gpu/drm/msm/ci/msm_sc7180_results.txt
-> > > > > > > new file mode 100644
-> > > > > > > index 000000000000..01f7b4b399b5
-> > > > > > > --- /dev/null
-> > > > > > > +++ b/drivers/gpu/drm/msm/ci/msm_sc7180_results.txt
-> > > > > > > @@ -0,0 +1,141 @@
-> > > > > > > +igt@core_auth@getclient-simple,dmesg-warn
-> > > > > > > +igt@core_auth@getclient-master-drop,pass
-> > > > > > > +igt@core_auth@basic-auth,pass
-> > > > > > > +igt@core_auth@many-magics,pass
-> > > > > > > +igt@core_getclient,pass
-> > > > > > > +igt@core_getstats,pass
-> > > > > > > +igt@core_getversion,pass
-> > > > > > > +igt@core_setmaster_vs_auth,pass
-> > > > > > > +igt@drm_read@invalid-buffer,pass
-> > > > > > > +igt@drm_read@fault-buffer,pass
-> > > > > > > +igt@drm_read@empty-block,pass
-> > > > > > > +igt@drm_read@empty-nonblock,pass
-> > > > > > > +igt@drm_read@short-buffer-block,pass
-> > > > > > > +igt@drm_read@short-buffer-nonblock,pass
-> > > > > > > +igt@drm_read@short-buffer-wakeup,pass
-> > > > > > > +igt@kms_addfb_basic@unused-handle,pass
-> > > > > > > +igt@kms_addfb_basic@unused-pitches,pass
-> > > > > > > +igt@kms_addfb_basic@unused-offsets,pass
-> > > > > > > +igt@kms_addfb_basic@unused-modifier,pass
-> > > > > > > +igt@kms_addfb_basic@legacy-format,dmesg-warn
-> > > > > > > +igt@kms_addfb_basic@no-handle,pass
-> > > > > > > +igt@kms_addfb_basic@basic,pass
-> > > > > > > +igt@kms_addfb_basic@bad-pitch-0,pass
-> > > > > > > +igt@kms_addfb_basic@bad-pitch-32,pass
-> > > > > > > +igt@kms_addfb_basic@bad-pitch-63,pass
-> > > > > > > +igt@kms_addfb_basic@bad-pitch-128,pass
-> > > > > > > +igt@kms_addfb_basic@bad-pitch-256,pass
-> > > > > > > +igt@kms_addfb_basic@bad-pitch-1024,pass
-> > > > > > > +igt@kms_addfb_basic@bad-pitch-999,pass
-> > > > > > > +igt@kms_addfb_basic@bad-pitch-65536,pass
-> > > > > > > +igt@kms_addfb_basic@size-max,pass
-> > > > > > > +igt@kms_addfb_basic@too-wide,pass
-> > > > > > > +igt@kms_addfb_basic@too-high,dmesg-warn
-> > > > > >
-> > > > > > For test results on Trogdor, is is possible to have them be
-> > > > > > success/fail/skip only?
-> > > > > >
-> > > > > > Results such as dmesg-warn/dmesg-fail are igt_runner specific and
-> > > > > > because there isn't support for igt_runner on ChromeOS, they will be
-> > > > > > difficult to replicate and debug.
-> > > > >
-> > > > > Actually, I wonder if it would be better to just treat
-> > > > > dmesg-warn/dmesg-fail as pass/fail?  I'd noticed some flakes on
-> > > > > rockchip which looked just like unrelated dmesg msg which just
-> > > > > happened to show up while the test was running.
-> > > >
-> > > > This is kinda the reason behind standardizing on drm dmesg logging, so
-> > > > that we have some chances at filtering stuff out. Not sure that's a
-> > > > good idea, since when your entire box splats and lockdep is dead, then
-> > > > continuing to run drm tests is still fairly pointless.
-> > >
-> > > I'm not sure if we are using it yet for drm-ci, but for mesa-ci we
-> > > monitor dmesg (over serial port, from the controller) for splats, so
-> > > we already have the tech for restarting or aborting the CI run.  We
-> > > don't need igt-runner to tell us.
-> > >
-> > > > I think this is another reason why trying at least to standardize this
-> > > > stuff over drivers would be pretty good idea.
-> > > >
-> > > > > Additionally, some of the tests, like msm_recovery, are *expected* to
-> > > > > generate some dmesg spam since they are intentionally triggering GPU
-> > > > > hangs to test the recovery mechanism.
-> > > >
-> > > > Uh I don't like that. It just allows userspace to spam dmesg, which
-> > > > doesn't seem like a great idea. That's at least why i915 dumps these
-> > > > at a lower level, and in the past had a special "I'm going to whack
-> > > > the gpu real hard expect hangs" knob in debugfs.
-> > > >
-> > > > Having tests which intentionally spam dmesg above info level isn't
-> > > > really good since then you need endless amounts of test-specific
-> > > > encoding of what is considered a success and what not. Like when a
-> > > > backmerge breaks a testcases which is already at dmesg-fail, is that
-> > > > bad or not? Probably bad, but was the situation before that really
-> > > > good or already kinda on fire?
-> > >
-> > > I guess I could add some debugfs knobs to squelch the dmesg msgs on
-> > > gpu hangs.  In the normal case, I'd prefer that gpu hangs are not
-> > > silent.. since that is something we get in feedback reports if a user
-> > > (or dogfooder) reports a bug.
-> > >
-> > > The rockchip case I mentioned was some unrelated dmesg about
-> > > linktraining failing.. presumably because there was no display
-> > > attached?  IDK, I didn't look too closely.  But my point is we could
-> > > be getting unrelated and asynchronous dmesg spam, even from other
-> > > kernel subsystems.  Letting that be part of the test results just
-> > > sounds like asking for flakes.
-> >
-> > That's why I think you need to filter dmesg, otherwise you'll just get
-> > random stuff in there that causes flaps.
->
-> We've evolved a bit of that over the time, see:
->
-> https://gitlab.freedesktop.org/gfx-ci/drm-ci/-/blob/main/.gitlab-ci/bare-metal/cros_servo_run.py#L94
->
-> It tends to be a bit specific to the runners and their quirks.  But
-> mesa does a lot of CI runs, so once-in-a-blue-moon quirks quickly turn
-> frustrating if the CI machinery doesn't detect them, and (for ex)
-> reboot and restart the DUT
+On Wed, May 11, 2022 at 10:57:03AM +0200, Uladzislau Rezki (Sony) wrote:
+> Introduce a RCU_NOCB_CPU_CB_BOOST kernel option. So a user can
+> decide if an offloading has to be done in a high-prio context or
+> not. Please note an option depends on RCU_NOCB_CPU and RCU_BOOST
+> parameters. For CONFIG_PREEMPT_RT kernel both RCU_BOOST and the
+> RCU_NOCB_CPU_CB_BOOST are active by default.
+> 
+> This patch splits the CONFIG_RCU_BOOST config into two peaces:
+> a) boosting preempted RCU readers and the kthreads which are
+>    directly responsible for driving expedited grace periods
+>    forward;
+> b) boosting offloading-kthreads in a way that their scheduling
+>    class are changed from SCHED_NORMAL to SCHED_FIFO.
+> 
+> The main reason of such split is, for example on Android there
+> are some workloads which require fast expedited grace period to
+> be done whereas offloading in RT context can lead to starvation
+> and hogging a CPU for a long time what is not acceptable for
+> latency sensitive environment. For instance:
+> 
+> <snip>
+> <...>-60 [006] d..1 2979.028717: rcu_batch_start: rcu_preempt CBs=34619 bl=270
+> <snip>
+> 
+> invoking 34 619 callbacks will take time thus making other CFS
+> tasks waiting in run-queue to be starved due to such behaviour.
+> 
+> v1 -> v2:
+> - fix the comment about the rcuc/rcub/rcuop;
+> - check the kthread_prio against zero value;
+> - by default the RCU_NOCB_CPU_CB_BOOST is ON for PREEMPT_RT.
+> 
+> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 
-Yeah that kind of stuff is probably best kept in a ci-farm adjacent
-repo, since it's all very specific to the machine and ci setup.
--Daniel
+Very good, thank you!  I have queued this for further review and testing,
+with the usual wordsmithing (please check!).
 
->
-> BR,
-> -R
->
-> > And then in another level you need different filtering to figure out
-> > when your kernel is too busted and you need to reboot (like when
-> > lockdep splats anywhere).
-> >
-> > Maybe we should pull that part of igt_runner out so that it can be
-> > used in places where the full thing cant? Maybe even in mesa as a "my
-> > kernel is in really bad shape" kinda test. There's a lot of tea leaves
-> > reading heuristics involved in this stuff ime.
-> > -Daniel
-> >
-> > >
-> > > BR,
-> > > -R
-> > >
-> > > > -Daniel
-> > > >
-> > > > > BR,
-> > > > > -R
-> > > > >
-> >
-> >
-> >
-> > --
-> > Daniel Vetter
-> > Software Engineer, Intel Corporation
-> > http://blog.ffwll.ch
+By default, this would go not into the upcoming merge window, but to
+the one after that.  Please let me know if you need it in the upcoming
+merge window.
 
+							Thanx, Paul
 
+------------------------------------------------------------------------
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+commit f50467bdfec9c27ae574b8c7916b51abe3c46eae
+Author: Uladzislau Rezki (Sony) <urezki@gmail.com>
+Date:   Wed May 11 10:57:03 2022 +0200
+
+    rcu/nocb: Add option to opt rcuo kthreads out of RT priority
+    
+    This commit introduces a RCU_NOCB_CPU_CB_BOOST Kconfig option that
+    prevents rcuo kthreads from running at real-time priority, even in
+    kernels built with RCU_BOOST.  This capability is important to devices
+    needing low-latency (as in a few milliseconds) response from expedited
+    RCU grace periods, but which are not running a classic real-time workload.
+    On such devices, permitting the rcuo kthreads to run at real-time priority
+    results in unacceptable latencies imposed on the application tasks,
+    which run as SCHED_OTHER.
+    
+    See for example the following trace output:
+    
+    <snip>
+    <...>-60 [006] d..1 2979.028717: rcu_batch_start: rcu_preempt CBs=34619 bl=270
+    <snip>
+    
+    If that rcuop kthread were permitted to run at real-time SCHED_FIFO
+    priority, it would monopolize its CPU for hundreds of milliseconds
+    while invoking those 34619 RCU callback functions, which would cause an
+    unacceptably long latency spike for many application stacks on Android
+    platforms.
+    
+    However, some existing real-time workloads require that callback
+    invocation run at SCHED_FIFO priority, for example, those running on
+    systems with heavy SCHED_OTHER background loads.  (It is the real-time
+    system's administrator's responsibility to make sure that important
+    real-time tasks run at a higher priority than do RCU's kthreads.)
+    
+    Therefore, this new RCU_NOCB_CPU_CB_BOOST Kconfig option defaults to
+    "y" on kernels built with PREEMPT_RT and defaults to "n" otherwise.
+    The effect is to preserve current behavior for real-time systems, but for
+    other systems to allow expedited RCU grace periods to run with real-time
+    priority while continuing to invoke RCU callbacks as SCHED_OTHER.
+    
+    As you would expect, this RCU_NOCB_CPU_CB_BOOST Kconfig option has no
+    effect except on CPUs with offloaded RCU callbacks.
+    
+    Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
+index 27aab870ae4cf..c05ca52cdf64d 100644
+--- a/kernel/rcu/Kconfig
++++ b/kernel/rcu/Kconfig
+@@ -275,6 +275,22 @@ config RCU_NOCB_CPU_DEFAULT_ALL
+ 	  Say Y here if you want offload all CPUs by default on boot.
+ 	  Say N here if you are unsure.
+ 
++config RCU_NOCB_CPU_CB_BOOST
++	bool "Offload RCU callback from real-time kthread"
++	depends on RCU_NOCB_CPU && RCU_BOOST
++	default y if PREEMPT_RT
++	help
++	  Use this option to invoke offloaded callbacks as SCHED_FIFO
++	  to avoid starvation by heavy SCHED_OTHER background load.
++	  Of course, running as SCHED_FIFO during callback floods will
++	  cause the rcuo[ps] kthreads to monopolize the CPU for hundreds
++	  of milliseconds or more.  Therefore, when enabling this option,
++	  it is your responsibility to ensure that latency-sensitive
++	  tasks either run with higher priority or run on some other CPU.
++
++	  Say Y here if you want to set RT priority for offloading kthreads.
++	  Say N here if you are building a !PREEMPT_RT kernel and are unsure.
++
+ config TASKS_TRACE_RCU_READ_MB
+ 	bool "Tasks Trace RCU readers use memory barriers in user and idle"
+ 	depends on RCU_EXPERT && TASKS_TRACE_RCU
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index bcc5876c9753b..222d59299a2af 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -154,7 +154,11 @@ static void sync_sched_exp_online_cleanup(int cpu);
+ static void check_cb_ovld_locked(struct rcu_data *rdp, struct rcu_node *rnp);
+ static bool rcu_rdp_is_offloaded(struct rcu_data *rdp);
+ 
+-/* rcuc/rcub/rcuop kthread realtime priority */
++/*
++ * rcuc/rcub/rcuop kthread realtime priority. The "rcuop"
++ * real-time priority(enabling/disabling) is controlled by
++ * the extra CONFIG_RCU_NOCB_CPU_CB_BOOST configuration.
++ */
+ static int kthread_prio = IS_ENABLED(CONFIG_RCU_BOOST) ? 1 : 0;
+ module_param(kthread_prio, int, 0444);
+ 
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index 60cc92cc66552..fa8e4f82e60c0 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -1315,8 +1315,9 @@ static void rcu_spawn_cpu_nocb_kthread(int cpu)
+ 	if (WARN_ONCE(IS_ERR(t), "%s: Could not start rcuo CB kthread, OOM is now expected behavior\n", __func__))
+ 		goto end;
+ 
+-	if (kthread_prio)
++	if (IS_ENABLED(CONFIG_RCU_NOCB_CPU_CB_BOOST) && kthread_prio)
+ 		sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
++
+ 	WRITE_ONCE(rdp->nocb_cb_kthread, t);
+ 	WRITE_ONCE(rdp->nocb_gp_kthread, rdp_gp->nocb_gp_kthread);
+ 	return;

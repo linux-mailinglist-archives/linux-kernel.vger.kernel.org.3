@@ -2,241 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438FC523724
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C83523723
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343600AbiEKPXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41970 "EHLO
+        id S230219AbiEKPXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343577AbiEKPXa (ORCPT
+        with ESMTP id S1343580AbiEKPXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:23:30 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A02E51596;
-        Wed, 11 May 2022 08:23:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652282609; x=1683818609;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=jyk3mHBzL3GP52KkY0E3l3kR0Ar4/ziX8ARz3mXJ8GQ=;
-  b=hkbEw0xztPty37n0CsUvH3AQCeAHNoVYlgZuK3OzkAIEUQW9LUPh4MhT
-   /jNw5/qY2dajoztGleT3BVFhPeT4AkCrPnxU9HAtnieotE+6WKp3ZmSSP
-   qINc1xAqyVaIF519i50Re+qDTtu7ypbvED4AvKIjvpGgfXLuj2l+RYHbU
-   4=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 11 May 2022 08:23:29 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 08:23:28 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 11 May 2022 08:23:28 -0700
-Received: from jhugo-lnx.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 11 May 2022 08:23:27 -0700
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-To:     <kys@microsoft.com>, <haiyangz@microsoft.com>,
-        <sthemmin@microsoft.com>, <wei.liu@kernel.org>,
-        <decui@microsoft.com>, <lorenzo.pieralisi@arm.com>,
-        <robh@kernel.org>, <kw@linux.com>, <bhelgaas@google.com>
-CC:     <jakeo@microsoft.com>, <dazhan@microsoft.com>,
-        <linux-hyperv@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>
-Subject: [PATCH v2 2/2] PCI: hv: Fix interrupt mapping for multi-MSI
-Date:   Wed, 11 May 2022 09:23:19 -0600
-Message-ID: <1652282599-21643-1-git-send-email-quic_jhugo@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 11 May 2022 11:23:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D5D722404B
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:23:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652282609;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QSwu7xqkqoNLt+H1Fs+CQIumcyQcOiTFfolxhe68oB0=;
+        b=bGGJXIaxT4eTG53R4qklI3Dc/tE+pP3NP5Cyn91Y58jply+yIltKxyEVhzhKnmTI62Tws/
+        ulxV/GAunXDUdSxQybYeLYeYKksO1/NuZxXFUNtragfnWYbqqlDN14eVAf5G/bsWHXHmNV
+        ocpfLCjaKFjaXHvT4sdAgzOuZQmaYA4=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-59-KxBzYXLgOU2XJmgfP0SttA-1; Wed, 11 May 2022 11:23:27 -0400
+X-MC-Unique: KxBzYXLgOU2XJmgfP0SttA-1
+Received: by mail-wm1-f69.google.com with SMTP id k16-20020a7bc310000000b0038e6cf00439so841552wmj.0
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:23:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=QSwu7xqkqoNLt+H1Fs+CQIumcyQcOiTFfolxhe68oB0=;
+        b=4CJ5gJoJOuZ6V66YF2J+mPlXEe6dgGkiJQVY7aOBGMzBNqB2HeN7ts8AiQuaGwJcwM
+         NlNAtyAuBAjCwIMEbvSRcn1DhoeH4EbcnsT93BoxoxQR3buP7b3W2c55jwehfLjrhew6
+         9gvDs+NK9aQ74ACEZpltEYfW0NMjoCJL13P9hkZOxI8IjBii5T/m+sNhJ5/pPbMbzPJR
+         pCF8G3f5jI8JqwuMH//W4TqgACR2DBdW1UIe2DNho6Ae/W5zuDm7bu70MRVbDbq7epKC
+         QnOzYx4dveT6PAMUIH0iNO1xn7Hj8sDBq9kqilP30FxpL4PuLgWMTtST4wlFT5ut7f/s
+         28HA==
+X-Gm-Message-State: AOAM533eCHmuZevQGivbndnZkA+IM4oyBBp5EJ10oPTQjXPQZMxUpX2Z
+        yj9YDSDL3/wzSwN7yl4Ew0+j8zsXFt1wCKCTMwwcgZNrUPD0FvGOtmTL5WoE1Zbts5xW8t3BiPB
+        yHiySg1EUJOtxSLOrmzVNQ0Cc
+X-Received: by 2002:a05:6000:144e:b0:20c:ab37:70f3 with SMTP id v14-20020a056000144e00b0020cab3770f3mr23119861wrx.682.1652282606801;
+        Wed, 11 May 2022 08:23:26 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzXmrCQHyV0Vzn7S9Pf5AXsxOTUZnIuFnjQeZxtcrP3EcXVkDoAgCyGtUebE34qnyln2EmSPQ==
+X-Received: by 2002:a05:6000:144e:b0:20c:ab37:70f3 with SMTP id v14-20020a056000144e00b0020cab3770f3mr23119840wrx.682.1652282606497;
+        Wed, 11 May 2022 08:23:26 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c701:700:2393:b0f4:ef08:bd51? (p200300cbc70107002393b0f4ef08bd51.dip0.t-ipconnect.de. [2003:cb:c701:700:2393:b0f4:ef08:bd51])
+        by smtp.gmail.com with ESMTPSA id i10-20020a5d630a000000b0020c5253d8d4sm1956738wru.32.2022.05.11.08.23.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 08:23:25 -0700 (PDT)
+Message-ID: <4cf144a9-fff5-d993-4fcb-7f2dfa6e71bb@redhat.com>
+Date:   Wed, 11 May 2022 17:23:25 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-US
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     ying.huang@intel.com, hch@lst.de, dhowells@redhat.com,
+        cl@linux.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        naoya.horiguchi@nec.com
+References: <20220425132723.34824-1-linmiaohe@huawei.com>
+ <20220425132723.34824-3-linmiaohe@huawei.com>
+ <525298ad-5e6a-2f8d-366d-4dcb7eebd093@redhat.com>
+ <f5f933dc-450c-f3ac-34e6-d6dc1d901efd@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v2 2/4] mm/migration: remove unneeded lock page and
+ PageMovable check
+In-Reply-To: <f5f933dc-450c-f3ac-34e6-d6dc1d901efd@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to Dexuan, the hypervisor folks beleive that multi-msi
-allocations are not correct.  compose_msi_msg() will allocate multi-msi
-one by one.  However, multi-msi is a block of related MSIs, with alignment
-requirements.  In order for the hypervisor to allocate properly aligned
-and consecutive entries in the IOMMU Interrupt Remapping Table, there
-should be a single mapping request that requests all of the multi-msi
-vectors in one shot.
+On 09.05.22 10:51, Miaohe Lin wrote:
+> On 2022/4/29 18:07, David Hildenbrand wrote:
+>> On 25.04.22 15:27, Miaohe Lin wrote:
+>>> When non-lru movable page was freed from under us, __ClearPageMovable must
+>>> have been done. Even if it's not done, ClearPageIsolated here won't hurt
+>>> as page will be freed anyway. So we can thus remove unneeded lock page and
+>>> PageMovable check here.
+>>>
+>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>> Reviewed-by: Christoph Hellwig <hch@lst.de>
+>>> ---
+>>>  mm/migrate.c | 8 ++------
+>>>  1 file changed, 2 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/mm/migrate.c b/mm/migrate.c
+>>> index b779646665fe..0fc4651b3e39 100644
+>>> --- a/mm/migrate.c
+>>> +++ b/mm/migrate.c
+>>> @@ -1093,12 +1093,8 @@ static int unmap_and_move(new_page_t get_new_page,
+>>>  		/* page was freed from under us. So we are done. */
+>>>  		ClearPageActive(page);
+>>>  		ClearPageUnevictable(page);
+>>> -		if (unlikely(__PageMovable(page))) {
+>>> -			lock_page(page);
+>>> -			if (!PageMovable(page))
+>>> -				ClearPageIsolated(page);
+>>> -			unlock_page(page);
+>>> -		}
+>>> +		if (unlikely(__PageMovable(page)))
+>>> +			ClearPageIsolated(page);
+>>>  		goto out;
+>>>  	}
+>>
+>> Hm, that code+change raises a couple of questions.
+>>
+>> We're doing here the same as in putback_movable_pages(). So I guess the
+>> difference here is that the caller did release the reference while the
+>> page was isolated, while we don't assume the same in
+>> putback_movable_pages().
+> 
+> Agree.
+> 
+>>
+>>
+>> Shouldn't whoever owned the page have cleared that? IOW, is it even
+>> valid that we see a movable or isolated page here (WARN/BUG?)?
+>>
+>> At least for balloon compaction, I remember that __PageMovable() is
+>> properly cleared before freeing it via balloon_page_delete().
+> 
+> z3fold, zsmalloc will do __ClearPageMovable when the page is going to be released.
+> So I think we shouldn't see a movable page here:
+> 
+> void __ClearPageMovable(struct page *page)
+> {
+> 	VM_BUG_ON_PAGE(!PageMovable(page), page);
+> 	/*
+> 	 * Clear registered address_space val with keeping PAGE_MAPPING_MOVABLE
+> 	 * flag so that VM can catch up released page by driver after isolation.
+> 	 * With it, VM migration doesn't try to put it back.
+> 	 */
+> 	page->mapping = (void *)((unsigned long)page->mapping &
+> 				PAGE_MAPPING_MOVABLE);
+> }
+> 
+> But it seems there is no guarantee for PageIsolated flag. Or am I miss something?
 
-Dexuan suggests detecting the multi-msi case and composing a single
-request related to the first MSI.  Then for the other MSIs in the same
-block, use the cached information.  This appears to be viable, so do it.
+At least the code we have now:
 
-Suggested-by: Dexuan Cui <decui@microsoft.com>
-Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-Reviewed-by: Dexuan Cui <decui@microsoft.com>
-Tested-by: Michael Kelley <mikelley@microsoft.com>
----
- drivers/pci/controller/pci-hyperv.c | 60 ++++++++++++++++++++++++++++++-------
- 1 file changed, 50 insertions(+), 10 deletions(-)
+if (unlikely(__PageMovable(page)))
+	ClearPageIsolated(page);
 
-diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-index 5e2e637..e439b81 100644
---- a/drivers/pci/controller/pci-hyperv.c
-+++ b/drivers/pci/controller/pci-hyperv.c
-@@ -1525,6 +1525,10 @@ static void hv_int_desc_free(struct hv_pci_dev *hpdev,
- 		u8 buffer[sizeof(struct pci_delete_interrupt)];
- 	} ctxt;
- 
-+	if (!int_desc->vector_count) {
-+		kfree(int_desc);
-+		return;
-+	}
- 	memset(&ctxt, 0, sizeof(ctxt));
- 	int_pkt = (struct pci_delete_interrupt *)&ctxt.pkt.message;
- 	int_pkt->message_type.type =
-@@ -1609,12 +1613,12 @@ static void hv_pci_compose_compl(void *context, struct pci_response *resp,
- 
- static u32 hv_compose_msi_req_v1(
- 	struct pci_create_interrupt *int_pkt, struct cpumask *affinity,
--	u32 slot, u8 vector)
-+	u32 slot, u8 vector, u8 vector_count)
- {
- 	int_pkt->message_type.type = PCI_CREATE_INTERRUPT_MESSAGE;
- 	int_pkt->wslot.slot = slot;
- 	int_pkt->int_desc.vector = vector;
--	int_pkt->int_desc.vector_count = 1;
-+	int_pkt->int_desc.vector_count = vector_count;
- 	int_pkt->int_desc.delivery_mode = DELIVERY_MODE;
- 
- 	/*
-@@ -1637,14 +1641,14 @@ static int hv_compose_msi_req_get_cpu(struct cpumask *affinity)
- 
- static u32 hv_compose_msi_req_v2(
- 	struct pci_create_interrupt2 *int_pkt, struct cpumask *affinity,
--	u32 slot, u8 vector)
-+	u32 slot, u8 vector, u8 vector_count)
- {
- 	int cpu;
- 
- 	int_pkt->message_type.type = PCI_CREATE_INTERRUPT_MESSAGE2;
- 	int_pkt->wslot.slot = slot;
- 	int_pkt->int_desc.vector = vector;
--	int_pkt->int_desc.vector_count = 1;
-+	int_pkt->int_desc.vector_count = vector_count;
- 	int_pkt->int_desc.delivery_mode = DELIVERY_MODE;
- 	cpu = hv_compose_msi_req_get_cpu(affinity);
- 	int_pkt->int_desc.processor_array[0] =
-@@ -1656,7 +1660,7 @@ static u32 hv_compose_msi_req_v2(
- 
- static u32 hv_compose_msi_req_v3(
- 	struct pci_create_interrupt3 *int_pkt, struct cpumask *affinity,
--	u32 slot, u32 vector)
-+	u32 slot, u32 vector, u8 vector_count)
- {
- 	int cpu;
- 
-@@ -1664,7 +1668,7 @@ static u32 hv_compose_msi_req_v3(
- 	int_pkt->wslot.slot = slot;
- 	int_pkt->int_desc.vector = vector;
- 	int_pkt->int_desc.reserved = 0;
--	int_pkt->int_desc.vector_count = 1;
-+	int_pkt->int_desc.vector_count = vector_count;
- 	int_pkt->int_desc.delivery_mode = DELIVERY_MODE;
- 	cpu = hv_compose_msi_req_get_cpu(affinity);
- 	int_pkt->int_desc.processor_array[0] =
-@@ -1695,6 +1699,8 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
- 	struct cpumask *dest;
- 	struct compose_comp_ctxt comp;
- 	struct tran_int_desc *int_desc;
-+	struct msi_desc *msi_desc;
-+	u8 vector, vector_count;
- 	struct {
- 		struct pci_packet pci_pkt;
- 		union {
-@@ -1716,7 +1722,8 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
- 		return;
- 	}
- 
--	pdev = msi_desc_to_pci_dev(irq_data_get_msi_desc(data));
-+	msi_desc  = irq_data_get_msi_desc(data);
-+	pdev = msi_desc_to_pci_dev(msi_desc);
- 	dest = irq_data_get_effective_affinity_mask(data);
- 	pbus = pdev->bus;
- 	hbus = container_of(pbus->sysdata, struct hv_pcibus_device, sysdata);
-@@ -1729,6 +1736,36 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
- 	if (!int_desc)
- 		goto drop_reference;
- 
-+	if (!msi_desc->pci.msi_attrib.is_msix && msi_desc->nvec_used > 1) {
-+		/*
-+		 * If this is not the first MSI of Multi MSI, we already have
-+		 * a mapping.  Can exit early.
-+		 */
-+		if (msi_desc->irq != data->irq) {
-+			data->chip_data = int_desc;
-+			int_desc->address = msi_desc->msg.address_lo |
-+					    (u64)msi_desc->msg.address_hi << 32;
-+			int_desc->data = msi_desc->msg.data +
-+					 (data->irq - msi_desc->irq);
-+			msg->address_hi = msi_desc->msg.address_hi;
-+			msg->address_lo = msi_desc->msg.address_lo;
-+			msg->data = int_desc->data;
-+			put_pcichild(hpdev);
-+			return;
-+		}
-+		/*
-+		 * The vector we select here is a dummy value.  The correct
-+		 * value gets sent to the hypervisor in unmask().  This needs
-+		 * to be aligned with the count, and also not zero.  Multi-msi
-+		 * is powers of 2 up to 32, so 32 will always work here.
-+		 */
-+		vector = 32;
-+		vector_count = msi_desc->nvec_used;
-+	} else {
-+		vector = hv_msi_get_int_vector(data);
-+		vector_count = 1;
-+	}
-+
- 	memset(&ctxt, 0, sizeof(ctxt));
- 	init_completion(&comp.comp_pkt.host_event);
- 	ctxt.pci_pkt.completion_func = hv_pci_compose_compl;
-@@ -1739,7 +1776,8 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
- 		size = hv_compose_msi_req_v1(&ctxt.int_pkts.v1,
- 					dest,
- 					hpdev->desc.win_slot.slot,
--					hv_msi_get_int_vector(data));
-+					vector,
-+					vector_count);
- 		break;
- 
- 	case PCI_PROTOCOL_VERSION_1_2:
-@@ -1747,14 +1785,16 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
- 		size = hv_compose_msi_req_v2(&ctxt.int_pkts.v2,
- 					dest,
- 					hpdev->desc.win_slot.slot,
--					hv_msi_get_int_vector(data));
-+					vector,
-+					vector_count);
- 		break;
- 
- 	case PCI_PROTOCOL_VERSION_1_4:
- 		size = hv_compose_msi_req_v3(&ctxt.int_pkts.v3,
- 					dest,
- 					hpdev->desc.win_slot.slot,
--					hv_msi_get_int_vector(data));
-+					vector,
-+					vector_count);
- 		break;
- 
- 	default:
+Should be dead code. So PG_isolated could remain set.
+
+If PG_isolated is still set, it will get cleared in the buddy when
+freeing the page via
+
+	page->flags &= ~PAGE_FLAGS_CHECK_AT_PREP;
+
+> 
+>>
+>>
+>> Also, I am not sure how reliable that page count check is here: if we'd
+>> have another speculative reference to the page, we might see
+>> "page_count(page) > 1" and not take that path, although the previous
+>> owner released the last reference.
+> 
+> IIUC, there should not be such speculative reference. The driver should have taken care
+> of it.
+
+How can you prevent any kind of speculative references?
+
+See isolate_movable_page() as an example, which grabs a speculative
+reference to then find out that the page is already isolated by someone
+else, to then back off.
+
 -- 
-2.7.4
+Thanks,
+
+David / dhildenb
 

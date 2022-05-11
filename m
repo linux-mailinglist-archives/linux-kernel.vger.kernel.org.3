@@ -2,121 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E65E7523CD8
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:48:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75346523CDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:50:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346480AbiEKSsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 14:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
+        id S1346483AbiEKSuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 14:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241219AbiEKSsK (ORCPT
+        with ESMTP id S229954AbiEKSuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 14:48:10 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5719E1A4933
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:48:09 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id j4so5117476lfh.8
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:48:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LjOBAquXwgrrgXm8VNOmvziGW6n+WunCBS4qV3JJbEM=;
-        b=cA8UQtFoVUliUtfWSv912J6B0ub0HcxW8gmIXite+joZhlMbpeCS+bUAZWYfMzZ8Xa
-         G/fJOfLTcngtIL8G90CQr+73lLbCL1AHxsh2R+qmJrgmJRTCuyNKXj7cliEo28pPuXQj
-         6w3VaEUFPmnSDKtF91NPiV/sgjc8ZRv71y4uYb9hxeHwZUr5je/pDiqFgm2aSZ7bIISf
-         /1UJjBBsIPYSlsXi1kwAQ99jbSUPR+9P2r7SaKBX1wGFQEJXaWfpYonbpRKCQDD6CxUK
-         Dp+b87CVNCLP2zVCceaShTI1HSRNKEIjVASMSKh/ElRg8CR6aP+J3pZQ1S3J5UZUSIaH
-         1EZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LjOBAquXwgrrgXm8VNOmvziGW6n+WunCBS4qV3JJbEM=;
-        b=INXhJsDSs3oPQXkJp9S6pYCHqOdMajiac4HzhRRX8glf3w916IzwOYGrajxPFn1kHu
-         ZoAfrf+CGou1WjOOsGzX1GMyl8H098mLMYtalNqtqL8Uk14VG5mZSUtcHdnd94zifNMV
-         l+k56XlPXDcUiC/6mLieqYIT6eM8rqiTbxA/0H9oQa/G7A/OwvD5TmFGjD0/W4ObZlzo
-         7r3CmXU77m57pF/b/sMpvGcIO8n6EXVj5RIuKzh/DnmmN6e1sh8NmoxjncAOZi9Kf3Ao
-         eOU39CrGzrahturaUfh20E/QCfKVYwveKgFiYSZpHeGXZXpXHa6tka/jzb8mgmASZR84
-         9+rw==
-X-Gm-Message-State: AOAM531A31JoeS5EnKPhn7kbLWvoNnYc/2t8YSY4nn3tGhQ2KuSVKnUd
-        329clrlpLawqoytdnW2emS6jgjoLw/l6OKyvaUm76Q==
-X-Google-Smtp-Source: ABdhPJwORYNYs+f4SpR17x+QtOIu9Uo6dxlRowGZd30bvV7AXP2VnNh+RNLxsgttKR9yFrJ+aoveRa6JaxEnp5h+sgs=
-X-Received: by 2002:a05:6512:1d1:b0:471:f63a:b182 with SMTP id
- f17-20020a05651201d100b00471f63ab182mr20624164lfp.392.1652294887500; Wed, 11
- May 2022 11:48:07 -0700 (PDT)
+        Wed, 11 May 2022 14:50:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837671ACFAC;
+        Wed, 11 May 2022 11:50:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C137360F2F;
+        Wed, 11 May 2022 18:49:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1788C340EE;
+        Wed, 11 May 2022 18:49:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652294999;
+        bh=1/F7wsDez0z3wrk2Ax/t4Z3pU9oQk4PfJkSQFlB07kQ=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=cDqvRFyyAsMQPyM+khdB7N1GbvetpBwd8gw7x9bIgfAfpQNYRE1n6r/kuH2fdisZg
+         p6jpzPYr30KC6DqpclR9v9tZzG3vbscidCN78WL38Zp/YbYgW9yuhxEIs2nsboIgqQ
+         3QQiJYl798OmTnUS2DFlN9Q9dDg5IbLRLTf83HeaBWc9XcA3f08TWaM02S4KzVJ6ek
+         wsW2nF2upA4jm84EIDyps12Xb/KmAt4HSQdsiEk4m41cC7Cb92dZG71GNa0L0kfyFv
+         f/S1UTOD3IuHq0s76crG73KqsbLA5u1mEwBb3RQBYFh+VvNaZUbZI3T9I30fLo2uog
+         0cNAkNhAZ0Ncg==
+From:   Mark Brown <broonie@kernel.org>
+To:     alexandre.torgue@foss.st.com, patrice.chotard@foss.st.com
+Cc:     linux-stm32@st-md-mailman.stormreply.com,
+        christophe.kerello@foss.st.com, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20220511074644.558874-1-patrice.chotard@foss.st.com>
+References: <20220511074644.558874-1-patrice.chotard@foss.st.com>
+Subject: Re: [PATCH 0/3] spi: stm32-qspi: flags management fixes
+Message-Id: <165229499740.364474.10772649163744226308.b4-ty@kernel.org>
+Date:   Wed, 11 May 2022 19:49:57 +0100
 MIME-Version: 1.0
-References: <20220508190631.2386038-1-masahiroy@kernel.org>
- <20220508190631.2386038-4-masahiroy@kernel.org> <CAKwvOd=LR=UNOeWJDmM-McJ=FrCWTo8w1ox+KGMQCwCVpiUyFg@mail.gmail.com>
- <CAK7LNARGNEDzPPUsPjDXsXUUUPSFK2erQRuyPocR_v5hTYRihg@mail.gmail.com>
-In-Reply-To: <CAK7LNARGNEDzPPUsPjDXsXUUUPSFK2erQRuyPocR_v5hTYRihg@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 11 May 2022 11:47:56 -0700
-Message-ID: <CAKwvOdmK4oH0t8Q6F19sWKX1fT=AgS=kfvn05FT01HffLJwgMQ@mail.gmail.com>
-Subject: Re: [PATCH v4 03/14] modpost: split the section mismatch checks into section-check.c
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 9, 2022 at 11:57 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> > > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> > > index a78b75f0eeb0..e7e2c70a98f5 100644
-> > > --- a/scripts/mod/modpost.c
-> > > +++ b/scripts/mod/modpost.c
-> > > @@ -31,7 +31,7 @@ static bool external_module;
-> > >  /* Only warn about unresolved symbols */
-> > >  static bool warn_unresolved;
-> > >
-> > > -static int sec_mismatch_count;
-> > > +int sec_mismatch_count;
-> >
-> > ^ this should go in modpost.h if it is to be used in two translation
-> > units, rather than forward declaring it in section-check.c.  You did
-> > this for the functions.
->
->
-> Sorry, I do not understand.
->
->
-> In modpost.h, I put the declaration:
->
->   extern int sec_mismatch_count;
->
-> If I moved it to the header without 'extern'
-> I would get multiple definitions.
+On Wed, 11 May 2022 09:46:41 +0200, patrice.chotard@foss.st.com wrote:
+> From: Patrice Chotard <patrice.chotard@foss.st.com>
+> 
+> This series update flags management in the following cases:
+>   - In APM mode, don't take care of TCF and TEF flags
+>   - Always check TCF flag in stm32_qspi_wait_cmd()
+>   - Don't check BUSY flag when sending new command
+> 
+> [...]
 
-Yeah, you need to _declare_ it w/ extern in the header, then _define_
-it in one source file.
+Applied to
 
-That way, if the type ever changes, the sources will agree on type in
-all source files. You will get a redefinition error if the definition
-changes the type of the variable since the last declaration.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-What you're doing is forward declaring, which works, and is a common
-pattern for (bloated) C++, but is less type safe than sharing a single
-common declaration between multiple source files via a single common
-shared header. (Sorry I didn't respond before you sent v5)
--- 
+Thanks!
+
+[1/3] spi: stm32-qspi: Fix wait_cmd timeout in APM mode
+      commit: d83d89ea68b4726700fa87b22db075e4217e691c
+[2/3] spi: stm32-qspi: Always check SR_TCF flags in stm32_qspi_wait_cmd()
+      commit: 0cf8d32600cf5660ee45d421f1b6e3a129ca58b6
+[3/3] spi: stm32-qspi: Remove SR_BUSY bit check before sending command
+      commit: ae16cc18f37bcdea7d4ef57a5e526a60b09a1506
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
 Thanks,
-~Nick Desaulniers
+Mark

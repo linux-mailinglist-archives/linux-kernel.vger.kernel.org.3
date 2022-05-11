@@ -2,92 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D79523CAC
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6EB1523CAB
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346397AbiEKShQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 14:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45014 "EHLO
+        id S1346407AbiEKShG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 14:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346382AbiEKSg7 (ORCPT
+        with ESMTP id S1346357AbiEKSgz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 14:36:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D76C82F021
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:36:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652294217;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Cne9kzq5J+wUhheKNYyc+FraBMO4jJvb9afeixc7QTk=;
-        b=fkgbbUq+FXs793SRRGiQ2Ysu3q84ykd5C8pQCptCiO3UwAWJD3zr44Hazaphv/ca0bS7SF
-        /CWGOXnNvGk7xnlVZIez3qIPiqzTat4UytSnqunI8DP2reV9+I8L+wj+ObByrJuCV1qPDc
-        hKNPcLVF8TtekqID4CHPOE5jh13e5Kw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-172-7ee-hStvPHual-hKBg3ydQ-1; Wed, 11 May 2022 14:36:51 -0400
-X-MC-Unique: 7ee-hStvPHual-hKBg3ydQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 11 May 2022 14:36:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0004D1FCEF;
+        Wed, 11 May 2022 11:36:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E5FA0185A794;
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1C72B825FA;
+        Wed, 11 May 2022 18:36:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0704AC340EE;
         Wed, 11 May 2022 18:36:50 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.39.192.194])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id CEF1D40C1421;
-        Wed, 11 May 2022 18:36:49 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] x86/vsyscall: Remove CONFIG_LEGACY_VSYSCALL_EMULATE
-References: <898932fe61db6a9d61bc2458fa2f6049f1ca9f5c.1652290558.git.luto@kernel.org>
-        <202205111104.464A6619@keescook>
-Date:   Wed, 11 May 2022 20:36:48 +0200
-In-Reply-To: <202205111104.464A6619@keescook> (Kees Cook's message of "Wed, 11
-        May 2022 11:04:55 -0700")
-Message-ID: <87k0ardigv.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652294211;
+        bh=9dgk5MMfcSNFnaS9xDsRuvP7ApuSvlKIV/AhUIRrM5M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=ayL0/cxgvhOeHusF0CD32lm4iAN55yhdjRh8HYDDLCUFllMtno2DQhW+WShYRZSyo
+         NmqdgJNCxmSwJVBMU6iHIFZnLg70bCHID+F7uiNt9wupxI95RcISY7SSBk4L4+p01H
+         KYSbUraQlZQYzuwznmAv24/bT3riF9fRjyzVqHc2aQ+gn6nV9TGJ3sf67WsjSjZW2h
+         YSl0Kvk3DnmvR0TcEkusO1HUzJNICEg9cdx3IM5oBErOZ7JmTpQLT5j89swbubiG0n
+         M6XqBLn0XXewlGbt0xGEGs6mKXpemojhfXr/lZrOtxYpeVQXnCbgDsbNeRFxovFGyE
+         QLkEbNjPqUgmA==
+Date:   Wed, 11 May 2022 13:36:48 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, lorenzo.pieralisi@arm.com,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
+        jakeo@microsoft.com, dazhan@microsoft.com,
+        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] PCI: hv: Fix interrupt mapping for multi-MSI
+Message-ID: <20220511183648.GA798565@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1652282599-21643-1-git-send-email-quic_jhugo@quicinc.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Kees Cook:
+In the subject, "Fix interrupt mapping ..." is too general.  Almost
+all patches "fix" something, so all we learn is that this is something
+to do with multi-MSI.  It's better if you can say something specific,
+like the fact that you now ensure that multi-MSI vectors are aligned
+and consecutive.
 
-> On Wed, May 11, 2022 at 10:38:53AM -0700, Andy Lutomirski wrote:
->> CONFIG_LEGACY_VSYSCALL_EMULATE is, as far as I know, only needed for the
->> combined use of exotic and outdated debugging mechanisms with outdated
->> binaries.  At this point, no one should be using it.  We would like to
->> implement dynamic switching of vsyscalls, but this is much more
->> complicated to support in EMULATE mode than XONLY mode.
->> 
->> So let's force all the distros off of EMULATE mode.  If anyone actually
->> needs it, they can set vsyscall=emulate, and we can then get away with
->> refusing to support newer security models if that option is set.
->> 
->> Cc: x86@kernel.org
->> Cc: Kees Cook <keescook@chromium.org>
->> Cc: Florian Weimer <fweimer@redhat.com>
->> Signed-off-by: Andy Lutomirski <luto@kernel.org>
->
-> Sounds legit! Can we switch the default to "none" while we're at it?
+On Wed, May 11, 2022 at 09:23:19AM -0600, Jeffrey Hugo wrote:
+> According to Dexuan, the hypervisor folks beleive that multi-msi
+> allocations are not correct.  compose_msi_msg() will allocate multi-msi
+> one by one.  However, multi-msi is a block of related MSIs, with alignment
+> requirements.  In order for the hypervisor to allocate properly aligned
+> and consecutive entries in the IOMMU Interrupt Remapping Table, there
+> should be a single mapping request that requests all of the multi-msi
+> vectors in one shot.
 
-I think that's a userspace ABI break?
+s/beleive/believe/
+s/multi-msi/multi-MSI/ (several, and below, and in code comments)
 
-I do not have a *very* strong opinion about this.  For one thing, it
-would be handy example to have that such deliberate  do actually
-happen. 8-)
+But we don't really need the context of "According to Dexuan, the
+hypervisor folks believe ..."  Just describe what this patch does and
+why.  Apparently we previously didn't allocate aligned and consecutive
+MSI vectors, and presumably that broke something.
 
-Thanks,
-Florian
-
+> Dexuan suggests detecting the multi-msi case and composing a single
+> request related to the first MSI.  Then for the other MSIs in the same
+> block, use the cached information.  This appears to be viable, so do it.
+> 
+> Suggested-by: Dexuan Cui <decui@microsoft.com>
+> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> Reviewed-by: Dexuan Cui <decui@microsoft.com>
+> Tested-by: Michael Kelley <mikelley@microsoft.com>
+> ---
+>  drivers/pci/controller/pci-hyperv.c | 60 ++++++++++++++++++++++++++++++-------
+>  1 file changed, 50 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+> index 5e2e637..e439b81 100644
+> --- a/drivers/pci/controller/pci-hyperv.c
+> +++ b/drivers/pci/controller/pci-hyperv.c
+> @@ -1525,6 +1525,10 @@ static void hv_int_desc_free(struct hv_pci_dev *hpdev,
+>  		u8 buffer[sizeof(struct pci_delete_interrupt)];
+>  	} ctxt;
+>  
+> +	if (!int_desc->vector_count) {
+> +		kfree(int_desc);
+> +		return;
+> +	}
+>  	memset(&ctxt, 0, sizeof(ctxt));
+>  	int_pkt = (struct pci_delete_interrupt *)&ctxt.pkt.message;
+>  	int_pkt->message_type.type =
+> @@ -1609,12 +1613,12 @@ static void hv_pci_compose_compl(void *context, struct pci_response *resp,
+>  
+>  static u32 hv_compose_msi_req_v1(
+>  	struct pci_create_interrupt *int_pkt, struct cpumask *affinity,
+> -	u32 slot, u8 vector)
+> +	u32 slot, u8 vector, u8 vector_count)
+>  {
+>  	int_pkt->message_type.type = PCI_CREATE_INTERRUPT_MESSAGE;
+>  	int_pkt->wslot.slot = slot;
+>  	int_pkt->int_desc.vector = vector;
+> -	int_pkt->int_desc.vector_count = 1;
+> +	int_pkt->int_desc.vector_count = vector_count;
+>  	int_pkt->int_desc.delivery_mode = DELIVERY_MODE;
+>  
+>  	/*
+> @@ -1637,14 +1641,14 @@ static int hv_compose_msi_req_get_cpu(struct cpumask *affinity)
+>  
+>  static u32 hv_compose_msi_req_v2(
+>  	struct pci_create_interrupt2 *int_pkt, struct cpumask *affinity,
+> -	u32 slot, u8 vector)
+> +	u32 slot, u8 vector, u8 vector_count)
+>  {
+>  	int cpu;
+>  
+>  	int_pkt->message_type.type = PCI_CREATE_INTERRUPT_MESSAGE2;
+>  	int_pkt->wslot.slot = slot;
+>  	int_pkt->int_desc.vector = vector;
+> -	int_pkt->int_desc.vector_count = 1;
+> +	int_pkt->int_desc.vector_count = vector_count;
+>  	int_pkt->int_desc.delivery_mode = DELIVERY_MODE;
+>  	cpu = hv_compose_msi_req_get_cpu(affinity);
+>  	int_pkt->int_desc.processor_array[0] =
+> @@ -1656,7 +1660,7 @@ static u32 hv_compose_msi_req_v2(
+>  
+>  static u32 hv_compose_msi_req_v3(
+>  	struct pci_create_interrupt3 *int_pkt, struct cpumask *affinity,
+> -	u32 slot, u32 vector)
+> +	u32 slot, u32 vector, u8 vector_count)
+>  {
+>  	int cpu;
+>  
+> @@ -1664,7 +1668,7 @@ static u32 hv_compose_msi_req_v3(
+>  	int_pkt->wslot.slot = slot;
+>  	int_pkt->int_desc.vector = vector;
+>  	int_pkt->int_desc.reserved = 0;
+> -	int_pkt->int_desc.vector_count = 1;
+> +	int_pkt->int_desc.vector_count = vector_count;
+>  	int_pkt->int_desc.delivery_mode = DELIVERY_MODE;
+>  	cpu = hv_compose_msi_req_get_cpu(affinity);
+>  	int_pkt->int_desc.processor_array[0] =
+> @@ -1695,6 +1699,8 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+>  	struct cpumask *dest;
+>  	struct compose_comp_ctxt comp;
+>  	struct tran_int_desc *int_desc;
+> +	struct msi_desc *msi_desc;
+> +	u8 vector, vector_count;
+>  	struct {
+>  		struct pci_packet pci_pkt;
+>  		union {
+> @@ -1716,7 +1722,8 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+>  		return;
+>  	}
+>  
+> -	pdev = msi_desc_to_pci_dev(irq_data_get_msi_desc(data));
+> +	msi_desc  = irq_data_get_msi_desc(data);
+> +	pdev = msi_desc_to_pci_dev(msi_desc);
+>  	dest = irq_data_get_effective_affinity_mask(data);
+>  	pbus = pdev->bus;
+>  	hbus = container_of(pbus->sysdata, struct hv_pcibus_device, sysdata);
+> @@ -1729,6 +1736,36 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+>  	if (!int_desc)
+>  		goto drop_reference;
+>  
+> +	if (!msi_desc->pci.msi_attrib.is_msix && msi_desc->nvec_used > 1) {
+> +		/*
+> +		 * If this is not the first MSI of Multi MSI, we already have
+> +		 * a mapping.  Can exit early.
+> +		 */
+> +		if (msi_desc->irq != data->irq) {
+> +			data->chip_data = int_desc;
+> +			int_desc->address = msi_desc->msg.address_lo |
+> +					    (u64)msi_desc->msg.address_hi << 32;
+> +			int_desc->data = msi_desc->msg.data +
+> +					 (data->irq - msi_desc->irq);
+> +			msg->address_hi = msi_desc->msg.address_hi;
+> +			msg->address_lo = msi_desc->msg.address_lo;
+> +			msg->data = int_desc->data;
+> +			put_pcichild(hpdev);
+> +			return;
+> +		}
+> +		/*
+> +		 * The vector we select here is a dummy value.  The correct
+> +		 * value gets sent to the hypervisor in unmask().  This needs
+> +		 * to be aligned with the count, and also not zero.  Multi-msi
+> +		 * is powers of 2 up to 32, so 32 will always work here.
+> +		 */
+> +		vector = 32;
+> +		vector_count = msi_desc->nvec_used;
+> +	} else {
+> +		vector = hv_msi_get_int_vector(data);
+> +		vector_count = 1;
+> +	}
+> +
+>  	memset(&ctxt, 0, sizeof(ctxt));
+>  	init_completion(&comp.comp_pkt.host_event);
+>  	ctxt.pci_pkt.completion_func = hv_pci_compose_compl;
+> @@ -1739,7 +1776,8 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+>  		size = hv_compose_msi_req_v1(&ctxt.int_pkts.v1,
+>  					dest,
+>  					hpdev->desc.win_slot.slot,
+> -					hv_msi_get_int_vector(data));
+> +					vector,
+> +					vector_count);
+>  		break;
+>  
+>  	case PCI_PROTOCOL_VERSION_1_2:
+> @@ -1747,14 +1785,16 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+>  		size = hv_compose_msi_req_v2(&ctxt.int_pkts.v2,
+>  					dest,
+>  					hpdev->desc.win_slot.slot,
+> -					hv_msi_get_int_vector(data));
+> +					vector,
+> +					vector_count);
+>  		break;
+>  
+>  	case PCI_PROTOCOL_VERSION_1_4:
+>  		size = hv_compose_msi_req_v3(&ctxt.int_pkts.v3,
+>  					dest,
+>  					hpdev->desc.win_slot.slot,
+> -					hv_msi_get_int_vector(data));
+> +					vector,
+> +					vector_count);
+>  		break;
+>  
+>  	default:
+> -- 
+> 2.7.4
+> 

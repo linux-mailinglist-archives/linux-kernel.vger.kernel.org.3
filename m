@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF3FE5231FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C99145231FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234866AbiEKLmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 07:42:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35598 "EHLO
+        id S230384AbiEKLma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 07:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241691AbiEKLl5 (ORCPT
+        with ESMTP id S234436AbiEKLmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 07:41:57 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D362267D34;
-        Wed, 11 May 2022 04:41:53 -0700 (PDT)
-Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KytDK07y5z67Wgc;
-        Wed, 11 May 2022 19:37:05 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 11 May 2022 13:41:51 +0200
-Received: from [10.47.91.186] (10.47.91.186) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.24; Wed, 11 May
- 2022 12:41:49 +0100
-Message-ID: <cee3177d-458f-e61c-d38f-08965eb79eb6@huawei.com>
-Date:   Wed, 11 May 2022 12:42:02 +0100
+        Wed, 11 May 2022 07:42:23 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4D92229D1;
+        Wed, 11 May 2022 04:42:22 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id x23so1737859pff.9;
+        Wed, 11 May 2022 04:42:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vR78/0cozBARbfgmLg/xD9wO6VleNhWzZE+8yJ1LpXQ=;
+        b=VACSZeD+XR+ARtHH3HoDnaZS+Y9u1fGwlFPSmy63JxD/kP+30Jq0Bw98Lmoei0v+Bk
+         dLtImgiBpBxS6NLLDcpRIaxfaEh2GQSLkpXGtKFHcusiemYSBHZs70CdReAUi4jZTYb8
+         9RsUGKNJXVDh2GQXNK5pD3IW1dBPpyxJQ9jZkz4aiM9oXTT70rw0BVbYiUqnz5rSMtoJ
+         VU7LRv2E8BiFHSAn/azo2T5/mtArfc7CUOavPLJeakQWlxtZyKY/p7zsttHQ2/LXBChX
+         IZ/govXWVwDH0619SZw/Csb2RPynK/4UldL6zHvUyhYBnToqsPV0xnQqnbyIZeI9By0p
+         lu5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vR78/0cozBARbfgmLg/xD9wO6VleNhWzZE+8yJ1LpXQ=;
+        b=Go6pnwfc/wvgFLRLOpJoxbbkijyyeszARUF1e3d79jxTA8Xd96mc8LI/BVyn8EF2Tf
+         zlYI4bAKOQRPjtDZYW3mUe3ws/YNLgQcWmegn0gvs9fan3JQGTGlzXdxCPtZuUmgvmQD
+         8gQGQvgAfxomExNs5ytX9KHQTBGrsk2EeFfKxKPiC1J9f39ilj6hBGs3PlqEsjozp6zi
+         Z/4wPwucXoYW+yvugh2Y6tfHiz+7eY79ofEZcohReSvEFWrukFc2GpxBBcaue0ze3hoO
+         wxQZyKTTfFMc1X+j+uyRtgaIynjg57BvYAuoSVFlU5Ihx4RpLtnO6uIdUUBG+JmUjuJK
+         /BEQ==
+X-Gm-Message-State: AOAM53339K2q7oxW1zA3ZaYKGO7GIqJCCZ3tH20Ljob/1nRWB3Bn2khA
+        VcexWpk/YLykLkuph1xGqCY=
+X-Google-Smtp-Source: ABdhPJwmoiL/c+C4ECSorOVKxMM33LVv+pl673jYWon4sDaR3WqZS1VElgoX59Aah3WRPCBSqoWfrg==
+X-Received: by 2002:aa7:938c:0:b0:50d:418a:cdfb with SMTP id t12-20020aa7938c000000b0050d418acdfbmr24996286pfe.72.1652269342295;
+        Wed, 11 May 2022 04:42:22 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id g1-20020aa79dc1000000b0050dc76281e1sm1474115pfq.187.2022.05.11.04.42.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 04:42:22 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Damien Riegel <damien.riegel@savoirfairelinux.com>,
+        Rob Herring <robh@kernel.org>, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] watchdog: ts4800_wdt: Fix refcount leak in ts4800_wdt_probe
+Date:   Wed, 11 May 2022 15:42:03 +0400
+Message-Id: <20220511114203.47420-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v7 1/7] iommu/arm-smmu-v3: Make default domain type of
- HiSilicon PTT device to identity
-To:     Yicong Yang <yangyicong@hisilicon.com>,
-        <gregkh@linuxfoundation.org>, <helgaas@kernel.org>,
-        <alexander.shishkin@linux.intel.com>, <lorenzo.pieralisi@arm.com>,
-        <will@kernel.org>, <mark.rutland@arm.com>,
-        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
-        <jonathan.cameron@huawei.com>, <daniel.thompson@linaro.org>,
-        <joro@8bytes.org>, <shameerali.kolothum.thodi@huawei.com>,
-        <robin.murphy@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
-        <acme@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <coresight@lists.linaro.org>, <linux-pci@vger.kernel.org>,
-        <linux-perf-users@vger.kernel.org>,
-        <iommu@lists.linux-foundation.org>
-CC:     <prime.zeng@huawei.com>, <liuqi115@huawei.com>,
-        <zhangshaokun@hisilicon.com>, <linuxarm@huawei.com>
-References: <20220407125841.3678-1-yangyicong@hisilicon.com>
- <20220407125841.3678-2-yangyicong@hisilicon.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220407125841.3678-2-yangyicong@hisilicon.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.91.186]
-X-ClientProxiedBy: lhreml705-chm.china.huawei.com (10.201.108.54) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,56 +71,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/2022 13:58, Yicong Yang wrote:
-> The DMA operations of HiSilicon PTT device can only work properly with
-> identical mappings. So add a quirk for the device to force the domain
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when done.
+Add  missing of_node_put() in some error paths.
 
-I'm not sure if you meant to write "identity mappings".
+Fixes: bf9006399939 ("watchdog: ts4800: add driver for TS-4800 watchdog")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/watchdog/ts4800_wdt.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-> as passthrough.
-> 
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-
-FWIW,
-
-Reviewed-by: John Garry <john.garry@huawei.com>
-
-> ---
->   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 16 ++++++++++++++++
->   1 file changed, 16 insertions(+)
-> 
-> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> index 627a3ed5ee8f..5ec15ae2a9b1 100644
-> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> @@ -2839,6 +2839,21 @@ static int arm_smmu_dev_disable_feature(struct device *dev,
->   	}
->   }
->   
-> +#define IS_HISI_PTT_DEVICE(pdev)	((pdev)->vendor == PCI_VENDOR_ID_HUAWEI && \
-> +					 (pdev)->device == 0xa12e)
-> +
-> +static int arm_smmu_def_domain_type(struct device *dev)
-> +{
-> +	if (dev_is_pci(dev)) {
-> +		struct pci_dev *pdev = to_pci_dev(dev);
-> +
-> +		if (IS_HISI_PTT_DEVICE(pdev))
-> +			return IOMMU_DOMAIN_IDENTITY;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->   static struct iommu_ops arm_smmu_ops = {
->   	.capable		= arm_smmu_capable,
->   	.domain_alloc		= arm_smmu_domain_alloc,
-> @@ -2856,6 +2871,7 @@ static struct iommu_ops arm_smmu_ops = {
->   	.sva_unbind		= arm_smmu_sva_unbind,
->   	.sva_get_pasid		= arm_smmu_sva_get_pasid,
->   	.page_response		= arm_smmu_page_response,
-> +	.def_domain_type	= arm_smmu_def_domain_type,
->   	.pgsize_bitmap		= -1UL, /* Restricted during device attach */
->   	.owner			= THIS_MODULE,
->   	.default_domain_ops = &(const struct iommu_domain_ops) {
+diff --git a/drivers/watchdog/ts4800_wdt.c b/drivers/watchdog/ts4800_wdt.c
+index c137ad2bd5c3..0ea554c7cda5 100644
+--- a/drivers/watchdog/ts4800_wdt.c
++++ b/drivers/watchdog/ts4800_wdt.c
+@@ -125,13 +125,16 @@ static int ts4800_wdt_probe(struct platform_device *pdev)
+ 	ret = of_property_read_u32_index(np, "syscon", 1, &reg);
+ 	if (ret < 0) {
+ 		dev_err(dev, "no offset in syscon\n");
++		of_node_put(syscon_np);
+ 		return ret;
+ 	}
+ 
+ 	/* allocate memory for watchdog struct */
+ 	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+-	if (!wdt)
++	if (!wdt) {
++		of_node_put(syscon_np);
+ 		return -ENOMEM;
++	}
+ 
+ 	/* set regmap and offset to know where to write */
+ 	wdt->feed_offset = reg;
+-- 
+2.25.1
 

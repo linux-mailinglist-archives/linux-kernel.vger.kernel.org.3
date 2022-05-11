@@ -2,436 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2E3523C36
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 749BB523C3A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346061AbiEKSIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 14:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35942 "EHLO
+        id S1346079AbiEKSJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 14:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233707AbiEKSII (ORCPT
+        with ESMTP id S233707AbiEKSJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 14:08:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982584C42E;
-        Wed, 11 May 2022 11:08:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2195461DE9;
-        Wed, 11 May 2022 18:08:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ADE8C340EE;
-        Wed, 11 May 2022 18:08:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652292485;
-        bh=s3Uj5z2jK9360nVzQqgYKlZfc8dFQIlZtVcyCHnD0f8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IoRFSR/Jj011J0pJjrks+MzcCEegnPeU0pButN0H/HMcp9yITFz4KPR0g7FKWmwyj
-         w3DslEiyLTAeek2djBqm9iVGlMQMLzUZOLYlQ+Mu5rU3kKgFzIufewyqQhISuWnk/D
-         ImPeiYK2zcBuZiXk6feVbDnYAwGOOR181AEBDEA3l7dW1SDPWwdfmkF4e5zsfXY/03
-         +p9ASMfxZCETJliApJLQ9tC31MpFtsRUxlShs2KqiJZHbGJSXEaEp5iZ2D2++82wqu
-         0nIfq58pjJZ8WGBdfvVsHzi+UB8ro2/G5Hvrvy78g6s2NFKX1yZYau9omPKsflQMeg
-         BXQGu6ALRYvzg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 0E982400B1; Wed, 11 May 2022 15:08:02 -0300 (-03)
-Date:   Wed, 11 May 2022 15:08:02 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>, peterz@infradead.org,
-        mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, elver@google.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tools/perf: add breakpoint benchmarks
-Message-ID: <Ynv7gkbBVd9dlJRh@kernel.org>
-References: <20220505155745.1690906-1-dvyukov@google.com>
- <CAP-5=fVDs-AQvhXbZM9ksRqMdfS00Mpn8LDRZUppJb76TCkrAg@mail.gmail.com>
+        Wed, 11 May 2022 14:09:34 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0315E44C3;
+        Wed, 11 May 2022 11:09:33 -0700 (PDT)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24BFMR5R004923;
+        Wed, 11 May 2022 11:09:33 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=NBkbFXFzz4Cpr+JyPstXQqhVemuVyzaVHKJWLwXbgBY=;
+ b=hhFyMMgOg62OxyV/7T6LrPPHMQVsxZSWTPUf2hVdAc9rbVM4CfONYUOgZUTWUSGRlQ1s
+ zzJF6SmVnVlzck5f93OJQ0ryWxGfUoX46BzY2uD/LJi275SbRH+d3nKVjJJrpy6wlwuf
+ eibp1l93ZPFgqhiesH6fW+c8u+OzR5TYOaI= 
+Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam08lp2044.outbound.protection.outlook.com [104.47.74.44])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fymp4kgvu-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 May 2022 11:09:33 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=M6AwIunHlqKWRy1J3GJwVRYA7tIk/GMlRfOlYLdTDmfxmMtGcWfgWhW5OaOFLnUVUaTHbW36jIs6ntB6Sy+uoYlSF8UnepZpuL7BQJH+fFZS/hVGWb4qJbJSUWxW2JMmKBXOExyIj+NsvpQ837ZfeBO0GjszWW6iiuEc3AOui3jfeep5L0PLwO5jOTAi93/a4v/5T477+z1F3EDtsrZyA+XTLtVyHufStV/7ujlKlq6+hSqCGpaH7l4ySWZA6oL/tQfuz0FA9Mk/Wy+PLvjEHqX/XOaKRhewwEW7vqdCqcz7a4kbnt1wRNcji5DoGfoklrqbzT9IIveZbd4J5HCXgw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NBkbFXFzz4Cpr+JyPstXQqhVemuVyzaVHKJWLwXbgBY=;
+ b=NT9/YULbjiV84xuWYH2I+49v/5ZKUyVWNWp9Ezy+0JFcEs6eeo0RkZ18DkhPR4+OcsNSSDejoTAuSxeKBfUwEgo4vlmr/GVPiHIMEwQ1mPcOrbbp2Nka3hkxOklr+xe8yTl/ujiczN1TPLn2V6zo1PhkLUS8PSyFZtTSPW1GoSE1cdsLk+nOmybW0uc+MpOzho3m6mv0zfLc6Tdt+0ugeI513sXAG0ZgxADlnh06bAIBEVGmjEzyZ3tCTPkywaWgNYEpqhHY9E8dvpj+64toBTxi5SM3jLApwfew16LPH74ts2L7UvH2ULpYyx96mTrFEpMCYkFjFDvllge67YQnsA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from CO1PR15MB4969.namprd15.prod.outlook.com (2603:10b6:303:e4::23)
+ by BYAPR15MB3367.namprd15.prod.outlook.com (2603:10b6:a03:105::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.23; Wed, 11 May
+ 2022 18:09:29 +0000
+Received: from CO1PR15MB4969.namprd15.prod.outlook.com
+ ([fe80::dde6:b4a5:be4e:b730]) by CO1PR15MB4969.namprd15.prod.outlook.com
+ ([fe80::dde6:b4a5:be4e:b730%6]) with mapi id 15.20.5227.023; Wed, 11 May 2022
+ 18:09:29 +0000
+From:   Rik van Riel <riel@fb.com>
+To:     "jpoimboe@kernel.org" <jpoimboe@kernel.org>
+CC:     "song@kernel.org" <song@kernel.org>,
+        "joe.lawrence@redhat.com" <joe.lawrence@redhat.com>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Kernel Team <Kernel-team@fb.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "pmladek@suse.com" <pmladek@suse.com>
+Subject: Re: [RFC] sched,livepatch: call klp_try_switch_task in __cond_resched
+Thread-Topic: [RFC] sched,livepatch: call klp_try_switch_task in
+ __cond_resched
+Thread-Index: AQHYYjpsdFy2RMM8vk2xmmtLa5gGmK0WqGoAgAAVAICAAQUigIAAXfwAgAAkyICAAAZgAIAADJgAgAAUwACAAAnWgIAAEcWAgAA3YgCAAA7RAIAACqUAgAAAlwCAAAKWAIAAB0iAgAEcHQA=
+Date:   Wed, 11 May 2022 18:09:28 +0000
+Message-ID: <5c146997c0ae4869b55aa1b846e96005cda72949.camel@fb.com>
+References: <6bf85ff908377508a5f5bcc7c4e75d598b96f388.camel@fb.com>
+         <20220510165244.ikfh64ertnvodxb4@treble>
+         <1bd15361edfd4db9fc9271d35e7bbe5edad1b87a.camel@fb.com>
+         <20220510184213.l3gjweeleyg7obca@treble>
+         <47440502-930F-4CBD-B859-3AC9BBFF8FC6@fb.com>
+         <20220510230402.e5ymkwt45sg7bd35@treble>
+         <D298A3F1-43A5-4FD5-B198-906364BF4B79@fb.com>
+         <6c36c09fbf426280d13f6025f41aed4c65c042d6.camel@fb.com>
+         <20220511003716.2lo6gkluwycvauda@treble>
+         <bf682c8874a044a643becbb8704a4dfedadc3321.camel@fb.com>
+         <20220511011235.f7cdkc6xn7redqa3@treble>
+In-Reply-To: <20220511011235.f7cdkc6xn7redqa3@treble>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f8affc70-798d-46bd-f854-08da3379641c
+x-ms-traffictypediagnostic: BYAPR15MB3367:EE_
+x-microsoft-antispam-prvs: <BYAPR15MB3367021191B860316EAA2277A3C89@BYAPR15MB3367.namprd15.prod.outlook.com>
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: BtKjjdPXwh8SP2KGOplwbq0iF+xvxZgsKFwI7h4ZlgUHWEVtqNUQCa1hRC7dyVjxPgyP/eH9KO0tK6ZWn+2Ol3q3smZysaAlx+6EqORbaV1YEsCAadV7W0WbNExxy32uc92I4RfBm4TtNRdlafWSWIGBBc342O08SqoB+W1Lhsw8snoLDZRMqzwmbUnxor5ogFBDWnfO7y8L2Y6c1WrbRUfbDj7ByZ70gMi42rRsE4quvlSN0MoGI94YmiZ1MasXu3304eTsg/j2H08eEmxNk/T7ML49InPaJmOjNUeMeYrqMYOGTYNPx5DWLnqWjFX4tTrrFqF9PkNFmv5ubuFcNCum535VxJqdD9uzWDK1sgqQUHXy6AHOm89R0PA6V2YrtsZmLGe5as4WrS/dsbK9ly59rWuFKlo34O0TRIH6/9nmGpQLAJUhKKSjrgUrl80Rua2hudggdfYU70582Qr6APcXgwgRqVVbYhJSphtFKZ2+4FuTrSoJ2EbMSY24+NamtBkDW03cFN7zo/xXv/QpVePNaRDHUFClkbfXxc9lHCzBJyj2oCOi9kdaEvkxlGSzstgTeMKTNznwSOpQFVB7acFL7Npes8OuM0227iXLvpW6ZcjGz9JHgkqnd1ZxELVBm1UWgT77VGvKjNHr3bpj6bwhVKbbWfqv+2MordvlD0r0PhYRW3z4+9jJoQN2B+mpeXf7WByC2ntrFaSdXq1ZWQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR15MB4969.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2616005)(38100700002)(122000001)(6512007)(38070700005)(66446008)(8676002)(4326008)(64756008)(36756003)(6916009)(186003)(316002)(66556008)(76116006)(91956017)(66946007)(54906003)(66476007)(2906002)(71200400001)(508600001)(86362001)(6506007)(5660300002)(7416002)(6486002)(8936002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Z2lzYm15OHJDSjhsSzlrbmM3YVBpZmNQK1R1dEJQMllvMmNrcDZ5Q1hkUFNY?=
+ =?utf-8?B?NmpXWXJNTXZPNlFQcmdmOVloblBNRVk5dnRNZDJkTUVHY1BDMExZYWUvU3ZV?=
+ =?utf-8?B?b3h2Z0oxRjVEY3hmZmF4T0l5ZDE4NG0rUHVwcTYvRXhYWFVZcWdrZUdBbG9r?=
+ =?utf-8?B?Y0ErTldhcHl4QlpyUDM4M1EwWkFSRkVJT3ZoVEJZRlduMzh6RzNOcnhURzJX?=
+ =?utf-8?B?UElCdHR2d1hhVFQ5NFVlK1dSKzZlOERjYkhpKy9BY21yWkVYaUJtYzJsenZo?=
+ =?utf-8?B?T0dXVDVOdGhHK0ZlYnNaUk8zVVFYbTVRUUdMaEpLUFhoTkxJVFAwUVpXdnY2?=
+ =?utf-8?B?cnQ2SnRTYlA2T2RSblVtRlVkbGNqb3NyVm5rRy9DM0REYS9uZXN1K2szd3NW?=
+ =?utf-8?B?OW5mckNRSFc1RXA2VFJvU3BVUGtEdXBnWjRDOHNxMzJpRFE4cVBOL0dJbUVa?=
+ =?utf-8?B?UnJhalc1R1NNcWdZZC9GUExhMzRWNmFIOHh0bmZmdm42RCtQa0paOThlakZj?=
+ =?utf-8?B?LzcwSk1GdkVOUzdoTFdBL2M1M05BZmovZWZ0TVc4YmxWWkxkL2pvNHRZYlU0?=
+ =?utf-8?B?azcyUTMyRDZKelNLUjF1UHg3YTJTNnZINXhZZlViSEhXMmtncTQwc1NjeUsx?=
+ =?utf-8?B?bXIzTkViYVVVTUJLQlVmNHVjcXJIVW9xeHY0WGRacTJSeG5LWWpRSUoxMGN2?=
+ =?utf-8?B?eDB0Qk1vS0p6VU9xQ2pSdTN3L0kwckhYTUhSUHpreEoyQWxGOWZyWkJpUHll?=
+ =?utf-8?B?d0xDZWpRRENQOVAvU1VxcTV2bHlPK1pFWUQxQnBIQk95RXpneW9yN0hmdlB0?=
+ =?utf-8?B?NWhHcDhoTGwzKzNpRzFaelJkRmplTWVIN0NtT2xIajd3K1pCczkwNk5zZStC?=
+ =?utf-8?B?elVZK2JGNUJxZUFiTkxVejFFaER2RFJ4b2N1LzhhemFhWGpGakg4TVRNc0VG?=
+ =?utf-8?B?RExvNEZhYnZ6c25nam5QYUh6b3FVS3ZjQjh1UTNYOFpRRVdVTUwzcEtMQnpy?=
+ =?utf-8?B?ZlU4RXoySE9jQ3gxVHRlRnZiUXhzbzVWdXdiSDdKNWF2b1daWnpYRUNaWE5V?=
+ =?utf-8?B?YVlKOWsvYktraWFZK0Q0QmtibXR3ekxNWlg3dmlYWHRBcm1EVEVXVmYxSUpm?=
+ =?utf-8?B?TFF3T0pobjVsVytWTHdDVGdKTWJ3WjQ4dDRKL2Y5T2hwT2dCcWJRNXIzQkkr?=
+ =?utf-8?B?ZDJvK3dITS9vR0lUQlpDYmtobFNKYkR3bHZER1F2VkNKVWNmc2g1c1RFUUp0?=
+ =?utf-8?B?VXJBM3FxMWFHKzNDVTNqa2xqRm90VFowYWg5NGV2b1VUZ0xSb01wRHg2WDhV?=
+ =?utf-8?B?aEVhRklwQlhYS3BaVE5TUEpmeUMrdUdhdUhnUG11V3hiRldSQTJ5ZzB1cS9O?=
+ =?utf-8?B?b0R2VEltTkRjVTA2Ym85ckVaUWVpZEFvUGhEeVZwZmxUUVc0RnZER0psVXJh?=
+ =?utf-8?B?RjJqWGVLQlR4ekZUWjkyaHRUSTA2eEJDNk1POEFzQXFVU3ZaaGUxcm11dmww?=
+ =?utf-8?B?MTV0Q0VNOG50K0wxNGhtTElCMHd1Nk1ydjh3UzJUTFhjRkJhYzIrMlREdlo5?=
+ =?utf-8?B?a1F6bXZsNVRaNFppeUdUcVFWOSsvM0wrQTRyb0FJUXhiaGh2T1lseEkvUUNJ?=
+ =?utf-8?B?RkFRa3FxM0FESllQdCtESG9aRDlGcE9McnAyTlBxbmJzcE01OVE0eFhybFJN?=
+ =?utf-8?B?TEsxMDd3WVdTVUMxald3S2xvK2tYOUlCeFhxWmtpZ253L29VSW1nRVJram03?=
+ =?utf-8?B?YjBybUgxWnNGQlM3a01NZWQvUnBIMXlhN0xJbUo3NDI5SnVESTVQMVFYQmVH?=
+ =?utf-8?B?MkJ5alNoZ3FKNXZsVElIVmtvaGtNMi9WREp3RWxNYlhRblMzVTBMREdFcmp1?=
+ =?utf-8?B?c21xeWJKK1pWSEV2bFRpY0o4OXdTdEQ1ZjNyS05XdFA2UTF6KzZ4U3pUZjFs?=
+ =?utf-8?B?Q2ZwN2wxOEw1RlMyaXVVMzE0MTFHQko5eEYybm5TRWtBcWZVMlIrRGQxV0d2?=
+ =?utf-8?B?MkR4c21RbjVDQzNDUTJFS2p5OS8yMEdiTTZkZDNMeWVFU2VaZ3E5SkxPaWt6?=
+ =?utf-8?B?WUlXSW52TWg0TllpYUhvVitGbWpxVzR6dU9OQVdzcGxIaXd2NXpkSnp6aWNw?=
+ =?utf-8?B?bWkyZUZwUjZ3S0c4bVh2bXkwK2NUQkJwT0V6RWF3bEdlcDduUStWRXAxT3VG?=
+ =?utf-8?B?dEtBZXBWZDNTU3pNYlp4endZS3V1NERFYnJYQ3RRVjM0d3NFem96bkU4bjBo?=
+ =?utf-8?B?NkNMcjd4bUlKNDV0L2IyM3R3dGJSRU9kNG1KZXJnRDBzNzA1bkgxdW9LbldR?=
+ =?utf-8?B?SkVtakxBb0RMWXNEcnVZTXR6UW5jczJaUDRyTDJ3a2J5TUNDTTlyMXZCY2Fw?=
+ =?utf-8?Q?VwRdGR0LTpbpr5rs=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4CEF291948ACED47A274E687DAF77793@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP-5=fVDs-AQvhXbZM9ksRqMdfS00Mpn8LDRZUppJb76TCkrAg@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR15MB4969.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f8affc70-798d-46bd-f854-08da3379641c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 May 2022 18:09:28.9713
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 42qBCEVvTaNjojXcpvVg903S/oVPLhFQil/1N7LjWXmeLaKon3Qq0/8l8Z836+IA
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3367
+X-Proofpoint-GUID: awen5JaDw5ibK7wzPzfqTVJYwwuHW7ql
+X-Proofpoint-ORIG-GUID: awen5JaDw5ibK7wzPzfqTVJYwwuHW7ql
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-11_07,2022-05-11_01,2022-02-23_01
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, May 11, 2022 at 08:34:58AM -0700, Ian Rogers escreveu:
-> On Thu, May 5, 2022 at 8:58 AM Dmitry Vyukov <dvyukov@google.com> wrote:
-> >
-> > Add 2 benchmarks:
-> > 1. Performance of thread creation/exiting in presence of breakpoints.
-> > 2. Performance of breakpoint modification in presence of threads.
-> >
-> > The benchmarks capture use cases that we are interested in:
-> > using inheritable breakpoints in large highly-threaded applications.
-> > The benchmarks show significant slowdown imposed by breakpoints
-> > (even when they don't fire).
-> >
-> > Testing on Intel 8173M with 112 HW threads show:
-> >
-> > perf bench --repeat=56 breakpoint thread --breakpoints=0 --parallelism=56 --threads=20
-> >       78.675000 usecs/op
-> > perf bench --repeat=56 breakpoint thread --breakpoints=4 --parallelism=56 --threads=20
-> >    12967.135714 usecs/op
-> > That's 165x slowdown due to presence of the breakpoints.
-> >
-> > perf bench --repeat=20000 breakpoint enable --passive=0 --active=0
-> >        1.433250 usecs/op
-> > perf bench --repeat=20000 breakpoint enable --passive=224 --active=0
-> >      585.318400 usecs/op
-> > perf bench --repeat=20000 breakpoint enable --passive=0 --active=111
-> >      635.953000 usecs/op
-> > That's 408x and 444x slowdown due to presence of threads.
-> >
-> > Profiles show some overhead in toggle_bp_slot,
-> > but also very high contention:
-> >
-> >     90.83%  breakpoint-thre  [kernel.kallsyms]  [k] osq_lock
-> >      4.69%  breakpoint-thre  [kernel.kallsyms]  [k] mutex_spin_on_owner
-> >      2.06%  breakpoint-thre  [kernel.kallsyms]  [k] __reserve_bp_slot
-> >      2.04%  breakpoint-thre  [kernel.kallsyms]  [k] toggle_bp_slot
-> >
-> >     79.01%  breakpoint-enab  [kernel.kallsyms]  [k] smp_call_function_single
-> >      9.94%  breakpoint-enab  [kernel.kallsyms]  [k] llist_add_batch
-> >      5.70%  breakpoint-enab  [kernel.kallsyms]  [k] _raw_spin_lock_irq
-> >      1.84%  breakpoint-enab  [kernel.kallsyms]  [k] event_function_call
-> >      1.12%  breakpoint-enab  [kernel.kallsyms]  [k] send_call_function_single_ipi
-> >      0.37%  breakpoint-enab  [kernel.kallsyms]  [k] generic_exec_single
-> >      0.24%  breakpoint-enab  [kernel.kallsyms]  [k] __perf_event_disable
-> >      0.20%  breakpoint-enab  [kernel.kallsyms]  [k] _perf_event_enable
-> >      0.18%  breakpoint-enab  [kernel.kallsyms]  [k] toggle_bp_slot
-> >
-> > Signed-off-by: Dmitry Vyukov <dvyukov@google.com>
-> 
-> Acked-by: Ian Rogers <irogers@google.com>
-
-Thanks, applied.
-
-- Arnaldo
-
- 
-> > Cc: linux-perf-users@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > ---
-> >  tools/perf/bench/Build        |   1 +
-> >  tools/perf/bench/bench.h      |   2 +
-> >  tools/perf/bench/breakpoint.c | 235 ++++++++++++++++++++++++++++++++++
-> >  tools/perf/builtin-bench.c    |   8 ++
-> >  4 files changed, 246 insertions(+)
-> >  create mode 100644 tools/perf/bench/breakpoint.c
-> >
-> > diff --git a/tools/perf/bench/Build b/tools/perf/bench/Build
-> > index 61d45fcb4057c..6b6155a8ad096 100644
-> > --- a/tools/perf/bench/Build
-> > +++ b/tools/perf/bench/Build
-> > @@ -14,6 +14,7 @@ perf-y += kallsyms-parse.o
-> >  perf-y += find-bit-bench.o
-> >  perf-y += inject-buildid.o
-> >  perf-y += evlist-open-close.o
-> > +perf-y += breakpoint.o
-> >
-> >  perf-$(CONFIG_X86_64) += mem-memcpy-x86-64-asm.o
-> >  perf-$(CONFIG_X86_64) += mem-memset-x86-64-asm.o
-> > diff --git a/tools/perf/bench/bench.h b/tools/perf/bench/bench.h
-> > index b3480bc33fe84..6cefb4315d75e 100644
-> > --- a/tools/perf/bench/bench.h
-> > +++ b/tools/perf/bench/bench.h
-> > @@ -49,6 +49,8 @@ int bench_synthesize(int argc, const char **argv);
-> >  int bench_kallsyms_parse(int argc, const char **argv);
-> >  int bench_inject_build_id(int argc, const char **argv);
-> >  int bench_evlist_open_close(int argc, const char **argv);
-> > +int bench_breakpoint_thread(int argc, const char **argv);
-> > +int bench_breakpoint_enable(int argc, const char **argv);
-> >
-> >  #define BENCH_FORMAT_DEFAULT_STR       "default"
-> >  #define BENCH_FORMAT_DEFAULT           0
-> > diff --git a/tools/perf/bench/breakpoint.c b/tools/perf/bench/breakpoint.c
-> > new file mode 100644
-> > index 0000000000000..56936fea246d7
-> > --- /dev/null
-> > +++ b/tools/perf/bench/breakpoint.c
-> > @@ -0,0 +1,235 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +#include <subcmd/parse-options.h>
-> > +#include <linux/hw_breakpoint.h>
-> > +#include <linux/perf_event.h>
-> > +#include <linux/time64.h>
-> > +#include <sys/syscall.h>
-> > +#include <sys/ioctl.h>
-> > +#include <sys/time.h>
-> > +#include <pthread.h>
-> > +#include <stddef.h>
-> > +#include <stdlib.h>
-> > +#include <unistd.h>
-> > +#include <stdio.h>
-> > +#include <errno.h>
-> > +#include "bench.h"
-> > +#include "futex.h"
-> > +
-> > +struct {
-> > +       unsigned int nbreakpoints;
-> > +       unsigned int nparallel;
-> > +       unsigned int nthreads;
-> > +} thread_params = {
-> > +       .nbreakpoints = 1,
-> > +       .nparallel = 1,
-> > +       .nthreads = 1,
-> > +};
-> > +
-> > +static const struct option thread_options[] = {
-> > +       OPT_UINTEGER('b', "breakpoints", &thread_params.nbreakpoints,
-> > +               "Specify amount of breakpoints"),
-> > +       OPT_UINTEGER('p', "parallelism", &thread_params.nparallel, "Specify amount of parallelism"),
-> > +       OPT_UINTEGER('t', "threads", &thread_params.nthreads, "Specify amount of threads"),
-> > +       OPT_END()
-> > +};
-> > +
-> > +static const char * const thread_usage[] = {
-> > +       "perf bench breakpoint thread <options>",
-> > +       NULL
-> > +};
-> > +
-> > +struct breakpoint {
-> > +       int fd;
-> > +       char watched;
-> > +};
-> > +
-> > +static int breakpoint_setup(void *addr)
-> > +{
-> > +       struct perf_event_attr attr = {0};
-> > +
-> > +       attr.type = PERF_TYPE_BREAKPOINT;
-> > +       attr.size = sizeof(attr);
-> > +       attr.inherit = 1;
-> > +       attr.exclude_kernel = 1;
-> > +       attr.exclude_hv = 1;
-> > +       attr.bp_addr = (uint64_t)addr;
-> > +       attr.bp_type = HW_BREAKPOINT_RW;
-> > +       attr.bp_len = HW_BREAKPOINT_LEN_1;
-> > +       return syscall(SYS_perf_event_open, &attr, 0, -1, -1, 0);
-> > +}
-> > +
-> > +static void *passive_thread(void *arg)
-> > +{
-> > +       unsigned int *done = (unsigned int *)arg;
-> > +
-> > +       while (!__atomic_load_n(done, __ATOMIC_RELAXED))
-> 
-> Note, this may be the first change with atomics since Linux moved to
-> C11 which may make the use of stdatomic.h more idiomatic. Just
-> flagging for potential future cleanup.
-> 
-> Thanks,
-> Ian
-> 
-> > +               futex_wait(done, 0, NULL, 0);
-> > +       return NULL;
-> > +}
-> > +
-> > +static void *active_thread(void *arg)
-> > +{
-> > +       unsigned int *done = (unsigned int *)arg;
-> > +
-> > +       while (!__atomic_load_n(done, __ATOMIC_RELAXED));
-> > +       return NULL;
-> > +}
-> > +
-> > +static void *breakpoint_thread(void *arg)
-> > +{
-> > +       unsigned int i, done;
-> > +       int *repeat = (int *)arg;
-> > +       pthread_t *threads;
-> > +
-> > +       threads = calloc(thread_params.nthreads, sizeof(threads[0]));
-> > +       while (__atomic_fetch_sub(repeat, 1, __ATOMIC_RELAXED) > 0) {
-> > +               done = 0;
-> > +               for (i = 0; i < thread_params.nthreads; i++) {
-> > +                       if (pthread_create(&threads[i], NULL, passive_thread, &done))
-> > +                               exit((perror("pthread_create"), EXIT_FAILURE));
-> > +               }
-> > +               __atomic_store_n(&done, 1, __ATOMIC_RELAXED);
-> > +               futex_wake(&done, thread_params.nthreads, 0);
-> > +               for (i = 0; i < thread_params.nthreads; i++)
-> > +                       pthread_join(threads[i], NULL);
-> > +       }
-> > +       free(threads);
-> > +       return NULL;
-> > +}
-> > +
-> > +// The benchmark creates nbreakpoints inheritable breakpoints,
-> > +// then starts nparallel threads which create and join bench_repeat batches of nthreads threads.
-> > +int bench_breakpoint_thread(int argc, const char **argv)
-> > +{
-> > +       unsigned int i, result_usec;
-> > +       int repeat = bench_repeat;
-> > +       struct breakpoint *breakpoints;
-> > +       pthread_t *parallel;
-> > +       struct timeval start, stop, diff;
-> > +
-> > +       if (parse_options(argc, argv, thread_options, thread_usage, 0)) {
-> > +               usage_with_options(thread_usage, thread_options);
-> > +               exit(EXIT_FAILURE);
-> > +       }
-> > +       breakpoints = calloc(thread_params.nbreakpoints, sizeof(breakpoints[0]));
-> > +       parallel = calloc(thread_params.nparallel, sizeof(parallel[0]));
-> > +       for (i = 0; i < thread_params.nbreakpoints; i++) {
-> > +               breakpoints[i].fd = breakpoint_setup(&breakpoints[i].watched);
-> > +               if (breakpoints[i].fd == -1)
-> > +                       exit((perror("perf_event_open"), EXIT_FAILURE));
-> > +       }
-> > +       gettimeofday(&start, NULL);
-> > +       for (i = 0; i < thread_params.nparallel; i++) {
-> > +               if (pthread_create(&parallel[i], NULL, breakpoint_thread, &repeat))
-> > +                       exit((perror("pthread_create"), EXIT_FAILURE));
-> > +       }
-> > +       for (i = 0; i < thread_params.nparallel; i++)
-> > +               pthread_join(parallel[i], NULL);
-> > +       gettimeofday(&stop, NULL);
-> > +       timersub(&stop, &start, &diff);
-> > +       for (i = 0; i < thread_params.nbreakpoints; i++)
-> > +               close(breakpoints[i].fd);
-> > +       free(parallel);
-> > +       free(breakpoints);
-> > +       switch (bench_format) {
-> > +       case BENCH_FORMAT_DEFAULT:
-> > +               printf("# Created/joined %d threads with %d breakpoints and %d parallelism\n",
-> > +                       bench_repeat, thread_params.nbreakpoints, thread_params.nparallel);
-> > +               printf(" %14s: %lu.%03lu [sec]\n\n", "Total time",
-> > +                       (long)diff.tv_sec, (long)(diff.tv_usec / USEC_PER_MSEC));
-> > +               result_usec = diff.tv_sec * USEC_PER_SEC + diff.tv_usec;
-> > +               printf(" %14lf usecs/op\n",
-> > +                       (double)result_usec / bench_repeat / thread_params.nthreads);
-> > +               printf(" %14lf usecs/op/cpu\n",
-> > +                       (double)result_usec / bench_repeat /
-> > +                       thread_params.nthreads * thread_params.nparallel);
-> > +               break;
-> > +       case BENCH_FORMAT_SIMPLE:
-> > +               printf("%lu.%03lu\n", (long)diff.tv_sec, (long)(diff.tv_usec / USEC_PER_MSEC));
-> > +               break;
-> > +       default:
-> > +               fprintf(stderr, "Unknown format: %d\n", bench_format);
-> > +               exit(EXIT_FAILURE);
-> > +       }
-> > +       return 0;
-> > +}
-> > +
-> > +struct {
-> > +       unsigned int npassive;
-> > +       unsigned int nactive;
-> > +} enable_params = {
-> > +       .nactive = 0,
-> > +       .npassive = 0,
-> > +};
-> > +
-> > +static const struct option enable_options[] = {
-> > +       OPT_UINTEGER('p', "passive", &enable_params.npassive, "Specify amount of passive threads"),
-> > +       OPT_UINTEGER('a', "active", &enable_params.nactive, "Specify amount of active threads"),
-> > +       OPT_END()
-> > +};
-> > +
-> > +static const char * const enable_usage[] = {
-> > +       "perf bench breakpoint enable <options>",
-> > +       NULL
-> > +};
-> > +
-> > +// The benchmark creates an inheritable breakpoint,
-> > +// then starts npassive threads that block and nactive threads that actively spin
-> > +// and then disables and enables the breakpoint bench_repeat times.
-> > +int bench_breakpoint_enable(int argc, const char **argv)
-> > +{
-> > +       unsigned int i, nthreads, result_usec, done = 0;
-> > +       char watched;
-> > +       int fd;
-> > +       pthread_t *threads;
-> > +       struct timeval start, stop, diff;
-> > +
-> > +       if (parse_options(argc, argv, enable_options, enable_usage, 0)) {
-> > +               usage_with_options(enable_usage, enable_options);
-> > +               exit(EXIT_FAILURE);
-> > +       }
-> > +       fd = breakpoint_setup(&watched);
-> > +       if (fd == -1)
-> > +               exit((perror("perf_event_open"), EXIT_FAILURE));
-> > +       nthreads = enable_params.npassive + enable_params.nactive;
-> > +       threads = calloc(nthreads, sizeof(threads[0]));
-> > +       for (i = 0; i < nthreads; i++) {
-> > +               if (pthread_create(&threads[i], NULL,
-> > +                       i < enable_params.npassive ? passive_thread : active_thread, &done))
-> > +                       exit((perror("pthread_create"), EXIT_FAILURE));
-> > +       }
-> > +       usleep(10000);  // let the threads block
-> > +       gettimeofday(&start, NULL);
-> > +       for (i = 0; i < bench_repeat; i++) {
-> > +               if (ioctl(fd, PERF_EVENT_IOC_DISABLE, 0))
-> > +                       exit((perror("ioctl(PERF_EVENT_IOC_DISABLE)"), EXIT_FAILURE));
-> > +               if (ioctl(fd, PERF_EVENT_IOC_ENABLE, 0))
-> > +                       exit((perror("ioctl(PERF_EVENT_IOC_ENABLE)"), EXIT_FAILURE));
-> > +       }
-> > +       gettimeofday(&stop, NULL);
-> > +       timersub(&stop, &start, &diff);
-> > +       __atomic_store_n(&done, 1, __ATOMIC_RELAXED);
-> > +       futex_wake(&done, enable_params.npassive, 0);
-> > +       for (i = 0; i < nthreads; i++)
-> > +               pthread_join(threads[i], NULL);
-> > +       free(threads);
-> > +       close(fd);
-> > +       switch (bench_format) {
-> > +       case BENCH_FORMAT_DEFAULT:
-> > +               printf("# Enabled/disabled breakpoint %d time with %d passive and %d active threads\n",
-> > +                       bench_repeat, enable_params.npassive, enable_params.nactive);
-> > +               printf(" %14s: %lu.%03lu [sec]\n\n", "Total time",
-> > +                       (long)diff.tv_sec, (long)(diff.tv_usec / USEC_PER_MSEC));
-> > +               result_usec = diff.tv_sec * USEC_PER_SEC + diff.tv_usec;
-> > +               printf(" %14lf usecs/op\n", (double)result_usec / bench_repeat);
-> > +               break;
-> > +       case BENCH_FORMAT_SIMPLE:
-> > +               printf("%lu.%03lu\n", (long)diff.tv_sec, (long)(diff.tv_usec / USEC_PER_MSEC));
-> > +               break;
-> > +       default:
-> > +               fprintf(stderr, "Unknown format: %d\n", bench_format);
-> > +               exit(EXIT_FAILURE);
-> > +       }
-> > +       return 0;
-> > +}
-> > diff --git a/tools/perf/builtin-bench.c b/tools/perf/builtin-bench.c
-> > index d291f3a8af5f2..334ab897aae3b 100644
-> > --- a/tools/perf/builtin-bench.c
-> > +++ b/tools/perf/builtin-bench.c
-> > @@ -92,6 +92,13 @@ static struct bench internals_benchmarks[] = {
-> >         { NULL,         NULL,                                   NULL                    }
-> >  };
-> >
-> > +static struct bench breakpoint_benchmarks[] = {
-> > +       { "thread", "Benchmark thread start/finish with breakpoints", bench_breakpoint_thread},
-> > +       { "enable", "Benchmark breakpoint enable/disable", bench_breakpoint_enable},
-> > +       { "all", "Run all breakpoint benchmarks", NULL},
-> > +       { NULL, NULL, NULL },
-> > +};
-> > +
-> >  struct collection {
-> >         const char      *name;
-> >         const char      *summary;
-> > @@ -110,6 +117,7 @@ static struct collection collections[] = {
-> >         {"epoll",       "Epoll stressing benchmarks",                   epoll_benchmarks        },
-> >  #endif
-> >         { "internals",  "Perf-internals benchmarks",                    internals_benchmarks    },
-> > +       { "breakpoint", "Breakpoint benchmarks",                        breakpoint_benchmarks   },
-> >         { "all",        "All benchmarks",                               NULL                    },
-> >         { NULL,         NULL,                                           NULL                    }
-> >  };
-> >
-> > base-commit: bd24325684029a48f20a188b899eb84900d0bc9c
-> > --
-> > 2.36.0.464.gb9c8b46e94-goog
-> >
-
--- 
-
-- Arnaldo
+T24gVHVlLCAyMDIyLTA1LTEwIGF0IDE4OjEyIC0wNzAwLCBKb3NoIFBvaW1ib2V1ZiB3cm90ZToN
+Cj4gT24gV2VkLCBNYXkgMTEsIDIwMjIgYXQgMTI6NDY6MzJBTSArMDAwMCwgUmlrIHZhbiBSaWVs
+IHdyb3RlOg0KPiA+IE9uIFR1ZSwgMjAyMi0wNS0xMCBhdCAxNzozNyAtMDcwMCwgSm9zaCBQb2lt
+Ym9ldWYgd3JvdGU6DQo+ID4gPiBPbiBXZWQsIE1heSAxMSwgMjAyMiBhdCAxMjozNToxMUFNICsw
+MDAwLCBSaWsgdmFuIFJpZWwgd3JvdGU6DQo+ID4gPiA+IE9uIFR1ZSwgMjAyMi0wNS0xMCBhdCAy
+Mzo1NyArMDAwMCwgU29uZyBMaXUgd3JvdGU6DQo+ID4gPiA+ID4gDQo+ID4gPiA+ID4gU28sIGlm
+IHdlIGNvbWUgYmFjayB0byB0aGUgc2FtZSBxdWVzdGlvbjogaXMgdGhpcyBhIGJ1ZyAob3IgYQ0K
+PiA+ID4gPiA+IHN1Ym9wdGltYWwNCj4gPiA+ID4gPiBiZWhhdmlvciB0aGF0IHdvcnRoIGZpeGlu
+Zyk/IElmIHNvLCB3ZSBhcmUgb3BlbiB0byBhbnkNCj4gPiA+ID4gPiBzb2x1dGlvbg0KPiA+ID4g
+PiA+IHRoYXQgDQo+ID4gPiA+ID4gd291bGQgYWxzbyBoZWxwIFBSRUVNUFQgYW5kL29yIG5vbi14
+ODYgYXJjaGVzLiANCj4gPiA+ID4gPiANCj4gPiA+ID4gVXNpbmcgdGhlIHByZWVtcHQgbm90aWZp
+ZXJzIGR1cmluZyBLTFAgdHJhbnNpdGlvbiBzaG91bGQNCj4gPiA+ID4gd29yayBlcXVhbGx5IHdl
+bGwgZm9yIFBSRUVNUFQgYW5kICFQUkVFTVBULiBJdCBhbHNvIGRvZXMNCj4gPiA+ID4gbm90IGlu
+c2VydCBhbnkgYWRkaXRpb25hbCBjb2RlIGludG8gdGhlIHNjaGVkdWxlciB3aGlsZQ0KPiA+ID4g
+PiB0aGVyZSBpcyBubyBLTFAgdHJhbnNpdGlvbiBnb2luZyBvbi4NCj4gPiA+IA0KPiA+ID4gQXMg
+SSd2ZSBiZWVuIHNheWluZywgdGhpcyBpcyBub3QgZ29pbmcgdG8gd29yayBmb3IgUFJFRU1QVA0K
+PiA+ID4gYmVjYXVzZSwNCj4gPiA+IHdpdGhvdXQgT1JDLCB3ZSBjYW4ndCByZWxpYWJseSB1bndp
+bmQgZnJvbSBhbiBJUlEgaGFuZGxlciwgc28gdGhlDQo+ID4gPiBrdGhyZWFkIHdvbid0IGdldCBw
+YXRjaGVkLg0KPiA+ID4gDQo+ID4gSXNuJ3QgdGhlIHNjaGVkX291dCBwcmVlbXB0IG5vdGlmaWVy
+IGFsd2F5cyBydW4gaW4NCj4gPiBwcm9jZXNzIGNvbnRleHQ/DQo+ID4gDQo+ID4gV2hhdCBhbSBJ
+IG1pc3Npbmc/DQo+IA0KPiBNYXliZSBpdCdzIHRlY2huaWNhbGx5IHByb2Nlc3MgY29udGV4dCBh
+dCB0aGF0IHBvaW50LsKgIEJ1dCB0aGUNCj4gaW1wb3J0YW50DQo+IHBvaW50IGlzIHRoYXQgdGhl
+IGNhbGwgdG8gdGhlIHNjaGVkdWxlciB2aWEgcHJlZW1wdF9zY2hlZHVsZV9pcnEoKQ0KPiBvcmln
+aW5hdGVzIGZyb20gdGhlICJyZXR1cm4gZnJvbSBpbnRlcnJ1cHQiIHBhdGguDQoNCkFoaGhoLCBJ
+IHRoaW5rIEkgdW5kZXJzdGFuZC4NCg0KRG9lcyB0aGF0IG1lYW4gaWYgdGhlIHNjaGVkdWxpbmcg
+b2YgdGhlIGtlcm5lbCB0aHJlYWQgb3JpZ2luYXRlZA0KZnJvbSBhbiBJUlEsIHRoZSBLTFAgdHJh
+bnNpdGlvbiB3aWxsIGZhaWwgcHJvYmFibHk/DQoNCkhvd2V2ZXIsIGlmIHRoZSBjYWxsIHRvIHNj
+aGVkdWxlIGNhbWUgZnJvbSBhIHZvbHVudGFyeSBwcmVlbXB0aW9uLA0KZm9yIGV4YW1wbGUgdGhy
+b3VnaCBhIGNvbmRfcmVzY2hlZCgpIG9yIGR1ZSB0byB0aGUgdGhyZWFkIGdvaW5nDQp0byBzbGVl
+cCBhIGxpdHRsZSBiaXQsIHRoZSBzdGFjayB3YWxrIHdpbGwgYmUgcmVsaWFibGUsIGFuZCB0aGUN
+CktMUCB0cmFuc2l0aW9uIG1heSBzdWNjZWVkPw0KDQoNCg==

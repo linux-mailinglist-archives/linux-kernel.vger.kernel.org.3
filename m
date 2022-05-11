@@ -2,66 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2663E5231A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECC005231B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 13:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234600AbiEKLbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 07:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47882 "EHLO
+        id S239240AbiEKLbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 07:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237916AbiEKLak (ORCPT
+        with ESMTP id S239563AbiEKLa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 07:30:40 -0400
+        Wed, 11 May 2022 07:30:57 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D0F472415EF
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:30:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 804771DA44
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:30:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652268630;
+        s=mimecast20190719; t=1652268655;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wohS2fd8iJK+nOu4KauEQg//cRaTs75yj08GCIBle5g=;
-        b=AJxXfDCgaNzYsH4bF7s9T+X7TPWz/wZ+ERMab7POHimDXheMBC10rLE8MDOf0JORcpLzdk
-        Zr629T+1YO8AXZnDGONQfcDkFTYRNrjqQQVYhTEZxdn6JLx/Js5DRm4XCJ3esiAFzNOPh8
-        BTlP/UMy+MpFklvO058smzbZACkX3XE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=bKBAcv9/i+j+NmGeneztCrY9Hfc9zc/TOb5Jz8UH/dw=;
+        b=anNttK3x9fdg73xyi/P2jnkHt8EfP84bb+mtIi8eGAR+Zj9LwtfNcIi5NRfAxlA9jYKjiq
+        DZRmaSgunDVpLDP8L0gsE21//FdXSQNJKyaGZ1rdOWPP+Q6lf5X7jc6MnyN7wtuckQXEr+
+        uuEKlH4JeAX4JFg/7PY0JXGZUxxbJZ0=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-642-25UsvugIN9usLHru1ARIcQ-1; Wed, 11 May 2022 07:30:27 -0400
-X-MC-Unique: 25UsvugIN9usLHru1ARIcQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 23770801210;
-        Wed, 11 May 2022 11:30:27 +0000 (UTC)
-Received: from starship (unknown [10.40.192.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 72C8214693A5;
-        Wed, 11 May 2022 11:30:24 +0000 (UTC)
-Message-ID: <a060d2f84fb207af7d96cb955dd676c1d87f6adb.camel@redhat.com>
-Subject: Re: [PATCH v3 18/34] x86/hyperv: Fix 'struct hv_enlightened_vmcs'
- definition
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 11 May 2022 14:30:23 +0300
-In-Reply-To: <20220414132013.1588929-19-vkuznets@redhat.com>
-References: <20220414132013.1588929-1-vkuznets@redhat.com>
-         <20220414132013.1588929-19-vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+ us-mta-316-nyoCIZJeNeiFeYH5AR2l9Q-1; Wed, 11 May 2022 07:30:54 -0400
+X-MC-Unique: nyoCIZJeNeiFeYH5AR2l9Q-1
+Received: by mail-wr1-f70.google.com with SMTP id o18-20020adfcf12000000b0020cdc76ea11so740340wrj.3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 04:30:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=bKBAcv9/i+j+NmGeneztCrY9Hfc9zc/TOb5Jz8UH/dw=;
+        b=gM2cvfpJSbZycoa1bpjY8yhNEsWORmSnC3clb7Ig1aaN0SjJ3wXsOHWJeQRVaVe865
+         l1X+tqOaUspuk7IX/PpuD+MEvQKFDno5ntmQK+30wl0u1W42rw/w9k2rum8IyQ1vFQvN
+         MjHFtTaS36OUAYJ0998dSXu6o8sgfjhEnSpn53DjFeyGTW9xmKLAsHyQsMJT4T9xeGlJ
+         lhovnuCTDthx6tHL04V9aH5N6U3FkotGphwRJSVtsN9VjHt3rtDzj7JBAFhcUHxJIA/G
+         5C/Ia4IWJ40V+mXys5xLDwEMgZwMpv2q7AidF+K4XzvegJO3UeBfF4fG750LqQu+90e0
+         Ka8g==
+X-Gm-Message-State: AOAM533TouVUku3QatJ/D1eD9cme3fdvQXTKY4KVnvVEzFlqGw4hbyWJ
+        sJKupUrho4GOw35+mLGxZs5xGkI7KVmD1yVHe+r3eDnNCpnP94Gsx8jJjRuj7gHiqLMPCU0xGoy
+        i45rwbF+bLLy7JV8xhh04/0bXOKTk52VQgA33JW5bbdBHIOIMmrJeUswxx+41EE3IePDsH6AQhD
+        o=
+X-Received: by 2002:adf:9dcc:0:b0:20a:ed44:fd48 with SMTP id q12-20020adf9dcc000000b0020aed44fd48mr22330195wre.120.1652268653208;
+        Wed, 11 May 2022 04:30:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxIJjtshhhNaPS9SyMj2B6z8Yib37iNGrRjx/XQ5eyK5wW8o/9hh+eocyK9ixZaPPybN81Bxg==
+X-Received: by 2002:adf:9dcc:0:b0:20a:ed44:fd48 with SMTP id q12-20020adf9dcc000000b0020aed44fd48mr22330167wre.120.1652268652888;
+        Wed, 11 May 2022 04:30:52 -0700 (PDT)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id w9-20020a5d4049000000b0020c5253d8cfsm1722625wrp.27.2022.05.11.04.30.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 04:30:52 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Helge Deller <deller@gmx.de>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v5 3/7] fbdev: Restart conflicting fb removal loop when unregistering devices
+Date:   Wed, 11 May 2022 13:30:39 +0200
+Message-Id: <20220511113039.1252432-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220511112438.1251024-1-javierm@redhat.com>
+References: <20220511112438.1251024-1-javierm@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,64 +82,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-14 at 15:19 +0200, Vitaly Kuznetsov wrote:
-> Section 1.9 of TLFS v6.0b says:
-> 
-> "All structures are padded in such a way that fields are aligned
-> naturally (that is, an 8-byte field is aligned to an offset of 8 bytes
-> and so on)".
-> 
-> 'struct enlightened_vmcs' has a glitch:
-> 
-> ...
->         struct {
->                 u32                nested_flush_hypercall:1; /*   836: 0  4 */
->                 u32                msr_bitmap:1;         /*   836: 1  4 */
->                 u32                reserved:30;          /*   836: 2  4 */
->         } hv_enlightenments_control;                     /*   836     4 */
->         u32                        hv_vp_id;             /*   840     4 */
->         u64                        hv_vm_id;             /*   844     8 */
->         u64                        partition_assist_page; /*   852     8 */
-> ...
-> 
-> And the observed values in 'partition_assist_page' make no sense at
-> all. Fix the layout by padding the structure properly.
-> 
-> Fixes: 68d1eb72ee99 ("x86/hyper-v: define struct hv_enlightened_vmcs and clean field bits")
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/include/asm/hyperv-tlfs.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
-> index 5225a85c08c3..e7ddae8e02c6 100644
-> --- a/arch/x86/include/asm/hyperv-tlfs.h
-> +++ b/arch/x86/include/asm/hyperv-tlfs.h
-> @@ -548,7 +548,7 @@ struct hv_enlightened_vmcs {
->  	u64 guest_rip;
->  
->  	u32 hv_clean_fields;
-> -	u32 hv_padding_32;
-> +	u32 padding32_1;
->  	u32 hv_synthetic_controls;
->  	struct {
->  		u32 nested_flush_hypercall:1;
-> @@ -556,7 +556,7 @@ struct hv_enlightened_vmcs {
->  		u32 reserved:30;
->  	}  __packed hv_enlightenments_control;
->  	u32 hv_vp_id;
-> -
-> +	u32 padding32_2;
->  	u64 hv_vm_id;
->  	u64 partition_assist_page;
->  	u64 padding64_4[4];
+Drivers that want to remove registered conflicting framebuffers prior to
+register their own framebuffer, calls remove_conflicting_framebuffers().
 
+This function takes the registration_lock mutex, to prevent a races when
+drivers register framebuffer devices. But if a conflicting framebuffer
+device is found, the underlaying platform device is unregistered and this
+will lead to the platform driver .remove callback to be called, which in
+turn will call to the unregister_framebuffer() that takes the same lock.
 
-Makes sense.
+To prevent this, a struct fb_info.forced_out field was used as indication
+to unregister_framebuffer() whether the mutex has to be grabbed or not.
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+A cleaner solution is to drop the lock before platform_device_unregister()
+so unregister_framebuffer() can take it when called from the fbdev driver,
+and just grab the lock again after the device has been registered and do
+a removal loop restart.
 
-Best regards,
-	Maxim Levitsky
+Since the framebuffer devices will already be removed, the loop would just
+finish when no more conflicting framebuffers are found.
+
+Suggested-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+---
+
+(no changes since v1)
+
+ drivers/video/fbdev/core/fbmem.c | 22 +++++++++++++++-------
+ include/linux/fb.h               |  1 -
+ 2 files changed, 15 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
+index b445a7a00def..2fda5917c212 100644
+--- a/drivers/video/fbdev/core/fbmem.c
++++ b/drivers/video/fbdev/core/fbmem.c
+@@ -1555,6 +1555,7 @@ static void do_remove_conflicting_framebuffers(struct apertures_struct *a,
+ {
+ 	int i;
+ 
++restart_removal:
+ 	/* check all firmware fbs and kick off if the base addr overlaps */
+ 	for_each_registered_fb(i) {
+ 		struct apertures_struct *gen_aper;
+@@ -1587,12 +1588,23 @@ static void do_remove_conflicting_framebuffers(struct apertures_struct *a,
+ 				pr_warn("fb%d: no device set\n", i);
+ 				do_unregister_framebuffer(registered_fb[i]);
+ 			} else if (dev_is_platform(device)) {
+-				registered_fb[i]->forced_out = true;
++				/*
++				 * Drop the lock because if the device is unregistered, its
++				 * driver will call to unregister_framebuffer(), that takes
++				 * this lock.
++				 */
++				mutex_unlock(&registration_lock);
+ 				platform_device_unregister(to_platform_device(device));
++				mutex_lock(&registration_lock);
+ 			} else {
+ 				pr_warn("fb%d: cannot remove device\n", i);
+ 				do_unregister_framebuffer(registered_fb[i]);
+ 			}
++			/*
++			 * Restart the removal loop now that the device has been
++			 * unregistered and its associated framebuffer gone.
++			 */
++			goto restart_removal;
+ 		}
+ 	}
+ }
+@@ -1899,13 +1911,9 @@ EXPORT_SYMBOL(register_framebuffer);
+ void
+ unregister_framebuffer(struct fb_info *fb_info)
+ {
+-	bool forced_out = fb_info->forced_out;
+-
+-	if (!forced_out)
+-		mutex_lock(&registration_lock);
++	mutex_lock(&registration_lock);
+ 	do_unregister_framebuffer(fb_info);
+-	if (!forced_out)
+-		mutex_unlock(&registration_lock);
++	mutex_unlock(&registration_lock);
+ }
+ EXPORT_SYMBOL(unregister_framebuffer);
+ 
+diff --git a/include/linux/fb.h b/include/linux/fb.h
+index 69c67c70fa78..bbe1e4571899 100644
+--- a/include/linux/fb.h
++++ b/include/linux/fb.h
+@@ -511,7 +511,6 @@ struct fb_info {
+ 	} *apertures;
+ 
+ 	bool skip_vt_switch; /* no VT switch on suspend/resume required */
+-	bool forced_out; /* set when being removed by another driver */
+ };
+ 
+ static inline struct apertures_struct *alloc_apertures(unsigned int max_num) {
+-- 
+2.35.1
 

@@ -2,255 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DB1523CE5
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4170E523CF7
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:59:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346523AbiEKSve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 14:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
+        id S1346540AbiEKS7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 14:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244722AbiEKSv3 (ORCPT
+        with ESMTP id S1343977AbiEKS7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 14:51:29 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720881D8103
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:51:27 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id bs17so3020749qkb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:51:27 -0700 (PDT)
+        Wed, 11 May 2022 14:59:38 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2986D39A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:59:37 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id i24so2757816pfa.7
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:59:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2M4Jyxc4ZhLMOpYVi4rOXmZMkxhNrB3SJA5cGP33wsw=;
-        b=hIi47nK8NjD/G3LuJK2PAPk/bVzllp+fLuCexjLy4BH8rKTDb3JBxsVc6CiFPUlPYm
-         RpZNxJsX1BtpycEgYFrmcIy0UVGH5dv8mOjYtvNKe9RPUDQdoiwdsJmIn2ep3UNfURjW
-         E2QbN4oSEUFmANl6EfG54igt6AaiRFeW547fvOMgwfaYYttkG4s/xM7BvmDZEE+FR999
-         PoZRqh0zXwAngexKVvPpKCphvB7Q5/CfbAIBTAJCimizzjDj+kdaFCYVEb9w5vWoA/4k
-         vKDJcYdGNKq2txfo+LtyBaJ6k1DmnFn9pS7PeY4cEyEnaECtZ2cR9mfB3WB/92BT2wi0
-         WG2A==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8sGAQG8dHMKLn+nlsPe/05icv+DfBZPnqj5ZoB1g/UQ=;
+        b=wZV2E92PHLNHqME2ISGsoc8JZxSNdYWfG7d8y4/9sA4UeBrjX1Vx2Lace/4dA85wk/
+         ILfvKj3XjG9cZVCAMKPAxH9lD20VM/AU9unfqDjD87cKBUMCZlomMOd4AzaKSK1xKvNB
+         CkTgogQZZzeMoIua3YYxVoJXzIihcZkqfezwAmDOP8/yQ3R/96KXJ5qMJzs/OBEn9VBc
+         k518IQ6IuQmkA1P0vgEWvo/UhHsLVcrx/az0T5DjM4u7YSmsRzDE2s2fZV91WspwRWnj
+         yW9jzGWJ71P0TFhoqwFQFiMNKF9y1j5QfYjC3RP1tqfnt40r4lgH8M8gjv7h1+kYa12i
+         CaeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2M4Jyxc4ZhLMOpYVi4rOXmZMkxhNrB3SJA5cGP33wsw=;
-        b=whlv+BBHKVM8/xuDzzQW8EoWqZ7JoVGAJTvuOvOh73pVepl8CKn/seSAzIm441KHmr
-         fISfkZJlewEhlPIFJD1pJrZSUeiOHZH8rRmAI2Q+bG3qtJ4sEpt1iX8lHD16NDNtsfZ+
-         7TAwiAgHQeIkXx+vwMFlef4u6RBXsX/ZIrZE3IZcyREMuaE7IHREltsB4tOBOjL/Yi8m
-         4N7+qAWMhYwQxtO78PZOZmO7LA7s566kP09YxaKwAsuCqUsqi6lQdqSrXF6rdJo7bhgT
-         L7L2AR0IP79heFsPC8VXubQqtMf+WB9UD2kcr7wfI8WBUn1dpLRt6wgios07vM71ZPei
-         1rWw==
-X-Gm-Message-State: AOAM533qOoPlmniao4dtGNhhylvcvuWului19qlGN5b5oJTrHOvUuZ7d
-        gMULbRmZtJmBbkafKBQvtV18ow==
-X-Google-Smtp-Source: ABdhPJy8hfHIAyaLgeAGd1noKkDIygPLAvRQwGVbLxOKICyyA8xx5wGKdjyIYE/SOuJ7JDSHQk/GRQ==
-X-Received: by 2002:a05:620a:2a04:b0:6a0:603f:4cd9 with SMTP id o4-20020a05620a2a0400b006a0603f4cd9mr14749226qkp.262.1652295086581;
-        Wed, 11 May 2022 11:51:26 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::1:14fe])
-        by smtp.gmail.com with ESMTPSA id k4-20020ae9f104000000b0069fc13ce205sm1596531qkg.54.2022.05.11.11.51.25
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8sGAQG8dHMKLn+nlsPe/05icv+DfBZPnqj5ZoB1g/UQ=;
+        b=X3BzfrVTRFVtHOK+M4gkbrDyaB4MrxHogMSg43uInj5mkcLu3ILUwkE2T4e/dYzbnr
+         qFQYgEcKghd11ROPvx6fsQQulRL2ExUsnwXj5CtH3d+P0kq9pghWCXSOZz/AiF7Om4+e
+         yDC5/kA5JRmzKi7Q02wnTmbDtJAL46HshA69mME52p1iqsJPGPqNREdDrO+nY0ocD/OU
+         c+J6MdVrCgsPgAaOfgHkuqL2YFcDF48jYyczGNdrm4kleVfwJtK04LWfu+jwQDHH25St
+         nNXloE6jNj0cxYPGDEBMG0I6aZNpUVRJR/gTF3W71QHd0JX5RSBOSYfihL4WN/ORo4t+
+         sg+Q==
+X-Gm-Message-State: AOAM530VZbLg7FX8MpdMNORoA39rZGpFRjkowmx02BINPKrtFu2Rkb2m
+        4X6Gt4uUPhzcE0KdobxAFEhKqM6ugV6XOQ==
+X-Google-Smtp-Source: ABdhPJyuiOoKNfa17Y3IGmkUvslc+8XNXB9vnFmRfrQOBJZ+U4wDOk7Wf89qsDxFqO0T+kIsUYQY7Q==
+X-Received: by 2002:a05:6a00:15d3:b0:510:3c69:b387 with SMTP id o19-20020a056a0015d300b005103c69b387mr26214468pfu.30.1652295576885;
+        Wed, 11 May 2022 11:59:36 -0700 (PDT)
+Received: from localhost.localdomain ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id a19-20020a17090aa51300b001d5c571f487sm280709pjq.25.2022.05.11.11.59.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 11:51:25 -0700 (PDT)
-Date:   Wed, 11 May 2022 14:51:25 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Minchan Kim <minchan@kernel.org>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com
-Subject: Re: [PATCH v2 1/6] Documentation: filesystems: proc: update meminfo
- section
-Message-ID: <YnwFraZlVWQoCjz3@cmpxchg.org>
-References: <20220510152847.230957-1-hannes@cmpxchg.org>
- <20220510152847.230957-2-hannes@cmpxchg.org>
- <7a6f8520-a496-e3c3-1fd9-8a30b7a12b14@redhat.com>
+        Wed, 11 May 2022 11:59:36 -0700 (PDT)
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+To:     linkinjeon@kernel.org
+Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] exfat: move is_valid_cluster to a common header
+Date:   Wed, 11 May 2022 11:59:08 -0700
+Message-Id: <20220511185909.175110-1-tadeusz.struk@linaro.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7a6f8520-a496-e3c3-1fd9-8a30b7a12b14@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 07:11:06PM +0200, David Hildenbrand wrote:
-> On 10.05.22 17:28, Johannes Weiner wrote:
-> > Add new entries. Minor corrections and cleanups.
-> > 
-> > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-> > ---
-> >  Documentation/filesystems/proc.rst | 155 ++++++++++++++++++-----------
-> >  1 file changed, 99 insertions(+), 56 deletions(-)
-> > 
-> > diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-> > index 061744c436d9..736ed384750c 100644
-> > --- a/Documentation/filesystems/proc.rst
-> > +++ b/Documentation/filesystems/proc.rst
-> > @@ -942,56 +942,71 @@ can be substantial.  In many cases there are other means to find out
-> >  additional memory using subsystem specific interfaces, for instance
-> >  /proc/net/sockstat for TCP memory allocations.
-> >  
-> > -The following is from a 16GB PIII, which has highmem enabled.
-> > -You may not have all of these fields.
-> > +Example output. You may not have all of these fields.
-> >  
-> >  ::
-> >  
-> >      > cat /proc/meminfo
-> >  
-> > -    MemTotal:     16344972 kB
-> > -    MemFree:      13634064 kB
-> > -    MemAvailable: 14836172 kB
-> > -    Buffers:          3656 kB
-> > -    Cached:        1195708 kB
-> > -    SwapCached:          0 kB
-> > -    Active:         891636 kB
-> > -    Inactive:      1077224 kB
-> > -    HighTotal:    15597528 kB
-> > -    HighFree:     13629632 kB
-> > -    LowTotal:       747444 kB
-> > -    LowFree:          4432 kB
-> > -    SwapTotal:           0 kB
-> > -    SwapFree:            0 kB
-> > -    Dirty:             968 kB
-> > -    Writeback:           0 kB
-> > -    AnonPages:      861800 kB
-> > -    Mapped:         280372 kB
-> > -    Shmem:             644 kB
-> > -    KReclaimable:   168048 kB
-> > -    Slab:           284364 kB
-> > -    SReclaimable:   159856 kB
-> > -    SUnreclaim:     124508 kB
-> > -    PageTables:      24448 kB
-> > -    NFS_Unstable:        0 kB
-> > -    Bounce:              0 kB
-> > -    WritebackTmp:        0 kB
-> > -    CommitLimit:   7669796 kB
-> > -    Committed_AS:   100056 kB
-> > -    VmallocTotal:   112216 kB
-> > -    VmallocUsed:       428 kB
-> > -    VmallocChunk:   111088 kB
-> > -    Percpu:          62080 kB
-> > -    HardwareCorrupted:   0 kB
-> > -    AnonHugePages:   49152 kB
-> > -    ShmemHugePages:      0 kB
-> > -    ShmemPmdMapped:      0 kB
-> > +    MemTotal:       32858820 kB
-> > +    MemFree:        21001236 kB
-> > +    MemAvailable:   27214312 kB
-> > +    Buffers:          581092 kB
-> > +    Cached:          5587612 kB
-> > +    SwapCached:            0 kB
-> > +    Active:          3237152 kB
-> > +    Inactive:        7586256 kB
-> > +    Active(anon):      94064 kB
-> > +    Inactive(anon):  4570616 kB
-> > +    Active(file):    3143088 kB
-> > +    Inactive(file):  3015640 kB
-> > +    Unevictable:           0 kB
-> > +    Mlocked:               0 kB
-> > +    SwapTotal:             0 kB
-> > +    SwapFree:              0 kB
-> > +    Dirty:                12 kB
-> > +    Writeback:             0 kB
-> > +    AnonPages:       4654780 kB
-> > +    Mapped:           266244 kB
-> > +    Shmem:              9976 kB
-> > +    KReclaimable:     517708 kB
-> > +    Slab:             660044 kB
-> > +    SReclaimable:     517708 kB
-> > +    SUnreclaim:       142336 kB
-> > +    KernelStack:       11168 kB
-> > +    PageTables:        20540 kB
-> > +    NFS_Unstable:          0 kB
-> > +    Bounce:                0 kB
-> > +    WritebackTmp:          0 kB
-> > +    CommitLimit:    16429408 kB
-> > +    Committed_AS:    7715148 kB
-> > +    VmallocTotal:   34359738367 kB
-> > +    VmallocUsed:       40444 kB
-> > +    VmallocChunk:          0 kB
-> > +    Percpu:            29312 kB
-> > +    HardwareCorrupted:     0 kB
-> > +    AnonHugePages:   4149248 kB
-> > +    ShmemHugePages:        0 kB
-> > +    ShmemPmdMapped:        0 kB
-> > +    FileHugePages:         0 kB
-> > +    FilePmdMapped:         0 kB
-> > +    CmaTotal:              0 kB
-> > +    CmaFree:               0 kB
-> > +    HugePages_Total:       0
-> > +    HugePages_Free:        0
-> > +    HugePages_Rsvd:        0
-> > +    HugePages_Surp:        0
-> > +    Hugepagesize:       2048 kB
-> > +    Hugetlb:               0 kB
-> > +    DirectMap4k:      401152 kB
-> > +    DirectMap2M:    10008576 kB
-> > +    DirectMap1G:    24117248 kB
-> >  
-> >  MemTotal
-> >                Total usable RAM (i.e. physical RAM minus a few reserved
-> >                bits and the kernel binary code)
-> >  MemFree
-> > -              The sum of LowFree+HighFree
-> > +              Total free RAM. On highmem systems, the sum of LowFree+HighFree
-> >  MemAvailable
-> >                An estimate of how much memory is available for starting new
-> >                applications, without swapping. Calculated from MemFree,
-> > @@ -1005,8 +1020,9 @@ Buffers
-> >                Relatively temporary storage for raw disk blocks
-> >                shouldn't get tremendously large (20MB or so)
-> >  Cached
-> > -              in-memory cache for files read from the disk (the
-> > -              pagecache).  Doesn't include SwapCached
-> > +              In-memory cache for files read from the disk (the
-> > +              pagecache) as well as tmpfs & shmem.
-> > +              Doesn't include SwapCached.
-> >  SwapCached
-> >                Memory that once was swapped out, is swapped back in but
-> >                still also is in the swapfile (if memory is needed it
-> > @@ -1018,6 +1034,11 @@ Active
-> >  Inactive
-> >                Memory which has been less recently used.  It is more
-> >                eligible to be reclaimed for other purposes
-> > +Unevictable
-> > +              Memory that cannot be reclaimed, such as mlocked pages,
-> > +              ramfs backing pages, secret memfd pages etc.
-> 
-> 
-> A little imprecise, because this only includes memory to be mapped into
-> user space. For example, all kernel allocations are unevictable but not
-> accounted here.
+Move the is_valid_cluster() helper from fatent.c to a common
+header to make it reusable in other *.c files.
 
-True. How about the below?
+Cc: Namjae Jeon <linkinjeon@kernel.org>
+Cc: Sungjong Seo <sj1557.seo@samsung.com>
+Cc: linux-fsdevel@vger.kernel.org
+Cc: stable@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-> Apart from that
-> 
-> Acked-by: David Hildenbrand <david@redhat.com>
-
-Thanks!
-
-Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
 ---
+ fs/exfat/exfat_fs.h | 6 ++++++
+ fs/exfat/fatent.c   | 6 ------
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-index 9749ff8c0ecf..5e9791457876 100644
---- a/Documentation/filesystems/proc.rst
-+++ b/Documentation/filesystems/proc.rst
-@@ -1035,8 +1035,8 @@ Inactive
-               Memory which has been less recently used.  It is more
-               eligible to be reclaimed for other purposes
- Unevictable
--              Memory that cannot be reclaimed, such as mlocked pages,
--              ramfs backing pages, secret memfd pages etc.
-+              Memory allocated for userspace which cannot be reclaimed, such
-+              as mlocked pages, ramfs backing pages, secret memfd pages etc.
- Mlocked
-               Memory locked with mlock().
- HighTotal, HighFree
+diff --git a/fs/exfat/exfat_fs.h b/fs/exfat/exfat_fs.h
+index c6800b880920..42d06c68d5c5 100644
+--- a/fs/exfat/exfat_fs.h
++++ b/fs/exfat/exfat_fs.h
+@@ -381,6 +381,12 @@ static inline int exfat_sector_to_cluster(struct exfat_sb_info *sbi,
+ 		EXFAT_RESERVED_CLUSTERS;
+ }
+ 
++static inline bool is_valid_cluster(struct exfat_sb_info *sbi,
++		unsigned int clus)
++{
++	return clus >= EXFAT_FIRST_CLUSTER && clus < sbi->num_clusters;
++}
++
+ /* super.c */
+ int exfat_set_volume_dirty(struct super_block *sb);
+ int exfat_clear_volume_dirty(struct super_block *sb);
+diff --git a/fs/exfat/fatent.c b/fs/exfat/fatent.c
+index a3464e56a7e1..421c27353104 100644
+--- a/fs/exfat/fatent.c
++++ b/fs/exfat/fatent.c
+@@ -81,12 +81,6 @@ int exfat_ent_set(struct super_block *sb, unsigned int loc,
+ 	return 0;
+ }
+ 
+-static inline bool is_valid_cluster(struct exfat_sb_info *sbi,
+-		unsigned int clus)
+-{
+-	return clus >= EXFAT_FIRST_CLUSTER && clus < sbi->num_clusters;
+-}
+-
+ int exfat_ent_get(struct super_block *sb, unsigned int loc,
+ 		unsigned int *content)
+ {
+-- 
+2.36.1
+

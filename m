@@ -2,155 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A37ED52372D
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF4ED523730
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:24:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244825AbiEKPYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
+        id S1343619AbiEKPYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343607AbiEKPYI (ORCPT
+        with ESMTP id S1343607AbiEKPY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:24:08 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7B34EDE2;
-        Wed, 11 May 2022 08:24:05 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1nooBr-0003aM-1O; Wed, 11 May 2022 17:23:53 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Peter Geis <pgwipeout@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Marc Zyngier <maz@kernel.org>, PCI <linux-pci@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-Subject: Re: [PATCH v9 2/5] PCI: rockchip-dwc: Reset core at driver probe
-Date:   Wed, 11 May 2022 17:23:28 +0200
-Message-ID: <1860493.taCxCBeP46@diego>
-In-Reply-To: <YnvPdSPUm85Bg9zE@lpieralisi>
-References: <20220429123832.2376381-1-pgwipeout@gmail.com> <CAMdYzYqdDPUFPhAZqA71dLaf6rT9CwFqQ1dFMRbGpVMyzgT8bg@mail.gmail.com> <YnvPdSPUm85Bg9zE@lpieralisi>
+        Wed, 11 May 2022 11:24:27 -0400
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB54C227831;
+        Wed, 11 May 2022 08:24:25 -0700 (PDT)
+Received: by mail-ot1-f52.google.com with SMTP id 31-20020a9d0822000000b00605f1807664so690990oty.3;
+        Wed, 11 May 2022 08:24:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/YW/NabRNlqlFBWgGilu1Fwu61bxFXT4UrNqhtMuKug=;
+        b=7kbhuQV5fm7djNPeL34dLhVs/CrjVYvHV07Szsy3FTbiFw6F25GGDKWCPTvhV+LtBI
+         O7dtzmfA5jxDtbiLallWKx7Kt12h0lR37jLyUCbxxCaXqL11QBIzEOpA9Q3SZ4t+kmCJ
+         y5RYDMCSTYZ5PJST0UYqGVYnTIu9J0V/XUllYwoSaWs5rh1L5fSyzQqR5U7UW4fPhAq3
+         +Fz1ERsp6wQ2317EXq7dYfPNpLOjI5aiWfsT4NOq7K+DhRUuCkEhn7KoDjeJO68KwvRd
+         +GNiapaMmXozkerMr5EZu6xJLXlWCQs6Td6q195SRen4UacOvbaVNlLbWfl+U0j2GqkC
+         tmZw==
+X-Gm-Message-State: AOAM531GYnPpSucUuWqbYQzLc36hXY3sGTpQ9XJ+KLkoW2ri4jCAveeh
+        yvuZH/nvXiM6ETZ2NRno7g==
+X-Google-Smtp-Source: ABdhPJwW6W24dzq/fhBeIZjPgBInHoKIcnuL7XRJyzp48a8Nt/eKYf23URC2W2inbDtmAxg7YeSoLA==
+X-Received: by 2002:a9d:674f:0:b0:606:5b6:b76e with SMTP id w15-20020a9d674f000000b0060605b6b76emr10106810otm.12.1652282664955;
+        Wed, 11 May 2022 08:24:24 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t13-20020a4aadcd000000b0035eb4e5a6c9sm1014996oon.31.2022.05.11.08.24.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 08:24:24 -0700 (PDT)
+Received: (nullmailer pid 339802 invoked by uid 1000);
+        Wed, 11 May 2022 15:24:22 -0000
+Date:   Wed, 11 May 2022 10:24:22 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Tyrone Ting <warp5tw@gmail.com>
+Cc:     sven@svenpeter.dev, JJLIU0@nuvoton.com,
+        linux-kernel@vger.kernel.org, jie.deng@intel.com, olof@lixom.net,
+        lukas.bulwahn@gmail.com, jarkko.nikula@linux.intel.com,
+        yuenn@google.com, arnd@arndb.de, tali.perry1@gmail.com,
+        openbmc@lists.ozlabs.org, krzysztof.kozlowski@canonical.com,
+        robh+dt@kernel.org, linux-i2c@vger.kernel.org, tmaimon77@gmail.com,
+        benjaminfair@google.com, tomer.maimon@nuvoton.com,
+        kfting@nuvoton.com, semen.protsenko@linaro.org,
+        Avi.Fishman@nuvoton.com, jsd@semihalf.com, wsa@kernel.org,
+        devicetree@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        KWLIU@nuvoton.com, tali.perry@nuvoton.com, avifishman70@gmail.com,
+        venture@google.com
+Subject: Re: [PATCH v4 1/9] dt-bindings: i2c: npcm: support NPCM845
+Message-ID: <20220511152422.GA339769-robh@kernel.org>
+References: <20220510091654.8498-1-warp5tw@gmail.com>
+ <20220510091654.8498-2-warp5tw@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220510091654.8498-2-warp5tw@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, 11. Mai 2022, 17:00:05 CEST schrieb Lorenzo Pieralisi:
-> On Wed, May 11, 2022 at 10:26:20AM -0400, Peter Geis wrote:
-> > On Wed, May 11, 2022 at 9:50 AM Lorenzo Pieralisi
-> > <lorenzo.pieralisi@arm.com> wrote:
-> > >
-> > > On Fri, Apr 29, 2022 at 08:38:28AM -0400, Peter Geis wrote:
-> > > > The PCIe controller is in an unknown state at driver probe. This can
-> > > > lead to undesireable effects when the driver attempts to configure the
-> > > > controller.
-> > > >
-> > > > Prevent issues in the future by resetting the core during probe.
-> > > >
-> > > > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> > > > Tested-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-> > > > ---
-> > > >  drivers/pci/controller/dwc/pcie-dw-rockchip.c | 23 ++++++++-----------
-> > > >  1 file changed, 10 insertions(+), 13 deletions(-)
-> > >
-> > > I fear that the controller reset behaviour is bootloader/firmware
-> > > dependent.
-> > >
-> > > Are we sure we are not triggering any regressions by resetting the
-> > > controller in the middle of probe (aka is the driver implicitly
-> > > relying on existing behaviour on systems that are not the ones
-> > > you are testing on) ?
-> > >
-> > > Just asking, the rockchip maintainers should be able to answer this
-> > > question.
-> > 
-> > This is a new driver with no current users, this series enables the
-> > first user. It does not support ACPI nor any sort of handoff at this
-> > time.
+On Tue, 10 May 2022 17:16:46 +0800, Tyrone Ting wrote:
+> From: Tyrone Ting <kfting@nuvoton.com>
 > 
-> Ok. I will take patches [1-3], dts changes will have to go via
-> platform trees, I hope that's fine.
-
-yep, that sounds great and I'll pick the dts patches then :-)
-
-Thanks
-Heiko
-
-> > > > diff --git a/drivers/pci/controller/dwc/pcie-dw-rockchip.c b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
-> > > > index c9b341e55cbb..faedbd6ebc20 100644
-> > > > --- a/drivers/pci/controller/dwc/pcie-dw-rockchip.c
-> > > > +++ b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
-> > > > @@ -152,6 +152,11 @@ static int rockchip_pcie_resource_get(struct platform_device *pdev,
-> > > >       if (IS_ERR(rockchip->rst_gpio))
-> > > >               return PTR_ERR(rockchip->rst_gpio);
-> > > >
-> > > > +     rockchip->rst = devm_reset_control_array_get_exclusive(&pdev->dev);
-> > > > +     if (IS_ERR(rockchip->rst))
-> > > > +             return dev_err_probe(&pdev->dev, PTR_ERR(rockchip->rst),
-> > > > +                                  "failed to get reset lines\n");
-> > > > +
-> > > >       return 0;
-> > > >  }
-> > > >
-> > > > @@ -182,18 +187,6 @@ static void rockchip_pcie_phy_deinit(struct rockchip_pcie *rockchip)
-> > > >       phy_power_off(rockchip->phy);
-> > > >  }
-> > > >
-> > > > -static int rockchip_pcie_reset_control_release(struct rockchip_pcie *rockchip)
-> > > > -{
-> > > > -     struct device *dev = rockchip->pci.dev;
-> > > > -
-> > > > -     rockchip->rst = devm_reset_control_array_get_exclusive(dev);
-> > > > -     if (IS_ERR(rockchip->rst))
-> > > > -             return dev_err_probe(dev, PTR_ERR(rockchip->rst),
-> > > > -                                  "failed to get reset lines\n");
-> > > > -
-> > > > -     return reset_control_deassert(rockchip->rst);
-> > > > -}
-> > > > -
-> > > >  static const struct dw_pcie_ops dw_pcie_ops = {
-> > > >       .link_up = rockchip_pcie_link_up,
-> > > >       .start_link = rockchip_pcie_start_link,
-> > > > @@ -222,6 +215,10 @@ static int rockchip_pcie_probe(struct platform_device *pdev)
-> > > >       if (ret)
-> > > >               return ret;
-> > > >
-> > > > +     ret = reset_control_assert(rockchip->rst);
-> > > > +     if (ret)
-> > > > +             return ret;
-> > > > +
-> > > >       /* DON'T MOVE ME: must be enable before PHY init */
-> > > >       rockchip->vpcie3v3 = devm_regulator_get_optional(dev, "vpcie3v3");
-> > > >       if (IS_ERR(rockchip->vpcie3v3)) {
-> > > > @@ -241,7 +238,7 @@ static int rockchip_pcie_probe(struct platform_device *pdev)
-> > > >       if (ret)
-> > > >               goto disable_regulator;
-> > > >
-> > > > -     ret = rockchip_pcie_reset_control_release(rockchip);
-> > > > +     ret = reset_control_deassert(rockchip->rst);
-> > > >       if (ret)
-> > > >               goto deinit_phy;
-> > > >
-> > > > --
-> > > > 2.25.1
-> > > >
+> Add compatible and nuvoton,sys-mgr description for NPCM i2c module.
+> 
+> Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+> ---
+>  .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml     | 25 +++++++++++++++----
+>  1 file changed, 20 insertions(+), 5 deletions(-)
 > 
 
-
-
-
+Reviewed-by: Rob Herring <robh@kernel.org>

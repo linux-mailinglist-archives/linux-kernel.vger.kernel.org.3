@@ -2,125 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7E1352287A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 02:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BADAF52287D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 02:29:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239689AbiEKA3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 20:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
+        id S239708AbiEKA3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 20:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239649AbiEKA2y (ORCPT
+        with ESMTP id S229795AbiEKA32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 20:28:54 -0400
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD80266C93;
-        Tue, 10 May 2022 17:28:53 -0700 (PDT)
-Received: by mail-vs1-xe2c.google.com with SMTP id z144so390564vsz.13;
-        Tue, 10 May 2022 17:28:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ArJ+P0yP41IspvL16vZgXyp5wGPDg81O0e5eE6H/vks=;
-        b=TmeVRx9py0dFnEm1+1TQ/UZnrTgHHdOLlw2Hg/DmfL9RPjUBspUNsO6IaFp9AHo04x
-         CyrG9eP8kVS+Q0M5scz+SpJ+oPm5ftB+uKdpygdqfsG5TGs2lgT5BbmFpW6uig2eAc+x
-         L92C4Sl0SGJgJ1RqYttF7dIj/CbeT/+aEjlFJKtUYsjG3bSf19nn3hxMK5psMj/Kdyev
-         vwUkLPp4Sd6DoHsVVgWFTywVAA93pVhPOmL2jh0RvBmDjYLuHXHeN/8moU7QoL1dXddI
-         dO9j3yGjXudx0e7cszWgN7B/Rupgac9uvTPYxwqmewbBjQww9y8hsZGjGVohCqNKHbsE
-         YuIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ArJ+P0yP41IspvL16vZgXyp5wGPDg81O0e5eE6H/vks=;
-        b=DFdvEJsmn8t3ZysHbhyEcfUMMbwdnGXZCqGXFA8T8sOT9rgyc8WbfrFkr9076BNVqm
-         zVFNeCe963tFF7+TOrJ0R5IkyYBzg0KXxGOJb7pRviJh+Uh3Es3LjuJpHRNN00N1U9YD
-         nvMkOxu4MIs+T37Uz2Jd1NjD7Qj6NwdCY8ohDJzhMukQMnf2yl4UZaCwKZNrc+0lo97O
-         sgyTg/Ujszq5QH4TxBsJVxx93ikiNIAP/gnVi2kqPtR2VofPf/mD54ahHJa/h2yNgOqO
-         BP0UL+UYNSOWmQGZ2qTq+q+yjDNBnwWB61JRitWNFN92+UgOLoHc7b0J1j9QjuyXYH7Y
-         NJDQ==
-X-Gm-Message-State: AOAM530W6OkLaTm5XKx30KsPggVdnn9HuuUwOnVnAiD6UNrdogZXaQxy
-        7yn2LJxDy4nO2wHV32jhoTC8MUvDARDY6LV5AQ==
-X-Google-Smtp-Source: ABdhPJxhZxAx7pGH4pYIhNGd5w1vurCriRZkY02XBkZ32jUrSC70/SiZ/pB1dgdPFtRowcflumM3uWIdxBgBCnQZs4Q=
-X-Received: by 2002:a67:ec48:0:b0:32c:e56b:6e85 with SMTP id
- z8-20020a67ec48000000b0032ce56b6e85mr12394926vso.50.1652228932835; Tue, 10
- May 2022 17:28:52 -0700 (PDT)
+        Tue, 10 May 2022 20:29:28 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2A8266C83;
+        Tue, 10 May 2022 17:29:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652228966; x=1683764966;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=XquAI6R0rBp2uUzOlsSUaevTUDwAMJvvtmnGX6BxntA=;
+  b=NtZs38tOKjdlJavudVDCMVDFR6nJyx+Cwp4aBZAbYK6ja2+6MEei6J7J
+   5kiINl89prKOBoskl6Ud5b8WnO/WD2HHyXUJBdtmroX7uhguxWCG+n4s5
+   ilC7L1UvemtTAaIBWLf0amy9J5cLBqxp+/+ixJfAHz4heNQRzxqUxNnUk
+   slFjB08evY78cX6h46YrYySn6KF1YOAwH8vjJGVKURagUu3adz6eJByHW
+   J0ErEFoBErl9ypEZ/wvEWUMFHBrf+0ADHE2ShURYPMRG3uC4WTMDzD6WD
+   n6tuCphAiDc61zNEH1GXVbiyNJ2Z5SaZI31i9YB/8TEucRynuEDfuIQH6
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="330138791"
+X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
+   d="scan'208";a="330138791"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 17:29:07 -0700
+X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
+   d="scan'208";a="657899611"
+Received: from yangweij-mobl.ccr.corp.intel.com (HELO [10.249.171.95]) ([10.249.171.95])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 17:29:04 -0700
+Message-ID: <f9d35ba0-7c35-bb89-0b39-d44821d65047@intel.com>
+Date:   Wed, 11 May 2022 08:29:02 +0800
 MIME-Version: 1.0
-References: <20220510100328.9191-1-warp5tw@gmail.com> <20220510100328.9191-2-warp5tw@gmail.com>
- <28029d30-6d18-d28c-a7d2-d86b9ab9ad35@linaro.org> <CACD3sJa6qEPDD58NqiXJ+hHHSSbB6BRqEPXuX+m49ei8HrHF+g@mail.gmail.com>
-In-Reply-To: <CACD3sJa6qEPDD58NqiXJ+hHHSSbB6BRqEPXuX+m49ei8HrHF+g@mail.gmail.com>
-From:   Tyrone Ting <warp5tw@gmail.com>
-Date:   Wed, 11 May 2022 08:28:40 +0800
-Message-ID: <CACD3sJa2qdocMXX3QFj5OdjFGd95M5nArJqPpEMjCYmb2ZvgHA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/9] dt-bindings: i2c: npcm: support NPCM845
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        avifishman70@gmail.com, Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>, robh+dt@kernel.org,
-        Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        jarkko.nikula@linux.intel.com, semen.protsenko@linaro.org,
-        sven@svenpeter.dev, jsd@semihalf.com, lukas.bulwahn@gmail.com,
-        olof@lixom.net, arnd@arndb.de, Tyrone Ting <warp5tw@gmail.com>,
-        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
-        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        kfting <kfting@nuvoton.com>
-Cc:     openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v11 00/16] Introduce Architectural LBR for vPMU
+Content-Language: en-US
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "kan.liang@linux.intel.com" <kan.liang@linux.intel.com>,
+        "like.xu.linux@gmail.com" <like.xu.linux@gmail.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "Wang, Wei W" <wei.w.wang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220506033305.5135-1-weijiang.yang@intel.com>
+ <27e36c48-8062-7a02-aca2-80f32f61ae75@redhat.com>
+From:   "Yang, Weijiang" <weijiang.yang@intel.com>
+In-Reply-To: <27e36c48-8062-7a02-aca2-80f32f61ae75@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tyrone Ting <warp5tw@gmail.com> =E6=96=BC 2022=E5=B9=B45=E6=9C=8811=E6=97=
-=A5 =E9=80=B1=E4=B8=89 =E4=B8=8A=E5=8D=888:25=E5=AF=AB=E9=81=93=EF=BC=9A
+
+On 5/10/2022 11:55 PM, Paolo Bonzini wrote:
+> On 5/6/22 05:32, Yang Weijiang wrote:
+>> [0] https://software.intel.com/sites/default/files/managed/c5/15/architecture-instruction-set-extensions-programming-reference.pdf
+>> [1] https://lore.kernel.org/lkml/1593780569-62993-1-git-send-email-kan.liang@linux.intel.com/
+>>
+>> Qemu patch:
+>> https://patchwork.ozlabs.org/project/qemu-devel/cover/20220215195258.29149-1-weijiang.yang@intel.com/
+>>
+>> Previous version:
+>> v10: https://lore.kernel.org/all/20220422075509.353942-1-weijiang.yang@intel.com/
+>>
+>> Changes in v11:
+>> 1. Moved MSR_ARCH_LBR_DEPTH/CTL check code to a unified function.[Kan]
+>> 2. Modified some commit messages per Kan's feedback.
+>> 3. Rebased the patch series to 5.18-rc5.
+> Thanks, this is mostly okay; the only remaining issues are Kan's
+> feedback and saving/restoring on SMM enter/exit.
+Thanks Paolo, I'll fix Kan's feedback and the issue you mentioned in 
+next version.
 >
-> Hi Krzysztof:
+> The QEMU patches look good too.
 >
-> Thank you for your review and it will be addressed.
->
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E6=96=BC 2022=E5=B9=
-=B45=E6=9C=8810=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=886:59=E5=AF=AB=
-=E9=81=93=EF=BC=9A
-> >
-> > On 10/05/2022 12:03, Tyrone Ting wrote:
-> > >
-> > >  maintainers:
-> > >    - Tali Perry <tali.perry1@gmail.com>
-> > >
-> > >  properties:
-> > >    compatible:
-> > > -    const: nuvoton,npcm750-i2c
-> > > +    enum:
-> > > +      - nuvoton,npcm750-i2c
-> > > +      - nuvoton,npcm845-i2c
-> > >
-> > >    reg:
-> > >      maxItems: 1
-> > > @@ -36,6 +37,10 @@ properties:
-> > >      default: 100000
-> > >      enum: [100000, 400000, 1000000]
-> > >
-> > > +  nuvoton,sys-mgr:
-> > > +    $ref: "/schemas/types.yaml#/definitions/phandle"
-> >
-> > Minor nit: No quotes. The other places don't have it.
-> >
-> >
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >
-> >
-> > Best regards,
-> > Krzysztof
->
-> Best regards,
-> Tyrone
+> Paolo

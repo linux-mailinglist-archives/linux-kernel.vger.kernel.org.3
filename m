@@ -2,69 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1F0F522B84
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 07:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1570522B88
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 07:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237186AbiEKFJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 01:09:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54514 "EHLO
+        id S237862AbiEKFMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 01:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbiEKFJY (ORCPT
+        with ESMTP id S229994AbiEKFMA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 01:09:24 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7196D19E
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:09:22 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so3872336pju.2
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:09:22 -0700 (PDT)
+        Wed, 11 May 2022 01:12:00 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407C798094
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:11:58 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id y19so1118617ljd.4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:11:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0gq3sKC60SlE1+eqSd0WEC2zbcLYJeGd4RWGvL2PnVo=;
-        b=L5ekbGaTbHgSsh0r0y/zK4RhBJ+lXwEzBFBByDBax0oQlNdDzs4Nmp8n3gaPjtZLlZ
-         QQKetg8TBFkSJ08qx6TUveyXFAdt8DhFDP/9hjKukMvSOV5cC7CDUZJzLaRv40GREyNa
-         14FW4YDz86Q5UF49J6G3h9I8vtaX4XZfRRe5N1gucDftFkpVmBiov3KFEX19pbqJT6AN
-         j/1NUewVh4sKZrX7j/p+eXzfAxgqV6O5Nek/EERMm7YbPVLtZImC3x65ElfFFCjGmEFi
-         P2A060F8R3PhJN6UUHOYUFUwqoHwmSOD2cQ43Se0icrOcSkEO4SAQnlRCRkmxoMCdbHD
-         MslQ==
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=FsqMLvYhC8qarZmsr+129u+7sKwrIH+JPr+bFWl7+5k=;
+        b=0aG7kU3eWAaKIv/Td9eRJ5q6oW+7HIa6nEf1s1DtvmoURqmTGUjIfod6WyVpZrOLQG
+         edcTzONtr1MlDcl4mYXZXlsIlXhzvwUxwe7+C22rF9/+P8fccOBzqemsYOYv9io4jg/Q
+         ZgiPvF/qI3UxE9/Jabe8hGdEibI51Ou1/0olIozn+yzyLafL/VSUFC/vqkEt/EM112RX
+         JZcFcxwbJrUGmZwAYuNCS4ajsGwlkMVLFLO0ecCSpRxV5PwCaCzILghm/8EO5CELGx8d
+         qxMOR0ACQ4+iZMB4bvvnZ73gAsuc+A36M7mRsYxpGgDt2PYVqARDUdyhG0vim6eZh8WI
+         nPOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=0gq3sKC60SlE1+eqSd0WEC2zbcLYJeGd4RWGvL2PnVo=;
-        b=Q15m6PeJl6bN92h8GOEFynQDuO6ppC7RCBPVWZ6Zt7c//ELmeHiuyvmXQYx5CtDi9Z
-         t1yhoYT57VsoQxxc1s9JgFJNNRkSKtDZu9CIYMAJH/iTPPpzdTgIlezbMTOrr+yAOQNB
-         tVcfpzDFlSBxu/+W4Li88Gyyv/DqwY4bcYDJ8XdajbfMUNMrFecCN+9moEZl6Vf0AE0y
-         0kMDYxoE1JRg6ze/LQRtStabUWyBRx73OV/9aoZdJLTy9oRE+lWZb9KfF79n6gTu4B4S
-         WqDXthgtEl0Q78keO4IoL/jEYCu6nTtwBSovY/UkDG19GoCLnA4oyj73tl/uW/vD9VbV
-         w/WA==
-X-Gm-Message-State: AOAM533ksStF3Sr4DUvCGj7C+QEDC8BngQNy45JG/QkMRlJmRnkUKck9
-        yOL0HmEXDoi9eRwgJFKBf4c=
-X-Google-Smtp-Source: ABdhPJx0pFUFYJjVt28setLfLu4qvNgaY8D2j7D6DoMGcX9NPav0eUXgwrj31VFCo7KV0wUsGF77UA==
-X-Received: by 2002:a17:90a:cf:b0:1d9:44ad:2607 with SMTP id v15-20020a17090a00cf00b001d944ad2607mr3432138pjd.25.1652245762403;
-        Tue, 10 May 2022 22:09:22 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id y5-20020aa78045000000b0050dd876f5f8sm497649pfm.49.2022.05.10.22.09.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 22:09:21 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] phy: HiSilicon: Fix refcount leak in hi3670_pcie_get_resources_from_pcie
-Date:   Wed, 11 May 2022 09:08:53 +0400
-Message-Id: <20220511050903.42763-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=FsqMLvYhC8qarZmsr+129u+7sKwrIH+JPr+bFWl7+5k=;
+        b=wDxn6apZj36azyDt67R8Ca9nQfKLIMhu2rvAX9bsn1F5cGC5McgZ9aUXQ34Al9+zVI
+         Pc7NHqVc1+PKiZnctgpBWRbaomCc7wwZIzNVNyhKqBmegllD1BM4UC3VSk8lfH0AOCm3
+         tmUGdSXOR4/mb4yXk0tgqTa24t3Z9v431pmp69Bicjdrd6zwCuA+7eZYmZtXfTceRIiG
+         BPZI/02TUqqCxX7c3f5OGFS6mQp3R94TF+8mjusn2fEhhdydXJ35s6LRVooe0kV6RAAz
+         yq/ZlcpaN4EM9n1FiJ29r0Tf4X+eEcQrRQWgKLLGroEwfEwivtRkzaWyaUmXJXQSOzAv
+         620w==
+X-Gm-Message-State: AOAM530AxfIXRGx4LLPP08kfXGBuX8eyESNrrezC29ZdFu5D3MT8i5nk
+        3HKoOD8Knbk57HfwF8+LL0ZOKA==
+X-Google-Smtp-Source: ABdhPJylxFLXHgGKD6Y69ipptaIp6insZc80YMZOxk6lThbPjMk/dpJzdxb/LCLLOqmDJlv2iM02fw==
+X-Received: by 2002:a2e:9ecb:0:b0:24b:4e2a:a555 with SMTP id h11-20020a2e9ecb000000b0024b4e2aa555mr15778281ljk.149.1652245916570;
+        Tue, 10 May 2022 22:11:56 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.177])
+        by smtp.gmail.com with ESMTPSA id m3-20020ac24283000000b0047255d210f4sm119249lfh.35.2022.05.10.22.11.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 22:11:56 -0700 (PDT)
+Message-ID: <30a47b4e-7c4b-cd2d-998d-cfaf8d12d342@openvz.org>
+Date:   Wed, 11 May 2022 08:11:54 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2] percpu: improve percpu_alloc_percpu event trace
+Content-Language: en-US
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Shakeel Butt <shakeelb@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, kernel@openvz.org,
+        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>, linux-mm@kvack.org
+References: <2b388d09-940e-990f-1f8a-2fdaa9210fa0@openvz.org>
+ <a07be858-c8a3-7851-9086-e3262cbcf707@openvz.org> <YnsgbXKiNNSF+1ZO@carbon>
+From:   Vasily Averin <vvs@openvz.org>
+In-Reply-To: <YnsgbXKiNNSF+1ZO@carbon>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,38 +80,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-1. of_get_child_by_name() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
+On 5/11/22 05:33, Roman Gushchin wrote:
+> On Fri, May 06, 2022 at 10:29:25PM +0300, Vasily Averin wrote:
+>>  TRACE_EVENT(percpu_alloc_percpu,
+>>  
+>> -	TP_PROTO(bool reserved, bool is_atomic, size_t size,
+>> -		 size_t align, void *base_addr, int off, void __percpu *ptr),
+>> +	TP_PROTO(unsigned long call_site,
+>> +		 bool reserved, bool is_atomic, size_t size,
+>> +		 size_t align, void *base_addr, int off,
+>> +		 void __percpu *ptr, size_t bytes_alloc, gfp_t gfp_flags),
+> 
+> Don't we want to preserve the order and add the call_site at the end?
+> Trace events are not ABI, but if we don't have a strong reason to break it,
+> I'd preserve the old order.
 
-2. bus_find_device_by_of_node() also take a references, use put_device()
-to drop the reference in error handling.
+I checked recent trace patches and found that order changes is acceptable.
 
-Fixes: 73075011ffff ("phy: HiSilicon: Add driver for Kirin 970 PCIe PHY")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/phy/hisilicon/phy-hi3670-pcie.c | 2 ++
- 1 file changed, 2 insertions(+)
+commit 8c39b8bc82aafcc8dd378bd79c76fac8e8a89c8d
+Author: David Howells <dhowells@redhat.com>
+Date:   Fri Jan 14 11:44:54 2022 +0000
 
-diff --git a/drivers/phy/hisilicon/phy-hi3670-pcie.c b/drivers/phy/hisilicon/phy-hi3670-pcie.c
-index 0ac9634b398d..01f3090b4372 100644
---- a/drivers/phy/hisilicon/phy-hi3670-pcie.c
-+++ b/drivers/phy/hisilicon/phy-hi3670-pcie.c
-@@ -565,6 +565,7 @@ static int hi3670_pcie_get_resources_from_pcie(struct hi3670_pcie_phy *phy)
- 	}
- 
- 	pcie_dev = bus_find_device_by_of_node(&platform_bus_type, pcie_port);
-+	of_node_put(pcie_port);
- 	if (!pcie_dev) {
- 		dev_err(dev, "Didn't find pcie device\n");
- 		return -ENODEV;
-@@ -581,6 +582,7 @@ static int hi3670_pcie_get_resources_from_pcie(struct hi3670_pcie_phy *phy)
- 	phy->apb = dev_get_regmap(pcie_dev, "kirin_pcie_apb");
- 	if (!phy->apb) {
- 		dev_err(dev, "Failed to get APB regmap\n");
-+		put_device(pcie_dev);
- 		return -ENODEV;
- 	}
- 
--- 
-2.25.1
+    cachefiles: Make some tracepoint adjustments
 
+-           TP_printk("o=%08x i=%lx e=%d",
+-                     __entry->obj, __entry->ino, __entry->error)
++           TP_printk("o=%08x dB=%lx B=%lx e=%d",
++                     __entry->obj, __entry->dino, __entry->ino, __entry->error)
+
+On the other hand I'm agree to keep old order by default.
+that's why I added bytes_alloc and gfp_flags to end of output.
+However I think call_site is an exception. In all cases found, 
+call_site is output first.
+For me personally it simplified output parsing.
+
+So I would like to know Steven's position on this question.
+
+Thank you,
+	Vasily Averin

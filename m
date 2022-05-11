@@ -2,192 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05538522A4B
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 05:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 913CB522A64
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 05:23:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230186AbiEKDSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 23:18:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
+        id S240008AbiEKDXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 23:23:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241648AbiEKDSP (ORCPT
+        with ESMTP id S231142AbiEKDWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 23:18:15 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB544B874;
-        Tue, 10 May 2022 20:18:14 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kyg7w6SPZzhZ4Q;
-        Wed, 11 May 2022 11:17:32 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 11 May 2022 11:18:10 +0800
-Message-ID: <f8c3f048-9d59-7249-a1d7-31616556e931@huawei.com>
-Date:   Wed, 11 May 2022 11:18:09 +0800
+        Tue, 10 May 2022 23:22:06 -0400
+Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937C614AC85;
+        Tue, 10 May 2022 20:20:34 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
+ (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Wed, 11 May
+ 2022 11:20:20 +0800
+Received: from [172.16.137.70] (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Wed, 11 May
+ 2022 11:20:20 +0800
+Message-ID: <427b0e8e-fb35-1091-abe1-bb2b9b229d11@meizu.com>
+Date:   Wed, 11 May 2022 11:20:19 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next v3 4/7] bpf, arm64: Impelment
- bpf_arch_text_poke() for arm64
-Content-Language: en-US
-To:     Jakub Sitnicki <jakub@cloudflare.com>
-CC:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
+Subject: Re: [PATCH] rcutorture: remove useless INIT_LIST_HEAD()
+To:     <paulmck@kernel.org>
+CC:     Davidlohr Bueso <dave@stgolabs.net>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Neeraj Upadhyay" <quic_neeraju@quicinc.com>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-References: <20220424154028.1698685-1-xukuohai@huawei.com>
- <20220424154028.1698685-5-xukuohai@huawei.com>
- <87ee11obih.fsf@cloudflare.com>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <87ee11obih.fsf@cloudflare.com>
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        <linux-kernel@vger.kernel.org>, <rcu@vger.kernel.org>
+References: <1652237224-11656-1-git-send-email-baihaowen@meizu.com>
+ <20220511030157.GB1790663@paulmck-ThinkPad-P17-Gen-1>
+From:   baihaowen <baihaowen@meizu.com>
+In-Reply-To: <20220511030157.GB1790663@paulmck-ThinkPad-P17-Gen-1>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/10/2022 7:45 PM, Jakub Sitnicki wrote:
-> On Sun, Apr 24, 2022 at 11:40 AM -04, Xu Kuohai wrote:
->> Impelment bpf_arch_text_poke() for arm64, so bpf trampoline code can use
->> it to replace nop with jump, or replace jump with nop.
+在 2022/5/11 上午11:01, Paul E. McKenney 写道:
+> On Wed, May 11, 2022 at 10:47:04AM +0800, Haowen Bai wrote:
+>> list rcu_torture_freelist has been inited staticly through LIST_HEAD,
+>> so there's no need to call another INIT_LIST_HEAD. Simply remove
+>> it.
 >>
->> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
->> Acked-by: Song Liu <songliubraving@fb.com>
+>> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> For kernels with built-in rcutorture that starts automatically at
+> boot, you are quite correct.
+>
+> But wouldn't there be trouble in the case where someone does a series of
+> "modprobe rcutorture" "rmmod rcutorture" commands?
+>
+> 							Thanx, Paul
+>
 >> ---
->>  arch/arm64/net/bpf_jit_comp.c | 63 +++++++++++++++++++++++++++++++++++
->>  1 file changed, 63 insertions(+)
+>>  kernel/rcu/rcutorture.c | 1 -
+>>  1 file changed, 1 deletion(-)
 >>
->> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
->> index 8ab4035dea27..3f9bdfec54c4 100644
->> --- a/arch/arm64/net/bpf_jit_comp.c
->> +++ b/arch/arm64/net/bpf_jit_comp.c
->> @@ -9,6 +9,7 @@
+>> diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+>> index faf6b4c7a757..0005e259c4ce 100644
+>> --- a/kernel/rcu/rcutorture.c
+>> +++ b/kernel/rcu/rcutorture.c
+>> @@ -3247,7 +3247,6 @@ rcu_torture_init(void)
 >>  
->>  #include <linux/bitfield.h>
->>  #include <linux/bpf.h>
->> +#include <linux/memory.h>
->>  #include <linux/filter.h>
->>  #include <linux/printk.h>
->>  #include <linux/slab.h>
->> @@ -18,6 +19,7 @@
->>  #include <asm/cacheflush.h>
->>  #include <asm/debug-monitors.h>
->>  #include <asm/insn.h>
->> +#include <asm/patching.h>
->>  #include <asm/set_memory.h>
+>>  	/* Set up the freelist. */
 >>  
->>  #include "bpf_jit.h"
->> @@ -1529,3 +1531,64 @@ void bpf_jit_free_exec(void *addr)
->>  {
->>  	return vfree(addr);
->>  }
->> +
->> +static int gen_branch_or_nop(enum aarch64_insn_branch_type type, void *ip,
->> +			     void *addr, u32 *insn)
->> +{
->> +	if (!addr)
->> +		*insn = aarch64_insn_gen_nop();
->> +	else
->> +		*insn = aarch64_insn_gen_branch_imm((unsigned long)ip,
->> +						    (unsigned long)addr,
->> +						    type);
->> +
->> +	return *insn != AARCH64_BREAK_FAULT ? 0 : -EFAULT;
->> +}
->> +
->> +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
->> +		       void *old_addr, void *new_addr)
->> +{
->> +	int ret;
->> +	u32 old_insn;
->> +	u32 new_insn;
->> +	u32 replaced;
->> +	enum aarch64_insn_branch_type branch_type;
->> +
->> +	if (!is_bpf_text_address((long)ip))
->> +		/* Only poking bpf text is supported. Since kernel function
->> +		 * entry is set up by ftrace, we reply on ftrace to poke kernel
->> +		 * functions. For kernel funcitons, bpf_arch_text_poke() is only
-> 
-> Nit: s/funcitons/functions/
-> 
->> +		 * called after a failed poke with ftrace. In this case, there
->> +		 * is probably something wrong with fentry, so there is nothing
->> +		 * we can do here. See register_fentry, unregister_fentry and
->> +		 * modify_fentry for details.
->> +		 */
->> +		return -EINVAL;
->> +
->> +	if (poke_type == BPF_MOD_CALL)
->> +		branch_type = AARCH64_INSN_BRANCH_LINK;
->> +	else
->> +		branch_type = AARCH64_INSN_BRANCH_NOLINK;
->> +
->> +	if (gen_branch_or_nop(branch_type, ip, old_addr, &old_insn) < 0)
->> +		return -EFAULT;
->> +
->> +	if (gen_branch_or_nop(branch_type, ip, new_addr, &new_insn) < 0)
->> +		return -EFAULT;
->> +
->> +	mutex_lock(&text_mutex);
->> +	if (aarch64_insn_read(ip, &replaced)) {
->> +		ret = -EFAULT;
->> +		goto out;
->> +	}
->> +
->> +	if (replaced != old_insn) {
->> +		ret = -EFAULT;
->> +		goto out;
->> +	}
->> +
->> +	ret = aarch64_insn_patch_text_nosync((void *)ip, new_insn);
-> 
-> Nit: No need for the explicit cast to void *. Type already matches.
-> 
->> +out:
->> +	mutex_unlock(&text_mutex);
->> +	return ret;
->> +}
-> 
-> .
-will fix in v4, thanks!
+>> -	INIT_LIST_HEAD(&rcu_torture_freelist);
+>>  	for (i = 0; i < ARRAY_SIZE(rcu_tortures); i++) {
+>>  		rcu_tortures[i].rtort_mbtest = 0;
+>>  		list_add_tail(&rcu_tortures[i].rtort_free,
+>> -- 
+>> 2.7.4
+>>
+Thank you for kindly reply, got it.
+
+-- 
+Haowen Bai
+

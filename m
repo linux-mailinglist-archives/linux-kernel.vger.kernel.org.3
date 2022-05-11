@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37763523AC2
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:50:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19FF6523AC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345065AbiEKQtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 12:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45188 "EHLO
+        id S1345102AbiEKQuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 12:50:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233496AbiEKQtm (ORCPT
+        with ESMTP id S235800AbiEKQtq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 12:49:42 -0400
+        Wed, 11 May 2022 12:49:46 -0400
 Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF9A93982;
-        Wed, 11 May 2022 09:49:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A36F95DDB;
+        Wed, 11 May 2022 09:49:41 -0700 (PDT)
 Received: from grover.jp (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-08.nifty.com with ESMTP id 24BGlWc5031975;
-        Thu, 12 May 2022 01:47:42 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 24BGlWc5031975
+        by conuserg-08.nifty.com with ESMTP id 24BGlWc6031975;
+        Thu, 12 May 2022 01:47:43 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 24BGlWc6031975
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1652287663;
-        bh=OcOEuS6jEbLubdZRYm9mI6nzM08ugGxo0tuefY4hIgE=;
+        s=dec2015msa; t=1652287664;
+        bh=PfsqhsCBk5DMJKQrgxjPrt4cR290nXSjW4ewrtsP89A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jXi1gJPHIE2xagfeR2MNcfLTDFlg9D5O9cnkBMlaoyva8Do8oJfp6T+S9S4xs+LXI
-         mbrFTqdzrHF0wP0OVeZc1gHvb856yx+ZfDsW6UnXoSwnaZLi6xTmLkkNem16UBBP7G
-         Mv9n97/BoZmFifFt7YxrYZJQzzWpLiqvfELN1kUyI23LFUQWDtOBBq+cP+7B+29kaS
-         heJui4xv66QP7cK5llyJUm9hDLvTD/WnVJAdHb5C1xVoNZfo0IQHttkWQBZvPgU0k4
-         LhNu07C+jWfwR7Z1xyAiP00Tzt2EkDe7UTV97+1Ytkg7hTmnpbuDpNBg7j27PDMu7c
-         tiqDnu6ifEqMQ==
+        b=KGPJJDyaNocbo6ncNt90Q/OY7ihHW9tXr3BUWHXD4rjMD3KkrdCuYQZTTVomseqSK
+         +XTfWkakm1H4RwK0EbAITtDKkiiAWjT8O/6BZqBXHN/rVs4Q1szUu/FPRyrbwrrzV0
+         eh/ATsHp2W7mHqysKrYp5SE61AiXtfsPnEra23WGRjfzpMzlwUP6MYeY1NoYNI4utk
+         pZV5zT4e++CpCbsBFhvg07OMQ1FdS0zgT72+Ne+un4xKMRHYZBz2fyEsurC8zCVL1j
+         4THxnWfD6Pa3WElSRT+CekpOBnMwVZMMCbvzWIiwwQJLolqwlbnXUralfrpajp7JYT
+         YrzXYa2EGODug==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
@@ -40,10 +40,11 @@ Cc:     linux-kernel@vger.kernel.org,
         linux-modules@vger.kernel.org, llvm@lists.linux.dev,
         Ard Biesheuvel <ardb@kernel.org>,
         Sami Tolvanen <samitolvanen@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v5 10/12] kbuild: make *.mod rule robust against too long argument error
-Date:   Thu, 12 May 2022 01:45:12 +0900
-Message-Id: <20220511164514.2741934-11-masahiroy@kernel.org>
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH v5 11/12] kbuild: add cmd_and_savecmd macro
+Date:   Thu, 12 May 2022 01:45:13 +0900
+Message-Id: <20220511164514.2741934-12-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220511164514.2741934-1-masahiroy@kernel.org>
 References: <20220511164514.2741934-1-masahiroy@kernel.org>
@@ -59,51 +60,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Like built-in.a, the command length of the *.mod rule scales with
-the depth of the directory times the number of objects in the Makefile.
+Separate out the command execution part of if_changed, as we did
+for if_changed_dep.
 
-Add $(obj)/ by the shell command (awk) instead of by Make's builtin
-function.
+This allows us to reuse it in if_changed_rule.
 
-In-tree modules still have some room to the limit (ARG_MAX=2097152),
-but this is more future-proof for big modules in a deep directory.
-
-For example, you can build i915 as a module (CONFIG_DRM_I915=m) and
-compare drivers/gpu/drm/i915/.i915.mod.cmd with/without this commit.
-
-The issue is more critical for external modules because the M= path
-can be very long as Jeff Johnson reported before [1].
-
-[1] https://lore.kernel.org/linux-kbuild/4c02050c4e95e4cb8cc04282695f8404@codeaurora.org/
+  define rule_foo
+          $(call cmd_and_savecmd,foo)
+          $(call cmd,bar)
+  endef
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
 
-(no changes since v2)
+(no changes since v4)
 
-Changes in v2:
-  - New patch
+Changes in v4:
+  - New.
+    Resent of my previous submission.
+    https://lore.kernel.org/all/20210831074004.3195284-10-masahiroy@kernel.org/
 
- scripts/Makefile.build | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ scripts/Kbuild.include | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 8f1a355df7aa..f546b5f1f33f 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -270,8 +270,8 @@ $(obj)/%.o: $(src)/%.c $(recordmcount_source) FORCE
- 	$(call if_changed_rule,cc_o_c)
- 	$(call cmd,force_checksrc)
+diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
+index 455a0a6ce12d..ece44b735061 100644
+--- a/scripts/Kbuild.include
++++ b/scripts/Kbuild.include
+@@ -142,9 +142,11 @@ check-FORCE = $(if $(filter FORCE, $^),,$(warning FORCE prerequisite is missing)
+ if-changed-cond = $(newer-prereqs)$(cmd-check)$(check-FORCE)
  
--cmd_mod = echo $(addprefix $(obj)/, $(call real-search, $*.o, .o, -objs -y -m)) | \
--	$(AWK) -v RS='( |\n)' '!x[$$0]++' > $@
-+cmd_mod = echo $(call real-search, $*.o, .o, -objs -y -m) | \
-+	$(AWK) -v RS='( |\n)' '!x[$$0]++ { print("$(obj)/"$$0) }' > $@
+ # Execute command if command has changed or prerequisite(s) are updated.
+-if_changed = $(if $(if-changed-cond),                                        \
++if_changed = $(if $(if-changed-cond),$(cmd_and_savecmd),@:)
++
++cmd_and_savecmd =                                                            \
+ 	$(cmd);                                                              \
+-	printf '%s\n' 'cmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
++	printf '%s\n' 'cmd_$@ := $(make-cmd)' > $(dot-target).cmd
  
- $(obj)/%.mod: FORCE
- 	$(call if_changed,mod)
+ # Execute the command and also postprocess generated .d dependencies file.
+ if_changed_dep = $(if $(if-changed-cond),$(cmd_and_fixdep),@:)
 -- 
 2.32.0
 

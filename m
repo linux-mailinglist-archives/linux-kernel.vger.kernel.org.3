@@ -2,64 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD374523081
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:14:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F520523086
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 12:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236255AbiEKKOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 06:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33940 "EHLO
+        id S242092AbiEKKOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 06:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241945AbiEKKOF (ORCPT
+        with ESMTP id S242172AbiEKKOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 06:14:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0C44227B69
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:13:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652264007;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZL+idh8z82yGfceUpUMDcLt25Q+LynjrWsRec67ynZc=;
-        b=KbhDJUEovVpine+4H2+jv/WLr2Q6aVuJWgWWV9m4O8jF328sQ0gEpTamXK+t2hRxhwUugm
-        z1YNaJRWLkJ+F6wpvUyWHum4ZrbF72BU1dk+IBmbeNQ2/fQeHl3CBUIy4fdJ8h2DV0Hw2d
-        Dr6/aaPbI8Qu1V0Mq9Wja9oJVHkf7bI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-192-NPXEhp-JM5uUgxxvhIbx-w-1; Wed, 11 May 2022 06:13:24 -0400
-X-MC-Unique: NPXEhp-JM5uUgxxvhIbx-w-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CEA04800882;
-        Wed, 11 May 2022 10:13:23 +0000 (UTC)
-Received: from localhost (ovpn-13-194.pek2.redhat.com [10.72.13.194])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 592091121314;
-        Wed, 11 May 2022 10:13:15 +0000 (UTC)
-Date:   Wed, 11 May 2022 18:13:09 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Eric DeVolder <eric.devolder@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-Subject: Re: [PATCH v8 5/7] kexec: exclude hot remove cpu from elfcorehdr
- notes
-Message-ID: <20220511101309.GI122876@MiWiFi-R3L-srv>
-References: <20220505184603.1548-1-eric.devolder@oracle.com>
- <20220505184603.1548-6-eric.devolder@oracle.com>
+        Wed, 11 May 2022 06:14:22 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0D72211C8
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 03:14:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652264041; x=1683800041;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=QfzNbK8xK1toiVcloBzznf91Fo0KngmwDAbahjmvIeY=;
+  b=S7+0NRF7goSYFhihBkcJaZv2eWFN5WryE4ZRVPPpkkfsLjnXMQ3duprq
+   Nc+WK3WyMG1YDFL5QibTFRhA+//ETFfoYbjMs1r25AKU2Vv9iJMPHHrU3
+   GsRF68UPsKmuGPKMyV4+0N+2gcc6odqwq3ixNeEyDQ0paYlwNCs1JSN2p
+   F6c9FNzNmj0CONiW7BBp8r5uh0KtY5NwN2scU1ZmIQaKe5OhrNWwqf5B5
+   Iw+PIbQM17ALHxUdKEcob94I9oF8YofVoxiEI1RoP4bLDdVPa44fWXz0t
+   e28qEAyPDu6RnRXtmIZ4C25p7ZqUd4DLEXsHTq9PWYGSAuxDTnJv1ITwx
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="332692385"
+X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
+   d="scan'208";a="332692385"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 03:14:00 -0700
+X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
+   d="scan'208";a="697510872"
+Received: from mstribae-mobl1.ger.corp.intel.com (HELO [10.249.254.135]) ([10.249.254.135])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 03:13:57 -0700
+Message-ID: <3d08eb595c4a4eff02be5385c82d1e1d0e781c98.camel@linux.intel.com>
+Subject: Re: [PATCH 1/4] drm/i915: add gen6 ppgtt dummy creation function
+From:   Thomas =?ISO-8859-1?Q?Hellstr=F6m?= 
+        <thomas.hellstrom@linux.intel.com>
+To:     Robert Beckett <bob.beckett@collabora.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Matthew Auld <matthew.auld@intel.com>, linux-kernel@vger.kernel.org
+Date:   Wed, 11 May 2022 12:13:55 +0200
+In-Reply-To: <20220503191316.1145124-2-bob.beckett@collabora.com>
+References: <20220503191316.1145124-1-bob.beckett@collabora.com>
+         <20220503191316.1145124-2-bob.beckett@collabora.com>
+Organization: Intel Sweden AB, Registration Number: 556189-6027
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-3.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505184603.1548-6-eric.devolder@oracle.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,65 +69,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/05/22 at 02:46pm, Eric DeVolder wrote:
-> Due to use of CPUHP_AP_ONLINE_DYN, upon CPU unplug, the CPU is
-> still in the for_each_present_cpu() list when within the
-> handle_hotplug_event(). Thus the CPU must be explicitly excluded
-> when building the new list of CPUs.
+Hi,
+
+On Tue, 2022-05-03 at 19:13 +0000, Robert Beckett wrote:
+> Internal gem objects will soon just be volatile system memory region
+> objects.
+> To enable this, create a separate dummy object creation function
+> for gen6 ppgtt
+
+
+It's not clear from the commit message why we need a special case for
+this. Could you describe more in detail?
+
+Thanks,
+Thomas
+
+
 > 
-> This change identifies in handle_hotplug_event() the CPU to be
-> excluded, and the check for excluding the CPU in
-> crash_prepare_elf64_headers().
-> 
-> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
-
-LGTM,
-
-Acked-by: Baoquan He <bhe@redhat.com>
-
+> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
 > ---
->  kernel/crash_core.c | 10 ++++++++++
->  kernel/kexec_file.c |  5 +++++
->  2 files changed, 15 insertions(+)
+>  drivers/gpu/drm/i915/gt/gen6_ppgtt.c | 43
+> ++++++++++++++++++++++++++--
+>  1 file changed, 40 insertions(+), 3 deletions(-)
 > 
-> diff --git a/kernel/crash_core.c b/kernel/crash_core.c
-> index f197af50def6..7ba43f058d82 100644
-> --- a/kernel/crash_core.c
-> +++ b/kernel/crash_core.c
-> @@ -520,6 +520,16 @@ static void handle_hotplug_event(unsigned int hp_action, unsigned int cpu)
->  		/* Flag to differentiate between normal load and hotplug */
->  		kexec_crash_image->hotplug_event = true;
->  
-> +		/*
-> +		 * Due to use of CPUHP_AP_ONLINE_DYN, upon unplug and during
-> +		 * this callback, the CPU is still in the for_each_present_cpu()
-> +		 * list. Must explicitly look to exclude this CPU when building
-> +		 * new list.
-> +		 */
-> +		kexec_crash_image->offlinecpu =
-> +			(hp_action == KEXEC_CRASH_HP_REMOVE_CPU) ?
-> +				cpu : KEXEC_CRASH_HP_INVALID_CPU;
+> diff --git a/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
+> b/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
+> index 1bb766c79dcb..f3b660cfeb7f 100644
+> --- a/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
+> +++ b/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
+> @@ -372,6 +372,45 @@ static const struct drm_i915_gem_object_ops
+> pd_dummy_obj_ops = {
+>         .put_pages = pd_dummy_obj_put_pages,
+>  };
+>  
+> +static struct drm_i915_gem_object *
+> +i915_gem_object_create_dummy(struct drm_i915_private *i915,
+> phys_addr_t size)
+> +{
+> +       static struct lock_class_key lock_class;
+> +       struct drm_i915_gem_object *obj;
+> +       unsigned int cache_level;
 > +
->  		/* Now invoke arch-specific update handler */
->  		arch_crash_handle_hotplug_event(kexec_crash_image, hp_action, cpu);
->  
-> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> index aacdf93c3507..d68e5769b428 100644
-> --- a/kernel/kexec_file.c
-> +++ b/kernel/kexec_file.c
-> @@ -1314,6 +1314,11 @@ int crash_prepare_elf64_headers(struct kimage *image, struct crash_mem *mem,
->  
->  	/* Prepare one phdr of type PT_NOTE for each present CPU */
->  	for_each_present_cpu(cpu) {
-> +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
-> +		/* Skip the soon-to-be offlined cpu */
-> +		if (image->hotplug_event && (cpu == image->offlinecpu))
-> +			continue;
-> +#endif
->  		phdr->p_type = PT_NOTE;
->  		notes_addr = per_cpu_ptr_to_phys(per_cpu_ptr(crash_notes, cpu));
->  		phdr->p_offset = phdr->p_paddr = notes_addr;
-> -- 
-> 2.27.0
-> 
+> +       GEM_BUG_ON(!size);
+> +       GEM_BUG_ON(!IS_ALIGNED(size, PAGE_SIZE));
+> +
+> +       if (overflows_type(size, obj->base.size))
+> +               return ERR_PTR(-E2BIG);
+> +
+> +       obj = i915_gem_object_alloc();
+> +       if (!obj)
+> +               return ERR_PTR(-ENOMEM);
+> +
+> +       drm_gem_private_object_init(&i915->drm, &obj->base, size);
+> +       i915_gem_object_init(obj, &pd_dummy_obj_ops, &lock_class, 0);
+> +       obj->mem_flags |= I915_BO_FLAG_STRUCT_PAGE;
+> +
+> +       /*
+> +        * Mark the object as volatile, such that the pages are
+> marked as
+> +        * dontneed whilst they are still pinned. As soon as they are
+> unpinned
+> +        * they are allowed to be reaped by the shrinker, and the
+> caller is
+> +        * expected to repopulate - the contents of this object are
+> only valid
+> +        * whilst active and pinned.
+> +        */
+> +       i915_gem_object_set_volatile(obj);
+> +
+> +       obj->read_domains = I915_GEM_DOMAIN_CPU;
+> +       obj->write_domain = I915_GEM_DOMAIN_CPU;
+> +
+> +       cache_level = HAS_LLC(i915) ? I915_CACHE_LLC :
+> I915_CACHE_NONE;
+> +       i915_gem_object_set_cache_coherency(obj, cache_level);
+> +
+> +       return obj;
+> +}
+> +
+>  static struct i915_page_directory *
+>  gen6_alloc_top_pd(struct gen6_ppgtt *ppgtt)
+>  {
+> @@ -383,9 +422,7 @@ gen6_alloc_top_pd(struct gen6_ppgtt *ppgtt)
+>         if (unlikely(!pd))
+>                 return ERR_PTR(-ENOMEM);
+>  
+> -       pd->pt.base = __i915_gem_object_create_internal(ppgtt-
+> >base.vm.gt->i915,
+> -
+>                                                        &pd_dummy_obj_o
+> ps,
+> -                                                       I915_PDES *
+> SZ_4K);
+> +       pd->pt.base = i915_gem_object_create_dummy(ppgtt->base.vm.gt-
+> >i915, I915_PDES * SZ_4K);
+>         if (IS_ERR(pd->pt.base)) {
+>                 err = PTR_ERR(pd->pt.base);
+>                 pd->pt.base = NULL;
+
 

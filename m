@@ -2,122 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE580523CE1
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DB1523CE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 20:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346501AbiEKSvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 14:51:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38458 "EHLO
+        id S1346523AbiEKSve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 14:51:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiEKSvK (ORCPT
+        with ESMTP id S244722AbiEKSv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 14:51:10 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74A21D8103
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:51:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652295068; x=1683831068;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eo7o/N1AMi+S88uFgAy/x0ypF5HQMsJ+YsmNCO77hPo=;
-  b=XaarnIW/N8XPM0ETm1214MgjOkXs85jwA2CXeJaRWhWN9hSKS8B668bZ
-   xd6g3kaK6d1Ubm2LO87VWncyy06XLB9tf+UbJKt+SEMswQkkmU5O4BIdW
-   wNSLdWUvpIMrnMzPu/zo0PyFSluWqASpbXOPuek0oH8HivWj3rpnVDi/L
-   Vwbz/ldMEHAbB42rcE6nwS0E1VMaTZR6fOvB816D8sZMlsjHXsulbXzzF
-   R6WRW6rT5fQ4szCd+WwmZ0e8b1xkuZbzuNpaY9a/96dSjcBOfqKVQjTpN
-   AZGOWQac5MZ7WSSyq7fStPNnkSqq7MWKFK7MQDM190adcV4XHVGUvS4Rl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="356210560"
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="356210560"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 11:51:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="711606565"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 11 May 2022 11:51:07 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1norQQ-000JQD-Se;
-        Wed, 11 May 2022 18:51:06 +0000
-Date:   Thu, 12 May 2022 02:50:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [krzk-github:n/qcom-ufs-opp-v3 30/31]
- drivers/scsi/ufs/ufshcd.c:1056: warning: expecting prototype for Returns 0
- for success, non(). Prototype was for ufshcd_set_opp() instead
-Message-ID: <202205120226.P786kaQa-lkp@intel.com>
+        Wed, 11 May 2022 14:51:29 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720881D8103
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:51:27 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id bs17so3020749qkb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 11:51:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2M4Jyxc4ZhLMOpYVi4rOXmZMkxhNrB3SJA5cGP33wsw=;
+        b=hIi47nK8NjD/G3LuJK2PAPk/bVzllp+fLuCexjLy4BH8rKTDb3JBxsVc6CiFPUlPYm
+         RpZNxJsX1BtpycEgYFrmcIy0UVGH5dv8mOjYtvNKe9RPUDQdoiwdsJmIn2ep3UNfURjW
+         E2QbN4oSEUFmANl6EfG54igt6AaiRFeW547fvOMgwfaYYttkG4s/xM7BvmDZEE+FR999
+         PoZRqh0zXwAngexKVvPpKCphvB7Q5/CfbAIBTAJCimizzjDj+kdaFCYVEb9w5vWoA/4k
+         vKDJcYdGNKq2txfo+LtyBaJ6k1DmnFn9pS7PeY4cEyEnaECtZ2cR9mfB3WB/92BT2wi0
+         WG2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2M4Jyxc4ZhLMOpYVi4rOXmZMkxhNrB3SJA5cGP33wsw=;
+        b=whlv+BBHKVM8/xuDzzQW8EoWqZ7JoVGAJTvuOvOh73pVepl8CKn/seSAzIm441KHmr
+         fISfkZJlewEhlPIFJD1pJrZSUeiOHZH8rRmAI2Q+bG3qtJ4sEpt1iX8lHD16NDNtsfZ+
+         7TAwiAgHQeIkXx+vwMFlef4u6RBXsX/ZIrZE3IZcyREMuaE7IHREltsB4tOBOjL/Yi8m
+         4N7+qAWMhYwQxtO78PZOZmO7LA7s566kP09YxaKwAsuCqUsqi6lQdqSrXF6rdJo7bhgT
+         L7L2AR0IP79heFsPC8VXubQqtMf+WB9UD2kcr7wfI8WBUn1dpLRt6wgios07vM71ZPei
+         1rWw==
+X-Gm-Message-State: AOAM533qOoPlmniao4dtGNhhylvcvuWului19qlGN5b5oJTrHOvUuZ7d
+        gMULbRmZtJmBbkafKBQvtV18ow==
+X-Google-Smtp-Source: ABdhPJy8hfHIAyaLgeAGd1noKkDIygPLAvRQwGVbLxOKICyyA8xx5wGKdjyIYE/SOuJ7JDSHQk/GRQ==
+X-Received: by 2002:a05:620a:2a04:b0:6a0:603f:4cd9 with SMTP id o4-20020a05620a2a0400b006a0603f4cd9mr14749226qkp.262.1652295086581;
+        Wed, 11 May 2022 11:51:26 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::1:14fe])
+        by smtp.gmail.com with ESMTPSA id k4-20020ae9f104000000b0069fc13ce205sm1596531qkg.54.2022.05.11.11.51.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 11:51:25 -0700 (PDT)
+Date:   Wed, 11 May 2022 14:51:25 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Minchan Kim <minchan@kernel.org>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com
+Subject: Re: [PATCH v2 1/6] Documentation: filesystems: proc: update meminfo
+ section
+Message-ID: <YnwFraZlVWQoCjz3@cmpxchg.org>
+References: <20220510152847.230957-1-hannes@cmpxchg.org>
+ <20220510152847.230957-2-hannes@cmpxchg.org>
+ <7a6f8520-a496-e3c3-1fd9-8a30b7a12b14@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7a6f8520-a496-e3c3-1fd9-8a30b7a12b14@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/krzk/linux n/qcom-ufs-opp-v3
-head:   a37fb33a00889e90edd1c74de967b3315980a65d
-commit: 83f52b94e7d208a3d1570fb3e8d6684186ac996f [30/31] ifss
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220512/202205120226.P786kaQa-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/krzk/linux/commit/83f52b94e7d208a3d1570fb3e8d6684186ac996f
-        git remote add krzk-github https://github.com/krzk/linux
-        git fetch --no-tags krzk-github n/qcom-ufs-opp-v3
-        git checkout 83f52b94e7d208a3d1570fb3e8d6684186ac996f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/scsi/ufs/
+On Wed, May 11, 2022 at 07:11:06PM +0200, David Hildenbrand wrote:
+> On 10.05.22 17:28, Johannes Weiner wrote:
+> > Add new entries. Minor corrections and cleanups.
+> > 
+> > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+> > ---
+> >  Documentation/filesystems/proc.rst | 155 ++++++++++++++++++-----------
+> >  1 file changed, 99 insertions(+), 56 deletions(-)
+> > 
+> > diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+> > index 061744c436d9..736ed384750c 100644
+> > --- a/Documentation/filesystems/proc.rst
+> > +++ b/Documentation/filesystems/proc.rst
+> > @@ -942,56 +942,71 @@ can be substantial.  In many cases there are other means to find out
+> >  additional memory using subsystem specific interfaces, for instance
+> >  /proc/net/sockstat for TCP memory allocations.
+> >  
+> > -The following is from a 16GB PIII, which has highmem enabled.
+> > -You may not have all of these fields.
+> > +Example output. You may not have all of these fields.
+> >  
+> >  ::
+> >  
+> >      > cat /proc/meminfo
+> >  
+> > -    MemTotal:     16344972 kB
+> > -    MemFree:      13634064 kB
+> > -    MemAvailable: 14836172 kB
+> > -    Buffers:          3656 kB
+> > -    Cached:        1195708 kB
+> > -    SwapCached:          0 kB
+> > -    Active:         891636 kB
+> > -    Inactive:      1077224 kB
+> > -    HighTotal:    15597528 kB
+> > -    HighFree:     13629632 kB
+> > -    LowTotal:       747444 kB
+> > -    LowFree:          4432 kB
+> > -    SwapTotal:           0 kB
+> > -    SwapFree:            0 kB
+> > -    Dirty:             968 kB
+> > -    Writeback:           0 kB
+> > -    AnonPages:      861800 kB
+> > -    Mapped:         280372 kB
+> > -    Shmem:             644 kB
+> > -    KReclaimable:   168048 kB
+> > -    Slab:           284364 kB
+> > -    SReclaimable:   159856 kB
+> > -    SUnreclaim:     124508 kB
+> > -    PageTables:      24448 kB
+> > -    NFS_Unstable:        0 kB
+> > -    Bounce:              0 kB
+> > -    WritebackTmp:        0 kB
+> > -    CommitLimit:   7669796 kB
+> > -    Committed_AS:   100056 kB
+> > -    VmallocTotal:   112216 kB
+> > -    VmallocUsed:       428 kB
+> > -    VmallocChunk:   111088 kB
+> > -    Percpu:          62080 kB
+> > -    HardwareCorrupted:   0 kB
+> > -    AnonHugePages:   49152 kB
+> > -    ShmemHugePages:      0 kB
+> > -    ShmemPmdMapped:      0 kB
+> > +    MemTotal:       32858820 kB
+> > +    MemFree:        21001236 kB
+> > +    MemAvailable:   27214312 kB
+> > +    Buffers:          581092 kB
+> > +    Cached:          5587612 kB
+> > +    SwapCached:            0 kB
+> > +    Active:          3237152 kB
+> > +    Inactive:        7586256 kB
+> > +    Active(anon):      94064 kB
+> > +    Inactive(anon):  4570616 kB
+> > +    Active(file):    3143088 kB
+> > +    Inactive(file):  3015640 kB
+> > +    Unevictable:           0 kB
+> > +    Mlocked:               0 kB
+> > +    SwapTotal:             0 kB
+> > +    SwapFree:              0 kB
+> > +    Dirty:                12 kB
+> > +    Writeback:             0 kB
+> > +    AnonPages:       4654780 kB
+> > +    Mapped:           266244 kB
+> > +    Shmem:              9976 kB
+> > +    KReclaimable:     517708 kB
+> > +    Slab:             660044 kB
+> > +    SReclaimable:     517708 kB
+> > +    SUnreclaim:       142336 kB
+> > +    KernelStack:       11168 kB
+> > +    PageTables:        20540 kB
+> > +    NFS_Unstable:          0 kB
+> > +    Bounce:                0 kB
+> > +    WritebackTmp:          0 kB
+> > +    CommitLimit:    16429408 kB
+> > +    Committed_AS:    7715148 kB
+> > +    VmallocTotal:   34359738367 kB
+> > +    VmallocUsed:       40444 kB
+> > +    VmallocChunk:          0 kB
+> > +    Percpu:            29312 kB
+> > +    HardwareCorrupted:     0 kB
+> > +    AnonHugePages:   4149248 kB
+> > +    ShmemHugePages:        0 kB
+> > +    ShmemPmdMapped:        0 kB
+> > +    FileHugePages:         0 kB
+> > +    FilePmdMapped:         0 kB
+> > +    CmaTotal:              0 kB
+> > +    CmaFree:               0 kB
+> > +    HugePages_Total:       0
+> > +    HugePages_Free:        0
+> > +    HugePages_Rsvd:        0
+> > +    HugePages_Surp:        0
+> > +    Hugepagesize:       2048 kB
+> > +    Hugetlb:               0 kB
+> > +    DirectMap4k:      401152 kB
+> > +    DirectMap2M:    10008576 kB
+> > +    DirectMap1G:    24117248 kB
+> >  
+> >  MemTotal
+> >                Total usable RAM (i.e. physical RAM minus a few reserved
+> >                bits and the kernel binary code)
+> >  MemFree
+> > -              The sum of LowFree+HighFree
+> > +              Total free RAM. On highmem systems, the sum of LowFree+HighFree
+> >  MemAvailable
+> >                An estimate of how much memory is available for starting new
+> >                applications, without swapping. Calculated from MemFree,
+> > @@ -1005,8 +1020,9 @@ Buffers
+> >                Relatively temporary storage for raw disk blocks
+> >                shouldn't get tremendously large (20MB or so)
+> >  Cached
+> > -              in-memory cache for files read from the disk (the
+> > -              pagecache).  Doesn't include SwapCached
+> > +              In-memory cache for files read from the disk (the
+> > +              pagecache) as well as tmpfs & shmem.
+> > +              Doesn't include SwapCached.
+> >  SwapCached
+> >                Memory that once was swapped out, is swapped back in but
+> >                still also is in the swapfile (if memory is needed it
+> > @@ -1018,6 +1034,11 @@ Active
+> >  Inactive
+> >                Memory which has been less recently used.  It is more
+> >                eligible to be reclaimed for other purposes
+> > +Unevictable
+> > +              Memory that cannot be reclaimed, such as mlocked pages,
+> > +              ramfs backing pages, secret memfd pages etc.
+> 
+> 
+> A little imprecise, because this only includes memory to be mapped into
+> user space. For example, all kernel allocations are unevictable but not
+> accounted here.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+True. How about the below?
 
-All warnings (new ones prefixed by >>):
+> Apart from that
+> 
+> Acked-by: David Hildenbrand <david@redhat.com>
 
-   drivers/scsi/ufs/ufshcd.c:1039: warning: cannot understand function prototype: '/* static int ufshcd_set_clk_freq(struct ufs_hba *hba, unsigned long freq) '
-   drivers/scsi/ufs/ufshcd.c:1056: warning: Function parameter or member 'data' not described in 'ufshcd_set_opp'
->> drivers/scsi/ufs/ufshcd.c:1056: warning: expecting prototype for Returns 0 for success, non(). Prototype was for ufshcd_set_opp() instead
+Thanks!
 
+Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+---
 
-vim +1056 drivers/scsi/ufs/ufshcd.c
-
-868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1051  
-868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1052  /**
-868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1053   * Returns 0 for success, non-zero error value for errors.
-868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1054   */
-868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1055  int ufshcd_set_opp(struct dev_pm_set_opp_data *data)
-868147b0e847f5 Krzysztof Kozlowski 2022-05-11 @1056  {
-e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1057  	struct ufs_hba *hba = dev_get_drvdata(data->dev);
-e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1058  	unsigned long old_freq = data->old_opp.rate;
-e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1059  	unsigned long freq = data->new_opp.rate;
-e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1060  	bool scale_up;
-868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1061  
-e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1062  	scale_up = (freq > old_freq);
-e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1063  
-e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1064  	pr_err("AAAA ufs %s %s %lu->%lu\n", __func__,
-e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1065  	       (scale_up ? "up" : "down"),
-e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1066  	       old_freq, freq);
-e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1067  
-e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1068  	return ufshcd_set_clk_freq_direct(hba, scale_up);
-868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1069  }
-868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1070  EXPORT_SYMBOL_GPL(ufshcd_set_opp);
-868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1071  
-
-:::::: The code at line 1056 was first introduced by commit
-:::::: 868147b0e847f596b8fff395a553c423f32ab7db wip
-
-:::::: TO: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-:::::: CC: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index 9749ff8c0ecf..5e9791457876 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -1035,8 +1035,8 @@ Inactive
+               Memory which has been less recently used.  It is more
+               eligible to be reclaimed for other purposes
+ Unevictable
+-              Memory that cannot be reclaimed, such as mlocked pages,
+-              ramfs backing pages, secret memfd pages etc.
++              Memory allocated for userspace which cannot be reclaimed, such
++              as mlocked pages, ramfs backing pages, secret memfd pages etc.
+ Mlocked
+               Memory locked with mlock().
+ HighTotal, HighFree

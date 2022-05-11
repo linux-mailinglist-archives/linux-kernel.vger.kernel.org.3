@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC4E0523F8A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 23:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C7C523F8F
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 23:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348255AbiEKVlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 17:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
+        id S1348267AbiEKVls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 17:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245485AbiEKVlf (ORCPT
+        with ESMTP id S1347797AbiEKVln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 17:41:35 -0400
+        Wed, 11 May 2022 17:41:43 -0400
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7DF57B04;
-        Wed, 11 May 2022 14:41:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87EC15C77B;
+        Wed, 11 May 2022 14:41:42 -0700 (PDT)
 Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
         by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <heiko@sntech.de>)
-        id 1nou58-0005N8-MH; Wed, 11 May 2022 23:41:18 +0200
+        id 1nou5O-0005NU-3o; Wed, 11 May 2022 23:41:34 +0200
 From:   Heiko Stuebner <heiko@sntech.de>
 To:     palmer@dabbelt.com, paul.walmsley@sifive.com
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -29,8 +29,8 @@ Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         krzk+dt@kernel.org, devicetree@vger.kernel.org,
         Heiko Stuebner <heiko@sntech.de>
 Subject: [PATCH v2 0/2] riscv: implement Zicbom-based CMO instructions + the t-head variant
-Date:   Wed, 11 May 2022 23:40:35 +0200
-Message-Id: <20220511214038.2281398-1-heiko@sntech.de>
+Date:   Wed, 11 May 2022 23:41:29 +0200
+Message-Id: <20220511214132.2281431-1-heiko@sntech.de>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit

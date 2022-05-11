@@ -2,96 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA142523753
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E858E523756
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 17:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343668AbiEKP34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 11:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
+        id S236795AbiEKPaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 11:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343663AbiEKP3r (ORCPT
+        with ESMTP id S1343730AbiEKPaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 11:29:47 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FBDC21551E
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:29:45 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id h85so2403944iof.12
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 08:29:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=CtdNPcv9Xs9pvNuMfHH4clvaHcmZY+jRmMu+Z0g00OI=;
-        b=FXyxzi6wVDNzYPNCgOTZK6DWrWW/t2C/I/HWs2S8QRaoWcmdq1/O3iZv5q12z7/qMK
-         /mbSq+jDpBY+KphoLfTI+DM1Jpp/cx3qqnLw6hJbl91aAZWIkhmWF/9P4U0TroFCbqmf
-         DfYmAdFaSP/aawKG9M/PL1pI/wZnmIrKWj9TdqQjVINq8SA0rI4H8648VOiHq8Yx32+w
-         P6lajvFaoltfkAhlLfoG+sR8+bgFjakZf7A/7zBtiXTQy5RQ7Bgw9PJ2wNHK5zzu1CSq
-         DppCrezZzMlWJGUQ61u+myWyE2ssCiyMW/C34eAhvzbS1WKfgStC6jfxYeqVaCQKaKJj
-         YzWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=CtdNPcv9Xs9pvNuMfHH4clvaHcmZY+jRmMu+Z0g00OI=;
-        b=YQxWtAMWx6nAu7uv9WL+nqvtwmikNPqT8BqQjI1H1UqmsKelTDx64TpqnI+AEqahSC
-         CqPGtXv8BE16f09VC/xQs7DiV628ykOpQmLX2e20RyvbcO5g9wcKeUmNSp8W87+ZrUHn
-         uNgTC1rWCGgM0RChWthKE4HXBKHkFTRHNTO3V1OZHNtDspuOn+NV4lnQGT8ng2V+FTfR
-         xFWLfwVUFAbccxIINlhd9GkpNQRjmJVHHPGe9Oco9uKPn0KmG5utWIY+HeJM/+Vmt4Z+
-         s6uWNUGHwutcIrfITeWYcizRiemG0uDahEluC95JVS9+HH3PgqRvJSHn8OxQcOprnUKn
-         856w==
-X-Gm-Message-State: AOAM533QzRQaOANsJh2m44u46SlO6SoZkwbc/6BlBHYDZOJX6dy6X/fg
-        ZFMsPV1TmAD4ekBxqsi8xwa9zyJ/dOKQ4ozM4XVs8jqr
-X-Google-Smtp-Source: ABdhPJw0enMBLm4i62iaBVoiXBvnTDT7dfPXX7omlqXOgjhfI4Tp7zPydctZejKfLHlp/69sQJwFC7rxsWL0yWC++B4=
-X-Received: by 2002:a05:6602:2d90:b0:63d:b41e:e4e4 with SMTP id
- k16-20020a0566022d9000b0063db41ee4e4mr11011603iow.172.1652282984563; Wed, 11
- May 2022 08:29:44 -0700 (PDT)
+        Wed, 11 May 2022 11:30:15 -0400
+Received: from email.studentenwerk.mhn.de (dresden.studentenwerk.mhn.de [141.84.225.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92A52317D7;
+        Wed, 11 May 2022 08:30:12 -0700 (PDT)
+Received: from mailhub.studentenwerk.mhn.de (mailhub.studentenwerk.mhn.de [127.0.0.1])
+        by email.studentenwerk.mhn.de (Postfix) with ESMTPS id 4KyzPG71BKzRhSb;
+        Wed, 11 May 2022 17:30:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwm.de; s=stwm-20170627;
+        t=1652283010;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gxz36RVlOiO4cTics5Uaj4XQYfoPl6ornakX9fpwvfQ=;
+        b=ajjz6G8TK63b/+ipg9BYQzWXI1EmLBtQHXN8wY1iP1uO6tvOLzWyhRLQTycQ/wUFn+5oQV
+        Z/DV/z/1oiqwTlHaV+HStIVo09bwDCvublQZHRRkZa8zZ/lRrEV9jtnakfJdxiElJMps2F
+        CTctPN3/24tgaI33/dYn17B7rGoDkMwbPxFRzonV+6WwIiOfPjMRXnzEoAtz3TkQndS6ng
+        WuntJIjimKejdU8l8SCjr+Ue28NuJsEy+yIgCxFBZEzLsmvCY/P4vroQbJxzWuqC2Ksqtx
+        1cmqWl8hSujXJPrGMaZV27EQzPJOj5+invBX++c+BexSnK9Xi9oH69/6duCmqQ==
 MIME-Version: 1.0
-References: <20220506160106.522341-1-mic@digikod.net> <152da06a-330d-3125-6f41-262e0751f41b@digikod.net>
-In-Reply-To: <152da06a-330d-3125-6f41-262e0751f41b@digikod.net>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 11 May 2022 17:29:33 +0200
-Message-ID: <CANiq72mST6rfJDVGGT2+=_FUCXwms6N8mo2eoLzQ6KW64M9BtQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] Fix clang-format configuration according to checkpatch.pl
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
-        Brian Norris <briannorris@chromium.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        Joe Perches <joe@perches.com>,
-        Kees Cook <keescook@chromium.org>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Paul Moore <paul@paul-moore.com>, Tom Rix <trix@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 11 May 2022 17:30:14 +0200
+From:   Wolfgang Walter <linux@stwm.de>
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        linux-stable <stable@vger.kernel.org>,
+        Trond Myklebust <trondmy@gmail.com>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: 5.4.188 and later: massive performance regression with nfsd
+In-Reply-To: <0F5EA15D-08A0-4D3E-B5A9-D62C49BF2B56@oracle.com>
+References: <f8d9b9112607df4807fba8948ac6e145@stwm.de>
+ <YnuuLZe6h80KCNhd@kroah.com>
+ <6A15DEE1-CAC9-4C64-8643-AD28EA423046@oracle.com>
+ <YnvG71v4Ay560D+X@kroah.com>
+ <0F5EA15D-08A0-4D3E-B5A9-D62C49BF2B56@oracle.com>
+Message-ID: <88e7fae3578052ba70eb3e8a3b929c54@stwm.de>
+X-Sender: linux@stwm.de
+Organization: =?UTF-8?Q?Studentenwerk_M=C3=BCnchen?=
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Micka=C3=ABl,
+Am 2022-05-11 16:36, schrieb Chuck Lever III:
+>> On May 11, 2022, at 10:23 AM, Greg KH <gregkh@linuxfoundation.org> 
+>> wrote:
+>> 
+>> On Wed, May 11, 2022 at 02:16:19PM +0000, Chuck Lever III wrote:
+>>> 
+>>> 
+>>>> On May 11, 2022, at 8:38 AM, Greg KH <gregkh@linuxfoundation.org> 
+>>>> wrote:
+>>>> 
+>>>> On Wed, May 11, 2022 at 12:03:13PM +0200, Wolfgang Walter wrote:
+>>>>> Hi,
+>>>>> 
+>>>>> starting with 5.4.188 wie see a massive performance regression on 
+>>>>> our
+>>>>> nfs-server. It basically is serving requests very very slowly with 
+>>>>> cpu
+>>>>> utilization of 100% (with 5.4.187 and earlier it is 10%) so that it 
+>>>>> is
+>>>>> unusable as a fileserver.
+>>>>> 
+>>>>> The culprit are commits (or one of it):
+>>>>> 
+>>>>> c32f1041382a88b17da5736886da4a492353a1bb "nfsd: cleanup
+>>>>> nfsd_file_lru_dispose()"
+>>>>> 628adfa21815f74c04724abc85847f24b5dd1645 "nfsd: Containerise 
+>>>>> filecache
+>>>>> laundrette"
+>>>>> 
+>>>>> (upstream 36ebbdb96b694dd9c6b25ad98f2bbd263d022b63 and
+>>>>> 9542e6a643fc69d528dfb3303f145719c61d3050)
+>>>>> 
+>>>>> If I revert them in v5.4.192 the kernel works as before and 
+>>>>> performance is
+>>>>> ok again.
+>>>>> 
+>>>>> I did not try to revert them one by one as any disruption of our 
+>>>>> nfs-server
+>>>>> is a severe problem for us and I'm not sure if they are related.
+>>>>> 
+>>>>> 5.10 and 5.15 both always performed very badly on our nfs-server in 
+>>>>> a
+>>>>> similar way so we were stuck with 5.4.
+>>>>> 
+>>>>> I now think this is because of 
+>>>>> 36ebbdb96b694dd9c6b25ad98f2bbd263d022b63
+>>>>> and/or 9542e6a643fc69d528dfb3303f145719c61d3050 though I didn't 
+>>>>> tried to
+>>>>> revert them in 5.15 yet.
+>>>> 
+>>>> Odds are 5.18-rc6 is also a problem?
+>>> 
+>>> We believe that
+>>> 
+>>> 6b8a94332ee4 ("nfsd: Fix a write performance regression")
+>>> 
+>>> addresses the performance regression. It was merged into 5.18-rc.
+>> 
+>> And into 5.17.4 if someone wants to try that release.
+> 
+> I don't have a lot of time to backport this one myself, so
+> I welcome anyone who wants to apply that commit to their
+> favorite LTS kernel and test it for us.
+> 
+> 
+>>>> If so, I'll just wait for the fix to get into Linus's tree as this 
+>>>> does
+>>>> not seem to be a stable-tree-only issue.
+>>> 
+>>> Unfortunately I've received a recent report that the fix introduces
+>>> a "sleep while spinlock is held" for NFSv4.0 in rare cases.
+>> 
+>> Ick, not good, any potential fixes for that?
+> 
+> Not yet. I was at LSF last week, so I've just started digging
+> into this one. I've confirmed that the report is a real bug,
+> but we still don't know how hard it is to hit it with real
+> workloads.
+> 
+> 
+> --
+> Chuck Lever
 
-On Wed, May 11, 2022 at 4:19 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
-wrote:
->
-> Miguel, what do you think about this series? Do you plan to take it for
-> the next merge window? FYI, I plan to use it for Landlock [1] and send
-> it for the next merge window. Could you publish your pending
-> clang-format changes so that I can make sure everything is OK?
+This maybe unrelated: when I used 5.4.188 for the first time I got this:
 
-It looked good to me overall (though it indeed conflicts with what I
-was doing) -- I will take it for the next merge window. I am thinking
-of putting Brian as author and you as Co-developed-by for the last one
-to be fair (Brian: is this OK with you too?). Thanks!
+[Mon Apr 11 09:20:23 2022] ------------[ cut here ]------------
+[Mon Apr 11 09:20:23 2022] refcount_t: underflow; use-after-free.
+[Mon Apr 11 09:20:23 2022] WARNING: CPU: 18 PID: 7443 at 
+lib/refcount.c:190 refcount_sub_and_test_checked+0x48/0x50
+[Mon Apr 11 09:20:23 2022] Modules linked in: rpcsec_gss_krb5(E) msr(E) 
+8021q(E) garp(E) stp(E) mrp(E) llc(E) dm_cache_smq(E) binfmt_misc(E) 
+dm_cache(E) dm_persistent_data(E) dm_bio_prison(E) dm_bufio(E) 
+ipmi_ssif(E) intel_rapl_ms
+r(E) intel_rapl_common(E) sb_edac(E) x86_pkg_temp_thermal(E) 
+intel_powerclamp(E) coretemp(E) kvm_intel(E) kvm(E) irqbypass(E) 
+crct10dif_pclmul(E) crc32_pclmul(E) ast(E) snd_pcm(E) drm_vram_helper(E) 
+ttm(E) ghash_clmulni_intel(E) s
+nd_timer(E) rapl(E) snd(E) soundcore(E) drm_kms_helper(E) 
+intel_cstate(E) pcspkr(E) iTCO_wdt(E) intel_uncore(E) drm(E) 
+iTCO_vendor_support(E) mei_me(E) joydev(E) i2c_algo_bit(E) watchdog(E) 
+mei(E) ioatdma(E) evdev(E) sg(E) ipmi_si
+(E) ipmi_devintf(E) ipmi_msghandler(E) acpi_power_meter(E) acpi_pad(E) 
+button(E) poly1305_x86_64(E) poly1305_generic(E) sha256_ssse3(E) 
+sha1_ssse3(E) chacha_generic(E) chacha20poly1305(E) aesni_intel(E) 
+crypto_simd(E) glue_helper(
+E) cryptd(E) drbd(E) lru_cache(E) nfsd(E) nfs_acl(E) lockd(E) grace(E) 
+auth_rpcgss(E) sunrpc(E)
+[Mon Apr 11 09:20:23 2022]  ip_tables(E) x_tables(E) autofs4(E) ext4(E) 
+crc16(E) mbcache(E) jbd2(E) dm_mod(E) raid10(E) raid456(E) 
+async_raid6_recov(E) async_memcpy(E) async_pq(E) async_xor(E) 
+async_tx(E) xor(E) raid6_pq(E) libcrc
+32c(E) crc32c_generic(E) raid0(E) multipath(E) linear(E) ses(E) 
+enclosure(E) hid_generic(E) usbhid(E) hid(E) raid1(E) md_mod(E) 
+sd_mod(E) crc32c_intel(E) ixgbe(E) ahci(E) xhci_pci(E) libahci(E) 
+ehci_pci(E) xfrm_algo(E) mpt3sas(E)
+xhci_hcd(E) ehci_hcd(E) dca(E) raid_class(E) libata(E) libphy(E) 
+usbcore(E) scsi_transport_sas(E) lpc_ich(E) ptp(E) i2c_i801(E) 
+mfd_core(E) usb_common(E) pps_core(E) scsi_mod(E) mdio(E) wmi(E)
+[Mon Apr 11 09:20:23 2022] CPU: 18 PID: 7443 Comm: kworker/u50:1 
+Tainted: G        W   E     5.4.188-debian64.all+1.2 #1
+[Mon Apr 11 09:20:23 2022] Hardware name: Supermicro X10DRi/X10DRI-T, 
+BIOS 1.1a 10/16/2015
+[Mon Apr 11 09:20:23 2022] Workqueue: rpciod rpc_async_schedule [sunrpc]
+[Mon Apr 11 09:20:23 2022] RIP: 
+0010:refcount_sub_and_test_checked+0x48/0x50
+[Mon Apr 11 09:20:23 2022] Code: 31 e4 44 89 e0 41 5c c3 eb f8 44 0f b6 
+25 7c ee ce 00 45 84 e4 75 e8 48 c7 c7 80 97 8b b1 c6 05 69 ee ce 00 01 
+e8 78 3f 3a 00 <0f> 0b eb d4 0f 1f 40 00 48 89 fe bf 01 00 00 00 eb a6 
+66 0f 1f 44
+[Mon Apr 11 09:20:23 2022] RSP: 0018:ffffad8a8d01fe48 EFLAGS: 00010286
+[Mon Apr 11 09:20:23 2022] RAX: 0000000000000000 RBX: 0000000000002a81 
+RCX: 0000000000000000
+[Mon Apr 11 09:20:23 2022] RDX: 0000000000000001 RSI: 0000000000000082 
+RDI: 00000000ffffffff
+[Mon Apr 11 09:20:23 2022] RBP: ffff9fb4a2394400 R08: 0000000000000001 
+R09: 000000000000085b
+[Mon Apr 11 09:20:23 2022] R10: 0000000000030f5c R11: 0000000000000004 
+R12: 0000000000000000
+[Mon Apr 11 09:20:23 2022] R13: ffff9feaf358d400 R14: 0000000000000000 
+R15: ffff9fb7e1b25148
+[Mon Apr 11 09:20:23 2022] FS:  0000000000000000(0000) 
+GS:ffff9feaff980000(0000) knlGS:0000000000000000
+[Mon Apr 11 09:20:23 2022] CS:  0010 DS: 0000 ES: 0000 CR0: 
+0000000080050033
+[Mon Apr 11 09:20:23 2022] CR2: 00007ffe62ca3080 CR3: 000000350880a002 
+CR4: 00000000001606e0
+[Mon Apr 11 09:20:23 2022] Call Trace:
+[Mon Apr 11 09:20:23 2022]  nfsd4_cb_offload_release+0x16/0x30 [nfsd]
+[Mon Apr 11 09:20:23 2022]  rpc_free_task+0x39/0x70 [sunrpc]
+[Mon Apr 11 09:20:23 2022]  rpc_async_schedule+0x29/0x40 [sunrpc]
+[Mon Apr 11 09:20:23 2022]  process_one_work+0x1ab/0x390
+[Mon Apr 11 09:20:23 2022]  worker_thread+0x50/0x3c0
+[Mon Apr 11 09:20:23 2022]  ? rescuer_thread+0x370/0x370
+[Mon Apr 11 09:20:23 2022]  kthread+0x13c/0x160
+[Mon Apr 11 09:20:23 2022]  ? __kthread_bind_mask+0x60/0x60
+[Mon Apr 11 09:20:23 2022]  ret_from_fork+0x1f/0x40
+[Mon Apr 11 09:20:23 2022] ---[ end trace c58c1aaca9be5d21 ]---
+[Mon Apr 11 09:56:32 2022] perf: interrupt took too long (6293 > 6228), 
+lowering kernel.perf_event_max_sample_rate to 31750
+[Mon Apr 11 09:59:17 2022] ------------[ cut here ]------------
 
-Cheers,
-Miguel
+[Mon Apr 11 09:59:17 2022] nfsd4_process_open2 failed to open 
+newly-created file! status=10008
+[Mon Apr 11 09:59:17 2022] WARNING: CPU: 2 PID: 3061 at 
+fs/nfsd/nfs4proc.c:456 nfsd4_open+0x39a/0x710 [nfsd]
+[Mon Apr 11 09:59:17 2022] Modules linked in: rpcsec_gss_krb5(E) msr(E) 
+8021q(E) garp(E) stp(E) mrp(E) llc(E) dm_cache_smq(E) binfmt_misc(E) 
+dm_cache(E) dm_persistent_data(E) dm_bio_prison(E) dm_bufio(E) 
+ipmi_ssif(E) intel_rapl_msr(E) intel_rapl_common(E) sb_edac(E) 
+x86_pkg_temp_thermal(E) intel_powerclamp(E) coretemp(E) kvm_intel(E) 
+kvm(E) irqbypass(E) crct10dif_pclmul(E) crc32_pclmul(E) ast(E) 
+snd_pcm(E) drm_vram_helper(E) ttm(E) ghash_clmulni_intel(E) snd_timer(E) 
+rapl(E) snd(E) soundcore(E) drm_kms_helper(E) intel_cstate(E) pcspkr(E) 
+iTCO_wdt(E) intel_uncore(E) drm(E) iTCO_vendor_support(E) mei_me(E) 
+joydev(E) i2c_algo_bit(E) watchdog(E) mei(E) ioatdma(E) evdev(E) sg(E) 
+ipmi_si(E) ipmi_devintf(E) ipmi_msghandler(E) acpi_power_meter(E) 
+acpi_pad(E) button(E) poly1305_x86_64(E) poly1305_generic(E) 
+sha256_ssse3(E) sha1_ssse3(E) chacha_generic(E) chacha20poly1305(E) 
+aesni_intel(E) crypto_simd(E) glue_helper(E) cryptd(E) drbd(E) 
+lru_cache(E) nfsd(E) nfs_acl(E) lockd(E) grace(E) auth_rpcgss(E) 
+sunrpc(E)
+[Mon Apr 11 09:59:17 2022]  ip_tables(E) x_tables(E) autofs4(E) ext4(E) 
+crc16(E) mbcache(E) jbd2(E) dm_mod(E) raid10(E) raid456(E) 
+async_raid6_recov(E) async_memcpy(E) async_pq(E) async_xor(E) 
+async_tx(E) xor(E) raid6_pq(E) libcrc32c(E) crc32c_generic(E) raid0(E) 
+multipath(E) linear(E) ses(E) enclosure(E) hid_generic(E) usbhid(E) 
+hid(E) raid1(E) md_mod(E) sd_mod(E) crc32c_intel(E) ixgbe(E) ahci(E) 
+xhci_pci(E) libahci(E) ehci_pci(E) xfrm_algo(E) mpt3sas(E) xhci_hcd(E) 
+ehci_hcd(E) dca(E) raid_class(E) libata(E) libphy(E) usbcore(E) 
+scsi_transport_sas(E) lpc_ich(E) ptp(E) i2c_i801(E) mfd_core(E) 
+usb_common(E) pps_core(E) scsi_mod(E) mdio(E) wmi(E)
+[Mon Apr 11 09:59:17 2022] CPU: 2 PID: 3061 Comm: nfsd Tainted: G        
+W   E     5.4.188-debian64.all+1.2 #1
+[Mon Apr 11 09:59:17 2022] Hardware name: Supermicro X10DRi/X10DRI-T, 
+BIOS 1.1a 10/16/2015
+[Mon Apr 11 09:59:17 2022] RIP: 0010:nfsd4_open+0x39a/0x710 [nfsd]
+[Mon Apr 11 09:59:17 2022] Code: e8 db 0f 01 00 41 89 c5 85 c0 0f 84 5e 
+01 00 00 80 bd 15 01 00 00 00 74 13 44 89 ee 48 c7 c7 a8 08 6f c0 0f ce 
+e8 b6 f8 ae f0 <0f> 0b 4d 85 ff 0f 84 58 fd ff ff 4d 39 fc 0f 84 4f fd 
+ff ff 4c 89
+[Mon Apr 11 09:59:17 2022] RSP: 0018:ffffad8ab09c7db8 EFLAGS: 00010286
+[Mon Apr 11 09:59:17 2022] RAX: 0000000000000000 RBX: ffff9feaaf7cb000 
+RCX: 0000000000000000
+[Mon Apr 11 09:59:17 2022] RDX: 0000000000000001 RSI: 0000000000000082 
+RDI: 00000000ffffffff
+[Mon Apr 11 09:59:17 2022] RBP: ffff9feaae54f460 R08: 0000000000000001 
+R09: 000000000000087a
+[Mon Apr 11 09:59:17 2022] R10: 0000000000031e00 R11: 0000000000000004 
+R12: ffff9feaae550070
+[Mon Apr 11 09:59:17 2022] R13: 0000000018270000 R14: ffff9feaae5ae000 
+R15: ffff9fc07ccfd400
+[Mon Apr 11 09:59:17 2022] FS:  0000000000000000(0000) 
+GS:ffff9fcb1f880000(0000) knlGS:0000000000000000
+[Mon Apr 11 09:59:17 2022] CS:  0010 DS: 0000 ES: 0000 CR0: 
+0000000080050033
+[Mon Apr 11 09:59:17 2022] CR2: 00007fdae60db000 CR3: 00000037e87fe005 
+CR4: 00000000001606e0
+[Mon Apr 11 09:59:17 2022] Call Trace:
+[Mon Apr 11 09:59:17 2022]  nfsd4_proc_compound+0x45d/0x730 [nfsd]
+[Mon Apr 11 09:59:17 2022]  nfsd_dispatch+0xc1/0x200 [nfsd]
+[Mon Apr 11 09:59:17 2022]  svc_process_common+0x399/0x6e0 [sunrpc]
+[Mon Apr 11 09:59:17 2022]  ? svc_recv+0x312/0x9f0 [sunrpc]
+[Mon Apr 11 09:59:17 2022]  ? nfsd_svc+0x2f0/0x2f0 [nfsd]
+[Mon Apr 11 09:59:17 2022]  ? nfsd_destroy+0x60/0x60 [nfsd]
+[Mon Apr 11 09:59:17 2022]  svc_process+0xd4/0x110 [sunrpc]
+[Mon Apr 11 09:59:17 2022]  nfsd+0xed/0x150 [nfsd]
+[Mon Apr 11 09:59:17 2022]  kthread+0x13c/0x160
+[Mon Apr 11 09:59:17 2022]  ? __kthread_bind_mask+0x60/0x60
+[Mon Apr 11 09:59:17 2022]  ret_from_fork+0x1f/0x40
+[Mon Apr 11 09:59:17 2022] ---[ end trace c58c1aaca9be5d22 ]---
+
+I never saw this with an earlier kernel (and we use 5.4 since a long 
+time).
+
+I did not see this with the unchanged 5.4.192, though, which I tested 
+before running 5.4.192 with the above mentioned patches reverted.
+
+Regards,
+-- 
+Wolfgang Walter
+Studentenwerk München
+Anstalt des öffentlichen Rechts

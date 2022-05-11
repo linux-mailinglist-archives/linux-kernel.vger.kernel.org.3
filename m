@@ -2,234 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B86C523AEC
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4406523AF8
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345182AbiEKQyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 12:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34002 "EHLO
+        id S1345271AbiEKQ4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 12:56:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345178AbiEKQyp (ORCPT
+        with ESMTP id S1345194AbiEKQz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 12:54:45 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F184C644F0
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:54:42 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id y32so4622531lfa.6
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:54:42 -0700 (PDT)
+        Wed, 11 May 2022 12:55:59 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A172C24BFE
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:55:57 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id ch13so5238138ejb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:55:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=+5747A4Ma391dQmFsOLvwVUU2kapbuzWaQTGm/dKdZQ=;
-        b=NrZRAu/N5s8gpBmN+NE8JE4qm599tse0FE4/hUcxD2dduSKW9wcjqAwCyx+phX7hhI
-         OFZAunZ8ixiWs41Nk0IJ9xuGMr1PVNayB8zF7g3Wvo0Cj5R1D1Tq3P6fLdJ6buieL0Ex
-         98NpfA2mqbzQdhJKWE64l0nc2GXlZBY4lseJ1h3KiqC7bZnuQqWzQi9on+uQadEQw69T
-         t9u6X6xV3OwjOch09fv1bYhhdzmPkwetJduP2qksKYuU9hQQCfbMNI3jN5oJsGbxFWLB
-         XlomA+rUzeI4poH8sHTs4MnmUwj09JpTlohRPR0JJrfKjyvMyvgA/ad8e6RyPZRHzqAy
-         SGJA==
+        bh=Xq2Zvl0y6W/DywjzfFwT3mSGvp4ssDiPwloRauJoX+Y=;
+        b=LYCqyvwZoP1ifve9OGWqcvp+t/dcnM6DtUoRIXPVXMT1ea9ysYZc463wV4AwwCZNHO
+         l1FAUIS97PmXZGll9Nk2/ZnDo+NRe6D7PPe/hZaa6uzjaQfEyh9r6kEVj2gkxD9oFrqX
+         Vv1QHiweCi6MxLBPeh+eh0wvIp9p3qH5sHVp9hR/UFWul5jDzx/v0eBn98xqFJtixPC2
+         Tx8ocdDvbf3f6me0rgKC4lO9llQSwZed67AILcMiDqMIrEdYzGbhdRhChvCOMI5wzfzK
+         w3abenRg1FSLjvCOvncaK2bALCQmePLQHGiFukoe+p8FTpubTrRQTtkNws9CFUe6GRJA
+         2QDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=+5747A4Ma391dQmFsOLvwVUU2kapbuzWaQTGm/dKdZQ=;
-        b=0Z6E//f6uEbOuKQ/oHRP6/2srvSXkE7buuuSi9EQQNt/3ouylHkKPM0JZL0cQJp2aD
-         pinlqRcnwbc/XgVlJDQpYtBBdr45H/XMWpa86PYZdXek/Xw45gE0RMaW1hJbiaDqDeFm
-         xqdVBGr/P8j9nqaCFTXMh9bXu1U4xi9dyuUo5sJCPAsKIOO0Sg/+qKhMslvlGENm+MVx
-         iSApYivKaX0hdg+sJ6Ibr6UoEeLKpBPa4UJU+ZDZdU2J7Vmz71EKDdafnYfXJCAmW+ZU
-         iMMWKZjF+n5iab7Kz1bpnkAVOwtDyxq3wrFSIGU/4PngG4Ryhrkl+z0x7Rbqw1ZkLTcV
-         9IGQ==
-X-Gm-Message-State: AOAM532aIpyYGaPNi2rB2lVXQJhwHcBwHMaAG3Z0yaLHXPgvM5Dk4RaQ
-        hvVhqd1J+IeZ/0MqMwxOA4+0iQ==
-X-Google-Smtp-Source: ABdhPJye2LWKIIWro0fjrmR+DnWvSvOo9wamkKGElpGs2OZ2l4JsOJdVTsjMmwDwZYXwdSRzw9Q0cA==
-X-Received: by 2002:a05:6512:2391:b0:473:ac1e:f2ce with SMTP id c17-20020a056512239100b00473ac1ef2cemr20756190lfv.297.1652288081314;
-        Wed, 11 May 2022 09:54:41 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id dt5-20020a0565122a8500b0047255d2119csm354662lfb.203.2022.05.11.09.54.40
+        bh=Xq2Zvl0y6W/DywjzfFwT3mSGvp4ssDiPwloRauJoX+Y=;
+        b=7mMK31gzHpxZzrMnZO9E6MJI+JBlGSMp79qJoiwD/rTDjv9CkLBzso16E0aL7Goxqd
+         OiIDXCTbYlmj1qVZAG/wWESur8KoMe9TSToIPdji7tLpKFiUVqrfgeKheYafdZWfbFr8
+         ht5Vg7TJCU09VvbfTZ2bxUJSekD7iRppeuOS7Wf4i+GV5LxUtIGuEFeC8S0nwUTQoi0f
+         23W1KefFSJSE04eGFCgQQUQbdBXufMoPLGJXs+oS3CFudfLMLKbeUcgQWFEEqnZlU+kg
+         gAQhXr3mlN6OZ+wERcMAODt9EiUXK8DAyJLlyA8AuG4/WnjkWn15Y3hge4++bFQfjbbq
+         ZMww==
+X-Gm-Message-State: AOAM530YEF+bYdlwcNp6ciksZe+Ai1EttUD46SfZ/bqyujm2VLXQUdQ9
+        +3BLiqeBXpyHTub9yHc4WV3T3Q==
+X-Google-Smtp-Source: ABdhPJwN1LNE3bePB/EDGUDvrgMui6lW6wUTzRmjoN4KSjSNpgMURLIriwixt/6bkZIOOsSNDa8poA==
+X-Received: by 2002:a17:906:7751:b0:6ce:e3c:81a6 with SMTP id o17-20020a170906775100b006ce0e3c81a6mr24463186ejn.278.1652288151530;
+        Wed, 11 May 2022 09:55:51 -0700 (PDT)
+Received: from [192.168.0.155] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id b19-20020a170906195300b006f3ef214dbdsm1169111eje.35.2022.05.11.09.55.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 09:54:40 -0700 (PDT)
-Message-ID: <1d43e1fa-30b2-dbf0-bfaf-f9cfaf987efb@linaro.org>
-Date:   Wed, 11 May 2022 19:54:40 +0300
+        Wed, 11 May 2022 09:55:49 -0700 (PDT)
+Message-ID: <ce75d018-1ecd-32ab-55a3-da24ec0d4947@linaro.org>
+Date:   Wed, 11 May 2022 18:55:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH 2/9] remoteproc: qcom: q6v5-mss: Add modem support on
- MSM8953
-Content-Language: en-GB
-To:     Sireesh Kodali <sireeshkodali1@gmail.com>,
-        linux-remoteproc@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, bjorn.andersson@linaro.org,
-        devicetree@vger.kernel.org, phone-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-References: <20220511161602.117772-1-sireeshkodali1@gmail.com>
- <20220511161602.117772-3-sireeshkodali1@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220511161602.117772-3-sireeshkodali1@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v3 1/3] dt-bindings: media: rockchip-vpu: Add RK3568 VEPU
+ compatible
+Content-Language: en-US
+To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220511155309.2637-1-frattaroli.nicolas@gmail.com>
+ <20220511155309.2637-2-frattaroli.nicolas@gmail.com>
+ <bc4c395d-4e21-1d15-96be-00a5cad1d6f7@linaro.org>
+ <2486415.XAZu0pfo7u@archbook>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <2486415.XAZu0pfo7u@archbook>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/05/2022 19:15, Sireesh Kodali wrote:
-> The modem on the MSM8953 platform is similar to the modem on the MSM8996
-> platform in terms of set up. It differs primarily in the way it needs SCM
-> to bless the MPSS firmware region.
+On 11/05/2022 18:37, Nicolas Frattaroli wrote:
+> On Mittwoch, 11. Mai 2022 18:00:09 CEST Krzysztof Kozlowski wrote:
+>> On 11/05/2022 17:53, Nicolas Frattaroli wrote:
+>>> The RK3568 and RK3566 have a Hantro VPU node solely dedicated to
+>>> encoding. This patch adds a compatible for it, and also allows
+>>> the bindings to only come with a vepu interrupt.
+>>>
+>>> Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+>>> ---
+>>>  .../devicetree/bindings/media/rockchip-vpu.yaml | 17 ++++++++++++++++-
+>>>  1 file changed, 16 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
+>>> index bacb60a34989..965ca80b5cea 100644
+>>> --- a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
+>>> +++ b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
+>>> @@ -22,6 +22,7 @@ properties:
+>>>            - rockchip,rk3288-vpu
+>>>            - rockchip,rk3328-vpu
+>>>            - rockchip,rk3399-vpu
+>>> +          - rockchip,rk3568-vepu
+>>>            - rockchip,px30-vpu
+>>>        - items:
+>>>            - const: rockchip,rk3188-vpu
+>>> @@ -39,7 +40,9 @@ properties:
+>>>  
+>>>    interrupt-names:
+>>>      oneOf:
+>>> -      - const: vdpu
+>>> +      - enum:
+>>> +          - vdpu
+>>> +          - vepu
+>>>        - items:
+>>>            - const: vepu
+>>>            - const: vdpu
+>>> @@ -76,6 +79,18 @@ required:
+>>>  
+>>>  additionalProperties: false
+>>>  
+>>> +allOf:
+>>> +  # compatibles that end in -vepu should only have the vepu interrupt
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            pattern: "^[a-zA-Z0-9\\-,_.]+\\-vepu$"
+>>
+>> Why not listing the compatible how I asked? This is the common way of
+>> handling allOf:if:then per variant.
 > 
-> Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
-> ---
->   drivers/remoteproc/qcom_q6v5_mss.c | 64 +++++++++++++++++++++++++++---
->   1 file changed, 58 insertions(+), 6 deletions(-)
+> Because I was afraid that if this wasn't general enough to apply to all
+> future vepu-only instances of Hantro, then my patch might be bikeshed
+> into requiring a v4. Clearly, my worries had the opposite effect.
 > 
-> diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-> index af217de75e4d..a73fdcddeda4 100644
-> --- a/drivers/remoteproc/qcom_q6v5_mss.c
-> +++ b/drivers/remoteproc/qcom_q6v5_mss.c
-> @@ -234,6 +234,7 @@ struct q6v5 {
->   
->   enum {
->   	MSS_MSM8916,
-> +	MSS_MSM8953,
->   	MSS_MSM8974,
->   	MSS_MSM8996,
->   	MSS_MSM8998,
-> @@ -687,12 +688,14 @@ static int q6v5proc_reset(struct q6v5 *qproc)
->   		}
->   		goto pbl_wait;
->   	} else if (qproc->version == MSS_MSM8996 ||
-> -		   qproc->version == MSS_MSM8998) {
-> +		   qproc->version == MSS_MSM8998 ||
-> +		   qproc->version == MSS_MSM8953) {
->   		int mem_pwr_ctl;
->   
->   		/* Override the ACC value if required */
-> -		writel(QDSP6SS_ACC_OVERRIDE_VAL,
-> -		       qproc->reg_base + QDSP6SS_STRAP_ACC);
-> +		if (qproc->version != MSS_MSM8953)
-> +			writel(QDSP6SS_ACC_OVERRIDE_VAL,
-> +					qproc->reg_base + QDSP6SS_STRAP_ACC);
->   
->   		/* Assert resets, stop core */
->   		val = readl(qproc->reg_base + QDSP6SS_RESET_REG);
-> @@ -734,7 +737,8 @@ static int q6v5proc_reset(struct q6v5 *qproc)
->   		writel(val, qproc->reg_base + QDSP6SS_PWR_CTL_REG);
->   
->   		/* Turn on L1, L2, ETB and JU memories 1 at a time */
-> -		if (qproc->version == MSS_MSM8996) {
-> +		if (qproc->version == MSS_MSM8996 ||
-> +			qproc->version == MSS_MSM8953) {
->   			mem_pwr_ctl = QDSP6SS_MEM_PWR_CTL;
->   			i = 19;
->   		} else {
-> @@ -1314,7 +1318,16 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
->   			max_addr = ALIGN(phdr->p_paddr + phdr->p_memsz, SZ_4K);
->   	}
->   
-> -	/*
-> +	if (qproc->version == MSS_MSM8953) {
-> +		ret = qcom_scm_pas_mem_setup(5, qproc->mpss_phys, qproc->mpss_size);
-> +		if (ret) {
-> +			dev_err(qproc->dev,
-> +					"setting up mpss memory failed: %d\n", ret);
-> +			goto release_firmware;
-> +		}
-> +	}
-> +
-> +	/**
+> Also because I thought it was cool to use a pattern for this to enforce
+> consistent naming in the bindings.
 
-Single star please
-
->   	 * In case of a modem subsystem restart on secure devices, the modem
->   	 * memory can be reclaimed only after MBA is loaded.
->   	 */
-> @@ -1413,7 +1426,6 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
->   			writel(RMB_CMD_LOAD_READY, qproc->rmb_base + RMB_MBA_COMMAND_REG);
->   		}
->   		writel(size, qproc->rmb_base + RMB_PMI_CODE_LENGTH_REG);
-> -
->   		ret = readl(qproc->rmb_base + RMB_MBA_STATUS_REG);
->   		if (ret < 0) {
->   			dev_err(qproc->dev, "MPSS authentication failed: %d\n",
-> @@ -1422,6 +1434,7 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
->   		}
->   	}
->   
-> +
-
-Unnecessary
+Until it does not match for some reason. :) Just list the compatible
+under enum and it is expected the list to grow over time (if needed).
 
 
->   	/* Transfer ownership of modem ddr region to q6 */
->   	ret = q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm, false, true,
->   				      qproc->mpss_phys, qproc->mpss_size);
-> @@ -2198,6 +2211,44 @@ static const struct rproc_hexagon_res msm8996_mss = {
->   	.version = MSS_MSM8996,
->   };
->   
-> +static const struct rproc_hexagon_res msm8953_mss = {
-> +	.hexagon_mba_image = "mba.mbn",
-> +	.proxy_supply = (struct qcom_mss_reg_res[]) {
-> +		{
-> +			.supply = "pll",
-> +			.uA = 100000,
-> +		},
-> +		{}
-> +	},
-> +	.proxy_pd_names = (char*[]) {
-> +			"cx",
-> +			"mx",
-> +			NULL
-> +	},
-> +	.active_supply = (struct qcom_mss_reg_res[]) {
-> +		{
-> +			.supply = "mss",
-> +			.uV = 1050000,
-> +			.uA = 100000,
-> +		},
-> +		{}
-> +	},
-> +	.proxy_clk_names = (char*[]){
-> +			"xo",
-> +			NULL
-> +	},
-> +	.active_clk_names = (char*[]){
-> +			"iface",
-> +			"bus",
-> +			"mem",
-> +			NULL
-> +	},
-> +	.need_mem_protection = false,
-> +	.has_alt_reset = false,
-> +	.has_spare_reg = false,
 
-
-Please follow the custom  and define the rest of fields here.
-
-> +	.version = MSS_MSM8953,
-> +};
-> +
->   static const struct rproc_hexagon_res msm8916_mss = {
->   	.hexagon_mba_image = "mba.mbn",
->   	.proxy_supply = (struct qcom_mss_reg_res[]) {
-> @@ -2301,6 +2352,7 @@ static const struct of_device_id q6v5_of_match[] = {
->   	{ .compatible = "qcom,msm8916-mss-pil", .data = &msm8916_mss},
->   	{ .compatible = "qcom,msm8974-mss-pil", .data = &msm8974_mss},
->   	{ .compatible = "qcom,msm8996-mss-pil", .data = &msm8996_mss},
-> +	{ .compatible = "qcom,msm8953-mss-pil", .data = &msm8953_mss},
->   	{ .compatible = "qcom,msm8998-mss-pil", .data = &msm8998_mss},
->   	{ .compatible = "qcom,sc7180-mss-pil", .data = &sc7180_mss},
->   	{ .compatible = "qcom,sc7280-mss-pil", .data = &sc7280_mss},
-
-
--- 
-With best wishes
-Dmitry
+Best regards,
+Krzysztof

@@ -2,126 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E7B4523D63
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E6A523D76
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 21:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346795AbiEKT2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 15:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54164 "EHLO
+        id S1346907AbiEKTaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 15:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346836AbiEKT15 (ORCPT
+        with ESMTP id S1346837AbiEKT3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 15:27:57 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AAE038790
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:27:53 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id a30so3861655ljq.9
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:27:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SW6iq+qYhyOT6jikrCxFTwADR0TMZdkkRDPETazGaSM=;
-        b=nB3Xvk21FevH9/hA9Yk7i5EiWu5T7wG775A1abZsEReiLLe3bbhxjmdCJPypSFradb
-         cFh5Gp4yTjPKn9AaewWZ/cnRXM3lpD1ZJfEq+C2UO7zBZ8d9EccVMseanvn4dga9Wu1t
-         VPzaF/qFDbZQqFB1CaIWIXSzVB1K9OkNxjty5qGxMCBa0C0Y6lvequVJsxLt6qMJOrpr
-         Pxuib0rhCsTJUsdyArRGSYyQOpbdWLQqEDdIqWh/RtIEfieUrbha3yEGRWYWj3W68NHV
-         3R7XHUO0/HGijPUcjkbZtAATUyb7CrfyPk5orQ70v0A8YyGJ0bd/Jd7GmtiPm6uygzfp
-         CIHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SW6iq+qYhyOT6jikrCxFTwADR0TMZdkkRDPETazGaSM=;
-        b=hOaWIS05Qf6f+NMAvE8QsAtvhHFIC6otCElqlopWgrVio7I4keF4UNhB3Pgmbg3YIm
-         gVzdx6DQJ8UudcvFO8effXhhOLrHM4r3Ui+WLOxzWS6bQ62yN12jfY/9nEegn7vs4sR7
-         t6SA1fGj6FiECXf86l51jFDA5AXPXz2uDDtNX4qyRFCeNn8JH+Mui9O+ygWTR+NXf1lV
-         vw+3Id/6+kMNSy1o5jcPVJ5Fq6y2hDH1wiEbxxF1K9ghEYTCHz2YZpTDAAvUS0Wc38LD
-         z2Kh5hZr+ld80TFLdRlumDtfejD9RtdjYj05VvGFsUmW/m1/fq/vXcS7mZLyAYOFExCn
-         4ASw==
-X-Gm-Message-State: AOAM533TYJI3S50Q7TXxQNLCL+1uE44F2Tt4SfVj7MjNgahzuIVBEF2t
-        rFdd/EkMp3DOVTFqFyVj83tTDDJkwI4RQoTlqw7EBQ==
-X-Google-Smtp-Source: ABdhPJydB8FVx07Gzpsea2mcu0GzM5Al7+CTg9CTEqkX8nYWBBx0ISM+XN60+ObYsYrs9KAMSUaYIZ1zXLZ2/xAGu8o=
-X-Received: by 2002:a2e:a7c8:0:b0:24f:700a:4df5 with SMTP id
- x8-20020a2ea7c8000000b0024f700a4df5mr17838500ljp.472.1652297271133; Wed, 11
- May 2022 12:27:51 -0700 (PDT)
+        Wed, 11 May 2022 15:29:47 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA15F29F9
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 12:29:45 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nos1d-0004fe-No; Wed, 11 May 2022 21:29:33 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     palmer@dabbelt.com, paul.walmsley@sifive.com, aou@eecs.berkeley.edu
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wefu@redhat.com, liush@allwinnertech.com, guoren@kernel.org,
+        atishp@atishpatra.org, anup@brainfault.org, drew@beagleboard.org,
+        hch@lst.de, arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
+        gfavor@ventanamicro.com, andrea.mondelli@huawei.com,
+        behrensj@mit.edu, xinhaoqu@huawei.com, mick@ics.forth.gr,
+        allen.baum@esperantotech.com, jscheid@ventanamicro.com,
+        rtrauben@gmail.com, samuel@sholland.org, cmuellner@linux.com,
+        philipp.tomsich@vrull.eu, Heiko Stuebner <heiko@sntech.de>
+Subject: [PATCH v10 00/12] riscv: support for Svpbmt and D1 memory types
+Date:   Wed, 11 May 2022 21:29:09 +0200
+Message-Id: <20220511192921.2223629-1-heiko@sntech.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220511120532.2228616-1-hca@linux.ibm.com> <20220511120532.2228616-9-hca@linux.ibm.com>
-In-Reply-To: <20220511120532.2228616-9-hca@linux.ibm.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 11 May 2022 12:27:39 -0700
-Message-ID: <CAKwvOd=EQa9tyWUi-ZfKrK-AABDRG7=TErHK+yb+_Z_dkjrmfQ@mail.gmail.com>
-Subject: Re: [PATCH 8/8] scripts/min-tool-version.sh: raise minimum clang
- version to 14.0.0 for s390
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jonas Paulsson <paulsson@linux.vnet.ibm.com>,
-        Ulrich Weigand <ulrich.weigand@de.ibm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andreas Krebbel <krebbel@linux.ibm.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 5:05 AM Heiko Carstens <hca@linux.ibm.com> wrote:
->
-> Before version 14.0.0 llvm's integrated assembler fails to handle some
-> displacement variants:
->
-> arch/s390/purgatory/head.S:108:10: error: invalid operand for instruction
->  lg %r11,kernel_type-.base_crash(%r13)
->
-> Instead of working around this and given that this is already fixed
-> raise the minimum clang version from 13.0.0 to 14.0.0.
+Svpbmt is an extension defining "Supervisor-mode: page-based memory types"
+for things like non-cacheable pages or I/O memory pages.
 
-Do you have the commit in LLVM that fixed this? Might be nice to link
-to the particular commit in the commit message. Either way:
-Acked-by: Nick Desaulniers <ndesaulniers@google.com>
 
-(Thanks for the series, will pull down and test!)
+So this is my 2nd try at implementing Svpbmt (and the diverging D1 memory
+types) using the alternatives framework.
 
-If you have a github account, let me know it if you'd like to be cc'ed
-when we wire this up in our CI.
+This includes a number of changes to the alternatives mechanism itself.
+The biggest one being the move to a more central location, as I expect
+in the future, nearly every chip needing some sort of patching, be it
+either for erratas or for optional features (svpbmt or others).
 
->
-> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-> ---
->  scripts/min-tool-version.sh | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
-> index 53fe64856015..f1e8358ec19a 100755
-> --- a/scripts/min-tool-version.sh
-> +++ b/scripts/min-tool-version.sh
-> @@ -24,9 +24,8 @@ icc)
->         echo 16.0.3
->         ;;
->  llvm)
-> -       # https://lore.kernel.org/r/YMtib5hKVyNknZt3@osiris/
->         if [ "$SRCARCH" = s390 ]; then
-> -               echo 13.0.0
-> +               echo 14.0.0
->         else
->                 echo 11.0.0
->         fi
-> --
-> 2.32.0
->
+Detection of the svpbmt functionality is done via Atish's isa extension
+handling series [0] and thus does not need any dt-parsing of its own
+anymore.
 
+The series also introduces support for the memory types of the D1
+which are implemented differently to svpbmt. But when patching anyway
+it's pretty clean to add the D1 variant via ALTERNATIVE_2 to the same
+location.
+
+The only slightly bigger difference is that the "normal" type is not 0
+as with svpbmt, so kernel patches for this PMA type need to be applied
+even before the MMU is brought up, so the series introduces a separate
+stage for that.
+
+
+In theory this series is 2 parts:
+- alternatives improvements
+- svpbmt+d1
+
+I picked the recipient list from the previous versions, hopefully
+I didn't forget anybody.
+
+I tested the series on:
+- qemu-rv32 + buildroot rootfs
+- qemu-rv64 + debian roots
+- Allwinner D1-Nezha
+- BeagleV - it at least reached the same point as without the series
+
+I also ran Palmers CI environment on 5.18-rc6 + this series and
+it passed with all testcases now.
+
+
+changes in v10:
+- add received review-tags
+- put early patching behind a kconfig symbol
+- adapt compiler flags of sources in use by early patching
+  similar to other riscv arch-parts.
+  This fixes the medlow cmodel issue on rv32 and also issues
+  with Kasan.
+
+changes in v9:
+- rebase onto 5.18-rc1
+- drop the sbi null-ptr patch
+  While I still think this to be non-ideal as is, it isn't really
+  necessary for svpbmt support anymore
+- merge cpufeature + svpbmt patch, as otherwise some empty shells
+  cause build warnings when a bisection stops between these two
+  patches
+- address review comments from Christoph Hellwig:
+  - keep alternatives optional, they now get selected by its
+    users (erratas and also the newly introduced svpbmt kconfig)
+  - wrap long lines and keep things below 80 characters
+  - restyle svpbmt + thead errata assembly
+  - introduce a helper for the repeated calls to
+    (val & _PAGE_PFN_MASK) >> _PAGE_PFN_SHIFT
+
+changes in v8:
+- rebase onto 5.17-final + isa extension series
+  We're halfway through the merge-window, so this series
+  should be merge after that
+- adapt to fix limiting alternatives to non-xip-kernels
+- add .norelax option for alternatives
+- fix unused cpu_apply_errata in thead errata
+- don't use static globals to store cpu-manufacturer data
+  as it makes machines hang if done too early
+
+changes in v7:
+- fix typo in patch1 (Atish)
+- moved to Atish's isa-extension framework
+- and therefore move regular boot-alternatives directly behind fill_hwcaps
+- change T-Head errata Kconfig text (Atish)
+
+changes in v6:
+- rebase onto 5.17-rc1
+- handle sbi null-ptr differently
+- improve commit messages
+- use riscv,mmu as property name
+
+changes in v5:
+- move to use alternatives for runtime-patching
+- add D1 variant
+
+
+[0] https://lore.kernel.org/r/20220222204811.2281949-2-atishp@rivosinc.com
+
+Heiko Stuebner (12):
+  riscv: integrate alternatives better into the main architecture
+  riscv: allow different stages with alternatives
+  riscv: implement module alternatives
+  riscv: implement ALTERNATIVE_2 macro
+  riscv: extend concatenated alternatives-lines to the same length
+  riscv: prevent compressed instructions in alternatives
+  riscv: move boot alternatives to after fill_hwcap
+  riscv: Fix accessing pfn bits in PTEs for non-32bit variants
+  riscv: add RISC-V Svpbmt extension support
+  riscv: remove FIXMAP_PAGE_IO and fall back to its default value
+  riscv: don't use global static vars to store alternative data
+  riscv: add memory-type errata for T-Head
+
+ arch/riscv/Kconfig                          |  28 +++++
+ arch/riscv/Kconfig.erratas                  |  34 ++++--
+ arch/riscv/Kconfig.socs                     |   1 -
+ arch/riscv/Makefile                         |   2 +-
+ arch/riscv/errata/Makefile                  |   2 +-
+ arch/riscv/errata/alternative.c             |  75 ------------
+ arch/riscv/errata/sifive/errata.c           |  20 ++-
+ arch/riscv/errata/thead/Makefile            |  11 ++
+ arch/riscv/errata/thead/errata.c            |  82 +++++++++++++
+ arch/riscv/include/asm/alternative-macros.h | 129 +++++++++++++++-----
+ arch/riscv/include/asm/alternative.h        |  25 +++-
+ arch/riscv/include/asm/errata_list.h        |  59 +++++++++
+ arch/riscv/include/asm/fixmap.h             |   2 -
+ arch/riscv/include/asm/hwcap.h              |   1 +
+ arch/riscv/include/asm/pgtable-32.h         |  17 +++
+ arch/riscv/include/asm/pgtable-64.h         |  79 +++++++++++-
+ arch/riscv/include/asm/pgtable-bits.h       |  10 --
+ arch/riscv/include/asm/pgtable.h            |  55 +++++++--
+ arch/riscv/include/asm/vendorid_list.h      |   1 +
+ arch/riscv/kernel/Makefile                  |  15 +++
+ arch/riscv/kernel/alternative.c             | 118 ++++++++++++++++++
+ arch/riscv/kernel/cpu.c                     |   1 +
+ arch/riscv/kernel/cpufeature.c              |  80 +++++++++++-
+ arch/riscv/kernel/module.c                  |  29 +++++
+ arch/riscv/kernel/setup.c                   |   2 +
+ arch/riscv/kernel/smpboot.c                 |   4 -
+ arch/riscv/kernel/traps.c                   |   2 +-
+ arch/riscv/mm/init.c                        |   1 +
+ 28 files changed, 724 insertions(+), 161 deletions(-)
+ delete mode 100644 arch/riscv/errata/alternative.c
+ create mode 100644 arch/riscv/errata/thead/Makefile
+ create mode 100644 arch/riscv/errata/thead/errata.c
+ create mode 100644 arch/riscv/kernel/alternative.c
 
 -- 
-Thanks,
-~Nick Desaulniers
+2.35.1
+

@@ -2,67 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93899522BEB
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 07:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08488522BEE
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 07:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239547AbiEKFv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 01:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59404 "EHLO
+        id S233288AbiEKFyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 01:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232213AbiEKFvx (ORCPT
+        with ESMTP id S229568AbiEKFyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 01:51:53 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663F285656;
-        Tue, 10 May 2022 22:51:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652248309; x=1683784309;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=y7Ma3NU4R9DKob8KaqtrYsX/Lg7x0p6qjlq2IolMo3A=;
-  b=ybP8OunGnSp4Cg6yf4bFIX+cEWMCEBXkaTINbzLmQw8dp922yf+Pvt0s
-   6cP+R7cHE7BRGAJRIEMISBcU2NPJHlAq8fZEghVjNZCw8epRA8+P8YfFq
-   R1C9WYF/U+RoHAEIJHyTy2aqqJEXTUww8Tcf2z2IOfQIE9bEZK9sjVQ+D
-   w=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 10 May 2022 22:51:49 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 22:51:50 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 10 May 2022 22:51:50 -0700
-Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 10 May
- 2022 22:51:46 -0700
-Subject: Re: [PATCH] remoteproc: qcom_q6v5_mss: map/unmap metadata region
- before/after use
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     <bjorn.andersson@linaro.org>, <arnd@arndb.de>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <sboyd@kernel.org>, <agross@kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <mathieu.poirier@linaro.org>
-References: <1651845086-16535-1-git-send-email-quic_sibis@quicinc.com>
- <YnVj7fxUbTqkJpdz@google.com>
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-Message-ID: <d6dca8a1-0986-1d56-f0bd-131bda4b1381@quicinc.com>
-Date:   Wed, 11 May 2022 11:21:43 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 11 May 2022 01:54:33 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E856815E63B
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 22:54:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652248470; x=1683784470;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kH+FIA2U7mKZG7uzbkrYnU9KpnPco/57lpdqv6tp6gY=;
+  b=ZhVIlVapVZcWGiPOC+ygt/CAf+LjAmNRVYaAgu+NQTNHmJOfSVq7naBP
+   voEv1mlIjOzggj0VcwYLl+grLgPatahrZEjlSXLYMMOxppOXm0YvDqYb+
+   9cTBs2tfeQlv5+ilzHh0ZOETd2pyLKiQUCXCHXXHRnqGrWxXSChaCCsLj
+   or0XDmz54qujui3c4q0V7gp+BfsXLmkXY5MRLavUohLnCkRsmLaF0R8gg
+   +5cEPyYp22o7j0qjL8kocWVsRmT1gGu1DPyvLScg8GCxE2/gUOOr1CpDr
+   M+KrCr6eX57luWmHBTj93RfLWIsNySs5V4Y9bzeH2zKYzjmcCfFmG01gl
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="249494093"
+X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
+   d="scan'208";a="249494093"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 22:54:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
+   d="scan'208";a="542146891"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 10 May 2022 22:54:29 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nofIq-000ImI-8E;
+        Wed, 11 May 2022 05:54:28 +0000
+Date:   Wed, 11 May 2022 13:53:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hao Xu <howeyxu@tencent.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Subject: [ammarfaizi2-block:axboe/linux-block/fastpoll-mshot 89/98]
+ fs/io_uring.c:6075:9: error: implicit declaration of function
+ '__io_poll_clean'; did you mean '__io_fill_cqe'?
+Message-ID: <202205111354.aZRUoOl7-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <YnVj7fxUbTqkJpdz@google.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,114 +64,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Matthias,
-Thanks for taking time to review the patch.
+tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/fastpoll-mshot
+head:   e721cdc172fd3aa845e4a0850cb5f9aefd8f3591
+commit: e2959ad0f1aa6081772c3d9c703497c15d9c6039 [89/98] io_uring: add a helper for poll clean
+config: m68k-randconfig-m031-20220509 (https://download.01.org/0day-ci/archive/20220511/202205111354.aZRUoOl7-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/e2959ad0f1aa6081772c3d9c703497c15d9c6039
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block axboe/linux-block/fastpoll-mshot
+        git checkout e2959ad0f1aa6081772c3d9c703497c15d9c6039
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
 
-On 5/6/22 11:37 PM, Matthias Kaehlcke wrote:
-> On Fri, May 06, 2022 at 07:21:26PM +0530, Sibi Sankar wrote:
->> The application processor accessing the dynamically assigned metadata
->> region after assigning it to the remote Q6 would lead to an XPU violation.
->> Fix this by un-mapping the metadata region post firmware header copy. The
->> metadata region is freed only after the modem Q6 is done with fw header
->> authentication.
->>
->> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-> 
-> Should this have a 'Fixes:' tag
-It ideally should have but similar to what we did for mba and mpss
-region map/unmap, it would be a ugly backport since it would point to
-the very first commit. We can agree to do a backport if it's ever
-reported upstream on any of the older SoCs.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
--Sibi
+All errors (new ones prefixed by >>):
 
-> 
->> ---
->>   drivers/remoteproc/qcom_q6v5_mss.c | 43 +++++++++++++++++++++++++++++++-------
->>   1 file changed, 35 insertions(+), 8 deletions(-)
->>
->> diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
->> index af217de75e4d..eb34a258b67b 100644
->> --- a/drivers/remoteproc/qcom_q6v5_mss.c
->> +++ b/drivers/remoteproc/qcom_q6v5_mss.c
->> @@ -10,6 +10,7 @@
->>   #include <linux/clk.h>
->>   #include <linux/delay.h>
->>   #include <linux/devcoredump.h>
->> +#include <linux/dma-map-ops.h>
->>   #include <linux/dma-mapping.h>
->>   #include <linux/interrupt.h>
->>   #include <linux/kernel.h>
->> @@ -932,27 +933,52 @@ static void q6v5proc_halt_axi_port(struct q6v5 *qproc,
->>   static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
->>   				const char *fw_name)
->>   {
->> -	unsigned long dma_attrs = DMA_ATTR_FORCE_CONTIGUOUS;
->> +	unsigned long dma_attrs = DMA_ATTR_FORCE_CONTIGUOUS | DMA_ATTR_NO_KERNEL_MAPPING;
->> +	unsigned long flags = VM_DMA_COHERENT | VM_FLUSH_RESET_PERMS;
->> +	struct page **pages;
->> +	struct page *page;
->>   	dma_addr_t phys;
->>   	void *metadata;
->>   	int mdata_perm;
->>   	int xferop_ret;
->>   	size_t size;
->> -	void *ptr;
->> +	void *vaddr;
->> +	int count;
->>   	int ret;
->> +	int i;
->>   
->>   	metadata = qcom_mdt_read_metadata(fw, &size, fw_name, qproc->dev);
->>   	if (IS_ERR(metadata))
->>   		return PTR_ERR(metadata);
->>   
->> -	ptr = dma_alloc_attrs(qproc->dev, size, &phys, GFP_KERNEL, dma_attrs);
->> -	if (!ptr) {
->> -		kfree(metadata);
->> +	page = dma_alloc_attrs(qproc->dev, size, &phys, GFP_KERNEL, dma_attrs);
->> +	if (!page) {
->>   		dev_err(qproc->dev, "failed to allocate mdt buffer\n");
->> -		return -ENOMEM;
->> +		ret = -ENOMEM;
->> +		goto free_metadata;
->> +	}
->> +
->> +	count = PAGE_ALIGN(size) >> PAGE_SHIFT;
->> +	pages = kmalloc_array(count, sizeof(struct page *), GFP_KERNEL);
->> +	if (!pages) {
->> +		ret = -ENOMEM;
->> +		goto free_metadata;
->>   	}
->>   
->> -	memcpy(ptr, metadata, size);
->> +	for (i = 0; i < count; i++)
->> +		pages[i] = nth_page(page, i);
->> +
->> +	vaddr = vmap(pages, count, flags, dma_pgprot(qproc->dev, PAGE_KERNEL, dma_attrs));
->> +	kfree(pages);
->> +	if (!vaddr) {
->> +		dev_err(qproc->dev, "unable to map memory region: %pa+%zx\n", &phys, size);
->> +		ret = -EBUSY;
->> +		goto free_metadata;
->> +	}
->> +
->> +	memcpy(vaddr, metadata, size);
->> +
->> +	vunmap(vaddr);
->>   
->>   	/* Hypervisor mapping to access metadata by modem */
->>   	mdata_perm = BIT(QCOM_SCM_VMID_HLOS);
->> @@ -982,7 +1008,8 @@ static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
->>   			 "mdt buffer not reclaimed system may become unstable\n");
->>   
->>   free_dma_attrs:
->> -	dma_free_attrs(qproc->dev, size, ptr, phys, dma_attrs);
->> +	dma_free_attrs(qproc->dev, size, page, phys, dma_attrs);
->> +free_metadata:
->>   	kfree(metadata);
->>   
->>   	return ret < 0 ? ret : 0;
->> -- 
->> 2.7.4
->>
+   fs/io_uring.c: In function '__io_submit_flush_completions':
+   fs/io_uring.c:2806:40: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
+    2806 |         struct io_wq_work_node *node, *prev;
+         |                                        ^~~~
+   fs/io_uring.c: In function 'io_apoll_task_func':
+>> fs/io_uring.c:6075:9: error: implicit declaration of function '__io_poll_clean'; did you mean '__io_fill_cqe'? [-Werror=implicit-function-declaration]
+    6075 |         __io_poll_clean(req);
+         |         ^~~~~~~~~~~~~~~
+         |         __io_fill_cqe
+   cc1: some warnings being treated as errors
+
+
+vim +6075 fs/io_uring.c
+
+  6066	
+  6067	static void io_apoll_task_func(struct io_kiocb *req, bool *locked)
+  6068	{
+  6069		int ret;
+  6070	
+  6071		ret = io_poll_check_events(req, locked);
+  6072		if (ret > 0)
+  6073			return;
+  6074	
+> 6075		__io_poll_clean(req);
+  6076	
+  6077		if (!ret)
+  6078			io_req_task_submit(req, locked);
+  6079		else
+  6080			io_req_complete_failed(req, ret);
+  6081	}
+  6082	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

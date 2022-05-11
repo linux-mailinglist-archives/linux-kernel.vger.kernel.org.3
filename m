@@ -2,80 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E23A1523804
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E930523808
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 18:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344261AbiEKQEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 12:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
+        id S229622AbiEKQE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 12:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344248AbiEKQEF (ORCPT
+        with ESMTP id S1344241AbiEKQEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 12:04:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9606E19C761
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:04:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652285041;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=byqMNSdf6bnIBh4DurWrX7V2g59mmEQr+NLKUpUehNY=;
-        b=YwLm3LRryiAZpCgQSixWOYRfaZK7gwW1UwCQLxIFiQbgVBdJdhsfxrOZ5eraL+XeVF/txB
-        dqALLKMGP7x4vfyosESCskMmiRgUMA/JM2a7uEAjboX0Rwp5x4wW3CFNs9jjWgjSD48VzG
-        11XEFkZltNp3MQyr3w8q93B8tancaBM=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-171-nm2EX3_DNRKBmNFPfaNvXw-1; Wed, 11 May 2022 12:04:00 -0400
-X-MC-Unique: nm2EX3_DNRKBmNFPfaNvXw-1
-Received: by mail-ed1-f71.google.com with SMTP id a19-20020aa7d913000000b004284eecb34aso1607183edr.6
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:04:00 -0700 (PDT)
+        Wed, 11 May 2022 12:04:09 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E0719C3A4
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:04:08 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id bv19so5011357ejb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 09:04:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=wQ+4WhV6k9PLSLRu2ycXl8Jd/rTXVtAwxYwfDpJmHeQ=;
+        b=FQkLZaRRby2FjgefqVXwZG5cd45AVoW5mBxIPs4/ACAjlfIUckJBfr7AgNJi1sA2PE
+         ReehVHy+e71raZyAeffWYbk7GbIefoArYARSe77wZVjnD+2Lo9wxrNlVlhwG9W+YXezH
+         UKayJlTm+Q5LNRo3yWmDq1Oe0fUV42F59X2waMA6k5OADRwy1mCKDOztRyTvlDazQtKy
+         ipFNeMcr3uMJvngEOqbq68KVUZ8xU9bvzXIeGbWMwzpaDofS6Snx/XEqAJgtqn44AU6+
+         aUfO0pbfTmbtc5tf0dsM3GASHxBAoc1kg8Og7SFY40rubqtkzTDwV9bZQnurARlWEfaf
+         rcdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=byqMNSdf6bnIBh4DurWrX7V2g59mmEQr+NLKUpUehNY=;
-        b=HBqWNTDh8JmH8VoTxdBLZY3nlp7CbAImGRsSjlBvoT57IF3zKkwbWxNDQc+4nNhtW9
-         AlMKcICV2LLfnzcn6ltieI6w+0u6KnhxHJpXAScYAWDSbgu3MFv2IHPO2n05ik+OYIXg
-         yzSAJ2iKWfkIHRWjlhC9HMfqLXyaf5gsVQgVTT42NXxwvMFNsZI7jjKG6XnSfTBzZkJv
-         jOe2SauGUmuebwQ57fQwhsjIAxkxXPBswzEJH3zYjONk+IhjlnMDAb/789SG0PRyOymb
-         PO3GKoFXSR98PnUjRokt8+a/CSYThWsXg9vXUVJxClbfLxUmzI/Vyl+Fg1FIDqIhVrwn
-         yXTw==
-X-Gm-Message-State: AOAM533XmgL9qY/h2M1gKiY9gFF96m+US6oiybY7aToDGKIjS412YA07
-        qU+YS1tnBx/F7xreQ6sEcwP22Ehp60pB4UnppSi5sHAT2tAlhqGM786q4VC44s/3aJpjLNuEWys
-        VXHtSrTC8egcSjz4k7Oc1h7f2
-X-Received: by 2002:a17:906:3e05:b0:6f3:a14a:fd3f with SMTP id k5-20020a1709063e0500b006f3a14afd3fmr24340209eji.640.1652285038872;
-        Wed, 11 May 2022 09:03:58 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz57bRJ8Xm97UzTQ6gASlTYMO34H4z/Jt5jP3gub5wjACPTo4dTYHQBBEZVD8jqkcn8T3Pliw==
-X-Received: by 2002:a17:906:3e05:b0:6f3:a14a:fd3f with SMTP id k5-20020a1709063e0500b006f3a14afd3fmr24340190eji.640.1652285038652;
-        Wed, 11 May 2022 09:03:58 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id v22-20020aa7d9d6000000b0042617ba6392sm1337013eds.28.2022.05.11.09.03.57
+        bh=wQ+4WhV6k9PLSLRu2ycXl8Jd/rTXVtAwxYwfDpJmHeQ=;
+        b=GbDQbHAPNd5P8ZFku5IWEZCPkIkN2ujw2m1japUadDpJWbOP1KEHR7L3JbDkPDFD5S
+         GDAF/4bnYgFZ17QGjuFoXgECxd2JF+2Dw0Z1GuvYsWeneZXm3Xa34PH/6fAUfD2H0fzo
+         zPZqbeUzxLp8UUi2yIrPtbRiXAdYgTgn2wPEIQF73IWhKWTvjXZXo+3poTy/RjQFbVfU
+         h81x5TgfiLTC8cXDe/NnwuS7Nlvy2kkwDhe5jLWvu5CX9jmU/lOIlI6W6l36qmGOXXOq
+         bDhp56xL6FUW4vqkNio+4hzwsdRvlTyjMzLjqYJKcAnUKNF3AV2d1cQjNmuUb+QW8Xma
+         +RRA==
+X-Gm-Message-State: AOAM530iFIS9GYsQqW964fn/cwebK4EPQB/aU4SEA7ikSrIWSGbUO1ar
+        zVbCPthhAhBIhiJmw7N4h1CqPA==
+X-Google-Smtp-Source: ABdhPJyzXUV5jsqnDfWfN4VVucH3ddXpg1wmvj8zlxv9ouygUIznS3UcqdagiJVmiKJiJn3K6R3VJA==
+X-Received: by 2002:a17:906:dc93:b0:6f4:6a27:41ed with SMTP id cs19-20020a170906dc9300b006f46a2741edmr25797324ejc.36.1652285047009;
+        Wed, 11 May 2022 09:04:07 -0700 (PDT)
+Received: from [192.168.0.155] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id f19-20020a50ee93000000b0042617ba63b1sm1325703edr.59.2022.05.11.09.04.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 09:03:58 -0700 (PDT)
-Message-ID: <1bdf6cfd-7690-f949-8eee-e545af979a3a@redhat.com>
-Date:   Wed, 11 May 2022 18:03:57 +0200
+        Wed, 11 May 2022 09:04:06 -0700 (PDT)
+Message-ID: <9dd9d22c-6933-3790-35e8-8de197d05d39@linaro.org>
+Date:   Wed, 11 May 2022 18:04:05 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH V2] samsung-laptop: use kobj_to_dev()
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 2/3] MIPS: Loongson64: DTS: Add Loongson-2K1000 DTS
+ related smp support
 Content-Language: en-US
-To:     cgel.zte@gmail.com, andy.shevchenko@gmail.com
-Cc:     chi.minghao@zte.com.cn, corentin.chary@gmail.com,
-        linux-kernel@vger.kernel.org, markgross@kernel.org,
-        platform-driver-x86@vger.kernel.org, zealci@zte.com.cn
-References: <CAHp75Vc+G1JNkxBcpyXge9qsGpT0m4erBV1aEi4bMHDYfE-JOw@mail.gmail.com>
- <20220511021522.1488373-1-chi.minghao@zte.com.cn>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220511021522.1488373-1-chi.minghao@zte.com.cn>
+To:     Qing Zhang <zhangqing@loongson.cn>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yangtiezhu@loongson.cn
+References: <20220511083007.17700-1-zhangqing@loongson.cn>
+ <20220511083007.17700-2-zhangqing@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220511083007.17700-2-zhangqing@loongson.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,50 +80,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 11/05/2022 10:30, Qing Zhang wrote:
+> Add the device tree node and connect it to the CPU nodes.
 
-On 5/11/22 04:15, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
-> 
-> Use kobj_to_dev() instead of open-coding it.
-> 
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-
-> ---
-> v1->v2:
-> 	remove Reported-by: Zeal Robot <zealci@zte.com.cn>
-> 
->  drivers/platform/x86/samsung-laptop.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/platform/x86/samsung-laptop.c b/drivers/platform/x86/samsung-laptop.c
-> index 19f6b456234f..c187dcdf82f0 100644
-> --- a/drivers/platform/x86/samsung-laptop.c
-> +++ b/drivers/platform/x86/samsung-laptop.c
-> @@ -1208,7 +1208,7 @@ static int __init samsung_backlight_init(struct samsung_laptop *samsung)
->  static umode_t samsung_sysfs_is_visible(struct kobject *kobj,
->  					struct attribute *attr, int idx)
->  {
-> -	struct device *dev = container_of(kobj, struct device, kobj);
-> +	struct device *dev = kobj_to_dev(kobj);
->  	struct samsung_laptop *samsung = dev_get_drvdata(dev);
->  	bool ok = true;
 >  
+> +	ipi: interrupt-controller@1fe11000 {
+> +		compatible = "loongson, mmio-ipi";
 
+No spaces in compatibles. The compatible needs bindings.
+
+
+Best regards,
+Krzysztof

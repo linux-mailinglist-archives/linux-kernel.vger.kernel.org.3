@@ -2,204 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E7352528F
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 713A552528B
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356459AbiELQ36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 12:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
+        id S1352838AbiELQ3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 12:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343801AbiELQ3z (ORCPT
+        with ESMTP id S241673AbiELQ3K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 12:29:55 -0400
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF861B57B4;
-        Thu, 12 May 2022 09:29:53 -0700 (PDT)
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 24CGTdRr000432;
-        Fri, 13 May 2022 01:29:40 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 24CGTdRr000432
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1652372980;
-        bh=mO/DMNrIOb9APlTM3yT+RrP66+SqAVMQ3Ym8daEBsB8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Au1gJMIjZjri4c45hmo3gtGE7edeeRZZiAj50KRCy93yqQEX3OiJc27G2vejdK/Rr
-         SUkCPjY/bM5k2he0yiFxrOT/fF6M2XBnQxRW6uC+SQbH9PJl3bz/FIjj912CdGJE0W
-         9TT1bAnCZzhs0dnpCqrIHoQ67+DHvE9o4MnJ+9esQrGuIetwcYueGNOFpYFk5jjQfQ
-         PIHLlQzb7nNNbOh2CYRdUfX8b84e1HBeXve+49vBPxn4i2QGlHQcGAbrKoTTSJ+kYR
-         7rV5SYftOIjaIbLqLugI5kDM9OSwKLxE7tIlPzuK6nRSqVRYzN6NBGVMeCw06vcpxt
-         B9Okg8BC7RxcQ==
-X-Nifty-SrcIP: [209.85.214.181]
-Received: by mail-pl1-f181.google.com with SMTP id q4so5379133plr.11;
-        Thu, 12 May 2022 09:29:40 -0700 (PDT)
-X-Gm-Message-State: AOAM531Ckf51Ih4XDxmd/r5rREO4UKnvxWdJHkZ56WUaAVsfwG4KWRFl
-        85esODfWFn0dwuDbofs2hFNiW0EBkmuXRxjEDvo=
-X-Google-Smtp-Source: ABdhPJx92l367XcU+G3abVD603tgi5nQTDTAzhgbiPSkPLV6qRfWMHMAOxL8BNsF/qgdsmuh+OjAz9m/oAaHyRFzl18=
-X-Received: by 2002:a17:90b:1bca:b0:1dd:1f36:dc2a with SMTP id
- oa10-20020a17090b1bca00b001dd1f36dc2amr11680027pjb.119.1652372979433; Thu, 12
- May 2022 09:29:39 -0700 (PDT)
+        Thu, 12 May 2022 12:29:10 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3EC760BB7;
+        Thu, 12 May 2022 09:29:08 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id bx33so7146734ljb.12;
+        Thu, 12 May 2022 09:29:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=gLe5l9DAolzLphi8/wPvIZln9njciDHas8G30cxiyRE=;
+        b=f+myMvIiz2tjwVtbg/kwFeqyRkKhEUyloCObDSYMuAm4tqelGuM/cpPuvE4abEDHe+
+         qm+HgiUExaRlIQs4cDQUnEvlh0RUFpxHKSURPyRKEAeQf2AP1iZi8x5Xh8Y3roofRHAD
+         2iAu3rnA6ggRtCqTCdqaf6WWpko4Q+Rv7Fs1zgnuSkUAmpz6Nc9O7glhWXixIZvYDQvi
+         dQAuRaRUmMj2HLxwtdL+K/g+gfjKPQ80Ai4pn7i/Akk1wptzy9c3TTk5X25l989641OK
+         o0V5oLpfH9KkNs6aoRfAFtdf0KYaTOTT4YZiK4wAQIH0I9Uhozm4kuEg3jnUedPuiWd8
+         TNPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=gLe5l9DAolzLphi8/wPvIZln9njciDHas8G30cxiyRE=;
+        b=O9BpZomNF3I+8+2yd85mQPlAHpnLXt1+wnGOPJUHcQUfSRGGLFbkIolUSdVuZehCtS
+         NPnN4ysNBw9DyZpd1F5vR/aof4crECHraK8aZDoZ4IeIfhAo/xBWtj4mvXHn15DWIgJK
+         gaAkAVYfKZsJhHn3sSsrFWiUNWTtmwVO8xG98H9TWsgoqQjv649uIANwxZcCAuV+hE/l
+         ZdXAoikDgFnC6u8NbQnTPkLooeqyBSUe84erwHxO7nmIvQIn2n2ncaEndSilOk3C2UEG
+         PvHeiKrkp3PeKA/6/D3PXNjcltkWuoD28JXYbkRTqxyACnp5OfghmLsymEH02JCEk9WP
+         fXMQ==
+X-Gm-Message-State: AOAM531NJTIKtGNXVFW10FxSNyySCbgpDhhb2nkVgNZde1iQN3TW/Avf
+        rnVJj40L3YAkzUiNFZY0SIQapEyJsLIDDA==
+X-Google-Smtp-Source: ABdhPJw9rrsJElQQstE2Px12+IH9oT7SX+diGL9CcP696w8ibA9VJFrOK2y6+hnOk766xAI059XEXw==
+X-Received: by 2002:a2e:9556:0:b0:24f:1c4f:cade with SMTP id t22-20020a2e9556000000b0024f1c4fcademr496981ljh.39.1652372946377;
+        Thu, 12 May 2022 09:29:06 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id n11-20020a05651203eb00b0047255d211adsm2738lfq.220.2022.05.12.09.29.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 09:29:05 -0700 (PDT)
+Date:   Thu, 12 May 2022 19:29:03 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 21/23] ata: ahci-dwc: Add platform-specific quirks
+ support
+Message-ID: <20220512162903.ehqrbqm5wngznwjl@mobilestation>
+References: <20220511231810.4928-1-Sergey.Semin@baikalelectronics.ru>
+ <20220511231810.4928-22-Sergey.Semin@baikalelectronics.ru>
+ <f89f34e6-eb04-4ed4-0323-292c2e332948@suse.de>
 MIME-Version: 1.0
-References: <20220511164514.2741934-1-masahiroy@kernel.org> <20220511164514.2741934-4-masahiroy@kernel.org>
-In-Reply-To: <20220511164514.2741934-4-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 13 May 2022 01:28:26 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATt7iFAHqxqW=5GggJJ_k9mXuDmSEkNyyJKG3c4MkxK_w@mail.gmail.com>
-Message-ID: <CAK7LNATt7iFAHqxqW=5GggJJ_k9mXuDmSEkNyyJKG3c4MkxK_w@mail.gmail.com>
-Subject: Re: [PATCH v5 03/12] modpost: extract symbol versions from *.cmd files
-To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f89f34e6-eb04-4ed4-0323-292c2e332948@suse.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 1:49 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> Currently, CONFIG_MODVERSIONS needs extra link to embed the symbol
-> versions into ELF objects. Then, modpost extracts the version CRCs
-> from them.
->
-> The following figures show how it currently works, and how I am trying
-> to change it.
->
-> Current implementation
-> ======================
->                                                            |----------|
->                  embed CRC      -------------------------->| final    |
->        $(CC)       $(LD)       /  |---------|              | link for |
->        -----> *.o -------> *.o -->| modpost |              | vmlinux  |
->       /              /            |         |-- *.mod.c -->| or       |
->      / genksyms     /             |---------|              | module   |
->   *.c ------> *.symversions                                |----------|
->
-> Genksyms outputs the calculated CRCs in the form of linker script
-> (*.symversions), which is used by $(LD) to update the object.
->
-> If CONFIG_LTO_CLANG=y, the build process is much more complex. Embedding
-> the CRCs is postponed until the LLVM bitcode is converted into ELF,
-> creating another intermediate *.prelink.o.
->
-> However, this complexity is unneeded. There is no reason why we must
-> embed version CRCs in objects so early.
->
-> There is final link stage for vmlinux (scripts/link-vmlinux.sh) and
-> modules (scripts/Makefile.modfinal). We can link CRCs at the very last
-> moment.
->
-> New implementation
-> ==================
->                                                            |----------|
->                    --------------------------------------->| final    |
->        $(CC)      /    |---------|                         | link for |
->        -----> *.o ---->|         |                         | vmlinux  |
->       /                | modpost |--- .vmlinux.export.c -->| or       |
->      / genksyms        |         |--- *.mod.c ------------>| module   |
->   *.c ------> *.cmd -->|---------|                         |----------|
->
-> Pass the symbol versions to modpost as separate text data, which are
-> available in *.cmd files.
->
-> This commit changes modpost to extract CRCs from *.cmd files instead of
-> from ELF objects.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
-> Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
-> ---
->
-> (no changes since v2)
->
-> Changes in v2:
->   - Simplify the implementation (parse .cmd files after ELF)
->
->  scripts/mod/modpost.c | 177 ++++++++++++++++++++++++++++++------------
->  1 file changed, 129 insertions(+), 48 deletions(-)
+On Thu, May 12, 2022 at 09:12:46AM +0200, Hannes Reinecke wrote:
+> On 5/12/22 01:18, Serge Semin wrote:
+> > Some DWC AHCI SATA IP-core derivatives require to perform small platform
+> > or IP-core specific setups. They are too small to be placed in a dedicated
+> > driver. It's just much easier to have a set of quirks for them right in
+> > the DWC AHCI driver code. Since we are about to add such platform support,
+> > as a pre-requisite we introduce a platform-data based DWC AHCI quirks API.
+> > The platform data can be used to define the flags passed to the
+> > ahci_platform_get_resources() method, additional AHCI host-flags and a set
+> > of callbacks to initialize, re-initialize and clear the platform settings.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > 
+> > ---
+> > 
+> > Changelog v2:
+> > - Change the local objects prefix from 'dwc_ahci_' to 'ahci_dwc_'.
+> >    (@Damien)
+> > ---
+> >   drivers/ata/ahci_dwc.c | 52 ++++++++++++++++++++++++++++++++++++++----
+> >   1 file changed, 48 insertions(+), 4 deletions(-)
+> > 
 
+> This really could be merged with patch 19; as you're adding a new driver you
+> might as well fold this patch in to avoid further modifications.
 
+That merely depends on the development approach. I saw and reviewed
+not one kernel patchsets introducing new drivers and adding features
+one after another. Moreover there is no kernel patches requirement
+which would constitutes not to do so. In this particular case the
+modification isn't complicated at all thus can be reviewed as is.
 
-> +/*
-> + * The CRCs are recorded in .*.cmd files in the form of:
-> + * #SYMVER <name> <crc>
-> + */
-> +static void extract_crcs_for_object(const char *object, struct module *mod)
-> +{
-> +       char cmd_file[PATH_MAX];
-> +       char *buf, *p;
-> +       const char *base;
-> +       int dirlen, ret;
-> +
-> +       base = strrchr(object, '/');
-> +       if (base) {
-> +               base++;
-> +               dirlen = base - object;
-> +       } else {
-> +               dirlen = 0;
-> +               base = object;
-> +       }
-> +
-> +       ret = snprintf(cmd_file, sizeof(cmd_file), "%.*s.%s.cmd",
-> +                      dirlen, object, base);
-> +       if (ret >= sizeof(cmd_file)) {
-> +               error("%s: too long path was truncated\n", cmd_file);
-> +               return;
-> +       }
-> +
-> +       buf = read_text_file(cmd_file);
-> +       p = buf;
-> +
-> +       while ((p = strstr(p, "\n#SYMVER "))) {
-> +               char *name;
-> +               size_t namelen;
-> +               unsigned int crc;
-> +               struct symbol *sym;
-> +
-> +               name = p + strlen("\n#SYMVER ");
-> +
-> +               p = strchr(name, ' ');
-> +               if (!p)
-> +                       break;
-> +
-> +               namelen = p - name;
-> +               p++;
-> +
-> +               if (!isdigit(*p))
-> +                       continue;       /* skip this line */
-> +
-> +               crc = strtol(p, &p, 0);
-> +               if (*p != '\n')
-> +                       continue;       /* skip this line */
-> +
-> +               name[namelen] = '\0';
-> +
-> +               sym = sym_find_with_module(name, mod);
-> +               if (!sym) {
-> +                       warn("Skip the version for unexported symbol \"%s\" [%s%s]\n",
-> +                            name, mod->name, mod->is_vmlinux ? "" : ".ko");
-> +                       continue;
-> +               }
+-Sergey
 
-
-A lot of warnings are displayed when CONFIG_TRIM_UNUSED_KSYMS=y.
-
-I will fix this in v6.
-
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+> 
+> Cheers,
+> 
+> Hannes
+> -- 
+> Dr. Hannes Reinecke		           Kernel Storage Architect
+> hare@suse.de			                  +49 911 74053 688
+> SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
+> HRB 36809 (AG Nürnberg), GF: Felix Imendörffer

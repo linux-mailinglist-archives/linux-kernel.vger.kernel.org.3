@@ -2,137 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A7D52489E
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:10:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC468524894
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351863AbiELJKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 05:10:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54142 "EHLO
+        id S1351826AbiELJIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 05:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351862AbiELJKe (ORCPT
+        with ESMTP id S1351820AbiELJIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 05:10:34 -0400
-Received: from AUS01-SY4-obe.outbound.protection.outlook.com (mail-sy4aus01olkn2172.outbound.protection.outlook.com [40.92.62.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532838E1A2;
-        Thu, 12 May 2022 02:10:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dQZVmhLWNv/FjQhzIXPOp5UFSVUXI1lj3M5/j9gzgQxAZsSPGTovuZFKnsYQ9wvUgtqj+zTSsPfVyZ/tZ7qBB1xfMkt+wBLX/xO6MRljSQsnfqRWG8JA15i+H0ie3Kc8aHovdGfkJBIPWNdRij6UoZ8JJAPLSmQEa69rIbbkbok22KgVMTFoZJm8QMtJ7LP3A6eIreDlttVThNPe5kdUG3kC0bdQszHKGSX7DJ9IRIrGcOeNFHOOG5oYZmop0jHS1TJXBdWXmWzxKOAxCtjAF475GHf4G0fxGlgFpbTMQRDUuRvhjNPH7HAip2VzoieDL7eXyLC20ODzuyuC47cjvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uTuCJP18nHfqeYgUKGf7KufJ4ztpCEhq/TXcnuTDP5s=;
- b=dS3s4gigX5PJ1jrR8Oww8SIUwkiWaC5NHTc0ZsbzwUx2mwV5brD+tnpylSlU1ZNxYr0yxIFpBNiWOGAl4Thy3ulNkcon5K+b3By4ALcDwoBmIir0n5H708RAX1kf1e9tVrvTMLRihwHQqMQRr5UAmI1lnnu6XACOhFWCkTh9OfCqYTQc0nZQYKAm4K+Wg+TxQFaslxgzpCsbn1nViuJ7mKVxkVMUKbzb0x3KCR4qsigAXeiO6N3ovGzYDUX+P0tFUSMcHqTeHkZ2RuR8QgbW+xNRIOH+7tnJb8Ovw1SDleo/3elaw7U0MmEpNTZYB33Ov7mznyFp7a9f03UIHzvLag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uTuCJP18nHfqeYgUKGf7KufJ4ztpCEhq/TXcnuTDP5s=;
- b=ssaky/r4LgU+ujcCNo8tEpzpGqZsAwNL+dE2xhCxFchN+TQC+GSl8psupAeZTKOvnuUQbI9SCCzA9BNfmJFRcJ3OuUSL8dhsrIT/gfvgPKaSNtSMXDEeasw58IHuaOm1fy4dy1mVC2rwfRTSsAS+qQy8jVQq9Qc8Qq3TOrUaqkQskgx1tLlaQEioXgFmB6+lPwgWNJcXj8eTTBW49ygt3nQQAgQ9q7NUgspcQTGZqSAzDU5G+4CIe88UXNPlk63DUrOKghUULRfK0H8yKG7r+m6zPrdifyRGdgn5sF80n2V4EtAD1jNFb6+slQH/H583ww6BnGgWDkWXPCD8cib76Q==
-Received: from MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:113::14)
- by MEAP282MB0583.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:65::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.20; Thu, 12 May
- 2022 09:10:28 +0000
-Received: from MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM
- ([fe80::702a:73df:6a57:6a00]) by MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM
- ([fe80::702a:73df:6a57:6a00%6]) with mapi id 15.20.5227.023; Thu, 12 May 2022
- 09:10:28 +0000
-From:   Yonglin Tan <yonglin.tan@outlook.com>
-To:     mani@kernel.org, quic_hemantk@quicinc.com,
-        gregkh@linuxfoundation.org, loic.poulain@linaro.org
-Cc:     mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ylintan <yonglin.tan@outlook.com>
-Subject: [PATCH]     bus: mhi: host: Add support for a new Quectel Module.
-Date:   Thu, 12 May 2022 17:07:46 +0800
-Message-ID: <MEYP282MB2374BF134896B003FD8BF826FDCB9@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.7.4
-Content-Type: text/plain
-X-TMN:  [hMnkSDSX2drB345a6wB4buGMqTV5dL1T]
-X-ClientProxiedBy: HK2PR0401CA0018.apcprd04.prod.outlook.com
- (2603:1096:202:2::28) To MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM
- (2603:10c6:220:113::14)
-X-Microsoft-Original-Message-ID: <1652346466-16902-1-git-send-email-yonglin.tan@outlook.com>
+        Thu, 12 May 2022 05:08:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7249D65D3F
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:08:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652346489;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y/j2DLJTcGndHtvQqB0oEoKz+UbynhWSX4BfSSQ/pzc=;
+        b=bJhC7BRmcpJefxpBQ//BeJ1N/jvoueqs9S7an3mFBBdboYxNQUeJbAgod1qjT/cPTtu8Ar
+        1mQ27Glonpo9SDMaLxUvKeQ3VNDLb74o+tz79b+e3qmgp1UhByc6+NSl+BzjYv6k9sZs7n
+        gvifIM/JflsPjyiLjvtep1ExDlvRt7I=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-98-vHYeiQhTOnCjBPETfxVAMQ-1; Thu, 12 May 2022 05:08:05 -0400
+X-MC-Unique: vHYeiQhTOnCjBPETfxVAMQ-1
+Received: by mail-wr1-f70.google.com with SMTP id j21-20020adfa555000000b0020adb9ac14fso1819482wrb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:08:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=y/j2DLJTcGndHtvQqB0oEoKz+UbynhWSX4BfSSQ/pzc=;
+        b=3UlVaLfDkTsYBi+PqXuvIb96r4ypvyFnP5H8LK521mWhnkFzHGXXYtLh7T8CHH4gFc
+         +JV6J/Xr/xWgcuLbSmA2bNE9qbiR4P58+wASNzbhc3SaP7aLeWiOgx3oX5re0K0pjnmY
+         nsaKVH6qXNL9IxGL5CFif1QwnS1Za0B95VwGqqP8PUULcyrS959/+lbU+ETclruRVNWt
+         Yo8OnIYhibg5xV3bZZ6uVR++XqjujHQeu7RTJDfYrWWXV/XNwjz+fid0IR6U917MQT8f
+         oE56YEkl/gIWlJLLf68X9/ybM/dW0sjFMc4Bk82NQ7sN84AkKNxj5rEFUtj2JlAgaswQ
+         9dyg==
+X-Gm-Message-State: AOAM533PvjvLkKrFzAsEg/VWDU6RpwXge3BFrdSv/DFr7BbPUAGKJGip
+        wA69I7WfBUwY9BJQdLunWvCx5TFZWBYyfX2TDkKHGp7B3Fk81Foe6Vp8A4TPd4vE3q2d5hbt+xv
+        BTi9tW/fEHOh+RshKKRa3kqtj
+X-Received: by 2002:a05:600c:2e12:b0:395:b6ae:f551 with SMTP id o18-20020a05600c2e1200b00395b6aef551mr7210540wmf.36.1652346484325;
+        Thu, 12 May 2022 02:08:04 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwUQEGT0+VpyQO5wHnlhPG2R7sv8wC84gKC8UIrDB+7/35B8+9BWk8Lk8wiU9+qsxrKMLibQA==
+X-Received: by 2002:a05:600c:2e12:b0:395:b6ae:f551 with SMTP id o18-20020a05600c2e1200b00395b6aef551mr7210512wmf.36.1652346484044;
+        Thu, 12 May 2022 02:08:04 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c701:d200:ee5d:1275:f171:136d? (p200300cbc701d200ee5d1275f171136d.dip0.t-ipconnect.de. [2003:cb:c701:d200:ee5d:1275:f171:136d])
+        by smtp.gmail.com with ESMTPSA id i25-20020a7bc959000000b003942a244ee4sm2390056wml.41.2022.05.12.02.08.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 02:08:03 -0700 (PDT)
+Message-ID: <e23160b6-2d3c-ebdb-ac5a-c71311e7e5ec@redhat.com>
+Date:   Thu, 12 May 2022 11:08:02 +0200
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9e0b35d9-5207-493a-64b1-08da33f74220
-X-MS-Exchange-SLBlob-MailProps: 0RSV28T7LqTw98sKciW2l8XpStjyDTN8lXQUQIW6dh9a5RGd2BB5afhuIdpOem/WjOCQyYwtSamluRPx1nyaAIfzbdY4bxDlF99XjnYFCXBnSIshHcJGGj+GKjBrjzvLfdODrj44g+a7s7xLkJeRaJFBkdTue9Tjt/qwVOXYtmmKX3CxzPDXQP8vKSE78t0xj7ObKTbgOBin6b0x46+Y/4LhEgsFDRaZvC2RcHRpe4vjQHBnSwhRJ2uYWecI1Z+uVWSwNXV97akNwKZSLBDgB/TLoz9tZf8G6pUGTglzzNmMVeRh7kzP4hM17hKyckBn/WxGkU3AD5BAgtUceTi/git/R/wuoJqNwJHFB+ppTp6wlxJlim6SBukP2F5MUMBXG/3dqBucqRlTrLbmxeRksQeTCbKYQZpXLiACjwJrq484h34aTNva1ehnXHj8SOoyWm1JnE284sdjZNV9S+LPyxxpJQCYwAolNHhZ8e+ifApd93sv/wp0wbWbsXQ72n5sNN6rkP6iCTIXPG66F9iTubG8CMlIJVsJkAvRcpS6Ed0pRfESCx4iGF+2SiM8zb+cTTWYjSeuh0WsuFPc0Prsv+9Hx6TNPAa8vVqMf1UvoN5T9KFiYlUAn7kLxbsBCs9E33Q2QpbLbWJ+d8FWDOawX34p8uscVdNV9DQ4P9acPYNrKv1B4hbXzpmoGFhF49J9
-X-MS-TrafficTypeDiagnostic: MEAP282MB0583:EE_
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6t+/12OZAjh1G7j4S77p/BdjfJ84VRefTRD2rr7LGIhko8pepIjD9ZAUCWJyQM8nNhQsr4U+R5S6D4Iwhd5wd49aa6+5KqlZtWCBH1AWK7ZtLZpo4Hn9Tp4P0gdogSb9w5NqrIIg6feNXAtIv8OdgVdl6j47HGIoyOAiUvi+EBlwSkFA8CknBWtXLL/wbhPlzYZHMKtuhueJMjF93yYck/3m4YODqyYUgitOXs+hQcUko1oS2cmyVz3ft5Zp7xPJI6Pa6IiEqvDju+s5tHG4MqTj3LKfpXzIutux9eQ75xp4DZ55CGeLKrpvTp5K6I3OK9wUMeWmImkXejhT4GvQJ9vYuhCEGh1vVP8vedB58rBRQzBzto43WySdAMSBV/AnCBGc98LkXVPWOp1Y594++pMfQN1xEKpxtPbumi5J1tzfxZPljnCHEJp01W/FWVph252V+CJdwpvjZdPLC/ur4frbO/BA41fAv1rHbmDkVtqmQ0/KRpfPJiROnU+MhGpJqo+pTluyUlUGdy9Cm8JP54Hc58Di0T32rFbpBe3j9iVh/yNTRvKRw4vMXR7OOM59UZ9XEzocXPmma9BJEgD7yg==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?V2q1dB4Yk9pLeaZKy7zDhzyV/P4blRkacuA7l0Vu6Xpjl5j8RxdbMTfrhahJ?=
- =?us-ascii?Q?yLZo9A1fp0nkXRXz4IvdAzVAWwltl4O+x53iH+jLKM2uTUwkpC3Bpn7lbRVF?=
- =?us-ascii?Q?n3PVQedHQueZoBBPU5/7ZfkyQkwMkdd/RZya/3WZuZEGj9pj+aZNA395j0Jq?=
- =?us-ascii?Q?amEpFcm7tQ+PAUCXcyj2Mt5M3fEgKk6S4Unf449hge9Kde3UylDalmYNsZcL?=
- =?us-ascii?Q?DitgJFyrb9ERgR+9sazcc+I3FYTpEUG5WD2qXtiCWcNJJgWj8AkGMoNHhSZM?=
- =?us-ascii?Q?0KOf4xuGwJlT19Fz0UAyzxD1muxOZ8RoRBlVtV5d00vVWeUr3sXFzXliNIB+?=
- =?us-ascii?Q?Inyep+NKm16Atpr6XsAcF/dHiucUye6kh+FW17u6b0gSa6zKbtZWFilow5Sp?=
- =?us-ascii?Q?lplRhXPgZPpt6iuIzA3SIK7DUbCX4G/z1W+KejpUHb1MpqpnNwxXtbxrNQfR?=
- =?us-ascii?Q?eEogyjhDbfgccfix7v9Q+2gLL/4fZalrUuyJENJlVDJMNruFZsZPiHx1plYM?=
- =?us-ascii?Q?BstAINwoBf4fy9MG+Q+uPfhr154y5vsJ88zGGIrHdLeFfKsGoeOVeo97RxOL?=
- =?us-ascii?Q?8pLhJCi4Q9XqvVZs90z7MtJogEvQDB3wAvH68pSpNx2dmsT4lkIO1rHNSzr8?=
- =?us-ascii?Q?l706APiiUDRIWUuD7DQ0OzxVvX90htLaeiPJQfW/ng76NsXEznnIVA+XK53F?=
- =?us-ascii?Q?bASdwpCoXsz1s4dh9pwN6rZ8hX2mYV+9ogDnoMHMqIUF4XYeRC4wz/H2LcxC?=
- =?us-ascii?Q?tV1MpAa4GMK+7POJGb30BW78gSTVdKTkQf5sWpRzpopCK8A1P9gCW6uV+NTs?=
- =?us-ascii?Q?9IqNu9xm5qmI88rl7lq8QM6HSm9jBHbeZm5JhdPo2GqTuZ8xXlc0PTphODce?=
- =?us-ascii?Q?AFzbQ1tAR8d0DQcewgqxmcB0fLhI56umBaQYz8G2jWDNDeBRV3561Gpu9jEg?=
- =?us-ascii?Q?C3m5ymAE+cGkpjMv0lKo/pvYf+h4xjRgAyT4K/gvlpYwPmXKQqy5H3CITRbe?=
- =?us-ascii?Q?VsG4dPRAcO78VhnGPG2A76ohb6IsA6a4DqBt0BIEH2s68pICKoZJsp8qx3P/?=
- =?us-ascii?Q?QyAzVif6DSmPweWepmfRmKE8FKnjrSRqF0t4B2vGPoy5/4DXfewQnv3TxDDR?=
- =?us-ascii?Q?LP6C0nNWfXR5hG3yHEFmWdIbCTrDBoabp1G7zaVB+hDrgBfyHIGMJtzN9fFf?=
- =?us-ascii?Q?b/Ls6AeWbq5iLvi+zqWoR9mTf82MLmsexF/0yXTjGih/9S2V1B1azKAhwguF?=
- =?us-ascii?Q?K1vkVh4+owqpIIsEVYt2Zdg32rTYakxWgx59V//8mqgAmi5kQjV5A/ImISb/?=
- =?us-ascii?Q?wD+xwn1Jy9puCJGI3SufDMUhAu/I/FzXJldW0gkD3iTEm//9F7BjzyWhe87U?=
- =?us-ascii?Q?xDKuRsakCm3KdOuaiHXqiZ6bZ9KSP/bQMlAN0ViUI7HuhAlFNQwQ8cb6GWV+?=
- =?us-ascii?Q?bKR2I2SeKqo=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9e0b35d9-5207-493a-64b1-08da33f74220
-X-MS-Exchange-CrossTenant-AuthSource: MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2022 09:10:28.8047
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MEAP282MB0583
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v9 1/3] s390x: KVM: ipte lock for SCA access should be
+ contained in KVM
+Content-Language: en-US
+To:     Pierre Morel <pmorel@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
+        thuth@redhat.com, imbrenda@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, wintera@linux.ibm.com, seiden@linux.ibm.com,
+        nrb@linux.ibm.com
+References: <20220506092403.47406-1-pmorel@linux.ibm.com>
+ <20220506092403.47406-2-pmorel@linux.ibm.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220506092403.47406-2-pmorel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ylintan <yonglin.tan@outlook.com>
+On 06.05.22 11:24, Pierre Morel wrote:
+> The former check to chose between SIIF or not SIIF can be done
+> using the sclp.has_siif instead of accessing per vCPU structures
+> 
+> When accessing the SCA, ipte lock and ipte_unlock do not need
+> to access any vcpu structures but only the KVM structure.
+> 
+> Let's simplify the ipte handling.
+> 
+> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
 
-    A new Quectel EM1xx module need to be supported by kernel.
-    The module is based on Qualcomm SDX24 platform and the
-    configuration should be aligned with EM120 and EM160.
+Much better
 
-    Signed-off-by: Yonglin Tan <yonglin.tan@outlook.com>
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-Signed-off-by: ylintan <yonglin.tan@outlook.com>
----
- drivers/bus/mhi/host/pci_generic.c | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
-index 8416267..0a6469c 100644
---- a/drivers/bus/mhi/host/pci_generic.c
-+++ b/drivers/bus/mhi/host/pci_generic.c
-@@ -557,6 +557,8 @@ static const struct pci_device_id mhi_pci_id_table[] = {
- 		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
- 	{ PCI_DEVICE(0x1eac, 0x1002), /* EM160R-GL (sdx24) */
- 		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
-+	{ PCI_DEVICE(0x1eac, 0x2001), /* EM120R-GL for FCCL (sdx24) */
-+		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
- 	/* T99W175 (sdx55), Both for eSIM and Non-eSIM */
- 	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0ab),
- 		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx55_info },
 -- 
-2.7.4
+Thanks,
+
+David / dhildenb
 

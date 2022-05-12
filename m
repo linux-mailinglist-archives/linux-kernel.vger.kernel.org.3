@@ -2,47 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00BFC524581
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 08:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F275B524584
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 08:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244110AbiELGSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 02:18:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
+        id S1350238AbiELGTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 02:19:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350229AbiELGSM (ORCPT
+        with ESMTP id S239775AbiELGTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 02:18:12 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE031356A7;
-        Wed, 11 May 2022 23:18:11 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 564D968BFE; Thu, 12 May 2022 08:18:08 +0200 (CEST)
-Date:   Thu, 12 May 2022 08:18:08 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Zhihao Cheng <chengzhihao1@huawei.com>
-Cc:     axboe@kernel.dk, hch@lst.de, torvalds@linux-foundation.org,
-        mingo@redhat.com, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com
-Subject: Re: [PATCH v3 1/1] =?utf-8?Q?fs-writeback?=
- =?utf-8?Q?=3A_writeback=5Fsb=5Finodes=EF=BC=9ARecalculat?=
- =?utf-8?Q?e?= 'wrote' according skipped pages
-Message-ID: <20220512061808.GA20448@lst.de>
-References: <20220510133805.1988292-1-chengzhihao1@huawei.com>
+        Thu, 12 May 2022 02:19:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427AC140435;
+        Wed, 11 May 2022 23:19:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1E4CB82701;
+        Thu, 12 May 2022 06:19:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D84BC385B8;
+        Thu, 12 May 2022 06:19:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652336353;
+        bh=qOyBPK7TljuAhSrqbpM1O6XdNl/pRG4gfpH6MySft30=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rMGJhmWwGhuEOAxU/G9IM2KhVWGEpF75e2bPDyHEBqUTMaq0XxGUmQnlFh4K/Cw0D
+         s113JAqy8t2S67WDVFdU92bgXLuU+jdNjBfbMYKfrNMSGAN5gmPNwniqgEt8v1M5+n
+         ++RKu3MT0VmF3KduC4QivpQ1AdUyVybz83mOtMdVraPklhVX+p78PatrDKu6m46KT8
+         7owaBHE8lhGEImrGZ7FDVJsbmv26h/MVmd/GzR/dlheQjbiFdvrOKc9SjAcB7dLEH2
+         IHCb8Cr8/vxdx0XGXgDM2VHKiGaiFeWBe3oBbb+vDlF9CBjK/y2yPdmGnCLO4xefP/
+         j0B3MQ8trl4TA==
+Date:   Wed, 11 May 2022 23:19:11 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 7/7] fsverity: update the documentation
+Message-ID: <Ynym39Y++2zAiWOx@sol.localdomain>
+References: <20220505123141.1599622-1-zohar@linux.ibm.com>
+ <20220505123141.1599622-8-zohar@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220510133805.1988292-1-chengzhihao1@huawei.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220505123141.1599622-8-zohar@linux.ibm.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good:
+On Thu, May 05, 2022 at 08:31:41AM -0400, Mimi Zohar wrote:
+> Update the fsverity documentation related to IMA signature support.
+> 
+> Acked-by: Stefan Berger <stefanb@linux.ibm.com>
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+>  Documentation/filesystems/fsverity.rst | 35 +++++++++++++++++---------
+>  1 file changed, 23 insertions(+), 12 deletions(-)
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Acked-by: Eric Biggers <ebiggers@google.com>
+
+- Eric

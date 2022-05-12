@@ -2,127 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 389AB524CE0
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEABD524CDF
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353777AbiELMbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 08:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57504 "EHLO
+        id S1353761AbiELMbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 08:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353763AbiELMbm (ORCPT
+        with ESMTP id S1353748AbiELMba (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 08:31:42 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB904924D
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:31:35 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1np7yH-00020p-2C; Thu, 12 May 2022 14:31:09 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     mick@ics.forth.gr, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org,
-        akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
-        rppt@kernel.org, david@redhat.com, wangborong@cdjrlc.com,
-        twd2.me@gmail.com, seanjc@google.com, alex@ghiti.fr,
-        petr.pavlu@suse.com, atishp@rivosinc.com,
-        linux-riscv@lists.infradead.org
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jianghuaming.jhm@alibaba-inc.com, guoren@kernel.org,
-        Xianting Tian <xianting.tian@linux.alibaba.com>,
-        Xianting Tian <xianting.tian@linux.alibaba.com>
-Subject: Re: [PATCH v2] RISC-V: Mark IORESOURCE_EXCLUSIVE for reserved mem instead of IORESOURCE_BUSY
-Date:   Thu, 12 May 2022 14:31:07 +0200
-Message-ID: <2583718.X9hSmTKtgW@diego>
-In-Reply-To: <20220512060910.601832-1-xianting.tian@linux.alibaba.com>
-References: <20220512060910.601832-1-xianting.tian@linux.alibaba.com>
+        Thu, 12 May 2022 08:31:30 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25C644A34;
+        Thu, 12 May 2022 05:31:27 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id ba17so6059451edb.5;
+        Thu, 12 May 2022 05:31:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Bq27qi36uNFUZk8ZL5NHNoP0jxC4Lj73Ft3Qq22TL74=;
+        b=Qk8rV4hBpcnrZIIFrzc/vy+LEr0x/YF0jGYVH/2JoeLnlhcEkoEyW6u7MCYVLBpTwW
+         0UumpuhBgXYujASXv6zPNQZE/t+l0dy7fEFjfdVJgM4hX1FP1FiLxVdPW93dDS05NOz9
+         Va5lU5hHPLCevXlTLXD7RuJ4W/qoEQU3bPLWhxTP3kEnRp8HN8hdzpZm3j+WsSWN8R2S
+         yFH9GuhpHb3xXHpWdtMMIUuPlFhk8sajKQ2vum+CAhDPwsEtrkmP3SiIxzTHM/dkjixI
+         MzjhrM/YG+Brra4Rn5sGf0fpAa545XCgKJEwAuQu/gWEx4/k2Ou5DzGO5noNhyqVxsX3
+         Gh+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Bq27qi36uNFUZk8ZL5NHNoP0jxC4Lj73Ft3Qq22TL74=;
+        b=NtvvU7Oe2c80eFjC3Rqz5Q2IjDljxviiXkUaBlJzY5kILB2chNJCLxUSjXisKKBNg1
+         vfa3Qf3mEEAJgi58y3wzeej4RkJ/8aFC3RV5i11Ie+0FNSAQjErz94GIsq7bVEt4QdyI
+         ZCJHrGRLnQ/WdDwl9dbgT/mYhKZYUhdPUpT7g7LHSQacbUsWvH3G5+UTk4gI1w8R1w99
+         QDz+AYeX2kUcfyXAAKyYOYlsTXndd73Z0WiqsW01T5UY5N3mAxCece8dJcZcuaFx1pfM
+         UuXwX6AAThrZFf4oVTv9jZfTjDQBRS3uDP/uwjDTgvMMpWrUfyPIDhTGKbdLZnI81I5x
+         uvZQ==
+X-Gm-Message-State: AOAM531TTTht5FCHOq4dd4aGewwPNWSevE4X7fgeP21XotR/Jth5RQQD
+        pxF604HFBvE9kBXH0N38kE7hOmv6K/nAgRsDTAE=
+X-Google-Smtp-Source: ABdhPJxgS+gzIYhIWSduRKTHnDYBo2Hhbf1EvSfO1rLZIPmd6sXvnqror3k4ncBq1qt3HJCjLcuDwDS5zZN3zQDyQPM=
+X-Received: by 2002:a05:6402:1f0b:b0:427:b390:2020 with SMTP id
+ b11-20020a0564021f0b00b00427b3902020mr34676701edb.70.1652358686409; Thu, 12
+ May 2022 05:31:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220512062629.10286-1-imagedong@tencent.com>
+In-Reply-To: <20220512062629.10286-1-imagedong@tencent.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Thu, 12 May 2022 20:31:14 +0800
+Message-ID: <CADxym3Zqe=9TA_JBYCEX2tqeVxLN_LbH_F_zQuoXBG4XK=mc7g@mail.gmail.com>
+Subject: Re: [PATCH net-next 0/4] net: skb: check the boundrary of skb drop reason
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Neil Horman <nhorman@tuxdriver.com>,
+        David Miller <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Menglong Dong <imagedong@tencent.com>,
+        Martin Lau <kafai@fb.com>, Talal Ahmad <talalahmad@google.com>,
+        Kees Cook <keescook@chromium.org>, asml.silence@gmail.com,
+        Willem de Bruijn <willemb@google.com>,
+        vasily.averin@linux.dev,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, 12. Mai 2022, 08:09:10 CEST schrieb Xianting Tian:
-> Commit 00ab027a3b82 ("RISC-V: Add kernel image sections to the resource tree")
-> marked IORESOURCE_BUSY for reserved memory, which casued resource map
+On Thu, May 12, 2022 at 2:26 PM <menglong8.dong@gmail.com> wrote:
+>
+> From: Menglong Dong <imagedong@tencent.com>
+>
+> In the commit 1330b6ef3313 ("skb: make drop reason booleanable"),
+> SKB_NOT_DROPPED_YET is added to the enum skb_drop_reason, which makes
+> the invalid drop reason SKB_NOT_DROPPED_YET can leak to the kfree_skb
+> tracepoint. Once this happen (it happened, as 4th patch says), it can
+> cause NULL pointer in drop monitor and result in kernel panic.
+>
+> Therefore, check the boundrary of drop reason in both kfree_skb_reason
+> (2th patch) and drop monitor (1th patch).
+>
+> Meanwhile, fix the invalid drop reason passed to kfree_skb_reason() in
+> tcp_v4_rcv().
+>
 
-typo "caused" resource map
+tcp_v6_rcv() is forgeted, I'll send a V2 :/
 
-> failed in subsequent operations of related driver, so remove the
-> IORESOURCE_BUSY flag. In order to prohibit userland mapping reserved
-> memory, mark IORESOURCE_EXCLUSIVE for it.
-
-Looking at the comment for IORESOURCE_EXCLUSIVE
-(/* Userland may not map this resource */)
-
-this also looks like the way better match for "no-map" :-) .
-
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-
-Also on qemu + d1-nezha board
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-
-
-Heiko
-
-> The code to reproduce the issue,
-> dts:
->         mem0: memory@a0000000 {
->                 reg = <0x0 0xa0000000 0 0x1000000>;
->                 no-map;
->         };
-> 
->         &test {
->                 status = "okay";
->                 memory-region = <&mem0>;
->         };
-> 
-> code:
->         np = of_parse_phandle(pdev->dev.of_node, "memory-region", 0);
->         ret = of_address_to_resource(np, 0, &r);
->         base = devm_ioremap_resource(&pdev->dev, &r);
->         // base = -EBUSY
-> 
-> Fixes: 00ab027a3b82 ("RISC-V: Add kernel image sections to the resource tree")
-> Reported-by: Huaming Jiang <jianghuaming.jhm@alibaba-inc.com>
-> Reviewed-by: Guo Ren <guoren@kernel.org>
-> Reviewed-by: Nick Kossifidis <mick@ics.forth.gr>
-> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
-> ---
->  arch/riscv/kernel/setup.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> index 834eb652a7b9..e0a00739bd13 100644
-> --- a/arch/riscv/kernel/setup.c
-> +++ b/arch/riscv/kernel/setup.c
-> @@ -189,7 +189,7 @@ static void __init init_resources(void)
->  		res = &mem_res[res_idx--];
->  
->  		res->name = "Reserved";
-> -		res->flags = IORESOURCE_MEM | IORESOURCE_BUSY;
-> +		res->flags = IORESOURCE_MEM | IORESOURCE_EXCLUSIVE;
->  		res->start = __pfn_to_phys(memblock_region_reserved_base_pfn(region));
->  		res->end = __pfn_to_phys(memblock_region_reserved_end_pfn(region)) - 1;
->  
-> @@ -214,7 +214,7 @@ static void __init init_resources(void)
->  
->  		if (unlikely(memblock_is_nomap(region))) {
->  			res->name = "Reserved";
-> -			res->flags = IORESOURCE_MEM | IORESOURCE_BUSY;
-> +			res->flags = IORESOURCE_MEM | IORESOURCE_EXCLUSIVE;
->  		} else {
->  			res->name = "System RAM";
->  			res->flags = IORESOURCE_SYSTEM_RAM | IORESOURCE_BUSY;
-> 
-
-
-
-
+> Menglong Dong (4):
+>   net: dm: check the boundary of skb drop reasons
+>   net: skb: check the boundrary of drop reason in kfree_skb_reason()
+>   net: skb: change the definition SKB_DR_SET()
+>   net: tcp: reset skb drop reason to NOT_SPCIFIED in tcp_v4_rcv()
+>
+>  include/linux/skbuff.h  | 3 ++-
+>  net/core/drop_monitor.c | 2 +-
+>  net/core/skbuff.c       | 5 +++++
+>  net/ipv4/tcp_ipv4.c     | 1 +
+>  4 files changed, 9 insertions(+), 2 deletions(-)
+>
+> --
+> 2.36.1
+>

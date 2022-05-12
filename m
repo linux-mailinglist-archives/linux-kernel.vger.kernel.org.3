@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C22E85243E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 06:08:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 942C25243ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 06:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345952AbiELEI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 00:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48918 "EHLO
+        id S1346090AbiELEMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 00:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbiELEIM (ORCPT
+        with ESMTP id S230419AbiELEMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 00:08:12 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378371CC98C
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 21:08:08 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id r188-20020a1c44c5000000b003946c466c17so1719518wma.4
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 21:08:08 -0700 (PDT)
+        Thu, 12 May 2022 00:12:13 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0941C12EC
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 21:12:10 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id p12so3747143pfn.0
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 21:12:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GyMW7JKE5ri9UseraSETF0tOwJpGQyvrKdzSI8W/128=;
-        b=m0wkWQXmzJubMmCCz3hb0dBvjSodoZ9dQEYU1IkfHAfvxK3OJVHUpU+yoYJBVnJxDJ
-         7OmwhngCjmUyw0p79fkFhu5/hOx3+ItIrSrqmgZ2HZ3uGLyKsBPxmvY14JaG1+v7p63C
-         5pNqUf95Fy9OVplO1h2hIvuiPVSrQ12ryf0D1e7Ex6veIDPHwIVYLZbLFBR04kKOMMK+
-         NsflxS5PvtG9YuQOz4jXaMTTi9q+1a7YBKBmprZquPgeCgmEvybP4ON8ixUzc8d42qb/
-         yICTaYvM9QmtCkAdcdfy8N41+RFnIUNaEVbSJ/66vvVLvjccI+2Z1Yl47VCpcO+o/6Jy
-         em1A==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HQnzlDikKOsDxf1h8spRLU9TXxPUqNDKctkg19RVkFM=;
+        b=StMBboIsOvYwncuvyeTg7rPeTafDz8G7/dg30myGJeamyQj3Dadv3p7IdQXVIjaujj
+         0liZkhXgA84gzeXvYO1yqN+8lTKkDa3VKlFRNoEUMhEZRz8VT6gNZs8Ot4RWKt46LuUr
+         L2Z/g0YxiH0dpLkq4LY95B4pJNHatPStdR/LFpkJmzjbHfQ9PhjdnK8AzGG7pKuELqqq
+         myXRGfAuerWOFPsas0Cvhvmro0zNlkJ8jbWxY9GDyDRoH5+20M9jQRAHyu1z+QxVRc/m
+         DugAoek7BCSMkhGkwjIHCyPMtfiWYMzY9vjPXWrXasxvxii1a31uHtD2jc4S6lxTQRxh
+         7S5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GyMW7JKE5ri9UseraSETF0tOwJpGQyvrKdzSI8W/128=;
-        b=qY41qW8qFI9n0GgNlEkm445NbQ8dyCaCSl8Do8hu3HAsALlgAl7p+jrXFAqb6e5hBo
-         u7X+MhdHbCqYYBiNXgFZvQ4oEilBkk2fjKcQVkzOLbcmoWUnpZJbAMPZX19qSNfB+EN/
-         nkbw2FV+9F8lzAWBJiq07kf2GAg6ad8I7cHNZSUfDN9uKBL370FG/LamJO2V10PoBxTv
-         QlLzJTVkPyUIC3IYdN3UV2l0SBAowaSUfMG2gcopasSTIg6DtIF9UvNR7MhTK57dtZVH
-         VJHeZu7sRPJnN51S9/y7pOo4JioR0NV3+ZnluQZK04JXIlwyv+8bq3XEPpKjEWYjSbRN
-         gP6A==
-X-Gm-Message-State: AOAM530t4azQA2Regs0iAznKgrm2DP1uv58irS9sQgAGrM7E4M87F7RU
-        Jum4mBRckVT1exOpRHGRnig/bTv/PEq6fCDlB8sRUQ==
-X-Google-Smtp-Source: ABdhPJzSoWdXfBkndIBZoZOFwrpb7uDQjD1gAUcPFwN57z7F+LfwyMvq3mjZg+CNFRS8Bl4vV/eiaroxEfBg1N23Sko=
-X-Received: by 2002:a05:600c:5113:b0:394:800c:4c36 with SMTP id
- o19-20020a05600c511300b00394800c4c36mr8028307wms.93.1652328486531; Wed, 11
- May 2022 21:08:06 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HQnzlDikKOsDxf1h8spRLU9TXxPUqNDKctkg19RVkFM=;
+        b=AawmVzTzUyw1PU8NPKrjPnmg6TbmCxsGP7SSG192/ftN9miyqnm1v122dJKWiPNxzp
+         8QpAU/epiUnW2GMYSBh3MyFcDZeVzyad0GWQ1yYdZJ4L1Naxb00YONSny6Re5+mnHOFH
+         Ytl2X0xS8/hO6yz+gpCxpfEDmV7s7iGkFYcK626iCoeH2f42myWOpWajEqiMPEz+xiHk
+         DWorShJMi07R9wwRuaZrxdZNEGrBqcjhTKBYCkiQW8D/Iuqf706R6DSV25HXkN01gnMk
+         LlUqbWrUWHY1g8jJHSooQQzfX0BTgEXtumePruw9EX6iokx7p0bfR8t8GtUW8mPg1sIx
+         iI8w==
+X-Gm-Message-State: AOAM5304Cg6GyiR2HdoPwkro31CBuQFG+jG9WhVzA9zdFGAtYwhY3ly9
+        Zj3Z3LlJNugze609a78aFgT4mw==
+X-Google-Smtp-Source: ABdhPJzvZBtXMozuWBMlu0OwrFMFcyKndb2ocY+uEuiBi9hX0XjdbynP491SC406Vp3nqjZ1Z10hKg==
+X-Received: by 2002:a65:6745:0:b0:3db:2558:c458 with SMTP id c5-20020a656745000000b003db2558c458mr5166424pgu.211.1652328729922;
+        Wed, 11 May 2022 21:12:09 -0700 (PDT)
+Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.234])
+        by smtp.gmail.com with ESMTPSA id q13-20020a170902edcd00b0015e8d4eb2dcsm2695161plk.294.2022.05.11.21.12.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 21:12:09 -0700 (PDT)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     corbet@lwn.net, mike.kravetz@oracle.com, akpm@linux-foundation.org,
+        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
+        osalvador@suse.de, david@redhat.com, masahiroy@kernel.org
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, duanxiongchun@bytedance.com, smuchun@gmail.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH v11 0/4] add hugetlb_optimize_vmemmap sysctl
+Date:   Thu, 12 May 2022 12:11:38 +0800
+Message-Id: <20220512041142.39501-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-References: <20220511184408.2751850-1-masahiroy@kernel.org>
-In-Reply-To: <20220511184408.2751850-1-masahiroy@kernel.org>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Thu, 12 May 2022 09:37:54 +0530
-Message-ID: <CAAhSdy1XvMV02ye-+mZ-DewmmpQz+NZZb8HqRcxhssy=WBmNUA@mail.gmail.com>
-Subject: Re: [PATCH] riscv: move errata/ and kvm/ builds to arch/riscv/Kbuild
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,58 +70,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 12:17 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> Commit 909548d6c578 ("riscv: add arch/riscv/Kbuild") intended that
-> subdirectories in arch/riscv/ would be added in arch/riscv/Kbuild.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+This series is based on next-20220428.
 
-Looks good to me.
+This series amis to add hugetlb_optimize_vmemmap sysctl to enable or disable
+the feature of optimizing vmemmap pages associated with HugeTLB pages.
 
-Reviewed-by: Anup Patel <anup@brainfault.org>
+v11:
+  - Collect Reviewed-by from Mike.
+  - Remove hugetlb_optimize_vmemmap_enabled() check from flush_free_hpage_work().
 
-Regards,
-Anup
+v10:
+  - Collect Reviewed-by from Mike.
+  - Remove hugetlb_optimize_vmemmap_enabled() check from
+    hugetlb_optimize_vmemmap_pages() (Mike).
+  - Add more explanation to Documentation/admin-guide/sysctl/vm.rst.
+  - Fix cannot disable the feature via hugetlb_optimize_vmemmap sysctl (Mike).
+  - Update patch 2's commit log (Mike).
 
-> ---
->
->  arch/riscv/Kbuild   | 2 ++
->  arch/riscv/Makefile | 3 ---
->  2 files changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/riscv/Kbuild b/arch/riscv/Kbuild
-> index fb3397223d52..525ef2482253 100644
-> --- a/arch/riscv/Kbuild
-> +++ b/arch/riscv/Kbuild
-> @@ -2,6 +2,8 @@
->
->  obj-y += kernel/ mm/ net/
->  obj-$(CONFIG_BUILTIN_DTB) += boot/dts/
-> +obj-$(CONFIG_RISCV_ERRATA_ALTERNATIVE) += errata/
-> +obj-$(CONFIG_KVM) += kvm/
->
->  # for cleaning
->  subdir- += boot
-> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> index 7d81102cffd4..fd9fda67c038 100644
-> --- a/arch/riscv/Makefile
-> +++ b/arch/riscv/Makefile
-> @@ -103,9 +103,6 @@ endif
->
->  head-y := arch/riscv/kernel/head.o
->
-> -core-$(CONFIG_RISCV_ERRATA_ALTERNATIVE) += arch/riscv/errata/
-> -core-$(CONFIG_KVM) += arch/riscv/kvm/
-> -
->  libs-y += arch/riscv/lib/
->  libs-$(CONFIG_EFI_STUB) += $(objtree)/drivers/firmware/efi/libstub/lib.a
->
-> --
-> 2.32.0
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+v9:
+  - Go back to v3 since checking the size of struct page at config time is
+    very complex.
+
+v8:
+  - Fix compilation (scripts/selinux/mdp/mdp.c) error when
+    CONFIG_SECURITY_SELINUX is selected.
+
+v7:
+  - Fix circular dependency issue reported by kernel test robot.
+  - Introduce CONFIG_HUGETLB_PAGE_HAS_OPTIMIZE_VMEMMAP instead of
+    STRUCT_PAGE_SIZE_IS_POWER_OF_2.
+  - Add more comments into vm.rst to explain hugetlb_optimize_vmemmap (Andrew).
+  - Drop the patch "sysctl: allow to set extra1 to SYSCTL_ONE".
+  - Add a new patch "use kstrtobool for hugetlb_vmemmap param parsing".
+  - Reuse static_key's refcount to count the number of HugeTLB pages with
+    vmemmap pages optimized to simplify the lock scheme.
+
+v6:
+  - Remove "make syncconfig" from Kbuild.
+
+v5:
+  - Fix not working properly if one is workig off of a very clean build
+    reported by Luis Chamberlain.
+  - Add Suggested-by for Luis Chamberlain.
+
+v4:
+  - Introduce STRUCT_PAGE_SIZE_IS_POWER_OF_2 inspired by Luis.
+
+v3:
+  - Add pr_warn_once() (Mike).
+  - Handle the transition from enabling to disabling (Luis)
+
+v2:
+  - Fix compilation when !CONFIG_MHP_MEMMAP_ON_MEMORY reported by kernel
+    test robot <lkp@intel.com>.
+  - Move sysctl code from kernel/sysctl.c to mm/hugetlb_vmemmap.c.
+
+Muchun Song (4):
+  mm: hugetlb_vmemmap: disable hugetlb_optimize_vmemmap when struct page
+    crosses page boundaries
+  mm: memory_hotplug: override memmap_on_memory when
+    hugetlb_free_vmemmap=on
+  mm: hugetlb_vmemmap: use kstrtobool for hugetlb_vmemmap param parsing
+  mm: hugetlb_vmemmap: add hugetlb_optimize_vmemmap sysctl
+
+ Documentation/admin-guide/kernel-parameters.txt |   6 +-
+ Documentation/admin-guide/sysctl/vm.rst         |  39 +++++++++
+ include/linux/memory_hotplug.h                  |   9 ++
+ mm/hugetlb_vmemmap.c                            | 105 ++++++++++++++++++++----
+ mm/memory_hotplug.c                             |  27 ++++--
+ 5 files changed, 162 insertions(+), 24 deletions(-)
+
+-- 
+2.11.0
+

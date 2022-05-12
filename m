@@ -2,100 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 763BD524E78
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1331C524E82
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354529AbiELNmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 09:42:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56074 "EHLO
+        id S1354547AbiELNmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 09:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354511AbiELNmb (ORCPT
+        with ESMTP id S1354538AbiELNmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 09:42:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BCF1D6162E
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:42:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652362948;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JZ1iz42UuoFFLaKz0a8ddkWtT9BcQVuYpXvBQ9Jadug=;
-        b=If9B4lUfshsQGu5uCdu6U6qwQJZhUpZ7QTCQFHfMWOSzE5f7EsFLGQMrgykw66Grdb7nV0
-        8DBjpJMQXL12hb2xZyV8h2fOfI6COFi8a6nMouERx+b7JZaMwxZBjDU7CuaibgRCpO1bs7
-        SCAHBQtr7BhRQlqtFObB+ujekO1rJdg=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-669-E87etiXhMaSK06mQCxYQLw-1; Thu, 12 May 2022 09:42:25 -0400
-X-MC-Unique: E87etiXhMaSK06mQCxYQLw-1
-Received: by mail-wm1-f71.google.com with SMTP id g3-20020a7bc4c3000000b0039409519611so1644514wmk.9
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:42:25 -0700 (PDT)
+        Thu, 12 May 2022 09:42:44 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4176A62CD1;
+        Thu, 12 May 2022 06:42:43 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id i24so4830356pfa.7;
+        Thu, 12 May 2022 06:42:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:content-transfer-encoding:date:message-id:cc:subject
+         :from:to:references:in-reply-to;
+        bh=GgzNh++292NF+E5zmg+4OX55F9De/BlQIpudd+EXtLQ=;
+        b=LA63FLxYpym5WboTuUwi/wt+SGKurpEXYZQxiMDo+Xt5K5HxcMaroziFYgsNY4U/D0
+         jQcL2M6YnnnpxbMx8WO/l+dZr1XtXZXWlVn/uh428fXkeT5rbnonFqHo8E14tAdUQCsG
+         S4W8NZReOH65ZS3DdbfBwBp/s91Ypl8qzOshu5CcbA+6tpQzhSwJbzboU8awwQhvxwgb
+         prba+OJY/UDjw4SkwUk7eclm5IT7azw9CMmuZZvVGf9b0WPTP5FXARfsgIf7JDgzJOn7
+         lIPjXOuhF8ADfbty0dik/14V86WxCGBL/BSipDt5/OBSqXOfAIprdtTOEQ/LgxHdvchl
+         orRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=JZ1iz42UuoFFLaKz0a8ddkWtT9BcQVuYpXvBQ9Jadug=;
-        b=i7b+UweayGTQykkpVDuhd+4Beaj7TxpbWH/EGV+d5Av4H9MsRvl5HVICF9KI10PCoA
-         SIP38l05dfRkV04GFQfO+n8cK59xm93TCiTOHuSPmoK6lOGgrpYW00+JnFUNdg+p/rcV
-         /1R+sxDUX6vB4G0SmPvvCsGOkKii9FyyI/yrqcdCm48Yr6UN2otFW1YZyXwCELSebbAJ
-         JGfW0Zg0A3bMQL0C7HyAfe2w7DNFBBBpXjemDOzKZv5D3RuTEKOrYcmj527T18Rn7lS6
-         GFOWfvuzj0yL2aXxgeHz0PFESnbO+3gxH2onkx6FDffaIjH6aRpWoXtI9ivwid0z46yW
-         6yUw==
-X-Gm-Message-State: AOAM5332R+ximUHZuSY0o5pGsZ3ARUn5MOTPP3OG8zmgLjsrkTJwv1A3
-        MosyJtsn6wxn6p+6Wwk7RFv22RjkljzDi1V2t9mL2Vc7YhftOi59hJH+FKRASF7gcXsLN3IwlfJ
-        uXgrl6EDcNw89FMNC3YcU4fic
-X-Received: by 2002:a05:600c:4fd5:b0:394:55ae:32c7 with SMTP id o21-20020a05600c4fd500b0039455ae32c7mr10192430wmq.73.1652362944652;
-        Thu, 12 May 2022 06:42:24 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz0GfudMW0PDi8mJzfRw/b3zOX6EznbIkxPniElw+DxSXPt1wzfGfEq+gnrvWZc/0ylm4qGKA==
-X-Received: by 2002:a05:600c:4fd5:b0:394:55ae:32c7 with SMTP id o21-20020a05600c4fd500b0039455ae32c7mr10192412wmq.73.1652362944446;
-        Thu, 12 May 2022 06:42:24 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c701:d200:ee5d:1275:f171:136d? (p200300cbc701d200ee5d1275f171136d.dip0.t-ipconnect.de. [2003:cb:c701:d200:ee5d:1275:f171:136d])
-        by smtp.gmail.com with ESMTPSA id o12-20020a05600c2e0c00b003945781b725sm2636061wmf.37.2022.05.12.06.42.23
+        h=x-gm-message-state:mime-version:content-transfer-encoding:date
+         :message-id:cc:subject:from:to:references:in-reply-to;
+        bh=GgzNh++292NF+E5zmg+4OX55F9De/BlQIpudd+EXtLQ=;
+        b=rhUvVR81hmpNdc6UmCck84sIDZZLiq8moZevjrNdD0luwTRpxq3ZU6ls+nm/HnTbAW
+         32fyMt+pqmRye3BxMPOh2cfFmwykTi+MeQx5UDis5hdS1nq/XqBiY3JJMPB+HVvKZdqw
+         oNO5bOsI/+QzP+pEYmgGzAaOo6k8zGpVHtyd7AsgY92Lp75WB667MEbpuuLhejtvoCWS
+         kFOiREwWTUwiO19UP5zGwqD84RngzwDo9pakQvCABe9lgrGRmvdXa3GHotyvI21mUxbV
+         1sfnjVAfzlcvyNhb2DZKGugT437o6Et0v6Y3GQXmTomLqwQ2yA78TnS/gS6U/VGjh3/I
+         yTpQ==
+X-Gm-Message-State: AOAM532N7IwMdRRnxYZuhImr7DWfdmQw2HD761K9KfAW6wI7R1MDvOuj
+        8zkwzlLUwAY7c1TUbkFKKRg=
+X-Google-Smtp-Source: ABdhPJyhAuXqFsgoeseiRJPc84g3MKIgyF+aoWzOOmIUwQdQ7kGidEG8ONsSZ/Ofybzfz7Fr5YYarA==
+X-Received: by 2002:a05:6a00:234b:b0:510:4161:781a with SMTP id j11-20020a056a00234b00b005104161781amr30341812pfj.5.1652362962594;
+        Thu, 12 May 2022 06:42:42 -0700 (PDT)
+Received: from localhost ([49.204.239.218])
+        by smtp.gmail.com with ESMTPSA id x40-20020a056a000be800b0051082ab4de0sm3741051pfu.44.2022.05.12.06.42.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 06:42:23 -0700 (PDT)
-Message-ID: <3d7355b5-afa5-3a13-6169-eccc8adbe3ee@redhat.com>
-Date:   Thu, 12 May 2022 15:42:22 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 13/15] mm/swap: clean up the comment of find_next_to_unuse
-Content-Language: en-US
-To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
-Cc:     willy@infradead.org, vbabka@suse.cz, dhowells@redhat.com,
-        neilb@suse.de, apopple@nvidia.com, surenb@google.com,
-        peterx@redhat.com, naoya.horiguchi@nec.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220509131416.17553-1-linmiaohe@huawei.com>
- <20220509131416.17553-14-linmiaohe@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220509131416.17553-14-linmiaohe@huawei.com>
+        Thu, 12 May 2022 06:42:41 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Thu, 12 May 2022 19:12:36 +0530
+Message-Id: <CJXTS6RN1T67.WNKK2FZKK9UB@skynet-linux>
+Cc:     <linux-arm-msm@vger.kernel.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        <bjorn.andersson@linaro.org>, <devicetree@vger.kernel.org>,
+        <phone-devel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Andy Gross" <agross@kernel.org>,
+        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Loic Poulain" <loic.poulain@linaro.org>
+Subject: Re: [PATCH 4/9] dt-bindings: remoteproc: qcom: wcnss: Convert to
+ YAML
+From:   "Sireesh Kodali" <sireeshkodali1@gmail.com>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>
+X-Mailer: aerc 0.9.0
+References: <20220511161602.117772-1-sireeshkodali1@gmail.com>
+ <20220511161602.117772-5-sireeshkodali1@gmail.com>
+ <00234f36-9bae-31d5-5b83-ea238e7e3c11@linaro.org>
+ <CJXL0SG2GHN1.1IO2JOR5ARNV8@skynet-linux>
+ <a62822a4-a771-dfa9-f46d-586fdccedf66@linaro.org>
+ <CJXOGJIR1ONQ.2ZT3JQGVWWHFB@skynet-linux>
+ <58a6391b-b930-0095-4f50-618dee4f24e2@linaro.org>
+In-Reply-To: <58a6391b-b930-0095-4f50-618dee4f24e2@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.05.22 15:14, Miaohe Lin wrote:
-> Since commit 10a9c496789f ("mm: simplify try_to_unuse"), frontswap
-> parameter is removed. Update the corresponding comment.
-> 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+On Thu May 12, 2022 at 4:32 PM IST, Krzysztof Kozlowski wrote:
+> On 12/05/2022 11:32, Sireesh Kodali wrote:
+> >>>>> +          - enum:
+> >>>>> +              - qcom,pronto-v2-pil
+> >>>>> +          - enum:
+> >>>>> +              - qcom,pronto
+> >>>>
+> >>>> This does not look correct. The fallback compatible should not chang=
+e.
+> >>>> What is more, it was not documented in original binding, so this sho=
+uld
+> >>>> be done in separate patch.
+> >>>>
+> >>>
+> >>> This was not a change to the fallback compatible.=20
+> >>
+> >> You made it an enum, so you expect it to use different fallback for
+> >> different cases.
+> >>
+> >>> msm8916.dtsi's wcnss
+> >>> node has "qcom,pronto" as the compatible string, which is why this wa=
+s
+> >>> added. It is however not documented in the txt file. Is it sufficient=
+ to
+> >>> add a note in the commit message, or should it be split into a separa=
+te
+> >>> commit?
+> >>
+> >> Please split it, assuming that fallback is correct. Maybe the fallback
+> >> is wrong?
+> >=20
+> > The code doesn't recognize "qcom,pronto", so perhaps the best solution
+> > is to just remove that compatible from msm8916.dtsi?
+>
+> Eh, I don't know. You need to check, maybe also in downstream sources.
+>
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+I just checked, it seems "qcom,pronto" is used by the wcnss driver in
+/net. So both "qcom,pronto-v2-pil" and "qcom,pronto" need to be present,
+but the latter wasn't documented.
 
+> (...)
+>
+> >>>>
+> >>>>> +
+> >>>>> +  iris:
+> >>>>
+> >>>> Generic node name... what is "iris"?
+> >>>>
+> >>> Iris is the RF module, I'll make the description better
+> >>
+> >> RF like wifi? Then the property name should be "wifi".
+> >=20
+> > RF like wifi and bluetooth. However there are wifi and bt subnodes in
+> > the smd-edge subnode. Iris is just the antenna hardware if I understand
+> > correctly. Also this is just a documentation of the existing nodes that
+> > are present in msm8916.dtsi, but for whatever reason their documentatio=
+n
+> > was missing in the txt file. Without adding this node in the YAML
+> > dtb_check fails.
+>
+> It seems commit fd52bdae9ab0 ("wcn36xx: Disable 5GHz for wcn3620")
+>  added usage of "iris" property but did not document it in the bindings.
+>
+> You can fix it by documenting (separate patch) existing practice or
+> document with changing the node name. I am not sure if it is worth the
+> effort, so just new patch please.
+>
 
--- 
+I'll make a 2 separate patches, documenting the extra "qcom,pronto"
+compatible, and the iris subnode.
+
 Thanks,
+Sireesh
 
-David / dhildenb
+> Best regards,
+> Krzysztof
 

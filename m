@@ -2,113 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3E9525165
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:37:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D306525164
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356028AbiELPhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 11:37:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
+        id S1356018AbiELPhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 11:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356023AbiELPhu (ORCPT
+        with ESMTP id S244489AbiELPhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 11:37:50 -0400
-Received: from smtp1.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F9325B07C;
-        Thu, 12 May 2022 08:37:49 -0700 (PDT)
-Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+        Thu, 12 May 2022 11:37:37 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF13D25C28B;
+        Thu, 12 May 2022 08:37:36 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:3d::5f6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id BA68B3C04C0;
-        Thu, 12 May 2022 17:37:47 +0200 (CEST)
-Received: from localhost.localdomain (10.72.94.11) by hi2exch02.adit-jv.com
- (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Thu, 12 May
- 2022 17:37:47 +0200
-From:   Eugeniu Rosca <erosca@de.adit-jv.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Rajat Jain <rajatja@google.com>, Andrew Lunn <andrew@lunn.ch>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Naveen kumar Sunkari <naveenkumar.sunkari@in.bosch.com>,
-        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Eugeniu Rosca <rosca.eugeniu@gmail.com>
-Subject: [PATCH v2] usb: hub: Simplify error and success path in port_over_current_notify
-Date:   Thu, 12 May 2022 17:37:14 +0200
-Message-ID: <1652369834-4480-1-git-send-email-erosca@de.adit-jv.com>
-X-Mailer: git-send-email 2.7.4
+        by ms.lwn.net (Postfix) with ESMTPSA id 3D9FA846;
+        Thu, 12 May 2022 15:37:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 3D9FA846
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1652369856; bh=i+7cj4/G5qFWaDsvpxUy3aGMfQgj+VzEITIE6+j6oWY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=kS8v5mVvFQHYeJDxgphwKw1jGH8dPoJg69tycBYgJ/pZMEY2FCbh/DTevk0G3wB2l
+         Wtx4eeXhtqc1Oc840JxIDI5fguU70OU2MIOWbHxfCnGgTX/pUQ+aHlOB9jKbk5Rpsc
+         xvhYURaUFoPYnRGN28DayN7ZpDWev6jVWEbAOR0EWSwg9Sgi7Q8SQpK2Y9HV00zkDs
+         xGgrrw8/604vRlwh5ftEfL02pO/H1At0RQ8MJ3P+p2YD4hmryjvEL2539GovNDKpDP
+         Z/O1fTcUC4/IhwGwVTHkmiv1TYUNZfvj0RGVm5+RI/Ixbr22WDwd/cWp6giXxAcDJ7
+         1LrV6yqV4nwsg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Garrett LeSage <garrett@lesage.us>,
+        IFo Hancroft <contact@ifohancroft.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>
+Subject: Re: [PATCH v1 1/2] docs: move Linux logo into a new `images` folder
+In-Reply-To: <20220510172530.29704-1-ojeda@kernel.org>
+References: <20220510172530.29704-1-ojeda@kernel.org>
+Date:   Thu, 12 May 2022 09:37:35 -0600
+Message-ID: <87r14y4v9c.fsf@meer.lwn.net>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.72.94.11]
-X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
- hi2exch02.adit-jv.com (10.72.92.28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>
+Miguel Ojeda <ojeda@kernel.org> writes:
 
-kasprintf() returns NULL or valid pointer. Since kfree() can handle
-NULL pointer condition, simplify error and success paths in function
-port_over_current_notify() by removing multiple error path labels.
+> Having assets in the top-level `Documentation` directory can make
+> it harder to find the documents one needs, especially if we want
+> to add more of them later on.
+>
+> Instead, create a new `images` folder inside it that is used
+> to hold assets such as logos.
+>
+> Link: https://lore.kernel.org/lkml/8735hicoy7.fsf@meer.lwn.net/
+> Suggested-by: Jonathan Corbet <corbet@lwn.net>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> ---
+>  Documentation/{ => images}/COPYING-logo |   0
+>  Documentation/{ => images}/logo.gif     | Bin
+>  2 files changed, 0 insertions(+), 0 deletions(-)
+>  rename Documentation/{ => images}/COPYING-logo (100%)
+>  rename Documentation/{ => images}/logo.gif (100%)
+>
+> diff --git a/Documentation/COPYING-logo b/Documentation/images/COPYING-logo
+> similarity index 100%
+> rename from Documentation/COPYING-logo
+> rename to Documentation/images/COPYING-logo
+> diff --git a/Documentation/logo.gif b/Documentation/images/logo.gif
+> similarity index 100%
+> rename from Documentation/logo.gif
+> rename to Documentation/images/logo.gif
 
-Signed-off-by: Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>
-Signed-off-by: Eugeniu Rosca <erosca@de.adit-jv.com>
----
+This will break scripts/spdxcheck-test.sh - which somebody might
+actually try to run one of these years.  So this patch really needs to
+update that script to follow the move.
 
-v2:
- - [Greg Kroah-Hartman] Drop 'exit_path' and keep 'exit' instead
+As far as I can tell, that's the only reference to logo.gif in the
+entire tree.  It makes me wonder if we need it at all.  Digging through
+the history suggests it was added in 2.1.15, but never really used for
+anything.  It's only role would appear to be to serve as testing
+material for the SPDX checker..:)
 
-v1: https://lore.kernel.org/linux-usb/1652354127-3499-1-git-send-email-erosca@de.adit-jv.com/
----
- drivers/usb/core/hub.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+Thanks,
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 1460857026e0..4a06892f9774 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -5511,7 +5511,7 @@ static void hub_port_connect_change(struct usb_hub *hub, int port1,
- /* Handle notifying userspace about hub over-current events */
- static void port_over_current_notify(struct usb_port *port_dev)
- {
--	char *envp[3];
-+	char *envp[3] = { NULL, NULL, NULL };
- 	struct device *hub_dev;
- 	char *port_dev_path;
- 
-@@ -5528,20 +5528,18 @@ static void port_over_current_notify(struct usb_port *port_dev)
- 
- 	envp[0] = kasprintf(GFP_KERNEL, "OVER_CURRENT_PORT=%s", port_dev_path);
- 	if (!envp[0])
--		goto exit_path;
-+		goto exit;
- 
- 	envp[1] = kasprintf(GFP_KERNEL, "OVER_CURRENT_COUNT=%u",
- 			port_dev->over_current_count);
- 	if (!envp[1])
- 		goto exit;
- 
--	envp[2] = NULL;
- 	kobject_uevent_env(&hub_dev->kobj, KOBJ_CHANGE, envp);
- 
--	kfree(envp[1]);
- exit:
-+	kfree(envp[1]);
- 	kfree(envp[0]);
--exit_path:
- 	kfree(port_dev_path);
- }
- 
--- 
-2.36.0
-
+jon

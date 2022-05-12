@@ -2,124 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E1652488A
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 891D652488E
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351788AbiELJFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 05:05:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35902 "EHLO
+        id S1351814AbiELJGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 05:06:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347424AbiELJFr (ORCPT
+        with ESMTP id S1351820AbiELJGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 05:05:47 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3650425C0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:05:44 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id cu23-20020a17090afa9700b001d98d8e53b7so5684750pjb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:05:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=786wkcJ5s78jewmsUXyg4PXxshc2x0szKJgtpoGXHUo=;
-        b=ithI42PXwNMmIlEz7dBqpzyzxm/cCqBccyhHhfDrZpmJfbs5eP1Yrl7cx/si/oy/nf
-         VO35554++W2J8DM9xoydkmScEuAbQl6Jujm0Oh1oxvDSmqfKCJOevJs9aIgFHldebge5
-         AZTqWaX2cRsCF0tvRwa/YPCjNLXS8BygaCQDtIXCfeETIr6wARUKvHCQcAgHvOPRy+Xd
-         Yd5mUObhPjTloEsH4jiOec40AVnIa+gNWGffPMJQnsDoTf8l/bnrCOeZOWJ6s/C8quYS
-         4vYH0705aDcBmJDVxU44GmrzqXjrJ1ufkzK7IIjjSpwZRq8r99669Ffg+e9/Z9Qcqrj0
-         OeWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=786wkcJ5s78jewmsUXyg4PXxshc2x0szKJgtpoGXHUo=;
-        b=Nc3MeMHrDnn5hmuRmG7CVgxl82PWNFYbuKQ/Nrgy0UYJN6imVRyeuZ7n+ywPZFA0X/
-         zVAWxwg4XV2xGqFzKCR2y2c3iEsEDczA2mqKZVoSiV/q5XofeVuJdDwUhdIT4+J4f+Be
-         1OyXVduxRQXnnksnnotWYIymcn6arOjuGvtuFftcRAE725RNjsme2ux1STo0nQtDHKRG
-         Vn+/XdVUrTop3qQim86K2mVbBJ/cEzzHZVI+AdQ9agyZ1csNlRTAxx8HDRme9Ly1e+Iv
-         SRgnDM+GugrHSVoSdQZiX2nl98fMHYY3v2PD9uu1Y1bwC7hKiLgXdsO2J5clRnt/CboE
-         kjvQ==
-X-Gm-Message-State: AOAM530WFc9lIS5a1ni788g3X+2C545LZpVdlTMP+jg/yAcH3yv5V1ba
-        apUbvJFpiEFrQQV4D07yGB+Xj34oX7iH25SzZzs=
-X-Google-Smtp-Source: ABdhPJznixXxd7TIhMalrFNOxaTcW+XdgpSHp/MPzsYMGnqCKSxoAwMSaJ2c1J468jiw6zEI/ykZfA==
-X-Received: by 2002:a17:90a:dc0c:b0:1da:125a:ec84 with SMTP id i12-20020a17090adc0c00b001da125aec84mr9772336pjv.137.1652346343680;
-        Thu, 12 May 2022 02:05:43 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id x13-20020a62fb0d000000b0050dc762813dsm3199054pfm.23.2022.05.12.02.05.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 02:05:43 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>,
-        Nick Child <nick.child@ibm.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Ammar Faizi <ammarfaizi2@gmail.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] powerpc/xive: Fix refcount leak in xive_spapr_init
-Date:   Thu, 12 May 2022 13:05:33 +0400
-Message-Id: <20220512090535.33397-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 12 May 2022 05:06:05 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B2F1EADA;
+        Thu, 12 May 2022 02:05:59 -0700 (PDT)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 3B9F5240002;
+        Thu, 12 May 2022 09:05:54 +0000 (UTC)
+Date:   Thu, 12 May 2022 11:05:53 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Quentin Schulz <foss+kernel@0leil.net>
+Cc:     shawnx.tu@intel.com, mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Subject: Re: [PATCH v3 4/4] media: i2c: ov5675: add .get_selection support
+Message-ID: <20220512090553.x7mzsj3ff3u5gqxq@uno.localdomain>
+References: <20220509143226.531117-1-foss+kernel@0leil.net>
+ <20220509143226.531117-4-foss+kernel@0leil.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220509143226.531117-4-foss+kernel@0leil.net>
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,PDS_OTHER_BAD_TLD,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_find_compatible_node() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
-Add missing of_node_put() to avoid refcount leak.
+Hi Quentin,
 
-Fixes: eac1e731b59e ("powerpc/xive: guest exploitation of the XIVE interrupt controller")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- arch/powerpc/sysdev/xive/spapr.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+On Mon, May 09, 2022 at 04:32:26PM +0200, Quentin Schulz wrote:
+> From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+>
+> The sensor has 2592*1944 active pixels, surrounded by 16 active dummy
+> pixels and there are an additional 24 black rows "at the bottom".
+>
+> As recommended in the SELECTION API documentation, let's put the first
+> useful active pixel at the top/left corner (0,0).
+>
+> This window is the default and maximal crop allowed by the sensor.
+>
+> Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+> ---
+>
+> added in v3
+>
+>  drivers/media/i2c/ov5675.c | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+>
+> diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
+> index 5544e1ae444e..8e3a5bc6c027 100644
+> --- a/drivers/media/i2c/ov5675.c
+> +++ b/drivers/media/i2c/ov5675.c
+> @@ -78,6 +78,9 @@
+>  #define OV5675_REG_FORMAT1		0x3820
+>  #define OV5675_REG_FORMAT2		0x373d
+>
+> +#define OV5675_PIXEL_ARRAY_WIDTH	2592U
+> +#define OV5675_PIXEL_ARRAY_HEIGHT	1944U
+> +
+>  #define to_ov5675(_sd)			container_of(_sd, struct ov5675, sd)
+>
+>  static const char * const ov5675_supply_names[] = {
+> @@ -1115,6 +1118,27 @@ static int ov5675_get_format(struct v4l2_subdev *sd,
+>  	return 0;
+>  }
+>
+> +static int ov5675_get_selection(struct v4l2_subdev *sd,
+> +				struct v4l2_subdev_state *state,
+> +				struct v4l2_subdev_selection *sel)
+> +{
+> +	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE)
+> +		return -EINVAL;
+> +
+> +	switch (sel->target) {
+> +	case V4L2_SEL_TGT_CROP:
+> +	case V4L2_SEL_TGT_CROP_DEFAULT:
+> +	case V4L2_SEL_TGT_CROP_BOUNDS:
+> +		/* In HW, top/left corner is actually at (16,16) */
+> +		sel->r.top = 0;
+> +		sel->r.left = 0;
+> +		sel->r.width = OV5675_PIXEL_ARRAY_WIDTH;
+> +		sel->r.height = OV5675_PIXEL_ARRAY_HEIGHT;
+> +		return 0;
+> +	}
 
-diff --git a/arch/powerpc/sysdev/xive/spapr.c b/arch/powerpc/sysdev/xive/spapr.c
-index 29456c255f9f..503f544d28e2 100644
---- a/arch/powerpc/sysdev/xive/spapr.c
-+++ b/arch/powerpc/sysdev/xive/spapr.c
-@@ -830,12 +830,12 @@ bool __init xive_spapr_init(void)
- 	/* Resource 1 is the OS ring TIMA */
- 	if (of_address_to_resource(np, 1, &r)) {
- 		pr_err("Failed to get thread mgmnt area resource\n");
--		return false;
-+		goto err_put;
- 	}
- 	tima = ioremap(r.start, resource_size(&r));
- 	if (!tima) {
- 		pr_err("Failed to map thread mgmnt area\n");
--		return false;
-+		goto err_put;
- 	}
- 
- 	if (!xive_get_max_prio(&max_prio))
-@@ -871,6 +871,7 @@ bool __init xive_spapr_init(void)
- 	if (!xive_core_init(np, &xive_spapr_ops, tima, TM_QW1_OS, max_prio))
- 		goto err_mem_free;
- 
-+	of_node_put(np);
- 	pr_info("Using %dkB queues\n", 1 << (xive_queue_shift - 10));
- 	return true;
- 
-@@ -878,6 +879,8 @@ bool __init xive_spapr_init(void)
- 	xive_irq_bitmap_remove_all();
- err_unmap:
- 	iounmap(tima);
-+err_put:
-+	of_node_put(np);
- 	return false;
- }
- 
--- 
-2.25.1
+CROP_NATIVE = the full pixel array size = 2592x1944
 
+CROP_BOUNDS = the rectangle that contains all possible crop
+              rectangles, aka the readable portion of your pixel array.
+              If in your case the sensor can read out dummy and non
+              active lines this is == NATIVE
+
+CROP_DEFAULT = the active/valid pixel area. If there are any
+               dummy/invalid lines the DEFAULT rectangle should not
+               include them
+
+CROP = the portion of the active pixel area cropped to produce the
+       final image. You should look into the modes definition and
+       inspect what values are programmed in register 0x380x (I don't
+       have a datasheet hence I don't know what corresponds to what)
+
+Does this make any sense to you ?
+
+Thanks
+  j
+
+> +	return -EINVAL;
+> +}
+> +
+>  static int ov5675_enum_mbus_code(struct v4l2_subdev *sd,
+>  				 struct v4l2_subdev_state *sd_state,
+>  				 struct v4l2_subdev_mbus_code_enum *code)
+> @@ -1164,6 +1188,7 @@ static const struct v4l2_subdev_video_ops ov5675_video_ops = {
+>  static const struct v4l2_subdev_pad_ops ov5675_pad_ops = {
+>  	.set_fmt = ov5675_set_format,
+>  	.get_fmt = ov5675_get_format,
+> +	.get_selection = ov5675_get_selection,
+>  	.enum_mbus_code = ov5675_enum_mbus_code,
+>  	.enum_frame_size = ov5675_enum_frame_size,
+>  };
+> --
+> 2.35.3
+>

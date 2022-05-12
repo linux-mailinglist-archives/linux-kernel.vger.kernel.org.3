@@ -2,144 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE1252568C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 22:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC8B525689
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 22:50:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358458AbiELUvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 16:51:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
+        id S1358443AbiELUuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 16:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348349AbiELUu4 (ORCPT
+        with ESMTP id S1358434AbiELUuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 16:50:56 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D3524950
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 13:50:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652388652; x=1683924652;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ir3jumVTPsEtVAlCCzru3GvFR8Ccn6TVtNrXTCoC+2M=;
-  b=J/4M+Gvm+V04f8tD9UeVkI9p0/KdrNvlrTFn+fdOUwXxbd9bs2d32sTT
-   6xR9yWZcEaqYPZicrWvoKPKI7JcZb8h5phDV+AdN+3V/fILWHFnA/E1yO
-   q5NRPNmPKQA1qTii3nYOFgfIueSDyknVi3h23+4Ipcbx3DTSCSlgerHUQ
-   Rbmbtm/sMRasP5fKE1VLyiRe2Ef5aX8hNYOUET54lQIvhLW6MN8SM3t1O
-   8uz1R1bluLRKlJzJDk74DmS2RmDir71mPPKhwqV0Bjr8O8K7Sfnrw9phV
-   0ewK2+yej1a9EFAqhoOTZKlXi1VI6rbK8QgP0ROB4w14NsCPEs8YJZ7km
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="268969463"
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="268969463"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 13:50:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="603546303"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 12 May 2022 13:50:50 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1npFlp-000Kue-Kb;
-        Thu, 12 May 2022 20:50:49 +0000
-Date:   Fri, 13 May 2022 04:50:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Steve Wahl <steve.wahl@hpe.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
-Subject: include/linux/intel-iommu.h:531:28: error: use of undeclared
- identifier 'CONFIG_DMAR_UNITS_SUPPORTED'
-Message-ID: <202205130438.4S9ZxIkJ-lkp@intel.com>
+        Thu, 12 May 2022 16:50:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097982689DB
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 13:50:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F3AC61E7A
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 20:50:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E93C8C385B8;
+        Thu, 12 May 2022 20:50:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652388621;
+        bh=s6aW6e11wP98+FSUafeJLEk+hn3qZAdUCOod1nr9YxM=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=q/lqGLktXhJSyaNmkh061WnB/Mg8XM1/+GKfi+xFJWWfRXJ1DFuT2I8Plt7e/z5ow
+         FR9P2Qtj8RMHzjF8dlfE26Xn7+pGC/QnaZ0IdBXBbhVe3wQme++KIQOH03OuZTPEd1
+         9eN6ISBOXB5LViOtNCqzb7inke1dCJwhW7g4y2oX5Oiih2WP3f5WmCR/FyH2eylweb
+         JIBZNnDkfSD8NIoKEkSUImhTk1NQlcfFnuv4UTcr2NIoLzuGKhHB6ypq8fWHtvNNgd
+         ugWNsc2S/aHW1w4wPRBDIOfIHgqbJ/2b7/yktJrk0eSSYN2ak74EpzJJLGwww0z4hf
+         x6pnfF0eojnHA==
+Date:   Thu, 12 May 2022 13:50:19 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [PATCH 4/5 v2] f2fs: do not stop GC when requiring a free section
+Message-ID: <Yn1zC6MUZOEbSlWK@google.com>
+References: <20220506232032.1264078-1-jaegeuk@kernel.org>
+ <20220506232032.1264078-4-jaegeuk@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220506232032.1264078-4-jaegeuk@kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220512-231415/Steve-Wahl/iommu-vt-d-Increase-DMAR_UNITS_SUPPORTED/20220506-035321
-head:   70fc6f8ca45b69a710b82d38ef61ac43a73fef24
-commit: 70fc6f8ca45b69a710b82d38ef61ac43a73fef24 iommu/vt-d: Make DMAR_UNITS_SUPPORTED a config setting
-date:   5 hours ago
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220513/202205130438.4S9ZxIkJ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9519dacab7b8afd537811fc2abaceb4d14f4e16a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/70fc6f8ca45b69a710b82d38ef61ac43a73fef24
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review UPDATE-20220512-231415/Steve-Wahl/iommu-vt-d-Increase-DMAR_UNITS_SUPPORTED/20220506-035321
-        git checkout 70fc6f8ca45b69a710b82d38ef61ac43a73fef24
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/char/agp/
+The f2fs_gc uses a bitmap to indicate pinned sections, but when disabling
+chckpoint, we call f2fs_gc() with NULL_SEGNO which selects the same dirty
+segment as a victim all the time, resulting in checkpoint=disable failure,
+for example. Let's pick another one, if we fail to collect it.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+---
 
-All errors (new ones prefixed by >>):
+ Change log from v1:
+  - refactor the code path to avoid ambiguous condition like BG_GC/sec_freed
 
-   In file included from drivers/char/agp/intel-gtt.c:23:
->> include/linux/intel-iommu.h:531:28: error: use of undeclared identifier 'CONFIG_DMAR_UNITS_SUPPORTED'
-           unsigned int iommu_refcnt[DMAR_UNITS_SUPPORTED];
-                                     ^
-   include/linux/dmar.h:21:30: note: expanded from macro 'DMAR_UNITS_SUPPORTED'
-   #define DMAR_UNITS_SUPPORTED    CONFIG_DMAR_UNITS_SUPPORTED
-                                   ^
-   In file included from drivers/char/agp/intel-gtt.c:23:
-   include/linux/intel-iommu.h:535:17: error: use of undeclared identifier 'CONFIG_DMAR_UNITS_SUPPORTED'
-           u16             iommu_did[DMAR_UNITS_SUPPORTED];
-                                     ^
-   include/linux/dmar.h:21:30: note: expanded from macro 'DMAR_UNITS_SUPPORTED'
-   #define DMAR_UNITS_SUPPORTED    CONFIG_DMAR_UNITS_SUPPORTED
-                                   ^
-   2 errors generated.
+ fs/f2fs/f2fs.h              |  1 +
+ fs/f2fs/file.c              | 12 ++++++++----
+ fs/f2fs/gc.c                | 14 +++++++++-----
+ fs/f2fs/segment.c           |  3 ++-
+ fs/f2fs/super.c             |  3 ++-
+ include/trace/events/f2fs.h | 11 ++++++++---
+ 6 files changed, 30 insertions(+), 14 deletions(-)
 
-
-vim +/CONFIG_DMAR_UNITS_SUPPORTED +531 include/linux/intel-iommu.h
-
-b0d1f8741b8123 Jacob Pan       2020-05-16  527  
-9ddbfb42138d84 Lu Baolu        2018-07-14  528  struct dmar_domain {
-9ddbfb42138d84 Lu Baolu        2018-07-14  529  	int	nid;			/* node id */
-9ddbfb42138d84 Lu Baolu        2018-07-14  530  
-9739ba327c01e2 Parav Pandit    2021-06-10 @531  	unsigned int iommu_refcnt[DMAR_UNITS_SUPPORTED];
-9ddbfb42138d84 Lu Baolu        2018-07-14  532  					/* Refcount of devices per iommu */
-9ddbfb42138d84 Lu Baolu        2018-07-14  533  
-9ddbfb42138d84 Lu Baolu        2018-07-14  534  
-9ddbfb42138d84 Lu Baolu        2018-07-14  535  	u16		iommu_did[DMAR_UNITS_SUPPORTED];
-9ddbfb42138d84 Lu Baolu        2018-07-14  536  					/* Domain ids per IOMMU. Use u16 since
-9ddbfb42138d84 Lu Baolu        2018-07-14  537  					 * domain ids are 16 bit wide according
-9ddbfb42138d84 Lu Baolu        2018-07-14  538  					 * to VT-d spec, section 9.3 */
-9ddbfb42138d84 Lu Baolu        2018-07-14  539  
-1f106ff0ea2782 Parav Pandit    2021-06-10  540  	u8 has_iotlb_device: 1;
-1f106ff0ea2782 Parav Pandit    2021-06-10  541  	u8 iommu_coherency: 1;		/* indicate coherency of iommu access */
-6043257b1de069 Jason Gunthorpe 2022-04-11  542  	u8 force_snooping : 1;		/* Create IOPTEs with snoop control */
-1f106ff0ea2782 Parav Pandit    2021-06-10  543  
-9ddbfb42138d84 Lu Baolu        2018-07-14  544  	struct list_head devices;	/* all devices' list */
-9ddbfb42138d84 Lu Baolu        2018-07-14  545  	struct iova_domain iovad;	/* iova's that belong to this domain */
-9ddbfb42138d84 Lu Baolu        2018-07-14  546  
-9ddbfb42138d84 Lu Baolu        2018-07-14  547  	struct dma_pte	*pgd;		/* virtual address */
-9ddbfb42138d84 Lu Baolu        2018-07-14  548  	int		gaw;		/* max guest address width */
-9ddbfb42138d84 Lu Baolu        2018-07-14  549  
-9ddbfb42138d84 Lu Baolu        2018-07-14  550  	/* adjusted guest address width, 0 is level 2 30-bit */
-9ddbfb42138d84 Lu Baolu        2018-07-14  551  	int		agaw;
-9ddbfb42138d84 Lu Baolu        2018-07-14  552  
-9ddbfb42138d84 Lu Baolu        2018-07-14  553  	int		flags;		/* flags to find out type of domain */
-9ddbfb42138d84 Lu Baolu        2018-07-14  554  	int		iommu_superpage;/* Level of superpages supported:
-9ddbfb42138d84 Lu Baolu        2018-07-14  555  					   0 == 4KiB (no superpages), 1 == 2MiB,
-9ddbfb42138d84 Lu Baolu        2018-07-14  556  					   2 == 1GiB, 3 == 512GiB, 4 == 1TiB */
-9ddbfb42138d84 Lu Baolu        2018-07-14  557  	u64		max_addr;	/* maximum mapped address */
-9ddbfb42138d84 Lu Baolu        2018-07-14  558  
-9ddbfb42138d84 Lu Baolu        2018-07-14  559  	struct iommu_domain domain;	/* generic domain data structure for
-9ddbfb42138d84 Lu Baolu        2018-07-14  560  					   iommu core */
-9ddbfb42138d84 Lu Baolu        2018-07-14  561  };
-9ddbfb42138d84 Lu Baolu        2018-07-14  562  
-
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 9920b2d6af8f..492af5b96de1 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -1271,6 +1271,7 @@ struct f2fs_gc_control {
+ 	bool no_bg_gc;			/* check the space and stop bg_gc */
+ 	bool should_migrate_blocks;	/* should migrate blocks */
+ 	bool err_gc_skipped;		/* return EAGAIN if GC skipped */
++	unsigned int nr_free_secs;	/* # of free sections to do GC */
+ };
+ 
+ /* For s_flag in struct f2fs_sb_info */
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index d0547bef0851..216081ea8c81 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -1650,7 +1650,8 @@ static int expand_inode_data(struct inode *inode, loff_t offset,
+ 	struct f2fs_gc_control gc_control = { .victim_segno = NULL_SEGNO,
+ 			.init_gc_type = FG_GC,
+ 			.should_migrate_blocks = false,
+-			.err_gc_skipped = true };
++			.err_gc_skipped = true,
++			.nr_free_secs = 0 };
+ 	pgoff_t pg_start, pg_end;
+ 	loff_t new_size = i_size_read(inode);
+ 	loff_t off_end;
+@@ -2350,7 +2351,8 @@ static int f2fs_ioc_gc(struct file *filp, unsigned long arg)
+ 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+ 	struct f2fs_gc_control gc_control = { .victim_segno = NULL_SEGNO,
+ 			.no_bg_gc = false,
+-			.should_migrate_blocks = false };
++			.should_migrate_blocks = false,
++			.nr_free_secs = 0 };
+ 	__u32 sync;
+ 	int ret;
+ 
+@@ -2391,7 +2393,8 @@ static int __f2fs_ioc_gc_range(struct file *filp, struct f2fs_gc_range *range)
+ 			.init_gc_type = range->sync ? FG_GC : BG_GC,
+ 			.no_bg_gc = false,
+ 			.should_migrate_blocks = false,
+-			.err_gc_skipped = range->sync };
++			.err_gc_skipped = range->sync,
++			.nr_free_secs = 0 };
+ 	u64 end;
+ 	int ret;
+ 
+@@ -2837,7 +2840,8 @@ static int f2fs_ioc_flush_device(struct file *filp, unsigned long arg)
+ 	struct f2fs_gc_control gc_control = {
+ 			.init_gc_type = FG_GC,
+ 			.should_migrate_blocks = true,
+-			.err_gc_skipped = true };
++			.err_gc_skipped = true,
++			.nr_free_secs = 0 };
+ 	int ret;
+ 
+ 	if (!capable(CAP_SYS_ADMIN))
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index e275b72bc65f..10b24b0f13a5 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -147,6 +147,7 @@ static int gc_thread_func(void *data)
+ 
+ 		gc_control.init_gc_type = sync_mode ? FG_GC : BG_GC;
+ 		gc_control.no_bg_gc = foreground;
++		gc_control.nr_free_secs = foreground ? 1 : 0;
+ 
+ 		/* if return value is not zero, no victim was selected */
+ 		if (f2fs_gc(sbi, &gc_control))
+@@ -1761,6 +1762,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 	unsigned int skipped_round = 0, round = 0;
+ 
+ 	trace_f2fs_gc_begin(sbi->sb, gc_type, gc_control->no_bg_gc,
++				gc_control->nr_free_secs,
+ 				get_pages(sbi, F2FS_DIRTY_NODES),
+ 				get_pages(sbi, F2FS_DIRTY_DENTS),
+ 				get_pages(sbi, F2FS_DIRTY_IMETA),
+@@ -1823,12 +1825,13 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 	if (gc_type == FG_GC)
+ 		sbi->cur_victim_sec = NULL_SEGNO;
+ 
+-	if (gc_control->init_gc_type == FG_GC)
+-		goto stop;
+-
+-	if (!has_not_enough_free_secs(sbi,
+-			(gc_type == FG_GC) ? sec_freed : 0, 0))
++	if (gc_control->init_gc_type == FG_GC ||
++	    !has_not_enough_free_secs(sbi,
++				(gc_type == FG_GC) ? sec_freed : 0, 0)) {
++		if (gc_mode == FG_GC && sec_freed < gc_control->nr_free_secs)
++			goto go_gc_more;
+ 		goto stop;
++	}
+ 
+ 	/* FG_GC stops GC by skip_count */
+ 	if (gc_type == FG_GC) {
+@@ -1849,6 +1852,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 		if (ret)
+ 			goto stop;
+ 	}
++go_gc_more:
+ 	segno = NULL_SEGNO;
+ 	goto gc_more;
+ 
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 8b4f2b1d2cca..0a4180f64291 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -404,7 +404,8 @@ void f2fs_balance_fs(struct f2fs_sb_info *sbi, bool need)
+ 				.init_gc_type = BG_GC,
+ 				.no_bg_gc = true,
+ 				.should_migrate_blocks = false,
+-				.err_gc_skipped = false };
++				.err_gc_skipped = false,
++				.nr_free_secs = 1 };
+ 			f2fs_down_write(&sbi->gc_lock);
+ 			f2fs_gc(sbi, &gc_control);
+ 		}
+diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+index a28c27eed6d0..63daae67a9d9 100644
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -2080,7 +2080,8 @@ static int f2fs_disable_checkpoint(struct f2fs_sb_info *sbi)
+ 			.victim_segno = NULL_SEGNO,
+ 			.init_gc_type = FG_GC,
+ 			.should_migrate_blocks = false,
+-			.err_gc_skipped = true };
++			.err_gc_skipped = true,
++			.nr_free_secs = 1 };
+ 
+ 		f2fs_down_write(&sbi->gc_lock);
+ 		err = f2fs_gc(sbi, &gc_control);
+diff --git a/include/trace/events/f2fs.h b/include/trace/events/f2fs.h
+index 54ec9e543f09..16c67ede85b6 100644
+--- a/include/trace/events/f2fs.h
++++ b/include/trace/events/f2fs.h
+@@ -645,18 +645,21 @@ TRACE_EVENT(f2fs_background_gc,
+ TRACE_EVENT(f2fs_gc_begin,
+ 
+ 	TP_PROTO(struct super_block *sb, int gc_type, bool no_bg_gc,
++			unsigned int nr_free_secs,
+ 			long long dirty_nodes, long long dirty_dents,
+ 			long long dirty_imeta, unsigned int free_sec,
+ 			unsigned int free_seg, int reserved_seg,
+ 			unsigned int prefree_seg),
+ 
+-	TP_ARGS(sb, gc_type, no_bg_gc, dirty_nodes, dirty_dents, dirty_imeta,
++	TP_ARGS(sb, gc_type, no_bg_gc, nr_free_secs, dirty_nodes,
++		dirty_dents, dirty_imeta,
+ 		free_sec, free_seg, reserved_seg, prefree_seg),
+ 
+ 	TP_STRUCT__entry(
+ 		__field(dev_t,		dev)
+ 		__field(int,		gc_type)
+ 		__field(bool,		no_bg_gc)
++		__field(unsigned int,	nr_free_secs)
+ 		__field(long long,	dirty_nodes)
+ 		__field(long long,	dirty_dents)
+ 		__field(long long,	dirty_imeta)
+@@ -670,6 +673,7 @@ TRACE_EVENT(f2fs_gc_begin,
+ 		__entry->dev		= sb->s_dev;
+ 		__entry->gc_type	= gc_type;
+ 		__entry->no_bg_gc	= no_bg_gc;
++		__entry->nr_free_secs	= nr_free_secs;
+ 		__entry->dirty_nodes	= dirty_nodes;
+ 		__entry->dirty_dents	= dirty_dents;
+ 		__entry->dirty_imeta	= dirty_imeta;
+@@ -679,12 +683,13 @@ TRACE_EVENT(f2fs_gc_begin,
+ 		__entry->prefree_seg	= prefree_seg;
+ 	),
+ 
+-	TP_printk("dev = (%d,%d), gc_type = %s, no_background_GC = %d, nodes = %lld, "
+-		"dents = %lld, imeta = %lld, free_sec:%u, free_seg:%u, "
++	TP_printk("dev = (%d,%d), gc_type = %s, no_background_GC = %d, nr_free_secs = %u, "
++		"nodes = %lld, dents = %lld, imeta = %lld, free_sec:%u, free_seg:%u, "
+ 		"rsv_seg:%d, prefree_seg:%u",
+ 		show_dev(__entry->dev),
+ 		show_gc_type(__entry->gc_type),
+ 		(__entry->gc_type == BG_GC) ? __entry->no_bg_gc : -1,
++		__entry->nr_free_secs,
+ 		__entry->dirty_nodes,
+ 		__entry->dirty_dents,
+ 		__entry->dirty_imeta,
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.0.550.gb090851708-goog
+

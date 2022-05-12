@@ -2,131 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CBA7525388
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B4252538A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357006AbiELR0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 13:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54546 "EHLO
+        id S1357019AbiELR0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 13:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356999AbiELR0h (ORCPT
+        with ESMTP id S1357012AbiELR0w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 13:26:37 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390CB6F498;
-        Thu, 12 May 2022 10:26:36 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id l15so4023298ilh.3;
-        Thu, 12 May 2022 10:26:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QKm3n0v8rk6VHx9tGn2YwNzy4klIX/9lzZ8DLlwYNkI=;
-        b=I6uckV0hW9685lv/BrD/CU5YywPkCnJ0C5a8IOrIceMeCqikNXqMwglMnH4UO2Ypel
-         fkhT1i+MWp5IHRefROev7XKpF0DnEhLVsGI70nW5FBnVBhfGmQNqOF79AWIszHJDLlGu
-         tOWK+iqCqn4SnBoJ+rh7yEq3L3lfqAiFdKYikc6Dzm+gPJDDmWpfjw1kMloSjdCVI+CE
-         R3TAvQQX8QoNB26QVw3LKNBSB5V+F0dBFrZZp4IJrottvsV0wmP5hYHcBj6ZAoVXleFm
-         q1bUxWf+H4MccRO8cj3SxA5vWPlaznpZGDzkc9hdG5hbw/DcAsXdEWprH8CmkrWUjslA
-         cAwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QKm3n0v8rk6VHx9tGn2YwNzy4klIX/9lzZ8DLlwYNkI=;
-        b=MbnN2JAjM58wZAeAPIJhcoVUQcLE3v29bOKdImKNrbM1Z+IT8BXBuLLyyPlny/ex4I
-         M51gQw37AsnYTOuzPIv23BG5+hG4KysFFbTKc1+kiagE8rQ9zRHqnewYtxTOu86PVSH0
-         c04QmWVxzJ8BAEARU2YjLowHC6ARAgiWQiTLng5Ri2c1low+HlGyhIBIo5k+F5rgYM44
-         GVgb+TzzOS5gcPQBIBz0J8N95Z05ZS+7Fso6qJqco64rAMSDK2bcpCTMIeCJyXBybCEh
-         TfCvgrGAYTspEnzxPPfS4om3htbni5EI7UVFh/bHrFgdA3ezeAYbVZlVx2nG1KRZM+QJ
-         VlWg==
-X-Gm-Message-State: AOAM530QQX6ZynvH7Rh4KawVeZyn7yGd5xZzOA0GtSR5NwYw5jAofd/+
-        x6m+7/sPSKJX+DUH8RLKIz0=
-X-Google-Smtp-Source: ABdhPJxqFWzsj34P2hAjM6BBEKPVVGCVSqoNPfvIeXNfYGWVvSx4+gSnimbShO6ArmPqcwmxb3ETJw==
-X-Received: by 2002:a05:6e02:2190:b0:2cf:8529:e291 with SMTP id j16-20020a056e02219000b002cf8529e291mr620684ila.22.1652376395589;
-        Thu, 12 May 2022 10:26:35 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:fdf4:a10e:cb39:9b64? ([2600:1700:2442:6db0:fdf4:a10e:cb39:9b64])
-        by smtp.gmail.com with ESMTPSA id g11-20020a02b70b000000b0032b3a7817c8sm21178jam.140.2022.05.12.10.26.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 10:26:35 -0700 (PDT)
-Message-ID: <5b2783a2-76bf-ce6f-89b1-d0fe05b80b82@gmail.com>
-Date:   Thu, 12 May 2022 12:26:33 -0500
+        Thu, 12 May 2022 13:26:52 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B40F61C1;
+        Thu, 12 May 2022 10:26:51 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CHOaZU013167;
+        Thu, 12 May 2022 17:26:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=Y1/6uFfp3yWu69cBpG/b34aTugBLfs+8ovXVNB3HJqQ=;
+ b=ljFmyJOH7e4WhKZvxGtQLjbBtU4Nl8OXCxmrREL2JcIfeBraxpP/r3wqw/HBhQOu9SOF
+ jI4gA6znmCQ8Yv+r1aZ+Kxih+PXZLEAB00zIbJAvUz7cbnqOEI+w/tQDehxFtUpiwlm2
+ DGI/M+JpVSxb7ZZax4I5Muo2AmL3yQWaOEUyZ1Nc0IWoqciXSEVxwrv49BnKMgkwhk5W
+ p30TX4Jly7z0uXJ30D7FIbpgogQUxk0fOOQiHzi6eucHs2pFygfLiDtIXOgrNTokIg5/
+ 5qxc3xfiMtbYbCv/oW1wZVV/o0HoM/x3G9CymTRG+oKcYFF0fOUxepotzrN8iKqT90wB sQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g154nhxw8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 17:26:48 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24CHPS8d015858;
+        Thu, 12 May 2022 17:26:47 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g154nhxvs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 17:26:47 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24CHHagR014690;
+        Thu, 12 May 2022 17:26:45 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma01fra.de.ibm.com with ESMTP id 3fwgd8ns0t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 17:26:45 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24CHQf5Y44564754
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 May 2022 17:26:41 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3C64452050;
+        Thu, 12 May 2022 17:26:41 +0000 (GMT)
+Received: from osiris (unknown [9.145.44.123])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id C6A695204E;
+        Thu, 12 May 2022 17:26:40 +0000 (GMT)
+Date:   Thu, 12 May 2022 19:26:39 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Jonas Paulsson <paulsson@linux.vnet.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Ulrich Weigand <ulrich.weigand@de.ibm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andreas Krebbel <krebbel@linux.ibm.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH 5/8] s390/purgatory: workaround llvm's IAS limitations
+Message-ID: <Yn1DT3zHNM9MMQJL@osiris>
+References: <20220511120532.2228616-1-hca@linux.ibm.com>
+ <20220511120532.2228616-6-hca@linux.ibm.com>
+ <CAKwvOdm3P+c0W+oZ9wtgMyxcP3KYX0UkYxO4o=7DLLyMdKdnPg@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdm3P+c0W+oZ9wtgMyxcP3KYX0UkYxO4o=7DLLyMdKdnPg@mail.gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 5DySOv71Pi7kL41QWeBBArV-ddrnFPWc
+X-Proofpoint-GUID: Sp5cbfkUzo5mRNNnJalFX618Jd-IWIkc
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC] KTAP spec v2: prefix to KTAP data
-Content-Language: en-US
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>, Tim.Bird@sony.com,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Jonathan Corbet <corbet@lwn.net>, rmr167@gmail.com,
-        guillaume.tucker@collabora.com, kernelci@groups.io,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <bc6e9ed7-d98b-c4da-2a59-ee0915c18f10@gmail.com>
- <5ca35c47-6145-4ec1-6c05-3c46f436cb4d@gmail.com>
- <CAGS_qxpE9qGsS1LqaobVGFKFgV6TwvwNLR4e9PG5zsfPACSf_Q@mail.gmail.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <CAGS_qxpE9qGsS1LqaobVGFKFgV6TwvwNLR4e9PG5zsfPACSf_Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-12_14,2022-05-12_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 impostorscore=0 suspectscore=0 lowpriorityscore=0
+ spamscore=0 mlxlogscore=497 clxscore=1015 mlxscore=0 bulkscore=0
+ phishscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205120079
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/12/22 10:25, Daniel Latypov wrote:
-> On Wed, May 11, 2022 at 11:01 PM Frank Rowand <frowand.list@gmail.com> wrote:
->> ================================================================================
->> #### discussion notes:
->>
->> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
->> PRO: minimally invasive to specification.
->>
->> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
->> CON:
->>
->> KTAP does not include any mechanism to describe the value of <prefix string>
->> to test harnesses and test output processing programs.  The test output
->> processing programs must infer the value of <prefix string> by detecting
->> the <prefix string> in the "Version lines".
->>
->> The detection of a "Version lines" might be a match of the regex:
->>
->>    "^.*KTAP version 2$"
->>
->> This risks falsely detecting a "Version lines", but the risk is small???
+On Wed, May 11, 2022 at 12:54:41PM -0700, Nick Desaulniers wrote:
+> On Wed, May 11, 2022 at 5:05 AM Heiko Carstens <hca@linux.ibm.com> wrote:
+> >
+> > llvm's integrated assembler cannot handle immediate values which are
+> > calculated with two local labels:
+> >
+> > arch/s390/purgatory/head.S:139:11: error: invalid operand for instruction
+> >  aghi %r8,-(.base_crash-purgatory_start)
 > 
-> Agree this is a risk and also think it's probably small, but it's hard to say.
-> I think the $ anchoring the regex is probably safe enough.
-> 
-> As noted earlier, this tracks with what kunit.py already does.
-> That was necessitated by dynamic prefixes such as timestamps, etc.f
+> I thought this was fixed in
+> https://github.com/ClangBuiltLinux/linux/issues/1420
+> https://reviews.llvm.org/D113341
+> (clang-14)
+> ?
 
-That is a good observation.  I nearly always have the prefix timestamp
-on my console output, and thus remove the timestamp with a regex when
-processing the data.
-
--Frank
-
-> So I think this is probably a fine risk to take.
-> 
-> I imagine we could add constraints of prefix string, e.g. must have []
-> around it, etc. if we want to try and minimize this risk.
-> But I don't know if it's necessarily worth it, given what we know right now.
-> 
-> Along those lines, I think I like this approach (Alternative 1) more
-> than Alternative 2/2b.
-> I'm not sure we need a structured way to specify metadata in KTAP yet?
-> The prefix seems like a reasonable candidate, but do others have ideas
-> of other bits of metadata we'd want to be able to declare?
-> 
-> Daniel
-
+Looks like the referenced fix only works for displacements, bit not
+for immediates.

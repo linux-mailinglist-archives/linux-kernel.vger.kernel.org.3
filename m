@@ -2,110 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF23D52579A
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 00:11:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066E35257A1
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 00:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359066AbiELWLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 18:11:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52338 "EHLO
+        id S1359079AbiELWP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 18:15:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359076AbiELWKz (ORCPT
+        with ESMTP id S1354300AbiELWPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 18:10:55 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E920E28E3F
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 15:10:53 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id x18so6208525plg.6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 15:10:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5pINHEZv62I1VVi/6cPBplzqwfW+cUrao+xeCNK719k=;
-        b=LCRFLml7xEJRxFGUFkWpJE/kchV+HpiS1oOHDIpBNpG5BsbTuduUCS8YfO5TzpHlYQ
-         3ptdU3A+twkT86qLqhKa4sj2dWAb2DwxO+ygJyGzul9PWb4o8o2QQEnlkn/eNhcZT1fi
-         D8TFh38oRb8dLnSChfMarF325DLkkTM0oA6oD3ZBj4AqOS3XYntUhjg5ydhZ89fDcgOS
-         RMTHM/olvT8e/DciINTCtF9OUhBxwilTni6qAOqfCVgq1wMW9xcGmryBpd5q68GaHUp1
-         /BvgYZqfC+ExF2aNI0CBO0X26nEDS6wpORgNp1jK02QYVUyU+jHwF30vNsUnd57Euqvt
-         HTjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5pINHEZv62I1VVi/6cPBplzqwfW+cUrao+xeCNK719k=;
-        b=FbNf4bDtx1EhpgL1k+ve1C5EHXnRGmz4YkDebTl/xvKTGrQ2rXlGIzRBEkFSsqD+rh
-         oG6Rb88OeJf29zhFmfSDKNATUkHK3vxkomZ/IOPH6KgAMoY3wemcOAreCjWBq3OY9Kn/
-         SyYnhhH7zrjDT0LcFQwfF/mnA3CeWoWqU0Ed/824TC/U4TMhgPCe/niiavhDuQAipG7c
-         Vl4Pi5LhkStcp1bO01aaoc7cxwW4ZiG8V/4gA1hX1Tfl/HrhPpvAhVYee/apdbzrB9by
-         nmd19IUb5VCntHvl0lV8qwBgyHx/Rqx9fX3yTYlVmiWbCnC/zLdlVoon3SPIZtBzUYcG
-         l8AA==
-X-Gm-Message-State: AOAM532iguKhY7THk6B/Bc5jEpewFwWr77ZpUS74n8SB5C5445evppxF
-        pZ7ngkaKy7rnKa0Ba9csbFgtDDY+bqocDx/IZH4=
-X-Google-Smtp-Source: ABdhPJyf6+hXy2q/+T6v2bshm8tdUo6EkuVGShdkL0vzhulsFZI82vRLQGS4bF3INIXlm0R9mB7rjkbvdcUvyPmT7Bw=
-X-Received: by 2002:a17:903:1108:b0:156:73a7:7c1 with SMTP id
- n8-20020a170903110800b0015673a707c1mr1653537plh.101.1652393453361; Thu, 12
- May 2022 15:10:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
- <20220511064943.GR76023@worktop.programming.kicks-ass.net>
- <20bada85-9203-57f4-2502-57a6fd11f3ea@intel.com> <875ymav8ul.ffs@tglx> <55176b79-90af-4a47-dc06-9f5f2f2c123d@intel.com>
-In-Reply-To: <55176b79-90af-4a47-dc06-9f5f2f2c123d@intel.com>
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-Date:   Thu, 12 May 2022 15:10:17 -0700
-Message-ID: <CAMe9rOqb6ZnAZYe4uAWDt-vmhhP=z_+uZwi5fBURqyUWxCX9Cg@mail.gmail.com>
-Subject: Re: [RFCv2 00/10] Linear Address Masking enabling
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 12 May 2022 18:15:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA816254730;
+        Thu, 12 May 2022 15:15:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 70549B82B63;
+        Thu, 12 May 2022 22:15:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A6FDC385B8;
+        Thu, 12 May 2022 22:15:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652393717;
+        bh=fc0UztyX51O5K/1Ek3Why80En4eNCFKQYWY/tu8LjnA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nIyMOfR1ehCwgryDuutkkX34eSooJenNfM00EH6PipdBVTeaTRJ1WYbl+1WJ98OPs
+         dl1saOtU9ksXmx2RbXKsKmaNZod7+03vGDJbmznmblHnri5urVflxkxXCLpQQrNFrI
+         S/FwT82WG3idnThLWphcvYqQEMHXSq07WE8Hm+RaQRN92GoFvIfXtLtKU3anTlfeHV
+         O1UoQnz3NIpHY37LaTzfVHxYROyNAL/hdOsudWAw5YynDIKgT6yGzSJi+ayWW6Bbfo
+         SP7uymQ16GkXlDhI1nzvy39YwEl2GcNfkhe29Cb/JApYUPKaA65BsHVL/6YHdzpmAg
+         E4vZIL72XFqnA==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1npH5W-00AzV7-85; Thu, 12 May 2022 23:15:14 +0100
+Date:   Thu, 12 May 2022 23:15:11 +0100
+Message-ID: <87v8uamm8g.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v3 00/10] gpiolib: Handle immutable irq_chip structures
+In-Reply-To: <Yn0/DIl3+i/heRH6@smile.fi.intel.com>
+References: <20220419141846.598305-1-maz@kernel.org>
+        <Yn0/DIl3+i/heRH6@smile.fi.intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: andy.shevchenko@gmail.com, linux-kernel@vger.kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, thierry.reding@gmail.com, joey.gouly@arm.com, jonathanh@nvidia.com, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, bjorn.andersson@linaro.org, agross@kernel.org, jeffrey.l.hugo@gmail.com, tglx@linutronix.de, Basavaraj.Natikar@amd.com, Shyam-sundar.S-k@amd.com, linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 2:51 PM Dave Hansen <dave.hansen@intel.com> wrote:
->
-> On 5/12/22 12:39, Thomas Gleixner wrote:
-> >> It's OK for a debugging build that runs on one kind of hardware.  But,
-> >> if we want LAM-using binaries to be portable, we have to do something
-> >> different.
-> >>
-> >> One of the stated reasons for adding LAM hardware is that folks want to
-> >> use sanitizers outside of debugging environments.  To me, that means
-> >> that LAM is something that the same binary might run with or without.
-> > On/off yes, but is there an actual use case where such a mechanism would
-> > at start time dynamically chose the number of bits?
->
-> I'd love to hear from folks doing the userspace side of this.  Will
-> userspace be saying: "Give me all the bits you can!".  Or, will it
-> really just be looking for 6 bits only, and it doesn't care whether it
-> gets 6 or 15, it will use only 6?
->
-> Do the sanitizers have more overhead with more bits?  Or *less* overhead
-> because they can store more metadata in the pointers?
->
-> Will anyone care about the difference about potentially missing 1/64
-> issues with U57 versus 1/32768 with U48?
+On Thu, 12 May 2022 18:08:28 +0100,
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> 
+> On Tue, Apr 19, 2022 at 03:18:36PM +0100, Marc Zyngier wrote:
+> > This is a followup from [2].
+> > 
+> > I recently realised that the gpiolib play ugly tricks on the
+> > unsuspecting irq_chip structures by patching the callbacks.
+> > 
+> > Not only this breaks when an irq_chip structure is made const (which
+> > really should be the default case), but it also forces this structure
+> > to be copied at nauseam for each instance of the GPIO block, which is
+> > a waste of memory.
+> 
+> Is this brings us to the issue with IRQ chip name?
+> 
+> The use case in my mind is the following:
+> 1) we have two or more GPIO chips that supports IRQ;
+> 2) the user registers two IRQs of the same (by number) pin on different chips;
+> 3) cat /proc/interrupt will show 'my_gpio_chip XX', where XX is the number.
 
-The only LAM usage I know so far is LAM_U57 in HWASAN.   An application
-can ask for LAM_U48 or LAM_U57.  But the decision should be made by
-application.  When an application asks for LAM_U57, I expect it will store
-tags in upper 6 bits, even if the kernel enables LAM_U48.
+/proc/interrupts isn't a dumping ground for debug information. Yes,
+some irqchips do that, and they have been fixed by providing the
+irq_print_chip callback, thus ensuring that the irq_chip structure is
+never written to. I would have loved to simply get rid of the variable
+string, but this is obviously ABI, and we can't break that.
+
+> So, do I understand correct current state of affairs?
+> 
+> If so, we have to fix this to have any kind of ID added to the chip name that
+> we can map /proc/interrupts output correctly.
+
+This is already done.
+
+That's not an excuse to add more of those though. We already have the
+required infrastructure in debugfs, and that's where this sort of
+thing should happen.
+
+	M.
 
 -- 
-H.J.
+Without deviation from the norm, progress is not possible.

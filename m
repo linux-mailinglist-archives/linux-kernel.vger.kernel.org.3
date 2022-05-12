@@ -2,36 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91EA9524562
+	by mail.lfdr.de (Postfix) with ESMTP id 46021524560
 	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 08:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350140AbiELGJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 02:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56678 "EHLO
+        id S1350133AbiELGJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 02:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350110AbiELGJU (ORCPT
+        with ESMTP id S1345148AbiELGJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 02:09:20 -0400
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EDC104C83;
-        Wed, 11 May 2022 23:09:16 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VCzTSH7_1652335746;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VCzTSH7_1652335746)
+        Thu, 12 May 2022 02:09:19 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1886D104C91
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 23:09:17 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VCzTSIl_1652335751;
+Received: from localhost(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VCzTSIl_1652335751)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 12 May 2022 14:09:14 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     wellslutw@gmail.com
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, p.zabel@pengutronix.de, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH v2] net: ethernet: Use swap() instead of open coding it
-Date:   Thu, 12 May 2022 14:09:05 +0800
-Message-Id: <20220512060905.33744-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+          Thu, 12 May 2022 14:09:12 +0800
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+To:     mick@ics.forth.gr, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org,
+        akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
+        rppt@kernel.org, david@redhat.com, wangborong@cdjrlc.com,
+        twd2.me@gmail.com, seanjc@google.com, alex@ghiti.fr,
+        petr.pavlu@suse.com, atishp@rivosinc.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jianghuaming.jhm@alibaba-inc.com, guoren@kernel.org,
+        Xianting Tian <xianting.tian@linux.alibaba.com>
+Subject: [PATCH v2] RISC-V: Mark IORESOURCE_EXCLUSIVE for reserved mem instead of IORESOURCE_BUSY
+Date:   Thu, 12 May 2022 14:09:10 +0800
+Message-Id: <20220512060910.601832-1-xianting.tian@linux.alibaba.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
@@ -42,60 +43,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clean the following coccicheck warning:
+Commit 00ab027a3b82 ("RISC-V: Add kernel image sections to the resource tree")
+marked IORESOURCE_BUSY for reserved memory, which casued resource map
+failed in subsequent operations of related driver, so remove the
+IORESOURCE_BUSY flag. In order to prohibit userland mapping reserved
+memory, mark IORESOURCE_EXCLUSIVE for it.
 
-./drivers/net/ethernet/sunplus/spl2sw_driver.c:217:27-28: WARNING
-opportunity for swap().
+The code to reproduce the issue,
+dts:
+        mem0: memory@a0000000 {
+                reg = <0x0 0xa0000000 0 0x1000000>;
+                no-map;
+        };
 
-./drivers/net/ethernet/sunplus/spl2sw_driver.c:222:27-28: WARNING
-opportunity for swap().
+        &test {
+                status = "okay";
+                memory-region = <&mem0>;
+        };
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+code:
+        np = of_parse_phandle(pdev->dev.of_node, "memory-region", 0);
+        ret = of_address_to_resource(np, 0, &r);
+        base = devm_ioremap_resource(&pdev->dev, &r);
+        // base = -EBUSY
+
+Fixes: 00ab027a3b82 ("RISC-V: Add kernel image sections to the resource tree")
+Reported-by: Huaming Jiang <jianghuaming.jhm@alibaba-inc.com>
+Reviewed-by: Guo Ren <guoren@kernel.org>
+Reviewed-by: Nick Kossifidis <mick@ics.forth.gr>
+Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
 ---
-Changes in v2:
-  -Delete useless comments.
+ arch/riscv/kernel/setup.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- drivers/net/ethernet/sunplus/spl2sw_driver.c | 20 ++++----------------
- 1 file changed, 4 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/net/ethernet/sunplus/spl2sw_driver.c b/drivers/net/ethernet/sunplus/spl2sw_driver.c
-index 8320fa833d3e..1cb7076f946d 100644
---- a/drivers/net/ethernet/sunplus/spl2sw_driver.c
-+++ b/drivers/net/ethernet/sunplus/spl2sw_driver.c
-@@ -204,28 +204,16 @@ static const struct net_device_ops netdev_ops = {
+diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+index 834eb652a7b9..e0a00739bd13 100644
+--- a/arch/riscv/kernel/setup.c
++++ b/arch/riscv/kernel/setup.c
+@@ -189,7 +189,7 @@ static void __init init_resources(void)
+ 		res = &mem_res[res_idx--];
  
- static void spl2sw_check_mac_vendor_id_and_convert(u8 *mac_addr)
- {
--	u8 tmp;
--
- 	/* Byte order of MAC address of some samples are reversed.
- 	 * Check vendor id and convert byte order if it is wrong.
- 	 * OUI of Sunplus: fc:4b:bc
- 	 */
- 	if (mac_addr[5] == 0xfc && mac_addr[4] == 0x4b && mac_addr[3] == 0xbc &&
- 	    (mac_addr[0] != 0xfc || mac_addr[1] != 0x4b || mac_addr[2] != 0xbc)) {
--		/* Swap mac_addr[0] and mac_addr[5] */
--		tmp = mac_addr[0];
--		mac_addr[0] = mac_addr[5];
--		mac_addr[5] = tmp;
--
--		/* Swap mac_addr[1] and mac_addr[4] */
--		tmp = mac_addr[1];
--		mac_addr[1] = mac_addr[4];
--		mac_addr[4] = tmp;
--
--		/* Swap mac_addr[2] and mac_addr[3] */
--		tmp = mac_addr[2];
--		mac_addr[2] = mac_addr[3];
--		mac_addr[3] = tmp;
-+
-+		swap(mac_addr[0], mac_addr[5]);
-+		swap(mac_addr[1], mac_addr[4]);
-+		swap(mac_addr[2], mac_addr[3]);
- 	}
- }
+ 		res->name = "Reserved";
+-		res->flags = IORESOURCE_MEM | IORESOURCE_BUSY;
++		res->flags = IORESOURCE_MEM | IORESOURCE_EXCLUSIVE;
+ 		res->start = __pfn_to_phys(memblock_region_reserved_base_pfn(region));
+ 		res->end = __pfn_to_phys(memblock_region_reserved_end_pfn(region)) - 1;
  
+@@ -214,7 +214,7 @@ static void __init init_resources(void)
+ 
+ 		if (unlikely(memblock_is_nomap(region))) {
+ 			res->name = "Reserved";
+-			res->flags = IORESOURCE_MEM | IORESOURCE_BUSY;
++			res->flags = IORESOURCE_MEM | IORESOURCE_EXCLUSIVE;
+ 		} else {
+ 			res->name = "System RAM";
+ 			res->flags = IORESOURCE_SYSTEM_RAM | IORESOURCE_BUSY;
 -- 
-2.20.1.7.g153144c
+2.17.1
 

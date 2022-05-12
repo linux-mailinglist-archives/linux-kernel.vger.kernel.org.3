@@ -2,114 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA251524F10
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44F00524F17
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354616AbiELN7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 09:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34706 "EHLO
+        id S1354871AbiELN7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 09:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232399AbiELN7L (ORCPT
+        with ESMTP id S1354659AbiELN7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 09:59:11 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2108.outbound.protection.outlook.com [40.107.215.108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05DA91E7815;
-        Thu, 12 May 2022 06:59:09 -0700 (PDT)
+        Thu, 12 May 2022 09:59:35 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2040.outbound.protection.outlook.com [40.107.223.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16C41ED5AC;
+        Thu, 12 May 2022 06:59:32 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VEoL1xsJGVDMZFjqa+Y/ZzdJl2zTXPDSDo8FHktxK23KS5bi0AkY4YtyG9mhVtRtuOo7f5ksl1WorctF5wOPn+sGXfKYrZoTWFC4ww50Lvz4e2Cs7avap84K8vCOQBeTQnsjIVxmeL4yA/xTrJNuS1zEP094QxWcwjp61e7VMOQ9qPaTzRWWw3KAjHHkTABorwHtEAskk5NtQHjfS4V41Sa4Tr1ZVQIQux1pkqt6rMNap+7zxIjYMbLAROfkrqRMU61ese+Ezn/O1r6Y6+In832DaLSG21Xdrl9qeBcH0naHbFI/0kfJQD3HAKLTLvXlfJrhyYeNDCm0noa8IHPr8Q==
+ b=Jlnz7NFdZy2lHsRt2Vmr/bztH+58N2skj1mzpqAHbvx4kGFdy/5em+k8wpfwI11W7EbJ1mNyPwU+Fo5+AFKOxX/dTlw7U3xiQkcwJ3loVG37/XL73xKMBTgIjeoP2J4ZOCmVvk8fxVFSAKAG9Iq5aOg/G7aS+d5jeK9HnnIzlxXO5YRuBm8gZeEndO5j92PNRZfdiwYqE1UfPhPJwL8XmHZlmuaRTfau6wDo3cufke7J1WWQH7/bfpytK0n0H2e0kK8dmwJQ+sJABXLRtYT13ASnx8kb4gVUF5ynCiMb/oEOUrzYQAjXeQmZ7UWvqLS6/ahox/aEsIb323PicNiU0g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DDYIrMGpDUDoRy7ePh0k3aj1UndPkY05Nvzfl8F/q8k=;
- b=icexmYNbJQF0BJ6f2IsFGCLV0PPrk3LLR7JaR2NXtmwBToYTAjMVkfMcl2K86zH3eWyutHnCzW3kGo4suFplSLMgh8QJR57O82iUxfRspKrj3xJHsP4igZlUeb2bewHN+SrgFZR6L9ktvjeL3eEYTgjs/uSm7AwpPliIBdWyyBSqjRNutB8KZeByCOSnerLB3NT6cj1Do+xemtjxEsLjWuYjoortj1nxyy8aC8zd/HEB+O5+P7vLoQr26edHJ1tapf607aUDEB3Oft6ONLMnYMUcetN3ifm6eIxTOFdCJ4ZVxm7v3YUUzfoM/OOfOoP1EpmYxkZsI4ZHWBZCcAlvNg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
+ bh=3FgqguSY/mxh23UYLPvFkaPEAtyfteDGvHGcGhiT00w=;
+ b=Bf7jwJ/K6kv+b5CtmSxYdVjCqFbVLR0+sg1E8yse6xInf13UnuYTFo/nDe5Fe/Np65wq939X22/ixokd6j9cDEU3oQ+pc6/Qp3waaaZZh0DknG4F7vyNYFQGVUx8/GhGBvwhYNf0Psv9/hh3FrwLfLnVGIn1/yxMWQmhvFu1j4J8fWMKovZkhfz9GI7CFFlN+UzJaS0d9c7ewarlaxKMXgK8qEFD/FgNeWqJT99YbRiz5iYpBCjuQ/kl5OPX62U38lv+UXMb9MVL7brSzV12U6ANAWk3ov54Q2+oFrsvzeQmA6y90LAYMWQ/1SqMnpIVifCSUhEGoM1/RwoYQ2JICg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=grandegger.com smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DDYIrMGpDUDoRy7ePh0k3aj1UndPkY05Nvzfl8F/q8k=;
- b=ZXMye9VrpuxIyUVAcnOMAW1mHbaEX9CQ+5d9f80cozVyFjjIbZZxXKUdvYF7iLAy/TLwQCgCH2BcRq7BE5ecDzFuvdjqwRDkcG1J0jt0oJqnDM/SaFs0yx9UsaHEMNaD54e9/dHRv+ew4CMkBrmHH+IPPxcMYdEwvY3GpqJWReE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from HK2PR06MB3492.apcprd06.prod.outlook.com (2603:1096:202:2f::10)
- by SEYPR06MB5134.apcprd06.prod.outlook.com (2603:1096:101:5a::12) with
+ bh=3FgqguSY/mxh23UYLPvFkaPEAtyfteDGvHGcGhiT00w=;
+ b=WcPlo1Tpx9yvmpLXQvFPn+RDTXo/blPHpLXtfo4zzDJ4naVjWhYPuUDzHq4a+hYPJnYhnq6BGqYqVkNneqjOjrBngsqINEtYu/nC6JZmUcpxAwnUJ+7ULSLqgHCCPsiyy/PiS70GEEttTU9F3byz3Q/Cm/kQ+VXBpI6jl0HKp/4=
+Received: from DM6PR21CA0012.namprd21.prod.outlook.com (2603:10b6:5:174::22)
+ by BN6PR02MB2738.namprd02.prod.outlook.com (2603:10b6:404:fc::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.20; Thu, 12 May
- 2022 13:59:03 +0000
-Received: from HK2PR06MB3492.apcprd06.prod.outlook.com
- ([fe80::88e1:dc04:6851:ad08]) by HK2PR06MB3492.apcprd06.prod.outlook.com
- ([fe80::88e1:dc04:6851:ad08%7]) with mapi id 15.20.5227.023; Thu, 12 May 2022
- 13:59:03 +0000
-From:   Guo Zhengkui <guozhengkui@vivo.com>
-To:     Potnuri Bharat Teja <bharat@chelsio.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        linux-rdma@vger.kernel.org (open list:CXGB4 IWARP RNIC DRIVER
-        (IW_CXGB4)), linux-kernel@vger.kernel.org (open list)
-Cc:     zhengkui_guo@outlook.com, Guo Zhengkui <guozhengkui@vivo.com>
-Subject: [PATCH] RDMA: replace ternary operator with min()
-Date:   Thu, 12 May 2022 21:58:37 +0800
-Message-Id: <20220512135837.41089-1-guozhengkui@vivo.com>
-X-Mailer: git-send-email 2.20.1
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.22; Thu, 12 May
+ 2022 13:59:30 +0000
+Received: from DM3NAM02FT010.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:5:174:cafe::3b) by DM6PR21CA0012.outlook.office365.com
+ (2603:10b6:5:174::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.6 via Frontend
+ Transport; Thu, 12 May 2022 13:59:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT010.mail.protection.outlook.com (10.13.5.124) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5250.13 via Frontend Transport; Thu, 12 May 2022 13:59:30 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Thu, 12 May 2022 06:59:21 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Thu, 12 May 2022 06:59:20 -0700
+Envelope-to: git@xilinx.com,
+ wg@grandegger.com,
+ mkl@pengutronix.de,
+ davem@davemloft.net,
+ edumazet@google.com,
+ kuba@kernel.org,
+ pabeni@redhat.com,
+ linux-can@vger.kernel.org,
+ netdev@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Received: from [10.140.6.39] (port=41180 helo=xhdsgoud40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <srinivas.neeli@xilinx.com>)
+        id 1np9Lc-000BAQ-Az; Thu, 12 May 2022 06:59:20 -0700
+From:   Srinivas Neeli <srinivas.neeli@xilinx.com>
+To:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>,
+        <edumazet@google.com>, <appana.durga.rao@xilinx.com>,
+        <sgoud@xilinx.com>, <michal.simek@xilinx.com>
+CC:     <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <git@xilinx.com>,
+        Srinivas Neeli <srinivas.neeli@xilinx.com>
+Subject: [PATCH] can: xilinx_can: Add Transmitter delay compensation (TDC) feature support
+Date:   Thu, 12 May 2022 19:29:01 +0530
+Message-ID: <20220512135901.1377087-1-srinivas.neeli@xilinx.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: HK2PR04CA0050.apcprd04.prod.outlook.com
- (2603:1096:202:14::18) To HK2PR06MB3492.apcprd06.prod.outlook.com
- (2603:1096:202:2f::10)
-MIME-Version: 1.0
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fb587a97-8077-4cb3-5e09-08da341f9251
-X-MS-TrafficTypeDiagnostic: SEYPR06MB5134:EE_
-X-Microsoft-Antispam-PRVS: <SEYPR06MB51342484DEDB46DB36451EDEC7CB9@SEYPR06MB5134.apcprd06.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: d60e14ac-7576-41bb-3c99-08da341fa2a5
+X-MS-TrafficTypeDiagnostic: BN6PR02MB2738:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR02MB2738FC07E17F0655148F944EAFCB9@BN6PR02MB2738.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iTuLSRZH6VhnYzHSBxED/1j83h0dPO4F4XO0YAqOGzW+NFf5AI3jO6Q8ODGMwVwWHsngfN4syBa7fVfIFymdEk/JCC9lBlUXij2OXPBzLkhRacCabslNEr/utGoX1SESAMmG/XmX2CNEHjIzt/4GxuOpdI2tXq9kkdfUFATX+y+9leKRnIGFCq07A8Xn3B7+chyLE8Xwob7iifw+fGMmQpCtieUd99BpD+Uh3tPq4ghuLqigOy40caX6gSjrERf9QLPkM812Ttnb3oFA6wyC/IYLD5lptYt7QRBckrX3VuJorJcTrroE39aoWlOvlzJHve9l5tjEF8FeYs4O+U5lgFESuwgr9b2OsL8ZjyAI6w5A70gfMf26zWZ8bOTZEgBZkqnbTE7bJR/bX2Bz2Fj3YlbxB124Kjp8t3SkvFOCNqqupkDTlKRJpEo3bSkmgsFuTF5KdXYx3PZxBqbYvM/FAFoUSlDssB0P6rPpl8Kr76uMqQhspoAScxRymDPa2SYv2O4VQpGkwcrkeCkqElHpgeLiHONCK7cmjsO9yYFlt9wjHSydBr8rFaJ5FFU0jDVJKg78JE6JxP74i/XomobxXpH4/wXAPXOqWebAl9yeKk55DlA6EMdkTdb/X13+RMYFsWxXFkfscBdPAtY/sIKlB1MsyEO7K2j4BR+KhspvK6ELOmSyuvkb+ftguLe/CpSe9Rf4wezthMuRL767feiVGw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR06MB3492.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(52116002)(316002)(110136005)(5660300002)(508600001)(66946007)(66476007)(6666004)(2616005)(2906002)(107886003)(66556008)(1076003)(186003)(8936002)(83380400001)(86362001)(6506007)(26005)(36756003)(6486002)(38100700002)(38350700002)(8676002)(4326008)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rOlp/cMOlvuKogkOgs9Cgjk3R19AgbXUK/TP6pyoG4cSr8i+WrvF67KmV4GA?=
- =?us-ascii?Q?Lmui44cynSEa9ieTYI9D1U9O0KSREKeqmN2dWB4thCLlx2QzbE2nffb1YBKQ?=
- =?us-ascii?Q?6IekGQBlMPDek69aTK4t57shMbwAe6PplilabxZSSnU1Sr0jem9gWJgRzFE5?=
- =?us-ascii?Q?jFW5fxVHOos9xrmBQaHf5TMq6YhtOMOuYinQmDhpTLE0ywgkLihrDq3HAkbc?=
- =?us-ascii?Q?HI2/l3Fxwos/ABGpXa02089cbbRLk97DHo3YKAi4HrsiPYCeGylBTUIvKfl/?=
- =?us-ascii?Q?f/5i7zMboR7y9pkgMHY2I/Fgt8y9xOWdAfb+b3dmTYQ8NZCkA437x7viZanb?=
- =?us-ascii?Q?tVS9kslSd5eKzgajCOCWJzJ+5Ytf8GlpH4uuLjHanEER/V7OvX9NtMR7Bnrb?=
- =?us-ascii?Q?tPZ9GxE9a2EjxUQLC4SPetEXx4DcKiusbm6Gyul9F3Vd5M/PJ+g+2Ns+B970?=
- =?us-ascii?Q?tpk431KZNil+uh8M82jUmrxxizfM8GH4+L/HuUL5AOcpgQ+eRJn4u9WR9ubD?=
- =?us-ascii?Q?IKhvgQA9eI/mhb+XS8ikssshE0YBfi+83tenuqnKcOJAszyelATHbVV9wg94?=
- =?us-ascii?Q?T6sg1lTyLObL0IWh0jXD5WtZOAMJYAdGFmnjBQswR6IUgANVtkeWVgifptT/?=
- =?us-ascii?Q?6Qa0IbskRIPcq99EFUCn8JVkkJZ//bot5J3nikzkXtzeYSdi+a7n32/KYJ59?=
- =?us-ascii?Q?P9XAH7UWu4RdbkRAWGxMwcXg5KBmNBMNn6C5BxT2emYOk6p6eo+PTq38ObRb?=
- =?us-ascii?Q?TXCDfj3tbMwEVpi20b/WnLWZwlIk9KI0+hINDn2wpc+EVQwbEkCxQ0SluUKh?=
- =?us-ascii?Q?BV/Vwr9pAOripfKSPlMlPLTNiAVrdCZl6AI7HVvv6yrFVh/uUjA+wFDbDB6T?=
- =?us-ascii?Q?fgB6pjkKAST8t6QofdIortnDr1hrlUWEz/8OtQGSQXB2di90w5nBsx6X3amP?=
- =?us-ascii?Q?Un5Rv78vugZaS6o579BikAiR514or0k9QZSA8tYgOoOwuq9B/gTK+QIeR+1E?=
- =?us-ascii?Q?/dM1XopC9P/oTZBTxRX4vdt02QcwUjoqFjDKIzR9OB7BZTPMqyaHxqs3K5h0?=
- =?us-ascii?Q?Ndz65c/7W2fCUJe9teWD3aCOoGg4YeGorPhdsdhGGc35D44i37v3WoTFD8iy?=
- =?us-ascii?Q?tnmfKPTpLkzMOO0Jxus8E8plIgCgan9nJanHdED76gfCULPt++DBnvo26d5B?=
- =?us-ascii?Q?2QFChYUaiPqpRx4UMYygJh38cZME9gLXFs+JUcp3aTD9tspZjZWaqDCAtw9p?=
- =?us-ascii?Q?GleIKbwAec+D8DAEQDW/XJvDhLx1sCVJhk1O//OHOg3d42I2baWOzxN2JCkW?=
- =?us-ascii?Q?5gcIFrJYhiIQLPNdFUcETSOTa26L5iQKgPoOj1xlPeDVBBm08MgNfSw1ZZ17?=
- =?us-ascii?Q?FZ1AQq89tcP5WUDlOuNQx6DYxv+VC72fnCbKXuJwcJasUag1/7eayTLBKi/5?=
- =?us-ascii?Q?kXQMdZws+5jbg/B4H80os15UoBcVHTzYAVIDUL1nudGloSh/oZjdFErrcj4t?=
- =?us-ascii?Q?JF6NaKzsRCo0wyPVgVP1jIZKxXWGiBV3FcrNWV6HFuhP1Qk3gU0REyubpJpJ?=
- =?us-ascii?Q?IIA8ha6050zCepknKaTNbK3+d9VRPsIaNqkTFuRBmDd5NgH2ILyoL99By30H?=
- =?us-ascii?Q?zS5F/OQIkD5XK6QsIW0eGgVgO5w6pp21djIYNqzDF/Sfq/HDev5bRIqMOJJ/?=
- =?us-ascii?Q?7+cHVhovWPCiWBqD74SZEDJAiGVcFFzNLn9DYe3pbAZCLgUNCRcCQ8AfdlLP?=
- =?us-ascii?Q?b6N1Vto75Q=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb587a97-8077-4cb3-5e09-08da341f9251
-X-MS-Exchange-CrossTenant-AuthSource: HK2PR06MB3492.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2022 13:59:03.1189
+X-Microsoft-Antispam-Message-Info: Ob/TGesKIcimf9m0MgbgABIgPYDQseGLfbWdV9cGD+e0RZdx4zxk2MYc/SoEn8NTmkMjYsHJvg5fmRBDwJvItCx/ALEZGmDIcwu/UXL9jWnlUTOhKUqnGaN43D7SjBQxAyIam5/IkCJFiuEk+uYzdaodUOUndpaN8/M2CA9YThBQkg2Q2MVX5OYZZittvdp5RZQW5+qNLwyVjZFgcZaTjRhP8UyNZd3zSp6XIAQxsszcNMpYp+b7lZW5W5lL6QDAYcNQIUP2+xbv/EX5Cbn47d0at/llQL/70Z8g34GR8nNTbS8G22yohH2z2rPgkKy2Oltnav5EC8KMKeJISSfZQL23aIDgZTUn7MjcVyMo/68Vn6Fo3Stk0FArO+zJ5U32zzTINK7sqwFYxOlCiOdpXw7aismMtVEhfxC445T6zUUHnlW7NqgLD0/g4uSnge66s4hLaACeAQk7mUI5d1dg6WkduwBNNLQZh6Y0vK3tGaowPCMuujFkfre7eBjaJkLwJwTEKd6z1uKm2OhLoHfj4muWv78jcDwt2f8ti7HQ98DIfmdHhgQAKKBU8ELcp4wH5CHcV+5UhfowjySrq5xzhLb1GS9xkw5iEmUGbbENpQM3T3yKtCNMoGpwYZrkCKPHxf5I9OOt1MTcx1tcSAkLCWWWqnI889Yo82f17/XwWfR8jYdYTW/hJ70oR5IDnrQM8o2lllYWd825G4NxAlK3LQ==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(1076003)(6636002)(5660300002)(508600001)(316002)(8936002)(7416002)(9786002)(54906003)(426003)(107886003)(47076005)(336012)(110136005)(7636003)(186003)(36756003)(70206006)(70586007)(82310400005)(40460700003)(26005)(36860700001)(2616005)(4326008)(8676002)(6666004)(2906002)(83380400001)(356005)(44832011)(7696005)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2022 13:59:30.2777
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Q/yeqwXVrO9jVuJRW0161pDAK/hSYAH2s2HrGJQiGQEpbKyw2tVmLUWRcMj7i9S2qnMiAJILxMOfVs4X/P2BaA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5134
+X-MS-Exchange-CrossTenant-Network-Message-Id: d60e14ac-7576-41bb-3c99-08da341fa2a5
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT010.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR02MB2738
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -119,67 +119,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following coccicheck warnings:
+Added Transmitter delay compensation (TDC) feature support.
+In the case of higher measured loop delay with higher baud rates, observed
+bit stuff errors.
+By enabling the TDC feature in a controller, will compensate for
+the measure loop delay in the receive path.
+TDC feature requires BRP values can be 1 or 2.
+The current CAN framework does not limit the brp so while using TDC,
+have to restrict BRP values.
+Ex:
+ip link set can0 type can tq 12 prop-seg 39 phase-seg1 20 phase-seg2 20
+sjw 20 dtq 12 dprop-seg 5 dphase-seg1 6 dphase-seg2 4 dsjw 4 fd on
+loopback on tdco 12 tdc-mode auto
 
-drivers/infiniband/sw/siw/siw_cm.c:1326:11-12: WARNING opportunity for min()
-drivers/infiniband/sw/siw/siw_cm.c:488:11-12: WARNING opportunity for min()
-drivers/infiniband/hw/cxgb4/cm.c:217:14-15: WARNING opportunity for min()
-drivers/infiniband/hw/cxgb4/cm.c:232:14-15: WARNING opportunity for min()
-
-min() macro is defined in include/linux/minmax.h. It avoids multiple
-evaluations of the arguments when non-constant and performs strict
-type-checking.
-
-Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
 ---
- drivers/infiniband/hw/cxgb4/cm.c   | 4 ++--
- drivers/infiniband/sw/siw/siw_cm.c | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/net/can/xilinx_can.c | 30 +++++++++++++++++++++++++-----
+ 1 file changed, 25 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/infiniband/hw/cxgb4/cm.c b/drivers/infiniband/hw/cxgb4/cm.c
-index c16017f6e8db..167faa358800 100644
---- a/drivers/infiniband/hw/cxgb4/cm.c
-+++ b/drivers/infiniband/hw/cxgb4/cm.c
-@@ -214,7 +214,7 @@ static int c4iw_l2t_send(struct c4iw_rdev *rdev, struct sk_buff *skb,
- 		kfree_skb(skb);
- 	else if (error == NET_XMIT_DROP)
- 		return -ENOMEM;
--	return error < 0 ? error : 0;
-+	return min(error, 0);
- }
+diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
+index e2b15d29d15e..7af518fbed02 100644
+--- a/drivers/net/can/xilinx_can.c
++++ b/drivers/net/can/xilinx_can.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ /* Xilinx CAN device driver
+  *
+- * Copyright (C) 2012 - 2014 Xilinx, Inc.
++ * Copyright (C) 2012 - 2022 Xilinx, Inc.
+  * Copyright (C) 2009 PetaLogix. All rights reserved.
+  * Copyright (C) 2017 - 2018 Sandvik Mining and Construction Oy
+  *
+@@ -133,6 +133,8 @@ enum xcan_reg {
+ #define XCAN_DLCR_BRS_MASK		0x04000000 /* BRS Mask in DLC */
  
- int c4iw_ofld_send(struct c4iw_rdev *rdev, struct sk_buff *skb)
-@@ -229,7 +229,7 @@ int c4iw_ofld_send(struct c4iw_rdev *rdev, struct sk_buff *skb)
- 	error = cxgb4_ofld_send(rdev->lldi.ports[0], skb);
- 	if (error < 0)
- 		kfree_skb(skb);
--	return error < 0 ? error : 0;
-+	return min(error, 0);
- }
+ /* CAN register bit shift - XCAN_<REG>_<BIT>_SHIFT */
++#define XCAN_BRPR_TDCO_SHIFT_CANFD	8  /* Transmitter Delay Compensation Offset */
++#define XCAN_BRPR_TDCE_SHIFT_CANFD	16 /* Transmitter Delay Compensation (TDC) Enable */
+ #define XCAN_BTR_SJW_SHIFT		7  /* Synchronous jump width */
+ #define XCAN_BTR_TS2_SHIFT		4  /* Time segment 2 */
+ #define XCAN_BTR_SJW_SHIFT_CANFD	16 /* Synchronous jump width */
+@@ -259,7 +261,7 @@ static const struct can_bittiming_const xcan_bittiming_const_canfd2 = {
+ 	.tseg2_min = 1,
+ 	.tseg2_max = 128,
+ 	.sjw_max = 128,
+-	.brp_min = 2,
++	.brp_min = 1,
+ 	.brp_max = 256,
+ 	.brp_inc = 1,
+ };
+@@ -272,11 +274,21 @@ static struct can_bittiming_const xcan_data_bittiming_const_canfd2 = {
+ 	.tseg2_min = 1,
+ 	.tseg2_max = 16,
+ 	.sjw_max = 16,
+-	.brp_min = 2,
++	.brp_min = 1,
+ 	.brp_max = 256,
+ 	.brp_inc = 1,
+ };
  
- static void release_tid(struct c4iw_rdev *rdev, u32 hwtid, struct sk_buff *skb)
-diff --git a/drivers/infiniband/sw/siw/siw_cm.c b/drivers/infiniband/sw/siw/siw_cm.c
-index 17f34d584cd9..3f8181664050 100644
---- a/drivers/infiniband/sw/siw/siw_cm.c
-+++ b/drivers/infiniband/sw/siw/siw_cm.c
-@@ -485,7 +485,7 @@ static int siw_send_mpareqrep(struct siw_cep *cep, const void *pdata, u8 pd_len)
++/* Transmission Delay Compensation constants for CANFD2.0 and Versal  */
++static const struct can_tdc_const xcan_tdc_const = {
++	.tdcv_min = 0,
++	.tdcv_max = 0, /* Manual mode not supported. */
++	.tdco_min = 0,
++	.tdco_max = 64,
++	.tdcf_min = 0, /* Filter window not supported */
++	.tdcf_max = 0,
++};
++
+ /**
+  * xcan_write_reg_le - Write a value to the device register little endian
+  * @priv:	Driver private data structure
+@@ -425,6 +437,11 @@ static int xcan_set_bittiming(struct net_device *ndev)
+ 	    priv->devtype.cantype == XAXI_CANFD_2_0) {
+ 		/* Setting Baud Rate prescalar value in F_BRPR Register */
+ 		btr0 = dbt->brp - 1;
++		if (can_tdc_is_enabled(&priv->can)) {
++			btr0 = btr0 |
++			(priv->can.tdc.tdco) << XCAN_BRPR_TDCO_SHIFT_CANFD |
++			1 << XCAN_BRPR_TDCE_SHIFT_CANFD;
++		}
  
- 	rv = kernel_sendmsg(s, &msg, iov, iovec_num + 1, mpa_len);
+ 		/* Setting Time Segment 1 in BTR Register */
+ 		btr1 = dbt->prop_seg + dbt->phase_seg1 - 1;
+@@ -1747,13 +1764,16 @@ static int xcan_probe(struct platform_device *pdev)
+ 		priv->can.data_bittiming_const =
+ 			&xcan_data_bittiming_const_canfd;
  
--	return rv < 0 ? rv : 0;
-+	return min(rv, 0);
- }
+-	if (devtype->cantype == XAXI_CANFD_2_0)
++	if (devtype->cantype == XAXI_CANFD_2_0) {
+ 		priv->can.data_bittiming_const =
+ 			&xcan_data_bittiming_const_canfd2;
++		priv->can.tdc_const = &xcan_tdc_const;
++	}
  
- /*
-@@ -1324,7 +1324,7 @@ static int kernel_bindconnect(struct socket *s, struct sockaddr *laddr,
+ 	if (devtype->cantype == XAXI_CANFD ||
+ 	    devtype->cantype == XAXI_CANFD_2_0)
+-		priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD;
++		priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD |
++						CAN_CTRLMODE_TDC_AUTO;
  
- 	rv = s->ops->connect(s, raddr, size, flags);
- 
--	return rv < 0 ? rv : 0;
-+	return min(rv, 0);
- }
- 
- int siw_connect(struct iw_cm_id *id, struct iw_cm_conn_param *params)
+ 	priv->reg_base = addr;
+ 	priv->tx_max = tx_max;
 -- 
-2.20.1
+2.25.1
 

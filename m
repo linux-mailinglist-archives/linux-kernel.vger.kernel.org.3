@@ -2,97 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C61AD5241F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 03:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2635241F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 03:19:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349859AbiELBS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 21:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
+        id S1349874AbiELBTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 21:19:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349868AbiELBSy (ORCPT
+        with ESMTP id S1349857AbiELBS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 21:18:54 -0400
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652FF7E587
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 18:18:52 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id m128so7121326ybm.5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 18:18:52 -0700 (PDT)
+        Wed, 11 May 2022 21:18:58 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CE07DA8D;
+        Wed, 11 May 2022 18:18:57 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id n10so3758615pjh.5;
+        Wed, 11 May 2022 18:18:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AnVgcIyIBqniHu4rYLTlqz37Qz+0nzpmLAnn5WFxfPs=;
+        b=Q9U8UNeaLvA04a+8y+a2xJd59Cn9LqfLtp9pFxCYaGjjroX8aohicGf25t1hkXfTxe
+         KkfsAuFAV5nZ1VD4xgHw3W6y2zoFHZCLvHNrt5+c/1QTXx1sPWbawP5BgsSs0yfgVLZm
+         RKpaQtf6npbYQdZMq4bV+jSngyQ4NBfY2olNrFZ1ETKBH8qk2ykIcdGdPIWktQOVFcKd
+         lyNto3FIRmE08eIuSHtNqAGaDNQd67EXEIFIDLBYXZ6PfHTDVfZapnlbluGBDuf+STDG
+         jVAuw0hSD7L63QBFSW03EwhSr+r5qCZFcMe6Uw9VQScuU6515YWsvKAoc+PVKVPjiRvP
+         FTfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=w4stT9a7FDgrQn5Qyvbf3ILrgD/C37efIbL6LozjRUM=;
-        b=gzfYna/tFSGdr2hyUvQ/hJcSIG6oMTwyeQTlnODuHXSwe1zJpCids0p1FYB4+jAxj3
-         yRfRr1HN4olh/ITBZmm8GV+3PXXje/vwhy/3GjAO3xHphsx44/x6RXbjwqW7qX3Cwg+n
-         AY/4gYL6f82c+lRTZpgZFRZi8km7d0BET35G3mJP+dkgohXEoQvi//Ysaq5nJtL78Ofn
-         S7XQCojpdqOntqrVxlgfPkFkkJEHU4K3KCruajCpLu6jzVXeahLfVomlUVyT/BY8HrGP
-         EUWqMryFiZs4luLLDkMqNO+8lsFFrzR37B3hbo1OWQAEsYVeB7GghesvOY6yK+aItMRq
-         nqdA==
-X-Gm-Message-State: AOAM533LMmye/1VXbe9r8YN3UPNGTlgd7ZkrK5m1qtR1EXoZJy+VYDIr
-        W+30dMLv+pLAnJPw+VeuCGTgXXE2w+ZXElqOcso=
-X-Google-Smtp-Source: ABdhPJwcvEkxvkY7EbXbUN1ejuS/pf9M00xo1nrPv7jZAJkGKlmtUEKR6Ug3J5JY2M5YNk3sPr5W13L6HDUpJqQGhYQ=
-X-Received: by 2002:a25:bbc5:0:b0:649:7ef0:1215 with SMTP id
- c5-20020a25bbc5000000b006497ef01215mr25915823ybk.142.1652318331641; Wed, 11
- May 2022 18:18:51 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AnVgcIyIBqniHu4rYLTlqz37Qz+0nzpmLAnn5WFxfPs=;
+        b=Wihowfk4D0MW+7+g1MvUg8G9MCsblpdDE9BleNEgYjNrCDg2dkq/NENJ+g0h6wd/4f
+         c+XMv9PTYwLP4oiVYQEL7qPXQY4yHD5kEFmQbckQOaeMJymZS2EvcFyNrmqTepNEwqvv
+         TZo2StXG0KCeXo7gzyCeTp3+XpN33LnD9gY3E500/Oc4i3yleJASV6IFc7uWJ430T5MM
+         KcgV+oaj8TB4iSN3ye3MgSiezTbSGzlf60WD91orpUVm3LcmhM9CITZoT17J03CMA4Rw
+         S/e7YqQVQmfm/0nIbBfqTnDkKXWNTFkE9vi8alXyIJKZMkZgQ3qDl/krEG8ACSSiK5Ew
+         RsZw==
+X-Gm-Message-State: AOAM532wETQIHZqV6o+EOE7SbWquK6RCWuFkaStcL9FtJo81lyj1goio
+        4sx4gC9qmElpGJzQ39IIgCQ=
+X-Google-Smtp-Source: ABdhPJz/rmyQf3Qoamjem3D5LRE9zsf7vddS53Lp1Scd8NQQ8dwNOtOJXSlw1nFabBJOjpJcXTWJCw==
+X-Received: by 2002:a17:902:7891:b0:15e:cae9:7620 with SMTP id q17-20020a170902789100b0015ecae97620mr28091638pll.136.1652318337357;
+        Wed, 11 May 2022 18:18:57 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id 18-20020a621712000000b0050dc762817asm2398325pfx.84.2022.05.11.18.18.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 18:18:57 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     jejb@linux.ibm.com
+Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] [SCSI] arcmsr: Use kobj_to_dev()
+Date:   Thu, 12 May 2022 01:18:53 +0000
+Message-Id: <20220512011853.1621819-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
- <20220512000340.1171988-1-mailhol.vincent@wanadoo.fr> <20220512000340.1171988-2-mailhol.vincent@wanadoo.fr>
- <CAKwvOdnnDaiJcV1gr9vV+ya-jWxx7+2KJNTDThyFctVDOgt9zQ@mail.gmail.com>
-In-Reply-To: <CAKwvOdnnDaiJcV1gr9vV+ya-jWxx7+2KJNTDThyFctVDOgt9zQ@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Thu, 12 May 2022 10:18:40 +0900
-Message-ID: <CAMZ6RqJ_zU0DL1hiXE_xkOmHQFTxHPPt=c_bPUzGXWrjVJEKJg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] x86/asm/bitops: ffs: use __builtin_ffs to evaluate
- constant expressions
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
-        Jan Beulich <JBeulich@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu. 12 May 2022 at 09:28, Nick Desaulniers <ndesaulniers@google.com> wrote:
-> On Wed, May 11, 2022 at 5:04 PM Vincent Mailhol
-> <mailhol.vincent@wanadoo.fr> wrote:
-> >
-> > And finally, Nick Desaulniers pointed out in [2] that this also fixes
-> > a constant propagation missed-optimization in clang.
-> >
-> > [2] https://lore.kernel.org/all/CAKwvOdnH_gYv4qRN9pKY7jNTQK95xNeH1w1KZJJmvCkh8xJLBg@mail.gmail.com/
->
-> Regarding
-> https://github.com/llvm/llvm-project/issues/55394
-> it seems that functions with static linkage cannot be considered
-> library functions, so libcall optimization will not run on calls to
-> them. So the compiler might be able to do a better job for constants
-> if ffs() and friends indeed were not defined in a header as static
-> inline.  But that relies on the compiler knowing these tricks; I think
-> the kernel's approach is just fine (better in fact, because we should
-> inline these tiny functions, regardless of LTO), but like this series
-> shows, there may be room for improvement for other functions within
-> the kernel that are defined as static inline in headers that are
-> normally found in a libc.
->
-> So I no longer think there's a missed optimization here, but at this
-> point, it's not worth a respin of the series IMO to just let sleeping
-> dogs lie.
->
-> Unless the x86 maintainers wouldn't mind dropping that line and link
-> when applying?
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Let me send the v4, this will save the x86 maintainers some manual
-editing effort (add will add your "Review-by" tag in patch 2 while
-doing so).
+Use kobj_to_dev() instead of open-coding it.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ drivers/scsi/arcmsr/arcmsr_attr.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/scsi/arcmsr/arcmsr_attr.c b/drivers/scsi/arcmsr/arcmsr_attr.c
+index baeb5e795690..041e15929cd3 100644
+--- a/drivers/scsi/arcmsr/arcmsr_attr.c
++++ b/drivers/scsi/arcmsr/arcmsr_attr.c
+@@ -64,7 +64,7 @@ static ssize_t arcmsr_sysfs_iop_message_read(struct file *filp,
+ 					     char *buf, loff_t off,
+ 					     size_t count)
+ {
+-	struct device *dev = container_of(kobj,struct device,kobj);
++	struct device *dev = kobj_to_dev(kobj);
+ 	struct Scsi_Host *host = class_to_shost(dev);
+ 	struct AdapterControlBlock *acb = (struct AdapterControlBlock *) host->hostdata;
+ 	uint8_t *ptmpQbuffer;
+@@ -111,7 +111,7 @@ static ssize_t arcmsr_sysfs_iop_message_write(struct file *filp,
+ 					      char *buf, loff_t off,
+ 					      size_t count)
+ {
+-	struct device *dev = container_of(kobj,struct device,kobj);
++	struct device *dev = kobj_to_dev(kobj);
+ 	struct Scsi_Host *host = class_to_shost(dev);
+ 	struct AdapterControlBlock *acb = (struct AdapterControlBlock *) host->hostdata;
+ 	int32_t user_len, cnt2end;
+@@ -159,7 +159,7 @@ static ssize_t arcmsr_sysfs_iop_message_clear(struct file *filp,
+ 					      char *buf, loff_t off,
+ 					      size_t count)
+ {
+-	struct device *dev = container_of(kobj,struct device,kobj);
++	struct device *dev = kobj_to_dev(kobj);
+ 	struct Scsi_Host *host = class_to_shost(dev);
+ 	struct AdapterControlBlock *acb = (struct AdapterControlBlock *) host->hostdata;
+ 	uint8_t *pQbuffer;
+--
+2.25.1
+
+

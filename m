@@ -2,72 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FEF85249E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 778165249EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351230AbiELKCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 06:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
+        id S1352538AbiELKCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 06:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352456AbiELKAt (ORCPT
+        with ESMTP id S1352495AbiELKAw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 06:00:49 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136BC2311E4
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:00:32 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id kq17so9155592ejb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:00:31 -0700 (PDT)
+        Thu, 12 May 2022 06:00:52 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FBD45F4A
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:00:43 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id x18so6566715wrc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:00:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=bc1mIt/3dkcIrUfw+Wx32EX6v+iTPPZGITrndOapvM4=;
-        b=XWoI6TWSrxqK4NFoOjglomE/cazymfb44cK3GD+F51Mv24B90JgGF4RjFOU6vUL2TA
-         Q5PrHb+k5cF5N4/WTC03LZyXuQyeOh3GeFVMQiDGBW8q3Tnp4VuezfIuUa2Dbb057fxI
-         UdliXYS1OEAbQgB+XnH1fDT8b/s0IlZm3fS1qcO9qmlWwXKVwAOS5cDoYODbM9Se53s8
-         Xs4/A3+oL1w8WnMjB6UxxhXb+S+SXVw9XwXy+6FWk1jGX1IiT6N3rn7h30vnW6D4NWCJ
-         z98XLnrs8xh6/N9nasuXsNNwwNvnK3xguu9XYnlMhc0vYjIFjjH6M91XwBWvRGwyfxwu
-         kqVw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=V3TfJkXWTRH+gtF3lJ5Kz+EdosirYTs2KXZe5HGagKs=;
+        b=Bxu2T3x2MCQWNxLfWKJ5BgpNVx/FHPQDNwxXyE4Wn6iZYjk+tjL5x58Grld7+wHSm8
+         bbUtn05skKCHb2/SyGikrAvxyhpQLHVvj+m8s7fiNCSMkMBhdf+j68pUiwtz7eMSJ2/3
+         UqqPdLP2UJkSU8AnhFMJsRjWmEO9Prj+xpZoRQP+Qv41bVu9BudHpnyoQltLgYtnu53D
+         +4XeZ0eXl2aBNltBHRnJto/HNkoPCl+ChUfNFKqTYjl8u72di94C0aSJLwn6DxBtKBid
+         i6ect2SGZpWgnmMryQRfrdZNrhvQ7YSLaPg/K74tpjFTbahScV0WH8PfsUrGV3hNERwE
+         hN7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=bc1mIt/3dkcIrUfw+Wx32EX6v+iTPPZGITrndOapvM4=;
-        b=VswlmhTnFKq1rMGasxPSexIccEPAyR1vSTcosP3d2uphMYMAme6qo51S255UC/5Ido
-         wIuB5GNiodD4hGjWHTIZxMW1fJK15E7tpktsfof1/6xaxEYmNcNCe5hCMakQqjNXw86m
-         mpUSYQ2qeGEmh899Msa6jm6y22yFWk/TdCcND8uebg4n+RthkSXPdOVozEyx4kgaeU4c
-         ynzV1yoaYGR60tw8eBCy8xrn118A/cwbwcWByWlEWVqa79p4khVIP9u1JoyNjM3g79jg
-         MmSwGLAyc4HqYarbVnt56/VXRaitHcUI0w05vkPTC6M6zuD7mMwncscru7shhPfdhHeZ
-         /9iQ==
-X-Gm-Message-State: AOAM530PewKXf6fDJmYMpm9C6WhDKJ7ekS11uUpa5wIaxk+Vxqzm1hKN
-        Vv7oPGX6mjKut3YLXICdkpIkOQ==
-X-Google-Smtp-Source: ABdhPJwYJ3PjB3jJ91CPv9ONU3HTEf/WZ7sIWJ5XKfonKTYMcQs7h0i1F6unGKj0cysXRYnV8JkFWQ==
-X-Received: by 2002:a17:907:62a6:b0:6ef:8118:d3e2 with SMTP id nd38-20020a17090762a600b006ef8118d3e2mr28698426ejc.605.1652349630543;
-        Thu, 12 May 2022 03:00:30 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id d17-20020a170906641100b006f3ef214da1sm1970287ejm.7.2022.05.12.03.00.29
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=V3TfJkXWTRH+gtF3lJ5Kz+EdosirYTs2KXZe5HGagKs=;
+        b=FcHbGUlEqN+x6ahfdgPnBJaX5d+cp4xvhsJT3bXubALOXv0bKyToa7O6b3sTvUXQPZ
+         3j7RxUln8JUCoQQl1uNX8y+ZG/Oqa0hhx5qR+Hqsqfy8bv7VNSyj/MokT/wV/t0Kq4Tj
+         z5gk996TwKrXkAHxb497FK8yR97wvMKxVWwa5jWohnJjmDgG6SJC8FfJyrxWaWfhkyJd
+         P+XyPa4rycmuEggw6TbX2sPsc6OIOaCNVlYFvuZ3w3r+2nxij4QLQb+WEEdSrOEZkqDv
+         6sLWOBOQou5VRFZxeX7ApxdyGTc+SxO787M1vFTNdW76LD/1Ddn9nQKTl7ZGoAZ2qq8N
+         EClw==
+X-Gm-Message-State: AOAM530kkOe2C57MMLfHsSP6ZRB7Tp4G08OGUQxgDdR0vHuGfQcuOXKP
+        FIRgTyCtpG0QLju9lnhmAfBCLO4Ttrjdzg==
+X-Google-Smtp-Source: ABdhPJyRofIIKPpwVKZvncsUBvl7NBebV7Urul500SOT0rsWCwud4dbPq/neHFp3AZtzxEsgAU+KGA==
+X-Received: by 2002:a05:6000:1a85:b0:20c:7ba1:737b with SMTP id f5-20020a0560001a8500b0020c7ba1737bmr26893152wry.209.1652349641767;
+        Thu, 12 May 2022 03:00:41 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id m126-20020a1ca384000000b003945cdd0d55sm2179637wme.26.2022.05.12.03.00.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 03:00:30 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Sireesh Kodali <sireeshkodali1@gmail.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 12/12] arm64: dts: qcom: sm8450: remove duplicated glink-edge interrupt
-Date:   Thu, 12 May 2022 12:00:06 +0200
-Message-Id: <20220512100006.99695-13-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220512100006.99695-1-krzysztof.kozlowski@linaro.org>
-References: <20220512100006.99695-1-krzysztof.kozlowski@linaro.org>
+        Thu, 12 May 2022 03:00:41 -0700 (PDT)
+Date:   Thu, 12 May 2022 11:00:38 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
+        Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        =?utf-8?Q?=C5=81ukasz?= Bartosik <lb@semihalf.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-edac@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>
+Subject: Re: [PATCH v5 0/8] platform/x86: introduce p2sb_bar() helper
+Message-ID: <YnzaxiNBU1awfLoG@google.com>
+References: <20220510151451.85561-1-andriy.shevchenko@linux.intel.com>
+ <eff9907f-e92b-9115-bea7-b1093d1dc28e@redhat.com>
+ <CAHp75Vcnq=Ou6QNyPjwC+HR9wJ2BheonTqmkGvQU0qFtHO2BDw@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHp75Vcnq=Ou6QNyPjwC+HR9wJ2BheonTqmkGvQU0qFtHO2BDw@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -78,29 +93,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Specifying interrupts and interrupts-extended is not correct.  Keep only
-the extended ones, routed towards IPCC mailbox to fix warnings like:
+On Wed, 11 May 2022, Andy Shevchenko wrote:
 
-  sm8450-qrd.dtb: glink-edge: More than one condition true in oneOf schema:
-    {'$filename': 'Documentation/devicetree/bindings/remoteproc/qcom,glink-edge.yaml',
+> On Wed, May 11, 2022 at 6:08 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> > On 5/10/22 17:14, Andy Shevchenko wrote:
+> 
+> ...
+> 
+> > I must admit I have lost track of all the Ack-s / Reviewed-by-s a bit.
+> >
+> > So from the above I take it that the Ack-s resp. Reviewed-by-s on the
+> > other non drivers/platform/x86 bits also signal an Ack to merge the entire
+> > series through the pdx86 tree?
+> >
+> > Lee, any chance you can take a look at patches 3-5 and give your Ack
+> > for merging these through the pdx86 tree together with the rest?
+> 
+> Actually I misinterpreted Lee's different tags again. Acked-by is
+> normal for routing MFD code via other subsystems, while
+> Acked-for-MFD-by is for Lee (scripts?) to route the code via MFD tree.
+> Lee, is it the correct interpretation now?
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 1 -
- 1 file changed, 1 deletion(-)
+Yes, that is correct.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 7d08fad76371..4e796f27d6fc 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -2282,7 +2282,6 @@ IPCC_MPROC_SIGNAL_GLINK_QMP
- 							     IRQ_TYPE_EDGE_RISING>;
- 				mboxes = <&ipcc IPCC_CLIENT_MPSS
- 						IPCC_MPROC_SIGNAL_GLINK_QMP>;
--				interrupts = <GIC_SPI 449 IRQ_TYPE_EDGE_RISING>;
- 				label = "modem";
- 				qcom,remote-pid = <1>;
- 			};
+I just replied to your 0th patch (before I saw this, sorry).
+
+> ...
+> 
+> > p.s.
+> >
+> > Since this is mostly a cleanup series and since we are getting close
+> > to the next merge-window I believe that it likely is best to merge
+> > this after 5.19-rc1 has been released.
+> 
+> OK.
+> 
+> > I can then also provide
+> > an immutable branch for other maintainers early on in the 5.19
+> > cycle which should help to avoid merge conflicts.
+> 
+> I guess I will send a v6 anyway in order to attach Henning's series to mine.
+> 
+
 -- 
-2.32.0
-
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

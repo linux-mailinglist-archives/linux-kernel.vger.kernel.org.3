@@ -2,124 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E7F524FCD
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:18:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22729524FCB
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355184AbiELOSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 10:18:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52160 "EHLO
+        id S1355201AbiELOSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 10:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355231AbiELOST (ORCPT
+        with ESMTP id S1355183AbiELOSg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 10:18:19 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689A274840
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:18:14 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id j10-20020a17090a94ca00b001dd2131159aso7994844pjw.0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:18:14 -0700 (PDT)
+        Thu, 12 May 2022 10:18:36 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0C28D6AB
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:18:34 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id n18so5008618plg.5
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:18:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=7iZZodcw2kcYl7DcsgXoMrjWgWmUo2hoVmfbC2enldQ=;
-        b=f0iav4TX9MWlsCmY6kc9xgrGJbCfS5isN6BM1Z6iWUxV5R949SvxIHYuhyNXGq/LbV
-         iAVEe/k5sttQeWMaw8UJeNzTt7nM8mgs/GC29uCwzVviZ9UmUBlRI+Yz4RUEq3Dnpjdu
-         2s0PTjvqcKHLtt7RtJpqsNMesXKMwyhVVaDQmx0ZS2gv/W14tS7b3di51NdIdSkN/LgV
-         XzQIgrd3IqcQpA9t8nnDLybJ7SAHI7TXsGvLN72OpLgWmloZOd2HbrLfE11Ys9oztA22
-         585mp7uatbKavu7kiketYuGxOhssXwkcveNeYR6yEJEx5D8busxanwG2Ez59YvnJLBGT
-         vRRg==
+         :content-disposition:in-reply-to;
+        bh=EJCIgLlmlrEBfCKZGVMMjM7XE4hdH7cPIpVtr4puXbg=;
+        b=sqGrRKuvRsGAT9Rvn7s3ecBx0cKJzFT9HRKTHjDSNkBKrH1SCsytVym5adDqxG4sFX
+         EN7HgnWHrznI/Ozg3Bad4LKo99IXblGh8CPUNipHWL4II4TUMScLxYkJ7L3LxXSQZVDi
+         8+eo6lZTNL+9jEazz5mjHxjqfre/rBsSSoct2aXc2jKbir0L1kH0epOiVPONQqf+XGkf
+         6b/FIa5fJs7kbhl82w0oxEcREJCq+uzH4YWT9Sgv41b6nMEV0OCxlknML6OKACriWfAr
+         A05EnBaFxZni+961eBEWEePSwwke4lgomSmL+UFtgg1EnoHUpzFJBLq1Y13g+YkFlV/u
+         Is2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=7iZZodcw2kcYl7DcsgXoMrjWgWmUo2hoVmfbC2enldQ=;
-        b=jm6kOODJ/Sg6wPvkvI+12GItaNmDXgPMUWIh9XYzD02tngdJENhqZLKOXLlTm3ko9V
-         kouMpCATh67nlCGydVDHoGdnBNWtX3sLH8HR3GEcUYAkcMmPcmMLIPlcP+vf6pjSCbds
-         3kTrvgfnjlfNlzvHEn/+biN8Mav7tUqaSDikOCBtpgTIfGRO/h6iKP0eBz4TnTBpSspg
-         NojhoR/pNSSOO6jW1nv8DJTOfy3Df14s85fqqLJTKteZdX/x96ICVnOxIvPwZw7s1RyZ
-         vU1Zyp8h3RyyFQgJ38kKXKhGF48ZItAQPEwq8m79dLonqwtkOFvJhY/TKZzUcyS5wiCb
-         IWTg==
-X-Gm-Message-State: AOAM532+opOl863+4+dt51GfeMBKm9YzSPkOVgTQZOxY7yvMSJVwBokp
-        GjOaMxjN6FAOKPkZlzebYMth
-X-Google-Smtp-Source: ABdhPJy0b5z0NMw6JCWSQ6xCOd3R5EJ290CTQnJbuWRxW4kXTEznCyVtk2LbYi8JPVi2vsroZVZbrg==
-X-Received: by 2002:a17:90a:170c:b0:1dc:20c4:6354 with SMTP id z12-20020a17090a170c00b001dc20c46354mr11089713pjd.113.1652365093661;
-        Thu, 12 May 2022 07:18:13 -0700 (PDT)
-Received: from thinkpad ([117.202.184.202])
-        by smtp.gmail.com with ESMTPSA id u1-20020a170903124100b0015e8d4eb1f2sm3997428plh.60.2022.05.12.07.18.08
+         :mime-version:content-disposition:in-reply-to;
+        bh=EJCIgLlmlrEBfCKZGVMMjM7XE4hdH7cPIpVtr4puXbg=;
+        b=ui/ksmnwx/9nP7sh2fx84NyWVxN+cmx6mpwdD1sNQcFvgdfSPrb/b3gb4uNCpqbAM/
+         oR0UMq8ybxC5dgsU4I61x0VROPPzoCCZEAL/p+pA4eVFqX1AqQD5iy4itKB5NMIq3Tg7
+         nSEIQq5odBZYRSFSXjnHhqExgQyWZ5cbzyIe7O3U94MdDQe2q7hzo+O2/bluleK7dnEV
+         XEYAVArRjQI+UlTiDMq+0Fls/mJdbDrazi6tKL9fQ+kY0jxoWLrpiog9pL+agAqZmoRw
+         FI00dJa2xBJ1tj1eC6fpHGNeKS9oTRsIN6DnghlREvo7y5oLYBNN8gbuMm/OQ+WEXEL2
+         nCcA==
+X-Gm-Message-State: AOAM531YaDheoo3dmzLBEAsWSUrCMw35xJNkLy2/rqo7gZYFsXxB3jsd
+        LCtKE2orKkTX/Is2D7ckgZpiqlgn+c1LzA==
+X-Google-Smtp-Source: ABdhPJylEBGBm3thCxu5K66iXnEOJwEUQ8EAE3QfRKkImsymqDHIZiGiux8MWND7ylRxta3E27DKxQ==
+X-Received: by 2002:a17:903:182:b0:15e:8de0:2859 with SMTP id z2-20020a170903018200b0015e8de02859mr201551plg.124.1652365114298;
+        Thu, 12 May 2022 07:18:34 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id t67-20020a628146000000b0050dc762814asm3903647pfd.36.2022.05.12.07.18.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 07:18:13 -0700 (PDT)
-Date:   Thu, 12 May 2022 19:48:06 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 02/26] dmaengine: Fix dma_slave_config.dst_addr
- description
-Message-ID: <20220512141806.GG35848@thinkpad>
-References: <20220503225104.12108-1-Sergey.Semin@baikalelectronics.ru>
- <20220503225104.12108-3-Sergey.Semin@baikalelectronics.ru>
+        Thu, 12 May 2022 07:18:33 -0700 (PDT)
+Date:   Thu, 12 May 2022 14:18:30 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH 16/22] KVM: x86/mmu: remove redundant bits from extended
+ role
+Message-ID: <Yn0XNnqnbstGSiEl@google.com>
+References: <20220414074000.31438-1-pbonzini@redhat.com>
+ <20220414074000.31438-17-pbonzini@redhat.com>
+ <Ynmv2X5eLz2OQDMB@google.com>
+ <e1fc28b6-996f-a436-2664-d6b044d07c82@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220503225104.12108-3-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <e1fc28b6-996f-a436-2664-d6b044d07c82@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 01:50:40AM +0300, Serge Semin wrote:
-> Most likely due to a copy-paste mistake the dst_addr member of the
-> dma_slave_config structure has been marked as ignored if the !source!
-> address belong to the memory. That is relevant to the src_addr field of
-> the structure while the dst_addr field as containing a destination device
-> address is supposed to be ignored if the destination is the CPU memory.
-> Let's fix the field description accordingly.
+On Thu, May 12, 2022, Paolo Bonzini wrote:
+> On 5/10/22 02:20, Sean Christopherson wrote:
+> > --
+> > From: Sean Christopherson<seanjc@google.com>
+> > Date: Mon, 9 May 2022 17:13:39 -0700
+> > Subject: [PATCH] KVM: x86/mmu: Return true from is_cr4_pae() iff CR0.PG is set
+> > 
+> > Condition is_cr4_pae() on is_cr0_pg() in addition to the !4-byte gPTE
+> > check.  From the MMU's perspective, PAE is disabling if paging is
+> > disabled.  The current code works because all callers check is_cr0_pg()
+> > before invoking is_cr4_pae(), but relying on callers to maintain that
+> > behavior is unnecessarily risky.
+> > 
+> > Fixes: faf729621c96 ("KVM: x86/mmu: remove redundant bits from extended role")
+> > Signed-off-by: Sean Christopherson<seanjc@google.com>
+> > ---
+> >   arch/x86/kvm/mmu/mmu.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index 909372762363..d1c20170a553 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -240,7 +240,7 @@ static inline bool is_cr0_pg(struct kvm_mmu *mmu)
+> > 
+> >   static inline bool is_cr4_pae(struct kvm_mmu *mmu)
+> >   {
+> > -        return !mmu->cpu_role.base.has_4_byte_gpte;
+> > +        return is_cr0_pg(mmu) && !mmu->cpu_role.base.has_4_byte_gpte;
+> >   }
+> > 
+> >   static struct kvm_mmu_role_regs vcpu_to_role_regs(struct kvm_vcpu *vcpu)
 > 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-
-Thanks,
-Mani
-
-> ---
->  include/linux/dmaengine.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Hmm, thinking more about it this is not needed for two kind of opposite
+> reasons:
 > 
-> diff --git a/include/linux/dmaengine.h b/include/linux/dmaengine.h
-> index 842d4f7ca752..f204ea16ac1c 100644
-> --- a/include/linux/dmaengine.h
-> +++ b/include/linux/dmaengine.h
-> @@ -395,7 +395,7 @@ enum dma_slave_buswidth {
->   * should be read (RX), if the source is memory this argument is
->   * ignored.
->   * @dst_addr: this is the physical address where DMA slave data
-> - * should be written (TX), if the source is memory this argument
-> + * should be written (TX), if the destination is memory this argument
->   * is ignored.
->   * @src_addr_width: this is the width in bytes of the source (RX)
->   * register where DMA data shall be read. If the source
-> -- 
-> 2.35.1
+> * if is_cr4_pae() really were to represent the raw CR4.PAE value, this is
+> incorrect and it should be up to the callers to check is_cr0_pg()
 > 
+> * if is_cr4_pae() instead represents 8-byte page table entries, then it does
+> even before this patch, because of the following logic in
+> kvm_calc_cpu_role():
+> 
+>         if (!____is_cr0_pg(regs)) {
+>                 role.base.direct = 1;
+>                 return role;
+>         }
+> 	...
+>         role.base.has_4_byte_gpte = !____is_cr4_pae(regs);
+> 
+> 
+> So whatever meaning we give to is_cr4_pae(), there is no need for the
+> adjustment.
 
--- 
-மணிவண்ணன் சதாசிவம்
+I disagree, because is_cr4_pae() doesn't represent either of those things.  It
+represents the effective (not raw) CR4.PAE from the MMU's perspective.  If you
+want it to represent 8-byte gPTEs, that's fine, but then please name the helper
+accordingly, because is_cr4_pae() is flat out wrong if CR0.PG=0 && CR4.PAE=0.

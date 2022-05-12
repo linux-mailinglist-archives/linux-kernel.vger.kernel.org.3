@@ -2,87 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64B5F52547B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 20:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB1F52547C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 20:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357499AbiELSKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 14:10:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43670 "EHLO
+        id S1357492AbiELSKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 14:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357486AbiELSKD (ORCPT
+        with ESMTP id S1354531AbiELSKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 14:10:03 -0400
-Received: from srv6.fidu.org (srv6.fidu.org [159.69.62.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7148326FA46
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 11:10:00 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by srv6.fidu.org (Postfix) with ESMTP id B7584C800A0;
-        Thu, 12 May 2022 20:09:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        tuxedocomputers.com; h=content-transfer-encoding:mime-version
-        :x-mailer:message-id:date:date:subject:subject:from:from; s=
-        default; t=1652378999; x=1654193400; bh=lnzILpdh2K8lGWVaQPF3fcRF
-        vtUVSxBJPnRKUuK178o=; b=V9vBq+2AoWAORWo09hcDuIxXZ2KL8nvT/vS28wQ1
-        gbqzm5HsslAad7b7vFdOySu/UK/LrRBOkWi1EIID+Rk6wsJZ9lZgt77deuD5dOsA
-        jXIKjag/acvjqqnIpagdDJeYR8qURO3+DawvndbSD9L0p10zjac5a2V1xs+g332B
-        hbw=
-X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
-Received: from srv6.fidu.org ([127.0.0.1])
-        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10026)
-        with LMTP id njhnehTx8C5h; Thu, 12 May 2022 20:09:59 +0200 (CEST)
-Received: from wsembach-tuxedo.fritz.box (host-212-18-30-247.customer.m-online.net [212.18.30.247])
-        (Authenticated sender: wse@tuxedocomputers.com)
-        by srv6.fidu.org (Postfix) with ESMTPA id 1615BC8009E;
-        Thu, 12 May 2022 20:09:59 +0200 (CEST)
-From:   Werner Sembach <wse@tuxedocomputers.com>
-To:     perex@perex.cz, tiwai@suse.com, kai.vehmanen@linux.intel.com,
-        pierre-louis.bossart@linux.intel.com, imre.deak@intel.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] ALSA: hda/realtek: Add quirk for TongFang devices with pop noise
-Date:   Thu, 12 May 2022 20:09:56 +0200
-Message-Id: <20220512180956.281804-1-wse@tuxedocomputers.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 12 May 2022 14:10:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5691B2689C6;
+        Thu, 12 May 2022 11:10:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D458D61682;
+        Thu, 12 May 2022 18:09:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72353C385B8;
+        Thu, 12 May 2022 18:09:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652378999;
+        bh=IPa84a0ExaTFb0Q/aAwP7vM1wEznpiYTW9cY/k40XB8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kgzFv+Yzg6w3p9oWbiNYgbRVrFr+a2wBBfrHCpr0gEKWvnEJYY2DbCOyq5MKneTp6
+         /1D5WZQCabvBh2Fl861WE2Pz04CCWmAlyCUZ9hRXFmd+MZ5FKXps08bdljNJ6Y6GsE
+         EAQl1O4Sh2GGRkGSPfDRsstUqaUgtyPCGdl3f+NWmow9OLv+vsVIpxBP4l32xWnClt
+         WQGQou2JxgtiEALq4/iQvfahVR/txrCSxiYOhJsbon2j6A8i+kXlDPfgf8beDZ0D4i
+         uKLT37oHaghKsaa/F+jfPjdBM0FRnLZisTOQ2fuUVpYa8/lx38IhiwASv2go6z44Wt
+         eRL4GYDm0vAFQ==
+Date:   Thu, 12 May 2022 21:11:37 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
+        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
+        x86@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
+        cedric.xing@intel.com, haitao.huang@intel.com,
+        mark.shanahan@intel.com, vijay.dhanraj@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V5 00/31] x86/sgx and selftests/sgx: Support SGX2
+Message-ID: <Yn1N2chUNs9EcnM3@iki.fi>
+References: <cover.1652137848.git.reinette.chatre@intel.com>
+ <YnrllJ2OqmcqLUuv@kernel.org>
+ <395657d1-b040-89e7-046f-3cbd358ed7c1@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <395657d1-b040-89e7-046f-3cbd358ed7c1@intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When audio stops playing there is an audible "pop"-noise when using
-headphones on the TongFang GMxMRxx, GKxNRxx, GMxZGxx, GMxTGxx and GMxAGxx.
+On Wed, May 11, 2022 at 11:47:31AM -0700, Reinette Chatre wrote:
+> Hi Jarkko,
+> 
+> On 5/10/2022 3:22 PM, Jarkko Sakkinen wrote:
+> > If there is any patch that does not have my reviewed-by, please put it
+> > there. I was totally happy with v4 already. I went through these, and
+> > did not see anything worth of complaining about.
+> > 
+> > Great job, thank you for doing this.
+> > 
+> > I can also add my tag separely to each patch, which have not have it on
+> > request if that makes things easier in any possible way on request.
+> 
+> Thank you very much. I do appreciate all the feedback and testing.
+> 
+> All patches in this series have some tag from you, a few have "Acked-by"
+> instead of "Reviewed-by".
+> 
+> Patch 20/31 "x86/sgx: Free up EPC pages directly to support large
+> page ranges" is the only x86/sgx patch that has an "Acked-by" from you
+> instead of a "Reviewed-by". All selftests/sgx patches have an "Acked-by"
+> from you.
+> 
+> Here is a summary of your tags if you would like to make changes:
+> 
+> [PATCH V5 01/31] x86/sgx: Add short descriptions to ENCLS wrappers
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 02/31] x86/sgx: Add wrapper for SGX2 EMODPR function
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 03/31] x86/sgx: Add wrapper for SGX2 EMODT function
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 04/31] x86/sgx: Add wrapper for SGX2 EAUG function
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 05/31] x86/sgx: Support loading enclave page without VMA
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 06/31] x86/sgx: Export sgx_encl_ewb_cpumask()
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 07/31] x86/sgx: Rename sgx_encl_ewb_cpumask() as sgx_encl_cpumask()
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 08/31] x86/sgx: Move PTE zap code to new sgx_zap_enclave_ptes()
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 09/31] x86/sgx: Make sgx_ipi_cb() available internally
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 10/31] x86/sgx: Create utility to validate user provided offset and length
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 11/31] x86/sgx: Keep record of SGX page type
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 12/31] x86/sgx: Export sgx_encl_{grow,shrink}()
+> 	Suggested-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 13/31] x86/sgx: Export sgx_encl_page_alloc()
+> 	Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 14/31] x86/sgx: Support VA page allocation without reclaiming
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 15/31] x86/sgx: Support restricting of enclave page permissions
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 	Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 16/31] x86/sgx: Support adding of pages to an initialized enclave
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 	Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 17/31] x86/sgx: Tighten accessible memory range after enclave initialization
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 18/31] x86/sgx: Support modifying SGX page type
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 	Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 19/31] x86/sgx: Support complete page removal
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 	Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 20/31] x86/sgx: Free up EPC pages directly to support large page ranges
+> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 21/31] Documentation/x86: Introduce enclave runtime management section
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 22/31] selftests/sgx: Add test for EPCM permission changes
+> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 23/31] selftests/sgx: Add test for TCS page permission changes
+> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 24/31] selftests/sgx: Test two different SGX2 EAUG flows
+> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 25/31] selftests/sgx: Introduce dynamic entry point
+> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 26/31] selftests/sgx: Introduce TCS initialization enclave operation
+> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 27/31] selftests/sgx: Test complete changing of page type flow
+> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 28/31] selftests/sgx: Test faulty enclave behavior
+> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 29/31] selftests/sgx: Test invalid access to removed enclave page
+> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 30/31] selftests/sgx: Test reclaiming of untouched page
+> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 31/31] selftests/sgx: Page removal stress test
+> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>	
+> 
+> 
+> Reinette
 
-This quirk fixes this mostly.
+It looks good. And yeah, I've been running different versions of this patch
+set since April with zero issues, about a month, in our platform. No high
+doubts that anything would wrong that could not be later fixed, if problems
+arise.
 
-Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-Cc: stable@vger.kernel.org
----
- sound/pci/hda/patch_realtek.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index cf531c1efa132..8003bf7441d6d 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -9290,6 +9290,14 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x1c06, 0x2013, "Lemote A1802", ALC269_FIXUP_LEMOTE_A1802),
- 	SND_PCI_QUIRK(0x1c06, 0x2015, "Lemote A190X", ALC269_FIXUP_LEMOTE_A190X),
- 	SND_PCI_QUIRK(0x1d05, 0x1132, "TongFang PHxTxX1", ALC256_FIXUP_SET_COEF_DEFAULTS),
-+	SND_PCI_QUIRK(0x1d05, 0x1096, "TongFang GMxMRxx", ALC269_FIXUP_NO_SHUTUP),
-+	SND_PCI_QUIRK(0x1d05, 0x1100, "TongFang GKxNRxx", ALC269_FIXUP_NO_SHUTUP),
-+	SND_PCI_QUIRK(0x1d05, 0x1111, "TongFang GMxZGxx", ALC269_FIXUP_NO_SHUTUP),
-+	SND_PCI_QUIRK(0x1d05, 0x1119, "TongFang GMxZGxx", ALC269_FIXUP_NO_SHUTUP),
-+	SND_PCI_QUIRK(0x1d05, 0x1129, "TongFang GMxZGxx", ALC269_FIXUP_NO_SHUTUP),
-+	SND_PCI_QUIRK(0x1d05, 0x1147, "TongFang GMxTGxx", ALC269_FIXUP_NO_SHUTUP),
-+	SND_PCI_QUIRK(0x1d05, 0x115c, "TongFang GMxTGxx", ALC269_FIXUP_NO_SHUTUP),
-+	SND_PCI_QUIRK(0x1d05, 0x121b, "TongFang GMxAGxx", ALC269_FIXUP_NO_SHUTUP),
- 	SND_PCI_QUIRK(0x1d72, 0x1602, "RedmiBook", ALC255_FIXUP_XIAOMI_HEADSET_MIC),
- 	SND_PCI_QUIRK(0x1d72, 0x1701, "XiaomiNotebook Pro", ALC298_FIXUP_DELL1_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1d72, 0x1901, "RedmiBook 14", ALC256_FIXUP_ASUS_HEADSET_MIC),
--- 
-2.25.1
-
+BR, Jarkko

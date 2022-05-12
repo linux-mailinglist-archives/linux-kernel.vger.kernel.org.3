@@ -2,211 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C18FB524FE8
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:26:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A8B3524FED
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352279AbiELO0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 10:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
+        id S1355260AbiELO0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 10:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355262AbiELOZ5 (ORCPT
+        with ESMTP id S1355284AbiELO0D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 10:25:57 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F48413F00
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:25:55 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id ch13so10529569ejb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:25:55 -0700 (PDT)
+        Thu, 12 May 2022 10:26:03 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CC81AD87
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:26:02 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2eb7d137101so46825297b3.12
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:26:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=e7wJLjfJ1iVilvpq3jQ/LuI1I5wd6zNBUq4hxK7yISQ=;
-        b=r5ualuxQ0leFqfg+jbNOvJJk8d5rLmW6rQULOQ0IRnTzgGR9H/PIWd9zWwzi3fs9WC
-         S1+FtRFMKsim/XCxLByVyAPekRdEM+FkcCbXi0+pkaqQrGQuMKAqH4LWlJgqhnW90b53
-         hUcHLI6ng/MAOx3Ixjn4Bte8v2Le82Buhh1GjWKoq0c0Q8nk9dyi3F42U34U10f6fyyO
-         +hMWt5oUXdRHyqZvXq4fpzcyQ+u/x9RJ318MWMw/PSTuk7Wo0+iY86IzDn6FKEzxbT8x
-         EG0pnu9SrvZgNIOARlKvfuwqyU1AOdJqhDncYUpZLB5LqJs2JwSHle88uuT735DJAPAC
-         y0cg==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=j9bsN1b2L5uuxoi/IMspLNVh2Kizip/Mswp9v0VIKcw=;
+        b=Ox6W1FtyoROd3nJ1Rp+QL/upobk7KTTBCqQXmIvM043PL/su4Ku4ORBWOh2DQ8EGgS
+         wVMZTdtareDCyGrYmJYXosK8cn9JkaXeNy5yQmHFwV9KF/lZc3UOLClip20N421P0OEo
+         Lq/Bwrdldrsw8XJY0zNEHzrrxDB1RyAIGGVC7yfKYSsYJYy4wYm/0o3Ck14bHHzwgpaT
+         Gql0whJIxnuQPEMMCU493X0cVjbPKtK1DCgsw9y9/gqzSZZZrgkUNI9u0QCtXKg6YT2m
+         E0Z2GYQvbxGCvZZT3GV9MqwU7qxYfMtukZ6IuWlkmQoE+lKa9oF+rT2EKKiDhCyY8xwc
+         DWmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=e7wJLjfJ1iVilvpq3jQ/LuI1I5wd6zNBUq4hxK7yISQ=;
-        b=tEuPJxOtOqXZ0JBR3dvrv7rtvqNDhTBGE4kyZSL1QXF288I8h6RsjoxuMvsBZxhJsg
-         S8LZUUMcLxadI12RVXAplR3eAdrNg1W2vxkEIwcL0rYcy69qvfycWHnBTz6xGKPaf7rt
-         jGAHVfLCAxDAOqOi5ScqQbbIZy/pcLd/BObRjl86wNIOrXCVCQKNusDbgWSfXXOC51gy
-         qf8gncYz1ninD4hYKloX9c149rkBk+X9n2ENZoJxOIy4Ss8ZD3yVr3OoK4xUWBwHNMXu
-         tMVnHkFhO/nOK9alMY2gdIoGDtVz1lfEf16GfzM+1rHzpoTzkTKCKFcQ/SuAOacEtxa7
-         Pdrw==
-X-Gm-Message-State: AOAM532ovCHXRe5gBgVKSi1PRFXpUydJA/TvIO0BvpnIiSwiaT7C1P0u
-        AxZo+mgBcNe8NUa8M+7iI1nX5qrQuUoBiK91
-X-Google-Smtp-Source: ABdhPJxfn8AF52a6nAcaWJI5jbWZNRWTIkVKS2zEyi9i2MQCsxmdkfWrb5DIJvkdV6aURcKf/+NZ2w==
-X-Received: by 2002:a17:907:6e88:b0:6fa:888d:74a7 with SMTP id sh8-20020a1709076e8800b006fa888d74a7mr141867ejc.335.1652365553928;
-        Thu, 12 May 2022 07:25:53 -0700 (PDT)
-Received: from [192.168.0.161] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id n14-20020a170906700e00b006f3ef214e34sm2134511ejj.154.2022.05.12.07.25.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 07:25:53 -0700 (PDT)
-Message-ID: <546ddbd4-927d-2e28-6e82-a67b4584a17f@linaro.org>
-Date:   Thu, 12 May 2022 16:25:51 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v6 2/7] dt-bindings: thermal: Add binding document for
- mt6873 thermal controller
-Content-Language: en-US
-To:     Alexandre Bailon <abailon@baylibre.com>, robh+dt@kernel.org,
-        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, michael.kao@mediatek.com,
-        ben.tseng@mediatek.com, ethan.chang@mediatek.com,
-        frank-w@public-files.de, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, khilman@baylibre.com
-References: <20220512122433.1399802-1-abailon@baylibre.com>
- <20220512122433.1399802-3-abailon@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220512122433.1399802-3-abailon@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=j9bsN1b2L5uuxoi/IMspLNVh2Kizip/Mswp9v0VIKcw=;
+        b=wXQZskJi84H3bRMZtJ/9pAH43L/5MxZwMbqlLukyn7LmRQ1WaxOLeF815BndwZDdH6
+         YAS3m59Ke/eLPE87GzmmdEC2ahJkPfuVcXWgZVDgsLLuJpnZmaTZ0M6JF0wsLI8FY6Wx
+         6oBo0dJb2RvC3bgt3H8H6MLyR3Vn6UKtXKCjhpkfz7XwxPCJBeY2At/pGkMmif9qyZAh
+         SIYixJ2QoEV5STeEEgbJrFwmYIgY3W+X8hBJMBXLCUSWd+UrNQlw/wgcLPTwl2oG+f1o
+         dX8O1Wi5modHHBYnGA/xueG0xI/A57IMPFid12PD9cAHxxz9BPu9UA5LWdjdlX/bomB1
+         7r9Q==
+X-Gm-Message-State: AOAM5315XKvgaFFqqXXL5uPKrZp391O7+zCFiBl9e81a12Z+Kf8Ib9Br
+        TW3cRZOw55uF5r6ATrzVCZ/cp2l/qj1tAA==
+X-Google-Smtp-Source: ABdhPJw0GoGFPNVWWBCxEeoIp+rSU/N13zEDo0TIfGPwSrDhaq+2gnfAjPBHvA2Q9FF277vlpQpqZvVwllDHiQ==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:bd59:7b9f:6863:5402])
+ (user=dlatypov job=sendgmr) by 2002:a25:dccf:0:b0:648:a757:ad34 with SMTP id
+ y198-20020a25dccf000000b00648a757ad34mr86537ybe.66.1652365561816; Thu, 12 May
+ 2022 07:26:01 -0700 (PDT)
+Date:   Thu, 12 May 2022 07:25:55 -0700
+Message-Id: <20220512142555.3554396-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
+Subject: [PATCH v2] kunit: tool: stop using a shell to run kernel under QEMU
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2022 14:24, Alexandre Bailon wrote:
-> From: Michael Kao <michael.kao@mediatek.com>
-> 
-> This patch adds binding document for mt6873 thermal controller.
+Note: this potentially breaks custom qemu_configs if people are using
+them! But the fix for them is simple, don't specify multiple arguments
+in one string and don't add on a redundant ''.
 
-Thank you for your patch. There is something to discuss/improve.
+It feels a bit iffy to be using a shell in the first place.
 
-> 
-> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-> Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
-> ---
->  .../thermal/mediatek-thermal-lvts.yaml        | 81 +++++++++++++++++++
->  1 file changed, 81 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml b/Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml
-> new file mode 100644
-> index 000000000000..69ffe7b14c21
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml
+There's the usual shenanigans where people could pass in arbitrary shell
+commands via --kernel_arg (since we're just adding '' around the
+kernel_cmdline) or via a custom qemu_config.
+This isn't too much of a concern given the nature of this script (and
+the qemu_config file is in python, you can do w/e you want already).
 
-filename: vendor,device
-so something like mediatek,mt6873-lvts.yaml or
-mediatek,mt6873-lvts-thermal.yaml
+But it does have some other drawbacks.
 
-> @@ -0,0 +1,81 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/mediatek-thermal-lvts.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Mediatek SoC LVTS thermal controller (DTS) binding
+One example of a kunit-specific pain point:
+If the relevant qemu binary is missing, we get output like this:
+> /bin/sh: line 1: qemu-system-aarch64: command not found
+This in turn results in our KTAP parser complaining about
+missing/invalid KTAP, but we don't directly show the error!
+It's even more annoying to debug when you consider --raw_output only
+shows KUnit output by default, i.e. you need --raw_output=all to see it.
 
-s/(DTS) binding//
-(unless DTS means something related to hardware)
+Whereas directly invoking the binary, Python will raise a
+FileNotFoundError for us, which is a noisier but more clear.
 
-> +
-> +maintainers:
-> +  - Yu-Chia Chang <ethan.chang@mediatek.com>
-> +  - Ben Tseng <ben.tseng@mediatek.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt6873-lvts
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    items:
-> +      - const: lvts_clk
+Making this change requires
+* splitting parameters like ['-m 256'] into ['-m', '256'] in
+  kunit/qemu_configs/*.py
+* change [''] to [] in kunit/qemu_configs/*.py since otherwise
+  QEMU fails w/ 'Device needs media, but drive is empty'
+* dropping explicit quoting of the kernel cmdline
+* using shlex.quote() when we print what command we're running
+  so the user can copy-paste and run it
 
-Skip "_clk" suffix, so just lvts.
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+---
+v1 -> v2: fix typo (' pseries' => 'pseries')
+---
+ tools/testing/kunit/kunit_kernel.py         | 18 ++++++++++--------
+ tools/testing/kunit/qemu_configs/alpha.py   |  2 +-
+ tools/testing/kunit/qemu_configs/arm.py     |  2 +-
+ tools/testing/kunit/qemu_configs/arm64.py   |  2 +-
+ tools/testing/kunit/qemu_configs/i386.py    |  2 +-
+ tools/testing/kunit/qemu_configs/powerpc.py |  2 +-
+ tools/testing/kunit/qemu_configs/riscv.py   |  6 +++---
+ tools/testing/kunit/qemu_configs/s390.py    |  4 ++--
+ tools/testing/kunit/qemu_configs/sparc.py   |  2 +-
+ tools/testing/kunit/qemu_configs/x86_64.py  |  2 +-
+ 10 files changed, 22 insertions(+), 20 deletions(-)
 
-> +
-> +  "#thermal-sensor-cells":
-> +    const: 0
-> +
-> +required:
-> +  - "#thermal-sensor-cells"
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index 483f78e15ce9..1b9c4922a675 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -11,6 +11,7 @@ import importlib.util
+ import logging
+ import subprocess
+ import os
++import shlex
+ import shutil
+ import signal
+ import threading
+@@ -118,16 +119,17 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+ 				'-nodefaults',
+ 				'-m', '1024',
+ 				'-kernel', kernel_path,
+-				'-append', '\'' + ' '.join(params + [self._kernel_command_line]) + '\'',
++				'-append', ' '.join(params + [self._kernel_command_line]),
+ 				'-no-reboot',
+ 				'-nographic',
+-				'-serial stdio'] + self._extra_qemu_params
+-		print('Running tests with:\n$', ' '.join(qemu_command))
+-		return subprocess.Popen(' '.join(qemu_command),
+-					   stdin=subprocess.PIPE,
+-					   stdout=subprocess.PIPE,
+-					   stderr=subprocess.STDOUT,
+-					   text=True, shell=True, errors='backslashreplace')
++				'-serial', 'stdio'] + self._extra_qemu_params
++		# Note: shlex.join() does what we want, but requires python 3.8+.
++		print('Running tests with:\n$', ' '.join(shlex.quote(arg) for arg in qemu_command))
++		return subprocess.Popen(qemu_command,
++					stdin=subprocess.PIPE,
++					stdout=subprocess.PIPE,
++					stderr=subprocess.STDOUT,
++					text=True, errors='backslashreplace')
+ 
+ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+ 	"""An abstraction over command line operations performed on a source tree."""
+diff --git a/tools/testing/kunit/qemu_configs/alpha.py b/tools/testing/kunit/qemu_configs/alpha.py
+index 5d0c0cff03bd..3ac846e03a6b 100644
+--- a/tools/testing/kunit/qemu_configs/alpha.py
++++ b/tools/testing/kunit/qemu_configs/alpha.py
+@@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
+ 			   qemu_arch='alpha',
+ 			   kernel_path='arch/alpha/boot/vmlinux',
+ 			   kernel_command_line='console=ttyS0',
+-			   extra_qemu_params=[''])
++			   extra_qemu_params=[])
+diff --git a/tools/testing/kunit/qemu_configs/arm.py b/tools/testing/kunit/qemu_configs/arm.py
+index b9c2a35e0296..db2160200566 100644
+--- a/tools/testing/kunit/qemu_configs/arm.py
++++ b/tools/testing/kunit/qemu_configs/arm.py
+@@ -10,4 +10,4 @@ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y''',
+ 			   qemu_arch='arm',
+ 			   kernel_path='arch/arm/boot/zImage',
+ 			   kernel_command_line='console=ttyAMA0',
+-			   extra_qemu_params=['-machine virt'])
++			   extra_qemu_params=['-machine', 'virt'])
+diff --git a/tools/testing/kunit/qemu_configs/arm64.py b/tools/testing/kunit/qemu_configs/arm64.py
+index 517c04459f47..67d04064f785 100644
+--- a/tools/testing/kunit/qemu_configs/arm64.py
++++ b/tools/testing/kunit/qemu_configs/arm64.py
+@@ -9,4 +9,4 @@ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y''',
+ 			   qemu_arch='aarch64',
+ 			   kernel_path='arch/arm64/boot/Image.gz',
+ 			   kernel_command_line='console=ttyAMA0',
+-			   extra_qemu_params=['-machine virt', '-cpu cortex-a57'])
++			   extra_qemu_params=['-machine', 'virt', '-cpu', 'cortex-a57'])
+diff --git a/tools/testing/kunit/qemu_configs/i386.py b/tools/testing/kunit/qemu_configs/i386.py
+index aed3ffd3937d..52b80be40e4b 100644
+--- a/tools/testing/kunit/qemu_configs/i386.py
++++ b/tools/testing/kunit/qemu_configs/i386.py
+@@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
+ 			   qemu_arch='x86_64',
+ 			   kernel_path='arch/x86/boot/bzImage',
+ 			   kernel_command_line='console=ttyS0',
+-			   extra_qemu_params=[''])
++			   extra_qemu_params=[])
+diff --git a/tools/testing/kunit/qemu_configs/powerpc.py b/tools/testing/kunit/qemu_configs/powerpc.py
+index 35e9de24f0db..7ec38d4131f7 100644
+--- a/tools/testing/kunit/qemu_configs/powerpc.py
++++ b/tools/testing/kunit/qemu_configs/powerpc.py
+@@ -9,4 +9,4 @@ CONFIG_HVC_CONSOLE=y''',
+ 			   qemu_arch='ppc64',
+ 			   kernel_path='vmlinux',
+ 			   kernel_command_line='console=ttyS0',
+-			   extra_qemu_params=['-M pseries', '-cpu power8'])
++			   extra_qemu_params=['-M', 'pseries', '-cpu', 'power8'])
+diff --git a/tools/testing/kunit/qemu_configs/riscv.py b/tools/testing/kunit/qemu_configs/riscv.py
+index 9e528087cd7c..b882fde39435 100644
+--- a/tools/testing/kunit/qemu_configs/riscv.py
++++ b/tools/testing/kunit/qemu_configs/riscv.py
+@@ -26,6 +26,6 @@ CONFIG_SERIAL_EARLYCON_RISCV_SBI=y''',
+ 			   kernel_path='arch/riscv/boot/Image',
+ 			   kernel_command_line='console=ttyS0',
+ 			   extra_qemu_params=[
+-					   '-machine virt',
+-					   '-cpu rv64',
+-					   '-bios opensbi-riscv64-generic-fw_dynamic.bin'])
++					   '-machine', 'virt',
++					   '-cpu', 'rv64',
++					   '-bios', 'opensbi-riscv64-generic-fw_dynamic.bin'])
+diff --git a/tools/testing/kunit/qemu_configs/s390.py b/tools/testing/kunit/qemu_configs/s390.py
+index e310bd521113..98fa4fb60c0a 100644
+--- a/tools/testing/kunit/qemu_configs/s390.py
++++ b/tools/testing/kunit/qemu_configs/s390.py
+@@ -10,5 +10,5 @@ CONFIG_MODULES=y''',
+ 			   kernel_path='arch/s390/boot/bzImage',
+ 			   kernel_command_line='console=ttyS0',
+ 			   extra_qemu_params=[
+-					   '-machine s390-ccw-virtio',
+-					   '-cpu qemu',])
++					   '-machine', 's390-ccw-virtio',
++					   '-cpu', 'qemu',])
+diff --git a/tools/testing/kunit/qemu_configs/sparc.py b/tools/testing/kunit/qemu_configs/sparc.py
+index 27f474e7ad6e..e975c4331a7c 100644
+--- a/tools/testing/kunit/qemu_configs/sparc.py
++++ b/tools/testing/kunit/qemu_configs/sparc.py
+@@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
+ 			   qemu_arch='sparc',
+ 			   kernel_path='arch/sparc/boot/zImage',
+ 			   kernel_command_line='console=ttyS0 mem=256M',
+-			   extra_qemu_params=['-m 256'])
++			   extra_qemu_params=['-m', '256'])
+diff --git a/tools/testing/kunit/qemu_configs/x86_64.py b/tools/testing/kunit/qemu_configs/x86_64.py
+index 77ab1aeee8a3..dc7949076863 100644
+--- a/tools/testing/kunit/qemu_configs/x86_64.py
++++ b/tools/testing/kunit/qemu_configs/x86_64.py
+@@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
+ 			   qemu_arch='x86_64',
+ 			   kernel_path='arch/x86/boot/bzImage',
+ 			   kernel_command_line='console=ttyS0',
+-			   extra_qemu_params=[''])
++			   extra_qemu_params=[])
 
-You should reference in allOf therma-sensor.yaml unless this is not a
-thermal sensor?
+base-commit: 38289a26e1b8a37755f3e07056ca416c1ee2a2e8
+-- 
+2.36.0.512.ge40c2bad7a-goog
 
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/thermal/thermal.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/mt8192-clk.h>
-> +    dts: lvts@1100b000 {
-
-Generic node name, so thermal-sensor
-
-> +        compatible = "mediatek,mt6873-lvts";
-> +        reg = <0x1100b000 0x1000>;
-> +        clocks = <&infracfg CLK_INFRA_THERM>;
-> +        clock-names = "lvts_clk";
-> +        #thermal-sensor-cells = <0>;
-> +        interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_HIGH>;
-> +    };
-> +
-> +    thermal-zones {
-> +        cpu_thermal: cpu-thermal {
-> +            polling-delay-passive = <0>;
-> +            polling-delay = <0>;
-> +
-> +            thermal-sensors = <&dts>;
-> +            trips {
-> +                cpu_alert1: cpu-alert1 {
-> +                    temperature = <85000>;
-> +                    hysteresis = <0>;
-> +                    type = "passive";
-> +                };
-> +
-> +                cpu_crit: cpu-crit {
-> +                    temperature = <120000>;
-> +                    hysteresis = <0>;
-> +                    type = "critical";
-> +                };
-> +            };
-> +
-> +            cooling-maps {
-> +            };
-
-Empty node? Is it used anyhow here?
-
-> +        };
-> +    };
-> +...
-
-
-Best regards,
-Krzysztof

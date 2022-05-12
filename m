@@ -2,157 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A8B15252CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A9905252D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356618AbiELQkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 12:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36712 "EHLO
+        id S1356609AbiELQl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 12:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356597AbiELQkY (ORCPT
+        with ESMTP id S236495AbiELQly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 12:40:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E0842685DC
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 09:40:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652373618;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NsJep5oCvE52cG8IYLZ5lNH1MW8yFZhmyzXX66loBtY=;
-        b=XoLxstCC8bh8lkxKIfPpYg/4m6wrS7Q+HFvk1vz5XUwdyFCDeg9KX26j3PMwy0oipBl4Mn
-        PyVZ1tYmGcDvW2qKbmSnB3vdFosutCODGwJ+n53k95cEbKoW/g9r8cHO5nx2ebQ43ijOiI
-        7yyphX6dIN8GXHf/GnXBb7eVTHh30mw=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-225-Kr9BY_KXP7W46BRkyXm1aA-1; Thu, 12 May 2022 12:40:16 -0400
-X-MC-Unique: Kr9BY_KXP7W46BRkyXm1aA-1
-Received: by mail-wm1-f69.google.com with SMTP id 26-20020a05600c021a00b003940660c053so1845973wmi.2
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 09:40:16 -0700 (PDT)
+        Thu, 12 May 2022 12:41:54 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249AC5D5F6;
+        Thu, 12 May 2022 09:41:54 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d22so5421030plr.9;
+        Thu, 12 May 2022 09:41:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6TwX+Uem+RX7yFMEQloRfhp790CWUfMnBz6v8ZFXqWw=;
+        b=W0iepvlelCLBuiCrQ0b37NsVuwjZqmnDvDuXQwTxPwqmfcisydLXhlvB+5bIBxb9Mo
+         DDIm9SAd9GCqOj8Y1mqJ3sPE2DDD2VG+CyW+x8zKZGJ1ncvmUcgmSj5NWAatP+ff85TH
+         ZnWqN4wW+Xvd09HvOI7ErGXsWF0qITMEkVBE8CptKkPKH0y41qpN2h8EhYFt/EnyW95X
+         LUnS06SYFHbr1Fd4ZdIEgY2aNXkWlf7fBX3yTTPM4sIzGKDRzP8t5PBqeY5+wGCWKGeI
+         4l9xLi0L1UoF0RefF/g+HEKdfK0lgVXEOyZZ3Lz8Yy/OIJTAikD/cX/wCLx1Gu2ea24/
+         QN8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=NsJep5oCvE52cG8IYLZ5lNH1MW8yFZhmyzXX66loBtY=;
-        b=L5Ct1ve1Orm9HQI0j+EnQ/MYZ2ZU4K1TkvCQotGDPnBAzQAOLlvP3JXx3lPjEgt6jT
-         fKlNOHVOs+APzOoo1OboNX5QSpeSvS1DpEf5nLYg9BXv4ltAFjjpjSMK96+NDwyyW3jb
-         iUDUgPQImf6+HHsTAt8qSS70h+ABPWHRCdEITMSEZYoHTtee3zXewbQbmabuaykgJfZI
-         etGgVSXqUg2tgXy3TIgCk8dY6ebfAbJcX0vFsjcRKSXqhTYQVA+71p6OCDKLlft4rexa
-         Z87BwdiRPSclcQPTBX3YLM1NUtsUeiY73CsJeSVi9u3i+o5f7F0LmaG/H9c4htnTiini
-         D4aw==
-X-Gm-Message-State: AOAM533Bxy4ZnysVDpHNQRAnzarnpvZ2ZzvoVfWjXfSMJyDaPitA/pp3
-        ua1+ZFWA0wD3yfH0+MGu+s+xoaXaHzGcMqAj7Ug0rU4tVHUTHTMRs7+XJJsevwdhecEn3a3kgBb
-        bumN927+1ZLxhXQLxNI///Xft
-X-Received: by 2002:adf:e812:0:b0:20c:dd44:b06c with SMTP id o18-20020adfe812000000b0020cdd44b06cmr468985wrm.714.1652373615740;
-        Thu, 12 May 2022 09:40:15 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwWKc+W5dfrOdOxweNVXdTz6oJYOENyjVQGLe4xiMAybfEgwkqqsd4IYjrdjYIX8sxGYcz+PA==
-X-Received: by 2002:adf:e812:0:b0:20c:dd44:b06c with SMTP id o18-20020adfe812000000b0020cdd44b06cmr468956wrm.714.1652373615462;
-        Thu, 12 May 2022 09:40:15 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c701:d200:ee5d:1275:f171:136d? (p200300cbc701d200ee5d1275f171136d.dip0.t-ipconnect.de. [2003:cb:c701:d200:ee5d:1275:f171:136d])
-        by smtp.gmail.com with ESMTPSA id d11-20020adfa34b000000b0020c86a9f33bsm65751wrb.18.2022.05.12.09.40.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 09:40:14 -0700 (PDT)
-Message-ID: <089a4ded-636f-b0c6-0645-8220c5a785d9@redhat.com>
-Date:   Thu, 12 May 2022 18:40:13 +0200
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=6TwX+Uem+RX7yFMEQloRfhp790CWUfMnBz6v8ZFXqWw=;
+        b=4Qx/+dLMe/UYMi/4NF5aXGTzt6txId//pn0zTeIZEmB7igS/a8vc1e7ruASYup9ViL
+         vsmmNel4A2ato1HKfpQ9nHOlL1yjEAfpnOVbWzvvUtB/Xl0WAA6SvbiepWoeWFQSdoQV
+         CX6n0ERvWDrz/IhAHDgbIJlxuWDysXisyjP3ok6RdzMcASdLNz89eix9umQIgeT9iScI
+         yV6hkMzP+qxBErEl8vBV4sE5LdXk1BOYQvtpDR4c/pVLHGJwYdmYjq8Js/6lo6dKkilF
+         jfUp1rnbu/tgBvtuyq36DlZQpZaJbdRA2eqtDTpcIbNpzi2NCzE4+Jk+pDK4Ay7duYRv
+         ResQ==
+X-Gm-Message-State: AOAM530g93I3/N321NxGBxcb0167fLbNgCKlQqX1I3cc/Ly3mZysNPCW
+        5fMuj4oJAlo5bTTqViSMhB8=
+X-Google-Smtp-Source: ABdhPJzsb54QRB11Kg0xwOQPwsZz32Td9eLOjqUbH9eOlCaQUD4CO9IvOZZ+4QXL8vYjVErb6WonGA==
+X-Received: by 2002:a17:902:ab96:b0:159:1ff:4ea0 with SMTP id f22-20020a170902ab9600b0015901ff4ea0mr779294plr.60.1652373713356;
+        Thu, 12 May 2022 09:41:53 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:6c64])
+        by smtp.gmail.com with ESMTPSA id x4-20020a62fb04000000b0050dc76281a9sm46574pfm.131.2022.05.12.09.41.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 09:41:52 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 12 May 2022 06:41:51 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Byungchul Park <byungchul.park@lge.com>
+Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
+        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tytso@mit.edu, willy@infradead.org,
+        david@fromorbit.com, amir73il@gmail.com,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
+        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, rodrigosiqueiramelo@gmail.com,
+        melissa.srw@gmail.com, hamohammed.sa@gmail.com,
+        42.hyeyoo@gmail.com, mcgrof@kernel.org, holt@sgi.com
+Subject: Re: [REPORT] syscall reboot + umh + firmware fallback
+Message-ID: <Yn04z6xzqJQqYNOX@slm.duckdns.org>
+References: <YnzQHWASAxsGL9HW@slm.duckdns.org>
+ <1652354304-17492-1-git-send-email-byungchul.park@lge.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v3 1/2] KVM: s390: Don't indicate suppression on dirtying,
- failing memop
-Content-Language: en-US
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     Sven Schnelle <svens@linux.ibm.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org
-References: <20220512131019.2594948-1-scgl@linux.ibm.com>
- <20220512131019.2594948-2-scgl@linux.ibm.com>
- <77f6f5e7-5945-c478-0e41-affed62252eb@redhat.com>
- <4a06e3e8-4453-9204-eb66-d435860c5714@linux.ibm.com>
- <701033df-49c5-987e-b316-40835ad83d16@redhat.com>
- <9ad7acb4-2729-15bb-7b25-eb95c4a12f09@linux.ibm.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <9ad7acb4-2729-15bb-7b25-eb95c4a12f09@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1652354304-17492-1-git-send-email-byungchul.park@lge.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.05.22 18:26, Christian Borntraeger wrote:
-> 
-> 
-> Am 12.05.22 um 17:50 schrieb David Hildenbrand:
->> On 12.05.22 15:51, Christian Borntraeger wrote:
->>>
->>>
->>> Am 12.05.22 um 15:22 schrieb David Hildenbrand:
->>>> On 12.05.22 15:10, Janis Schoetterl-Glausch wrote:
->>>>> If user space uses a memop to emulate an instruction and that
->>>>> memop fails, the execution of the instruction ends.
->>>>> Instruction execution can end in different ways, one of which is
->>>>> suppression, which requires that the instruction execute like a no-op.
->>>>> A writing memop that spans multiple pages and fails due to key
->>>>> protection may have modified guest memory, as a result, the likely
->>>>> correct ending is termination. Therefore, do not indicate a
->>>>> suppressing instruction ending in this case.
->>>>
->>>> I think that is possibly problematic handling.
->>>>
->>>> In TCG we stumbled in similar issues in the past for MVC when crossing
->>>> page boundaries. Failing after modifying the first page already
->>>> seriously broke some user space, because the guest would retry the
->>>> instruction after fixing up the fault reason on the second page: if
->>>> source and destination operands overlap, you'll be in trouble because
->>>> the input parameters already changed.
->>>>
->>>> For this reason, in TCG we make sure that all accesses are valid before
->>>> starting modifications.
->>>>
->>>> See target/s390x/tcg/mem_helper.c:do_helper_mvc with access_prepare()
->>>> and friends as an example.
->>>>
->>>> Now, I don't know how to tackle that for KVM, I just wanted to raise
->>>> awareness that injecting an interrupt after modifying page content is
->>>> possible dodgy and dangerous.
->>>
->>> this is really special and only for key protection crossing pages.
->>> Its been done since the 70ies in that way on z/VM. The architecture
->>> is and was always written in a way to allow termination for this
->>> case for hypervisors.
->>
->> Just so I understand correctly: all instructions that a hypervisor with
->> hardware virtualization is supposed to emulate are "written in a way to
->> allow termination", correct? That makes things a lot easier.
-> 
-> Only for key protection. Key protection can always be terminating no matter
-> what the instruction says. This is historical baggage - key protection was
-> resulting in abends - killing the process. So it does not matter if we
-> provide the extra info as in enhanced suppression on protection as nobody
-> is making use of that (apart from debuggers maybe).
+Hello,
 
-Got it, makes sense then. Thanks for clarifying!
+On Thu, May 12, 2022 at 08:18:24PM +0900, Byungchul Park wrote:
+> > 1. wait_for_completion_killable_timeout() doesn't need someone to wake it up
+> >    to make forward progress because it will unstick itself after timeout
+> >    expires.
+> 
+> I have a question about this one. Yes, it would never been stuck thanks
+> to timeout. However, IIUC, timeouts are not supposed to expire in normal
+> cases. So I thought a timeout expiration means not a normal case so need
+> to inform it in terms of dependency so as to prevent further expiraton.
+> That's why I have been trying to track even timeout'ed APIs.
+> 
+> Do you think DEPT shouldn't track timeout APIs? If I was wrong, I
+> shouldn't track the timeout APIs any more.
+
+Without actually surveying the use cases, I can't say for sure but my
+experience has been that we often get pretty creative with timeouts and it's
+something people actively think about and monitor (and it's usually not
+subtle). Given that, I'm skeptical about how much value it'd add for a
+dependency checker to warn about timeouts. It might be net negative than the
+other way around.
+
+> > 2. complete_all() from __fw_load_abort() isn't the only source of wakeup.
+> >    The fw loader can be, and mainly should be, woken up by firmware loading
+> >    actually completing instead of being aborted.
+> 
+> This is the point I'd like to ask. In normal cases, fw_load_done() might
+> happen, of course, if the loading gets completed. However, I was
+> wondering if the kernel ensures either fw_load_done() or fw_load_abort()
+> to be called by *another* context while kernel_halt().
+
+We'll have to walk through the code to tell that. On a cursory look tho, up
+until that point (just before shutting down usermode helper), I don't see
+anything which would actively block firmware loading.
+
+Thanks.
 
 -- 
-Thanks,
-
-David / dhildenb
-
+tejun

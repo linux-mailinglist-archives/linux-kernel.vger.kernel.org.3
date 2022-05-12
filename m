@@ -2,268 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A77524F3E
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE62524F53
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354911AbiELODG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 10:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48036 "EHLO
+        id S1354935AbiELODr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 10:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343674AbiELODE (ORCPT
+        with ESMTP id S1354957AbiELOD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 10:03:04 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF475621F
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:03:03 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2fb9a85a124so54408567b3.13
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:03:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KlDkQpCn49Egj2gNBh7QJsQSLZROJtZtgLe+YMoSoeo=;
-        b=N3570Jyc5Be2853QkpFfp1yCxzkBQU3WOotacVP2mpU9bVdFZU9pNQNBGnXw6ZGK4p
-         OK6g2jhm8N2ACXg12P63FUp7J3EQNCcAnJhkgWXeMmp/D7WLv1d22lfsfD1KCodNVg3/
-         4wcCCLuCtkN2yUgOhBGKfZIFZFCj0pjOXSh8pe5l+hstpwodlzK7pes7t+dq15YwMLq0
-         x5Myz0uiG8mSPZYxHSBkx8CDdr5cDPktvIOJaO/rZAnVGjBvU3pf+f43IaQlauwNIo/n
-         3bpokGajPVE1F2fAvaB9UgUgk1IOmd+VwPb9NWRGQH4l6SbR/CCXQ0QT9g/SoDTUo/BJ
-         Iimg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KlDkQpCn49Egj2gNBh7QJsQSLZROJtZtgLe+YMoSoeo=;
-        b=OcbckI1Pkzl0AzzuyGFeuQqU8j9oaVb4abXdHau8H+u96txx+4BrkKiy8qDJnQ2zvv
-         sSLLJNJeYUHNuT9UBWfdPoYSQdxwM4fq2/UWtxOk+72kcCqdoyPyhAqejeFPUF/oABeo
-         W7AGI4K/q9jz2ywnu2yRcgJuhBeubORR8sl3JDA7PYTaUBqohd3Xk1PKj9z4Lc0BHugZ
-         IIGkxsbI/GZv/PxfRixWMzt1C6bwMNS0LMcH7z3R2P8/L1wudyBA1IAq9FcGoNCGc/bI
-         tRkjtWXa5p8yJaNhokG8w1TuwxAWAB1hOUKOjX+2pVVSUWJzT+IMNrAR4dwmzL2txyUs
-         64AQ==
-X-Gm-Message-State: AOAM531S2sKNIV0gZpjv36RFgBypJoxYLZRLlfCYor5cOm3+hXoJOQgL
-        qjNA35OP6qbCWbCILktWVK1JG6K8T53OzaTB4CE7rFUZGMQ=
-X-Google-Smtp-Source: ABdhPJxnn7D4LVeIOfQOk+RSZWj5mvF54pTLOLu7vH5wr16JxWLf2fOlF1Woe/Z0TOy+MD7A+t4Wk3Tl+SskM+2nWT8=
-X-Received: by 2002:a81:5204:0:b0:2fb:9312:52fc with SMTP id
- g4-20020a815204000000b002fb931252fcmr169486ywb.67.1652364182208; Thu, 12 May
- 2022 07:03:02 -0700 (PDT)
+        Thu, 12 May 2022 10:03:29 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D54562DE
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:03:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652364208; x=1683900208;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=NhDtgoaMXvySOWMIQkpesDgHu3RGoaDVVPAaHf5XlfI=;
+  b=Hk5pNnYSNDwkqswWiqpAtUhNO51MFpzRoFquiCJBiRLPRnZgwrw9QMQD
+   nzR6lZjMPgSa2ifmfK7LNhJ/rSqhapzrGh62pOZaro7lTpXOwjm+h6ZUV
+   1C02k5PRZOv2+I7JO8brOCi+pM/f9iusxnPUYjnBhyvqnYP2fyaoY8ehx
+   E3TztBjngHhQeWNt9P0edMR+yyqjage2Wal1Ezrkwaq2jhoOWYMYLyZir
+   lGEymZT9S6zB50SgtF4o6ePzCdAedDXhhyFTWa7QubFMEZ3Bqu1NHNlr3
+   VtFH2+xENO66A+Ft9M18jJ7sIeWU3GjxOVoA5GvuQTUPTCunxduuaK9A3
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="268842240"
+X-IronPort-AV: E=Sophos;i="5.91,220,1647327600"; 
+   d="scan'208";a="268842240"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 07:03:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,220,1647327600"; 
+   d="scan'208";a="624410444"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 12 May 2022 07:03:27 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1np9Pa-000KXL-Gz;
+        Thu, 12 May 2022 14:03:26 +0000
+Date:   Thu, 12 May 2022 22:02:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:locking/core] BUILD SUCCESS
+ 434e09e7575b02e014931bc5672289fabd7a825c
+Message-ID: <627d1393.2WVFmW15INOyldqt%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20220427160544.40309-1-zhouchengming@bytedance.com> <4f04f101-53c1-0ac8-c7e8-ff2999ed35ba@bytedance.com>
-In-Reply-To: <4f04f101-53c1-0ac8-c7e8-ff2999ed35ba@bytedance.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Thu, 12 May 2022 16:02:49 +0200
-Message-ID: <CAKfTPtDpqECw_mo1+iPN8OPb3cBf7ppJsLSTAJwPRLr-N3auqg@mail.gmail.com>
-Subject: Re: [PATCH] sched/fair: optimize and simplify rq leaf_cfs_rq_list
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com, songmuchun@bytedance.com,
-        zhengqi.arch@bytedance.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chengming,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
+branch HEAD: 434e09e7575b02e014931bc5672289fabd7a825c  locking/qrwlock: Change "queue rwlock" to "queued rwlock"
 
-Your patch is on my list but I have been busy on other stuff and we
-had enough warnings and problems with this part that I want to
-carefully review that all the cases are covered. I will review it soon
+elapsed time: 1079m
 
-Vincent
+configs tested: 228
+configs skipped: 4
 
-On Wed, 11 May 2022 at 14:05, Chengming Zhou
-<zhouchengming@bytedance.com> wrote:
->
-> Hello, friendly ping...
->
->
-> On 2022/4/28 00:05, Chengming Zhou wrote:
-> > We notice the rq leaf_cfs_rq_list has two problems when do bugfix
-> > backports and some test profiling.
-> >
-> > 1. cfs_rqs under throttled subtree could be added to the list, and
-> >    make their fully decayed ancestors on the list, even though not needed.
-> >
-> > 2. #1 also make the leaf_cfs_rq_list management complex and error prone,
-> >    this is the list of related bugfix so far:
-> >
-> >    commit 31bc6aeaab1d ("sched/fair: Optimize update_blocked_averages()")
-> >    commit fe61468b2cbc ("sched/fair: Fix enqueue_task_fair warning")
-> >    commit b34cb07dde7c ("sched/fair: Fix enqueue_task_fair() warning some more")
-> >    commit 39f23ce07b93 ("sched/fair: Fix unthrottle_cfs_rq() for leaf_cfs_rq list")
-> >    commit 0258bdfaff5b ("sched/fair: Fix unfairness caused by missing load decay")
-> >    commit a7b359fc6a37 ("sched/fair: Correctly insert cfs_rq's to list on unthrottle")
-> >    commit fdaba61ef8a2 ("sched/fair: Ensure that the CFS parent is added after unthrottling")
-> >    commit 2630cde26711 ("sched/fair: Add ancestors of unthrottled undecayed cfs_rq")
-> >
-> > commit 31bc6aeaab1d ("sched/fair: Optimize update_blocked_averages()")
-> > delete every cfs_rq under throttled subtree from rq->leaf_cfs_rq_list,
-> > and delete the throttled_hierarchy() test in update_blocked_averages(),
-> > which optimized update_blocked_averages().
-> >
-> > But those later bugfix add cfs_rqs under throttled subtree back to
-> > rq->leaf_cfs_rq_list again, with their fully decayed ancestors, for
-> > the integrity of rq->leaf_cfs_rq_list.
-> >
-> > This patch takes another method, skip all cfs_rqs under throttled
-> > hierarchy when list_add_leaf_cfs_rq(), to completely make cfs_rqs
-> > under throttled subtree off the leaf_cfs_rq_list.
-> >
-> > So we don't need to consider throttled related things in
-> > enqueue_entity(), unthrottle_cfs_rq() and enqueue_task_fair(),
-> > which simplify the code a lot. Also optimize update_blocked_averages()
-> > since cfs_rqs under throttled hierarchy and their ancestors
-> > won't be on the leaf_cfs_rq_list.
-> >
-> > Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> > ---
-> >  kernel/sched/fair.c | 72 ++++++++++-----------------------------------
-> >  1 file changed, 16 insertions(+), 56 deletions(-)
-> >
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index 1ad18b5cc1b8..083c3d32c899 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -309,6 +309,8 @@ const struct sched_class fair_sched_class;
-> >
-> >  #ifdef CONFIG_FAIR_GROUP_SCHED
-> >
-> > +static inline int throttled_hierarchy(struct cfs_rq *cfs_rq);
-> > +
-> >  /* Walk up scheduling entities hierarchy */
-> >  #define for_each_sched_entity(se) \
-> >               for (; se; se = se->parent)
-> > @@ -331,7 +333,7 @@ static inline bool list_add_leaf_cfs_rq(struct cfs_rq *cfs_rq)
-> >       struct rq *rq = rq_of(cfs_rq);
-> >       int cpu = cpu_of(rq);
-> >
-> > -     if (cfs_rq->on_list)
-> > +     if (cfs_rq->on_list || throttled_hierarchy(cfs_rq))
-> >               return rq->tmp_alone_branch == &rq->leaf_cfs_rq_list;
-> >
-> >       cfs_rq->on_list = 1;
-> > @@ -3242,8 +3244,6 @@ static long calc_group_shares(struct cfs_rq *cfs_rq)
-> >  }
-> >  #endif /* CONFIG_SMP */
-> >
-> > -static inline int throttled_hierarchy(struct cfs_rq *cfs_rq);
-> > -
-> >  /*
-> >   * Recomputes the group entity based on the current state of its group
-> >   * runqueue.
-> > @@ -4356,16 +4356,10 @@ enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
-> >               __enqueue_entity(cfs_rq, se);
-> >       se->on_rq = 1;
-> >
-> > -     /*
-> > -      * When bandwidth control is enabled, cfs might have been removed
-> > -      * because of a parent been throttled but cfs->nr_running > 1. Try to
-> > -      * add it unconditionally.
-> > -      */
-> > -     if (cfs_rq->nr_running == 1 || cfs_bandwidth_used())
-> > +     if (cfs_rq->nr_running == 1) {
-> >               list_add_leaf_cfs_rq(cfs_rq);
-> > -
-> > -     if (cfs_rq->nr_running == 1)
-> >               check_enqueue_throttle(cfs_rq);
-> > +     }
-> >  }
-> >
-> >  static void __clear_buddies_last(struct sched_entity *se)
-> > @@ -4980,11 +4974,18 @@ void unthrottle_cfs_rq(struct cfs_rq *cfs_rq)
-> >       /* update hierarchical throttle state */
-> >       walk_tg_tree_from(cfs_rq->tg, tg_nop, tg_unthrottle_up, (void *)rq);
-> >
-> > -     /* Nothing to run but something to decay (on_list)? Complete the branch */
-> >       if (!cfs_rq->load.weight) {
-> > -             if (cfs_rq->on_list)
-> > -                     goto unthrottle_throttle;
-> > -             return;
-> > +             if (!cfs_rq->on_list)
-> > +                     return;
-> > +             /*
-> > +              * Nothing to run but something to decay (on_list)?
-> > +              * Complete the branch.
-> > +              */
-> > +             for_each_sched_entity(se) {
-> > +                     if (list_add_leaf_cfs_rq(cfs_rq_of(se)))
-> > +                             break;
-> > +             }
-> > +             goto unthrottle_throttle;
-> >       }
-> >
-> >       task_delta = cfs_rq->h_nr_running;
-> > @@ -5022,31 +5023,12 @@ void unthrottle_cfs_rq(struct cfs_rq *cfs_rq)
-> >               /* end evaluation on encountering a throttled cfs_rq */
-> >               if (cfs_rq_throttled(qcfs_rq))
-> >                       goto unthrottle_throttle;
-> > -
-> > -             /*
-> > -              * One parent has been throttled and cfs_rq removed from the
-> > -              * list. Add it back to not break the leaf list.
-> > -              */
-> > -             if (throttled_hierarchy(qcfs_rq))
-> > -                     list_add_leaf_cfs_rq(qcfs_rq);
-> >       }
-> >
-> >       /* At this point se is NULL and we are at root level*/
-> >       add_nr_running(rq, task_delta);
-> >
-> >  unthrottle_throttle:
-> > -     /*
-> > -      * The cfs_rq_throttled() breaks in the above iteration can result in
-> > -      * incomplete leaf list maintenance, resulting in triggering the
-> > -      * assertion below.
-> > -      */
-> > -     for_each_sched_entity(se) {
-> > -             struct cfs_rq *qcfs_rq = cfs_rq_of(se);
-> > -
-> > -             if (list_add_leaf_cfs_rq(qcfs_rq))
-> > -                     break;
-> > -     }
-> > -
-> >       assert_list_leaf_cfs_rq(rq);
-> >
-> >       /* Determine whether we need to wake up potentially idle CPU: */
-> > @@ -5701,13 +5683,6 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
-> >               /* end evaluation on encountering a throttled cfs_rq */
-> >               if (cfs_rq_throttled(cfs_rq))
-> >                       goto enqueue_throttle;
-> > -
-> > -               /*
-> > -                * One parent has been throttled and cfs_rq removed from the
-> > -                * list. Add it back to not break the leaf list.
-> > -                */
-> > -               if (throttled_hierarchy(cfs_rq))
-> > -                       list_add_leaf_cfs_rq(cfs_rq);
-> >       }
-> >
-> >       /* At this point se is NULL and we are at root level*/
-> > @@ -5731,21 +5706,6 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
-> >               update_overutilized_status(rq);
-> >
-> >  enqueue_throttle:
-> > -     if (cfs_bandwidth_used()) {
-> > -             /*
-> > -              * When bandwidth control is enabled; the cfs_rq_throttled()
-> > -              * breaks in the above iteration can result in incomplete
-> > -              * leaf list maintenance, resulting in triggering the assertion
-> > -              * below.
-> > -              */
-> > -             for_each_sched_entity(se) {
-> > -                     cfs_rq = cfs_rq_of(se);
-> > -
-> > -                     if (list_add_leaf_cfs_rq(cfs_rq))
-> > -                             break;
-> > -             }
-> > -     }
-> > -
-> >       assert_list_leaf_cfs_rq(rq);
-> >
-> >       hrtick_update(rq);
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                 randconfig-c001-20220509
+i386                          randconfig-c001
+arm                         lpc18xx_defconfig
+sh                          rsk7269_defconfig
+mips                          rb532_defconfig
+powerpc                 mpc834x_mds_defconfig
+powerpc64                           defconfig
+sh                        edosk7760_defconfig
+arc                          axs101_defconfig
+h8300                       h8s-sim_defconfig
+xtensa                generic_kc705_defconfig
+xtensa                         virt_defconfig
+um                                  defconfig
+m68k                       m5249evb_defconfig
+sh                          urquell_defconfig
+ia64                         bigsur_defconfig
+arm                            pleb_defconfig
+xtensa                          iss_defconfig
+arm                        mini2440_defconfig
+arm                        multi_v7_defconfig
+m68k                        m5272c3_defconfig
+sh                          rsk7201_defconfig
+arm                         at91_dt_defconfig
+arc                        nsim_700_defconfig
+powerpc                 linkstation_defconfig
+powerpc                       eiger_defconfig
+arm                          iop32x_defconfig
+arm                         cm_x300_defconfig
+arm                           h3600_defconfig
+um                               alldefconfig
+xtensa                  cadence_csp_defconfig
+sh                          r7785rp_defconfig
+sh                                  defconfig
+powerpc                  storcenter_defconfig
+sparc                       sparc64_defconfig
+arm                       aspeed_g5_defconfig
+ia64                        generic_defconfig
+xtensa                  nommu_kc705_defconfig
+sh                           se7721_defconfig
+m68k                             allmodconfig
+sh                           sh2007_defconfig
+i386                                defconfig
+powerpc                     sequoia_defconfig
+sh                          polaris_defconfig
+sh                            hp6xx_defconfig
+sparc                            alldefconfig
+arc                         haps_hs_defconfig
+m68k                          multi_defconfig
+sh                          sdk7780_defconfig
+s390                             allyesconfig
+nios2                         10m50_defconfig
+openrisc                 simple_smp_defconfig
+sh                         ecovec24_defconfig
+mips                  maltasmvp_eva_defconfig
+sparc                       sparc32_defconfig
+sh                           se7750_defconfig
+arm                          exynos_defconfig
+s390                       zfcpdump_defconfig
+arc                          axs103_defconfig
+m68k                       m5208evb_defconfig
+powerpc                      pcm030_defconfig
+mips                       capcella_defconfig
+arc                    vdk_hs38_smp_defconfig
+powerpc                     taishan_defconfig
+mips                            ar7_defconfig
+xtensa                    smp_lx200_defconfig
+sh                         microdev_defconfig
+arm                          simpad_defconfig
+xtensa                       common_defconfig
+powerpc                 mpc837x_mds_defconfig
+h8300                            allyesconfig
+sh                          kfr2r09_defconfig
+sh                            migor_defconfig
+powerpc                     tqm8555_defconfig
+parisc                generic-32bit_defconfig
+alpha                            allyesconfig
+m68k                        mvme147_defconfig
+powerpc                        cell_defconfig
+ia64                                defconfig
+m68k                             alldefconfig
+openrisc                            defconfig
+sh                          lboxre2_defconfig
+sh                           se7722_defconfig
+openrisc                  or1klitex_defconfig
+m68k                        m5407c3_defconfig
+riscv                               defconfig
+xtensa                           alldefconfig
+powerpc                   currituck_defconfig
+sh                     sh7710voipgw_defconfig
+sh                           se7206_defconfig
+ia64                          tiger_defconfig
+sh                        apsh4ad0a_defconfig
+powerpc                      ep88xc_defconfig
+powerpc                         ps3_defconfig
+arm                             rpc_defconfig
+arm                        spear6xx_defconfig
+sh                      rts7751r2d1_defconfig
+powerpc                      cm5200_defconfig
+sh                           se7724_defconfig
+sh                          rsk7203_defconfig
+powerpc                     tqm8548_defconfig
+openrisc                         alldefconfig
+powerpc                 mpc834x_itx_defconfig
+x86_64               randconfig-c001-20220509
+arm                  randconfig-c002-20220509
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220512
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                             allyesconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+arc                                 defconfig
+xtensa                           allyesconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64               randconfig-a015-20220509
+x86_64               randconfig-a012-20220509
+x86_64               randconfig-a016-20220509
+x86_64               randconfig-a014-20220509
+x86_64               randconfig-a013-20220509
+x86_64               randconfig-a011-20220509
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                 randconfig-a011-20220509
+i386                 randconfig-a013-20220509
+i386                 randconfig-a016-20220509
+i386                 randconfig-a015-20220509
+i386                 randconfig-a014-20220509
+i386                 randconfig-a012-20220509
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220509
+s390                 randconfig-r044-20220509
+riscv                randconfig-r042-20220509
+s390                 randconfig-r044-20220512
+riscv                randconfig-r042-20220512
+arc                  randconfig-r043-20220512
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+
+clang tested configs:
+x86_64               randconfig-c007-20220509
+s390                 randconfig-c005-20220509
+i386                 randconfig-c001-20220509
+powerpc              randconfig-c003-20220509
+riscv                randconfig-c006-20220509
+mips                 randconfig-c004-20220509
+arm                  randconfig-c002-20220509
+s390                 randconfig-c005-20220512
+powerpc              randconfig-c003-20220512
+x86_64                        randconfig-c007
+riscv                randconfig-c006-20220512
+mips                 randconfig-c004-20220512
+i386                          randconfig-c001
+arm                  randconfig-c002-20220512
+powerpc                      acadia_defconfig
+mips                       rbtx49xx_defconfig
+mips                        maltaup_defconfig
+mips                      maltaaprp_defconfig
+mips                        omega2p_defconfig
+powerpc                 xes_mpc85xx_defconfig
+arm                  colibri_pxa300_defconfig
+arm                       versatile_defconfig
+powerpc                     ppa8548_defconfig
+arm                         shannon_defconfig
+powerpc                    mvme5100_defconfig
+x86_64               randconfig-a006-20220509
+x86_64               randconfig-a002-20220509
+x86_64               randconfig-a001-20220509
+x86_64               randconfig-a004-20220509
+x86_64               randconfig-a005-20220509
+x86_64               randconfig-a003-20220509
+i386                 randconfig-a004-20220509
+i386                 randconfig-a006-20220509
+i386                 randconfig-a002-20220509
+i386                 randconfig-a003-20220509
+i386                 randconfig-a001-20220509
+i386                 randconfig-a005-20220509
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+hexagon              randconfig-r041-20220509
+hexagon              randconfig-r045-20220509
+hexagon              randconfig-r045-20220512
+hexagon              randconfig-r041-20220512
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

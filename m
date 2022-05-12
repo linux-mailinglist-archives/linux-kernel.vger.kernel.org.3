@@ -2,63 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D470524252
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 04:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03757524257
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 04:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237206AbiELCIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 22:08:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47702 "EHLO
+        id S237827AbiELCKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 22:10:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234973AbiELCIA (ORCPT
+        with ESMTP id S237316AbiELCKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 22:08:00 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC476D38C;
-        Wed, 11 May 2022 19:07:58 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 24C27abX015835
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 May 2022 22:07:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1652321259; bh=N0RrHZICQeD+jMKffmiVOPCX1VOHVXkmF2unBxL2MJo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=ICSnAYgUceKKXsBKoRVPVEIQKsCW0KTrDhONUN31qeHKplZYIzPxqs8r+P+6YnX6x
-         abGDraN6I6t1+6cpTxV+pX/G3fEwMzr4yTmbUKBr0T0taRo1DJimXKf5Gg79Ohpl3X
-         JpMubQ0WlA6eF0LKDzQNgnOqe3puzHfHVqCXvtBW3+YG7uyHfHolbIovUtrn+rdOwy
-         JRr9Qa2HfVEUQ+aQ+EAp9AyaK7SPZhtHVsCbScLn15PNFhEYvE1xXltNl0sfjvJCFF
-         uoPI6+2MP/NnYrl1D9pLkyRIkK7Nn5W9/l5pldeyIP7y4GsgumtbbEERrnA1b/cRhh
-         9OGVUNr2s3ldg==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 0BBB915C3F2A; Wed, 11 May 2022 22:07:36 -0400 (EDT)
-Date:   Wed, 11 May 2022 22:07:36 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        KVM list <kvm@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        mie@igel.co.jp
-Subject: Re: [GIT PULL] virtio: last minute fixup
-Message-ID: <Ynxr6JNczWFTwxVw@mit.edu>
-References: <20220510082351-mutt-send-email-mst@kernel.org>
- <CAHk-=wjPR+bj7P1O=MAQWXp0Mx2hHuNQ1acn6gS+mRo_kbo5Lg@mail.gmail.com>
- <YnrxTMVRtDnGA/EK@dev-arch.thelio-3990X>
- <CAHk-=wgAk3NEJ2PHtb0jXzCUOGytiHLq=rzjkFKfpiuH-SROgA@mail.gmail.com>
- <20220511125140.ormw47yluv4btiey@meerkat.local>
- <87a6bo89w4.fsf@mpe.ellerman.id.au>
- <20220511163116.fpw2lvrkjbxmiesz@meerkat.local>
+        Wed, 11 May 2022 22:10:34 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427F36D4E5;
+        Wed, 11 May 2022 19:10:33 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-d39f741ba0so5005570fac.13;
+        Wed, 11 May 2022 19:10:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=fQPyapFD5yK80jYccvbvTBqZpr7+hTPz6GZIBB/rNbA=;
+        b=Ni3GZ9Qc0o3tjDRWDIeIxobqwxfiOAI7j7D0aepL2h5WqmHnZVW9IN9PMJV9D6MN3m
+         JYzymJ6BdNipNzEKnCH7sh5v7o1sqUPhpm/9F/KRwsn6l9o+u/wU/sID9efPj97LR1T2
+         VxiYchU7dJOlqU/FRK67LOBAMc9+BqQe2BF10NyUn+SnLShEVkTyPw8nWwNTtvqAedIm
+         QaX8cGY9JfzeqNVmd63gjHJQCssHXcmbsPy1zKEXF1zDKQs+Y7D8g9XduPik/98ZMzoy
+         +3fCHsjIdXZi2Bf2D/vCdn+00hjE9/0HBgYgKaBfum1tnCPj3agFpSpHZsUZ56zYyYKo
+         dbaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=fQPyapFD5yK80jYccvbvTBqZpr7+hTPz6GZIBB/rNbA=;
+        b=t1RhQtP+RDIFZzX1Yz65b7Jo5m+/HFvr6EOE33gnILjk1qwwrllhDtq7MLYWEp7fVx
+         QzGpC2VS1JY1/RH0bX2ksCELhhN7dsAQavv4FtNfmQrFNvkoCnnlpXFBqD232WFTcps+
+         xZ39vdTopCxv18Hn0xXAzKsC2uebzLumEE1i7S3rJ0mF33on3nIqZX/hkO6ar6K9ykpm
+         GxxHC00PMkf0FufcibXLhlMg5EWBsb0S91qhNNgqdGielrG6Q6vKdRwuS36SVI3WF7wW
+         7AIpuVNTZ6BbCz+yLGnw+mVtRnF4HKjRSACUDOAFSiiPqBO4pcKD2qkJch2B5AO3eNY3
+         CVfA==
+X-Gm-Message-State: AOAM533iEngov2z8/ECyzJZ1etpNHXa/h4Kak5zHvDTnk3U6pac4xuEB
+        yV7absZzC73/pZQtzQ4d6JA=
+X-Google-Smtp-Source: ABdhPJwih7XGoH9aHoDALG7XhRniGayDQ/zJFlFdwZodO4DdCTjGWMpPmnclN9++nJeq/Nr2LEp8Pw==
+X-Received: by 2002:a05:6870:b010:b0:e5:ff56:61d1 with SMTP id y16-20020a056870b01000b000e5ff5661d1mr4468918oae.47.1652321432596;
+        Wed, 11 May 2022 19:10:32 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f6-20020a056830056600b006062836c4f4sm1459845otc.71.2022.05.11.19.10.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 19:10:31 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e5f6c712-efed-2126-de2b-9a0d09150e7b@roeck-us.net>
+Date:   Wed, 11 May 2022 19:10:29 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220511163116.fpw2lvrkjbxmiesz@meerkat.local>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: en-US
+To:     Corentin Labbe <clabbe@baylibre.com>, jdelvare@suse.com
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhang Rui <rui.zhang@intel.com>
+References: <20220509063010.3878134-1-clabbe@baylibre.com>
+ <20220509063010.3878134-3-clabbe@baylibre.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v3 2/2] hwmon: acpi_power_meter: convert to
+ hwmon_device_register_with_info
+In-Reply-To: <20220509063010.3878134-3-clabbe@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,27 +78,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 12:31:16PM -0400, Konstantin Ryabitsev wrote:
-> > But my mailer, editor and terminal don't know what to do with a Message-Id.
-> > 
-> > Whereas they can all open an https link.
-> > 
-> > Making people paste message ids into lore to see the original submission
-> > is not a win. People make enough fun of us already for still using email
-> > to submit patches, let's not make their job any easier :)
+Corentin,
+
+On 5/8/22 23:30, Corentin Labbe wrote:
+> Booting lead to a hwmon_device_register() is deprecated. Please convert the driver to use hwmon_device_register_with_info().
+> So let's convert the driver to use hwmon_device_register_with_info().
 > 
-> Okay, I'm fine with using a dedicated trailer for this purpose, perhaps an
-> "Archived-At"? That's a real header that was proposed by IETF for similar
-> purposes. E.g.:
-> 
->     Archived-at: https://lore.kernel.org/r/CAHk-=wgAk3NEJ2PHtb0jXzCUOGytiHLq=rzjkFKfpiuH-SROgA@mail.gmail.com
->
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> ---
+[ ... ]
 
-I'd suggest is "Patch-Link".  Then we can also have "Bug-Link:",
-"Test-Link:", etc.
+> @@ -836,20 +740,20 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
+>   		if (res)
+>   			break;
+>   
+> -		remove_attrs(resource);
+> +		remove_domain_devices(resource);
+>   		setup_attrs(resource);
 
-"Patch-Link" is a tad bit shorter "Archived-at", and ultimately, it's
-not actually not the patch which is being archived.  It's the fact
-that it's a pointer to the patch review which is of most interest.
+Zhang Rui found an interesting problem with this code:
+It needs a call to sysfs_update_groups(hwmon_dev->groups)
+to update sysfs attribute visibility, probably between
+remove_domain_devices() and setup_attrs().
 
-					- Ted
+>   		break;
+>   	case METER_NOTIFY_TRIP:
+> -		sysfs_notify(&device->dev.kobj, NULL, POWER_AVERAGE_NAME);
+> +		hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_average, 0);
+
+... which makes realize: The notification device should be the hwmon device.
+That would be resource->hwmon_dev, not the acpi device.
+
+Thanks,
+Guenter

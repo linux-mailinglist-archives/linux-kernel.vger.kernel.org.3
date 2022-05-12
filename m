@@ -2,203 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2181524541
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 07:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1830524545
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 07:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350058AbiELF6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 01:58:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
+        id S1347143AbiELF7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 01:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245288AbiELF6D (ORCPT
+        with ESMTP id S230164AbiELF7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 01:58:03 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB3F21A97D;
-        Wed, 11 May 2022 22:58:01 -0700 (PDT)
+        Thu, 12 May 2022 01:59:21 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A73421AA8F;
+        Wed, 11 May 2022 22:59:20 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id n6so2851745ili.7;
+        Wed, 11 May 2022 22:59:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652335081; x=1683871081;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=NZnDnpvgn5my4A1DvCZcio68+0nCB9EOlvfdWJyoVwM=;
-  b=uaN6etRChmtAK0UDuMe2evnLmOnyeKLErk9PA17i15vm40hyTVueYf2w
-   bK3K+KrZfIiOJNc/PupvPOW6JTFP1kWEn6SGspAc+sj7Eif3jTPHsI+3E
-   MeW75yaUMsPBVCYydGI47t7SiRU2zEmWzjO2cnUvnETWEmpYoiuJ4nj6n
-   M=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 11 May 2022 22:58:01 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 22:58:00 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 11 May 2022 22:58:00 -0700
-Received: from [10.216.61.198] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 11 May
- 2022 22:57:53 -0700
-Message-ID: <9644d608-4ab9-ed0d-50fb-0016e4331361@quicinc.com>
-Date:   Thu, 12 May 2022 11:27:48 +0530
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
+         :subject:content-transfer-encoding;
+        bh=i6sSIotdIWouqlURKWF/odLlAcLzJKzrea0b/RTwDAQ=;
+        b=baKvNss1FgFVPquDs+enoki70l8DphZzft/UeT78trhXzx1hh3DoaeloO6ZK2puzgt
+         Zffybs5INr7xmPldsidZ4DMKUHwfXgSfsM6c2dhE5yrRCHFtlIyPGMnP/p85VosDvhYi
+         H4k/F3BPqZptVb6/pTJe/x9QTie2iL+/arsFJjdORZvKxRPPFiHKxdUEglafIBQy1aN6
+         RnwB509eU8/hEzN9TgBCw3LnvXQKGR6B8uuJUmoLiI13v40XEMrawP7omD5THim1eTTe
+         7+JK6aUDASQmfSa6pG8Qr+bjsOafTBO/aaWR+4BTCUvGFrNQVXJ8Mk9PxcUwXk0FerWL
+         9mig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:from:subject:content-transfer-encoding;
+        bh=i6sSIotdIWouqlURKWF/odLlAcLzJKzrea0b/RTwDAQ=;
+        b=t3kmjEPTJxAV/6Z4rqi8UJj7WZX72bwRBlN1RX94AHGYj9NrsZYmC++wuRlOo7lBEb
+         2DIWy3PUwEi+PRZ3bJ3Vv9JxM+vVYIPNQcC0i/JP8ad7Rjy3s/n7NiCHM104dkctgK3g
+         ZPY1gE/s6t8h4LcmDvsJOcHC8Kt3F1fyZWv6WXzdlAORXthdxqEt0NFpRMfX/gb5lkwx
+         l+M1xw25pDpuSsny9NNX+eeA7gp7KqCjxwXYbFnKg8M7cdHFbHM24AEXZqki16CM1sMx
+         UDSh51tNCWS2di30mJ+Dy42Hru8gYxWWAOlBoj5o0zwrVgobAy6ttH75e8h+GfTxPEcN
+         smOA==
+X-Gm-Message-State: AOAM531y5IK715Zxosmu7D7vi24lrXYHU2l416lEOak7gcTXae3Tn6mG
+        Dgbu0tCkXnflkXVOLeq6nvs=
+X-Google-Smtp-Source: ABdhPJwJc/133PL3/MkHui2eEbGZKlk1DxaQS1ki/TTpZHhP1e4OCilxlH0XBkf1X1VkMxOaotgzcQ==
+X-Received: by 2002:a05:6e02:f11:b0:2cf:7745:d4a with SMTP id x17-20020a056e020f1100b002cf77450d4amr13517811ilj.313.1652335159828;
+        Wed, 11 May 2022 22:59:19 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:fdf4:a10e:cb39:9b64? ([2600:1700:2442:6db0:fdf4:a10e:cb39:9b64])
+        by smtp.gmail.com with ESMTPSA id m17-20020a927111000000b002cde6e352c6sm1159994ilc.16.2022.05.11.22.59.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 22:59:19 -0700 (PDT)
+Message-ID: <bc6e9ed7-d98b-c4da-2a59-ee0915c18f10@gmail.com>
+Date:   Thu, 12 May 2022 00:59:17 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [v4 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
- override params bindings
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        "Vinod Koul" <vkoul@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-References: <1652282793-5580-1-git-send-email-quic_kriskura@quicinc.com>
- <1652282793-5580-2-git-send-email-quic_kriskura@quicinc.com>
- <d296720d-ccbe-27f0-8ba1-9653af25dd52@linaro.org>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <d296720d-ccbe-27f0-8ba1-9653af25dd52@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Frank Rowand <frowand.list@gmail.com>,
+        David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>, Tim.Bird@sony.com,
+        Brendan Higgins <brendanhiggins@google.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, rmr167@gmail.com,
+        guillaume.tucker@collabora.com, dlatypov@google.com,
+        kernelci@groups.io, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+From:   Frank Rowand <frowand.list@gmail.com>
+Subject: [RFC] KTAP spec v2: prefix to KTAP data
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In the middle of the "RFC - kernel test result specification (KTAP)" thread,
+started in August 2021, Tim Bird made a suggestion to allow a prefix to the
+KTAP data format:
 
-On 5/11/2022 11:49 PM, Krzysztof Kozlowski wrote:
-> On 11/05/2022 17:26, Krishna Kurapati wrote:
->> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
->>
->> Add device tree bindings for SNPS phy tuning parameters.
->>
->> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
->> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->> ---
->>   .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 87 ++++++++++++++++++++++
->>   1 file changed, 87 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
->> index 1ce251d..70efffe 100644
->> --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
->> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
->> @@ -53,6 +53,93 @@ properties:
->>     vdda33-supply:
->>       description: phandle to the regulator 3.3V supply node.
->>   
->> +  qcom,hs-disconnect-bps:
->> +    $ref: /schemas/types.yaml#/definitions/int32
->> +    description:
->> +      This adjusts the voltage level for the threshold used to
->> +      detect a disconnect event at the host. Possible values are.
->> +      The values defined are in multiples of basis points (1bp = 0.01%).
-> This means there is some minimum and maximum (100%)?
-
-Hi Krzystof,
-
-Yes there are max and min for each parameter (not necessarily 0%/100%)
-
-As an example if we take squelch detector threshold, the register value 
-vs actual percentage changer as per data book is as follows :
-
-% change in voltage    |     corresponding reg value
-
-  -20.90%                        |    7
-  -15.60%                        |    6
--10.30%                         |    5
--5.30%                           |    4
-0%                                  |    3
-5.30%                            |    2
-10.60%                          |    1
-15.90%                          |    0
-
-Here the min and max are 15.9% to -20.9%
-
-The min and max differ for each parameter and might not be necessarily 
-0% and 100%
->> +      The hardware accepts only discrete values. The value closest to the
->> +      provided input will be chosen as the override value for this param.
->> +
->> +  qcom,squelch-detector-bps:
->> +    $ref: /schemas/types.yaml#/definitions/int32
->> +    description:
->> +      This adjusts the voltage level for the threshold used to
->> +      detect valid high-speed data.
->> +      The values defined are in multiples of basis points (1bp = 0.01%).
->> +      The hardware accepts only discrete values. The value closest to the
->> +      provided input will be chosen as the override value for this param.
->> +
->> +  qcom,hs-amplitude-bps:
->> +    $ref: /schemas/types.yaml#/definitions/int32
->> +    description:
->> +      This adjusts the high-speed DC level voltage.
->> +      The values defined are in multiples of basis points (1bp = 0.01%).
->> +      The hardware accepts only discrete values. The value closest to the
->> +      provided input will be chosen as the override value for this param.
->> +
->> +  qcom,pre-emphasis-duration-bps:
->> +    $ref: /schemas/types.yaml#/definitions/int32
->> +    description:
->> +      This signal controls the duration for which the
->> +      HS pre-emphasis current is sourced onto DP<#> or DM<#>.
->> +      The HS Transmitter pre-emphasis duration is defined in terms of
->> +      unit amounts. One unit of pre-emphasis duration is approximately
->> +      650 ps and is defined as 1X pre-emphasis duration.
->> +      The values defined are in multiples of basis points (1bp = 0.01%).
->> +      The hardware accepts only discrete values. The value closest to the
->> +      provided input will be chosen as the override value for this param.
->> +
->> +  qcom,pre-emphasis-amplitude-bps:
->> +    $ref: /schemas/types.yaml#/definitions/int32
->> +    description:
->> +      This signal controls the amount of current sourced to
->> +      DP<#> and DM<#> after a J-to-K or K-to-J transition.
->> +      The HS Transmitter pre-emphasis current is defined in terms of unit
->> +      amounts. One unit amount is approximately 2 mA and is defined as
->> +      1X pre-emphasis current.
->> +      The values defined are in multiples of basis points (1bp = 0.01%).
->> +      The hardware accepts only discrete values. The value closest to the
->> +      provided input will be chosen as the override value for this param.
->> +
->> +  qcom,hs-rise-fall-time-bps:
->> +    $ref: /schemas/types.yaml#/definitions/int32
->> +    description:
->> +      This adjusts the rise/fall times of the high-speed waveform.
->> +      The values defined are in multiples of basis points (1bp = 0.01%).
->> +      The hardware accepts only discrete values. The value closest to the
->> +      provided input will be chosen as the override value for this param.
->> +
->> +  qcom,hs-crossover-voltage-mv:
->> +    $ref: /schemas/types.yaml#/definitions/int32
->> +    description:
->> +      This adjusts the voltage at which the DP<#> and DM<#>
->> +      signals cross while transmitting in HS mode.
->> +      The values defined are in milli volts. The hardware accepts only
->> +      discrete values. The value closest to the provided input will be
->> +      chosen as the override value for this param.
->> +
->> +  qcom,hs-output-impedance-mohm:
->> +    $ref: /schemas/types.yaml#/definitions/int32
-> Here and in other places, please use standard units. See
-> dtschema/schemas/property-units.yaml in dtschema repo.
+> Just as a side note, in some Fuego tests, it was very useful to include an identifier
+> in thethe prefix nested tests.  The output looked like this:
 >
+> TAP version 13
+> 1..2
+> [batch_id 4] TAP version 13
+> [batch_id 4] 1..2
+> [batch_id 4] ok 1 - cyclictest with 1000 cycles
+> [batch_id 4] # problem setting CLOCK_REALTIME
+> [batch_id 4] not ok 2 - cyclictest with CLOCK_REALTIME
+> not ok 1 - check realtime
+> [batch_id 4] TAP version 13
+> [batch_id 4] 1..1
+> [batch_id 4] ok 1 - IOZone read/write 4k blocks
+> ok 2 - check I/O performance
 >
-> Best regards,
-> Krzysztof
+> Can I propose that the prefix not be fixed by the spec, but that the spec indicates that
+> whatever the prefix is on the TAP version line, that prefix must be used with the output for
+> all lines from the test (with the exception of unknown lines)?
+
+The thread was discussing many other items, but this is the one that I want
+to focus on in this new RFC thread.
+
+Tim's original email was:
+
+   https://lore.kernel.org/r/BYAPR13MB2503A4B79074D8ED5579345DFDCB9@BYAPR13MB2503.namprd13.prod.outlook.com
+
+There was one reply to this that commented on Tim's suggestion (and also many
+other items in the thread) at:
+
+   https://lore.kernel.org/r/202108301226.800F3D6D4@keescook
+
+> Oh, interesting. This would also allow parallel (unique) test execution
+> to be parsable. That sounds workable. (Again, this needs LAVA patching
+> again...)
+
+I found Tim's original suggestion to be useful, so I have come up with
+two possible ways to modify the KTAP specification to implement what Tim
+was thinking about.  I would not be surprised if someone else has a better
+suggestion than mine, but I will reply to this email with my two alternatives
+to start a discussion.  My alternatives are not in the form of patches, but
+if discussion leads to a good result then I will create a patch for review.
+
+-Frank

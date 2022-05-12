@@ -2,88 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F3D5250F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3957B5250FB
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355746AbiELPMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 11:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42020 "EHLO
+        id S1355769AbiELPMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 11:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355775AbiELPMK (ORCPT
+        with ESMTP id S1355759AbiELPMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 11:12:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0DA0554A7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:12:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E145861E42
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 15:12:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC39CC385B8;
-        Thu, 12 May 2022 15:12:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652368328;
-        bh=uYvMyxzmEzgGs3lP9laB6AIOtldLOsLsxFxjFqAdLXo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sBQRfnUv/ca+85vrpjesPIxdKdgiMljkmIZppAtfxQyk09MZXAbwlvvUqjcOt2n2A
-         dEoXTis3MD4xnnsEaPMpa1EgKQuBHkApCeNPkNLbxdkHELHL3KI67rGzSblRcD+QV0
-         FJf7Uho/8upVG7WGp9d0OPH50jm4xBuV0pw2//XGqjgaSkCKkxhzM7BQKNVfcOX/IC
-         4a71yQ5fJ/PbpfUBVmnzL209EriGr+YpbR4Wbjq+XdTj/FNUVHwJ0oNntwBaXvgAE4
-         AGOeYW+imMB0UgQ8F+c3VKyve3jttJYDNBYEEwb3wt6tZ6zEWnn2A0VHQ3PKJ7pn2D
-         AeV6sG/T2RCoA==
-Date:   Thu, 12 May 2022 08:12:06 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-Subject: Re: [RFC PATCH 3/3] objtool/mcount: Add powerpc specific functions
-Message-ID: <20220512151206.dphxz5jyeshwc4jb@treble>
-References: <20220318105140.43914-1-sv@linux.ibm.com>
- <20220318105140.43914-4-sv@linux.ibm.com>
- <YjR6kHq4c/rjCTpr@hirez.programming.kicks-ass.net>
- <0b55f122-4760-c1ba-840a-0911cefec2ad@csgroup.eu>
- <20220328195920.dqlfra3lcardko6r@treble>
- <b8fac6e2-c117-86cf-2901-5ae0852ca403@csgroup.eu>
+        Thu, 12 May 2022 11:12:36 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867F0262705
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:12:35 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id i27so10847582ejd.9
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:12:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=URAyLVGzg8Nt4aDbg3Gbees9letYmMiBHHAQBtnqWOg=;
+        b=Sz0wAf/nuR9sykNUsrdx7wu/2uB9VWEK4Lk+0EPPHIb/+SAcG2B0hOLzt3zkTxVlm2
+         qUeKFfx/kYDQSEfmeSdLV1eAo7/NOUosm/NjXv4hxnf/SMauHIBN0aOaZhYtou/cS+wc
+         yBVTKyOdM7CxbFhx5HcdWWTryb3qhzftC9eygXuJ0vEJ8eemFtvH3cxzxYaj7f6PGOp/
+         fZTfBE9PZeQdZ4SEvQcrDxPi5EUdmJkmmC+TpOzospFaxKT9QYRu1VSEb24jWIdNlwSI
+         8tne8p7REzWgW2s6YRW/c6fWS4jqhxI+SfvxcFOXZsB3nXIr8x4BoVrDVfLOYcwjezDu
+         zwZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=URAyLVGzg8Nt4aDbg3Gbees9letYmMiBHHAQBtnqWOg=;
+        b=ydlOhZaQdjnthv6Ep8RxjqctJYpgIWziDJ/oppF07xKuHqF4zRcQJhGX+n6jDphPjq
+         SRbfY7HrsBRGAyN2cdTm/zDOSxh2ZWUGJ9d25uCxRAWi2oEXgzic/xykcOWhUhamJUuV
+         bqT/rqHaqHBvqqU9jvYHatY0ZAC0bQoe6eahU7Cek892ZCQoWH8H3JQCDA02Ou4ILFvk
+         k5uxIojTbB9eEGk0JkWvLGCG33usJ3ta9Zv9/GJSwDHtimbRbNZy2F5O8o9BwZ5onrPz
+         hV3Oz21yh6SLDdlP3nXMwf42mR2BnIITMZCR63cEbWFzKv+/a0c6v9bT/LSAXWXV+zPz
+         ky0Q==
+X-Gm-Message-State: AOAM532kc+UTrP85NKobFmZ7t5aofevl0zoenC9BJe6gY1HWf0iN9HU4
+        BxSFmCRCbZub7NpnWXf6hNexsw4YJ7KlvgqWaDFzhA==
+X-Google-Smtp-Source: ABdhPJw39fUr46PtBbB7NV8LWUrpQykG2OQD9q5q4f8PfkT7wPGNBmgyzRQFBWCXyPCYwrmHFTqVFH1kj4wXm8EeaI0=
+X-Received: by 2002:a17:907:1c06:b0:6df:b257:cbb3 with SMTP id
+ nc6-20020a1709071c0600b006dfb257cbb3mr315311ejc.631.1652368353809; Thu, 12
+ May 2022 08:12:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b8fac6e2-c117-86cf-2901-5ae0852ca403@csgroup.eu>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <bc6e9ed7-d98b-c4da-2a59-ee0915c18f10@gmail.com>
+In-Reply-To: <bc6e9ed7-d98b-c4da-2a59-ee0915c18f10@gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 12 May 2022 08:12:22 -0700
+Message-ID: <CAGS_qxreTLFp1VvMd07AZhE9wbgxR5bXgeJSyW-iWWoA5qs79g@mail.gmail.com>
+Subject: Re: [RFC] KTAP spec v2: prefix to KTAP data
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>, Tim.Bird@sony.com,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Jonathan Corbet <corbet@lwn.net>, rmr167@gmail.com,
+        guillaume.tucker@collabora.com, kernelci@groups.io,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 02:52:40PM +0000, Christophe Leroy wrote:
-> Hi Josh,
-> 
-> Le 28/03/2022 à 21:59, Josh Poimboeuf a écrit :
-> > On Sun, Mar 27, 2022 at 09:09:20AM +0000, Christophe Leroy wrote:
-> >> What are current works in progress on objtool ? Should I wait Josh's
-> >> changes before starting looking at all this ? Should I wait for anything
-> >> else ?
-> > 
-> > I'm not making any major changes to the code, just shuffling things
-> > around to make the interface more modular.  I hope to have something
-> > soon (this week).  Peter recently added a big feature (Intel IBT) which
-> > is already in -next.
-> > 
-> 
-> Were you able to send out something ?
+On Wed, May 11, 2022 at 10:59 PM Frank Rowand <frowand.list@gmail.com> wrote:
+>
+> In the middle of the "RFC - kernel test result specification (KTAP)" thread,
+> started in August 2021, Tim Bird made a suggestion to allow a prefix to the
+> KTAP data format:
+>
+> > Just as a side note, in some Fuego tests, it was very useful to include an identifier
+> > in thethe prefix nested tests.  The output looked like this:
+> >
+> > TAP version 13
+> > 1..2
+> > [batch_id 4] TAP version 13
+> > [batch_id 4] 1..2
+> > [batch_id 4] ok 1 - cyclictest with 1000 cycles
+> > [batch_id 4] # problem setting CLOCK_REALTIME
+> > [batch_id 4] not ok 2 - cyclictest with CLOCK_REALTIME
+> > not ok 1 - check realtime
+> > [batch_id 4] TAP version 13
+> > [batch_id 4] 1..1
+> > [batch_id 4] ok 1 - IOZone read/write 4k blocks
+> > ok 2 - check I/O performance
+> >
+> > Can I propose that the prefix not be fixed by the spec, but that the spec indicates that
+> > whatever the prefix is on the TAP version line, that prefix must be used with the output for
+> > all lines from the test (with the exception of unknown lines)?
 
-Yes, the objtool rewrite is now in tip/objtool/core and linux-next.
+Just chiming in since I didn't see it mentioned after a quick skim of
+the original thread:
 
--- 
-Josh
+This is already basically the behavior of kunit.py's TAP parser since
+commit afc63da64f1e5e41875c98707020e85050f8a0c5
+Author: Heidi Fahim <heidifahim@google.com>
+Date:   Mon Mar 16 13:21:24 2020 -0700
+
+    kunit: kunit_parser: make parser more robust
+
+    Previously, kunit_parser did not properly handle kunit TAP output that
+    - had any prefixes (generated from different configs e.g.
+    CONFIG_PRINTK_TIME)
+...
+
+The notable difference is that only the prefix _length_ is fixed, not
+the contents of the string itself.
+
+So ignoring a dynamic prefix is a practical necessity if we want to
+parse TAP from kernelspace/printk across a range of configs.
+But I don't know if this dynamic version is worth including in the spec.
+The static prefix makes more sense to me to formalize, and if we go
+down that route, at least kunit.py will already be compliant :)
+
+Daniel

@@ -2,89 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F115525851
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 01:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4D6E525859
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 01:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359480AbiELX3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 19:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58252 "EHLO
+        id S1359501AbiELXbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 19:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343539AbiELX3o (ORCPT
+        with ESMTP id S1359494AbiELXbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 19:29:44 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C1616A260
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 16:29:43 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id v11so6160555pff.6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 16:29:43 -0700 (PDT)
+        Thu, 12 May 2022 19:31:14 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5725DE5B;
+        Thu, 12 May 2022 16:31:13 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id gj17-20020a17090b109100b001d8b390f77bso9241733pjb.1;
+        Thu, 12 May 2022 16:31:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=/iy7DvZiK8nafA5XKuXqSqcNqBCZjj9/qjUXXJFqGpQ=;
-        b=cWZf8gG13SFYJAbym+C3jUQYUcEqHiEmBSGcMRkGeKtHJpoPVjCJpboc2DabP5dHl4
-         t2pGv+CgDWDeHxJP9tx6pCY9dSjjnguG4ekrfcrEUPi+LIH60qOBWqDT9YCyqkQV8C4/
-         dSaySBo05+qtz5foTJQ9KZOVML5d+2f0Q7XlTuBAcMKJyVliAc9S9Hsa6xjkW2Sp6kD0
-         1UgaKp+HBuU30LUTW23SGQf4o5bUWN8CesvUXR+7waPEQ995rJuJyEfEpi5J8hby+7Aj
-         Cx1uoQ+692VdjLzjahYMHQzslw6xA739laCwIfxc6iaGRPPEF0WSqEC8fNXQchv8WP2x
-         CzyQ==
+        bh=eYpdJ90sIk3qZfEgX1a80cpN/dFwOCIJBaG2OIahXBc=;
+        b=qKp7BG8mXAqZXqb/q+PqxvmItgFgFMkAAnwKz1ZHXkZUzAmYP1HhV7uDIrl8P5ETsq
+         wcXGlgBZT6WcjLF4FbrqrsOPbP6NYQLlPiTVFfR+/fdNCoT+aOUjWHFviEiJEDWPRe8M
+         QAZVv4pIpo4JlGexYJ02gmNzrN7VyihR6x7qLYq1mKKzPKPZZoiql485/sL4mdIcSlaH
+         qXl8S8sFG43zr08JWElKyp6uI8TS5HgtN4WwArQ9QPt7WWqnpi5JwOLaoVVY6il+NlE4
+         Aft7cZSdhohv0lDf1inYoo0+fKqi5aFjNKon+ogLso8wmA2p1Z/RWkB02i+JU4p0uBbL
+         Vwqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=/iy7DvZiK8nafA5XKuXqSqcNqBCZjj9/qjUXXJFqGpQ=;
-        b=o5vCZYOagzqqn5ZT1XOaUqf7cYlg1NLMi+0ERML7kFgp55E732DsdMOpQIQV+mnuPq
-         jzOPKwrU3RIU54gG24o0UaIs2ZST+Vxt6IVfhTapRftUipLZcNSN1ASj0h5n4ikcIeMs
-         XFpiAfF0Gsv1EXp5k7nLlVXtV5Cq1Q0m5m3cfI9GL6CN2MMdytnp/X48VWvCusocQu3R
-         lAsmmRpySi0goIxxFlSjZuhsbXT3jppMlaV2/HTRtuSXMoTI4BpTK53dYTfuR5cfffHl
-         OWW1hDraic1XQWStHDJxF5/XuhJMbEKrUQXAVc2GkJzt/lFSvP7SlOZJWB8BFnTl1Co3
-         LD/Q==
-X-Gm-Message-State: AOAM530FhvIHHFg4CFgB8rjnCYXLnRXTEnkyI48sneUUJRxPZ02J04FU
-        MHw8bigl/SmJf7imreLyXvJrxw==
-X-Google-Smtp-Source: ABdhPJxxG6YUzPEUM5+g1vu/KK0sSWSbi9F/X2ppQRyP6w4zTtX0HAmpJ+CS2CQNyEouYPVZqp8oog==
-X-Received: by 2002:a63:d20e:0:b0:3db:5e25:26c with SMTP id a14-20020a63d20e000000b003db5e25026cmr1559604pgg.200.1652398182635;
-        Thu, 12 May 2022 16:29:42 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id n2-20020a622702000000b0050dc76281e7sm333832pfn.193.2022.05.12.16.29.41
+        bh=eYpdJ90sIk3qZfEgX1a80cpN/dFwOCIJBaG2OIahXBc=;
+        b=PZcgH/et2KtIg4zaAHykniXJwhSOJ71LUyGULWmqihqatvkTNUW/be0SZMSLZH0pg0
+         Ye04SHYnQw6gOGfG//fHvJLpE9VE8g8t/FDEE8SlJmLjCcEy2GAvLIJloyIk1dxalG7t
+         TPDfDHA1VKIPNiZtX1bVHP/okjblixT4z6YdYaCPKnZ59fzQx5ZVhsdwxRfCJolON+MA
+         KowDd+XRFqvN7KH56dZY5+iPLNr6Ik9dUDozKaKOqvnR72ZiTOg80HqQdoRCkkhl6iiz
+         XAHDO/3DxS+Ixo6/gcllr3+HaVe7YAFzj+9iTTFv84UDQUzpnyGeJiS33NZuskpFVqV+
+         mssQ==
+X-Gm-Message-State: AOAM531VYxd/9ti1g3WpSvCWXx4Ij2mxiifpVaviVHLuvAPqpIuCzMDQ
+        8P76set5+lsahjcPzcqspBI=
+X-Google-Smtp-Source: ABdhPJxGwDjAa20EhqPaHUJXCC4KPV0xgsDoyqJN1XWSOCehFaWL3975iAR5D+4hE6C6ezwHizsd1w==
+X-Received: by 2002:a17:902:f24c:b0:15c:b564:e4cc with SMTP id j12-20020a170902f24c00b0015cb564e4ccmr1893884plc.137.1652398272481;
+        Thu, 12 May 2022 16:31:12 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:88fd:a79c:b005:79b1])
+        by smtp.gmail.com with ESMTPSA id a3-20020a170902710300b0015e8d4eb22esm443677pll.120.2022.05.12.16.31.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 16:29:42 -0700 (PDT)
-Date:   Thu, 12 May 2022 23:29:38 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Yosry Ahmed <yosryahmed@google.com>, Marc Zyngier <maz@kernel.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Oliver Upton <oupton@google.com>, cgroups@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, Linux-MM <linux-mm@kvack.org>
-Subject: Re: [PATCH v4 1/4] mm: add NR_SECONDARY_PAGETABLE to count secondary
- page table uses.
-Message-ID: <Yn2YYl98Vhh/UL0w@google.com>
-References: <20220429201131.3397875-1-yosryahmed@google.com>
- <20220429201131.3397875-2-yosryahmed@google.com>
- <87ilqoi77b.wl-maz@kernel.org>
- <CAJD7tkY7JF25XXUFq2mGroetMkfo-2zGOaQC94pjZE3D42+oaw@mail.gmail.com>
- <Yn2TGJ4vZ/fst+CY@cmpxchg.org>
+        Thu, 12 May 2022 16:31:11 -0700 (PDT)
+Date:   Thu, 12 May 2022 16:31:08 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Doug Anderson <dianders@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        chrome-platform@lists.linux.dev,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: google,cros-ec-keyb: Introduce
+ switches only compatible
+Message-ID: <Yn2YvIFNhaz5GmfI@google.com>
+References: <20220429233112.2851665-1-swboyd@chromium.org>
+ <20220429233112.2851665-2-swboyd@chromium.org>
+ <CAD=FV=VX8EEgkeLgKwyKvjztcjbA8UhKOUpTr-sS1_Ec=QcWbA@mail.gmail.com>
+ <CAKdAkRSOtAD6u_cwKhHeMLgz5dC2hfPvVvqmj+17b4i-nspfgg@mail.gmail.com>
+ <CAE-0n50Y8tZD9Djn9TVaAiHxehFJ2cZKZ1Z09piDk47uw3nK+Q@mail.gmail.com>
+ <Ynzf5jEIECLmELK7@google.com>
+ <CAE-0n50+obQ5qgPNPtUY=OmTgU9bZQ3hNw+MaG9Wi3SQSc-i4A@mail.gmail.com>
+ <CAE-0n52WVNru5fnyaB_7wcBOk4twL0Q92YpRbd40-o6ZBmbXWQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yn2TGJ4vZ/fst+CY@cmpxchg.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+In-Reply-To: <CAE-0n52WVNru5fnyaB_7wcBOk4twL0Q92YpRbd40-o6ZBmbXWQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,63 +85,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022, Johannes Weiner wrote:
-> Hey Yosry,
+On Thu, May 12, 2022 at 01:11:39PM -0700, Stephen Boyd wrote:
+> Quoting Stephen Boyd (2022-05-12 11:58:02)
+> > Quoting Dmitry Torokhov (2022-05-12 03:22:30)
+> > >
+> > > Have we solved module loading in the presence of multiple compatibles?
+> > > IIRC we only ever try to load module on the first compatible, so you'd
+> > > be breaking autoloading cros-ec-keyb on these older kernels. I think the
+> > > cure that is being proposed is worse than the disease.
+> > >
+> >
+> > The first compatible is still cros-ec-keyb in the driver though? Or you
+> > mean the first compatible in the node? I'm not aware of this problem at
+> > all but I can certainly test out a fake node and module and see if it
+> > gets autoloaded.
 > 
-> On Mon, May 02, 2022 at 11:46:26AM -0700, Yosry Ahmed wrote:
-> > On Mon, May 2, 2022 at 3:01 AM Marc Zyngier <maz@kernel.org> wrote:
-> > > 115bae923ac8bb29ee635). You are saying that this is related to a
-> > > 'workload', but given that the accounting is global, I fail to see how
-> > > you can attribute these allocations on a particular VM.
-> > 
-> > The main motivation is having the memcg stats, which give attribution
-> > to workloads. If you think it's more appropriate, we can add it as a
-> > memcg-only stat, like MEMCG_VMALLOC (see 4e5aa1f4c2b4 ("memcg: add
-> > per-memcg vmalloc stat")). The only reason I made this as a global
-> > stat too is to be consistent with NR_PAGETABLE.
+> I can't get this test module to fail to load no matter what I do. I
+> commented out the second match table entry, and kept it there and
+> removed 'vendor,switch-compat' from the DTS. Module still autoloads.
 > 
-> Please no memcg-specific stats if a regular vmstat item is possible
-> and useful at the system level as well, like in this case. It's extra
-> memcg code, extra callbacks, and it doesn't have NUMA node awareness.
-> 
-> > > What do you plan to do for IOMMU page tables? After all, they serve
-> > > the exact same purpose, and I'd expect these to be handled the same
-> > > way (i.e. why is this KVM specific?).
-> > 
-> > The reason this was named NR_SECONDARY_PAGTABLE instead of
-> > NR_KVM_PAGETABLE is exactly that. To leave room to incrementally
-> > account other types of secondary page tables to this stat. It is just
-> > that we are currently interested in the KVM MMU usage.
-> 
-> Do you actually care at the supervisor level that this memory is used
-> for guest page tables?
 
-Hmm, yes?  KVM does have a decent number of large-ish allocations that aren't
-for page tables, but except for page tables, the number/size of those allocations
-scales linearly with either the number of vCPUs or the amount of memory assigned
-to the VM (with no room for improvement barring KVM changes).
+Ah, indeed, if the module contains both compatibles we will load it. It
+is broken when we have 2 or more modules and DT lists several
+compatibles for a device.
 
-Off the top of my head, KVM's secondary page tables are the only allocations that
-don't scale linearly, especially when nested virtualization is in use.
+OK, it looks like you feel very strongly regarding having a dedicated
+compatible. In this case please make sure that the compatible's behavior
+is properly documented (i.e. google,cros-ec-keyb compatible does not
+imply that there are *NO* switches, and users having buttons and
+switches in addition to matrix keys can also use google,cros-ec-keyb as
+a compatible for their device). We also need to mention that with the
+2nd compatible the device still can report key/button events, it is
+simply that there is no matrix component. Should we call the other
+compatible google,cros-ec-bs?
 
-> It seems to me you primarily care that it is reported *somewhere*
-> (hence the piggybacking off of NR_PAGETABLE at first). And whether
-> it's page tables or iommu tables or whatever else allocated for the
-> purpose of virtualization, it doesn't make much of a difference to the
-> host/cgroup that is tracking it, right?
-> 
-> (The proximity to nr_pagetable could also be confusing. A high page
-> table count can be a hint to userspace to enable THP. It seems
-> actionable in a different way than a high number of kvm page tables or
-> iommu page tables.)
+We should also abort binding the device if it specifies the new
+compatible, but EC does not report any buttons or switches.
 
-I don't know about iommu page tables, but on the KVM side a high count can also
-be a good signal that enabling THP would be beneficial.  It's definitely actionable
-in a different way though too.
+Thanks.
 
-> How about NR_VIRT? It's shorter, seems descriptive enough, less room
-> for confusion, and is more easily extensible in the future.
-
-I don't like NR_VIRT because VFIO/iommu can be used for non-virtualization things,
-and we'd be lying by omission unless KVM (and other users) updates all of its
-large-ish allocations to account them correctly.
+-- 
+Dmitry

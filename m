@@ -2,79 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8910525557
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB72525558
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:06:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357864AbiELTFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 15:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
+        id S1357871AbiELTFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 15:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244299AbiELTFC (ORCPT
+        with ESMTP id S1357866AbiELTFr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 15:05:02 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB13B26FA39
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 12:05:00 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 2016D1F45935
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652382298;
-        bh=CkCAXCIfRhD+VLuvicaPJg8SgaATpt/zDLNfA6aYXDo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Nv4jr/ZQk0TqP9+0izHiBDYP/cqgOcFmYQrvNJab1CwyaaDQDh/jXCA0tUJ8x/dbd
-         fKgdRQhmwpjSXJpu9/40wHRhUAJYWmxJHlOoB5wnJO2X/oe5FiVsbeAstOpU0OOV64
-         MXP12cAlIEaG1Ut9NQyseoB3m1S3yOOz5J1tRiayNoZ5ubhKnWDFejDhv/bAjKcPVJ
-         th9YYOPV442LT1odi35BVZjdSioSmj50S4hV+uJjxNGBvfCqyZlFlbl5Hf1p9X4HzS
-         f9cTQx9WH3GBDnYW+1OKhY++sB1XU05UkJTgEEj0YfCEAgX9pOa1JrBL9DXVXcmezj
-         wM81LrCYKNKEQ==
-Message-ID: <31bc7a14-ff30-6961-b4fc-0aad83551df9@collabora.com>
-Date:   Thu, 12 May 2022 22:04:53 +0300
+        Thu, 12 May 2022 15:05:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F921128
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 12:05:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 974D761B8F
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 19:05:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3C92C385B8;
+        Thu, 12 May 2022 19:05:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652382344;
+        bh=TpojvJtg3UFM+acn3Qz4YIne1JNKro/1rJmbYwbmKkM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=V4Rab15FjMqCZZrNlCXop5Q3VDdkrRbBNSB4AQMNq4wQPhqCguBpGnBk7I+KP7Fvc
+         ACTw5NG97gXB3eBpG6ye1X6+lZ5PHFam8Wkyfa9PjjQ5Zox4WIVvK/2qDQunTZBnyL
+         HgXSpJ0lwCTK6FAqSTBaHdwLVdYy6gEe4NrBzkcGO0NE9OpbgeDjojIXZuPJRL6XXG
+         NpYr/BcUaXdbI+dr+ZGI3IWmVXTg2tONS9QLaorApO8h8ynZuFEXIbiz0+bsTh4Orj
+         vD+RST1Put049TUH7LRCZx7+skndpmucaXYfXVy+COb5sEFDzmZXoHM7ctmv6Sv8XA
+         oeY9Iz2uPcLIg==
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Kaiwan N Billimoria <kaiwan.billimoria@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH] scripts/faddr2line: Fix overlapping text section failures
+Date:   Thu, 12 May 2022 12:05:27 -0700
+Message-Id: <29ff99f86e3da965b6e46c1cc2d72ce6528c17c3.1652382321.git.jpoimboe@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v4 11/15] drm/shmem-helper: Add generic memory shrinker
-Content-Language: en-US
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-References: <20220417223707.157113-1-dmitry.osipenko@collabora.com>
- <20220417223707.157113-12-dmitry.osipenko@collabora.com>
- <e6108e9c-6e67-2d71-0665-654e11d9c3a5@suse.de>
- <ff97790a-fb64-1e15-74b4-59c807bce0b9@collabora.com>
- <Ynkb1U2nNWYPML88@phenom.ffwll.local>
- <5fdf5232-e2b2-b444-5a41-f1db7e6a04da@collabora.com>
- <Ynu1k5lH+xvqtObG@phenom.ffwll.local>
- <3429a12f-9fbe-b66b-dbbd-94a1df54714e@collabora.com>
- <YnwJ0kLwLS7RxuwS@phenom.ffwll.local>
- <0ae6fed7-b166-d2b8-0e42-84b94b777c20@collabora.com>
- <CAKMK7uGS3PSwbkW7gj1hd2pz591HwY6Gbb=P_X4N5KOM5+X85w@mail.gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <CAKMK7uGS3PSwbkW7gj1hd2pz591HwY6Gbb=P_X4N5KOM5+X85w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,125 +53,263 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/12/22 20:04, Daniel Vetter wrote:
-> On Thu, 12 May 2022 at 13:36, Dmitry Osipenko
-> <dmitry.osipenko@collabora.com> wrote:
->>
->> On 5/11/22 22:09, Daniel Vetter wrote:
->>> On Wed, May 11, 2022 at 07:06:18PM +0300, Dmitry Osipenko wrote:
->>>> On 5/11/22 16:09, Daniel Vetter wrote:
->>>>>>>>> I'd like to ask you to reduce the scope of the patchset and build the
->>>>>>>>> shrinker only for virtio-gpu. I know that I first suggested to build
->>>>>>>>> upon shmem helpers, but it seems that it's easier to do that in a later
->>>>>>>>> patchset.
->>>>>>>> The first version of the VirtIO shrinker didn't support memory eviction.
->>>>>>>> Memory eviction support requires page fault handler to be aware of the
->>>>>>>> evicted pages, what should we do about it? The page fault handling is a
->>>>>>>> part of memory management, hence to me drm-shmem is already kinda a MM.
->>>>>>> Hm I still don't get that part, why does that also not go through the
->>>>>>> shmem helpers?
->>>>>> The drm_gem_shmem_vm_ops includes the page faults handling, it's a
->>>>>> helper by itself that is used by DRM drivers.
->>>>>>
->>>>>> I could try to move all the shrinker logic to the VirtIO and re-invent
->>>>>> virtio_gem_shmem_vm_ops, but what is the point of doing this for each
->>>>>> driver if we could have it once and for all in the common drm-shmem code?
->>>>>>
->>>>>> Maybe I should try to factor out all the shrinker logic from drm-shmem
->>>>>> into a new drm-shmem-shrinker that could be shared by drivers? Will you
->>>>>> be okay with this option?
->>>>> I think we're talking past each another a bit. I'm only bringing up the
->>>>> purge vs eviction topic we discussed in the other subthread again.
->>>>
->>>> Thomas asked to move the whole shrinker code to the VirtIO driver and
->>>> I's saying that this is not a great idea to me, or am I misunderstanding
->>>> the Thomas' suggestion? Thomas?
->>>
->>> I think it was just me creating a confusion here.
->>>
->>> fwiw I do also think that shrinker in shmem helpers makes sense, just in
->>> case that was also lost in confusion.
->>
->> Okay, good that we're on the same page now.
->>
->>>>>>> I'm still confused why drivers need to know the difference
->>>>>>> between evition and purging. Or maybe I'm confused again.
->>>>>> Example:
->>>>>>
->>>>>> If userspace uses IOV addresses, then these addresses must be kept
->>>>>> reserved while buffer is evicted.
->>>>>>
->>>>>> If BO is purged, then we don't need to retain the IOV space allocated
->>>>>> for the purged BO.
->>>>> Yeah but is that actually needed by anyone? If userspace fails to allocate
->>>>> another bo because of lack of gpu address space then it's very easy to
->>>>> handle that:
->>>>>
->>>>> 1. Make a rule that "out of gpu address space" gives you a special errno
->>>>> code like ENOSPC
->>>>>
->>>>> 2. If userspace gets that it walks the list of all buffers it marked as
->>>>> purgeable and nukes them (whether they have been evicted or not). Then it
->>>>> retries the bo allocation.
->>>>>
->>>>> Alternatively you can do step 2 also directly from the bo alloc ioctl in
->>>>> step 1. Either way you clean up va space, and actually a lot more (you
->>>>> potentially nuke all buffers marked as purgeable, not just the ones that
->>>>> have been purged already) and only when va cleanup is actually needed
->>>>>
->>>>> Trying to solve this problem at eviction time otoh means:
->>>>> - we have this difference between eviction and purging
->>>>> - it's still not complete, you still need to glue step 2 above into your
->>>>>   driver somehow, and once step 2 above is glued in doing additional
->>>>>   cleanup in the purge function is just duplicated logic
->>>>>
->>>>> So at least in my opinion this isn't the justification we need. And we
->>>>> should definitely not just add that complication "in case, for the
->>>>> future", if we don't have a real need right now. Adding it later on is
->>>>> easy, removing it later on because it just gets in the way and confuses is
->>>>> much harder.
->>>>
->>>> The IOVA space is only one example.
->>>>
->>>> In case of the VirtIO driver, we may have two memory allocation for a
->>>> BO. One is the shmem allcation in guest and the other is in host's vram.
->>>> If we will only release the guest's memory on purge, then the vram will
->>>> remain allocated until BO is destroyed, which unnecessarily sub-optimal.
->>>
->>> Hm but why don't you just nuke the memory on the host side too when you
->>> evict? Allowing the guest memory to be swapped out while keeping the host
->>> memory allocation alive also doesn't make a lot of sense for me. Both can
->>> be recreated (I guess at least?) on swap-in.
->>
->> Shouldn't be very doable or at least worth the efforts. It's userspace
->> that manages data uploading, kernel only provides transport for the
->> virtio-gpu commands.
->>
->> Drivers are free to use the same function for both purge() and evict()
->> callbacks if they want. Getting rid of the purge() callback creates more
->> problems than solves, IMO.
-> 
-> Hm this still sounds pretty funny and defeats the point of
-> purgeable/evictable buffers a bit I think. But also I guess we'd
-> pushed this bikeshed to the max, so I think if you make ->purge
-> optional and just call ->evict if that's not present, and document it
-> all in the kerneldoc, then I think that's good.
+There have been some recent reports of faddr2line failures:
 
-This is a good enough compromise to me.
+  $ scripts/faddr2line sound/soundcore.ko sound_devnode+0x5/0x35
+  bad symbol size: base: 0x0000000000000000 end: 0x0000000000000000
 
-> I just don't think that encouraging drivers to distinguish between
-> evict/purge is a good idea for almost all of them.
+  $ ./scripts/faddr2line vmlinux.o enter_from_user_mode+0x24
+  bad symbol size: base: 0x0000000000005fe0 end: 0x0000000000005fe0
 
-Intel's shrinker checks the "madvise" status of BOs and then decides
-what to do based on it. Perhaps we could move the decision-making about
-purging to drivers and then it will be single evict() callback, but will
-drivers really ever need to be responsible for this decision-making or
-this will be an unnecessary boilerplate code in the drivers? I'll think
-more about this.
+The problem is that faddr2line is based on 'nm', which has a major
+limitation: it doesn't know how to distinguish between different text
+sections.  So if an offset exists in multiple text sections in the
+object, it may fail.
 
-Thank you all for taking time to look at this patchset. I'm preparing
-the new version.
+Rewrite faddr2line to be section-aware, by basing it on readelf.
 
+Fixes: 67326666e2d4 ("scripts: add script for translating stack dump function offsets")
+Reported-by: Kaiwan N Billimoria <kaiwan.billimoria@gmail.com>
+Reported-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+---
+ scripts/faddr2line | 150 +++++++++++++++++++++++++++++----------------
+ 1 file changed, 97 insertions(+), 53 deletions(-)
+
+diff --git a/scripts/faddr2line b/scripts/faddr2line
+index 6c6439f69a72..0e6268d59883 100755
+--- a/scripts/faddr2line
++++ b/scripts/faddr2line
+@@ -44,17 +44,6 @@
+ set -o errexit
+ set -o nounset
+ 
+-READELF="${CROSS_COMPILE:-}readelf"
+-ADDR2LINE="${CROSS_COMPILE:-}addr2line"
+-SIZE="${CROSS_COMPILE:-}size"
+-NM="${CROSS_COMPILE:-}nm"
+-
+-command -v awk >/dev/null 2>&1 || die "awk isn't installed"
+-command -v ${READELF} >/dev/null 2>&1 || die "readelf isn't installed"
+-command -v ${ADDR2LINE} >/dev/null 2>&1 || die "addr2line isn't installed"
+-command -v ${SIZE} >/dev/null 2>&1 || die "size isn't installed"
+-command -v ${NM} >/dev/null 2>&1 || die "nm isn't installed"
+-
+ usage() {
+ 	echo "usage: faddr2line [--list] <object file> <func+offset> <func+offset>..." >&2
+ 	exit 1
+@@ -69,6 +58,14 @@ die() {
+ 	exit 1
+ }
+ 
++READELF="${CROSS_COMPILE:-}readelf"
++ADDR2LINE="${CROSS_COMPILE:-}addr2line"
++AWK="awk"
++
++command -v ${AWK} >/dev/null 2>&1 || die "${AWK} isn't installed"
++command -v ${READELF} >/dev/null 2>&1 || die "${READELF} isn't installed"
++command -v ${ADDR2LINE} >/dev/null 2>&1 || die "${ADDR2LINE} isn't installed"
++
+ # Try to figure out the source directory prefix so we can remove it from the
+ # addr2line output.  HACK ALERT: This assumes that start_kernel() is in
+ # init/main.c!  This only works for vmlinux.  Otherwise it falls back to
+@@ -76,7 +73,7 @@ die() {
+ find_dir_prefix() {
+ 	local objfile=$1
+ 
+-	local start_kernel_addr=$(${READELF} -sW $objfile | awk '$8 == "start_kernel" {printf "0x%s", $2}')
++	local start_kernel_addr=$(${READELF} --symbols --wide $objfile | ${AWK} '$8 == "start_kernel" {printf "0x%s", $2}')
+ 	[[ -z $start_kernel_addr ]] && return
+ 
+ 	local file_line=$(${ADDR2LINE} -e $objfile $start_kernel_addr)
+@@ -97,86 +94,133 @@ __faddr2line() {
+ 	local dir_prefix=$3
+ 	local print_warnings=$4
+ 
+-	local func=${func_addr%+*}
++	local sym_name=${func_addr%+*}
+ 	local offset=${func_addr#*+}
+ 	offset=${offset%/*}
+-	local size=
+-	[[ $func_addr =~ "/" ]] && size=${func_addr#*/}
++	local user_size=
++	[[ $func_addr =~ "/" ]] && user_size=${func_addr#*/}
+ 
+-	if [[ -z $func ]] || [[ -z $offset ]] || [[ $func = $func_addr ]]; then
++	if [[ -z $sym_name ]] || [[ -z $offset ]] || [[ $sym_name = $func_addr ]]; then
+ 		warn "bad func+offset $func_addr"
+ 		DONE=1
+ 		return
+ 	fi
+ 
+ 	# Go through each of the object's symbols which match the func name.
+-	# In rare cases there might be duplicates.
+-	file_end=$(${SIZE} -Ax $objfile | awk '$1 == ".text" {print $2}')
+-	while read symbol; do
+-		local fields=($symbol)
+-		local sym_base=0x${fields[0]}
+-		local sym_type=${fields[1]}
+-		local sym_end=${fields[3]}
+-
+-		# calculate the size
+-		local sym_size=$(($sym_end - $sym_base))
++	# In rare cases there might be duplicates, in which case we print all
++	# matches.
++	while read line; do
++		local fields=($line)
++		local sym_addr=0x${fields[1]}
++		local sym_elf_size=${fields[2]}
++		local sym_sec=${fields[6]}
++
++		# Get the section size:
++		local sec_size=$(${READELF} --section-headers --wide $objfile |
++			sed 's/\[ /\[/' |
++			${AWK} -v sec=$sym_sec '$1 == "[" sec "]" { print "0x" $6; exit }')
++
++		if [[ -z $sec_size ]]; then
++			warn "bad section size: section: $sym_sec"
++			DONE=1
++			return
++		fi
++
++		# Calculate the symbol size.
++		#
++		# Unfortunately we can't use the ELF size, because kallsyms
++		# also includes the padding bytes in its size calculation.  For
++		# kallsyms, the size calculation is the distance between the
++		# symbol and the next symbol in a sorted list.
++		local sym_size
++		local cur_sym_addr
++		local found=0
++		while read line; do
++			local fields=($line)
++			cur_sym_addr=0x${fields[1]}
++			local cur_sym_elf_size=${fields[2]}
++			local cur_sym_name=${fields[7]:-}
++
++			if [[ $cur_sym_addr = $sym_addr ]] &&
++			   [[ $cur_sym_elf_size = $sym_elf_size ]] &&
++			   [[ $cur_sym_name = $sym_name ]]; then
++				found=1
++				continue
++			fi
++
++			if [[ $found = 1 ]]; then
++				sym_size=$(($cur_sym_addr - $sym_addr))
++				[[ $sym_size -lt $sym_elf_size ]] && continue;
++				found=2
++				break
++			fi
++		done < <(${READELF} --symbols --wide $objfile | ${AWK} -v sec=$sym_sec '$7 == sec' | sort --key=2)
++
++		if [[ $found = 0 ]]; then
++			warn "can't find symbol: sym_name: $sym_name sym_sec: $sym_sec sym_addr: $sym_addr sym_elf_size: $sym_elf_size"
++			DONE=1
++			return
++		fi
++
++		# If nothing was found after the symbol, assume it's the last
++		# symbol in the section.
++		[[ $found = 1 ]] && sym_size=$(($sec_size - $sym_addr))
++
+ 		if [[ -z $sym_size ]] || [[ $sym_size -le 0 ]]; then
+-			warn "bad symbol size: base: $sym_base end: $sym_end"
++			warn "bad symbol size: sym_addr: $sym_addr cur_sym_addr: $cur_sym_addr"
+ 			DONE=1
+ 			return
+ 		fi
++
+ 		sym_size=0x$(printf %x $sym_size)
+ 
+-		# calculate the address
+-		local addr=$(($sym_base + $offset))
++		# Calculate the section address from user-supplied offset:
++		local addr=$(($sym_addr + $offset))
+ 		if [[ -z $addr ]] || [[ $addr = 0 ]]; then
+-			warn "bad address: $sym_base + $offset"
++			warn "bad address: $sym_addr + $offset"
+ 			DONE=1
+ 			return
+ 		fi
+ 		addr=0x$(printf %x $addr)
+ 
+-		# weed out non-function symbols
+-		if [[ $sym_type != t ]] && [[ $sym_type != T ]]; then
+-			[[ $print_warnings = 1 ]] &&
+-				echo "skipping $func address at $addr due to non-function symbol of type '$sym_type'"
+-			continue
+-		fi
+-
+-		# if the user provided a size, make sure it matches the symbol's size
+-		if [[ -n $size ]] && [[ $size -ne $sym_size ]]; then
++		# If the user provided a size, make sure it matches the symbol's size:
++		if [[ -n $user_size ]] && [[ $user_size -ne $sym_size ]]; then
+ 			[[ $print_warnings = 1 ]] &&
+-				echo "skipping $func address at $addr due to size mismatch ($size != $sym_size)"
++				echo "skipping $sym_name address at $addr due to size mismatch ($user_size != $sym_size)"
+ 			continue;
+ 		fi
+ 
+-		# make sure the provided offset is within the symbol's range
++		# Make sure the provided offset is within the symbol's range:
+ 		if [[ $offset -gt $sym_size ]]; then
+ 			[[ $print_warnings = 1 ]] &&
+-				echo "skipping $func address at $addr due to size mismatch ($offset > $sym_size)"
++				echo "skipping $sym_name address at $addr due to size mismatch ($offset > $sym_size)"
+ 			continue
+ 		fi
+ 
+-		# separate multiple entries with a blank line
++		# In case of duplicates or multiple addresses specified on the
++		# cmdline, separate multiple entries with a blank line:
+ 		[[ $FIRST = 0 ]] && echo
+ 		FIRST=0
+ 
+-		# pass real address to addr2line
+-		echo "$func+$offset/$sym_size:"
+-		local file_lines=$(${ADDR2LINE} -fpie $objfile $addr | sed "s; $dir_prefix\(\./\)*; ;")
+-		[[ -z $file_lines ]] && return
++		echo "$sym_name+$offset/$sym_size:"
+ 
++		# Pass section address to addr2line and strip absolute paths
++		# from the output:
++		local output=$(${ADDR2LINE} -fpie $objfile $addr | sed "s; $dir_prefix\(\./\)*; ;")
++		[[ -z $output ]] && continue
++
++		# Default output (non --list):
+ 		if [[ $LIST = 0 ]]; then
+-			echo "$file_lines" | while read -r line
++			echo "$output" | while read -r line
+ 			do
+ 				echo $line
+ 			done
+ 			DONE=1;
+-			return
++			continue
+ 		fi
+ 
+-		# show each line with context
+-		echo "$file_lines" | while read -r line
++		# For --list, show each line with its corresponding source code:
++		echo "$output" | while read -r line
+ 		do
+ 			echo
+ 			echo $line
+@@ -184,12 +228,12 @@ __faddr2line() {
+ 			n1=$[$n-5]
+ 			n2=$[$n+5]
+ 			f=$(echo $line | sed 's/.*at \(.\+\):.*/\1/g')
+-			awk 'NR>=strtonum("'$n1'") && NR<=strtonum("'$n2'") { if (NR=='$n') printf(">%d<", NR); else printf(" %d ", NR); printf("\t%s\n", $0)}' $f
++			${AWK} 'NR>=strtonum("'$n1'") && NR<=strtonum("'$n2'") { if (NR=='$n') printf(">%d<", NR); else printf(" %d ", NR); printf("\t%s\n", $0)}' $f
+ 		done
+ 
+ 		DONE=1
+ 
+-	done < <(${NM} -n $objfile | awk -v fn=$func -v end=$file_end '$3 == fn { found=1; line=$0; start=$1; next } found == 1 { found=0; print line, "0x"$1 } END {if (found == 1) print line, end; }')
++	done < <(${READELF} --symbols --wide $objfile | ${AWK} -v fn=$sym_name '$4 == "FUNC" && $8 == fn')
+ }
+ 
+ [[ $# -lt 2 ]] && usage
 -- 
-Best regards,
-Dmitry
+2.34.1
+

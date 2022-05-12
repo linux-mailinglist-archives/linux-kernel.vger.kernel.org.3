@@ -2,177 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14B8C524CB9
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92DF9524CC4
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353699AbiELMY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 08:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37632 "EHLO
+        id S1353724AbiELMZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 08:25:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353664AbiELMYn (ORCPT
+        with ESMTP id S1353710AbiELMZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 08:24:43 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE61F248258
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:24:40 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id m2-20020a1ca302000000b003943bc63f98so2886100wme.4
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:24:40 -0700 (PDT)
+        Thu, 12 May 2022 08:25:08 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D07A248264
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:25:06 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id w187so9439012ybe.2
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:25:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=CEL25fIAOxZ58SCupHBAbwosUkv+Gl8sueS42GQV8/0=;
-        b=hmJKYH3GoV5OPRognhaYZ9+ey9NKhNM6sjc6eiy81im7gczC0H9b8FiR7Ynz3TR2aO
-         EtsHN4T+aZLesVCtqXMrOouFUZ0JeTeDAP3e227fx4J9gnYhikxOjKCKJYufyHjNO++H
-         r7gu1qICR7hpGKy2Fx4ERghUJfTGx+zUO+RQQ12CRjki/XcuVH25CzD0uo8ilTc7N0QX
-         S2j9NtLnAZJBji7+i54njL8ORu9Ph55VVxsVX8jHBGqIkBhETEEywKjaWD6j++UpZVaL
-         SnSRYZY/dbyyAE1QccpUR5ph/44KCoclXmeaiIYnLjiEp86PKr8BtlvuhN6R2B5OxqIw
-         3wWg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=D4KhC5f7akNZCYIX8CtlWMuJDmlYSG1ZIcg9H4X+0cs=;
+        b=sXaJnq0WTlzePRDnCEPZnv1ywN9iZDx3YdJpMPUTYdKyBc8fpCzfJxYzshSq0xZyPe
+         3qjM6nIbUB2rt1rmwfWS/Jcfqq50vfkOvDQfANthsZF9YuSm9eHP0oDAoLD+L4fPR+El
+         nBRGApfUqlwsgLqYtQyQjb17FCffj5UWbAxAZXKzfK3Vq9PkBEHfYg3N77c4XzqbJpv9
+         x/FsGiWdRSgBll1tVMNM8DbxLdSHE/ITKEww13LBKWvcDPxGnKdO7EtCXTdbFAVZrIgg
+         oehXpKop+Vl5sNUZ1rkni1wpkj2K+Z+snfW+rRiZ55fAaAqe+wK9Avr49louivL9fuEw
+         3l3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=CEL25fIAOxZ58SCupHBAbwosUkv+Gl8sueS42GQV8/0=;
-        b=CvGgdDozrz9mZMqX2DGahwsvxeWMUoHdLCrCbNaNZL/hotIkvCHhzSofDu76lzLJe7
-         AjlWRReB5JNbz+53siH/HPzNFdaY+58g/FvKSgT2y4QK3S/fEVMHIOgIOv44WSvRxPPO
-         WRIB6kL5S72ZtWvLSjHW7hAh38bRaQukaYCq1qhPe4bsRJTzmnPmAQr60Xv5Pq3cYiUJ
-         izKkuUXF9YiYQra9HdNq838rFr1Y90ATvNWHcRTz0/tot8el+NaKTQAaF4divRJxpQyk
-         6bhM2JZEL0xxNTRoY2ht9c8ifnfVOHLZ1hTK0H9h6AeWBYeOU2aPwfW0X9VfNfH/Si00
-         shPA==
-X-Gm-Message-State: AOAM530phkWY6EVwvNoaF+uzJDMzG+nFZk07BT/tNzp71DqlQJtaxxP7
-        ChQ7cgrkGQTGOO2GuLDLSBsK7w==
-X-Google-Smtp-Source: ABdhPJy2UcZEE5+c7sRO4tFxsA0JEIP0dOgsO3PQO1bZq+4Emf94ol1GlRDSyhrBYOiYdVC3cajVNA==
-X-Received: by 2002:a1c:7510:0:b0:394:1961:708 with SMTP id o16-20020a1c7510000000b0039419610708mr9895075wmc.201.1652358279313;
-        Thu, 12 May 2022 05:24:39 -0700 (PDT)
-Received: from xps-9300.baylibre (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id z22-20020a7bc156000000b003942a244f30sm3047819wmi.9.2022.05.12.05.24.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 05:24:39 -0700 (PDT)
-From:   Alexandre Bailon <abailon@baylibre.com>
-To:     robh+dt@kernel.org, krzk+dt@kernel.org, matthias.bgg@gmail.com,
-        p.zabel@pengutronix.de
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, michael.kao@mediatek.com,
-        ben.tseng@mediatek.com, ethan.chang@mediatek.com,
-        frank-w@public-files.de, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, khilman@baylibre.com
-Subject: [PATCH v6 2/7] dt-bindings: thermal: Add binding document for mt6873 thermal controller
-Date:   Thu, 12 May 2022 14:24:28 +0200
-Message-Id: <20220512122433.1399802-3-abailon@baylibre.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220512122433.1399802-1-abailon@baylibre.com>
-References: <20220512122433.1399802-1-abailon@baylibre.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=D4KhC5f7akNZCYIX8CtlWMuJDmlYSG1ZIcg9H4X+0cs=;
+        b=caowu+GmZWuSp9o7KQXLySWJhD9NDC5OI/R06XHgycP7y/h9nKOKDqqHeZm8IRrvLY
+         tNxhVcgtwG7nBoY3f0IH6MBTgxDhNtdo9O2W6teABW18pi4GD3bsKGn0ixYZ15pw1a/D
+         CcpoKr4MhNww0M8/mAhXtGbkGsgnWjaHNgkFthLpFKW1mQ2yc857F2XH7Pk48ZZAFQKD
+         49aAwnANgvMwh6NpFWN1MYGns4iknz0dm3ebX137zyTMf3TzPiLmGXhR3fnSlhczo+GC
+         eQnxXyRkHv98GzqMdirrR6qhd3y7AG669J5cRNth8y9lSZHDquHgJZwxFEdQp0u4I/7K
+         PBtg==
+X-Gm-Message-State: AOAM533bfj0h+uOgOd2gSbNHNhN6FVJxN5kJiphQgf4QKn2fAtV5VRgG
+        Goc1KhJH62BbTnMMjJArJbRv21XpMXe4guXTPLOUXw==
+X-Google-Smtp-Source: ABdhPJyoD+H2LGgZwY+Bi30AMPIZBme8GNjgmAInKiNdqlZrW6PHBOWbalHNrR1jrF+lMZFQr9DfRd3NZTkSSxTJSUs=
+X-Received: by 2002:a25:aa62:0:b0:648:590f:5a53 with SMTP id
+ s89-20020a25aa62000000b00648590f5a53mr29319927ybi.5.1652358305516; Thu, 12
+ May 2022 05:25:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220426164315.625149-1-glider@google.com> <20220426164315.625149-29-glider@google.com>
+ <87a6c6y7mg.ffs@tglx> <CAG_fn=U7PPBmmkgxFcWFQUCqZitzMizr1e69D9f26sGGzeitLQ@mail.gmail.com>
+ <87y1zjlhmj.ffs@tglx> <CAG_fn=XxAhBEBP2KJvahinbaxLAd1xvqTfRJdAu1Tk5r8=01jw@mail.gmail.com>
+ <878rrfiqyr.ffs@tglx> <CAG_fn=XVchXCcOhFt+rP=vinRhkyrXJSP46cyvcZeHJWaDquGg@mail.gmail.com>
+ <87k0ayhc43.ffs@tglx> <CAG_fn=UpcXMqJiZvho6_G3rjvjQA-3Ax6X8ONVO0D+4Pttc9dA@mail.gmail.com>
+ <87h762h5c2.ffs@tglx> <CAG_fn=UroTgp0jt77X_E-b1DPJ+32Cye6dRL4DOZ8MRf+XSokg@mail.gmail.com>
+ <871qx2r09k.ffs@tglx>
+In-Reply-To: <871qx2r09k.ffs@tglx>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 12 May 2022 14:24:29 +0200
+Message-ID: <CAG_fn=VtQw1gL_UVONHi=OJakOuMa3wKfkzP0jWcuvGQEmV9Vw@mail.gmail.com>
+Subject: Re: [PATCH v3 28/46] kmsan: entry: handle register passing from
+ uninstrumented code
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Kao <michael.kao@mediatek.com>
+On Mon, May 9, 2022 at 9:09 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> On Mon, May 09 2022 at 18:50, Alexander Potapenko wrote:
+> > Indeed, calling kmsan_unpoison_memory() in irqentry_enter() was
+> > supposed to be enough, but we have code in kmsan_unpoison_memory() (as
+> > well as other runtime functions) that checks for kmsan_in_runtime()
+> > and bails out to prevent potential recursion if KMSAN code starts
+> > calling itself.
+> >
+> > kmsan_in_runtime() is implemented as follows:
+> >
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > static __always_inline bool kmsan_in_runtime(void)
+> > {
+> >   if ((hardirq_count() >> HARDIRQ_SHIFT) > 1)
+> >     return true;
+> >   return kmsan_get_context()->kmsan_in_runtime;
+> > }
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > (see the code here:
+> > https://lore.kernel.org/lkml/20220426164315.625149-13-glider@google.com=
+/#Z31mm:kmsan:kmsan.h)
+> >
+> > If we are running in the task context (in_task()=3D=3Dtrue),
+> > kmsan_get_context() returns a per-task `struct *kmsan_ctx`.
+> > If `in_task()=3D=3Dfalse` and `hardirq_count()>>HARDIRQ_SHIFT=3D=3D1`, =
+it
+> > returns a per-CPU one.
+> > Otherwise kmsan_in_runtime() is considered true to avoid dealing with
+> > nested interrupts.
+> >
+> > So in the case when `hardirq_count()>>HARDIRQ_SHIFT` is greater than
+> > 1, kmsan_in_runtime() becomes a no-op, which leads to false positives.
+>
+> But, that'd only > 1 when there is a nested interrupt, which is not the
+> case. Interrupt handlers keep interrupts disabled. The last exception fro=
+m
+> that rule was some legacy IDE driver which is gone by now.
 
-This patch adds binding document for mt6873 thermal controller.
+That's good to know, then we probably don't need this hardirq_count()
+check anymore.
 
-Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
----
- .../thermal/mediatek-thermal-lvts.yaml        | 81 +++++++++++++++++++
- 1 file changed, 81 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml
+> So no, not a good explanation either.
 
-diff --git a/Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml b/Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml
-new file mode 100644
-index 000000000000..69ffe7b14c21
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml
-@@ -0,0 +1,81 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/mediatek-thermal-lvts.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Mediatek SoC LVTS thermal controller (DTS) binding
-+
-+maintainers:
-+  - Yu-Chia Chang <ethan.chang@mediatek.com>
-+  - Ben Tseng <ben.tseng@mediatek.com>
-+
-+properties:
-+  compatible:
-+    const: mediatek,mt6873-lvts
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: lvts_clk
-+
-+  "#thermal-sensor-cells":
-+    const: 0
-+
-+required:
-+  - "#thermal-sensor-cells"
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/thermal/thermal.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/mt8192-clk.h>
-+    dts: lvts@1100b000 {
-+        compatible = "mediatek,mt6873-lvts";
-+        reg = <0x1100b000 0x1000>;
-+        clocks = <&infracfg CLK_INFRA_THERM>;
-+        clock-names = "lvts_clk";
-+        #thermal-sensor-cells = <0>;
-+        interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_HIGH>;
-+    };
-+
-+    thermal-zones {
-+        cpu_thermal: cpu-thermal {
-+            polling-delay-passive = <0>;
-+            polling-delay = <0>;
-+
-+            thermal-sensors = <&dts>;
-+            trips {
-+                cpu_alert1: cpu-alert1 {
-+                    temperature = <85000>;
-+                    hysteresis = <0>;
-+                    type = "passive";
-+                };
-+
-+                cpu_crit: cpu-crit {
-+                    temperature = <120000>;
-+                    hysteresis = <0>;
-+                    type = "critical";
-+                };
-+            };
-+
-+            cooling-maps {
-+            };
-+        };
-+    };
-+...
--- 
-2.35.1
+After looking deeper I see that unpoisoning was indeed skipped because
+kmsan_in_runtime() returned true, but I was wrong about the root
+cause.
+The problem was not caused by a nested hardirq, but rather by the fact
+that the KMSAN hook in irqentry_enter() was called with in_task()=3D=3D1.
 
+Roughly said, T0 was running some code in the task context, then it
+started executing KMSAN instrumentation and entered the runtime by
+setting current->kmsan_ctx.kmsan_in_runtime.
+Then an IRQ kicked in and started calling
+asm_sysvec_apic_timer_interrupt() =3D> sysvec_apic_timer_interrupt(regs)
+=3D> irqentry_enter(regs) - but at that point in_task() was still true,
+therefore kmsan_unpoison_memory() became a no-op.
+
+As far as I can see, it is irq_enter_rcu() that makes in_task() return
+0 by incrementing the preempt count in __irq_enter_raw(), so our
+unpoisoning can only work if we perform it after we enter the IRQ
+context.
+
+I think the best that can be done here is (as suggested above) to
+provide some kmsan_unpoison_pt_regs() function that will only be
+called from the entry points and won't be doing reentrancy checks.
+It should be safe, because unpoisoning boils down to calculating
+shadow/origin addresses and calling memset() on them, no instrumented
+code will be involved.
+
+We could try to figure out the places in idtentry code where normal
+kmsan_unpoison_memory() can be called in IRQ context, but as far as I
+can see it will depend on the type of the entry point.
+
+Another way to deal with the problem is to not rely on in_task(), but
+rather use some per-cpu counter in irqentry_enter()/irqentry_exit() to
+figure out whether we are in IRQ code already.
+However this is only possible irqentry_enter() itself guarantees that
+the execution cannot be rescheduled to another CPU - is that the case?
+
+> Thanks,
+>
+>         tglx
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "kasan-dev" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kasan-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/kasan-dev/871qx2r09k.ffs%40tglx.
+
+
+
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
+
+Diese E-Mail ist vertraulich. Falls Sie diese f=C3=A4lschlicherweise
+erhalten haben sollten, leiten Sie diese bitte nicht an jemand anderes
+weiter, l=C3=B6schen Sie alle Kopien und Anh=C3=A4nge davon und lassen Sie =
+mich
+bitte wissen, dass die E-Mail an die falsche Person gesendet wurde.
+
+
+This e-mail is confidential. If you received this communication by
+mistake, please don't forward it to anyone else, please erase all
+copies and attachments, and please let me know that it has gone to the
+wrong person.

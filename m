@@ -2,70 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E052524538
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 07:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0A8524534
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 07:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350041AbiELF4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 01:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40812 "EHLO
+        id S1350029AbiELF4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 01:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350033AbiELF4M (ORCPT
+        with ESMTP id S237798AbiELF4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 01:56:12 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D5B2497D;
-        Wed, 11 May 2022 22:56:10 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id bv19so8034673ejb.6;
-        Wed, 11 May 2022 22:56:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Jovg6Gn1+l1bFNNGDKkLFFufpn4EfrWqOlCPZrp3sfU=;
-        b=Xy0o+hM3tLvfZFqKsOhlwTwoOuWhFr+FGKgTHRYaM9okG67pwCh0qkD6FMf5tWO121
-         xVQr8qgZ67VG+OwWVYSJTnrXQhiRcrY4GQfVlcvJvd0IhUVkii0biNd4WAWiT5Txe+uh
-         MH/ftG2j7rUul1mbXRvZLlI/EigyjBpjZtoC87FbIhYbH2Ve/8pHNo3DgkQJT4dGciLq
-         De+oSIkX1ckMoS9Vkkv/sN77ejblRiyyNQ3DDJhVOx0sGJa6LQrLpA5HLQCZHLNDtfG/
-         uuzIJI9/J1WDGgV6X8iTnAW+74TOYGNaeZP4ixBR1wvLTp6VNSGFedzaA4+vhVVacclI
-         0rvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Jovg6Gn1+l1bFNNGDKkLFFufpn4EfrWqOlCPZrp3sfU=;
-        b=JP0zALe3Mwsb/hZjsNzPB63okiArrOwR3LtG3sK6zYZUIhz2v9o+yh1nBGD15V+nd9
-         7BH3vbUiCFLEn8WrbE735bXYGq12/yy1Y7UKIH5oxXjbKzPEGNQ3LqKQDKqy9zQ5i5Q3
-         XgqtWH7K6yjG6NGEmrL7DVG1Tk4Zxr+VXUP1/QnrI90X/mh297vx3LVvv9gIKaRhaYiX
-         S+j4uVC1Gl51LF38Znfxhovprc5kLzhBE9iyobZwNcDM+pRtV7fcZwDK2BUoADrWqHua
-         /eCYOutPa2alpB0GrExwZWJous0oU56cOL5smRyk3RRueyWwozFEfVq5UMc2EqnqJpWQ
-         3z2Q==
-X-Gm-Message-State: AOAM532S/Yu+rRWftPjLyBvCX1Z1hQ1m0lQpZY4fJwHLObbdriQymKEt
-        TmzgiMlbTxd4q77W5lTCnY0+/q0HQFUdgQ==
-X-Google-Smtp-Source: ABdhPJyI3xxnYv+nUrY0ShpToYWh0lCS4SMpU7AgO5U14xIuKB6L20Ofw4VRc/Rv1YFCN5AboQIS+w==
-X-Received: by 2002:a17:907:6287:b0:6e1:6ac:c769 with SMTP id nd7-20020a170907628700b006e106acc769mr28929968ejc.388.1652334968811;
-        Wed, 11 May 2022 22:56:08 -0700 (PDT)
-Received: from localhost.localdomain.info (62-178-82-229.cable.dynamic.surfer.at. [62.178.82.229])
-        by smtp.gmail.com with ESMTPSA id n14-20020a170906700e00b006f3ef214e34sm1686320ejj.154.2022.05.11.22.56.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 22:56:08 -0700 (PDT)
-From:   Christian Gmeiner <christian.gmeiner@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     dominic.rath@ibv-augsburg.net, kishon@ti.com,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Tom Joseph <tjoseph@cadence.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Subject: [PATCH v3] PCI: cadence: Allow PTM Responder to be enabled
-Date:   Thu, 12 May 2022 07:55:38 +0200
-Message-Id: <20220512055539.1782437-1-christian.gmeiner@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Thu, 12 May 2022 01:56:06 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B17A20F4C
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 22:56:04 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R391e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VCzTOIt_1652334961;
+Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VCzTOIt_1652334961)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 12 May 2022 13:56:01 +0800
+From:   Jeffle Xu <jefflexu@linux.alibaba.com>
+To:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH v2] erofs: scan devices from device table
+Date:   Thu, 12 May 2022 13:56:01 +0800
+Message-Id: <20220512055601.106109-1-jefflexu@linux.alibaba.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,59 +38,186 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This enables the Controller [RP] to automatically respond with
-Response/ResponseD messages if CDNS_PCIE_LM_TPM_CTRL_PTMRSEN
-and PCI_PTM_CTRL_ENABLE bits are both set.
+When "-o device" mount option is not specified, scan the device table
+and instantiate the devices if there's any in the device table. In this
+case, the tag field of each device slot uniquely specifies a device.
 
-Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
+Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
+Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 ---
- drivers/pci/controller/cadence/pcie-cadence-host.c | 10 ++++++++++
- drivers/pci/controller/cadence/pcie-cadence.h      |  4 ++++
- 2 files changed, 14 insertions(+)
+changes since v1:
+  tweak the error warning when device tag is empty
+---
+ fs/erofs/erofs_fs.h |   9 ++--
+ fs/erofs/super.c    | 102 ++++++++++++++++++++++++++++++--------------
+ 2 files changed, 72 insertions(+), 39 deletions(-)
 
-diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
-index fb96d37a135c..940c7dd701d6 100644
---- a/drivers/pci/controller/cadence/pcie-cadence-host.c
-+++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
-@@ -123,6 +123,14 @@ static int cdns_pcie_retrain(struct cdns_pcie *pcie)
- 	return ret;
- }
+diff --git a/fs/erofs/erofs_fs.h b/fs/erofs/erofs_fs.h
+index 1238ca104f09..1adde3a813b4 100644
+--- a/fs/erofs/erofs_fs.h
++++ b/fs/erofs/erofs_fs.h
+@@ -37,12 +37,9 @@
+ #define EROFS_SB_EXTSLOT_SIZE	16
  
-+static void cdns_pcie_host_enable_ptm_response(struct cdns_pcie *pcie)
+ struct erofs_deviceslot {
+-	union {
+-		u8 uuid[16];		/* used for device manager later */
+-		u8 userdata[64];	/* digest(sha256), etc. */
+-	} u;
+-	__le32 blocks;			/* total fs blocks of this device */
+-	__le32 mapped_blkaddr;		/* map starting at mapped_blkaddr */
++	u8 tag[64];		/* digest(sha256), etc. */
++	__le32 blocks;		/* total fs blocks of this device */
++	__le32 mapped_blkaddr;	/* map starting at mapped_blkaddr */
+ 	u8 reserved[56];
+ };
+ #define EROFS_DEVT_SLOT_SIZE	sizeof(struct erofs_deviceslot)
+diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+index 4a623630e1c4..7f0082cb4361 100644
+--- a/fs/erofs/super.c
++++ b/fs/erofs/super.c
+@@ -219,7 +219,52 @@ static int erofs_load_compr_cfgs(struct super_block *sb,
+ }
+ #endif
+ 
+-static int erofs_init_devices(struct super_block *sb,
++static int erofs_init_device(struct erofs_buf *buf, struct super_block *sb,
++			     struct erofs_device_info *dif, erofs_off_t *pos)
 +{
-+	u32 val;
++	struct erofs_sb_info *sbi = EROFS_SB(sb);
++	struct erofs_deviceslot *dis;
++	struct block_device *bdev;
++	void *ptr;
++	int ret;
 +
-+	val = cdns_pcie_readl(pcie, CDNS_PCIE_LM_PTM_CTRL);
-+	cdns_pcie_writel(pcie, CDNS_PCIE_LM_PTM_CTRL, val | CDNS_PCIE_LM_TPM_CTRL_PTMRSEN);
++	ptr = erofs_read_metabuf(buf, sb, erofs_blknr(*pos), EROFS_KMAP);
++	if (IS_ERR(ptr))
++		return PTR_ERR(ptr);
++	dis = ptr + erofs_blkoff(*pos);
++
++	if (!dif->path) {
++		if (!dis->tag[0]) {
++			erofs_err(sb, "empty device tag @ pos %llu", *pos);
++			return -EINVAL;
++		}
++		dif->path = kmemdup_nul(dis->tag, sizeof(dis->tag), GFP_KERNEL);
++		if (!dif->path)
++			return -ENOMEM;
++	}
++
++	if (erofs_is_fscache_mode(sb)) {
++		ret = erofs_fscache_register_cookie(sb, &dif->fscache,
++				dif->path, false);
++		if (ret)
++			return ret;
++	} else {
++		bdev = blkdev_get_by_path(dif->path, FMODE_READ | FMODE_EXCL,
++					  sb->s_type);
++		if (IS_ERR(bdev))
++			return PTR_ERR(bdev);
++		dif->bdev = bdev;
++		dif->dax_dev = fs_dax_get_by_bdev(bdev, &dif->dax_part_off);
++	}
++
++	dif->blocks = le32_to_cpu(dis->blocks);
++	dif->mapped_blkaddr = le32_to_cpu(dis->mapped_blkaddr);
++	sbi->total_blocks += dif->blocks;
++	*pos += EROFS_DEVT_SLOT_SIZE;
++	return 0;
 +}
 +
- static int cdns_pcie_host_start_link(struct cdns_pcie_rc *rc)
++static int erofs_scan_devices(struct super_block *sb,
+ 			      struct erofs_super_block *dsb)
  {
- 	struct cdns_pcie *pcie = &rc->pcie;
-@@ -501,6 +509,8 @@ int cdns_pcie_host_setup(struct cdns_pcie_rc *rc)
- 	if (rc->quirk_detect_quiet_flag)
- 		cdns_pcie_detect_quiet_min_delay_set(&rc->pcie);
+ 	struct erofs_sb_info *sbi = EROFS_SB(sb);
+@@ -227,8 +272,6 @@ static int erofs_init_devices(struct super_block *sb,
+ 	erofs_off_t pos;
+ 	struct erofs_buf buf = __EROFS_BUF_INITIALIZER;
+ 	struct erofs_device_info *dif;
+-	struct erofs_deviceslot *dis;
+-	void *ptr;
+ 	int id, err = 0;
  
-+	cdns_pcie_host_enable_ptm_response(pcie);
-+
- 	ret = cdns_pcie_start_link(pcie);
- 	if (ret) {
- 		dev_err(dev, "Failed to start link\n");
-diff --git a/drivers/pci/controller/cadence/pcie-cadence.h b/drivers/pci/controller/cadence/pcie-cadence.h
-index c8a27b6290ce..1ffa8fa77a8a 100644
---- a/drivers/pci/controller/cadence/pcie-cadence.h
-+++ b/drivers/pci/controller/cadence/pcie-cadence.h
-@@ -116,6 +116,10 @@
- #define LM_RC_BAR_CFG_APERTURE(bar, aperture)		\
- 					(((aperture) - 2) << ((bar) * 8))
+ 	sbi->total_blocks = sbi->primarydevice_blocks;
+@@ -237,7 +280,8 @@ static int erofs_init_devices(struct super_block *sb,
+ 	else
+ 		ondisk_extradevs = le16_to_cpu(dsb->extra_devices);
  
-+/* PTM Control Register */
-+#define CDNS_PCIE_LM_PTM_CTRL 	(CDNS_PCIE_LM_BASE + 0x0da8)
-+#define CDNS_PCIE_LM_TPM_CTRL_PTMRSEN 	BIT(17)
+-	if (ondisk_extradevs != sbi->devs->extra_devices) {
++	if (sbi->devs->extra_devices &&
++	    ondisk_extradevs != sbi->devs->extra_devices) {
+ 		erofs_err(sb, "extra devices don't match (ondisk %u, given %u)",
+ 			  ondisk_extradevs, sbi->devs->extra_devices);
+ 		return -EINVAL;
+@@ -248,39 +292,31 @@ static int erofs_init_devices(struct super_block *sb,
+ 	sbi->device_id_mask = roundup_pow_of_two(ondisk_extradevs + 1) - 1;
+ 	pos = le16_to_cpu(dsb->devt_slotoff) * EROFS_DEVT_SLOT_SIZE;
+ 	down_read(&sbi->devs->rwsem);
+-	idr_for_each_entry(&sbi->devs->tree, dif, id) {
+-		struct block_device *bdev;
+-
+-		ptr = erofs_read_metabuf(&buf, sb, erofs_blknr(pos),
+-					 EROFS_KMAP);
+-		if (IS_ERR(ptr)) {
+-			err = PTR_ERR(ptr);
+-			break;
+-		}
+-		dis = ptr + erofs_blkoff(pos);
+-
+-		if (erofs_is_fscache_mode(sb)) {
+-			err = erofs_fscache_register_cookie(sb, &dif->fscache,
+-							    dif->path, false);
++	if (sbi->devs->extra_devices) {
++		idr_for_each_entry(&sbi->devs->tree, dif, id) {
++			err = erofs_init_device(&buf, sb, dif, &pos);
+ 			if (err)
+ 				break;
+-		} else {
+-			bdev = blkdev_get_by_path(dif->path,
+-						  FMODE_READ | FMODE_EXCL,
+-						  sb->s_type);
+-			if (IS_ERR(bdev)) {
+-				err = PTR_ERR(bdev);
++		}
++	} else {
++		for (id = 0; id < ondisk_extradevs; id++) {
++			dif = kzalloc(sizeof(*dif), GFP_KERNEL);
++			if (!dif) {
++				err = -ENOMEM;
+ 				break;
+ 			}
+-			dif->bdev = bdev;
+-			dif->dax_dev = fs_dax_get_by_bdev(bdev,
+-							  &dif->dax_part_off);
+-		}
+ 
+-		dif->blocks = le32_to_cpu(dis->blocks);
+-		dif->mapped_blkaddr = le32_to_cpu(dis->mapped_blkaddr);
+-		sbi->total_blocks += dif->blocks;
+-		pos += EROFS_DEVT_SLOT_SIZE;
++			err = idr_alloc(&sbi->devs->tree, dif, 0, 0, GFP_KERNEL);
++			if (err < 0) {
++				kfree(dif);
++				break;
++			}
++			++sbi->devs->extra_devices;
 +
- /*
-  * Endpoint Function Registers (PCI configuration space for endpoint functions)
-  */
++			err = erofs_init_device(&buf, sb, dif, &pos);
++			if (err)
++				break;
++		}
+ 	}
+ 	up_read(&sbi->devs->rwsem);
+ 	erofs_put_metabuf(&buf);
+@@ -367,7 +403,7 @@ static int erofs_read_superblock(struct super_block *sb)
+ 		goto out;
+ 
+ 	/* handle multiple devices */
+-	ret = erofs_init_devices(sb, dsb);
++	ret = erofs_scan_devices(sb, dsb);
+ 
+ 	if (erofs_sb_has_ztailpacking(sbi))
+ 		erofs_info(sb, "EXPERIMENTAL compressed inline data feature in use. Use at your own risk!");
 -- 
-2.36.1
+2.27.0
 

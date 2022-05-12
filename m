@@ -2,42 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A92F25258CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 01:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FCB45258D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 01:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359690AbiELX5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 19:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
+        id S1359697AbiELX72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 19:59:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359688AbiELX5t (ORCPT
+        with ESMTP id S243920AbiELX70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 19:57:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BED25A59C;
-        Thu, 12 May 2022 16:57:48 -0700 (PDT)
+        Thu, 12 May 2022 19:59:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C52428B684;
+        Thu, 12 May 2022 16:59:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D35B46209D;
-        Thu, 12 May 2022 23:57:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DF4EC385B8;
-        Thu, 12 May 2022 23:57:46 +0000 (UTC)
-Message-ID: <b128ed0f-08f8-2742-e22c-20cc5870a61c@linux-m68k.org>
-Date:   Fri, 13 May 2022 09:57:43 +1000
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 165716206C;
+        Thu, 12 May 2022 23:59:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C30FC385B8;
+        Thu, 12 May 2022 23:59:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652399964;
+        bh=gjvACHtGA2z6GnIxl6laM07IgvWJrXhmBnyL+KjzY1Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qtVGdSlskjXFv5UjcDm2Zz5z2cGIvC1SsmOXmbI3/Rwe3Un/8ahnIyUinS08fl1xx
+         kRv6AG6TLWl8r6NoYA4N7ORiNZIMi7w4GTgMfb+2yd7EjEF9T7nnda7b7rquSn9ip7
+         c1nviacB+QzUqAjafZBRicXxmfFGCAHkK51GCTQtrcS/h9UVtt25s6OUPuhXHohfIm
+         W4cVvDVII4hWH3G2KOoiLjkHpf0+tBKYQGPUQkdTIvTIyRz300kUcHUyJnwCnsiiDx
+         Mo48P3UjVBETmjla5EWrS8GTayg/grpi/mbZlslIbMiuOghMjyFQSWRR3VVD8jyY7s
+         FlOUdbrqS81Dg==
+Date:   Thu, 12 May 2022 16:59:23 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Zheng Bin <zhengbin13@huawei.com>
+Cc:     <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <gaochao49@huawei.com>
+Subject: Re: [PATCH -next] net: hinic: add missing destroy_workqueue in
+ hinic_pf_to_mgmt_init
+Message-ID: <20220512165923.1fda4c49@kernel.org>
+In-Reply-To: <20220512084148.1027481-1-zhengbin13@huawei.com>
+References: <20220512084148.1027481-1-zhengbin13@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 4/4] m68knommu: allow elf_fdpic loader to be selected
-Content-Language: en-US
-To:     linux-m68k@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, dalias@libc.org
-References: <20220512230602.1408871-1-gerg@linux-m68k.org>
-From:   Greg Ungerer <gerg@linux-m68k.org>
-In-Reply-To: <20220512230602.1408871-1-gerg@linux-m68k.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -46,38 +56,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 13/5/22 09:06, Greg Ungerer wrote:
-> The m68k architecture code is capable of supporting the binfmt_elf_fdpic
-> loader, so allow it to be configured. It is restricted to nommu
-> configurations at this time due to the MMU context structures/code not
-> supporting everything elf_fdpic needs when MMU is enabled.
+On Thu, 12 May 2022 16:41:48 +0800 Zheng Bin wrote:
+> hinic_pf_to_mgmt_init misses destroy_workqueue in error path,
+> this patch fixes that.
 > 
-> Link: https://lore.kernel.org/linux-m68k/20220428033319.239341-1-gerg@linux-m68k.org/
-> Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
-> ---
->   fs/Kconfig.binfmt | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> v2: remove superfluous surrounding "(" ")"
+> Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
 
-If no one has any objections I can carry this in the m68knommu
-git tree with the rest of the series.
-
-Regards
-Greg
-
-
-> diff --git a/fs/Kconfig.binfmt b/fs/Kconfig.binfmt
-> index 21c6332fa785..fb325b3aa4b0 100644
-> --- a/fs/Kconfig.binfmt
-> +++ b/fs/Kconfig.binfmt
-> @@ -58,7 +58,7 @@ config ARCH_USE_GNU_PROPERTY
->   config BINFMT_ELF_FDPIC
->   	bool "Kernel support for FDPIC ELF binaries"
->   	default y if !BINFMT_ELF
-> -	depends on (ARM || (SUPERH && !MMU))
-> +	depends on ARM || ((M68K || SUPERH) && !MMU)
->   	select ELFCORE
->   	help
->   	  ELF FDPIC binaries are based on ELF, but allow the individual load
+Please add a Fixes tag and repost. Thanks!

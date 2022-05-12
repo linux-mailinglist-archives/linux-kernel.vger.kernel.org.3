@@ -2,294 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 680BE524FC5
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E7F524FCD
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355182AbiELOSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 10:18:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52030 "EHLO
+        id S1355184AbiELOSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 10:18:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354853AbiELOSN (ORCPT
+        with ESMTP id S1355231AbiELOST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 10:18:13 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C8C047356C
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:17:58 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6C4CE106F;
-        Thu, 12 May 2022 07:17:58 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7AF5F3F73D;
-        Thu, 12 May 2022 07:17:57 -0700 (PDT)
-Date:   Thu, 12 May 2022 15:17:55 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Qing Wang <wangqing@vivo.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com
-Subject: Re: [PATCH V2] arch_topology: support parsing cluster_id from DT
-Message-ID: <Yn0XE3szFk9f2VyL@bogus>
-References: <1652262776-3056-1-git-send-email-wangqing@vivo.com>
+        Thu, 12 May 2022 10:18:19 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689A274840
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:18:14 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id j10-20020a17090a94ca00b001dd2131159aso7994844pjw.0
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:18:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=7iZZodcw2kcYl7DcsgXoMrjWgWmUo2hoVmfbC2enldQ=;
+        b=f0iav4TX9MWlsCmY6kc9xgrGJbCfS5isN6BM1Z6iWUxV5R949SvxIHYuhyNXGq/LbV
+         iAVEe/k5sttQeWMaw8UJeNzTt7nM8mgs/GC29uCwzVviZ9UmUBlRI+Yz4RUEq3Dnpjdu
+         2s0PTjvqcKHLtt7RtJpqsNMesXKMwyhVVaDQmx0ZS2gv/W14tS7b3di51NdIdSkN/LgV
+         XzQIgrd3IqcQpA9t8nnDLybJ7SAHI7TXsGvLN72OpLgWmloZOd2HbrLfE11Ys9oztA22
+         585mp7uatbKavu7kiketYuGxOhssXwkcveNeYR6yEJEx5D8busxanwG2Ez59YvnJLBGT
+         vRRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=7iZZodcw2kcYl7DcsgXoMrjWgWmUo2hoVmfbC2enldQ=;
+        b=jm6kOODJ/Sg6wPvkvI+12GItaNmDXgPMUWIh9XYzD02tngdJENhqZLKOXLlTm3ko9V
+         kouMpCATh67nlCGydVDHoGdnBNWtX3sLH8HR3GEcUYAkcMmPcmMLIPlcP+vf6pjSCbds
+         3kTrvgfnjlfNlzvHEn/+biN8Mav7tUqaSDikOCBtpgTIfGRO/h6iKP0eBz4TnTBpSspg
+         NojhoR/pNSSOO6jW1nv8DJTOfy3Df14s85fqqLJTKteZdX/x96ICVnOxIvPwZw7s1RyZ
+         vU1Zyp8h3RyyFQgJ38kKXKhGF48ZItAQPEwq8m79dLonqwtkOFvJhY/TKZzUcyS5wiCb
+         IWTg==
+X-Gm-Message-State: AOAM532+opOl863+4+dt51GfeMBKm9YzSPkOVgTQZOxY7yvMSJVwBokp
+        GjOaMxjN6FAOKPkZlzebYMth
+X-Google-Smtp-Source: ABdhPJy0b5z0NMw6JCWSQ6xCOd3R5EJ290CTQnJbuWRxW4kXTEznCyVtk2LbYi8JPVi2vsroZVZbrg==
+X-Received: by 2002:a17:90a:170c:b0:1dc:20c4:6354 with SMTP id z12-20020a17090a170c00b001dc20c46354mr11089713pjd.113.1652365093661;
+        Thu, 12 May 2022 07:18:13 -0700 (PDT)
+Received: from thinkpad ([117.202.184.202])
+        by smtp.gmail.com with ESMTPSA id u1-20020a170903124100b0015e8d4eb1f2sm3997428plh.60.2022.05.12.07.18.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 07:18:13 -0700 (PDT)
+Date:   Thu, 12 May 2022 19:48:06 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 02/26] dmaengine: Fix dma_slave_config.dst_addr
+ description
+Message-ID: <20220512141806.GG35848@thinkpad>
+References: <20220503225104.12108-1-Sergey.Semin@baikalelectronics.ru>
+ <20220503225104.12108-3-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1652262776-3056-1-git-send-email-wangqing@vivo.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220503225104.12108-3-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 02:52:56AM -0700, Qing Wang wrote:
-> From: Wang Qing <wangqing@vivo.com>
+On Wed, May 04, 2022 at 01:50:40AM +0300, Serge Semin wrote:
+> Most likely due to a copy-paste mistake the dst_addr member of the
+> dma_slave_config structure has been marked as ignored if the !source!
+> address belong to the memory. That is relevant to the src_addr field of
+> the structure while the dst_addr field as containing a destination device
+> address is supposed to be ignored if the destination is the CPU memory.
+> Let's fix the field description accordingly.
 > 
-> Use nested cluster structures in DT to support describing multi-level
-> cluster topologies and increase the parsing of nested cluster.
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
+Thanks,
+Mani
+
+> ---
+>  include/linux/dmaengine.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Notice: the clusters describing in DT currently are not physical
-> boundaries, since changing "cluster" to "socket" is too involved and error
-> prone, this patch will not have any effect on one-level cluster topo, but
-> can support the mutil-level cluster topo to support CLUSTER_SCHED.
+> diff --git a/include/linux/dmaengine.h b/include/linux/dmaengine.h
+> index 842d4f7ca752..f204ea16ac1c 100644
+> --- a/include/linux/dmaengine.h
+> +++ b/include/linux/dmaengine.h
+> @@ -395,7 +395,7 @@ enum dma_slave_buswidth {
+>   * should be read (RX), if the source is memory this argument is
+>   * ignored.
+>   * @dst_addr: this is the physical address where DMA slave data
+> - * should be written (TX), if the source is memory this argument
+> + * should be written (TX), if the destination is memory this argument
+>   * is ignored.
+>   * @src_addr_width: this is the width in bytes of the source (RX)
+>   * register where DMA data shall be read. If the source
+> -- 
+> 2.35.1
+> 
 
-Sorry the socket/package_id is broken. If we are playing with cluster_id
-which is now wrongly presented as package_id, you are forced to fix that
-too. We don't want to break that in a different way or leave that as is
-since the cluster_id and package ids now show up as same now. Earlier the
-cluster_id was -1.
-
-I had a look when I started reviewing your patch. Assuming we don't need
-nested cluster support yet, I have some patches(not built or tested
-unfortunately yet). Let me know your thoughts. If you think you still
-need support for some kind of nested cluster, build that on top of this.
-Also I haven't bothered about sched domains as this purely relates to
-topology and how this is mapped to sched domain is orthogonal.
-
-If anything is broken, that needs to be fixed separately there. I see the
-idea here is correct and would like to push the patches once I build/test
-and get some review/more testing.
-
-Regards,
-Sudeep
-
----->8
-
-From 73de6524249287159a5c9fab9493d84bc5efc6e6 Mon Sep 17 00:00:00 2001
-From: Sudeep Holla <sudeep.holla@arm.com>
-Date: Thu, 12 May 2022 14:12:20 +0100
-Subject: [PATCH 1/3] arch_topology: Don't set cluster identifier as physical
- package identifier
-
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
----
- drivers/base/arch_topology.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
-
-diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index f73b836047cf..44f733b365cc 100644
---- a/drivers/base/arch_topology.c
-+++ b/drivers/base/arch_topology.c
-@@ -543,7 +543,6 @@ static int __init parse_cluster(struct device_node *cluster, int depth)
- 	bool leaf = true;
- 	bool has_cores = false;
- 	struct device_node *c;
--	static int package_id __initdata;
- 	int core_id = 0;
- 	int i, ret;
- 
-@@ -582,7 +581,7 @@ static int __init parse_cluster(struct device_node *cluster, int depth)
- 			}
- 
- 			if (leaf) {
--				ret = parse_core(c, package_id, core_id++);
-+				ret = parse_core(c, 0, core_id++);
- 			} else {
- 				pr_err("%pOF: Non-leaf cluster with core %s\n",
- 				       cluster, name);
-@@ -599,9 +598,6 @@ static int __init parse_cluster(struct device_node *cluster, int depth)
- 	if (leaf && !has_cores)
- 		pr_warn("%pOF: empty cluster\n", cluster);
- 
--	if (leaf)
--		package_id++;
--
- 	return 0;
- }
- 
 -- 
-2.36.1
-
-
-From 33a5184fbb3020a59f27347051fde1af6356b559 Mon Sep 17 00:00:00 2001
-From: Sudeep Holla <sudeep.holla@arm.com>
-Date: Thu, 12 May 2022 14:13:43 +0100
-Subject: [PATCH 2/3] arch_topology: Set cluster identifier in each core/thread
-
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
----
- drivers/base/arch_topology.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index 44f733b365cc..87150b90ede4 100644
---- a/drivers/base/arch_topology.c
-+++ b/drivers/base/arch_topology.c
-@@ -491,7 +491,7 @@ static int __init get_cpu_for_node(struct device_node *node)
- }
- 
- static int __init parse_core(struct device_node *core, int package_id,
--			     int core_id)
-+			     int cluster_id, int core_id)
- {
- 	char name[20];
- 	bool leaf = true;
-@@ -507,6 +507,7 @@ static int __init parse_core(struct device_node *core, int package_id,
- 			cpu = get_cpu_for_node(t);
- 			if (cpu >= 0) {
- 				cpu_topology[cpu].package_id = package_id;
-+				cpu_topology[cpu].cluster_id = cluster_id;
- 				cpu_topology[cpu].core_id = core_id;
- 				cpu_topology[cpu].thread_id = i;
- 			} else if (cpu != -ENODEV) {
-@@ -528,6 +529,7 @@ static int __init parse_core(struct device_node *core, int package_id,
- 		}
- 
- 		cpu_topology[cpu].package_id = package_id;
-+		cpu_topology[cpu].cluster_id = cluster_id;
- 		cpu_topology[cpu].core_id = core_id;
- 	} else if (leaf && cpu != -ENODEV) {
- 		pr_err("%pOF: Can't get CPU for leaf core\n", core);
-@@ -537,7 +539,8 @@ static int __init parse_core(struct device_node *core, int package_id,
- 	return 0;
- }
- 
--static int __init parse_cluster(struct device_node *cluster, int depth)
-+static int __init
-+parse_cluster(struct device_node *cluster, int cluster_id, int depth)
- {
- 	char name[20];
- 	bool leaf = true;
-@@ -557,7 +560,7 @@ static int __init parse_cluster(struct device_node *cluster, int depth)
- 		c = of_get_child_by_name(cluster, name);
- 		if (c) {
- 			leaf = false;
--			ret = parse_cluster(c, depth + 1);
-+			ret = parse_cluster(c, i, depth + 1);
- 			of_node_put(c);
- 			if (ret != 0)
- 				return ret;
-@@ -581,7 +584,7 @@ static int __init parse_cluster(struct device_node *cluster, int depth)
- 			}
- 
- 			if (leaf) {
--				ret = parse_core(c, 0, core_id++);
-+				ret = parse_core(c, 0, cluster_id, core_id++);
- 			} else {
- 				pr_err("%pOF: Non-leaf cluster with core %s\n",
- 				       cluster, name);
-@@ -621,7 +624,7 @@ static int __init parse_dt_topology(void)
- 	if (!map)
- 		goto out;
- 
--	ret = parse_cluster(map, 0);
-+	ret = parse_cluster(map, -1, 0);
- 	if (ret != 0)
- 		goto out_map;
- 
--- 
-2.36.1
-
-
-From 82def1dbe2ffd0d03c3b5d995dfa163b312c4b6b Mon Sep 17 00:00:00 2001
-From: Sudeep Holla <sudeep.holla@arm.com>
-Date: Thu, 12 May 2022 14:33:05 +0100
-Subject: [PATCH 3/3] arch_topology: Add support for parsing sockets in
- /cpu-map
-
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
----
- drivers/base/arch_topology.c | 37 +++++++++++++++++++++++++++++++-----
- 1 file changed, 32 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index 87150b90ede4..0ec461bb5d63 100644
---- a/drivers/base/arch_topology.c
-+++ b/drivers/base/arch_topology.c
-@@ -539,8 +539,8 @@ static int __init parse_core(struct device_node *core, int package_id,
- 	return 0;
- }
- 
--static int __init
--parse_cluster(struct device_node *cluster, int cluster_id, int depth)
-+static int __init parse_cluster(struct device_node *cluster, int package_id,
-+				int cluster_id, int depth)
- {
- 	char name[20];
- 	bool leaf = true;
-@@ -560,7 +560,7 @@ parse_cluster(struct device_node *cluster, int cluster_id, int depth)
- 		c = of_get_child_by_name(cluster, name);
- 		if (c) {
- 			leaf = false;
--			ret = parse_cluster(c, i, depth + 1);
-+			ret = parse_cluster(c, package_id, i, depth + 1);
- 			of_node_put(c);
- 			if (ret != 0)
- 				return ret;
-@@ -584,7 +584,8 @@ parse_cluster(struct device_node *cluster, int cluster_id, int depth)
- 			}
- 
- 			if (leaf) {
--				ret = parse_core(c, 0, cluster_id, core_id++);
-+				ret = parse_core(c, package_id, cluster_id,
-+						 core_id++);
- 			} else {
- 				pr_err("%pOF: Non-leaf cluster with core %s\n",
- 				       cluster, name);
-@@ -604,6 +605,32 @@ parse_cluster(struct device_node *cluster, int cluster_id, int depth)
- 	return 0;
- }
- 
-+static int __init parse_socket(struct device_node *socket)
-+{
-+	char name[20];
-+	struct device_node *c;
-+	bool has_socket = false;
-+	int package_id = 0, ret;
-+
-+	do {
-+		snprintf(name, sizeof(name), "socket%d", package_id);
-+		c = of_get_child_by_name(socket, name);
-+		if (c) {
-+			has_socket = true;
-+			ret = parse_cluster(c, package_id, -1, 0);
-+			of_node_put(c);
-+			if (ret != 0)
-+				return ret;
-+		}
-+		package_id++;
-+	} while(c);
-+
-+	if (!has_socket)
-+		ret = parse_cluster(socket, 0, -1, 0);
-+
-+	return ret;
-+}
-+
- static int __init parse_dt_topology(void)
- {
- 	struct device_node *cn, *map;
-@@ -624,7 +651,7 @@ static int __init parse_dt_topology(void)
- 	if (!map)
- 		goto out;
- 
--	ret = parse_cluster(map, -1, 0);
-+	ret = parse_socket(map);
- 	if (ret != 0)
- 		goto out_map;
- 
--- 
-2.36.1
-
+மணிவண்ணன் சதாசிவம்

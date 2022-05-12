@@ -2,125 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8590524980
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8332E524983
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:54:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352276AbiELJyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 05:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
+        id S243972AbiELJyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 05:54:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351950AbiELJxr (ORCPT
+        with ESMTP id S1348542AbiELJyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 05:53:47 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19CD41F96
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:53:45 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 125-20020a1c1983000000b003941f354c62so2686565wmz.0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:53:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=36WnFUDNUVrLnebw8e2rXDDHxmNPW9lYWYZDRw2VWIc=;
-        b=wItM0zhGx7UzmwBKHTcTNSfo6Gq3orFWBR5BIn2yY69ledPGEX5cdPMw/CjKLUonw1
-         VW6ImWsa4Tgl6WMGhWiArwkcvEm+bubsIfJzl+XouMoj/ahYklsOtVjX2+kzBTMMZvVs
-         wI24LeMLt/Njzl5+4+MSimffTiYgguNRSwX4X2zewUOO83l3pFiwdFtjPAX9jNSDJDXL
-         zq5/NAY98iB7sljIHtDqmb03G+2P0Eqv94aZOQNUDtd5UFX+ntNlQs8uDgd4v57hd7OW
-         XAQb3WtzZNIg4cu9//2PIO+eQbn+NnwxgsxrVe2c2sJWrSiQ93pFX5DTFp9k0diNbzJ9
-         c+dQ==
+        Thu, 12 May 2022 05:54:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A25042EC4
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:54:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652349276;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fi0YhV364tas2tIudHmBj0yV1vo+oCMyyhwL6b5uu0w=;
+        b=KcAQv4LAi5JdAPCL2zTMUBG1Pn5RHTWgm0UTfUy3NUjDexYl5nG/fI+8yzBMi4STpceLPB
+        FtQ8GD/SFAFCbRyjDg8e7/eRV4Gzve4ya3qXLgKzZtHpxs7D9ENphjOJLZ5qvKuLQLt9mm
+        BDIArGtVeThcX2qLVW0rS4hug1sqV3M=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-116-SpLk0flOPxeDfrd9Z0No2g-1; Thu, 12 May 2022 05:54:35 -0400
+X-MC-Unique: SpLk0flOPxeDfrd9Z0No2g-1
+Received: by mail-wm1-f71.google.com with SMTP id m26-20020a7bcb9a000000b0039455e871b6so1462088wmi.8
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:54:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=36WnFUDNUVrLnebw8e2rXDDHxmNPW9lYWYZDRw2VWIc=;
-        b=0N1Z5lttt3eqFNR876rT/yAjjoMUSE1T/BpxIimhdcxNoxHJRpMucJyXF7j18SRdq6
-         0UMQrJppT1Hn1gWv+gDFG0GydOw8R2UTK8qXtrl1j20ARW4xeZDf3SSOKiRjPIErbdJZ
-         U1HZ3I1beoddfaGFHArwyAjDROyavHGEDPN9eQMv9xb7fuTOUxv2KLzIfYSfr6pxkQBq
-         f9ec5tqyvAbJc52wBKraQ18dtGrkEPi2tPaEZRw1ziTKjZFgoyvGLT+fsmG5KuOpM+WJ
-         Hvwu1cUD6KFRUtJL7K9N/9SzIMGc++TMUNWEHozIc+RWr6d0D1oOduRWVMAUro3IKK3H
-         3TDg==
-X-Gm-Message-State: AOAM531QfN5QTC/1zEodfaQVGq1S1s9/AVeTQtwlPPGeUKgd7wNw29sk
-        r+M63K/xpQDqLCThGDhXbwFcqQ==
-X-Google-Smtp-Source: ABdhPJyiH+vmHLZHTmxMQfShNBwbUwLOV82INmXxyFQwcXdIF90tUO/KPbJe4l2fiAUfICToHf26tg==
-X-Received: by 2002:a1c:5415:0:b0:394:2c89:4f2a with SMTP id i21-20020a1c5415000000b003942c894f2amr9282931wmb.144.1652349224349;
-        Thu, 12 May 2022 02:53:44 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id f15-20020a056000128f00b0020c5253d8dbsm3080302wrx.39.2022.05.12.02.53.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 02:53:43 -0700 (PDT)
-Date:   Thu, 12 May 2022 10:53:41 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        =?utf-8?Q?=C5=81ukasz?= Bartosik <lb@semihalf.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Henning Schild <henning.schild@siemens.com>
-Subject: Re: [PATCH v5 5/8] mfd: lpc_ich: Add support for pinctrl in non-ACPI
- system
-Message-ID: <YnzZJaS+ZISAZfh5@google.com>
-References: <20220510151451.85561-1-andriy.shevchenko@linux.intel.com>
- <20220510151451.85561-6-andriy.shevchenko@linux.intel.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=fi0YhV364tas2tIudHmBj0yV1vo+oCMyyhwL6b5uu0w=;
+        b=Fk9VsbxoRzApZZuhlCVnoe6EdbcXeKi/ZaZWqjU7X4s+vZS5vZAnSNrQHtUtBH95Sc
+         9sc0uKYLL+bSWYjKtrT+lNOP7Rn+wm7TtgoudMdenj3Lc5yeiTW8C4sTOurqoA+KoJyH
+         D1xnWWpsndDEF3eH5Sz0HTq/0ke/blsMHN0BlGnPC6fR4Y3bD6xxDb+f5SspRvDAi9cV
+         9O7DjiBWtUPmzfV4seN80d4sxXLTf6VE2n1l9Ylu1rGDW8WBgMJYy6lNuMwt/JjEDwhm
+         0nA0fGV/9RnhI+tG00DDnIc6Z4TNv0Bl4CnSNFlyWJla3cJM/u8tAEwnFS9YVuvaLCEq
+         bNNA==
+X-Gm-Message-State: AOAM532EnCkcSeevNmZamgYTra0KGSmDIjHDAhakEcB492HvycRLiehX
+        yxB97VRatWfV4KnaotYmnTUIkeoYxcrGM9aGyjDBi6yKgHPNsG7h9uDkhJ2yMwreyVqHhaAgyl0
+        Gb7o8dJ5WZSQm+e9Y05mOy2Wk
+X-Received: by 2002:a05:6000:1283:b0:20a:e149:a9ab with SMTP id f3-20020a056000128300b0020ae149a9abmr25892802wrx.330.1652349274159;
+        Thu, 12 May 2022 02:54:34 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwN0msJfeisZ8RL0PLfCeAg9VdgRAnmPHNuzy1XxhUiOqdAF99zc+iQzQhd6iiK1NMw8ABnsw==
+X-Received: by 2002:a05:6000:1283:b0:20a:e149:a9ab with SMTP id f3-20020a056000128300b0020ae149a9abmr25892789wrx.330.1652349273959;
+        Thu, 12 May 2022 02:54:33 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c701:d200:ee5d:1275:f171:136d? (p200300cbc701d200ee5d1275f171136d.dip0.t-ipconnect.de. [2003:cb:c701:d200:ee5d:1275:f171:136d])
+        by smtp.gmail.com with ESMTPSA id t14-20020a5d460e000000b0020c5253d8f3sm4545885wrq.63.2022.05.12.02.54.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 02:54:33 -0700 (PDT)
+Message-ID: <165b01be-71c9-7737-3a78-124220ce59d0@redhat.com>
+Date:   Thu, 12 May 2022 11:54:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220510151451.85561-6-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 1/1] mips: rename mt_init to mips_mt_init
+Content-Language: en-US
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220504002554.654642-1-Liam.Howlett@oracle.com>
+ <20220504002554.654642-2-Liam.Howlett@oracle.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220504002554.654642-2-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 May 2022, Andy Shevchenko wrote:
-
-> From: Tan Jui Nee <jui.nee.tan@intel.com>
+On 04.05.22 02:26, Liam Howlett wrote:
+> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
 > 
-> Add support for non-ACPI systems, such as system that uses
-> Advanced Boot Loader (ABL) whereby a platform device has to be created
-> in order to bind with pin control and GPIO.
+> Move mt_init out of the way for the maple tree.  Use mips_mt prefix to
+> match the rest of the functions in the file.
 > 
-> At the moment, Intel Apollo Lake In-Vehicle Infotainment (IVI) system
-> requires a driver to hide and unhide P2SB to lookup P2SB BAR and pass
-> the PCI BAR address to GPIO.
-> 
-> Signed-off-by: Tan Jui Nee <jui.nee.tan@intel.com>
-> Co-developed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Tested-by: Henning Schild <henning.schild@siemens.com>
-> Acked-by: Hans de Goede <hdegoede@redhat.com>
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
->  drivers/mfd/lpc_ich.c | 105 +++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 104 insertions(+), 1 deletion(-)
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 
-For my own reference (apply this as-is to your sign-off block):
 
-  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Thanks,
+
+David / dhildenb
+

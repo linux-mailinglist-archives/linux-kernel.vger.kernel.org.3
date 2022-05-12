@@ -2,234 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5291524554
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 08:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0FB5524555
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 08:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350101AbiELGCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 02:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
+        id S1350108AbiELGCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 02:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241825AbiELGCP (ORCPT
+        with ESMTP id S241825AbiELGCq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 02:02:15 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BB566208;
-        Wed, 11 May 2022 23:02:14 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id f4so4282082iov.2;
-        Wed, 11 May 2022 23:02:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=XF/xFPtLmhC4ZgohYR62Nv8OLeVFzEOKNGwxgGsfdL8=;
-        b=YBd3ZIb1+jo23ypuHUppLf4wj5jZxNXzmo93O9MtoVI7vfDLlfJhIh+HGz78IxfHS6
-         YKcD1+1bt7PfBOSIum2q0bGEm0UMULPNdEqkV/4R45z3tGbqzfDCs/4UV9qhQk0AgSdQ
-         hmmgE4cwggI8WBXURuFFTxK+LQrm7kPJFYlvbWXHrIK4ECZ/E3Hp0UkHt98gU9BGC/bd
-         1Lt8qAbhmXY7A72ALbB9SYIo50YU0ahhNr8PCS9p4AsmWWjVoDz8DToNVhIFA0lkQ38c
-         cwuz2NZmjO2bgL5xx4XH1f50L+jSMt9VRA1cnYN3zRM9kGTEbpHWgc84jjj5OJ85U/ZD
-         micQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XF/xFPtLmhC4ZgohYR62Nv8OLeVFzEOKNGwxgGsfdL8=;
-        b=Kph7Zh6SM/mk4s38ktCa02oFS3IZfRJU8rY02EdJZ5Ko1/XUyyJbf4dW1O7yTmVHU0
-         ntC6jXnBI5pk7IwTPDcnowQ5hMEwA93D/XrHZfgD8Ng54qwS41xx5xv/tlpZ1TBg2TYK
-         AMQPaq1RU/khV+xHCPWB8XWekDqtYq8/Z6BVDZgFXmQcYpUk0ltbfxWaBJKmZwZvZuB0
-         FzKLBvCOxQZAOPU6Hsb62AMwwBXbNaL8C0tKhGqVuXVnuQW/9pG2rOYCEcCywMtfA1oJ
-         kLy2sJeMvwOciXRIZ8mOUpR7XzmabDqOhfznW3CRmH+eV2yVGiWrRjT/dWwDJWSIRHjm
-         JaaQ==
-X-Gm-Message-State: AOAM533irUAd/BUx3TmtbuwG4bemXR3fqV8HKPatQriJYIqU81xBqajv
-        2tR0XT5SnwzY048xN0lBeKw=
-X-Google-Smtp-Source: ABdhPJwYp1zTu4Y0ygbGlCVlf7igw2pMEJCGyZlXuTWZffrmszeMkZlVNgn+J3dXbNh6l5bAlYN+GQ==
-X-Received: by 2002:a05:6638:d4b:b0:32b:ece6:a56f with SMTP id d11-20020a0566380d4b00b0032bece6a56fmr10734448jak.315.1652335334066;
-        Wed, 11 May 2022 23:02:14 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:fdf4:a10e:cb39:9b64? ([2600:1700:2442:6db0:fdf4:a10e:cb39:9b64])
-        by smtp.gmail.com with ESMTPSA id x11-20020a92dc4b000000b002cde6e352d4sm1175261ilq.30.2022.05.11.23.02.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 23:02:13 -0700 (PDT)
-Message-ID: <1c89133e-7bd2-862a-bd57-7fefdffb77ae@gmail.com>
-Date:   Thu, 12 May 2022 01:02:11 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC] KTAP spec v2: prefix to KTAP data
+        Thu, 12 May 2022 02:02:46 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2060.outbound.protection.outlook.com [40.107.223.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF2E6CA95
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 23:02:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZoH9qHxEZUFLv82t8jgCTvV2J9nnXerPQTCseDrD8i1xmPfAyTwG3m5Ztg7MlAo2XPPqE83RFW/6aQ9Tlb3ZveDUX/UFAKMzgp2pc7VXSeH8nBr7BEnIO4PMEvW3G3JMxu1Pe5qCI6OQbSYIimtBFLRGjLUD39AAmD8Z5sm2OlRKNe0k/liKMFNirtWl94gNcspvxB5tqTS1QhsHvnqSlzh28ma8GjXCoWOZ4m4iJqlFbsmSNDdmJjiSe3L9Ddp0xhkbmKWNZiyjICYyAV4yta5NxBL8myxHwzWsk7mWQWViPQDfj//Afw2ddYMHuFn/QedJBFgaA/Jp/Y0wXecB7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XucDPuxviraXIdag+qT0KMNBNN6KNMozYhbgrFeY0V4=;
+ b=k7JnkL4szW+r+BkTmJf9JpxMsmWfV2QPXElX+JAfi9FsMXkTmEGdZyhFaaSPMA/uXE5puJ0Hb7PFMrNwO2MfDhxNJnShvkhubgbB0MgQQrAiI72NhFKeJzJx2lhqGcMthtSym+mdq5p9Ecm4+deC7snEzeUjM0AP/6zDqiSjywHvSBrAeeq3h0GxNrqswiKwix4NBicyEUkQUeSmbcj+2TgbNIVNyPtDfayAlbt6SVYlTldYuwKOjNe5J9ujYnKghqjUbZ2o7jCfw4yzC4IWSDJf+8zJSH8iz+go08Iqb2OoAJXDnyCCIZPD3NprVamoVfPyTPDQHxsN3uPxIFGUxA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XucDPuxviraXIdag+qT0KMNBNN6KNMozYhbgrFeY0V4=;
+ b=gjcMMpyOkvK28XGxt4hq3qDstSjUSDpgQawY5Eiv58kKxdt336LLQ6U9Lz1e0Wm+LgEWZAbVD7MpaNqH/fFS4hE/EX2vq9ZRpOq06WQvrDRbUZ9Z949TzG5UwyibJflMmAMvoUnhcdheLSqSxGaiYPwXo0vLsEuewT9djz51Us4MU7cRaiDFTHSYzTlizRn1EnIcW3fs2zyQ4Yy0RDu8Tns4G3F2Ndu8l6E/SHOiHTNVrGnj6SQyo/R2w4bIu6PE11vX7oXQ+HOKKFIhznKenX3+WxsrDt+bD7wQVR3TNFm+0NAnenXe23sKojrVUQPTfX3ddgJDrCCf1IauFxhwqw==
+Received: from DM8PR12MB5400.namprd12.prod.outlook.com (2603:10b6:8:3b::12) by
+ MN2PR12MB3039.namprd12.prod.outlook.com (2603:10b6:208:c9::27) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5227.23; Thu, 12 May 2022 06:02:43 +0000
+Received: from DM8PR12MB5400.namprd12.prod.outlook.com
+ ([fe80::a196:bbcc:de9d:50a5]) by DM8PR12MB5400.namprd12.prod.outlook.com
+ ([fe80::a196:bbcc:de9d:50a5%9]) with mapi id 15.20.5250.013; Thu, 12 May 2022
+ 06:02:42 +0000
+From:   Eli Cohen <elic@nvidia.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+CC:     "jasowang@redhat.com" <jasowang@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "si-wei.liu@oracle.com" <si-wei.liu@oracle.com>
+Subject: RE: [PATCH v1] vdpa: Warn if MTU configured is too low
+Thread-Topic: [PATCH v1] vdpa: Warn if MTU configured is too low
+Thread-Index: AQHYZSXQkvDSxjYK1kSGW4GgpWe2qq0av/0AgAABD2A=
+Date:   Thu, 12 May 2022 06:02:42 +0000
+Message-ID: <DM8PR12MB5400970537EFD6A0B4C5C8FEABCB9@DM8PR12MB5400.namprd12.prod.outlook.com>
+References: <20220511105642.124806-1-elic@nvidia.com>
+ <20220512014128-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220512014128-mutt-send-email-mst@kernel.org>
+Accept-Language: en-US
 Content-Language: en-US
-To:     David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>, Tim.Bird@sony.com,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, rmr167@gmail.com,
-        guillaume.tucker@collabora.com, dlatypov@google.com,
-        kernelci@groups.io, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <bc6e9ed7-d98b-c4da-2a59-ee0915c18f10@gmail.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <bc6e9ed7-d98b-c4da-2a59-ee0915c18f10@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 65660551-decb-4463-67a0-08da33dd0747
+x-ms-traffictypediagnostic: MN2PR12MB3039:EE_
+x-microsoft-antispam-prvs: <MN2PR12MB3039822A0D4FDD1A57BD967FABCB9@MN2PR12MB3039.namprd12.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: beUxQtXh90hPnZuBwqdwQf5GZIJ78nnyhgBQx5g5Xtn9jbz2i3eSNoFnHSKz+CMPaF1Z6jYy9mIIyqpu5lYDlDmGriUdwdvPOFPhQEr38W3t7byDpPR+ZJDxbxH02hte2U8MQw3z7jfr01Da5gS3lR+wh9X/GyPpSkm7VJoIpvEi5Rj8J03Q2wKRc9FrHzjmJ8+wkclFx7g8LtUMZ+LxC4BoqISRaK4lBQ4rAumRcQUMoanSfwjx9FU9SYgr4tnOuIJ6CnOb8ChRwxQRURbq/F1DKOKOrSK/ruh46njj+SuD/3CZbuaGzL5pEeeWmR6dWzAxuvt8ohwyfAqxGBCcdb3WmJSPWTMcoslU5iMoPS9TjKBJvw2gRBeJBpKYd8deAQ0kXbx1QDIY39cflyxYOg+Y/rY3ymI7hn8jOeMfZTeU6w90Fulfr6ht8ELGJI4LiuzFdIl6ikPwXN1gHmDCb9CFpQN5EXr35BfSmdHHsV4sv6UCOWPl/eplMhsMAwhlfhsoSO7I/AM18aiSBB1EPIe6g2/ANHX3TzcT+XkPUHUWO1tzNM+jZ7dsD/ozNYI69EjHyg8GQsjbxm86vAt2JB4pLOCAIyJpw/YUArgEFqO+DH4e2+XUhK1j3SEoaheOHxn1ERXvlWF6rFafrpUs+aiz2EdcjtrXFQnSjwvc1d2g6+QTqiEtchmLFYRVCm/ZeOQ8F1eog4qXQADyO3FrXg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5400.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(33656002)(38070700005)(38100700002)(83380400001)(2906002)(5660300002)(186003)(55016003)(86362001)(8936002)(52536014)(316002)(8676002)(54906003)(66446008)(66946007)(6916009)(66476007)(66556008)(4326008)(76116006)(64756008)(26005)(6506007)(7696005)(508600001)(71200400001)(122000001)(9686003)(53546011);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Hq3NBdQDAOei2avuDzr+wpotkDnUSKOL8w0txyWOIYkLUYtzCmYOgnsQFwwr?=
+ =?us-ascii?Q?2Ap5dysqDfOINUb1jpC2wYCOda7MEV5DZtvvAedyUioiT/Ggz8zUudU/XKoe?=
+ =?us-ascii?Q?UwFtmeFLeXupXhdJfy0IPHSiy8Pn+V7FTkrfDVh9aS9jIPZ0NaLTGd4+AfDI?=
+ =?us-ascii?Q?0C5tNaJvoByMg1FE9E03TGCdtFc8Iw/xf0owx+vtgT5cBghGqx5yzOMmHxWv?=
+ =?us-ascii?Q?FwHN3dHSxLBni8DPGGWCHWuayg7vmCdXQ4E35DUPkmYyV6ckpjYZkxktKt3M?=
+ =?us-ascii?Q?UtudOwWdKSMPM3jEhjlpxubDXhHiPxjOEpX9v2aSzEc3iYbnynUlupa+OTnq?=
+ =?us-ascii?Q?E9I+Yb8oCaSeRc2TIOHT71Na4kTyVMcA9B7qrdb8x+G4ef7Qf8Ze8pk6TQ/x?=
+ =?us-ascii?Q?RMo4Iig0RNsMLX+jeT3vtlyHa8AMKZVnTN6iT2oI2AZpQ1i8gQVeXY9zDg66?=
+ =?us-ascii?Q?cPJ0hG23i7Cu3jRbu8e2V0Vu9EGcZoEynqVDE2hjwxCV7d9iaInzrc50hNwp?=
+ =?us-ascii?Q?hP/UyjMEEdSuSBFZzLhv4eNc1cTT33bTziD/j4w4TTfpaS9s0LB8HV2+AAU6?=
+ =?us-ascii?Q?w9t3gpoXzLyhQA+P85PUGRaCPcaLhSZ5BwL67AchIEzzqOL+jmeeQwKU73nk?=
+ =?us-ascii?Q?y3hiCRU82pCjespH19uhSirgCxGu/fcvjOFBZ9dA+f5ErKPkapX+Jo25iK8b?=
+ =?us-ascii?Q?3miO7OcqiWhvXRNvPp1LccbpVXMFV36aVaaJPJgRJgKBX87D9F9O8dA8rsl/?=
+ =?us-ascii?Q?YJU9gyIM5xFd1q1419b46Co79McpJGgkxkVygbp3Z4c1us0ziqE3MJwB/yRZ?=
+ =?us-ascii?Q?LbRc3l7asxVcMpGx9m9Ce34Zac6cWIeHXZ8f/NLWbEY28Sl5Ai0fclrjDUBC?=
+ =?us-ascii?Q?2qCgQtLyTxwRkhvd9JVOwljWdQ+RdKD/J88WDNi2j1HxRZ+RXzzQQL8YghUp?=
+ =?us-ascii?Q?tyAF36CFpLsQke4qRU8wYa2eie/xG6iV2es4QAtszmlSR6gRTTHSoSlVGW/x?=
+ =?us-ascii?Q?z8rMXnqCp2JfIfsLX5Vq7OYLUS6tFV4BilLmziOeNZw3J+Rk2iXzPAYZJ3Sm?=
+ =?us-ascii?Q?AibmgCMJLeZyDLJtq1Zv52JsTXBTnWS2XObLBVQOP/c/ViAuaNhdy3dmyz9a?=
+ =?us-ascii?Q?WAjklf6a1BpnEmGQ2CtKXbiFwR05qTvQIdpLZwZ5q8eMYqBiFsygfuLQluRJ?=
+ =?us-ascii?Q?yP0mCvteEnAHFlA54HjOISrhoeoiecRpdcIymh/xNkH0zFaPMaqmmM7KjBLD?=
+ =?us-ascii?Q?aNr/z3Jaxi69sBWmY4z+PYUvKyp4AjLWMNf0dJalzqnJph9ZM7ZLEaUSnPS8?=
+ =?us-ascii?Q?Vcy3ofORLmic2PW4nGnZEAzUD2unRIKH1Kyqk7rFP8zu6/3sd1niNAyjgBr7?=
+ =?us-ascii?Q?BVFUB3oLdaFE/M1KJ6Tb9gEoGoE2tOx5eyOjs4avES4yvcWSzxIoSMoyWKme?=
+ =?us-ascii?Q?8oamNDzlgCQXHEy/6Szt8V9gnCkxyd/lVG7W9dkvftvCBzIpI7a6Gepl5O4Z?=
+ =?us-ascii?Q?fhcG2wj5lvVrvAddP6OGvhVf9d6UehhiQY9A1FAmE+Q1l3wJx65Xcg29ioKG?=
+ =?us-ascii?Q?LRVqMuNBXOyfG5xSReclZarTBvhDCRch6kk55gE8YOKnfBoKUgBRZ0zzbwEi?=
+ =?us-ascii?Q?1h2utlxMI3U1hoWu+LnUGToz9z2hKilSYqnTUp0YIpIYAB9jjPcAMpJSmYcq?=
+ =?us-ascii?Q?VyD4tWp6L9X6zcvKpfvvBMwd+LT2jyhe5iynjP65KBXzoW+w?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5400.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 65660551-decb-4463-67a0-08da33dd0747
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 May 2022 06:02:42.8943
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jsqbCKmwkwIkhJSP6WP15X7tpcnn39xcbjyFyYazuuXrRQrHQ+s9bR6pCca2Y4D6
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3039
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/12/22 00:59, Frank Rowand wrote:
-> In the middle of the "RFC - kernel test result specification (KTAP)" thread,
-> started in August 2021, Tim Bird made a suggestion to allow a prefix to the
-> KTAP data format:
-> 
->> Just as a side note, in some Fuego tests, it was very useful to include an identifier
->> in thethe prefix nested tests.  The output looked like this:
->>
->> TAP version 13
->> 1..2
->> [batch_id 4] TAP version 13
->> [batch_id 4] 1..2
->> [batch_id 4] ok 1 - cyclictest with 1000 cycles
->> [batch_id 4] # problem setting CLOCK_REALTIME
->> [batch_id 4] not ok 2 - cyclictest with CLOCK_REALTIME
->> not ok 1 - check realtime
->> [batch_id 4] TAP version 13
->> [batch_id 4] 1..1
->> [batch_id 4] ok 1 - IOZone read/write 4k blocks
->> ok 2 - check I/O performance
->>
->> Can I propose that the prefix not be fixed by the spec, but that the spec indicates that
->> whatever the prefix is on the TAP version line, that prefix must be used with the output for
->> all lines from the test (with the exception of unknown lines)?
-> 
-> The thread was discussing many other items, but this is the one that I want
-> to focus on in this new RFC thread.
-> 
-> Tim's original email was:
-> 
->    https://lore.kernel.org/r/BYAPR13MB2503A4B79074D8ED5579345DFDCB9@BYAPR13MB2503.namprd13.prod.outlook.com
-> 
-> There was one reply to this that commented on Tim's suggestion (and also many
-> other items in the thread) at:
-> 
->    https://lore.kernel.org/r/202108301226.800F3D6D4@keescook
-> 
->> Oh, interesting. This would also allow parallel (unique) test execution
->> to be parsable. That sounds workable. (Again, this needs LAVA patching
->> again...)
-> 
-> I found Tim's original suggestion to be useful, so I have come up with
-> two possible ways to modify the KTAP specification to implement what Tim
-> was thinking about.  I would not be surprised if someone else has a better
-> suggestion than mine, but I will reply to this email with my two alternatives
-> to start a discussion.  My alternatives are not in the form of patches, but
-> if discussion leads to a good result then I will create a patch for review.
-> 
-> -Frank
+> -----Original Message-----
+> From: Michael S. Tsirkin <mst@redhat.com>
+> Sent: Thursday, May 12, 2022 8:57 AM
+> To: Eli Cohen <elic@nvidia.com>
+> Cc: jasowang@redhat.com; virtualization@lists.linux-foundation.org; linux=
+-kernel@vger.kernel.org; si-wei.liu@oracle.com
+> Subject: Re: [PATCH v1] vdpa: Warn if MTU configured is too low
+>=20
+> On Wed, May 11, 2022 at 01:56:42PM +0300, Eli Cohen wrote:
+> > Following the recommendation in virio spec 1.1, a device offering
+> > VIRTIO_NET_F_MTU should set the mtu to at least 1280 bytes.
+> >
+> > Print a warning if this recommendation is not met.
+> >
+> > Signed-off-by: Eli Cohen <elic@nvidia.com>
+> > ---
+> > v0 -> v1:
+> >   chage pr_warn to netlink warning to userspace
+> >
+> >  drivers/vdpa/vdpa.c | 9 ++++++++-
+> >  1 file changed, 8 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
+> > index 91f4c13c7c7c..0fb4a615f267 100644
+> > --- a/drivers/vdpa/vdpa.c
+> > +++ b/drivers/vdpa/vdpa.c
+> > @@ -583,6 +583,9 @@ vdpa_nl_cmd_mgmtdev_get_dumpit(struct sk_buff *msg,=
+ struct netlink_callback *cb)
+> >  				 BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MTU)     | \
+> >  				 BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MAX_VQP))
+> >
+> > +/* Recommended virtio spec 1.1 section 5.1.4.1 */
+>=20
+> I'd add name of section here too.
 
-================================================================================
-Alternative 2
-   - Add an optional <prefix string> to test output.
-   - Add "Configuration info lines", which are used to provide information
-     about the KTAP format to programs that interpret the KTAP data.  The
-     only type of "Configuration info lines" proposed provides the value
-     of <prefix string> for programs that process the KTAP output.
-   - Further types of "Configuration info lines" could be added.
+Sure
 
-Alternative 2b
-   - Add an optional <prefix string> to test output.
-   - Add a <prefix string> definition line of the form:
-        ok 0 <prefix string>
-     This line is essentially a phony "Test case result lines" for test 0.
+>=20
+> > +#define VIRTIO_MIN_PREFERRED_MTU 1280
+> > +
+>=20
+> Preferred is kind of confusing here. I guess you are trying to
+> say it's not mandatory but I don't think this conveys this information.
+>=20
+> Recommended (matching text below)?
 
-================================================================================
-## Configuration info lines
+Will modify
 
-Occur in zero or more test case result lines, where <number> is 0 (zero),
-following the "Plan line", before any other "Test case result" line.
-
-   If there is no "Plan line" at the beginning of the test, then the
-   "Configuration info lines" follow the "Version line", before any
-   other "Test case result" line.
-
-format:
-
-   ok 0 <description> # [<directive>] [<diagnostic data>]]
-
-<result> must be "ok".
-
-The type of each "Configuration info line" is defined by the value
-of <description>.
-
-Each value of <description> used for a "Configuration info line" must be
-listed in the specification.
-
-Whether # <directive> is optional or required is defined for each type of
-"Configuration info line".
-
-#### Should '[<diagnostic data>]' be included in the format?
-
-
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# [output] prefix
-
-ok 0 output_prefix #<prefix string>
-
-   <prefix content is a constant string>
-   Note: there is no space between "#" and "<prefix string>".  If there is one
-   or more spaces after the "#", then there are part of the <prefix string>
-
-   ## <diagnostic data> must not exist unless there is a way to determine the
-   ## end of <prefix string>.
-   ##
-   ## Adding a way to determine the end of <prefix string> adds much complexity
-   ## to the consumers of ktap output.  For example, if the format was:
-   ##
-   ##   ok 0 output_prefix #<prefix string>[#<diagnostic data>]
-   ##
-   ## then it is not possible for <prefix string> to contain '#', unless
-   ## a method to escape '#' is provided.  E.G.:
-   ##
-   ##   ok 0 output_prefix #XXX test result \#\#\##<diagnostic data>
-   ##
-   ## would result in <prefix string> value of 'XXX test result ###'
-   ##
-   ## My recomendation: do not allow <diagnostic data> in output_prefix format.
-
-   All subsequent test lines are prefixed with the <prefix string>.
-
-   Indentation for "Nested tests" follows <prefix string>.  The indentation
-   does NOT precede <prefix string>.
-
-   "Diagnostic lines" are prefixed with the <prefix string>.
-
-   "Unknown lines" may optionally be prefixed with the <prefix string>, but
-   are not required to be prefixed with the <prefix string>.  It is allowed
-   for some "Unknown lines" to not be prefixed with the <prefix string>, even
-   if one or more other "Unknown lines" are prefixed with the <prefix string>.
-
-   #### Does prefixing begin immediately (even for a subsequent "Configuration
-   #### info line" or does it begin with the test 1 "Test case result line"
-   #### line?
-   ####
-   ####    This question might be simplified if the output_prefix line is
-   ####    required to be the last "Configuration info line".  (Or maybe even if
-   ####    required to be the first "Configuration info line".
-
-
-================================================================================
-#### discussion notes:
-
-PRO:
-   Test output processing programs can detect the value of <prefix string>
-   more deterministically than Alternative 1.
-
-CON:
-   More complex than Alternative 1.  (But alternative 2b is less complex than
-   Alternative 2.)
-
-================================================================================
+>=20
+>=20
+> >  static int vdpa_nl_cmd_dev_add_set_doit(struct sk_buff *skb, struct ge=
+nl_info *info)
+> >  {
+> >  	struct vdpa_dev_set_config config =3D {};
+> > @@ -634,6 +637,10 @@ static int vdpa_nl_cmd_dev_add_set_doit(struct sk_=
+buff *skb, struct genl_info *i
+> >  		err =3D PTR_ERR(mdev);
+> >  		goto err;
+> >  	}
+> > +	if ((mdev->supported_features & BIT_ULL(VIRTIO_NET_F_MTU)) &&
+> > +	    (config.mask & BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MTU) &&
+> > +	    config.net.mtu < VIRTIO_MIN_PREFERRED_MTU))
+> > +		NL_SET_ERR_MSG_MOD(info->extack, "MTU is below recommended value\n")=
+;
+> >  	if ((config.mask & mdev->config_attr_mask) !=3D config.mask) {
+> >  		NL_SET_ERR_MSG_MOD(info->extack,
+> >  				   "All provided attributes are not supported");
+>=20
+>=20
+> Pity we can't include the actual value here, but oh well. At least let's
+> include the recommended value, we can do that:
+> 	"MTU is below recommended value of " __stringify(VIRTIO_MIN_PREFERRED_MT=
+U) "\n"
+>=20
+Will change
+>=20
+> > @@ -1135,7 +1142,7 @@ static const struct nla_policy vdpa_nl_policy[VDP=
+A_ATTR_MAX + 1] =3D {
+> >  	[VDPA_ATTR_DEV_NAME] =3D { .type =3D NLA_STRING },
+> >  	[VDPA_ATTR_DEV_NET_CFG_MACADDR] =3D NLA_POLICY_ETH_ADDR,
+> >  	/* virtio spec 1.1 section 5.1.4.1 for valid MTU range */
+> > -	[VDPA_ATTR_DEV_NET_CFG_MTU] =3D NLA_POLICY_MIN(NLA_U16, 68),
+> > +	[VDPA_ATTR_DEV_NET_CFG_MTU] =3D NLA_POLICY_MIN(NLA_U16, ETH_MIN_MTU),
+> >  };
+> >
+> >  static const struct genl_ops vdpa_nl_ops[] =3D {
+> > --
+> > 2.35.1
 

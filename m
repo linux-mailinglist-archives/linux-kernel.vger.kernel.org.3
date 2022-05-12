@@ -2,365 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C07352445F
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 06:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 322D852445A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 06:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347734AbiELEiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 00:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347548AbiELEh5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1347622AbiELEh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 12 May 2022 00:37:57 -0400
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C52286C0;
-        Wed, 11 May 2022 21:37:53 -0700 (PDT)
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 24C4bPuo022955;
-        Thu, 12 May 2022 13:37:26 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 24C4bPuo022955
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1652330246;
-        bh=IUVNjJxNI8Y2N6J08VzVrWq/34IrVEKJXOQ5ZZINgIk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=xXD+m8oSWbCTXA/qPnGHaiS/QVg/PxSHsr4fIhcqjOlaZsP1KJqpZNwCpRKJ4KH2S
-         pCHiA69DicaE9dMqlpi9Lj88GUELYSKbzkpXSmyIESxuhMReVp3jIoaO+lKFMk97gI
-         xctCZYMzFOZewSVp4xOsU2bELYT0AkGcMSyubPfRkaReQxW15ssceEaoYRb9yxmH90
-         FhS1gpSkMSK50KWjOWLoFWZyA6hzoKZmA/7W7dEPf1CdpWk2lk8qT9Gww/6r0PNsZy
-         0XL5fnSft5EpmOVuLcLCkAczz4fmjDSGFh/LVYhPsnoVdZZtVFlb9PWQs9wQ5qb9y9
-         3rd3eU5/5oh+g==
-X-Nifty-SrcIP: [209.85.214.170]
-Received: by mail-pl1-f170.google.com with SMTP id n8so3810905plh.1;
-        Wed, 11 May 2022 21:37:25 -0700 (PDT)
-X-Gm-Message-State: AOAM530kUR2RqxuX8FKPX08kollimai+u5yQfMS377XRYRxuqHKqIQSk
-        OIwT/tveA7pnQxG1pqErs1S2dbZr8wCgL7SsUGA=
-X-Google-Smtp-Source: ABdhPJxIUnQ07JXrHxlmHeRUWu09ufIC94QEfhLUzNSqT72tmaZ5IS17kMlGKNSvGNHedylj1IZCjWj5ZROsWHhla+w=
-X-Received: by 2002:a17:902:9887:b0:151:6e1c:7082 with SMTP id
- s7-20020a170902988700b001516e1c7082mr27988770plp.162.1652330245039; Wed, 11
- May 2022 21:37:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220508190631.2386038-1-masahiroy@kernel.org> <20220508190631.2386038-3-masahiroy@kernel.org>
-In-Reply-To: <20220508190631.2386038-3-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 12 May 2022 13:36:13 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARhgfkSP+jmoTF2nVJtd=amPTNsNRjgaV+H7NhgjV+6Bw@mail.gmail.com>
-Message-ID: <CAK7LNARhgfkSP+jmoTF2nVJtd=amPTNsNRjgaV+H7NhgjV+6Bw@mail.gmail.com>
-Subject: Re: [PATCH v4 02/14] modpost: change the license of EXPORT_SYMBOL to
- bool type
-To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35798 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347548AbiELEht (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 12 May 2022 00:37:49 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A23286C0
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 21:37:48 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id x4-20020a1709028ec400b0015e84d42eaaso2146923plo.7
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 21:37:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=rc/b171eEbEHOcZ7/65TQW8GF+vL+OBn1WLQqFshNME=;
+        b=Dc8S7aaRKMlDer6zT72Yq6vWe2t3Mq53+blU/I4gv0bMRmn+5rx/JqZmKkcleUXrKz
+         R38rBX7mdy/ho+yWIPY/2vqvH/geclVvPd3FleGn2jf79tXm5aPpOBiddmPlvM74/otT
+         7c/QXDAjLGEM7m8boPKze/sT+FgHHPZlmX3ercRPeG+3X/Vy1M/FgYuZoHil3VrbbhbR
+         k8iJYy+xf6nOa6NtRlpKOtzWi+0m7C9g1owr7IG4tVbFJgX2hG5hA08QihzctvkocFqH
+         jcBxpHBKPfSsqP5+1YKp/KrxXYtiQD9lvvRMoqhp1lJmUMnC+rpn9kEXrnOQHoxQOCBb
+         U05Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=rc/b171eEbEHOcZ7/65TQW8GF+vL+OBn1WLQqFshNME=;
+        b=6cIJxwbPpntXROxgO1cyE2SmYyIZspeKZSbgK9WQQ7CNyTxs0Jhv//xKpRX63aRo95
+         Z2UDuEmJsbhyVmMYugQLxzMwvah3apfgfJCTAnp30xEHtQu/YemsvXzcmR4m5L9Xnn60
+         /aMng9NGYyC5+WTVYFWoskYIvvJd8CdrY9NGdFUk5243EIkcWGQd6nOEIqjuaZ2PrDBf
+         qoUOMD5ftYON05wgSdFasESLmm7nxz11zT3AJE13wHNTb4ZmDnk/Dvzi7bAsdcIG7k2z
+         CKBvG2tGO41iAKzjUa6e5KaKrD36pySdHGzY5Z6eQ0avrskJHJZ9Qah/xVRWwRn7wAXh
+         IY0A==
+X-Gm-Message-State: AOAM530Tjns90T5NgV0jvpYw8/CTWmNMg+DTZZJFoEm2kBeVnVy8Ksu4
+        kJcReiUMi2x3i859PnFg3WtBtrUVarrex2k3Y8o=
+X-Google-Smtp-Source: ABdhPJxPx8NE9mhNjd9A52lMRPB9i6nr6yPV75/2jKbabGX6KHDl4XgMws2oMFSoQx8N9KeM8zKZyZCRPaK3IT3k3MA=
+X-Received: from albertccwang.ntc.corp.google.com ([2401:fa00:fc:202:8983:2d2c:f62b:626])
+ (user=albertccwang job=sendgmr) by 2002:a62:e819:0:b0:510:693e:b20c with SMTP
+ id c25-20020a62e819000000b00510693eb20cmr28178767pfi.60.1652330266640; Wed,
+ 11 May 2022 21:37:46 -0700 (PDT)
+Date:   Thu, 12 May 2022 12:37:39 +0800
+Message-Id: <20220512043739.1234857-1-albertccwang@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
+Subject: [PATCH v2] usb: dwc3: gadget: Move null pinter check after window closed
+From:   Albert Wang <albertccwang@google.com>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        quic_jackp@quicinc.com
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Albert Wang <albertccwang@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 9, 2022 at 4:09 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> There were more EXPORT_SYMBOL types in the past. The following commits
-> removed unused ones.
->
->  - f1c3d73e973c ("module: remove EXPORT_SYMBOL_GPL_FUTURE")
->  - 367948220fce ("module: remove EXPORT_UNUSED_SYMBOL*")
->
-> There are 3 remaining in enum export, but export_unknown does not make
-> any sense because we never expect such a situation like "we do not know
-> how it was exported".
->
-> If the symbol name starts with "__ksymtab_", but the section name
-> does not start with "___ksymtab+" or "___ksymtab_gpl+", it is not an
-> exported symbol.
->
-> It occurs when a variable starting with "__ksymtab_" is directly defined:
->
->    int __ksymtab_foo;
->
-> Presumably, there is no practical issue for using such a weird variable
-> name (but there is no good reason for doing so, either).
->
-> Anyway, that is not an exported symbol. Setting export_unknown is not
-> the right thing to do. Do not call sym_add_exported() in this case.
->
-> With pointless export_unknown removed, the export type finally becomes
-> boolean (either EXPORT_SYMBOL or EXPORT_SYMBOL_GPL).
->
-> I renamed the field name to is_gpl_only. EXPORT_SYMBOL_GPL sets it true.
-> Only GPL-compatible modules can use it.
->
-> I removed the orphan comment, "How a symbol is exported", which is
-> unrelated to sec_mismatch_count. It is about enum export.
-> See commit bd5cbcedf446 ("kbuild: export-type enhancement to modpost.c")
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
-> ---
+After inspecting further, we do see the locking is implicit, with the
+main gotcha being the unlock/re-lock. That creates a window for a race
+to happen. This change moves the NULL check to be adjacent to where
+to it's used and after the window is "closed".
 
-Applied to linux-kbuild.
+Fixes: 26288448120b ("usb: dwc3: gadget: Fix null pointer exception")
 
+Signed-off-by: Albert Wang <albertccwang@google.com>
+---
+ drivers/usb/dwc3/gadget.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
->
-> Changes in v4:
->   - Rebase again because I dropped
->      https://patchwork.kernel.org/project/linux-kbuild/patch/20220501084032.1025918-11-masahiroy@kernel.org/
->   - Remove warning message because I plan to change this hunk again in a later commit
->   - Remove orphan comment
->
-> Changes in v3:
->   - New patch
->
->  scripts/mod/modpost.c | 108 ++++++++++++------------------------------
->  1 file changed, 30 insertions(+), 78 deletions(-)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index d9efbd5b31a6..a78b75f0eeb0 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -30,7 +30,7 @@ static bool all_versions;
->  static bool external_module;
->  /* Only warn about unresolved symbols */
->  static bool warn_unresolved;
-> -/* How a symbol is exported */
-> +
->  static int sec_mismatch_count;
->  static bool sec_mismatch_warn_only = true;
->  /* ignore missing files */
-> @@ -47,12 +47,6 @@ static bool error_occurred;
->  #define MAX_UNRESOLVED_REPORTS 10
->  static unsigned int nr_unresolved;
->
-> -enum export {
-> -       export_plain,
-> -       export_gpl,
-> -       export_unknown
-> -};
-> -
->  /* In kernel, this size is defined in linux/module.h;
->   * here we use Elf_Addr instead of long for covering cross-compile
->   */
-> @@ -219,7 +213,7 @@ struct symbol {
->         bool crc_valid;
->         bool weak;
->         bool is_static;         /* true if symbol is not global */
-> -       enum export  export;       /* Type of export */
-> +       bool is_gpl_only;       /* exported by EXPORT_SYMBOL_GPL */
->         char name[];
->  };
->
-> @@ -316,34 +310,6 @@ static void add_namespace(struct list_head *head, const char *namespace)
->         }
->  }
->
-> -static const struct {
-> -       const char *str;
-> -       enum export export;
-> -} export_list[] = {
-> -       { .str = "EXPORT_SYMBOL",            .export = export_plain },
-> -       { .str = "EXPORT_SYMBOL_GPL",        .export = export_gpl },
-> -       { .str = "(unknown)",                .export = export_unknown },
-> -};
-> -
-> -
-> -static const char *export_str(enum export ex)
-> -{
-> -       return export_list[ex].str;
-> -}
-> -
-> -static enum export export_no(const char *s)
-> -{
-> -       int i;
-> -
-> -       if (!s)
-> -               return export_unknown;
-> -       for (i = 0; export_list[i].export != export_unknown; i++) {
-> -               if (strcmp(export_list[i].str, s) == 0)
-> -                       return export_list[i].export;
-> -       }
-> -       return export_unknown;
-> -}
-> -
->  static void *sym_get_data_by_offset(const struct elf_info *info,
->                                     unsigned int secindex, unsigned long offset)
->  {
-> @@ -374,18 +340,6 @@ static const char *sec_name(const struct elf_info *info, int secindex)
->
->  #define strstarts(str, prefix) (strncmp(str, prefix, strlen(prefix)) == 0)
->
-> -static enum export export_from_secname(struct elf_info *elf, unsigned int sec)
-> -{
-> -       const char *secname = sec_name(elf, sec);
-> -
-> -       if (strstarts(secname, "___ksymtab+"))
-> -               return export_plain;
-> -       else if (strstarts(secname, "___ksymtab_gpl+"))
-> -               return export_gpl;
-> -       else
-> -               return export_unknown;
-> -}
-> -
->  static void sym_update_namespace(const char *symname, const char *namespace)
->  {
->         struct symbol *s = find_symbol(symname);
-> @@ -405,7 +359,7 @@ static void sym_update_namespace(const char *symname, const char *namespace)
->  }
->
->  static struct symbol *sym_add_exported(const char *name, struct module *mod,
-> -                                      enum export export)
-> +                                      bool gpl_only)
->  {
->         struct symbol *s = find_symbol(name);
->
-> @@ -417,7 +371,7 @@ static struct symbol *sym_add_exported(const char *name, struct module *mod,
->
->         s = alloc_symbol(name);
->         s->module = mod;
-> -       s->export    = export;
-> +       s->is_gpl_only = gpl_only;
->         list_add_tail(&s->list, &mod->exported_symbols);
->         hash_add_symbol(s);
->
-> @@ -689,8 +643,6 @@ static void handle_modversion(const struct module *mod,
->  static void handle_symbol(struct module *mod, struct elf_info *info,
->                           const Elf_Sym *sym, const char *symname)
->  {
-> -       const char *name;
-> -
->         switch (sym->st_shndx) {
->         case SHN_COMMON:
->                 if (strstarts(symname, "__gnu_lto_")) {
-> @@ -724,12 +676,15 @@ static void handle_symbol(struct module *mod, struct elf_info *info,
->         default:
->                 /* All exported symbols */
->                 if (strstarts(symname, "__ksymtab_")) {
-> -                       enum export export;
-> +                       const char *name, *secname;
->
->                         name = symname + strlen("__ksymtab_");
-> -                       export = export_from_secname(info,
-> -                                                    get_secindex(info, sym));
-> -                       sym_add_exported(name, mod, export);
-> +                       secname = sec_name(info, get_secindex(info, sym));
-> +
-> +                       if (strstarts(secname, "___ksymtab_gpl+"))
-> +                               sym_add_exported(name, mod, true);
-> +                       else if (strstarts(secname, "___ksymtab+"))
-> +                               sym_add_exported(name, mod, false);
->                 }
->                 if (strcmp(symname, "init_module") == 0)
->                         mod->has_init = true;
-> @@ -2140,20 +2095,6 @@ void buf_write(struct buffer *buf, const char *s, int len)
->         buf->pos += len;
->  }
->
-> -static void check_for_gpl_usage(enum export exp, const char *m, const char *s)
-> -{
-> -       switch (exp) {
-> -       case export_gpl:
-> -               error("GPL-incompatible module %s.ko uses GPL-only symbol '%s'\n",
-> -                     m, s);
-> -               break;
-> -       case export_plain:
-> -       case export_unknown:
-> -               /* ignore */
-> -               break;
-> -       }
-> -}
-> -
->  static void check_exports(struct module *mod)
->  {
->         struct symbol *s, *exp;
-> @@ -2192,8 +2133,9 @@ static void check_exports(struct module *mod)
->                         add_namespace(&mod->missing_namespaces, exp->namespace);
->                 }
->
-> -               if (!mod->is_gpl_compatible)
-> -                       check_for_gpl_usage(exp->export, basename, exp->name);
-> +               if (!mod->is_gpl_compatible && exp->is_gpl_only)
-> +                       error("GPL-incompatible module %s.ko uses GPL-only symbol '%s'\n",
-> +                             basename, exp->name);
->         }
->  }
->
-> @@ -2437,6 +2379,7 @@ static void read_dump(const char *fname)
->                 unsigned int crc;
->                 struct module *mod;
->                 struct symbol *s;
-> +               bool gpl_only;
->
->                 if (!(symname = strchr(line, '\t')))
->                         goto fail;
-> @@ -2454,12 +2397,22 @@ static void read_dump(const char *fname)
->                 crc = strtoul(line, &d, 16);
->                 if (*symname == '\0' || *modname == '\0' || *d != '\0')
->                         goto fail;
-> +
-> +               if (!strcmp(export, "EXPORT_SYMBOL_GPL")) {
-> +                       gpl_only = true;
-> +               } else if (!strcmp(export, "EXPORT_SYMBOL")) {
-> +                       gpl_only = false;
-> +               } else {
-> +                       error("%s: unknown license %s. skip", symname, export);
-> +                       continue;
-> +               }
-> +
->                 mod = find_module(modname);
->                 if (!mod) {
->                         mod = new_module(modname);
->                         mod->from_dump = true;
->                 }
-> -               s = sym_add_exported(symname, mod, export_no(export));
-> +               s = sym_add_exported(symname, mod, gpl_only);
->                 s->is_static = false;
->                 sym_set_crc(symname, crc);
->                 sym_update_namespace(symname, namespace);
-> @@ -2481,9 +2434,9 @@ static void write_dump(const char *fname)
->                 if (mod->from_dump)
->                         continue;
->                 list_for_each_entry(sym, &mod->exported_symbols, list) {
-> -                       buf_printf(&buf, "0x%08x\t%s\t%s\t%s\t%s\n",
-> +                       buf_printf(&buf, "0x%08x\t%s\t%s\tEXPORT_SYMBOL%s\t%s\n",
->                                    sym->crc, sym->name, mod->name,
-> -                                  export_str(sym->export),
-> +                                  sym->is_gpl_only ? "_GPL" : "",
->                                    sym->namespace ?: "");
->                 }
->         }
-> @@ -2604,9 +2557,8 @@ int main(int argc, char **argv)
->
->                 for (s = symbolhash[n]; s; s = s->next) {
->                         if (s->is_static)
-> -                               error("\"%s\" [%s] is a static %s\n",
-> -                                     s->name, s->module->name,
-> -                                     export_str(s->export));
-> +                               error("\"%s\" [%s] is a static EXPORT_SYMBOL\n",
-> +                                     s->name, s->module->name);
->                 }
->         }
->
-> --
-> 2.32.0
->
-> --
-> You received this message because you are subscribed to the Google Groups "Clang Built Linux" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to clang-built-linux+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/clang-built-linux/20220508190631.2386038-3-masahiroy%40kernel.org.
-
-
-
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 19477f4bbf54..fda58951cf27 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -3366,14 +3366,19 @@ static bool dwc3_gadget_endpoint_trbs_complete(struct dwc3_ep *dep,
+ 	struct dwc3		*dwc = dep->dwc;
+ 	bool			no_started_trb = true;
+ 
+-	if (!dep->endpoint.desc)
+-		return no_started_trb;
+-
++	/*
++	 * This function eventually leads to dwc3_giveback() which unlocks
++	 * the dwc->lock and relocks afterwards. This actually creates a
++	 * a window for a race to happen.
++	 */
+ 	dwc3_gadget_ep_cleanup_completed_requests(dep, event, status);
+ 
+ 	if (dep->flags & DWC3_EP_END_TRANSFER_PENDING)
+ 		goto out;
+ 
++	if (!dep->endpoint.desc)
++		return no_started_trb;
++
+ 	if (usb_endpoint_xfer_isoc(dep->endpoint.desc) &&
+ 		list_empty(&dep->started_list) &&
+ 		(list_empty(&dep->pending_list) || status == -EXDEV))
 -- 
-Best Regards
-Masahiro Yamada
+2.36.0.550.gb090851708-goog
+

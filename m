@@ -2,85 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D259D525414
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD84525410
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:49:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357296AbiELRt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 13:49:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48808 "EHLO
+        id S1357280AbiELRtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 13:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357300AbiELRty (ORCPT
+        with ESMTP id S1357272AbiELRtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 13:49:54 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BAD71FC7FD
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:49:52 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id gh6so11804318ejb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:49:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GxjUSnXGIp+LcadhUklxf1p/q+y9181EApLyCaGSqK8=;
-        b=AUbwiiK3NRbqsNi0r1+ALkJ0iMRp6O+56QYUMEgQj8W+pb0cHP2IPD1qvdY+8ZYj05
-         SGexijpfcPmxfR2MeaJ/aUM4INCyRfLSgJYPzMZlCycwdvvMWIiHD7ncOP1qzXzACwQf
-         q1OhizbiuwuicMRJlauscgSC74vZ562NJj42J/OKJmriU8qyH7D0FS3cvzVeABwSi9jQ
-         Hd39NOYgDGnSfw/nik+CAelnCTGcIXCnBdvfT2qC3OdqGfvCh9WlY4Cl8El/PLIXsL9+
-         leP78muTbocCCvZsrFinmRzqaW4411NMoG5gs9qy793ocglcfExX40yWSkk0WW9Ptx5B
-         xWIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GxjUSnXGIp+LcadhUklxf1p/q+y9181EApLyCaGSqK8=;
-        b=D4C3pOCp7B7D3WO92PCFk8xwPBU3FCch3cX04pN+AOfiNAsc0cA2l+M1eSl16+xkzf
-         JiBcBAgAXEer7PDW5SzbUGoWhOWr2GZJg2Q5ihCA//N5JuSsqh93jloS8RVQmApr16cu
-         Htb7vxEDOmZ7f6K9yE5UlyRkhSL1xCFST3aBm1wChFD5q/NnICbilTDimrhIGF95Z2Pf
-         oEpshr/iiojZZRbvOxIhKGS2WuToyMWyEHwliPYk10PTfyl6GA6yf3zfeFuhyuPfQQI8
-         8lC9Prt579nWv3wjmRiOuFdiIeuEqnEyYkp4Zj7wOHIql3gKO5s8AA5rKv2BRnFkF6y7
-         /8+A==
-X-Gm-Message-State: AOAM532DldgJOkJB7pl/91cZ9UCm6VjAnxBoFHC9IuBq+emt/rCDTWey
-        faqNx48Ptde2y1sfNQBpc/9DlV/6FraTujOC1R2ASg==
-X-Google-Smtp-Source: ABdhPJzSrSgG8yOO0WtPga4iMyKd7F5XTZUZsCfc/LWCnVWSxUzYNnxDbQSDPM5UZ88puIX+5Tq3CGaSY4WfguwgXTw=
-X-Received: by 2002:a17:907:968d:b0:6f4:9f9e:3e5f with SMTP id
- hd13-20020a170907968d00b006f49f9e3e5fmr965233ejc.540.1652377790529; Thu, 12
- May 2022 10:49:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220426173334.3871399-1-dlatypov@google.com>
-In-Reply-To: <20220426173334.3871399-1-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 12 May 2022 13:49:39 -0400
-Message-ID: <CAFd5g45v5=j7h36asTekM2UH71ycv0BJPV6xJ9XWyTsK00tBGg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] kunit: tool: remove dead parse_crash_in_log() logic
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 12 May 2022 13:49:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFA41FC2DD;
+        Thu, 12 May 2022 10:49:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF66060C69;
+        Thu, 12 May 2022 17:49:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3FC3EC385B8;
+        Thu, 12 May 2022 17:49:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652377783;
+        bh=iACxMt1xiFoGjTQxV0SOqR7DmwQ6H5CFvzHBwVxGmO4=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=ko+B8SI2SkMSxu6L5pFBBFqGKzamZBBLcH2nUltA8OdiDII666dS7KNwAo7qOWJm6
+         w2VJ8rXrIcrSRg9pMJeITXtUxoPifNSxIayi6pONLOHBEIJZZNv55STPraXh0/S+cp
+         CTValHPWB/vrJc+xEotMceUMhtfTKZZqPiuwF4OsgUGPBMnIxRNqn4KM///Ji0wrP7
+         yW6rccgGqOJ1qMN8m6mfIIc7CtB4VdHzbLLCi8GoRjZI1UgyS8C2luQLNgLu50GmIm
+         Be/+0SPB8UeVrqd5kXMPgjuQ2Wm/vrmKRg9Ff+f+U7SccNQ6EGtOOPBHqt68QmtgnM
+         E+5HlSlAV501A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 22105F0392C;
+        Thu, 12 May 2022 17:49:43 +0000 (UTC)
+Subject: Re: [GIT PULL] cgroup fixes for v5.18-rc6
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Yn1EFgZdbSSjTatf@slm.duckdns.org>
+References: <Yn1EFgZdbSSjTatf@slm.duckdns.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Yn1EFgZdbSSjTatf@slm.duckdns.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git for-5.18-fixes
+X-PR-Tracked-Commit-Id: 2685027fca387b602ae565bff17895188b803988
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 0ac824f379fba2c2b17b75fd5ada69cd68c66348
+Message-Id: <165237778312.3166.15209946095490727314.pr-tracker-bot@kernel.org>
+Date:   Thu, 12 May 2022 17:49:43 +0000
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 1:33 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> This logic depends on the kernel logging a message containing
-> 'kunit test case crashed', but there is no corresponding logic to do so.
->
-> This is likely a relic of the revision process KUnit initially went
-> through when being upstreamed.
->
-> Delete it given
-> 1) it's been missing for years and likely won't get implemented
-> 2) the parser has been moving to be a more general KTAP parser,
->    kunit-only magic like this isn't how we'd want to implement it.
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+The pull request you sent on Thu, 12 May 2022 07:29:58 -1000:
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git for-5.18-fixes
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/0ac824f379fba2c2b17b75fd5ada69cd68c66348
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

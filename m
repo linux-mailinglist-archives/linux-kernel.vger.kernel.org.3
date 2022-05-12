@@ -2,63 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49816525827
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 01:15:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D71452582B
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 01:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359402AbiELXO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 19:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36602 "EHLO
+        id S1359406AbiELXT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 19:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347549AbiELXO4 (ORCPT
+        with ESMTP id S1347549AbiELXTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 19:14:56 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB8427EB9E
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 16:14:55 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652397292;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0aEuWsANdQLRHrRiGsBWyR4tbeCF0F0+oihoUK5Cya8=;
-        b=u461Q4lqyAIKEkFnBZbGWIGY0v3pRsgI0BV3nCBEjTUASwbg/SMzArAa2X+jeWtol/gHZ7
-        a8bDAHWL0YZM0/IybLsWfHKahvMxEZjDL3d0laLMLqUS5kjtg3L5aQW6XpSP/KTGHNO+nT
-        kEOeaHspWcSrm5LKUcH3BAC7RHd8GgvHiCeWVhTMNnSPuY7wnqPv4FWAg+YoYhMXxpN3JQ
-        m5r/PQGVpkZAncK427k7jEa6hDsSE2AeDw9K4gxUUgCCGIuxxtD2EFdmR0G2lJes5zw4dR
-        JRkbUUm1tU3sGW6edQoo5XS6ceG29bguW0eiR+oitqjAcmcLr/qVYKUSCIwS1Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652397292;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0aEuWsANdQLRHrRiGsBWyR4tbeCF0F0+oihoUK5Cya8=;
-        b=7sbzSsucjj1+dX1so+YTgeoXx5C4epdXmdUJJ9CCNIAVocXWDAF6qsRzyz1IfJZ1sNGszW
-        oDOgW4zFDIneEJDA==
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFCv2 05/10] x86/mm: Provide untagged_addr() helper
-In-Reply-To: <87sfpevl1g.ffs@tglx>
-References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
- <20220511022751.65540-7-kirill.shutemov@linux.intel.com>
- <87a6bmx5lt.ffs@tglx> <Yn0YdPNG/Q3lf+4G@hirez.programming.kicks-ass.net>
- <87sfpevl1g.ffs@tglx>
-Date:   Fri, 13 May 2022 01:14:51 +0200
-Message-ID: <87wneqtkb8.ffs@tglx>
+        Thu, 12 May 2022 19:19:54 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEEE127BC43;
+        Thu, 12 May 2022 16:19:52 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id p8so6131598pfh.8;
+        Thu, 12 May 2022 16:19:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GbPvhZkWXt3QY9qEZgwTEjoyNuMBfGa+oZ63rvVL6pU=;
+        b=KXo7F11DTbJvlXDBd9SjPMuEcgSvLN0+t9Z42Gnld89u3gv3d13it8R4mvdpD4Aj+A
+         iX0ixvDywrk4zVp46MwFLGsn706vY+iYKx/Wopote1ECb78df+H+ykwo+SXk+kq8kKr6
+         dKBUr+5AFsvbM2g2emjRGCteNR1c6oyj+Ckz4U3FAEyTulGbHnW9N6ENPcYVUI3kPYWy
+         LApJXwuVMqeGxWjH49SbdfduZ+0u/VsJYIwqRI6qCnmstjBy4q6oijGZ4V/gFMDu8/fS
+         0lcibXZXSJXqWQXWtSRZNEVTA3xK1eHsA2O/EOoaQsvNaUhp90DRWN/Cvk7cflzreJuQ
+         ytQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=GbPvhZkWXt3QY9qEZgwTEjoyNuMBfGa+oZ63rvVL6pU=;
+        b=7IRS2P156jvQaut0E70JSykuLO1zPuwb3Jxog4q5/LgJBWEn2GZwLxe6iWMjSXDOsA
+         YpXuT0KAozm0Ag0UIxC6mdlcBEFxFUeo/EXjYk0guEhyKKStAOJGFEWDpWzbW7VasbkU
+         ighv2ikM4AfrGnCk+QAkSIx9PR+TKFgDq67KF2rIezZs4dBX8aoZKHqV7nzgvbLkZ0L/
+         ebYeso79JD6wzGo4O9VTRkShO+V133hDHoXIDK/DJXXE+LO0tvajIUQAuU3n1ZxeFTUw
+         91/Cs5rCl5dktLl6BGzRuI+XFJ1JvNzGgO+SbjZ3AxDhmv96sdDabNIzTZ5pCzp3cG2R
+         y5DA==
+X-Gm-Message-State: AOAM532gnA6S5HJlzU1yb77MaFPVPmZEjl6UmPl8GbaeNvdGTNV1aSNK
+        q9ARERH6zELtzzHkguQwH4c=
+X-Google-Smtp-Source: ABdhPJyjZh9c6o2fHHw3TEt65QCqWYK5MnJjNiUnAYFi/lE+ZXQ7XfTmNu97r4JGi8v3BR2xEP6rxw==
+X-Received: by 2002:a65:6250:0:b0:3c6:8a09:249 with SMTP id q16-20020a656250000000b003c68a090249mr1524507pgv.389.1652397592333;
+        Thu, 12 May 2022 16:19:52 -0700 (PDT)
+Received: from localhost.localdomain ([45.124.203.18])
+        by smtp.gmail.com with ESMTPSA id u20-20020a63b554000000b003c6445e2aa8sm267814pgo.4.2022.05.12.16.19.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 16:19:50 -0700 (PDT)
+Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
+From:   Joel Stanley <joel@jms.id.au>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Dylan Hung <dylan_hung@aspeedtech.com>,
+        David Wilder <dwilder@us.ibm.com>
+Cc:     openbmc@lists.ozlabs.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Wilder <wilder@us.ibm.com>
+Subject: [PATCH net v2] net: ftgmac100: Disable hardware checksum on AST2600
+Date:   Fri, 13 May 2022 08:49:38 +0930
+Message-Id: <20220512231938.228651-1-joel@jms.id.au>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,117 +75,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12 2022 at 17:16, Thomas Gleixner wrote:
-> On Thu, May 12 2022 at 16:23, Peter Zijlstra wrote:
->> On Thu, May 12, 2022 at 03:06:38PM +0200, Thomas Gleixner wrote:
->>
->>> #define untagged_addr(addr)	({			\
->>> 	u64 __addr = (__force u64)(addr);		\
->>> 							\
->>> 	__addr &= current->thread.lam_untag_mask;	\
->>> 	(__force __typeof__(addr))__addr;		\
->>> })
->>> 
->>> No conditionals, fast _and_ correct. Setting this untag mask up once
->>> when LAM is enabled is not rocket science.
->>
->> But that goes wrong if someone ever wants to untag a kernel address and
->> not use the result for access_ok().
->>
->> I'd feel better about something like:
->>
->> 	s64 __addr = (addr);
->> 	s64 __sign = __addr;
->>
->> 	__sign >>= 63;
->> 	__sign &= lam_untag_mask;
->
-> that needs to be
->
->  	__sign &= ~lam_untag_mask;
->
->> 	__addr &= lam_untag_mask;
->> 	__addr |= __sign;
->>
->> 	__addr;
->>
->> Which simply extends bit 63 downwards -- although possibly there's an
->> easier way to do that, this is pretty gross.
->
-> For the price of a conditional:
->
->     __addr &= lam_untag_mask;
->     if (__addr & BIT(63))
->         __addr |= ~lam_untag_mask;
->
-> Now you have the choice between gross and ugly.
+The AST2600 when using the i210 NIC over NC-SI has been observed to
+produce incorrect checksum results with specific MTU values. This was
+first observed when sending data across a long distance set of networks.
 
-Though we can also replace your flavour of gross with a different
-flavour of gross:
+On a local network, the following test was performed using a 1MB file of
+random data.
 
-	s64 sign = (s64)(addr) >> 63;
+On the receiver run this script:
 
-	addr ^= sign;
-	addr &= mask;
-	addr ^= sign;
+ #!/bin/bash
+ while [ 1 ]; do
+        # Zero the stats
+        nstat -r  > /dev/null
+        nc -l 9899 > test-file
+        # Check for checksum errors
+        TcpInCsumErrors=$(nstat | grep TcpInCsumErrors)
+        if [ -z "$TcpInCsumErrors" ]; then
+                echo No TcpInCsumErrors
+        else
+                echo TcpInCsumErrors = $TcpInCsumErrors
+        fi
+ done
 
-After twisting my brain around replacing gross by something differently
-gross and coming up with the gem above I actually did compile the
-variants and discovered that GCC compiles your flavour of gross exactly
-to this:
+On an AST2600 system:
 
-        mov    %rdi,%rax
-        sar    $0x3f,%rax
-        xor    %rax,%rdi
-        and    %rsi,%rdi
-        xor    %rdi,%rax
+ # nc <IP of  receiver host> 9899 < test-file
 
-I have to admit that compilers are sometimes pretty smart. I might have
-to rethink my prejudice. :)
+The test was repeated with various MTU values:
 
-But then clang converts your flavour of 'gross' to:
+ # ip link set mtu 1410 dev eth0
 
-     	mov    %rsi,%rax
-     	mov    %rsi,%rcx
-     	and    %rdi,%rax
-     	sar    $0x3f,%rdi
-     	not    %rcx
-     	and    %rdi,%rcx
-     	or     %rcx,%rax
+The observed results:
 
-and my explicit flavour to:
+ 1500 - good
+ 1434 - bad
+ 1400 - good
+ 1410 - bad
+ 1420 - good
 
-      	mov    %rdi,%rax
-      	mov    %rdi,%rcx
-      	sar    $0x3f,%rcx
-      	xor    %rcx,%rax
-      	and    %rsi,%rax
-      	xor    %rcx,%rax
+The test was repeated after disabling tx checksumming:
 
-which is at least slightly less retarted, but still has a pointless mov
-there. Note, that this was compiled in user space with noinline
-functions. I did some inlined variants as well and clang still insists
-on using an extra register for no obvious reason. This might be more
-efficient in reality, but I haven't bothered to write a test which
-might give an answer via perf.
+ # ethtool -K eth0 tx-checksumming off
 
-The ugly with the conditional resolves for both compilers to:
+And all MTU values tested resulted in transfers without error.
 
-       	mov    %rsi,%rax
-       	mov    %rsi,%rcx
-       	not    %rcx
-       	or     %rdi,%rcx
-       	and    %rdi,%rax
-       	test   %rdi,%rdi
-       	cmovs  %rcx,%rax
+An issue with the driver cannot be ruled out, however there has been no
+bug discovered so far.
 
-At least they agree on that one.
+David has done the work to take the original bug report of slow data
+transfer between long distance connections and triaged it down to this
+test case.
 
-But whatever we chose, it's sad, that we need to have support for
-interfaces which swallow any pointer (user or kernel) because otherwise
-this really boils down to a single OR resp. AND operation plus the
-according mov to retrieve the mask.
+The vendor suspects this this is a hardware issue when using NC-SI. The fixes line refers
+to the patch that introduced AST2600 support.
 
-Thanks,
+Fixes: 39bfab8844a0 ("net: ftgmac100: Add support for DT phy-handle property")
+Reported-by: David Wilder <wilder@us.ibm.com>
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+---
+v2 updates the commit message with confirmation form the vendor that
+this is a hardware issue, and clarifes why the commit used in the fixes
+tag was chosen.
 
-        tglx
+ drivers/net/ethernet/faraday/ftgmac100.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/net/ethernet/faraday/ftgmac100.c b/drivers/net/ethernet/faraday/ftgmac100.c
+index caf48023f8ea..5231818943c6 100644
+--- a/drivers/net/ethernet/faraday/ftgmac100.c
++++ b/drivers/net/ethernet/faraday/ftgmac100.c
+@@ -1928,6 +1928,11 @@ static int ftgmac100_probe(struct platform_device *pdev)
+ 	/* AST2400  doesn't have working HW checksum generation */
+ 	if (np && (of_device_is_compatible(np, "aspeed,ast2400-mac")))
+ 		netdev->hw_features &= ~NETIF_F_HW_CSUM;
++
++	/* AST2600 tx checksum with NC-SI is broken */
++	if (priv->use_ncsi && of_device_is_compatible(np, "aspeed,ast2600-mac"))
++		netdev->hw_features &= ~NETIF_F_HW_CSUM;
++
+ 	if (np && of_get_property(np, "no-hw-checksum", NULL))
+ 		netdev->hw_features &= ~(NETIF_F_HW_CSUM | NETIF_F_RXCSUM);
+ 	netdev->features |= netdev->hw_features;
+-- 
+2.35.1
+

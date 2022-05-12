@@ -2,108 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E6C52451A
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 07:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D55AE52452D
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 07:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350025AbiELFlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 01:41:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48358 "EHLO
+        id S1350015AbiELFvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 01:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349998AbiELFlJ (ORCPT
+        with ESMTP id S237798AbiELFvY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 01:41:09 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3835548F
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 22:41:06 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R701e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VCzPcW9_1652334062;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VCzPcW9_1652334062)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 12 May 2022 13:41:04 +0800
-Date:   Thu, 12 May 2022 13:41:02 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Jeffle Xu <jefflexu@linux.alibaba.com>
-Cc:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        Thu, 12 May 2022 01:51:24 -0400
+X-Greylist: delayed 366 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 11 May 2022 22:51:18 PDT
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [IPv6:2001:67c:2050:0:465::202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0033E506C6;
+        Wed, 11 May 2022 22:51:17 -0700 (PDT)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4KzLMh0dpMz9t2F;
+        Thu, 12 May 2022 07:45:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dylanvanassche.be;
+        s=MBO0001; t=1652334304;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Mjrv/G6HrIBpduWu1g0fC288vFkgwsi6v+XkaQ1EIAw=;
+        b=fyaBxxNAJxPwOOSm4Ko49ricSxn6uh/uoCvNEjbnzlK9D6D+JvaYq4SVn3wuRfS902o1It
+        mVW7wJRowWQ7hOBLhWtC040pkFck2OWyHOmeD/ffcaLpG4jb7aF8x+Z/N1rcc5RYAxcWtH
+        HSRAAL/d2qjSLFrTMDSM6GDSua39ssYm38AKrc8T1sTeooZAGhaZvLRS/BaOWrJBS2+njE
+        5PMrFcAXbkAEW/g4cSk/GWcZAjalBNscC4cXMP9OYF0XY6hho1GB8Zj2DzjVpzaPK5Zfhq
+        oAbjT1Mpq0VyJ0H4TvY7ubxKVa3o70QNTOPt9dS+I/Cn8qbamD/3wp0zxbOY9Q==
+From:   Dylan Van Assche <me@dylanvanassche.be>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] erofs: scan devices from device table
-Message-ID: <Ynyd7iTbE+NhnTmh@B-P7TQMD6M-0146.local>
-References: <20220510093511.77473-1-jefflexu@linux.alibaba.com>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Dylan Van Assche <me@dylanvanassche.be>
+Subject: [PATCH] arm64: dts: qcom/sdm845-shift-axolotl: Enable pmi9889 LPG LED
+Date:   Thu, 12 May 2022 07:44:39 +0200
+Message-Id: <20220512054439.13971-1-me@dylanvanassche.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220510093511.77473-1-jefflexu@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 05:35:11PM +0800, Jeffle Xu wrote:
-> When "-o device" mount option is not specified, scan the device table
-> and instantiate the devices if there's any in the device table. In this
-> case, the tag field of each device slot uniquely specifies a device.
-> 
-> Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
-> ---
->  fs/erofs/erofs_fs.h |   9 ++--
->  fs/erofs/super.c    | 102 ++++++++++++++++++++++++++++++--------------
->  2 files changed, 72 insertions(+), 39 deletions(-)
-> 
-> diff --git a/fs/erofs/erofs_fs.h b/fs/erofs/erofs_fs.h
-> index 1238ca104f09..1adde3a813b4 100644
-> --- a/fs/erofs/erofs_fs.h
-> +++ b/fs/erofs/erofs_fs.h
-> @@ -37,12 +37,9 @@
->  #define EROFS_SB_EXTSLOT_SIZE	16
->  
->  struct erofs_deviceslot {
-> -	union {
-> -		u8 uuid[16];		/* used for device manager later */
-> -		u8 userdata[64];	/* digest(sha256), etc. */
-> -	} u;
-> -	__le32 blocks;			/* total fs blocks of this device */
-> -	__le32 mapped_blkaddr;		/* map starting at mapped_blkaddr */
-> +	u8 tag[64];		/* digest(sha256), etc. */
-> +	__le32 blocks;		/* total fs blocks of this device */
-> +	__le32 mapped_blkaddr;	/* map starting at mapped_blkaddr */
->  	u8 reserved[56];
->  };
->  #define EROFS_DEVT_SLOT_SIZE	sizeof(struct erofs_deviceslot)
-> diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-> index 4a623630e1c4..3f19c2031e69 100644
-> --- a/fs/erofs/super.c
-> +++ b/fs/erofs/super.c
-> @@ -219,7 +219,52 @@ static int erofs_load_compr_cfgs(struct super_block *sb,
->  }
->  #endif
->  
-> -static int erofs_init_devices(struct super_block *sb,
-> +static int erofs_init_device(struct erofs_buf *buf, struct super_block *sb,
-> +			     struct erofs_device_info *dif, erofs_off_t *pos)
-> +{
-> +	struct erofs_sb_info *sbi = EROFS_SB(sb);
-> +	struct erofs_deviceslot *dis;
-> +	struct block_device *bdev;
-> +	void *ptr;
-> +	int ret;
-> +
-> +	ptr = erofs_read_metabuf(buf, sb, erofs_blknr(*pos), EROFS_KMAP);
-> +	if (IS_ERR(ptr))
-> +		return PTR_ERR(ptr);
-> +	dis = ptr + erofs_blkoff(*pos);
-> +
-> +	if (!dif->path) {
-> +		if (!dis->tag[0]) {
-> +			erofs_err(sb, "Empty digest data (pos %llu)", *pos);
+Enables the RGB notification LED on the SHIFT 6mq (sdm845-shift-axolotl)
+with the Qualcomm Light Pulse Generator bindings by Bjorn Andersson [1].
+Patches are merged in for-next branch of linux-leds.
+Tested these changes on the SHIFT 6mq.
 
-			erofs_err(sb, "empty tag @ pos %llu", *pos);
-?
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git/commit/?h=for-next&id=a8e53db46f19f67be6a26488aafb7d10c78e33bd
 
-Otherwise it looks good to me,
-Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
+---
+ .../boot/dts/qcom/sdm845-shift-axolotl.dts    | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-Thanks,
-Gao Xiang
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts b/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
+index 847f6217a77b..af412ac2c9d0 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
++++ b/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
+@@ -2,11 +2,13 @@
+ /*
+  * Copyright (c) 2022, Alexander Martinz <amartinz@shiftphones.com>
+  * Copyright (c) 2022, Caleb Connolly <caleb@connolly.tech>
++ * Copyright (c) 2022, Dylan Van Assche <me@dylanvanassche.be>
+  */
+ 
+ /dts-v1/;
+ 
+ #include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/leds/common.h>
+ #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+ #include "sdm845.dtsi"
+ #include "pm8998.dtsi"
+@@ -554,6 +556,33 @@ &pmi8998_smb2 {
+ 	monitored-battery = <&battery>;
+ };
+ 
++&pmi8998_lpg {
++	status = "okay";
++
++	multi-led {
++		color = <LED_COLOR_ID_RGB>;
++		function = LED_FUNCTION_STATUS;
++
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		led@3 {
++			reg = <3>;
++			color = <LED_COLOR_ID_BLUE>;
++		};
++
++		led@4 {
++			reg = <4>;
++			color = <LED_COLOR_ID_GREEN>;
++		};
++
++		led@5 {
++			reg = <5>;
++			color = <LED_COLOR_ID_RED>;
++		};
++	};
++};
++
+ &qup_uart9_default {
+ 	pinconf-rx {
+ 		pins = "gpio5";
+-- 
+2.36.1
+

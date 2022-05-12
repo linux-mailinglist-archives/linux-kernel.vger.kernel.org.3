@@ -2,83 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1331C524E82
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F65524E8A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:44:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354547AbiELNmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 09:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57352 "EHLO
+        id S1354570AbiELNoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 09:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354538AbiELNmo (ORCPT
+        with ESMTP id S1354574AbiELNoj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 09:42:44 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4176A62CD1;
-        Thu, 12 May 2022 06:42:43 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id i24so4830356pfa.7;
-        Thu, 12 May 2022 06:42:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:content-transfer-encoding:date:message-id:cc:subject
-         :from:to:references:in-reply-to;
-        bh=GgzNh++292NF+E5zmg+4OX55F9De/BlQIpudd+EXtLQ=;
-        b=LA63FLxYpym5WboTuUwi/wt+SGKurpEXYZQxiMDo+Xt5K5HxcMaroziFYgsNY4U/D0
-         jQcL2M6YnnnpxbMx8WO/l+dZr1XtXZXWlVn/uh428fXkeT5rbnonFqHo8E14tAdUQCsG
-         S4W8NZReOH65ZS3DdbfBwBp/s91Ypl8qzOshu5CcbA+6tpQzhSwJbzboU8awwQhvxwgb
-         prba+OJY/UDjw4SkwUk7eclm5IT7azw9CMmuZZvVGf9b0WPTP5FXARfsgIf7JDgzJOn7
-         lIPjXOuhF8ADfbty0dik/14V86WxCGBL/BSipDt5/OBSqXOfAIprdtTOEQ/LgxHdvchl
-         orRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:content-transfer-encoding:date
-         :message-id:cc:subject:from:to:references:in-reply-to;
-        bh=GgzNh++292NF+E5zmg+4OX55F9De/BlQIpudd+EXtLQ=;
-        b=rhUvVR81hmpNdc6UmCck84sIDZZLiq8moZevjrNdD0luwTRpxq3ZU6ls+nm/HnTbAW
-         32fyMt+pqmRye3BxMPOh2cfFmwykTi+MeQx5UDis5hdS1nq/XqBiY3JJMPB+HVvKZdqw
-         oNO5bOsI/+QzP+pEYmgGzAaOo6k8zGpVHtyd7AsgY92Lp75WB667MEbpuuLhejtvoCWS
-         kFOiREwWTUwiO19UP5zGwqD84RngzwDo9pakQvCABe9lgrGRmvdXa3GHotyvI21mUxbV
-         1sfnjVAfzlcvyNhb2DZKGugT437o6Et0v6Y3GQXmTomLqwQ2yA78TnS/gS6U/VGjh3/I
-         yTpQ==
-X-Gm-Message-State: AOAM532N7IwMdRRnxYZuhImr7DWfdmQw2HD761K9KfAW6wI7R1MDvOuj
-        8zkwzlLUwAY7c1TUbkFKKRg=
-X-Google-Smtp-Source: ABdhPJyhAuXqFsgoeseiRJPc84g3MKIgyF+aoWzOOmIUwQdQ7kGidEG8ONsSZ/Ofybzfz7Fr5YYarA==
-X-Received: by 2002:a05:6a00:234b:b0:510:4161:781a with SMTP id j11-20020a056a00234b00b005104161781amr30341812pfj.5.1652362962594;
-        Thu, 12 May 2022 06:42:42 -0700 (PDT)
-Received: from localhost ([49.204.239.218])
-        by smtp.gmail.com with ESMTPSA id x40-20020a056a000be800b0051082ab4de0sm3741051pfu.44.2022.05.12.06.42.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 06:42:41 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 12 May 2022 19:12:36 +0530
-Message-Id: <CJXTS6RN1T67.WNKK2FZKK9UB@skynet-linux>
-Cc:     <linux-arm-msm@vger.kernel.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        <bjorn.andersson@linaro.org>, <devicetree@vger.kernel.org>,
-        <phone-devel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Andy Gross" <agross@kernel.org>,
-        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Loic Poulain" <loic.poulain@linaro.org>
-Subject: Re: [PATCH 4/9] dt-bindings: remoteproc: qcom: wcnss: Convert to
- YAML
-From:   "Sireesh Kodali" <sireeshkodali1@gmail.com>
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        <linux-remoteproc@vger.kernel.org>
-X-Mailer: aerc 0.9.0
-References: <20220511161602.117772-1-sireeshkodali1@gmail.com>
- <20220511161602.117772-5-sireeshkodali1@gmail.com>
- <00234f36-9bae-31d5-5b83-ea238e7e3c11@linaro.org>
- <CJXL0SG2GHN1.1IO2JOR5ARNV8@skynet-linux>
- <a62822a4-a771-dfa9-f46d-586fdccedf66@linaro.org>
- <CJXOGJIR1ONQ.2ZT3JQGVWWHFB@skynet-linux>
- <58a6391b-b930-0095-4f50-618dee4f24e2@linaro.org>
-In-Reply-To: <58a6391b-b930-0095-4f50-618dee4f24e2@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        Thu, 12 May 2022 09:44:39 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C987248E36;
+        Thu, 12 May 2022 06:44:37 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C7E1B1EC06DA;
+        Thu, 12 May 2022 15:44:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1652363071;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=lPa7c9dHOHhN02kSSI97I/I6ysdJlQQ6rMlomVLCERk=;
+        b=YpiYrIZyQx5NoGQ+fa+ZGRYPALgsEYRnvYQzOR7kwTe7p+yMa7bBgvE5/SF71E+fdAB1Sk
+        jxMPlLLMyoMJthAGP4FvTQEc8uGEfIIOMoUmvBbXMOHt43tIxciJs1rGNhJE5/cIijH0p9
+        lAyx3JfL5RPHB/mtRr7Ir8IywoWI3bQ=
+Date:   Thu, 12 May 2022 15:44:33 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Jon Kohler <jon@nutanix.com>, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Balbir Singh <sblbir@amazon.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH v3] x86/speculation, KVM: only IBPB for
+ switch_mm_always_ibpb on vCPU load
+Message-ID: <Yn0PQe48qczUMZoL@zn.tnic>
+References: <YmxRnwSUBIkOIjLA@zn.tnic>
+ <Ymxf2Jnmz5y4CHFN@google.com>
+ <YmxlHBsxcIy8uYaB@zn.tnic>
+ <YmxzdAbzJkvjXSAU@google.com>
+ <Ym0GcKhPZxkcMCYp@zn.tnic>
+ <4E46337F-79CB-4ADA-B8C0-009E7500EDF8@nutanix.com>
+ <Ym1fGZIs6K7T6h3n@zn.tnic>
+ <Ynp6ZoQUwtlWPI0Z@google.com>
+ <520D7CBE-55FA-4EB9-BC41-9E8D695334D1@nutanix.com>
+ <YnqJx/5hos0lKqI9@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YnqJx/5hos0lKqI9@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,81 +77,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu May 12, 2022 at 4:32 PM IST, Krzysztof Kozlowski wrote:
-> On 12/05/2022 11:32, Sireesh Kodali wrote:
-> >>>>> +          - enum:
-> >>>>> +              - qcom,pronto-v2-pil
-> >>>>> +          - enum:
-> >>>>> +              - qcom,pronto
-> >>>>
-> >>>> This does not look correct. The fallback compatible should not chang=
-e.
-> >>>> What is more, it was not documented in original binding, so this sho=
-uld
-> >>>> be done in separate patch.
-> >>>>
-> >>>
-> >>> This was not a change to the fallback compatible.=20
-> >>
-> >> You made it an enum, so you expect it to use different fallback for
-> >> different cases.
-> >>
-> >>> msm8916.dtsi's wcnss
-> >>> node has "qcom,pronto" as the compatible string, which is why this wa=
-s
-> >>> added. It is however not documented in the txt file. Is it sufficient=
- to
-> >>> add a note in the commit message, or should it be split into a separa=
-te
-> >>> commit?
-> >>
-> >> Please split it, assuming that fallback is correct. Maybe the fallback
-> >> is wrong?
-> >=20
-> > The code doesn't recognize "qcom,pronto", so perhaps the best solution
-> > is to just remove that compatible from msm8916.dtsi?
->
-> Eh, I don't know. You need to check, maybe also in downstream sources.
->
+On Tue, May 10, 2022 at 03:50:31PM +0000, Sean Christopherson wrote:
+> >     x86/speculation, KVM: remove IBPB on vCPU load
+> > 
+> >     Remove IBPB that is done on KVM vCPU load, as the guest-to-guest
+> >     attack surface is already covered by switch_mm_irqs_off() ->
+> >     cond_mitigation().
+> > 
+> >     The original 15d45071523d ("KVM/x86: Add IBPB support") was simply wrong in
+> >     its guest-to-guest design intention. There are three scenarios at play
+> >     here:
+> > 
+> >     1. If the vCPUs belong to the same VM, they are in the same security 
+> >     domain and do not need an IPBP.
+> >     2. If the vCPUs belong to different VMs, and each VM is in its own mm_struct,
+> >     switch_mm_irqs_off() will handle IBPB as an mm switch is guaranteed to
+> >     occur prior to loading a vCPU belonging to a different VMs.
+> >     3. If the vCPUs belong to different VMs, but multiple VMs share an mm_struct,
+> >     then the security benefits of an IBPB when switching vCPUs are dubious, 
+> >     at best.
+> > 
+> >     Issuing IBPB from KVM vCPU load would only cover #3, but there are no
+> 
+> Just to hedge, there are no _known_ use cases.
+> 
+> >     real world tangible use cases for such a configuration.
+> 
+> and I would further qualify this with:
+> 
+>       but there are no known real world, tangible use cases for running multiple
+>       VMs belonging to different security domains in a shared address space.
+> 
+> Running multiple VMs in a single address space is plausible and sane, _if_ they
+> are all in the same security domain or security is not a concern.  That way the
+> statement isn't invalidated if someone pops up with a use case for running multiple
+> VMs but has no security story.
+> 
+> Other than that, LGTM.
+> 
+> >     If multiple VMs
+> >     are sharing an mm_structs, prediction attacks are the least of their
+> >     security worries.
+> > 
+> >     Fixes: 15d45071523d ("KVM/x86: Add IBPB support")
+> >     (Reviewedby/signed of by people here)
+> >     (Code change simply whacks IBPB in KVM vmx/svm and thats it)
 
-I just checked, it seems "qcom,pronto" is used by the wcnss driver in
-/net. So both "qcom,pronto-v2-pil" and "qcom,pronto" need to be present,
-but the latter wasn't documented.
+I agree with all that I've read so far - the only thing that's missing is:
 
-> (...)
->
-> >>>>
-> >>>>> +
-> >>>>> +  iris:
-> >>>>
-> >>>> Generic node name... what is "iris"?
-> >>>>
-> >>> Iris is the RF module, I'll make the description better
-> >>
-> >> RF like wifi? Then the property name should be "wifi".
-> >=20
-> > RF like wifi and bluetooth. However there are wifi and bt subnodes in
-> > the smd-edge subnode. Iris is just the antenna hardware if I understand
-> > correctly. Also this is just a documentation of the existing nodes that
-> > are present in msm8916.dtsi, but for whatever reason their documentatio=
-n
-> > was missing in the txt file. Without adding this node in the YAML
-> > dtb_check fails.
->
-> It seems commit fd52bdae9ab0 ("wcn36xx: Disable 5GHz for wcn3620")
->  added usage of "iris" property but did not document it in the bindings.
->
-> You can fix it by documenting (separate patch) existing practice or
-> document with changing the node name. I am not sure if it is worth the
-> effort, so just new patch please.
->
+	(Documentation in Documentation/admin-guide/hw-vuln/spectre.rst about what the use
+	 cases are and what we're protecting against and what we're *not* protecting
+	 against because <raisins>).
 
-I'll make a 2 separate patches, documenting the extra "qcom,pronto"
-compatible, and the iris subnode.
+Thx.
 
-Thanks,
-Sireesh
+-- 
+Regards/Gruss,
+    Boris.
 
-> Best regards,
-> Krzysztof
-
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,142 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2F9525526
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 20:50:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76CF352552A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 20:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357789AbiELSuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 14:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58788 "EHLO
+        id S1357797AbiELSwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 14:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345813AbiELSuQ (ORCPT
+        with ESMTP id S1357782AbiELSwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 14:50:16 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A8B24578E
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 11:50:15 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id p18so7326221edr.7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 11:50:14 -0700 (PDT)
+        Thu, 12 May 2022 14:52:35 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C91D5EBC9
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 11:52:33 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id s11so3542755edy.6
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 11:52:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=N01o2MK9zpj/dh2u/Xpb3w8n7ZmHwYIRG43aX5zXwiY=;
-        b=VWqHFI6m05UgCKkAS3BZUIFsXQjlgwwShbmz9escP9uC5aEVY1Vps5DpBBWix+aUxd
-         zVQZ3JYk3AK8ULZM9+xfniceVs9q7vYitugCHm+IZnF3iL8JSQl8hAtFz4apJ7E2MtG6
-         ffGWoPzzvS9CZHryhRuDMzgfRU98gnKDPZWUA=
+        bh=Qdnyh7+uu18FzVA20njWSdWEwxEC9EB3ZfenS4EmCh8=;
+        b=NtPPWDW+K9Q3GoCCru2mvoD3zjpF1DWuglu+M2WF8crMt/Y+9dsYZ3dkt+buBrYye/
+         pITGDScQHlaTUGQguC/n+YyPsk1I9N/0rmmoewXxEq9jBEl/vogABi1kQ943x7A4XX0h
+         zZvX/DdbVdY5aH9lGHQAaa/zZx0waDN1vdegmtxWJf5xWxAObQjX4mIE7SscUUA+yw8G
+         2LQJaOO5dgiaXpOJiQEqzfjvLJ1zOsAnpd/PcfMnlsRoVLc2NPI8i0Q70cByqUu1tXSu
+         afSw0z2XiJSK42puSJjpK1CoNkV3ZNfBhNQcI3071baoxDnfyL+CcCNvUIgJMVfEUdai
+         GIZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=N01o2MK9zpj/dh2u/Xpb3w8n7ZmHwYIRG43aX5zXwiY=;
-        b=gA+w7Tt8p/yKos83xG13vMECYPk3VwihuqdnkUw5YyV15c9C7G7KaSblPAqs401vz6
-         kiBRTrFCjxdUlX2eHt5M0pI5mcHvsT3AQ5D9/NwqjjnGv6stiVTdKttvIKAWDYMB3wiw
-         em+0P5arAWIj2G9Nn4gcrzAsbde78nBrTJGSM+qBj4Q7neHthr7LQJx5q5drWTJ/19/5
-         24qbKMqbzuPsxwOALzq63IFZs9JSLXuZApVva+W7LlsW6lseqiNX+Ee7y9lvJ5skthWa
-         Jj5lWl4mAv6lQcG7jYosJmba+Qch7c7iPNFpneqn9R2jLtKOYqgjQ5k/qpXQVB9XCSEq
-         rhlg==
-X-Gm-Message-State: AOAM533aIazHjfCMupUPvxyWFEWR1ksulRoGwMnJfD6czW1GcjApKT1S
-        KoY/AUj4+LGhQ0ynbcsz8jU8Lg3oGsveM/nuHCE=
-X-Google-Smtp-Source: ABdhPJxbzxT203OiorZp5GZl2yOfYEk0n88QwghfIZCTAszbxz9eKC0P2uZxu3Fx/FvylK42he+ctw==
-X-Received: by 2002:a05:6402:2291:b0:425:deb5:73be with SMTP id cw17-20020a056402229100b00425deb573bemr36167690edb.392.1652381413086;
-        Thu, 12 May 2022 11:50:13 -0700 (PDT)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
-        by smtp.gmail.com with ESMTPSA id g5-20020a50ee05000000b0042617ba639esm46638eds.40.2022.05.12.11.50.10
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 11:50:10 -0700 (PDT)
-Received: by mail-wr1-f50.google.com with SMTP id d5so8502096wrb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 11:50:10 -0700 (PDT)
-X-Received: by 2002:a05:6000:2c2:b0:20c:7329:7c10 with SMTP id
- o2-20020a05600002c200b0020c73297c10mr865946wry.193.1652381409749; Thu, 12 May
- 2022 11:50:09 -0700 (PDT)
+        bh=Qdnyh7+uu18FzVA20njWSdWEwxEC9EB3ZfenS4EmCh8=;
+        b=GxyGtRVpvF2VqCm+WQP4p2p6VtamB9RtHS0K1HvFROjbtuuoGVUpmNL3vFmal7vlNG
+         4ZlBqykZWEMeO6LqnBjj5dzTdmORamYa5js9j+s5+iL2vS65QeWqGdhl9JQbvKOVJDeT
+         uq+7n+q8JmMJXvTAoqCvCWAyX15Sn0saoVxBqY401mQYnrZbsw4PY4Oz/Pow61k0wIp3
+         A9FpWjB5hMJIRh2DoC7QfFJsaLR2tE8u8AulnOH63hnzrQv77y5yD5EXn9myOa7TRfNd
+         jr8UotlsmA1Q1XjZ4rPH1yzkAVqNs3sbbnj2p6xI+85At1IG2zkfYEmAoGbBopgpiA+I
+         oBEw==
+X-Gm-Message-State: AOAM530CmfdAUU4fha0rTXCXAQhEZai7P0qqqK+FAu7qYfHsqKOXYNh3
+        tSMwhOxiQkmCb1C+mW/xVM7m1lj2YjHl5+dZt3krYw==
+X-Google-Smtp-Source: ABdhPJyOVKvjn7GnmLfbaRzvyQLgsSYg1Hg8lBeaOUmFzCrYOPeSR7JAngVtkD4cazI9ApC+FwLv5q1HqE3E3EFmJ2A=
+X-Received: by 2002:a05:6402:40c5:b0:427:af77:c10c with SMTP id
+ z5-20020a05640240c500b00427af77c10cmr36851119edb.387.1652381552037; Thu, 12
+ May 2022 11:52:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <YnXnLuYjmEWdVyBP@ziqianlu-desk1> <ae763d63e50d14650c5762103d113934412bef57.camel@intel.com>
- <ba83270a-4f37-7d5a-b37a-0b7a6df5f5b4@intel.com> <d13688d1483e9d87ec477292893f2916832b3bdc.camel@intel.com>
- <c11ae803-cea7-8b7f-9992-2f640c90f104@intel.com> <37dac785a08e3a341bf05d9ee35f19718ce83d26.camel@intel.com>
- <CAHk-=wjguW5nxjagV99GHvc_-E_7mSg+LMvGtFjJ9LUSx4Skig@mail.gmail.com>
- <41c08a5371957acac5310a2e608b2e42bd231558.camel@intel.com>
- <YnuYV3J2ljY88DyQ@ziqianlu-desk1> <dfc98503b11e2e54a5a82c21b8ef6afa10eda9b7.camel@intel.com>
- <Yn0BeRaUC9ailyzz@ziqianlu-desk1> <CAHk-=whmeWNC-YH_cGRofdW3Spt8Y5nfWpoX=CipQ5pBYgnt2g@mail.gmail.com>
- <20220512110634.712057e4663ecc5f697bf185@linux-foundation.org>
-In-Reply-To: <20220512110634.712057e4663ecc5f697bf185@linux-foundation.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 12 May 2022 11:49:53 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiyjnKiCZyou+fHYi7tNh1FC-BYy_kubusd+jrkDRsExA@mail.gmail.com>
-Message-ID: <CAHk-=wiyjnKiCZyou+fHYi7tNh1FC-BYy_kubusd+jrkDRsExA@mail.gmail.com>
-Subject: Re: [mm/page_alloc] f26b3fa046: netperf.Throughput_Mbps -18.0% regression
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Aaron Lu <aaron.lu@intel.com>,
-        "ying.huang@intel.com" <ying.huang@intel.com>,
-        Waiman Long <longman@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        kernel test robot <oliver.sang@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        kernel test robot <lkp@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        fengwei.yin@intel.com, Linux-MM <linux-mm@kvack.org>
+References: <20220502192327.81153-1-dlatypov@google.com>
+In-Reply-To: <20220502192327.81153-1-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Thu, 12 May 2022 14:52:20 -0400
+Message-ID: <CAFd5g47FYJPXK6Ab-qdWsGGmPmnUF1tmpK6m2ZpgkC6W4nhaog@mail.gmail.com>
+Subject: Re: [PATCH] lib/atomic64_test.c: convert to use KUnit
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, mpe@ellerman.id.au
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 11:06 AM Andrew Morton
-<akpm@linux-foundation.org> wrote:
+On Mon, May 2, 2022 at 3:23 PM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> On Thu, 12 May 2022 10:42:09 -0700 Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> >
-> > In a perfect world, somebody would fix the locking to just not have as
-> > much contention. But assuming that isn't an option, maybe somebody
-> > should just look at that 'struct zone' layout a bit more.
+> The test currently is a bunch of checks (implemented using BUG_ON())
+> that can be built into the kernel or as a module.
 >
-> (hopefully adds linux-mm to cc)
+> Convert it to a KUnit test, which can also run in both modes.
+> From a user's perspective, this change adds a CONFIG_KUNIT=y dep and
+> changes the output format of the test [1]. The test itself is the same.
+>
+> This hopefully makes the test easier to run and more consistent with
+> similar tests in lib/.
+> Since it has no dependencies, it can be run without explicitly setting
+> up a .kunitconfig via
+> $ ./tools/testing/kunit/kunit.py run atomic
+> ...
+> [13:53:44] Starting KUnit Kernel (1/1)...
+> [13:53:44] ============================================================
+> [13:53:47] =================== atomic (2 subtests) ====================
+> [13:53:47] [PASSED] test_atomic
+> [13:53:47] [PASSED] test_atomic64
+> [13:53:47] ===================== [PASSED] atomic ======================
+> [13:53:47] ============================================================
+> [13:53:47] Testing complete. Passed: 2, Failed: 0, Crashed: 0, Skipped: 0, Errors: 0
+> [13:53:47] Elapsed time: 13.902s total, 1.629s configuring, 9.331s building, 2.852s running
+>
+> It can be run on ARCH=x86_64 (and others) via:
+> $ ./tools/testing/kunit/kunit.py run --arch=x86_64 atomic
+>
+> The message about which platform the test ran on won't show up in
+> kunit.py, but still gets printed out in dmesg, e.g.
+> > TAP version 14
+> > 1..1
+> >     # Subtest: atomic
+> >     1..2
+> >     ok 1 - test_atomic
+> >     ok 2 - test_atomic64
+> >     # atomic: ran on x86-64 platform with CX8 and with SSE
+> > # atomic: pass:2 fail:0 skip:0 total:2
+> > # Totals: pass:2 fail:0 skip:0 total:2
+> > ok 1 - atomic
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
-So I suspect the people who do re-layout would have to be the intel
-people who actually see the regression.
+I am also not an expert, but it looks good to me.
 
-Because the exact rules are quite complicated, and currently the
-comments about the layout don't really help much.
-
-For example, the "Read-mostly fields" comment doesn't necessarily mean
-that the fields in question should be kept away from the lock.
-
-Even if they are mostly read-only, if they are only read *under* the
-lock (because the lock still is what serializes them), then putting
-them in the same cacheline as the lock certainly won't hurt.
-
-And the same is actually true of things that are actively written to:
-if they are written to under the lock, being in the same cacheline as
-the lock can be a *good* thing, since then you have only one dirty
-cacheline.
-
-It only becomes a problem when (a) the lock is contended (so you get
-the bouncing from other lockers trying to get it) _and_ (b) the
-writing is fairly intense (so you get active bouncing back-and-forth,
-not just one or two bounces).
-
-And so to actually do any real analysis, you probably have to have
-multiple sockets, because without numbers to guide you to exactly
-_which_ writes are problematic, you're bound to get the heuristic
-wrong.
-
-And to make the issue even murkier, this whole thread is mixing up two
-different regressions that may not have all that much in common (ie
-the subject line is about one thing, but then we have that whole
-page_fault1 process mode results, and it's not clear that they have
-anything really to do with each other - just different examples of
-cache sensitivity).
-
-                   Linus
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

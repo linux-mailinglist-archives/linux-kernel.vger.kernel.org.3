@@ -2,71 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1B45252EA
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 456B8525265
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356677AbiELQqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 12:46:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56576 "EHLO
+        id S1356412AbiELQVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 12:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356659AbiELQqA (ORCPT
+        with ESMTP id S1356510AbiELQVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 12:46:00 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA3A5FDA;
-        Thu, 12 May 2022 09:45:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652373956; x=1683909956;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aSoD9A65PeW90ZHA6KeiB1hT1IPWY6t/5WyFpaRGgNg=;
-  b=HLMRkUeFcDBwnFtG7mnPZjvOrOBkIx5kEjMIHp6gaBD/xHjW4OqLOCHR
-   3MixoC9hhxOQf7x5W0rjvL0FLi8tu1/SG8KGEa49y8FTH7reGzNxxSUeg
-   M0ixu5jiBhF2xN/CttK2kTMCHnRG1nB49MtyxWdjCK6PMvQbU7dQCHinN
-   JcH7rAb3as07TINOtnphLjda2eLn8N1H8ihZ7VTUu5leuMrGEQsg/jA4I
-   EREp4P3rEzATAIORLX3jPTK5w7aiFIRdsmUtNjjgw978UZq6y75kTulig
-   StrmvW/da2VDPHlE54ipYX1lxx+lPeI8L5edzwXsgzN/iZb6DQ/3Gw2DD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="268888929"
-X-IronPort-AV: E=Sophos;i="5.91,220,1647327600"; 
-   d="scan'208";a="268888929"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 09:21:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,220,1647327600"; 
-   d="scan'208";a="670909190"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 12 May 2022 09:21:37 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1npBZI-000Kfo-LM;
-        Thu, 12 May 2022 16:21:36 +0000
-Date:   Fri, 13 May 2022 00:20:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jonas Paulsson <paulsson@linux.vnet.ibm.com>,
-        Ulrich Weigand <ulrich.weigand@de.ibm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andreas Krebbel <krebbel@linux.ibm.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH 3/8] s390/entry: shorten OUTSIDE macro
-Message-ID: <202205130050.x6Is9kJO-lkp@intel.com>
-References: <20220511120532.2228616-4-hca@linux.ibm.com>
+        Thu, 12 May 2022 12:21:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C9251331;
+        Thu, 12 May 2022 09:21:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9862B61F9C;
+        Thu, 12 May 2022 16:21:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73140C385B8;
+        Thu, 12 May 2022 16:21:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652372489;
+        bh=NDeYtJoOTyZCZ7rH4NHOQS1V70YxoweEBSxhUWIM/zE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GEZzmykw70nosMdq2UT7qg8LKHXmRTyvKi2MNKMtZZ2CwyO6035MToY/A+CtoWVMY
+         oeSXpYZuUcqissIoGJ61njBawHIw+QDkKvnMrIZZylSUEPuDQKvY08371yKuyZbajk
+         RIXLkYKVZRAfckK8MXp2I3O8tCFEYOIRx+Ti6yrs=
+Date:   Thu, 12 May 2022 18:21:26 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Maximilian Heyne <mheyne@amazon.de>
+Cc:     stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org
+Subject: Re: [PATCH 0/4] x86: decode Xen/KVM emulate prefixes
+Message-ID: <Yn00BsSx060gS94o@kroah.com>
+References: <20220512135654.119791-1-mheyne@amazon.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220511120532.2228616-4-hca@linux.ibm.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220512135654.119791-1-mheyne@amazon.de>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,111 +72,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Heiko,
+On Thu, May 12, 2022 at 01:56:47PM +0000, Maximilian Heyne wrote:
+> This is a backport of a patch series for 5.4.x.
+> 
+> The patch series allows the x86 decoder to decode the Xen and KVM emulate
+> prefixes.
+> 
+> In particular this solves the following issue that appeared when commit
+> db6c6a0df840 ("objtool: Fix noreturn detection for ignored functions") was
+> backported to 5.4.69:
+> 
+>   arch/x86/xen/enlighten_pv.o: warning: objtool: xen_cpuid()+0x25: can't find jump dest instruction at .text+0x9c
+> 
+> Also now that this decoding is possible, also backport the commit which prevents
+> kprobes on probing such prefixed instructions. This was also part of the
+> original series.
+> 
+> The series applied mostly cleanly on 5.4.192 except for a contextual problem in
+> the 3rd patch ("x86: xen: insn: Decode Xen and KVM emulate-prefix signature").
+> 
+> Masami Hiramatsu (4):
+>   x86/asm: Allow to pass macros to __ASM_FORM()
+>   x86: xen: kvm: Gather the definition of emulate prefixes
+>   x86: xen: insn: Decode Xen and KVM emulate-prefix signature
+>   x86: kprobes: Prohibit probing on instruction which has emulate prefix
+> 
+>  arch/x86/include/asm/asm.h                  |  8 +++--
+>  arch/x86/include/asm/emulate_prefix.h       | 14 +++++++++
+>  arch/x86/include/asm/insn.h                 |  6 ++++
+>  arch/x86/include/asm/xen/interface.h        | 11 +++----
+>  arch/x86/kernel/kprobes/core.c              |  4 +++
+>  arch/x86/kvm/x86.c                          |  4 ++-
+>  arch/x86/lib/insn.c                         | 34 +++++++++++++++++++++
+>  tools/arch/x86/include/asm/emulate_prefix.h | 14 +++++++++
+>  tools/arch/x86/include/asm/insn.h           |  6 ++++
+>  tools/arch/x86/lib/insn.c                   | 34 +++++++++++++++++++++
+>  tools/objtool/sync-check.sh                 |  3 +-
+>  tools/perf/check-headers.sh                 |  3 +-
+>  12 files changed, 128 insertions(+), 13 deletions(-)
+>  create mode 100644 arch/x86/include/asm/emulate_prefix.h
+>  create mode 100644 tools/arch/x86/include/asm/emulate_prefix.h
+> 
+> 
+> base-commit: 1d72b776f6dc973211f5d153453cf8955fb3d70a
+> -- 
+> 2.32.0
+> 
+> 
+> 
+> 
+> Amazon Development Center Germany GmbH
+> Krausenstr. 38
+> 10117 Berlin
+> Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+> Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+> Sitz: Berlin
+> Ust-ID: DE 289 237 879
+> 
+> 
+> 
 
-I love your patch! Yet something to improve:
+All now queued up, thanks.
 
-[auto build test ERROR on s390/features]
-[also build test ERROR on tip/locking/core masahiroy-kbuild/for-next linus/master v5.18-rc6 next-20220512]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Heiko-Carstens/s390-allow-to-build-with-llvm-s-integrated-assembler/20220511-201054
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git features
-config: s390-randconfig-r003-20220512 (https://download.01.org/0day-ci/archive/20220513/202205130050.x6Is9kJO-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/ad8a0a6488ba252aaa84b813dee2c949ae59d88a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Heiko-Carstens/s390-allow-to-build-with-llvm-s-integrated-assembler/20220511-201054
-        git checkout ad8a0a6488ba252aaa84b813dee2c949ae59d88a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> <instantiation>:2:2: error: instruction requires: distinct-ops
-    slgrk %r14,%r9,%r14
-    ^
-   arch/s390/kernel/entry.S:378:2: note: while in macro instantiation
-    OUTSIDE %r9,.Lsie_gmap,.Lsie_done,1f
-    ^
-   <instantiation>:3:13: error: invalid operand for instruction
-    clgfi %r14,.Lsie_done - .Lsie_gmap
-               ^
-   arch/s390/kernel/entry.S:378:2: note: while in macro instantiation
-    OUTSIDE %r9,.Lsie_gmap,.Lsie_done,1f
-    ^
->> <instantiation>:2:2: error: instruction requires: distinct-ops
-    slgrk %r14,%r9,%r14
-    ^
-   <instantiation>:12:2: note: while in macro instantiation
-    OUTSIDE %r9,.Lsie_gmap,.Lsie_done,0f
-    ^
-   arch/s390/kernel/entry.S:488:1: note: while in macro instantiation
-   INT_HANDLER ext_int_handler,304,do_ext_irq
-   ^
-   <instantiation>:3:13: error: invalid operand for instruction
-    clgfi %r14,.Lsie_done - .Lsie_gmap
-               ^
-   <instantiation>:12:2: note: while in macro instantiation
-    OUTSIDE %r9,.Lsie_gmap,.Lsie_done,0f
-    ^
-   arch/s390/kernel/entry.S:488:1: note: while in macro instantiation
-   INT_HANDLER ext_int_handler,304,do_ext_irq
-   ^
->> <instantiation>:2:2: error: instruction requires: distinct-ops
-    slgrk %r14,%r9,%r14
-    ^
-   <instantiation>:12:2: note: while in macro instantiation
-    OUTSIDE %r9,.Lsie_gmap,.Lsie_done,0f
-    ^
-   arch/s390/kernel/entry.S:489:1: note: while in macro instantiation
-   INT_HANDLER io_int_handler,368,do_io_irq
-   ^
-   <instantiation>:3:13: error: invalid operand for instruction
-    clgfi %r14,.Lsie_done - .Lsie_gmap
-               ^
-   <instantiation>:12:2: note: while in macro instantiation
-    OUTSIDE %r9,.Lsie_gmap,.Lsie_done,0f
-    ^
-   arch/s390/kernel/entry.S:489:1: note: while in macro instantiation
-   INT_HANDLER io_int_handler,368,do_io_irq
-   ^
->> <instantiation>:2:2: error: instruction requires: distinct-ops
-    slgrk %r14,%r9,%r14
-    ^
-   arch/s390/kernel/entry.S:554:2: note: while in macro instantiation
-    OUTSIDE %r9,.Lsie_gmap,.Lsie_done,6f
-    ^
-   <instantiation>:3:13: error: invalid operand for instruction
-    clgfi %r14,.Lsie_done - .Lsie_gmap
-               ^
-   arch/s390/kernel/entry.S:554:2: note: while in macro instantiation
-    OUTSIDE %r9,.Lsie_gmap,.Lsie_done,6f
-    ^
->> <instantiation>:2:2: error: instruction requires: distinct-ops
-    slgrk %r14,%r9,%r14
-    ^
-   arch/s390/kernel/entry.S:555:2: note: while in macro instantiation
-    OUTSIDE %r9,.Lsie_entry,.Lsie_skip,4f
-    ^
-   <instantiation>:3:13: error: invalid operand for instruction
-    clgfi %r14,.Lsie_skip - .Lsie_entry
-               ^
-   arch/s390/kernel/entry.S:555:2: note: while in macro instantiation
-    OUTSIDE %r9,.Lsie_entry,.Lsie_skip,4f
-    ^
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+greg k-h

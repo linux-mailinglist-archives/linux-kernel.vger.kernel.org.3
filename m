@@ -2,169 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1915C524C49
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EDA4524C4F
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353495AbiELMBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 08:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45532 "EHLO
+        id S1353501AbiELMCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 08:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237852AbiELMBK (ORCPT
+        with ESMTP id S237852AbiELMB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 08:01:10 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89AB377C1;
-        Thu, 12 May 2022 05:01:08 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id p10so8592802lfa.12;
-        Thu, 12 May 2022 05:01:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=ki8Z7TUnUuDhm9/3QHrPzjbPsX1q3SF+4ubhMDYxBeQ=;
-        b=XG+YBrrDszCrRcy9TfNEI1fUYxCJmZCMNt+NFNc7v/XQhWueUHPInOjaZ6uD64K5fU
-         6EQ6cHtKvAquib+niNYFPYRY22uuzu7ok6rUTHNUMS8B2qdmroqk4eUAfWP54TBn25qf
-         Gg+j6zK1x6Ufq4ZaUhaQEQQKsgkFpUF+bk9TPOCfWJOdwhVOex1SF61g7Ct0RvOTixpZ
-         N09TyVXg9bCjHK3iMSWPQ5SC4pkVZA4xVBHZTHMgCB3Xx5m5evbB+k5xMKj0e2tJASfX
-         Gdapja7ZNe0ey7tiajTudxf5wGQ/x9VcQbj0UGG7afBYmnN/bsVtztTvBjYA8Lggo9xA
-         stSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=ki8Z7TUnUuDhm9/3QHrPzjbPsX1q3SF+4ubhMDYxBeQ=;
-        b=Jf7iPhU9RgFLc9RfO6M0Un8x6I/oaKo7G+6SyJuz8/FnRN6xCthyIC5JhylBmVy0Ms
-         Ht6XYjSxpiQLIDYdwL0btMpYw2PBiroIRt0npP6kvpW3yghoHzeS7QlJqw8rNULlFJJC
-         fXu4fXMb6HPvFr3bRSQKG75uG03ixaDY5hGK4tIXTqOUzSfZ+2LkZC/HsbJYGrwm9Wj4
-         823/Y+5ZgTuSX7Wf8z5eL88306pEUNHfFhrREuAaOOTpXm2MJG7O3C/s2B4D6hK/XhdY
-         7G7kgTk/clFV5wEvKoFs9TFKCW9SSeSuR3ncDYcLQa7+C9s05hiPyqokjcIRkqbrfm9s
-         1icA==
-X-Gm-Message-State: AOAM531J3OYuU9MVd2M9n1rX/rqT/JZLDb49HxElriv/3hvrxwUTWokW
-        rW4ROYxLGjeQT5yH8JlnMDQ=
-X-Google-Smtp-Source: ABdhPJy2jPbbUaC1tbwx5RgY+9vJHyi7k0zFqm/NWacgyu/xNVJYR7Wvx29a/YZjbsyff47nDyUn5w==
-X-Received: by 2002:a05:6512:2514:b0:472:59b7:9523 with SMTP id be20-20020a056512251400b0047259b79523mr23217383lfb.147.1652356867068;
-        Thu, 12 May 2022 05:01:07 -0700 (PDT)
-Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id b23-20020a196717000000b0047255d211f9sm748589lfc.296.2022.05.12.05.01.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 05:01:06 -0700 (PDT)
-Date:   Thu, 12 May 2022 15:01:03 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Hannes Reinecke <hare@suse.de>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 03/23] dt-bindings: ata: ahci-platform: Clarify common
- AHCI props constraints
-Message-ID: <20220512120103.bybyg7e3f6wsd2wl@mobilestation>
-References: <20220511231810.4928-1-Sergey.Semin@baikalelectronics.ru>
- <20220511231810.4928-4-Sergey.Semin@baikalelectronics.ru>
- <d73f45d3-171f-a704-e479-411a54699d3b@suse.de>
+        Thu, 12 May 2022 08:01:56 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F5262A37;
+        Thu, 12 May 2022 05:01:54 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CBPkbZ013678;
+        Thu, 12 May 2022 12:01:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=RUlyg8FDU+wb0XmaG9hw5n80lwl5Wa6K4p4fyelbBgY=;
+ b=OqxXcjwDWCS4v3Ty6Cd4eXmWGJWepTNWW9PkXP/rFC68YrmqsRI7trzYOt28qlL4Payv
+ BBvdxteGk3VEbW4/uYzPR2/ZhLGDit8I6lPrnBbQdpBjZ1+ZGlqsV8Lj75Um1yUpqpgO
+ 95TEdQ3WCUeoVM6g5tq3qRbdgchv7mb/oLf4DH2VJyH0I/0lt3udMLg3Y4H+wSAsjxuc
+ FU3IKKZIiYIAT6rh/w/rocbby6Trgic6rk0Jj3mMCo1GP5rUjYzz36hrJQMbHeNrW6/X
+ 6KDidC422NFoy2XEOd+ZOn4Ip4lPmyVBqV9c7N2/WuWGI+1fhP2RvotMiML0hmG+PGd/ fQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g11bugkhf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 12:01:45 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24CBxLFS005313;
+        Thu, 12 May 2022 12:01:44 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g11bugket-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 12:01:44 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24CBwljZ007877;
+        Thu, 12 May 2022 12:01:39 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma02fra.de.ibm.com with ESMTP id 3fwgd8wej5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 12:01:38 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24CC1Fic33554692
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 May 2022 12:01:15 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4972552050;
+        Thu, 12 May 2022 12:01:36 +0000 (GMT)
+Received: from [9.152.222.250] (unknown [9.152.222.250])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 0E12E5204E;
+        Thu, 12 May 2022 12:01:36 +0000 (GMT)
+Message-ID: <fc6c27ca-5592-8445-7054-76c9b2ec6de8@linux.ibm.com>
+Date:   Thu, 12 May 2022 14:01:37 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d73f45d3-171f-a704-e479-411a54699d3b@suse.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH net v2] net/smc: non blocking recvmsg() return -EAGAIN
+ when no data and signal_pending
+Content-Language: en-US
+To:     Guangguan Wang <guangguan.wang@linux.alibaba.com>,
+        davem@davemloft.net, kuba@kernel.org, tonylu@linux.alibaba.com
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220512030820.73848-1-guangguan.wang@linux.alibaba.com>
+From:   Karsten Graul <kgraul@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <20220512030820.73848-1-guangguan.wang@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 9mfs52fYt2fw_WmFyVUEzbXusk4f-esO
+X-Proofpoint-ORIG-GUID: NJE6ZRCo5JJqsA7vqARbTU2b3RGKeymv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-12_10,2022-05-12_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
+ adultscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0
+ clxscore=1011 priorityscore=1501 mlxscore=0 bulkscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205120056
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 08:21:42AM +0200, Hannes Reinecke wrote:
-> On 5/12/22 01:17, Serge Semin wrote:
-> > Indeed in accordance with what is imeplemtned in the AHCI paltform driver
+On 12/05/2022 05:08, Guangguan Wang wrote:
+> Non blocking sendmsg will return -EAGAIN when any signal pending
+> and no send space left, while non blocking recvmsg return -EINTR
+> when signal pending and no data received. This may makes confused.
+> As TCP returns -EAGAIN in the conditions described above. Align the
+> behavior of smc with TCP.
 > 
+> Fixes: 846e344eb722 ("net/smc: add receive timeout check")
+> Signed-off-by: Guangguan Wang <guangguan.wang@linux.alibaba.com>
+> Reviewed-by: Tony Lu <tonylu@linux.alibaba.com>
+> ---
 
-> Spelling; 'imeplemtned' and 'paltform'
+Acked-by: Karsten Graul <kgraul@linux.ibm.com>
 
-Ok. I'll fix it in v3.
-
-> 
-> > and the way the AHCI DT nodes are defined in the DT files we can add the
-> > next AHCI DT properties constraints: AHCI CSR ID is fixed to 'ahci', PHY
-> > name is fixed to 'sata-phy', AHCI controller can't have more than 32 ports
-> > by design.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > 
-> > Changelog v2:
-> > - This is a new patch created after rebasing v1 onto the 5.18-rc3 kernel.
-> > ---
-> >   .../devicetree/bindings/ata/ahci-common.yaml      | 15 ++++++++++-----
-> >   1 file changed, 10 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/ata/ahci-common.yaml b/Documentation/devicetree/bindings/ata/ahci-common.yaml
-> > index 620042ca12e7..a7d1a8353de3 100644
-> > --- a/Documentation/devicetree/bindings/ata/ahci-common.yaml
-> > +++ b/Documentation/devicetree/bindings/ata/ahci-common.yaml
-> > @@ -31,6 +31,8 @@ properties:
-> >     reg-names:
-> >       description: CSR space IDs
-> > +    contains:
-> > +      const: ahci
-> >     interrupts:
-> >       description:
-> > @@ -71,14 +73,13 @@ properties:
-> >       maxItems: 1
-> >     phy-names:
-> > -    maxItems: 1
-> > +    const: sata-phy
-> >     ports-implemented:
-> >       $ref: '/schemas/types.yaml#/definitions/uint32'
-> >       description:
-> >         Mask that indicates which ports the HBA supports. Useful if PI is not
-> >         programmed by the BIOS, which is true for some embedded SoC's.
-> > -    maximum: 0x1f
-> >   patternProperties:
-> >     "^sata-port@[0-9a-f]+$":
-> > @@ -89,8 +90,12 @@ patternProperties:
-> >       properties:
-> >         reg:
-> > -        description: AHCI SATA port identifier
-> > -        maxItems: 1
-> > +        description:
-> > +          AHCI SATA port identifier. By design AHCI controller can't have
-> > +          more than 32 ports due to the CAP.NP fields and PI register size
-> > +          constraints.
-> > +        minimum: 0
-> > +        maximum: 31
-> >         phys:
-> >           description: Individual AHCI SATA port PHY
-> > @@ -98,7 +103,7 @@ patternProperties:
-> >         phy-names:
-> >           description: AHCI SATA port PHY ID
-> > -        maxItems: 1
-> > +        const: sata-phy
-> >         target-supply:
-> >           description: Power regulator for SATA port target device
-> 
-
-> Other than that it looks okay.
-> 
-> Reviewed-by: Hannes Reinecke <hare@suse.de>
-
-Thanks.
-
--Sergey
-
-> 
-> Cheers,
-> 
-> Hannes
-> -- 
-> Dr. Hannes Reinecke		           Kernel Storage Architect
-> hare@suse.de			                  +49 911 74053 688
-> SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-> HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+Thank you.

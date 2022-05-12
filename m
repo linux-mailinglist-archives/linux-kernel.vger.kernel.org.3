@@ -2,116 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 311745249E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8963A524AC8
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352426AbiELKB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 06:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57020 "EHLO
+        id S1352804AbiELKua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 06:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352388AbiELKA0 (ORCPT
+        with ESMTP id S240752AbiELKuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 06:00:26 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278FA23020A
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:00:24 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id y21so5629400edo.2
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:00:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KYeBcLtOIBRk8eetAhraGQ55nA0X3XbtRB4w/tNkBGA=;
-        b=NlucVuMSl9/wuCgD326aQu7m+E7uxY0DfQEiX3BhFbEzcnNDuOIYVyn1lJ7Zke0WZ0
-         StmeDYB6CIRje1L5uD7iz4dMr30kUbR88l6UD6Pyc0LWKXSz86gnxvCDBuOaJRmP33NH
-         uF6MXCW/R0BPIcLvxOOUdHiq/Li7Sx4ZgUJF0efSukvUTqmfZkbQg9Ouvbo8Da9L9Gkq
-         M22PbokhMBBf/z95pmAo7kIMKR/uKlH6CLPlallMou8QmLG9hRdQ1cOK75TmolnNiQfY
-         gTc4f9PYUL6jJ+ELshqXGZORlq/YBgM6KRUHJew0OY0ZFT8/mcXhvh3GUux1Aw7vEFu8
-         +sgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KYeBcLtOIBRk8eetAhraGQ55nA0X3XbtRB4w/tNkBGA=;
-        b=tB5VqbMZTbphQDlyWvuetO0xATOWbTm2n6bYpDkQ/lsOadBSFSULqXqCLUSxI3hrVS
-         ZYVCiTRXd6Ib12WApX3fGhaPFd1Q1uFPxc6SGpRFMDgn7jPsm0mGzSjbYKtdOAHVIpwr
-         18Wtzk88bh0DEo13tPA49eU0IoCilwDVTKr8A152/6C6ojVHIIiJusgmDf0BgiLrtjFz
-         qi2k0SeNMmTH5H3/ZYjpoR7j8GB7BzT3GHjsDo38OHUGffHzny2s2ZSOwtggAQvWhx10
-         B5QWPOoVbM3y0eieLpJX0Nuo9ioar3+qV5C6hHT4OnTY8KAbY3sfIvySvNkV1qNdQlA7
-         iulg==
-X-Gm-Message-State: AOAM532xVdW2gOdoUFTp1Gx07tWH2+JwIIu42T8/U8H0fGgScYL/jEkU
-        x2dSA6ZlcNpQymlMrvYSY6LZkg==
-X-Google-Smtp-Source: ABdhPJxhwKvYUoLyz4rfWf9/itQcivelkjyOFUdXSVCz6n6J2MSVD4UEdAPjvYHFFIetH0/hSXmgvA==
-X-Received: by 2002:a05:6402:4391:b0:427:f2f0:607b with SMTP id o17-20020a056402439100b00427f2f0607bmr34483394edc.45.1652349623633;
-        Thu, 12 May 2022 03:00:23 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id d17-20020a170906641100b006f3ef214da1sm1970287ejm.7.2022.05.12.03.00.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 03:00:23 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Sireesh Kodali <sireeshkodali1@gmail.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 06/12] dt-bindings: remoteproc: qcom,adsp: use GIC_SPI defines in example
-Date:   Thu, 12 May 2022 12:00:00 +0200
-Message-Id: <20220512100006.99695-7-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220512100006.99695-1-krzysztof.kozlowski@linaro.org>
-References: <20220512100006.99695-1-krzysztof.kozlowski@linaro.org>
+        Thu, 12 May 2022 06:50:25 -0400
+Received: from nksmu.kylinos.cn (mailgw.kylinos.cn [123.150.8.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBBC322D603
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:50:21 -0700 (PDT)
+X-UUID: 42638307e20445239de8faf503934731-20220512
+X-Spam-Fingerprint: 0
+X-GW-Reason: 11101
+X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HMTDkurrpnIDopoHlrqHmoLg=
+X-Content-Feature: ica/max.line-size 116
+        audit/email.address 1
+        meta/cnt.alert 1
+X-UUID: 42638307e20445239de8faf503934731-20220512
+Received: from cs2c.com.cn [(172.17.111.24)] by nksmu.kylinos.cn
+        (envelope-from <pengfuyuan@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 124501943; Thu, 12 May 2022 16:52:21 +0800
+X-ns-mid: postfix-627CCA00-974326314
+Received: from localhost.localdomain (unknown [172.20.4.120])
+        by cs2c.com.cn (NSMail) with ESMTPA id C3C48383C640;
+        Thu, 12 May 2022 08:49:03 +0000 (UTC)
+From:   pengfuyuan <pengfuyuan@kylinos.cn>
+To:     Harry Wentland <harry.wentland@amd.com>
+Cc:     Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Xinhui.Pan@amd.com, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        pengfuyuan <pengfuyuan@kylinos.cn>
+Subject: [PATCH] drm/amd/display: Remove macro DC_DEFAULT_LOG_MASK
+Date:   Thu, 12 May 2022 16:48:51 +0800
+Message-Id: <20220512084851.104099-1-pengfuyuan@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,UNPARSEABLE_RELAY,
+        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use GIC_SPI defines instead of raw value in the DTS example.
+[Why & How]
+The DC_DEFAULT_LOG_MASK macro has not been used for a long time, so remove it.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: pengfuyuan <pengfuyuan@kylinos.cn>
 ---
- Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ .../drm/amd/display/include/logger_types.h    | 34 -------------------
+ 1 file changed, 34 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-index e3a193299c4a..d04de60ae017 100644
---- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-+++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-@@ -575,11 +575,12 @@ allOf:
- examples:
-   - |
-     #include <dt-bindings/clock/qcom,rpmcc.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-     #include <dt-bindings/interrupt-controller/irq.h>
-     adsp {
-         compatible = "qcom,msm8974-adsp-pil";
+diff --git a/drivers/gpu/drm/amd/display/include/logger_types.h b/drivers/gpu/drm/amd/display/include/logger_types.h
+index f093b49c5e6e..a31d7c959f2c 100644
+--- a/drivers/gpu/drm/amd/display/include/logger_types.h
++++ b/drivers/gpu/drm/amd/display/include/logger_types.h
+@@ -131,37 +131,3 @@ enum dc_log_type {
+ #define DC_MIN_LOG_MASK ((1 << LOG_ERROR) | \
+ 		(1 << LOG_DETECTION_EDID_PARSER))
  
--        interrupts-extended = <&intc 0 162 IRQ_TYPE_EDGE_RISING>,
-+        interrupts-extended = <&intc GIC_SPI 162 IRQ_TYPE_EDGE_RISING>,
-                       <&adsp_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
-                       <&adsp_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
-                       <&adsp_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
-@@ -601,7 +602,7 @@ examples:
-         qcom,smem-state-names = "stop";
- 
-         smd-edge {
--            interrupts = <0 156 IRQ_TYPE_EDGE_RISING>;
-+            interrupts = <GIC_SPI 156 IRQ_TYPE_EDGE_RISING>;
- 
-             qcom,ipc = <&apcs 8 8>;
-             qcom,smd-edge = <1>;
+-#define DC_DEFAULT_LOG_MASK ((1ULL << LOG_ERROR) | \
+-		(1ULL << LOG_WARNING) | \
+-		(1ULL << LOG_EVENT_MODE_SET) | \
+-		(1ULL << LOG_EVENT_DETECTION) | \
+-		(1ULL << LOG_EVENT_LINK_TRAINING) | \
+-		(1ULL << LOG_EVENT_LINK_LOSS) | \
+-		(1ULL << LOG_EVENT_UNDERFLOW) | \
+-		(1ULL << LOG_RESOURCE) | \
+-		(1ULL << LOG_FEATURE_OVERRIDE) | \
+-		(1ULL << LOG_DETECTION_EDID_PARSER) | \
+-		(1ULL << LOG_DC) | \
+-		(1ULL << LOG_HW_HOTPLUG) | \
+-		(1ULL << LOG_HW_SET_MODE) | \
+-		(1ULL << LOG_HW_RESUME_S3) | \
+-		(1ULL << LOG_HW_HPD_IRQ) | \
+-		(1ULL << LOG_SYNC) | \
+-		(1ULL << LOG_BANDWIDTH_VALIDATION) | \
+-		(1ULL << LOG_MST) | \
+-		(1ULL << LOG_DETECTION_DP_CAPS) | \
+-		(1ULL << LOG_BACKLIGHT)) | \
+-		(1ULL << LOG_I2C_AUX) | \
+-		(1ULL << LOG_IF_TRACE) | \
+-		(1ULL << LOG_HDMI_FRL) | \
+-		(1ULL << LOG_SCALER) | \
+-		(1ULL << LOG_DTN) /* | \
+-		(1ULL << LOG_DEBUG) | \
+-		(1ULL << LOG_BIOS) | \
+-		(1ULL << LOG_SURFACE) | \
+-		(1ULL << LOG_DML) | \
+-		(1ULL << LOG_HW_LINK_TRAINING) | \
+-		(1ULL << LOG_HW_AUDIO)| \
+-		(1ULL << LOG_BANDWIDTH_CALCS)*/
+-
+-#endif /* __DAL_LOGGER_TYPES_H__ */
 -- 
-2.32.0
+2.25.1
 

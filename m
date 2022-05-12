@@ -2,117 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B42E95255FD
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1DC52560B
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:49:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358177AbiELTqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 15:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51460 "EHLO
+        id S1358191AbiELTtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 15:49:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358204AbiELTqM (ORCPT
+        with ESMTP id S1358162AbiELTtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 15:46:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DA132057;
-        Thu, 12 May 2022 12:46:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A0F5361DA4;
-        Thu, 12 May 2022 19:46:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C200FC385B8;
-        Thu, 12 May 2022 19:46:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652384770;
-        bh=FphpY5pj+S7AOQXAISwaEryRE2ZR8UaKb+vNvWxe4ZI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BLS9DMOvOE5u60oBd0tsWixpD2hRuliwpVlP9Ha+TIeiKZ46qyIYOwK+ZGB03R3/P
-         y530u/U9qU2ebqDIAwNkF5yt6bNxPI5We2n4TWcWi4nw7Fxcx+BdDll9qY77GErCHe
-         y2a3Hs929xUMYAtnocKH4fb4JWOvv/ZReWJz9xqKqRfhj2anNivFeUkoUaV7gF3OL0
-         kc0RO9owdX8lXCoBpYq8vPmezTOeApvnc57v3xnNp8IZUtiNzf2f40LpQdvVWkzyGB
-         tpd0ZYyv4xMtXsximnZACUlvIh1PydRbp5+UajzWSg0reAWaQAUSgVcO0XKSQEgQTU
-         qpG68auOSXpog==
-Date:   Thu, 12 May 2022 12:46:08 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Joe Damato <jdamato@fastly.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: Re: [RFC,net-next,x86 0/6] Nontemporal copies in unix socket write
- path
-Message-ID: <20220512124608.452d3300@kernel.org>
-In-Reply-To: <20220512010153.GA74055@fastly.com>
-References: <1652241268-46732-1-git-send-email-jdamato@fastly.com>
-        <20220511162520.6174f487@kernel.org>
-        <20220512010153.GA74055@fastly.com>
+        Thu, 12 May 2022 15:49:12 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2986C0CB;
+        Thu, 12 May 2022 12:49:11 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id s11so3703606edy.6;
+        Thu, 12 May 2022 12:49:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=L6bc/v2q9wAOZf+bsMrDYFkU4XW2OPwKGzrf/4IaxOw=;
+        b=oKNxmUSRY97LZxvn4LykNJx9l+VNSrrOP9A+bFIG8JBTsJ3FgU/CvT38d3BaIHrCxM
+         KJp1hc8RdA1O5jZStUVeiPgvhCr7z12dywOkUo/Gqljzg53oTRKpLT/mcCqQOggENFgm
+         OAR9KGhGGh34eVHX3t8pd/N0zYk2/hZG8I9CIk/wyreDFJg9oTBUq8E2zVltYgE4HSW5
+         OiS5JL667+4/2BIcIWhnGf6FVZ2O+CyE72gevQ1BqRaiNaTY/5jdwLmASD2g9Jaqe1xR
+         4Wo02fzPqPL1kn4LFJHUH5zM/cYxMDYoCR3JVhDaQk3YskSW/2ctf2ALcMEn61IouzTI
+         hXhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=L6bc/v2q9wAOZf+bsMrDYFkU4XW2OPwKGzrf/4IaxOw=;
+        b=2+1mIBMfXc05t28iDNUI3BuHEbywgAfwWHGhKDDDJCyoy+EGsfeH/AMobGz0FeMc4u
+         N0lvS6cqp9cnTfyML4fuFngO1xI+8bv8+jKnjq2P3R+JqnVy9A5JIBR+se14mGkRQu/B
+         sdpKkMXM5z6nTb+n6KTmMIn4LEmgcUDVJp1rBe+B95FeALhpcv/bwVJHxkjMFLfvnnTZ
+         I5Ofq+VeTlS1juFjG3euA75HrS8j583lZFUoxhtwoAoI/R3Xg7TjePCFMFREmPtdRaEK
+         k+jU5BFT1eeitO7edS1Eq9ty02DvYaS5TWHEFJzDCFkZ08GRDIAPOuRe/8GaPFp48uA9
+         Y86Q==
+X-Gm-Message-State: AOAM531KBzoV1aCBKY0hWe4FWI9E/egI/385ULLQ4nBG/N5YAvjyrp0V
+        QDfLJeW6CSdLOtDDjBlGNS/viYPydDWbkCBGbsk=
+X-Google-Smtp-Source: ABdhPJwZtff2PRHohfwpuQPnoqgF6843ayY4Y5H4s4QohcvBZEVKaooZLAQp+5U/kSShim+yChyf+HRSMyKwtvbzugc=
+X-Received: by 2002:aa7:d954:0:b0:425:f621:f77f with SMTP id
+ l20-20020aa7d954000000b00425f621f77fmr36567273eds.363.1652384950339; Thu, 12
+ May 2022 12:49:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Test Bot <zgrieee@gmail.com>
+Date:   Thu, 12 May 2022 23:48:59 +0400
+Message-ID: <CAOFRbGnQ1P4q+egG+K=BcZL4bwaAdtp7hQ1nh9TYJyky0j3WDw@mail.gmail.com>
+Subject: ERROR: drivers: net: ethernet: stmicro: stmmac: stmmac_main.c
+To:     peppe.cavallaro@st.com, linux-kernel@vger.kernel.org
+Cc:     davem@davemloft.net, linux@armlinux.org.uk,
+        linux-stm32@st-md-mailman.stormreply.com, bpf@vger.kernel.org,
+        ozgurk@ieee.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 May 2022 18:01:54 -0700 Joe Damato wrote:
-> > Is there a practical use case?  
-> 
-> Yes; for us there seems to be - especially with AMD Zen2. I'll try to
-> describe such a setup and my synthetic HTTP benchmark results.
-> 
-> Imagine a program, call it storageD, which is responsible for storing and
-> retrieving data from a data store. Other programs can request data from
-> storageD via communicating with it on a Unix socket.
-> 
-> One such program that could request data via the Unix socket is an HTTP
-> daemon. For some client connections that the HTTP daemon receives, the
-> daemon may determine that responses can be sent in plain text.
-> 
-> In this case, the HTTP daemon can use splice to move data from the unix
-> socket connection with storageD directly to the client TCP socket via a
-> pipe. splice saves CPU cycles and avoids incurring any memory access
-> latency since the data itself is not accessed.
-> 
-> Because we'll use splice (instead of accessing the data and potentially
-> affecting the CPU cache) it is advantageous for storageD to use NT copies
-> when it writes to the Unix socket to avoid evicting hot data from the CPU
-> cache. After all, once the data is copied into the kernel on the unix
-> socket write path, it won't be touched again; only spliced.
-> 
-> In my synthetic HTTP benchmarks for this setup, we've been able to increase
-> network throughput of the the HTTP daemon by roughly 30% while reducing
-> the system time of storageD. We're still collecting data on production
-> workloads.
-> 
-> The motivation, IMHO, is very similar to the motivation for
-> NETIF_F_NOCACHE_COPY, as far I understand.
-> 
-> In some cases, when an application writes to a network socket the data
-> written to the socket won't be accessed again once it is copied into the
-> kernel. In these cases, NETIF_F_NOCACHE_COPY can improve performance and
-> helps to preserve the CPU cache and avoid evicting hot data.
-> 
-> We get a sizable benefit from this option, too, in situations where we
-> can't use splice and have to call write to transmit data to client
-> connections. We want to get the same benefit of NETIF_F_NOCACHE_COPY, but
-> when writing to Unix sockets as well.
-> 
-> Let me know if that makes it more clear.
+Hi,
 
-Makes sense, thanks for the explainer.
+I automatically test (RC) kernel and caught ERROR word.
+Please ignore, if its unimportant.
 
-> > The patches look like a lot of extra indirect calls.  
-> 
-> Yup. As I mentioned in the cover letter this was mostly a PoC that seems to
-> work and increases network throughput in a real world scenario.
-> 
-> If this general line of thinking (NT copies on write to a Unix socket) is
-> acceptable, I'm happy to refactor the code however you (and others) would
-> like to get it to an acceptable state.
+Kernel: 5.18-rc6
+Arch: x86_64 (SMP)
+Compiler: 7.5.0 (gcc)
+FIle: drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 
-My only concern is that in post-spectre world the indirect calls are
-going to be more expensive than an branch would be. But I'm not really
-a mirco-optimization expert :)
+Codebase Block:
+
+static int stmmac_request_irq_multi_msi(struct net_device *dev)
+{
+        struct stmmac_priv *priv =3D netdev_priv(dev);
+        enum request_irq_err irq_err;
+        cpumask_t cpu_mask;
+        int irq_idx =3D 0;
+        char *int_name;
+        int ret;
+        int i;
+
+        int_name =3D priv->int_name_mac;
+        sprintf(int_name, "%s:%s", dev->name, "mac");
+        ret =3D request_irq(dev->irq, stmmac_mac_interrupt,
+                          0, int_name, dev);
+
+        if (unlikely(ret < 0)) {
+                netdev_err(priv->dev,
+                           "%s: alloc mac MSI %d (error: %d)\n",
+                           __func__, dev->irq, ret);
+                irq_err =3D REQ_IRQ_ERR_MAC;
+                goto irq_error;
+        }
+
+        if (priv->wol_irq > 0 && priv->wol_irq !=3D dev->irq) {
+                int_name =3D priv->int_name_wol;
+                sprintf(int_name, "%s:%s", dev->name, "wol");
+                ret =3D request_irq(priv->wol_irq,
+                                  stmmac_mac_interrupt,
+                                  0, int_name, dev);
+
+                if (unlikely(ret < 0)) {
+                        netdev_err(priv->dev,
+                                   "%s: alloc wol MSI %d (error: %d)\n",
+                                   __func__, priv->wol_irq, ret);
+                        irq_err =3D REQ_IRQ_ERR_WOL;
+                        goto irq_error;
+                }
+        }
+
+Compiler  Log:
+
+drivers/net/ethernet/stmicro/stmmac/stmmac_main.c: In function
+=E2=80=98stmmac_request_irq_multi_msi=E2=80=99:
+drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:3562:1: warning: the
+frame size of 1040 bytes is larger than 1024 bytes
+[-Wframe-larger-than=3D]

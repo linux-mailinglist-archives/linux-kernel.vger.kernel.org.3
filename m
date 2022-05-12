@@ -2,108 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 347CE525210
+	by mail.lfdr.de (Postfix) with ESMTP id 88D47525211
 	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:06:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348472AbiELQGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 12:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60722 "EHLO
+        id S1355167AbiELQGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 12:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242546AbiELQGg (ORCPT
+        with ESMTP id S1352442AbiELQGm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 12:06:36 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24CF5A5B8
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 09:06:34 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CCwbiG027802;
-        Thu, 12 May 2022 18:06:11 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=aCPJszZbF0EkvfaNWtnvz2O8HhqAUWnZMspB/XLlJTc=;
- b=jSrqAe5w3uLXCt30iO79ToQxWlMmcrDrZuAQlBvMbhGHpAAmPJ7pErYGt/fer/BJ5/HB
- HCgn8jRV8LqQHfyLN+iMrrarW6Q1fqkfe7wSytdCxLJgTtqA5sFIPow1SJSK2r8bOXf4
- zZAw/kVpBlPuF7ziOLwKhAN13u3I2nCrruQuol3MqLDBaq4zzlAaCpJfmxooDP/FunEW
- 144QXcgLbY1UKkXmqs198rwgzSVNR0KsVL+7mT0FiIwOgtX+db47y9DVOr34PbMMbwxo
- beqHFkAmwvkhXmzO/I/fP+ZgLqti8yYI+MZQiXq2iaSnr/DvPx8lO0aUwKPDj0amxY2U pQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3g083j3p08-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 18:06:11 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 93A2110002A;
-        Thu, 12 May 2022 18:06:10 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CA71322ECC9;
-        Thu, 12 May 2022 18:06:09 +0200 (CEST)
-Received: from localhost (10.75.127.46) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 12 May 2022 18:06:09
- +0200
-From:   Antonio Borneo <antonio.borneo@foss.st.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Antonio Borneo <antonio.borneo@foss.st.com>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-Subject: [PATCH] genirq: Don't return error on missing optional irq_request_resources()
-Date:   Thu, 12 May 2022 18:05:44 +0200
-Message-ID: <20220512160544.13561-1-antonio.borneo@foss.st.com>
-X-Mailer: git-send-email 2.36.0
+        Thu, 12 May 2022 12:06:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931B7266051;
+        Thu, 12 May 2022 09:06:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E85B61F72;
+        Thu, 12 May 2022 16:06:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 347EDC385B8;
+        Thu, 12 May 2022 16:06:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652371600;
+        bh=DrSC0OB90Zt28VeZRaStAIYyW0aDYHkAcj25LE262pM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=emY8umTkPi8XXPj3Sh+8T4NbtojPlrY5lmYAloP3IB+uyZ8wkEq9+dkFze5tlmlE8
+         OtadHEH40564WNFYwiX70KyAdzNSD/wUHJTz6UO9REGV876RCgbmIcUPVf4cSz7FVv
+         gVdA0x6gT8cZ6jGt2/SCUkwBygaUzxHnDPiSdWAHyccE+vfXsg9jOfK1ahxKRbTSD5
+         /W5z0y2I/6FQhmvBwN27ZxderKu6ACx/drhL+9dmOgmzUuBaJwpRPYxWlgq1l3Xs0s
+         t+x1CW2xB/c3xZtzC14k+AVZK32BaehlUb82KnY/2nmvXq2kTGkFNxbZOaZ79b4das
+         eO0n8xDZdbYLA==
+Date:   Thu, 12 May 2022 09:06:38 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Guangguan Wang <guangguan.wang@linux.alibaba.com>
+Cc:     Tony Lu <tonylu@linux.alibaba.com>, kgraul@linux.ibm.com,
+        davem@davemloft.net, pabeni@redhat.com, linux-s390@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2 1/2] net/smc: non blocking recvmsg() return
+ -EAGAIN when no data and signal_pending
+Message-ID: <20220512090638.0fbe7710@kernel.org>
+In-Reply-To: <9be49a5a-c87d-1630-3ff3-90e6a233d38b@linux.alibaba.com>
+References: <20220512031156.74054-1-guangguan.wang@linux.alibaba.com>
+        <20220512031156.74054-2-guangguan.wang@linux.alibaba.com>
+        <YnyCblJuPf+UAvjY@TonyMac-Alibaba>
+        <9be49a5a-c87d-1630-3ff3-90e6a233d38b@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-12_12,2022-05-12_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Function irq_chip::irq_request_resources() is reported as optional
-in the declaration of struct irq_chip.
-If the parent irq_chip does not implement it, we should ignore it
-and return.
+On Thu, 12 May 2022 11:51:22 +0800 Guangguan Wang wrote:
+> On 2022/5/12 11:43, Tony Lu wrote:
+> > On Thu, May 12, 2022 at 11:11:55AM +0800, Guangguan Wang wrote: =20
+> >> Non blocking sendmsg will return -EAGAIN when any signal pending
+> >> and no send space left, while non blocking recvmsg return -EINTR
+> >> when signal pending and no data received. This may makes confused.
+> >> As TCP returns -EAGAIN in the conditions described above. Align the
+> >> behavior of smc with TCP.
+> >>
+> >> Fixes: 846e344eb722 ("net/smc: add receive timeout check")
+> >> Signed-off-by: Guangguan Wang <guangguan.wang@linux.alibaba.com>
+> >> Reviewed-by: Tony Lu <tonylu@linux.alibaba.com> =20
+> >=20
+> > I see that you have already sent this patch to net, so this patch is a
+> > duplicate. There is no need to send it again to net-next.
+>=20
+> Ok, just ignore it. Thanks=EF=BC=81
 
-Don't return error if the functions is missing.
-
-Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
----
-
-As follow-up of discussion in
-https://lore.kernel.org/lkml/875ymd6xdu.wl-maz@kernel.org/
-here is a proposal for changing the returned value.
-
-A similar issue is present for the optional function
-irq_set_vcpu_affinity(), to be covered separately, if needed.
-
----
- kernel/irq/chip.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
-index 54af0deb239b..eb921485930f 100644
---- a/kernel/irq/chip.c
-+++ b/kernel/irq/chip.c
-@@ -1513,7 +1513,8 @@ int irq_chip_request_resources_parent(struct irq_data *data)
- 	if (data->chip->irq_request_resources)
- 		return data->chip->irq_request_resources(data);
- 
--	return -ENOSYS;
-+	/* no error on missing optional irq_chip::irq_request_resources */
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(irq_chip_request_resources_parent);
- 
-
-base-commit: c5eb0a61238dd6faf37f58c9ce61c9980aaffd7a
--- 
-2.36.0
-
+You gotta repost just patch 2, then. Please wait until net and net-next
+get merged before sending (or 12h if you don't know how to figure out if
+that already happened ;))

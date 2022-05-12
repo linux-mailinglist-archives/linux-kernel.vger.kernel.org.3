@@ -2,140 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08576525345
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B37B0525350
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356873AbiELRKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 13:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33366 "EHLO
+        id S1356919AbiELRMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 13:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349317AbiELRK2 (ORCPT
+        with ESMTP id S1356930AbiELRLB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 13:10:28 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522C2269EE3;
-        Thu, 12 May 2022 10:10:27 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 12AA91F38C;
-        Thu, 12 May 2022 17:10:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1652375426; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/9XAcRo+E2h3CTio5LOn32n4GFy+zXlhWLwgRN3/9n8=;
-        b=juGeGmWI5D/vC/Yy/fmA8IV+naKTrFWfTQxB7lDgG1rqPrZV2erbm76n3Po3TwcPYWVk4Q
-        F/KfzgtkQzT5/v2OrVJ1MQHTJDVf966rNOuSNMt91kWppLpcDyrQl3lWWR627330+0cbbF
-        em6T9V4IefCmIxUh+GGL9mKN6CkD/4o=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1652375426;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/9XAcRo+E2h3CTio5LOn32n4GFy+zXlhWLwgRN3/9n8=;
-        b=aqqg2OameJ2jGwEdBptM+puRW+2mj5eziSKcu1DbMb5SnbDNg+8lihAebI3AR6LI+7pGSs
-        WIgDYz8xRBexHUCw==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id DB9FA2C141;
-        Thu, 12 May 2022 17:10:25 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 31752A062A; Thu, 12 May 2022 19:10:25 +0200 (CEST)
-Date:   Thu, 12 May 2022 19:10:25 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     "yukuai (C)" <yukuai3@huawei.com>
-Cc:     Jan Kara <jack@suse.cz>, paolo.valente@linaro.org, axboe@kernel.dk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH -next 2/2] block, bfq: make bfq_has_work() more accurate
-Message-ID: <20220512171025.blstxod6aphulctm@quack3.lan>
-References: <20220510131629.1964415-1-yukuai3@huawei.com>
- <20220510131629.1964415-3-yukuai3@huawei.com>
- <20220511140832.w6eqphw5uepre5ws@quack3.lan>
- <67425a7b-f9e1-d7a9-9ec8-158f9f8ce13e@huawei.com>
+        Thu, 12 May 2022 13:11:01 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F115727FD7
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:10:56 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id bv19so11524982ejb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:10:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=loonHWmCtVeGx4aWVVUzPzapZ1t+QIqGsKXmCgmw6z8=;
+        b=WD5qjD3n7PQ6Q1+OHYaSBYIXZyE3MSnd14hOsae1gMnqzXVow2TJFjREwN777Ig52q
+         V4qfULfCcQ86ni9aAhSi7LjMQHCPkFJi+glv65R1S+sQR6oFUNEhVyq5JADGgBm6h1kT
+         2hznSR7F9VZ12haH7nWz1Ev8hTm8abuX+I6D4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=loonHWmCtVeGx4aWVVUzPzapZ1t+QIqGsKXmCgmw6z8=;
+        b=fB21s0bz0sorJAx4QzsaITGMVTsVzPYWIo3BwbmRIjs8i/gM3pm0+k7VE3i8VO4+20
+         DSWiLsAWjdqcSWA+yaMq0KsP+AAddUfoWdWXnRw0jcyB604EpTfylc6vO6nE+jyDMRRu
+         rtUqhGf+Wp3BZm7igDvfFR+M6dg0BihkDtqif3Fa3I1d/ZknI5azujoPyfE2gZ27XANv
+         6kCHyXobeFJK/88Tqvy0Wfb+6qYWd9gafy5noQunOqYiQowLbtJwTItoLPRvhKhkbPO+
+         OLRykOPGcYpu0Xana8ddSPSJ55M0tkd3KHZ725a5cYJ4jHVDireogMheGoXcgno57I1S
+         Tcnw==
+X-Gm-Message-State: AOAM531RDlwWEHU8u0aO+th2kW3Aa6YfGuIKvqT95EhWys7sANMHCTwF
+        THAeU9ZE+QrFEUrJMpfzkZwfnnzrm/OGZcz5HpA=
+X-Google-Smtp-Source: ABdhPJxDN6Hwhpo+ubYFdrhDW/6nWDfS/q/cQEARq7g11BvGA9uxioGKI5LNxvmbneDAucdR+OsBnQ==
+X-Received: by 2002:a17:907:2159:b0:6f3:a307:d01d with SMTP id rk25-20020a170907215900b006f3a307d01dmr803565ejb.760.1652375454338;
+        Thu, 12 May 2022 10:10:54 -0700 (PDT)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
+        by smtp.gmail.com with ESMTPSA id eg56-20020a05640228b800b00427ae00972dsm2892281edb.12.2022.05.12.10.10.51
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 10:10:52 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id d5so8169531wrb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:10:51 -0700 (PDT)
+X-Received: by 2002:a05:6000:2c2:b0:20c:7329:7c10 with SMTP id
+ o2-20020a05600002c200b0020c73297c10mr557896wry.193.1652375451235; Thu, 12 May
+ 2022 10:10:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <67425a7b-f9e1-d7a9-9ec8-158f9f8ce13e@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220510082351-mutt-send-email-mst@kernel.org>
+ <CAHk-=wjPR+bj7P1O=MAQWXp0Mx2hHuNQ1acn6gS+mRo_kbo5Lg@mail.gmail.com>
+ <87czgk8jjo.fsf@mpe.ellerman.id.au> <CAHk-=wj9zKJGA_6SJOMPiQEoYke6cKX-FV3X_5zNXOcFJX1kOQ@mail.gmail.com>
+ <87mtfm7uag.fsf@mpe.ellerman.id.au>
+In-Reply-To: <87mtfm7uag.fsf@mpe.ellerman.id.au>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 12 May 2022 10:10:34 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgnYGY=10sRDzXCC2bmappjBTRNNbr8owvGLEW-xuV7Vw@mail.gmail.com>
+Message-ID: <CAHk-=wgnYGY=10sRDzXCC2bmappjBTRNNbr8owvGLEW-xuV7Vw@mail.gmail.com>
+Subject: Re: [GIT PULL] virtio: last minute fixup
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        KVM list <kvm@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        mie@igel.co.jp
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 12-05-22 09:30:16, yukuai (C) wrote:
-> On 2022/05/11 22:08, Jan Kara wrote:
-> > On Tue 10-05-22 21:16:29, Yu Kuai wrote:
-> > > bfq_has_work() is using busy_queues currently, which is not accurate
-> > > because bfq_queue is busy doesn't represent that it has requests. Since
-> > > bfqd aready has a counter 'queued' to record how many requests are in
-> > > bfq, use it instead of busy_queues.
-> > > 
-> > > Noted that bfq_has_work() can be called with 'bfqd->lock' held, thus the
-> > > lock can't be held in bfq_has_work() to protect 'bfqd->queued'.
-> > > 
-> > > Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> > 
-> > So did you find this causing any real problem? Because bfq queue is
-> > accounted among busy queues once bfq_add_bfqq_busy() is called. And that
-> > happens once a new request is inserted into the queue so it should be very
-> > similar to bfqd->queued.
-> > 
-> > 								Honza
-> 
-> Hi,
-> 
-> The related problem is described here:
-> 
-> https://lore.kernel.org/all/20220510112302.1215092-1-yukuai3@huawei.com/
-> 
-> The root cause of the panic is a linux-block problem, however, it can
-> be bypassed if bfq_has_work() is accurate. On the other hand,
-> unnecessary run_work will be triggered if bfqq stays busy:
-> 
-> __blk_mq_run_hw_queue
->  __blk_mq_sched_dispatch_requests
->   __blk_mq_do_dispatch_sched
->    if (!bfq_has_work())
->     break;
->    blk_mq_delay_run_hw_queues -> run again after 3ms
+On Thu, May 12, 2022 at 6:30 AM Michael Ellerman <mpe@ellerman.id.au> wrote:
+>
+> Links to other random places don't serve that function.
 
-Ah, I see. So it is the other way around than I thought. Due to idling
-bfq_tot_busy_queues() can be greater than 0 even if there are no requests
-to dispatch. Indeed. OK, the patch makes sense. But please use WRITE_ONCE
-for the updates of bfqd->queued. Otherwise the READ_ONCE does not really
-make sense (it can still result in some bogus value due to compiler
-optimizations on the write side).
+What "function"?
 
-								Honza
+This is my argument. Those Link: things need to have a *reason*.
 
-> > > ---
-> > >   block/bfq-iosched.c | 4 ++--
-> > >   1 file changed, 2 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-> > > index 61750696e87f..1d2f8110c26b 100644
-> > > --- a/block/bfq-iosched.c
-> > > +++ b/block/bfq-iosched.c
-> > > @@ -5063,11 +5063,11 @@ static bool bfq_has_work(struct blk_mq_hw_ctx *hctx)
-> > >   	struct bfq_data *bfqd = hctx->queue->elevator->elevator_data;
-> > >   	/*
-> > > -	 * Avoiding lock: a race on bfqd->busy_queues should cause at
-> > > +	 * Avoiding lock: a race on bfqd->queued should cause at
-> > >   	 * most a call to dispatch for nothing
-> > >   	 */
-> > >   	return !list_empty_careful(&bfqd->dispatch) ||
-> > > -		bfq_tot_busy_queues(bfqd) > 0;
-> > > +		READ_ONCE(bfqd->queued);
-> > >   }
-> > >   static struct request *__bfq_dispatch_request(struct blk_mq_hw_ctx *hctx)
-> > > -- 
-> > > 2.31.1
-> > > 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Saying "they are a change ID" is not a reason. That's just a random
+word-salad. You need to have an active reason that you can explain,
+not just say "look, I want to add a message ID to every commit".
+
+Here's the thing. There's a difference between "data" and "information".
+
+We should add information to the commits, not random data.
+
+And most definitely not just random data that can be trivially
+auto-generated after-the-fact.
+
+                Linus

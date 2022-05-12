@@ -2,169 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 955BD5251BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 031775251C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356140AbiELQBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 12:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
+        id S1356142AbiELQCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 12:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343533AbiELQBa (ORCPT
+        with ESMTP id S1356138AbiELQCR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 12:01:30 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0EC147558;
-        Thu, 12 May 2022 09:01:28 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-ed9a75c453so7131423fac.11;
-        Thu, 12 May 2022 09:01:28 -0700 (PDT)
+        Thu, 12 May 2022 12:02:17 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47B15F26F;
+        Thu, 12 May 2022 09:02:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BoY7g8nUQQ3BvW0xBl0eILMoOU8tGg7MZ9xjNiqrFPA=;
-        b=TH7l9iasZncqnM5kUsqw7GwUDOgqZpjRQ9+dl4GQpL+/5cH5UVP+bjbrT+vsprLv4z
-         pwVBaeaGBSBWxAGZoCgSSUQLvIlt1CRZ7/6Q7z1gts6rlcG7rHbH/oqfW51h86zVhfF2
-         3s+pzxr/jBtnRXomw2dHHx7nV5kHJLKKJILZVH0eZNm5/YVPapJK4G7R0wFVVGFqs977
-         UhSoI4uadPx+aSBHE9WgbJXilQ6BZl+oBec+wjMFL36cpvI/7PV/raWjk4iCKrmslGdn
-         E768o01/UPTWFZ1EORuaBNU/7FugBRPrAzcdSKzQ5ETnXycI8Xtqgs0fYKzIkPJtdO+h
-         ZWLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BoY7g8nUQQ3BvW0xBl0eILMoOU8tGg7MZ9xjNiqrFPA=;
-        b=3i9ndeOwYD+GYqFKeiGPOD/Pn6lT5pofZwquTJJQIduWL9nlROtdcvmmQD3pMCoSVQ
-         3C7GfSyNemPJpGRDQFWW8fm0hIUiXUEtBXzKpwp6AXnU4O/kFAMYRLTqzMVHz+WO+AqE
-         /+oDHonsUOa/g7jyLZYqa5Qz9p7Vrtmg2CFAcOOu9VudcH136hr4UEAfA3sHzc8EZmAp
-         LNiYfgT0A6iKsExfbEwz4rTMb1yMyFgBVKdlUEdQt4m+bqwEzKJAGPRhmbnpCkCXGbzr
-         6Q1N7Po8Rs3MwcUe/soqnIlGW4BfDunAhG6nY6fNvetgiJinl17WnqWIfSYFHCtK3CDC
-         jBZw==
-X-Gm-Message-State: AOAM533IGYxVm1FkobfYcGQC8n1F+F4Di9Q9OZV+qYQaC0S4fb4WrQ3S
-        S2tDkin8GfSTvwO09L6KhKJVRb89xHeuv92CMZmaoAH7IpYADKLD
-X-Google-Smtp-Source: ABdhPJx/2GOpXH2bLjEym/lKA2keUtwkdjxN/7bIy/NLe+vgD2VyAqthraR6XG9/mFx406495jSSJO8wXSUA4TmYxKo=
-X-Received: by 2002:a05:6870:5b89:b0:e9:bb4c:a6f1 with SMTP id
- em9-20020a0568705b8900b000e9bb4ca6f1mr299361oab.52.1652371287934; Thu, 12 May
- 2022 09:01:27 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652371335; x=1683907335;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Uk8KetLMQmVcByn8GqAjnN4FXpr5Io3d+JPHKDf5tDw=;
+  b=DIize8frSOHIMASjYifXe6dCOjJ0air8bSgYWGxA0cS8ckyMkCbBMwVx
+   ZoIlXMXWrTBgEEvczcV1o/l0JB9pefMlPdiw703WbCyBG/MEE3E/HCXPn
+   B6YsKz0AIgX5xX/o8h9zrG5bUMtxrWTOAw0A0TJ4FIijc/k8FUSr3iXUI
+   U=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 12 May 2022 09:02:15 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 09:02:15 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 12 May 2022 09:02:14 -0700
+Received: from [10.110.33.222] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 12 May
+ 2022 09:02:13 -0700
+Message-ID: <0c1bf723-1fb5-6718-4c44-7a0e7af5b2b7@quicinc.com>
+Date:   Thu, 12 May 2022 09:02:12 -0700
 MIME-Version: 1.0
-References: <20220512135231.10076-1-schspa@gmail.com> <20220512135231.10076-2-schspa@gmail.com>
- <CAJZ5v0htGfZ3G+BWgZSxvcEAhNd_LONm8rNMetdPts3uZ=Tcxw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0htGfZ3G+BWgZSxvcEAhNd_LONm8rNMetdPts3uZ=Tcxw@mail.gmail.com>
-From:   Schspa Shi <schspa@gmail.com>
-Date:   Fri, 13 May 2022 00:01:16 +0800
-Message-ID: <CAMA88TodZJYmd2GnWty=qCw7T=LG9jihEAmT+RPK8tSBqdiubA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] cpufreq: make interface functions and lock holding
- state clear
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v5] drm/msm/dp: Always clear mask bits to disable
+ interrupts at dp_ctrl_reset_irq_ctrl()
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>
+CC:     <agross@kernel.org>, <airlied@linux.ie>,
+        <bjorn.andersson@linaro.org>, <daniel@ffwll.ch>,
+        <dianders@chromium.org>, <robdclark@gmail.com>, <sean@poorly.run>,
+        <vkoul@kernel.org>, <quic_abhinavk@quicinc.com>,
+        <quic_aravindh@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1652313768-16286-1-git-send-email-quic_khsieh@quicinc.com>
+ <e5c16697-5919-bafa-4ec5-294c94d7a740@linaro.org>
+ <CAE-0n53zHrczQAOWM5f_tafUVJxg7JU2NuC4sGcBZddwKr-dGA@mail.gmail.com>
+ <CAA8EJppc9d+FjVzAX_KU2-akTc1vSmSHMeKr8dp2ynH2LLOyBQ@mail.gmail.com>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <CAA8EJppc9d+FjVzAX_KU2-akTc1vSmSHMeKr8dp2ynH2LLOyBQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Rafael J. Wysocki" <rafael@kernel.org> writes:
 
-> On Thu, May 12, 2022 at 3:52 PM Schspa Shi <schspa@gmail.com> wrote:
->>
->> cpufreq_offline() calls offline() and exit() under the policy rwsem
->> But they are called outside the rwsem in cpufreq_online().
->>
->> This patch move the offline(), exit(), online(), init() to be inside
->> of policy rwsem to achieve a clear lock relationship.
->>
->> All the init() online() implement only initialize policy object without
->> holding this lock and won't call cpufreq APIs need to hold this lock.
->>
->> Signed-off-by: Schspa Shi <schspa@gmail.com>
->
-> IMV this still addresses 2 different issues and so it should be split
-> into 2 different patches.
->
->> ---
->>  drivers/cpufreq/cpufreq.c | 5 ++---
->>  1 file changed, 2 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
->> index 35dffd738580..f242d5488364 100644
->> --- a/drivers/cpufreq/cpufreq.c
->> +++ b/drivers/cpufreq/cpufreq.c
->
-> Patch 1:
->
->> @@ -1343,12 +1343,12 @@ static int cpufreq_online(unsigned int cpu)
->>                 down_write(&policy->rwsem);
->>                 policy->cpu = cpu;
->>                 policy->governor = NULL;
->> -               up_write(&policy->rwsem);
->>         } else {
->>                 new_policy = true;
->>                 policy = cpufreq_policy_alloc(cpu);
->>                 if (!policy)
->>                         return -ENOMEM;
->> +               down_write(&policy->rwsem);
->>         }
->>
->>         if (!new_policy && cpufreq_driver->online) {
->> @@ -1388,7 +1388,6 @@ static int cpufreq_online(unsigned int cpu)
->>                 cpumask_copy(policy->related_cpus, policy->cpus);
->>         }
->>
->> -       down_write(&policy->rwsem);
->>         /*
->>          * affected cpus must always be the one, which are online. We aren't
->>          * managing offline cpus here.
->
-> which addresses the problem that cpufreq_online() updates the
-> policy->cpus and related_cpus masks without holding the policy rwsem
-> (since the policy kobject has been registered already at this point,
-> this is generally unsafe).
->
-> A side-effect of it is that ->online() and ->init() will be called
-> under the policy rwsem now, but that should be fine and is more
-> consistent than the current code too.
->
-> Patch 2:
->
->> @@ -1540,7 +1539,6 @@ static int cpufreq_online(unsigned int cpu)
->>                 remove_cpu_dev_symlink(policy, get_cpu_device(j));
->>
->>         cpumask_clear(policy->cpus);
->> -       up_write(&policy->rwsem);
->>
->>  out_offline_policy:
->>         if (cpufreq_driver->offline)
->> @@ -1549,6 +1547,7 @@ static int cpufreq_online(unsigned int cpu)
->>  out_exit_policy:
->>         if (cpufreq_driver->exit)
->>                 cpufreq_driver->exit(policy);
->> +       up_write(&policy->rwsem);
->>
->>  out_free_policy:
->>         cpufreq_policy_free(policy);
->> --
->
-> which addressed the issue of calling ->offline() and ->exit() without
-> holding the policy rwsem that is at best inconsistent with
-> cpufreq_offline().
+On 5/11/2022 6:03 PM, Dmitry Baryshkov wrote:
+> On Thu, 12 May 2022 at 04:01, Stephen Boyd <swboyd@chromium.org> wrote:
+>> Quoting Dmitry Baryshkov (2022-05-11 17:41:50)
+>>> On 12/05/2022 03:02, Kuogee Hsieh wrote:
+>>>> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>>>> index af7a80c..f3e333e 100644
+>>>> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>>>> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>>>> @@ -1389,8 +1389,13 @@ void dp_ctrl_reset_irq_ctrl(struct dp_ctrl *dp_ctrl, bool enable)
+>>>>
+>>>>        dp_catalog_ctrl_reset(ctrl->catalog);
+>>>>
+>>>> -     if (enable)
+>>>> -             dp_catalog_ctrl_enable_irq(ctrl->catalog, enable);
+>>>> +     /*
+>>>> +      * all dp controller programmable registers will not
+>>>> +      * be reset to default value after DP_SW_RESET
+>>>> +      * therefore interrupt mask bits have to be updated
+>>>> +      * to enable/disable interrupts
+>>>> +      */
+>>>> +     dp_catalog_ctrl_enable_irq(ctrl->catalog, enable);
+>>>>    }
+>>>>
+>>>>    void dp_ctrl_phy_init(struct dp_ctrl *dp_ctrl)
+>>>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+>>>> index c388323..79439b8 100644
+>>>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+>>>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+>>>> @@ -98,6 +98,8 @@ struct dp_display_private {
+>>>>        struct dp_ctrl    *ctrl;
+>>>>        struct dp_debug   *debug;
+>>>>
+>>>> +     atomic_t suspended;
+>>> I think it'd be better to protect it with event_lock rather than using
+>>> atomics.
+>> Agreed. I think the concern is that the event queue will have "stuff" in
+>> it. If the event queue was all a threaded irq we could simply call
+>> synchronize_irq() after disabling the irq bit in the DP hardware and
+>> then we would know it is safe to power down the DP logic. Unfortunately
+>> the event queue is a kthread so we can't do that and we have to rewrite
+>> synchronize_irq() by checking that the event queue is empty and waiting
+>> for it to empty out otherwise. It's not safe enough to simply do the
+>> power operations underneath the event_lock because there's a queue in
+>> the kthread that might be waiting to grab the event_lock to process.
+> This sounds like a good reason to rewrite event_thread to use
+> threaded_irq and/or workqueue.
 
-No, we can't split this into two different patches. which will cause a
-uninitialized unlock for policy rwsem.
-This will make the git bitsec unusable.
+ok, i will do
 
-Which Dan Carpenter reported, and cause the patch of the v1 version to
-be reverted.
+1) protect suspended flag with event_lock to prevent new event be added
 
-Link: https://lore.kernel.org/all/YnKZCGaig+EXSowf@kili/
+2) disable interrupts
 
----
-BRs
+2) wait for event_q empty before turn off power
 
-
-Schspa Shi

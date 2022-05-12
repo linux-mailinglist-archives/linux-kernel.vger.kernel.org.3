@@ -2,115 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35FE85249EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B3B75249F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352336AbiELKDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 06:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60980 "EHLO
+        id S1352499AbiELKDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 06:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352646AbiELKBo (ORCPT
+        with ESMTP id S1352464AbiELKB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 06:01:44 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA542631;
-        Thu, 12 May 2022 03:01:43 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id i24so4337716pfa.7;
-        Thu, 12 May 2022 03:01:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:content-transfer-encoding:date:message-id:cc:subject
-         :from:to:references:in-reply-to;
-        bh=EpBY+DzaKr9D9IVnNO2+lmGSlE52SY1thjpa7lm9o98=;
-        b=H/vDwD9CLydNeeCx0wINFwNCrrUAP3HjvBKceekUmrNS2Cm1/dqVyoSPjQfWVLDoYY
-         hNwhC4cPb4rAtzFwuXR9KbED2q9bIevRtRi8A19F/zYGPSv3LpHFTI89j0/GVsI6vbF6
-         z1Y6KvKppkgn0KxmM7uP5k6RH6XbpoK6oqnLi1r0EOGwuSLagI/LXmTklB96zhbGrRdR
-         jZq++K/R4Nc732LumYw2B9iaYS6s6+8Tyb0U3xypaHWBY1ZyVfSNkTTFaVb4L/kLKkvG
-         nm1V01D/xeNmrkc7tRGXoFryvx/vhdCjcmi01xDQFF8dbqEbY/IpM4YQHJGhZzcwJcxr
-         RzdQ==
+        Thu, 12 May 2022 06:01:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B3BD2FFCF
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:01:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652349716;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3arBzyEj0Y+10rY33HKP6mUUeQUbMaPvYDzVucF481c=;
+        b=Ei8vjMSEuzKei3VGnrrRA3cFxJ3KA4eFo9t6IDp7gbRzQ7tVTC7yFsUIDZy4hnsKMs3UJO
+        mBHqkZdhlZyCfvvMgAgqWfRV1tFdkj1vqPg/XjPN+tu97SpE1JvHVVLBOOQYEFUnDoMpPW
+        UUxpoFsJCqnPfksUowpw4edAJWKClsc=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-349-fjNwgWJEMgOHIRArmFo3sQ-1; Thu, 12 May 2022 06:01:55 -0400
+X-MC-Unique: fjNwgWJEMgOHIRArmFo3sQ-1
+Received: by mail-wm1-f69.google.com with SMTP id m186-20020a1c26c3000000b003943e12185dso1435604wmm.7
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:01:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:content-transfer-encoding:date
-         :message-id:cc:subject:from:to:references:in-reply-to;
-        bh=EpBY+DzaKr9D9IVnNO2+lmGSlE52SY1thjpa7lm9o98=;
-        b=AFGt3/JvSWzgM0Jhznq0qW4FUROWDWXB2kB1K1yRClHIkeG0u9eb8qcEysv52MtMAZ
-         mVmEsbzoQ1GX/mqb4yPrWS9IDoe99s/0rNWbh9PjGxnX4raVzGbJvp+tLtz2d+mREdCf
-         Fverjp3qDBVvdRwM8i4Lo3xknjBoAdU/8hCR1xL2Yq/Fv3v4xwUHMZyHaIk+4DQVDmu1
-         J9lmK5JxpElJeRDYmGZUQH16zsRCLEeHVXaKwp0m/zD+a8GOaS2TZZRMlLz0LzMwAnd4
-         UtBj0tFgDRSmKM+8Fz+/zpc7I34IGeMkXST1QxngpNB3o4gRyeNJatmLC3Gi1d+xR7jg
-         MVbQ==
-X-Gm-Message-State: AOAM531dVvfqsMgJyWJQhlJGmb1RTCTmKSB6roPiJ0TmVkc1CzR9Uj7K
-        vK5V27KMi4JyeT6itgH+/LM=
-X-Google-Smtp-Source: ABdhPJwDkS1ORRJ1l54DeEOUcmdKRbft9icrpYGIK8G2oR5hAts4EVC68n5cxAfMu55mW6Prgo7TZg==
-X-Received: by 2002:a63:2a04:0:b0:3c4:a041:d71 with SMTP id q4-20020a632a04000000b003c4a0410d71mr24377491pgq.492.1652349702720;
-        Thu, 12 May 2022 03:01:42 -0700 (PDT)
-Received: from localhost ([49.204.239.218])
-        by smtp.gmail.com with ESMTPSA id j8-20020a170902758800b0015ea95948ebsm3454916pll.134.2022.05.12.03.01.38
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=3arBzyEj0Y+10rY33HKP6mUUeQUbMaPvYDzVucF481c=;
+        b=DdR99t6lEJwE3xxizsrwq/EH/5L2QIOT8wDLJkWTqBOgaFis5RoAB2ztNiqx+n/4O1
+         2kVNq3o2qNImxh2TuYQ21kqOSe0LhWYus4+yULyDLAvCQiUSyno+YHwj791H3y9OBxxt
+         zaDMr9qlp8C8YNssUwDG+xhwbtwJc33qb9fAKV0pk4thf8XlzJlbfLgGW0FOE0ej8XIA
+         1VCrf2s9vwXvrc9YxLEIJJEpnNlocAizSP+FHUKGb0OovI2w9Mf7HWBlahDW7YWMSjCG
+         5ie8A4jtsWdaTVTZpzHydtXKDIZTb9bL+7tq2ocqEnyr624XMtVvqCkn2OmjRtalCQAJ
+         3mRw==
+X-Gm-Message-State: AOAM533Ge6bf7udw+zolB+OYqvXeA1VGNXDQH6ELoC5gqkrK3zBSND6u
+        1TDbhCFKspRPoHxFMXeX0gxr/mYuY5Cf5RnkXk3RZD38/DV8H6qOh1OfPDFuJeSl9XngmxQE4O1
+        VFBmT3e6r4SGZwUvUuW8+eNoD
+X-Received: by 2002:a5d:4a0a:0:b0:20a:c899:cb7b with SMTP id m10-20020a5d4a0a000000b0020ac899cb7bmr27316347wrq.618.1652349714381;
+        Thu, 12 May 2022 03:01:54 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxRhDGBs9YTvxkam9DUV8EFQnoG6RsdfM4bAsBLkkDwQvHU5eaODpobFR9pjyP7q6gQhfIqPA==
+X-Received: by 2002:a5d:4a0a:0:b0:20a:c899:cb7b with SMTP id m10-20020a5d4a0a000000b0020ac899cb7bmr27316320wrq.618.1652349714148;
+        Thu, 12 May 2022 03:01:54 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c701:d200:ee5d:1275:f171:136d? (p200300cbc701d200ee5d1275f171136d.dip0.t-ipconnect.de. [2003:cb:c701:d200:ee5d:1275:f171:136d])
+        by smtp.gmail.com with ESMTPSA id w17-20020a05600018d100b0020c5253d90asm3878293wrq.86.2022.05.12.03.01.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 03:01:42 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+        Thu, 12 May 2022 03:01:52 -0700 (PDT)
+Message-ID: <70a7d93c-c1b1-fa72-0eb4-02e3e2235f94@redhat.com>
+Date:   Thu, 12 May 2022 12:01:51 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v9 3/3] s390x: KVM: resetting the Topology-Change-Report
+Content-Language: en-US
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     Pierre Morel <pmorel@linux.ibm.com>, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
+        thuth@redhat.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        wintera@linux.ibm.com, seiden@linux.ibm.com, nrb@linux.ibm.com
+References: <20220506092403.47406-1-pmorel@linux.ibm.com>
+ <20220506092403.47406-4-pmorel@linux.ibm.com>
+ <76fd0c11-5b9b-0032-183b-54db650f13b1@redhat.com>
+ <20220512115250.2e20bfdf@p-imbrenda>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220512115250.2e20bfdf@p-imbrenda>
 Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 12 May 2022 15:31:36 +0530
-Message-Id: <CJXP2Z9J7QS1.24A3N1EFCTACN@skynet-linux>
-Cc:     <linux-arm-msm@vger.kernel.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        <bjorn.andersson@linaro.org>, <devicetree@vger.kernel.org>,
-        <phone-devel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Andy Gross" <agross@kernel.org>,
-        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH 4/9] dt-bindings: remoteproc: qcom: wcnss: Convert to
- YAML
-From:   "Sireesh Kodali" <sireeshkodali1@gmail.com>
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        <linux-remoteproc@vger.kernel.org>
-X-Mailer: aerc 0.9.0
-References: <20220511161602.117772-1-sireeshkodali1@gmail.com>
- <20220511161602.117772-5-sireeshkodali1@gmail.com>
- <00234f36-9bae-31d5-5b83-ea238e7e3c11@linaro.org>
- <CJXL0SG2GHN1.1IO2JOR5ARNV8@skynet-linux>
- <30c18480-bf0d-82b9-5b11-daa3b70c40df@linaro.org>
-In-Reply-To: <30c18480-bf0d-82b9-5b11-daa3b70c40df@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu May 12, 2022 at 2:06 PM IST, Krzysztof Kozlowski wrote:
-> On 12/05/2022 08:50, Sireesh Kodali wrote:
-> >>> +    description: The names of the state bits used for SMP2P output
-> >>> +    items:
-> >>> +      - const: stop
-> >>> +
-> >>> +  memory-region:
-> >>> +    maxItems: 1
-> >>> +    description: Reference to the reserved-memory for the WCNSS core
-> >>> +
-> >>> +  smd-edge:
-> >>> +    type: object
-> >>> +    description:
-> >>> +      Qualcomm Shared Memory subnode which represents communication =
-edge,
-> >>> +      channels and devices related to the ADSP.
-> >>
-> >> You should reference /schemas/soc/qcom/qcom,smd.yaml
->
-> It seems it is not a SMD driver so above reference is not correct. This
-> should be probably described in its own schema, I just need to
-> understand what's this...
->
-The smd-edge node describes the smd channels used to communicate with
-the remote processor. For wcnss that would be the remote proc id, and
-the channels for bt and wifi (both separate). There's a similar node for
-adsp and q6v5.
->
-> Best regards,
-> Krzysztof
+>>
+>> I think we prefer something like u16 when copying to user space.
+> 
+> but then userspace also has to expect a u16, right?
+
+Yep.
+
+-- 
+Thanks,
+
+David / dhildenb
 

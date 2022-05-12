@@ -2,133 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30ACB524A7B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A961524A7E
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352743AbiELKkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 06:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55590 "EHLO
+        id S1352759AbiELKkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 06:40:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiELKkC (ORCPT
+        with ESMTP id S1352754AbiELKkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 06:40:02 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4A15EDDF;
-        Thu, 12 May 2022 03:40:00 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 4so5915339ljw.11;
-        Thu, 12 May 2022 03:40:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Wzyr02LBMhdQTusCnd1t3WsMuC5rvPxv7Sz+P69gyT8=;
-        b=PWTwmij20E3Mx8kkcN6UdjugtIl0wEDuYlA5F658FkTar2PMXMqP+YesyMptZYicJu
-         g4Ljgi6Jv+sdLvdOVGM46CQKxPXA8J6YIn4y0PbbbaLiYhYEtuz7RvkUBdQ+proIUlcP
-         F++7e+Pv29niDsIPpEBe35M7iLmeN1wcaEQgPtsm6O1fCtZTUzhwCpf6Oq6RKEPNMmdQ
-         WSi+o+YFYVHCBBocnPS1guewxtjmg7ovaZSOFF7DJ8Dw9oe4n1sYaRV6wmbSi3Qe85VZ
-         AweZ7HjY1vNRzcGMLJD9lUmw+UZnHT52DKBRvPuYSt2u0juIrY7RDM1wCBPtoee+6hrU
-         SBzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Wzyr02LBMhdQTusCnd1t3WsMuC5rvPxv7Sz+P69gyT8=;
-        b=dEm7WEGOuw0kntPmPHE5xKVFxa3bzqPumux+HL5qzjufld8oibQXQAcToHN7GEqZ1f
-         lM3GMu6eqdrxT70YG1UD0+9SBC91OazEkLRo8DECJwWnaSE+Tl6H2gxB41xKibSUXIL7
-         CGsdwfzQRC6n+KgFEYSvpFGhvy6vlgtbBOaeazOquyMG4cAblm3uhWcndQws8XEfvboN
-         IIcSU1jwNQvBIpQMzw2HKTQfvAoVEq/UZ2NY/OXLGKKtt2DW3x87732nR68mTdDNrNNq
-         k1Bm363Qx7mV8MMrn5AKpsgD6mrjgqIah/bveGDJr7QWeNQm+RM6WYisa1I2t1GkPLQk
-         uj3A==
-X-Gm-Message-State: AOAM530/jfe3coj/ENAOKJgXoAwarFK1LbjVFkxTi2U4WDfE2Pm4qW+O
-        wMLXAOfzVTzlHaiRdEck4QXdE0uCfnjGFg==
-X-Google-Smtp-Source: ABdhPJwkJNGIfXjYmaDvHSqQtwOxoCRn8Ovhnhsa7HeK1ShpaVly4CF8TTokFz3Cv20eexjHM+Nhjg==
-X-Received: by 2002:a2e:b895:0:b0:250:6797:9e07 with SMTP id r21-20020a2eb895000000b0025067979e07mr20457510ljp.306.1652351998394;
-        Thu, 12 May 2022 03:39:58 -0700 (PDT)
-Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id 76-20020a2e054f000000b0024f3d1dae98sm824665ljf.32.2022.05.12.03.39.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 03:39:57 -0700 (PDT)
-Date:   Thu, 12 May 2022 13:39:55 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Ruiqi Li <guywithanaxe42@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        gustavo.pimentel@synopsys.com, vkoul@kernel.org,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] dmaengine: dw-edma: Removed redundant #ifdef check
- for 64-bit
-Message-ID: <20220512103955.abihluliakytznae@mobilestation>
-References: <20220510163117.1761625-1-guywithanaxe42@gmail.com>
+        Thu, 12 May 2022 06:40:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22ABC229FE9;
+        Thu, 12 May 2022 03:40:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9903EB8271F;
+        Thu, 12 May 2022 10:40:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4D99DC385CB;
+        Thu, 12 May 2022 10:40:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652352012;
+        bh=4WOAJEDFWkl0XQDS7GAUPGwoYhNmfkWAl2nGUkdF/mY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=A9T7X+MTMlsnpzhdEqnxyRsFE3xDBHVpkujufNLrkkBlE3j0yeOhBCNHi6OyLRcnU
+         AbX3staFyMlot8wYf/BbvBWUKU0fjb9rxx/rNwjeVAPg/bKmNoIxz1OXZaDXVkJ9+A
+         6S5pmxTtVS09wrahssd/NY/Bmhoe5Lvo+qukeCnKtKeq+K4Fh1HvORFvs+OTxJ0lVi
+         hSH0DKcHV9Nrcpeb2yEpw2TVrWIfsHN5HEio/gyMspSqjdHp1p4Xr58YKdmtXNfPG0
+         O9alsAYdwPzErRgQhwhk5ycs13iik4Ddfa9UzPQrBFQXxH7rEgC1GCvo/aoz+jv48j
+         NehfC+hwHd3Og==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 309F7F0393A;
+        Thu, 12 May 2022 10:40:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220510163117.1761625-1-guywithanaxe42@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH][next] net: ethernet: SP7021: Fix spelling mistake "Interrput"
+ -> "Interrupt"
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165235201219.27484.11040061538399474855.git-patchwork-notify@kernel.org>
+Date:   Thu, 12 May 2022 10:40:12 +0000
+References: <20220511104448.150800-1-colin.i.king@gmail.com>
+In-Reply-To: <20220511104448.150800-1-colin.i.king@gmail.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     wellslutw@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Ruiqu
+Hello:
 
-On Tue, May 10, 2022 at 11:31:17AM -0500, Ruiqi Li wrote:
-> Commit at 8fc5133d fixed unaligned memory access, which caused both 32
-> and 64 bit to be the same.
+This patch was applied to netdev/net-next.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
+
+On Wed, 11 May 2022 11:44:48 +0100 you wrote:
+> There is a spelling mistake in a dev_dbg message. Fix it.
 > 
->     #ifdef CONFIG_64BIT
->     /* llp is not aligned on 64bit -> keep 32bit accesses */
->     SET_CH_32(dw, chan->dir, chan->id, llp.lsb,
->               lower_32_bits(chunk->ll_region.paddr));
->     SET_CH_32(dw, chan->dir, chan->id, llp.msb,
->               upper_32_bits(chunk->ll_region.paddr));
->     #else /* CONFIG_64BIT */
->     SET_CH_32(dw, chan->dir, chan->id, llp.lsb,
->               lower_32_bits(chunk->ll_region.paddr));
->     SET_CH_32(dw, chan->dir, chan->id, llp.msb,
->               upper_32_bits(chunk->ll_region.paddr));
->     #endif /* CONFIG_64BIT */
-> 
-> This patch removes redundant preprocessor check for 64 bit.
-
-A similar fix but with another reasoning has already been submitted:
-Link: https://lore.kernel.org/linux-pci/20220503225104.12108-21-Sergey.Semin@baikalelectronics.ru/
-So not only the denoted but all 64BIT-ifdef's will be dropped from the
-driver.
-
--Sergey
-
-> 
-> Signed-off-by: Ruiqi Li <guywithanaxe42@gmail.com>
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 > ---
->  drivers/dma/dw-edma/dw-edma-v0-core.c | 7 -------
->  1 file changed, 7 deletions(-)
-> 
-> diff --git a/drivers/dma/dw-edma/dw-edma-v0-core.c b/drivers/dma/dw-edma/dw-edma-v0-core.c
-> index 33bc1e6c4cf2..d34f344a094b 100644
-> --- a/drivers/dma/dw-edma/dw-edma-v0-core.c
-> +++ b/drivers/dma/dw-edma/dw-edma-v0-core.c
-> @@ -415,18 +415,11 @@ void dw_edma_v0_core_start(struct dw_edma_chunk *chunk, bool first)
->  			  (DW_EDMA_V0_CCS | DW_EDMA_V0_LLE));
->  		/* Linked list */
->  
-> -		#ifdef CONFIG_64BIT
->  		/* llp is not aligned on 64bit -> keep 32bit accesses */
->  		SET_CH_32(dw, chan->dir, chan->id, llp.lsb,
->  			  lower_32_bits(chunk->ll_region.paddr));
->  		SET_CH_32(dw, chan->dir, chan->id, llp.msb,
->  			  upper_32_bits(chunk->ll_region.paddr));
-> -		#else /* CONFIG_64BIT */
-> -		SET_CH_32(dw, chan->dir, chan->id, llp.lsb,
-> -			  lower_32_bits(chunk->ll_region.paddr));
-> -		SET_CH_32(dw, chan->dir, chan->id, llp.msb,
-> -			  upper_32_bits(chunk->ll_region.paddr));
-> -		#endif /* CONFIG_64BIT */
->  	}
->  	/* Doorbell */
->  	SET_RW_32(dw, chan->dir, doorbell,
-> -- 
-> 2.36.1
-> 
+>  drivers/net/ethernet/sunplus/spl2sw_int.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Here is the summary with links:
+  - [next] net: ethernet: SP7021: Fix spelling mistake "Interrput" -> "Interrupt"
+    https://git.kernel.org/netdev/net-next/c/982c97eede13
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

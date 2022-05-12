@@ -2,115 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 593F55248AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:15:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D57F95248B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:15:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351859AbiELJPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 05:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
+        id S1351880AbiELJPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 05:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242267AbiELJPD (ORCPT
+        with ESMTP id S1351862AbiELJPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 05:15:03 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22B96223872
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:15:02 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BE739106F;
-        Thu, 12 May 2022 02:15:01 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.5.172])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4A36F3F73D;
-        Thu, 12 May 2022 02:15:00 -0700 (PDT)
-Date:   Thu, 12 May 2022 10:14:53 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Alexander Popov <alex.popov@linux.com>,
-        linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org,
-        catalin.marinas@arm.com, linux-kernel@vger.kernel.org,
-        luto@kernel.org, will@kernel.org
-Subject: Re: [PATCH v2 03/13] stackleak: remove redundant check
-Message-ID: <YnzQDWTw1qdtVJMJ@FVFF77S0Q05N>
-References: <20220427173128.2603085-1-mark.rutland@arm.com>
- <20220427173128.2603085-4-mark.rutland@arm.com>
- <a604fa2b-e7c3-3fff-dd81-1a0585a9e2fa@linux.com>
- <YnpQqBwYjlVffJk8@FVFF77S0Q05N>
- <202205101958.2A33DE20@keescook>
- <YnttpThLX0tgrw5i@FVFF77S0Q05N>
- <33711C66-BB24-4A75-8756-3CDDA02BC0CD@chromium.org>
+        Thu, 12 May 2022 05:15:14 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3420D227831;
+        Thu, 12 May 2022 02:15:12 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id bo5so4257770pfb.4;
+        Thu, 12 May 2022 02:15:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1yVCgY4QE8l5qFrVqFzJJ9uTK3QajC1JSeAXUrEX5mM=;
+        b=MGUdJx5o67V+c7ivUhgeC/BUEADviIwlhokhBxj+J+gl6IETIqORALQLeC353MYEdq
+         2Pv50dWwl1qTvK4mqNFOHI069/CG7FyZ13loxUH6lrmM2YVeNsaUmHum8Mp+TTRs/oeh
+         ZBGlq/iUg4CymqPWX6MatUagIwHh9sqigv1U1pwp/IFJZbcDC/sE8Y+G0OKSNa80eWYW
+         BLyjSxh1M6W5n5yjCmzKLV+ZcSFkjUbkiXtb+XgBTqTcLJ/SB7G8DkotwTzZEmEbSOsa
+         oNAFvZbwt1QeW4GoMUD5qskyCou5gc5b1XU1x3Lv9xQyif6Bg+WLMnX/LxkveG9KxCuB
+         sqAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=1yVCgY4QE8l5qFrVqFzJJ9uTK3QajC1JSeAXUrEX5mM=;
+        b=lLRz/8h4NizjwgN8zoRozPJbvNPyIQBVNxFc/iUuFBpY7WDnWaV2138zYnD81GnNLm
+         30tcGYNNrWfeHmdltgQdGYniLiTT18FOISFaVX6v2JItia+fkm4ovaaG4mT3zs+TpBud
+         M14UGMuPkezOXY+m1Ro9PUKv91WkIxp7YpobxURf7JosYRcehDxGp04xBiU+qaN80YRN
+         3HG10ZYle0roxs/eiJTckZJApb+FqrZh+XnURV/rYSvGFQgtxLtRNeYNWlB72Pk0ezjd
+         E20xX15YCHWJGKis9tGmnj2udTBHDxfH2lCb9XaE3fMFrfpeqI7wHf0zu/gx2TZoquzc
+         67xw==
+X-Gm-Message-State: AOAM530ZejMVa6hcqdYCAce1jrg5m9lF/RmP93z+48aHiiYJ6hpV5Mo8
+        stX+ppHOxBlWhXVRVhjwmU0=
+X-Google-Smtp-Source: ABdhPJxaigst32EHE9ix2EpasU4GC9GvtV1b4JcFlMBs/Eobm4jyuO5205pcB0haARI31D6QIfoeng==
+X-Received: by 2002:a05:6a00:885:b0:510:950f:f787 with SMTP id q5-20020a056a00088500b00510950ff787mr22839855pfj.83.1652346911472;
+        Thu, 12 May 2022 02:15:11 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:6c64])
+        by smtp.gmail.com with ESMTPSA id c3-20020a170902724300b0015e8d4eb20esm3353001pll.88.2022.05.12.02.15.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 02:15:10 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 11 May 2022 23:15:09 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Byungchul Park <byungchul.park@lge.com>
+Cc:     torvalds@linux-foundation.org, holt@sgi.com, mcgrof@kernel.org,
+        damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        mingo@redhat.com, linux-kernel@vger.kernel.org,
+        peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
+        rostedt@goodmis.org, joel@joelfernandes.org, sashal@kernel.org,
+        daniel.vetter@ffwll.ch, chris@chris-wilson.co.uk,
+        duyuyang@gmail.com, johannes.berg@intel.com, tytso@mit.edu,
+        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
+        bfields@fieldses.org, gregkh@linuxfoundation.org,
+        kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org,
+        mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org,
+        vdavydov.dev@gmail.com, sj@kernel.org, jglisse@redhat.com,
+        dennis@kernel.org, cl@linux.com, penberg@kernel.org,
+        rientjes@google.com, vbabka@suse.cz, ngupta@vflare.org,
+        linux-block@vger.kernel.org, paolo.valente@linaro.org,
+        josef@toxicpanda.com, linux-fsdevel@vger.kernel.org,
+        viro@zeniv.linux.org.uk, jack@suse.cz, jack@suse.com,
+        jlayton@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
+        djwong@kernel.org, dri-devel@lists.freedesktop.org,
+        airlied@linux.ie, rodrigosiqueiramelo@gmail.com,
+        melissa.srw@gmail.com, hamohammed.sa@gmail.com, 42.hyeyoo@gmail.com
+Subject: Re: [REPORT] syscall reboot + umh + firmware fallback
+Message-ID: <YnzQHWASAxsGL9HW@slm.duckdns.org>
+References: <1651652269-15342-1-git-send-email-byungchul.park@lge.com>
+ <20220512052557.GD18445@X58A-UD3R>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <33711C66-BB24-4A75-8756-3CDDA02BC0CD@chromium.org>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220512052557.GD18445@X58A-UD3R>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 07:44:41AM -0700, Kees Cook wrote:
+Hello,
+
+Just took a look out of curiosity.
+
+On Thu, May 12, 2022 at 02:25:57PM +0900, Byungchul Park wrote:
+> PROCESS A	PROCESS B	WORKER C
 > 
+> __do_sys_reboot()
+> 		__do_sys_reboot()
+>  mutex_lock(&system_transition_mutex)
+>  ...		 mutex_lock(&system_transition_mutex) <- stuck
+> 		 ...
+> 				request_firmware_work_func()
+> 				 _request_firmware()
+> 				  firmware_fallback_sysfs()
+> 				   usermodehelper_read_lock_wait()
+> 				    down_read(&umhelper_sem)
+> 				   ...
+> 				   fw_load_sysfs_fallback()
+> 				    fw_sysfs_wait_timeout()
+> 				     wait_for_completion_killable_timeout(&fw_st->completion) <- stuck
+>  kernel_halt()
+>   __usermodehelper_disable()
+>    down_write(&umhelper_sem) <- stuck
 > 
-> On May 11, 2022 1:02:45 AM PDT, Mark Rutland <mark.rutland@arm.com> wrote:
-> >On Tue, May 10, 2022 at 08:00:38PM -0700, Kees Cook wrote:
-> >> On Tue, May 10, 2022 at 12:46:48PM +0100, Mark Rutland wrote:
-> >> > On Sun, May 08, 2022 at 09:17:01PM +0300, Alexander Popov wrote:
-> >> > > On 27.04.2022 20:31, Mark Rutland wrote:
-> >> > > > In __stackleak_erase() we check that the `erase_low` value derived from
-> >> > > > `current->lowest_stack` is above the lowest legitimate stack pointer
-> >> > > > value, but this is already enforced by stackleak_track_stack() when
-> >> > > > recording the lowest stack value.
-> >> > > > 
-> >> > > > Remove the redundant check.
-> >> > > > 
-> >> > > > There should be no functional change as a result of this patch.
-> >> > > 
-> >> > > Mark, I can't agree here. I think this check is important.
-> >> > > The performance profit from dropping it is less than the confidence decrease :)
-> >> > > 
-> >> > > With this check, if the 'lowest_stack' value is corrupted, stackleak doesn't
-> >> > > overwrite some wrong kernel memory, but simply clears the whole thread
-> >> > > stack, which is safe behavior.
-> >> > 
-> >> > If you feel strongly about it, I can restore the check, but I struggle to
-> >> > believe that it's worthwhile. The `lowest_stack` value lives in the
-> >> > task_struct, and if you have the power to corrupt that you have the power to do
-> >> > much more interesting things.
-> >> > 
-> >> > If we do restore it, I'd like to add a big fat comment explaining the
-> >> > rationale (i.e. that it only matter if someone could corrupt
-> >> > `current->lowest_stack`, as otherwise that's guarnateed to be within bounds).
-> >> 
-> >> Yeah, let's restore it and add the comment. While I do agree it's likely
-> >> that such an corruption would likely mean an attacker had significant
-> >> control over kernel memory already, it is not uncommon that an attack
-> >> only has a limited index from a given address, etc. Or some manipulation
-> >> is possible via weird gadgets, etc. It's unlikely, but not impossible,
-> >> and a bounds-check for that value is cheap compared to the rest of the
-> >> work happening. :)
-> >
-> >Fair enough; I can go spin a patch restoring this. I'm somewhat unhappy with
-> >silently fixing that up, though -- IMO it'd be better to BUG() or similar in
-> >that case.
+> --------------------------------------------------------
+> All the 3 contexts are stuck at this point.
+> --------------------------------------------------------
 > 
-> I share your desires, and this was exactly what Alexander originally proposed, but Linus rejected it violently. :(
-> https://lore.kernel.org/lkml/CA+55aFy6jNLsywVYdGp83AMrXBo_P-pkjkphPGrO=82SPKCpLQ@mail.gmail.com/
+> PROCESS A	PROCESS B	WORKER C
+> 
+>    ...
+>    up_write(&umhelper_sem)
+>  ...
+>  mutex_unlock(&system_transition_mutex) <- cannot wake up B
+> 
+> 		 ...
+> 		 kernel_halt()
+> 		  notifier_call_chain()
+> 		   hw_shutdown_notify()
+> 		    kill_pending_fw_fallback_reqs()
+> 		     __fw_load_abort()
+> 		      complete_all(&fw_st->completion) <- cannot wake up C
+> 
+> 				   ...
+> 				   usermodeheler_read_unlock()
+> 				    up_read(&umhelper_sem) <- cannot wake up A
 
-I see. :/
+I'm not sure I'm reading it correctly but it looks like "process B" column
+is superflous given that it's waiting on the same lock to do the same thing
+that A is already doing (besides, you can't really halt the machine twice).
+What it's reporting seems to be ABBA deadlock between A waiting on
+umhelper_sem and C waiting on fw_st->completion. The report seems spurious:
 
-Thinking about this some more, if we assume someone can corrupt *some* word of
-memory, then we need to consider that instead of corrupting
-task_struct::lowest_stack, they could corrupt task_struct::stack (or x86's
-cpu_current_top_of_stack prior to this series).
+1. wait_for_completion_killable_timeout() doesn't need someone to wake it up
+   to make forward progress because it will unstick itself after timeout
+   expires.
 
-With that in mind, if we detect that task_struct::lowest_stack is
-out-of-bounds, we have no idea whether it has been corrupted or the other bound
-values have been corrupted, and so we can't do the erase safely anyway.
+2. complete_all() from __fw_load_abort() isn't the only source of wakeup.
+   The fw loader can be, and mainly should be, woken up by firmware loading
+   actually completing instead of being aborted.
 
-So AFAICT we must *avoid* erasing when that goes wrong. Maybe we could WARN()
-instead of BUG()?
+I guess the reason why B shows up there is because the operation order is
+such that just between A and C, the complete_all() takes place before
+__usermodehlper_disable(), so the whole thing kinda doesn't make sense as
+you can't block a past operation by a future one. Inserting process B
+introduces the reverse ordering.
 
-Thanks,
-Mark.
+Thanks.
+
+-- 
+tejun

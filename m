@@ -2,105 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76738524CDA
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DEA1524CDC
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:30:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353730AbiELMaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 08:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54766 "EHLO
+        id S1353740AbiELMan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 08:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234099AbiELMaW (ORCPT
+        with ESMTP id S1353746AbiELMad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 08:30:22 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC48313F35;
-        Thu, 12 May 2022 05:30:19 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id fu47so4142381qtb.5;
-        Thu, 12 May 2022 05:30:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GQiqWZrRB16NjkMXC8fmeM9ZM7iEqMa7fAB1175TsNU=;
-        b=J4Wo8R/RXOEPe2RWiqzhHzUROd03ArSLwuEPWLGf7VH3rWrna1foPjpdXq/4CgxYvw
-         kVsm0nmBVJWfirWrjJntlY70InwtG9jV10rLiMIJCOqZOqyvY/uYUvfVv2rmwLdtgjO4
-         LJ/JqUmEGhjCfetlFvtnUQQRlVOhQwvsyZQ/d/D9w6gcbgP8KDjy77uszhBuHr23+vY0
-         yMYDnBjxCxNZqzQ7u5Rwy94NdSFLkbPrR/ZIbJrFxL8pwhUYVYv4ycnQY918TyBtf/MU
-         Vo5e+Ut9ED7Kzx2fVPQAZlkDRSwvPu7xfcf2wTEvU+ENxzP0ypFjwTLdkdbJFm6YAygI
-         Efig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GQiqWZrRB16NjkMXC8fmeM9ZM7iEqMa7fAB1175TsNU=;
-        b=YZu5lfiN5tgm0AK5bNE5QgHqviH+/aOH3SO0YpXr+8DwzZLUSEKV/XqUcnxboxN0Tr
-         jo7YNrLeXR3fJmatziu/wAINuarQZW60HT1yzWSLdadMFY1TJ7aGBmyU7KY3r1e4NqFm
-         v0dmhAMREOtoETHhm3/FPIV49d6znIQgL6+Lh7ObT9I4acR7GRMuqjXyBUsRovckZy2N
-         zicKYM6qYCYPa5ZN2fgcfovL8wsJryjpVBCQGHplNEsQ/UwUkLGmaGgFVcNx7XpRDYYE
-         jzogxPy+3bg801W1/Rv/fzYXCGJiC8CAgbdmJjvCqqIwOb8EEpYtLEDi7A95WYQu33NH
-         M3OQ==
-X-Gm-Message-State: AOAM531MJNxR0aO2ireXtnFArUNU2GrrJHwUOxBzCqk31sOtJ5bd9tDP
-        9CLKPSQSMTadK7VtkFKIoYkxQZsYLrukZN3KF7c=
-X-Google-Smtp-Source: ABdhPJxOS1aZ0rU0taKVCsDSMHPuSnwD6+3BnAnqqD7B/ow5mFt1jkOJoR+8Cd5aaioOa/rG15ya5VTtA02SsQQoi0o=
-X-Received: by 2002:ac8:4e46:0:b0:2e1:b933:ec06 with SMTP id
- e6-20020ac84e46000000b002e1b933ec06mr28865970qtw.684.1652358618712; Thu, 12
- May 2022 05:30:18 -0700 (PDT)
+        Thu, 12 May 2022 08:30:33 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D521F218
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:30:29 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 69A631F460;
+        Thu, 12 May 2022 12:30:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1652358628; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DoM2S+8jiCWaZnDZKbaWw6MEK0h9xXTciJ7KPHK3e+g=;
+        b=xhG1swfamE+GSab+AKwK+gq3d6fYDdraOp9xCEgGeH0/FKxebsRYhxbKZ5dNqJDfJanrFY
+        y7Gb28crUwl+XNY3MrXYuoRO3rbMP/Yk7imczzF63gGsXF9SZkCY4NWG7fNq9dmThnUd42
+        qyjgSkuyhZTFtB0jzCrYQbvI5qaj8HI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1652358628;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DoM2S+8jiCWaZnDZKbaWw6MEK0h9xXTciJ7KPHK3e+g=;
+        b=NNn8/t8R75BS2bAgRQcNY47L651YbitkKtJ4dfgyxMyCtAsjRvbb8GkWQ1oMr8DyGGcBzh
+        1Se+nA5Uo/2NgwAw==
+Received: from suse.de (mgorman.tcp.ovpn2.nue.suse.de [10.163.32.246])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 03BE22C141;
+        Thu, 12 May 2022 12:30:25 +0000 (UTC)
+Date:   Thu, 12 May 2022 13:30:21 +0100
+From:   Mel Gorman <mgorman@suse.de>
+To:     Wonhyuk Yang <vvghjk1234@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Baik Song An <bsahn@etri.re.kr>,
+        Hong Yeon Kim <kimhy@etri.re.kr>,
+        Taeung Song <taeung@reallinux.co.kr>, linuxgeek@linuxgeek.io,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [Patch v2] [PATCH] mm/page_alloc: Fix tracepoint
+ mm_page_alloc_zone_locked()
+Message-ID: <20220512123021.GP20579@suse.de>
+References: <20220512025307.57924-1-vvghjk1234@gmail.com>
 MIME-Version: 1.0
-References: <lGo7a4qQABKb-u_xsz6p-QtLIy2bzciBLTUJ7-ksv7ppK3mRrJhXqFmCFU4AtQf6EyrZUrYuSLDMBHEUMe5st_iT9VcRuyYPMU_jVpSzoWg=@emersion.fr>
-In-Reply-To: <lGo7a4qQABKb-u_xsz6p-QtLIy2bzciBLTUJ7-ksv7ppK3mRrJhXqFmCFU4AtQf6EyrZUrYuSLDMBHEUMe5st_iT9VcRuyYPMU_jVpSzoWg=@emersion.fr>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Thu, 12 May 2022 15:30:07 +0300
-Message-ID: <CAOQ4uxjOOe0aouDYNdkVyk7Mu1jQ-eY-6XoW=FrVRtKyBd2KFg@mail.gmail.com>
-Subject: Re: procfs: open("/proc/self/fd/...") allows bypassing O_RDONLY
-To:     Simon Ser <contact@emersion.fr>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <20220512025307.57924-1-vvghjk1234@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 2:09 PM Simon Ser <contact@emersion.fr> wrote:
->
-> Hi all,
->
-> I'm a user-space developer working on Wayland. Recently we've been
-> discussing about security considerations related to FD passing between
-> processes [1].
->
-> A Wayland compositor often needs to share read-only data with its
-> clients. Examples include a keyboard keymap, or a pixel format table.
-> The clients might be untrusted. The data sharing can happen by having
-> the compositor send a read-only FD (ie, a FD opened with O_RDONLY) to
-> clients.
->
-> It was assumed that passing such a FD wouldn't allow Wayland clients to
-> write to the file. However, it was recently discovered that procfs
-> allows to bypass this restriction. A process can open(2)
-> "/proc/self/fd/<fd>" with O_RDWR, and that will return a FD suitable for
-> writing. This also works when running the client inside a user namespace.
-> A PoC is available at [2] and can be tested inside a compositor which
-> uses this O_RDONLY strategy (e.g. wlroots compositors).
->
-> Question: is this intended behavior, or is this an oversight? If this is
+On Thu, May 12, 2022 at 11:53:07AM +0900, Wonhyuk Yang wrote:
+> Currently, trace point mm_page_alloc_zone_locked() doesn't show
+> correct information.
+> 
+> First, when alloc_flag has ALLOC_HARDER/ALLOC_CMA, page can
+> be allocated from MIGRATE_HIGHATOMIC/MIGRATE_CMA. Nevertheless,
+> tracepoint use requested migration type not MIGRATE_HIGHATOMIC and
+> MIGRATE_CMA.
+> 
+> Second, after Commit 44042b4498728 ("mm/page_alloc: allow high-order
+> pages to be stored on the per-cpu lists") percpu-list can store
+> high order pages. But trace point determine whether it is a refiil
+> of percpu-list by comparing requested order and 0.
+> 
+> To handle these problems, make mm_page_alloc_zone_locked() only be
+> called by __rmqueue_smallest with correct migration type. With a
+> new argument called percpu_refill, it can show roughly whether it
+> is a refill of percpu-list.
+> 
+> Cc: Baik Song An <bsahn@etri.re.kr>
+> Cc: Hong Yeon Kim <kimhy@etri.re.kr>
+> Cc: Taeung Song <taeung@reallinux.co.kr>
+> Cc: linuxgeek@linuxgeek.io
+> Signed-off-by: Wonhyuk Yang <vvghjk1234@gmail.com>
 
-Clients can also readlink("/proc/self/fd/<fd>") to get the path of the file
-and open it from its path (if path is accessible in their mount namespace).
-Would the clients typically have write permission to those files?
-Do they need to?
+Acked-by: Mel Gorman <mgorman@suse.de>
 
-> intended behavior, what would be a good way to share a FD to another
-> process without allowing it to write to the underlying file?
->
-
-If wayland can use a read-only bind mount to the location of the files that it
-needs to share, then re-open will get EROFS.
-
-Thanks,
-Amir.
+-- 
+Mel Gorman
+SUSE Labs

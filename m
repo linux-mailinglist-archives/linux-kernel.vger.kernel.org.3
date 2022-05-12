@@ -2,87 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E81B524F2E
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 987E5524F78
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354904AbiELOBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 10:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
+        id S1355043AbiELOJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 10:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354964AbiELOBv (ORCPT
+        with ESMTP id S1354927AbiELOJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 10:01:51 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0972655238
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:01:43 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CC1wn2004224;
-        Thu, 12 May 2022 14:01:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=PZKeUa51MnK6JBOqFyls3O7ght9z6gRfDZMSkyjlB54=;
- b=BXRgERzMIxLm/scsT3BPr0w/UG1SxHJPDqG50kbAvqSAXBWbX2p7KoSS2kZemsg/fWCK
- /EYxrJGAsgGo8X1NYMBNpRwvh8+OtiPeLC3X049bqc3l7ZencIQwxwqFWIdGb6sV8u5B
- S/L7EwmuDkOpHZ0TKZa+ZI1UQs3dRQ7NlvMjyhjMFZdc7xdPopfENlh+tcC9Efy4qXbL
- boCeBfq9IbosNGQuQZ0FgnRbbFidbj2pAuTRBT4VNBnRzoDJjXwAvO2O2pTS0HXWEOno
- hIeBKwa3W9+QRQqGF2TievLb7nQNeVijoQaNW5wWq3B/baoxuWt2IiajNzZ1PZMDjibO Ig== 
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g11vr313y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 14:01:36 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24CDwSM0029524;
-        Thu, 12 May 2022 14:01:36 GMT
-Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
-        by ppma03dal.us.ibm.com with ESMTP id 3fwgdacfvy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 14:01:35 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24CE1YnN30278062
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 12 May 2022 14:01:34 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D069DC605F;
-        Thu, 12 May 2022 14:01:34 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ADD80C6059;
-        Thu, 12 May 2022 14:01:34 +0000 (GMT)
-Received: from [9.211.56.168] (unknown [9.211.56.168])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 12 May 2022 14:01:34 +0000 (GMT)
-Message-ID: <08e04659-2d06-2eb0-0ba8-8717a2d2bd48@linux.ibm.com>
-Date:   Thu, 12 May 2022 09:01:34 -0500
+        Thu, 12 May 2022 10:09:28 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F2B201C0D
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:09:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652364568; x=1683900568;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Zi8Pic5CJM9KyS0pkVNYuX6w9wNDHDJL2ofCVifXfuM=;
+  b=SrFlNR942A45tpBTL7DxVlfurPioWp8bW6JygWUkPKYo2t2M9qVGhui3
+   p5MeaIeSI1fxPPqkEbuErwufGM6OrcF5OjnJTh6FDlBGJ+1OgWbr/yW//
+   0gRcdmx/pEaLFxnrnNYneVozszmyCqs+SLMlZNsi+wwBB4vZoXTSi/DWv
+   MN+r2JFtCrJd2IYfTa6X5zVn7a4Pq0Q3f+hC1rTCqRiqd2YIJ10qU8D+L
+   0imIoMNbnSwinzFHe2uGjGviMjINMmy30+lUJvp9CigbS7anHUhSOCTEb
+   faklO4TnGn/3SeEh70cKkxzllgvO5iZ6mJi5Cl9FK0VzCJ533Apn6x8M4
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="257557371"
+X-IronPort-AV: E=Sophos;i="5.91,220,1647327600"; 
+   d="scan'208";a="257557371"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 07:09:27 -0700
+X-IronPort-AV: E=Sophos;i="5.91,220,1647327600"; 
+   d="scan'208";a="566702128"
+Received: from jainamit-mobl.amr.corp.intel.com (HELO [10.212.194.29]) ([10.212.194.29])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 07:09:26 -0700
+Message-ID: <6a18ce53-c5c8-5ba9-fe7c-199bd9b4bff6@linux.intel.com>
+Date:   Thu, 12 May 2022 08:13:59 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] mm: Add config option for default panic_on_oom value
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH -next] ASoC: SOF: amd: add missing
+ platform_device_unregister in acp_pci_rn_probe
 Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220511183400.47940-1-eajames@linux.ibm.com>
- <20220511145648.3c421ff592df32766319ea2d@linux-foundation.org>
- <b597cc79-0f8a-c32d-397e-0c04777e9491@linux.ibm.com>
- <20220511153616.9298d246adb1c7fea9ab453b@linux-foundation.org>
-From:   Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <20220511153616.9298d246adb1c7fea9ab453b@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Zheng Bin <zhengbin13@huawei.com>, lgirdwood@gmail.com,
+        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
+        daniel.baluta@nxp.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, sound-open-firmware@alsa-project.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Cc:     gaochao49@huawei.com
+References: <20220512013728.4128903-1-zhengbin13@huawei.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20220512013728.4128903-1-zhengbin13@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: HzQyKlLHrsOPuOBNQonRFQ1qjIg6Mk27
-X-Proofpoint-ORIG-GUID: HzQyKlLHrsOPuOBNQonRFQ1qjIg6Mk27
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-12_10,2022-05-12_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 suspectscore=0 bulkscore=0 mlxscore=0 impostorscore=0
- spamscore=0 clxscore=1015 malwarescore=0 lowpriorityscore=0
- mlxlogscore=927 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2202240000 definitions=main-2205120067
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -90,42 +67,33 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 5/11/22 17:36, Andrew Morton wrote:
-> On Wed, 11 May 2022 17:06:35 -0500 Eddie James <eajames@linux.ibm.com> wrote:
->
->> On 5/11/22 16:56, Andrew Morton wrote:
->>> On Wed, 11 May 2022 13:34:00 -0500 Eddie James <eajames@linux.ibm.com> wrote:
->>>
->>>> Add the option to kconfig and set the default panic_on_value.
->>> Why?  What are the use-cases and how does this benefit our users?
->> If a distribution (for example some embedded system distribution) wants
->> the system to always panic when OOM, they may as well configure their
->> kernel to do it by default, rather than writing to
->> /proc/sys/vm/panic_on_oom every boot. Maybe I'm missing another way to
->> do what I want here?
-> Presumably such a distribution would do this in initramfs initscripts
-> and forget about it.
 
+On 5/11/22 20:37, Zheng Bin wrote:
+> acp_pci_rn_probe misses a call platform_device_unregister in error path,
+> this patch fixes that.
+> 
+> Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
 
-Yes, my thinking was that it was either a line in an init script or a 
-system service. It seems more efficient to configure it in the kernel 
-instead.
+Thanks for the patch, nice catch
 
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
->
-> What inspired the patch?  Have you seen a situation which was best
-> solved with this change?
-
-
-Yes, our distro, OpenBMC, uses systemd, so I thought we'd need a new 
-service. However after a little more research, I see now that that the 
-existing systemd-sysctl can do what you suggest and set it during early 
-boot. So that is probably the right way to go, and this change can be 
-dropped.
-
-Thanks for your feedback!
-
-Eddie
-
-
->
+> ---
+>  sound/soc/sof/amd/pci-rn.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/sound/soc/sof/amd/pci-rn.c b/sound/soc/sof/amd/pci-rn.c
+> index b8910bb7f27c..d5d9bcc2c997 100644
+> --- a/sound/soc/sof/amd/pci-rn.c
+> +++ b/sound/soc/sof/amd/pci-rn.c
+> @@ -101,6 +101,7 @@ static int acp_pci_rn_probe(struct pci_dev *pci, const struct pci_device_id *pci
+>  	res = devm_kzalloc(&pci->dev, sizeof(struct resource) * ARRAY_SIZE(renoir_res), GFP_KERNEL);
+>  	if (!res) {
+>  		sof_pci_remove(pci);
+> +		platform_device_unregister(dmic_dev);
+>  		return -ENOMEM;
+>  	}
+> 
+> --
+> 2.31.1
+> 

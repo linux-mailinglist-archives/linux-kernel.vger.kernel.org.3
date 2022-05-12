@@ -2,121 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EA8D5255CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 482105255D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344183AbiELTfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 15:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44454 "EHLO
+        id S1358103AbiELTfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 15:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232168AbiELTfW (ORCPT
+        with ESMTP id S1358096AbiELTf3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 15:35:22 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43C123E29E
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 12:35:21 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id j10-20020a17090a94ca00b001dd2131159aso8803393pjw.0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 12:35:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kfZN6PXN3cDIj6QUSkzpmoXvq4z3A1Hj8dUVdgbk/LI=;
-        b=TDmXlRACyP52L1jGPGFOWL4byOhwal0rhKM+xO441dFXS3IuZdPlDV85V5K1j0yrPA
-         odDZ67qDA2O6O3JFbd+WH0LQpcmMhogaJYT+wq/7HszRntXNVPXDeSk1gG08QzZRQRIW
-         CHlDNPl4fMOaoqiWI8Phe4dM/4zcQY5u3Nc6eAWh3jfJg4zIRCPnUCYXUMs3QEhDX84q
-         gu+blpAY5EDrIJRk0oKEA6r2HJYVePEmNySaN4Th6TkiPfm4w+kWRDX7DllWMSaIN2l8
-         6kGOMXnjEhn5ERdzY4qMgzI+UhM3IbSbengxwejfbRcVwb/k2PpeHOn5zgF1HWH89dza
-         nEwg==
+        Thu, 12 May 2022 15:35:29 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65D025E7A5
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 12:35:28 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id j4-20020a92c204000000b002caad37af3fso3855616ilo.22
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 12:35:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kfZN6PXN3cDIj6QUSkzpmoXvq4z3A1Hj8dUVdgbk/LI=;
-        b=g57X+XiuTdb+1Uyimqz6BMuX67/rc8FX1Fo7ivYKbrOodqDkC4wooUHuOQ3jtgdGdE
-         hjUa++PVNt7slEsVsn5qxiEb0D9Ayq+qmcYHHOef0KOHSwylNWdrKoT1xZ424ogkKaPa
-         aAKi2HtgZEOPd9Jk3XREHQLwTgEZS/00PItIY0d3VREzU/+c0/VXgn+Esl2WeXxt/04z
-         Yo39H9Y8dmX0xMS8keQ+BcmgCr2DDwxSSgWn3SvVEyPMR91uyEyKJdgFgnp6CmxUcdU8
-         TreM/IUkVIqs3AyjfRqJ+lsYXumREPC9eqQdQkrA/h3LfgLn/aoAh1jApEIZy55DNKGQ
-         /xoQ==
-X-Gm-Message-State: AOAM531VR6UxgwIHpTI4dFhabumO/pYrXtCMl7+Wke6gXpOaV7sxzXoh
-        nL3rrsAEPrkiz8GXIJq0RKD3WA==
-X-Google-Smtp-Source: ABdhPJy3B0WgQXyYcsYlyM8zhsfQkOrQ9Ynae+lWMuPFoAySH0P8tBiO77yZ9vYieIinOyRTKKEsyA==
-X-Received: by 2002:a17:903:22cb:b0:15e:d715:1bd8 with SMTP id y11-20020a17090322cb00b0015ed7151bd8mr1319276plg.159.1652384121012;
-        Thu, 12 May 2022 12:35:21 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id p187-20020a62d0c4000000b0050dc7628135sm226616pfg.15.2022.05.12.12.35.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 12:35:20 -0700 (PDT)
-Date:   Thu, 12 May 2022 19:35:16 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jon Kohler <jon@nutanix.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ashok Raj <ashok.raj@intel.com>,
-        KarimAllah Ahmed <karahmed@amazon.de>,
-        David Woodhouse <dwmw@amazon.co.uk>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH v4] x86/speculation, KVM: remove IBPB on vCPU load
-Message-ID: <Yn1hdHgMVuni/GEx@google.com>
-References: <20220512184514.15742-1-jon@nutanix.com>
- <Yn1fjAqFoszWz500@google.com>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=vnBY0HzgcdQ5Va+zEnq5HjFQ0qe5vbnNzeKtvYL+KTM=;
+        b=sSbIrhedexWAPmuMvkZsPZJkCNblOx7Gdh6s+C+dnFelBZ2qVulfN8sBbJ2ZNL1OWx
+         QuEAXDq5QQv1AEVzKCqw/jYWqKJjEZyz+V3uSqa4f/Jv+60VCL/Yx+L+pTiHjc7kYZCu
+         DgU3Aak2YVOQL8NwiS+kD1B5pSp9mmzpxZY5Qt5xyo/jADzjuyDhUl0pd/fdTN0AFIZy
+         N4ZR3ebD0mrHvPBdYTmoMN0gYK2J+cpVkvEEeb4nqpvHfxIinmaSk+GjKCxluqZmsTqX
+         dEvf3WVGoEwwTBc+U1jCjoWs92dXXcuvqm3lRBczSG1QwYz4D7zsfwrFjtEEj7rTL/Fy
+         gr7A==
+X-Gm-Message-State: AOAM531IFbnnTAoEVnJbQFYZQyFbQXyk5MikccTOeqxG9rI2laqCnmfQ
+        rXpyenC4vTlNtQ1wzqx8azNyVM0zgJm9Q5uZKSHyR22xI7yo
+X-Google-Smtp-Source: ABdhPJyv1FM7UI0nrMJNmcePkouONIWR1m2g431a3Tqc+Z2iBZjMpy4slL2YQ4f+e2cevHFMw4W5JLLgDe1Y4ou86OuY3PJhPPDk
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yn1fjAqFoszWz500@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:258b:b0:32d:b5e8:b282 with SMTP id
+ s11-20020a056638258b00b0032db5e8b282mr872153jat.16.1652384128139; Thu, 12 May
+ 2022 12:35:28 -0700 (PDT)
+Date:   Thu, 12 May 2022 12:35:28 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fd857805ded5a88e@google.com>
+Subject: [syzbot] WARNING: suspicious RCU usage in bond_ethtool_get_ts_info
+From:   syzbot <syzbot+92beb3d46aab498710fa@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, andy@greyhouse.net, ast@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        edumazet@google.com, hawk@kernel.org, j.vosburgh@gmail.com,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        liuhangbin@gmail.com, netdev@vger.kernel.org, pabeni@redhat.com,
+        songliubraving@fb.com, syzkaller-bugs@googlegroups.com,
+        vfalico@gmail.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022, Sean Christopherson wrote:
-> On Thu, May 12, 2022, Jon Kohler wrote:
-> > Remove IBPB that is done on KVM vCPU load, as the guest-to-guest
-> > attack surface is already covered by switch_mm_irqs_off() ->
-> > cond_mitigation().
-> > 
-> > The original commit 15d45071523d ("KVM/x86: Add IBPB support") was simply
-> > wrong in its guest-to-guest design intention. There are three scenarios
-> > at play here:
-> 
-> Jim pointed offline that there's a case we didn't consider.  When switching between
-> vCPUs in the same VM, an IBPB may be warranted as the tasks in the VM may be in
-> different security domains.  E.g. the guest will not get a notification that vCPU0 is
-> being swapped out for vCPU1 on a single pCPU.
-> 
-> So, sadly, after all that, I think the IBPB needs to stay.  But the documentation
-> most definitely needs to be updated.
-> 
-> A per-VM capability to skip the IBPB may be warranted, e.g. for container-like
-> use cases where a single VM is running a single workload.
+Hello,
 
-Ah, actually, the IBPB can be skipped if the vCPUs have different mm_structs,
-because then the IBPB is fully redundant with respect to any IBPB performed by
-switch_mm_irqs_off().  Hrm, though it might need a KVM or per-VM knob, e.g. just
-because the VMM doesn't want IBPB doesn't mean the guest doesn't want IBPB.
+syzbot found the following issue on:
 
-That would also sidestep the largely theoretical question of whether vCPUs from
-different VMs but the same address space are in the same security domain.  It doesn't
-matter, because even if they are in the same domain, KVM still needs to do IBPB.
+HEAD commit:    01f4685797a5 eth: amd: remove NI6510 support (ni65)
+git tree:       net-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=16391d99f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c04cc4641789ea51
+dashboard link: https://syzkaller.appspot.com/bug?extid=92beb3d46aab498710fa
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17df03e1f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12159cbef00000
+
+The issue was bisected to:
+
+commit aa6034678e873db8bd5c5a4b73f8b88c469374d6
+Author: Hangbin Liu <liuhangbin@gmail.com>
+Date:   Fri Jan 21 08:25:18 2022 +0000
+
+    bonding: use rcu_dereference_rtnl when get bonding active slave
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16fce349f00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=15fce349f00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=11fce349f00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+92beb3d46aab498710fa@syzkaller.appspotmail.com
+Fixes: aa6034678e87 ("bonding: use rcu_dereference_rtnl when get bonding active slave")
+
+=============================
+WARNING: suspicious RCU usage
+5.18.0-rc5-syzkaller-01392-g01f4685797a5 #0 Not tainted
+-----------------------------
+include/net/bonding.h:353 suspicious rcu_dereference_check() usage!
+
+other info that might help us debug this:
+
+
+rcu_scheduler_active = 2, debug_locks = 1
+1 lock held by syz-executor317/3599:
+ #0: ffff88801de78130 (sk_lock-AF_INET){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1680 [inline]
+ #0: ffff88801de78130 (sk_lock-AF_INET){+.+.}-{0:0}, at: sock_setsockopt+0x1e3/0x2ec0 net/core/sock.c:1066
+
+stack backtrace:
+CPU: 0 PID: 3599 Comm: syz-executor317 Not tainted 5.18.0-rc5-syzkaller-01392-g01f4685797a5 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ bond_option_active_slave_get_rcu include/net/bonding.h:353 [inline]
+ bond_ethtool_get_ts_info+0x32c/0x3a0 drivers/net/bonding/bond_main.c:5595
+ __ethtool_get_ts_info+0x173/0x240 net/ethtool/common.c:554
+ ethtool_get_phc_vclocks+0x99/0x110 net/ethtool/common.c:568
+ sock_timestamping_bind_phc net/core/sock.c:869 [inline]
+ sock_set_timestamping+0x3a3/0x7e0 net/core/sock.c:916
+ sock_setsockopt+0x543/0x2ec0 net/core/sock.c:1221
+ __sys_setsockopt+0x55e/0x6a0 net/socket.c:2223
+ __do_sys_setsockopt net/socket.c:2238 [inline]
+ __se_sys_setsockopt net/socket.c:2235 [inline]
+ __x64_sys_setsockopt+0xba/0x150 net/socket.c:2235
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f8902c8eb39
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

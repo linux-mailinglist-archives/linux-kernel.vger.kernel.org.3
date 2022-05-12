@@ -2,154 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E59B6524A4B
+	by mail.lfdr.de (Postfix) with ESMTP id 984EF524A4A
 	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:31:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352643AbiELKai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 06:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49240 "EHLO
+        id S1352641AbiELKad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 06:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352638AbiELKac (ORCPT
+        with ESMTP id S1352623AbiELKaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 06:30:32 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B027622308F;
-        Thu, 12 May 2022 03:30:31 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2f7ca2ce255so50599887b3.7;
-        Thu, 12 May 2022 03:30:31 -0700 (PDT)
+        Thu, 12 May 2022 06:30:25 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC24223840
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:30:23 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id s11so1884031edy.6
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:30:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Jl+ZZLPEmKFGVogvW81THWaOFnfrMcq7xgsxNJKbp8Y=;
+        b=GzHOlN0ZzVY4PrqYpKqPssLC3MnbSsdquS7slbkn7dcdXDOrQpCRO8USwHNEsG3Ysf
+         jju6K0tEIHtYxB4vhKQcLCXTFcb2Y9juE/nPZnI9LSD+xuSwFndkivKRNQ+dZA+wYnyD
+         oYxi6rdcJ3ZBUG08tLjCMUb3wUfGdt1yHBdL754NRw1j1CoCHU1rkKgEl8haN/BCf0k3
+         qzmFdXoKxi+jkWpLJSnhloCSptQ+ruWOvyhvxxsimbDX+8Xl6g9xn3e8ZsaYaKvdCClH
+         w8qbLG6rSSGpdpTFjHHKAV3ZKzzLMCLF4hWyUZVEL5r/gyg+vxdCkctA67GXkCCWANDg
+         8ulA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DznYDTXJFA0HssmMIscX0UQ6FL2uFsbT209IcQLUNKU=;
-        b=SUTLkiyhs72bcFVEodWWfJiz13zYpT5qMd8wfY9UPHmkztsAHknDLcgqaA88056QNb
-         Bc2y+2VIFbFITRlv9PiIqUGsLzNaMSZdzMsaE1ss+/hwRDgz+uvSUz1J4ZGrLojzqXeQ
-         M9UYmvm4cvNxg1lnJExjzUjYquNenBUO3SDvyRguhfxemGkvbivz5lrivKw8iZfBqj2M
-         Dqq2gUQWqKQ6koR/JC+eYUexZDk3cDM8Oip8gg5RsNLzIb8uhu+fDcJE/A+lSB24dWaM
-         f6eqUhkka8GWOm5Wpl9+Ccx4ZUU3Hbj8rryK8O2YfEjxo1AToT7elVMSYm1gnd2hru0p
-         CfoQ==
-X-Gm-Message-State: AOAM532Z5QFgpAsaHUkYVPGKyP0cf/RITldPeKNDmLsS9+y16VQ6R/c7
-        tYuB1YDE2Qmm3jJitA/gkVz3tyHaIHkK1bTcULw=
-X-Google-Smtp-Source: ABdhPJybiRZHO9cH0p8EVh00RpAoFILmE24SwCtaAYWKyhu93JjxbXApgUNEAhrWSeh26UHaJ/QdSG0pvm/JFs4TU8g=
-X-Received: by 2002:a0d:ddce:0:b0:2f8:c9f7:8f7c with SMTP id
- g197-20020a0dddce000000b002f8c9f78f7cmr30685978ywe.301.1652351430973; Thu, 12
- May 2022 03:30:30 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Jl+ZZLPEmKFGVogvW81THWaOFnfrMcq7xgsxNJKbp8Y=;
+        b=TcezCYQGWRxhtLfVCHhawZPgWyWcvN4u80uaLgWmvDUOB43ltDTTe7e4BX2fekpp+W
+         nANgqjis2aB+a+GNb51vpFzI0nnbdkVP2qKEGRAdU8ODJtoYW3QUY5CqxadgZlf7e1X+
+         Jn3B59eZE4tD28MZNwDaDPbZwNs95p6I27v9ySVBnA6DQ1BwI4PGKHgfsRcOdPP6TVko
+         1eMFTqVtYxkKjApVopZFpbs/D3u/0zR159HgiM8F2fntURt98yHiw35XwJ79s8yOhWBl
+         4qez+w13SZIeXBXkXtHXoosaifyguf2N1cbAPrj2Iq7ULYf563/CanDH7zKVxMW34MIN
+         3/rQ==
+X-Gm-Message-State: AOAM533reTMEOfAjltoR1uJn9Kq8u7se54+YfSOsDJaKRpCRWx2SO0lN
+        ex7fUECOP7eCt+UZp52B0hhZng==
+X-Google-Smtp-Source: ABdhPJyfG2D7eWQvDaS2cd6jcMEovgXAcO4kNIJd+zFA4btjO+0kmpY2e/uHtr9ENXd4dF29PFCiUA==
+X-Received: by 2002:a05:6402:948:b0:425:ea37:96b8 with SMTP id h8-20020a056402094800b00425ea3796b8mr34018713edz.90.1652351421995;
+        Thu, 12 May 2022 03:30:21 -0700 (PDT)
+Received: from [192.168.0.158] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id q20-20020a170906941400b006f3ef214dd1sm1991452ejx.55.2022.05.12.03.30.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 03:30:21 -0700 (PDT)
+Message-ID: <5b32cecf-873a-6367-df87-1b8d45e63cec@linaro.org>
+Date:   Thu, 12 May 2022 12:30:20 +0200
 MIME-Version: 1.0
-References: <20220510182221.3990256-1-srinivas.pandruvada@linux.intel.com>
- <CAJZ5v0hDN=iGBQei6XeJ1b3qLiRxPDm+ZFtKU1PcHbBcyxGpZw@mail.gmail.com> <408701ca2c7704c146c806740eabb5a99f30c945.camel@linux.intel.com>
-In-Reply-To: <408701ca2c7704c146c806740eabb5a99f30c945.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 12 May 2022 12:30:19 +0200
-Message-ID: <CAJZ5v0hT8UBDn3Lo5znFTao1bbjVUOgk8fPxkW9x4wC7XME1-A@mail.gmail.com>
-Subject: Re: [UPDATE][PATCH] thermal: int340x: Mode setting with new OS handshake
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [v4 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
+ override params bindings
+Content-Language: en-US
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+References: <1652282793-5580-1-git-send-email-quic_kriskura@quicinc.com>
+ <1652282793-5580-2-git-send-email-quic_kriskura@quicinc.com>
+ <d296720d-ccbe-27f0-8ba1-9653af25dd52@linaro.org>
+ <9644d608-4ab9-ed0d-50fb-0016e4331361@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <9644d608-4ab9-ed0d-50fb-0016e4331361@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 9:56 PM srinivas pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> On Wed, 2022-05-11 at 20:14 +0200, Rafael J. Wysocki wrote:
-> > On Tue, May 10, 2022 at 8:22 PM Srinivas Pandruvada
-> > <srinivas.pandruvada@linux.intel.com> wrote:
-> > >
-> > > With the new OS handshake introduced with the commit: "c7ff29763989
-> > > ("thermal: int340x: Update OS policy capability handshake")",
-> > > thermal zone mode "enabled" doesn't work in the same way as the
-> > > legacy
-> > > handshake. The mode "enabled" fails with -EINVAL using new
-> > > handshake.
-> > >
-> > > To address this issue, when the new OS UUID mask is set:
-> > > - When mode is "enabled", return 0 as the firmware already has the
-> > > latest policy mask.
-> > > - When mode is "disabled", update the firmware with UUID mask of
-> > > zero.
-> > > In this way firmware can take control of the thermal control. Also
-> > > reset the OS UUID mask. This allows user space to update with new
-> > > set of policies.
-> > >
-> > > Fixes: c7ff29763989 ("thermal: int340x: Update OS policy capability
-> > > handshake")
-> > > Signed-off-by: Srinivas Pandruvada
-> > > <srinivas.pandruvada@linux.intel.com>
-> > > Cc: stable@vger.kernel.org
-> >
-> > This is not -stable material yet.
-> I thought it will wait for 5.19 merge window.
+On 12/05/2022 07:57, Krishna Kurapati PSSNV wrote:
+> 
+> On 5/11/2022 11:49 PM, Krzysztof Kozlowski wrote:
+>> On 11/05/2022 17:26, Krishna Kurapati wrote:
+>>> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>>>
+>>> Add device tree bindings for SNPS phy tuning parameters.
+>>>
+>>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>>> ---
+>>>   .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 87 ++++++++++++++++++++++
+>>>   1 file changed, 87 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+>>> index 1ce251d..70efffe 100644
+>>> --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+>>> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+>>> @@ -53,6 +53,93 @@ properties:
+>>>     vdda33-supply:
+>>>       description: phandle to the regulator 3.3V supply node.
+>>>   
+>>> +  qcom,hs-disconnect-bps:
+>>> +    $ref: /schemas/types.yaml#/definitions/int32
+>>> +    description:
+>>> +      This adjusts the voltage level for the threshold used to
+>>> +      detect a disconnect event at the host. Possible values are.
+>>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>> This means there is some minimum and maximum (100%)?
+> 
+> Hi Krzystof,
+> 
+> Yes there are max and min for each parameter (not necessarily 0%/100%)
+> 
+> As an example if we take squelch detector threshold, the register value 
+> vs actual percentage changer as per data book is as follows :
+> 
+> % change in voltage    |     corresponding reg value
+> 
+>   -20.90%                        |    7
+>   -15.60%                        |    6
+> -10.30%                         |    5
+> -5.30%                           |    4
+> 0%                                  |    3
+> 5.30%                            |    2
+> 10.60%                          |    1
+> 15.90%                          |    0
+> 
+> Here the min and max are 15.9% to -20.9%
+> 
+> The min and max differ for each parameter and might not be necessarily 
+> 0% and 100%
 
-It is better to avoid making a major release with a known-broken
-interface if possible.
+Then it seems possible to define minimum and maximum values - please add
+them ("minimum: xxxx").
 
-> >
-> > > ---
-> > > update:
-> > > Added Fixes tag
-> > >
-> > >
->
-> [...]
->
-> > > +               if (priv->os_uuid_mask) {
-> > > +                       if (!enabled) {
-> > > +                               priv->os_uuid_mask = 0;
-> > > +                               result = set_os_uuid_mask(priv,
-> > > priv->os_uuid_mask);
-> >
-> > This change worries me a bit, because it means replaying an already
-> > established _OSC handshake which shouldn't be done by the spec.
-> >
-> I checked with the firmware team. The _OSC changes dynamically is
-> validated and is recommended when enable/disable user space thermal
-> control.
 
-OK
-
-> Looking at ACPI Spec
-> "OSPM may evaluate _OSC multiple times to indicate changes in OSPM
-> capability to the device but this may be precluded by specific device
-> requirements"
-
-Well, different paragraphs say different things, but it is fine as
-long as the firmware and the OS are on the same page in the given use
-case.
-
-> > But I suppose you have tested this?
-> I tested on TigerLake system.
-
-OK
-
-> >
-> > > +                       }
-> > > +
->
-> [...]
->
-> >
-> > Patch applied as 5.18-rc material, but I've removed some unneeded
-> > parens from the new code, so please double check the result in
-> > bleeding-edge.
-> I tested the patch from bleeding edge.
-> Works fine.
-
-Good.
-
-I'll queue it up for -rc7 then (I will be offline for the next few
-days, most likely, and I'm not ready to send a pull request today).
-
-Thanks!
+Best regards,
+Krzysztof

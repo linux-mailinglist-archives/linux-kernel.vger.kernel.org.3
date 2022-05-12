@@ -2,124 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCBF95256F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 23:18:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 898C65256F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 23:19:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358676AbiELVSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 17:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39390 "EHLO
+        id S1358693AbiELVTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 17:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358532AbiELVSa (ORCPT
+        with ESMTP id S1358689AbiELVTf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 17:18:30 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1297A45A
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 14:18:29 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id r9-20020a92ce89000000b002cfcfff298dso4006196ilo.19
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 14:18:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=OD+DJjg0IVnWKUjf9SiJctf3WNuUFGLwQrxYAzpgXbY=;
-        b=bzbw3s7qCnm2w6xvVyftH9ciEzEZGGLZzO54Y+skCQtEOiarynucUNwN43ffDoouMw
-         rDPNSMHvC6CmGjloZS4hFJ13vudIabYBCTu3cbTsTEW6X12bSVm2pAUSQC9RsfT65sQw
-         ZJbZaOWOQagOFL7ZOCVY1GiEqKarZSbtpbUBoIgHiaNQndaYTrEnRVYf7s+M8K+LD7cA
-         BI7ZuIbjKybsH5EmC6bW85I5nN9iYbCVKSge25glUfz6r+GWdiPYeBMm4xpigxspVTK+
-         /19wq7VsrxYRna8t7AqObch3aTMVhI9e7R5obc40AQ9pre1vjrWPHRfj8baVzQHDUxCX
-         9mNA==
-X-Gm-Message-State: AOAM532YR5oCJqo4t8VA+X+ugS6qgNJN/0vHO1dChYND+4EPiyw/nymw
-        9uBlqBYG+0oyg73ff8Uo/uvO3u3VM1UEGqiW+m9/aEaWHRGb
-X-Google-Smtp-Source: ABdhPJwC5eM42fGDTmMX5/gu/JoS0zMGHmicuAdhYE4t7bPkyifrzJ9L1lPr6G41pEJ+uFmJHyhw810wOPpQo+RcWbagA4M0NSVd
+        Thu, 12 May 2022 17:19:35 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6D61A8E3A
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 14:19:32 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id BE39C2C00E8;
+        Thu, 12 May 2022 21:19:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1652390369;
+        bh=CAJVfbLRnIberFA3/D7eHStqIi/ycjSlAeXdnxJB2ss=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=eg2LIM/3JBDJtb4ZdYqee367jH0rk96OveYu6CNWhuoVbogXy1tLZf8UVYKisaTqy
+         TL1Y7BSna0rkygFbcHSnbbwZIWNdgfcUPXv0qvdV1fh3MVRKi3a5B0t6y5ysPOTrRR
+         df+ksFT6yAseC1swu4fMWsCiUwcS26QnMT46ydTZtlkaIsRwL4RVaQuu1tR9ShcF5G
+         DUIw8uwNicyljI34xqiTUAQUrPBBM3IwwRjfARQRUxoRcKLKYVGsjpmuEjbsJAFxVr
+         BnRx7QMo/ylyig1bd4gYBWNNG7oTDjy1QeRvhfe2UqcDfxUeIyO696YA8vxMkkC898
+         LOIQW8UdwFMYg==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B627d79e10001>; Fri, 13 May 2022 09:19:29 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.32; Fri, 13 May 2022 09:19:30 +1200
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.033; Fri, 13 May 2022 09:19:30 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Andrew Lunn <andrew@lunn.ch>, Elad Nachman <enachman@marvell.com>
+CC:     Vadym Kochan <vadym.kochan@plvision.eu>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
+        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
+        "Kostya Porotchkin" <kostap@marvell.com>,
+        "robert.marko@sartura.hr" <robert.marko@sartura.hr>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [EXT] Re: [PATCH v5 1/2] arm64: dts: marvell: Add Armada 98DX2530
+ SoC and RD-AC5X board
+Thread-Topic: [EXT] Re: [PATCH v5 1/2] arm64: dts: marvell: Add Armada
+ 98DX2530 SoC and RD-AC5X board
+Thread-Index: AQHYZVGaM5HNJyVFK0yMg5+dPH+INq0ZEh4AgABvp4CAABwDAIAAaYGAgABhrgCAAI8oAA==
+Date:   Thu, 12 May 2022 21:19:29 +0000
+Message-ID: <65093185-dc36-af34-8fa7-6f7c08edabaa@alliedtelesis.co.nz>
+References: <20220504044624.951841-1-chris.packham@alliedtelesis.co.nz>
+ <20220511161003.GE10145@plvision.eu> <YnviMOtXX+us+IA4@lunn.ch>
+ <c781f7eb-86f2-16c4-1380-b08b974900ff@alliedtelesis.co.nz>
+ <YnxXWIloDzfg8bh0@lunn.ch>
+ <BN9PR18MB4251F84C9D4C538DB6D63CFCDBCB9@BN9PR18MB4251.namprd18.prod.outlook.com>
+ <Yn0ByoU6Ta5Kmq0u@lunn.ch>
+In-Reply-To: <Yn0ByoU6Ta5Kmq0u@lunn.ch>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8D1B9DC094DB79479ABC3CEEBA7718DA@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:27c6:b0:657:7e7a:11f3 with SMTP id
- l6-20020a05660227c600b006577e7a11f3mr937389ios.40.1652390308547; Thu, 12 May
- 2022 14:18:28 -0700 (PDT)
-Date:   Thu, 12 May 2022 14:18:28 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005f1a8805ded719cc@google.com>
-Subject: [syzbot] UBSAN: shift-out-of-bounds in tcf_pedit_init
-From:   syzbot <syzbot+8ed8fc4c57e9dcf23ca6@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, jhs@mojatatu.com,
-        jiri@resnulli.us, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com, xiyou.wangcong@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=U+Hs8tju c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=oZkIemNP1mAA:10 a=trsHGxiVvyFGy2KKG6kA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    810c2f0a3f86 mlxsw: Avoid warning during ip6gre device rem..
-git tree:       net
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1448a599f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=331feb185f8828e0
-dashboard link: https://syzkaller.appspot.com/bug?extid=8ed8fc4c57e9dcf23ca6
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=104e9749f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15f913b9f00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8ed8fc4c57e9dcf23ca6@syzkaller.appspotmail.com
-
-netlink: 28 bytes leftover after parsing attributes in process `syz-executor151'.
-netlink: 28 bytes leftover after parsing attributes in process `syz-executor151'.
-================================================================================
-UBSAN: shift-out-of-bounds in net/sched/act_pedit.c:238:43
-shift exponent 1400735974 is too large for 32-bit type 'unsigned int'
-CPU: 0 PID: 3606 Comm: syz-executor151 Not tainted 5.18.0-rc5-syzkaller-00165-g810c2f0a3f86 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- ubsan_epilogue+0xb/0x50 lib/ubsan.c:151
- __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x187 lib/ubsan.c:322
- tcf_pedit_init.cold+0x1a/0x1f net/sched/act_pedit.c:238
- tcf_action_init_1+0x414/0x690 net/sched/act_api.c:1367
- tcf_action_init+0x530/0x8d0 net/sched/act_api.c:1432
- tcf_action_add+0xf9/0x480 net/sched/act_api.c:1956
- tc_ctl_action+0x346/0x470 net/sched/act_api.c:2015
- rtnetlink_rcv_msg+0x413/0xb80 net/core/rtnetlink.c:5993
- netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2502
- netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
- netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
- netlink_sendmsg+0x904/0xe00 net/netlink/af_netlink.c:1921
- sock_sendmsg_nosec net/socket.c:705 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:725
- ____sys_sendmsg+0x6e2/0x800 net/socket.c:2413
- ___sys_sendmsg+0xf3/0x170 net/socket.c:2467
- __sys_sendmsg+0xe5/0x1b0 net/socket.c:2496
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fe36e9e1b59
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffef796fe88 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fe36e9e1b59
-RDX: 0000000000000000 RSI: 0000000020000300 RDI: 0000000000000003
-RBP: 00007fe36e9a5d00 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007fe36e9a5d90
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-================================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+DQpPbiAxMy8wNS8yMiAwMDo0NywgQW5kcmV3IEx1bm4gd3JvdGU6DQo+PiBCYXNpY2FsbHksIHRo
+ZSBjcHUtc3Vic3lzdGVtcyBvZiBQcmVzdGVyYSA5OERYMjV4eCAoQUM1KSBhbmQgUHJlc3RlcmEg
+OThEWDM1eHggKEFDNVgpIGFyZSB0aGUgc2FtZS4NCj4gR3JlYXQsIHRoYW5rcyBmb3IgdGhlIGNv
+bmZvcm1hdGlvbi4NCj4NCj4+IFRoZSBEVFNJIENocmlzIHByb3Bvc2VkIGhhZCB0aGUgUENJZSBw
+b3J0aW9uIHJlbW92ZWQuDQo+PiBXZSBoYXZlIFBDSWUgc3VwcG9ydCBmb3IgQUM1L0FDNVggc28g
+d2Ugd291bGQgb2J2aW91c2x5IGxpa2UgdG8NCj4+IGluY2x1ZGUgdGhpcyBwb3J0aW9uIGluIGJv
+dGggdGhlIERUU0kgYW5kIGFzIGEgcGF0Y2ggdG8gdGhlIEFybWFkYThLDQo+PiBQQ0llIGRyaXZl
+ci4NCj4gU28geW91IGNhbiBhZGQgdGhlIG5lZWRlZCBub2RlIHRvIHRoZSAuZHRzaSBhcyBwYXJ0
+IG9mIHRoZSBwYXRjaCB0bw0KPiB0aGUgcGNpLWFhcmR2YXJrLmMgZHJpdmVyLiBUaGF0IHNvdW5k
+cyBPLksuDQoNCkkgZGVsaWJlcmF0ZWx5IGxlZnQgdGhlIHBjaSBzdHVmZiBvdXQgb2YgbXkgc3Vi
+bWlzc2lvbiB0byBrZWVwIHRoaW5ncyANCnNpbXBsZSBhbmQgYmVjYXVzZSBJIGhhdmUgbm8gd2F5
+IG9mIHRlc3RpbmcgaXQuIEV2ZW50dWFsbHkgd2UgKGFsbGllZCANCnRlbGVzaXMpIGFyZSBwbGFu
+bmluZyBhIHByb2R1Y3QgdmFyaWFudCB0aGF0IHdpbGwgbmVlZCBhIDJuZCBzd2l0Y2ggDQpjb25u
+ZWN0ZWQgdmlhIHBjaSBzbyBJJ2xsIGJlIHJldmlzaXRpbmcgdGhlIHBjaSBzdHVmZiB0aGVuICh1
+bmxlc3MgDQpzb21lb25lIGVsc2UgYmVhdHMgbWUgdG8gaXQpLg0KDQo=

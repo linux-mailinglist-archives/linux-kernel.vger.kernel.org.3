@@ -2,74 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A937052463B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 08:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A54D652465D
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350602AbiELG5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 02:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46458 "EHLO
+        id S1350679AbiELHCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 03:02:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238889AbiELG43 (ORCPT
+        with ESMTP id S242965AbiELHCY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 02:56:29 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2821836F
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 23:56:27 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id l11-20020a17090a49cb00b001d923a9ca99so4074250pjm.1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 23:56:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=WIZMHJ5xRJacnsB6/o2E9laJl0A/k8C1YscKZGNG7WM=;
-        b=CDwaq7yh1rz+5ZXUtvYAmjK5GoGl0YKf9usiA8Qr0ncf55O2ooNJCUldcC4OWNITMD
-         Bi54+J2lepaOCMCr7j49UhXpQm39vVkbhACXPmy7rxvh+A57/qp7gARCu767qWcqEPm4
-         cTsdp4sQDW5zjc9rzS1fFS/Z+EgC3Hyx1Zl9WQjJ6NXoFPPikQbKtGryud/o2IPcDC2C
-         bYTlLfyJSJjG+e1cmbp4TUxIn/Zvh82xBUn1cZLzwKSVuIYAwJ0ByDFq4L3TcG7dWypc
-         +jCHNYeum0ecMEPenZvIgJ4WTaRiv6AV0vpRaWJBuChT8Zts+6fIuLb2H0IpFrWLUjF/
-         bH4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=WIZMHJ5xRJacnsB6/o2E9laJl0A/k8C1YscKZGNG7WM=;
-        b=sD81pLwBx8TQL0C10m67APx8pOJ+C1wdychVIjFfbi65baiyLJ0G/9jr4ZPdya9KsW
-         HmPYAZy1Ddwyo9nC8xOpcVM8gqvYE6NmIdBNP/x7WBD8eDylklDAs14CMzQ1geruZAdV
-         ClO45bFyYtBHb955wgu5eGbLJGYcHL0/6sU+jZLSzuOYUrRqXXYrJdZ1fSm580nhr4qc
-         XfIiTnm2WkeZw7nXEcAnXhnZUpIxkSC/pgmNmDUFIl9Gr+nMmtl75DisnYZMa4hU0er1
-         RAJnEqiqZt2jlFhrTMB+3AOH9DoRr8On5gJbSamOIRKT75y93TLSK/pEtTbZQ/FfS8eR
-         jpyA==
-X-Gm-Message-State: AOAM530s9XM8L4xv6Wf7rIoztF/+uFFBCsxgSt48lSQVc6NHw3qtKeoE
-        aTWmsCA7hyvM2jrHzQQH7Fk42w==
-X-Google-Smtp-Source: ABdhPJxLokG376TROJxhzuNTRoirq0Y+7oatotyBqsBFWqk0owd9epXW0o/dm8NXds7ePxSBgMFBGQ==
-X-Received: by 2002:a17:903:1108:b0:156:73a7:7c1 with SMTP id n8-20020a170903110800b0015673a707c1mr28578721plh.101.1652338586874;
-        Wed, 11 May 2022 23:56:26 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id e4-20020a636904000000b003db141a5f26sm1110175pgc.1.2022.05.11.23.56.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 23:56:25 -0700 (PDT)
-Date:   Thu, 12 May 2022 12:26:23 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Schspa Shi <schspa@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v3] cpufreq: fix race on cpufreq online
-Message-ID: <20220512065623.q4aa6y52pst3zpxu@vireshk-i7>
-References: <20220510035259.5ep52sgahd2a6rie@vireshk-i7>
- <20220510154236.88753-1-schspa@gmail.com>
- <20220511043515.fn2gz6q3kcpdai5p@vireshk-i7>
- <CAMA88TpefB=rnqea2u1zEvNUJNE_kdj4mYito7SGCuMj-o071Q@mail.gmail.com>
- <20220511122114.wccgyur6g3qs6fps@vireshk-i7>
- <CAJZ5v0gN_yDFpvCXRXv8rN-i3TugCi-HKpBKK2z4eWU0Zm1GUg@mail.gmail.com>
- <CAJZ5v0id+7vkqMQEyVRe29oF_dRtzZ0EhoYUn8=yzeENDeABJw@mail.gmail.com>
+        Thu, 12 May 2022 03:02:24 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57B53F8A0;
+        Thu, 12 May 2022 00:02:22 -0700 (PDT)
+Received: from kwepemi500014.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KzN4H43Q3zgYt0;
+        Thu, 12 May 2022 15:01:51 +0800 (CST)
+Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
+ kwepemi500014.china.huawei.com (7.221.188.232) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 12 May 2022 15:02:20 +0800
+Received: from localhost.localdomain (10.67.165.24) by
+ kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 12 May 2022 15:02:20 +0800
+From:   Guangbin Huang <huangguangbin2@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>, <edumazet@google.com>,
+        <pabeni@redhat.com>, <bpf@vger.kernel.org>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <lipeng321@huawei.com>, <huangguangbin2@huawei.com>,
+        <chenhao288@hisilicon.com>
+Subject: [PATCH net-next] net: page_pool: add page allocation stats for two fast page allocate path
+Date:   Thu, 12 May 2022 14:56:31 +0800
+Message-ID: <20220512065631.33673-1-huangguangbin2@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0id+7vkqMQEyVRe29oF_dRtzZ0EhoYUn8=yzeENDeABJw@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.24]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600016.china.huawei.com (7.193.23.20)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,39 +52,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11-05-22, 15:19, Rafael J. Wysocki wrote:
-> On Wed, May 11, 2022 at 2:59 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > Hmm, I don't think depending on the values of policy->cpus is a good idea to be
-> > > honest. This design is inviting bugs to come in at another place. We need a
-> > > clear flag for this, a new flag or something like policy_list.
-> 
-> Why?
+From: Jie Wang <wangjie125@huawei.com>
 
-Because it doesn't mean anything unless we have code elsewhere which checks this
-specifically. It should be fine though after using policy_is_inactive() in
-show/store as you suggested, which I too tried to do in a patch :)
+Currently If use page pool allocation stats to analysis a RX performance
+degradation problem. These stats only count for pages allocate from
+page_pool_alloc_pages. But nic drivers such as hns3 use
+page_pool_dev_alloc_frag to allocate pages, so page stats in this API
+should also be counted.
 
-> > > Also I see the same bug happening while the policy is removed. The kobject is
-> > > put after the rwsem is dropped.
-> 
-> This shouldn't be a problem because of the wait_for_completion() in
-> cpufreq_policy_put_kobj().  It is known that cpufreq_sysfs_release()
-> has run when cpufreq_policy_put_kobj() returns, so it is safe to free
-> the policy then.
+Signed-off-by: Jie Wang <wangjie125@huawei.com>
+Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
+---
+ net/core/page_pool.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-I agree to that, but the destruction of stuff happens right in
-cpufreq_policy_free() where it starts removing the policy from the list and
-clears cpufreq_cpu_data. I don't know if it will break anything or not, but we
-should disallow any further sysfs operations once we have reached
-cpufreq_policy_free().
-
-> TBH, I'm not sure why show() doesn't check policy_is_inactive() under the rwsem.
-
-I agree, both show/store should have it.
-
-> Moreover, I'm not sure why the locking dance in store() is necessary.
-
-commit fdd320da84c6 ("cpufreq: Lock CPU online/offline in cpufreq_register_driver()")
-
+diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+index bdbadfaee867..f18e6e771993 100644
+--- a/net/core/page_pool.c
++++ b/net/core/page_pool.c
+@@ -704,8 +704,10 @@ struct page *page_pool_alloc_frag(struct page_pool *pool,
+ 
+ 	if (page && *offset + size > max_size) {
+ 		page = page_pool_drain_frag(pool, page);
+-		if (page)
++		if (page) {
++			alloc_stat_inc(pool, fast);
+ 			goto frag_reset;
++		}
+ 	}
+ 
+ 	if (!page) {
+@@ -727,6 +729,7 @@ struct page *page_pool_alloc_frag(struct page_pool *pool,
+ 
+ 	pool->frag_users++;
+ 	pool->frag_offset = *offset + size;
++	alloc_stat_inc(pool, fast);
+ 	return page;
+ }
+ EXPORT_SYMBOL(page_pool_alloc_frag);
 -- 
-viresh
+2.33.0
+

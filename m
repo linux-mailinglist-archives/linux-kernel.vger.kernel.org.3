@@ -2,125 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0989052536B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10DF652536E
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356945AbiELRTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 13:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
+        id S1356937AbiELRUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 13:20:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356937AbiELRTq (ORCPT
+        with ESMTP id S1356965AbiELRU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 13:19:46 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57C626AD8B
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:19:45 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id y21so7102056edo.2
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:19:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jDHOqKOOly/u6UGesDlSvrOYIRtvk+Gi75eJQoAcvU8=;
-        b=ajie93GkyM3bMzgPSyr9+zDuLO8qmNsBGOmDLDAYe2chL7Y1Dex40FgP7wpA+YsFVS
-         PbCwBPFRrhD1wKMyrktSA2hu4sY+A8Snezdkh2Pl31GtbbWKUVs17izWFz1kX+D2q2GT
-         3Kh1nj3RjFExJpH9SEac2MgWbeFHQCaqrxqgg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jDHOqKOOly/u6UGesDlSvrOYIRtvk+Gi75eJQoAcvU8=;
-        b=dlfiWXqVKKfVy8fYSiNrNDFZ3Wtu80u/AlTlbQxHJx6Gz0vd+4oz0AHNiFRYQPWQQP
-         xfu6kDFKyIVcuI+dfLLsjFdEieO+JKhsXo0TaT9yjEpphmAxHCMauyxOS2oulNzZpeUj
-         PRYpf90kttNDFHwOhtVFLcTkdexnCjRozhTI7+w+39U3sIq1DILYvCAK0byJLCWbm6tW
-         e1gkS6H3G5lsC0c0miIub8BqeLmV7GDuVGdDJTGaAsXrlxWfNejATyUIWqoKikUenk4I
-         RPQubRN/9ofSXQWfrbqz4J3ja0ztxF06j7g7uhrzWKB3nDw8FrHu5NG+44NfGFcqGSYE
-         llZw==
-X-Gm-Message-State: AOAM532XagfQuJaq86FvJzKh/esepxdw51ISJHHjCdxaiomEEJBhbEVg
-        +zqTxk/n5aNpwVjsKDao2sVpADGb8wNlX99ffmU=
-X-Google-Smtp-Source: ABdhPJzRH0j3ONJxkEZjgv2juq4KqnoDu/xJxt4yc1Vur1vpE5xlD83atXi4JMBFWVc3rjswIbuxOQ==
-X-Received: by 2002:a50:ee85:0:b0:428:2648:bc1f with SMTP id f5-20020a50ee85000000b004282648bc1fmr36066103edr.183.1652375984025;
-        Thu, 12 May 2022 10:19:44 -0700 (PDT)
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
-        by smtp.gmail.com with ESMTPSA id z15-20020a1709064e0f00b006f3ef214dc4sm2239775eju.42.2022.05.12.10.19.41
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 10:19:41 -0700 (PDT)
-Received: by mail-wr1-f51.google.com with SMTP id m1so8185346wrb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:19:41 -0700 (PDT)
-X-Received: by 2002:a5d:6dad:0:b0:20c:4dc1:e247 with SMTP id
- u13-20020a5d6dad000000b0020c4dc1e247mr629061wrs.274.1652375980629; Thu, 12
- May 2022 10:19:40 -0700 (PDT)
+        Thu, 12 May 2022 13:20:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32CF26AD96
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:20:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F40F6207F
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 17:20:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E8A58C34116;
+        Thu, 12 May 2022 17:20:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652376015;
+        bh=+7AtIdZR9osN4t5qyhi4RgNDEqKiuehscGpR7C12g9M=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Yy+IEW+keTgP53+Wup42Fq4NvSlCd8SaASd7pyQ+sAnRZVDyXAJcpY5taGya6eh0n
+         rM+gC2PaBAqC8l3u06r4iSRsoYJX+CLT+FM4tFre9xhzAB5at6NrYhtR0NX4CxEygw
+         8OskA3qWhpcZ8abN+1WP58dPq2D9Og19Y5drh6HInXe0JKs8gB1MFxfG2JVCfbEIfy
+         nGYnzw5vDk9GVwBLpT7iJQCiuluDffKbezuzzYAWNeLNIF+QNfQwTWHvQM8/8LSE27
+         qHssxtmcfjM+5MEXs3oktPEIlmHrJS09l98mhPsNDDdlLoKcTSdrEYi6mSBaNmiNWJ
+         YEt5kBZcvGCIQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CFBD1F03937;
+        Thu, 12 May 2022 17:20:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220510082351-mutt-send-email-mst@kernel.org>
- <CAHk-=wjPR+bj7P1O=MAQWXp0Mx2hHuNQ1acn6gS+mRo_kbo5Lg@mail.gmail.com>
- <87czgk8jjo.fsf@mpe.ellerman.id.au> <CAHk-=wj9zKJGA_6SJOMPiQEoYke6cKX-FV3X_5zNXOcFJX1kOQ@mail.gmail.com>
- <87mtfm7uag.fsf@mpe.ellerman.id.au> <CAHk-=wgnYGY=10sRDzXCC2bmappjBTRNNbr8owvGLEW-xuV7Vw@mail.gmail.com>
-In-Reply-To: <CAHk-=wgnYGY=10sRDzXCC2bmappjBTRNNbr8owvGLEW-xuV7Vw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 12 May 2022 10:19:24 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg=jfhgTkYBtY3LPPcUP=8A2bqH_iFezwOCDivuovE41w@mail.gmail.com>
-Message-ID: <CAHk-=wg=jfhgTkYBtY3LPPcUP=8A2bqH_iFezwOCDivuovE41w@mail.gmail.com>
-Subject: Re: [GIT PULL] virtio: last minute fixup
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        KVM list <kvm@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        mie@igel.co.jp
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] platform/chrome: cros_ec_typec: Check for EC driver
+From:   patchwork-bot+chrome-platform@kernel.org
+Message-Id: <165237601584.19682.12247816211484032812.git-patchwork-notify@kernel.org>
+Date:   Thu, 12 May 2022 17:20:15 +0000
+References: <20220404041101.6276-1-akihiko.odaki@gmail.com>
+In-Reply-To: <20220404041101.6276-1-akihiko.odaki@gmail.com>
+To:     Akihiko Odaki <akihiko.odaki@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        pmalani@chromium.org, bleung@chromium.org, groeck@chromium.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 10:10 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> And most definitely not just random data that can be trivially
-> auto-generated after-the-fact.
+Hello:
 
-Put another way: when people asked for change ID's and I said "we have
-links", I by no means meant that "you can just add random worthless
-links to commits".
+This patch was applied to chrome-platform/linux.git (for-next)
+by Prashant Malani <pmalani@chromium.org>:
 
-For example, if you have a (public-facing) Gerrit system that tracks a
-patch before it gets committed, BY ALL MEANS add a link to that as the
-"change ID" that you tracked in Gerrit.
+On Mon,  4 Apr 2022 13:11:01 +0900 you wrote:
+> The EC driver may not be initialized when cros_typec_probe is called,
+> particulary when CONFIG_CROS_EC_CHARDEV=m.
+> 
+> Signed-off-by: Akihiko Odaki <akihiko.odaki@gmail.com>
+> ---
+>  drivers/platform/chrome/cros_ec_typec.c | 3 +++
+>  1 file changed, 3 insertions(+)
 
-That's a Link: that actually adds *information*. It shows some real
-history to the commit, and shows who approved it and when, and gives
-you all the Gerrit background.
+Here is the summary with links:
+  - platform/chrome: cros_ec_typec: Check for EC driver
+    https://git.kernel.org/chrome-platform/c/7464ff8bf2d7
 
-But a link to the email on lkml that just contains the patch and the
-same commentary that was introduced into the commit? Useless garbage.
-It adds no actual information.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-THAT is my argument. Why do people think I'm arguing against the Link:
-tag? No. I'm arguing against adding links with no relevant new
-information behind them.
 
-I don't argue against links to lore. Not at all. If those links are
-about the background that caused the patch, they are great. Maybe they
-are to a long thread about the original problem and how to solve it.
-Thats WONDERFUL.
-
-But here's the deal: when I look at a commit that I wonder "why is it
-doing this, it seems wrong" (possibly after there's been a bug report
-about it, but possibly just because I'm reviewing it as part of doing
-the pull), and I see a "Link:" tag, and it just points back to the
-SAME DAMN DATA that I already have in the commit, then that Link: tag
-not only wasn't helpful, it was ACTIVELY DETRIMENTAL and made me waste
-time and just get irritated.
-
-And if you waste my time with useless links, why would you expect me
-to be supportive of that behavior?
-
-                      Linus

@@ -2,132 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF0E5256DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 23:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6905256DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 23:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358631AbiELVHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 17:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36832 "EHLO
+        id S1358637AbiELVK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 17:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358599AbiELVHP (ORCPT
+        with ESMTP id S238439AbiELVK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 17:07:15 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A61F5C65A;
-        Thu, 12 May 2022 14:07:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=IXavWz4RVwW+N7NqHtEfLphEvWnC63XDl89hHqWIYYM=; b=X1EUyNzIPqRbThayuGlNzSMDo6
-        vWAYGXBSIROCH076Xjc27JeBIIAVWJZbeybapVoesv86Ud8mKmhNGIy0DwQdA0H2wiID24am85i/m
-        QBfv3drxjQSk5FwvDabV//9wMITnx0hB+EVkcFK6B16WnjUj2oj9uX3GQdoGb51OG3fwZHBIZYpUT
-        F/SO1YAfID4K2KV3Bo0KtvvvAWmVfUuItHGwoUzO+nu7G45B/7SVpqlCxwBh/U7Q7vbeutb1uoKLz
-        BsnfBCNZYgVIlbjbMzb3gUgkW0MabgcolqZkwUTAzxQdWVu8zsss+4XL1k3PKCaEbREeUJD8qjsju
-        8THA1Jnw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1npG1d-006kSG-SZ; Thu, 12 May 2022 21:07:09 +0000
-Date:   Thu, 12 May 2022 22:07:09 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     cgel.zte@gmail.com
-Cc:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, corbet@lwn.net,
-        xu xin <xu.xin16@zte.com.cn>,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        wangyong <wang.yong12@zte.com.cn>,
-        Yunkai Zhang <zhang.yunkai@zte.com.cn>
-Subject: Re: [PATCH v6] mm/ksm: introduce ksm_force for each process
-Message-ID: <Yn12/ZMyQEnSh0Ge@casper.infradead.org>
-References: <20220510122242.1380536-1-xu.xin16@zte.com.cn>
+        Thu, 12 May 2022 17:10:56 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EBA33B01C
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 14:10:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652389855; x=1683925855;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ngM5MW6Uypp14d3Hp2UmVsui82daPLdUFpkqWIqZkMM=;
+  b=b8r8stqlES+PQ2KZQ2O3v8r/GbaNpeDjUT+2l/c9htYMtV6t5oDD7vav
+   Zu1oxbzTeULGwEhIvtL1yWDcyggTgxfC3UX4KBsunKKM8ZJ0Uk+EwDPEu
+   FSKan+t6yqtO8XYZgEUs2Qmf3hOFVERaYrg8yMF//LgKB/3T+KXyhGJg6
+   QmmsjcxeuF+e4PFleG5vJFpUsYG4TplkUs5y54D2CS2JtlAwm73nTFSWq
+   2MDo9rxp6+pIu2wSkkcA3qF48ET5lhirSXExVl2MJwtLYgu74NiO7fNbH
+   Ww7SfCZKtiX46JZ8X7lB3VvZQI7UZaj4YtpBqUSjFfNVRzJ+KDeFIyTkq
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="250039282"
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="250039282"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 14:10:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="572695003"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 12 May 2022 14:10:52 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1npG5D-000Kwa-V9;
+        Thu, 12 May 2022 21:10:51 +0000
+Date:   Fri, 13 May 2022 05:10:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Steve Wahl <steve.wahl@hpe.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        0day robot <lkp@intel.com>
+Subject: include/linux/dmar.h:21:33: error: 'CONFIG_DMAR_UNITS_SUPPORTED'
+ undeclared here (not in a function); did you mean 'DMAR_UNITS_SUPPORTED'?
+Message-ID: <202205130506.HnFWEJtK-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220510122242.1380536-1-xu.xin16@zte.com.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 12:22:42PM +0000, cgel.zte@gmail.com wrote:
-> +++ b/Documentation/admin-guide/mm/ksm.rst
-> @@ -32,7 +32,7 @@ are swapped back in: ksmd must rediscover their identity and merge again).
->  Controlling KSM with madvise
->  ============================
->  
-> -KSM only operates on those areas of address space which an application
-> +KSM can operates on those areas of address space which an application
+tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220512-231415/Steve-Wahl/iommu-vt-d-Increase-DMAR_UNITS_SUPPORTED/20220506-035321
+head:   70fc6f8ca45b69a710b82d38ef61ac43a73fef24
+commit: 70fc6f8ca45b69a710b82d38ef61ac43a73fef24 iommu/vt-d: Make DMAR_UNITS_SUPPORTED a config setting
+date:   6 hours ago
+config: x86_64-randconfig-a002 (https://download.01.org/0day-ci/archive/20220513/202205130506.HnFWEJtK-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/70fc6f8ca45b69a710b82d38ef61ac43a73fef24
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review UPDATE-20220512-231415/Steve-Wahl/iommu-vt-d-Increase-DMAR_UNITS_SUPPORTED/20220506-035321
+        git checkout 70fc6f8ca45b69a710b82d38ef61ac43a73fef24
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-"can operate on"
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +static ssize_t ksm_force_write(struct file *file, const char __user *buf,
-> +				size_t count, loff_t *ppos)
-> +{
-> +	struct task_struct *task;
-> +	struct mm_struct *mm;
-> +	char buffer[PROC_NUMBUF];
-> +	int force;
-> +	int err = 0;
-> +
-> +	memset(buffer, 0, sizeof(buffer));
-> +	if (count > sizeof(buffer) - 1)
-> +		count = sizeof(buffer) - 1;
-> +	if (copy_from_user(buffer, buf, count))
-> +		return -EFAULT;
-> +
-> +	err = kstrtoint(strstrip(buffer), 0, &force);
-> +	if (err)
-> +		return err;
-> +
-> +	if (force != 0 && force != 1)
-> +		return -EINVAL;
-> +
-> +	task = get_proc_task(file_inode(file));
-> +	if (!task)
-> +		return -ESRCH;
-> +
-> +	mm = get_task_mm(task);
-> +	if (!mm)
-> +		goto out_put_task;
-> +
-> +	if (mm->ksm_force != force) {
-> +		if (mmap_write_lock_killable(mm)) {
-> +			err = -EINTR;
-> +			goto out_mmput;
-> +		}
-> +
-> +		if (force == 0)
-> +			mm->ksm_force = force;
-> +		else {
-> +			/*
-> +			 * Force anonymous pages of this mm to be involved in KSM merging
-> +			 * without explicitly calling madvise.
-> +			 */
-> +			if (!test_bit(MMF_VM_MERGEABLE, &mm->flags))
-> +				err = __ksm_enter(mm);
-> +			if (!err)
-> +				mm->ksm_force = force;
-> +		}
-> +
-> +		mmap_write_unlock(mm);
-> +	}
+All errors (new ones prefixed by >>):
 
-There's a much simpler patch hiding inside this complicated one.
+   In file included from include/linux/intel-iommu.h:21,
+                    from arch/x86/kvm/x86.c:44:
+>> include/linux/dmar.h:21:33: error: 'CONFIG_DMAR_UNITS_SUPPORTED' undeclared here (not in a function); did you mean 'DMAR_UNITS_SUPPORTED'?
+      21 | #define DMAR_UNITS_SUPPORTED    CONFIG_DMAR_UNITS_SUPPORTED
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/intel-iommu.h:531:35: note: in expansion of macro 'DMAR_UNITS_SUPPORTED'
+     531 |         unsigned int iommu_refcnt[DMAR_UNITS_SUPPORTED];
+         |                                   ^~~~~~~~~~~~~~~~~~~~
 
-	if (force) {
-		set_bit(MMF_VM_MERGEABLE, &mm->flags));
-		for each VMA
-			set VM_MERGEABLE;
-		err = __ksm_enter(mm);
-	} else {
-		clear_bit(MMF_VM_MERGEABLE, &mm->flags));
-		for each VMA
-			clear VM_MERGEABLE;
-	}
 
-... and all the extra complications you added go away.
+vim +21 include/linux/dmar.h
+
+    20	
+  > 21	#define	DMAR_UNITS_SUPPORTED	CONFIG_DMAR_UNITS_SUPPORTED
+    22	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

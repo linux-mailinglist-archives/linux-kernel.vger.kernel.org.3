@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1CE5249EA
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02DE35249EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347744AbiELKCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 06:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
+        id S1352500AbiELKCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 06:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352439AbiELKAs (ORCPT
+        with ESMTP id S1352443AbiELKAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 12 May 2022 06:00:48 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF112230228
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:00:28 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id ks9so9169692ejb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:00:28 -0700 (PDT)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECAF2310A0
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:00:29 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id ch13so9077124ejb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:00:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=a0nTM6qsq4GtGJkoH4nf0Q+TnkSQuyFZioVt/ZR1zw4=;
-        b=oQtJ1P1ICxbjuMvyKGc4PrOAjOYiXbWwf9h50atcRuWJ3tVM+EDUHiZUwhHWJRX3oH
-         KkcXY+UDJL4iCFU+LPkUAwmbiW0xc+fR53Z7Tiyc7BmzupNQSbNqNvoikVrwctwew9HN
-         Evnr3mYbJv2yxkkoUTsjSqEKXAiSWHn2z/D1ZGnSjJ7t0U90qwvUsieqTIvlMRLXydhP
-         jBIwSBQAMGT4icJxcJZRrjFhYoUGwlzQpiIZF8qmEgXBBmeRvXOiw/tISK7utNTNxYaD
-         /IexxpPTLBnJzv0kUIAMI66JSMoKjOCrK/CUS7LMU6FdtR7L2u/+E/ZLOl4OFWhZXrvu
-         3MOA==
+        bh=MAlRyJ0IHfdwsaWhxry6um/UE2vHbyKkhoLXrIb+qPA=;
+        b=HQIdXAR/JBhklqnlGGuEgsJU1ko85OEMvZbET4FVuTkS/TTDxWbpsRpsew3xKXbcaj
+         /G5Ol+0q/ZlDx0Z/Pl0ui1lNEyj0bQV8fzAWFHrG84sISyZ+XRZQGFg1JWe4CEquN+xX
+         GxVjc+eGWPDg0xSWZd2n6urM72qu42CB1a1ltM+adEJJhMVgUijkACDrFFJ9WWZx/V1k
+         5aEup+9P8KjxgdRADLEhrcvsRHWYs5P1QTgUVNs5tCDzmp2Vjl0QHXx3uPgnI3Y0TVxF
+         sJVU/enibj3KDtfWPj2RvoBw8VmSZd9VivhdrgF09VHE1EAyjuKbXrMUF5p4XtudoNh+
+         xijA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=a0nTM6qsq4GtGJkoH4nf0Q+TnkSQuyFZioVt/ZR1zw4=;
-        b=XLwNijy63ASJlgCwrylazphi6SdAvYMEtKyuimNFQjaUyPzjRxmHLCLltsPot0culr
-         kVMgjxSQXcQ5kS51tjJv3yrkP2WoKobeZ86YIE4hNilEyC8yvJd5b+PfxfZrFOzPTIHN
-         YR+WJqlctN5/cfdGy/Pg3HXEUKh8tQtvYDvwuTnLMLCt14pC98Axe3eA2H35mnJ+YHQN
-         +5uwqsGP2K1J6AcVywFo6DhGj9WdGEvhIoVIoaXNRLgTy7275XpzN/EzvdBBa0pmMmoa
-         8jnj2X6x+kOdE37aZPpk9oZDcZP4VpydDey1IwBMozXTdmpBVQ2vAbIOhgAhO6LsTD+J
-         e47A==
-X-Gm-Message-State: AOAM531gjqKmj9JNFqayBscKjVoIVmHMLsyt0MIdZLOyEpcEDsLuAP+v
-        R4IjM+E7f4JgVHCiPSImKXFQIg==
-X-Google-Smtp-Source: ABdhPJztglS/DsrXYvgSkRA9NmYg98rfTUoXDYryxBoafF/ogKr7ATiW2uZke/W9R/xOYWc7cKdl7g==
-X-Received: by 2002:a17:907:62a9:b0:6da:7953:4df0 with SMTP id nd41-20020a17090762a900b006da79534df0mr29302869ejc.316.1652349627443;
-        Thu, 12 May 2022 03:00:27 -0700 (PDT)
+        bh=MAlRyJ0IHfdwsaWhxry6um/UE2vHbyKkhoLXrIb+qPA=;
+        b=NVdcJcbyLFbj8b8SOZya7vqCMZrmcJlpuOHjsy5dpJEnAk+OYu5tNsb/KOWQ9SfGEG
+         OYusU0mFqb/UIfCnFIfL1LCTzFCdh/O4bjBd9xBtznhCBrEURFLpwW06X0T94ZlI1/UJ
+         1bKo5WS4LI/lyydgyJYcSkYbFJQldgw4FnCofgUEBHjnJR8ZHvHU9v2YoDJi9EurGDd+
+         p5O5YGQd7R45Am1SvFH22eP//8DojMSqG/YRT4ZnH5UOGxLEWtUc83F9wrKDgpwxkEeB
+         fhPSkwaA4r9zBjt+YIvigomHj8m8djRr1ZoW5DNeukX/YlIgDONVpfCO0EpaUxyDF5Mw
+         yQ3Q==
+X-Gm-Message-State: AOAM531HSC1AesRawQaH3nbBNvVCJv+gJf8tza9IrKwH6vNPD7jshoJp
+        Wba8u1cdrNGbfey3xJbgQsCQrw==
+X-Google-Smtp-Source: ABdhPJxGNv2EEGDkjnxhKKuaa6cDWZmaGOgjKIXE75pBz7nY1wlq7c8pHtcpcsD3Aki/Tzwhu9tyfw==
+X-Received: by 2002:a17:906:19c6:b0:6ce:98a4:5ee6 with SMTP id h6-20020a17090619c600b006ce98a45ee6mr29302193ejd.567.1652349628444;
+        Thu, 12 May 2022 03:00:28 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id d17-20020a170906641100b006f3ef214da1sm1970287ejm.7.2022.05.12.03.00.26
+        by smtp.gmail.com with ESMTPSA id d17-20020a170906641100b006f3ef214da1sm1970287ejm.7.2022.05.12.03.00.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 03:00:26 -0700 (PDT)
+        Thu, 12 May 2022 03:00:28 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -60,9 +60,9 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     Sireesh Kodali <sireeshkodali1@gmail.com>,
         Sibi Sankar <quic_sibis@quicinc.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 09/12] arm64: dts: qcom: ipq6018: add label to remoteproc node
-Date:   Thu, 12 May 2022 12:00:03 +0200
-Message-Id: <20220512100006.99695-10-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 10/12] arm64: dts: qcom: sdm630: remove unneeded address/size cells in glink-edge
+Date:   Thu, 12 May 2022 12:00:04 +0200
+Message-Id: <20220512100006.99695-11-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220512100006.99695-1-krzysztof.kozlowski@linaro.org>
 References: <20220512100006.99695-1-krzysztof.kozlowski@linaro.org>
@@ -78,27 +78,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-glink-edge bindings require label:
+glink-edge node does not have children with unit addresses:
 
-  ipq6018-cp01-c1.dtb: glink-edge: 'label' is a required property
+  sdm630-sony-xperia-ganges-kirin.dtb: glink-edge: '#address-cells', '#size-cells' do not match any of the regexes: 'pinctrl-[0-9]
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/ipq6018.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/qcom/sdm630.dtsi | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-index c89499e366d3..9db30e7da7bd 100644
---- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-@@ -621,6 +621,7 @@ q6v5_wcss: remoteproc@cd00000 {
+diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+index b72e8e6c52f3..8e32eb3ed599 100644
+--- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+@@ -2158,8 +2158,6 @@ glink-edge {
+ 				label = "lpass";
+ 				mboxes = <&apcs_glb 9>;
+ 				qcom,remote-pid = <2>;
+-				#address-cells = <1>;
+-				#size-cells = <0>;
  
- 			glink-edge {
- 				interrupts = <GIC_SPI 321 IRQ_TYPE_EDGE_RISING>;
-+				label = "rtr";
- 				qcom,remote-pid = <1>;
- 				mboxes = <&apcs_glb 8>;
- 
+ 				apr {
+ 					compatible = "qcom,apr-v2";
 -- 
 2.32.0
 

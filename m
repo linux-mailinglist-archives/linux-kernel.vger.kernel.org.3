@@ -2,115 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83DCB52448A
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 06:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F38E524440
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 06:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344264AbiELEs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 00:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37636 "EHLO
+        id S1345822AbiELEaQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 12 May 2022 00:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348701AbiELEsP (ORCPT
+        with ESMTP id S243795AbiELEaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 00:48:15 -0400
-Received: from esa2.hc1455-7.c3s2.iphmx.com (esa2.hc1455-7.c3s2.iphmx.com [207.54.90.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C6F3B007
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 21:48:13 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="72425221"
-X-IronPort-AV: E=Sophos;i="5.91,218,1647270000"; 
-   d="scan'208";a="72425221"
-Received: from unknown (HELO oym-r1.gw.nic.fujitsu.com) ([210.162.30.89])
-  by esa2.hc1455-7.c3s2.iphmx.com with ESMTP; 12 May 2022 13:48:11 +0900
-Received: from oym-m1.gw.nic.fujitsu.com (oym-nat-oym-m1.gw.nic.fujitsu.com [192.168.87.58])
-        by oym-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 6EC4AED502
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 13:48:10 +0900 (JST)
-Received: from m3003.s.css.fujitsu.com (m3003.s.css.fujitsu.com [10.128.233.114])
-        by oym-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id AA90BD9C46
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 13:48:09 +0900 (JST)
-Received: from localhost.localdomain (unknown [10.125.5.220])
-        by m3003.s.css.fujitsu.com (Postfix) with ESMTP id 65FDB203EF3D;
-        Thu, 12 May 2022 13:48:09 +0900 (JST)
-From:   Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
-To:     linmiaohe@huawei.com
-Cc:     akpm@linux-foundation.org, aquini@redhat.com, ddutile@redhat.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        mgorman@techsingularity.net, vvghjk1234@gmail.com,
-        yamamoto.rei@jp.fujitsu.com
-Subject: Re: [PATCH] mm, compaction: fast_find_migrateblock() should return pfn in the target zone
-Date:   Thu, 12 May 2022 13:27:33 +0900
-Message-Id: <20220512042733.17976-1-yamamoto.rei@jp.fujitsu.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <4cf33f9c-89bc-f845-10d7-2aa62a20f5e5@huawei.com>
-References: <4cf33f9c-89bc-f845-10d7-2aa62a20f5e5@huawei.com>
+        Thu, 12 May 2022 00:30:13 -0400
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F2620F9D3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 21:29:59 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2f7d621d1caso42644237b3.11
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 21:29:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=XqBqQ+XRvyAHUyGfBZIABF5Embq5Xn1tLFaDAHrehy0=;
+        b=SjYSlNjradb8xsdLxJrOoO57gFeddQhIN7aSvVVzAr3NT12jd7yBDjBlmIYGMOtqtC
+         0iDfIr5XOW0Gx8OreHZQEowRFS6Kwyp5bHWwucndMYw28JWVAtgGv7vIj/+5C6bxrQUg
+         4E508vMZQYXCo+qL/QqnlHZBRV5VXbKuP50S2ZsWbjzgO/rIw3LnwH5VZYkZ6ipQpb9M
+         Qk6UT6e+U43L6L+SB6lbNsOyJr67y5TDV7h1Z2P/yeBPTlO5zYy5LkYTwCOpLDxkfyoi
+         6TUF9DlS0fefptZLpjkRUTOsVLAg6OSnpTaBdYEkLisKkaAZTQKN328QrLOd7UdpiGtq
+         kdjA==
+X-Gm-Message-State: AOAM532XDoYwROjJ4bvZLTRNI0HnHteNVD7euhLHM7FkSRpIj1/9CwVy
+        CmIpHTzOH4NDKsBGI3hzzYE8D1IbFW6U1lOOZVA=
+X-Google-Smtp-Source: ABdhPJyyVkmDxcTDBFjfTHOEDq9W/5HTODdg+KeIBAkAVH3WC7JPKZR0Bvog0/jCQrKv80S+rQPqP4YDlS9waRSLq3Y=
+X-Received: by 2002:a81:34f:0:b0:2f7:bbb1:1576 with SMTP id
+ 76-20020a81034f000000b002f7bbb11576mr28802714ywd.45.1652329798501; Wed, 11
+ May 2022 21:29:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+ <20220512011855.1189653-1-mailhol.vincent@wanadoo.fr> <20220512011855.1189653-2-mailhol.vincent@wanadoo.fr>
+ <154f41707c58acdac26c3300c5b429f381c45708.camel@perches.com>
+In-Reply-To: <154f41707c58acdac26c3300c5b429f381c45708.camel@perches.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Thu, 12 May 2022 13:29:47 +0900
+Message-ID: <CAMZ6Rq+Nm9wSajUFP7PyctB50t5ANpe9LhRmO3GJvmgkuXzEOA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] x86/asm/bitops: ffs: use __builtin_ffs to evaluate
+ constant expressions
+To:     Joe Perches <joe@perches.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
+        Jan Beulich <JBeulich@suse.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 May 2022 10:27:44 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
-> On 2022/5/12 9:47, Rei Yamamoto wrote:
->> On Wed, 11 May 2022 17:26:16 Miaohe Lin wrote:
->>> On 2022/5/11 15:07, Rei Yamamoto wrote:
->>>> On Wed, 11 May 2022 14:25:34 Miaohe Lin wrote:
->>>>> On 2022/5/11 12:43, Rei Yamamoto wrote:
->>>>>> Prevent returning a pfn outside the target zone in case that not
->>>>>> aligned with pageblock boundary.
->>>>>> Otherwise isolate_migratepages_block() would handle pages not in
->>>>>> the target zone.
->>>>>>
->>>>>
->>>>> IIUC, the sole caller isolate_migratepages will ensure the pfn won't outside
->>>>> the target zone. So the below code change might not be necessary. Or am I miss
->>>>> something ?
->>>>
->>>> While block_start_pfn is ensured, this variable is not used as the argument for 
->>>> isolate_migratepages_block():
->>>>   -----
->>>>   static isolate_migrate_t isolate_migratepages(struct compact_control *cc)
->>>>   {
->>>>   :
->>>>           low_pfn = fast_find_migrateblock(cc);
->>>>           block_start_pfn = pageblock_start_pfn(low_pfn);
->>>>           if (block_start_pfn < cc->zone->zone_start_pfn)
->>>>                   block_start_pfn = cc->zone->zone_start_pfn;  <--- block_start_pfn is ensured not outside 
->>>>                                                                     the target zone
->>>>   :
->>>>           block_end_pfn = pageblock_end_pfn(low_pfn);
->>>>   :
->>>>           for (; block_end_pfn <= cc->free_pfn;
->>>>                           fast_find_block = false,
->>>>                           cc->migrate_pfn = low_pfn = block_end_pfn,
->>>>                           block_start_pfn = block_end_pfn,
->>>>                           block_end_pfn += pageblock_nr_pages) {
->>>>   :
->>>>                   if (isolate_migratepages_block(cc, low_pfn, block_end_pfn,  <--- low_pfn is passed as 
->>>>                                                                                    the argument
->>>
->>> Sorry, I think you're right. And could you please add the runtime effect of this issue?
->>>
->>> Anyway, this patch looks good to me now. Thanks!
->> 
->> Thank you for your review.
->> The runtime effect is that compaction become unintended behavior.
->> For example, pages not in the target zone are added to cc->migratepages list in isolate_migratepages_block().
->> As a result, pages migrate between nodes unintentionally.
+On Thu. 12 May 2022 at 12:02, Joe Perches <joe@perches.com> wrote:
+> On Thu, 2022-05-12 at 10:18 +0900, Vincent Mailhol wrote:
+> > For x86_64, the current ffs() implementation does not produce
+> > optimized code when called with a constant expression. On the
+> > contrary, the __builtin_ffs() function of both GCC and clang is able
+> > to simplify the expression into a single instruction.
+> []
+> > -static __always_inline int ffs(int x)
+> > +static __always_inline int variable_ffs(int x)
+> >  {
+> >       int r;
+> >
+> > @@ -310,6 +299,19 @@ static __always_inline int ffs(int x)
+> >       return r + 1;
+> >  }
+> >
+> > +/**
+> > + * ffs - find first set bit in word
+> > + * @x: the word to search
+> > + *
+> > + * This is defined the same way as the libc and compiler builtin ffs
+> > + * routines, therefore differs in spirit from the other bitops.
+> > + *
+> > + * ffs(value) returns 0 if value is 0 or the position of the first
+> > + * set bit if value is nonzero. The first (least significant) bit
+> > + * is at position 1.
+> > + */
+> > +#define ffs(x) (__builtin_constant_p(x) ? __builtin_ffs(x) : variable_ffs(x))
 >
-> Many thanks for clarifying. :) Is this worth a Fixes tag or even CC stable?
+> How about not defining another function and using parentheses around
+> the function definition to avoid the macro expansion like:
 >
-> Thanks!
+> #define ffs(x) (__builtin_constant_p(x) ? __builtin_ffs(x) : ffs(x))
+>
+> and
+>
+> static __always_inline int (ffs)(int x)
+> {
+>         etc...
+> }
 
-Thank you for your reply.
+Sorry, but I don’t really like this approach.
 
-If add a Fixes tag, I think the following commit:
-  Fixes: 70b4459 ("mm, compaction: use free lists to quickly locate a migration source")
+Main issue I see is that this code will emit a -Wshadow warning.
 
-Andrew, how do you think about this? 
+And using parentheses around the function definition just seems an
+obscure hack to me. The variable_foo() gives me less headache. Was
+this pattern ever used anywhere else in the kernel?
 
-Thanks,
-Rei
+
+Yours sincerely,
+Vincent Mailhol

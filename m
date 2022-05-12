@@ -2,121 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3A3E524D81
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D72D524D8B
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354033AbiELMud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 08:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38778 "EHLO
+        id S1353990AbiELMwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 08:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354040AbiELMuG (ORCPT
+        with ESMTP id S1354131AbiELMu4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 08:50:06 -0400
-Received: from mail.toke.dk (mail.toke.dk [IPv6:2a0c:4d80:42:2001::664])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E348224F0D1;
-        Thu, 12 May 2022 05:50:00 -0700 (PDT)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
-        t=1652359798; bh=98g8YRRaj0MjLN/x5A3xUMwHLtbWASMbKhpV4ODYJwA=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=tVMw0JJ/AyQIOHEqcRg0sX2VzH8JcEIEUEFPyZTAqBF/KNFfOb9TYTQhqrbYRJX92
-         7r19nB+YayrLVuGTlh7cRKVzsJG/wkjKtGGLNQIt/ioWaBq+/5R2BswduY/Hs7oV9c
-         3MDYLsMLqenk+6vV/bhh/KjlUYfg5SkXsKYvPinX9kaBCVpzqC7RnVL1C+E6GEhZRq
-         pfEsLCzv5SHOVs3RtrjEvPVZ9cVjVJtzJmME1LkbM3GDsdo79JgeQDzsUoseuH7JzY
-         3hOXBol2j40eMSZ+YhmdT21COCtvPD7V6ujeHGQg5BiIxtdapjwpEEhIAqOVzZ4HLw
-         p6rxsSECQBKzQ==
-To:     Pavel Skripkin <paskripkin@gmail.com>,
-        ath9k-devel@qca.qualcomm.com, kvalo@kernel.org,
-        davem@davemloft.net, kuba@kernel.org, linville@tuxdriver.com
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        syzbot+03110230a11411024147@syzkaller.appspotmail.com,
-        syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
-Subject: Re: [PATCH v3 1/2] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
-In-Reply-To: <80962aae265995d1cdb724f5362c556d494c7566.1644265120.git.paskripkin@gmail.com>
-References: <80962aae265995d1cdb724f5362c556d494c7566.1644265120.git.paskripkin@gmail.com>
-Date:   Thu, 12 May 2022 14:49:57 +0200
-X-Clacks-Overhead: GNU Terry Pratchett
-Message-ID: <87r14yhq4q.fsf@toke.dk>
+        Thu, 12 May 2022 08:50:56 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080F714091
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:50:41 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 202so4492393pgc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:50:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=A0xOx0HJGPqe65kUT8EYAv7c6q9fmHkJFCQDDmRbELQ=;
+        b=lwxhL4wAs6Qvzati4H2W524EGSAsQhuS3/nB5BZWZ4DEpD5RDkZvry5sMHYjaX/WEw
+         y3U0PGPPxvMt6oD+WQwL4AHVAjGflqpa/Bt0K+pciJmSLHe+5NVj/LUGh9Dp1uTu01RQ
+         znnBn8BAy0KGV9DBsyKUfoiT1Sy8QscSdPlY7DZUd03IdYvEkO6Y47GwahGKpBKZ4YS2
+         oTFA9xVdwzp02a3nxDkp37gCPunfyYdIN3xquEjhbu1X9zZ+YpuOgWoeAIdpYVQZgq6F
+         SqGFY/KIvGfMxFo6rKdQROw+56A0Hn0UjJNrM2h71EC59qap64VmDCAdMBoYbnUGbGLY
+         +75w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=A0xOx0HJGPqe65kUT8EYAv7c6q9fmHkJFCQDDmRbELQ=;
+        b=l4Gw8NJYwTvGyOx26g2bizTWpSC0rftOmIrbRlnY8Zx/Ky+p5s8BhIH8grQ0f8gzUF
+         C7uuuN3bYN8Fi9JFx4hhmgEa3q5k4TF9a+Zy0jmcUc0OLIbRwDyGlP97lyKe8yyLDCG1
+         BjAXON+No9hRrlbVfNnguVBwSrWpCW1f3a8ie0RZXSrq2ToUpx/eJpKdh5nexsmNRT/X
+         4VqcafexZfVMVcqlg+aqtxEC713pH+LsQEtKWIj5BgiW5cUHjTPn44p13XKmlj7F33tY
+         lhAeDveuVhUHNGRZTT1kZ911aYnAWfdanc1l4/RFg/0+fGTfyFOlMtFzV2HuBriRNJMy
+         p4sQ==
+X-Gm-Message-State: AOAM531DJd4z5qlZxwht/J9538slth+BL5kzJYrlrgkAZu4hGfsLvYjf
+        N6H+0Z7Y0smB5KS3Cj1gCt8O3A==
+X-Google-Smtp-Source: ABdhPJzD/auBmfoLWNxs2s5aGR2dmgOFqGv/Z5slJeRepfjx/hj1IpceD0OaHmBJGL5a2oxFasebMg==
+X-Received: by 2002:a63:4549:0:b0:3db:5130:d269 with SMTP id u9-20020a634549000000b003db5130d269mr4372076pgk.101.1652359840481;
+        Thu, 12 May 2022 05:50:40 -0700 (PDT)
+Received: from localhost ([139.177.225.250])
+        by smtp.gmail.com with ESMTPSA id i21-20020a170902e49500b0015e8d4eb20dsm3758677ple.87.2022.05.12.05.50.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 05:50:40 -0700 (PDT)
+Date:   Thu, 12 May 2022 20:50:27 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     corbet@lwn.net, mike.kravetz@oracle.com, akpm@linux-foundation.org,
+        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
+        osalvador@suse.de, masahiroy@kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        duanxiongchun@bytedance.com, smuchun@gmail.com
+Subject: Re: [PATCH v10 2/4] mm: memory_hotplug: override memmap_on_memory
+ when hugetlb_free_vmemmap=on
+Message-ID: <Yn0Ck5isxx4ghQi6@FVFYT0MHHV2J.usts.net>
+References: <20220509062703.64249-1-songmuchun@bytedance.com>
+ <20220509062703.64249-3-songmuchun@bytedance.com>
+ <ebffd794-697b-9bf1-f41b-4b2d52c100fc@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ebffd794-697b-9bf1-f41b-4b2d52c100fc@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pavel Skripkin <paskripkin@gmail.com> writes:
+On Thu, May 12, 2022 at 09:36:15AM +0200, David Hildenbrand wrote:
+> On 09.05.22 08:27, Muchun Song wrote:
+> > Optimizing HugeTLB vmemmap pages is not compatible with allocating memmap on
+> > hot added memory. If "hugetlb_free_vmemmap=on" and
+> > memory_hotplug.memmap_on_memory" are both passed on the kernel command line,
+> > optimizing hugetlb pages takes precedence. 
+> 
+> Why?
+>
 
-> Syzbot reported use-after-free Read in ath9k_hif_usb_rx_cb(). The
-> problem was in incorrect htc_handle->drv_priv initialization.
->
-> Probable call trace which can trigger use-after-free:
->
-> ath9k_htc_probe_device()
->   /* htc_handle->drv_priv = priv; */
->   ath9k_htc_wait_for_target()      <--- Failed
->   ieee80211_free_hw()		   <--- priv pointer is freed
->
-> <IRQ>
-> ...
-> ath9k_hif_usb_rx_cb()
->   ath9k_hif_usb_rx_stream()
->    RX_STAT_INC()		<--- htc_handle->drv_priv access
->
-> In order to not add fancy protection for drv_priv we can move
-> htc_handle->drv_priv initialization at the end of the
-> ath9k_htc_probe_device() and add helper macro to make
-> all *_STAT_* macros NULL save.
->
-> Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
-> Reported-and-tested-by: syzbot+03110230a11411024147@syzkaller.appspotmail.com
-> Reported-and-tested-by: syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
-> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Because both two features are not compatible since hugetlb_free_vmemmap cannot
+optimize the vmemmap pages allocated from alternative allocator (when
+memory_hotplug.memmap_on_memory=1). So when the feature of hugetlb_free_vmemmap
+is introduced, I made hugetlb_free_vmemmap take precedence.  BTW, I have a plan
+to remove this restriction, I'll post it out ASAP.
 
-Could you link the original syzbot report in the commit message as well,
-please? Also that 'tested-by' implies that syzbot run-tested this? How
-does it do that; does it have ath9k_htc hardware?
+Thanks.
 
-> ---
->
-> Changes since v2:
-> 	- My send-email script forgot, that mailing lists exist.
-> 	  Added back all related lists
->
-> Changes since v1:
-> 	- Removed clean-ups and moved them to 2/2
->
-> ---
->  drivers/net/wireless/ath/ath9k/htc.h          | 10 +++++-----
->  drivers/net/wireless/ath/ath9k/htc_drv_init.c |  3 ++-
->  2 files changed, 7 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/net/wireless/ath/ath9k/htc.h b/drivers/net/wireless/ath/ath9k/htc.h
-> index 6b45e63fae4b..141642e5e00d 100644
-> --- a/drivers/net/wireless/ath/ath9k/htc.h
-> +++ b/drivers/net/wireless/ath/ath9k/htc.h
-> @@ -327,11 +327,11 @@ static inline struct ath9k_htc_tx_ctl *HTC_SKB_CB(struct sk_buff *skb)
->  }
->  
->  #ifdef CONFIG_ATH9K_HTC_DEBUGFS
-> -
-> -#define TX_STAT_INC(c) (hif_dev->htc_handle->drv_priv->debug.tx_stats.c++)
-> -#define TX_STAT_ADD(c, a) (hif_dev->htc_handle->drv_priv->debug.tx_stats.c += a)
-> -#define RX_STAT_INC(c) (hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c++)
-> -#define RX_STAT_ADD(c, a) (hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c += a)
-> +#define __STAT_SAVE(expr) (hif_dev->htc_handle->drv_priv ? (expr) : 0)
-> +#define TX_STAT_INC(c) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.tx_stats.c++)
-> +#define TX_STAT_ADD(c, a) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.tx_stats.c += a)
-> +#define RX_STAT_INC(c) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c++)
-> +#define RX_STAT_ADD(c, a) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c += a)
->  #define CAB_STAT_INC   priv->debug.tx_stats.cab_queued++
-
-s/SAVE/SAFE/ here and in the next patch (and the commit message).
-
--Toke

@@ -2,74 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D025F5244C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 07:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F00B5244C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 07:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349599AbiELFRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 01:17:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50060 "EHLO
+        id S1349515AbiELFRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 01:17:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242790AbiELFRs (ORCPT
+        with ESMTP id S1345698AbiELFRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 01:17:48 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527DE37A3B;
-        Wed, 11 May 2022 22:17:46 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 661C85FD06;
-        Thu, 12 May 2022 08:17:44 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1652332664;
-        bh=42jDnDX08klVXS7FSnmeXaJxIYwIwhgFNvH0ZzzZhLE=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=H+Ybw6Csrazqt4x432PVXOPb1J7Z9p40cNcLl/G30tF51yRo5IFBpaG14STYemCS4
-         VF4YZl/jWoIP2mE5IG/4kQJtj0cc89e2EK77UE32K3UIZX4hlp1X3smOFRWGYnY/tn
-         MKdMCs+FhxFFQ58Jv9USRedoShRaiqyq8VH9PEs0OsscwudIrXGPEe3VoST1T3l4yM
-         w1BsNcP78QoZa+viEBqwOKVVEgPrDMX332TmBWU9yYniO0keZg6RlJAL2vtuP4s3xF
-         g+JVAgg/CkFBR9B5f0Ff7ucgxwSe49wdZR1gndNncnS32KPl4HfjNRfWsZwQmpNBrE
-         2smAwEK1kGJdA==
-Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Thu, 12 May 2022 08:17:44 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Subject: [RFC PATCH v1 5/8] vhost/vsock: enable zerocopy callback
-Thread-Topic: [RFC PATCH v1 5/8] vhost/vsock: enable zerocopy callback
-Thread-Index: AQHYZb+Chv+MF/2wWEaC/fTa33nAOg==
-Date:   Thu, 12 May 2022 05:17:01 +0000
-Message-ID: <cef192f7-45ce-839a-91a4-a6996f6a6f29@sberdevices.ru>
-In-Reply-To: <7cdcb1e1-7c97-c054-19cf-5caeacae981d@sberdevices.ru>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E7F6E37C94EAD8439CE0EFD97F2AD119@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Thu, 12 May 2022 01:17:15 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491CA62A0B
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 22:17:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652332634; x=1683868634;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JZD9ZoRZafokL8iPENWer3ntJWFW7GvCYTn95IARhRg=;
+  b=V8HR9PbwnClzeLU3EtR6ZAOIjkkRby6LftE4VWvH+h3tQLAeLgszN80s
+   CNWHyMa9GAUzgEVywJjVP+YDg6QQWUOw4En1QZO0e29Ati0WA5MPyzoaG
+   wwX8IfnEGtQBFv7auR/tsUGViyOER077eNNrOWBPzF8hlP4EkW40N9tDk
+   j1Zn8MlLuxig6skGAabgH+Ot2EQnTdRL8xQNYokm28x2BEMe7hrPz/q4h
+   9v4zsCACch0/+f7EEHyvI7LAQTKVI0KcL+RPp25cODgmaT3MytPkcT9PD
+   E1yJgydzVgmyAMp9gCltELlZXL4OYDMiR7Q67BxlQr6zp0GwPr7wuFsWv
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="295139587"
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="295139587"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 22:17:14 -0700
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="594492936"
+Received: from hezhu1-mobl1.ccr.corp.intel.com (HELO [10.255.29.168]) ([10.255.29.168])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 22:17:10 -0700
+Message-ID: <64954f2d-2274-410e-269c-84efc0635633@linux.intel.com>
+Date:   Thu, 12 May 2022 13:17:08 +0800
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/05/12 02:55:00 #19424207
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 08/12] iommu/sva: Use attach/detach_pasid_dev in SVA
+ interfaces
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+References: <20220510061738.2761430-1-baolu.lu@linux.intel.com>
+ <20220510061738.2761430-9-baolu.lu@linux.intel.com>
+ <20220510152330.GG49344@nvidia.com>
+ <749a7d62-3e6c-ef5c-beaf-6b7add495740@linux.intel.com>
+ <20220511145319.GZ49344@nvidia.com>
+ <05a68e1e-8e18-5914-ebe7-d7b1a4aaa2ec@linux.intel.com>
+ <BN9PR11MB5276C03134A898CA9EFEE9258CCB9@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <BN9PR11MB5276C03134A898CA9EFEE9258CCB9@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,18 +80,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhpcyBhZGRzIHplcm9jb3B5IGNhbGxiYWNrIHRvIHZob3N0IHRyYW5zcG9ydC4NCg0KU2lnbmVk
-LW9mZi1ieTogQXJzZW5peSBLcmFzbm92IDxBVktyYXNub3ZAc2JlcmRldmljZXMucnU+DQotLS0N
-CiBkcml2ZXJzL3Zob3N0L3Zzb2NrLmMgfCAxICsNCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRp
-b24oKykNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvdmhvc3QvdnNvY2suYyBiL2RyaXZlcnMvdmhv
-c3QvdnNvY2suYw0KaW5kZXggMTU3Nzk4OTg1Mzg5Li45MzExOWQ1MjlmYjAgMTAwNjQ0DQotLS0g
-YS9kcml2ZXJzL3Zob3N0L3Zzb2NrLmMNCisrKyBiL2RyaXZlcnMvdmhvc3QvdnNvY2suYw0KQEAg
-LTQ4NCw2ICs0ODQsNyBAQCBzdGF0aWMgc3RydWN0IHZpcnRpb190cmFuc3BvcnQgdmhvc3RfdHJh
-bnNwb3J0ID0gew0KIAkJLnN0cmVhbV9yY3ZoaXdhdCAgICAgICAgICA9IHZpcnRpb190cmFuc3Bv
-cnRfc3RyZWFtX3Jjdmhpd2F0LA0KIAkJLnN0cmVhbV9pc19hY3RpdmUgICAgICAgICA9IHZpcnRp
-b190cmFuc3BvcnRfc3RyZWFtX2lzX2FjdGl2ZSwNCiAJCS5zdHJlYW1fYWxsb3cgICAgICAgICAg
-ICAgPSB2aXJ0aW9fdHJhbnNwb3J0X3N0cmVhbV9hbGxvdywNCisJCS56ZXJvY29weV9kZXF1ZXVl
-CSAgPSB2aXJ0aW9fdHJhbnNwb3J0X3plcm9jb3B5X2RlcXVldWUsDQogDQogCQkuc2VxcGFja2V0
-X2RlcXVldWUgICAgICAgID0gdmlydGlvX3RyYW5zcG9ydF9zZXFwYWNrZXRfZGVxdWV1ZSwNCiAJ
-CS5zZXFwYWNrZXRfZW5xdWV1ZSAgICAgICAgPSB2aXJ0aW9fdHJhbnNwb3J0X3NlcXBhY2tldF9l
-bnF1ZXVlLA0KLS0gDQoyLjI1LjENCg==
+On 2022/5/12 13:01, Tian, Kevin wrote:
+>> From: Baolu Lu <baolu.lu@linux.intel.com>
+>> Sent: Thursday, May 12, 2022 11:03 AM
+>>
+>> On 2022/5/11 22:53, Jason Gunthorpe wrote:
+>>>>> Also, given the current arrangement it might make sense to have a
+>>>>> struct iommu_domain_sva given that no driver is wrappering this in
+>>>>> something else.
+>>>> Fair enough. How about below wrapper?
+>>>>
+>>>> +struct iommu_sva_domain {
+>>>> +       /*
+>>>> +        * Common iommu domain header,*must*  be put at the top
+>>>> +        * of the structure.
+>>>> +        */
+>>>> +       struct iommu_domain domain;
+>>>> +       struct mm_struct *mm;
+>>>> +       struct iommu_sva bond;
+>>>> +}
+>>>>
+>>>> The refcount is wrapped in bond.
+>>> I'm still not sure that bond is necessary
+>>
+>> "bond" is the sva handle that the device drivers get through calling
+>> iommu_sva_bind().
+>>
+> 
+> 'bond' was required before because we didn't have a domain to wrap
+> the page table at that time.
+> 
+> Now we have a domain and it is 1:1 associated to bond. Probably
+> make sense now by just returning the domain as the sva handle
+> instead?
+
+It also includes the device information that the domain has been
+attached. So the sva_unbind() looks like this:
+
+/**
+  * iommu_sva_unbind_device() - Remove a bond created with 
+iommu_sva_bind_device
+  * @handle: the handle returned by iommu_sva_bind_device()
+  *
+  * Put reference to a bond between device and address space. The device 
+should
+  * not be issuing any more transaction for this PASID. All outstanding page
+  * requests for this PASID must have been flushed to the IOMMU.
+  */
+void iommu_sva_unbind_device(struct iommu_sva *handle)
+
+It's fine to replace the iommu_sva with iommu_sva_domain for sva handle,
+if we can include the device in the unbind() interface.
+
+Anyway, I'd expect to achieve all these in two steps:
+
+- sva and iopf refactoring, only iommu internal changes;
+- sva interface refactoring, only interface changes.
+
+Does above work?
+
+Best regards,
+baolu

@@ -2,109 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9AF0524217
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 03:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D39D52421C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 03:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbiELBbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 21:31:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40652 "EHLO
+        id S231449AbiELBek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 21:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiELBbT (ORCPT
+        with ESMTP id S229615AbiELBef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 21:31:19 -0400
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B41994CD;
-        Wed, 11 May 2022 18:31:17 -0700 (PDT)
-Received: by mail-ua1-x931.google.com with SMTP id z15so1453422uad.7;
-        Wed, 11 May 2022 18:31:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=izi87e4xdMz6LmYhPRp48LrcOnBQxKpRxLhyMwRFH0c=;
-        b=b+gkm0bYZ8uNyQdSPV8PZRfQzGQtBxCjNaHXwmxEEL0encPEDceqhmcqMKWc0J86VO
-         bWKJZ22mU/irATvyq2v+pvad+frrSJonoOeNZY5ZnPxTX5xPMT5N9L98udGOy65AJNdN
-         KVgw5ZZtbxRJx/PRPeauWz4VDF0F/c9pKfyzKqQuMChX5EV0FMx68sjGjEJZMkE9d8Ka
-         XRNTbhCDa/cw+Nh7u4WXo6TS+4uQUbXXkllNcdQIl1uNAR7s5AZxD/e+Y4vjJUKjOGVF
-         yy5/JYsMs3tgryVPM+OadJcWrcGKENrirKQuIaQhOB81t1Z8/sik9haw7XbLw+psYzGt
-         uuxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=izi87e4xdMz6LmYhPRp48LrcOnBQxKpRxLhyMwRFH0c=;
-        b=ous5EYgl+ixcmRrTawnAuDcpC0+JOUqy+rJLrTI2GV+fYE5yBhoV1KMI1Lplv2hnjw
-         XWAGz9aD81V0NezmKSe7fu8IRZiyjRx0cs8wlw1iJCoLv5i9FZjOtRgxpSNwNrVURLDW
-         VS39OoH75PzTzV6II/HT3BgnNgIxoI7FE10f7V6asEcbhKG6Ybju94x9OM9ms3m3pqPc
-         RXdzn0eqoMxwmwbnTaefT274VmTPQdeSANXAVGUdL6Jz8olmMRt3UDxWUeLwHJXgwN0p
-         D4TnPTcTDAAJRLPx8VAnXW6LymKwBWC2zbpGFp7TQbHrJ9NpxkeGpNN+L/Mi/XidkL2g
-         kUsw==
-X-Gm-Message-State: AOAM532QWSXib+eW6JWUD4OsdtSpfzrjKPmtPa6EDRvaOf6AJM/D5EXq
-        r4t1UVdLaHSzW3TtRFh7X7ZaHBjMb5WrU6Aa8A==
-X-Google-Smtp-Source: ABdhPJxFpJ2a8wB4d9oBe1bLcmgo7DLtuCR49Ty/ZdQW74K93TPNyttHA0PwWQOkkjHrO4v0bEo0GynEtX+sVQJYVkk=
-X-Received: by 2002:ab0:6f95:0:b0:362:8cb3:36f3 with SMTP id
- f21-20020ab06f95000000b003628cb336f3mr15208878uav.46.1652319076461; Wed, 11
- May 2022 18:31:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220510091654.8498-1-warp5tw@gmail.com> <20220510091654.8498-2-warp5tw@gmail.com>
- <20220511152422.GA339769-robh@kernel.org>
-In-Reply-To: <20220511152422.GA339769-robh@kernel.org>
-From:   Tyrone Ting <warp5tw@gmail.com>
-Date:   Thu, 12 May 2022 09:31:05 +0800
-Message-ID: <CACD3sJbiPYcckyLncXcVR-TFBo_-3XwSDYbmid4qwnoHX-JtUw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/9] dt-bindings: i2c: npcm: support NPCM845
-To:     Rob Herring <robh@kernel.org>
-Cc:     sven@svenpeter.dev, JJLIU0@nuvoton.com,
-        linux-kernel@vger.kernel.org, olof@lixom.net,
-        lukas.bulwahn@gmail.com, jarkko.nikula@linux.intel.com,
-        yuenn@google.com, arnd@arndb.de, tali.perry1@gmail.com,
-        openbmc@lists.ozlabs.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-i2c@vger.kernel.org,
-        tmaimon77@gmail.com, benjaminfair@google.com,
-        tomer.maimon@nuvoton.com, kfting@nuvoton.com,
-        semen.protsenko@linaro.org, Avi.Fishman@nuvoton.com,
-        jsd@semihalf.com, wsa@kernel.org, devicetree@vger.kernel.org,
-        andriy.shevchenko@linux.intel.com, KWLIU@nuvoton.com,
-        tali.perry@nuvoton.com, avifishman70@gmail.com, venture@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 11 May 2022 21:34:35 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DA6163F52;
+        Wed, 11 May 2022 18:34:34 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24C10qWi007812;
+        Thu, 12 May 2022 01:34:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=UKpb/O5tAGRbc/8/27SzriP9fD5S6Pn2HVidREwISr0=;
+ b=e93goE2MQGqJE1pJHJ3CSTu0bR/1MlKmXBo8W49lnVryqQuMlWypFr6m+y7pmgZE4M4h
+ aJY0fJixKPbMfBvzyvDgiK/1eJ5g58TvRf+9YzJD0LaX6Hxc624ZcaNFvgIwv4kskUwG
+ VHqTEjTg3qY4iJs3vODfv3/H8eUD3Grg3E140JstdffaShwGGL7lndqqy8JoIvynCKob
+ MV02W9rSP9YSTod1xMocPX+uuvfBzzY7Ob+litHtfdmbBTuX13ma0anlNMYLJH+mPNFz
+ HvaCoDPY9CVmRIUdXCRJQxewsW+Nzmc/mVYyy0adSAefPTu3XMzoltp4pbbiZ9IQRfVY Zg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g0cme6upv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 01:34:11 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24C1Rvhc008924;
+        Thu, 12 May 2022 01:34:10 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g0cme6up7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 01:34:10 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24C1OUaC007319;
+        Thu, 12 May 2022 01:34:08 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3fwg1hvtgh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 01:34:08 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24C1Y5lt37683554
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 May 2022 01:34:05 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9AD2E5204F;
+        Thu, 12 May 2022 01:34:05 +0000 (GMT)
+Received: from sig-9-65-89-202.ibm.com (unknown [9.65.89.202])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 2D6A15204E;
+        Thu, 12 May 2022 01:34:04 +0000 (GMT)
+Message-ID: <11153650a1c4a70bb83ce67724280313120d07d5.camel@linux.ibm.com>
+Subject: Re: [PATCH v3] x86/kexec: Carry forward IMA measurement log on kexec
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Jonathan McDowell <noodles@fb.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Date:   Wed, 11 May 2022 21:34:03 -0400
+In-Reply-To: <67f0fe5874638241bc2f2401dc2bc12c51becc0b.camel@linux.ibm.com>
+References: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
+         <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
+         <YnuJCH75GrhVm0Tp@noodles-fedora.dhcp.thefacebook.com>
+         <67f0fe5874638241bc2f2401dc2bc12c51becc0b.camel@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: QH3eQL91NtugomYoPs1JIfWyjlJK7qD1
+X-Proofpoint-GUID: zmEDd7AYErMVBKvORzeN3hlYM9h8WHNa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-11_07,2022-05-11_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ mlxlogscore=999 adultscore=0 lowpriorityscore=0 malwarescore=0 spamscore=0
+ phishscore=0 impostorscore=0 priorityscore=1501 bulkscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205120006
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob:
+On Wed, 2022-05-11 at 13:53 -0400, Mimi Zohar wrote:
+> Hi Jonathan,
+> 
+> On Wed, 2022-05-11 at 09:59 +0000, Jonathan McDowell wrote:
+> > On kexec file load Integrity Measurement Architecture (IMA) subsystem
+> > may verify the IMA signature of the kernel and initramfs, and measure
+> > it. The command line parameters passed to the kernel in the kexec call
+> > may also be measured by IMA. A remote attestation service can verify
+> > a TPM quote based on the TPM event log, the IMA measurement list, and
+> > the TPM PCR data. This can be achieved only if the IMA measurement log
+> > is carried over from the current kernel to the next kernel across
+> > the kexec call.
+> > 
+> > powerpc and ARM64 both achieve this using device tree with a
+> > "linux,ima-kexec-buffer" node. x86 platforms generally don't make use of
+> > device tree, so use the setup_data mechanism to pass the IMA buffer to
+> > the new kernel.
+> > 
+> > Signed-off-by: Jonathan McDowell <noodles@fb.com>
 
-Thank you for your review. I would like to apply Krzysztof's comment
-from the link https://www.spinics.net/lists/linux-i2c/msg56795.html
-and remove the
-quotes of the statement "$ref: "/schemas/types.yaml#/definitions/phandle"".
+Thanks, Jonathan.  The measurement list is now properly being restored
+independently of CONFIG_IMA_KEXEC being configured.
 
-If it's okay with you, I'll come up with a new patch with
-"Reviewed-by" from you and Krzysztof.
+> > +++ b/include/linux/ima.h
+> > @@ -140,6 +140,9 @@ static inline int ima_measure_critical_data(const char *event_label,
+> >  
+> >  #endif /* CONFIG_IMA */
+> > 
 
-Thank you.
+#ifdef CONFIG_HAVE_IMA_KEXEC
 
-Rob Herring <robh@kernel.org> =E6=96=BC 2022=E5=B9=B45=E6=9C=8811=E6=97=A5 =
-=E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=8811:24=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Tue, 10 May 2022 17:16:46 +0800, Tyrone Ting wrote:
-> > From: Tyrone Ting <kfting@nuvoton.com>
-> >
-> > Add compatible and nuvoton,sys-mgr description for NPCM i2c module.
-> >
-> > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
-> > ---
-> >  .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml     | 25 +++++++++++++++----
-> >  1 file changed, 20 insertions(+), 5 deletions(-)
-> >
->
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> > +int ima_free_kexec_buffer(void);
+> > +int ima_get_kexec_buffer(void **addr, size_t *size);
 
-Best Regards,
-Tyrone
+#endif
+> 
+> Wouldn't moving these function definitions here imply they are
+> implemented on all architectures or are using the version in
+> drivers/of/kexec.c.
+
+Adding the ifdef around these functions should resolve any issues.
+
+thanks,
+
+Mimi
+

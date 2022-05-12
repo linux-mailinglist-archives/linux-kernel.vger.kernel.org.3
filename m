@@ -2,161 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D71452582B
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 01:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8406C52582E
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 01:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359406AbiELXT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 19:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
+        id S1359415AbiELXUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 19:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347549AbiELXTy (ORCPT
+        with ESMTP id S1347549AbiELXUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 19:19:54 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEEE127BC43;
-        Thu, 12 May 2022 16:19:52 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id p8so6131598pfh.8;
-        Thu, 12 May 2022 16:19:52 -0700 (PDT)
+        Thu, 12 May 2022 19:20:42 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE5A27BC46;
+        Thu, 12 May 2022 16:20:38 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id a23so230593ljd.9;
+        Thu, 12 May 2022 16:20:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GbPvhZkWXt3QY9qEZgwTEjoyNuMBfGa+oZ63rvVL6pU=;
-        b=KXo7F11DTbJvlXDBd9SjPMuEcgSvLN0+t9Z42Gnld89u3gv3d13it8R4mvdpD4Aj+A
-         iX0ixvDywrk4zVp46MwFLGsn706vY+iYKx/Wopote1ECb78df+H+ykwo+SXk+kq8kKr6
-         dKBUr+5AFsvbM2g2emjRGCteNR1c6oyj+Ckz4U3FAEyTulGbHnW9N6ENPcYVUI3kPYWy
-         LApJXwuVMqeGxWjH49SbdfduZ+0u/VsJYIwqRI6qCnmstjBy4q6oijGZ4V/gFMDu8/fS
-         0lcibXZXSJXqWQXWtSRZNEVTA3xK1eHsA2O/EOoaQsvNaUhp90DRWN/Cvk7cflzreJuQ
-         ytQg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=WBWVeheegSrEpGj7igBTHF2yhrLBHycQwDW5NFTLi8g=;
+        b=eX+2ro4JTwaHBb2bo+LApjgYts1GmLMhnYiosuaGG32Qyy1B0jsLHU7LsVr3XMVlm8
+         ygkyFLHgl5mZ01MVEHP6wL2xA8Dklv1kV62MPjcpx+KRIGctup8VGF0DpW6PPLgc8Mya
+         cUQmly4RVywcy9ulGBxmGo5Gac0kj+w5HcAzg+5+3amPWMCB5eCO6OqlprxQTGvXgIyz
+         agyY7OhhYSsQnM4dVu/sklVm1i7f4OeczHZ8UemeoF1caOLeWPVmIMUHIajioOWkxh9w
+         RV+rEOSzlyvQEuxm/Xa7n5MiHcR9nQZowDZ6HHuU/vqHvOCtKdrkvC3S8XpddScr+2k5
+         JNSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=GbPvhZkWXt3QY9qEZgwTEjoyNuMBfGa+oZ63rvVL6pU=;
-        b=7IRS2P156jvQaut0E70JSykuLO1zPuwb3Jxog4q5/LgJBWEn2GZwLxe6iWMjSXDOsA
-         YpXuT0KAozm0Ag0UIxC6mdlcBEFxFUeo/EXjYk0guEhyKKStAOJGFEWDpWzbW7VasbkU
-         ighv2ikM4AfrGnCk+QAkSIx9PR+TKFgDq67KF2rIezZs4dBX8aoZKHqV7nzgvbLkZ0L/
-         ebYeso79JD6wzGo4O9VTRkShO+V133hDHoXIDK/DJXXE+LO0tvajIUQAuU3n1ZxeFTUw
-         91/Cs5rCl5dktLl6BGzRuI+XFJ1JvNzGgO+SbjZ3AxDhmv96sdDabNIzTZ5pCzp3cG2R
-         y5DA==
-X-Gm-Message-State: AOAM532gnA6S5HJlzU1yb77MaFPVPmZEjl6UmPl8GbaeNvdGTNV1aSNK
-        q9ARERH6zELtzzHkguQwH4c=
-X-Google-Smtp-Source: ABdhPJyjZh9c6o2fHHw3TEt65QCqWYK5MnJjNiUnAYFi/lE+ZXQ7XfTmNu97r4JGi8v3BR2xEP6rxw==
-X-Received: by 2002:a65:6250:0:b0:3c6:8a09:249 with SMTP id q16-20020a656250000000b003c68a090249mr1524507pgv.389.1652397592333;
-        Thu, 12 May 2022 16:19:52 -0700 (PDT)
-Received: from localhost.localdomain ([45.124.203.18])
-        by smtp.gmail.com with ESMTPSA id u20-20020a63b554000000b003c6445e2aa8sm267814pgo.4.2022.05.12.16.19.45
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=WBWVeheegSrEpGj7igBTHF2yhrLBHycQwDW5NFTLi8g=;
+        b=RDf+7lJZHttx08mq8FubOwK/a0lYRxhPNHQopuUZaqAgUZqc/aVhectOjO5JBSBcM5
+         mnK5TOn4JOoKMCkqWZdYzOBBVAOikAhHQaNX9FHCIx8cUkYjaLvZNOqaxMEFIPbrUctd
+         3mFkqa8RPga/TQvmQRyoGyfwjJNPFl31cIAwxKju0i8eNLbZDuSQIeU/3e47zo5zvp9B
+         HaXqhtB0ibGyJGyWfBKyyyQKAfnqmVkghpmnt1KUS/POQxl5WX4vS4mlEQf9fTp/VJSU
+         kWYc4yDksbwjMGxBe29v/4AWo1ZdHwNRx6KjhyTzUSTKP8dxFiqeCaH7Ha98lDIiaomH
+         1xtA==
+X-Gm-Message-State: AOAM531uHVxSxfPyK46SLF35Y0cdBIkLxx2grZ0fv2PJveHQE4UdZoVG
+        L4JAJEHb08/yU0kDLygh+Kk=
+X-Google-Smtp-Source: ABdhPJyA8TEW/IrjDw5qn51PPVQ+mxDVAnm99kbvxVHa1kwfmO9Z925b1O7oHxKU2h03IGnsrMknQw==
+X-Received: by 2002:a05:651c:552:b0:250:5c23:d0f2 with SMTP id q18-20020a05651c055200b002505c23d0f2mr1387401ljp.239.1652397636861;
+        Thu, 12 May 2022 16:20:36 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id v10-20020a2e504a000000b0024f3d1dae93sm147974ljd.27.2022.05.12.16.20.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 16:19:50 -0700 (PDT)
-Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
-From:   Joel Stanley <joel@jms.id.au>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Dylan Hung <dylan_hung@aspeedtech.com>,
-        David Wilder <dwilder@us.ibm.com>
-Cc:     openbmc@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Wilder <wilder@us.ibm.com>
-Subject: [PATCH net v2] net: ftgmac100: Disable hardware checksum on AST2600
-Date:   Fri, 13 May 2022 08:49:38 +0930
-Message-Id: <20220512231938.228651-1-joel@jms.id.au>
-X-Mailer: git-send-email 2.35.1
+        Thu, 12 May 2022 16:20:35 -0700 (PDT)
+Date:   Fri, 13 May 2022 02:20:33 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 00/13] PCI: dwc: Various fixes and cleanups
+Message-ID: <20220512232033.wpbr4excmftzlxdi@mobilestation>
+References: <20220503212300.30105-1-Sergey.Semin@baikalelectronics.ru>
+ <Yn1/GRzXNCTJnMHj@lpieralisi>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Yn1/GRzXNCTJnMHj@lpieralisi>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The AST2600 when using the i210 NIC over NC-SI has been observed to
-produce incorrect checksum results with specific MTU values. This was
-first observed when sending data across a long distance set of networks.
+On Thu, May 12, 2022 at 10:41:45PM +0100, Lorenzo Pieralisi wrote:
+> On Wed, May 04, 2022 at 12:22:47AM +0300, Serge Semin wrote:
+> > This patchset is a second one in the series created in the framework of
+> > my Baikal-T1 PCIe/eDMA-related work:
+> > 
+> > [1: In-progress v3] clk: Baikal-T1 DDR/PCIe resets and some xGMAC fixes
+> > Link: https://lore.kernel.org/linux-pci/20220503205722.24755-1-Sergey.Semin@baikalelectronics.ru/
+> > [2: In-progress v2] PCI: dwc: Various fixes and cleanups
+> > Link: https://lore.kernel.org/linux-pci/20220324012524.16784-1-Sergey.Semin@baikalelectronics.ru/
+> > [3: In-progress v1] PCI: dwc: Add dma-ranges/YAML-schema/Baikal-T1 support
+> > Link: https://lore.kernel.org/linux-pci/20220324013734.18234-1-Sergey.Semin@baikalelectronics.ru/
+> > [4: In-progress v1] dmaengine: dw-edma: Add RP/EP local DMA controllers support
+> > Link: https://lore.kernel.org/linux-pci/20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru/
+> > 
+> > Note it is very recommended to merge the patchsets in the same order as
+> > they are placed in the list above in order to prevent possible merge/build
+> > conflicts. Nothing prevents them from being reviewed synchronously though.
+> > 
+> > As it can be easily inferred from the patchset title, this series is about
+> > the DW PCIe Root Port/End-point driver fixes and the code cleanups, where
+> > fixes come before the cleanup patches. The patchset starts with adding the
+> > stop_link() platform-specific method invocation in case of the PCIe host
+> > probe procedure errors. It has been missing in the cleanup-on-error path
+> > of the DW PCIe Host initialization method. After that there is a patch
+> > which fixes the host own cfg-space accessors for the case of the
+> > platform-specific DBI implementation. Third the unrolled CSRs layout is
+> > added to the iATU disable procedure. Fourth the disable iATU procedure is
+> > fixed to be called only for the internal ATU as being specific for the
+> > internal ATU implementation. Last but no least the outbound iATU extended
+> > region setup procedure is fixed to have the INCREASE_REGION_SIZE flag set
+> > based on the limit-address - not the region size one.
+> > 
+> > Afterwards there is a series of cleanups. It concerns the changes like
+> > adding braces to the multi-line if-else constructions, trailing new-lines
+> > to the print format-string, dropping unnecessary version checking, and
+> > various code simplifications and optimizations.
+> 
+> Hi,
+> 
+> I went through the series and I don't have any specific objections.
+> 
 
-On a local network, the following test was performed using a 1MB file of
-random data.
+> We can try to queue it for v5.19, with the caveat that the fixes
+> _need_ testing on several DWC platforms
 
-On the receiver run this script:
+Alas I can't deliver that. But Manivannan has done a testing on his
+Qualcomm devices.
 
- #!/bin/bash
- while [ 1 ]; do
-        # Zero the stats
-        nstat -r  > /dev/null
-        nc -l 9899 > test-file
-        # Check for checksum errors
-        TcpInCsumErrors=$(nstat | grep TcpInCsumErrors)
-        if [ -z "$TcpInCsumErrors" ]; then
-                echo No TcpInCsumErrors
-        else
-                echo TcpInCsumErrors = $TcpInCsumErrors
-        fi
- done
+> (and I _strongly_ encourage
+> DWC maintainers to chime in). To sum it up:
+> 
 
-On an AST2600 system:
+> - It is a mixture of clean-ups and fixes. I would prefer having the
+>   cleanups earlier in the series and rebase (if there is a need, I
+>   can try to reshuffle the patches myself) the fixes on top. That
+>   because we may have to drop some of the fixes (and if we merge them
+>   we may have to revert them as cleanly as we can),
 
- # nc <IP of  receiver host> 9899 < test-file
+Normally fixes patches go before ahead of the rest of the series to
+simplify the backporting procedure (makes Greg's life much easier).
+Revertability has much less priority. In the worst case an additional
+fixes patch is more preferable especially if the original patch has
+been reviewed, accepted and most likely backported. Only if the patch
+author didn't provide a fix then the reversion is proceeded. So I
+wouldn't recommend to reshuffle the patches.
 
-The test was repeated with various MTU values:
+>   my concern is that
+>   they require testing on a number of platforms you have not been
+>   exposed to
 
- # ip link set mtu 1410 dev eth0
+This series and another patchsets have been available for testing for
+about two months now. There have been more than enough time to give it
+a try and review.
 
-The observed results:
+> - Kbot complained about patch (3)
 
- 1500 - good
- 1434 - bad
- 1400 - good
- 1410 - bad
- 1420 - good
+Could you be more specific what it was complaining about? I haven't
+got any relevant message in none of my emails.
 
-The test was repeated after disabling tx checksumming:
+> - I will have comments about the commit logs but I can try to fix them
+>   myself
 
- # ethtool -K eth0 tx-checksumming off
+Feel free to submit your comments. I'll take them into account in v3.
 
-And all MTU values tested resulted in transfers without error.
+> 
+> I have concerns especially about patches (2, 3, 4, 5, 8, 9), because
+> they can affect DWC platforms other than the ones you are testing on.
 
-An issue with the driver cannot be ruled out, however there has been no
-bug discovered so far.
+Basically any generic code change affects the dependent platforms. If
+you don't see any exact issue in mind then I don't see any reason to
+sustain the series any longer especially seeing it has been already
+tested on an alternative platform.
 
-David has done the work to take the original bug report of slow data
-transfer between long distance connections and triaged it down to this
-test case.
+> 
+> The cleanups we can definitely queue them up.
 
-The vendor suspects this this is a hardware issue when using NC-SI. The fixes line refers
-to the patch that introduced AST2600 support.
+> As I said, and there
+> is nothing I can do about it, I will be off the radar for two months
+> from wednesday,
 
-Fixes: 39bfab8844a0 ("net: ftgmac100: Add support for DT phy-handle property")
-Reported-by: David Wilder <wilder@us.ibm.com>
-Signed-off-by: Joel Stanley <joel@jms.id.au>
----
-v2 updates the commit message with confirmation form the vendor that
-this is a hardware issue, and clarifes why the commit used in the fixes
-tag was chosen.
+As I noted this isn't good since I haven't noticed much activity for
+the last two months. Alas Bjorn hasn't participated in the review
+process either. I can offer a help with reviewing the patches
+concerning the DW PCIe drivers since during the patchsets development
+I've got a good notion regarding the DWC drivers and HW internals. But
+it only concerns the DW PCIe Host/End-point code.
 
- drivers/net/ethernet/faraday/ftgmac100.c | 5 +++++
- 1 file changed, 5 insertions(+)
+> please try to repost with the Kbot issue fixed and
 
-diff --git a/drivers/net/ethernet/faraday/ftgmac100.c b/drivers/net/ethernet/faraday/ftgmac100.c
-index caf48023f8ea..5231818943c6 100644
---- a/drivers/net/ethernet/faraday/ftgmac100.c
-+++ b/drivers/net/ethernet/faraday/ftgmac100.c
-@@ -1928,6 +1928,11 @@ static int ftgmac100_probe(struct platform_device *pdev)
- 	/* AST2400  doesn't have working HW checksum generation */
- 	if (np && (of_device_is_compatible(np, "aspeed,ast2400-mac")))
- 		netdev->hw_features &= ~NETIF_F_HW_CSUM;
-+
-+	/* AST2600 tx checksum with NC-SI is broken */
-+	if (priv->use_ncsi && of_device_is_compatible(np, "aspeed,ast2600-mac"))
-+		netdev->hw_features &= ~NETIF_F_HW_CSUM;
-+
- 	if (np && of_get_property(np, "no-hw-checksum", NULL))
- 		netdev->hw_features &= ~(NETIF_F_HW_CSUM | NETIF_F_RXCSUM);
- 	netdev->features |= netdev->hw_features;
--- 
-2.35.1
+See my comment above regarding kbot.
 
+-Sergey
+
+> with the comments above in mind and I will do my best to queue as
+> many patches from this series as possible for v5.19.
+> 
+> Thanks,
+> Lorenzo
+> 
+> > New features like adding two-level DT bindings abstraction, adding better
+> > structured IP-core version interface, adding iATU regions size detection
+> > and the PCIe regions verification procedure, adding dma-ranges support,
+> > introducing a set of generic platform clocks and resets and finally adding
+> > Baikal-T1 PCIe interface support will be submitted in the next part of the
+> > series.
+> > 
+> > Link: https://lore.kernel.org/linux-pci/20220324012524.16784-1-Sergey.Semin@baikalelectronics.ru/
+> > Changelog v2:
+> > - Fix the end address of the example in the patch log with
+> >   the INCREASE_REGION_SIZE flag usage fixup. It should be
+> >   0x1000FFFF and not 0x0000FFFF (@Manivannan).
+> > - Add the cleanup-on-error path to the dw_pcie_ep_init() function.
+> >   (@Manivannan)
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> > Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+> > Cc: Rob Herring <robh@kernel.org>
+> > Cc: "Krzysztof Wilczyński" <kw@linux.com>
+> > Cc: Frank Li <Frank.Li@nxp.com>
+> > Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > Cc: linux-pci@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > 
+> > Serge Semin (13):
+> >   PCI: dwc: Stop link in the host init error and de-initialization
+> >   PCI: dwc: Don't use generic IO-ops for DBI-space access
+> >   PCI: dwc: Add unroll iATU space support to the regions disable method
+> >   PCI: dwc: Disable outbound windows for controllers with iATU
+> >   PCI: dwc: Set INCREASE_REGION_SIZE flag based on limit address
+> >   PCI: dwc: Add braces to the multi-line if-else statements
+> >   PCI: dwc: Add trailing new-line literals to the log messages
+> >   PCI: dwc: Discard IP-core version checking on unrolled iATU detection
+> >   PCI: dwc: Convert Link-up status method to using dw_pcie_readl_dbi()
+> >   PCI: dwc: Deallocate EPC memory on EP init error
+> >   PCI: dwc-plat: Simplify the probe method return value handling
+> >   PCI: dwc-plat: Discard unused regmap pointer
+> >   PCI: dwc-plat: Drop dw_plat_pcie_of_match forward declaration
+> > 
+> >  .../pci/controller/dwc/pcie-designware-ep.c   | 22 +++++--
+> >  .../pci/controller/dwc/pcie-designware-host.c | 66 +++++++++++++++----
+> >  .../pci/controller/dwc/pcie-designware-plat.c | 13 ++--
+> >  drivers/pci/controller/dwc/pcie-designware.c  | 48 +++++++++-----
+> >  4 files changed, 109 insertions(+), 40 deletions(-)
+> > 
+> > -- 
+> > 2.35.1
+> > 

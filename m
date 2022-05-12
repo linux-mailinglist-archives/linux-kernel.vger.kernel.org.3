@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 843E95241C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 03:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A25625241CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 03:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345699AbiELBBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 21:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48432 "EHLO
+        id S1349777AbiELBCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 21:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343834AbiELBB2 (ORCPT
+        with ESMTP id S1349757AbiELBB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 21:01:28 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3878C6E8E0
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 18:01:27 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id w123so4721918oiw.5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 18:01:27 -0700 (PDT)
+        Wed, 11 May 2022 21:01:59 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2A56FD0D
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 18:01:58 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id o69so3743967pjo.3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 18:01:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=KkHNoGFNmm+2/TYi6ZuGQ2Cbch/NU3jA999yYTZ1GdU=;
-        b=fYzBOmi9dwJ7uhGEEQdetvr/2AFRci4EDkcJ+KZ4B+gSnT+cHk2Pm1pkhFjrbcB3T+
-         Y3opASV6+Ne+20FH4mpSkUXkQ4JlhKHQ6tUP4ApIu4HTBcUpCECgW42lJVCLg5d2CEkY
-         dC0JUR0cHaatNLxem1o/Mcjv/tb6OqUIYZSeY=
+        d=fastly.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=cqIXbNSlHT7h2zuf3TdH1Rcr/Q2tqRr9EyF43o9ouk8=;
+        b=WCMICnZ4yFop8p5BNK/Y1RabpyArV3GgkAczZYPOeEy2IHLbwvkhWqt9nL21f8Z9eP
+         bS074YqvSkLwqNYEmGDVYcrTEhATtvQd2gy8wGAaGpfepZT/1JnHe4NzM2pcEYEQGqc5
+         7wuukbwCLwYDl28E3aGbycnzw1XbQLrCqy2PA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=KkHNoGFNmm+2/TYi6ZuGQ2Cbch/NU3jA999yYTZ1GdU=;
-        b=KMXeIprzOh41O50L5Yvv+bUj6y71uV6+V92NODa7bcgAjY4Fe9ELQatDWrjoo9t4B0
-         iOKZ3kAsRrGshw2KNmH92kBLVXwj9E2PE4a2xKcxhTeTbB/kvfRbOfW+xynb6hdzmb0k
-         oHu5cl8hIEN122eQz9USPoUrNofNTTyw9r5tUEm//KHi7i9r1MFuHEX1sTT7KDACv68h
-         R2BclYs+S4dji3SfIkAqmvrFbWUSaCuR0K4uDHABuTt8/gvHjK5DRhlKuRdJvJ/4D3Vj
-         ZCvn0D9NPXoNy2MNrMSUfFn3KrwJSi1COxU12zHIpgdfplYX3X8e5sBXrHipznvx0rBj
-         dHOA==
-X-Gm-Message-State: AOAM533jmBOm9qgkEojTeKmw2wEMmgV6sszIZ0cu1NReQ8Px8zU8iuLp
-        urWLaj5R/A1ob+vSzfGI3GMvA8jiLY74o2PamYDDJA==
-X-Google-Smtp-Source: ABdhPJyZyRcSyf1WMpHlbuM6TXip4xUs8zue+4HQsI+8TZq/afqmiMvK4becdP3jyYz88janNmHmpTvQeobO71GUPzw=
-X-Received: by 2002:a05:6808:23c3:b0:326:bd8d:7993 with SMTP id
- bq3-20020a05680823c300b00326bd8d7993mr3957420oib.63.1652317286569; Wed, 11
- May 2022 18:01:26 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 11 May 2022 18:01:26 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=cqIXbNSlHT7h2zuf3TdH1Rcr/Q2tqRr9EyF43o9ouk8=;
+        b=5CPX4yRhYF8Syc7myU2zUB+BFBVyF3xNAFcjaYKBgaX9PlHI1YcrXXW6XnF+4Y2H5/
+         qZ8jHsiKlQWonz5jHVRQ3RDYUqkA+Sov4++HIe6rrx1uEEwZXhdo2YzQVRqku9xbpEqD
+         8aQXdjc+iXywTN+w2SFTsV7g6SqSyReCOnYczDk6DYhg6HnAQ+mCRkJK6m1Bx+nrBHmg
+         SqyCvlc6rWtuYHaQ4eJbBiiGiLP52dKiyt9vc9im+7zZ2A+9aQyY9F7fgBpbrKcchTAZ
+         wmsFinBzRjCcapPIOid8CCEZAF/fyNNcVthcF+hlLeRCVn1Xq8WIHbFPMxvdIFWjegQm
+         rr2w==
+X-Gm-Message-State: AOAM532PBJVECRNr/Qq+TcK1JHXhsRpk+/iIame7JhkMi2m13iYBTfyU
+        TP2CF7WA4KwgqGRnDICqAHe9Dw==
+X-Google-Smtp-Source: ABdhPJyWb3Um5ooWcuLBRteAU4B7JVMDphXRC9YvJHgG1ZMSWIEuPXSZuEJwCbBW1CU1QXdL/JkEnA==
+X-Received: by 2002:a17:903:40c2:b0:15c:fd2a:7198 with SMTP id t2-20020a17090340c200b0015cfd2a7198mr27689039pld.0.1652317317957;
+        Wed, 11 May 2022 18:01:57 -0700 (PDT)
+Received: from fastly.com (c-73-223-190-181.hsd1.ca.comcast.net. [73.223.190.181])
+        by smtp.gmail.com with ESMTPSA id q37-20020a17090a17a800b001da3780bfd3sm595988pja.0.2022.05.11.18.01.56
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 11 May 2022 18:01:57 -0700 (PDT)
+Date:   Wed, 11 May 2022 18:01:54 -0700
+From:   Joe Damato <jdamato@fastly.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: Re: [RFC,net-next,x86 0/6] Nontemporal copies in unix socket write
+ path
+Message-ID: <20220512010153.GA74055@fastly.com>
+References: <1652241268-46732-1-git-send-email-jdamato@fastly.com>
+ <20220511162520.6174f487@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <e5c16697-5919-bafa-4ec5-294c94d7a740@linaro.org>
-References: <1652313768-16286-1-git-send-email-quic_khsieh@quicinc.com> <e5c16697-5919-bafa-4ec5-294c94d7a740@linaro.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 11 May 2022 18:01:26 -0700
-Message-ID: <CAE-0n53zHrczQAOWM5f_tafUVJxg7JU2NuC4sGcBZddwKr-dGA@mail.gmail.com>
-Subject: Re: [PATCH v5] drm/msm/dp: Always clear mask bits to disable
- interrupts at dp_ctrl_reset_irq_ctrl()
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
-        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
-        dianders@chromium.org, robdclark@gmail.com, sean@poorly.run,
-        vkoul@kernel.org
-Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511162520.6174f487@kernel.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,47 +70,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Dmitry Baryshkov (2022-05-11 17:41:50)
-> On 12/05/2022 03:02, Kuogee Hsieh wrote:
-> > diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> > index af7a80c..f3e333e 100644
-> > --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> > +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> > @@ -1389,8 +1389,13 @@ void dp_ctrl_reset_irq_ctrl(struct dp_ctrl *dp_ctrl, bool enable)
-> >
-> >       dp_catalog_ctrl_reset(ctrl->catalog);
-> >
-> > -     if (enable)
-> > -             dp_catalog_ctrl_enable_irq(ctrl->catalog, enable);
-> > +     /*
-> > +      * all dp controller programmable registers will not
-> > +      * be reset to default value after DP_SW_RESET
-> > +      * therefore interrupt mask bits have to be updated
-> > +      * to enable/disable interrupts
-> > +      */
-> > +     dp_catalog_ctrl_enable_irq(ctrl->catalog, enable);
-> >   }
-> >
-> >   void dp_ctrl_phy_init(struct dp_ctrl *dp_ctrl)
-> > diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> > index c388323..79439b8 100644
-> > --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> > +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> > @@ -98,6 +98,8 @@ struct dp_display_private {
-> >       struct dp_ctrl    *ctrl;
-> >       struct dp_debug   *debug;
-> >
-> > +     atomic_t suspended;
->
-> I think it'd be better to protect it with event_lock rather than using
-> atomics.
+On Wed, May 11, 2022 at 04:25:20PM -0700, Jakub Kicinski wrote:
+> On Tue, 10 May 2022 20:54:21 -0700 Joe Damato wrote:
+> > Initial benchmarks are extremely encouraging. I wrote a simple C program to
+> > benchmark this patchset, the program:
+> >   - Creates a unix socket pair
+> >   - Forks a child process
+> >   - The parent process writes to the unix socket using MSG_NTCOPY - or not -
+> >     depending on the command line flags
+> >   - The child process uses splice to move the data from the unix socket to
+> >     a pipe buffer, followed by a second splice call to move the data from
+> >     the pipe buffer to a file descriptor opened on /dev/null.
+> >   - taskset is used when launching the benchmark to ensure the parent and
+> >     child run on appropriate CPUs for various scenarios
+> 
+> Is there a practical use case?
 
-Agreed. I think the concern is that the event queue will have "stuff" in
-it. If the event queue was all a threaded irq we could simply call
-synchronize_irq() after disabling the irq bit in the DP hardware and
-then we would know it is safe to power down the DP logic. Unfortunately
-the event queue is a kthread so we can't do that and we have to rewrite
-synchronize_irq() by checking that the event queue is empty and waiting
-for it to empty out otherwise. It's not safe enough to simply do the
-power operations underneath the event_lock because there's a queue in
-the kthread that might be waiting to grab the event_lock to process.
+Yes; for us there seems to be - especially with AMD Zen2. I'll try to
+describe such a setup and my synthetic HTTP benchmark results.
+
+Imagine a program, call it storageD, which is responsible for storing and
+retrieving data from a data store. Other programs can request data from
+storageD via communicating with it on a Unix socket.
+
+One such program that could request data via the Unix socket is an HTTP
+daemon. For some client connections that the HTTP daemon receives, the
+daemon may determine that responses can be sent in plain text.
+
+In this case, the HTTP daemon can use splice to move data from the unix
+socket connection with storageD directly to the client TCP socket via a
+pipe. splice saves CPU cycles and avoids incurring any memory access
+latency since the data itself is not accessed.
+
+Because we'll use splice (instead of accessing the data and potentially
+affecting the CPU cache) it is advantageous for storageD to use NT copies
+when it writes to the Unix socket to avoid evicting hot data from the CPU
+cache. After all, once the data is copied into the kernel on the unix
+socket write path, it won't be touched again; only spliced.
+
+In my synthetic HTTP benchmarks for this setup, we've been able to increase
+network throughput of the the HTTP daemon by roughly 30% while reducing
+the system time of storageD. We're still collecting data on production
+workloads.
+
+The motivation, IMHO, is very similar to the motivation for
+NETIF_F_NOCACHE_COPY, as far I understand.
+
+In some cases, when an application writes to a network socket the data
+written to the socket won't be accessed again once it is copied into the
+kernel. In these cases, NETIF_F_NOCACHE_COPY can improve performance and
+helps to preserve the CPU cache and avoid evicting hot data.
+
+We get a sizable benefit from this option, too, in situations where we
+can't use splice and have to call write to transmit data to client
+connections. We want to get the same benefit of NETIF_F_NOCACHE_COPY, but
+when writing to Unix sockets as well.
+
+Let me know if that makes it more clear.
+
+> The patches look like a lot of extra indirect calls.
+
+Yup. As I mentioned in the cover letter this was mostly a PoC that seems to
+work and increases network throughput in a real world scenario.
+
+If this general line of thinking (NT copies on write to a Unix socket) is
+acceptable, I'm happy to refactor the code however you (and others) would
+like to get it to an acceptable state.
+
+Thanks for taking a look,
+Joe

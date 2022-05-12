@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EADCC5242E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 04:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F7E5242E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 04:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243845AbiELCwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 22:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
+        id S243941AbiELCxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 22:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243697AbiELCwU (ORCPT
+        with ESMTP id S243697AbiELCxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 22:52:20 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22041B1CDA;
-        Wed, 11 May 2022 19:52:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652323938; x=1683859938;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iPovg244m5lB0ST8KaA8boWcMETie163IiQLz7k5qJk=;
-  b=L/GI1HzsMa+cDzMLOz2EEBMihyRofAgS3/RsuNCniY2dbqGrcB+MkQuW
-   Rh0h13dH1EDfRNvG+1GtAr1QKJ0hY462ZRj+EGypDQp5KBTcSwQztkFrz
-   /LshXxd5vloSHVdp6xVifxFeloGPjJ3ui5mCX9SzxgLInCAqPch+Q7Zi8
-   TTMv+IV+gCTjhblsRMvdbie3z8tv17MI2QxwGtEP+zYzlA3KwBs2t2v+l
-   y5EndX1Fq8hGHBWQQ0eFo7pBLqtVt0zOHrvV3i5bDxRYA8c6+ihNuLav3
-   ctC7NGsg5AR2dUiWxpnEsDzfla96E+gRnzICJyl3JX92c1y8MLiJfFesx
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="257419742"
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="257419742"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 19:52:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="636662834"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 11 May 2022 19:52:15 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1noyw2-000Jrz-Oi;
-        Thu, 12 May 2022 02:52:14 +0000
-Date:   Thu, 12 May 2022 10:51:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Henning Schild <henning.schild@siemens.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Mark Gross <markgross@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, Enrico Weigelt <lkml@metux.net>,
-        Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
-        Henning Schild <henning.schild@siemens.com>
-Subject: Re: [PATCH v2 2/4] watchdog: simatic-ipc-wdt: convert to use P2SB
- accessor
-Message-ID: <202205121056.jp0pcxHa-lkp@intel.com>
-References: <20220511153905.13980-3-henning.schild@siemens.com>
+        Wed, 11 May 2022 22:53:15 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9361CC990
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 19:53:14 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id fv2so3913332pjb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 19:53:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jrgF71qNNcYD8nMa0N2Q78v1uFUFa9LGIhiMObVxexI=;
+        b=MC7TNUG4QWAakfYQhS5QSM5SxEsCYVGXnkyUwHwXKvplZ7MABo+4i4g7EAumDk/IRK
+         B/VKo4UUmnm0M/qTCiamuZh7YCX948h8rzLdv8+lnO5rORzPD8JKJcYht2q/0fuD48JN
+         zB56ucdFuOstRW34Cfa/XsT0/gKAIYX7rToPeRXjPJtxovndrRjgak2/ROloBqi92rQw
+         eOaweOM8ilNP4E4+F5hkh69jRUVjneiqzlljaBPBsp7bRbeVxwYrqX4qSzBOHfn+x1YH
+         LYfBvIQImecH4tqm76Sge0c3Y7EoSdKlVNerS6yPCL7WzLz7trGFCZasWe/Qq9b/oV28
+         P+SQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jrgF71qNNcYD8nMa0N2Q78v1uFUFa9LGIhiMObVxexI=;
+        b=lobESlCTYHoBjY4SCdX6wmtM+rzKtIbaqwy0lUzMxqMbpCexUfAmycwgdu1zuBVcdW
+         t7+m0F8RodPsR8At0NkFiHeTIgORDWjm6KJFIcY7r2DRFskbUG1rnHU84GGPEUzENoRk
+         g9OUAP0KCAftpAp6HVkzRkw6F0WCTLqJuMTVIkqEUxSgPtwd7XT5DrJ3dyoLRLXrdaYb
+         By9eoTZpE7IchpXfLKTxmx12dvladMTmK1Qrll7Haw8z8ib7CBviSEIzfz7A10X8rTVD
+         b1BpgXynUrszCdB1bpdmzW8CxghELiK6Ji5tLOm9CVTkjo6OUasAzejYuyCWSa1vCCU3
+         gWoQ==
+X-Gm-Message-State: AOAM531yMPUC32+z1Ub52MDmwVLyLaJr1G1AZM1oJlp/xICde/L1nRqz
+        a2a3eDgscVb4eimUi8CVdis=
+X-Google-Smtp-Source: ABdhPJxiQGyU27UIahq15uZJlZcn2NmrIUajfvr44Ukcf4v/Ucl9xoUNLKWjatK0SYMOaj15aAgLrA==
+X-Received: by 2002:a17:90b:606:b0:1d9:5dd5:1489 with SMTP id gb6-20020a17090b060600b001d95dd51489mr8518187pjb.171.1652323993950;
+        Wed, 11 May 2022 19:53:13 -0700 (PDT)
+Received: from localhost.localdomain ([125.131.156.123])
+        by smtp.gmail.com with ESMTPSA id a13-20020a1709027e4d00b0015e8d4eb21fsm2603639pln.105.2022.05.11.19.53.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 19:53:13 -0700 (PDT)
+From:   Wonhyuk Yang <vvghjk1234@gmail.com>
+To:     Mel Gorman <mgorman@suse.de>, Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Wonhyuk Yang <vvghjk1234@gmail.com>,
+        Baik Song An <bsahn@etri.re.kr>,
+        Hong Yeon Kim <kimhy@etri.re.kr>,
+        Taeung Song <taeung@reallinux.co.kr>, linuxgeek@linuxgeek.io,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [Patch v2] [PATCH] mm/page_alloc: Fix tracepoint mm_page_alloc_zone_locked()
+Date:   Thu, 12 May 2022 11:53:07 +0900
+Message-Id: <20220512025307.57924-1-vvghjk1234@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220511153905.13980-3-henning.schild@siemens.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,52 +73,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Henning,
+Currently, trace point mm_page_alloc_zone_locked() doesn't show
+correct information.
 
-Thank you for the patch! Yet something to improve:
+First, when alloc_flag has ALLOC_HARDER/ALLOC_CMA, page can
+be allocated from MIGRATE_HIGHATOMIC/MIGRATE_CMA. Nevertheless,
+tracepoint use requested migration type not MIGRATE_HIGHATOMIC and
+MIGRATE_CMA.
 
-[auto build test ERROR on pavel-leds/for-next]
-[also build test ERROR on groeck-staging/hwmon-next linus/master v5.18-rc6 next-20220511]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Second, after Commit 44042b4498728 ("mm/page_alloc: allow high-order
+pages to be stored on the per-cpu lists") percpu-list can store
+high order pages. But trace point determine whether it is a refiil
+of percpu-list by comparing requested order and 0.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Henning-Schild/simatic-ipc-additions-to-p2sb-apl-lake-gpio/20220511-234148
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git for-next
-config: i386-randconfig-a004-20220509 (https://download.01.org/0day-ci/archive/20220512/202205121056.jp0pcxHa-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f9374205615fb91a7d289a6acaeafcd5f9c16ac4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Henning-Schild/simatic-ipc-additions-to-p2sb-apl-lake-gpio/20220511-234148
-        git checkout f9374205615fb91a7d289a6acaeafcd5f9c16ac4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/
+To handle these problems, make mm_page_alloc_zone_locked() only be
+called by __rmqueue_smallest with correct migration type. With a
+new argument called percpu_refill, it can show roughly whether it
+is a refill of percpu-list.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Cc: Baik Song An <bsahn@etri.re.kr>
+Cc: Hong Yeon Kim <kimhy@etri.re.kr>
+Cc: Taeung Song <taeung@reallinux.co.kr>
+Cc: linuxgeek@linuxgeek.io
+Signed-off-by: Wonhyuk Yang <vvghjk1234@gmail.com>
+---
+v1 -> v2: Simplify determining percpu-refill suggested by Mel Gorman
 
-All errors (new ones prefixed by >>):
+ include/trace/events/kmem.h | 14 +++++++++-----
+ mm/page_alloc.c             | 13 +++++--------
+ 2 files changed, 14 insertions(+), 13 deletions(-)
 
->> drivers/watchdog/simatic-ipc-wdt.c:19:10: fatal error: 'linux/platform_data/x86/p2sb.h' file not found
-   #include <linux/platform_data/x86/p2sb.h>
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +19 drivers/watchdog/simatic-ipc-wdt.c
-
-  > 19	#include <linux/platform_data/x86/p2sb.h>
-    20	#include <linux/platform_data/x86/simatic-ipc-base.h>
-    21	#include <linux/platform_device.h>
-    22	#include <linux/sizes.h>
-    23	#include <linux/util_macros.h>
-    24	#include <linux/watchdog.h>
-    25	
-
+diff --git a/include/trace/events/kmem.h b/include/trace/events/kmem.h
+index ddc8c944f417..f89fb3afcd46 100644
+--- a/include/trace/events/kmem.h
++++ b/include/trace/events/kmem.h
+@@ -229,20 +229,23 @@ TRACE_EVENT(mm_page_alloc,
+ 
+ DECLARE_EVENT_CLASS(mm_page,
+ 
+-	TP_PROTO(struct page *page, unsigned int order, int migratetype),
++	TP_PROTO(struct page *page, unsigned int order, int migratetype,
++		 int percpu_refill),
+ 
+-	TP_ARGS(page, order, migratetype),
++	TP_ARGS(page, order, migratetype, percpu_refill),
+ 
+ 	TP_STRUCT__entry(
+ 		__field(	unsigned long,	pfn		)
+ 		__field(	unsigned int,	order		)
+ 		__field(	int,		migratetype	)
++		__field(	int,		percpu_refill	)
+ 	),
+ 
+ 	TP_fast_assign(
+ 		__entry->pfn		= page ? page_to_pfn(page) : -1UL;
+ 		__entry->order		= order;
+ 		__entry->migratetype	= migratetype;
++		__entry->percpu_refill	= percpu_refill;
+ 	),
+ 
+ 	TP_printk("page=%p pfn=0x%lx order=%u migratetype=%d percpu_refill=%d",
+@@ -250,14 +253,15 @@ DECLARE_EVENT_CLASS(mm_page,
+ 		__entry->pfn != -1UL ? __entry->pfn : 0,
+ 		__entry->order,
+ 		__entry->migratetype,
+-		__entry->order == 0)
++		__entry->percpu_refill)
+ );
+ 
+ DEFINE_EVENT(mm_page, mm_page_alloc_zone_locked,
+ 
+-	TP_PROTO(struct page *page, unsigned int order, int migratetype),
++	TP_PROTO(struct page *page, unsigned int order, int migratetype,
++		 int percpu_refill),
+ 
+-	TP_ARGS(page, order, migratetype)
++	TP_ARGS(page, order, migratetype, percpu_refill)
+ );
+ 
+ TRACE_EVENT(mm_page_pcpu_drain,
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 0e42038382c1..e906ac274586 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -2476,6 +2476,9 @@ struct page *__rmqueue_smallest(struct zone *zone, unsigned int order,
+ 		del_page_from_free_list(page, zone, current_order);
+ 		expand(zone, page, order, current_order, migratetype);
+ 		set_pcppage_migratetype(page, migratetype);
++		trace_mm_page_alloc_zone_locked(page, order, migratetype, 
++				pcp_allowed_order(order) &&
++				migratetype < MIGRATE_PCPTYPES);
+ 		return page;
+ 	}
+ 
+@@ -2999,7 +3002,7 @@ __rmqueue(struct zone *zone, unsigned int order, int migratetype,
+ 		    zone_page_state(zone, NR_FREE_PAGES) / 2) {
+ 			page = __rmqueue_cma_fallback(zone, order);
+ 			if (page)
+-				goto out;
++				return page;
+ 		}
+ 	}
+ retry:
+@@ -3012,9 +3015,6 @@ __rmqueue(struct zone *zone, unsigned int order, int migratetype,
+ 								alloc_flags))
+ 			goto retry;
+ 	}
+-out:
+-	if (page)
+-		trace_mm_page_alloc_zone_locked(page, order, migratetype);
+ 	return page;
+ }
+ 
+@@ -3733,11 +3733,8 @@ struct page *rmqueue(struct zone *preferred_zone,
+ 		 * reserved for high-order atomic allocation, so order-0
+ 		 * request should skip it.
+ 		 */
+-		if (order > 0 && alloc_flags & ALLOC_HARDER) {
++		if (order > 0 && alloc_flags & ALLOC_HARDER)
+ 			page = __rmqueue_smallest(zone, order, MIGRATE_HIGHATOMIC);
+-			if (page)
+-				trace_mm_page_alloc_zone_locked(page, order, migratetype);
+-		}
+ 		if (!page) {
+ 			page = __rmqueue(zone, order, migratetype, alloc_flags);
+ 			if (!page)
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.30.2
+

@@ -2,60 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5FED524ED2
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0669524ED6
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354688AbiELNwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 09:52:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
+        id S1354731AbiELNw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 09:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354509AbiELNwn (ORCPT
+        with ESMTP id S1354722AbiELNws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 09:52:43 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B762E6542B;
-        Thu, 12 May 2022 06:52:42 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id n10so4360299qvi.5;
-        Thu, 12 May 2022 06:52:42 -0700 (PDT)
+        Thu, 12 May 2022 09:52:48 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4E66541F;
+        Thu, 12 May 2022 06:52:47 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id 185so4627717qke.7;
+        Thu, 12 May 2022 06:52:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9AmgPpxvn6EdK4HK0dUjo8+r0C+bjsTldPYOViPnEiM=;
-        b=CGaMZSgceeiAXjZ7U/J28/bVw4EJWKiPI1Km/56Zr8PZw45Va2EUqYhgvTLSVDDmI5
-         UU5IcKMIeq6skG1u62HlA1MeFKoAmZj5SuYFdSdtZ4S5SF8tR0rOxj95wG4Nc8qLlkvE
-         0ZCsdH9B/J3N6NRy1O6HTgaMGebrzxpHQq3t7JJg5JPhc/jYLZCvqOJ4VuCCcUNEjMOM
-         4PwEq640w5QerqBZVuLzCh5XrTB4/JvOYJEg5vr/KukoVZwJCCfJxlD5JUd/7ZierVBy
-         Jsz4Ir/LLmt5QGQPmT7klktZcHfRUo7d6ldVWzTEM6odz/2pOqy4IXOmNxd+0NPmsuzy
-         rETw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=EntzcyMJqmyoVwB2wFomh4Orbg1WQwtLfJblu/8zhGs=;
+        b=SUc7k2sPrY6R3kV27omjPGQxBeNTkELcBzbTdTAtrEDCXV3NlJvvfIKu/5Hic7Xd4E
+         rwv62gGkHlV4LUeq0pD16Wgi3qqe2nO3WLcmEnVRg680ZEL64VwRTzM5jYd4t7w+ruFF
+         zbPQysckaTyoENbAf2HJp9/eHw0UPwWQvX2IflxfXtmNVqfSVZ3COKfO/wi2+7OMxuva
+         bF5kiFUwhysPKcEHgphPmCf+Ok0p5RF6180iGE3+bOsx9vB27EjIcGFPfNaTeViAA3OF
+         IjSWkUpSoJmLWheYkCA8GVGeYlNAQB8H8oERZA6lwtPRr9IO5WkdBPZNyz38Gd8kEMWA
+         rrfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9AmgPpxvn6EdK4HK0dUjo8+r0C+bjsTldPYOViPnEiM=;
-        b=yy+Si+WZNr4PPnMdBYr4xv23wO1rA/Rdu/vKNREOiCHYgGCvv2mHJiQhcskz58YFGS
-         zz8h6cFFQy1IphE/GsC73+g2yvpewt6t56zcayayO44gKGq2tRqvsUVpCy6naE4hSW+H
-         fJhppHGW3QePQX7vDzfLQAV9fPnDGKGrCPdq0PNs9BfjR1aiM9jy2XtbQDwWA16t6SVX
-         WH1Nqe0/Ji4UeB9Al+OCZns2nA9vvhUzE8Gfbvawnkv7t110NLKvDBaX2VJNp3dPD905
-         c8DW0JI6ChJA6RZFFwWt5xkbZNMl+UhClvpbVRfO93oDeeDrMo23TL/hto4JBVHn69LG
-         pM+w==
-X-Gm-Message-State: AOAM532GTYYas+EQLUUgjNIhQ/SkfJEzICnoG1/jrffxo1iUUHOqSPrK
-        SXcOwav3I7dlrdpixY3kYdgYVNDHPgwb3Ocq
-X-Google-Smtp-Source: ABdhPJxtUbZjUiYVcfuwPdRVe417fmbRT6QtnO+1RzhV6qXzSSM2BdMZGCvW5a4vbMorUvAO50ykNg==
-X-Received: by 2002:a05:6214:4103:b0:440:e4d1:a2a0 with SMTP id kc3-20020a056214410300b00440e4d1a2a0mr26800735qvb.42.1652363561661;
-        Thu, 12 May 2022 06:52:41 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=EntzcyMJqmyoVwB2wFomh4Orbg1WQwtLfJblu/8zhGs=;
+        b=Gdz4GXA9soUWZlaiESJv5g1AFkr+Bu4s/7VwGqIeDA83PimUe8w4sT2SW5pwI8sapq
+         WkF91VqiecV+qAnI409U/3luH+QY/OQZ3rOABQCVd7p1iJ0wN5bALK8O28Uj5lcYahA1
+         jAwdDu3F5nyppAyu7cmpDErcdg0aFtPT8cLn27v00pMXdyAyMVjq2b3Ck3SHex6avMBp
+         1xe1vb7vj7Ot6vVUJ1muzDPLRJFEG+Ogdf5nlH/Wjb26u/zzl4rKilZ2RCttgFzI13Wz
+         O7/bQFwwuyyWU2EV9jvkLr8r6H1GRMGuwwUU5nmEtytIFjyY26dyRw5nF3JKjjFOxYYg
+         jmcQ==
+X-Gm-Message-State: AOAM531bTC05PciEceJ2pgE3RG3XFxnC6fA8qNTFWUBr1dUuyFhqnwST
+        UDpqkKW1wVOjXKLU3JU2LIkE1SrcaX/kmWkF
+X-Google-Smtp-Source: ABdhPJyWjQ589PYbNcdgdqT2LVWIuiQFWeroqxIVMiytvY7GX6A58YzaHho5Vo1MvGtx+4zLvGoNug==
+X-Received: by 2002:a37:63cc:0:b0:6a0:c68b:b06d with SMTP id x195-20020a3763cc000000b006a0c68bb06dmr8741580qkb.90.1652363567040;
+        Thu, 12 May 2022 06:52:47 -0700 (PDT)
 Received: from MBP.hobot.cc (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
-        by smtp.gmail.com with ESMTPSA id r204-20020a37a8d5000000b0069fc13ce1e8sm2885591qke.25.2022.05.12.06.52.38
+        by smtp.gmail.com with ESMTPSA id r204-20020a37a8d5000000b0069fc13ce1e8sm2885591qke.25.2022.05.12.06.52.44
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 12 May 2022 06:52:41 -0700 (PDT)
+        Thu, 12 May 2022 06:52:46 -0700 (PDT)
 From:   Schspa Shi <schspa@gmail.com>
 To:     rafael@kernel.org, viresh.kumar@linaro.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         schspa@gmail.com
-Subject: [PATCH v4 1/2] cpufreq: fix race on cpufreq online
-Date:   Thu, 12 May 2022 21:52:30 +0800
-Message-Id: <20220512135231.10076-1-schspa@gmail.com>
+Subject: [PATCH v4 2/2] cpufreq: make interface functions and lock holding state clear
+Date:   Thu, 12 May 2022 21:52:31 +0800
+Message-Id: <20220512135231.10076-2-schspa@gmail.com>
 X-Mailer: git-send-email 2.29.0
+In-Reply-To: <20220512135231.10076-1-schspa@gmail.com>
+References: <20220512135231.10076-1-schspa@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,121 +70,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When cpufreq online failed, policy->cpus are not empty while
-cpufreq sysfs file available, we may access some data freed.
+cpufreq_offline() calls offline() and exit() under the policy rwsem
+But they are called outside the rwsem in cpufreq_online().
 
-Take policy->clk as an example:
+This patch move the offline(), exit(), online(), init() to be inside
+of policy rwsem to achieve a clear lock relationship.
 
-static int cpufreq_online(unsigned int cpu)
-{
-  ...
-  // policy->cpus != 0 at this time
-  down_write(&policy->rwsem);
-  ret = cpufreq_add_dev_interface(policy);
-  up_write(&policy->rwsem);
-
-  down_write(&policy->rwsem);
-  ...
-  /* cpufreq nitialization fails in some cases */
-  if (cpufreq_driver->get && has_target()) {
-    policy->cur = cpufreq_driver->get(policy->cpu);
-    if (!policy->cur) {
-      ret = -EIO;
-      pr_err("%s: ->get() failed\n", __func__);
-      goto out_destroy_policy;
-    }
-  }
-  ...
-  up_write(&policy->rwsem);
-  ...
-
-  return 0;
-
-out_destroy_policy:
-	for_each_cpu(j, policy->real_cpus)
-		remove_cpu_dev_symlink(policy, get_cpu_device(j));
-    up_write(&policy->rwsem);
-...
-out_exit_policy:
-  if (cpufreq_driver->exit)
-    cpufreq_driver->exit(policy);
-      clk_put(policy->clk);
-      // policy->clk is a wild pointer
-...
-                                    ^
-                                    |
-                            Another process access
-                            __cpufreq_get
-                              cpufreq_verify_current_freq
-                                cpufreq_generic_get
-                                  // acces wild pointer of policy->clk;
-                                    |
-                                    |
-out_offline_policy:                 |
-  cpufreq_policy_free(policy);      |
-    // deleted here, and will wait for no body reference
-    cpufreq_policy_put_kobj(policy);
-}
-
-We can fix it by clear the policy->cpus mask.
-Both show_scaling_cur_freq and show_cpuinfo_cur_freq will return an
-error by checking this mask, thus avoiding UAF.
+All the init() online() implement only initialize policy object without
+holding this lock and won't call cpufreq APIs need to hold this lock.
 
 Signed-off-by: Schspa Shi <schspa@gmail.com>
-
 ---
-
-Changelog:
-v1 -> v2:
-        - Fix bad critical region enlarge which causes uninitialized
-          unlock.
-        - Move cpumask_clear(policy->cpus); before out_offline_policy
-v2 -> v3:
-        - Remove the missed down_write() before
-          cpumask_and(policy->cpus, policy->cpus, cpu_online_mask);
-v3 -> v4:
-        - Seprate to two patchs.
-        - Add policy_is_inactive check before sysfs access
----
- drivers/cpufreq/cpufreq.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/cpufreq/cpufreq.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 80f535cc8a75..35dffd738580 100644
+index 35dffd738580..f242d5488364 100644
 --- a/drivers/cpufreq/cpufreq.c
 +++ b/drivers/cpufreq/cpufreq.c
-@@ -953,7 +953,10 @@ static ssize_t show(struct kobject *kobj, struct attribute *attr, char *buf)
- 		return -EIO;
- 
- 	down_read(&policy->rwsem);
--	ret = fattr->show(policy, buf);
-+	if (unlikely(policy_is_inactive(policy)))
-+		ret = -EBUSY;
-+	else
-+		ret = fattr->show(policy, buf);
- 	up_read(&policy->rwsem);
- 
- 	return ret;
-@@ -978,7 +981,10 @@ static ssize_t store(struct kobject *kobj, struct attribute *attr,
- 
- 	if (cpu_online(policy->cpu)) {
+@@ -1343,12 +1343,12 @@ static int cpufreq_online(unsigned int cpu)
  		down_write(&policy->rwsem);
--		ret = fattr->store(policy, buf, count);
-+		if (unlikely(policy_is_inactive(policy)))
-+			ret = -EBUSY;
-+		else
-+			ret = fattr->store(policy, buf, count);
- 		up_write(&policy->rwsem);
+ 		policy->cpu = cpu;
+ 		policy->governor = NULL;
+-		up_write(&policy->rwsem);
+ 	} else {
+ 		new_policy = true;
+ 		policy = cpufreq_policy_alloc(cpu);
+ 		if (!policy)
+ 			return -ENOMEM;
++		down_write(&policy->rwsem);
  	}
  
-@@ -1533,6 +1539,7 @@ static int cpufreq_online(unsigned int cpu)
- 	for_each_cpu(j, policy->real_cpus)
+ 	if (!new_policy && cpufreq_driver->online) {
+@@ -1388,7 +1388,6 @@ static int cpufreq_online(unsigned int cpu)
+ 		cpumask_copy(policy->related_cpus, policy->cpus);
+ 	}
+ 
+-	down_write(&policy->rwsem);
+ 	/*
+ 	 * affected cpus must always be the one, which are online. We aren't
+ 	 * managing offline cpus here.
+@@ -1540,7 +1539,6 @@ static int cpufreq_online(unsigned int cpu)
  		remove_cpu_dev_symlink(policy, get_cpu_device(j));
  
-+	cpumask_clear(policy->cpus);
- 	up_write(&policy->rwsem);
+ 	cpumask_clear(policy->cpus);
+-	up_write(&policy->rwsem);
  
  out_offline_policy:
+ 	if (cpufreq_driver->offline)
+@@ -1549,6 +1547,7 @@ static int cpufreq_online(unsigned int cpu)
+ out_exit_policy:
+ 	if (cpufreq_driver->exit)
+ 		cpufreq_driver->exit(policy);
++	up_write(&policy->rwsem);
+ 
+ out_free_policy:
+ 	cpufreq_policy_free(policy);
 -- 
 2.29.0
 

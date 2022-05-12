@@ -2,144 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D2B525413
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09F945253EF
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357285AbiELRty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 13:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48462 "EHLO
+        id S1356307AbiELRmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 13:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357283AbiELRtt (ORCPT
+        with ESMTP id S1353035AbiELRmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 13:49:49 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB5C1FC7C7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:49:47 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id l18so11689462ejc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:49:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=g2rQByg8zgc+HF8Kk0b5UhwCnCqFJu0XeJMRMnUubP4=;
-        b=hQCDnuOiRDAfjb566SDsAuhMZtfYydXMJWNTiXviylyOTuWKwRNr/yhTZJtQ7Rl3CG
-         A7N2tVbkUqoa4kcxh8BagYehWy7EziQ7fQlaG6vGRw+5gKndrEbBrpA6FG2xHm837fLw
-         YVrFUtBoXf4X3nG+M16IVVJry4+tbviGnwkNE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=g2rQByg8zgc+HF8Kk0b5UhwCnCqFJu0XeJMRMnUubP4=;
-        b=vSu63p6zQHhPD4CcI5BTzPZfdP3WjUw6wPZgBV3ih1vXLefooHDw1TAWHEx2Ja5D7h
-         tXG154OzyGuSug4lmqpNjGB8mHMwDc58BxJ8qfRaCsuVP6mGQ1dtBUx1PRkMjXnCz4Vm
-         98UbgXQQR+lnwxfOiIwbh18Ux00NrmhL4D3MNyy5FzmCoyZwtoHwJT04amWzFYsQ3i0Z
-         Sc4Ziv41lye3hgcWDS87sc8iL7wA2GoR4MvJLjWhgV8qeHE0mfdxyGFbFH4dnXhrcbds
-         70Rk1qy6hk1Ig3PmACWTux15ESb/OO5UuisKPecckgVqmQwmuPRX5cWjnZPfD77uBraG
-         QMPQ==
-X-Gm-Message-State: AOAM530b5CZf2ymwuQ0Lj2gkgzzCDOKe3+k5diHlDt8g9fppkOFS/67B
-        SDC5KqIw5BmHhDj8dvrJd8K6C5Iy9gDforiWy4Y=
-X-Google-Smtp-Source: ABdhPJzHhE9y+7fHV0OFH3dD+gY27TFMettFIpLWjN+mxMqwUAaX6DVHUWIkvtf/tyIPWKV08eI2WQ==
-X-Received: by 2002:a17:907:1b14:b0:6ef:a5c8:afbd with SMTP id mp20-20020a1709071b1400b006efa5c8afbdmr960025ejc.151.1652377786166;
-        Thu, 12 May 2022 10:49:46 -0700 (PDT)
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com. [209.85.218.42])
-        by smtp.gmail.com with ESMTPSA id bd23-20020a056402207700b0042617ba63a3sm2755251edb.45.2022.05.12.10.49.45
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 10:49:45 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id j6so11664570ejc.13
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:49:45 -0700 (PDT)
-X-Received: by 2002:a5d:6dad:0:b0:20c:4dc1:e247 with SMTP id
- u13-20020a5d6dad000000b0020c4dc1e247mr702827wrs.274.1652377345676; Thu, 12
- May 2022 10:42:25 -0700 (PDT)
+        Thu, 12 May 2022 13:42:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17465E743;
+        Thu, 12 May 2022 10:42:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CD6A620C3;
+        Thu, 12 May 2022 17:42:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87477C385B8;
+        Thu, 12 May 2022 17:42:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652377361;
+        bh=xqAM2tBdd1Wwr4gn7QuECIUH2WF1B4DBfO+9+uwWOHg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=SVzzxKHIsuL34zozU+8DhYbhZ3LXXYPiE3Zsc+HXJU1jfuV4JCoFBtqQ5ditBeGQd
+         QpC9UuVvAzwtWxBU+kBdBppCkolASzQ51OAVEsny3Lqk94Yusf2mMiWAzotA0PdPiA
+         XacNYIbUgC6EXvR8Xxmc2WoZ+PUVEW7t4EwPaPzEtK4xEzMTETbyyyxUBKqH53gx9k
+         Ueu8XN1G7pZwzMh/u2lmffCUmeCmB+eXaq4efTAwKtqTNqW+4k/OImiKr5DHdXIoMX
+         FAicIJPA7HrgaA+bh58lX00OYFTAE0GTChNZtPZTv8ObaZ53KdyE3KXtRHGkqrRM7t
+         GFoh44sm04XSA==
+Date:   Thu, 12 May 2022 12:42:39 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Rajvi Jingar <rajvi.jingar@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        bhelgaas@google.com, david.e.box@linux.intel.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
+Message-ID: <20220512174239.GA851224@bhelgaas>
 MIME-Version: 1.0
-References: <YnXnLuYjmEWdVyBP@ziqianlu-desk1> <ae763d63e50d14650c5762103d113934412bef57.camel@intel.com>
- <ba83270a-4f37-7d5a-b37a-0b7a6df5f5b4@intel.com> <d13688d1483e9d87ec477292893f2916832b3bdc.camel@intel.com>
- <c11ae803-cea7-8b7f-9992-2f640c90f104@intel.com> <37dac785a08e3a341bf05d9ee35f19718ce83d26.camel@intel.com>
- <CAHk-=wjguW5nxjagV99GHvc_-E_7mSg+LMvGtFjJ9LUSx4Skig@mail.gmail.com>
- <41c08a5371957acac5310a2e608b2e42bd231558.camel@intel.com>
- <YnuYV3J2ljY88DyQ@ziqianlu-desk1> <dfc98503b11e2e54a5a82c21b8ef6afa10eda9b7.camel@intel.com>
- <Yn0BeRaUC9ailyzz@ziqianlu-desk1>
-In-Reply-To: <Yn0BeRaUC9ailyzz@ziqianlu-desk1>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 12 May 2022 10:42:09 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whmeWNC-YH_cGRofdW3Spt8Y5nfWpoX=CipQ5pBYgnt2g@mail.gmail.com>
-Message-ID: <CAHk-=whmeWNC-YH_cGRofdW3Spt8Y5nfWpoX=CipQ5pBYgnt2g@mail.gmail.com>
-Subject: Re: [mm/page_alloc] f26b3fa046: netperf.Throughput_Mbps -18.0% regression
-To:     Aaron Lu <aaron.lu@intel.com>
-Cc:     "ying.huang@intel.com" <ying.huang@intel.com>,
-        Waiman Long <longman@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        kernel test robot <oliver.sang@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        kernel test robot <lkp@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        fengwei.yin@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <70d0c0d4-093f-ae8a-9654-5a433285ab12@intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 5:46 AM Aaron Lu <aaron.lu@intel.com> wrote:
->
-> When nr_process=16, zone lock contention increased about 21% from 6% to
-> 27%, performance dropped 17.8%, overall lock contention increased 14.3%:
+Hi Rajvi,
 
-So the contention issue seems real and nasty, and while the queued
-locks may have helped a bit, I don't think they ended up making a
-*huge* change: the queued locks help make sure the lock itself doesn't
-bounce all over the place, but clearly if the lock holder writes close
-to the lock, it will still bounce with at least *one* lock waiter.
+I received your v1, v2, v3, v4, v5 postings because they were sent
+directly to bhelgaas@google.com, but for some reason vger doesn't like
+them so they don't show up on the mailing list:
 
-And having looked at the qspinlock code, I have to agree with Waiman
-and PeterZ that I don't think the locking code can reasonably eb
-changed - I'm sure this particular case could be improved, but the
-downsides for other cases would be quite large enough to make that a
-bad idea.
+  https://lore.kernel.org/all/?q=a%3Arajvi.jingar
 
-So I think the issue is that
+I looked at the ones I received directly and don't see an obvious
+problem.  Maybe there's a hint here?
 
- (a) that zone lock is too hot.
+  http://vger.kernel.org/majordomo-info.html
 
- (b) given lock contention, the fields that get written to under the
-lock are too close to the lock
+All patches should appear on the linux-pci mailing list before
+applying them, so we need to figure this out somehow.  In fact, I read
+and review patches from linux-pci, so I often don't even see things
+that are just sent directly to bhelgaas@google.com. 
 
-Now, the optimal fix would of course be to just fix the lock so that
-it isn't so hot. But assuming that's not possible, just looking at the
-definition of that 'struct zone', I do have to say that the
-ZONE_PADDING fields seem to have bit-rotted over the years.
+On Thu, May 12, 2022 at 03:49:18PM +0200, Rafael J. Wysocki wrote:
+> On 4/29/2022 11:05 PM, Rajvi Jingar wrote:
+> > For the PCIe devices (like nvme) that do not go into D3 state still need to
+> > disable PTM to allow the port to enter a lower-power PM state and the SoC
+> > to reach a lower-power idle state as a whole. Move the pci_disable_ptm()
+> > out of pci_prepare_to_sleep() as this code path is not followed for devices
+> > that do not go into D3. This fixes the issue seen on Dell XPS 9300 with
+> > Ice Lake CPU and Dell Precision 5530 with Coffee Lake CPU platforms to get
+> > improved residency in low power idle states.
 
-The whole and only reason for them would be to avoid the cache
-bouncing, but commit 6168d0da2b47 ("mm/lru: replace pgdat lru_lock
-with lruvec lock") actively undid that for the 'lru_lock' case, and
-way back when commit a368ab67aa55 ("mm: move zone lock to a different
-cache line than order-0 free page lists") tried to make it true for
-the 'lock' vs free_area[] cases, but did it without actually using the
-ZONE_PADDING thing, but by moving things around, and not really
-*guaranteeing* that 'lock' was in a different cacheline, but really
-just making 'free_area[]' aligned, but still potentially in the same
-cache-line as 'lock' (so now the lower-order 'free_area[]' entries are
-not sharing a cache-line, but the higher-order 'free_area[]' ones
-probably are).
+I think the paragraph above is a distraction, and the real reason is
+the paragraph below.
 
-So I get the feeling that those 'ZONE_PADDING' things are a bit random
-and not really effective.
+> > Also, on receiving a PTM Request from a downstream device, if PTM is
+> > disabled on the root port, as per PCIe r6.0, sec 6.21.3, such a request
+> > would cause an Unsupported Request error. So it must first disable PTM in
+> > any downstream devices.
+> > 
+> > Fixes: a697f072f5da ("PCI: Disable PTM during suspend to save power")
+> > Signed-off-by: Rajvi Jingar <rajvi.jingar@intel.com>
+> > Suggested-by: David E. Box <david.e.box@linux.intel.com>
+> > ---
+> >   v1 -> v2: add Fixes tag in commit message
+> >   v2 -> v3: move changelog after "---" marker
+> >   v3 -> v4: add "---" marker after changelog
+> >   v4 -> v5: move pci_disable_ptm() out of the pci_dev->state_saved check.
+> > 	   disable PTM for all devices, not just root ports.
+> > ---
+> >   drivers/pci/pci-driver.c | 28 +++++++++++++++++++---------
+> >   drivers/pci/pci.c        | 10 ----------
+> >   2 files changed, 19 insertions(+), 19 deletions(-)
+> > 
+> > diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> > index 8b55a90126a2..400dd18a9cf5 100644
+> > --- a/drivers/pci/pci-driver.c
+> > +++ b/drivers/pci/pci-driver.c
+> > @@ -813,6 +813,7 @@ static int pci_pm_suspend_late(struct device *dev)
+> >   static int pci_pm_suspend_noirq(struct device *dev)
+> >   {
+> > +	unsigned int dev_state_saved;
+> >   	struct pci_dev *pci_dev = to_pci_dev(dev);
+> >   	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> > @@ -845,16 +846,25 @@ static int pci_pm_suspend_noirq(struct device *dev)
+> >   		}
+> >   	}
+> > -	if (!pci_dev->state_saved) {
+> > +	dev_state_saved = pci_dev->state_saved;
+> 
+> If pci_dev->state_saved is set here, the device may be in D3cold already and
+> disabling PTM for it will not work.  Of course, it is not necessary to
+> disable PTM for it then, but this case need to be taken care of.
+> 
+> > +	if (!dev_state_saved)
+> >   		pci_save_state(pci_dev);
+> > -		/*
+> > -		 * If the device is a bridge with a child in D0 below it, it needs to
+> > -		 * stay in D0, so check skip_bus_pm to avoid putting it into a
+> > -		 * low-power state in that case.
+> > -		 */
+> > -		if (!pci_dev->skip_bus_pm && pci_power_manageable(pci_dev))
+> > -			pci_prepare_to_sleep(pci_dev);
+> > -	}
+> > +
+> > +	/*
+> > +	 * There are systems (for example, Intel mobile chips since Coffee
+> > +	 * Lake) where the power drawn while suspended can be significantly
+> > +	 * reduced by disabling PTM as this allows the SoC to reach a
+> > +	 * lower-power idle state as a whole.
 
-In a perfect world, somebody would fix the locking to just not have as
-much contention. But assuming that isn't an option, maybe somebody
-should just look at that 'struct zone' layout a bit more.
+I think the argument for disabling PTM is that:
 
-                     Linus
+  - If a PTM Requester is put in a low-power state, a PTM Responder
+    upstream from it may also be put in a low-power state.
+
+  - Putting a Port in D1, D2, or D3hot does not prohibit it from
+    sending or responding to PTM Requests (I'd be glad to be corrected
+    about this).
+
+  - We want to disable PTM on Responders when they are in a low-power
+    state.
+
+  - Per 6.21.3, a PTM Requester must not be enabled when the upstream
+    PTM Responder is disabled.
+
+  - Therefore, we must disable all PTM on all downstream PTM
+    Requesters before disabling it on the PTM Responder, e.g., a Root
+    Port.
+
+This has nothing specifically to do with Coffee Lake or other Intel
+chips, so I think the comment should be merely something to the
+effect that "disabling PTM reduces power consumption."
+
+> Something like this should suffice IMV:
+> 
+> if (!dev_state_saved || pci_dev->current_state != PCI_D3cold)
+> 
+>         pci_disable_ptm(pci_dev);
+
+It makes sense to me that we needn't disable PTM if the device is in
+D3cold.  But the "!dev_state_saved" condition depends on what the
+driver did.  Why is that important?  Why should we not do the
+following?
+
+  if (pci_dev->current_state != PCI_D3cold)
+    pci_disable_ptm(pci_dev);
+
+Bjorn

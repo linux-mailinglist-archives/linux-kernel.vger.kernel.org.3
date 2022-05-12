@@ -2,146 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9588A525071
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:42:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 085CA525072
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355514AbiELOl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 10:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53074 "EHLO
+        id S1355505AbiELOmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 10:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355511AbiELOlz (ORCPT
+        with ESMTP id S1355511AbiELOmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 10:41:55 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E75633A4
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:41:53 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id iq10so5402723pjb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:41:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=THMV7qBfGHCnlJOjQih5vLNyRsOAcoDzGxFt208dGu4=;
-        b=UbWumBa7yY1Xw+NaPBUMufOeoJu1dgpBoySaGRRBs71aEpKas6Ce/MWMDlAxgrUro0
-         UAIZ8Nwjob2jBkbaJ904XL1JgX3FJTmnblKLBXM0hW0qRoqrwE/a2DpAq4llq4X/GEs5
-         JcPB9unrb0xULhz6iz95Yof1U3ZuKdLACvuQeqSIIfPGpz1iMA7XaZBITwf2HJZPwBOn
-         UQPuUpNAL74LgdrQek/DkVQz1IBOFHMkMtvShOay9MEKlccIq60SWbSkjiPD/fRTFkQU
-         q+4LrCf4zWIe9L8k3KgUAx84ZtYAyOj/rEFizUgKNbBVrIpEwJhLfoe/MR8ks10I1nhi
-         lYbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=THMV7qBfGHCnlJOjQih5vLNyRsOAcoDzGxFt208dGu4=;
-        b=U2/aXVaqr+Z3m6Bo2AWerpBZFqx2oxqyCViXHtUgOmRiDnKaMVmugcjfu1r9WRH5v6
-         PHo2wspKfS6+9z244t10a0tRXraRSEkE0jd1+ApoJPe+4L4jaqIPHogWlZrzNLUK47Lz
-         5GhYRJUDTcKX5StadTP0eaqTpK/c2d2pAYdJNCd1bFbJXSGjPTK5CIgjSK6Y5Du9fwfr
-         2rqOCz3dC0T86XRO0yZ2NNi1dHOzVMvxcwzPObGlZF7ydLgNvxmJtIyh8CeqYk0Z/Sap
-         xwASXSChDL8Aw+3VMpCZ7c2nejbSZozFpwFpIceYKuOrlqwU0n407UJjgqepGQDAYMNX
-         Tw5g==
-X-Gm-Message-State: AOAM530GdGyPjBht9JRy4nCMZxgKW/icIFG+0IoEHOhCT2Eror1NZ8pq
-        cqcFNOp3sG0As+CSZvhLkX6G
-X-Google-Smtp-Source: ABdhPJxCSSw5bHNaT//Ydnd2YrZDuaUnaM9WoqXjjcpFokoUN6rNEeORPq2Yxmp9IWULlcl81z2ngg==
-X-Received: by 2002:a17:90b:4a03:b0:1dc:756a:2463 with SMTP id kk3-20020a17090b4a0300b001dc756a2463mr11313605pjb.68.1652366512715;
-        Thu, 12 May 2022 07:41:52 -0700 (PDT)
-Received: from thinkpad ([117.202.184.202])
-        by smtp.gmail.com with ESMTPSA id t9-20020a632249000000b003c652a0134asm2008843pgm.10.2022.05.12.07.41.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 07:41:52 -0700 (PDT)
-Date:   Thu, 12 May 2022 20:11:44 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 06/26] dmaengine: dw-edma: Don't permit non-inc
- interleaved xfers
-Message-ID: <20220512144144.GI35848@thinkpad>
-References: <20220503225104.12108-1-Sergey.Semin@baikalelectronics.ru>
- <20220503225104.12108-7-Sergey.Semin@baikalelectronics.ru>
+        Thu, 12 May 2022 10:42:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343F263397;
+        Thu, 12 May 2022 07:42:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F5B3B8286C;
+        Thu, 12 May 2022 14:41:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D7CDC385B8;
+        Thu, 12 May 2022 14:41:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652366518;
+        bh=lO/Qu5Nf2ml3fZ177q4ahOGbvoGlU6Rf0HczodM1aWU=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=jiRwg7s0maDYdE7dhVB9Xl/S30cPI855qHNrqNH66GzO65xBOy3wV3jl5NWw/87XK
+         ySpz4YIBnAtGKY/0WqrUXbq63+7vq54St+rWdGxe5nmiRKNCY2dXy2kwWz4RsIkjmJ
+         /GnxKGyi6uSi0GhWzTagDrTDno3otI3NzYTP/ltNy0cx8ERTDaKAsC0ybXtDx4zChj
+         m1tjIhC5nrvmDJI7IF0lTJkkowGlGF3Wy80+Zv/OBbe7V+bICw+HEsIy03vj2ASwO6
+         imSHytriwbUwSYILs80ceL3wbeeYpPu9Mm/WUeG4cI/3+VHWvIyLipaF6LCCXM57en
+         ekUxHdZzZ1Hfw==
+Message-ID: <98d7e84c-086a-794f-019d-849bcc2570c9@kernel.org>
+Date:   Thu, 12 May 2022 09:41:56 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220503225104.12108-7-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 0/3] Add device tree for Intel n6000
+Content-Language: en-US
+To:     matthew.gerlach@linux.intel.com, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+References: <20220508142624.491045-1-matthew.gerlach@linux.intel.com>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <20220508142624.491045-1-matthew.gerlach@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 01:50:44AM +0300, Serge Semin wrote:
-> DW eDMA controller always increments both source and destination
-> addresses. Permitting DMA interleaved transfers with no src_inc/dst_inc
-> flags set may lead to unexpected behaviour for the device users. Let's fix
-> that by terminating the interleaved transfers if at least one of the
-> dma_interleaved_template.{src_inc,dst_inc} flag is initialized with false
-> value. Note in addition to that we need to increase the source and
-> destination addresses accordingly after each iteration.
-> 
-> Fixes: 85e7518f42c8 ("dmaengine: dw-edma: Add device_prep_interleave_dma() support")
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
+On 5/8/22 09:26, matthew.gerlach@linux.intel.com wrote:
+> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> 
+> This patch set adds a device tree for the Hard Processor System (HPS)
+> on an Agilex based Intel n6000 board.
+> 
+> Patch 1 defines the device tree binding for the HPS Copy Engine IP
+> used to copy a bootable image from host memory to HPS DDR.
+> 
+> Patch 2 defines the binding for the Intel n6000 board itself.
+> 
+> Patch 3 adds the device tree for the n6000 board.
+> 
+> Changelog v3 -> v4:
+>    - move binding yaml from soc to soc/intel
+> 
+> Changelog v2 -> v3:
+>    - remove unused label
+>    - move from misc to soc
+>    - remove 0x from #address-cells/#size-cells values
+>    - change hps_cp_eng@0 to dma-controller@0
+>    - remote inaccurate 'items:' tag
+>    - added Acked-by
+>    - add unit number to memory node
+>    - remove spi node with unaccepted compatible value
+> 
+> Changelog v1 -> v2:
+>    - add dt binding for copy enging
+>    - add dt binding for n6000 board
+>    - fix copy engine node name
+>    - fix compatible field for copy engine
+>    - remove redundant status field
+>    - add compatibility field for the board
+>    - fix SPDX
+>    - fix how osc1 clock frequency is set
+> 
+> Matthew Gerlach (3):
+>    dt-bindings: soc: add bindings for Intel HPS Copy Engine
+>    dt-bindings: intel: add binding for Intel n6000
+>    arm64: dts: intel: add device tree for n6000
+> 
+>   .../bindings/arm/intel,socfpga.yaml           |  1 +
+>   .../soc/intel/intel,hps-copy-engine.yaml      | 51 ++++++++++++++
+>   arch/arm64/boot/dts/intel/Makefile            |  3 +-
+>   .../boot/dts/intel/socfpga_agilex_n6000.dts   | 66 +++++++++++++++++++
+>   4 files changed, 120 insertions(+), 1 deletion(-)
+>   create mode 100644 Documentation/devicetree/bindings/soc/intel/intel,hps-copy-engine.yaml
+>   create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts
+> 
+
+Applied!
 
 Thanks,
-Mani
 
-> ---
->  drivers/dma/dw-edma/dw-edma-core.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
-> index f0ef87d75ea9..225eab58acb7 100644
-> --- a/drivers/dma/dw-edma/dw-edma-core.c
-> +++ b/drivers/dma/dw-edma/dw-edma-core.c
-> @@ -386,6 +386,8 @@ dw_edma_device_transfer(struct dw_edma_transfer *xfer)
->  			return NULL;
->  		if (xfer->xfer.il->numf > 0 && xfer->xfer.il->frame_size > 0)
->  			return NULL;
-> +		if (!xfer->xfer.il->src_inc || !xfer->xfer.il->dst_inc)
-> +			return NULL;
->  	} else {
->  		return NULL;
->  	}
-> @@ -485,15 +487,13 @@ dw_edma_device_transfer(struct dw_edma_transfer *xfer)
->  			struct dma_interleaved_template *il = xfer->xfer.il;
->  			struct data_chunk *dc = &il->sgl[i];
->  
-> -			if (il->src_sgl) {
-> -				src_addr += burst->sz;
-> +			src_addr += burst->sz;
-> +			if (il->src_sgl)
->  				src_addr += dmaengine_get_src_icg(il, dc);
-> -			}
->  
-> -			if (il->dst_sgl) {
-> -				dst_addr += burst->sz;
-> +			dst_addr += burst->sz;
-> +			if (il->dst_sgl)
->  				dst_addr += dmaengine_get_dst_icg(il, dc);
-> -			}
->  		}
->  	}
->  
-> -- 
-> 2.35.1
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
+Dinh

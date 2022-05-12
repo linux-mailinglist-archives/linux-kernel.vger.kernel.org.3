@@ -2,91 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020A9524524
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 07:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E54952452C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 07:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349991AbiELFsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 01:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45212 "EHLO
+        id S1349999AbiELFv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 01:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349973AbiELFsc (ORCPT
+        with ESMTP id S241110AbiELFvY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 01:48:32 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11DF4B422
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 22:48:29 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id j14so3917267plx.3
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 22:48:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Xuxuada9VjQWUI1huyzXxe5QzMXan59Iyu/e0FTIM3E=;
-        b=ASJQRBuMuNpLQOOTO1/95U8uONu/PxLK1NQwtEc5uIIinPwbzZ+EiMTqvJW4QuLzs5
-         Dvqj2QCJsNx8sPa/tDARlduwW3wdhQ0FGWnBcOUYQPrLWhXtmvZ6L3lTWYbNMl4MuYAf
-         A/PyOdptPDjw6TlGMudLwSFxHjVnS2Te9OSnDg+gxoZsDP/tNurbNk44BFro9n430bhV
-         vCHyXSBVgahfrymdhsL+5cRgGU7FA/ts3WzupsI2VR2OSHHZ3vUiHxnlMmFDF5i3eP0d
-         +FD1eSppYkkUwZIlNxuO6EhS0yW5e5kxoU1rlLL/KgKIpZGwrK/dbcF9nIeuXBhIBiHy
-         o7dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Xuxuada9VjQWUI1huyzXxe5QzMXan59Iyu/e0FTIM3E=;
-        b=HHLO+BbGlOCpcdzn/cXGTPJwzRErwfPChzNhe0Vq/Ykokxzvlsh8wHwZSz7agPXO0y
-         QEAlZ2Uq4n0BIcV/s8F4xJ4gbP0eDdrm1yqN6+jTFF7wS/h4srEaXftFWGnFGVFb+VwC
-         Cq2sPsmojQUAZN4/2IlqF/pyNa4mbydeZ93PYbrlVTdSIEYp4ylZIw1/SzkPtn4GNLBq
-         LKFTGhZh3vWgZM8UtfZgZ1HbLefii68ZMp7QP9GveLHsKOk4mjwGJxURBp9/xBam9gt6
-         0yZQV8GKhDdOm6VC0t4CE34GzRAiq0/n8aPqmNWIvuAWPJry0Yt6kxRgXgH+2GWs6cNx
-         hM6w==
-X-Gm-Message-State: AOAM531ywZtY1iuI9NO9UOKu/VFhMlv2fYpdGQBdF/sLUItkk+OIDMhF
-        XbjesFsduXPZH+5i10XMS0Ou8g==
-X-Google-Smtp-Source: ABdhPJy/83UwXF9qp2QmxMhj6rkiPyZePvTFVEifIrC1Ee9PJQriq+WUh+dvyq4lN3UFDvlBYmDWUg==
-X-Received: by 2002:a17:902:e989:b0:15f:1545:326d with SMTP id f9-20020a170902e98900b0015f1545326dmr16902177plb.119.1652334509123;
-        Wed, 11 May 2022 22:48:29 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id p21-20020a1709028a9500b0015e8d4eb245sm2868086plo.143.2022.05.11.22.48.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 22:48:28 -0700 (PDT)
-Date:   Thu, 12 May 2022 11:18:25 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     rafael@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
-        roger.lu@mediatek.com, hsinyi@google.com, khilman@baylibre.com,
-        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v6 00/10] cpufreq: mediatek: Cleanup and support MT8183
- and MT8186
-Message-ID: <20220512054825.aqe4g4lupuqj3rcq@vireshk-i7>
-References: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
- <20220506042004.hqzpb66shak4y7rz@vireshk-i7>
- <86851bd03128cc61082d516ebff929d3637063cb.camel@mediatek.com>
- <20220512052732.iqphgpveoyrqjlqg@vireshk-i7>
- <af82434adea0b648d74ed5ffd123e0faaaac6508.camel@mediatek.com>
+        Thu, 12 May 2022 01:51:24 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003E5506E8;
+        Wed, 11 May 2022 22:51:18 -0700 (PDT)
+X-UUID: bc075dd5dd7149c5a3d19c88f1121c7e-20220512
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:e210bcc1-f115-4f11-af59-f2692a195f82,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:9,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:14
+X-CID-META: VersionHash:faefae9,CLOUDID:f4a128f6-13a6-4067-b017-3b2864319134,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:3,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: bc075dd5dd7149c5a3d19c88f1121c7e-20220512
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 147289659; Thu, 12 May 2022 13:51:14 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 12 May 2022 13:51:12 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 12 May 2022 13:51:11 +0800
+Message-ID: <2ff41b86a7f7c7ce73cf800a7c1ecb531b835786.camel@mediatek.com>
+Subject: Re: [PATCH] iommu/dma: Fix iova map result check bug
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     <yf.wang@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Logan Gunthorpe" <logang@deltatee.com>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+CC:     <wsd_upstream@mediatek.com>, Libo Kang <Libo.Kang@mediatek.com>,
+        Ning Li <Ning.Li@mediatek.com>, <stable@vger.kernel.org>
+Date:   Thu, 12 May 2022 13:51:11 +0800
+In-Reply-To: <20220507085204.16914-1-yf.wang@mediatek.com>
+References: <20220507085204.16914-1-yf.wang@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <af82434adea0b648d74ed5ffd123e0faaaac6508.camel@mediatek.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12-05-22, 13:33, Rex-BC Chen wrote:
-> Matthias is not the member of mediatek, so I think we still need his
-> feedback for these three patches.
+On Sat, 2022-05-07 at 16:52 +0800, yf.wang@mediatek.com wrote:
+> From: Yunfei Wang <yf.wang@mediatek.com>
+> 
+> The data type of the return value of the iommu_map_sg_atomic
+> is ssize_t, but the data type of iova size is size_t,
+> e.g. one is int while the other is unsigned int.
+> 
+> When iommu_map_sg_atomic return value is compared with iova size,
+> it will force the signed int to be converted to unsigned int, if
+> iova map fails and iommu_map_sg_atomic return error code is less
+> than 0, then (ret < iova_len) is false, which will to cause not
+> do free iova, and the master can still successfully get the iova
+> of map fail, which is not expected.
+> 
+> Therefore, we need to check the return value of iommu_map_sg_atomic
+> in two cases according to whether it is less than 0.
+> 
+> Fixes: ad8f36e4b6b1 ("iommu: return full error code from
+> iommu_map_sg[_atomic]()")
+> Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
+> Cc: <stable@vger.kernel.org> # 5.15.*
+> ---
+>  drivers/iommu/dma-iommu.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+> index 09f6e1c0f9c0..2932281e93fc 100644
+> --- a/drivers/iommu/dma-iommu.c
+> +++ b/drivers/iommu/dma-iommu.c
+> @@ -776,6 +776,7 @@ static struct page
+> **__iommu_dma_alloc_noncontiguous(struct device *dev,
+>  	unsigned int count, min_size, alloc_sizes = domain-
+> >pgsize_bitmap;
+>  	struct page **pages;
+>  	dma_addr_t iova;
+> +	ssize_t ret;
+>  
+>  	if (static_branch_unlikely(&iommu_deferred_attach_enabled) &&
+>  	    iommu_deferred_attach(dev, domain))
+> @@ -813,8 +814,8 @@ static struct page
+> **__iommu_dma_alloc_noncontiguous(struct device *dev,
+>  			arch_dma_prep_coherent(sg_page(sg), sg-
+> >length);
+>  	}
+>  
+> -	if (iommu_map_sg_atomic(domain, iova, sgt->sgl, sgt-
+> >orig_nents, ioprot)
+> -			< size)
+> +	ret = iommu_map_sg_atomic(domain, iova, sgt->sgl, sgt-
+> >orig_nents, ioprot);
+> +	if (ret < 0 || ret < size)
 
-Please ping him and ask for his feedback then.
+        if (IS_ERR_VALUE(ret) || ret < size) for readable?
 
--- 
-viresh
+>  		goto out_free_sg;
+>  
+>  	sgt->sgl->dma_address = iova;
+> @@ -1209,7 +1210,7 @@ static int iommu_dma_map_sg(struct device *dev,
+> struct scatterlist *sg,
+>  	 * implementation - it knows better than we do.
+>  	 */
+>  	ret = iommu_map_sg_atomic(domain, iova, sg, nents, prot);
+> -	if (ret < iova_len)
+> +	if (ret < 0 || ret < iova_len)
+>  		goto out_free_iova;
+>  
+>  	return __finalise_sg(dev, sg, nents, iova);
+

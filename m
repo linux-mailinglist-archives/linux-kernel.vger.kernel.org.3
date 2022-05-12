@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 959E9524B7D
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3E72524B85
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353336AbiELLW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 07:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38680 "EHLO
+        id S1353139AbiELLWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 07:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353131AbiELLV2 (ORCPT
+        with ESMTP id S1353150AbiELLVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 07:21:28 -0400
+        Thu, 12 May 2022 07:21:30 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E37306;
-        Thu, 12 May 2022 04:21:27 -0700 (PDT)
-Received: from fraeml706-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KzTmR2pmqz687hF;
-        Thu, 12 May 2022 19:18:31 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02B6D67;
+        Thu, 12 May 2022 04:21:28 -0700 (PDT)
+Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KzTlp1Nw3z6GD8h;
+        Thu, 12 May 2022 19:17:58 +0800 (CST)
 Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
+ fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Thu, 12 May 2022 13:21:25 +0200
+ 15.1.2375.24; Thu, 12 May 2022 13:21:26 +0200
 Received: from localhost.localdomain (10.69.192.58) by
  lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 12 May 2022 12:21:23 +0100
+ 15.1.2375.24; Thu, 12 May 2022 12:21:25 +0100
 From:   John Garry <john.garry@huawei.com>
 To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linuxarm@huawei.com>, John Garry <john.garry@huawei.com>
-Subject: [PATCH 1/3] scsi: libsas: Refactor sas_ata_hard_reset()
-Date:   Thu, 12 May 2022 19:15:32 +0800
-Message-ID: <1652354134-171343-2-git-send-email-john.garry@huawei.com>
+Subject: [PATCH 2/3] scsi: hisi_sas: Use sas_ata_wait_after_reset() in IT nexus reset
+Date:   Thu, 12 May 2022 19:15:33 +0800
+Message-ID: <1652354134-171343-3-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1652354134-171343-1-git-send-email-john.garry@huawei.com>
 References: <1652354134-171343-1-git-send-email-john.garry@huawei.com>
@@ -51,103 +51,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create function sas_ata_wait_after_reset() from sas_ata_hard_reset() as
-some LLDDs may want to check for a remote ATA phy is up after reset.
+We have seen errors like this when a SATA device is probed:
+
+[524.566298] hisi_sas_v3_hw 0000L74:02.0: erroneous completion iptt=4096 ...
+[524.582827] sas: TMF task open reject failed 500e004aaaaaaaa00
+
+Since commit 21c7e972475e ("scsi: hisi_sas: Disable SATA disk phy for
+severe I_T nexus reset failure"), we issue an ATA softreset to disks after
+a phy reset to ensure that they are in sound working order. If the
+softreset is issued before the remote phy has come back up then the
+softreset will fail (errors as above). Remedy this by waiting for the
+phy to come back up after the reset.
 
 Signed-off-by: John Garry <john.garry@huawei.com>
 Reviewed-by: Xiang Chen <chenxiang66@hisilicon.com>
 Tested-by: Yihang Li <liyihang6@hisilicon.com>
 ---
- drivers/scsi/libsas/sas_ata.c | 41 +++++++++++++++++++++++------------
- include/scsi/sas_ata.h        |  7 ++++++
- 2 files changed, 34 insertions(+), 14 deletions(-)
+ drivers/scsi/hisi_sas/hisi_sas_main.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
-index d34c82e24d9a..d35c9296f738 100644
---- a/drivers/scsi/libsas/sas_ata.c
-+++ b/drivers/scsi/libsas/sas_ata.c
-@@ -358,22 +358,14 @@ static int sas_ata_printk(const char *level, const struct domain_device *ddev,
- 	return r;
- }
- 
--static int sas_ata_hard_reset(struct ata_link *link, unsigned int *class,
--			      unsigned long deadline)
-+int sas_ata_wait_after_reset(struct domain_device *dev, unsigned long deadline)
- {
--	int ret = 0, res;
--	struct sas_phy *phy;
--	struct ata_port *ap = link->ap;
-+	struct sata_device *sata_dev = &dev->sata_dev;
- 	int (*check_ready)(struct ata_link *link);
--	struct domain_device *dev = ap->private_data;
--	struct sas_internal *i = dev_to_sas_internal(dev);
--
--	res = i->dft->lldd_I_T_nexus_reset(dev);
--	if (res == -ENODEV)
--		return res;
--
--	if (res != TMF_RESP_FUNC_COMPLETE)
--		sas_ata_printk(KERN_DEBUG, dev, "Unable to reset ata device?\n");
-+	struct ata_port *ap = sata_dev->ap;
-+	struct ata_link *link = &ap->link;
-+	struct sas_phy *phy;
-+	int ret;
- 
- 	phy = sas_get_local_phy(dev);
- 	if (scsi_is_sas_phy_local(phy))
-@@ -386,6 +378,27 @@ static int sas_ata_hard_reset(struct ata_link *link, unsigned int *class,
- 	if (ret && ret != -EAGAIN)
- 		sas_ata_printk(KERN_ERR, dev, "reset failed (errno=%d)\n", ret);
- 
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(sas_ata_wait_after_reset);
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
+index 4bda2f6cb352..997f27e2f1e5 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_main.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+@@ -1710,13 +1710,18 @@ static int hisi_sas_debug_I_T_nexus_reset(struct domain_device *device)
+ 		/* report PHY down if timed out */
+ 		if (rc == -ETIMEDOUT)
+ 			hisi_sas_phy_down(hisi_hba, sas_phy->id, 0, GFP_KERNEL);
+-	} else if (sas_dev->dev_status != HISI_SAS_DEV_INIT) {
+-		/*
+-		 * If in init state, we rely on caller to wait for link to be
+-		 * ready; otherwise, except phy reset is fail, delay.
+-		 */
+-		if (!rc)
+-			msleep(2000);
++		return rc;
++	}
 +
-+static int sas_ata_hard_reset(struct ata_link *link, unsigned int *class,
-+			      unsigned long deadline)
-+{
-+	struct ata_port *ap = link->ap;
-+	struct domain_device *dev = ap->private_data;
-+	struct sas_internal *i = dev_to_sas_internal(dev);
-+	int ret;
++	if (rc)
++		return rc;
 +
-+	ret = i->dft->lldd_I_T_nexus_reset(dev);
-+	if (ret == -ENODEV)
-+		return ret;
-+
-+	if (ret != TMF_RESP_FUNC_COMPLETE)
-+		sas_ata_printk(KERN_DEBUG, dev, "Unable to reset ata device?\n");
-+
-+	ret = sas_ata_wait_after_reset(dev, deadline);
-+
- 	*class = dev->sata_dev.class;
++	/* Remote phy */
++	if (dev_is_sata(device)) {
++		rc = sas_ata_wait_after_reset(device,
++					HISI_SAS_WAIT_PHYUP_TIMEOUT);
++	} else {
++		msleep(2000);
+ 	}
  
- 	ap->cbl = ATA_CBL_SATA;
-diff --git a/include/scsi/sas_ata.h b/include/scsi/sas_ata.h
-index d47dea70855d..a1df4f9d57a3 100644
---- a/include/scsi/sas_ata.h
-+++ b/include/scsi/sas_ata.h
-@@ -34,6 +34,7 @@ void sas_resume_sata(struct asd_sas_port *port);
- void sas_ata_end_eh(struct ata_port *ap);
- int sas_execute_ata_cmd(struct domain_device *device, u8 *fis,
- 			int force_phy_id);
-+int sas_ata_wait_after_reset(struct domain_device *dev, unsigned long deadline);
- #else
- 
- 
-@@ -91,6 +92,12 @@ static inline int sas_execute_ata_cmd(struct domain_device *device, u8 *fis,
- {
- 	return 0;
- }
-+
-+static inline int sas_ata_wait_after_reset(struct domain_device *dev,
-+					   unsigned long deadline)
-+{
-+	return -ETIMEDOUT;
-+}
- #endif
- 
- #endif /* _SAS_ATA_H_ */
+ 	return rc;
 -- 
 2.26.2
 

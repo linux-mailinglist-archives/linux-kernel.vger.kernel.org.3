@@ -2,96 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0588525379
+	by mail.lfdr.de (Postfix) with ESMTP id 83B81525378
 	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:22:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356982AbiELRWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 13:22:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41556 "EHLO
+        id S1356993AbiELRWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 13:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356981AbiELRWF (ORCPT
+        with ESMTP id S1356987AbiELRWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 13:22:05 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C2866AF6;
-        Thu, 12 May 2022 10:22:02 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CHKUCa011895;
-        Thu, 12 May 2022 17:21:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=bPdVCnCIWEacY7fSG/XOyHejYZbwJTakmHy8ZHlj6KQ=;
- b=sl5sAl+grzkLS/TtP37trAfs/O/bVjd6/xDCiIqd0b2ByQZDR5Jz1pZLzuv0zGIMpCAM
- w5X7TJ8Rc75DhFp/IXJsXoS9UHv7T8i/ElTAQJSFvNf+BqYrUFD50J/LQKRjm00gcTth
- 7PxU/HNJOtKDgixWCkln3EGteKVMvm42zXRvRCX3rQAIBlHVgQtq5G3E9UuTyftEvAjl
- nPz/3jnM5Mu6ETZGD3IEOFNto/CfdUT1Zrzhs7+rEs3b3Lvf06PXXmx0EtSptHXuyeZE
- 2Fuk0qudvFiBomz/+GRRe5+SjP1dpg0Jm+PErnp9hp2NcBOpL5z+fWXE3A7ySbNP8D46 aw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g16af8b0r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 17:21:59 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24CHLxZt015470;
-        Thu, 12 May 2022 17:21:59 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g16af8b08-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 17:21:58 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24CHIhAh005251;
-        Thu, 12 May 2022 17:21:57 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3fwgd8ycqw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 17:21:56 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24CHLUpY32506244
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 12 May 2022 17:21:30 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C99CBA4040;
-        Thu, 12 May 2022 17:21:51 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 53708A404D;
-        Thu, 12 May 2022 17:21:51 +0000 (GMT)
-Received: from osiris (unknown [9.145.44.123])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu, 12 May 2022 17:21:51 +0000 (GMT)
-Date:   Thu, 12 May 2022 19:21:49 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jonas Paulsson <paulsson@linux.vnet.ibm.com>,
-        Ulrich Weigand <ulrich.weigand@de.ibm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andreas Krebbel <krebbel@linux.ibm.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH 3/8] s390/entry: shorten OUTSIDE macro
-Message-ID: <Yn1CLcsu9I0M8IEM@osiris>
-References: <20220511120532.2228616-1-hca@linux.ibm.com>
- <20220511120532.2228616-4-hca@linux.ibm.com>
+        Thu, 12 May 2022 13:22:11 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9DA663E7
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:22:09 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id l19so7340647ljb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:22:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=k5uBtUuVEeyc/uDRq1ERjuwGFNzbvMoQDv2ORcXlb34=;
+        b=zSde4TismK45+H65/WKteA+kIU8dYdT5m6nUNBnPGE10a/oyMx9hE8U3rDy16Xu1eQ
+         5vWYkxU0GKQp6i6p6DMtPshoptRmUTYUYsUWN/vePrAPF5fClSkzPdwBZGYs4dzlulKF
+         3mg7REuBmBQrPAJsvOPivBw3HuAXK9PIwQRoVEmM2bXYJers3CHKHzuva4OQ6cAW80Vw
+         Hatmw/L8aLsB4rJ8IyF4OGEEf3na/ogfoTln7b/NDIDnoVAmREbxmA1FdstbMiU8i3WQ
+         iFXW3Qb62yRy+N0sGcJo7YJR4i0sfyNVx9bND0XVIZ8BhwvhFJ9lFaz/4QJt43NMNFq/
+         hRuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=k5uBtUuVEeyc/uDRq1ERjuwGFNzbvMoQDv2ORcXlb34=;
+        b=fwrpxzFSn8rJLYb7dm30N+miX+CdxY4TYzjZ5gI6RSUYJty+512Oz1SVbxNfqIP6Tf
+         N+WKxHgnSDuvWWwwIiF7dpIQwm3zF2ALdAwTwfkQhqOu1MD3vLtuDsYxVXrwZAJfJfAl
+         9VzpY86F1tBo/nRoEY8Hatzq45nCXa1/QOqrRjMi9Tc0Jy6bLHEznYRWEALv3S8Gk4r+
+         wdIfPQrsIq2B27qVxkSu8+t2TlBJDmcC4WePzrTXLxA56DNa5DWlzsu8QowRe/m1jWde
+         DuPQkslCIa30xKTHbaao3QzmV9SsY6RGDPhRo0JHURxSqsk91Kc1UBbGIU6NEMTcWKly
+         nrag==
+X-Gm-Message-State: AOAM531wE+M96OPBAsDq6/b4Np9k/TmNrM4xb6kjN8MKEWuW42oOvNEy
+        2GwMpLXzkTUy2byM/k9SEB8HbFHYj2p2yuVbzE6ekw==
+X-Google-Smtp-Source: ABdhPJwRQYyKvWXSdO1RUyMSIOChIO0JcTz2B2sJ96JajpdlrOav1FcCfG0mrPRe+zl3iw+NxE/6pYCDfEEZBBurGtA=
+X-Received: by 2002:a2e:82c5:0:b0:247:e81f:8b02 with SMTP id
+ n5-20020a2e82c5000000b00247e81f8b02mr644883ljh.90.1652376128189; Thu, 12 May
+ 2022 10:22:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220511120532.2228616-4-hca@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Nv5aANPpoAXu9r5rKH9n_HXnkoxomRFS
-X-Proofpoint-ORIG-GUID: tWPU1_D1ocZkUH4-iG6iv5zAjWzFoWus
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-12_14,2022-05-12_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- mlxlogscore=630 lowpriorityscore=0 clxscore=1015 malwarescore=0
- bulkscore=0 adultscore=0 phishscore=0 suspectscore=0 priorityscore=1501
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205120079
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+References: <20220511201107.2311757-1-atishp@rivosinc.com> <CAAhSdy3mbGdK9LrLxZX0JL0mQxP5FrFUuneX1cQS2SABpO=7dw@mail.gmail.com>
+ <23274575.ouqheUzb2q@diego> <CAAhSdy3t6cnfR02kfHvnKdCcDPvyX4jwccV7qkR_=-dV_m0aGQ@mail.gmail.com>
+In-Reply-To: <CAAhSdy3t6cnfR02kfHvnKdCcDPvyX4jwccV7qkR_=-dV_m0aGQ@mail.gmail.com>
+From:   Atish Kumar Patra <atishp@rivosinc.com>
+Date:   Thu, 12 May 2022 10:21:56 -0700
+Message-ID: <CAHBxVyF5T7r26nAp1Hep+DRkZErr2PH43k=HwLi6iuqMXWju6Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] RISC-V: Fix counter restart during overflow for RV32
+To:     Anup Patel <anup@brainfault.org>
+Cc:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        DTML <devicetree@vger.kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,32 +76,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 02:05:27PM +0200, Heiko Carstens wrote:
-> Since the minimum architecture level has been raised to z10 a shorter
-> instruction sequence can be used to implement the OUTSIDE macro. This
-> also reduces the number of used registers within that macro to one.
-> 
-> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-> ---
->  arch/s390/kernel/entry.S | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/s390/kernel/entry.S b/arch/s390/kernel/entry.S
-> index a6b45eaa3450..e1664b45090f 100644
-> --- a/arch/s390/kernel/entry.S
-> +++ b/arch/s390/kernel/entry.S
-> @@ -169,11 +169,9 @@ _LPP_OFFSET	= __LC_LPP
->  	 * @outside_label: jump here if @reg is outside of [@start..@end)
->  	 */
->  	.macro OUTSIDE reg,start,end,outside_label
-> -	lgr	%r14,\reg
-> -	larl	%r13,\start
-> -	slgr	%r14,%r13
-> -	lghi	%r13,\end - \start
-> -	clgr	%r14,%r13
-> +	larl	%r14,\start
-> +	slgrk	%r14,\reg,%r14
-> +	clgfi	%r14,\end - \start
+On Thu, May 12, 2022 at 8:36 AM Anup Patel <anup@brainfault.org> wrote:
+>
+> On Thu, May 12, 2022 at 6:12 PM Heiko St=C3=BCbner <heiko@sntech.de> wrot=
+e:
+> >
+> > Am Donnerstag, 12. Mai 2022, 06:44:12 CEST schrieb Anup Patel:
+> > > On Thu, May 12, 2022 at 1:41 AM Atish Patra <atishp@rivosinc.com> wro=
+te:
+> > > >
+> > > > Pass the upper half of the initial value of the counter correctly
+> > > > for RV32.
+> > > >
+> > > > Fixes: 4905ec2fb7e6 ("RISC-V: Add sscofpmf extension support")
+> > > >
+> > > > Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> > > > ---
+> > > >  drivers/perf/riscv_pmu_sbi.c | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_=
+sbi.c
+> > > > index a1317a483512..24cea59612be 100644
+> > > > --- a/drivers/perf/riscv_pmu_sbi.c
+> > > > +++ b/drivers/perf/riscv_pmu_sbi.c
+> > > > @@ -526,7 +526,7 @@ static inline void pmu_sbi_start_overflow_mask(=
+struct riscv_pmu *pmu,
+> > > >                         max_period =3D riscv_pmu_ctr_get_width_mask=
+(event);
+> > > >                         init_val =3D local64_read(&hwc->prev_count)=
+ & max_period;
+> > > >                         sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_=
+START, idx, 1,
+> > > > -                                 flag, init_val, 0, 0);
+> > > > +                                 flag, init_val, init_val >> 32, 0=
+);
+> > >
+> > > This should be under "#if __riscv_xlen =3D=3D 32".
+> >
+> > What's the difference between using CONFIG_32BIT
+> > and checking the __riscv_xlen flag value?
+>
+> It's one and the same.
+>
+> >
+> > CONFIG_32BIT seems to be a bit the more kernel'ish
+> > way to do this, but it looks like most SBI parts check the
+> > __riscv_xlen instead.
+>
 
-Clever me.. slgrk was added with z196, and not z10.
-So dropping this patch.
+Not only SBI parts, there are more users of __riscv_xlen compared
+CONFIG_32BIT in arch/riscv.
+
+> I agree with you. We should prefer "#ifdef CONFIG_32BIT"
+> in this case to match the kernel coding style.
+>
+
+Sure. I will change it to CONFIG_32BIT.
+
+
+> Currently, OpenSBI does not have CONFIG_xyz defines so
+> over there we use "#if __riscv_xlen =3D=3D 32".
+>
+> Regards,
+> Anup
+>
+> >
+> >
+> > In any case, looking at the opensbi-side of the call,
+> > this fix is abviously correct, so
+> >
+> > Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+> >
+> >
+> >

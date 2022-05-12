@@ -2,101 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B30CD524FF1
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 421FA524FF6
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:29:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354781AbiELO2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 10:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
+        id S1355267AbiELO3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 10:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354953AbiELO2X (ORCPT
+        with ESMTP id S1344674AbiELO3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 10:28:23 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4812AC5E7F
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:28:22 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id l18so10585883ejc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:28:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kmldS1PJBhy2mvJ6Oe3Qm7P58BiPUBNHjcuuTI17eok=;
-        b=Y5eGsc40VfAs6yQRfpkVe1LerATM1xgOoWPWc9TvDkF2QDRPjeVHrrIyGvcwhWBm8A
-         /ggxdexCsVpwmzt+v2JjRzwIHVcooWFFWuwhq05mNu+NZsuqk13CiHsOWwqOfs30xN7U
-         QUYAeLTSp1rPizdLmFujbcOCBejuHDO+Luv5wBhG9SW0MMUiNUKQ0shfi5qsySyyzipP
-         //CXhLAUqZx+QOi9epw9dQqDeoANLO71X2CWrknrCRjDBdsq68wi3JPoqbgCg0TzSldv
-         gDpCF3fR+EslvoKz/gX+6tcjkhsnnjdAuPzBSEkghPnI89nVtpgbp/XMsHv0AV7FLE3J
-         sCvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kmldS1PJBhy2mvJ6Oe3Qm7P58BiPUBNHjcuuTI17eok=;
-        b=HjnH1NiY4lny7PZadjk9lGOYHQf2gYSRHLY4JU14A5DLdgToEq1Dv4srlt9ei3vB5n
-         Wp5vpV3nGBHnYJLlznKLUONKDd4QeqFcNfIKf/iVrCg4NFB6X9m+YAD8vBLXXe6CnwBt
-         lA8BOwFa1PXvvnwrDUNg76lvjhv5SDG7IaKorzA+1IfioU7CCGon5F6vQxmTBi7lb5jQ
-         HYVwdsmw7emefkfHi/N+SWwkGX83P0KGIOfGCA8TmS+laNe32rZ80fnYaUHh7k9C0tGQ
-         7bXeC13hz9ziOOpYIPB6+gTlST/5v1/HgLagQ6CqjeGeSGCPY3+nU942krZGi9djokGc
-         NA/A==
-X-Gm-Message-State: AOAM532STrGmhSNAFZ/q6SOsd4Ynw9tj0gjm87kSuhckknojLWZd7jiL
-        zz97nawbJGtBdDONvJcdmCaaBkAYyom3LJdjm/fGWQ==
-X-Google-Smtp-Source: ABdhPJwt9Mc/2cPGpYDcYXrtvB2oLWzuEZ8fomYcWJcpLCQZM47ZwEE3P5bnvCC9WfeBTgeuzBqu45cJvO/2qrb6xiU=
-X-Received: by 2002:a17:907:72ce:b0:6f4:5a57:320c with SMTP id
- du14-20020a17090772ce00b006f45a57320cmr165344ejc.75.1652365700615; Thu, 12
- May 2022 07:28:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220420203020.1412886-1-dlatypov@google.com> <CAFd5g454KM9-45NEjUN3JWTZmpajHY9to=CW7Ecg6z_5xorU+w@mail.gmail.com>
-In-Reply-To: <CAFd5g454KM9-45NEjUN3JWTZmpajHY9to=CW7Ecg6z_5xorU+w@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Thu, 12 May 2022 07:28:09 -0700
-Message-ID: <CAGS_qxro7Az_yJfjQYK0+0u2mu9E62xmRPD_8EKiq8ZNEd6qUg@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: stop using a shell to run kernel under QEMU
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 12 May 2022 10:29:14 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB5FC62127;
+        Thu, 12 May 2022 07:29:12 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 5F0391E80D22;
+        Thu, 12 May 2022 22:23:35 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id xYV0EK951nP4; Thu, 12 May 2022 22:23:32 +0800 (CST)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+        (Authenticated sender: liqiong@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id C13A21E80D04;
+        Thu, 12 May 2022 22:23:31 +0800 (CST)
+From:   liqiong <liqiong@nfschina.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hukun@nfschina.com,
+        qixu@nfschina.com, yuzhe@nfschina.com, renyu@nfschina.com,
+        liqiong <liqiong@nfschina.com>
+Subject: [PATCH 1/2] kernel/bpf: change "char *" string form to "char []"
+Date:   Thu, 12 May 2022 22:28:14 +0800
+Message-Id: <20220512142814.26705-1-liqiong@nfschina.com>
+X-Mailer: git-send-email 2.11.0
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 4:22 PM Brendan Higgins
-<brendanhiggins@google.com> wrote:
-> > +                          extra_qemu_params=[])
-> > diff --git a/tools/testing/kunit/qemu_configs/powerpc.py b/tools/testing/kunit/qemu_configs/powerpc.py
-> > index 35e9de24f0db..6c901149726b 100644
-> > --- a/tools/testing/kunit/qemu_configs/powerpc.py
-> > +++ b/tools/testing/kunit/qemu_configs/powerpc.py
-> > @@ -9,4 +9,4 @@ CONFIG_HVC_CONSOLE=y''',
-> >                            qemu_arch='ppc64',
-> >                            kernel_path='vmlinux',
-> >                            kernel_command_line='console=ttyS0',
-> > -                          extra_qemu_params=['-M pseries', '-cpu power8'])
-> > +                          extra_qemu_params=['-M', ' pseries', '-cpu', 'power8'])
->
-> This should be '-M', 'pseries', not '-M', ' pseries', (you left an
-> extra space in.
->
-> Note this actually breaks QEMU on my machine.
+The string form of "char []" declares a single variable. It is better
+than "char *" which creates two variables.
 
-Thanks for catching this!
+Signed-off-by: liqiong <liqiong@nfschina.com>
+---
+ kernel/bpf/btf.c      | 4 ++--
+ kernel/bpf/verifier.c | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Ugh, I must have sent out a stale version of the .patch file.
-My tree has the fix since I noticed it right as I was preparing to
-send this out.
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 0918a39279f6..218a8ac73644 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -894,10 +894,10 @@ static const struct btf_type *btf_type_skip_qualifiers(const struct btf *btf,
+ static const char *btf_show_name(struct btf_show *show)
+ {
+ 	/* BTF_MAX_ITER array suffixes "[]" */
+-	const char *array_suffixes = "[][][][][][][][][][]";
++	static const char array_suffixes[] = "[][][][][][][][][][]";
+ 	const char *array_suffix = &array_suffixes[strlen(array_suffixes)];
+ 	/* BTF_MAX_ITER pointer suffixes "*" */
+-	const char *ptr_suffixes = "**********";
++	static const char ptr_suffixes[] = "**********";
+ 	const char *ptr_suffix = &ptr_suffixes[strlen(ptr_suffixes)];
+ 	const char *name = NULL, *prefix = "", *parens = "";
+ 	const struct btf_member *m = show->state.member;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index d175b70067b3..78a090fcbc72 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7346,7 +7346,7 @@ static int sanitize_err(struct bpf_verifier_env *env,
+ 			const struct bpf_reg_state *off_reg,
+ 			const struct bpf_reg_state *dst_reg)
+ {
+-	static const char *err = "pointer arithmetic with it prohibited for !root";
++	static const char err[] = "pointer arithmetic with it prohibited for !root";
+ 	const char *op = BPF_OP(insn->code) == BPF_ADD ? "add" : "sub";
+ 	u32 dst = insn->dst_reg, src = insn->src_reg;
+ 
+-- 
+2.25.1
 
-I have this locally:
--                          extra_qemu_params=['-M pseries', '-cpu power8'])
-+                          extra_qemu_params=['-M', 'pseries', '-cpu',
-'power8'])
-
-Sent out as v2,
-https://lore.kernel.org/linux-kselftest/20220512142555.3554396-1-dlatypov@google.com

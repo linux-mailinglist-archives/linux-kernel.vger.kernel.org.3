@@ -2,164 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A4035250D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6212D5250D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355694AbiELPFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 11:05:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45458 "EHLO
+        id S1355704AbiELPFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 11:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355688AbiELPFF (ORCPT
+        with ESMTP id S231782AbiELPFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 11:05:05 -0400
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B551625509F;
-        Thu, 12 May 2022 08:05:02 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id r1so10277730ybo.7;
-        Thu, 12 May 2022 08:05:02 -0700 (PDT)
+        Thu, 12 May 2022 11:05:08 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8549B255098;
+        Thu, 12 May 2022 08:05:07 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id y19so6886628ljd.4;
+        Thu, 12 May 2022 08:05:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=NbrPLO5f80Fgr4pkih0UW7c1y1en5FoEIT51dqIUABU=;
+        b=T4/pRiB0gG8qKpHvxG5wzXi041AjJ7RNXcavuodhvKhL0St/j2CypCgv0hj1pBROYW
+         ahm+lGdGKqlVR7raalF632or3hCWzCGXZAiy2R4DFdBIQBVDmXQU4JepA8A9DvhpJXPT
+         N/ytJrV4csCfL+okod6dqA1BuDRCgCpparBYVza2N7mepP6PgzRjf32X3yptDVGkrzXZ
+         X5qG2Py5CzaM2o2Bkpl52daEYAvQMm2vImmF0UHpZ2Xs6zAKGBrZ6eU+UDZ985SP9O4Y
+         KzwHU3IVTv+hnaIdsayBTAuZ+iwuAIVxQqOm8YFAjZvwL8j2l2O8GOtp8YUN7irGemQr
+         cQCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3m1cLce0U7sWwoPRoIzSnGNl6tg1bkDp1pFDNxtbcTk=;
-        b=Snwyg6vameeadNIw6m8ow8BvTqvyLwSzJ4Mn6PXHeIQjvszUQKGNXFGowc7D4lBeTg
-         rPdvZN5ZCZNtj/Jsiv3kCNarNFebfoxrKFgmP6pk24jGc/74+D4zNO1w/Jh/YL+GovgH
-         ByXTgB+DRZq5ehwtIDhIYEyJHYJyy+EjgsgfduS/m2RBcgAP3Fp4A9eI0ul3TeLKFMqD
-         phKbXy5V1vj+CzL7Uv2GsEL6grSwd8EUV4ipcwkbtAmMJz4h9fHogtw3s9XhtSTn+KFV
-         /flP74kyCUUkVfR44X+VD5F5UsKc3K+Sh1SdQNuOjEiNQrjJ4R1l01/1RfLxkEfAQ/Sv
-         9W+g==
-X-Gm-Message-State: AOAM530tUmSgd5EY+DfEBYeJrwT/qm/N4G9rSZmEeS1Rf0n1bsioFBTj
-        XUws+h/w30xFmi0GJzyFwDjGTgVeua70rLlDKgehABOZ
-X-Google-Smtp-Source: ABdhPJyVyp4by0cL7EufgP8w7GRukzsRyDSHhJZOpF+poV1MdPj+Aq7HO3eT2LyRF32MRAnkZMgy6LoFj0Yeo/byNy0=
-X-Received: by 2002:a25:d288:0:b0:64b:4bb5:32be with SMTP id
- j130-20020a25d288000000b0064b4bb532bemr173435ybg.633.1652367901673; Thu, 12
- May 2022 08:05:01 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=NbrPLO5f80Fgr4pkih0UW7c1y1en5FoEIT51dqIUABU=;
+        b=iL5J/sX0o+H4Jhae4pLtiL4Hogq1+J/0ZEY2A2cFblhebSM1oRQU4fujbeErbNcpf8
+         84QJzxoXwFceHPJteKrJhoJjoe6m3bILfwaFiUrYUsyUabzl5LzOA01Usj8/b8YIwXwR
+         XWXOjBh6+T2UKHevozr1IF9kwZ5aeEurCRsln7NNkXo+E0INenNpgugdLGKkTnIRvQyS
+         YnlEoyiWkI5glTWyyrPpCzE42TzpW8iFCcljOJUD89169YaTnRK4SYSbPQ2wip8h3QL7
+         keYt2/7PFldhV7T20b6BJGm8abp21Mk0MqRnZu5AwGqqZMHpacde7k9kZhXd5PzDhgrs
+         jksg==
+X-Gm-Message-State: AOAM531T8x7plOFEp711PcxxYsTf0iFTjcI8QEbshl74D2q2TG/u+3Jm
+        tqpQKhzCNPOp7kMyW5WJlJI=
+X-Google-Smtp-Source: ABdhPJwu5RZKqoup6YD08X1MAMMVsO9re9t/o4FDDvNu0taMK00x3Mc0VisaC962QTBtonmG2ZVFTg==
+X-Received: by 2002:a05:651c:1502:b0:250:2328:d127 with SMTP id e2-20020a05651c150200b002502328d127mr267441ljf.183.1652367905862;
+        Thu, 12 May 2022 08:05:05 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id m19-20020a2e5813000000b0024f3d1daef0sm911302ljb.120.2022.05.12.08.05.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 08:05:04 -0700 (PDT)
+Date:   Thu, 12 May 2022 18:05:02 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 13/23] ata: libahci: Extend port-cmd flags set with
+ port capabilities
+Message-ID: <20220512150502.l6gmh3d4uosmvxwg@mobilestation>
+References: <20220511231810.4928-1-Sergey.Semin@baikalelectronics.ru>
+ <20220511231810.4928-14-Sergey.Semin@baikalelectronics.ru>
+ <7fd1c122-12b2-adff-856f-50ffc5fc6bd1@suse.de>
 MIME-Version: 1.0
-References: <20220511134559.1466925-1-pierre.gondois@arm.com>
- <20220511134559.1466925-3-pierre.gondois@arm.com> <20220511143001.ewba7sovabinnajz@bogus>
-In-Reply-To: <20220511143001.ewba7sovabinnajz@bogus>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 12 May 2022 17:04:50 +0200
-Message-ID: <CAJZ5v0i5h+JYd=jXsgfcuA8_XnUV0RenqFZ0ALhCVt1eZtKnrQ@mail.gmail.com>
-Subject: Re: [PATCH v1 3/5] ACPI: CPPC: Assume no transition latency if no PCCT
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Pierre Gondois <pierre.gondois@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ionela Voinescu <Ionela.Voinescu@arm.com>,
-        Dietmar Eggemann <Dietmar.Eggemann@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Robert Moore <robert.moore@intel.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7fd1c122-12b2-adff-856f-50ffc5fc6bd1@suse.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 4:30 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Wed, May 11, 2022 at 03:45:57PM +0200, Pierre Gondois wrote:
-> > From: Pierre Gondois <Pierre.Gondois@arm.com>
-> >
-> > The transition_delay_us (struct cpufreq_policy) is currently defined
-> > as:
-> >   Preferred average time interval between consecutive invocations of
-> >   the driver to set the frequency for this policy.  To be set by the
-> >   scaling driver (0, which is the default, means no preference).
-> > The transition_latency represents the amount of time necessary for a
-> > CPU to change its frequency.
-> >
-> > A PCCT table advertises mutliple values:
-> > - pcc_nominal: Expected latency to process a command, in microseconds
-> > - pcc_mpar: The maximum number of periodic requests that the subspace
-> >   channel can support, reported in commands per minute. 0 indicates no
-> >   limitation.
-> > - pcc_mrtt: The minimum amount of time that OSPM must wait after the
-> >   completion of a command before issuing the next command,
-> >   in microseconds.
-> > cppc_get_transition_latency() allows to get the max of them.
-> >
-> > commit d4f3388afd48 ("cpufreq / CPPC: Set platform specific
-> > transition_delay_us") allows to select transition_delay_us based on
-> > the platform, and fallbacks to cppc_get_transition_latency()
-> > otherwise.
-> >
-> > If _CPC objects are not using PCC channels (no PPCT table), the
-> > transition_delay_us is set to CPUFREQ_ETERNAL, leading to really long
-> > periods between frequency updates (~4s).
-> >
-> > If the desired_reg, where performance requests are written, is in
-> > SystemMemory or SystemIo ACPI address space, there is no delay
-> > in requests. So return 0 instead of CPUFREQ_ETERNAL, leading to
-> > transition_delay_us being set to LATENCY_MULTIPLIER us (1000 us).
-> >
-> > This patch also adds two macros to check the address spaces.
-> >
-> > Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+On Thu, May 12, 2022 at 08:57:55AM +0200, Hannes Reinecke wrote:
+> On 5/12/22 01:18, Serge Semin wrote:
+> > Currently not all of the Port-specific capabilities listed in the
+> > PORT_CMD-enumeration. Let's extend that set with the Cold Presence
+> > Detection and Mechanical Presence Switch attached to the Port flags [1] so
+> > to closeup the set of the platform-specific port-capabilities flags.  Note
+> > these flags are supposed to be set by the platform firmware if there is
+> > one. Alternatively as we are about to do they can be set by means of the
+> > OF properties.
+> > 
+> > While at it replace PORT_IRQ_DEV_ILCK with PORT_IRQ_DEV_MPS and fix the
+> > comment there. In accordance with [2] that IRQ flag is supposed to
+> > indicate the state of the signal coming from the Mechanical Presence
+> > Switch.
+> > 
+> > [1] Serial ATA AHCI 1.3.1 Specification, p.27
+> > [2] Serial ATA AHCI 1.3.1 Specification, p.7
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > > ---
-> >  drivers/acpi/cppc_acpi.c | 17 ++++++++++++++++-
-> >  1 file changed, 16 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> > index 6f09fe011544..cc932ec1b613 100644
-> > --- a/drivers/acpi/cppc_acpi.c
-> > +++ b/drivers/acpi/cppc_acpi.c
-> > @@ -100,6 +100,16 @@ static DEFINE_PER_CPU(struct cpc_desc *, cpc_desc_ptr);
-> >                               (cpc)->cpc_entry.reg.space_id ==        \
-> >                               ACPI_ADR_SPACE_PLATFORM_COMM)
-> >
-> > +/* Check if a CPC register is in SystemMemory */
-> > +#define CPC_IN_SM(cpc) ((cpc)->type == ACPI_TYPE_BUFFER &&           \
-> > +                             (cpc)->cpc_entry.reg.space_id ==        \
-> > +                             ACPI_ADR_SPACE_SYSTEM_MEMORY)
-> > +
->
-> Again my taste or preference: s/SM/SYS_MEM or SYSTEM_MEM
+> >   drivers/ata/ahci.h | 7 ++++++-
+> >   1 file changed, 6 insertions(+), 1 deletion(-)
+> > 
 
-SYSTEM_MEMORY even.
+> You might want to adapt the subject line, as this patch doesn't touch
+> libahci at all.
 
->
-> > +/* Check if a CPC register is in SystemIo */
-> > +#define CPC_IN_SIO(cpc) ((cpc)->type == ACPI_TYPE_BUFFER &&          \
-> > +                             (cpc)->cpc_entry.reg.space_id ==        \
-> > +                             ACPI_ADR_SPACE_SYSTEM_IO)
-> > +
->
-> Ditto, s/SM/SYS_IO or SYSTEM_IO
->
-> I need not refer back to the macro when reading the code. SM/SIO is too
-> short and makes it hard to infer from the name in general.
+AFAICS ahci.h is mainly (if not to say only) the header file of the
+libahci.c module interface. Modifying ahci.h I basically update the
+libahci interface. So based on that the subject is fully correct.
 
-Right.
+> Other than that:
+> 
+> Reviewed-by: Hannes Reinecke <hare@suse.de>
 
-> >  /* Evaluates to True if reg is a NULL register descriptor */
-> >  #define IS_NULL_REG(reg) ((reg)->space_id ==  ACPI_ADR_SPACE_SYSTEM_MEMORY && \
-> >                               (reg)->address == 0 &&                  \
-> > @@ -1456,6 +1466,9 @@ EXPORT_SYMBOL_GPL(cppc_set_perf);
-> >   * transition latency for performance change requests. The closest we have
-> >   * is the timing information from the PCCT tables which provides the info
-> >   * on the number and frequency of PCC commands the platform can handle.
-> > + *
-> > + * If desired_reg is in the SystemMemory or SystemIo ACPI address space,
-> > + * then assume there is no latency.
-> >   */
-> >  unsigned int cppc_get_transition_latency(int cpu_num)
-> >  {
-> > @@ -1481,7 +1494,9 @@ unsigned int cppc_get_transition_latency(int cpu_num)
-> >               return CPUFREQ_ETERNAL;
-> >
-> >       desired_reg = &cpc_desc->cpc_regs[DESIRED_PERF];
-> > -     if (!CPC_IN_PCC(desired_reg))
-> > +     if (CPC_IN_SM(desired_reg) || CPC_IN_SIO(desired_reg))
-> > +             return 0;
-> > +     else if (!CPC_IN_PCC(desired_reg))
-> >               return CPUFREQ_ETERNAL;
+Thanks.
+
+-Sergey
+
+> 
+> Cheers,
+> 
+> Hannes
+> -- 
+> Dr. Hannes Reinecke		           Kernel Storage Architect
+> hare@suse.de			                  +49 911 74053 688
+> SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
+> HRB 36809 (AG Nürnberg), GF: Felix Imendörffer

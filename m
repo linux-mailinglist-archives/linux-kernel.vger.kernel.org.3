@@ -2,158 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E3075254AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 20:23:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC77E5254A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 20:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356460AbiELSW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 14:22:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56338 "EHLO
+        id S1357571AbiELSW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 14:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357591AbiELSWu (ORCPT
+        with ESMTP id S1357594AbiELSWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 14:22:50 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726635D64A;
-        Thu, 12 May 2022 11:22:48 -0700 (PDT)
+        Thu, 12 May 2022 14:22:20 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608F860B86;
+        Thu, 12 May 2022 11:22:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652379768; x=1683915768;
+  t=1652379732; x=1683915732;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=/lMp0wN6+3oR5lan9YwIxjQ08ZrF0e3S9TFAB75U+44=;
-  b=XjYlTGeKdyr4DwnhSpNA4+ymdmhh3bU7Garrw+0unxbFMBJDwBJH7K7p
-   NjEakCgAu/uOzdiuQtQ/a8vV0i6EwAarqubsRXHj6VQa8hMwwWJRoF9BX
-   KmeNbJNt66mzspl2sYyrVHN6xjRh0heK03EnMLKRYWIcZ065AVeHCXshl
-   mbOwYzV+KVRNgNNm1IIkTLqhwJmB86jliH5KxLmiC4MeSk4NEoHmH8N9C
-   1zrABXSV+U5Q4T98xutMGY6bmks1DAHohTADJQ/YTLa3DKi3YJuB12XuA
-   J7KZQv+xT1aa8E8Ffnvj7iQZ9MM8ZA+uxJWlLkMzL97Owm5WJM68hgTYR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="250002591"
+  bh=gKX1PGO+dptTOabwhDDmbl7BBre5vJXGH8K4d83YX8E=;
+  b=TzoB19gd4P6Hh0YJNn4nRgFSA80K6pIBw1/WOKUsa/SPgfJ4xLECcLSh
+   7DwU4Q+z3+KSOAGAfj5pdGp71tlh9BRx2g6N93FuBg4MJAXrJGtyi8PIA
+   Qp9TSlZXfLAa3KzNhpk5ej45qDkrD5CEEwJWGJUkPt1cfNcy1MvlULszS
+   5b435MrU+3J+NYd7s8tzgtqRYv8u0rbM9J+fDmTv/AR5phbMYhmssxXfG
+   vXbkdPcbZwE3eyiGupaWTf+2RHYpykmQI0t91dc/TxO5BEzd8xljoW864
+   3mNoGWuSFaNxGyQG9bJkb/DkUflrZbxFP/sNGSCSbWoRN7gi6dw3Xp3l+
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="267690652"
 X-IronPort-AV: E=Sophos;i="5.91,220,1647327600"; 
-   d="scan'208";a="250002591"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 11:22:48 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="267690652"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 11:22:11 -0700
 X-IronPort-AV: E=Sophos;i="5.91,220,1647327600"; 
-   d="scan'208";a="566828491"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 12 May 2022 11:22:44 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1npDSW-000Knx-80;
-        Thu, 12 May 2022 18:22:44 +0000
-Date:   Fri, 13 May 2022 02:22:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Golle <daniel@makrotopia.org>, linux-block@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Tom Rini <trini@konsulko.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH v2 2/5] block: add partition parser for U-Boot uImage.FIT
-Message-ID: <202205130213.kRDmMP6B-lkp@intel.com>
-References: <YnjxXASWU5Ps9ZoA@makrotopia.org>
+   d="scan'208";a="624521577"
+Received: from josdenl-mobl1.amr.corp.intel.com (HELO ldmartin-desk2) ([10.251.19.41])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 11:22:11 -0700
+Date:   Thu, 12 May 2022 11:22:09 -0700
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH 1/2] sysctl: read() must consume poll events, not poll()
+Message-ID: <20220512182209.7uiy3pt4chctqhg4@ldmartin-desk2>
+X-Patchwork-Hint: comment
+References: <20220502140602.130373-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <YnjxXASWU5Ps9ZoA@makrotopia.org>
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220502140602.130373-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On Mon, May 02, 2022 at 04:06:01PM +0200, Jason A. Donenfeld wrote:
+>Events that poll() responds to are supposed to be consumed when the file
+>is read(), not by the poll() itself. By putting it on the poll() itself,
+>it makes it impossible to poll() on a epoll file descriptor, since the
+>event gets consumed too early. Jann wrote a PoC, available in the link
+>below.
+>
+>Reported-by: Jann Horn <jannh@google.com>
+>Cc: Kees Cook <keescook@chromium.org>
+>Cc: Luis Chamberlain <mcgrof@kernel.org>
+>Cc: linux-fsdevel@vger.kernel.org
+>Link: https://lore.kernel.org/lkml/CAG48ez1F0P7Wnp=PGhiUej=u=8CSF6gpD9J=Oxxg0buFRqV1tA@mail.gmail.com/
+>Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-I love your patch! Yet something to improve:
+It seems to be my bug. This is indeed better. Also, I don't think it's unsafe
+to fix it like this neither. If my memory serves (it's what, 10+ years?), this
+was only tested and used with poll(), which will continue to work.
 
-[auto build test ERROR on axboe-block/for-next]
-[also build test ERROR on mtd/mtd/next mtd/mtd/fixes v5.18-rc6 next-20220512]
-[cannot apply to rw-ubifs/next rw-ubifs/fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+There were plans to use it in one of systemd's tools, in which case we'd
+probably notice the misbehavior with epoll().... humn, checking now systemd's
+codebase:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Golle/partition-parser-for-U-Boot-s-uImage-FIT/20220509-185349
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-config: xtensa-buildonly-randconfig-r001-20220512 (https://download.01.org/0day-ci/archive/20220513/202205130213.kRDmMP6B-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/5a69884cfc6091e8d7c5491fbf57dd5e13cd5ee8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Golle/partition-parser-for-U-Boot-s-uImage-FIT/20220509-185349
-        git checkout 5a69884cfc6091e8d7c5491fbf57dd5e13cd5ee8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
+static int on_hostname_change(sd_event_source *es, int fd, uint32_t revents, void *userdata) {
+	...
+	log_info("System hostname changed to '%s'.", full_hostname);
+	...
+}
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+static int manager_watch_hostname(Manager *m) {
+         int r;
 
-All errors (new ones prefixed by >>):
+         assert(m);
 
-   xtensa-linux-ld: block/partitions/fit.o: in function `put_page':
->> fit.c:(.text+0x11c): undefined reference to `fdt_check_header'
-   xtensa-linux-ld: block/partitions/fit.o: in function `parse_fit_partitions':
-   fit.c:(.text+0x262): undefined reference to `fdt_check_header'
-   xtensa-linux-ld: block/partitions/fit.o: in function `put_page':
->> fit.c:(.text+0x124): undefined reference to `fdt_path_offset'
-   xtensa-linux-ld: block/partitions/fit.o: in function `parse_fit_partitions':
-   fit.c:(.text+0x320): undefined reference to `fdt_path_offset'
-   xtensa-linux-ld: block/partitions/fit.o: in function `put_page':
->> fit.c:(.text+0x128): undefined reference to `fdt_getprop'
-   xtensa-linux-ld: block/partitions/fit.o: in function `parse_fit_partitions':
-   fit.c:(.text+0x337): undefined reference to `fdt_getprop'
-   xtensa-linux-ld: block/partitions/fit.o: in function `put_page':
->> fit.c:(.text+0x130): undefined reference to `fdt_subnode_offset'
-   xtensa-linux-ld: block/partitions/fit.o: in function `parse_fit_partitions':
-   fit.c:(.text+0x356): undefined reference to `fdt_subnode_offset'
-   xtensa-linux-ld: block/partitions/fit.o: in function `put_page':
-   fit.c:(.text+0x138): undefined reference to `fdt_getprop'
-   xtensa-linux-ld: block/partitions/fit.o: in function `parse_fit_partitions':
-   fit.c:(.text+0x382): undefined reference to `fdt_getprop'
-   xtensa-linux-ld: block/partitions/fit.o: in function `put_page':
-   fit.c:(.text+0x13c): undefined reference to `fdt_getprop'
-   xtensa-linux-ld: block/partitions/fit.o: in function `parse_fit_partitions':
-   fit.c:(.text+0x397): undefined reference to `fdt_getprop'
-   xtensa-linux-ld: block/partitions/fit.o: in function `put_page':
-   fit.c:(.text+0x148): undefined reference to `fdt_path_offset'
-   xtensa-linux-ld: block/partitions/fit.o: in function `parse_fit_partitions':
-   fit.c:(.text+0x3e3): undefined reference to `fdt_path_offset'
-   xtensa-linux-ld: block/partitions/fit.o: in function `put_page':
->> fit.c:(.text+0x150): undefined reference to `fdt_first_subnode'
-   xtensa-linux-ld: block/partitions/fit.o: in function `parse_fit_partitions':
-   fit.c:(.text+0x412): undefined reference to `fdt_first_subnode'
-   xtensa-linux-ld: block/partitions/fit.o: in function `put_page':
->> fit.c:(.text+0x154): undefined reference to `fdt_get_name'
-   xtensa-linux-ld: block/partitions/fit.o: in function `parse_fit_partitions':
-   fit.c:(.text+0x423): undefined reference to `fdt_get_name'
-   xtensa-linux-ld: block/partitions/fit.o: in function `put_page':
-   fit.c:(.text+0x158): undefined reference to `fdt_getprop'
-   xtensa-linux-ld: block/partitions/fit.o: in function `parse_fit_partitions':
-   fit.c:(.text+0x43a): undefined reference to `fdt_getprop'
-   xtensa-linux-ld: block/partitions/fit.o: in function `put_page':
-   fit.c:(.text+0x15c): undefined reference to `fdt_getprop'
-   xtensa-linux-ld: block/partitions/fit.o: in function `parse_fit_partitions':
-   fit.c:(.text+0x44b): undefined reference to `fdt_getprop'
-   xtensa-linux-ld: block/partitions/fit.o: in function `put_page':
-   fit.c:(.text+0x160): undefined reference to `fdt_getprop'
-   xtensa-linux-ld: block/partitions/fit.o:fit.c:(.text+0x45f): more undefined references to `fdt_getprop' follow
-   xtensa-linux-ld: block/partitions/fit.o: in function `put_page':
->> fit.c:(.text+0x184): undefined reference to `fdt_next_subnode'
-   xtensa-linux-ld: block/partitions/fit.o: in function `parse_fit_partitions':
-   fit.c:(.text+0x6ae): undefined reference to `fdt_next_subnode'
+         m->hostname_fd = open("/proc/sys/kernel/hostname",
+                               O_RDONLY|O_CLOEXEC|O_NONBLOCK|O_NOCTTY);
+         if (m->hostname_fd < 0) {
+                 log_warning_errno(errno, "Failed to watch hostname: %m");
+                 return 0;
+         }
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+         r = sd_event_add_io(m->event, &m->hostname_event_source, m->hostname_fd, 0, on_hostname_change, m);
+         if (r < 0) {
+                 if (r == -EPERM)
+                         /* kernels prior to 3.2 don't support polling this file. Ignore the failure. */
+                         m->hostname_fd = safe_close(m->hostname_fd);
+                 else
+                         return log_error_errno(r, "Failed to add hostname event source: %m");
+         }
+	....
+}
+
+and sd_event library uses epoll. So, it's apparently not working and it doesn't
+seem to be their intention to rely on the misbehavior. This makes me think it
+even deserves a Cc to stable.
+
+Reviewed-by: Lucas De Marchi <lucas.demarchi@intel.com>
+
+
+Lucas De Marchi
+
+>---
+> fs/proc/proc_sysctl.c | 12 +++++++++---
+> 1 file changed, 9 insertions(+), 3 deletions(-)
+>
+>diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+>index 7d9cfc730bd4..1aa145794207 100644
+>--- a/fs/proc/proc_sysctl.c
+>+++ b/fs/proc/proc_sysctl.c
+>@@ -622,6 +622,14 @@ static ssize_t proc_sys_call_handler(struct kiocb *iocb, struct iov_iter *iter,
+>
+> static ssize_t proc_sys_read(struct kiocb *iocb, struct iov_iter *iter)
+> {
+>+	struct inode *inode = file_inode(iocb->ki_filp);
+>+	struct ctl_table_header *head = grab_header(inode);
+>+	struct ctl_table *table = PROC_I(inode)->sysctl_entry;
+>+
+>+	if (!IS_ERR(head) && table->poll)
+>+		iocb->ki_filp->private_data = proc_sys_poll_event(table->poll);
+>+	sysctl_head_finish(head);
+>+
+> 	return proc_sys_call_handler(iocb, iter, 0);
+> }
+>
+>@@ -668,10 +676,8 @@ static __poll_t proc_sys_poll(struct file *filp, poll_table *wait)
+> 	event = (unsigned long)filp->private_data;
+> 	poll_wait(filp, &table->poll->wait, wait);
+>
+>-	if (event != atomic_read(&table->poll->event)) {
+>-		filp->private_data = proc_sys_poll_event(table->poll);
+>+	if (event != atomic_read(&table->poll->event))
+> 		ret = EPOLLIN | EPOLLRDNORM | EPOLLERR | EPOLLPRI;
+>-	}
+>
+> out:
+> 	sysctl_head_finish(head);
+>-- 
+>2.35.1
+>

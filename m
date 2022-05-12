@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8439E52475A
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE119524757
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351194AbiELHs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 03:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
+        id S1351188AbiELHsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 03:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351166AbiELHsN (ORCPT
+        with ESMTP id S1351163AbiELHsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 12 May 2022 03:48:13 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309AB4756A
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1574CD4D
         for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:48:11 -0700 (PDT)
-Received: from kwepemi500010.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KzP2R54Q7zGpZS;
-        Thu, 12 May 2022 15:45:19 +0800 (CST)
+Received: from kwepemi500005.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KzP4J1JsJz1JBsZ;
+        Thu, 12 May 2022 15:46:56 +0800 (CST)
 Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
- kwepemi500010.china.huawei.com (7.221.188.191) with Microsoft SMTP Server
+ kwepemi500005.china.huawei.com (7.221.188.179) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 12 May 2022 15:48:08 +0800
+ 15.1.2375.24; Thu, 12 May 2022 15:48:09 +0800
 Received: from ubuntu1804.huawei.com (10.67.175.30) by
  kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -32,10 +32,12 @@ CC:     <broonie@kernel.org>, <perex@perex.cz>, <tiwai@suse.com>,
         <ryan.lee.analog@gmail.com>, <ricardw@axis.com>, <steve@sk2.org>,
         <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
         <tanghui20@huawei.com>
-Subject: [PATCH -next v2 0/2] ASoC: codecs: Fix build error
-Date:   Thu, 12 May 2022 15:46:38 +0800
-Message-ID: <20220512074640.75550-1-tanghui20@huawei.com>
+Subject: [PATCH -next v2 1/2] ASoC: max98396: Fix build error for implicit function declaration
+Date:   Thu, 12 May 2022 15:46:39 +0800
+Message-ID: <20220512074640.75550-2-tanghui20@huawei.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220512074640.75550-1-tanghui20@huawei.com>
+References: <20220512074640.75550-1-tanghui20@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
@@ -52,19 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix two build error, as follows:
+sound/soc/codecs/max98396.c: In function ‘max98396_i2c_probe’:
+sound/soc/codecs/max98396.c:1555:25: error: implicit declaration of function ‘devm_gpiod_get_optional’; did you mean ‘devm_regulator_get_optional’? [-Werror=implicit-function-declaration]
+  max98396->reset_gpio = devm_gpiod_get_optional(&i2c->dev,
+                         ^~~~~~~~~~~~~~~~~~~~~~~
+                         devm_regulator_get_optional
+sound/soc/codecs/max98396.c:1556:23: error: ‘GPIOD_OUT_HIGH’ undeclared (first use in this function); did you mean ‘GPIOF_INIT_HIGH’?
+              "reset", GPIOD_OUT_HIGH);
+                       ^~~~~~~~~~~~~~
+                       GPIOF_INIT_HIGH
+sound/soc/codecs/max98396.c:1556:23: note: each undeclared identifier is reported only once for each function it appears in
+sound/soc/codecs/max98396.c:1565:3: error: implicit declaration of function ‘gpiod_set_value_cansleep’; did you mean ‘gpio_set_value_cansleep’? [-Werror=implicit-function-declaration]
+   gpiod_set_value_cansleep(max98396->reset_gpio, 0);
+   ^~~~~~~~~~~~~~~~~~~~~~~~
+   gpio_set_value_cansleep
+cc1: all warnings being treated as errors
 
+Include header file <linux/gpio/consumer.h>
+
+Fixes: b58581136770 ("ASoC: max98396: add amplifier driver")
+Signed-off-by: Hui Tang <tanghui20@huawei.com>
+---
 Changes in v2:
- * Add missing header files instead of adding dependencies.
+ * Add missing header files instead of adding dependencies
 
-Hui Tang (2):
-  ASoC: max98396: Fix build error for implicit function declaration
-  ASoC: tlv320adc3xxx: Fix build error for implicit function declaration
+ sound/soc/codecs/max98396.c | 1 +
+ 1 file changed, 1 insertion(+)
 
- sound/soc/codecs/max98396.c      | 1 +
- sound/soc/codecs/tlv320adc3xxx.c | 3 +++
- 2 files changed, 4 insertions(+)
-
+diff --git a/sound/soc/codecs/max98396.c b/sound/soc/codecs/max98396.c
+index 745d7e761680..56eb62bb041f 100644
+--- a/sound/soc/codecs/max98396.c
++++ b/sound/soc/codecs/max98396.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (c) 2022, Analog Devices Inc.
+ 
++#include <linux/gpio/consumer.h>
+ #include <linux/i2c.h>
+ #include <linux/module.h>
+ #include <sound/pcm_params.h>
 -- 
 2.17.1
 

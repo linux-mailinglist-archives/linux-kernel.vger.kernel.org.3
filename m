@@ -2,447 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D83525690
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 22:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 749B3525692
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 22:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358472AbiELUvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 16:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37380 "EHLO
+        id S1358502AbiELUve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 16:51:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358475AbiELUvQ (ORCPT
+        with ESMTP id S1358490AbiELUvY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 16:51:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB7F51E56
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 13:51:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53CB0B82800
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 20:51:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2F40C385B8;
-        Thu, 12 May 2022 20:51:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652388671;
-        bh=9WjwDRA3LQcT2EnS+ROHg9+PDa9poi2ZXe8g7MGTH8w=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=JH/H8biB25y+V5gzWe3+dxmqhXTSBhziGEmxj6jqa4eXQGOgiDTaRsJlaCq5HDiJ1
-         S7GZ0gkVOylM2V6JcIKo/YPHOFNYIP+KOgIu64RY9+9q+lFQNPJoo/+T1AoIOIRXM0
-         QZZUsIaXOmaiQbY3/k9wIthYApcmPFIPIRDhTNiRXa7KUUIM22Cx2qvzTuebdbEUn9
-         DwETLNf+qyrXaRABgpEvUk63sIyJlIb8FI1HOUph9u3fiw1TUPULaOtDSsUFD5YIRP
-         +JwybbAMeX0YfhpAkCiIwm4FFabenn4CdtawHEJ0iV5gYqb0U8pGQhw+rAtKEo9Aff
-         ijOSnGzRkDK4w==
-Date:   Thu, 12 May 2022 13:51:09 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [PATCH 2/5 v2] f2fs: introduce f2fs_gc_control to consolidate
- f2fs_gc parameters
-Message-ID: <Yn1zPQKZ3DI6e1Zi@google.com>
-References: <20220506232032.1264078-1-jaegeuk@kernel.org>
- <20220506232032.1264078-2-jaegeuk@kernel.org>
+        Thu, 12 May 2022 16:51:24 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2046.outbound.protection.outlook.com [40.107.93.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBEA57999
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 13:51:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gWzIr3zjzdLwP8wPRLtriKRH1zoH8wC/GYB7FN0arhJ7a7DpMjjQ45tR3OXwBk8ITR9/LknwLjFR/qjy/F0rhmgeBig3jchOM6rd7VysmqRGg//tFVETOigqAZ25HEvQGpCxgUvRNs0AJ+61AiqfQtWLUFIC54ScNwsAKqxg9kVO8D3iosMk3kCUz6/oBGv/3bKSWWxJHK8XMVmaOMF7tBAjTs3gObblpA0+2PcQYqyrWkEe8kP3J8zgIehxqy+/vif18ZCu7wxgBpPI7+Y54wMsUyaCnPZ/zpFUUsGEMk+66sFPwayn8GyFFNj6ha3Y7MUBI7XAfZIuCXq6to0n6w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1fipYTsqaeeO4SDY9sdwOlVGXge+Hxf0DmoV1MtSnXQ=;
+ b=T8Drk1IUXXkcBQhjxEgpHJiIMFNqDp15X8iFHkhDSXW/Qtic31uU27iYId/G3EhH42ayjjmDx24wyU4a00xzANCrY5HvYdW6viIRwTbUZdwAxaCorHdFS8vSRKdwWWC5JjG2FEQeSqOuADNnY+WqU5/kunJqf2fNXq9Uw/+WAXJuKIWHhQf8dmWWGUENROkOy4mSsvRMKhvt6260FzIBiPY2uWt0wcbro7iVESXONiOP0w5xWGh7hpLFDs14RPCpx3+SsoAz0gU8933rXW51Pzko6jBkr+v11H0J263IaUMleB2jDmlM5cz+++z9PBSTILmR8+WRmXNcPC8ia/J/yA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1fipYTsqaeeO4SDY9sdwOlVGXge+Hxf0DmoV1MtSnXQ=;
+ b=fDlJyYqOQliXSk8VawziVmxEz7qjRgZQrvlm0t/lW0mUWbFNdv+cJx1wIm9jYIE0XqcP4U9JP0vMNVkUsspPCY3PoQ6Jxeh2LtYXCEtep1Y2crpF6oLj9rmnYwXh9cmQzO/uihhr9HE6i2WK/BXYr4mDjMUJVLFZj+a+Vkl9ncjrSxxggewt75xVufqojDVU1fbg4BhoNR1wj79dnxYSSWpAwQQB2BjUyKDp54BoTFarJdG4NHaFEZSTLDnsoTjS3/Z0u/fFVPQYtDTMPqeMn1rl3ow3XIc6Qo8MxK371YmfFhAru4TAeTVwLWrxpzatZ/5GFbmvxgBQQBENkYp16w==
+Received: from MW4PR03CA0357.namprd03.prod.outlook.com (2603:10b6:303:dc::32)
+ by BN7PR12MB2788.namprd12.prod.outlook.com (2603:10b6:408:30::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13; Thu, 12 May
+ 2022 20:51:19 +0000
+Received: from CO1NAM11FT028.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:dc:cafe::2a) by MW4PR03CA0357.outlook.office365.com
+ (2603:10b6:303:dc::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14 via Frontend
+ Transport; Thu, 12 May 2022 20:51:19 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.236) by
+ CO1NAM11FT028.mail.protection.outlook.com (10.13.175.214) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5250.13 via Frontend Transport; Thu, 12 May 2022 20:51:19 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL109.nvidia.com
+ (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Thu, 12 May
+ 2022 20:51:18 +0000
+Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 12 May
+ 2022 13:51:17 -0700
+Message-ID: <5d9eb30e-6e0e-81a3-2b2c-47adc4e85470@nvidia.com>
+Date:   Thu, 12 May 2022 13:51:47 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220506232032.1264078-2-jaegeuk@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v5] mm: fix is_pinnable_page against on cma page
+Content-Language: en-US
+To:     Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     linux-mm <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        John Dias <joaodias@google.com>,
+        "David Hildenbrand" <david@redhat.com>
+References: <20220512204143.3961150-1-minchan@kernel.org>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <20220512204143.3961150-1-minchan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.231.35]
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c9cc3211-6e3c-487b-8d48-08da34592a47
+X-MS-TrafficTypeDiagnostic: BN7PR12MB2788:EE_
+X-Microsoft-Antispam-PRVS: <BN7PR12MB27880A48ACBC2A0502DE573BA8CB9@BN7PR12MB2788.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: V1Zy/g9sLFt8WnXSuFog9KXQNlJKC3b5FviLWyxnELNbamHATX5OXLLcH6M6Gf0EODbr8iPAstULHB1er6Dj4xogQ76cVUF0SsoCsg7Z9X/P1FDf+8zSvXwkBLXdwWCnhX8lgyGHU7KmEPtIRGe+o9E9hNGuEQCOCtknpWqEj8V7j1izHndgNTGKj5aI2ne/wKCNRysI5ZK9Or1AK35T+UTUoKcRKF3dTj7nGsGdIYdea0FVzUQwy2NQts+RF5R/JKOqQX6G/h/xAiEwm8bBrTvHs24KzZnZDpee4fDuhhpXgG3th5AgVVDXzJAkCSRxtFJMD/MgfiXF5lAjud29BzLFzsuLyQ3jJIfxNbSPMQqBGpUw9OAMeRlgdk8seHZ/ROkfxAxQc9IxL/GDdf35LX3/GJWeL0ihEp9mnnVSp2URFnbx5grB7unLTVuKVeF3Sv7Nu4GJiLj3zU5sbnRKxuHsMW2pxZb8p/P6aWC7VvSpm7SZ5XBDEKEEneslpZpXh8UKwpF3HtpWvozlodfLH+WrkQ2ccNqenyLCsGpXofFNap5rKsrpHBFdMRZB6EO7OGwnR9l+gFhNwoBgF7g/Kkj7hY8l8zRg3xBqOlaQWz6HT3WSZL2MDJnSOuN1KqYDF1/zA/WpUGj7Vfv3v11S7xwoWp9SbZ7SQsZuNIm1cYJUGNrx2uwK6sevp7atzaj43m/wQwPUy9B7cjqm6gYajkL9tiRdZUE7UMUMTOErttzf1zyoJeyu7RzYd9QSbesEb71IKKyqUFYEorjy+Gdsgk36ddI7G69TshsZHFQPaZ8XPjzcnFkM/Svdd7HULHPKNhOU6dRjdpR9UMN2fGI3Z3R1TuQS+3U+SnYO/28yEqQ=
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(31696002)(86362001)(16576012)(316002)(8676002)(4326008)(110136005)(70206006)(54906003)(356005)(966005)(508600001)(81166007)(426003)(70586007)(83380400001)(36860700001)(16526019)(47076005)(186003)(40460700003)(6666004)(26005)(2616005)(53546011)(336012)(36756003)(82310400005)(5660300002)(2906002)(8936002)(31686004)(43740500002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2022 20:51:19.1162
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c9cc3211-6e3c-487b-8d48-08da34592a47
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT028.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR12MB2788
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No functional change.
+On 5/12/22 13:41, Minchan Kim wrote:
+> Pages on CMA area could have MIGRATE_ISOLATE as well as MIGRATE_CMA
+> so current is_pinnable_page could miss CMA pages which has MIGRATE_
+> ISOLATE. It ends up pinning CMA pages as longterm at pin_user_pages
+> APIs so CMA allocation keep failed until the pin is released.
+> 
+>       CPU 0                                   CPU 1 - Task B
+> 
+> cma_alloc
+> alloc_contig_range
+>                                          pin_user_pages_fast(FOLL_LONGTERM)
+> change pageblock as MIGRATE_ISOLATE
+>                                          internal_get_user_pages_fast
+>                                          lockless_pages_from_mm
+>                                          gup_pte_range
+>                                          try_grab_folio
+>                                          is_pinnable_page
+>                                            return true;
+>                                          So, pinned the page successfully.
+> page migration failure with pinned page
+>                                          ..
+>                                          .. After 30 sec
+>                                          unpin_user_page(page)
+> 
+> CMA allocation succeeded after 30 sec.
+> 
+> The CMA allocation path protects the migration type change race
+> using zone->lock but what GUP path need to know is just whether the
+> page is on CMA area or not rather than exact migration type.
+> Thus, we don't need zone->lock but just checks migration type in
+> either of (MIGRATE_ISOLATE and MIGRATE_CMA).
+> 
+> Adding the MIGRATE_ISOLATE check in is_pinnable_page could cause
+> rejecting of pinning pages on MIGRATE_ISOLATE pageblocks even
+> though it's neither CMA nor movable zone if the page is temporarily
+> unmovable. However, such a migration failure by unexpected temporal
+> refcount holding is general issue, not only come from MIGRATE_ISOLATE
+> and the MIGRATE_ISOLATE is also transient state like other temporal
+> elevated refcount problem.
+> 
+> Cc: "Paul E . McKenney" <paulmck@kernel.org>
+> Cc: John Hubbard <jhubbard@nvidia.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Signed-off-by: Minchan Kim <minchan@kernel.org>
+> ---
+> * from v4 - https://lore.kernel.org/all/20220510211743.95831-1-minchan@kernel.org/
+>    * clarification why we need READ_ONCE - Paul
+>    * Adding a comment about READ_ONCE - John
+> 
+> * from v3 - https://lore.kernel.org/all/20220509153430.4125710-1-minchan@kernel.org/
+>    * Fix typo and adding more description - akpm
+> 
+> * from v2 - https://lore.kernel.org/all/20220505064429.2818496-1-minchan@kernel.org/
+>    * Use __READ_ONCE instead of volatile - akpm
+> 
+> * from v1 - https://lore.kernel.org/all/20220502173558.2510641-1-minchan@kernel.org/
+>    * fix build warning - lkp
+>    * fix refetching issue of migration type
+>    * add side effect on !ZONE_MOVABLE and !MIGRATE_CMA in description - david
+> 
+>   include/linux/mm.h | 16 ++++++++++++++--
+>   1 file changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 6acca5cecbc5..2d7a5d87decd 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -1625,8 +1625,20 @@ static inline bool page_needs_cow_for_dma(struct vm_area_struct *vma,
+>   #ifdef CONFIG_MIGRATION
+>   static inline bool is_pinnable_page(struct page *page)
+>   {
+> -	return !(is_zone_movable_page(page) || is_migrate_cma_page(page)) ||
+> -		is_zero_pfn(page_to_pfn(page));
+> +#ifdef CONFIG_CMA
+> +	/*
+> +	 * Defend against future compiler LTO features, or code refactoring
+> +	 * that inlines the above function, by forcing a single read. Because,
+> +	 * this routine races with set_pageblock_migratetype(), and we want to
+> +	 * avoid reading zero, when actually one or the other flags was set.
+> +	 */
 
-- remove checkpoint=disable check for f2fs_write_checkpoint
-- get sec_freed all the time
+The most interesting line got dropped in this version. :)
 
-Reviewed-by: Chao Yu <chao@kernel.org>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
----
+This is missing:
 
- Change log from v1:
-  - clean up more
+	int __mt = get_pageblock_migratetype(page);
 
- fs/f2fs/f2fs.h              | 11 +++++-
- fs/f2fs/file.c              | 30 ++++++++++++---
- fs/f2fs/gc.c                | 74 ++++++++++++++++++++-----------------
- fs/f2fs/segment.c           |  8 +++-
- fs/f2fs/super.c             |  8 +++-
- include/trace/events/f2fs.h | 18 ++++-----
- 6 files changed, 98 insertions(+), 51 deletions(-)
+Assuming that that is restored, please feel free to add:
 
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index 0699d7460d5d..9920b2d6af8f 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -1265,6 +1265,14 @@ struct atgc_management {
- 	unsigned long long age_threshold;	/* age threshold */
- };
- 
-+struct f2fs_gc_control {
-+	unsigned int victim_segno;	/* target victim segment number */
-+	int init_gc_type;		/* FG_GC or BG_GC */
-+	bool no_bg_gc;			/* check the space and stop bg_gc */
-+	bool should_migrate_blocks;	/* should migrate blocks */
-+	bool err_gc_skipped;		/* return EAGAIN if GC skipped */
-+};
-+
- /* For s_flag in struct f2fs_sb_info */
- enum {
- 	SBI_IS_DIRTY,				/* dirty flag for checkpoint */
-@@ -3761,8 +3769,7 @@ extern const struct iomap_ops f2fs_iomap_ops;
- int f2fs_start_gc_thread(struct f2fs_sb_info *sbi);
- void f2fs_stop_gc_thread(struct f2fs_sb_info *sbi);
- block_t f2fs_start_bidx_of_node(unsigned int node_ofs, struct inode *inode);
--int f2fs_gc(struct f2fs_sb_info *sbi, bool sync, bool background, bool force,
--			unsigned int segno);
-+int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control);
- void f2fs_build_gc_manager(struct f2fs_sb_info *sbi);
- int f2fs_resize_fs(struct f2fs_sb_info *sbi, __u64 block_count);
- int __init f2fs_create_garbage_collection_cache(void);
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index 6da8a663de7b..d0547bef0851 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -1647,6 +1647,10 @@ static int expand_inode_data(struct inode *inode, loff_t offset,
- 	struct f2fs_map_blocks map = { .m_next_pgofs = NULL,
- 			.m_next_extent = NULL, .m_seg_type = NO_CHECK_TYPE,
- 			.m_may_create = true };
-+	struct f2fs_gc_control gc_control = { .victim_segno = NULL_SEGNO,
-+			.init_gc_type = FG_GC,
-+			.should_migrate_blocks = false,
-+			.err_gc_skipped = true };
- 	pgoff_t pg_start, pg_end;
- 	loff_t new_size = i_size_read(inode);
- 	loff_t off_end;
-@@ -1684,7 +1688,7 @@ static int expand_inode_data(struct inode *inode, loff_t offset,
- 		if (has_not_enough_free_secs(sbi, 0,
- 			GET_SEC_FROM_SEG(sbi, overprovision_segments(sbi)))) {
- 			f2fs_down_write(&sbi->gc_lock);
--			err = f2fs_gc(sbi, true, false, false, NULL_SEGNO);
-+			err = f2fs_gc(sbi, &gc_control);
- 			if (err && err != -ENODATA)
- 				goto out_err;
- 		}
-@@ -2344,6 +2348,9 @@ static int f2fs_ioc_gc(struct file *filp, unsigned long arg)
- {
- 	struct inode *inode = file_inode(filp);
- 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
-+	struct f2fs_gc_control gc_control = { .victim_segno = NULL_SEGNO,
-+			.no_bg_gc = false,
-+			.should_migrate_blocks = false };
- 	__u32 sync;
- 	int ret;
- 
-@@ -2369,7 +2376,9 @@ static int f2fs_ioc_gc(struct file *filp, unsigned long arg)
- 		f2fs_down_write(&sbi->gc_lock);
- 	}
- 
--	ret = f2fs_gc(sbi, sync, true, false, NULL_SEGNO);
-+	gc_control.init_gc_type = sync ? FG_GC : BG_GC;
-+	gc_control.err_gc_skipped = sync;
-+	ret = f2fs_gc(sbi, &gc_control);
- out:
- 	mnt_drop_write_file(filp);
- 	return ret;
-@@ -2378,6 +2387,11 @@ static int f2fs_ioc_gc(struct file *filp, unsigned long arg)
- static int __f2fs_ioc_gc_range(struct file *filp, struct f2fs_gc_range *range)
- {
- 	struct f2fs_sb_info *sbi = F2FS_I_SB(file_inode(filp));
-+	struct f2fs_gc_control gc_control = {
-+			.init_gc_type = range->sync ? FG_GC : BG_GC,
-+			.no_bg_gc = false,
-+			.should_migrate_blocks = false,
-+			.err_gc_skipped = range->sync };
- 	u64 end;
- 	int ret;
- 
-@@ -2405,8 +2419,8 @@ static int __f2fs_ioc_gc_range(struct file *filp, struct f2fs_gc_range *range)
- 		f2fs_down_write(&sbi->gc_lock);
- 	}
- 
--	ret = f2fs_gc(sbi, range->sync, true, false,
--				GET_SEGNO(sbi, range->start));
-+	gc_control.victim_segno = GET_SEGNO(sbi, range->start);
-+	ret = f2fs_gc(sbi, &gc_control);
- 	if (ret) {
- 		if (ret == -EBUSY)
- 			ret = -EAGAIN;
-@@ -2820,6 +2834,10 @@ static int f2fs_ioc_flush_device(struct file *filp, unsigned long arg)
- 	unsigned int start_segno = 0, end_segno = 0;
- 	unsigned int dev_start_segno = 0, dev_end_segno = 0;
- 	struct f2fs_flush_device range;
-+	struct f2fs_gc_control gc_control = {
-+			.init_gc_type = FG_GC,
-+			.should_migrate_blocks = true,
-+			.err_gc_skipped = true };
- 	int ret;
- 
- 	if (!capable(CAP_SYS_ADMIN))
-@@ -2863,7 +2881,9 @@ static int f2fs_ioc_flush_device(struct file *filp, unsigned long arg)
- 		sm->last_victim[GC_CB] = end_segno + 1;
- 		sm->last_victim[GC_GREEDY] = end_segno + 1;
- 		sm->last_victim[ALLOC_NEXT] = end_segno + 1;
--		ret = f2fs_gc(sbi, true, true, true, start_segno);
-+
-+		gc_control.victim_segno = start_segno;
-+		ret = f2fs_gc(sbi, &gc_control);
- 		if (ret == -EAGAIN)
- 			ret = 0;
- 		else if (ret < 0)
-diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-index ba8e93e517be..f3d58d154240 100644
---- a/fs/f2fs/gc.c
-+++ b/fs/f2fs/gc.c
-@@ -35,6 +35,9 @@ static int gc_thread_func(void *data)
- 	wait_queue_head_t *wq = &sbi->gc_thread->gc_wait_queue_head;
- 	wait_queue_head_t *fggc_wq = &sbi->gc_thread->fggc_wq;
- 	unsigned int wait_ms;
-+	struct f2fs_gc_control gc_control = {
-+		.victim_segno = NULL_SEGNO,
-+		.should_migrate_blocks = false };
- 
- 	wait_ms = gc_th->min_sleep_time;
- 
-@@ -141,8 +144,12 @@ static int gc_thread_func(void *data)
- 		if (foreground)
- 			sync_mode = false;
- 
-+		gc_control.init_gc_type = sync_mode ? FG_GC : BG_GC;
-+		gc_control.no_bg_gc = foreground;
-+		gc_control.err_gc_skipped = sync_mode;
-+
- 		/* if return value is not zero, no victim was selected */
--		if (f2fs_gc(sbi, sync_mode, !foreground, false, NULL_SEGNO))
-+		if (f2fs_gc(sbi, &gc_control))
- 			wait_ms = gc_th->no_gc_sleep_time;
- 
- 		if (foreground)
-@@ -1740,21 +1747,20 @@ static int do_garbage_collect(struct f2fs_sb_info *sbi,
- 	return seg_freed;
- }
- 
--int f2fs_gc(struct f2fs_sb_info *sbi, bool sync,
--			bool background, bool force, unsigned int segno)
-+int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
- {
--	int gc_type = sync ? FG_GC : BG_GC;
-+	int gc_type = gc_control->init_gc_type;
-+	unsigned int segno = gc_control->victim_segno;
- 	int sec_freed = 0, seg_freed = 0, total_freed = 0;
- 	int ret = 0;
- 	struct cp_control cpc;
--	unsigned int init_segno = segno;
- 	struct gc_inode_list gc_list = {
- 		.ilist = LIST_HEAD_INIT(gc_list.ilist),
- 		.iroot = RADIX_TREE_INIT(gc_list.iroot, GFP_NOFS),
- 	};
- 	unsigned int skipped_round = 0, round = 0;
- 
--	trace_f2fs_gc_begin(sbi->sb, sync, background,
-+	trace_f2fs_gc_begin(sbi->sb, gc_type, gc_control->no_bg_gc,
- 				get_pages(sbi, F2FS_DIRTY_NODES),
- 				get_pages(sbi, F2FS_DIRTY_DENTS),
- 				get_pages(sbi, F2FS_DIRTY_IMETA),
-@@ -1781,8 +1787,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, bool sync,
- 		 * threshold, we can make them free by checkpoint. Then, we
- 		 * secure free segments which doesn't need fggc any more.
- 		 */
--		if (prefree_segments(sbi) &&
--				!is_sbi_flag_set(sbi, SBI_CP_DISABLED)) {
-+		if (prefree_segments(sbi)) {
- 			ret = f2fs_write_checkpoint(sbi, &cpc);
- 			if (ret)
- 				goto stop;
-@@ -1792,7 +1797,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, bool sync,
- 	}
- 
- 	/* f2fs_balance_fs doesn't need to do BG_GC in critical path. */
--	if (gc_type == BG_GC && !background) {
-+	if (gc_type == BG_GC && gc_control->no_bg_gc) {
- 		ret = -EINVAL;
- 		goto stop;
- 	}
-@@ -1808,45 +1813,48 @@ int f2fs_gc(struct f2fs_sb_info *sbi, bool sync,
- 		goto stop;
- 	}
- 
--	seg_freed = do_garbage_collect(sbi, segno, &gc_list, gc_type, force);
--	if (gc_type == FG_GC &&
--		seg_freed == f2fs_usable_segs_in_sec(sbi, segno))
--		sec_freed++;
-+	seg_freed = do_garbage_collect(sbi, segno, &gc_list, gc_type,
-+				gc_control->should_migrate_blocks);
- 	total_freed += seg_freed;
- 
--	if (gc_type == FG_GC) {
--		if (sbi->skipped_gc_rwsem)
--			skipped_round++;
--		round++;
--	}
-+	if (seg_freed == f2fs_usable_segs_in_sec(sbi, segno))
-+		sec_freed++;
- 
- 	if (gc_type == FG_GC)
- 		sbi->cur_victim_sec = NULL_SEGNO;
- 
--	if (sync)
-+	if (gc_control->init_gc_type == FG_GC)
- 		goto stop;
- 
--	if (!has_not_enough_free_secs(sbi, sec_freed, 0))
-+	if (!has_not_enough_free_secs(sbi,
-+			(gc_type == FG_GC) ? sec_freed : 0, 0))
- 		goto stop;
- 
--	if (skipped_round <= MAX_SKIP_GC_COUNT || skipped_round * 2 < round) {
--
--		/* Write checkpoint to reclaim prefree segments */
--		if (free_sections(sbi) < NR_CURSEG_PERSIST_TYPE &&
--				prefree_segments(sbi) &&
--				!is_sbi_flag_set(sbi, SBI_CP_DISABLED)) {
-+	/* FG_GC stops GC by skip_count */
-+	if (gc_type == FG_GC) {
-+		if (sbi->skipped_gc_rwsem)
-+			skipped_round++;
-+		round++;
-+		if (skipped_round > MAX_SKIP_GC_COUNT &&
-+				skipped_round * 2 >= round) {
- 			ret = f2fs_write_checkpoint(sbi, &cpc);
--			if (ret)
--				goto stop;
-+			goto stop;
- 		}
--		segno = NULL_SEGNO;
--		goto gc_more;
- 	}
--	if (gc_type == FG_GC && !is_sbi_flag_set(sbi, SBI_CP_DISABLED))
-+
-+	/* Write checkpoint to reclaim prefree segments */
-+	if (free_sections(sbi) < NR_CURSEG_PERSIST_TYPE &&
-+				prefree_segments(sbi)) {
- 		ret = f2fs_write_checkpoint(sbi, &cpc);
-+		if (ret)
-+			goto stop;
-+	}
-+	segno = NULL_SEGNO;
-+	goto gc_more;
-+
- stop:
- 	SIT_I(sbi)->last_victim[ALLOC_NEXT] = 0;
--	SIT_I(sbi)->last_victim[FLUSH_DEVICE] = init_segno;
-+	SIT_I(sbi)->last_victim[FLUSH_DEVICE] = gc_control->victim_segno;
- 
- 	if (gc_type == FG_GC)
- 		f2fs_unpin_all_sections(sbi, true);
-@@ -1864,7 +1872,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, bool sync,
- 
- 	put_gc_inode(&gc_list);
- 
--	if (sync && !ret)
-+	if (gc_control->err_gc_skipped && !ret)
- 		ret = sec_freed ? 0 : -EAGAIN;
- 	return ret;
- }
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index 47934995e2ca..8b4f2b1d2cca 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -399,8 +399,14 @@ void f2fs_balance_fs(struct f2fs_sb_info *sbi, bool need)
- 			io_schedule();
- 			finish_wait(&sbi->gc_thread->fggc_wq, &wait);
- 		} else {
-+			struct f2fs_gc_control gc_control = {
-+				.victim_segno = NULL_SEGNO,
-+				.init_gc_type = BG_GC,
-+				.no_bg_gc = true,
-+				.should_migrate_blocks = false,
-+				.err_gc_skipped = false };
- 			f2fs_down_write(&sbi->gc_lock);
--			f2fs_gc(sbi, false, false, false, NULL_SEGNO);
-+			f2fs_gc(sbi, &gc_control);
- 		}
- 	}
- }
-diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-index 8c81dd324297..a28c27eed6d0 100644
---- a/fs/f2fs/super.c
-+++ b/fs/f2fs/super.c
-@@ -2076,8 +2076,14 @@ static int f2fs_disable_checkpoint(struct f2fs_sb_info *sbi)
- 	sbi->gc_mode = GC_URGENT_HIGH;
- 
- 	while (!f2fs_time_over(sbi, DISABLE_TIME)) {
-+		struct f2fs_gc_control gc_control = {
-+			.victim_segno = NULL_SEGNO,
-+			.init_gc_type = FG_GC,
-+			.should_migrate_blocks = false,
-+			.err_gc_skipped = true };
-+
- 		f2fs_down_write(&sbi->gc_lock);
--		err = f2fs_gc(sbi, true, false, false, NULL_SEGNO);
-+		err = f2fs_gc(sbi, &gc_control);
- 		if (err == -ENODATA) {
- 			err = 0;
- 			break;
-diff --git a/include/trace/events/f2fs.h b/include/trace/events/f2fs.h
-index 7e915dbf3674..54ec9e543f09 100644
---- a/include/trace/events/f2fs.h
-+++ b/include/trace/events/f2fs.h
-@@ -644,19 +644,19 @@ TRACE_EVENT(f2fs_background_gc,
- 
- TRACE_EVENT(f2fs_gc_begin,
- 
--	TP_PROTO(struct super_block *sb, bool sync, bool background,
-+	TP_PROTO(struct super_block *sb, int gc_type, bool no_bg_gc,
- 			long long dirty_nodes, long long dirty_dents,
- 			long long dirty_imeta, unsigned int free_sec,
- 			unsigned int free_seg, int reserved_seg,
- 			unsigned int prefree_seg),
- 
--	TP_ARGS(sb, sync, background, dirty_nodes, dirty_dents, dirty_imeta,
-+	TP_ARGS(sb, gc_type, no_bg_gc, dirty_nodes, dirty_dents, dirty_imeta,
- 		free_sec, free_seg, reserved_seg, prefree_seg),
- 
- 	TP_STRUCT__entry(
- 		__field(dev_t,		dev)
--		__field(bool,		sync)
--		__field(bool,		background)
-+		__field(int,		gc_type)
-+		__field(bool,		no_bg_gc)
- 		__field(long long,	dirty_nodes)
- 		__field(long long,	dirty_dents)
- 		__field(long long,	dirty_imeta)
-@@ -668,8 +668,8 @@ TRACE_EVENT(f2fs_gc_begin,
- 
- 	TP_fast_assign(
- 		__entry->dev		= sb->s_dev;
--		__entry->sync		= sync;
--		__entry->background	= background;
-+		__entry->gc_type	= gc_type;
-+		__entry->no_bg_gc	= no_bg_gc;
- 		__entry->dirty_nodes	= dirty_nodes;
- 		__entry->dirty_dents	= dirty_dents;
- 		__entry->dirty_imeta	= dirty_imeta;
-@@ -679,12 +679,12 @@ TRACE_EVENT(f2fs_gc_begin,
- 		__entry->prefree_seg	= prefree_seg;
- 	),
- 
--	TP_printk("dev = (%d,%d), sync = %d, background = %d, nodes = %lld, "
-+	TP_printk("dev = (%d,%d), gc_type = %s, no_background_GC = %d, nodes = %lld, "
- 		"dents = %lld, imeta = %lld, free_sec:%u, free_seg:%u, "
- 		"rsv_seg:%d, prefree_seg:%u",
- 		show_dev(__entry->dev),
--		__entry->sync,
--		__entry->background,
-+		show_gc_type(__entry->gc_type),
-+		(__entry->gc_type == BG_GC) ? __entry->no_bg_gc : -1,
- 		__entry->dirty_nodes,
- 		__entry->dirty_dents,
- 		__entry->dirty_imeta,
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+
+thanks,
 -- 
-2.36.0.550.gb090851708-goog
+John Hubbard
+NVIDIA
+
+> +	int mt = __READ_ONCE(__mt);
+> +
+> +	if (mt & (MIGRATE_CMA | MIGRATE_ISOLATE))
+> +		return false;
+> +#endif
+> +
+> +	return !(is_zone_movable_page(page) || is_zero_pfn(page_to_pfn(page)));
+>   }
+>   #else
+>   static inline bool is_pinnable_page(struct page *page)
+
 

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AF0E5253DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A795253DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:40:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357163AbiELRkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 13:40:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
+        id S1357157AbiELRkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 13:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357130AbiELRjj (ORCPT
+        with ESMTP id S1357140AbiELRkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 13:39:39 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E1826709D;
-        Thu, 12 May 2022 10:39:37 -0700 (PDT)
+        Thu, 12 May 2022 13:40:14 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029EA26C4C5;
+        Thu, 12 May 2022 10:40:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652377177; x=1683913177;
+  t=1652377214; x=1683913214;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=nybsqFuOSxsesOybfPjcLR1CetTbOyukDDpcrXaTOeU=;
-  b=gmnZynLd0YDlCfnIL61UAoVwRdNeNpB062jaWi+xQnRWeY4bAwjMbiCO
-   dkPo7n2/WWRucDzB+ULUX8bhuRGZiE7IItSzoXo4MqKKnd3wk+D1PtEE7
-   9qvkBxkJNBFlaAwKO5GanLWNyx2jseqFV4PfrliXGvJnqid+Fey6eFdye
-   5uEzUbvmmnJ+IUjyU37esyii0ze4L0zdxlYlAK6rx/FXxrbwfZe4bpb0G
-   9GTMYpgwTQuDD6UKwpgQSMqAcXreJbF9G6JgwXd7dF/d1EMz5thqA12BI
-   L81Et2jL7hnfNc3T8IW+EDloTOLzY29kUDh4NA/oDcfmGyIp1cHhrnvMG
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="333123609"
+  bh=lfHOk3NbKnCzKqrFFON5C5D8NThthEjbjuQAmQX0Sco=;
+  b=iNYtBVvUHVu/lm8x6WVos/NsUubUpvWOj80OmAzEyLs26iD56KOJq+rv
+   4NNkpWIzMrzLSOIeKcUSSeMznfY7Y3hBH72ujY8tgbu3vZkbqg49GuxkV
+   s3DswyUo9QpHJa1cTxxWt+s3ZiQejO3G6Kh3TNh4ySfFhv0qOti75rb3o
+   QFyc/xkliO0IT9p5UA8qBZZvSf7n0rcxeuELxTSlzBXxGr4UlUTM/k725
+   soj/hCgV+y/0mZ+B2POK5qraJgwSH+Vd7moCW/mvLOULGwM5+P+/pfUSW
+   Iqa1tbm9B4COc7nWxok5DUuXlzuIi0P2WD1979hqY9RsLV2TjvjUOXvvG
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="257634327"
 X-IronPort-AV: E=Sophos;i="5.91,220,1647327600"; 
-   d="scan'208";a="333123609"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 10:39:37 -0700
+   d="scan'208";a="257634327"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 10:39:37 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,220,1647327600"; 
-   d="scan'208";a="698140588"
+   d="scan'208";a="542883705"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 12 May 2022 10:39:34 -0700
+  by orsmga006.jf.intel.com with ESMTP; 12 May 2022 10:39:34 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 5D60E109; Thu, 12 May 2022 20:39:33 +0300 (EEST)
+        id 6698C103; Thu, 12 May 2022 20:39:33 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Marc Zyngier <maz@kernel.org>,
@@ -51,18 +51,18 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Jonathan Corbet <corbet@lwn.net>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Andy Shevchenko <andy@kernel.org>
-Subject: [PATCH v1 4/5] pinctrl: cherryview: make irq_chip immutable
-Date:   Thu, 12 May 2022 20:39:20 +0300
-Message-Id: <20220512173921.8210-4-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 5/5] pinctrl: lynxpoint: make irq_chip immutable
+Date:   Thu, 12 May 2022 20:39:21 +0300
+Message-Id: <20220512173921.8210-5-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220512173921.8210-1-andriy.shevchenko@linux.intel.com>
 References: <20220512173921.8210-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,183 +76,108 @@ Since recently, the kernel is nagging about mutable irq_chips:
 Drop the unneeded copy, flag it as IRQCHIP_IMMUTABLE, add the new
 helper functions and call the appropriate gpiolib functions.
 
-While at it, switch to use hwirq variable instead of pin for
+While at it, switch hwirq variable to use the correct type for
 the sake of consistency.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/intel/pinctrl-cherryview.c | 65 +++++++++++++---------
- 1 file changed, 38 insertions(+), 27 deletions(-)
+ drivers/pinctrl/intel/pinctrl-lynxpoint.c | 26 ++++++++++++++---------
+ 1 file changed, 16 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/pinctrl/intel/pinctrl-cherryview.c b/drivers/pinctrl/intel/pinctrl-cherryview.c
-index 1d5818269076..b696f9392789 100644
---- a/drivers/pinctrl/intel/pinctrl-cherryview.c
-+++ b/drivers/pinctrl/intel/pinctrl-cherryview.c
-@@ -1242,12 +1242,12 @@ static void chv_gpio_irq_ack(struct irq_data *d)
+diff --git a/drivers/pinctrl/intel/pinctrl-lynxpoint.c b/drivers/pinctrl/intel/pinctrl-lynxpoint.c
+index 561fa322b0b4..4fb39eb30902 100644
+--- a/drivers/pinctrl/intel/pinctrl-lynxpoint.c
++++ b/drivers/pinctrl/intel/pinctrl-lynxpoint.c
+@@ -663,7 +663,7 @@ static void lp_irq_ack(struct irq_data *d)
  {
  	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
- 	struct intel_pinctrl *pctrl = gpiochip_get_data(gc);
--	int pin = irqd_to_hwirq(d);
+ 	struct intel_pinctrl *lg = gpiochip_get_data(gc);
+-	u32 hwirq = irqd_to_hwirq(d);
 +	irq_hw_number_t hwirq = irqd_to_hwirq(d);
- 	u32 intr_line;
- 
- 	raw_spin_lock(&chv_lock);
- 
--	intr_line = chv_readl(pctrl, pin, CHV_PADCTRL0);
-+	intr_line = chv_readl(pctrl, hwirq, CHV_PADCTRL0);
- 	intr_line &= CHV_PADCTRL0_INTSEL_MASK;
- 	intr_line >>= CHV_PADCTRL0_INTSEL_SHIFT;
- 	chv_pctrl_writel(pctrl, CHV_INTSTAT, BIT(intr_line));
-@@ -1255,17 +1255,16 @@ static void chv_gpio_irq_ack(struct irq_data *d)
- 	raw_spin_unlock(&chv_lock);
- }
- 
--static void chv_gpio_irq_mask_unmask(struct irq_data *d, bool mask)
-+static void chv_gpio_irq_mask_unmask(struct irq_data *d, irq_hw_number_t hwirq, bool mask)
- {
- 	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
- 	struct intel_pinctrl *pctrl = gpiochip_get_data(gc);
--	int pin = irqd_to_hwirq(d);
- 	u32 value, intr_line;
+ 	void __iomem *reg = lp_gpio_reg(&lg->chip, hwirq, LP_INT_STAT);
  	unsigned long flags;
  
- 	raw_spin_lock_irqsave(&chv_lock, flags);
- 
--	intr_line = chv_readl(pctrl, pin, CHV_PADCTRL0);
-+	intr_line = chv_readl(pctrl, hwirq, CHV_PADCTRL0);
- 	intr_line &= CHV_PADCTRL0_INTSEL_MASK;
- 	intr_line >>= CHV_PADCTRL0_INTSEL_SHIFT;
- 
-@@ -1281,12 +1280,20 @@ static void chv_gpio_irq_mask_unmask(struct irq_data *d, bool mask)
- 
- static void chv_gpio_irq_mask(struct irq_data *d)
+@@ -684,10 +684,12 @@ static void lp_irq_enable(struct irq_data *d)
  {
--	chv_gpio_irq_mask_unmask(d, true);
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
+ 	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
+ 	struct intel_pinctrl *lg = gpiochip_get_data(gc);
+-	u32 hwirq = irqd_to_hwirq(d);
 +	irq_hw_number_t hwirq = irqd_to_hwirq(d);
+ 	void __iomem *reg = lp_gpio_reg(&lg->chip, hwirq, LP_INT_ENABLE);
+ 	unsigned long flags;
+ 
++	gpiochip_enable_irq(gc, hwirq);
 +
-+	chv_gpio_irq_mask_unmask(d, hwirq, true);
+ 	raw_spin_lock_irqsave(&lg->lock, flags);
+ 	iowrite32(ioread32(reg) | BIT(hwirq % 32), reg);
+ 	raw_spin_unlock_irqrestore(&lg->lock, flags);
+@@ -697,30 +699,33 @@ static void lp_irq_disable(struct irq_data *d)
+ {
+ 	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
+ 	struct intel_pinctrl *lg = gpiochip_get_data(gc);
+-	u32 hwirq = irqd_to_hwirq(d);
++	irq_hw_number_t hwirq = irqd_to_hwirq(d);
+ 	void __iomem *reg = lp_gpio_reg(&lg->chip, hwirq, LP_INT_ENABLE);
+ 	unsigned long flags;
+ 
+ 	raw_spin_lock_irqsave(&lg->lock, flags);
+ 	iowrite32(ioread32(reg) & ~BIT(hwirq % 32), reg);
+ 	raw_spin_unlock_irqrestore(&lg->lock, flags);
++
 +	gpiochip_disable_irq(gc, hwirq);
  }
  
- static void chv_gpio_irq_unmask(struct irq_data *d)
- {
--	chv_gpio_irq_mask_unmask(d, false);
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
-+	irq_hw_number_t hwirq = irqd_to_hwirq(d);
-+
-+	gpiochip_enable_irq(gc, hwirq);
-+	chv_gpio_irq_mask_unmask(d, hwirq, false);
- }
- 
- static unsigned chv_gpio_irq_startup(struct irq_data *d)
-@@ -1306,17 +1313,17 @@ static unsigned chv_gpio_irq_startup(struct irq_data *d)
- 		struct intel_pinctrl *pctrl = gpiochip_get_data(gc);
- 		struct device *dev = pctrl->dev;
- 		struct intel_community_context *cctx = &pctrl->context.communities[0];
--		unsigned int pin = irqd_to_hwirq(d);
-+		irq_hw_number_t hwirq = irqd_to_hwirq(d);
- 		irq_flow_handler_t handler;
- 		unsigned long flags;
- 		u32 intsel, value;
- 
- 		raw_spin_lock_irqsave(&chv_lock, flags);
--		intsel = chv_readl(pctrl, pin, CHV_PADCTRL0);
-+		intsel = chv_readl(pctrl, hwirq, CHV_PADCTRL0);
- 		intsel &= CHV_PADCTRL0_INTSEL_MASK;
- 		intsel >>= CHV_PADCTRL0_INTSEL_SHIFT;
- 
--		value = chv_readl(pctrl, pin, CHV_PADCTRL1);
-+		value = chv_readl(pctrl, hwirq, CHV_PADCTRL1);
- 		if (value & CHV_PADCTRL1_INTWAKECFG_LEVEL)
- 			handler = handle_level_irq;
- 		else
-@@ -1324,9 +1331,9 @@ static unsigned chv_gpio_irq_startup(struct irq_data *d)
- 
- 		if (cctx->intr_lines[intsel] == CHV_INVALID_HWIRQ) {
- 			irq_set_handler_locked(d, handler);
--			dev_dbg(dev, "using interrupt line %u for IRQ_TYPE_NONE on pin %u\n",
--				intsel, pin);
--			cctx->intr_lines[intsel] = pin;
-+			dev_dbg(dev, "using interrupt line %u for IRQ_TYPE_NONE on pin %lu\n",
-+				intsel, hwirq);
-+			cctx->intr_lines[intsel] = hwirq;
- 		}
- 		raw_spin_unlock_irqrestore(&chv_lock, flags);
- 	}
-@@ -1392,14 +1399,14 @@ static int chv_gpio_irq_type(struct irq_data *d, unsigned int type)
+ static int lp_irq_set_type(struct irq_data *d, unsigned int type)
  {
  	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
- 	struct intel_pinctrl *pctrl = gpiochip_get_data(gc);
--	unsigned int pin = irqd_to_hwirq(d);
+ 	struct intel_pinctrl *lg = gpiochip_get_data(gc);
+-	u32 hwirq = irqd_to_hwirq(d);
+-	void __iomem *reg = lp_gpio_reg(&lg->chip, hwirq, LP_CONFIG1);
 +	irq_hw_number_t hwirq = irqd_to_hwirq(d);
  	unsigned long flags;
++	void __iomem *reg;
  	u32 value;
- 	int ret;
  
- 	raw_spin_lock_irqsave(&chv_lock, flags);
+-	if (hwirq >= lg->chip.ngpio)
++	reg = lp_gpio_reg(&lg->chip, hwirq, LP_CONFIG1);
++	if (!reg)
+ 		return -EINVAL;
  
--	ret = chv_gpio_set_intr_line(pctrl, pin);
-+	ret = chv_gpio_set_intr_line(pctrl, hwirq);
- 	if (ret)
- 		goto out_unlock;
- 
-@@ -1416,8 +1423,8 @@ static int chv_gpio_irq_type(struct irq_data *d, unsigned int type)
- 	 * 2. If the pin cfg is not locked in BIOS:
- 	 *	Driver programs the IntWakeCfg bits and save the mapping.
- 	 */
--	if (!chv_pad_locked(pctrl, pin)) {
--		value = chv_readl(pctrl, pin, CHV_PADCTRL1);
-+	if (!chv_pad_locked(pctrl, hwirq)) {
-+		value = chv_readl(pctrl, hwirq, CHV_PADCTRL1);
- 		value &= ~CHV_PADCTRL1_INTWAKECFG_MASK;
- 		value &= ~CHV_PADCTRL1_INVRXTX_MASK;
- 
-@@ -1434,7 +1441,7 @@ static int chv_gpio_irq_type(struct irq_data *d, unsigned int type)
- 				value |= CHV_PADCTRL1_INVRXTX_RXDATA;
- 		}
- 
--		chv_writel(pctrl, pin, CHV_PADCTRL1, value);
-+		chv_writel(pctrl, hwirq, CHV_PADCTRL1, value);
+ 	/* Fail if BIOS reserved pin for ACPI use */
+ 	if (lp_gpio_acpi_use(lg, hwirq)) {
+-		dev_err(lg->dev, "pin %u can't be used as IRQ\n", hwirq);
++		dev_err(lg->dev, "pin %lu can't be used as IRQ\n", hwirq);
+ 		return -EBUSY;
  	}
  
- 	if (type & IRQ_TYPE_EDGE_BOTH)
-@@ -1448,6 +1455,17 @@ static int chv_gpio_irq_type(struct irq_data *d, unsigned int type)
- 	return ret;
+@@ -755,7 +760,7 @@ static int lp_irq_set_type(struct irq_data *d, unsigned int type)
+ 	return 0;
  }
  
-+static const struct irq_chip chv_gpio_irq_chip = {
-+	.name		= "chv-gpio",
-+	.irq_startup	= chv_gpio_irq_startup,
-+	.irq_ack	= chv_gpio_irq_ack,
-+	.irq_mask	= chv_gpio_irq_mask,
-+	.irq_unmask	= chv_gpio_irq_unmask,
-+	.irq_set_type	= chv_gpio_irq_type,
-+	.flags		= IRQCHIP_SKIP_SET_WAKE | IRQCHIP_IMMUTABLE,
+-static struct irq_chip lp_irqchip = {
++static const struct irq_chip lp_irqchip = {
+ 	.name = "LP-GPIO",
+ 	.irq_ack = lp_irq_ack,
+ 	.irq_mask = lp_irq_mask,
+@@ -763,7 +768,8 @@ static struct irq_chip lp_irqchip = {
+ 	.irq_enable = lp_irq_enable,
+ 	.irq_disable = lp_irq_disable,
+ 	.irq_set_type = lp_irq_set_type,
+-	.flags = IRQCHIP_SKIP_SET_WAKE,
++	.flags = IRQCHIP_SKIP_SET_WAKE | IRQCHIP_IMMUTABLE,
 +	GPIOCHIP_IRQ_RESOURCE_HELPERS,
-+};
-+
- static void chv_gpio_irq_handler(struct irq_desc *desc)
- {
- 	struct gpio_chip *gc = irq_desc_get_handler_data(desc);
-@@ -1611,15 +1629,8 @@ static int chv_gpio_probe(struct intel_pinctrl *pctrl, int irq)
- 	chip->base = -1;
+ };
  
- 	pctrl->irq = irq;
--	pctrl->irqchip.name = "chv-gpio";
--	pctrl->irqchip.irq_startup = chv_gpio_irq_startup;
--	pctrl->irqchip.irq_ack = chv_gpio_irq_ack;
--	pctrl->irqchip.irq_mask = chv_gpio_irq_mask;
--	pctrl->irqchip.irq_unmask = chv_gpio_irq_unmask;
--	pctrl->irqchip.irq_set_type = chv_gpio_irq_type;
--	pctrl->irqchip.flags = IRQCHIP_SKIP_SET_WAKE;
--
--	chip->irq.chip = &pctrl->irqchip;
-+
-+	gpio_irq_chip_set_chip(&chip->irq, &chv_gpio_irq_chip);
- 	chip->irq.init_hw = chv_gpio_irq_init_hw;
- 	chip->irq.parent_handler = chv_gpio_irq_handler;
- 	chip->irq.num_parents = 1;
+ static int lp_gpio_irq_init_hw(struct gpio_chip *chip)
+@@ -884,7 +890,7 @@ static int lp_gpio_probe(struct platform_device *pdev)
+ 		struct gpio_irq_chip *girq;
+ 
+ 		girq = &gc->irq;
+-		girq->chip = &lp_irqchip;
++		gpio_irq_chip_set_chip(girq, &lp_irqchip);
+ 		girq->init_hw = lp_gpio_irq_init_hw;
+ 		girq->parent_handler = lp_gpio_irq_handler;
+ 		girq->num_parents = 1;
 -- 
 2.35.1
 

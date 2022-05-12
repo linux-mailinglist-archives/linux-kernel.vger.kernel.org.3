@@ -2,54 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E375255D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 376795255D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350422AbiELThu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 15:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52214 "EHLO
+        id S1358077AbiELTiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 15:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238899AbiELThr (ORCPT
+        with ESMTP id S238899AbiELTiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 15:37:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1212F62CC9
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 12:37:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A0AD361BE2
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 19:37:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE9A5C34117;
-        Thu, 12 May 2022 19:37:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1652384265;
-        bh=lQpabCphLsIePbatgCbsEpbOuoC7zkFlFeb5DU65TmI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UYDyTW9RGEvNnX3N0dpBTAO528x9y7IuNfzSzRDBC2Mk0Ks6gaTOiZk8NWCT4N/Xq
-         r4XbMICQYY5ENy20WojmmEBXmIYChvUFqlRtj+PxhjzdXlxbIu/aU3v709AUGOvRXT
-         ajOHnuqlikd883wEH/JTxU1sAv15kCNPcAIbn82Y=
-Date:   Thu, 12 May 2022 12:37:43 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Subject: Re: [PATCH 6/6] mm/page_alloc: Remotely drain per-cpu lists
-Message-Id: <20220512123743.5be26b3ad4413f20d5f46564@linux-foundation.org>
-In-Reply-To: <20220512085043.5234-7-mgorman@techsingularity.net>
-References: <20220512085043.5234-1-mgorman@techsingularity.net>
-        <20220512085043.5234-7-mgorman@techsingularity.net>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Thu, 12 May 2022 15:38:16 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631EC62CC9;
+        Thu, 12 May 2022 12:38:13 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.94.2)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1npEdU-0004t0-Tb; Thu, 12 May 2022 21:38:09 +0200
+Date:   Thu, 12 May 2022 20:37:59 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     linux-block@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Tom Rini <trini@konsulko.com>, Jens Axboe <axboe@kernel.dk>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH v3 0/5] partition parser for U-Boot's uImage.FIT
+Message-ID: <Yn1iF0JHPYou9hiS@makrotopia.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,PDS_OTHER_BAD_TLD,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,51 +44,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 May 2022 09:50:43 +0100 Mel Gorman <mgorman@techsingularity.net> wrote:
+Add uImage.FIT partition parser and wire it up to allow mounting
+filesystem sub-images from uImage.FIT in GPT partitions as well as
+mtdblock and ubiblock devices within Linux (e.g. as root filesystem).
 
-> From: Nicolas Saenz Julienne <nsaenzju@redhat.com>
-> 
-> Some setups, notably NOHZ_FULL CPUs, are too busy to handle the per-cpu
-> drain work queued by __drain_all_pages(). So introduce a new mechanism to
-> remotely drain the per-cpu lists. It is made possible by remotely locking
-> 'struct per_cpu_pages' new per-cpu spinlocks. A benefit of this new scheme
-> is that drain operations are now migration safe.
-> 
-> There was no observed performance degradation vs. the previous scheme.
-> Both netperf and hackbench were run in parallel to triggering the
-> __drain_all_pages(NULL, true) code path around ~100 times per second.
-> The new scheme performs a bit better (~5%), although the important point
-> here is there are no performance regressions vs. the previous mechanism.
-> Per-cpu lists draining happens only in slow paths.
-> 
-> Minchan Kim tested this independently and reported;
-> 
-> 	My workload is not NOHZ CPUs but run apps under heavy memory
-> 	pressure so they goes to direct reclaim and be stuck on
-> 	drain_all_pages until work on workqueue run.
-> 
-> 	unit: nanosecond
-> 	max(dur)        avg(dur)                count(dur)
-> 	166713013       487511.77786438033      1283
-> 
-> 	From traces, system encountered the drain_all_pages 1283 times and
-> 	worst case was 166ms and avg was 487us.
-> 
-> 	The other problem was alloc_contig_range in CMA. The PCP draining
-> 	takes several hundred millisecond sometimes though there is no
-> 	memory pressure or a few of pages to be migrated out but CPU were
-> 	fully booked.
-> 
-> 	Your patch perfectly removed those wasted time.
+Using uImage.FIT to store the root filesystem besides kernel and dtb has
+several obvious advantages which are hard to obtain in any other way:
+ * single image accross different storage types
+ * dynamically sized partitions for kernel and rootfs
+ * hash also for rootfs checked by U-Boot before launching kernel
+ * images may include additional filesystems e.g. for localization or
+   branding
 
-I'm not getting a sense here of the overall effect upon userspace
-performance.  As Thomas said last year in
-https://lkml.kernel.org/r/87v92sgt3n.ffs@tglx
+For this to work, the image has to be created with external data and
+sub-images aligned to the system's memory page boundaries, ie.
+ mkimage -E -B 0x1000 -p 0x1000 ...
 
-: The changelogs and the cover letter have a distinct void vs. that which
-: means this is just another example of 'scratch my itch' changes w/o
-: proper justification.
+Booting such images has been supported by U-Boot since v2018.01.
 
-Is there more to all of this than itchiness and if so, well, you know
-the rest ;)
+A previous version of this partition parser is in production use on
+some OpenWrt devices, eg. the BananaPi R64 where using the FIT parser
+allows booting the very same image from eMMC, SD Card or SPI-NAND/UBI
+and also using it as a firmware-upgrade image at the same time.
+The Ubiquiti UniFi 6 LR access served as a reference board with SPI-NOR
+flash and use of the partition parser on top of a mtdblock device.
+
+Most recently U-Boot now passes down the selected configuration
+node name via device tree to allow the partition parser (or userspace
+process via sysfs) to identify the image configuration.
+
+Device Tree schema for that:
+https://github.com/devicetree-org/dt-schema/commit/a24d97d43491e55d4def006213213a6c4045b646
+
+In most cases this partition parser can be used without relying on the
+bootloader to pass-down the configuration node name. The default
+configuration node is used then.
+
+Changes since v2:
+ * use returned length to limit all strings read from fit/dt
+ * use __be32 type for 32-bit values read from fit/dt
+Reported-by: kernel test robot <lkp@intel.com>
+ * Kconfig: select LIBFDT for FIT_PARTITION
+Reported-by: kernel test robot <lkp@intel.com>
+
+Changes since v1:
+ * Use again #ifdef's in partitions/efi to only build against FIT
+   parser symbols if it is actually selected. Otherwise the efi/gpt
+   would unconditionally depend on the FTT parser to be present.
+
+Changes since RFC:
+ * fixed wrong variable used in error path
+ * introduced dedicated Kconfig options to enable partition
+   parsers on mtdblock and ubiblock
+ * drop #ifdef'ery, use IS_ENABLED(...) where needed
+
+Daniel Golle (5):
+  block: add new flag to add partitions read-only
+  block: add partition parser for U-Boot uImage.FIT
+  partitions/efi: add support for uImage.FIT sub-partitions
+  mtd_blkdevs: add option to enable scanning for partitions
+  mtd: ubi: block: add option to enable scanning for partitions
+
+ MAINTAINERS               |   6 +
+ block/blk.h               |   1 +
+ block/partitions/Kconfig  |  15 ++
+ block/partitions/Makefile |   1 +
+ block/partitions/check.h  |   4 +
+ block/partitions/core.c   |   6 +
+ block/partitions/efi.c    |   9 +
+ block/partitions/efi.h    |   3 +
+ block/partitions/fit.c    | 353 ++++++++++++++++++++++++++++++++++++++
+ drivers/mtd/Kconfig       |  11 ++
+ drivers/mtd/mtd_blkdevs.c |   4 +-
+ drivers/mtd/ubi/Kconfig   |  10 ++
+ drivers/mtd/ubi/block.c   |   5 +-
+ 13 files changed, 426 insertions(+), 2 deletions(-)
+ create mode 100644 block/partitions/fit.c
+
+
+base-commit: 187b9ac8c348383f7f36c8413d73ad89e9b1e90a
+-- 
+2.36.0
 

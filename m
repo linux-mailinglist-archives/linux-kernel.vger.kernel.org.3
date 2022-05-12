@@ -2,171 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27CE752487D
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E96B8524886
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351794AbiELJBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 05:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48212 "EHLO
+        id S1351759AbiELJEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 05:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351770AbiELJBV (ORCPT
+        with ESMTP id S235555AbiELJEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 05:01:21 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2085.outbound.protection.outlook.com [40.107.96.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECCA393CA;
-        Thu, 12 May 2022 02:01:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WN83iDQoVigZFCgrX12HcfcyLxAV0otY9pE5tPLu5WhGevWNoImft7mwnLp4j819mN6Vmf+uHvfk+aRPsI2FbVrsgtq1/sayBO09MYwHTADk8DNhI3EIhYri0AiPcfyzqh6nrJjdFmOmLDSE4dYiXCzPeQyin8L6Gmu2GpolCWYKb4uAJjn40ctTrW5+JwzVuXvj2R4o2upnl9Zi2ojAFvJ1YXwH9RPwQHLTvprmRO3Fql2LZpRxlCWE/rtyoWPqwdjrc2qZ4IO7moSukPmZq+HBNjolEMQYW6anSoSOUJOc6Uke9/1xQ4Q2qRBHXRxtzS+JxXG55WNOdPphFMXghg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gYSU66Zq3/bWkhd/67htkG+NbmHF0xf4ozBEaoJ3iT4=;
- b=RJMK317oxUYM/l1hKAi2R+prHq8yCEcDy+83F5hSYOKyJ5jD8/JKbDMsHExriqUBcbuowdRT2DmojCTqAYyHZ0OX3Z9BR58aKC6qRD1SfauV+rpPJ7DQ694dwpqcp0LQ++sJOr3mpysXuqPMGoSk1HGPOr/PtbuUfDIg+eGXVA0Xt6MIlaLDfIvMRc9qrPSuF6IvhgVg5KDudA3aY4GlI0I0/SSM0lHkmX8u+CR3SUkz03HROTSyqY27wDExWTu4UV0vleR7RQizyRkQX4FuoaBGPXEnQa7kfe+mHjc021anLewhd0M2JnUpRUi6mN1Atgx3HOBlo29/ZpnAs6PL7g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gYSU66Zq3/bWkhd/67htkG+NbmHF0xf4ozBEaoJ3iT4=;
- b=SkdxpDqWp65HqwzI1vBEp4cnFMcRTqlspLbUZqsR9i0uWwG4nSR3ouUL3e/oHFkcwMmLRVb4WqBjFFNTIriBCPM75anf/l/AfXd4yESnJbsnzECa5Amoqw4Watx1CnEbDs4B4wFFtgz+IHpsG3N4BVAK1R/BR1BllUkOrVsnYyb7xXqjmdh+1h0rV1XV10CG7pWEGtXhW8ZHrKFaAFKaUiP4+K2yiJHxkkbSWB7/ggNmGQnk/4v90XJbobwim86pVcUFyavatqpb7ssofbNJaLPW6p3YBXb2V5yp5/sLjoJ2XXztW96Xv8YYIQEZcOp5PqsOU1wcV4ln5QBy1cYNaQ==
-Received: from MW4PR03CA0333.namprd03.prod.outlook.com (2603:10b6:303:dc::8)
- by DM6PR12MB3881.namprd12.prod.outlook.com (2603:10b6:5:148::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.23; Thu, 12 May
- 2022 09:01:19 +0000
-Received: from CO1NAM11FT064.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:dc:cafe::be) by MW4PR03CA0333.outlook.office365.com
- (2603:10b6:303:dc::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14 via Frontend
- Transport; Thu, 12 May 2022 09:01:18 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.236) by
- CO1NAM11FT064.mail.protection.outlook.com (10.13.175.77) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5250.13 via Frontend Transport; Thu, 12 May 2022 09:01:18 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- DRHQMAIL109.nvidia.com (10.27.9.19) with Microsoft SMTP Server (TLS) id
- 15.0.1497.32; Thu, 12 May 2022 09:01:13 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 12 May 2022 02:01:13 -0700
-Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.14) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server id 15.2.986.22 via Frontend
- Transport; Thu, 12 May 2022 02:01:10 -0700
-From:   Akhil R <akhilrajeev@nvidia.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <akhilrajeev@nvidia.com>
-Subject: [PATCH 2/2] arm64: tegra: Add Tegra234 GPCDMA device tree node
-Date:   Thu, 12 May 2022 14:30:52 +0530
-Message-ID: <20220512090052.47840-3-akhilrajeev@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220512090052.47840-1-akhilrajeev@nvidia.com>
-References: <20220512090052.47840-1-akhilrajeev@nvidia.com>
+        Thu, 12 May 2022 05:04:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D5301C06F4
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:04:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652346271;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6sQcqAYa2g0Ny9nhwKlQtaEoOvA7oM/vQxwpgMFwV6g=;
+        b=PKDtcEXQ62DlV/wQKZO8HekyUTkcJqxf7VZs8Ybx7vUG20v26xBhlFtGZ7dXKfpxIf08dM
+        3e0APVgdON/D4Z0Z2aaf8A3A2wHQY4kCwSkqWr8OMX9+BUaaHz9+IK0WIz0PAoWvT7bEvP
+        xmOu7HrrmPGkZTpsUgaRmPvfH/cSXnM=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-112-WgA30_ZxPHGX_O4rfh-L1Q-1; Thu, 12 May 2022 05:04:27 -0400
+X-MC-Unique: WgA30_ZxPHGX_O4rfh-L1Q-1
+Received: by mail-wm1-f70.google.com with SMTP id 205-20020a1c02d6000000b003928cd3853aso4101166wmc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:04:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=6sQcqAYa2g0Ny9nhwKlQtaEoOvA7oM/vQxwpgMFwV6g=;
+        b=rbCT94skQw2wsrso8Vt0rmcqhfeXp8022v367+pyk002vkrbLlpmbL1LOVRZ1EJsnd
+         SK5UAiTzLuoxTURCgyMNpyguCTh0l/y4at6j6yM+7CEn2kXz8FDFNNCs6TO+bpQaM/QO
+         S/It+Fu9VS6+1h4B17amSyuxJh301z+IThGNMhD2vzzj9KZlnsgPs8ly4XHCysXW8dpx
+         Qy7YUdTcB2c4fudTAb1tjoPoGT6OJY0++bxy/qmNw6zQWNfUyFxr4FtTeDM0a5yI/OaR
+         Nmpc2ABW1wiieDOOS8lZxzxsjuYQIVPpLlr+NMpw1D4bngAvGX1MJkArzA7+vHuR9Amb
+         tAKg==
+X-Gm-Message-State: AOAM530fZB/w28bCdc4aPHbGy5AgiL7mN8AUsqu+hZ8t1gMQtkaggP+o
+        hVGOglU4VGcbJ4t769XI+l1gYpLqDvny/FxjucYSNKD4LQbStdpXyFU/D+n215jUGBrpKoMXAOu
+        IRCWNRm4jGfzN7R/PoNEpMc3l
+X-Received: by 2002:a05:600c:1d9f:b0:394:7a51:cb8b with SMTP id p31-20020a05600c1d9f00b003947a51cb8bmr9020115wms.163.1652346266043;
+        Thu, 12 May 2022 02:04:26 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzp1ISu6PPULzoE8l/q8W72KZf8BfW97byHFvPuiQThQtQpRsNu88feZLxked2oo9eyxI7NOw==
+X-Received: by 2002:a05:600c:1d9f:b0:394:7a51:cb8b with SMTP id p31-20020a05600c1d9f00b003947a51cb8bmr9020083wms.163.1652346265761;
+        Thu, 12 May 2022 02:04:25 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c701:d200:ee5d:1275:f171:136d? (p200300cbc701d200ee5d1275f171136d.dip0.t-ipconnect.de. [2003:cb:c701:d200:ee5d:1275:f171:136d])
+        by smtp.gmail.com with ESMTPSA id v3-20020a05600c428300b00394867d66ddsm1931393wmc.35.2022.05.12.02.04.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 02:04:25 -0700 (PDT)
+Message-ID: <8f2af450-1080-2dcd-9c85-6190e7e14f27@redhat.com>
+Date:   Thu, 12 May 2022 11:04:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9267846b-35c5-4224-f184-08da33f5fa65
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3881:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB38816EA5F81B53EF5AACB9FBC0CB9@DM6PR12MB3881.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: grJO34I8C+9rtP3cAz7SG6fUJvLpgfP2reWduS4BtG7iuPNPGj4ZuCOuDa9UlSwGia1RKh3PujsLDtRE0iusbTyxQuflMEOsvumuX6RkROR1uVoYKyEsBlwS9NLnej2mxYfrxsx6BAjcT2KiUlYq1vjssWmddvkny1HegiZaSrCquC9OhST/kGowHx2zKHPYVO7AqSNxDDtAuSrjz1BMMXxJz3LtfNnCF1ieZ2XI1CgCw3J8tohFY+jlHx27ZZQUdH+UDwBNFwQGSmpPUs02EKmzUZvnTXBXOT6xCWHUX5elrdHt2S3PgPRcWhXleiO/VkBj8dUVOSqxw/zR4dYrZo0svQ/RwIGOu1PO0TqF88CA/UBbvs2vxr2aToJ28ZVgk+uVq4mrpQKZOyZUbGLLlR92MZEb+Tfr1GfD6wnsQTC6R8GTOgnVmLYRpjTVcAua6W31Ol3IUrxNKlIiG/jgheJjt2KeTws5iMiWGbJ0Jny9vSiy+8gxJyY+Qwkw0rNaASxiw8zFGXC+Q+d/jC8UheK+gJZm0UA4PWbb25Imqx2ubE2Nd653E/+2aAT6lJgl+Y2WP4tk9keg4bsEvi8ZHoLPIEwlOJuQDir/CwXx1T3p6b3KZSNSVUSrMwkpnV8FB1cg6kLEMPtQS4Fbdz7EXyowZ78AIic73NAcnnzVn4fR9/nRFhddDwBheCS6PN7tmjznHvq7fRF44HGopGhdlQ==
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(6666004)(316002)(36756003)(26005)(110136005)(82310400005)(2616005)(70206006)(70586007)(1076003)(8676002)(107886003)(4326008)(186003)(47076005)(508600001)(7696005)(426003)(336012)(86362001)(2906002)(81166007)(356005)(36860700001)(5660300002)(8936002)(40460700003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2022 09:01:18.6085
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9267846b-35c5-4224-f184-08da33f5fa65
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT064.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3881
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] x86/mm: Fix marking of unused sub-pmd ranges
+Content-Language: en-US
+To:     Adrian-Ken Rueegsegger <ken@codelabs.ch>,
+        dave.hansen@linux.intel.com, osalvador@suse.de
+Cc:     luto@kernel.org, peterz@infradead.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220509090637.24152-1-ken@codelabs.ch>
+ <20220509090637.24152-2-ken@codelabs.ch>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220509090637.24152-2-ken@codelabs.ch>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device tree nodes for Tegra234 GPCDMA
+On 09.05.22 11:06, Adrian-Ken Rueegsegger wrote:
+> The unused part precedes the new range spanned by the start, end
+> parameters of vmemmap_use_new_sub_pmd. This means it actually goes from
+> ALIGN_DOWN(start, PMD_SIZE) up to start. Use the correct address when
+> applying the mark using memset.
+> 
+> Fixes: 8d400913c231 ("x86/vmemmap: handle unpopulated sub-pmd ranges")
+> Signed-off-by: Adrian-Ken Rueegsegger <ken@codelabs.ch>
+> ---
+>  arch/x86/mm/init_64.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
+> index 96d34ebb20a9..e2942335d143 100644
+> --- a/arch/x86/mm/init_64.c
+> +++ b/arch/x86/mm/init_64.c
+> @@ -902,6 +902,8 @@ static void __meminit vmemmap_use_sub_pmd(unsigned long start, unsigned long end
+>  
+>  static void __meminit vmemmap_use_new_sub_pmd(unsigned long start, unsigned long end)
+>  {
+> +	const unsigned long page = ALIGN_DOWN(start, PMD_SIZE);
+> +
+>  	vmemmap_flush_unused_pmd();
+>  
+>  	/*
+> @@ -914,8 +916,7 @@ static void __meminit vmemmap_use_new_sub_pmd(unsigned long start, unsigned long
+>  	 * Mark with PAGE_UNUSED the unused parts of the new memmap range
+>  	 */
+>  	if (!IS_ALIGNED(start, PMD_SIZE))
+> -		memset((void *)start, PAGE_UNUSED,
+> -			start - ALIGN_DOWN(start, PMD_SIZE));
+> +		memset((void *)page, PAGE_UNUSED, start - page);
+>  
+>  	/*
+>  	 * We want to avoid memset(PAGE_UNUSED) when populating the vmemmap of
 
-Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
----
- arch/arm64/boot/dts/nvidia/tegra234.dtsi | 43 ++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+As the x86 code was based on my s390x code, I assume that this was
+accidentally introduced in the x86 variant.
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-index cb3af539e477..860c3cc68cea 100644
---- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-@@ -21,6 +21,49 @@
- 
- 		ranges = <0x0 0x0 0x0 0x40000000>;
- 
-+		gpcdma: dma-controller@2600000 {
-+			compatible = "nvidia,tegra194-gpcdma",
-+				      "nvidia,tegra186-gpcdma";
-+			reg = <0x2600000 0x210000>;
-+			resets = <&bpmp TEGRA234_RESET_GPCDMA>;
-+			reset-names = "gpcdma";
-+			interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 84 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 86 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 87 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 88 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 89 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 91 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 92 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 93 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>;
-+			#dma-cells = <1>;
-+			iommus = <&smmu_niso0 TEGRA234_SID_GPCDMA>;
-+			dma-coherent;
-+			status = "okay";
-+		};
-+
- 		aconnect@2900000 {
- 			compatible = "nvidia,tegra234-aconnect",
- 				     "nvidia,tegra210-aconnect";
+
+We'd be marking the wrong range PAGE_UNUSED.
+
+
+Your fix looks correct to me:
+
+Reviewed-by: David Hildenbrand <david@redhat.com>
+
+
+Do we want to cc stable?
+
 -- 
-2.17.1
+Thanks,
+
+David / dhildenb
 

@@ -2,97 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2F19524F9E
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E2F6524FA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355116AbiELONQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 10:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32910 "EHLO
+        id S1355131AbiELOOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 10:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355118AbiELONC (ORCPT
+        with ESMTP id S237439AbiELOO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 10:13:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7525562CEB
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:13:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08C2761AC0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 14:13:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EB3CC34117;
-        Thu, 12 May 2022 14:12:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652364780;
-        bh=68GFkRgsrtca9GWvE/A57OESbgWrNobjqyS8pJVM7kA=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=mztajfliKVo8agx+Q0g9wLIjqs8vonKuc7nEbgPpRWPEKw/8YEk4ud55fybgtQedV
-         9kAacqe3ZgYgyDbON5D4W6DLTYQHYPAeJR5aPIVe4dKGy+ccVFrmBl/Tm9Yms3EfYZ
-         ViF1hq0qz6lLvWA1xjLa6pLLm/JEzq2dDcOq61LRZZ1WCNVTND6s+K9CRIt2EB73KE
-         tEdf93K62NPXKJxmPcPABkUL7hMYo8XO2nbQrdJT5uyJdgFKf5WuR4tF/5LT0IHbgQ
-         icBKcm5YJcG3YmiNybUEDUtRwXya7MCm0pGL+F3fi/Px8/7YgxgiZbcc9gYfUCRmC/
-         BAg2Nu9akh7EQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     tanghui20@huawei.com, lgirdwood@gmail.com
-Cc:     alsa-devel@alsa-project.org, tiwai@suse.com, ricardw@axis.com,
-        linux-kernel@vger.kernel.org, ryan.lee.analog@gmail.com,
-        steve@sk2.org, perex@perex.cz
-In-Reply-To: <20220512074640.75550-1-tanghui20@huawei.com>
-References: <20220512074640.75550-1-tanghui20@huawei.com>
-Subject: Re: [PATCH -next v2 0/2] ASoC: codecs: Fix build error
-Message-Id: <165236477836.1016627.1128343126631448820.b4-ty@kernel.org>
-Date:   Thu, 12 May 2022 15:12:58 +0100
+        Thu, 12 May 2022 10:14:27 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE09024EA02
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:14:25 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d22so4981927plr.9
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:14:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FuS/ZgfSwC6kSt4qIvn3GFGZYvOzE0L2SWUhv9P3AZU=;
+        b=M6M2RBJZBMGhUpzDnpJTlBCP/1NlQvrn3MAPUOVbiVmQVneFnd/IdoEzdV/Ts0RSxj
+         /sMNT61JH0UKaA+qe6ctPJ4SYeNyiaohtE0dGIfHbZ9Cg5ca2eqNUmbZz7HXQ+yOYXac
+         s3svq/Bs1P5B72M2f+ereQ2ezZKD/GmQtJCF5om56RdwpuDLSnPKo0YAQjctT2jvY3hu
+         6/1kyIzYSjUwU4AIX/to3PUXR7y2dyZxl9aSXjevImr/TLxfywO4feB34OtacCtXi4BG
+         3Tdimw90q5VqakA8Qk6STfelnaPYaADMlbY01UPuNf+ctPNFMAyviYjtp/cqIpQLwVN/
+         uW7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FuS/ZgfSwC6kSt4qIvn3GFGZYvOzE0L2SWUhv9P3AZU=;
+        b=HbeKIaME1w59P2vPKN4JJgtkJL1s2jTJ+ttHiLlyWKvpykgrH6Mkk5BH2u+B5Aop0o
+         pH/3Zqe88pE/YHngYMniEpH/bOq978s2r+Ha+PbMxnwkMot70MoPxwVrLigP3Go8Qkke
+         oCH6xBcDYLqBBMEreujoXKQu3pVFhwnC4tEY5Iy4z+vV780fz7Nfwam7x2a94j+3lqVQ
+         nGxlXsX+ZcS1y/AWE5TKLyQfaKSjw0lW9dJOBGzCjGd/0MAjJKQAGi47ttWZUQeUoY25
+         hrdl9hDChLAxkCzHrHfooCvOwgHbOYVlRWEO6SV6ZUj4krdeADMn3pzQ6/yUmSIBNEp2
+         UcCQ==
+X-Gm-Message-State: AOAM532LHKG731P+yZGgS7ITai4Zee8ceWqCpPp/n2mhckDXPIKG9q7L
+        bU2fLCLVThL6T6Dh+5UCf/Lq5w==
+X-Google-Smtp-Source: ABdhPJx4JPQbkZ31MyCPnBd/otdiCyBaejNm1PnUMk6ARMDfKx0wO0sZ6mVRrkYprBHt+7b3ScWpmQ==
+X-Received: by 2002:a17:902:e149:b0:15e:bafb:8760 with SMTP id d9-20020a170902e14900b0015ebafb8760mr30657461pla.155.1652364865185;
+        Thu, 12 May 2022 07:14:25 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id b9-20020a170902a9c900b0015f186be48asm3980280plr.36.2022.05.12.07.14.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 07:14:24 -0700 (PDT)
+Date:   Thu, 12 May 2022 14:14:20 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH 1/2] x86/crash: Disable virt in core NMI crash handler to
+ avoid double list_add
+Message-ID: <Yn0WPBGGI4VcbM4S@google.com>
+References: <20220511234332.3654455-1-seanjc@google.com>
+ <20220511234332.3654455-2-seanjc@google.com>
+ <87wnervxb7.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87wnervxb7.ffs@tglx>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 May 2022 15:46:38 +0800, Hui Tang wrote:
-> Fix two build error, as follows:
+On Thu, May 12, 2022, Thomas Gleixner wrote:
+> Sean,
 > 
-> Changes in v2:
->  * Add missing header files instead of adding dependencies.
+> On Wed, May 11 2022 at 23:43, Sean Christopherson wrote:
+> > @@ -840,6 +858,20 @@ void nmi_shootdown_cpus(nmi_shootdown_cb callback)
+> >  	unsigned long msecs;
+> >  	local_irq_disable();
+> >  
+> > +	/*
+> > +	 * Invoking multiple callbacks is not currently supported, registering
+> > +	 * the NMI handler twice will cause a list_add() double add BUG().
+> > +	 * The exception is the "nop" handler in the emergency reboot path,
+> > +	 * which can run after e.g. kdump's shootdown.  Do nothing if the crash
+> > +	 * handler has already run, i.e. has already prepared other CPUs, the
+> > +	 * reboot path doesn't have any work of its to do, it just needs to
+> > +	 * ensure all CPUs have prepared for reboot.
 > 
-> Hui Tang (2):
->   ASoC: max98396: Fix build error for implicit function declaration
->   ASoC: tlv320adc3xxx: Fix build error for implicit function declaration
+> This is confusing at best. The double list add is just one part of the
+> problem, which would be trivial enough to fix.
 > 
-> [...]
+> The real point is that after the first shoot down all other CPUs are
+> stuck in crash_nmi_callback() and won't respond to the second NMI.
 
-Applied to
+Well that's embarrasingly obvious in hindsight.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+> 
+> So trying to run this twice is completely pointless and guaranteed to
+> run into the timeout.
+> 
+> > +	 */
+> > +	if (shootdown_callback) {
+> > +		WARN_ON_ONCE(callback != nmi_shootdown_nop);
+> > +		return;
+> 
+> Instead of playing games with the callback pointer, I prefer to make
+> this all explicit. Delta patch below.
+
+Much better.  If you're planning on doing fixup, can you also include a comment
+tweak about why the callback is left set?  If not, I'll do it in v2.  A bit
+overkill, but it's another thing that for me was obvious only once I realized "why".
 
 Thanks!
 
-[1/2] ASoC: max98396: Fix build error for implicit function declaration
-      (no commit info)
-[2/2] ASoC: tlv320adc3xxx: Fix build error for implicit function declaration
-      commit: 19c5bda74dc45fee598a57600b550c9ea7662f10
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+diff --git a/arch/x86/kernel/reboot.c b/arch/x86/kernel/reboot.c
+index 4e3a839ae146..808d3e75fb2d 100644
+--- a/arch/x86/kernel/reboot.c
++++ b/arch/x86/kernel/reboot.c
+@@ -896,7 +896,11 @@ void nmi_shootdown_cpus(nmi_shootdown_cb callback)
+                msecs--;
+        }
+ 
+-       /* Leave the nmi callback set */
++       /*
++        * Leave the nmi callback set, shootdown is a one-time thing.  Clearing
++        * the callback could result in a NULL pointer dereference if a CPU
++        * (finally) responds after the timeout expires.
++        */
+ }
+ 
+ static inline void nmi_shootdown_cpus_on_restart(void)

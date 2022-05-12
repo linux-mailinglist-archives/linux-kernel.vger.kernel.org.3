@@ -2,118 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 071CA524E10
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 772AA524E14
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354276AbiELNSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 09:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36686 "EHLO
+        id S1354287AbiELNT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 09:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354268AbiELNSr (ORCPT
+        with ESMTP id S1354279AbiELNTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 09:18:47 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF49250E8E;
-        Thu, 12 May 2022 06:18:46 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id be20so6151421edb.12;
-        Thu, 12 May 2022 06:18:46 -0700 (PDT)
+        Thu, 12 May 2022 09:19:51 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B30250E8E
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:19:46 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-edeb6c3642so6592351fac.3
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:19:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=V2JNCP+HsfCN+EYLETrCl+Q2QImYlR/SvAjA8iddPzo=;
-        b=evK7+Zcvz2xVuylTV6weOBTX9rOxmYedGbk9SMQuehhsEWlXsR1jHtd4FcUGAj47WB
-         Hzk7jbG3PmoXiy3L9SfBDVuVXBNLP/g6qViO8Ixjbz5q/sv8pcILCK3e1AZWf/KcvFHo
-         jOHXn8w61z1bnQbZW0IWXfaRYjUT62sKTUuxQ2qAQ7U1gk4G0yVAzD/0flUAbSo8p7O6
-         58JlQTZhiNsIGmYDPDUWAT1OLZOL+1tGvocVtmLFSPILQXSPADQmzpERboQtrZczyAod
-         zhFR7j6njZvfmCOS4FXdA7OwKw/yKgYVimcIwhk/2yYjB2nQ10Cqi2HOBVG9u9pBNNBT
-         Y7Bg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rnW1lNdXaHOrseNx+8VZQkCoh4hVp7eYD17JDIqBNtY=;
+        b=oi7x1SH011n4JulssPJJ4GDfjqKYhSYQ0T1tiXB9tvhOy5Mdy+Z2PCzNAsF/7iEFCB
+         ukYsBCXrB1SmnFjtouzUbdnGqEvBkCgNZ6K2pDdf9JUPG+14CPagbSXalfyEgPFuJ4Bq
+         mXBGFNv1v8gnl+euHb+kBd3WEpGNNxHVvhWTyHlBXlUdlUsadWCM/Y6QowcbTg+Ijk7U
+         rJVnJVj8st0ixwA+ZgS20uf/eDSDjA/9RKZXa8/aFYaMNnd/cdcNMU+eXVXdez2BFjaO
+         adWE499AXKAD9+6tdp+EsvjFRq0Gtr3Ctt7xvI4uC8zJ9UXKQYgVs00vMMHTwynaf55c
+         RNcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=V2JNCP+HsfCN+EYLETrCl+Q2QImYlR/SvAjA8iddPzo=;
-        b=6M2hhIIh6eQqNMZ6nEIdboStbZvLIk1kXDiRRtonT+y4FgS7srW22bb6OAdAgaArxn
-         eQmZZmlmzS7EYR+AT5NwNsUIfGFnN9obZVluZyKvVJhwGGilaztVrkmrq9er69WxcF+u
-         2lehEZ94UL3SALETA6aMYHCGkL4Ifkyj4saXxJmm2IHRNlI1VNAMflxNJAqYWdUUQ+lF
-         HwV04hguC7W4DOsqiAg+uiPpnu309s8fRiL9k4TAQZWiovfSy83NDdPbWcUGiUTdydkx
-         u50X0ramdJMdK0yCPxZL7V4Y/ZdnGUbtQjDZwP2yPxGPFH6OMt1vGziKWm6+y26xw/Ai
-         iSyQ==
-X-Gm-Message-State: AOAM53210QyLb3R56dQELU5lQtIINfN4mQbEhg7SyjKUjUnuq8Bfb1qU
-        /uPqPk+r6d6YI52W1IMwovU=
-X-Google-Smtp-Source: ABdhPJxOpJ1Ehy5Z/UEMu9MD6Lq5Gh2Lb+BAQDVB8F7/0zk71rTur/33E6WTKe2v8JQLR/F+W+OlZQ==
-X-Received: by 2002:a05:6402:4301:b0:427:c8e4:4acd with SMTP id m1-20020a056402430100b00427c8e44acdmr35297088edc.230.1652361524776;
-        Thu, 12 May 2022 06:18:44 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id r2-20020a056402234200b0042617ba63besm2538718eda.72.2022.05.12.06.18.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 06:18:44 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <8a15c4b4-cabe-7bc3-bd98-bd669d586616@redhat.com>
-Date:   Thu, 12 May 2022 15:18:40 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rnW1lNdXaHOrseNx+8VZQkCoh4hVp7eYD17JDIqBNtY=;
+        b=k3yo2/EUEOeGtj66H922uSmX7APChiq+zDy80N3JlD1hTGb9mmXf7eE+MiQPJhETPy
+         zp6dqZdXYr1SteeGMYbUIi62yxnvZhatrBhCkNGCArkAReaPU+rwpD8P85LwHOXugBnc
+         9InG0fzlQT9vZCOkVm9YrLePB/AvVHs4ICG//VOdh2fApoW12daN16sZ7SIQRzV7xFW5
+         OmhZ/aIMXk5y1tilkQ6fCfU0X69xdHuu9wgxmKvdDrZh84Gns12LKC/wtr6E19a3HOJp
+         r914/Y/hGki6oFrw5sCnJJ+A5GrXIMpolpFgqvlvCi6QHnTdWmcH03fL37JP8mHydbnz
+         NN0Q==
+X-Gm-Message-State: AOAM532oeB5itvyH2ZpHDJiudXymuaSw2ceQwmr44gDJ+GFuachiOA9j
+        qnIm1tTHuFCHHgHPDC/i/RY8KLxJnF7qHxPyWdUHXw==
+X-Google-Smtp-Source: ABdhPJzJ9UCZzyIr9uCRxfqtNYldmP9u2JwxV1+G+hxFwMYyTA5WI0Koxn2yjLH38Pjz4Dugu1UDn8pxJ9yV+0b+L+A=
+X-Received: by 2002:a05:6870:b61e:b0:ec:a426:bab5 with SMTP id
+ cm30-20020a056870b61e00b000eca426bab5mr5478149oab.163.1652361585876; Thu, 12
+ May 2022 06:19:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v11 14/16] KVM: x86/vmx: Flip Arch LBREn bit on guest
- state change
-Content-Language: en-US
-To:     "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "kan.liang@linux.intel.com" <kan.liang@linux.intel.com>,
-        "like.xu.linux@gmail.com" <like.xu.linux@gmail.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220506033305.5135-1-weijiang.yang@intel.com>
- <20220506033305.5135-15-weijiang.yang@intel.com>
- <9f19a5eb-3eb0-58a2-e4ee-612f3298ba82@redhat.com>
- <9e2b5e9f-25a2-b724-c6d7-282dc987aa99@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <9e2b5e9f-25a2-b724-c6d7-282dc987aa99@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <0000000000004c57c005b0fc4114@google.com> <000000000000b15b3505d7d9e8ca@google.com>
+In-Reply-To: <000000000000b15b3505d7d9e8ca@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 12 May 2022 15:19:34 +0200
+Message-ID: <CACT4Y+YOJU91CLaNhFosG7koHPpz8U38nurXyboXb_9gGw=Fgg@mail.gmail.com>
+Subject: Re: [syzbot] INFO: task hung in usb_get_descriptor
+To:     syzbot <syzbot+31ae6d17d115e980fd14@syzkaller.appspotmail.com>
+Cc:     brouer@redhat.com, coreteam@netfilter.org, davem@davemloft.net,
+        edumazet@google.com, eman.mohamed@rofaidarealestate.com,
+        gregkh@linuxfoundation.org, gustavoars@kernel.org,
+        hdanton@sina.com, ingrassia@epigenesys.com, johan@kernel.org,
+        kaber@trash.net, kadlec@blackhole.kfki.hu,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        mathias.nyman@linux.intel.com, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, pablo@netfilter.org,
+        skhan@linuxfoundation.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/11/22 09:43, Yang, Weijiang wrote:
->>
->> Instead of using flip_arch_lbr_ctl, SMM should save the value of the MSR
->> in kvm_x86_ops->enter_smm, and restore it in kvm_x86_ops->leave_smm
->> (feel free to do it only if guest_cpuid_has(vcpu, X86_FEATURE_LM), i.e.
->> the 32-bit case can be ignored).
-> 
-> In the case of migration in SMM, I assume kvm_x86_ops->enter_smm() 
-> called in source side
-> 
-> and kvm_x86_ops->leave_smm() is called at destination, then should the 
-> saved LBREn be transferred
-> 
-> to destination too? The destination can rely on the bit to defer setting 
-> LBREn bit in
+On Sat, 12 Feb 2022 at 23:43, syzbot
+<syzbot+31ae6d17d115e980fd14@syzkaller.appspotmail.com> wrote:
+>
+> syzbot suspects this issue was fixed by commit:
+>
+> commit 363eaa3a450abb4e63bd6e3ad79d1f7a0f717814
+> Author: Shuah Khan <skhan@linuxfoundation.org>
+> Date:   Tue Mar 30 01:36:51 2021 +0000
+>
+>     usbip: synchronize event handler with sysfs code paths
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1616e872700000
+> start commit:   4fa56ad0d12e Merge tag 'for-linus' of git://git.kernel.org..
+> git tree:       upstream
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=144ecdb0be3abc07
+> dashboard link: https://syzkaller.appspot.com/bug?extid=31ae6d17d115e980fd14
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12548d11d00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13ec77e9d00000
+>
+> If the result looks correct, please mark the issue as fixed by replying with:
+>
+> #syz fix: usbip: synchronize event handler with sysfs code paths
 
-Hi, it's transferred automatically if the MSR is saved in the SMM save 
-state area.  Both enter_smm and leave_smm can access the save state area.
+Based on subsystem and commit subject looks legit:
 
-The enter_smm callback is called after saving "normal" state, and it has 
-to save the state + clear the bit; likewise, the leave_smm callback is 
-called before saving "normal" state and will restore the old value of 
-the MSR.
-
-Thanks,
-
-Paolo
-
-> VMCS until kvm_x86_ops->leave_smm() is called. is it good? thanks!
-
+#syz fix: usbip: synchronize event handler with sysfs code paths

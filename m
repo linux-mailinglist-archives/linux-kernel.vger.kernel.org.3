@@ -2,78 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0699D5245C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 08:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E285245C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 08:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350218AbiELG2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 02:28:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56926 "EHLO
+        id S1350324AbiELG25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 02:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350406AbiELG2W (ORCPT
+        with ESMTP id S1350207AbiELG2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 02:28:22 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5901D5F8D6;
-        Wed, 11 May 2022 23:27:55 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 12 May 2022 02:28:55 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09AC8185CB5
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 23:28:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 19BEA21ACB;
-        Thu, 12 May 2022 06:27:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1652336874; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/Yif5rQWHgrq+WHn14NbPf9qK8+CDYsZFAUQ+p+C2iM=;
-        b=NK97LIFCPNWla3WDhxnaKX/cUQmu+IBEFCWDR6Qne3sDHfcLOAfk9oTkX4tKw8mEyaFMNj
-        lsGniYn9j9O75NhIqgzWLMGajpHH+fVU74lbofJr5ocHyBIukDPYG0SdiYWoFYlFsBiPNa
-        IUvemT8bUL5LCK59GLGMQQDFzKk2ZeY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1652336874;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/Yif5rQWHgrq+WHn14NbPf9qK8+CDYsZFAUQ+p+C2iM=;
-        b=A10xl/mGFm1BaaG+a7kggJcQHhrtAtcEFOmhQawcDjOo58ERVivE6zbqsSFhU56UnEuSI0
-        5G45mdKef8qFg9CA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EFAC313ABE;
-        Thu, 12 May 2022 06:27:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id u/YAOemofGKUTgAAMHmgww
-        (envelope-from <hare@suse.de>); Thu, 12 May 2022 06:27:53 +0000
-Message-ID: <4bd4318b-a753-6453-a815-716fbfffab3f@suse.de>
-Date:   Thu, 12 May 2022 08:27:53 +0200
+        by sin.source.kernel.org (Postfix) with ESMTPS id 53D17CE2811
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:28:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98F90C385B8;
+        Thu, 12 May 2022 06:28:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652336930;
+        bh=86ZkoUSlcv+cLdSEqCEOYta5lwjJpAX090c8eXe4Ytw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=t1MJpFJhUtfs+gP2fnP+9UIPJVJ9U3Qo8C96iGR+M5DH6AhIXKlDZYafTYqttPw4p
+         cnYtjAmNEq9dwXyfHgdpd5/26eCbndIfoCqUdq+xxqpFqLpT6i6tzkfpeqrloePNbP
+         0U6dh8l/JIGEb+gQv/UZCaG4F63M/p2LASAYK2NDrHlQgzfvLsaypf8vlhuREE7AnS
+         p84q9bMHCvTDWRdzn4s1yLdHNLIBaN9r8CxeMAr3q+fUXuTqLWbGyQEjtHyExRMB1H
+         DUaycNkNlRetVXRZfEKr5QjCC6yqUMdUtWBq6ncbgf6NymEW4g/o+PmOEAfPcGjDpp
+         dfY1ohLwEl/UQ==
+Date:   Thu, 12 May 2022 09:28:42 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Zhouguanghui (OS Kernel)" <zhouguanghui1@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "xuqiang (M)" <xuqiang36@huawei.com>
+Subject: Re: [PATCH] memblock: config the number of init memblock regions
+Message-ID: <YnypGu1Cu2xPQ1nA@kernel.org>
+References: <20220511010530.60962-1-zhouguanghui1@huawei.com>
+ <20220510185523.3f7479b8ffc49a8a7c17d328@linux-foundation.org>
+ <YntRlrwJeP40q6Hg@kernel.org>
+ <73da782c847b413d9b81b0c2940ab13c@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v3 05/23] ata: libahci_platform: Explicitly set rc on
- devres_alloc failure
-Content-Language: en-US
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220511231810.4928-1-Sergey.Semin@baikalelectronics.ru>
- <20220511231810.4928-6-Sergey.Semin@baikalelectronics.ru>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20220511231810.4928-6-Sergey.Semin@baikalelectronics.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+In-Reply-To: <73da782c847b413d9b81b0c2940ab13c@huawei.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,61 +60,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/12/22 01:17, Serge Semin wrote:
-> It's better for readability and maintainability to explicitly assign an
-> error number to the variable used then as a return value from the method
-> on the cleanup-on-error path. So adding new code in the method we won't
-> have to think whether the overridden rc-variable is set afterward in case
-> of an error. Saving one line of code doesn't worth it especially seeing
-> the rest of the ahci_platform_get_resources() function errors handling
-> blocks do explicitly write errno to rc.
+On Thu, May 12, 2022 at 02:46:25AM +0000, Zhouguanghui (OS Kernel) wrote:
+> 在 2022/5/11 14:03, Mike Rapoport 写道:
+> > On Tue, May 10, 2022 at 06:55:23PM -0700, Andrew Morton wrote:
+> >> On Wed, 11 May 2022 01:05:30 +0000 Zhou Guanghui <zhouguanghui1@huawei.com> wrote:
+> >>
+> >>> During early boot, the number of memblocks may exceed 128(some memory
+> >>> areas are not reported to the kernel due to test failures. As a result,
+> >>> contiguous memory is divided into multiple parts for reporting). If
+> >>> the size of the init memblock regions is exceeded before the array size
+> >>> can be resized, the excess memory will be lost.
+> > 
+> > I'd like to see more details about how firmware creates that sparse memory
+> > map in the changelog.
+> > 
 > 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> The scenario is as follows: In a system using HBM, a multi-bit ECC error 
+> occurs, and the BIOS saves the corresponding area (for example, 2 MB). 
+> When the system restarts next time, these areas are isolated and not 
+> reported or reported as EFI_UNUSABLE_MEMORY. Both of them lead to an 
+> increase in the number of memblocks, whereas EFI_UNUSABLE_MEMORY leads 
+> to a larger number of memblocks.
 > 
-> ---
-> 
-> Changelog v2:
-> - Drop rc variable initialization (@Damien)
-> ---
->   drivers/ata/libahci_platform.c | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/ata/libahci_platform.c b/drivers/ata/libahci_platform.c
-> index 32495ae96567..f7f9bfcfc164 100644
-> --- a/drivers/ata/libahci_platform.c
-> +++ b/drivers/ata/libahci_platform.c
-> @@ -389,7 +389,7 @@ struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
->   	struct ahci_host_priv *hpriv;
->   	struct clk *clk;
->   	struct device_node *child;
-> -	int i, enabled_ports = 0, rc = -ENOMEM, child_nodes;
-> +	int i, enabled_ports = 0, rc, child_nodes;
->   	u32 mask_port_map = 0;
->   
->   	if (!devres_open_group(dev, NULL, GFP_KERNEL))
-> @@ -397,8 +397,10 @@ struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
->   
->   	hpriv = devres_alloc(ahci_platform_put_resources, sizeof(*hpriv),
->   			     GFP_KERNEL);
-> -	if (!hpriv)
-> +	if (!hpriv) {
-> +		rc = -ENOMEM;
->   		goto err_out;
-> +	}
->   
->   	devres_add(dev, hpriv);
->   
-I disagree.
-As 'rc' is now only initialized within a conditional we're risking 'rc' 
-will be left uninitialized.
-And in the end, it's a matter of style; this patch doesn't change the 
-flow of events and the benefits are hard to see.
+> For example, if the EFI_UNUSABLE_MEMORY type is reported:
+> ...
+> memory[0x92]    [0x0000200834a00000-0x0000200835bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
+> memory[0x93]    [0x0000200835c00000-0x0000200835dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
+> memory[0x94]    [0x0000200835e00000-0x00002008367fffff], 0x0000000000a00000 bytes on node 7 flags: 0x0
+> memory[0x95]    [0x0000200836800000-0x00002008369fffff], 0x0000000000200000 bytes on node 7 flags: 0x4
+> memory[0x96]    [0x0000200836a00000-0x0000200837bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
+> memory[0x97]    [0x0000200837c00000-0x0000200837dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
+> memory[0x98]    [0x0000200837e00000-0x000020087fffffff], 0x0000000048200000 bytes on node 7 flags: 0x0
+> memory[0x99]    [0x0000200880000000-0x0000200bcfffffff], 0x0000000350000000 bytes on node 6 flags: 0x0
+> memory[0x9a]    [0x0000200bd0000000-0x0000200bd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
+> memory[0x9b]    [0x0000200bd0200000-0x0000200bd07fffff], 0x0000000000600000 bytes on node 6 flags: 0x0
+> memory[0x9c]    [0x0000200bd0800000-0x0000200bd09fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
+> memory[0x9d]    [0x0000200bd0a00000-0x0000200fcfffffff], 0x00000003ff600000 bytes on node 6 flags: 0x0
+> memory[0x9e]    [0x0000200fd0000000-0x0000200fd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
+> memory[0x9f]    [0x0000200fd0200000-0x0000200fffffffff], 0x000000002fe00000 bytes on node 6 flags: 0x0
+> ...
 
-Cheers,
+Thanks for the clarification of the usecase.
+ 
+> >>>
+> >>> ...
+> >>>
+> >>
+> >> Can we simply increase INIT_MEMBLOCK_REGIONS to 1024 and avoid the
+> >> config option?  It appears that the overhead from this would be 60kB or
+> >> so.
+> > 
+> > 60k is not big, but using 1024 entries array for 2-4 memory banks on
+> > systems that don't report that fragmented memory map is really a waste.
+> > 
+> > We can make this per platform opt-in, like INIT_MEMBLOCK_RESERVED_REGIONS ...
+> > 
+> 
+> As I described above, is this a general scenario?
 
-Hannes
+The EFI memory on arm64 is generally bad because of all those NOMAP
+carveouts spread all over the place even in cases without memory faults. So
+it would make sense to increase the number of memblock regions on arm64
+when CONFIG_EFI=y.
+ 
+> >> Or zero if CONFIG_ARCH_KEEP_MEMBLOCK and CONFIG_MEMORY_HOTPLUG
+> >> are cooperating.
+> > 
+> > ... or add code that will discard unused parts of memblock arrays even if
+> > CONFIG_ARCH_KEEP_MEMBLOCK=y.
+> > 
+> 
+> In scenarios where the memory usage is sensitive, should 
+> CONFIG_ARCH_KEEP_MEMBLOCK be set to n or set the number by adding config?
+
+We are talking about 20 or so architectures that are doing well with 128
+memblock regions. I don't see why they need to be altered to accommodate
+this use-case.
+ 
+> Andrew, Mike, thank you.
+
 -- 
-Dr. Hannes Reinecke		           Kernel Storage Architect
-hare@suse.de			                  +49 911 74053 688
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+Sincerely yours,
+Mike.

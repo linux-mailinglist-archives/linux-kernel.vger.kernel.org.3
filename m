@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 577B95247F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 10:37:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11FD85247F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 10:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351521AbiELIg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 04:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48402 "EHLO
+        id S1351533AbiELIhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 04:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351506AbiELIgx (ORCPT
+        with ESMTP id S1351514AbiELIgz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 04:36:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0AF26131
+        Thu, 12 May 2022 04:36:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E75B54
         for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 01:36:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CEEC4B8271A
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:36:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B3B3C385B8;
-        Thu, 12 May 2022 08:36:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CBF0860DF0
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:36:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03922C34100;
+        Thu, 12 May 2022 08:36:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652344609;
-        bh=3e5g6lhyha4VVxzhEZrSIdhjvbVTgz6Wec7JaF8MggI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=fzxUcUT+iAN8VGvPA3YzzKI7NdkBfHJyPG2hgMqLywMtAeNASINqC+GbVP+Oosgnv
-         n2IgFyK8BQo4efm45Oa2u1gdxrtxgiD8pKjn7ggbqqF27DD5FqH9yS2JssT8vBTYMS
-         LguibDQrrEh1epPN65IA3niSh3P7ar4PomTuxjaubKoRLmJ8QmQ6y8lgD8xpVF0kFZ
-         TjpAr6c1oSTsddOS8GSRTyYkQsUf13WnG0OwErPxAXs0f6GaxKl/AQ2jROpKVFZvcC
-         DNi9Qmh/35lpa6H83U93JGDdNKpDwt4ST3vmTFFVbdpUCIlhsUG/I46r2dJSFDYfP+
-         hIpABfuP1JhyQ==
+        s=k20201202; t=1652344611;
+        bh=o5vc0t4cN3VhTt01w0WPWP/zm+4fUUK1vnIfe10Nm9M=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=MyaYaNbVLuBiuAlPwmvtAk9+7JA1Fwa8JX6DlmMvWp0HK3gwTH8AMLFraAh0OU57W
+         yB3beK8dgeoj7LYXo1HOOx1qAXkKHhfNT3TYci3Wn0RdmqtTA9XM4J7x63kFD9iuLa
+         uwRuCp6s76ykoaI2yLbMvJLaODfWluCY4/XD1mtv7XlWcC5I4ZnmiTYpv6rkKPD6bY
+         z+sulTGmc3UM/kVYpp4erPcP8BWWxy/ytfIzWsOv11X0YM6YPJOpVmNzTM4nxjXF5D
+         YtP5dQV+E26vuIsj4Z0RfYjDO6LA0sBeqW82AxYnIVReIwzZVF1vm9RdcQ044TCwQ8
+         7+7Soi0MAObqg==
 From:   Tzung-Bi Shih <tzungbi@kernel.org>
 To:     bleung@chromium.org, groeck@chromium.org
 Cc:     chrome-platform@lists.linux.dev, tzungbi@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 0/6] platform/chrome: get rid of BUG_ON()
-Date:   Thu, 12 May 2022 16:36:21 +0800
-Message-Id: <20220512083627.885338-1-tzungbi@kernel.org>
+Subject: [PATCH 1/6] platform/chrome: cros_ec_proto: drop unneeded BUG_ON() in prepare_packet()
+Date:   Thu, 12 May 2022 16:36:22 +0800
+Message-Id: <20220512083627.885338-2-tzungbi@kernel.org>
 X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
+In-Reply-To: <20220512083627.885338-1-tzungbi@kernel.org>
+References: <20220512083627.885338-1-tzungbi@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -52,32 +54,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The series gets rid of BUG_ON()s in drivers/platform/chrome/.  Most of them
-can be replaced by returning proper return code.
+prepare_packet() gets called if `ec_dev->proto_version` > 2.  For now, it
+must be equivalent to EC_HOST_REQUEST_VERSION.
 
-The 2nd patch makes callers of cros_ec_prepare_tx() to take care of the
-return code.
+Drop the BUG_ON().
 
-The 3rd patch turns cros_ec_prepare_tx() to return error code if any.
+Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+---
+ drivers/platform/chrome/cros_ec_proto.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Tzung-Bi Shih (6):
-  platform/chrome: cros_ec_proto: drop unneeded BUG_ON() in
-    prepare_packet()
-  platform/chrome: correct cros_ec_prepare_tx() usage
-  platform/chrome: cros_ec_proto: drop BUG_ON() in cros_ec_prepare_tx()
-  platform/chrome: cros_ec_proto: drop BUG_ON() in
-    cros_ec_get_host_event()
-  platform/chrome: cros_ec_i2c: drop BUG_ON() in cros_ec_pkt_xfer_i2c()
-  platform/chrome: cros_ec_spi: drop BUG_ON()
-
- drivers/platform/chrome/cros_ec_i2c.c   | 12 ++++++++++--
- drivers/platform/chrome/cros_ec_ishtp.c |  4 +++-
- drivers/platform/chrome/cros_ec_lpc.c   |  2 ++
- drivers/platform/chrome/cros_ec_proto.c | 13 ++++++++-----
- drivers/platform/chrome/cros_ec_rpmsg.c |  2 ++
- drivers/platform/chrome/cros_ec_spi.c   | 19 ++++++++++++++-----
- 6 files changed, 39 insertions(+), 13 deletions(-)
-
+diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
+index ac1419881ff3..db1c8ba43171 100644
+--- a/drivers/platform/chrome/cros_ec_proto.c
++++ b/drivers/platform/chrome/cros_ec_proto.c
+@@ -60,7 +60,6 @@ static int prepare_packet(struct cros_ec_device *ec_dev,
+ 	int i;
+ 	u8 csum = 0;
+ 
+-	BUG_ON(ec_dev->proto_version != EC_HOST_REQUEST_VERSION);
+ 	BUG_ON(msg->outsize + sizeof(*request) > ec_dev->dout_size);
+ 
+ 	out = ec_dev->dout;
 -- 
 2.36.0.512.ge40c2bad7a-goog
 

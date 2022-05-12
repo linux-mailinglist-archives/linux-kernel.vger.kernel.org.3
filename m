@@ -2,130 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC790524E09
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:17:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B1B524E0C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354248AbiELNRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 09:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58342 "EHLO
+        id S1354256AbiELNR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 09:17:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354107AbiELNRL (ORCPT
+        with ESMTP id S1353446AbiELNR5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 09:17:11 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6511D246422;
-        Thu, 12 May 2022 06:17:10 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KzXPF6hr7z4xLb;
-        Thu, 12 May 2022 23:17:05 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1652361426;
-        bh=gYQv0AS0gD3iTDUtUFbFD436ahJqXiZXz8+LVEIcXjY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=DgXI6vDFoOhQlNw2D3j6l7p9Bo8NxO46sWtXM8r+OYiyMftvvKeZ+YigIjT5fPK7o
-         qs7zCef6LfYSz032M6qHnAc0bmnx7uQ/WxBPhiFl8Pob/lmnwkWrQW6EBHPqj3v0mE
-         BUjjaxw4ou8ESl+UqnJFXaNSJpiAWIJCYhAPt/hhFc2XuEoDWRjSUvkwIhH7yIyBd4
-         NJvpVPUlNtq+1EGWYxAWX3S4ypqkd8noZTBJt+9sgPF8AzspNgP4zVdd25GQTpw3zZ
-         MR158s156buU2q9Qq24SFts9hiB7De9hl/ZGXZ7DC7NvDVOQBx903T4+MnWrsyqNU/
-         /ZQE1z9/wcHUA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     xiujianfeng <xiujianfeng@huawei.com>,
-        Nicholas Piggin <npiggin@gmail.com>, benh@kernel.crashing.org,
-        christophe.leroy@csgroup.eu, mark.rutland@arm.com,
-        paulus@samba.org, tglx@linutronix.de
-Cc:     linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH -next] powerpc: add support for syscall stack randomization
-In-Reply-To: <a1dcd50b-0819-df54-a963-ebb0551e3356@huawei.com>
-References: <20220505111932.228814-1-xiujianfeng@huawei.com>
- <1652173338.7bltwybi0c.astroid@bobo.none>
- <a1dcd50b-0819-df54-a963-ebb0551e3356@huawei.com>
-Date:   Thu, 12 May 2022 23:17:04 +1000
-Message-ID: <87pmki7uwf.fsf@mpe.ellerman.id.au>
+        Thu, 12 May 2022 09:17:57 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707332211C8;
+        Thu, 12 May 2022 06:17:56 -0700 (PDT)
+Received: from kwepemi100013.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KzXPP4n5DzhYTq;
+        Thu, 12 May 2022 21:17:13 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100013.china.huawei.com (7.221.188.136) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 12 May 2022 21:17:54 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 12 May 2022 21:17:53 +0800
+Subject: Re: [PATCH -next 0/6] nbd: bugfix and cleanup patches
+From:   "yukuai (C)" <yukuai3@huawei.com>
+To:     <josef@toxicpanda.com>, <axboe@kernel.dk>, <ming.lei@redhat.com>
+CC:     <linux-block@vger.kernel.org>, <nbd@other.debian.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20220426130746.885140-1-yukuai3@huawei.com>
+ <a8f0b55b-625c-3393-fadb-5724e129abdf@huawei.com>
+Message-ID: <98bd0dda-7cb4-ee6d-f037-d5049428d127@huawei.com>
+Date:   Thu, 12 May 2022 21:17:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a8f0b55b-625c-3393-fadb-5724e129abdf@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-eGl1amlhbmZlbmcgPHhpdWppYW5mZW5nQGh1YXdlaS5jb20+IHdyaXRlczoNCj4g5ZyoIDIwMjIv
-NS8xMCAxNzoyMywgTmljaG9sYXMgUGlnZ2luIOWGmemBkzoNCj4+IEV4Y2VycHRzIGZyb20gWGl1
-IEppYW5mZW5nJ3MgbWVzc2FnZSBvZiBNYXkgNSwgMjAyMiA5OjE5IHBtOg0KPj4+IEFkZCBzdXBw
-b3J0IGZvciBhZGRpbmcgYSByYW5kb20gb2Zmc2V0IHRvIHRoZSBzdGFjayB3aGlsZSBoYW5kbGlu
-Zw0KPj4+IHN5c2NhbGxzLiBUaGlzIHBhdGNoIHVzZXMgbWZ0YigpIGluc3RlYWQgb2YgZ2V0X3Jh
-bmRvbV9pbnQoKSBmb3IgYmV0dGVyDQo+Pj4gcGVyZm9ybWFuY2UuDQo+Pg0KLi4uDQo+Pg0KPj4+
-IEBAIC00MDUsNiArNDA3LDcgQEAgaW50ZXJydXB0X2V4aXRfdXNlcl9wcmVwYXJlX21haW4odW5z
-aWduZWQgbG9uZyByZXQsIHN0cnVjdCBwdF9yZWdzICpyZWdzKQ0KPj4+DQo+Pj4gICAJLyogUmVz
-dG9yZSB1c2VyIGFjY2VzcyBsb2NrcyBsYXN0ICovDQo+Pj4gICAJa3VhcF91c2VyX3Jlc3RvcmUo
-cmVncyk7DQo+Pj4gKwljaG9vc2VfcmFuZG9tX2tzdGFja19vZmZzZXQobWZ0YigpICYgMHhGRik7
-DQo+Pj4NCj4+PiAgIAlyZXR1cm4gcmV0Ow0KPj4+ICAgfQ0KPj4gU28gdGhpcyBzZWVtcyB0byBi
-ZSB3aGF0IHg4NiBhbmQgczM5MCBkbywgYnV0IHdoeSBhcmUgd2UgY2hvb3NpbmcgYQ0KPj4gbmV3
-IG9mZnNldCBmb3IgZXZlcnkgaW50ZXJydXB0IHdoZW4gaXQncyBvbmx5IHVzZWQgb24gYSBzeXNj
-YWxsPw0KPj4gSSB3b3VsZCByYXRoZXIgeW91IGRvIHdoYXQgYXJtNjQgZG9lcyBhbmQganVzdCBj
-aG9vc2UgdGhlIG9mZnNldA0KPj4gYXQgdGhlIGVuZCBvZiBzeXN0ZW1fY2FsbF9leGNlcHRpb24u
-DQo+IHRoYW5rcyBmb3IgeW91IHN1Z2dlc3Rpb24sIHdpbGwgZG8gaW4gdjIuDQo+Pg0KPj4gSSB3
-b25kZXIgd2h5IHRoZSBjaG9vc2UgaXMgc2VwYXJhdGVkIGZyb20gdGhlIGFkZD8gSSBndWVzcyBp
-dCdzIHRvDQo+PiBhdm9pZCBhIGRhdGEgZGVwZW5kZW5jeSBmb3Igc3RhY2sgYWNjZXNzIG9uIGFu
-IGV4cGVuc2l2ZSByYW5kb20NCj4+IGZ1bmN0aW9uLCBzbyB0aGF0IG1ha2VzIHNlbnNlIChhIGNv
-bW1lbnQgd291bGQgYmUgbmljZSBpbiB0aGUNCj4+IGdlbmVyaWMgY29kZSkuDQo+Pg0KPj4gSSBk
-b24ndCBhY3R1YWxseSBrbm93IGlmIG1mdGIoKSBpcyBjaGVhcGVyIGhlcmUgdGhhbiBhIFJORy4g
-SXQNCj4+IG1heSBub3QgYmUgY29uZGl0aW9uZWQgYWxsIHRoYXQgd2VsbCBlaXRoZXIuIEkgd291
-bGQgYmUgdGVtcHRlZA0KDQo+ICNpZiBkZWZpbmVkKF9fcG93ZXJwYzY0X18pICYmIChkZWZpbmVk
-KENPTkZJR19QUENfQ0VMTCkgfHwNCj4gZGVmaW5lZChDT05GSUdfRTUwMCkpDQo+ICNkZWZpbmUg
-bWZ0YigpwqDCoMKgwqDCoMKgwqDCoMKgICh7dW5zaWduZWQgbG9uZyBydmFsO8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgXA0KPiAgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBhc20gdm9sYXRpbGUowqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgXA0KPiAgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqAgIjkwOsKgwqDCoCBtZnNwciAlMCwgJTI7XG4iwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIFwNCj4gQVNNX0ZUUl9JRlNFVCjCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBcDQo+ICDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgIjk3OsKgwqDCoCBjbXB3aSAlMCwwO1xuIsKgwqDCoMKgwqDCoMKgwqDCoCBcDQo+ICDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqAgIsKgwqDCoMKgwqDCoCBiZXEtIDkwYjtcbiIsICIiLCAlMSnCoMKg
-IFwNCj4gIMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgOiAi
-PXIiIChydmFsKSBcDQo+ICDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgIDogImkiIChDUFVfRlRSX0NFTExfVEJfQlVHKSwgImkiIChTUFJOX1RCUkwpIDoNCj4g
-ImNyMCIpOyBcDQo+ICDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIHJ2YWw7fSkNCj4gI2VsaWYgZGVmaW5lZChDT05GSUdfUFBDXzh4eCkNCj4gI2RlZmluZSBt
-ZnRiKCnCoMKgwqDCoMKgwqDCoMKgwqAgKHt1bnNpZ25lZCBsb25nIHJ2YWw7wqDCoCBcDQo+ICDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGFzbSB2b2xhdGls
-ZSgibWZ0YmwgJTAiIDogIj1yIiAocnZhbCkpOyBydmFsO30pDQo+ICNlbHNlDQo+ICNkZWZpbmUg
-bWZ0YigpwqDCoMKgwqDCoMKgwqDCoMKgICh7dW5zaWduZWQgbG9uZyBydmFsO8KgwqAgXA0KPiAg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBhc20gdm9sYXRp
-bGUoIm1mc3ByICUwLCAlMSIgOiBcDQo+ICDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgIj1yIiAocnZhbCkgOiAi
-aSIgKFNQUk5fVEJSTCkpOw0KPiBydmFsO30pDQo+ICNlbmRpZiAvKiAhQ09ORklHX1BQQ19DRUxM
-ICovDQo+DQo+IHRoZXJlIGFyZSAzIGltcGxlbWVudGF0aW9ucyBvZiBtZnRiKCkgaW4NCj4gYXJj
-aC9wb3dlcnBjL2luY2x1ZGUvYXNtL3Zkc28vdGltZWJhc2UuaCwNCj4NCj4gdGhlIGxhc3QgdHdv
-IGNhc2VzIGhhdmUgb25seSBvbmUgaW5zdHJ1Y3Rpb24sIEl0J3Mgb2J2aW91c2x5IGNoZWFwZXIN
-Cj4gdGhhbiBnZXRfcmFuZG9tX2ludCwNCg0KSnVzdCBiZWNhdXNlIGl0J3Mgb25lIGluc3RydWN0
-aW9uIGRvZXNuJ3QgbWVhbiBpdCdzIG9idmlvdXNseSBjaGVhcGVyLg0KT24gc29tZSBDUFVzIG1m
-dGIgdGFrZXMgMTBzIG9mIGN5Y2xlcywgYW5kIGNhbiBhbHNvIHN0YWxsIHRoZSBwaXBlbGluZS4N
-Cg0KQnV0IGxvb2tpbmcgYXQgZ2V0X3JhbmRvbV91MzIoKSBpdCBkb2VzIGxvb2sgcHJldHR5IGNv
-bXBsaWNhdGVkLCBpdA0KdGFrZXMgYSBsb2NrIGFuZCBzbyBvbi4gSXQncyBhbHNvIHNpbGx5IHRv
-IGNhbGwgZ2V0X3JhbmRvbV91MzIoKSBmb3INCjQtYml0cyBvZiByYW5kb21uZXNzLg0KDQpNeSBp
-bml0aWFsIGltcHJlc3Npb24gd2FzIHRoYXQgbWZ0YigpIGlzIHRvbyBwcmVkaWN0YWJsZSB0byBi
-ZSB1c2VmdWwNCmFnYWluc3QgYSBkZXRlcm1pbmVkIGF0dGFja2VyLiBCdXQgbG9va2luZyBjbG9z
-ZXIgSSBzZWUgdGhhdA0KY2hvb3NlX3JhbmRvbV9rc3RhY2tfb2Zmc2V0KCkgeG9yJ3MgdGhlIHZh
-bHVlIHdlIHBhc3Mgd2l0aCB0aGUgZXhpc3RpbmcNCnZhbHVlLiBTbyB0aGF0IG1ha2VzIG1lIGxl
-c3Mgd29ycmllZCBhYm91dCB1c2luZyBtZnRiKCkuDQoNCldlIGNvdWxkIGFkZGl0aW9uYWxseSBj
-YWxsIGNob29zZV9yYW5kb21fa3N0YWNrX29mZnNldChnZXRfcmFuZG9tX2ludCgpKQ0KbGVzcyBy
-ZWd1bGFybHksIGVnLiBkdXJpbmcgY29udGV4dCBzd2l0Y2guIEJ1dCBJIGd1ZXNzIHRoYXQncyB0
-b28NCmluZnJlcXVlbnQgdG8gYWN0dWFsbHkgbWFrZSBhbnkgZGlmZmVyZW5jZS4NCg0KQnV0IGxp
-bWl0aW5nIGl0IHRvIDQtYml0cyBvZiByYW5kb21uZXNzIHNlZW1zIGluc3VmZmljaWVudC4gSXQg
-c2VlbXMNCmxpa2Ugd2Ugc2hvdWxkIGFsbG93IHRoZSBmdWxsIDYgKDEwKSBiaXRzLCBhbmQgYW55
-b25lIHR1cm5pbmcgdGhpcw0Kb3B0aW9uIG9uIHNob3VsZCBwcm9iYWJseSBhbHNvIGNvbnNpZGVy
-IGluY3JlYXNpbmcgdGhlaXIgc3RhY2sgc2l6ZS4NCg0KQWxzbyBkaWQgeW91IGNoZWNrIHRoZSBo
-ZWxwIHRleHQgYWJvdXQgc3RhY2stcHJvdGVjdG9yIHVuZGVyDQpIQVZFX0FSQ0hfUkFORE9NSVpF
-X0tTVEFDS19PRkZTRVQ/DQoNCmNoZWVycw0K
+friendly ping ...
+
+在 2022/05/05 8:57, yukuai (C) 写道:
+> friendly ping ...
+> 
+> 在 2022/04/26 21:07, Yu Kuai 写道:
+>> path 1-2 fix races between nbd setup and module removal.
+>> patch 3 fix io can't be completed in some error path.
+>> patch 4 fix io hung when disconnecting failed.
+>> patch 5 fix sysfs warning about duplicate creation.
+>> patch 6 use pr_err to output error message.
+>>
+>> Yu Kuai (5):
+>>    nbd: call genl_unregister_family() first in nbd_cleanup()
+>>    nbd: fix race between nbd_alloc_config() and module removal
+>>    nbd: don't clear 'NBD_CMD_INFLIGHT' flag if request is not completed
+>>    nbd: fix io hung while disconnecting device
+>>    nbd: use pr_err to output error message
+>>
+>> Zhang Wensheng (1):
+>>    nbd: fix possible overflow on 'first_minor' in nbd_dev_add()
+>>
+>>   drivers/block/nbd.c | 119 +++++++++++++++++++++++++++-----------------
+>>   1 file changed, 74 insertions(+), 45 deletions(-)
+>>

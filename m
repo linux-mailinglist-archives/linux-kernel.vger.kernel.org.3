@@ -2,74 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 014F75244BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 07:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3AC5244C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 07:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242707AbiELFPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 01:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
+        id S1349494AbiELFQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 01:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344371AbiELFPi (ORCPT
+        with ESMTP id S1349915AbiELFQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 01:15:38 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22F515C1BF;
-        Wed, 11 May 2022 22:15:34 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id D39C05FD06;
-        Thu, 12 May 2022 08:15:32 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1652332532;
-        bh=Izj6qmaDftSm7vCIdQAAbOT+b+SthQ6rdLkGKpOl1fI=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=so8ZFNggqp6OjX1gvmCVO/4aRAuI6+YyHs2LS/j0EP3v8SRTm/YJnoPxrjxJGqurw
-         GNo25wlS0BXmWATUTjFG6V3RqmrjTEPwSgw0qGLGQUduiH+IjlNMs1mLH3CYOQaZuL
-         oTN13QtXZHmQHO4DLjHzAXTlo0FWJ8gT9KHtryZbEvxNksWMtpM1mGjC+If9RjGWGi
-         MREsvDTqxMs3iJ9bT9ysGjFTKEHjpE6KFxGsyfPsl34FTRNIUQsJpnyHl20tiZIZC2
-         kGeqricGCcSkEf2czCdJyPOi3Fw/enrWg0CXyNdnWIO4KTOgTCbkwM58ONL5ixus7J
-         Or4Wgc5UdvJBg==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Thu, 12 May 2022 08:15:32 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Subject: [RFC PATCH v1 4/8] virtio/vsock: add transport zerocopy callback
-Thread-Topic: [RFC PATCH v1 4/8] virtio/vsock: add transport zerocopy callback
-Thread-Index: AQHYZb800Rp4tFVLaEqKpJtt6b7xqQ==
-Date:   Thu, 12 May 2022 05:14:49 +0000
-Message-ID: <9c1fa0ba-76b3-6214-4b9f-879bf932fa9c@sberdevices.ru>
-In-Reply-To: <7cdcb1e1-7c97-c054-19cf-5caeacae981d@sberdevices.ru>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <86554AE6F041E6488D96A4C79387CA1A@sberdevices.ru>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/05/12 02:55:00 #19424207
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        Thu, 12 May 2022 01:16:24 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8F21F62F;
+        Wed, 11 May 2022 22:16:22 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id i17so3834230pla.10;
+        Wed, 11 May 2022 22:16:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:content-transfer-encoding:date:message-id:cc:subject
+         :from:to:references:in-reply-to;
+        bh=o5r8j5DfRtmLS+iVKuwr6JvqFgR9CxOqwnqwvrWJx9w=;
+        b=m/daO8WF7cexoTd4geHDhaMezghvuSRaTFPrdGvTuluSIepdWjVnfvL/TZbJUr3GDz
+         /q8/JGjqwkqG/wowpueFJ2DRpwX8YcRFuiHrGc7ngDMHyK687V4hFwdWRbjCWrzNwJ/q
+         +WrGgNv27agaVgQDMct1extVZfjV8Nxus4ZsaVOd8S042zqulV4dkwgSaRkStbjO4BkV
+         hQZzensKfcpL78/LzZwFu2BItNJEmcgCqFqkcveJLrEKxR92CPxDhY5sILeM/ExvhNhk
+         4lMRN9tQ3/JsBxw7U5COI+806D8fSFzLhphMpZPGatrrWYbzdaPsoVBwKQ9EhC9NUiHk
+         qVIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:content-transfer-encoding:date
+         :message-id:cc:subject:from:to:references:in-reply-to;
+        bh=o5r8j5DfRtmLS+iVKuwr6JvqFgR9CxOqwnqwvrWJx9w=;
+        b=snuWjQVaG13p8tE/eCUT+dmABVJ3T8kZQ6zvCGzwV55o/jc3vlUAHyatYz8rApR70o
+         842SorkJFZX7llfJkrOxQ0/vf6L5oALNrRJlSgCcCh+oUYdVmvLZCWt301CbLgIwncum
+         yG2DufstTkQnaH6okFXR75pRZl7lpX9aZkiudBW6AcMGte2c/rQHOUGBoBoP+4DorcyS
+         bZMGnvortrNmH2k7v0Uw50Ls2xCyLhzF8x3wMM6Fdo4g+ckuxqAUsSVrkff3250xVbF9
+         ByEgi2PjTqsLLiTstayrW35BKibT7MfggS4J0HbCBTLQPb4ncSIL9KXCI/CHAaFR3yIe
+         /70Q==
+X-Gm-Message-State: AOAM531R8bQwlLDsYeJf+J8t9gZTFTjA95egSfkPOQ6zQkYXbBGFN6ZG
+        8vYSy5URo0KsUzRInCf7hG0=
+X-Google-Smtp-Source: ABdhPJxsuLKd57Hz6gAd6v6A/NHHFlJvHr99DoDw5/Hx2C3VmQhaVRkb6NQsrtVOgQZ3fe5U5dGiOg==
+X-Received: by 2002:a17:902:d2c9:b0:15e:a266:6472 with SMTP id n9-20020a170902d2c900b0015ea2666472mr28171958plc.45.1652332581734;
+        Wed, 11 May 2022 22:16:21 -0700 (PDT)
+Received: from localhost ([49.204.239.218])
+        by smtp.gmail.com with ESMTPSA id t16-20020a170902e85000b0015e8d4eb2e1sm2857810plg.299.2022.05.11.22.16.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 22:16:21 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 12 May 2022 10:46:16 +0530
+Message-Id: <CJXJ0IIGOKN4.7V6UQ9ZFIX8I@skynet-linux>
+Cc:     <linux-arm-msm@vger.kernel.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        <bjorn.andersson@linaro.org>, <devicetree@vger.kernel.org>,
+        <phone-devel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Andy Gross" <agross@kernel.org>,
+        "Mathieu Poirier" <mathieu.poirier@linaro.org>
+Subject: Re: [PATCH 2/9] remoteproc: qcom: q6v5-mss: Add modem support on
+ MSM8953
+From:   "Sireesh Kodali" <sireeshkodali1@gmail.com>
+To:     "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>
+X-Mailer: aerc 0.9.0
+References: <20220511161602.117772-1-sireeshkodali1@gmail.com>
+ <20220511161602.117772-3-sireeshkodali1@gmail.com>
+ <1d43e1fa-30b2-dbf0-bfaf-f9cfaf987efb@linaro.org>
+In-Reply-To: <1d43e1fa-30b2-dbf0-bfaf-f9cfaf987efb@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,142 +79,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhpcyBhZGRzIHRyYW5zcG9ydCBjYWxsYmFjayB3aGljaCBwcm9jZXNzZXMgcngNCnF1ZXVlIG9m
-IHNvY2tldCBhbmQgaW5zdGVhZCBvZiBjb3B5aW5nIGRhdGEgdG8NCnVzZXIgcHJvdmlkZWQgYnVm
-ZmVyLCBpdCBpbnNlcnRzIGRhdGEgcGFnZXMgb2YNCmVhY2ggcGFja2V0IHRvIHVzZXIncyB2bSBh
-cmVhLg0KDQpTaWduZWQtb2ZmLWJ5OiBBcnNlbml5IEtyYXNub3YgPEFWS3Jhc25vdkBzYmVyZGV2
-aWNlcy5ydT4NCi0tLQ0KIGluY2x1ZGUvbGludXgvdmlydGlvX3Zzb2NrLmggICAgICAgICAgICB8
-ICAgNCArDQogaW5jbHVkZS91YXBpL2xpbnV4L3ZpcnRpb192c29jay5oICAgICAgIHwgICA1ICsN
-CiBuZXQvdm13X3Zzb2NrL3ZpcnRpb190cmFuc3BvcnRfY29tbW9uLmMgfCAxOTUgKysrKysrKysr
-KysrKysrKysrKysrKystDQogMyBmaWxlcyBjaGFuZ2VkLCAyMDEgaW5zZXJ0aW9ucygrKSwgMyBk
-ZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGludXgvdmlydGlvX3Zzb2NrLmgg
-Yi9pbmNsdWRlL2xpbnV4L3ZpcnRpb192c29jay5oDQppbmRleCBkMDJjYjdhYTkyMmYuLjQ3YTY4
-YTJlYTgzOCAxMDA2NDQNCi0tLSBhL2luY2x1ZGUvbGludXgvdmlydGlvX3Zzb2NrLmgNCisrKyBi
-L2luY2x1ZGUvbGludXgvdmlydGlvX3Zzb2NrLmgNCkBAIC01MSw2ICs1MSw3IEBAIHN0cnVjdCB2
-aXJ0aW9fdnNvY2tfcGt0IHsNCiAJYm9vbCByZXBseTsNCiAJYm9vbCB0YXBfZGVsaXZlcmVkOw0K
-IAlib29sIHNsYWJfYnVmOw0KKwlib29sIHNwbGl0Ow0KIH07DQogDQogc3RydWN0IHZpcnRpb192
-c29ja19wa3RfaW5mbyB7DQpAQCAtMTMxLDYgKzEzMiw5IEBAIGludCB2aXJ0aW9fdHJhbnNwb3J0
-X2RncmFtX2JpbmQoc3RydWN0IHZzb2NrX3NvY2sgKnZzaywNCiAJCQkJc3RydWN0IHNvY2thZGRy
-X3ZtICphZGRyKTsNCiBib29sIHZpcnRpb190cmFuc3BvcnRfZGdyYW1fYWxsb3codTMyIGNpZCwg
-dTMyIHBvcnQpOw0KIA0KK2ludCB2aXJ0aW9fdHJhbnNwb3J0X3plcm9jb3B5X2RlcXVldWUoc3Ry
-dWN0IHZzb2NrX3NvY2sgKnZzaywNCisJCQkJICAgICAgc3RydWN0IHZtX2FyZWFfc3RydWN0ICp2
-bWEsDQorCQkJCSAgICAgIHVuc2lnbmVkIGxvbmcgYWRkcik7DQogaW50IHZpcnRpb190cmFuc3Bv
-cnRfY29ubmVjdChzdHJ1Y3QgdnNvY2tfc29jayAqdnNrKTsNCiANCiBpbnQgdmlydGlvX3RyYW5z
-cG9ydF9zaHV0ZG93bihzdHJ1Y3QgdnNvY2tfc29jayAqdnNrLCBpbnQgbW9kZSk7DQpkaWZmIC0t
-Z2l0IGEvaW5jbHVkZS91YXBpL2xpbnV4L3ZpcnRpb192c29jay5oIGIvaW5jbHVkZS91YXBpL2xp
-bnV4L3ZpcnRpb192c29jay5oDQppbmRleCA2NDczODgzOGJlZTUuLjIxNGFjOTcyNzMwNyAxMDA2
-NDQNCi0tLSBhL2luY2x1ZGUvdWFwaS9saW51eC92aXJ0aW9fdnNvY2suaA0KKysrIGIvaW5jbHVk
-ZS91YXBpL2xpbnV4L3ZpcnRpb192c29jay5oDQpAQCAtNjYsNiArNjYsMTEgQEAgc3RydWN0IHZp
-cnRpb192c29ja19oZHIgew0KIAlfX2xlMzIJZndkX2NudDsNCiB9IF9fYXR0cmlidXRlX18oKHBh
-Y2tlZCkpOw0KIA0KK3N0cnVjdCB2aXJ0aW9fdnNvY2tfdXNyX2hkciB7DQorCXUzMiBmbGFnczsN
-CisJdTMyIGxlbjsNCit9IF9fYXR0cmlidXRlX18oKHBhY2tlZCkpOw0KKw0KIGVudW0gdmlydGlv
-X3Zzb2NrX3R5cGUgew0KIAlWSVJUSU9fVlNPQ0tfVFlQRV9TVFJFQU0gPSAxLA0KIAlWSVJUSU9f
-VlNPQ0tfVFlQRV9TRVFQQUNLRVQgPSAyLA0KZGlmZiAtLWdpdCBhL25ldC92bXdfdnNvY2svdmly
-dGlvX3RyYW5zcG9ydF9jb21tb24uYyBiL25ldC92bXdfdnNvY2svdmlydGlvX3RyYW5zcG9ydF9j
-b21tb24uYw0KaW5kZXggMjc4NTY3Zjc0OGYyLi4zYzdhYzQ3YTg2NzIgMTAwNjQ0DQotLS0gYS9u
-ZXQvdm13X3Zzb2NrL3ZpcnRpb190cmFuc3BvcnRfY29tbW9uLmMNCisrKyBiL25ldC92bXdfdnNv
-Y2svdmlydGlvX3RyYW5zcG9ydF9jb21tb24uYw0KQEAgLTEyLDYgKzEyLDcgQEANCiAjaW5jbHVk
-ZSA8bGludXgvY3R5cGUuaD4NCiAjaW5jbHVkZSA8bGludXgvbGlzdC5oPg0KICNpbmNsdWRlIDxs
-aW51eC92aXJ0aW9fdnNvY2suaD4NCisjaW5jbHVkZSA8bGludXgvbW0uaD4NCiAjaW5jbHVkZSA8
-dWFwaS9saW51eC92c29ja21vbi5oPg0KIA0KICNpbmNsdWRlIDxuZXQvc29jay5oPg0KQEAgLTM0
-Nyw2ICszNDgsMTgzIEBAIHZpcnRpb190cmFuc3BvcnRfc3RyZWFtX2RvX3BlZWsoc3RydWN0IHZz
-b2NrX3NvY2sgKnZzaywNCiAJcmV0dXJuIGVycjsNCiB9DQogDQorI2RlZmluZSBNQVhfUEFHRVNf
-VE9fTUFQIDI1Ng0KKw0KK2ludCB2aXJ0aW9fdHJhbnNwb3J0X3plcm9jb3B5X2RlcXVldWUoc3Ry
-dWN0IHZzb2NrX3NvY2sgKnZzaywNCisJCQkJICAgICAgc3RydWN0IHZtX2FyZWFfc3RydWN0ICp2
-bWEsDQorCQkJCSAgICAgIHVuc2lnbmVkIGxvbmcgYWRkcikNCit7DQorCXN0cnVjdCB2aXJ0aW9f
-dnNvY2tfc29jayAqdnZzID0gdnNrLT50cmFuczsNCisJc3RydWN0IHZpcnRpb192c29ja191c3Jf
-aGRyICp1c3JfaGRyX2J1ZmZlcjsNCisJdW5zaWduZWQgbG9uZyBtYXhfcGFnZXNfdG9faW5zZXJ0
-Ow0KKwl1bnNpZ25lZCBsb25nIHRtcF9wYWdlc19pbnNlcnRlZDsNCisJdW5zaWduZWQgbG9uZyBw
-YWdlc190b19pbnNlcnQ7DQorCXN0cnVjdCBwYWdlICp1c3JfaGRyX3BhZ2U7DQorCXVuc2lnbmVk
-IGxvbmcgdm1hX3NpemU7DQorCXN0cnVjdCBwYWdlICoqcGFnZXM7DQorCWludCBtYXhfdm1hX3Bh
-Z2VzOw0KKwlpbnQgbWF4X3Vzcl9oZHJzOw0KKwlpbnQgcmVzOw0KKwlpbnQgZXJyOw0KKwlpbnQg
-aTsNCisNCisJLyogT25seSB1c2UgVk1BIGZyb20gZmlyc3QgcGFnZS4gKi8NCisJaWYgKHZtYS0+
-dm1fc3RhcnQgIT0gYWRkcikNCisJCXJldHVybiAtRUZBVUxUOw0KKw0KKwl2bWFfc2l6ZSA9IHZt
-YS0+dm1fZW5kIC0gdm1hLT52bV9zdGFydDsNCisNCisJLyogVG9vIHNtYWxsIHZtYShhdCBsZWFz
-dCBvbmUgcGFnZSBmb3IgaGVhZGVycw0KKwkgKiBhbmQgb25lIHBhZ2UgZm9yIGRhdGEpLg0KKwkg
-Ki8NCisJaWYgKHZtYV9zaXplIDwgMiAqIFBBR0VfU0laRSkNCisJCXJldHVybiAtRUZBVUxUOw0K
-Kw0KKwkvKiBQYWdlIGZvciBtZXRhIGRhdGEuICovDQorCXVzcl9oZHJfcGFnZSA9IGFsbG9jX3Bh
-Z2UoR0ZQX0tFUk5FTCk7DQorDQorCWlmICghdXNyX2hkcl9wYWdlKQ0KKwkJcmV0dXJuIC1FRkFV
-TFQ7DQorDQorCXBhZ2VzID0ga21hbGxvY19hcnJheShNQVhfUEFHRVNfVE9fTUFQLCBzaXplb2Yo
-cGFnZXNbMF0pLCBHRlBfS0VSTkVMKTsNCisNCisJaWYgKCFwYWdlcykNCisJCXJldHVybiAtRUZB
-VUxUOw0KKw0KKwlwYWdlc1twYWdlc190b19pbnNlcnQrK10gPSB1c3JfaGRyX3BhZ2U7DQorDQor
-CXVzcl9oZHJfYnVmZmVyID0gcGFnZV90b192aXJ0KHVzcl9oZHJfcGFnZSk7DQorDQorCWVyciA9
-IDA7DQorDQorCS8qIEFzIHdlIHVzZSBmaXJzdCBwYWdlIGZvciBoZWFkZXJzLCBzbyB0b3RhbCBu
-dW1iZXIgb2YNCisJICogcGFnZXMgZm9yIHVzZXIgaXMgbWluIGJldHdlZW4gbnVtYmVyIG9mIGhl
-YWRlcnMgaW4NCisJICogZmlyc3QgcGFnZSBhbmQgc2l6ZSBvZiB2bWEoaW4gcGFnZXMsIGV4Y2Vw
-dCBmaXJzdCBwYWdlKS4NCisJICovDQorCW1heF91c3JfaGRycyA9IFBBR0VfU0laRSAvIHNpemVv
-ZigqdXNyX2hkcl9idWZmZXIpOw0KKwltYXhfdm1hX3BhZ2VzID0gKHZtYV9zaXplIC8gUEFHRV9T
-SVpFKSAtIDE7DQorCW1heF9wYWdlc190b19pbnNlcnQgPSBtaW4obWF4X3Vzcl9oZHJzLCBtYXhf
-dm1hX3BhZ2VzKTsNCisNCisJaWYgKG1heF9wYWdlc190b19pbnNlcnQgPiBNQVhfUEFHRVNfVE9f
-TUFQKQ0KKwkJbWF4X3BhZ2VzX3RvX2luc2VydCA9IE1BWF9QQUdFU19UT19NQVA7DQorDQorCXNw
-aW5fbG9ja19iaCgmdnZzLT5yeF9sb2NrKTsNCisNCisJd2hpbGUgKCFsaXN0X2VtcHR5KCZ2dnMt
-PnJ4X3F1ZXVlKSAmJg0KKwkgICAgICAgcGFnZXNfdG9faW5zZXJ0IDwgbWF4X3BhZ2VzX3RvX2lu
-c2VydCkgew0KKwkJc3RydWN0IHZpcnRpb192c29ja19wa3QgKnBrdDsNCisJCXNzaXplX3QgcmVz
-dF9kYXRhX2J5dGVzOw0KKwkJc2l6ZV90IG1vdmVkX2RhdGFfYnl0ZXM7DQorCQl1bnNpZ25lZCBs
-b25nIHBnX29mZnM7DQorDQorCQlwa3QgPSBsaXN0X2ZpcnN0X2VudHJ5KCZ2dnMtPnJ4X3F1ZXVl
-LA0KKwkJCQkgICAgICAgc3RydWN0IHZpcnRpb192c29ja19wa3QsIGxpc3QpOw0KKw0KKwkJLyog
-VGhpcyBjb3VsZCBoYXBwZW4sIHdoZW4gcGFja2V0IHdhcyBkZXF1ZXVlZCBiZWZvcmUNCisJCSAq
-IGJ5IGFuIG9yZGluYXJ5ICdyZWFkKCknIGNhbGwuIFdlIGNhbid0IGhhbmRsZSBzdWNoDQorCQkg
-KiBwYWNrZXQuIERyb3AgaXQuDQorCQkgKi8NCisJCWlmIChwa3QtPm9mZiAlIFBBR0VfU0laRSkg
-ew0KKwkJCWxpc3RfZGVsKCZwa3QtPmxpc3QpOw0KKwkJCXZpcnRpb190cmFuc3BvcnRfZGVjX3J4
-X3BrdCh2dnMsIHBrdCk7DQorCQkJdmlydGlvX3RyYW5zcG9ydF9mcmVlX3BrdChwa3QpOw0KKwkJ
-CWNvbnRpbnVlOw0KKwkJfQ0KKw0KKwkJcmVzdF9kYXRhX2J5dGVzID0gbGUzMl90b19jcHUocGt0
-LT5oZHIubGVuKSAtIHBrdC0+b2ZmOw0KKw0KKwkJLyogRm9yIHBhY2tldHMsIGJpZ2dlciB0aGFu
-IG9uZSBwYWdlLCBzcGxpdCBpdCdzDQorCQkgKiBoaWdoIG9yZGVyIGFsbG9jYXRlZCBidWZmZXIg
-dG8gMCBvcmRlciBwYWdlcy4NCisJCSAqIE90aGVyd2lzZSAndm1faW5zZXJ0X3BhZ2VzKCknIHdp
-bGwgZmFpbCwgZm9yDQorCQkgKiBhbGwgcGFnZXMgZXhjZXB0IGZpcnN0Lg0KKwkJICovDQorCQlp
-ZiAocmVzdF9kYXRhX2J5dGVzID4gUEFHRV9TSVpFKSB7DQorCQkJLyogSGlnaCBvcmRlciBidWZm
-ZXIgbm90IHNwbGl0IHlldC4gKi8NCisJCQlpZiAoIXBrdC0+c3BsaXQpIHsNCisJCQkJc3BsaXRf
-cGFnZSh2aXJ0X3RvX3BhZ2UocGt0LT5idWYpLA0KKwkJCQkJICAgZ2V0X29yZGVyKGxlMzJfdG9f
-Y3B1KHBrdC0+aGRyLmxlbikpKTsNCisJCQkJcGt0LT5zcGxpdCA9IHRydWU7DQorCQkJfQ0KKwkJ
-fQ0KKw0KKwkJcGdfb2ZmcyA9IHBrdC0+b2ZmOw0KKwkJbW92ZWRfZGF0YV9ieXRlcyA9IDA7DQor
-DQorCQl3aGlsZSAocmVzdF9kYXRhX2J5dGVzICYmDQorCQkgICAgICAgcGFnZXNfdG9faW5zZXJ0
-IDwgbWF4X3BhZ2VzX3RvX2luc2VydCkgew0KKwkJCXN0cnVjdCBwYWdlICpidWZfcGFnZTsNCisN
-CisJCQlidWZfcGFnZSA9IHZpcnRfdG9fcGFnZShwa3QtPmJ1ZiArIHBnX29mZnMpOw0KKw0KKwkJ
-CXBhZ2VzW3BhZ2VzX3RvX2luc2VydCsrXSA9IGJ1Zl9wYWdlOw0KKwkJCS8qIEdldCByZWZlcmVu
-Y2UgdG8gcHJldmVudCB0aGlzIHBhZ2UgYmVpbmcNCisJCQkgKiByZXR1cm5lZCB0byBwYWdlIGFs
-bG9jYXRvciB3aGVuIHBhY2tldCB3aWxsDQorCQkJICogYmUgZnJlZWQuIFJlZiBjb3VudCB3aWxs
-IGJlIDIuDQorCQkJICovDQorCQkJZ2V0X3BhZ2UoYnVmX3BhZ2UpOw0KKwkJCXBnX29mZnMgKz0g
-UEFHRV9TSVpFOw0KKw0KKwkJCWlmIChyZXN0X2RhdGFfYnl0ZXMgPj0gUEFHRV9TSVpFKSB7DQor
-CQkJCW1vdmVkX2RhdGFfYnl0ZXMgKz0gUEFHRV9TSVpFOw0KKwkJCQlyZXN0X2RhdGFfYnl0ZXMg
-LT0gUEFHRV9TSVpFOw0KKwkJCX0gZWxzZSB7DQorCQkJCW1vdmVkX2RhdGFfYnl0ZXMgKz0gcmVz
-dF9kYXRhX2J5dGVzOw0KKwkJCQlyZXN0X2RhdGFfYnl0ZXMgPSAwOw0KKwkJCX0NCisJCX0NCisN
-CisJCXVzcl9oZHJfYnVmZmVyLT5mbGFncyA9IGxlMzJfdG9fY3B1KHBrdC0+aGRyLmZsYWdzKTsN
-CisJCXVzcl9oZHJfYnVmZmVyLT5sZW4gPSBtb3ZlZF9kYXRhX2J5dGVzOw0KKwkJdXNyX2hkcl9i
-dWZmZXIrKzsNCisNCisJCXBrdC0+b2ZmID0gcGdfb2ZmczsNCisNCisJCWlmIChyZXN0X2RhdGFf
-Ynl0ZXMgPT0gMCkgew0KKwkJCWxpc3RfZGVsKCZwa3QtPmxpc3QpOw0KKwkJCXZpcnRpb190cmFu
-c3BvcnRfZGVjX3J4X3BrdCh2dnMsIHBrdCk7DQorCQkJdmlydGlvX3RyYW5zcG9ydF9mcmVlX3Br
-dChwa3QpOw0KKwkJfQ0KKw0KKwkJLyogTm93IHJlZiBjb3VudCBmb3IgYWxsIHBhZ2VzIG9mIHBh
-Y2tldCBpcyAxLiAqLw0KKwl9DQorDQorCS8qIFNldCBsYXN0IGJ1ZmZlciBlbXB0eShpZiB3ZSBo
-YXZlIG9uZSkuICovDQorCWlmIChwYWdlc190b19pbnNlcnQgLSAxIDwgbWF4X3Vzcl9oZHJzKQ0K
-KwkJdXNyX2hkcl9idWZmZXItPmxlbiA9IDA7DQorDQorCXNwaW5fdW5sb2NrX2JoKCZ2dnMtPnJ4
-X2xvY2spOw0KKw0KKwl0bXBfcGFnZXNfaW5zZXJ0ZWQgPSBwYWdlc190b19pbnNlcnQ7DQorDQor
-CXJlcyA9IHZtX2luc2VydF9wYWdlcyh2bWEsIGFkZHIsIHBhZ2VzLCAmdG1wX3BhZ2VzX2luc2Vy
-dGVkKTsNCisNCisJaWYgKHJlcyB8fCB0bXBfcGFnZXNfaW5zZXJ0ZWQpIHsNCisJCS8qIEZhaWxl
-ZCB0byBpbnNlcnQgc29tZSBwYWdlcywgd2UgaGF2ZSAicGFydGlhbGx5Ig0KKwkJICogbWFwcGVk
-IHZtYS4gRG8gbm90IHJldHVybiwgc2V0IGVycm9yIGNvZGUuIFRoaXMNCisJCSAqIGNvZGUgd2ls
-bCBiZSByZXR1cm5lZCB0byB1c2VyLiBVc2VyIG5lZWRzIHRvIGNhbGwNCisJCSAqICdtYWR2aXNl
-KCkvbW1hcCgpJyB0byBjbGVhciB0aGlzIHZtYS4gQW55d2F5LA0KKwkJICogcmVmZXJlbmNlcyB0
-byBhbGwgcGFnZXMgd2lsbCB0byBiZSBkcm9wcGVkIGJlbG93Lg0KKwkJICovDQorCQllcnIgPSAt
-RUZBVUxUOw0KKwl9DQorDQorCS8qIFB1dCByZWZlcmVuY2UgZm9yIGV2ZXJ5IHBhZ2UuICovDQor
-CWZvciAoaSA9IDA7IGkgPCBwYWdlc190b19pbnNlcnQ7IGkrKykgew0KKwkJLyogUmVmIGNvdW50
-IGlzIDIgKCdnZXRfcGFnZSgpJyArICd2bV9pbnNlcnRfcGFnZXMoKScgYWJvdmUpLg0KKwkJICog
-UHV0IHJlZmVyZW5jZSBvbmNlLCBwYWdlIHdpbGwgYmUgcmV0dXJuZWQgdG8gYWxsb2NhdG9yDQor
-CQkgKiBhZnRlciB1c2VyJ3MgJ21hZHZpY2UoKS9tdW5tYXAoKScgY2FsbChvciBpdCB3YXNuJ3Qg
-bWFwcGVkDQorCQkgKiBpZiAndm1faW5zZXJ0X3BhZ2VzKCknIGZhaWxlZCkuDQorCQkgKi8NCisJ
-CXB1dF9wYWdlKHBhZ2VzW2ldKTsNCisJfQ0KKw0KKwl2aXJ0aW9fdHJhbnNwb3J0X3NlbmRfY3Jl
-ZGl0X3VwZGF0ZSh2c2spOw0KKwlrZnJlZShwYWdlcyk7DQorDQorCXJldHVybiBlcnI7DQorfQ0K
-K0VYUE9SVF9TWU1CT0xfR1BMKHZpcnRpb190cmFuc3BvcnRfemVyb2NvcHlfZGVxdWV1ZSk7DQor
-DQogc3RhdGljIHNzaXplX3QNCiB2aXJ0aW9fdHJhbnNwb3J0X3N0cmVhbV9kb19kZXF1ZXVlKHN0
-cnVjdCB2c29ja19zb2NrICp2c2ssDQogCQkJCSAgIHN0cnVjdCBtc2doZHIgKm1zZywNCkBAIC0x
-MzQ0LDEwICsxNTIyLDIxIEBAIEVYUE9SVF9TWU1CT0xfR1BMKHZpcnRpb190cmFuc3BvcnRfcmVj
-dl9wa3QpOw0KIHZvaWQgdmlydGlvX3RyYW5zcG9ydF9mcmVlX3BrdChzdHJ1Y3QgdmlydGlvX3Zz
-b2NrX3BrdCAqcGt0KQ0KIHsNCiAJaWYgKHBrdC0+YnVmX2xlbikgew0KLQkJaWYgKHBrdC0+c2xh
-Yl9idWYpDQorCQlpZiAocGt0LT5zbGFiX2J1Zikgew0KIAkJCWtmcmVlKHBrdC0+YnVmKTsNCi0J
-CWVsc2UNCi0JCQlmcmVlX3BhZ2VzKGJ1ZiwgZ2V0X29yZGVyKHBrdC0+YnVmX2xlbikpOw0KKwkJ
-fSBlbHNlIHsNCisJCQl1bnNpZ25lZCBpbnQgb3JkZXIgPSBnZXRfb3JkZXIocGt0LT5idWZfbGVu
-KTsNCisJCQl1bnNpZ25lZCBsb25nIGJ1ZiA9ICh1bnNpZ25lZCBsb25nKXBrdC0+YnVmOw0KKw0K
-KwkJCWlmIChwa3QtPnNwbGl0KSB7DQorCQkJCWludCBpOw0KKw0KKwkJCQlmb3IgKGkgPSAwOyBp
-IDwgKDEgPDwgb3JkZXIpOyBpKyspDQorCQkJCQlmcmVlX3BhZ2UoYnVmICsgaSAqIFBBR0VfU0la
-RSk7DQorCQkJfSBlbHNlIHsNCisJCQkJZnJlZV9wYWdlcyhidWYsIG9yZGVyKTsNCisJCQl9DQor
-CQl9DQogCX0NCiANCiAJa2ZyZWUocGt0KTsNCi0tIA0KMi4yNS4xDQo=
+On Wed May 11, 2022 at 10:24 PM IST, Dmitry Baryshkov wrote:
+> On 11/05/2022 19:15, Sireesh Kodali wrote:
+> > The modem on the MSM8953 platform is similar to the modem on the MSM899=
+6
+> > platform in terms of set up. It differs primarily in the way it needs S=
+CM
+> > to bless the MPSS firmware region.
+> >=20
+> > Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
+> > ---
+> >   drivers/remoteproc/qcom_q6v5_mss.c | 64 +++++++++++++++++++++++++++--=
+-
+> >   1 file changed, 58 insertions(+), 6 deletions(-)
+> >=20
+> > diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qc=
+om_q6v5_mss.c
+> > index af217de75e4d..a73fdcddeda4 100644
+> > --- a/drivers/remoteproc/qcom_q6v5_mss.c
+> > +++ b/drivers/remoteproc/qcom_q6v5_mss.c
+> > @@ -234,6 +234,7 @@ struct q6v5 {
+> >  =20
+> >   enum {
+> >   	MSS_MSM8916,
+> > +	MSS_MSM8953,
+> >   	MSS_MSM8974,
+> >   	MSS_MSM8996,
+> >   	MSS_MSM8998,
+> > @@ -687,12 +688,14 @@ static int q6v5proc_reset(struct q6v5 *qproc)
+> >   		}
+> >   		goto pbl_wait;
+> >   	} else if (qproc->version =3D=3D MSS_MSM8996 ||
+> > -		   qproc->version =3D=3D MSS_MSM8998) {
+> > +		   qproc->version =3D=3D MSS_MSM8998 ||
+> > +		   qproc->version =3D=3D MSS_MSM8953) {
+> >   		int mem_pwr_ctl;
+> >  =20
+> >   		/* Override the ACC value if required */
+> > -		writel(QDSP6SS_ACC_OVERRIDE_VAL,
+> > -		       qproc->reg_base + QDSP6SS_STRAP_ACC);
+> > +		if (qproc->version !=3D MSS_MSM8953)
+> > +			writel(QDSP6SS_ACC_OVERRIDE_VAL,
+> > +					qproc->reg_base + QDSP6SS_STRAP_ACC);
+> >  =20
+> >   		/* Assert resets, stop core */
+> >   		val =3D readl(qproc->reg_base + QDSP6SS_RESET_REG);
+> > @@ -734,7 +737,8 @@ static int q6v5proc_reset(struct q6v5 *qproc)
+> >   		writel(val, qproc->reg_base + QDSP6SS_PWR_CTL_REG);
+> >  =20
+> >   		/* Turn on L1, L2, ETB and JU memories 1 at a time */
+> > -		if (qproc->version =3D=3D MSS_MSM8996) {
+> > +		if (qproc->version =3D=3D MSS_MSM8996 ||
+> > +			qproc->version =3D=3D MSS_MSM8953) {
+> >   			mem_pwr_ctl =3D QDSP6SS_MEM_PWR_CTL;
+> >   			i =3D 19;
+> >   		} else {
+> > @@ -1314,7 +1318,16 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
+> >   			max_addr =3D ALIGN(phdr->p_paddr + phdr->p_memsz, SZ_4K);
+> >   	}
+> >  =20
+> > -	/*
+> > +	if (qproc->version =3D=3D MSS_MSM8953) {
+> > +		ret =3D qcom_scm_pas_mem_setup(5, qproc->mpss_phys, qproc->mpss_size=
+);
+> > +		if (ret) {
+> > +			dev_err(qproc->dev,
+> > +					"setting up mpss memory failed: %d\n", ret);
+> > +			goto release_firmware;
+> > +		}
+> > +	}
+> > +
+> > +	/**
+>
+> Single star please
+>
+> >   	 * In case of a modem subsystem restart on secure devices, the modem
+> >   	 * memory can be reclaimed only after MBA is loaded.
+> >   	 */
+> > @@ -1413,7 +1426,6 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
+> >   			writel(RMB_CMD_LOAD_READY, qproc->rmb_base + RMB_MBA_COMMAND_REG);
+> >   		}
+> >   		writel(size, qproc->rmb_base + RMB_PMI_CODE_LENGTH_REG);
+> > -
+> >   		ret =3D readl(qproc->rmb_base + RMB_MBA_STATUS_REG);
+> >   		if (ret < 0) {
+> >   			dev_err(qproc->dev, "MPSS authentication failed: %d\n",
+> > @@ -1422,6 +1434,7 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
+> >   		}
+> >   	}
+> >  =20
+> > +
+>
+> Unnecessary
+>
+
+oops
+
+> >   	/* Transfer ownership of modem ddr region to q6 */
+> >   	ret =3D q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm, false, tru=
+e,
+> >   				      qproc->mpss_phys, qproc->mpss_size);
+> > @@ -2198,6 +2211,44 @@ static const struct rproc_hexagon_res msm8996_ms=
+s =3D {
+> >   	.version =3D MSS_MSM8996,
+> >   };
+> >  =20
+> > +static const struct rproc_hexagon_res msm8953_mss =3D {
+> > +	.hexagon_mba_image =3D "mba.mbn",
+> > +	.proxy_supply =3D (struct qcom_mss_reg_res[]) {
+> > +		{
+> > +			.supply =3D "pll",
+> > +			.uA =3D 100000,
+> > +		},
+> > +		{}
+> > +	},
+> > +	.proxy_pd_names =3D (char*[]) {
+> > +			"cx",
+> > +			"mx",
+> > +			NULL
+> > +	},
+> > +	.active_supply =3D (struct qcom_mss_reg_res[]) {
+> > +		{
+> > +			.supply =3D "mss",
+> > +			.uV =3D 1050000,
+> > +			.uA =3D 100000,
+> > +		},
+> > +		{}
+> > +	},
+> > +	.proxy_clk_names =3D (char*[]){
+> > +			"xo",
+> > +			NULL
+> > +	},
+> > +	.active_clk_names =3D (char*[]){
+> > +			"iface",
+> > +			"bus",
+> > +			"mem",
+> > +			NULL
+> > +	},
+> > +	.need_mem_protection =3D false,
+> > +	.has_alt_reset =3D false,
+> > +	.has_spare_reg =3D false,
+>
+>
+> Please follow the custom  and define the rest of fields here.
+>
+
+I missed these in the rebase, I'll add them in v2
+
+> > +	.version =3D MSS_MSM8953,
+> > +};
+> > +
+> >   static const struct rproc_hexagon_res msm8916_mss =3D {
+> >   	.hexagon_mba_image =3D "mba.mbn",
+> >   	.proxy_supply =3D (struct qcom_mss_reg_res[]) {
+> > @@ -2301,6 +2352,7 @@ static const struct of_device_id q6v5_of_match[] =
+=3D {
+> >   	{ .compatible =3D "qcom,msm8916-mss-pil", .data =3D &msm8916_mss},
+> >   	{ .compatible =3D "qcom,msm8974-mss-pil", .data =3D &msm8974_mss},
+> >   	{ .compatible =3D "qcom,msm8996-mss-pil", .data =3D &msm8996_mss},
+> > +	{ .compatible =3D "qcom,msm8953-mss-pil", .data =3D &msm8953_mss},
+> >   	{ .compatible =3D "qcom,msm8998-mss-pil", .data =3D &msm8998_mss},
+> >   	{ .compatible =3D "qcom,sc7180-mss-pil", .data =3D &sc7180_mss},
+> >   	{ .compatible =3D "qcom,sc7280-mss-pil", .data =3D &sc7280_mss},
+>
+>
+> --=20
+> With best wishes
+> Dmitry
+
+Thank you for the review, I'll make the changes in v2 of this patch.
+
+Thanks,
+Sireesh

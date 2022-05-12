@@ -2,90 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C60FA524672
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0D2F524673
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:06:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350717AbiELHGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 03:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50670 "EHLO
+        id S1350742AbiELHGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 03:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350736AbiELHGC (ORCPT
+        with ESMTP id S1350774AbiELHGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 03:06:02 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E877525D
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:05:39 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id v10so3782313pgl.11
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:05:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=YI7qa/QXN/dczkT1YUrOOGjLkBD1yFf86CRdik/OXPc=;
-        b=Y4apOYdNhXDppeVSa/hY0qEPuUky2k8Mg+NNjWBrW8mmFyzqzKMGoEWHE4GFn2zp4H
-         cxj7pbd/24zF85Owm07osrmLRw6g2PD6EgaPzgQDGaeAukm6kGaAvSRpF2NXxyTATdTU
-         lklv61EIttvQ3OGS2ci0xlBzXvhZPYzuqB223Cs7TnGxoZ9g/p9rgDbnwrNrTXTeUjwJ
-         CRKFky5J7zDncf+87NEMYukF70kBixfmGKs31BrVSspYyJ9o+7maC2rRQCOfHoqf5KMN
-         Sju56e+jlLk0zAiU3jppCPWN174v69+nsVIbDO+8ck5wqJunF68ADmKuV5IZmHvvH3Dz
-         6pLg==
+        Thu, 12 May 2022 03:06:08 -0400
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BDD5CD3;
+        Thu, 12 May 2022 00:06:06 -0700 (PDT)
+Received: by mail-qk1-f179.google.com with SMTP id a22so3997804qkl.5;
+        Thu, 12 May 2022 00:06:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=YI7qa/QXN/dczkT1YUrOOGjLkBD1yFf86CRdik/OXPc=;
-        b=wWYBOKGQ9j6FCVWiKBkzIxEGkwH3qTKhu0tbycV6LGCLm9D9ikYG9WqY4H/XZGxk/c
-         DSePrc5tvDDHUYgBSSJUVxspoqZHYJQ0pRY4Vq7+7HlPQktABZGhnyM/5rvOVtj4cn1j
-         EkB4sAPxFdLVMcy5TMbmww5CKKaohQUfyo0Bgf14IIl8rJIKV2b+4CvjvepdvGN9Blw8
-         IuFxTSGzyhVvb+k+YwDmwkNFYgtlQvdCNtQfyOCFaHaTY/s/kCTLEoxqVZOhF/GSZ3gG
-         DjxDkNCWs+In48R+wstTiWdaVcAZn6gCj/HEofNTM2y/+GSkYapEMTj2Q96GygHDI3zv
-         Ja7w==
-X-Gm-Message-State: AOAM532v7HUyoL7xDTXQDuz/2AEwk0k+RsEH/b/MVYxSZDCGFIRRfMUp
-        jJCAP/8d9Nf2RHVJkcy2xK06YQ==
-X-Google-Smtp-Source: ABdhPJxi5KQrydwI8y97PuNn+ZsXxv/4PCd0/jR6YnFfztko70nCMswOPSAAnlzmeSO1zoISQydwtQ==
-X-Received: by 2002:a63:68c4:0:b0:3c6:c9a6:e316 with SMTP id d187-20020a6368c4000000b003c6c9a6e316mr13828351pgc.399.1652339139501;
-        Thu, 12 May 2022 00:05:39 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id d10-20020a170902ceca00b0015e8d4eb285sm3251896plg.207.2022.05.12.00.05.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 00:05:38 -0700 (PDT)
-Date:   Thu, 12 May 2022 12:35:36 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 1/3] cpufreq: Reorganize checks in cpufreq_offline()
-Message-ID: <20220512070536.6mbzhllvr6vme5g7@vireshk-i7>
-References: <5585781.DvuYhMxLoT@kreacher>
- <4756874.31r3eYUQgx@kreacher>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uZq5KQ7PbYNEAlZ3QkxMc8y4Xac8EM18MZB7pmG8rGs=;
+        b=RFH58T1tiKFNLyf3PNjwmqmRMNNDbE29N9RsKv+FdUpQ8FI3FrnOpL54mLNufp3RnL
+         2LtQGFk3TxfNngX+6HdQgvK48s4Jc7+cIywUFsWjQ3us/31C5rPAckmGAoRBXzq4EPj8
+         hZjPnWHZtxxVwOALDBWZCpSweyWOc9BM8N/j+M10hmzFPBaEv87xkNojrQY+JEf4pGK/
+         nrJ0PFFw3e8hxsIEx0eJSODsp/L7LHmEmClUdZHSfran9APtfFP0srEnrF67AVc3FBwQ
+         9yJSuyWdND/pICOafB3x5/rCSR9tIUzmgfgkz4PvjTPbIJZxbIOV3dQiBusQZTK7l0MG
+         F80w==
+X-Gm-Message-State: AOAM530SrcF7JDabLi4P4mOuFGi6VSiQPTF9tfUMh9KACWqRmB8bKRz4
+        DA3VEmaC+WP5eXIQ7oyaWYC/ghsrkinSCA==
+X-Google-Smtp-Source: ABdhPJxHdA9T+GeoSG62uIbqlG++dUzTUGAvmmXXRTValPzVDa67XHHYCGDnhfNw9L6rUMkY/5Chkw==
+X-Received: by 2002:a37:bbc4:0:b0:69b:db2c:c962 with SMTP id l187-20020a37bbc4000000b0069bdb2cc962mr21881103qkf.565.1652339165226;
+        Thu, 12 May 2022 00:06:05 -0700 (PDT)
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
+        by smtp.gmail.com with ESMTPSA id x4-20020a05620a0b4400b0069fcebf9c0asm2453284qkg.37.2022.05.12.00.06.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 00:06:04 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2f7bb893309so45452707b3.12;
+        Thu, 12 May 2022 00:06:03 -0700 (PDT)
+X-Received: by 2002:a81:2143:0:b0:2fb:1274:247e with SMTP id
+ h64-20020a812143000000b002fb1274247emr29285779ywh.384.1652339163593; Thu, 12
+ May 2022 00:06:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4756874.31r3eYUQgx@kreacher>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220511183210.5248-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220511183210.5248-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220511183210.5248-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 12 May 2022 09:05:51 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW9kfhr3d=yG8yfAuX+yBTR5vQr8XRi5ymbRyEVfWAjDg@mail.gmail.com>
+Message-ID: <CAMuHMdW9kfhr3d=yG8yfAuX+yBTR5vQr8XRi5ymbRyEVfWAjDg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/5] irqchip: Add RZ/G2L IA55 Interrupt Controller driver
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11-05-22, 17:48, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Notice that cpufreq_offline() only needs to check policy_is_inactive()
-> once and rearrange the code in there to make that happen.
-> 
-> No expected functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/cpufreq/cpufreq.c |   24 ++++++++++++------------
->  1 file changed, 12 insertions(+), 12 deletions(-)
+Hi Prabhakar,
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+On Wed, May 11, 2022 at 8:32 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Add a driver for the Renesas RZ/G2L Interrupt Controller.
+>
+> This supports external pins being used as interrupts. It supports
+> one line for NMI, 8 external pins and 32 GPIO pins (out of 123)
+> to be used as IRQ lines.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
--- 
-viresh
+LGTM ("I'm no irqchip expert"), so
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+One suggestion for improvement below, which needs changes to the
+irqchip core code, though.
+
+> --- /dev/null
+> +++ b/drivers/irqchip/irq-renesas-rzg2l.c
+
+> +static int rzg2l_irqc_init(struct device_node *node, struct device_node *parent)
+> +{
+> +       struct irq_domain *irq_domain, *parent_domain;
+> +       struct reset_control *resetn;
+> +       struct rzg2l_irqc_priv *priv;
+> +       struct clk *clk;
+> +       struct clk *pclk;
+> +       int ret;
+> +
+> +       priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+> +       if (!priv)
+> +               return -ENOMEM;
+> +
+> +       priv->base = of_iomap(node, 0);
+> +       if (!priv->base) {
+> +               ret = -ENXIO;
+> +               goto free_priv;
+> +       }
+> +
+> +       clk = of_clk_get_by_name(node, "clk");
+> +       if (IS_ERR(clk)) {
+> +               ret = IS_ERR(clk);
+> +               goto iounmap_base;
+> +       }
+> +
+> +       pclk = of_clk_get_by_name(node, "pclk");
+> +       if (IS_ERR(pclk)) {
+> +               ret = IS_ERR(pclk);
+> +               goto iounmap_base;
+> +       }
+> +
+> +       resetn = of_reset_control_get_exclusive_by_index(node, 0);
+> +       if (IS_ERR(resetn)) {
+> +               ret = IS_ERR(resetn);
+> +               goto iounmap_base;
+> +       }
+> +
+> +       parent_domain = irq_find_host(parent);
+> +       if (!parent_domain) {
+> +               pr_err("%pOF: cannot find parent domain\n", node);
+> +               ret = -ENODEV;
+> +               goto iounmap_base;
+> +       }
+> +
+> +       ret = rzg2l_irqc_parse_map(priv, node);
+> +       if (ret) {
+> +               pr_err("%pOF: cannot parse interrupts: %d\n", node, ret);
+> +               goto iounmap_base;
+> +       }
+> +
+> +       ret = reset_control_deassert(resetn);
+> +       if (ret) {
+> +               pr_err("%pOF: failed to deassert resetn pin, %d\n", node, ret);
+> +               goto iounmap_base;
+> +       }
+> +
+> +       raw_spin_lock_init(&priv->lock);
+> +
+> +       ret = clk_prepare_enable(clk);
+> +       if (ret)
+> +               goto assert_reset;
+> +
+> +       ret = clk_prepare_enable(pclk);
+> +       if (ret)
+> +               goto disable_clk;
+
+As the driver doesn't care about the properties of the clock, but
+just needs to enable them, I think it would be worthwhile to replace
+the explicit clock handling by Runtime PM.
+But that needs access to the struct device pointer.
+Of course that can be done later (see below).
+
+> +
+> +       irq_domain = irq_domain_add_hierarchy(parent_domain, 0, IRQC_NUM_IRQ,
+> +                                             node, &rzg2l_irqc_domain_ops,
+> +                                             priv);
+> +       if (!irq_domain) {
+> +               pr_err("%pOF: cannot initialize irq domain\n", node);
+> +               ret = -ENOMEM;
+> +               goto fail_irq_domain;
+> +       }
+> +
+> +       return 0;
+> +
+> +fail_irq_domain:
+> +       clk_disable_unprepare(pclk);
+> +disable_clk:
+> +       clk_disable_unprepare(clk);
+> +assert_reset:
+> +       reset_control_assert(resetn);
+> +iounmap_base:
+> +       iounmap(priv->base);
+> +free_priv:
+> +       kfree(priv);
+> +       return ret;
+> +}
+> +
+> +IRQCHIP_PLATFORM_DRIVER_BEGIN(rzg2l_irqc)
+> +IRQCHIP_MATCH("renesas,rzg2l-irqc", rzg2l_irqc_init)
+> +IRQCHIP_PLATFORM_DRIVER_END(rzg2l_irqc)
+
+While platform_irqchip_probe() has access to the platform_device,
+it does not pass that to the driver's initialization function, so
+that function does not have access to the device framework.
+Hence it can not be used for interrupt controllers that are part of a
+Power Domain, as, unlike clocks, Power Domains can only be controlled
+from Runtime PM, and thus require access to a struct device pointer.
+I think it would be good to fix this sooner rather than later; there
+are only a handful of users of this interface yet.
+
+> +MODULE_AUTHOR("Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>");
+> +MODULE_DESCRIPTION("Renesas RZ/G2L IRQC Driver");
+> +MODULE_LICENSE("GPL");
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

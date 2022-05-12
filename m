@@ -2,79 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4B3524568
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 08:12:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B52652456C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 08:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350167AbiELGMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 02:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
+        id S1350170AbiELGNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 02:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350142AbiELGL4 (ORCPT
+        with ESMTP id S1349200AbiELGNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 02:11:56 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EAC76D952
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 23:11:52 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id b32so5227956ljf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 23:11:52 -0700 (PDT)
+        Thu, 12 May 2022 02:13:13 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0D571D91
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 23:13:12 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2f7ee6bc6ddso37716157b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 23:13:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=NEB+jrNm+Tn2FtofeaBVpeeoHMLJsewS6l3Qc041rsM=;
-        b=NNEUu6kPZ1arfW4eHUTQDHxPZV/kgJ370ELIRRoRiXNWZ5JJi9ZCFJO/R344mtpCg0
-         vrL8s3NxqydBsjCxs5i3xi6bIjgpDLx/+cyNPZScHQ4l3rj85FQUP8NsYNUKGPyKHiwL
-         HkLijvpLEQCy8RojLGQhtygKeI+z+sETXEpoy5R+qPsiQgVbcQokY51YeREWOqH2qspM
-         rNibrz1iHC4ETdUPQBJutTzoVJlSAmvAjiiUAjOGdBaQMREZx2lZg9Gh0RHnQEd60wTq
-         yXnEBA3TkTar00aJ1t5mx+OkH2e8EamaGMjyBereZye249/Hpp8mTJrGf2KQAlwKUCrS
-         UFBQ==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=k2mrwNMnDRDtKU4GgM7wzGIZDxmWj/S0FET83F74pgg=;
+        b=Pn5/YRZEdz4bLQyrZFlg+WTrDF1ez3jNuU3oeeYtBPOfI5LbGlFTaJfwufzjmSUY0V
+         hsMopSSrrhIMQ9tMydE/FdeV78QAtkeahrMuNxv53QreiyxNamrOK/BuL3+EhnIqBi/Z
+         F8fcCVwiJPR8TYY4LThQSjVlQ0z4/qoNCP8V38dKAikPu2Ol3b8SFyRtFfUvwvw4GSKk
+         3CAYqZjRDIx8pGR0ADieFNK9hHZfOVmewF65P1wtD+mGuAtlGQbUF/KqagrGCye0E3kS
+         d7o2Twa7snYiyV9H4hMQGrbEgrolqc2F/i9MH466tgVdYt9/47HhLs+MJhSx6Ivx6+EW
+         GeZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=NEB+jrNm+Tn2FtofeaBVpeeoHMLJsewS6l3Qc041rsM=;
-        b=oL9UHqcuYjDOF30OzRjHUzKiHXLeSfybiipNlGVMua0sY6B1nyfVbJJaAuQ/K/QJWi
-         IMRpBmFN1ZlqofyemgEovechb+7GMG4W6SEQq7jWbRQg+9f9WRAe3/bbicSwLYmX+7Q3
-         7sb49zhDhyUKOJ0fhe9vCEDrdaQ9fRL1mPO8YaLApifkOderpJbLoUCM2qJkDxWpmgUv
-         /dkAS+RDkVDsloi1LgEP0vyjGWqJRXeTi/lW85gbwtQGu1VWLGsI3BBTBn2FxM8Mjh6y
-         eRUKQQ/75I5knZlfGUwr2rkT4h2bcS4SCORv86+pMuVlbNccmkBPF4ieNXzhHxAO8Oyt
-         T31Q==
-X-Gm-Message-State: AOAM533tjJwbQXVuTuMd9cTui3LuLkXjffCQ95bh7BySFE2WC8kLLC+U
-        ZR66N8a9NwRl3WEZR3aeMRY=
-X-Google-Smtp-Source: ABdhPJyMRNpNOP2eL5Vb3YEt2h7dyYcK52kqLFmo+atTAmUfpAkUnaLLPD4zU5Qj2p/8dIrpHs9V/Q==
-X-Received: by 2002:a05:651c:895:b0:250:c5ec:bc89 with SMTP id d21-20020a05651c089500b00250c5ecbc89mr13159344ljq.251.1652335910783;
-        Wed, 11 May 2022 23:11:50 -0700 (PDT)
-Received: from [192.168.1.7] ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id 17-20020ac24d51000000b0047255d2119asm617346lfp.201.2022.05.11.23.11.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 23:11:50 -0700 (PDT)
-Subject: Re: [PATCH V2 2/7] xen/grants: support allocating consecutive grants
-To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Cc:     Stefano Stabellini <sstabellini@kernel.org>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Juergen Gross <jgross@suse.com>, Julien Grall <julien@xen.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>
-References: <1651947548-4055-1-git-send-email-olekstysh@gmail.com>
- <1651947548-4055-3-git-send-email-olekstysh@gmail.com>
- <8409e636-94e3-e231-f181-c76a849534a1@gmail.com>
- <24748b59-e2ed-1d7d-801e-ab9dc12b0983@oracle.com>
-From:   Oleksandr <olekstysh@gmail.com>
-Message-ID: <749e79d0-c920-adee-c145-edc4153a99f9@gmail.com>
-Date:   Thu, 12 May 2022 09:11:49 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <24748b59-e2ed-1d7d-801e-ab9dc12b0983@oracle.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=k2mrwNMnDRDtKU4GgM7wzGIZDxmWj/S0FET83F74pgg=;
+        b=GHWOHTCb5teb6gVs3slo1YAKfDba1gmyzCNwGmGsecnnkBfzb4iUkCA10A7Lf7tVy5
+         bbI1YLEo68RxCXoUeenSyGqoNWXW+4n3itqG8u7K/LHtYH7UhMcf04Pgow6r/KGfEjdA
+         ZyWnGQp2A6zK3zoqYVoTp8M3fB5fpJPKj8aR4XHmKYmAQWWWj11Uuga2OliqoJz6UGgt
+         tRcS941APHCjHmr5qOG+3p8TdFtorrgdWnlThuYV+0lENVUFVd3n+rtkqD7K0UXhiQ0/
+         B0YYelm7xe1jXj0E3lt/No4Gp+8gW6R8f20Yp1RcRJQkd8wvI1dYCRv2oHJDQOZ0bBOn
+         IA9g==
+X-Gm-Message-State: AOAM531F5kg5Mv8TlI5QxP6g9dYwrQHGmshf45aSNgrx6qQLc2Q4fkEd
+        /IroGwX/nK66P8QnIwF75hPPL3BKBVIo
+X-Google-Smtp-Source: ABdhPJwbvviNfoKin2ClLu67Q4c9Lr6aurmjWUX+jvvCQpLwrsh4JwVF6ENzbLc6q1jbFTQcQUbiXHqgYecC
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:5993:294b:7b62:54cb])
+ (user=irogers job=sendgmr) by 2002:a25:c1c3:0:b0:648:e9af:111f with SMTP id
+ r186-20020a25c1c3000000b00648e9af111fmr29222012ybf.168.1652335991609; Wed, 11
+ May 2022 23:13:11 -0700 (PDT)
+Date:   Wed, 11 May 2022 23:13:06 -0700
+Message-Id: <20220512061308.1152233-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
+Subject: [PATCH v2 0/2] Fix topdown event weak grouping
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Andi Kleen <ak@linux.intel.com>,
+        John Garry <john.garry@huawei.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,83 +81,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Keep topdown events within a group when a weak group is broken. This
+is a requirement as topdown events must form a group.
 
-On 12.05.22 00:09, Boris Ostrovsky wrote:
+Add perf stat testing including for required topdown event group
+behaviors.
 
+Note: as with existing topdown evsel/evlist code topdown events are
+assumed to be on the PMU "cpu". On Alderlake the PMU "cpu_core" should
+also be tested. Future changes can fix Alderlake.
 
-Hello Boris
+v2. Correct behavior wrt pmu prefixed events and avoid the test using
+    deprecated events: Suggested-by: Liang, Kan <kan.liang@linux.intel.com>
 
+Ian Rogers (2):
+  perf evlist: Keep topdown counters in weak group
+  perf test: Add basic stat and topdown group test
 
->
-> On 5/11/22 2:00 PM, Oleksandr wrote:
->>
->> On 07.05.22 21:19, Oleksandr Tyshchenko wrote:
->>
->> Hello Boris, Stefano
->>
->>
->>> From: Juergen Gross <jgross@suse.com>
->>>
->>> For support of virtio via grant mappings in rare cases larger mappings
->>> using consecutive grants are needed. Support those by adding a bitmap
->>> of free grants.
->>>
->>> As consecutive grants will be needed only in very rare cases (e.g. when
->>> configuring a virtio device with a multi-page ring), optimize for the
->>> normal case of non-consecutive allocations.
->>>
->>> Signed-off-by: Juergen Gross <jgross@suse.com>
->>> ---
->>> Changes RFC -> V1:
->>>     - no changes
->>>     Changes V1 -> V2:
->>>     - no changes
->>
->>
->> May I please ask for the review here?
->
->
->
-> I had a quick look but I am stuck on get_free_seq(), I need to stare 
-> at it some more. Unless someone else reviews this, I will try to get 
-> to this in the next couple of days.
+ tools/perf/arch/x86/util/evsel.c | 12 ++++++
+ tools/perf/tests/shell/stat.sh   | 67 ++++++++++++++++++++++++++++++++
+ tools/perf/util/evlist.c         | 16 +++++++-
+ tools/perf/util/evsel.c          | 10 +++++
+ tools/perf/util/evsel.h          |  3 ++
+ 5 files changed, 106 insertions(+), 2 deletions(-)
+ create mode 100755 tools/perf/tests/shell/stat.sh
 
-
-Thank you!
-
-
->
->
->
-> One thing I did notice is
->
->
->>
->>> @@ -1452,6 +1624,13 @@ int gnttab_init(void)
->>>           }
->>>       }
->>>   +    i = gnttab_interface->grefs_per_grant_frame * 
->>> max_nr_grant_frames;
->>> +    gnttab_free_bitmap = bitmap_zalloc(i, GFP_KERNEL);
->>> +    if (!gnttab_free_bitmap) {
->>> +        ret = -ENOMEM;
->>> +        goto ini_nomem;
->>> +    }
->
->
-> This overwrites 'i' and will break error handling at ini_nomem.
-
-
-Indeed, will fix. Thank you for pointing this out.
-
-
->
->
-> -boris
->
->
 -- 
-Regards,
-
-Oleksandr Tyshchenko
+2.36.0.512.ge40c2bad7a-goog
 

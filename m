@@ -2,144 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AD155246C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA46C5246C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350908AbiELHUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 03:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45038 "EHLO
+        id S1350928AbiELHVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 03:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235907AbiELHUR (ORCPT
+        with ESMTP id S1350929AbiELHVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 03:20:17 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2044.outbound.protection.outlook.com [40.107.236.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D572F61D3;
-        Thu, 12 May 2022 00:20:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Dk3Fl28oscMtsFv4f1wz/Vt8NXdSCu/9VsP9wR/2IdVydA+V7UTmMDTFO7wkfh0JsH80QhfOosLpqnZ8zCi6KdwJku//JWyp143IpsvLWBSkWj4vR/yQv8s6quA9F269xOu5scn93OVYJZ0Y3CE90SpFfDVWQibPzKPkqL0J6c/Qqsp4oLVkz4SuFFKj0+Tyaxf7E/GgZnlr6cXMWgK2RvTXffjD9XLa8aMwR9rjlFDCaXAIcvQiMQHcevGX8yMffNp7OAswiEcI1oP5VPyWRSJqjX5+dJywK2scj4Z5gyTQnBZjMNpTRX+nIghi/PPD2mr6OVJxoiS07ZVBVpfI5w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v+6ZJfyH57Nsu+xycuZwWWFMkUL7pd9JQ3WB4p4QbVk=;
- b=aYWsBjIne5pnr3cap/BXjt2oPyRBIipmoIWW1gYVNxkFfGQCDoA9spkIwr03LJGed9dj82TgvpSH9bTbJQqrEO86CVp20IcTZjjmUOwkgc4/b7l2JAPaVExJTMtBQzg5fqRcVT6sA+eska9pZrkik5Q0IQvcFoLePjGei19mINoCVVfiT51Wp4YwYJB7MM6QnaUu6+rKtbOfB7WMVDfu74W7ZjlfLPW2HVCsNMqy5RbJle0QP6DkRTObPBu56yHYd3yaHog6IDiLmYFy01wA/GnPRhXHxCuAVdkD/8dQXHIfMumxR8k0cFsXavoFmv0fkkKLku52k4USUdxC8Pp6XA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=gmail.com smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v+6ZJfyH57Nsu+xycuZwWWFMkUL7pd9JQ3WB4p4QbVk=;
- b=NvsnjmfCUzdio47jVrkERoInT8QuBHhjsqpy0eJ660owmYAMYWEcUyXgVGuOi9c1vAvM18KISOsrujyuBzU4XxoG0aKXFlU7hLi8iic6tTlib/KGefMI0i2SUHwerHAfpv1ksMLJRobMgtQtaVfriuw64w7+VhA5D8WiTlCU9Lc=
-Received: from SN4PR0501CA0126.namprd05.prod.outlook.com
- (2603:10b6:803:42::43) by PH0PR02MB8358.namprd02.prod.outlook.com
- (2603:10b6:510:102::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13; Thu, 12 May
- 2022 07:20:14 +0000
-Received: from SN1NAM02FT0053.eop-nam02.prod.protection.outlook.com
- (2603:10b6:803:42:cafe::b7) by SN4PR0501CA0126.outlook.office365.com
- (2603:10b6:803:42::43) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.5 via Frontend
- Transport; Thu, 12 May 2022 07:20:14 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0053.mail.protection.outlook.com (10.97.4.115) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5250.13 via Frontend Transport; Thu, 12 May 2022 07:20:14 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Thu, 12 May 2022 00:20:12 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Thu, 12 May 2022 00:20:12 -0700
-Envelope-to: git@xilinx.com,
- saikrishna12468@gmail.com,
- adrian.hunter@intel.com,
- ulf.hansson@linaro.org,
- linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org,
- linux-mmc@vger.kernel.org
-Received: from [172.23.64.3] (port=38989 helo=xhdvnc103.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <lakshmi.sai.krishna.potthuri@xilinx.com>)
-        id 1np37L-000Fck-LL; Thu, 12 May 2022 00:20:11 -0700
-Received: by xhdvnc103.xilinx.com (Postfix, from userid 14964)
-        id D6D4D102C79; Thu, 12 May 2022 12:50:10 +0530 (IST)
-From:   Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Adrian Hunter <adrian.hunter@intel.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <git@xilinx.com>,
-        <saikrishna12468@gmail.com>, <sgoud@xilinx.com>,
-        Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
-Subject: [PATCH] mmc: sdhci-of-arasan: Add NULL check for data field
-Date:   Thu, 12 May 2022 12:49:53 +0530
-Message-ID: <1652339993-27280-1-git-send-email-lakshmi.sai.krishna.potthuri@xilinx.com>
-X-Mailer: git-send-email 2.1.1
+        Thu, 12 May 2022 03:21:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1A951AD8D
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:21:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652340063;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=v7bOQidy2XKacFQoEFC88TIIvZuaoizz8bbPSOsrMVU=;
+        b=WzhGOFw6tD0KNK+9t0klqE4vqt6BG6qI2OlDEvMisKxc+ovLPFJ6QBtFeJaZepcmzZ2I1F
+        kzy41H6xzshsxdQkf38DkS7yzdBN6uqCOVITGdWSqs/HIInq7yYo0DYW8GhqQZP8Z+rvof
+        zBIxBVjdjr2KDf3AceCS5Semm8HE8Xo=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-646-pkh5LATMP56FwyDqeZHFRQ-1; Thu, 12 May 2022 03:21:01 -0400
+X-MC-Unique: pkh5LATMP56FwyDqeZHFRQ-1
+Received: by mail-wm1-f72.google.com with SMTP id k5-20020a05600c0b4500b003941ca130f9so1293441wmr.0
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:21:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=v7bOQidy2XKacFQoEFC88TIIvZuaoizz8bbPSOsrMVU=;
+        b=vdBcm7SRx+2oigB5n+5KZPxPXJYODm4TpvMubcKFr8wTCOEPrLP4/Jh98bH8ggRfWP
+         zQE0/rpZ4YzUDA1ATWTpK9/rV69YYnWUyCC57zzlP18yZySIOrF45tmxLd11LLihmpAQ
+         Ynb3tHOvqnxPP2kPTqWRJUziK2sdjHoUqpLxcJVBSOgCcmZuFjrGvY2/RaI8BOad1ah2
+         SYVoHQTbjSiHpMpk39MFZ87KTAvGqnEos2Xp85/Dm/q/rBIUWHGKZjYLUL/jIfnBeoKG
+         jR+l0Igd6YtEcPY9F9coQa71goAFBkaBdIEDI9kE0jxAXapZnOJN4fGpd7+Dt6KjwJv1
+         4Y9Q==
+X-Gm-Message-State: AOAM5326MYzV0rqzc1CGa7Xpepi+m7a9BULKSrnAxxTyfwoNUGG7jf5z
+        C+fYgYBtTHaQJZBldS3TTlzs3OhhnGsqcYQrjnhT02s4GBfisaFyrnrN7HsqMLoJrWmMzDKe4QQ
+        UaGQC7zBT43JkDmcNPoKC6DjF
+X-Received: by 2002:a05:600c:4ba1:b0:394:9ae3:ee98 with SMTP id e33-20020a05600c4ba100b003949ae3ee98mr8594972wmp.160.1652340060416;
+        Thu, 12 May 2022 00:21:00 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwkID2x3/1z0/wYtZX175tGSUkmgETVETXT7EhcZbVjxfbCqFPAOMIbsG17vOktA4lTMY16mg==
+X-Received: by 2002:a05:600c:4ba1:b0:394:9ae3:ee98 with SMTP id e33-20020a05600c4ba100b003949ae3ee98mr8594952wmp.160.1652340060137;
+        Thu, 12 May 2022 00:21:00 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-113-89.dyn.eolo.it. [146.241.113.89])
+        by smtp.gmail.com with ESMTPSA id l16-20020a5d4bd0000000b0020c5253d8d8sm4000061wrt.36.2022.05.12.00.20.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 00:20:59 -0700 (PDT)
+Message-ID: <87124d7a213f14eec98bbeb80836c20ea1a33352.camel@redhat.com>
+Subject: Re: [PATCH v2] drivers: net: vmxnet3: fix possible use-after-free
+ bugs in vmxnet3_rq_alloc_rx_buf()
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Zixuan Fu <r33s3n6@gmail.com>, doshir@vmware.com,
+        pv-drivers@vmware.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        baijiaju1990@gmail.com, TOTE Robot <oslab@tsinghua.edu.cn>
+Date:   Thu, 12 May 2022 09:20:58 +0200
+In-Reply-To: <20220510131716.929387-1-r33s3n6@gmail.com>
+References: <20220510131716.929387-1-r33s3n6@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5d57e9c2-3872-46c1-1beb-08da33e7dbcb
-X-MS-TrafficTypeDiagnostic: PH0PR02MB8358:EE_
-X-Microsoft-Antispam-PRVS: <PH0PR02MB8358D5536F2F64052F889288BDCB9@PH0PR02MB8358.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: K+kkUJoNPpFbhqTdpvG7nJEeu0OAfs10Vz0uiz10/HGh4pkwpI3N2DbBaqjWwEAmfZfQICMzkhATU5SILZlKuS8vQyTzDTVMtBAgZBMy7g50YB2kBa+STUOGJOxhSbeLCIVo/T0X3vBur4Dj7tVDbKOO5RU//AFKrXZtIFqHi2MgdEZjkDw79orvUIReVOC62Vifd9uPlyeXMEr4N7gi2WI62tnjCEjSzLgFf8JuT6g3lHVJQin9sK65Y04YJz/QDQM+9jlrDYLnT5SlIiM34/bdJvQB9Re/sNfasLstD6hiIlnnfuItYAVKN5D1qAj7zs5pkuYtb+F7yd/mnu8qiWbbM3FLrBidHV+T59alG3IcK/Bqq35rHhOEevnP4CYk2av2ls+9lfI50xI7nhegUvsU+9HQGJ1Tlk0UBII4uCjmeXCFJtUgdADVNHx4HJbpuxgPu39Dx8a3BXlV2+V/ixKopzpg/QSE5ZdyTzLXG1KwfrA4SiJOURSvZKdM0KaQpS1i77TLD/Og7Ac+KknNoaMORRxm4REm/YbIGeLWgQocz72hDyn/IQVCrVpC10H6dgRL99+rY8wNoc5QOM/0pBtqx0fcQ8cTR3RGoEzioUkmirXKidtVcpL8vnrs5txvulXcyFoYMHkkotcMECNSuLqEltAdcNYzHvKB3MhGUZgpDp3l9+7o7LVnCrBF0qnQPafZJUUZih20q6Rjxxva/g==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(36860700001)(508600001)(54906003)(70206006)(70586007)(8676002)(4326008)(6666004)(82310400005)(110136005)(6266002)(26005)(426003)(47076005)(336012)(8936002)(2906002)(40460700003)(316002)(107886003)(186003)(36756003)(4744005)(2616005)(42186006)(5660300002)(7636003)(356005)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2022 07:20:14.3079
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5d57e9c2-3872-46c1-1beb-08da33e7dbcb
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0053.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR02MB8358
-X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add NULL check for data field retrieved from of_device_get_match_data()
-before dereferencing the data.
-Addresses-coverity: CID 305057:Dereference null return value (NULL_RETURNS)
+Hello,
 
-Signed-off-by: Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
----
- drivers/mmc/host/sdhci-of-arasan.c | 3 +++
- 1 file changed, 3 insertions(+)
+On Tue, 2022-05-10 at 21:17 +0800, Zixuan Fu wrote:
+> In vmxnet3_rq_alloc_rx_buf(), when dma_map_single() fails, rbi->skb is
+> freed immediately. Similarly, in another branch, when dma_map_page() fails,
+> rbi->page is also freed. In the two cases, vmxnet3_rq_alloc_rx_buf()
+> returns an error to its callers vmxnet3_rq_init() -> vmxnet3_rq_init_all()
+> -> vmxnet3_activate_dev(). Then vmxnet3_activate_dev() calls
+> vmxnet3_rq_cleanup_all() in error handling code, and rbi->skb or rbi->page
+> are freed again in vmxnet3_rq_cleanup_all(), causing use-after-free bugs.
+> 
+> To fix these possible bugs, rbi->skb and rbi->page should be cleared after
+> they are freed.
+> 
+> The error log in our fault-injection testing is shown as follows:
+> 
+> [   14.319016] BUG: KASAN: use-after-free in consume_skb+0x2f/0x150
+> ...
+> [   14.321586] Call Trace:
+> ...
+> [   14.325357]  consume_skb+0x2f/0x150
+> [   14.325671]  vmxnet3_rq_cleanup_all+0x33a/0x4e0 [vmxnet3]
+> [   14.326150]  vmxnet3_activate_dev+0xb9d/0x2ca0 [vmxnet3]
+> [   14.326616]  vmxnet3_open+0x387/0x470 [vmxnet3]
+> ...
+> [   14.361675] Allocated by task 351:
+> ...
+> [   14.362688]  __netdev_alloc_skb+0x1b3/0x6f0
+> [   14.362960]  vmxnet3_rq_alloc_rx_buf+0x1b0/0x8d0 [vmxnet3]
+> [   14.363317]  vmxnet3_activate_dev+0x3e3/0x2ca0 [vmxnet3]
+> [   14.363661]  vmxnet3_open+0x387/0x470 [vmxnet3]
+> ...
+> [   14.367309] 
+> [   14.367412] Freed by task 351:
+> ...
+> [   14.368932]  __dev_kfree_skb_any+0xd2/0xe0
+> [   14.369193]  vmxnet3_rq_alloc_rx_buf+0x71e/0x8d0 [vmxnet3]
+> [   14.369544]  vmxnet3_activate_dev+0x3e3/0x2ca0 [vmxnet3]
+> [   14.369883]  vmxnet3_open+0x387/0x470 [vmxnet3]
+> [   14.370174]  __dev_open+0x28a/0x420
+> [   14.370399]  __dev_change_flags+0x192/0x590
+> [   14.370667]  dev_change_flags+0x7a/0x180
+> [   14.370919]  do_setlink+0xb28/0x3570
+> [   14.371150]  rtnl_newlink+0x1160/0x1740
+> [   14.371399]  rtnetlink_rcv_msg+0x5bf/0xa50
+> [   14.371661]  netlink_rcv_skb+0x1cd/0x3e0
+> [   14.371913]  netlink_unicast+0x5dc/0x840
+> [   14.372169]  netlink_sendmsg+0x856/0xc40
+> [   14.372420]  ____sys_sendmsg+0x8a7/0x8d0
+> [   14.372673]  __sys_sendmsg+0x1c2/0x270
+> [   14.372914]  do_syscall_64+0x41/0x90
+> [   14.373145]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> ...
+> 
+> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+> Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
 
-diff --git a/drivers/mmc/host/sdhci-of-arasan.c b/drivers/mmc/host/sdhci-of-arasan.c
-index 6a2e5a468424..757801dfc308 100644
---- a/drivers/mmc/host/sdhci-of-arasan.c
-+++ b/drivers/mmc/host/sdhci-of-arasan.c
-@@ -1577,6 +1577,9 @@ static int sdhci_arasan_probe(struct platform_device *pdev)
- 	const struct sdhci_arasan_of_data *data;
- 
- 	data = of_device_get_match_data(dev);
-+	if (!data)
-+		return -EINVAL;
-+
- 	host = sdhci_pltfm_init(pdev, data->pdata, sizeof(*sdhci_arasan));
- 
- 	if (IS_ERR(host))
--- 
-2.17.1
+This looks like targeting the 'net' tree. You should specify that in
+the patch subj. More importantly you should provide a 'Fixes' tag
+pointing to commit introducing the issue.
+
+Please provide a new version addressing the above.
+
+Thanks,
+
+Paolo
 

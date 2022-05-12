@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E72524B85
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24E7A524B7C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353139AbiELLWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 07:22:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46004 "EHLO
+        id S1353299AbiELLWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 07:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353150AbiELLVa (ORCPT
+        with ESMTP id S1353188AbiELLVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 07:21:30 -0400
+        Thu, 12 May 2022 07:21:32 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02B6D67;
-        Thu, 12 May 2022 04:21:28 -0700 (PDT)
-Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KzTlp1Nw3z6GD8h;
-        Thu, 12 May 2022 19:17:58 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3F42983F;
+        Thu, 12 May 2022 04:21:30 -0700 (PDT)
+Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KzTmW1tSHz687hF;
+        Thu, 12 May 2022 19:18:35 +0800 (CST)
 Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
+ fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Thu, 12 May 2022 13:21:26 +0200
+ 15.1.2375.24; Thu, 12 May 2022 13:21:28 +0200
 Received: from localhost.localdomain (10.69.192.58) by
  lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 12 May 2022 12:21:25 +0100
+ 15.1.2375.24; Thu, 12 May 2022 12:21:26 +0100
 From:   John Garry <john.garry@huawei.com>
 To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linuxarm@huawei.com>, John Garry <john.garry@huawei.com>
-Subject: [PATCH 2/3] scsi: hisi_sas: Use sas_ata_wait_after_reset() in IT nexus reset
-Date:   Thu, 12 May 2022 19:15:33 +0800
-Message-ID: <1652354134-171343-3-git-send-email-john.garry@huawei.com>
+Subject: [PATCH 3/3] scsi: hisi_sas: Fix rescan after deleting a disk
+Date:   Thu, 12 May 2022 19:15:34 +0800
+Message-ID: <1652354134-171343-4-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1652354134-171343-1-git-send-email-john.garry@huawei.com>
 References: <1652354134-171343-1-git-send-email-john.garry@huawei.com>
@@ -51,55 +51,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have seen errors like this when a SATA device is probed:
+Removing an ATA device via sysfs means that the device may not be found
+through re-scanning:
 
-[524.566298] hisi_sas_v3_hw 0000L74:02.0: erroneous completion iptt=4096 ...
-[524.582827] sas: TMF task open reject failed 500e004aaaaaaaa00
+root@ubuntu:/home/john# lsscsi
+[0:0:0:0] disk SanDisk LT0200MO P404 /dev/sda
+[0:0:1:0] disk ATA HGST HUS724040AL A8B0 /dev/sdb
+[0:0:8:0] enclosu 12G SAS Expander RevB -
+root@ubuntu:/home/john# echo 1 > /sys/block/sdb/device/delete
+root@ubuntu:/home/john# echo "- - -" > /sys/class/scsi_host/host0/scan
+root@ubuntu:/home/john# lsscsi
+[0:0:0:0] disk SanDisk LT0200MO P404 /dev/sda
+[0:0:8:0] enclosu 12G SAS Expander RevB -
+root@ubuntu:/home/john#
 
-Since commit 21c7e972475e ("scsi: hisi_sas: Disable SATA disk phy for
-severe I_T nexus reset failure"), we issue an ATA softreset to disks after
-a phy reset to ensure that they are in sound working order. If the
-softreset is issued before the remote phy has come back up then the
-softreset will fail (errors as above). Remedy this by waiting for the
-phy to come back up after the reset.
+The problem is that the rescan of the device may conflict with the device
+in being re-initialized, as follows:
 
+- In the rescan we call hisi_sas_slave_alloc() in store_scan() ->
+  sas_user_scan() -> [__]scsi_scan_target() -> scsi_probe_and_add_lunc() ->
+  scsi_alloc_sdev() -> hisi_sas_slave_alloc() -> hisi_sas_init_device()
+  In hisi_sas_init_device() we issue an IT nexus reset for ATA devices
+
+- That IT nexus causes the remote PHY to go down and this triggers a bcast
+  event
+
+- In parallel libsas processes the bcast event, finds that the phy is down
+  and marks the device as gone
+
+The hard reset issued in hisi_sas_init_device() is unncessary - as
+described in the code comment - so remove it. Also set dev status as
+HISI_SAS_DEV_NORMAL as the hisi_sas_init_device() call.
+
+Fixes: 36c6b7613ef1 ("scsi: hisi_sas: Initialise devices in .slave_alloc callback")
 Signed-off-by: John Garry <john.garry@huawei.com>
-Reviewed-by: Xiang Chen <chenxiang66@hisilicon.com>
 Tested-by: Yihang Li <liyihang6@hisilicon.com>
+Reviewed-by: Xiang Chen <chenxiang66@hisilicon.com>
 ---
- drivers/scsi/hisi_sas/hisi_sas_main.c | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+ drivers/scsi/hisi_sas/hisi_sas_main.c | 47 ++++++++++-----------------
+ 1 file changed, 18 insertions(+), 29 deletions(-)
 
 diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 4bda2f6cb352..997f27e2f1e5 100644
+index 997f27e2f1e5..6803751dc4b1 100644
 --- a/drivers/scsi/hisi_sas/hisi_sas_main.c
 +++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -1710,13 +1710,18 @@ static int hisi_sas_debug_I_T_nexus_reset(struct domain_device *device)
- 		/* report PHY down if timed out */
- 		if (rc == -ETIMEDOUT)
- 			hisi_sas_phy_down(hisi_hba, sas_phy->id, 0, GFP_KERNEL);
--	} else if (sas_dev->dev_status != HISI_SAS_DEV_INIT) {
--		/*
--		 * If in init state, we rely on caller to wait for link to be
--		 * ready; otherwise, except phy reset is fail, delay.
--		 */
--		if (!rc)
--			msleep(2000);
-+		return rc;
-+	}
-+
+@@ -709,8 +709,6 @@ static int hisi_sas_init_device(struct domain_device *device)
+ 	struct scsi_lun lun;
+ 	int retry = HISI_SAS_DISK_RECOVER_CNT;
+ 	struct hisi_hba *hisi_hba = dev_to_hisi_hba(device);
+-	struct device *dev = hisi_hba->dev;
+-	struct sas_phy *local_phy;
+ 
+ 	switch (device->dev_type) {
+ 	case SAS_END_DEVICE:
+@@ -729,30 +727,18 @@ static int hisi_sas_init_device(struct domain_device *device)
+ 	case SAS_SATA_PM_PORT:
+ 	case SAS_SATA_PENDING:
+ 		/*
+-		 * send HARD RESET to clear previous affiliation of
+-		 * STP target port
++		 * If an expander is swapped when a SATA disk is attached then
++		 * we should issue a hard reset to clear previous affiliation
++		 * of STP target port, see SPL (chapter 6.19.4).
++		 *
++		 * However we don't need to issue a hard reset here for these
++		 * reasons:
++		 * a. When probing the device, libsas/libata already issues a
++		 * hard reset in sas_probe_sata() -> ata_sas_async_probe().
++		 * Note that in hisi_sas_debug_I_T_nexus_reset() we take care
++		 * to issue a hard reset by checking the dev status (== INIT).
++		 * b. When resetting the controller, this is simply unnecessary.
+ 		 */
+-		local_phy = sas_get_local_phy(device);
+-		if (!scsi_is_sas_phy_local(local_phy) &&
+-		    !test_bit(HISI_SAS_RESETTING_BIT, &hisi_hba->flags)) {
+-			unsigned long deadline = ata_deadline(jiffies, 20000);
+-			struct sata_device *sata_dev = &device->sata_dev;
+-			struct ata_host *ata_host = sata_dev->ata_host;
+-			struct ata_port_operations *ops = ata_host->ops;
+-			struct ata_port *ap = sata_dev->ap;
+-			struct ata_link *link;
+-			unsigned int classes;
+-
+-			ata_for_each_link(link, ap, EDGE)
+-				rc = ops->hardreset(link, &classes,
+-						    deadline);
+-		}
+-		sas_put_local_phy(local_phy);
+-		if (rc) {
+-			dev_warn(dev, "SATA disk hardreset fail: %d\n", rc);
+-			return rc;
+-		}
+-
+ 		while (retry-- > 0) {
+ 			rc = hisi_sas_softreset_ata_disk(device);
+ 			if (!rc)
+@@ -768,15 +754,19 @@ static int hisi_sas_init_device(struct domain_device *device)
+ 
+ int hisi_sas_slave_alloc(struct scsi_device *sdev)
+ {
+-	struct domain_device *ddev;
++	struct domain_device *ddev = sdev_to_domain_dev(sdev);
++	struct hisi_sas_device *sas_dev = ddev->lldd_dev;
+ 	int rc;
+ 
+ 	rc = sas_slave_alloc(sdev);
+ 	if (rc)
+ 		return rc;
+-	ddev = sdev_to_domain_dev(sdev);
+ 
+-	return hisi_sas_init_device(ddev);
++	rc = hisi_sas_init_device(ddev);
 +	if (rc)
 +		return rc;
-+
-+	/* Remote phy */
-+	if (dev_is_sata(device)) {
-+		rc = sas_ata_wait_after_reset(device,
-+					HISI_SAS_WAIT_PHYUP_TIMEOUT);
-+	} else {
-+		msleep(2000);
- 	}
++	sas_dev->dev_status = HISI_SAS_DEV_NORMAL;
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(hisi_sas_slave_alloc);
  
- 	return rc;
+@@ -826,7 +816,6 @@ static int hisi_sas_dev_found(struct domain_device *device)
+ 	dev_info(dev, "dev[%d:%x] found\n",
+ 		sas_dev->device_id, sas_dev->dev_type);
+ 
+-	sas_dev->dev_status = HISI_SAS_DEV_NORMAL;
+ 	return 0;
+ 
+ err_out:
 -- 
 2.26.2
 

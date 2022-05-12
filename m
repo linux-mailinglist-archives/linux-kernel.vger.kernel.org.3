@@ -2,51 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12B685242E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 04:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E955242E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 04:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243992AbiELCyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 22:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
+        id S244098AbiELCyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 22:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240471AbiELCyJ (ORCPT
+        with ESMTP id S244033AbiELCyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 22:54:09 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064871F929D
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 19:54:07 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KzGYf0lt7zhZ20;
-        Thu, 12 May 2022 10:53:26 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 12 May 2022 10:54:05 +0800
-Subject: Re: [PATCH v1] mm,hwpoison: set PG_hwpoison for busy hugetlb pages
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        zhenwei pi <pizhenwei@bytedance.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        <linux-kernel@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
-References: <20220511151955.3951352-1-naoya.horiguchi@linux.dev>
- <f0da4fcf-a4af-ccaa-32ce-55d9fda72203@oracle.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <d7f24648-2af5-3998-d265-c441538ce5fc@huawei.com>
-Date:   Thu, 12 May 2022 10:54:05 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Wed, 11 May 2022 22:54:19 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E4F1F92A8;
+        Wed, 11 May 2022 19:54:18 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id s14so3624000plk.8;
+        Wed, 11 May 2022 19:54:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
+         :subject:content-transfer-encoding;
+        bh=0ncjSUxU9ysAJVNjYh3SEKLhVjJ2NUMWUwnaCNe9M+4=;
+        b=eqhv82/YtmgTASuDpV78q7NFNrgsaQkdY6OcKvUGe4H4gveR8+OuyqYb7pJArOAyS0
+         y7AjyXTClc1mCZYP+LPN9ix/8PZTSjx2h5L7jnhz0ACJ/V/d47rUtf+exrPuP1FRL6Wf
+         rqxo80lrMJgRh/mG3+5KKpkZyA5YiH3/rRIHEvtOakBl/cSY2DukjI4sxMs9zl22lTQN
+         QH8C9SpxpBTYtQ1vkEav2VMpmMZmJGK1PgjlfzhTCZf/R3KW2wLX6p5TU78t10m86lpv
+         DEFPmLz0mgiQehyO+7h13hhoDtt8ZFvTJvosExDah2Pd9QOJjY0NA5NcPBBPpR8F9lbR
+         x83g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:from:subject:content-transfer-encoding;
+        bh=0ncjSUxU9ysAJVNjYh3SEKLhVjJ2NUMWUwnaCNe9M+4=;
+        b=t/6TAgiCP1WcJL4+1f3TPj1m7/F5T5yMdpGPcPiDlLIobbS3tm9j0D/z+1HMUEGCHm
+         SPjm53KJ+gx5eoKy1rtZ/kZ9GTiM1Xb4WBIFAp52Z8ECIOOF0aTKLFN/isboeW58OROH
+         uBiZ7JZJV4bfzK6OEnobFl5rl2zV+O/+YSbBlh5P9rTffxSZv0fPnLoMTNSvOOkm5IBG
+         bT+4DtXTbbahI/0MBKGs0nM6INzzzCQ07lOcvlFfgQy6aLjTu4JSqapuOwOMh7FSwpF0
+         krjNJGG6hCIG/DGtdjSFMm/P+ryRTmojRvZKSOOcZxO+OnLvso2QQw68S+QytiKV0aVj
+         bqIA==
+X-Gm-Message-State: AOAM530a3IaON+eQJrBGCDjfZGLCrJqajPrp05lbJG8ywvtZhk2vgGKH
+        Pw/bTpLbiFO5xbwSvweS/+8=
+X-Google-Smtp-Source: ABdhPJwMI/BS05nSm+q+R3pIxryrQGUxMNCYmzDsdtMimal9fRRdt8eLWR7v9mLY91T4i3TvSwmOeA==
+X-Received: by 2002:a17:902:ef50:b0:156:486f:b593 with SMTP id e16-20020a170902ef5000b00156486fb593mr28378992plx.104.1652324058050;
+        Wed, 11 May 2022 19:54:18 -0700 (PDT)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id d15-20020a170902b70f00b0015e8d4eb21dsm2618567pls.103.2022.05.11.19.54.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 19:54:17 -0700 (PDT)
+Message-ID: <bdb60ba3-7813-47d0-74f9-7c31dd912d95@gmail.com>
+Date:   Thu, 12 May 2022 11:54:12 +0900
 MIME-Version: 1.0
-In-Reply-To: <f0da4fcf-a4af-ccaa-32ce-55d9fda72203@oracle.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
 Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Akira Yokosawa <akiyks@gmail.com>
+From:   Akira Yokosawa <akiyks@gmail.com>
+Subject: [PATCH] docs: pdfdocs: Add space for chapter counts >= 100 in TOC
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,74 +71,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/12 2:35, Mike Kravetz wrote:
-> On 5/11/22 08:19, Naoya Horiguchi wrote:
->> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
->>
->> If memory_failure() fails to grab page refcount on a hugetlb page
->> because it's busy, it returns without setting PG_hwpoison on it.
->> This not only loses a chance of error containment, but breaks the rule
->> that action_result() should be called only when memory_failure() do
->> any of handling work (even if that's just setting PG_hwpoison).
->> This inconsistency could harm code maintainability.
->>
->> So set PG_hwpoison and call hugetlb_set_page_hwpoison() for such a case.
+It turns out that networking.pdf has exceeded 100 chapters and
+titles of chapters >= 100 collide with their counts in its table
+of contents (TOC).
 
-I'm sorry but where is hugetlb_set_page_hwpoison() defined and used ? I can't find it.
+Increase relevant params by 0.6em in the preamble to avoid such
+ugly collisions.
 
->>
->> Fixes: 405ce051236c ("mm/hwpoison: fix race between hugetlb free/demotion and memory_failure_hugetlb()")
->> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
->> ---
->>  include/linux/mm.h  | 1 +
->>  mm/memory-failure.c | 8 ++++----
->>  2 files changed, 5 insertions(+), 4 deletions(-)
->>
->> diff --git a/include/linux/mm.h b/include/linux/mm.h
->> index d446e834a3e5..04de0c3e4f9f 100644
->> --- a/include/linux/mm.h
->> +++ b/include/linux/mm.h
->> @@ -3187,6 +3187,7 @@ enum mf_flags {
->>  	MF_MUST_KILL = 1 << 2,
->>  	MF_SOFT_OFFLINE = 1 << 3,
->>  	MF_UNPOISON = 1 << 4,
->> +	MF_NO_RETRY = 1 << 5,
->>  };
->>  extern int memory_failure(unsigned long pfn, int flags);
->>  extern void memory_failure_queue(unsigned long pfn, int flags);
->> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
->> index 6a28d020a4da..e3269b991016 100644
->> --- a/mm/memory-failure.c
->> +++ b/mm/memory-failure.c
->> @@ -1526,7 +1526,8 @@ int __get_huge_page_for_hwpoison(unsigned long pfn, int flags)
->>  			count_increased = true;
->>  	} else {
->>  		ret = -EBUSY;
->> -		goto out;
->> +		if (!(flags & MF_NO_RETRY))
->> +			goto out;
->>  	}
-> 
-> Hi Naoya,
-> 
-> We are in the else block because !HPageFreed() and !HPageMigratable().
-> IIUC, this likely means the page is isolated.  One common reason for isolation
-> is migration.  So, the page could be isolated and on a list for migration.
-> 
-> I took a quick look at the hugetlb migration code and did not see any checks
-> for PageHWPoison after a hugetlb page is isolated.  I could have missed
-> something?  If there are no checks, we will read the PageHWPoison page
-> in kernel mode while copying to the migration target.
-> 
-> Is this an issue?  Is is something we need to be concerned with?  Memory
-> errors can happen at any time, and gracefully handling them is best effort.
+While at it, fix a typo in comment (subsection).
 
-It seems HWPoison hugetlb page will still be accessed before this patch. Can we do a
-get_page_unless_zero first here to ensure that hugetlb page migration should fail due
-to this extra page reference and thus not access the page content? If hugetlb page is
-already freezed, corrupted memory will still be consumed though. :(
+Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+---
+ Documentation/sphinx/kerneldoc-preamble.sty | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-Thanks!
+diff --git a/Documentation/sphinx/kerneldoc-preamble.sty b/Documentation/sphinx/kerneldoc-preamble.sty
+index 9d0204dc38be..2a29cbe51396 100644
+--- a/Documentation/sphinx/kerneldoc-preamble.sty
++++ b/Documentation/sphinx/kerneldoc-preamble.sty
+@@ -20,13 +20,13 @@
+ %  - Indent of 2 chars is preserved for ease of comparison.
+ % Summary of changes from default params:
+ %   Width of page number (\@pnumwidth): 1.55em -> 2.7em
+-%   Width of chapter number:            1.5em  -> 1.8em
+-%   Indent of section number:           1.5em  -> 1.8em
++%   Width of chapter number:            1.5em  -> 2.4em
++%   Indent of section number:           1.5em  -> 2.4em
+ %   Width of section number:            2.6em  -> 3.2em
+-%   Indent of sebsection number:        4.1em  -> 5em
++%   Indent of subsection number:        4.1em  -> 5.6em
+ %   Width of subsection number:         3.5em  -> 4.3em
+ %
+-% These params can have 4 digit page counts, 2 digit chapter counts,
++% These params can have 4 digit page counts, 3 digit chapter counts,
+ % section counts of 4 digits + 1 period (e.g., 18.10), and subsection counts
+ % of 5 digits + 2 periods (e.g., 18.7.13).
+ \makeatletter
+@@ -37,7 +37,7 @@
+   \ifnum \c@tocdepth >\m@ne
+     \addpenalty{-\@highpenalty}%
+     \vskip 1.0em \@plus\p@
+-    \setlength\@tempdima{1.8em}%
++    \setlength\@tempdima{2.4em}%
+     \begingroup
+       \parindent \z@ \rightskip \@pnumwidth
+       \parfillskip -\@pnumwidth
+@@ -51,8 +51,8 @@
+     \endgroup
+   \fi}
+ %% Redefine \l@section and \l@subsection
+-\renewcommand*\l@section{\@dottedtocline{1}{1.8em}{3.2em}}
+-\renewcommand*\l@subsection{\@dottedtocline{2}{5em}{4.3em}}
++\renewcommand*\l@section{\@dottedtocline{1}{2.4em}{3.2em}}
++\renewcommand*\l@subsection{\@dottedtocline{2}{5.6em}{4.3em}}
+ \makeatother
+ %% Sphinx < 1.8 doesn't have \sphinxtableofcontentshook
+ \providecommand{\sphinxtableofcontentshook}{}
 
-> 
+base-commit: 4a840d5fdcfcfff55b8b22896c1193a9b26405aa
+-- 
+2.25.1
 

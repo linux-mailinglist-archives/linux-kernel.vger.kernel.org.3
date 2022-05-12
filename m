@@ -2,86 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3573752585B
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 01:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A243052585E
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 01:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359508AbiELXcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 19:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38664 "EHLO
+        id S1359519AbiELXfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 19:35:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357948AbiELXca (ORCPT
+        with ESMTP id S1359511AbiELXfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 19:32:30 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9D5606E6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 16:32:28 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id s12-20020a0568301e0c00b00605f30530c2so3812251otr.9
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 16:32:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gTUkwCFl4eQnWHOmjCkOZ+MxC51lVa04QGhlnVFdjr0=;
-        b=KCrUnBzZw0FbOC+bEY7DfMZabUIkT+ejInGoZJeN7Z04sWegXELod3KusB2HhalIi5
-         moYjXXYdISshVNhloFqTXBAiiT8l1Lt/qb/MDoDLeRzxOQp6HXpIrH0CmCrG2Rk3QFUa
-         D+SRhwry0qQ4fATRknA4vw+r8Xgo7LZzKKZ1XZhAgJ2F7TEBBb5gMElHh25rAwzNlH0d
-         GqjCG59VaExNP8G1h5SgoulEBKCV/nWa3vnP3yagHJrYA2//ctSBMjCm529dxDY7MrrG
-         aE8JDRNAd69wVZ4eoNGdu6jmJgXq/Znwz0D6cveCP4PIfKzxkWrKdfcTqKxZQTcSOtme
-         DAyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gTUkwCFl4eQnWHOmjCkOZ+MxC51lVa04QGhlnVFdjr0=;
-        b=1gwBc7KHPRxlp24yZq+zmmDyj29ouWn+MDQpUn0s77I+w61eQG8W1qDytRCSS1mfFM
-         UfvVMP0K0kjAf16OkitlQcLyRyL4OMnQdboc6W1GxAT76DrUDAZZzQI3OmOew+pGlnjq
-         h/V76UUoP6wA2G3A2kQxAeHwFbuJQRX/UJLAnOYpOX4u5zo0Ckvl42voIfxT9GkEqNSn
-         HpWWfWlsJ9HFm5MetDLo703TeHZctyXP0I0Z8Uud7XKXMQ9GJyePh/MOuIlEtNkQ4bij
-         vPNcb0XCl4WT1lVSzuZGcrzkcQsIJ9dX+scDFlydPMbpGMZs/NmznOFW+RBd5kWW8Bh/
-         0fBQ==
-X-Gm-Message-State: AOAM533c6y8wI1i97C7Rn5FRwSAvA5q4Slzj5NWDBcN5sPWRJGBeinzK
-        yvP8AZlTGLeT/8SlPbN1hE6U2mMbQNTX6kcKiYk3Kg==
-X-Google-Smtp-Source: ABdhPJymXYbisqYMcq1fGyKKmDxQzIG71HgmBEDe2A8NT63b1QV/sdpApHnFRtTyoDh1hbCmsjh6HHMT6FeJG8um0yE=
-X-Received: by 2002:a05:6830:1c65:b0:606:3cc:862 with SMTP id
- s5-20020a0568301c6500b0060603cc0862mr886983otg.75.1652398347631; Thu, 12 May
- 2022 16:32:27 -0700 (PDT)
+        Thu, 12 May 2022 19:35:19 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96ED2285EFB
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 16:35:18 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652398516;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pfTVpQBBfdX2IFvNH0UqLqx7jcD8qe2XwLVneMmb18E=;
+        b=pGTKHFWGyDGJgUele6ZXW7WjSIn3WqOCUeDlvCENYMK9IQExnvtF/6McZTkiV9Ln7phEPY
+        AUk0R/YjbBksJeAGsOz95BxNhg8/uQSosOQ4zuMoA0XBIZWnbZa3syzQhLByGkx3OlS+J9
+        rasv8mRwDCimDe+tRvW5Yc/+BXPeFonlQG74i0eq0qYCk9mORijwnUdD1pEcQ5BOnaCezN
+        SYTSZsFkoUlq52skEL60U33HRXu2jJOSZdHHA0bpo5+81YSZRojWhocPEJBAajEWPokKn0
+        nzLIi7VVcv88PSOupz6kR9VesyUFYYvWIbbg68ZbaoZ/I7sTqqoGzG7LPOfBww==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652398516;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pfTVpQBBfdX2IFvNH0UqLqx7jcD8qe2XwLVneMmb18E=;
+        b=SlngLJSIisI7Q2vZleWNUVBAf1fy8xHeDwS8IBxEfnWFT1XmR9Ud7N4B7QWxUH+X8OiEez
+        aH+JtKpJbQUulqAQ==
+To:     "H.J. Lu" <hjl.tools@gmail.com>,
+        Dave Hansen <dave.hansen@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [RFCv2 00/10] Linear Address Masking enabling
+In-Reply-To: <CAMe9rOqb6ZnAZYe4uAWDt-vmhhP=z_+uZwi5fBURqyUWxCX9Cg@mail.gmail.com>
+References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
+ <20220511064943.GR76023@worktop.programming.kicks-ass.net>
+ <20bada85-9203-57f4-2502-57a6fd11f3ea@intel.com> <875ymav8ul.ffs@tglx>
+ <55176b79-90af-4a47-dc06-9f5f2f2c123d@intel.com>
+ <CAMe9rOqb6ZnAZYe4uAWDt-vmhhP=z_+uZwi5fBURqyUWxCX9Cg@mail.gmail.com>
+Date:   Fri, 13 May 2022 01:35:16 +0200
+Message-ID: <87o802tjd7.ffs@tglx>
 MIME-Version: 1.0
-References: <20220512222716.4112548-1-seanjc@google.com> <20220512222716.4112548-4-seanjc@google.com>
-In-Reply-To: <20220512222716.4112548-4-seanjc@google.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Thu, 12 May 2022 16:32:16 -0700
-Message-ID: <CALMp9eRZySh=rLQNUx6fbxDa-6G-vS837tBi=J3HZ9ePTVLa-Q@mail.gmail.com>
-Subject: Re: [PATCH 3/3] KVM: x86: Add helpers to identify CTL and STATUS MCi MSRs
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jue Wang <juew@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 3:27 PM Sean Christopherson <seanjc@google.com> wrote:
+On Thu, May 12 2022 at 15:10, H. J. Lu wrote:
+> On Thu, May 12, 2022 at 2:51 PM Dave Hansen <dave.hansen@intel.com> wrote:
+>> On 5/12/22 12:39, Thomas Gleixner wrote:
+>> >> It's OK for a debugging build that runs on one kind of hardware.  But,
+>> >> if we want LAM-using binaries to be portable, we have to do something
+>> >> different.
+>> >>
+>> >> One of the stated reasons for adding LAM hardware is that folks want to
+>> >> use sanitizers outside of debugging environments.  To me, that means
+>> >> that LAM is something that the same binary might run with or without.
+>> > On/off yes, but is there an actual use case where such a mechanism would
+>> > at start time dynamically chose the number of bits?
+>>
+>> I'd love to hear from folks doing the userspace side of this.  Will
+>> userspace be saying: "Give me all the bits you can!".  Or, will it
+>> really just be looking for 6 bits only, and it doesn't care whether it
+>> gets 6 or 15, it will use only 6?
+>>
+>> Do the sanitizers have more overhead with more bits?  Or *less* overhead
+>> because they can store more metadata in the pointers?
+>>
+>> Will anyone care about the difference about potentially missing 1/64
+>> issues with U57 versus 1/32768 with U48?
 >
-> Add helpers to identify CTL (control) and STATUS MCi MSR types instead of
-> open coding the checks using the offset.  Using the offset is perfectly
-> safe, but unintuitive, as understanding what the code does requires
-> knowing that the offset calcuation will not affect the lower three bits.
->
-> Opportunistically comment the STATUS logic to save readers a trip to
-> Intel's SDM or AMD's APM to understand the "data != 0" check.
->
-> No functional change intended.
->
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
-Reviewed-by: Jim Mattson <jmattson@google.com>
+> The only LAM usage I know so far is LAM_U57 in HWASAN.
+
+That's at least a halfways useful answer.
+
+> An application can ask for LAM_U48 or LAM_U57. But the decision should
+> be made by application.
+
+It can ask for whatever, but the decision whether it's granted is made
+by the kernel for obvious reasons.
+
+> When an application asks for LAM_U57, I expect it will store tags in
+> upper 6 bits, even if the kernel enables LAM_U48.
+
+The kernel does not enable LAM_U48 when the application only wants to
+have LAM_U57, because that would restrict the address space of the
+application to 47 bits on 5-level capable system for no reason.
+
+So what are you trying to tell me?
+
+Thanks,
+
+        tglx
+
+
+

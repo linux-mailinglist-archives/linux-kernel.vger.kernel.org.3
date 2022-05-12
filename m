@@ -2,195 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B945524DE8
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF9D524DEC
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354220AbiELNKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 09:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
+        id S1354394AbiELNLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 09:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354199AbiELNKg (ORCPT
+        with ESMTP id S1354302AbiELNLE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 09:10:36 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124F824F223;
-        Thu, 12 May 2022 06:10:35 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CCPOnq030082;
-        Thu, 12 May 2022 13:10:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=ASZR1ISLUjcv6xgh/PKwoyKZ7X3ouFYmG9xh930aNZA=;
- b=SSDGmOD31NxZQ6VgdHXsnqLat8YRq1PiYw1QBMMHdJvWioqdMDxFYa70rliTEw4xW9j+
- mmMbAZY23lzNYKTNWfOMOHfqStAHNlx2j/Zd4XQCOcb7nolxyteGI+a6Kn7V8OnIXX/T
- YgZTzV7KQhy42vY4QU0NyZkTG4vgm11Kgz7zQ/l7cbgK7bR09+V5Gicl3R8E66W0wG1P
- mNPYOXBQViVfwK238qtb1G/Zb+EGQ9WCJ4quJ21ek5rnQd9udpLnfRVHysLdy9GfBS4H
- RaEkHP8HA0xcvZd2wrKOhEwNLqdtrUtDYu/kMBQfFirqxsr3d3JlkqUUyLmMLfBBWkr8 Mw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g127v9662-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 13:10:32 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24CCvdqa030862;
-        Thu, 12 May 2022 13:10:31 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g127v964y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 13:10:31 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24CD2jXr026785;
-        Thu, 12 May 2022 13:10:29 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3fwgd8y33f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 13:10:29 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24CCumvL26739036
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 12 May 2022 12:56:48 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6D746AE045;
-        Thu, 12 May 2022 13:10:26 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 22C30AE04D;
-        Thu, 12 May 2022 13:10:26 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 12 May 2022 13:10:26 +0000 (GMT)
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] KVM: s390: selftest: Test suppression indication on key prot exception
-Date:   Thu, 12 May 2022 15:10:18 +0200
-Message-Id: <20220512131019.2594948-3-scgl@linux.ibm.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220512131019.2594948-1-scgl@linux.ibm.com>
-References: <20220512131019.2594948-1-scgl@linux.ibm.com>
+        Thu, 12 May 2022 09:11:04 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7375D30568
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:10:59 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24CDAcRp044919;
+        Thu, 12 May 2022 08:10:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1652361038;
+        bh=kpYjg/YJDu1USEjgBhUQOa9ZvfUzQA8K4X6I5hRa6UA=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=GuwX/IyUVRCIh4HRLZPctUBCIs/o/jUbeobExryJCfMbVzPiBBb4zwtHj/DBs4HwH
+         xvwEztC91ipe27tZOoD+YYBD4R+TYCH/iBOLZ1YAhtoOjht+OnXAd5UWnHvSoFptZ7
+         UN+FnhLmCakUKrMESAz92WtWdjQnpMjrjyZW1wx8=
+Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24CDAcUT015850
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 12 May 2022 08:10:38 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 12
+ May 2022 08:10:38 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 12 May 2022 08:10:38 -0500
+Received: from pratyush-4F-325.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24CDAZ7I011087;
+        Thu, 12 May 2022 08:10:35 -0500
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Michael Walle <michael@walle.cc>
+CC:     <linux-kernel@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH] mtd: spi-nor: debugfs: fix format specifier
+Date:   Thu, 12 May 2022 18:40:34 +0530
+Message-ID: <165236096308.3070754.3267469990588119006.b4-ty@ti.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220512112027.3771734-1-michael@walle.cc>
+References: <20220512112027.3771734-1-michael@walle.cc>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: h_HVN4N3wcQPd01F5_58dZhvjyqDFGK6
-X-Proofpoint-GUID: aD9b1Pdu6OxK8x3VDklrocpJH5jP1rHf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-12_10,2022-05-12_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- malwarescore=0 adultscore=0 lowpriorityscore=0 priorityscore=1501
- bulkscore=0 suspectscore=0 mlxscore=0 phishscore=0 mlxlogscore=999
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205120061
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Check that suppression is not indicated on injection of a key checked
-protection exception caused by a memop after it already modified guest
-memory, as that violates the definition of suppression.
+On Thu, 12 May 2022 13:20:27 +0200, Michael Walle wrote:
+> The intention was to print the JEDEC ID in the following format:
+>   nn nn nn
+> 
+> In this case format specifier has to be "%*ph". Fix it.
+> 
+> 
 
-Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
----
- tools/testing/selftests/kvm/s390x/memop.c | 46 ++++++++++++++++++++++-
- 1 file changed, 45 insertions(+), 1 deletion(-)
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git spi-nor/next, thanks!
+[1/1] mtd: spi-nor: debugfs: fix format specifier
+      https://git.kernel.org/mtd/c/c474521946
 
-diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-index b04c2c1b3c30..49f26f544127 100644
---- a/tools/testing/selftests/kvm/s390x/memop.c
-+++ b/tools/testing/selftests/kvm/s390x/memop.c
-@@ -10,6 +10,8 @@
- #include <string.h>
- #include <sys/ioctl.h>
- 
-+#include <linux/bits.h>
-+
- #include "test_util.h"
- #include "kvm_util.h"
- 
-@@ -194,6 +196,7 @@ static int err_memop_ioctl(struct test_vcpu vcpu, struct kvm_s390_mem_op *ksmo)
- #define SIDA_OFFSET(o) ._sida_offset = 1, .sida_offset = (o)
- #define AR(a) ._ar = 1, .ar = (a)
- #define KEY(a) .f_key = 1, .key = (a)
-+#define INJECT .f_inject = 1
- 
- #define CHECK_N_DO(f, ...) ({ f(__VA_ARGS__, CHECK_ONLY); f(__VA_ARGS__); })
- 
-@@ -430,9 +433,18 @@ static void test_copy_key_fetch_prot(void)
- 	TEST_ASSERT(rv == 4, "Should result in protection exception");		\
- })
- 
-+static void guest_error_key(void)
-+{
-+	GUEST_SYNC(STAGE_INITED);
-+	set_storage_key_range(mem1, PAGE_SIZE, 0x18);
-+	set_storage_key_range(mem1 + PAGE_SIZE, sizeof(mem1) - PAGE_SIZE, 0x98);
-+	GUEST_SYNC(STAGE_SKEYS_SET);
-+	GUEST_SYNC(STAGE_IDLED);
-+}
-+
- static void test_errors_key(void)
- {
--	struct test_default t = test_default_init(guest_copy_key_fetch_prot);
-+	struct test_default t = test_default_init(guest_error_key);
- 
- 	HOST_SYNC(t.vcpu, STAGE_INITED);
- 	HOST_SYNC(t.vcpu, STAGE_SKEYS_SET);
-@@ -446,6 +458,37 @@ static void test_errors_key(void)
- 	kvm_vm_free(t.kvm_vm);
- }
- 
-+static void test_termination(void)
-+{
-+	struct test_default t = test_default_init(guest_error_key);
-+	uint64_t prefix;
-+	uint64_t teid;
-+	uint64_t teid_mask = BIT(63 - 56) | BIT(63 - 60) | BIT(63 - 61);
-+	uint64_t psw[2];
-+
-+	HOST_SYNC(t.vcpu, STAGE_INITED);
-+	HOST_SYNC(t.vcpu, STAGE_SKEYS_SET);
-+
-+	/* vcpu, mismatching keys after first page */
-+	ERR_PROT_MOP(t.vcpu, LOGICAL, WRITE, mem1, t.size, GADDR_V(mem1), KEY(1), INJECT);
-+	/*
-+	 * The memop injected a program exception and the test needs to check the
-+	 * Translation-Exception Identification (TEID). It is necessary to run
-+	 * the guest in order to be able to read the TEID from guest memory.
-+	 * Set the guest program new PSW, so the guest state is not clobbered.
-+	 */
-+	prefix = t.run->s.regs.prefix;
-+	psw[0] = t.run->psw_mask;
-+	psw[1] = t.run->psw_addr;
-+	MOP(t.vm, ABSOLUTE, WRITE, psw, sizeof(psw), GADDR(prefix + 464));
-+	HOST_SYNC(t.vcpu, STAGE_IDLED);
-+	MOP(t.vm, ABSOLUTE, READ, &teid, sizeof(teid), GADDR(prefix + 168));
-+	/* Bits 56, 60, 61 form a code, 0 being the only one allowing for termination */
-+	ASSERT_EQ(teid & teid_mask, 0);
-+
-+	kvm_vm_free(t.kvm_vm);
-+}
-+
- static void test_errors_key_storage_prot_override(void)
- {
- 	struct test_default t = test_default_init(guest_copy_key_fetch_prot);
-@@ -668,6 +711,7 @@ int main(int argc, char *argv[])
- 		test_copy_key_fetch_prot();
- 		test_copy_key_fetch_prot_override();
- 		test_errors_key();
-+		test_termination();
- 		test_errors_key_storage_prot_override();
- 		test_errors_key_fetch_prot_override_not_enabled();
- 		test_errors_key_fetch_prot_override_enabled();
--- 
-2.32.0
+--
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
 

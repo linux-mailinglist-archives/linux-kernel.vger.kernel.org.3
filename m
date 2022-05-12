@@ -2,78 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71CE7525030
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68891525035
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355054AbiELOfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 10:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56762 "EHLO
+        id S1355382AbiELOfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 10:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355389AbiELOey (ORCPT
+        with ESMTP id S1354452AbiELOfW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 10:34:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 144B726084D
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:34:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652366085;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=mglyuvEmvgYHun8zwNB9cJvmded1N/ByJaYNnqZF5m0=;
-        b=DCjV9shwDe2NJNBHZbCEGM38GXpAgNYHK/6d1uaetlStwLRQfuwY7h6zReMU2/Tq/PQaoI
-        cQNUSUwmho7cFJOYShkMRCSf0DTwBISS61DUi4k4ZdlQmVwa1n9wRpLIE6gTOKgsQ2Nd3w
-        nzD85L4iHUaOq4eB72kwPfrTG/8L4qA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-328-MhFf1UAxNAW6SmEMJOd-yg-1; Thu, 12 May 2022 10:34:41 -0400
-X-MC-Unique: MhFf1UAxNAW6SmEMJOd-yg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A6C2538149A9;
-        Thu, 12 May 2022 14:34:40 +0000 (UTC)
-Received: from pauld.bos.com (dhcp-17-51.bos.redhat.com [10.18.17.51])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8005E552781;
-        Thu, 12 May 2022 14:34:40 +0000 (UTC)
-From:   Phil Auld <pauld@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     mkoutny@suse.com, tj@kernel.org, longman@redhat.com
-Subject: [PATCH] kselftest/cgroup: fix test_stress.sh to use OUTPUT dir
-Date:   Thu, 12 May 2022 10:34:39 -0400
-Message-Id: <20220512143439.26104-1-pauld@redhat.com>
+        Thu, 12 May 2022 10:35:22 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E9225D130;
+        Thu, 12 May 2022 07:35:20 -0700 (PDT)
+Received: from mail-yw1-f171.google.com ([209.85.128.171]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MJn8J-1nV91L1dyj-00K7ib; Thu, 12 May 2022 16:35:18 +0200
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2f16645872fso58979727b3.4;
+        Thu, 12 May 2022 07:35:17 -0700 (PDT)
+X-Gm-Message-State: AOAM531uf/IF/eWxzCferfvFQ6nIMHB2lfFsJRRwsc+S2dpF7nYzmX0X
+        XxBk2ONLjbID075LmHgnLUw4L2odBO2eNk5CZp8=
+X-Google-Smtp-Source: ABdhPJzfbhwoFr1q9juMntgIfHM+m3U1nWpSEbsdjudirAmgYnzjhj8eMLGYhy6XgarB5vhSiUly3q7lBnc1N2pSqgQ=
+X-Received: by 2002:a81:ad7:0:b0:2e6:84de:3223 with SMTP id
+ 206-20020a810ad7000000b002e684de3223mr331249ywk.209.1652366117032; Thu, 12
+ May 2022 07:35:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-type: text/plain
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220510032558.10304-1-ychuang3@nuvoton.com> <CAK8P3a1k8y8U99bBmqBYE1vYAc0q-UeaM0oLP4tTHZCpyYNOgA@mail.gmail.com>
+ <8be62b40-077a-7634-7d34-7776909a2abe@linaro.org>
+In-Reply-To: <8be62b40-077a-7634-7d34-7776909a2abe@linaro.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 12 May 2022 16:35:00 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3=YD7WV+Www8pf+JTv14DwcnSjD+f=YFCNMxXYT9FAZA@mail.gmail.com>
+Message-ID: <CAK8P3a3=YD7WV+Www8pf+JTv14DwcnSjD+f=YFCNMxXYT9FAZA@mail.gmail.com>
+Subject: Re: [PATCH V4 0/5] Add initial support for MA35D1 SoC
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jacky Huang <ychuang3@nuvoton.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        ychuang570808@gmail.com, Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, SoC Team <soc@kernel.org>,
+        cfli0@nuvoton.com
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:f35I4VQN5HrjLu+f35ruvI1eR5T9g+bS8hIxq67YP8hU7et8GXq
+ 6/ga5BEAuNysl5lffjUoLFn5i77YASqLm+x0rtNCuyggX++caLY3Lbm2HsCugCp3hMCY4pQ
+ GzzJ+3KwbzZaF4Mjb5Rzfx5AtpBzCIZUdIBhT+5xL2soYf++YgqAUeGSxv91EoCtsvutHh6
+ Nm+mInPbNTW1RvP4obUXQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:fkt0tv7tA1I=:UI38Qzf7Hgmuu3pdwo8Sza
+ FIDnSMv87Ew1LeBfkAnGiv96fAvynAjx7G455b/zjgpTOBoAzfHzoWrPpTWD35lL5mjfyVQ2V
+ 3mtXsArw+VU4KZQkllqM+NjGPy06D1Nxc4pcD3EgvrnQVV9G3/1VtFHcjcZRraf1/X1txz+RJ
+ 2cFvvs/zLtqNfHx/z2lmHriraxorAeZipIjhu7s52OgNer4igR3/RZZsUn4N5MKYghbYXbsgN
+ ffCcCy/YR4TOVPT8SRSju9xHnuzSIUxW7P0yfgyfPGo5b2G9PQDC/A5wZ4teKOy0wjXKhbBJm
+ t9zMJJbEz7heT7jMAFuc6p5moRal+sYfFDsvxNIPrjYEA/zLd0mdNoKdhWlE6hPZNkw8B+9wI
+ HIw4cO3rundVs9CHfm3Aq3uSGxT1KvIF6sfEP99SrKjsHf71WIcC3Eka4nhoXi+2S80GbCKPH
+ lvgNvShwFowIcNXg6Qug4Z2bWYVmp0Q67Bg9h1v+JsiGrNt0S+II/l1kUtq3BYP8RplgjJhfj
+ 6rYZVFfKh+7v561mukU2a6Y7gAoD1xDSeDrrDZYiuz6yE/F5zZZQn345YpIAUP03nxjcA6NJR
+ R5BXdcFbeQbQzx+UbeolBUk7+IpjUSZsOGXncmK3sSaenEgUmbLvO/4qkYGp9Fxg7UuRtCOcI
+ u+iMksTTQH++kmbPHfTQKLBEfIc2Tsfn423KoptDxCWPna+ibMYT/5BN+g91V/dR+Hq1NlsMY
+ aF1wrvqsm4xICty0OOHSaRE9MrsaSJYeASF8OA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Running cgroup kselftest with O= fails to run the with_stress test due
-to hardcoded ./test_core. Find test_core binary using the OUTPUT directory.
+On Thu, May 12, 2022 at 4:11 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 10/05/2022 09:07, Arnd Bergmann wrote:
+> > On Tue, May 10, 2022 at 5:25 AM Jacky Huang <ychuang3@nuvoton.com> wrote:
+> >>
+> >> This patch series adds initial support for Nuvoton MA35D1 SoC,
+> >> include initial dts and clock controller binding.
+> >>
+> >
+> > This looks fine in principle, but we are getting close to the merge window and
+> > should finalize this quickly to make it into v5.19. I see that you don't have a
+> > console device, as commented in the .dts patch. Normally I prefer merging
+> > platforms only when there is at least rudimentary support for booting into
+> > an initramfs with a serial console, but this is a flexible rule.
+>
+> I disagree. It does not look fine - does not pass `make dtbs_check` even
+> with Nuvoton bindings...
 
-Fixes: 1a99fcc035fb ("selftests: cgroup: Run test_core under interfering stress")
-Signed-off-by: Phil Auld <pauld@redhat.com>
----
- tools/testing/selftests/cgroup/test_stress.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Ok, thanks for taking a look. It was already late for 5.19 and missing the uart
+driver, so it was clear it had not seen actual runtime testing. Let's try
+aiming for 5.20 then.
 
-diff --git a/tools/testing/selftests/cgroup/test_stress.sh b/tools/testing/selftests/cgroup/test_stress.sh
-index 15d9d5896394..109c044f715f 100755
---- a/tools/testing/selftests/cgroup/test_stress.sh
-+++ b/tools/testing/selftests/cgroup/test_stress.sh
-@@ -1,4 +1,4 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
--./with_stress.sh -s subsys -s fork ./test_core
-+./with_stress.sh -s subsys -s fork ${OUTPUT}/test_core
--- 
-2.18.0
-
+        Arnd

@@ -2,190 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC3B524D59
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC29524D60
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353940AbiELMsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 08:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33114 "EHLO
+        id S1353935AbiELMsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 08:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353882AbiELMsK (ORCPT
+        with ESMTP id S1353943AbiELMss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 08:48:10 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63301E0584
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:48:08 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id e194so5132945iof.11
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:48:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura-hr.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vNd3Gm8nUZ7PICSGljzFyVVDd1hZA/GzEUARiHu8reA=;
-        b=P+s6nn3BAqL09cTQZHN1ewg0v6vl8jrsEONJYK8CKGpgYe3lx+uzP9HwD3eQJqN577
-         3pqtxxiCI6YXx6P3O6QUpst4SV+8tyUqwfZWxep4F/+Ifhbf+6pdODLAAHQDQaz4Z3TF
-         x5+2iqnQ9zyy8BDIvOatJegOBDMBt0yT0Y5TRrtUcWrqCnlNmM8flPTXWexwbfuf/dmK
-         b6jyhgL61F6EeHqpnxc3rVnOKTkZzjMACalpFZ1OxT88LKcBij/OTYDUZRf95ZRMqFJs
-         PabNAO8NU0/APnsHy6LFbcCvDl5IDaUR2wsB5mTWC3dOVNMIlrAVj9oZpbRQD3Gki5P7
-         igPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vNd3Gm8nUZ7PICSGljzFyVVDd1hZA/GzEUARiHu8reA=;
-        b=l27hKly4CndXY9lQMwCzjBQMqTOegxmG2bXnlOAWDVZf/Cm2r/nyolJtKw2QNq07Dy
-         yT3guv6Coebofj0Fd0Z/Vna+8A1c4lngAdHn2CizjOqJRKVq78y5h6bykO96IimgCJ10
-         dG2Rx0+ZAEI4zNMn4/f+XZoDqSd5bkqAu7RNJBaXkN2jCzlCLfArbzO/TupqRpxT6+jK
-         vsWp7Pppjp5ayBQ/VoRzpy4mvrngmSx9BHc0BbELdpmsCuQsyDMyz9VGYAkP8YGjd5an
-         zFygIYyhFjL7H+AzQ8pSSaBhVEuD3A9Ym3E2jRPgsn0s3B2PlpOvcrWRzW73v4BnRl+W
-         TFPQ==
-X-Gm-Message-State: AOAM532xshMSR2C2lwiZMRWjJA9xOEk178tOuu3BiNK7p1hHjjzaFshq
-        kqk008mvwdWBVzH0BiXpkTWvydHrru/IPiULHfyGsw==
-X-Google-Smtp-Source: ABdhPJxmHajQAtmeAOa2hqK9jIE6Fvj7k4Q2daHftWuREJvjw97wdOFcHX4vJ74gWyi2jlegcsdeaAeZ+9EvNgHAy2U=
-X-Received: by 2002:a5d:9e17:0:b0:657:b212:c97e with SMTP id
- h23-20020a5d9e17000000b00657b212c97emr13187580ioh.176.1652359688147; Thu, 12
- May 2022 05:48:08 -0700 (PDT)
+        Thu, 12 May 2022 08:48:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0183E24D60A
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:48:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D873361F8C
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 12:48:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE96AC385B8;
+        Thu, 12 May 2022 12:48:44 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="DaXEsJsE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1652359723;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Fw6XqJOjx/gL+0IgPDG0uG9L5ijZCTo506iJQ00IxOk=;
+        b=DaXEsJsEk+k02LLyni6k07+hHVt0HDDe67XEqRCf2JlnQQ7MHneRyxB46iU8nQ9t+URkSR
+        AICihYfqgDujJYeTaNheDY/E0Bh+KISJw9ka94D6dAqTya8Px0YN4VKtRys+oqvcaF3Vrk
+        Zwa4qKqstugQxRgxaK5HjAj9WG+SBAk=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d102ee5a (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 12 May 2022 12:48:42 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: [PATCH] random: handle latent entropy and command line from random_init()
+Date:   Thu, 12 May 2022 14:48:39 +0200
+Message-Id: <20220512124839.20755-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-References: <20220510124929.91000-1-robert.marko@sartura.hr>
- <20220510124929.91000-2-robert.marko@sartura.hr> <0815f581-ca5b-6fb6-a59e-f5d0a3686caa@linaro.org>
- <CA+HBbNFnXoEghSdhTYoC-VvCMkiEuuee9p8SuNGubYCeLWoYfA@mail.gmail.com> <41cc4506-57be-a831-57d5-e539e8a95610@linaro.org>
-In-Reply-To: <41cc4506-57be-a831-57d5-e539e8a95610@linaro.org>
-From:   Robert Marko <robert.marko@sartura.hr>
-Date:   Thu, 12 May 2022 14:47:57 +0200
-Message-ID: <CA+HBbNGvXtGhuxRgz-7VSPh1HJwdeTOD1fU7rWV2xBEvhf2WYA@mail.gmail.com>
-Subject: Re: [PATCH v2 02/11] dt-bindings: marvell: convert Armada 37xx
- compatibles to YAML
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, Andrew Lunn <andrew@lunn.ch>,
-        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
-        kostap@marvell.com, devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        =?UTF-8?B?TWFyZWsgQmVow7pu?= <marek.behun@nic.cz>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 2:36 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 12/05/2022 14:26, Robert Marko wrote:
-> > On Wed, May 11, 2022 at 6:52 PM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> On 10/05/2022 14:49, Robert Marko wrote:
-> >>
-> >> Thank you for your patch. There is something to discuss/improve.
-> >>
-> >>> -
-> >>> - - compatible: must contain "cznic,turris-mox"
-> >>> diff --git a/Documentation/devicetree/bindings/arm/marvell/armada-37xx.yaml b/Documentation/devicetree/bindings/arm/marvell/armada-37xx.yaml
-> >>> new file mode 100644
-> >>> index 000000000000..3f41ef2c6f3e
-> >>> --- /dev/null
-> >>> +++ b/Documentation/devicetree/bindings/arm/marvell/armada-37xx.yaml
-> >>> @@ -0,0 +1,50 @@
-> >>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >>> +%YAML 1.2
-> >>> +---
-> >>> +$id: http://devicetree.org/schemas/arm/marvell/armada-37xx.yaml#
-> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >>> +
-> >>> +title: Marvell Armada 37xx Platforms Device Tree Bindings
-> >>> +
-> >>> +maintainers:
-> >>> +  - Robert Marko <robert.marko@sartura.hr>
-> >>> +
-> >>> +properties:
-> >>> +  $nodename:
-> >>> +    const: '/'
-> >>> +  compatible:
-> >>> +    oneOf:
-> >>> +      - description: Armada 3710 SoC
-> >>> +        items:
-> >>> +          - const: marvell,armada3710
-> >>
-> >> This does not look correct. The SoC usually cannot be used by itself,
-> >> it's always a part of some product, SoM, board.
-> >
-> > Hi Krzysztof,
-> > Currently, there are no Armada 3710 boards present in Linux, so I just
-> > put the SoC compatible.
-> > If that is not appropriate, I can drop it.
->
-> Yes, please drop it.
->
-> It seems several Marvel boards and bindings use wrong convention for
-> compatibles. We discussed it here:
-> https://lore.kernel.org/all/1ed03960-77f6-1a9e-2378-07a6c51f42f7@linaro.org/
-> AC5 and CN9130 have the same wrong patterns.
->
-> >
-> >>
-> >>> +
-> >>> +      - description: Armada 3720 SoC
-> >>> +        items:
-> >>> +          - enum:
-> >>> +              - marvell,armada-3720-db
-> >>> +              - globalscale,espressobin
-> >>> +              - cznic,turris-mox
-> >>> +              - methode,udpu
-> >>
-> >> Order by name.
-> > Will fixup in v3.
-> >
-> >>
-> >>> +          - const: marvell,armada3720
-> >>> +          - const: marvell,armada3710
-> >>> +
-> >>> +      - description: Globalscale Espressobin boards
-> >>> +        items:
-> >>> +          - enum:
-> >>> +              - globalscale,espressobin-emmc
-> >>> +              - globalscale,espressobin-ultra
-> >>> +              - globalscale,espressobin-v7
-> >>> +          - const: globalscale,espressobin
-> >>> +          - const: marvell,armada3720
-> >>> +          - const: marvell,armada3710
-> > Do these const compatibles also need to be in alphabetical ordering,
-> > cause I ported them as they are meant to be used with the board and
-> > then 3720 compatibles being in front of 3710 one as required by the current
-> > text bindings.
->
-> Entries in enum should be ordered alphabetically. Then the entire set "-
-> description: Globalscale Espressobin boards" should have some logical
-> order, not necessarily by name.
->
-> Anyway this is not a requirement but rather suggestion because having
-> things ordered reduces amount of conflicts when two people add new
-> boards (because they add it not at the end, but somewhere in the middle
-> following some order).
+Currently, start_kernel() adds latent entropy and the command line to
+the entropy bool *after* the RNG has been initialized, deferring when
+it's actually used by things like stack canaries until the next time
+the pool is seeded. This surely is not intended.
 
-Hi,
-understood, will send a v3 soon.
+Rather than splitting up which entropy gets added where and when between
+start_kernel() and random_init(), just do everything in random_init(),
+which should eliminate these kinds of bugs in the future.
 
-Regards,
-Robert
->
->
-> Best regards,
-> Krzysztof
+While we're at it, rename the awkwardly titled "rand_initialize()" to
+the more standard "random_init()" nomenclature.
 
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/char/random.c  | 17 ++++++++++-------
+ include/linux/random.h | 17 ++++++++---------
+ init/main.c            |  8 ++------
+ 3 files changed, 20 insertions(+), 22 deletions(-)
 
-
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index d4bc9beaed2c..bd80d74a7f8c 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -926,12 +926,13 @@ static struct notifier_block pm_notifier = { .notifier_call = random_pm_notifica
+ 
+ /*
+  * The first collection of entropy occurs at system boot while interrupts
+- * are still turned off. Here we push in RDSEED, a timestamp, and utsname().
+- * Depending on the above configuration knob, RDSEED may be considered
+- * sufficient for initialization. Note that much earlier setup may already
+- * have pushed entropy into the input pool by the time we get here.
++ * are still turned off. Here we push in latent entropy, RDSEED, a timestamp,
++ * utsname(), and the command line. Depending on the above configuration knob,
++ * RDSEED may be considered sufficient for initialization. Note that much
++ * earlier setup may already have pushed entropy into the input pool by the
++ * time we get here.
+  */
+-int __init rand_initialize(void)
++int __init random_init(const char *command_line)
+ {
+ 	size_t i;
+ 	ktime_t now = ktime_get_real();
+@@ -953,6 +954,8 @@ int __init rand_initialize(void)
+ 	}
+ 	_mix_pool_bytes(&now, sizeof(now));
+ 	_mix_pool_bytes(utsname(), sizeof(*(utsname())));
++	_mix_pool_bytes(command_line, strlen(command_line));
++	add_latent_entropy();
+ 
+ 	if (crng_ready()) {
+ 		/*
+@@ -1703,8 +1706,8 @@ static struct ctl_table random_table[] = {
+ };
+ 
+ /*
+- * rand_initialize() is called before sysctl_init(),
+- * so we cannot call register_sysctl_init() in rand_initialize()
++ * random_init() is called before sysctl_init(),
++ * so we cannot call register_sysctl_init() in random_init()
+  */
+ static int __init random_sysctls_init(void)
+ {
+diff --git a/include/linux/random.h b/include/linux/random.h
+index f673fbb838b3..6eabea6697d0 100644
+--- a/include/linux/random.h
++++ b/include/linux/random.h
+@@ -14,22 +14,21 @@ struct notifier_block;
+ 
+ extern void add_device_randomness(const void *, size_t);
+ extern void add_bootloader_randomness(const void *, size_t);
++extern void add_input_randomness(unsigned int type, unsigned int code,
++				 unsigned int value) __latent_entropy;
++extern void add_interrupt_randomness(int irq) __latent_entropy;
++extern void add_hwgenerator_randomness(const void *buffer, size_t count,
++				       size_t entropy);
+ 
+ #if defined(LATENT_ENTROPY_PLUGIN) && !defined(__CHECKER__)
+ static inline void add_latent_entropy(void)
+ {
+-	add_device_randomness((const void *)&latent_entropy,
+-			      sizeof(latent_entropy));
++	add_device_randomness((const void *)&latent_entropy, sizeof(latent_entropy));
+ }
+ #else
+-static inline void add_latent_entropy(void) {}
++static inline void add_latent_entropy(void) { }
+ #endif
+ 
+-extern void add_input_randomness(unsigned int type, unsigned int code,
+-				 unsigned int value) __latent_entropy;
+-extern void add_interrupt_randomness(int irq) __latent_entropy;
+-extern void add_hwgenerator_randomness(const void *buffer, size_t count,
+-				       size_t entropy);
+ #if IS_ENABLED(CONFIG_VMGENID)
+ extern void add_vmfork_randomness(const void *unique_vm_id, size_t size);
+ extern int register_random_vmfork_notifier(struct notifier_block *nb);
+@@ -41,7 +40,7 @@ static inline int unregister_random_vmfork_notifier(struct notifier_block *nb) {
+ 
+ extern void get_random_bytes(void *buf, size_t nbytes);
+ extern int wait_for_random_bytes(void);
+-extern int __init rand_initialize(void);
++extern int __init random_init(const char *command_line);
+ extern bool rng_is_initialized(void);
+ extern int register_random_ready_notifier(struct notifier_block *nb);
+ extern int unregister_random_ready_notifier(struct notifier_block *nb);
+diff --git a/init/main.c b/init/main.c
+index 92783732a36f..4aec8a69301c 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -1042,13 +1042,9 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+ 	 * - setup_arch() for any UEFI RNG entropy and boot cmdline access
+ 	 * - timekeeping_init() for ktime entropy used in rand_initialize()
+ 	 * - time_init() for making random_get_entropy() work on some platforms
+-	 * - rand_initialize() to get any arch-specific entropy like RDRAND
+-	 * - add_latent_entropy() to get any latent entropy
+-	 * - adding command line entropy
++	 * - random_init() to initialize the RNG from from early entropy sources
+ 	 */
+-	rand_initialize();
+-	add_latent_entropy();
+-	add_device_randomness(command_line, strlen(command_line));
++	random_init(command_line);
+ 	boot_init_stack_canary();
+ 
+ 	perf_event_init();
 -- 
-Robert Marko
-Staff Embedded Linux Engineer
-Sartura Ltd.
-Lendavska ulica 16a
-10000 Zagreb, Croatia
-Email: robert.marko@sartura.hr
-Web: www.sartura.hr
+2.35.1
+

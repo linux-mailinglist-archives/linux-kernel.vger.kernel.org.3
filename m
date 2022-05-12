@@ -2,123 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88A31524D80
+	by mail.lfdr.de (Postfix) with ESMTP id D3A3E524D81
 	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354027AbiELMub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 08:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
+        id S1354033AbiELMud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 08:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353998AbiELMtc (ORCPT
+        with ESMTP id S1354040AbiELMuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 08:49:32 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533F724EA3A
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:49:29 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id bv19so10025499ejb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:49:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura-hr.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=XtfJqDS+4XXgrs5gmHjTVbohIpUyumGa7vczR+1IPgQ=;
-        b=okxummRYoYmm3mndr4IQ4mgnv150u1olNX74O7biUh+HrNqMKUVuUqAIzcm/QxtJTg
-         q/Wppj3fEdtm4aHOGPk4dQedpaKJzGP/07VYffXkh6ial1HBi6dxX/tSmMC3X98lNr/E
-         6fo4ablNWe2hi3uLO6m1lNGDioa303lXvjye1sjYFXCltiBp9kk/QjxtYSBTAp+1LAvX
-         B5z2eHs6kwZ0vXEUsFybyBhskYWK65mVnxJE0a8brcOCFwMFI8Zq28j3jNcdYj1DG7zO
-         /0hn8dRwmcTPOnzs65HkH2IzTWoz9FkvBaGkZWjc7FUuteGlXfMYG8b4BOFVokQY4XRK
-         Nftg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XtfJqDS+4XXgrs5gmHjTVbohIpUyumGa7vczR+1IPgQ=;
-        b=v2/dVq5L/D+cMJZ8U+YSUhTFOoWGQ9Zcgk3RMmKLDTPBUEhOR3UDAXJSve8OJPqame
-         EwnRcosSm2kiqgJt/tM5Ew8d+p8HpR3Gnx0CINdBiBm5tYpBJZIGjAflk1iEi51WDrwc
-         7E6VBVwqZrlpZdNT6GPxhggnI4AVZuXRIXJaeFFRbKvybaE8StS5kT1NvCRtPX7lzQ5U
-         RFsIpfpyqGxWSYMl27i0y3u7KOGncpAAbdm+aIdwdyioAp0rZE8x3wce6U1wK30eOZOx
-         IO+Hbw+uG5DKsBkZE08XCtjxQXeSAFp43AtoaZCCE4TIQ6e1TJjz+IDST2yjskX4ZiFk
-         nZNQ==
-X-Gm-Message-State: AOAM530prfKLBlPRiwvxUK2Tvr0yox+C2FFBrL/duil9ZEEXqikcO9XF
-        BneJiv6KmVxl+492KS/GV8Tfkw==
-X-Google-Smtp-Source: ABdhPJx6hUgrDA/sPEgXzBnUZI+wl8Y+4ZV8GUq0JQoFPJlaV4kfSgX/xPyQM3zp8YMWYBx0k8cbVQ==
-X-Received: by 2002:a17:906:6a28:b0:6f4:d368:ccf1 with SMTP id qw40-20020a1709066a2800b006f4d368ccf1mr29868611ejc.35.1652359767733;
-        Thu, 12 May 2022 05:49:27 -0700 (PDT)
-Received: from fedora.robimarko.hr (dh207-98-58.xnet.hr. [88.207.98.58])
-        by smtp.googlemail.com with ESMTPSA id h3-20020a170906828300b006f3ef214dc2sm2109475ejx.40.2022.05.12.05.49.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 05:49:27 -0700 (PDT)
-From:   Robert Marko <robert.marko@sartura.hr>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        andrew@lunn.ch, gregory.clement@bootlin.com,
-        sebastian.hesselbarth@gmail.com, kostap@marvell.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Robert Marko <robert.marko@sartura.hr>
-Subject: [PATCH v3 11/11] arm64: dts: marvell: add support for Methode eDPU
-Date:   Thu, 12 May 2022 14:49:05 +0200
-Message-Id: <20220512124905.49979-11-robert.marko@sartura.hr>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220512124905.49979-1-robert.marko@sartura.hr>
-References: <20220512124905.49979-1-robert.marko@sartura.hr>
+        Thu, 12 May 2022 08:50:06 -0400
+Received: from mail.toke.dk (mail.toke.dk [IPv6:2a0c:4d80:42:2001::664])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E348224F0D1;
+        Thu, 12 May 2022 05:50:00 -0700 (PDT)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
+        t=1652359798; bh=98g8YRRaj0MjLN/x5A3xUMwHLtbWASMbKhpV4ODYJwA=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=tVMw0JJ/AyQIOHEqcRg0sX2VzH8JcEIEUEFPyZTAqBF/KNFfOb9TYTQhqrbYRJX92
+         7r19nB+YayrLVuGTlh7cRKVzsJG/wkjKtGGLNQIt/ioWaBq+/5R2BswduY/Hs7oV9c
+         3MDYLsMLqenk+6vV/bhh/KjlUYfg5SkXsKYvPinX9kaBCVpzqC7RnVL1C+E6GEhZRq
+         pfEsLCzv5SHOVs3RtrjEvPVZ9cVjVJtzJmME1LkbM3GDsdo79JgeQDzsUoseuH7JzY
+         3hOXBol2j40eMSZ+YhmdT21COCtvPD7V6ujeHGQg5BiIxtdapjwpEEhIAqOVzZ4HLw
+         p6rxsSECQBKzQ==
+To:     Pavel Skripkin <paskripkin@gmail.com>,
+        ath9k-devel@qca.qualcomm.com, kvalo@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, linville@tuxdriver.com
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        syzbot+03110230a11411024147@syzkaller.appspotmail.com,
+        syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
+Subject: Re: [PATCH v3 1/2] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
+In-Reply-To: <80962aae265995d1cdb724f5362c556d494c7566.1644265120.git.paskripkin@gmail.com>
+References: <80962aae265995d1cdb724f5362c556d494c7566.1644265120.git.paskripkin@gmail.com>
+Date:   Thu, 12 May 2022 14:49:57 +0200
+X-Clacks-Overhead: GNU Terry Pratchett
+Message-ID: <87r14yhq4q.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Methode eDPU is an Armada 3720 powered board based on the Methode uDPU.
+Pavel Skripkin <paskripkin@gmail.com> writes:
 
-They feature the same CPU, RAM, and storage as well as the form factor.
+> Syzbot reported use-after-free Read in ath9k_hif_usb_rx_cb(). The
+> problem was in incorrect htc_handle->drv_priv initialization.
+>
+> Probable call trace which can trigger use-after-free:
+>
+> ath9k_htc_probe_device()
+>   /* htc_handle->drv_priv = priv; */
+>   ath9k_htc_wait_for_target()      <--- Failed
+>   ieee80211_free_hw()		   <--- priv pointer is freed
+>
+> <IRQ>
+> ...
+> ath9k_hif_usb_rx_cb()
+>   ath9k_hif_usb_rx_stream()
+>    RX_STAT_INC()		<--- htc_handle->drv_priv access
+>
+> In order to not add fancy protection for drv_priv we can move
+> htc_handle->drv_priv initialization at the end of the
+> ath9k_htc_probe_device() and add helper macro to make
+> all *_STAT_* macros NULL save.
+>
+> Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
+> Reported-and-tested-by: syzbot+03110230a11411024147@syzkaller.appspotmail.com
+> Reported-and-tested-by: syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
+> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
 
-However, eDPU only has one SFP slot plus a copper G.hn port.
+Could you link the original syzbot report in the commit message as well,
+please? Also that 'tested-by' implies that syzbot run-tested this? How
+does it do that; does it have ath9k_htc hardware?
 
-Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-Changes in v2:
-* Make the DTS split a separate commit
----
- arch/arm64/boot/dts/marvell/Makefile             |  1 +
- arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts | 14 ++++++++++++++
- 2 files changed, 15 insertions(+)
- create mode 100644 arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts
+> ---
+>
+> Changes since v2:
+> 	- My send-email script forgot, that mailing lists exist.
+> 	  Added back all related lists
+>
+> Changes since v1:
+> 	- Removed clean-ups and moved them to 2/2
+>
+> ---
+>  drivers/net/wireless/ath/ath9k/htc.h          | 10 +++++-----
+>  drivers/net/wireless/ath/ath9k/htc_drv_init.c |  3 ++-
+>  2 files changed, 7 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/net/wireless/ath/ath9k/htc.h b/drivers/net/wireless/ath/ath9k/htc.h
+> index 6b45e63fae4b..141642e5e00d 100644
+> --- a/drivers/net/wireless/ath/ath9k/htc.h
+> +++ b/drivers/net/wireless/ath/ath9k/htc.h
+> @@ -327,11 +327,11 @@ static inline struct ath9k_htc_tx_ctl *HTC_SKB_CB(struct sk_buff *skb)
+>  }
+>  
+>  #ifdef CONFIG_ATH9K_HTC_DEBUGFS
+> -
+> -#define TX_STAT_INC(c) (hif_dev->htc_handle->drv_priv->debug.tx_stats.c++)
+> -#define TX_STAT_ADD(c, a) (hif_dev->htc_handle->drv_priv->debug.tx_stats.c += a)
+> -#define RX_STAT_INC(c) (hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c++)
+> -#define RX_STAT_ADD(c, a) (hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c += a)
+> +#define __STAT_SAVE(expr) (hif_dev->htc_handle->drv_priv ? (expr) : 0)
+> +#define TX_STAT_INC(c) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.tx_stats.c++)
+> +#define TX_STAT_ADD(c, a) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.tx_stats.c += a)
+> +#define RX_STAT_INC(c) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c++)
+> +#define RX_STAT_ADD(c, a) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c += a)
+>  #define CAB_STAT_INC   priv->debug.tx_stats.cab_queued++
 
-diff --git a/arch/arm64/boot/dts/marvell/Makefile b/arch/arm64/boot/dts/marvell/Makefile
-index 1c794cdcb8e6..104d7d7e8215 100644
---- a/arch/arm64/boot/dts/marvell/Makefile
-+++ b/arch/arm64/boot/dts/marvell/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- # Mvebu SoC Family
- dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-db.dtb
-+dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-eDPU.dtb
- dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-espressobin.dtb
- dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-espressobin-emmc.dtb
- dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-espressobin-ultra.dtb
-diff --git a/arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts b/arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts
-new file mode 100644
-index 000000000000..57fc698e55d0
---- /dev/null
-+++ b/arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts
-@@ -0,0 +1,14 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+
-+/dts-v1/;
-+
-+#include "armada-3720-uDPU.dtsi"
-+
-+/ {
-+	model = "Methode eDPU Board";
-+	compatible = "methode,edpu", "marvell,armada3720", "marvell,armada3710";
-+};
-+
-+&eth0 {
-+	phy-mode = "2500base-x";
-+};
--- 
-2.36.1
+s/SAVE/SAFE/ here and in the next patch (and the commit message).
 
+-Toke

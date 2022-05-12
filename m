@@ -2,123 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67089525125
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63EF0525127
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355878AbiELPUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 11:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44082 "EHLO
+        id S1355877AbiELPU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 11:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355873AbiELPUi (ORCPT
+        with ESMTP id S1355880AbiELPUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 11:20:38 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053A925AFBF
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:20:36 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id i19so10867935eja.11
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:20:35 -0700 (PDT)
+        Thu, 12 May 2022 11:20:54 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A2C4991B
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:20:52 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id h186so2251075pgc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:20:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LSVMi3sIF030EU435n7TSz+80CX0XXIOGq6LT9c1iJs=;
-        b=R93hpC55nIrmmOwCv9ozgHF6+ZEnHvkBliQAm+PzjJ4fRxcR9juR4MHn1tg0IZlYnP
-         CnQQh8Snsq7U3+rULyhqoiz6ewotSFb6k/70frKD9FgAmPUEXNDgHCmE/oxf4DpP8f5D
-         IBXQ/CfEcH2+c2yK7DrvTsPyCchAC3lE46gfrRIGfS2p659nmV/QAxG+5p3JnZ7EyOSR
-         HqmpNvG18HLlgazoMmkwGhjOcarZiv4QymzOCYa/SFtOgOSLbYJGOsd8/MfvIjM9rJ+W
-         L2ds0d3chFwZnUa4ex//ufhmLgYweHJ3dVMPse4gNyK1LA6iB1xuJzP+BJAJZvJHQTLI
-         vNmA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=E/ZGPDd6EGa1BCVuSAUfZ4zMJWA3QnqklNSu8Txalno=;
+        b=Umjx4mw7Jom+4lVTJ8vFbpsbAOdvdnbZbMIwpBV2lgSK5VJNLmjftD8n1ZxByh+a8z
+         Yb08knSBs6YrZJpvx9nbiDYWp40CrOl0FcpeqEYP/0dVa6Ghm4/DMXl/ilTiX8gW3bVV
+         YvaBwXrBldYg9DvZFeGazu45QBDKaZQgOZ3iC/1r4NYGuq4GbXYOBB2ZyjagvtRsbqLm
+         fZf+825cAueVSpnl1WxCT03stpnWhDWy3z5eGeJBECVktIfR0/uURGNmIh0x9UJCwiT5
+         G9l5bYXnoBLgp8YoIsKPDhNPGV6mZd4Z1anFUdWr+eZb8LTGcnzdAJlV5KHgAtMY49S0
+         q7/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LSVMi3sIF030EU435n7TSz+80CX0XXIOGq6LT9c1iJs=;
-        b=xREVpsAIuRewVJmk2v+pFq0LK5T69yjw72ZqWXca+LiXv4zYpawq4XJ9N0MzhIkgx7
-         NrreOD3aiPFzlvW1EijMBwTbPgCUYYXfgJtKOQGIvUVIK7xdg+3IwugLtvBY13wiLJp1
-         GgZ0q3UhbphZbuhSeFr8uhCxWxes2Ifr6HGwCjvvbuVCMsV6aD8vFibAgJ1KNjkGkeUU
-         lwNg6Wj2GQ8+by4Zk3duWYlYmOvWRY4vpIzUFTuPbhhweUrD/iPBhCxVqgNUOfTzheb3
-         Y5bdlWc9J19SZtsNOWipgxXRZteNqaD5dXibJQubtw+uXkKLRD1DzMFhsq1fbzGg+smr
-         d91Q==
-X-Gm-Message-State: AOAM531UWM7aJelJePFyHW3ocqzZRNbvoUOvKuuphvecJ149Mswg6b4u
-        GuqUJO4sfcvpdDnXNzacFlOmxReYNqi+KtDpKYZazA==
-X-Google-Smtp-Source: ABdhPJyfOvuHWuBNEzCDaf6KWjVCW5+Yh5xV+7u/r/xrZNVTzYvg+dpYbastpgLiZn/zH67ln5iDNrujvtfmyJbpnMI=
-X-Received: by 2002:a17:906:58d4:b0:6f4:cebd:c4b with SMTP id
- e20-20020a17090658d400b006f4cebd0c4bmr385389ejs.492.1652368834342; Thu, 12
- May 2022 08:20:34 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=E/ZGPDd6EGa1BCVuSAUfZ4zMJWA3QnqklNSu8Txalno=;
+        b=gK13iKZiw4MvFwBIGHsCVbT9p/Ww162C0Q387qK45FbpNkHQb7ay6xwazBwIQYpZ2U
+         hmxjFKh+2By378KhgDryJHk3vsx78I+RNdA4CiMeS+CbjZajXiwlFn1kU50hDO+5Kbdy
+         CyW4BsOJZaD7NlJsXS6syLk4bk7rCoWCkaWnCLaKbCj7GWMW+lIkqAii8eMFhKWIuG2R
+         a+9AUlaO6kWC2gkqArJWvtUUlWZ5yNlD7VyHiPI0/+OtJNEOqgSBRBVqyw04RK+bnGRC
+         MtNxxOpnmy6gXvxr7bzjPK14zKk7JAqMh8dYcnc5o656r4z6LhkEhuo0P7HJ9NweH7qE
+         krKQ==
+X-Gm-Message-State: AOAM530h4DQCHLYwXTNhyyZPRStEuhyrmMwEoUX3xJhEsZQ7ztHPZTSe
+        COZEcGIAyYHZoVbKFuugasBN
+X-Google-Smtp-Source: ABdhPJzylavASdsNdk/OuO2HLKe8QBzaVuy+mQZuilbxc81CK+dqVavyPjfOcUNdDSssL2cEKiJe+Q==
+X-Received: by 2002:a05:6a00:2442:b0:4fd:8b00:d2f with SMTP id d2-20020a056a00244200b004fd8b000d2fmr59368pfj.39.1652368852217;
+        Thu, 12 May 2022 08:20:52 -0700 (PDT)
+Received: from thinkpad ([117.202.184.202])
+        by smtp.gmail.com with ESMTPSA id t184-20020a6381c1000000b003c66480613esm1777048pgd.80.2022.05.12.08.20.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 08:20:51 -0700 (PDT)
+Date:   Thu, 12 May 2022 20:50:43 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 16/26] dmaengine: dw-edma: Simplify the DebugFS
+ context CSRs init procedure
+Message-ID: <20220512152043.GM35848@thinkpad>
+References: <20220503225104.12108-1-Sergey.Semin@baikalelectronics.ru>
+ <20220503225104.12108-17-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-References: <20220512013921.164637-1-swboyd@chromium.org> <20220512013921.164637-2-swboyd@chromium.org>
-In-Reply-To: <20220512013921.164637-2-swboyd@chromium.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Thu, 12 May 2022 08:20:23 -0700
-Message-ID: <CABXOdTe9KAs8conb-LNh09dqZLkbuuhtxFirwtvZaeO=agfROQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/3] dt-bindings: cros-ec: Fix a typo in description
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        patches@lists.linux.dev,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
-        <devicetree@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        chrome-platform@lists.linux.dev,
-        Guenter Roeck <groeck@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Craig Hesling <hesling@chromium.org>,
-        Tom Hughes <tomhughes@chromium.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220503225104.12108-17-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 6:39 PM Stephen Boyd <swboyd@chromium.org> wrote:
->
-> A 's/pf/of/' on rpmsg-name description.
->
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: <devicetree@vger.kernel.org>
-> Cc: <chrome-platform@lists.linux.dev>
-> Cc: Guenter Roeck <groeck@chromium.org>
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Cc: Craig Hesling <hesling@chromium.org>
-> Cc: Tom Hughes <tomhughes@chromium.org>
-> Cc: Alexandru M Stan <amstan@chromium.org>
-> Cc: Tzung-Bi Shih <tzungbi@kernel.org>
-> Cc: Matthias Kaehlcke <mka@chromium.org>
-> Cc: Benson Leung <bleung@chromium.org>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+On Wed, May 04, 2022 at 01:50:54AM +0300, Serge Semin wrote:
+> DW eDMA v4.70a and older have the read and write channels context CSRs
+> indirectly accessible. It means the CSRs like Channel Control, Xfer size,
+> SAR, DAR and LLP address are accessed over at a fixed MMIO address, but
+> their reference to the corresponding channel is determined by the Viewport
+> CSR. In order to have a coherent access to these registers the CSR IOs are
+> supposed to be protected with a spin-lock. DW eDMA v4.80a and newer
+> normally have unrolled Read/Write channel context registers. That is all
+> CSRs denoted before are directly mapped in the controller MMIO space.
+> 
+> Since both normal and viewport-based registers are exposed via the DebugFS
+> nodes, the original code author decided to implement an algorithm based on
+> the unrolled CSRs mapping with the viewport addresses recalculation if
+> it's required. The problem is that such implementation turned to be first
+> unscalable (supports a platform with only single eDMA available since a
+> base address statically preserved) and second needlessly overcomplicated
+> (it loops over all Rd/Wr context addresses and re-calculates the viewport
+> base address on each DebugFS node access). The algorithm can be greatly
+> simplified just by adding the channel ID and it's direction fields in the
+> eDMA DebugFS node descriptor. These new parameters can be used to find a
+> CSR offset within the corresponding channel registers space. The DW eDMA
+> DebugFS node getter afterwards will also use them in order to activate the
+> respective context CSRs viewport before reading data from the specified
+> register. In case of the unrolled version of the CSRs mapping there won't
+> be any spin-lock taken/released, no viewport activation as before this
+> modification.
+> 
+> Note this modification fixes the REGISTER() macros using an externally
+> defined local variable. The same problem with the rest of the macro will
+> be fixed in the next commit.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
+Thanks,
+Mani
 
 > ---
->  Documentation/devicetree/bindings/mfd/google,cros-ec.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml b/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
-> index d1f53bd449f7..99eda9ab0651 100644
-> --- a/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
-> @@ -61,7 +61,7 @@ properties:
->    mediatek,rpmsg-name:
->      description:
->        Must be defined if the cros-ec is a rpmsg device for a Mediatek
-> -      ARM Cortex M4 Co-processor. Contains the name pf the rpmsg
-> +      ARM Cortex M4 Co-processor. Contains the name of the rpmsg
->        device. Used to match the subnode to the rpmsg device announced by
->        the SCP.
->      $ref: "/schemas/types.yaml#/definitions/string"
-> --
-> https://chromeos.dev
->
+>  drivers/dma/dw-edma/dw-edma-v0-debugfs.c | 84 +++++++++++-------------
+>  1 file changed, 38 insertions(+), 46 deletions(-)
+> 
+> diff --git a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> index 7bb3363b40e4..1596eedf35c5 100644
+> --- a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> +++ b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> @@ -15,9 +15,27 @@
+>  
+>  #define REGS_ADDR(name) \
+>  	((void __iomem *)&regs->name)
+> +
+> +#define REGS_CH_ADDR(name, _dir, _ch)						\
+> +	({									\
+> +		struct dw_edma_v0_ch_regs __iomem *__ch_regs;			\
+> +										\
+> +		if ((dw)->chip->mf == EDMA_MF_EDMA_LEGACY)			\
+> +			__ch_regs = &regs->type.legacy.ch;			\
+> +		else if (_dir == EDMA_DIR_READ)					\
+> +			__ch_regs = &regs->type.unroll.ch[_ch].rd;		\
+> +		else								\
+> +			__ch_regs = &regs->type.unroll.ch[_ch].wr;		\
+> +										\
+> +		(void __iomem *)&__ch_regs->name;				\
+> +	})
+> +
+>  #define REGISTER(name) \
+>  	{ #name, REGS_ADDR(name) }
+>  
+> +#define CTX_REGISTER(name, dir, ch) \
+> +	{ #name, REGS_CH_ADDR(name, dir, ch), dir, ch }
+> +
+>  #define WR_REGISTER(name) \
+>  	{ #name, REGS_ADDR(wr_##name) }
+>  #define RD_REGISTER(name) \
+> @@ -41,14 +59,11 @@
+>  static struct dw_edma				*dw;
+>  static struct dw_edma_v0_regs			__iomem *regs;
+>  
+> -static struct {
+> -	void					__iomem *start;
+> -	void					__iomem *end;
+> -} lim[2][EDMA_V0_MAX_NR_CH];
+> -
+>  struct dw_edma_debugfs_entry {
+>  	const char				*name;
+>  	void __iomem				*reg;
+> +	enum dw_edma_dir			dir;
+> +	u16					ch;
+>  };
+>  
+>  static int dw_edma_debugfs_u32_get(void *data, u64 *val)
+> @@ -58,33 +73,16 @@ static int dw_edma_debugfs_u32_get(void *data, u64 *val)
+>  
+>  	if (dw->chip->mf == EDMA_MF_EDMA_LEGACY &&
+>  	    reg >= (void __iomem *)&regs->type.legacy.ch) {
+> -		void __iomem *ptr = &regs->type.legacy.ch;
+> -		u32 viewport_sel = 0;
+>  		unsigned long flags;
+> -		u16 ch;
+> -
+> -		for (ch = 0; ch < dw->wr_ch_cnt; ch++)
+> -			if (lim[0][ch].start >= reg && reg < lim[0][ch].end) {
+> -				ptr += (reg - lim[0][ch].start);
+> -				goto legacy_sel_wr;
+> -			}
+> -
+> -		for (ch = 0; ch < dw->rd_ch_cnt; ch++)
+> -			if (lim[1][ch].start >= reg && reg < lim[1][ch].end) {
+> -				ptr += (reg - lim[1][ch].start);
+> -				goto legacy_sel_rd;
+> -			}
+> -
+> -		return 0;
+> -legacy_sel_rd:
+> -		viewport_sel = BIT(31);
+> -legacy_sel_wr:
+> -		viewport_sel |= FIELD_PREP(EDMA_V0_VIEWPORT_MASK, ch);
+> +		u32 viewport_sel;
+> +
+> +		viewport_sel = entry->dir == EDMA_DIR_READ ? BIT(31) : 0;
+> +		viewport_sel |= FIELD_PREP(EDMA_V0_VIEWPORT_MASK, entry->ch);
+>  
+>  		raw_spin_lock_irqsave(&dw->lock, flags);
+>  
+>  		writel(viewport_sel, &regs->type.legacy.viewport_sel);
+> -		*val = readl(ptr);
+> +		*val = readl(reg);
+>  
+>  		raw_spin_unlock_irqrestore(&dw->lock, flags);
+>  	} else {
+> @@ -114,19 +112,19 @@ static void dw_edma_debugfs_create_x32(const struct dw_edma_debugfs_entry ini[],
+>  	}
+>  }
+>  
+> -static void dw_edma_debugfs_regs_ch(struct dw_edma_v0_ch_regs __iomem *regs,
+> +static void dw_edma_debugfs_regs_ch(enum dw_edma_dir dir, u16 ch,
+>  				    struct dentry *dent)
+>  {
+> -	const struct dw_edma_debugfs_entry debugfs_regs[] = {
+> -		REGISTER(ch_control1),
+> -		REGISTER(ch_control2),
+> -		REGISTER(transfer_size),
+> -		REGISTER(sar.lsb),
+> -		REGISTER(sar.msb),
+> -		REGISTER(dar.lsb),
+> -		REGISTER(dar.msb),
+> -		REGISTER(llp.lsb),
+> -		REGISTER(llp.msb),
+> +	struct dw_edma_debugfs_entry debugfs_regs[] = {
+> +		CTX_REGISTER(ch_control1, dir, ch),
+> +		CTX_REGISTER(ch_control2, dir, ch),
+> +		CTX_REGISTER(transfer_size, dir, ch),
+> +		CTX_REGISTER(sar.lsb, dir, ch),
+> +		CTX_REGISTER(sar.msb, dir, ch),
+> +		CTX_REGISTER(dar.lsb, dir, ch),
+> +		CTX_REGISTER(dar.msb, dir, ch),
+> +		CTX_REGISTER(llp.lsb, dir, ch),
+> +		CTX_REGISTER(llp.msb, dir, ch),
+>  	};
+>  	int nr_entries;
+>  
+> @@ -191,10 +189,7 @@ static void dw_edma_debugfs_regs_wr(struct dentry *dent)
+>  
+>  		ch_dent = debugfs_create_dir(name, regs_dent);
+>  
+> -		dw_edma_debugfs_regs_ch(&regs->type.unroll.ch[i].wr, ch_dent);
+> -
+> -		lim[0][i].start = &regs->type.unroll.ch[i].wr;
+> -		lim[0][i].end = &regs->type.unroll.ch[i].padding_1[0];
+> +		dw_edma_debugfs_regs_ch(EDMA_DIR_WRITE, i, ch_dent);
+>  	}
+>  }
+>  
+> @@ -256,10 +251,7 @@ static void dw_edma_debugfs_regs_rd(struct dentry *dent)
+>  
+>  		ch_dent = debugfs_create_dir(name, regs_dent);
+>  
+> -		dw_edma_debugfs_regs_ch(&regs->type.unroll.ch[i].rd, ch_dent);
+> -
+> -		lim[1][i].start = &regs->type.unroll.ch[i].rd;
+> -		lim[1][i].end = &regs->type.unroll.ch[i].padding_2[0];
+> +		dw_edma_debugfs_regs_ch(EDMA_DIR_READ, i, ch_dent);
+>  	}
+>  }
+>  
+> -- 
+> 2.35.1
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்

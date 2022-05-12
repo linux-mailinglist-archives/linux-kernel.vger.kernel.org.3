@@ -2,92 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A5A55245B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 08:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 762FA5245B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 08:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350322AbiELG0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 02:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54040 "EHLO
+        id S1350378AbiELG1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 02:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346648AbiELG0e (ORCPT
+        with ESMTP id S1350354AbiELG0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 02:26:34 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5015932D;
-        Wed, 11 May 2022 23:26:32 -0700 (PDT)
-X-UUID: 04abfdf11c7d425a8fe154987037a57b-20220512
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:e6b305b9-9674-4f00-8da3-912bda9bbb11,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:faefae9,CLOUDID:83c504a7-eab7-4b74-a74d-5359964535a9,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 04abfdf11c7d425a8fe154987037a57b-20220512
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1227379191; Thu, 12 May 2022 14:26:28 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 12 May 2022 14:26:27 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 12 May 2022 14:26:26 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Subject: [PATCH next v5 4/4] arm64: dts: mediatek: mt8183: change efuse node name
-Date:   Thu, 12 May 2022 14:26:22 +0800
-Message-ID: <20220512062622.31484-4-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220512062622.31484-1-chunfeng.yun@mediatek.com>
-References: <20220512062622.31484-1-chunfeng.yun@mediatek.com>
+        Thu, 12 May 2022 02:26:51 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D5B5BD25;
+        Wed, 11 May 2022 23:26:45 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id d22so3965407plr.9;
+        Wed, 11 May 2022 23:26:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8yRr6IhHVycdTfaRSyz5soIw6uXvzqCiB4oJS5Tk2Vs=;
+        b=IlDPnzybBtoyQZsEd79y06SMZcbZWh1SaBQ0rO9v6ks/JHkYUXgf7vhPgJQCrAk0ag
+         aWfdj8RyHeGAycKJtHnD5cJrYx1yQFqPebH9KAXwUmP0pU5WAYe7t5zDgvfQThRpBNhN
+         4os8OhxS2MlqNssrrNwHEqUPvnDHbgfNtPX2OxkZfMnZv9e1Cu3IXCOinzCjOgnMFBc5
+         W/jeJDlIuBrmyKpbfsGNJ7ezc/clMGAvoquM5rNUuen/Cargu3yo56dpbMFKaXeBAuvj
+         ixz9a2Ag/oQ3zC3V21p0MZ+aHh35fwQDGjzSnDQAPsvNQVdVNe9BjLzzME3FYnuqjB9g
+         FGcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8yRr6IhHVycdTfaRSyz5soIw6uXvzqCiB4oJS5Tk2Vs=;
+        b=4kLvhJY8PbcjoIUgQaQvtJyjAf7fizh3XzEx8zc21ohYfoXiBP2lenTL6fSgNV+0Bt
+         cJOhhw0u0hkpRu0wWn8zBJqhc8UuilgFH/SUb0fg43097Jbm9UXaypxMlg3jOwtAQPH2
+         AlRV7k+rjMCGMDtWZw6vvNPNgN1d7MQ1sKRmvHPpYKEu+G1jRRPWN3MVBlZeQKQpQy8t
+         5PjLQLJrf+PPjsCRu+GIxUPzIMraIPvV5apCwgIt/RD2T0WVzcCS0Te7pHrntQfX6CGu
+         2YXi1UC1Md7ordyB2gBkZBa/AsIOP7rfnwh0AWJcpMl1hDQjls8syP7bTB7cFwG7sXoD
+         3Rdg==
+X-Gm-Message-State: AOAM531sWQ7R/Y7nKoHqYr8JlVJ7Q8fn7qKBFCjMqzhUGL3U08AjPF6l
+        ECpfHU1FcSgwZFDxd7iWPUc=
+X-Google-Smtp-Source: ABdhPJyEz+lEtQC2DnvQPHiOEcNFsbv1te0Q/MxC8WuZz4tdeQROJlXHWlKZoGWHora4MZXOxAItOg==
+X-Received: by 2002:a17:902:8698:b0:158:99d4:6256 with SMTP id g24-20020a170902869800b0015899d46256mr29321539plo.104.1652336805313;
+        Wed, 11 May 2022 23:26:45 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.114])
+        by smtp.gmail.com with ESMTPSA id gn21-20020a17090ac79500b001d903861194sm999748pjb.30.2022.05.11.23.26.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 23:26:44 -0700 (PDT)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     kuba@kernel.org
+Cc:     nhorman@tuxdriver.com, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        imagedong@tencent.com, kafai@fb.com, talalahmad@google.com,
+        keescook@chromium.org, asml.silence@gmail.com, willemb@google.com,
+        vasily.averin@linux.dev, ilias.apalodimas@linaro.org,
+        luiz.von.dentz@intel.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH net-next 0/4] net: skb: check the boundrary of skb drop reason
+Date:   Thu, 12 May 2022 14:26:25 +0800
+Message-Id: <20220512062629.10286-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the fixed "efuse" name for efuse nodes according to its yaml file
+From: Menglong Dong <imagedong@tencent.com>
 
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
-v5: new patch
----
- arch/arm64/boot/dts/mediatek/mt8183.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+In the commit 1330b6ef3313 ("skb: make drop reason booleanable"),
+SKB_NOT_DROPPED_YET is added to the enum skb_drop_reason, which makes
+the invalid drop reason SKB_NOT_DROPPED_YET can leak to the kfree_skb
+tracepoint. Once this happen (it happened, as 4th patch says), it can
+cause NULL pointer in drop monitor and result in kernel panic.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 01e650251928..82c6260998bd 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -321,7 +321,7 @@
- 		compatible = "simple-bus";
- 		ranges;
- 
--		soc_data: soc_data@8000000 {
-+		soc_data: efuse@8000000 {
- 			compatible = "mediatek,mt8183-efuse",
- 				     "mediatek,efuse";
- 			reg = <0 0x08000000 0 0x0010>;
+Therefore, check the boundrary of drop reason in both kfree_skb_reason
+(2th patch) and drop monitor (1th patch).
+
+Meanwhile, fix the invalid drop reason passed to kfree_skb_reason() in
+tcp_v4_rcv().
+
+Menglong Dong (4):
+  net: dm: check the boundary of skb drop reasons
+  net: skb: check the boundrary of drop reason in kfree_skb_reason()
+  net: skb: change the definition SKB_DR_SET()
+  net: tcp: reset skb drop reason to NOT_SPCIFIED in tcp_v4_rcv()
+
+ include/linux/skbuff.h  | 3 ++-
+ net/core/drop_monitor.c | 2 +-
+ net/core/skbuff.c       | 5 +++++
+ net/ipv4/tcp_ipv4.c     | 1 +
+ 4 files changed, 9 insertions(+), 2 deletions(-)
+
 -- 
-2.18.0
+2.36.1
 

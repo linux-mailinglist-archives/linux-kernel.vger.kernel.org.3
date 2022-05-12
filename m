@@ -2,146 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93393524CE5
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31ADC524CE6
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353775AbiELMcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 08:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
+        id S1353781AbiELMdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 08:33:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353727AbiELMcl (ORCPT
+        with ESMTP id S1353778AbiELMdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 08:32:41 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24ABB5A0B9
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:32:39 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24CCWESM067393;
-        Thu, 12 May 2022 07:32:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1652358734;
-        bh=MsVBxvyfgGwdtzvGgcuBz5n9dAHmwRvAG2ctFAEx0YE=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=uAz9oTYrCIN9LT2cx3D0A2LKdVIwQsxRVeVGUg+C/glF2ALLBGHCpF0u/X+EoPrsZ
-         tHqBIRYlSEXmklkxJ15C9V/NEKfswZ8Nb1v4EirAn93p0WGmFG3mcMYkQ7TTfrj7WZ
-         MOoTsl2/147S1S0jGVK+yds3lR+T8rkK91FbaOkc=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24CCWEek051917
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 12 May 2022 07:32:14 -0500
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 12
- May 2022 07:32:14 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 12 May 2022 07:32:14 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24CCWDK8094985;
-        Thu, 12 May 2022 07:32:14 -0500
-Date:   Thu, 12 May 2022 18:02:13 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Michael Walle <michael@walle.cc>
-CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] mtd: spi-nor: debugfs: fix format specifier
-Message-ID: <20220512123213.fzly4gollonlo27p@ti.com>
-References: <20220512112027.3771734-1-michael@walle.cc>
+        Thu, 12 May 2022 08:33:01 -0400
+X-Greylist: delayed 58837 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 May 2022 05:32:59 PDT
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4365BD16;
+        Thu, 12 May 2022 05:32:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1652358778;
+        bh=IySozlMZXy/1QNYSgDSx5HLq+jIRHXYcbbpihCThx6s=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=rKE+Lp6Uxyi3yJmORKUqLDYGEKVYhKiNso8at95lUIeg8azuxByuZWwz/T6Wg5Kuy
+         ulXO3j5EkYgL3XYf8vg6jNAMGdjOguNYLK4dQq22V+vqixY3K9QDdLkxsY+mXDMvyX
+         orkDtOPb1bKA0hUB68gyjIfcxoQHQ/HYaQElawao=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 7646A12869F3;
+        Thu, 12 May 2022 08:32:58 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 3XK07T6rk3Bg; Thu, 12 May 2022 08:32:58 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1652358777;
+        bh=IySozlMZXy/1QNYSgDSx5HLq+jIRHXYcbbpihCThx6s=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=sfLrRlb76wM8CIFj4r6KmR/cimvHsb3Tz6HoqnEPAmMyABOODn6xzBX9Atdm256jX
+         MHx9wT4qBaNvyW6YeLu8vjarX5+rp107Vpcu61EQhJPxnGMzm+dKypq0VcP2XA3q/S
+         QJ+ayWjJzwcf5XKtGZUVJlQV2GP11l3VAJ8k2v4E=
+Received: from [IPv6:2601:5c4:4300:c551:a71:90ff:fec2:f05b] (unknown [IPv6:2601:5c4:4300:c551:a71:90ff:fec2:f05b])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 1DED3128195F;
+        Thu, 12 May 2022 08:32:57 -0400 (EDT)
+Message-ID: <eb9ef8aeab4c0284028c013a2c86b248719a46ae.camel@HansenPartnership.com>
+Subject: Re: [PATCH] tpm: sleep at least <...> ms in tpm_msleep()
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Johannes Holland <johannes.holland@infineon.com>,
+        Nayna <nayna@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peterhuewe@gmx.de, jgg@ziepe.ca
+Date:   Thu, 12 May 2022 08:32:55 -0400
+In-Reply-To: <99541f08e8b554dea59334005cafb0af978f9a05.camel@linux.ibm.com>
+References: <20220510112902.23213-1-johannes.holland@infineon.com>
+         <YnvTSqRgYkWu0qgp@kernel.org>
+         <99541f08e8b554dea59334005cafb0af978f9a05.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220512112027.3771734-1-michael@walle.cc>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
-
-On 12/05/22 01:20PM, Michael Walle wrote:
-> The intention was to print the JEDEC ID in the following format:
->   nn nn nn
+On Thu, 2022-05-12 at 08:21 -0400, Mimi Zohar wrote:
+> On Wed, 2022-05-11 at 18:16 +0300, Jarkko Sakkinen wrote:
+> > On Tue, May 10, 2022 at 01:29:03PM +0200, Johannes Holland wrote:
+> > > To comply with protocol requirements, minimum polling times must
+> > > often
+> > > be adhered to. Therefore, a macro like tpm_msleep() should sleep
+> > > at
+> > > least the given amount of time (not up to the given period). Have
+> > > tpm_msleep() sleep at least the given number of milliseconds.
+> > > 
+> > > Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+> > > ---
+> > >  drivers/char/tpm/tpm.h | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> > > index 2163c6ee0d36..0971b55fffe3 100644
+> > > --- a/drivers/char/tpm/tpm.h
+> > > +++ b/drivers/char/tpm/tpm.h
+> > > @@ -185,8 +185,8 @@ int tpm_pm_resume(struct device *dev);
+> > >  
+> > >  static inline void tpm_msleep(unsigned int delay_msec)
+> > >  {
+> > > -	usleep_range((delay_msec * 1000) - TPM_TIMEOUT_RANGE_US,
+> > > -		     delay_msec * 1000);
+> > > +	usleep_range(delay_msec * 1000, (delay_msec * 1000)
+> > > +		     + TPM_TIMEOUT_RANGE_US);
+> > >  };
+> > >  
+> > >  int tpm_chip_start(struct tpm_chip *chip);
+> > > -- 
+> > > 2.34.1
+> > > 
+> > 
+> > For this I would really like to hear a 2nd opinion from Nayna and
+> > Mimi.
 > 
-> In this case format specifier has to be "%*ph". Fix it.
-> 
-> Fixes: 0257be79fc4a ("mtd: spi-nor: expose internal parameters via debugfs")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
->  drivers/mtd/spi-nor/debugfs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mtd/spi-nor/debugfs.c b/drivers/mtd/spi-nor/debugfs.c
-> index bf9fda5d4d0b..4b972bd4b80d 100644
-> --- a/drivers/mtd/spi-nor/debugfs.c
-> +++ b/drivers/mtd/spi-nor/debugfs.c
-> @@ -81,7 +81,7 @@ static int spi_nor_params_show(struct seq_file *s, void *data)
->  	int i;
->  
->  	seq_printf(s, "name\t\t%s\n", info->name);
-> -	seq_printf(s, "id\t\t%*phn\n", SPI_NOR_MAX_ID_LEN, nor->id);
-> +	seq_printf(s, "id\t\t%*ph\n", SPI_NOR_MAX_ID_LEN, nor->id);
+> This patch reverts commit 5ef924d9e2e8 ("tpm: use tpm_msleep() value
+> as max delay").    Are you experiencing TPM issues that require it?
 
-Patch does not apply. Are you basing this on some other commits you 
-have? This line is different on my tree:
+I am:
 
-	seq_printf(s, "id\t\t%*phn\n", info->id_len, info->id);
+https://lore.kernel.org/linux-integrity/1531328689.3260.8.camel@HansenPartnership.com/
 
-In fact, I do not have a nor->id at all in my tree. BTW, I have applied 
-https://lore.kernel.org/r/20220429102018.2361038-2-michael@walle.cc
+I'm about 24h into a soak test of the patch with no TPM failure so far.
+I think it probably needs to run another 24h just to be sure, but it
+does seem the theory is sound (my TPM gets annoyed by being poked too
+soon) so reverting 5ef924d9e2e8 looks to be the correct action.  The
+only other ways I've found to fix this are either revert the
+usleep_range patch altogether or increase the timings:
 
-I am going to apply the below patch. Please ACK/NACK. I did a quick 
-test, the output stays the same before and after this patch.
+https://lore.kernel.org/linux-integrity/1531329074.3260.9.camel@HansenPartnership.com/
 
--- 8< --
-From c47452194641b5d27c20e557c84a46c85fd7ce37 Mon Sep 17 00:00:00 2001
-From: Michael Walle <michael@walle.cc>
-Date: Thu, 12 May 2022 13:20:27 +0200
-Subject: [PATCH] mtd: spi-nor: debugfs: fix format specifier
+Which obviously pushes the min past whatever issue my TPM is having
+even with 5ef924d9e2e8 applied.
 
-The intention was to print the JEDEC ID in the following format:
-  nn nn nn
+Given that even the commit message for 5ef924d9e2e8 admits it only
+shaves about 12% off the TPM response time, that would appear to be an
+optimization too far if it's going to cause some TPMs to fail.
 
-In this case format specifier has to be "%*ph". Fix it.
+James
 
-Fixes: 0257be79fc4a ("mtd: spi-nor: expose internal parameters via debugfs")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Michael Walle <michael@walle.cc>
-Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-Link: https://lore.kernel.org/r/20220512112027.3771734-1-michael@walle.cc
----
- drivers/mtd/spi-nor/debugfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/mtd/spi-nor/debugfs.c b/drivers/mtd/spi-nor/debugfs.c
-index 1949905eefea..eaf84f7a0676 100644
---- a/drivers/mtd/spi-nor/debugfs.c
-+++ b/drivers/mtd/spi-nor/debugfs.c
-@@ -81,7 +81,7 @@ static int spi_nor_params_show(struct seq_file *s, void *data)
- 	int i;
- 
- 	seq_printf(s, "name\t\t%s\n", info->name);
--	seq_printf(s, "id\t\t%*phn\n", info->id_len, info->id);
-+	seq_printf(s, "id\t\t%*ph\n", info->id_len, info->id);
- 	string_get_size(params->size, 1, STRING_UNITS_2, buf, sizeof(buf));
- 	seq_printf(s, "size\t\t%s\n", buf);
- 	seq_printf(s, "write size\t%u\n", params->writesize);
-
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.

@@ -2,56 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 716665252BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C789D5252BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356560AbiELQiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 12:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56662 "EHLO
+        id S1356568AbiELQix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 12:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348751AbiELQiR (ORCPT
+        with ESMTP id S242977AbiELQiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 12:38:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FAF7C78B;
-        Thu, 12 May 2022 09:38:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 88CD6B82A02;
-        Thu, 12 May 2022 16:38:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A62DFC385B8;
-        Thu, 12 May 2022 16:38:12 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Z6KAmAk0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1652373490;
+        Thu, 12 May 2022 12:38:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F1E4520E090
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 09:38:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652373530;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2D/pEhTU/+V82CjpEsLBKB8+2YAiMBZc9DPAa+vQgNs=;
-        b=Z6KAmAk0DaDniCQ3cIldb6U8p1i2feTgcYZYEIPxLuk/58yNQvaXh05H2khOMNCXhdSxQ/
-        bq46wE+AZ02Avfh0v5/l743+OJdS2O2/BOFoNhRVABZaYtVyxP6h69PIrI8+6eNLuGUKMJ
-        1qgr4ejTYe66r0RWYbJ2XjqWxiTvwOE=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f2863515 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 12 May 2022 16:38:09 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Sultan Alsawaf <sultan@kerneltoast.com>
-Subject: [PATCH v4] random: use static branch for crng_ready()
-Date:   Thu, 12 May 2022 18:37:48 +0200
-Message-Id: <20220512163748.3477-1-Jason@zx2c4.com>
-In-Reply-To: <20220512144235.2466-1-Jason@zx2c4.com>
-References: <20220512144235.2466-1-Jason@zx2c4.com>
+        bh=mp/k4+ROOQmqxpZwmJD0fhrk0KhPBsBL98sUg/4FvV4=;
+        b=FO8DCwvg9XVsGepcd2Ml2n9NKAiwNzGTRD1t9DwQNQS+AOXxdncG5CjpBZWZ6tjeooO67j
+        C8z2DL8Cx/j3PqrmylzETzJq+uLbcSQjBmmgFJOP7l/Xk63cK9qT5GoV1ZbKbIJeoGVHG0
+        LRDONLlGa6Nr2jL2fwIi8QsUFGlWZso=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-125-tyUtRBZ-Mo2SsnRYaktzzA-1; Thu, 12 May 2022 12:38:48 -0400
+X-MC-Unique: tyUtRBZ-Mo2SsnRYaktzzA-1
+Received: by mail-wm1-f71.google.com with SMTP id n26-20020a1c721a000000b003941ea1ced7so1882043wmc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 09:38:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=mp/k4+ROOQmqxpZwmJD0fhrk0KhPBsBL98sUg/4FvV4=;
+        b=mzlKlYaVKROzix7DwuMZSVQ1yXFoetiDB9X6r9e+5KQuTmph27ilejYp5E8rrE/p5O
+         uZnilKp7ESfMIiU6EuOF3zkYhzYlqanfjr8dkLqAqV0kzUJGwLQ5AU2pVA3qm0xlW5jx
+         LWX5UzRv3sVYbN5qn3EW25FaGTwrv6qVUm/4Me/vMj4ZA9Fwh0Hg7LldzZk9Cl6mK150
+         gnI/DX3uGADZjYc4wiSzB+DzTR7mcNTF56hQcc0lJTBe6VC36LsvQqtethqgGgyC15tY
+         7mT4oOefOAOaQks+iOph6qWVCkE0BX4LWGfASjPRjaT+vQGJ2cvbF3K9rJ6pOxB9k25e
+         UmYA==
+X-Gm-Message-State: AOAM5328/10Xu6//732gK2YOo3lbaPi3MKEXSEg7DgyjzddCIGg3YxHC
+        kbAheWwakCN8tF1TIX1oZdA6/CS//93Os8hEdoeDFMCUh+U7Rz4Oy2PUgprL6nFrA5Mlpfia/Gq
+        ND8MsYvX3aoCxTNUXRxDDJD+K
+X-Received: by 2002:a5d:52c5:0:b0:1f2:1a3:465a with SMTP id r5-20020a5d52c5000000b001f201a3465amr486450wrv.206.1652373527706;
+        Thu, 12 May 2022 09:38:47 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw//xNJoDYn5jy5VfLK8EYdFrB0LMzS/0yyqB5elC7RCc26OTEcBI18h7H0GbGJR3KT78tEog==
+X-Received: by 2002:a5d:52c5:0:b0:1f2:1a3:465a with SMTP id r5-20020a5d52c5000000b001f201a3465amr486433wrv.206.1652373527464;
+        Thu, 12 May 2022 09:38:47 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c701:d200:ee5d:1275:f171:136d? (p200300cbc701d200ee5d1275f171136d.dip0.t-ipconnect.de. [2003:cb:c701:d200:ee5d:1275:f171:136d])
+        by smtp.gmail.com with ESMTPSA id j10-20020adfc68a000000b0020c635ca28bsm2219wrg.87.2022.05.12.09.38.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 09:38:45 -0700 (PDT)
+Message-ID: <5ca142fd-c7c0-768d-39f4-c58a84fff1f7@redhat.com>
+Date:   Thu, 12 May 2022 18:38:44 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v10 2/4] mm: memory_hotplug: override memmap_on_memory
+ when hugetlb_free_vmemmap=on
+Content-Language: en-US
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     corbet@lwn.net, mike.kravetz@oracle.com, akpm@linux-foundation.org,
+        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
+        osalvador@suse.de, masahiroy@kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        duanxiongchun@bytedance.com, smuchun@gmail.com
+References: <20220509062703.64249-1-songmuchun@bytedance.com>
+ <20220509062703.64249-3-songmuchun@bytedance.com>
+ <ebffd794-697b-9bf1-f41b-4b2d52c100fc@redhat.com>
+ <Yn0Ck5isxx4ghQi6@FVFYT0MHHV2J.usts.net>
+ <284eec3f-a79d-c5f0-3cd6-53b8e64100cd@redhat.com>
+ <Yn0SyaqfS2YZ8kO/@FVFYT0MHHV2J.usts.net>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <Yn0SyaqfS2YZ8kO/@FVFYT0MHHV2J.usts.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,100 +91,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since crng_ready() is only false briefly during initialization and then
-forever after becomes true, we don't need to evaluate it after, making
-it a prime candidate for a static branch.
+On 12.05.22 15:59, Muchun Song wrote:
+> On Thu, May 12, 2022 at 03:04:57PM +0200, David Hildenbrand wrote:
+>> On 12.05.22 14:50, Muchun Song wrote:
+>>> On Thu, May 12, 2022 at 09:36:15AM +0200, David Hildenbrand wrote:
+>>>> On 09.05.22 08:27, Muchun Song wrote:
+>>>>> Optimizing HugeTLB vmemmap pages is not compatible with allocating memmap on
+>>>>> hot added memory. If "hugetlb_free_vmemmap=on" and
+>>>>> memory_hotplug.memmap_on_memory" are both passed on the kernel command line,
+>>>>> optimizing hugetlb pages takes precedence. 
+>>>>
+>>>> Why?
+>>>>
+>>>
+>>> Because both two features are not compatible since hugetlb_free_vmemmap cannot
+>>> optimize the vmemmap pages allocated from alternative allocator (when
+>>> memory_hotplug.memmap_on_memory=1). So when the feature of hugetlb_free_vmemmap
+>>> is introduced, I made hugetlb_free_vmemmap take precedence.  BTW, I have a plan
+>>> to remove this restriction, I'll post it out ASAP.
+>>
+>> I was asking why vmemmap optimization should take precedence.
+>> memmap_on_memory makes it more likely to succeed memory hotplug in
+>> close-to-OOM situations -- which is IMHO more important than a vmemmap
+>> optimization.
+>>
+> 
+> I thought the users who enable hugetlb_free_vmemmap value memory
+> savings more, so I made a decision in commit 4bab4964a59f.  Seems
+> I made a bad decision from your description.
 
-One complication, however, is that it changes state in a particular call
-to credit_init_bits(), which might be made from atomic context, which
-means we must kick off a workqueue to change the static key. Further
-complicating things, credit_init_bits() may be called sufficiently early
-on in system initialization such that system_wq is NULL.
+Depends on the perspective I guess. :)
 
-Fortunately, there exists the nice function execute_in_process_context(),
-which will immediately execute the function if !in_interrupt(), and
-otherwise defer it to a workqueue. During early init, before workqueues
-are available, in_interrupt() is always false, because interrupts
-haven't even been enabled yet, which means the function in that case
-executes immediately. Later on, after workqueues are available,
-in_interrupt() might be true, but in that case, the work is queued in
-system_wq and all goes well.
+>  
+>> But anyhow, the proper approach should most probably be to simply not
+>> mess with the vmemmap if we stumble over a vmemmap that's special due to
+>> memmap_on_memory. I assume that's what you're talking about sending out.
+>>
+> 
+> I mean I want to have hugetlb_vmemmap.c do the check whether the section
+> which the HugeTLB pages belong to can be optimized instead of making
+> hugetlb_free_vmemmap take precedence.  E.g. If the section's vmemmap pages
+> are allocated from the added memory block itself, hugetlb_free_vmemmap will
+> refuse to optimize the vmemmap, otherwise, do the optimization.  Then
+> both kernel parameters are compatible.  I have done those patches, but
+> haven't send them out.
 
-Cc: Theodore Ts'o <tytso@mit.edu>
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Cc: Sultan Alsawaf <sultan@kerneltoast.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
-Sorry for all the churn. execute_in_process_context() appeared out of
-the blue and so clearly represents the better option, so happily going
-with that now, making this patch finally tiny.
+Yeah, that's exactly what I thought. How complicated are they? If they
+are easy, can we just avoid this patch here and do it "properly"? :)
 
-Changes v3->v4:
-- Use execute_in_process_context() to resolve quandries.
-
-Changes v2->v3:
-- Call schedule_work() outside of the lock.
-
-Changes v1->v2:
-- Use a workqueue instead of doing it on-demand.
-
- drivers/char/random.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 2f5460edba28..ec4e8c2657fb 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -78,8 +78,9 @@ static enum {
- 	CRNG_EMPTY = 0, /* Little to no entropy collected */
- 	CRNG_EARLY = 1, /* At least POOL_EARLY_BITS collected */
- 	CRNG_READY = 2  /* Fully initialized with POOL_READY_BITS collected */
--} crng_init = CRNG_EMPTY;
--#define crng_ready() (likely(crng_init >= CRNG_READY))
-+} crng_init __read_mostly = CRNG_EMPTY;
-+static DEFINE_STATIC_KEY_FALSE(crng_is_ready);
-+#define crng_ready() (static_branch_likely(&crng_is_ready) || crng_init >= CRNG_READY)
- /* Various types of waiters for crng_init->CRNG_READY transition. */
- static DECLARE_WAIT_QUEUE_HEAD(crng_init_wait);
- static struct fasync_struct *fasync;
-@@ -109,6 +110,11 @@ bool rng_is_initialized(void)
- }
- EXPORT_SYMBOL(rng_is_initialized);
- 
-+static void crng_set_ready(struct work_struct *work)
-+{
-+	static_branch_enable(&crng_is_ready);
-+}
-+
- /* Used by wait_for_random_bytes(), and considered an entropy collector, below. */
- static void try_to_generate_entropy(void);
- 
-@@ -268,7 +274,8 @@ static void crng_reseed(void)
- 		++next_gen;
- 	WRITE_ONCE(base_crng.generation, next_gen);
- 	WRITE_ONCE(base_crng.birth, jiffies);
--	crng_init = CRNG_READY;
-+	if (!static_branch_likely(&crng_is_ready))
-+		crng_init = CRNG_READY;
- 	spin_unlock_irqrestore(&base_crng.lock, flags);
- 	memzero_explicit(key, sizeof(key));
- }
-@@ -785,6 +792,7 @@ static void extract_entropy(void *buf, size_t nbytes)
- 
- static void credit_init_bits(size_t nbits)
- {
-+	static struct execute_work set_ready;
- 	unsigned int new, orig, add;
- 	unsigned long flags;
- 
-@@ -800,6 +808,7 @@ static void credit_init_bits(size_t nbits)
- 
- 	if (orig < POOL_READY_BITS && new >= POOL_READY_BITS) {
- 		crng_reseed(); /* Sets crng_init to CRNG_READY under base_crng.lock. */
-+		execute_in_process_context(crng_set_ready, &set_ready);
- 		process_random_ready_list();
- 		wake_up_interruptible(&crng_init_wait);
- 		kill_fasync(&fasync, SIGIO, POLL_IN);
 -- 
-2.35.1
+Thanks,
+
+David / dhildenb
 

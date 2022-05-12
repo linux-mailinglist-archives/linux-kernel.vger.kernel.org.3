@@ -2,68 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E15524250
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 04:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D470524252
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 04:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236941AbiELCG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 22:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42504 "EHLO
+        id S237206AbiELCIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 22:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234973AbiELCGw (ORCPT
+        with ESMTP id S234973AbiELCIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 22:06:52 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FC366F95
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 19:06:51 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id p12so3556615pfn.0
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 19:06:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=e5ejgBXTAIUixboB4DJUAMoeq/lr5AGnM16DSQO4iD0=;
-        b=fWC+os+5n3q5/oM2q5UhHNUR8KmKwVjjKQfn64+siR+2+lrAqRjVCkyp9Q+pkXlfBz
-         lJrhatB9kQcByfRRRra7p7C6S7etFxRUVRMGsSorHmPfK0zW9HpaQHCiPllXxTZITPjn
-         Pc1GYf7Z2nvpXE9yI1Z4fU4Oaibv0Wng+1u0O+JtyrO7cAe8zltj5qAtrm0jVouWDKqp
-         wxMXtnNaw+UGugaLoMKnhca/+qSPA51U27Y+WPH9LhzTdaPMLJthwqy+o2H/kHGJFU5v
-         zcex7eucr8UcmLQnC6Hw8Xt1iKiDNkbv/OqyTLli2z6Mj162j4ytc253hzEt5AbqVh0l
-         Md5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=e5ejgBXTAIUixboB4DJUAMoeq/lr5AGnM16DSQO4iD0=;
-        b=MUGtyEqtyvoQAWH4ktK0dVbE7aUzZW40qimqfSM81p7VZeFeEUNJmdGH3MWJXcPcYQ
-         LbSzeA7q6sbXYuTxnFKuz/AD01Hz7vADpQ0iI9OE69O1rqhOfpi79MBUgUJHqLo+zB8N
-         K6K2/FqDUrXWg6wsnyDw+zfbxlmKyL3GDPZmLCQv7SaUmZHXs3euthGzlsyhZ5Mv1d9Q
-         AJC5llQuZCPzCLjdl40qTXiO9J8tNL4Prl/YYcOEPL6Ukgk6z+sHYM6mirqq1/RIYwUK
-         jPWNkN6Huolls0O98tGIZMAq/17Un7JDwxAVXFP/R5+dzjcIxYYXQqY8+0fX+TOoW/ih
-         r3eQ==
-X-Gm-Message-State: AOAM5303nKSJUPCuTZCZp3Qst6vFcvPTBfhp9qNCg16pLL/2PfH9IM7E
-        QQEVAL5xv6b74wP49CSr1ZE=
-X-Google-Smtp-Source: ABdhPJxxgUYp/Q7pUWclcnmdGsopJnbeev5DMjUldDXikj/BlTisP/Hk4WZo8xQgJnuYpuARQyVVUQ==
-X-Received: by 2002:a63:81c6:0:b0:3ab:616b:35b with SMTP id t189-20020a6381c6000000b003ab616b035bmr23545343pgd.256.1652321210709;
-        Wed, 11 May 2022 19:06:50 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id a17-20020a63d411000000b003c14af5063fsm520814pgh.87.2022.05.11.19.06.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 19:06:50 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Anders Berg <anders.berg@lsi.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: Fix refcount leak in axxia_boot_secondary
-Date:   Thu, 12 May 2022 06:06:39 +0400
-Message-Id: <20220512020641.45156-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 11 May 2022 22:08:00 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC476D38C;
+        Wed, 11 May 2022 19:07:58 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 24C27abX015835
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 May 2022 22:07:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1652321259; bh=N0RrHZICQeD+jMKffmiVOPCX1VOHVXkmF2unBxL2MJo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=ICSnAYgUceKKXsBKoRVPVEIQKsCW0KTrDhONUN31qeHKplZYIzPxqs8r+P+6YnX6x
+         abGDraN6I6t1+6cpTxV+pX/G3fEwMzr4yTmbUKBr0T0taRo1DJimXKf5Gg79Ohpl3X
+         JpMubQ0WlA6eF0LKDzQNgnOqe3puzHfHVqCXvtBW3+YG7uyHfHolbIovUtrn+rdOwy
+         JRr9Qa2HfVEUQ+aQ+EAp9AyaK7SPZhtHVsCbScLn15PNFhEYvE1xXltNl0sfjvJCFF
+         uoPI6+2MP/NnYrl1D9pLkyRIkK7Nn5W9/l5pldeyIP7y4GsgumtbbEERrnA1b/cRhh
+         9OGVUNr2s3ldg==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 0BBB915C3F2A; Wed, 11 May 2022 22:07:36 -0400 (EDT)
+Date:   Wed, 11 May 2022 22:07:36 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        KVM list <kvm@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        mie@igel.co.jp
+Subject: Re: [GIT PULL] virtio: last minute fixup
+Message-ID: <Ynxr6JNczWFTwxVw@mit.edu>
+References: <20220510082351-mutt-send-email-mst@kernel.org>
+ <CAHk-=wjPR+bj7P1O=MAQWXp0Mx2hHuNQ1acn6gS+mRo_kbo5Lg@mail.gmail.com>
+ <YnrxTMVRtDnGA/EK@dev-arch.thelio-3990X>
+ <CAHk-=wgAk3NEJ2PHtb0jXzCUOGytiHLq=rzjkFKfpiuH-SROgA@mail.gmail.com>
+ <20220511125140.ormw47yluv4btiey@meerkat.local>
+ <87a6bo89w4.fsf@mpe.ellerman.id.au>
+ <20220511163116.fpw2lvrkjbxmiesz@meerkat.local>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511163116.fpw2lvrkjbxmiesz@meerkat.local>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,28 +66,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_find_compatible_node() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
-Add missing of_node_put() to avoid refcount leak.
+On Wed, May 11, 2022 at 12:31:16PM -0400, Konstantin Ryabitsev wrote:
+> > But my mailer, editor and terminal don't know what to do with a Message-Id.
+> > 
+> > Whereas they can all open an https link.
+> > 
+> > Making people paste message ids into lore to see the original submission
+> > is not a win. People make enough fun of us already for still using email
+> > to submit patches, let's not make their job any easier :)
+> 
+> Okay, I'm fine with using a dedicated trailer for this purpose, perhaps an
+> "Archived-At"? That's a real header that was proposed by IETF for similar
+> purposes. E.g.:
+> 
+>     Archived-at: https://lore.kernel.org/r/CAHk-=wgAk3NEJ2PHtb0jXzCUOGytiHLq=rzjkFKfpiuH-SROgA@mail.gmail.com
+>
 
-Fixes: 1d22924e1c4e ("ARM: Add platform support for LSI AXM55xx SoC")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- arch/arm/mach-axxia/platsmp.c | 1 +
- 1 file changed, 1 insertion(+)
+I'd suggest is "Patch-Link".  Then we can also have "Bug-Link:",
+"Test-Link:", etc.
 
-diff --git a/arch/arm/mach-axxia/platsmp.c b/arch/arm/mach-axxia/platsmp.c
-index 512943eae30a..2e203626eda5 100644
---- a/arch/arm/mach-axxia/platsmp.c
-+++ b/arch/arm/mach-axxia/platsmp.c
-@@ -39,6 +39,7 @@ static int axxia_boot_secondary(unsigned int cpu, struct task_struct *idle)
- 		return -ENOENT;
- 
- 	syscon = of_iomap(syscon_np, 0);
-+	of_node_put(syscon_np);
- 	if (!syscon)
- 		return -ENOMEM;
- 
--- 
-2.25.1
+"Patch-Link" is a tad bit shorter "Archived-at", and ultimately, it's
+not actually not the patch which is being archived.  It's the fact
+that it's a pointer to the patch review which is of most interest.
 
+					- Ted

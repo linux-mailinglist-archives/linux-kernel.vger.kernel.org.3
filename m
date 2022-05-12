@@ -2,85 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3022B5246CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 039EB5246D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:22:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350921AbiELHVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 03:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48386 "EHLO
+        id S1350917AbiELHWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 03:22:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350972AbiELHVg (ORCPT
+        with ESMTP id S1350934AbiELHWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 03:21:36 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030E42C10C;
-        Thu, 12 May 2022 00:21:33 -0700 (PDT)
-Received: from mail-yb1-f173.google.com ([209.85.219.173]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M2fDr-1nma1s3mxT-004CAf; Thu, 12 May 2022 09:21:32 +0200
-Received: by mail-yb1-f173.google.com with SMTP id v59so8108983ybi.12;
-        Thu, 12 May 2022 00:21:31 -0700 (PDT)
-X-Gm-Message-State: AOAM532m7bhsqYseq6xznso3H2LCu9NoI7jZNTium6OFgIlUc1uKAlzh
-        8EBUuGE/I+ym1RYNT6C2OEeWGFGN9qQIBgmT950=
-X-Google-Smtp-Source: ABdhPJx4WfEOUWv2L6bCmWT0mJB6dEDWkNIHboRAE66MHFC+PuQA7c4QPgkOpP2BhGDSQSBJfhNNN89Hg26ByytWHec=
-X-Received: by 2002:a25:cdc7:0:b0:648:f57d:c0ed with SMTP id
- d190-20020a25cdc7000000b00648f57dc0edmr26571261ybf.480.1652340090303; Thu, 12
- May 2022 00:21:30 -0700 (PDT)
+        Thu, 12 May 2022 03:22:09 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C3F27B3A;
+        Thu, 12 May 2022 00:22:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652340125; x=1683876125;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=TcvqFRo7tE7F2CGVY7lJqLdptfPjmpv6H/Lv9po1svo=;
+  b=KBWi2NK9ffH3L6RU8stGP8/c3cs8oUyY9oTK2tblBLAp6yRAMlHvds3E
+   dUKocG/603dE6zRqHRhkV0fRJddf9/cs8716RuLnpxlCXWtOB89hwlSp/
+   qJRvx2OKa8jrIdkBKGgLrhf18tjjk6jrW5q2cCYVARt2uJAQsDfyVk9Y7
+   8=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 12 May 2022 00:22:05 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 00:22:04 -0700
+Received: from [10.50.47.121] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 12 May
+ 2022 00:22:00 -0700
+Message-ID: <e740f0f7-8010-a390-98e0-d549d981f5e3@quicinc.com>
+Date:   Thu, 12 May 2022 12:51:48 +0530
 MIME-Version: 1.0
-References: <20220430090518.3127980-1-chenhuacai@loongson.cn>
- <20220430090518.3127980-14-chenhuacai@loongson.cn> <CAK8P3a0A9dW4mwJ6JHDiJxizL7vWfr4r4c5KhbjtAY0sWbZJVA@mail.gmail.com>
- <CAAhV-H4te_+AS69viO4eBz=abBUm5oQ6AfoY1Cb+nOCZyyeMdA@mail.gmail.com>
- <CAK8P3a0DqQcApv8aa2dgBS5At=tEkN7cnaskoUeXDi2-Bu9Rnw@mail.gmail.com>
- <20220507121104.7soocpgoqkvwv3gc@wittgenstein> <20220509100058.vmrgn5fkk3ayt63v@wittgenstein>
- <CAK8P3a0zmPbMNsS11aUGiAADyjOEueNUXQ8QZtVxr48M3pwAkQ@mail.gmail.com> <20220511211231.GG7074@brightrain.aerifal.cx>
-In-Reply-To: <20220511211231.GG7074@brightrain.aerifal.cx>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 12 May 2022 09:21:13 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a05wSVu7M9kVMw5cSqx84YUCk1394Yfd_5tweEOc2P69g@mail.gmail.com>
-Message-ID: <CAK8P3a05wSVu7M9kVMw5cSqx84YUCk1394Yfd_5tweEOc2P69g@mail.gmail.com>
-Subject: Re: [musl] Re: [PATCH V9 13/24] LoongArch: Add system call support
-To:     musl@lists.openwall.com
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <brauner@kernel.org>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        GNU C Library <libc-alpha@sourceware.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:i280+8Sy6Wd4KatTn+RAGMJYY6bd4l+X6Q9g41wB0EzV5X30OO5
- 4F/E9HIw9rH3XsYfsgDXkv8wVRdhceF7dTDTOWUf+b6zI7JZrCl1L2eHs24DhecUt0pCEbQ
- ukUdWPXSgzAJX9qnvbH+D6DTGPfESuYxFs9qVcsdWMUjMnxleuzfZaG3jSfOI80dHooHwRL
- ANBM/AtA2m0eggx/7I5iA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:YhzFAH8uXKs=:InJy6ZucBe+dh6L7ckj11f
- WzhmjMZMraPlGFvP/YSsCywqfrtchUusNsSgyCdGxFrItN0vcro3UmkaEC68tugzAoBJBv9SV
- buDkGAGUv9mHuod3qaSDHjtBNWOHkg32FiZshWt71YhZMHkZqs6t3tFddTUMo6GvkjHCa3B3p
- 1NdQRyuHfL8sytpzGoni1yWoKkKf5AVF51+qQIwDrQuv/9KCTfIpChFshB19HptGnTNrt7gXc
- qRF6RA3EItn8/4dxLLYOZYUss6273Io/sWYp+akYxRkpENMtboT26fZwZsIX1JgXVESnkCdE6
- mZDiejsgESRTx/P8lVkMf3x1eLvVSTiHLidh1IDaH8FDauWiJIrGB3mqe7wP+BKQM+D1DcJ5m
- aCcaTS88zzIQqnaX78s3QEA3IEozae65oXP0k882cEc4nyQPYaWEna6T6f0gbvEEMpN7LFO41
- mhR43WsPBpVYS2G89k8l1Moq1+VJMvHOtVDCj6HG0hni8YSxoFkZfQzNfYUcagppRtFlDXfmj
- o8eomH+CvzOpFhB21d13cNvMmcf/3E0XtK6ipRbWZgRfQ0b9HvBl+r4z3mp/gzUT7vd2Pmbmq
- pjciDZRJlzngfCvuEXrfJVp6ojFbLOqaG91GZWqADrw4BKEoM2tOAsPBwVPV0fsovGHR9Gtjq
- 9FTVn1vErqylEXHGPNKTlEvuxZRmJK4Z93J0KVZiVb/6hUQO794P0IyfuvnobVUnd7FBgDbW1
- a0v5Ca15cWEg8+Fpvq2OwqZMtNa1rl5IgoSyRNW7EBH81aQdyXDET2v4IPGxsSfOg+/x/LQI8
- tctzVxDP3o0Imqw+j6YmjuZmYAJ/t0FceQ03cxuBiBRK2MyNvuPobmlgwVE/uAxrqEmoNsgM8
- Mp21AeuMcp/vIrPJm6QQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] arm64: Enable repeat tlbi workaround on KRYO4XX gold CPUs
+Content-Language: en-US
+To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
+CC:     Andre Przywara <andre.przywara@arm.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Prasanna Kumar <quic_kprasan@quicinc.com>
+References: <20220511080247.1530-1-quic_shrekk@quicinc.com>
+ <7a7b4657-ec75-7984-1a6e-50ff928ab09c@quicinc.com>
+From:   Shreyas K K <quic_shrekk@quicinc.com>
+In-Reply-To: <7a7b4657-ec75-7984-1a6e-50ff928ab09c@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,46 +73,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 11:12 PM Rich Felker <dalias@libc.org> wrote:
-> On Wed, May 11, 2022 at 09:11:56AM +0200, Arnd Bergmann wrote:
-> > On Mon, May 9, 2022 at 12:00 PM Christian Brauner <brauner@kernel.org> wrote:
-> > .....
-> > > I can try and move a poc for this up the todo list.
-> > >
-> > > Without an approach like this certain sandboxes will fallback to
-> > > ENOSYSing system calls they can't filter. This is a generic problem
-> > > though with clone3() being one promiment example.
-> >
-> > Thank you for the detailed reply. It sounds to me like this will eventually have
-> > to get solved anyway, so we could move ahead without clone() on loongarch,
-> > and just not have support for Chrome until this is fully solved.
-> >
-> > As both the glibc and musl ports are being proposed for inclusion right
-> > now, we should try to come to a decision so the libc ports can adjust if
-> > necessary. Adding both mailing lists to Cc here, the discussion is archived
-> > at [1].
-> >
-> >          Arnd
-> >
-> > [1] https://lore.kernel.org/linux-arch/20220509100058.vmrgn5fkk3ayt63v@wittgenstein/
+Hi Sai,
+
+On 5/11/2022 4:43 PM, Sai Prakash Ranjan wrote:
+> Hi Shreyas,
 >
-> Having read about the seccomp issue, I think it's a very strong
-> argument that __NR_clone should be kept permanently for all future
-> archs.
+> On 5/11/2022 1:32 PM, Shreyas K K wrote:
+>> Add KRYO4XX gold/big cores to the list of CPUs that need the
+>> repeat TLBI workaround. Apply this to the affected
+>> KRYO4XX cores (rcpe to rdpe).
+>>
+>> The variant and revision bits are implementation defined and are
+>> different from the their Cortex CPU counterparts on which they are
+>> based on, i.e., (r0p0 to r1p0) is equivalent to (rcpe to rdpe).
+>>
+>> Signed-off-by: Shreyas K K <quic_shrekk@quicinc.com>
+>> ---
+>>   Documentation/arm64/silicon-errata.rst | 3 +++
+>>   arch/arm64/kernel/cpu_errata.c         | 2 ++
+>>   2 files changed, 5 insertions(+)
+>>
+>> diff --git a/Documentation/arm64/silicon-errata.rst 
+>> b/Documentation/arm64/silicon-errata.rst
+>> index 466cb9e89047..d27db84d585e 100644
+>> --- a/Documentation/arm64/silicon-errata.rst
+>> +++ b/Documentation/arm64/silicon-errata.rst
+>> @@ -189,6 +189,9 @@ stable kernels.
+>> +----------------+-----------------+-----------------+-----------------------------+
+>>   | Qualcomm Tech. | Kryo4xx Silver  | N/A             | 
+>> ARM64_ERRATUM_1024718       |
+>> +----------------+-----------------+-----------------+-----------------------------+
+>> +| Qualcomm Tech. | Kryo4xx Gold    | N/A             | 
+>> ARM64_ERRATUM_1286807       |
+>> ++----------------+-----------------+-----------------+-----------------------------+ 
+>>
+>> +
+>> +----------------+-----------------+-----------------+-----------------------------+
+>>   | Fujitsu        | A64FX           | E#010001        | 
+>> FUJITSU_ERRATUM_010001      |
+>> +----------------+-----------------+-----------------+-----------------------------+
+>> diff --git a/arch/arm64/kernel/cpu_errata.c 
+>> b/arch/arm64/kernel/cpu_errata.c
+>> index 4c9b5b4b7a0b..2518657e6de1 100644
+>> --- a/arch/arm64/kernel/cpu_errata.c
+>> +++ b/arch/arm64/kernel/cpu_errata.c
+>> @@ -208,6 +208,8 @@ static const struct arm64_cpu_capabilities 
+>> arm64_repeat_tlbi_list[] = {
+>>   #ifdef CONFIG_ARM64_ERRATUM_1286807
+>>       {
+>>           ERRATA_MIDR_RANGE(MIDR_CORTEX_A76, 0, 0, 3, 0),
+>> +        /* Kryo4xx Gold (rcpe to rdpe) => (r0p0 to r1p0) */
+>> +        ERRATA_MIDR_RANGE(QCOM_CPU_PART_KRYO_4XX_GOLD, 0xc, 0xe, 
+>> 0xd, 0xe),
+>>       },
+>>   #endif
+>>       {},
+>
+> Why not include r2p0 and r3p0 which are affected by this erratum? I 
+> see these revisions are present
+> in our SoCs as per the document.
+>
+> Thanks,
+> Sai
 
-Ok, let's keep clone() around for all architectures then. We should probably
-just remove the __ARCH_WANT_SYS_CLONE macro and build the
-code into the kernel unconditionally, but at the moment there
-are still private versions for ia64 and sparc with the same name as
-the generic version. Both are also still lacking support for clone3() and
-don't have anyone actively working on them.
+Acknowledged. Changing in the next version.
 
-In this case, we probably don't need to change clone3() to allow the
-zero-length stack after all, and the wrapper that was added to the
-musl port should get removed again.
+Thanks,
+Shreyas
 
-For the other syscalls, I think the latest musl patches already dropped
-the old-style stat() implementation, but the glibc patches still have those
-and need to drop them as well to match what the kernel will get.
-
-       Arnd

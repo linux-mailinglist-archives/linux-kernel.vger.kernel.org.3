@@ -2,145 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A265250FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:14:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF0E525100
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355766AbiELPNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 11:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
+        id S1355776AbiELPOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 11:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344515AbiELPNg (ORCPT
+        with ESMTP id S1344515AbiELPOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 11:13:36 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D0226265B
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:13:35 -0700 (PDT)
-Received: from pps.filterd (m0134420.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CEt5it015938;
-        Thu, 12 May 2022 15:13:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pps0720;
- bh=/YEWxrPhlLh6CePIL0BsOiR5cQBtub4EQMXI9f9rhok=;
- b=oxKZOhLkdmrY4ThCsi+EDxVERUmhfI2CRsjj3IIioVVekhJW+KPmjNCYJQHMJLe+TYBA
- n4dBa1W/e+kowts6vfNgq9bP+PDL65xSXrNJrPKcpVJNctG9MQqIfKbT8EQyrCIwlDc2
- nAxaIrAcYgOneh9dshoyIhnrFDTF8LN97pMM9AM4tEYBG/durCW6W1Mr7Zp4ByB5Gwe7
- otnnQx+tDgzmKcAm02lCAwFhiRYMvgYFnNFQLrpsyBuX+4hEjTgI3SDNXMeypnWOB7HU
- LgK2Xi7Kv91RDulVCHgPW1mvuzJcdrkd/u+GzjgN2PzkyxeCuxtFIsV4jKikjTm3CRQJ kA== 
-Received: from g9t5008.houston.hpe.com (g9t5008.houston.hpe.com [15.241.48.72])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3g0uj3vtgg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 15:13:11 +0000
-Received: from g4t3433.houston.hpecorp.net (g4t3433.houston.hpecorp.net [16.208.49.245])
-        by g9t5008.houston.hpe.com (Postfix) with ESMTP id B592A56;
-        Thu, 12 May 2022 15:13:10 +0000 (UTC)
-Received: from dog.eag.rdlabs.hpecorp.net (dog.eag.rdlabs.hpecorp.net [128.162.243.181])
-        by g4t3433.houston.hpecorp.net (Postfix) with ESMTP id 2539046;
-        Thu, 12 May 2022 15:13:10 +0000 (UTC)
-Received: by dog.eag.rdlabs.hpecorp.net (Postfix, from userid 200934)
-        id C675F30090F61; Thu, 12 May 2022 10:13:09 -0500 (CDT)
-From:   Steve Wahl <steve.wahl@hpe.com>
-To:     Joerg Roedel <jroedel@suse.de>,
-        Kyung Min Park <kyung.min.park@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Will Deacon <will@kernel.org>, iommu@lists.linux-foundation.org
-Cc:     Mike Travis <mike.travis@hpe.com>,
-        Dimitri Sivanich <sivanich@hpe.com>,
-        Steve Wahl <steve.wahl@hpe.com>,
-        Russ Anderson <russ.anderson@hpe.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] iommu/vt-d: Make DMAR_UNITS_SUPPORTED a config setting
-Date:   Thu, 12 May 2022 10:13:09 -0500
-Message-Id: <20220512151309.330068-1-steve.wahl@hpe.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20220505194658.246121-1-steve.wahl@hpe.com>
-References: <20220505194658.246121-1-steve.wahl@hpe.com>
+        Thu, 12 May 2022 11:14:24 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB08F262709
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:14:22 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id kq17so10899270ejb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:14:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/u1HiPt6El83plNrSLkAGuBjrIwscqUyOaYLijW4+kI=;
+        b=SGkOEfmBRXouNoqxzf6hPYzUe+KKDSEXHdMYqMrIEyzQFtBEzUh9yE60B9BjPMv1/3
+         CAModw8CHTSfruh9dwdt1oia1svoMbOwNkrl9k+Yza4G8NLgXzpfjaUHbQpc3NHCP6lt
+         rOgvN9cSwKIobkpbUP4MLiaODRYyX/mFODpHMdGoqo91z6WYKQuo0kaail8HWNLJFm7r
+         oEpoQXCcqo78YwnbCfV9c2RI995O0O1Usj61Cwh2Fzr6QkAS5WnNq39piWiv0Bi6GHQ6
+         ZdsrIJwijClhQ3OG4QmV8m++5nK0NqSwYLC8B7bbxPTlvhVzYij43k7ccFd2a1pUvoOt
+         n8tA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/u1HiPt6El83plNrSLkAGuBjrIwscqUyOaYLijW4+kI=;
+        b=dSqgNpp94JgDlKSzJnmcmJNqlrcQYgr3EnIfGliLMtluyjBXPIqaAFF1kCNlQMJeNW
+         zSrYL2UmApHpG+hLNbTm6XdV9pCCMuqcLoc5hXKqZhJ2frjIxoThZ4Xq9dIwfh/p1Pv4
+         hHhxTET04IJTNsHppWAYVPZoVY6EDw1dylMvkDPT23GTA16uU3WVnUhaJZbeiEpGRse+
+         J4Z/QMjKOHw/S7Nxr/4c8CjzXNAT9UtwreEHhWvRI//ja/nY2KAtryY0jXbQUua7YhKO
+         YA2yIwS6eBsW70uCwflsnYxPHw57nQsCqH5mIKuLa3+WqteH1ZAiJYyj4VUH8L3GpnJI
+         7Mzw==
+X-Gm-Message-State: AOAM530+SakjVgqpuCPpLWLKtXpDWz3Z5yKSceqcPXz2X4p/nVXuaNeK
+        DV1uDnFucEhgRuRGfX0vwfhQ79JwiyuMHDzpmfWIBA==
+X-Google-Smtp-Source: ABdhPJw5m0z/CmdfOhU+dqZxjqaMKJpcftWxfCERbCQDYh902+JstuqmfCHNkwRS3wN+w5yo2i3h7F5TFysGsE9liUo=
+X-Received: by 2002:a17:907:8a17:b0:6f4:4b56:f550 with SMTP id
+ sc23-20020a1709078a1700b006f44b56f550mr357869ejc.720.1652368461187; Thu, 12
+ May 2022 08:14:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: WkWMN80jBTgaSK4d3wDiBtfoldiJGW3s
-X-Proofpoint-GUID: WkWMN80jBTgaSK4d3wDiBtfoldiJGW3s
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-12_12,2022-05-12_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- lowpriorityscore=0 malwarescore=0 clxscore=1015 priorityscore=1501
- spamscore=0 phishscore=0 mlxlogscore=999 adultscore=0 suspectscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205120073
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220512083627.885338-1-tzungbi@kernel.org> <20220512083627.885338-7-tzungbi@kernel.org>
+In-Reply-To: <20220512083627.885338-7-tzungbi@kernel.org>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Thu, 12 May 2022 08:14:10 -0700
+Message-ID: <CABXOdTftq_Gbf5UmYCLEfm00xJusm-ZaWnQt9KEhb7U-mY_1Pw@mail.gmail.com>
+Subject: Re: [PATCH 6/6] platform/chrome: cros_ec_spi: drop BUG_ON()
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To support up to 64 sockets with 10 DMAR units each (640), make the
-value of DMAR_UNITS_SUPPORTED adjustable by a config variable,
-CONFIG_DMAR_UNITS_SUPPORTED, and make it's default 1024 when MAXSMP is
-set.
+On Thu, May 12, 2022 at 1:37 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+>
+> It is overkill to crash the kernel if the `din` buffer is going to full
+> or overflow.
+>
+> Drop the BUG_ON() and return -EINVAL instead.
+>
+> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 
-If the available hardware exceeds DMAR_UNITS_SUPPORTED (previously set
-to MAX_IO_APICS, or 128), it causes these messages: "DMAR: Failed to
-allocate seq_id", "DMAR: Parse DMAR table failure.", and "x2apic: IRQ
-remapping doesn't support X2APIC mode x2apic disabled"; and the system
-fails to boot properly.
+Wonder if the return code should be -EPROTO instead, but I don't have
+a strong opinion.
 
-Signed-off-by: Steve Wahl <steve.wahl@hpe.com>
----
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
 
-Note that we could not find a reason for connecting
-DMAR_UNITS_SUPPORTED to MAX_IO_APICS as was done previously.  Perhaps
-it seemed like the two would continue to match on earlier processors.
-There doesn't appear to be kernel code that assumes that the value of
-one is related to the other.
-
-v2: Make this value a config option, rather than a fixed constant.  The default
-values should match previous configuration except in the MAXSMP case.  Keeping the
-value at a power of two was requested by Kevin Tian.
-
- drivers/iommu/intel/Kconfig | 6 ++++++
- include/linux/dmar.h        | 6 +-----
- 2 files changed, 7 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/iommu/intel/Kconfig b/drivers/iommu/intel/Kconfig
-index 247d0f2d5fdf..fdbda77ac21e 100644
---- a/drivers/iommu/intel/Kconfig
-+++ b/drivers/iommu/intel/Kconfig
-@@ -9,6 +9,12 @@ config DMAR_PERF
- config DMAR_DEBUG
- 	bool
- 
-+config DMAR_UNITS_SUPPORTED
-+	int "Number of DMA Remapping Units supported"
-+	default 1024 if MAXSMP
-+	default 128  if X86_64
-+	default 64
-+
- config INTEL_IOMMU
- 	bool "Support for Intel IOMMU using DMA Remapping Devices"
- 	depends on PCI_MSI && ACPI && (X86 || IA64)
-diff --git a/include/linux/dmar.h b/include/linux/dmar.h
-index 45e903d84733..0c03c1845c23 100644
---- a/include/linux/dmar.h
-+++ b/include/linux/dmar.h
-@@ -18,11 +18,7 @@
- 
- struct acpi_dmar_header;
- 
--#ifdef	CONFIG_X86
--# define	DMAR_UNITS_SUPPORTED	MAX_IO_APICS
--#else
--# define	DMAR_UNITS_SUPPORTED	64
--#endif
-+#define	DMAR_UNITS_SUPPORTED	CONFIG_DMAR_UNITS_SUPPORTED
- 
- /* DMAR Flags */
- #define DMAR_INTR_REMAP		0x1
--- 
-2.26.2
-
+> ---
+>  drivers/platform/chrome/cros_ec_spi.c | 15 ++++++++++-----
+>  1 file changed, 10 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/platform/chrome/cros_ec_spi.c b/drivers/platform/chrome/cros_ec_spi.c
+> index 589f18e9537d..0a938f317adc 100644
+> --- a/drivers/platform/chrome/cros_ec_spi.c
+> +++ b/drivers/platform/chrome/cros_ec_spi.c
+> @@ -160,7 +160,8 @@ static int receive_n_bytes(struct cros_ec_device *ec_dev, u8 *buf, int n)
+>         struct spi_message msg;
+>         int ret;
+>
+> -       BUG_ON(buf - ec_dev->din + n > ec_dev->din_size);
+> +       if (buf - ec_dev->din + n > ec_dev->din_size)
+> +               return -EINVAL;
+>
+>         memset(&trans, 0, sizeof(trans));
+>         trans.cs_change = 1;
+> @@ -197,7 +198,8 @@ static int cros_ec_spi_receive_packet(struct cros_ec_device *ec_dev,
+>         unsigned long deadline;
+>         int todo;
+>
+> -       BUG_ON(ec_dev->din_size < EC_MSG_PREAMBLE_COUNT);
+> +       if (ec_dev->din_size < EC_MSG_PREAMBLE_COUNT)
+> +               return -EINVAL;
+>
+>         /* Receive data until we see the header byte */
+>         deadline = jiffies + msecs_to_jiffies(EC_MSG_DEADLINE_MS);
+> @@ -237,7 +239,8 @@ static int cros_ec_spi_receive_packet(struct cros_ec_device *ec_dev,
+>          * start of our buffer
+>          */
+>         todo = end - ++ptr;
+> -       BUG_ON(todo < 0 || todo > ec_dev->din_size);
+> +       if (todo < 0 || todo > ec_dev->din_size)
+> +               return -EINVAL;
+>         todo = min(todo, need_len);
+>         memmove(ec_dev->din, ptr, todo);
+>         ptr = ec_dev->din + todo;
+> @@ -305,7 +308,8 @@ static int cros_ec_spi_receive_response(struct cros_ec_device *ec_dev,
+>         unsigned long deadline;
+>         int todo;
+>
+> -       BUG_ON(ec_dev->din_size < EC_MSG_PREAMBLE_COUNT);
+> +       if (ec_dev->din_size < EC_MSG_PREAMBLE_COUNT)
+> +               return -EINVAL;
+>
+>         /* Receive data until we see the header byte */
+>         deadline = jiffies + msecs_to_jiffies(EC_MSG_DEADLINE_MS);
+> @@ -345,7 +349,8 @@ static int cros_ec_spi_receive_response(struct cros_ec_device *ec_dev,
+>          * start of our buffer
+>          */
+>         todo = end - ++ptr;
+> -       BUG_ON(todo < 0 || todo > ec_dev->din_size);
+> +       if (todo < 0 || todo > ec_dev->din_size)
+> +               return -EINVAL;
+>         todo = min(todo, need_len);
+>         memmove(ec_dev->din, ptr, todo);
+>         ptr = ec_dev->din + todo;
+> --
+> 2.36.0.512.ge40c2bad7a-goog
+>

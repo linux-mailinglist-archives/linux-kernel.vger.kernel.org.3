@@ -2,128 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B32A524AF3
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4921524AFA
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352930AbiELLH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 07:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57204 "EHLO
+        id S1352963AbiELLIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 07:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240084AbiELLHv (ORCPT
+        with ESMTP id S240084AbiELLIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 07:07:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262CB52E63;
-        Thu, 12 May 2022 04:07:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA76BB82792;
-        Thu, 12 May 2022 11:07:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07451C385B8;
-        Thu, 12 May 2022 11:07:44 +0000 (UTC)
-Date:   Thu, 12 May 2022 12:07:41 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mm tree
-Message-ID: <YnzqffV7STYS24Yn@arm.com>
-References: <20220512193855.4f6ce32f@canb.auug.org.au>
+        Thu, 12 May 2022 07:08:13 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BF3580CB;
+        Thu, 12 May 2022 04:08:10 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id t25so6030560ljd.6;
+        Thu, 12 May 2022 04:08:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dBBHl0CC2zkFhkTGpkjRFnXUjhNmvvs7bjai/yQgBzI=;
+        b=YFbbrvWobPli7+ZpBvGVl4ObJiJOD73o01734aD9JYzT0Pvm4RiULDDuD3uMASjewG
+         cSaMk8i8WGQYkZB4SMHoOajCR7rJsaThoHtyu+RPp4EVGv/8/Hdp7Mg13EG2blUPH6c/
+         ohc2v2q4EWOvANPY1lRf4o9E16LIZuHgG+9XC2labNqX+iZU9UbGlHlyI00PeetmjU78
+         Mb0Cud+we7CiQLD/IPy7I4UyJl+zt+iElyUrmsJcvsFYX0rXQ01ZB7nwzSF4NbIRcaW7
+         7gSNtva5lX5SOV9Nd32mQz7QAml71gQtOCJv7rQvi5ag9MVjz8i+BKRCKxiKvKhlS0BR
+         TrDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dBBHl0CC2zkFhkTGpkjRFnXUjhNmvvs7bjai/yQgBzI=;
+        b=a5k8Q5+lKTf2F5z+six26pFkJF63+2ryHuL5lxLhU8X/56ZiLmUrPC/qqKAmFG5Qyt
+         GVYwwKUnjOBigUDEizBBZbYG/cyDXNv/91BxEs8VNwGEqS+lTMqQHlM/yMIW2UYxB5R5
+         3F/rgnD47efHIY7G1VjSFISMipjYvcv1HmFLlilHLjVPhWax9Z/+ZJAyThoveatDg9TK
+         wc3IAppf/4gh6CAghDfww52L0Meb7dbIRgyhD0FBhXdeGHT1mmGnOP2BSIbFvrxevpmb
+         M3QrqBQpV4l3b9n2KRAbme+HmXCxNq8GQsS6QB195UN9yk9RuqogEvp1TP1AF+r7rJnR
+         YoMQ==
+X-Gm-Message-State: AOAM532lvS7IWL7+vzQATzGAD8vW7m+43NghW+wtz3KSFIMyq0rn0XhP
+        8CwJ2xNqiA4wx3VSM6CkKTnqAMr81wKqVA==
+X-Google-Smtp-Source: ABdhPJwlYkC1xm2URAbVR3Mh4H7Sa69hMp6XIWvNUDRFcpN2z4ld6Iq203X7uw25R+808nPph3qxFg==
+X-Received: by 2002:a2e:9645:0:b0:24f:2e6f:f931 with SMTP id z5-20020a2e9645000000b0024f2e6ff931mr20360672ljh.466.1652353687988;
+        Thu, 12 May 2022 04:08:07 -0700 (PDT)
+Received: from nergzd-desktop.localdomain ([194.39.226.133])
+        by smtp.gmail.com with ESMTPSA id i25-20020a056512007900b004725b99d2fdsm734883lfo.164.2022.05.12.04.08.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 04:08:07 -0700 (PDT)
+From:   Markuss Broks <markuss.broks@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Markuss Broks <markuss.broks@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Song Qiang <songqiang1304521@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: [PATCH v3 0/5] Add support for ToF sensor on Yoshino platform
+Date:   Thu, 12 May 2022 14:07:52 +0300
+Message-Id: <20220512110757.5297-1-markuss.broks@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220512193855.4f6ce32f@canb.auug.org.au>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 07:38:55PM +1000, Stephen Rothwell wrote:
-> After merging the mm tree, today's linux-next build (arm64 defconfig)
-> failed like this:
-> 
-> arch/arm64/mm/hugetlbpage.c: In function 'huge_ptep_clear_flush':
-> arch/arm64/mm/hugetlbpage.c:493:16: error: implicit declaration of function 'get_clear_flush'; did you mean 'ptep_clear_flush'? [-Werror=implicit-function-declaration]
->   493 |         return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
->       |                ^~~~~~~~~~~~~~~
->       |                ptep_clear_flush
-> arch/arm64/mm/hugetlbpage.c:493:16: error: incompatible types when returning type 'int' but 'pte_t' was expected
->   493 |         return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
->       |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> arch/arm64/mm/hugetlbpage.c:494:1: error: control reaches end of non-void function [-Werror=return-type]
->   494 | }
->       | ^
-> 
-> Caused by commit
-> 
->   00df1f1a133b ("mm: change huge_ptep_clear_flush() to return the original pte")
-> 
-> interacting with commit
-> 
->   fb396bb459c1 ("arm64/hugetlb: Drop TLB flush from get_clear_flush()")
-> 
-> I have applied the following merg fix patch for today.
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Thu, 12 May 2022 19:33:11 +1000
-> Subject: [PATCH] fixup for "mm: change huge_ptep_clear_flush() to return the original pte"
-> 
-> It interacts with commit
-> 
->   fb396bb459c1 ("arm64/hugetlb: Drop TLB flush from get_clear_flush()")
-> 
-> from the arm64 tree
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  arch/arm64/mm/hugetlbpage.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
-> index 5bdf913dedc7..30f5b76aabe9 100644
-> --- a/arch/arm64/mm/hugetlbpage.c
-> +++ b/arch/arm64/mm/hugetlbpage.c
-> @@ -490,7 +490,7 @@ pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
->  		return ptep_clear_flush(vma, addr, ptep);
->  
->  	ncontig = find_num_contig(vma->vm_mm, addr, ptep, &pgsize);
-> -	return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
-> +	return get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
->  }
+This series adds support for the ToF proximity sensor installed on
+Yoshino devices. As part of this series, support handling the reset
+GPIO and VDD supply by the VL53L0X driver. Also stop hardcoding the
+interrupt type, since on Yoshino devices it seems that edge triggering
+doesn't work properly.
 
-Note that after the arm64 commit, get_clear_contig() no longer flushes
-the TLB. So maybe something like:
+Tested on Sony Xperia XZ1 (poplar).
 
-diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
-index 30f5b76aabe9..9a999550df8e 100644
---- a/arch/arm64/mm/hugetlbpage.c
-+++ b/arch/arm64/mm/hugetlbpage.c
-@@ -485,12 +485,15 @@ pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
- {
- 	size_t pgsize;
- 	int ncontig;
-+	pte_t orig_pte;
+Cc: Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc: Marijn Suijten <marijn.suijten@somainline.org>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 
- 	if (!pte_cont(READ_ONCE(*ptep)))
- 		return ptep_clear_flush(vma, addr, ptep);
+v2:
+- Fix a nasty issue: turns out grouping the pinctrl makes it not apply,
+which was the main cause of edge interrupts not working correctly and
+having to use level interrupts, which caused a large amount of false
+detections.
+- handle the irq type more gracefully: if it's not provided, default
+to falling edge, but if it's provided, then use the provided one.
+v3:
+- add irq.h header (forgot to commit)
+- reword commit message (already initialized -> pre-initialized)
 
- 	ncontig = find_num_contig(vma->vm_mm, addr, ptep, &pgsize);
--	return get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
-+	orig_pte = get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
-+	flush_tlb_range(vma, addr, addr + pgsize * ncontig);
-+	return orig_pte;
- }
+Markuss Broks (5):
+  dt-bindings: proximity: vl53l0x: Document optional supply and GPIO
+    properties
+  proximity: vl53l0x: Get interrupt type from DT
+  proximity: vl53l0x: Handle the VDD regulator
+  proximity: vl53l0x: Handle the reset GPIO
+  arm64: dts: qcom: msm8998-xperia: Introduce ToF sensor support
 
- static int __init hugetlbpage_init(void)
+ .../bindings/iio/proximity/st,vl53l0x.yaml    |  5 ++
+ .../dts/qcom/msm8998-sony-xperia-yoshino.dtsi | 34 +++++++++++++
+ drivers/iio/proximity/vl53l0x-i2c.c           | 50 ++++++++++++++++++-
+ 3 files changed, 88 insertions(+), 1 deletion(-)
 
 -- 
-Catalin
+2.35.1
+

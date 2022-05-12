@@ -2,97 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24271524F3B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93A77524F3E
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354886AbiELOCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 10:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46202 "EHLO
+        id S1354911AbiELODG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 10:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352695AbiELOCd (ORCPT
+        with ESMTP id S1343674AbiELODE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 10:02:33 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73295522D
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:02:31 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id l38-20020a05600c1d2600b00395b809dfbaso2799913wms.2
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:02:31 -0700 (PDT)
+        Thu, 12 May 2022 10:03:04 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF475621F
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:03:03 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2fb9a85a124so54408567b3.13
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:03:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Y5zEOR8a2tEkZy/r6HUczq8om3FfL9i9nYmMHgZoVJY=;
-        b=HprFLMVg4LbqJ+pbrw6wTtnHQb3AMb89BE3vhNP+EI+RbD0KiLCACPrCAyu1q2fDWw
-         kJHivbngQXjomyStmHAncejy/E/iy4Cr+uGLfgohOAciGYUTD5YZAKiKF/wZABnIH7bQ
-         jr5XdpGMMTm3GBXy5SC9VULk+3EFB9sjBTuCM=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KlDkQpCn49Egj2gNBh7QJsQSLZROJtZtgLe+YMoSoeo=;
+        b=N3570Jyc5Be2853QkpFfp1yCxzkBQU3WOotacVP2mpU9bVdFZU9pNQNBGnXw6ZGK4p
+         OK6g2jhm8N2ACXg12P63FUp7J3EQNCcAnJhkgWXeMmp/D7WLv1d22lfsfD1KCodNVg3/
+         4wcCCLuCtkN2yUgOhBGKfZIFZFCj0pjOXSh8pe5l+hstpwodlzK7pes7t+dq15YwMLq0
+         x5Myz0uiG8mSPZYxHSBkx8CDdr5cDPktvIOJaO/rZAnVGjBvU3pf+f43IaQlauwNIo/n
+         3bpokGajPVE1F2fAvaB9UgUgk1IOmd+VwPb9NWRGQH4l6SbR/CCXQ0QT9g/SoDTUo/BJ
+         Iimg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=Y5zEOR8a2tEkZy/r6HUczq8om3FfL9i9nYmMHgZoVJY=;
-        b=yzL7XZTWYcRjA9KVIjff3n9vCZR/mfnRp2rpFbEoKPeHULsFLRPIaOKPUNMt0+Sl4/
-         POf0yLCGBc180Z9HsG9sRUeqObVdXFHqfQ3BCgEk/yH7Lm9AsizGl+e1572JTCWpk+Cn
-         UK9xPYRWRnl/o7Fj1jUN0iAqPgfMuJxpCz6nvXYT3bbtUb1n1R5IjZrgUaGmKEHGWrKD
-         Zs6FWVdtjvb8+R51ZmpmS8qCsiWiMXNLGpRwflh7p3aNC25Qix2vmQx0q6hMQjN/1rh1
-         3V/3rWClvqaXh5MaKpqn4eyegy9flyTuP+fvrvbpX0eCEZFColCIwT9FYnBW1oaNhvTN
-         go+g==
-X-Gm-Message-State: AOAM530tO7ZHW6Nh4yybdat4Pi0hJE8yxFijT1G3OG3PuCZFNa8jgGKc
-        EiKvzJOVIJHnBYf1QpbTN8gaow==
-X-Google-Smtp-Source: ABdhPJzPtiUjtRrz1hCSkubjaMF5DK7FhphPaMUkyQlWPr7RMXTEB7eQTDkzhJR0n4ZglX3xo1X1ng==
-X-Received: by 2002:a1c:2c6:0:b0:38f:f280:caa2 with SMTP id 189-20020a1c02c6000000b0038ff280caa2mr25599wmc.87.1652364149421;
-        Thu, 12 May 2022 07:02:29 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id k5-20020adff285000000b0020c5253d8desm4241643wro.42.2022.05.12.07.02.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 07:02:28 -0700 (PDT)
-Date:   Thu, 12 May 2022 16:02:26 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Tomeu Vizoso <tomeu.vizoso@collabora.com>
-Cc:     Rob Clark <robdclark@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>
-Subject: Re: [Freedreno] [RFC v2] drm/msm: Add initial ci/ subdirectory
-Message-ID: <Yn0TcgMbOY1R0fuQ@phenom.ffwll.local>
-Mail-Followup-To: Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>, Jonathan Corbet <corbet@lwn.net>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>
-References: <20220510070140.45407-1-tomeu.vizoso@collabora.com>
- <20220510141329.54414-1-tomeu.vizoso@collabora.com>
- <e4e03cd8-3ebc-e5e1-e7d0-6bdc038049b5@quicinc.com>
- <CAF6AEGueadnRMiatO3MoHS+NTQ1o1sgcV0cVjJM3iu-6JUNmNw@mail.gmail.com>
- <CAKMK7uGRuCZwF6m02tcxxrgQGaijsYaNkowjxR+cw0JM3UpDkQ@mail.gmail.com>
- <CAF6AEGthpxPLxyt_i-aUFgW485hA5qw+xXcJ3gKQUJ+fM=ZBhg@mail.gmail.com>
- <79d79110-9fbc-0e96-d17e-68a1f8f2c224@collabora.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KlDkQpCn49Egj2gNBh7QJsQSLZROJtZtgLe+YMoSoeo=;
+        b=OcbckI1Pkzl0AzzuyGFeuQqU8j9oaVb4abXdHau8H+u96txx+4BrkKiy8qDJnQ2zvv
+         sSLLJNJeYUHNuT9UBWfdPoYSQdxwM4fq2/UWtxOk+72kcCqdoyPyhAqejeFPUF/oABeo
+         W7AGI4K/q9jz2ywnu2yRcgJuhBeubORR8sl3JDA7PYTaUBqohd3Xk1PKj9z4Lc0BHugZ
+         IIGkxsbI/GZv/PxfRixWMzt1C6bwMNS0LMcH7z3R2P8/L1wudyBA1IAq9FcGoNCGc/bI
+         tRkjtWXa5p8yJaNhokG8w1TuwxAWAB1hOUKOjX+2pVVSUWJzT+IMNrAR4dwmzL2txyUs
+         64AQ==
+X-Gm-Message-State: AOAM531S2sKNIV0gZpjv36RFgBypJoxYLZRLlfCYor5cOm3+hXoJOQgL
+        qjNA35OP6qbCWbCILktWVK1JG6K8T53OzaTB4CE7rFUZGMQ=
+X-Google-Smtp-Source: ABdhPJxnn7D4LVeIOfQOk+RSZWj5mvF54pTLOLu7vH5wr16JxWLf2fOlF1Woe/Z0TOy+MD7A+t4Wk3Tl+SskM+2nWT8=
+X-Received: by 2002:a81:5204:0:b0:2fb:9312:52fc with SMTP id
+ g4-20020a815204000000b002fb931252fcmr169486ywb.67.1652364182208; Thu, 12 May
+ 2022 07:03:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <79d79110-9fbc-0e96-d17e-68a1f8f2c224@collabora.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+References: <20220427160544.40309-1-zhouchengming@bytedance.com> <4f04f101-53c1-0ac8-c7e8-ff2999ed35ba@bytedance.com>
+In-Reply-To: <4f04f101-53c1-0ac8-c7e8-ff2999ed35ba@bytedance.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Thu, 12 May 2022 16:02:49 +0200
+Message-ID: <CAKfTPtDpqECw_mo1+iPN8OPb3cBf7ppJsLSTAJwPRLr-N3auqg@mail.gmail.com>
+Subject: Re: [PATCH] sched/fair: optimize and simplify rq leaf_cfs_rq_list
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com,
+        zhengqi.arch@bytedance.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,170 +69,201 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 03:28:16PM +0200, Tomeu Vizoso wrote:
-> On 5/11/22 7:46 PM, Rob Clark wrote:
-> > On Wed, May 11, 2022 at 10:12 AM Daniel Vetter <daniel@ffwll.ch> wrote:
-> > > 
-> > > On Tue, 10 May 2022 at 22:26, Rob Clark <robdclark@gmail.com> wrote:
-> > > > 
-> > > > On Tue, May 10, 2022 at 12:39 PM Jessica Zhang
-> > > > <quic_jesszhan@quicinc.com> wrote:
-> > > > > 
-> > > > > 
-> > > > > 
-> > > > > On 5/10/2022 7:13 AM, Tomeu Vizoso wrote:
-> > > > > > And use it to store expectations about what the drm/msm driver is
-> > > > > > supposed to pass in the IGT test suite.
-> > > > > > 
-> > > > > > Also include a configuration file that points to the out-of-tree CI
-> > > > > > scripts.
-> > > > > > 
-> > > > > > By storing the test expectations along the code we can make sure both
-> > > > > > stay in sync with each other, and so we can know when a code change
-> > > > > > breaks those expectations.
-> > > > > > 
-> > > > > > This will allow all contributors to drm/msm to reuse the infrastructure
-> > > > > > already in gitlab.freedesktop.org to test the driver on several
-> > > > > > generations of the hardware.
-> > > > > > 
-> > > > > > v2:
-> > > > > >     - Fix names of result expectation files to match SoC
-> > > > > >     - Don't execute tests that are going to skip on all boards
-> > > > > > 
-> > > > > > Signed-off-by: Tomeu Vizoso <tomeu.vizoso@collabora.com>
-> > > > > > ---
-> > > > > >    Documentation/gpu/msm_automated_testing.rst   |  70 +++++++++
-> > > > > >    drivers/gpu/drm/msm/ci/gitlab-ci.yml          |  11 ++
-> > > > > >    drivers/gpu/drm/msm/ci/msm.testlist           | 148 ++++++++++++++++++
-> > > > > >    .../gpu/drm/msm/ci/msm_apq8016_results.txt    | 140 +++++++++++++++++
-> > > > > >    .../gpu/drm/msm/ci/msm_apq8096_results.txt    | 140 +++++++++++++++++
-> > > > > >    drivers/gpu/drm/msm/ci/msm_sc7180_results.txt | 141 +++++++++++++++++
-> > > > > >    drivers/gpu/drm/msm/ci/msm_sdm845_results.txt | 141 +++++++++++++++++
-> > > > > >    7 files changed, 791 insertions(+)
-> > > > > >    create mode 100644 Documentation/gpu/msm_automated_testing.rst
-> > > > > >    create mode 100644 drivers/gpu/drm/msm/ci/gitlab-ci.yml
-> > > > > >    create mode 100644 drivers/gpu/drm/msm/ci/msm.testlist
-> > > > > >    create mode 100644 drivers/gpu/drm/msm/ci/msm_apq8016_results.txt
-> > > > > >    create mode 100644 drivers/gpu/drm/msm/ci/msm_apq8096_results.txt
-> > > > > >    create mode 100644 drivers/gpu/drm/msm/ci/msm_sc7180_results.txt
-> > > > > >    create mode 100644 drivers/gpu/drm/msm/ci/msm_sdm845_results.txt
-> > > > > > 
-> > 
-> > [snip]
-> > 
-> > > > > > diff --git a/drivers/gpu/drm/msm/ci/msm_sc7180_results.txt b/drivers/gpu/drm/msm/ci/msm_sc7180_results.txt
-> > > > > > new file mode 100644
-> > > > > > index 000000000000..01f7b4b399b5
-> > > > > > --- /dev/null
-> > > > > > +++ b/drivers/gpu/drm/msm/ci/msm_sc7180_results.txt
-> > > > > > @@ -0,0 +1,141 @@
-> > > > > > +igt@core_auth@getclient-simple,dmesg-warn
-> > > > > > +igt@core_auth@getclient-master-drop,pass
-> > > > > > +igt@core_auth@basic-auth,pass
-> > > > > > +igt@core_auth@many-magics,pass
-> > > > > > +igt@core_getclient,pass
-> > > > > > +igt@core_getstats,pass
-> > > > > > +igt@core_getversion,pass
-> > > > > > +igt@core_setmaster_vs_auth,pass
-> > > > > > +igt@drm_read@invalid-buffer,pass
-> > > > > > +igt@drm_read@fault-buffer,pass
-> > > > > > +igt@drm_read@empty-block,pass
-> > > > > > +igt@drm_read@empty-nonblock,pass
-> > > > > > +igt@drm_read@short-buffer-block,pass
-> > > > > > +igt@drm_read@short-buffer-nonblock,pass
-> > > > > > +igt@drm_read@short-buffer-wakeup,pass
-> > > > > > +igt@kms_addfb_basic@unused-handle,pass
-> > > > > > +igt@kms_addfb_basic@unused-pitches,pass
-> > > > > > +igt@kms_addfb_basic@unused-offsets,pass
-> > > > > > +igt@kms_addfb_basic@unused-modifier,pass
-> > > > > > +igt@kms_addfb_basic@legacy-format,dmesg-warn
-> > > > > > +igt@kms_addfb_basic@no-handle,pass
-> > > > > > +igt@kms_addfb_basic@basic,pass
-> > > > > > +igt@kms_addfb_basic@bad-pitch-0,pass
-> > > > > > +igt@kms_addfb_basic@bad-pitch-32,pass
-> > > > > > +igt@kms_addfb_basic@bad-pitch-63,pass
-> > > > > > +igt@kms_addfb_basic@bad-pitch-128,pass
-> > > > > > +igt@kms_addfb_basic@bad-pitch-256,pass
-> > > > > > +igt@kms_addfb_basic@bad-pitch-1024,pass
-> > > > > > +igt@kms_addfb_basic@bad-pitch-999,pass
-> > > > > > +igt@kms_addfb_basic@bad-pitch-65536,pass
-> > > > > > +igt@kms_addfb_basic@size-max,pass
-> > > > > > +igt@kms_addfb_basic@too-wide,pass
-> > > > > > +igt@kms_addfb_basic@too-high,dmesg-warn
-> > > > > 
-> > > > > For test results on Trogdor, is is possible to have them be
-> > > > > success/fail/skip only?
-> > > > > 
-> > > > > Results such as dmesg-warn/dmesg-fail are igt_runner specific and
-> > > > > because there isn't support for igt_runner on ChromeOS, they will be
-> > > > > difficult to replicate and debug.
-> > > > 
-> > > > Actually, I wonder if it would be better to just treat
-> > > > dmesg-warn/dmesg-fail as pass/fail?  I'd noticed some flakes on
-> > > > rockchip which looked just like unrelated dmesg msg which just
-> > > > happened to show up while the test was running.
-> > > 
-> > > This is kinda the reason behind standardizing on drm dmesg logging, so
-> > > that we have some chances at filtering stuff out. Not sure that's a
-> > > good idea, since when your entire box splats and lockdep is dead, then
-> > > continuing to run drm tests is still fairly pointless.
-> > 
-> > I'm not sure if we are using it yet for drm-ci, but for mesa-ci we
-> > monitor dmesg (over serial port, from the controller) for splats, so
-> > we already have the tech for restarting or aborting the CI run.  We
-> > don't need igt-runner to tell us.
-> 
-> Yep, these scripts are currently being used as-is from Mesa, so we got that
-> functionality for free.
-> 
-> > > I think this is another reason why trying at least to standardize this
-> > > stuff over drivers would be pretty good idea.
-> > > 
-> > > > Additionally, some of the tests, like msm_recovery, are *expected* to
-> > > > generate some dmesg spam since they are intentionally triggering GPU
-> > > > hangs to test the recovery mechanism.
-> > > 
-> > > Uh I don't like that. It just allows userspace to spam dmesg, which
-> > > doesn't seem like a great idea. That's at least why i915 dumps these
-> > > at a lower level, and in the past had a special "I'm going to whack
-> > > the gpu real hard expect hangs" knob in debugfs.
-> > > 
-> > > Having tests which intentionally spam dmesg above info level isn't
-> > > really good since then you need endless amounts of test-specific
-> > > encoding of what is considered a success and what not. Like when a
-> > > backmerge breaks a testcases which is already at dmesg-fail, is that
-> > > bad or not? Probably bad, but was the situation before that really
-> > > good or already kinda on fire?
-> > 
-> > I guess I could add some debugfs knobs to squelch the dmesg msgs on
-> > gpu hangs.  In the normal case, I'd prefer that gpu hangs are not
-> > silent.. since that is something we get in feedback reports if a user
-> > (or dogfooder) reports a bug.
-> > 
-> > The rockchip case I mentioned was some unrelated dmesg about
-> > linktraining failing.. presumably because there was no display
-> > attached?  IDK, I didn't look too closely.  But my point is we could
-> > be getting unrelated and asynchronous dmesg spam, even from other
-> > kernel subsystems.  Letting that be part of the test results just
-> > sounds like asking for flakes.
-> 
-> I think some drivers are currently a bit too buggy to behave reliably under
-> CI unless one reduces coverage (rockchip on rk3399, for example). And some
-> other drivers (in other subsystems as well) could do with a review of what
-> they print to the console. I guess these are things we could and probably
-> should fix?
+Hi Chengming,
 
-I think the best way for these is to still run the tests, but supress the
-results. At least if the flakiness is only in whether the test passes, and
-not in the test run outright killing the kernel/machine somehow.
+Your patch is on my list but I have been busy on other stuff and we
+had enough warnings and problems with this part that I want to
+carefully review that all the cases are covered. I will review it soon
 
-But yeah sometimes just having an explicit run list is the way to go, and
-we have plenty of that in intel ci. But for i915 it's more a testament to
-how terrible the i915-gem tests in particular have become, largely also
-because people simply kept adding crap and never removed much at all (and
-sometimes even removed important tests, oh well).
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Vincent
+
+On Wed, 11 May 2022 at 14:05, Chengming Zhou
+<zhouchengming@bytedance.com> wrote:
+>
+> Hello, friendly ping...
+>
+>
+> On 2022/4/28 00:05, Chengming Zhou wrote:
+> > We notice the rq leaf_cfs_rq_list has two problems when do bugfix
+> > backports and some test profiling.
+> >
+> > 1. cfs_rqs under throttled subtree could be added to the list, and
+> >    make their fully decayed ancestors on the list, even though not needed.
+> >
+> > 2. #1 also make the leaf_cfs_rq_list management complex and error prone,
+> >    this is the list of related bugfix so far:
+> >
+> >    commit 31bc6aeaab1d ("sched/fair: Optimize update_blocked_averages()")
+> >    commit fe61468b2cbc ("sched/fair: Fix enqueue_task_fair warning")
+> >    commit b34cb07dde7c ("sched/fair: Fix enqueue_task_fair() warning some more")
+> >    commit 39f23ce07b93 ("sched/fair: Fix unthrottle_cfs_rq() for leaf_cfs_rq list")
+> >    commit 0258bdfaff5b ("sched/fair: Fix unfairness caused by missing load decay")
+> >    commit a7b359fc6a37 ("sched/fair: Correctly insert cfs_rq's to list on unthrottle")
+> >    commit fdaba61ef8a2 ("sched/fair: Ensure that the CFS parent is added after unthrottling")
+> >    commit 2630cde26711 ("sched/fair: Add ancestors of unthrottled undecayed cfs_rq")
+> >
+> > commit 31bc6aeaab1d ("sched/fair: Optimize update_blocked_averages()")
+> > delete every cfs_rq under throttled subtree from rq->leaf_cfs_rq_list,
+> > and delete the throttled_hierarchy() test in update_blocked_averages(),
+> > which optimized update_blocked_averages().
+> >
+> > But those later bugfix add cfs_rqs under throttled subtree back to
+> > rq->leaf_cfs_rq_list again, with their fully decayed ancestors, for
+> > the integrity of rq->leaf_cfs_rq_list.
+> >
+> > This patch takes another method, skip all cfs_rqs under throttled
+> > hierarchy when list_add_leaf_cfs_rq(), to completely make cfs_rqs
+> > under throttled subtree off the leaf_cfs_rq_list.
+> >
+> > So we don't need to consider throttled related things in
+> > enqueue_entity(), unthrottle_cfs_rq() and enqueue_task_fair(),
+> > which simplify the code a lot. Also optimize update_blocked_averages()
+> > since cfs_rqs under throttled hierarchy and their ancestors
+> > won't be on the leaf_cfs_rq_list.
+> >
+> > Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> > ---
+> >  kernel/sched/fair.c | 72 ++++++++++-----------------------------------
+> >  1 file changed, 16 insertions(+), 56 deletions(-)
+> >
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index 1ad18b5cc1b8..083c3d32c899 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -309,6 +309,8 @@ const struct sched_class fair_sched_class;
+> >
+> >  #ifdef CONFIG_FAIR_GROUP_SCHED
+> >
+> > +static inline int throttled_hierarchy(struct cfs_rq *cfs_rq);
+> > +
+> >  /* Walk up scheduling entities hierarchy */
+> >  #define for_each_sched_entity(se) \
+> >               for (; se; se = se->parent)
+> > @@ -331,7 +333,7 @@ static inline bool list_add_leaf_cfs_rq(struct cfs_rq *cfs_rq)
+> >       struct rq *rq = rq_of(cfs_rq);
+> >       int cpu = cpu_of(rq);
+> >
+> > -     if (cfs_rq->on_list)
+> > +     if (cfs_rq->on_list || throttled_hierarchy(cfs_rq))
+> >               return rq->tmp_alone_branch == &rq->leaf_cfs_rq_list;
+> >
+> >       cfs_rq->on_list = 1;
+> > @@ -3242,8 +3244,6 @@ static long calc_group_shares(struct cfs_rq *cfs_rq)
+> >  }
+> >  #endif /* CONFIG_SMP */
+> >
+> > -static inline int throttled_hierarchy(struct cfs_rq *cfs_rq);
+> > -
+> >  /*
+> >   * Recomputes the group entity based on the current state of its group
+> >   * runqueue.
+> > @@ -4356,16 +4356,10 @@ enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+> >               __enqueue_entity(cfs_rq, se);
+> >       se->on_rq = 1;
+> >
+> > -     /*
+> > -      * When bandwidth control is enabled, cfs might have been removed
+> > -      * because of a parent been throttled but cfs->nr_running > 1. Try to
+> > -      * add it unconditionally.
+> > -      */
+> > -     if (cfs_rq->nr_running == 1 || cfs_bandwidth_used())
+> > +     if (cfs_rq->nr_running == 1) {
+> >               list_add_leaf_cfs_rq(cfs_rq);
+> > -
+> > -     if (cfs_rq->nr_running == 1)
+> >               check_enqueue_throttle(cfs_rq);
+> > +     }
+> >  }
+> >
+> >  static void __clear_buddies_last(struct sched_entity *se)
+> > @@ -4980,11 +4974,18 @@ void unthrottle_cfs_rq(struct cfs_rq *cfs_rq)
+> >       /* update hierarchical throttle state */
+> >       walk_tg_tree_from(cfs_rq->tg, tg_nop, tg_unthrottle_up, (void *)rq);
+> >
+> > -     /* Nothing to run but something to decay (on_list)? Complete the branch */
+> >       if (!cfs_rq->load.weight) {
+> > -             if (cfs_rq->on_list)
+> > -                     goto unthrottle_throttle;
+> > -             return;
+> > +             if (!cfs_rq->on_list)
+> > +                     return;
+> > +             /*
+> > +              * Nothing to run but something to decay (on_list)?
+> > +              * Complete the branch.
+> > +              */
+> > +             for_each_sched_entity(se) {
+> > +                     if (list_add_leaf_cfs_rq(cfs_rq_of(se)))
+> > +                             break;
+> > +             }
+> > +             goto unthrottle_throttle;
+> >       }
+> >
+> >       task_delta = cfs_rq->h_nr_running;
+> > @@ -5022,31 +5023,12 @@ void unthrottle_cfs_rq(struct cfs_rq *cfs_rq)
+> >               /* end evaluation on encountering a throttled cfs_rq */
+> >               if (cfs_rq_throttled(qcfs_rq))
+> >                       goto unthrottle_throttle;
+> > -
+> > -             /*
+> > -              * One parent has been throttled and cfs_rq removed from the
+> > -              * list. Add it back to not break the leaf list.
+> > -              */
+> > -             if (throttled_hierarchy(qcfs_rq))
+> > -                     list_add_leaf_cfs_rq(qcfs_rq);
+> >       }
+> >
+> >       /* At this point se is NULL and we are at root level*/
+> >       add_nr_running(rq, task_delta);
+> >
+> >  unthrottle_throttle:
+> > -     /*
+> > -      * The cfs_rq_throttled() breaks in the above iteration can result in
+> > -      * incomplete leaf list maintenance, resulting in triggering the
+> > -      * assertion below.
+> > -      */
+> > -     for_each_sched_entity(se) {
+> > -             struct cfs_rq *qcfs_rq = cfs_rq_of(se);
+> > -
+> > -             if (list_add_leaf_cfs_rq(qcfs_rq))
+> > -                     break;
+> > -     }
+> > -
+> >       assert_list_leaf_cfs_rq(rq);
+> >
+> >       /* Determine whether we need to wake up potentially idle CPU: */
+> > @@ -5701,13 +5683,6 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
+> >               /* end evaluation on encountering a throttled cfs_rq */
+> >               if (cfs_rq_throttled(cfs_rq))
+> >                       goto enqueue_throttle;
+> > -
+> > -               /*
+> > -                * One parent has been throttled and cfs_rq removed from the
+> > -                * list. Add it back to not break the leaf list.
+> > -                */
+> > -               if (throttled_hierarchy(cfs_rq))
+> > -                       list_add_leaf_cfs_rq(cfs_rq);
+> >       }
+> >
+> >       /* At this point se is NULL and we are at root level*/
+> > @@ -5731,21 +5706,6 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
+> >               update_overutilized_status(rq);
+> >
+> >  enqueue_throttle:
+> > -     if (cfs_bandwidth_used()) {
+> > -             /*
+> > -              * When bandwidth control is enabled; the cfs_rq_throttled()
+> > -              * breaks in the above iteration can result in incomplete
+> > -              * leaf list maintenance, resulting in triggering the assertion
+> > -              * below.
+> > -              */
+> > -             for_each_sched_entity(se) {
+> > -                     cfs_rq = cfs_rq_of(se);
+> > -
+> > -                     if (list_add_leaf_cfs_rq(cfs_rq))
+> > -                             break;
+> > -             }
+> > -     }
+> > -
+> >       assert_list_leaf_cfs_rq(rq);
+> >
+> >       hrtick_update(rq);

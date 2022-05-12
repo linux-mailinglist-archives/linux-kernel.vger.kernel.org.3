@@ -2,175 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7512524F26
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E81B524F2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354881AbiELOBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 10:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39802 "EHLO
+        id S1354904AbiELOBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 10:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354932AbiELOBG (ORCPT
+        with ESMTP id S1354964AbiELOBv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 10:01:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7D92FFC7;
-        Thu, 12 May 2022 07:01:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 500D2B82833;
-        Thu, 12 May 2022 14:01:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E1EBC385B8;
-        Thu, 12 May 2022 14:01:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652364062;
-        bh=vG0c5NdOF8Y08/Dxnr4xnnOdio+reSdLGOl6h5nExNw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=K1mXObEY11mAWpCV7a6Aahlj/2UZ+KVxVjlSXY7WmHIkR7dBAp9XvpRiw/ouNfIka
-         tRn7sOrb/ervDy459RSe4ddukj6B5Cwkhu2VrWe3UPSje2B6o1WCoJTj4EkIr8AGdW
-         XOtdX7ggwmJETB3sYiPhyF1lQSvNN0J2qU92IFPzk5jIcMFCrpXxt8J2iF1zS+BJrs
-         tnrLcXgOyupU8WgzLHoagRXsag5cZSJZsVSq8Om3zJvK28CBXcT6vY2xuGElbrheNx
-         iPR/wIhDvXmmtAC1jvFhWEqTFfdoWLEjbK2aj7WdwCnbm5Tb505WMmCy3Q++pV+rIs
-         NjTMs1Xj0dGig==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 999C85C032C; Thu, 12 May 2022 07:01:01 -0700 (PDT)
-Date:   Thu, 12 May 2022 07:01:01 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH v2 1/1] rcu/nocb: Add an option to ON/OFF an offloading
- from RT context
-Message-ID: <20220512140101.GM1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220511085703.101596-1-urezki@gmail.com>
- <Ynx61yH8RFkaXG6M@google.com>
+        Thu, 12 May 2022 10:01:51 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0972655238
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:01:43 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CC1wn2004224;
+        Thu, 12 May 2022 14:01:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=PZKeUa51MnK6JBOqFyls3O7ght9z6gRfDZMSkyjlB54=;
+ b=BXRgERzMIxLm/scsT3BPr0w/UG1SxHJPDqG50kbAvqSAXBWbX2p7KoSS2kZemsg/fWCK
+ /EYxrJGAsgGo8X1NYMBNpRwvh8+OtiPeLC3X049bqc3l7ZencIQwxwqFWIdGb6sV8u5B
+ S/L7EwmuDkOpHZ0TKZa+ZI1UQs3dRQ7NlvMjyhjMFZdc7xdPopfENlh+tcC9Efy4qXbL
+ boCeBfq9IbosNGQuQZ0FgnRbbFidbj2pAuTRBT4VNBnRzoDJjXwAvO2O2pTS0HXWEOno
+ hIeBKwa3W9+QRQqGF2TievLb7nQNeVijoQaNW5wWq3B/baoxuWt2IiajNzZ1PZMDjibO Ig== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g11vr313y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 14:01:36 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24CDwSM0029524;
+        Thu, 12 May 2022 14:01:36 GMT
+Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+        by ppma03dal.us.ibm.com with ESMTP id 3fwgdacfvy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 14:01:35 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24CE1YnN30278062
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 May 2022 14:01:34 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D069DC605F;
+        Thu, 12 May 2022 14:01:34 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ADD80C6059;
+        Thu, 12 May 2022 14:01:34 +0000 (GMT)
+Received: from [9.211.56.168] (unknown [9.211.56.168])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu, 12 May 2022 14:01:34 +0000 (GMT)
+Message-ID: <08e04659-2d06-2eb0-0ba8-8717a2d2bd48@linux.ibm.com>
+Date:   Thu, 12 May 2022 09:01:34 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ynx61yH8RFkaXG6M@google.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] mm: Add config option for default panic_on_oom value
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220511183400.47940-1-eajames@linux.ibm.com>
+ <20220511145648.3c421ff592df32766319ea2d@linux-foundation.org>
+ <b597cc79-0f8a-c32d-397e-0c04777e9491@linux.ibm.com>
+ <20220511153616.9298d246adb1c7fea9ab453b@linux-foundation.org>
+From:   Eddie James <eajames@linux.ibm.com>
+In-Reply-To: <20220511153616.9298d246adb1c7fea9ab453b@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: HzQyKlLHrsOPuOBNQonRFQ1qjIg6Mk27
+X-Proofpoint-ORIG-GUID: HzQyKlLHrsOPuOBNQonRFQ1qjIg6Mk27
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-12_10,2022-05-12_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 suspectscore=0 bulkscore=0 mlxscore=0 impostorscore=0
+ spamscore=0 clxscore=1015 malwarescore=0 lowpriorityscore=0
+ mlxlogscore=927 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2205120067
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 03:11:19AM +0000, Joel Fernandes wrote:
-> On Wed, May 11, 2022 at 10:57:03AM +0200, Uladzislau Rezki (Sony) wrote:
-> > Introduce a RCU_NOCB_CPU_CB_BOOST kernel option. So a user can
-> > decide if an offloading has to be done in a high-prio context or
-> > not. Please note an option depends on RCU_NOCB_CPU and RCU_BOOST
-> > parameters. For CONFIG_PREEMPT_RT kernel both RCU_BOOST and the
-> > RCU_NOCB_CPU_CB_BOOST are active by default.
-> > 
-> > This patch splits the CONFIG_RCU_BOOST config into two peaces:
-> > a) boosting preempted RCU readers and the kthreads which are
-> >    directly responsible for driving expedited grace periods
-> >    forward;
-> > b) boosting offloading-kthreads in a way that their scheduling
-> >    class are changed from SCHED_NORMAL to SCHED_FIFO.
-> > 
-> > The main reason of such split is, for example on Android there
-> > are some workloads which require fast expedited grace period to
-> > be done whereas offloading in RT context can lead to starvation
-> > and hogging a CPU for a long time what is not acceptable for
-> > latency sensitive environment. For instance:
-> > 
-> > <snip>
-> > <...>-60 [006] d..1 2979.028717: rcu_batch_start: rcu_preempt CBs=34619 bl=270
-> > <snip>
-> > 
-> > invoking 34 619 callbacks will take time thus making other CFS
-> > tasks waiting in run-queue to be starved due to such behaviour.
-> > 
-> > v1 -> v2:
-> > - fix the comment about the rcuc/rcub/rcuop;
-> > - check the kthread_prio against zero value;
-> > - by default the RCU_NOCB_CPU_CB_BOOST is ON for PREEMPT_RT.
-> > 
-> > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> 
-> Acked-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
-Thank you both, and I will apply Joel's ack on the next rebase.
+On 5/11/22 17:36, Andrew Morton wrote:
+> On Wed, 11 May 2022 17:06:35 -0500 Eddie James <eajames@linux.ibm.com> wrote:
+>
+>> On 5/11/22 16:56, Andrew Morton wrote:
+>>> On Wed, 11 May 2022 13:34:00 -0500 Eddie James <eajames@linux.ibm.com> wrote:
+>>>
+>>>> Add the option to kconfig and set the default panic_on_value.
+>>> Why?  What are the use-cases and how does this benefit our users?
+>> If a distribution (for example some embedded system distribution) wants
+>> the system to always panic when OOM, they may as well configure their
+>> kernel to do it by default, rather than writing to
+>> /proc/sys/vm/panic_on_oom every boot. Maybe I'm missing another way to
+>> do what I want here?
+> Presumably such a distribution would do this in initramfs initscripts
+> and forget about it.
 
-						Thanx, Paul
 
-> thanks,
-> 
->  - Joel
-> 
-> 
-> > ---
-> >  kernel/rcu/Kconfig     | 14 ++++++++++++++
-> >  kernel/rcu/tree.c      |  6 +++++-
-> >  kernel/rcu/tree_nocb.h |  3 ++-
-> >  3 files changed, 21 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-> > index 27aab870ae4c..a4ed7b5e2b75 100644
-> > --- a/kernel/rcu/Kconfig
-> > +++ b/kernel/rcu/Kconfig
-> > @@ -275,6 +275,20 @@ config RCU_NOCB_CPU_DEFAULT_ALL
-> >  	  Say Y here if you want offload all CPUs by default on boot.
-> >  	  Say N here if you are unsure.
-> >  
-> > +config RCU_NOCB_CPU_CB_BOOST
-> > +	bool "Offload RCU callback from real-time kthread"
-> > +	depends on RCU_NOCB_CPU && RCU_BOOST
-> > +	default y if PREEMPT_RT
-> > +	help
-> > +	  Use this option to offload callbacks from the SCHED_FIFO context
-> > +	  to make the process faster. As a side effect of this approach is
-> > +	  a latency especially for the SCHED_OTHER tasks which will not be
-> > +	  able to preempt an offloading kthread. That latency depends on a
-> > +	  number of callbacks to be invoked.
-> > +
-> > +	  Say Y here if you want to set RT priority for offloading kthreads.
-> > +	  Say N here if you are unsure.
-> > +
-> >  config TASKS_TRACE_RCU_READ_MB
-> >  	bool "Tasks Trace RCU readers use memory barriers in user and idle"
-> >  	depends on RCU_EXPERT && TASKS_TRACE_RCU
-> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> > index 9dc4c4e82db6..1c3852b1e0c8 100644
-> > --- a/kernel/rcu/tree.c
-> > +++ b/kernel/rcu/tree.c
-> > @@ -154,7 +154,11 @@ static void sync_sched_exp_online_cleanup(int cpu);
-> >  static void check_cb_ovld_locked(struct rcu_data *rdp, struct rcu_node *rnp);
-> >  static bool rcu_rdp_is_offloaded(struct rcu_data *rdp);
-> >  
-> > -/* rcuc/rcub/rcuop kthread realtime priority */
-> > +/*
-> > + * rcuc/rcub/rcuop kthread realtime priority. The "rcuop"
-> > + * real-time priority(enabling/disabling) is controlled by
-> > + * the extra CONFIG_RCU_NOCB_CPU_CB_BOOST configuration.
-> > + */
-> >  static int kthread_prio = IS_ENABLED(CONFIG_RCU_BOOST) ? 1 : 0;
-> >  module_param(kthread_prio, int, 0444);
-> >  
-> > diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> > index 60cc92cc6655..fa8e4f82e60c 100644
-> > --- a/kernel/rcu/tree_nocb.h
-> > +++ b/kernel/rcu/tree_nocb.h
-> > @@ -1315,8 +1315,9 @@ static void rcu_spawn_cpu_nocb_kthread(int cpu)
-> >  	if (WARN_ONCE(IS_ERR(t), "%s: Could not start rcuo CB kthread, OOM is now expected behavior\n", __func__))
-> >  		goto end;
-> >  
-> > -	if (kthread_prio)
-> > +	if (IS_ENABLED(CONFIG_RCU_NOCB_CPU_CB_BOOST) && kthread_prio)
-> >  		sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
-> > +
-> >  	WRITE_ONCE(rdp->nocb_cb_kthread, t);
-> >  	WRITE_ONCE(rdp->nocb_gp_kthread, rdp_gp->nocb_gp_kthread);
-> >  	return;
-> > -- 
-> > 2.30.2
-> > 
+Yes, my thinking was that it was either a line in an init script or a 
+system service. It seems more efficient to configure it in the kernel 
+instead.
+
+
+>
+> What inspired the patch?  Have you seen a situation which was best
+> solved with this change?
+
+
+Yes, our distro, OpenBMC, uses systemd, so I thought we'd need a new 
+service. However after a little more research, I see now that that the 
+existing systemd-sysctl can do what you suggest and set it during early 
+boot. So that is probably the right way to go, and this change can be 
+dropped.
+
+Thanks for your feedback!
+
+Eddie
+
+
+>

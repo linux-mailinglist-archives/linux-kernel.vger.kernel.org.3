@@ -2,78 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 846A9524C60
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:07:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A12DE524C6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353547AbiELMHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 08:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36908 "EHLO
+        id S1353558AbiELMIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 08:08:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243140AbiELMHi (ORCPT
+        with ESMTP id S1351652AbiELMIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 08:07:38 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7E733E9A;
-        Thu, 12 May 2022 05:07:34 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KzVry2jy9z4ySc;
-        Thu, 12 May 2022 22:07:30 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1652357250;
-        bh=VZSW+kLwiLdM89tx8T02OMcLyU8N86ihiltmUjTWwjI=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=XP41nicttMOhY9hwW7ifQg2VaHXrgfn5gqxy72pbMcNrCIDLFnLRtS6w6og9CNqK6
-         nfglk3q4XgkwHUkKXU2YAPNMA6T+LY+efjCMwbPkEjfG7K0jSWdZgbC26jbu/U3Xcl
-         5oEbIbP5B31AYRCtrtiLL941I4qH1NkcSEECG4hfVklIAfPOY/c3oDymRLW/N/gs/8
-         2nABeRNQSF+J6FzFKg0RD6jU3loze5R0Qj/Exft5+7TIpmm0GH+KfhdI3Lzf+saYbY
-         eFMKhvv5GqDVbGt9d2R8lw8p+jKhswUJjJCCd+elCw/toBYU19BWQ19jXOHAty0KmP
-         ZMGFbGsOj+R7Q==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        fnovak@us.ibm.com, linuxppc-dev@ozlabs.org,
-        christophe.leroy@csgroup.eu
-Subject: Re: request_module DoS
-In-Reply-To: <871qwz8aot.fsf@mpe.ellerman.id.au>
-References: <YnXiuhdZ49pKL/dK@gondor.apana.org.au>
- <874k1zt0ec.fsf@mpe.ellerman.id.au>
- <Ynk9j6DQmVGAA3Jf@bombadil.infradead.org>
- <Ynvl6wCQRFdYsHar@bombadil.infradead.org>
- <871qwz8aot.fsf@mpe.ellerman.id.au>
-Date:   Thu, 12 May 2022 22:07:26 +1000
-Message-ID: <87v8ub6jk1.fsf@mpe.ellerman.id.au>
+        Thu, 12 May 2022 08:08:37 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E6033E9A;
+        Thu, 12 May 2022 05:08:36 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CBuOU2027358;
+        Thu, 12 May 2022 12:08:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=UpinVejisDsY3s3pfI6xdVEtuuplzdK+4Ga9n1LdEpw=;
+ b=I5hyYD+hL9952MKtiyBfQQdIHpJM4wRw+VJMKoQ4ONnB75gP3FHy8QwzJCWDrrVxXibT
+ aG7YOXRwhYHlaXEFYyb2jsZP/oMrns+a35nGTaEdWVmGkNEd2hppJMlaCIKgYavMFJzz
+ BQhZc8xMEQIFver8w/QkBDg0YN/MxHSbW7stWpWLcfp66s4ZAZqcnm3KPIioK4qyILZ8
+ BRFvgo+gGWzad+ZknbKGpX5zSPdwlh8nhSCTPIwwz8i4+D/e5ize/XvrwYIF+2gGurvV
+ rWtHPnxqFQpc28ZqjS3w/0MSNbfoEopCghkhagzNH1/jarStaQQjkKDE6+rDGI616SNx cQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g11t9087q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 12:08:26 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24CBxSWc005111;
+        Thu, 12 May 2022 12:08:26 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g11t9086r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 12:08:26 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24CC7QCO009910;
+        Thu, 12 May 2022 12:08:24 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3fwgd8y08c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 12:08:24 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24CC80gH35193266
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 May 2022 12:08:00 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EE4115204F;
+        Thu, 12 May 2022 12:08:21 +0000 (GMT)
+Received: from [9.152.222.250] (unknown [9.152.222.250])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id A772452050;
+        Thu, 12 May 2022 12:08:21 +0000 (GMT)
+Message-ID: <ba81cf0c-08c5-76e9-bfc8-369887454e52@linux.ibm.com>
+Date:   Thu, 12 May 2022 14:08:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH net-next v2 2/2] net/smc: align the connect behaviour with
+ TCP
+Content-Language: en-US
+To:     Guangguan Wang <guangguan.wang@linux.alibaba.com>,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        tonylu@linux.alibaba.com
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220512031156.74054-1-guangguan.wang@linux.alibaba.com>
+ <20220512031156.74054-3-guangguan.wang@linux.alibaba.com>
+From:   Karsten Graul <kgraul@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <20220512031156.74054-3-guangguan.wang@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 2oaO-gE-6SnHAkJOjUibTWsqLRitPRID
+X-Proofpoint-ORIG-GUID: nMgKDzK2wHDukIK4NrGJp_FNDdIxk9g-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-12_02,2022-05-12_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 suspectscore=0 clxscore=1015 mlxlogscore=999 bulkscore=0
+ malwarescore=0 spamscore=0 mlxscore=0 lowpriorityscore=0 impostorscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205120052
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Michael Ellerman <mpe@ellerman.id.au> writes:
-> Luis Chamberlain <mcgrof@kernel.org> writes:
-...
->
->> Can someone try this on ppc64le system? At this point I am not convinced
->> this issue is generic.
->
-> Does your x86 system have at least 784 CPUs?
->
-> I don't know where the original report came from, but the trace shows
-> "CPU 784", which would usually indicate a system with at least that many
-> CPUs.
+On 12/05/2022 05:11, Guangguan Wang wrote:
+> Connect with O_NONBLOCK will not be completed immediately
+> and returns -EINPROGRESS. It is possible to use selector/poll
+> for completion by selecting the socket for writing. After select
+> indicates writability, a second connect function call will return
+> 0 to indicate connected successfully as TCP does, but smc returns
+> -EISCONN. Use socket state for smc to indicate connect state, which
+> can help smc aligning the connect behaviour with TCP.
+> 
+> Signed-off-by: Guangguan Wang <guangguan.wang@linux.alibaba.com>
+> ---
 
-Update, apparently the report originally came from IBM, so I'll chase it
-up internally.
+Acked-by: Karsten Graul <kgraul@linux.ibm.com>
 
-I think you're right that there's probably no issue in the module code,
-sorry to waste your time.
-
-cheers
+Thank you.

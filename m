@@ -2,199 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD0415246D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 141C85246D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350937AbiELHWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 03:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50108 "EHLO
+        id S1350943AbiELHXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 03:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350940AbiELHWO (ORCPT
+        with ESMTP id S1350927AbiELHWs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 03:22:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D184529805
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:22:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652340127;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uLW+m9ur/lMSYv/hoja8jsAABTcjuU8qCpLCY/fAt6g=;
-        b=BnL819nsa08uMt327s7SBzXbdPMMMQIQQCNoeIttf/kI49wnn86dcfW7J7SNYZIqyfwGCS
-        aZrA6LKMIQ0dFSd8hP7ZjOYfs7GeH5GTcEEZUNm13h6My+qzye2HywM342FL12RQYUcf2x
-        yb00T9CAXSYCNoBNi7I0NOZr7KhlT88=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-524-mMkE9jedOmKW7IZwGNGlhA-1; Thu, 12 May 2022 03:22:00 -0400
-X-MC-Unique: mMkE9jedOmKW7IZwGNGlhA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0AD5F382ECC0;
-        Thu, 12 May 2022 07:22:00 +0000 (UTC)
-Received: from localhost (ovpn-12-247.pek2.redhat.com [10.72.12.247])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2FD35416363;
-        Thu, 12 May 2022 07:21:57 +0000 (UTC)
-Date:   Thu, 12 May 2022 15:21:54 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Coiby Xu <coxu@redhat.com>
-Cc:     kexec@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
-        Michal Suchanek <msuchanek@suse.de>,
-        Dave Young <dyoung@redhat.com>, Will Deacon <will@kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Mimi Zohar <zohar@linux.ibm.com>, Chun-Yi Lee <jlee@suse.com>,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v8 2/4] kexec, KEYS: make the code in
- bzImage64_verify_sig generic
-Message-ID: <Yny1kqrkgQ9u7h8L@MiWiFi-R3L-srv>
-References: <20220512070123.29486-1-coxu@redhat.com>
- <20220512070123.29486-3-coxu@redhat.com>
+        Thu, 12 May 2022 03:22:48 -0400
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0012C662
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:22:45 -0700 (PDT)
+Received: by mail-vs1-xe2b.google.com with SMTP id y74so4284143vsy.7
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:22:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+47ZJ5j0kmxI/lG0OiobIxpstGwfhpvNpvMEZldSxdk=;
+        b=MuT9tsxoUEIIaxiykQc0WLAgcqyuwhOycLY1xIEQd7ISyb9br2bf1LLu+S4UYj8lj3
+         8m8ze6NTZqKhc0v5SyIPcQuA1R4qBoZA8Q6lAtk8HXB52Dd5KPqt+Ds+6dH7RyNc3TYi
+         4AgMOAq57JN+k1UxDq7cpOQpSH1gnBZ0NE0rApDav0VPZa8lkVnuA+LUVltiiB7L5/LT
+         g+vwuxnOgeYHHjNqvZPl+cxcTVHhC6k5l3263yTd4OfbT2B8/zHLPCZKdpEIT8k65Rzx
+         nC4cty7D55MnVNslHa/C0HTGsyrzh8pMo1+YsLZSQVkxb3aQMO1mdX3GOhlYcRB2+GJC
+         6Osw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+47ZJ5j0kmxI/lG0OiobIxpstGwfhpvNpvMEZldSxdk=;
+        b=xDxCkgYxdMjkxFR89tUwYS2kUM0BJWYMPxY5CL/FKgXAr5J6v5qO/X5qDuBhEbB/B+
+         BcngjraXFumFPE8AV20z0Di2cGESliNdkdf8TfdLtaA180NnSotASzNgULIpTqUtXAXg
+         ve8L7cIJYSrhFlascy+8ItygxeBqJ7232lPEk5N7eByFk3z7/tBkrvG5bqm1YZBUCHq7
+         r/PPzib8GcW4xAvniMCQevc+7q0ksCFupnvuTuZzixRTWrkeOqKcY3yUSlqxdSY7CwdM
+         w50ERFrrPX+wlp74ED4Btwur5eEGn9l5mlfmWsaxEjN07w0auC4bTHdfLxq7bRZBZRq1
+         WlEA==
+X-Gm-Message-State: AOAM5326BPIWzC08SEMyh+uPPljSTKYIqTpkJGNi9Vk/wgQLsLkFiNop
+        XdhoIIUjSQ+KXqdhQ5A3Kw44eQuWzTBHui6NA6c4xA==
+X-Google-Smtp-Source: ABdhPJwj+V7aWJeyepm6+7W6e91Vry5hHYf2VwL3c0cxba/jMCnceW+EJTNcdKzywIzqMHQW1UknFgcv8buvE+BKFGE=
+X-Received: by 2002:a67:2fc6:0:b0:32d:7195:32e9 with SMTP id
+ v189-20020a672fc6000000b0032d719532e9mr15747916vsv.44.1652340164357; Thu, 12
+ May 2022 00:22:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220512070123.29486-3-coxu@redhat.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <CAAPL-u-DGLcKRVDnChN9ZhxPkfxQvz9Sb93kVoX_4J2oiJSkUw@mail.gmail.com>
+ <56b41ce6922ed5f640d9bd46a603fa27576532a9.camel@intel.com> <c5d55131-76ff-7354-2954-7cfac365a9a5@linux.ibm.com>
+In-Reply-To: <c5d55131-76ff-7354-2954-7cfac365a9a5@linux.ibm.com>
+From:   Wei Xu <weixugc@google.com>
+Date:   Thu, 12 May 2022 00:22:33 -0700
+Message-ID: <CAAPL-u-g86QqHaHGGtVJMER8ENC2dpekK+2qOkxoRFmC0F_80g@mail.gmail.com>
+Subject: Re: RFC: Memory Tiering Kernel Interfaces (v2)
+To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+Cc:     "ying.huang@intel.com" <ying.huang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Hesham Almatary <hesham.almatary@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/12/22 at 03:01pm, Coiby Xu wrote:
-> commit 278311e417be ("kexec, KEYS: Make use of platform keyring for
-> signature verify") adds platform keyring support on x86 kexec but not
-> arm64.
-> 
-> The code in bzImage64_verify_sig makes use of system keyrings including
-> .buitin_trusted_keys, .secondary_trusted_keys and .platform keyring to
-> verify signed kernel image as PE file. Make it generic so both x86_64
-> and arm64 can use it.
+On Thu, May 12, 2022 at 12:12 AM Aneesh Kumar K V
+<aneesh.kumar@linux.ibm.com> wrote:
+>
+> On 5/12/22 12:33 PM, ying.huang@intel.com wrote:
+> > On Wed, 2022-05-11 at 23:22 -0700, Wei Xu wrote:
+> >> Sysfs Interfaces
+> >> ================
+> >>
+> >> * /sys/devices/system/memtier/memtierN/nodelist
+> >>
+> >>    where N = 0, 1, 2 (the kernel supports only 3 tiers for now).
+> >>
+> >>    Format: node_list
+> >>
+> >>    Read-only.  When read, list the memory nodes in the specified tier.
+> >>
+> >>    Tier 0 is the highest tier, while tier 2 is the lowest tier.
+> >>
+> >>    The absolute value of a tier id number has no specific meaning.
+> >>    What matters is the relative order of the tier id numbers.
+> >>
+> >>    When a memory tier has no nodes, the kernel can hide its memtier
+> >>    sysfs files.
+> >>
+> >> * /sys/devices/system/node/nodeN/memtier
+> >>
+> >>    where N = 0, 1, ...
+> >>
+> >>    Format: int or empty
+> >>
+> >>    When read, list the memory tier that the node belongs to.  Its value
+> >>    is empty for a CPU-only NUMA node.
+> >>
+> >>    When written, the kernel moves the node into the specified memory
+> >>    tier if the move is allowed.  The tier assignment of all other nodes
+> >>    are not affected.
+> >>
+> >>    Initially, we can make this interface read-only.
+> >
+> > It seems that "/sys/devices/system/node/nodeN/memtier" has all
+> > information we needed.  Do we really need
+> > "/sys/devices/system/memtier/memtierN/nodelist"?
+> >
+> > That can be gotten via a simple shell command line,
+> >
+> > $ grep . /sys/devices/system/node/nodeN/memtier | sort -n -k 2 -t ':'
+> >
+>
+> It will be really useful to fetch the memory tier node list in an easy
+> fashion rather than reading multiple sysfs directories. If we don't have
+> other attributes for memorytier, we could keep
+> "/sys/devices/system/memtier/memtierN" a NUMA node list there by
+> avoiding /sys/devices/system/memtier/memtierN/nodelist
+>
+> -aneesh
 
-LGTM,
-
-Acked-by: Baoquan He <bhe@redhat.com>
-
-> 
-> Cc: kexec@lists.infradead.org
-> Cc: keyrings@vger.kernel.org
-> Cc: linux-security-module@vger.kernel.org
-> Reviewed-by: Michal Suchanek <msuchanek@suse.de>
-> Signed-off-by: Coiby Xu <coxu@redhat.com>
-> ---
->  arch/x86/kernel/kexec-bzimage64.c | 20 +-------------------
->  include/linux/kexec.h             |  7 +++++++
->  kernel/kexec_file.c               | 17 +++++++++++++++++
->  3 files changed, 25 insertions(+), 19 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/kexec-bzimage64.c b/arch/x86/kernel/kexec-bzimage64.c
-> index 170d0fd68b1f..f299b48f9c9f 100644
-> --- a/arch/x86/kernel/kexec-bzimage64.c
-> +++ b/arch/x86/kernel/kexec-bzimage64.c
-> @@ -17,7 +17,6 @@
->  #include <linux/kernel.h>
->  #include <linux/mm.h>
->  #include <linux/efi.h>
-> -#include <linux/verification.h>
->  
->  #include <asm/bootparam.h>
->  #include <asm/setup.h>
-> @@ -528,28 +527,11 @@ static int bzImage64_cleanup(void *loader_data)
->  	return 0;
->  }
->  
-> -#ifdef CONFIG_KEXEC_BZIMAGE_VERIFY_SIG
-> -static int bzImage64_verify_sig(const char *kernel, unsigned long kernel_len)
-> -{
-> -	int ret;
-> -
-> -	ret = verify_pefile_signature(kernel, kernel_len,
-> -				      VERIFY_USE_SECONDARY_KEYRING,
-> -				      VERIFYING_KEXEC_PE_SIGNATURE);
-> -	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
-> -		ret = verify_pefile_signature(kernel, kernel_len,
-> -					      VERIFY_USE_PLATFORM_KEYRING,
-> -					      VERIFYING_KEXEC_PE_SIGNATURE);
-> -	}
-> -	return ret;
-> -}
-> -#endif
-> -
->  const struct kexec_file_ops kexec_bzImage64_ops = {
->  	.probe = bzImage64_probe,
->  	.load = bzImage64_load,
->  	.cleanup = bzImage64_cleanup,
->  #ifdef CONFIG_KEXEC_BZIMAGE_VERIFY_SIG
-> -	.verify_sig = bzImage64_verify_sig,
-> +	.verify_sig = kexec_kernel_verify_pe_sig,
->  #endif
->  };
-> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-> index 413235c6c797..da83abfc628b 100644
-> --- a/include/linux/kexec.h
-> +++ b/include/linux/kexec.h
-> @@ -19,6 +19,7 @@
->  #include <asm/io.h>
->  
->  #include <uapi/linux/kexec.h>
-> +#include <linux/verification.h>
->  
->  /* Location of a reserved region to hold the crash kernel.
->   */
-> @@ -202,6 +203,12 @@ int arch_kexec_apply_relocations(struct purgatory_info *pi,
->  				 const Elf_Shdr *relsec,
->  				 const Elf_Shdr *symtab);
->  int arch_kimage_file_post_load_cleanup(struct kimage *image);
-> +#ifdef CONFIG_KEXEC_SIG
-> +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
-> +int kexec_kernel_verify_pe_sig(const char *kernel,
-> +				    unsigned long kernel_len);
-> +#endif
-> +#endif
->  int arch_kexec_locate_mem_hole(struct kexec_buf *kbuf);
->  
->  extern int kexec_add_buffer(struct kexec_buf *kbuf);
-> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> index 3720435807eb..754885b96aab 100644
-> --- a/kernel/kexec_file.c
-> +++ b/kernel/kexec_file.c
-> @@ -165,6 +165,23 @@ void kimage_file_post_load_cleanup(struct kimage *image)
->  }
->  
->  #ifdef CONFIG_KEXEC_SIG
-> +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
-> +int kexec_kernel_verify_pe_sig(const char *kernel, unsigned long kernel_len)
-> +{
-> +	int ret;
-> +
-> +	ret = verify_pefile_signature(kernel, kernel_len,
-> +				      VERIFY_USE_SECONDARY_KEYRING,
-> +				      VERIFYING_KEXEC_PE_SIGNATURE);
-> +	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
-> +		ret = verify_pefile_signature(kernel, kernel_len,
-> +					      VERIFY_USE_PLATFORM_KEYRING,
-> +					      VERIFYING_KEXEC_PE_SIGNATURE);
-> +	}
-> +	return ret;
-> +}
-> +#endif
-> +
->  static int kexec_image_verify_sig(struct kimage *image, void *buf,
->  		unsigned long buf_len)
->  {
-> -- 
-> 2.35.3
-> 
-
+It is harder to implement memtierN as just a file and doesn't follow
+the existing sysfs pattern, either.  Besides, it is extensible to have
+memtierN as a directory.

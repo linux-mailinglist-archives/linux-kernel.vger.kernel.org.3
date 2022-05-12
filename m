@@ -2,120 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 637B9524EAA
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B5E524EAD
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354634AbiELNse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 09:48:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48872 "EHLO
+        id S1354650AbiELNsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 09:48:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354631AbiELNsa (ORCPT
+        with ESMTP id S1354631AbiELNsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 09:48:30 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65276542E
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:48:29 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id x18so4923048plg.6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:48:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XTqMxjhIn1jUYYr1ALo/DlLRk85oazw41UC3366CUb8=;
-        b=GvsJmFSDZ8o6LCBH9Mh693vukltHnjMOfIqFhUvMvJ5uCsr9QEwSealT+7LMhnD9Re
-         J3nZi/kBiWke6QhoZkiRj665ZZFvNmN2BNpvPl7/3Nq/sgyCtVZ0UOh2+18vGbb/Gto+
-         llEpMW2tvaZDtDYDIJLU3Rp0EmU5QZn+s38sNfkhrLzyp5eB1k9lJWYkNTDOI0EmsVWp
-         14R5tyC6LiV1ac+rplvCkfUtvlvH969p7HYEzf/tFi46OfGMs0vAkfiyGAItVIjYnd5d
-         1DDHTsnnGLE+f4friRNmecLMqyIxXjDstrQ8suLfYU2J9zaZyBtYdB/QTn/CpMzdr0Dw
-         3nBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XTqMxjhIn1jUYYr1ALo/DlLRk85oazw41UC3366CUb8=;
-        b=kCs+Dvgpl3Mxhk6cRDUnMx+oP40fvIfA7BVjpAlSuRx3FhUlPmTYKkHmKhv4k7Hq5T
-         JoBuXMoHLX/OUmyjjSBIcNmyg29JN0XBhLClxRmrRurVa73SOpd8+fWoR/u2/eFKqnEc
-         fZ2g+kYqg2ar7XU1is418a3Pmey5LY4SgAR1Kxo15yvzl6iQOnMPw0yQyJzalHSdBogy
-         wJcxAZt5cs3ZmIbvwBH7NEUqc7x+55+zZ/E3e2NtwB6BvRdQxOaZeE+Bbs6dPaTpHEBY
-         IkTHAW5LB/oUzfQoLvx2oOpqMu48M6q+PYeUOaxnTr/LC5Zr4PErwp4/leWfk1kSzjZC
-         oVkA==
-X-Gm-Message-State: AOAM532CWTZbKM8W64CNN8lafRgck0Uc7w3EqzS5361gT0/T0h9KnLDl
-        EfUk/Uq7YCMx7rNQkjLcQSJz7bGQBGhxiA==
-X-Google-Smtp-Source: ABdhPJzDUqaIXEhvnG8IhUWq92AKD62nGUZqhCw5quZuMX5Qj+KxHqlevZNiH9NM06UtEv2FfmTeBw==
-X-Received: by 2002:a17:90b:4a12:b0:1de:c82d:7cda with SMTP id kk18-20020a17090b4a1200b001dec82d7cdamr8082711pjb.9.1652363308844;
-        Thu, 12 May 2022 06:48:28 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id x189-20020a6286c6000000b0050dc762815dsm3780751pfd.55.2022.05.12.06.48.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 06:48:28 -0700 (PDT)
-Date:   Thu, 12 May 2022 13:48:24 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, x86@kernel.org,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH] KVM: x86: fix a typo in __try_cmpxchg_user that caused
- cmpxchg to be not atomic
-Message-ID: <Yn0QKHKKibBP2V0F@google.com>
-References: <20220202004945.2540433-5-seanjc@google.com>
- <20220512101420.306759-1-mlevitsk@redhat.com>
- <875ymayl55.fsf@redhat.com>
+        Thu, 12 May 2022 09:48:36 -0400
+Received: from mail.toke.dk (mail.toke.dk [45.145.95.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE310644D3;
+        Thu, 12 May 2022 06:48:31 -0700 (PDT)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
+        t=1652363309; bh=blX63fNBGtPLVWob9X9ETslO5YPtKIw3mZLNDG9ks5o=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=hiHqRnVtYx6ket6hb/L9fydLguY2ye051mhuoiXDA5jDZFBfKkkJ1KeAoonLIjgCH
+         WTj4ARFuwPxQhjuHT/+6cwgbtQK0/oLt0Pav9QO4DzESWOOLir93VPSQKQm2wkrrcX
+         hMPCtLTOfWNeRe4F+wUoE6NEPGJdHIAvgzyh/ldeUivozBfMmt1rjATTBWWvMpiqC3
+         BGPwUWvOjKW4r9f9+Yq3xDpJDTN+r/KAttVWMAaT4EIL+6IL/KP0/GMqvSWPYUgJia
+         jIl3k+snTsfi4XPG7jMj6GyADw0GFACFO51PoeJK8A07kykVrMdzhYLqx06udRGz4R
+         Xu1ZUqg8PbXiw==
+To:     Pavel Skripkin <paskripkin@gmail.com>,
+        ath9k-devel@qca.qualcomm.com, kvalo@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, linville@tuxdriver.com
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+03110230a11411024147@syzkaller.appspotmail.com,
+        syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
+Subject: Re: [PATCH v3 1/2] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
+In-Reply-To: <246ba9d2-2afd-c6c0-9cc2-9e5598407c70@gmail.com>
+References: <80962aae265995d1cdb724f5362c556d494c7566.1644265120.git.paskripkin@gmail.com>
+ <87r14yhq4q.fsf@toke.dk> <246ba9d2-2afd-c6c0-9cc2-9e5598407c70@gmail.com>
+Date:   Thu, 12 May 2022 15:48:29 +0200
+X-Clacks-Overhead: GNU Terry Pratchett
+Message-ID: <87ilqahnf6.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <875ymayl55.fsf@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022, Vitaly Kuznetsov wrote:
-> Maxim Levitsky <mlevitsk@redhat.com> writes:
-> 
-> > Fixes: 1c2361f667f36 ("KVM: x86: Use __try_cmpxchg_user() to emulate atomic accesses")
-> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > ---
-> >  arch/x86/kvm/x86.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > Yes, this is the root cause of the TDP mmu leak I was doing debug of in the last week.
-> > Non working cmpxchg on which TDP mmu relies makes it install two differnt shadow pages
-> > under same spte.
+Pavel Skripkin <paskripkin@gmail.com> writes:
 
-Ewww, as in running a buggy L0 resulted in a CMPXCHG going sideways in L1?  That's
-awful.  My apologies :-(
+> Hi Toke,
+>
+> On 5/12/22 15:49, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>> Pavel Skripkin <paskripkin@gmail.com> writes:
+>>=20
+>>> Syzbot reported use-after-free Read in ath9k_hif_usb_rx_cb(). The
+>>> problem was in incorrect htc_handle->drv_priv initialization.
+>>>
+>>> Probable call trace which can trigger use-after-free:
+>>>
+>>> ath9k_htc_probe_device()
+>>>   /* htc_handle->drv_priv =3D priv; */
+>>>   ath9k_htc_wait_for_target()      <--- Failed
+>>>   ieee80211_free_hw()		   <--- priv pointer is freed
+>>>
+>>> <IRQ>
+>>> ...
+>>> ath9k_hif_usb_rx_cb()
+>>>   ath9k_hif_usb_rx_stream()
+>>>    RX_STAT_INC()		<--- htc_handle->drv_priv access
+>>>
+>>> In order to not add fancy protection for drv_priv we can move
+>>> htc_handle->drv_priv initialization at the end of the
+>>> ath9k_htc_probe_device() and add helper macro to make
+>>> all *_STAT_* macros NULL save.
+>>>
+>>> Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
+>>> Reported-and-tested-by: syzbot+03110230a11411024147@syzkaller.appspotma=
+il.com
+>>> Reported-and-tested-by: syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotma=
+il.com
+>>> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+>>=20
+>> Could you link the original syzbot report in the commit message as well,
+>
+> Sure! See links below
+>
+> use-after-free bug:
+> https://syzkaller.appspot.com/bug?id=3D6ead44e37afb6866ac0c7dd121b4ce07cb=
+665f60
+>
+> NULL deref bug:
+> https://syzkaller.appspot.com/bug?id=3Db8101ffcec107c0567a0cd8acbbacec91e=
+9ee8de
+>
+> I can add them in commit message if you want :)
 
-> In case the fix is not squashed with 1c2361f667f36, the above should
-> really go before '---'.
-> 
-> >
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index 8ee8c91fa7625..79cabd3d97d22 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -7329,7 +7329,7 @@ static int emulator_cmpxchg_emulated(struct x86_emulate_ctxt *ctxt,
-> >  		goto emul_write;
-> >  
-> >  	hva = kvm_vcpu_gfn_to_hva(vcpu, gpa_to_gfn(gpa));
-> > -	if (kvm_is_error_hva(addr))
-> > +	if (kvm_is_error_hva(hva))
-> 
-> Looks like a typo indeed, so
-> 
-> Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Yes, please do!
 
-Yep, if this doesn't get squashed
+>> please? Also that 'tested-by' implies that syzbot run-tested this? How
+>> does it do that; does it have ath9k_htc hardware?
+>>=20
+>
+> No, it uses CONFIG_USB_RAW_GADGET and CONFIG_USB_DUMMY_HCD for gadgets=20
+> for emulating usb devices.
+>
+> Basically these things "connect" fake USB device with random usb ids=20
+> from hardcoded table and try to do various things with usb driver
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+Ah, right, hence the failures I suppose? Makes sense.
+
+> [snip]
+>
+>>> -#define TX_STAT_INC(c) (hif_dev->htc_handle->drv_priv->debug.tx_stats.=
+c++)
+>>> -#define TX_STAT_ADD(c, a) (hif_dev->htc_handle->drv_priv->debug.tx_sta=
+ts.c +=3D a)
+>>> -#define RX_STAT_INC(c) (hif_dev->htc_handle->drv_priv->debug.skbrx_sta=
+ts.c++)
+>>> -#define RX_STAT_ADD(c, a) (hif_dev->htc_handle->drv_priv->debug.skbrx_=
+stats.c +=3D a)
+>>> +#define __STAT_SAVE(expr) (hif_dev->htc_handle->drv_priv ? (expr) : 0)
+>>> +#define TX_STAT_INC(c) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debu=
+g.tx_stats.c++)
+>>> +#define TX_STAT_ADD(c, a) __STAT_SAVE(hif_dev->htc_handle->drv_priv->d=
+ebug.tx_stats.c +=3D a)
+>>> +#define RX_STAT_INC(c) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debu=
+g.skbrx_stats.c++)
+>>> +#define RX_STAT_ADD(c, a) __STAT_SAVE(hif_dev->htc_handle->drv_priv->d=
+ebug.skbrx_stats.c +=3D a)
+>>>  #define CAB_STAT_INC   priv->debug.tx_stats.cab_queued++
+>>=20
+>> s/SAVE/SAFE/ here and in the next patch (and the commit message).
+>>=20
+>
+> Oh, sorry about that! Will update in next version
+
+Thanks! Other than that, I think the patch looks reasonable...
+
+-Toke

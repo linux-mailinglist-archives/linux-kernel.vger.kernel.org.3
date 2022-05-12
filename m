@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1107524D79
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A9B524D7C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353962AbiELMta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 08:49:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37616 "EHLO
+        id S1354035AbiELMu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 08:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353944AbiELMtR (ORCPT
+        with ESMTP id S1353953AbiELMtT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 08:49:17 -0400
+        Thu, 12 May 2022 08:49:19 -0400
 Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 961DC24D5BA
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:49:16 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id l18so10000749ejc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:49:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F2C924DC3B
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:49:18 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id ch13so9960228ejb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:49:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sartura-hr.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JRHr7fdKzwvGcxbeg/0F2EjB5DJIbPSUWRot3RR3KEM=;
-        b=5qOD4m+rBHldN3nysblgLsH8WptxZXeWg5hx6uJu3cbY2IGpK+yqPo0D9LlT2NN16E
-         E4OyeFyGj8+nWQkxMG8rwSFnrfjUh5s8zg/81RhxraPhqufoajLtqieo5ayU+N7neqd3
-         etBerYcEppc3g1dczYesZFKENQWRT0NwCJaILKYNQLpJ/QQ/olSeXlsikKdYeDNNg77t
-         KiJVbi7iyF3TcBkZpDGTblA++wOYF3NOivBt+zUs7zdVvoJwilBBiCZ4WKeRj++svovi
-         ePsQubUWVxw1v87rHF1GKT/qmQtofag1Vpkn025cWjwVpPwnGVMOVE2SgThziS/AXCvu
-         qwgQ==
+        bh=78JVcYS1OPNy0iMprMf44gcnodWCbP7TdZbHTmipSOU=;
+        b=sijY0lZ3c3KWSqpBuVDt4ijlt04YhIkm7GThXtoIVJcfKgvXnu+W1lr6Zl5lcmBB9p
+         nPd5rCmOPcmaObajb1RmVUDXxOoFpCsqRBFZbpkwpBO6uFDL0kRsWkLuEycCEPQ5E79O
+         MvRMLsCM59KGBKhjk4UCldegskFRQi0s5tXdx9cKF5ZcRDIdNZLTtSv5xTnmHi5bh+zx
+         rvU990SOZ5nSDwsjcblYbZlUKu/Bdt/TPTFLbRz+XG/u/KulXM+s0/58efqsMUboZgeW
+         TGWl0c/NpUTlgSLggwhUvbi4GH7hAPj6HAwHdgvYblyq3g+duaeVz1IxCIfjdwz2nYII
+         jdtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JRHr7fdKzwvGcxbeg/0F2EjB5DJIbPSUWRot3RR3KEM=;
-        b=02yPfOfG6iCINURCCzJ/WKEF9QIah65htVIXm6ASX9EXwPCE7Kec44OGLfeMd0TJuM
-         I7+rpcEuuE80lyemLl09QzB7WB5cHYhTSqycDFHku46TukUoOZr2V/ZxDREtsKmrQICY
-         EH5KGiWef/tXq04dBw5TTz9xMw3WCaORELYnq3f8v3ljDw+0XpL3mIak9xyTpP67++Lx
-         BTAr5IYZTHLHnMN/EByCYlxmQjo/9NXoNtPx/nuI2U9TWEaK8kzTfvEqVEk2qVhVNSW2
-         WQz5f3e24QV5yhHVH/FQ1FVYtxojfQJ5OAYA3ARU2H25oshnpQEkhttqe3kyXwx0w5A3
-         fmvA==
-X-Gm-Message-State: AOAM533ljYwsT5D0MT42vECpMYRL4YMedGGMJ1WC6oJLb1WE4Y5LpOAg
-        mJeO3YwLhypWdwWwvMl137ZLLw==
-X-Google-Smtp-Source: ABdhPJypzDPM2tzbDNyHxubPQ3WDgA0YQyMnGC3nOD27vkwpwtsGZKgEbnWRKML0sYHEC6aYdbAS5w==
-X-Received: by 2002:a17:907:7b89:b0:6f4:9b92:c2ac with SMTP id ne9-20020a1709077b8900b006f49b92c2acmr29566908ejc.409.1652359755126;
-        Thu, 12 May 2022 05:49:15 -0700 (PDT)
+        bh=78JVcYS1OPNy0iMprMf44gcnodWCbP7TdZbHTmipSOU=;
+        b=XGrYc2o0beLEaarHih211pSdfdXZsZgvWpRpeNEBJvA0UBIurnXOP+27kvtSCilB1d
+         j38X/CQT4BEVzrUSkH/3qGaVjLjNSQcfCTj6N1hEeGNRcy2QvbGvPa9bNS8//7oOHWcp
+         nD5laPWgT4x03TJEyqqUn8wLvLw6Ws4Jt/NbL/9BzbpQEfQ/c7n0OfJknFw6eKSsMfMH
+         eCxJNN0sirARE3cJk+vDiWAa6IuPsCZwf0lORVO42BAatGfpGWLy0cqYCls+HVGs+XeS
+         C/eSyXsw3+hI7bz9X1SMQuT45w5zrE5XIfpIfAF5T+JYSqOTYqWc0xLCkdH4SrqFqG/0
+         z4IA==
+X-Gm-Message-State: AOAM532F4q5rNfv0smk0Qerk+ZceNq2wXMgjN7B47Y8R6JMJ/BTajwvZ
+        4jlUM9/Ipj4p24TWXIDZ+8oB4w==
+X-Google-Smtp-Source: ABdhPJzP4SuGIwfx7WvJoqjk6loiZqM6ck3RAgiX41IwDbIS71e1apGfJFULypLrQ8MMxL3PlzjWoQ==
+X-Received: by 2002:a17:907:1c20:b0:6f4:639e:9400 with SMTP id nc32-20020a1709071c2000b006f4639e9400mr29509686ejc.485.1652359756824;
+        Thu, 12 May 2022 05:49:16 -0700 (PDT)
 Received: from fedora.robimarko.hr (dh207-98-58.xnet.hr. [88.207.98.58])
-        by smtp.googlemail.com with ESMTPSA id h3-20020a170906828300b006f3ef214dc2sm2109475ejx.40.2022.05.12.05.49.14
+        by smtp.googlemail.com with ESMTPSA id h3-20020a170906828300b006f3ef214dc2sm2109475ejx.40.2022.05.12.05.49.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 05:49:14 -0700 (PDT)
+        Thu, 12 May 2022 05:49:16 -0700 (PDT)
 From:   Robert Marko <robert.marko@sartura.hr>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         andrew@lunn.ch, gregory.clement@bootlin.com,
@@ -55,9 +55,9 @@ To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     Robert Marko <robert.marko@sartura.hr>
-Subject: [PATCH v3 03/11] arm64: dts: marvell: espressobin-ultra: add generic Espressobin compatible
-Date:   Thu, 12 May 2022 14:48:57 +0200
-Message-Id: <20220512124905.49979-3-robert.marko@sartura.hr>
+Subject: [PATCH v3 04/11] arm64: dts: marvell: uDPU: add missing SoC compatible
+Date:   Thu, 12 May 2022 14:48:58 +0200
+Message-Id: <20220512124905.49979-4-robert.marko@sartura.hr>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220512124905.49979-1-robert.marko@sartura.hr>
 References: <20220512124905.49979-1-robert.marko@sartura.hr>
@@ -72,30 +72,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Espressobin Ultra is part of the Espressobin family and shares the basic
-design, so add the generic "globalscale,espressobin" compatible to it as
-well.
+According to the bindings, all boards using Armada 37xx SoC-s must have
+"marvell,armada3710" compatible while 3720 based ones should also have
+"marvell,armada3720" before it.
 
 Signed-off-by: Robert Marko <robert.marko@sartura.hr>
 ---
- arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts
-index 070725b81be5..1b2ed63ae6a2 100644
---- a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts
-+++ b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts
-@@ -12,8 +12,8 @@
+diff --git a/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts b/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
+index 1f534c0c65f7..62fce6f2a3a7 100644
+--- a/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
++++ b/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
+@@ -16,7 +16,7 @@
  
  / {
- 	model = "Globalscale Marvell ESPRESSOBin Ultra Board";
--	compatible = "globalscale,espressobin-ultra", "marvell,armada3720",
--		     "marvell,armada3710";
-+	compatible = "globalscale,espressobin-ultra", "globalscale,espressobin",
-+		     "marvell,armada3720", "marvell,armada3710";
+ 	model = "Methode uDPU Board";
+-	compatible = "methode,udpu", "marvell,armada3720";
++	compatible = "methode,udpu", "marvell,armada3720", "marvell,armada3710";
  
- 	aliases {
- 		/* ethernet1 is WAN port */
+ 	chosen {
+ 		stdout-path = "serial0:115200n8";
 -- 
 2.36.1
 

@@ -2,70 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEDB45257C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 00:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 948925257CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 00:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359187AbiELW1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 18:27:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
+        id S1359191AbiELWbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 18:31:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359165AbiELW1Z (ORCPT
+        with ESMTP id S1359165AbiELWbr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 18:27:25 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B867369727
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 15:27:24 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id m6-20020a17090a730600b001d9041534e4so3390772pjk.7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 15:27:24 -0700 (PDT)
+        Thu, 12 May 2022 18:31:47 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6F65A0BE
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 15:31:46 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-2f7ca2ce255so72624527b3.7
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 15:31:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=y6gb0U2+lLyl/JLfdo770ZdpJj+aiCLx3/RH8sebC6g=;
-        b=kEP9p9p6ty8/Cn8cm6dGGrIzXSWlTeD922G12T3rUIRfkqyIxLiFDIdV6tNBMqYigy
-         9ouHWupdaewZjaLRmHYZ/JL4yB/ZAV7O17Z0fwvGj2/iIt+gRZvfAaRfkSUACbXVm29k
-         lgjMnz8qoEKLSuKPDHiHfWHk+dnEbQLea8ksKSyZW4K0tocXBIh9PsAk3+4m0AMkKjQE
-         tpLyygojrv2nLbMp4P4mahrE/sVfFdu+EaCt+/4VO2Ni3+WkuVrweTmq8GhcAansyS1I
-         eByUUhClwyruTFsBBVTnF24SrSjgX8S4AAer3b+8hAZf/xzxFRMqwMnVFpYYGpGfilNz
-         82PQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AJGrVRrH+dOEhiElDtPJnom+nsrzVSlx3m1P3MXcyt8=;
+        b=HKHBQnUdowSNLBhbkOBsBEX5C+iK1w0Yf+bcFPhOqlRiMP6A0Mz5ltaYanBi+i05iG
+         cin6l4liXxnPvewh1T7T7VdF/b2gZubu8BFpF1WFRdvGC4vbHWLBnyEHMDVH+/ycYupI
+         sjKR4L02x/5+BSW+jam05AzZ2NmQlqkBhti6Uq78H0zr3uNSRVTWjzYDMTHeVMumdU/f
+         6Swv4843WGA/Mnd9MNpjok50X0vmtCH9JqfJWCHJy2aQ5P6XU2iRMYw+xQW3GDRas9BS
+         PaouOeajWzpDJoWV+wRBWGsBQvWe3KgQtzreixaQBUYxzKZaZERpu/imjAsk5CAWC9cB
+         OUbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=y6gb0U2+lLyl/JLfdo770ZdpJj+aiCLx3/RH8sebC6g=;
-        b=Zh6yAWRk2IYiW2mKuKJ/FR6tzbRw5g8vWFXn6uYxd/xCj0knqXl3mdhgmDTr+eCP/D
-         /AhY/Y36l7owJzb7jj01qiZIuYVfvngXJ0n4TZU+O/3mcpdLXk+L6uV4g8Az8i8TCZSw
-         RwXJ0L6rp8DsabE6MfeK27qc+E3LBw3FP5SwjxSzIWpFEJz4ddWHHDfEhPJ2WqmlsSZM
-         l50GHAepO+MmZtRsuTafB+Mn9z48YleeIcHQv8iy0VTEgvKjphUMR3NmASAz8yzWIfaB
-         8zjuxTy9pmS2TWPf7J8yGsgLQiPp9ciuVewpBLQbJz8SYAbIX7F3R+L9KTQEkrc70uRo
-         6Xzw==
-X-Gm-Message-State: AOAM530HrkoTP2WOWDH4cTN8TqwJOCI8ygfYavqCe7DtJnIlvMwmR37Q
-        N4/oVhNFxigq2CmkzJZxY+tTLP47SOE=
-X-Google-Smtp-Source: ABdhPJw1WLaJt1wz9itOgfj7pPjBlw2xXYrT6jt9xeyZPyALNNRSlFuN+TayMfobCW23vb/d4MMU2OIBnl0=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:76cb:b0:15e:f795:bf5e with SMTP id
- j11-20020a17090276cb00b0015ef795bf5emr1930290plt.39.1652394444060; Thu, 12
- May 2022 15:27:24 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu, 12 May 2022 22:27:16 +0000
-In-Reply-To: <20220512222716.4112548-1-seanjc@google.com>
-Message-Id: <20220512222716.4112548-4-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220512222716.4112548-1-seanjc@google.com>
-X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [PATCH 3/3] KVM: x86: Add helpers to identify CTL and STATUS MCi MSRs
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jue Wang <juew@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AJGrVRrH+dOEhiElDtPJnom+nsrzVSlx3m1P3MXcyt8=;
+        b=lbXTXI5SMbmSRcjnshAOqFQcejQRN/83LtQsSzrQKbb4QaG5ZKbu0HGwS+jp+W19iz
+         6ibcKqKV3lhZxW8FlqYTMpN2cKDOP50+OHPhi7Zi3hPCGLgbVw4rERkV8axd9wEEsRrw
+         VoRwRKd/0Gt8BGKDBbJ0upjQZ+91UhV0yr5nq66uWsXsG2SdyId4W3PhC4CUL6ugdiED
+         eL8tnvoNcs7/bJc33svWIcxeNu9DQHwqFSGlPRNh+7MlBk7aZEMhjh5GOntCLY7Y2FBh
+         rSGy0Jx6RnPW5GbwZYLLRxNyXXB72opT62Li2+RKQ50q8G1rSQHetiNqeGAiGhvkMewl
+         APRw==
+X-Gm-Message-State: AOAM531x2TvNuPoMQdgpuBX5X/RAk161K3yamD1vRIlo9NJhe3yPN4g1
+        gTeXGvF7L/QLFBt1V3SvOg8C8TZZezeELowszl1hog==
+X-Google-Smtp-Source: ABdhPJwzefOUbhnD4vlu7+gan+V9STOahhU9EhcwGhhFaV8YI/mjlx7OYk8OXREHs4uUiLanalOYjb8ajWHHjC3d7gc=
+X-Received: by 2002:a81:4fd0:0:b0:2fb:2c3e:6cbc with SMTP id
+ d199-20020a814fd0000000b002fb2c3e6cbcmr2716004ywb.180.1652394705360; Thu, 12
+ May 2022 15:31:45 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220512044634.63586-1-ligang.bdlg@bytedance.com>
+In-Reply-To: <20220512044634.63586-1-ligang.bdlg@bytedance.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 12 May 2022 15:31:34 -0700
+Message-ID: <CAJuCfpGDamD6P6Tgz=Y59fpj1NgFL0wjKe+y42-mCQ2x-asx3A@mail.gmail.com>
+Subject: Re: [PATCH 0/5 v1] mm, oom: Introduce per numa node oom for CONSTRAINT_MEMORY_POLICY
+To:     Gang Li <ligang.bdlg@bytedance.com>, Michal Hocko <mhocko@suse.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Muchun Song <songmuchun@bytedance.com>, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org,
+        David Hildenbrand <david@redhat.com>, imbrenda@linux.ibm.com,
+        apopple@nvidia.com, Alexey Dobriyan <adobriyan@gmail.com>,
+        stephen.s.brennan@oracle.com, ohoono.kwon@samsung.com,
+        haolee.swjtu@gmail.com, Kalesh Singh <kaleshsingh@google.com>,
+        zhengqi.arch@bytedance.com, Peter Xu <peterx@redhat.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Colin Cross <ccross@google.com>, vincent.whitchurch@axis.com,
+        Thomas Gleixner <tglx@linutronix.de>, bigeasy@linutronix.de,
+        fenghua.yu@intel.com, linux-s390@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,77 +90,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add helpers to identify CTL (control) and STATUS MCi MSR types instead of
-open coding the checks using the offset.  Using the offset is perfectly
-safe, but unintuitive, as understanding what the code does requires
-knowing that the offset calcuation will not affect the lower three bits.
+On Wed, May 11, 2022 at 9:47 PM Gang Li <ligang.bdlg@bytedance.com> wrote:
+>
+> TLDR:
+> If a mempolicy is in effect(oc->constraint == CONSTRAINT_MEMORY_POLICY), out_of_memory() will
+> select victim on specific node to kill. So that kernel can avoid accidental killing on NUMA system.
+>
+> Problem:
+> Before this patch series, oom will only kill the process with the highest memory usage.
+> by selecting process with the highest oom_badness on the entire system to kill.
+>
+> This works fine on UMA system, but may have some accidental killing on NUMA system.
+>
+> As shown below, if process c.out is bind to Node1 and keep allocating pages from Node1,
+> a.out will be killed first. But killing a.out did't free any mem on Node1, so c.out
+> will be killed then.
+>
+> A lot of our AMD machines have 8 numa nodes. In these systems, there is a greater chance
+> of triggering this problem.
+>
+> OOM before patches:
+> ```
+> Per-node process memory usage (in MBs)
+> PID             Node 0        Node 1      Total
+> ----------- ---------- ------------- ----------
+> 3095 a.out     3073.34          0.11    3073.45(Killed first. Maximum memory consumption)
+> 3199 b.out      501.35       1500.00    2001.35
+> 3805 c.out        1.52 (grow)2248.00    2249.52(Killed then. Node1 is full)
+> ----------- ---------- ------------- ----------
+> Total          3576.21       3748.11    7324.31
+> ```
+>
+> Solution:
+> We store per node rss in mm_rss_stat for each process.
+>
+> If a page allocation with mempolicy in effect(oc->constraint == CONSTRAINT_MEMORY_POLICY)
+> triger oom. We will calculate oom_badness with rss counter for the corresponding node. Then
+> select the process with the highest oom_badness on the corresponding node to kill.
+>
+> OOM after patches:
+> ```
+> Per-node process memory usage (in MBs)
+> PID             Node 0        Node 1     Total
+> ----------- ---------- ------------- ----------
+> 3095 a.out     3073.34          0.11    3073.45
+> 3199 b.out      501.35       1500.00    2001.35
+> 3805 c.out        1.52 (grow)2248.00    2249.52(killed)
+> ----------- ---------- ------------- ----------
+> Total          3576.21       3748.11    7324.31
+> ```
 
-Opportunistically comment the STATUS logic to save readers a trip to
-Intel's SDM or AMD's APM to understand the "data != 0" check.
+You included lots of people but missed Michal Hocko. CC'ing him and
+please include him in the future postings.
 
-No functional change intended.
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/x86.c | 25 +++++++++++++++++++------
- 1 file changed, 19 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 7e685ea9882b..b61c5def0bfc 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -3188,6 +3188,16 @@ static void kvmclock_sync_fn(struct work_struct *work)
- 					KVMCLOCK_SYNC_PERIOD);
- }
- 
-+/* These helpers are safe iff @msr is known to be an MCx bank MSR. */
-+static bool is_mci_control_msr(u32 msr)
-+{
-+	return (msr & 3) == 0;
-+}
-+static bool is_mci_status_msr(u32 msr)
-+{
-+	return (msr & 3) == 1;
-+}
-+
- /*
-  * On AMD, HWCR[McStatusWrEn] controls whether setting MCi_STATUS results in #GP.
-  */
-@@ -3225,9 +3235,6 @@ static int set_msr_mce(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		if (msr > last_msr)
- 			return 1;
- 
--		offset = array_index_nospec(msr - MSR_IA32_MC0_CTL,
--					    last_msr + 1 - MSR_IA32_MC0_CTL);
--
- 		/*
- 		 * Only 0 or all 1s can be written to IA32_MCi_CTL, all other
- 		 * values are architecturally undefined.  But, some Linux
-@@ -3235,15 +3242,21 @@ static int set_msr_mce(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		 * issue on AMD K8s, allow bit 10 to be clear when setting all
- 		 * other bits in order to avoid an uncaught #GP in the guest.
- 		 */
--		if ((offset & 0x3) == 0 &&
-+		if (is_mci_control_msr(msr) &&
- 		    data != 0 && (data | (1 << 10)) != ~(u64)0)
- 			return 1;
- 
--		/* MCi_STATUS */
--		if (!msr_info->host_initiated && (offset & 0x3) == 1 &&
-+		/*
-+		 * All CPUs allow writing 0 to MCi_STATUS MSRs to clear the MSR.
-+		 * AMD-based CPUs allow non-zero values, but if and only if
-+		 * HWCR[McStatusWrEn] is set.
-+		 */
-+		if (!msr_info->host_initiated && is_mci_status_msr(msr) &&
- 		    data != 0 && !can_set_mci_status(vcpu))
- 			return 1;
- 
-+		offset = array_index_nospec(msr - MSR_IA32_MC0_CTL,
-+					    last_msr + 1 - MSR_IA32_MC0_CTL);
- 		vcpu->arch.mce_banks[offset] = data;
- 		break;
- 	default:
--- 
-2.36.0.550.gb090851708-goog
-
+>
+> Gang Li (5):
+>   mm: add a new parameter `node` to `get/add/inc/dec_mm_counter`
+>   mm: add numa_count field for rss_stat
+>   mm: add numa fields for tracepoint rss_stat
+>   mm: enable per numa node rss_stat count
+>   mm, oom: enable per numa node oom for CONSTRAINT_MEMORY_POLICY
+>
+>  arch/s390/mm/pgtable.c        |   4 +-
+>  fs/exec.c                     |   2 +-
+>  fs/proc/base.c                |   6 +-
+>  fs/proc/task_mmu.c            |  14 ++--
+>  include/linux/mm.h            |  59 ++++++++++++-----
+>  include/linux/mm_types_task.h |  16 +++++
+>  include/linux/oom.h           |   2 +-
+>  include/trace/events/kmem.h   |  27 ++++++--
+>  kernel/events/uprobes.c       |   6 +-
+>  kernel/fork.c                 |  70 +++++++++++++++++++-
+>  mm/huge_memory.c              |  13 ++--
+>  mm/khugepaged.c               |   4 +-
+>  mm/ksm.c                      |   2 +-
+>  mm/madvise.c                  |   2 +-
+>  mm/memory.c                   | 116 ++++++++++++++++++++++++----------
+>  mm/migrate.c                  |   2 +
+>  mm/migrate_device.c           |   2 +-
+>  mm/oom_kill.c                 |  59 ++++++++++++-----
+>  mm/rmap.c                     |  16 ++---
+>  mm/swapfile.c                 |   4 +-
+>  mm/userfaultfd.c              |   2 +-
+>  21 files changed, 317 insertions(+), 111 deletions(-)
+>
+> --
+> 2.20.1
+>

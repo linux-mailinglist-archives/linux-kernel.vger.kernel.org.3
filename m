@@ -2,105 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 435D35248C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EFB15248D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:22:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351916AbiELJVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 05:21:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
+        id S1351947AbiELJWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 05:22:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351928AbiELJVZ (ORCPT
+        with ESMTP id S1351925AbiELJWP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 05:21:25 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813424EDFD
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:21:24 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id n10so4606216pjh.5
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:21:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=trstv+pRRGZWnVg0+iN5UCLh2DdH9t4IV2sdILAbWVo=;
-        b=KDQhOyYHM/ghyxsyYX2XznPNtfLuxQL/rD+vsMnBO34aYxBsr9ceM9eDUWXAMLJM1g
-         9qJpLzk42GzZaBZbcgWUjy6LOebVHmF9bqI7MPkd/10lA1bpzvrEX45t8Y33GLQnbz1E
-         4xjhKznHXiYyv4C74c+8dkaHPGwnM2Xr5nFisIkCTmppBiVXORiPXCaEqfAxG9UA6jiV
-         iL9Ahrh/AabO+F2dHjvO1YsOn69pZxSPvrDoiSdzFVMIhkAU5/Q6mldf5ISJuihXbdN9
-         8ApW3DsCjYYcUVvQ+vqQFrvDS6DEiNcNP1oYqHta/uiDkShGesbOpsU+nrVUkSoMHASh
-         qtag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=trstv+pRRGZWnVg0+iN5UCLh2DdH9t4IV2sdILAbWVo=;
-        b=nApqMUj1j3IWmAVaddmUUD+YTLhe+eHE9Znu/tcDM6Zd5SvhyT2kGNlTDPcPVjRAIT
-         rUB7t87M7GK8QD2SFE3gXOiGo+zSSGzYszZYpSs8GiVyqPzeQ8HCyaEqriBWoY7QBttG
-         lS4vVdBrmGaC3BEWyCtjBi9dfECRzHj2ATdsMVX/xcbvD1E/fhCY97HH6MZp9oC1bZ/O
-         /0VvJEVRGNcbXoa4cxLIj73LbML4k7QrJqFpcNXVb9Hhsg8XZ/u860WNKg2HeNY2tLnI
-         F0ztBqP8pfOMeOEoWAb6wsP38AV9rJZkOhilDez+q/Fa7ZQKihv9ouVXLPoU4Ga1MXln
-         fzrg==
-X-Gm-Message-State: AOAM530tBV893aGmqOYBBmO6p7gFedyNIcLHQjRq2jDRi7h5MeRPmEpa
-        8H4EW5vEKJvdxUjfQkDUGo8=
-X-Google-Smtp-Source: ABdhPJzZwN6t9mhBq0vhDH0XiM6VYuy8GmDZ2wYMYQ05gapLnZQ2or//JNGRUEmvLf3VxVplWrAO8w==
-X-Received: by 2002:a17:90b:1d82:b0:1dc:ba02:52a0 with SMTP id pf2-20020a17090b1d8200b001dcba0252a0mr9773736pjb.246.1652347284037;
-        Thu, 12 May 2022 02:21:24 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id gj9-20020a17090b108900b001cd4989fedfsm1336874pjb.43.2022.05.12.02.21.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 02:21:23 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] drm/meson: Fix refcount leak in meson_encoder_hdmi_init
-Date:   Thu, 12 May 2022 13:21:13 +0400
-Message-Id: <20220512092114.38426-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 12 May 2022 05:22:15 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E1D50453
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:22:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652347332; x=1683883332;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=y4aqSKG+Qdhrrlw+VzjpUHVoxZf0QQKL3LP5SMTVV2c=;
+  b=NUQgOhEvD366kC+kxDh3auIQg1u0UbHpqXsY2TT2JEOlPKJ2/Y5DwLVb
+   +91csG9kNEYyJpcOmNCFiU7ZSVVvgU2wnNT2NmKgVRf4cuVkirb6f7s04
+   usjOltXHCKx3RBpmPeCRwKLHYHMUYGnL7WUliP+ax6IzY+wwCa2gDeQvT
+   5hnkJ5i1CmwM7ZgPOqkITvcQ3PbrGghMvhQtiTCitYjAvNzjecRT6G1j6
+   kjYK5mPWaAvmr83jwsd/SsUfr9PnDnpXktDvMUIH6FxAY5ViLuV9LT1dp
+   BO1052T9ILJj+YvCZFLGwH0zAWIw/ykZknfchUD5MGZQE0LHg4q7m23wW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="251999724"
+X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
+   d="scan'208";a="251999724"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 02:22:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
+   d="scan'208";a="603301156"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 12 May 2022 02:22:09 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1np51M-000KFI-Gu;
+        Thu, 12 May 2022 09:22:08 +0000
+Date:   Thu, 12 May 2022 17:21:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: [cxl:preview 40/67] drivers/cxl/core/pci.c:137:14: error: call to
+ undeclared function 'readq'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202205121731.lbcgjrP6-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_find_device_by_node() takes a reference to the embedded struct device,
-we should use put_device() to release it when not need anymore.
-Add missing put_device() in error path to avoid refcount leak.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git preview
+head:   9c642abd8b31d895f34186bd72b7360083b58492
+commit: e7ed4a0688738b1f47a6b500444942d4dfa1035d [40/67] cxl/pci: Move cxl_await_media_ready() to the core
+config: i386-randconfig-c001-20220509 (https://download.01.org/0day-ci/archive/20220512/202205121731.lbcgjrP6-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?id=e7ed4a0688738b1f47a6b500444942d4dfa1035d
+        git remote add cxl https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
+        git fetch --no-tags cxl preview
+        git checkout e7ed4a0688738b1f47a6b500444942d4dfa1035d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/cxl/core/
 
-Fixes: 0af5e0b41110 ("drm/meson: encoder_hdmi: switch to bridge DRM_BRIDGE_ATTACH_NO_CONNECTOR")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/gpu/drm/meson/meson_encoder_hdmi.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/gpu/drm/meson/meson_encoder_hdmi.c b/drivers/gpu/drm/meson/meson_encoder_hdmi.c
-index 5e306de6f485..de87f02cd388 100644
---- a/drivers/gpu/drm/meson/meson_encoder_hdmi.c
-+++ b/drivers/gpu/drm/meson/meson_encoder_hdmi.c
-@@ -435,8 +435,10 @@ int meson_encoder_hdmi_init(struct meson_drm *priv)
- 		cec_fill_conn_info_from_drm(&conn_info, meson_encoder_hdmi->connector);
- 
- 		notifier = cec_notifier_conn_register(&pdev->dev, NULL, &conn_info);
--		if (!notifier)
-+		if (!notifier) {
-+			put_device(&pdev->dev);
- 			return -ENOMEM;
-+		}
- 
- 		meson_encoder_hdmi->cec_notifier = notifier;
- 	}
+All errors (new ones prefixed by >>):
+
+>> drivers/cxl/core/pci.c:137:14: error: call to undeclared function 'readq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           md_status = readq(cxlds->regs.memdev + CXLMDEV_STATUS_OFFSET);
+                       ^
+   1 error generated.
+
+
+vim +/readq +137 drivers/cxl/core/pci.c
+
+   103	
+   104	/*
+   105	 * Wait up to @media_ready_timeout for the device to report memory
+   106	 * active.
+   107	 */
+   108	int cxl_await_media_ready(struct cxl_dev_state *cxlds)
+   109	{
+   110		struct pci_dev *pdev = to_pci_dev(cxlds->dev);
+   111		int d = cxlds->cxl_dvsec;
+   112		bool active = false;
+   113		u64 md_status;
+   114		int rc, i;
+   115	
+   116		for (i = media_ready_timeout; i; i--) {
+   117			u32 temp;
+   118	
+   119			rc = pci_read_config_dword(
+   120				pdev, d + CXL_DVSEC_RANGE_SIZE_LOW(0), &temp);
+   121			if (rc)
+   122				return rc;
+   123	
+   124			active = FIELD_GET(CXL_DVSEC_MEM_ACTIVE, temp);
+   125			if (active)
+   126				break;
+   127			msleep(1000);
+   128		}
+   129	
+   130		if (!active) {
+   131			dev_err(&pdev->dev,
+   132				"timeout awaiting memory active after %d seconds\n",
+   133				media_ready_timeout);
+   134			return -ETIMEDOUT;
+   135		}
+   136	
+ > 137		md_status = readq(cxlds->regs.memdev + CXLMDEV_STATUS_OFFSET);
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

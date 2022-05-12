@@ -2,150 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC6C524812
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 10:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3930C52482A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 10:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241672AbiELInM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 04:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40534 "EHLO
+        id S1351560AbiELInF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 04:43:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351728AbiELImo (ORCPT
+        with ESMTP id S1351692AbiELIm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 04:42:44 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2040.outbound.protection.outlook.com [40.107.94.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5234504A;
-        Thu, 12 May 2022 01:42:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VJH6Q/9KUlo5RoSK75zGnL9j//xVm6Z+OlxhqzSACIO9FPckVzZzYPtdK8YMUswyXe1b+q+VE5dFlN5j0/pqDIFhwyAcF/5PHxWU+56M16uTUpW7toM56TvRDgqSfa4Z32lhRV2jgKE8G2Vt3a1lvx5ZZIY4N+ESTLoWe9xFIwKKxCyiydcjBfU0sMC0TtV/bpAr7geQpYn73aAWhKg9lcyscFsTLP92+xt6F2RY1/vKmsBKpKadkNXxkzHDzfr6HvTNOdSy/6D+ABBeyEQQC1IN8mgMWi09pnDUiViMc+/DwFRk1xCD5qG7lHuY2QXE/Pbeg3vcjo059XiCyu1viw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TYz0eM6fXd67zyrv4B2b+ZkmS2jAJPiEvLLUTnhSh3w=;
- b=i+5U1uTmUTCSnJqoD1nuwtORmsqbBkENM7xHYEipPgRw49PJE+2edVPJzhu6ZrTl/ftcdlCTet+triQf9p36mMO9KHdGTPR8cELpUXUS0t4cucIMr2BKz8zCun2vhgDh3/G+LIR1tAxp0ePr0O3T6lfUZlm8LSEFnAELVWTuKPQhhxDV0cDJiPz9PIZUxDR5834bhwvkjxnB97E/af8BuIAtyG7FzO66ziKRWINuNY44EYcdW6Lp5res1O3oOKMzOWqpQfU3otxjx6C9mm977lPRFEBUjC67YaRoWmrNghagZFZk4q37Pz0/2RX3BSc7Lilm71lYF2uiMgU9sdPBIg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TYz0eM6fXd67zyrv4B2b+ZkmS2jAJPiEvLLUTnhSh3w=;
- b=lwm5JqgjkEqXy9vId0HdDHHK820D17xXG6IcHCGFfLsy/SWGTufiaAfk0Uco/HpWT2NSjHZr4BcaikxuKmtwFM0ktnCHckTxAj0+hmSEsZBQmUEgia7svlJT3V1RF2ZPT6xGXjGJklWkNw3xQf3EqDljJ+q3FTJt9WZGdxc5Im0yxLYndtPXsU6/3QeVNtDHWKqLVdD6Yw39wKZEZVSSsOcsR31LsE8+2W57UHXU8Jyfvzhrb+1jr0SQew5VXUwZce6LFWW6lnZXsAe5ClLYemrS02u+yQPNxUhC6eJYcYx0n74ZJTKhFYWf7db7RC4Bfhq4Fgz4FWY5h76CO1zegA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4209.namprd12.prod.outlook.com (2603:10b6:a03:20d::22)
- by MN0PR12MB5811.namprd12.prod.outlook.com (2603:10b6:208:377::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.23; Thu, 12 May
- 2022 08:42:28 +0000
-Received: from BY5PR12MB4209.namprd12.prod.outlook.com
- ([fe80::bcda:499a:1cc1:abca]) by BY5PR12MB4209.namprd12.prod.outlook.com
- ([fe80::bcda:499a:1cc1:abca%4]) with mapi id 15.20.5227.023; Thu, 12 May 2022
- 08:42:28 +0000
-Date:   Thu, 12 May 2022 01:42:26 -0700
-From:   Saeed Mahameed <saeedm@nvidia.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Coco Li <lixiaoyan@google.com>,
-        Tariq Toukan <tariqt@nvidia.com>, netdev@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-Subject: Re: [PATCH] fortify: Provide a memcpy trap door for sharp corners
-Message-ID: <20220512084226.id7jghqbadluze5k@LT-SAEEDM-5760.attlocal.net>
-References: <20220511025301.3636666-1-keescook@chromium.org>
- <20220511092417.3c1c60d9@kernel.org>
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220511092417.3c1c60d9@kernel.org>
-X-ClientProxiedBy: BYAPR11CA0037.namprd11.prod.outlook.com
- (2603:10b6:a03:80::14) To BY5PR12MB4209.namprd12.prod.outlook.com
- (2603:10b6:a03:20d::22)
+        Thu, 12 May 2022 04:42:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5AAF41320
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 01:42:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652344970;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TL296SryyvFIzUKAgvAx0DbiXeRdrRfvIeuhT1ztCEc=;
+        b=Y7/X+9KxonqUFDVXCsVfPVDsjyFP4vl6drQ1eXYnLdiGSS+/s5x8g1SARf/BW4iALTuLJS
+        +I4NiP6A3D58cye1KRj4tSvV6SUh3rVFLOlNKxYUX8+vFCOmUPOwYgI2onGSPJVNa5KBT2
+        PdwA3Vkl9FJ29+fvQ7z4pWa6SHk1fP8=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-17-Of_QDZGKM3ih64jI1pM8kQ-1; Thu, 12 May 2022 04:42:49 -0400
+X-MC-Unique: Of_QDZGKM3ih64jI1pM8kQ-1
+Received: by mail-wr1-f71.google.com with SMTP id o11-20020adfca0b000000b0020adc114131so1795002wrh.8
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 01:42:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=TL296SryyvFIzUKAgvAx0DbiXeRdrRfvIeuhT1ztCEc=;
+        b=OTtr3h2xz20LW8Pkuzd0FO5TauwLXlWF1dxpaADep1K6yCq3WnKy1eMnd64UVt/gMY
+         /uX7ECM9gauImvySPr/jcrEUNvMNwCL6A/4379K/lCeAnEWTShsHuN2oA/DUlzQphEaB
+         R4BJEOroao1yU58vfSkiLz3zmH/H405QH0eyqE7LzI0lP7WUol+aGEqK/YU0l2McVOnX
+         mOgT8gYS5bQkBfXziJvx12IwySKr9u0KM4SqIONfFU58S0OOElSOGVWHhTVQHpFyizoV
+         JWXM9gMyMZfp5MOuEMnlHByRzzp+9OFG7DWRKlo8HUvt6k2f7HYK+2Jk4n8ckm6yn1YO
+         G1xQ==
+X-Gm-Message-State: AOAM533AMO22U3yXiLmpTqcre1CXDkXaTIrqmMTcYP2bl63r6pVSWmxF
+        /grJmp7lCld2F9vCth0Ko4PlvWKrxtw/pwe5nB8f7KFaW2WfSAyinjoz26bnXzfE/fXyGRNTYHy
+        8RkkqT9+9Mze3+nTYpINjxUtc
+X-Received: by 2002:a1c:2b86:0:b0:392:ae97:2fec with SMTP id r128-20020a1c2b86000000b00392ae972fecmr8712603wmr.165.1652344968570;
+        Thu, 12 May 2022 01:42:48 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwbQjWVKCg/mTM5M+UooSQiAqm2pFe5GDlwzn/9BE6+Xp7XBA0IvVggvyUtSDCdR3aT9tTh/g==
+X-Received: by 2002:a1c:2b86:0:b0:392:ae97:2fec with SMTP id r128-20020a1c2b86000000b00392ae972fecmr8712585wmr.165.1652344968305;
+        Thu, 12 May 2022 01:42:48 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c701:d200:ee5d:1275:f171:136d? (p200300cbc701d200ee5d1275f171136d.dip0.t-ipconnect.de. [2003:cb:c701:d200:ee5d:1275:f171:136d])
+        by smtp.gmail.com with ESMTPSA id z1-20020a5d6541000000b0020ac8c19ecfsm3647938wrv.3.2022.05.12.01.42.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 01:42:47 -0700 (PDT)
+Message-ID: <c26a28cc-9955-9724-3271-602c9bddf8a2@redhat.com>
+Date:   Thu, 12 May 2022 10:42:46 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7102d372-55c8-45d6-ab88-08da33f35866
-X-MS-TrafficTypeDiagnostic: MN0PR12MB5811:EE_
-X-Microsoft-Antispam-PRVS: <MN0PR12MB5811A97F6FD53A34F0EDFF90B3CB9@MN0PR12MB5811.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Oj7bOxfjEnagrL1Vk9FMxJdPBM3iNHqBgEp3jBQZvm9SAaT+8x92MX04SOQ5ECFKuiwHmuyFEEnL90fBBuYEOt0Ke3PSIvepU4nSlRR0PYV2I37CqAaOep4l5El+wHnVIQ1yNr3lHPs0Y49hMakixvLvTECPI5XLDht5qEGoZ1sd6C1LRoCUeKPJZXt/8JmNruhQuGLxCToTe6YXQjEaNI+e+HKYga9Dmm2apGz/JnETcMhTr4PR0SmdHuYkyNStluL6/8cUpZkMKgVadYQWlFtbSGn9SV8C1EcEOXSKpBYHQ2zMxEkMpsogtcXQqVLXL9GWLK10UweDWPBm9pdcYTv6hYHq0lHVYnweSpFWBETvGUuSkWO/Mk9X/qThRuewlpjQnR7un1kDbQDHUOoxW+m2EMXDr8d8RP+o+d3Pep55XW1hQhRjkP4ltcQGBuGdNhs3mMRkk6NYOLB4jbTFcd73QKPPt1nQ6aGotBYbQpYosYSY6e+ea1bIZudOcDR7wtDDm9erY8aj2HNuWvmSbvZTUG/AyXCJMnivdV0oWjG4KfubRt/BDRVvurzZugPo3RaTX6HVKI+PTGWT4jzqLfZemGzHcllXwssQulav3mz0j47dpWTGI7RbmHpzGXr8u/QQsklx3M+J1fUfYuo30lWvB8vAXRbTCuHvVMybZ5lRiKuDQxv7AudZG+bJdHt8o9qM2oqx70yoZGu24E6Q0WG1MOclqOSwAWb9mMArV1I=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4209.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(7416002)(38100700002)(508600001)(5660300002)(6486002)(966005)(9686003)(66946007)(316002)(6506007)(4326008)(66476007)(66556008)(54906003)(6916009)(8676002)(83380400001)(186003)(6512007)(1076003)(2906002)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MeglJ2F6pEYczcRzLaZbLhAcs+VKQmsRJKnprvCuT9TH/XBBj7uQMAZRJV9j?=
- =?us-ascii?Q?sJFCGRpCwdPLdtxhXh6C9mbBU51s1dI+6QtArPNrQyOgHKqyCgmGr4tyilmn?=
- =?us-ascii?Q?pJJ5R+WTBeR5fl0UufvD9sP9hn57YlxMl4XU4kb7CLUTa1ulPgRbXX4ea2wu?=
- =?us-ascii?Q?y+4Rul40MfcgVTAzJAi5sBn8moBA5nS0sRh2t2tM4skyyWO633mtaN+xFubk?=
- =?us-ascii?Q?ixk2dARC8J7w/v75w89IbViZFfOk1FQEr2u7ywifuRbAKgw4JmVIDgdHmUDy?=
- =?us-ascii?Q?eHUV2xvsSlYTwV+T0CFLcRjiR8Kh6EqPqXiFBJzFEs3UTr5O/vF/casoT4Vt?=
- =?us-ascii?Q?x3kAFX+OT5TwaYGvD7QKZl2EsOZ91PT0jT2HXqvI25khIUh96dDO1/6PY80G?=
- =?us-ascii?Q?nR6gZy3sGno5o9syX5BwchaEnhdhV+dI4ROkXN4Iofh7pdtdDl1ew1+acCKt?=
- =?us-ascii?Q?JpLkMkYVPUB+NZbBblI+ok/seAgbAxN3OFg/4wd3vLxMPBgOWzl7nUNCEJp4?=
- =?us-ascii?Q?ogZ5gxFJ0IJKa3WCnebDPnOluU4Bz8i+7mDA2o5+uv7UF+ITIRWBtecMf9Zo?=
- =?us-ascii?Q?vDLlhiKXuVr/mZSaDl0VWh++AIwZry514OIkENbR9RfWsdLj5ge+lY4IQiIF?=
- =?us-ascii?Q?IaBKqaG2fDxxYY3rR6wEDW0+lrxOHzl5GPktLBPbMnJQ4oYZ3rpcX+QBlfhx?=
- =?us-ascii?Q?sCkMoY9Rc2Olm1l4uyId1bs+kuIAjuw1gJLvyjpUfwhE0IdOUVZEXvIMoIS1?=
- =?us-ascii?Q?briJM/9ovEuF5ObjCSxDOjSHw/2nbENPmR+lxvc418rNDgv4HQzYIyakmmNp?=
- =?us-ascii?Q?FMys0smo+9zpd3B5mlekeI1Uu6cJYtZzHUROjT19HNAt6iR+cr5wihHWQwoL?=
- =?us-ascii?Q?bvcUtIs456FUxw8wYuGear8tdiw87qTB8b88+DxnWVC4KWzXTvYr2R3atAuY?=
- =?us-ascii?Q?3NRwhUrYQpxIHuUVD1lFI+oc1TCX2zExHnTI0Yo3iiovMhcrRMyxt5ZjSOE+?=
- =?us-ascii?Q?6J4ztJ06NbLOtUhzNOen59bLJZkz0Dxrku8bWsMQWkN4x+2CChc9pl/Yg/cX?=
- =?us-ascii?Q?oSoQsHf4XgWl6fId9CxipW4jfyugljDUJgw98NPIRHS1QP7TN0i1lMWKgsri?=
- =?us-ascii?Q?uZv+1fxG8UtLije8ksa9jFC5mOINCmD1fsoHku3u6Ppmx3K6t/2ClpVXltBN?=
- =?us-ascii?Q?Bk15IqB5tVlHvbuktoRBJ4NruwbivhevM6b1gulQBMm5LPZZHnj7cWr3tIvZ?=
- =?us-ascii?Q?zUbD6s2DBXTG0g4aAM5r/AF4m0WgDcZPsSzjQY/Qm2Ib8pMRp3WsgrGNg7FW?=
- =?us-ascii?Q?mTwia+toECPNKcPfMRYISStJHpLG2splad9/PcR0sahV+1ncQRC/61w0Ill+?=
- =?us-ascii?Q?Gh7ro8FrM2L5yGM8cTNNYBmQeJJQsLdT/YQXOFiGSlx0O3MEoA+IHNvIva5d?=
- =?us-ascii?Q?bFw+kD4jNfRdYdwvrudV1J/pFNX0j7NkCOmxrphKUim6QeRL6aut/qTSTsgV?=
- =?us-ascii?Q?7o53chlBxF5fnoJEe+Qi4nfCKnYMGV3ldkSMLdPCysyfdiT9t09FtZ0d+JFu?=
- =?us-ascii?Q?y+aur2rwvHociiuzR72YLZ9l2Bb77ldjG3O+iNxoV/NrfuQhDrio1zrzOkdv?=
- =?us-ascii?Q?mLlkqTER4E0jftAxVVmSjPF2vJ4j+4ZX9aLrrzFWVkhCmHwtyyMeJy+wiG8M?=
- =?us-ascii?Q?RMqGhXJUwlsVfAbZqXwAOADkp6PRcLDA1xnBjKXazLZmT0TrLctofkKOt2Kl?=
- =?us-ascii?Q?yZlZ77zhw8gYqC08SsOGCy7eY+InuGY=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7102d372-55c8-45d6-ab88-08da33f35866
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4209.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2022 08:42:28.0789
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Fhcm9rDDR4smXg2hEKew1g8Kf/I71sH2OPVz0rMkcikuC1LJn3qREge80SDDg2sbMwK7YC+dUNVbqvcLL3PLbA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5811
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v8 2/7] crash: prototype change for
+ crash_prepare_elf64_headers
+Content-Language: en-US
+To:     Eric DeVolder <eric.devolder@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+References: <20220505184603.1548-1-eric.devolder@oracle.com>
+ <20220505184603.1548-3-eric.devolder@oracle.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220505184603.1548-3-eric.devolder@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11 May 09:24, Jakub Kicinski wrote:
->On Tue, 10 May 2022 19:53:01 -0700 Kees Cook wrote:
->> As we continue to narrow the scope of what the FORTIFY memcpy() will
->> accept and build alternative APIs that give the compiler appropriate
->> visibility into more complex memcpy scenarios, there is a need for
->> "unfortified" memcpy use in rare cases where combinations of compiler
->> behaviors, source code layout, etc, result in cases where the stricter
->> memcpy checks need to be bypassed until appropriate solutions can be
->> developed (i.e. fix compiler bugs, code refactoring, new API, etc). The
->> intention is for this to be used only if there's no other reasonable
->> solution, for its use to include a justification that can be used
->> to assess future solutions, and for it to be temporary.
->>
->> Example usage included, based on analysis and discussion from:
->> https://lore.kernel.org/netdev/CANn89iLS_2cshtuXPyNUGDPaic=sJiYfvTb_wNLgWrZRyBxZ_g@mail.gmail.com
->
->Saeed, ack for taking this in directly? Or do you prefer to take this
->plus Eric's last BIG TCP patch via your tree?
+On 05.05.22 20:45, Eric DeVolder wrote:
+> From within crash_prepare_elf64_headers() there is a need to
+> reference the struct kimage hotplug members. As such, this
+> change passes the struct kimage as a parameter to the
+> crash_prepare_elf64_headers().
 
-Please take both, I asked Eric a question on the BIG TCP patch, but I
-won't block the series.
+You should make it clearer that the hotplug members will be added by
+successive patches.
 
-Thanks!
+> 
+> This is preparation for later patch, no functionality change.
+> 
+> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+> Acked-by: Baoquan He <bhe@redhat.com>
+
+Acked-by: David Hildenbrand <david@redhat.com>
+
+-- 
+Thanks,
+
+David / dhildenb
 

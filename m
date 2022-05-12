@@ -2,299 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 398C3524C0E
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C46BC524C18
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353428AbiELLsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 07:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55012 "EHLO
+        id S1353445AbiELLtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 07:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353436AbiELLsQ (ORCPT
+        with ESMTP id S1353434AbiELLsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 07:48:16 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F4B52E45
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 04:48:14 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id z15-20020a9d65cf000000b00605f064482cso2484233oth.6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 04:48:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JK2+i5Ku98GGSVUQ7q25UBT/j75Io56SBd88g6FXM58=;
-        b=aAFcTqcSsFN787hSNccl0uEM57i9Yj9dX9ktFWvwWDzn28ehLlYynZc/rOzOTDfR2H
-         +i9UvpmYFUkiOHMztu4HDZaSTC+H5WFDxiPuxtNpzK8ISLFFz9wOoAK8UThi/xLV02rJ
-         Aj+G9hqlSkGx8kHuTnExkBg1JlaHt1TqP4kAgZNCW6FHCL/dhAfnBYCSFWn0Y9HGP5ed
-         zi9CHO5h5Ho/9lHI50TmAXt3tArn8DQnC73Rwf9b+FEF4CpOO2VykwHefcxc3X2Pbekh
-         DAo0Sq/ttRdlbAPT7tR6fr5e1xZ5kGm9tk0B0IlIs7lme7Vch18wY061lQNJ+hlXw0lj
-         P4DQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JK2+i5Ku98GGSVUQ7q25UBT/j75Io56SBd88g6FXM58=;
-        b=zuMhpwGUeGCN0PONdzdgGDjmA60QqkIOOhyUtxAUHA9zhlSNREwWqRCho5eZfgzAmO
-         ODAL6KOXDRA+CEKIS764KxEho/j59vCQgdsF1t5ccta0pR1pnHwdoSEsQ65gyUUrG4LZ
-         P+S2N1nK43oN0Zdrtr67Z0z03G1KEs6lXIw2GEu8tiXxT92DqxcHTf1+cDaHcODaZyJB
-         XI5dLufZOZlE5Gs31gi5wB3vv+fQvUZH3OQ7t4clyB4+K/Qr88oZjOx8s0JIw/lT9zfD
-         Nge8+oFldacB9f6Dxj8pztoWQwxI3NceS42FcZMyuLlLK21r9ZfeaFLSNc2vbvQimpNq
-         95XQ==
-X-Gm-Message-State: AOAM530OKwSoiP6vHb0Fwwyo8gsKqAnqOsQV2bkLb38AHM08MmWUvh7L
-        tyv4LJSN4O7c6NdebFEFXIw/w/leYMJPjmagr4FHuw==
-X-Google-Smtp-Source: ABdhPJzNtB7kzm0jzBDaKFd2pP5y6UqWZYKjG54pJy8DR2InZOSGI9VTFGVZ4+Lt7//diW2HlUwdu5R9KqcAisAKgfM=
-X-Received: by 2002:a05:6830:23a6:b0:606:1bc8:b0d3 with SMTP id
- m6-20020a05683023a600b006061bc8b0d3mr11690535ots.196.1652356092670; Thu, 12
- May 2022 04:48:12 -0700 (PDT)
+        Thu, 12 May 2022 07:48:50 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam08on2052.outbound.protection.outlook.com [40.107.101.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936466160F
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 04:48:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=m9E3bDf1md3mWiOVqKQMDFTXz6xi6GRADCKP8av/qQpfWD13wQXDiJQ3U/nh5HGW7T8Ng/4LPya1XDjGEWnF08R76ySxmv/oyQcCNoj5/QZuHbto6IsgiytV7nBpRtv+Vsph+XwQK9909G4IsAEM4NQbdgBmaHTgBQNMIPZ6ggp66V2Ov0aqUl2Z+K+zH+ynjYovkYMmtZqSUjjg4puRA5YpIFyNZmZ53sMr1MG4DsosZVCAaExII3XPx1Vepzbc3KOl6W9SOs/meeve2+jcLgVrQeYDLY5dj/kyc4fm9waEpy7Vx/kH3vMTRUOoZ38Glpueok0aBWGAIsp4GMDwiA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S+VYzlcmnpOLLF5ggAMk+8wRfHOAhBwLATLAFuPFXpY=;
+ b=DAnt71sfRjaZWJqd5l0Qz5AZlOyV+YFOtu9Ob0MkTVtDatdRRNL+KtF783RvMRwUxPvgQIJ8AD7fqteHfsnpLprI6Re8oYtcTQhAxte7snEiR5NdfRlpkjJfojH5SUWeA/n1hkg7dHxv2Hu+ZgN8fWgMIe2Nups0ob30Ce8pPOkyo0dRem3/2cmk/qizPzhhHIMqYePvxHgML+pZzOLFyQOuc6RxcCnvajZIpXIALROl2UTiHmLOYy75YdoThk9p04VIH4icuUDYCWraJZOSxcFnSu5aqo9iF837wB11E1b72GGrI0wx2lgg0Y3qLSso6xLCgJS/htg1yxWQxDG9/A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=S+VYzlcmnpOLLF5ggAMk+8wRfHOAhBwLATLAFuPFXpY=;
+ b=ONhlOYac+erfbrb5oAwC1YArM7Ab1bxVk+5KHs3xS8s1yrYpbs+39KHVXecYdqflp7U83M5NcWUqdXeQGtKGTJu7dPA+x1rWXeWvyUyBBwvVzdYxL37Z3EoxBrJ5ETHVS/JCZCCTzzyp6KlzJg0WE2FbSAu15etpp4KfD6PpUxhb1oUZdwM7QXfdvFsyG4UoROOjZ/FZf83UaoA/Y3jrbOMdHY7LZpsmE1PHKB5RjVzK0ZGS4ER7JVS/x8hAI2+Whin6giYgz24oD1Nzmq5JLpdrU3Q2CYUhlJ0HHx4ljYdkO7ba2G1bA/R9thqj1dyhMYemz7Xf1pJgWLdsf7+G3g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by DM5PR12MB1578.namprd12.prod.outlook.com (2603:10b6:4:e::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5250.13; Thu, 12 May 2022 11:48:46 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2%5]) with mapi id 15.20.5250.013; Thu, 12 May 2022
+ 11:48:46 +0000
+Date:   Thu, 12 May 2022 08:48:44 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 08/12] iommu/sva: Use attach/detach_pasid_dev in SVA
+ interfaces
+Message-ID: <20220512114844.GT49344@nvidia.com>
+References: <20220510061738.2761430-1-baolu.lu@linux.intel.com>
+ <20220510061738.2761430-9-baolu.lu@linux.intel.com>
+ <20220510152330.GG49344@nvidia.com>
+ <749a7d62-3e6c-ef5c-beaf-6b7add495740@linux.intel.com>
+ <20220511145319.GZ49344@nvidia.com>
+ <05a68e1e-8e18-5914-ebe7-d7b1a4aaa2ec@linux.intel.com>
+ <BN9PR11MB5276C03134A898CA9EFEE9258CCB9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <64954f2d-2274-410e-269c-84efc0635633@linux.intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <64954f2d-2274-410e-269c-84efc0635633@linux.intel.com>
+X-ClientProxiedBy: MN2PR05CA0014.namprd05.prod.outlook.com
+ (2603:10b6:208:c0::27) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-References: <00000000000038779505d5d8b372@google.com> <CANp29Y7WjwXwgxPrNq0XXjXPu+wGFqTreh9gry=O6aE7+cKpLQ@mail.gmail.com>
- <CA+zEjCvu76yW7zfM+qJUe+t5y23oPdzR4KDV1mOdqH8bB4GmTw@mail.gmail.com>
- <CACT4Y+arufrRgwmN66wUU+_FGxMy-sTkjMQnRN8U2H2tQuhB7A@mail.gmail.com>
- <a0769218-c84a-a1d3-71e7-aefd40bf54fe@ghiti.fr> <CANp29Y4WMhsE_-VWvNbwq18+qvb1Qc-ES80h_j_G-N_hcAnRAw@mail.gmail.com>
- <CANp29Y4ujmz901aE9oiBDx9dYWHti4-Jw=6Ewtotm6ck6MN9FQ@mail.gmail.com>
- <CACT4Y+ZvStiHLYBOcPDoAJnk8hquXwm9BgjQTv=APwh7AvgEUQ@mail.gmail.com>
- <CANp29Y56Or0V1AG7rzBfV_ZTph2Crg4JKKHiuw1kcGFFxeWqiQ@mail.gmail.com>
- <CANp29Y5+MuhKAzVxzEDb_k9voXmKWrUFx8k4wnW5=2+5enVFVA@mail.gmail.com>
- <CA+zEjCtvaT0YsxxUgnEGM+V4b5sWuCAs3=3J+Xocf580uT3t1g@mail.gmail.com>
- <CA+zEjCs1FEUTcM+pgV+_MZnixSO5c2hexZFxGxuCQWc2ZMQiRg@mail.gmail.com>
- <CANp29Y4rDSjrfTOxcQqwh+Qm+ocR0v6Oxr7EkFxScf+24M1tNA@mail.gmail.com> <CA+zEjCtB0rTuNAJkrM2q3JQL7D-9fAXBo0Ud0w__gy9CAfo_Ag@mail.gmail.com>
-In-Reply-To: <CA+zEjCtB0rTuNAJkrM2q3JQL7D-9fAXBo0Ud0w__gy9CAfo_Ag@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 12 May 2022 13:48:01 +0200
-Message-ID: <CACT4Y+Z=3MWEhVUH3mAH150XpOmhdjsGPOHoP1nvBcBwU_sphQ@mail.gmail.com>
-Subject: Re: [syzbot] riscv/fixes boot error: can't ssh into the instance
-To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Cc:     Aleksandr Nogikh <nogikh@google.com>,
-        Alexandre Ghiti <alex@ghiti.fr>,
-        linux-riscv@lists.infradead.org,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        syzbot <syzbot+330a558d94b58f7601be@syzkaller.appspotmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 583bd338-4caa-4fdf-75d6-08da340d5eea
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1578:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB1578489223E55E5AA9063889C2CB9@DM5PR12MB1578.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZDsrfD/KKu7GnEeBv5rfY5Iz723joYYOmjfopyozxkiE9tJu7CNGj2Xqq7/05XfgPEXBa1869jVPGOxReMp2M7cDzrkLzIwMNjyy+Rgqz7YCQM49nV4XnpfhHRI1GEDoISze7nMum6sw1UxhhKi0x2ufzn9UvI6uhnqPeKG4UvreGJHuH0tc2E+J+JadaTnrcl3OWnLi+DIVgI/JaXM8pNg3pHEncRaupU6ZbEuuBvcw9t0hgEssTLlIFEI83vkqeEvAfQYMYc4/OzEEv4G4gxYrQqgqycm7bAbB4zMAuWV6yCBvK4BNxDw+AGymbh9NA0dXAIycMtYPY/QxeMm3DLyHSvECCShq3rkNN3mXJW/VpP0vFppOIsJ6TOF+lme5aapvTEcSl/13KFnODlsfUCcfbLiv2/q1crC2wd2Ovfs4XIeSr5KpNodsj7BbnkGQMxAh44YAN02Lddl88adcYlplX6/feRlw8GIlVEaAhXG0jJwgIscEl+UE+FxjCiyZKXtW4sbXZX92cSKBLBqMMhtwDCPYk5C7pmilDQreCL8lTy8B0ghgyH4W/6WSjWYbErN1g0e8XmzbpnLZRTl4asegrukh59M2Va5UpwKr0Uwa+dGSspwxYlyNex7ByDKcf6EcfBjyAaZFKbmP862EZg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(26005)(186003)(83380400001)(6916009)(33656002)(6512007)(316002)(8936002)(54906003)(1076003)(6506007)(53546011)(7416002)(5660300002)(36756003)(2616005)(508600001)(6486002)(4326008)(8676002)(66946007)(66556008)(66476007)(86362001)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EgGNPImiJTkTixIEaTSeAQjVAUOTYAPRM8QJws8m7pYXTfIPohfBW5pRPc7n?=
+ =?us-ascii?Q?hlENs8TxjBm45KAIZeweyPGQox/fllQyYXZ/qAAJVz0Vv5APp4yqmI6s2Unq?=
+ =?us-ascii?Q?yIuSd4IET+aN1yVTsWQJ7+x6w4jN+I/vmD2f2JsMFIPWcnw3pzN8hfRm6JjJ?=
+ =?us-ascii?Q?2X/aGk+JiMpmLkUxGnUrIGV34N2bVDPlOXjO4yNBChRmcM/jRNV1Rnjr0Rhp?=
+ =?us-ascii?Q?XACB6lRz1HvuC291QFdII9faJiROa2M1fng0hrhdV57AIyi/1lxOVsxLEeqU?=
+ =?us-ascii?Q?+HMkm1XBpNBe5v/G5S9E52i1vbXLqW6sc68BykDWbBnPJLzu1LjIYCg7CGWZ?=
+ =?us-ascii?Q?isGGwNo8+jGzfLBbVUd243dt9O4lKEo6ATmAHAxkoO1gJCMo34QvZicDttYG?=
+ =?us-ascii?Q?z1P55j/8l8M5M5BUR2Fd40VgWorDbVwGB8A+eFU6E9efAsnxqZdTMLek1sJ4?=
+ =?us-ascii?Q?MbJwDu5xPfRDi28bvakeWQPtmaCCll6D4BDlb40UoCgXntuCzMGBphy7QLd6?=
+ =?us-ascii?Q?7Agv+puFSzi4c/hF8M5QF8rZ3yqRcIB9kHiqq0CVDc5U53V3Za1ECGXlx4vI?=
+ =?us-ascii?Q?g1XH90wFi7DwDg2KtYykyO59IZv6KNT1I8kD/MgjlPdXoHlXPfgbPRyeSIdM?=
+ =?us-ascii?Q?4QwRQrpA+XkZfZROrVkDZCdjplPHp/O6IovflD06zKbTZMmx3oJgL4vuZdf/?=
+ =?us-ascii?Q?TPnYb+TawXBuT5Q4HMROmfQQyKwvQlnpnufF8v/WMpvieM+is19KiL7oFcrh?=
+ =?us-ascii?Q?63J2q6WKpOjn9zHQukdOOxWMsCUXh/DIwJRolKya2bGKjLmdV0H6ij3d0MTi?=
+ =?us-ascii?Q?OzO8bCH+G4Fdejqd9N7HZfF2dPVJQphEylGOBiG54ygZxjr6sGtVoyvXIupc?=
+ =?us-ascii?Q?wToivnueTMW7abG+KYa/WA+QMw/gj6d72WpO3fMVHmggv6nBPfOlG3CtXkVQ?=
+ =?us-ascii?Q?Fr/XYEMN2X7scvbVbmUp3zb4ECB17A53BAiRCStzOXmYjYi0e31GMxDdHhz6?=
+ =?us-ascii?Q?JsOYKPTtgVUs7u/viEq5JE8i6DB2T4mcof2sSZscIXnjdeGvcymGqJewBVwU?=
+ =?us-ascii?Q?90orpjaATAj8kM8Js+SQSYGZgl05cEwDiOMA/UtazFKazSwPRg23vlESmsTe?=
+ =?us-ascii?Q?zmpicKjwp451ZvUhVgCBr9okc6gO5MBDEDIynXevMpXid6DwSa8QNuyqSDl+?=
+ =?us-ascii?Q?LgqVxRjQscEVljjHyFQD4vBstSAUoumm7+1umWve9vU4BGydCcH/h8QlvALu?=
+ =?us-ascii?Q?7o5yG/oc0s9mf8/6TY9khYzF1A/EwoeTVI+ZI4CZaWSdYTZ47nDsjg3BPL1g?=
+ =?us-ascii?Q?/GvJy8m7sT5b9MmE0RZ8bXa+YcVlMiUw1zNWERh/lAmJcRcRdDELWzdPuCEr?=
+ =?us-ascii?Q?7BWMyfXeQ9hD+JBDHStQlRq03K7uGvyovId29e1Ic5W/GZfxvcFu+W2CREh7?=
+ =?us-ascii?Q?hDUSfrT3H9XonDBjzumcCLx4Ow+Nem6CjQocQbJAOBIf8gVa263aSMuvxaM8?=
+ =?us-ascii?Q?2zle6fRvDpGyVGPPOfmuLrlrVWJiilISp7y/x3MV5GPiFJTPxWFwFr6ssIwR?=
+ =?us-ascii?Q?JPhyOybY6oeKYjC7jtH/c/r2Hi5hQ0fGyT+CiMjWULeNtQ6hVF9TJhqXayi9?=
+ =?us-ascii?Q?9zkw4W6R3iLlN+TjZLMLMiAoChJ01GJe0QSonrDbR8iV9AYiFoDkx7n6QgwG?=
+ =?us-ascii?Q?6uZjBPOpbQ0GrwhnnenU9uIRzolxlAe4xEoK8oiQEISvJxAH7wAa5eBd5PgI?=
+ =?us-ascii?Q?/3nfy2ND3g=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 583bd338-4caa-4fdf-75d6-08da340d5eea
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2022 11:48:45.9710
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QJWux541omgEjKSQAy9luA+OMYKorJTzUP/lCIfpVlFYuv9axyR85mfdBqwvo2IE
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1578
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Feb 2022 at 14:45, Alexandre Ghiti
-<alexandre.ghiti@canonical.com> wrote:
->
-> Hi Aleksandr,
->
-> On Thu, Feb 17, 2022 at 6:08 PM Aleksandr Nogikh <nogikh@google.com> wrote:
-> >
-> > Hi Alex,
-> >
-> > On Thu, Feb 17, 2022 at 5:53 PM Alexandre Ghiti
-> > <alexandre.ghiti@canonical.com> wrote:
-> > >
-> > > Aleksandr,
-> > >
-> > > On Wed, Feb 16, 2022 at 5:58 PM Alexandre Ghiti
-> > > <alexandre.ghiti@canonical.com> wrote:
-> > > >
-> > > > First, thank you for working on this.
-> > > >
-> > > > On Wed, Feb 16, 2022 at 5:17 PM Aleksandr Nogikh <nogikh@google.com> wrote:
-> > > > >
-> > > > > If I use just defconfig + DEBUG_VIRTUAL, without any KASAN, it begins
-> > > > > to boot, but overwhelms me with tons of `virt_to_phys used for
-> > > > > non-linear address:` errors.
-> > > > >
-> > > > > Like that
-> > > > >
-> > > > > [    2.701271] virt_to_phys used for non-linear address:
-> > > > > 00000000b59e31b6 (0xffffffff806c2000)
-> > > > > [    2.701727] WARNING: CPU: 0 PID: 1 at arch/riscv/mm/physaddr.c:16
-> > > > > __virt_to_phys+0x7e/0x86
-> > > > > [    2.702207] Modules linked in:
-> > > > > [    2.702393] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G        W
-> > > > >   5.17.0-rc1 #1
-> > > > > [    2.702806] Hardware name: riscv-virtio,qemu (DT)
-> > > > > [    2.703051] epc : __virt_to_phys+0x7e/0x86
-> > > > > [    2.703298]  ra : __virt_to_phys+0x7e/0x86
-> > > > > [    2.703547] epc : ffffffff80008448 ra : ffffffff80008448 sp :
-> > > > > ffff8f800021bde0
-> > > > > [    2.703977]  gp : ffffffff80ed9b30 tp : ffffaf8001230000 t0 :
-> > > > > ffffffff80eea56f
-> > > > > [    2.704704]  t1 : ffffffff80eea560 t2 : 0000000000000000 s0 :
-> > > > > ffff8f800021be00
-> > > > > [    2.705153]  s1 : ffffffff806c2000 a0 : 000000000000004f a1 :
-> > > > > ffffffff80e723d8
-> > > > > [    2.705555]  a2 : 0000000000000010 a3 : fffffffffffffffe a4 :
-> > > > > 0000000000000000
-> > > > > [    2.706027]  a5 : 0000000000000000 a6 : 0000000000000005 a7 :
-> > > > > ffffffffffffffff
-> > > > > [    2.706474]  s2 : ffffffff80b80b08 s3 : 00000000000000c2 s4 :
-> > > > > ffffffff806c2000
-> > > > > [    2.706891]  s5 : ffffffff80edba10 s6 : ffffffff80edb960 s7 :
-> > > > > 0000000000000001
-> > > > > [    2.707290]  s8 : 00000000000000ff s9 : ffffffff80b80b40 s10:
-> > > > > 00000000000000cc
-> > > > > [    2.707689]  s11: ffffaf807e1fcf00 t3 : 0000000000000076 t4 :
-> > > > > ffffffffffffffff
-> > > > > [    2.708092]  t5 : 00000000000001f2 t6 : ffff8f800021bb48
-> > > > > [    2.708433] status: 0000000000000120 badaddr: 0000000000000000
-> > > > > cause: 0000000000000003
-> > > > > [    2.708919] [<ffffffff8011416a>] free_reserved_area+0x72/0x19a
-> > > > > [    2.709296] [<ffffffff80003a5a>] free_initmem+0x6c/0x7c
-> > > > > [    2.709648] [<ffffffff805f60c8>] kernel_init+0x3a/0x10a
-> > > > > [    2.709993] [<ffffffff80002fda>] ret_from_exception+0x0/0xc
-> > > > > [    2.710310] ---[ end trace 0000000000000000 ]---
-> > > > >
-> > > >
-> > > > I was able to reproduce this: the first one regarding init_zero_pfn is
-> > > > legit but not wrong, I have to check when it was introduced and how to
-> > > > fix this.
-> > > > Regarding the huge batch that follows, at first sight, I would say
-> > > > this is linked to my sv48 patchset but that does not seem important as
-> > > > the address is a kernel mapping address so the use of virt_to_phys is
-> > > > right.
-> > > >
-> > > > > On Wed, Feb 16, 2022 at 5:09 PM Aleksandr Nogikh <nogikh@google.com> wrote:
-> > > > > >
-> > > > > > On Wed, Feb 16, 2022 at 12:56 PM Dmitry Vyukov <dvyukov@google.com> wrote:
-> > > > > > >
-> > > > > > > On Wed, 16 Feb 2022 at 12:47, Aleksandr Nogikh <nogikh@google.com> wrote:
-> > > > > > > >
-> > > > > > > > On Wed, Feb 16, 2022 at 11:37 AM Aleksandr Nogikh <nogikh@google.com> wrote:
-> > > > > > > > >
-> > > > > > > > > Hi Alex,
-> > > > > > > > >
-> > > > > > > > > On Wed, Feb 16, 2022 at 5:14 AM Alexandre Ghiti <alex@ghiti.fr> wrote:
-> > > > > > > > > >
-> > > > > > > > > > Hi Dmitry,
-> > > > > > > > > >
-> > > > > > > > > > On 2/15/22 18:12, Dmitry Vyukov wrote:
-> > > > > > > > > > > On Wed, 2 Feb 2022 at 14:18, Alexandre Ghiti
-> > > > > > > > > > > <alexandre.ghiti@canonical.com> wrote:
-> > > > > > > > > > >> Hi Aleksandr,
-> > > > > > > > > > >>
-> > > > > > > > > > >> On Wed, Feb 2, 2022 at 12:08 PM Aleksandr Nogikh <nogikh@google.com> wrote:
-> > > > > > > > > > >>> Hello,
-> > > > > > > > > > >>>
-> > > > > > > > > > >>> syzbot has already not been able to fuzz its RISC-V instance for 97
-> > > > > > > > > > >> That's a longtime, I'll take a look more regularly.
-> > > > > > > > > > >>
-> > > > > > > > > > >>> days now because the compiled kernel cannot boot. I bisected the issue
-> > > > > > > > > > >>> to the following commit:
-> > > > > > > > > > >>>
-> > > > > > > > > > >>> commit 54c5639d8f507ebefa814f574cb6f763033a72a5
-> > > > > > > > > > >>> Author: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-> > > > > > > > > > >>> Date:   Fri Oct 29 06:59:27 2021 +0200
-> > > > > > > > > > >>>
-> > > > > > > > > > >>>      riscv: Fix asan-stack clang build
-> > > > > > > > > > >>>
-> > > > > > > > > > >>> Apparently, the problem appears on GCC-built RISC-V kernels with KASAN
-> > > > > > > > > > >>> enabled. In the previous message syzbot mentions
-> > > > > > > > > > >>> "riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU
-> > > > > > > > > > >>> Binutils for Debian) 2.35.2", but the issue also reproduces finely on
-> > > > > > > > > > >>> a newer GCC compiler: "riscv64-linux-gnu-gcc (Debian 11.2.0-10)
-> > > > > > > > > > >>> 11.2.0, GNU ld (GNU Binutils for Debian) 2.37".
-> > > > > > > > > > >>> For convenience, I also duplicate the .config file from the bot's
-> > > > > > > > > > >>> message: https://syzkaller.appspot.com/x/.config?x=522544a2e0ef2a7d
-> > > > > > > > > > >>>
-> > > > > > > > > > >>> Can someone with KASAN and RISC-V expertise please take a look?
-> > > > > > > > > > >> I'll take a look at that today.
-> > > > > > > > > > >>
-> > > > > > > > > > >> Thanks for reporting the issue,
-> > > > > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > I took a quick look, not enough to fix it but I know the issue comes
-> > > > > > > > > > from the inline instrumentation, I have no problem with the outline
-> > > > > > > > > > instrumentation. I need to find some cycles to work on this, my goal is
-> > > > > > > > > > to fix this for 5.17.
-> > > > > > > > >
-> > > > > > > > > Thanks for the update!
-> > > > > > > > >
-> > > > > > > > > Can you please share the .config with which you tested the outline
-> > > > > > > > > instrumentation?
-> > > > > > > > > I updated the syzbot config to use KASAN_OUTLINE instead of KASAN_INLINE,
-> > > > > > > > > but it still does not boot :(
-> > > > > > > > >
-> > > > > > > > > Here's what I used:
-> > > > > > > > > https://gist.github.com/a-nogikh/279c85c2d24f47efcc3e865c08844138
-> > > > > > > >
-> > > > > > > > Update: it doesn't boot with that big config, but boots if I generate
-> > > > > > > > a simple one with KASAN_OUTLINE:
-> > > > > > > >
-> > > > > > > > make defconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
-> > > > > > > > ./scripts/config -e KASAN -e KASAN_OUTLINE
-> > > > > > > > make olddefconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
-> > > > > > > >
-> > > > > > > > And it indeed doesn't work if I use KASAN_INLINE.
-> > > > > > >
-> > > > > > > It may be an issue with code size. Full syzbot config + KASAN + KCOV
-> > > > > > > produce hugely massive .text. It may be hitting some limitation in the
-> > > > > > > bootloader/kernel bootstrap code.
-> > > >
-> > > > I took a quick glance and it traps on a KASAN address that is not
-> > > > mapped, either because it is too soon or because the mapping failed
-> > > > somehow.
-> > > >
-> > > > I'll definitely dive into that tomorrow, sorry for being slow here and
-> > > > thanks again for all your work, that helps a lot.
-> > > >
-> > > > Thanks,
-> > > >
-> > > > Alex
-> > > >
-> > > > > >
-> > > > > > I bisected the difference between the config we use on syzbot and the
-> > > > > > simple one that was generated like I described above.
-> > > > > > Turns out that it's the DEBUG_VIRTUAL config that makes the difference.
-> > > > > >
-> > > > > > make defconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
-> > > > > > ./scripts/config -e KASAN -e KASAN_OUTLINE -e DEBUG_VIRTUAL
-> > > > > > make olddefconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
-> > > > > >
-> > > > > > And the resulting kernel does not boot.
-> > > > > > My env: the `riscv/fixes` branch, commit
-> > > > > > 6df2a016c0c8a3d0933ef33dd192ea6606b115e3, qemu 6.2.0.
-> > >
-> > > I fixed a few things today: KASAN + SPARSE_VMEMMAP, DEBUG_VIRTUAL and
-> > > maybe KASAN  + KCOV.
-> > >
-> > > With those small fixes, I was able to boot your large dotconfig with
-> > > KASAN_OUTLINE, the inline version still fails, this is my next target
-> > > :)
-> > > I'll push that tomorrow!
-> >
-> > Awesome, thank you very much!
-> > Looking forward to finally seeing the instance run :)
->
-> I sent a patchset which should fix your config with *outline* instrumentation.
+On Thu, May 12, 2022 at 01:17:08PM +0800, Baolu Lu wrote:
+> On 2022/5/12 13:01, Tian, Kevin wrote:
+> > > From: Baolu Lu <baolu.lu@linux.intel.com>
+> > > Sent: Thursday, May 12, 2022 11:03 AM
+> > > 
+> > > On 2022/5/11 22:53, Jason Gunthorpe wrote:
+> > > > > > Also, given the current arrangement it might make sense to have a
+> > > > > > struct iommu_domain_sva given that no driver is wrappering this in
+> > > > > > something else.
+> > > > > Fair enough. How about below wrapper?
+> > > > > 
+> > > > > +struct iommu_sva_domain {
+> > > > > +       /*
+> > > > > +        * Common iommu domain header,*must*  be put at the top
+> > > > > +        * of the structure.
+> > > > > +        */
+> > > > > +       struct iommu_domain domain;
+> > > > > +       struct mm_struct *mm;
+> > > > > +       struct iommu_sva bond;
+> > > > > +}
+> > > > > 
+> > > > > The refcount is wrapped in bond.
+> > > > I'm still not sure that bond is necessary
+> > > 
+> > > "bond" is the sva handle that the device drivers get through calling
+> > > iommu_sva_bind().
+> > > 
+> > 
+> > 'bond' was required before because we didn't have a domain to wrap
+> > the page table at that time.
+> > 
+> > Now we have a domain and it is 1:1 associated to bond. Probably
+> > make sense now by just returning the domain as the sva handle
+> > instead?
+> 
+> It also includes the device information that the domain has been
+> attached. So the sva_unbind() looks like this:
+> 
+> /**
+>  * iommu_sva_unbind_device() - Remove a bond created with
+> iommu_sva_bind_device
+>  * @handle: the handle returned by iommu_sva_bind_device()
+>  *
+>  * Put reference to a bond between device and address space. The device
+> should
+>  * not be issuing any more transaction for this PASID. All outstanding page
+>  * requests for this PASID must have been flushed to the IOMMU.
+>  */
+> void iommu_sva_unbind_device(struct iommu_sva *handle)
+> 
+> It's fine to replace the iommu_sva with iommu_sva_domain for sva handle,
+> if we can include the device in the unbind() interface.
 
-Was this fix merged? The riscv instance still does not boot:
-https://syzkaller.appspot.com/bug?id=5f2ff52ad42cba9f222202219baebd4e63e35127
+Why would we have a special unbind for SVA?
 
-> However, as you'll see in the cover letter, I have an issue with
-> another KASAN config and if you can take a look at the stacktrace and
-> see if that rings a bell, that would be great.
->
-> Don't hesitate next time to ping me when the riscv syzbot instance fails :)
->
-> Alex
->
->
-> >
-> > --
-> > Best Regards,
-> > Aleksandr
-> >
-> > >
-> > > Thanks again,
-> > >
-> > > Alex
->
-> --
-> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/CA%2BzEjCtB0rTuNAJkrM2q3JQL7D-9fAXBo0Ud0w__gy9CAfo_Ag%40mail.gmail.com.
+SVA should not different from normal domains it should use the normal
+detach flow too.
+
+Jason

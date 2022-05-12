@@ -2,103 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D67524BEA
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D42524BF4
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:45:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353389AbiELLnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 07:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37244 "EHLO
+        id S1353396AbiELLpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 07:45:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351802AbiELLnN (ORCPT
+        with ESMTP id S1351802AbiELLpc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 07:43:13 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCD65BD24;
-        Thu, 12 May 2022 04:43:12 -0700 (PDT)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CBPdXq011183;
-        Thu, 12 May 2022 11:43:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=VZbIDCul7T2Ww8sJEjj+xsE0H5qsntMAXBtOrgZzbxc=;
- b=S/CuAKWCxf4DvZrmjW8ErAmyX+2RgVqP653ujCC+/oz9Yea6zi3WgMM/D78DgB516PPB
- hSnt3c4PHd9wsojQpPjjI5sEb9dW7JMSnd1gWwcqsLD+yIt5LdLJ8C/klDiU5ma6mBSG
- d9tgWeCj5pkGCwHRyX3eZarpLl+Jluj0AspN4ERGneGQE046di/R1mzKLeVz194qYGpR
- IHSUNyuUO3xM9cZRWMQJqYS43Xr+GfjNLxHhMe6Dq/E1+u6XXP199JDN1u5LsrL6xMDN
- tlocHV5Y7TKZ+N1TX9daCOXiAyHzjVVM2eAl86hq3tCkvPXYpBr6CkQJM8/BlAJidUqm Lw== 
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g11bug8tc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 11:43:12 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24CBbIb7031987;
-        Thu, 12 May 2022 11:43:11 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma02wdc.us.ibm.com with ESMTP id 3fwgda2wna-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 11:43:11 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24CBhARV43516172
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 12 May 2022 11:43:10 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0CC496A05D;
-        Thu, 12 May 2022 11:43:10 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A9D776A054;
-        Thu, 12 May 2022 11:43:09 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 12 May 2022 11:43:09 +0000 (GMT)
-From:   Stefan Berger <stefanb@linux.ibm.com>
-To:     zohar@linux.ibm.com, linux-integrity@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH] evm: Return INTEGRITY_PASS for enum integrity_status value '0'
-Date:   Thu, 12 May 2022 07:43:07 -0400
-Message-Id: <20220512114307.3669972-1-stefanb@linux.ibm.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 12 May 2022 07:45:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24738200F6B;
+        Thu, 12 May 2022 04:45:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5E0961EB4;
+        Thu, 12 May 2022 11:45:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80E8EC385B8;
+        Thu, 12 May 2022 11:45:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652355930;
+        bh=KnyscJaCd02whKn+o6uMKbEt+ZJNKobwRDPjtf2a4/M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vSBWZBv9srcO1hrocZTU5SjYRrDgcNvzMz0EuSc6/RI6xomx/QzJb6W9TVtGSi3Zy
+         Q3caeGu+ZpqEh6Dv0I+QY0koV93CZ5Vm0zs5heB8HhDh9gKcbfLtKiGnD6itqdTTcm
+         0qSjpx1ZC/yn7yV2kbg6i3hKQ+ARGeyUJyiR/c88=
+Date:   Thu, 12 May 2022 13:45:26 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Georgi Djakov <djakov@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] interconnect fix for 5.18-rc
+Message-ID: <YnzzVvyqfIGjfJsr@kroah.com>
+References: <20220506085923.23816-1-djakov@kernel.org>
+ <445dd693-f797-c4f9-3bf9-04185a54286d@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: FVgjLTIpGbMgE3v2a1Jhhqrluafzcg5W
-X-Proofpoint-ORIG-GUID: FVgjLTIpGbMgE3v2a1Jhhqrluafzcg5W
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-12_02,2022-05-12_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=787 phishscore=0
- adultscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0
- clxscore=1015 priorityscore=1501 mlxscore=0 bulkscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205120052
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <445dd693-f797-c4f9-3bf9-04185a54286d@kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Return INTEGRITY_PASS for the enum integrity_status rather than 0.
+On Thu, May 12, 2022 at 12:58:29PM +0300, Georgi Djakov wrote:
+> On 6.05.22 11:59, Georgi Djakov wrote:
+> > Hello Greg,
+> > 
+> > This pull request contains one more fix for the current cycle. The
+> > details are in the signed tag. It has been in linux-next during the
+> > last few days. Please pull into char-misc-linus when possible.
+> > 
+> 
+> Hello Greg,
+> 
+> I was wondering if this got missed or is it in your mail queue? Please
+> let me know in case anything is required from my side.
 
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
----
- security/integrity/evm/evm_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index 7d87772f0ce6..cc88f02c7562 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -436,7 +436,7 @@ static enum integrity_status evm_verify_current_integrity(struct dentry *dentry)
- 	struct inode *inode = d_backing_inode(dentry);
- 
- 	if (!evm_key_loaded() || !S_ISREG(inode->i_mode) || evm_fixmode)
--		return 0;
-+		return INTEGRITY_PASS;
- 	return evm_verify_hmac(dentry, NULL, NULL, 0, NULL);
- }
- 
--- 
-2.35.1
-
+Still in my queue, sorry, will get to it "soon"...

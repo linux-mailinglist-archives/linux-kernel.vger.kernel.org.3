@@ -2,68 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 252DE525330
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84995525375
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356843AbiELRFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 13:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41986 "EHLO
+        id S1356975AbiELRVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 13:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356839AbiELRF3 (ORCPT
+        with ESMTP id S1356787AbiELRVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 13:05:29 -0400
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA159269EFD;
-        Thu, 12 May 2022 10:05:26 -0700 (PDT)
-Received: by mail-qt1-f182.google.com with SMTP id p4so4906023qtq.12;
-        Thu, 12 May 2022 10:05:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+6B2p5x2MsdiGQqOHTdj/jEV/QOhWbmjHIG+C1y2HyI=;
-        b=HVddJcFC1vwFoH8Vz9W+YE8WP8SAZuUOcUt9Ej4BteJZh6FgiF99kmT/9ZYBL+usw1
-         qiib83DDdL3aaBc1OxTZz+gS8aZ9qYwWiW1KNbxaKdkB/MXSUYFvxRPawj61yo1s/iC3
-         sluENUT3lt3xWc2IrBI8zHt+VBLFlvb12a3nUADTZlDSRJXXpIwpjnuEx9z66IgpoB23
-         7fTqwO+QNedSMl6lLYFToYW9czCtAvOVIw7VzkJV5AHxSgCJ7OZpc8q0QZRDPNx+6NOC
-         nuDjbHKJID9PUeZ/iEIc4R6gYMsrYrahz6qxOI2IzDFXHNidQZvuYkxWCEdxdpHptsJK
-         jKpA==
-X-Gm-Message-State: AOAM5309LOmoBo9Dexjibc8PFz0yAGzNOXUne+5GZjtInjzPLxndkkib
-        9LLu6Oz6e3dwBoJbYmRuwws=
-X-Google-Smtp-Source: ABdhPJyerLlG0Vc9EMfOfjsIemvOVeJd5Nd6Zc4QkNV1NHFFQZtrSBUY2HOMiIDSb+A1DVnZY5rbVg==
-X-Received: by 2002:ac8:5896:0:b0:2f3:d231:58a9 with SMTP id t22-20020ac85896000000b002f3d23158a9mr741939qta.131.1652375125492;
-        Thu, 12 May 2022 10:05:25 -0700 (PDT)
-Received: from dev0025.ash9.facebook.com (fwdproxy-ash-011.fbsv.net. [2a03:2880:20ff:b::face:b00c])
-        by smtp.gmail.com with ESMTPSA id t80-20020a374653000000b0069fc13ce231sm3183117qka.98.2022.05.12.10.05.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 10:05:25 -0700 (PDT)
-Date:   Thu, 12 May 2022 10:05:22 -0700
-From:   David Vernet <void@manifault.com>
-To:     Wan Jiabing <wanjiabing@vivo.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] bpf: use 'error_xxx' tags in
- bpf_kprobe_multi_link_attach
-Message-ID: <20220512170522.3e47hwj53plhr4qq@dev0025.ash9.facebook.com>
-References: <20220512141710.116135-1-wanjiabing@vivo.com>
- <20220512141710.116135-2-wanjiabing@vivo.com>
+        Thu, 12 May 2022 13:21:48 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F921D305;
+        Thu, 12 May 2022 10:21:47 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CHKXk0031642;
+        Thu, 12 May 2022 17:21:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=YctxKmkmQ9bKYz01l53+I32l6T0/zyL+1QeW1Wl6yFM=;
+ b=YpJoivJePs2MjDGsjkPjfPkonAQPk/zKt96es46aelYJo8Z+bsdsG5tsHeuCK7bHmA+y
+ aK0q52ZqJAeYMFUbIqiMeIjNRykcsS9xvD+qrDcN2cCFTiV5qvdIEcorN3lns5AKhSa3
+ aUNDDnR81wgJoMy+ZJyDk9QsCeRdhLR3SGVgvgz5wiUWhTI3tBfT9PgUnvUiwG9OogTx
+ +cYdepU7a7+CviPETYHv7uZxZmHzan1cIq6aaPrWnQkhAzk8FN/fZWvTaZiwPnexNUT4
+ TM4byVMruGFiu7Lk2HtbOuMUceB1fS1n8RJgE4FLVlQv684s1tru2m3LUYJNGwk2yVr6 FA== 
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g154nhu4t-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 17:21:26 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24CGlJwq029109;
+        Thu, 12 May 2022 17:08:09 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma02wdc.us.ibm.com with ESMTP id 3fwgda4rvb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 17:08:09 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24CH88Kb33620264
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 May 2022 17:08:08 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B06D328060;
+        Thu, 12 May 2022 17:08:08 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CD1732805A;
+        Thu, 12 May 2022 17:08:07 +0000 (GMT)
+Received: from [9.211.56.168] (unknown [9.211.56.168])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu, 12 May 2022 17:08:07 +0000 (GMT)
+Message-ID: <4fd44316-689e-1b72-d483-2c617d2a455d@linux.ibm.com>
+Date:   Thu, 12 May 2022 12:08:07 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220512141710.116135-2-wanjiabing@vivo.com>
-User-Agent: NeoMutt/20211029
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2 0/2] iio: humidity: si7020: Check device property for
+ skipping reset in probe
+Content-Language: en-US
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, lars@metafoo.de, jic23@kernel.org,
+        miltonm@us.ibm.com
+References: <20220512162020.33450-1-eajames@linux.ibm.com>
+ <20220512174859.000042b6@Huawei.com>
+From:   Eddie James <eajames@linux.ibm.com>
+In-Reply-To: <20220512174859.000042b6@Huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 8PCv02jC7Ddb5gx0wb32wb-KB9hBcHAg
+X-Proofpoint-GUID: 8PCv02jC7Ddb5gx0wb32wb-KB9hBcHAg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-12_14,2022-05-12_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 impostorscore=0 suspectscore=0 lowpriorityscore=0
+ spamscore=0 mlxlogscore=999 clxscore=1015 mlxscore=0 bulkscore=0
+ phishscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205120079
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,103 +91,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 10:17:08PM +0800, Wan Jiabing wrote:
-> Use 'error_addrs', 'error_cookies' and 'error_link' tags to make error
-> handling more efficient.
 
-Can you add a bit more context to this commit summary? The added goto
-labels aren't what make the code more performant, it's the avoidance of
-unnecessary free calls on NULL pointers that (supposedly) does.
+On 5/12/22 11:48, Jonathan Cameron wrote:
+> On Thu, 12 May 2022 11:20:18 -0500
+> Eddie James <eajames@linux.ibm.com> wrote:
+>
+>> I2C commands issued after the SI7020 is starting up or after reset
+>> can potentially upset the startup sequence. Therefore, the host
+>> needs to wait for the startup sequence to finish before issuing
+>> further i2c commands. This is impractical in cases where the SI7020
+>> is on a shared bus or behind a mux, which may switch channels at
+>> any time (generating I2C traffic). Therefore, check for a device
+>> property that indicates that the driver should skip resetting the
+>> device when probing.
+> Why not lock the bus?  It's not ideal, but then not resetting and hence
+> potentially ending up in an unknown state isn't great either.
 
-> 
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
-> ---
->  kernel/trace/bpf_trace.c | 20 +++++++++++---------
->  1 file changed, 11 insertions(+), 9 deletions(-)
-> 
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 2eaac094caf8..3a8b69ef9a0d 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -2467,20 +2467,20 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
->  	if (uaddrs) {
->  		if (copy_from_user(addrs, uaddrs, size)) {
->  			err = -EFAULT;
-> -			goto error;
-> +			goto error_addrs;
->  		}
->  	} else {
->  		struct user_syms us;
->  
->  		err = copy_user_syms(&us, usyms, cnt);
->  		if (err)
-> -			goto error;
-> +			goto error_addrs;
->  
->  		sort(us.syms, cnt, sizeof(*us.syms), symbols_cmp, NULL);
->  		err = ftrace_lookup_symbols(us.syms, cnt, addrs);
->  		free_user_syms(&us);
->  		if (err)
-> -			goto error;
-> +			goto error_addrs;
->  	}
->  
->  	ucookies = u64_to_user_ptr(attr->link_create.kprobe_multi.cookies);
-> @@ -2488,18 +2488,18 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
->  		cookies = kvmalloc(size, GFP_KERNEL);
->  		if (!cookies) {
->  			err = -ENOMEM;
-> -			goto error;
-> +			goto error_addrs;
->  		}
->  		if (copy_from_user(cookies, ucookies, size)) {
->  			err = -EFAULT;
-> -			goto error;
-> +			goto error_cookies;
->  		}
->  	}
->  
->  	link = kzalloc(sizeof(*link), GFP_KERNEL);
->  	if (!link) {
->  		err = -ENOMEM;
-> -		goto error;
-> +		goto error_cookies;
->  	}
->  
->  	bpf_link_init(&link->link, BPF_LINK_TYPE_KPROBE_MULTI,
-> @@ -2507,7 +2507,7 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
->  
->  	err = bpf_link_prime(&link->link, &link_primer);
->  	if (err)
-> -		goto error;
-> +		goto error_link;
->  
->  	if (flags & BPF_F_KPROBE_MULTI_RETURN)
->  		link->fp.exit_handler = kprobe_multi_link_handler;
-> @@ -2539,10 +2539,12 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
->  
->  	return bpf_link_settle(&link_primer);
->  
-> -error:
-> +error_link:
->  	kfree(link);
-> -	kvfree(addrs);
-> +error_cookies:
->  	kvfree(cookies);
-> +error_addrs:
-> +	kvfree(addrs);
->  	return err;
->  }
->  #else /* !CONFIG_FPROBE */
-> -- 
-> 2.35.1
-> 
 
-Could you clarify what performance gains you observed from doing this? I
-wouldn't have expected avoiding a couple of calls and NULL checks to have a
-measurable impact on performance, and I'm wondering whether the complexity
-from having multiple goto labels is really worth any supposed performance
-gains.
+Agreed, but locking the bus doesn't work in the case where the chip is 
+behind a mux. The mux core driver deselects the mux immediately after 
+the transfer to reset the si7020, causing some i2c traffic, breaking the 
+si7020. So it would also be a requirement to configure the mux to idle 
+as-is... That's why I went with the optional skipping of the reset. 
+Maybe I should add the bus lock too?
+
 
 Thanks,
-David
+
+Eddie
+
+
+>
+> Jonathan
+>
+>> Changes since v1:
+>>   - Fix dt binding document
+>>
+>> Eddie James (2):
+>>    dt-bindings: iio: humidity: Add si7020 bindings
+>>    iio: humidity: si7020: Check device property for skipping reset in probe
+>>
+>>   .../bindings/iio/humidity/silabs,si7020.yaml  | 47 +++++++++++++++++++
+>>   .../devicetree/bindings/trivial-devices.yaml  |  2 -
+>>   drivers/iio/humidity/si7020.c                 | 14 +++---
+>>   3 files changed, 55 insertions(+), 8 deletions(-)
+>>   create mode 100644 Documentation/devicetree/bindings/iio/humidity/silabs,si7020.yaml
+>>

@@ -2,62 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A295352555F
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47539525563
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357885AbiELTHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 15:07:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56656 "EHLO
+        id S1357896AbiELTKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 15:10:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357878AbiELTHE (ORCPT
+        with ESMTP id S231944AbiELTKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 15:07:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8C82457B9;
-        Thu, 12 May 2022 12:07:03 -0700 (PDT)
+        Thu, 12 May 2022 15:10:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03A3274A29;
+        Thu, 12 May 2022 12:10:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 103EE61B87;
-        Thu, 12 May 2022 19:07:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD27CC385B8;
-        Thu, 12 May 2022 19:07:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652382422;
-        bh=UAhhpbytMvD5GfxmgGkk/MtSBThhQKdLGrX/1MNtNA8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ngO8388PC0TyRKE6gLj7jvwizRWRPkJKgXmmKrxbqDGcTq1kvkKMFwlRuhdcfOreR
-         F19MBziPbLyG6srNayZkpqIworEmPnsbdVXw4ZKh/ePQ/sh5f0DuZ6Oo7qGy/mN12e
-         Ix0ubp1oYNMDSlYrYryPW6LBd9MF0q7Xs60lLkoesQP3x8ALiELwb0nCl51tZfYnoy
-         gTnX0Kaqsi8lBUP7QWqDMIkG+VS2GEZHpd2RVsVYEQKdWs+YTJgv6uCUlcsrUdj5hu
-         vqcpfBOBPturfU1Pfhvms+qNzjJa+92sS1kIQcX4BMRr8MG945W+KEy4o8YmiIUVEq
-         nIdCzP0vRn5rw==
-Date:   Thu, 12 May 2022 12:06:59 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jonas Paulsson <paulsson@linux.vnet.ibm.com>,
-        Ulrich Weigand <ulrich.weigand@de.ibm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andreas Krebbel <krebbel@linux.ibm.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH 4/8] s390/entry: workaround llvm's IAS limitations
-Message-ID: <Yn1a01xhijM5MH1o@dev-arch.thelio-3990X>
-References: <20220511120532.2228616-1-hca@linux.ibm.com>
- <20220511120532.2228616-5-hca@linux.ibm.com>
- <YnvynSZfF/8I8vmT@dev-arch.thelio-3990X>
- <Yn1CyTcrZk1Kgvoq@osiris>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yn1CyTcrZk1Kgvoq@osiris>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D7ADB8290E;
+        Thu, 12 May 2022 19:10:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2972C385B8;
+        Thu, 12 May 2022 19:10:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1652382630;
+        bh=cnAMAMi9fYJo3US7em6lDWG28E0G0iYdwQhQjunOp9w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=FnbPoU5nJ4fEo9AA3m5+U8zpLvDz2nxndZrtvgFI58X61AqiSUnnPn5yHypcsW635
+         o3iahGjneTuN3CgOqOYzep8qwU7DtC9zz/h25TCV4v3ebR97M//kpIQTK5eNucWfAf
+         iyMNWVicBC3FH7DznyHN+2KylEpp4tqPU37GNauk=
+Date:   Thu, 12 May 2022 12:10:29 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Will Deacon <will@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the mm tree
+Message-Id: <20220512121029.8157e99756b3172e85ccb474@linux-foundation.org>
+In-Reply-To: <Yn0LctZl8dTsezFu@arm.com>
+References: <20220512193855.4f6ce32f@canb.auug.org.au>
+        <YnzqffV7STYS24Yn@arm.com>
+        <188f7cb2-ba21-a53a-828d-7242b17b0c72@linux.alibaba.com>
+        <Yn0LctZl8dTsezFu@arm.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,100 +59,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 07:24:25PM +0200, Heiko Carstens wrote:
-> On Wed, May 11, 2022 at 10:30:05AM -0700, Nathan Chancellor wrote:
-> > Hi Heiko,
+On Thu, 12 May 2022 14:28:18 +0100 Catalin Marinas <catalin.marinas@arm.com> wrote:
+
+> > > -	return get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
+> > > +	orig_pte = get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
+> > > +	flush_tlb_range(vma, addr, addr + pgsize * ncontig);
+> > > +	return orig_pte;
+> > >   }
 > > 
-> > On Wed, May 11, 2022 at 02:05:28PM +0200, Heiko Carstens wrote:
-> > > llvm's integrated assembler cannot handle immediate values which are
-> > > calculated with two local labels:
-> > > 
-> > > <instantiation>:3:13: error: invalid operand for instruction
-> > >  clgfi %r14,.Lsie_done - .Lsie_gmap
-> > > 
-> > > Workaround this by adding clang specific code which reads the specific
-> > > value from memory. Since this code is within the hot paths of the kernel
-> > > and adds an additional memory reference, keep the original code, and add
-> > > ifdef'ed code.
-> > > 
-> > > Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-> > > ---
-> > >  arch/s390/kernel/entry.S | 11 +++++++++++
-> > >  1 file changed, 11 insertions(+)
-> > > 
-> > > diff --git a/arch/s390/kernel/entry.S b/arch/s390/kernel/entry.S
-> > > index e1664b45090f..ff7a75078e93 100644
-> > > --- a/arch/s390/kernel/entry.S
-> > > +++ b/arch/s390/kernel/entry.S
-> > > @@ -171,8 +171,19 @@ _LPP_OFFSET	= __LC_LPP
-> > >  	.macro OUTSIDE reg,start,end,outside_label
-> > >  	larl	%r14,\start
-> > >  	slgrk	%r14,\reg,%r14
-> > > +#ifdef CONFIG_CC_IS_CLANG
+> > Yes, after checking this fb396bb459c1 ("arm64/hugetlb: Drop TLB flush from
+> > get_clear_flush()"), I also realized it will miss TLB flush.
 > > 
-> > I intend to put this series through my build and boot test matrix later
-> > today but one fly by comment in the meantime. Should this be
-> > CONFIG_AS_IS_LLVM if this is an integrated assembler limitation, rather
-> > than a clang one?
+> > So I am not sure I need send a incremental patch to fix this issue? Or
+> > resend my patch set [1] with rebasing on the arm64 changes?
+> > 
+> > Catalin and Andrew, how do you think? Thanks.
 > 
-> Yes, that makes a lot of sense. Considering that I will drop the
-> previous patch within this series, the new version looks like:
-> 
-> From fe4fb0b014378d84ae517deaea338577b2ea6ae0 Mon Sep 17 00:00:00 2001
-> From: Heiko Carstens <hca@linux.ibm.com>
-> Date: Sat, 7 May 2022 15:00:40 +0200
-> Subject: [PATCH 3/7] s390/entry: workaround llvm's IAS limitations
-> 
-> llvm's integrated assembler cannot handle immediate values which are
-> calculated with two local labels:
-> 
-> <instantiation>:3:13: error: invalid operand for instruction
->  clgfi %r14,.Lsie_done - .Lsie_gmap
-> 
-> Workaround this by adding clang specific code which reads the specific
-> value from memory. Since this code is within the hot paths of the kernel
-> and adds an additional memory reference, keep the original code, and add
-> ifdef'ed code.
-> 
-> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-> ---
->  arch/s390/kernel/entry.S | 14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/s390/kernel/entry.S b/arch/s390/kernel/entry.S
-> index a6b45eaa3450..f2f30bfba1e9 100644
-> --- a/arch/s390/kernel/entry.S
-> +++ b/arch/s390/kernel/entry.S
-> @@ -172,9 +172,19 @@ _LPP_OFFSET	= __LC_LPP
->  	lgr	%r14,\reg
->  	larl	%r13,\start
->  	slgr	%r14,%r13
-> -	lghi	%r13,\end - \start
-> -	clgr	%r14,%r13
-> +#ifdef CONFIG_AS_IS_LLVM
-> +	clgfrl	%r14,.Lrange_size\@
-> +#else
-> +	clgfi	%r14,\end - \start
-> +#endif
->  	jhe	\outside_label
-> +#ifdef CONFIG_CC_IS_CLANG
+> Andrew folding the diff in is fine by me. I presume the mm patches are
+> applied on top of the rest of linux-next (and the arm64 commits).
 
-I think this one also wants to be CONFIG_AS_IS_LLVM, right?
+No, the mm patches are based on
+git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm master branch,
+which is -rc4 or thereabouts.
 
-Other than that, seems fine to me, although I have no knowledge of s390
-assembly so that statement probably means next to nothing :)
+So one of us needs to ensure that Linus gets that patch after the
+second of us merges up.  I can't test it so I nominate you ;) Against
+linux-next or the mm-everything branch at
+git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm?
 
-Cheers,
-Nathan
-
-> +	.section .rodata, "a"
-> +	.align 4
-> +.Lrange_size\@:
-> +	.long	\end - \start
-> +	.previous
-> +#endif
->  	.endm
->  
->  	.macro SIEEXIT
-> -- 
-> 2.32.0

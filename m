@@ -2,73 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5505452453C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 07:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2181524541
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 07:58:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350048AbiELF5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 01:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
+        id S1350058AbiELF6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 01:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiELF5a (ORCPT
+        with ESMTP id S245288AbiELF6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 01:57:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A088A24588
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 22:57:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652335047;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=t0bDFb/tAAbguC+IHzTExFsJLrZiV0YVZh8GFZSOhC8=;
-        b=fbQOa0cBLXisj8omCSSa4ehkiRuak1D7ivcAesdzCwyPCkjIpFVBDhbxqOg7VUuPmhAfZ6
-        octWV/1UHItnQOxUgU1TekOyCt/8d7Z3wC0QJzE1nU3bHpD8HMhrqygk6yEYzM+JQIHF3Q
-        Xv63KST+A4DJ34yey/QX7nFIrmTt+RM=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-121-rHSAyJ5yNo-8U_8a8UXqrw-1; Thu, 12 May 2022 01:57:26 -0400
-X-MC-Unique: rHSAyJ5yNo-8U_8a8UXqrw-1
-Received: by mail-ej1-f69.google.com with SMTP id ga27-20020a1709070c1b00b006f43c161da4so2270624ejc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 22:57:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=t0bDFb/tAAbguC+IHzTExFsJLrZiV0YVZh8GFZSOhC8=;
-        b=WgdkfyXmufa+iNqPt14gWCzk+Qi6HkDxZn97p0Tb0AWfxlIxbsEaQHUl2PESQ+txsc
-         X/aLu4/FMRYQgnSDlWux4yz5eC2Pf2pz4bpYiN6BxcNaKv0UfBQXOSYOkqc/cxTUevpp
-         QTR+eQ86nJmdbH1jWXGWurCW6+CeQZTNtB9L7vACUaJJVBrmk9JFhreKpdcocTd35B1q
-         NWOAxwZvcSaECvS4vzNk74T8YN9MI16y6w9yCWOcouRp7qQTg6eKcsl/gHYObM9aV7Kw
-         8ZfuFbk0FcKii7Epydd4gIriIM0iPEEeu0lul+KmIJn558B0lxGsq1qLU/MIRWpFXEzw
-         wXww==
-X-Gm-Message-State: AOAM531+rxyVmHUIHg7owoFeXbamXFBemR1dWVxQj9oBn90YK0wgODQa
-        7cntrhPJB2TL3cwVtwdtsnbCAGB9jpk18za/KV2aCe2uTa/sNYeasQxtd6NkzojPBPOhJ2k1NUx
-        Zo3hzZpiKzvbd0rvsw9qe2bCh
-X-Received: by 2002:a05:6402:5188:b0:428:e77:b55b with SMTP id q8-20020a056402518800b004280e77b55bmr33524671edd.82.1652335044998;
-        Wed, 11 May 2022 22:57:24 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJweg8gy0e+6m0LjjDG+u4kpvwZO9qOgpH3UsJkCBifxEoBTksWtM9DNoFbA6rp3Rsn/gvanVw==
-X-Received: by 2002:a05:6402:5188:b0:428:e77:b55b with SMTP id q8-20020a056402518800b004280e77b55bmr33524656edd.82.1652335044755;
-        Wed, 11 May 2022 22:57:24 -0700 (PDT)
-Received: from redhat.com ([2.55.42.2])
-        by smtp.gmail.com with ESMTPSA id t5-20020a170906608500b006f4512e7bc8sm1716477ejj.60.2022.05.11.22.57.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 22:57:24 -0700 (PDT)
-Date:   Thu, 12 May 2022 01:57:20 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Eli Cohen <elic@nvidia.com>
-Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, si-wei.liu@oracle.com
-Subject: Re: [PATCH v1] vdpa: Warn if MTU configured is too low
-Message-ID: <20220512014128-mutt-send-email-mst@kernel.org>
-References: <20220511105642.124806-1-elic@nvidia.com>
+        Thu, 12 May 2022 01:58:03 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB3F21A97D;
+        Wed, 11 May 2022 22:58:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652335081; x=1683871081;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=NZnDnpvgn5my4A1DvCZcio68+0nCB9EOlvfdWJyoVwM=;
+  b=uaN6etRChmtAK0UDuMe2evnLmOnyeKLErk9PA17i15vm40hyTVueYf2w
+   bK3K+KrZfIiOJNc/PupvPOW6JTFP1kWEn6SGspAc+sj7Eif3jTPHsI+3E
+   MeW75yaUMsPBVCYydGI47t7SiRU2zEmWzjO2cnUvnETWEmpYoiuJ4nj6n
+   M=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 11 May 2022 22:58:01 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 22:58:00 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 11 May 2022 22:58:00 -0700
+Received: from [10.216.61.198] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 11 May
+ 2022 22:57:53 -0700
+Message-ID: <9644d608-4ab9-ed0d-50fb-0016e4331361@quicinc.com>
+Date:   Thu, 12 May 2022 11:27:48 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220511105642.124806-1-elic@nvidia.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [v4 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
+ override params bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        "Matthias Kaehlcke" <mka@chromium.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        "Vinod Koul" <vkoul@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+References: <1652282793-5580-1-git-send-email-quic_kriskura@quicinc.com>
+ <1652282793-5580-2-git-send-email-quic_kriskura@quicinc.com>
+ <d296720d-ccbe-27f0-8ba1-9653af25dd52@linaro.org>
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <d296720d-ccbe-27f0-8ba1-9653af25dd52@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,71 +82,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 01:56:42PM +0300, Eli Cohen wrote:
-> Following the recommendation in virio spec 1.1, a device offering
-> VIRTIO_NET_F_MTU should set the mtu to at least 1280 bytes.
-> 
-> Print a warning if this recommendation is not met.
-> 
-> Signed-off-by: Eli Cohen <elic@nvidia.com>
-> ---
-> v0 -> v1:
->   chage pr_warn to netlink warning to userspace
-> 
->  drivers/vdpa/vdpa.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
-> index 91f4c13c7c7c..0fb4a615f267 100644
-> --- a/drivers/vdpa/vdpa.c
-> +++ b/drivers/vdpa/vdpa.c
-> @@ -583,6 +583,9 @@ vdpa_nl_cmd_mgmtdev_get_dumpit(struct sk_buff *msg, struct netlink_callback *cb)
->  				 BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MTU)     | \
->  				 BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MAX_VQP))
->  
-> +/* Recommended virtio spec 1.1 section 5.1.4.1 */
 
-I'd add name of section here too.
+On 5/11/2022 11:49 PM, Krzysztof Kozlowski wrote:
+> On 11/05/2022 17:26, Krishna Kurapati wrote:
+>> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>>
+>> Add device tree bindings for SNPS phy tuning parameters.
+>>
+>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+>>   .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 87 ++++++++++++++++++++++
+>>   1 file changed, 87 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+>> index 1ce251d..70efffe 100644
+>> --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+>> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+>> @@ -53,6 +53,93 @@ properties:
+>>     vdda33-supply:
+>>       description: phandle to the regulator 3.3V supply node.
+>>   
+>> +  qcom,hs-disconnect-bps:
+>> +    $ref: /schemas/types.yaml#/definitions/int32
+>> +    description:
+>> +      This adjusts the voltage level for the threshold used to
+>> +      detect a disconnect event at the host. Possible values are.
+>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+> This means there is some minimum and maximum (100%)?
 
-> +#define VIRTIO_MIN_PREFERRED_MTU 1280
-> +
+Hi Krzystof,
 
-Preferred is kind of confusing here. I guess you are trying to
-say it's not mandatory but I don't think this conveys this information.
+Yes there are max and min for each parameter (not necessarily 0%/100%)
 
-Recommended (matching text below)?
+As an example if we take squelch detector threshold, the register value 
+vs actual percentage changer as per data book is as follows :
 
+% change in voltage    |     corresponding reg value
 
->  static int vdpa_nl_cmd_dev_add_set_doit(struct sk_buff *skb, struct genl_info *info)
->  {
->  	struct vdpa_dev_set_config config = {};
-> @@ -634,6 +637,10 @@ static int vdpa_nl_cmd_dev_add_set_doit(struct sk_buff *skb, struct genl_info *i
->  		err = PTR_ERR(mdev);
->  		goto err;
->  	}
-> +	if ((mdev->supported_features & BIT_ULL(VIRTIO_NET_F_MTU)) &&
-> +	    (config.mask & BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MTU) &&
-> +	    config.net.mtu < VIRTIO_MIN_PREFERRED_MTU))
-> +		NL_SET_ERR_MSG_MOD(info->extack, "MTU is below recommended value\n");
->  	if ((config.mask & mdev->config_attr_mask) != config.mask) {
->  		NL_SET_ERR_MSG_MOD(info->extack,
->  				   "All provided attributes are not supported");
+  -20.90%                        |    7
+  -15.60%                        |    6
+-10.30%                         |    5
+-5.30%                           |    4
+0%                                  |    3
+5.30%                            |    2
+10.60%                          |    1
+15.90%                          |    0
 
+Here the min and max are 15.9% to -20.9%
 
-Pity we can't include the actual value here, but oh well. At least let's
-include the recommended value, we can do that:
-	"MTU is below recommended value of " __stringify(VIRTIO_MIN_PREFERRED_MTU) "\n"
-
-
-> @@ -1135,7 +1142,7 @@ static const struct nla_policy vdpa_nl_policy[VDPA_ATTR_MAX + 1] = {
->  	[VDPA_ATTR_DEV_NAME] = { .type = NLA_STRING },
->  	[VDPA_ATTR_DEV_NET_CFG_MACADDR] = NLA_POLICY_ETH_ADDR,
->  	/* virtio spec 1.1 section 5.1.4.1 for valid MTU range */
-> -	[VDPA_ATTR_DEV_NET_CFG_MTU] = NLA_POLICY_MIN(NLA_U16, 68),
-> +	[VDPA_ATTR_DEV_NET_CFG_MTU] = NLA_POLICY_MIN(NLA_U16, ETH_MIN_MTU),
->  };
->  
->  static const struct genl_ops vdpa_nl_ops[] = {
-> -- 
-> 2.35.1
-
+The min and max differ for each parameter and might not be necessarily 
+0% and 100%
+>> +      The hardware accepts only discrete values. The value closest to the
+>> +      provided input will be chosen as the override value for this param.
+>> +
+>> +  qcom,squelch-detector-bps:
+>> +    $ref: /schemas/types.yaml#/definitions/int32
+>> +    description:
+>> +      This adjusts the voltage level for the threshold used to
+>> +      detect valid high-speed data.
+>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>> +      The hardware accepts only discrete values. The value closest to the
+>> +      provided input will be chosen as the override value for this param.
+>> +
+>> +  qcom,hs-amplitude-bps:
+>> +    $ref: /schemas/types.yaml#/definitions/int32
+>> +    description:
+>> +      This adjusts the high-speed DC level voltage.
+>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>> +      The hardware accepts only discrete values. The value closest to the
+>> +      provided input will be chosen as the override value for this param.
+>> +
+>> +  qcom,pre-emphasis-duration-bps:
+>> +    $ref: /schemas/types.yaml#/definitions/int32
+>> +    description:
+>> +      This signal controls the duration for which the
+>> +      HS pre-emphasis current is sourced onto DP<#> or DM<#>.
+>> +      The HS Transmitter pre-emphasis duration is defined in terms of
+>> +      unit amounts. One unit of pre-emphasis duration is approximately
+>> +      650 ps and is defined as 1X pre-emphasis duration.
+>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>> +      The hardware accepts only discrete values. The value closest to the
+>> +      provided input will be chosen as the override value for this param.
+>> +
+>> +  qcom,pre-emphasis-amplitude-bps:
+>> +    $ref: /schemas/types.yaml#/definitions/int32
+>> +    description:
+>> +      This signal controls the amount of current sourced to
+>> +      DP<#> and DM<#> after a J-to-K or K-to-J transition.
+>> +      The HS Transmitter pre-emphasis current is defined in terms of unit
+>> +      amounts. One unit amount is approximately 2 mA and is defined as
+>> +      1X pre-emphasis current.
+>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>> +      The hardware accepts only discrete values. The value closest to the
+>> +      provided input will be chosen as the override value for this param.
+>> +
+>> +  qcom,hs-rise-fall-time-bps:
+>> +    $ref: /schemas/types.yaml#/definitions/int32
+>> +    description:
+>> +      This adjusts the rise/fall times of the high-speed waveform.
+>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>> +      The hardware accepts only discrete values. The value closest to the
+>> +      provided input will be chosen as the override value for this param.
+>> +
+>> +  qcom,hs-crossover-voltage-mv:
+>> +    $ref: /schemas/types.yaml#/definitions/int32
+>> +    description:
+>> +      This adjusts the voltage at which the DP<#> and DM<#>
+>> +      signals cross while transmitting in HS mode.
+>> +      The values defined are in milli volts. The hardware accepts only
+>> +      discrete values. The value closest to the provided input will be
+>> +      chosen as the override value for this param.
+>> +
+>> +  qcom,hs-output-impedance-mohm:
+>> +    $ref: /schemas/types.yaml#/definitions/int32
+> Here and in other places, please use standard units. See
+> dtschema/schemas/property-units.yaml in dtschema repo.
+>
+>
+> Best regards,
+> Krzysztof

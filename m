@@ -2,116 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C20524376
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 05:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2D0A52437A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 05:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344087AbiELDeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 23:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
+        id S1344397AbiELDei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 23:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343921AbiELDeD (ORCPT
+        with ESMTP id S1344338AbiELDee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 23:34:03 -0400
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B164D6FA18;
-        Wed, 11 May 2022 20:34:02 -0700 (PDT)
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 24C3XRUS015264;
-        Thu, 12 May 2022 12:33:27 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 24C3XRUS015264
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1652326408;
-        bh=dbNwEvZYw1fjRFSQZy5q9B2R8hJHj2WYVFlICWwM6Oc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=23082fZBoIgWOojx7XxPpv03C3EJGPNBRuMzZAGL3AOXpRozDEr9PQpuxUCERQYrP
-         0+0gSR3MjCbTfbTk6GsZcVbiGrPa7rMlSfERLAIJ9Y4LbWg3AXEL6MPs1DdhdKyswB
-         A2ZKISCJ3B3op0jPuphxOrtjAJOhDmkfl9sMwHKMRmcBRAkJ9eeU76+cNVN13duZ5s
-         Y4isHZit2d7hK+eqpiOX0WR5ktLWnMCInuq3FoCYhQMpQR/JyFUy7VIYRhO+yCO2cn
-         3YFNsTjC39Ht4c/k8+5d6OdqLYkwUy4zOxRcmAt8khm7oTOG6LLUgArhWn91cnk2ke
-         FDtOEKmTru2qw==
-X-Nifty-SrcIP: [209.85.215.173]
-Received: by mail-pg1-f173.google.com with SMTP id h186so815384pgc.3;
-        Wed, 11 May 2022 20:33:27 -0700 (PDT)
-X-Gm-Message-State: AOAM533LILPcG388CIa23fFx7q/vNsLxDHbqyacb60lKYBNinZAVH2n9
-        4mmf5S4T8xgwXrvhMj7+t5oD0oly+sbxuMx6vkM=
-X-Google-Smtp-Source: ABdhPJwG0xbZVE9S3odmeddiK5smlXhc5MfRFuwXPi0gSLw2Nm0SAMreZzrCHdbMunbY06F+fLSoK5TjQygOQdUrI6I=
-X-Received: by 2002:a63:6989:0:b0:3c2:3c19:d661 with SMTP id
- e131-20020a636989000000b003c23c19d661mr23412597pgc.352.1652326406909; Wed, 11
- May 2022 20:33:26 -0700 (PDT)
+        Wed, 11 May 2022 23:34:34 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BEA66FD11;
+        Wed, 11 May 2022 20:34:32 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id e194so4033750iof.11;
+        Wed, 11 May 2022 20:34:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ynf0e/virvZjVizU2QRUFjeoIWjt7fbHUUoT414b2mI=;
+        b=o71rtoZS1hWQgY+blTY49Fz1ge2cFxrR3Q3Djr44ei+5uqxh787BoRPdLH3/pXMqaf
+         Bueuci8imJrDQOZXlZU5OWsX3P9NDq51ZSz0awKmdBS6j9JXdhQucobr8HOrKdz3fdGV
+         rkm0YWlx4p+bRCEa7y8/v6VGdFMY3tfjCknHVZRxcSaX0QCh0eYJqPrpxInjT5NVyV96
+         jl7N9q30zbFwL4HXGrBEHXu8H51OAh2dk57hSkuMxuyOiY8tnIlXtq7YGurdLKfKFAeK
+         VigX23GFtenA9s2iaKO+yr25hUT7+eBcXU+TQnNsNm/hHkH2ZuQY7lWrGeRdJ3ELXmRA
+         zbSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ynf0e/virvZjVizU2QRUFjeoIWjt7fbHUUoT414b2mI=;
+        b=Mojp6YOmsdrTbiF4+XfW8YlYJ65ad7cANWiZdyIoG55rZ5gFRveC9rsrRmxHuUNjIF
+         r/FqiLBy4gNJymXaSkHj656Q/NYpSnSyML3beP7RWT3G4Xj7SApJEEeWETFUGMZAJZan
+         +hHk6GTTtW692jHWj0JFl+L3qMWNTpGYuvt3l8ncVn87ioUWp/lJhk5fu/Ga8zWi6uJr
+         jXvBdv7Iu1OOdVuEdFmxpjZ1wLbpDIqlbc/xnvSjLt7P5wfd9W+8C4wuYKT1XqisljFV
+         HQ/5+Wz79uAyrf+vkjFZRaupznUaxWcVgSqIZ0NRq+VmmrJJAu2Ypq8eCKQIZ6fDucgS
+         5f1g==
+X-Gm-Message-State: AOAM531u7xTxNbZ4t3RIu3fiNVEvUOr/txm8ioFNM8sZ48TTFDcschVo
+        efKo86AQJRZcr7D09KTxMxJzrW45vwVsu30yMfk=
+X-Google-Smtp-Source: ABdhPJzPS/Yxm2YPeTS2PeeqfhhQTHUAj3jGf6URPk3RyfnRK130vQGyej2FRiAWmsMZmM1iniVU8XciAzjUeHzzdH0=
+X-Received: by 2002:a5e:8e42:0:b0:657:bc82:64e5 with SMTP id
+ r2-20020a5e8e42000000b00657bc8264e5mr11982398ioo.112.1652326471691; Wed, 11
+ May 2022 20:34:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220511164514.2741934-1-masahiroy@kernel.org>
- <20220511164514.2741934-2-masahiroy@kernel.org> <CAKwvOd=SZYO0344rrJWP+JvmuZmQ9N6VM9UgMwrb9fH3MaNLMQ@mail.gmail.com>
-In-Reply-To: <CAKwvOd=SZYO0344rrJWP+JvmuZmQ9N6VM9UgMwrb9fH3MaNLMQ@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 12 May 2022 12:32:14 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASsnrxu1BvtR9aq6oeOvmTX8jr4Wum=+7qemKzcLpSRWQ@mail.gmail.com>
-Message-ID: <CAK7LNASsnrxu1BvtR9aq6oeOvmTX8jr4Wum=+7qemKzcLpSRWQ@mail.gmail.com>
-Subject: Re: [PATCH v5 01/12] modpost: split the section mismatch checks into section-check.c
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>
+References: <20220511093854.411-1-zhoufeng.zf@bytedance.com> <20220511093854.411-3-zhoufeng.zf@bytedance.com>
+In-Reply-To: <20220511093854.411-3-zhoufeng.zf@bytedance.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 11 May 2022 20:34:20 -0700
+Message-ID: <CAEf4BzZL85C7KUwKv9i5cdLSDzM175cLjiW4EDjOqNfcxbLO+A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: add test case for bpf_map_lookup_percpu_elem
+To:     Feng zhou <zhoufeng.zf@bytedance.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joanne Koong <joannekoong@fb.com>,
+        Geliang Tang <geliang.tang@suse.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        duanxiongchun@bytedance.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        Dongdong Wang <wangdongdong.6@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        zhouchengming@bytedance.com, yosryahmed@google.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 7:28 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Wed, May 11, 2022 at 2:39 AM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
 >
-> On Wed, May 11, 2022 at 9:49 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > modpost.c is too big, and the half of the code is for section checks.
-> > Split it.
-> >
-> > Also, move some related typedefs and macros from modpost.h to
-> > section-check.c
-> >
-> > Copy Sam's Copyright there. Commit b39927cf4cc5 ("kbuild: check for
-> > section mismatch during modpost stage") is the initial work for the
-> > section checks.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> From: Feng Zhou <zhoufeng.zf@bytedance.com>
 >
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> test_progs:
+> Tests new ebpf helpers bpf_map_lookup_percpu_elem.
 >
-> Sorry again for my "brain fart" in reviewing the global var in v4. :(
-> I think my blood sugar was getting low or something...
-
-Never mind.
-Thanks for the close review all the time!
-
+> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+> ---
+>  .../bpf/prog_tests/map_lookup_percpu_elem.c   | 46 ++++++++++++++++
+>  .../bpf/progs/test_map_lookup_percpu_elem.c   | 54 +++++++++++++++++++
+>  2 files changed, 100 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
 >
-> > ---
-> >
-> > Changes in v5:
-> >    - Fix the build error  (spotted by Nathan)
-> >    - Do not do codying style changes  (Suggested by Nick)
+> diff --git a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
+> new file mode 100644
+> index 000000000000..58b24c2112b0
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
+> @@ -0,0 +1,46 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +// Copyright (c) 2022 Bytedance
+
+/* */ instead of //
+
+> +
+> +#include <test_progs.h>
+> +
+> +#include "test_map_lookup_percpu_elem.skel.h"
+> +
+> +#define TEST_VALUE  1
+> +
+> +void test_map_lookup_percpu_elem(void)
+> +{
+> +       struct test_map_lookup_percpu_elem *skel;
+> +       int key = 0, ret;
+> +       int nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
+
+I think this is actually wrong and will break selftests on systems
+with offline CPUs. Please use libbpf_num_possible_cpus() instead.
+
+> +       int *buf;
+> +
+> +       buf = (int *)malloc(nr_cpus*sizeof(int));
+> +       if (!ASSERT_OK_PTR(buf, "malloc"))
+> +               return;
+> +       memset(buf, 0, nr_cpus*sizeof(int));
+
+this is wrong, kernel expects to have roundup(sz, 8) per each CPU,
+while you have just 4 bytes per each element
+
+please also have spaces around multiplication operator here and above
+
+> +       buf[0] = TEST_VALUE;
+> +
+> +       skel = test_map_lookup_percpu_elem__open_and_load();
+> +       if (!ASSERT_OK_PTR(skel, "test_map_lookup_percpu_elem__open_and_load"))
+> +               return;
+
+buf leaking here
+
+> +       ret = test_map_lookup_percpu_elem__attach(skel);
+> +       ASSERT_OK(ret, "test_map_lookup_percpu_elem__attach");
+> +
+> +       ret = bpf_map_update_elem(bpf_map__fd(skel->maps.percpu_array_map), &key, buf, 0);
+> +       ASSERT_OK(ret, "percpu_array_map update");
+> +
+> +       ret = bpf_map_update_elem(bpf_map__fd(skel->maps.percpu_hash_map), &key, buf, 0);
+> +       ASSERT_OK(ret, "percpu_hash_map update");
+> +
+> +       ret = bpf_map_update_elem(bpf_map__fd(skel->maps.percpu_lru_hash_map), &key, buf, 0);
+> +       ASSERT_OK(ret, "percpu_lru_hash_map update");
+> +
+> +       syscall(__NR_getuid);
+> +
+> +       ret = skel->bss->percpu_array_elem_val == TEST_VALUE &&
+> +             skel->bss->percpu_hash_elem_val == TEST_VALUE &&
+> +             skel->bss->percpu_lru_hash_elem_val == TEST_VALUE;
+> +       ASSERT_OK(!ret, "bpf_map_lookup_percpu_elem success");
+
+this would be better done as three separate ASSERT_EQ(), combining
+into opaque true/false isn't helpful if something breaks
+
+> +
+> +       test_map_lookup_percpu_elem__destroy(skel);
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c b/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
+> new file mode 100644
+> index 000000000000..5d4ef86cbf48
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
+> @@ -0,0 +1,54 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +// Copyright (c) 2022 Bytedance
+
+/* */ instead of //
+
+> +
+> +#include "vmlinux.h"
+> +#include <bpf/bpf_helpers.h>
+> +
+> +int percpu_array_elem_val = 0;
+> +int percpu_hash_elem_val = 0;
+> +int percpu_lru_hash_elem_val = 0;
+> +
+> +struct {
+> +       __uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
+> +       __uint(max_entries, 1);
+> +       __type(key, __u32);
+> +       __type(value, __u32);
+> +} percpu_array_map SEC(".maps");
+> +
+> +struct {
+> +       __uint(type, BPF_MAP_TYPE_PERCPU_HASH);
+> +       __uint(max_entries, 1);
+> +       __type(key, __u32);
+> +       __type(value, __u32);
+> +} percpu_hash_map SEC(".maps");
+> +
+> +struct {
+> +       __uint(type, BPF_MAP_TYPE_LRU_PERCPU_HASH);
+> +       __uint(max_entries, 1);
+> +       __type(key, __u32);
+> +       __type(value, __u32);
+> +} percpu_lru_hash_map SEC(".maps");
+> +
+> +SEC("tp/syscalls/sys_enter_getuid")
+> +int sysenter_getuid(const void *ctx)
+> +{
+> +       __u32 key = 0;
+> +       __u32 cpu = 0;
+> +       __u32 *value;
+> +
+> +       value = bpf_map_lookup_percpu_elem(&percpu_array_map, &key, cpu);
+> +       if (value)
+> +               percpu_array_elem_val = *value;
+> +
+> +       value = bpf_map_lookup_percpu_elem(&percpu_hash_map, &key, cpu);
+> +       if (value)
+> +               percpu_hash_elem_val = *value;
+> +
+> +       value = bpf_map_lookup_percpu_elem(&percpu_lru_hash_map, &key, cpu);
+> +       if (value)
+> +               percpu_lru_hash_elem_val = *value;
+> +
+
+if the test happens to run on CPU 0 then the test doesn't really test
+much. It would be more interesting to have a bpf_loop() iteration that
+would fetch values on each possible CPU instead and do something with
+it.
+
+> +       return 0;
+> +}
+> +
+> +char _license[] SEC("license") = "GPL";
+> --
+> 2.20.1
 >
-> I'm surprised the style changes didn't show up in v5 as a later patch
-> in the series. I wasn't against them in general, just thought it would
-> be easier to review if they were distinct commits.
-
-
-I just postponed the coding style fixes
-because they are not essential for my main goal
-in this patch set.
-
-A lot of old code exists in modpost.
-We can improve it later.
-
-
--- 
-Best Regards
-Masahiro Yamada

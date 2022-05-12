@@ -2,176 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88C49525643
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 22:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D06525647
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 22:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358310AbiELULo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 16:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
+        id S1358318AbiELUO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 16:14:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357941AbiELULl (ORCPT
+        with ESMTP id S1357941AbiELUOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 16:11:41 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C065DD00
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 13:11:40 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-ed9a75c453so8002450fac.11
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 13:11:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=37IX51ckyCTT+yZsWM/kPl+cjpj4hHPN6he08LybAOQ=;
-        b=nkDuxOoAbImXZRcvvj1gfFmpDwftHQWbiObrKwOxshF14hW4hHjhBOTZxvvSZQyjLT
-         +SNjcd0Eha5XO6P0Rb8nczXCqfhxzo3SDR2fgosVoYMzzq0ezEVJg5i221zzPec69DIX
-         cypiO6dAQliJBB0FK5MlRwAOh99s48286unm0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=37IX51ckyCTT+yZsWM/kPl+cjpj4hHPN6he08LybAOQ=;
-        b=U8pIyyvW+f5SELn1B8nGBPpNQoYMxi4UxWlNA+renEEwdD9m1qKSmT3vrJYqzrdGX7
-         L5HmvdoM4G8SW5ZbKqon/kKK+JTNuTf2ndTPPsWSYfDp45Eqpxep/RCSm8LPjfBe2qi8
-         kMQTWV5ZYYoXcLD8vHxhp9MvwZ3uCmPOGgyy9hZjXmVblLDqjUONrV8sryqaFbJyqRIm
-         nuaFUrnowswaULI58PgNNmwJFVs2ZA1AE0Psja9QRh1mcDO2TzXvpQJPrJD55YMW9c9X
-         in9tN4hML+9O2Shgh8qPxcjKtSWNhpMuixjx+ziPnrOe6jqLWTVhJrdDt0IaC61E6sqR
-         zLLA==
-X-Gm-Message-State: AOAM531gWI6tJqKNHKTFZWK/N8fakVq5696/HDyP0qLgFVcO+CsRXZco
-        fKZnX1WBBIO+SY8fLR8tkdV2XRev9HaYXd5TijYs68lxZc8=
-X-Google-Smtp-Source: ABdhPJxd7yZSyV1HL3mHq2/BuEuj5XOOzGUA62h40C+z0kI+RzGTIUcxQQWEo5wiqOsSlg5b3aqgF0K7mnODmWwOJdE=
-X-Received: by 2002:a05:6870:40c1:b0:ed:9a12:3f95 with SMTP id
- l1-20020a05687040c100b000ed9a123f95mr831874oal.193.1652386299686; Thu, 12 May
- 2022 13:11:39 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 12 May 2022 13:11:39 -0700
+        Thu, 12 May 2022 16:14:54 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36925AEC6
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 13:14:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652386492; x=1683922492;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sWMoEmv5M9+5j4diEIgRyDkXPSAFp5UbF9L9c25C3tE=;
+  b=kQ6HvW3i6Fk197biWLS7ur/XYYGYjBmGzFK2FdsUsfAw3EUbO2cizF7Y
+   Vw+3qSyymS6yXtB04CWRyeFK8zptFrBDxa/FcJpEGhwHSozwkxc8rX92q
+   8ENUO8nuxTkAKqvV6uIt5fAk2ERnNlihrArlXLem8PlBaREl5s+jq4zSs
+   5XwRLlp+EE3XvFnKA4qLLCZTzSsM33Mm4jo1/kzg0q7GbWws6/gSpajXA
+   cG1QwYuwnRvKXE8nkj4X/g962N6w3hFjLDSbrU87h3BflOS6fKJUvvPNy
+   SHCOk987MoXAXRV9nPFZSETXc2xAvS5LIiE/6z/DL580Uquzl0+eoWi6u
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="330727333"
+X-IronPort-AV: E=Sophos;i="5.91,220,1647327600"; 
+   d="scan'208";a="330727333"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 13:14:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,220,1647327600"; 
+   d="scan'208";a="521116015"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 12 May 2022 13:14:49 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1npFCy-000Ksu-BO;
+        Thu, 12 May 2022 20:14:48 +0000
+Date:   Fri, 13 May 2022 04:14:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: arch/powerpc/kvm/book3s_pr.c:660:22: sparse: sparse: cast to
+ restricted __be32
+Message-ID: <202205130409.MfQ1ZvwW-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <CAE-0n50+obQ5qgPNPtUY=OmTgU9bZQ3hNw+MaG9Wi3SQSc-i4A@mail.gmail.com>
-References: <20220429233112.2851665-1-swboyd@chromium.org> <20220429233112.2851665-2-swboyd@chromium.org>
- <CAD=FV=VX8EEgkeLgKwyKvjztcjbA8UhKOUpTr-sS1_Ec=QcWbA@mail.gmail.com>
- <CAKdAkRSOtAD6u_cwKhHeMLgz5dC2hfPvVvqmj+17b4i-nspfgg@mail.gmail.com>
- <CAE-0n50Y8tZD9Djn9TVaAiHxehFJ2cZKZ1Z09piDk47uw3nK+Q@mail.gmail.com>
- <Ynzf5jEIECLmELK7@google.com> <CAE-0n50+obQ5qgPNPtUY=OmTgU9bZQ3hNw+MaG9Wi3SQSc-i4A@mail.gmail.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Thu, 12 May 2022 13:11:39 -0700
-Message-ID: <CAE-0n52WVNru5fnyaB_7wcBOk4twL0Q92YpRbd40-o6ZBmbXWQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: google,cros-ec-keyb: Introduce
- switches only compatible
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
-        chrome-platform@lists.linux.dev,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        "Joseph S. Barrera III" <joebar@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Stephen Boyd (2022-05-12 11:58:02)
-> Quoting Dmitry Torokhov (2022-05-12 03:22:30)
-> >
-> > Have we solved module loading in the presence of multiple compatibles?
-> > IIRC we only ever try to load module on the first compatible, so you'd
-> > be breaking autoloading cros-ec-keyb on these older kernels. I think the
-> > cure that is being proposed is worse than the disease.
-> >
->
-> The first compatible is still cros-ec-keyb in the driver though? Or you
-> mean the first compatible in the node? I'm not aware of this problem at
-> all but I can certainly test out a fake node and module and see if it
-> gets autoloaded.
+Hi Cédric,
 
-I can't get this test module to fail to load no matter what I do. I
-commented out the second match table entry, and kept it there and
-removed 'vendor,switch-compat' from the DTS. Module still autoloads.
+First bad commit (maybe != root cause):
 
-----8<----
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index 42a87fa4976e..a6173b79ba67 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -54,6 +54,10 @@ aliases {
- 		spi11 = &spi11;
- 	};
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0ac824f379fba2c2b17b75fd5ada69cd68c66348
+commit: cb53a93e33e108bfec00a13cd12696e1c0ccc8b6 KVM: PPC: Book3S PR: Declare kvmppc_handle_exit_pr()
+date:   9 months ago
+config: powerpc64-randconfig-s031-20220512 (https://download.01.org/0day-ci/archive/20220513/202205130409.MfQ1ZvwW-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=cb53a93e33e108bfec00a13cd12696e1c0ccc8b6
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout cb53a93e33e108bfec00a13cd12696e1c0ccc8b6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/
 
-+	mynode {
-+		compatible = "vendor,switch-compat", "vendor,keyb-compat";
-+	};
-+
- 	clocks {
- 		xo_board: xo-board {
- 			compatible = "fixed-clock";
-diff --git a/lib/Makefile b/lib/Makefile
-index a841be5244ac..0a784011feb5 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -74,6 +74,7 @@ UBSAN_SANITIZE_test_ubsan.o := y
- obj-$(CONFIG_TEST_KSTRTOX) += test-kstrtox.o
- obj-$(CONFIG_TEST_LIST_SORT) += test_list_sort.o
- obj-$(CONFIG_TEST_MIN_HEAP) += test_min_heap.o
-+obj-m += dtmod.o
- obj-$(CONFIG_TEST_LKM) += test_module.o
- obj-$(CONFIG_TEST_VMALLOC) += test_vmalloc.o
- obj-$(CONFIG_TEST_OVERFLOW) += test_overflow.o
-diff --git a/lib/dtmod.c b/lib/dtmod.c
-new file mode 100644
-index 000000000000..c34ae37b8ff0
---- /dev/null
-+++ b/lib/dtmod.c
-@@ -0,0 +1,44 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/platform_device.h>
-+#include <linux/printk.h>
-+
-+static int test_probe(struct platform_device *pdev)
-+{
-+	dev_info(&pdev->dev, "I got probed\n");
-+
-+	return 0;
-+}
-+
-+static int test_remove(struct platform_device *pdev)
-+{
-+	dev_info(&pdev->dev, "I got removed\n");
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id test_of_match[] = {
-+	{ .compatible = "vendor,keyb-compat" },
-+	{ .compatible = "vendor,switch-compat" }, // comment out
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, test_of_match);
-+
-+static struct platform_driver test_keyb_driver = {
-+	.probe = test_probe,
-+	.remove = test_remove,
-+	.driver = {
-+		.name = "test-ec-keyb",
-+		.of_match_table = test_of_match,
-+	},
-+};
-+
-+module_platform_driver(test_keyb_driver);
-+
-+MODULE_LICENSE("GPL v2");
-+MODULE_ALIAS("platform:test-ec-keyb");
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+>> arch/powerpc/kvm/book3s_pr.c:660:22: sparse: sparse: cast to restricted __be32
+>> arch/powerpc/kvm/book3s_pr.c:661:33: sparse: sparse: invalid assignment: &=
+>> arch/powerpc/kvm/book3s_pr.c:661:33: sparse:    left side has type unsigned int
+>> arch/powerpc/kvm/book3s_pr.c:661:33: sparse:    right side has type restricted __be32
+   arch/powerpc/kvm/book3s_pr.c: note: in included file:
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:962:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] srr0 @@     got restricted __be64 [usertype] @@
+   arch/powerpc/include/asm/kvm_ppc.h:962:1: sparse:     expected unsigned long long [usertype] srr0
+   arch/powerpc/include/asm/kvm_ppc.h:962:1: sparse:     got restricted __be64 [usertype]
+   arch/powerpc/include/asm/kvm_ppc.h:962:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] srr0 @@     got restricted __le64 [usertype] @@
+   arch/powerpc/include/asm/kvm_ppc.h:962:1: sparse:     expected unsigned long long [usertype] srr0
+   arch/powerpc/include/asm/kvm_ppc.h:962:1: sparse:     got restricted __le64 [usertype]
+   arch/powerpc/include/asm/kvm_ppc.h:963:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] srr1 @@     got restricted __be64 [usertype] @@
+   arch/powerpc/include/asm/kvm_ppc.h:963:1: sparse:     expected unsigned long long [usertype] srr1
+   arch/powerpc/include/asm/kvm_ppc.h:963:1: sparse:     got restricted __be64 [usertype]
+   arch/powerpc/include/asm/kvm_ppc.h:963:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] srr1 @@     got restricted __le64 [usertype] @@
+   arch/powerpc/include/asm/kvm_ppc.h:963:1: sparse:     expected unsigned long long [usertype] srr1
+   arch/powerpc/include/asm/kvm_ppc.h:963:1: sparse:     got restricted __le64 [usertype]
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:970:39: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] msr @@     got restricted __be64 [usertype] @@
+   arch/powerpc/include/asm/kvm_ppc.h:970:39: sparse:     expected unsigned long long [usertype] msr
+   arch/powerpc/include/asm/kvm_ppc.h:970:39: sparse:     got restricted __be64 [usertype]
+   arch/powerpc/include/asm/kvm_ppc.h:972:39: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] msr @@     got restricted __le64 [usertype] @@
+   arch/powerpc/include/asm/kvm_ppc.h:972:39: sparse:     expected unsigned long long [usertype] msr
+   arch/powerpc/include/asm/kvm_ppc.h:972:39: sparse:     got restricted __le64 [usertype]
+   arch/powerpc/include/asm/kvm_ppc.h:970:39: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] msr @@     got restricted __be64 [usertype] @@
+   arch/powerpc/include/asm/kvm_ppc.h:970:39: sparse:     expected unsigned long long [usertype] msr
+   arch/powerpc/include/asm/kvm_ppc.h:970:39: sparse:     got restricted __be64 [usertype]
+   arch/powerpc/include/asm/kvm_ppc.h:972:39: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] msr @@     got restricted __le64 [usertype] @@
+   arch/powerpc/include/asm/kvm_ppc.h:972:39: sparse:     expected unsigned long long [usertype] msr
+   arch/powerpc/include/asm/kvm_ppc.h:972:39: sparse:     got restricted __le64 [usertype]
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:964:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] dar @@     got restricted __be64 [usertype] @@
+   arch/powerpc/include/asm/kvm_ppc.h:964:1: sparse:     expected unsigned long long [usertype] dar
+   arch/powerpc/include/asm/kvm_ppc.h:964:1: sparse:     got restricted __be64 [usertype]
+   arch/powerpc/include/asm/kvm_ppc.h:964:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] dar @@     got restricted __le64 [usertype] @@
+   arch/powerpc/include/asm/kvm_ppc.h:964:1: sparse:     expected unsigned long long [usertype] dar
+   arch/powerpc/include/asm/kvm_ppc.h:964:1: sparse:     got restricted __le64 [usertype]
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:964:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] dar @@     got restricted __be64 [usertype] @@
+   arch/powerpc/include/asm/kvm_ppc.h:964:1: sparse:     expected unsigned long long [usertype] dar
+   arch/powerpc/include/asm/kvm_ppc.h:964:1: sparse:     got restricted __be64 [usertype]
+   arch/powerpc/include/asm/kvm_ppc.h:964:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] dar @@     got restricted __le64 [usertype] @@
+   arch/powerpc/include/asm/kvm_ppc.h:964:1: sparse:     expected unsigned long long [usertype] dar
+   arch/powerpc/include/asm/kvm_ppc.h:964:1: sparse:     got restricted __le64 [usertype]
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:974:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] dsisr @@     got restricted __be32 [usertype] @@
+   arch/powerpc/include/asm/kvm_ppc.h:974:1: sparse:     expected unsigned int [usertype] dsisr
+   arch/powerpc/include/asm/kvm_ppc.h:974:1: sparse:     got restricted __be32 [usertype]
+   arch/powerpc/include/asm/kvm_ppc.h:974:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] dsisr @@     got restricted __le32 [usertype] @@
+   arch/powerpc/include/asm/kvm_ppc.h:974:1: sparse:     expected unsigned int [usertype] dsisr
+   arch/powerpc/include/asm/kvm_ppc.h:974:1: sparse:     got restricted __le32 [usertype]
+   arch/powerpc/include/asm/kvm_ppc.h:964:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] dar @@     got restricted __be64 [usertype] @@
+   arch/powerpc/include/asm/kvm_ppc.h:964:1: sparse:     expected unsigned long long [usertype] dar
+   arch/powerpc/include/asm/kvm_ppc.h:964:1: sparse:     got restricted __be64 [usertype]
+   arch/powerpc/include/asm/kvm_ppc.h:964:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] dar @@     got restricted __le64 [usertype] @@
+   arch/powerpc/include/asm/kvm_ppc.h:964:1: sparse:     expected unsigned long long [usertype] dar
+   arch/powerpc/include/asm/kvm_ppc.h:964:1: sparse:     got restricted __le64 [usertype]
+   arch/powerpc/include/asm/kvm_ppc.h:984:23: sparse: sparse: cast to restricted __be32
+
+vim +660 arch/powerpc/kvm/book3s_pr.c
+
+f05ed4d56e9cff Paul Mackerras 2011-06-29  630  
+f05ed4d56e9cff Paul Mackerras 2011-06-29  631  /* Book3s_32 CPUs always have 32 bytes cache line size, which Linux assumes. To
+f05ed4d56e9cff Paul Mackerras 2011-06-29  632   * make Book3s_32 Linux work on Book3s_64, we have to make sure we trap dcbz to
+f05ed4d56e9cff Paul Mackerras 2011-06-29  633   * emulate 32 bytes dcbz length.
+f05ed4d56e9cff Paul Mackerras 2011-06-29  634   *
+f05ed4d56e9cff Paul Mackerras 2011-06-29  635   * The Book3s_64 inventors also realized this case and implemented a special bit
+f05ed4d56e9cff Paul Mackerras 2011-06-29  636   * in the HID5 register, which is a hypervisor ressource. Thus we can't use it.
+f05ed4d56e9cff Paul Mackerras 2011-06-29  637   *
+f05ed4d56e9cff Paul Mackerras 2011-06-29  638   * My approach here is to patch the dcbz instruction on executing pages.
+f05ed4d56e9cff Paul Mackerras 2011-06-29  639   */
+f05ed4d56e9cff Paul Mackerras 2011-06-29  640  static void kvmppc_patch_dcbz(struct kvm_vcpu *vcpu, struct kvmppc_pte *pte)
+f05ed4d56e9cff Paul Mackerras 2011-06-29  641  {
+f05ed4d56e9cff Paul Mackerras 2011-06-29  642  	struct page *hpage;
+f05ed4d56e9cff Paul Mackerras 2011-06-29  643  	u64 hpage_offset;
+f05ed4d56e9cff Paul Mackerras 2011-06-29  644  	u32 *page;
+f05ed4d56e9cff Paul Mackerras 2011-06-29  645  	int i;
+f05ed4d56e9cff Paul Mackerras 2011-06-29  646  
+f05ed4d56e9cff Paul Mackerras 2011-06-29  647  	hpage = gfn_to_page(vcpu->kvm, pte->raddr >> PAGE_SHIFT);
+32cad84f44d186 Xiao Guangrong 2012-08-03  648  	if (is_error_page(hpage))
+f05ed4d56e9cff Paul Mackerras 2011-06-29  649  		return;
+f05ed4d56e9cff Paul Mackerras 2011-06-29  650  
+f05ed4d56e9cff Paul Mackerras 2011-06-29  651  	hpage_offset = pte->raddr & ~PAGE_MASK;
+f05ed4d56e9cff Paul Mackerras 2011-06-29  652  	hpage_offset &= ~0xFFFULL;
+f05ed4d56e9cff Paul Mackerras 2011-06-29  653  	hpage_offset /= 4;
+f05ed4d56e9cff Paul Mackerras 2011-06-29  654  
+f05ed4d56e9cff Paul Mackerras 2011-06-29  655  	get_page(hpage);
+2480b2089210de Cong Wang      2011-11-25  656  	page = kmap_atomic(hpage);
+f05ed4d56e9cff Paul Mackerras 2011-06-29  657  
+f05ed4d56e9cff Paul Mackerras 2011-06-29  658  	/* patch dcbz into reserved instruction, so we trap */
+f05ed4d56e9cff Paul Mackerras 2011-06-29  659  	for (i=hpage_offset; i < hpage_offset + (HW_PAGE_SIZE / 4); i++)
+cd087eefe637d5 Alexander Graf 2014-04-24 @660  		if ((be32_to_cpu(page[i]) & 0xff0007ff) == INS_DCBZ)
+cd087eefe637d5 Alexander Graf 2014-04-24 @661  			page[i] &= cpu_to_be32(0xfffffff7);
+f05ed4d56e9cff Paul Mackerras 2011-06-29  662  
+2480b2089210de Cong Wang      2011-11-25  663  	kunmap_atomic(page);
+f05ed4d56e9cff Paul Mackerras 2011-06-29  664  	put_page(hpage);
+f05ed4d56e9cff Paul Mackerras 2011-06-29  665  }
+f05ed4d56e9cff Paul Mackerras 2011-06-29  666  
+
+:::::: The code at line 660 was first introduced by commit
+:::::: cd087eefe637d545345ea5f888d4ea4fe52e312c KVM: PPC: Book3S PR: Do dcbz32 patching with big endian instructions
+
+:::::: TO: Alexander Graf <agraf@suse.de>
+:::::: CC: Alexander Graf <agraf@suse.de>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

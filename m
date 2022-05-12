@@ -2,145 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 141C85246D7
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6D55246D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:23:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350943AbiELHXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 03:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53570 "EHLO
+        id S1350945AbiELHXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 03:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350927AbiELHWs (ORCPT
+        with ESMTP id S1344245AbiELHWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 03:22:48 -0400
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0012C662
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:22:45 -0700 (PDT)
-Received: by mail-vs1-xe2b.google.com with SMTP id y74so4284143vsy.7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:22:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+47ZJ5j0kmxI/lG0OiobIxpstGwfhpvNpvMEZldSxdk=;
-        b=MuT9tsxoUEIIaxiykQc0WLAgcqyuwhOycLY1xIEQd7ISyb9br2bf1LLu+S4UYj8lj3
-         8m8ze6NTZqKhc0v5SyIPcQuA1R4qBoZA8Q6lAtk8HXB52Dd5KPqt+Ds+6dH7RyNc3TYi
-         4AgMOAq57JN+k1UxDq7cpOQpSH1gnBZ0NE0rApDav0VPZa8lkVnuA+LUVltiiB7L5/LT
-         g+vwuxnOgeYHHjNqvZPl+cxcTVHhC6k5l3263yTd4OfbT2B8/zHLPCZKdpEIT8k65Rzx
-         nC4cty7D55MnVNslHa/C0HTGsyrzh8pMo1+YsLZSQVkxb3aQMO1mdX3GOhlYcRB2+GJC
-         6Osw==
+        Thu, 12 May 2022 03:22:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B1FB64701
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:22:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652340172;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kseTB5nEdb0NBMdde4rHbkMWqkdFBH/zYnlVhau93BU=;
+        b=ahcR3uv0SqRmdd2vBNlXfaR9kqK01uZx66qaMDyhaB5ZGI6tHEdrFCy+hbeZV6LGE3n8Y7
+        nClHpV8yQZEvCwz+p9h5RqdvIJBGDwDfVTOzu9P7ocQLwD0GC76PXnlkY3Qlt/F+hincwv
+        G8JBDkoexmki9XaJ4w6+VTYfYdGoKfg=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-425-TKHmWdNOOZCqiFFStrO-bw-1; Thu, 12 May 2022 03:22:51 -0400
+X-MC-Unique: TKHmWdNOOZCqiFFStrO-bw-1
+Received: by mail-wr1-f71.google.com with SMTP id u17-20020a056000161100b0020cda98f292so1701575wrb.21
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:22:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+47ZJ5j0kmxI/lG0OiobIxpstGwfhpvNpvMEZldSxdk=;
-        b=xDxCkgYxdMjkxFR89tUwYS2kUM0BJWYMPxY5CL/FKgXAr5J6v5qO/X5qDuBhEbB/B+
-         BcngjraXFumFPE8AV20z0Di2cGESliNdkdf8TfdLtaA180NnSotASzNgULIpTqUtXAXg
-         ve8L7cIJYSrhFlascy+8ItygxeBqJ7232lPEk5N7eByFk3z7/tBkrvG5bqm1YZBUCHq7
-         r/PPzib8GcW4xAvniMCQevc+7q0ksCFupnvuTuZzixRTWrkeOqKcY3yUSlqxdSY7CwdM
-         w50ERFrrPX+wlp74ED4Btwur5eEGn9l5mlfmWsaxEjN07w0auC4bTHdfLxq7bRZBZRq1
-         WlEA==
-X-Gm-Message-State: AOAM5326BPIWzC08SEMyh+uPPljSTKYIqTpkJGNi9Vk/wgQLsLkFiNop
-        XdhoIIUjSQ+KXqdhQ5A3Kw44eQuWzTBHui6NA6c4xA==
-X-Google-Smtp-Source: ABdhPJwj+V7aWJeyepm6+7W6e91Vry5hHYf2VwL3c0cxba/jMCnceW+EJTNcdKzywIzqMHQW1UknFgcv8buvE+BKFGE=
-X-Received: by 2002:a67:2fc6:0:b0:32d:7195:32e9 with SMTP id
- v189-20020a672fc6000000b0032d719532e9mr15747916vsv.44.1652340164357; Thu, 12
- May 2022 00:22:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAAPL-u-DGLcKRVDnChN9ZhxPkfxQvz9Sb93kVoX_4J2oiJSkUw@mail.gmail.com>
- <56b41ce6922ed5f640d9bd46a603fa27576532a9.camel@intel.com> <c5d55131-76ff-7354-2954-7cfac365a9a5@linux.ibm.com>
-In-Reply-To: <c5d55131-76ff-7354-2954-7cfac365a9a5@linux.ibm.com>
-From:   Wei Xu <weixugc@google.com>
-Date:   Thu, 12 May 2022 00:22:33 -0700
-Message-ID: <CAAPL-u-g86QqHaHGGtVJMER8ENC2dpekK+2qOkxoRFmC0F_80g@mail.gmail.com>
-Subject: Re: RFC: Memory Tiering Kernel Interfaces (v2)
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-Cc:     "ying.huang@intel.com" <ying.huang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Hesham Almatary <hesham.almatary@huawei.com>
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=kseTB5nEdb0NBMdde4rHbkMWqkdFBH/zYnlVhau93BU=;
+        b=pYBcV7CsC5+IlO5HcylDDu0pK/Wrf8RW8BbLS0UkK4V/nkbF7X4QlkhMIFTkWr+CiW
+         yPRJ/0LZLU+QoiHzcojAPfXaNAfv2Etm2AJsrzRP1TNMrqsow8T2CKWqeW4GYDWvqG13
+         VTNHifV1Y4wVLegDJAv+k46xdLuDD9dOFA+Pwirfa+v3Wu7kvbSDZZfG3i0Nq8EYxYJ1
+         1+m1fYYYeT+S+LEAe4kn2Y1MIWRvyoHazov8cJZuwsLWH4b3z86sV5+tG4JYxAhmev/7
+         z0GwB37Os/ZIpVoSXCmXwNsOZaA7qYemk1urK07A40FzvQmObT5GcsxqWnQPz1g3N77k
+         iw9w==
+X-Gm-Message-State: AOAM532DAQeyhwFDVnaPiN8k+aF3QnhERXAYp/BZLmBs25jwXmkfpSy+
+        za+MYro6/zRmYHkvOCuAQ+C85iU8y05C3kekZ+DwVeRbBPJpmsU1gavka0jFG/ZH7Kf6jsPuTwx
+        Qdf7n6Ia8yYAJ2bGdSCdGHAhF
+X-Received: by 2002:a05:600c:5008:b0:394:533c:54a1 with SMTP id n8-20020a05600c500800b00394533c54a1mr8661638wmr.15.1652340169935;
+        Thu, 12 May 2022 00:22:49 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzfDIyJS163A7troAixDhGyY3D0Z1myKH8iDS+VN/nsVAAT0KBLGPCXQS7L9r7bFwizbHtLgA==
+X-Received: by 2002:a05:600c:5008:b0:394:533c:54a1 with SMTP id n8-20020a05600c500800b00394533c54a1mr8661622wmr.15.1652340169675;
+        Thu, 12 May 2022 00:22:49 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-113-89.dyn.eolo.it. [146.241.113.89])
+        by smtp.gmail.com with ESMTPSA id r5-20020adfdc85000000b0020c5253d8d2sm3279125wrj.30.2022.05.12.00.22.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 00:22:49 -0700 (PDT)
+Message-ID: <dd7641f326b63211c3a749341e905cca90c9e124.camel@redhat.com>
+Subject: Re: [PATCH v2]  drivers: net: vmxnet3: fix possible NULL pointer
+ dereference in vmxnet3_rq_cleanup()
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Zixuan Fu <r33s3n6@gmail.com>, doshir@vmware.com,
+        pv-drivers@vmware.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        baijiaju1990@gmail.com, TOTE Robot <oslab@tsinghua.edu.cn>
+Date:   Thu, 12 May 2022 09:22:48 +0200
+In-Reply-To: <20220510131727.929547-1-r33s3n6@gmail.com>
+References: <20220510131727.929547-1-r33s3n6@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 12:12 AM Aneesh Kumar K V
-<aneesh.kumar@linux.ibm.com> wrote:
->
-> On 5/12/22 12:33 PM, ying.huang@intel.com wrote:
-> > On Wed, 2022-05-11 at 23:22 -0700, Wei Xu wrote:
-> >> Sysfs Interfaces
-> >> ================
-> >>
-> >> * /sys/devices/system/memtier/memtierN/nodelist
-> >>
-> >>    where N = 0, 1, 2 (the kernel supports only 3 tiers for now).
-> >>
-> >>    Format: node_list
-> >>
-> >>    Read-only.  When read, list the memory nodes in the specified tier.
-> >>
-> >>    Tier 0 is the highest tier, while tier 2 is the lowest tier.
-> >>
-> >>    The absolute value of a tier id number has no specific meaning.
-> >>    What matters is the relative order of the tier id numbers.
-> >>
-> >>    When a memory tier has no nodes, the kernel can hide its memtier
-> >>    sysfs files.
-> >>
-> >> * /sys/devices/system/node/nodeN/memtier
-> >>
-> >>    where N = 0, 1, ...
-> >>
-> >>    Format: int or empty
-> >>
-> >>    When read, list the memory tier that the node belongs to.  Its value
-> >>    is empty for a CPU-only NUMA node.
-> >>
-> >>    When written, the kernel moves the node into the specified memory
-> >>    tier if the move is allowed.  The tier assignment of all other nodes
-> >>    are not affected.
-> >>
-> >>    Initially, we can make this interface read-only.
-> >
-> > It seems that "/sys/devices/system/node/nodeN/memtier" has all
-> > information we needed.  Do we really need
-> > "/sys/devices/system/memtier/memtierN/nodelist"?
-> >
-> > That can be gotten via a simple shell command line,
-> >
-> > $ grep . /sys/devices/system/node/nodeN/memtier | sort -n -k 2 -t ':'
-> >
->
-> It will be really useful to fetch the memory tier node list in an easy
-> fashion rather than reading multiple sysfs directories. If we don't have
-> other attributes for memorytier, we could keep
-> "/sys/devices/system/memtier/memtierN" a NUMA node list there by
-> avoiding /sys/devices/system/memtier/memtierN/nodelist
->
-> -aneesh
+On Tue, 2022-05-10 at 21:17 +0800, Zixuan Fu wrote:
+> In vmxnet3_rq_create(), when dma_alloc_coherent() fails, 
+> vmxnet3_rq_destroy() is called. It sets rq->rx_ring[i].base to NULL. Then
+> vmxnet3_rq_create() returns an error to its callers mxnet3_rq_create_all()
+> -> vmxnet3_change_mtu(). Then vmxnet3_change_mtu() calls 
+> vmxnet3_force_close() -> dev_close() in error handling code. And the driver
+> calls vmxnet3_close() -> vmxnet3_quiesce_dev() -> vmxnet3_rq_cleanup_all()
+> -> vmxnet3_rq_cleanup(). In vmxnet3_rq_cleanup(), 
+> rq->rx_ring[ring_idx].base is accessed, but this variable is NULL, causing
+> a NULL pointer dereference.
+> 
+> To fix this possible bug, an if statement is added to check whether 
+> rq->rx_ring[0].base is NULL in vmxnet3_rq_cleanup() and exit early if so.
+> 
+> The error log in our fault-injection testing is shown as follows:
+> 
+> [   65.220135] BUG: kernel NULL pointer dereference, address: 0000000000000008
+> ...
+> [   65.222633] RIP: 0010:vmxnet3_rq_cleanup_all+0x396/0x4e0 [vmxnet3]
+> ...
+> [   65.227977] Call Trace:
+> ...
+> [   65.228262]  vmxnet3_quiesce_dev+0x80f/0x8a0 [vmxnet3]
+> [   65.228580]  vmxnet3_close+0x2c4/0x3f0 [vmxnet3]
+> [   65.228866]  __dev_close_many+0x288/0x350
+> [   65.229607]  dev_close_many+0xa4/0x480
+> [   65.231124]  dev_close+0x138/0x230
+> [   65.231933]  vmxnet3_force_close+0x1f0/0x240 [vmxnet3]
+> [   65.232248]  vmxnet3_change_mtu+0x75d/0x920 [vmxnet3]
+> ...
+> 
+> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+> Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
 
-It is harder to implement memtierN as just a file and doesn't follow
-the existing sysfs pattern, either.  Besides, it is extensible to have
-memtierN as a directory.
+Same remarks here, please provide a new version with a suitable fixes
+tag, thanks!
+
+Paolo
+

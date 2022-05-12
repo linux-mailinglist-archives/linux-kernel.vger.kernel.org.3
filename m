@@ -2,94 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D306525164
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44664525169
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356018AbiELPhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 11:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
+        id S1356033AbiELPij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 11:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244489AbiELPhh (ORCPT
+        with ESMTP id S1349137AbiELPih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 11:37:37 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF13D25C28B;
-        Thu, 12 May 2022 08:37:36 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:3d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 3D9FA846;
-        Thu, 12 May 2022 15:37:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 3D9FA846
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1652369856; bh=i+7cj4/G5qFWaDsvpxUy3aGMfQgj+VzEITIE6+j6oWY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=kS8v5mVvFQHYeJDxgphwKw1jGH8dPoJg69tycBYgJ/pZMEY2FCbh/DTevk0G3wB2l
-         Wtx4eeXhtqc1Oc840JxIDI5fguU70OU2MIOWbHxfCnGgTX/pUQ+aHlOB9jKbk5Rpsc
-         xvhYURaUFoPYnRGN28DayN7ZpDWev6jVWEbAOR0EWSwg9Sgi7Q8SQpK2Y9HV00zkDs
-         xGgrrw8/604vRlwh5ftEfL02pO/H1At0RQ8MJ3P+p2YD4hmryjvEL2539GovNDKpDP
-         Z/O1fTcUC4/IhwGwVTHkmiv1TYUNZfvj0RGVm5+RI/Ixbr22WDwd/cWp6giXxAcDJ7
-         1LrV6yqV4nwsg==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Garrett LeSage <garrett@lesage.us>,
-        IFo Hancroft <contact@ifohancroft.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>
-Subject: Re: [PATCH v1 1/2] docs: move Linux logo into a new `images` folder
-In-Reply-To: <20220510172530.29704-1-ojeda@kernel.org>
-References: <20220510172530.29704-1-ojeda@kernel.org>
-Date:   Thu, 12 May 2022 09:37:35 -0600
-Message-ID: <87r14y4v9c.fsf@meer.lwn.net>
+        Thu, 12 May 2022 11:38:37 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B739525C2A8
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:38:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652369916; x=1683905916;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+C+zcQ9OMsRKzfxB09v5LYFDyAjdAYn83xmW14cew7Y=;
+  b=cY75drnqwgOWz3yXBUOhok/yZI5coV+KMl3APqIwOsyUQy0Wfz5N3Iyi
+   QCMQtclB16AGjQUi8GVJ/V2ibneH+AxQNSBPndaWcTBq0OfhU18/ch5aw
+   4myzp5DmP8ZFJB72gcyt9xtfXPklNiI43cqyh3KgrmKYOTlfxjGVxHo9e
+   evnH/IwW1PVwL2BPz9yoVKcGhtAnszHP9niE/SMJGX9nGIGajYijPvsVO
+   15PfZqpipGwzmv6RadFOXsAYIXKvlPtUVbg05ClOGQXt50CrbNrQf0XTc
+   q7T/FGWm0sJCWeldKs0KJu3EfybbSQawwMGfDV4XQuapdovynbwgaXTU1
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="269974072"
+X-IronPort-AV: E=Sophos;i="5.91,220,1647327600"; 
+   d="scan'208";a="269974072"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 08:38:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,220,1647327600"; 
+   d="scan'208";a="553814387"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 12 May 2022 08:38:33 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1npAtc-000Kd0-SB;
+        Thu, 12 May 2022 15:38:32 +0000
+Date:   Thu, 12 May 2022 23:38:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+        Wei Fu <wefu@redhat.com>,
+        Liu Shaohua <liush@allwinnertech.com>,
+        Guo Ren <guoren@kernel.org>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>
+Subject: [ammarfaizi2-block:palmer/linux/riscv-d1 9/12]
+ arch/riscv/kernel/cpufeature.c:292:6: warning: variable 'cpu_apply_feature'
+ set but not used
+Message-ID: <202205122310.HMWyrLx7-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Miguel Ojeda <ojeda@kernel.org> writes:
+tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-d1
+head:   a35707c3d850dda0ceefb75b1b3bd191921d5765
+commit: ff689fd21cb13098305bae3f8d0c0065df2e2fc1 [9/12] riscv: add RISC-V Svpbmt extension support
+config: riscv-randconfig-r033-20220512 (https://download.01.org/0day-ci/archive/20220512/202205122310.HMWyrLx7-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9519dacab7b8afd537811fc2abaceb4d14f4e16a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/ff689fd21cb13098305bae3f8d0c0065df2e2fc1
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-d1
+        git checkout ff689fd21cb13098305bae3f8d0c0065df2e2fc1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
 
-> Having assets in the top-level `Documentation` directory can make
-> it harder to find the documents one needs, especially if we want
-> to add more of them later on.
->
-> Instead, create a new `images` folder inside it that is used
-> to hold assets such as logos.
->
-> Link: https://lore.kernel.org/lkml/8735hicoy7.fsf@meer.lwn.net/
-> Suggested-by: Jonathan Corbet <corbet@lwn.net>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> ---
->  Documentation/{ => images}/COPYING-logo |   0
->  Documentation/{ => images}/logo.gif     | Bin
->  2 files changed, 0 insertions(+), 0 deletions(-)
->  rename Documentation/{ => images}/COPYING-logo (100%)
->  rename Documentation/{ => images}/logo.gif (100%)
->
-> diff --git a/Documentation/COPYING-logo b/Documentation/images/COPYING-logo
-> similarity index 100%
-> rename from Documentation/COPYING-logo
-> rename to Documentation/images/COPYING-logo
-> diff --git a/Documentation/logo.gif b/Documentation/images/logo.gif
-> similarity index 100%
-> rename from Documentation/logo.gif
-> rename to Documentation/images/logo.gif
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-This will break scripts/spdxcheck-test.sh - which somebody might
-actually try to run one of these years.  So this patch really needs to
-update that script to follow the move.
+All warnings (new ones prefixed by >>):
 
-As far as I can tell, that's the only reference to logo.gif in the
-entire tree.  It makes me wonder if we need it at all.  Digging through
-the history suggests it was added in 2.1.15, but never really used for
-anything.  It's only role would appear to be to serve as testing
-material for the SPDX checker..:)
+>> arch/riscv/kernel/cpufeature.c:292:6: warning: variable 'cpu_apply_feature' set but not used [-Wunused-but-set-variable]
+           u32 cpu_apply_feature = 0;
+               ^
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   1 warning and 20 errors generated.
 
-Thanks,
 
-jon
+vim +/cpu_apply_feature +292 arch/riscv/kernel/cpufeature.c
+
+   286	
+   287	void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
+   288							  struct alt_entry *end,
+   289							  unsigned int stage)
+   290	{
+   291		u32 cpu_req_feature = cpufeature_probe(stage);
+ > 292		u32 cpu_apply_feature = 0;
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

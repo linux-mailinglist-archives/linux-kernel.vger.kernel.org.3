@@ -2,195 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF8E5256CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 23:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCCDF5256D0
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 23:01:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358596AbiELVBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 17:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43884 "EHLO
+        id S1358625AbiELVBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 17:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354595AbiELVAz (ORCPT
+        with ESMTP id S1358599AbiELVA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 17:00:55 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551E320F4B
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 14:00:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652389254; x=1683925254;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=e4jQKep7r8+EurMhXfxPV0jLfPxTV/UjYpAHlsYVU/8=;
-  b=mV6pwltWUMUNwo471AxCRBhNjVd8hJlJQUi4gZLPirC9xvcrQ0aKtzGp
-   F6XECBndumNl9jmNlP7Vfxyb7yE7SNm8K7H7DBRFWVAqYRXu0gqfq+N2v
-   m/wxKPBS0n4Tx+WzKVx2r85p7+dl08PS1n6lQpg0oiaEQLGI72FVpi/eh
-   Ai1RfwyvzW3JF6FJ5WRmxbLW0puqY+yCFsKArjkDxB+kzOELHnfTJH+8W
-   f6CnBf3m8tg3NXK1YCVvAGTxVSkPRC796/KJxwYuPgkPnpNQCs6MlMo3X
-   XWw16nopu8orhjsO+depSvOAaggmc/VMt0Txk5ewNaqgy5Dbs3X+UoFKG
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="250036969"
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="250036969"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 14:00:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="815087845"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 12 May 2022 14:00:52 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1npFvX-000Kw4-It;
-        Thu, 12 May 2022 21:00:51 +0000
-Date:   Fri, 13 May 2022 05:00:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [linux-stable-rc:linux-5.10.y 5435/5609]
- drivers/usb/phy/phy-generic.c:271:19: error: implicit declaration of
- function 'devm_regulator_get_exclusive'
-Message-ID: <202205130402.6UESZaCw-lkp@intel.com>
+        Thu, 12 May 2022 17:00:59 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D982558B
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 14:00:57 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CKuFUZ030686;
+        Thu, 12 May 2022 21:00:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=1KwfhkldnBNAglWnX9p2UAFz4cu4GJ4dugWpMyEm/YU=;
+ b=M+Aq3G8xD2cr+Z0cpB3tIs9aRkoK4gcspKMbSZKV2OEBMU+gXTo8T4sbojYMj4FCT7ux
+ UK0rOUrmPNp66pqFaa8rGBv0C3QiHh2yvIhZUIzpGxCza9XTKDIl5Di7XP5C3/8O+oV4
+ g+NtI5i1p42FbHqOHbspJUJn6gDmgy0sK3IQH1Kh4Ghrf/pX6QfHtYcvAL0sRLvbD2BD
+ WBOhZaLqxZjPINDAiuezMXD5/B9ICCwTqKy+PGamGHx3w/nXxsSoKkCKNCQKxl5+TKyd
+ LvJRIzlpsdZzn4sg6aDCVB4x3oEVIyWvuG/0hm+JO3XzHjhjmwwGD+x1sUNc1X7h4g/J uQ== 
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g19q6g2ak-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 21:00:45 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24CKwSOW017618;
+        Thu, 12 May 2022 21:00:45 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma02dal.us.ibm.com with ESMTP id 3fwgday76c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 21:00:45 +0000
+Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24CL0iDk32768334
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 May 2022 21:00:44 GMT
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ED2F313605D;
+        Thu, 12 May 2022 21:00:43 +0000 (GMT)
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A11FD136055;
+        Thu, 12 May 2022 21:00:43 +0000 (GMT)
+Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.56.168])
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu, 12 May 2022 21:00:43 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-fsi@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, joel@jms.id.au,
+        alistair@popple.id.au, jk@ozlabs.org,
+        Eddie James <eajames@linux.ibm.com>
+Subject: [PATCH] fsi: occ: Prevent use after free
+Date:   Thu, 12 May 2022 16:00:34 -0500
+Message-Id: <20220512210034.59907-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: j2hZuXqg4k_jRswtDikHsB2aCBsJaAvY
+X-Proofpoint-ORIG-GUID: j2hZuXqg4k_jRswtDikHsB2aCBsJaAvY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-12_17,2022-05-12_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 adultscore=0 spamscore=0 mlxscore=0 mlxlogscore=829
+ lowpriorityscore=0 priorityscore=1501 phishscore=0 clxscore=1011
+ suspectscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205120087
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-head:   e61686bb77c441d8e5f10dc063e2cea799e4aae6
-commit: d22d92230ffbbfb696f3800bf53391bb2ef6a688 [5435/5609] usb: phy: generic: Get the vbus supply
-config: arm64-buildonly-randconfig-r004-20220512 (https://download.01.org/0day-ci/archive/20220513/202205130402.6UESZaCw-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9519dacab7b8afd537811fc2abaceb4d14f4e16a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=d22d92230ffbbfb696f3800bf53391bb2ef6a688
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.10.y
-        git checkout d22d92230ffbbfb696f3800bf53391bb2ef6a688
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/usb/phy/
+Use get_device and put_device in the open and close functions to
+make sure the device doesn't get freed while a file descriptor is
+open.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
+---
+ drivers/fsi/fsi-occ.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-All error/warnings (new ones prefixed by >>):
-
->> drivers/usb/phy/phy-generic.c:271:19: error: implicit declaration of function 'devm_regulator_get_exclusive' [-Werror,-Wimplicit-function-declaration]
-           nop->vbus_draw = devm_regulator_get_exclusive(dev, "vbus");
-                            ^
-   drivers/usb/phy/phy-generic.c:271:19: note: did you mean 'regulator_get_exclusive'?
-   include/linux/regulator/consumer.h:329:1: note: 'regulator_get_exclusive' declared here
-   regulator_get_exclusive(struct device *dev, const char *id)
-   ^
->> drivers/usb/phy/phy-generic.c:271:17: warning: incompatible integer to pointer conversion assigning to 'struct regulator *' from 'int' [-Wint-conversion]
-           nop->vbus_draw = devm_regulator_get_exclusive(dev, "vbus");
-                          ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
-
-
-vim +/devm_regulator_get_exclusive +271 drivers/usb/phy/phy-generic.c
-
-   205	
-   206	int usb_phy_gen_create_phy(struct device *dev, struct usb_phy_generic *nop)
-   207	{
-   208		enum usb_phy_type type = USB_PHY_TYPE_USB2;
-   209		int err = 0;
-   210	
-   211		u32 clk_rate = 0;
-   212		bool needs_vcc = false, needs_clk = false;
-   213	
-   214		if (dev->of_node) {
-   215			struct device_node *node = dev->of_node;
-   216	
-   217			if (of_property_read_u32(node, "clock-frequency", &clk_rate))
-   218				clk_rate = 0;
-   219	
-   220			needs_vcc = of_property_read_bool(node, "vcc-supply");
-   221			needs_clk = of_property_read_bool(node, "clocks");
-   222		}
-   223		nop->gpiod_reset = devm_gpiod_get_optional(dev, "reset",
-   224							   GPIOD_ASIS);
-   225		err = PTR_ERR_OR_ZERO(nop->gpiod_reset);
-   226		if (!err) {
-   227			nop->gpiod_vbus = devm_gpiod_get_optional(dev,
-   228							 "vbus-detect",
-   229							 GPIOD_ASIS);
-   230			err = PTR_ERR_OR_ZERO(nop->gpiod_vbus);
-   231		}
-   232	
-   233		if (err == -EPROBE_DEFER)
-   234			return -EPROBE_DEFER;
-   235		if (err) {
-   236			dev_err(dev, "Error requesting RESET or VBUS GPIO\n");
-   237			return err;
-   238		}
-   239		if (nop->gpiod_reset)
-   240			gpiod_direction_output(nop->gpiod_reset, 1);
-   241	
-   242		nop->phy.otg = devm_kzalloc(dev, sizeof(*nop->phy.otg),
-   243				GFP_KERNEL);
-   244		if (!nop->phy.otg)
-   245			return -ENOMEM;
-   246	
-   247		nop->clk = devm_clk_get(dev, "main_clk");
-   248		if (IS_ERR(nop->clk)) {
-   249			dev_dbg(dev, "Can't get phy clock: %ld\n",
-   250						PTR_ERR(nop->clk));
-   251			if (needs_clk)
-   252				return PTR_ERR(nop->clk);
-   253		}
-   254	
-   255		if (!IS_ERR(nop->clk) && clk_rate) {
-   256			err = clk_set_rate(nop->clk, clk_rate);
-   257			if (err) {
-   258				dev_err(dev, "Error setting clock rate\n");
-   259				return err;
-   260			}
-   261		}
-   262	
-   263		nop->vcc = devm_regulator_get(dev, "vcc");
-   264		if (IS_ERR(nop->vcc)) {
-   265			dev_dbg(dev, "Error getting vcc regulator: %ld\n",
-   266						PTR_ERR(nop->vcc));
-   267			if (needs_vcc)
-   268				return -EPROBE_DEFER;
-   269		}
-   270	
- > 271		nop->vbus_draw = devm_regulator_get_exclusive(dev, "vbus");
-   272		if (PTR_ERR(nop->vbus_draw) == -ENODEV)
-   273			nop->vbus_draw = NULL;
-   274		if (IS_ERR(nop->vbus_draw))
-   275			return dev_err_probe(dev, PTR_ERR(nop->vbus_draw),
-   276					     "could not get vbus regulator\n");
-   277	
-   278		nop->dev		= dev;
-   279		nop->phy.dev		= nop->dev;
-   280		nop->phy.label		= "nop-xceiv";
-   281		nop->phy.set_suspend	= nop_set_suspend;
-   282		nop->phy.type		= type;
-   283	
-   284		nop->phy.otg->state		= OTG_STATE_UNDEFINED;
-   285		nop->phy.otg->usb_phy		= &nop->phy;
-   286		nop->phy.otg->set_host		= nop_set_host;
-   287		nop->phy.otg->set_peripheral	= nop_set_peripheral;
-   288	
-   289		return 0;
-   290	}
-   291	EXPORT_SYMBOL_GPL(usb_phy_gen_create_phy);
-   292	
-
+diff --git a/drivers/fsi/fsi-occ.c b/drivers/fsi/fsi-occ.c
+index c9cc75fbdfb9..9e48dc62b1c5 100644
+--- a/drivers/fsi/fsi-occ.c
++++ b/drivers/fsi/fsi-occ.c
+@@ -82,6 +82,9 @@ static int occ_open(struct inode *inode, struct file *file)
+ 	struct miscdevice *mdev = file->private_data;
+ 	struct occ *occ = to_occ(mdev);
+ 
++	if (!occ->buffer)
++		return -ENOENT;
++
+ 	if (!client)
+ 		return -ENOMEM;
+ 
+@@ -94,6 +97,7 @@ static int occ_open(struct inode *inode, struct file *file)
+ 	client->occ = occ;
+ 	mutex_init(&client->lock);
+ 	file->private_data = client;
++	get_device(occ->dev);
+ 
+ 	/* We allocate a 1-page buffer, make sure it all fits */
+ 	BUILD_BUG_ON((OCC_CMD_DATA_BYTES + 3) > PAGE_SIZE);
+@@ -143,7 +147,7 @@ static ssize_t occ_write(struct file *file, const char __user *buf,
+ 	ssize_t rc;
+ 	u8 *cmd;
+ 
+-	if (!client)
++	if (!client || !client->occ->buffer)
+ 		return -ENODEV;
+ 
+ 	if (len > (OCC_CMD_DATA_BYTES + 3) || len < 3)
+@@ -197,6 +201,7 @@ static int occ_release(struct inode *inode, struct file *file)
+ {
+ 	struct occ_client *client = file->private_data;
+ 
++	put_device(client->occ->dev);
+ 	free_page((unsigned long)client->buffer);
+ 	kfree(client);
+ 
+@@ -672,6 +677,7 @@ static int occ_remove(struct platform_device *pdev)
+ 	struct occ *occ = platform_get_drvdata(pdev);
+ 
+ 	kvfree(occ->buffer);
++	occ->buffer = NULL;
+ 
+ 	misc_deregister(&occ->mdev);
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.27.0
+

@@ -2,258 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 307B252444A
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 06:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E09524452
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 06:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347321AbiELEd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 00:33:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
+        id S1347515AbiELEgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 00:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346463AbiELEdu (ORCPT
+        with ESMTP id S1347286AbiELEgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 00:33:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1385C218FCE
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 21:33:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652330018;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9m59m31zWjI88PU/fkJ+2jBtK+MMPKzeFSYoFIaJt9c=;
-        b=hFs+QH3VSLYLL+GcmLe23/y/SpLzyLPJZ5L07aosfy/pP+dWAun4JpNi6wDojZwELAoaSS
-        aHh7X6QXmnmVJDwwJmyYs1rAWKf7ra++PJ1iV7TMSz2Jmgnw3tsg7lR663+l1/fnIIWoxE
-        kCR6GmUfy2Jr+3/ITsO3Sc5yQmWaJhY=
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
- [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-621-X0LD5W0KNH6Ml8ysa-8SJQ-1; Thu, 12 May 2022 00:33:36 -0400
-X-MC-Unique: X0LD5W0KNH6Ml8ysa-8SJQ-1
-Received: by mail-pf1-f199.google.com with SMTP id u25-20020aa78499000000b0050d328e2f6bso2067100pfn.7
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 21:33:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9m59m31zWjI88PU/fkJ+2jBtK+MMPKzeFSYoFIaJt9c=;
-        b=ZULrBOr694FTYN1lOXTxvja1uMAEXzy+Aj7GTZe4XpLkXsGLfIjGihdaOeZIUUyEAd
-         kmzgw/raZcj3TgXRyb15dwHGY11ONbqx88hwubRAzNYa3IFDj4OtZg+JcstURA7zvghS
-         Z1qYKYbqk55PahuxYhj6jfHU86rQMvSwRA9ZehBe+Jlm/s/VupDHE8ylI98DGcSLvf82
-         cTfXUHqiJmeL/3OdyZYhr/s852wMPfIoyi1Jw1HwHjUBxXrCr34M/Mg8s6TcANCIdYRK
-         W/G2eLMauFGFecHOQ6aopm555xIi6bYI54fMqPACU0X6V5/9esz71R/he4CbBULMUqjq
-         JGAQ==
-X-Gm-Message-State: AOAM532//zlBi13kInD3jiiOp7AZI4NXxxIUc2MGqNz6X0FytP4ASOGl
-        K82c7PgheciUtNDQFpu0LWmJlXyluUX78VQmEHpqxFEOZ07GtZ+i2lOiwNPNn+DZB47BXl43qu/
-        E0vqTGVILFbKWy0YQTut3N7bg
-X-Received: by 2002:a17:903:32d0:b0:15e:8cbc:fd39 with SMTP id i16-20020a17090332d000b0015e8cbcfd39mr29480055plr.95.1652330015204;
-        Wed, 11 May 2022 21:33:35 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwywe5Nh4a9dE8q7MbA+N0sqO4+GFmGOMSIJl/Vpj8aBpEmmVY8aRc6/9wvIdpdBGVwqi/Qbw==
-X-Received: by 2002:a17:903:32d0:b0:15e:8cbc:fd39 with SMTP id i16-20020a17090332d000b0015e8cbcfd39mr29480024plr.95.1652330014959;
-        Wed, 11 May 2022 21:33:34 -0700 (PDT)
-Received: from localhost ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id p3-20020a170902780300b0015e8d4eb293sm2755119pll.221.2022.05.11.21.33.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 21:33:34 -0700 (PDT)
-Date:   Thu, 12 May 2022 12:33:10 +0800
-From:   Coiby Xu <coxu@redhat.com>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     kexec@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
-        Michal Suchanek <msuchanek@suse.de>,
-        Dave Young <dyoung@redhat.com>, Will Deacon <will@kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Mimi Zohar <zohar@linux.ibm.com>, Chun-Yi Lee <jlee@suse.com>,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v7 2/4] kexec, KEYS: make the code in
- bzImage64_verify_sig generic
-Message-ID: <20220512043310.v3e22423ybe4z65e@Rk>
-References: <20220512023402.9913-1-coxu@redhat.com>
- <20220512023402.9913-3-coxu@redhat.com>
- <Ynx1DUvDTL1R4Pj5@MiWiFi-R3L-srv>
- <YnyEafqEcSh/wRRN@MiWiFi-R3L-srv>
+        Thu, 12 May 2022 00:36:10 -0400
+Received: from m12-13.163.com (m12-13.163.com [220.181.12.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07C2115A25;
+        Wed, 11 May 2022 21:36:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Message-ID:Date:MIME-Version:Subject:From; bh=1d1tM
+        H+vnpjo4OFLZKcFG1r3ENVDriGXTVUEOuHNaZI=; b=d9n4eEEfilh7piLG7UENr
+        1Boj9hwQtUtl1CeaNiYFDlYuMRUTBDhRUZJGikc9OnvLgYlFR0xkvUp1YI9vtuJY
+        pgSoSaCc/Fi1/78Q5RTpzeje4bYF9ONLeZuBR5sU/jKzE4obNA4yLCs3sMrbB/bn
+        TY12O6FCtnLzkTlCi8bxIM=
+Received: from [192.168.3.102] (unknown [218.201.129.19])
+        by smtp9 (Coremail) with SMTP id DcCowABHmR9ejnxi3XKFCQ--.35242S2;
+        Thu, 12 May 2022 12:34:39 +0800 (CST)
+Message-ID: <01c2c11f-71fd-b735-b935-109865d62de5@163.com>
+Date:   Thu, 12 May 2022 12:34:38 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <YnyEafqEcSh/wRRN@MiWiFi-R3L-srv>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2] drivers: cpufreq: sun8i-r40: Add cpufreq support
+Content-Language: en-US
+To:     =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
+        linux-sunxi@lists.linux.dev
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20220510003611.1812-1-qianfanguijin@163.com>
+ <1902551.yKVeVyVuyW@kista>
+From:   qianfan <qianfanguijin@163.com>
+In-Reply-To: <1902551.yKVeVyVuyW@kista>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DcCowABHmR9ejnxi3XKFCQ--.35242S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxKF17GFy3tFW5JFWxKr17Jrb_yoW7Zw15pr
+        1UCFZ5GF4fWr15t34aqw1DGrn7CFyv9FWY9ryUGa48tr1kZrykXr13tr93KrZ5Xr13J3yI
+        vrn5XryI9ws8JaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UXiSLUUUUU=
+X-Originating-IP: [218.201.129.19]
+X-CM-SenderInfo: htld0w5dqj3xxmlqqiywtou0bp/1tbiGhn+7VaEBiT6wwABsY
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 11:52:09AM +0800, Baoquan He wrote:
->On 05/12/22 at 10:46am, Baoquan He wrote:
->> On 05/12/22 at 10:34am, Coiby Xu wrote:
->> > commit 278311e417be ("kexec, KEYS: Make use of platform keyring for
->> > signature verify") adds platform keyring support on x86 kexec but not
->> > arm64.
->> >
->> > The code in bzImage64_verify_sig makes use of system keyrings including
->> > .buitin_trusted_keys, .secondary_trusted_keys and .platform keyring to
->> > verify signed kernel image as PE file. Make it generic so both x86_64
->> > and arm64 can use it.
->> >
->> > Note this patch is needed by a later patch so Cc it to the stable tree
->> > as well.
+
+
+在 2022/5/12 4:13, Jernej Škrabec 写道:
+> Dne torek, 10. maj 2022 ob 02:36:11 CEST je qianfanguijin@163.com napisal(a):
+>> From: qianfan Zhao <qianfanguijin@163.com>
 >>
->> This note should not be added in log.
+>> OPP table value is get from allwinner lichee 3.10 kernel.
+>> And completed 'cpu-supply' on sun8i based board.
 >>
->> >
->> > Cc: kexec@lists.infradead.org
->> > Cc: keyrings@vger.kernel.org
->> > Cc: linux-security-module@vger.kernel.org
->> > Cc: stable@vger.kernel.org # 34d5960af253: kexec: clean up arch_kexec_kernel_verify_sig
+>> Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
+>> ---
+>>   .../boot/dts/sun8i-r40-bananapi-m2-ultra.dts  |  4 ++
+>>   arch/arm/boot/dts/sun8i-r40-feta40i.dtsi      |  4 ++
+>>   arch/arm/boot/dts/sun8i-r40.dtsi              | 47 +++++++++++++++++++
+>>   arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts      |  4 ++
+>>   .../boot/dts/sun8i-v40-bananapi-m2-berry.dts  |  4 ++
+>>   drivers/cpufreq/cpufreq-dt-platdev.c          |  1 +
+> This patch needs to be split in two:
+> 1. driver change
+> 2. DT changes
 >
->Hold on, should we CC stable when it's not fixing an issue?
+> And please add change log here for next submission.
+Maybe there patch is better? one of driver, one of sun8i-r40.dtsi
+and the others is the board's changes.
 >
->Hi Coiby,
-
-Hi Baoquan,
-
->
->Just to make clear , is this patch fixing an issue, or it's just an
->preparation for later patch's use?
->
->Or I should ask in another way, any problem is solved with this patch?
-
-At least it doesn't fix an issue that satisfy the criteria listed in 
-https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-
->
->
->> > Reviewed-by: Michal Suchanek <msuchanek@suse.de>
->> > Signed-off-by: Coiby Xu <coxu@redhat.com>
->> > ---
+>>   6 files changed, 64 insertions(+)
 >>
->> You can put the note here, it won't be added to commit log when merged.
->> Maybe it can be removed when merged.
-
-Thanks for the suggestion! Shall I send a version to fix this problem or
-can I just bother the maintainer to remove it?
-
-
->>
->> Otherwise, LGTM
->>
->> Acked-by: Baoquan He <bhe@redhat.com>
->>
->> >  arch/x86/kernel/kexec-bzimage64.c | 20 +-------------------
->> >  include/linux/kexec.h             |  7 +++++++
->> >  kernel/kexec_file.c               | 17 +++++++++++++++++
->> >  3 files changed, 25 insertions(+), 19 deletions(-)
->> >
->> > diff --git a/arch/x86/kernel/kexec-bzimage64.c b/arch/x86/kernel/kexec-bzimage64.c
->> > index 170d0fd68b1f..f299b48f9c9f 100644
->> > --- a/arch/x86/kernel/kexec-bzimage64.c
->> > +++ b/arch/x86/kernel/kexec-bzimage64.c
->> > @@ -17,7 +17,6 @@
->> >  #include <linux/kernel.h>
->> >  #include <linux/mm.h>
->> >  #include <linux/efi.h>
->> > -#include <linux/verification.h>
->> >
->> >  #include <asm/bootparam.h>
->> >  #include <asm/setup.h>
->> > @@ -528,28 +527,11 @@ static int bzImage64_cleanup(void *loader_data)
->> >  	return 0;
->> >  }
->> >
->> > -#ifdef CONFIG_KEXEC_BZIMAGE_VERIFY_SIG
->> > -static int bzImage64_verify_sig(const char *kernel, unsigned long kernel_len)
->> > -{
->> > -	int ret;
->> > -
->> > -	ret = verify_pefile_signature(kernel, kernel_len,
->> > -				      VERIFY_USE_SECONDARY_KEYRING,
->> > -				      VERIFYING_KEXEC_PE_SIGNATURE);
->> > -	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
->> > -		ret = verify_pefile_signature(kernel, kernel_len,
->> > -					      VERIFY_USE_PLATFORM_KEYRING,
->> > -					      VERIFYING_KEXEC_PE_SIGNATURE);
->> > -	}
->> > -	return ret;
->> > -}
->> > -#endif
->> > -
->> >  const struct kexec_file_ops kexec_bzImage64_ops = {
->> >  	.probe = bzImage64_probe,
->> >  	.load = bzImage64_load,
->> >  	.cleanup = bzImage64_cleanup,
->> >  #ifdef CONFIG_KEXEC_BZIMAGE_VERIFY_SIG
->> > -	.verify_sig = bzImage64_verify_sig,
->> > +	.verify_sig = kexec_kernel_verify_pe_sig,
->> >  #endif
->> >  };
->> > diff --git a/include/linux/kexec.h b/include/linux/kexec.h
->> > index 413235c6c797..da83abfc628b 100644
->> > --- a/include/linux/kexec.h
->> > +++ b/include/linux/kexec.h
->> > @@ -19,6 +19,7 @@
->> >  #include <asm/io.h>
->> >
->> >  #include <uapi/linux/kexec.h>
->> > +#include <linux/verification.h>
->> >
->> >  /* Location of a reserved region to hold the crash kernel.
->> >   */
->> > @@ -202,6 +203,12 @@ int arch_kexec_apply_relocations(struct purgatory_info *pi,
->> >  				 const Elf_Shdr *relsec,
->> >  				 const Elf_Shdr *symtab);
->> >  int arch_kimage_file_post_load_cleanup(struct kimage *image);
->> > +#ifdef CONFIG_KEXEC_SIG
->> > +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
->> > +int kexec_kernel_verify_pe_sig(const char *kernel,
->> > +				    unsigned long kernel_len);
->> > +#endif
->> > +#endif
->> >  int arch_kexec_locate_mem_hole(struct kexec_buf *kbuf);
->> >
->> >  extern int kexec_add_buffer(struct kexec_buf *kbuf);
->> > diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
->> > index 3720435807eb..754885b96aab 100644
->> > --- a/kernel/kexec_file.c
->> > +++ b/kernel/kexec_file.c
->> > @@ -165,6 +165,23 @@ void kimage_file_post_load_cleanup(struct kimage *image)
->> >  }
->> >
->> >  #ifdef CONFIG_KEXEC_SIG
->> > +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
->> > +int kexec_kernel_verify_pe_sig(const char *kernel, unsigned long kernel_len)
->> > +{
->> > +	int ret;
->> > +
->> > +	ret = verify_pefile_signature(kernel, kernel_len,
->> > +				      VERIFY_USE_SECONDARY_KEYRING,
->> > +				      VERIFYING_KEXEC_PE_SIGNATURE);
->> > +	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
->> > +		ret = verify_pefile_signature(kernel, kernel_len,
->> > +					      VERIFY_USE_PLATFORM_KEYRING,
->> > +					      VERIFYING_KEXEC_PE_SIGNATURE);
->> > +	}
->> > +	return ret;
->> > +}
->> > +#endif
->> > +
->> >  static int kexec_image_verify_sig(struct kimage *image, void *buf,
->> >  		unsigned long buf_len)
->> >  {
->> > --
->> > 2.35.3
->> >
->>
+>> diff --git a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts b/arch/arm/
+> boot/dts/sun8i-r40-bananapi-m2-ultra.dts
+>> index a6a1087a0c9b..4f30018ec4a2 100644
+>> --- a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
+>> +++ b/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
+>> @@ -113,6 +113,10 @@ &ahci {
+>>   	status = "okay";
+>>   };
+>>   
+>> +&cpu0 {
+>> +	cpu-supply = <&reg_dcdc2>;
+>> +};
+>> +
+>>   &de {
+>>   	status = "okay";
+>>   };
+>> diff --git a/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi b/arch/arm/boot/dts/
+> sun8i-r40-feta40i.dtsi
+>> index 265e0fa57a32..b872b51a346d 100644
+>> --- a/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi
+>> +++ b/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi
+>> @@ -6,6 +6,10 @@
+>>   
+>>   #include "sun8i-r40.dtsi"
+>>   
+>> +&cpu0 {
+>> +	cpu-supply = <&reg_dcdc2>;
+>> +};
+>> +
+>>   &i2c0 {
+>>   	status = "okay";
+>>   
+>> diff --git a/arch/arm/boot/dts/sun8i-r40.dtsi b/arch/arm/boot/dts/sun8i-
+> r40.dtsi
+>> index 291f4784e86c..90de119095fa 100644
+>> --- a/arch/arm/boot/dts/sun8i-r40.dtsi
+>> +++ b/arch/arm/boot/dts/sun8i-r40.dtsi
+>> @@ -54,6 +54,41 @@ / {
+>>   	#size-cells = <1>;
+>>   	interrupt-parent = <&gic>;
+>>   
+>> +	cpu0_opp_table: opp_table0 {
+>> +		compatible = "operating-points-v2";
+>> +		opp-shared;
+>> +
+>> +		opp-720000000 {
+>> +			opp-hz = /bits/ 64 <720000000>;
+>> +			opp-microvolt = <1000000 1000000 1300000>;
+>> +			clock-latency-ns = <2000000>;
+>> +		};
+>> +
+>> +		opp-912000000 {
+>> +			opp-hz = /bits/ 64 <912000000>;
+>> +			opp-microvolt = <1100000 1100000 1300000>;
+>> +			clock-latency-ns = <2000000>;
+>> +		};
+>> +
+>> +		opp-1008000000 {
+>> +			opp-hz = /bits/ 64 <1008000000>;
+>> +			opp-microvolt = <1160000 1160000 1300000>;
+>> +			clock-latency-ns = <2000000>;
+>> +		};
+>> +
+>> +		opp-1104000000 {
+>> +			opp-hz = /bits/ 64 <1104000000>;
+>> +			opp-microvolt = <1240000 1240000 1300000>;
+>> +			clock-latency-ns = <2000000>;
+>> +		};
+>> +
+>> +		opp-1200000000 {
+>> +			opp-hz = /bits/ 64 <1200000000>;
+>> +			opp-microvolt = <1300000 1300000 1300000>;
+>> +			clock-latency-ns = <2000000>;
+>> +		};
+>> +	};
+>> +
+>>   	clocks {
+>>   		#address-cells = <1>;
+>>   		#size-cells = <1>;
+>> @@ -84,24 +119,36 @@ cpu0: cpu@0 {
+>>   			compatible = "arm,cortex-a7";
+>>   			device_type = "cpu";
+>>   			reg = <0>;
+>> +			clocks = <&ccu CLK_CPU>;
+>> +			clock-names = "cpu";
+>> +			operating-points-v2 = <&cpu0_opp_table>;
+>>   		};
+>>   
+>>   		cpu1: cpu@1 {
+>>   			compatible = "arm,cortex-a7";
+>>   			device_type = "cpu";
+>>   			reg = <1>;
+>> +			clocks = <&ccu CLK_CPU>;
+>> +			clock-names = "cpu";
+>> +			operating-points-v2 = <&cpu0_opp_table>;
+>>   		};
+>>   
+>>   		cpu2: cpu@2 {
+>>   			compatible = "arm,cortex-a7";
+>>   			device_type = "cpu";
+>>   			reg = <2>;
+>> +			clocks = <&ccu CLK_CPU>;
+>> +			clock-names = "cpu";
+>> +			operating-points-v2 = <&cpu0_opp_table>;
+>>   		};
+>>   
+>>   		cpu3: cpu@3 {
+>>   			compatible = "arm,cortex-a7";
+>>   			device_type = "cpu";
+>>   			reg = <3>;
+>> +			clocks = <&ccu CLK_CPU>;
+>> +			clock-names = "cpu";
+>> +			operating-points-v2 = <&cpu0_opp_table>;
+>>   		};
+>>   	};
+>>   
+>> diff --git a/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts b/arch/arm/boot/dts/
+> sun8i-t3-cqa3t-bv3.dts
+>> index 6931aaab2382..0eb1990742ff 100644
+>> --- a/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts
+>> +++ b/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts
+>> @@ -88,6 +88,10 @@ &ahci {
+>>   	status = "okay";
+>>   };
+>>   
+>> +&cpu0 {
+>> +	cpu-supply = <&reg_dcdc2>;
+>> +};
+>> +
+>>   &de {
+>>   	status = "okay";
+>>   };
+>> diff --git a/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts b/arch/arm/
+> boot/dts/sun8i-v40-bananapi-m2-berry.dts
+>> index 47954551f573..fdf8bd12faaa 100644
+>> --- a/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts
+>> +++ b/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts
+>> @@ -107,6 +107,10 @@ &ahci {
+>>   	status = "okay";
+>>   };
+>>   
+>> +&cpu0 {
+>> +	cpu-supply = <&reg_dcdc2>;
+>> +};
+>> +
+>>   &de {
+>>   	status = "okay";
+>>   };
+>> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-
+> dt-platdev.c
+>> index ca1d103ec449..971a99219d4d 100644
+>> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+>> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+>> @@ -26,6 +26,7 @@ static const struct of_device_id allowlist[] __initconst =
+> {
+>>   	{ .compatible = "allwinner,sun8i-a23", },
+>>   	{ .compatible = "allwinner,sun8i-a83t", },
+>>   	{ .compatible = "allwinner,sun8i-h3", },
+>> +	{ .compatible = "allwinner,sun8i-r40", },
+> Why on allow list? Comment says operatings-point-v2 should be on block list,
+> just like H6.
+Actually I'm not make sure the difference, seems both of them can work.
+Most of allwinner device_id is added in allowlist, so I did this.
 >
-
--- 
-Best regards,
-Coiby
+> Best regards,
+> Jernej
+>
+>>   
+>>   	{ .compatible = "apm,xgene-shadowcat", },
+>>   
+>> -- 
+>> 2.25.1
+>>
+>>
 

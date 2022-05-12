@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0036525553
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:04:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF2C525555
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357851AbiELTD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 15:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45276 "EHLO
+        id S1357859AbiELTEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 15:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238231AbiELTDy (ORCPT
+        with ESMTP id S1357853AbiELTEb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 15:03:54 -0400
+        Thu, 12 May 2022 15:04:31 -0400
 Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5161820F4EB;
-        Thu, 12 May 2022 12:03:53 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CIbjm4018232;
-        Thu, 12 May 2022 19:03:50 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A1D21E403;
+        Thu, 12 May 2022 12:04:29 -0700 (PDT)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CIRVVN012874;
+        Thu, 12 May 2022 19:04:27 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=qhb5EdS7Ah6FnpMCgiZxIqTWU6iB3Z4pxEjaBzyE5oU=;
- b=GGA1U5whjDKp9/s6k6RfD3z+0Y/oT9zwHt7KOM2hwUxopa+VLTxDbKD+b9P5CYlTY02V
- stB/nZUARjx7P3j70EbwPvFtZyA7yb5igqxnrIvLW991RISHfwVNrm5E+mnSQe41lW+x
- dLbmdVY93IiQRhDzV3Wjm9KH9xm2T2fLMNrTbIXsPx5+R5gDyZHPArAHYvyGeOf4+AYt
- rr1Vr6SujAuMSP2tTqYxsgP/SS6OB5sL3QP1ZAizJAfcPybuJQhJ/qPjkhGJw5DcT1GM
- +uSlFy64GUoJTxTtrSrmRf2bkLzTFau7xj3/q/b49Ng2nbdUX/eWTyGiZQ3qGQFcvqat 5w== 
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=H29RDK2yJl5oRBJrLnfkhfz5cXgstDB5uPjuDwdtEPQ=;
+ b=cVwm+jJhU599VQrZ0odMq4n8G9pf/dQ/N3fKr0hceljlVZ/ARIE9lBedSAFLmWqZyYfb
+ nFJgA1oQeJAj0iwoLdsrMRbc/w1X1XHRhnlFCSydomFMvS1T5uzAvBOEznaDSXQK9IIo
+ uy2NNymCFTYdK1EoCcTxhdHtrLpjWC3JYfM4LfkuJSJ6daflJLn+3vU8eT1MUwDUGSfp
+ 2VNEFcPXkoo5BoC6bZ147NiSzLPsmpBYcTzH+7yR84spwbXXBa/Ye8Hobcaj8GN6nUj5
+ GbZXsZreVS+GcubKA+wS1abOc77LVzgBRX7sg9xQqQDCQGGs/yNzDyzIimduKLTEB8iT qw== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g17p9rf1v-1
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g173b9ar3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 19:03:50 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24CIrFjP024560;
-        Thu, 12 May 2022 19:03:49 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g17p9rf1h-1
+        Thu, 12 May 2022 19:04:26 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24CIjJd2012975;
+        Thu, 12 May 2022 19:04:26 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g173b9aqb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 19:03:49 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24CIwoYw030926;
-        Thu, 12 May 2022 19:03:47 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3fwgd8yfm9-1
+        Thu, 12 May 2022 19:04:26 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24CIvNgN022308;
+        Thu, 12 May 2022 19:04:23 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 3fyrkk3bk7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 19:03:47 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24CIo4Ib44957982
+        Thu, 12 May 2022 19:04:23 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24CJ4JO149676722
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 12 May 2022 18:50:04 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1D44CA404D;
-        Thu, 12 May 2022 19:03:43 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9C5D6A4040;
-        Thu, 12 May 2022 19:03:42 +0000 (GMT)
+        Thu, 12 May 2022 19:04:19 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0C9EBA4054;
+        Thu, 12 May 2022 19:04:19 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 933ECA405C;
+        Thu, 12 May 2022 19:04:18 +0000 (GMT)
 Received: from osiris (unknown [9.145.44.123])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu, 12 May 2022 19:03:42 +0000 (GMT)
-Date:   Thu, 12 May 2022 21:03:41 +0200
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu, 12 May 2022 19:04:18 +0000 (GMT)
+Date:   Thu, 12 May 2022 21:04:17 +0200
 From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Nathan Chancellor <nathan@kernel.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
 Cc:     Vasily Gorbik <gor@linux.ibm.com>,
         Alexander Gordeev <agordeev@linux.ibm.com>,
         Jonas Paulsson <paulsson@linux.vnet.ibm.com>,
@@ -69,27 +69,25 @@ Cc:     Vasily Gorbik <gor@linux.ibm.com>,
         Sven Schnelle <svens@linux.ibm.com>,
         Andreas Krebbel <krebbel@linux.ibm.com>,
         Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
         linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
 Subject: Re: [PATCH 0/8] s390: allow to build with llvm's integrated assembler
-Message-ID: <Yn1aDRKgB9zJIk21@osiris>
+Message-ID: <Yn1aMcKTD0v3FevS@osiris>
 References: <20220511120532.2228616-1-hca@linux.ibm.com>
- <Ynwh/Uk3IyiyRzO3@dev-arch.thelio-3990X>
+ <CAKwvOdkXy0nhS-S+dOAsSO+mpj2dCuZ4aUTe=upPV8epfTA7Aw@mail.gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ynwh/Uk3IyiyRzO3@dev-arch.thelio-3990X>
+In-Reply-To: <CAKwvOdkXy0nhS-S+dOAsSO+mpj2dCuZ4aUTe=upPV8epfTA7Aw@mail.gmail.com>
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: SG9IGlokKTe0Jgn4P8cpBtE9A1oJ2ylA
-X-Proofpoint-ORIG-GUID: S_IRG6k-WoOjFd9lZU-gUEyCpo285umZ
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-ORIG-GUID: Eo6A3lLQ9p42Ac8B2xFgV2lCfD6_Ercd
+X-Proofpoint-GUID: pzRmEjic2ySjkRjN8oWTY23Qr3REfSs6
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-05-12_16,2022-05-12_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=794 priorityscore=1501 bulkscore=0 phishscore=0 spamscore=0
- lowpriorityscore=0 mlxscore=0 adultscore=0 clxscore=1015 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 phishscore=0 mlxlogscore=655 priorityscore=1501
+ clxscore=1015 impostorscore=0 spamscore=0 bulkscore=0 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2202240000 definitions=main-2205120083
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
@@ -100,34 +98,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 01:52:13PM -0700, Nathan Chancellor wrote:
-> Hi Heiko,
-> 
-> On Wed, May 11, 2022 at 02:05:24PM +0200, Heiko Carstens wrote:
+On Wed, May 11, 2022 at 12:48:34PM -0700, Nick Desaulniers wrote:
+> On Wed, May 11, 2022 at 5:05 AM Heiko Carstens <hca@linux.ibm.com> wrote:
+> >
 > > A couple of patches which in result make it finally possible to build the
 > > kernel for s390 with llvm's integrated assembler. Several configs build
 > > without errors or warnings, and the kernel also works as expected.
-> > 
+> >
 > > Note that patch 6 ("s390/boot: workaround llvm IAS bug") reveals a
 > > miscompile. This looks like a bug in the instruction definitions of the mvc
 > > and clc instructions(?). I'd like to ask people to look into this, since
 > > this silently generated broken code.
+> >
+> > This patch series is based on linux-next, which contains two additional
+> > required s390 specific patches to make llvm's IAS work.
 > 
-> I think it should be pretty simple to file a bug report for this since
-> it occurs in a standalone assembly file? I agree with Nick that there
-> should be a bug report filed and linked to in patch 6 so that we don't
-> lose track of it.
-
-https://github.com/llvm/llvm-project/issues/55411
-
-> I applied this series to the latest s390 for-next branch (c4fb15578802)
-> and built a few in-tree and distribution configurations with clang-14
-> and clang-15 then boot tested them in QEMU with a simple buildroot
-> userspace. I did not see any new warnings or errors. This is awesome, I
-> am excited to get this wired up in our CI!
+> I did a quick test of just a defconfig via:
+> $ ARCH=s390 CROSS_COMPILE=s390x-linux-gnu- make CC=clang -j72 defconfig all
+> and this assembled then booted in qemu for me. Thanks for the work
+> that went into this!
 > 
-> In case it is worthwhile:
-> 
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
+> Tested-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Yes, it is. Thanks a lot!
+Will add this too. Thank you!

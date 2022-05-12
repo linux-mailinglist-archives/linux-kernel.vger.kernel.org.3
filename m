@@ -2,70 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 930325243B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 05:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6ED85243BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 05:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344960AbiELDvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 23:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
+        id S1345209AbiELDwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 23:52:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235557AbiELDv3 (ORCPT
+        with ESMTP id S1345010AbiELDwa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 23:51:29 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21BF30553;
-        Wed, 11 May 2022 20:51:25 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=guangguan.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VCyplkM_1652327482;
-Received: from 30.43.105.60(mailfrom:guangguan.wang@linux.alibaba.com fp:SMTPD_---0VCyplkM_1652327482)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 12 May 2022 11:51:23 +0800
-Message-ID: <9be49a5a-c87d-1630-3ff3-90e6a233d38b@linux.alibaba.com>
-Date:   Thu, 12 May 2022 11:51:22 +0800
+        Wed, 11 May 2022 23:52:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9992436153
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 20:52:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652327548;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2SKwInTDfwSjGYjczGeCpjDqlYEJ6dRe4uToWw6mvPw=;
+        b=UDF1KfRNeGvrYoOD8wv7fmMcDRc1EtnO6AyKfqYixDbTy4CRYqBiXJd3BdKFiGOOm6VCqo
+        +Mq23A+YkJAqaWJe+acduxGQVCepZHdszMZIKv1XDjg6bQrjPnWftzIrcZ0iyZW7Ui/rhF
+        C2QNcwBT1B1+miFpow9/bLsbatV7xrA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-644-ZhHGqITBNHqD11DJywYAPA-1; Wed, 11 May 2022 23:52:23 -0400
+X-MC-Unique: ZhHGqITBNHqD11DJywYAPA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F2F173C01D99;
+        Thu, 12 May 2022 03:52:22 +0000 (UTC)
+Received: from localhost (ovpn-13-226.pek2.redhat.com [10.72.13.226])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id AE0491121314;
+        Thu, 12 May 2022 03:52:12 +0000 (UTC)
+Date:   Thu, 12 May 2022 11:52:09 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Coiby Xu <coxu@redhat.com>
+Cc:     kexec@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+        Michal Suchanek <msuchanek@suse.de>,
+        Dave Young <dyoung@redhat.com>, Will Deacon <will@kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Mimi Zohar <zohar@linux.ibm.com>, Chun-Yi Lee <jlee@suse.com>,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v7 2/4] kexec, KEYS: make the code in
+ bzImage64_verify_sig generic
+Message-ID: <YnyEafqEcSh/wRRN@MiWiFi-R3L-srv>
+References: <20220512023402.9913-1-coxu@redhat.com>
+ <20220512023402.9913-3-coxu@redhat.com>
+ <Ynx1DUvDTL1R4Pj5@MiWiFi-R3L-srv>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [PATCH net-next v2 1/2] net/smc: non blocking recvmsg() return
- -EAGAIN when no data and signal_pending
-Content-Language: en-US
-To:     Tony Lu <tonylu@linux.alibaba.com>
-Cc:     kgraul@linux.ibm.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, linux-s390@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220512031156.74054-1-guangguan.wang@linux.alibaba.com>
- <20220512031156.74054-2-guangguan.wang@linux.alibaba.com>
- <YnyCblJuPf+UAvjY@TonyMac-Alibaba>
-From:   Guangguan Wang <guangguan.wang@linux.alibaba.com>
-In-Reply-To: <YnyCblJuPf+UAvjY@TonyMac-Alibaba>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ynx1DUvDTL1R4Pj5@MiWiFi-R3L-srv>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/5/12 11:43, Tony Lu wrote:
-> On Thu, May 12, 2022 at 11:11:55AM +0800, Guangguan Wang wrote:
->> Non blocking sendmsg will return -EAGAIN when any signal pending
->> and no send space left, while non blocking recvmsg return -EINTR
->> when signal pending and no data received. This may makes confused.
->> As TCP returns -EAGAIN in the conditions described above. Align the
->> behavior of smc with TCP.
->>
->> Fixes: 846e344eb722 ("net/smc: add receive timeout check")
->> Signed-off-by: Guangguan Wang <guangguan.wang@linux.alibaba.com>
->> Reviewed-by: Tony Lu <tonylu@linux.alibaba.com>
+On 05/12/22 at 10:46am, Baoquan He wrote:
+> On 05/12/22 at 10:34am, Coiby Xu wrote:
+> > commit 278311e417be ("kexec, KEYS: Make use of platform keyring for
+> > signature verify") adds platform keyring support on x86 kexec but not
+> > arm64.
+> > 
+> > The code in bzImage64_verify_sig makes use of system keyrings including
+> > .buitin_trusted_keys, .secondary_trusted_keys and .platform keyring to
+> > verify signed kernel image as PE file. Make it generic so both x86_64
+> > and arm64 can use it.
+> > 
+> > Note this patch is needed by a later patch so Cc it to the stable tree
+> > as well.
 > 
-> I see that you have already sent this patch to net, so this patch is a
-> duplicate. There is no need to send it again to net-next.
+> This note should not be added in log.
 > 
-> Thanks,
-> Tony Lu
+> > 
+> > Cc: kexec@lists.infradead.org
+> > Cc: keyrings@vger.kernel.org
+> > Cc: linux-security-module@vger.kernel.org
+> > Cc: stable@vger.kernel.org # 34d5960af253: kexec: clean up arch_kexec_kernel_verify_sig
 
-Ok, just ignore it. Thanks！
+Hold on, should we CC stable when it's not fixing an issue?
+
+Hi Coiby,
+
+Just to make clear , is this patch fixing an issue, or it's just an
+preparation for later patch's use?
+
+Or I should ask in another way, any problem is solved with this patch?
+
+
+> > Reviewed-by: Michal Suchanek <msuchanek@suse.de>
+> > Signed-off-by: Coiby Xu <coxu@redhat.com>
+> > ---
+> 
+> You can put the note here, it won't be added to commit log when merged.
+> Maybe it can be removed when merged.
+> 
+> Otherwise, LGTM
+> 
+> Acked-by: Baoquan He <bhe@redhat.com>
+> 
+> >  arch/x86/kernel/kexec-bzimage64.c | 20 +-------------------
+> >  include/linux/kexec.h             |  7 +++++++
+> >  kernel/kexec_file.c               | 17 +++++++++++++++++
+> >  3 files changed, 25 insertions(+), 19 deletions(-)
+> > 
+> > diff --git a/arch/x86/kernel/kexec-bzimage64.c b/arch/x86/kernel/kexec-bzimage64.c
+> > index 170d0fd68b1f..f299b48f9c9f 100644
+> > --- a/arch/x86/kernel/kexec-bzimage64.c
+> > +++ b/arch/x86/kernel/kexec-bzimage64.c
+> > @@ -17,7 +17,6 @@
+> >  #include <linux/kernel.h>
+> >  #include <linux/mm.h>
+> >  #include <linux/efi.h>
+> > -#include <linux/verification.h>
+> >  
+> >  #include <asm/bootparam.h>
+> >  #include <asm/setup.h>
+> > @@ -528,28 +527,11 @@ static int bzImage64_cleanup(void *loader_data)
+> >  	return 0;
+> >  }
+> >  
+> > -#ifdef CONFIG_KEXEC_BZIMAGE_VERIFY_SIG
+> > -static int bzImage64_verify_sig(const char *kernel, unsigned long kernel_len)
+> > -{
+> > -	int ret;
+> > -
+> > -	ret = verify_pefile_signature(kernel, kernel_len,
+> > -				      VERIFY_USE_SECONDARY_KEYRING,
+> > -				      VERIFYING_KEXEC_PE_SIGNATURE);
+> > -	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
+> > -		ret = verify_pefile_signature(kernel, kernel_len,
+> > -					      VERIFY_USE_PLATFORM_KEYRING,
+> > -					      VERIFYING_KEXEC_PE_SIGNATURE);
+> > -	}
+> > -	return ret;
+> > -}
+> > -#endif
+> > -
+> >  const struct kexec_file_ops kexec_bzImage64_ops = {
+> >  	.probe = bzImage64_probe,
+> >  	.load = bzImage64_load,
+> >  	.cleanup = bzImage64_cleanup,
+> >  #ifdef CONFIG_KEXEC_BZIMAGE_VERIFY_SIG
+> > -	.verify_sig = bzImage64_verify_sig,
+> > +	.verify_sig = kexec_kernel_verify_pe_sig,
+> >  #endif
+> >  };
+> > diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+> > index 413235c6c797..da83abfc628b 100644
+> > --- a/include/linux/kexec.h
+> > +++ b/include/linux/kexec.h
+> > @@ -19,6 +19,7 @@
+> >  #include <asm/io.h>
+> >  
+> >  #include <uapi/linux/kexec.h>
+> > +#include <linux/verification.h>
+> >  
+> >  /* Location of a reserved region to hold the crash kernel.
+> >   */
+> > @@ -202,6 +203,12 @@ int arch_kexec_apply_relocations(struct purgatory_info *pi,
+> >  				 const Elf_Shdr *relsec,
+> >  				 const Elf_Shdr *symtab);
+> >  int arch_kimage_file_post_load_cleanup(struct kimage *image);
+> > +#ifdef CONFIG_KEXEC_SIG
+> > +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
+> > +int kexec_kernel_verify_pe_sig(const char *kernel,
+> > +				    unsigned long kernel_len);
+> > +#endif
+> > +#endif
+> >  int arch_kexec_locate_mem_hole(struct kexec_buf *kbuf);
+> >  
+> >  extern int kexec_add_buffer(struct kexec_buf *kbuf);
+> > diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+> > index 3720435807eb..754885b96aab 100644
+> > --- a/kernel/kexec_file.c
+> > +++ b/kernel/kexec_file.c
+> > @@ -165,6 +165,23 @@ void kimage_file_post_load_cleanup(struct kimage *image)
+> >  }
+> >  
+> >  #ifdef CONFIG_KEXEC_SIG
+> > +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
+> > +int kexec_kernel_verify_pe_sig(const char *kernel, unsigned long kernel_len)
+> > +{
+> > +	int ret;
+> > +
+> > +	ret = verify_pefile_signature(kernel, kernel_len,
+> > +				      VERIFY_USE_SECONDARY_KEYRING,
+> > +				      VERIFYING_KEXEC_PE_SIGNATURE);
+> > +	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
+> > +		ret = verify_pefile_signature(kernel, kernel_len,
+> > +					      VERIFY_USE_PLATFORM_KEYRING,
+> > +					      VERIFYING_KEXEC_PE_SIGNATURE);
+> > +	}
+> > +	return ret;
+> > +}
+> > +#endif
+> > +
+> >  static int kexec_image_verify_sig(struct kimage *image, void *buf,
+> >  		unsigned long buf_len)
+> >  {
+> > -- 
+> > 2.35.3
+> > 
+> 
+

@@ -2,69 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E85D35254E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 20:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 513B05254F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 20:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357712AbiELSdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 14:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34860 "EHLO
+        id S1357729AbiELSfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 14:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357581AbiELSdG (ORCPT
+        with ESMTP id S1357619AbiELSft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 14:33:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5428366C93;
-        Thu, 12 May 2022 11:33:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14E63B82AD2;
-        Thu, 12 May 2022 18:32:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E02FC34100;
-        Thu, 12 May 2022 18:32:57 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="aqUMb18b"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1652380373;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=j7L3jRaEE24CnmSnfnYX9QsrDcQ/7q3vvEzMqLeZ5bw=;
-        b=aqUMb18bSC8gARPE928AF57G1ouW5sq16pr9+RhFRMMh/PVm6wrzqcR8jrA4jKQRXr7cMO
-        b0u0mLtcBHeOSqq8cm5sTeyc4qJpUThC4lsmJLlhU3YhZ43d5v/LzFbX6wUjUsETWFYBQ+
-        +gWngA/nF0VaGD2JWEHCABWPgOgYw7o=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id cdcf0445 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 12 May 2022 18:32:53 +0000 (UTC)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2f7b815ac06so66900377b3.3;
-        Thu, 12 May 2022 11:32:53 -0700 (PDT)
-X-Gm-Message-State: AOAM531k+q51/sdzILOQLP19txc92NF7e8QUUgvIbgXYEnniVi74jrKf
-        wEj6KTOB2pNZONkUgF9/ZXf2Hr/pUfiyP60zCBc=
-X-Google-Smtp-Source: ABdhPJyXiV1OZyKsWVqUB6Bpq4PbzfC2ZtM7crKN2JIm8eqSbMDWlna2R8rfUBqbOpTwHpix1NvHEHveHZpEyvdzsfo=
-X-Received: by 2002:a0d:ef03:0:b0:2fa:245:adf3 with SMTP id
- y3-20020a0def03000000b002fa0245adf3mr1585638ywe.100.1652380372103; Thu, 12
- May 2022 11:32:52 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:7110:6406:b0:179:6742:1e2c with HTTP; Thu, 12 May 2022
- 11:32:51 -0700 (PDT)
-In-Reply-To: <87bkw2hafj.fsf@email.froward.int.ebiederm.org>
-References: <20220502140602.130373-1-Jason@zx2c4.com> <Ym/5EEYHbk56hV1H@zx2c4.com>
- <Ym/8GTW2RfhnbqiF@gardel-login> <YnERsPIsiOCa8cty@zx2c4.com>
- <Yn1GmlWKIvuoJJby@bombadil.infradead.org> <87bkw2hafj.fsf@email.froward.int.ebiederm.org>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Thu, 12 May 2022 20:32:51 +0200
-X-Gmail-Original-Message-ID: <CAHmME9o5n6TLfB3GsXz4KOt9iwxbT0e4ut65AFMsJsAm7ayNRg@mail.gmail.com>
-Message-ID: <CAHmME9o5n6TLfB3GsXz4KOt9iwxbT0e4ut65AFMsJsAm7ayNRg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] sysctl: read() must consume poll events, not poll()
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+        Thu, 12 May 2022 14:35:49 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2209414009
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 11:35:48 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id d188-20020a25cdc5000000b00648429e5ab9so5292048ybf.13
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 11:35:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=SidjaeLltkRbDBELlZ8bKr9H1JAqOBDWVEO14927GyI=;
+        b=A2ERi4ku4zhqWOlWCPybWStRNXTkdG2DtBVymreb4ROsX6VEWjLvpqBPK/kqWbNFur
+         uRZNIMsq4WzDmlA7mba5ERI+xP5xQCd80dAXqfWtMjVW9GdnyE6guCgcB7whpp1uZSLV
+         Ol1JbLqgCv3ZNzGoDBVE8Y7tCy7JGQE+XgKZDCLZJVW55EhF3L48iaK4UfVZTgeqGy8O
+         pR7vbLKm4kR6FBr9GwFlljJr2x5Q6mS1/U+KDrlsPcLciikBC89y/A+szG6sSNJYZJc9
+         QFEh08T9cImGFyEAEy2hmaA8LEUqSWpgyX0sNaNOMBQvFMGMfz0IpSQqxksNsoq2xRst
+         JmXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=SidjaeLltkRbDBELlZ8bKr9H1JAqOBDWVEO14927GyI=;
+        b=E4RLY470wyI64yy9ECoTM3bV1ODIb/NUo+Fr1KzcfcNzkSMDqP1MevFfKI11ZObNxs
+         6SlKKvK41IMK7D7dtT14HQJXuanvGXn3DJs2xCYAmXqCr0NM+qfyWk0I4wB8GTcbURvs
+         4TLLvKPcEk52irgaFCLbh/IVj93cCOdok4oB5L91qlYXM5xQ2iqq6S8AyHQxhmtbRSqp
+         glS2bSojE+06kP0pWPx9qrEFAIjc4s+mrdF5JfC7B7SpYylKbemaxwzuyvTNzU912RYF
+         QxSVPKvh5sUtsKfta5JZa5KbNR8WIHeUjZjr/iKVPECU3zGxiaGOktlIwtgTMIjAWx7a
+         0AYg==
+X-Gm-Message-State: AOAM531FBSsYRB7nQocRqFxDPqlP3b3fw88XHsFrjzOLa/ACgGHFTQ4w
+        s6/uAfIxkQLsksRzx4VuovGSge8tRXLx9A==
+X-Google-Smtp-Source: ABdhPJzFPdg5t/6kjhor0OfRDTgulq0Sj2XKyFGTWJULnP0zF9fQ4IpZFh0HjIToRf+B2L2cUvDeYiM751dOzQ==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:648d:cdc5:d51:4873])
+ (user=dlatypov job=sendgmr) by 2002:a25:33d6:0:b0:64a:9d22:f005 with SMTP id
+ z205-20020a2533d6000000b0064a9d22f005mr1172243ybz.54.1652380547371; Thu, 12
+ May 2022 11:35:47 -0700 (PDT)
+Date:   Thu, 12 May 2022 11:35:36 -0700
+Message-Id: <20220512183538.3787321-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
+Subject: [PATCH v2 1/3] kunit: tool: remove dead parse_crash_in_log() logic
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,43 +65,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+This logic depends on the kernel logging a message containing
+'kunit test case crashed', but there is no corresponding logic to do so.
 
-On 5/12/22, Eric W. Biederman <ebiederm@xmission.com> wrote:
-> Luis Chamberlain <mcgrof@kernel.org> writes:
->
->> On Tue, May 03, 2022 at 01:27:44PM +0200, Jason A. Donenfeld wrote:
->>> On Mon, May 02, 2022 at 05:43:21PM +0200, Lennart Poettering wrote:
->>> > On Mo, 02.05.22 17:30, Jason A. Donenfeld (Jason@zx2c4.com) wrote:
->>> >
->>> > > Just wanted to double check with you that this change wouldn't break
->>> > > how
->>> > > you're using it in systemd for /proc/sys/kernel/hostname:
->>> > >
->>> > > https://github.com/systemd/systemd/blob/39cd62c30c2e6bb5ec13ebc1ecf0d37ed015b1b8/src/journal/journald-server.c#L1832
->>> > > https://github.com/systemd/systemd/blob/39cd62c30c2e6bb5ec13ebc1ecf0d37ed015b1b8/src/resolve/resolved-manager.c#L465
->>> > >
->>> > > I couldn't find anybody else actually polling on it. Interestingly,
->>> > > it
->>> > > looks like sd_event_add_io uses epoll() inside, but you're not
->>> > > hitting
->>> > > the bug that Jann pointed out (because I suppose you're not poll()ing
->>> > > on
->>> > > an epoll fd).
->>> >
->>> > Well, if you made sure this still works, I am fine either way ;-)
->>>
->>> Actually... ugh. It doesn't work. systemd uses uname() to read the host
->>> name, and doesn't actually read() the file descriptor after receiving
->>> the poll event on it. So I guess I'll forget this, and maybe we'll have
->>> to live with sysctl's poll() being broken. :(
->
-> We should be able to modify calling uname() to act the same as reading
-> the file descriptor.
+This is likely a relic of the revision process KUnit initially went
+through when being upstreamed.
 
-How? That sounds like madness. read() takes a fd. uname() doesn't. Are
-you proposing we walk through the fds of the process calling uname()
-til we find a matching one and then twiddle it's private context
-state? I mean I guess that'd work, but...
+Delete it given
+1) it's been missing for years and likely won't get implemented
+2) the parser has been moving to be a more general KTAP parser,
+   kunit-only magic like this isn't how we'd want to implement it.
 
-Jason
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: David Gow <davidgow@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+---
+v1 -> v2: rebase onto -kselftest/kunit branch, no changes
+---
+ tools/testing/kunit/kunit_parser.py           | 21 ------
+ tools/testing/kunit/kunit_tool_test.py        | 17 ++---
+ .../test_data/test_is_test_passed-crash.log   | 70 -------------------
+ 3 files changed, 4 insertions(+), 104 deletions(-)
+ delete mode 100644 tools/testing/kunit/test_data/test_is_test_passed-crash.log
+
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index e16331a5bec4..c8c0df56cc51 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -475,26 +475,6 @@ def parse_diagnostic(lines: LineStream) -> List[str]:
+ 		log.append(lines.pop())
+ 	return log
+ 
+-DIAGNOSTIC_CRASH_MESSAGE = re.compile(r'^# .*?: kunit test case crashed!$')
+-
+-def parse_crash_in_log(test: Test) -> bool:
+-	"""
+-	Iterate through the lines of the log to parse for crash message.
+-	If crash message found, set status to crashed and return True.
+-	Otherwise return False.
+-
+-	Parameters:
+-	test - Test object for current test being parsed
+-
+-	Return:
+-	True if crash message found in log
+-	"""
+-	for line in test.log:
+-		if DIAGNOSTIC_CRASH_MESSAGE.match(line):
+-			test.status = TestStatus.TEST_CRASHED
+-			return True
+-	return False
+-
+ 
+ # Printing helper methods:
+ 
+@@ -682,7 +662,6 @@ def bubble_up_test_results(test: Test) -> None:
+ 	Parameters:
+ 	test - Test object for current test being parsed
+ 	"""
+-	parse_crash_in_log(test)
+ 	subtests = test.subtests
+ 	counts = test.counts
+ 	status = test.status
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index aebda46bcad8..b417eceeda74 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -230,15 +230,6 @@ class KUnitParserTest(unittest.TestCase):
+ 		print_mock.stop()
+ 		self.assertEqual(0, len(result.subtests))
+ 
+-	def test_crashed_test(self):
+-		crashed_log = test_data_path('test_is_test_passed-crash.log')
+-		with open(crashed_log) as file:
+-			result = kunit_parser.parse_run_tests(
+-				file.readlines())
+-		self.assertEqual(
+-			kunit_parser.TestStatus.TEST_CRASHED,
+-			result.status)
+-
+ 	def test_skipped_test(self):
+ 		skipped_log = test_data_path('test_skip_tests.log')
+ 		with open(skipped_log) as file:
+@@ -478,10 +469,10 @@ class KUnitJsonTest(unittest.TestCase):
+ 			result["sub_groups"][1]["test_cases"][0])
+ 
+ 	def test_crashed_test_json(self):
+-		result = self._json_for('test_is_test_passed-crash.log')
++		result = self._json_for('test_kernel_panic_interrupt.log')
+ 		self.assertEqual(
+-			{'name': 'example_simple_test', 'status': 'ERROR'},
+-			result["sub_groups"][1]["test_cases"][0])
++			{'name': '', 'status': 'ERROR'},
++			result["sub_groups"][2]["test_cases"][1])
+ 
+ 	def test_skipped_test_json(self):
+ 		result = self._json_for('test_skip_tests.log')
+@@ -562,7 +553,7 @@ class KUnitMainTest(unittest.TestCase):
+ 	def test_exec_no_tests(self):
+ 		self.linux_source_mock.run_kernel = mock.Mock(return_value=['TAP version 14', '1..0'])
+ 		with self.assertRaises(SystemExit) as e:
+-                  kunit.main(['run'], self.linux_source_mock)
++		  kunit.main(['run'], self.linux_source_mock)
+ 		self.linux_source_mock.run_kernel.assert_called_once_with(
+ 			args=None, build_dir='.kunit', filter_glob='', timeout=300)
+ 		self.print_mock.assert_any_call(StrContains(' 0 tests run!'))
+diff --git a/tools/testing/kunit/test_data/test_is_test_passed-crash.log b/tools/testing/kunit/test_data/test_is_test_passed-crash.log
+deleted file mode 100644
+index 4d97f6708c4a..000000000000
+--- a/tools/testing/kunit/test_data/test_is_test_passed-crash.log
++++ /dev/null
+@@ -1,70 +0,0 @@
+-printk: console [tty0] enabled
+-printk: console [mc-1] enabled
+-TAP version 14
+-1..2
+-	# Subtest: sysctl_test
+-	1..8
+-	# sysctl_test_dointvec_null_tbl_data: sysctl_test_dointvec_null_tbl_data passed
+-	ok 1 - sysctl_test_dointvec_null_tbl_data
+-	# sysctl_test_dointvec_table_maxlen_unset: sysctl_test_dointvec_table_maxlen_unset passed
+-	ok 2 - sysctl_test_dointvec_table_maxlen_unset
+-	# sysctl_test_dointvec_table_len_is_zero: sysctl_test_dointvec_table_len_is_zero passed
+-	ok 3 - sysctl_test_dointvec_table_len_is_zero
+-	# sysctl_test_dointvec_table_read_but_position_set: sysctl_test_dointvec_table_read_but_position_set passed
+-	ok 4 - sysctl_test_dointvec_table_read_but_position_set
+-	# sysctl_test_dointvec_happy_single_positive: sysctl_test_dointvec_happy_single_positive passed
+-	ok 5 - sysctl_test_dointvec_happy_single_positive
+-	# sysctl_test_dointvec_happy_single_negative: sysctl_test_dointvec_happy_single_negative passed
+-	ok 6 - sysctl_test_dointvec_happy_single_negative
+-	# sysctl_test_dointvec_single_less_int_min: sysctl_test_dointvec_single_less_int_min passed
+-	ok 7 - sysctl_test_dointvec_single_less_int_min
+-	# sysctl_test_dointvec_single_greater_int_max: sysctl_test_dointvec_single_greater_int_max passed
+-	ok 8 - sysctl_test_dointvec_single_greater_int_max
+-kunit sysctl_test: all tests passed
+-ok 1 - sysctl_test
+-	# Subtest: example
+-	1..2
+-init_suite
+-	# example_simple_test: initializing
+-Stack:
+- 6016f7db 6f81bd30 6f81bdd0 60021450
+- 6024b0e8 60021440 60018bbe 16f81bdc0
+- 00000001 6f81bd30 6f81bd20 6f81bdd0
+-Call Trace:
+- [<6016f7db>] ? kunit_try_run_case+0xab/0xf0
+- [<60021450>] ? set_signals+0x0/0x60
+- [<60021440>] ? get_signals+0x0/0x10
+- [<60018bbe>] ? kunit_um_run_try_catch+0x5e/0xc0
+- [<60021450>] ? set_signals+0x0/0x60
+- [<60021440>] ? get_signals+0x0/0x10
+- [<60018bb3>] ? kunit_um_run_try_catch+0x53/0xc0
+- [<6016f321>] ? kunit_run_case_catch_errors+0x121/0x1a0
+- [<60018b60>] ? kunit_um_run_try_catch+0x0/0xc0
+- [<600189e0>] ? kunit_um_throw+0x0/0x180
+- [<6016f730>] ? kunit_try_run_case+0x0/0xf0
+- [<6016f600>] ? kunit_catch_run_case+0x0/0x130
+- [<6016edd0>] ? kunit_vprintk+0x0/0x30
+- [<6016ece0>] ? kunit_fail+0x0/0x40
+- [<6016eca0>] ? kunit_abort+0x0/0x40
+- [<6016ed20>] ? kunit_printk_emit+0x0/0xb0
+- [<6016f200>] ? kunit_run_case_catch_errors+0x0/0x1a0
+- [<6016f46e>] ? kunit_run_tests+0xce/0x260
+- [<6005b390>] ? unregister_console+0x0/0x190
+- [<60175b70>] ? suite_kunit_initexample_test_suite+0x0/0x20
+- [<60001cbb>] ? do_one_initcall+0x0/0x197
+- [<60001d47>] ? do_one_initcall+0x8c/0x197
+- [<6005cd20>] ? irq_to_desc+0x0/0x30
+- [<60002005>] ? kernel_init_freeable+0x1b3/0x272
+- [<6005c5ec>] ? printk+0x0/0x9b
+- [<601c0086>] ? kernel_init+0x26/0x160
+- [<60014442>] ? new_thread_handler+0x82/0xc0
+-
+-	# example_simple_test: kunit test case crashed!
+-	# example_simple_test: example_simple_test failed
+-	not ok 1 - example_simple_test
+-	# example_mock_test: initializing
+-	# example_mock_test: example_mock_test passed
+-	ok 2 - example_mock_test
+-kunit example: one or more tests failed
+-not ok 2 - example
+-List of all partitions:
+
+base-commit: 9660209d9418f2295d31fea0d32e313e9b2c1200
+-- 
+2.36.0.550.gb090851708-goog
+

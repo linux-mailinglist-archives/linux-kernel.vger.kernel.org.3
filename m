@@ -2,46 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F26F0524514
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 07:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C850F524515
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 07:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349342AbiELFi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 01:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43196 "EHLO
+        id S1349972AbiELFjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 01:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234095AbiELFix (ORCPT
+        with ESMTP id S234095AbiELFjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 01:38:53 -0400
-Received: from support.corp-email.com (support.corp-email.com [222.73.234.235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2CE21687C
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 22:38:44 -0700 (PDT)
-Received: from ([114.119.32.142])
-        by support.corp-email.com ((D)) with ASMTP (SSL) id GAY00136;
-        Thu, 12 May 2022 13:38:36 +0800
-Received: from localhost.localdomain (172.16.34.28) by GCY-MBS-28.TCL.com
- (10.136.3.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 12 May
- 2022 13:38:36 +0800
-From:   Rokudo Yan <wu-yan@tcl.com>
-To:     <linux-kernel@vger.kernel.org>, <peterz@infradead.org>,
-        <mingo@kernel.org>
-CC:     <tang.ding@tcl.com>, <wu-yan@tcl.com>
-Subject: [PATCH] sched/core: fix the order of update sched_reset_on_fork and policy
-Date:   Thu, 12 May 2022 13:38:16 +0800
-Message-ID: <20220512053816.27687-1-wu-yan@tcl.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 12 May 2022 01:39:54 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D986E21687C
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 22:39:52 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id i1so3889770plg.7
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 22:39:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=y+ADADOLsy5U0cbqUSAL8sVCV2JHFFb6d6snlliJvBk=;
+        b=CW1zEzHl2MHW93A2lOFLisKLVaijVGVVOUbJG+LpYd/sEPsAq1gJ4cZLkYTgdYyeq9
+         luxVY40W6rvMrywxYpQGit5+fe+LYvyCUUjqptcXIlkkwUsyu+YSIV0NWVRcHhwnVVfh
+         4OZSrJP7mHtdXyaAovFq2mqhstaDb0N6wzo3Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=y+ADADOLsy5U0cbqUSAL8sVCV2JHFFb6d6snlliJvBk=;
+        b=4GeEe9S3dhMOeA+TiyoCB+1UXoSdWXVTVROzyp5OH0UM5Cf0c4Tv47BnpzAt8r4uWg
+         UkEEt8jDH9QmFNnsJSeUdtCsALp/fu0IZtAKWnZsCyGKMN+18ii15niz/5iToyM0vIx/
+         Z2/30r9t/428PhBqQJ1yG2oXrweIK+ED8N90drQLHK6MhIuW5JWVpMcreUeFC0uPgU54
+         rloGeo2nyMl47I4rtSQwFDGdkBn1Gy1/7QZ/OI3EUtSkEol9+f+/Dn67laIizepniSwf
+         5gL/spw4HzbSqaHEWzEUx7aVJncpfsHvEeHxc2ZJ9qQu5+CSmTRyQMjPO6RY66BTlK+M
+         a7qg==
+X-Gm-Message-State: AOAM5324IQMQyXnEsmhgcNh7xZiwtME1MQZBYDnbBKn1i94nuyvCXZFF
+        9H1crdJsIXdrhx2MMLLx6Ey5gw==
+X-Google-Smtp-Source: ABdhPJzpiXxGpg3/2XDINmqm/PjN3LkXht9fMp4MYaS4FJyG7BSAhZVDPSpPqMiJLhETFW+kFl0k3Q==
+X-Received: by 2002:a17:902:a9ca:b0:15e:f017:91b5 with SMTP id b10-20020a170902a9ca00b0015ef01791b5mr27782532plr.27.1652333992397;
+        Wed, 11 May 2022 22:39:52 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f10-20020a170902ab8a00b0015e8d4eb1casm2880921plr.20.2022.05.11.22.39.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 22:39:52 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     songyuanzheng@huawei.com, Andrew Morton <akpm@linux-foundation.org>
+Cc:     Kees Cook <keescook@chromium.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: usercopy: move the virt_addr_valid() below the is_vmalloc_addr()
+Date:   Wed, 11 May 2022 22:39:41 -0700
+Message-Id: <165233397814.161845.13267754142064821597.b4-ty@chromium.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220505071037.4121100-1-songyuanzheng@huawei.com>
+References: <20220505071037.4121100-1-songyuanzheng@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.16.34.28]
-X-ClientProxiedBy: GCY-EXS-09.TCL.com (10.74.128.159) To GCY-MBS-28.TCL.com
- (10.136.3.28)
-tUid:   202251213383689c2c2f6db613b8e7646a1c0d3f54138
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -50,132 +68,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When child process is forked during updating scheduler policy of parent
-process, there is a small time window that child copy inconsistent
-policy parameters from the parent, which cause unexpected high priority
-to unprivileged child. This may cause unexpected behavior of child
-process(even hog the cpu and hang the system in some scenario).
+On Thu, 5 May 2022 07:10:37 +0000, Yuanzheng Song wrote:
+> The is_kmap_addr() and the is_vmalloc_addr() in the check_heap_object()
+> will not work, because the virt_addr_valid() will exclude the kmap and
+> vmalloc regions. So let's move the virt_addr_valid() below
+> the is_vmalloc_addr().
 
-Resource manager(privileged)               App task(unprivileged)
-sched_setscheduler(p,
- policy=SCHED_FIFO|SCHED_RESET_ON_FORK)
-                                             p->policy is SCHED_FIFO
-...                                          p->sched_reset_on_fork is 1
-                                           ...
-                                           clone
-sched_setscheduler(p,policy=SCHED_NORMAL)   -kernel_clone
- -_sched_setscheduler                        -copy_process
-  -__sched_setscheduler                       -dup_task_struct
-   set p->sched_reset_on_fork to 0             copy p's task struct we get
-   ...                                           policy = SCHED_FIFO
-                                                 sched_reset_on_fork = 0
-   set p->policy = SCHED_NORMAL                this leak FIFO priority to
-                                               to child task.
+Applied to for-next/hardening, thanks!
 
-Signed-off-by: Rokudo Yan <wu-yan@tcl.com>
-Cc: Tang Ding <tang.ding@tcl.com>
----
- kernel/fork.c       | 28 +++++++++++++++++++++++++++-
- kernel/sched/core.c | 20 +++++++++++++++++++-
- 2 files changed, 46 insertions(+), 2 deletions(-)
+[1/1] mm: usercopy: move the virt_addr_valid() below the is_vmalloc_addr()
+      https://git.kernel.org/kees/c/0a76d4c331b4
 
-diff --git a/kernel/fork.c b/kernel/fork.c
-index f1e89007f228..90f3c3f59316 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -871,12 +871,19 @@ void set_task_stack_end_magic(struct task_struct *tsk)
- 	*stackend = STACK_END_MAGIC;	/* for overflow detection */
- }
- 
-+static inline bool has_rt_dl_policy(struct task_struct *tsk)
-+{
-+	int policy = tsk->policy;
-+	return policy == SCHED_FIFO || policy == SCHED_RR ||
-+		policy == SCHED_DEADLINE;
-+}
-+
- static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
- {
- 	struct task_struct *tsk;
- 	unsigned long *stack;
- 	struct vm_struct *stack_vm_area __maybe_unused;
--	int err;
-+	int err, reset_on_fork;
- 
- 	if (node == NUMA_NO_NODE)
- 		node = tsk_fork_get_node(orig);
-@@ -893,7 +900,26 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
- 
- 	stack_vm_area = task_stack_vm_area(tsk);
- 
-+	reset_on_fork = orig->sched_reset_on_fork;
-+	/*
-+	 * Match the barrier before 'sched_reset_on_fork = 0' in __sched_setscheduler,
-+	 * this guarantees that if we see 'sched_reset_on_fork = 0' we must also see
-+	 * 'policy = SCHED_NORMAL' when the child is forked during updating parent to
-+	 * noraml class by sched_setscheduler(SCHED_NORMAL)
-+	 */
-+	smp_rmb();
- 	err = arch_dup_task_struct(tsk, orig);
-+	tsk->sched_reset_on_fork = reset_on_fork;
-+	if (!reset_on_fork && has_rt_dl_policy(tsk)) {
-+	        /*
-+		 * Match the barrier after 'sched_reset_on_fork = 1' in __sched_setscheduler,
-+		 * this guarantees that if we see 'policy=SCHED_FIFO' we must also see
-+		 * 'sched_reset_on_fork = 1' when the child is forked during updating parent
-+		 * to rt class by sched_setscheduler(SCHED_FIFO|SCHED_RESET_ON_FORK)
-+		 */
-+		smp_rmb();
-+		tsk->sched_reset_on_fork = orig->sched_reset_on_fork;
-+	}
- 
- 	/*
- 	 * arch_dup_task_struct() clobbers the stack-related fields.  Make
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 1eec4925b8c6..8d12f29fd888 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -7447,7 +7447,6 @@ static int __sched_setscheduler(struct task_struct *p,
- 		goto unlock;
- 	}
- 
--	p->sched_reset_on_fork = reset_on_fork;
- 	oldprio = p->prio;
- 
- 	newprio = __normal_prio(policy, attr->sched_priority, attr->sched_nice);
-@@ -7472,6 +7471,15 @@ static int __sched_setscheduler(struct task_struct *p,
- 		put_prev_task(rq, p);
- 
- 	prev_class = p->sched_class;
-+	if (reset_on_fork && !p->sched_reset_on_fork) {
-+		p->sched_reset_on_fork = 1;
-+		/*
-+		 * Make sure sched_reset_on_fork(1) visible before updating sched policy
-+		 * to avoid rt/deadline priority leak to unprivileged child process if
-+		 * it is forked during sched policy change of parent process.
-+		 */
-+		smp_wmb();
-+	}
- 
- 	if (!(attr->sched_flags & SCHED_FLAG_KEEP_PARAMS)) {
- 		__setscheduler_params(p, attr);
-@@ -7479,6 +7487,16 @@ static int __sched_setscheduler(struct task_struct *p,
- 	}
- 	__setscheduler_uclamp(p, attr);
- 
-+	if (!reset_on_fork && p->sched_reset_on_fork) {
-+		/*
-+		 * Make sure p's sched policy visible before reset sched_reset_on_fork(0)
-+		 * to avoid rt/deadline priority leak to unprivileged child process if
-+		 * it is forked during sched policy change of parent process.
-+		 */
-+		smp_wmb();
-+		p->sched_reset_on_fork = 0;
-+	}
-+
- 	if (queued) {
- 		/*
- 		 * We enqueue to tail when the priority of a task is
 -- 
-2.25.1
+Kees Cook
 

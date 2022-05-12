@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A23565256B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 22:57:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F108F5256BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 22:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358666AbiELU5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 16:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58024 "EHLO
+        id S1358546AbiELU5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 16:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358563AbiELU47 (ORCPT
+        with ESMTP id S1358545AbiELU5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 16:56:59 -0400
+        Thu, 12 May 2022 16:57:00 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0678367D14;
-        Thu, 12 May 2022 13:56:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7CCA68F8F;
+        Thu, 12 May 2022 13:56:35 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nfraprado)
-        with ESMTPSA id 013401F458B5
+        with ESMTPSA id ED4B11F45945
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652388992;
-        bh=+BNmslGrnrGfRi8LVBnEQQZU/Jy/1MkC2zZ90CW0O9U=;
+        s=mail; t=1652388994;
+        bh=8931BEPpRMo9jwNwHld86dfIKOtzN61ZDy8g9afbC0U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jFenFtbJ2sxBVbR3/dCRYNnEyOsAL0pk33JR7lrgpapqt36vF8TSialS7z6NWcaW0
-         7H9ARGjN/EY0/A/9VaStOLRsu9rmTtWYH56mxvpThdyno6OAFgsGJQbpl4HXDUJ6bv
-         dgS8TS+iOc7CIzhfmWfVn3aAkrnwKA2Oid04a8yTj18ZkM8s9DRGCs6a6quYLfY0mp
-         luU/cEcSnRVHTId/EnzTt69JWX4WPfCc2UClI7+6Tm/hUAkA8Ow0dqJutktKOdgyGe
-         NDr2kI/+99glCa4h/8BYJWz6HkK716Ca5O44blCpZcBVf9frO+DG+rj381JsYCBJCB
-         nmDaqaigz5jdQ==
+        b=YLxYb8ta5a6kjhDiboyTyxwDCKdK4bJow0DMQO6QC7D/gKxdW7+8Fbv2zPWwOqZ8/
+         7XxA+B/UZKBQ8xlRHlV/2RhGp8BXp2aSNsteFCxBWsmRMtc2BFD6z8C5i59nR5fOM4
+         jqy0E+NieQ3PA92yNOT7lk1b+a6gtdgnjMHQjc+1/Bi4CoASmBzjFkbx/mNGR928+3
+         C0L6o2DmUmq+mO+FQZRRl7fHadtFSNEUxZ839TouRp+FZ6MJwkmYYG5zzNoNstHhan
+         apVGdkDdplpM/CDhpXtz0c4K2RvDkpLXcPCGzXrdFrbLwHhS/PXoxDygp/lz+DMgUz
+         T3cdxUc4D9C9Q==
 From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
         <nfraprado@collabora.com>
 To:     Matthias Brugger <matthias.bgg@gmail.com>
@@ -40,9 +40,9 @@ Cc:     Chen-Yu Tsai <wenst@chromium.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH v3 08/16] arm64: dts: mediatek: asurada: Add keyboard mapping for the top row
-Date:   Thu, 12 May 2022 16:55:54 -0400
-Message-Id: <20220512205602.158273-9-nfraprado@collabora.com>
+Subject: [PATCH v3 09/16] arm64: dts: mediatek: asurada: Add Cr50 TPM
+Date:   Thu, 12 May 2022 16:55:55 -0400
+Message-Id: <20220512205602.158273-10-nfraprado@collabora.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220512205602.158273-1-nfraprado@collabora.com>
 References: <20220512205602.158273-1-nfraprado@collabora.com>
@@ -59,105 +59,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Chromebooks' embedded keyboards differ from standard layouts for the
-top row in that they have shortcuts in place of the standard function
-keys. Map these keys to achieve the functionality that is pictured on
-the printouts.
-
-There's a minor difference between the keys present on Hayato, which
-uses an older layout, and Spherion, which uses a newer one.
+The Asurada platform has a Google Security Chip connected to the SPI5
+bus. It runs the cr50 firmware and provides TPM functionality. Add
+support for it.
 
 Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-
 ---
 
-Changes in v3:
-- Moved keyboard layout definition to hayato and spherion dts files,
-  instead of common one in asurada dtsi
-- Changed hayato layout to be the same as older Chromebooks like Kevin
-- Switched KEY_ZOOM for KEY_FULL_SCREEN, just for semantics
-- Updated commit message
+(no changes since v1)
 
- .../dts/mediatek/mt8192-asurada-hayato-r1.dts | 29 +++++++++++++++++++
- .../mediatek/mt8192-asurada-spherion-r0.dts   | 29 +++++++++++++++++++
- 2 files changed, 58 insertions(+)
+ .../arm64/boot/dts/mediatek/mt8192-asurada.dtsi | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts b/arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts
-index 00c76709a055..ca18fcf2ad4f 100644
---- a/arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts
-@@ -9,3 +9,32 @@ / {
- 	model = "Google Hayato rev1";
- 	compatible = "google,hayato-rev1", "google,hayato", "mediatek,mt8192";
+diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+index bcfa688b67f7..ddf18861edad 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+@@ -5,6 +5,7 @@
+  */
+ /dts-v1/;
+ #include "mt8192.dtsi"
++#include <dt-bindings/gpio/gpio.h>
+ 
+ / {
+ 	aliases {
+@@ -353,6 +354,13 @@ &pio {
+ 			  "AUD_DAT_MISO0",
+ 			  "AUD_DAT_MISO1";
+ 
++	cr50_int: cr50-irq-default-pins {
++		pins-gsc-ap-int-odl {
++			pinmux = <PINMUX_GPIO171__FUNC_GPIO171>;
++			input-enable;
++		};
++	};
++
+ 	cros_ec_int: cros-ec-irq-default-pins {
+ 		pins-ec-ap-int-odl {
+ 			pinmux = <PINMUX_GPIO5__FUNC_GPIO5>;
+@@ -517,6 +525,15 @@ &spi5 {
+ 	mediatek,pad-select = <0>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&spi5_pins>;
++
++	cr50@0 {
++		compatible = "google,cr50";
++		reg = <0>;
++		interrupts-extended = <&pio 171 IRQ_TYPE_EDGE_RISING>;
++		spi-max-frequency = <1000000>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&cr50_int>;
++	};
  };
-+
-+&keyboard_controller {
-+	function-row-physmap = <
-+		MATRIX_KEY(0x00, 0x02, 0)	/* T1 */
-+		MATRIX_KEY(0x03, 0x02, 0)	/* T2 */
-+		MATRIX_KEY(0x02, 0x02, 0)	/* T3 */
-+		MATRIX_KEY(0x01, 0x02, 0)	/* T4 */
-+		MATRIX_KEY(0x03, 0x04, 0)	/* T5 */
-+		MATRIX_KEY(0x02, 0x04, 0)	/* T6 */
-+		MATRIX_KEY(0x01, 0x04, 0)	/* T7 */
-+		MATRIX_KEY(0x02, 0x09, 0)	/* T8 */
-+		MATRIX_KEY(0x01, 0x09, 0)	/* T9 */
-+		MATRIX_KEY(0x00, 0x04, 0)	/* T10 */
-+	>;
-+	linux,keymap = <
-+		MATRIX_KEY(0x00, 0x02, KEY_BACK)
-+		MATRIX_KEY(0x03, 0x02, KEY_FORWARD)
-+		MATRIX_KEY(0x02, 0x02, KEY_REFRESH)
-+		MATRIX_KEY(0x01, 0x02, KEY_FULL_SCREEN)
-+		MATRIX_KEY(0x03, 0x04, KEY_SCALE)
-+		MATRIX_KEY(0x02, 0x04, KEY_BRIGHTNESSDOWN)
-+		MATRIX_KEY(0x01, 0x04, KEY_BRIGHTNESSUP)
-+		MATRIX_KEY(0x02, 0x09, KEY_MUTE)
-+		MATRIX_KEY(0x01, 0x09, KEY_VOLUMEDOWN)
-+		MATRIX_KEY(0x00, 0x04, KEY_VOLUMEUP)
-+
-+		CROS_STD_MAIN_KEYMAP
-+	>;
-+};
-diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada-spherion-r0.dts b/arch/arm64/boot/dts/mediatek/mt8192-asurada-spherion-r0.dts
-index d384d584bbcf..30b03895de41 100644
---- a/arch/arm64/boot/dts/mediatek/mt8192-asurada-spherion-r0.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada-spherion-r0.dts
-@@ -11,3 +11,32 @@ / {
- 		     "google,spherion-rev1", "google,spherion-rev0",
- 		     "google,spherion", "mediatek,mt8192";
- };
-+
-+&keyboard_controller {
-+	function-row-physmap = <
-+		MATRIX_KEY(0x00, 0x02, 0)	/* T1 */
-+		MATRIX_KEY(0x03, 0x02, 0)	/* T2 */
-+		MATRIX_KEY(0x02, 0x02, 0)	/* T3 */
-+		MATRIX_KEY(0x01, 0x02, 0)	/* T4 */
-+		MATRIX_KEY(0x03, 0x04, 0)	/* T5 */
-+		MATRIX_KEY(0x02, 0x04, 0)	/* T6 */
-+		MATRIX_KEY(0x01, 0x04, 0)	/* T7 */
-+		MATRIX_KEY(0x02, 0x09, 0)	/* T8 */
-+		MATRIX_KEY(0x01, 0x09, 0)	/* T9 */
-+		MATRIX_KEY(0x00, 0x04, 0)	/* T10 */
-+	>;
-+	linux,keymap = <
-+		MATRIX_KEY(0x00, 0x02, KEY_BACK)
-+		MATRIX_KEY(0x03, 0x02, KEY_REFRESH)
-+		MATRIX_KEY(0x02, 0x02, KEY_FULL_SCREEN)
-+		MATRIX_KEY(0x01, 0x02, KEY_SCALE)
-+		MATRIX_KEY(0x03, 0x04, KEY_SYSRQ)
-+		MATRIX_KEY(0x02, 0x04, KEY_BRIGHTNESSDOWN)
-+		MATRIX_KEY(0x01, 0x04, KEY_BRIGHTNESSUP)
-+		MATRIX_KEY(0x02, 0x09, KEY_MUTE)
-+		MATRIX_KEY(0x01, 0x09, KEY_VOLUMEDOWN)
-+		MATRIX_KEY(0x00, 0x04, KEY_VOLUMEUP)
-+
-+		CROS_STD_MAIN_KEYMAP
-+	>;
-+};
+ 
+ &uart0 {
 -- 
 2.36.1
 

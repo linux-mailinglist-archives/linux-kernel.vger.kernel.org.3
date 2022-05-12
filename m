@@ -2,153 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 301F65246FE
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8560524706
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351018AbiELH3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 03:29:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
+        id S1351026AbiELHcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 03:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350977AbiELH3m (ORCPT
+        with ESMTP id S229502AbiELHcB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 03:29:42 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB37813B8EA
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:29:39 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id i27so8390402ejd.9
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:29:39 -0700 (PDT)
+        Thu, 12 May 2022 03:32:01 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5E833A3A;
+        Thu, 12 May 2022 00:32:00 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id cu23-20020a17090afa9700b001d98d8e53b7so5544023pjb.0;
+        Thu, 12 May 2022 00:32:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=6pAZCGyP8MKNDHSnHkp9Vkj/nq2Rx3C2O79znDA1ohY=;
-        b=gxJRzrkmadF3F010BI/AMYnQC5Uyk0pnkL9ydptziONsEZn/T/Fbr536Bj0CqT43/F
-         OE8wBqNbrMI1khevv0mxyHVfbDzMZ0KwNdeo/bIpVHajTT+EF0oDYf7N0VNN3eIe2c0O
-         bJgEjttmuMaTQOa5J2uuTwyztqxfHYcUX2fk7ZNZB18NWHk4aV009x5qtgb8QqTLTAaS
-         8y1to59ZLt6vcN6xaJxMesvLgIVpZbaUxsHo0IzdyH1F+HGrknc0It+VZabYdtbKbDlG
-         oOIQGI+//4lh04gMHGLybH31m8u8DcH87bpUKK9AOmqcOMltr0HhDsM4I8CDWsx0WSDg
-         fO5w==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PK+zEjT0FwnfyuqNzIGPbA6J7wMPiAnBkII/UnzliNo=;
+        b=I9ocdOKHMOQzPWcvTeVkMOm3iPrQGP6UTm/mB5DEmvSJsxSwCkmrtMDfYgSuPWKFP5
+         8FvYLhAGh+qlInjBDGuAPwJfxldrH8jQigVYJGDwLlCfzs6pUpmlhfybK78tIGDtG+hC
+         M/a5YLrYlHt3VKZAzXvGR9o1A+eq0kZL6S4tlfnbzbDlrae0K/EjWRmlIlEJNMvelERB
+         2FT3s1ChLewqy9+xI9v4iODVSpU8PvF3FNEcSNhrRsTXthBU5vPV8E9Rw5z0EZ0NLvA9
+         yqLK41Untd+oJaad1jYWBBQ8nd2I6PnaRD5TV3G/D+J9ud1XQVMNkuSLC6IZy/87Vgfj
+         9NeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6pAZCGyP8MKNDHSnHkp9Vkj/nq2Rx3C2O79znDA1ohY=;
-        b=Giy++5fhCF5Y/uTqegJv8zxjBGuVBpIcmJZHShdsOXkS520Z4kwdrRpSV8maEdkU8i
-         3Xm+Vbx5swRG895Dr2/oUcYG3Xd09+llFS64sXRv+4tfPwtKYenU4MezcQU4mBTl9HWH
-         USTygtUqI0/TorgEFsJBdVyLKQqpSdIHNgUIrXKrGU7Xsan32RaQ8OTQ0AWvvqr3lSeU
-         lqMu0Md2qFfv0yObdzlYuwpG6vi6yoC6Qs0QGnLwEA/IgESeWD60k7GOh3ValS1Zkfwa
-         ytODOJfdFZSndZo3IuxgWXoYg2XkMX9/93Js+9Qnc0Hd5KPYtuqcGFRAzhVntW0bjNc6
-         wuBg==
-X-Gm-Message-State: AOAM5303FxiWbOmwCdvCkmep9jHHMuf5jyvOBxBQgJAebfAi8XuzOAk8
-        V20WLSG8UpZ9mXtifYxOy48=
-X-Google-Smtp-Source: ABdhPJzmYNUvkYEksV5JP3JbnVmzNZnB1l4WyXgWPZVb+mOEjX9GxlW5bDRlUp4xgoD9wQN+D9XfMw==
-X-Received: by 2002:a17:907:60d6:b0:6fa:95d3:d4e5 with SMTP id hv22-20020a17090760d600b006fa95d3d4e5mr13864164ejc.357.1652340578275;
-        Thu, 12 May 2022 00:29:38 -0700 (PDT)
-Received: from [192.168.178.21] (p5b0ea033.dip0.t-ipconnect.de. [91.14.160.51])
-        by smtp.gmail.com with ESMTPSA id da26-20020a056402177a00b0042617ba63a5sm2274053edb.47.2022.05.12.00.29.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 00:29:37 -0700 (PDT)
-Message-ID: <f6e42cfb-0252-1273-2ba3-76af818e0799@gmail.com>
-Date:   Thu, 12 May 2022 09:29:35 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PK+zEjT0FwnfyuqNzIGPbA6J7wMPiAnBkII/UnzliNo=;
+        b=zFi4xMpG2Hg7YV4sGz483m6vptml3eLOPhvkhXmm9UoTmnVntLoieHseMQDolM+600
+         sTyF3Dw13Qn3ooGW2EgsRSuqTPn2sKtXKleGrvju/vq9i7YIQqj9x9zFY8iSCFVa2fu+
+         6DfdTNqe0SZ/I6OcSoKXKhha/02rIk4XQ6DWTRYzwexKFqiW6CymPXnJc1xVYHDZu75b
+         Ishd3vN0G5Wm0dfSca4hzPCGMfytDmhwoW6r4OwdpRwe5CbUxHTsUhGyqVXtki3bVRDc
+         Us79J+QUNJfj2VkIZ7J+v7JzEQFV5r7tkDZKQsPfPHphkLHbKFs4G0uQu7rfcb4Gl+wu
+         9hOA==
+X-Gm-Message-State: AOAM533mxTs5F9P7jbKNZNWV+TY/Zhgx8v52xr49Ytj18WWtjKsR24cp
+        cL25rUpPPHWde6B0e7Dfe4+0YVURZu3IqahuMNQ=
+X-Google-Smtp-Source: ABdhPJyNy2ltsylm+FZOgVt68fjIenNg5NWdfleHLhcviWLXS4BlU+/cc1KWA/xpzG7S/mnkaEmG/SnQe+e3DclLVeQ=
+X-Received: by 2002:a17:903:20f:b0:158:d86a:f473 with SMTP id
+ r15-20020a170903020f00b00158d86af473mr29201585plh.92.1652340719755; Thu, 12
+ May 2022 00:31:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4 10/15] drm/shmem-helper: Take reservation lock instead
- of drm_gem_shmem locks
-Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Stone <daniel@fooishbar.org>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-References: <01506516-ab2f-cb6e-7507-f2a3295efb59@collabora.com>
- <YnOHAh9I1ds4+1J+@phenom.ffwll.local>
- <83e68918-68de-c0c6-6f9b-e94d34b19383@collabora.com>
- <YnkaUk0mZNuPsZ5r@phenom.ffwll.local>
- <4d08b382-0076-1ea2-b565-893d50b453cb@collabora.com>
- <YnuziJDmXVR09UzP@phenom.ffwll.local>
- <56787b70-fb64-64da-6006-d3aa3ed59d12@gmail.com>
- <3a362c32-870c-1d73-bba6-bbdcd62dc326@collabora.com>
- <YnvWUbh5QDDs6u2B@phenom.ffwll.local>
- <ba2836d0-9a3a-b879-cb1e-a48aed31637d@collabora.com>
- <YnwI5UX/zvmnAHvg@phenom.ffwll.local>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <YnwI5UX/zvmnAHvg@phenom.ffwll.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220510141753.3878390-1-Qing-wu.Li@leica-geosystems.com.cn> <20220510141753.3878390-4-Qing-wu.Li@leica-geosystems.com.cn>
+In-Reply-To: <20220510141753.3878390-4-Qing-wu.Li@leica-geosystems.com.cn>
+From:   Alexandru Ardelean <ardeleanalex@gmail.com>
+Date:   Thu, 12 May 2022 10:31:48 +0300
+Message-ID: <CA+U=Dsqu_5JVyhs8juznQ5SyBx1V6Q5yT-fsnYuoYHX9ESE=Tg@mail.gmail.com>
+Subject: Re: [PATCH V2 3/6] iio: accel: bmi088: modified the device name
+To:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        mchehab+huawei@kernel.org, linux-iio <linux-iio@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mike Looijmans <mike.looijmans@topic.nl>,
+        devicetree <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 11.05.22 um 21:05 schrieb Daniel Vetter:
-> [SNIP]
->>>> It's unclear to me which driver may ever want to do the mapping under
->>>> the dma_resv_lock. But if we will ever have such a driver that will need
->>>> to map imported buffer under dma_resv_lock, then we could always add the
->>>> dma_buf_vmap_locked() variant of the function. In this case the locking
->>>> rule will sound like this:
->>>>
->>>> "All dma-buf importers are responsible for holding the dma-reservation
->>>> lock around the dmabuf->ops->mmap/vmap() calls."
->> Are you okay with this rule?
-> Yeah I think long-term it's where we want to be, just trying to find
-> clever ways to get there.
+On Tue, May 10, 2022 at 5:18 PM LI Qingwu
+<Qing-wu.Li@leica-geosystems.com.cn> wrote:
 >
-> And I think Christian agrees with that?
+> It is possible to have multiple sensors connected on the same platform,
+> To support multiple sensors, the commit makes it possible to obtain the
+> device name by reading the chip ID instead of the device-tree name.
+> To be compatible with previous versions, renam bmi088a to bmi088-accel.
 
-Yes, completely.
+// my spellcheck in GMail found this :p
 
-A design where most DMA-buf functions are supposed to be called with the 
-reservation lock held is exactly what I have in mind for the long term.
+typo: renam -> rename
 
->>>>> It shouldn't be that hard to clean up. The last time I looked into it my
->>>>> main problem was that we didn't had any easy unit test for it.
->>>> Do we have any tests for dma-bufs at all? It's unclear to me what you
->>>> are going to test in regards to the reservation locks, could you please
->>>> clarify?
->>> Unfortunately not really :-/ Only way really is to grab a driver which
->>> needs vmap (those are mostly display drivers) on an imported buffer, and
->>> see what happens.
->>>
->>> 2nd best is liberally sprinkling lockdep annotations all over the place
->>> and throwing it at intel ci (not sure amd ci is accessible to the public)
->>> and then hoping that's good enough. Stuff like might_lock and
->>> dma_resv_assert_held.
->> Alright
-> So throwing it at intel-gfx-ci can't hurt I think, but that only covers
-> i915 so doesn't really help with the bigger issue of catching all the
-> drivers.
+I also have a comment about a duplication that is highlighted by this change.
 
-BTW: We have now somebody working on converting the existing 
-libdrm_amdgpu unit tests over to igt.
-
-Regards,
-Christian.
+You can disregard my comment about the duplication and leave this change as-is.
 
 >
-> Cheers, Daniel
+> Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+> ---
+>  drivers/iio/accel/bmi088-accel-core.c | 6 +++---
+>  drivers/iio/accel/bmi088-accel-spi.c  | 4 +---
+>  drivers/iio/accel/bmi088-accel.h      | 2 +-
+>  3 files changed, 5 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/iio/accel/bmi088-accel-core.c b/drivers/iio/accel/bmi088-accel-core.c
+> index 8fee1d02e773..de2385e4dad5 100644
+> --- a/drivers/iio/accel/bmi088-accel-core.c
+> +++ b/drivers/iio/accel/bmi088-accel-core.c
+> @@ -459,7 +459,7 @@ static const struct iio_chan_spec bmi088_accel_channels[] = {
+>
+>  static const struct bmi088_accel_chip_info bmi088_accel_chip_info_tbl[] = {
+>         [0] = {
+> -               .name = "bmi088a",
+> +               .name = "bmi088-accel",
+>                 .chip_id = 0x1E,
+>                 .channels = bmi088_accel_channels,
+>                 .num_channels = ARRAY_SIZE(bmi088_accel_channels),
+> @@ -524,7 +524,7 @@ static int bmi088_accel_chip_init(struct bmi088_accel_data *data)
+>  }
+>
+>  int bmi088_accel_core_probe(struct device *dev, struct regmap *regmap,
+> -       int irq, const char *name, bool block_supported)
+> +       int irq, bool block_supported)
+>  {
+>         struct bmi088_accel_data *data;
+>         struct iio_dev *indio_dev;
+> @@ -545,7 +545,7 @@ int bmi088_accel_core_probe(struct device *dev, struct regmap *regmap,
+>
+>         indio_dev->channels = data->chip_info->channels;
+>         indio_dev->num_channels = data->chip_info->num_channels;
+> -       indio_dev->name = name ? name : data->chip_info->name;
+> +       indio_dev->name = data->chip_info->name;
 
+(with this change) i can better see, a bit of duplication between the
+spi_device table and the chip_info table
+
+this was not introduced by this change, but it was made a bit more
+obvious by this change;
+
+one way to address this, is to remove the `const char *name;` and
+continue using the `name` provided as a parameter from
+bmi088_accel_core_probe();
+(apologies if I seem to have changed my mind (from the previous
+changeset), but I did not see it too well before)
+
+and we can convert
+
+enum {
+   ID_BMI088,
+   ID_BMI085,
+   ...
+};
+
+ static const struct bmi088_accel_chip_info bmi088_accel_chip_info_tbl[] = {
+         [ID_BMI088] = {
+                 .chip_id = 0x1E,
+                 .channels = bmi088_accel_channels,
+                .num_channels = ARRAY_SIZE(bmi088_accel_channels),
+        },
+         [ID_BMI085] = {
+         ........
+
+>         indio_dev->available_scan_masks = bmi088_accel_scan_masks;
+>         indio_dev->modes = INDIO_DIRECT_MODE;
+>         indio_dev->info = &bmi088_accel_info;
+> diff --git a/drivers/iio/accel/bmi088-accel-spi.c b/drivers/iio/accel/bmi088-accel-spi.c
+> index dd1e3f6cf211..0fed0081e1fd 100644
+> --- a/drivers/iio/accel/bmi088-accel-spi.c
+> +++ b/drivers/iio/accel/bmi088-accel-spi.c
+> @@ -42,7 +42,6 @@ static struct regmap_bus bmi088_regmap_bus = {
+>  static int bmi088_accel_probe(struct spi_device *spi)
+>  {
+>         struct regmap *regmap;
+> -       const struct spi_device_id *id = spi_get_device_id(spi);
+>
+>         regmap = devm_regmap_init(&spi->dev, &bmi088_regmap_bus,
+>                         spi, &bmi088_regmap_conf);
+> @@ -52,8 +51,7 @@ static int bmi088_accel_probe(struct spi_device *spi)
+>                 return PTR_ERR(regmap);
+>         }
+>
+> -       return bmi088_accel_core_probe(&spi->dev, regmap, spi->irq, id->name,
+> -                                      true);
+> +       return bmi088_accel_core_probe(&spi->dev, regmap, spi->irq, true);
+>  }
+>
+>  static int bmi088_accel_remove(struct spi_device *spi)
+> diff --git a/drivers/iio/accel/bmi088-accel.h b/drivers/iio/accel/bmi088-accel.h
+> index 5c25f16b672c..c32afe9606a8 100644
+> --- a/drivers/iio/accel/bmi088-accel.h
+> +++ b/drivers/iio/accel/bmi088-accel.h
+> @@ -12,7 +12,7 @@ extern const struct regmap_config bmi088_regmap_conf;
+>  extern const struct dev_pm_ops bmi088_accel_pm_ops;
+>
+>  int bmi088_accel_core_probe(struct device *dev, struct regmap *regmap, int irq,
+> -                           const char *name, bool block_supported);
+> +                           bool block_supported);
+>  int bmi088_accel_core_remove(struct device *dev);
+>
+>  #endif /* BMI088_ACCEL_H */
+> --
+> 2.25.1
+>

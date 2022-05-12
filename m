@@ -2,141 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCCDF5256D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 23:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1A45256D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 23:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358625AbiELVBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 17:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
+        id S1358025AbiELVFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 17:05:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358599AbiELVA7 (ORCPT
+        with ESMTP id S239241AbiELVFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 17:00:59 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D982558B
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 14:00:57 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CKuFUZ030686;
-        Thu, 12 May 2022 21:00:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=1KwfhkldnBNAglWnX9p2UAFz4cu4GJ4dugWpMyEm/YU=;
- b=M+Aq3G8xD2cr+Z0cpB3tIs9aRkoK4gcspKMbSZKV2OEBMU+gXTo8T4sbojYMj4FCT7ux
- UK0rOUrmPNp66pqFaa8rGBv0C3QiHh2yvIhZUIzpGxCza9XTKDIl5Di7XP5C3/8O+oV4
- g+NtI5i1p42FbHqOHbspJUJn6gDmgy0sK3IQH1Kh4Ghrf/pX6QfHtYcvAL0sRLvbD2BD
- WBOhZaLqxZjPINDAiuezMXD5/B9ICCwTqKy+PGamGHx3w/nXxsSoKkCKNCQKxl5+TKyd
- LvJRIzlpsdZzn4sg6aDCVB4x3oEVIyWvuG/0hm+JO3XzHjhjmwwGD+x1sUNc1X7h4g/J uQ== 
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g19q6g2ak-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 21:00:45 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24CKwSOW017618;
-        Thu, 12 May 2022 21:00:45 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma02dal.us.ibm.com with ESMTP id 3fwgday76c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 21:00:45 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24CL0iDk32768334
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 12 May 2022 21:00:44 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ED2F313605D;
-        Thu, 12 May 2022 21:00:43 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A11FD136055;
-        Thu, 12 May 2022 21:00:43 +0000 (GMT)
-Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.56.168])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 12 May 2022 21:00:43 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-fsi@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, joel@jms.id.au,
-        alistair@popple.id.au, jk@ozlabs.org,
-        Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH] fsi: occ: Prevent use after free
-Date:   Thu, 12 May 2022 16:00:34 -0500
-Message-Id: <20220512210034.59907-1-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
+        Thu, 12 May 2022 17:05:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E742427D00A
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 14:05:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A026AB80AEA
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 21:05:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43F39C385B8;
+        Thu, 12 May 2022 21:05:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652389510;
+        bh=8b8yIycXYuwnaJ406/9sz6HbsqXEqBJ0DuflynEfHaA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=of152Ns5DycT3vO6iszfj6AWOFGbEbDPjkhrOYNdImgrcMooMjA4MvdWcDG6Y/PM1
+         Tm5f0kPtcl5UtZY40pcVAtSo69hcG4DuUnkFb/8s1FRGOPInWaxrp3Ed/2tr5YycR7
+         /oMvQM1VEZX/i2o9ebq1wkLyRE6PHLU4njRcAPxmF+yuVijvjyEkajceNCXPnQVCxj
+         rYmH/DgoneaW61+a4Dko/g0QHVLPmqT9KZwjqwqYANzRHzzPdu/s6vGil0UwP5mL8a
+         asRonNPdJZsAEs4Sncc/cx7P+bJlI6ktJglh6Y2J8Dj+FFxCALm1WvJaTgjikHU3r8
+         u4gcRx2NJSo7Q==
+Date:   Thu, 12 May 2022 14:05:08 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [f2fs-dev] [PATCH 4/5] f2fs: do not stop GC when requiring a
+ free section
+Message-ID: <Yn12hPhKOqWNGpdM@google.com>
+References: <20220506232032.1264078-1-jaegeuk@kernel.org>
+ <20220506232032.1264078-4-jaegeuk@kernel.org>
+ <77e870dd-fd7a-f58e-79fb-d0e5b8fbfc16@kernel.org>
+ <YnlHdgHix+3qlc1a@google.com>
+ <42c23c83-1914-e8dd-c765-df3d6d872532@kernel.org>
+ <Ynvoszmp7+64NdZg@google.com>
+ <ab569309-f639-33af-ebb3-909a02158d02@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: j2hZuXqg4k_jRswtDikHsB2aCBsJaAvY
-X-Proofpoint-ORIG-GUID: j2hZuXqg4k_jRswtDikHsB2aCBsJaAvY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-12_17,2022-05-12_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 adultscore=0 spamscore=0 mlxscore=0 mlxlogscore=829
- lowpriorityscore=0 priorityscore=1501 phishscore=0 clxscore=1011
- suspectscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205120087
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ab569309-f639-33af-ebb3-909a02158d02@kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use get_device and put_device in the open and close functions to
-make sure the device doesn't get freed while a file descriptor is
-open.
+On 05/12, Chao Yu wrote:
+> On 2022/5/12 0:47, Jaegeuk Kim wrote:
+> > > > > > @@ -147,6 +147,7 @@ static int gc_thread_func(void *data)
+> > > > > >     		gc_control.init_gc_type = sync_mode ? FG_GC : BG_GC;
+> > > > > >     		gc_control.no_bg_gc = foreground;
+> > > > > > +		gc_control.nr_free_secs = foreground ? 1 : 0;
+> 
+> [snip]
+> 
+> > 
+> > I mean gc_control->nr_free_secs should be 0.
+> 
+> [snip]
+> 
+> > > > > > @@ -528,7 +528,8 @@ void f2fs_balance_fs(struct f2fs_sb_info *sbi, bool need)
+> > > > > >     				.init_gc_type = BG_GC,
+> > > > > >     				.no_bg_gc = true,
+> > > > > >     				.should_migrate_blocks = false,
+> > > > > > -				.err_gc_skipped = false };
+> > > > > > +				.err_gc_skipped = false,
+> > > > > > +				.nr_free_secs = 1 };
+> 
+> Oh, so, in above two paths, when .nr_free_secs is 1, no_bg_gc should be true
+> to keep skipping BG_GC flow.
+> 
+> How about adding a check condition in f2fs_gc() to avoid invalid argument
+> usage in future?
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
- drivers/fsi/fsi-occ.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Sent out v2. Could you please check?
 
-diff --git a/drivers/fsi/fsi-occ.c b/drivers/fsi/fsi-occ.c
-index c9cc75fbdfb9..9e48dc62b1c5 100644
---- a/drivers/fsi/fsi-occ.c
-+++ b/drivers/fsi/fsi-occ.c
-@@ -82,6 +82,9 @@ static int occ_open(struct inode *inode, struct file *file)
- 	struct miscdevice *mdev = file->private_data;
- 	struct occ *occ = to_occ(mdev);
- 
-+	if (!occ->buffer)
-+		return -ENOENT;
-+
- 	if (!client)
- 		return -ENOMEM;
- 
-@@ -94,6 +97,7 @@ static int occ_open(struct inode *inode, struct file *file)
- 	client->occ = occ;
- 	mutex_init(&client->lock);
- 	file->private_data = client;
-+	get_device(occ->dev);
- 
- 	/* We allocate a 1-page buffer, make sure it all fits */
- 	BUILD_BUG_ON((OCC_CMD_DATA_BYTES + 3) > PAGE_SIZE);
-@@ -143,7 +147,7 @@ static ssize_t occ_write(struct file *file, const char __user *buf,
- 	ssize_t rc;
- 	u8 *cmd;
- 
--	if (!client)
-+	if (!client || !client->occ->buffer)
- 		return -ENODEV;
- 
- 	if (len > (OCC_CMD_DATA_BYTES + 3) || len < 3)
-@@ -197,6 +201,7 @@ static int occ_release(struct inode *inode, struct file *file)
- {
- 	struct occ_client *client = file->private_data;
- 
-+	put_device(client->occ->dev);
- 	free_page((unsigned long)client->buffer);
- 	kfree(client);
- 
-@@ -672,6 +677,7 @@ static int occ_remove(struct platform_device *pdev)
- 	struct occ *occ = platform_get_drvdata(pdev);
- 
- 	kvfree(occ->buffer);
-+	occ->buffer = NULL;
- 
- 	misc_deregister(&occ->mdev);
- 
--- 
-2.27.0
-
+> 
+> From: Chao Yu <chao@kernel.org>
+> 
+> ---
+>  fs/f2fs/gc.c | 17 +++++++++++++----
+>  1 file changed, 13 insertions(+), 4 deletions(-)
+> 
+> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+> index 385282017317..a98276fd3cc1 100644
+> --- a/fs/f2fs/gc.c
+> +++ b/fs/f2fs/gc.c
+> @@ -1799,10 +1799,19 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+>  			gc_type = FG_GC;
+>  	}
+> 
+> -	/* f2fs_balance_fs doesn't need to do BG_GC in critical path. */
+> -	if (gc_type == BG_GC && gc_control->no_bg_gc) {
+> -		ret = -EINVAL;
+> -		goto stop;
+> +	if (gc_type == BG_GC) {
+> +		/* f2fs_balance_fs doesn't need to do BG_GC in critical path. */
+> +		if (gc_control->no_bg_gc) {
+> +			ret = -EINVAL;
+> +			goto stop;
+> +		}
+> +		/*
+> +		 * BG_GC never guarantee that blocks are migrated synchronously.
+> +		 */
+> +		if (gc_control->nr_free_secs) {
+> +			ret = -EINVAL;
+> +			goto stop;
+> +		}
+>  	}
+>  retry:
+>  	ret = __get_victim(sbi, &segno, gc_type);
+> -- 
+> 2.25.1
+> 
+> 
+> 
+> Thanks,

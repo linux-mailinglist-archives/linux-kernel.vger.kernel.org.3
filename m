@@ -2,150 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BCD752436B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 05:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE37A52436D
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 05:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245519AbiELD35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 23:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37964 "EHLO
+        id S1343517AbiELDaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 23:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238977AbiELD3y (ORCPT
+        with ESMTP id S238977AbiELDax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 23:29:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1DF38694A0
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 20:29:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652326192;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oiuB6/1rpu58Tvln0nC0vsy2jP9iWIIb82ww3FDDrRc=;
-        b=CzFUDnJDGhEZEOgBrhOo53SWe0HaEhTrRxeluhaBRNGllZj28Gad+zdyPdoiMeZBKB6OuP
-        lLx/nvg6HV3XtowELRx8UFJt4sOJiwuRUURx4hgdrDu3R7vm7kwkGWjw+oH8H1AvFBJ+pi
-        QhUJ8ImLePAsxdSNSU3jVmRW5R/eOaA=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-446-4pvC43NQOcGaElhv1usf_Q-1; Wed, 11 May 2022 23:29:51 -0400
-X-MC-Unique: 4pvC43NQOcGaElhv1usf_Q-1
-Received: by mail-lf1-f71.google.com with SMTP id bq15-20020a056512150f00b00473a2e132a5so1632385lfb.10
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 20:29:50 -0700 (PDT)
+        Wed, 11 May 2022 23:30:53 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5EDD6424
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 20:30:49 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 31so3442227pgp.8
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 20:30:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/JUiAQKzBnPtASw9bBA0S7cim7i54c+lQ4bL89Ie24Y=;
+        b=I1Hitc0sLSDuMW3ftGYZTxAqH/9FyBOmqNrTUHH81bqpO9FBcaQ/T+/LHHvkStLHRa
+         FU4Ub/I2yIy/K2Vwj28s9yropHNijLHUJ15ftInxMEgmf4XWvO9RIM8mXLkB3PTGugUW
+         d+Yq1psfwoFC1yfBuK6RzDkH0twRPszSUfv5Ohzj2bn2ZEr52p8wU6rBnsvcxU+CD1oL
+         HwFmvyDylbp2gw0rHcXFptpuvC5T5mArzgEIgOdcO7ym7PU9mSRQ4Q4Bqdz1pgOItv80
+         vwrRrqlNG9gugvt3g07tgEDVemCmKTPwp+XMVAdU/L74vBynDn3roP9wxqLyTYzrh24f
+         iJEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oiuB6/1rpu58Tvln0nC0vsy2jP9iWIIb82ww3FDDrRc=;
-        b=h3oB0kMhy5+ZZpbTQr7rRyInXBJYp0ZRTIqb5vpepAjP7ymMs0TT37qH9+Pwftj3fC
-         uoMvMe6L4ubz0/dMvUuaQ9aqj9jddYgbSTvyTFMzsQMaj3/ganX9WUEbMRarX4uNu0VV
-         XdZuVmhyvRfDwCDJTMVuTZNHlN30h3gT/rGvyxKWGBYjG9psFCM3f+fTUoPp+v2oKHXW
-         S1Cf5AnZEWd3Z5cwlFE9TZIpJLInE+qeHGdafwj9i2fPOLPlZE8nSeym11UjEs9ENzMx
-         r4wGDScCbIgjc117NqUHlgky0UeV0oQzkKKElP+ItVdoq7eXtnl2hxshj7euJ3kJYMdF
-         Yrgw==
-X-Gm-Message-State: AOAM5320ox6w5o9wN5M0SHqKbZAXsQMtCIoae9lp7AAYy3eIrDU2H5qo
-        5EtI8AGfD3q9Bouc/2X5JQzWAqPdfOp8bfulBcO2Nj69f14ADkn12QX3khICUk0ZYMLESNljQ6a
-        768uwJUGoiKAp9EZmIOkTYgBtJSDC7Cfkppfk/Jlx
-X-Received: by 2002:a05:651c:89:b0:250:87c9:d4e6 with SMTP id 9-20020a05651c008900b0025087c9d4e6mr19554530ljq.315.1652326189666;
-        Wed, 11 May 2022 20:29:49 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxvGZl7k97bjA3gCsBTaYT9EmgeyM3io1yNju3NEal0LqRm3HelICd4QB0dYrDMJ/jB6zAA972jJiPUWWm1pPU=
-X-Received: by 2002:a05:651c:89:b0:250:87c9:d4e6 with SMTP id
- 9-20020a05651c008900b0025087c9d4e6mr19554516ljq.315.1652326189448; Wed, 11
- May 2022 20:29:49 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/JUiAQKzBnPtASw9bBA0S7cim7i54c+lQ4bL89Ie24Y=;
+        b=7v5M4ycMaJDxiNfW1WlZMPb9cR4OUUOqpGYDzG8ZWpusA9xWSYEtCicSKG9pReiWs+
+         q4RuDAOJjSMueBnQulY5fvHknY5QW4cgWZ5bxwG9qz94Bxke9QxyFKI0NbqTlRf9Hea/
+         npDddWy8brJkMg0eF2VwCd6qnIbVYJgV1oVkJJlkri9WVx/my1+ySOmQvJuw3Ixx1P46
+         Ss6KrC4Kva+ybNICdBAMMA13t7W7IMl2vECL9iDFb95ILxYTmi3Dl0bJCDtDXeqGJMVy
+         TSLATF6Y1ouGRBj8qw0xSFnWpcBFkUNsijE9LAE0F8+LSdnYbApo+/5203sYUnfQBWXq
+         9zKw==
+X-Gm-Message-State: AOAM530uvT6x6BawIfanYyMw3LbLo70NGZDQ+Emmnp1AUc/8b0GPeFKP
+        W37+mseufnJZ/vt1DRtcAjMwA4wUvTisRA==
+X-Google-Smtp-Source: ABdhPJykn6Ud83qc5fsETVgHN6MByMTgZhcIbGoXC/W37OdrZ8Vl/0675MIvuB2S1LCC0JPiPYwnog==
+X-Received: by 2002:aa7:88ce:0:b0:510:72bd:5a61 with SMTP id k14-20020aa788ce000000b0051072bd5a61mr28315689pff.21.1652326249120;
+        Wed, 11 May 2022 20:30:49 -0700 (PDT)
+Received: from daolu.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id g10-20020a170902d5ca00b0015e8d4eb283sm2695684plh.205.2022.05.11.20.30.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 20:30:48 -0700 (PDT)
+From:   Dao Lu <daolu@rivosinc.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dao Lu <daolu@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org (open list:RISC-V ARCHITECTURE)
+Subject: [PATCH] arch/riscv: Add Zihintpause extension support 
+Date:   Wed, 11 May 2022 20:30:45 -0700
+Message-Id: <20220512033045.1101909-1-daolu@rivosinc.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-References: <20220507071954.14455-1-jasowang@redhat.com> <20220507071954.14455-7-jasowang@redhat.com>
- <20220510072451-mutt-send-email-mst@kernel.org> <CACGkMEvWFyEqeeXYEmbU4TWtnj9Ku6J7jLK_7MueuFvpR7FiGg@mail.gmail.com>
- <87r150bi0d.fsf@redhat.com> <CACGkMEtPk9P4KhJ5wTOLj9CZoKDx9-X_5uLRVBag692x4s9SrA@mail.gmail.com>
- <87lev8bffh.fsf@redhat.com> <CACGkMEviB6-SmJmbV3h2zhaTwnep=WQLdnHXRc6D+UUxRXijfg@mail.gmail.com>
- <YnvNmtPgip5knLHP@tuxmaker.boeblingen.de.ibm.com>
-In-Reply-To: <YnvNmtPgip5knLHP@tuxmaker.boeblingen.de.ibm.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Thu, 12 May 2022 11:29:38 +0800
-Message-ID: <CACGkMEuMXMTcV7TF7qje5z2H6sXqShcWRRMVatFh5yneDfPwgA@mail.gmail.com>
-Subject: Re: [PATCH V4 6/9] virtio-ccw: implement synchronize_cbs()
-To:     Vineeth Vijayan <vneethv@linux.ibm.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        eperezma <eperezma@redhat.com>, Cindy Lu <lulu@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 10:52 PM Vineeth Vijayan <vneethv@linux.ibm.com> wrote:
->
-> On Wed, May 11, 2022 at 05:28:11PM +0800, Jason Wang wrote:
-> > On Wed, May 11, 2022 at 5:13 PM Cornelia Huck <cohuck@redhat.com> wrote:
-> > >
-> > > On Wed, May 11 2022, Jason Wang <jasowang@redhat.com> wrote:
-> > >
-> > > > On Wed, May 11, 2022 at 4:17 PM Cornelia Huck <cohuck@redhat.com> wrote:
-> > > >>
-> > > >> On Wed, May 11 2022, Jason Wang <jasowang@redhat.com> wrote:
-> > > >>
-> > > >> > On Tue, May 10, 2022 at 7:28 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > >> >>
-> > > >> >> On Sat, May 07, 2022 at 03:19:51PM +0800, Jason Wang wrote:
-> > > >> >> > @@ -1106,6 +1130,7 @@ static void virtio_ccw_int_handler(struct ccw_device *cdev,
-> > > >> >> >                       vcdev->err = -EIO;
-> > > >> >> >       }
-> > > >> >> >       virtio_ccw_check_activity(vcdev, activity);
-> > > >> >> > +     read_lock_irqsave(&vcdev->irq_lock, flags);
-> > > >> >> >       for_each_set_bit(i, indicators(vcdev),
-> > > >> >> >                        sizeof(*indicators(vcdev)) * BITS_PER_BYTE) {
-> > > >> >> >               /* The bit clear must happen before the vring kick. */
-> > > >> >>
-> > > >> >> Cornelia sent a lockdep trace on this.
-> > > >> >>
-> > > >> >> Basically I think this gets the irqsave/restore logic wrong.
-> > > >> >> It attempts to disable irqs in the handler (which is an interrupt
-> > > >> >> anyway).
-> > > >> >
-> > > >> > The reason I use irqsave/restore is that it can be called from process
-> > > >> > context (if I was not wrong), e.g from io_subchannel_quiesce().
-> > > >>
-> > > >> io_subchannel_quiesce() should disable interrupts, though? Otherwise, it
-> > > >> would be a bug.
-> > > >
-> > > > Right, it was protected by a spin_lock_irq(), but I can see other
-> > > > cdev->handler() in e.g device_fsm.c, the irq status is not obvious, do
-> > > > they have the same assumption which IRQ is disabled?
-> > >
-> > > Yes, that should be the case for any invocations via the fsm as well.
-> > >
-> >
-> > Ok.
-> >
-> > > It's been some time since I've worked on that part of the code, though,
-> > > so let's cc: the s390 cio maintainers so that they can speak up if I'm
-> > > wrong.
-> >
-> > Ok, I will do that.
-> >
-> > Thanks
-> >
-> > >
-> Thank you Corny to looking in to this. I agree, the cdev->handler is
-> called with lock held. And as you mentioned, in the fsm these handler
-> invocations are done with IRQ disabled, which will otherwise end up in a
-> deadlock.
-> thanks.
->
+This patch:
+  1. Build with _zihintpause if the toolchain has support for it
+  2. Detects if the platform supports the extension
+  3. Use PAUSE for cpu_relax if both toolchain and the platform support it
 
-Thanks a lot for the confirmation, I will use
-spin_lock()/spin_unlock() in the next version.
+Signed-off-by: Dao Lu <daolu@rivosinc.com>
+---
+ arch/riscv/Makefile                     |  4 ++++
+ arch/riscv/include/asm/hwcap.h          |  1 +
+ arch/riscv/include/asm/vdso/processor.h | 19 ++++++++++++++++---
+ arch/riscv/kernel/cpu.c                 |  1 +
+ arch/riscv/kernel/cpufeature.c          |  7 +++++++
+ 5 files changed, 29 insertions(+), 3 deletions(-)
+
+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+index 7d81102cffd4..900a8fda1a2d 100644
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@ -56,6 +56,10 @@ riscv-march-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-y)c
+ toolchain-need-zicsr-zifencei := $(call cc-option-yn, -march=$(riscv-march-y)_zicsr_zifencei)
+ riscv-march-$(toolchain-need-zicsr-zifencei) := $(riscv-march-y)_zicsr_zifencei
+ 
++# Check if the toolchain supports Zihintpause extension
++toolchain-supports-zihintpause := $(call cc-option-yn, -march=$(riscv-march-y)_zihintpause)
++riscv-march-$(toolchain-supports-zihintpause) := $(riscv-march-y)_zihintpause
++
+ KBUILD_CFLAGS += -march=$(subst fd,,$(riscv-march-y))
+ KBUILD_AFLAGS += -march=$(riscv-march-y)
+ 
+diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+index 0734e42f74f2..caa9ee5459b4 100644
+--- a/arch/riscv/include/asm/hwcap.h
++++ b/arch/riscv/include/asm/hwcap.h
+@@ -52,6 +52,7 @@ extern unsigned long elf_hwcap;
+  */
+ enum riscv_isa_ext_id {
+ 	RISCV_ISA_EXT_SSCOFPMF = RISCV_ISA_EXT_BASE,
++	RISCV_ISA_EXT_ZIHINTPAUSE,
+ 	RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
+ };
+ 
+diff --git a/arch/riscv/include/asm/vdso/processor.h b/arch/riscv/include/asm/vdso/processor.h
+index 134388cbaaa1..106b35ba8cac 100644
+--- a/arch/riscv/include/asm/vdso/processor.h
++++ b/arch/riscv/include/asm/vdso/processor.h
+@@ -4,15 +4,28 @@
+ 
+ #ifndef __ASSEMBLY__
+ 
++#include <linux/jump_label.h>
+ #include <asm/barrier.h>
++#include <asm/hwcap.h>
+ 
++extern struct static_key_false riscv_pause_available;
+ static inline void cpu_relax(void)
+ {
++	if (!static_branch_likely(&riscv_pause_available)) {
+ #ifdef __riscv_muldiv
+-	int dummy;
+-	/* In lieu of a halt instruction, induce a long-latency stall. */
+-	__asm__ __volatile__ ("div %0, %0, zero" : "=r" (dummy));
++		int dummy;
++		/* In lieu of a halt instruction, induce a long-latency stall. */
++		__asm__ __volatile__ ("div %0, %0, zero" : "=r" (dummy));
+ #endif
++	} else {
++#ifdef __riscv_zihintpause
++		/*
++		 * Reduce instruction retirement.
++		 * This assumes the PC changes.
++		 */
++		__asm__ __volatile__ ("pause");
++#endif
++	}
+ 	barrier();
+ }
+ 
+diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+index ccb617791e56..89e563e9c4cc 100644
+--- a/arch/riscv/kernel/cpu.c
++++ b/arch/riscv/kernel/cpu.c
+@@ -88,6 +88,7 @@ int riscv_of_parent_hartid(struct device_node *node)
+  */
+ static struct riscv_isa_ext_data isa_ext_arr[] = {
+ 	__RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
++	__RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
+ 	__RISCV_ISA_EXT_DATA("", RISCV_ISA_EXT_MAX),
+ };
+ 
+diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+index 1b2d42d7f589..327c19507dbb 100644
+--- a/arch/riscv/kernel/cpufeature.c
++++ b/arch/riscv/kernel/cpufeature.c
+@@ -24,6 +24,8 @@ static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) __read_mostly;
+ #ifdef CONFIG_FPU
+ __ro_after_init DEFINE_STATIC_KEY_FALSE(cpu_hwcap_fpu);
+ #endif
++DEFINE_STATIC_KEY_FALSE(riscv_pause_available);
++EXPORT_SYMBOL_GPL(riscv_pause_available);
+ 
+ /**
+  * riscv_isa_extension_base() - Get base extension word
+@@ -192,6 +194,7 @@ void __init riscv_fill_hwcap(void)
+ 				set_bit(*ext - 'a', this_isa);
+ 			} else {
+ 				SET_ISA_EXT_MAP("sscofpmf", RISCV_ISA_EXT_SSCOFPMF);
++				SET_ISA_EXT_MAP("zihintpause", RISCV_ISA_EXT_ZIHINTPAUSE);
+ 			}
+ #undef SET_ISA_EXT_MAP
+ 		}
+@@ -213,6 +216,10 @@ void __init riscv_fill_hwcap(void)
+ 
+ 	}
+ 
++	if (__riscv_isa_extension_available(riscv_isa, RISCV_ISA_EXT_ZIHINTPAUSE)) {
++		static_branch_enable(&riscv_pause_available);
++	}
++
+ 	/* We don't support systems with F but without D, so mask those out
+ 	 * here. */
+ 	if ((elf_hwcap & COMPAT_HWCAP_ISA_F) && !(elf_hwcap & COMPAT_HWCAP_ISA_D)) {
+-- 
+2.36.0
 

@@ -2,202 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F7E5242E6
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 04:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B685242E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 04:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243941AbiELCxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 22:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58978 "EHLO
+        id S243992AbiELCyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 22:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243697AbiELCxP (ORCPT
+        with ESMTP id S240471AbiELCyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 22:53:15 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9361CC990
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 19:53:14 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id fv2so3913332pjb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 19:53:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jrgF71qNNcYD8nMa0N2Q78v1uFUFa9LGIhiMObVxexI=;
-        b=MC7TNUG4QWAakfYQhS5QSM5SxEsCYVGXnkyUwHwXKvplZ7MABo+4i4g7EAumDk/IRK
-         B/VKo4UUmnm0M/qTCiamuZh7YCX948h8rzLdv8+lnO5rORzPD8JKJcYht2q/0fuD48JN
-         zB56ucdFuOstRW34Cfa/XsT0/gKAIYX7rToPeRXjPJtxovndrRjgak2/ROloBqi92rQw
-         eOaweOM8ilNP4E4+F5hkh69jRUVjneiqzlljaBPBsp7bRbeVxwYrqX4qSzBOHfn+x1YH
-         LYfBvIQImecH4tqm76Sge0c3Y7EoSdKlVNerS6yPCL7WzLz7trGFCZasWe/Qq9b/oV28
-         P+SQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jrgF71qNNcYD8nMa0N2Q78v1uFUFa9LGIhiMObVxexI=;
-        b=lobESlCTYHoBjY4SCdX6wmtM+rzKtIbaqwy0lUzMxqMbpCexUfAmycwgdu1zuBVcdW
-         t7+m0F8RodPsR8At0NkFiHeTIgORDWjm6KJFIcY7r2DRFskbUG1rnHU84GGPEUzENoRk
-         g9OUAP0KCAftpAp6HVkzRkw6F0WCTLqJuMTVIkqEUxSgPtwd7XT5DrJ3dyoLRLXrdaYb
-         By9eoTZpE7IchpXfLKTxmx12dvladMTmK1Qrll7Haw8z8ib7CBviSEIzfz7A10X8rTVD
-         b1BpgXynUrszCdB1bpdmzW8CxghELiK6Ji5tLOm9CVTkjo6OUasAzejYuyCWSa1vCCU3
-         gWoQ==
-X-Gm-Message-State: AOAM531yMPUC32+z1Ub52MDmwVLyLaJr1G1AZM1oJlp/xICde/L1nRqz
-        a2a3eDgscVb4eimUi8CVdis=
-X-Google-Smtp-Source: ABdhPJxiQGyU27UIahq15uZJlZcn2NmrIUajfvr44Ukcf4v/Ucl9xoUNLKWjatK0SYMOaj15aAgLrA==
-X-Received: by 2002:a17:90b:606:b0:1d9:5dd5:1489 with SMTP id gb6-20020a17090b060600b001d95dd51489mr8518187pjb.171.1652323993950;
-        Wed, 11 May 2022 19:53:13 -0700 (PDT)
-Received: from localhost.localdomain ([125.131.156.123])
-        by smtp.gmail.com with ESMTPSA id a13-20020a1709027e4d00b0015e8d4eb21fsm2603639pln.105.2022.05.11.19.53.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 19:53:13 -0700 (PDT)
-From:   Wonhyuk Yang <vvghjk1234@gmail.com>
-To:     Mel Gorman <mgorman@suse.de>, Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Wonhyuk Yang <vvghjk1234@gmail.com>,
-        Baik Song An <bsahn@etri.re.kr>,
-        Hong Yeon Kim <kimhy@etri.re.kr>,
-        Taeung Song <taeung@reallinux.co.kr>, linuxgeek@linuxgeek.io,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [Patch v2] [PATCH] mm/page_alloc: Fix tracepoint mm_page_alloc_zone_locked()
-Date:   Thu, 12 May 2022 11:53:07 +0900
-Message-Id: <20220512025307.57924-1-vvghjk1234@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 11 May 2022 22:54:09 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064871F929D
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 19:54:07 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KzGYf0lt7zhZ20;
+        Thu, 12 May 2022 10:53:26 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 12 May 2022 10:54:05 +0800
+Subject: Re: [PATCH v1] mm,hwpoison: set PG_hwpoison for busy hugetlb pages
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        zhenwei pi <pizhenwei@bytedance.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        <linux-kernel@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
+References: <20220511151955.3951352-1-naoya.horiguchi@linux.dev>
+ <f0da4fcf-a4af-ccaa-32ce-55d9fda72203@oracle.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <d7f24648-2af5-3998-d265-c441538ce5fc@huawei.com>
+Date:   Thu, 12 May 2022 10:54:05 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <f0da4fcf-a4af-ccaa-32ce-55d9fda72203@oracle.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, trace point mm_page_alloc_zone_locked() doesn't show
-correct information.
+On 2022/5/12 2:35, Mike Kravetz wrote:
+> On 5/11/22 08:19, Naoya Horiguchi wrote:
+>> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+>>
+>> If memory_failure() fails to grab page refcount on a hugetlb page
+>> because it's busy, it returns without setting PG_hwpoison on it.
+>> This not only loses a chance of error containment, but breaks the rule
+>> that action_result() should be called only when memory_failure() do
+>> any of handling work (even if that's just setting PG_hwpoison).
+>> This inconsistency could harm code maintainability.
+>>
+>> So set PG_hwpoison and call hugetlb_set_page_hwpoison() for such a case.
 
-First, when alloc_flag has ALLOC_HARDER/ALLOC_CMA, page can
-be allocated from MIGRATE_HIGHATOMIC/MIGRATE_CMA. Nevertheless,
-tracepoint use requested migration type not MIGRATE_HIGHATOMIC and
-MIGRATE_CMA.
+I'm sorry but where is hugetlb_set_page_hwpoison() defined and used ? I can't find it.
 
-Second, after Commit 44042b4498728 ("mm/page_alloc: allow high-order
-pages to be stored on the per-cpu lists") percpu-list can store
-high order pages. But trace point determine whether it is a refiil
-of percpu-list by comparing requested order and 0.
+>>
+>> Fixes: 405ce051236c ("mm/hwpoison: fix race between hugetlb free/demotion and memory_failure_hugetlb()")
+>> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+>> ---
+>>  include/linux/mm.h  | 1 +
+>>  mm/memory-failure.c | 8 ++++----
+>>  2 files changed, 5 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/include/linux/mm.h b/include/linux/mm.h
+>> index d446e834a3e5..04de0c3e4f9f 100644
+>> --- a/include/linux/mm.h
+>> +++ b/include/linux/mm.h
+>> @@ -3187,6 +3187,7 @@ enum mf_flags {
+>>  	MF_MUST_KILL = 1 << 2,
+>>  	MF_SOFT_OFFLINE = 1 << 3,
+>>  	MF_UNPOISON = 1 << 4,
+>> +	MF_NO_RETRY = 1 << 5,
+>>  };
+>>  extern int memory_failure(unsigned long pfn, int flags);
+>>  extern void memory_failure_queue(unsigned long pfn, int flags);
+>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>> index 6a28d020a4da..e3269b991016 100644
+>> --- a/mm/memory-failure.c
+>> +++ b/mm/memory-failure.c
+>> @@ -1526,7 +1526,8 @@ int __get_huge_page_for_hwpoison(unsigned long pfn, int flags)
+>>  			count_increased = true;
+>>  	} else {
+>>  		ret = -EBUSY;
+>> -		goto out;
+>> +		if (!(flags & MF_NO_RETRY))
+>> +			goto out;
+>>  	}
+> 
+> Hi Naoya,
+> 
+> We are in the else block because !HPageFreed() and !HPageMigratable().
+> IIUC, this likely means the page is isolated.  One common reason for isolation
+> is migration.  So, the page could be isolated and on a list for migration.
+> 
+> I took a quick look at the hugetlb migration code and did not see any checks
+> for PageHWPoison after a hugetlb page is isolated.  I could have missed
+> something?  If there are no checks, we will read the PageHWPoison page
+> in kernel mode while copying to the migration target.
+> 
+> Is this an issue?  Is is something we need to be concerned with?  Memory
+> errors can happen at any time, and gracefully handling them is best effort.
 
-To handle these problems, make mm_page_alloc_zone_locked() only be
-called by __rmqueue_smallest with correct migration type. With a
-new argument called percpu_refill, it can show roughly whether it
-is a refill of percpu-list.
+It seems HWPoison hugetlb page will still be accessed before this patch. Can we do a
+get_page_unless_zero first here to ensure that hugetlb page migration should fail due
+to this extra page reference and thus not access the page content? If hugetlb page is
+already freezed, corrupted memory will still be consumed though. :(
 
-Cc: Baik Song An <bsahn@etri.re.kr>
-Cc: Hong Yeon Kim <kimhy@etri.re.kr>
-Cc: Taeung Song <taeung@reallinux.co.kr>
-Cc: linuxgeek@linuxgeek.io
-Signed-off-by: Wonhyuk Yang <vvghjk1234@gmail.com>
----
-v1 -> v2: Simplify determining percpu-refill suggested by Mel Gorman
+Thanks!
 
- include/trace/events/kmem.h | 14 +++++++++-----
- mm/page_alloc.c             | 13 +++++--------
- 2 files changed, 14 insertions(+), 13 deletions(-)
-
-diff --git a/include/trace/events/kmem.h b/include/trace/events/kmem.h
-index ddc8c944f417..f89fb3afcd46 100644
---- a/include/trace/events/kmem.h
-+++ b/include/trace/events/kmem.h
-@@ -229,20 +229,23 @@ TRACE_EVENT(mm_page_alloc,
- 
- DECLARE_EVENT_CLASS(mm_page,
- 
--	TP_PROTO(struct page *page, unsigned int order, int migratetype),
-+	TP_PROTO(struct page *page, unsigned int order, int migratetype,
-+		 int percpu_refill),
- 
--	TP_ARGS(page, order, migratetype),
-+	TP_ARGS(page, order, migratetype, percpu_refill),
- 
- 	TP_STRUCT__entry(
- 		__field(	unsigned long,	pfn		)
- 		__field(	unsigned int,	order		)
- 		__field(	int,		migratetype	)
-+		__field(	int,		percpu_refill	)
- 	),
- 
- 	TP_fast_assign(
- 		__entry->pfn		= page ? page_to_pfn(page) : -1UL;
- 		__entry->order		= order;
- 		__entry->migratetype	= migratetype;
-+		__entry->percpu_refill	= percpu_refill;
- 	),
- 
- 	TP_printk("page=%p pfn=0x%lx order=%u migratetype=%d percpu_refill=%d",
-@@ -250,14 +253,15 @@ DECLARE_EVENT_CLASS(mm_page,
- 		__entry->pfn != -1UL ? __entry->pfn : 0,
- 		__entry->order,
- 		__entry->migratetype,
--		__entry->order == 0)
-+		__entry->percpu_refill)
- );
- 
- DEFINE_EVENT(mm_page, mm_page_alloc_zone_locked,
- 
--	TP_PROTO(struct page *page, unsigned int order, int migratetype),
-+	TP_PROTO(struct page *page, unsigned int order, int migratetype,
-+		 int percpu_refill),
- 
--	TP_ARGS(page, order, migratetype)
-+	TP_ARGS(page, order, migratetype, percpu_refill)
- );
- 
- TRACE_EVENT(mm_page_pcpu_drain,
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 0e42038382c1..e906ac274586 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -2476,6 +2476,9 @@ struct page *__rmqueue_smallest(struct zone *zone, unsigned int order,
- 		del_page_from_free_list(page, zone, current_order);
- 		expand(zone, page, order, current_order, migratetype);
- 		set_pcppage_migratetype(page, migratetype);
-+		trace_mm_page_alloc_zone_locked(page, order, migratetype, 
-+				pcp_allowed_order(order) &&
-+				migratetype < MIGRATE_PCPTYPES);
- 		return page;
- 	}
- 
-@@ -2999,7 +3002,7 @@ __rmqueue(struct zone *zone, unsigned int order, int migratetype,
- 		    zone_page_state(zone, NR_FREE_PAGES) / 2) {
- 			page = __rmqueue_cma_fallback(zone, order);
- 			if (page)
--				goto out;
-+				return page;
- 		}
- 	}
- retry:
-@@ -3012,9 +3015,6 @@ __rmqueue(struct zone *zone, unsigned int order, int migratetype,
- 								alloc_flags))
- 			goto retry;
- 	}
--out:
--	if (page)
--		trace_mm_page_alloc_zone_locked(page, order, migratetype);
- 	return page;
- }
- 
-@@ -3733,11 +3733,8 @@ struct page *rmqueue(struct zone *preferred_zone,
- 		 * reserved for high-order atomic allocation, so order-0
- 		 * request should skip it.
- 		 */
--		if (order > 0 && alloc_flags & ALLOC_HARDER) {
-+		if (order > 0 && alloc_flags & ALLOC_HARDER)
- 			page = __rmqueue_smallest(zone, order, MIGRATE_HIGHATOMIC);
--			if (page)
--				trace_mm_page_alloc_zone_locked(page, order, migratetype);
--		}
- 		if (!page) {
- 			page = __rmqueue(zone, order, migratetype, alloc_flags);
- 			if (!page)
--- 
-2.30.2
+> 
 

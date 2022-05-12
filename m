@@ -2,67 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CE8C5247D5
+	by mail.lfdr.de (Postfix) with ESMTP id 3121B5247D4
 	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 10:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238966AbiELIYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 04:24:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35536 "EHLO
+        id S1351426AbiELIYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 04:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237176AbiELIXy (ORCPT
+        with ESMTP id S237176AbiELIY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 04:23:54 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DD769B4F;
-        Thu, 12 May 2022 01:23:52 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id 126so4089205qkm.4;
-        Thu, 12 May 2022 01:23:52 -0700 (PDT)
+        Thu, 12 May 2022 04:24:27 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03326633B1;
+        Thu, 12 May 2022 01:24:26 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id q130so5543122ljb.5;
+        Thu, 12 May 2022 01:24:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=brHoAYESbYaw3qeDx896/zwLySs+sKATjJeEldnRzw0=;
-        b=KgfUkaQARcExIlpU4rOm6uwSVpDtKV+CYKxa0xV36nWPu6HcqwegrlwMmwFAmZCk6s
-         JQDg3yjgtLGYy+rcSgvEVNFUgZHXFXUVbvv5q2Opa9B7XCKnmWety+W8z5Tj8U2QT0bk
-         jaOVNY5CQyv6rg2n7ZcbKTP1R1V+I+cakkG+vgl7hrN8yo3/wP9m8vuti0jZawo67nUM
-         AOXHoTOt6BzMq31dQCgIf5+E+VYaJTp7fM7BLTpfY5Bm+2QtbnGAFA/N4R0Bgo3hLRBz
-         IuawAuEQryOHeLJdgBSFKkWdRV31YdI8b4NmiIO7NbBVnCtHXV0ocffJkMFjjECtf4Km
-         yrDA==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Dp5RjKDsRorlt15Q842QS1oD3zaqmbFzxKTc/+h/+tQ=;
+        b=MneGklh48zNq8AAwN3ifgUtyhXr9lX5z/oy2m6O2tLieaDN9QE+UD3cbj/bsLZUqZa
+         DBg6dcCXwHX1uivRZQF8U3eNzSq1Rj0c01fLeNNE6Nt6My9U8l8UZamKDZ+5j4LeVNFL
+         OiAsbqlMfzpEro0I/bv5Jw/jg7gg4kWIK5B29d1fMMh4YmJJs+uPM/UWHy7L73jAnfL1
+         9tgx9SPSIM0cDU4qJuOmj71Hh8eq/jwMXe0wkcF1XIBSTCTa5SUjFewve6xDBBaIfT46
+         G14Xxr+ZfnSxKCISOaFW2d2eAEmTCO85yVFmSz0zsHKgDAjFKQtJ8y9BW7GPwXTy3EoJ
+         OGUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=brHoAYESbYaw3qeDx896/zwLySs+sKATjJeEldnRzw0=;
-        b=EneTyFqni5ce8/avtpC1N/e/YaF257wfLCaO8v34J/f0tFk93wwEitc/nott7MHDat
-         Ymildo1METv69iG2kYmWv7PPpM6UGlb6YqeWcm9KSb/+ao9HiQTgvnUubPeDv2QaWUx+
-         LLXAo5ruzmSD4yHlr985mXli0066AfOwNR0LYxnog6b00AyHGrULieeB3gQxlTKdV+lg
-         kQmHx5ZrvfgcrzJLHsggavazs7mdSMFIz65mREhJWuXEpwOeb3l0xS1mOCHRMe09FOAY
-         ApiEAA2jiE1TM1jtB//8fd+1zs/h9BuzZC6LVgwxS0Ye22yhRt7k/GQRzyXYrsQRP1PZ
-         Xzng==
-X-Gm-Message-State: AOAM532GF/+pO5TxsQLYb34oBc3LP9LOCmNwSzN124PhmEClhXtK6PDf
-        5OXFo9bwf+FVMNpzRa8izQKtEywsE4QVWrWcBv8=
-X-Google-Smtp-Source: ABdhPJyGAjNEKtEIIrYUOnLep7A7vZSIaAaaX6ec2tSxbiP9yvOwZ5Re/xNCRVSWIFgNux6XC7YflNO/XiTrD7nAv6M=
-X-Received: by 2002:a37:9ace:0:b0:69f:b424:25b4 with SMTP id
- c197-20020a379ace000000b0069fb42425b4mr21826665qke.250.1652343831504; Thu, 12
- May 2022 01:23:51 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Dp5RjKDsRorlt15Q842QS1oD3zaqmbFzxKTc/+h/+tQ=;
+        b=nj7gP7bbvSfHbxFpHbrjfJcMpmC5YgWxj7FzN7hrCKqmPXjPZfQD61Jx0fdcDB0d7t
+         ArdJoOZVjikgn/FdIX3WFe1l8cUl6RBgn6zkSMylWA9NRMY8juPxN+XcnPJAPRWhfmsa
+         m8Q7f4oYg77s93TaNY4Ua8LV4iAX6nFJVRrHgyEXavYNmhfKJMYsL1vliBu8tf4x0t/w
+         eQccWhe1Ov7mk7P3nRIcmPQT/C8u8lCBxeHvgDRkthhcsh+jXTWXn/Kp3arsnmgbP9Rx
+         V9Osbx6KTOWiDIjW6dVrFKJVETYzxHaNBOhVfqGToRZB/eFCSWe/01bnOvbGmBSHv0rg
+         6lSA==
+X-Gm-Message-State: AOAM5316d9adEm34j631djJFYbtwOLtyNwqA3dgq4asGU/957hWBn14U
+        sZRCkWYcCkg2XOe0/UK5IiMq4n5UxGQ=
+X-Google-Smtp-Source: ABdhPJyWBOKLTrjc+R7ofT+rL175Kzj+uFEU5bmAzeiLls7z8qDKjLUGSKaVXf2V9tHgoktYGQFqgQ==
+X-Received: by 2002:a2e:bb8e:0:b0:250:76dd:3bd9 with SMTP id y14-20020a2ebb8e000000b0025076dd3bd9mr20340342lje.71.1652343863752;
+        Thu, 12 May 2022 01:24:23 -0700 (PDT)
+Received: from [192.168.1.103] ([31.173.83.174])
+        by smtp.gmail.com with ESMTPSA id u17-20020a05651206d100b00474018dfb76sm673110lff.157.2022.05.12.01.24.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 01:24:23 -0700 (PDT)
+Subject: Re: [PATCH v3 09/23] ata: libahci_platform: Sanity check the DT child
+ nodes number
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220511231810.4928-1-Sergey.Semin@baikalelectronics.ru>
+ <20220511231810.4928-10-Sergey.Semin@baikalelectronics.ru>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <42dfc76f-a9d9-8e63-874d-b7459cef326c@gmail.com>
+Date:   Thu, 12 May 2022 11:24:22 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <1652236710-36524-1-git-send-email-wanpengli@tencent.com> <7d9d5f72-21ed-070e-c063-1cd7ae6671ec@redhat.com>
-In-Reply-To: <7d9d5f72-21ed-070e-c063-1cd7ae6671ec@redhat.com>
-From:   Wanpeng Li <kernellwp@gmail.com>
-Date:   Thu, 12 May 2022 16:23:40 +0800
-Message-ID: <CANRm+CzFdJvuq=V+5eSGmqvrTFPyHTHGp-rQD4gGujADeNtf+w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] KVM: LAPIC: Disarm LAPIC timer includes pending
- timer around TSC deadline switch
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+In-Reply-To: <20220511231810.4928-10-Sergey.Semin@baikalelectronics.ru>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,48 +82,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 May 2022 at 21:54, Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> On 5/11/22 04:38, Wanpeng Li wrote:
-> >
-> > Fixes: 4427593258 (KVM: x86: thoroughly disarm LAPIC timer around TSC deadline switch)
-> > Signed-off-by: Wanpeng Li<wanpengli@tencent.com>
-> > ---
->
-> Please write a testcase for this.
+On 5/12/22 2:17 AM, Serge Semin wrote:
 
-Something like this, however, it is not easy to catch the pending
-timer in this scenario.
+> Having greater than (AHCI_MAX_PORTS = 32) ports detected isn't that
 
-diff --git a/x86/apic.c b/x86/apic.c
-index 23508ad..108c1c8 100644
---- a/x86/apic.c
-+++ b/x86/apic.c
-@@ -22,7 +22,7 @@ static void test_lapic_existence(void)
- #define TSC_DEADLINE_TIMER_VECTOR 0xef
- #define BROADCAST_VECTOR 0xcf
+   Having greater than AHCI_MAX_PORTS (32) ports detected?
 
--static int tdt_count;
-+static int volatile tdt_count;
+> critical from the further AHCI-platform initialization point of view since
+> exceeding the ports upper limit will cause allocating more resources than
+> will be used afterwards. But detecting too many child DT-nodes doesn't
+> seem right since it's very unlikely to have it on an ordinary platform. In
+> accordance with the AHCI specification there can't be more than 32 ports
+> implemented at least due to having the CAP.NP field of 4 bits wide and the
 
- static void tsc_deadline_timer_isr(isr_regs_t *regs)
- {
-@@ -672,6 +672,18 @@ static void test_apic_change_mode(void)
-        /* now tmcct == 0 and tmict != 0 */
-        apic_change_mode(APIC_LVT_TIMER_PERIODIC);
-        report(!apic_read(APIC_TMCCT), "TMCCT should stay at zero");
-+
-+       handle_irq(TSC_DEADLINE_TIMER_VECTOR, tsc_deadline_timer_isr);
-+       irq_enable();
-+
-+       apic_write(APIC_LVTT, APIC_LVT_TIMER_ONESHOT |
-+               APIC_LVT_TIMER_VECTOR);
-+        /* Divider == 1 */
-+       apic_write(APIC_TDCR, 0x0000000b);
-+
-+       apic_write(APIC_TMICT, 0x999999);
-+       enable_tsc_deadline_timer();
-+       while(tdt_count == 1);
- }
+   It's 5 bits wide, actually...
 
- #define KVM_HC_SEND_IPI 10
+> PI register of dword size. Thus if such situation is found the DTB must
+> have been corrupted and the data read from it shouldn't be reliable. Let's
+> consider that as an erroneous situation and halt further resources
+> allocation.
+> 
+> Note it's logically more correct to have the nports set only after the
+> initialization value is checked for being sane. So while at it let's make
+> sure nports is assigned with a correct value.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+
+[...]
+
+MBR, Sergey

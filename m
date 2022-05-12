@@ -2,84 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABA1252417D
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 02:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42BD152417B
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 02:23:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349640AbiELA1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 20:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54408 "EHLO
+        id S1349634AbiELAXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 20:23:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242707AbiELA07 (ORCPT
+        with ESMTP id S242707AbiELAXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 20:26:59 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4072335DE7
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 17:26:58 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id e24so3705071pjt.2
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 17:26:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=lSOQOgP92/YiU5VAWj+NdXGc95/DnozpR5AdrSptpI4=;
-        b=nj48KdFh+/sfMu3rISqNM01K4uo221UQg9EECYj9I1566x6pbwZ2im6XJF1nepDYAR
-         rAS1n9HuNI+9hF04K4JpP2/eftkYUUNbN9BhUht3NRASeQ136OfBwoQBHzoCUD29mOXX
-         c0P2aAmQdLPSObjwvEzC+qqDiOo9GskHVMz51V3OvVdhdrZFbUcw9YJJRHB7hUUNDMiK
-         tSWV01HrIsISPKBi90rk4a7dgXhLP6d4mfqxDvBM9Y3gFGU0zfLhimu8NYEO2/SgyeVP
-         ul/LtTlNBnN6zwuJz9kni2nCqJ0V8JnFtjWJPcfpdYuxqbeKnAGPl8/Lu1wwVAqxzyYl
-         csTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=lSOQOgP92/YiU5VAWj+NdXGc95/DnozpR5AdrSptpI4=;
-        b=q91AyuE6PHcwYY9GQzjdQ+NjDzvp0gKG2uo6trMIU9VGBo3i/DgEaJR8ClInsuZ/2v
-         Gxxsjy4zb8dBoJSnkaQW3eNtrxF65KmQ/XeS8U+I6Ck8Y3QXXTie8U+eOJIC52X7h3YW
-         p6swTJ6awPpY/ztcA8DQAxRPkbkZT1k4DDZjSczbCG+rZYxvqSR2QuBn+LlxVCU+e+2U
-         J3oekyl8yAF6WITdI9WIO0QNY7gaUnoFqtVgCWO5I/uTHRtFfbsvlRWeOpOInAZ8Yl3R
-         K1S2OlkAx40iLE0MB7z/wavtG4D1tdFdoLTAsLZCp7ydebGRvmDZRkiuEWTGDrnodvHE
-         JQ0A==
-X-Gm-Message-State: AOAM5312y9YwXF+4X3w3uWFgKC1CgXkzXhYPRBXC4wJkRJVNEAyYcvBg
-        af5BgbPZPS6HZq9hsQrj6Mk=
-X-Google-Smtp-Source: ABdhPJyh51RrSZyzGueYZU+R57NkHQ8GfEjV+AaZcM12tnOzVv5rZ2hD+66yclGja+Q1K83BPJkE4Q==
-X-Received: by 2002:a17:90b:4a84:b0:1dc:67e9:a92c with SMTP id lp4-20020a17090b4a8400b001dc67e9a92cmr7878081pjb.141.1652315217763;
-        Wed, 11 May 2022 17:26:57 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:69ef:9c87:7816:4f74])
-        by smtp.gmail.com with ESMTPSA id d6-20020a170902654600b0015f44241a31sm77278pln.110.2022.05.11.17.26.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 17:26:57 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Wed, 11 May 2022 17:26:55 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     John Hubbard <jhubbard@nvidia.com>,
+        Wed, 11 May 2022 20:23:30 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B62016609F
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 17:23:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652315009; x=1683851009;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FXGLp4kn6zowFU/uMojpzoAT+8Tt5jfdv5yfT9ck7Mg=;
+  b=K1EBet4/u5n6/ELIzR6ilyWceXrk06LR2c8MAlLk4wVj3zK7ZljQMBKL
+   +Iq4x3IAtjE8IvGGp8ubcoG27z3v0FXt/ZPHZ2A0+ArOJgTNpy7VC3luK
+   a9kwwpFJ8Bu3g7Gz9W5wZ6N42SssN1d6ykS8fE38uyDQgGsDINqXdLSfT
+   3eXXrBB2Ai5fRKIui+1Mh4IAVAHdvV2OmV/17w1RT3WKZMXrvX7AYm0Tt
+   c7jp1gzr9kVwtmrAEGY2LjrKS4sS+w3YRmVJl39+q9a1hMUgXWUx51GMW
+   ntRHcL2+b2OmkN7l77BKUzu7sEi3SuN4VxincxW71qD8o4UjxXR/EqRuR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="332886070"
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="332886070"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 17:23:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="594395631"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga008.jf.intel.com with ESMTP; 11 May 2022 17:23:27 -0700
+Date:   Wed, 11 May 2022 17:26:58 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     x86@kernel.org, Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Stephane Eranian <eranian@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        John Dias <joaodias@google.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v4] mm: fix is_pinnable_page against on cma page
-Message-ID: <YnxUTxnCJ6EsmjEi@google.com>
-References: <YnwupNzDNv7IbjRQ@google.com>
- <54b5d177-f2f4-cef2-3a68-cd3b0b276f86@nvidia.com>
- <Ynw6mauQuNhrOAHy@google.com>
- <f7bcda22-8ffe-67be-36bc-fcde58d8884a@nvidia.com>
- <YnxCCPZUfgQNXSg6@google.com>
- <8f083802-7ab0-15ec-b37d-bc9471eea0b1@nvidia.com>
- <20220511234534.GG1790663@paulmck-ThinkPad-P17-Gen-1>
- <ea64b36c-ecc1-74db-dd2e-909e7e507ef8@nvidia.com>
- <0d90390c-3624-4f93-f8bd-fb29e92237d3@nvidia.com>
- <20220512002207.GJ1790663@paulmck-ThinkPad-P17-Gen-1>
+        Joerg Roedel <joro@8bytes.org>,
+        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 02/29] x86/apic: Add irq_cfg::delivery_mode
+Message-ID: <20220512002658.GB16273@ranerica-svr.sc.intel.com>
+References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
+ <20220506000008.30892-3-ricardo.neri-calderon@linux.intel.com>
+ <875ymih1yl.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220512002207.GJ1790663@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+In-Reply-To: <875ymih1yl.ffs@tglx>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,80 +74,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 05:22:07PM -0700, Paul E. McKenney wrote:
-> On Wed, May 11, 2022 at 05:12:32PM -0700, John Hubbard wrote:
-> > On 5/11/22 16:57, John Hubbard wrote:
-> > > On 5/11/22 16:45, Paul E. McKenney wrote:
-> > > > > 
-> > > > > Well no, because the "&" operation is a single operation on the CPU, and
-> > > > > isn't going to get split up like that.
-> > > > 
-> > > > Chiming in a bit late...
-> > > 
-> > > Much appreciated!
-> > > 
-> > > > 
-> > > > The usual way that this sort of thing causes trouble is if there is a
-> > > > single store instruction that changes the value from MIGRATE_ISOLATE
-> > > > to MIGRATE_CMA, and if the compiler decides to fetch twice, AND twice,
-> > > 
-> > > Doing an AND twice for "x & constant" this definitely blows my mind. Is
-> > > nothing sacred? :)
-> > > 
-> > > > and then combine the results.  This could give a zero outcome where the
-> > > > underlying variable never had the value zero.
-> > > > 
-> > > > Is this sort of thing low probability?
-> > > > 
-> > > > Definitely.
-> > > > 
-> > > > Isn't this sort of thing prohibited?
-> > > > 
-> > > > Definitely not.
-> > > > 
-> > > > So what you have will likely work for at least a while longer, but it
-> > > > is not guaranteed and it forces you to think a lot harder about what
-> > > > the current implementations of the compiler can and cannot do to you.
-> > > > 
-> > > > The following LWN article goes through some of the possible optimizations
-> > > > (vandalisms?) in this area: https://lwn.net/Articles/793253/
-> > > > 
-> > > 
-> > > hmm, I don't think we hit any of those  cases, do we? Because here, the
-> > > "write" side is via a non-inline function that I just don't believe the
-> > > compiler is allowed to call twice. Or is it?
-> > > 
-> > > Minchan's earlier summary:
-> > > 
-> > > CPU 0                         CPU1
-> > > 
-> > > 
-> > >                                set_pageblock_migratetype(MIGRATE_ISOLATE)
-> > > 
-> > > if (get_pageblock_migrate(page) & MIGRATE_CMA)
-> > > 
-> > >                                set_pageblock_migratetype(MIGRATE_CMA)
-> > > 
-> > > if (get_pageblock_migrate(page) & MIGRATE_ISOLATE)
-> > > 
-> > > ...where set_pageblock_migratetype() is not inline.
-> > > 
-> > > thanks,
-> > 
-> > Let me try to say this more clearly: I don't think that the following
-> > __READ_ONCE() statement can actually help anything, given that
-> > get_pageblock_migratetype() is non-inlined:
-> > 
-> > +	int __mt = get_pageblock_migratetype(page);
-> > +	int mt = __READ_ONCE(__mt);
-> > +
-> > +	if (mt & (MIGRATE_CMA | MIGRATE_ISOLATE))
-> > +		return false;
-> > 
-> > 
-> > Am I missing anything here?
+On Fri, May 06, 2022 at 09:53:54PM +0200, Thomas Gleixner wrote:
+> On Thu, May 05 2022 at 16:59, Ricardo Neri wrote:
+> > Currently, the delivery mode of all interrupts is set to the mode of the
+> > APIC driver in use. There are no restrictions in hardware to configure the
+> > delivery mode of each interrupt individually. Also, certain IRQs need
+> > to be
 > 
-> In the absence of future aggression from link-time optimizations (LTO),
-> you are missing nothing.
+> s/IRQ/interrupt/ Changelogs can do without acronyms.
 
-A thing I want to note is Android kernel uses LTO full mode.
+Sure. I will sanitize all the changelogs to remove acronyms.
+
+> 
+> > configured with a specific delivery mode (e.g., NMI).
+> >
+> > Add a new member, delivery_mode, to struct irq_cfg. Subsequent changesets
+> > will update every irq_domain to set the delivery mode of each IRQ to that
+> > specified in its irq_cfg data.
+> >
+> > To keep the current behavior, when allocating an IRQ in the root
+> > domain
+> 
+> The root domain does not allocate an interrupt. The root domain
+> allocates a vector for an interrupt. There is a very clear and technical
+> destinction. Can you please be more careful about the wording?
+
+I will review the wording in the changelogs.
+
+> 
+> > --- a/arch/x86/kernel/apic/vector.c
+> > +++ b/arch/x86/kernel/apic/vector.c
+> > @@ -567,6 +567,7 @@ static int x86_vector_alloc_irqs(struct irq_domain *domain, unsigned int virq,
+> >  		irqd->chip_data = apicd;
+> >  		irqd->hwirq = virq + i;
+> >  		irqd_set_single_target(irqd);
+> > +
+> 
+> Stray newline.
+
+Sorry! I will remove it.
+> 
+> >  		/*
+> >  		 * Prevent that any of these interrupts is invoked in
+> >  		 * non interrupt context via e.g. generic_handle_irq()
+> > @@ -577,6 +578,14 @@ static int x86_vector_alloc_irqs(struct irq_domain *domain, unsigned int virq,
+> >  		/* Don't invoke affinity setter on deactivated interrupts */
+> >  		irqd_set_affinity_on_activate(irqd);
+> >  
+> > +		/*
+> > +		 * Initialize the delivery mode of this irq to match the
+> 
+> s/irq/interrupt/
+
+I will make this change.
+
+Thanks and BR,
+Ricardo
+
+> 
+> > +		 * default delivery mode of the APIC. Children irq domains
+> > +		 * may take the delivery mode from the individual irq
+> > +		 * configuration rather than from the APIC driver.
+> > +		 */
+> > +		apicd->hw_irq_cfg.delivery_mode = apic->delivery_mode;
+> > +
+> >  		/*
+> >  		 * Legacy vectors are already assigned when the IOAPIC
+> >  		 * takes them over. They stay on the same vector. This is

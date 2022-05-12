@@ -2,139 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E2F6524FA3
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 251AA524FB0
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:15:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355131AbiELOOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 10:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39576 "EHLO
+        id S1354826AbiELOPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 10:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237439AbiELOO1 (ORCPT
+        with ESMTP id S236680AbiELOPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 10:14:27 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE09024EA02
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:14:25 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d22so4981927plr.9
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:14:25 -0700 (PDT)
+        Thu, 12 May 2022 10:15:44 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464CD21255
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:15:42 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id j25so6454331wrc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:15:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FuS/ZgfSwC6kSt4qIvn3GFGZYvOzE0L2SWUhv9P3AZU=;
-        b=M6M2RBJZBMGhUpzDnpJTlBCP/1NlQvrn3MAPUOVbiVmQVneFnd/IdoEzdV/Ts0RSxj
-         /sMNT61JH0UKaA+qe6ctPJ4SYeNyiaohtE0dGIfHbZ9Cg5ca2eqNUmbZz7HXQ+yOYXac
-         s3svq/Bs1P5B72M2f+ereQ2ezZKD/GmQtJCF5om56RdwpuDLSnPKo0YAQjctT2jvY3hu
-         6/1kyIzYSjUwU4AIX/to3PUXR7y2dyZxl9aSXjevImr/TLxfywO4feB34OtacCtXi4BG
-         3Tdimw90q5VqakA8Qk6STfelnaPYaADMlbY01UPuNf+ctPNFMAyviYjtp/cqIpQLwVN/
-         uW7A==
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=n/7pYmQpfwFthS/9oBJ6j9sdvjU7gecjyTu7MlWAR7k=;
+        b=kUmh1oG60Fx0A6U56QVurQQLGKQ7477RCDCtn29lmcK1mpvRBMpGiD6hdcAaMvFXmV
+         qOGgXhg3PVoHSSWjxbVmU5G5zNZqptA0VHiElu7Vy6cSSsGOyRC0I3lk0Tn4mIUNZlAw
+         AsnpIb4hk5Q+SIPopSbDEj41i4yu8DkWC+t4w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FuS/ZgfSwC6kSt4qIvn3GFGZYvOzE0L2SWUhv9P3AZU=;
-        b=HbeKIaME1w59P2vPKN4JJgtkJL1s2jTJ+ttHiLlyWKvpykgrH6Mkk5BH2u+B5Aop0o
-         pH/3Zqe88pE/YHngYMniEpH/bOq978s2r+Ha+PbMxnwkMot70MoPxwVrLigP3Go8Qkke
-         oCH6xBcDYLqBBMEreujoXKQu3pVFhwnC4tEY5Iy4z+vV780fz7Nfwam7x2a94j+3lqVQ
-         nGxlXsX+ZcS1y/AWE5TKLyQfaKSjw0lW9dJOBGzCjGd/0MAjJKQAGi47ttWZUQeUoY25
-         hrdl9hDChLAxkCzHrHfooCvOwgHbOYVlRWEO6SV6ZUj4krdeADMn3pzQ6/yUmSIBNEp2
-         UcCQ==
-X-Gm-Message-State: AOAM532LHKG731P+yZGgS7ITai4Zee8ceWqCpPp/n2mhckDXPIKG9q7L
-        bU2fLCLVThL6T6Dh+5UCf/Lq5w==
-X-Google-Smtp-Source: ABdhPJx4JPQbkZ31MyCPnBd/otdiCyBaejNm1PnUMk6ARMDfKx0wO0sZ6mVRrkYprBHt+7b3ScWpmQ==
-X-Received: by 2002:a17:902:e149:b0:15e:bafb:8760 with SMTP id d9-20020a170902e14900b0015ebafb8760mr30657461pla.155.1652364865185;
-        Thu, 12 May 2022 07:14:25 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id b9-20020a170902a9c900b0015f186be48asm3980280plr.36.2022.05.12.07.14.24
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=n/7pYmQpfwFthS/9oBJ6j9sdvjU7gecjyTu7MlWAR7k=;
+        b=OU5KzEOI9qsy+fd3eRD5uBmp1r5QdaDB0QM3FGStKEmd/HyKWlLm96S/NNC6QdEEHO
+         N6gu9ClFUYp2YdIkWOg7Z09IBglfmFh9hpYKnUAutFCSxnA0tLVFOvqyE5rY9sFjVQJ6
+         TIob60oYxvP14/iNkm6DhoYWx+XnG3RRU/nJDPy0dPHAFBxOG13NKS6Wg05Uxqu/k7dn
+         CZLrXUh6bFb3JA0BKFEX5zNMyptIgrauUfmVro5ZsFLSEWedJfca9YKE8AbGCIWQz631
+         q+JjpnMSs4v4chkRDVgkASvyrUuuhVx8HLKyeKPjHBHKVC91kJYNowKheKlRdgs3Y3Ye
+         UskQ==
+X-Gm-Message-State: AOAM5339VqzlRNuxOxeXsG0lOFka7gYBfxDB/9ZzurDlNDQg3+mbQRQs
+        hEXE6U/+VVKs+KzU0vUg+jjKEg==
+X-Google-Smtp-Source: ABdhPJxgE25FTVTyKaDpk3JLkWltkhrtfTRyeVsxBvMnjZwfuCI1/qUzdN0GY0T1EvfVBkrJ5o12Vw==
+X-Received: by 2002:a5d:6d8d:0:b0:20c:5f60:d551 with SMTP id l13-20020a5d6d8d000000b0020c5f60d551mr27919826wrs.427.1652364940783;
+        Thu, 12 May 2022 07:15:40 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id c13-20020adfed8d000000b0020c5253d8d7sm4428980wro.35.2022.05.12.07.15.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 07:14:24 -0700 (PDT)
-Date:   Thu, 12 May 2022 14:14:20 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH 1/2] x86/crash: Disable virt in core NMI crash handler to
- avoid double list_add
-Message-ID: <Yn0WPBGGI4VcbM4S@google.com>
-References: <20220511234332.3654455-1-seanjc@google.com>
- <20220511234332.3654455-2-seanjc@google.com>
- <87wnervxb7.ffs@tglx>
+        Thu, 12 May 2022 07:15:39 -0700 (PDT)
+Date:   Thu, 12 May 2022 16:15:37 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= 
+        <ckoenig.leichtzumerken@gmail.com>
+Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Stone <daniel@fooishbar.org>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v4 10/15] drm/shmem-helper: Take reservation lock instead
+ of drm_gem_shmem locks
+Message-ID: <Yn0WicACq5Y46DGU@phenom.ffwll.local>
+Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Stone <daniel@fooishbar.org>,
+        David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>, Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dmitry Osipenko <digetx@gmail.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+References: <83e68918-68de-c0c6-6f9b-e94d34b19383@collabora.com>
+ <YnkaUk0mZNuPsZ5r@phenom.ffwll.local>
+ <4d08b382-0076-1ea2-b565-893d50b453cb@collabora.com>
+ <YnuziJDmXVR09UzP@phenom.ffwll.local>
+ <56787b70-fb64-64da-6006-d3aa3ed59d12@gmail.com>
+ <3a362c32-870c-1d73-bba6-bbdcd62dc326@collabora.com>
+ <YnvWUbh5QDDs6u2B@phenom.ffwll.local>
+ <ba2836d0-9a3a-b879-cb1e-a48aed31637d@collabora.com>
+ <YnwI5UX/zvmnAHvg@phenom.ffwll.local>
+ <f6e42cfb-0252-1273-2ba3-76af818e0799@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <87wnervxb7.ffs@tglx>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f6e42cfb-0252-1273-2ba3-76af818e0799@gmail.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022, Thomas Gleixner wrote:
-> Sean,
+On Thu, May 12, 2022 at 09:29:35AM +0200, Christian König wrote:
+> Am 11.05.22 um 21:05 schrieb Daniel Vetter:
+> > [SNIP]
+> > > > > It's unclear to me which driver may ever want to do the mapping under
+> > > > > the dma_resv_lock. But if we will ever have such a driver that will need
+> > > > > to map imported buffer under dma_resv_lock, then we could always add the
+> > > > > dma_buf_vmap_locked() variant of the function. In this case the locking
+> > > > > rule will sound like this:
+> > > > > 
+> > > > > "All dma-buf importers are responsible for holding the dma-reservation
+> > > > > lock around the dmabuf->ops->mmap/vmap() calls."
+> > > Are you okay with this rule?
+> > Yeah I think long-term it's where we want to be, just trying to find
+> > clever ways to get there.
+> > 
+> > And I think Christian agrees with that?
 > 
-> On Wed, May 11 2022 at 23:43, Sean Christopherson wrote:
-> > @@ -840,6 +858,20 @@ void nmi_shootdown_cpus(nmi_shootdown_cb callback)
-> >  	unsigned long msecs;
-> >  	local_irq_disable();
-> >  
-> > +	/*
-> > +	 * Invoking multiple callbacks is not currently supported, registering
-> > +	 * the NMI handler twice will cause a list_add() double add BUG().
-> > +	 * The exception is the "nop" handler in the emergency reboot path,
-> > +	 * which can run after e.g. kdump's shootdown.  Do nothing if the crash
-> > +	 * handler has already run, i.e. has already prepared other CPUs, the
-> > +	 * reboot path doesn't have any work of its to do, it just needs to
-> > +	 * ensure all CPUs have prepared for reboot.
+> Yes, completely.
 > 
-> This is confusing at best. The double list add is just one part of the
-> problem, which would be trivial enough to fix.
+> A design where most DMA-buf functions are supposed to be called with the
+> reservation lock held is exactly what I have in mind for the long term.
 > 
-> The real point is that after the first shoot down all other CPUs are
-> stuck in crash_nmi_callback() and won't respond to the second NMI.
+> > > > > > It shouldn't be that hard to clean up. The last time I looked into it my
+> > > > > > main problem was that we didn't had any easy unit test for it.
+> > > > > Do we have any tests for dma-bufs at all? It's unclear to me what you
+> > > > > are going to test in regards to the reservation locks, could you please
+> > > > > clarify?
+> > > > Unfortunately not really :-/ Only way really is to grab a driver which
+> > > > needs vmap (those are mostly display drivers) on an imported buffer, and
+> > > > see what happens.
+> > > > 
+> > > > 2nd best is liberally sprinkling lockdep annotations all over the place
+> > > > and throwing it at intel ci (not sure amd ci is accessible to the public)
+> > > > and then hoping that's good enough. Stuff like might_lock and
+> > > > dma_resv_assert_held.
+> > > Alright
+> > So throwing it at intel-gfx-ci can't hurt I think, but that only covers
+> > i915 so doesn't really help with the bigger issue of catching all the
+> > drivers.
+> 
+> BTW: We have now somebody working on converting the existing libdrm_amdgpu
+> unit tests over to igt.
 
-Well that's embarrasingly obvious in hindsight.
+This sounds awesome.
 
-> 
-> So trying to run this twice is completely pointless and guaranteed to
-> run into the timeout.
-> 
-> > +	 */
-> > +	if (shootdown_callback) {
-> > +		WARN_ON_ONCE(callback != nmi_shootdown_nop);
-> > +		return;
-> 
-> Instead of playing games with the callback pointer, I prefer to make
-> this all explicit. Delta patch below.
+/me throws a happy dance
 
-Much better.  If you're planning on doing fixup, can you also include a comment
-tweak about why the callback is left set?  If not, I'll do it in v2.  A bit
-overkill, but it's another thing that for me was obvious only once I realized "why".
-
-Thanks!
-
-diff --git a/arch/x86/kernel/reboot.c b/arch/x86/kernel/reboot.c
-index 4e3a839ae146..808d3e75fb2d 100644
---- a/arch/x86/kernel/reboot.c
-+++ b/arch/x86/kernel/reboot.c
-@@ -896,7 +896,11 @@ void nmi_shootdown_cpus(nmi_shootdown_cb callback)
-                msecs--;
-        }
- 
--       /* Leave the nmi callback set */
-+       /*
-+        * Leave the nmi callback set, shootdown is a one-time thing.  Clearing
-+        * the callback could result in a NULL pointer dereference if a CPU
-+        * (finally) responds after the timeout expires.
-+        */
- }
- 
- static inline void nmi_shootdown_cpus_on_restart(void)
+Cheers, Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

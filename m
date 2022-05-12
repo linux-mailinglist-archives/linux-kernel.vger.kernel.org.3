@@ -2,157 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B97F524399
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 05:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04849524397
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 05:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344758AbiELDpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 23:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
+        id S1344742AbiELDov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 23:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233136AbiELDo7 (ORCPT
+        with ESMTP id S233136AbiELDor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 23:44:59 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB58C9B1B8
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 20:44:57 -0700 (PDT)
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220512034451epoutp01476e7a4d99a97329d42ca78e1a514c54~uPrw_1jPE1701217012epoutp01V
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:44:51 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220512034451epoutp01476e7a4d99a97329d42ca78e1a514c54~uPrw_1jPE1701217012epoutp01V
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1652327091;
-        bh=GirDdQEslfbySicVoQGet6fAqxxqlgyh1Y0KbsS0OHc=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=dipO9DyK5Y2LnxICuGJXTPAXXgOMfQhlp31I0B7TWf2kEr9KZ864kscO/OlOU57pk
-         0HOtdp+YUv+5PGxYP5THCBFwBMlU3M9ZbiJkJRPlCXuvdYvS3MTwENOuaZjTutD9hM
-         wXlP8kC0XiEEA0Ql4doCsWEKGmCemrTp0BUfsxyM=
-Received: from epsmges5p1new.samsung.com (unknown [182.195.42.73]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20220512034450epcas5p3b74892a315c8163c6065b65e62ce1a08~uPrwRjVv12876328763epcas5p3E;
-        Thu, 12 May 2022 03:44:50 +0000 (GMT)
-X-AuditID: b6c32a49-4b5ff7000000274f-09-627c82b29056
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        01.C2.10063.2B28C726; Thu, 12 May 2022 12:44:50 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE: [PATCH modules-next 1/1] kallsyms: enhance %pS/s/b printing
- when KALLSYSMS is disabled
-Reply-To: maninder1.s@samsung.com
-Sender: Maninder Singh <maninder1.s@samsung.com>
-From:   Maninder Singh <maninder1.s@samsung.com>
-To:     Kees Cook <keescook@chromium.org>
-CC:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        Vaneet Narang <v.narang@samsung.com>,
-        "swboyd@chromium.org" <swboyd@chromium.org>,
-        "ojeda@kernel.or" <ojeda@kernel.or>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "avimalin@gmail.com" <avimalin@gmail.com>,
-        "atomlin@redhat.com" <atomlin@redhat.com>,
-        Onkarnath <onkarnath.1@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <202205111513.3AD646936@keescook>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220512034437epcms5p1b384e18e75f0f56ee70f67e62f7ab0ce@epcms5p1>
-Date:   Thu, 12 May 2022 09:14:37 +0530
-X-CMS-MailID: 20220512034437epcms5p1b384e18e75f0f56ee70f67e62f7ab0ce
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrOKsWRmVeSWpSXmKPExsWy7bCmlu6mppokgxU9WhZz1q9hs+htms5k
-        cWT+GlaLBwevs1uc6c61uLxrDptFw+zvrBaPZ81js7gx4SmjxcwvQBUrej6wWvx//JXVYl/H
-        AyaL3RsXsVkcv/OUyeLQybmMFo2f7zM6CHrMbrjI4rFz1l12j5Z9t4DEkbesHl+un2f02LSq
-        k83jxIzfLB7zTgZ6XOjK9ni/7yqbR9+WVYwe67dcZfH4vEkugDeKyyYlNSezLLVI3y6BK2Nz
-        x03Wgtk8Fb2bDjA2ME7l7GLk5JAQMJFYvOIVWxcjF4eQwG5GiUfLtzB3MXJw8AoISvzdIQxS
-        IyyQKrFk91sWEFtIQFHiwow1jCAlwgIGEr+2aoCE2QT0JFbt2gNWIiKgKvH9UjMzyEhmga1s
-        Etf3nmOF2MUrMaP9KQuELS2xfflWRhCbE6j56PH7UDWiEjdXv2WHsd8fm88IYYtItN47ywxh
-        C0o8+LkbKi4jsXpzL9TMaomnr8+B/SIh0MIosW83TJG5xPolq8CG8gr4SjT3LgGLswBdOufC
-        czaIGheJ8xcWgw1iFpCX2P52DjgcmAU0Jdbv0ocokZWYemodE0QJn0Tv7ydMMH/tmAdjq0q0
-        3NzACvPj548foW7zkGj684gJEs7LGSW+HDjLPIFRYRYiqGch2TwLYfMCRuZVjJKpBcW56anF
-        pgWGeanlesWJucWleel6yfm5mxjBaVHLcwfj3Qcf9A4xMnEwHmKU4GBWEuHd31eRJMSbklhZ
-        lVqUH19UmpNafIhRmoNFSZz3dPqGRCGB9MSS1OzU1ILUIpgsEwenVAPTpLpWnXdtnU9lTOy7
-        ZbbznGoQmbd8o8Xb8gsGt/4vM7P85b7BR9dmsc3yvb8u6LvWsgaKlv54JNqxoHMS6wzHwMNO
-        nxfx3J6uIeD1MennvzntPxOMRR4Y3fbXOMx6iVMgTuOOduK+1AX3HU+WdJ5X+uMYUmr2dP2P
-        onWeZe3s8h84VnUaV89//j/LZQ/D9i9365dc7lziYqT9wmJPzM/Ajx3f+otYnioc2XtDSON1
-        5IEWC5crH7b/LWKcNOutmoxWb4Dkm93TCti2mfTZ+J3SnpBl+vF7srKR8LQ2AT7dOY3n279n
-        H5/4ZUfvn4sT/lfwNk/QOMNhkJW7/kNaRZaOxXUxTWfPo4vYtac1eOQrsRRnJBpqMRcVJwIA
-        NBwmvPoDAAA=
-X-CMS-RootMailID: 20220421041604epcas5p414cf2e851d1bd828a151dc6b2b004680
-References: <202205111513.3AD646936@keescook>
-        <20220421041542.9195-1-maninder1.s@samsung.com>
-        <CGME20220421041604epcas5p414cf2e851d1bd828a151dc6b2b004680@epcms5p1>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 11 May 2022 23:44:47 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204849809D
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 20:44:46 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id 204so3671146pfx.3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 20:44:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eeIOFs3Zsk1WG7JFtEjA/i1tDZMezk35qDyAeCBM+EM=;
+        b=iNK2cXUXdbjPaWYNSzHx/04+0ZNvMnEF4rN/hFqqGZtuMQnRVLAyyJefxqvLZ58UDS
+         w7z2F1m1FaSjc11BJ0/97o8mdzA0LllrU2rCOr33EWXk/o+Atx24qV3z3jmZpRZdvO6X
+         OjiGnIyyo4/ylfzHV6nt11YpS4Oxs07lP/8/GND2bFOGpszoswCGMwY9fzSASe8n7UXn
+         52myBOWyeEEtcWj7DeDlmvyW6Nfo5TkEKLGjVm3CmxBslnTM68yVwG5wL4gOD26KTttT
+         ndyw13SKKcSK0SGw+/NRf/bSnLYJjoHCxir+3m3ktijZjuFvLt58rLM5tbSjeXWGpE4y
+         Ij8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=eeIOFs3Zsk1WG7JFtEjA/i1tDZMezk35qDyAeCBM+EM=;
+        b=XBX5a58U2OI4K1sleHwMlAbxie59wOyPNK0CMgZZNGV+7zLcsKLCsrHEH7QRyH5UsW
+         0TQZML+0Mv+GajHUhxJ5hTCnF32QM+OeNpIjMVVyaeh6TnC9wR6hT7k+vrfSsdNJQDja
+         jx7EaawYqp6JaaXJuSTeMABRkqGpDlZ24yI0wwJvoD77pYKHJf/s6IBNyFG6hfNBh0ah
+         9nCrM7ZCJJTHo+Wq1JTHIm4NwduDjwxo1ve8IguTRX4VHoSc7rkLWaCwrZ9BoxojvDHr
+         0qd2UKJHynYYOuyNIuh7SIaz7SZjcSfAaZ4Lq7WIEdpxPfwtykKIDBGqmj3dSm52N0z0
+         dGFg==
+X-Gm-Message-State: AOAM532vW6dCDDEUFbJqirDBdkE2SalyzGeYr+3Q8yZoonoO5M5NYUP9
+        BSlWoID7a1c45zUVdASlCUs=
+X-Google-Smtp-Source: ABdhPJytajbBH+2uAtUsa+iGiFeqxfpgp8mmGxD7WzklKuzcsgf6JZhrM5deeWHWi6U/CBa40aybdA==
+X-Received: by 2002:a63:d30f:0:b0:3db:48a0:c6d8 with SMTP id b15-20020a63d30f000000b003db48a0c6d8mr3434016pgg.93.1652327085542;
+        Wed, 11 May 2022 20:44:45 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:69ef:9c87:7816:4f74])
+        by smtp.gmail.com with ESMTPSA id v11-20020aa7850b000000b0050dc76281fbsm2469410pfn.213.2022.05.11.20.44.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 20:44:44 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Wed, 11 May 2022 20:44:43 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        John Dias <joaodias@google.com>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH v4] mm: fix is_pinnable_page against on cma page
+Message-ID: <YnyCqwY4DxcZ/NjM@google.com>
+References: <20220511234534.GG1790663@paulmck-ThinkPad-P17-Gen-1>
+ <ea64b36c-ecc1-74db-dd2e-909e7e507ef8@nvidia.com>
+ <0d90390c-3624-4f93-f8bd-fb29e92237d3@nvidia.com>
+ <20220512002207.GJ1790663@paulmck-ThinkPad-P17-Gen-1>
+ <YnxUTxnCJ6EsmjEi@google.com>
+ <f7ff4186-e629-a5da-3f4d-ec629b0c8dd9@nvidia.com>
+ <20220512004949.GK1790663@paulmck-ThinkPad-P17-Gen-1>
+ <YnxczoehQJ+x6m9Y@google.com>
+ <0accce46-fac6-cdfb-db7f-d08396bf9d35@nvidia.com>
+ <aafc0954-80df-dceb-03f2-2caea29cbbda@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aafc0954-80df-dceb-03f2-2caea29cbbda@nvidia.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-> On Wed, May 11, 2022 at 01:36:56PM +0530, Maninder Singh wrote:
-> > kallsyms_show_value return false if KALLSYMS is disabled,
-> > but its usage is done by module.c also.
-> > Thus when KALLSYMS is disabled, system will not print module
-> > load address:
+On Wed, May 11, 2022 at 07:18:56PM -0700, John Hubbard wrote:
+> On 5/11/22 18:08, John Hubbard wrote:
+> > On 5/11/22 18:03, Minchan Kim wrote:
+> > > > 
+> > > > Or there might be some code path that really hates a READ_ONCE() in
+> > > > that place.
+> > > 
+> > > My worry about chaning __get_pfnblock_flags_mask is it's called
+> > > multiple hot places in mm codes so I didn't want to add overhead
+> > > to them.
+> > 
+> > ...unless it really does generate the same code as is already there,
+> > right? Let me check that real quick.
+> > 
 > 
-> Eek, I hadn't see the other changes this depends on. I think those
-> changes need to be reworked first. Notably in the other patch, this is
-> no good:
+> It does change the generated code slightly. I don't know if this will
+> affect performance here or not. But just for completeness, here you go:
 > 
->         /* address belongs to module */
->         if (add_offset)
->                 len = sprintf(buf, "0x%p+0x%lx", base, offset);
->         else
->                 len = sprintf(buf, "0x%lx", value);
+> free_one_page() originally has this (just showing the changed parts):
 > 
-> This is printing raw kernel addresses with no hashing, as far as I can
-> tell. That's not okay at all.
->
-
-yes same was suggested by Petr also, because earlier we were printing base address also as raw address.
-
-https://lkml.org/lkml/2022/2/28/847
-
-but then modified approach to print base address as hash when we are going to show offset of module address,
-but when we print complete address then we thought of keeping it same as it was:
-
-original:
- [12.487424] ps 0xffff800000eb008c
-with patch:
- [9.624152] ps 0xffff800001bd008c [crash]
-
-But if its has to be hashed, will fix that also.
-
-> Once that other patch gets fixed, this one then can be revisited.
+>     mov    0x8(%rdx,%rax,8),%rbx
+>     and    $0x3f,%ecx
+>     shr    %cl,%rbx
+>     and    $0x7,
+> 
+> 
+> And after applying this diff:
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 0e42038382c1..df1f8e9a294f 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -482,7 +482,7 @@ unsigned long __get_pfnblock_flags_mask(const struct
+> page *page,
+>         word_bitidx = bitidx / BITS_PER_LONG;
+>         bitidx &= (BITS_PER_LONG-1);
+> 
+> -       word = bitmap[word_bitidx];
+> +       word = READ_ONCE(bitmap[word_bitidx]);
+>         return (word >> bitidx) & mask;
+>  }
+> 
+> 
+> ...it now does an extra memory dereference:
+> 
+>     lea    0x8(%rdx,%rax,8),%rax
+>     and    $0x3f,%ecx
+>     mov    (%rax),%rbx
+>     shr    %cl,%rbx
+>     and    $0x7,%ebx
 > 
 
-I will check detailed comments on that also
+Thanks for checking, John.
 
-> And just on naming: "kallsyms_tiny" is a weird name: it's just "ksyms"
-> -- there's no "all".  :)
+I don't want to have the READ_ONCE in __get_pfnblock_flags_mask 
+atm even though it's an extra memory dereference for specific
+architecutre and specific compiler unless other callsites *do*
+need it.
 
-Ok :)
-
-Will name it as knosyms.c (if it seems ok).
-
-
-
-Thanks,
-Maninder Singh
+We choose the choice(i.e., having __READ_ONCE in is_pinanble_
+page) for *potential* cases(e.g., aggressive LTO for future)
+and if it's an extra memory dereference atm, it would be multiple
+instructions *potentailly* as having more change or different
+compiler and/or arches now or later. It's out of scope in
+this patch.

@@ -2,70 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4522D5255AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:25:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 022A05255B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358013AbiELTZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 15:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39766 "EHLO
+        id S1358041AbiELT1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 15:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352586AbiELTZQ (ORCPT
+        with ESMTP id S1352586AbiELT1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 15:25:16 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01FE2764F0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 12:25:14 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id c24so1347484lfv.11
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 12:25:14 -0700 (PDT)
+        Thu, 12 May 2022 15:27:17 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E2448E72
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 12:27:12 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so8734803pjb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 12:27:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6mcqHVCTOADxT4nWVQOUHhwOqrmkthTN0rJ4nqx8rlI=;
-        b=fKCnjktwaZsXbw/hdsBSxLZqoXSDDmhQvbTlTr5AYZ8Oy9oDUyxGAllTgPTTqFT04O
-         m3sldOJGdC7gWeyAiRqa6IJQGSutRiFPDgOfJHVXCK9s083fVPgxQPUY77Arc5Iw8i2M
-         bzjk6gJ2wHqyIN4IC25rZeTcE6tYu32CyQFwUYh9yoERE+bORr/w4KbFaYi4udwHmUr1
-         OV+KCPvty4O2N28zK2+oGjyyDLNkBRxkRphYt3yx6lcqqjQciRkriZ38J7/aLAmLkaWX
-         TP3pdlbT3G+gvU7KLn0XzLasIlbneDcjX60j2vXak3HjF2T4saXxRHcBR7/nrnjawfyJ
-         qNnQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WD9f8NZclyvL/TGsiBp0JtJ2J04vFPjve2IcgvH1Te0=;
+        b=TtoJf0EMG2z4xJNlFEjfpfTvKbRWMYnVfsaFF9dey7ZcDXRn6VB9ETgO30AyVeRTsM
+         smmFFyzjm9XizVirhKHZln56waUVWQlc04Y1je/FD79vJqBqbneR2v4UIjQiAy+t6ogN
+         eWqfa3xtGpC9b19Jq2oG4beo1INx6x7KF4aQpBv1htCSofsxHlzub90F7bpDfIHMMdU9
+         hkl5zyMpX801u/PY1y1i2Y1D7b29irNOOQ3/3hsJt8WFOBOcAicBYffiFZKQbsP/fC9G
+         cYLbVMQl8mvITMKWfIFWb7i4HhEHgkwVOFLQGgcyrBGhTh0AHHupOHKh+zMEZqPut3TA
+         /8fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6mcqHVCTOADxT4nWVQOUHhwOqrmkthTN0rJ4nqx8rlI=;
-        b=2rKO1+Mujy2HDkCkNg2pBCk6wKLwMhaBBSdJWSxYwj0glS5FXLXzTzNJHi5lXOTfnw
-         lExvg0lJRxqZvrtQCEwCVw2GxeUzLeecUTa7yUHAJhY/a+gqR/U3tg9Wv6QjA6lo3Cw8
-         havDznzh29ah0yOZ+YrGmDoa/Qc164qppAoTlk/EZsFXnIyutysbZ6oWaSiyywzv0A+R
-         6V804RAkFJsni5zKnSiKEnP+zSTBnAQGY99ktCvLtV2QHv0Ibkea3rbcjIyOfKjBUK2i
-         Rex0z4N41Ih/DykQoE2IWGjNQ50og7d8UhshFXlGqi/IGHJqkeryfdADqsH89s2IcB+T
-         vudQ==
-X-Gm-Message-State: AOAM532LToCxlFLA6hmgQIrxCkiZh4XkI870cruKpVEjvZgcnhzNUZLV
-        Fat6C/qSOkJaq3RyXnf/P5Tb9y7X+ImhEunHGJ/XaQ==
-X-Google-Smtp-Source: ABdhPJwheBuGcaGgIIU/pM/BIG++IJsDiYIDUzck0xktR1ebk4IiEg3VfSwDzPBi50vdfq6jUaJJBc2HMtWkYUaWDT4=
-X-Received: by 2002:a05:6512:1291:b0:473:b522:ef58 with SMTP id
- u17-20020a056512129100b00473b522ef58mr908856lfs.190.1652383512824; Thu, 12
- May 2022 12:25:12 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WD9f8NZclyvL/TGsiBp0JtJ2J04vFPjve2IcgvH1Te0=;
+        b=MQPwT6OETBKIYyaaQf6R1B0eFVNcawg/QqZyXLEceTDE5+inyYEWKfXVr5uqd4Q7Ft
+         o4e83ytn52nxOscwU2vvaRb8u++8RtWbmrH3B0XhNdUy7EwO9l1aWinGwxooBRIRQShg
+         A2dqt/qV7ezyu4eJTQjRDNxMPu3+NIag4pQSWF5oyiU+nqH25zDFoZNqdf4FnXQABvB3
+         a7OqxeHjkF2nHZCQhWINGJZiYg+3ILifazEaF1VuQUBDLOMLBfUH+r0QhOtJgXvi1HUm
+         5+PSFOFNLsyc13UjT5VyUD4229tmfNBtE2qHWa9k3veP2psFzCa3XpIbvF6FDTXArMjj
+         comw==
+X-Gm-Message-State: AOAM531PJaEHrappzFumX4o91nFUFsTMNOMfewnn79k6FhzQ88hXcAya
+        xaWqE9lzhnP/eTe7Q8YKHYOfzQ==
+X-Google-Smtp-Source: ABdhPJwQhX+K4SaB/SQwYnYT492MMove7nu1ofptwA+g1lHneg+HJedyoPLLP1mnOx5J9zGXB4w3pQ==
+X-Received: by 2002:a17:902:7d93:b0:14d:d401:f59b with SMTP id a19-20020a1709027d9300b0014dd401f59bmr1389200plm.14.1652383632054;
+        Thu, 12 May 2022 12:27:12 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id e13-20020a170902ed8d00b0015e8d4eb1fcsm292912plj.70.2022.05.12.12.27.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 12:27:11 -0700 (PDT)
+Date:   Thu, 12 May 2022 19:27:08 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jon Kohler <jon@nutanix.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ashok Raj <ashok.raj@intel.com>,
+        KarimAllah Ahmed <karahmed@amazon.de>,
+        David Woodhouse <dwmw@amazon.co.uk>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH v4] x86/speculation, KVM: remove IBPB on vCPU load
+Message-ID: <Yn1fjAqFoszWz500@google.com>
+References: <20220512184514.15742-1-jon@nutanix.com>
 MIME-Version: 1.0
-References: <20220511120532.2228616-1-hca@linux.ibm.com> <20220511120532.2228616-4-hca@linux.ibm.com>
- <Yn1CLcsu9I0M8IEM@osiris> <CAKwvOdmSBNsA7C2ZCGDEmuxCituSQ=HPJx=9+AsBAOYfkSZRPA@mail.gmail.com>
- <Yn1ctPDjPaU2wsor@osiris>
-In-Reply-To: <Yn1ctPDjPaU2wsor@osiris>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 12 May 2022 12:25:01 -0700
-Message-ID: <CAKwvOdkwamvuCFkj-uFA_uT+gLNr8-v-zuGYLYb-pV8TOTxDSw@mail.gmail.com>
-Subject: Re: [PATCH 3/8] s390/entry: shorten OUTSIDE macro
-To:     Heiko Carstens <hca@linux.ibm.com>,
-        Nathan Chancellor <natechancellor@gmail.com>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jonas Paulsson <paulsson@linux.vnet.ibm.com>,
-        Ulrich Weigand <ulrich.weigand@de.ibm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andreas Krebbel <krebbel@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220512184514.15742-1-jon@nutanix.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -77,68 +90,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 12:15 PM Heiko Carstens <hca@linux.ibm.com> wrote:
->
-> On Thu, May 12, 2022 at 11:00:31AM -0700, Nick Desaulniers wrote:
-> > On Thu, May 12, 2022 at 10:22 AM Heiko Carstens <hca@linux.ibm.com> wrote:
-> > >
-> > > On Wed, May 11, 2022 at 02:05:27PM +0200, Heiko Carstens wrote:
-> > > > Since the minimum architecture level has been raised to z10 a shorter
-> > > > instruction sequence can be used to implement the OUTSIDE macro. This
-> > > > also reduces the number of used registers within that macro to one.
-> > > >
-> > > > Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-> > > > ---
-> > > >  arch/s390/kernel/entry.S | 8 +++-----
-> > > >  1 file changed, 3 insertions(+), 5 deletions(-)
-> > > >
-> > > > diff --git a/arch/s390/kernel/entry.S b/arch/s390/kernel/entry.S
-> > > > index a6b45eaa3450..e1664b45090f 100644
-> > > > --- a/arch/s390/kernel/entry.S
-> > > > +++ b/arch/s390/kernel/entry.S
-> > > > @@ -169,11 +169,9 @@ _LPP_OFFSET      = __LC_LPP
-> > > >        * @outside_label: jump here if @reg is outside of [@start..@end)
-> > > >        */
-> > > >       .macro OUTSIDE reg,start,end,outside_label
-> > > > -     lgr     %r14,\reg
-> > > > -     larl    %r13,\start
-> > > > -     slgr    %r14,%r13
-> > > > -     lghi    %r13,\end - \start
-> > > > -     clgr    %r14,%r13
-> > > > +     larl    %r14,\start
-> > > > +     slgrk   %r14,\reg,%r14
-> > > > +     clgfi   %r14,\end - \start
-> > >
-> > > Clever me.. slgrk was added with z196, and not z10.
-> > > So dropping this patch.
-> >
-> > How do the version numbers work for SystemZ? Is there a list/reference
-> > you could link me to?  If it's too deep a rabbit hole, then nevermind,
-> > but I would like to learn a little more about the architecture.
->
-> If it is only for the machine generations the following links might help:
->
-> https://www.ibm.com/support/pages/ibm-mainframe-life-cycle-history
-> (see linked pdf for list of machine names)
->
-> https://en.wikipedia.org/wiki/IBM_Z
->
-> There might be better sources, but that's all I could find right now.
+On Thu, May 12, 2022, Jon Kohler wrote:
+> Remove IBPB that is done on KVM vCPU load, as the guest-to-guest
+> attack surface is already covered by switch_mm_irqs_off() ->
+> cond_mitigation().
+> 
+> The original commit 15d45071523d ("KVM/x86: Add IBPB support") was simply
+> wrong in its guest-to-guest design intention. There are three scenarios
+> at play here:
 
-Interesting! Thanks for the links.
-I'm guessing in our CI that we should probably pursue testing some of
-the newer revisions. Wasn't defconfig updated from z10 to z12 not too
-long ago?
-So probably
-CONFIG_MARCH_Z13
-CONFIG_MARCH_Z14
-CONFIG_MARCH_Z15
-CONFIG_MARCH_Z16
+Jim pointed offline that there's a case we didn't consider.  When switching between
+vCPUs in the same VM, an IBPB may be warranted as the tasks in the VM may be in
+different security domains.  E.g. the guest will not get a notification that vCPU0 is
+being swapped out for vCPU1 on a single pCPU.
 
-All look like they're still "supported" (and I'm guessing
-CONFIG_MARCH_Z10 and CONFIG_MARCH_Z196 are not too much burden to
-continue to maintain kernel support for), with a higher emphasis
-perhaps on z15+z16?
--- 
-Thanks,
-~Nick Desaulniers
+So, sadly, after all that, I think the IBPB needs to stay.  But the documentation
+most definitely needs to be updated.
+
+A per-VM capability to skip the IBPB may be warranted, e.g. for container-like
+use cases where a single VM is running a single workload.

@@ -2,131 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB60D5247A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 10:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E855247AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 10:11:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351298AbiELIKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 04:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48972 "EHLO
+        id S1351361AbiELILe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 04:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiELIKo (ORCPT
+        with ESMTP id S233612AbiELIL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 04:10:44 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3FAEE4C
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 01:10:40 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id cu23-20020a17090afa9700b001d98d8e53b7so5602221pjb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 01:10:40 -0700 (PDT)
+        Thu, 12 May 2022 04:11:28 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF17A4C433;
+        Thu, 12 May 2022 01:11:26 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id bx33so5478431ljb.12;
+        Thu, 12 May 2022 01:11:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fYxJzIlygzVtOu994zXNVLK64i/sa8H3L0sgERB2T50=;
-        b=VRctKcDXv9xMu5JW5m0qsoBjvlr3ctTf+JhmvcxaOLPYGBFDbyPQTnhV8u6eCg0Mqu
-         6qQkxwkHtaZTTNk082+S62OFf9aslJZ8cS6p4tgPjg0b9poI3dONCo9PTXjzF7a1A1Mf
-         7e7oUKAomP3KFVPzcZRTWzSAFWaabh+xmnKYSF6f2Kvu53YJTzYJUpTnZrMVu0YU7jAN
-         80umIx2HFePbizdbEd9F2ldCh81iII5aJLrdwyZPDAFbJkDI6p/tkfJBxBbV1GjTozL5
-         tlGx9NyS8LtN7qltNMpZlcR9RKZ9Ya94NrIWmPc1Bo8Y4ROSmV6B2RFdWee4ItFk8Ymp
-         BlhQ==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=IT4+ZL64oTTNdkAnINgvpnUEBANf9bbEzcBz3oDssZE=;
+        b=dIG8FRU8MCYcHd5Y7xBSUD3HNg/0MdYKgGMgIpFhx8qFn7HSfM3dHfjCewzE7Dx5Jf
+         YM6NResLXt/kXRttUOKKI2ADsOnLzfU1ywg4qXoOmooa/jFxItVb4Mx9XxjKV690rfMN
+         qRCGhb7hlIFBM9ASn18SQoneSKCR2Kqix4hHCfgya+04Yq+Z/n1AtAL2cEg5Ja5AUy6C
+         xmOXIluEDL4qquYUvC/LDFT9ROPuBcJy2Gd6vTvDdUU02Mn+KWzdTefzOsX4H7MDLt3/
+         keXWvZgdRl+EyIJt5v8VvqqTHf+xgGc66hluWJpgffUvqMFa9lo7onSglJZ9Ho5f0jy9
+         nvTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=fYxJzIlygzVtOu994zXNVLK64i/sa8H3L0sgERB2T50=;
-        b=gxQjUDWFwGyuJuZDSxgUWTJGx97cAbY+Zcgc7vp2n3bcDE4G23mjsHo7+NIoZ70Mfz
-         NX8FLfZSEVFDpRYk+VrYmsA9Hi6iVAKih4BPJSuPf+k2x+K4sCz+tnZEbsj0smo1zeRs
-         5pNqAhT8gM4cNqgUB6iiE626z3KVYM9FrzqVl4sa4SIhEMbzOmv83vJDN7uVpyK+7foq
-         uuVEWuZ+qwAsuQOeU9e3O+9L0BFxiVz+CREVHnt9UXTyo64Zl7nvUq6qBLBfMY5fYNMf
-         CMk9/rxVxO2KNXqaExHWaTDk0hha++cGJf+O3QjCKgXRNP758v+hkRtL+8sUhFfOvf1g
-         x3tA==
-X-Gm-Message-State: AOAM5311LNfxCl+ORJfb6jylpssZ912VMTtiDemI5z4yWyjnf9kz5GXu
-        WXAk3y1oloUQ8vk7sGamDgg=
-X-Google-Smtp-Source: ABdhPJxWOE6dWlMK0mfC4ikh55aYQppXtqMkDNX4jcU8cX+Jt/bJ6LBoJnZyFghyC//BgxhUM1KKXA==
-X-Received: by 2002:a17:90a:e38c:b0:1de:b43f:f969 with SMTP id b12-20020a17090ae38c00b001deb43ff969mr9691861pjz.126.1652343040255;
-        Thu, 12 May 2022 01:10:40 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id 10-20020a17090a174a00b001d5f22845bdsm1737745pjm.1.2022.05.12.01.10.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 01:10:39 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Wei Xu <xuwei5@hisilicon.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Haojian Zhuang <haojian.zhuang@linaro.org>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] ARM: hisi: Fix refcount leak in hip04_smp_init
-Date:   Thu, 12 May 2022 12:10:31 +0400
-Message-Id: <20220512081031.24301-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=IT4+ZL64oTTNdkAnINgvpnUEBANf9bbEzcBz3oDssZE=;
+        b=RZrBlHStqr9fW3MkDQFHO6XR/DR+ZfK2GgOAAwwn4LAIntpupWb0b4sZUNk66yUZIx
+         xB9FNZI96Um1Qi40u4UX6BQMoYv1isebsd7kt5Z+7I1daPPimAumusqnWHGBqjUA9iLZ
+         MyMMl2sb8VJXjROH8C+ZOxQoBc4nXJQ2twS3+Qn8WmVJuiLHOdqUZtTla1CW2oNEvl+9
+         zMNF85759MyIw+RMDAAvLS7cJjmhUl/7xjiCuo7kS3sP4JUzDnHgh7QvvxS8ZGqdbTKX
+         J3b+7wExEGYgfByyUm5gi8/mBL/G6CeatI3y3kA5/C/+N6p3vb3InY8iJmV4SCNaK+ML
+         zNqg==
+X-Gm-Message-State: AOAM532GqZ6epYXalmhPu4AyujOKvvmTj9LQG+s0tzEQMUe5M0EYgUSl
+        QR7rmG88T3vnklUJCjbnjFvA8lpDoAk=
+X-Google-Smtp-Source: ABdhPJwCT3OLpL3yxeUTBokf861h6vE2qpINykhuZEe7e6iXUQ8sm+sXh4KKjLAv7oIMKjcsahbBNA==
+X-Received: by 2002:a2e:8759:0:b0:250:6afa:78e9 with SMTP id q25-20020a2e8759000000b002506afa78e9mr19691006ljj.225.1652343084776;
+        Thu, 12 May 2022 01:11:24 -0700 (PDT)
+Received: from [192.168.1.103] ([31.173.83.174])
+        by smtp.gmail.com with ESMTPSA id z6-20020a2e9646000000b0024f3d1daeb7sm742266ljh.63.2022.05.12.01.11.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 01:11:24 -0700 (PDT)
+Subject: Re: [PATCH v3 03/23] dt-bindings: ata: ahci-platform: Clarify common
+ AHCI props constraints
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20220511231810.4928-1-Sergey.Semin@baikalelectronics.ru>
+ <20220511231810.4928-4-Sergey.Semin@baikalelectronics.ru>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <68d51092-1a4c-0d42-e28d-c3b5316d580a@gmail.com>
+Date:   Thu, 12 May 2022 11:11:22 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220511231810.4928-4-Sergey.Semin@baikalelectronics.ru>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_find_compatible_node() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
-Add missing of_node_put() to avoid refcount leak.
+Hello!
 
-Fixes: 9cdc99919a95 ("ARM: hisi: enable MCPM implementation")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- arch/arm/mach-hisi/platmcpm.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+On 5/12/22 2:17 AM, Serge Semin wrote:
 
-diff --git a/arch/arm/mach-hisi/platmcpm.c b/arch/arm/mach-hisi/platmcpm.c
-index 258586e31333..e9b5d63ecf4c 100644
---- a/arch/arm/mach-hisi/platmcpm.c
-+++ b/arch/arm/mach-hisi/platmcpm.c
-@@ -274,6 +274,7 @@ static int __init hip04_smp_init(void)
- 		goto err;
- 	ret = of_property_read_u32_array(np, "boot-method",
- 					 &hip04_boot_method[0], 4);
-+	of_node_put(np);
- 	if (ret)
- 		goto err;
- 
-@@ -283,11 +284,11 @@ static int __init hip04_smp_init(void)
- 		goto err;
- 	np_fab = of_find_compatible_node(NULL, NULL, "hisilicon,hip04-fabric");
- 	if (!np_fab)
--		goto err;
-+		goto err_put_sctl;
- 
- 	ret = memblock_reserve(hip04_boot_method[0], hip04_boot_method[1]);
- 	if (ret)
--		goto err;
-+		goto err_put_fab;
- 
- 	relocation = ioremap(hip04_boot_method[2], hip04_boot_method[3]);
- 	if (!relocation) {
-@@ -329,6 +330,8 @@ static int __init hip04_smp_init(void)
- 	writel_relaxed(__pa_symbol(secondary_startup), relocation + 8);
- 	writel_relaxed(0, relocation + 12);
- 	iounmap(relocation);
-+	of_node_put(np_fab);
-+	of_node_put(np_sctl);
- 
- 	smp_set_ops(&hip04_smp_ops);
- 	return ret;
-@@ -340,6 +343,10 @@ static int __init hip04_smp_init(void)
- 	iounmap(relocation);
- err_reloc:
- 	memblock_phys_free(hip04_boot_method[0], hip04_boot_method[1]);
-+err_put_fab:
-+	of_node_put(np_fab);
-+err_put_sctl:
-+	of_node_put(np_sctl);
- err:
- 	return ret;
- }
--- 
-2.25.1
+> Indeed in accordance with what is imeplemtned in the AHCI paltform driver
 
+   Implemented? :-)
+
+> and the way the AHCI DT nodes are defined in the DT files we can add the
+> next AHCI DT properties constraints: AHCI CSR ID is fixed to 'ahci', PHY
+> name is fixed to 'sata-phy', AHCI controller can't have more than 32 ports
+> by design.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> Changelog v2:
+> - This is a new patch created after rebasing v1 onto the 5.18-rc3 kernel.
+
+   This normally goes after ---...
+
+[...]
+
+MBR, Sergey

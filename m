@@ -2,45 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA47524719
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1CEB52471B
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351090AbiELHia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 03:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48894 "EHLO
+        id S1347461AbiELHis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 03:38:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351091AbiELHiU (ORCPT
+        with ESMTP id S1351085AbiELHid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 03:38:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092F45C776;
-        Thu, 12 May 2022 00:38:11 -0700 (PDT)
+        Thu, 12 May 2022 03:38:33 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B3635DE1;
+        Thu, 12 May 2022 00:38:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0BD7AB826F8;
-        Thu, 12 May 2022 07:38:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27CF9C385B8;
-        Thu, 12 May 2022 07:38:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652341088;
-        bh=6wZHNd3Dwzsl3XeQvSPKHlk9BV48mA0w4uaiMM/qzUY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wG25XutNYJt8V/a7PqpdejLfX227ATdfzwdmSABzI3fIeMo2AVay7c/NXsz7YocQB
-         qPNFM5hDb+5/X/ZaVI/G56+KuWnrBg6Cpnad7PbJ/LyHmhJ6PZL8bUZVEjheiXnAx2
-         8ajn6yBqNXsFK+GHaV0lt6tNO5C2C61MzkwR2pZY=
-Date:   Thu, 12 May 2022 09:38:06 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Guan Jing <guanjing6@huawei.com>
-Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next v2] usb: dwc3: include extcon.h to fix compile error
-Message-ID: <Yny5Xm+rNkR5bnjJ@kroah.com>
-References: <20220511022622.168486-1-guanjing6@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220511022622.168486-1-guanjing6@huawei.com>
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0BFD0CE2808;
+        Thu, 12 May 2022 07:38:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25A24C385B8;
+        Thu, 12 May 2022 07:38:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652341107;
+        bh=ugIyGV0pe1/xrkV0tlYgt/gRuv1slF9T3wv3KtmXcbg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lfIcfEwPwHaF+77LvNlCFp1sc8z8jgmzhGnmwTNwPMCmO6Ra6PQd9IO6TUZm6DrMR
+         8ZUz+I+Gazc1Rfiei48ABujuX3aZDEX0jOfdXltvJyKm8o0GC/lAp71xSdDiq6Chhb
+         UQeT0apxvc0fZAiYnYB1PaPWr5EWeB1P7i/vVOwmx1VSiR1uqncN8WnIwkGJNrkMz1
+         5P5XsF1AAnE4f3vWxj0LRRB0SWrN/PP3JgDxNNNcknK1X+Mc1EYNNoewwgtXR0OuCz
+         GYFigyEMDhNif66CZM1RsFksozoiw/+jkstx8GkqZyM/8AT9lgUGNT979P72eNBW1Z
+         tET4QDX7fSXcg==
+Received: from 82-132-234-237.dab.02.net ([82.132.234.237] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1np3Oy-00An74-HK; Thu, 12 May 2022 08:38:24 +0100
+Date:   Thu, 12 May 2022 08:38:23 +0100
+Message-ID: <87wnermc9c.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org, andrew@lunn.ch,
+        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
+        kostap@marvell.com, robert.marko@sartura.hr,
+        vadym.kochan@plvision.eu, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v7 2/3] arm64: dts: marvell: Add Armada 98DX2530 SoC and RD-AC5X board
+In-Reply-To: <20220512042501.3339775-3-chris.packham@alliedtelesis.co.nz>
+References: <20220512042501.3339775-1-chris.packham@alliedtelesis.co.nz>
+        <20220512042501.3339775-3-chris.packham@alliedtelesis.co.nz>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 82.132.234.237
+X-SA-Exim-Rcpt-To: chris.packham@alliedtelesis.co.nz, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, catalin.marinas@arm.com, will@kernel.org, andrew@lunn.ch, gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com, kostap@marvell.com, robert.marko@sartura.hr, vadym.kochan@plvision.eu, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -51,40 +70,193 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 10:26:22AM +0800, Guan Jing wrote:
-> If dwc3 is not include extcon.h, the dwc3 driver
-> will fail to link:
+On Thu, 12 May 2022 05:25:00 +0100,
+Chris Packham <chris.packham@alliedtelesis.co.nz> wrote:
 > 
-> drivers/usb/dwc3/core.o: In function `dwc3_probe':
-> core.c:(.text+0x1095): undefined reference to `extcon_get_edev_by_phandle'
-> core.c:(.text+0x10bd): undefined reference to `extcon_get_extcon_dev'
+> The 98DX2530 SoC is the Control and Management CPU integrated into
+> the Marvell 98DX25xx and 98DX35xx series of switch chip (internally
+> referred to as AlleyCat5 and AlleyCat5X).
 > 
-> Add miss #include <linux/extcon.h> to fix this error.
+> These files have been taken from the Marvell SDK and lightly cleaned
+> up with the License and copyright retained.
 > 
-> Fixes: 0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral if extcon is present")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Guan Jing <guanjing6@huawei.com>
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 > ---
->  drivers/usb/dwc3/core.c | 1 +
->  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 950e238c65bf..e619a3ef6c46 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -28,6 +28,7 @@
->  #include <linux/pinctrl/consumer.h>
->  #include <linux/reset.h>
->  #include <linux/bitfield.h>
-> +#include <linux/extcon.h>
->  
->  #include <linux/usb/ch9.h>
->  #include <linux/usb/gadget.h>
-> -- 
-> 2.17.1
+> Notes:
+>     The Marvell SDK has a number of new compatible strings. I've brought
+>     through some of the drivers or where possible used an in-tree
+>     alternative (e.g. there is SDK code for a ac5-gpio but two instances of
+>     the existing marvell,orion-gpio seems to cover what is needed if you use
+>     an appropriate binding). I expect that there will a new series of
+>     patches when I get some different hardware (or additions to this series
+>     depending on if/when it lands).
+>     
+>     Changes in v7:
+>     - Add missing compatible on usb1
+>     - Add "rd-ac5x" compatible for board
+>     - Move aliases to board dts
+>     - Move board specific usb info to board dts
+>     - Consolidate usb1 board settings and remove unnecessary compatible
+>     - Add Allied Telesis copyright
+>     - Rename files after mailng-list discussion
+>     Changes in v6:
+>     - Move CPU nodes above the SoC (Krzysztof)
+>     - Minor formatting clean ups (Krzysztof)
+>     - Run through `make dtbs_check`
+>     - Move gic nodes inside SoC
+>     - Group clocks under a clock node
+>     Changes in v5:
+>     - add #{address,size}-cells property to i2c nodes
+>     - make i2c nodes disabled in the SoC and enable them in the board
+>     - add interrupt controller attributes to gpio nodes
+>     - Move fixed-clock nodes up a level and remove unnecessary @0
+>     Changes in v4:
+>     - use 'phy-handle' instead of 'phy'
+>     - move status="okay" on usb nodes to board dts
+>     - Add review from Andrew
+>     Changes in v3:
+>     - Move memory node to board
+>     - Use single digit reg value for phy address
+>     - Remove MMC node (driver needs work)
+>     - Remove syscon & simple-mfd for pinctrl
+>     Changes in v2:
+>     - Make pinctrl a child node of a syscon node
+>     - Use marvell,armada-8k-gpio instead of orion-gpio
+>     - Remove nand peripheral. The Marvell SDK does have some changes for the
+>       ac5-nand-controller but I currently lack hardware with NAND fitted so
+>       I can't test it right now. I've therefore chosen to omit the node and
+>       not attempted to bring in the driver or binding.
+>     - Remove pcie peripheral. Again there are changes in the SDK and I have
+>       no way of testing them.
+>     - Remove prestera node.
+>     - Remove "marvell,ac5-ehci" compatible from USB node as
+>       "marvell,orion-ehci" is sufficient
+>     - Remove watchdog node. There is a buggy driver for the ac5 watchdog in
+>       the SDK but it needs some work so I've dropped the node for now.
 > 
+>  arch/arm64/boot/dts/marvell/Makefile          |   1 +
+>  .../boot/dts/marvell/armada-98dx25xx.dtsi     | 295 ++++++++++++++++++
+>  .../boot/dts/marvell/armada-98dx35xx-rd.dts   | 101 ++++++
+>  .../boot/dts/marvell/armada-98dx35xx.dtsi     |  13 +
+>  4 files changed, 410 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/marvell/armada-98dx25xx.dtsi
+>  create mode 100644 arch/arm64/boot/dts/marvell/armada-98dx35xx-rd.dts
+>  create mode 100644 arch/arm64/boot/dts/marvell/armada-98dx35xx.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/marvell/Makefile b/arch/arm64/boot/dts/marvell/Makefile
+> index 1c794cdcb8e6..b7a4c715afbb 100644
+> --- a/arch/arm64/boot/dts/marvell/Makefile
+> +++ b/arch/arm64/boot/dts/marvell/Makefile
+> @@ -24,3 +24,4 @@ dtb-$(CONFIG_ARCH_MVEBU) += cn9132-db.dtb
+>  dtb-$(CONFIG_ARCH_MVEBU) += cn9132-db-B.dtb
+>  dtb-$(CONFIG_ARCH_MVEBU) += cn9130-crb-A.dtb
+>  dtb-$(CONFIG_ARCH_MVEBU) += cn9130-crb-B.dtb
+> +dtb-$(CONFIG_ARCH_MVEBU) += armada-98dx35xx-rd.dtb
+> diff --git a/arch/arm64/boot/dts/marvell/armada-98dx25xx.dtsi b/arch/arm64/boot/dts/marvell/armada-98dx25xx.dtsi
+> new file mode 100644
+> index 000000000000..55ab4cd843a9
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/marvell/armada-98dx25xx.dtsi
+> @@ -0,0 +1,295 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Device Tree For AC5.
+> + *
+> + * Copyright (C) 2021 Marvell
+> + * Copyright (C) 2022 Allied Telesis Labs
+> + */
+> +
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +/ {
+> +	model = "Marvell AC5 SoC";
+> +	compatible = "marvell,ac5";
+> +	interrupt-parent = <&gic>;
+> +	#address-cells = <2>;
+> +	#size-cells = <2>;
+> +
+> +	cpus {
+> +		#address-cells = <2>;
+> +		#size-cells = <0>;
+> +
+> +		cpu-map {
+> +			cluster0 {
+> +				core0 {
+> +					cpu = <&cpu0>;
+> +				};
+> +				core1 {
+> +					cpu = <&cpu1>;
+> +				};
+> +			};
+> +		};
+> +
+> +		cpu0: cpu@0 {
+> +			device_type = "cpu";
+> +			compatible = "arm,armv8";
+> +			reg = <0x0 0x0>;
+> +			enable-method = "psci";
+> +			next-level-cache = <&l2>;
+> +		};
+> +
+> +		cpu1: cpu@1 {
+> +			device_type = "cpu";
+> +			compatible = "arm,armv8";
+> +			reg = <0x0 0x100>;
+> +			enable-method = "psci";
+> +			next-level-cache = <&l2>;
+> +		};
+> +
+> +		l2: l2-cache {
+> +			compatible = "cache";
+> +		};
+> +	};
+> +
+> +
+> +	psci {
+> +		compatible = "arm,psci-0.2";
+> +		method = "smc";
+> +	};
+> +
+> +	timer {
+> +		compatible = "arm,armv8-timer";
+> +		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>,
+> +				 <GIC_PPI 8 IRQ_TYPE_LEVEL_HIGH>,
+> +				 <GIC_PPI 10 IRQ_TYPE_LEVEL_HIGH>,
+> +				 <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
+> +		clock-frequency = <25000000>;
 
-As Jack said, this will not fix a linker error.  I think something else
-is wrong with your system as your .config file builds just fine for me.
+I said no to this hack in a past version of this patch, and I'm going
+to say it *again*. Please fix your firmware to program CNTFRQ_EL0, and
+remove this useless property.
 
-greg k-h
+You are also missing a PPI for the EL2 virtual timer which is present
+on any ARMv8.1+ CPU (and since this system is using A55, it definitely
+has it).
+
+[...]
+
+> +
+> +		gic: interrupt-controller@80600000 {
+> +			compatible = "arm,gic-v3";
+> +			#interrupt-cells = <3>;
+> +			interrupt-controller;
+> +			/*#redistributor-regions = <1>;*/
+> +			redistributor-stride = <0x0 0x20000>;	// 128kB stride
+
+You don't need this at all. This is the architected value for GICv3.
+
+> +			reg = <0x0 0x80600000 0x0 0x10000>, /* GICD */
+> +			      <0x0 0x80660000 0x0 0x40000>; /* GICR */
+> +			interrupts = <GIC_PPI 6 IRQ_TYPE_LEVEL_HIGH>;
+> +		};
+> +	};
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

@@ -2,119 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C001B52528C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30232525243
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354637AbiELQ3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 12:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54586 "EHLO
+        id S1356338AbiELQOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 12:14:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350699AbiELQ3f (ORCPT
+        with ESMTP id S233278AbiELQOu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 12:29:35 -0400
-X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 May 2022 09:29:33 PDT
-Received: from 10.mo552.mail-out.ovh.net (10.mo552.mail-out.ovh.net [87.98.187.244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897091BA8C2
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 09:29:33 -0700 (PDT)
-Received: from mxplan5.mail.ovh.net (unknown [10.109.146.228])
-        by mo552.mail-out.ovh.net (Postfix) with ESMTPS id 92B1024EA4;
-        Thu, 12 May 2022 16:14:18 +0000 (UTC)
-Received: from kaod.org (37.59.142.101) by DAG4EX1.mxp5.local (172.16.2.31)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.6; Thu, 12 May
- 2022 18:14:17 +0200
-Authentication-Results: garm.ovh; auth=pass (GARM-101G0047b61092e-eff4-4052-83bb-9054023d8a3d,
-                    72056902518AC1F5BD4797AAAB6E76FEAFBFF81B) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 82.64.250.170
-Message-ID: <cc8cf48b-8acf-c281-a3b2-5acd49e38dfd@kaod.org>
-Date:   Thu, 12 May 2022 18:14:17 +0200
+        Thu, 12 May 2022 12:14:50 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC5ED6623B
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 09:14:49 -0700 (PDT)
+Received: from [192.168.88.87] (unknown [180.242.99.67])
+        by gnuweeb.org (Postfix) with ESMTPSA id 02E317F628;
+        Thu, 12 May 2022 16:14:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1652372089;
+        bh=3U63MfFe6NNlA7+9OBTVpsTNg4BhGFmC0heC1eTNPn0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=HHlioj8YxvRo7x+f4nbXrHcO5+g3bxMx7SRXW142HTO3mHdehBK/a8rmh2dZeFKYn
+         XhLlqi/qE2AvWMJEUpVX/S50PYuFgakb+Ob9XOnwWRRakPLYjEmQCB8q1IP3OGCuwj
+         +vZ883/d311UUy85Yab3+b8Gxj1x8I+Q7KoIgR6INIwJonBawsKD4oC/mnpDE5mvAt
+         MvBLJ4yXTesfbMl07SLVYdOO/3LXcLSJm1T9ldruIs/qN0o7Wol4jwofXm1wM79NJf
+         RIBIwIDE78ze1OKHfdxj89R0jqb5MXWB1boS8Ab9Q0x2Wtb6h3j5JhEkiAX8PskeOs
+         4BWfm9SPsUmSQ==
+Message-ID: <d988d85f-c704-96cd-13b6-7715ea5cacbb@gnuweeb.org>
+Date:   Thu, 12 May 2022 23:14:35 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] powerpc/xive: Fix refcount leak in xive_spapr_init
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 1/1] tools/nolibc/stdio: Add format attribute to enable
+ printf warnings
 Content-Language: en-US
-To:     Miaoqian Lin <linmq006@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Nick Child <nick.child@ibm.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Ammar Faizi <ammarfaizi2@gmail.com>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-References: <20220512090535.33397-1-linmq006@gmail.com>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <20220512090535.33397-1-linmq006@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [37.59.142.101]
-X-ClientProxiedBy: DAG7EX1.mxp5.local (172.16.2.61) To DAG4EX1.mxp5.local
- (172.16.2.31)
-X-Ovh-Tracer-GUID: 89c32f8e-8e1a-4e55-a27b-1b57f752691f
-X-Ovh-Tracer-Id: 3628212452218538799
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrgeejgdelhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgihesthekredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpeeigedvffekgeeftedutddttdevudeihfegudffkeeitdekkeetkefhffelveelleenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddruddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+Cc:     GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220509065445.3912334-1-alviro.iskandar@gnuweeb.org>
+ <20220509065445.3912334-2-alviro.iskandar@gnuweeb.org>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+In-Reply-To: <20220509065445.3912334-2-alviro.iskandar@gnuweeb.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/12/22 11:05, Miaoqian Lin wrote:
-> of_find_compatible_node() returns a node pointer with refcount
-> incremented, we should use of_node_put() on it when done.
-> Add missing of_node_put() to avoid refcount leak.
-> 
-> Fixes: eac1e731b59e ("powerpc/xive: guest exploitation of the XIVE interrupt controller")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+I will send it to Willy soon.
 
-Reviewed-by: Cédric Le Goater <clg@kaod.org>
+Anyway, __attribute__ can have multiple arguments, so no need
+to write it twice. I simplified it, the end result patch below...
 
-Thanks,
+Thank you!
 
-C.
+---
+ From 7998cda9acdbfec6d6ba73642c27d710996c27ed Mon Sep 17 00:00:00 2001
+From: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+Subject: tools/nolibc/stdio: Add format attribute to enable printf warnings
 
-> ---
->   arch/powerpc/sysdev/xive/spapr.c | 7 +++++--
->   1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/powerpc/sysdev/xive/spapr.c b/arch/powerpc/sysdev/xive/spapr.c
-> index 29456c255f9f..503f544d28e2 100644
-> --- a/arch/powerpc/sysdev/xive/spapr.c
-> +++ b/arch/powerpc/sysdev/xive/spapr.c
-> @@ -830,12 +830,12 @@ bool __init xive_spapr_init(void)
->   	/* Resource 1 is the OS ring TIMA */
->   	if (of_address_to_resource(np, 1, &r)) {
->   		pr_err("Failed to get thread mgmnt area resource\n");
-> -		return false;
-> +		goto err_put;
->   	}
->   	tima = ioremap(r.start, resource_size(&r));
->   	if (!tima) {
->   		pr_err("Failed to map thread mgmnt area\n");
-> -		return false;
-> +		goto err_put;
->   	}
->   
->   	if (!xive_get_max_prio(&max_prio))
-> @@ -871,6 +871,7 @@ bool __init xive_spapr_init(void)
->   	if (!xive_core_init(np, &xive_spapr_ops, tima, TM_QW1_OS, max_prio))
->   		goto err_mem_free;
->   
-> +	of_node_put(np);
->   	pr_info("Using %dkB queues\n", 1 << (xive_queue_shift - 10));
->   	return true;
->   
-> @@ -878,6 +879,8 @@ bool __init xive_spapr_init(void)
->   	xive_irq_bitmap_remove_all();
->   err_unmap:
->   	iounmap(tima);
-> +err_put:
-> +	of_node_put(np);
->   	return false;
->   }
->   
+When we use printf and fprintf functions from the nolibc, we don't
+get any warning from the compiler if we have the wrong arguments.
+For example, the following calls will compile silently:
+```
+   printf("%s %s\n", "aaa");
+   fprintf(stdout, "%s %s\n", "xxx", 1);
+```
+(Note the wrong arguments).
 
+Those calls are undefined behavior. The compiler can help us warn
+about the above mistakes by adding a `printf` format attribute to
+those functions declaration. This patch adds it, and now it yields
+these warnings for those mistakes:
+```
+   warning: format `%s` expects a matching `char *` argument [-Wformat=]
+   warning: format `%s` expects argument of type `char *`, but argument 4 has type `int` [-Wformat=]
+```
+
+[ammarfaizi2: Simplify the attribute placement.]
+
+Signed-off-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+---
+  tools/include/nolibc/stdio.h | 4 ++--
+  1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/include/nolibc/stdio.h b/tools/include/nolibc/stdio.h
+index 15dedf8d0902..a3cebc4bc3ac 100644
+--- a/tools/include/nolibc/stdio.h
++++ b/tools/include/nolibc/stdio.h
+@@ -273,7 +273,7 @@ int vfprintf(FILE *stream, const char *fmt, va_list args)
+  	return written;
+  }
+  
+-static __attribute__((unused))
++static __attribute__((unused, format(printf, 2, 3)))
+  int fprintf(FILE *stream, const char *fmt, ...)
+  {
+  	va_list args;
+@@ -285,7 +285,7 @@ int fprintf(FILE *stream, const char *fmt, ...)
+  	return ret;
+  }
+  
+-static __attribute__((unused))
++static __attribute__((unused, format(printf, 1, 2)))
+  int printf(const char *fmt, ...)
+  {
+  	va_list args;
+
+
+-- 
+Ammar Faizi

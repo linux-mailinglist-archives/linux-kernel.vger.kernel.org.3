@@ -2,104 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1F2852461D
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 08:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8EB9524624
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 08:50:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbiELGtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 02:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50124 "EHLO
+        id S1350557AbiELGuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 02:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234001AbiELGtR (ORCPT
+        with ESMTP id S238889AbiELGuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 02:49:17 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D58F1F158A;
-        Wed, 11 May 2022 23:49:16 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24C6n5Ld069294;
-        Thu, 12 May 2022 01:49:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1652338145;
-        bh=tqDc90TW9niX2Xbc7VgaTfAR53FI2rByBiiRCzMIoPI=;
-        h=From:To:CC:Subject:Date;
-        b=RAGW9DeUdZQWVOsnmv8Jn+xepZ9VUcnL/yl25v4LM7jFIQ3m9OM0LvOvC6Zdsol70
-         WBkRKiNaF6b30Y2xQVTgkVZ97PDuZfzJcNg19Piud+TgQ57J0kwpvv96wQmbTFq5ge
-         aD84CXxrFJG3Lz/6544j9X95qkGGdAJeHKNrWL7Y=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24C6n5cB120881
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 12 May 2022 01:49:05 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 12
- May 2022 01:49:04 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 12 May 2022 01:49:04 -0500
-Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24C6n0e8009542;
-        Thu, 12 May 2022 01:49:01 -0500
-From:   Aswath Govindraju <a-govindraju@ti.com>
-CC:     Aswath Govindraju <a-govindraju@ti.com>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Faiz Abbas <faiz_abbas@ti.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Dave Gerlach <d-gerlach@ti.com>,
+        Thu, 12 May 2022 02:50:06 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D181FD86A;
+        Wed, 11 May 2022 23:50:03 -0700 (PDT)
+X-UUID: e2bb00be931b4ef0965c0813c8d20856-20220512
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:2f8707e3-577b-427d-a100-6e6c181d618f,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:faefae9,CLOUDID:f5ad05a7-eab7-4b74-a74d-5359964535a9,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: e2bb00be931b4ef0965c0813c8d20856-20220512
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 556747679; Thu, 12 May 2022 14:49:57 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 12 May 2022 14:49:56 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 12 May 2022 14:49:55 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Mathias Nyman <mathias.nyman@intel.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] arm64: dts: ti: k3-am64-main: Remove support for HS400 speed mode
-Date:   Thu, 12 May 2022 12:18:58 +0530
-Message-ID: <20220512064859.32059-1-a-govindraju@ti.com>
-X-Mailer: git-send-email 2.17.1
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Eddie Hung" <eddie.hung@mediatek.com>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH 1/2] usb: xhci-mtk: fix fs isoc's transfer error
+Date:   Thu, 12 May 2022 14:49:30 +0800
+Message-ID: <20220512064931.31670-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AM64 SoC, does not support HS400 and HS200 is the maximum supported speed
-mode[1]. Therefore, fix the device tree node to reflect the same.
+Due to the scheduler allocates the optimal bandwidth for FS ISOC endpoints,
+this may be not enough actually and causes data transfer error, so come up
+with an estimate that is no less than the worst case bandwidth used for
+any one mframe, but may be an over-estimate.
 
-[1] - https://www.ti.com/lit/ds/symlink/am6442.pdf
-      (SPRSP56C – JANUARY 2021 – REVISED FEBRUARY 2022)
-Fixes: 8abae9389bdb ("arm64: dts: ti: Add support for AM642 SoC")
-Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+Fixes: 451d3912586a ("usb: xhci-mtk: update fs bus bandwidth by bw_budget_table")
+Cc: stable@vger.kernel.org
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 ---
- arch/arm64/boot/dts/ti/k3-am64-main.dtsi | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/usb/host/xhci-mtk-sch.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am64-main.dtsi b/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
-index f64b368c6c37..cdb530597c5e 100644
---- a/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
-@@ -456,13 +456,11 @@
- 		clock-names = "clk_ahb", "clk_xin";
- 		mmc-ddr-1_8v;
- 		mmc-hs200-1_8v;
--		mmc-hs400-1_8v;
- 		ti,trm-icp = <0x2>;
- 		ti,otap-del-sel-legacy = <0x0>;
- 		ti,otap-del-sel-mmc-hs = <0x0>;
- 		ti,otap-del-sel-ddr52 = <0x6>;
- 		ti,otap-del-sel-hs200 = <0x7>;
--		ti,otap-del-sel-hs400 = <0x4>;
- 	};
+diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
+index f3139ce7b0a9..953d2cd1d4cc 100644
+--- a/drivers/usb/host/xhci-mtk-sch.c
++++ b/drivers/usb/host/xhci-mtk-sch.c
+@@ -464,7 +464,7 @@ static int check_fs_bus_bw(struct mu3h_sch_ep_info *sch_ep, int offset)
+ 		 */
+ 		for (j = 0; j < sch_ep->num_budget_microframes; j++) {
+ 			k = XHCI_MTK_BW_INDEX(base + j);
+-			tmp = tt->fs_bus_bw[k] + sch_ep->bw_budget_table[j];
++			tmp = tt->fs_bus_bw[k] + sch_ep->bw_cost_per_microframe;
+ 			if (tmp > FS_PAYLOAD_MAX)
+ 				return -ESCH_BW_OVERFLOW;
+ 		}
+@@ -538,19 +538,17 @@ static int check_sch_tt(struct mu3h_sch_ep_info *sch_ep, u32 offset)
+ static void update_sch_tt(struct mu3h_sch_ep_info *sch_ep, bool used)
+ {
+ 	struct mu3h_sch_tt *tt = sch_ep->sch_tt;
++	int bw_updated;
+ 	u32 base;
+-	int i, j, k;
++	int i, j;
++
++	bw_updated = sch_ep->bw_cost_per_microframe * (used ? 1 : -1);
  
- 	sdhci1: mmc@fa00000 {
+ 	for (i = 0; i < sch_ep->num_esit; i++) {
+ 		base = sch_ep->offset + i * sch_ep->esit;
+ 
+-		for (j = 0; j < sch_ep->num_budget_microframes; j++) {
+-			k = XHCI_MTK_BW_INDEX(base + j);
+-			if (used)
+-				tt->fs_bus_bw[k] += sch_ep->bw_budget_table[j];
+-			else
+-				tt->fs_bus_bw[k] -= sch_ep->bw_budget_table[j];
+-		}
++		for (j = 0; j < sch_ep->num_budget_microframes; j++)
++			tt->fs_bus_bw[XHCI_MTK_BW_INDEX(base + j)] += bw_updated;
+ 	}
+ 
+ 	if (used)
 -- 
-2.17.1
+2.18.0
 

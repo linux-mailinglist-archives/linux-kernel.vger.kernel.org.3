@@ -2,139 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41447525820
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 01:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6127D525823
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 01:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359394AbiELXKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 19:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48252 "EHLO
+        id S1359380AbiELXMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 19:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359393AbiELXKu (ORCPT
+        with ESMTP id S238447AbiELXMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 19:10:50 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF16717054
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 16:10:49 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-ed9a75c453so8522262fac.11
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 16:10:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fUvo8JQzQvYNWRP4R5hC6ePxb8/F+QFQVGVerVzsRdY=;
-        b=Bh1QNo7Cpq/M4g8JOfLWCXzgXKMgKxYGD/dalpwJSBEQI/yro7N9PUdjHrMxWJow36
-         q8ufrmM3j2Zr2meGKviwz5fUEDmPEUV2M1xQ8vjxeK2NcfMqGhtQe/idAEApooXKQhSr
-         M0A4OIAQBCPyaND/MG7W7t6Hj9Nkut9MvKHYt1lVpbt1j71suSKr2kNhCDyLL+Bg6xYN
-         ZScM9xV8pBu5QUh/9eIjRsxSRDEc8dqmbk6qtjIhReK85KVzooIScF+edVmG+Vn8LQid
-         b9xMSeb00ch+mIbktyQlX5gykKefROFb+TAHkL4kH9BDc26JOTmyxTUDHi/8ERJ7ESbR
-         aiyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fUvo8JQzQvYNWRP4R5hC6ePxb8/F+QFQVGVerVzsRdY=;
-        b=Lk3P2kBoDPiRyB6cLalF+v25mfKpin0+NKJkv3m8+v3cJYdqqiup262MDy016Z3d9V
-         Oc/UqySdN0Cp76wsral7TNiLLm6aubMM3fPt/MFILCJRYmbVw2G5jhw+Emr6WPZ/FlU6
-         XItZHvB44Q/UtZW/9C+K8GoIXqbzDyUGrCND3X/NjqSl5ipXofoYRpkNtpnBAg4FzJl1
-         hGmoa+jVcu4WRSvgwaUJQz/Yz81LVgEIJLEPHIwfvjQLWra/zAElQHpj4q97ff5hmEp6
-         tuMTsZflb4kqN8KSkqbXD+VikjH0FvlVi2fQua8cYcZD3xPhWE4669rffrZ7xuRagF3T
-         zBTA==
-X-Gm-Message-State: AOAM530Lf4XonOb23E4Dwc3/y9Z1JC47yVoDogywbQdPfACaELR7nJmM
-        fHq3uM8jDuy/RMBoM2Crp0464N90KNCjQQ==
-X-Google-Smtp-Source: ABdhPJzNOgGevrCz/1SupsRSDLEV4rsiyh64RxLVgxaj2jH2A5cFl7+mOhWsHgdtYnu0pxnmFZXh0Q==
-X-Received: by 2002:a05:6870:538f:b0:e1:e893:95c5 with SMTP id h15-20020a056870538f00b000e1e89395c5mr7203392oan.11.1652397048908;
-        Thu, 12 May 2022 16:10:48 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b7-20020acab207000000b0032647f4e437sm415756oif.45.2022.05.12.16.10.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 16:10:48 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ad258449-ddc3-6bd5-0371-becac42e7d47@roeck-us.net>
-Date:   Thu, 12 May 2022 16:10:46 -0700
+        Thu, 12 May 2022 19:12:50 -0400
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5959113B8D8
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 16:12:49 -0700 (PDT)
+Received: from pps.filterd (m0148663.ppops.net [127.0.0.1])
+        by mx0a-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CGAvuE005052;
+        Thu, 12 May 2022 23:12:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pps0720; bh=LZVNUAIDSEu9/DVKOuoRKSe4j+omN8ZwfLvyP3Uyqtk=;
+ b=Qb+tNSdQT7hymKCR9HlYUSIkuDzcjrIbWaz3Q6NpRIhiioIA9m7caMHIdR85nqJVQwA7
+ dNuWVTGB/WF+BUO9SicLTOY8oQLmSpqiHKnDe1YdrU2mmFn7MtKwCRyWjQ56JFJ19/Pq
+ 6E10TGFND7eNEqmoac9Vr/tdArfn1wYxJzyU71zlqBqm+wnEKuQX7vX7mHXgwtX3bQx4
+ ljjdKQyamhLTwT9m5wbr1HsbqdF69/Tvt/aK8TEoNNaXxyAMPu0CEPbWAZ1SgSvz4Z51
+ 8D58dgXkphcLs/uDlEKFhcPu4sm0xj0aPWbgqoBgN5Xbo7tjX2hJ3o9dJvE1z/S8hKKO 7Q== 
+Received: from g4t3427.houston.hpe.com (g4t3427.houston.hpe.com [15.241.140.73])
+        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3g0h2s4dr1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 23:12:37 +0000
+Received: from g4t3433.houston.hpecorp.net (g4t3433.houston.hpecorp.net [16.208.49.245])
+        by g4t3427.houston.hpe.com (Postfix) with ESMTP id 6BD3257;
+        Thu, 12 May 2022 23:12:36 +0000 (UTC)
+Received: from swahl-home.5wahls.com (unknown [10.207.206.199])
+        by g4t3433.houston.hpecorp.net (Postfix) with ESMTP id EC24445;
+        Thu, 12 May 2022 23:12:34 +0000 (UTC)
+Date:   Thu, 12 May 2022 18:12:34 -0500
+From:   Steve Wahl <steve.wahl@hpe.com>
+To:     Joerg Roedel <jroedel@suse.de>,
+        Kyung Min Park <kyung.min.park@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Will Deacon <will@kernel.org>, iommu@lists.linux-foundation.org
+Cc:     Mike Travis <mike.travis@hpe.com>,
+        Dimitri Sivanich <sivanich@hpe.com>,
+        Steve Wahl <steve.wahl@hpe.com>,
+        Russ Anderson <russ.anderson@hpe.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] iommu/vt-d: Make DMAR_UNITS_SUPPORTED a config setting
+Message-ID: <Yn2UYst0ETp42uzq@swahl-home.5wahls.com>
+References: <20220505194658.246121-1-steve.wahl@hpe.com>
+ <20220512151309.330068-1-steve.wahl@hpe.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] fsi: occ: Prevent use after free
-Content-Language: en-US
-To:     Eddie James <eajames@linux.ibm.com>, linux-fsi@lists.ozlabs.org
-Cc:     alistair@popple.id.au, linux-kernel@vger.kernel.org
-References: <20220512210034.59907-1-eajames@linux.ibm.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220512210034.59907-1-eajames@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220512151309.330068-1-steve.wahl@hpe.com>
+X-Proofpoint-GUID: Bn27EBR5OzO3pAHxn15TKeA1h62Kv1Uq
+X-Proofpoint-ORIG-GUID: Bn27EBR5OzO3pAHxn15TKeA1h62Kv1Uq
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-12_19,2022-05-12_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ phishscore=0 clxscore=1015 mlxscore=0 mlxlogscore=755 spamscore=0
+ priorityscore=1501 adultscore=0 impostorscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205120098
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/12/22 14:00, Eddie James wrote:
-> Use get_device and put_device in the open and close functions to
-> make sure the device doesn't get freed while a file descriptor is
-> open.
+On Thu, May 12, 2022 at 10:13:09AM -0500, Steve Wahl wrote:
+> To support up to 64 sockets with 10 DMAR units each (640), make the
+> value of DMAR_UNITS_SUPPORTED adjustable by a config variable,
+> CONFIG_DMAR_UNITS_SUPPORTED, and make it's default 1024 when MAXSMP is
+> set.
 > 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> ---
->   drivers/fsi/fsi-occ.c | 8 +++++++-
->   1 file changed, 7 insertions(+), 1 deletion(-)
+> If the available hardware exceeds DMAR_UNITS_SUPPORTED (previously set
+> to MAX_IO_APICS, or 128), it causes these messages: "DMAR: Failed to
+> allocate seq_id", "DMAR: Parse DMAR table failure.", and "x2apic: IRQ
+> remapping doesn't support X2APIC mode x2apic disabled"; and the system
+> fails to boot properly.
 > 
-> diff --git a/drivers/fsi/fsi-occ.c b/drivers/fsi/fsi-occ.c
-> index c9cc75fbdfb9..9e48dc62b1c5 100644
-> --- a/drivers/fsi/fsi-occ.c
-> +++ b/drivers/fsi/fsi-occ.c
-> @@ -82,6 +82,9 @@ static int occ_open(struct inode *inode, struct file *file)
->   	struct miscdevice *mdev = file->private_data;
->   	struct occ *occ = to_occ(mdev);
->   
-> +	if (!occ->buffer)
-> +		return -ENOENT;
-> +
->   	if (!client)
->   		return -ENOMEM;
->   
-> @@ -94,6 +97,7 @@ static int occ_open(struct inode *inode, struct file *file)
->   	client->occ = occ;
->   	mutex_init(&client->lock);
->   	file->private_data = client;
-> +	get_device(occ->dev);
->   
->   	/* We allocate a 1-page buffer, make sure it all fits */
->   	BUILD_BUG_ON((OCC_CMD_DATA_BYTES + 3) > PAGE_SIZE);
-> @@ -143,7 +147,7 @@ static ssize_t occ_write(struct file *file, const char __user *buf,
->   	ssize_t rc;
->   	u8 *cmd;
->   
-> -	if (!client)
-> +	if (!client || !client->occ->buffer)
->   		return -ENODEV;
->   
->   	if (len > (OCC_CMD_DATA_BYTES + 3) || len < 3)
-> @@ -197,6 +201,7 @@ static int occ_release(struct inode *inode, struct file *file)
->   {
->   	struct occ_client *client = file->private_data;
->   
-> +	put_device(client->occ->dev);
->   	free_page((unsigned long)client->buffer);
->   	kfree(client);
->   
-> @@ -672,6 +677,7 @@ static int occ_remove(struct platform_device *pdev)
->   	struct occ *occ = platform_get_drvdata(pdev);
->   
->   	kvfree(occ->buffer);
-> +	occ->buffer = NULL;
+> Signed-off-by: Steve Wahl <steve.wahl@hpe.com>
 
-Isn't this slightly racy (there is no guarantee that occ->buffer is updated
-by the time it is used by the write function, and there is no synchronization
-across CPUs which ensures that the pointer is actually written to memory
-before it is used) ?
+I've received a report from the kernel test robot <lkp@intel.com>,
+that this patch causes an error (shown below) when
+CONFIG_IOMMU_SUPPORT is not set.
 
-Thanks,
-Guenter
+In my opinion, this is because include/linux/dmar.h and
+include/linux/intel-iommu are being #included when they are not really
+being used.
+
+I've tried placing the contents of intel-iommu.h within an #ifdef
+CONFIG_INTEL_IOMMU, and that fixes the problem.
+
+Two questions:
+
+A) Is this the desired approach to to the fix?
+
+B) Should it be a separate patch, or added onto this patch as a v3?
+
+Error message:  ------------------------------
+
+   In file included from include/linux/intel-iommu.h:21,
+                    from arch/x86/kvm/x86.c:44:
+>> include/linux/dmar.h:21:33: error: 'CONFIG_DMAR_UNITS_SUPPORTED' undeclared here (not in a function); did you mean 'DMAR_UNITS_SUPPORTED'?
+      21 | #define DMAR_UNITS_SUPPORTED    CONFIG_DMAR_UNITS_SUPPORTED
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/intel-iommu.h:531:35: note: in expansion of macro 'DMAR_UNITS_SUPPORTED'
+     531 |         unsigned int iommu_refcnt[DMAR_UNITS_SUPPORTED];
+         |                                   ^~~~~~~~~~~~~~~~~~~~
+
+
+vim +21 include/linux/dmar.h
+
+    20
+  > 21  #define DMAR_UNITS_SUPPORTED    CONFIG_DMAR_UNITS_SUPPORTED
+    22
+
+Initial stab at fixing it: ------------------------------
+
+diff --git a/include/linux/intel-iommu.h b/include/linux/intel-iommu.h
+index 2f9891cb3d00..916fd7b5bcb5 100644
+--- a/include/linux/intel-iommu.h
++++ b/include/linux/intel-iommu.h
+@@ -10,6 +10,8 @@
+ #ifndef _INTEL_IOMMU_H_
+ #define _INTEL_IOMMU_H_
+ 
++#ifdef CONFIG_INTEL_IOMMU
++
+ #include <linux/types.h>
+ #include <linux/iova.h>
+ #include <linux/io.h>
+@@ -831,4 +833,6 @@ static inline const char *decode_prq_descriptor(char *str, size_t size,
+ 	return str;
+ }
+ 
++#endif /* CONFIG_IOMMU_SUPPORT */
++
+ #endif
+
+
+Thanks.
+
+--> Steve Wahl
+
+
+-- 
+Steve Wahl, Hewlett Packard Enterprise

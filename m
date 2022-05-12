@@ -2,45 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B894A52477A
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 352DC52477E
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351257AbiELH5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 03:57:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59162 "EHLO
+        id S241283AbiELH6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 03:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241283AbiELH5J (ORCPT
+        with ESMTP id S1351261AbiELH6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 03:57:09 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6C98689A4
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:57:04 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 674371042;
-        Thu, 12 May 2022 00:57:04 -0700 (PDT)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 149C83F73D;
-        Thu, 12 May 2022 00:57:02 -0700 (PDT)
-Date:   Thu, 12 May 2022 08:56:59 +0100
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Rob Herring <rob.herring@calxeda.com>,
-        Jamie Iles <jamie@jamieiles.com>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
-Subject: Re: [PATCH] ARM: highbank: Fix refcount leak in highbank_init
-Message-ID: <20220512085659.678db0b3@donnerap.cambridge.arm.com>
-In-Reply-To: <20220512031259.56459-1-linmq006@gmail.com>
-References: <20220512031259.56459-1-linmq006@gmail.com>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        Thu, 12 May 2022 03:58:16 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D7268999
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:58:15 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1np3i7-0001Rg-3t; Thu, 12 May 2022 09:58:11 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D10C37C670;
+        Thu, 12 May 2022 07:58:08 +0000 (UTC)
+Date:   Thu, 12 May 2022 09:58:08 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Devid Antonio Filoni <devid.filoni@egluetechnologies.com>,
+        kernel@pengutronix.de, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Jander <david@protonic.nl>
+Subject: Re: [PATCH 1/1] can: skb: add and set local_origin flag
+Message-ID: <20220512075808.urlptf4d3wiu4kwh@pengutronix.de>
+References: <20220511121913.2696181-1-o.rempel@pengutronix.de>
+ <b631b022-72d5-9160-fd13-f33c80dbbe59@hartkopp.net>
+ <20220511132421.7o5a3po32l3w2wcr@pengutronix.de>
+ <20220511143620.kphwgp2vhjyoecs5@pengutronix.de>
+ <002d234f-a7d6-7b1a-72f4-157d7a283446@hartkopp.net>
+ <20220511145437.oezwkcprqiv5lfda@pengutronix.de>
+ <3c6bf83c-0d91-ea43-1a5d-27df7db1fb08@hartkopp.net>
+ <f6cb7e44-226b-cffb-d907-9014075cdcb5@hartkopp.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7ajn64kwg73u2oir"
+Content-Disposition: inline
+In-Reply-To: <f6cb7e44-226b-cffb-d907-9014075cdcb5@hartkopp.net>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,41 +64,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 May 2022 07:12:58 +0400
-Miaoqian Lin <linmq006@gmail.com> wrote:
 
-Hi,
+--7ajn64kwg73u2oir
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> of_find_compatible_node() returns a node pointer with refcount
-> incremented, we should use of_node_put() on it when done.
-> Add missing of_node_put() to avoid refcount leak.
-> 
-> Fixes: 220e6cf7b793 ("ARM: add Highbank core platform support")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+On 12.05.2022 08:23:26, Oliver Hartkopp wrote:
+> > > > > BTW: There is a bug with interfaces that don't support IFF_ECHO.
+> > > > >=20
+> > > > > Assume an invalid CAN frame is passed to can_send() on an
+> > > > > interface that doesn't support IFF_ECHO. The above mentioned
+> > > > > code does happily generate an echo frame and it's send, even
+> > > > > if the driver drops it, due to can_dropped_invalid_skb(dev,
+> > > > > skb).
+> > > > >=20
+> > > > > The echoed back CAN frame is treated in raw_rcv() as if the
+> > > > > headroom is valid:
 
-That is basically the same patch as this one:
-https://lore.kernel.org/linux-arm-kernel/20220408094817.2494756-1-lv.ruyi@zte.com.cn/
+> I double checked that code and when I didn't miss anything all the callers
+> of can_send() (e.g. raw_sendmsg()) are creating valid skbs.
 
-Arnd, Olof, can you please take the older one through the soc tree? Maybe
-adding the Fixes tag from this one?
+ACK - I haven't checked, but I assume that all current callers of
+can_send() are sound, this I why I started the description with: "Assume
+an invalid CAN frame is passed to can_send()". But we can argue that we
+trust all callers.
 
-Thanks,
-Andre
+regards,
+Marc
 
-> ---
->  arch/arm/mach-highbank/highbank.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm/mach-highbank/highbank.c b/arch/arm/mach-highbank/highbank.c
-> index db607955a7e4..af9488854fe3 100644
-> --- a/arch/arm/mach-highbank/highbank.c
-> +++ b/arch/arm/mach-highbank/highbank.c
-> @@ -142,6 +142,7 @@ static void __init highbank_init(void)
->  	np = of_find_compatible_node(NULL, NULL, "calxeda,hb-sregs");
->  	sregs_base = of_iomap(np, 0);
->  	WARN_ON(!sregs_base);
-> +	of_node_put(np);
->  
->  	pm_power_off = highbank_power_off;
->  	highbank_pm_init();
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
+--7ajn64kwg73u2oir
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJ8vg0ACgkQrX5LkNig
+0123iAf9ErX08AbRVn9w0Yc3/EK4BXK/wG8D+Qc4T3MK+m6wTUWjEozDpbcdT9Xf
+7KwXqMctUdH/G3YvAHSD0dM0qFv6PL9BSO+Cj7TX2itOe6ME1r2/Ym8fodHtZIv9
+FSfySMHM8/+kN1v2xyfL8VlOsBuaXaQzTHv/Oj+O3cdKZnFS2qG2SFlXhPvmTdLE
+j29aIQakN+nCJCcmXoimM5Bn9DftyXbbNLa14hN93bfNIktuveaKKgSjH36hZ96S
+JjCDRfpG16DnxyYAuk+grsThKZGFeylRtV8TC4E53aumG/zoDNZpmkV+/FtPa/VS
+QoLahTJiU4vJphpbic4F7MHlTwaSFQ==
+=epSY
+-----END PGP SIGNATURE-----
+
+--7ajn64kwg73u2oir--

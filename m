@@ -2,98 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987E5524F78
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E56524F31
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355043AbiELOJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 10:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
+        id S1354915AbiELOBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 10:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354927AbiELOJ2 (ORCPT
+        with ESMTP id S1354904AbiELOBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 10:09:28 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F2B201C0D
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:09:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652364568; x=1683900568;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Zi8Pic5CJM9KyS0pkVNYuX6w9wNDHDJL2ofCVifXfuM=;
-  b=SrFlNR942A45tpBTL7DxVlfurPioWp8bW6JygWUkPKYo2t2M9qVGhui3
-   p5MeaIeSI1fxPPqkEbuErwufGM6OrcF5OjnJTh6FDlBGJ+1OgWbr/yW//
-   0gRcdmx/pEaLFxnrnNYneVozszmyCqs+SLMlZNsi+wwBB4vZoXTSi/DWv
-   MN+r2JFtCrJd2IYfTa6X5zVn7a4Pq0Q3f+hC1rTCqRiqd2YIJ10qU8D+L
-   0imIoMNbnSwinzFHe2uGjGviMjINMmy30+lUJvp9CigbS7anHUhSOCTEb
-   faklO4TnGn/3SeEh70cKkxzllgvO5iZ6mJi5Cl9FK0VzCJ533Apn6x8M4
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="257557371"
-X-IronPort-AV: E=Sophos;i="5.91,220,1647327600"; 
-   d="scan'208";a="257557371"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 07:09:27 -0700
-X-IronPort-AV: E=Sophos;i="5.91,220,1647327600"; 
-   d="scan'208";a="566702128"
-Received: from jainamit-mobl.amr.corp.intel.com (HELO [10.212.194.29]) ([10.212.194.29])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 07:09:26 -0700
-Message-ID: <6a18ce53-c5c8-5ba9-fe7c-199bd9b4bff6@linux.intel.com>
-Date:   Thu, 12 May 2022 08:13:59 -0500
+        Thu, 12 May 2022 10:01:35 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7A854014
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:01:33 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id n8so4975864plh.1
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:01:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=LuitxF/LxlyDzAJ6WiMHBPYI6+2/9TqSBGYdKA4Kdbk=;
+        b=hXQKiSvErap40hy+dXmzuEfIjSuO7mQ4+LF6SI7ROCaq0cCea+dX7+6p0kYgipc7r7
+         fAg178C7ZxY+IqXATlnRL/PWrtggp5bfkNR5xPTvVlNa8oMEWEDqlRGJ9oJMB6ZXe86z
+         +ZQrfP6/9HOrmnkiutVcL7IbUW00wvqgViWkgP9Mcuun52KPbP9NdRaRFFz6gO9kwvAS
+         V4NwrLQnBi/ClLHsSCYEj+e1J6kqvb3kHPR7cjYWZv1HP/PkLOMnuG8CwLyhC3AxTRzn
+         A7NZBi+LXLeFf9kCkxUTUpaFh8abRrajqDJZoLIreRRPDK9m4TUh6DTMkeNw4lt/rXF8
+         WQ6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=LuitxF/LxlyDzAJ6WiMHBPYI6+2/9TqSBGYdKA4Kdbk=;
+        b=w7cE4GfDcsqZbZxJh5zp3YOIPhuV1m2Df3JSVvY9vvQ2XlDMBYIbWDcs4zKjOKTVgG
+         gprO72mtfhnoasE7NVDCcLzSez5GyctGMj6Ww+y5AzpRe3phCDP0GN1BQB0cpmNdzZ3Q
+         FZm0yeeMtPg77iolftVd2HyIDWq9YKF3DE0RrpT5Wd8c6IyqKZj8HGLkQzPLFgpzebhs
+         YdYr8rPlQ10i+YT7V+loWiqX/5GPKE3s40SRXL6OM05SP7qv6A4BKMRls+fsiYoR5AQL
+         FKJY3K5H4rkt/G4OPi8ZMtnQY6Lkhy8U1AEuqv+vyP3f1G8AYbBoSPHpFrS6g78y0NVn
+         GFJA==
+X-Gm-Message-State: AOAM532W9+72fqnBGjfaljCV1hzhvQ6BAs15nB3pD6EouBQAyARA9ERp
+        630K4/DcD0XYLSrMZ59lQxjw
+X-Google-Smtp-Source: ABdhPJxaAVTBu9QCUOg7jBzjc3IVOzl4NbzJYJxeufqURrOTTpDV1PE/u6pG6jCUU+sYZ0fh/cw2LQ==
+X-Received: by 2002:a17:90a:fcb:b0:1dc:f0ce:69fb with SMTP id 69-20020a17090a0fcb00b001dcf0ce69fbmr11084857pjz.198.1652364092878;
+        Thu, 12 May 2022 07:01:32 -0700 (PDT)
+Received: from thinkpad ([117.202.184.202])
+        by smtp.gmail.com with ESMTPSA id ch9-20020a056a00288900b0050dc76281c2sm3683732pfb.156.2022.05.12.07.01.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 07:01:32 -0700 (PDT)
+Date:   Thu, 12 May 2022 19:31:24 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 11/17] PCI: dwc: Simplify in/outbound iATU setup
+ methods
+Message-ID: <20220512140124.GD35848@thinkpad>
+References: <20220503214638.1895-1-Sergey.Semin@baikalelectronics.ru>
+ <20220503214638.1895-12-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [PATCH -next] ASoC: SOF: amd: add missing
- platform_device_unregister in acp_pci_rn_probe
-Content-Language: en-US
-To:     Zheng Bin <zhengbin13@huawei.com>, lgirdwood@gmail.com,
-        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
-        daniel.baluta@nxp.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, sound-open-firmware@alsa-project.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Cc:     gaochao49@huawei.com
-References: <20220512013728.4128903-1-zhengbin13@huawei.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220512013728.4128903-1-zhengbin13@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220503214638.1895-12-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/11/22 20:37, Zheng Bin wrote:
-> acp_pci_rn_probe misses a call platform_device_unregister in error path,
-> this patch fixes that.
+On Wed, May 04, 2022 at 12:46:32AM +0300, Serge Semin wrote:
+> From maintainability and scalability points of view it has been wrong to
+> use different iATU inbound and outbound regions accessors for the viewport
+> and unrolled versions of the iATU CSRs mapping. Seeing the particular iATU
+> region-wise registers layout is almost fully compatible for different
+> IP-core versions, there were no much points in splitting the code up that
+> way since it was possible to implement a common windows setup methods for
+> both viewport and unrolled iATU CSRs spaces. While what we can observe in
+> the current driver implementation of these methods, is a lot of code
+> duplication, which consequently worsen the code readability,
+> maintainability and scalability. Note the current implementation is a bit
+> more performant than the one suggested in this commit since it implies
+> having less MMIO accesses. But the gain just doesn't worth having the
+> denoted difficulties especially seeing the iATU setup methods are mainly
+> called on the DW PCIe controller and peripheral devices initialization
+> stage.
 > 
-> Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
-
-Thanks for the patch, nice catch
-
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-
+> Here we suggest to move the iATU viewport and unrolled CSR access
+> specifics in the dw_pcie_readl_atu() and dw_pcie_writel_atu() method, and
+> convert the dw_pcie_prog_outbound_atu() and
+> dw_pcie_prog_{ep_}inbound_atu() functions to being generic instead of
+> having a different methods for each viewport and unrolled types of iATU
+> CSRs mapping. Nothing complex really. First of all the dw_pcie_readl_atu()
+> and dw_pcie_writel_atu() are converted to accept relative iATU CSRs
+> address together with the iATU region direction (inbound or outbound) and
+> region index. If DW PCIe controller doesn't have the unrolled iATU CSRs
+> space, then the accessors will need to activate a iATU viewport based on
+> the specified direction and index, otherwise a base address for the
+> corresponding region CSRs will be calculated by means of the
+> PCIE_ATU_UNROLL_BASE() macro. The CSRs macro have been modified in
+> accordance with that logic in the pcie-designware.h header file.
+> 
+> The rest of the changes in this commit just concern converting the iATU
+> in-/out-bound setup methods and iATU regions detection procedure to be
+> compatible with the new accessors semantics. As a result we've dropped the
+> no more required dw_pcie_prog_outbound_atu_unroll(),
+> dw_pcie_prog_inbound_atu_unroll() and dw_pcie_iatu_detect_regions_unroll()
+> methods.
+> 
+> Note aside with the denoted code improvements, there is an additional
+> positive side effect of this change. If at some point an atomic iATU
+> configs setup procedure is required, it will be possible to be done with
+> no much effort just by adding the synchronization into the
+> dw_pcie_readl_atu() and dw_pcie_writel_atu() accessors.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
 > ---
->  sound/soc/sof/amd/pci-rn.c | 1 +
->  1 file changed, 1 insertion(+)
 > 
-> diff --git a/sound/soc/sof/amd/pci-rn.c b/sound/soc/sof/amd/pci-rn.c
-> index b8910bb7f27c..d5d9bcc2c997 100644
-> --- a/sound/soc/sof/amd/pci-rn.c
-> +++ b/sound/soc/sof/amd/pci-rn.c
-> @@ -101,6 +101,7 @@ static int acp_pci_rn_probe(struct pci_dev *pci, const struct pci_device_id *pci
->  	res = devm_kzalloc(&pci->dev, sizeof(struct resource) * ARRAY_SIZE(renoir_res), GFP_KERNEL);
->  	if (!res) {
->  		sof_pci_remove(pci);
-> +		platform_device_unregister(dmic_dev);
->  		return -ENOMEM;
->  	}
-> 
-> --
-> 2.31.1
-> 
+> Changelog v2:
+> - Move the iATU region selection procedure into a helper function (@Rob).
+> - Simplify the iATU region selection procedure by recalculating the base
+>   address only if the space is unrolled. The iATU viewport base address
+>   is saved in the pci->atu_base field from now.
+> ---
+>  drivers/pci/controller/dwc/pcie-designware.c | 293 ++++++-------------
+>  drivers/pci/controller/dwc/pcie-designware.h |  48 ++-
+
+In this patch, you also need to fix "pcie-tegra194-acpi.c" driver that makes
+use of the removed macros.
+
+Thanks,
+Mani
+
+-- 
+மணிவண்ணன் சதாசிவம்

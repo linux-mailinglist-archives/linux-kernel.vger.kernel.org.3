@@ -2,204 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2F7524B21
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E48AA524B2F
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353057AbiELLNK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 12 May 2022 07:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47150 "EHLO
+        id S1353079AbiELLNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 07:13:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353055AbiELLNB (ORCPT
+        with ESMTP id S1353096AbiELLN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 07:13:01 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E9462216
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 04:12:56 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1np6kZ-0001eb-5Y; Thu, 12 May 2022 13:12:55 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Cc:     Dao Lu <daolu@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
-        Dao Lu <daolu@rivosinc.com>
-Subject: Re: [PATCH] arch/riscv: Add Zihintpause extension support
-Date:   Thu, 12 May 2022 13:12:54 +0200
-Message-ID: <4061745.1IzOArtZ34@diego>
-In-Reply-To: <20220512033045.1101909-1-daolu@rivosinc.com>
-References: <20220512033045.1101909-1-daolu@rivosinc.com>
+        Thu, 12 May 2022 07:13:26 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6DD4BCEB1
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 04:13:19 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KzTb81HbJzGpg2;
+        Thu, 12 May 2022 19:10:28 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 12 May 2022 19:13:17 +0800
+Subject: Re: [RFC PATCH v1 0/4] mm, hwpoison: improve handling workload
+ related to hugetlb and memory_hotplug
+To:     David Hildenbrand <david@redhat.com>,
+        =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>, Oscar Salvador <osalvador@suse.de>
+CC:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <54399815-10fe-9d43-7ada-7ddb55e798cb@redhat.com>
+ <20220427122049.GA3918978@hori.linux.bs1.fc.nec.co.jp>
+ <bb1caf48-7e9d-61bf-e0dc-72fcc0228f28@redhat.com>
+ <20220509072902.GB123646@hori.linux.bs1.fc.nec.co.jp>
+ <6a5d31a3-c27f-f6d9-78bb-d6bf69547887@huawei.com>
+ <Ynjl4JmLXkA47U8T@localhost.localdomain>
+ <465902dc-d3bf-7a93-da04-839faddcd699@huawei.com>
+ <0389eac1-af68-56b5-696d-581bb56878b9@redhat.com>
+ <20220511161052.GA224675@hori.linux.bs1.fc.nec.co.jp>
+ <6986a8dd-7211-fb4d-1d66-5b203cad1aab@redhat.com>
+ <20220512063558.GA249122@hori.linux.bs1.fc.nec.co.jp>
+ <c424e8a2-a771-e738-396c-24ac907b557f@redhat.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <04781d15-9d87-1763-02fe-e353679c50d7@huawei.com>
+Date:   Thu, 12 May 2022 19:13:16 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <c424e8a2-a771-e738-396c-24ac907b557f@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Am Donnerstag, 12. Mai 2022, 05:30:45 CEST schrieb Dao Lu:
-> This patch:
->   1. Build with _zihintpause if the toolchain has support for it
->   2. Detects if the platform supports the extension
->   3. Use PAUSE for cpu_relax if both toolchain and the platform support it
-
-This simply explains what the patch does, which is also pretty easy to
-see by just reading the patch, so doesn't provide real additional value.
-
-Please use the commit message to provide more background on what
-you want to achieve. I.e. a short explanation what it is.
-
------
-Implement support for the ZiHintPause extension.
-
-The PAUSE instruction is a HINT that indicates the current hart’s rate of
-instruction retirement should be temporarily reduced or paused.
------
-
-The second sentence obviously comes directly from the riscv-spec pdf ;-)
-
-There is one nit below too and with that fixed
-
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-
-On a Qemu build with your extension patch for it, also
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-
-
-> Signed-off-by: Dao Lu <daolu@rivosinc.com>
-> ---
->  arch/riscv/Makefile                     |  4 ++++
->  arch/riscv/include/asm/hwcap.h          |  1 +
->  arch/riscv/include/asm/vdso/processor.h | 19 ++++++++++++++++---
->  arch/riscv/kernel/cpu.c                 |  1 +
->  arch/riscv/kernel/cpufeature.c          |  7 +++++++
->  5 files changed, 29 insertions(+), 3 deletions(-)
+On 2022/5/12 15:28, David Hildenbrand wrote:
+>>>>>
+>>>>> Once the problematic DIMM would actually get unplugged, the memory block devices
+>>>>> would get removed as well. So when hotplugging a new DIMM in the same
+>>>>> location, we could online that memory again.
+>>>>
+>>>> What about PG_hwpoison flags?  struct pages are also freed and reallocated
+>>>> in the actual DIMM replacement?
+>>>
+>>> Once memory is offline, the memmap is stale and is no longer
+>>> trustworthy. It gets reinitialize during memory onlining -- so any
+>>> previous PG_hwpoison is overridden at least there. In some setups, we
+>>> even poison the whole memmap via page_init_poison() during memory offlining.
+>>>
+>>> Apart from that, we should be freeing the memmap in all relevant cases
+>>> when removing memory. I remember there are a couple of corner cases, but
+>>> we don't really have to care about that.
+>>
+>> OK, so there seems no need to manipulate struct pages for hwpoison in
+>> all relevant cases.
 > 
-> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> index 7d81102cffd4..900a8fda1a2d 100644
-> --- a/arch/riscv/Makefile
-> +++ b/arch/riscv/Makefile
-> @@ -56,6 +56,10 @@ riscv-march-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-y)c
->  toolchain-need-zicsr-zifencei := $(call cc-option-yn, -march=$(riscv-march-y)_zicsr_zifencei)
->  riscv-march-$(toolchain-need-zicsr-zifencei) := $(riscv-march-y)_zicsr_zifencei
->  
-> +# Check if the toolchain supports Zihintpause extension
-> +toolchain-supports-zihintpause := $(call cc-option-yn, -march=$(riscv-march-y)_zihintpause)
-> +riscv-march-$(toolchain-supports-zihintpause) := $(riscv-march-y)_zihintpause
-> +
->  KBUILD_CFLAGS += -march=$(subst fd,,$(riscv-march-y))
->  KBUILD_AFLAGS += -march=$(riscv-march-y)
->  
-> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-> index 0734e42f74f2..caa9ee5459b4 100644
-> --- a/arch/riscv/include/asm/hwcap.h
-> +++ b/arch/riscv/include/asm/hwcap.h
-> @@ -52,6 +52,7 @@ extern unsigned long elf_hwcap;
->   */
->  enum riscv_isa_ext_id {
->  	RISCV_ISA_EXT_SSCOFPMF = RISCV_ISA_EXT_BASE,
-> +	RISCV_ISA_EXT_ZIHINTPAUSE,
->  	RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
->  };
->  
-> diff --git a/arch/riscv/include/asm/vdso/processor.h b/arch/riscv/include/asm/vdso/processor.h
-> index 134388cbaaa1..106b35ba8cac 100644
-> --- a/arch/riscv/include/asm/vdso/processor.h
-> +++ b/arch/riscv/include/asm/vdso/processor.h
-> @@ -4,15 +4,28 @@
->  
->  #ifndef __ASSEMBLY__
->  
-> +#include <linux/jump_label.h>
->  #include <asm/barrier.h>
-> +#include <asm/hwcap.h>
->  
-> +extern struct static_key_false riscv_pause_available;
->  static inline void cpu_relax(void)
->  {
-> +	if (!static_branch_likely(&riscv_pause_available)) {
->  #ifdef __riscv_muldiv
-> -	int dummy;
-> -	/* In lieu of a halt instruction, induce a long-latency stall. */
-> -	__asm__ __volatile__ ("div %0, %0, zero" : "=r" (dummy));
-> +		int dummy;
-> +		/* In lieu of a halt instruction, induce a long-latency stall. */
-> +		__asm__ __volatile__ ("div %0, %0, zero" : "=r" (dummy));
->  #endif
-> +	} else {
-> +#ifdef __riscv_zihintpause
-> +		/*
-> +		 * Reduce instruction retirement.
-> +		 * This assumes the PC changes.
-> +		 */
-> +		__asm__ __volatile__ ("pause");
-> +#endif
-> +	}
->  	barrier();
->  }
->  
-> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> index ccb617791e56..89e563e9c4cc 100644
-> --- a/arch/riscv/kernel/cpu.c
-> +++ b/arch/riscv/kernel/cpu.c
-> @@ -88,6 +88,7 @@ int riscv_of_parent_hartid(struct device_node *node)
->   */
->  static struct riscv_isa_ext_data isa_ext_arr[] = {
->  	__RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
-> +	__RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
->  	__RISCV_ISA_EXT_DATA("", RISCV_ISA_EXT_MAX),
->  };
->  
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index 1b2d42d7f589..327c19507dbb 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -24,6 +24,8 @@ static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) __read_mostly;
->  #ifdef CONFIG_FPU
->  __ro_after_init DEFINE_STATIC_KEY_FALSE(cpu_hwcap_fpu);
->  #endif
-> +DEFINE_STATIC_KEY_FALSE(riscv_pause_available);
-> +EXPORT_SYMBOL_GPL(riscv_pause_available);
->  
->  /**
->   * riscv_isa_extension_base() - Get base extension word
-> @@ -192,6 +194,7 @@ void __init riscv_fill_hwcap(void)
->  				set_bit(*ext - 'a', this_isa);
->  			} else {
->  				SET_ISA_EXT_MAP("sscofpmf", RISCV_ISA_EXT_SSCOFPMF);
-> +				SET_ISA_EXT_MAP("zihintpause", RISCV_ISA_EXT_ZIHINTPAUSE);
->  			}
->  #undef SET_ISA_EXT_MAP
->  		}
-> @@ -213,6 +216,10 @@ void __init riscv_fill_hwcap(void)
->  
->  	}
->  
-> +	if (__riscv_isa_extension_available(riscv_isa, RISCV_ISA_EXT_ZIHINTPAUSE)) {
-> +		static_branch_enable(&riscv_pause_available);
-> +	}
-> +
+> Right. When offlining a memory block, all we have to do is remember if
+> we stumbled over a hwpoisoned page and rememebr that inside the memory
+> block. Rejecting to online is then easy.
 
-You don't really need the braces for the single call to static_branch_enable
+BTW: How should we deal with the below race window:
 
+CPU A			CPU B				CPU C
+accessing page while hold page refcnt
+			memory_failure happened on page
+							offline_pages
+							  page can be offlined due to page refcnt
+							  is ignored when PG_hwpoison is set
+can still access page struct...
 
->  	/* We don't support systems with F but without D, so mask those out
->  	 * here. */
->  	if ((elf_hwcap & COMPAT_HWCAP_ISA_F) && !(elf_hwcap & COMPAT_HWCAP_ISA_D)) {
+Any in use page (with page refcnt incremented) might be offlined while its content, e.g. flags, private ..., can
+still be accessed if the above race happened. Is this possible? Or am I miss something? Any suggestion to fix it?
+I can't figure out a way yet. :(
+
+Thanks a lot!
+
 > 
-
-
-Heiko
-
-
 

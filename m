@@ -2,102 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B37B0525350
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 569C5525346
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356919AbiELRMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 13:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
+        id S1356890AbiELRKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 13:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356930AbiELRLB (ORCPT
+        with ESMTP id S1356888AbiELRKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 13:11:01 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F115727FD7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:10:56 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id bv19so11524982ejb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:10:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=loonHWmCtVeGx4aWVVUzPzapZ1t+QIqGsKXmCgmw6z8=;
-        b=WD5qjD3n7PQ6Q1+OHYaSBYIXZyE3MSnd14hOsae1gMnqzXVow2TJFjREwN777Ig52q
-         V4qfULfCcQ86ni9aAhSi7LjMQHCPkFJi+glv65R1S+sQR6oFUNEhVyq5JADGgBm6h1kT
-         2hznSR7F9VZ12haH7nWz1Ev8hTm8abuX+I6D4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=loonHWmCtVeGx4aWVVUzPzapZ1t+QIqGsKXmCgmw6z8=;
-        b=fB21s0bz0sorJAx4QzsaITGMVTsVzPYWIo3BwbmRIjs8i/gM3pm0+k7VE3i8VO4+20
-         DSWiLsAWjdqcSWA+yaMq0KsP+AAddUfoWdWXnRw0jcyB604EpTfylc6vO6nE+jyDMRRu
-         rtUqhGf+Wp3BZm7igDvfFR+M6dg0BihkDtqif3Fa3I1d/ZknI5azujoPyfE2gZ27XANv
-         6kCHyXobeFJK/88Tqvy0Wfb+6qYWd9gafy5noQunOqYiQowLbtJwTItoLPRvhKhkbPO+
-         OLRykOPGcYpu0Xana8ddSPSJ55M0tkd3KHZ725a5cYJ4jHVDireogMheGoXcgno57I1S
-         Tcnw==
-X-Gm-Message-State: AOAM531RDlwWEHU8u0aO+th2kW3Aa6YfGuIKvqT95EhWys7sANMHCTwF
-        THAeU9ZE+QrFEUrJMpfzkZwfnnzrm/OGZcz5HpA=
-X-Google-Smtp-Source: ABdhPJxDN6Hwhpo+ubYFdrhDW/6nWDfS/q/cQEARq7g11BvGA9uxioGKI5LNxvmbneDAucdR+OsBnQ==
-X-Received: by 2002:a17:907:2159:b0:6f3:a307:d01d with SMTP id rk25-20020a170907215900b006f3a307d01dmr803565ejb.760.1652375454338;
-        Thu, 12 May 2022 10:10:54 -0700 (PDT)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
-        by smtp.gmail.com with ESMTPSA id eg56-20020a05640228b800b00427ae00972dsm2892281edb.12.2022.05.12.10.10.51
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 10:10:52 -0700 (PDT)
-Received: by mail-wr1-f50.google.com with SMTP id d5so8169531wrb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:10:51 -0700 (PDT)
-X-Received: by 2002:a05:6000:2c2:b0:20c:7329:7c10 with SMTP id
- o2-20020a05600002c200b0020c73297c10mr557896wry.193.1652375451235; Thu, 12 May
- 2022 10:10:51 -0700 (PDT)
+        Thu, 12 May 2022 13:10:42 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A036021B5
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:10:40 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 35B681E80D6B;
+        Fri, 13 May 2022 01:05:03 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id VMlKyIXNQHXH; Fri, 13 May 2022 01:05:00 +0800 (CST)
+Received: from [172.30.21.106] (unknown [180.167.10.98])
+        (Authenticated sender: liqiong@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id AB25F1E80D22;
+        Fri, 13 May 2022 01:05:00 +0800 (CST)
+Subject: Re: [PATCH] mm: change "char *bdi_unknown_name" to "char
+ bdi_unknown_name[]"
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220512082637.24649-1-liqiong@nfschina.com>
+ <Yn0n23MRQ+wD1ZWN@FVFYT0MHHV2J.usts.net>
+From:   liqiong <liqiong@nfschina.com>
+Message-ID: <f4317b85-0a7b-913c-6d45-9f8b7c65e40b@nfschina.com>
+Date:   Fri, 13 May 2022 01:10:36 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
 MIME-Version: 1.0
-References: <20220510082351-mutt-send-email-mst@kernel.org>
- <CAHk-=wjPR+bj7P1O=MAQWXp0Mx2hHuNQ1acn6gS+mRo_kbo5Lg@mail.gmail.com>
- <87czgk8jjo.fsf@mpe.ellerman.id.au> <CAHk-=wj9zKJGA_6SJOMPiQEoYke6cKX-FV3X_5zNXOcFJX1kOQ@mail.gmail.com>
- <87mtfm7uag.fsf@mpe.ellerman.id.au>
-In-Reply-To: <87mtfm7uag.fsf@mpe.ellerman.id.au>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 12 May 2022 10:10:34 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgnYGY=10sRDzXCC2bmappjBTRNNbr8owvGLEW-xuV7Vw@mail.gmail.com>
-Message-ID: <CAHk-=wgnYGY=10sRDzXCC2bmappjBTRNNbr8owvGLEW-xuV7Vw@mail.gmail.com>
-Subject: Re: [GIT PULL] virtio: last minute fixup
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        KVM list <kvm@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        mie@igel.co.jp
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Yn0n23MRQ+wD1ZWN@FVFYT0MHHV2J.usts.net>
+Content-Type: text/plain; charset=gbk
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RDNS_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 6:30 AM Michael Ellerman <mpe@ellerman.id.au> wrote:
+
+
+在 2022年05月12日 23:29, Muchun Song 写道:
+> On Thu, May 12, 2022 at 04:26:37PM +0800, liqiong wrote:
+>> "char bdi_unknown_nam[]" string form declares a single variable.
+>> It is better then "char *bdi_unknown_name" which creates two
+>> variables.
+>>
+> Sorry, I do not understand what you are saying here.  Creating
+> two variables means what?
 >
-> Links to other random places don't serve that function.
+> Thanks.
 
-What "function"?
+Hi there，
 
-This is my argument. Those Link: things need to have a *reason*.
+The string form of "char *" creates two variables in the final assembly output, 
+a static string, and a char pointer to the static string.
 
-Saying "they are a change ID" is not a reason. That's just a random
-word-salad. You need to have an active reason that you can explain,
-not just say "look, I want to add a message ID to every commit".
+Use "objdump -S -D *.o", can find out the static string occurring at 
+"Contents of section .rodata".
 
-Here's the thing. There's a difference between "data" and "information".
 
-We should add information to the commits, not random data.
+>  
+>> Signed-off-by: liqiong <liqiong@nfschina.com>
+>> ---
+>>  mm/backing-dev.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/mm/backing-dev.c b/mm/backing-dev.c
+>> index 7176af65b103..4982ccc63536 100644
+>> --- a/mm/backing-dev.c
+>> +++ b/mm/backing-dev.c
+>> @@ -20,7 +20,7 @@ struct backing_dev_info noop_backing_dev_info;
+>>  EXPORT_SYMBOL_GPL(noop_backing_dev_info);
+>>  
+>>  static struct class *bdi_class;
+>> -static const char *bdi_unknown_name = "(unknown)";
+>> +static const char bdi_unknown_name[] = "(unknown)";
+>>  
+>>  /*
+>>   * bdi_lock protects bdi_tree and updates to bdi_list. bdi_list has RCU
+>> -- 
+>> 2.11.0
+>>
+>>
 
-And most definitely not just random data that can be trivially
-auto-generated after-the-fact.
+-- 
+李力琼 <13524287433>
+上海市浦东新区海科路99号中科院上海高等研究院3号楼3楼
 
-                Linus

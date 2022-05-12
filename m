@@ -2,94 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AFCF524F58
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1789524F65
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354993AbiELOEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 10:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56024 "EHLO
+        id S1354995AbiELOFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 10:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354972AbiELOE3 (ORCPT
+        with ESMTP id S1350311AbiELOFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 10:04:29 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BC11EEE1B;
-        Thu, 12 May 2022 07:04:26 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id dk23so10450019ejb.8;
-        Thu, 12 May 2022 07:04:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fs8s4x4j/+asSW1i8f2Pukqgr0Ir/tJgvdWyY3yoq3U=;
-        b=SUG5R4mvQVZygGuRddCDO8dZQacyk07/cAZawwDbBHFiIcz+Eh01oOdFt+8NMsiteQ
-         s8AlWxu2/skdBIc9am1jSyRtORyb1BuvlFo2plpzUHEsxv9da1HNExENjJ/0t+nOi9bO
-         k6oU2HkXL/cV0mXaW/mfigdUplLND8VcIPAZZRcd10cHVVgLxpSC20yq2GqMhOEn4o3v
-         BX8j64LjIRumUuIVBipI3tL8S6DVa+sbn4U3DSEKiGesq+9Htf13sK9idkEcXbPWJtoW
-         pmum4BbxGst/QvpAJs+YLlKzd9hKoO2n+ygfnHiEf87Cm4zp15vme9Bvbc6JHtHUcLB8
-         yScg==
+        Thu, 12 May 2022 10:05:10 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2607B5D5DF
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:05:09 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id t1-20020a056602140100b0065393cc1dc3so3088387iov.5
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:05:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fs8s4x4j/+asSW1i8f2Pukqgr0Ir/tJgvdWyY3yoq3U=;
-        b=v4B3HHwlk9jnnCSMeZzI1PxJB6prSWalTvvucWTXhx+NZ1PbGCi41eDOQWYYEH0O+3
-         muOEYrZEVquXOOjvDXr+YsfSAaqZQJRZaxePEZHel8j4i8tA6aO4IkFHyXIaHj0cJ9W4
-         28be8uzT1XAahhlfBeARCdaypq7rl6NKnXK2vAvT6p4tNhQkA/St14A7NR5hGRh9uYHB
-         SabIQYkJz30ql5GC917Acr3flgypcku2CDRsX173gT7kGQRqn6/LthrojbCCsbiRG/yE
-         DrdNaI/2DBJBPvqv8aDmTlh6yK6Wfvt4BAIga4uV5t4jWiawAb0tIIiOCusVsAyq0Pyp
-         ArjA==
-X-Gm-Message-State: AOAM531Z2Pg69vJsy5zCPsP3LGyejYQK8occa6UXxI3e3xO1VdLvgfM8
-        le6fTlZM6RoH0xjheWHlQ9U=
-X-Google-Smtp-Source: ABdhPJyt50qyYPCyD03r3/AJ3OUGuB2lb9Kyp65SglIgNSyfP293qaN/xBFVKFZfLgIbEagAjedBOw==
-X-Received: by 2002:a17:907:3e86:b0:6f5:917:10cc with SMTP id hs6-20020a1709073e8600b006f5091710ccmr63430ejc.53.1652364264897;
-        Thu, 12 May 2022 07:04:24 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id r10-20020a508d8a000000b00428bb4c952bsm2609603edh.31.2022.05.12.07.04.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 07:04:24 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <0d4e0b40-a2b3-789f-3adb-9da30c61403f@redhat.com>
-Date:   Thu, 12 May 2022 16:04:20 +0200
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=Mf+SGmOPJ8hxFoqVz1yrqkfaKgwcbpjRG6BPa4pWlFc=;
+        b=BUKyb/XrTplc8y+xLSNHhwabHi8N3FQ/xCrJU+IKIU1Ce6Nj3hcYyf8sIs5jgwQD+Z
+         DnW11MtpbtYpTV5DWx2PK23ZCriBtf4spm1im3LaTwSF/yaHxo46H3el+L+MsGgIKD07
+         X86FeHFfo254dGdCYss9G9bm1FmrkjTGrPAh9t0e1axZk+zfavfEXvBOU63GIGg1Tb3E
+         f5TNB7G3OIzBmzaFTfS/X4LFN9Co/47/mIokDNaYxhG0izj/e6XzsncYCw63/iekn4iO
+         R1/TR5V887X4Yz2NnzGibygn/EDxEs1DFyCUrv7f/PztUUihbwoMr22q0KX3U99vIZqf
+         QaPA==
+X-Gm-Message-State: AOAM530fE3xF9UpYmWyPoPpgYK1aNKshQT3zfxWlPlKDL88zEYCsK49k
+        W6o2qOrzEvTcty6NHTwnrfN+Sxjwe3CXcKOUXjbq1Bg/5DYS
+X-Google-Smtp-Source: ABdhPJzTUtokRcXE9eT4uPY5zHhPJf32Dv6MYzpQ2lsTmIb5KHpdvLNYHwnldCI0qYYCbFxguwbqM0jVkKmOz5U8KO8jNlqlMywp
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] selftests: kvm: replace ternary operator with min()
-Content-Language: en-US
-To:     Guo Zhengkui <guozhengkui@vivo.com>, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Anup Patel <anup@brainfault.org>,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>
-Cc:     zhengkui_guo@outlook.com
-References: <20220511120621.36956-1-guozhengkui@vivo.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220511120621.36956-1-guozhengkui@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:4189:b0:32b:a06a:b007 with SMTP id
+ az9-20020a056638418900b0032ba06ab007mr41435jab.101.1652364308550; Thu, 12 May
+ 2022 07:05:08 -0700 (PDT)
+Date:   Thu, 12 May 2022 07:05:08 -0700
+In-Reply-To: <20220512133426.6300-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a69d4305ded10b86@google.com>
+Subject: Re: [syzbot] WARNING in mntput_no_expire (3)
+From:   syzbot <syzbot+5b1e53987f858500ec00@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,92 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/11/22 14:05, Guo Zhengkui wrote:
-> Fix the following coccicheck warnings:
-> 
-> tools/testing/selftests/kvm/lib/s390x/ucall.c:25:15-17: WARNING
-> opportunity for min()
-> tools/testing/selftests/kvm/lib/x86_64/ucall.c:27:15-17: WARNING
-> opportunity for min()
-> tools/testing/selftests/kvm/lib/riscv/ucall.c:56:15-17: WARNING
-> opportunity for min()
-> tools/testing/selftests/kvm/lib/aarch64/ucall.c:82:15-17: WARNING
-> opportunity for min()
-> tools/testing/selftests/kvm/lib/aarch64/ucall.c:55:20-21: WARNING
-> opportunity for min()
-> 
-> min() is defined in tools/include/linux/kernel.h.
-> 
-> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
-> ---
->   tools/testing/selftests/kvm/lib/aarch64/ucall.c | 4 ++--
->   tools/testing/selftests/kvm/lib/riscv/ucall.c   | 2 +-
->   tools/testing/selftests/kvm/lib/s390x/ucall.c   | 2 +-
->   tools/testing/selftests/kvm/lib/x86_64/ucall.c  | 2 +-
->   4 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/lib/aarch64/ucall.c b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-> index e0b0164e9af8..00be3ef195ca 100644
-> --- a/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-> +++ b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-> @@ -52,7 +52,7 @@ void ucall_init(struct kvm_vm *vm, void *arg)
->   	 * lower and won't match physical addresses.
->   	 */
->   	bits = vm->va_bits - 1;
-> -	bits = vm->pa_bits < bits ? vm->pa_bits : bits;
-> +	bits = min(vm->pa_bits, bits);
->   	end = 1ul << bits;
->   	start = end * 5 / 8;
->   	step = end / 16;
-> @@ -79,7 +79,7 @@ void ucall(uint64_t cmd, int nargs, ...)
->   	va_list va;
->   	int i;
->   
-> -	nargs = nargs <= UCALL_MAX_ARGS ? nargs : UCALL_MAX_ARGS;
-> +	nargs = min(nargs, UCALL_MAX_ARGS);
->   
->   	va_start(va, nargs);
->   	for (i = 0; i < nargs; ++i)
-> diff --git a/tools/testing/selftests/kvm/lib/riscv/ucall.c b/tools/testing/selftests/kvm/lib/riscv/ucall.c
-> index 9e42d8248fa6..34f16fe70ce8 100644
-> --- a/tools/testing/selftests/kvm/lib/riscv/ucall.c
-> +++ b/tools/testing/selftests/kvm/lib/riscv/ucall.c
-> @@ -53,7 +53,7 @@ void ucall(uint64_t cmd, int nargs, ...)
->   	va_list va;
->   	int i;
->   
-> -	nargs = nargs <= UCALL_MAX_ARGS ? nargs : UCALL_MAX_ARGS;
-> +	nargs = min(nargs, UCALL_MAX_ARGS);
->   
->   	va_start(va, nargs);
->   	for (i = 0; i < nargs; ++i)
-> diff --git a/tools/testing/selftests/kvm/lib/s390x/ucall.c b/tools/testing/selftests/kvm/lib/s390x/ucall.c
-> index 9d3b0f15249a..665267c1135d 100644
-> --- a/tools/testing/selftests/kvm/lib/s390x/ucall.c
-> +++ b/tools/testing/selftests/kvm/lib/s390x/ucall.c
-> @@ -22,7 +22,7 @@ void ucall(uint64_t cmd, int nargs, ...)
->   	va_list va;
->   	int i;
->   
-> -	nargs = nargs <= UCALL_MAX_ARGS ? nargs : UCALL_MAX_ARGS;
-> +	nargs = min(nargs, UCALL_MAX_ARGS);
->   
->   	va_start(va, nargs);
->   	for (i = 0; i < nargs; ++i)
-> diff --git a/tools/testing/selftests/kvm/lib/x86_64/ucall.c b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-> index a3489973e290..2ea31a0ebe30 100644
-> --- a/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-> +++ b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-> @@ -24,7 +24,7 @@ void ucall(uint64_t cmd, int nargs, ...)
->   	va_list va;
->   	int i;
->   
-> -	nargs = nargs <= UCALL_MAX_ARGS ? nargs : UCALL_MAX_ARGS;
-> +	nargs = min(nargs, UCALL_MAX_ARGS);
->   
->   	va_start(va, nargs);
->   	for (i = 0; i < nargs; ++i)
+Hello,
 
-Queued, thanks.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+WARNING in mntput_no_expire
 
-Paolo
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 4303 at fs/namespace.c:1225 mntput_no_expire+0x965/0xfc0 fs/namespace.c:1225
+Modules linked in:
+CPU: 1 PID: 4303 Comm: syz-executor.2 Not tainted 5.18.0-rc6-syzkaller-00009-gfeb9c5e19e91-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:mntput_no_expire+0x965/0xfc0 fs/namespace.c:1225
+Code: 05 00 00 48 8b 35 93 a4 dd 0b b9 01 00 00 00 bf 08 00 00 00 48 c7 c2 e0 fd f0 8b e8 c5 0e 72 ff e9 15 f9 ff ff e8 bb c0 9d ff <0f> 0b e9 ca f8 ff ff e8 af c0 9d ff 0f 0b e9 be f8 ff ff e8 a3 c0
+RSP: 0018:ffffc900039dfd78 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888018771d80 RSI: ffffffff81db8025 RDI: 0000000000000003
+RBP: 0000000000000008 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffffff81db78d8 R11: 0000000000000000 R12: 0000000000000002
+R13: ffff88807d666600 R14: dffffc0000000000 R15: ffffed100facccca
+FS:  00005555560e5400(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000555556a84848 CR3: 000000001a7cd000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ mntput+0x67/0x90 fs/namespace.c:1287
+ __fput+0x3ba/0x9d0 fs/file_table.c:333
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
+ exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:201
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:294
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f215003bd2b
+Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
+RSP: 002b:00007ffc71fd75e0 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 0000000000000004 RCX: 00007f215003bd2b
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000003
+RBP: 00007f215019d960 R08: 0000000000000000 R09: 00007ffc71fe1080
+R10: 0000000000000000 R11: 0000000000000293 R12: 0000000000016e46
+R13: 00007ffc71fd76e0 R14: 00007ffc71fd7700 R15: 0000000000000032
+ </TASK>
+
+
+Tested on:
+
+commit:         feb9c5e1 Merge tag 'for_linus' of git://git.kernel.org..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+console output: https://syzkaller.appspot.com/x/log.txt?x=10502459f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=79caa0035f59d385
+dashboard link: https://syzkaller.appspot.com/bug?extid=5b1e53987f858500ec00
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1786c8c6f00000
+

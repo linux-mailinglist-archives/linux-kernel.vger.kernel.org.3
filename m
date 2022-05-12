@@ -2,109 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8875525511
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 20:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C78952550E
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 20:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357779AbiELSmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 14:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35240 "EHLO
+        id S1357766AbiELSmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 14:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357775AbiELSmU (ORCPT
+        with ESMTP id S1351554AbiELSmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 14:42:20 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B427D16D5E1;
-        Thu, 12 May 2022 11:42:17 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id t5so7258737edw.11;
-        Thu, 12 May 2022 11:42:17 -0700 (PDT)
+        Thu, 12 May 2022 14:42:12 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC6169702
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 11:42:11 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id a22-20020a9d3e16000000b00606aeb12ab6so3326242otd.7
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 11:42:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=DQEjc9LLkazMYK7135d/LkRmF8/MHLi1SQKyaSXA8xw=;
-        b=jZZfOXalAzJbrSRhMn5DOxj+wmcmW9KHSrya9O+vcqx6LjKVmxrNPmQ8uvT4U4qKfH
-         JXpeYgoJRSHhJShmsrXh4wb5T/Ybz6n7+DkqSoToP3lVHJ64Thn+r3Cau/VLlMW636fm
-         aMlsyVlViVmzRIT5iU0NxzKOvb0WY3GRr7fnXaafsvkespQVAE6j/YLNCaS1bybuMl3o
-         hPH9hwAr3dC0j69dUd9UTFH5oE/1UAuZtWIGlsRgZuJeVRFnE5SrnvLVwDkD1ZBLHXxA
-         R0JkGUfRBIKzOO/EbIhVi9jOULidARk0FUbiN13rVgeeKE3Fkvh3h1t6qQIsj/fKsU/w
-         VMHg==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=2ktEM2WdQXhUkI4WC57ZsgNwZP50FQxfG+aaBGhL1/A=;
+        b=X84dqLkVxAqkq2YriqsNaydX5HWwTZIJ41RwxOz78cFKaBWcUViPGfxQQnUcKxODJU
+         jlRB3Elg852MYIjthVe2hc0onWRbJRVUKA34l44KQTcMpXQgOxe5HdlePDnD7l4gGpmK
+         0I71ECIHGd3G/uPaybBW+PILUaRLuQ7hXCD7A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=DQEjc9LLkazMYK7135d/LkRmF8/MHLi1SQKyaSXA8xw=;
-        b=EdneSaAeXHCp7nYmFq5yqVz4oRTzMOSXzPe9KA7Eh2ivhKYDruH6s6zsKzfyXOrswM
-         G3wO/Ga1HGl6HrtCuHHRk+H1HM0PImRy4DHrOxvnJbm+i5M7KoNccRkKN+YSps1y8uIf
-         jd1Dp79YTKEd1paULwSBGRG8dRFKy6RZi8FUN0ZeKWPUrbEDPvWiVNSMr0OtGYfL+US+
-         5g0sznZC9QwNcq3DCdIyQSEvLpFR87MdDCABIDchgz7IcVemS6/h7wTB884HJAO4CfFO
-         BiSdWpQE8seAJLdFFnmzfWL2PJqKtvIM6dwojBeI/1vuUP20+hCv63Fe/fbBwiGg29p7
-         OGqg==
-X-Gm-Message-State: AOAM5319hwada/kVQ2X1C6MN5+ESxR0TFf1ZsjaSeNlyrMO4QetzxVCq
-        b8LyUpIQMjKSg3JeZMxMXFEAw09cbmTTaLgZtRodtMhDIlo=
-X-Google-Smtp-Source: ABdhPJyzzLMwvQTmiiVhe12k+xkHAfUJ87/jKzAZePGBkf2qmXfuAUfq4uQICrd6JfXAgtvLTKpdakL3RWNZgqSt7Mc=
-X-Received: by 2002:a05:6402:1770:b0:425:b2b5:6248 with SMTP id
- da16-20020a056402177000b00425b2b56248mr36119207edb.281.1652380935977; Thu, 12
- May 2022 11:42:15 -0700 (PDT)
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=2ktEM2WdQXhUkI4WC57ZsgNwZP50FQxfG+aaBGhL1/A=;
+        b=N1evFnnOPM4Vp3uNlsnTjPWGT0E4sMLuY0dRuVSS8A3vX7oUJEyK2UVeHBYMMkJAxm
+         eq9ayOtCMecIMUliEU3I5xNsYv78MPU2gctsQAU4Utkco53RdvvAiLk+9IgnDPktJOMP
+         Uh+QbbrCXVFy5mL4EbZPLubG0OmXBiSNztG2UxBQDjV+zp+bmNnWzOuU1OUVAh2pX23R
+         IQbnkq+kSewOKvc02PJ6ZTQtxm1zLcS82mfU7oHMzS/Y5jpF+p7Gt4rMgme9ZPjCaHG7
+         nGoDRNYYLfdJRCzPGs4PdsqPtquIcbWaXsXpcZwacLiTKY/gXO+EUlVzay0e5VCDtl8f
+         bj6w==
+X-Gm-Message-State: AOAM53109OBAHkI3JqPD5RvLqvkYv+TTRXV3MBjQxlvteswx5mODzW82
+        50GlL3TvUXcaq5Bo935RCSFizFE0jh30tNbOxkthvw==
+X-Google-Smtp-Source: ABdhPJwYZomkma75bHZi41atC+Y+imFA2JK98Jirq9TfqEF/WaUpsCWBVXGwHAmgE8CNURqOJUtqAkCO4SquH4yYBm0=
+X-Received: by 2002:a9d:63cd:0:b0:606:9e7f:79f8 with SMTP id
+ e13-20020a9d63cd000000b006069e7f79f8mr532146otl.77.1652380930973; Thu, 12 May
+ 2022 11:42:10 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 12 May 2022 11:42:10 -0700
 MIME-Version: 1.0
-From:   Test Bot <zgrieee@gmail.com>
-Date:   Thu, 12 May 2022 22:42:05 +0400
-Message-ID: <CAOFRbGmGr2Z_sbYmE0SZT48CFkNAWVABnC_4V6x9PzZw-LJO4w@mail.gmail.com>
-Subject: ERROR: drivers: iscsi: iscsi_target.c
-To:     linux-kernel@vger.kernel.org
-Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, torvalds@linux-foundation.org
+In-Reply-To: <20220512090429.1.I9804fcd5d6c8552ab25f598dd7a3ea71b15b55f0@changeid>
+References: <20220512090429.1.I9804fcd5d6c8552ab25f598dd7a3ea71b15b55f0@changeid>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 12 May 2022 11:42:10 -0700
+Message-ID: <CAE-0n51fD6H2+JmFLMWyWuamcXDWzLQaXuWpnanvwO8rDQcuKQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] dt-bindings: arm: qcom: Add sc7180 Chromebook board bindings
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Alexandru M Stan <amstan@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        "Joseph S . Barrera III" <joebar@chromium.org>,
+        Julius Werner <jwerner@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Quoting Douglas Anderson (2022-05-12 09:04:45)
+> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+> index 5c06d1bfc046..399be67eb5d2 100644
+> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
+> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+> @@ -214,11 +214,191 @@ properties:
+>                - qcom,ipq8074-hk10-c2
+>            - const: qcom,ipq8074
+>
 
-I automatically test (RC) kernel and caught ERROR word.
-Please ignore, if its unimportant.
+Side note: The top of this file describes a scheme that is basically not
+used by any compatibles in this file. I came up with that scheme many
+years ago so that we could upstream DTS files but still be able to
+generate the magic numbers that the bootloader picked DTBs by. I hope
+nobody assumes that description applies to "google," prefixed
+compatibles.
 
-Kernel: 5.18-rc6
-Arch: x86_64 (SMP)
-Compiler: 7.5.0 (gcc)
+Can the description can be amended to indicate the "google," scheme with
+rev and sku details? Or a bindings/arm/chrome.yaml file could be made
+and all google prefix chromeos board compatibles could be put in there
+regardless of SoC used.
 
-Codebase Block:
+> +      # Qualcomm Technologies, Inc. SC7180 IDP
+>        - items:
+>            - enum:
+>                - qcom,sc7180-idp
+>            - const: qcom,sc7180
+>
+> +      # Google CoachZ (rev1 - 2)
 
-void iscsit_thread_get_cpumask(struct iscsi_conn *conn)
-{
-        int ord, cpu;
-        cpumask_t conn_allowed_cpumask;
-
-        cpumask_and(&conn_allowed_cpumask, iscsit_global->allowed_cpumask,
-                    cpu_online_mask);
-
-       cpumask_clear(conn->conn_cpumask);
-        ord =3D conn->bitmap_id % cpumask_weight(&conn_allowed_cpumask);
-        for_each_cpu(cpu, &conn_allowed_cpumask) {
-                if (ord-- =3D=3D 0) {
-                        cpumask_set_cpu(cpu, conn->conn_cpumask);
-                        return;
-                }
-        }
-        dump_stack();
-        cpumask_setall(conn->conn_cpumask);
-}
-
-Compiler  Log:
-
-drivers/target/iscsi/iscsi_target_configfs.c: In function
-=E2=80=98lio_target_wwn_cpus_allowed_list_store=E2=80=99:
-drivers/target/iscsi/iscsi_target_configfs.c:1157:1: warning: the
-frame size of 1032 bytes is larger than 1024 bytes
-[-Wframe-larger-than=3D]
-
-drivers/target/iscsi/iscsi_target.c: In function =E2=80=98iscsit_thread_get=
-_cpumask=E2=80=99:
-drivers/target/iscsi/iscsi_target.c:3625:1: warning: the frame size of
-1032 bytes is larger than 1024 bytes [-Wframe-larger-than=3D]
+Can we follow the design of rockchip.yaml and also include the marketing
+name (if published)? That helps folks match things up quicker.

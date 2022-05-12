@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2147F525803
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 00:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FF94525805
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 00:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359320AbiELWxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 18:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43268 "EHLO
+        id S1359331AbiELWxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 18:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350110AbiELWw7 (ORCPT
+        with ESMTP id S1356737AbiELWxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 18:52:59 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2BA2685F6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 15:52:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652395978; x=1683931978;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KesB9TkFdl9cmnTv7mRpkD//DnYASuepMhknEjHthiQ=;
-  b=NkpKVio4EfjNeshi7X7WkcBDDbaRdLm8P/4DFxSQm8uNdvMIThXrDWjz
-   yI0HlCDNpenXOPCdNZtGAevEuBKqupUhjDJSPHSDlnE4403mudVA4yaWX
-   BLaFe38Ntv54O21rTVWz2iRTTWzUytRZHKx0qWov6JBeNwcuSHtskjRcU
-   +ngWj/oKNnoWsl2edbsiZYORIj81A2fO0fEdgppGB9k+PYpGGCr8qQkVu
-   WwKu9gSQeuud9luSduh/hWURfdzwuktbEGr7smd/rQo2ahQB7SdlFPw+C
-   Fzi+yz8d4a/UXtV/90VhEphFGpAvkgfjANrVhKuS6Stkn7sofcLT9qFOU
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="330757634"
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="330757634"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 15:52:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="624605132"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 12 May 2022 15:52:56 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1npHfz-000L12-Lt;
-        Thu, 12 May 2022 22:52:55 +0000
-Date:   Fri, 13 May 2022 06:52:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jagan Teki <jagan@amarulasolutions.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Subject: [mszyprow:v5.18-next-20220511-dsi-rework 14/35] ERROR: modpost:
- "dsi_driver" [drivers/gpu/drm/exynos/exynosdrm.ko] undefined!
-Message-ID: <202205130603.OtcbHnd9-lkp@intel.com>
+        Thu, 12 May 2022 18:53:12 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6AB5268646
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 15:53:08 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id h186so3224261pgc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 15:53:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fastly.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=+VaX5bEkt76Upj3MV7wwCv/6t4DebBt0Na7sEL1aFWk=;
+        b=RLIUxCf7DyHsfTc9r+srDbeWsNAe7EbL+jFZYOZRR4BWW+qLVAuoHKGuWgN/hyuWSh
+         XqGnKskIo2YPhI43QZSG0tP+o/2rDa+mHXKqbquaFpk5J+QzlCr+uiLn2DlvD54vaeol
+         RRsMufH6It/H/btgUCKnq7wQ4dOP5Bq0BUSjA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=+VaX5bEkt76Upj3MV7wwCv/6t4DebBt0Na7sEL1aFWk=;
+        b=i5VsXfd3E5LBJSHnU4WJl4m06Mcf1DFPTwFuY1GZXgh05w7826tQPy7kbCPsOqZauc
+         gnSmqYmQgxPxoj3/gMOrC31JuOEvl30mV9FqEjoNnnHOtYKVlm+D7SLlNNiDVeSPJkJ1
+         ZdNB9jgWhxpLnVAxG9asGZcnuBx8FUAHZ1XZkJ2UISXULjpLdIFIIJmqyFBmkZ2hq8ZT
+         oBZjcv0LwChe7sEz5OvxokEvhEDHYRmcExyHzYmfRdEm+r8YwGYCcOvQEEzJpyt79GnP
+         AS5h2L8/Pz8loDPa9hrsesB//Q6/onlVHxKaQhMzNcILBSLYOoZqSHgloXPB3cEa9VfO
+         wpEw==
+X-Gm-Message-State: AOAM533DJYVjKV+wrfxPMDjRoWqF26UYyJ9RpCQe+zyXOu4pGCUHhUAS
+        +YHfAHkJhSWwhlF9hyIAz92wxQ==
+X-Google-Smtp-Source: ABdhPJw8D9Yn2NvhdDbwVV4UNIZuZQOhxhAbXeSXhinVOmBc47nuHD4rdSNx10K2su40x/WsCjhq2Q==
+X-Received: by 2002:a63:a553:0:b0:3db:48a0:f506 with SMTP id r19-20020a63a553000000b003db48a0f506mr1444062pgu.456.1652395988124;
+        Thu, 12 May 2022 15:53:08 -0700 (PDT)
+Received: from fastly.com (c-73-223-190-181.hsd1.ca.comcast.net. [73.223.190.181])
+        by smtp.gmail.com with ESMTPSA id w20-20020a170902ca1400b0015f391f56b7sm358600pld.305.2022.05.12.15.53.06
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 12 May 2022 15:53:07 -0700 (PDT)
+Date:   Thu, 12 May 2022 15:53:05 -0700
+From:   Joe Damato <jdamato@fastly.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: Re: [RFC,net-next,x86 0/6] Nontemporal copies in unix socket write
+ path
+Message-ID: <20220512225302.GA74948@fastly.com>
+References: <1652241268-46732-1-git-send-email-jdamato@fastly.com>
+ <20220511162520.6174f487@kernel.org>
+ <20220512010153.GA74055@fastly.com>
+ <20220512124608.452d3300@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20220512124608.452d3300@kernel.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,31 +72,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/mszyprow/linux.git v5.18-next-20220511-dsi-rework
-head:   65cb4959430021041f1e68ef98a6ec541d5891aa
-commit: 395cab08cbac6e4028dafce068414ea43244a592 [14/35] drm: bridge: Add Samsung DSIM bridge driver
-config: arm64-randconfig-r034-20220512 (https://download.01.org/0day-ci/archive/20220513/202205130603.OtcbHnd9-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/mszyprow/linux/commit/395cab08cbac6e4028dafce068414ea43244a592
-        git remote add mszyprow https://github.com/mszyprow/linux.git
-        git fetch --no-tags mszyprow v5.18-next-20220511-dsi-rework
-        git checkout 395cab08cbac6e4028dafce068414ea43244a592
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+On Thu, May 12, 2022 at 12:46:08PM -0700, Jakub Kicinski wrote:
+> On Wed, 11 May 2022 18:01:54 -0700 Joe Damato wrote:
+> > > Is there a practical use case?  
+> > 
+> > Yes; for us there seems to be - especially with AMD Zen2. I'll try to
+> > describe such a setup and my synthetic HTTP benchmark results.
+> > 
+> > Imagine a program, call it storageD, which is responsible for storing and
+> > retrieving data from a data store. Other programs can request data from
+> > storageD via communicating with it on a Unix socket.
+> > 
+> > One such program that could request data via the Unix socket is an HTTP
+> > daemon. For some client connections that the HTTP daemon receives, the
+> > daemon may determine that responses can be sent in plain text.
+> > 
+> > In this case, the HTTP daemon can use splice to move data from the unix
+> > socket connection with storageD directly to the client TCP socket via a
+> > pipe. splice saves CPU cycles and avoids incurring any memory access
+> > latency since the data itself is not accessed.
+> > 
+> > Because we'll use splice (instead of accessing the data and potentially
+> > affecting the CPU cache) it is advantageous for storageD to use NT copies
+> > when it writes to the Unix socket to avoid evicting hot data from the CPU
+> > cache. After all, once the data is copied into the kernel on the unix
+> > socket write path, it won't be touched again; only spliced.
+> > 
+> > In my synthetic HTTP benchmarks for this setup, we've been able to increase
+> > network throughput of the the HTTP daemon by roughly 30% while reducing
+> > the system time of storageD. We're still collecting data on production
+> > workloads.
+> > 
+> > The motivation, IMHO, is very similar to the motivation for
+> > NETIF_F_NOCACHE_COPY, as far I understand.
+> > 
+> > In some cases, when an application writes to a network socket the data
+> > written to the socket won't be accessed again once it is copied into the
+> > kernel. In these cases, NETIF_F_NOCACHE_COPY can improve performance and
+> > helps to preserve the CPU cache and avoid evicting hot data.
+> > 
+> > We get a sizable benefit from this option, too, in situations where we
+> > can't use splice and have to call write to transmit data to client
+> > connections. We want to get the same benefit of NETIF_F_NOCACHE_COPY, but
+> > when writing to Unix sockets as well.
+> > 
+> > Let me know if that makes it more clear.
+> 
+> Makes sense, thanks for the explainer.
+> 
+> > > The patches look like a lot of extra indirect calls.  
+> > 
+> > Yup. As I mentioned in the cover letter this was mostly a PoC that seems to
+> > work and increases network throughput in a real world scenario.
+> > 
+> > If this general line of thinking (NT copies on write to a Unix socket) is
+> > acceptable, I'm happy to refactor the code however you (and others) would
+> > like to get it to an acceptable state.
+> 
+> My only concern is that in post-spectre world the indirect calls are
+> going to be more expensive than an branch would be. But I'm not really
+> a mirco-optimization expert :)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Makes sense; neither am I, FWIW :)
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+For whatever reason, on AMD Zen2 it seems that using non-temporal
+instructions when copying data sizes above the L2 size is a huge
+performance win (compared to the kernel's normal temporal copy code) even
+if that size fits in L3.
 
->> ERROR: modpost: "dsi_driver" [drivers/gpu/drm/exynos/exynosdrm.ko] undefined!
+This is why both NETIF_F_NOCACHE_COPY and MSG_NTCOPY from this series seem
+to have such a large, measurable impact in the contrived benchmark I
+included in the cover letter and also in synthetic HTTP workloads.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I'll plan on including numbers from the benchmark program on a few other
+CPUs I have access to in the cover letter for any follow-up RFCs or
+revisions.
+
+As a data point, there has been similar-ish work done in glibc [1] to
+determine when non-temporal copies should be used on Zen2 based on the size
+of the copy. I'm certainly not a micro-arch expert by any stretch, but the
+glibc work plus the benchmark results I've measured seem to suggest that
+NT-copies can be very helpful on Zen2.
+
+Two questions for you:
+
+ 1. Do you have any strong opinions on the sendmsg flag vs a socket option?
+
+ 2. If I can think of a way to avoid the indirect calls, do you think this
+    series is ready for a v1? I'm not sure if there's anything major that
+    needs to be addressed aside from the indirect calls.
+
+I'll include some documentation and cosmetic cleanup in the v1, as well.
+
+Thanks,
+Joe
+
+[1]: https://sourceware.org/pipermail/libc-alpha/2020-October/118895.html

@@ -2,62 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8053C524559
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 08:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE47352455C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 08:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350117AbiELGEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 02:04:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
+        id S242402AbiELGFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 02:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350110AbiELGEm (ORCPT
+        with ESMTP id S1350110AbiELGFr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 02:04:42 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F358F21B16D;
-        Wed, 11 May 2022 23:04:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652335480; x=1683871480;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GUnQO9JdQMr0wO2xVWFn0ckakjuuaV315eTIAdrWDCE=;
-  b=EnwHnJK+BA/AWVITuciBndPydLn1ivzWSRLKMAygW/88+3MXqRZw3zwD
-   G/QEpn1TXvs0LSEjNAGrf/NQNrpG/RkVatyOqbB8OCpc+pogFfmscolKj
-   fMYcZ+TEZMuw4bAx2BxJHBjvu8JIyXrOHOFC8ISpCNLAjDKHavC47mGd3
-   rIFAl7O1uINUPZp+8i1AqpCQFLYUDECJBqWb/zHQlOzatmLiPN8J/lBNQ
-   6jNlhdoPb9lh1Db/4U206/ckbNh7A9xmtj34SYYXSKQbqBcpVEdUwuFe3
-   HVI0IzvKTZTnMmAyddaKyd8FJJpmVL2/ouw4sSn84gy8OS2xKhJN2TOKo
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="249796510"
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="249796510"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 23:04:37 -0700
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="739540188"
-Received: from xsang-optiplex-9020.sh.intel.com (HELO xsang-OptiPlex-9020) ([10.239.159.143])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 23:04:35 -0700
-Date:   Thu, 12 May 2022 14:03:44 +0800
-From:   Oliver Sang <oliver.sang@intel.com>
-To:     Pablo Neira Ayuso <pablo@netfilter.org>
-Cc:     Sven Auhagen <Sven.Auhagen@voleatech.de>,
-        0day robot <lkp@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        netfilter-devel@vger.kernel.org
-Subject: Re: [nf_flowtable]  2cd764935d:
- kernel-selftests.netfilter.nft_flowtable.sh.ipsec_tunnel_mode_for_ns1/ns2.fail
-Message-ID: <20220512060344.GA31697@xsang-OptiPlex-9020>
-References: <20220427071515.qfgqbs6uzoowwnkg@SvensMacbookPro.hq.voleatech.com>
- <20220510092803.GA3969@xsang-OptiPlex-9020>
- <Yno3VXOUEzAOSdDe@salvia>
+        Thu, 12 May 2022 02:05:47 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B02631D;
+        Wed, 11 May 2022 23:05:45 -0700 (PDT)
+X-UUID: 94997701536f472dbebcae6c7ba853c8-20220512
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:6e4b1bcc-5816-4e8c-b62b-de4f6de9f4ab,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-INFO: VERSION:1.1.4,REQID:6e4b1bcc-5816-4e8c-b62b-de4f6de9f4ab,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:45
+X-CID-META: VersionHash:faefae9,CLOUDID:d7535448-e22d-4f1a-9d3f-55c4a2b00ea4,C
+        OID:cb026531e4b5,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 94997701536f472dbebcae6c7ba853c8-20220512
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1604091499; Thu, 12 May 2022 14:05:40 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 12 May 2022 14:05:39 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 12 May 2022 14:05:38 +0800
+Message-ID: <ca85977bcff2e3de925d7ab834b8654ec5ddf8c1.camel@mediatek.com>
+Subject: Re: [PATCH v6 00/10] cpufreq: mediatek: Cleanup and support MT8183
+ and MT8186
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     <rafael@kernel.org>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
+        <roger.lu@mediatek.com>, <hsinyi@google.com>,
+        <khilman@baylibre.com>, <angelogioacchino.delregno@collabora.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 12 May 2022 14:05:39 +0800
+In-Reply-To: <20220512054825.aqe4g4lupuqj3rcq@vireshk-i7>
+References: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
+         <20220506042004.hqzpb66shak4y7rz@vireshk-i7>
+         <86851bd03128cc61082d516ebff929d3637063cb.camel@mediatek.com>
+         <20220512052732.iqphgpveoyrqjlqg@vireshk-i7>
+         <af82434adea0b648d74ed5ffd123e0faaaac6508.camel@mediatek.com>
+         <20220512054825.aqe4g4lupuqj3rcq@vireshk-i7>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yno3VXOUEzAOSdDe@salvia>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,48 +74,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pablo Neira Ayuso,
+On Thu, 2022-05-12 at 11:18 +0530, Viresh Kumar wrote:
+> On 12-05-22, 13:33, Rex-BC Chen wrote:
+> > Matthias is not the member of mediatek, so I think we still need
+> > his
+> > feedback for these three patches.
+> 
+> Please ping him and ask for his feedback then.
+> 
 
-On Tue, May 10, 2022 at 11:58:45AM +0200, Pablo Neira Ayuso wrote:
-> Hi,
-> 
-> On Tue, May 10, 2022 at 05:28:03PM +0800, kernel test robot wrote:
-> [...] 
-> > # selftests: netfilter: nft_flowtable.sh
-> > # PASS: netns routing/connectivity: ns1 can reach ns2
-> > # FAIL: file mismatch for ns1 -> ns2
-> > # -rw------- 1 root root 227328 May  8 22:05 /tmp/tmp.fnnwOCWcA4
-> > # -rw------- 1 root root 99388 May  8 22:05 /tmp/tmp.LL8ohakyGQ
-> > # FAIL: file mismatch for ns1 <- ns2
-> > # -rw------- 1 root root 296960 May  8 22:05 /tmp/tmp.1DlwdJLSUX
-> > # -rw------- 1 root root 15584 May  8 22:05 /tmp/tmp.HnObAriWng
-> > # FAIL: flow offload for ns1/ns2:
-> > # table inet filter {
-> > # 	flowtable f1 {
-> > # 		hook ingress priority 0
-> > # 		devices = { veth0, veth1 }
-> > # 	}
-> > # 
-> > # 	chain forward {
-> > # 		type filter hook forward priority 0; policy drop;
-> > # 		oif "veth1" tcp dport 12345 flow offload @f1 counter packets 0 bytes 0
-> > # 		tcp dport 12345 meta length > 200 ct mark set 0x00000001 counter packets 14 bytes 103660
-> > # 		tcp flags fin,rst ct mark set 0x00000000 accept
-> > # 		meta length > 1500 accept comment "something-to-grep-for"
-> > # 		tcp sport 12345 ct mark 0x00000001 counter packets 57 bytes 8220 log prefix "mark failure " drop
-> > # 		ct state established,related accept
-> > # 		meta length < 200 oif "veth1" tcp dport 12345 counter packets 1 bytes 60 accept
-> > # 		meta l4proto icmp accept
-> > # 		meta l4proto ipv6-icmp accept
-> > # 	}
-> > # }
-> > # /dev/stdin:4:73-74: Error: syntax error, unexpected to, expecting newline or semicolon
-> > #       meta iif "veth0" ip daddr 10.6.6.6 tcp dport 1666 counter dnat ip to 10.0.2.99:12345
-> > #                                                                         ^^
-> 
-> What nftables userspace version is kbuild robot using?
-> 
-> It seems this rule fails to load, looks like a unrelated issue?
+ok, I will do this.
+Thanks!
 
-sorry for a false report. we realized that we need upgrade our toolchain.
+BRs,
+Rex
 

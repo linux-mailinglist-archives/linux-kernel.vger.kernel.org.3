@@ -2,156 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C6AF524735
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 672A252473C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:44:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351131AbiELHnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 03:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
+        id S1351140AbiELHoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 03:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351119AbiELHn2 (ORCPT
+        with ESMTP id S1351099AbiELHoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 03:43:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0DC1A15D7;
-        Thu, 12 May 2022 00:43:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A6AC761EC6;
-        Thu, 12 May 2022 07:43:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A2A1C34100;
-        Thu, 12 May 2022 07:43:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652341405;
-        bh=/jv1RPpECihnpiFwTxMxfDy7BEiXHhX9DxelFbnjXMI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Kq3HcyCEBSOk0hL014f1nFXp8zGkv+ZiXpMOprfqAPK0SeY3sNnNk5+ciybqevgCK
-         bNt3IHeISfcuWFpdX3t7bD9tdkR/A7Dg5o/e7SfNc7/xzMlSLOrOMrJKtQ2KxEjWmw
-         5SOaDsVXRAlJDu4frl3ASj7Mr9mjS5v49o0vGKna5j7Vc4qkRIsdf5tczYfz9UNyVp
-         /Kdy5KSu8AC5kdVZw+mEs7Nra9xiF7wImUtbr12Q7M5vqlmR7YIG16+ZNrOjaA8Cpn
-         ual8WVmehZu2V/nfwR5QY1KQv2ETw/GBb3peNpNpnIXKN0V/nEyS5FwZVa/hXSskv3
-         u/xv6sD9lX9dA==
-Date:   Thu, 12 May 2022 13:13:12 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Sibi Sankar <quic_sibis@quicinc.com>
-Cc:     bjorn.andersson@linaro.org, jassisinghbrar@gmail.com,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        agross@kernel.org, Prasad Sodagudi <quic_psodagud@quicinc.com>
-Subject: Re: [PATCH v2] mailbox: qcom-ipcc: Log the pending interrupt during
- resume
-Message-ID: <20220512074312.GA35848@thinkpad>
-References: <1652251404-30562-1-git-send-email-quic_sibis@quicinc.com>
+        Thu, 12 May 2022 03:44:08 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0E41A15E5
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:44:05 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id c12so5190146edv.10
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:44:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DrDbGhLo7XaClO51j9YJvUywtHQ0+/I5lMy5wJbGhKc=;
+        b=DiruNwr0imBp+10H53dtlHhIGwryjAwAWWCxLchPrV+5Ds5esyMWKjS3HAq8f4h/7O
+         VZ8MmEQaRkIYQ8sFGjoZL7WHBNcERhJ9n5ZHJMUFreePm93eQoOr4FDrKr4sWpp1fB4N
+         paupObkAaW1R41KdMj35taLnJ2UhWNnuoOsss=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DrDbGhLo7XaClO51j9YJvUywtHQ0+/I5lMy5wJbGhKc=;
+        b=g6c+atKDr80rO98lI0qqLjxUsbz8wl9J1kM/XjjLWv/MNApjHslreQALfOVfMVBAXT
+         Q+2zPu+znH4pov9Hi+Dp2Gat5glipMylWNgTWDHPhCvdpCWt8tITwAJPO+kliZxw2cgn
+         EL7ejKJf/0nz8Sdx1oXT/Pl4u5Ksmw0C+7xaxNbS+Q/m8phiRJXkU06WBe/zt1RtJjA3
+         Sgdw/3Ec9S5CUiAq8jeYaJ6o0osryGkXjZjvoNXta6pBsiogGR8I2EjoZ8yBjeS5TFl4
+         UNf529h4GwDafv05UaJTDAUqqaoiGDxl8PRB6IpxzCl+cOk6KqHqXKWlxMbLVIW8yTXR
+         cWyQ==
+X-Gm-Message-State: AOAM533UwyrCqVFd6mM/WfzlxlJlTj+lwYZDV+gVbLO+tr3oRh8cq6yT
+        OFnKj3Xf9UoJuWpk3uzDgvdmzQ==
+X-Google-Smtp-Source: ABdhPJx58tfL7OheWyZCoXsZi7LTgs1k6P5QALJf6eVDOoqqZCFTxJOEZzC3/cKaG5YF/CTWwcEUwg==
+X-Received: by 2002:a05:6402:4241:b0:428:177b:5fd with SMTP id g1-20020a056402424100b00428177b05fdmr32950480edb.193.1652341444209;
+        Thu, 12 May 2022 00:44:04 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i.station (net-188-217-59-245.cust.vodafonedsl.it. [188.217.59.245])
+        by smtp.gmail.com with ESMTPSA id cm10-20020a0564020c8a00b0042617ba63c0sm2192721edb.74.2022.05.12.00.44.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 00:44:03 -0700 (PDT)
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Cc:     tommaso.merciai@amarulasolutions.com,
+        linux-amarula@amarulasolutions.com, linuxfancy@googlegroups.com,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: max98088: add support for reg_4a_cfg_bypass reg
+Date:   Thu, 12 May 2022 09:43:58 +0200
+Message-Id: <20220512074359.446999-1-tommaso.merciai@amarulasolutions.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1652251404-30562-1-git-send-email-quic_sibis@quicinc.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 12:13:24PM +0530, Sibi Sankar wrote:
-> From: Prasad Sodagudi <quic_psodagud@quicinc.com>
-> 
-> Enable logging of the pending interrupt that triggered device wakeup. This
-> logging information helps to debug IRQs that cause periodic device wakeups
-> and prints the detailed information of pending IPCC interrupts instead of
-> the generic "Resume caused by IRQ 17, ipcc".
-> 
-> Scenario: Device wakeup caused by Modem crash
-> Logs:
-> qcom-ipcc mailbox: virq: 182 triggered client-id: 2; signal-id: 2
-> 
-> From the IPCC bindings it can further understood that the client here is
-> IPCC_CLIENT_MPSS and the signal was IPCC_MPROC_SIGNAL_SMP2P.
-> 
-> Signed-off-by: Prasad Sodagudi <quic_psodagud@quicinc.com>
-> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-> ---
-> 
-> V2:
->  * Fix build error when ipcc is a module [Kernel Test Bot]
-> 
->  drivers/mailbox/qcom-ipcc.c | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
-> 
-> diff --git a/drivers/mailbox/qcom-ipcc.c b/drivers/mailbox/qcom-ipcc.c
-> index c5d963222014..21c071ec119c 100644
-> --- a/drivers/mailbox/qcom-ipcc.c
-> +++ b/drivers/mailbox/qcom-ipcc.c
-> @@ -254,6 +254,28 @@ static int qcom_ipcc_setup_mbox(struct qcom_ipcc *ipcc,
->  	return devm_mbox_controller_register(dev, mbox);
->  }
->  
-> +#ifdef CONFIG_PM_SLEEP
+Add mixer controls support for M98088_REG_4A_CFG_BYPASS register
 
-You don't need this guard anymore. Please see below.
+References:
+ - https://datasheets.maximintegrated.com/en/ds/MAX98089.pdf p71, p113
 
-> +static int qcom_ipcc_pm_resume(struct device *dev)
-> +{
-> +	struct qcom_ipcc *ipcc = dev_get_drvdata(dev);
-> +	u32 hwirq;
-> +	int virq;
-> +
-> +	hwirq = readl(ipcc->base + IPCC_REG_RECV_ID);
-> +	if (hwirq == IPCC_NO_PENDING_IRQ)
-> +		return 0;
-> +
-> +	virq = irq_find_mapping(ipcc->irq_domain, hwirq);
-> +
-> +	dev_info(dev, "virq: %d triggered client-id: %ld; signal-id: %ld\n", virq,
-> +		 FIELD_GET(IPCC_CLIENT_ID_MASK, hwirq), FIELD_GET(IPCC_SIGNAL_ID_MASK, hwirq));
-> +
+Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+---
+ sound/soc/codecs/max98088.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Does this really need to be dev_info? This looks like a dev_dbg() material to
-me.
-
-> +	return 0;
-> +}
-> +#else
-> +#define qcom_ipcc_pm_resume NULL
-> +#endif
-> +
->  static int qcom_ipcc_probe(struct platform_device *pdev)
->  {
->  	struct qcom_ipcc *ipcc;
-> @@ -324,6 +346,10 @@ static const struct of_device_id qcom_ipcc_of_match[] = {
->  };
->  MODULE_DEVICE_TABLE(of, qcom_ipcc_of_match);
->  
-> +static const struct dev_pm_ops qcom_ipcc_dev_pm_ops = {
-> +	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(NULL, qcom_ipcc_pm_resume)
-> +};
-> +
->  static struct platform_driver qcom_ipcc_driver = {
->  	.probe = qcom_ipcc_probe,
->  	.remove = qcom_ipcc_remove,
-> @@ -331,6 +357,7 @@ static struct platform_driver qcom_ipcc_driver = {
->  		.name = "qcom-ipcc",
->  		.of_match_table = qcom_ipcc_of_match,
->  		.suppress_bind_attrs = true,
-> +		.pm = &qcom_ipcc_dev_pm_ops,
-
-You can use the new pm_sleep_ptr() macro to avoid the PM_SLEEP guard.
-
-		.pm = pm_sleep_ptr(&qcom_ipcc_dev_pm_ops),
-
-Thanks,
-Mani
-
->  	},
->  };
->  
-> -- 
-> 2.7.4
-> 
-
+diff --git a/sound/soc/codecs/max98088.c b/sound/soc/codecs/max98088.c
+index 429717d4ac5a..f8ec2f164e08 100644
+--- a/sound/soc/codecs/max98088.c
++++ b/sound/soc/codecs/max98088.c
+@@ -486,6 +486,11 @@ static const struct snd_kcontrol_new max98088_snd_controls[] = {
+        SOC_SINGLE("EQ1 Switch", M98088_REG_49_CFG_LEVEL, 0, 1, 0),
+        SOC_SINGLE("EQ2 Switch", M98088_REG_49_CFG_LEVEL, 1, 1, 0),
+ 
++       SOC_SINGLE("SPK Bypass Switch", M98088_REG_4A_CFG_BYPASS, 0, 1, 0),
++       SOC_SINGLE("REC Bypass Switch", M98088_REG_4A_CFG_BYPASS, 1, 1, 0),
++       SOC_SINGLE("MIC2 Bypass Switch", M98088_REG_4A_CFG_BYPASS, 4, 1, 0),
++       SOC_SINGLE("INA Bypass Switch", M98088_REG_4A_CFG_BYPASS, 7, 1, 0),
++
+        SOC_ENUM("EX Limiter Mode", max98088_exmode_enum),
+        SOC_ENUM("EX Limiter Threshold", max98088_ex_thresh_enum),
+ 
 -- 
-மணிவண்ணன் சதாசிவம்
+2.25.1
+

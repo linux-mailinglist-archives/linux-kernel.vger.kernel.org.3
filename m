@@ -2,90 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE47352455C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 08:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91EA9524562
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 08:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242402AbiELGFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 02:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42120 "EHLO
+        id S1350140AbiELGJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 02:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350110AbiELGFr (ORCPT
+        with ESMTP id S1350110AbiELGJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 02:05:47 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B02631D;
-        Wed, 11 May 2022 23:05:45 -0700 (PDT)
-X-UUID: 94997701536f472dbebcae6c7ba853c8-20220512
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:6e4b1bcc-5816-4e8c-b62b-de4f6de9f4ab,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.4,REQID:6e4b1bcc-5816-4e8c-b62b-de4f6de9f4ab,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:faefae9,CLOUDID:d7535448-e22d-4f1a-9d3f-55c4a2b00ea4,C
-        OID:cb026531e4b5,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 94997701536f472dbebcae6c7ba853c8-20220512
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1604091499; Thu, 12 May 2022 14:05:40 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 12 May 2022 14:05:39 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 12 May 2022 14:05:38 +0800
-Message-ID: <ca85977bcff2e3de925d7ab834b8654ec5ddf8c1.camel@mediatek.com>
-Subject: Re: [PATCH v6 00/10] cpufreq: mediatek: Cleanup and support MT8183
- and MT8186
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     <rafael@kernel.org>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
-        <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
-        <roger.lu@mediatek.com>, <hsinyi@google.com>,
-        <khilman@baylibre.com>, <angelogioacchino.delregno@collabora.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 12 May 2022 14:05:39 +0800
-In-Reply-To: <20220512054825.aqe4g4lupuqj3rcq@vireshk-i7>
-References: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
-         <20220506042004.hqzpb66shak4y7rz@vireshk-i7>
-         <86851bd03128cc61082d516ebff929d3637063cb.camel@mediatek.com>
-         <20220512052732.iqphgpveoyrqjlqg@vireshk-i7>
-         <af82434adea0b648d74ed5ffd123e0faaaac6508.camel@mediatek.com>
-         <20220512054825.aqe4g4lupuqj3rcq@vireshk-i7>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 12 May 2022 02:09:20 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EDC104C83;
+        Wed, 11 May 2022 23:09:16 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VCzTSH7_1652335746;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VCzTSH7_1652335746)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 12 May 2022 14:09:14 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     wellslutw@gmail.com
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, p.zabel@pengutronix.de, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH v2] net: ethernet: Use swap() instead of open coding it
+Date:   Thu, 12 May 2022 14:09:05 +0800
+Message-Id: <20220512060905.33744-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-12 at 11:18 +0530, Viresh Kumar wrote:
-> On 12-05-22, 13:33, Rex-BC Chen wrote:
-> > Matthias is not the member of mediatek, so I think we still need
-> > his
-> > feedback for these three patches.
-> 
-> Please ping him and ask for his feedback then.
-> 
+Clean the following coccicheck warning:
 
-ok, I will do this.
-Thanks!
+./drivers/net/ethernet/sunplus/spl2sw_driver.c:217:27-28: WARNING
+opportunity for swap().
 
-BRs,
-Rex
+./drivers/net/ethernet/sunplus/spl2sw_driver.c:222:27-28: WARNING
+opportunity for swap().
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+Changes in v2:
+  -Delete useless comments.
+
+ drivers/net/ethernet/sunplus/spl2sw_driver.c | 20 ++++----------------
+ 1 file changed, 4 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/net/ethernet/sunplus/spl2sw_driver.c b/drivers/net/ethernet/sunplus/spl2sw_driver.c
+index 8320fa833d3e..1cb7076f946d 100644
+--- a/drivers/net/ethernet/sunplus/spl2sw_driver.c
++++ b/drivers/net/ethernet/sunplus/spl2sw_driver.c
+@@ -204,28 +204,16 @@ static const struct net_device_ops netdev_ops = {
+ 
+ static void spl2sw_check_mac_vendor_id_and_convert(u8 *mac_addr)
+ {
+-	u8 tmp;
+-
+ 	/* Byte order of MAC address of some samples are reversed.
+ 	 * Check vendor id and convert byte order if it is wrong.
+ 	 * OUI of Sunplus: fc:4b:bc
+ 	 */
+ 	if (mac_addr[5] == 0xfc && mac_addr[4] == 0x4b && mac_addr[3] == 0xbc &&
+ 	    (mac_addr[0] != 0xfc || mac_addr[1] != 0x4b || mac_addr[2] != 0xbc)) {
+-		/* Swap mac_addr[0] and mac_addr[5] */
+-		tmp = mac_addr[0];
+-		mac_addr[0] = mac_addr[5];
+-		mac_addr[5] = tmp;
+-
+-		/* Swap mac_addr[1] and mac_addr[4] */
+-		tmp = mac_addr[1];
+-		mac_addr[1] = mac_addr[4];
+-		mac_addr[4] = tmp;
+-
+-		/* Swap mac_addr[2] and mac_addr[3] */
+-		tmp = mac_addr[2];
+-		mac_addr[2] = mac_addr[3];
+-		mac_addr[3] = tmp;
++
++		swap(mac_addr[0], mac_addr[5]);
++		swap(mac_addr[1], mac_addr[4]);
++		swap(mac_addr[2], mac_addr[3]);
+ 	}
+ }
+ 
+-- 
+2.20.1.7.g153144c
 

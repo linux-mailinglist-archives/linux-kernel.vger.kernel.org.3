@@ -2,122 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBF2C525555
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8910525557
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357859AbiELTEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 15:04:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47958 "EHLO
+        id S1357864AbiELTFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 15:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357853AbiELTEb (ORCPT
+        with ESMTP id S244299AbiELTFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 15:04:31 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A1D21E403;
-        Thu, 12 May 2022 12:04:29 -0700 (PDT)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CIRVVN012874;
-        Thu, 12 May 2022 19:04:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=H29RDK2yJl5oRBJrLnfkhfz5cXgstDB5uPjuDwdtEPQ=;
- b=cVwm+jJhU599VQrZ0odMq4n8G9pf/dQ/N3fKr0hceljlVZ/ARIE9lBedSAFLmWqZyYfb
- nFJgA1oQeJAj0iwoLdsrMRbc/w1X1XHRhnlFCSydomFMvS1T5uzAvBOEznaDSXQK9IIo
- uy2NNymCFTYdK1EoCcTxhdHtrLpjWC3JYfM4LfkuJSJ6daflJLn+3vU8eT1MUwDUGSfp
- 2VNEFcPXkoo5BoC6bZ147NiSzLPsmpBYcTzH+7yR84spwbXXBa/Ye8Hobcaj8GN6nUj5
- GbZXsZreVS+GcubKA+wS1abOc77LVzgBRX7sg9xQqQDCQGGs/yNzDyzIimduKLTEB8iT qw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g173b9ar3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 19:04:26 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24CIjJd2012975;
-        Thu, 12 May 2022 19:04:26 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g173b9aqb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 19:04:26 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24CIvNgN022308;
-        Thu, 12 May 2022 19:04:23 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06ams.nl.ibm.com with ESMTP id 3fyrkk3bk7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 19:04:23 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24CJ4JO149676722
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 12 May 2022 19:04:19 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0C9EBA4054;
-        Thu, 12 May 2022 19:04:19 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 933ECA405C;
-        Thu, 12 May 2022 19:04:18 +0000 (GMT)
-Received: from osiris (unknown [9.145.44.123])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu, 12 May 2022 19:04:18 +0000 (GMT)
-Date:   Thu, 12 May 2022 21:04:17 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jonas Paulsson <paulsson@linux.vnet.ibm.com>,
-        Ulrich Weigand <ulrich.weigand@de.ibm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andreas Krebbel <krebbel@linux.ibm.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH 0/8] s390: allow to build with llvm's integrated assembler
-Message-ID: <Yn1aMcKTD0v3FevS@osiris>
-References: <20220511120532.2228616-1-hca@linux.ibm.com>
- <CAKwvOdkXy0nhS-S+dOAsSO+mpj2dCuZ4aUTe=upPV8epfTA7Aw@mail.gmail.com>
+        Thu, 12 May 2022 15:05:02 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB13B26FA39
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 12:05:00 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id 2016D1F45935
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652382298;
+        bh=CkCAXCIfRhD+VLuvicaPJg8SgaATpt/zDLNfA6aYXDo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Nv4jr/ZQk0TqP9+0izHiBDYP/cqgOcFmYQrvNJab1CwyaaDQDh/jXCA0tUJ8x/dbd
+         fKgdRQhmwpjSXJpu9/40wHRhUAJYWmxJHlOoB5wnJO2X/oe5FiVsbeAstOpU0OOV64
+         MXP12cAlIEaG1Ut9NQyseoB3m1S3yOOz5J1tRiayNoZ5ubhKnWDFejDhv/bAjKcPVJ
+         th9YYOPV442LT1odi35BVZjdSioSmj50S4hV+uJjxNGBvfCqyZlFlbl5Hf1p9X4HzS
+         f9cTQx9WH3GBDnYW+1OKhY++sB1XU05UkJTgEEj0YfCEAgX9pOa1JrBL9DXVXcmezj
+         wM81LrCYKNKEQ==
+Message-ID: <31bc7a14-ff30-6961-b4fc-0aad83551df9@collabora.com>
+Date:   Thu, 12 May 2022 22:04:53 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdkXy0nhS-S+dOAsSO+mpj2dCuZ4aUTe=upPV8epfTA7Aw@mail.gmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Eo6A3lLQ9p42Ac8B2xFgV2lCfD6_Ercd
-X-Proofpoint-GUID: pzRmEjic2ySjkRjN8oWTY23Qr3REfSs6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-12_16,2022-05-12_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- malwarescore=0 phishscore=0 mlxlogscore=655 priorityscore=1501
- clxscore=1015 impostorscore=0 spamscore=0 bulkscore=0 suspectscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205120083
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v4 11/15] drm/shmem-helper: Add generic memory shrinker
+Content-Language: en-US
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+References: <20220417223707.157113-1-dmitry.osipenko@collabora.com>
+ <20220417223707.157113-12-dmitry.osipenko@collabora.com>
+ <e6108e9c-6e67-2d71-0665-654e11d9c3a5@suse.de>
+ <ff97790a-fb64-1e15-74b4-59c807bce0b9@collabora.com>
+ <Ynkb1U2nNWYPML88@phenom.ffwll.local>
+ <5fdf5232-e2b2-b444-5a41-f1db7e6a04da@collabora.com>
+ <Ynu1k5lH+xvqtObG@phenom.ffwll.local>
+ <3429a12f-9fbe-b66b-dbbd-94a1df54714e@collabora.com>
+ <YnwJ0kLwLS7RxuwS@phenom.ffwll.local>
+ <0ae6fed7-b166-d2b8-0e42-84b94b777c20@collabora.com>
+ <CAKMK7uGS3PSwbkW7gj1hd2pz591HwY6Gbb=P_X4N5KOM5+X85w@mail.gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <CAKMK7uGS3PSwbkW7gj1hd2pz591HwY6Gbb=P_X4N5KOM5+X85w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 12:48:34PM -0700, Nick Desaulniers wrote:
-> On Wed, May 11, 2022 at 5:05 AM Heiko Carstens <hca@linux.ibm.com> wrote:
-> >
-> > A couple of patches which in result make it finally possible to build the
-> > kernel for s390 with llvm's integrated assembler. Several configs build
-> > without errors or warnings, and the kernel also works as expected.
-> >
-> > Note that patch 6 ("s390/boot: workaround llvm IAS bug") reveals a
-> > miscompile. This looks like a bug in the instruction definitions of the mvc
-> > and clc instructions(?). I'd like to ask people to look into this, since
-> > this silently generated broken code.
-> >
-> > This patch series is based on linux-next, which contains two additional
-> > required s390 specific patches to make llvm's IAS work.
+On 5/12/22 20:04, Daniel Vetter wrote:
+> On Thu, 12 May 2022 at 13:36, Dmitry Osipenko
+> <dmitry.osipenko@collabora.com> wrote:
+>>
+>> On 5/11/22 22:09, Daniel Vetter wrote:
+>>> On Wed, May 11, 2022 at 07:06:18PM +0300, Dmitry Osipenko wrote:
+>>>> On 5/11/22 16:09, Daniel Vetter wrote:
+>>>>>>>>> I'd like to ask you to reduce the scope of the patchset and build the
+>>>>>>>>> shrinker only for virtio-gpu. I know that I first suggested to build
+>>>>>>>>> upon shmem helpers, but it seems that it's easier to do that in a later
+>>>>>>>>> patchset.
+>>>>>>>> The first version of the VirtIO shrinker didn't support memory eviction.
+>>>>>>>> Memory eviction support requires page fault handler to be aware of the
+>>>>>>>> evicted pages, what should we do about it? The page fault handling is a
+>>>>>>>> part of memory management, hence to me drm-shmem is already kinda a MM.
+>>>>>>> Hm I still don't get that part, why does that also not go through the
+>>>>>>> shmem helpers?
+>>>>>> The drm_gem_shmem_vm_ops includes the page faults handling, it's a
+>>>>>> helper by itself that is used by DRM drivers.
+>>>>>>
+>>>>>> I could try to move all the shrinker logic to the VirtIO and re-invent
+>>>>>> virtio_gem_shmem_vm_ops, but what is the point of doing this for each
+>>>>>> driver if we could have it once and for all in the common drm-shmem code?
+>>>>>>
+>>>>>> Maybe I should try to factor out all the shrinker logic from drm-shmem
+>>>>>> into a new drm-shmem-shrinker that could be shared by drivers? Will you
+>>>>>> be okay with this option?
+>>>>> I think we're talking past each another a bit. I'm only bringing up the
+>>>>> purge vs eviction topic we discussed in the other subthread again.
+>>>>
+>>>> Thomas asked to move the whole shrinker code to the VirtIO driver and
+>>>> I's saying that this is not a great idea to me, or am I misunderstanding
+>>>> the Thomas' suggestion? Thomas?
+>>>
+>>> I think it was just me creating a confusion here.
+>>>
+>>> fwiw I do also think that shrinker in shmem helpers makes sense, just in
+>>> case that was also lost in confusion.
+>>
+>> Okay, good that we're on the same page now.
+>>
+>>>>>>> I'm still confused why drivers need to know the difference
+>>>>>>> between evition and purging. Or maybe I'm confused again.
+>>>>>> Example:
+>>>>>>
+>>>>>> If userspace uses IOV addresses, then these addresses must be kept
+>>>>>> reserved while buffer is evicted.
+>>>>>>
+>>>>>> If BO is purged, then we don't need to retain the IOV space allocated
+>>>>>> for the purged BO.
+>>>>> Yeah but is that actually needed by anyone? If userspace fails to allocate
+>>>>> another bo because of lack of gpu address space then it's very easy to
+>>>>> handle that:
+>>>>>
+>>>>> 1. Make a rule that "out of gpu address space" gives you a special errno
+>>>>> code like ENOSPC
+>>>>>
+>>>>> 2. If userspace gets that it walks the list of all buffers it marked as
+>>>>> purgeable and nukes them (whether they have been evicted or not). Then it
+>>>>> retries the bo allocation.
+>>>>>
+>>>>> Alternatively you can do step 2 also directly from the bo alloc ioctl in
+>>>>> step 1. Either way you clean up va space, and actually a lot more (you
+>>>>> potentially nuke all buffers marked as purgeable, not just the ones that
+>>>>> have been purged already) and only when va cleanup is actually needed
+>>>>>
+>>>>> Trying to solve this problem at eviction time otoh means:
+>>>>> - we have this difference between eviction and purging
+>>>>> - it's still not complete, you still need to glue step 2 above into your
+>>>>>   driver somehow, and once step 2 above is glued in doing additional
+>>>>>   cleanup in the purge function is just duplicated logic
+>>>>>
+>>>>> So at least in my opinion this isn't the justification we need. And we
+>>>>> should definitely not just add that complication "in case, for the
+>>>>> future", if we don't have a real need right now. Adding it later on is
+>>>>> easy, removing it later on because it just gets in the way and confuses is
+>>>>> much harder.
+>>>>
+>>>> The IOVA space is only one example.
+>>>>
+>>>> In case of the VirtIO driver, we may have two memory allocation for a
+>>>> BO. One is the shmem allcation in guest and the other is in host's vram.
+>>>> If we will only release the guest's memory on purge, then the vram will
+>>>> remain allocated until BO is destroyed, which unnecessarily sub-optimal.
+>>>
+>>> Hm but why don't you just nuke the memory on the host side too when you
+>>> evict? Allowing the guest memory to be swapped out while keeping the host
+>>> memory allocation alive also doesn't make a lot of sense for me. Both can
+>>> be recreated (I guess at least?) on swap-in.
+>>
+>> Shouldn't be very doable or at least worth the efforts. It's userspace
+>> that manages data uploading, kernel only provides transport for the
+>> virtio-gpu commands.
+>>
+>> Drivers are free to use the same function for both purge() and evict()
+>> callbacks if they want. Getting rid of the purge() callback creates more
+>> problems than solves, IMO.
 > 
-> I did a quick test of just a defconfig via:
-> $ ARCH=s390 CROSS_COMPILE=s390x-linux-gnu- make CC=clang -j72 defconfig all
-> and this assembled then booted in qemu for me. Thanks for the work
-> that went into this!
-> 
-> Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Hm this still sounds pretty funny and defeats the point of
+> purgeable/evictable buffers a bit I think. But also I guess we'd
+> pushed this bikeshed to the max, so I think if you make ->purge
+> optional and just call ->evict if that's not present, and document it
+> all in the kerneldoc, then I think that's good.
 
-Will add this too. Thank you!
+This is a good enough compromise to me.
+
+> I just don't think that encouraging drivers to distinguish between
+> evict/purge is a good idea for almost all of them.
+
+Intel's shrinker checks the "madvise" status of BOs and then decides
+what to do based on it. Perhaps we could move the decision-making about
+purging to drivers and then it will be single evict() callback, but will
+drivers really ever need to be responsible for this decision-making or
+this will be an unnecessary boilerplate code in the drivers? I'll think
+more about this.
+
+Thank you all for taking time to look at this patchset. I'm preparing
+the new version.
+
+-- 
+Best regards,
+Dmitry

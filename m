@@ -2,176 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F7E7525321
+	by mail.lfdr.de (Postfix) with ESMTP id 6A256525322
 	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:01:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356796AbiELRBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 13:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52828 "EHLO
+        id S1356793AbiELRB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 13:01:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356768AbiELRAx (ORCPT
+        with ESMTP id S1356818AbiELRBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 13:00:53 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA003B548
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:00:48 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id i1so5479404plg.7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:00:48 -0700 (PDT)
+        Thu, 12 May 2022 13:01:09 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD995F4A
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:01:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DekJ8UcrLNS24H0kwzTpTKU7qq2O3Iea6VLoLOi4nfQ=;
-        b=f5IqLmz12k/A5y/HILvzizzg5UZ4Xo+oPXyab7LROvRiERsd1dO3gaJTB4blXyX16d
-         a4sANvf65uub2a+/f5LHxWZ50u60S5qRyYpGcrrKicFwzUdUOysUVYkg93TA3ChY7p8C
-         3GFuNLm3fbXb2H9eFMG5JXK8hkzGeJRDVJ6fuUxviBCsAe4Y2FVxpf1uDWgFt1tHtoyO
-         6FoIVtDufRl9BdWzCWP4yL6KLSgLPORwixoU4fe1jDTH61mWIwjJXWWDDxnG2ZsDXmVZ
-         K/RfcJ3k+HMX3w57SBA0cRgDQbOPwgDjCtBE2rborWOqPL66soELs1wO0gAtXRphJMx6
-         6oWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DekJ8UcrLNS24H0kwzTpTKU7qq2O3Iea6VLoLOi4nfQ=;
-        b=cTpmKIhqfyx+aypYK4bh4F0n0qkiGzKChZCyaEe2mjtJWjcaYRZR9XeA8qCoOStF5R
-         7W8MfVjF0jDijlRenwBLmOCqTd87xtaZd6LWOupAawNimgjSWGoptc3h9AOLLV9Lyajp
-         ZRMfQMw/9MNQAEZ62e0wjdQS0xpj7cvUBtdkYn0faA8ENi/TeKN6IaWrgpVk2TNrsHc4
-         rPPoKOZZjhVmHBaBuSVdv5GrbXHLDNpJFx8ZsR3xbGwpKgt5JeQhefPSi0eJaE4hcbkJ
-         TZGprxCsu3fBlTZQX6tt3mcwH43fyAWYBReNn2R4N5gTAj+l7iPX2cX1chce+Kr7t5FY
-         E0pw==
-X-Gm-Message-State: AOAM533wNFAOQJ8MV4JK0QehJnRPmLeyNDqlo34IrbB5Qr3PelZ/5I+6
-        K6rKFzgN9fIrDbn+z92Eb0CEHLyWxgs=
-X-Google-Smtp-Source: ABdhPJzKKpeK66hB/TVR0aX0f41KqAxlOXi/iGKlAsl3QNixXAQ1XXdLKowdHap30CXSS2sIwugFIQ==
-X-Received: by 2002:a17:90a:c797:b0:1d9:2764:a83b with SMTP id gn23-20020a17090ac79700b001d92764a83bmr11609475pjb.5.1652374847650;
-        Thu, 12 May 2022 10:00:47 -0700 (PDT)
-Received: from localhost.localdomain (li567-56.members.linode.com. [192.155.81.56])
-        by smtp.gmail.com with ESMTPSA id u10-20020a63234a000000b003c14af50605sm2119374pgm.29.2022.05.12.10.00.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 10:00:47 -0700 (PDT)
-From:   Jeff Xie <xiehuan09@gmail.com>
-To:     rostedt@goodmis.org
-Cc:     mingo@redhat.com, mhiramat@kernel.org, zanussi@kernel.org,
-        linux-kernel@vger.kernel.org, Jeff Xie <xiehuan09@gmail.com>
-Subject: [PATCH v10 4/4] trace/objtrace: Add documentation for objtrace
-Date:   Fri, 13 May 2022 01:00:08 +0800
-Message-Id: <20220512170008.1301613-5-xiehuan09@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220512170008.1301613-1-xiehuan09@gmail.com>
-References: <20220512170008.1301613-1-xiehuan09@gmail.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652374866; x=1683910866;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AZZTVVPejmnnjzcb0Y6aYldJcyupZeutNKdvKmzjyXA=;
+  b=rrvtLnxnfNkNHTR16ys5f3gYTXrT7ylP/V+lOeLwbG/hB0gg/dlm+ucx
+   1zBSk0//Xy94UjMSE5uFOZ8J9WqC7YDm5zGGrJHVK/8T02kD59DGQXGdf
+   peFHxYv9qngs5blqAVpW9fd5U6jRJ2Ix5nGKo8AnSi1tV+fWRMWFmkTlQ
+   I=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 12 May 2022 10:01:04 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 10:01:04 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 12 May 2022 10:01:04 -0700
+Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 12 May
+ 2022 10:01:03 -0700
+Date:   Thu, 12 May 2022 13:01:00 -0400
+From:   Qian Cai <quic_qiancai@quicinc.com>
+To:     Liam Howlett <liam.howlett@oracle.com>
+CC:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v9 08/69] mm: start tracking VMAs with maple tree
+Message-ID: <20220512170100.GA74@qian>
+References: <20220504010716.661115-1-Liam.Howlett@oracle.com>
+ <20220504010716.661115-10-Liam.Howlett@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220504010716.661115-10-Liam.Howlett@oracle.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added documentation explaining how to use objtrace trigger to get the value
-of the object.
+On Wed, May 04, 2022 at 01:07:52AM +0000, Liam Howlett wrote:
+> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+> 
+> Start tracking the VMAs with the new maple tree structure in parallel with
+> the rb_tree.  Add debug and trace events for maple tree operations and
+> duplicate the rb_tree that is created on forks into the maple tree.
+> 
+> The maple tree is added to the mm_struct including the mm_init struct,
+> added support in required mm/mmap functions, added tracking in kernel/fork
+> for process forking, and used to find the unmapped_area and checked
+> against what the rbtree finds.
+> 
+> This also moves the mmap_lock() in exit_mmap() since the oom reaper call
+> does walk the VMAs.  Otherwise lockdep will be unhappy if oom happens.
+> 
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+...
+> @@ -2479,9 +2693,14 @@ int expand_downwards(struct vm_area_struct *vma,
+>  			return -ENOMEM;
+>  	}
+>  
+> +	if (mas_preallocate(&mas, vma, GFP_KERNEL))
 
-Signed-off-by: Jeff Xie <xiehuan09@gmail.com>
----
- Documentation/trace/events.rst | 83 ++++++++++++++++++++++++++++++++++
- 1 file changed, 83 insertions(+)
+We have thousands of leaks reports here from kmemleak while running some
+syscall fuzzers on today's linux-next tree.
 
-diff --git a/Documentation/trace/events.rst b/Documentation/trace/events.rst
-index c47f381d0c00..0dc475160133 100644
---- a/Documentation/trace/events.rst
-+++ b/Documentation/trace/events.rst
-@@ -546,6 +546,89 @@ The following commands are supported:
- 
-   See Documentation/trace/histogram.rst for details and examples.
- 
-+- objtrace
-+
-+  This command provides a way to get the value of any object, The object
-+  can be obtained from the dynamic event(kprobe_event/uprobe_event) or the
-+  static event(tracepoint).
-+
-+  Usage:
-+  When using the kprobe event, only need to set the objtrace(a new trigger),
-+  we can get the value of the object. The object is from the setting of the
-+  kprobe event.
-+
-+  For example:
-+  For the function bio_add_page():
-+
-+  int bio_add_page(struct bio *bio, struct page *page,
-+	unsigned int len, unsigned int offset)
-+
-+  Firstly, we can set the base of the object, thus the first string "arg1"
-+  stands for the value of the first parameter of this function bio_add_gage(),
-+
-+  # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
-+
-+  Secondly, we can get the value dynamically based on above object.
-+
-+  find the offset of the bi_size in struct bio:
-+  $ gdb vmlinux
-+  (gdb) p &(((struct bio *)0)->bi_iter.bi_size)
-+  $1 = (unsigned int *) 0x28
-+
-+  # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
-+	p_bio_add_page_0/trigger
-+
-+  # cd /sys/kernel/debug/tracing/
-+  # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
-+  # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/p_bio_add_page_0/trigger
-+
-+  # du -sh /test.txt
-+  12.0K   /test.txt
-+
-+  # cat  /test.txt > /dev/null
-+  # cat ./trace
-+  # tracer: nop
-+  #
-+  # entries-in-buffer/entries-written: 128/128   #P:4
-+  #
-+  #                                _-----=> irqs-off/BH-disabled
-+  #                               / _----=> need-resched
-+  #                              | / _---=> hardirq/softirq
-+  #                              || / _--=> preempt-depth
-+  #                              ||| / _-=> migrate-disable
-+  #                              |||| /     delay
-+  #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-+  #              | |         |   |||||     |         |
-+               cat-117     [002] ...1.     1.602243: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x0
-+               cat-117     [002] ...1.     1.602244: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x0
-+               cat-117     [002] ...2.     1.602244: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x1000
-+               cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
-+               cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
-+               cat-117     [002] ...2.     1.602245: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x2000
-+               cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
-+               cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
-+               cat-117     [002] ...1.     1.602245: submit_bio <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
-+               cat-117     [002] ...1.     1.602245: submit_bio_noacct <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
-+               cat-117     [002] ...1.     1.602246: __submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
-+               cat-117     [002] ...1.     1.602246: submit_bio_checks <-__submit_bio object:0xffff88811bee4000 value:0x3000
-+               cat-117     [002] ...1.     1.602246: __cond_resched <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
-+               cat-117     [002] ...1.     1.602246: should_fail_bio <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
-+               cat-117     [002] ...1.     1.602246: blk_mq_submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
-+               cat-117     [002] ...1.     1.602246: blk_attempt_plug_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-+               cat-117     [002] ...1.     1.602246: blk_mq_sched_bio_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-+               cat-117     [002] ...1.     1.602247: __rcu_read_lock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-+               cat-117     [002] ...1.     1.602247: __rcu_read_unlock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-+               cat-117     [002] ...1.     1.602247: __blk_mq_alloc_requests <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-+            <idle>-0       [002] d..3.     1.602298: bio_endio <-blk_update_request object:0xffff88811bee4000 value:0x0
-+            <idle>-0       [002] d..3.     1.602298: mpage_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
-+            <idle>-0       [002] d..3.     1.602298: __read_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
-+            <idle>-0       [002] d..3.     1.602300: bio_put <-blk_update_request object:0xffff88811bee4000 value:0x0
-+            <idle>-0       [002] d..3.     1.602300: bio_free <-blk_update_request object:0xffff88811bee4000 value:0x0
-+            <idle>-0       [002] d..3.     1.602300: mempool_free <-blk_update_request object:0xffff88811bee4000 value:0x0
-+            <idle>-0       [002] d..3.     1.602300: mempool_free_slab <-blk_update_request object:0xffff88811bee4000 value:0x0
-+            <idle>-0       [002] d..3.     1.602300: kmem_cache_free <-blk_update_request object:0xffff88811bee4000 value:0x0
-+             ...
-+
- 7. In-kernel trace event API
- ============================
- 
--- 
-2.25.1
+unreferenced object 0xffff0803c0063d00 (size 256):
+  comm "trinity-c25", pid 177739, jiffies 4297781293 (age 354.988s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+     slab_post_alloc_hook
+     kmem_cache_alloc_bulk
+     mas_alloc_nodes
+     mas_preallocate
+     mas_preallocate at lib/maple_tree.c:5579
+     expand_downwards
+     expand_downwards at mm/mmap.c:2094
+     expand_stack
+     do_page_fault
+     do_translation_fault
+     do_mem_abort
+     el1_abort
+     el1h_64_sync_handler
+     el1h_64_sync
+     handle_futex_death
+     exit_robust_list
+     futex_exit_release
+     exit_mm_release
 
+> +		return -ENOMEM;
+> +
+>  	/* We must make sure the anon_vma is allocated. */
+> -	if (unlikely(anon_vma_prepare(vma)))
+> +	if (unlikely(anon_vma_prepare(vma))) {
+> +		mas_destroy(&mas);
+>  		return -ENOMEM;
+> +	}
+>  
+>  	/*
+>  	 * vma->vm_start/vm_end cannot change under us because the caller

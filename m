@@ -2,156 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DEFE5243D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 06:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DEA45243CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 06:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345815AbiELECG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 00:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55302 "EHLO
+        id S240676AbiELEC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 00:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237704AbiELEBn (ORCPT
+        with ESMTP id S1345623AbiELECN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 00:01:43 -0400
-Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19D154FA2
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 21:01:42 -0700 (PDT)
-Received: from grover.jp (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-07.nifty.com with ESMTP id 24C41CNP015198;
-        Thu, 12 May 2022 13:01:13 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 24C41CNP015198
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1652328073;
-        bh=onFv+YAOxIPYNs8nK9urU409UP2PBRJMAjENXFOL5Vk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eg03YOigSKL+FkCX7H+IUzTgy39mWtqGcAJHY9n411eCCEDc4gA7Sy0edNb2f/zt8
-         Pp/I7NVhbKw1fBUw8m6FK1j1z9Lja7xHfMfXnS88e1vRmAAcm94Xbh4TbfD688aUWH
-         ad6SvDP9sMQgY9VDXFQzK8tBZuAARcUVsEn/FzbCZioIsE97iwOkWQZAAhzyGJ94tw
-         UOE5p5uTx9bPcYhGG9BqUbzEkZ0JIER7SS4b/Fst11j2a5BkioQ2Q8qdvUaKA91PvN
-         bxz2atiZ1r5LwreohfTE8mhwj+uOm8OB0iU0U3FXyTjo/Q841PecMkkS+YVm1+4KGl
-         UDDA5c8/3RUFA==
-X-Nifty-SrcIP: [133.32.177.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 3/4] csky: introduce CONFIG_CSKY_ABI_V1/2
-Date:   Thu, 12 May 2022 12:59:02 +0900
-Message-Id: <20220512035903.2779287-3-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220512035903.2779287-1-masahiroy@kernel.org>
-References: <20220512035903.2779287-1-masahiroy@kernel.org>
+        Thu, 12 May 2022 00:02:13 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084C15DA62
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 21:02:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=ResXbnpcW2KRBtsxMsZIEyQjIsTuDtJ8NLFBKnhdMcg=; b=jxqB8ZSs3Vy+z6KgA0XdfMWxN/
+        x+wXhKhMEHBZ7Ag/B0DRWhqiXX+MuuvRGsM0+6VH/YwdjV8yPWsE4Tl8pqwMPb9d+5fptged4cxmu
+        R7N73N9yxo0Lp4ifdX+24dMEY3yNfVpbkX5jwuWWaXp5o+LG9IFhVzWCXmysT5pkzaEex9QC9f0c6
+        b0rWUgA/aUck0WQGTnchdoPnmfqhbTMu5g7vApwPvWjwgJ8EYasSg5lGPvvyEZO5TstnSfj4gLPLN
+        dMBzIuyfxHjbYFYCgF1Fcq3TpfW7/CjfaRDfH4h/Cm/yer0CSDXXmH1ilmH6NFdPQL48kzY8JCdWy
+        yU6O9HWQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1np01U-00DOFL-FZ; Thu, 12 May 2022 04:01:57 +0000
+Message-ID: <73e60194-5841-9d46-0ebe-c129348125e5@infradead.org>
+Date:   Wed, 11 May 2022 21:01:51 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: time.c:undefined reference to `mach_get_rtc_pll'
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Daniel Palmer <daniel@0x0f.com>
+References: <202205041720.i8wJ8uXq-lkp@intel.com>
+ <CAK8P3a3F3Z1NyhVcK6wN+b6Es3gqiYGee8a+pAPsaer4hhHDbQ@mail.gmail.com>
+ <CAMuHMdVHUvbembVU92CZ+SXhfb8i8F_==d9rcH18pc=O-F8WOQ@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CAMuHMdVHUvbembVU92CZ+SXhfb8i8F_==d9rcH18pc=O-F8WOQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is useful to clean up Makefile.
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
 
- arch/csky/Kconfig  | 11 +++++++++++
- arch/csky/Makefile | 14 ++++++++------
- 2 files changed, 19 insertions(+), 6 deletions(-)
+On 5/4/22 06:33, Geert Uytterhoeven wrote:
+> Hi Arnd,
+> 
+> On Wed, May 4, 2022 at 2:25 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>> On Wed, May 4, 2022 at 11:14 AM kernel test robot <lkp@intel.com> wrote:
+>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+>>> head:   107c948d1d3e61d10aee9d0f7c3d81bbee9842af
+>>> commit: 8b22820efb35f93d98638563b0a8f4094e8ee399 m68k: m68328: remove duplicate code
+>>>
+>>> If you fix the issue, kindly add following tag as appropriate
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>
+>>> All errors (new ones prefixed by >>):
+>>>
+>>>    m68k-linux-ld: arch/m68k/kernel/time.o: in function `rtc_ioctl':
+>>>>> time.c:(.text+0x82): undefined reference to `mach_get_rtc_pll'
+>>>    m68k-linux-ld: time.c:(.text+0xbc): undefined reference to `mach_set_rtc_pll'
+>>>    m68k-linux-ld: time.c:(.text+0xf4): undefined reference to `mach_set_rtc_pll'
+>>>
+>>
+>> I think this is just another build failure that was hidden before my patch,
+>> not caused by my patch.
+> 
+> That's an m68knommu kernel build with CONFIG_RTC_DRV_GENERIC=y,
+> I guess?
 
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 75ef86605d69..da756ecf0f85 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -161,6 +161,12 @@ config ARCH_MMAP_RND_BITS_MIN
- config ARCH_MMAP_RND_BITS_MAX
- 	default 17
- 
-+config CSKY_ABI_V1
-+	bool
-+
-+config CSKY_ABI_V2
-+	bool
-+
- menu "Processor type and features"
- 
- choice
-@@ -172,15 +178,18 @@ config CPU_CK610
- 	select CPU_NEED_TLBSYNC
- 	select CPU_NEED_SOFTALIGN
- 	select CPU_NO_USER_BKPT
-+	select CSKY_ABI_V1
- 
- config CPU_CK810
- 	bool "CSKY CPU ck810"
- 	select CPU_HAS_HILO
- 	select CPU_NEED_TLBSYNC
-+	select CSKY_ABI_V2
- 
- config CPU_CK807
- 	bool "CSKY CPU ck807"
- 	select CPU_HAS_HILO
-+	select CSKY_ABI_V2
- 
- config CPU_CK860
- 	bool "CSKY CPU ck860"
-@@ -188,6 +197,8 @@ config CPU_CK860
- 	select CPU_HAS_CACHEV2
- 	select CPU_HAS_LDSTEX
- 	select CPU_HAS_FPUV2
-+	select CSKY_ABI_V2
-+
- endchoice
- 
- choice
-diff --git a/arch/csky/Makefile b/arch/csky/Makefile
-index 4d72aca4069b..2b30525f39e1 100644
---- a/arch/csky/Makefile
-+++ b/arch/csky/Makefile
-@@ -16,34 +16,36 @@ endif
- 
- ifdef CONFIG_CPU_CK610
- CPUTYPE	= ck610
--CSKYABI	= abiv1
- endif
- 
- ifdef CONFIG_CPU_CK810
- CPUTYPE = ck810
--CSKYABI	= abiv2
- endif
- 
- ifdef CONFIG_CPU_CK807
- CPUTYPE = ck807
--CSKYABI	= abiv2
- endif
- 
- ifdef CONFIG_CPU_CK860
- CPUTYPE = ck860
-+endif
-+
-+ifdef CONFIG_CSKY_ABI_V1
-+CSKYABI	= abiv1
-+endif
-+
-+ifdef CONFIG_CSKY_ABI_V2
- CSKYABI	= abiv2
- endif
- 
--ifneq ($(CSKYABI),)
- MCPU_STR = $(CPUTYPE)$(FPUEXT)$(VDSPEXT)$(TEEEXT)
- KBUILD_CFLAGS += -mcpu=$(CPUTYPE) -Wa,-mcpu=$(MCPU_STR)
- KBUILD_CFLAGS += -DCSKYCPU_DEF_NAME=\"$(MCPU_STR)\"
- KBUILD_CFLAGS += -msoft-float -mdiv
- KBUILD_CFLAGS += -fno-tree-vectorize
--endif
- 
- KBUILD_CFLAGS += -pipe
--ifeq ($(CSKYABI),abiv2)
-+ifdef CONFIG_CSKY_ABI_V2
- KBUILD_CFLAGS += -mno-stack-size
- endif
- 
+CONFIG_RTC_DRV_GENERIC=m
+
+
 -- 
-2.32.0
-
+~Randy

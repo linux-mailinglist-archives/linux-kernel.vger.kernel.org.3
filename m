@@ -2,254 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88074524869
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 10:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1490524871
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 10:58:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351456AbiELI4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 04:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58784 "EHLO
+        id S1351611AbiELI6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 04:58:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350313AbiELIz6 (ORCPT
+        with ESMTP id S1346555AbiELI6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 04:55:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D278AF16
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 01:55:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652345750;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7g2+Ytw7LOFNSmUdcgJm+KVblwr69gQPARUIhiHhirk=;
-        b=alLsoOZScoigVFm+ZWFWp49vGePUcTNtqm1WPHN//E0/HslL8uPY2Zrmf3nMbAeb6AfJ1F
-        3axm6M8d5khC1PSkjvcsrLqMWEzCE1o/RtwXN71zOgemB7RTpDpE9tU6nt0sfLNam8dsGD
-        5KlOVxtkJiOUq/+I1PSCCm/KsXJ/KN8=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-588-ehV-65bgPniGVd3W_Pk-Zw-1; Thu, 12 May 2022 04:55:48 -0400
-X-MC-Unique: ehV-65bgPniGVd3W_Pk-Zw-1
-Received: by mail-wm1-f72.google.com with SMTP id k16-20020a7bc310000000b0038e6cf00439so1435352wmj.0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 01:55:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=7g2+Ytw7LOFNSmUdcgJm+KVblwr69gQPARUIhiHhirk=;
-        b=0oCQMfcTm2gcdkpjXYaHuEHBAFBo7/2YhdTd6RAcizjAnUarzKhHCVmXmA9ceVUWyc
-         xrFowcbHOUrPtBklBppYth9uVyLBN4jAYz4Wntmtir0oZ9lNGWzmBDTlorXDaEM/3s8h
-         kGvQYui0hQ7W6TuaEXAH4TVgOFlcg69D6/GOg8+lKh9pXnJUC26iGngcQQfb242GEHKm
-         KSBBgg2XD18hxln1w+Ya0vx6SC8ajfKMEDHfNYi0RSFGDT6Jrobz7q9kLNCMqi/XNi8S
-         EprYDFsLPjUu3KELyX9KRu+ZQ76YjMatg8536MsSse1/si70Av/oh/0IynqG5VLNgZ8J
-         Xk9w==
-X-Gm-Message-State: AOAM5330DtE8boT2hx7PbRGnInKV4Iaolzp1Zth2af0vJo7ADRqh2pnA
-        sdajNpXXKFSiRvhugdax1Iz9zSyKT26JmAn9MBISAqRq1GuVeGmaHo7JBuCJfytmju6ZaTgF6IO
-        k4uLRE8izyH/hOPoklO+1snet
-X-Received: by 2002:adf:d081:0:b0:20c:7f56:abd1 with SMTP id y1-20020adfd081000000b0020c7f56abd1mr25102324wrh.386.1652345747426;
-        Thu, 12 May 2022 01:55:47 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzgDUaV0Pvl8E9KjWZrA4Ta4cxlJ4ZfqSzMPCrJAB9wK4ZmY3C5NwvXHdv7bDy0pOSmbYgYaQ==
-X-Received: by 2002:adf:d081:0:b0:20c:7f56:abd1 with SMTP id y1-20020adfd081000000b0020c7f56abd1mr25102301wrh.386.1652345747118;
-        Thu, 12 May 2022 01:55:47 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c701:d200:ee5d:1275:f171:136d? (p200300cbc701d200ee5d1275f171136d.dip0.t-ipconnect.de. [2003:cb:c701:d200:ee5d:1275:f171:136d])
-        by smtp.gmail.com with ESMTPSA id bv30-20020a0560001f1e00b0020c5253d900sm3278670wrb.76.2022.05.12.01.55.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 01:55:46 -0700 (PDT)
-Message-ID: <2f7b7320-6899-93a0-420c-523d53363f58@redhat.com>
-Date:   Thu, 12 May 2022 10:55:45 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 1/6] Documentation: filesystems: proc: update meminfo
- section
-Content-Language: en-US
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Minchan Kim <minchan@kernel.org>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com
-References: <20220510152847.230957-1-hannes@cmpxchg.org>
- <20220510152847.230957-2-hannes@cmpxchg.org>
- <7a6f8520-a496-e3c3-1fd9-8a30b7a12b14@redhat.com>
- <YnwFraZlVWQoCjz3@cmpxchg.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <YnwFraZlVWQoCjz3@cmpxchg.org>
-Content-Type: text/plain; charset=UTF-8
+        Thu, 12 May 2022 04:58:42 -0400
+Received: from EUR03-AM5-obe.outbound.protection.outlook.com (mail-eopbgr30067.outbound.protection.outlook.com [40.107.3.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABD15838D;
+        Thu, 12 May 2022 01:58:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=adWABasQLXBaT/VY38PiMHCVkPpPFjK3yNuF9EnKrzIdilOu79x3ro2Ioy/NUBUC+p3iRy7dK4yCVU7HeYuGMevN33ysfYJtEkWke3r5IV04RB/j89S3v0udppVjbN7NGa+3TZUbSxGSgFMdUPmDxFPlGme5i3928iXSjLSlqj38oWNoKCYt1PudXEeeMVxy+bAZc2DA5v9q9waY6yXhV/14VeUKq9an6FEUJAbxBSCNFTrmyIbbYPxZVFWY6764TYxEArrIMaSz+KRc3JhYQwDYW2qv7rQ2Ac6ewynt5JXm0eabvsMLRzr0N0TAliC44qneYB3wypN4kthf1yrMEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UxYLS8yY8+C5UHIOz9nz3Bx5mYH8srTmRXlal6rArd4=;
+ b=mt2ziwH7G6t0TAexSxjsNlxbEonwg+IK6ymLwv33Q+teBa5dtHh74X6jzYbymd0QDHiyeDO4U2de9RsRiRgvRdA078KCySPxhQxs1Bf8mNhb1qjGvTd0zkD1xtH35EKXEBUzQkhm6c6nL7Pf8WVTiLPtR5Pch6Dks6ty8TlEbsl/jYsfBGnbZP8HL2hykCY8QjYZ7E694FJgEMxqtd18Y8InlD2mddvX9WcYGnzWwpj4RdAnbxmLKO++saghGD9Tqqueg9Gt/enFwHrnf/IlDXP4HEpKdUmrlh+qyScny8p3ElRYJzCm1ipyTT/Dhcn5KA3J5F9SCZBnUKtFvMxFtA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UxYLS8yY8+C5UHIOz9nz3Bx5mYH8srTmRXlal6rArd4=;
+ b=CjfV/20vsCYmpD3BSD47+I6DXiTCPNBVfnpjQkjOSjT7RuGTH1fggmkUbgIkqcTQPdD3YiFdFMtZ5Svki0lt3iLaB4wVoUUZLLlUDPtsUJTXUi/VFeaQ4Tpjmo5LcqqTpGU0ahvdJP4qEZkg3FVy+JtuQKA4lz5SkceXAJJNjCaBMXCe7U8SrkrNGE6oUz8psW3utQLgyL0yUBmxJptEsTBoNELjqSbBLwLmLulBs8YLZ3BJ34MCW8ispYEobWpdphkPAyG6Pk7/8swKbC3KI9Jed9zjp8So8FQH+zDd/OVLaukqPGb81OivCu7ateGjF3y5oTBUfQoD0Uus522Jow==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+Received: from DB9PR10MB5762.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:2ed::13)
+ by DB8PR10MB3211.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:117::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13; Thu, 12 May
+ 2022 08:58:39 +0000
+Received: from DB9PR10MB5762.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::7574:7fdc:9b12:30be]) by DB9PR10MB5762.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::7574:7fdc:9b12:30be%8]) with mapi id 15.20.5227.023; Thu, 12 May 2022
+ 08:58:38 +0000
+Date:   Thu, 12 May 2022 10:58:36 +0200
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Enrico Weigelt <lkml@metux.net>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>
+Subject: Re: [PATCH v2 2/4] watchdog: simatic-ipc-wdt: convert to use P2SB
+ accessor
+Message-ID: <20220512105836.3fb3ff95@md1za8fc.ad001.siemens.net>
+In-Reply-To: <7c458add-a496-6b3a-a04f-e6b68865daf4@roeck-us.net>
+References: <20220511153905.13980-1-henning.schild@siemens.com>
+        <20220511153905.13980-3-henning.schild@siemens.com>
+        <7c458add-a496-6b3a-a04f-e6b68865daf4@roeck-us.net>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-ClientProxiedBy: AS9P251CA0018.EURP251.PROD.OUTLOOK.COM
+ (2603:10a6:20b:50f::16) To DB9PR10MB5762.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:10:2ed::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b44789b7-03f6-465e-21b2-08da33f59b11
+X-MS-TrafficTypeDiagnostic: DB8PR10MB3211:EE_
+X-Microsoft-Antispam-PRVS: <DB8PR10MB3211F934569EBC7537802E2985CB9@DB8PR10MB3211.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: cH8SgwUJCG+SXSGb/cDhWCgB1Zs/UgpKno5JsgwNvVtGwpnLLhcqGCfapVYOmHCgP08rees/ThK+gItMzoCe7qLNCFTXvL61ht9ipW4yIWip8XHTFb01umPutZHwtPVtoijnPkCggh65j9UK2NmyGw2tmV3OglNNSwzHMr+fAi0g1LTypVPl+4LnteVcu67qnpjZJPK6W+/aeqSsF4h3ecIfy+1AtoUOd+XKGqAAf2Cy/kCNtQF2L32JnU3XEPcfUKlwpBj3agb/LJTLZqYqE9bO69p+ztIFf8SFExkHA/CDFSqv94vn50E1r2towEuUnQ9FxyvGRh+9O3o9Z0dQugzFvZA8kHBy3zvIHdCxy7HcrD1gg28Ucno/RWBFpcXgOiSTYiSFDpXp5jxaDFU3bZH5PiHBKILQ1pLfIMR0HTODhqPOlvIzeMdR7n8yT21MO+O1OVWRfNh4tGISCJC+FKKhwhd2GMtErjztX8mdIcNdCqfC7OFD3HLMmDyKJwwIoVt1zlUlU/04zi9E5Xfp6AcMjASIjX84ifImf5rp6JSBNPII8iR+lDyeyOdHFFLMHhnjn0qkk4YobJ6BA3vb9zkvUWMkwInsl4iQcMOXZhHI6/mWlyxcJWcu4AfKluILs3ACqb6Pjo22y70lpnWClA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR10MB5762.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(83380400001)(5660300002)(1076003)(6506007)(186003)(2906002)(66476007)(66556008)(66946007)(44832011)(8936002)(53546011)(86362001)(6916009)(8676002)(6486002)(4326008)(9686003)(26005)(6512007)(38100700002)(82960400001)(498600001)(54906003)(107886003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?y1qWKtAcdg+ymxQd7KhZ+u/SnS1XtqsoOiKyvdkow+zt7A5px2+tiPqPLMel?=
+ =?us-ascii?Q?bVkGYCMHGAHToUn0bnBymhwmFlTqXPgJGf6EETckb553Lkbwiz9mDo3X4RG6?=
+ =?us-ascii?Q?/1NuH0KUsm+5O20OL7m3K2VJ2nFXzy0LJHcql2TIRHibVDMMP7FNPfdfimpu?=
+ =?us-ascii?Q?z0iBoSsKsUYta4aVsRSh+n8/6szU0Z5eE/A81xt89QPjTlgefUT16iTnOStW?=
+ =?us-ascii?Q?IAPNI6Vau8hz2LYwS9NbTGxgvCbjNpSHBkmszgCHGYpB0pVFDH6TuU1Ur3FG?=
+ =?us-ascii?Q?muyG0uPOcDzcUzSPMofDnNxOwU24rGo+3mTHGmQdtecDQf9TvaEhl9sFJIex?=
+ =?us-ascii?Q?evPusHgVlR2l6X2NYZoGE3rR1z4aLo7VzEUzqWvoc7C0SRakUxMlN6pb/gcv?=
+ =?us-ascii?Q?s8T4p1Rd/7tvOBdwYsbP2ad0bUB2UedPlvL9HQtV/ZLkk1ktWsvjpWGEin8Q?=
+ =?us-ascii?Q?0lA1moqRPbb4Ts3wbVNepuAGGJQ9zsqnWWL6Vn0NxvJQ8k7cFIMDiSt36rPV?=
+ =?us-ascii?Q?Gg8R9LX3r0/yPYsqRwAcuWl9PjC9JfSBj8ub01bAo0NOUmSAQqkk9dr5pxa/?=
+ =?us-ascii?Q?jqeg4XAgk0reNKfG4BDLMgFjLNWo1S/mJID2KL8+RSCLYLEYkRrUmFug2vp/?=
+ =?us-ascii?Q?6QLhJrWEzthobSjeOvD3b+Cxz/kDzBLOtmjuikcmbmoVSOXFLx/d4hibPZ5T?=
+ =?us-ascii?Q?NFR/U2leNlYlXVzpHyGvokfLKGpZsVTy3sXa/7w3Pq0uBD5W37sFY15d5AB5?=
+ =?us-ascii?Q?8SmxV45wNcE1Pae0B2Hj8mwdyQtFtbhbTDdWTTdUNhQbhXigQh7jyMcgDl70?=
+ =?us-ascii?Q?HXZAYgHTnxq67570GEWrCJiZ79NmbepY6KLrAg1gxv5VoiXaGtC7or9xhoFg?=
+ =?us-ascii?Q?+v1Z4ouetB8nASI5zyb+THJ619VWyAHo9yfJGg1PjZ+9RB9RDvMDyEGY39EZ?=
+ =?us-ascii?Q?KaD8PnukygDFrmRYfzy90dPaiPgTD7SLrp8cxqjd4e1l1bmGOAbgz7JrFnWg?=
+ =?us-ascii?Q?K3AxwVL0gwpT6Dx1NgRRxvtBzJ74EupTaWQAymvc6eFYC3g530YiN4KWRny+?=
+ =?us-ascii?Q?uiTf+ieriEUWd+xhEBORtoowKFTQct5eiUmY5NKDnx2p96XVz2uIoqpJfZoe?=
+ =?us-ascii?Q?8TPqAJhty+9vx1v35+U52VUyMf/Y7KcIN/0wGND32gdCCuFWJNm30ZcUpHU0?=
+ =?us-ascii?Q?Y9MxjiIsRGliWQWfR9vfW+T4bwq9KjW+mnSYg+PniY2YXSKjwVPcgoKm4qXf?=
+ =?us-ascii?Q?s1EwkC5dQ7XDVeKU8dYQjADJSHn7PdrkIJ5BJcFXwpc4uqYEckQgd8ZPcQfQ?=
+ =?us-ascii?Q?+NBnqVcJ/K5cUwp6aQ7+JbgP/MNcYKVEtUb1N06ROOsU6ODDUEvFnfaCDeWe?=
+ =?us-ascii?Q?OLch8y71aQEFzgLdlnN0i1jBmi/3G3xrsfMRb7vr7hYfaXaBAMu32cWc7daM?=
+ =?us-ascii?Q?hL3ikk62Lg5ySnB1GmZm+cmDWcxmpj2SWbGOZQU0RUIRXAqKx8ArqHDefdpf?=
+ =?us-ascii?Q?jAXHzjPmUDMI3B/OVYhyVUOClj5sMsjF0Up7fMuNtcsBJAI40P4DI0sZEO2h?=
+ =?us-ascii?Q?1jZgEfc6XKaeveDcxZg3w22R/LnhmlkCQV7jJYyrswpbc7kZHYqmVTXGGMof?=
+ =?us-ascii?Q?l4xfX4ao0nhuIp3CwHhe3L8UJ3JWryzCCs9t8s2e7hy6bWrhNMgWWoWZPzEB?=
+ =?us-ascii?Q?A0EC4zEtMo3LyC962l3a6WLcTR8dN6TRPY3xddtbFaTpcxfgKRpUWpGLWE/R?=
+ =?us-ascii?Q?YH2bLkuUW3z9t8ca92ZMinJ1uB5YyCmJJHJmm/rgTC/SD7CDZXO9?=
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b44789b7-03f6-465e-21b2-08da33f59b11
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR10MB5762.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2022 08:58:38.8879
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: o5Si+QI7BmkcNF1KioNYvfpDXDV8wGXycM5AMy62jpfrXrmcjeLGODMqxNZSRYQdBi9cuLk56eQFTn9zYajBmNIIcDPyYDy0dHp96pbV5eQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR10MB3211
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11.05.22 20:51, Johannes Weiner wrote:
-> On Wed, May 11, 2022 at 07:11:06PM +0200, David Hildenbrand wrote:
->> On 10.05.22 17:28, Johannes Weiner wrote:
->>> Add new entries. Minor corrections and cleanups.
->>>
->>> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
->>> ---
->>>  Documentation/filesystems/proc.rst | 155 ++++++++++++++++++-----------
->>>  1 file changed, 99 insertions(+), 56 deletions(-)
->>>
->>> diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
->>> index 061744c436d9..736ed384750c 100644
->>> --- a/Documentation/filesystems/proc.rst
->>> +++ b/Documentation/filesystems/proc.rst
->>> @@ -942,56 +942,71 @@ can be substantial.  In many cases there are other means to find out
->>>  additional memory using subsystem specific interfaces, for instance
->>>  /proc/net/sockstat for TCP memory allocations.
->>>  
->>> -The following is from a 16GB PIII, which has highmem enabled.
->>> -You may not have all of these fields.
->>> +Example output. You may not have all of these fields.
->>>  
->>>  ::
->>>  
->>>      > cat /proc/meminfo
->>>  
->>> -    MemTotal:     16344972 kB
->>> -    MemFree:      13634064 kB
->>> -    MemAvailable: 14836172 kB
->>> -    Buffers:          3656 kB
->>> -    Cached:        1195708 kB
->>> -    SwapCached:          0 kB
->>> -    Active:         891636 kB
->>> -    Inactive:      1077224 kB
->>> -    HighTotal:    15597528 kB
->>> -    HighFree:     13629632 kB
->>> -    LowTotal:       747444 kB
->>> -    LowFree:          4432 kB
->>> -    SwapTotal:           0 kB
->>> -    SwapFree:            0 kB
->>> -    Dirty:             968 kB
->>> -    Writeback:           0 kB
->>> -    AnonPages:      861800 kB
->>> -    Mapped:         280372 kB
->>> -    Shmem:             644 kB
->>> -    KReclaimable:   168048 kB
->>> -    Slab:           284364 kB
->>> -    SReclaimable:   159856 kB
->>> -    SUnreclaim:     124508 kB
->>> -    PageTables:      24448 kB
->>> -    NFS_Unstable:        0 kB
->>> -    Bounce:              0 kB
->>> -    WritebackTmp:        0 kB
->>> -    CommitLimit:   7669796 kB
->>> -    Committed_AS:   100056 kB
->>> -    VmallocTotal:   112216 kB
->>> -    VmallocUsed:       428 kB
->>> -    VmallocChunk:   111088 kB
->>> -    Percpu:          62080 kB
->>> -    HardwareCorrupted:   0 kB
->>> -    AnonHugePages:   49152 kB
->>> -    ShmemHugePages:      0 kB
->>> -    ShmemPmdMapped:      0 kB
->>> +    MemTotal:       32858820 kB
->>> +    MemFree:        21001236 kB
->>> +    MemAvailable:   27214312 kB
->>> +    Buffers:          581092 kB
->>> +    Cached:          5587612 kB
->>> +    SwapCached:            0 kB
->>> +    Active:          3237152 kB
->>> +    Inactive:        7586256 kB
->>> +    Active(anon):      94064 kB
->>> +    Inactive(anon):  4570616 kB
->>> +    Active(file):    3143088 kB
->>> +    Inactive(file):  3015640 kB
->>> +    Unevictable:           0 kB
->>> +    Mlocked:               0 kB
->>> +    SwapTotal:             0 kB
->>> +    SwapFree:              0 kB
->>> +    Dirty:                12 kB
->>> +    Writeback:             0 kB
->>> +    AnonPages:       4654780 kB
->>> +    Mapped:           266244 kB
->>> +    Shmem:              9976 kB
->>> +    KReclaimable:     517708 kB
->>> +    Slab:             660044 kB
->>> +    SReclaimable:     517708 kB
->>> +    SUnreclaim:       142336 kB
->>> +    KernelStack:       11168 kB
->>> +    PageTables:        20540 kB
->>> +    NFS_Unstable:          0 kB
->>> +    Bounce:                0 kB
->>> +    WritebackTmp:          0 kB
->>> +    CommitLimit:    16429408 kB
->>> +    Committed_AS:    7715148 kB
->>> +    VmallocTotal:   34359738367 kB
->>> +    VmallocUsed:       40444 kB
->>> +    VmallocChunk:          0 kB
->>> +    Percpu:            29312 kB
->>> +    HardwareCorrupted:     0 kB
->>> +    AnonHugePages:   4149248 kB
->>> +    ShmemHugePages:        0 kB
->>> +    ShmemPmdMapped:        0 kB
->>> +    FileHugePages:         0 kB
->>> +    FilePmdMapped:         0 kB
->>> +    CmaTotal:              0 kB
->>> +    CmaFree:               0 kB
->>> +    HugePages_Total:       0
->>> +    HugePages_Free:        0
->>> +    HugePages_Rsvd:        0
->>> +    HugePages_Surp:        0
->>> +    Hugepagesize:       2048 kB
->>> +    Hugetlb:               0 kB
->>> +    DirectMap4k:      401152 kB
->>> +    DirectMap2M:    10008576 kB
->>> +    DirectMap1G:    24117248 kB
->>>  
->>>  MemTotal
->>>                Total usable RAM (i.e. physical RAM minus a few reserved
->>>                bits and the kernel binary code)
->>>  MemFree
->>> -              The sum of LowFree+HighFree
->>> +              Total free RAM. On highmem systems, the sum of LowFree+HighFree
->>>  MemAvailable
->>>                An estimate of how much memory is available for starting new
->>>                applications, without swapping. Calculated from MemFree,
->>> @@ -1005,8 +1020,9 @@ Buffers
->>>                Relatively temporary storage for raw disk blocks
->>>                shouldn't get tremendously large (20MB or so)
->>>  Cached
->>> -              in-memory cache for files read from the disk (the
->>> -              pagecache).  Doesn't include SwapCached
->>> +              In-memory cache for files read from the disk (the
->>> +              pagecache) as well as tmpfs & shmem.
->>> +              Doesn't include SwapCached.
->>>  SwapCached
->>>                Memory that once was swapped out, is swapped back in but
->>>                still also is in the swapfile (if memory is needed it
->>> @@ -1018,6 +1034,11 @@ Active
->>>  Inactive
->>>                Memory which has been less recently used.  It is more
->>>                eligible to be reclaimed for other purposes
->>> +Unevictable
->>> +              Memory that cannot be reclaimed, such as mlocked pages,
->>> +              ramfs backing pages, secret memfd pages etc.
->>
->>
->> A little imprecise, because this only includes memory to be mapped into
->> user space. For example, all kernel allocations are unevictable but not
->> accounted here.
+Am Wed, 11 May 2022 11:03:04 -0700
+schrieb Guenter Roeck <linux@roeck-us.net>:
+
+> On 5/11/22 08:39, Henning Schild wrote:
+> > Since we have a common P2SB accessor in tree we may use it instead
+> > of open coded variants.
+> > 
+> > Replace custom code by p2sb_bar() call.
+> > 
+> > Signed-off-by: Henning Schild <henning.schild@siemens.com>
+> > ---
+> >   drivers/watchdog/Kconfig           |  1 +
+> >   drivers/watchdog/simatic-ipc-wdt.c | 15 ++++++++-------
+> >   2 files changed, 9 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> > index c4e82a8d863f..643a8f5a97b1 100644
+> > --- a/drivers/watchdog/Kconfig
+> > +++ b/drivers/watchdog/Kconfig
+> > @@ -1628,6 +1628,7 @@ config SIEMENS_SIMATIC_IPC_WDT
+> >   	tristate "Siemens Simatic IPC Watchdog"
+> >   	depends on SIEMENS_SIMATIC_IPC
+> >   	select WATCHDOG_CORE
+> > +	select P2SB if X86  
 > 
-> True. How about the below?
+> Why "if X86" ? SIEMENS_SIMATIC_IPC already depends on it.
 
-Sounds good, thanks!
+Thanks, will remove that.
 
+> Also, I just noticed that P2SB is neither in mainline nor
+> in linux-next, meaning this code won't even compile right now.
+> That should be mentioned in the introduction e-mail (the use
+> of "introduced" suggests that it is already there; you could
+> just use "will be introduced" instead).
 
--- 
+It was kind of in the cover letter, but maybe not verbose enough. Sorry
+for the confusion. v1 was sent in-reply-to on top of P2SB, maybe i will
+do that again for v3 but for sure point out the order in case i send it
+without the reply.
+
 Thanks,
+Henning
 
-David / dhildenb
+> Thanks,
+> Guenter
 

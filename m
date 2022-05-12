@@ -2,161 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 907AC5252D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:40:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8B15252CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356593AbiELQkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 12:40:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
+        id S1356618AbiELQkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 12:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356574AbiELQkO (ORCPT
+        with ESMTP id S1356597AbiELQkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 12:40:14 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDEB25A78B;
-        Thu, 12 May 2022 09:40:13 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CCEJsA022848;
-        Thu, 12 May 2022 09:40:13 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : mime-version; s=facebook;
- bh=x+4Sd57FuLX7168+6+24hltmig4ecSBFvlfoKDP2zuk=;
- b=Mw5eGerQWa5KNn3ClSveWPpL/FINph6ApPXUdKFowR4Wwq47JSFJ0/7uUqo7JziQWzSM
- nQb7CnAYYn2o+V90a1fCvtGOgqlJH39uuxurwiz7qXs8e686Ft8iSZaQatpwQUTTwtab
- 4EnKpWvE/ubk2P8fZSVxk506/w7Hn35XBOM= 
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2171.outbound.protection.outlook.com [104.47.57.171])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g055hutu5-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 09:40:12 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=S5R3Xj9BLNn57gOlISEVokmdrw9aRrQQNTeXQan9cQxaEJ/KUzHR3cEGkOlGgeIr1lpanv+mgWW0O21q5TqtMQ2bR3sEpp8xLW+i2tf99FqP9TC75NCJd9KbhKobx9c7yvALZmNNkiEAcT0Z6bOn6fp6pc2IFL1jb9Azrljvu86e9JFqyKJf11A9NugDBM0VhDUyLNTIbxcmdmIBUoLlTWbs0qJ+G4RYK6qXzbnrPN4Jm/tAXjGV3VWGSFmynFbyvJYinQcbhUJdb52c2Vx7Pi6E25g+qhyQqpnF0eAlDDoIHIb1KTcHFFJIPi09LeJAXonY3g6jxqE4ApARGxuzJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qryt685I33NBx554p2iJO9jcO77XX083W+Qu8DFXTIU=;
- b=eeP6uvSQA5z7UsSDaYtqLh+el4ecnTEudfrZb44bm6JYG7atNU06SGmMiPVSJkRaEtsA16aGWadpS/w6y+WuVO9tLCEPaJCHXieF05vSyteq7zOYDyxzkPFEKpgA/pYH3C1lYFe/EHWcGRRFbp1VdlfSp5u141kI+TLEv6lq52x3PA9+a6km8EWvLOi0L3e3k+cwGfCLJRhbWkRpmviAyML2n0UTf+TM9qEuaqTIqwfmGCcbBO6HdraWyaCNM7+QtMD+hQG1MwU54lC4ehw/PMum/aUKkl9hKXSAFCRUERvGMAMJr1r4Hhf51Gtztyt6VyTgVvi6nZPsp11Ko85iCw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
- by DM6PR15MB2345.namprd15.prod.outlook.com (2603:10b6:5:8d::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14; Thu, 12 May
- 2022 16:40:09 +0000
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::3061:40ff:2ad:33aa]) by SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::3061:40ff:2ad:33aa%4]) with mapi id 15.20.5227.023; Thu, 12 May 2022
- 16:40:09 +0000
-From:   Song Liu <songliubraving@fb.com>
-To:     Wan Jiabing <wanjiabing@vivo.com>
-CC:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/3] bpf: use 'error_xxx' tags in
- bpf_kprobe_multi_link_attach
-Thread-Topic: [PATCH 1/3] bpf: use 'error_xxx' tags in
- bpf_kprobe_multi_link_attach
-Thread-Index: AQHYZgsIMIVDG4Y66UCqI47+lLAf5q0bccsA
-Date:   Thu, 12 May 2022 16:40:09 +0000
-Message-ID: <97736EC2-A393-4E8C-A7D5-7C6D3CD26CEB@fb.com>
-References: <20220512141710.116135-1-wanjiabing@vivo.com>
- <20220512141710.116135-2-wanjiabing@vivo.com>
-In-Reply-To: <20220512141710.116135-2-wanjiabing@vivo.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.80.82.1.1)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 20d52d09-b5f2-4a4e-1b4b-08da3436140e
-x-ms-traffictypediagnostic: DM6PR15MB2345:EE_
-x-microsoft-antispam-prvs: <DM6PR15MB23454D1CB3F5B91504AE51E3B3CB9@DM6PR15MB2345.namprd15.prod.outlook.com>
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: G5hSqTCmdfCHwGu65UgkFWa5CZsQfdo3I4e/gnjN8Y/f5ZpeA63RZt3E7n4l694Sh7tB3yoHnIWt+qCX1U7iObflKBR17PDXlVsHOp7wv9+82WArukD45q12g2wheXJCfEx7NJnvwx6ZwyAdnTatdBsUYWYTxT/60FqYl+J6hFx2AJwajrS2e0CuIkW0yoNbJdpWzoz0ihzUcUIy4V93gAwQbLuM1WekSnjKauMEwWjuXBpbhtW68Thown9iGD3VigHw8NXWREE6qDdhfdN6Wcxdh1rvQ+k8kYlDiqEOfryZ6UkPoyA8y+CS2+V6XabP8SnBCvqVtRdrOOlMYR6D59u2CjBySbSA8rsKkFVG8GdPSSTHqOpjeR43Y+eyRcu+zK5DISxmewno5wg160Gr4eUA1FhzKEECc9NSwbEz9Ls9y0jKAcgqo+LlgEpnTGjlkDlQRcsZDFZiYtzaPQQwH5gbjt1t5nMhSW6aF0M3CqTH4s2XhBdpDNSEriuOj+80qFWE98FSurj0Jw2Apdmj50TeZde2/YuhnN4NXtbQRhKOSpPeI1LPsjP+aL/xqVDYBDyxScYr+aihkYhPLv7JuLhTbP8qpgZFGmkIhwsZgrO21J+1oMkw0LYR4ehN6IRWNjpMFLdOIFtCaEkaIEVvtSjWKKgWFR6KC8OQnCEjrDu5OJ5pTc0tjmmoUb6W8TFTkEPZbfK4StCdSX6gb3rotVBBobKP274+URCXXHnB+WR0XMLqw31j+blBaOGwNaS+
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(54906003)(76116006)(6916009)(91956017)(38070700005)(2616005)(6506007)(6512007)(508600001)(5660300002)(4744005)(53546011)(66446008)(66946007)(36756003)(4326008)(8676002)(66476007)(66556008)(38100700002)(316002)(64756008)(83380400001)(6486002)(186003)(7416002)(71200400001)(2906002)(33656002)(8936002)(122000001)(86362001)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3xWDkRfnJkTuNmLudm+ySepGC7rjv84Dq1S1uuh6DZIMwYbDooUNWMLOsJwC?=
- =?us-ascii?Q?pSyYWhQQJMtiF1kSY29I6vkAZ2S0hJJVCWXnG3LKzY5hgU/24pmxL0hWRIFK?=
- =?us-ascii?Q?5fZwLj/4g/UBwFmnDMLS4NXTtRQ0Rl9EPRtMxAl5VsVK0VSjNRItAnuJlQZt?=
- =?us-ascii?Q?003doIkOE2MmoOy1/k6Z6wqmm35Xc3XUr2iO11sTO8aZ25++KsSOyEBAfLw4?=
- =?us-ascii?Q?IPjvZC53y2p8V7fFMXayuEjwAfGzn/3MQ/k3umhf9mun8r7nhSXAzyvLss6R?=
- =?us-ascii?Q?k8v/gLO8Ixi0xC2ILwA5SROc0uz22q3woEh+guaViFwfSeoXn+KU3rbJilLs?=
- =?us-ascii?Q?2D7bZZKdI26s4k/EjkwTpFmPvuHISgexKI2ogLebBzXu9DaJL2SW+z/udCA7?=
- =?us-ascii?Q?sbZXRzLyQ91mqUhazwPsRY/I2yhwj7yxekHEHPHb/7SuctO+MCTzIQhlDuGl?=
- =?us-ascii?Q?Bnyqt3nD09N1f1bE4jjP8tu+g71yhINLCZjNOJzP7KTmqmLB2RQ6c9ru0Xdl?=
- =?us-ascii?Q?2OY/+8yAVwBeE948y+mHAylRQTw1V5tKjKD8gARfoT18YqnLFU2+fab2F6yG?=
- =?us-ascii?Q?AeRUHyxnPHiFkAj72Wv6mPielkij6YpmiP+KXzYw/MDh+evTiAO4qNIeDuDu?=
- =?us-ascii?Q?Oaz3upC0p45VPZvsAiTEZ74gE9E8vVYPA5jzAMQEjzwxEEH5k4SGIX4JQUGY?=
- =?us-ascii?Q?SBTtNEvuZFPQ0M1Cpm6ZnQtoV5L8BVDveo5gGwiN6+0l5yPG+8Su1ZeeqOAq?=
- =?us-ascii?Q?ZzMrP09ofoOSYWnYYocQZYSMwEUvA0+mBFfYBI97icXmleYYt7tNCTH3921c?=
- =?us-ascii?Q?9BWuAT8MNUdkKwX2lQZaZBTFhQxLhVD5rHAaR8pqRRXY4/4+aBDbedHs1zwd?=
- =?us-ascii?Q?TRRETJp1gMAuv9D6pOqOXO2E0Qzfbdm7eny+TFD+OB5olwCe+5vI+HpxcuPL?=
- =?us-ascii?Q?8tbu1UX/DIOLEIUq7P6lRc5sgq0KFBBt8kivpzEeOazuvk/y37FsXZ3cq9dc?=
- =?us-ascii?Q?iwLyL1KQTPbyZvORJwgZdEa8i6hyhYEmf2gG4EGkV9RSezKRTA3sDafEzYV7?=
- =?us-ascii?Q?uK7gwj2JqMxx2JI2oQATLCzA+26JvRV1zMHT25opEhcVGnMxKv4Oghgk5aYO?=
- =?us-ascii?Q?y+gU9FsQQqC0ZzytIp3toAyxER1cOtshbgco1oM5LMdif3riDArS9AZUrx1A?=
- =?us-ascii?Q?5ugSBb/gX8gVjnrSEJZGe1+XL7Dq4g4gkAQiqFp8W0v/IyCz1is2iq0nOZSq?=
- =?us-ascii?Q?+AGvcjt1UU5JmrRkte58R4s+M6k+r6ZKE/3iWyGPg1eT2wLeZ5ZmpeoG1L7I?=
- =?us-ascii?Q?hbHYCEPYU0grvrdvVPOJpqUPRHdXXU65cDGR/eLYfvRD6QfMGKm6PPYgRJ+m?=
- =?us-ascii?Q?1ww0kc+Sm62JvATAYap02wD9mixa7WPRN/wd+hgVvGbUAZ+9hyTNdMiQCWH3?=
- =?us-ascii?Q?hUbKvkN7AFDXCg8i+3eAtbSuGQ3rA++/Qs2kMHZ0yDmkQ1205q8naBRyB45+?=
- =?us-ascii?Q?bu15MYZlWrrPRdcvDz79IeFcWHoYPLhBi+ZaaXP6YkI3Ci833hVrb99bXhje?=
- =?us-ascii?Q?laGYp7pzZrgCETQ35eoJ6Sm4ZzLhV2C5Mr1Qo0+uZPbMC2EC4MpgfzxqOr6s?=
- =?us-ascii?Q?p9FM2lS2ST2buSxA/PscgiX4JfLXWhiK5b+lq6guj5uUpaNy8Sjug7Vb4gj1?=
- =?us-ascii?Q?lVgSdorq3z1DlGnXlCDbfcwW8XIIb5u1Sz9t04ko4qT/UBjZ/d7nOZ1Uymlp?=
- =?us-ascii?Q?cggBFoXtexO7WYwxZbNjh4gR9TWMv9rAwbuKynRgXBftABnXaGYJ?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <DCB5951702674649860595EF9CC188F6@namprd15.prod.outlook.com>
+        Thu, 12 May 2022 12:40:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E0842685DC
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 09:40:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652373618;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NsJep5oCvE52cG8IYLZ5lNH1MW8yFZhmyzXX66loBtY=;
+        b=XoLxstCC8bh8lkxKIfPpYg/4m6wrS7Q+HFvk1vz5XUwdyFCDeg9KX26j3PMwy0oipBl4Mn
+        PyVZ1tYmGcDvW2qKbmSnB3vdFosutCODGwJ+n53k95cEbKoW/g9r8cHO5nx2ebQ43ijOiI
+        7yyphX6dIN8GXHf/GnXBb7eVTHh30mw=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-225-Kr9BY_KXP7W46BRkyXm1aA-1; Thu, 12 May 2022 12:40:16 -0400
+X-MC-Unique: Kr9BY_KXP7W46BRkyXm1aA-1
+Received: by mail-wm1-f69.google.com with SMTP id 26-20020a05600c021a00b003940660c053so1845973wmi.2
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 09:40:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=NsJep5oCvE52cG8IYLZ5lNH1MW8yFZhmyzXX66loBtY=;
+        b=L5Ct1ve1Orm9HQI0j+EnQ/MYZ2ZU4K1TkvCQotGDPnBAzQAOLlvP3JXx3lPjEgt6jT
+         fKlNOHVOs+APzOoo1OboNX5QSpeSvS1DpEf5nLYg9BXv4ltAFjjpjSMK96+NDwyyW3jb
+         iUDUgPQImf6+HHsTAt8qSS70h+ABPWHRCdEITMSEZYoHTtee3zXewbQbmabuaykgJfZI
+         etGgVSXqUg2tgXy3TIgCk8dY6ebfAbJcX0vFsjcRKSXqhTYQVA+71p6OCDKLlft4rexa
+         Z87BwdiRPSclcQPTBX3YLM1NUtsUeiY73CsJeSVi9u3i+o5f7F0LmaG/H9c4htnTiini
+         D4aw==
+X-Gm-Message-State: AOAM533Bxy4ZnysVDpHNQRAnzarnpvZ2ZzvoVfWjXfSMJyDaPitA/pp3
+        ua1+ZFWA0wD3yfH0+MGu+s+xoaXaHzGcMqAj7Ug0rU4tVHUTHTMRs7+XJJsevwdhecEn3a3kgBb
+        bumN927+1ZLxhXQLxNI///Xft
+X-Received: by 2002:adf:e812:0:b0:20c:dd44:b06c with SMTP id o18-20020adfe812000000b0020cdd44b06cmr468985wrm.714.1652373615740;
+        Thu, 12 May 2022 09:40:15 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwWKc+W5dfrOdOxweNVXdTz6oJYOENyjVQGLe4xiMAybfEgwkqqsd4IYjrdjYIX8sxGYcz+PA==
+X-Received: by 2002:adf:e812:0:b0:20c:dd44:b06c with SMTP id o18-20020adfe812000000b0020cdd44b06cmr468956wrm.714.1652373615462;
+        Thu, 12 May 2022 09:40:15 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c701:d200:ee5d:1275:f171:136d? (p200300cbc701d200ee5d1275f171136d.dip0.t-ipconnect.de. [2003:cb:c701:d200:ee5d:1275:f171:136d])
+        by smtp.gmail.com with ESMTPSA id d11-20020adfa34b000000b0020c86a9f33bsm65751wrb.18.2022.05.12.09.40.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 09:40:14 -0700 (PDT)
+Message-ID: <089a4ded-636f-b0c6-0645-8220c5a785d9@redhat.com>
+Date:   Thu, 12 May 2022 18:40:13 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 20d52d09-b5f2-4a4e-1b4b-08da3436140e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 May 2022 16:40:09.5224
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: GHTyz7S1GlcZng61SX8VGIcY/I2iKq5jiSYO33TXVokO8fusGldQdhFwGWWqMsKUZ9ee98BsmeYScXDIB3fuqA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR15MB2345
-X-Proofpoint-ORIG-GUID: 9v9YAR4acjzkyPFHyz9DayvbKFa8M0Cc
-X-Proofpoint-GUID: 9v9YAR4acjzkyPFHyz9DayvbKFa8M0Cc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-12_13,2022-05-12_01,2022-02-23_01
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 1/2] KVM: s390: Don't indicate suppression on dirtying,
+ failing memop
+Content-Language: en-US
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     Sven Schnelle <svens@linux.ibm.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org
+References: <20220512131019.2594948-1-scgl@linux.ibm.com>
+ <20220512131019.2594948-2-scgl@linux.ibm.com>
+ <77f6f5e7-5945-c478-0e41-affed62252eb@redhat.com>
+ <4a06e3e8-4453-9204-eb66-d435860c5714@linux.ibm.com>
+ <701033df-49c5-987e-b316-40835ad83d16@redhat.com>
+ <9ad7acb4-2729-15bb-7b25-eb95c4a12f09@linux.ibm.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <9ad7acb4-2729-15bb-7b25-eb95c4a12f09@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> On May 12, 2022, at 7:17 AM, Wan Jiabing <wanjiabing@vivo.com> wrote:
+On 12.05.22 18:26, Christian Borntraeger wrote:
 > 
-> Use 'error_addrs', 'error_cookies' and 'error_link' tags to make error
-> handling more efficient.
 > 
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
-> ---
-> kernel/trace/bpf_trace.c | 20 +++++++++++---------
-> 1 file changed, 11 insertions(+), 9 deletions(-)
+> Am 12.05.22 um 17:50 schrieb David Hildenbrand:
+>> On 12.05.22 15:51, Christian Borntraeger wrote:
+>>>
+>>>
+>>> Am 12.05.22 um 15:22 schrieb David Hildenbrand:
+>>>> On 12.05.22 15:10, Janis Schoetterl-Glausch wrote:
+>>>>> If user space uses a memop to emulate an instruction and that
+>>>>> memop fails, the execution of the instruction ends.
+>>>>> Instruction execution can end in different ways, one of which is
+>>>>> suppression, which requires that the instruction execute like a no-op.
+>>>>> A writing memop that spans multiple pages and fails due to key
+>>>>> protection may have modified guest memory, as a result, the likely
+>>>>> correct ending is termination. Therefore, do not indicate a
+>>>>> suppressing instruction ending in this case.
+>>>>
+>>>> I think that is possibly problematic handling.
+>>>>
+>>>> In TCG we stumbled in similar issues in the past for MVC when crossing
+>>>> page boundaries. Failing after modifying the first page already
+>>>> seriously broke some user space, because the guest would retry the
+>>>> instruction after fixing up the fault reason on the second page: if
+>>>> source and destination operands overlap, you'll be in trouble because
+>>>> the input parameters already changed.
+>>>>
+>>>> For this reason, in TCG we make sure that all accesses are valid before
+>>>> starting modifications.
+>>>>
+>>>> See target/s390x/tcg/mem_helper.c:do_helper_mvc with access_prepare()
+>>>> and friends as an example.
+>>>>
+>>>> Now, I don't know how to tackle that for KVM, I just wanted to raise
+>>>> awareness that injecting an interrupt after modifying page content is
+>>>> possible dodgy and dangerous.
+>>>
+>>> this is really special and only for key protection crossing pages.
+>>> Its been done since the 70ies in that way on z/VM. The architecture
+>>> is and was always written in a way to allow termination for this
+>>> case for hypervisors.
+>>
+>> Just so I understand correctly: all instructions that a hypervisor with
+>> hardware virtualization is supposed to emulate are "written in a way to
+>> allow termination", correct? That makes things a lot easier.
+> 
+> Only for key protection. Key protection can always be terminating no matter
+> what the instruction says. This is historical baggage - key protection was
+> resulting in abends - killing the process. So it does not matter if we
+> provide the extra info as in enhanced suppression on protection as nobody
+> is making use of that (apart from debuggers maybe).
 
-I seriously think current version is simpler. 
+Got it, makes sense then. Thanks for clarifying!
 
-Song
+-- 
+Thanks,
+
+David / dhildenb
+

@@ -2,153 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65BF6524A56
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:33:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 098CB524A5A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352667AbiELKd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 06:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60020 "EHLO
+        id S1352645AbiELKdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 06:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352688AbiELKdV (ORCPT
+        with ESMTP id S243765AbiELKcw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 06:33:21 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315F722384E;
-        Thu, 12 May 2022 03:33:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652351597; x=1683887597;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=j2jLl94ZVv6+GyAHgqDQMoLNb5is4/daKLdqORUvrdg=;
-  b=c8gsRy5vrkVgf5ltd4jkh27OZFBQbAjROQCHP1hb46tNjRnfIA1ouAFz
-   sIBlWfB43/C/oc5kT6TRCMomhblfCkLJzMTCtbTcSsQ4FWwzpy6YX1rVo
-   YphJ6sDG8AkBECaC6mJiu7oK6isTxjWjMb1+9hFeaXUbkUWhjO6u9kakB
-   1Vj0AT1bi876t577ACjpv4boZtolbHugcKX5IbPmMi1r5ztoY5dmcitxL
-   I9JJLhwgiPgomiG4SwQHLiFcQ278Bbfe9XkNfX4fjfpag1EIZa6O717N8
-   ZPuf3dR+DTErGSUn/Ailsd91AXdBtAeDswP53y7NRwCLnJKA+btXZRUMO
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="269637629"
-X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
-   d="scan'208";a="269637629"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 03:33:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
-   d="scan'208";a="711867159"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 12 May 2022 03:33:11 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1np686-000KIM-T5;
-        Thu, 12 May 2022 10:33:10 +0000
-Date:   Thu, 12 May 2022 18:32:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Markuss Broks <markuss.broks@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Markuss Broks <markuss.broks@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Song Qiang <songqiang1304521@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] proximity: vl53l0x: Prefer already initialized
- interrupt flags
-Message-ID: <202205121820.qRBa5PNP-lkp@intel.com>
-References: <20220511214718.50879-3-markuss.broks@gmail.com>
+        Thu, 12 May 2022 06:32:52 -0400
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118FC22308F
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:32:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1652351569; x=1683887569;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7am/MEeERb7BqRq8auuQ8/s1Gt58B+E4igyB05DEOK8=;
+  b=lZ8ZuY5fx2ZTkEyuw50hBX0pFXaaGOcRbpK3xM1ZT7ACaR0aevjED0uk
+   P0hxg8wk/F/Kl4wFY8OaRrQMato3ps4Y1oZxf9C4YOH167huPouokyZrR
+   uBdAku0mz7ZUhnFJDOuSJDWzV0mBQu4vdJ5ln405MAB2zui9soWMapPOr
+   DXkWUk0H8mQX9NWdkcRViGxTasiG2hc7771VCzfYlVuSj+lH97a5gjDlR
+   xCE8GJjUlk2oacrBDXE6/4Xz7NFCwxvcTJraE2qVylIvDlTy1jfHcLDVA
+   NKJ9urgcR9ci7ZjAbFdY2e7Gp/5pzIYeuYX+WIl9vRdgrSrVZXc5Mg33g
+   g==;
+X-IronPort-AV: E=Sophos;i="5.91,219,1647273600"; 
+   d="scan'208";a="205022508"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 12 May 2022 18:32:47 +0800
+IronPort-SDR: ScW5Y//OVTK5m5jfW5mVr6gRqLt5KPca6s0v9xBKM6mBeUzrRO5rrAVesTL1Nq471rRRcg65t6
+ 7SyB+7uZiau7DvT7IBBKXLAGCR3N//doqtqk0FpxaOlnnJHFI/q8HY5ibyf235UKruxBLWjHsK
+ QXLWm5A1iIhluLIL33OyBjW7Cvxdt/otrGtNvLKlyi50mFnT1wKdw7Yf/CRVcKzc06WFEKdsbm
+ jtNqZerkDwQZHwhNifmIORjFwueRJ7m8+zsp6MxNSkJOBuL27vbZaCxsEq3H4iDTjHL1yBb6jK
+ YB88jnfShFDA6hqabn15LMEq
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 12 May 2022 03:02:41 -0700
+IronPort-SDR: 6lQqF5MFU+qgzZ6HPOrEDJuu/P4HDOaIelgE9FHv5eLgabusjskLj4/vuqT3YddqrytbFx3NIi
+ fDajF2P7PRLRf4j8+QD9Kypv7uqJa0sLWM+1KQJxPJPqMDXRqa1BpEYoRpmTTkUAmjUo0WQ8R1
+ 65QeBmH7gcHK4BZGAV8Jd0XfMvT+48J0Glnq8NdkMebXa/mlRrsLa/fdemKVAnfrM/iXxN9Vcv
+ vSujVDoH9PG0mX7GVI8Gl4AXiTc+LvlcQGdcKWU8MtN0jDGkO7/aj0Ka/qCKKPICi00fWTP7gm
+ 3zY=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 12 May 2022 03:32:49 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KzSlh5YKHz1SVp5
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:32:48 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1652351567; x=1654943568; bh=7am/MEeERb7BqRq8auuQ8/s1Gt58B+E4igy
+        B05DEOK8=; b=j8pXKrff2t+NTPKM72zJidPk+f2HcacOfmcQhOkLfV0Z1egUYxg
+        KN9jmriK5/F0/6jnFM2nmW+R4r25fUt+xQJpO97C8Hs1+1g9JUT2wgArLJo+UKwV
+        6/Heg24D7Htp1xJmyTjpM5fwzGwYNb+b6PCF8RjNNpQ2x61MEVJQ+uW2eYLYK20o
+        MIUiXKtpJwlO4Srz5LUFoVHV+7vN0ug3BQhlqvjGsO4UiCjfWV2XG2RZd+WR1f0p
+        3HlDNPRNRLo1DJKGFOBhT7y30BuWmBadkCMwo3nu7YCtQn9b0kcS4672J3v2AIlY
+        uxFL8aP8UfCshtJWUTPg8yMkhyg61fWdFoA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id awNX8WPVpZNI for <linux-kernel@vger.kernel.org>;
+        Thu, 12 May 2022 03:32:47 -0700 (PDT)
+Received: from [10.225.1.43] (unknown [10.225.1.43])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KzSld0yfZz1Rvlc;
+        Thu, 12 May 2022 03:32:44 -0700 (PDT)
+Message-ID: <9a1ad8f4-7f60-a941-940d-eca00b1f533b@opensource.wdc.com>
+Date:   Thu, 12 May 2022 12:32:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220511214718.50879-3-markuss.broks@gmail.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [PATCH v3 05/23] ata: libahci_platform: Explicitly set rc on
+ devres_alloc failure
+Content-Language: en-US
+To:     Hannes Reinecke <hare@suse.de>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220511231810.4928-1-Sergey.Semin@baikalelectronics.ru>
+ <20220511231810.4928-6-Sergey.Semin@baikalelectronics.ru>
+ <4bd4318b-a753-6453-a815-716fbfffab3f@suse.de>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <4bd4318b-a753-6453-a815-716fbfffab3f@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Markuss,
+On 2022/05/12 8:27, Hannes Reinecke wrote:
+> On 5/12/22 01:17, Serge Semin wrote:
+>> It's better for readability and maintainability to explicitly assign an
+>> error number to the variable used then as a return value from the method
+>> on the cleanup-on-error path. So adding new code in the method we won't
+>> have to think whether the overridden rc-variable is set afterward in case
+>> of an error. Saving one line of code doesn't worth it especially seeing
+>> the rest of the ahci_platform_get_resources() function errors handling
+>> blocks do explicitly write errno to rc.
+>>
+>> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+>>
+>> ---
+>>
+>> Changelog v2:
+>> - Drop rc variable initialization (@Damien)
+>> ---
+>>   drivers/ata/libahci_platform.c | 6 ++++--
+>>   1 file changed, 4 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/ata/libahci_platform.c b/drivers/ata/libahci_platform.c
+>> index 32495ae96567..f7f9bfcfc164 100644
+>> --- a/drivers/ata/libahci_platform.c
+>> +++ b/drivers/ata/libahci_platform.c
+>> @@ -389,7 +389,7 @@ struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
+>>   	struct ahci_host_priv *hpriv;
+>>   	struct clk *clk;
+>>   	struct device_node *child;
+>> -	int i, enabled_ports = 0, rc = -ENOMEM, child_nodes;
+>> +	int i, enabled_ports = 0, rc, child_nodes;
+>>   	u32 mask_port_map = 0;
+>>   
+>>   	if (!devres_open_group(dev, NULL, GFP_KERNEL))
+>> @@ -397,8 +397,10 @@ struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
+>>   
+>>   	hpriv = devres_alloc(ahci_platform_put_resources, sizeof(*hpriv),
+>>   			     GFP_KERNEL);
+>> -	if (!hpriv)
+>> +	if (!hpriv) {
+>> +		rc = -ENOMEM;
+>>   		goto err_out;
+>> +	}
+>>   
+>>   	devres_add(dev, hpriv);
+>>   
+> I disagree.
+> As 'rc' is now only initialized within a conditional we're risking 'rc' 
+> will be left uninitialized.
+> And in the end, it's a matter of style; this patch doesn't change the 
+> flow of events and the benefits are hard to see.
 
-I love your patch! Yet something to improve:
+Yes. Let's drop this patch. Not improving anything.
 
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on robh/for-next linux/master linus/master v5.18-rc6 next-20220511]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> 
+> Cheers,
+> 
+> Hannes
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Markuss-Broks/Add-support-for-ToF-sensor-on-Yoshino-platform/20220512-054917
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-config: s390-randconfig-r032-20220509 (https://download.01.org/0day-ci/archive/20220512/202205121820.qRBa5PNP-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/b4103f031e2c0265ae4f15f107341bcfc83008f0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Markuss-Broks/Add-support-for-ToF-sensor-on-Yoshino-platform/20220512-054917
-        git checkout b4103f031e2c0265ae4f15f107341bcfc83008f0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/iio/proximity/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/iio/proximity/vl53l0x-i2c.c:60:18: error: call to undeclared function 'irq_get_trigger_type'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           int irq_flags = irq_get_trigger_type(client->irq);
-                           ^
-   1 error generated.
-
-
-vim +/irq_get_trigger_type +60 drivers/iio/proximity/vl53l0x-i2c.c
-
-    56	
-    57	static int vl53l0x_configure_irq(struct i2c_client *client,
-    58					 struct iio_dev *indio_dev)
-    59	{
-  > 60		int irq_flags = irq_get_trigger_type(client->irq);
-    61		struct vl53l0x_data *data = iio_priv(indio_dev);
-    62		int ret;
-    63	
-    64		if (!irq_flags)
-    65			irq_flags = IRQF_TRIGGER_FALLING;
-    66	
-    67		ret = devm_request_irq(&client->dev, client->irq, vl53l0x_handle_irq,
-    68				irq_flags, indio_dev->name, indio_dev);
-    69		if (ret) {
-    70			dev_err(&client->dev, "devm_request_irq error: %d\n", ret);
-    71			return ret;
-    72		}
-    73	
-    74		ret = i2c_smbus_write_byte_data(data->client,
-    75				VL_REG_SYSTEM_INTERRUPT_CONFIG_GPIO,
-    76				VL_REG_SYSTEM_INTERRUPT_GPIO_NEW_SAMPLE_READY);
-    77		if (ret < 0)
-    78			dev_err(&client->dev, "failed to configure IRQ: %d\n", ret);
-    79	
-    80		return ret;
-    81	}
-    82	
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Damien Le Moal
+Western Digital Research

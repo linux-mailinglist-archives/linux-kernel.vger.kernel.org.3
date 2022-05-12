@@ -2,112 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE07525402
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82AC85253FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357244AbiELRqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 13:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33004 "EHLO
+        id S1357235AbiELRqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 13:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357226AbiELRp5 (ORCPT
+        with ESMTP id S1357229AbiELRp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 12 May 2022 13:45:57 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A770A11C37
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:45:55 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id bo5so5470264pfb.4
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D5C12601
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:45:56 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-ed9a75c453so7503720fac.11
         for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:45:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=MKSf812TTE05BrANtImubNsPtr0MvP/NAKhjTot4IJA=;
-        b=T4klzcOxo/2MGKJlZI20mz46CAW/dJSi8WpnD+JfxxXVw2Sm2479kH38VRnPx71CMV
-         CbtFS6KSZ13DX7jsgSAVeCts3SAsIPlfPU3hIjWKllG3bpSrTLr2lsAsjO8uMTGlm2wk
-         1ZZZFjDxCGeLr4dimsllA/e8y3AoDx9zxFGS84Hj7M9j6TNHfetyNVfpZVC3dGsc9EtT
-         Fb8kD8irhbZBbuJKx7Y2pwA9Z6xEDRA4jdtGEvcQnnhaOQ8JjDxXBcFk1dO76iOhYk1o
-         XDHyC/GJpI6PbXOi3/jwogaI96tQF7ZA/o2cuxToERseGQIxosM7Mf2VsVipk6ZuLCPV
-         IOCg==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=pZ9h+s6h2+1qS4V/lr1+HPr3vp4rl9/9pnc5MgAiHb4=;
+        b=VBjXrSrh6RboKZRgN/Ib5xzMxbhAijEoDCAuhLKOpfVPdBGmDAzSmLKv8bSg5QW7y4
+         3mqmcYR5/SWL7pQgkwk8xsZ7UIK+C1Z05ek1YEdkbRueTl4lI/BEA2w6FjZIk28QIxjF
+         FuLHSrKG/4n0a0xsLofGyez4RSh+oHEoAIgfA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=MKSf812TTE05BrANtImubNsPtr0MvP/NAKhjTot4IJA=;
-        b=VFn8ShvbrFHkFsBfChYD0n3CGS+ZchNMugl/XCvv41I5Ip9wjvRTl3Vp31l3C/Ydm9
-         o4HGXDAXECVCY0WqiUHrDq35ka8XZcZXZdOJgxpjzVd6eRrl3DyPCqOKhsLOI/4/uMI6
-         0AXlTRSbfLJ8gFF59+DqKWoYJOFM1/u4zrGBqZZX2lHawcMmp5PfrarKQ9Gut3b5Q6sb
-         qKnAUNZ28l3IwaN2B/X2h1bKqzR4P1cwgM6+afXo3dcgAz2uA0359gyl+MTxW/Ed+QNp
-         M/vcDPr4TCgTLsXGuTo3y1y7ceFXfEvCkGPtGTHgiWMztJSS1boTHejZWajupcunUZsj
-         EsXA==
-X-Gm-Message-State: AOAM530Fec6z6vO0szHv6S5xewNzx4PQ3iGJ0yMcKP0YpMJlz4khzs+d
-        0buSrUxBqPp6qzSRapG0I7s=
-X-Google-Smtp-Source: ABdhPJyaxS+JpibF6XGuB3QzwL/WbWlsDrwN5hk4B2HsNo04GTLu6GafE4I8Hu+zLZoU6aKdMDT3bw==
-X-Received: by 2002:a63:5746:0:b0:3c2:363b:a88d with SMTP id h6-20020a635746000000b003c2363ba88dmr605892pgm.17.1652377555198;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=pZ9h+s6h2+1qS4V/lr1+HPr3vp4rl9/9pnc5MgAiHb4=;
+        b=hfech15Bgfl8hIPl2Lj7S975SbUAxQvPsKgvL3NLGQTi0iAyw+elASIBU5MhCevaGl
+         G3foln3rwMIkbuOCXSXeUMBzUjaxlfDh/tjqEF8sorm07P6Dfog2P1y8s+Gvfmg6otfA
+         jjsBti0A6F6YQ2cg20M//kBr3z87oc8Tt2QZdHfBOyCAgL4m/9qtRf8EnSrbRLDc83OZ
+         aJiSmW4v6g9jzweU+0thvI4LdvWkKY0PBp+4dhUcrwR4ISMKvc9snDt1Lv/OVRL24jbk
+         qKfE6HK763ccGRyOpf6cmmhg0kzXGqY10YVN0duBujq55ozhOp+AcDI8A553JXknw6/M
+         B2Kw==
+X-Gm-Message-State: AOAM533XvaW3stvbGp1qcCd9eHS6hqS3aXrg2POYzJA5oTZznGSEhvmD
+        5Z/SSO/LLN7tmB1xM9P60Ip7iw==
+X-Google-Smtp-Source: ABdhPJydZ/eJU55U4wrTdxdPrOmcr/r8xF7yWuRPmZDzeEMIweJfMbFWjkFuN99HN71Z9pz4nPUVvw==
+X-Received: by 2002:a05:6870:95a4:b0:d7:18b5:f927 with SMTP id k36-20020a05687095a400b000d718b5f927mr527535oao.45.1652377555169;
         Thu, 12 May 2022 10:45:55 -0700 (PDT)
-Received: from localhost.localdomain (c-67-174-241-145.hsd1.ca.comcast.net. [67.174.241.145])
-        by smtp.gmail.com with ESMTPSA id f123-20020a62db81000000b00512d84548c7sm121950pfg.53.2022.05.12.10.45.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id a3-20020a05683012c300b00606387601a2sm126250otq.34.2022.05.12.10.45.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Thu, 12 May 2022 10:45:54 -0700 (PDT)
-From:   Yang Shi <shy828301@gmail.com>
-To:     willy@infradead.org, songmuchun@bytedance.com,
-        akpm@linux-foundation.org
-Cc:     shy828301@gmail.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] mm: pvmw: check possible huge PMD map by transhuge_vma_suitable()
-Date:   Thu, 12 May 2022 10:45:51 -0700
-Message-Id: <20220512174551.81279-2-shy828301@gmail.com>
-X-Mailer: git-send-email 2.26.3
-In-Reply-To: <20220512174551.81279-1-shy828301@gmail.com>
-References: <20220512174551.81279-1-shy828301@gmail.com>
+Subject: Re: [RFC V2 PATCH 4/8] selftests: kvm: priv_memfd_test: Add shared
+ access test
+To:     Vishal Annapurve <vannapurve@google.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, shauh@kernel.org, yang.zhong@intel.com,
+        drjones@redhat.com, ricarkol@google.com, aaronlewis@google.com,
+        wei.w.wang@intel.com, kirill.shutemov@linux.intel.com,
+        corbet@lwn.net, hughd@google.com, jlayton@kernel.org,
+        bfields@fieldses.org, akpm@linux-foundation.org,
+        chao.p.peng@linux.intel.com, yu.c.zhang@linux.intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com,
+        michael.roth@amd.com, qperret@google.com, steven.price@arm.com,
+        ak@linux.intel.com, david@redhat.com, luto@kernel.org,
+        vbabka@suse.cz, marcorr@google.com, erdemaktas@google.com,
+        pgonda@google.com, nikunj@amd.com, seanjc@google.com,
+        diviness@google.com
+References: <20220511000811.384766-1-vannapurve@google.com>
+ <20220511000811.384766-5-vannapurve@google.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <d908a526-7367-366d-9f45-f40274c1b27e@linuxfoundation.org>
+Date:   Thu, 12 May 2022 11:45:52 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220511000811.384766-5-vannapurve@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IIUC PVMW checks if the vma is possibly huge PMD mapped by
-transparent_hugepage_active() and "pvmw->nr_pages >= HPAGE_PMD_NR".
+On 5/10/22 6:08 PM, Vishal Annapurve wrote:
+> Add a test to access private memory in shared fashion
+> which should exercise implicit memory conversion path
+> using KVM_EXIT_MEMORY_ERROR.
+> 
 
-Actually pvmw->nr_pages is returned by compound_nr() or
-folio_nr_pages(), so the page should be THP as long as "pvmw->nr_pages
->= HPAGE_PMD_NR".  And it is guaranteed THP is allocated for valid VMA
-in the first place.  But it may be not PMD mapped if the VMA is file
-VMA and it is not properly aligned.  The transhuge_vma_suitable()
-is used to do such check, so replace transparent_hugepage_active() to
-it, which is too heavy and overkilling.
+This comment applies all patches in this series. Keep commit log
+line length around 76 for readability in "git log" display.
 
-Fixes: 2aff7a4755be ("mm: Convert page_vma_mapped_walk to work on PFNs")
-Signed-off-by: Yang Shi <shy828301@gmail.com>
----
- mm/page_vma_mapped.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
-index c10f839fc410..2634565be175 100644
---- a/mm/page_vma_mapped.c
-+++ b/mm/page_vma_mapped.c
-@@ -237,13 +237,14 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
- 			spin_unlock(pvmw->ptl);
- 			pvmw->ptl = NULL;
- 		} else if (!pmd_present(pmde)) {
-+			unsigned long haddr = pvmw->address & HPAGE_PMD_MASK;
- 			/*
- 			 * If PVMW_SYNC, take and drop THP pmd lock so that we
- 			 * cannot return prematurely, while zap_huge_pmd() has
- 			 * cleared *pmd but not decremented compound_mapcount().
- 			 */
- 			if ((pvmw->flags & PVMW_SYNC) &&
--			    transparent_hugepage_active(vma) &&
-+			    transhuge_vma_suitable(vma, haddr) &&
- 			    (pvmw->nr_pages >= HPAGE_PMD_NR)) {
- 				spinlock_t *ptl = pmd_lock(mm, pvmw->pmd);
- 
--- 
-2.26.3
+Also same comment about combining lines of code when it isn't
+necessary to split them, align the lines with parenthesis to
+make it easier to read, and run checkpatch.
 
+> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> ---
+>   tools/testing/selftests/kvm/priv_memfd_test.c | 69 +++++++++++++++++++
+>   1 file changed, 69 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/priv_memfd_test.c b/tools/testing/selftests/kvm/priv_memfd_test.c
+> index 55e24c893b07..48bc4343e7b5 100644
+> --- a/tools/testing/selftests/kvm/priv_memfd_test.c
+> +++ b/tools/testing/selftests/kvm/priv_memfd_test.c
+> @@ -147,12 +147,81 @@ static void pmpat_guest_code(void)
+>   	GUEST_DONE();
+>   }
+>   
+> +/* Test to verify guest shared accesses on private memory with following steps:
+> + * 1) Upon entry, guest signals VMM that it has started.
+> + * 2) VMM populates the shared memory with known pattern and continues guest
+> + *    execution.
+> + * 3) Guest reads private gpa range in a shared fashion and verifies that it
+> + *    reads what VMM has written in step2.
+> + * 3) Guest writes a different pattern on the shared memory and signals VMM
+> + *      that it has updated the shared memory.
+> + * 4) VMM verifies shared memory contents to be same as the data populated
+> + *      in step 3 and continues guest execution.
+> + */
+> +#define PMSAT_ID				1
+> +#define PMSAT_DESC				"PrivateMemorySharedAccessTest"
+> +
+> +/* Guest code execution stages for private mem access test */
+> +#define PMSAT_GUEST_STARTED			0ULL
+> +#define PMSAT_GUEST_TEST_MEM_UPDATED		1ULL
+> +
+> +static bool pmsat_handle_vm_stage(struct kvm_vm *vm,
+> +			void *test_info,
+> +			uint64_t stage)
+> +{
+> +	void *shared_mem = ((struct test_run_helper *)test_info)->shared_mem;
+> +
+> +	switch (stage) {
+> +	case PMSAT_GUEST_STARTED: {
+> +		/* Initialize the contents of shared memory */
+> +		TEST_ASSERT(do_mem_op(SET_PAT, shared_mem,
+> +			TEST_MEM_DATA_PAT1, TEST_MEM_SIZE),
+> +			"Shared memory update failed");
+> +		VM_STAGE_PROCESSED(PMSAT_GUEST_STARTED);
+> +		break;
+> +	}
+> +	case PMSAT_GUEST_TEST_MEM_UPDATED: {
+> +		/* verify data to be same as what guest wrote */
+> +		TEST_ASSERT(do_mem_op(VERIFY_PAT, shared_mem,
+> +			TEST_MEM_DATA_PAT2, TEST_MEM_SIZE),
+> +			"Shared memory view mismatch");
+> +		VM_STAGE_PROCESSED(PMSAT_GUEST_TEST_MEM_UPDATED);
+> +		break;
+> +	}
+> +	default:
+> +		printf("Unhandled VM stage %ld\n", stage);
+
+Is this a test failure? Add more information to use why it isn't handled.
+
+> +		return false;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+> +static void pmsat_guest_code(void)
+> +{
+> +	void *shared_mem = (void *)TEST_MEM_GPA;
+> +
+> +	GUEST_SYNC(PMSAT_GUEST_STARTED);
+> +	GUEST_ASSERT(do_mem_op(VERIFY_PAT, shared_mem,
+> +			TEST_MEM_DATA_PAT1, TEST_MEM_SIZE));
+> +
+> +	GUEST_ASSERT(do_mem_op(SET_PAT, shared_mem,
+> +			TEST_MEM_DATA_PAT2, TEST_MEM_SIZE));
+> +	GUEST_SYNC(PMSAT_GUEST_TEST_MEM_UPDATED);
+> +
+> +	GUEST_DONE();
+> +}
+> +
+>   static struct test_run_helper priv_memfd_testsuite[] = {
+>   	[PMPAT_ID] = {
+>   		.test_desc = PMPAT_DESC,
+>   		.vmst_handler = pmpat_handle_vm_stage,
+>   		.guest_fn = pmpat_guest_code,
+>   	},
+> +	[PMSAT_ID] = {
+> +		.test_desc = PMSAT_DESC,
+> +		.vmst_handler = pmsat_handle_vm_stage,
+> +		.guest_fn = pmsat_guest_code,
+> +	},
+>   };
+>   
+>   static void handle_vm_exit_hypercall(struct kvm_run *run,
+> 
+
+thanks,
+-- Shuah

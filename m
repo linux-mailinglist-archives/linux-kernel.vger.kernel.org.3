@@ -2,124 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DDA15246E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 746BB5246E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350958AbiELH0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 03:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38312 "EHLO
+        id S1350970AbiELH1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 03:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237001AbiELH0r (ORCPT
+        with ESMTP id S1349921AbiELH1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 03:26:47 -0400
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527FA126EA0;
-        Thu, 12 May 2022 00:26:46 -0700 (PDT)
-Received: by mail-qk1-f169.google.com with SMTP id k8so4012590qki.8;
-        Thu, 12 May 2022 00:26:46 -0700 (PDT)
+        Thu, 12 May 2022 03:27:38 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0748812E325;
+        Thu, 12 May 2022 00:27:37 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id a191so3854437pge.2;
+        Thu, 12 May 2022 00:27:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=VgtuSspPJrZl0jLVEiIkQ6TuZqE9Z2iilbMNeSQTMxI=;
+        b=P6pNllwbvdjsOPDvGlj6WiFYA2FBOGg18byFnZLrqjvxmqcGL1ouVMe5B7n0ld6Nxw
+         lGvbjJju+fwxbZjeK2a9zYJHmJ+8VvJfF715SHWREAXvri5JWg4fZH3HxVKxAquLMjRz
+         HI5JxydTEnbcggMP/2SsGwDpoooEUHrCuT73ZxcaFISGt5EHptHR+L074/8YLXPJxcEI
+         VhgPQg8CCUmE8nonBDehT2mg3QTE+I+JkG1Br/N/Gs7DzH2lLMsiMHwk1wIsE8Bim5iJ
+         U2s+4skU1/VRHJa21j3NKsvQxBQOvjYWzvqxHwHodoeUJXg7Ux5cNHXxd5dsntdvq32I
+         Pm+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0hXa5ZyCL0c1LJOSj3SaJudX8UU4KaAqyCdW1DHNsjs=;
-        b=V4hWpc1M/4xwJCRS2vCe/WUf3PGO1zcTP3zFpN6LvGIbjem+KyMkOZrqjpI1VIyPKW
-         YDz8s9UdD2pIP73AmnFPJj4FkkFdzXtzWVLuqRvdy7FU3Ot1YfscsWyKxWH7/G8nYxGw
-         3sn9fRqN8n0X6RiWal+f95gWvrdEfA1IAE0snZODd5hZ9SOhYFvnnqRHLNHGYgIiFI1j
-         M6sq25JioAhJNiH1h9Je/JjezsXvezi/cCTYpP3E1taxQtBIytaiyAU3bVyg0tGnmz64
-         Gf1erSg0jFa7oPBUpz2FHJFgMUBcUnJp74zGTmmA/8ggI9waPAnxjXGT06tuWX9DMA7Y
-         Yy9g==
-X-Gm-Message-State: AOAM530t5VNWzl36lvoyQ+sot9CFJ6iwXye8oaYFxcbrbDqsG8i3T+dN
-        +orv4rthIOv5rmORWa+IX0Zo2BR8EcWF2A==
-X-Google-Smtp-Source: ABdhPJyyMnmwQcTDPU7SLDyH+JhA0k7qhJ0V+KILMo7UEVz3ZUqPKl7yQfqbw5fyU5vWgjj9rMR4Bg==
-X-Received: by 2002:a37:5d8:0:b0:6a0:91ec:fc64 with SMTP id 207-20020a3705d8000000b006a091ecfc64mr13612549qkf.133.1652340405362;
-        Thu, 12 May 2022 00:26:45 -0700 (PDT)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id h197-20020a379ece000000b0069fc13ce227sm2566732qke.88.2022.05.12.00.26.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 00:26:44 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id m190so8184105ybf.4;
-        Thu, 12 May 2022 00:26:44 -0700 (PDT)
-X-Received: by 2002:a25:4506:0:b0:648:cfc2:301d with SMTP id
- s6-20020a254506000000b00648cfc2301dmr26715754yba.380.1652340403876; Thu, 12
- May 2022 00:26:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220511183210.5248-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220511183210.5248-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <87zgjnmcxt.wl-maz@kernel.org>
-In-Reply-To: <87zgjnmcxt.wl-maz@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 12 May 2022 09:26:31 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXb0H010_kr_-rMosynKv8HxU+Q45jR88wCYepkWpxB_Q@mail.gmail.com>
-Message-ID: <CAMuHMdXb0H010_kr_-rMosynKv8HxU+Q45jR88wCYepkWpxB_Q@mail.gmail.com>
-Subject: Re: [PATCH v3 2/5] irqchip: Add RZ/G2L IA55 Interrupt Controller driver
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=VgtuSspPJrZl0jLVEiIkQ6TuZqE9Z2iilbMNeSQTMxI=;
+        b=MGIkGVtZxlM5SD6jKKZwBuGi3Bj/atTUtI7TmKAlvohXS7Ndfz/grAQjDWVbLEEUTV
+         msl//R+vJiGz+HMp8KFVSmihRSSsSQAzUS49tahjOA6jla3xk8NTYcKyxbzukJ8+baE0
+         9Jwz2rZGcJhPV+Mxsv4e8+RemiCUgo76XmV759evHXKaVwY6yvEDplGQZTAxdlX3pVRs
+         FfNACXb4qM/NR77RSJ+GUrglc91NgWqjY26pDO2IcY03tm4LL2CDrF0h3oQRESQrwBV4
+         uMavJfQy22KWb+5cePwGv7wEPJXik/QGkUFDpFNd49GZKc3/bap+yB2kt7JYa90FB5BF
+         fptw==
+X-Gm-Message-State: AOAM5327xg3v8EZi4svNyACjv5S2fEM4z1QQMCFpTHaKpEVvMT+DHtQd
+        D62rHCUcN5HwWHIPidgFx0c=
+X-Google-Smtp-Source: ABdhPJxODcr5MqRHBIViamAPN40p1m+6snj1eKf+gSdwUTr2qMEIvN3b3sXB2xmnWCSOY52qHZIH7w==
+X-Received: by 2002:a65:6aa3:0:b0:3ab:23fb:adae with SMTP id x3-20020a656aa3000000b003ab23fbadaemr23973962pgu.278.1652340456354;
+        Thu, 12 May 2022 00:27:36 -0700 (PDT)
+Received: from localhost.localdomain (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id z9-20020aa79e49000000b0050dc762813csm3082779pfq.22.2022.05.12.00.27.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 00:27:35 -0700 (PDT)
+From:   Marvin Lin <milkfafa@gmail.com>
+X-Google-Original-From: Marvin Lin <kflin@nuvoton.com>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     openbmc@lists.ozlabs.org, avifishman70@gmail.com,
+        tmaimon77@gmail.com, tali.perry1@gmail.com, kwliu@nuvoton.com,
+        kflin@nuvoton.com
+Subject: [PATCH v1 0/5] Support Nuvoton NPCM Video Capture/Encode Engine
+Date:   Thu, 12 May 2022 15:27:17 +0800
+Message-Id: <20220512072722.25005-1-kflin@nuvoton.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+This patch series add DTS node, dt-bindings document and drivers for Video
+Capture/Differentiation Engine (VCD) and Encoding Compression Engine (ECE)
+present on Nuvoton NPCM SoCs.
 
-On Thu, May 12, 2022 at 9:23 AM Marc Zyngier <maz@kernel.org> wrote:
-> On Wed, 11 May 2022 19:32:07 +0100,
-> Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> >
-> > Add a driver for the Renesas RZ/G2L Interrupt Controller.
-> >
-> > This supports external pins being used as interrupts. It supports
-> > one line for NMI, 8 external pins and 32 GPIO pins (out of 123)
-> > to be used as IRQ lines.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+VCD can capture/differentiate video data from digital or analog sources,
+then ECE will compress the data into HEXTILE format.
 
-> > +static int rzg2l_irqc_init(struct device_node *node, struct device_node *parent)
-> > +{
-> > +     struct irq_domain *irq_domain, *parent_domain;
-> > +     struct reset_control *resetn;
-> > +     struct rzg2l_irqc_priv *priv;
-> > +     struct clk *clk;
-> > +     struct clk *pclk;
-> > +     int ret;
-> > +
-> > +     priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-> > +     if (!priv)
-> > +             return -ENOMEM;
->
-> Since you are implementing this as a platform driver, consider
-> converting this to the devm_* helpers (you can obtain the device
-> structure via of_find_device_by_node()).
+HEXTILE compressed format is defined in Remote Framebuffer Protocol (RFC
+6143) and is used by VNC features, so we also add a patch to support it.
 
-So that's the missing piece.
-Still, it would be more efficient to just pass the pointer, as
-platform_irqchip_probe() already has the pointer.
+Marvin Lin (5):
+  arm: dts: Add node for NPCM Video Capture/Encode Engine
+  dt-bindings: media: Add dt-bindings for NPCM Video Capture/Encode
+    Engine
+  dt-bindings: arm/npcm: Add dt-bindings for Graphics Core Information
+  media: Add HEXTILE compressed format
+  drivers: media: platform: Add NPCM Video Capture/Encode Engine driver
 
-Gr{oetje,eeting}s,
+ .../bindings/arm/npcm/nuvoton,gfxi.yaml       |   41 +
+ .../bindings/media/nuvoton,npcm-video.yaml    |   87 +
+ MAINTAINERS                                   |    1 +
+ arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi |   19 +
+ drivers/media/platform/Kconfig                |    1 +
+ drivers/media/platform/Makefile               |    1 +
+ drivers/media/platform/nuvoton/Kconfig        |   12 +
+ drivers/media/platform/nuvoton/Makefile       |    2 +
+ drivers/media/platform/nuvoton/npcm-video.c   | 2074 +++++++++++++++++
+ drivers/media/v4l2-core/v4l2-ioctl.c          |    1 +
+ include/uapi/linux/videodev2.h                |    1 +
+ 11 files changed, 2240 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/npcm/nuvoton,gfxi.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/nuvoton,npcm-video.yaml
+ create mode 100644 drivers/media/platform/nuvoton/Kconfig
+ create mode 100644 drivers/media/platform/nuvoton/Makefile
+ create mode 100644 drivers/media/platform/nuvoton/npcm-video.c
 
-                        Geert
+-- 
+2.17.1
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

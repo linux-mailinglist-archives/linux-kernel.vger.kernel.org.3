@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C68525292
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:32:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FFDC525296
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356475AbiELQcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 12:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
+        id S1356487AbiELQcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 12:32:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352659AbiELQb5 (ORCPT
+        with ESMTP id S1352659AbiELQcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 12:31:57 -0400
+        Thu, 12 May 2022 12:32:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1908F63393
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 09:31:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8765D63393;
+        Thu, 12 May 2022 09:32:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A512E61FD8
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 16:31:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF14DC385B8;
-        Thu, 12 May 2022 16:31:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 19C0061FDA;
+        Thu, 12 May 2022 16:32:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42CD2C385B8;
+        Thu, 12 May 2022 16:31:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652373115;
-        bh=h9Kzf5/SsxRvY1gZjEU/igSn6fpGqPvspFpuVtnK7kg=;
+        s=k20201202; t=1652373120;
+        bh=VGcrNcu5gEaD9NOE27MHl/Wr7tluunIA7FvG7tXRfBo=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=rTvb2kyn7eb/9ukf8eciK2lLPwcjnxvnLxM9dpZrft3IfljA2cbtJluyjuT1n1jMH
-         Vs5Z4tv+Rd2RZrxL7VXxSkWZ4BaBTUlRRlSE5dG4xrPlZDH5cbEYevBxXMCyayeVBR
-         oNUTzQbIH59naXSQ6qj7RePOy56WOl9xIpp34+pKlUKS1sp1GCAHunQUjRI/PBidi7
-         k+Hv3ggAN//z0IzCVH8Job6hYYLQWQcKYjS+otsDnTMTx5gI4hoaAHeMlFK3oWoEY+
-         BwC2p8UaLodULQvI4znXS1LHvZqvdXSKPGJu8379wV0PW19mYGDNgIIgiLd6xSBQ8x
-         46WYRbHyyoYew==
+        b=NDu0ye6cxUW/ueCuDl6gfECptIn83HktVDKdLsm7vPHHBaJ0HexH7j1/JLdHBiQOJ
+         ItrnjUClt0430jfBr5nvEOe3KvCM0lNatIKSA6jluRL5teYwooYm5ufJwsQhhUIXPR
+         5Ofa0z6oTz6WEBk4JPilGcVjEdugbCkMhbIWUqdhHVMcrTPiQh8iss76niZwJX9Yba
+         pAcXkxgGoPGUgB1o5CaL2fzyYPEFqrKkIf++LFi1CU4f9m7PwJzte1BhaBLSZh+ue/
+         p3byRZEwg3npTX6d36+l1wn+8aYUKC44c7TMTHB/6JcCV+i9RIKtV8wgq+6QQV16IB
+         Ebv/04N2aE1WQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     pierre-louis.bossart@linux.intel.com, kai.vehmanen@linux.intel.com,
-        ranjani.sridharan@linux.intel.com, tiwai@suse.com,
-        zhengbin13@huawei.com, linux-kernel@vger.kernel.org,
-        daniel.baluta@nxp.com, alsa-devel@alsa-project.org,
-        lgirdwood@gmail.com, sound-open-firmware@alsa-project.org,
-        perex@perex.cz
-Cc:     gaochao49@huawei.com
-In-Reply-To: <20220512013728.4128903-1-zhengbin13@huawei.com>
-References: <20220512013728.4128903-1-zhengbin13@huawei.com>
-Subject: Re: [PATCH -next] ASoC: SOF: amd: add missing platform_device_unregister in acp_pci_rn_probe
-Message-Id: <165237311250.1053236.5667344558272155246.b4-ty@kernel.org>
-Date:   Thu, 12 May 2022 17:31:52 +0100
+To:     linux-spi@vger.kernel.org, vaishnav.a@ti.com,
+        linux-kernel@vger.kernel.org
+Cc:     vigneshr@ti.com, j-keerthy@ti.com, p.yadav@ti.com
+In-Reply-To: <20220511115516.14894-1-vaishnav.a@ti.com>
+References: <20220511115516.14894-1-vaishnav.a@ti.com>
+Subject: Re: [PATCH] drivers: spi: cadence-quadspi: Handle spi_unregister_master() in remove()
+Message-Id: <165237311899.1053498.14444513819547781414.b4-ty@kernel.org>
+Date:   Thu, 12 May 2022 17:31:58 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,20 +54,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 May 2022 09:37:28 +0800, Zheng Bin wrote:
-> acp_pci_rn_probe misses a call platform_device_unregister in error path,
-> this patch fixes that.
+On Wed, 11 May 2022 17:25:16 +0530, Vaishnav Achath wrote:
+> Currently devres managed removal of the spi_controller happens after
+> removing the power domain of the host platform_device.While this
+> does not affect the clean removal of the controller, but affects
+> graceful removal of the child devices if the child  device removal
+> requires issuing commands over SPI.
 > 
+> Eg. flash device being soft reset to 1S-1S-1S mode before removal
+> so that on next probe operations in 1S-1S-1S mode is successful.
 > 
+> [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[1/1] ASoC: SOF: amd: add missing platform_device_unregister in acp_pci_rn_probe
-      commit: cbcab8cd737c74c20195c31d647e19f7cb49c9b8
+[1/1] drivers: spi: cadence-quadspi: Handle spi_unregister_master() in remove()
+      commit: 606e5d408184989f53028125e0cb5aa6713362d5
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

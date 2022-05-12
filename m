@@ -2,97 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A60524DA9
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A14AA524DAA
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:01:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352739AbiELNBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 09:01:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50038 "EHLO
+        id S1354052AbiELNBR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 12 May 2022 09:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354052AbiELNA4 (ORCPT
+        with ESMTP id S1354049AbiELNBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 09:00:56 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6494435259
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:00:54 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id m15-20020a9d608f000000b00606a788887aso2615617otj.0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:00:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hM4gINRD/8H6twDujxcRG1iWBhWngcTIcPKwJ3NWeHI=;
-        b=Uq5jA42dpUf4a4d5oDdhSJ+SaH7fCfy9R3XlKetI/YPan/b+0P6SB+M9z4oAYi0Unk
-         oZXRpWs/0/bDBDZlq8Jp1UPXEE59KKHDw+2Ff5hvz2bVQFqBN1Wz5Zlx3sWknzExtIrr
-         4Bds7eK/4IrFCS59a+nb5WC2abCrw+yssLWRsjEUihM/vqvPZjBt4l7b35j7yDjB/WOL
-         jOERw0aWBFIlvxeAjwrTFlVHwfJhIQB/BvZ5L1j/xDWQL2gr5MqH1h7/BKvPTkrgR9Wr
-         JPKFNsa/eo/rvXNSJqECdgOQsDZlWX3WnguFNOdwS3M593bp0wYwgr0KjCfhFXnwJjOE
-         7AZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hM4gINRD/8H6twDujxcRG1iWBhWngcTIcPKwJ3NWeHI=;
-        b=CY1aU1OgTTS+66CqbwXUNbHtAgDtx2uqFCb2TXB5+lSieZfzd5YemZEYh2zfw88aTm
-         9z6pJ7ojQIvHczTUjCeve5oT5sGKxTXszYA73ieoSpOvy2tVFpByBbIVr/poXhWbFNOH
-         Gxltj2KoLKmEFgDTXG5F33i/ap0272hkzvAK+LhBp1ObUJF+llxjATbezvHbDxNuggd8
-         NlMjG8KLvjw8ZnvMH5qLBSm72o2eAuHSkP+J+jPhByQOEhGCaFsGceun11jgbCmRsE+/
-         IVsvJ8RVSeENK2a0kVWLLRsKOckBEImpbedNbXp5OERDgqo6im8nhEUSgDlPhJ7syeE5
-         XKdg==
-X-Gm-Message-State: AOAM532BnqxD9xDJuTbTDETQfBUlBzZ+b9lcucp6vK/ILV9Z5VqAbc/4
-        90diyWuehqtHVo/vNlL7JaHmLg2/Qpk7NouT7jHeYw==
-X-Google-Smtp-Source: ABdhPJw8n+NNtzZmKnOes7rLaGEeWOocf2jp4qdn5SoHXN2sCMymaj+NGll0BsnYoJNnSXpCjOvY7VGAfOTdY18oX1o=
-X-Received: by 2002:a05:6830:23a6:b0:606:1bc8:b0d3 with SMTP id
- m6-20020a05683023a600b006061bc8b0d3mr11819475ots.196.1652360453085; Thu, 12
- May 2022 06:00:53 -0700 (PDT)
+        Thu, 12 May 2022 09:01:15 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ECC5B5EBDC
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:01:12 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-308-WKnz_SfHO5SeLrhiKjvyFg-1; Thu, 12 May 2022 14:01:09 +0100
+X-MC-Unique: WKnz_SfHO5SeLrhiKjvyFg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Thu, 12 May 2022 14:01:07 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Thu, 12 May 2022 14:01:07 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Kirill A. Shutemov'" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Peter Zijlstra" <peterz@infradead.org>
+CC:     "x86@kernel.org" <x86@kernel.org>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Alexander Potapenko <glider@google.com>,
+        "Dmitry Vyukov" <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] x86: Implement Linear Address Masking support
+Thread-Topic: [PATCH] x86: Implement Linear Address Masking support
+Thread-Index: AQHYZN7+/opgI73BZUKmGdIzOSRkmq0bNCgQ
+Date:   Thu, 12 May 2022 13:01:07 +0000
+Message-ID: <fc54d360620d436f93785ae5e9f8a23f@AcuMS.aculab.com>
+References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
+ <20220511022751.65540-2-kirill.shutemov@linux.intel.com>
+In-Reply-To: <20220511022751.65540-2-kirill.shutemov@linux.intel.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <000000000000d4f30d05d3aa4f09@google.com> <00000000000004ac9505da46ba30@google.com>
-In-Reply-To: <00000000000004ac9505da46ba30@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 12 May 2022 15:00:41 +0200
-Message-ID: <CACT4Y+Yqd_a6Mqb4uGSw=Vtx1ppqGxRRURGi1+RCnjYhXnko9w@mail.gmail.com>
-Subject: Re: [syzbot] general protection fault in reweight_entity
-To:     syzbot <syzbot+8d9571494fc49db5aca1@syzkaller.appspotmail.com>
-Cc:     akpm@linux-foundation.org, brauner@kernel.org, ccross@google.com,
-        christian.brauner@ubuntu.com, david@redhat.com,
-        dietmar.eggemann@arm.com, ebiederm@xmission.com, legion@kernel.org,
-        linux-kernel@vger.kernel.org, pcc@google.com, peterz@infradead.org,
-        syzkaller-bugs@googlegroups.com, tadeusz.struk@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Mar 2022 at 20:23, syzbot
-<syzbot+8d9571494fc49db5aca1@syzkaller.appspotmail.com> wrote:
->
-> syzbot suspects this issue was fixed by commit:
->
-> commit 13765de8148f71fa795e0a6607de37c49ea5915a
-> Author: Tadeusz Struk <tadeusz.struk@linaro.org>
-> Date:   Thu Feb 3 16:18:46 2022 +0000
->
->     sched/fair: Fix fault in reweight_entity
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1230bdd9700000
-> start commit:   b81b1829e7e3 Merge tag 'scsi-fixes' of git://git.kernel.or..
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=266de9da75c71a45
-> dashboard link: https://syzkaller.appspot.com/bug?extid=8d9571494fc49db5aca1
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10209674700000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1645552c700000
->
-> If the result looks correct, please mark the issue as fixed by replying with:
->
-> #syz fix: sched/fair: Fix fault in reweight_entity
+From: Kirill A. Shutemov
+> Sent: 11 May 2022 03:28
+> 
+> Linear Address Masking feature makes CPU ignore some bits of the virtual
+> address. These bits can be used to encode metadata.
+> 
+> The feature is enumerated with CPUID.(EAX=07H, ECX=01H):EAX.LAM[bit 26].
+> 
+> CR3.LAM_U57[bit 62] allows to encode 6 bits of metadata in bits 62:57 of
+> user pointers.
+> 
+> CR3.LAM_U48[bit 61] allows to encode 15 bits of metadata in bits 62:48
+> of user pointers.
+> 
+> CR4.LAM_SUP[bit 28] allows to encode metadata of supervisor pointers.
+> If 5-level paging is in use, 6 bits of metadata can be encoded in 62:57.
+> For 4-level paging, 15 bits of metadata can be encoded in bits 62:48.
+> 
+...
+> +static vaddr clean_addr(CPUArchState *env, vaddr addr)
+> +{
+> +    CPUClass *cc = CPU_GET_CLASS(env_cpu(env));
+> +
+> +    if (cc->tcg_ops->do_clean_addr) {
+> +        addr = cc->tcg_ops->do_clean_addr(env_cpu(env), addr);
 
-Yes, it is:
+The performance of a conditional indirect call will be horrid.
+Over-engineered when there is only one possible function.
 
-#syz fix: sched/fair: Fix fault in reweight_entity
+....
+> +
+> +static inline int64_t sign_extend64(uint64_t value, int index)
+> +{
+> +    int shift = 63 - index;
+> +    return (int64_t)(value << shift) >> shift;
+> +}
+
+Shift of signed integers are UB.
+
+> +vaddr x86_cpu_clean_addr(CPUState *cs, vaddr addr)
+> +{
+> +    CPUX86State *env = &X86_CPU(cs)->env;
+> +    bool la57 = env->cr[4] & CR4_LA57_MASK;
+> +
+> +    if (addr >> 63) {
+> +        if (env->cr[4] & CR4_LAM_SUP) {
+> +            return sign_extend64(addr, la57 ? 56 : 47);
+> +        }
+> +    } else {
+> +        if (env->cr[3] & CR3_LAM_U57) {
+> +            return sign_extend64(addr, 56);
+> +        } else if (env->cr[3] & CR3_LAM_U48) {
+> +            return sign_extend64(addr, 47);
+> +        }
+> +    }
+
+That is completely horrid.
+Surely it can be just:
+	if (addr && 1u << 63)
+		return addr | env->address_mask;
+	else
+		return addr & ~env->address_mask;
+Where 'address_mask' is 0x7ff....
+although since you really want a big gap between valid user and
+valid kernel addresses allowing masked kernel addresses adds
+costs elsewhere.
+
+I've no idea how often the address masking is required?
+Hopefully almost never?
+
+copy_to/from_user() (etc) need to be able to use user addresses
+without having to mask them.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

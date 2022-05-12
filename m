@@ -2,69 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E2F52472F
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C6AF524735
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351118AbiELHmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 03:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34478 "EHLO
+        id S1351131AbiELHnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 03:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351112AbiELHmm (ORCPT
+        with ESMTP id S1351119AbiELHn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 03:42:42 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883131A15D7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:42:39 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id p12so4113357pfn.0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:42:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=WgTgy6Q+d8TrDK1hHPXj5oNnS+nB3lnyhddRNxBZhpk=;
-        b=OhYgBUt2hUmUJ+ybZL/wdXJLTU0v+/9O+N5ePdErfkb4ZTtdJ5P0t67WYjcdjFXEne
-         2vPwS8X0CJy1h25YJo8wqCso1FL5di2KkfkbiMtLzZl8FVax2zIVTSD1r5cB1voGiKF4
-         +XDyVWJvry04by0kx6zsSlLL1DW8PSOiTvF794KJCtUKVwVQ76fOdt3hWhfa9nRuw5fS
-         mxrV809q5uSxkGUqEd/LYNrNru8VAtzAnM5erRvTwbYsMDExyUyXh7VQBMUk2ATHyh3L
-         RkZoEpu2+XFPdhKXFJH+7Na36uTHaXDQmE13zYefldQeQ0E3s6T4QSYIy3RRjgCrN2bV
-         3V0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=WgTgy6Q+d8TrDK1hHPXj5oNnS+nB3lnyhddRNxBZhpk=;
-        b=wmjo2Mi2qIssd+jBhSoIpPcXkWHwIPMhppLbAOr6CSUePplkEf4TZC92cRyNIvlTmK
-         vxnS/vnz0ZkJAWcwLVgxUdBDmQOOBo5Rf+JtYK5w0PPcqB5McfekhKf5T9N+qqa1cCwJ
-         Ra8AhNhV7abbNGSc0Mu2JcKO+/knkfQnalfkQEult8qZZTFdBN06nLa4aFahy0TuObpF
-         AmqGMJCbmDmUtQemmHo8SOQc2qknVdSttxXkCJRL6Wqo3pRqowrqByQAevCVWPsa8HIF
-         N4ovzNcTJBbQVGLvrZOk+dYnX4S3HLaHshm1CcC780pFvQav/6uTziw9sQ8msL6JddRL
-         wh5Q==
-X-Gm-Message-State: AOAM532er1vJi6+JoB59JEf9oTgj2/e2exj89YtO2VvaKHixuAl2eKvq
-        83qeJf7Hqa1OI7kpXrhNPBtN7w==
-X-Google-Smtp-Source: ABdhPJwia2Fq44GWsT7Jk6YqY2Am5aAvcWQiS8d5n/BYk4E3i6aXcP2rSAmGyo9C/F4nOfaSjhHBRQ==
-X-Received: by 2002:a63:1d26:0:b0:3c1:eb3f:9daf with SMTP id d38-20020a631d26000000b003c1eb3f9dafmr23797634pgd.284.1652341358988;
-        Thu, 12 May 2022 00:42:38 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id m3-20020a17090aef8300b001cd4989ff42sm1204989pjy.9.2022.05.12.00.42.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 00:42:38 -0700 (PDT)
-Date:   Thu, 12 May 2022 13:12:36 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 3/3] cpufreq: Rearrange locking in cpufreq_remove_dev()
-Message-ID: <20220512074236.bkamv2o5hgson243@vireshk-i7>
-References: <5585781.DvuYhMxLoT@kreacher>
- <1836239.tdWV9SEqCh@kreacher>
+        Thu, 12 May 2022 03:43:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0DC1A15D7;
+        Thu, 12 May 2022 00:43:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6AC761EC6;
+        Thu, 12 May 2022 07:43:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A2A1C34100;
+        Thu, 12 May 2022 07:43:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652341405;
+        bh=/jv1RPpECihnpiFwTxMxfDy7BEiXHhX9DxelFbnjXMI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Kq3HcyCEBSOk0hL014f1nFXp8zGkv+ZiXpMOprfqAPK0SeY3sNnNk5+ciybqevgCK
+         bNt3IHeISfcuWFpdX3t7bD9tdkR/A7Dg5o/e7SfNc7/xzMlSLOrOMrJKtQ2KxEjWmw
+         5SOaDsVXRAlJDu4frl3ASj7Mr9mjS5v49o0vGKna5j7Vc4qkRIsdf5tczYfz9UNyVp
+         /Kdy5KSu8AC5kdVZw+mEs7Nra9xiF7wImUtbr12Q7M5vqlmR7YIG16+ZNrOjaA8Cpn
+         ual8WVmehZu2V/nfwR5QY1KQv2ETw/GBb3peNpNpnIXKN0V/nEyS5FwZVa/hXSskv3
+         u/xv6sD9lX9dA==
+Date:   Thu, 12 May 2022 13:13:12 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Sibi Sankar <quic_sibis@quicinc.com>
+Cc:     bjorn.andersson@linaro.org, jassisinghbrar@gmail.com,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        agross@kernel.org, Prasad Sodagudi <quic_psodagud@quicinc.com>
+Subject: Re: [PATCH v2] mailbox: qcom-ipcc: Log the pending interrupt during
+ resume
+Message-ID: <20220512074312.GA35848@thinkpad>
+References: <1652251404-30562-1-git-send-email-quic_sibis@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1836239.tdWV9SEqCh@kreacher>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1652251404-30562-1-git-send-email-quic_sibis@quicinc.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,27 +57,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11-05-22, 17:51, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Wed, May 11, 2022 at 12:13:24PM +0530, Sibi Sankar wrote:
+> From: Prasad Sodagudi <quic_psodagud@quicinc.com>
 > 
-> Currently, cpufreq_remove_dev() invokes the ->exit() driver callback
-> without holding the policy rwsem which is inconsistent with what
-> happens if ->exit() is invoked directly from cpufreq_offline().
+> Enable logging of the pending interrupt that triggered device wakeup. This
+> logging information helps to debug IRQs that cause periodic device wakeups
+> and prints the detailed information of pending IPCC interrupts instead of
+> the generic "Resume caused by IRQ 17, ipcc".
 > 
-> It also manipulates the real_cpus mask and removes the CPU device
-> symlink without holding the policy rwsem, but cpufreq_offline() holds
-> the rwsem around the modifications thereof.
+> Scenario: Device wakeup caused by Modem crash
+> Logs:
+> qcom-ipcc mailbox: virq: 182 triggered client-id: 2; signal-id: 2
 > 
-> For consistency, modify cpufreq_remove_dev() to hold the policy rwsem
-> until the ->exit() callback has been called (or it has been determined
-> that it is not necessary to call it).
+> From the IPCC bindings it can further understood that the client here is
+> IPCC_CLIENT_MPSS and the signal was IPCC_MPROC_SIGNAL_SMP2P.
 > 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Prasad Sodagudi <quic_psodagud@quicinc.com>
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
 > ---
->  drivers/cpufreq/cpufreq.c |   21 ++++++++++++++-------
->  1 file changed, 14 insertions(+), 7 deletions(-)
+> 
+> V2:
+>  * Fix build error when ipcc is a module [Kernel Test Bot]
+> 
+>  drivers/mailbox/qcom-ipcc.c | 27 +++++++++++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+> 
+> diff --git a/drivers/mailbox/qcom-ipcc.c b/drivers/mailbox/qcom-ipcc.c
+> index c5d963222014..21c071ec119c 100644
+> --- a/drivers/mailbox/qcom-ipcc.c
+> +++ b/drivers/mailbox/qcom-ipcc.c
+> @@ -254,6 +254,28 @@ static int qcom_ipcc_setup_mbox(struct qcom_ipcc *ipcc,
+>  	return devm_mbox_controller_register(dev, mbox);
+>  }
+>  
+> +#ifdef CONFIG_PM_SLEEP
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+You don't need this guard anymore. Please see below.
+
+> +static int qcom_ipcc_pm_resume(struct device *dev)
+> +{
+> +	struct qcom_ipcc *ipcc = dev_get_drvdata(dev);
+> +	u32 hwirq;
+> +	int virq;
+> +
+> +	hwirq = readl(ipcc->base + IPCC_REG_RECV_ID);
+> +	if (hwirq == IPCC_NO_PENDING_IRQ)
+> +		return 0;
+> +
+> +	virq = irq_find_mapping(ipcc->irq_domain, hwirq);
+> +
+> +	dev_info(dev, "virq: %d triggered client-id: %ld; signal-id: %ld\n", virq,
+> +		 FIELD_GET(IPCC_CLIENT_ID_MASK, hwirq), FIELD_GET(IPCC_SIGNAL_ID_MASK, hwirq));
+> +
+
+Does this really need to be dev_info? This looks like a dev_dbg() material to
+me.
+
+> +	return 0;
+> +}
+> +#else
+> +#define qcom_ipcc_pm_resume NULL
+> +#endif
+> +
+>  static int qcom_ipcc_probe(struct platform_device *pdev)
+>  {
+>  	struct qcom_ipcc *ipcc;
+> @@ -324,6 +346,10 @@ static const struct of_device_id qcom_ipcc_of_match[] = {
+>  };
+>  MODULE_DEVICE_TABLE(of, qcom_ipcc_of_match);
+>  
+> +static const struct dev_pm_ops qcom_ipcc_dev_pm_ops = {
+> +	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(NULL, qcom_ipcc_pm_resume)
+> +};
+> +
+>  static struct platform_driver qcom_ipcc_driver = {
+>  	.probe = qcom_ipcc_probe,
+>  	.remove = qcom_ipcc_remove,
+> @@ -331,6 +357,7 @@ static struct platform_driver qcom_ipcc_driver = {
+>  		.name = "qcom-ipcc",
+>  		.of_match_table = qcom_ipcc_of_match,
+>  		.suppress_bind_attrs = true,
+> +		.pm = &qcom_ipcc_dev_pm_ops,
+
+You can use the new pm_sleep_ptr() macro to avoid the PM_SLEEP guard.
+
+		.pm = pm_sleep_ptr(&qcom_ipcc_dev_pm_ops),
+
+Thanks,
+Mani
+
+>  	},
+>  };
+>  
+> -- 
+> 2.7.4
+> 
 
 -- 
-viresh
+மணிவண்ணன் சதாசிவம்

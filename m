@@ -2,110 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C897524A10
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A3F524A15
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352528AbiELKNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 06:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41040 "EHLO
+        id S1352545AbiELKOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 06:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352516AbiELKNJ (ORCPT
+        with ESMTP id S240772AbiELKOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 06:13:09 -0400
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94B166212;
-        Thu, 12 May 2022 03:13:06 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VD-IJYp_1652350382;
-Received: from 30.39.157.75(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VD-IJYp_1652350382)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 12 May 2022 18:13:03 +0800
-Message-ID: <6412e6c5-6e5e-aa7f-b549-64c9c43d8e98@linux.alibaba.com>
-Date:   Thu, 12 May 2022 18:13:41 +0800
+        Thu, 12 May 2022 06:14:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 229C6644C0
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:14:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652350472;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PPUrfpTKF1ogdDfODf+4Ux6BqBNq8Ze3rzmWyPbynzA=;
+        b=DCbQP1NP0Yu4ETs54/6UPUar7dKrZAzXoxfQ/DzXuPv0U7vbvRHhois0r1gFUXFX5kbAZA
+        RMGa5w4WOZmiFpYGOVDcI2cFRq9Bl3ZiS43dnnSuGcerwJUW+ZPj+7HZRng+K/JjwPccrQ
+        7FRWY2Ms6zk3yOTzM9Iq8WkduA1knds=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-47-rzFv9KAfPH2IcNiYLA30Ig-1; Thu, 12 May 2022 06:14:28 -0400
+X-MC-Unique: rzFv9KAfPH2IcNiYLA30Ig-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 51E0D85A5BC;
+        Thu, 12 May 2022 10:14:27 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.40.192.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D729115392CD;
+        Thu, 12 May 2022 10:14:23 +0000 (UTC)
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     kvm@vger.kernel.org
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>, x86@kernel.org,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Subject: [PATCH] KVM: x86: fix a typo in __try_cmpxchg_user that caused cmpxchg to be not atomic
+Date:   Thu, 12 May 2022 13:14:20 +0300
+Message-Id: <20220512101420.306759-1-mlevitsk@redhat.com>
+In-Reply-To: <20220202004945.2540433-5-seanjc@google.com>
+References: <20220202004945.2540433-5-seanjc@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: linux-next: build failure after merge of the mm tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220512193855.4f6ce32f@canb.auug.org.au>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20220512193855.4f6ce32f@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-12.8 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fixes: 1c2361f667f36 ("KVM: x86: Use __try_cmpxchg_user() to emulate atomic accesses")
+Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+---
+ arch/x86/kvm/x86.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+Yes, this is the root cause of the TDP mmu leak I was doing debug of in the last week.
+Non working cmpxchg on which TDP mmu relies makes it install two differnt shadow pages
+under same spte.
 
-On 5/12/2022 5:38 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the mm tree, today's linux-next build (arm64 defconfig)
-> failed like this:
-> 
-> arch/arm64/mm/hugetlbpage.c: In function 'huge_ptep_clear_flush':
-> arch/arm64/mm/hugetlbpage.c:493:16: error: implicit declaration of function 'get_clear_flush'; did you mean 'ptep_clear_flush'? [-Werror=implicit-function-declaration]
->    493 |         return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
->        |                ^~~~~~~~~~~~~~~
->        |                ptep_clear_flush
-> arch/arm64/mm/hugetlbpage.c:493:16: error: incompatible types when returning type 'int' but 'pte_t' was expected
->    493 |         return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
->        |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> arch/arm64/mm/hugetlbpage.c:494:1: error: control reaches end of non-void function [-Werror=return-type]
->    494 | }
->        | ^
-> 
-> Caused by commit
-> 
->    00df1f1a133b ("mm: change huge_ptep_clear_flush() to return the original pte")
-> 
-> interacting with commit
-> 
->    fb396bb459c1 ("arm64/hugetlb: Drop TLB flush from get_clear_flush()")
-> 
-> I have applied the following merg fix patch for today.
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Thu, 12 May 2022 19:33:11 +1000
-> Subject: [PATCH] fixup for "mm: change huge_ptep_clear_flush() to return the original pte"
-> 
-> It interacts with commit
-> 
->    fb396bb459c1 ("arm64/hugetlb: Drop TLB flush from get_clear_flush()")
-> 
-> from the arm64 tree
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 8ee8c91fa7625..79cabd3d97d22 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -7329,7 +7329,7 @@ static int emulator_cmpxchg_emulated(struct x86_emulate_ctxt *ctxt,
+ 		goto emul_write;
+ 
+ 	hva = kvm_vcpu_gfn_to_hva(vcpu, gpa_to_gfn(gpa));
+-	if (kvm_is_error_hva(addr))
++	if (kvm_is_error_hva(hva))
+ 		goto emul_write;
+ 
+ 	hva += offset_in_page(gpa);
+-- 
+2.26.3
 
-Thanks. Looks good to me.
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-
-> ---
->   arch/arm64/mm/hugetlbpage.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
-> index 5bdf913dedc7..30f5b76aabe9 100644
-> --- a/arch/arm64/mm/hugetlbpage.c
-> +++ b/arch/arm64/mm/hugetlbpage.c
-> @@ -490,7 +490,7 @@ pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
->   		return ptep_clear_flush(vma, addr, ptep);
->   
->   	ncontig = find_num_contig(vma->vm_mm, addr, ptep, &pgsize);
-> -	return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
-> +	return get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
->   }
->   
->   static int __init hugetlbpage_init(void)

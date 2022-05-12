@@ -2,100 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 672A252473C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D10524768
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351140AbiELHoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 03:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40138 "EHLO
+        id S1350873AbiELHvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 03:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351099AbiELHoI (ORCPT
+        with ESMTP id S1351176AbiELHvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 03:44:08 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0E41A15E5
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:44:05 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id c12so5190146edv.10
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:44:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DrDbGhLo7XaClO51j9YJvUywtHQ0+/I5lMy5wJbGhKc=;
-        b=DiruNwr0imBp+10H53dtlHhIGwryjAwAWWCxLchPrV+5Ds5esyMWKjS3HAq8f4h/7O
-         VZ8MmEQaRkIYQ8sFGjoZL7WHBNcERhJ9n5ZHJMUFreePm93eQoOr4FDrKr4sWpp1fB4N
-         paupObkAaW1R41KdMj35taLnJ2UhWNnuoOsss=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DrDbGhLo7XaClO51j9YJvUywtHQ0+/I5lMy5wJbGhKc=;
-        b=g6c+atKDr80rO98lI0qqLjxUsbz8wl9J1kM/XjjLWv/MNApjHslreQALfOVfMVBAXT
-         Q+2zPu+znH4pov9Hi+Dp2Gat5glipMylWNgTWDHPhCvdpCWt8tITwAJPO+kliZxw2cgn
-         EL7ejKJf/0nz8Sdx1oXT/Pl4u5Ksmw0C+7xaxNbS+Q/m8phiRJXkU06WBe/zt1RtJjA3
-         Sgdw/3Ec9S5CUiAq8jeYaJ6o0osryGkXjZjvoNXta6pBsiogGR8I2EjoZ8yBjeS5TFl4
-         UNf529h4GwDafv05UaJTDAUqqaoiGDxl8PRB6IpxzCl+cOk6KqHqXKWlxMbLVIW8yTXR
-         cWyQ==
-X-Gm-Message-State: AOAM533UwyrCqVFd6mM/WfzlxlJlTj+lwYZDV+gVbLO+tr3oRh8cq6yT
-        OFnKj3Xf9UoJuWpk3uzDgvdmzQ==
-X-Google-Smtp-Source: ABdhPJx58tfL7OheWyZCoXsZi7LTgs1k6P5QALJf6eVDOoqqZCFTxJOEZzC3/cKaG5YF/CTWwcEUwg==
-X-Received: by 2002:a05:6402:4241:b0:428:177b:5fd with SMTP id g1-20020a056402424100b00428177b05fdmr32950480edb.193.1652341444209;
-        Thu, 12 May 2022 00:44:04 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i.station (net-188-217-59-245.cust.vodafonedsl.it. [188.217.59.245])
-        by smtp.gmail.com with ESMTPSA id cm10-20020a0564020c8a00b0042617ba63c0sm2192721edb.74.2022.05.12.00.44.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 00:44:03 -0700 (PDT)
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     tommaso.merciai@amarulasolutions.com,
-        linux-amarula@amarulasolutions.com, linuxfancy@googlegroups.com,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ASoC: max98088: add support for reg_4a_cfg_bypass reg
-Date:   Thu, 12 May 2022 09:43:58 +0200
-Message-Id: <20220512074359.446999-1-tommaso.merciai@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 12 May 2022 03:51:15 -0400
+X-Greylist: delayed 372 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 May 2022 00:51:09 PDT
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D6841838F;
+        Thu, 12 May 2022 00:51:08 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id DB9CC2B059AE;
+        Thu, 12 May 2022 03:44:50 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Thu, 12 May 2022 03:44:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1652341490; x=
+        1652348690; bh=F/3C1V38ahUzifyHzEs+CWDQJfKIOWf16zUshCZyYK4=; b=f
+        oyo14B5q77HWBztYyB6jy0JiEQ9Ii/BiEb6AG0JsU2fDxdZqUcK68yNGAC7EoaS0
+        MLdiGoW2wTpmdb51vgwhwQiNWtPftgTIU60n5uuzPE360fUVgjTUAya9IPqnwNKb
+        BnviiRI1bsbrEa+UsHZFVi+kJ9LICkw7R3oWYCMgAfhrwml2d5eev3yTn9skCxBg
+        VH8/RSJY4M5b81xtpsc+F9ey0/umPWOxbsk7XMP+7d9G9PDaBbhhl/f5taTsz5RB
+        6dmN6bGq0hhSJ7jW2s6IqG39WvMgsRgpCq0P2vXnglINSYJVGREHl0DALEPDRllK
+        ioGt2OrO1hw7MXf06E+fg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1652341490; x=1652348690; bh=F/3C1V38ahUzi
+        fyHzEs+CWDQJfKIOWf16zUshCZyYK4=; b=PwYCoCpllwsaeQDZ/UbNYqufIcU3D
+        ZUWgY8F7k7Saqv2O6zyjaOoYF5xcDIWEnLSGiwdoo9z8lCBMr/tHJh5b0zfeFWE6
+        /Z2RCJLc+r2pnrvNhImcW02ht7w/mv4bgobAnb9k0gXLDcWXAQYuz3K1z9POKN/y
+        S/eqJzDh+501oGPp9exuG3dzomL2dp5vuGlGULmmWXC8cqRqYHf4z9q8S2BE/UHo
+        6LyF8q2ZC7+aDXKLXASdRi94nP7is08wABRLovnl/szz04ritVADLELl1cAAm1+2
+        90qcou1rCuxePxCOn11vTIOW78qBQGe0KsUAxnEyD9NN9GYZScntiuXrg==
+X-ME-Sender: <xms:8bp8YqcK-fdwBudEcm5H1P_35GB8Y7LkLxZ4zJkH7TKJFPY--ts9wQ>
+    <xme:8bp8YkOvhUAnmlQU_F1xaAbi92HOEjaEU2MhKVss9NVtJC1EMVj_Hk3wd-nXqt7XK
+    R68JXUE9Mg8QkPMOf4>
+X-ME-Received: <xmr:8bp8Yrgphjel3L9AUZeENPZqw0iDm42eTLMqQ_jugzMVv5Ex1vLAqdXFGcdo-J9RZVw2IZo3EkihHmK8LVQqL50inCCR6S8SR81EWos>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgeeigdduvdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnhepheejffefgefgieevjedvfffgvdfghedtgfdvueejvdejgfffvdeuteei
+    vedufedvnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordht
+    vggthh
+X-ME-Proxy: <xmx:8bp8Yn9_Hnhd8voI202NNd_FlS4bmUHGt3SBFFkI5a5B-1Sfmlps8Q>
+    <xmx:8bp8Ymsn4HLY6Dqe7h0m9lGhr8Ulxluora9B7319zC42M3vRgIlJhg>
+    <xmx:8bp8YuGGZe5sCyNbypDOt_k8OycLAKInPJrliLcAmGL5wufwJB_p0w>
+    <xmx:8rp8Yu2wRlaVZOp8yBGYU65RItWFtHlRMmFrvZtBCrOu7SA0hzrdwpMFxjs>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 12 May 2022 03:44:48 -0400 (EDT)
+Date:   Thu, 12 May 2022 09:44:46 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Guillaume Ranquet <granquet@baylibre.com>
+Cc:     airlied@linux.ie, angelogioacchino.delregno@collabora.com,
+        chunfeng.yun@mediatek.com, chunkuang.hu@kernel.org,
+        ck.hu@mediatek.com, daniel@ffwll.ch, deller@gmx.de,
+        jitao.shi@mediatek.com, kishon@ti.com, krzk+dt@kernel.org,
+        maarten.lankhorst@linux.intel.com, matthias.bgg@gmail.com,
+        p.zabel@pengutronix.de, robh+dt@kernel.org, tzimmermann@suse.de,
+        vkoul@kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, markyacoub@google.com,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v9 18/22] drm/mediatek: Add mt8195 Embedded DisplayPort
+ driver
+Message-ID: <20220512074446.ihilbbnbuwesxbbg@houat>
+References: <20220327223927.20848-1-granquet@baylibre.com>
+ <20220327223927.20848-19-granquet@baylibre.com>
+ <20220429083933.q3w75q3zuyyuvo4w@houat>
+ <CABnWg9tzhZjrdKT4chkDrY-uH8BMUoxyNLUSwfuG6Sv1J+8ddg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CABnWg9tzhZjrdKT4chkDrY-uH8BMUoxyNLUSwfuG6Sv1J+8ddg@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add mixer controls support for M98088_REG_4A_CFG_BYPASS register
+Hi,
 
-References:
- - https://datasheets.maximintegrated.com/en/ds/MAX98089.pdf p71, p113
+On Wed, May 11, 2022 at 05:59:13AM -0700, Guillaume Ranquet wrote:
+> >> +#include <drm/drm_atomic_helper.h>
+> >> +#include <drm/drm_bridge.h>
+> >> +#include <drm/drm_crtc.h>
+> >> +#include <drm/dp/drm_dp_helper.h>
+> >> +#include <drm/drm_edid.h>
+> >> +#include <drm/drm_of.h>
+> >> +#include <drm/drm_panel.h>
+> >> +#include <drm/drm_print.h>
+> >> +#include <drm/drm_probe_helper.h>
+> >> +#include <linux/arm-smccc.h>
+> >> +#include <linux/clk.h>
+> >> +#include <linux/delay.h>
+> >> +#include <linux/errno.h>
+> >> +#include <linux/kernel.h>
+> >> +#include <linux/mfd/syscon.h>
+> >> +#include <linux/nvmem-consumer.h>
+> >> +#include <linux/of.h>
+> >> +#include <linux/of_irq.h>
+> >> +#include <linux/of_platform.h>
+> >> +#include <linux/phy/phy.h>
+> >> +#include <linux/platform_device.h>
+> >> +#include <linux/pm_runtime.h>
+> >> +#include <linux/regmap.h>
+> >> +#include <sound/hdmi-codec.h>
+> >> +#include <video/videomode.h>
+> >> +
+> >> +#include "mtk_dp_reg.h"
+> >> +
+> >> +#define MTK_DP_AUX_WAIT_REPLY_COUNT 20
+> >> +#define MTK_DP_CHECK_SINK_CAP_TIMEOUT_COUNT 3
+> >> +
+> >> +//TODO: platform/device data or dts?
+> >
+> >DTS :)
+>=20
+> It's probably going to be a platform_data struct for v10...
+> If I have time, I'll change it to a dts property for v10.
 
-Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
----
- sound/soc/codecs/max98088.c | 5 +++++
- 1 file changed, 5 insertions(+)
+I can't really imagine a case where we would need platform_data
+nowadays. If you have a device tree, then it should be part of the
+binding.
 
-diff --git a/sound/soc/codecs/max98088.c b/sound/soc/codecs/max98088.c
-index 429717d4ac5a..f8ec2f164e08 100644
---- a/sound/soc/codecs/max98088.c
-+++ b/sound/soc/codecs/max98088.c
-@@ -486,6 +486,11 @@ static const struct snd_kcontrol_new max98088_snd_controls[] = {
-        SOC_SINGLE("EQ1 Switch", M98088_REG_49_CFG_LEVEL, 0, 1, 0),
-        SOC_SINGLE("EQ2 Switch", M98088_REG_49_CFG_LEVEL, 1, 1, 0),
- 
-+       SOC_SINGLE("SPK Bypass Switch", M98088_REG_4A_CFG_BYPASS, 0, 1, 0),
-+       SOC_SINGLE("REC Bypass Switch", M98088_REG_4A_CFG_BYPASS, 1, 1, 0),
-+       SOC_SINGLE("MIC2 Bypass Switch", M98088_REG_4A_CFG_BYPASS, 4, 1, 0),
-+       SOC_SINGLE("INA Bypass Switch", M98088_REG_4A_CFG_BYPASS, 7, 1, 0),
-+
-        SOC_ENUM("EX Limiter Mode", max98088_exmode_enum),
-        SOC_ENUM("EX Limiter Threshold", max98088_ex_thresh_enum),
- 
--- 
-2.25.1
+What issue would you like to address by using a platform_data?
 
+> >> +static enum drm_connector_status mtk_dp_bdg_detect(struct drm_bridge =
+*bridge)
+> >> +{
+> >> +	return connector_status_connected;
+> >> +}
+> >
+> >I'm not quite sure what's going on there. You seem to have some support
+> >for HPD interrupts above, but you always report the display as
+> >connected?
+> >
+> >I'd assume that either you don't have HPD support and then always report
+> >it as connected, or you have HPD support and report the current status
+> >in detect, but that combination seems weird.
+>=20
+> The HPD logic needs more work, some things have been broken when I split
+> the driver into three patches eDP - DP - Audio
+> The assumption at first was that eDP didn't need any HPD handling... but =
+it
+> seems I was wrong and the eDP driver needs to be reworked.
+
+That can be made into a patch of its own if you prefer.
+
+You first introduce the driver without status reporting (always
+returning connected or unknown), and then add the needed bits for HPD.
+
+However, that first patch shouldn't contain the interrupt plumbing and
+so on, it's just confusing.
+
+> >> +static struct edid *mtk_dp_get_edid(struct drm_bridge *bridge,
+> >> +				    struct drm_connector *connector)
+> >> +{
+> >> +	struct mtk_dp *mtk_dp =3D mtk_dp_from_bridge(bridge);
+> >> +	bool enabled =3D mtk_dp->enabled;
+> >> +	struct edid *new_edid =3D NULL;
+> >> +
+> >> +	if (!enabled)
+> >> +		drm_bridge_chain_pre_enable(bridge);
+> >> +
+> >> +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_SET_POWER, DP_SET_POWER_D0);
+> >> +	usleep_range(2000, 5000);
+> >> +
+> >> +	if (mtk_dp_plug_state(mtk_dp))
+> >> +		new_edid =3D drm_get_edid(connector, &mtk_dp->aux.ddc);
+> >> +
+> >> +	if (!enabled)
+> >> +		drm_bridge_chain_post_disable(bridge);
+> >
+> >Are you sure we can't get a mode set while get_edid is called?
+> >
+> >If we can, then you could end up disabling the device while it's being
+> >powered on.
+>=20
+> I'm a bit unsure, I need to spend more time in the drm stack to make sure.
+> I'll get back to you when I have a definitive answer.
+
+So, it looks like it's ok.
+
+get_edid is your implementation of get_modes, which is called by
+drm_helper_probe_single_connector_modes
+
+https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/drm_probe_he=
+lper.c#L416
+
+This is the standard implemantion of fill_modes, which is called
+whenever the get_connector ioctl is called (or similar paths, like
+drm_client_modeset_probe)
+
+drm_helper_probe_single_connector_modes is under the assumption that the
+mode_config.mutex is held though, and that the big lock. So it should be
+serialized there.
+
+Just for future proofing though, it would be better to use refcounting
+there. Would runtime_pm work for you there?
+
+> >> +static void mtk_dp_parse_drm_mode_timings(struct mtk_dp *mtk_dp,
+> >> +					  struct drm_display_mode *mode)
+> >> +{
+> >> +	struct mtk_dp_timings *timings =3D &mtk_dp->info.timings;
+> >> +
+> >> +	drm_display_mode_to_videomode(mode, &timings->vm);
+> >> +	timings->frame_rate =3D mode->clock * 1000 / mode->htotal / mode->vt=
+otal;
+> >
+> >drm_mode_vrefresh()
+> >
+> >> +	timings->htotal =3D mode->htotal;
+> >> +	timings->vtotal =3D mode->vtotal;
+> >> +}
+> >
+> >It's not really clear to me why you need to duplicate drm_display_mode
+> >here?
+> >
+> It's saved to be re-used in mtk_dp_set_msa().
+> It's not ideal, I'll check if I can get the mode directly from mtk_dp_set=
+_msa()
+
+Yeah, it looks like mtk_dp_set_msa() uses fairly straightforward values,
+this will be just as easy with drm_display_mode.
+
+Maxime

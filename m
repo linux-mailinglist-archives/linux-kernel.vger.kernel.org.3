@@ -2,93 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ADE052454D
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 08:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE06752454C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 08:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350078AbiELGAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 02:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51852 "EHLO
+        id S1350092AbiELGAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 02:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350074AbiELGAU (ORCPT
+        with ESMTP id S1350077AbiELGAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 02:00:20 -0400
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B86D21B16F;
-        Wed, 11 May 2022 23:00:20 -0700 (PDT)
-Received: by mail-oi1-f169.google.com with SMTP id w130so5324178oig.0;
-        Wed, 11 May 2022 23:00:20 -0700 (PDT)
+        Thu, 12 May 2022 02:00:23 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2163921AAB0;
+        Wed, 11 May 2022 23:00:22 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id m20so8001421ejj.10;
+        Wed, 11 May 2022 23:00:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EsIEN4O+TN/lxuS5UZLuc5seboCoSmgg6DJggBHbT4Y=;
+        b=HYG80oIF8cUpOGMyABw+qJ9keHg9v90TkcjPAjS4gUE6SH9FthhSZrjMmp9gP5sUo4
+         hV06Kdx9GvoPPGRQvE6/uae7aygj2hBaoCrSJd7DrEj0OsAsWqsEicRW82Cqjt1MJlTM
+         PJ92pppJXUIJgT0z1xue5WDKweXUim7LcrIUhgizV0EnSFkrpjZPOGacw7mPqp5A73jk
+         VhdD13IGpaXTvpCYTip4lkZD4/jg9gAompIEs8WkP80Jw+qt+THOikPXexSTM1Jm3STJ
+         t9YWEsESOyywtYtGFmxd2sJ1Zagr1odijVLS9UgsPBP3pwXZkj5NPSluVJ5e6IAdOiuO
+         utwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=a7v3kpgCHL4lSPtmaodDrwClQXTFc2Us+lIP9tOf/jQ=;
-        b=r1wBYnZ3YexOTa1Uvyh3dbiO2bRf21R35Pue8W4pa7ZwzFhYZmiHh6Vnh6wzhu6va6
-         U9UhsHsLGyVZXimMIpZ0tSD8hIomG8SKf6qe0ovDVqT1TMOUUNxDTT84WcTYyV2FJqsO
-         KMvbuDgoloSTwj0K1YWiF+TgjuCkORpmfeBwguWnKHMzvUk7OSODg33RhP4APxwRN3+s
-         OidWRobzOhKbIhYSJ2DXg4HsbLmdF3F8lT+8Qi+Ay25fYGh74Y60AXXzP+lBoUSF89yK
-         lgwCwEUZgH1YHOjzoeuttr5V6f7dZt2SWcStrPnr/uyffBsdbjeO6PxZIjQROujsdni0
-         Xh7g==
-X-Gm-Message-State: AOAM531TIHhUfYflW86Cj8MUVgYaIIxC5We9BEPF3GF+snQrUu0s5jv9
-        +c6zYUokhWRf9SrzFkQUpwTLYaCt/z7TkZ5HNqM=
-X-Google-Smtp-Source: ABdhPJyyBK4NyiBn8Ll0K1mCMENvb6ThGjHNjyRBEf/Xzfb0SAwxmYsMpV46GgZhL4lFgleEeXpO5qU3fqMNetLr3Nc=
-X-Received: by 2002:a05:6808:2218:b0:326:bd8c:d044 with SMTP id
- bd24-20020a056808221800b00326bd8cd044mr4376782oib.92.1652335219320; Wed, 11
- May 2022 23:00:19 -0700 (PDT)
+        bh=EsIEN4O+TN/lxuS5UZLuc5seboCoSmgg6DJggBHbT4Y=;
+        b=r9iclqUztdojPNbKo4z6i0/u5JuWF+vpSbsySS4aUclwiw2iRGMvqSIbBAPPpNFi+L
+         CVt3YAxTyhTLT55+1lDmI6DK94RX5qCP2Rahh3Tb+vkqlfuK8iOAXFsxP43mnrLgAEzp
+         PgA2taNzh8Is5MjpYqZvYBVKJDyNVvzuxcanxwbdMHqk2Mr3ijlg3EMQWa5pHfzSqZZk
+         SbpLGqTKtHk1ZpPbgSTf8eV3+yABwe4xfCD2JiV+V3Bnb2bKU7GHxCBHi39bK6E5ua9K
+         wGCT37YYuu0/V5Kh87axxNDPsV/js5FaCvIEV0f37SyfjMzLtw9kDHNzDF55hz1IS9uv
+         9Y4g==
+X-Gm-Message-State: AOAM530SWmor1klEQ8V62zAjOSY2+N9HbdmS/KANzQdV6uO0sq7f1xnv
+        N25UqWycfFWDYo1VqwWbLQSlmY+XBFu5wNquxhk=
+X-Google-Smtp-Source: ABdhPJxmaicvwEDsMJ+Hau8Pq8B99VQFj6+JSnEqaAQ9k+WI1DC7k2zhUbIuCEoR9nMMhuE4mVFUt5RC/LMKCDPE/aE=
+X-Received: by 2002:a17:907:2064:b0:6f4:3f07:c76e with SMTP id
+ qp4-20020a170907206400b006f43f07c76emr28442375ejb.462.1652335220507; Wed, 11
+ May 2022 23:00:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220506201627.85598-1-namhyung@kernel.org> <20220506201627.85598-2-namhyung@kernel.org>
- <YnqXtRqW1phdtc7a@kernel.org>
-In-Reply-To: <YnqXtRqW1phdtc7a@kernel.org>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 11 May 2022 23:00:08 -0700
-Message-ID: <CAM9d7cjDxNx42oxyL5A0TA+b6tJXtSgAP6eVvHOGwz55rZ7piw@mail.gmail.com>
-Subject: Re: [PATCH 1/4] perf report: Do not extend sample type of bpf-output event
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
+References: <20220429105627.GA28438@lpieralisi> <20220429192825.GA82239@bhelgaas>
+ <20220505144347.GA19346@JADEVM-DRA> <CAH9NwWcU71gZ2woZ7ePRvuwz=_T+F7V6VOYLyAqPhTy1j6xxPA@mail.gmail.com>
+ <YnuuIQgwt45zUEcR@lpieralisi>
+In-Reply-To: <YnuuIQgwt45zUEcR@lpieralisi>
+From:   Christian Gmeiner <christian.gmeiner@gmail.com>
+Date:   Thu, 12 May 2022 08:00:09 +0200
+Message-ID: <CAH9NwWdbknzwDqzjfKPx1FRa0JV8botWZH6_HOh+KbLpRof9hw@mail.gmail.com>
+Subject: Re: [PATCH] PCI: cadence: respond to received PTM Requests
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     Dominic Rath <dominic.rath@ibv-augsburg.net>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
         LKML <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
-        Milian Wolff <milian.wolff@kdab.com>,
-        bpf <bpf@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Blake Jones <blakejones@google.com>
+        Tom Joseph <tjoseph@cadence.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnaldo,
-
-On Tue, May 10, 2022 at 9:50 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
+Am Mi., 11. Mai 2022 um 14:37 Uhr schrieb Lorenzo Pieralisi
+<lorenzo.pieralisi@arm.com>:
 >
-> Em Fri, May 06, 2022 at 01:16:24PM -0700, Namhyung Kim escreveu:
-> > Currently evsel__new_idx() sets more sample_type bits when it finds a
-> > BPF-output event.  But it should honor what's recorded in the perf
-> > data file rather than blindly sets the bits.  Otherwise it could lead
-> > to a parse error when it recorded with a modified sample_type.
+> On Thu, May 05, 2022 at 04:48:17PM +0200, Christian Gmeiner wrote:
 >
-> Can you please try to provide a Fixes: tag for this? This way reviewing
-> gets simpler by looking at who introduced this, if there was some reason
-> or if it was a plain oversight.
+> [...]
 >
-> It also helps to get this fix propabated to the stable trees.
+> > > > I think the proposed subject of "Enable Controller to respond to
+> > > > received PTM Requests" is somewhat misleading, though, because PTM
+> > > > responses still aren't enabled until we set PTM Enable.  I suggest
+> > > > something like:
+> > > >
+> > > >   PCI: cadence: Allow PTM Responder to be enabled
+> > >
+> > > I'll ask Christian for permission to resend his patch with the subject
+> > > changed.
+> > >
+> >
+> > I will send a new version tomorrow with an improved subject line.
+>
+> Hi Christian,
 
-Well.. actually this is not a fix.  I've realized it adds some
-sample types when it creates a new evsel regardless of
-the perf_event_attr.
+Hi Lorenzo
 
-This was not a problem so far (as nobody touched it),
-but when I changed some sample types during record
-for this change, perf report sees a different value and
-rejects the data.
+>
+> just asking if you are about to post a new version to pick it up.
+>
 
-Thanks,
-namhyung
+Sorry for the delay .. send out V3:
+https://lore.kernel.org/lkml/20220512055539.1782437-1-christian.gmeiner@gmail.com/
+
+
+-- 
+greets
+--
+Christian Gmeiner, MSc
+
+https://christian-gmeiner.info/privacypolicy

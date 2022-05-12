@@ -2,128 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D33524475
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 06:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A00F6524476
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 06:46:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348031AbiELEpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 00:45:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58540 "EHLO
+        id S1348041AbiELEq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 00:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347991AbiELEpX (ORCPT
+        with ESMTP id S1348598AbiELEqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 00:45:23 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9785219F55
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 21:45:19 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id j25so4516053wrc.9
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 21:45:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nB/czAIXlJJ8PHEUqcnrNljzAJJcfTV3UmWzXVmd/Cs=;
-        b=uJorObYandt+4O05YsIkNx5pXRqDbRHU94W6N1cx4h7FkzmjxjYu6zQ7JOC2IoqZ3I
-         K+NokQmLZvZEsSnrPI32VjBpodTdZ4CVMuSZQMDyvwiY3KvOVa6bsn1EiKPQXY+xbHx2
-         3ujNWKnT/cicNYkm+ZB8mDvF5YLtei+WOgqMXS6Ste14Qpp4j8w/owZUfdtOqs1ZBq32
-         AVrGkmulAwPqQs3SbZ8RJVXmPovBQMWMOLfo//EsVyhqI6OKdY/vHSOrvkKQyHfJ1T1a
-         w/gaDWYAPXbqyKh4vrhpDUkT+LXZABfi3lv1aGyO1dmftPUcvF+C2R5tp81bm2HlF/VH
-         YRuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nB/czAIXlJJ8PHEUqcnrNljzAJJcfTV3UmWzXVmd/Cs=;
-        b=pYWw5ZyJhVrDr4Xgie1l1cfGWMsKZtRT0ReglE5JXOM7rlIY8RTechMAvOyhRsWSUW
-         rP8SW6GOdM5NJ/jHMNmGqLXur2e9PpE2aGJUPpJinEoEWFcnKkrgV6hytqeVDeobkmBS
-         nqtLjBJ3sU6Vdun/N1puZ7XRuRFJSUMTk1WJ4hlEL02iBKrlN/ZWS5Yf2aQfyK+3f7KL
-         4lFpUqwW7yZ8fcn/HjX/F62IvCaS14pmc1MUXAUHZv+42s1xp5xOKg0Phlws2gy2j7yz
-         LNN8CZ+376kpnOuj/BpsqUuihlD95cgJCtjyab5PeyMrAtgAUfi9zxjacMCHyeavDMQ/
-         WSMg==
-X-Gm-Message-State: AOAM531av7P1u5z6ou9Sa8t3Bhcme2OlVfHEtBe7/ROCTubBbPPPD07Y
-        xGmCBcDQcU/CsZ/hgnvdD9HotqM9LQeADCGCWFsLZQ==
-X-Google-Smtp-Source: ABdhPJx+mk1aBg9Ve43PcEgLYy3YQNt0epJCWo9clPxMAFTEILckRPTvps8178/xvCNaRUYKctEKvhkGi0JxLePLj3Y=
-X-Received: by 2002:a5d:6483:0:b0:20c:5c21:5c8c with SMTP id
- o3-20020a5d6483000000b0020c5c215c8cmr25640208wri.86.1652330717991; Wed, 11
- May 2022 21:45:17 -0700 (PDT)
+        Thu, 12 May 2022 00:46:19 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69A82180D
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 21:46:11 -0700 (PDT)
+Received: from kwepemi100006.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KzJy860tgzCsXP;
+        Thu, 12 May 2022 12:41:20 +0800 (CST)
+Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
+ kwepemi100006.china.huawei.com (7.221.188.165) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 12 May 2022 12:46:09 +0800
+Received: from [10.67.109.54] (10.67.109.54) by kwepemm600005.china.huawei.com
+ (7.193.23.191) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 12 May
+ 2022 12:46:08 +0800
+Subject: Re: [PATCH -next 1/2] ASoC: max98396: Fix build error for implicit
+ function declaration
+To:     Mark Brown <broonie@kernel.org>
+References: <20220511012348.94288-1-tanghui20@huawei.com>
+ <20220511012348.94288-2-tanghui20@huawei.com>
+ <YnumrRUSkVCPONdl@sirena.org.uk>
+CC:     <lgirdwood@gmail.com>, <perex@perex.cz>, <tiwai@suse.com>,
+        <ryan.lee.analog@gmail.com>, <ricardw@axis.com>, <steve@sk2.org>,
+        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>
+From:   Hui Tang <tanghui20@huawei.com>
+Message-ID: <f84cbd0a-0a9e-fd72-b319-dfca8c19ce64@huawei.com>
+Date:   Thu, 12 May 2022 12:46:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-References: <20220511201107.2311757-1-atishp@rivosinc.com> <20220511201107.2311757-2-atishp@rivosinc.com>
-In-Reply-To: <20220511201107.2311757-2-atishp@rivosinc.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Thu, 12 May 2022 10:15:06 +0530
-Message-ID: <CAAhSdy2=EspQ10wn6WiACov58GJESsR8udOU=j=CgvmH2bgHoA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] RISC-V: Update user page mapping only once during start
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        DTML <devicetree@vger.kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YnumrRUSkVCPONdl@sirena.org.uk>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.109.54]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600005.china.huawei.com (7.193.23.191)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 1:41 AM Atish Patra <atishp@rivosinc.com> wrote:
->
-> Currently, riscv_pmu_event_set_period updates the userpage mapping.
-> However, the caller of riscv_pmu_event_set_period should update
-> the userpage mapping because the counter can not be updated/started
-> from set_period function in counter overflow path.
->
-> Invoke the perf_event_update_userpage at the caller so that it
-> doesn't get invoked twice during counter start path.
->
-> Fixes: f5bfa23f576f ("RISC-V: Add a perf core library for pmu drivers")
->
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
 
-Looks good to me.
 
-Reviewed-by: Anup Patel <anup@brainfault.org>
+On 2022/5/11 20:06, Mark Brown wrote:
+> On Wed, May 11, 2022 at 09:23:47AM +0800, Hui Tang wrote:
+>
+>>                          devm_regulator_get_optional
+>> sound/soc/codecs/max98396.c:1556:23: error: ‘GPIOD_OUT_HIGH’ undeclared (first use in this function); did you mean ‘GPIOF_INIT_HIGH’?
+>>               "reset", GPIOD_OUT_HIGH);
+>>                        ^~~~~~~~~~~~~~
+>>                        GPIOF_INIT_HIGH
+>> sound/soc/codecs/max98396.c:1556:23: note: each undeclared identifier is reported only once for each function it appears in
+>> sound/soc/codecs/max98396.c:1565:3: error: implicit declaration of function ‘gpiod_set_value_cansleep’; did you mean ‘gpio_set_value_cansleep’? [-Werror=implicit-function-declaration]
+>>    gpiod_set_value_cansleep(max98396->reset_gpio, 0);
+>>    ^~~~~~~~~~~~~~~~~~~~~~~~
+>>    gpio_set_value_cansleep
+>> cc1: all warnings being treated as errors
+>>
+>> Add depend on GPIOLIB for 'config SND_SOC_MAX98396'
+>
+> No, these issues are missing headers not dependencies.  In general
+> gpiolib stubs out so drivers can optionally use GPIO functionality.
+>
 
-Regards,
-Anup
+Ok, I will do that
 
-> ---
->  drivers/perf/riscv_pmu.c     | 1 -
->  drivers/perf/riscv_pmu_sbi.c | 1 +
->  2 files changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/perf/riscv_pmu.c b/drivers/perf/riscv_pmu.c
-> index b2b8d2074ed0..130b9f1a40e0 100644
-> --- a/drivers/perf/riscv_pmu.c
-> +++ b/drivers/perf/riscv_pmu.c
-> @@ -170,7 +170,6 @@ int riscv_pmu_event_set_period(struct perf_event *event)
->                 left = (max_period >> 1);
->
->         local64_set(&hwc->prev_count, (u64)-left);
-> -       perf_event_update_userpage(event);
->
->         return overflow;
->  }
-> diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
-> index 24cea59612be..2eac5db2cc18 100644
-> --- a/drivers/perf/riscv_pmu_sbi.c
-> +++ b/drivers/perf/riscv_pmu_sbi.c
-> @@ -527,6 +527,7 @@ static inline void pmu_sbi_start_overflow_mask(struct riscv_pmu *pmu,
->                         init_val = local64_read(&hwc->prev_count) & max_period;
->                         sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_START, idx, 1,
->                                   flag, init_val, init_val >> 32, 0);
-> +                       perf_event_update_userpage(event);
->                 }
->                 ctr_ovf_mask = ctr_ovf_mask >> 1;
->                 idx++;
-> --
-> 2.25.1
->
+thank you

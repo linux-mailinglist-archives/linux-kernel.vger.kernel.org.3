@@ -2,119 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E431524AE3
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EBDE524AE6
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352901AbiELK5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 06:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52200 "EHLO
+        id S1352903AbiELK7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 06:59:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349512AbiELK5K (ORCPT
+        with ESMTP id S238426AbiELK7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 06:57:10 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D00EABAB
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:57:08 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652353027;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=grjUomL2E+JtA+UjZH9AVyARolluKP570HRi18UPmiI=;
-        b=cWiUbSOzXbXSlNiud5qW/QKW8RYV41LT1brGzUR72bVDKNT5/YFRDWopodXTkQZyJmQyLA
-        g6lcpVI3hpdg7yzfARgrxQeheHDHJFj8+yIgcw5lq12AnP6gqHnxZnGQYvUdmo+LzKx2V5
-        aXxt2yYyv3YHYdeVz91lpJiHYiu9c/waBUj9YBjjVaWYItAP8T63OQPijyJ/3UkFyhcB1d
-        CDV2yrUQAeRXnro/Ivf7qPkzVZeL8o8OKexm3upuX2IuynviQ9ufl6BNYVyRt//JYrtUZm
-        vXi+ykZXpXljjhQMtWt5ZyTQOro5j9t39hqmrKsJ27Zl8NvWx1Wkz0egVI6UgA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652353027;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=grjUomL2E+JtA+UjZH9AVyARolluKP570HRi18UPmiI=;
-        b=V7s+lpSjGe220JOzNr7KtiPfiwmIp4xr1GTdj89tou8FJ5u17lUEi9hTtzUtFUN2HQaDTi
-        Ah146k8bf+0ORsCg==
-To:     Sean Christopherson <seanjc@google.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH 2/2] x86/reboot: Disable virtualization in an emergency
- if SVM is supported
-In-Reply-To: <20220511234332.3654455-3-seanjc@google.com>
-References: <20220511234332.3654455-1-seanjc@google.com>
- <20220511234332.3654455-3-seanjc@google.com>
-Date:   Thu, 12 May 2022 12:57:06 +0200
-Message-ID: <87tu9vvx19.ffs@tglx>
+        Thu, 12 May 2022 06:59:09 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D71CCEABAB
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:59:07 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AE85C106F;
+        Thu, 12 May 2022 03:59:07 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B008A3F66F;
+        Thu, 12 May 2022 03:59:06 -0700 (PDT)
+Message-ID: <89525069-4fd5-2fd8-20eb-5af240a4bceb@arm.com>
+Date:   Thu, 12 May 2022 12:58:50 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH V2] arch_topology: support parsing cluster_id from DT
+Content-Language: en-US
+To:     Qing Wang <wangqing@vivo.com>, Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <1652262776-3056-1-git-send-email-wangqing@vivo.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <1652262776-3056-1-git-send-email-wangqing@vivo.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11 2022 at 23:43, Sean Christopherson wrote:
-> Disable SVM on all CPUs via NMI shootdown during an emergency reboot.
-> Like VMX, SVM can block INIT and thus prevent bringing up other CPUs via
-> INIT-SIPI-SIPI.
+On 11/05/2022 11:52, Qing Wang wrote:
+> From: Wang Qing <wangqing@vivo.com>
 
-With the delta patch applied, I'd make that:
+[...]
 
---- a/arch/x86/kernel/reboot.c
-+++ b/arch/x86/kernel/reboot.c
-@@ -530,29 +530,25 @@ static inline void kb_wait(void)
- 
- static inline void nmi_shootdown_cpus_on_restart(void);
- 
--/* Use NMIs as IPIs to tell all CPUs to disable virtualization */
--static void emergency_vmx_disable_all(void)
-+static void emergency_reboot_disable_virtualization(void)
- {
- 	/* Just make sure we won't change CPUs while doing this */
- 	local_irq_disable();
- 
- 	/*
--	 * Disable VMX on all CPUs before rebooting, otherwise we risk hanging
--	 * the machine, because the CPU blocks INIT when it's in VMX root.
-+	 * Disable virtualization on all CPUs before rebooting to avoid hanging
-+	 * the system, as VMX and SVM block INIT when running in the host
- 	 *
- 	 * We can't take any locks and we may be on an inconsistent state, so
--	 * use NMIs as IPIs to tell the other CPUs to exit VMX root and halt.
-+	 * use NMIs as IPIs to tell the other CPUs to disable VMX/SVM and halt.
- 	 *
--	 * Do the NMI shootdown even if VMX if off on _this_ CPU, as that
--	 * doesn't prevent a different CPU from being in VMX root operation.
-+	 * Do the NMI shootdown even if virtualization is off on _this_ CPU, as
-+	 * other CPUs may have virtualization enabled.
- 	 */
--	if (cpu_has_vmx()) {
--		/* Safely force _this_ CPU out of VMX root operation. */
--		__cpu_emergency_vmxoff();
-+	cpu_crash_disable_virtualization();
- 
--		/* Halt and exit VMX root operation on the other CPUs. */
-+	if (cpu_has_vmx() || cpu_has_svm(NULL))
- 		nmi_shootdown_cpus_on_restart();
--	}
- }
- 
- 
-@@ -587,7 +583,7 @@ static void native_machine_emergency_res
- 	unsigned short mode;
- 
- 	if (reboot_emergency)
--		emergency_vmx_disable_all();
-+		emergency_reboot_disable_virtualization();
- 
- 	tboot_shutdown(TB_SHUTDOWN_REBOOT);
- 
+> @@ -582,7 +594,8 @@ static int __init parse_cluster(struct device_node *cluster, int depth)
+>  			}
+>  
+>  			if (leaf) {
+> -				ret = parse_core(c, package_id, core_id++);
+> +				ret = parse_core(c, package_id, (depth == 2)?cluster_id : -1,
+> +					       core_id++);
+>  			} else {
+>  				pr_err("%pOF: Non-leaf cluster with core %s\n",
+>  				       cluster, name);
+> @@ -599,9 +612,6 @@ static int __init parse_cluster(struct device_node *cluster, int depth)
+>  	if (leaf && !has_cores)
+>  		pr_warn("%pOF: empty cluster\n", cluster);
+>  
+> -	if (leaf)
+> -		package_id++;
+> -
+>  	return 0;
+>  }
+
+The issue I mentioned under
+https://lkml.kernel.org/r/bd746cf0-0fdd-1ee6-d394-67fffb5d9b58@arm.com
+still exists.
+
+Btw, I recommend the following test strategy.
+
+(A) Create a set of dts files which represent today's topologies in DT:
+
+  (1) 8 CPUs flat (Arm DynamIQ single DSU)
+
+  (2) 2 groups of 4 CPUs (e.g. hikey 960) (which covers Phantom* domain)
+
+  (3) your QC SM8450 Armv9 tri-gear (4-3-1) DynamIQ single DSU w/ shared
+      L2 btwn CPU0-1 and CPU2-3.
+  ...
+
+ * used in Android
+
+(B) Compile dtb's
+
+  dtc -I dts -O dtb -o foo.dtb foo.dts
+
+
+(C) Run them under qemu w/ and w/o CONFIG_SCHED_CLUSTER and check:
+
+  sudo qemu-system-aarch64 ... -dtb foo.dtb
+
+  (1) sched domains:
+
+      cat /sys/kernel/debug/sched/domains/cpu*/domain*/name
+
+  (2) sched flags:
+
+      cat /sys/kernel/debug/sched/domains/cpu*/domain*/flags
+
+  (3) cpumasks:
+
+      cat /proc/schedstat | awk '{print $1 " " $2 }' | grep ^[cd]
+
+You can even mention the test results in your patch so that people see
+that you already covered them. This will speed up the review-process
+enormously.

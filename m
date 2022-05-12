@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E365257B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 00:20:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB1505257B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 00:20:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245292AbiELWUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 18:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53512 "EHLO
+        id S1359158AbiELWU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 18:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359111AbiELWUK (ORCPT
+        with ESMTP id S1359116AbiELWUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 12 May 2022 18:20:10 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D1A2802F8
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 15:20:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A793280E06
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 15:20:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652394009; x=1683930009;
+  t=1652394010; x=1683930010;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ZX9rczUcpcP69GtQzgymUOW71yf2YPyb1EbDJ5FEJsw=;
-  b=FkVw+C1oVvykyO03E6sngUBNTvrSL7PXoU/8H/lE2W+SSfcpEwqz7WID
-   a/oaSZga3bLwlUZ8O6n8gboVwCe0y1moldJgAOz5AmhQckzu5iC6grDIV
-   c4YgEpyJ4xSi+O/mvTgkOe5sGZ7c3CI/BGh2MmLHo7sWCQ83qT4rMGLUv
-   M8tgS+SjQo/LO7IDhTzpThEjhrrtC2ehla21A65ffJS+e2VaNF0XY5B4O
-   Jyr46wBCZTiQqammAjA+7Eq5MApsY1RquiAWBmMV9VguaAYFHX1FUIXs2
-   dQqS2RASPoyUf5EZQQFekI7sXqi6NRrUf69kaGkMyA85WOYDC902AgnrF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="257694998"
+  bh=o1V4B1vYijYcC+JeCBsMbjrh6n4qeE+NBMgzu3VHSZo=;
+  b=W+t1JyzCZS1rzFm8p3myi4dwR9XlRKc70+HbOeGGhoZ56tpJvi/fD8fU
+   7Ib7roafxtMZ9SB7drnbHhbgPDtTkx3LVUeauD3LuwHBjnuc4QH8W/1j/
+   XV72Yf6QIFly6j0m4+vtc548D5/7ClL1ibq6i0Yb5iDJ/s51oYXUmyiFg
+   Pnpm5Ws29vhnafbe4PBFopvwdEz65HOhm/rVKcLLbctUKEsMn9c1ogqQI
+   fww8ghRffsW4nkWWIFSuHpSKANek/ioI6IHqjQpNG6KAM5BtZ9F1YZ/pc
+   7QWroU/fV2lnxUkAFZLgEqg5ykH6SN7LE8MnFbqfP0mRAj/7aC3dFrIhY
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="257695001"
 X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="257694998"
+   d="scan'208";a="257695001"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
   by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 15:20:08 -0700
 X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="594904485"
+   d="scan'208";a="594904494"
 Received: from skothapa-mobl.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.209.67.107])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 15:20:07 -0700
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 15:20:08 -0700
 From:   Kuppuswamy Sathyanarayanan 
         <sathyanarayanan.kuppuswamy@linux.intel.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
@@ -54,9 +54,9 @@ Cc:     "H . Peter Anvin" <hpa@zytor.com>,
         marcelo.cerri@canonical.com, tim.gardner@canonical.com,
         khalid.elmously@canonical.com, philip.cox@canonical.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v6 3/5] x86/mm: Make tdx_enc_status_changed() vmalloc address compatible
-Date:   Thu, 12 May 2022 15:19:50 -0700
-Message-Id: <20220512221952.3647598-4-sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH v6 4/5] x86/mm: Add noalias variants of set_memory_*crypted() functions
+Date:   Thu, 12 May 2022 15:19:51 -0700
+Message-Id: <20220512221952.3647598-5-sathyanarayanan.kuppuswamy@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220512221952.3647598-1-sathyanarayanan.kuppuswamy@linux.intel.com>
 References: <20220512221952.3647598-1-sathyanarayanan.kuppuswamy@linux.intel.com>
@@ -72,52 +72,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-set_memory_*crypted() APIs are used to change encryption or decryption
-page attributes for the given address. It also supports conversion for
-the vmalloc'ed memory.
+In TDX guest, when creating a shared buffer for the VMM access, to
+avoid breaking the direct mapping, vmap() can be used to remap the
+memory and use it to create the shared mapping.
 
-In TDX Guest, tdx_enc_status_changed() function is triggered by
-set_memory_*crypted() APIs when converting memory from/to shared or
-private. Internally this function uses __pa() for physical address
-conversion, which breaks the vmalloc address compatibility of the
-set_memory_*crypted() API.
-
-So add support to fix the vmalloc'ed address compatibility issue.
+Currently, both set_memory_encrypted() and set_memory_decrypted()
+functions modify the page attributes of aliased mappings (which also
+includes the direct mapping). So handle the use case like mentioned
+above, create noalias variants of set_memory_*crypted() functions.
 
 Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 ---
- arch/x86/coco/tdx/tdx.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/set_memory.h |  2 ++
+ arch/x86/mm/pat/set_memory.c      | 26 ++++++++++++++++++++------
+ 2 files changed, 22 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index b49211994864..37d58675ccf1 100644
---- a/arch/x86/coco/tdx/tdx.c
-+++ b/arch/x86/coco/tdx/tdx.c
-@@ -15,6 +15,7 @@
- #include <asm/idtentry.h>
- #include <asm/irq_regs.h>
- #include <asm/desc.h>
-+#include <asm/io.h>
- 
- /* TDX module Call Leaf IDs */
- #define TDX_GET_INFO			1
-@@ -680,8 +681,14 @@ static bool try_accept_one(phys_addr_t *start, unsigned long len,
+diff --git a/arch/x86/include/asm/set_memory.h b/arch/x86/include/asm/set_memory.h
+index 78ca53512486..0e5fc2b818be 100644
+--- a/arch/x86/include/asm/set_memory.h
++++ b/arch/x86/include/asm/set_memory.h
+@@ -46,7 +46,9 @@ int set_memory_wb(unsigned long addr, int numpages);
+ int set_memory_np(unsigned long addr, int numpages);
+ int set_memory_4k(unsigned long addr, int numpages);
+ int set_memory_encrypted(unsigned long addr, int numpages);
++int set_memory_encrypted_noalias(unsigned long addr, int numpages);
+ int set_memory_decrypted(unsigned long addr, int numpages);
++int set_memory_decrypted_noalias(unsigned long addr, int numpages);
+ int set_memory_np_noalias(unsigned long addr, int numpages);
+ int set_memory_nonglobal(unsigned long addr, int numpages);
+ int set_memory_global(unsigned long addr, int numpages);
+diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+index abf5ed76e4b7..ef54178855a1 100644
+--- a/arch/x86/mm/pat/set_memory.c
++++ b/arch/x86/mm/pat/set_memory.c
+@@ -1987,7 +1987,8 @@ int set_memory_global(unsigned long addr, int numpages)
+  * __set_memory_enc_pgtable() is used for the hypervisors that get
+  * informed about "encryption" status via page tables.
   */
- static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+-static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
++static int __set_memory_enc_pgtable(unsigned long addr, int numpages,
++		bool enc, int checkalias)
  {
--	phys_addr_t start = __pa(vaddr);
--	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
-+	phys_addr_t start, end;
-+
-+	if (is_vmalloc_addr((void *)vaddr))
-+		start = vmalloc_to_pfn((void *) vaddr) << PAGE_SHIFT;
-+	else
-+		start = __pa(vaddr);
-+
-+	end = start + numpages * PAGE_SIZE;
+ 	pgprot_t empty = __pgprot(0);
+ 	struct cpa_data cpa;
+@@ -2015,7 +2016,7 @@ static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
+ 	/* Notify hypervisor that we are about to set/clr encryption attribute. */
+ 	x86_platform.guest.enc_status_change_prepare(addr, numpages, enc);
  
- 	if (!enc) {
- 		/* Set the shared (decrypted) bits: */
+-	ret = __change_page_attr_set_clr(&cpa, 1);
++	ret = __change_page_attr_set_clr(&cpa, checkalias);
+ 
+ 	/*
+ 	 * After changing the encryption attribute, we need to flush TLBs again
+@@ -2035,29 +2036,42 @@ static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
+ 	return ret;
+ }
+ 
+-static int __set_memory_enc_dec(unsigned long addr, int numpages, bool enc)
++static int __set_memory_enc_dec(unsigned long addr, int numpages, bool enc,
++		int checkalias)
+ {
+ 	if (hv_is_isolation_supported())
+ 		return hv_set_mem_host_visibility(addr, numpages, !enc);
+ 
+ 	if (cc_platform_has(CC_ATTR_MEM_ENCRYPT))
+-		return __set_memory_enc_pgtable(addr, numpages, enc);
++		return __set_memory_enc_pgtable(addr, numpages, enc, checkalias);
+ 
+ 	return 0;
+ }
+ 
+ int set_memory_encrypted(unsigned long addr, int numpages)
+ {
+-	return __set_memory_enc_dec(addr, numpages, true);
++	return __set_memory_enc_dec(addr, numpages, true, 1);
+ }
+ EXPORT_SYMBOL_GPL(set_memory_encrypted);
+ 
+ int set_memory_decrypted(unsigned long addr, int numpages)
+ {
+-	return __set_memory_enc_dec(addr, numpages, false);
++	return __set_memory_enc_dec(addr, numpages, false, 1);
+ }
+ EXPORT_SYMBOL_GPL(set_memory_decrypted);
+ 
++int set_memory_encrypted_noalias(unsigned long addr, int numpages)
++{
++	return __set_memory_enc_dec(addr, numpages, true, 0);
++}
++EXPORT_SYMBOL_GPL(set_memory_encrypted_noalias);
++
++int set_memory_decrypted_noalias(unsigned long addr, int numpages)
++{
++	return __set_memory_enc_dec(addr, numpages, false, 0);
++}
++EXPORT_SYMBOL_GPL(set_memory_decrypted_noalias);
++
+ int set_pages_uc(struct page *page, int numpages)
+ {
+ 	unsigned long addr = (unsigned long)page_address(page);
 -- 
 2.25.1
 

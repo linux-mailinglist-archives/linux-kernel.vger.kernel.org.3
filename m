@@ -2,69 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C7C9524BD7
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E790A524BE2
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353346AbiELLkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 07:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56440 "EHLO
+        id S1353377AbiELLmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 07:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239947AbiELLkI (ORCPT
+        with ESMTP id S1351802AbiELLmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 07:40:08 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0501B6D4C8
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 04:40:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652355608; x=1683891608;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=334QfPsBhgD128XgXQmRYLsAEiLeQWJ3MXNBRTVpIsw=;
-  b=PDVUJz2h/Hlih36WLWOJqDG6cyrmk94I3IExIqWj4Y91CcDDVFFYN7FM
-   ZkBr2h/MxmL/yyYTPspKUEFgbU0LXHYrkCmbr4EnPRPZnESl3rGeVGMEQ
-   wPZPTpmQmUty5lTYPIV2pGbqZ0DBmBZ1jkb3c/zqteRvrW5annkxAhrxO
-   LOiA5rmV1B4zPPtwQI2Ep6hMbEmfrZttTTP2FlTJ5C5FYN1TDgkxeGNeD
-   Zq2/6VfGs22Y0Y2ddDr3NbELSxySjOVk3Ms+Xgd8VbP6DLz3Labysowc9
-   D5xHw8c7PihmV5c4T1GAP83PR0OhvwFXU0BPOGAxTjaTrItOrzeFpV6ju
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="257521551"
-X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
-   d="scan'208";a="257521551"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 04:40:07 -0700
-X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
-   d="scan'208";a="594628454"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.32.215])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 04:40:04 -0700
-Message-ID: <df9ead42-42d8-1547-6621-3e59f773266b@intel.com>
-Date:   Thu, 12 May 2022 14:40:00 +0300
+        Thu, 12 May 2022 07:42:04 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03ECC37BFD;
+        Thu, 12 May 2022 04:42:04 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CBLhTV024029;
+        Thu, 12 May 2022 11:42:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : to : cc : references : from : subject : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=2HThL5e0p57DZEmje+L+wRf4APcvYg3CjZSZeahaRoQ=;
+ b=GQxUeXmGnb/gCcx0NEMR9SQXxyP/3X5NUmZQtfKEEUXtUYnZbwpUJ5PjeevYXTk/xfeE
+ 1AH+WKpASyhZpDgOL0KViO/3pZ7EFa13UmbfgUCLguV1bKNcbWE6aOWZsCnzKvANn96b
+ 6+M+WM3glgYhsxQ2FqR4KVdRAnoc3wWDIOB2T6KoxeMk+4Fn+qA/jwfVycdsBbmKRTdp
+ zcDSSVKBM5IyxRPg44NozM/w21Uc+6GzzGDNaOBfpoaR31IhQkaE98a6yhRnfuk1CW3w
+ lOnmM5Y2Z6Zz+IYBUtrrZt4o/ifBGvOvolfUN7PC0iH5BjOAeYzdr9qD+zOP2gAYtY1w zQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g119xgavr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 11:42:03 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24CBQZxB010065;
+        Thu, 12 May 2022 11:42:02 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g119xgaus-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 11:42:02 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24CBc2jH002228;
+        Thu, 12 May 2022 11:42:00 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3fyrkk2uds-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 11:42:00 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24CBfvNZ56230220
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 May 2022 11:41:57 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5626FA4040;
+        Thu, 12 May 2022 11:41:57 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EAE5EA404D;
+        Thu, 12 May 2022 11:41:56 +0000 (GMT)
+Received: from [9.152.224.243] (unknown [9.152.224.243])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 12 May 2022 11:41:56 +0000 (GMT)
+Message-ID: <ecf827ee-4b07-c999-064d-96d77607cf1c@linux.ibm.com>
+Date:   Thu, 12 May 2022 13:41:56 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.8.1
-Subject: Re: [PATCH V2 21/23] libperf evsel: Add comments for booleans
+ Thunderbird/91.8.0
 Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
-References: <20220506122601.367589-1-adrian.hunter@intel.com>
- <20220506122601.367589-22-adrian.hunter@intel.com>
- <CAP-5=fWjpP8hhzPuS7tvGaPh9UFJ7Fdyg0B41B4100XbsqFUBA@mail.gmail.com>
- <ec62edc2-f4fc-82db-c001-23d43137557c@intel.com>
- <CAP-5=fW4k0A_iYPYq5pS59GmvUa8uUkzS2c2C5ruyKd40wjU8A@mail.gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <CAP-5=fW4k0A_iYPYq5pS59GmvUa8uUkzS2c2C5ruyKd40wjU8A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Pierre Morel <pmorel@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        borntraeger@de.ibm.com, cohuck@redhat.com, david@redhat.com,
+        thuth@redhat.com, imbrenda@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, wintera@linux.ibm.com, seiden@linux.ibm.com,
+        nrb@linux.ibm.com
+References: <20220506092403.47406-1-pmorel@linux.ibm.com>
+ <20220506092403.47406-3-pmorel@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+Subject: Re: [PATCH v9 2/3] s390x: KVM: guest support for topology function
+In-Reply-To: <20220506092403.47406-3-pmorel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 4W7oIOnb_eCQykAqfrgFBO8sFj4xES6F
+X-Proofpoint-ORIG-GUID: WZNU0cAi9OojDenHDJIpNKFJkW1pCIuG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-12_02,2022-05-12_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 mlxscore=0 clxscore=1015 phishscore=0 impostorscore=0
+ suspectscore=0 adultscore=0 mlxlogscore=999 malwarescore=0
+ priorityscore=1501 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2205120052
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,84 +98,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/22 08:34, Ian Rogers wrote:
-> On Wed, May 11, 2022 at 12:03 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->>
->> On 6/05/22 23:51, Ian Rogers wrote:
->>> On Fri, May 6, 2022 at 5:26 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->>>>
->>>> Add comments for 'system_wide' and 'requires_cpu' booleans
->>>>
->>>> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
->>>> ---
->>>>  tools/lib/perf/include/internal/evsel.h | 9 +++++++++
->>>>  1 file changed, 9 insertions(+)
->>>>
->>>> diff --git a/tools/lib/perf/include/internal/evsel.h b/tools/lib/perf/include/internal/evsel.h
->>>> index 77fbb8b97e5c..cc8f1ba790bd 100644
->>>> --- a/tools/lib/perf/include/internal/evsel.h
->>>> +++ b/tools/lib/perf/include/internal/evsel.h
->>>> @@ -49,7 +49,16 @@ struct perf_evsel {
->>>>
->>>>         /* parse modifier helper */
->>>>         int                      nr_members;
->>>> +       /*
->>>> +        * system_wide is for events that need to be on every CPU, irrespective
->>>> +        * of user requested CPUs or threads. Map propagation will not override
->>>> +        * this events own_cpus, which will contribute to evlist all_cpus.
->>>
->>> So this muddies my understanding of cpus and own_cpus (sigh, again
->>> undocumented). I believe cpus to be the set of CPUs (or any CPU, aka
->>> dummy) that perf_event_open happens on. all_cpus in evlist is the
->>> union of all the evsels cpus (ie not related to own_cpus as described
->>> here). Own_cpus I believe to be what's computed at parse-event time
->>> from sysfs. Is this a typo in the comment or quite likely my error?
->>
->> A 'system_wide' event is not created by the parser, so own_cpus is set
->> by the code adding the event.
-> 
-> I think I may be misreading the comment. Perhaps it should read:
-> 
-> system_wide is for events that need to be on every CPU, irrespective
-> of user requested CPUs or threads. Map propagation will not override
-> this event's own_cpus and own_cpus don't contribute to the evlist
-> all_cpus.
+On 5/6/22 11:24, Pierre Morel wrote:
+> We let the userland hypervisor know if the machine support the CPU
+> topology facility using a new KVM capability: KVM_CAP_S390_CPU_TOPOLOGY.
 
-For a system_wide evsel, evsel->cpus are set to own_cpus and the
-evsel->cpus contribute to all_cpus.
+Nope, we indicate KVM's support which is based on the machine's support.
 
-> 
-> It would be nice if there were a comment on own_cpus to explain its
-> relationship to cpus and more broadly when it is used. Fwiw, the parse
-> time copy is made here:
-> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/parse-events.c?h=perf/core#n367
-> 
-> I worry that if own_cpus should be used in place of cpus then
-> iterators like evlist__for_each_cpu may need to handle this, and so
-> they'd be broken currently.
-
-No, evsel->own_cpus may be used to determine evsel->cpus, but that
-is where their influence stops.
-
-> 
-> Thanks,
-> Ian
-> 
->>>
->>> Thanks,
->>> Ian
->>>
->>>> +        */
->>>>         bool                     system_wide;
->>>> +       /*
->>>> +        * Some events, for example uncore events, require a CPU.
->>>> +        * i.e. it cannot be the 'any CPU' value of -1.
->>>> +        */
->>>>         bool                     requires_cpu;
->>>>         int                      idx;
->>>>  };
->>>> --
->>>> 2.25.1
->>>>
->>
-
+On the same note: Shouldn't the CAP indication be part of the last 
+patch? The resets are needed for a full support of this feature, no?

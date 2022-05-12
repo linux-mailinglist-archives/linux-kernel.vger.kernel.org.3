@@ -2,241 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3C66524F86
+	by mail.lfdr.de (Postfix) with ESMTP id 561CD524F85
 	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355089AbiELOLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 10:11:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52938 "EHLO
+        id S1355088AbiELOLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 10:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354893AbiELOL0 (ORCPT
+        with ESMTP id S1355060AbiELOLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 10:11:26 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C44FE61295
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:11:24 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id x88so5297431pjj.1
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:11:24 -0700 (PDT)
+        Thu, 12 May 2022 10:11:47 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4929A62113;
+        Thu, 12 May 2022 07:11:46 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id g6so10550838ejw.1;
+        Thu, 12 May 2022 07:11:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=7DM0fhozyxZfRm0O8cuYidMQN4EUbzqJzK7mBi/zq5g=;
-        b=qQmcFeR2f/ZJ3GrSdy0gqIiC2l2t+wMUw0hwEEUDyJzba7YXHy0ob48OgB4jOh1Oyo
-         WL/4Hj+Zwo7vVaoTRRNMHaVpZcvxCxP46e77mTy7/dNjzPmWM5GtKex/6cbfvYMoWV9J
-         HU1STEHgs0MNCkAZh0JBsC9qSDm5KqWTQWBj70NlRUZ8/k7mybkyoUzmFIdu/cOQ20Yc
-         ZzDzfI1K6huZEVOT5weWb82c0Sg3BnEg0t7qiYMjRhFZ83DtJmUwew4oQzjBe0dan0R/
-         XgSkGszjXY2an95D+Li4KzWQyYK3MgOJIFAuhUKlf/BPTgiZx1H7f8+a2Bs3mmE5Tam8
-         DSFw==
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vDfWle9etWMCmQNVGzMruoXlBGLrPBNQ0jQnmtdNAT4=;
+        b=lbH/a60vTfH0YMoCYxaNMx4khmhaEAiJpnijLbVIse7l464HPTBpnDgXMA3JP0r5Zt
+         wosR3ndq5qim2RZCTPu15TxZ5hOjBgq2gI+dbLdqRNPJFrNBbNDZ1GDDkXaJZC8ZkFyg
+         h085ul/kM5bnupa0Vp1/NjiqfAykEL8jTgvW1M2lep43rtLzaH+edEFfPes6jgt1rzhb
+         /JIbNkYBko57rbX8wxKrIjTF8NLorE6v8/iwHl1/1fFP/LmB33ed7DIedW1PHl60rXvm
+         M07TS+SjmrfIWG7Qpcxb+Hsbko/YzMQs3XMGN53QPKWe1IFwIj6OnjZOsXq1cAocONFN
+         S46A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=7DM0fhozyxZfRm0O8cuYidMQN4EUbzqJzK7mBi/zq5g=;
-        b=iIJXYvPQo205yl7zRiTXZoMURNLQNBfqsfFJGhZ+07jVVp3rtfLe6BzC4ggIsCgMez
-         Kv6p7y5nS5uRmurzDcspdoQR5TisofBhZH/0wePaoKBtG2ywjTrGIzBOGwsJmnx4LrEy
-         +S+bzek8BD0u7gV9AHjJk70rQj0btA+znocIAsqs+neEj7+CMTRd+N9FrqkARXiXfuwG
-         rElxjfbEkraDk2dJ7glxmMlywiO8Y1oBe90Ko8OFc4kNDvfbtLXlqTbS22k7Deie7jrO
-         qg/HzqkxoDquHzBAjKMEGLeArPmsuLnjSjyjg5yOOBdf520OOKE3IR7WQySGTCzREHV+
-         N2Dw==
-X-Gm-Message-State: AOAM531fowR3ZNip/gEjfDL2V2kN11sCqBjMD6h8L7WriwRRGfdlBo5Y
-        OjYk2OJZcncoV0jMkXHKTKNr
-X-Google-Smtp-Source: ABdhPJzFOCbGXcIm00mYaykwWZp+4Y22f7p6HRgUZHN0vZ452HnzpGCGO7+t52pJ9lz9aEdAeDz6AQ==
-X-Received: by 2002:a17:902:e353:b0:15d:4ca:90c3 with SMTP id p19-20020a170902e35300b0015d04ca90c3mr30015312plc.171.1652364684141;
-        Thu, 12 May 2022 07:11:24 -0700 (PDT)
-Received: from thinkpad ([117.202.184.202])
-        by smtp.gmail.com with ESMTPSA id e4-20020a17090ada0400b001cd4989fecesm1885043pjv.26.2022.05.12.07.11.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 07:11:23 -0700 (PDT)
-Date:   Thu, 12 May 2022 19:41:15 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 00/26] dmaengine: dw-edma: Add RP/EP local DMA
- controllers support
-Message-ID: <20220512141115.GE35848@thinkpad>
-References: <20220503225104.12108-1-Sergey.Semin@baikalelectronics.ru>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vDfWle9etWMCmQNVGzMruoXlBGLrPBNQ0jQnmtdNAT4=;
+        b=EPf3Z0NG7KrGIprZkKT9Lf4gE7z5RIpJjJ4Gstyz7WjNNerlVGJYi5APUNhb95kHoc
+         /FxY1Jb0EMFct3ihj6bM9HzL0/oj57Q1wDgJTh8aEk72CEa9K14egzVllsme6bmUgMTG
+         eQ39TG1RUU04k1COM44obYv1Qx9GYeFDqK3AQNH3vhg+v89+iReayakGXcHLH9KkQlka
+         sGC810qYrdyJrV8CcIavNSTIS2A3OHjnOAYDW41KakYUkXPwpGXzq5fvWIAaoOTZfaL4
+         ur/2zO1945Bx3Jds3mFn2SdfujPHWPXQ4o/3mil2GGWt8HqlhycsgbeuNW3DxS4N3pKt
+         56cQ==
+X-Gm-Message-State: AOAM531I2Y07T2UTbdZoVexOxBziUI7LG0qyVOcyJDMEEU1GMArMYY5s
+        4WJWOnBabehAxiiz8CAE+DI=
+X-Google-Smtp-Source: ABdhPJy4SV46Fw946eFm0yov5HwLW2Bb91us5NM7wZC9tAYmquJgB+/RwuH491Qkvgkl0aY1W35C5Q==
+X-Received: by 2002:a17:906:1b1b:b0:6f3:9044:5fb4 with SMTP id o27-20020a1709061b1b00b006f390445fb4mr50087ejg.763.1652364704686;
+        Thu, 12 May 2022 07:11:44 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id y18-20020aa7ccd2000000b0042617ba6394sm2565060edt.30.2022.05.12.07.11.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 07:11:44 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <c21a5891-06fa-1d0b-360f-54b8711fd23b@redhat.com>
+Date:   Thu, 12 May 2022 16:11:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220503225104.12108-1-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3] KVM: x86/mmu: Update number of zapped pages even if
+ page list is stable
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>
+References: <20220511145122.3133334-1-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220511145122.3133334-1-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 01:50:38AM +0300, Serge Semin wrote:
-> This is a final patchset in the series created in the framework of
-> my Baikal-T1 PCIe/eDMA-related work:
+On 5/11/22 16:51, Sean Christopherson wrote:
+> When zapping obsolete pages, update the running count of zapped pages
+> regardless of whether or not the list has become unstable due to zapping
+> a shadow page with its own child shadow pages.  If the VM is backed by
+> mostly 4kb pages, KVM can zap an absurd number of SPTEs without bumping
+> the batch count and thus without yielding.  In the worst case scenario,
+> this can cause a soft lokcup.
 > 
-> [1: In-progress v3] clk: Baikal-T1 DDR/PCIe resets and some xGMAC fixes
-> Link: https://lore.kernel.org/linux-pci/20220503205722.24755-1-Sergey.Semin@baikalelectronics.ru/
-> [2: In-progress v2] PCI: dwc: Various fixes and cleanups
-> Link: https://lore.kernel.org/linux-pci/20220503212300.30105-1-Sergey.Semin@baikalelectronics.ru/
-> [3: In-progress v2] PCI: dwc: Add dma-ranges/YAML-schema/Baikal-T1 support
-> Link: https://lore.kernel.org/linux-pci/20220503214638.1895-1-Sergey.Semin@baikalelectronics.ru/
-> [4: In-progress v2] dmaengine: dw-edma: Add RP/EP local DMA controllers support
-> Link: --you are looking at it--
+>   watchdog: BUG: soft lockup - CPU#12 stuck for 22s! [dirty_log_perf_:13020]
+>     RIP: 0010:workingset_activation+0x19/0x130
+>     mark_page_accessed+0x266/0x2e0
+>     kvm_set_pfn_accessed+0x31/0x40
+>     mmu_spte_clear_track_bits+0x136/0x1c0
+>     drop_spte+0x1a/0xc0
+>     mmu_page_zap_pte+0xef/0x120
+>     __kvm_mmu_prepare_zap_page+0x205/0x5e0
+>     kvm_mmu_zap_all_fast+0xd7/0x190
+>     kvm_mmu_invalidate_zap_pages_in_memslot+0xe/0x10
+>     kvm_page_track_flush_slot+0x5c/0x80
+>     kvm_arch_flush_shadow_memslot+0xe/0x10
+>     kvm_set_memslot+0x1a8/0x5d0
+>     __kvm_set_memory_region+0x337/0x590
+>     kvm_vm_ioctl+0xb08/0x1040
 > 
+> Fixes: fbb158cb88b6 ("KVM: x86/mmu: Revert "Revert "KVM: MMU: zap pages in batch""")
+> Reported-by: David Matlack <dmatlack@google.com>
+> Reviewed-by: Ben Gardon <bgardon@google.com>
+> Reviewed-by: David Matlack <dmatlack@google.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+> 
+> v3:
+>   - Collect David's review.
+>   - "Rebase".  The v2 patch still applies cleanly, but Paolo apparently has
+>     a filter configured to ignore all emails related to the v2 submission.
+> 
+> v2:
+>   - https://lore.kernel.org/all/20211129235233.1277558-1-seanjc@google.com
+>   - Rebase to kvm/master, commit 30d7c5d60a88 ("KVM: SEV: expose...")
+>   - Collect Ben's review, modulo bad splat.
+>   - Copy+paste the correct splat and symptom. [David].
+> 
+>   arch/x86/kvm/mmu/mmu.c | 10 ++++++----
+>   1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 909372762363..7429ae1784af 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -5665,6 +5665,7 @@ static void kvm_zap_obsolete_pages(struct kvm *kvm)
+>   {
+>   	struct kvm_mmu_page *sp, *node;
+>   	int nr_zapped, batch = 0;
+> +	bool unstable;
+>   
+>   restart:
+>   	list_for_each_entry_safe_reverse(sp, node,
+> @@ -5696,11 +5697,12 @@ static void kvm_zap_obsolete_pages(struct kvm *kvm)
+>   			goto restart;
+>   		}
+>   
+> -		if (__kvm_mmu_prepare_zap_page(kvm, sp,
+> -				&kvm->arch.zapped_obsolete_pages, &nr_zapped)) {
+> -			batch += nr_zapped;
+> +		unstable = __kvm_mmu_prepare_zap_page(kvm, sp,
+> +				&kvm->arch.zapped_obsolete_pages, &nr_zapped);
+> +		batch += nr_zapped;
+> +
+> +		if (unstable)
+>   			goto restart;
+> -		}
+>   	}
+>   
+>   	/*
+> 
+> base-commit: 2764011106d0436cb44702cfb0981339d68c3509
 
-I rebased my Qcom specific changes on top of the above patches and tested
-on SM8450 based dev board. After fixing couple of issues (shared those in the
-respective patch postings), everything seems to work fine.
+Queued, thanks.
 
-So feel free to add my Tested-by tag for dwc/edma patches after fixing those
-issues.
-
-Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-
-Thanks,
-Mani
-
-> Note it is recommended to merge this patchset after the former ones in
-> order to prevent merge conflicts. @Lorenzo could you merge in this
-> patchset through your PCIe repo? After getting all the ack'es of course
-> and after merging in the @Frank' series? (See the next paragraph for more
-> details.)
-> 
-> Please note originally this series was self content, but due to Frank
-> being a bit faster in his work submission I had to rebase my patchset onto
-> his one. So now this patchset turns to be dependent on the Frank' work:
-> Link: https://lore.kernel.org/linux-pci/20220503005801.1714345-1-Frank.Li@nxp.com/
-> So please merge Frank' series first before applying this one.
-> 
-> Here is a short summary regarding this patchset. The series starts with
-> fixes patches. The very first patch fixes the dma_direct_map_resource()
-> method, which turned out to be not working correctly for the case of
-> having devive.dma_range_map being non-empty (non-empty dma-ranges DT
-> property). Then we discovered that the dw-edma-pcie.c driver incorrectly
-> initializes the LL/DT base addresses for the platforms with not matching
-> CPU and PCIe memory spaces. It is fixed by using the pci_bus_address()
-> method to get a correct base address. After that you can find a series of
-> the interleaved xfers fixes. It turned out the interleaved transfers
-> implementation didn't work quite correctly from the very beginning for
-> instance missing src/dst addresses initialization, etc. In the framework
-> of the next two patches we suggest to add a new platform-specific
-> callback - pci_address() and use it to convert the CPU address to the PCIe
-> space address. It is at least required for the DW eDMA remote End-point
-> setup on the platforms with not-matching CPU/PCIe address spaces. In case
-> of the DW eDMA local RP/EP setup the conversion will be done automatically
-> by the outbound iATU (if no DMA-bypass flag is specified for the
-> corresponding iATU window). Then we introduce a set of the patches to make
-> the DebugFS part of the code supporting the multi-eDMA controllers
-> platforms. It starts with several cleanup patches and is closed joining
-> the Read/Write channels into a single DMA-device as they originally should
-> have been. After that you can find the patches with adding the non-atomic
-> io-64 methods usage, dropping DT-region descriptors allocation, replacing
-> chip IDs with the device name. In addition to that in order to have the
-> eDMA embedded into the DW PCIe RP/EP supported we need to bypass the
-> dma-ranges-based memory ranges mapping since in case of the root port DT
-> node it's applicable for the peripheral PCIe devices only. Finally at the
-> series closure we introduce a generic DW eDMA controller support being
-> available in the DW PCIe Host/End-point driver.
-> 
-> Link: https://lore.kernel.org/linux-pci/20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru/
-> Changelog v2:
-> - Drop the patches:
->   [PATCH 1/25] dmaengine: dw-edma: Drop dma_slave_config.direction field usage
->   [PATCH 2/25] dmaengine: dw-edma: Fix eDMA Rd/Wr-channels and DMA-direction semantics
->   since they are going to be merged in in the framework of the
->   Frank's patchset.
-> - Add a new patch: "dmaengine: dw-edma: Release requested IRQs on
->   failure."
-> - Drop __iomem qualifier from the struct dw_edma_debugfs_entry instance
->   definition in the dw_edma_debugfs_u32_get() method. (@Manivannan)
-> - Add a new patch: "dmaengine: dw-edma: Rename DebugFS dentry variables to
->   'dent'." (@Manivannan)
-> - Slightly extend the eDMA name array size. (@Manivannan)
-> - Change the specific DMA mapping comment a bit to being
->   clearer. (@Manivannan)
-> - Add a new patch: "PCI: dwc: Add generic iATU/eDMA CSRs space detection
->   method."
-> - Don't fail eDMA detection procedure if the DW eDMA driver couldn't probe
->   device. That happens if the driver is disabled. (@Manivannan)
-> - Add "dma" registers resource mapping procedure. (@Manivannan)
-> - Move the eDMA CSRs space detection into the dw_pcie_map_detect() method.
-> - Remove eDMA on the dw_pcie_ep_init() internal errors. (@Manivannan)
-> - Remove eDMA in the dw_pcie_ep_exit() method.
-> - Move the dw_pcie_edma_detect() method execution to the tail of the
->   dw_pcie_ep_init() function.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: "Krzysztof Wilczyński" <kw@linux.com>
-> Cc: linux-pci@vger.kernel.org
-> Cc: dmaengine@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> 
-> Serge Semin (26):
->   dma-direct: take dma-ranges/offsets into account in resource mapping
->   dmaengine: Fix dma_slave_config.dst_addr description
->   dmaengine: dw-edma: Release requested IRQs on failure
->   dmaengine: dw-edma: Convert ll/dt phys-address to PCIe bus/DMA address
->   dmaengine: dw-edma: Fix missing src/dst address of the interleaved
->     xfers
->   dmaengine: dw-edma: Don't permit non-inc interleaved xfers
->   dmaengine: dw-edma: Fix invalid interleaved xfers semantics
->   dmaengine: dw-edma: Add CPU to PCIe bus address translation
->   dmaengine: dw-edma: Add PCIe bus address getter to the remote EP
->     glue-driver
->   dmaengine: dw-edma: Drop chancnt initialization
->   dmaengine: dw-edma: Fix DebugFS reg entry type
->   dmaengine: dw-edma: Stop checking debugfs_create_*() return value
->   dmaengine: dw-edma: Add dw_edma prefix to the DebugFS nodes descriptor
->   dmaengine: dw-edma: Convert DebugFS descs to being kz-allocated
->   dmaengine: dw-edma: Rename DebugFS dentry variables to 'dent'
->   dmaengine: dw-edma: Simplify the DebugFS context CSRs init procedure
->   dmaengine: dw-edma: Move eDMA data pointer to DebugFS node descriptor
->   dmaengine: dw-edma: Join Write/Read channels into a single device
->   dmaengine: dw-edma: Use DMA-engine device DebugFS subdirectory
->   dmaengine: dw-edma: Use non-atomic io-64 methods
->   dmaengine: dw-edma: Drop DT-region allocation
->   dmaengine: dw-edma: Replace chip ID number with device name
->   dmaengine: dw-edma: Bypass dma-ranges mapping for the local setup
->   dmaengine: dw-edma: Skip cleanup procedure if no private data found
->   PCI: dwc: Add generic iATU/eDMA CSRs space detection method
->   PCI: dwc: Add DW eDMA engine support
-> 
->  drivers/dma/dw-edma/dw-edma-core.c            | 211 +++++-----
->  drivers/dma/dw-edma/dw-edma-core.h            |  10 +-
->  drivers/dma/dw-edma/dw-edma-pcie.c            |  24 +-
->  drivers/dma/dw-edma/dw-edma-v0-core.c         |  76 ++--
->  drivers/dma/dw-edma/dw-edma-v0-core.h         |   1 -
->  drivers/dma/dw-edma/dw-edma-v0-debugfs.c      | 372 ++++++++----------
->  drivers/dma/dw-edma/dw-edma-v0-debugfs.h      |   5 -
->  .../pci/controller/dwc/pcie-designware-ep.c   |  16 +-
->  .../pci/controller/dwc/pcie-designware-host.c |  17 +-
->  drivers/pci/controller/dwc/pcie-designware.c  | 251 ++++++++++--
->  drivers/pci/controller/dwc/pcie-designware.h  |  23 +-
->  include/linux/dma/edma.h                      |  18 +-
->  include/linux/dmaengine.h                     |   2 +-
->  kernel/dma/direct.c                           |   2 +-
->  14 files changed, 628 insertions(+), 400 deletions(-)
-> 
-> -- 
-> 2.35.1
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
+Paolo

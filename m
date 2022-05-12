@@ -2,119 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F8C524B0F
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 875CE524B15
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352985AbiELLLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 07:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40912 "EHLO
+        id S1353013AbiELLLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 07:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241298AbiELLLM (ORCPT
+        with ESMTP id S1344515AbiELLL1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 07:11:12 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B83532F0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 04:11:06 -0700 (PDT)
-Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 84EDC1EC0445;
-        Thu, 12 May 2022 13:11:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1652353861;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=5C8XNjk61+NvHfhAsvBbiWRgErg4Q9IkuFQ7F4uDckA=;
-        b=IURjnoaRNsOcAuXiX8cHJCSSRqFCMzlPSoUwBAkhD7sKhaNTsUXdD8uSg5JZ3xwx14uClU
-        QuLRpT5Gp1WOMfBjLvLVfYhn7PnACU9U2ueBEncObpyvnDe8UZXv8h1RIN+R/7/Y2HDBGx
-        4WK/aVB6VAK00xWFJCf+tGWSN/BdYq8=
-Date:   Thu, 12 May 2022 13:10:51 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Baskov Evgeniy <baskov@ispras.ru>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] x86: Add strlcat() to compressed kernel
-Message-ID: <YnzrO8O4Q66SFED0@zn.tnic>
-References: <20220505103224.21667-1-baskov@ispras.ru>
- <20220505103224.21667-2-baskov@ispras.ru>
+        Thu, 12 May 2022 07:11:27 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A475372B
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 04:11:25 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id dk23so9482126ejb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 04:11:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=mU7DjZ6YdE5ZE6KKWVtlZVe9sgVvfea3+yMKl+vOnVo=;
+        b=Jz3TNB8Ix/xBZkbtD4X/DUmSq4yrvweuymYmhr87xqoKK5IUcCStHAl/E63TFW9yig
+         lcBfVAgG4F3Y70mg4qNIlVfbSyle/W6kkfNPBn3V53mF6wXoUvnWuh2G1uaOVPh2pNVZ
+         29PL1PqFKJ5Q17EoiAxRowAF6RaaQR7bHgXdonm7011jncH3ynSsle0eIJlA38q6o/gw
+         S1P4+n0yOKA0iDNxa2RRjZZt9ImKvr+7LHeXFbgqRiKSRfKwe7SKImD52XXg0ib0zhG6
+         D3sR9XXM3oS9fT4pT7hGWd8NX+8ZgSsFY/YN26HVof+qfy6t65+FRNetsjng4OXJYS5y
+         tVjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=mU7DjZ6YdE5ZE6KKWVtlZVe9sgVvfea3+yMKl+vOnVo=;
+        b=XhQEKVPCAHrXLh8v+vjXdaeh71pQmCVSJX3MwiP/C31e2Tgnv27T0Ggv7JbNEXsWlp
+         +BkY/8HkMEKsA9SZu4M7C0WiWOpYML9EpO6C7V6+FDP2ViQCnO47Xn2+YxmDmqHp62lm
+         Wt2YArTAwSy2Iz7/2QY+fh+jkVpFU8PzcYvSBfn65lwwZyAh2L9okgDSwH1MYCLz2Dp9
+         CBPTf1AYet6bydYNeQgRsh1rJMHw6SiPuctNanG7RTWfHfQbGzzhN9n035b15J9pdGEa
+         cuMC9srTYoeGYkvoq5Lxugc8ZakJHZSBY+ixiuA2gurmcZdGx+Sap7/fFkA4L/QlM/gc
+         wy9g==
+X-Gm-Message-State: AOAM531pJ1KvxwaUiG/Y9pFRd56eKQXkja6VoMo1xYzD0xo+OuOzn6fq
+        qftG+/Ko235g5r93kr/hJyY=
+X-Google-Smtp-Source: ABdhPJyAzjR5uVZuKuZsiWODeTC6oFfxt4BJFSeN9J6FT/+zjzv4PUPDOISmQAZEk6erZEgvpK+x2A==
+X-Received: by 2002:a17:907:c28:b0:6f4:2a80:f355 with SMTP id ga40-20020a1709070c2800b006f42a80f355mr28999239ejc.101.1652353884087;
+        Thu, 12 May 2022 04:11:24 -0700 (PDT)
+Received: from archbook.localnet (ict-networks-195-176-112-051.fwd-v4.ethz.ch. [195.176.112.51])
+        by smtp.gmail.com with ESMTPSA id y17-20020a50f1d1000000b0042617ba6380sm2436781edl.10.2022.05.12.04.11.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 04:11:23 -0700 (PDT)
+From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+To:     Cristian Marussi <cristian.marussi@arm.com>,
+        Etienne Carriere <etienne.carriere@linaro.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liang Chen <cl@rock-chips.com>, linux-kernel@vger.kernel.org,
+        Kever Yang <kever.yang@rock-chips.com>,
+        Jeffy Chen <jeffy.chen@rock-chips.com>,
+        Peter Geis <pgwipeout@gmail.com>
+Subject: Re: [BUG] New arm scmi check in linux-next causing rk3568 not to boot due to firmware bug
+Date:   Thu, 12 May 2022 13:11:22 +0200
+Message-ID: <6587375.6lpfYT6tjA@archbook>
+In-Reply-To: <CAN5uoS_MgBiTVZCRSZyYCH4cnUZD_bHj2+mZu661bFV8TKWScw@mail.gmail.com>
+References: <1698297.NAKyZzlH2u@archbook> <YnOEwuuyO2/h7c1G@e120937-lin> <CAN5uoS_MgBiTVZCRSZyYCH4cnUZD_bHj2+mZu661bFV8TKWScw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220505103224.21667-2-baskov@ispras.ru>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 01:32:23PM +0300, Baskov Evgeniy wrote:
-> Subject: Re: [PATCH v3 1/2] x86: Add strlcat() to compressed kernel
+Hello,
 
-The tip tree preferred format for patch subject prefixes is
-'subsys/component:', e.g. 'x86/apic:', 'x86/mm/fault:', 'sched/fair:',
-'genirq/core:'. Please do not use file names or complete file paths as
-prefix. 'git log path/to/file' should give you a reasonable hint in most
-cases.
+sorry for the late reply, completely missed that there was a question
+for me in this mail.
 
-The condensed patch description in the subject line should start with a
-uppercase letter and should be written in imperative tone.
-
-In your case, that would be x86/boot: Add...
-
-> strlcat() simplifies the code of command line
-> concatenation and reduces the probability of mistakes.
+On Donnerstag, 5. Mai 2022 11:40:09 CEST Etienne Carriere wrote:
+> Hello Nicolas, Cristian,
+> [...]
 > 
-> Signed-off-by: Baskov Evgeniy <baskov@ispras.ru>
+> Indeed the firmware implementation is wrong in TF-A.
+> And also in OP-TEE by the way:
+> https://github.com/OP-TEE/optee_os/blob/3.17.0/core/drivers/scmi-msg/base.c#L163-L166
 > 
-> diff --git a/arch/x86/boot/compressed/string.c b/arch/x86/boot/compressed/string.c
-> index 81fc1eaa3229..b0635539b6f6 100644
-> --- a/arch/x86/boot/compressed/string.c
-> +++ b/arch/x86/boot/compressed/string.c
-> @@ -40,6 +40,21 @@ static void *____memcpy(void *dest, const void *src, size_t n)
->  }
->  #endif
->  
-> +size_t strlcat(char *dest, const char *src, size_t count)
-> +{
-> +	size_t dsize = strlen(dest);
-> +	size_t len = strlen(src);
-> +	size_t res = dsize + len;
+> @Nicoals, do you want to send a patch to TF-A, or do you want me to do it?
 
-You can add the BUG_ON() check from the kernel proper version like this:
+I have no experience with TF-A, so I'd prefer if you could do it.
 
-diff --git a/arch/x86/boot/compressed/string.c b/arch/x86/boot/compressed/string.c
-index b0635539b6f6..643fcd957527 100644
---- a/arch/x86/boot/compressed/string.c
-+++ b/arch/x86/boot/compressed/string.c
-@@ -46,6 +46,10 @@ size_t strlcat(char *dest, const char *src, size_t count)
- 	size_t len = strlen(src);
- 	size_t res = dsize + len;
- 
-+        /* This would be a bug */
-+        if (dsize >= count)
-+		error("strlcat(): destination too big\n");
-+
- 	dest += dsize;
- 	count -= dsize;
- 	if (len >= count)
-diff --git a/arch/x86/purgatory/purgatory.c b/arch/x86/purgatory/purgatory.c
-index 7558139920f8..65f0cedb65ae 100644
---- a/arch/x86/purgatory/purgatory.c
-+++ b/arch/x86/purgatory/purgatory.c
-@@ -57,3 +57,4 @@ void purgatory(void)
-  * arch/x86/boot/compressed/string.c
-  */
- void warn(const char *msg) {}
-+void error(char *m) {}
+In good news, Rockchip has confirmed they're preparing to release RK356x
+TF-A sources, so I'll be able to port the patch over to their sources once
+they are released, if they don't already apply it themselves.
 
--- 
-Regards/Gruss,
-    Boris.
+> 
+> I can fix the optee_os implementation. I'll tell you when I'll have
+> created a P-R.
+> The fix is the same for TF-A and OP-TEE.
+> Proposal from Cristian looks good to me, maybe simplified:
+> 
+> ```patch
+>          memcpy(outargs, &p2a, sizeof(p2a));
+>          memcpy(outargs + sizeof(p2a), list + a2p->skip, count);
+> 
+> -        scmi_write_response(msg, outargs, sizeof(outargs));
+> +        list_sz = (1 + (count - 1) / sizeof(uint32_t)) * sizeof(uint32_t);
+> +        scmi_write_response(msg, outargs, sizeof(p2a) + list_sz);
+> ```
+> [...]
+> 
+> BR,
+> Etienne
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Regards,
+Nicolas Frattaroli
+
+
+

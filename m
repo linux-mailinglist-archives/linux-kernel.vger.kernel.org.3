@@ -2,91 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8DA5251FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A53CD52520C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356213AbiELQFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 12:05:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56520 "EHLO
+        id S1356280AbiELQFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 12:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356214AbiELQFB (ORCPT
+        with ESMTP id S1356256AbiELQFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 12:05:01 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCCB62BC1
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 09:04:58 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id m1so7902597wrb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 09:04:58 -0700 (PDT)
+        Thu, 12 May 2022 12:05:17 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326CC263DBC;
+        Thu, 12 May 2022 09:05:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=QbECvT15E4W7/wFT2xYXuo6yIOKSonMrztm7bwUstF8=;
-        b=y7TbWI505OM9r4QfmR1oa5OPuJvJCNXquu4pD895WX47HdmQJ8IL2M/cW7jnJ3jBnq
-         P4Vck7ywqn770X1j/baz1uFJOP8Wr6kYUS/wb+Gv3ob2EOUQIpeawZ6oq+qHqmpObCoH
-         hHTTJPKw6l8dyZyBkdSbxMrfLOG6MoJgSBqN4sR8hTtWuAKZnTCwQ+iWd2nHFF6G6JFw
-         451wpxPzihUEiS+TzfEWI/OuYHh56S7h+DceZWt5Z9qd4SOLQpBsTjSdR1/SzWQU1V2t
-         rPcgblASh/QjGx5unRKwLgOfforgTLvvC0BDqZgo4XIOTlsPPWF85MmnLs8WRhAYw+iG
-         M1vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=QbECvT15E4W7/wFT2xYXuo6yIOKSonMrztm7bwUstF8=;
-        b=AYfgwXjnUlRt2aHZ5k99zuIe/kf8jh852mqDhiqaW/M38EasmuPUOydWdkiAxE77Jj
-         0Oihg1T2q4sg8PaYQO+BMJM/8QFPPZ5UC5kVPC4WXHPTMoyepNozA3p5a80nYkvvM+oX
-         DDHLMDBHbBKnyHtyxcSqfqLirseK9wQN9NLYJEMha/ABJHnbMKUWnk0sjhY2PhSIjem+
-         8O6VbCy4ZfaxF3HqCD7takRjOLA+V+jKNPsC08Y2PEWrI6H0XpFUY9bXVsWM+PhMKzmu
-         tRaLpFw4KISy41xLOfWUaG/UCaa7Sc5zDoFrww1OjQ3+2X2DJR+6LbtM2+RJKDwTePjX
-         QqRA==
-X-Gm-Message-State: AOAM530fIU5oO6bcrcd2mPeXyhWGfH8Cb7CsycFmOOOoHW7e2nrstOaH
-        dhgqT7Cl2z53cK4TftkQxLXvCg==
-X-Google-Smtp-Source: ABdhPJy7zRqEJRjSEEuUjB7/oBw3OPRyfUzDhJc1bOY5V5/KbwB+hySji3cZvBHbaUBiOzIvC5igeA==
-X-Received: by 2002:adf:e891:0:b0:20a:d653:7cd2 with SMTP id d17-20020adfe891000000b0020ad6537cd2mr314620wrm.195.1652371496851;
-        Thu, 12 May 2022 09:04:56 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id i3-20020adff303000000b0020c5253d923sm4135881wro.111.2022.05.12.09.04.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 09:04:55 -0700 (PDT)
-Date:   Thu, 12 May 2022 17:04:53 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        =?utf-8?Q?=C5=81ukasz?= Bartosik <lb@semihalf.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-edac@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>
-Subject: Re: [PATCH v5 0/8] platform/x86: introduce p2sb_bar() helper
-Message-ID: <Yn0wJba+u2C3LSw2@google.com>
-References: <20220510151451.85561-1-andriy.shevchenko@linux.intel.com>
- <eff9907f-e92b-9115-bea7-b1093d1dc28e@redhat.com>
- <CAHp75Vcnq=Ou6QNyPjwC+HR9wJ2BheonTqmkGvQU0qFtHO2BDw@mail.gmail.com>
- <YnzaxiNBU1awfLoG@google.com>
- <Ynzfl9u4v6/JjwLM@smile.fi.intel.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652371516; x=1683907516;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=SbkIAr8kDAHWGtaAPt3QNiXsXJ4IT42PUqH47lTn8JY=;
+  b=y0CUDKYSWqdE6VY0YfgbgFJvyYqZK08HyqkArf0UF0xoJlrXHovIWusB
+   VT4aeFOcQefRsFED0pETmnAWJA7r3zzeNcxeY9fbn33Abf5XMpab5LO7x
+   5bUirAnGNES++SZTLP6VtUH5/ODwx7OHOhbFktixzb9/ZBbunER9GjpM2
+   A=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 12 May 2022 09:05:16 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 09:05:15 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 12 May 2022 09:05:15 -0700
+Received: from [10.110.47.233] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 12 May
+ 2022 09:05:14 -0700
+Message-ID: <fa713d4a-a3ef-2837-d220-857ed1e5538c@quicinc.com>
+Date:   Thu, 12 May 2022 09:05:13 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ynzfl9u4v6/JjwLM@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v3 1/2] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
+Content-Language: en-US
+To:     Pavel Skripkin <paskripkin@gmail.com>,
+        <ath9k-devel@qca.qualcomm.com>, <kvalo@kernel.org>,
+        <davem@davemloft.net>, <kuba@kernel.org>, <toke@toke.dk>,
+        <linville@tuxdriver.com>
+CC:     <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <syzbot+03110230a11411024147@syzkaller.appspotmail.com>,
+        <syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com>
+References: <80962aae265995d1cdb724f5362c556d494c7566.1644265120.git.paskripkin@gmail.com>
+From:   Jeff Johnson <quic_jjohnson@quicinc.com>
+In-Reply-To: <80962aae265995d1cdb724f5362c556d494c7566.1644265120.git.paskripkin@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,46 +71,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 May 2022, Andy Shevchenko wrote:
+On 2/7/2022 12:24 PM, Pavel Skripkin wrote:
+[...snip...]
+>   
+>   #ifdef CONFIG_ATH9K_HTC_DEBUGFS
+> -
+> -#define TX_STAT_INC(c) (hif_dev->htc_handle->drv_priv->debug.tx_stats.c++)
+> -#define TX_STAT_ADD(c, a) (hif_dev->htc_handle->drv_priv->debug.tx_stats.c += a)
+> -#define RX_STAT_INC(c) (hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c++)
+> -#define RX_STAT_ADD(c, a) (hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c += a)
+> +#define __STAT_SAVE(expr) (hif_dev->htc_handle->drv_priv ? (expr) : 0)
+> +#define TX_STAT_INC(c) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.tx_stats.c++)
+> +#define TX_STAT_ADD(c, a) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.tx_stats.c += a)
+> +#define RX_STAT_INC(c) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c++)
+> +#define RX_STAT_ADD(c, a) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c += a)
 
-> On Thu, May 12, 2022 at 11:00:38AM +0100, Lee Jones wrote:
-> > On Wed, 11 May 2022, Andy Shevchenko wrote:
-> > > On Wed, May 11, 2022 at 6:08 PM Hans de Goede <hdegoede@redhat.com> wrote:
-> > > > On 5/10/22 17:14, Andy Shevchenko wrote:
-> 
-> ...
-> 
-> > > > I must admit I have lost track of all the Ack-s / Reviewed-by-s a bit.
-> > > >
-> > > > So from the above I take it that the Ack-s resp. Reviewed-by-s on the
-> > > > other non drivers/platform/x86 bits also signal an Ack to merge the entire
-> > > > series through the pdx86 tree?
-> > > >
-> > > > Lee, any chance you can take a look at patches 3-5 and give your Ack
-> > > > for merging these through the pdx86 tree together with the rest?
-> > > 
-> > > Actually I misinterpreted Lee's different tags again. Acked-by is
-> > > normal for routing MFD code via other subsystems, while
-> > > Acked-for-MFD-by is for Lee (scripts?) to route the code via MFD tree.
-> > > Lee, is it the correct interpretation now?
-> > 
-> > Yes, that is correct.
-> 
-> Thanks for clarification. I'm learning hard way :-)
-> 
-> > I just replied to your 0th patch (before I saw this, sorry).
-> 
-> Thanks for the tag.
-> 
-> So, it seems we all set to route this via MFD then. Do you think we can go?
-> Or do need to postpone this to be after v5.19-rc1?
+it is unfortunate that the existing macros don't abide by the coding style:
+	Things to avoid when using macros:
+	macros that depend on having a local variable with a magic name
 
-I think Hans is correct.
+the companion macros in ath9k/debug.h do the right thing
 
-I would like to see this soak before submitting directly to Mainline.
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+perhaps this could be given to Kernel Janitors for subsequent cleanup?

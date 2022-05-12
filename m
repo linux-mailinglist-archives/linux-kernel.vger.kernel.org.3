@@ -2,92 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20FC652517E
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:44:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4E852517F
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356061AbiELPop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 11:44:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
+        id S1356065AbiELPp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 11:45:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356055AbiELPoi (ORCPT
+        with ESMTP id S1355771AbiELPpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 11:44:38 -0400
-Received: from smtp1.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B226B0AD;
-        Thu, 12 May 2022 08:44:37 -0700 (PDT)
-Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+        Thu, 12 May 2022 11:45:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1C264734;
+        Thu, 12 May 2022 08:45:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id A08DC3C04C1;
-        Thu, 12 May 2022 17:44:36 +0200 (CEST)
-Received: from lxhi-065 (10.72.94.11) by hi2exch02.adit-jv.com (10.72.92.28)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Thu, 12 May
- 2022 17:44:36 +0200
-Date:   Thu, 12 May 2022 17:44:31 +0200
-From:   Eugeniu Rosca <erosca@de.adit-jv.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Rajat Jain <rajatja@google.com>, Andrew Lunn <andrew@lunn.ch>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Naveen kumar Sunkari <naveenkumar.sunkari@in.bosch.com>,
-        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
-        Eugeniu Rosca <rosca.eugeniu@gmail.com>
-Subject: Re: [PATCH] usb: hub: Simplify error and success path in
- port_over_current_notify
-Message-ID: <20220512154431.GA4536@lxhi-065>
-References: <1652354127-3499-1-git-send-email-erosca@de.adit-jv.com>
- <YnzxvJ7/LGpu92bK@kroah.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 23C6D61F0A;
+        Thu, 12 May 2022 15:45:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0C54C385B8;
+        Thu, 12 May 2022 15:45:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652370322;
+        bh=DD2xdLhXWSgHygwViWrC+JPg+DvdP1KdqEAZISrgsLE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=E8fLQzpQszdxSpiGQ65QWq7DvwYlrfrN47FGDOwRSWFRCpif0/oQv3+gCXv+DvGJm
+         EBmLeUXRee/dc3a/he7JT/2pfQYXgOqFwKLF19OsVLLcThSKuXz9XMWbjvqTJIkD2x
+         ZLJZjt18/H342ovoSBtczpldKaMPL/SyAFhq7eoNcvL0+TebKMar7wdG9l24vRtXLm
+         kI/wd7HW5xHeusx2PaUCMnV6wdt9vVpxKjTZ234Ahv+UtsdXdY/7fCpgChEWR1hE9S
+         EFkTI8sM9+Qg+zBnruAucNiukrziCEPWGO2zZRVtQhkJDCV6LOkPOmbIHO7gzqFiqt
+         E1Cm2XFMayXhQ==
+Date:   Thu, 12 May 2022 08:45:20 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Harini Katakam <harinik@xilinx.com>
+Cc:     Harini Katakam <harini.katakam@xilinx.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        David Miller <davem@davemloft.net>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        dumazet@google.com, Paolo Abeni <pabeni@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Subject: Re: [PATCH v2] net: macb: Disable macb pad and fcs for fragmented
+ packets
+Message-ID: <20220512084520.0cdb9dd1@kernel.org>
+In-Reply-To: <CAFcVECK2gARjppHjALg4w2v94FPgo6BvqNrZvCY-4x_mJbh7oQ@mail.gmail.com>
+References: <20220510162809.5511-1-harini.katakam@xilinx.com>
+        <20220511154024.5e231704@kernel.org>
+        <CAFcVECK2gARjppHjALg4w2v94FPgo6BvqNrZvCY-4x_mJbh7oQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YnzxvJ7/LGpu92bK@kroah.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.72.94.11]
-X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
- hi2exch02.adit-jv.com (10.72.92.28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Greg,
-
-On Do, Mai 12, 2022 at 01:38:36 +0200, Greg Kroah-Hartman wrote:
-> On Thu, May 12, 2022 at 01:15:27PM +0200, Eugeniu Rosca wrote:
-> > From: Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>
-
-[..]
-
-> >  	if (!envp[1])
-> > -		goto exit;
-> > +		goto exit_path;
+On Thu, 12 May 2022 12:26:15 +0530 Harini Katakam wrote:
+> On Thu, May 12, 2022 at 4:10 AM Jakub Kicinski <kuba@kernel.org> wrote:
+> > On Tue, 10 May 2022 21:58:09 +0530 Harini Katakam wrote:  
+> > > data_len in skbuff represents bytes resident in fragment lists or
+> > > unmapped page buffers. For such packets, when data_len is non-zero,
+> > > skb_put cannot be used - this will throw a kernel bug. Hence do not
+> > > use macb_pad_and_fcs for such fragments.
+> > >
+> > > Fixes: 653e92a9175e ("net: macb: add support for padding and fcs computation")
+> > > Signed-off-by: Harini Katakam <harini.katakam@xilinx.com>
+> > > Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+> > > Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+> > > Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>  
+> >
+> > I'm confused. When do we *have to* compute the FCS?
+> >
+> > This commit seems to indicate that we can't put the FCS so it's okay to
+> > ask the HW to do it. But that's backwards. We should ask the HW to
+> > compute the FCS whenever possible, to save the CPU cycles.
+> >
+> > Is there an unstated HW limitation here?  
 > 
-> No need to rename this, right?
+> Thanks for the review. The top level summary is that there CSUM
+> offload is enabled by
+> via NETIF_F_HW_CSUM (and universally in IP registers) and then
+> selectively disabled for
+> certain packets (using NOCRC bit in buffer descriptors) where the
+> application intentionally
+> performs CSUM and HW should not replace it, for ex. forwarding usecases.
+> I'm modifying this list of exceptions with this patch.
 > 
-> >  
-> > -	envp[2] = NULL;
-> >  	kobject_uevent_env(&hub_dev->kobj, KOBJ_CHANGE, envp);
-> >  
-> > +exit_path:
-> >  	kfree(envp[1]);
-> > -exit:
+> This was due to HW limitation (see
+> https://www.spinics.net/lists/netdev/msg505065.html).
+> Further to this, Claudiu added macb_pad_and_fcs support. Please see
+> comment starting
+> with "It was reported in" below:
+> https://lists.openwall.net/netdev/2018/10/30/76
 > 
-> Move this up one line?
+> Hope this helps.
+> I'll fix the nit and send another version.
 
-Thank you for your comments. Much appreciated.
+So the NOCRC bit controls both ethernet and transport protocol
+checksums? The CRC in the name is a little confusing.
 
-Please, find the updated version at:
-https://lore.kernel.org/linux-usb/1652369834-4480-1-git-send-email-erosca@de.adit-jv.com
-
-Best regards,
-Eugeniu
+Are you sure commit 403dc16796f5 ("cadence: force nonlinear buffers to
+be cloned") does not fix the case you're trying to address?

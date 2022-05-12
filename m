@@ -2,74 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F8A352423E
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 03:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4960B524244
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 04:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233750AbiELB6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 21:58:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44696 "EHLO
+        id S235581AbiELCBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 22:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiELB6e (ORCPT
+        with ESMTP id S234184AbiELCBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 21:58:34 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773F5393D7
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 18:58:33 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id e189so4803399oia.8
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 18:58:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=Ew6wAX9YihrNznSFxG+GfB43C9Zeo824boapu8VVX0Y=;
-        b=A2dNMrO5TZBA3uubMg3LoxxHktyTrpGgR9A7Z1wODLEXSPCMP6NdyLRepwqtDIBA2w
-         XpvUEtOHgkC8CjQ2+JN5OiKrYnwNbDS6A5Xnq2iFbxHBDmT6A2ZiFhOsY9Y8loaQ/QgG
-         llbcSHjRSIP163ztRPz8tCEQrWwg8V/GLuVEw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=Ew6wAX9YihrNznSFxG+GfB43C9Zeo824boapu8VVX0Y=;
-        b=NqKq3vysqVWZJdQlcCsPETAeg4X5YAyBd+JMD6jgeb6u+DiQgWwa0Nz/hpFvQfIzd1
-         pxnRKHZLAiyK0/85r7DrYl1EkEvJ4LfpDFBrHMMkxEkHNOnhqfgHXiVusJsGK+mHkOS9
-         Nr9MfrEaKr3XjJnFEhJH3EnXRQYIOACTsguIwbSDiae+F3B3xnNx0vyxSmjIPq43U0I1
-         dD8gh69resxrcHXIsNgc2MKnOUD+jWI45EBMj4xIJiiADKwrE0EBNou8K+m8RlXjri8t
-         nWAu6i1oK5jj39Y+eOHjr/A6jDJYIx1HhzlkmLrmVoDOhO+VKMoV7xdnZ2GrOXnm2qY8
-         gxag==
-X-Gm-Message-State: AOAM533irqOEHhUV8EGDUTyaWuWYcCNotLSfUurEjJ6xcDehtHIj2zAY
-        FbKQ6wOla2roW0WwFdAi3VAjRhU7c8rbURw5Cd3LXQ==
-X-Google-Smtp-Source: ABdhPJx0Dlj1uzL7cIUiHfs3RnHj2J1c7/H0WVTcAkonpSNzGOGYsQOmIq+nRxa3NGvGJ9MXBe+33UKZZ/N2u5EPwAA=
-X-Received: by 2002:a05:6808:14c2:b0:326:c129:d308 with SMTP id
- f2-20020a05680814c200b00326c129d308mr3935796oiw.193.1652320712791; Wed, 11
- May 2022 18:58:32 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 11 May 2022 18:58:32 -0700
+        Wed, 11 May 2022 22:01:10 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F318C36E3A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 19:01:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652320868; x=1683856868;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GsRj3Tw/Y+iM4xxRr6AIFhOLcxZVs59DJKNOXzVPb2I=;
+  b=hm3BhYLDbtQEDhTAUvhyLW94cvXzub+6kmdMHK6Hp11NQE1zIyQ7yLPF
+   vc703LLk4YM5hh4VwS9R/sreU+l9KAifJ4+jM8jBhXzkKYn4Ot6ixm4Tk
+   JYkhJ1dDe95xq+lSb4mGtypP/2QrSf58wJG6WSh9KnvMGI88iyncQ7gl5
+   tJ3WUQvfWWOXJuL3PWThmt11njtmTU3sZQQ6OGst0iZvdzbUJ2RXcx/hd
+   LDWRrDXR7gKVLuRSQkWz+VMjmvwmFuFMbMYUzbU8NXNXHCHAAU0b1TOxY
+   7PeJdcZsQbLXYscyH2OFZ0OUkhSMVxss5bwTdlz3X6bYRQSFasB98rv5p
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="249757355"
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="249757355"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 19:01:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="895595043"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 11 May 2022 19:01:06 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1noy8X-000JpQ-Ii;
+        Thu, 12 May 2022 02:01:05 +0000
+Date:   Thu, 12 May 2022 10:00:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+        Borislav Petkov <bp@suse.de>
+Subject: [ammarfaizi2-block:stable/linux-stable-rc/queue/5.15 146/150]
+ kernel/futex.o: warning: objtool: futex_atomic_op_inuser()+0xb8: unreachable
+ instruction
+Message-ID: <202205120956.qLpGQurX-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220418101725.v3.1.Icf57bb12233a47727013c6ab69eebf803e22ebc1@changeid>
-References: <20220418171757.2282651-1-dianders@chromium.org> <20220418101725.v3.1.Icf57bb12233a47727013c6ab69eebf803e22ebc1@changeid>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 11 May 2022 18:58:32 -0700
-Message-ID: <CAE-0n51iNXN4oOP-wAqrm9U6qC84fQ+qMUBu0BODXjsCDk+H=w@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] drm/dp: Add wait_hpd_asserted() callback to struct drm_dp_aux
-To:     Douglas Anderson <dianders@chromium.org>,
-        dri-devel@lists.freedesktop.org
-Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Philip Chen <philipchen@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Maxime Ripard <maxime@cerno.tech>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,81 +65,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Douglas Anderson (2022-04-18 10:17:54)
-> Sometimes it's useful for users of the DP AUX bus (like panels) to be
-> able to poll HPD. Let's add a callback that allows DP AUX busses
-> drivers to provide this.
->
-> Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> Left Dmitry's Reviewed-by tag off since patch changed enough.
->
-> (no changes since v2)
->
-> Changes in v2:
-> - Change is_hpd_asserted() to wait_hpd_asserted()
->
->  include/drm/dp/drm_dp_helper.h | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
->
-> diff --git a/include/drm/dp/drm_dp_helper.h b/include/drm/dp/drm_dp_helper.h
-> index 53d1e722f4de..0940c415db8c 100644
-> --- a/include/drm/dp/drm_dp_helper.h
-> +++ b/include/drm/dp/drm_dp_helper.h
-> @@ -2035,6 +2035,32 @@ struct drm_dp_aux {
->         ssize_t (*transfer)(struct drm_dp_aux *aux,
->                             struct drm_dp_aux_msg *msg);
->
-> +       /**
-> +        * @wait_hpd_asserted: wait for HPD to be asserted
-> +        *
-> +        * This is mainly useful for eDP panels drivers to wait for an eDP
-> +        * panel to finish powering on. This is an optional function.
+tree:   https://github.com/ammarfaizi2/linux-block stable/linux-stable-rc/queue/5.15
+head:   305e905f70311e1b49cc730931a19c3e364f4d8c
+commit: 45dc9d706619a6814e4063d5431483f94badb5a1 [146/150] x86: Add straight-line-speculation mitigation
+config: x86_64-randconfig-m001-20220509 (https://download.01.org/0day-ci/archive/20220512/202205120956.qLpGQurX-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/ammarfaizi2/linux-block/commit/45dc9d706619a6814e4063d5431483f94badb5a1
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block stable/linux-stable-rc/queue/5.15
+        git checkout 45dc9d706619a6814e4063d5431483f94badb5a1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Is there any use for the opposite direction? For example, does anything
-care that HPD is deasserted?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +        *
-> +        * This function will efficiently wait for up to `wait_us` microseconds
-> +        * for HPD to be asserted and might sleep.
-> +        *
-> +        * This function returns 0 if HPD was asserted or -ETIMEDOUT if time
-> +        * expired and HPD wasn't asserted. This function should not print
-> +        * timeout errors to the log.
-> +        *
-> +        * The semantics of this function are designed to match the
-> +        * readx_poll_timeout() function. That means a `wait_us` of 0 means
-> +        * to wait forever. If you want to do a quick poll you could pass 1
-> +        * for `wait_us`.
+All warnings (new ones prefixed by >>):
 
-It would also make sense to have a drm_dp_wait_hpd_asserted() API
+>> kernel/futex.o: warning: objtool: futex_atomic_op_inuser()+0xb8: unreachable instruction
+--
+>> mm/madvise.o: warning: objtool: madvise_behavior()+0x69: unreachable instruction
+--
+>> kernel/bpf/btf.o: warning: objtool: __btf_resolve_size()+0x72: unreachable instruction
 
-  int drm_dp_wait_hpd_asserted(struct drm_dp_aux *aux, unsigned long wait_us);
-
-and then this aux function could be implemented in various ways. The API
-could poll if the aux can only read immediate state of HPD, or it could
-sleep (is sleeping allowed? that isn't clear) and wake up the process
-once HPD goes high. Or if this op isn't implemented maybe there's a
-fixed timeout member that is non-zero which means "sleep this long".
-Either way, making each drm_dp_aux implement that logic seems error
-prone vs. having the drm_dp_aux implement some function for
-
-	get_immediate_hpd(struct drm_dp_aux *aux)
-
-or
-
-	notify_on_hpd(struct drm_dp_aux *auxstruct completion *comp)
-
-> +        *
-> +        * NOTE: this function specifically reports the state of the HPD pin
-> +        * that's associated with the DP AUX channel. This is different from
-> +        * the HPD concept in much of the rest of DRM which is more about
-> +        * physical presence of a display. For eDP, for instance, a display is
-> +        * assumed always present even if the HPD pin is deasserted.
-> +        */
-> +       int (*wait_hpd_asserted)(struct drm_dp_aux *aux, unsigned long wait_us);
-> +
->         /**
->          * @i2c_nack_count: Counts I2C NACKs, used for DP validation.
->          */
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

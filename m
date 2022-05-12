@@ -2,86 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD69525630
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 22:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 611EE525635
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 22:06:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358263AbiELUC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 16:02:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42210 "EHLO
+        id S1358268AbiELUGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 16:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358242AbiELUCZ (ORCPT
+        with ESMTP id S1355330AbiELUGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 16:02:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593DA5E746;
-        Thu, 12 May 2022 13:02:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1A9AFB827FB;
-        Thu, 12 May 2022 20:02:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96D15C385B8;
-        Thu, 12 May 2022 20:02:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1652385741;
-        bh=xG3M7ynp6fXPzsJnjU3A+JFihfWe3iaUA5pquCim2sU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=AVcp7CBfdHGYEFvfDESyEdAZ1feYNiZoDWO3vwFtQIfA8ucSKBeZ03Sddmky7z1Om
-         0K6odpTnmMUgiz4dfjn1l5XWw438aePX4/39ttywu4ri7NZx3ojjKQICkRBs77wEWx
-         +XZSQiynewY0za0DfJ+ENcNlo68HfXxEDzGe46Tk=
-Date:   Thu, 12 May 2022 13:02:20 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: Re: linux-next: manual merge of the mm-nonmm-stable tree with the
- userns tree
-Message-Id: <20220512130220.c9ec9b150c9d5f3848ef3389@linux-foundation.org>
-In-Reply-To: <20220512182215.2b7c4383@canb.auug.org.au>
-References: <20220512182215.2b7c4383@canb.auug.org.au>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 12 May 2022 16:06:39 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1110E5DA7E
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 13:06:38 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id i11so11732161ybq.9
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 13:06:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7xSrUdnA1OiCjH5kvyp3iABoTsJX17lF1oCQIDPuInU=;
+        b=oJmTqas0xC+2qy+kk8WgzgOdjTx5w6qZApvdhSwAEndyUXURPZKCZLybhoilwzTvzi
+         l0wAH2cytfQ+DdcyuxCO7SHCaYu1K4TSjPEqk+L3k7VC+Zu4gqWjwvo9hC/VksHEh4gx
+         KI1gfqoqXoOH0kRcq+gP99WoTnIsG6ly78eiOfDuSde/nrghdfNDqBRFsJunaTgIOojq
+         F4lGABgENIBZtk2zqB4b2r5kOlDPoArntlXCiL4orMuzLVG3JyaFvjytpY+/KYIYvCGE
+         Pv23RO0Ce1szZ8o4Ql2tVK29DPtkgxhFaMES3xtAOIAiBTUwTENXGRUod0MvS6XbEZ8h
+         CERg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7xSrUdnA1OiCjH5kvyp3iABoTsJX17lF1oCQIDPuInU=;
+        b=gQv2JQMjeVEC7/RGesXr57U4IIR0CuRDauOkIsw1JYthL43AAE/TyesxjWafnxANq7
+         6/zr71Hc8I41ko7IQjixWLvPizJzvG189ShZhuxjPZEhOmrVKtGLUMRbzgdAlLWgimZY
+         KfsEDcaAG0pCtgIdfH0V+JTtNHGvDH7QaL7Xwt0qSa+w0hS1nuopukEhyZDsn/+rLFrI
+         +tLthFwJaBO9ceu6X0dwWY8E6NJ66S3v3qiyTzDhgiDbhvbvjlfshqNc0DAwm5oQB5cW
+         DZ+u9ToG8YPytIv+tMAu1G8u6nIOA8P17CsLVKpl2LZDRNqt3R+biN+E4kAXKsJBqXEU
+         1XtA==
+X-Gm-Message-State: AOAM532QVMA1LmpOec9HDKNQhSp/QZD1aT3uxU+51sOIA/5mp+WGt93w
+        /EMZwcJuTZbeMiDuHZYcBXsOc9YpE1144nxa7eIKKg==
+X-Google-Smtp-Source: ABdhPJw8Y8k43/xV/isf7Q80Xc14MBCGk0QQ/DZqAosKF47RSj1duBiv3pC1djX3bb4W0pu1syMZObddvfAJVrJeVzY=
+X-Received: by 2002:a25:230a:0:b0:64b:49c:c67c with SMTP id
+ j10-20020a25230a000000b0064b049cc67cmr1573440ybj.598.1652385996916; Thu, 12
+ May 2022 13:06:36 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220512103322.380405-1-liujian56@huawei.com>
+In-Reply-To: <20220512103322.380405-1-liujian56@huawei.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 12 May 2022 13:06:25 -0700
+Message-ID: <CANn89iJ7Lo7NNi4TrpKsaxzFrcVXdgbyopqTRQEveSzsDL7CFA@mail.gmail.com>
+Subject: Re: [PATCH net] tcp: Add READ_ONCE() to read tcp_orphan_count
+To:     Liu Jian <liujian56@huawei.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Marco Elver <elver@google.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Neal Cardwell <ncardwell@google.com>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 May 2022 18:22:15 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Thu, May 12, 2022 at 3:32 AM Liu Jian <liujian56@huawei.com> wrote:
+>
+> The tcp_orphan_count per-CPU variable is read locklessly, so this commit
+> add the READ_ONCE() to a load in order to avoid below KCSAN warnning:
+>
+> BUG: KCSAN: data-race in tcp_orphan_count_sum net/ipv4/tcp.c:2476 [inline]
+> BUG: KCSAN: data-race in tcp_orphan_update+0x64/0x100 net/ipv4/tcp.c:2487
+>
+> race at unknown origin, with read to 0xffff9c63bbdac7a8 of 4 bytes by interrupt on cpu 2:
+>  tcp_orphan_count_sum net/ipv4/tcp.c:2476 [inline]
+>  tcp_orphan_update+0x64/0x100 net/ipv4/tcp.c:2487
+>  call_timer_fn+0x33/0x210 kernel/time/timer.c:1414
+>
+> Fixes: 19757cebf0c5 ("tcp: switch orphan_count to bare per-cpu counters")
+> Signed-off-by: Liu Jian <liujian56@huawei.com>
+> ---
+>  net/ipv4/tcp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> index cf18fbcbf123..7245609f41e6 100644
+> --- a/net/ipv4/tcp.c
+> +++ b/net/ipv4/tcp.c
+> @@ -2718,7 +2718,7 @@ int tcp_orphan_count_sum(void)
+>         int i, total = 0;
+>
+>         for_each_possible_cpu(i)
+> -               total += per_cpu(tcp_orphan_count, i);
+> +               total += READ_ONCE(per_cpu(tcp_orphan_count, i));
 
-> Hi all,
-> 
-> Today's linux-next merge of the mm-nonmm-stable tree got a conflict in:
-> 
->   include/linux/ptrace.h
-> 
-> between commit:
-> 
->   c200e4bb44e8 ("ptrace/um: Replace PT_DTRACE with TIF_SINGLESTEP")
-> 
-> from the userns tree and commit:
-> 
->   a9866bef5171 ("ptrace: fix wrong comment of PT_DTRACE")
-> 
-> from the mm-nonmm-stable tree.
-> 
-> I fixed it up (the former removed the line modified by the latter, so I
-> just removed it) and can carry the fix as necessary. This is now fixed
-> as far as linux-next is concerned, but any non trivial conflicts should
-> be mentioned to your upstream maintainer when your tree is submitted for
-> merging.  You may also want to consider cooperating with the maintainer
-> of the conflicting tree to minimise any particularly complex conflicts.
+We might raise the discussion to lkml and/or KCSAN supporters.
 
-Thanks.
+Presumably, all per_cpu() uses in the kernel will have the same issue ?
 
-Eric, I'll send that patch to you for inclusion in the userns tree,
-please.
+By definition per-cpu data can be changed by other cpus.
 
+So maybe per_cpu() should contain the annotation, instead of having to
+annotate all users.
+
+
+>
+>         return max(total, 0);
+>  }
+> --
+> 2.17.1
+>

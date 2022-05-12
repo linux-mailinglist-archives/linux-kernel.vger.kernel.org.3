@@ -2,75 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CF53524229
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 03:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4002C524232
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 03:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233741AbiELBjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 21:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41948 "EHLO
+        id S233675AbiELBmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 21:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232550AbiELBjb (ORCPT
+        with ESMTP id S229781AbiELBme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 21:39:31 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0BA31BE117
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 18:39:26 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id i17so3487176pla.10
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 18:39:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=OKsiMTO05pP2YFIGQs4jSS3mDepImUu3DLLTqj1JC+E=;
-        b=YsayhIWOka75EoI2fzwHCCftn/Bb9jwmP/Rkx1xwXG9vjaIK2W0w0dUR3AAOr6r2Oe
-         XonHI7AKz/OGZFdSX/xhBM/WsB3QQR9homjoWpklpdW2aQ3t2N0JI7Qm44zoJcYE3r0d
-         TLEHZusT57YAmYqkJuMTvRpsLVn6DR2UuXZlg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=OKsiMTO05pP2YFIGQs4jSS3mDepImUu3DLLTqj1JC+E=;
-        b=1Ui0OSkRbN+tep4dDPwWu6+9xz+T9w08mgyqWmgCRFBnknrCbAh6WqcgVlXwzpI5oU
-         Yh+QhcaL+vgE2+86/flKEMtr3rxP7cVSmMLhXYke7vseA8ickErnM7+VJCV2KLBVEgQW
-         qg1nmxtcVLr4CwXcuUWyoOdp+aBlAGq9kvoiW7SmsJFAFrOac0+/1j4HqeiP80mJgc1q
-         IU+hXnOyMhPnY1qs5UI9L7A+Cy0QhmdqOS4Bl/+FLnYE1wPoaOfpWJqCmeh+M5+j5r2r
-         oI9kYrcqfpmwssFN3vtiWIvbNQoktCBpyd9ZxOdHB38xg1D8D7SeJkUr5RjWcuMwrB/H
-         UkTw==
-X-Gm-Message-State: AOAM533hq8YMxktlbXLewLqsX2FPRmPL/BJXacyqwBynyHQ86lOjtZbV
-        CWPXEkNs6WHuwRcRq9HPURotVA==
-X-Google-Smtp-Source: ABdhPJz5juvszW0WlRxr8OLPLsBo/MwprcIaMIxuhi+YYdwUVFMtA53XzJ8ap+j44qKXzkn75exLhQ==
-X-Received: by 2002:a17:902:e94e:b0:158:91e6:501 with SMTP id b14-20020a170902e94e00b0015891e60501mr28053817pll.29.1652319566414;
-        Wed, 11 May 2022 18:39:26 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:201:193f:f17a:ab0d:1f83])
-        by smtp.gmail.com with ESMTPSA id b7-20020a170902d50700b0015e8d4eb2cfsm2614766plg.281.2022.05.11.18.39.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 18:39:26 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        chrome-platform@lists.linux.dev,
-        Guenter Roeck <groeck@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Craig Hesling <hesling@chromium.org>,
-        Tom Hughes <tomhughes@chromium.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: [PATCH v5 3/3] dt-bindings: cros-ec: Add ChromeOS fingerprint binding
-Date:   Wed, 11 May 2022 18:39:21 -0700
-Message-Id: <20220512013921.164637-4-swboyd@chromium.org>
-X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
-In-Reply-To: <20220512013921.164637-1-swboyd@chromium.org>
-References: <20220512013921.164637-1-swboyd@chromium.org>
+        Wed, 11 May 2022 21:42:34 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC281C5FA0
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 18:42:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652319752; x=1683855752;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=nqS2Yo8wWxSVKw+tz2+wy6FYBMYYW/yKi14tiidRDOI=;
+  b=PkhY5GCYW1X7+fhuYGRGQ8D7fyq91z+kzChmiRch23UO1svt4eG+Pv8D
+   itkoPsbtBVXsKh3mE0Bh6rD/XRvBGQR86gAJtlvK4MeTaadGyUatuS7Gu
+   qd3wF1xxQ2hUF8RpKkhGxcsgoLJv5fvl3VimlKLuCEd3ZmRkXByAAb438
+   m7NWfS+VTMrpvxV/zowKy8DyLAE0O27ojkGb8kEjfbtbCE538/1Wba0DY
+   PRTumRVDdxpQu7jSjRaM4T+5WWJ9UHir7p89bwfz86H8LkaN9rq+gdMkB
+   M0U8vLQL+YC9ddluTZeIGlE6eLhcLJ8nrp+7Pz4ZAcehMRC5CGXhaM6BE
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="250387093"
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="250387093"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 18:42:32 -0700
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="697821769"
+Received: from ruonanwa-mobl.ccr.corp.intel.com ([10.254.212.157])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 18:42:27 -0700
+Message-ID: <0a92d0040edb3b74ac259062d241b8cd28924edf.camel@intel.com>
+Subject: Re: RFC: Memory Tiering Kernel Interfaces
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     Wei Xu <weixugc@google.com>
+Cc:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Greg Thelen <gthelen@google.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Michal Hocko <mhocko@kernel.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>
+Date:   Thu, 12 May 2022 09:42:24 +0800
+In-Reply-To: <CAAPL-u80BFYTKK=0HRBXOeDTULyPOtbgu5V3fEYDOczTMxgJ1g@mail.gmail.com>
+References: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
+         <CAHbLzkq1YXXLMiREpGnzhJjPssu4WpSsnkTmrLJ=hAEhZVUr9w@mail.gmail.com>
+         <CAAPL-u-r2Pc_MaHQmKKNH_icAa_fH1COWb5qSPpr8xffREQ_cQ@mail.gmail.com>
+         <87tua3h5r1.fsf@nvdebian.thelocal>
+         <CAAPL-u-0HwL6p1SA73LPfFyywG55QqE9O+q=83fhShoJAVVxyQ@mail.gmail.com>
+         <875ymerl81.fsf@nvdebian.thelocal> <87fslhhb2l.fsf@linux.ibm.com>
+         <CAAPL-u9FvCfgA7xsqStLNZ=W03iyWBmvHrpVzPKyitsGN2v_KQ@mail.gmail.com>
+         <68333b21a58604f3fd0e660f1a39921ae22849d8.camel@intel.com>
+         <CAAPL-u80BFYTKK=0HRBXOeDTULyPOtbgu5V3fEYDOczTMxgJ1g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,139 +83,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a binding to describe the fingerprint processor found on Chromebooks
-with a fingerprint sensor. Previously we've been describing this with
-the google,cros-ec-spi binding but it lacks gpio and regulator control
-used during firmware flashing.
+On Wed, 2022-05-11 at 10:07 -0700, Wei Xu wrote:
+> On Wed, May 11, 2022 at 12:49 AM ying.huang@intel.com
+> <ying.huang@intel.com> wrote:
+> > 
+> > On Tue, 2022-05-10 at 22:30 -0700, Wei Xu wrote:
+> > > On Tue, May 10, 2022 at 4:38 AM Aneesh Kumar K.V
+> > > <aneesh.kumar@linux.ibm.com> wrote:
+> > > > 
+> > > > Alistair Popple <apopple@nvidia.com> writes:
+> > > > 
+> > > > > Wei Xu <weixugc@google.com> writes:
+> > > > > 
+> > > > > > On Thu, May 5, 2022 at 5:19 PM Alistair Popple <apopple@nvidia.com> wrote:
+> > > > > > > 
+> > > > > > > Wei Xu <weixugc@google.com> writes:
+> > > > > > > 
+> > > > > > > [...]
+> > > > > > > 
+> > > > > > > > > > 
+> > > > > > > > > > 
+> > > > > > > > > > Tiering Hierarchy Initialization
+> > > > > > > > > > `=============================='
+> > > > > > > > > > 
+> > > > > > > > > > By default, all memory nodes are in the top tier (N_TOPTIER_MEMORY).
+> > > > > > > > > > 
+> > > > > > > > > > A device driver can remove its memory nodes from the top tier, e.g.
+> > > > > > > > > > a dax driver can remove PMEM nodes from the top tier.
+> > > > > > > > > 
+> > > > > > > > > With the topology built by firmware we should not need this.
+> > > > > > > 
+> > > > > > > I agree that in an ideal world the hierarchy should be built by firmware based
+> > > > > > > on something like the HMAT. But I also think being able to override this will be
+> > > > > > > useful in getting there. Therefore a way of overriding the generated hierarchy
+> > > > > > > would be good, either via sysfs or kernel boot parameter if we don't want to
+> > > > > > > commit to a particular user interface now.
+> > > > > > > 
+> > > > > > > However I'm less sure letting device-drivers override this is a good idea. How
+> > > > > > > for example would a GPU driver make sure it's node is in the top tier? By moving
+> > > > > > > every node that the driver does not know about out of N_TOPTIER_MEMORY? That
+> > > > > > > could get messy if say there were two drivers both of which wanted their node to
+> > > > > > > be in the top tier.
+> > > > > > 
+> > > > > > The suggestion is to allow a device driver to opt out its memory
+> > > > > > devices from the top-tier, not the other way around.
+> > > > > 
+> > > > > So how would demotion work in the case of accelerators then? In that
+> > > > > case we would want GPU memory to demote to DRAM, but that won't happen
+> > > > > if both DRAM and GPU memory are in N_TOPTIER_MEMORY and it seems the
+> > > > > only override available with this proposal would move GPU memory into a
+> > > > > lower tier, which is the opposite of what's needed there.
+> > > > 
+> > > > How about we do 3 tiers now. dax kmem devices can be registered to
+> > > > tier 3. By default all numa nodes can be registered at tier 2 and HBM or
+> > > > GPU can be enabled to register at tier 1. ?
+> > > 
+> > > This makes sense.  I will send an updated RFC based on the discussions so far.
+> > 
+> > Are these tier number fixed?  If so, it appears strange that the
+> > smallest tier number is 0 on some machines, but 1 on some other
+> > machines.
+> 
+> When the kernel is configured to allow 3 tiers, we can always show all
+> the 3 tiers. It is just that some tiers (e.g. tier 0) may be empty on
+> some machines.
 
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: <devicetree@vger.kernel.org>
-Cc: <chrome-platform@lists.linux.dev>
-Cc: Guenter Roeck <groeck@chromium.org>
-Cc: Douglas Anderson <dianders@chromium.org>
-Cc: Craig Hesling <hesling@chromium.org>
-Cc: Tom Hughes <tomhughes@chromium.org>
-Cc: Alexandru M Stan <amstan@chromium.org>
-Cc: Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: Matthias Kaehlcke <mka@chromium.org>
-Cc: Benson Leung <bleung@chromium.org>
-Cc: Lee Jones <lee.jones@linaro.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- .../bindings/mfd/google,cros-ec.yaml          | 80 ++++++++++++++++---
- 1 file changed, 71 insertions(+), 9 deletions(-)
+I still think that it's better to have no empty tiers for auto-generated
+memory tiers by kernel.  Yes, the tier number will be not absolutely
+stable, but that only happens during system bootup in practice, so it's
+not a big issue IMHO.
 
-diff --git a/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml b/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
-index 409ecef967ce..e5fe60beb9fe 100644
---- a/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
-+++ b/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
-@@ -19,15 +19,19 @@ description:
- properties:
-   compatible:
-     oneOf:
--      - description:
--          For implementations of the EC is connected through I2C.
--        const: google,cros-ec-i2c
--      - description:
--          For implementations of the EC is connected through SPI.
--        const: google,cros-ec-spi
--      - description:
--          For implementations of the EC is connected through RPMSG.
--        const: google,cros-ec-rpmsg
-+      # For implementations of the EC is connected through I2C.
-+      - items:
-+          - const: google,cros-ec-i2c
-+      # For implementations of the FPMCU connected through SPI.
-+      - items:
-+          - const: google,cros-ec-fp
-+          - const: google,cros-ec-spi
-+      # For implementations of the EC is connected through SPI.
-+      - items:
-+          - const: google,cros-ec-spi
-+      # For implementations of the EC is connected through RPMSG.
-+      - items:
-+          - const: google,cros-ec-rpmsg
- 
-   controller-data:
-     description:
-@@ -132,6 +136,15 @@ properties:
- 
-     additionalProperties: false
- 
-+  reset-gpios:
-+    maxItems: 1
-+
-+  boot0-gpios:
-+    maxItems: 1
-+    description: Assert for bootloader mode.
-+
-+  vdd-supply: true
-+
- patternProperties:
-   "^i2c-tunnel[0-9]*$":
-     type: object
-@@ -176,6 +189,37 @@ allOf:
-         - reg
-         - interrupts
- 
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: google,cros-ec-fp
-+    then:
-+      properties:
-+        '#address-cells': false
-+        '#size-cells': false
-+        typec: false
-+        ec-pwm: false
-+        keyboard-controller: false
-+        proximity: false
-+        codecs: false
-+        cbas: false
-+
-+      patternProperties:
-+        "^i2c-tunnel[0-9]*$": false
-+        "^regulator@[0-9]+$": false
-+        "^extcon[0-9]*$": false
-+
-+      required:
-+        - reset-gpios
-+        - boot0-gpios
-+        - vdd-supply
-+    else:
-+      properties:
-+        reset-gpios: false
-+        boot0-gpios: false
-+        vdd-supply: false
-+
- additionalProperties: false
- 
- examples:
-@@ -231,4 +275,22 @@ examples:
-             compatible = "google,cros-ec-rpmsg";
-         };
-     };
-+
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/gpio/gpio.h>
-+    spi {
-+      #address-cells = <0x1>;
-+      #size-cells = <0x0>;
-+      ec@0 {
-+        compatible = "google,cros-ec-fp", "google,cros-ec-spi";
-+        reg = <0>;
-+        interrupt-parent = <&gpio_controller>;
-+        interrupts = <4 IRQ_TYPE_LEVEL_LOW>;
-+        spi-max-frequency = <3000000>;
-+        reset-gpios = <&gpio_controller 5 GPIO_ACTIVE_LOW>;
-+        boot0-gpios = <&gpio_controller 10 GPIO_ACTIVE_HIGH>;
-+        vdd-supply = <&pp3300_fp_mcu>;
-+      };
-+    };
- ...
--- 
-https://chromeos.dev
+And, I still think it's better to make only N-1 tiers writable for
+totally N tiers (or even readable).  Considering "tier0" is written, how
+to deal with nodes in "tier0" before but not after writing?  One
+possible way is to put them into "tierN".  And during a user customize
+the tiers, the union of "N tiers" may be not complete.
+
+> BTW, the userspace should not assume a specific meaning of a
+> particular tier id because it can change depending on the number of
+> tiers that the kernel is configured with.  For example, the userspace
+> should not assume that tier-2 always means PMEM nodes.  In a system
+> with 4 tiers, PMEM nodes may be in tier-3, not tier-2.
+
+Yes.  This sounds good.
+
+Best Regards,
+Huang, Ying
 

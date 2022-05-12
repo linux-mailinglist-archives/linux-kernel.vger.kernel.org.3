@@ -2,227 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C74BB5251AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2D05251B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:59:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356126AbiELPzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 11:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52686 "EHLO
+        id S1356130AbiELP7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 11:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346693AbiELPyz (ORCPT
+        with ESMTP id S1355940AbiELP7H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 11:54:55 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578A3261FB7;
-        Thu, 12 May 2022 08:54:54 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id j4so9853076lfh.8;
-        Thu, 12 May 2022 08:54:54 -0700 (PDT)
+        Thu, 12 May 2022 11:59:07 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C412469F3
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:59:07 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id j6so5160577pfe.13
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:59:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=b6dHBzZHYFawdsy4O632nGec+yXs3DOqDdaqitWNAyU=;
-        b=kkxIBt25yQVh72J7htbdZ0+boce9c51K7QdvKzM2utgpPgf7/9x/+TUUxbYFuApgmV
-         bnUFlpbTxLHE5PTgFQu3NzGbEM10s10dGTDVZrZE/pehXevsuukvK0ZoZLtlWj0AV25A
-         B/z29NJoMJQnQv2J0g3LJufoqoVQKFnsmkYLDZ+6DTzkfYxBRAsdizg3WNRKkUVEZZFH
-         I9poGIZQiRMDrmFLUTNImgzIxKWndYdzknqq+v4zM2eU1T7ZopgWQbExIB1rOBdXOzTi
-         ELzzYMVyZTZbqk9g7924TPfLIO8G5RTiXjXlIxXe5hPjvslnZRfY5LGLYKcScsElF3Fi
-         ftYw==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=+GNQEVhDTg5gSuglbo+Hey8Sv7o9UNbWWWJQEXw3sck=;
+        b=Pqn23zJQOXfjoESt3cYI2rKF7zKu9ft+h/jAzhoptzse3aMeyXTuNQRLNDnNNdgpR7
+         IJVnKIWYCYqb4o1qS9KYF2OxXP82zuvg8l9H0G+2CltZLL78hzI6p9a47Gvdxv0L2J4u
+         GiqhNeNJOedYHGC8wYbUoNF68g7KLfn0g/RJYbFx8E3g6PCSwm61BUA8m8qwu3ocMoMv
+         6/PGP9bpKVCP2v6S0Zq13R5oqMthkhn4x7UNnb82qrbzdVoW1vGZ4+s0cKO73alltMtd
+         /rF+OazdL7D8NVXIVafNS2pIRducvHyehkKTFN+zxtynVcGyCW+PL0zmd9Q5y+MjJSE3
+         2KvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=b6dHBzZHYFawdsy4O632nGec+yXs3DOqDdaqitWNAyU=;
-        b=Hn5O07R3gl8wry1IPUW7zXcVKFe/ayTOG+QX+BZBBhK8wSXqVh1gvXKwNTemEo+smG
-         bkdNtDby9kL2OgrEE9Soq0+BU26vEO0oLd05xVbifEgxmOkELQqc8f94O07bpD/j6fm8
-         XaMcRJJPYjyP3CmNukw+2jqs4dI8K7+oan8EdZdtnnJUEQ3qV67AN9gkpppuI3WXxcJ0
-         Bp9L0vPZwkvNvMCwPT5G38Ne0mn4ejnOHotWLq6Lin/CnMKU2GUG0ifferJ3fYMlYYlE
-         Q1C3vZrxGvnlkfrVdFJ4qpvrv3s8CEjb+WcDqSlje331sCqQlQQ2gTO5mGgVr9EaSCME
-         0+bw==
-X-Gm-Message-State: AOAM533g2pShtKv4l2Zz5ZkUnO0KN0D+O/y0qJuFz8CabvqQ4j21PQXZ
-        wMNqyHYqH3YstJQVMSt3k2Y=
-X-Google-Smtp-Source: ABdhPJy19GaOobI+L2O4l/zjL1xqEvT28l/K/G2QWXTgolia3s1bRO6/I6n4I54AQ984fHOcR9iUgA==
-X-Received: by 2002:ac2:4c51:0:b0:473:ab19:87d9 with SMTP id o17-20020ac24c51000000b00473ab1987d9mr307285lfk.634.1652370891164;
-        Thu, 12 May 2022 08:54:51 -0700 (PDT)
-Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id p22-20020a2eba16000000b0024f3d1dae91sm942679lja.25.2022.05.12.08.54.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 08:54:50 -0700 (PDT)
-Date:   Thu, 12 May 2022 18:54:48 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Hannes Reinecke <hare@suse.de>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 17/23] ata: ahci: Introduce firmware-specific caps
- initialization
-Message-ID: <20220512155448.rcnfhju4zoqyi5el@mobilestation>
-References: <20220511231810.4928-1-Sergey.Semin@baikalelectronics.ru>
- <20220511231810.4928-18-Sergey.Semin@baikalelectronics.ru>
- <122e0019-4bee-f469-5e04-a9fbc66f3313@suse.de>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=+GNQEVhDTg5gSuglbo+Hey8Sv7o9UNbWWWJQEXw3sck=;
+        b=qpsCe6CAwqTQhmEbNxZ123eBmCoOt9+a/rOFeTg4sTcGd8ByTtjdtU2pJOoSw/gEMl
+         ofBPznMLalfQjSFAm6rp9Tx/mXN5jQxBGuNetRvUM+4jbwbvNRRVVotJ8puU7A+4evKo
+         uMGTD2dOWpKr2Cly7zq7zlyJNRz/wa9+M8aq8JIlmmnNuFibD4lUwtSwYaTl1cTw909x
+         HYL/SkXdBHFcHkGBRBecA7AcDMFa9flba2IJNdGWdQy56hSk6FAf/XNU+lr4XUMHQlKE
+         UenIABRViaCAS+5y46qKbGMFVxLWfwcKFTnKbxK6lfw9DYZoRJsIBBWh5tIVSMXjWMpI
+         45qQ==
+X-Gm-Message-State: AOAM531QjyJ5bCsedzj4QjLKKi39T/MS8ckMnTakCbBf4F7q5i+/d27f
+        aghTrLaL6kwNVQHZh19G2HA+lKnKILzxuZiPkWk=
+X-Google-Smtp-Source: ABdhPJwoPwgabfsixufyOm+4d9sHcFdO0bSZg8yR/mGAumz3a6j06/bcxRWrdPPp9rkRwhEnsGm0FpUlBe9QUNhv0mU=
+X-Received: by 2002:a63:df10:0:b0:3db:8bb8:bf01 with SMTP id
+ u16-20020a63df10000000b003db8bb8bf01mr265703pgg.163.1652371146582; Thu, 12
+ May 2022 08:59:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <122e0019-4bee-f469-5e04-a9fbc66f3313@suse.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a20:d2c7:b0:7f:757b:3407 with HTTP; Thu, 12 May 2022
+ 08:59:06 -0700 (PDT)
+Reply-To: msbelinaya892@gmail.com
+From:   msbelinaya <huisterlui75@gmail.com>
+Date:   Thu, 12 May 2022 15:59:06 +0000
+Message-ID: <CAAcQqWhv8Z4LfLhXDjQAvoRBXSpfX+vU=OXF4rRcjDqzUf+y5A@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:42e listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4957]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [huisterlui75[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [huisterlui75[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [msbelinaya892[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 09:05:01AM +0200, Hannes Reinecke wrote:
-> On 5/12/22 01:18, Serge Semin wrote:
-> > There are systems with no BIOS or comprehensive embedded firmware which
-> > could be able to properly initialize the SATA AHCI controller
-> > platform-specific capabilities. In that case a good alternative to having
-> > a clever bootloader is to create a device tree node with the properties
-> > well describing all the AHCI-related platform specifics. All the settings
-> > which are normally detected and marked as available in the HBA and its
-> > ports capabilities fields [1] could be defined in the platform DTB by
-> > means of a set of the dedicated properties. Such approach perfectly fits
-> > to the DTB-philosophy - to provide hardware/platform description.
-> > 
-> > So here we suggest to extend the SATA AHCI device tree bindings with the
-> > next set of additional DT boolean properties:
-> > 1) hba-sss - Controller supports Staggered Spin-up.
-> > 2) hba-smps - Mechanical Presence Switch is support by controller.
-> > 3) hba-hpcp - Hot Plug Capable Port.
-> > 4) hba-mpsp - Mechanical Presence Switch Attached to Port.
-> > 5) hba-cpd - Cold Presence Detection.
-> > 6) hba-esp - External SATA Port.
-> > 7) hba-fbscp - FIS-based Switching Capable Port.
-> > All of these capabilities require to have a corresponding hardware
-> > configuration. Thus it's ok to have them defined in DTB.
-> > 
-> > Even though the driver currently takes into account the state of the ESP
-> > and FBSCP flags state only, there is nothing wrong with having all them
-> > supported by the generic AHCI library in order to have a complete OF-based
-> > platform-capabilities initialization procedure. These properties will be
-> > parsed in the ahci_platform_get_resources() method and their values will
-> > be stored in the saved_* fields of the ahci_host_priv structure, which in
-> > its turn then will be used to restore the H.CAP, H.PI and P#.CMD
-> > capability fields on device init and after HBA reset.
-> > 
-> > Please note this modification concerns the HW-init HBA and its ports flags
-> > only, which are by specification [1] are supposed to be initialized by the
-> > BIOS/platform firmware/expansion ROM and which are normally declared in
-> > the one-time-writable-after-reset register fields. Even though these flags
-> > aren't supposed to be cleared after HBA reset some AHCI instances may
-> > violate that rule so we still need to perform the fields resetting after
-> > each reset. Luckily the corresponding functionality has already been
-> > partly implemented in the framework of the ahci_save_initial_config() and
-> > ahci_restore_initial_config() methods.
-> > 
-> > [1] Serial ATA AHCI 1.3.1 Specification, p. 103
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > ---
-> >   drivers/ata/ahci.h             |  1 +
-> >   drivers/ata/libahci.c          | 51 ++++++++++++++++++++++++++++------
-> >   drivers/ata/libahci_platform.c | 51 ++++++++++++++++++++++++++++++++--
-> >   3 files changed, 92 insertions(+), 11 deletions(-)
-> > 
-> > diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
-> > index 8b9826533ae5..0de221055961 100644
-> > --- a/drivers/ata/ahci.h
-> > +++ b/drivers/ata/ahci.h
-> > @@ -337,6 +337,7 @@ struct ahci_host_priv {
-> >   	u32			saved_cap;	/* saved initial cap */
-> >   	u32			saved_cap2;	/* saved initial cap2 */
-> >   	u32			saved_port_map;	/* saved initial port_map */
-> > +	u32			saved_port_cap[AHCI_MAX_PORTS]; /* saved port_cap */
-> >   	u32 			em_loc; /* enclosure management location */
-> >   	u32			em_buf_sz;	/* EM buffer size in byte */
-> >   	u32			em_msg_type;	/* EM message type */
-> > diff --git a/drivers/ata/libahci.c b/drivers/ata/libahci.c
-> > index 1ffaa5f5f21a..763ff1058da6 100644
-> > --- a/drivers/ata/libahci.c
-> > +++ b/drivers/ata/libahci.c
-> > @@ -16,6 +16,7 @@
-> >    * http://www.intel.com/technology/serialata/pdf/rev1_1.pdf
-> >    */
-> > +#include <linux/bitops.h>
-> >   #include <linux/kernel.h>
-> >   #include <linux/gfp.h>
-> >   #include <linux/module.h>
-> > @@ -443,16 +444,28 @@ static ssize_t ahci_show_em_supported(struct device *dev,
-> >   void ahci_save_initial_config(struct device *dev, struct ahci_host_priv *hpriv)
-> >   {
-> >   	void __iomem *mmio = hpriv->mmio;
-> > -	u32 cap, cap2, vers, port_map;
-> > +	void __iomem *port_mmio;
-> > +	unsigned long port_map;
-> 
-> Why is this an 'unsigned long' now? I thought we could have only 32 ports?
-> 
-> > +	u32 cap, cap2, vers;
-> >   	int i;
-> >   	/* make sure AHCI mode is enabled before accessing CAP */
-> >   	ahci_enable_ahci(mmio);
-> > -	/* Values prefixed with saved_ are written back to host after
-> > -	 * reset.  Values without are used for driver operation.
-> > +	/*
-> > +	 * Values prefixed with saved_ are written back to the HBA and ports
-> > +	 * registers after reset. Values without are used for driver operation.
-> > +	 */
-> > +
-> > +	/*
-> > +	 * Override HW-init HBA capability fields with platform-specific values.
-> > +	 * The rest of the HBA capabilities are defined with strictly RO flags
-> > +	 * and can't be modified in CSR anyway.
-> >   	 */
-> > -	hpriv->saved_cap = cap = readl(mmio + HOST_CAP);
-> > +	cap = readl(mmio + HOST_CAP);
-> > +	if (hpriv->saved_cap)
-> > +		cap = (cap & ~(HOST_CAP_SSS | HOST_CAP_MPS)) | hpriv->saved_cap;
-> > +	hpriv->saved_cap = cap;
-> >   	/* CAP2 register is only defined for AHCI 1.2 and later */
-> >   	vers = readl(mmio + HOST_VERSION);
-> > @@ -519,7 +532,7 @@ void ahci_save_initial_config(struct device *dev, struct ahci_host_priv *hpriv)
-> >   	/* Override the HBA ports mapping if the platform needs it */
-> >   	port_map = readl(mmio + HOST_PORTS_IMPL);
-> 
+Pakun oma s=C3=B5prust ja usun, et v=C3=B5tate mind hea s=C3=BCdamega vastu=
+. Mul
+paluti teiega =C3=BChendust v=C3=B5tta ja uurida, kuidas saaksime =C3=BCkst=
+eist k=C3=B5ige
+paremini toetada. Olen pr Kodjovi Hegbor T=C3=BCrgist ja t=C3=B6=C3=B6tan e=
+ttev=C3=B5ttes
+StandardBNP bank limited Turkey operatsioonide osakonna juhina. Usun,
+et see on Jumala tahe, et ma kohtun teiega n=C3=BC=C3=BCd. Mul on oluline
+=C3=A4rivestlus, mida tahan teiega jagada ja millest ma usun, et olete
+huvitatud, kuna see on seotud teie perekonnanimega ja toob teile
+sellest kasu.
 
-> And we're still using 'readl', so we will only initialize 32 bits ...
-> 
-> >   	if (hpriv->saved_port_map && port_map != hpriv->saved_port_map) {
-> 
-> Tsk. And now comparing is to a u32 ...
-> 
-> Please change it back to be 32 bits.
+ 2006. aastal avas teie riigi kodanik minu pangas kalendri 36-kuulise
+mitteresidendi konto v=C3=A4=C3=A4rtusega 8 400 000 naela. Selle tagatisrah=
+a
+lepingu kehtivusaeg oli 16. jaanuar 2009. Kahjuks hukkus ta 12. mail
+2008 Hiinas Sichuanis surmaga l=C3=B5ppenud maav=C3=A4rinas, mis tappis
+=C3=A4rireisil viibides v=C3=A4hemalt 68 000 inimest.
 
-Your comment made me thinking I was going crazy. =) After getting this
-patchset submitted and delivered I've switched to and already finished
-several more kernel patches series in another subsystems. So the
-AHCI/SATA context has stashed in my subconscious during that time.
+Minu panga juhtkond pole tema surmast veel kuulnud, teadsin sellest,
+sest ta oli minu s=C3=B5ber ja mina tema kontohaldur, kui konto avati enne
+minu edutamist. Siiski, h=C3=A4rra
+ ei maininud konto avamisel l=C3=A4hisugulasi/p=C3=A4rijaid ning ta ei olnu=
+d
+abielus ega tal polnud lapsi. Eelmisel n=C3=A4dalal palus mu panga juhtkond
+mul anda juhiseid, mida teha tema rahadega, kui lepingut kavatsetakse
+pikendada.
 
-Indeed what you are saying seems very much reasonable especially
-seeing not changing the variable type causes much less code
-alterations. Anyway the reason of having the port_map variable defined
-as 'unsigned long' is due to using the for_each_set_bit() macro. It
-has find_next_bit() called which expects a pointer to unsigned long
-passed. Needless to say that using 'unsigned long' in the port_map
-definition is very much required due to that.
+Ma tean, et see juhtub ja seep=C3=A4rast olen otsinud vahendeid olukorra
+lahendamiseks, sest kui mu pangadirektorid teavad, et nad on surnud ja
+neil pole p=C3=A4rijat, v=C3=B5tavad nad raha isiklikuks tarbeks, m=C3=B5ne=
+d aga ei
+tea. ei taha, et midagi sellist juhtuks. See oli siis, kui ma n=C3=A4gin
+teie perekonnanime, olin =C3=B5nnelik ja otsin n=C3=BC=C3=BCd teie koost=C3=
+=B6=C3=B6d, et
+esitleda teid l=C3=A4hisugulasena/konto p=C3=A4rijana, kuna teil on temaga =
+sama
+perekonnanimi ja minu panga peakontor vabastab konto sina. Risk
+puudub; tehing tehakse seadusliku lepingu alusel, mis kaitseb teid
+=C3=B5igusrikkumiste eest.
 
--Sergey
+Meil on parem raha v=C3=A4lja n=C3=B5uda, kui lubada pangajuhtidel see v=C3=
+=B5tta,
+nad on juba rikkad. Ma ei ole ahne inimene, seega soovitan jagada raha
+v=C3=B5rdselt, 50/50% m=C3=B5lema poole vahel. Minu osa aitab mul alustada =
+oma
+=C3=A4ri ja kasutada saadud tulu heategevuseks, mis oli minu unistus.
 
-> 
-> Cheers,
-> 
-> Hannes
-> -- 
-> Dr. Hannes Reinecke		           Kernel Storage Architect
-> hare@suse.de			                  +49 911 74053 688
-> SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-> HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+Palun andke mulle oma m=C3=B5tted minu ettepaneku kohta, ma vajan selle
+tehingu puhul teie abi. Ma olen valinud su mind aitama, mitte minu
+enda tegude t=C3=B5ttu, mu kallis, vaid Jumala poolt. Ma tahtsin, et sa
+teaksid, et v=C3=B5tsin aega selle s=C3=B5numi p=C3=A4rast palvetada, enne =
+kui v=C3=B5tsin
+sinuga =C3=BChendust, et jagada, avaldage mulle oma arvamust ja palun.
+k=C3=A4sitlege seda teavet T=C3=84IESTI SALAJASena. P=C3=A4rast teie vastus=
+e saamist
+ainult minu isikliku e-posti aadressi kaudu msbelinaya892@gmail.com
+annab teile tehingu =C3=BCksikasjad. Ja fondi deposiitsertifikaadi ja fondi
+loonud ettev=C3=B5tte asutamiskirja koopia.
+Jumal =C3=B5nnistagu teie kiiret vastust oodates
+Parimate soovidega
+Proua Kodjovi Hegbor
+msbelinaya892@gmail.com

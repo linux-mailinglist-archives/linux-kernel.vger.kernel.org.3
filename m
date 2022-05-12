@@ -2,103 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 149865250EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:11:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D63315250F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355779AbiELPLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 11:11:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37050 "EHLO
+        id S1355753AbiELPME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 11:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355735AbiELPKu (ORCPT
+        with ESMTP id S1355759AbiELPKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 11:10:50 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48538B15
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:10:41 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id z18so5653617iob.5
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:10:41 -0700 (PDT)
+        Thu, 12 May 2022 11:10:54 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5990627CF4
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:10:51 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id c12so6609711edv.10
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:10:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=V+ifJblrQS6wsvVLJbCK4vZS+8eWu82qh+mj7lpTlPI=;
-        b=BlhKvvEpQGUSQwb9tVfoCMFR+KbiPKGe70gOBDgljTA5DQUqQ9ZtT0kR7HeX0WWSOy
-         SAXnIDDky6RlT0fx4cOJkqAVuo6GGxtjfFg2Y1o63whslEzsP1X7zkyvQ//Wj99oxnVE
-         q/nSbzbflXX3HOTfe0stKMdncBYqvdAOkIsHHN0ezP/vZLF59z0/O0aadl383jhInwDM
-         w/idkEqDx7g1z3yyLvsGLYppYWYJtcqcsLkqyw6hGmRVVGgcIiqWdnYgvvNvfvfpbChQ
-         mzwQ9U03GQ3QsIV/wOTEeGf3wLy16CmUAJ52ENMM5yvGoY+TzZKlcMZZ5EDrAjkGBvyr
-         LI4A==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CLayYmfjkhcAMg8+8D2BY7rGeeiUMg34h820M4oj538=;
+        b=VPP3gLLeF4MsNjONZX20D0qECvCgMzDr/5BarO8M+QHDbT9F5GNFmOArZlZmpzFdG0
+         TXPBEolFTiiouK+wbBblSCABFom5RMZOmlPPEGXwSjZAm0sJgeWREmnkns6WFJfjekOV
+         NAyCPZ+GlathNET+WBdpkMN9yxVOjZBLiUnhlSSGOGTQHDt+TrdoXgBRAt51wZyHTyRq
+         IjC9t554stlsG9/g4B3HLzW+Lv8LCsMztExZcmo2vtQEqQrJqLKEZXhLIEydnif/7RWK
+         c2OiX6gZAUp+Ru4D5mNaHjlikY6TWKkdhNmmk6JFU9ZbUAkjSCcOfik52vmudTUjPNGq
+         HFwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=V+ifJblrQS6wsvVLJbCK4vZS+8eWu82qh+mj7lpTlPI=;
-        b=x5zqisflrfEp3Zsexy0gdSqGlyn9Y2fkmINP0piWaT7RzWgm47qs1gsWsYf2lVmH6t
-         NHfX2z98AIaFMKtFISgCjxKUD+c1xAU2kNCpQdoOaZQXJ2egdF95GSH52Mblformuicm
-         5KOe7OsiHFRpwlA2ytyfbCpPeAlV7QpnFCa+R8hoGOPUKNDYZcCh9WU4emcQytkwTgqS
-         Emxw0gnAnNAsQ21FnCR0KDN+Q5Sa9bmHBZyFa4dIF6KhfPOaaWa5e3gzaGW01Mybywr1
-         IXAYH3PL/87+cOTvjF0Bc1MvEUVlHZlgzLnXGgJP31MI5qVEyP0obww6EvEWGGgLM/pC
-         srqw==
-X-Gm-Message-State: AOAM530Co3hDz4rd4q+Ipf+H5pY+xBwmskL8WxxuepzEzowRNm1hL/B3
-        rL1ku6vY9PLusjYo6XesyIIngdzbXm9hmQ==
-X-Google-Smtp-Source: ABdhPJxlGm6rc2dunPT/tr/IfzWzjshBamNU2Qi/F2jgUz/yyiEQIT+JLijC3K3aRzy2BvP1FxejlQ==
-X-Received: by 2002:a05:6638:12d3:b0:32b:7235:6a08 with SMTP id v19-20020a05663812d300b0032b72356a08mr215122jas.27.1652368240573;
-        Thu, 12 May 2022 08:10:40 -0700 (PDT)
-Received: from presto.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.gmail.com with ESMTPSA id p15-20020a6b8d0f000000b0065a47e16f3fsm18217iod.17.2022.05.12.08.10.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 08:10:40 -0700 (PDT)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com
-Cc:     lkp@intel.com, mka@chromium.org, evgreen@chromium.org,
-        bjorn.andersson@linaro.org, quic_cpratapa@quicinc.com,
-        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
-        quic_subashab@quicinc.com, elder@kernel.org,
-        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net 3/3] net: ipa: get rid of a duplicate initialization
-Date:   Thu, 12 May 2022 10:10:33 -0500
-Message-Id: <20220512151033.211592-4-elder@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220512151033.211592-1-elder@linaro.org>
-References: <20220512151033.211592-1-elder@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CLayYmfjkhcAMg8+8D2BY7rGeeiUMg34h820M4oj538=;
+        b=XcJ4qMFlmvrztY7Hx2SZgEOOZmBHn4AiX733uRpAKazn8NgrY+STmaVwCjwlNPYLuB
+         AM1cd2MUafKOZV7Exccfp6UlHDUQXf/UOj5LAVVbZJfokfqsr3qG3L7PTWc30SiA8F1f
+         x75PdS30PpBjXo6FW6qAlW5zLQaTyOFudvpUuBVixuKNTWq8yStIQXYUE8Fr1tt6B/5B
+         4zf0iJsES3GG7v83Qv1Pr2W7ZRLpXVSYvDiRxcMIB38+h5ep4ndDQxRVQn89qQysxFuI
+         N0dUZlqWqmBexWC8ppV5RUdw8ZSJujwosg76yDjWtzAlsf/RX7YCsJFHb/TdCGzFVxy1
+         Ppvw==
+X-Gm-Message-State: AOAM532UjJyK/4HABeYg5YDPMULSRsxSGAB5QQ/z66KTeaKCa+tmGJwJ
+        j1UMT9NdG7r3T//OC52cr9WYXFU0Ku0xMtK4Z767dA==
+X-Google-Smtp-Source: ABdhPJyTJELgoNqWKtKc/a0Pq3BIgBopqi4EtQVTw75F8NJKDSHOkrQaZCuY63irAg0w41nA9fSJXqT4rvMVcGPVPL4=
+X-Received: by 2002:a05:6402:43c4:b0:41d:9403:8dca with SMTP id
+ p4-20020a05640243c400b0041d94038dcamr35277391edc.184.1652368249576; Thu, 12
+ May 2022 08:10:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220512083627.885338-1-tzungbi@kernel.org> <20220512083627.885338-4-tzungbi@kernel.org>
+In-Reply-To: <20220512083627.885338-4-tzungbi@kernel.org>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Thu, 12 May 2022 08:10:38 -0700
+Message-ID: <CABXOdTf1Hk3mZMrVGLxQfkBuoJ=bL-yprNtphZLRQu8zvt2U_g@mail.gmail.com>
+Subject: Re: [PATCH 3/6] platform/chrome: cros_ec_proto: drop BUG_ON() in cros_ec_prepare_tx()
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In ipa_qmi_ready(), the "ipa" local variable is set when
-initialized, but then set again just before it's first used.
-One or the other is enough, so get rid of the first one.
+On Thu, May 12, 2022 at 1:36 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+>
+> It is overkill to crash the kernel if the given message is oversize.
+>
+> Drop the BUG_ON() and return -EINVAL instead.
+>
+> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 
-References: https://lore.kernel.org/lkml/200de1bd-0f01-c334-ca18-43eed783dfac@intel.com/
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 530f9216a953 ("soc: qcom: ipa: AP/modem communications")
-Signed-off-by: Alex Elder <elder@linaro.org>
----
- drivers/net/ipa/ipa_qmi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
 
-diff --git a/drivers/net/ipa/ipa_qmi.c b/drivers/net/ipa/ipa_qmi.c
-index 90f3aec55b365..ec010cf2e816a 100644
---- a/drivers/net/ipa/ipa_qmi.c
-+++ b/drivers/net/ipa/ipa_qmi.c
-@@ -125,7 +125,7 @@ static void ipa_qmi_indication(struct ipa_qmi *ipa_qmi)
-  */
- static void ipa_qmi_ready(struct ipa_qmi *ipa_qmi)
- {
--	struct ipa *ipa = container_of(ipa_qmi, struct ipa, qmi);
-+	struct ipa *ipa;
- 	int ret;
- 
- 	/* We aren't ready until the modem and microcontroller are */
--- 
-2.32.0
-
+> ---
+>  drivers/platform/chrome/cros_ec_proto.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
+> index 2d6d3fbfa905..9ce3374846ff 100644
+> --- a/drivers/platform/chrome/cros_ec_proto.c
+> +++ b/drivers/platform/chrome/cros_ec_proto.c
+> @@ -60,7 +60,8 @@ static int prepare_packet(struct cros_ec_device *ec_dev,
+>         int i;
+>         u8 csum = 0;
+>
+> -       BUG_ON(msg->outsize + sizeof(*request) > ec_dev->dout_size);
+> +       if (msg->outsize + sizeof(*request) > ec_dev->dout_size)
+> +               return -EINVAL;
+>
+>         out = ec_dev->dout;
+>         request = (struct ec_host_request *)out;
+> @@ -176,7 +177,9 @@ int cros_ec_prepare_tx(struct cros_ec_device *ec_dev,
+>         if (ec_dev->proto_version > 2)
+>                 return prepare_packet(ec_dev, msg);
+>
+> -       BUG_ON(msg->outsize > EC_PROTO2_MAX_PARAM_SIZE);
+> +       if (msg->outsize > EC_PROTO2_MAX_PARAM_SIZE)
+> +               return -EINVAL;
+> +
+>         out = ec_dev->dout;
+>         out[0] = EC_CMD_VERSION0 + msg->version;
+>         out[1] = msg->command;
+> --
+> 2.36.0.512.ge40c2bad7a-goog
+>

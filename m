@@ -2,223 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B2BA524856
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 10:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F58524854
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 10:53:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237718AbiELIwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 04:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45020 "EHLO
+        id S1351758AbiELIwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 04:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351815AbiELIwF (ORCPT
+        with ESMTP id S1351725AbiELIvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 04:52:05 -0400
-Received: from outbound-smtp18.blacknight.com (outbound-smtp18.blacknight.com [46.22.139.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE446221A
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 01:52:00 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
-        by outbound-smtp18.blacknight.com (Postfix) with ESMTPS id 3E11B1C593D
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 09:51:59 +0100 (IST)
-Received: (qmail 17772 invoked from network); 12 May 2022 08:51:59 -0000
-Received: from unknown (HELO morpheus.112glenside.lan) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPA; 12 May 2022 08:51:58 -0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Mel Gorman <mgorman@techsingularity.net>
-Subject: [PATCH 6/6] mm/page_alloc: Remotely drain per-cpu lists
-Date:   Thu, 12 May 2022 09:50:43 +0100
-Message-Id: <20220512085043.5234-7-mgorman@techsingularity.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220512085043.5234-1-mgorman@techsingularity.net>
-References: <20220512085043.5234-1-mgorman@techsingularity.net>
+        Thu, 12 May 2022 04:51:10 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D6B4BB84
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 01:51:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652345468; x=1683881468;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=JDO/SYv/IsBTpgGj2Ul5Qf9St+2Ugai1kYoWuvM1djE=;
+  b=i55q/Pl6rGgA8Ccj4YwX3p+3qmBkXbvJCzTmu6g1Z+3G91e5Am/PzChz
+   osTf5YvaY2ZZofygZMdgM3o8IJ0c77C8UFGEIZG512ZW64o5CXcqxayIr
+   njAlnaxjD4CWb2Ri5UGO7ddZW0MujUqbumabMTOSRCq+wKltt0oqwJcjl
+   XhWEDt6q169AKw8vBofRrMFHhnMdTY9p2jWlh2laFIl9eo0UAotKNoIvp
+   hHp5m6SU5cG2HcEqxqDVc29Kw/DsLsRjDvzqKIKnAnXp5hUrlZEKx6VGw
+   GMljxpTYKJ2BWW2TP7NRtjyfKt9V6qXop54g8a72yKdAkNFaOa0JOGVWb
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="250465368"
+X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
+   d="scan'208";a="250465368"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 01:51:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
+   d="scan'208";a="553683861"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 12 May 2022 01:51:06 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1np4XK-000KDg-81;
+        Thu, 12 May 2022 08:51:06 +0000
+Date:   Thu, 12 May 2022 16:51:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/vdso] BUILD SUCCESS
+ bf00745e7791fe2ba7941aeead8528075a158bbe
+Message-ID: <627cca74.B8AB7LF26fMBl50x%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/vdso
+branch HEAD: bf00745e7791fe2ba7941aeead8528075a158bbe  x86/vsyscall: Remove CONFIG_LEGACY_VSYSCALL_EMULATE
 
-Some setups, notably NOHZ_FULL CPUs, are too busy to handle the per-cpu
-drain work queued by __drain_all_pages(). So introduce a new mechanism to
-remotely drain the per-cpu lists. It is made possible by remotely locking
-'struct per_cpu_pages' new per-cpu spinlocks. A benefit of this new scheme
-is that drain operations are now migration safe.
+elapsed time: 765m
 
-There was no observed performance degradation vs. the previous scheme.
-Both netperf and hackbench were run in parallel to triggering the
-__drain_all_pages(NULL, true) code path around ~100 times per second.
-The new scheme performs a bit better (~5%), although the important point
-here is there are no performance regressions vs. the previous mechanism.
-Per-cpu lists draining happens only in slow paths.
+configs tested: 147
+configs skipped: 84
 
-Minchan Kim tested this independently and reported;
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-	My workload is not NOHZ CPUs but run apps under heavy memory
-	pressure so they goes to direct reclaim and be stuck on
-	drain_all_pages until work on workqueue run.
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                 randconfig-c001-20220509
+xtensa                         virt_defconfig
+um                                  defconfig
+m68k                       m5249evb_defconfig
+sh                          urquell_defconfig
+arm                        mini2440_defconfig
+arm                        multi_v7_defconfig
+m68k                        m5272c3_defconfig
+sh                          rsk7201_defconfig
+arm                         at91_dt_defconfig
+sh                           se7721_defconfig
+m68k                             allmodconfig
+sh                           sh2007_defconfig
+i386                                defconfig
+powerpc                     sequoia_defconfig
+sh                          polaris_defconfig
+sh                            hp6xx_defconfig
+sparc                            alldefconfig
+arc                         haps_hs_defconfig
+s390                       zfcpdump_defconfig
+arc                          axs103_defconfig
+m68k                       m5208evb_defconfig
+powerpc                      pcm030_defconfig
+mips                       capcella_defconfig
+nios2                         10m50_defconfig
+powerpc                     taishan_defconfig
+mips                            ar7_defconfig
+xtensa                    smp_lx200_defconfig
+sh                         microdev_defconfig
+h8300                            allyesconfig
+sh                          kfr2r09_defconfig
+sh                            migor_defconfig
+powerpc                     tqm8555_defconfig
+parisc                generic-32bit_defconfig
+alpha                            allyesconfig
+sh                           se7206_defconfig
+sh                          lboxre2_defconfig
+ia64                          tiger_defconfig
+sh                        apsh4ad0a_defconfig
+s390                             allyesconfig
+sh                      rts7751r2d1_defconfig
+powerpc                      cm5200_defconfig
+sh                           se7724_defconfig
+sh                          rsk7203_defconfig
+powerpc                     tqm8548_defconfig
+powerpc                 mpc834x_itx_defconfig
+openrisc                         alldefconfig
+x86_64               randconfig-c001-20220509
+arm                  randconfig-c002-20220509
+ia64                                defconfig
+m68k                             allyesconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64               randconfig-a015-20220509
+x86_64               randconfig-a012-20220509
+x86_64               randconfig-a016-20220509
+x86_64               randconfig-a014-20220509
+x86_64               randconfig-a013-20220509
+x86_64               randconfig-a011-20220509
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                 randconfig-a011-20220509
+i386                 randconfig-a013-20220509
+i386                 randconfig-a016-20220509
+i386                 randconfig-a015-20220509
+i386                 randconfig-a014-20220509
+i386                 randconfig-a012-20220509
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220509
+s390                 randconfig-r044-20220509
+riscv                randconfig-r042-20220509
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
 
-	unit: nanosecond
-	max(dur)        avg(dur)                count(dur)
-	166713013       487511.77786438033      1283
+clang tested configs:
+x86_64               randconfig-c007-20220509
+s390                 randconfig-c005-20220509
+i386                 randconfig-c001-20220509
+powerpc              randconfig-c003-20220509
+riscv                randconfig-c006-20220509
+mips                 randconfig-c004-20220509
+arm                  randconfig-c002-20220509
+mips                       rbtx49xx_defconfig
+mips                        maltaup_defconfig
+mips                      maltaaprp_defconfig
+mips                        omega2p_defconfig
+powerpc                 xes_mpc85xx_defconfig
+arm                         shannon_defconfig
+powerpc                    mvme5100_defconfig
+x86_64               randconfig-a006-20220509
+x86_64               randconfig-a002-20220509
+x86_64               randconfig-a001-20220509
+x86_64               randconfig-a004-20220509
+x86_64               randconfig-a005-20220509
+x86_64               randconfig-a003-20220509
+i386                 randconfig-a004-20220509
+i386                 randconfig-a006-20220509
+i386                 randconfig-a002-20220509
+i386                 randconfig-a003-20220509
+i386                 randconfig-a001-20220509
+i386                 randconfig-a005-20220509
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon              randconfig-r045-20220509
+hexagon              randconfig-r041-20220509
 
-	From traces, system encountered the drain_all_pages 1283 times and
-	worst case was 166ms and avg was 487us.
-
-	The other problem was alloc_contig_range in CMA. The PCP draining
-	takes several hundred millisecond sometimes though there is no
-	memory pressure or a few of pages to be migrated out but CPU were
-	fully booked.
-
-	Your patch perfectly removed those wasted time.
-
-Link: https://lore.kernel.org/r/20211103170512.2745765-4-nsaenzju@redhat.com
-Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-Tested-by: Minchan Kim <minchan@kernel.org>
-Acked-by: Minchan Kim <minchan@kernel.org>
----
- mm/page_alloc.c | 59 +++++--------------------------------------------
- 1 file changed, 5 insertions(+), 54 deletions(-)
-
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index ce4d3002b8a3..0f5a6a5b0302 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -164,13 +164,7 @@ DEFINE_PER_CPU(int, _numa_mem_);		/* Kernel "local memory" node */
- EXPORT_PER_CPU_SYMBOL(_numa_mem_);
- #endif
- 
--/* work_structs for global per-cpu drains */
--struct pcpu_drain {
--	struct zone *zone;
--	struct work_struct work;
--};
- static DEFINE_MUTEX(pcpu_drain_mutex);
--static DEFINE_PER_CPU(struct pcpu_drain, pcpu_drain);
- 
- #ifdef CONFIG_GCC_PLUGIN_LATENT_ENTROPY
- volatile unsigned long latent_entropy __latent_entropy;
-@@ -3090,9 +3084,6 @@ static int rmqueue_bulk(struct zone *zone, unsigned int order,
-  * Called from the vmstat counter updater to drain pagesets of this
-  * currently executing processor on remote nodes after they have
-  * expired.
-- *
-- * Note that this function must be called with the thread pinned to
-- * a single processor.
-  */
- void drain_zone_pages(struct zone *zone, struct per_cpu_pages *pcp)
- {
-@@ -3117,10 +3108,6 @@ void drain_zone_pages(struct zone *zone, struct per_cpu_pages *pcp)
- 
- /*
-  * Drain pcplists of the indicated processor and zone.
-- *
-- * The processor must either be the current processor and the
-- * thread pinned to the current processor or a processor that
-- * is not online.
-  */
- static void drain_pages_zone(unsigned int cpu, struct zone *zone)
- {
-@@ -3139,10 +3126,6 @@ static void drain_pages_zone(unsigned int cpu, struct zone *zone)
- 
- /*
-  * Drain pcplists of all zones on the indicated processor.
-- *
-- * The processor must either be the current processor and the
-- * thread pinned to the current processor or a processor that
-- * is not online.
-  */
- static void drain_pages(unsigned int cpu)
- {
-@@ -3155,9 +3138,6 @@ static void drain_pages(unsigned int cpu)
- 
- /*
-  * Spill all of this CPU's per-cpu pages back into the buddy allocator.
-- *
-- * The CPU has to be pinned. When zone parameter is non-NULL, spill just
-- * the single zone's pages.
-  */
- void drain_local_pages(struct zone *zone)
- {
-@@ -3169,24 +3149,6 @@ void drain_local_pages(struct zone *zone)
- 		drain_pages(cpu);
- }
- 
--static void drain_local_pages_wq(struct work_struct *work)
--{
--	struct pcpu_drain *drain;
--
--	drain = container_of(work, struct pcpu_drain, work);
--
--	/*
--	 * drain_all_pages doesn't use proper cpu hotplug protection so
--	 * we can race with cpu offline when the WQ can move this from
--	 * a cpu pinned worker to an unbound one. We can operate on a different
--	 * cpu which is alright but we also have to make sure to not move to
--	 * a different one.
--	 */
--	migrate_disable();
--	drain_local_pages(drain->zone);
--	migrate_enable();
--}
--
- /*
-  * The implementation of drain_all_pages(), exposing an extra parameter to
-  * drain on all cpus.
-@@ -3207,13 +3169,6 @@ static void __drain_all_pages(struct zone *zone, bool force_all_cpus)
- 	 */
- 	static cpumask_t cpus_with_pcps;
- 
--	/*
--	 * Make sure nobody triggers this path before mm_percpu_wq is fully
--	 * initialized.
--	 */
--	if (WARN_ON_ONCE(!mm_percpu_wq))
--		return;
--
- 	/*
- 	 * Do not drain if one is already in progress unless it's specific to
- 	 * a zone. Such callers are primarily CMA and memory hotplug and need
-@@ -3263,14 +3218,12 @@ static void __drain_all_pages(struct zone *zone, bool force_all_cpus)
- 	}
- 
- 	for_each_cpu(cpu, &cpus_with_pcps) {
--		struct pcpu_drain *drain = per_cpu_ptr(&pcpu_drain, cpu);
--
--		drain->zone = zone;
--		INIT_WORK(&drain->work, drain_local_pages_wq);
--		queue_work_on(cpu, mm_percpu_wq, &drain->work);
-+		if (zone) {
-+			drain_pages_zone(cpu, zone);
-+		} else {
-+			drain_pages(cpu);
-+		}
- 	}
--	for_each_cpu(cpu, &cpus_with_pcps)
--		flush_work(&per_cpu_ptr(&pcpu_drain, cpu)->work);
- 
- 	mutex_unlock(&pcpu_drain_mutex);
- }
-@@ -3279,8 +3232,6 @@ static void __drain_all_pages(struct zone *zone, bool force_all_cpus)
-  * Spill all the per-cpu pages from all CPUs back into the buddy allocator.
-  *
-  * When zone parameter is non-NULL, spill just the single zone's pages.
-- *
-- * Note that this can be extremely slow as the draining happens in a workqueue.
-  */
- void drain_all_pages(struct zone *zone)
- {
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

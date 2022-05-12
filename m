@@ -2,178 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E564D524CD0
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B649524CCC
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353710AbiELM11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 08:27:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45352 "EHLO
+        id S1353694AbiELM1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 08:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353650AbiELM1V (ORCPT
+        with ESMTP id S230402AbiELM1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 08:27:21 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2066.outbound.protection.outlook.com [40.107.92.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B5A13F5C;
-        Thu, 12 May 2022 05:27:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mPvQetOIW/Ptiymp/J8NeEe9LRnokNvNamQ8QrMprzxgy/FIayGD02IKJK1nSjjRREvUhmjSQVuTl9Xhb6mdtPPRF7IvQ2ma20qy7z1AiR9zoJqYuufi38uxEkHmU7ow8gUr/4ekU65yH+0pRWZDc7rvHGqJMQGxaeK6GYlsp1WtTNyOYOpt/rrRJD1EevUr3V3XgE9nU4ATdrxOnl5uOk9t2zmaRgA3oQh1RjmBdIJkmJ2W3gGLCl3WX8f3+54j+vygTP9pG9EOw+KYGkTaiP7X58cTjZ6gcqe0s0bu3vYdyRztYm2u7aUgC2VJ7QFlY35YkE1LL8yuwUekaEd3BQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lmTA2DUf8+saemp/sMfgnsYZuSMbczp+V+9FYvtgrvE=;
- b=UyVMvCGpJQZ2EPdF8CnfAkUJJuvTTGHX7EOjIxSFGZXRtW/oFAnsB93lAX0ZSHVrt/t1qnICQdVyleMD73x/7wU1KPDqEu7NuTa91C6AS4RQhMBXpULXBX5z6UKbFEYv3YvUMdeeH3ez/sRmC3d2+TjS8Ly4VX55mdC1/060vc2oNQUe+3fuKwnMK6D4SSbKJ0BmjjSBo20vH9iCIggQgYjj1S3eGy14+EqL2J2dWnXi87iSYGULhP+Wj5bIvTm1Tso+DxJl5kGDZ6h4BHEZf0XmEDXAD3Ve07HiMVeR1bW54Km1x7c7y2+ZmEVjTqjDfjOsH02RnaXesBcucaMVBw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lmTA2DUf8+saemp/sMfgnsYZuSMbczp+V+9FYvtgrvE=;
- b=ppnlvH/Mpgzl4Lm8XZtVSJuhQHQtqeB9jFzsh2/y8r+hNHZppWiBBJl0WNjkRgseeLFcl4amseU3Yb+AzNC07to2X6/hHF4ayNJNYWK3rCjqME0sfo+3/BlrDRbOKXRj3ywt/jHG6IQbcAKMe5w+XSlr3NcfZkVvDEW9ZY38aE0PEDgjHC9bwdPi13HLV+ZrSCOOPYzs7PXCxq6DKw1awr5o48xvzsFWJTBI2KEBQosuJrfJl/ImqOR9e94lU2ES8lNdrkEcj4uesEYCfrpnrrL8Q4oK9p9SRPpRaw1YJnVbM/hA3x1VC/NUMTOnrNYumk5oEW2ARRE2urXNsn12qw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL1PR12MB5304.namprd12.prod.outlook.com (2603:10b6:208:314::13)
- by BY5PR12MB3812.namprd12.prod.outlook.com (2603:10b6:a03:1a7::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.22; Thu, 12 May
- 2022 12:27:18 +0000
-Received: from BL1PR12MB5304.namprd12.prod.outlook.com
- ([fe80::a9fa:62ae:bbc8:9d7d]) by BL1PR12MB5304.namprd12.prod.outlook.com
- ([fe80::a9fa:62ae:bbc8:9d7d%8]) with mapi id 15.20.5250.013; Thu, 12 May 2022
- 12:27:18 +0000
-Message-ID: <fdba8dd2-4db8-81f3-d9d8-4742c88e99d9@nvidia.com>
-Date:   Thu, 12 May 2022 17:57:05 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v3 8/8] vfio/pci: Add the support for PCI D3cold state
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
-References: <20220425092615.10133-1-abhsahu@nvidia.com>
- <20220425092615.10133-9-abhsahu@nvidia.com>
- <20220504134551.70d71bf0.alex.williamson@redhat.com>
- <9e44e9cc-a500-ab0d-4785-5ae26874b3eb@nvidia.com>
- <20220509154844.79e4915b.alex.williamson@redhat.com>
- <68463d9b-98ee-b9ec-1a3e-1375e50a2ad2@nvidia.com>
- <20220510133041.GA49344@nvidia.com>
-X-Nvconfidentiality: public
-From:   Abhishek Sahu <abhsahu@nvidia.com>
-In-Reply-To: <20220510133041.GA49344@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MA1PR01CA0169.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:d::21) To BL1PR12MB5304.namprd12.prod.outlook.com
- (2603:10b6:208:314::13)
+        Thu, 12 May 2022 08:27:19 -0400
+Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C69C13F5C;
+        Thu, 12 May 2022 05:27:17 -0700 (PDT)
+IronPort-Data: =?us-ascii?q?A9a23=3A2J3H0ahOgBolD7Tcll9Sgf2TX161nREKZh0ujC4?=
+ =?us-ascii?q?5NGQNrF6WrkUBzjEZXTvTPPbeMWWmc91/bYm//UNVsZHWzdBiQQpv/nw8FHgiR?=
+ =?us-ascii?q?ejtX4rAdhiqV8+xwmwvdGo+toNGLICowPkcFhcwnT/wdOixxZVA/fvQHOCkUra?=
+ =?us-ascii?q?dYnkZqTJME0/NtzoywobVvaY42bBVMyvV0T/Di5W31G2NglaYAUpIg063ky6Di?=
+ =?us-ascii?q?dyp0N8uUvPSUtgQ1LPWvyF94JvyvshdJVOgKmVfNrbSq+ouUNiEEm3lExcFUrt?=
+ =?us-ascii?q?Jk57wdAsEX7zTIROTzHFRXsBOgDAb/mprjPl9b6FaNC+7iB3Q9zx14M9QvJqrW?=
+ =?us-ascii?q?EEnOLbQsOoAURhECDw4NqpDkFPCCSHl7ZXDnhaYKRMAxN0rVinaJ7Yw9u9pAG1?=
+ =?us-ascii?q?m++YfLTcXZBGfwemxxdqTTuhqg8UqK8nmFIMCs25tzHfSCvNOaZDIQ43L49FC1?=
+ =?us-ascii?q?Ts9j8wIGuzRD+IGaD5rfTzBZRNVM1saAZ54m/2n7lHzejseqhSKpK4z4mHW1yR?=
+ =?us-ascii?q?w1qTgNJzefdnibclXgUGeqUrF8n7/DxVcM8aQoRKB83SxlqrKmAv4RosZF/u/7?=
+ =?us-ascii?q?PECqFSQ3mk7DBwQSEv+r/6kjEK3R9NYLQoT4CVGha4s+E2uS/H5XgakuziAvxg?=
+ =?us-ascii?q?BS5xcHvNSwAeEzbvdpQaeHGkLUzVBafQgucRwTjsvvneLltXkQzdvrZWSU3uW8?=
+ =?us-ascii?q?rrSpjS3UQAPImgGaTAVSyMe/sLu5o0+5jrLT9B+AOu7ldH4Bzz06y6FoTJ4hLg?=
+ =?us-ascii?q?Ji8MPkaKh8jjvhzOqu4iMTQMv4AjTdnyq4xk/Z4O/YYGsr1/B4p5oKIefU0nEr?=
+ =?us-ascii?q?HYfs9aR4fpIDpyXkiGJBuIXE9mB+fefNxXOjFhuAd8l9jKw6zikZ48W/TIWGav?=
+ =?us-ascii?q?DGq7oYhewOAmK51wXv8QVYROXgWZMS9rZI6wXIWLITLwJjszpU+c=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AMdotua02tTX0AwwoyLJmZwqjBFYkLtp133Aq?=
+ =?us-ascii?q?2lEZdPRUGvbo9fxG+85rrCMc6QxhPk3I9uruBEDtewK5yXcx2/h3AV7AZmfbUQ?=
+ =?us-ascii?q?mTQL2KhLGKq1aLdhEWtNQtsJuIGJIfNDSfNykYsS+32miF+sgbsaS62ZHtleHD?=
+ =?us-ascii?q?1G1sUA0vT6lh6j1yAgGdHlYefng8ObMJUIqb+tFcpyetPVAebsGADHEDWOTZ4/?=
+ =?us-ascii?q?LRkpaOW299OzcXrBmJkSiz6KP3VzyR3hIlWTtJxrs4tUjp+jaJnpmejw=3D=3D?=
+X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
+   d="scan'208";a="124189362"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 12 May 2022 20:27:17 +0800
+Received: from G08CNEXMBPEKD05.g08.fujitsu.local (unknown [10.167.33.204])
+        by cn.fujitsu.com (Postfix) with ESMTP id 0124C4D1716B;
+        Thu, 12 May 2022 20:27:13 +0800 (CST)
+Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
+ G08CNEXMBPEKD05.g08.fujitsu.local (10.167.33.204) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Thu, 12 May 2022 20:27:13 +0800
+Received: from [192.168.22.28] (10.167.225.141) by
+ G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Thu, 12 May 2022 20:27:10 +0800
+Message-ID: <32f51223-c671-1dc0-e14a-8887863d9071@fujitsu.com>
+Date:   Thu, 12 May 2022 20:27:12 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 09afed3d-6a8a-4986-0dee-08da3412c0f4
-X-MS-TrafficTypeDiagnostic: BY5PR12MB3812:EE_
-X-Microsoft-Antispam-PRVS: <BY5PR12MB3812BC2CDF55346982C2C535CCCB9@BY5PR12MB3812.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OoKI8IaN9Bki5MNKZ6KoSd1oTT4ZS0FfLYLqyrtUDFaFniZNjEeUCnKIdRIzevsRScl841Bwm25AbocYUpuja0wJlsuD4Hjanc2kuSHzEKwnWNwravo9NR9AA6oCyeMKqsNC2V3r/aK7WygKnQ7EIMnWvX0dsnNWCSqFCLtYa7CBAnZbcD15qnDezjDjHZ7a+0MHfRYZAYwzIAkJfuS1ZtKHeaWKmKcfDWY1W0d/9kXL7HUPwf3txh1YjMxKriCt9u+pfXjKOu4bPdD+PcbVkHLCEIPum19D9yeSk/yHIcJJkVCEK7cW7ueE5oBwxCn8/usFtUL97TnLof3aN2qrKCJckJ8fbxUdkLDTWlCFI2DMgXC1g9VG5kJ+2Y43vxw4nVv0dxmWcOlLK4Pn5BjgQRUs2OYnpzv01OZd72qb31Kl3SUhZx3ojXB386jomiWAU1lsaNgDgVEiBXkZUEJEaFIdW0fhnp0PE+f/lTA1gerRE2VrHu8PhribcoaEU3yDlIcQUYMv52YuyCPR+QzKWtvNmNxs5KfWjfGmQALcPOPdxNWVlejQDrIsvqBlEQSm98+VKfma2aGdS+VGd1AZth/oawrFVwBzT04AOvEohFn0pg+iRPeaRJveAv8RbupL0Kom9cqdgG/jK4Fp0Dxl1nBZu0zYQ5y07ktsJChoG++o+ml7auqzMkGyVPdYOfYmtXDOrkZNqkHhOU8reElqC39NAn5Wc6HaC3biYIMiaaqWIPA2/cUkKFxE3b2B+KWD
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5304.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(6486002)(4744005)(2616005)(38100700002)(6506007)(26005)(7416002)(53546011)(55236004)(86362001)(2906002)(5660300002)(186003)(6512007)(36756003)(31686004)(31696002)(316002)(66476007)(37006003)(54906003)(66556008)(508600001)(66946007)(6862004)(6666004)(8676002)(6636002)(4326008)(32563001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N2w3RFBhaVFPdVJLU0srWVFnZlFDSUFHWE1keGE3NE9heW5zOTlDTFdtNVB4?=
- =?utf-8?B?TDAxeitEVTZqMWN2UFg1d0hLMUI3akJIcXBXKytxTFVNc0h5WmNTZWFjRy9Y?=
- =?utf-8?B?MWowbDFGQ0k4aFVDSDg1aE9GRkE3YVM2dHo4SVpXL2tYQ1J2ME5iZjlld0g1?=
- =?utf-8?B?SG5vVjlJMzB1eEFTdzdRME5wZTdibVJQaXJwRktOcjRVTFJHY0hsSUFJc1c5?=
- =?utf-8?B?U2h2ajJCVUhEU1NEQzJrU1ZXT0RTR0RyQ1BDZ01IVHdqL0RmWkhnSG9GK2RD?=
- =?utf-8?B?WkU0TmtEMjNXQUgreHRqWmlXSlRqUGRyZ1g0WFdGdTN4SHpuWWZKcHo1M0Qy?=
- =?utf-8?B?bGNMNmwxd1N5UTNmTTNQc296UFpBMWMvbDl2QkNTOXY1L1dzaDdQUUxkYXdM?=
- =?utf-8?B?SGgyQmQ5aGxFWFU2T1Vzc3AyV2o4R3NNcUVRbTkyUnpoRERuSTZqSVQxcEc0?=
- =?utf-8?B?MjFUd0xCSVpRelNBL1BjY2tDS3Y0R2hCTmVlcE9ZN2FYalJ1U2EyWk9Ndkl3?=
- =?utf-8?B?cFk2WS9zNVdCS3dwUndYUEpIZW1NMjY0SGdPVE82ZXpaNlBHMFd3cmc0a25s?=
- =?utf-8?B?eXliUHpxZlIxQmh6ZzBRN251bUVEd1ZkQmFXZjRJb0VjVlovWnlWUWFKRkVS?=
- =?utf-8?B?RURSMExYRTEvTTJIVFJZdTNuaGtiRlhwcFQ2eEY5UGNhRFJxS1BYQVR3TlhE?=
- =?utf-8?B?b2tEVjk3SEdJVjgwZ01GOFFkK1pJVjcwalg5VGpLcFJqVHdMc0Q2MURxRzJ4?=
- =?utf-8?B?ZlpzMjBvOTlybG9XL2xuVEkvVUZKSnhYZTlCRVRwS0hteWdQdi9JQ05UWGwy?=
- =?utf-8?B?cENuaDNlTHNLcm1NeGs0dmpiMytNL1Y2VHRWT3l2ZXJ3L2ZDbTdPUmpMR0VS?=
- =?utf-8?B?cnRuWnZTNGNPWVJQQ25hYjRNY1hSV0cyZDAyN1JNM3ZnR1RzaUIwK3dUNHEw?=
- =?utf-8?B?eTZhRG9lUFc5dTBwbkw2MnVCZ1VERkU1dUxnT2FHM3oydGtTaDVFZTVQakVN?=
- =?utf-8?B?bTUrVDd3emptbVA1TERLTnUyY2lOTmlrS0F4YjBuVkdJc1Z3RS9LRHJRdmVS?=
- =?utf-8?B?eDBrVURsRG9iQmQrM3o4c3c1WGdwbkVOSEpTazZqTEtlTWZyOGt6RFRUYmJW?=
- =?utf-8?B?QTNxQlh3T1hlM1JaTzdDdHJvR0pjVVBMSUlOMnhDT1pReDQ5Rlc5RzNJemVi?=
- =?utf-8?B?M3dYeStjYVExUy9DalhUSHFVd2tXV1F5bUhKMndyMnNKYnF6L3VScDhoQVBZ?=
- =?utf-8?B?SktzZlEvSUh2KzI0OWlJQ3ZiS1RUZjBlV09HRy80TzNDYVdQNFJjSWVmNGtD?=
- =?utf-8?B?N2lWWGtrV1dxZEhFYXo3RUhGQTV4TE1MUy93eU5peFZXa1Y4SVhvRlVEcmdG?=
- =?utf-8?B?blcwd0d2RFV0MmlNR08wZEVnTmlRcEtyT2EzanEzU2x1OWpjT1p3cjY3bkhG?=
- =?utf-8?B?VGNvSkhqQ3BFY2xIMDVFSGRiaHgzUFFvYVorVGJwU3pybGc1aGFpempLUm1o?=
- =?utf-8?B?eGxEOTduSUtsSGl4aHpDUzdGVTkxUDMyelVLL3BmQnFqQ25ZVmIwOVZ2bGhz?=
- =?utf-8?B?MVRBOFZFUGhuSEFlR0hxT25FMS9LcDE2SUNZd0hMOEtYZERsdUQ1SW02S1Bt?=
- =?utf-8?B?Q0hSRU9QK1RTUGhnb0kyWXlsZ3d3VGNQUEcvWVdLcTJUbzVnTWE0SGR6VW94?=
- =?utf-8?B?VW52dzl6bVFVL29ldHBONFhNWGFWdmRvNkVMbzQvMnJSRWlJMFV5dnFnUlY4?=
- =?utf-8?B?RzFoRy9tTWF3ZkMzSlZZa0RmOGJ3MmpXMUdDWjVlTmV4K0xIdjlIMXVwbWJr?=
- =?utf-8?B?RE1JZDA0akpMWVlmL3lza0Rtanp2OGNvbVRlb1RxaUROdFh0N09tS1l6QVRB?=
- =?utf-8?B?VEdIS016cThkUU43V2o0eWlIUHUzVkd3SlQxYWdsVzVVVHJMMzdjUWRRUkpI?=
- =?utf-8?B?NXV3RmFqWlVybG1rYVJXdGUvaGV1WFA0M2UwWjN2ekg3cCs2dXlyMFhQNVdD?=
- =?utf-8?B?cCtwa2ttZjZBOXh6cXdoVElod3BvbzR2ZGlBUDJvQVUvOHJXNHgwdGt2YXE0?=
- =?utf-8?B?dDVRRmdkRTdFVmIzT1B6bjRuZnlhWlQweFMzMXl0WWx1cUNUMzY1Z1hHQ2ky?=
- =?utf-8?B?d25QdmZac0pMWitFZlJ2emcxekV4YnY1elpZQTlGa0V2UDJJMVgvQkJpdFlr?=
- =?utf-8?B?NDNodWtEa2JKeXBmNmZPRjJCdDJaT1I5RUwzQS9IVFRkQVJDRWtxeCsrd2o1?=
- =?utf-8?B?NGpsSzZlOFhLUks1UVhDYTJITm84RWtid2JEdllUc3FSUGs0RDRoS3dDMDIw?=
- =?utf-8?B?eHhwdzJiMDJrNjBvL05qNmpSWlJuS1lwbXlnMndOQW4zb3FZK3R5Zz09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 09afed3d-6a8a-4986-0dee-08da3412c0f4
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5304.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2022 12:27:18.1058
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HGC3X6b466dvBxNL662UhBpkNwW7dW1Nrrw0Si6kE8FSx7z7GhyDM/uvb9uEbpzqlMZssNLMleF7ZxrU5GNKjA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3812
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCHSETS] v14 fsdax-rmap + v11 fsdax-reflink
+To:     Dan Williams <dan.j.williams@intel.com>,
+        "Darrick J. Wong" <djwong@kernel.org>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jane Chu <jane.chu@oracle.com>,
+        Goldwyn Rodrigues <rgoldwyn@suse.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        <linmiaohe@huawei.com>
+References: <20220508143620.1775214-1-ruansy.fnst@fujitsu.com>
+ <20220511000352.GY27195@magnolia>
+ <20220511014818.GE1098723@dread.disaster.area>
+ <CAPcyv4h0a3aT3XH9qCBW3nbT4K3EwQvBSD_oX5W=55_x24-wFA@mail.gmail.com>
+ <20220510192853.410ea7587f04694038cd01de@linux-foundation.org>
+ <20220511024301.GD27195@magnolia>
+ <20220510222428.0cc8a50bd007474c97b050b2@linux-foundation.org>
+ <20220511151955.GC27212@magnolia>
+ <CAPcyv4gwV5ReuCUbJHZPVPUJjnaGFWibCLLsH-XEgyvbn9RkWA@mail.gmail.com>
+From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
+In-Reply-To: <CAPcyv4gwV5ReuCUbJHZPVPUJjnaGFWibCLLsH-XEgyvbn9RkWA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-yoursite-MailScanner-ID: 0124C4D1716B.A2F85
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/10/2022 7:00 PM, Jason Gunthorpe wrote:
-> On Tue, May 10, 2022 at 06:56:02PM +0530, Abhishek Sahu wrote:
->>> We can add a directive to enforce an alignment regardless of the field
->>> size.  I believe the feature ioctl header is already going to be eight
->>> byte aligned, so it's probably not strictly necessary, but Jason seems
->>> to be adding more of these directives elsewhere, so probably a good
->>> idea regardless.  Thanks,
-> 
->> So, should I change it like
+
+
+在 2022/5/11 23:46, Dan Williams 写道:
+> On Wed, May 11, 2022 at 8:21 AM Darrick J. Wong <djwong@kernel.org> wrote:
 >>
->> __u8    low_power_state __attribute__((aligned(8)));
+>> Oan Tue, May 10, 2022 at 10:24:28PM -0700, Andrew Morton wrote:
+>>> On Tue, 10 May 2022 19:43:01 -0700 "Darrick J. Wong" <djwong@kernel.org> wrote:
+>>>
+>>>> On Tue, May 10, 2022 at 07:28:53PM -0700, Andrew Morton wrote:
+>>>>> On Tue, 10 May 2022 18:55:50 -0700 Dan Williams <dan.j.williams@intel.com> wrote:
+>>>>>
+>>>>>>> It'll need to be a stable branch somewhere, but I don't think it
+>>>>>>> really matters where al long as it's merged into the xfs for-next
+>>>>>>> tree so it gets filesystem test coverage...
+>>>>>>
+>>>>>> So how about let the notify_failure() bits go through -mm this cycle,
+>>>>>> if Andrew will have it, and then the reflnk work has a clean v5.19-rc1
+>>>>>> baseline to build from?
+>>>>>
+>>>>> What are we referring to here?  I think a minimal thing would be the
+>>>>> memremap.h and memory-failure.c changes from
+>>>>> https://lkml.kernel.org/r/20220508143620.1775214-4-ruansy.fnst@fujitsu.com ?
+>>>>>
+>>>>> Sure, I can scoot that into 5.19-rc1 if you think that's best.  It
+>>>>> would probably be straining things to slip it into 5.19.
+>>>>>
+>>>>> The use of EOPNOTSUPP is a bit suspect, btw.  It *sounds* like the
+>>>>> right thing, but it's a networking errno.  I suppose livable with if it
+>>>>> never escapes the kernel, but if it can get back to userspace then a
+>>>>> user would be justified in wondering how the heck a filesystem
+>>>>> operation generated a networking errno?
+>>>>
+>>>> <shrug> most filesystems return EOPNOTSUPP rather enthusiastically when
+>>>> they don't know how to do something...
+>>>
+>>> Can it propagate back to userspace?
 >>
->>  Or
+>> AFAICT, the new code falls back to the current (mf_generic_kill_procs)
+>> failure code if the filesystem doesn't provide a ->memory_failure
+>> function or if it returns -EOPNOSUPP.  mf_generic_kill_procs can also
+>> return -EOPNOTSUPP, but all the memory_failure() callers (madvise, etc.)
+>> convert that to 0 before returning it to userspace.
 >>
->> __aligned_u64 low_power_state
+>> I suppose the weirder question is going to be what happens when madvise
+>> starts returning filesystem errors like EIO or EFSCORRUPTED when pmem
+>> loses half its brains and even the fs can't deal with it.
 > 
-> You should be explicit about padding, add a reserved to cover the gap.
-> 
-> Jasno
+> Even then that notification is not in a system call context so it
+> would still result in a SIGBUS notification not a EOPNOTSUPP return
+> code. The only potential gap I see are what are the possible error
+> codes that MADV_SOFT_OFFLINE might see? The man page is silent on soft
+> offline failure codes. Shiyang, that's something to check / update if
+> necessary.
+
+According to the code around MADV_SOFT_OFFLINE, it will return -EIO when 
+the backend is NVDIMM.
+
+Here is the logic:
+  madvise_inject_error() {
+      ...
+      if (MADV_SOFT_OFFLINE) {
+          ret = soft_offline_page() {
+              ...
+              /* Only online pages can be soft-offlined (esp., not 
+ZONE_DEVICE). */
+              page = pfn_to_online_page(pfn);
+              if (!page) {
+                  put_ref_page(ref_page);
+                  return -EIO;
+              }
+              ...
+          }
+      } else {
+          ret = memory_failure()
+      }
+      return ret
+  }
 
 
- Thanks Jason.
+--
+Thanks,
+Ruan.
 
- So, I need to make it like following. Correct ?
 
- __u8 low_power_state;
- __u8 reserved[7];
-
- It seems, then this aligned attribute should not be required.
-
- Thanks,
- Abhishek

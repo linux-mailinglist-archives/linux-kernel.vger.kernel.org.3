@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 753C0525291
+	by mail.lfdr.de (Postfix) with ESMTP id C0C68525292
 	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:32:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356424AbiELQb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 12:31:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58760 "EHLO
+        id S1356475AbiELQcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 12:32:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242065AbiELQbz (ORCPT
+        with ESMTP id S1352659AbiELQb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 12:31:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB00C63393
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 09:31:54 -0700 (PDT)
+        Thu, 12 May 2022 12:31:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1908F63393
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 09:31:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9D235B829AF
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 16:31:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 841E7C34100;
-        Thu, 12 May 2022 16:31:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A512E61FD8
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 16:31:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF14DC385B8;
+        Thu, 12 May 2022 16:31:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652373112;
-        bh=xh0dzvzjouPjkfWDaavilhb4zB9wsz2ZUVj1FOb1X4Q=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=h73JvsOLfTfwsA0mGsIfgLLc0a2lK2kMgdDflt+e/UFhtrn6msq+/4nz8OyqyxU8/
-         dW5dndF7q+MbSPg479IG8fb2jyArWU30mEsVHZjRW72JE+RbbDp6wBPeWUKtX0Rj+s
-         pxK+/r0wuKp4+0sSeZQxmcgYqRAddwCvb9EWqsWNxra6wXqXwG+7HyiYnZycZGaLiv
-         5gWOnASCPSVFPSx1o7+SG5POZMjqWPozfeBDpANCO/cNIfLE0tjowuuzyexh/rEno0
-         jCwHkavFEW/SH7Ua0mgvzPK7ySxIqK7DmeJBGI92ub7sg/8SCXMxtGyEEZzMe3Fwxi
-         6ExAVwM2iFZfA==
+        s=k20201202; t=1652373115;
+        bh=h9Kzf5/SsxRvY1gZjEU/igSn6fpGqPvspFpuVtnK7kg=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=rTvb2kyn7eb/9ukf8eciK2lLPwcjnxvnLxM9dpZrft3IfljA2cbtJluyjuT1n1jMH
+         Vs5Z4tv+Rd2RZrxL7VXxSkWZ4BaBTUlRRlSE5dG4xrPlZDH5cbEYevBxXMCyayeVBR
+         oNUTzQbIH59naXSQ6qj7RePOy56WOl9xIpp34+pKlUKS1sp1GCAHunQUjRI/PBidi7
+         k+Hv3ggAN//z0IzCVH8Job6hYYLQWQcKYjS+otsDnTMTx5gI4hoaAHeMlFK3oWoEY+
+         BwC2p8UaLodULQvI4znXS1LHvZqvdXSKPGJu8379wV0PW19mYGDNgIIgiLd6xSBQ8x
+         46WYRbHyyoYew==
 From:   Mark Brown <broonie@kernel.org>
-To:     linmq006@gmail.com, Takashi Iwai <tiwai@suse.com>,
-        lgirdwood@gmail.com, krzysztof.kozlowski@linaro.org,
-        linux-kernel@vger.kernel.org, s.nawrocki@samsung.com,
-        alsa-devel@alsa-project.org, xc-racer2@live.ca, perex@perex.cz
-In-Reply-To: <20220512043828.496-1-linmq006@gmail.com>
-References: <20220512043828.496-1-linmq006@gmail.com>
-Subject: Re: [PATCH] ASoC: samsung: Fix refcount leak in aries_audio_probe
-Message-Id: <165237311026.1053236.8801361926991753274.b4-ty@kernel.org>
-Date:   Thu, 12 May 2022 17:31:50 +0100
+To:     pierre-louis.bossart@linux.intel.com, kai.vehmanen@linux.intel.com,
+        ranjani.sridharan@linux.intel.com, tiwai@suse.com,
+        zhengbin13@huawei.com, linux-kernel@vger.kernel.org,
+        daniel.baluta@nxp.com, alsa-devel@alsa-project.org,
+        lgirdwood@gmail.com, sound-open-firmware@alsa-project.org,
+        perex@perex.cz
+Cc:     gaochao49@huawei.com
+In-Reply-To: <20220512013728.4128903-1-zhengbin13@huawei.com>
+References: <20220512013728.4128903-1-zhengbin13@huawei.com>
+Subject: Re: [PATCH -next] ASoC: SOF: amd: add missing platform_device_unregister in acp_pci_rn_probe
+Message-Id: <165237311250.1053236.5667344558272155246.b4-ty@kernel.org>
+Date:   Thu, 12 May 2022 17:31:52 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,11 +58,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 May 2022 08:38:28 +0400, Miaoqian Lin wrote:
-> of_parse_phandle() returns a node pointer with refcount
-> incremented, we should use of_node_put() on it when done.
-> If extcon_find_edev_by_node() fails, it doesn't call of_node_put()
-> Calling of_node_put() after extcon_find_edev_by_node() to fix this.
+On Thu, 12 May 2022 09:37:28 +0800, Zheng Bin wrote:
+> acp_pci_rn_probe misses a call platform_device_unregister in error path,
+> this patch fixes that.
 > 
 > 
 
@@ -69,8 +70,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: samsung: Fix refcount leak in aries_audio_probe
-      commit: bf4a9b2467b775717d0e9034ad916888e19713a3
+[1/1] ASoC: SOF: amd: add missing platform_device_unregister in acp_pci_rn_probe
+      commit: cbcab8cd737c74c20195c31d647e19f7cb49c9b8
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

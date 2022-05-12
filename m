@@ -2,119 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FFEF5255E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 537645255EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350403AbiELTjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 15:39:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59910 "EHLO
+        id S1358153AbiELTjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 15:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358114AbiELTj2 (ORCPT
+        with ESMTP id S1358144AbiELTjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 15:39:28 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCA7268E91;
-        Thu, 12 May 2022 12:39:27 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id 9771C1F45802
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652384366;
-        bh=l7sEGPwFChsQe883K+Tm9Z1Antz2QzvNm5fjecKjZro=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MiRat4ZX8kCJFkC9cOzTnSv5u0RYAj5LmdftjvZ1b1Pv9LYRgjAST3ZsIo14/Lq4U
-         8xjLPDuf16rEYbWZ25pXgAcaLIyyeGdtuKjf8bdi0+QLHfeZ2ohyGerWTSeHNHdDvn
-         Ib43klOczH6uRZgywp9LsyfFRvRH5pfDlwqHlIFO9rPjL1/d8B+vK5eaeAYN3qQWRG
-         KmTKJRc/r1PjnE4gZJAQXS4FtikcBXIcjODVsKltLiZMdBActDruHRZc1VVFXM/ONE
-         +prPluUCKcrIuhvfPHz0j9YwwJRP7A5AFJQEal2Gv8u66T2XYwLMr9+TzLghEU447M
-         nNJXeXWcALSOA==
-Date:   Thu, 12 May 2022 15:39:17 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>
-Cc:     Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>,
-        George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v12, 00/17] media: mtk-vcodec: support for M8192 decoder
-Message-ID: <20220512193917.tu6waopwagm3oyaz@notapiano>
-References: <20220512021950.29087-1-yunfei.dong@mediatek.com>
+        Thu, 12 May 2022 15:39:37 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D892252DD0;
+        Thu, 12 May 2022 12:39:34 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.94.2)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1npEeq-0004vd-NO; Thu, 12 May 2022 21:39:32 +0200
+Date:   Thu, 12 May 2022 20:39:27 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     linux-block@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Tom Rini <trini@konsulko.com>, Jens Axboe <axboe@kernel.dk>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH v3 4/5] mtd_blkdevs: add option to enable scanning for
+ partitions
+Message-ID: <Yn1ibyUeXZttNX2a@makrotopia.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220512021950.29087-1-yunfei.dong@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 10:19:33AM +0800, Yunfei Dong wrote:
-> This series adds support for mt8192 h264/vp8/vp9 decoder drivers. Firstly, refactor
-> power/clock/interrupt interfaces for mt8192 is lat and core architecture.
-> 
-> Secondly, add new functions to get frame buffer size and resolution according
-> to decoder capability from scp side. Then add callback function to get/put
-> capture buffer in order to enable lat and core decoder in parallel, need to
-> adjust GStreamer at the same time. 
-> 
-> Then add to support MT21C compressed mode and fix v4l2-compliance fail.
-> 
-> Next, extract H264 request api driver to let mt8183 and mt8192 use the same
-> code, and adds mt8192 frame based h264 driver for stateless decoder.
-> 
-> Lastly, add vp8 and vp9 stateless decoder drivers.
-> 
-> Patches 1 refactor power/clock/interrupt interface.
-> Patches 2~4 get frame buffer size and resolution according to decoder capability.
-> Patches 5 set capture queue bytesused.
-> Patches 6 adjust GStreamer.
-> Patch 7~11 add to support MT21C compressed mode and fix v4l2-compliance fail.
-> patch 12 record capture queue format type.
-> Patch 13~14 extract h264 driver and add mt8192 frame based driver for h264 decoder.
-> Patch 15~16 add vp8 and vp9 stateless decoder drivers.
-> Patch 17 prevent kernel crash when rmmod mtk-vcodec-dec.ko
+Add Kconfig boolean CONFIG_MTD_BLOCK_PARTITIONS and enable block
+partition parsers on non-NAND mtdblock devices in case it is selected.
 
-Hi Yunfei,
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
+ drivers/mtd/Kconfig       | 11 +++++++++++
+ drivers/mtd/mtd_blkdevs.c |  4 +++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
-With this series, and the new scp.img for mt8192 [1] (still waiting to get
-merged), I was able to get the following fluster scores on
-mt8192-asurada-spherion:
+diff --git a/drivers/mtd/Kconfig b/drivers/mtd/Kconfig
+index 796a2eccbef0b8..12874dec15692a 100644
+--- a/drivers/mtd/Kconfig
++++ b/drivers/mtd/Kconfig
+@@ -69,6 +69,17 @@ config MTD_BLOCK_RO
+ 	  You do not need this option for use with the DiskOnChip devices. For
+ 	  those, enable NFTL support (CONFIG_NFTL) instead.
+ 
++config MTD_BLOCK_PARTITIONS
++	bool "Scan for partitions on MTD block devices"
++	depends on MTD_BLOCK || MTD_BLOCK_RO
++	default y if FIT_PARTITION
++	help
++	  Scan MTD block devices for partitions (ie. MBR, GPT, uImage.FIT, ...).
++	  (NAND devices are omitted, ubiblock should be used instead when)
++
++	  Unless your MTD partitions contain sub-partitions mapped using a
++	  partition table, say no.
++
+ comment "Note that in some cases UBI block is preferred. See MTD_UBI_BLOCK."
+ 	depends on MTD_BLOCK || MTD_BLOCK_RO
+ 
+diff --git a/drivers/mtd/mtd_blkdevs.c b/drivers/mtd/mtd_blkdevs.c
+index f7317211146550..c67ce2e6fbeb0a 100644
+--- a/drivers/mtd/mtd_blkdevs.c
++++ b/drivers/mtd/mtd_blkdevs.c
+@@ -359,7 +359,9 @@ int add_mtd_blktrans_dev(struct mtd_blktrans_dev *new)
+ 	} else {
+ 		snprintf(gd->disk_name, sizeof(gd->disk_name),
+ 			 "%s%d", tr->name, new->devnum);
+-		gd->flags |= GENHD_FL_NO_PART;
++
++		if (!IS_ENABLED(CONFIG_MTD_BLOCK_PARTITIONS) || mtd_type_is_nand(new->mtd))
++			gd->flags |= GENHD_FL_NO_PART;
+ 	}
+ 
+ 	set_capacity(gd, ((u64)new->size * tr->blksize) >> 9);
+-- 
+2.36.0
 
-VP8: 59/61
-VP9: 249/303
-H.264: 92/135
-
-So for the whole series:
-
-Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-
-Thanks,
-Nícolas
-
-[1] https://lore.kernel.org/all/2537b84fbba82a77ee0a517b12bdcdd5e6ac1503.camel@mediatek.com/

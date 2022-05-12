@@ -2,100 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9377B524934
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:38:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A9C524936
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352132AbiELJiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 05:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
+        id S1345740AbiELJic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 05:38:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352133AbiELJhv (ORCPT
+        with ESMTP id S1351040AbiELJiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 05:37:51 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04F26FD1A;
-        Thu, 12 May 2022 02:37:38 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so7324951pju.2;
-        Thu, 12 May 2022 02:37:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:content-transfer-encoding:date:message-id:cc:subject
-         :from:to:references:in-reply-to;
-        bh=iZFrk+1WuAX7Uovgz4zajtM6wW58xVr5fx7WagK6QTE=;
-        b=iuLH0XfcHwUlF/vNb9nAe18b2ojIBUCTOjyojcLYaPl/T7OisuyAs147hvM1DKucIB
-         DZ23cJSUA41Gsojj/ZqZ/X81uqu/i/NKlsjSWQgOuI6GSZ+bdoIkTlv8mAaeEv9ry0ci
-         1bBnhdA4CY9RlEuOQXhhb7sgDR9VPA27HPvMuKu/JtntNi3sQmVAp384gNS+BmHiA/fs
-         F+kXkG485qOdYmtwpta5IljifuUEMpVStwRG6QgEepeEez4mIlpv9mejVuKY1z/5cNm6
-         T2F35aXq0/Dm/s+OCm0ufX/idfqkOWH8r/OeBNMYGKN/aa+SoBf9AE8BlwF6Xs2kuMNZ
-         JJJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:content-transfer-encoding:date
-         :message-id:cc:subject:from:to:references:in-reply-to;
-        bh=iZFrk+1WuAX7Uovgz4zajtM6wW58xVr5fx7WagK6QTE=;
-        b=QJjMbdL0Y+jKWVwhMAHvGYf7r3qYUW01i23kPMa8jAGfZMt2Orn63K5BDhbHMPzRc5
-         pwYOJBqzd4qTwoHciESAWzDEAlbjbPC1a1KHS6dOkM8u1tBawkQlHPKgy1kMahw5rTO0
-         t3zFS15W0kRVcvHlXqYkEuv0sLPmWSx1/TC62qVO2Oam/Kb33FkBHgQhnjLt7AAMASDG
-         RcrxeGmTXqPxQUbbQvHSAOiKJqNsUDORG8O0jyvFnEaJnGFl0K1GaDRLv8aVBoI8nvAQ
-         3dWA1oIqgEEh3ncLwFJM3K6LBVU824UWANllCF1zr6MJqNOvqV+hFdnnq/nAh70w5hrB
-         AeeA==
-X-Gm-Message-State: AOAM530+0nJcWdqbVVWljaXjngK4klVkDLAuodbkybLixv/rWuL0qoky
-        E48wQiW2U0LiqTfyRqRrRSQ=
-X-Google-Smtp-Source: ABdhPJzQfordeKPqWJc5pKiQnLmj2Bbc9ov9S+FxXYv9EgRzW0ywBuhOTZVWRfnZoW1+3gLBwaTWzQ==
-X-Received: by 2002:a17:903:32d0:b0:15e:8cbc:fd39 with SMTP id i16-20020a17090332d000b0015e8cbcfd39mr30500975plr.95.1652348258335;
-        Thu, 12 May 2022 02:37:38 -0700 (PDT)
-Received: from localhost ([49.204.239.218])
-        by smtp.gmail.com with ESMTPSA id a10-20020a170902b58a00b0015e8d4eb2acsm3364350pls.246.2022.05.12.02.37.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 02:37:37 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 12 May 2022 15:07:32 +0530
-Message-Id: <CJXOKK6WT06F.109YU66ZCBP5T@skynet-linux>
-Cc:     <bjorn.andersson@linaro.org>, "Andy Gross" <agross@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "open list" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: msm8916: Fix typo in pronto
- remoteproc node
-From:   "Sireesh Kodali" <sireeshkodali1@gmail.com>
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>
-X-Mailer: aerc 0.9.0
-References: <20220510042654.71152-1-sireeshkodali1@gmail.com>
- <20220510042654.71152-3-sireeshkodali1@gmail.com>
- <81365629-6cf0-f320-e684-4fb40b829399@linaro.org>
-In-Reply-To: <81365629-6cf0-f320-e684-4fb40b829399@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 12 May 2022 05:38:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2069157D;
+        Thu, 12 May 2022 02:38:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0ED5619E2;
+        Thu, 12 May 2022 09:38:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0F7DC385B8;
+        Thu, 12 May 2022 09:38:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652348300;
+        bh=B4K6BQAm7NYqTK919kivzANfZ0FJ/7Ep6q3oO1tLOAI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PdxQSjoVPD8RLWWhrFXL+8R0OVN9ab5CuEWNR4QcUNtEwhfmm5LoTwuDrYmBWA2V+
+         /45Zsk0wO0U2nTrqc7C3bvkndNDh6QJdz6nICo0YqXWSVg4KE4Bsixe9X0g2+uYz7W
+         FR4AptYXg7ceE+pR5JLNhacJc1MWigRuZ5Jm7WVM=
+Date:   Thu, 12 May 2022 11:38:17 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Zhou jie <zhoujie@nfschina.com>
+Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers:Modify the return value to void
+Message-ID: <YnzViTaLcvP4eBqZ@kroah.com>
+References: <20220512093210.GA6602@localhost.localdomain>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220512093210.GA6602@localhost.localdomain>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed May 11, 2022 at 11:41 PM IST, Krzysztof Kozlowski wrote:
-> On 10/05/2022 06:26, Sireesh Kodali wrote:
-> > The smem-state properties for the pronto node were incorrectly labelled=
-,
-> > reading `qcom,state*` rather than `qcom,smem-state*`. Fix that, allowin=
-g
-> > the stop state to be used.
-> >=20
-> > Fixes: 88106096cbf8 ("ARM: dts: msm8916: Add and enable wcnss node")
-> >=20
-> > Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
->
-> No blank lines between tags, please.
->
-> Best regards,
-> Krzysztof
+On Thu, May 12, 2022 at 05:32:10PM +0800, Zhou jie wrote:
+> drivers:Modify the return value to void
+> 
+> Signed-off-by: Zhou jie <zhoujie@nfschina.com>
+> ---
+>  drivers/usb/serial/mos7720.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/serial/mos7720.c b/drivers/usb/serial/mos7720.c
+> index 1e12b5f30dcc..e944c32505da 100644
+> --- a/drivers/usb/serial/mos7720.c
+> +++ b/drivers/usb/serial/mos7720.c
+> @@ -239,13 +239,12 @@ static int read_mos_reg(struct usb_serial *serial, unsigned int serial_portnum,
+>  
+>  #ifdef CONFIG_USB_SERIAL_MOS7715_PARPORT
+>  
+> -static inline int mos7715_change_mode(struct mos7715_parport *mos_parport,
+> +static void mos7715_change_mode(struct mos7715_parport *mos_parport,
+>  				      enum mos7715_pp_modes mode)
+>  {
+>  	mos_parport->shadowECR = mode;
+>  	write_mos_reg(mos_parport->serial, dummy, MOS7720_ECR,
+>  		      mos_parport->shadowECR);
+> -	return 0;
+>  }
+>  
+>  static void destroy_mos_parport(struct kref *kref)
+> -- 
+> 2.18.2
+> 
 
-Will fix in v2
+Hi,
 
-Thanks,
-Sireesh
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/SubmittingPatches for what is needed in order to
+  properly describe the change.
+
+- You did not write a descriptive Subject: for the patch, allowing Greg,
+  and everyone else, to know what this patch is all about.  Please read
+  the section entitled "The canonical patch format" in the kernel file,
+  Documentation/SubmittingPatches for what a proper Subject: line should
+  look like.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot

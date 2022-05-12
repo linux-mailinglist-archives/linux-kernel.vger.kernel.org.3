@@ -2,249 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7910B524A3D
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2876D524A43
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352603AbiELK2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 06:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39184 "EHLO
+        id S1352621AbiELKaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 06:30:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235697AbiELK2E (ORCPT
+        with ESMTP id S235697AbiELKaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 06:28:04 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D233CA75
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:28:03 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id n10so9297399ejk.5
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:28:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=GPIjrgvs4BQNA9eCtoSaAMxO4nClRBlQSuiV6w2t7iw=;
-        b=u7QsPViOON0my/3Vld/mwSoBJb7PZwySeGRnOJ3yY24HRVfpYdp7uLLQxmI3PtDrhr
-         udw+fHERr5nBaDWToCkIOcvYPBrd5Rz08CCqtBhNePRwdkbzaFDt+YXqySK15s2BYJ38
-         /sOud++DWMkozAm1jJ3hyXQeU9ZwJVZfm0iBNH02h/TmTDE59fJ1rMhyAwM5wnNijwHD
-         sb+n/ofSHeEezWiLWrmTPUH7hm1Ou7DBFkgEFWwVVN/s68UZx6BP6vut/3e+E5HandL6
-         Dl3Q7pDovpFzmqQxwz8IAe7G07GS0YfatOAkvHq3uJVgau5Y2YEVQokCGDkvm3Gf+efb
-         XIHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=GPIjrgvs4BQNA9eCtoSaAMxO4nClRBlQSuiV6w2t7iw=;
-        b=g1l5A4HtN15j3rJ+0eKgQhnb0Lmlhe1/+R3fCUx4GKArKyYRJAPSMNuX3wclzqkgc8
-         RzGpH4fEy1N6l/GQDJogtsHinA9DmJB4jTH5I5Lo0haUZY9lg92yQmgdRzGknzl4KkwR
-         eEJuqvtlKuWrp7hnriwBOdaCvRwMTxE1T6Ae3l2lXPdpFSXDWzrClBwNBi4ZB8jByl3F
-         vNjBY/blLS+TtlC5nOSzpmei3ucc5S9D4mvTqDaHlbsahZoP1GqdzqwnkmLqjAOIL1zi
-         y+xeA0O63dAKwJslL9QlsRi/DNqEcfAmRDPQEXBO/cBa+C65PSrWbvoZdrClRFfAXFet
-         OIBg==
-X-Gm-Message-State: AOAM530e0C72mob03BCVMmNMPOAnnrN4x9aVLOOvLfZz5wo1IspW1oF5
-        7+AwkgUPzwLnINNa9msZVmhXCg==
-X-Google-Smtp-Source: ABdhPJz6C1/W+PiAfKbM9TB2mSR6hgAMj4ZX8G5/UhG7wrslGlftRqkvDmWlYsTJem5hepeesEMzQA==
-X-Received: by 2002:a17:906:a188:b0:6f4:f5cd:27bd with SMTP id s8-20020a170906a18800b006f4f5cd27bdmr29318356ejy.406.1652351281599;
-        Thu, 12 May 2022 03:28:01 -0700 (PDT)
-Received: from [192.168.0.158] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id q18-20020a1709064cd200b006f3ef214e23sm1911302ejt.137.2022.05.12.03.28.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 03:28:01 -0700 (PDT)
-Message-ID: <32c80a79-abd5-3fd2-cbb4-e2ae93c539da@linaro.org>
-Date:   Thu, 12 May 2022 12:28:00 +0200
+        Thu, 12 May 2022 06:30:15 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF72222C28;
+        Thu, 12 May 2022 03:30:09 -0700 (PDT)
+X-UUID: c2120aac2697453a82e4dac9089f2101-20220512
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:4756a4c6-a249-4f39-be8f-99541c429198,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-INFO: VERSION:1.1.4,REQID:4756a4c6-a249-4f39-be8f-99541c429198,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:45
+X-CID-META: VersionHash:faefae9,CLOUDID:a61a0fa7-eab7-4b74-a74d-5359964535a9,C
+        OID:1347ce9edb3e,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil
+        ,QS:0,BEC:nil
+X-UUID: c2120aac2697453a82e4dac9089f2101-20220512
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 674903071; Thu, 12 May 2022 18:30:06 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 12 May 2022 18:30:05 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 12 May 2022 18:30:05 +0800
+Message-ID: <694b90f3d95d6e029d343d98e84c888ddf4eb855.camel@mediatek.com>
+Subject: Re: [PATCH v18 1/6] soc: mediatek: mutex: add common interface for
+ modules setting
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Moudy Ho <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        <tfiga@chromium.org>, <drinkcat@chromium.org>,
+        <pihsun@chromium.org>, <hsinyi@google.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        <allen-kh.cheng@mediatek.com>, <xiandong.wang@mediatek.com>,
+        <randy.wu@mediatek.com>, <jason-jh.lin@mediatek.com>,
+        <roy-cw.yeh@mediatek.com>, <river.cheng@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <cellopoint.kai@gmail.com>
+Date:   Thu, 12 May 2022 18:30:05 +0800
+In-Reply-To: <20220512084139.15086-2-moudy.ho@mediatek.com>
+References: <20220512084139.15086-1-moudy.ho@mediatek.com>
+         <20220512084139.15086-2-moudy.ho@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v15 10/10] ARM: dts: Add Sunplus SP7021-Demo-V3 board
- device tree
-Content-Language: en-US
-To:     Qin Jian <qinjian@cqplus1.com>, sboyd@kernel.org
-Cc:     robh+dt@kernel.org, mturquette@baylibre.com, tglx@linutronix.de,
-        maz@kernel.org, p.zabel@pengutronix.de, linux@armlinux.org.uk,
-        arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <cover.1652329411.git.qinjian@cqplus1.com>
- <daeccdfb9655e549656af0af955a4697871e3ab0.1652329411.git.qinjian@cqplus1.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <daeccdfb9655e549656af0af955a4697871e3ab0.1652329411.git.qinjian@cqplus1.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2022 08:31, Qin Jian wrote:
-> Add the basic support for Sunplus SP7021-Demo-V3 board.
+On Thu, 2022-05-12 at 16:41 +0800, Moudy Ho wrote:
+> In order to allow multiple modules to operate MUTEX hardware through
+> a common interfrace, a flexible index "mtk_mutex_table_index" needs
+> to
+> be added to replace original component ID so that like DDP and MDP
+> can add their own MUTEX table settings independently.
 > 
-> Signed-off-by: Qin Jian <qinjian@cqplus1.com>
+> In addition, 4 generic interface "mtk_mutex_set_mod",
+> "mtk_mutex_set_sof",
+> "mtk_mutex_clear_mod" and "mtk_mutex_clear_sof" have been added,
+> which is
+> expected to replace the "mtk_mutex_add_comp" and
+> "mtk_mutex_remove_comp"
+> pair originally dedicated to DDP in the future.
+> 
+> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
 > ---
->  MAINTAINERS                                  |   1 +
->  arch/arm/boot/dts/sunplus-sp7021-achip.dtsi  |  85 +++++
->  arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts |  27 ++
->  arch/arm/boot/dts/sunplus-sp7021.dtsi        | 369 +++++++++++++++++++
->  4 files changed, 482 insertions(+)
->  create mode 100644 arch/arm/boot/dts/sunplus-sp7021-achip.dtsi
->  create mode 100644 arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts
->  create mode 100644 arch/arm/boot/dts/sunplus-sp7021.dtsi
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 9cf30e776..b55ec0768 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2747,6 +2747,7 @@ F:	Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
->  F:	Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
->  F:	Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
->  F:	Documentation/devicetree/bindings/reset/sunplus,reset.yaml
-> +F:	arch/arm/boot/dts/sunplus-sp7021*.dts*
->  F:	arch/arm/configs/sp7021_*defconfig
->  F:	arch/arm/mach-sunplus/
->  F:	drivers/clk/clk-sp7021.c
-> diff --git a/arch/arm/boot/dts/sunplus-sp7021-achip.dtsi b/arch/arm/boot/dts/sunplus-sp7021-achip.dtsi
-> new file mode 100644
-> index 000000000..1560c95d9
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/sunplus-sp7021-achip.dtsi
-> @@ -0,0 +1,85 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Device Tree Source for Sunplus SP7021
-> + *
-> + * Copyright (C) 2021 Sunplus Technology Co.
-> + */
-> +
-> +#include "sunplus-sp7021.dtsi"
-> +
-> +/ {
-> +	compatible = "sunplus,sp7021-achip";
 
-This does not match your bindings.
+Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
 
-> +	model = "Sunplus SP7021 (CA7)";
-> +	#address-cells = <1>;
-> +	#size-cells = <1>;
-> +	interrupt-parent = <&gic>;
-> +
-> +	clocks {
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		ranges;
-> +
-> +		extclk: clk@osc0 {
-
-This is not a valid device tree. Please run make dtbs_check and compile
-dtbs with W=1.
-
-> +			compatible = "fixed-clock";
-> +			#clock-cells = <0>;
-> +			clock-frequency = <27000000>;
-> +			clock-output-names = "extclk";
-> +		};
-> +
-> +		divextclk: clk@0 {
-
-How is it suppose to pass any automated checks if there is no unit address?
-
-> +			compatible = "fixed-factor-clock";
-> +			#clock-cells = <0>;
-> +			clocks  = <&extclk>;
-> +			clock-mult = <1>;
-> +			clock-div = <2>;
-> +			clock-output-names = "extdivclk";
-> +		};
-> +
-> +		A_pll0: clk@A_pll0 {
-
-This is not a valid device tree.
-
-> +			compatible = "fixed-clock";
-> +			#clock-cells = <0>;
-> +			clock-frequency = <2000000000>;
-> +			clock-output-names = "A_pll0";
-> +		};
-> +	};
-> +
-> +	cpus {
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		cpu0: cpu@0 {
-> +			compatible = "arm,cortex-a7";
-> +			device_type = "cpu";
-> +			reg = <0>;
-> +			clock-frequency = <931000000>;
-> +		};
-> +		cpu1: cpu@1 {
-> +			compatible = "arm,cortex-a7";
-> +			device_type = "cpu";
-> +			reg = <1>;
-> +			clock-frequency = <931000000>;
-> +		};
-> +		cpu2: cpu@2 {
-> +			compatible = "arm,cortex-a7";
-> +			device_type = "cpu";
-> +			reg = <2>;
-> +			clock-frequency = <931000000>;
-> +		};
-> +		cpu3: cpu@3 {
-> +			compatible = "arm,cortex-a7";
-> +			device_type = "cpu";
-> +			reg = <3>;
-> +			clock-frequency = <931000000>;
-> +		};
-> +	};
-> +
-> +	arm-pmu {
-> +		compatible = "arm,cortex-a7-pmu";
-> +		interrupts = <GIC_SPI 219 IRQ_TYPE_LEVEL_HIGH>,
-> +			     <GIC_SPI 220 IRQ_TYPE_LEVEL_HIGH>,
-> +			     <GIC_SPI 221 IRQ_TYPE_LEVEL_HIGH>,
-> +			     <GIC_SPI 222 IRQ_TYPE_LEVEL_HIGH>;
-> +		interrupt-affinity = <&cpu0>, <&cpu1>, <&cpu2>, <&cpu3>;
-> +	};
-> +
-> +};
-> diff --git a/arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts b/arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts
-> new file mode 100644
-> index 000000000..05e164115
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts
-> @@ -0,0 +1,27 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Device Tree Source for Sunplus SP7021 Demo V3 SBC board
-> + *
-> + * Copyright (C) Sunplus Technology Co.
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "sunplus-sp7021-achip.dtsi"
-> +
-> +/ {
-> +	compatible = "sunplus,sp7021-demo-v3";
-
-This does not match your bindings.
-
-Please run make dtbs_check.
-
-> +	model = "SP7021/CA7/Demo_V3";
-> +	#address-cells = <1>;
-> +	#size-cells = <1>;
-> +
-> +	chosen {
-> +		bootargs = "console=ttyS0,115200 loglevel=8 earlycon";
-
-No bootargs.
-
-I'll stop reviewing. This either does not compile, does not work or does
-not pass automated checks. There is no point to use reviewers time if
-the tools are doing the same job, so use the tools and then submit DTS.
-
-Best regards,
-Krzysztof

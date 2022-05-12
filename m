@@ -2,91 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E627F524E58
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9DA524E61
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354460AbiELNcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 09:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55330 "EHLO
+        id S1354468AbiELNgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 09:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354446AbiELNcn (ORCPT
+        with ESMTP id S1354320AbiELNgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 09:32:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400C013CA02;
-        Thu, 12 May 2022 06:32:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA4C060FF9;
-        Thu, 12 May 2022 13:32:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91E26C385B8;
-        Thu, 12 May 2022 13:32:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652362362;
-        bh=iea0wvYMraNHhc9IlNAJyT9swOt+7dgRX/XiM8IK73E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V9r8yQIeB0P4EdEg/9ZFaSn9+w3/lt4RTec+WroBnpB3Obe613rBheuB95t2Jc2BX
-         rkuLU46AhA9Ar/cCLsSjEHVl02GieI6j2b3F+HZlHkWS452JUZX6Bg2KeE5B+tnthp
-         8aJeCVvMxLaGdkwIWw8+tNlr0Y+DfxmXQvs9O1vk=
-Date:   Thu, 12 May 2022 15:32:39 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 00/70] 5.10.115-rc1 review
-Message-ID: <Yn0Md78PJu1+nIKP@kroah.com>
-References: <20220510130732.861729621@linuxfoundation.org>
- <CADVatmNyky-XXaeAiQ5ypZ7+7F7fzLshB4bNWt5v3RdnXStsOg@mail.gmail.com>
+        Thu, 12 May 2022 09:36:35 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718B9326FA
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:36:33 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652362592;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7LGVxfd1csrHyg3a3ARuqfO22ZbRRJvUq3doY7jKQ9c=;
+        b=0PtyaDyLEdwKdNEmqZBly6HUlyPcXUUl7mjwtRW6N1p0cG2kNfHBRkfv712guwf01Fb9Px
+        DZ/RauThF3XYjocUeBUe+S9pWC6F1bdc60nWiIcDUlpSEDCVgn3itdnc5/MAXpDpujo946
+        41Tfl6AYKE1ESSxjyqfpRiaFx+eiPt1V4V5XqR92PhYo9TiZb+pHrZZM5FUmH/5M1cxQnY
+        KmZuY3dWLFyqnrHTWIJmVZRZEambTmXCpLcfn5xm7zQrkH1MZkRYV/8PYCX46R+JEzQldt
+        4bM2fDfRkoc1xILrh0XZTcmRgadFvKh2aaysWSq8sKo5rD10j557WnH82p7svw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652362592;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7LGVxfd1csrHyg3a3ARuqfO22ZbRRJvUq3doY7jKQ9c=;
+        b=lDHcjCCK2ho0I/bZ1VDJrm2Tge7rsYN1+F+mxTPNZNbNYLin0MGRvODrvmVyhAww86HLOD
+        Qbg8EGBGNc1voICQ==
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [RFCv2 08/10] x86/mm: Make LAM_U48 and mappings above 47-bits
+ mutually exclusive
+In-Reply-To: <20220511022751.65540-10-kirill.shutemov@linux.intel.com>
+References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
+ <20220511022751.65540-10-kirill.shutemov@linux.intel.com>
+Date:   Thu, 12 May 2022 15:36:31 +0200
+Message-ID: <875ymax480.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADVatmNyky-XXaeAiQ5ypZ7+7F7fzLshB4bNWt5v3RdnXStsOg@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 09:44:26PM +0100, Sudip Mukherjee wrote:
-> Hi Greg,
-> 
-> On Tue, May 10, 2022 at 2:25 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 5.10.115 release.
-> > There are 70 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
-> > Anything received after that time might be too late.
-> 
-> Just some initial report for you.
-> As mentioned in the mail for 4.19-stable, it will also need
-> d422c6c0644b ("MIPS: Use address-of operator on section symbols").
-> 
-> But apart from that, there is also another failure.
-> drivers/usb/phy/phy-generic.c: In function 'usb_phy_gen_create_phy':
-> drivers/usb/phy/phy-generic.c:271:26: error: implicit declaration of
-> function 'devm_regulator_get_exclusive'; did you mean
-> 'regulator_get_exclusive'? [-Werror=implicit-function-declaration]
->   271 |         nop->vbus_draw = devm_regulator_get_exclusive(dev, "vbus");
-> 
-> This was introduced in v5.10.114 by d22d92230ffb ("usb: phy: generic:
-> Get the vbus supply") but I missed testing that release. :(
+On Wed, May 11 2022 at 05:27, Kirill A. Shutemov wrote:
+> LAM_U48 steals bits above 47-bit for tags and makes it impossible for
+> userspace to use full address space on 5-level paging machine.
 
-Should now be fixed, thanks.
+> Make these features mutually exclusive: whichever gets enabled first
+> blocks the othe one.
 
-greg k-h
+So this patch prevents a mapping above 47bit when LAM48 is enabled, but
+I fail to spot how an already existing mapping above 47bit would prevent
+LAM48 from being enabled.
+
+Maybe I'm missing something which makes this magically mutually
+exclusive.
+
+Thanks,
+
+        tglx

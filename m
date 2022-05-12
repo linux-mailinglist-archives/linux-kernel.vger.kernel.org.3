@@ -2,146 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F4F524A37
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:25:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F612524A3A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352588AbiELKY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 06:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56470 "EHLO
+        id S1352596AbiELKZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 06:25:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242164AbiELKYu (ORCPT
+        with ESMTP id S1352590AbiELKZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 06:24:50 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F6B6D1A2
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:24:49 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id ba17so5683502edb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:24:49 -0700 (PDT)
+        Thu, 12 May 2022 06:25:14 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B0A1F0DE3;
+        Thu, 12 May 2022 03:25:14 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id l11so4177599pgt.13;
+        Thu, 12 May 2022 03:25:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=VEapW+Top2YENurWwmIy1jknpQzQkhVxUu+ei/y7bf8=;
-        b=AzRFLXUwZB5rVE9Iz1oFwBohYheeKHO+txTLfnNLVvprvZdr0OPxl3Fce94rk2e7OV
-         EhSQjyOUMAihJNE0xxmpsERjOamcrIOTU15wkN1TYaUXKVMnEjoud86GIC8j1KufuTT+
-         dQVGMrNlLbZ4X9p8MSo+TspkoEKsRfL54qvL9ZmRBPgSH0FVQZhePKh1f3+vRhH0lOKZ
-         BhBOlhdsnMpRAKz2n0Z7E+PfiMdwXb15v5BMkm0yeqw9uNgiY5mZDEVt7Q59ttqpfLsV
-         MDtPLNCcuiD3gR63Rn0A+xIuPGi+owmEr7xqgFIeJt84HdQPgDXUAXw3KYJoD26TjwV+
-         Nr0A==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=B0z70l/EHNI185diYCy/yAUimxq5OV5uwPx43q+AZpw=;
+        b=lhuwnemmB/jSGn/ychoOsz2uOa4iOM5tHhVl7yscl2ciw6+64DwsL+Xgh35okGS2ov
+         40IAupoRiU6nbD+BL6OWhSyw+KCNR+XTCeR0urc0is1OS9cG+m4p2dCiT0kFSLCzZ8Lg
+         yDdtCAhTbXNgbJrYRPfVskrRWqVP5GjK092z7GWrT3nPydkvQKOFUoKr/c7QytotLtQp
+         /5WpbjPZJkAZzWypCQqXqu4Ku3yPPCWBUG9NWkQ0b6TGSCmTJdIpT+sN1ufEogwwjoQL
+         1stN2mFW2RgzCknPjAYJteruOz653xn0llTpGf8T7DafdU8lBRqgW8MqAEzXop8oxzTi
+         ryIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=VEapW+Top2YENurWwmIy1jknpQzQkhVxUu+ei/y7bf8=;
-        b=i9ash4YKHCI4SGm7hjqo2Pv4bZ60lTdfy7QEU3dxc8QLP7sSRnIELkEwrlpcpHzQFH
-         4H29b0J6maRxp89k9GiyrsltoJnWvxW2mHaNCO2bkyCOltBxStSZ0wjk+qRGXwBwaM2W
-         cLrvjKJSx6rfMqGcQlmWHTVaQVk5/PM2WCOT5R/GNKVDg7HXdcOulG3l3/I3s4zywLzT
-         dU3Nug6pIRuR6hEsMR9vmYgk6Thja9ALq7g1wPMgEI0PQVWpqkT2qMPV3DIod9gn7tN3
-         nqdjyB24Yx8xP+5eMJ5CT6+dItYFRDADFuWpn66xgegb2XQ1VJsdHq1QAMs2jaj36cLZ
-         N1ww==
-X-Gm-Message-State: AOAM531iCZQqjUY6uc7a8Dcj4ue3IG8P4A7R13J6mV4mnPN1yq1QKUa1
-        xBusOvUsnXPn7qfyuVLOMSyOsQ==
-X-Google-Smtp-Source: ABdhPJw/FVga7D2wUgL6cuJAsTgAT0uHmO6X/cEonycEE10x0TBwVAsbhwpTzWvejpqD3o1d/qlZCg==
-X-Received: by 2002:aa7:db0a:0:b0:427:db1d:b258 with SMTP id t10-20020aa7db0a000000b00427db1db258mr33681454eds.304.1652351087944;
-        Thu, 12 May 2022 03:24:47 -0700 (PDT)
-Received: from [192.168.0.158] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id p16-20020a170906615000b006f3ef214e5fsm1876701ejl.197.2022.05.12.03.24.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 03:24:47 -0700 (PDT)
-Message-ID: <e9a39eb6-d8e2-bac6-27e2-f63ef8519917@linaro.org>
-Date:   Thu, 12 May 2022 12:24:46 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=B0z70l/EHNI185diYCy/yAUimxq5OV5uwPx43q+AZpw=;
+        b=XAFQpytnttNhLaOV+Dt5a8Bj8JLrE+Y3hjaW7ozbz2llZ73CgV96/tKSxNsJo7Nj2S
+         PkLcXyRwqWneMDy+BZnTo2hDx/+ii2+E7f50yfNjoe/VqzMkZBNs5heRjuaLF9B20sKn
+         ghRDqb0mq3iMDvHQ7n6eGGozcHqQrjdDIv9ModLrV+OBf/X+EN/Tnir3oSV6Z8m2GMSY
+         XMam2Kr4i+l7JXtczSNI0WeGn1Uuzz7feTSxvw1wVSZKMs1Fv9OLBOnkdmZHHahBlm7T
+         axecHTtEjAH8XwKy4+jz5KSw6D1gyaREUAmKPvym/j/VIm4QwzJlCO2CN4nwkIayHnU1
+         uWQQ==
+X-Gm-Message-State: AOAM533jn6KDdoEbaoxYTJ4T41DxC3avvdcIv9W7J3EKH5W9BP8mKlgN
+        o4jqOZ9oNU0K02xt7y6P8pBwaHlWvn8rWQ==
+X-Google-Smtp-Source: ABdhPJymMEFui5zPZPg28ynCFM42DId6/wOlFRUPq9Z8+E/B9p2zNbfubQ8MFNob9O+vdZN3nL4V1A==
+X-Received: by 2002:a05:6a00:248d:b0:510:5d7d:18ab with SMTP id c13-20020a056a00248d00b005105d7d18abmr28783890pfv.51.1652351113560;
+        Thu, 12 May 2022 03:25:13 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:ad76:8fc:e2ba:172])
+        by smtp.gmail.com with ESMTPSA id be12-20020a170902aa0c00b0015e8d4eb1e4sm3595969plb.46.2022.05.12.03.25.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 03:25:12 -0700 (PDT)
+Date:   Thu, 12 May 2022 03:25:10 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     cgel.zte@gmail.com
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] Input: simplify the return expression of
+ da9034_touch_probe()
+Message-ID: <Ynzghmx1CkJSRVpN@google.com>
+References: <20220429055300.3852396-1-chi.minghao@zte.com.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v15 04/10] dt-bindings: clock: Add bindings for SP7021
- clock driver
-Content-Language: en-US
-To:     Qin Jian <qinjian@cqplus1.com>, sboyd@kernel.org
-Cc:     robh+dt@kernel.org, mturquette@baylibre.com, tglx@linutronix.de,
-        maz@kernel.org, p.zabel@pengutronix.de, linux@armlinux.org.uk,
-        arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <cover.1652329411.git.qinjian@cqplus1.com>
- <b5ca5d417be079a2a40a6e79ac1b246b6359a49e.1652329411.git.qinjian@cqplus1.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <b5ca5d417be079a2a40a6e79ac1b246b6359a49e.1652329411.git.qinjian@cqplus1.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220429055300.3852396-1-chi.minghao@zte.com.cn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2022 08:30, Qin Jian wrote:
-> Add documentation to describe Sunplus SP7021 clock driver bindings.
+On Fri, Apr 29, 2022 at 05:53:00AM +0000, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
 > 
-> Signed-off-by: Qin Jian <qinjian@cqplus1.com>
-> ---
-> Remove "Binding" from yaml title
-> Rename sp-sp7021.h to sunplus,sp7021-clkc.h
-
-Thanks.
-
-> ---
->  .../bindings/clock/sunplus,sp7021-clkc.yaml   | 51 +++++++++++
->  MAINTAINERS                                   |  2 +
->  .../dt-bindings/clock/sunplus,sp7021-clkc.h   | 88 +++++++++++++++++++
->  3 files changed, 141 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
->  create mode 100644 include/dt-bindings/clock/sunplus,sp7021-clkc.h
+> Simplify the return expression.
 > 
-> diff --git a/Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml b/Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
-> new file mode 100644
-> index 000000000..119961a17
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
-> @@ -0,0 +1,51 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (C) Sunplus Co., Ltd. 2021
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/sunplus,sp7021-clkc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Sunplus SP7021 SoC Clock Controller
-> +
-> +maintainers:
-> +  - Qin Jian <qinjian@cqplus1.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: sunplus,sp7021-clkc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  "#clock-cells":
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - "#clock-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> ---
+>  drivers/input/touchscreen/da9034-ts.c | 7 +------
+>  1 file changed, 1 insertion(+), 6 deletions(-)
+> 
+> diff --git a/drivers/input/touchscreen/da9034-ts.c b/drivers/input/touchscreen/da9034-ts.c
+> index 2943f6a58388..dfb2604381d2 100644
+> --- a/drivers/input/touchscreen/da9034-ts.c
+> +++ b/drivers/input/touchscreen/da9034-ts.c
+> @@ -298,7 +298,6 @@ static int da9034_touch_probe(struct platform_device *pdev)
+>  	struct da9034_touch_pdata *pdata = dev_get_platdata(&pdev->dev);
+>  	struct da9034_touch *touch;
+>  	struct input_dev *input_dev;
+> -	int error;
+>  
+>  	touch = devm_kzalloc(&pdev->dev, sizeof(struct da9034_touch),
+>  			     GFP_KERNEL);
+> @@ -344,11 +343,7 @@ static int da9034_touch_probe(struct platform_device *pdev)
+>  	touch->input_dev = input_dev;
+>  	input_set_drvdata(input_dev, touch);
+>  
+> -	error = input_register_device(input_dev);
+> -	if (error)
+> -		return error;
+> -
+> -	return 0;
+> +	return input_register_device(input_dev);
 
-Same as in v14. Please go through the comments thoroughly so reviewers
-will not waste time repeating the same twice.
+In cases where there are multiple checks/exit paths in the same function
+I prefer the existing style as it requires less changes when extending.
 
-Best regards,
-Krzysztof
+Thanks,
+
+-- 
+Dmitry

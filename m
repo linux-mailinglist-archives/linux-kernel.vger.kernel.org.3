@@ -2,145 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2406A5241CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 03:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B032F5241D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 03:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349778AbiELBDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 21:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
+        id S1349797AbiELBEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 21:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344632AbiELBDO (ORCPT
+        with ESMTP id S1349787AbiELBEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 21:03:14 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD306FD0E
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 18:03:13 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id q4so3433086plr.11
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 18:03:13 -0700 (PDT)
+        Wed, 11 May 2022 21:04:05 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BEF36FD20
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 18:04:03 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2ebf4b91212so39932577b3.8
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 18:04:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ib18wyAnvSIua7ptS/vQLbuy/7W7pnuSm126r6BKOSs=;
-        b=luNq9qJhTeqeDz3jT2Otg0cIhK29IpVjShyS2KDcJkwi7jSwu2hMrifrzrMN+6U6+u
-         NwYNytU9esey4C8SeY5plISOZTfF4Mf/795/trgQPdZWIrW2wEib3yZbqIOcNXOKPihO
-         SbF0keTJDEjxypzqMCtinwlmr7zuItC0HTNSoZO45KyTGZsLlNC0dG8Y+LzbVMksuo9G
-         mriKEH5S5uLAgPe85v/cObdBIUhbEJHTtYg4AvS67zUBd236Dnfeezh7SAgQvzOh4/6o
-         JLkWna84ndlHWY4T3Pd77NrEH/kjvmQ3kSinhKxiofT4zwcn0XO4ODng52INcp/+Pfaf
-         PVVw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=U6tK8GPMBaPnPvzJJPFEhM/26woZfEa9DJERPsRxEgc=;
+        b=O54KDau0H299Yh1PZu6Xhrp359vgu0EaCOr0TEQ/1KQCZW7p1D709aynAaO927QN3S
+         UZUfHNwwZrp+1CFeN4XNOMaaS5M6mpBErWA+N68xAb9L61s0Qp/IiL64JvVWglGzVIFz
+         u+oaHgKD8xuQLQtOLAqgHXTMm9jBCWEeGEPkVi0UwcKJwx80WSC4Z14THJl68l/5Z5U/
+         YTvzfMCTynwmLcMaTlC2OgUByA+dLsYoiDZYirgkTXD0ospQCc1hCH9gkxMNRdVV3NcT
+         kVmF/hkBFaWumtIL1U6f4E3gIUXkxbLnMgoclRCuzEk5r1MCW9iaNOSVxoKsHrknhHtQ
+         9+Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=ib18wyAnvSIua7ptS/vQLbuy/7W7pnuSm126r6BKOSs=;
-        b=WAolAfSQtR8EN4ib0KibhAbR2+uu2g/koYQg8ruCxJabzYvSavk8fK5Fqb/j7v76Lt
-         xISff51birGQqjDZMxxAdeoehTFwYJ5XquS4+qou5JGKBf+i0PIg2HoJ1+Sggiu5TszI
-         HoxGp6D/LFA/aB1Z42rirs7F0RK6mq8uIzewbfxdjLuCNhtJjuC18X5wB/FcR62uc1xF
-         rjTqYmtKjtQ+SwEdc1rHI18wLaf2V3iv+VYKhg12yUBkD7RmMVaN+nto+BAzESYpbv3R
-         iqygBF+NnjN/UJqnY7a659erbBzyiYp6txhrDIrHxHbvUb5x2tHhVp0Xzp2Bn1luhoYZ
-         I+2A==
-X-Gm-Message-State: AOAM5325/LAglbvi1kTvluMB61/WunwA33CNFGZyY3gkLTOjQN8SFVxK
-        4HiaNrGYaK/q3ZwQEdudo1E=
-X-Google-Smtp-Source: ABdhPJypZJJ+M7FuetbveO+yXJMaW8UPZDVSuK1xTeClfN77hv8ltvUPBR98KEUR0WPwoIGvGC52Tw==
-X-Received: by 2002:a17:902:cf05:b0:156:8445:ce0f with SMTP id i5-20020a170902cf0500b001568445ce0fmr27880201plg.99.1652317392666;
-        Wed, 11 May 2022 18:03:12 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:69ef:9c87:7816:4f74])
-        by smtp.gmail.com with ESMTPSA id e15-20020a170902784f00b0015e8d4eb252sm2561773pln.156.2022.05.11.18.03.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 18:03:12 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Wed, 11 May 2022 18:03:10 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        John Dias <joaodias@google.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v4] mm: fix is_pinnable_page against on cma page
-Message-ID: <YnxczoehQJ+x6m9Y@google.com>
-References: <f7bcda22-8ffe-67be-36bc-fcde58d8884a@nvidia.com>
- <YnxCCPZUfgQNXSg6@google.com>
- <8f083802-7ab0-15ec-b37d-bc9471eea0b1@nvidia.com>
- <20220511234534.GG1790663@paulmck-ThinkPad-P17-Gen-1>
- <ea64b36c-ecc1-74db-dd2e-909e7e507ef8@nvidia.com>
- <0d90390c-3624-4f93-f8bd-fb29e92237d3@nvidia.com>
- <20220512002207.GJ1790663@paulmck-ThinkPad-P17-Gen-1>
- <YnxUTxnCJ6EsmjEi@google.com>
- <f7ff4186-e629-a5da-3f4d-ec629b0c8dd9@nvidia.com>
- <20220512004949.GK1790663@paulmck-ThinkPad-P17-Gen-1>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=U6tK8GPMBaPnPvzJJPFEhM/26woZfEa9DJERPsRxEgc=;
+        b=zBX/e5ys0x8dVvyEOAFQZsBxDbHdRpueI/tiLAFrTgx3jtZ7BTw3rYV0yf8Dh6wVaY
+         7Dy6doaHB8xWeZrfMbcgu8doBLSHQp9H2o5ikEm49XD+wB13Aj9LoR+g+MSdDLlRy6V4
+         TbZtvngs9E1fF7rt5D6VcQRP6t8RoOX61CSxMWsXR2NpbcIKYYCxR1h1wd3GtjWbsySR
+         lWqBFVaI38yIZT+mKEQPrbOOeBarA1IPiM1LBj/zJqk5v2N6WSGzQDBg0h2n1CRJTLgy
+         CEq++ZN39Men/BcistJHkhjFDQemI/5sgq01BNBM6ZSfKky/4lnx4nNxWiORcjbv8m39
+         K4hw==
+X-Gm-Message-State: AOAM531wwgpsBCr+/YuX9cjmaPUQCL2YJcjLaB5KKiqX7n13xz7pb99j
+        7qz3iFMm0d9/gUHs56H3kqA45xvX3/b2EpGW4qPUTA==
+X-Google-Smtp-Source: ABdhPJxcC7GLVrVLu5NCUf/TT8p1tHqKlLQAuai83vmfQMaboWPR/caZ0bZRwSbcggq7Pe9iZ8h/+m7oNv703gUkJgY=
+X-Received: by 2002:a81:1d4e:0:b0:2f7:be8b:502e with SMTP id
+ d75-20020a811d4e000000b002f7be8b502emr28547800ywd.278.1652317443088; Wed, 11
+ May 2022 18:04:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220512004949.GK1790663@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <1652313768-16286-1-git-send-email-quic_khsieh@quicinc.com>
+ <e5c16697-5919-bafa-4ec5-294c94d7a740@linaro.org> <CAE-0n53zHrczQAOWM5f_tafUVJxg7JU2NuC4sGcBZddwKr-dGA@mail.gmail.com>
+In-Reply-To: <CAE-0n53zHrczQAOWM5f_tafUVJxg7JU2NuC4sGcBZddwKr-dGA@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 12 May 2022 04:03:51 +0300
+Message-ID: <CAA8EJppc9d+FjVzAX_KU2-akTc1vSmSHMeKr8dp2ynH2LLOyBQ@mail.gmail.com>
+Subject: Re: [PATCH v5] drm/msm/dp: Always clear mask bits to disable
+ interrupts at dp_ctrl_reset_irq_ctrl()
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        dianders@chromium.org, robdclark@gmail.com, sean@poorly.run,
+        vkoul@kernel.org, quic_abhinavk@quicinc.com,
+        quic_aravindh@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 05:49:49PM -0700, Paul E. McKenney wrote:
-> On Wed, May 11, 2022 at 05:34:52PM -0700, John Hubbard wrote:
-> > On 5/11/22 17:26, Minchan Kim wrote:
-> > > > > Let me try to say this more clearly: I don't think that the following
-> > > > > __READ_ONCE() statement can actually help anything, given that
-> > > > > get_pageblock_migratetype() is non-inlined:
-> > > > > 
-> > > > > +	int __mt = get_pageblock_migratetype(page);
-> > > > > +	int mt = __READ_ONCE(__mt);
-> > > > > +
-> > > > > +	if (mt & (MIGRATE_CMA | MIGRATE_ISOLATE))
-> > > > > +		return false;
-> > > > > 
-> > > > > 
-> > > > > Am I missing anything here?
-> > > > 
-> > > > In the absence of future aggression from link-time optimizations (LTO),
-> > > > you are missing nothing.
-> > > 
-> > > A thing I want to note is Android kernel uses LTO full mode.
-> > 
-> > Thanks Paul for explaining the state of things.
-> > 
-> > Minchan, how about something like very close to your original draft,
-> > then, but with a little note, and the "&" as well:
-> > 
-> > int __mt = get_pageblock_migratetype(page);
-> > 
-> > /*
-> >  * Defend against future compiler LTO features, or code refactoring
-> >  * that inlines the above function, by forcing a single read. Because, this
-> >  * routine races with set_pageblock_migratetype(), and we want to avoid
-> >  * reading zero, when actually one or the other flags was set.
-> >  */
-> > int mt = __READ_ONCE(__mt);
-> > 
-> > if (mt & (MIGRATE_CMA | MIGRATE_ISOLATE))
-> >     return false;
-> > 
-> > 
-> > ...which should make everyone comfortable and protected from the
-> > future sins of the compiler and linker teams? :)
-> 
-> This would work, but it would force a store to the stack and an immediate
-> reload.  Which might be OK on this code path.
-> 
-> But using READ_ONCE() in (I think?) __get_pfnblock_flags_mask()
-> would likely generate the same code that is produced today.
-> 
-> 	word = READ_ONCE(bitmap[word_bitidx]);
-> 
-> But I could easily have missed a turn in that cascade of functions.  ;-)
-> 
-> Or there might be some code path that really hates a READ_ONCE() in
-> that place.
+On Thu, 12 May 2022 at 04:01, Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Dmitry Baryshkov (2022-05-11 17:41:50)
+> > On 12/05/2022 03:02, Kuogee Hsieh wrote:
+> > > diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> > > index af7a80c..f3e333e 100644
+> > > --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> > > +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> > > @@ -1389,8 +1389,13 @@ void dp_ctrl_reset_irq_ctrl(struct dp_ctrl *dp_ctrl, bool enable)
+> > >
+> > >       dp_catalog_ctrl_reset(ctrl->catalog);
+> > >
+> > > -     if (enable)
+> > > -             dp_catalog_ctrl_enable_irq(ctrl->catalog, enable);
+> > > +     /*
+> > > +      * all dp controller programmable registers will not
+> > > +      * be reset to default value after DP_SW_RESET
+> > > +      * therefore interrupt mask bits have to be updated
+> > > +      * to enable/disable interrupts
+> > > +      */
+> > > +     dp_catalog_ctrl_enable_irq(ctrl->catalog, enable);
+> > >   }
+> > >
+> > >   void dp_ctrl_phy_init(struct dp_ctrl *dp_ctrl)
+> > > diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> > > index c388323..79439b8 100644
+> > > --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> > > +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> > > @@ -98,6 +98,8 @@ struct dp_display_private {
+> > >       struct dp_ctrl    *ctrl;
+> > >       struct dp_debug   *debug;
+> > >
+> > > +     atomic_t suspended;
+> >
+> > I think it'd be better to protect it with event_lock rather than using
+> > atomics.
+>
+> Agreed. I think the concern is that the event queue will have "stuff" in
+> it. If the event queue was all a threaded irq we could simply call
+> synchronize_irq() after disabling the irq bit in the DP hardware and
+> then we would know it is safe to power down the DP logic. Unfortunately
+> the event queue is a kthread so we can't do that and we have to rewrite
+> synchronize_irq() by checking that the event queue is empty and waiting
+> for it to empty out otherwise. It's not safe enough to simply do the
+> power operations underneath the event_lock because there's a queue in
+> the kthread that might be waiting to grab the event_lock to process.
 
-My worry about chaning __get_pfnblock_flags_mask is it's called
-multiple hot places in mm codes so I didn't want to add overhead
-to them.
+This sounds like a good reason to rewrite event_thread to use
+threaded_irq and/or workqueue.
+
+-- 
+With best wishes
+Dmitry

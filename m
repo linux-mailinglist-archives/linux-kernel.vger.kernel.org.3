@@ -2,93 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 994415249A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C5125249A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352363AbiELJ6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 05:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51044 "EHLO
+        id S1352358AbiELJ6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 05:58:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352324AbiELJ6h (ORCPT
+        with ESMTP id S1352337AbiELJ6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 05:58:37 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EDBC22EA61;
-        Thu, 12 May 2022 02:58:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652349516; x=1683885516;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6GELAe/ApmVBKafQ2S7vNKp/RtrglRXEhF1UXL6PS3M=;
-  b=P+ra6eRELOFYjAUEjyMlWl0p89RWLxKiY+3ScAYLNvk3hurrRzLuv4D7
-   +IjAW9wJ6vKncHus1aPePHCP2Gm32Dz3MSHaahQwn3j0XHjQksjtqysrk
-   dHKVgFlKrfn5WZq+KU0h8GUE63EEFZTtAaNeA40VIELXAuVifdo03355q
-   Jzz23VPGxtGHBNhhMtmMGZrF1T1WvBejg5ZSp3QDCDYUutbCjISNgAXZw
-   mz+mVwkjYN1tjCXKghJ64PEU7mVFXOmuwrsfitkH1OLRcp8+FSNs3HZba
-   J7CoyLPYvstmFTm9Ebak8Vw3qLfB4eUTw1E6ea8uZjGSeL85LAlU5gzxZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="249850492"
-X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
-   d="scan'208";a="249850492"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 02:58:34 -0700
-X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
-   d="scan'208";a="542705299"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 02:58:31 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1np5aV-00F9q1-T7;
-        Thu, 12 May 2022 12:58:27 +0300
-Date:   Thu, 12 May 2022 12:58:27 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, Enrico Weigelt <lkml@metux.net>,
-        Gerd Haeussler <gerd.haeussler.ext@siemens.com>
-Subject: Re: [PATCH v2 4/4] leds: simatic-ipc-leds-gpio: add GPIO version of
- Siemens driver
-Message-ID: <YnzaQxProKeOkR41@smile.fi.intel.com>
-References: <20220511153905.13980-1-henning.schild@siemens.com>
- <20220511153905.13980-5-henning.schild@siemens.com>
- <20220512104424.1430c9a3@md1za8fc.ad001.siemens.net>
+        Thu, 12 May 2022 05:58:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C820E22EA63;
+        Thu, 12 May 2022 02:58:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1BBB0B82728;
+        Thu, 12 May 2022 09:58:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 178B5C385B8;
+        Thu, 12 May 2022 09:58:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652349513;
+        bh=kq14DywiWLmIjJ7CeeAFiu7DThWHwli6FpsxFOYnjgk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aCX1hDkfNTSfVLdYCM6R7yyJEj7szJz/ia3Yl3l8oFqnlmY1z9pocN2VIpi/ok91Z
+         hpIH8CXFBQBH/J/D6qUAOUjJyXl1ZfbR+jOBzDdBDtA6EofD9MHPgT4vCARWFp4epr
+         SLeCLFY1GTx1cbw8nIerNkt2/bDxkr5b1Wbgqm09yrfpGi6ucObTmPJBvSwN7Aq5nJ
+         5Q6UKlxovGvq0qcuQYDrEJVIYspp83PwCvGdvnUnXD5iI0ot9PbKr1qdvWyR9TD3av
+         xQ/GNMTqGXaNuEM91wS33lsDpDIsLKTXIHsr+1rze+jmgTX2oxv5t1vlpxycyKc9Jy
+         a1RIwvxo5c1dQ==
+Message-ID: <445dd693-f797-c4f9-3bf9-04185a54286d@kernel.org>
+Date:   Thu, 12 May 2022 12:58:29 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220512104424.1430c9a3@md1za8fc.ad001.siemens.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: Re: [GIT PULL] interconnect fix for 5.18-rc
+Content-Language: en-US
+To:     gregkh@linuxfoundation.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220506085923.23816-1-djakov@kernel.org>
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <20220506085923.23816-1-djakov@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 10:44:24AM +0200, Henning Schild wrote:
-> Am Wed, 11 May 2022 17:39:05 +0200
-> schrieb Henning Schild <henning.schild@siemens.com>:
-
-...
-
-> > +config LEDS_SIEMENS_SIMATIC_IPC_GPIO
+On 6.05.22 11:59, Georgi Djakov wrote:
+> Hello Greg,
 > 
-> I wonder if i really should introduce a new switch here or just carry
-> this one under LEDS_SIEMENS_SIMATIC_IPC
+> This pull request contains one more fix for the current cycle. The
+> details are in the signed tag. It has been in linux-next during the
+> last few days. Please pull into char-misc-linus when possible.
 > 
-> For a v3 i will likely put two modules under that one config switch.
 
-For me either is okay, but I'm not a LED maintainer.
+Hello Greg,
 
--- 
-With Best Regards,
-Andy Shevchenko
+I was wondering if this got missed or is it in your mail queue? Please
+let me know in case anything is required from my side.
 
+Thanks,
+Georgi
+
+> 
+> The following changes since commit 2fb251c265608636fc961b7d38e1a03937e57371:
+> 
+>    interconnect: qcom: sdx55: Drop IP0 interconnects (2022-04-14 09:47:16 +0300)
+> 
+> are available in the Git repository at:
+> 
+>    git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-5.18-rc6
+> 
+> for you to fetch changes up to 20ce30fb4750f2ffc130cdcb26232b1dd87cd0a5:
+> 
+>    interconnect: Restore sync state by ignoring ipa-virt in provider count (2022-05-03 22:24:21 +0300)
+> 
+> ----------------------------------------------------------------
+> interconnect fixes for v5.18-rc
+> 
+> This contains an additional fix for sc7180 and sdx55 platforms that helps
+> them to enter suspend even on devices that don't have the most recent DT
+> changes.
+> 
+> - interconnect: Restore sync state by ignoring ipa-virt in provider count
+> 
+> Signed-off-by: Georgi Djakov <djakov@kernel.org>
+> 
+> ----------------------------------------------------------------
+> Stephen Boyd (1):
+>        interconnect: Restore sync state by ignoring ipa-virt in provider count
+> 
+>   drivers/interconnect/core.c | 8 +++++++-
+>   1 file changed, 7 insertions(+), 1 deletion(-)
 

@@ -2,150 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D034C52504C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF4252504E
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:39:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355437AbiELOjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 10:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45078 "EHLO
+        id S1355477AbiELOjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 10:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355071AbiELOjJ (ORCPT
+        with ESMTP id S1355453AbiELOjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 10:39:09 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C751B253AAC
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:39:08 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id qe3-20020a17090b4f8300b001dc24e4da73so5943177pjb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:39:08 -0700 (PDT)
+        Thu, 12 May 2022 10:39:11 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B1A2618C8
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:39:11 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id x18so5063236plg.6
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:39:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=RpvA14mopi2wM/0/4s7P6t9yjcv8sVd/ys9twTz6XHs=;
-        b=IwjrKmELqe++qDbcjrB0VrUfg6crocNU1xe5lMxp6nWDAzOL5RWRRt8saVMkiGySTi
-         oFhpr/l7d61NIYvJG9xPdiXKeej6OyIZFHq7456kaCwqyz0g5bKVMdETsAH1TBVFFayr
-         rlNG/yc6J6myUNMWB6CFQ8qjTTUSzLwGSQTawUMIPH1LQ1wIQ39pAcWNRk4Wy4HpF9Q5
-         1GqUU7aWjlfmKZtqOwn+axFPpEsVq+5jqEMW2ZvjYj4y421WNHqCgfnk7QPDI/12rh7C
-         QNy2f3yAt3shWmOImGNjA8N37MhIMQs0iwYguP2rDjiZtaWS4/AE0VDsyJqe0dlJnArm
-         Ptvg==
+         :content-disposition:in-reply-to;
+        bh=E1mAoedHqKCxbwiJhcTWVMyW7rs80mjXjW2wzN8EpSY=;
+        b=hzs3wRnTcQy01CmqLlxG9g6xOizB2yWFw8y++j1vmsFHdynWNX5ubGCdvmz+gwaqE3
+         dDz2aAUKb+oPO72jrcbsIIbxLB23+WildV3hJXC5DXrW1amv/REI49ycKi40b211THXa
+         Mg79bqL6EzTg9xF0LU9V79cMXITgxHfrC0RqESuYKYYh2G9eCC5ggM4y0k5bfz+zmjo4
+         wJAyqoa8yQKhG0s6M991iNRgPLs+CNykf31CIWFmy4FMUnliEuNw6TQmnqDYl8qLN+3E
+         Fn8y9MytcYVwuFKQoceMFjysHF2aKrrCBmDOkja7SFGW9+1ISKPwGdtA2w0jSZz6mMcQ
+         BJZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=RpvA14mopi2wM/0/4s7P6t9yjcv8sVd/ys9twTz6XHs=;
-        b=j7YlehX6PE/L//NNMlztHY63UMqzR+11B/wwQoFvcuD8lGa8+t17Dq9yvAX5XxU3re
-         6Xu9lEfbBl8Dqy8G/k7+bsdC9WwkiYicQyB347qDXyGjuMa01kAEXRVZmbCsxQqJpo6t
-         uQvspjExtZjoGAujW7Q7fUrjhEfEjkFhGeIRWJIkdXP91upuh1MfpE3U/5+n3WeQDAGH
-         PAc6FqETjjLs2K503i4GqNNbzEGyH40XQiPVUC+D1ARrikPD94Xe7ZH+su027jdYV1AZ
-         CtFIr/gA1UG7OzrelDZnAvHyL89u9mfwOvJ6ucZ0cmW5yrMrIRdCUYmx31hfvu/2B16i
-         mnPg==
-X-Gm-Message-State: AOAM5309Dn4C8Z/95oPDPwSYrm5hwmop/wqbfpl0C3yLUYRmOXMtId7Z
-        bWecuUd5z58Mkq3ygX+bomMN
-X-Google-Smtp-Source: ABdhPJzGX4QVR+Nu2JITJr/b8RNE+XCcktTJ7Bx+sADcWNFJ0GnMQN2f39XlXIhEaWDxYRZWAK1HHw==
-X-Received: by 2002:a17:902:f710:b0:15f:165f:b50b with SMTP id h16-20020a170902f71000b0015f165fb50bmr276822plo.158.1652366348217;
-        Thu, 12 May 2022 07:39:08 -0700 (PDT)
-Received: from thinkpad ([117.202.184.202])
-        by smtp.gmail.com with ESMTPSA id 72-20020a62154b000000b0050dc762816bsm3852511pfv.69.2022.05.12.07.39.02
+         :mime-version:content-disposition:in-reply-to;
+        bh=E1mAoedHqKCxbwiJhcTWVMyW7rs80mjXjW2wzN8EpSY=;
+        b=JJtGe426bvPRtX701GCScWjvTbD4u7DjChnjKItxe04hYt6EWMDChkhob9MufRe/z2
+         hlihwQVL1mHYBc8f9ScGViQXWIYrOJ2UEXUPvO6eGXYyjOUCrLJVM3uhw0Mw0I6g5vse
+         jpOY6QX3U/31+MK8bL8MipfSsbnLc7NyeR0tKvwTcSaFcM4YFPrJjTblvRDwIWxKI6Co
+         TBkJD+a+mgg4RIt7usidD51iwMGHoSX5cLZlaW8QCz5KzUBprJL1v4lzJa3V3ok0YBGV
+         Tf8q/ZQ/wPPxA69OuQmLE4dlQeTY493Ms0QHS9QaA9DaOa1gJHRSW7hIllahhRnZUTZu
+         zkzA==
+X-Gm-Message-State: AOAM531eL7DxnLvpBRL4qtZTeIEIEUcEYnVeBcfFHymnqUtpbDf2rZDn
+        43veEtUuSt317FhkiijrQ0Pjzw==
+X-Google-Smtp-Source: ABdhPJxRjTzLDgFh6JYO5PiiNMAmNCpoVt4jax4zGuAU2+HWrHJi6Q6V17T+Uoqm8689YUhLvMg9eA==
+X-Received: by 2002:a17:902:d482:b0:15e:a06a:db0a with SMTP id c2-20020a170902d48200b0015ea06adb0amr291573plg.38.1652366350327;
+        Thu, 12 May 2022 07:39:10 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id 204-20020a6302d5000000b003c619f3d086sm2070886pgc.2.2022.05.12.07.39.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 07:39:07 -0700 (PDT)
-Date:   Thu, 12 May 2022 20:09:00 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 03/26] dmaengine: dw-edma: Release requested IRQs on
- failure
-Message-ID: <20220512143900.GH35848@thinkpad>
-References: <20220503225104.12108-1-Sergey.Semin@baikalelectronics.ru>
- <20220503225104.12108-4-Sergey.Semin@baikalelectronics.ru>
+        Thu, 12 May 2022 07:39:09 -0700 (PDT)
+Date:   Thu, 12 May 2022 14:39:06 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH 2/2] x86/reboot: Disable virtualization in an emergency
+ if SVM is supported
+Message-ID: <Yn0cCl+C+BE2yfPb@google.com>
+References: <20220511234332.3654455-1-seanjc@google.com>
+ <20220511234332.3654455-3-seanjc@google.com>
+ <87tu9vvx19.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220503225104.12108-4-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <87tu9vvx19.ffs@tglx>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 01:50:41AM +0300, Serge Semin wrote:
-> From very beginning of the DW eDMA driver live in the kernel the method
-> dw_edma_irq_request() hasn't been designed quite correct. In case if the
-> request_irq() method fails to initialize the IRQ handler at some point the
-> previously requested IRQs will be left initialized. It's prune to errors
-> up to the system crash. Let's fix that by releasing the previously
-> requested IRQs in the cleanup-on-error path of the dw_edma_irq_request()
-> function.
+On Thu, May 12, 2022, Thomas Gleixner wrote:
+> On Wed, May 11 2022 at 23:43, Sean Christopherson wrote:
+> > Disable SVM on all CPUs via NMI shootdown during an emergency reboot.
+> > Like VMX, SVM can block INIT and thus prevent bringing up other CPUs via
+> > INIT-SIPI-SIPI.
 > 
-> Fixes: e63d79d1ffcd ("dmaengine: Add Synopsys eDMA IP core driver")
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-
-Thanks,
-Mani
-
+> With the delta patch applied, I'd make that:
 > 
-> ---
-> 
-> Changelog v2:
-> - This is a new patch added in v2 iteration of the series.
-> ---
->  drivers/dma/dw-edma/dw-edma-core.c | 14 ++++++++++----
->  1 file changed, 10 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
-> index 07f756479663..04efcb16d13d 100644
-> --- a/drivers/dma/dw-edma/dw-edma-core.c
-> +++ b/drivers/dma/dw-edma/dw-edma-core.c
-> @@ -899,10 +899,8 @@ static int dw_edma_irq_request(struct dw_edma *dw,
->  						dw_edma_interrupt_read,
->  					  IRQF_SHARED, dw->name,
->  					  &dw->irq[i]);
-> -			if (err) {
-> -				dw->nr_irqs = i;
-> -				return err;
-> -			}
-> +			if (err)
-> +				goto err_irq_free;
+> --- a/arch/x86/kernel/reboot.c
+> +++ b/arch/x86/kernel/reboot.c
+> @@ -530,29 +530,25 @@ static inline void kb_wait(void)
 >  
->  			if (irq_get_msi_desc(irq))
->  				get_cached_msi_msg(irq, &dw->irq[i].msi);
-> @@ -911,6 +909,14 @@ static int dw_edma_irq_request(struct dw_edma *dw,
->  		dw->nr_irqs = i;
->  	}
+>  static inline void nmi_shootdown_cpus_on_restart(void);
 >  
-> +	return 0;
-> +
-> +err_irq_free:
-> +	for  (i--; i >= 0; i--) {
-> +		irq = chip->ops->irq_vector(dev, i);
-> +		free_irq(irq, &dw->irq[i]);
-> +	}
-> +
->  	return err;
+> -/* Use NMIs as IPIs to tell all CPUs to disable virtualization */
+> -static void emergency_vmx_disable_all(void)
+> +static void emergency_reboot_disable_virtualization(void)
+>  {
+>  	/* Just make sure we won't change CPUs while doing this */
+>  	local_irq_disable();
+>  
+>  	/*
+> -	 * Disable VMX on all CPUs before rebooting, otherwise we risk hanging
+> -	 * the machine, because the CPU blocks INIT when it's in VMX root.
+> +	 * Disable virtualization on all CPUs before rebooting to avoid hanging
+> +	 * the system, as VMX and SVM block INIT when running in the host
+>  	 *
+>  	 * We can't take any locks and we may be on an inconsistent state, so
+> -	 * use NMIs as IPIs to tell the other CPUs to exit VMX root and halt.
+> +	 * use NMIs as IPIs to tell the other CPUs to disable VMX/SVM and halt.
+>  	 *
+> -	 * Do the NMI shootdown even if VMX if off on _this_ CPU, as that
+> -	 * doesn't prevent a different CPU from being in VMX root operation.
+> +	 * Do the NMI shootdown even if virtualization is off on _this_ CPU, as
+> +	 * other CPUs may have virtualization enabled.
+>  	 */
+> -	if (cpu_has_vmx()) {
+> -		/* Safely force _this_ CPU out of VMX root operation. */
+> -		__cpu_emergency_vmxoff();
+> +	cpu_crash_disable_virtualization();
+>  
+> -		/* Halt and exit VMX root operation on the other CPUs. */
+> +	if (cpu_has_vmx() || cpu_has_svm(NULL))
+>  		nmi_shootdown_cpus_on_restart();
+> -	}
+
+What about leaving cpu_crash_disable_virtualization() inside the if-statement?
+It feels wierd to "disable" virtualization on the current CPU but ignore others,
+e.g. if there's some newfangled type of virtualization in the future, I would be
+quite surprised if only the CPU doing the transfer needed to disable virtualization.
+
+	if (cpu_has_vmx() || cpu_has_svm(NULL)) {
+		/* Safely force _this_ CPU out of VMX/SVM operation. */
+		cpu_crash_disable_virtualization();
+
+		/* Disable VMX/SVM and halt on other CPUs. */
+		nmi_shootdown_cpus_on_restart()
+	}
+
+
 >  }
 >  
-> -- 
-> 2.35.1
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
+>  
+> @@ -587,7 +583,7 @@ static void native_machine_emergency_res
+>  	unsigned short mode;
+>  
+>  	if (reboot_emergency)
+> -		emergency_vmx_disable_all();
+> +		emergency_reboot_disable_virtualization();
+>  
+>  	tboot_shutdown(TB_SHUTDOWN_REBOOT);
+>  

@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E1DA524174
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 02:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97C03524175
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 02:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349613AbiELARN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 20:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50240 "EHLO
+        id S1349620AbiELAUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 20:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345344AbiELARJ (ORCPT
+        with ESMTP id S1345344AbiELAUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 20:17:09 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0048814913E;
-        Wed, 11 May 2022 17:17:06 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id g16so4574883lja.3;
-        Wed, 11 May 2022 17:17:06 -0700 (PDT)
+        Wed, 11 May 2022 20:20:09 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BA11654B7
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 17:20:08 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id bq30so6319204lfb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 17:20:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6ewN4iebyG9uMgew1c//0eeNZDOPRJNH8c+AIOoPtww=;
-        b=I/D3IQssuH9XhW4LG1S8Ij/AirFKHPjUHHDdVkyRnf+QiaZCVa6ciRWZAD7Bi2Pyxt
-         cqujdsSbRBf5BppjlGnqydo7noSBRZ9kAsYd8p+9zHh2ZnJZ8Tr6U2LPo96gHcdX/Ycj
-         fvwu4KYwTT2GbaYgMOurp8elrvkG3yf7eNiyANvgE4VEU8WM4RqRfTGdKGRdBLz0pBdA
-         HK4mA6DueIjj0ZR6neU05sZclXW2NxgWOaZ7lzUW2Q7OjvSk5Ne9SOSs3yl5hq/Xvc9o
-         FOv0OqZMU9P5XEOjYyaNn/INcz2bxCRW7ZwD3lvk0e+OOWHpcH2txGxRhal2ToH6ZPUW
-         fqbA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hmOCXqJx3aPNv4toFluqExpM2fAmi+JPCbe0noGaZQw=;
+        b=RJmRo0HgfC9Kf3yO0+w2/I5Wdot1ejiTWXVtN28t570/TpcfZ0rXnWvezeh6gmWdW+
+         UOUa64hf/XUk253RtaHBUlobyqh8Y+2ZpxgEGnOaHs6TxXvVIToG+1RR946wBgrFAbyk
+         opCld9z+r4zI7R/FHeYrNOtWFdLHzDZnUBfnxP0+3Iluf55T61NuXpsg3uCRJt5THX+Z
+         dsCbcwhJWJcxK/xhknvj1IRvrgMGuYkHvKSkbDh0K6RlnFIAHL3yN8oHALbCM7IN/dAE
+         86sTXvEBhUVpOfFCalqkkPuWXTYJALcsdV3Jf6WEosfXUhH1BRbZNdlp0F/HZncqS63c
+         FlRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6ewN4iebyG9uMgew1c//0eeNZDOPRJNH8c+AIOoPtww=;
-        b=2P2QRiIbTx3h0X8jW9eYPlstYSlYTF9ODWBuDjj8ePGjhkKderAVqMGtqZH3eS+uL3
-         dPbFj/mGZz5BmVJPZOgSLVBcvjf/DBvVs1WtfvIjEWsTAHxqXgw9/qGWUHhwbcniPOAY
-         1kFWIpjv9ANEZf814dhf1kUAhPg+q6fsDnLHU/SMJpo8njqVmerkFwg+wUEzUL96pOs4
-         UpNNOCPL5YswKZW1KieH957KfOjhM2CL6SP48exL/8SAILBI/tyM+2dMVNXJJ84vXjFo
-         QYa62oBzVJsuIs8zIHrMH3r3Hc97RZIjU32tTxHmYfy0kUKWuvStfuBZ7RXP0JiE6DtD
-         4nsQ==
-X-Gm-Message-State: AOAM533UEKi3a9t5q8xIjECYRZrEajBPvseCLxkQukQLgX3/yDXdpNi1
-        UNtbMlG9JKueH3RR9EbN1L0=
-X-Google-Smtp-Source: ABdhPJytZO4CvmhspGSwFD2e5Vgp3ZwOtKrciZj9kXfeEmlIwA/B6ZuKw8AWR3CBePT65bMn9m6A7g==
-X-Received: by 2002:a2e:9993:0:b0:250:b5a9:18dc with SMTP id w19-20020a2e9993000000b00250b5a918dcmr14870158lji.364.1652314625399;
-        Wed, 11 May 2022 17:17:05 -0700 (PDT)
-Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id o18-20020ac24c52000000b0047255d211bbsm507362lfk.234.2022.05.11.17.17.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 17:17:04 -0700 (PDT)
-Date:   Thu, 12 May 2022 03:17:02 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-spdx@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-mips@vger.kernel.org
-Subject: Re: [patch 03/10] clocksource/drivers/mips-gic-timer: Convert to
- SPDX identifier
-Message-ID: <20220512001702.japqljr6ayxyzwn6@mobilestation>
-References: <20220510171003.952873904@linutronix.de>
- <20220510171254.529249404@linutronix.de>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hmOCXqJx3aPNv4toFluqExpM2fAmi+JPCbe0noGaZQw=;
+        b=xYCvUX2FxHDFySsx2iouMU/98CxKAQ7vIxw//27I924Mm7KtwtyMUQGy1s1HbKTX7X
+         4ejRzXpFwdLCs3SBSF49ZGy294hTDIcnXE/sBbwLh7ERIsyO3mvN76QAaDPL9DmU65Rr
+         YjJVTPrk+MO1q/4MVdSzdQXvE66gGuOGH17peci3JybURabDtw+eF0Z9/WFBweIU2JVE
+         VlFauoWDCKACQBbzaAajpgx6igNlAe2sRCWZVmGD7QjnONpoLYhnFhv4iZj10Yz4na2m
+         sNj767SrsQUZFP086c0Nxls6cHJ7J4YidLOnqwGXaQcnKF/TH6nroP6ojret1QTDOUdf
+         teiw==
+X-Gm-Message-State: AOAM532SSWXkHQdG8ld4QjxHWbiUFRBbeQvN0FaIY2rLecMMEyVFmFpH
+        gCQo7NILP/N8C9UJGC5yB0T4UTmkbTILiFgzUrp9zA==
+X-Google-Smtp-Source: ABdhPJyJa8CFD2lJb3SXoKRhg9zlKbw7LnvKB8sRqmoJ23L1zXPSQZb94ZFTj6dAS5ma5T1eblHEUYAN6lJ7kSfAXhA=
+X-Received: by 2002:ac2:5e86:0:b0:473:d044:60f5 with SMTP id
+ b6-20020ac25e86000000b00473d04460f5mr22024882lfq.87.1652314806600; Wed, 11
+ May 2022 17:20:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220510171254.529249404@linutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+ <20220512000340.1171988-1-mailhol.vincent@wanadoo.fr> <20220512000340.1171988-3-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20220512000340.1171988-3-mailhol.vincent@wanadoo.fr>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 11 May 2022 17:19:54 -0700
+Message-ID: <CAKwvOdntx-ZBqVYhdeOO4C1tF4Mx=OpFNYBQUfB=iXjfQO9bvw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to
+ evaluate constant expressions
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
+        Jan Beulich <JBeulich@suse.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,37 +75,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 07:24:40PM +0200, Thomas Gleixner wrote:
-> The licensing text references explicitely the COPYING file in the kernel
-> base directory, which is clearly GPL version 2 only.
+On Wed, May 11, 2022 at 5:04 PM Vincent Mailhol
+<mailhol.vincent@wanadoo.fr> wrote:
+>
+> __ffs(x) is equivalent to (unsigned long)__builtin_ctzl(x) and ffz(x)
+> is equivalent to (unsigned long)__builtin_ctzl(~x). Because
+> __builting_ctzl() returns an int, a cast to (unsigned long) is
+> necessary to avoid potential warnings on implicit casts.
+>
+> For x86_64, the current __ffs() and ffz() implementations do not
+> produce optimized code when called with a constant expression. On the
+> contrary, the __builtin_ctzl() gets simplified into a single
+> instruction.
+>
+> However, for non constant expressions, the __ffs() and ffz() asm
+> versions of the kernel remains slightly better than the code produced
+> by GCC (it produces a useless instruction to clear eax).
+>
+> This patch uses the __builtin_constant_p() to select between the
+> kernel's __ffs()/ffz() and the __builtin_ctzl() depending on whether
+> the argument is constant or not.
+>
+> ** Statistics **
+>
+> On a allyesconfig, before applying this patch...:
+>
+> | $ objdump -d vmlinux.o | grep tzcnt | wc -l
+> | 3607
+>
+> ...and after:
+>
+> | $ objdump -d vmlinux.o | grep tzcnt | wc -l
+> | 2600
+>
+> So, roughly 27.9% of the calls to either __ffs() or ffz() were using
+> constant expressions and could be optimized out.
+>
+> (tests done on linux v5.18-rc5 x86_64 using GCC 11.2.1)
+>
+> Note: on x86_64, the asm bsf instruction produces tzcnt when used with
+> the ret prefix (which is why we grep tzcnt instead of bsf in above
+> benchmark). c.f. [1]
+>
+> [1] commit e26a44a2d618 ("x86: Use REP BSF unconditionally")
+> http://lkml.kernel.org/r/5058741E020000780009C014@nat28.tlf.novell.com
+>
+> CC: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-Acked-by: Serge Semin <fancer.lancer@gmail.com>
+Thanks for the patches!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
--Serge
 
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Serge Semin <fancer.lancer@gmail.com>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: linux-mips@vger.kernel.org
-> ---
->  drivers/clocksource/mips-gic-timer.c |    9 ++-------
->  1 file changed, 2 insertions(+), 7 deletions(-)
-> 
-> --- a/drivers/clocksource/mips-gic-timer.c
-> +++ b/drivers/clocksource/mips-gic-timer.c
-> @@ -1,10 +1,5 @@
-> -/*
-> - * This file is subject to the terms and conditions of the GNU General Public
-> - * License.  See the file "COPYING" in the main directory of this archive
-> - * for more details.
-> - *
-> - * Copyright (C) 2012 MIPS Technologies, Inc.  All rights reserved.
-> - */
-> +// SPDX-License-Identifier: GPL-2.0
-> +// Copyright (C) 2012 MIPS Technologies, Inc.  All rights reserved.
->  
->  #define pr_fmt(fmt) "mips-gic-timer: " fmt
->  
-> 
+-- 
+Thanks,
+~Nick Desaulniers

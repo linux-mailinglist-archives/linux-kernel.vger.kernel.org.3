@@ -2,66 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 498955244CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 07:18:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F12D65244CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 07:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349629AbiELFS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 01:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52876 "EHLO
+        id S1349654AbiELFTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 01:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242790AbiELFSY (ORCPT
+        with ESMTP id S238423AbiELFTf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 01:18:24 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7ED318C06D;
-        Wed, 11 May 2022 22:18:23 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so3900079pjq.2;
-        Wed, 11 May 2022 22:18:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1AQXk6YcsqGT6AZ+v5JCyurVPXvqkymIH55yTG/A3eU=;
-        b=c4XbLJExL24lVduVaKZbo3JXp16pMcuqHtm+S6s8epmqQBy+6+ronYZOvOHbS4+/ds
-         JUJmUFC1sZ0Az/UXjgllV9wcwhlAeXGx/4hBd6pbOtgn2veRZBDG2gGCteKtnveYn4Tp
-         OPlp6hSkcnWR5KwF/OGocWc4HckoPwcBdE88RACKV62nbbGbL+AeGLNJZ7+kdAE/D4WG
-         n+F3Hzztytq3MsZG6tDaXTq6nslw6FW+Bo5ODoSRj2Z3idf/9xv/S5XwUnq4W96k3Dch
-         G8tnCyRtoCSa1MIATCXZlRmimMbHzr4qrdfpb87sHbnSnY62bJseaLdiB1QTn9bN3+VF
-         d3zA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1AQXk6YcsqGT6AZ+v5JCyurVPXvqkymIH55yTG/A3eU=;
-        b=4burRoblwZqTM7TYNbGGIMMIL1nAUVEyE5RK1qBwNh6ZIpSwOR5OdmwMIq+muZ0+RU
-         6y9/GIoF8o6XVRPPR7A3m8E3+JRh4EYabNWtzVpzp0un88oeU+9MwRlRCNLC9GB03pOf
-         z0k15L6LeJJKi5ujWVyGP44Z1exyhRXhdEbadBeiQ6d/cdn95BWKZhYxE7dR2b4WHdH0
-         igQiecRJ8i0Wzvt8o2r3OsXMEGbRhYgUPH2wrwa3f9iOPAZiySZ98tGISG8qBAcpU32h
-         XFoZ73RWfdw+H3XUO1CQdyzfIu4jSdNlGCMvhtXnGrpfOPdiFTR5V+w40xXXBkmaV4Xl
-         qlcg==
-X-Gm-Message-State: AOAM533Z8/VnL6JbDN1V2m5+T6zr45vw9AWNsIzwUsAKnrbO8NbKOqu4
-        H63QK0NzQ+wcB03d5DFuULVKGiJg4BhEsfisp4s=
-X-Google-Smtp-Source: ABdhPJy8usYAOKkyscc+PdxY19NHkSQ7NQZnqgW7jH9hOw/0P1A8c6rItZ0zRup4bEnRj2R/IPAjiw==
-X-Received: by 2002:a17:902:c14a:b0:15b:9c29:935a with SMTP id 10-20020a170902c14a00b0015b9c29935amr28603418plj.2.1652332702851;
-        Wed, 11 May 2022 22:18:22 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id c17-20020aa78811000000b0050dc7628135sm2786675pfo.15.2022.05.11.22.18.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 22:18:22 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] dmaengine: ti: Fix refcount leak in ti_dra7_xbar_route_allocate
-Date:   Thu, 12 May 2022 09:18:15 +0400
-Message-Id: <20220512051815.11946-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 12 May 2022 01:19:35 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849B41ACFAD;
+        Wed, 11 May 2022 22:19:33 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id 8533E5FD06;
+        Thu, 12 May 2022 08:19:31 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1652332771;
+        bh=q2RcWNsdgZuAprNCwQFszNeiGtFEWlS8dk+02jxT2tA=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=smckDdrLTKHxtZhvHPL7axP5nLbobUR3Y4cLISMmnYb+LBwbjapbc+RPJQOPSJ/bU
+         06BeTURqEzjzKRUzepNhRppD4Z2odOblSELi2jfcD9dYQpo29PoZMwlAnwMOG7TEyn
+         ibu+nPgh0zYUeNmPPj3NIGZYtt98a5lGzz6zufex+NxUiVXINFZ2H+uKpLKcpA/mhU
+         2Ln96+t7R94hHLqBN95OrhiFbcbPWb1tGjGnsRNCsyBVIKP/2llOTIo8IP4xmDG6hj
+         rY4x6njPwVb917p+PsMHiobH3zxVGdjBR1du0KZw2v695OL+LKlXYrUKKFEMzzPuLz
+         IHlPE4pRHKcxQ==
+Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Thu, 12 May 2022 08:19:30 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Jakub Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
+        Krasnov Arseniy <oxffffaa@gmail.com>
+Subject: [RFC PATCH v1 6/8] virtio/vsock: enable zerocopy callback
+Thread-Topic: [RFC PATCH v1 6/8] virtio/vsock: enable zerocopy callback
+Thread-Index: AQHYZb/CBCCGHsRsTEumsu3XsE8R1A==
+Date:   Thu, 12 May 2022 05:18:47 +0000
+Message-ID: <f8d9658f-73e8-e28a-3942-9fa07c90f21f@sberdevices.ru>
+In-Reply-To: <7cdcb1e1-7c97-c054-19cf-5caeacae981d@sberdevices.ru>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <163A9CE28E0AAF4CABE7459E5DE429D6@sberdevices.ru>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/05/12 02:55:00 #19424207
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,56 +77,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-1. of_find_device_by_node() takes reference, we should use put_device()
-to release it when not need anymore.
-2. of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not needed anymore.
-
-Add put_device() and of_node_put() in some error paths to fix.
-
-Fixes: ec9bfa1e1a79 ("dmaengine: ti-dma-crossbar: dra7: Use bitops instead of idr")
-Fixes: a074ae38f859 ("dmaengine: Add driver for TI DMA crossbar on DRA7x")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/dma/ti/dma-crossbar.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/dma/ti/dma-crossbar.c b/drivers/dma/ti/dma-crossbar.c
-index 71d24fc07c00..f744ddbbbad7 100644
---- a/drivers/dma/ti/dma-crossbar.c
-+++ b/drivers/dma/ti/dma-crossbar.c
-@@ -245,6 +245,7 @@ static void *ti_dra7_xbar_route_allocate(struct of_phandle_args *dma_spec,
- 	if (dma_spec->args[0] >= xbar->xbar_requests) {
- 		dev_err(&pdev->dev, "Invalid XBAR request number: %d\n",
- 			dma_spec->args[0]);
-+		put_device(&pdev->dev);
- 		return ERR_PTR(-EINVAL);
- 	}
- 
-@@ -252,12 +253,14 @@ static void *ti_dra7_xbar_route_allocate(struct of_phandle_args *dma_spec,
- 	dma_spec->np = of_parse_phandle(ofdma->of_node, "dma-masters", 0);
- 	if (!dma_spec->np) {
- 		dev_err(&pdev->dev, "Can't get DMA master\n");
-+		put_device(&pdev->dev);
- 		return ERR_PTR(-EINVAL);
- 	}
- 
- 	map = kzalloc(sizeof(*map), GFP_KERNEL);
- 	if (!map) {
- 		of_node_put(dma_spec->np);
-+		put_device(&pdev->dev);
- 		return ERR_PTR(-ENOMEM);
- 	}
- 
-@@ -268,6 +271,8 @@ static void *ti_dra7_xbar_route_allocate(struct of_phandle_args *dma_spec,
- 		mutex_unlock(&xbar->mutex);
- 		dev_err(&pdev->dev, "Run out of free DMA requests\n");
- 		kfree(map);
-+		of_node_put(dma_spec->np);
-+		put_device(&pdev->dev);
- 		return ERR_PTR(-ENOMEM);
- 	}
- 	set_bit(map->xbar_out, xbar->dma_inuse);
--- 
-2.25.1
-
+VGhpcyBhZGRzIHplcm9jb3B5IGNhbGxiYWNrIGZvciB2aXJ0aW8gdHJhbnNwb3J0Lg0KDQpTaWdu
+ZWQtb2ZmLWJ5OiBBcnNlbml5IEtyYXNub3YgPEFWS3Jhc25vdkBzYmVyZGV2aWNlcy5ydT4NCi0t
+LQ0KIG5ldC92bXdfdnNvY2svdmlydGlvX3RyYW5zcG9ydC5jIHwgMSArDQogMSBmaWxlIGNoYW5n
+ZWQsIDEgaW5zZXJ0aW9uKCspDQoNCmRpZmYgLS1naXQgYS9uZXQvdm13X3Zzb2NrL3ZpcnRpb190
+cmFuc3BvcnQuYyBiL25ldC92bXdfdnNvY2svdmlydGlvX3RyYW5zcG9ydC5jDQppbmRleCA0M2I3
+YjA5YjRhMGEuLmVhMGUxNTY3Y2ZhOCAxMDA2NDQNCi0tLSBhL25ldC92bXdfdnNvY2svdmlydGlv
+X3RyYW5zcG9ydC5jDQorKysgYi9uZXQvdm13X3Zzb2NrL3ZpcnRpb190cmFuc3BvcnQuYw0KQEAg
+LTQ3OCw2ICs0NzgsNyBAQCBzdGF0aWMgc3RydWN0IHZpcnRpb190cmFuc3BvcnQgdmlydGlvX3Ry
+YW5zcG9ydCA9IHsNCiAJCS5zdHJlYW1fcmN2aGl3YXQgICAgICAgICAgPSB2aXJ0aW9fdHJhbnNw
+b3J0X3N0cmVhbV9yY3ZoaXdhdCwNCiAJCS5zdHJlYW1faXNfYWN0aXZlICAgICAgICAgPSB2aXJ0
+aW9fdHJhbnNwb3J0X3N0cmVhbV9pc19hY3RpdmUsDQogCQkuc3RyZWFtX2FsbG93ICAgICAgICAg
+ICAgID0gdmlydGlvX3RyYW5zcG9ydF9zdHJlYW1fYWxsb3csDQorCQkuemVyb2NvcHlfZGVxdWV1
+ZQkgID0gdmlydGlvX3RyYW5zcG9ydF96ZXJvY29weV9kZXF1ZXVlLA0KIA0KIAkJLnNlcXBhY2tl
+dF9kZXF1ZXVlICAgICAgICA9IHZpcnRpb190cmFuc3BvcnRfc2VxcGFja2V0X2RlcXVldWUsDQog
+CQkuc2VxcGFja2V0X2VucXVldWUgICAgICAgID0gdmlydGlvX3RyYW5zcG9ydF9zZXFwYWNrZXRf
+ZW5xdWV1ZSwNCi0tIA0KMi4yNS4xDQo=

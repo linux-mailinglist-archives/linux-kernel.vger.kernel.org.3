@@ -2,101 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32087524E47
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E92524E48
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354415AbiELNaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 09:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46158 "EHLO
+        id S1354429AbiELNaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 09:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353288AbiELNaA (ORCPT
+        with ESMTP id S1354427AbiELNaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 09:30:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 598C7606E5
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:29:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652362198;
+        Thu, 12 May 2022 09:30:06 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72CAD253ABD
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:30:04 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652362202;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DA2o1oH2CnQN4rTgeJBlz0Z2QZ9OepNnqTduzJ6TFAE=;
-        b=FkFY81K5VTwaR6IFSKmoVbupZKIhz7eaHH+gzI77B9D9E1d8eDhFIV5YfbzpL9g8AAipf4
-        X/I8mOoH2gndp3GOjewpkWXLqMGrg7ZIGhDxzho05WZuuqc/HcTWXjdftbTgRUsyjEa7M8
-        cH1ZlqDseXBPwiXZBX/v6MAwEox9CMk=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-533-63bzjTfzOqWPBxqpPOgk4Q-1; Thu, 12 May 2022 09:29:57 -0400
-X-MC-Unique: 63bzjTfzOqWPBxqpPOgk4Q-1
-Received: by mail-wr1-f70.google.com with SMTP id m8-20020adfc588000000b0020c4edd8a57so2069940wrg.10
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:29:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=DA2o1oH2CnQN4rTgeJBlz0Z2QZ9OepNnqTduzJ6TFAE=;
-        b=USygqw8KO0deVXX8OKsC+51OIlyjmwFzwKpAkhHfiss68s1Yos7w1sEa3rsSpTceDC
-         juukYcWGvfFAbTrrw8k3xF1S8tJWz/XQlcVGMgi3vZGy50fr7urTlLpIFmXCNCiHoRNY
-         v9yg07Krh6be/+IdhuO76wXWccwU1ulR9/+HQqQhrAt5lGX/jGMSecsEfa/9ytb9fVzl
-         KAn0xDBTPvtu9k9fGzFu3qIwCmriXjNW8GAaWgGNtqykfC+LVBtWKVA3dSB+kj14H4vq
-         ZJsk9WIa2xhziu+VIV9I8Xb9OYPuCuMLITN+59hDQ2wpq25yiJCEoresgMUebLYPNs2L
-         kvdw==
-X-Gm-Message-State: AOAM533d2hsK5C1RLsKCaCOnDnfacUQcYt/gliDpxuEXIyUMH7TgzyIV
-        VwjJrCMRtNB2A+DXBVfumc9jplwKcvxRkqN+B+XNtOpiT/oI66mls568jXcp9XMq7yOdGxe2TPi
-        QsdRtUa1oOgMpRJvojywlgM8s
-X-Received: by 2002:a5d:6752:0:b0:20a:ce1f:2ceb with SMTP id l18-20020a5d6752000000b0020ace1f2cebmr27778393wrw.715.1652362196080;
-        Thu, 12 May 2022 06:29:56 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxXNlsPbzl2/GTRWfDAonlU3oNOseB8s5XhieI0K7okUkzO9jJ++Jt9yrmxfwD5f9zfWe7EZw==
-X-Received: by 2002:a5d:6752:0:b0:20a:ce1f:2ceb with SMTP id l18-20020a5d6752000000b0020ace1f2cebmr27778377wrw.715.1652362195861;
-        Thu, 12 May 2022 06:29:55 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c701:d200:ee5d:1275:f171:136d? (p200300cbc701d200ee5d1275f171136d.dip0.t-ipconnect.de. [2003:cb:c701:d200:ee5d:1275:f171:136d])
-        by smtp.gmail.com with ESMTPSA id n7-20020adffe07000000b0020c5253d8dasm4166161wrr.38.2022.05.12.06.29.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 06:29:55 -0700 (PDT)
-Message-ID: <f6e93064-a7ec-5509-e75c-0548ea5f9ed1@redhat.com>
-Date:   Thu, 12 May 2022 15:29:54 +0200
+        bh=jh/jFbnSUA7IWAzYFoSb7APluz7HA7PKXomh5dcaByM=;
+        b=fRsO4W3fk23MjEkXh9sd7FucAJARujP68JUxGf5kyNywn9isXTs1vCI2Pt+Y2qJXhLfogX
+        13saEhEqvFrc2p0vyyWeHR0SlG8Vfx0RB193zm/hYKO2N8PZMhJ1iSV3Ep2Ff7HB3AsMHo
+        5mtOlYk2NMXWa5dO735mzynKgt8LKxjl+eleD/ARq8oYA+/+BU6grmoJ6sD0YOLg20YgjX
+        f9i854gOWGfg7ptRZFVfHbedvvEVkNN3606k1PE/5xUT9rnD691gQVNKtrKF+PHTfBY6vH
+        6yQUdhd7QZ735zuBncutoBUasZ01LhB7xEsOgOE34G5Dya8ipXEIxo+2LsL27Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652362202;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jh/jFbnSUA7IWAzYFoSb7APluz7HA7PKXomh5dcaByM=;
+        b=T12LhOIo4k09ChfV17VLUuuDL26U+nTtwCeDRbjCSbJBnnw37TCkkByi2ts+5O89QuZmVD
+        4XmUByyA7rdd+fAQ==
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [RFCv2 07/10] x86/mm: Handle tagged memory accesses from kernel
+ threads
+In-Reply-To: <20220511022751.65540-9-kirill.shutemov@linux.intel.com>
+References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
+ <20220511022751.65540-9-kirill.shutemov@linux.intel.com>
+Date:   Thu, 12 May 2022 15:30:01 +0200
+Message-ID: <878rr6x4iu.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 03/15] mm/swap: fold __swap_info_get() into its sole
- caller
-Content-Language: en-US
-To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
-Cc:     willy@infradead.org, vbabka@suse.cz, dhowells@redhat.com,
-        neilb@suse.de, apopple@nvidia.com, surenb@google.com,
-        peterx@redhat.com, naoya.horiguchi@nec.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220509131416.17553-1-linmiaohe@huawei.com>
- <20220509131416.17553-4-linmiaohe@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220509131416.17553-4-linmiaohe@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.05.22 15:14, Miaohe Lin wrote:
-> Fold __swap_info_get() into its sole caller to make code more clear.
-> Minor readability improvement.
-> 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+On Wed, May 11 2022 at 05:27, Kirill A. Shutemov wrote:
+> diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
+> index f9fe71d1f42c..b320556e1c22 100644
+> --- a/arch/x86/mm/tlb.c
+> +++ b/arch/x86/mm/tlb.c
+> @@ -185,6 +185,34 @@ static u8 gen_lam(struct task_struct *tsk, struct mm_struct *mm)
+>  	if (!tsk)
+>  		return LAM_NONE;
+>  
+> +	if (tsk->flags & PF_KTHREAD) {
+> +		/*
+> +		 * For kernel thread use the most permissive LAM
+> +		 * used by the mm. It's required to handle kernel thread
+> +		 * memory accesses on behalf of a process.
+> +		 *
+> +		 * Adjust thread flags accodringly, so untagged_addr() would
+> +		 * work correctly.
+> +		 */
+> +
+> +		tsk->thread.features &= ~(X86_THREAD_LAM_U48 |
+> +					  X86_THREAD_LAM_U57);
+> +
+> +		switch (mm->context.lam) {
+> +		case LAM_NONE:
+> +			return LAM_NONE;
+> +		case LAM_U57:
+> +			tsk->thread.features |= X86_THREAD_LAM_U57;
+> +			return LAM_U57;
+> +		case LAM_U48:
+> +			tsk->thread.features |= X86_THREAD_LAM_U48;
+> +			return LAM_U48;
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Pretending that LAM is configurable per thread and then having a magic
+override in the per process mm when accessing that process' memory from
+a kernel thread is inconsistent, a horrible hack and a recipe for
+hard to diagnose problems.
 
+LAM has to be enabled by the process _before_ creating threads and then
+stay enabled until the whole thing dies. That's the only sensible use
+case.
 
--- 
+I understand that tsk->thread.features is conveniant for the untagging
+mechanism, but the whole setup should be:
+
+prctl(ENABLE, which)
+     if (can_enable_lam(which)) {
+     	mm->lam.c3_mask = CR3_LAM(which);
+        mm->lam.untag_mask = UNTAG_LAM(which);
+        current->thread.lam_untag_mask = mm->lam.untag_mask;
+     }
+
+and
+
+can_enable_lam(which)
+    if (current_is_multithreaded())
+    	return -ETOOLATE;
+    if (current->mm->lam_cr3_mask)
+    	return -EBUSY;
+    ....
+    	
+
+Now vs. kernel threads. Doing this like the above is just the wrong
+place. If a kernel thread accesses user space memory of a process then
+it has to invoke kthread_use_mm(), right? So the obvious point to cache
+that setting is in kthread_use_mm() and kthread_unuse_mm() clears it:
+
+kthread_use_mm()
+     current->thread.lam_untag_mask = mm->lam.untag_mask;
+
+kthread_unuse_mm()
+     current->thread.lam_untag_mask = 0;
+
+This makes all of the mechanics trivial because CR3 switch then simply
+does:
+
+     new_cr3 |= mm->lam.c3_mask;
+
+No conditionals and evaluations, nothing. Just straight forward and
+comprehensible code.
+
 Thanks,
 
-David / dhildenb
-
+        tglx

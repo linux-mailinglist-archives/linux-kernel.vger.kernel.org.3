@@ -2,80 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB115247FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 10:38:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2ED3524803
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 10:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351635AbiELIhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 04:37:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48974 "EHLO
+        id S1344681AbiELIiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 04:38:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351542AbiELIhB (ORCPT
+        with ESMTP id S1351589AbiELIiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 04:37:01 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4848B080
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 01:37:00 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id z2so8750846ejj.3
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 01:37:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Nv8lNSH0gbtDRGd36VCloQ6uZGegVPpsw/onrG8x3ew=;
-        b=yzFJE4m26cI254ywYC9KLHQeXSX1cl8syDdlPf27qy+G0mcnTD0mjfjwiZWKfNMCVG
-         bimWGCB8dEaE8pCVPoXHBIvO7B5ruTyh8RbzEW+KTU6Q5Ur68C/0PrfR3gwonkuZILKn
-         XBEDBiRH3pEBoR0p9xzsQt3QSUfqEAs/l0utOohuB3A0+eVfGEEDm4GR//oeVo9nocC3
-         LnRt5HKYPC2gNtKH09R6CWG2p1K7zb/RLei1GCX0WchH+T1PnfXGnQjsTAoGFMoDKMOW
-         H5nABG6HPcz+QYi/kx0YLqNgwtJ8GZFbXjbKK4i/3dOZRUBZIBAgKzxeIiS4MEw/xpHm
-         KeCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Nv8lNSH0gbtDRGd36VCloQ6uZGegVPpsw/onrG8x3ew=;
-        b=NimQzRnuGScF3ufbN+nmvefnR0IG28CQtRO4EQnMM2qx6WnFsmusdA5aJdEXKfiApm
-         O5tHegMIYB8lKmsF3aWiIGA4rhNqJsURtd7lZ+bISa0qY2ByJbMxiklmYz//rw9NAAV8
-         crK65OP/D9q9vnBS69hvWKdzD9qgUNpHr8pWvfD2p9S3HVnCeERDUMK5cFzdvTtFTp35
-         Yqi6La2w90oOkGj9PF0SbDIcpUrV3GgUjJo/jZAurBTK69q3v+iCyOnkJ6F9qfOvsjAE
-         EUuZY/sUmXSScHfDeK4a7qZ49p05soHFPm0BFMrqxOXj3JN0RIR3gEcZIroB6WOHuPXQ
-         8cvw==
-X-Gm-Message-State: AOAM531GA88b/NPzF4CGqiN8Ms7PE8Ru+laLgDUkO4K3mjDCNMjN9m1A
-        xBdad9xV1NqJXeMuzzNgDU9mxw==
-X-Google-Smtp-Source: ABdhPJwZLwXF5gGhpt3H78T3NZu8Rwtld52oms13g3NCCt4/CVIBRMHb30iIrWeu9SanSWzwVRzyKQ==
-X-Received: by 2002:a17:907:86a0:b0:6f4:fc1f:30d9 with SMTP id qa32-20020a17090786a000b006f4fc1f30d9mr28654321ejc.708.1652344618652;
-        Thu, 12 May 2022 01:36:58 -0700 (PDT)
-Received: from [192.168.0.156] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id ko21-20020a170907987500b006f3ef214e28sm1881071ejc.142.2022.05.12.01.36.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 01:36:58 -0700 (PDT)
-Message-ID: <30c18480-bf0d-82b9-5b11-daa3b70c40df@linaro.org>
-Date:   Thu, 12 May 2022 10:36:56 +0200
+        Thu, 12 May 2022 04:38:03 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E371207F4
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 01:37:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652344672; x=1683880672;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Q3HSBah4b2SHu/QAANeRqmuxmcVixTWpiSkP1xMK0KU=;
+  b=hST1m1D/6vPEeAMmvnBdUky5SwL7qh9HAv1I/5MVRtZL+90ZyVZUbi4B
+   iRW3paabG6YgE5aThVphxV5rGy4vkduzVnVXUIF1RFWkwkWH0mISAGQgw
+   wTxphBDwjKfiMS7nNTJ6IaCcmKiLnnwIj1y/G+a2BO2TajsnWQ6eVkII7
+   N9+S067Olm2ulAipQ9gACizkdVcysENwEe8JuY8zPIHpzdCpfxZnSrrfl
+   UR694fb2ZyDjaisTHhnZRd91jfuifq5pUpwgFnKziuMnABo9Ry7FOrS4d
+   jDwCDdvgWDic/q8SwCTlXb0QQN2b8bM9sb0u7cY7YVXoybtuqdqhKls6W
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="267521116"
+X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
+   d="scan'208";a="267521116"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 01:37:51 -0700
+X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
+   d="scan'208";a="594566236"
+Received: from ruonanwa-mobl.ccr.corp.intel.com ([10.254.212.157])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 01:37:46 -0700
+Message-ID: <c8f253839505adec4d68cd2aa3f3769866915ad3.camel@intel.com>
+Subject: Re: RFC: Memory Tiering Kernel Interfaces (v2)
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     Wei Xu <weixugc@google.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Hesham Almatary <hesham.almatary@huawei.com>
+Date:   Thu, 12 May 2022 16:37:38 +0800
+In-Reply-To: <CAAPL-u90Gzrepbsdpc62FGRBYOx1LAVwZWHg1E7UyVD_CmcROw@mail.gmail.com>
+References: <CAAPL-u-DGLcKRVDnChN9ZhxPkfxQvz9Sb93kVoX_4J2oiJSkUw@mail.gmail.com>
+         <56b41ce6922ed5f640d9bd46a603fa27576532a9.camel@intel.com>
+         <c5d55131-76ff-7354-2954-7cfac365a9a5@linux.ibm.com>
+         <CAAPL-u-g86QqHaHGGtVJMER8ENC2dpekK+2qOkxoRFmC0F_80g@mail.gmail.com>
+         <87y1z7jj85.fsf@linux.ibm.com>
+         <CAAPL-u90Gzrepbsdpc62FGRBYOx1LAVwZWHg1E7UyVD_CmcROw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 4/9] dt-bindings: remoteproc: qcom: wcnss: Convert to YAML
-Content-Language: en-US
-To:     Sireesh Kodali <sireeshkodali1@gmail.com>,
-        linux-remoteproc@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, bjorn.andersson@linaro.org,
-        devicetree@vger.kernel.org, phone-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20220511161602.117772-1-sireeshkodali1@gmail.com>
- <20220511161602.117772-5-sireeshkodali1@gmail.com>
- <00234f36-9bae-31d5-5b83-ea238e7e3c11@linaro.org>
- <CJXL0SG2GHN1.1IO2JOR5ARNV8@skynet-linux>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CJXL0SG2GHN1.1IO2JOR5ARNV8@skynet-linux>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,27 +82,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2022 08:50, Sireesh Kodali wrote:
->>> +    description: The names of the state bits used for SMP2P output
->>> +    items:
->>> +      - const: stop
->>> +
->>> +  memory-region:
->>> +    maxItems: 1
->>> +    description: Reference to the reserved-memory for the WCNSS core
->>> +
->>> +  smd-edge:
->>> +    type: object
->>> +    description:
->>> +      Qualcomm Shared Memory subnode which represents communication edge,
->>> +      channels and devices related to the ADSP.
->>
->> You should reference /schemas/soc/qcom/qcom,smd.yaml
+On Thu, 2022-05-12 at 01:15 -0700, Wei Xu wrote:
+> On Thu, May 12, 2022 at 12:36 AM Aneesh Kumar K.V
+> <aneesh.kumar@linux.ibm.com> wrote:
+> > 
+> > Wei Xu <weixugc@google.com> writes:
+> > 
+> > > On Thu, May 12, 2022 at 12:12 AM Aneesh Kumar K V
+> > > <aneesh.kumar@linux.ibm.com> wrote:
+> > > > 
+> > > > On 5/12/22 12:33 PM, ying.huang@intel.com wrote:
+> > > > > On Wed, 2022-05-11 at 23:22 -0700, Wei Xu wrote:
+> > > > > > Sysfs Interfaces
+> > > > > > ================
+> > > > > > 
+> > > > > > * /sys/devices/system/memtier/memtierN/nodelist
+> > > > > > 
+> > > > > >    where N = 0, 1, 2 (the kernel supports only 3 tiers for now).
+> > > > > > 
+> > > > > >    Format: node_list
+> > > > > > 
+> > > > > >    Read-only.  When read, list the memory nodes in the specified tier.
+> > > > > > 
+> > > > > >    Tier 0 is the highest tier, while tier 2 is the lowest tier.
+> > > > > > 
+> > > > > >    The absolute value of a tier id number has no specific meaning.
+> > > > > >    What matters is the relative order of the tier id numbers.
+> > > > > > 
+> > > > > >    When a memory tier has no nodes, the kernel can hide its memtier
+> > > > > >    sysfs files.
+> > > > > > 
+> > > > > > * /sys/devices/system/node/nodeN/memtier
+> > > > > > 
+> > > > > >    where N = 0, 1, ...
+> > > > > > 
+> > > > > >    Format: int or empty
+> > > > > > 
+> > > > > >    When read, list the memory tier that the node belongs to.  Its value
+> > > > > >    is empty for a CPU-only NUMA node.
+> > > > > > 
+> > > > > >    When written, the kernel moves the node into the specified memory
+> > > > > >    tier if the move is allowed.  The tier assignment of all other nodes
+> > > > > >    are not affected.
+> > > > > > 
+> > > > > >    Initially, we can make this interface read-only.
+> > > > > 
+> > > > > It seems that "/sys/devices/system/node/nodeN/memtier" has all
+> > > > > information we needed.  Do we really need
+> > > > > "/sys/devices/system/memtier/memtierN/nodelist"?
+> > > > > 
+> > > > > That can be gotten via a simple shell command line,
+> > > > > 
+> > > > > $ grep . /sys/devices/system/node/nodeN/memtier | sort -n -k 2 -t ':'
+> > > > > 
+> > > > 
+> > > > It will be really useful to fetch the memory tier node list in an easy
+> > > > fashion rather than reading multiple sysfs directories. If we don't have
+> > > > other attributes for memorytier, we could keep
+> > > > "/sys/devices/system/memtier/memtierN" a NUMA node list there by
+> > > > avoiding /sys/devices/system/memtier/memtierN/nodelist
+> > > > 
+> > > > -aneesh
+> > > 
+> > > It is harder to implement memtierN as just a file and doesn't follow
+> > > the existing sysfs pattern, either.  Besides, it is extensible to have
+> > > memtierN as a directory.
+> > 
+> > diff --git a/drivers/base/node.c b/drivers/base/node.c
+> > index 6248326f944d..251f38ec3816 100644
+> > --- a/drivers/base/node.c
+> > +++ b/drivers/base/node.c
+> > @@ -1097,12 +1097,49 @@ static struct attribute *node_state_attrs[] = {
+> >         NULL
+> >  };
+> > 
+> > +#define MAX_TIER 3
+> > +nodemask_t memory_tier[MAX_TIER];
+> > +
+> > +#define _TIER_ATTR_RO(name, tier_index)                                        \
+> > +       { __ATTR(name, 0444, show_tier, NULL), tier_index, NULL }
+> > +
+> > +struct memory_tier_attr {
+> > +       struct device_attribute attr;
+> > +       int tier_index;
+> > +       int (*write)(nodemask_t nodes);
+> > +};
+> > +
+> > +static ssize_t show_tier(struct device *dev,
+> > +                        struct device_attribute *attr, char *buf)
+> > +{
+> > +       struct memory_tier_attr *mt = container_of(attr, struct memory_tier_attr, attr);
+> > +
+> > +       return sysfs_emit(buf, "%*pbl\n",
+> > +                         nodemask_pr_args(&memory_tier[mt->tier_index]));
+> > +}
+> > +
+> >  static const struct attribute_group memory_root_attr_group = {
+> >         .attrs = node_state_attrs,
+> >  };
+> > 
+> > +
+> > +#define TOP_TIER 0
+> > +static struct memory_tier_attr memory_tiers[] = {
+> > +       [0] = _TIER_ATTR_RO(memory_top_tier, TOP_TIER),
+> > +};
+> > +
+> > +static struct attribute *memory_tier_attrs[] = {
+> > +       &memory_tiers[0].attr.attr,
+> > +       NULL
+> > +};
+> > +
+> > +static const struct attribute_group memory_tier_attr_group = {
+> > +       .attrs = memory_tier_attrs,
+> > +};
+> > +
+> >  static const struct attribute_group *cpu_root_attr_groups[] = {
+> >         &memory_root_attr_group,
+> > +       &memory_tier_attr_group,
+> >         NULL,
+> >  };
+> > 
+> > 
+> > As long as we have the ability to see the nodelist, I am good with the
+> > proposal.
+> > 
+> > -aneesh
+> 
+> I am OK with moving back the memory tier nodelist into node/.  When
+> there are more memory tier attributes needed, we can then create the
+> memory tier subtree and replace the tier nodelist in node/ with
+> symlinks.
 
-It seems it is not a SMD driver so above reference is not correct. This
-should be probably described in its own schema, I just need to
-understand what's this...
+What attributes do you imagine that we may put in memory_tierX/ sysfs
+directory?  If we have good candidates in mind, we may just do that. 
+What I can imagine now is "demote", like "memory_reclaim" in nodeX/ or
+node/ directory you proposed before.  Is it necessary to show something
+like "meminfo", "vmstat" there?
+
+Best Regards,
+Huang, Ying
+
+> 
+> So the revised sysfs interfaces are:
+> 
+> * /sys/devices/system/node/memory_tierN (read-only)
+> 
+>   where N = 0, 1, 2
+> 
+>   Format: node_list
+> 
+> * /sys/devices/system/node/nodeN/memory_tier (read/write)
+> 
+>   where N = 0, 1, ...
+> 
+>   Format: int or empty
 
 
-Best regards,
-Krzysztof

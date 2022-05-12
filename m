@@ -2,101 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 486FE52545D
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 20:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87D9A52558D
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357222AbiELSB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 14:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36530 "EHLO
+        id S1357960AbiELTOz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 12 May 2022 15:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357488AbiELSBN (ORCPT
+        with ESMTP id S1358005AbiELTOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 14:01:13 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01612DAA8;
-        Thu, 12 May 2022 11:01:11 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id k2so8352544wrd.5;
-        Thu, 12 May 2022 11:01:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=cJnjugKrgdrJmqtsA8GvHLwluSC6FXfzUUPGSlEcivE=;
-        b=qPUMUcm/abZSYEgcqqyPZr0HgYbcfPxuQOzKdDv7kDhAL/1WUobxuxwqth5mbVsgSu
-         kvQj/IJtKdilmYRYJ4Jzc3ZPtbnGR8yIXwwD9KBSQilm7QlGIS3bgWIYQG9715seIuNb
-         82+3h9ftKyqS+TaNHxJQJeqcqM/pshT+bS3nIfsAky8JGKfOtSuTbChrPybD6qa4Rntj
-         C6kHT4meX/mmxIzRQKj3RHf8cjOLRJd56dI9VA8Gwc5dBlIdhMLZnoCkvUnPAm/tbM0W
-         GVMGILHKnlu7z0uSi2gi6++7xoTfFGMUO1qgccpSKAE64BFhzmri4nJwzkTXs8MVcEbT
-         PzFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=cJnjugKrgdrJmqtsA8GvHLwluSC6FXfzUUPGSlEcivE=;
-        b=3DV0JvKmK6nayK2Itl1zqxlTZUX8uMcpq5mJHpz3HzOfi3sSN6jWlIwJwc3AdYmwy6
-         bVMm7/E5WIPdTT5VLkX7s43CdhAu35FPsZ5n4pUX92Wzz9dguqVo64b8UeZlxQrcUTeJ
-         KWpWNQ/zlGRn2F/Vcf0hZbylukl233wAHRuOE0zQVYjKUmwYxjQ4sW6pRAcU6LReQ5/s
-         zc/KTjrWPqu7BiRLKE0SMWCal49+DS6ZU6m+rMWIGVzdTzqnfIm5ivxrUT/D3R8gYy/F
-         oYcbYIsNQlRQcwCwj2m+2Ae46nHVr5hwjg7/2QtbMw2m6x28npeZgQvNK3GNjCD8dMHQ
-         rfjA==
-X-Gm-Message-State: AOAM531W8Qj75fyw6u1SQwJ0h/LHrCBH47RysXOoqsPj5w9k1te+mwzs
-        TsJk595TUSXQ5EOfzJ9k8RUcTGnWnd5VnA==
-X-Google-Smtp-Source: ABdhPJxoToamSOfhGh9lH0yr5QWOZvlt8q07M4v3o1V4D5RWM1VFWqEEPS6QbYcg05kvZVU4IY9tPA==
-X-Received: by 2002:adf:d230:0:b0:20a:da1f:aaaf with SMTP id k16-20020adfd230000000b0020ada1faaafmr705729wrh.616.1652378470507;
-        Thu, 12 May 2022 11:01:10 -0700 (PDT)
-Received: from ?IPV6:2a04:241e:502:a09c:2fa1:a00:fe93:7863? ([2a04:241e:502:a09c:2fa1:a00:fe93:7863])
-        by smtp.gmail.com with ESMTPSA id d25-20020adf9b99000000b0020c5253d8c4sm217015wrc.16.2022.05.12.11.01.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 11:01:09 -0700 (PDT)
-Message-ID: <93323bba-476e-f821-045c-9fe942143da9@gmail.com>
-Date:   Thu, 12 May 2022 21:01:08 +0300
+        Thu, 12 May 2022 15:14:39 -0400
+X-Greylist: delayed 22703 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 May 2022 12:14:36 PDT
+Received: from mail.siaya.go.ke (mail.siaya.go.ke [194.201.253.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE8B27B328
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 12:14:36 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.siaya.go.ke (Postfix) with ESMTP id 64DC833520BF2;
+        Thu, 12 May 2022 15:12:59 +0300 (EAT)
+Received: from mail.siaya.go.ke ([127.0.0.1])
+        by localhost (mail.siaya.go.ke [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 4WQiYn2ITUKV; Thu, 12 May 2022 15:12:45 +0300 (EAT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.siaya.go.ke (Postfix) with ESMTP id 582AA3341D22F;
+        Thu, 12 May 2022 11:28:29 +0300 (EAT)
+X-Virus-Scanned: amavisd-new at siaya.go.ke
+Received: from mail.siaya.go.ke ([127.0.0.1])
+        by localhost (mail.siaya.go.ke [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id DXbT-Y-SYpCH; Thu, 12 May 2022 11:28:22 +0300 (EAT)
+Received: from [103.1.179.201] (unknown [103.1.179.201])
+        by mail.siaya.go.ke (Postfix) with ESMTPSA id 3A0243341E42E;
+        Thu, 12 May 2022 10:09:31 +0300 (EAT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-From:   Leonard Crestez <cdleonard@gmail.com>
-Subject: BUG: TCP timewait sockets survive across namespace creation in
- net-next
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Re
+To:     Recipients <nman@redpack.com.mx>
+From:   "Maximilian Voigt" <nman@redpack.com.mx>
+Date:   Thu, 12 May 2022 12:39:16 +0530
+Reply-To: voigtmaximiliam@gmail.com
+Message-Id: <20220512070934.3A0243341E42E@mail.siaya.go.ke>
+X-Spam-Status: No, score=3.7 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,SPF_HELO_NONE,SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+QP Headquarters
+World Trade Center
+Corniche Road
+West Bay. Doha
+PO Box 24183. Doha
 
-It appears that in recent net-next versions it is possible for sockets 
-in the timewait state to survive across namespace add/del. Timewait 
-sockets are inserted into a global hash and only the sock_net value is 
-compared when they are enumerated from interfaces like /proc/net/tcp and 
-inet_diag. Old TW sockets are not cleared after namespace delete and 
-namespaces are allocated from a slab and thus their pointers get reused 
-a lot, when that happens timewait sockets from an old namespace will 
-show up in the new one.
+I sincerely hope that all is well with you . I am Maximilian Voigt I’m a Broker working with a Focused private equity investment firm – We are an international private equity firm with a 40 year track record, focused on supporting companies and CEOs.
 
-This can be reproduced by establishing a TCP connection over a veth pair 
-between two namespaces, closing and then recreating those namespaces. 
-Old timewait sockets will be visible and it happens quite reliably, 
-often on the first iteration. I can try to provide a script for this.
+Do you still want a loan or an investment fund
 
-I can't point to specific bugs outside of tests that explicitly 
-enumerate timewait sockets but letting sk_net be a dangling pointer 
-seems very dangerous. It also violates the idea of network namespaces 
-being independent and isolated.
+I have clients who are willing to push any amount of investment funds as soon as my clients  on the other end have a reliable investment business plan to execute and deliver as agreed .
 
-This does not happen in 5.17, I bisected this behavior to commit 
-0dad4087a86a ("tcp/dccp: get rid of inet_twsk_purge()")
+Please let me know if you are interested in this. This have to be confidential as my clients are really private people and would prefer we keep it confidential.
 
---
-Regards,
-Leonard
+Regards
+Maximilian Voigt

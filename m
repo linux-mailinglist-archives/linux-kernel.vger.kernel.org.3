@@ -2,113 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF8952513A
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:25:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9726652513C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355918AbiELPZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 11:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32992 "EHLO
+        id S1355922AbiELP1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 11:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355915AbiELPZS (ORCPT
+        with ESMTP id S1350445AbiELP1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 11:25:18 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0452920F4E6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:25:17 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id i19so10894413eja.11
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:25:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LZMxjSJmldQ3JWCoivCnvn/+FiMrBE9vcPF4uGtQz2A=;
-        b=hhzaIlWaIG4YpufqFFKKB+9c/4n/9E89t2cVHITLb/CTZiRXgM4WOJTmuW5fPTCYtC
-         c/jh9WFhKOMhx5aVbeKji3Tus8LJw4bjHpNOfXm+PqFrROCEA6/i0kitKKu49HOEzdzz
-         4sobYKpWQqGS+YoDGoLZ/xoT2+4FdIAQgU9YbMrz1boNVhux5IHe8ZdQ/dqcwgcNq1Dh
-         N9enZ/zIy58r4SEc42V6EkirsIn9CWFVD82Wfx2nk6whuMj++SmG7uYjm1wvISVRnprR
-         xXLLtQvXbWxruFV4WKCz6UeWZiYrAcJPVsvRxLuxAQvAdy+8T5CjQiLzuSqz6pUBq2wM
-         JX+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LZMxjSJmldQ3JWCoivCnvn/+FiMrBE9vcPF4uGtQz2A=;
-        b=4mS+CuIQbSQ1PPhe786cC/eAH8H38xC/lPHqzatxy2JnfH5gAcytimAzcttaEg/hSP
-         C5/t0h2FGaH1uk7FArAGTxIAp4906Pl17xhpNlnApBvzpNifcgI6wEDgtLooqL1Jxmis
-         5FvY2r9v5WV54WFxA0lUwfSaS6cA68FEpWrxEA+L++rcopj1hJa4iT/NKbsNhtavs9aX
-         E46u/bTJID5/oyHzXj/6fQoY0o/QNHSjhLweaoKvWiIGHWKLdaOJbpq5QbdyAxkPPEBf
-         sM6UWkqWWMirwVqFdtXBrXt+cI29/a3Oa0AWEVsVOOt/G9fzTHN+Nt4VY2PAkwaeKoFX
-         5U0g==
-X-Gm-Message-State: AOAM5316E6NTyWiL92//bhrs80PGTMGaUrmI4Gv5S8ttWa7QwT7O/i2v
-        accWoQWa3kd0ZAaJe06Bd8cvW2HlXO6WQAVXxiYOnA==
-X-Google-Smtp-Source: ABdhPJyw52u6k4SKpOakHeWu7gjr6JuceopSOtVUJ5BHjzjLTgPQPdonUQjHuVeMJTBgwp2cRZ99WzBoL3BHUYZYrEk=
-X-Received: by 2002:a17:907:72ce:b0:6f4:5a57:320c with SMTP id
- du14-20020a17090772ce00b006f45a57320cmr389491ejc.75.1652369115386; Thu, 12
- May 2022 08:25:15 -0700 (PDT)
+        Thu, 12 May 2022 11:27:06 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B31A66F8E
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:27:04 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0C2561BF20E;
+        Thu, 12 May 2022 15:27:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1652369223;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=M7NNT92k26CJgW/8BeDWNQkG7ssrSCWKv0a9u8U2/8M=;
+        b=P8I5f/YpC9U1TfQ8e9YGjttd53tWVniAp7/SiGkzeOOeFKIVX4v2JFxT9U/p9sDxbbkGUH
+        /jOrPdPANq+XVQ1uJ/JpDKgkg6wDlwuDECjIPVkQxhIKRXZ3wPKL8F1hlB1g5Jq60yFNel
+        yVruQCQEfcvV1Z8HwpV3mjC0avNxT1bTzMtVsTn267dlrAESD1ls6eRBReag0vs199sCww
+        m5kspJGdlrM4bL6U7sda3FBdZ9eCM2BgyLAiQGhtViKluoScyAEM9q8rWK2U7QTRy/2wNb
+        /RJ5X13tKs3/87v1a8x6wYjTHtcTKg8HjdnA8KPxLmaoYfUsprOHoKL0OYOZRA==
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Joern Engel <joern@lazybastard.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     kernel@axis.com, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] mtd: phram: Allow cached mappings
+Date:   Thu, 12 May 2022 17:27:01 +0200
+Message-Id: <20220512152701.244667-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220510151822.1809278-1-vincent.whitchurch@axis.com>
+References: 
 MIME-Version: 1.0
-References: <bc6e9ed7-d98b-c4da-2a59-ee0915c18f10@gmail.com> <5ca35c47-6145-4ec1-6c05-3c46f436cb4d@gmail.com>
-In-Reply-To: <5ca35c47-6145-4ec1-6c05-3c46f436cb4d@gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Thu, 12 May 2022 08:25:04 -0700
-Message-ID: <CAGS_qxpE9qGsS1LqaobVGFKFgV6TwvwNLR4e9PG5zsfPACSf_Q@mail.gmail.com>
-Subject: Re: [RFC] KTAP spec v2: prefix to KTAP data
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>, Tim.Bird@sony.com,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Jonathan Corbet <corbet@lwn.net>, rmr167@gmail.com,
-        guillaume.tucker@collabora.com, kernelci@groups.io,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-linux-mtd-patch-notification: thanks
+X-linux-mtd-patch-commit: b'9a7459fd9be4968721ba7a4c6c7eae2f01da2b32'
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 11:01 PM Frank Rowand <frowand.list@gmail.com> wrote:
-> ================================================================================
-> #### discussion notes:
->
-> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-> PRO: minimally invasive to specification.
->
-> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-> CON:
->
-> KTAP does not include any mechanism to describe the value of <prefix string>
-> to test harnesses and test output processing programs.  The test output
-> processing programs must infer the value of <prefix string> by detecting
-> the <prefix string> in the "Version lines".
->
-> The detection of a "Version lines" might be a match of the regex:
->
->    "^.*KTAP version 2$"
->
-> This risks falsely detecting a "Version lines", but the risk is small???
+On Tue, 2022-05-10 at 15:18:22 UTC, Vincent Whitchurch wrote:
+> Currently phram always uses ioremap(), but this is unnecessary when
+> normal memory is used.  If the reserved-memory node does not specify the
+> no-map property, indicating it should be mapped as system RAM and
+> ioremap() cannot be used on it, use a cached mapping using
+> memremap(MEMREMAP_WB) instead.
+> 
+> On one of my systems this improves read performance by ~70%.
+> 
+> (Note that this driver has always used normal memcpy/memset functions on
+> memory obtained from ioremap(), which sparse doesn't like.  There is no
+> memremap() variant which maps exactly to ioremap() on all architectures,
+> so that behaviour of the driver is not changed to avoid affecting
+> existing users, but the sparse warnings are suppressed in the moved code
+> with __force.)
+> 
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 
-Agree this is a risk and also think it's probably small, but it's hard to say.
-I think the $ anchoring the regex is probably safe enough.
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.
 
-As noted earlier, this tracks with what kunit.py already does.
-That was necessitated by dynamic prefixes such as timestamps, etc.
-So I think this is probably a fine risk to take.
-
-I imagine we could add constraints of prefix string, e.g. must have []
-around it, etc. if we want to try and minimize this risk.
-But I don't know if it's necessarily worth it, given what we know right now.
-
-Along those lines, I think I like this approach (Alternative 1) more
-than Alternative 2/2b.
-I'm not sure we need a structured way to specify metadata in KTAP yet?
-The prefix seems like a reasonable candidate, but do others have ideas
-of other bits of metadata we'd want to be able to declare?
-
-Daniel
+Miquel

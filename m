@@ -2,138 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A47524B18
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C93E1524B34
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:15:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352996AbiELLMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 07:12:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46482 "EHLO
+        id S1353157AbiELLPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 07:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352988AbiELLMp (ORCPT
+        with ESMTP id S1353086AbiELLOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 07:12:45 -0400
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBED7527EC;
-        Thu, 12 May 2022 04:12:42 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R841e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VD-YkUJ_1652353959;
-Received: from 30.39.157.75(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VD-YkUJ_1652353959)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 12 May 2022 19:12:40 +0800
-Message-ID: <188f7cb2-ba21-a53a-828d-7242b17b0c72@linux.alibaba.com>
-Date:   Thu, 12 May 2022 19:13:18 +0800
+        Thu, 12 May 2022 07:14:23 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE8B238D77
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 04:13:40 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id c14so4502430pfn.2
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 04:13:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3SloLfFU8a1Q2HMNHKnLwbt6pwT6BUy9sQ/8OgycCqI=;
+        b=TWkDoQms83WKpuzTNBdzKvhoODw/n2DKAB8PkH+WiozWmeNSuyjVm2KbSvtlMzMYCU
+         5AfE9yC2bc67wnsu2Z8Vv8u3Af/Zzx8mURws2tXG8nDAjzY6OYZb425+fGXR8DRY6LPV
+         arSq90SoYNx+KnlokAVjO1vz4A8Wz87mIQWyEvLOI0UCBfKL3NQt1u4ln6YGym9EIWej
+         ZiFRbwxPQChV0Bb8ZVLe4FQO06jNZD9Af123ar9N0qMbNk8LMocN60z3oQCYCpzAJx63
+         imffSCEagiv0jJexube7LgHVJAdDYLcQEPa9aMbEngNzcN1tzHa0Q3mPlseKS7bfJkgZ
+         X4BQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3SloLfFU8a1Q2HMNHKnLwbt6pwT6BUy9sQ/8OgycCqI=;
+        b=r5JsPqYsKgIr4e0WaWRWAXQNPKvJRrpxVdlPYtCjRAEjCGfgw/rtRpTLg8Rs5uBTk6
+         HVhC+2bcyO0Gr4XVYQt1C9pPCoJ0qAch5P6xoFie1c4GHdBJIJoAtTvuiS9ucCpZPtcd
+         iUYuOxFM7GBNdqJTnb9hc7CI1Us87N75MtoTW7unnrDj7W+cCl+N9+3JdngthR4bMUuB
+         +Q5sKVbapHJ02tcsJc/KEAt5I/Kd07Xb/95VLw+ecqi/a1160VRX2fBidYkSBGckrbC7
+         Eu2jx6HJwySQHf4VoECx017rGVuoqAprUfHGhoAcU+8XtdNL4sznttymRUeVxMD7io0j
+         TOwg==
+X-Gm-Message-State: AOAM532wh4MCK2mIljMnOagT1RUZdE7BfZWnuozXP9eODWUW7+2zQtwn
+        z/ygoedLIbN6BRgOSnFCqH4=
+X-Google-Smtp-Source: ABdhPJy/350N6jJC6Z1dMu9/mg4+Nu0BAcptLFnUjKHPNCWQopVS3tO4EUk5mkrlt09q3p5haIZgow==
+X-Received: by 2002:a05:6a00:b87:b0:510:5e02:79f1 with SMTP id g7-20020a056a000b8700b005105e0279f1mr29558222pfj.80.1652354019644;
+        Thu, 12 May 2022 04:13:39 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id c3-20020a170902724300b0015e8d4eb20esm3605859pll.88.2022.05.12.04.13.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 04:13:39 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] ASoC: ti: j721e-evm: Fix refcount leak in j721e_soc_probe_*
+Date:   Thu, 12 May 2022 15:13:30 +0400
+Message-Id: <20220512111331.44774-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: linux-next: build failure after merge of the mm tree
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220512193855.4f6ce32f@canb.auug.org.au>
- <YnzqffV7STYS24Yn@arm.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <YnzqffV7STYS24Yn@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-12.8 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not needed anymore.
+Add missing of_node_put() to avoid refcount leak.
 
+Fixes: 6748d0559059 ("ASoC: ti: Add custom machine driver for j721e EVM (CPB and IVI)")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ sound/soc/ti/j721e-evm.c | 44 ++++++++++++++++++++++++++++++----------
+ 1 file changed, 33 insertions(+), 11 deletions(-)
 
-On 5/12/2022 7:07 PM, Catalin Marinas wrote:
-> On Thu, May 12, 2022 at 07:38:55PM +1000, Stephen Rothwell wrote:
->> After merging the mm tree, today's linux-next build (arm64 defconfig)
->> failed like this:
->>
->> arch/arm64/mm/hugetlbpage.c: In function 'huge_ptep_clear_flush':
->> arch/arm64/mm/hugetlbpage.c:493:16: error: implicit declaration of function 'get_clear_flush'; did you mean 'ptep_clear_flush'? [-Werror=implicit-function-declaration]
->>    493 |         return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
->>        |                ^~~~~~~~~~~~~~~
->>        |                ptep_clear_flush
->> arch/arm64/mm/hugetlbpage.c:493:16: error: incompatible types when returning type 'int' but 'pte_t' was expected
->>    493 |         return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
->>        |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> arch/arm64/mm/hugetlbpage.c:494:1: error: control reaches end of non-void function [-Werror=return-type]
->>    494 | }
->>        | ^
->>
->> Caused by commit
->>
->>    00df1f1a133b ("mm: change huge_ptep_clear_flush() to return the original pte")
->>
->> interacting with commit
->>
->>    fb396bb459c1 ("arm64/hugetlb: Drop TLB flush from get_clear_flush()")
->>
->> I have applied the following merg fix patch for today.
->>
->> From: Stephen Rothwell <sfr@canb.auug.org.au>
->> Date: Thu, 12 May 2022 19:33:11 +1000
->> Subject: [PATCH] fixup for "mm: change huge_ptep_clear_flush() to return the original pte"
->>
->> It interacts with commit
->>
->>    fb396bb459c1 ("arm64/hugetlb: Drop TLB flush from get_clear_flush()")
->>
->> from the arm64 tree
->>
->> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
->> ---
->>   arch/arm64/mm/hugetlbpage.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
->> index 5bdf913dedc7..30f5b76aabe9 100644
->> --- a/arch/arm64/mm/hugetlbpage.c
->> +++ b/arch/arm64/mm/hugetlbpage.c
->> @@ -490,7 +490,7 @@ pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
->>   		return ptep_clear_flush(vma, addr, ptep);
->>   
->>   	ncontig = find_num_contig(vma->vm_mm, addr, ptep, &pgsize);
->> -	return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
->> +	return get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
->>   }
-> 
-> Note that after the arm64 commit, get_clear_contig() no longer flushes
-> the TLB. So maybe something like:
-> 
-> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
-> index 30f5b76aabe9..9a999550df8e 100644
-> --- a/arch/arm64/mm/hugetlbpage.c
-> +++ b/arch/arm64/mm/hugetlbpage.c
-> @@ -485,12 +485,15 @@ pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
->   {
->   	size_t pgsize;
->   	int ncontig;
-> +	pte_t orig_pte;
-> 
->   	if (!pte_cont(READ_ONCE(*ptep)))
->   		return ptep_clear_flush(vma, addr, ptep);
-> 
->   	ncontig = find_num_contig(vma->vm_mm, addr, ptep, &pgsize);
-> -	return get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
-> +	orig_pte = get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
-> +	flush_tlb_range(vma, addr, addr + pgsize * ncontig);
-> +	return orig_pte;
->   }
+diff --git a/sound/soc/ti/j721e-evm.c b/sound/soc/ti/j721e-evm.c
+index 4077e15ec48b..6a969874c927 100644
+--- a/sound/soc/ti/j721e-evm.c
++++ b/sound/soc/ti/j721e-evm.c
+@@ -630,17 +630,18 @@ static int j721e_soc_probe_cpb(struct j721e_priv *priv, int *link_idx,
+ 	codec_node = of_parse_phandle(node, "ti,cpb-codec", 0);
+ 	if (!codec_node) {
+ 		dev_err(priv->dev, "CPB codec node is not provided\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto put_dai_node;
+ 	}
+ 
+ 	domain = &priv->audio_domains[J721E_AUDIO_DOMAIN_CPB];
+ 	ret = j721e_get_clocks(priv->dev, &domain->codec, "cpb-codec-scki");
+ 	if (ret)
+-		return ret;
++		goto put_codec_node;
+ 
+ 	ret = j721e_get_clocks(priv->dev, &domain->mcasp, "cpb-mcasp-auxclk");
+ 	if (ret)
+-		return ret;
++		goto put_codec_node;
+ 
+ 	/*
+ 	 * Common Processor Board, two links
+@@ -650,8 +651,10 @@ static int j721e_soc_probe_cpb(struct j721e_priv *priv, int *link_idx,
+ 	comp_count = 6;
+ 	compnent = devm_kzalloc(priv->dev, comp_count * sizeof(*compnent),
+ 				GFP_KERNEL);
+-	if (!compnent)
+-		return -ENOMEM;
++	if (!compnent) {
++		ret = -ENOMEM;
++		goto put_codec_node;
++	}
+ 
+ 	comp_idx = 0;
+ 	priv->dai_links[*link_idx].cpus = &compnent[comp_idx++];
+@@ -702,6 +705,12 @@ static int j721e_soc_probe_cpb(struct j721e_priv *priv, int *link_idx,
+ 	(*conf_idx)++;
+ 
+ 	return 0;
++
++put_codec_node:
++	of_node_put(codec_node);
++put_dai_node:
++	of_node_put(dai_node);
++	return ret;
+ }
+ 
+ static int j721e_soc_probe_ivi(struct j721e_priv *priv, int *link_idx,
+@@ -726,23 +735,25 @@ static int j721e_soc_probe_ivi(struct j721e_priv *priv, int *link_idx,
+ 	codeca_node = of_parse_phandle(node, "ti,ivi-codec-a", 0);
+ 	if (!codeca_node) {
+ 		dev_err(priv->dev, "IVI codec-a node is not provided\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto put_dai_node;
+ 	}
+ 
+ 	codecb_node = of_parse_phandle(node, "ti,ivi-codec-b", 0);
+ 	if (!codecb_node) {
+ 		dev_warn(priv->dev, "IVI codec-b node is not provided\n");
+-		return 0;
++		ret = 0;
++		goto put_codeca_node;
+ 	}
+ 
+ 	domain = &priv->audio_domains[J721E_AUDIO_DOMAIN_IVI];
+ 	ret = j721e_get_clocks(priv->dev, &domain->codec, "ivi-codec-scki");
+ 	if (ret)
+-		return ret;
++		goto put_codecb_node;
+ 
+ 	ret = j721e_get_clocks(priv->dev, &domain->mcasp, "ivi-mcasp-auxclk");
+ 	if (ret)
+-		return ret;
++		goto put_codecb_node;
+ 
+ 	/*
+ 	 * IVI extension, two links
+@@ -754,8 +765,10 @@ static int j721e_soc_probe_ivi(struct j721e_priv *priv, int *link_idx,
+ 	comp_count = 8;
+ 	compnent = devm_kzalloc(priv->dev, comp_count * sizeof(*compnent),
+ 				GFP_KERNEL);
+-	if (!compnent)
+-		return -ENOMEM;
++	if (!compnent) {
++		ret = -ENOMEM;
++		goto put_codecb_node;
++	}
+ 
+ 	comp_idx = 0;
+ 	priv->dai_links[*link_idx].cpus = &compnent[comp_idx++];
+@@ -816,6 +829,15 @@ static int j721e_soc_probe_ivi(struct j721e_priv *priv, int *link_idx,
+ 	(*conf_idx)++;
+ 
+ 	return 0;
++
++
++put_codecb_node:
++	of_node_put(codecb_node);
++put_codeca_node:
++	of_node_put(codeca_node);
++put_dai_node:
++	of_node_put(dai_node);
++	return ret;
+ }
+ 
+ static int j721e_soc_probe(struct platform_device *pdev)
+-- 
+2.25.1
 
-Yes, after checking this fb396bb459c1 ("arm64/hugetlb: Drop TLB flush 
-from get_clear_flush()"), I also realized it will miss TLB flush.
-
-So I am not sure I need send a incremental patch to fix this issue? Or 
-resend my patch set [1] with rebasing on the arm64 changes?
-
-Catalin and Andrew, how do you think? Thanks.
-
-[1] 
-https://lore.kernel.org/all/cover.1652270205.git.baolin.wang@linux.alibaba.com/

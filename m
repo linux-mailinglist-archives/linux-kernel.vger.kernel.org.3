@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22DE2525150
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46CBA52514F
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355978AbiELPca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 11:32:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57374 "EHLO
+        id S1355959AbiELPcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 11:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355969AbiELPcY (ORCPT
+        with ESMTP id S1355646AbiELPcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 11:32:24 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286F2222C14;
-        Thu, 12 May 2022 08:32:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=mP150j04E/8jQ8B5g/+n8UgWwpaCq5hceVZHtLcU+78=; b=W91vqJCSDahiNvJzDzMjIzXcgX
-        3OrdskRDyBToQfzQ9VxpWRoZZZSM3TkqG9OJgLXdU9Ay2q/5VWZZ4+6GozoMSSRxgjz9zp6BMRpQF
-        OeXORs7whRYGslWtesZUceCqjI7fs3yHddlPh2wmt+SXfWFkJWS9yQ+gzoDV9ayrpAEc=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1npAnK-002TL3-6U; Thu, 12 May 2022 17:32:02 +0200
-Date:   Thu, 12 May 2022 17:32:02 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Felix Fietkau <nbd@nbd.name>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: dsa: tag_mtk: add padding for tx packets
-Message-ID: <Yn0ockLQ+5x+gCfl@lunn.ch>
-References: <5959946d-1d34-49b9-1abe-9f9299cc194e@nbd.name>
- <20220510165233.yahsznxxb5yq6rai@skbuf>
- <bc4bde22-c2d6-1ded-884a-69465b9d1dc7@nbd.name>
- <20220510222101.od3n7gk3cofwhbks@skbuf>
- <376b13ac-d90b-24e0-37ed-a96d8e5f80da@nbd.name>
- <20220511093245.3266lqdze2b4odh5@skbuf>
- <YnvJFmX+BRscJOtm@lunn.ch>
- <0ef1e0c2-1623-070d-fbf5-e7f09fc199ca@nbd.name>
- <Ynz/7Wh6vDjR7ljs@lunn.ch>
- <987a1cd5-6f35-d3ac-1d42-5346be7ecb1a@nbd.name>
+        Thu, 12 May 2022 11:32:17 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A36420F758;
+        Thu, 12 May 2022 08:32:15 -0700 (PDT)
+Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KzbKp6Spvz67ycC;
+        Thu, 12 May 2022 23:29:18 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 12 May 2022 17:32:13 +0200
+Received: from [10.47.25.226] (10.47.25.226) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 12 May
+ 2022 16:32:11 +0100
+Message-ID: <d7056fb8-d218-4ef4-ec45-a9af8e13045c@huawei.com>
+Date:   Thu, 12 May 2022 16:32:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <987a1cd5-6f35-d3ac-1d42-5346be7ecb1a@nbd.name>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 01/20] perf vendors events arm64: Arm Cortex-A5
+To:     Nick Forrington <nick.forrington@arm.com>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <acme@kernel.org>
+CC:     Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        "Namhyung Kim" <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Andrew Kilroy <andrew.kilroy@arm.com>
+References: <20220510104758.64677-1-nick.forrington@arm.com>
+ <20220510104758.64677-2-nick.forrington@arm.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <20220510104758.64677-2-nick.forrington@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.25.226]
+X-ClientProxiedBy: lhreml748-chm.china.huawei.com (10.201.108.198) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,12 +67,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> I guess if you guys don't think the issue is worth the price of a very small
-> performance hit from padding the packets, I will just have to keep this as
-> an out-of-tree patch.
+On 10/05/2022 11:47, Nick Forrington wrote:
+> --- a/tools/perf/pmu-events/arch/arm64/common-and-microarch.json
+> +++ b/tools/perf/pmu-events/arch/arm64/common-and-microarch.json
+> @@ -35,6 +35,18 @@
+>           "EventName": "L1D_TLB_REFILL",
+>           "BriefDescription": "Attributable Level 1 data TLB refill"
+>       },
 
-I'm thinking it is worth fixing, but i also wonder if your receiver
-has a bug. And if it does have a bug, it will probably come back to
-bite you sometime in the future.
+This is a comment on the general situation of pmu-events support for arm64:
 
-     Andrew
+> +    {
+> +        "PublicDescription": "Instruction architecturally executed, condition code check pass, load",
+> +        "EventCode": "0x06",
+> +        "EventName": "LD_RETIRED",
+> +        "BriefDescription": "Instruction architecturally executed, condition code check pass, load"
+> +    },
+> +    {
+ > +[
+ > +    {
+ > +        "ArchStdEvent": "L1I_CACHE_REFILL"
+ > +    },
+
+The JSONs for some cores list these common arch events and some don't. 
+The effect (if we do) is that the perf tool creates the alias for the 
+event and we get all the event info in "perf list", which is useful.
+
+It would be good to have consistency here, but so many arm 
+implementations exist and it's tricky to have all cores supported in 
+pmu-events. So I had a patch series which makes perf read the armv8 pmu 
+sysfs event file to learn all the events which the core supports and 
+create the aliases from that. So, in this, we don't require the JSONs to 
+list these events explicitly. Maybe I'll revisit it soon.
+
+Thanks,
+John

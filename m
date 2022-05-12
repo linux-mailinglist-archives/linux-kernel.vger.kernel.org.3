@@ -2,113 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 747CE52478C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 10:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96802524785
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 10:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351292AbiELIBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 04:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
+        id S1351283AbiELIAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 04:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242321AbiELIBl (ORCPT
+        with ESMTP id S1351272AbiELIAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 04:01:41 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4706D3B0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 01:01:39 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id p12so4150636pfn.0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 01:01:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9dj+MY7TVUG7YYlF96sOIX1/Xkd2WTjl3qbMNcTVGbY=;
-        b=CZkFRbSp/Rk60f9tno8+etGpGRKD6OMbn89hoACWVv3BOba1v0jPFWrqwYtyJEwGng
-         VLwqj9OEw0yrmisT7WJf1Dq2zqzWy4Qsb8Ul3UxTQs00v1j8c514SQeJYUtVO8yrI1KP
-         SfSYhdoGLzoreN/tJWsnhx+Sx64LKDNMKD4UoNjjLbyYRj/grXgnF3QuPnP+m8LEFVsA
-         k6tf4cEqHNrGzbzZXDcjpxz/5CFuxzM0lnOz0WlCGcdgtIiTQmH4aO053/cG7Y/uIaqi
-         Vhor7zAzngp9g4EOjNq/JklGerSkhP93GD3x0QRFWxX0Je9KPrNDfZNKcNDPy3lcNNT0
-         ddAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9dj+MY7TVUG7YYlF96sOIX1/Xkd2WTjl3qbMNcTVGbY=;
-        b=lh4mXTVgUn/yavrb/OCTdH0meIUs015ANlntMQiqoUSquFcal8GyPkKAIgghV7plYB
-         FoGhotRcAISXgLqfpsJhtn+ckUR/emQY4rxTZ3Pv4M0jsF7/h8j3L+6zMuKuFKpdEQz2
-         EP1AWvCgk/Pcvvx01dI51LBcmdz4HUH82j5Gn/U/E4vBp/eeP4jEPBA0yJySoymLA9xW
-         ZTdOVMQRkZ2DzGnqstl17EdTkKgQKp7IcQBnmszVZ+y+MlKA66qX9Mpdm1idft4UCMif
-         +3kbBbTE7ZMZ+FqE0vvjNO4PwN5tO5T/MBW+5LS3skIo87NSUksDayFPY0HANiPJDzQA
-         WEgg==
-X-Gm-Message-State: AOAM531I1n7rYr0otimDGodDnxvagcNnCBpp0KUA3pGMcbgkfcIJsy7t
-        qt0HursB47zv2raSNJ9ar4I=
-X-Google-Smtp-Source: ABdhPJzF7pwE1O6H64JMb4XxkQaRnY+MhwNvbklpsOaM71M6o4JTk9mqHUlzFKCq6GwZKMTlSusRPg==
-X-Received: by 2002:a63:5211:0:b0:3db:1c36:fc37 with SMTP id g17-20020a635211000000b003db1c36fc37mr6384919pgb.572.1652342498793;
-        Thu, 12 May 2022 01:01:38 -0700 (PDT)
-Received: from localhost.localdomain ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id az9-20020a170902a58900b0015e8d4eb1bcsm3264531plb.6.2022.05.12.01.01.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 01:01:38 -0700 (PDT)
-From:   Genjian Zhang <zhanggenjian123@gmail.com>
-X-Google-Original-From: Genjian Zhang <zhanggenjian@kylinos.cn>
-To:     hsweeten@visionengravers.com, alexander.sverdlin@gmail.com,
-        linux@armlinux.org.uk
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Genjian Zhang <zhanggenjian@kylinos.cn>
-Subject: [PATCH] ep93xx: clock: Do not return the address of the freed memory
-Date:   Thu, 12 May 2022 15:59:43 +0800
-Message-Id: <20220512075943.2397833-1-zhanggenjian@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 12 May 2022 04:00:16 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797CD1E122A;
+        Thu, 12 May 2022 01:00:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E6404CE2808;
+        Thu, 12 May 2022 08:00:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 514E0C34113;
+        Thu, 12 May 2022 08:00:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652342412;
+        bh=gNpLYA0CVJo+44QjEOzPtR7Xpn/S46BHQXAcJmGmc+g=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=KVzTM/PZ2Nb9gxqx7Mb8Ztk2peiZX1GYuUdzV1Cw4ddlm3fkBXLMkXlD4iauHfLus
+         vSkDGPsNDc1wPj20DK5pHT6PI347LU0GLJ8yHHKpjqk3XMqpQNE6FklfOmnzui06jQ
+         mwlHh9GSmSk+9M4NVDxLVTIRn0YMqQPhy0tiJBv1Go7JfkxOqK7+SOvPZMbS8qexvI
+         oFdJ18k0KcX0HiBjZdiz0YdPrnK2E4nsg/tj62DiOOAJ5DiuGrtoSLg++DsI5bb70p
+         SDn6uRC5ryG2D7szqCKpv/8BnZfke/7MJjw367nPoBD8rM3SwjPDH7G+zj5LQUCowu
+         7DzPcYTIyu9iw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2EC24F03935;
+        Thu, 12 May 2022 08:00:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] net: ethernet: mediatek: ppe: fix wrong size passed to
+ memset()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165234241218.23640.3865091641010227800.git-patchwork-notify@kernel.org>
+Date:   Thu, 12 May 2022 08:00:12 +0000
+References: <20220511030829.3308094-1-yangyingliang@huawei.com>
+In-Reply-To: <20220511030829.3308094-1-yangyingliang@huawei.com>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        nbd@nbd.name, davem@davemloft.net, kuba@kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Although there will be basic judgments of IS_ERR() on this return value
-elsewhere,but I think it can be replaced by the actual error return
-value of clk_register.
+Hello:
 
-Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
----
- arch/arm/mach-ep93xx/clock.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+This patch was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-diff --git a/arch/arm/mach-ep93xx/clock.c b/arch/arm/mach-ep93xx/clock.c
-index 4fa6ea5461b7..762328de4bce 100644
---- a/arch/arm/mach-ep93xx/clock.c
-+++ b/arch/arm/mach-ep93xx/clock.c
-@@ -345,9 +345,10 @@ static struct clk_hw *clk_hw_register_ddiv(const char *name,
- 	psc->hw.init = &init;
- 
- 	clk = clk_register(NULL, &psc->hw);
--	if (IS_ERR(clk))
-+	if (IS_ERR(clk)) {
- 		kfree(psc);
--
-+		return (struct clk_hw *)clk;
-+	}
- 	return &psc->hw;
- }
- 
-@@ -452,9 +453,10 @@ static struct clk_hw *clk_hw_register_div(const char *name,
- 	psc->hw.init = &init;
- 
- 	clk = clk_register(NULL, &psc->hw);
--	if (IS_ERR(clk))
-+	if (IS_ERR(clk)) {
- 		kfree(psc);
--
-+		return (struct clk_hw *)clk;
-+	}
- 	return &psc->hw;
- }
- 
+On Wed, 11 May 2022 11:08:29 +0800 you wrote:
+> 'foe_table' is a pointer, the real size of struct mtk_foe_entry
+> should be pass to memset().
+> 
+> Fixes: ba37b7caf1ed ("net: ethernet: mtk_eth_soc: add support for initializing the PPE")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  drivers/net/ethernet/mediatek/mtk_ppe.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Here is the summary with links:
+  - net: ethernet: mediatek: ppe: fix wrong size passed to memset()
+    https://git.kernel.org/netdev/net/c/00832b1d1a39
+
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

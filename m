@@ -2,133 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5F93524AEF
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B32A524AF3
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352923AbiELLF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 07:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50968 "EHLO
+        id S1352930AbiELLH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 07:07:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbiELLFZ (ORCPT
+        with ESMTP id S240084AbiELLHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 07:05:25 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5A222EA40;
-        Thu, 12 May 2022 04:05:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652353525; x=1683889525;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3uK8K761LCbMLiiXm5n4vA0kexSUsrfEfvE68CU0Ygw=;
-  b=TCluLWCRLDoFcszrAIvPejtDG6jn24GX1T34ZSzfbMlt0dJcGOyIH634
-   e/H7eyUrsyKCLPclv6u+xbHlCuUtH+WckLkbq9/lyP2ym+r2rHIbMp68C
-   /0xEp4Ary+4CsTDj+Bzml00fKnSFYrja8vM3cq/FhYQ2yM56iPGAFgZBj
-   s=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 12 May 2022 04:05:25 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 04:05:24 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 12 May 2022 04:05:23 -0700
-Received: from [10.50.8.133] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 12 May
- 2022 04:05:17 -0700
-Message-ID: <48087fad-a48a-e5f4-5840-a74be5057537@quicinc.com>
-Date:   Thu, 12 May 2022 16:35:14 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH V3] arm64: Enable repeat tlbi workaround on KRYO4XX gold
- CPUs
-Content-Language: en-US
-To:     Shreyas K K <quic_shrekk@quicinc.com>,
+        Thu, 12 May 2022 07:07:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262CB52E63;
+        Thu, 12 May 2022 04:07:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA76BB82792;
+        Thu, 12 May 2022 11:07:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07451C385B8;
+        Thu, 12 May 2022 11:07:44 +0000 (UTC)
+Date:   Thu, 12 May 2022 12:07:41 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>
-CC:     Andre Przywara <andre.przywara@arm.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Prasanna Kumar <quic_kprasan@quicinc.com>
-References: <20220512110134.12179-1-quic_shrekk@quicinc.com>
-From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-In-Reply-To: <20220512110134.12179-1-quic_shrekk@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the mm tree
+Message-ID: <YnzqffV7STYS24Yn@arm.com>
+References: <20220512193855.4f6ce32f@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220512193855.4f6ce32f@canb.auug.org.au>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/12/2022 4:31 PM, Shreyas K K wrote:
-> Add KRYO4XX gold/big cores to the list of CPUs that need the
-> repeat TLBI workaround. Apply this to the affected
-> KRYO4XX cores (rcpe to rfpe).
->
-> The variant and revision bits are implementation defined and are
-> different from the their Cortex CPU counterparts on which they are
-> based on, i.e., (r0p0 to r3p0) is equivalent to (rcpe to rfpe).
->
-> Signed-off-by: Shreyas K K <quic_shrekk@quicinc.com>
+On Thu, May 12, 2022 at 07:38:55PM +1000, Stephen Rothwell wrote:
+> After merging the mm tree, today's linux-next build (arm64 defconfig)
+> failed like this:
+> 
+> arch/arm64/mm/hugetlbpage.c: In function 'huge_ptep_clear_flush':
+> arch/arm64/mm/hugetlbpage.c:493:16: error: implicit declaration of function 'get_clear_flush'; did you mean 'ptep_clear_flush'? [-Werror=implicit-function-declaration]
+>   493 |         return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
+>       |                ^~~~~~~~~~~~~~~
+>       |                ptep_clear_flush
+> arch/arm64/mm/hugetlbpage.c:493:16: error: incompatible types when returning type 'int' but 'pte_t' was expected
+>   493 |         return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
+>       |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> arch/arm64/mm/hugetlbpage.c:494:1: error: control reaches end of non-void function [-Werror=return-type]
+>   494 | }
+>       | ^
+> 
+> Caused by commit
+> 
+>   00df1f1a133b ("mm: change huge_ptep_clear_flush() to return the original pte")
+> 
+> interacting with commit
+> 
+>   fb396bb459c1 ("arm64/hugetlb: Drop TLB flush from get_clear_flush()")
+> 
+> I have applied the following merg fix patch for today.
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Thu, 12 May 2022 19:33:11 +1000
+> Subject: [PATCH] fixup for "mm: change huge_ptep_clear_flush() to return the original pte"
+> 
+> It interacts with commit
+> 
+>   fb396bb459c1 ("arm64/hugetlb: Drop TLB flush from get_clear_flush()")
+> 
+> from the arm64 tree
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 > ---
->
-> Changes in v2:
->   * r2p0 and r3p0 are also affected by this erratum.
->   * Add the corresponding cores (repe and rfpe) making the range rcpe to rfpe.
->
-> Changes in v3:
->   * Fix the CPU model macro.
->
->   Documentation/arm64/silicon-errata.rst | 3 +++
->   arch/arm64/kernel/cpu_errata.c         | 2 ++
->   2 files changed, 5 insertions(+)
->
-> diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
-> index 466cb9e89047..d27db84d585e 100644
-> --- a/Documentation/arm64/silicon-errata.rst
-> +++ b/Documentation/arm64/silicon-errata.rst
-> @@ -189,6 +189,9 @@ stable kernels.
->   +----------------+-----------------+-----------------+-----------------------------+
->   | Qualcomm Tech. | Kryo4xx Silver  | N/A             | ARM64_ERRATUM_1024718       |
->   +----------------+-----------------+-----------------+-----------------------------+
-> +| Qualcomm Tech. | Kryo4xx Gold    | N/A             | ARM64_ERRATUM_1286807       |
-> ++----------------+-----------------+-----------------+-----------------------------+
-> +
->   +----------------+-----------------+-----------------+-----------------------------+
->   | Fujitsu        | A64FX           | E#010001        | FUJITSU_ERRATUM_010001      |
->   +----------------+-----------------+-----------------+-----------------------------+
-> diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
-> index 4c9b5b4b7a0b..a0f3d0aaa3c5 100644
-> --- a/arch/arm64/kernel/cpu_errata.c
-> +++ b/arch/arm64/kernel/cpu_errata.c
-> @@ -208,6 +208,8 @@ static const struct arm64_cpu_capabilities arm64_repeat_tlbi_list[] = {
->   #ifdef CONFIG_ARM64_ERRATUM_1286807
->   	{
->   		ERRATA_MIDR_RANGE(MIDR_CORTEX_A76, 0, 0, 3, 0),
-> +		/* Kryo4xx Gold (rcpe to rfpe) => (r0p0 to r3p0) */
-> +		ERRATA_MIDR_RANGE(MIDR_QCOM_KRYO_4XX_GOLD, 0xc, 0xe, 0xf, 0xe),
->   	},
->   #endif
->   	{},
+>  arch/arm64/mm/hugetlbpage.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
+> index 5bdf913dedc7..30f5b76aabe9 100644
+> --- a/arch/arm64/mm/hugetlbpage.c
+> +++ b/arch/arm64/mm/hugetlbpage.c
+> @@ -490,7 +490,7 @@ pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
+>  		return ptep_clear_flush(vma, addr, ptep);
+>  
+>  	ncontig = find_num_contig(vma->vm_mm, addr, ptep, &pgsize);
+> -	return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
+> +	return get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
+>  }
 
-Reviewed-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Note that after the arm64 commit, get_clear_contig() no longer flushes
+the TLB. So maybe something like:
 
-Thanks,
-Sai
+diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
+index 30f5b76aabe9..9a999550df8e 100644
+--- a/arch/arm64/mm/hugetlbpage.c
++++ b/arch/arm64/mm/hugetlbpage.c
+@@ -485,12 +485,15 @@ pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
+ {
+ 	size_t pgsize;
+ 	int ncontig;
++	pte_t orig_pte;
+
+ 	if (!pte_cont(READ_ONCE(*ptep)))
+ 		return ptep_clear_flush(vma, addr, ptep);
+
+ 	ncontig = find_num_contig(vma->vm_mm, addr, ptep, &pgsize);
+-	return get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
++	orig_pte = get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
++	flush_tlb_range(vma, addr, addr + pgsize * ncontig);
++	return orig_pte;
+ }
+
+ static int __init hugetlbpage_init(void)
+
+-- 
+Catalin

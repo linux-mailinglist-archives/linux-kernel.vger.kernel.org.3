@@ -2,168 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FD205252E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9F225252EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356655AbiELQqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 12:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
+        id S1351578AbiELQqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 12:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356662AbiELQqA (ORCPT
+        with ESMTP id S1356673AbiELQqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 12:46:00 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4B01CFE8
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 09:45:58 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id i19so11340598eja.11
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 09:45:58 -0700 (PDT)
+        Thu, 12 May 2022 12:46:40 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3FA268653
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 09:46:26 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id x23so5313640pff.9
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 09:46:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=VOukr0jPN6/+Y3Lw7g3n3whaIxWjCc3klQ0CjfQ5lCM=;
-        b=MrxmXMzfnzq6K5nrKAC4A+HDBoAqDlWVaasJyTjsppf1kQNnockYr/64Y63uOc1xki
-         ZWaFhqLbebWNgf17K/guVug91oeVrcFjo0hQJ5tgYYOpFk6ST92icXQjrVngmw5/L5jz
-         xLlqXGgOD7OZfEhol8NPmtILChVHLgeav+CIPwatcmLPHboHJ7LCMTz3a6wOlrmAckQv
-         ibFb5IvYmQ/6UPVZFoITKLMhL8seB2YTfw8AssrVlIh8VPpAkNr0UtVToCNfdB0yQ3+y
-         s/WjiwOa7qtFNiOMs5GWHpwnm0w/aOxB08utdoFgMu9Wtrra0UeY/T1wf0WGN8gGyco7
-         4/aw==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+/6qmbmcP5AokRkbZn/xg32IG6zFnvDICjqZUz86mKs=;
+        b=oIhkT9a8+AOL4JI7Qk/U6odJZm+0v8MQsEwzhADBYZXDwvu58jVVmyYBMNMQl7v5ap
+         9KkPPEmGEpKFtcDdq8B9f/4K/xMVoHNzFH2mbb9YOjFAWYmha8NvJPUvSM2D4WBiz0LK
+         JMJfoSjl7jNgx6wZzPcy1U0cTM1SJcfU24lsUYglc3U6jLWRGTktN7TlojDq3dzJD+5s
+         izETkmw4tM83dNMFn7+PNoeyx0GL3K4rJGMNM42/ptX822vNdPabInHByWiEtpxwWcYr
+         p78E9khLDmr3WeCT2wJwcfu9KkCANu4rjcDoHL4Oq5+73rcwQC5w0gZQmfb++q5RZ+sQ
+         sFZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=VOukr0jPN6/+Y3Lw7g3n3whaIxWjCc3klQ0CjfQ5lCM=;
-        b=fqaVW9mi4ITueUpuVfsYDMnZNjJciAsS2kmLKKxoj8T6FupvTFcfCgXB5Wx4e3xcs/
-         vojPa5sISvOkAqBRKq52YbiXY7jYmzY8uVsUszbABsKgi+4YV/yOE88hVOiPPscx6U3F
-         aSW0M4YxeDY1tIvOL6kTGdHBY7/vqXCAjiY+0Qr3OrFM1raw2Jf3+3w2quYaqaqYnJz0
-         /kFkEfEHSJstgE9y2+7JZrf2QEUYpvTjjDh9q4u+Otk6Q/YqDy+KXbPNHv0KWVvJ5+ld
-         ZhtLkKUBDAdfyG77ZCyqMo7Oj6De7/0TQmv1r/o9yX09bGDQj32FuVR1C4v5LXQM3qtn
-         juRQ==
-X-Gm-Message-State: AOAM532pVVpjxSjdldtgjzIe9mxYp1njhgNt0MRyM860+ifjI3Dms/MU
-        w2UoYU39vgIZqO1l4lNvzOr34SlL46lAbSZaUTCW/iuW8+A=
-X-Google-Smtp-Source: ABdhPJwgQFL+UHEGc1fQ+1zyCyRVfOaFZdTXvaV490exfsVkr05T7wXKiv/Y71s17aYjZr6lugxntWaGAY9TCZb+k+8=
-X-Received: by 2002:a17:906:3ed5:b0:6f5:108c:a45 with SMTP id
- d21-20020a1709063ed500b006f5108c0a45mr681072ejj.623.1652373956829; Thu, 12
- May 2022 09:45:56 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=+/6qmbmcP5AokRkbZn/xg32IG6zFnvDICjqZUz86mKs=;
+        b=0uu2agfSotJtL3jQqYeUvKbIXZqoQ5RvffocSukq+vNHU3yJg0gzzpMzxbhl0s7qyK
+         Z/7CwUcAwZyhSpHrQV7c9oQVyCj4aQIaJ9VXvrmSBBN9ZlbCR0UfeV1/saOxIsqFyQq2
+         6eJ9CK7+X/3uwjdn0LkvomWZa7WqX0A8uh2aC7FPHb2mbjWIXgDtVZlnjP9x/ZaiV/k2
+         5GrSfxrsw6bu/dFi3Jfz+fMG0CH+y+PD+TZzdxAn2jSfs7Pe79NRPPglSS+Zz6kLSMrl
+         Ya9p7/LE0ueaSoEwWQ8/mmRzRD+K7HG9EmpPtH4BAVCDa5TETMLu1//3z6CAF4sD42zg
+         Oc9Q==
+X-Gm-Message-State: AOAM532f8SKiZfT533l+ovQcg7kiXQROQH5wxbgkdesRbeVETKZX6uUz
+        hMCEO1h1KUNGq24OxSk/uyY=
+X-Google-Smtp-Source: ABdhPJwO+DuCUU5o9DMk576E6z5ybMRQPZuq7c1PyPVSqveeVp1yLTlHGjhOv8Y/Aq9/rrbdO8OgiA==
+X-Received: by 2002:a63:64c2:0:b0:3c6:2d70:9188 with SMTP id y185-20020a6364c2000000b003c62d709188mr455077pgb.186.1652373986078;
+        Thu, 12 May 2022 09:46:26 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:6c64])
+        by smtp.gmail.com with ESMTPSA id q9-20020a170902a3c900b0015e8d4eb210sm138646plb.90.2022.05.12.09.46.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 09:46:25 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 12 May 2022 06:46:23 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joe Perches <joe@perches.com>,
+        Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: Re: [PATCH] checkpatch: warn about flushing system-wide workqueues
+Message-ID: <Yn0538VavQPv+/Ws@slm.duckdns.org>
+References: <d34dac10-c12f-8bda-35c4-9cb158781db2@I-love.SAKURA.ne.jp>
+ <a6288570ed3534b0316723061f5604e3871accef.camel@perches.com>
+ <6e4ed62e-888b-6e7a-c13d-67656f39ca94@I-love.SAKURA.ne.jp>
+ <738afe71-2983-05d5-f0fc-d94efbdf7634@I-love.SAKURA.ne.jp>
+ <YnQKNea6KWFaWNis@slm.duckdns.org>
+ <a0d6b5e4-b9c8-1a43-570f-4c73b0f6fc0c@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
-From:   Test Bot <zgrieee@gmail.com>
-Date:   Thu, 12 May 2022 20:45:45 +0400
-Message-ID: <CAOFRbGka57nhcz9qbmx0R9wkXd3U6Gv0LX5n1fyXO0Hp_umhkg@mail.gmail.com>
-Subject: BUG: kernel NULL pointer dereference detect
-To:     linux-kernel@vger.kernel.org
-Cc:     ozgurk@ieee.org, torvalds@linux-foundation.org,
-        gregkh@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a0d6b5e4-b9c8-1a43-570f-4c73b0f6fc0c@I-love.SAKURA.ne.jp>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello,
 
-I automatically. test RC kernel and caught bug word.
-Please ignore if its unimportant.
+On Fri, May 06, 2022 at 08:29:07AM +0900, Tetsuo Handa wrote:
+> On 2022/05/06 2:32, Tejun Heo wrote:
+> > Given that we'll need runtime check anyway, why not resurrect the original
+> > runtime warning but exempt flush_schedule_work() if that's the only thing
+> > remaining right now (using a special flag or whatever)?
+> 
+> Yes, we will also need runtime check for robustness, for we can't catch usage
+> like
+> 
+> 	struct workqueue_struct *my_wq = alloc_workqueue();
+> 	if (!my_wq)
+> 		my_wq = system_long_wq;
+> 	flush_workqueue(my_wq);
+> 
+> using compile time checks.
+> 
+> I found that it is not easy to trigger flush_workqueue() paths. For example,
+> several modules are using flush_workqueue() only upon module unloading.
 
-Kernel: 5.18-rc6
-Arch: x86_64 (SMP)
+Ah, yeah, good point.
 
-Hardware:
+> Therefore, I'm trying to catch obvious flush_workqueue() paths at compile
+> time when possible.
+> 
+> >                                                         If we're sure that
+> > we aren't triggering it spuriously, we can ask Andrew to take the warning
+> > patch into -mm so that it floats on top of everything else and gets pulled
+> > into the trunk during the coming merge window.
+> 
+> OK, the coming merge window means 5.19.
+> 
+> The original runtime checking will be used anyway. Is "workqueue: Wrap
+> flush_workqueue() using a macro" OK for you as a compile time check?
 
-Gigabyte (Z370 HD3-CF)
-NVIDIA (3070)
-DKMS: No
+Sounds good to me.
 
-Parse Log:
+Thanks.
 
-[   20.455718] NVRM: GPU at PCI:0000:08:00:
-GPU-2086cea6-1668-6969-eb8c-c4d96a0678a3
-[   20.455719] NVRM: Xid (PCI:0000:08:00): 79, pid=982, GPU has fallen
-off the bus.
-[   20.455720] NVRM: GPU 0000:08:00.0: GPU has fallen off the bus.
-[   20.465092] BUG: kernel NULL pointer dereference, address: 0000000000000088
-[   20.465093] #PF: supervisor write access in kernel mode
-[   20.465094] #PF: error_code(0x0002) - not-present page
-[   20.465094] PGD 0 P4D 0
-[   20.465096] Oops: 0002 [#1] SMP NOPTI
-[   20.465098] CPU: 3 PID: 899 Comm: modprobe Tainted: P           OE
-   5.10.0-testos #83.testos.211201
-[   20.465099] Hardware name: Gigabyte Technology Co., Ltd. Z370
-HD3/Z370 HD3-CF, BIOS F14c 03/23/2021
-[   20.465386] RIP: 0010:_nv033456rm+0xac/0x130 [nvidia]
-[   20.465388] Code: 44 89 e0 5b 41 5c c3 0f 1f 80 00 00 00 00 48 c1
-e1 06 48 03 8c fe 58 23 00 00 45 84 c0 8b 50 08 44 8b 48 0c 74 78 85
-db 74 3c <48> 83 41 08 01 0f b6 10 83 e2 03 80 fa 03 75 bf 45 84 c0 75
-ba 0f
-[   20.465389] RSP: 0018:ffffba2840b3f538 EFLAGS: 00010206
-[   20.465390] RAX: ffff97c683585ce0 RBX: 0000000000000055 RCX: 0000000000000080
-[   20.465390] RDX: 0000000000000227 RSI: ffff97c686eb8008 RDI: 0000000000000014
-[   20.465391] RBP: ffff97c683585c90 R08: 0000000000000001 R09: 0000000000000000
-[   20.465391] R10: 0000000000020370 R11: 0000000000000001 R12: 0000000000000055
-[   20.465392] R13: ffff97c686eb8008 R14: 0000000000000014 R15: ffff97c686cac008
-[   20.465393] FS:  00007f3b6e409540(0000) GS:ffff97c846d80000(0000)
-knlGS:0000000000000000
-[   20.465394] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   20.465394] CR2: 0000000000000088 CR3: 000000010fc84005 CR4: 00000000003706e0
-[   20.465395] Call Trace:
-[   20.465666]  ? _nv033453rm+0x162/0x2f0 [nvidia]
-[   20.465899]  ? _nv037657rm+0x70/0xb0 [nvidia]
-[   20.466130]  ? _nv037657rm+0x3f/0xb0 [nvidia]
-[   20.466362]  ? _nv011734rm+0x37/0x60 [nvidia]
-[   20.466673]  ? _nv033836rm+0x109/0x220 [nvidia]
-[   20.466954]  ? _nv011056rm+0x7c/0x170 [nvidia]
-[   20.467259]  ? _nv033836rm+0x109/0x220 [nvidia]
-[   20.467562]  ? _nv032298rm+0xc6/0x1f0 [nvidia]
-[   20.467857]  ? _nv010911rm+0x4e/0xc0 [nvidia]
-[   20.468162]  ? _nv033836rm+0x109/0x220 [nvidia]
-[   20.468335]  ? _nv009158rm+0x115/0x170 [nvidia]
-[   20.468641]  ? _nv033836rm+0x109/0x220 [nvidia]
-[   20.468902]  ? _nv011979rm+0x2b5/0x4c0 [nvidia]
-[   20.469207]  ? _nv033836rm+0x109/0x220 [nvidia]
-[   20.469470]  ? _nv012024rm+0x25d/0x310 [nvidia]
-[   20.469777]  ? _nv033836rm+0x109/0x220 [nvidia]
-[   20.469949]  ? _nv014228rm+0x3a/0x100 [nvidia]
-[   20.470118]  ? _nv015165rm+0x16e/0x3c0 [nvidia]
-[   20.470424]  ? _nv021890rm+0x91/0x1e0 [nvidia]
-[   20.470736]  ? _nv021891rm+0x21/0x40 [nvidia]
-[   20.470894]  ? _nv000696rm+0x1aa/0x2f0 [nvidia]
-[   20.471052]  ? _nv000643rm+0x49c/0x20b0 [nvidia]
-[   20.471211]  ? rm_init_adapter+0xc5/0xe0 [nvidia]
-[   20.471331]  ? nv_open_device+0x417/0x8a0 [nvidia]
-[   20.471437]  ? nvidia_dev_get+0x24/0x60 [nvidia]
-[   20.471449]  ? nvkms_open_gpu+0x49/0x80 [nvidia_modeset]
-[   20.471468]  ? _nv000012kms+0x41/0x4a0 [nvidia_modeset]
-[   20.471471]  ? printk+0x52/0x6e
-[   20.471475]  ? nv_drm_load+0x99/0x410 [nvidia_drm]
-[   20.471478]  ? nv_drm_unload+0xc0/0xc0 [nvidia_drm]
-[   20.471480]  ? __kernfs_new_node+0x175/0x1e0
-[   20.471482]  ? _cond_resched+0x15/0x40
-[   20.471483]  ? kernfs_activate+0x63/0x80
-[   20.471484]  ? kernfs_add_one+0xe4/0x130
-[   20.471499]  ? drm_dev_register+0x144/0x1e0 [drm]
-[   20.471502]  ? nv_drm_probe_devices+0x113/0x210 [nvidia_drm]
-[   20.471504]  ? 0xffffffffc05f4000
-[   20.471506]  ? do_one_initcall+0x44/0x1e0
-[   20.471507]  ? _cond_resched+0x15/0x40
-[   20.471509]  ? kmem_cache_alloc_trace+0x3d/0x410
-[   20.471511]  ? do_init_module+0x5b/0x21a
-[   20.471513]  ? load_module+0x2908/0x2ef0
-[   20.471515]  ? ima_post_read_file+0xd4/0xe0
-[   20.471517]  ? __do_sys_finit_module+0xad/0x110
-[   20.471518]  ? __do_sys_finit_module+0xad/0x110
-[   20.471520]  ? do_syscall_64+0x33/0x80
-[   20.471522]  ? entry_SYSCALL_64_after_hwframe+0x44/0xa9
-[   20.471523] Modules linked in: nvidia_drm(POE+) nvidia_modeset(POE)
-nvidia(POE) drm_kms_helper cec drm drm_panel_orientation_quirks
-cfbfillrect cfbimgblt cfbcopyarea fb_sys_fops syscopyarea sysfillrect
-sysimgblt fb fbdev intel_rapl_msr intel_rapl_common
-x86_pkg_temp_thermal intel_powerclamp coretemp kvm_intel kvm irqbypass
-crct10dif_pclmul crc32_pclmul ghash_clmulni_intel ppdev aesni_intel
-crypto_simd cryptd glue_helper rapl intel_cstate wmi_bmof efi_pstore
-mei_me mei parport_pc parport acpi_pad mac_hid sch_fq_codel sunrpc
-droptcpsock(OE) ip_tables x_tables autofs4 e1000e ptp pps_core ahci
-libahci wmi video
-[   20.471547] CR2: 0000000000000088
-[   20.471548] ---[ end trace a23fb623caa37236 ]---
+-- 
+tejun

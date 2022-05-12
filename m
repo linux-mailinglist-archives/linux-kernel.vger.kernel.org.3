@@ -2,107 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D878452563F
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 22:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88C49525643
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 22:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352593AbiELUJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 16:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
+        id S1358310AbiELULo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 16:11:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354491AbiELUJh (ORCPT
+        with ESMTP id S1357941AbiELULl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 16:09:37 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2EB2670AA
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 13:09:36 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2f7ca2ce255so69283987b3.7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 13:09:36 -0700 (PDT)
+        Thu, 12 May 2022 16:11:41 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C065DD00
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 13:11:40 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-ed9a75c453so8002450fac.11
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 13:11:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+RvotmzlXXJLUjxfnHqDPaXa716Ci6O256j8ra0+f68=;
-        b=g0GsQlOvnxr8GQ9ath+D+MdVdAHaXyLhTt/CfZs6l7Ar6F5uYBhvWa/XylZxrFWxcQ
-         1zhc0mGLTwT/0Gn4apeojjEtse3mcuj2qV12KNPqhgeW8H4kvbEaeAEmZYV+3CBBvbbD
-         0a0AxJRm/bKaYOrnj19ALFto28G04rrbhQHNnrDGJJAAHE4ublazO9V9zqlX6PYJqXBk
-         V5sixDdKEnFlkmi5J3oOHMhQauKmGdn5wIgz2y4L1g1cH7P0rdoOKpiN0dH2W5UDJx5K
-         PVnQKhYAKKkZDtE9JtOKWryEJqgiXLqnChGzmoY4VI1E5YBSF4P5bNDO3EZ8kLu2sv0o
-         iWWw==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=37IX51ckyCTT+yZsWM/kPl+cjpj4hHPN6he08LybAOQ=;
+        b=nkDuxOoAbImXZRcvvj1gfFmpDwftHQWbiObrKwOxshF14hW4hHjhBOTZxvvSZQyjLT
+         +SNjcd0Eha5XO6P0Rb8nczXCqfhxzo3SDR2fgosVoYMzzq0ezEVJg5i221zzPec69DIX
+         cypiO6dAQliJBB0FK5MlRwAOh99s48286unm0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+RvotmzlXXJLUjxfnHqDPaXa716Ci6O256j8ra0+f68=;
-        b=1WkyPluMUv/BM/9mpM+euNzxEgbWh8NkYHlNORWPxJ1U40FnqTzsu6Tt6vCijSPZk2
-         9TIRl8wORXSltHn4NH9+dydf8UlkT8ocTwFEWoco5BVlLGENQ3vQtPRroOY8Q1jd/MDE
-         QBNYRpXpFSyxHZo3FEKRNHSmhohk+Xc7QsXgohU8ojRrF04PAlt6uW+l1sNcemJPSqpY
-         N7qKcUirMsX3evOJY/HV4grZ69YHR15yDkXXyYNFV7Nqrz+tl4DLcFFA7HWsyb+UDS3G
-         eaK9wgm7PCsOyyUkFxAp5OU7kfkXWzRvYgdtYvx2UC6PH7/tQHFkh06xTdcvQhbpbjHO
-         GOAg==
-X-Gm-Message-State: AOAM53084XWdhdLxk2BGbvF87I7XpSTVX07Lk8Hps9ovRRwXMvY7hpAP
-        2qwwD8EnGP4Ssb0CZk48gTEorUfVNHp6Ru3ZAEn5zE3aN8VH7A==
-X-Google-Smtp-Source: ABdhPJzHB6TV7hqi8N1J/X4kzAG33AMHh2DD3/6XgC/AEnve02kflDN19GN7MbWeOj6f4a1Ls/b+/1usqV+zqa2J4CM=
-X-Received: by 2002:a81:5603:0:b0:2f8:3187:f37a with SMTP id
- k3-20020a815603000000b002f83187f37amr1872082ywb.255.1652386175023; Thu, 12
- May 2022 13:09:35 -0700 (PDT)
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=37IX51ckyCTT+yZsWM/kPl+cjpj4hHPN6he08LybAOQ=;
+        b=U8pIyyvW+f5SELn1B8nGBPpNQoYMxi4UxWlNA+renEEwdD9m1qKSmT3vrJYqzrdGX7
+         L5HmvdoM4G8SW5ZbKqon/kKK+JTNuTf2ndTPPsWSYfDp45Eqpxep/RCSm8LPjfBe2qi8
+         kMQTWV5ZYYoXcLD8vHxhp9MvwZ3uCmPOGgyy9hZjXmVblLDqjUONrV8sryqaFbJyqRIm
+         nuaFUrnowswaULI58PgNNmwJFVs2ZA1AE0Psja9QRh1mcDO2TzXvpQJPrJD55YMW9c9X
+         in9tN4hML+9O2Shgh8qPxcjKtSWNhpMuixjx+ziPnrOe6jqLWTVhJrdDt0IaC61E6sqR
+         zLLA==
+X-Gm-Message-State: AOAM531gWI6tJqKNHKTFZWK/N8fakVq5696/HDyP0qLgFVcO+CsRXZco
+        fKZnX1WBBIO+SY8fLR8tkdV2XRev9HaYXd5TijYs68lxZc8=
+X-Google-Smtp-Source: ABdhPJxd7yZSyV1HL3mHq2/BuEuj5XOOzGUA62h40C+z0kI+RzGTIUcxQQWEo5wiqOsSlg5b3aqgF0K7mnODmWwOJdE=
+X-Received: by 2002:a05:6870:40c1:b0:ed:9a12:3f95 with SMTP id
+ l1-20020a05687040c100b000ed9a123f95mr831874oal.193.1652386299686; Thu, 12 May
+ 2022 13:11:39 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 12 May 2022 13:11:39 -0700
 MIME-Version: 1.0
-References: <93323bba-476e-f821-045c-9fe942143da9@gmail.com> <CANn89iKjt1wpGk1dqqnYYx3r9UzEc3rwNtvBQ1O2dVToY_7rBQ@mail.gmail.com>
-In-Reply-To: <CANn89iKjt1wpGk1dqqnYYx3r9UzEc3rwNtvBQ1O2dVToY_7rBQ@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 12 May 2022 13:09:23 -0700
-Message-ID: <CANn89i+aLWGcBe=n2iRR4chvkpfBO_V7c1P9mqA3fBS59CzjUg@mail.gmail.com>
-Subject: Re: BUG: TCP timewait sockets survive across namespace creation in net-next
-To:     Leonard Crestez <cdleonard@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+In-Reply-To: <CAE-0n50+obQ5qgPNPtUY=OmTgU9bZQ3hNw+MaG9Wi3SQSc-i4A@mail.gmail.com>
+References: <20220429233112.2851665-1-swboyd@chromium.org> <20220429233112.2851665-2-swboyd@chromium.org>
+ <CAD=FV=VX8EEgkeLgKwyKvjztcjbA8UhKOUpTr-sS1_Ec=QcWbA@mail.gmail.com>
+ <CAKdAkRSOtAD6u_cwKhHeMLgz5dC2hfPvVvqmj+17b4i-nspfgg@mail.gmail.com>
+ <CAE-0n50Y8tZD9Djn9TVaAiHxehFJ2cZKZ1Z09piDk47uw3nK+Q@mail.gmail.com>
+ <Ynzf5jEIECLmELK7@google.com> <CAE-0n50+obQ5qgPNPtUY=OmTgU9bZQ3hNw+MaG9Wi3SQSc-i4A@mail.gmail.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 12 May 2022 13:11:39 -0700
+Message-ID: <CAE-0n52WVNru5fnyaB_7wcBOk4twL0Q92YpRbd40-o6ZBmbXWQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: google,cros-ec-keyb: Introduce
+ switches only compatible
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Doug Anderson <dianders@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        chrome-platform@lists.linux.dev,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 11:13 AM Eric Dumazet <edumazet@google.com> wrote:
->
-> On Thu, May 12, 2022 at 11:01 AM Leonard Crestez <cdleonard@gmail.com> wrote:
+Quoting Stephen Boyd (2022-05-12 11:58:02)
+> Quoting Dmitry Torokhov (2022-05-12 03:22:30)
 > >
-> > Hello,
-> >
-> > It appears that in recent net-next versions it is possible for sockets
-> > in the timewait state to survive across namespace add/del. Timewait
-> > sockets are inserted into a global hash and only the sock_net value is
-> > compared when they are enumerated from interfaces like /proc/net/tcp and
-> > inet_diag. Old TW sockets are not cleared after namespace delete and
-> > namespaces are allocated from a slab and thus their pointers get reused
-> > a lot, when that happens timewait sockets from an old namespace will
-> > show up in the new one.
-> >
-> > This can be reproduced by establishing a TCP connection over a veth pair
-> > between two namespaces, closing and then recreating those namespaces.
-> > Old timewait sockets will be visible and it happens quite reliably,
-> > often on the first iteration. I can try to provide a script for this.
-> >
-> > I can't point to specific bugs outside of tests that explicitly
-> > enumerate timewait sockets but letting sk_net be a dangling pointer
-> > seems very dangerous. It also violates the idea of network namespaces
-> > being independent and isolated.
-> >
-> > This does not happen in 5.17, I bisected this behavior to commit
-> > 0dad4087a86a ("tcp/dccp: get rid of inet_twsk_purge()")
+> > Have we solved module loading in the presence of multiple compatibles?
+> > IIRC we only ever try to load module on the first compatible, so you'd
+> > be breaking autoloading cros-ec-keyb on these older kernels. I think the
+> > cure that is being proposed is worse than the disease.
 > >
 >
-> Thanks for the report.
->
-> I guess we will need to store the (struct net)->net_cookie to
-> disambiguate the case
-> where a new 'struct net' is reusing the same storage than an old one.
+> The first compatible is still cros-ec-keyb in the driver though? Or you
+> mean the first compatible in the node? I'm not aware of this problem at
+> all but I can certainly test out a fake node and module and see if it
+> gets autoloaded.
 
-Oh well, too many changes would be needed.
-I will send a revert, thanks.
+I can't get this test module to fail to load no matter what I do. I
+commented out the second match table entry, and kept it there and
+removed 'vendor,switch-compat' from the DTS. Module still autoloads.
+
+----8<----
+diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi
+b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+index 42a87fa4976e..a6173b79ba67 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+@@ -54,6 +54,10 @@ aliases {
+ 		spi11 = &spi11;
+ 	};
+
++	mynode {
++		compatible = "vendor,switch-compat", "vendor,keyb-compat";
++	};
++
+ 	clocks {
+ 		xo_board: xo-board {
+ 			compatible = "fixed-clock";
+diff --git a/lib/Makefile b/lib/Makefile
+index a841be5244ac..0a784011feb5 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -74,6 +74,7 @@ UBSAN_SANITIZE_test_ubsan.o := y
+ obj-$(CONFIG_TEST_KSTRTOX) += test-kstrtox.o
+ obj-$(CONFIG_TEST_LIST_SORT) += test_list_sort.o
+ obj-$(CONFIG_TEST_MIN_HEAP) += test_min_heap.o
++obj-m += dtmod.o
+ obj-$(CONFIG_TEST_LKM) += test_module.o
+ obj-$(CONFIG_TEST_VMALLOC) += test_vmalloc.o
+ obj-$(CONFIG_TEST_OVERFLOW) += test_overflow.o
+diff --git a/lib/dtmod.c b/lib/dtmod.c
+new file mode 100644
+index 000000000000..c34ae37b8ff0
+--- /dev/null
++++ b/lib/dtmod.c
+@@ -0,0 +1,44 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
++#include <linux/init.h>
++#include <linux/module.h>
++#include <linux/mod_devicetable.h>
++#include <linux/platform_device.h>
++#include <linux/printk.h>
++
++static int test_probe(struct platform_device *pdev)
++{
++	dev_info(&pdev->dev, "I got probed\n");
++
++	return 0;
++}
++
++static int test_remove(struct platform_device *pdev)
++{
++	dev_info(&pdev->dev, "I got removed\n");
++
++	return 0;
++}
++
++static const struct of_device_id test_of_match[] = {
++	{ .compatible = "vendor,keyb-compat" },
++	{ .compatible = "vendor,switch-compat" }, // comment out
++	{}
++};
++MODULE_DEVICE_TABLE(of, test_of_match);
++
++static struct platform_driver test_keyb_driver = {
++	.probe = test_probe,
++	.remove = test_remove,
++	.driver = {
++		.name = "test-ec-keyb",
++		.of_match_table = test_of_match,
++	},
++};
++
++module_platform_driver(test_keyb_driver);
++
++MODULE_LICENSE("GPL v2");
++MODULE_ALIAS("platform:test-ec-keyb");

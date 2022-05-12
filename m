@@ -2,130 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A256525322
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 610EB525335
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356793AbiELRB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 13:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53680 "EHLO
+        id S1356839AbiELRGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 13:06:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356818AbiELRBJ (ORCPT
+        with ESMTP id S1347317AbiELRGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 13:01:09 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD995F4A
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:01:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652374866; x=1683910866;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AZZTVVPejmnnjzcb0Y6aYldJcyupZeutNKdvKmzjyXA=;
-  b=rrvtLnxnfNkNHTR16ys5f3gYTXrT7ylP/V+lOeLwbG/hB0gg/dlm+ucx
-   1zBSk0//Xy94UjMSE5uFOZ8J9WqC7YDm5zGGrJHVK/8T02kD59DGQXGdf
-   peFHxYv9qngs5blqAVpW9fd5U6jRJ2Ix5nGKo8AnSi1tV+fWRMWFmkTlQ
-   I=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 12 May 2022 10:01:04 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 10:01:04 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 12 May 2022 10:01:04 -0700
-Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 12 May
- 2022 10:01:03 -0700
-Date:   Thu, 12 May 2022 13:01:00 -0400
-From:   Qian Cai <quic_qiancai@quicinc.com>
-To:     Liam Howlett <liam.howlett@oracle.com>
-CC:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v9 08/69] mm: start tracking VMAs with maple tree
-Message-ID: <20220512170100.GA74@qian>
-References: <20220504010716.661115-1-Liam.Howlett@oracle.com>
- <20220504010716.661115-10-Liam.Howlett@oracle.com>
+        Thu, 12 May 2022 13:06:34 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE37448E72;
+        Thu, 12 May 2022 10:06:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652375192; x=1683911192;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/ybuHoHzAtRBoXiWgwax+YcGH4jG6oU63lubaSD8RYc=;
+  b=V+zaATBievH2a1mXSjlWFfkJcYR6dLCH5/tYP5xfrUIorsorLWxakWoo
+   zVzaD4F9jRVcy+adqQzfyg3ZICGUi7QiaQnwCaMmGneq3M5Y5kmGwAAGF
+   P/TqH8idoY6jECf2K5yKy/+Wxpkfq76sTIH29wd5RTN8Unwe1Y+6HPzWw
+   x3myy1h9uiRhAqdRIGTDwYTkyvybCDSn8Dd8ZVLVwLNkzE3kiIe50NWV/
+   9bnK8RnZSiq1d6g64C20SQZVYzd6OE0PDs4I9gIb6fJQz7SxqAtZc0FKm
+   rgKoJsgMsoII5cyN/sx2skqDwep4kejHtQWaa9qR2R5bcvRkATqOfnLjb
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="270006497"
+X-IronPort-AV: E=Sophos;i="5.91,220,1647327600"; 
+   d="scan'208";a="270006497"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 10:01:37 -0700
+X-IronPort-AV: E=Sophos;i="5.91,220,1647327600"; 
+   d="scan'208";a="521037693"
+Received: from djiang5-mobl1.amr.corp.intel.com (HELO [10.212.68.97]) ([10.212.68.97])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 10:01:37 -0700
+Message-ID: <cb3d6542-10a8-22d7-ce09-2956449c02eb@intel.com>
+Date:   Thu, 12 May 2022 10:01:36 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220504010716.661115-10-Liam.Howlett@oracle.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] dmaengine: sf-pdma: Add multithread support for a DMA
+ channel
+Content-Language: en-US
+To:     Viacheslav Mitrofanov <v.v.mitrofanov@yadro.com>,
+        Green Wan <green.wan@sifive.com>,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     david.abdurachmanov@sifive.com, linux@yadro.com
+References: <20220512091327.349563-1-v.v.mitrofanov@yadro.com>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20220512091327.349563-1-v.v.mitrofanov@yadro.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 01:07:52AM +0000, Liam Howlett wrote:
-> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-> 
-> Start tracking the VMAs with the new maple tree structure in parallel with
-> the rb_tree.  Add debug and trace events for maple tree operations and
-> duplicate the rb_tree that is created on forks into the maple tree.
-> 
-> The maple tree is added to the mm_struct including the mm_init struct,
-> added support in required mm/mmap functions, added tracking in kernel/fork
-> for process forking, and used to find the unmapped_area and checked
-> against what the rbtree finds.
-> 
-> This also moves the mmap_lock() in exit_mmap() since the oom reaper call
-> does walk the VMAs.  Otherwise lockdep will be unhappy if oom happens.
-> 
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-...
-> @@ -2479,9 +2693,14 @@ int expand_downwards(struct vm_area_struct *vma,
->  			return -ENOMEM;
->  	}
->  
-> +	if (mas_preallocate(&mas, vma, GFP_KERNEL))
 
-We have thousands of leaks reports here from kmemleak while running some
-syscall fuzzers on today's linux-next tree.
+On 5/12/2022 2:13 AM, Viacheslav Mitrofanov wrote:
+> When we get a DMA channel and try to use it in multiple threads it
+> will cause oops and hanging the system.
+>
+> % echo 64 > /sys/module/dmatest/parameters/threads_per_chan
+> % echo 10000 > /sys/module/dmatest/parameters/iterations
+> % echo 1 > /sys/module/dmatest/parameters/run
+> [   89.480664] Unable to handle kernel NULL pointer dereference at virtual
+>                 address 00000000000000a0
+> [   89.488725] Oops [#1]
+> [   89.494708] CPU: 2 PID: 1008 Comm: dma0chan0-copy0 Not tainted
+>                 5.17.0-rc5
+> [   89.509385] epc : vchan_find_desc+0x32/0x46
+> [   89.513553]  ra : sf_pdma_tx_status+0xca/0xd6
+>
+> This happens because of data race. Each thread rewrite channels's
+> descriptor as soon as device_prep_dma_memcpy() is called. It leads to the
+> situation when the driver thinks that it uses right descriptor that
+> actually is freed or substituted for other one.
+>
+> With current fixes a descriptor changes it's value only when it has
 
-unreferenced object 0xffff0803c0063d00 (size 256):
-  comm "trinity-c25", pid 177739, jiffies 4297781293 (age 354.988s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-     slab_post_alloc_hook
-     kmem_cache_alloc_bulk
-     mas_alloc_nodes
-     mas_preallocate
-     mas_preallocate at lib/maple_tree.c:5579
-     expand_downwards
-     expand_downwards at mm/mmap.c:2094
-     expand_stack
-     do_page_fault
-     do_translation_fault
-     do_mem_abort
-     el1_abort
-     el1h_64_sync_handler
-     el1h_64_sync
-     handle_futex_death
-     exit_robust_list
-     futex_exit_release
-     exit_mm_release
+With the current fix a descriptor ...
 
-> +		return -ENOMEM;
+s/it's/its/
+
+
+> been used. A new descriptor is acquired from vc->desc_issued queue that
+> is already filled with descriptors that are ready to be sent. Threads
+> have no direct access to DMA channel descriptor, now it is just possible
+
+I suggest a '.' here instead of ','
+
+DJ
+
+> to queue a descriptor for further processing.
+>
+> Fixes: 6973886ad58e ("dmaengine: sf-pdma: add platform DMA support for HiFive Unleashed A00")
+> Signed-off-by: Viacheslav Mitrofanov <v.v.mitrofanov@yadro.com>
+> ---
+>   drivers/dma/sf-pdma/sf-pdma.c | 44 ++++++++++++++++++++++++-----------
+>   1 file changed, 30 insertions(+), 14 deletions(-)
+>
+> diff --git a/drivers/dma/sf-pdma/sf-pdma.c b/drivers/dma/sf-pdma/sf-pdma.c
+> index f12606aeff87..70bb032c59c2 100644
+> --- a/drivers/dma/sf-pdma/sf-pdma.c
+> +++ b/drivers/dma/sf-pdma/sf-pdma.c
+> @@ -52,16 +52,6 @@ static inline struct sf_pdma_desc *to_sf_pdma_desc(struct virt_dma_desc *vd)
+>   static struct sf_pdma_desc *sf_pdma_alloc_desc(struct sf_pdma_chan *chan)
+>   {
+>   	struct sf_pdma_desc *desc;
+> -	unsigned long flags;
+> -
+> -	spin_lock_irqsave(&chan->lock, flags);
+> -
+> -	if (chan->desc && !chan->desc->in_use) {
+> -		spin_unlock_irqrestore(&chan->lock, flags);
+> -		return chan->desc;
+> -	}
+> -
+> -	spin_unlock_irqrestore(&chan->lock, flags);
+>   
+>   	desc = kzalloc(sizeof(*desc), GFP_NOWAIT);
+>   	if (!desc)
+> @@ -111,7 +101,6 @@ sf_pdma_prep_dma_memcpy(struct dma_chan *dchan,	dma_addr_t dest, dma_addr_t src,
+>   	desc->async_tx = vchan_tx_prep(&chan->vchan, &desc->vdesc, flags);
+>   
+>   	spin_lock_irqsave(&chan->vchan.lock, iflags);
+> -	chan->desc = desc;
+>   	sf_pdma_fill_desc(desc, dest, src, len);
+>   	spin_unlock_irqrestore(&chan->vchan.lock, iflags);
+>   
+> @@ -170,11 +159,17 @@ static size_t sf_pdma_desc_residue(struct sf_pdma_chan *chan,
+>   	unsigned long flags;
+>   	u64 residue = 0;
+>   	struct sf_pdma_desc *desc;
+> -	struct dma_async_tx_descriptor *tx;
+> +	struct dma_async_tx_descriptor *tx = NULL;
+>   
+>   	spin_lock_irqsave(&chan->vchan.lock, flags);
+>   
+> -	tx = &chan->desc->vdesc.tx;
+> +	list_for_each_entry(vd, &chan->vchan.desc_submitted, node)
+> +		if (vd->tx.cookie == cookie)
+> +			tx = &vd->tx;
 > +
->  	/* We must make sure the anon_vma is allocated. */
-> -	if (unlikely(anon_vma_prepare(vma)))
-> +	if (unlikely(anon_vma_prepare(vma))) {
-> +		mas_destroy(&mas);
->  		return -ENOMEM;
+> +	if (!tx)
+> +		goto out;
+> +
+>   	if (cookie == tx->chan->completed_cookie)
+>   		goto out;
+>   
+> @@ -241,6 +236,19 @@ static void sf_pdma_enable_request(struct sf_pdma_chan *chan)
+>   	writel(v, regs->ctrl);
+>   }
+>   
+> +static struct sf_pdma_desc *sf_pdma_get_first_pending_desc(struct sf_pdma_chan *chan)
+> +{
+> +	struct virt_dma_chan *vchan = &chan->vchan;
+> +	struct virt_dma_desc *vdesc;
+> +
+> +	if (list_empty(&vchan->desc_issued))
+> +		return NULL;
+> +
+> +	vdesc = list_first_entry(&vchan->desc_issued, struct virt_dma_desc, node);
+> +
+> +	return container_of(vdesc, struct sf_pdma_desc, vdesc);
+> +}
+> +
+>   static void sf_pdma_xfer_desc(struct sf_pdma_chan *chan)
+>   {
+>   	struct sf_pdma_desc *desc = chan->desc;
+> @@ -268,8 +276,11 @@ static void sf_pdma_issue_pending(struct dma_chan *dchan)
+>   
+>   	spin_lock_irqsave(&chan->vchan.lock, flags);
+>   
+> -	if (vchan_issue_pending(&chan->vchan) && chan->desc)
+> +	if ((chan->desc == NULL) && vchan_issue_pending(&chan->vchan)) {
+> +		/* vchan_issue_pending has made a check that desc in not NULL */
+> +		chan->desc = sf_pdma_get_first_pending_desc(chan);
+>   		sf_pdma_xfer_desc(chan);
 > +	}
->  
->  	/*
->  	 * vma->vm_start/vm_end cannot change under us because the caller
+>   
+>   	spin_unlock_irqrestore(&chan->vchan.lock, flags);
+>   }
+> @@ -298,6 +309,11 @@ static void sf_pdma_donebh_tasklet(struct tasklet_struct *t)
+>   	spin_lock_irqsave(&chan->vchan.lock, flags);
+>   	list_del(&chan->desc->vdesc.node);
+>   	vchan_cookie_complete(&chan->desc->vdesc);
+> +
+> +	chan->desc = sf_pdma_get_first_pending_desc(chan);
+> +	if (chan->desc)
+> +		sf_pdma_xfer_desc(chan);
+> +
+>   	spin_unlock_irqrestore(&chan->vchan.lock, flags);
+>   }
+>   

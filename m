@@ -2,131 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97C03524175
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 02:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9DEF524178
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 02:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349620AbiELAUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 20:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
+        id S1349628AbiELAWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 20:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345344AbiELAUJ (ORCPT
+        with ESMTP id S242707AbiELAWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 20:20:09 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BA11654B7
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 17:20:08 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id bq30so6319204lfb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 17:20:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hmOCXqJx3aPNv4toFluqExpM2fAmi+JPCbe0noGaZQw=;
-        b=RJmRo0HgfC9Kf3yO0+w2/I5Wdot1ejiTWXVtN28t570/TpcfZ0rXnWvezeh6gmWdW+
-         UOUa64hf/XUk253RtaHBUlobyqh8Y+2ZpxgEGnOaHs6TxXvVIToG+1RR946wBgrFAbyk
-         opCld9z+r4zI7R/FHeYrNOtWFdLHzDZnUBfnxP0+3Iluf55T61NuXpsg3uCRJt5THX+Z
-         dsCbcwhJWJcxK/xhknvj1IRvrgMGuYkHvKSkbDh0K6RlnFIAHL3yN8oHALbCM7IN/dAE
-         86sTXvEBhUVpOfFCalqkkPuWXTYJALcsdV3Jf6WEosfXUhH1BRbZNdlp0F/HZncqS63c
-         FlRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hmOCXqJx3aPNv4toFluqExpM2fAmi+JPCbe0noGaZQw=;
-        b=xYCvUX2FxHDFySsx2iouMU/98CxKAQ7vIxw//27I924Mm7KtwtyMUQGy1s1HbKTX7X
-         4ejRzXpFwdLCs3SBSF49ZGy294hTDIcnXE/sBbwLh7ERIsyO3mvN76QAaDPL9DmU65Rr
-         YjJVTPrk+MO1q/4MVdSzdQXvE66gGuOGH17peci3JybURabDtw+eF0Z9/WFBweIU2JVE
-         VlFauoWDCKACQBbzaAajpgx6igNlAe2sRCWZVmGD7QjnONpoLYhnFhv4iZj10Yz4na2m
-         sNj767SrsQUZFP086c0Nxls6cHJ7J4YidLOnqwGXaQcnKF/TH6nroP6ojret1QTDOUdf
-         teiw==
-X-Gm-Message-State: AOAM532SSWXkHQdG8ld4QjxHWbiUFRBbeQvN0FaIY2rLecMMEyVFmFpH
-        gCQo7NILP/N8C9UJGC5yB0T4UTmkbTILiFgzUrp9zA==
-X-Google-Smtp-Source: ABdhPJyJa8CFD2lJb3SXoKRhg9zlKbw7LnvKB8sRqmoJ23L1zXPSQZb94ZFTj6dAS5ma5T1eblHEUYAN6lJ7kSfAXhA=
-X-Received: by 2002:ac2:5e86:0:b0:473:d044:60f5 with SMTP id
- b6-20020ac25e86000000b00473d04460f5mr22024882lfq.87.1652314806600; Wed, 11
- May 2022 17:20:06 -0700 (PDT)
+        Wed, 11 May 2022 20:22:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A79C165D65
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 17:22:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A995E61E25
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:22:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A071C340EE;
+        Thu, 12 May 2022 00:22:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652314928;
+        bh=seXO4v2zX3vcG/CFv9RKV/1XIKUC+Q16x5rmcL8DhCM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=kN/EJ4nonEfmbs/Ic/G3qvfOZXm70wH1xUaFAcbUau0GlW+56XCzk2BfyNvCxXE2m
+         3LKjaID3cWwtNMOio4awk7IpO/IQuxYSTsF7fLQaQYx3QWHAe7VgJnz44ep6buRWsy
+         gf0oYg76MJIXTPuZzfpHpQ/e5nPXrs9Q29jwDZlPEFi1CoToMqgnMzvm6/+Dmr7XAy
+         mC0ihbSHiStpKC+jjzIMEBltwbo4O9Q+tDepFjBCQsSB/1u4YVvYPhWvfbobJ6CCgQ
+         pTnlKvoTqpbMDB4VlmJWobr+4OflLxvHgXMsx8ORdUGn5OVHKOlt2tbaeHzR7JXp00
+         dC2gbu0B6NQHA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 7FB875C05FC; Wed, 11 May 2022 17:22:07 -0700 (PDT)
+Date:   Wed, 11 May 2022 17:22:07 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        John Dias <joaodias@google.com>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH v4] mm: fix is_pinnable_page against on cma page
+Message-ID: <20220512002207.GJ1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <2ffa7670-04ea-bb28-28f8-93a9b9eea7e8@nvidia.com>
+ <YnwupNzDNv7IbjRQ@google.com>
+ <54b5d177-f2f4-cef2-3a68-cd3b0b276f86@nvidia.com>
+ <Ynw6mauQuNhrOAHy@google.com>
+ <f7bcda22-8ffe-67be-36bc-fcde58d8884a@nvidia.com>
+ <YnxCCPZUfgQNXSg6@google.com>
+ <8f083802-7ab0-15ec-b37d-bc9471eea0b1@nvidia.com>
+ <20220511234534.GG1790663@paulmck-ThinkPad-P17-Gen-1>
+ <ea64b36c-ecc1-74db-dd2e-909e7e507ef8@nvidia.com>
+ <0d90390c-3624-4f93-f8bd-fb29e92237d3@nvidia.com>
 MIME-Version: 1.0
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
- <20220512000340.1171988-1-mailhol.vincent@wanadoo.fr> <20220512000340.1171988-3-mailhol.vincent@wanadoo.fr>
-In-Reply-To: <20220512000340.1171988-3-mailhol.vincent@wanadoo.fr>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 11 May 2022 17:19:54 -0700
-Message-ID: <CAKwvOdntx-ZBqVYhdeOO4C1tF4Mx=OpFNYBQUfB=iXjfQO9bvw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to
- evaluate constant expressions
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
-        Jan Beulich <JBeulich@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0d90390c-3624-4f93-f8bd-fb29e92237d3@nvidia.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 5:04 PM Vincent Mailhol
-<mailhol.vincent@wanadoo.fr> wrote:
->
-> __ffs(x) is equivalent to (unsigned long)__builtin_ctzl(x) and ffz(x)
-> is equivalent to (unsigned long)__builtin_ctzl(~x). Because
-> __builting_ctzl() returns an int, a cast to (unsigned long) is
-> necessary to avoid potential warnings on implicit casts.
->
-> For x86_64, the current __ffs() and ffz() implementations do not
-> produce optimized code when called with a constant expression. On the
-> contrary, the __builtin_ctzl() gets simplified into a single
-> instruction.
->
-> However, for non constant expressions, the __ffs() and ffz() asm
-> versions of the kernel remains slightly better than the code produced
-> by GCC (it produces a useless instruction to clear eax).
->
-> This patch uses the __builtin_constant_p() to select between the
-> kernel's __ffs()/ffz() and the __builtin_ctzl() depending on whether
-> the argument is constant or not.
->
-> ** Statistics **
->
-> On a allyesconfig, before applying this patch...:
->
-> | $ objdump -d vmlinux.o | grep tzcnt | wc -l
-> | 3607
->
-> ...and after:
->
-> | $ objdump -d vmlinux.o | grep tzcnt | wc -l
-> | 2600
->
-> So, roughly 27.9% of the calls to either __ffs() or ffz() were using
-> constant expressions and could be optimized out.
->
-> (tests done on linux v5.18-rc5 x86_64 using GCC 11.2.1)
->
-> Note: on x86_64, the asm bsf instruction produces tzcnt when used with
-> the ret prefix (which is why we grep tzcnt instead of bsf in above
-> benchmark). c.f. [1]
->
-> [1] commit e26a44a2d618 ("x86: Use REP BSF unconditionally")
-> http://lkml.kernel.org/r/5058741E020000780009C014@nat28.tlf.novell.com
->
-> CC: Nick Desaulniers <ndesaulniers@google.com>
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+On Wed, May 11, 2022 at 05:12:32PM -0700, John Hubbard wrote:
+> On 5/11/22 16:57, John Hubbard wrote:
+> > On 5/11/22 16:45, Paul E. McKenney wrote:
+> > > > 
+> > > > Well no, because the "&" operation is a single operation on the CPU, and
+> > > > isn't going to get split up like that.
+> > > 
+> > > Chiming in a bit late...
+> > 
+> > Much appreciated!
+> > 
+> > > 
+> > > The usual way that this sort of thing causes trouble is if there is a
+> > > single store instruction that changes the value from MIGRATE_ISOLATE
+> > > to MIGRATE_CMA, and if the compiler decides to fetch twice, AND twice,
+> > 
+> > Doing an AND twice for "x & constant" this definitely blows my mind. Is
+> > nothing sacred? :)
+> > 
+> > > and then combine the results.  This could give a zero outcome where the
+> > > underlying variable never had the value zero.
+> > > 
+> > > Is this sort of thing low probability?
+> > > 
+> > > Definitely.
+> > > 
+> > > Isn't this sort of thing prohibited?
+> > > 
+> > > Definitely not.
+> > > 
+> > > So what you have will likely work for at least a while longer, but it
+> > > is not guaranteed and it forces you to think a lot harder about what
+> > > the current implementations of the compiler can and cannot do to you.
+> > > 
+> > > The following LWN article goes through some of the possible optimizations
+> > > (vandalisms?) in this area: https://lwn.net/Articles/793253/
+> > > 
+> > 
+> > hmm, I don't think we hit any of those  cases, do we? Because here, the
+> > "write" side is via a non-inline function that I just don't believe the
+> > compiler is allowed to call twice. Or is it?
+> > 
+> > Minchan's earlier summary:
+> > 
+> > CPU 0                         CPU1
+> > 
+> > 
+> >                                set_pageblock_migratetype(MIGRATE_ISOLATE)
+> > 
+> > if (get_pageblock_migrate(page) & MIGRATE_CMA)
+> > 
+> >                                set_pageblock_migratetype(MIGRATE_CMA)
+> > 
+> > if (get_pageblock_migrate(page) & MIGRATE_ISOLATE)
+> > 
+> > ...where set_pageblock_migratetype() is not inline.
+> > 
+> > thanks,
+> 
+> Let me try to say this more clearly: I don't think that the following
+> __READ_ONCE() statement can actually help anything, given that
+> get_pageblock_migratetype() is non-inlined:
+> 
+> +	int __mt = get_pageblock_migratetype(page);
+> +	int mt = __READ_ONCE(__mt);
+> +
+> +	if (mt & (MIGRATE_CMA | MIGRATE_ISOLATE))
+> +		return false;
+> 
+> 
+> Am I missing anything here?
 
-Thanks for the patches!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+In the absence of future aggression from link-time optimizations (LTO),
+you are missing nothing.
 
-
--- 
-Thanks,
-~Nick Desaulniers
+							Thanx, Paul

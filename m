@@ -2,73 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A106652459A
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 08:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED0E852459D
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 08:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350279AbiELGXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 02:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44022 "EHLO
+        id S1350287AbiELGXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 02:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235180AbiELGXI (ORCPT
+        with ESMTP id S1350286AbiELGXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 02:23:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DF38D5710D
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 23:23:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652336585;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gu9u72Bn5KZQJL5OHuIKH7wOoRokqxGGSIy5PLn3fYs=;
-        b=d1wNdf0N9iFux+t9zUApXsbTRXfHGAyXpHcYMtZy+rwzVUCvuW98wO1RSgNQXrw57A22xh
-        J2DPPGAuIcIbkwZvaTqfQbhRnhQvrZNAVd1DAfMteG0Vhsr2OlUa8EDJvWg0hI81+Kxcgx
-        Buahi94OsehuyK1JHekUGBLCl4ypfeY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-439-YZ9qbDKqPymGnrE5fpLnxQ-1; Thu, 12 May 2022 02:23:02 -0400
-X-MC-Unique: YZ9qbDKqPymGnrE5fpLnxQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 836B680159B;
-        Thu, 12 May 2022 06:23:01 +0000 (UTC)
-Received: from localhost (ovpn-13-176.pek2.redhat.com [10.72.13.176])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C569E400E400;
-        Thu, 12 May 2022 06:23:00 +0000 (UTC)
-Date:   Thu, 12 May 2022 14:22:57 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Coiby Xu <coxu@redhat.com>
-Cc:     kexec@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
-        Michal Suchanek <msuchanek@suse.de>,
-        Dave Young <dyoung@redhat.com>, Will Deacon <will@kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Mimi Zohar <zohar@linux.ibm.com>, Chun-Yi Lee <jlee@suse.com>,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v7 2/4] kexec, KEYS: make the code in
- bzImage64_verify_sig generic
-Message-ID: <Ynynwe7Q0+0DSABQ@MiWiFi-R3L-srv>
-References: <20220512023402.9913-1-coxu@redhat.com>
- <20220512023402.9913-3-coxu@redhat.com>
- <Ynx1DUvDTL1R4Pj5@MiWiFi-R3L-srv>
- <YnyEafqEcSh/wRRN@MiWiFi-R3L-srv>
- <20220512043310.v3e22423ybe4z65e@Rk>
+        Thu, 12 May 2022 02:23:43 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154AA57128;
+        Wed, 11 May 2022 23:23:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1652336612;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=ZkBIc6Q0gdXP/pnup3PEDcuxEaaZqb9pnmXBD1pB/hs=;
+    b=E3yNUkKGbNwForlz0XMhl2Eb4xLzU299V/ZfyWT6DFFir7OT3n/nU4bpVZfQpnXvaT
+    Of1ObQ5uHY0/f4vKiW1t523oUUqRrZSGVUXjhNjFEuRhHSVdWM3yk6GNgQY7GoRZjO+W
+    Ho4mXXS4iyIxFOlQM28vlRfG2SdA2ITosBw69RHs92ufSMO/0v47Vjqq71pDbBAlDPyU
+    z2/JMO9zkJ/IDJTeBNg1cMcauCQO+4gqEeA9a12QgXY3zFfP9XC2eVQI3h/meik48IZC
+    lfaRFBPgFRZ/GqOP6Bdg8i4rwDvxTn7L97PSwHTrtaxjitIT+O3v3wk9YJ3K9DSWv5S4
+    8N6g==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdBqPeOuh2krLEWFUg=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cff:5b00::b82]
+    by smtp.strato.de (RZmta 47.42.2 AUTH)
+    with ESMTPSA id 4544c9y4C6NWzZI
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 12 May 2022 08:23:32 +0200 (CEST)
+Message-ID: <f6cb7e44-226b-cffb-d907-9014075cdcb5@hartkopp.net>
+Date:   Thu, 12 May 2022 08:23:26 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220512043310.v3e22423ybe4z65e@Rk>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 1/1] can: skb: add and set local_origin flag
+Content-Language: en-US
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Devid Antonio Filoni <devid.filoni@egluetechnologies.com>,
+        kernel@pengutronix.de, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Jander <david@protonic.nl>
+References: <20220511121913.2696181-1-o.rempel@pengutronix.de>
+ <b631b022-72d5-9160-fd13-f33c80dbbe59@hartkopp.net>
+ <20220511132421.7o5a3po32l3w2wcr@pengutronix.de>
+ <20220511143620.kphwgp2vhjyoecs5@pengutronix.de>
+ <002d234f-a7d6-7b1a-72f4-157d7a283446@hartkopp.net>
+ <20220511145437.oezwkcprqiv5lfda@pengutronix.de>
+ <3c6bf83c-0d91-ea43-1a5d-27df7db1fb08@hartkopp.net>
+In-Reply-To: <3c6bf83c-0d91-ea43-1a5d-27df7db1fb08@hartkopp.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,178 +71,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/12/22 at 12:33pm, Coiby Xu wrote:
-> On Thu, May 12, 2022 at 11:52:09AM +0800, Baoquan He wrote:
-> > On 05/12/22 at 10:46am, Baoquan He wrote:
-> > > On 05/12/22 at 10:34am, Coiby Xu wrote:
-> > > > commit 278311e417be ("kexec, KEYS: Make use of platform keyring for
-> > > > signature verify") adds platform keyring support on x86 kexec but not
-> > > > arm64.
-> > > >
-> > > > The code in bzImage64_verify_sig makes use of system keyrings including
-> > > > .buitin_trusted_keys, .secondary_trusted_keys and .platform keyring to
-> > > > verify signed kernel image as PE file. Make it generic so both x86_64
-> > > > and arm64 can use it.
-> > > >
-> > > > Note this patch is needed by a later patch so Cc it to the stable tree
-> > > > as well.
-> > > 
-> > > This note should not be added in log.
-> > > 
-> > > >
-> > > > Cc: kexec@lists.infradead.org
-> > > > Cc: keyrings@vger.kernel.org
-> > > > Cc: linux-security-module@vger.kernel.org
-> > > > Cc: stable@vger.kernel.org # 34d5960af253: kexec: clean up arch_kexec_kernel_verify_sig
-> > 
-> > Hold on, should we CC stable when it's not fixing an issue?
-> > 
-> > Hi Coiby,
-> 
-> Hi Baoquan,
-> 
-> > 
-> > Just to make clear , is this patch fixing an issue, or it's just an
-> > preparation for later patch's use?
-> > 
-> > Or I should ask in another way, any problem is solved with this patch?
-> 
-> At least it doesn't fix an issue that satisfy the criteria listed in
-> https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+Hi Marc,
 
-Then it should not be CC-ed to stable.
+On 11.05.22 16:57, Oliver Hartkopp wrote:
+> 
+> 
+> On 5/11/22 16:54, Marc Kleine-Budde wrote:
+>> On 11.05.2022 16:50:06, Oliver Hartkopp wrote:
+>>>
+>>>
+>>> On 5/11/22 16:36, Marc Kleine-Budde wrote:
+>>>> On 11.05.2022 15:24:21, Marc Kleine-Budde wrote:
+>>>>> On 11.05.2022 14:38:32, Oliver Hartkopp wrote:
+>>>>>> IMO this patch does not work as intended.
+>>>>>>
+>>>>>> You probably need to revisit every place where can_skb_reserve() 
+>>>>>> is used,
+>>>>>> e.g. in raw_sendmsg().
+>>>>>
+>>>>> And the loopback for devices that don't support IFF_ECHO:
+>>>>>
+>>>>> | https://elixir.bootlin.com/linux/latest/source/net/can/af_can.c#L257
+>>>>
+>>>> BTW: There is a bug with interfaces that don't support IFF_ECHO.
+>>>>
+>>>> Assume an invalid CAN frame is passed to can_send() on an interface 
+>>>> that
+>>>> doesn't support IFF_ECHO. The above mentioned code does happily 
+>>>> generate
+>>>> an echo frame and it's send, even if the driver drops it, due to
+>>>> can_dropped_invalid_skb(dev, skb).
+>>>>
+>>>> The echoed back CAN frame is treated in raw_rcv() as if the headroom 
+>>>> is valid:
+I double checked that code and when I didn't miss anything all the 
+callers of can_send() (e.g. raw_sendmsg()) are creating valid skbs.
 
-> 
-> > 
-> > 
-> > > > Reviewed-by: Michal Suchanek <msuchanek@suse.de>
-> > > > Signed-off-by: Coiby Xu <coxu@redhat.com>
-> > > > ---
-> > > 
-> > > You can put the note here, it won't be added to commit log when merged.
-> > > Maybe it can be removed when merged.
-> 
-> Thanks for the suggestion! Shall I send a version to fix this problem or
-> can I just bother the maintainer to remove it?
+https://elixir.bootlin.com/linux/v5.17.6/A/ident/can_send
 
-Better send a clean one, it will save maintainer's time, they can pick
-it directly.
+>>>>
+>>>> | https://elixir.bootlin.com/linux/v5.17.6/source/net/can/raw.c#L138
+>>>>
+>>>> But as far as I can see the can_skb_headroom_valid() check never has
+>>>> been done. What about this patch?
+>>>>
+>>>> index 1fb49d51b25d..fda4807ad165 100644
+>>>> --- a/net/can/af_can.c
+>>>> +++ b/net/can/af_can.c
+>>>> @@ -255,6 +255,9 @@ int can_send(struct sk_buff *skb, int loop)
+>>>>                    */
+>>>>                   if (!(skb->dev->flags & IFF_ECHO)) {
+>>>> +                       if (can_dropped_invalid_skb(dev, skb))
+>>>> +                               return -EINVAL;
+>>>> +
 
-> 
-> 
-> > > 
-> > > Otherwise, LGTM
-> > > 
-> > > Acked-by: Baoquan He <bhe@redhat.com>
-> > > 
-> > > >  arch/x86/kernel/kexec-bzimage64.c | 20 +-------------------
-> > > >  include/linux/kexec.h             |  7 +++++++
-> > > >  kernel/kexec_file.c               | 17 +++++++++++++++++
-> > > >  3 files changed, 25 insertions(+), 19 deletions(-)
-> > > >
-> > > > diff --git a/arch/x86/kernel/kexec-bzimage64.c b/arch/x86/kernel/kexec-bzimage64.c
-> > > > index 170d0fd68b1f..f299b48f9c9f 100644
-> > > > --- a/arch/x86/kernel/kexec-bzimage64.c
-> > > > +++ b/arch/x86/kernel/kexec-bzimage64.c
-> > > > @@ -17,7 +17,6 @@
-> > > >  #include <linux/kernel.h>
-> > > >  #include <linux/mm.h>
-> > > >  #include <linux/efi.h>
-> > > > -#include <linux/verification.h>
-> > > >
-> > > >  #include <asm/bootparam.h>
-> > > >  #include <asm/setup.h>
-> > > > @@ -528,28 +527,11 @@ static int bzImage64_cleanup(void *loader_data)
-> > > >  	return 0;
-> > > >  }
-> > > >
-> > > > -#ifdef CONFIG_KEXEC_BZIMAGE_VERIFY_SIG
-> > > > -static int bzImage64_verify_sig(const char *kernel, unsigned long kernel_len)
-> > > > -{
-> > > > -	int ret;
-> > > > -
-> > > > -	ret = verify_pefile_signature(kernel, kernel_len,
-> > > > -				      VERIFY_USE_SECONDARY_KEYRING,
-> > > > -				      VERIFYING_KEXEC_PE_SIGNATURE);
-> > > > -	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
-> > > > -		ret = verify_pefile_signature(kernel, kernel_len,
-> > > > -					      VERIFY_USE_PLATFORM_KEYRING,
-> > > > -					      VERIFYING_KEXEC_PE_SIGNATURE);
-> > > > -	}
-> > > > -	return ret;
-> > > > -}
-> > > > -#endif
-> > > > -
-> > > >  const struct kexec_file_ops kexec_bzImage64_ops = {
-> > > >  	.probe = bzImage64_probe,
-> > > >  	.load = bzImage64_load,
-> > > >  	.cleanup = bzImage64_cleanup,
-> > > >  #ifdef CONFIG_KEXEC_BZIMAGE_VERIFY_SIG
-> > > > -	.verify_sig = bzImage64_verify_sig,
-> > > > +	.verify_sig = kexec_kernel_verify_pe_sig,
-> > > >  #endif
-> > > >  };
-> > > > diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-> > > > index 413235c6c797..da83abfc628b 100644
-> > > > --- a/include/linux/kexec.h
-> > > > +++ b/include/linux/kexec.h
-> > > > @@ -19,6 +19,7 @@
-> > > >  #include <asm/io.h>
-> > > >
-> > > >  #include <uapi/linux/kexec.h>
-> > > > +#include <linux/verification.h>
-> > > >
-> > > >  /* Location of a reserved region to hold the crash kernel.
-> > > >   */
-> > > > @@ -202,6 +203,12 @@ int arch_kexec_apply_relocations(struct purgatory_info *pi,
-> > > >  				 const Elf_Shdr *relsec,
-> > > >  				 const Elf_Shdr *symtab);
-> > > >  int arch_kimage_file_post_load_cleanup(struct kimage *image);
-> > > > +#ifdef CONFIG_KEXEC_SIG
-> > > > +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
-> > > > +int kexec_kernel_verify_pe_sig(const char *kernel,
-> > > > +				    unsigned long kernel_len);
-> > > > +#endif
-> > > > +#endif
-> > > >  int arch_kexec_locate_mem_hole(struct kexec_buf *kbuf);
-> > > >
-> > > >  extern int kexec_add_buffer(struct kexec_buf *kbuf);
-> > > > diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> > > > index 3720435807eb..754885b96aab 100644
-> > > > --- a/kernel/kexec_file.c
-> > > > +++ b/kernel/kexec_file.c
-> > > > @@ -165,6 +165,23 @@ void kimage_file_post_load_cleanup(struct kimage *image)
-> > > >  }
-> > > >
-> > > >  #ifdef CONFIG_KEXEC_SIG
-> > > > +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
-> > > > +int kexec_kernel_verify_pe_sig(const char *kernel, unsigned long kernel_len)
-> > > > +{
-> > > > +	int ret;
-> > > > +
-> > > > +	ret = verify_pefile_signature(kernel, kernel_len,
-> > > > +				      VERIFY_USE_SECONDARY_KEYRING,
-> > > > +				      VERIFYING_KEXEC_PE_SIGNATURE);
-> > > > +	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
-> > > > +		ret = verify_pefile_signature(kernel, kernel_len,
-> > > > +					      VERIFY_USE_PLATFORM_KEYRING,
-> > > > +					      VERIFYING_KEXEC_PE_SIGNATURE);
-> > > > +	}
-> > > > +	return ret;
-> > > > +}
-> > > > +#endif
-> > > > +
-> > > >  static int kexec_image_verify_sig(struct kimage *image, void *buf,
-> > > >  		unsigned long buf_len)
-> > > >  {
-> > > > --
-> > > > 2.35.3
-> > > >
-> > > 
-> > 
-> 
-> -- 
-> Best regards,
-> Coiby
-> 
+That would make this change unnecessary, right?
 
+IIRC the reason for can_dropped_invalid_skb() is to prove valid skbs for 
+CAN interface drivers when CAN frame skbs are created e.g. with 
+PF_PACKET sockets.
+
+Best,
+Oliver
+
+
+>>>
+>>> Good point!
+>>>
+>>> But please check the rest of the code.
+>>> You need 'goto inval_skb;' instead of the return ;-)
+>>
+>> Why? To free the skb? That's what can_dropped_invalid_skb() does, too:
+>>
+>> | 
+>> https://elixir.bootlin.com/linux/v5.17.6/source/include/linux/can/skb.h#L130 
+>>
+>>
+> 
+> My bad!
+> 
+> Pointing you not reading the code ... should better have looked myself :-D
+> 

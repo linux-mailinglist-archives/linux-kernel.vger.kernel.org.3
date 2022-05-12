@@ -2,101 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06BF3524DF0
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FCE4524DEB
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354215AbiELNL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 09:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33414 "EHLO
+        id S1354380AbiELNLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 09:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354249AbiELNKy (ORCPT
+        with ESMTP id S1354224AbiELNKx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 09:10:54 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2691DA51
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:10:49 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-edeb6c3642so6561556fac.3
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:10:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sdLATnA0kcPNoqu23cfiMLmFcXc/ybpMfIMW+RMWEMQ=;
-        b=WH/Yg/K2dHDjtYEYJw7pMyeqK00jg9PMsnBNd1pniF5ESO43pGuCO5fdpfXfdvg5GS
-         dXTx+tXrKuQ2bEym+hdoMu3ZiHpWZh8HoBecQMlgoxILQUx5GP3ns+53JGTVqz81nxHs
-         H8XCAbvLb1JMXpVlagB8O97aKBvYKmmLaiP9k1qxyXicWB1+cyUX/noBAfgX4Iwf+DWx
-         Q/0VY3i4K/tlbkd14LKewDJl+22Dflp2EotibMBNPrwppTqRJghkISNCNY5jVSXp71Xy
-         uYOFVcj6HHUiZvS0Sb2f8wEKmaPnVeXbBFwQS50AXuIsCdKGe5jPHfxGmCKc9rqrQBrU
-         +CwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sdLATnA0kcPNoqu23cfiMLmFcXc/ybpMfIMW+RMWEMQ=;
-        b=lozOdndO/g+ve+NRH7xwGHm3IR7G7PWXW7d1er3kjZvMIyQsi0zJY4eahxZldZ0WSx
-         l0NYxmIosCK9FQOgh+A8huld4mGKUi7WPvmzHHgriYm6e9RWjrQ14GvnZr/tb/P8kgKN
-         dvMFFO2rPxBcPlhW5cQkpTaRZswOeTayDhm8bhNvhrzMo1Nia7nk2dj5QWCDCvv7d9WE
-         pBKmqHMZggn3fErXpaZ8ZicG9MTTXSocl+dXfohAms+64mRUpFqh/RjbzQ/1rHYqqo4C
-         IRnXsVJeWMrpSShUicvUQ0FZc0/2SmMpXRzzbiE372VMIeMDGgHBsZR/0+I9ByigcKL2
-         9qEA==
-X-Gm-Message-State: AOAM533NBwa1sULy9v58GjFHr5sppGQDrp4I07xvjMWyAYaGPw+2lyDd
-        Lqby5MtdTzgTj4lXWqSYCcoXPeCd2EEauDYS1QjjJw==
-X-Google-Smtp-Source: ABdhPJyS3tE3qF+JcU9MU6Fu4rHz6PDTLQJ7dBPcxrOf3QlhTSnRdWW6XbLBXQksgHFll5uPtYKXAL4qBCTjy5JTea8=
-X-Received: by 2002:a05:6870:d254:b0:db:12b5:da3 with SMTP id
- h20-20020a056870d25400b000db12b50da3mr5466937oac.211.1652361048752; Thu, 12
- May 2022 06:10:48 -0700 (PDT)
+        Thu, 12 May 2022 09:10:53 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C4BE01B
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:10:46 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KzXBf5GJNzGpfQ;
+        Thu, 12 May 2022 21:07:54 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 12 May 2022 21:10:43 +0800
+CC:     <yangyicong@hisilicon.com>, Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Mel Gorman <mgorman@suse.de>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Chen Yu <yu.chen.surf@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Barry Song <21cnbao@gmail.com>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        Len Brown <len.brown@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Aubrey Li <aubrey.li@intel.com>,
+        Abel Wu <wuyun.abel@bytedance.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        <linux-kernel@vger.kernel.org>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Subject: Re: [PATCH v3] sched/fair: Introduce SIS_UTIL to search idle CPU
+ based on sum of util_avg
+To:     Chen Yu <yu.c.chen@intel.com>
+References: <20220428182442.659294-1-yu.c.chen@intel.com>
+ <962e16d1-dd73-418c-9635-009db110823d@huawei.com>
+ <20220512081414.GA31450@chenyu5-mobl1>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <37596ea2-b97a-71a7-74ff-ec0281dd3de1@huawei.com>
+Date:   Thu, 12 May 2022 21:10:43 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-References: <0000000000008a7a1c05c9e53c87@google.com> <000000000000942c2205d6dc0896@google.com>
-In-Reply-To: <000000000000942c2205d6dc0896@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 12 May 2022 15:10:37 +0200
-Message-ID: <CACT4Y+Yfw+SFqbjqkBFw9aN7PABEgJapr7M2iY-O3nBwrMHVfQ@mail.gmail.com>
-Subject: Re: [syzbot] WARNING in drm_gem_shmem_vm_open
-To:     syzbot <syzbot+91525b2bd4b5dff71619@syzkaller.appspotmail.com>
-Cc:     airlied@linux.ie, bugs-a21@moonlit-rail.com,
-        christian.koenig@amd.com, daniel.vetter@ffwll.ch,
-        daniel.vetter@intel.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, javierm@redhat.com,
-        linaro-mm-sig-owner@lists.linaro.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, maarten.lankhorst@linux.intel.com,
-        maxime@cerno.tech, melissa.srw@gmail.com, mripard@kernel.org,
-        sumit.semwal@linaro.org, syzkaller-bugs@googlegroups.com,
-        tzimmermann@suse.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220512081414.GA31450@chenyu5-mobl1>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 31 Jan 2022 at 08:50, syzbot
-<syzbot+91525b2bd4b5dff71619@syzkaller.appspotmail.com> wrote:
->
-> syzbot suspects this issue was fixed by commit:
->
-> commit 0499f419b76f94ede08304aad5851144813ac55c
-> Author: Javier Martinez Canillas <javierm@redhat.com>
-> Date:   Mon Jan 10 09:56:25 2022 +0000
->
->     video: vga16fb: Only probe for EGA and VGA 16 color graphic cards
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=126571e0700000
-> start commit:   5d6ab0bb408f Merge tag 'xtensa-20211008' of git://github.c..
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=32e6048063923b7b
-> dashboard link: https://syzkaller.appspot.com/bug?extid=91525b2bd4b5dff71619
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11073300b00000
->
-> If the result looks correct, please mark the issue as fixed by replying with:
->
-> #syz fix: video: vga16fb: Only probe for EGA and VGA 16 color graphic cards
+On 2022/5/12 16:14, Chen Yu wrote:
+> On Tue, May 10, 2022 at 08:41:57PM +0800, Yicong Yang wrote:
+>> On 2022/4/29 2:24, Chen Yu wrote:
+>>> @@ -61,6 +61,7 @@ SCHED_FEAT(TTWU_QUEUE, true)
+>>>   * When doing wakeups, attempt to limit superfluous scans of the LLC domain.
+>>>   */
+>>>  SCHED_FEAT(SIS_PROP, true)
+>>> +SCHED_FEAT(SIS_UTIL, false)
+>>>  
+>>
+>> I see you mentioned they're mutually exclusive in the commit, worth a comment here?
+>>
+> Yes, previously I thought it could be made mutually exclusive, and Peter has
+> suggested that we should make SIS_UTIL enabled by default, so later we could
+> remove SIS_PROP if SIS_UTIL behaves stable. So I assume there is no need to
+> add comment in the next version now. 
+>> One minor question: nr is updated in load balance so there maybe a delay because of
+>> interval of load balancing.
+> Yes, this is a good question. The default interval between two load balance is sd_weight ms,
+> which is 112ms in my case. This interval was a trade off to reduce cache contention. Besides,
+> every 1st idle CPU or the balanced CPU in one sched group within the LLC domain has the chance
+> to launch a periodic load balance, for example, although CPU0 and CPU1's periodic load balance
+> are both triggered every 112ms, CPU1 could help launch the load balance when CPU0 is not in
+> load balance work. Consider there are many CPUs in a LLC domain, the 'internal' to launch
+> the periodic load balance becomes smaller.
+>> Furthermore, the LLC domain may not be balanced everytime
+>> if the lowest domain is not LLC, like CLS->LLC. So maybe a bit more delay included.
+>>
+> I thought every domain has its chance to launch a load balance, the difference is different
+> domains have different interval. No?
+I might miss something. I think it's right here.
+>> The test results is fine and as expected. The improvement of netperf at a heavy load
+>> condition, compared to your v2 version.
+>>
+> Thanks for the test, would you mind if I add Tested-by tag?
+> 
 
-Not sure, but maybe:
+On Kunpeng920 for this patch,
 
-#syz fix: video: vga16fb: Only probe for EGA and VGA 16 color graphic cards
+Tested-by: Yicong Yang <yangyicong@hisilicon.com>
+
+> thanks,
+> Chenyu 
+>> Thanks,
+>> Yicong
+>>
+>> TCP_RR node 0-1
+>> threads
+>> 16	57559.56667	57930.03333 (+0.64%)
+>> 32	56373		57754.53333 (+2.45%)
+>> 64	18831.4		46234.76667 (+145.52%)
+>> 128	15658.9		19620.26667 (+25.30%)
+>> 256	7959.896667	8869.013333 (+11.42%)
+>>
+>> TCP_RR node 0
+>> threads
+>> 16	58389.43333	59026.03333 (+1.09%)
+>> 32	23779.6		51563.33333 (+116.84%)
+>> 64	20514.56667	23485.63333 (+14.48%)
+>> 128	8202.49		9205.483333 (+12.23%)
+>> 256	3843.163333	4304.8      (+12.01%)
+>>
+>> tbench4 node 0-1
+>>                            5.18-rc1                patched
+>> Hmean     1        299.02 (   0.00%)      307.73 *   2.91%*
+>> Hmean     2        597.88 (   0.00%)      619.10 *   3.55%*
+>> Hmean     4       1207.11 (   0.00%)     1239.57 *   2.69%*
+>> Hmean     8       2406.67 (   0.00%)     2463.63 *   2.37%*
+>> Hmean     16      4755.52 (   0.00%)     4979.46 *   4.71%*
+>> Hmean     32      9449.01 (   0.00%)     9709.59 *   2.76%*
+>> Hmean     64     10538.89 (   0.00%)    10727.86 *   1.79%*
+>> Hmean     128    13333.84 (   0.00%)    14580.63 *   9.35%*
+>> Hmean     256    11735.24 (   0.00%)    11737.16 (   0.02%)
+>>
+>> tbench4 node 0
+>>                            5.18-rc1                patched
+>> Hmean     1        302.26 (   0.00%)      313.43 *   3.70%*
+>> Hmean     2        603.87 (   0.00%)      618.56 *   2.43%*
+>> Hmean     4       1213.91 (   0.00%)     1249.63 *   2.94%*
+>> Hmean     8       2469.72 (   0.00%)     2527.48 *   2.34%*
+>> Hmean     16      4980.70 (   0.00%)     5099.62 *   2.39%*
+>> Hmean     32      9001.88 (   0.00%)     9730.27 *   8.09%*
+>> Hmean     64      7032.07 (   0.00%)     7691.56 *   9.38%*
+>> Hmean     128     6037.76 (   0.00%)     6712.86 *  11.18%*
+>> Hmean     256     8513.83 (   0.00%)     9117.79 *   7.09%*
+>>
+> .
+> 

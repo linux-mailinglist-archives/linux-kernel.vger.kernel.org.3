@@ -2,116 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFC72525700
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 23:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD56525702
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 23:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358657AbiELVYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 17:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33482 "EHLO
+        id S1358684AbiELV1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 17:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231402AbiELVYb (ORCPT
+        with ESMTP id S1343679AbiELV11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 17:24:31 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB1C270CAC
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 14:24:29 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652390667;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=O0oZd+Y8woJ6fFGZxNFZTKswF93ZoW1CaLUWFySAj0A=;
-        b=nAdjWvTjYBrTDrCyGJfRXhhyjrSHLW4CZ3GF6Yf71+/cg6pHseaIqb2GEGB3ZTITjBCV3u
-        u+nwms1rNvpSQF7UZibEepc2avbvdv7x4sOPQiFC90ll+IiVTbkjr5oIZ6fd+YcyKpJloq
-        aq2qtwU+mWMU8dxGt3OBGwzQrR50UoV8DmBKcTRbu6jwXRwrfdsAD9dJGnqlEimpTaK4vS
-        Z9fNxHovZSvpr7qUs4/KZFSsGdavGsKTd21O54MLx9/0MrdSVqQB5sTxiL1lirVtW/U/ae
-        OtFuPPBdRI/JJAfFoi6Umj7JSK2wiKLktQJpLw0ir8nsNZbCBiuQhzOi9V8hvw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652390667;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=O0oZd+Y8woJ6fFGZxNFZTKswF93ZoW1CaLUWFySAj0A=;
-        b=mc+PbD5GUeDJd5gRo1q9/E9BiRbr+vlIeXqnLZGcFbpz8umfAIgSRpndoFcOjBunDCmkPE
-        PBx7GjFwxgTG2OAg==
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFCv2 00/10] Linear Address Masking enabling
-In-Reply-To: <875ymav8ul.ffs@tglx>
-References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
- <20220511064943.GR76023@worktop.programming.kicks-ass.net>
- <20bada85-9203-57f4-2502-57a6fd11f3ea@intel.com> <875ymav8ul.ffs@tglx>
-Date:   Thu, 12 May 2022 23:24:27 +0200
-Message-ID: <87zgjmtpf8.ffs@tglx>
+        Thu, 12 May 2022 17:27:27 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4901AF8C5
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 14:27:26 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id cx11-20020a17090afd8b00b001d9fe5965b3so8994451pjb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 14:27:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Z42I6VdLgJQWCimw9jq3ML6062lMxaAz0l305lNu6lY=;
+        b=sf6rGnUno4L6TvnRk2gpBC24KcJtsUZzN6I4vcfDuOiZfZRQ+3UJG2NNvdA53QBRPT
+         Y7zMBoxCnnZUBdlUyuRF92JRQJdOBvmaEgu4/AR2JuoEEIDA1RhKdKl5f6iXmvl/kBQh
+         +xOva8WNjZAQnXo3BURvlZ6ZywZ1sQHPJnrDAnTaO0dB/x+g64ljQ3VvV4H0Ow0bdzX/
+         yQsANAdKTv8L011Wk0C1pDbSCLuFY8LqNjwjlcyAGtjBKNAYN+Xi2s2SPi1g+JEhBFOS
+         AjnRs3tpZv9Zri8bo/SARsW0OjnX9ePob5VARvUr1q0PQHDMII641v4VqjmyVxie5rtM
+         nPfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Z42I6VdLgJQWCimw9jq3ML6062lMxaAz0l305lNu6lY=;
+        b=6bAC6KrddfQr/pzMr/indTC7Mc3FT4ov2FqALyq8CAwXCh1iJZk/L65uzunOiTn5Bf
+         knuae+VaPXlAaomUOxN4C6HShDlQM5/t3fvSOT5ybcEZIIoV/4Au1pTBD4ddQzZZJ/lO
+         nMEZf4PQGiMUHCh4k/f2WqC3fUMK4Wl/GcVOire4QK97XDWRj5y1JOvV3Ozmd7YFy/zW
+         o6B/tOaRFF8fWfG1Nd2Ry9JffauUFoByy8/9zVLnN4WdFzSuKCxKHs2wXw0gF85njbYV
+         q0Ie6FuyWMU0/mIdZ1yqKUJfaE0CyiTOIEgB7gHBdF9Skl2qtJSWf/Wj+6xpiJFnnSCw
+         cI3w==
+X-Gm-Message-State: AOAM53081LYRojjQMVZDrZ2zwYoYMHeMq5Ak8hLsS9liLFoegzomjz3f
+        tS8+FDvq9+4AXfFHBf0Vt/RRKw==
+X-Google-Smtp-Source: ABdhPJz9xsKhnwOtZsyp6CbgXOmfSkTHnZIHbC6HPulm4VT8eFiPZMXgDH6mwCOF1OeFg6Na0OCkHw==
+X-Received: by 2002:a17:902:e804:b0:15e:a5cf:676 with SMTP id u4-20020a170902e80400b0015ea5cf0676mr1411413plg.144.1652390845912;
+        Thu, 12 May 2022 14:27:25 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id c24-20020a170902c2d800b0015e8d4eb2ebsm304335pla.309.2022.05.12.14.27.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 14:27:25 -0700 (PDT)
+Date:   Thu, 12 May 2022 21:27:22 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Jim Mattson <jmattson@google.com>, x86@kernel.org,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] KVM: x86: fix a typo in __try_cmpxchg_user that caused
+ cmpxchg to be not atomic
+Message-ID: <Yn17urxf7vprODed@google.com>
+References: <20220202004945.2540433-5-seanjc@google.com>
+ <20220512101420.306759-1-mlevitsk@redhat.com>
+ <87e16c11-d57b-92cd-c10b-21d855f475ef@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87e16c11-d57b-92cd-c10b-21d855f475ef@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12 2022 at 21:39, Thomas Gleixner wrote:
-> On Thu, May 12 2022 at 10:22, Dave Hansen wrote:
->> One of the stated reasons for adding LAM hardware is that folks want to
->> use sanitizers outside of debugging environments.  To me, that means
->> that LAM is something that the same binary might run with or without.
->
-> On/off yes, but is there an actual use case where such a mechanism would
-> at start time dynamically chose the number of bits?
+On Thu, May 12, 2022, Paolo Bonzini wrote:
+> On 5/12/22 12:14, Maxim Levitsky wrote:
+> > Yes, this is the root cause of the TDP mmu leak I was doing debug of in the last week.
+> > Non working cmpxchg on which TDP mmu relies makes it install two differnt shadow pages
+> > under same spte.
+> 
+> Awesome!  And queued, thanks.
 
-This would need cooperation from the application because it has to tell
-the magic facility whether it intends to utilize the large VA space on a
-5-level paging system or not.
+If you haven't done so already, can you add 
 
-I have no idea how that is supposed to work, but what do I know about
-magic.
+  Cc: stable@vger.kernel.org
 
->> It's totally fine with me if the kernel only initially supports LAM_U57.
->>  But, I'd ideally like to make sure that the ABI can support LAM_U57,
->> LAM_U48, AMD's UAI (in whatever form it settles), or other masks.
->
-> Sure. No argument here.
-
-Assumed that the acronym of the day, which uses this, has a real benefit
-from the larger number of bits, we can support it.
-
-But we are not going to make this a per thread selectable thing.
-
-It's a process wide decision at startup simply because it does no buy
-thread A anything to select U57 if thread B selects U48 before thread A
-was able to map something into the U48 covered address space. Same issue
-the other way round as then B has to fallback to U57 or NONE. That does
-not make any sense at all.
-
-I'm all for flexible, but not just because we can. It has to make sense.
-
-Making it process wide and once on startup puts the 'complexity' into
-the prctl(), but keeps the runtime overhead as small as it gets:
-
-  - CR3 switching needs just the | mm->lam_cr3_mask
-
-  - untagging one of the uglies Peter and I came up with
-
-Making U48/U57 hardcoded would not buy much.
-
-Thanks,
-
-        tglx
-
-
-
+Also, given that we have concrete proof that not honoring atomic accesses can have
+dire consequences for the guest, what about adding a capability to turn the emul_write
+path into an emulation error?

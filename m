@@ -2,112 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC0F9524C90
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2DEF524C93
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353616AbiELMUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 08:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50236 "EHLO
+        id S1353621AbiELMUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 08:20:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353606AbiELMUJ (ORCPT
+        with ESMTP id S1349371AbiELMUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 08:20:09 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E788A2469F6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:20:08 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id f18-20020a926a12000000b002be48b02bc6so3087471ilc.17
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:20:08 -0700 (PDT)
+        Thu, 12 May 2022 08:20:44 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE42819C34
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:20:40 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id b19so6977935wrh.11
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:20:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:organization:in-reply-to:content-transfer-encoding;
+        bh=RB4UFWflnqT7YBqkDdk/tHJ953wpGWAq9+2dQip5Mgk=;
+        b=SYyQEfdTxPtJhqIjDzLvhoXxyWDkBykTLx2EMy2UIBn9ANURE3n1SbvvtNKJiZRdb9
+         QxgtIFjOVr0i1qU7eFxs7SAlFzFLIMyOfqJQRMcVZwp89iY5o2qN8fB/bRpKe413XYx6
+         080m+FmyhUnWUdQhf33FL6LXzpjGiaJP383/f5NwouESb9+/Ap6JFzbb4ituiGdzm1o0
+         no25PcXJuN67b6sN8hdFf4Fu9mryvYGvwYBqx35zXirO6yTRdPLYG2GInX6XHZoHBDGA
+         w8y4OdbFAKcH+ezHiHm+UjUB5pt9wJuEFHUQvmwwSAUJOpdM4SXx2ohi5d2cuja7KxzU
+         nCAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=ECsNBH3R+758KxYtoRcfDChqnInBt6dPUMitEt/42zs=;
-        b=5+u64sk6zb11Gez+p5yfUvBJVMUYu15PsQ35elmWuC0JKEutMppQDNxErHUOOGWrWF
-         O4NWHXeWh8QZtok4ykfDP6cLqFCW8VchZG9z9EPOII313pKWuhXwDd7n9K+y5IaAlmuh
-         YcvTDVA3Z5V/C+NY86D8zO1yXm0iT6Vpptssp2ndLFaCsrtEviooAkGwmszpaGvbTp7d
-         j9luRWYRkgGGYcRkUItW9squLcepPMJ9dehvRk2M6Vj7tBUF175d7Rknk39BK9b5DHsQ
-         vxWR5h0wLpmEFH6+VNgUKzl34xsk8xpPOsQ2ozvKPWzIpn8bcfzsbPeEW9g08+vv1hhj
-         dshw==
-X-Gm-Message-State: AOAM530xPg/8x9HYeEK3/hT1GdqdLsb5bIpCmFHa20wUG+R319AqTTTx
-        V23h/vhL8hSiqLC5vEfG5TSd7aBWJYH9dOkqX0HIM+s0pAjm
-X-Google-Smtp-Source: ABdhPJyRFrAKLktRcsRS/D1IXedH0tWevtoDU+ZVekRKWKSPlU1cH3jSpbBtwBAEGWDrs+v3InPMwTcG2Y3hXlKCrkDgizB6fov2
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=RB4UFWflnqT7YBqkDdk/tHJ953wpGWAq9+2dQip5Mgk=;
+        b=kFkO1m6Gv1QhGDju2ajo3ts6mjGdaIcrY5/y4KVI0piOGjXiz1Hn67TZ1bA7ZspuCU
+         zLMhbFTAH+ZH6H2rjVvFGStevIk5v6R1JQ5ZQ/rvH4DdixnTn0kwxr5Vw7rv+Yh/dwyn
+         jr4RGX1ZFs7YOtSooBqK4Op6pI7blY5EOvx+9GFTZRTZKOUd8ebCZY+xCS5EZI+Sqtu0
+         Cqj2EZMu5mCcD75mI+QbCYsimmk24aqMRQTo7ioQC8g/KrSgIuc2y4Pq8VyaXX1mBttn
+         980LO5FQrOEFa8THS+EUR4+xlSzZpZwcVXFvpYVJMaHiSImrRaLRMW/pgZuA2iJLObRm
+         QCmw==
+X-Gm-Message-State: AOAM533slmCvrd9CJhbVB33XCmvz5Dsiq4hXTPd9jNjMoXsrayK330y4
+        96FZRL1+E+Gta48sxA3PUIBQPtZ429nBmXW2
+X-Google-Smtp-Source: ABdhPJyu1aKN5KiuDTzkBD61oRd1v63Bb1+xpDXJPlEui//nYUG2arMwW3pCr9WkbGGiND0niBZcfg==
+X-Received: by 2002:a05:6000:144f:b0:20c:6090:3040 with SMTP id v15-20020a056000144f00b0020c60903040mr26377831wrx.479.1652358039271;
+        Thu, 12 May 2022 05:20:39 -0700 (PDT)
+Received: from ?IPV6:2001:861:44c0:66c0:8073:a89f:6230:abb? ([2001:861:44c0:66c0:8073:a89f:6230:abb])
+        by smtp.gmail.com with ESMTPSA id c1-20020a5d4cc1000000b0020c5253d8ccsm4104892wrt.24.2022.05.12.05.20.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 05:20:38 -0700 (PDT)
+Message-ID: <dabe6a15-b0ba-0458-bbd7-a07224071920@baylibre.com>
+Date:   Thu, 12 May 2022 14:20:37 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:26cb:b0:648:f391:c37d with SMTP id
- g11-20020a05660226cb00b00648f391c37dmr13222406ioo.198.1652358008274; Thu, 12
- May 2022 05:20:08 -0700 (PDT)
-Date:   Thu, 12 May 2022 05:20:08 -0700
-In-Reply-To: <20220512120234.6088-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000020077105decf94ea@google.com>
-Subject: Re: [syzbot] WARNING in mntput_no_expire (3)
-From:   syzbot <syzbot+5b1e53987f858500ec00@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] drm/meson: Fix refcount leak in meson_encoder_hdmi_init
+Content-Language: en-US
+To:     Miaoqian Lin <linmq006@gmail.com>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220511054052.51981-1-linmq006@gmail.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <20220511054052.51981-1-linmq006@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 11/05/2022 07:40, Miaoqian Lin wrote:
+> of_find_device_by_node() takes reference, we should use put_device()
+> to release it when not need anymore.
+> Add missing put_device() in error path to avoid refcount
+> leak.
+> 
+> Fixes: 0af5e0b41110 ("drm/meson: encoder_hdmi: switch to bridge DRM_BRIDGE_ATTACH_NO_CONNECTOR")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>   drivers/gpu/drm/meson/meson_encoder_hdmi.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/meson/meson_encoder_hdmi.c b/drivers/gpu/drm/meson/meson_encoder_hdmi.c
+> index 5e306de6f485..de87f02cd388 100644
+> --- a/drivers/gpu/drm/meson/meson_encoder_hdmi.c
+> +++ b/drivers/gpu/drm/meson/meson_encoder_hdmi.c
+> @@ -435,8 +435,10 @@ int meson_encoder_hdmi_init(struct meson_drm *priv)
+>   		cec_fill_conn_info_from_drm(&conn_info, meson_encoder_hdmi->connector);
+>   
+>   		notifier = cec_notifier_conn_register(&pdev->dev, NULL, &conn_info);
+> -		if (!notifier)
+> +		if (!notifier) {
+> +			put_device(&pdev->dev);
+>   			return -ENOMEM;
+> +		}
+>   
+>   		meson_encoder_hdmi->cec_notifier = notifier;
+>   	}
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-WARNING in mntput_no_expire
-
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 4071 at fs/namespace.c:1236 mntput_no_expire+0xada/0xcd0 fs/namespace.c:1236
-Modules linked in:
-CPU: 1 PID: 4071 Comm: syz-executor.4 Not tainted 5.18.0-rc6-syzkaller-00009-gfeb9c5e19e91-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:mntput_no_expire+0xada/0xcd0 fs/namespace.c:1236
-Code: 30 84 c0 0f 84 b9 fe ff ff 3c 03 0f 8f b1 fe ff ff 4c 89 44 24 10 e8 45 50 e9 ff 4c 8b 44 24 10 e9 9d fe ff ff e8 46 bf 9d ff <0f> 0b e9 19 fd ff ff e8 3a bf 9d ff e8 75 cf 91 07 31 ff 89 c5 89
-RSP: 0018:ffffc9000324fcf0 EFLAGS: 00010293
-
-RAX: 0000000000000000 RBX: 1ffff92000649fa4 RCX: 0000000000000000
-RDX: ffff88807ccd0000 RSI: ffffffff81db819a RDI: 0000000000000003
-RBP: ffff888022660c00 R08: 0000000000000000 R09: ffffffff9006d94f
-R10: ffffffff81db7eb1 R11: 0000000000000001 R12: 0000000000000008
-R13: ffffc9000324fd40 R14: 00000000ffffffff R15: 0000000000000002
-FS:  0000555556484400(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00005567c4d8d680 CR3: 0000000022908000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- path_umount+0x925/0x10d0 fs/namespace.c:1809
- ksys_umount fs/namespace.c:1828 [inline]
- __do_sys_umount fs/namespace.c:1833 [inline]
- __se_sys_umount fs/namespace.c:1831 [inline]
- __x64_sys_umount+0x159/0x180 fs/namespace.c:1831
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f0dfe48a557
-Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffef4140618 EFLAGS: 00000246
- ORIG_RAX: 00000000000000a6
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f0dfe48a557
-RDX: 00007ffef41406ea RSI: 000000000000000a RDI: 00007ffef41406e0
-RBP: 00007ffef41406e0 R08: 00000000ffffffff R09: 00007ffef41404b0
-R10: 00005555564858b3 R11: 0000000000000246 R12: 00007f0dfe4e21f8
-R13: 00007ffef41417a0 R14: 0000555556485810 R15: 00007ffef41417e0
- </TASK>
-
-
-Tested on:
-
-commit:         feb9c5e1 Merge tag 'for_linus' of git://git.kernel.org..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-console output: https://syzkaller.appspot.com/x/log.txt?x=159cbc4ef00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=79caa0035f59d385
-dashboard link: https://syzkaller.appspot.com/bug?extid=5b1e53987f858500ec00
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1449df71f00000
-
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>

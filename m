@@ -2,133 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 780B0524F14
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B82F2524F1D
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354850AbiELN71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 09:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37166 "EHLO
+        id S1354659AbiELOAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 10:00:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354836AbiELN7Y (ORCPT
+        with ESMTP id S1354887AbiELN75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 09:59:24 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792B91E21B1;
-        Thu, 12 May 2022 06:59:22 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id be20so6300408edb.12;
-        Thu, 12 May 2022 06:59:22 -0700 (PDT)
+        Thu, 12 May 2022 09:59:57 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD5025B07D
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:59:50 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id q18so4929586pln.12
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:59:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=g/Qg+1AZg6aTBJtpO/aq9xOI91f+bSFV81BXjqwHGko=;
-        b=GzBUlMuf69Ac0C7m/kaNVndV6Br0xiShvNqxUeOtw0juwWg14tpjtIRYebJbMQnycZ
-         gfsbrtjvbB198B/98w558vukOCoVUdS4/T5UrB7bGiHdWbfn56tqO9iKrbphRYbSsQUO
-         /Bip1JrTlw/Xs5cs4JtbClv1JRpR4YOzdebdBpfbcudpz2YrG5l5AwU1Uw8QJ0qmWBys
-         1tDUVkL99PTMiG7dUcrldXVcWZazAmRggiPt+16TFwqSq0NFTGlSo7qHwlkQ9v7lWZ+c
-         af+8hAUiy8qSER3xsYxNg1BOMPKLk+bJMQyWJkb0b1V6mBQ9pn99UxqCRrR8If9bBVLo
-         UtbQ==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3kOJe+H/ERTxI6v7eeqIA23qR8YVOZADC2y1mDVL6Wc=;
+        b=ITK30V0ZUC+q2vylMd4KbId4Ew0IpXXKdRnB/uGG7YT+A58FXfW/a49f3+jEpj8OLj
+         ANtE9V9zqSriZ7nDoXMGOR+o1WOd1YCUZOZQ+0jXTCIh5d0w+wPfiu7D+E60dcEn1Bfj
+         WpRdRmKZ0IypCClA3wBKR8kaS4XwaFIxUsawG8rFxliw05T5hJOQwDZ1UP1PTRTkKN6q
+         JLOhsyUwF4CsADHQAFrXQu7nHj3FYLiVcxR2ZtYAolcM7YCSNK0Sh5lqTRm+Lxl2GgDA
+         FwwiM0BzoiPCiV/y2qGsw7rRvvgD/i7s0jxPbGGmVVt+1nNsNvoiz1RDXgwb47nBaAvd
+         RheA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=g/Qg+1AZg6aTBJtpO/aq9xOI91f+bSFV81BXjqwHGko=;
-        b=KfrVUMd7A4KlmGOYziAIQueQwJ2TdH7zgSpzWmRAQHGnAXUNt2Zj9UTvDiJ0IV5O2g
-         As20+SjaJSketS0gJsSbS2yXCFiyQoVFsI59LGUxcike0Ao5xXM4c5Rz0hfjX33QhwtU
-         CCxjG+jSjqjDH0lI05EjuZCwB4xDItkacGCZbfvCwdtamGVmEB0YpOHo+bXdwU+rnbYx
-         oEpz/3QGMkxbJLrlRGUUqgjq3jTcNY4TO9WO5tx1KclXIs/7m6x9oy4Tiaz8T82pQ7/K
-         uyNPfsO5CoTIIp7+rtOjbw+XxX3qle/QTuDCmNcdTRKBKCHDOUiTD8udrWSeABiyU9FY
-         VtoQ==
-X-Gm-Message-State: AOAM532c7th8JiC8Q1011h1PuecmgXKtj++6TTD8450TCwRS5IUA0fmJ
-        PpDNJSwjL84ggzq2kQKJaDI=
-X-Google-Smtp-Source: ABdhPJxN9Fo7H7WahKOcrH15At67L2t0c/BFv/7iczdzwo4PhNstc9jrR++vhZVYhx07TuYHak7d1g==
-X-Received: by 2002:a05:6402:747:b0:428:1f98:d17 with SMTP id p7-20020a056402074700b004281f980d17mr35536640edy.57.1652363961067;
-        Thu, 12 May 2022 06:59:21 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id dx18-20020a170906a85200b006f3a8b81ff7sm2195937ejb.3.2022.05.12.06.59.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 06:59:20 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <e1fc28b6-996f-a436-2664-d6b044d07c82@redhat.com>
-Date:   Thu, 12 May 2022 15:59:19 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3kOJe+H/ERTxI6v7eeqIA23qR8YVOZADC2y1mDVL6Wc=;
+        b=OuuNdfTdK2PKqLlJH5Ku6pZvxFyKueqhqZO/mOICdSshbgloJBwXhq4r1SI8DZDtHS
+         RcE/AEKwlasZ7pjtqBVhII1D2GqTxBtLRY1wu8DGmu7kUBHodQ73Kn6FvY+JkG810HCF
+         6qRrqoFbD0JFCLUlcZbyCNEV/ZXkIc4IZeLFZ7/KLfrMLyHI5qEKLv5qbyjE0WrJYkAx
+         6pfcq0MH0oHmZNpBtcMlUcd+z4tUZOTwomC4v67jrAjss0Bphx+ZZsOMcsgJU0Ewmd1I
+         XlCMKDnUWp5t5c5VBZGH4/SLj5O/jTGzqmCr/CifpKwbR5Qc2TNBqdgBizf0p55eTaKg
+         1Uxg==
+X-Gm-Message-State: AOAM530Gn6Sd6Rv/dSCp4IdIlv8u3l2DSTy88pQdbdYpiBRtEJ2E9gmO
+        I2/uyqsgtfkP1Moc2Dp8wLJqzg==
+X-Google-Smtp-Source: ABdhPJx+vFO/jdauj2MQt/7gUdxpe2Sk1Zo72LFQJnNVksQfkJKJxnKxVLSTLyzoFNKL3X0NWLRj5A==
+X-Received: by 2002:a17:902:ccc2:b0:15f:4acc:f202 with SMTP id z2-20020a170902ccc200b0015f4accf202mr1778237ple.3.1652363990352;
+        Thu, 12 May 2022 06:59:50 -0700 (PDT)
+Received: from localhost ([139.177.225.234])
+        by smtp.gmail.com with ESMTPSA id a8-20020aa78e88000000b0050dc76281bfsm3748854pfr.153.2022.05.12.06.59.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 06:59:49 -0700 (PDT)
+Date:   Thu, 12 May 2022 21:59:37 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     corbet@lwn.net, mike.kravetz@oracle.com, akpm@linux-foundation.org,
+        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
+        osalvador@suse.de, masahiroy@kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        duanxiongchun@bytedance.com, smuchun@gmail.com
+Subject: Re: [PATCH v10 2/4] mm: memory_hotplug: override memmap_on_memory
+ when hugetlb_free_vmemmap=on
+Message-ID: <Yn0SyaqfS2YZ8kO/@FVFYT0MHHV2J.usts.net>
+References: <20220509062703.64249-1-songmuchun@bytedance.com>
+ <20220509062703.64249-3-songmuchun@bytedance.com>
+ <ebffd794-697b-9bf1-f41b-4b2d52c100fc@redhat.com>
+ <Yn0Ck5isxx4ghQi6@FVFYT0MHHV2J.usts.net>
+ <284eec3f-a79d-c5f0-3cd6-53b8e64100cd@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 16/22] KVM: x86/mmu: remove redundant bits from extended
- role
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20220414074000.31438-1-pbonzini@redhat.com>
- <20220414074000.31438-17-pbonzini@redhat.com> <Ynmv2X5eLz2OQDMB@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Ynmv2X5eLz2OQDMB@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <284eec3f-a79d-c5f0-3cd6-53b8e64100cd@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/10/22 02:20, Sean Christopherson wrote:
-> --
-> From: Sean Christopherson<seanjc@google.com>
-> Date: Mon, 9 May 2022 17:13:39 -0700
-> Subject: [PATCH] KVM: x86/mmu: Return true from is_cr4_pae() iff CR0.PG is set
+On Thu, May 12, 2022 at 03:04:57PM +0200, David Hildenbrand wrote:
+> On 12.05.22 14:50, Muchun Song wrote:
+> > On Thu, May 12, 2022 at 09:36:15AM +0200, David Hildenbrand wrote:
+> >> On 09.05.22 08:27, Muchun Song wrote:
+> >>> Optimizing HugeTLB vmemmap pages is not compatible with allocating memmap on
+> >>> hot added memory. If "hugetlb_free_vmemmap=on" and
+> >>> memory_hotplug.memmap_on_memory" are both passed on the kernel command line,
+> >>> optimizing hugetlb pages takes precedence. 
+> >>
+> >> Why?
+> >>
+> > 
+> > Because both two features are not compatible since hugetlb_free_vmemmap cannot
+> > optimize the vmemmap pages allocated from alternative allocator (when
+> > memory_hotplug.memmap_on_memory=1). So when the feature of hugetlb_free_vmemmap
+> > is introduced, I made hugetlb_free_vmemmap take precedence.  BTW, I have a plan
+> > to remove this restriction, I'll post it out ASAP.
 > 
-> Condition is_cr4_pae() on is_cr0_pg() in addition to the !4-byte gPTE
-> check.  From the MMU's perspective, PAE is disabling if paging is
-> disabled.  The current code works because all callers check is_cr0_pg()
-> before invoking is_cr4_pae(), but relying on callers to maintain that
-> behavior is unnecessarily risky.
-> 
-> Fixes: faf729621c96 ("KVM: x86/mmu: remove redundant bits from extended role")
-> Signed-off-by: Sean Christopherson<seanjc@google.com>
-> ---
->   arch/x86/kvm/mmu/mmu.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 909372762363..d1c20170a553 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -240,7 +240,7 @@ static inline bool is_cr0_pg(struct kvm_mmu *mmu)
-> 
->   static inline bool is_cr4_pae(struct kvm_mmu *mmu)
->   {
-> -        return !mmu->cpu_role.base.has_4_byte_gpte;
-> +        return is_cr0_pg(mmu) && !mmu->cpu_role.base.has_4_byte_gpte;
->   }
-> 
->   static struct kvm_mmu_role_regs vcpu_to_role_regs(struct kvm_vcpu *vcpu)
+> I was asking why vmemmap optimization should take precedence.
+> memmap_on_memory makes it more likely to succeed memory hotplug in
+> close-to-OOM situations -- which is IMHO more important than a vmemmap
+> optimization.
+>
 
-Hmm, thinking more about it this is not needed for two kind of opposite 
-reasons:
+I thought the users who enable hugetlb_free_vmemmap value memory
+savings more, so I made a decision in commit 4bab4964a59f.  Seems
+I made a bad decision from your description.
+ 
+> But anyhow, the proper approach should most probably be to simply not
+> mess with the vmemmap if we stumble over a vmemmap that's special due to
+> memmap_on_memory. I assume that's what you're talking about sending out.
+>
 
-* if is_cr4_pae() really were to represent the raw CR4.PAE value, this 
-is incorrect and it should be up to the callers to check is_cr0_pg()
+I mean I want to have hugetlb_vmemmap.c do the check whether the section
+which the HugeTLB pages belong to can be optimized instead of making
+hugetlb_free_vmemmap take precedence.  E.g. If the section's vmemmap pages
+are allocated from the added memory block itself, hugetlb_free_vmemmap will
+refuse to optimize the vmemmap, otherwise, do the optimization.  Then
+both kernel parameters are compatible.  I have done those patches, but
+haven't send them out.
 
-* if is_cr4_pae() instead represents 8-byte page table entries, then it 
-does even before this patch, because of the following logic in 
-kvm_calc_cpu_role():
+Thanks.
 
-         if (!____is_cr0_pg(regs)) {
-                 role.base.direct = 1;
-                 return role;
-         }
-	...
-         role.base.has_4_byte_gpte = !____is_cr4_pae(regs);
-
-
-So whatever meaning we give to is_cr4_pae(), there is no need for the 
-adjustment.
-
-Paolo

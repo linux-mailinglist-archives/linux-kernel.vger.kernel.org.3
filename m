@@ -2,179 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED190524446
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 06:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 307B252444A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 06:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347003AbiELEdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 00:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
+        id S1347321AbiELEd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 00:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347020AbiELEd3 (ORCPT
+        with ESMTP id S1346463AbiELEdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 00:33:29 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07F42173E8
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 21:33:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652330006; x=1683866006;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+2V5uKNQxb0pwoOXe1pIKVDMfyElxOAjv/Z78Am4WeY=;
-  b=N1nIUC97FrPud2vlGzGr1jpf9cVfLjVRoxfW3IZyPrl1BeZOohDtt1cg
-   5wB5JBJmA+hxs85G4mQQB+kpD32ue3nP/ANLftFPaDe8fmPeyrJjdwVu/
-   i6fovcf8w0/mEPm40pFY5baMVO250BOOptUt5lMbkoAKP9n2RKSXaBH1e
-   9TwQU3SXtFSQAjciQfSf27QLn04TAZPLJ+q3TtisZJvqp6zR2g036hjd0
-   cj71rEW7THmLElaMZftdknd7Nnz64vtFWUYBi/HnI94d2+rrd7vo8M6dm
-   jDaN6go5x6M0o9LslYwaGFj0Q45JxTy4MzNFESA7jHy/A8yaplCxHal6m
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="295132716"
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="295132716"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 21:33:11 -0700
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="594478965"
-Received: from ppwalsh-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.32.215])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 21:33:08 -0700
-Message-ID: <531bca30-c458-c0f6-61e0-08d64bdb1b3d@intel.com>
-Date:   Thu, 12 May 2022 07:33:05 +0300
+        Thu, 12 May 2022 00:33:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1385C218FCE
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 21:33:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652330018;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9m59m31zWjI88PU/fkJ+2jBtK+MMPKzeFSYoFIaJt9c=;
+        b=hFs+QH3VSLYLL+GcmLe23/y/SpLzyLPJZ5L07aosfy/pP+dWAun4JpNi6wDojZwELAoaSS
+        aHh7X6QXmnmVJDwwJmyYs1rAWKf7ra++PJ1iV7TMSz2Jmgnw3tsg7lR663+l1/fnIIWoxE
+        kCR6GmUfy2Jr+3/ITsO3Sc5yQmWaJhY=
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
+ [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-621-X0LD5W0KNH6Ml8ysa-8SJQ-1; Thu, 12 May 2022 00:33:36 -0400
+X-MC-Unique: X0LD5W0KNH6Ml8ysa-8SJQ-1
+Received: by mail-pf1-f199.google.com with SMTP id u25-20020aa78499000000b0050d328e2f6bso2067100pfn.7
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 21:33:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9m59m31zWjI88PU/fkJ+2jBtK+MMPKzeFSYoFIaJt9c=;
+        b=ZULrBOr694FTYN1lOXTxvja1uMAEXzy+Aj7GTZe4XpLkXsGLfIjGihdaOeZIUUyEAd
+         kmzgw/raZcj3TgXRyb15dwHGY11ONbqx88hwubRAzNYa3IFDj4OtZg+JcstURA7zvghS
+         Z1qYKYbqk55PahuxYhj6jfHU86rQMvSwRA9ZehBe+Jlm/s/VupDHE8ylI98DGcSLvf82
+         cTfXUHqiJmeL/3OdyZYhr/s852wMPfIoyi1Jw1HwHjUBxXrCr34M/Mg8s6TcANCIdYRK
+         W/G2eLMauFGFecHOQ6aopm555xIi6bYI54fMqPACU0X6V5/9esz71R/he4CbBULMUqjq
+         JGAQ==
+X-Gm-Message-State: AOAM532//zlBi13kInD3jiiOp7AZI4NXxxIUc2MGqNz6X0FytP4ASOGl
+        K82c7PgheciUtNDQFpu0LWmJlXyluUX78VQmEHpqxFEOZ07GtZ+i2lOiwNPNn+DZB47BXl43qu/
+        E0vqTGVILFbKWy0YQTut3N7bg
+X-Received: by 2002:a17:903:32d0:b0:15e:8cbc:fd39 with SMTP id i16-20020a17090332d000b0015e8cbcfd39mr29480055plr.95.1652330015204;
+        Wed, 11 May 2022 21:33:35 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwywe5Nh4a9dE8q7MbA+N0sqO4+GFmGOMSIJl/Vpj8aBpEmmVY8aRc6/9wvIdpdBGVwqi/Qbw==
+X-Received: by 2002:a17:903:32d0:b0:15e:8cbc:fd39 with SMTP id i16-20020a17090332d000b0015e8cbcfd39mr29480024plr.95.1652330014959;
+        Wed, 11 May 2022 21:33:34 -0700 (PDT)
+Received: from localhost ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id p3-20020a170902780300b0015e8d4eb293sm2755119pll.221.2022.05.11.21.33.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 21:33:34 -0700 (PDT)
+Date:   Thu, 12 May 2022 12:33:10 +0800
+From:   Coiby Xu <coxu@redhat.com>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     kexec@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+        Michal Suchanek <msuchanek@suse.de>,
+        Dave Young <dyoung@redhat.com>, Will Deacon <will@kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Mimi Zohar <zohar@linux.ibm.com>, Chun-Yi Lee <jlee@suse.com>,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v7 2/4] kexec, KEYS: make the code in
+ bzImage64_verify_sig generic
+Message-ID: <20220512043310.v3e22423ybe4z65e@Rk>
+References: <20220512023402.9913-1-coxu@redhat.com>
+ <20220512023402.9913-3-coxu@redhat.com>
+ <Ynx1DUvDTL1R4Pj5@MiWiFi-R3L-srv>
+ <YnyEafqEcSh/wRRN@MiWiFi-R3L-srv>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.8.1
-Subject: Re: [PATCH V3 13/23] perf evlist: Add evlist__add_dummy_on_all_cpus()
-Content-Language: en-US
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20220506122601.367589-1-adrian.hunter@intel.com>
- <20220506122601.367589-14-adrian.hunter@intel.com>
- <1bce56f9-2e4c-6cff-c668-d62cab038591@intel.com>
- <CAM9d7cgTpZ1KFLMG5DT63twJZUgoxQ6zhUeMkSya0x4O6U9TMg@mail.gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <CAM9d7cgTpZ1KFLMG5DT63twJZUgoxQ6zhUeMkSya0x4O6U9TMg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <YnyEafqEcSh/wRRN@MiWiFi-R3L-srv>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/22 01:50, Namhyung Kim wrote:
-> On Wed, May 11, 2022 at 12:02 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+On Thu, May 12, 2022 at 11:52:09AM +0800, Baoquan He wrote:
+>On 05/12/22 at 10:46am, Baoquan He wrote:
+>> On 05/12/22 at 10:34am, Coiby Xu wrote:
+>> > commit 278311e417be ("kexec, KEYS: Make use of platform keyring for
+>> > signature verify") adds platform keyring support on x86 kexec but not
+>> > arm64.
+>> >
+>> > The code in bzImage64_verify_sig makes use of system keyrings including
+>> > .buitin_trusted_keys, .secondary_trusted_keys and .platform keyring to
+>> > verify signed kernel image as PE file. Make it generic so both x86_64
+>> > and arm64 can use it.
+>> >
+>> > Note this patch is needed by a later patch so Cc it to the stable tree
+>> > as well.
 >>
->> Add evlist__add_dummy_on_all_cpus() to enable creating a system-wide dummy
->> event that sets up the system-wide maps before map propagation.
+>> This note should not be added in log.
 >>
->> For convenience, add evlist__add_aux_dummy() so that the logic can be used
->> whether or not the event needs to be system-wide.
->>
->> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
->> ---
->>
->> Changes in V3: Amended comment about all CPUs.
->>
->>  tools/perf/util/evlist.c | 45 ++++++++++++++++++++++++++++++++++++++++
->>  tools/perf/util/evlist.h |  5 +++++
->>  2 files changed, 50 insertions(+)
->>
->> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
->> index 78c47cbafbc2..2b2900434bba 100644
->> --- a/tools/perf/util/evlist.c
->> +++ b/tools/perf/util/evlist.c
->> @@ -264,6 +264,51 @@ int evlist__add_dummy(struct evlist *evlist)
->>         return 0;
->>  }
->>
->> +static void evlist__add_on_all_cpus(struct evlist *evlist, struct evsel *evsel)
->> +{
->> +       evsel->core.system_wide = true;
->> +
->> +       /*
->> +        * All CPUs.
->> +        *
->> +        * Note perf_event_open() does not accept CPUs that are not online, so
->> +        * in fact this CPU list will include only all online CPUs.
->> +        */
->> +       perf_cpu_map__put(evsel->core.own_cpus);
->> +       evsel->core.own_cpus = perf_cpu_map__new(NULL);
->> +       perf_cpu_map__put(evsel->core.cpus);
->> +       evsel->core.cpus = perf_cpu_map__get(evsel->core.own_cpus);
-> 
-> Maybe I'm missing something.. Wouldn't it be overwritten
-> by the user requested cpus during map propagation in
-> evlist__add()?
+>> >
+>> > Cc: kexec@lists.infradead.org
+>> > Cc: keyrings@vger.kernel.org
+>> > Cc: linux-security-module@vger.kernel.org
+>> > Cc: stable@vger.kernel.org # 34d5960af253: kexec: clean up arch_kexec_kernel_verify_sig
+>
+>Hold on, should we CC stable when it's not fixing an issue?
+>
+>Hi Coiby,
 
-Yes.  That gets changed in patch 22 "perf tools: Allow system-wide
-events to keep their own CPUs"
+Hi Baoquan,
 
-> 
-> Thanks,
-> Namhyung
-> 
-> 
->> +
->> +       /* No threads */
->> +       perf_thread_map__put(evsel->core.threads);
->> +       evsel->core.threads = perf_thread_map__new_dummy();
->> +
->> +       evlist__add(evlist, evsel);
->> +}
->> +
->> +struct evsel *evlist__add_aux_dummy(struct evlist *evlist, bool system_wide)
->> +{
->> +       struct evsel *evsel = evlist__dummy_event(evlist);
->> +
->> +       if (!evsel)
->> +               return NULL;
->> +
->> +       evsel->core.attr.exclude_kernel = 1;
->> +       evsel->core.attr.exclude_guest = 1;
->> +       evsel->core.attr.exclude_hv = 1;
->> +       evsel->core.attr.freq = 0;
->> +       evsel->core.attr.sample_period = 1;
->> +       evsel->no_aux_samples = true;
->> +       evsel->name = strdup("dummy:u");
->> +
->> +       if (system_wide)
->> +               evlist__add_on_all_cpus(evlist, evsel);
->> +       else
->> +               evlist__add(evlist, evsel);
->> +
->> +       return evsel;
->> +}
->> +
->>  static int evlist__add_attrs(struct evlist *evlist, struct perf_event_attr *attrs, size_t nr_attrs)
->>  {
->>         struct evsel *evsel, *n;
->> diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
->> index 4062f5aebfc1..1bde9ccf4e7d 100644
->> --- a/tools/perf/util/evlist.h
->> +++ b/tools/perf/util/evlist.h
->> @@ -114,6 +114,11 @@ int arch_evlist__add_default_attrs(struct evlist *evlist);
->>  struct evsel *arch_evlist__leader(struct list_head *list);
+>
+>Just to make clear , is this patch fixing an issue, or it's just an
+>preparation for later patch's use?
+>
+>Or I should ask in another way, any problem is solved with this patch?
+
+At least it doesn't fix an issue that satisfy the criteria listed in 
+https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+
+>
+>
+>> > Reviewed-by: Michal Suchanek <msuchanek@suse.de>
+>> > Signed-off-by: Coiby Xu <coxu@redhat.com>
+>> > ---
 >>
->>  int evlist__add_dummy(struct evlist *evlist);
->> +struct evsel *evlist__add_aux_dummy(struct evlist *evlist, bool system_wide);
->> +static inline struct evsel *evlist__add_dummy_on_all_cpus(struct evlist *evlist)
->> +{
->> +       return evlist__add_aux_dummy(evlist, true);
->> +}
+>> You can put the note here, it won't be added to commit log when merged.
+>> Maybe it can be removed when merged.
+
+Thanks for the suggestion! Shall I send a version to fix this problem or
+can I just bother the maintainer to remove it?
+
+
 >>
->>  int evlist__add_sb_event(struct evlist *evlist, struct perf_event_attr *attr,
->>                          evsel__sb_cb_t cb, void *data);
->> --
->> 2.25.1
+>> Otherwise, LGTM
 >>
+>> Acked-by: Baoquan He <bhe@redhat.com>
+>>
+>> >  arch/x86/kernel/kexec-bzimage64.c | 20 +-------------------
+>> >  include/linux/kexec.h             |  7 +++++++
+>> >  kernel/kexec_file.c               | 17 +++++++++++++++++
+>> >  3 files changed, 25 insertions(+), 19 deletions(-)
+>> >
+>> > diff --git a/arch/x86/kernel/kexec-bzimage64.c b/arch/x86/kernel/kexec-bzimage64.c
+>> > index 170d0fd68b1f..f299b48f9c9f 100644
+>> > --- a/arch/x86/kernel/kexec-bzimage64.c
+>> > +++ b/arch/x86/kernel/kexec-bzimage64.c
+>> > @@ -17,7 +17,6 @@
+>> >  #include <linux/kernel.h>
+>> >  #include <linux/mm.h>
+>> >  #include <linux/efi.h>
+>> > -#include <linux/verification.h>
+>> >
+>> >  #include <asm/bootparam.h>
+>> >  #include <asm/setup.h>
+>> > @@ -528,28 +527,11 @@ static int bzImage64_cleanup(void *loader_data)
+>> >  	return 0;
+>> >  }
+>> >
+>> > -#ifdef CONFIG_KEXEC_BZIMAGE_VERIFY_SIG
+>> > -static int bzImage64_verify_sig(const char *kernel, unsigned long kernel_len)
+>> > -{
+>> > -	int ret;
+>> > -
+>> > -	ret = verify_pefile_signature(kernel, kernel_len,
+>> > -				      VERIFY_USE_SECONDARY_KEYRING,
+>> > -				      VERIFYING_KEXEC_PE_SIGNATURE);
+>> > -	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
+>> > -		ret = verify_pefile_signature(kernel, kernel_len,
+>> > -					      VERIFY_USE_PLATFORM_KEYRING,
+>> > -					      VERIFYING_KEXEC_PE_SIGNATURE);
+>> > -	}
+>> > -	return ret;
+>> > -}
+>> > -#endif
+>> > -
+>> >  const struct kexec_file_ops kexec_bzImage64_ops = {
+>> >  	.probe = bzImage64_probe,
+>> >  	.load = bzImage64_load,
+>> >  	.cleanup = bzImage64_cleanup,
+>> >  #ifdef CONFIG_KEXEC_BZIMAGE_VERIFY_SIG
+>> > -	.verify_sig = bzImage64_verify_sig,
+>> > +	.verify_sig = kexec_kernel_verify_pe_sig,
+>> >  #endif
+>> >  };
+>> > diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+>> > index 413235c6c797..da83abfc628b 100644
+>> > --- a/include/linux/kexec.h
+>> > +++ b/include/linux/kexec.h
+>> > @@ -19,6 +19,7 @@
+>> >  #include <asm/io.h>
+>> >
+>> >  #include <uapi/linux/kexec.h>
+>> > +#include <linux/verification.h>
+>> >
+>> >  /* Location of a reserved region to hold the crash kernel.
+>> >   */
+>> > @@ -202,6 +203,12 @@ int arch_kexec_apply_relocations(struct purgatory_info *pi,
+>> >  				 const Elf_Shdr *relsec,
+>> >  				 const Elf_Shdr *symtab);
+>> >  int arch_kimage_file_post_load_cleanup(struct kimage *image);
+>> > +#ifdef CONFIG_KEXEC_SIG
+>> > +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
+>> > +int kexec_kernel_verify_pe_sig(const char *kernel,
+>> > +				    unsigned long kernel_len);
+>> > +#endif
+>> > +#endif
+>> >  int arch_kexec_locate_mem_hole(struct kexec_buf *kbuf);
+>> >
+>> >  extern int kexec_add_buffer(struct kexec_buf *kbuf);
+>> > diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+>> > index 3720435807eb..754885b96aab 100644
+>> > --- a/kernel/kexec_file.c
+>> > +++ b/kernel/kexec_file.c
+>> > @@ -165,6 +165,23 @@ void kimage_file_post_load_cleanup(struct kimage *image)
+>> >  }
+>> >
+>> >  #ifdef CONFIG_KEXEC_SIG
+>> > +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
+>> > +int kexec_kernel_verify_pe_sig(const char *kernel, unsigned long kernel_len)
+>> > +{
+>> > +	int ret;
+>> > +
+>> > +	ret = verify_pefile_signature(kernel, kernel_len,
+>> > +				      VERIFY_USE_SECONDARY_KEYRING,
+>> > +				      VERIFYING_KEXEC_PE_SIGNATURE);
+>> > +	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
+>> > +		ret = verify_pefile_signature(kernel, kernel_len,
+>> > +					      VERIFY_USE_PLATFORM_KEYRING,
+>> > +					      VERIFYING_KEXEC_PE_SIGNATURE);
+>> > +	}
+>> > +	return ret;
+>> > +}
+>> > +#endif
+>> > +
+>> >  static int kexec_image_verify_sig(struct kimage *image, void *buf,
+>> >  		unsigned long buf_len)
+>> >  {
+>> > --
+>> > 2.35.3
+>> >
+>>
+>
+
+-- 
+Best regards,
+Coiby
 

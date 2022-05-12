@@ -2,109 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F26524F96
+	by mail.lfdr.de (Postfix) with ESMTP id 37042524F94
 	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355096AbiELOMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 10:12:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59102 "EHLO
+        id S1355099AbiELOMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 10:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355102AbiELOMm (ORCPT
+        with ESMTP id S1355098AbiELOMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 10:12:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5CD63526;
-        Thu, 12 May 2022 07:12:35 -0700 (PDT)
+        Thu, 12 May 2022 10:12:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973D763380
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:12:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8DFC8B82856;
-        Thu, 12 May 2022 14:12:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E7DCC385B8;
-        Thu, 12 May 2022 14:12:31 +0000 (UTC)
-Date:   Thu, 12 May 2022 10:12:29 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Li kunyu <kunyu@nfschina.com>
-Cc:     mingo@redhat.com, linux@armlinux.org.uk, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com, tglx@linutronix.de,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org
-Subject: Re: [PATCH] kernel: Ftrace seems to have functions to improve
- performance through optimization
-Message-ID: <20220512101229.7886a798@gandalf.local.home>
-In-Reply-To: <20220512063017.57412-1-kunyu@nfschina.com>
-References: <20220512063017.57412-1-kunyu@nfschina.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 324F261A01
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 14:12:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FC6FC34114;
+        Thu, 12 May 2022 14:12:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652364763;
+        bh=UIXcV2KLWijXWL19jQLq1vEhgqxz6qEWy8qt2aKyHXE=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=a+r+E+ToFiNe9Q7bFQULMTHx1L1w/qPqi22IiPMWuBdhHM2PMyik/wtrfUatP3Qwu
+         f/ymLloRnIPL9gHtXw8KX1zJpXeCsNNNDvaH1XbsPUkrKJSYy6yaa46/QrqqvBA45K
+         dLouZyUfxUxr1YRmmWGcRSDN1+AQL5tYeAqEbhxqk236jNDgSiejU3wcugptP9q0Uo
+         otnhI8wtvttwXf8huK8VHoDKu4xsvCq4/vcQ+z6ByhxcY41Nr5NtxJ76o0VPgGe/qd
+         l9+7DqfbVcaauw+IjIpsjDbd0OKcVgYPDNs0t7Nilmfyyl3i8GXeZac0ijp0e7YC8S
+         rMHxvAAY8lZiQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     lgirdwood@gmail.com, alsa-devel@alsa-project.org,
+        Xiubo.Lee@gmail.com, tiwai@suse.com, shengjiu.wang@nxp.com,
+        nicoleotsuka@gmail.com, shengjiu.wang@gmail.com,
+        festevam@gmail.com, perex@perex.cz
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+In-Reply-To: <1652183808-3745-1-git-send-email-shengjiu.wang@nxp.com>
+References: <1652183808-3745-1-git-send-email-shengjiu.wang@nxp.com>
+Subject: Re: [PATCH] ASoC: fsl_ssi: Add support multi fifo script
+Message-Id: <165236476117.1016627.2134369167163504091.b4-ty@kernel.org>
+Date:   Thu, 12 May 2022 15:12:41 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 May 2022 14:30:17 +0800
-Li kunyu <kunyu@nfschina.com> wrote:
-
-> At present, it is found that two functions could be optimized, and the
-> performance may be improved.
-
-"may be impoved"?
-
-Have any numbers? This changes a very slow path. I do not think it is worth
-it for the "optimized". Also it's a weak function. An arch may be added that
-wants to return a value.
-
+On Tue, 10 May 2022 19:56:48 +0800, Shengjiu Wang wrote:
+> With dual fifo enabled, the case that recording mono sound
+> in the background, playback mono sound twice in parallal,
+> at second time playback sound may distort, the possible
+> reason is using dual fifo to playback mono sound is not
+> recommended.
 > 
-> Signed-off-by: Li kunyu <kunyu@nfschina.com>
-> ---
+> This patch is to provide a option to use multi fifo script,
+> which can be dynamically configured as one fifo or two fifo
+> mode.
+> 
+> [...]
 
+Applied to
 
->  void ftrace_modify_all_code(int command)
-> @@ -2804,12 +2802,7 @@ void __weak arch_ftrace_update_code(int command)
->  
->  static void ftrace_run_update_code(int command)
->  {
-> -	int ret;
-> -
-> -	ret = ftrace_arch_code_modify_prepare();
-> -	FTRACE_WARN_ON(ret);
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-Currently no arch returns anything but zero, but this was added in case
-something wrong did happen, and the FTRACE_WARN_ON() is more than just a
-WARN_ON(). It will also disable ftrace.
+Thanks!
 
-Now, I'm not totally against this change, but not for the rationale in the
-change log. That is, there is no optimization here. But as a standard clean
-up with something like "There is currently no version of
-ftrace_arch_code_modify_prepare() that returns anything bug zero, so the
-check is not needed" is a more appropriate reason for this change.
+[1/1] ASoC: fsl_ssi: Add support multi fifo script
+      commit: 7aded7003a4e949b3bf73f060771f9db018a6d96
 
--- Steve
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-> -	if (ret)
-> -		return;
-> +	ftrace_arch_code_modify_prepare();
->  
->  	/*
->  	 * By default we use stop_machine() to modify the code.
-> @@ -2819,8 +2812,7 @@ static void ftrace_run_update_code(int command)
->  	 */
->  	arch_ftrace_update_code(command);
->  
-> -	ret = ftrace_arch_code_modify_post_process();
-> -	FTRACE_WARN_ON(ret);
-> +	ftrace_arch_code_modify_post_process();
->  }
->  
->  static void ftrace_run_modify_code(struct ftrace_ops *ops, int command,
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

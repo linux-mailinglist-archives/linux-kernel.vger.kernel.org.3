@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1831A5248BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 036FD5248BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351893AbiELJS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 05:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55838 "EHLO
+        id S1351887AbiELJSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 05:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351879AbiELJSs (ORCPT
+        with ESMTP id S242267AbiELJSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 05:18:48 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D9722404C
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:18:46 -0700 (PDT)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24BMwcRA002014
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:18:45 -0700
+        Thu, 12 May 2022 05:18:45 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D73422386F
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:18:44 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 24BMwTCI000470
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:18:44 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=qb8qhPLHzq0EH/CymmI5Fcp6Hy360LSsgnIx1SZs8HQ=;
- b=HPCaz8o+r9oswo/04M1aFkHTd6wmAq2ISf1WB04Qm72U8hqH36+hN8Arg1fPkwHbxJqy
- uuBj2CvBRXHzG5Jzz+AF0MaCnlinmkkAMD3k/dko59j3DuXjKEd7ORr5ExsYFbp5XAOd
- kxCIhaofxpD5zh2DqK2nuzKgnBAIapU4uck= 
+ bh=dvk0mYlhAFZXbgLChpK9+Tor61QIoW8Jly4TzUrF7pc=;
+ b=CwTJJnJBGlki2/HhLIjGZtdrbZgR8U6TKP3TucflriAJIRB2y8d6t7XiojsrAMdQeKQE
+ BII8Hg4SH2f5MebT02jxROQ0wus8GGqC5IBJ3XdCPhBQ4O2fkmjVjPWNlt+TTK0pG4n0
+ N7CUpBBocEZ9YuLpyUrMTxLrNfewTgivc2I= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g0gat5gjh-1
+        by m0001303.ppops.net (PPS) with ESMTPS id 3g04kss8jh-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:18:45 -0700
-Received: from twshared25848.02.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:18:44 -0700
+Received: from twshared10276.08.ash9.facebook.com (2620:10d:c0a8:1b::d) by
  mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 12 May 2022 02:18:44 -0700
+ 15.1.2375.24; Thu, 12 May 2022 02:18:43 -0700
 Received: by devbig039.lla1.facebook.com (Postfix, from userid 572232)
-        id C464D8F0223B; Thu, 12 May 2022 02:18:36 -0700 (PDT)
+        id 4BE508F02251; Thu, 12 May 2022 02:18:38 -0700 (PDT)
 From:   Dylan Yudaken <dylany@fb.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>
 CC:     <io-uring@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH 1/2] io_uring: fix ordering of args in io_uring_queue_async_work
-Date:   Thu, 12 May 2022 02:18:33 -0700
-Message-ID: <20220512091834.728610-2-dylany@fb.com>
+Subject: [PATCH 2/2] io_uring: only wake when the correct events are set
+Date:   Thu, 12 May 2022 02:18:34 -0700
+Message-ID: <20220512091834.728610-3-dylany@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220512091834.728610-1-dylany@fb.com>
 References: <20220512091834.728610-1-dylany@fb.com>
@@ -50,44 +50,75 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: G6odb_mKvrw-RDvPlUCTIXwK2b9cc09W
-X-Proofpoint-GUID: G6odb_mKvrw-RDvPlUCTIXwK2b9cc09W
+X-Proofpoint-ORIG-GUID: JUUVj8osLP3K5MKQeiIVoqxaPiw7_cic
+X-Proofpoint-GUID: JUUVj8osLP3K5MKQeiIVoqxaPiw7_cic
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-05-12_02,2022-05-12_01,2022-02-23_01
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix arg ordering in TP_ARGS macro, which fixes the output.
+The check for waking up a request compares the poll_t bits, however this
+will always contain some common flags so this always wakes up.
 
-Fixes: 502c87d65564c ("io-uring: Make tracepoints consistent.")
+For files with single wait queues such as sockets this can cause the
+request to be sent to the async worker unnecesarily. Further if it is
+non-blocking will complete the request with EAGAIN which is not desired.
+
+Here exclude these common events, making sure to not exclude POLLERR whic=
+h
+might be important.
+
+Fixes: d7718a9d25a6 ("io_uring: use poll driven retry for files that supp=
+ort it")
 Signed-off-by: Dylan Yudaken <dylany@fb.com>
 ---
- include/trace/events/io_uring.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/io_uring.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/include/trace/events/io_uring.h b/include/trace/events/io_ur=
-ing.h
-index 630982b3c34c..ef186809ce97 100644
---- a/include/trace/events/io_uring.h
-+++ b/include/trace/events/io_uring.h
-@@ -148,7 +148,7 @@ TRACE_EVENT(io_uring_queue_async_work,
- 	TP_PROTO(void *ctx, void * req, unsigned long long user_data, u8 opcode=
-,
- 		unsigned int flags, struct io_wq_work *work, int rw),
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 44c57dca358d..44661a1f695a 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -6782,6 +6782,7 @@ static void io_poll_cancel_req(struct io_kiocb *req=
+)
 =20
--	TP_ARGS(ctx, req, user_data, flags, opcode, work, rw),
-+	TP_ARGS(ctx, req, user_data, opcode, flags, work, rw),
+ #define wqe_to_req(wait)	((void *)((unsigned long) (wait)->private & ~1)=
+)
+ #define wqe_is_double(wait)	((unsigned long) (wait)->private & 1)
++#define IO_ASYNC_POLL_COMMON	(EPOLLONESHOT | POLLPRI)
 =20
- 	TP_STRUCT__entry (
- 		__field(  void *,			ctx		)
+ static int io_poll_wake(struct wait_queue_entry *wait, unsigned mode, in=
+t sync,
+ 			void *key)
+@@ -6816,7 +6817,7 @@ static int io_poll_wake(struct wait_queue_entry *wa=
+it, unsigned mode, int sync,
+ 	}
+=20
+ 	/* for instances that support it check for an event match first */
+-	if (mask && !(mask & poll->events))
++	if (mask && !(mask & (poll->events & ~IO_ASYNC_POLL_COMMON)))
+ 		return 0;
+=20
+ 	if (io_poll_get_ownership(req)) {
+@@ -6973,7 +6974,7 @@ static int io_arm_poll_handler(struct io_kiocb *req=
+, unsigned issue_flags)
+ 	struct io_ring_ctx *ctx =3D req->ctx;
+ 	struct async_poll *apoll;
+ 	struct io_poll_table ipt;
+-	__poll_t mask =3D EPOLLONESHOT | POLLERR | POLLPRI;
++	__poll_t mask =3D IO_ASYNC_POLL_COMMON | POLLERR;
+ 	int ret;
+=20
+ 	if (!def->pollin && !def->pollout)
 --=20
 2.30.2
 

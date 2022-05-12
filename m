@@ -2,85 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B44D2524A88
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3527524A84
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352761AbiELKpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 06:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
+        id S1352754AbiELKo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 06:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238974AbiELKpW (ORCPT
+        with ESMTP id S238974AbiELKox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 06:45:22 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941EF2272E8
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:45:19 -0700 (PDT)
-X-UUID: a4a1469b2ba043c79fbc9fbc001ddf6b-20220512
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:c00bcde0-2d67-4fb6-92ff-442258da635c,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:14,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:59
-X-CID-INFO: VERSION:1.1.4,REQID:c00bcde0-2d67-4fb6-92ff-442258da635c,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:14,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:59
-X-CID-META: VersionHash:faefae9,CLOUDID:b47c0fa7-eab7-4b74-a74d-5359964535a9,C
-        OID:1f7e143175b1,Recheck:0,SF:28|17|19|48,TC:nil,Content:3,EDM:-3,File:nil
-        ,QS:0,BEC:nil
-X-UUID: a4a1469b2ba043c79fbc9fbc001ddf6b-20220512
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 556052706; Thu, 12 May 2022 18:44:27 +0800
-Received: from MTKMBS07N2.mediatek.inc (172.21.101.141) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 12 May 2022 18:44:26 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 12 May 2022 18:44:21 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 12 May 2022 18:44:20 +0800
-Message-ID: <8653d9d53c883a8ca09a795842d55d9baf77fa6f.camel@mediatek.com>
-Subject: Re: [PATCH v6,1/4] drm/mediatek: Modify dsi funcs to atomic
- operations
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     <xinlei.lee@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <matthias.bgg@gmail.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <jitao.shi@mediatek.com>
-Date:   Thu, 12 May 2022 18:44:20 +0800
-In-Reply-To: <1652337012-9053-2-git-send-email-xinlei.lee@mediatek.com>
-References: <1652337012-9053-1-git-send-email-xinlei.lee@mediatek.com>
-         <1652337012-9053-2-git-send-email-xinlei.lee@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 12 May 2022 06:44:53 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD3468FAB;
+        Thu, 12 May 2022 03:44:52 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KzT1V3NyPz4xR7;
+        Thu, 12 May 2022 20:44:46 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1652352288;
+        bh=3CsWVHRJHvuzc4hd+oj4lD0PBg5fFuGkXRApcTmKBs8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=mkt60qq4c01I0OyOTo4iA5pTGovjwZG+rvMqx+hV/9s4/0tRHeXEkeau8QIcxrBgu
+         v5/+pWJS05of7bKwyXnTH5csf4IQRGNvIvF//1sMkKJTr8rjfTyQ8yuQR57SEoOUo3
+         zul5QH2YvkNqUq/s48jjaAgo1IsyPr4tLteYxlW4sCxO7ji8e5AnDjbdBVGAcxwdr0
+         MNJYQfNkmSA3gUA0uXrYqg96ES7KLsk51iDdGo3Gq5A4qnPtoxl/y0p+lAdbHFTJmn
+         V0APOc2YhQP1+8wzLFUt6eWxDgfFBxIC3nRKOYOMhb5otRjGGbCG0gWNzd2BOJ1Cby
+         EMTkwpdV0GDyg==
+Date:   Thu, 12 May 2022 20:44:44 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Zucheng Zheng <zhengzucheng@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the tip tree
+Message-ID: <20220512204444.29f3c634@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/.Hl6UOumR8r/xaIHfx.MOZH";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-12 at 14:30 +0800, xinlei.lee@mediatek.com wrote:
-> From: Xinlei Lee <xinlei.lee@mediatek.com>
-> 
-> Because .enable & .disable are deprecated.
-> Use .atomic_enable & .atomic_disable instead.
-> 
-> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
-> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> ---
+--Sig_/.Hl6UOumR8r/xaIHfx.MOZH
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+Hi all,
 
+Commit
+
+  2cc6edea3673 ("perf/x86/amd: Remove unused variable 'hwc'")
+
+is missing a Signed-off-by from its author.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/.Hl6UOumR8r/xaIHfx.MOZH
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ85RwACgkQAVBC80lX
+0GzXLQf+I/vd5u2G0NKoJuKOCSag5mYchXwXZyCV7mInk1wAmh3jHal2FSzlPyPJ
+5OjbIWGxf/P7E+dOnTeSOuNNvLVu5txfTUlB2oRbn+7nxF1lZ7Vlh8ND9sY50+Yl
+TaUUWjtIeWMCyxdBQ6JXNSOmKGh1vecCANGPTeHJrwTM85yXjT+ruPMvE5+yhw/I
++/8Je+BfyWc3PLmbtMwkX12ultA4QkA6xp7Xl3ZwOhcye/zU7PJtBLwG1SggLsaV
++xpxQqbnPnz43FG2py2eKWM/4hFoxRByMQBvJjlkKMXrr39XmWqi0jDUjTqxfTqC
+mk4+53XBJvWsl1PD06ip6nV/YJ52FQ==
+=1Dme
+-----END PGP SIGNATURE-----
+
+--Sig_/.Hl6UOumR8r/xaIHfx.MOZH--

@@ -2,181 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E7A524B7C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFFF3524B50
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353299AbiELLWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 07:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47396 "EHLO
+        id S1353095AbiELLQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 07:16:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353188AbiELLVc (ORCPT
+        with ESMTP id S1353167AbiELLQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 07:21:32 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3F42983F;
-        Thu, 12 May 2022 04:21:30 -0700 (PDT)
-Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KzTmW1tSHz687hF;
-        Thu, 12 May 2022 19:18:35 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Thu, 12 May 2022 13:21:28 +0200
-Received: from localhost.localdomain (10.69.192.58) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 12 May 2022 12:21:26 +0100
-From:   John Garry <john.garry@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, John Garry <john.garry@huawei.com>
-Subject: [PATCH 3/3] scsi: hisi_sas: Fix rescan after deleting a disk
-Date:   Thu, 12 May 2022 19:15:34 +0800
-Message-ID: <1652354134-171343-4-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1652354134-171343-1-git-send-email-john.garry@huawei.com>
-References: <1652354134-171343-1-git-send-email-john.garry@huawei.com>
+        Thu, 12 May 2022 07:16:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2A012AB3;
+        Thu, 12 May 2022 04:16:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8FC10B82799;
+        Thu, 12 May 2022 11:16:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4DF9C385B8;
+        Thu, 12 May 2022 11:15:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652354159;
+        bh=MWbEkF9JhCm5bS61843/VGkIqBeDWarPhz6L02YoONg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Hn3eoVVW8xoiQAs9emCTmf81tomZbUzvhFobEUJoWZYjHZidknPA9JDHhrSTdHw3W
+         +jAY4SY8kNUHctQebY7NOoZWG0KXU1dun9snlVcR58AFjW/v4Ne4Rbkt/fWAK+SwhL
+         Ep+aL8cFfjsaDggBv8nIkXxB6zf77St7+rnRMnBE=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 4.9.313
+Date:   Thu, 12 May 2022 13:15:55 +0200
+Message-Id: <165235415537233@kroah.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Removing an ATA device via sysfs means that the device may not be found
-through re-scanning:
+I'm announcing the release of the 4.9.313 kernel.
 
-root@ubuntu:/home/john# lsscsi
-[0:0:0:0] disk SanDisk LT0200MO P404 /dev/sda
-[0:0:1:0] disk ATA HGST HUS724040AL A8B0 /dev/sdb
-[0:0:8:0] enclosu 12G SAS Expander RevB -
-root@ubuntu:/home/john# echo 1 > /sys/block/sdb/device/delete
-root@ubuntu:/home/john# echo "- - -" > /sys/class/scsi_host/host0/scan
-root@ubuntu:/home/john# lsscsi
-[0:0:0:0] disk SanDisk LT0200MO P404 /dev/sda
-[0:0:8:0] enclosu 12G SAS Expander RevB -
-root@ubuntu:/home/john#
+All users of the 4.9 kernel series must upgrade.
 
-The problem is that the rescan of the device may conflict with the device
-in being re-initialized, as follows:
+The updated 4.9.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.9.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-- In the rescan we call hisi_sas_slave_alloc() in store_scan() ->
-  sas_user_scan() -> [__]scsi_scan_target() -> scsi_probe_and_add_lunc() ->
-  scsi_alloc_sdev() -> hisi_sas_slave_alloc() -> hisi_sas_init_device()
-  In hisi_sas_init_device() we issue an IT nexus reset for ATA devices
+thanks,
 
-- That IT nexus causes the remote PHY to go down and this triggers a bcast
-  event
+greg k-h
 
-- In parallel libsas processes the bcast event, finds that the phy is down
-  and marks the device as gone
+------------
 
-The hard reset issued in hisi_sas_init_device() is unncessary - as
-described in the code comment - so remove it. Also set dev status as
-HISI_SAS_DEV_NORMAL as the hisi_sas_init_device() call.
+ Makefile                                            |    2 
+ arch/arm/boot/dts/imx6qdl-apalis.dtsi               |   10 +++-
+ arch/arm/boot/dts/omap3-gta04.dtsi                  |    2 
+ arch/arm/mach-omap2/omap4-common.c                  |    2 
+ arch/mips/include/asm/timex.h                       |    8 +--
+ arch/mips/kernel/time.c                             |   11 +----
+ arch/parisc/kernel/processor.c                      |    3 -
+ arch/x86/include/asm/microcode.h                    |    2 
+ arch/x86/kernel/cpu/microcode/core.c                |    6 +-
+ arch/x86/kvm/cpuid.c                                |    5 ++
+ arch/x86/power/cpu.c                                |    8 +++
+ drivers/block/Kconfig                               |   16 +++++++
+ drivers/block/floppy.c                              |   43 ++++++++++++++------
+ drivers/bus/sunxi-rsb.c                             |    2 
+ drivers/clk/sunxi/clk-sun9i-mmc.c                   |    2 
+ drivers/firewire/core-card.c                        |    3 +
+ drivers/firewire/core-cdev.c                        |    4 +
+ drivers/firewire/core-topology.c                    |    9 +---
+ drivers/firewire/core-transaction.c                 |   30 +++++++------
+ drivers/firewire/sbp2.c                             |   13 +++---
+ drivers/hwmon/adt7470.c                             |    4 -
+ drivers/iio/dac/ad5446.c                            |    2 
+ drivers/iio/dac/ad5592r-base.c                      |    2 
+ drivers/iio/magnetometer/ak8975.c                   |    1 
+ drivers/lightnvm/Kconfig                            |    2 
+ drivers/md/dm.c                                     |   19 +++++---
+ drivers/mtd/nand/sh_flctl.c                         |   14 +++---
+ drivers/net/can/grcan.c                             |    8 ++-
+ drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c    |    9 ++--
+ drivers/net/ethernet/smsc/smsc911x.c                |    2 
+ drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c  |    8 +++
+ drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h  |    4 -
+ drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c |   13 +++---
+ drivers/net/ethernet/xilinx/xilinx_emaclite.c       |   15 +++++-
+ drivers/net/hippi/rrunner.c                         |    2 
+ drivers/nfc/nfcmrvl/main.c                          |    2 
+ drivers/phy/phy-exynos5250-sata.c                   |   21 ++++++---
+ drivers/pinctrl/pinctrl-pistachio.c                 |    6 +-
+ drivers/tty/n_gsm.c                                 |   40 +++++++++---------
+ drivers/tty/serial/8250/8250_pci.c                  |    8 +--
+ drivers/tty/serial/8250/8250_port.c                 |    2 
+ drivers/usb/core/quirks.c                           |    6 ++
+ drivers/usb/gadget/configfs.c                       |    2 
+ drivers/usb/gadget/function/uvc_queue.c             |    2 
+ drivers/usb/host/xhci.c                             |   11 +++++
+ drivers/usb/misc/uss720.c                           |    3 -
+ drivers/usb/serial/cp210x.c                         |    2 
+ drivers/usb/serial/option.c                         |   12 +++++
+ drivers/usb/serial/whiteheat.c                      |    5 --
+ fs/btrfs/tree-log.c                                 |   14 ++++++
+ include/linux/kernel.h                              |    2 
+ include/net/tcp.h                                   |    1 
+ lib/hexdump.c                                       |   41 ++++++++++++++-----
+ net/ipv4/igmp.c                                     |    9 ++--
+ net/ipv4/ip_gre.c                                   |    8 +--
+ net/ipv4/tcp_input.c                                |   12 +++++
+ net/ipv4/tcp_output.c                               |    1 
+ net/ipv6/addrconf.c                                 |    8 ++-
+ net/nfc/core.c                                      |   29 ++++++-------
+ net/nfc/netlink.c                                   |    4 -
+ net/sched/cls_api.c                                 |    5 +-
+ net/sunrpc/xprtsock.c                               |    3 -
+ sound/firewire/fireworks/fireworks_hwdep.c          |    1 
+ sound/soc/codecs/wm8731.c                           |   19 +++++---
+ sound/soc/codecs/wm8958-dsp2.c                      |    8 +--
+ sound/soc/soc-generic-dmaengine-pcm.c               |    6 +-
+ 66 files changed, 386 insertions(+), 193 deletions(-)
 
-Fixes: 36c6b7613ef1 ("scsi: hisi_sas: Initialise devices in .slave_alloc callback")
-Signed-off-by: John Garry <john.garry@huawei.com>
-Tested-by: Yihang Li <liyihang6@hisilicon.com>
-Reviewed-by: Xiang Chen <chenxiang66@hisilicon.com>
----
- drivers/scsi/hisi_sas/hisi_sas_main.c | 47 ++++++++++-----------------
- 1 file changed, 18 insertions(+), 29 deletions(-)
+Armin Wolf (1):
+      hwmon: (adt7470) Fix warning on module removal
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 997f27e2f1e5..6803751dc4b1 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -709,8 +709,6 @@ static int hisi_sas_init_device(struct domain_device *device)
- 	struct scsi_lun lun;
- 	int retry = HISI_SAS_DISK_RECOVER_CNT;
- 	struct hisi_hba *hisi_hba = dev_to_hisi_hba(device);
--	struct device *dev = hisi_hba->dev;
--	struct sas_phy *local_phy;
- 
- 	switch (device->dev_type) {
- 	case SAS_END_DEVICE:
-@@ -729,30 +727,18 @@ static int hisi_sas_init_device(struct domain_device *device)
- 	case SAS_SATA_PM_PORT:
- 	case SAS_SATA_PENDING:
- 		/*
--		 * send HARD RESET to clear previous affiliation of
--		 * STP target port
-+		 * If an expander is swapped when a SATA disk is attached then
-+		 * we should issue a hard reset to clear previous affiliation
-+		 * of STP target port, see SPL (chapter 6.19.4).
-+		 *
-+		 * However we don't need to issue a hard reset here for these
-+		 * reasons:
-+		 * a. When probing the device, libsas/libata already issues a
-+		 * hard reset in sas_probe_sata() -> ata_sas_async_probe().
-+		 * Note that in hisi_sas_debug_I_T_nexus_reset() we take care
-+		 * to issue a hard reset by checking the dev status (== INIT).
-+		 * b. When resetting the controller, this is simply unnecessary.
- 		 */
--		local_phy = sas_get_local_phy(device);
--		if (!scsi_is_sas_phy_local(local_phy) &&
--		    !test_bit(HISI_SAS_RESETTING_BIT, &hisi_hba->flags)) {
--			unsigned long deadline = ata_deadline(jiffies, 20000);
--			struct sata_device *sata_dev = &device->sata_dev;
--			struct ata_host *ata_host = sata_dev->ata_host;
--			struct ata_port_operations *ops = ata_host->ops;
--			struct ata_port *ap = sata_dev->ap;
--			struct ata_link *link;
--			unsigned int classes;
--
--			ata_for_each_link(link, ap, EDGE)
--				rc = ops->hardreset(link, &classes,
--						    deadline);
--		}
--		sas_put_local_phy(local_phy);
--		if (rc) {
--			dev_warn(dev, "SATA disk hardreset fail: %d\n", rc);
--			return rc;
--		}
--
- 		while (retry-- > 0) {
- 			rc = hisi_sas_softreset_ata_disk(device);
- 			if (!rc)
-@@ -768,15 +754,19 @@ static int hisi_sas_init_device(struct domain_device *device)
- 
- int hisi_sas_slave_alloc(struct scsi_device *sdev)
- {
--	struct domain_device *ddev;
-+	struct domain_device *ddev = sdev_to_domain_dev(sdev);
-+	struct hisi_sas_device *sas_dev = ddev->lldd_dev;
- 	int rc;
- 
- 	rc = sas_slave_alloc(sdev);
- 	if (rc)
- 		return rc;
--	ddev = sdev_to_domain_dev(sdev);
- 
--	return hisi_sas_init_device(ddev);
-+	rc = hisi_sas_init_device(ddev);
-+	if (rc)
-+		return rc;
-+	sas_dev->dev_status = HISI_SAS_DEV_NORMAL;
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(hisi_sas_slave_alloc);
- 
-@@ -826,7 +816,6 @@ static int hisi_sas_dev_found(struct domain_device *device)
- 	dev_info(dev, "dev[%d:%x] found\n",
- 		sas_dev->device_id, sas_dev->dev_type);
- 
--	sas_dev->dev_status = HISI_SAS_DEV_NORMAL;
- 	return 0;
- 
- err_out:
--- 
-2.26.2
+Borislav Petkov (1):
+      x86/cpu: Load microcode during restore_processor_state()
+
+Bruno Thomsen (1):
+      USB: serial: cp210x: add PIDs for Kamstrup USB Meter Reader
+
+Chengfeng Ye (1):
+      firewire: fix potential uaf in outbound_phy_packet_callback()
+
+Christophe JAILLET (1):
+      bus: sunxi-rsb: Fix the return value of sunxi_rsb_device_create()
+
+Codrin Ciubotariu (1):
+      ASoC: dmaengine: Restore NULL prepare_slave_config() callback
+
+Dan Vacura (1):
+      usb: gadget: uvc: Fix crash when encoding data for usb request
+
+Daniel Hellstrom (1):
+      can: grcan: use ofdev->dev when allocating DMA memory
+
+Daniel Starke (7):
+      tty: n_gsm: fix wrong signal octet encoding in convergence layer type 2
+      tty: n_gsm: fix malformed counter for out of frame data
+      tty: n_gsm: fix insufficient txframe size
+      tty: n_gsm: fix missing explicit ldisc flush
+      tty: n_gsm: fix wrong command retry handling
+      tty: n_gsm: fix wrong command frame length field encoding
+      tty: n_gsm: fix incorrect UA handling
+
+Daniele Palmas (1):
+      USB: serial: option: add Telit 0x1057, 0x1058, 0x1075 compositions
+
+Duoming Zhou (5):
+      drivers: net: hippi: Fix deadlock in rr_close()
+      can: grcan: grcan_close(): fix deadlock
+      nfc: replace improper check device_is_registered() in netlink related functions
+      nfc: nfcmrvl: main: reorder destructive operations in nfcmrvl_nci_unregister_dev to avoid bugs
+      NFC: netlink: fix sleep in atomic bug when firmware download timeout
+
+Eric Dumazet (2):
+      tcp: fix potential xmit stalls caused by TCP_NOTSENT_LOWAT
+      net: igmp: respect RCU rules in ip_mc_source() and ip_mc_msfilter()
+
+Fabio Estevam (1):
+      ARM: dts: imx6qdl-apalis: Fix sgtl5000 detection issue
+
+Filipe Manana (1):
+      btrfs: always log symlinks in full mode
+
+Greg Kroah-Hartman (3):
+      Revert "net: ethernet: stmmac: fix altr_tse_pcs function when using a fixed-link"
+      lightnvm: disable the subsystem
+      Linux 4.9.313
+
+H. Nikolaus Schaller (1):
+      ARM: dts: Fix mmc order for omap3-gta04
+
+Hangyu Hua (1):
+      usb: misc: fix improper handling of refcount in uss720_probe()
+
+Helge Deller (1):
+      parisc: Merge model and model name into one line in /proc/cpuinfo
+
+Henry Lin (1):
+      xhci: stop polling roothubs after shutdown
+
+Jakob Koschel (1):
+      firewire: remove check of list iterator against head past the loop body
+
+Jiazi Li (1):
+      dm: fix mempool NULL pointer race when completing IO
+
+Kees Cook (1):
+      USB: serial: whiteheat: fix heap overflow in WHITEHEAT_GET_DTR_RTS
+
+Krzysztof Kozlowski (1):
+      phy: samsung: exynos5250-sata: fix missing device put in probe error paths
+
+Lv Ruyi (1):
+      pinctrl: pistachio: fix use of irq_of_parse_and_map()
+
+Maciej W. Rozycki (3):
+      serial: 8250: Also set sticky MCR bits in console restoration
+      serial: 8250: Correct the clock for EndRun PTP/1588 PCIe device
+      MIPS: Fix CP0 counter erratum detection for R4k CPUs
+
+Manish Chopra (1):
+      bnx2x: fix napi API usage sequence
+
+Mark Brown (1):
+      ASoC: wm8958: Fix change notifications for DSP controls
+
+Miaoqian Lin (3):
+      phy: samsung: Fix missing of_node_put() in exynos_sata_phy_probe
+      ARM: OMAP2+: Fix refcount leak in omap_gic_of_init
+      mtd: rawnand: Fix return value check of wait_for_completion_timeout
+
+Michael Hennerich (1):
+      iio: dac: ad5446: Fix read_raw not returning set value
+
+Mike Snitzer (1):
+      dm: interlock pending dm_io and dm_wait_for_bios_completion
+
+Mikulas Patocka (2):
+      hex2bin: make the function hex_to_bin constant-time
+      hex2bin: fix access beyond string end
+
+Niels Dossche (1):
+      firewire: core: extend card->lock in fw_core_handle_bus_reset
+
+Oliver Neukum (2):
+      USB: quirks: add a Realtek card reader
+      USB: quirks: add STRING quirk for VCOM device
+
+Peilin Ye (1):
+      ip_gre: Make o_seqno start from 0 in native mode
+
+Sandipan Das (1):
+      kvm: x86/cpuid: Only provide CPUID leaf 0xA if host has architectural PMU
+
+Sergey Shtylyov (1):
+      smsc911x: allow using IRQ0
+
+Shravya Kumbham (1):
+      net: emaclite: Add error handling for of_address_to_resource()
+
+Slark Xiao (1):
+      USB: serial: option: add support for Cinterion MV32-WA/MV32-WB
+
+Takashi Sakamoto (1):
+      ALSA: fireworks: fix wrong return count shorter than expected by 4 bytes
+
+Thadeu Lima de Souza Cascardo (1):
+      net: sched: prevent UAF on tc_ctl_tfilter when temporarily dropping rtnl_lock
+
+Trond Myklebust (1):
+      Revert "SUNRPC: attempt AF_LOCAL connect on setup"
+
+Vijayavardhan Vennapusa (1):
+      usb: gadget: configfs: clear deactivation flag in configfs_composite_unbind()
+
+Willy Tarreau (1):
+      floppy: disable FDRAWCMD by default
+
+Yang Yingliang (1):
+      clk: sunxi: sun9i-mmc: check return value after calling platform_get_resource()
+
+Zheyu Ma (2):
+      iio: magnetometer: ak8975: Fix the error handling in ak8975_power_on()
+      ASoC: wm8731: Disable the regulator when probing fails
+
+Zizhuang Deng (1):
+      iio: dac: ad5592r: Fix the missing return value.
+
+j.nixdorf@avm.de (1):
+      net: ipv6: ensure we call ipv6_mc_down() at most once
 

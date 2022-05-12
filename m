@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D145252B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9315252B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356549AbiELQgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 12:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46642 "EHLO
+        id S1356546AbiELQgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 12:36:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356530AbiELQf6 (ORCPT
+        with ESMTP id S1356533AbiELQf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 12:35:58 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDA1275E7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 09:35:57 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id b19so8005037wrh.11
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 09:35:57 -0700 (PDT)
+        Thu, 12 May 2022 12:35:59 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1193248E2
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 09:35:58 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id d5so8040418wrb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 09:35:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=5LSQF4qQ6PdU2l44s8zh7kHvz3U3R9H2i+FKozzkMrk=;
-        b=zn+g1Ycy1XsWOwIRH1IZWmSxoblP7fkC3C+xhRAAZcnQbWJZArprv6QGJwokYaEgI4
-         OFjd7l6KuNlcrbz4HNoEWaxKazwlFu6rBI1ebSgc79IBRrEPn1mYEi2rHVgWQeedm4TZ
-         89ZCh10ifROHuV/qmJqL1UU4iNigCCVLKvCokb52aSoR/lnP38dl+uDne0gpVVUwRWZs
-         gOQJAtUoNAIXFKzAiqEhq6dMXV05Il441S/tO5l4BLMjcj1hmuXlon0+1o3+l/0So3+W
-         IUymuBo/d88SX3cij56hjplOgvcLDgmo1t0MrbF4fVZ7p/NgIYq03yr9em8VQIVcGy19
-         jdgA==
+        bh=iEa/8mAzzO9RlCYIla5k70SI1Iglg8mw5NOlpxJMReg=;
+        b=NaCvW4b10j7Xtxd2Yrgzm1tQkfxe+qxD9X9km6qswM7R5iviuD+vgUXO/gH9LW5YQ4
+         MLI5HZxCyI8HcHDS240rMWOuEAfzQZ/cTa4nsQK4a8QfD4WHNpbJ5iO6lA0yLQwpwEZ0
+         eUOs1Ui2jlWss3IsKQmh3zsj79p5rz1POnbv8G0aNVjWXKxpaYgiu4eFY3LbNvi9mMv5
+         YA8OjL2p/sBfGY5yfuy0BUR0O2YlLrIXJebV+xkfppf5bpmMUvE1U1QkR3Y6eifRf4cK
+         1o0eG4n3HkJxG50Vd/PQWKs8o39BKS/pyVi/KfedPTGZL5vACqA1/KVgo87s9Q7yNx0y
+         97Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=5LSQF4qQ6PdU2l44s8zh7kHvz3U3R9H2i+FKozzkMrk=;
-        b=unkwltldTY174tcwb6jn5+a2Yd79UiTz7TPw16hu/CxqNDgZO4MsZR2kiKvT+4mzAZ
-         4rZkskXKJZo9sFncslOSoFZWwtNPLgWzxgSgnIgA+nakSeTXMKLM9aCFB+oH6GrQtBKJ
-         tAOEBRW0WOsoteM368D1F7aW0j/asBSfPOgSwNFba67EhKqiFhQ5NwYGpwrv91SIuTWg
-         JqpJnwm99asc/DKxv6k+fQa5iAWdDuTecelRWpEiNf+Xbm2ztNwaldbEssaLEDbuqzRk
-         HINNJR9wKHJJc5hyzy5EAyfxvrK3du2hW2vr/kzFjrWkkqWalLcUhD/bw4f3Nos26gms
-         irGw==
-X-Gm-Message-State: AOAM533cDSqEXvF0QcDakI+FzcnxNBnceXdQk4H2m2qOxLEez9lHD1V9
-        VSo2coxci9kaoURu8SGAu4VqlQ==
-X-Google-Smtp-Source: ABdhPJz42eGyH0dwTt5/MYB8DtEJQeazcoRnR88OzcJR1YmQeSqxE12GDN8WDCVz/BkRBaZMW0HxLQ==
-X-Received: by 2002:a5d:6504:0:b0:20c:e8c7:55f7 with SMTP id x4-20020a5d6504000000b0020ce8c755f7mr448731wru.276.1652373355603;
-        Thu, 12 May 2022 09:35:55 -0700 (PDT)
+        bh=iEa/8mAzzO9RlCYIla5k70SI1Iglg8mw5NOlpxJMReg=;
+        b=jdtJIoDByKPRpXv+wElCCrVzrHl4k4wbxMopNMOzGlUMLBq441g7ae7qfZ6mzC19gU
+         GqagthSp7JHglgn++AWehdXyBC1C0hKxqsMcyxdQEzEK2e3/dX+fL9kSvYaj34fBssX8
+         81q4km8U7C57MAGHF77pg8630VqEIlbWgrGH8MHEz29AIPMYQTUT2YsRgRKYxesR4NBO
+         BxE4LrvYAcVTY3ESvR+7vnam49IG4ybgSOWbHQ2Vnz7NYxUWJ4lVUHXICpdjPb2aTRMC
+         8GRDlXCxWX9yGyyr2Wi7Gjo/MXhqYL9+uBkyzgaiMVReO5pR6QBp9XTSz5kgU1gahvwF
+         iatQ==
+X-Gm-Message-State: AOAM5309iMf75nj6ANPvjFslp7I9YPGnHXJoG8CnE2hmmZ8f1tgg5zUL
+        56UHEs1uPR8BY8yG3pn57TNSbQ==
+X-Google-Smtp-Source: ABdhPJy1LcibwDb9MJE8lAR7DRt7CFWMODxweOaiwfYI3YYaI09MJQ7HOtUcThFhi4aeVSSIeG3mqA==
+X-Received: by 2002:adf:ed8f:0:b0:20a:e2a7:7201 with SMTP id c15-20020adfed8f000000b0020ae2a77201mr463281wro.26.1652373357971;
+        Thu, 12 May 2022 09:35:57 -0700 (PDT)
 Received: from localhost.localdomain ([2a01:e0a:f:6020:253e:ae0a:544b:2cb1])
-        by smtp.gmail.com with ESMTPSA id j25-20020adfa799000000b0020c5253d8dbsm21814wrc.39.2022.05.12.09.35.53
+        by smtp.gmail.com with ESMTPSA id j25-20020adfa799000000b0020c5253d8dbsm21814wrc.39.2022.05.12.09.35.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 09:35:54 -0700 (PDT)
+        Thu, 12 May 2022 09:35:56 -0700 (PDT)
 From:   Vincent Guittot <vincent.guittot@linaro.org>
 To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
         dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
@@ -57,9 +57,9 @@ Cc:     qais.yousef@arm.com, chris.hyser@oracle.com,
         David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
         tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
         joshdon@google.com, Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH v2 3/7] sched: Allow sched_{get,set}attr to change latency_nice of the task
-Date:   Thu, 12 May 2022 18:35:30 +0200
-Message-Id: <20220512163534.2572-4-vincent.guittot@linaro.org>
+Subject: [PATCH v2 4/7] sched/core: Add permission checks for setting the latency_nice value
+Date:   Thu, 12 May 2022 18:35:31 +0200
+Message-Id: <20220512163534.2572-5-vincent.guittot@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220512163534.2572-1-vincent.guittot@linaro.org>
 References: <20220512163534.2572-1-vincent.guittot@linaro.org>
@@ -75,180 +75,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Parth Shah <parth@linux.ibm.com>
 
-Introduce the latency_nice attribute to sched_attr and provide a
-mechanism to change the value with the use of sched_setattr/sched_getattr
-syscall.
-
-Also add new flag "SCHED_FLAG_LATENCY_NICE" to hint the change in
-latency_nice of the task on every sched_setattr syscall.
+Since the latency_nice uses the similar infrastructure as NICE, use the
+already existing CAP_SYS_NICE security checks for the latency_nice. This
+should return -EPERM for the non-root user when trying to set the task
+latency_nice value to any lower than the current value.
 
 Signed-off-by: Parth Shah <parth@linux.ibm.com>
-[rebase and add a dedicated __setscheduler_latency ]
+[rebase]
 Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
 ---
- include/uapi/linux/sched.h       |  4 +++-
- include/uapi/linux/sched/types.h | 19 +++++++++++++++++++
- kernel/sched/core.c              | 25 +++++++++++++++++++++++++
- tools/include/uapi/linux/sched.h |  4 +++-
- 4 files changed, 50 insertions(+), 2 deletions(-)
+ kernel/sched/core.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/include/uapi/linux/sched.h b/include/uapi/linux/sched.h
-index 3bac0a8ceab2..b2e932c25be6 100644
---- a/include/uapi/linux/sched.h
-+++ b/include/uapi/linux/sched.h
-@@ -132,6 +132,7 @@ struct clone_args {
- #define SCHED_FLAG_KEEP_PARAMS		0x10
- #define SCHED_FLAG_UTIL_CLAMP_MIN	0x20
- #define SCHED_FLAG_UTIL_CLAMP_MAX	0x40
-+#define SCHED_FLAG_LATENCY_NICE		0x80
- 
- #define SCHED_FLAG_KEEP_ALL	(SCHED_FLAG_KEEP_POLICY | \
- 				 SCHED_FLAG_KEEP_PARAMS)
-@@ -143,6 +144,7 @@ struct clone_args {
- 			 SCHED_FLAG_RECLAIM		| \
- 			 SCHED_FLAG_DL_OVERRUN		| \
- 			 SCHED_FLAG_KEEP_ALL		| \
--			 SCHED_FLAG_UTIL_CLAMP)
-+			 SCHED_FLAG_UTIL_CLAMP		| \
-+			 SCHED_FLAG_LATENCY_NICE)
- 
- #endif /* _UAPI_LINUX_SCHED_H */
-diff --git a/include/uapi/linux/sched/types.h b/include/uapi/linux/sched/types.h
-index f2c4589d4dbf..db1e8199e8c8 100644
---- a/include/uapi/linux/sched/types.h
-+++ b/include/uapi/linux/sched/types.h
-@@ -10,6 +10,7 @@ struct sched_param {
- 
- #define SCHED_ATTR_SIZE_VER0	48	/* sizeof first published struct */
- #define SCHED_ATTR_SIZE_VER1	56	/* add: util_{min,max} */
-+#define SCHED_ATTR_SIZE_VER2	60	/* add: latency_nice */
- 
- /*
-  * Extended scheduling parameters data structure.
-@@ -98,6 +99,22 @@ struct sched_param {
-  * scheduled on a CPU with no more capacity than the specified value.
-  *
-  * A task utilization boundary can be reset by setting the attribute to -1.
-+ *
-+ * Latency Tolerance Attributes
-+ * ===========================
-+ *
-+ * A subset of sched_attr attributes allows to specify the relative latency
-+ * requirements of a task with respect to the other tasks running/queued in the
-+ * system.
-+ *
-+ * @ sched_latency_nice	task's latency_nice value
-+ *
-+ * The latency_nice of a task can have any value in a range of
-+ * [MIN_LATENCY_NICE..MAX_LATENCY_NICE].
-+ *
-+ * A task with latency_nice with the value of LATENCY_NICE_MIN can be
-+ * taken for a task requiring a lower latency as opposed to the task with
-+ * higher latency_nice.
-  */
- struct sched_attr {
- 	__u32 size;
-@@ -120,6 +137,8 @@ struct sched_attr {
- 	__u32 sched_util_min;
- 	__u32 sched_util_max;
- 
-+	/* latency requirement hints */
-+	__s32 sched_latency_nice;
- };
- 
- #endif /* _UAPI_LINUX_SCHED_TYPES_H */
 diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 1f04b815b588..036bd9ff66e9 100644
+index 036bd9ff66e9..2c0f782a9089 100644
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -7200,6 +7200,15 @@ static void __setscheduler_params(struct task_struct *p,
- 	p->rt_priority = attr->sched_priority;
- 	p->normal_prio = normal_prio(p);
- 	set_load_weight(p, true);
-+
-+}
-+
-+static void __setscheduler_latency(struct task_struct *p,
-+		const struct sched_attr *attr)
-+{
-+	if (attr->sched_flags & SCHED_FLAG_LATENCY_NICE) {
-+		p->latency_nice = attr->sched_latency_nice;
-+	}
- }
- 
- /*
-@@ -7326,6 +7335,13 @@ static int __sched_setscheduler(struct task_struct *p,
- 			return retval;
+@@ -7340,6 +7340,10 @@ static int __sched_setscheduler(struct task_struct *p,
+ 			return -EINVAL;
+ 		if (attr->sched_latency_nice < MIN_LATENCY_NICE)
+ 			return -EINVAL;
++		/* Use the same security checks as NICE */
++		if (attr->sched_latency_nice < p->latency_nice &&
++		    !capable(CAP_SYS_NICE))
++			return -EPERM;
  	}
  
-+	if (attr->sched_flags & SCHED_FLAG_LATENCY_NICE) {
-+		if (attr->sched_latency_nice > MAX_LATENCY_NICE)
-+			return -EINVAL;
-+		if (attr->sched_latency_nice < MIN_LATENCY_NICE)
-+			return -EINVAL;
-+	}
-+
  	if (pi)
- 		cpuset_read_lock();
- 
-@@ -7360,6 +7376,9 @@ static int __sched_setscheduler(struct task_struct *p,
- 			goto change;
- 		if (attr->sched_flags & SCHED_FLAG_UTIL_CLAMP)
- 			goto change;
-+		if (attr->sched_flags & SCHED_FLAG_LATENCY_NICE &&
-+		    attr->sched_latency_nice != p->latency_nice)
-+			goto change;
- 
- 		p->sched_reset_on_fork = reset_on_fork;
- 		retval = 0;
-@@ -7448,6 +7467,7 @@ static int __sched_setscheduler(struct task_struct *p,
- 		__setscheduler_params(p, attr);
- 		__setscheduler_prio(p, newprio);
- 	}
-+	__setscheduler_latency(p, attr);
- 	__setscheduler_uclamp(p, attr);
- 
- 	if (queued) {
-@@ -7658,6 +7678,9 @@ static int sched_copy_attr(struct sched_attr __user *uattr, struct sched_attr *a
- 	    size < SCHED_ATTR_SIZE_VER1)
- 		return -EINVAL;
- 
-+	if ((attr->sched_flags & SCHED_FLAG_LATENCY_NICE) &&
-+	    size < SCHED_ATTR_SIZE_VER2)
-+		return -EINVAL;
- 	/*
- 	 * XXX: Do we want to be lenient like existing syscalls; or do we want
- 	 * to be strict and return an error on out-of-bounds values?
-@@ -7895,6 +7918,8 @@ SYSCALL_DEFINE4(sched_getattr, pid_t, pid, struct sched_attr __user *, uattr,
- 	get_params(p, &kattr);
- 	kattr.sched_flags &= SCHED_FLAG_ALL;
- 
-+	kattr.sched_latency_nice = p->latency_nice;
-+
- #ifdef CONFIG_UCLAMP_TASK
- 	/*
- 	 * This could race with another potential updater, but this is fine
-diff --git a/tools/include/uapi/linux/sched.h b/tools/include/uapi/linux/sched.h
-index 3bac0a8ceab2..ecc4884bfe4b 100644
---- a/tools/include/uapi/linux/sched.h
-+++ b/tools/include/uapi/linux/sched.h
-@@ -132,6 +132,7 @@ struct clone_args {
- #define SCHED_FLAG_KEEP_PARAMS		0x10
- #define SCHED_FLAG_UTIL_CLAMP_MIN	0x20
- #define SCHED_FLAG_UTIL_CLAMP_MAX	0x40
-+#define SCHED_FLAG_LATENCY_NICE		0X80
- 
- #define SCHED_FLAG_KEEP_ALL	(SCHED_FLAG_KEEP_POLICY | \
- 				 SCHED_FLAG_KEEP_PARAMS)
-@@ -143,6 +144,7 @@ struct clone_args {
- 			 SCHED_FLAG_RECLAIM		| \
- 			 SCHED_FLAG_DL_OVERRUN		| \
- 			 SCHED_FLAG_KEEP_ALL		| \
--			 SCHED_FLAG_UTIL_CLAMP)
-+			 SCHED_FLAG_UTIL_CLAMP		| \
-+			 SCHED_FLAG_LATENCY_NICE)
- 
- #endif /* _UAPI_LINUX_SCHED_H */
 -- 
 2.17.1
 

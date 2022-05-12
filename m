@@ -2,110 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 974B9524779
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B894A52477A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351176AbiELH4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 03:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56794 "EHLO
+        id S1351257AbiELH5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 03:57:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351278AbiELH4M (ORCPT
+        with ESMTP id S241283AbiELH5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 03:56:12 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A0D396BE;
-        Thu, 12 May 2022 00:56:10 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VCzyo8E_1652342166;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VCzyo8E_1652342166)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 12 May 2022 15:56:07 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     linkinjeon@kernel.org
-Cc:     sfrench@samba.org, hyc.lee@gmail.com, senozhatsky@chromium.org,
-        linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] ksmbd: Fix some kernel-doc comments
-Date:   Thu, 12 May 2022 15:56:05 +0800
-Message-Id: <20220512075605.34240-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Thu, 12 May 2022 03:57:09 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6C98689A4
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:57:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 674371042;
+        Thu, 12 May 2022 00:57:04 -0700 (PDT)
+Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 149C83F73D;
+        Thu, 12 May 2022 00:57:02 -0700 (PDT)
+Date:   Thu, 12 May 2022 08:56:59 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Rob Herring <rob.herring@calxeda.com>,
+        Jamie Iles <jamie@jamieiles.com>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+Subject: Re: [PATCH] ARM: highbank: Fix refcount leak in highbank_init
+Message-ID: <20220512085659.678db0b3@donnerap.cambridge.arm.com>
+In-Reply-To: <20220512031259.56459-1-linmq006@gmail.com>
+References: <20220512031259.56459-1-linmq006@gmail.com>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove some warnings found by running scripts/kernel-doc,
-which is caused by using 'make W=1'.
+On Thu, 12 May 2022 07:12:58 +0400
+Miaoqian Lin <linmq006@gmail.com> wrote:
 
-fs/ksmbd/misc.c:30: warning: Function parameter or member 'str' not
-described in 'match_pattern'
-fs/ksmbd/misc.c:30: warning: Excess function parameter 'string'
-description in 'match_pattern'
-fs/ksmbd/misc.c:163: warning: Function parameter or member 'share' not
-described in 'convert_to_nt_pathname'
-fs/ksmbd/misc.c:163: warning: Function parameter or member 'path' not
-described in 'convert_to_nt_pathname'
-fs/ksmbd/misc.c:163: warning: Excess function parameter 'filename'
-description in 'convert_to_nt_pathname'
-fs/ksmbd/misc.c:163: warning: Excess function parameter 'sharepath'
-description in 'convert_to_nt_pathname'
-fs/ksmbd/misc.c:259: warning: Function parameter or member 'share' not
-described in 'convert_to_unix_name'
-fs/ksmbd/misc.c:259: warning: Function parameter or member 'name' not
-described in 'convert_to_unix_name'
-fs/ksmbd/misc.c:259: warning: Excess function parameter 'path'
-description in 'convert_to_unix_name'
-fs/ksmbd/misc.c:259: warning: Excess function parameter 'tid'
-description in 'convert_to_unix_name'
+Hi,
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- fs/ksmbd/misc.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+> of_find_compatible_node() returns a node pointer with refcount
+> incremented, we should use of_node_put() on it when done.
+> Add missing of_node_put() to avoid refcount leak.
+> 
+> Fixes: 220e6cf7b793 ("ARM: add Highbank core platform support")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 
-diff --git a/fs/ksmbd/misc.c b/fs/ksmbd/misc.c
-index 1e2076a53bed..df991107ad2c 100644
---- a/fs/ksmbd/misc.c
-+++ b/fs/ksmbd/misc.c
-@@ -20,7 +20,7 @@
-  * wildcard '*' and '?'
-  * TODO : implement consideration about DOS_DOT, DOS_QM and DOS_STAR
-  *
-- * @string:	string to compare with a pattern
-+ * @str:	string to compare with a pattern
-  * @len:	string length
-  * @pattern:	pattern string which might include wildcard '*' and '?'
-  *
-@@ -152,8 +152,8 @@ int parse_stream_name(char *filename, char **stream_name, int *s_type)
- /**
-  * convert_to_nt_pathname() - extract and return windows path string
-  *      whose share directory prefix was removed from file path
-- * @filename : unix filename
-- * @sharepath: share path string
-+ * @share: ksmbd_share_config pointer
-+ * @path: path to report
-  *
-  * Return : windows path string or error
-  */
-@@ -250,8 +250,8 @@ char *ksmbd_extract_sharename(char *treename)
- 
- /**
-  * convert_to_unix_name() - convert windows name to unix format
-- * @path:	name to be converted
-- * @tid:	tree id of mathing share
-+ * @share:	ksmbd_share_config pointer
-+ * @name:	file name that is relative to share
-  *
-  * Return:	converted name on success, otherwise NULL
-  */
--- 
-2.20.1.7.g153144c
+That is basically the same patch as this one:
+https://lore.kernel.org/linux-arm-kernel/20220408094817.2494756-1-lv.ruyi@zte.com.cn/
+
+Arnd, Olof, can you please take the older one through the soc tree? Maybe
+adding the Fixes tag from this one?
+
+Thanks,
+Andre
+
+> ---
+>  arch/arm/mach-highbank/highbank.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm/mach-highbank/highbank.c b/arch/arm/mach-highbank/highbank.c
+> index db607955a7e4..af9488854fe3 100644
+> --- a/arch/arm/mach-highbank/highbank.c
+> +++ b/arch/arm/mach-highbank/highbank.c
+> @@ -142,6 +142,7 @@ static void __init highbank_init(void)
+>  	np = of_find_compatible_node(NULL, NULL, "calxeda,hb-sregs");
+>  	sregs_base = of_iomap(np, 0);
+>  	WARN_ON(!sregs_base);
+> +	of_node_put(np);
+>  
+>  	pm_power_off = highbank_power_off;
+>  	highbank_pm_init();
 

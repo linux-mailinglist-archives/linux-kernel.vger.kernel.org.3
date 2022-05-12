@@ -2,199 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10CC952499A
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29070524998
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352370AbiELJ4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 05:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
+        id S1352345AbiELJ4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 05:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352297AbiELJz5 (ORCPT
+        with ESMTP id S1352338AbiELJ4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 05:55:57 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D3222BF5
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:55:52 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id d5so6484109wrb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:55:52 -0700 (PDT)
+        Thu, 12 May 2022 05:56:16 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2013879F;
+        Thu, 12 May 2022 02:56:14 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id bd25-20020a05600c1f1900b0039485220e16so3914440wmb.0;
+        Thu, 12 May 2022 02:56:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=8Mml8/I6dZjDQVSbpICZmHamoycoSx+AztXtLx3bWPs=;
-        b=iH1TKkrS5WfQgAyOTSHAq81+XzaNS/SFjVKI4d3/BpcOtFsBqxWj3bgJ4wY28aEBac
-         sG/55sB6TPsWSZFpA2WndigICY7YfyCG+PHvvr6K46+6/decyzAEHzfVRe2adr9Zlv3L
-         rvRLAfsObPWEGc2Mso2ipeHw+q+ZrtNK67cQtGYWfifXG83tN0dYKb3PkW9gX1nu+tNI
-         xsGzpCFigWKpCW3r6X/zacsEhongIdUz0JzN+OMRKVHUFE3DklG8AmKcPrklhluQIgm2
-         3lnmtsE6m3uOnhRJXMQKV7POS8YYoYfWYm78+ZRyll34IbUFtD1yZ1Xq1fVU6DsIKO1V
-         JWZw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vI+rvT4jTUHk9Zem0CL850oZR0u8HlCjb7Iy9meG1aA=;
+        b=lpSgAFrVHDgV+Ou+xzBr6yczkXty0cfBXPNVhifBOx1K1XlM2aoHmrC6HkVUDLQ5ZI
+         LOsK5ttHwnnfAVf2UbNhSKRDGx0pgAGhRAulH3RIF4IXyXoRrRUkkj0KuLaFhx3Z0uyO
+         eM4g7zPUeD33kOSGvfCxdRRRowYbAqNdlNJkSvjw/Iv0+p0O4sYlUOHQ6A/JBMsPNvPz
+         cdYyfzqRam7EHGtogYWasfcT52OZ/Aby5niqbNVNjiRyvHIAMnUv53M4bIoB/oLqxeht
+         3HEk9TePNnhNLd4eksRgG/sJOnb0kXALligFZZ51HpBr7q1/hLac3RJTcFgm2yz4lyIt
+         AjKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=8Mml8/I6dZjDQVSbpICZmHamoycoSx+AztXtLx3bWPs=;
-        b=hODqsFchbpgGu3Rj7lA+qvneYEyl1xA+mbmEhMj2V9fA+aDna2uFLX3BMwGMTraG31
-         0HlwoLr/HaZ088zkI29q7kw3JesOOPVIVcb2ifhEu3lNl2j7Dgrs7ccfP0g/jlpHjdru
-         A6OmQxJvxvR58TKbiWOeYDQOnbkguAIQ+PHWuMDTlJRdE5xYlfRH5TFizKGRcXwbrrF4
-         jJzNQXc5XbPLsuD6joAyX/zZRwEyQe24U2YCzVhYMEAVKTWRnv21knT+kOhgN5gDV/Lw
-         qlu/8sqaBI1s/tXnD30h9EVCEOc8Fe87WfA66O0CgAKxF4TXeyJQuMIc4Tk5CXc9yKFb
-         jZSw==
-X-Gm-Message-State: AOAM532FaSMP/wnrX+3J4HC2gvhgLz/KLT5KYuM8ypBgolbp8s7x3Cv4
-        Wyn2sjfoxbcXjfjIyLA+nh7Ebg==
-X-Google-Smtp-Source: ABdhPJyeg+3xggI6uw+b1bSLWxaJSk3lJwrHHEn3ulHOjlGlq4yeoq8w9RWSdcvpl6PMXoJGur9TQw==
-X-Received: by 2002:adf:e812:0:b0:20c:dd44:b06c with SMTP id o18-20020adfe812000000b0020cdd44b06cmr6707154wrm.714.1652349351033;
-        Thu, 12 May 2022 02:55:51 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id m126-20020a1ca384000000b003945cdd0d55sm2167193wme.26.2022.05.12.02.55.49
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vI+rvT4jTUHk9Zem0CL850oZR0u8HlCjb7Iy9meG1aA=;
+        b=OC0EJGGGTR8seMv1U3snLxPg6dHOfR8m3vt98IVCb7a1jRRz6jM4A3QRH+CJE06JPB
+         rzlbtRrsTkGeUSMAmCwAug05GbiaE0XfRtEpd1KwRfIEY0K3MF5dxQhF7HU2ygh/+paY
+         tu7f4F1XeIMNBlYsGlgKVHPoCdPUA17aVnRJ0VE8WlkhHdnSqcEa2cy5ZaHmzVNoK8Ot
+         muw2/dXNKwTDQDBm/WtjHdaZ9wtrPzXI7E+xdz01ffFMZyw74LTrDpFPYmaPmlAotnG0
+         s7mdMLqesK4GKrJW49zptHvFNXIA/qa/R3rP3K1xMe5cPBvfnvMfVdJrZPuoeQvNxAkZ
+         fQ/w==
+X-Gm-Message-State: AOAM531xyZqbHmndfinllPFKVRD9lMEy3NNslvW8sy9V/OB2whEVVkMm
+        nJEJ4/3vVfYHEE/SD1adBvI=
+X-Google-Smtp-Source: ABdhPJzeOkR8gXtslb2c3OAosJp6H5XjNvatCGsuZGEiFUK0wnEiEhEtz1Qdscrp0cS4adhAzk+RXw==
+X-Received: by 2002:a05:600c:1547:b0:394:882a:3b5 with SMTP id f7-20020a05600c154700b00394882a03b5mr9296978wmg.97.1652349373138;
+        Thu, 12 May 2022 02:56:13 -0700 (PDT)
+Received: from alaa-emad ([197.57.250.210])
+        by smtp.gmail.com with ESMTPSA id z15-20020a05600c0a0f00b0039457b94069sm2306913wmp.42.2022.05.12.02.56.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 02:55:50 -0700 (PDT)
-Date:   Thu, 12 May 2022 10:55:48 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        =?utf-8?Q?=C5=81ukasz?= Bartosik <lb@semihalf.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>
-Subject: Re: [PATCH v5 0/8] platform/x86: introduce p2sb_bar() helper
-Message-ID: <YnzZpE4JOLlxsjVc@google.com>
-References: <20220510151451.85561-1-andriy.shevchenko@linux.intel.com>
+        Thu, 12 May 2022 02:56:12 -0700 (PDT)
+From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     outreachy@lists.linux.dev, roopa@nvidia.com, jdenham@redhat.com,
+        sbrivio@redhat.com, jesse.brandeburg@intel.com,
+        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
+        alexandre.belloni@bootlin.com, shshaikh@marvell.com,
+        manishc@marvell.com, razor@blackwall.org,
+        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, GR-Linux-NIC-Dev@marvell.com,
+        bridge@lists.linux-foundation.org,
+        eng.alaamohamedsoliman.am@gmail.com
+Subject: [PATCH net-next v7 0/2] propagate extack to vxlan_fdb_delete
+Date:   Thu, 12 May 2022 11:55:52 +0200
+Message-Id: <cover.1652348961.git.eng.alaamohamedsoliman.am@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220510151451.85561-1-andriy.shevchenko@linux.intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 May 2022, Andy Shevchenko wrote:
+In order to propagate extack to vxlan_fdb_delete and vxlan_fdb_parse,
+add extack to .ndo_fdb_del and edit all fdb del handelers.
 
-> There are a few users and at least one more is coming (*1) that would
-> like to utilize P2SB mechanism of hiding and unhiding a device from
-> the PCI configuration space.
-> 
-> Here is the series to consolidate p2sb handling code for existing users
-> and provide a generic way for new comer(s).
-> 
-> It also includes a patch to enable GPIO controllers on Apollo Lake
-> when it's used with ABL bootloader w/o ACPI support (*2).
-> 
-> The patch that brings the helper ("platform/x86/intel: Add Primary to
-> Sideband (P2SB) bridge support") has a commit message that sheds a light
-> on what the P2SB is and why this is needed.
-> 
-> The changes made in v5 do not change the main idea and the functionality
-> in a big scale. What we need is probably one more retest done by Henning
-> (*3). I hope to have it merged to v5.19-rc1 that Siemens can develop
-> their changes based on this series (*4).
-> 
-> I have tested this on Apollo Lake platform (I'm able to see SPI NOR and
-> since we have an ACPI device for GPIO I do not see any attempts to recreate
-> one).
-> 
-> *1) One in this series, and one is a recent merge of the Simatic IPC drivers
-> *2) This patch can be postponed as Lee hasn't given his tag yet.
-> *3) Henning gave his tag and I dared to used it even against changed patch 1
-> *4) The changes were posted in between of v4 and v5 of this series, but need
->     more work.
-> 
-> Taking into account the *2) the series is ready to be merged via PDx86 tree.
+Alaa Mohamed (2):
+  rtnetlink: add extack support in fdb del handlers
+  net: vxlan: Add extack support to vxlan_fdb_delete
 
-If that happens you need to do 2 things:
-
-1. Change all s/Acked-for-MFD-by/Acked-by/
-2. Submit a pull-request that we can all pull from
-
-Alternatively, I can apply this via MFD and do the same.
-
-> Changes in v5:
-> - rewritten patch 1 to use pci_scan_single_device() (Lukas, Bjorn)
-> - rebased patch 2 on top of the new Intel SPI NOR codebase
-> - fixed a potential bug and rewritten resource filling in patch 5 (Lee)
-> - added many different tags in a few patches (Jean, Wolfram, Henning)
-> 
-> Changes in v4:
-> - added tag to the entire series (Hans)
-> - added tag to pin control patch (Mika)
-> - dropped PCI core changes (PCI core doesn't want modifications to be made)
-> - as a consequence of the above merged necessary bits into p2sb.c
-> - added a check that p2sb is really hidden (Hans)
-> - added EDAC patches (reviewed by maintainer internally)
-> 
-> Changes in v3:
-> - resent with cover letter
-> 
-> Changes in v2:
-> - added parentheses around bus in macros (Joe)
-> - added tag (Jean)
-> - fixed indentation and wrapping in the header (Christoph)
-> - moved out of PCI realm to PDx86 as the best common denominator (Bjorn)
-> - added a verbose commit message to explain P2SB thingy (Bjorn)
-> - converted first parameter from pci_dev to pci_bus
-> - made first two parameters (bus and devfn) optional (Henning, Lee)
-> - added Intel pin control patch to the series (Henning, Mika)
-> - fixed English style in the commit message of one of MFD patch (Lee)
-> - added tags to my MFD LPC ICH patches (Lee)
-> - used consistently (c) (Lee)
-> - made indexing for MFD cell and resource arrays (Lee)
-> - fixed the resource size in i801 (Jean)
-> 
-> Andy Shevchenko (6):
->   pinctrl: intel: Check against matching data instead of ACPI companion
->   mfd: lpc_ich: Factor out lpc_ich_enable_spi_write()
->   mfd: lpc_ich: Switch to generic p2sb_bar()
->   i2c: i801: convert to use common P2SB accessor
->   EDAC, pnd2: Use proper I/O accessors and address space annotation
->   EDAC, pnd2: convert to use common P2SB accessor
-> 
-> Jonathan Yong (1):
->   platform/x86/intel: Add Primary to Sideband (P2SB) bridge support
-> 
-> Tan Jui Nee (1):
->   mfd: lpc_ich: Add support for pinctrl in non-ACPI system
-> 
->  drivers/edac/Kconfig                   |   1 +
->  drivers/edac/pnd2_edac.c               |  62 +++-------
->  drivers/i2c/busses/Kconfig             |   1 +
->  drivers/i2c/busses/i2c-i801.c          |  39 ++----
->  drivers/mfd/Kconfig                    |   1 +
->  drivers/mfd/lpc_ich.c                  | 161 +++++++++++++++++++------
->  drivers/pinctrl/intel/pinctrl-intel.c  |  14 +--
->  drivers/platform/x86/intel/Kconfig     |  12 ++
->  drivers/platform/x86/intel/Makefile    |   2 +
->  drivers/platform/x86/intel/p2sb.c      | 133 ++++++++++++++++++++
->  include/linux/platform_data/x86/p2sb.h |  28 +++++
->  11 files changed, 338 insertions(+), 116 deletions(-)
->  create mode 100644 drivers/platform/x86/intel/p2sb.c
->  create mode 100644 include/linux/platform_data/x86/p2sb.h
-> 
-> 
-> base-commit: 3bf222d317a20170ee17f082626c1e0f83537e13
+ drivers/net/ethernet/intel/ice/ice_main.c     |  3 +-
+ drivers/net/ethernet/mscc/ocelot_net.c        |  3 +-
+ .../net/ethernet/qlogic/qlcnic/qlcnic_main.c  |  3 +-
+ drivers/net/macvlan.c                         |  3 +-
+ drivers/net/vxlan/vxlan_core.c                | 41 +++++++++++++------
+ include/linux/netdevice.h                     |  2 +-
+ net/bridge/br_fdb.c                           |  3 +-
+ net/bridge/br_private.h                       |  3 +-
+ net/core/rtnetlink.c                          |  4 +-
+ 9 files changed, 44 insertions(+), 21 deletions(-)
 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.36.1
+

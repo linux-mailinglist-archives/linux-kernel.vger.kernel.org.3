@@ -2,76 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2DEF524C93
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B01524C9B
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353621AbiELMUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 08:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
+        id S1353599AbiELMVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 08:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349371AbiELMUo (ORCPT
+        with ESMTP id S1353632AbiELMVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 08:20:44 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE42819C34
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:20:40 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id b19so6977935wrh.11
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:20:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:organization:in-reply-to:content-transfer-encoding;
-        bh=RB4UFWflnqT7YBqkDdk/tHJ953wpGWAq9+2dQip5Mgk=;
-        b=SYyQEfdTxPtJhqIjDzLvhoXxyWDkBykTLx2EMy2UIBn9ANURE3n1SbvvtNKJiZRdb9
-         QxgtIFjOVr0i1qU7eFxs7SAlFzFLIMyOfqJQRMcVZwp89iY5o2qN8fB/bRpKe413XYx6
-         080m+FmyhUnWUdQhf33FL6LXzpjGiaJP383/f5NwouESb9+/Ap6JFzbb4ituiGdzm1o0
-         no25PcXJuN67b6sN8hdFf4Fu9mryvYGvwYBqx35zXirO6yTRdPLYG2GInX6XHZoHBDGA
-         w8y4OdbFAKcH+ezHiHm+UjUB5pt9wJuEFHUQvmwwSAUJOpdM4SXx2ohi5d2cuja7KxzU
-         nCAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=RB4UFWflnqT7YBqkDdk/tHJ953wpGWAq9+2dQip5Mgk=;
-        b=kFkO1m6Gv1QhGDju2ajo3ts6mjGdaIcrY5/y4KVI0piOGjXiz1Hn67TZ1bA7ZspuCU
-         zLMhbFTAH+ZH6H2rjVvFGStevIk5v6R1JQ5ZQ/rvH4DdixnTn0kwxr5Vw7rv+Yh/dwyn
-         jr4RGX1ZFs7YOtSooBqK4Op6pI7blY5EOvx+9GFTZRTZKOUd8ebCZY+xCS5EZI+Sqtu0
-         Cqj2EZMu5mCcD75mI+QbCYsimmk24aqMRQTo7ioQC8g/KrSgIuc2y4Pq8VyaXX1mBttn
-         980LO5FQrOEFa8THS+EUR4+xlSzZpZwcVXFvpYVJMaHiSImrRaLRMW/pgZuA2iJLObRm
-         QCmw==
-X-Gm-Message-State: AOAM533slmCvrd9CJhbVB33XCmvz5Dsiq4hXTPd9jNjMoXsrayK330y4
-        96FZRL1+E+Gta48sxA3PUIBQPtZ429nBmXW2
-X-Google-Smtp-Source: ABdhPJyu1aKN5KiuDTzkBD61oRd1v63Bb1+xpDXJPlEui//nYUG2arMwW3pCr9WkbGGiND0niBZcfg==
-X-Received: by 2002:a05:6000:144f:b0:20c:6090:3040 with SMTP id v15-20020a056000144f00b0020c60903040mr26377831wrx.479.1652358039271;
-        Thu, 12 May 2022 05:20:39 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:8073:a89f:6230:abb? ([2001:861:44c0:66c0:8073:a89f:6230:abb])
-        by smtp.gmail.com with ESMTPSA id c1-20020a5d4cc1000000b0020c5253d8ccsm4104892wrt.24.2022.05.12.05.20.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 05:20:38 -0700 (PDT)
-Message-ID: <dabe6a15-b0ba-0458-bbd7-a07224071920@baylibre.com>
-Date:   Thu, 12 May 2022 14:20:37 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] drm/meson: Fix refcount leak in meson_encoder_hdmi_init
-Content-Language: en-US
-To:     Miaoqian Lin <linmq006@gmail.com>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220511054052.51981-1-linmq006@gmail.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220511054052.51981-1-linmq006@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Thu, 12 May 2022 08:21:31 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D8D62235;
+        Thu, 12 May 2022 05:21:29 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CCJDnq014644;
+        Thu, 12 May 2022 12:21:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=bCU0bOeBXG5Y6DNauHOVFi5fNBXbyQkfeBK2dG8rdvw=;
+ b=ZjvQU0ZHGwtBdLWlUg+S2cVl1S5V40JJA0RHaSjyZrAXWD5cDXPJTl2d5Qr51ZUKK3j3
+ 8aNKwMtM0XLmdU10c8ANHjdStcRmShtDxnJanaiJQVZlv7W6n2TtbZadg5MVTVyl7w2W
+ 0pB2Sg/EOxoPLKFR6QfQgMTBKzL3IOsbIsEKVLy7I2uPrfwHX2p/oqzlCyiMWNJPS+rK
+ AaGjIy38aH6mHN+DWVpwohkxa89DYJX7EFcLefhyvw32iSz/gHkSON6heSI4J2GNu8VA
+ T+wlisDnvWy8IzpyQ8ujNtKQQvZ7LnAOolXpoE+JYP1sLv9WaHI7jOWDdAJ3oyBlU3Ct PQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g124rg1u1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 12:21:24 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24CCKCMV019771;
+        Thu, 12 May 2022 12:21:24 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g124rg1sr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 12:21:23 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24CCJdYr001036;
+        Thu, 12 May 2022 12:21:22 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma05fra.de.ibm.com with ESMTP id 3fwgd8wg5j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 12:21:21 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24CCLJTo52560360
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 May 2022 12:21:19 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9B378A4054;
+        Thu, 12 May 2022 12:21:19 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5ACD7A405B;
+        Thu, 12 May 2022 12:21:18 +0000 (GMT)
+Received: from sig-9-65-70-87.ibm.com (unknown [9.65.70.87])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 12 May 2022 12:21:18 +0000 (GMT)
+Message-ID: <99541f08e8b554dea59334005cafb0af978f9a05.camel@linux.ibm.com>
+Subject: Re: [PATCH] tpm: sleep at least <...> ms in tpm_msleep()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Johannes Holland <johannes.holland@infineon.com>,
+        Nayna <nayna@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peterhuewe@gmx.de, jgg@ziepe.ca
+Date:   Thu, 12 May 2022 08:21:17 -0400
+In-Reply-To: <YnvTSqRgYkWu0qgp@kernel.org>
+References: <20220510112902.23213-1-johannes.holland@infineon.com>
+         <YnvTSqRgYkWu0qgp@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: zx-3t_x1YUzXSSJZt9EnPRcjXHiHQJ8i
+X-Proofpoint-ORIG-GUID: INxetDhYIMU4i4YGIGUtGGi-9gmPTIp5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-12_10,2022-05-12_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ lowpriorityscore=0 priorityscore=1501 adultscore=0 spamscore=0
+ impostorscore=0 malwarescore=0 bulkscore=0 suspectscore=0 clxscore=1011
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205120056
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,33 +94,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/05/2022 07:40, Miaoqian Lin wrote:
-> of_find_device_by_node() takes reference, we should use put_device()
-> to release it when not need anymore.
-> Add missing put_device() in error path to avoid refcount
-> leak.
+On Wed, 2022-05-11 at 18:16 +0300, Jarkko Sakkinen wrote:
+> On Tue, May 10, 2022 at 01:29:03PM +0200, Johannes Holland wrote:
+> > To comply with protocol requirements, minimum polling times must often
+> > be adhered to. Therefore, a macro like tpm_msleep() should sleep at
+> > least the given amount of time (not up to the given period). Have
+> > tpm_msleep() sleep at least the given number of milliseconds.
+> > 
+> > Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+> > ---
+> >  drivers/char/tpm/tpm.h | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> > index 2163c6ee0d36..0971b55fffe3 100644
+> > --- a/drivers/char/tpm/tpm.h
+> > +++ b/drivers/char/tpm/tpm.h
+> > @@ -185,8 +185,8 @@ int tpm_pm_resume(struct device *dev);
+> >  
+> >  static inline void tpm_msleep(unsigned int delay_msec)
+> >  {
+> > -	usleep_range((delay_msec * 1000) - TPM_TIMEOUT_RANGE_US,
+> > -		     delay_msec * 1000);
+> > +	usleep_range(delay_msec * 1000, (delay_msec * 1000)
+> > +		     + TPM_TIMEOUT_RANGE_US);
+> >  };
+> >  
+> >  int tpm_chip_start(struct tpm_chip *chip);
+> > -- 
+> > 2.34.1
+> > 
 > 
-> Fixes: 0af5e0b41110 ("drm/meson: encoder_hdmi: switch to bridge DRM_BRIDGE_ATTACH_NO_CONNECTOR")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
->   drivers/gpu/drm/meson/meson_encoder_hdmi.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/meson/meson_encoder_hdmi.c b/drivers/gpu/drm/meson/meson_encoder_hdmi.c
-> index 5e306de6f485..de87f02cd388 100644
-> --- a/drivers/gpu/drm/meson/meson_encoder_hdmi.c
-> +++ b/drivers/gpu/drm/meson/meson_encoder_hdmi.c
-> @@ -435,8 +435,10 @@ int meson_encoder_hdmi_init(struct meson_drm *priv)
->   		cec_fill_conn_info_from_drm(&conn_info, meson_encoder_hdmi->connector);
->   
->   		notifier = cec_notifier_conn_register(&pdev->dev, NULL, &conn_info);
-> -		if (!notifier)
-> +		if (!notifier) {
-> +			put_device(&pdev->dev);
->   			return -ENOMEM;
-> +		}
->   
->   		meson_encoder_hdmi->cec_notifier = notifier;
->   	}
+> For this I would really like to hear a 2nd opinion from Nayna and Mimi.
 
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+This patch reverts commit 5ef924d9e2e8 ("tpm: use tpm_msleep() value as
+max delay").    Are you experiencing TPM issues that require it?
+
+thanks,
+
+Mimi
+
+

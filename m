@@ -2,64 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B1D452555D
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A295352555F
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:07:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357887AbiELTGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 15:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55942 "EHLO
+        id S1357885AbiELTHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 15:07:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357878AbiELTGx (ORCPT
+        with ESMTP id S1357878AbiELTHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 15:06:53 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635FB3F32C;
-        Thu, 12 May 2022 12:06:52 -0700 (PDT)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CIRWt3013301;
-        Thu, 12 May 2022 19:06:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=WXQORcdH4dsqLKEQq1CAxyPboU4WPCeRjlncygp/oZw=;
- b=MRjxXPYzOckLF0WFyxBEPwcF1aRfNE8aOymHpcG2SyTUXklsNYt3ZFFUjExmqNZmkBcI
- sWvAzcIcFER34bfHHi8CG7yxbpMe4jXl3JVLV8R/Yd8RXU9PcfkzYpp7swgIhYdirRxg
- PNmOuL/txvXBTTryvZkIsv6XxYBx9MP4sJskhxAbEjrDbpbEAy5ioLD9SjYhHcgiJ9oq
- oYhgRo7r/T2sZ7NwcbSB+mPTfvzhKK6ortFfm2QolymNf3mzusIrY3cIO57z13S791u4
- CJUzTtj4H5kV+943ItLVLLtmOqcQwu84rc4m4rPpR+tp0zE0dj9ICD5DL8NRjNLuSJvI 6A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g173b9cbv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 19:06:46 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24CIUii4031436;
-        Thu, 12 May 2022 19:06:45 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g173b9cbb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 19:06:45 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24CIvS5M022335;
-        Thu, 12 May 2022 19:06:44 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3fyrkk3bn1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 19:06:43 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24CJ6Hl334341284
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 12 May 2022 19:06:17 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5E0B8AE051;
-        Thu, 12 May 2022 19:06:39 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E3B0AAE045;
-        Thu, 12 May 2022 19:06:38 +0000 (GMT)
-Received: from osiris (unknown [9.145.44.123])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu, 12 May 2022 19:06:38 +0000 (GMT)
-Date:   Thu, 12 May 2022 21:06:37 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>
+        Thu, 12 May 2022 15:07:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8C82457B9;
+        Thu, 12 May 2022 12:07:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 103EE61B87;
+        Thu, 12 May 2022 19:07:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD27CC385B8;
+        Thu, 12 May 2022 19:07:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652382422;
+        bh=UAhhpbytMvD5GfxmgGkk/MtSBThhQKdLGrX/1MNtNA8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ngO8388PC0TyRKE6gLj7jvwizRWRPkJKgXmmKrxbqDGcTq1kvkKMFwlRuhdcfOreR
+         F19MBziPbLyG6srNayZkpqIworEmPnsbdVXw4ZKh/ePQ/sh5f0DuZ6Oo7qGy/mN12e
+         Ix0ubp1oYNMDSlYrYryPW6LBd9MF0q7Xs60lLkoesQP3x8ALiELwb0nCl51tZfYnoy
+         gTnX0Kaqsi8lBUP7QWqDMIkG+VS2GEZHpd2RVsVYEQKdWs+YTJgv6uCUlcsrUdj5hu
+         vqcpfBOBPturfU1Pfhvms+qNzjJa+92sS1kIQcX4BMRr8MG945W+KEy4o8YmiIUVEq
+         nIdCzP0vRn5rw==
+Date:   Thu, 12 May 2022 12:06:59 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Heiko Carstens <hca@linux.ibm.com>
 Cc:     Vasily Gorbik <gor@linux.ibm.com>,
         Alexander Gordeev <agordeev@linux.ibm.com>,
         Jonas Paulsson <paulsson@linux.vnet.ibm.com>,
@@ -69,67 +44,122 @@ Cc:     Vasily Gorbik <gor@linux.ibm.com>,
         Sven Schnelle <svens@linux.ibm.com>,
         Andreas Krebbel <krebbel@linux.ibm.com>,
         Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
         linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH 8/8] scripts/min-tool-version.sh: raise minimum clang
- version to 14.0.0 for s390
-Message-ID: <Yn1avbuIFdU87/Jj@osiris>
+Subject: Re: [PATCH 4/8] s390/entry: workaround llvm's IAS limitations
+Message-ID: <Yn1a01xhijM5MH1o@dev-arch.thelio-3990X>
 References: <20220511120532.2228616-1-hca@linux.ibm.com>
- <20220511120532.2228616-9-hca@linux.ibm.com>
- <CAKwvOd=EQa9tyWUi-ZfKrK-AABDRG7=TErHK+yb+_Z_dkjrmfQ@mail.gmail.com>
- <CAKwvOd=T5bd69-pduh8OnYdzGuBdJmF692VYP833ZG3BfGUA+A@mail.gmail.com>
+ <20220511120532.2228616-5-hca@linux.ibm.com>
+ <YnvynSZfF/8I8vmT@dev-arch.thelio-3990X>
+ <Yn1CyTcrZk1Kgvoq@osiris>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKwvOd=T5bd69-pduh8OnYdzGuBdJmF692VYP833ZG3BfGUA+A@mail.gmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: YX5qN9dn6S3zoj9gnAkZCOXN2pHBIHob
-X-Proofpoint-GUID: jmJUx8zmjiwk9Er2jItvWMIruAC1JQNY
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-12_16,2022-05-12_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- malwarescore=0 phishscore=0 mlxlogscore=744 priorityscore=1501
- clxscore=1015 impostorscore=0 spamscore=0 bulkscore=0 suspectscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205120083
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yn1CyTcrZk1Kgvoq@osiris>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 12:56:27PM -0700, Nick Desaulniers wrote:
-> On Wed, May 11, 2022 at 12:27 PM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > On Wed, May 11, 2022 at 5:05 AM Heiko Carstens <hca@linux.ibm.com> wrote:
-> > >
-> > > Before version 14.0.0 llvm's integrated assembler fails to handle some
-> > > displacement variants:
-> > >
-> > > arch/s390/purgatory/head.S:108:10: error: invalid operand for instruction
-> > >  lg %r11,kernel_type-.base_crash(%r13)
-> > >
-> > > Instead of working around this and given that this is already fixed
-> > > raise the minimum clang version from 13.0.0 to 14.0.0.
-> >
-> > Do you have the commit in LLVM that fixed this? Might be nice to link
+On Thu, May 12, 2022 at 07:24:25PM +0200, Heiko Carstens wrote:
+> On Wed, May 11, 2022 at 10:30:05AM -0700, Nathan Chancellor wrote:
+> > Hi Heiko,
+> > 
+> > On Wed, May 11, 2022 at 02:05:28PM +0200, Heiko Carstens wrote:
+> > > llvm's integrated assembler cannot handle immediate values which are
+> > > calculated with two local labels:
+> > > 
+> > > <instantiation>:3:13: error: invalid operand for instruction
+> > >  clgfi %r14,.Lsie_done - .Lsie_gmap
+> > > 
+> > > Workaround this by adding clang specific code which reads the specific
+> > > value from memory. Since this code is within the hot paths of the kernel
+> > > and adds an additional memory reference, keep the original code, and add
+> > > ifdef'ed code.
+> > > 
+> > > Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+> > > ---
+> > >  arch/s390/kernel/entry.S | 11 +++++++++++
+> > >  1 file changed, 11 insertions(+)
+> > > 
+> > > diff --git a/arch/s390/kernel/entry.S b/arch/s390/kernel/entry.S
+> > > index e1664b45090f..ff7a75078e93 100644
+> > > --- a/arch/s390/kernel/entry.S
+> > > +++ b/arch/s390/kernel/entry.S
+> > > @@ -171,8 +171,19 @@ _LPP_OFFSET	= __LC_LPP
+> > >  	.macro OUTSIDE reg,start,end,outside_label
+> > >  	larl	%r14,\start
+> > >  	slgrk	%r14,\reg,%r14
+> > > +#ifdef CONFIG_CC_IS_CLANG
+> > 
+> > I intend to put this series through my build and boot test matrix later
+> > today but one fly by comment in the meantime. Should this be
+> > CONFIG_AS_IS_LLVM if this is an integrated assembler limitation, rather
+> > than a clang one?
 > 
-> Maybe it's
-> https://reviews.llvm.org/D113341?
-
-Yes, looks like it.
-
-> Also, these are the open issues we had for the integrated assembler.
-> https://github.com/ClangBuiltLinux/linux/issues?q=is%3Aopen+is%3Aissue+label%3A%22%5BARCH%5D+s390%22+label%3A%22%5BTOOL%5D+integrated-as%22
+> Yes, that makes a lot of sense. Considering that I will drop the
+> previous patch within this series, the new version looks like:
 > 
-> Any chance you could include relevant Link tags on your commit
-> messages for patches that address these? It makes it easier to track
-> when/where things land if we ever intend to backport anything to
-> stable.
+> From fe4fb0b014378d84ae517deaea338577b2ea6ae0 Mon Sep 17 00:00:00 2001
+> From: Heiko Carstens <hca@linux.ibm.com>
+> Date: Sat, 7 May 2022 15:00:40 +0200
+> Subject: [PATCH 3/7] s390/entry: workaround llvm's IAS limitations
+> 
+> llvm's integrated assembler cannot handle immediate values which are
+> calculated with two local labels:
+> 
+> <instantiation>:3:13: error: invalid operand for instruction
+>  clgfi %r14,.Lsie_done - .Lsie_gmap
+> 
+> Workaround this by adding clang specific code which reads the specific
+> value from memory. Since this code is within the hot paths of the kernel
+> and adds an additional memory reference, keep the original code, and add
+> ifdef'ed code.
+> 
+> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+> ---
+>  arch/s390/kernel/entry.S | 14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/s390/kernel/entry.S b/arch/s390/kernel/entry.S
+> index a6b45eaa3450..f2f30bfba1e9 100644
+> --- a/arch/s390/kernel/entry.S
+> +++ b/arch/s390/kernel/entry.S
+> @@ -172,9 +172,19 @@ _LPP_OFFSET	= __LC_LPP
+>  	lgr	%r14,\reg
+>  	larl	%r13,\start
+>  	slgr	%r14,%r13
+> -	lghi	%r13,\end - \start
+> -	clgr	%r14,%r13
+> +#ifdef CONFIG_AS_IS_LLVM
+> +	clgfrl	%r14,.Lrange_size\@
+> +#else
+> +	clgfi	%r14,\end - \start
+> +#endif
+>  	jhe	\outside_label
+> +#ifdef CONFIG_CC_IS_CLANG
 
-Sure, will do.
+I think this one also wants to be CONFIG_AS_IS_LLVM, right?
+
+Other than that, seems fine to me, although I have no knowledge of s390
+assembly so that statement probably means next to nothing :)
+
+Cheers,
+Nathan
+
+> +	.section .rodata, "a"
+> +	.align 4
+> +.Lrange_size\@:
+> +	.long	\end - \start
+> +	.previous
+> +#endif
+>  	.endm
+>  
+>  	.macro SIEEXIT
+> -- 
+> 2.32.0

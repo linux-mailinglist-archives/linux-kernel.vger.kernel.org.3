@@ -2,58 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 245E5525802
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 00:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2147F525803
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 00:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359315AbiELWvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 18:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38048 "EHLO
+        id S1359320AbiELWxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 18:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359296AbiELWvl (ORCPT
+        with ESMTP id S1350110AbiELWw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 18:51:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9859B7092B;
-        Thu, 12 May 2022 15:51:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 598F3B82910;
-        Thu, 12 May 2022 22:51:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADD30C34113;
-        Thu, 12 May 2022 22:51:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652395898;
-        bh=l9FI+xPaIYCA8qXMiCGdIY4O2JO8Tx/QE9A+vCNwMaI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bKdcoXdlVkkR807/3DKbIpUXM0kRj7bK/6xqRTYNYrKtZtY66CPaQZnCZElkKD3D0
-         xsqMpqxVorjEG3ouvDe+jzVleXiRYq8a+N2iXdxk7jUPwv1aL2BQJkWtg7vkmvlgNU
-         vBGFaYNZrVODJWagbw/PvBUrCd31PdADHUJjKwIiLA9z424EjV7LwHgJi8aVUGemP6
-         DcQNq69erTsz5h3KQiqAfirCAkbMa1Gyr/wxTod2SjRBK39JKOBRROea959Hdg8YGL
-         0TSR2vblyQAwIvvHyoQ8tQSRF27rvvtPJVkAQz3X15PX91a8ixQgIvfPXJ3ETcnhf/
-         Z+IttVBhP7ruQ==
-Date:   Thu, 12 May 2022 15:51:36 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     syzbot <syzbot+8ed8fc4c57e9dcf23ca6@syzkaller.appspotmail.com>,
-        David Miller <davem@davemloft.net>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>
-Subject: Re: [syzbot] UBSAN: shift-out-of-bounds in tcf_pedit_init
-Message-ID: <20220512155136.70554388@kernel.org>
-In-Reply-To: <CANn89i+XHh1An6fDA0CH1Fb2k_-G8_CCzEmXGKqB4tRAMH9s4w@mail.gmail.com>
-References: <0000000000005f1a8805ded719cc@google.com>
-        <CANn89i+XHh1An6fDA0CH1Fb2k_-G8_CCzEmXGKqB4tRAMH9s4w@mail.gmail.com>
+        Thu, 12 May 2022 18:52:59 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2BA2685F6
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 15:52:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652395978; x=1683931978;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KesB9TkFdl9cmnTv7mRpkD//DnYASuepMhknEjHthiQ=;
+  b=NkpKVio4EfjNeshi7X7WkcBDDbaRdLm8P/4DFxSQm8uNdvMIThXrDWjz
+   yI0HlCDNpenXOPCdNZtGAevEuBKqupUhjDJSPHSDlnE4403mudVA4yaWX
+   BLaFe38Ntv54O21rTVWz2iRTTWzUytRZHKx0qWov6JBeNwcuSHtskjRcU
+   +ngWj/oKNnoWsl2edbsiZYORIj81A2fO0fEdgppGB9k+PYpGGCr8qQkVu
+   WwKu9gSQeuud9luSduh/hWURfdzwuktbEGr7smd/rQo2ahQB7SdlFPw+C
+   Fzi+yz8d4a/UXtV/90VhEphFGpAvkgfjANrVhKuS6Stkn7sofcLT9qFOU
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="330757634"
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="330757634"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 15:52:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="624605132"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 12 May 2022 15:52:56 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1npHfz-000L12-Lt;
+        Thu, 12 May 2022 22:52:55 +0000
+Date:   Fri, 13 May 2022 06:52:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jagan Teki <jagan@amarulasolutions.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: [mszyprow:v5.18-next-20220511-dsi-rework 14/35] ERROR: modpost:
+ "dsi_driver" [drivers/gpu/drm/exynos/exynosdrm.ko] undefined!
+Message-ID: <202205130603.OtcbHnd9-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,25 +63,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 May 2022 14:19:51 -0700 Eric Dumazet wrote:
-> On Thu, May 12, 2022 at 2:18 PM syzbot
-> > This report is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> >
-> > syzbot will keep track of this issue. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > syzbot can test patches for this issue, for details see:
-> > https://goo.gl/tpsmEJ#testing-patches  
-> 
-> As mentioned earlier, this came with
-> 
-> commit 8b796475fd7882663a870456466a4fb315cc1bd6
-> Author: Paolo Abeni <pabeni@redhat.com>
-> Date:   Tue May 10 16:57:34 2022 +0200
-> 
->     net/sched: act_pedit: really ensure the skb is writable
+tree:   https://github.com/mszyprow/linux.git v5.18-next-20220511-dsi-rework
+head:   65cb4959430021041f1e68ef98a6ec541d5891aa
+commit: 395cab08cbac6e4028dafce068414ea43244a592 [14/35] drm: bridge: Add Samsung DSIM bridge driver
+config: arm64-randconfig-r034-20220512 (https://download.01.org/0day-ci/archive/20220513/202205130603.OtcbHnd9-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/mszyprow/linux/commit/395cab08cbac6e4028dafce068414ea43244a592
+        git remote add mszyprow https://github.com/mszyprow/linux.git
+        git fetch --no-tags mszyprow v5.18-next-20220511-dsi-rework
+        git checkout 395cab08cbac6e4028dafce068414ea43244a592
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-Came in as in new stack trace for an old/existing bug, right?
-Nothing checks the shift so it'd have already tripped UBSAN 
-later on in tcf_pedit_act(), anyway.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "dsi_driver" [drivers/gpu/drm/exynos/exynosdrm.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,129 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3278A52561C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E345C525628
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 22:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358224AbiELTzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 15:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
+        id S1358232AbiELUAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 16:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351922AbiELTzV (ORCPT
+        with ESMTP id S232085AbiELUAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 15:55:21 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E122701B2
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 12:55:20 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id p8so5741467pfh.8
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 12:55:20 -0700 (PDT)
+        Thu, 12 May 2022 16:00:10 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA83663C7;
+        Thu, 12 May 2022 13:00:06 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id g6so12361024ejw.1;
+        Thu, 12 May 2022 13:00:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BrAloknBKGzWWokXz+hazBEfwUJ2O3UP9AUvih3teCk=;
-        b=N4D5cWFxJXwYO+Z9SIDfcfVXYPwfj3OhyZMfpDvEAmGo+DAn/cmubjX5MKM0VhBsIn
-         wU4HSjOrYVW1O/W+wXtBbA23aBek6h9o8Bx+6BBHreVLaH09/hLYumbswb2T79VUL6P6
-         pGeV+TrdmMYy4XeKEgDprNkrcg3vbX4rhWELikMEt9hg0rgyPEbviQgDonAEhVXGn2dT
-         nXseM+nxsKcjpzU2wi+psu7HGC7XTOSbK7ulO2Yfslb/jYTzWjVYOapwIveV5F+OFH+V
-         DZRHnURF440henKLWxQGG40AVg28HKU382dttDznh6KMowlqSW+XYBwJNC5Rnkc1qpOU
-         VqVA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=BZCyN3u0ukyiZuNWrYZZ3V7T3RNpHS+LzDDyyBy2MCs=;
+        b=kMUJVOVrC2EWJo16vfWhonvgaJjhET679TIiqxfNCeleLoffDUkiF39CbiThlLevuM
+         fUsyHPb/cvs5VpggCiTKlkiYY3AdltcxuEGiMhoe2whAeOotH/qu78sNWJw549+B2PeO
+         u3eX1m6gPbnsFMYXCfdQ1ly7yMpGxZqBHJT3rGLrlaeiX2WQBhhTLOrl5fBZUOav9GLM
+         bQxH0OSR33aaSLA99C2uR2OGLcIOaheqx1elAFnmdFXGJCQ+sUWjP0MrgLLRWEoiEOmI
+         W2vUOOf3I5THXk20qQTCV5K9s0SfMVXEAZ+Z1atUdqelaE+TwjEpK3go/erZu/wqD3bW
+         Z3/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=BrAloknBKGzWWokXz+hazBEfwUJ2O3UP9AUvih3teCk=;
-        b=Qq3On9E4wighdMZ6XnWwoU3Vm70aXKXVyF5x0hqq4d0J9OLplnw0fGOqpNlxATd8C6
-         ZI5jHj0SeO+G8yvYZbPrNijh9M2yEft+5G8YMalywPGiLQmL+qIdCV0cQWxbBz/kYrOF
-         1eoTYNnpDGxmpiy6ghtCWNUORLwDQsD/6SuTbSkt2k0bQH38drs4yHGWts4X5Ep+NOAA
-         QHrSXBl72HH34zkMfGCyotpyC9sVJlZJtT1VKO7o5xcNasnQskPItjatSJ+TKwTIcRYA
-         j/KuKPEAq9JWHzgXsRs/ZekfV/LLOHZ3q7Bkn2xWLx5MvAgGcaR8L3qBbHaIUDjcgusg
-         lytw==
-X-Gm-Message-State: AOAM530UVuAWC7x8j2wfx6frui/Vw7jQrHrhD0G9ALzKwstwg7AsbK7y
-        PdnlLD3GqEMqSN8GUKiyo80=
-X-Google-Smtp-Source: ABdhPJzmTzf76vaLA/IN6uWCznkqk2dWYfJtSSj+skNIBq99cZP8XamENPr/f/xjBoqNDoDO85MJFA==
-X-Received: by 2002:a63:8741:0:b0:3c6:a7d9:5d05 with SMTP id i62-20020a638741000000b003c6a7d95d05mr966539pge.313.1652385319494;
-        Thu, 12 May 2022 12:55:19 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:872f:bbca:8e23:fae5])
-        by smtp.gmail.com with ESMTPSA id i1-20020a17090332c100b0015e8d4eb21bsm307174plr.101.2022.05.12.12.55.18
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=BZCyN3u0ukyiZuNWrYZZ3V7T3RNpHS+LzDDyyBy2MCs=;
+        b=tTdJyKoxCJrel0/k20j/rBiprGzE9ucfWvoj6Asaxc2SvwZhVkV9GNvRTzCVXv4E1w
+         FDI+ZWf7zMaeuCkGllH6RXvFkxM8lm/jcQKfZ1UL1q6JIGF3R9HP2tCGxdkTR4wtALt1
+         BCmnAH5CyhHweyFYZhf6ko2RxytZfBAAlcrgS7aFMFnq7Hnc1jRIqSOQDy7J3BkOc/Vv
+         XKWZjuRR7DLYrtRg5vOZ41gS0Xtl0WKoQFlJMUURMQ6qfammqO8k5EsOFR7bqDorYdmK
+         7oKTX6BnAfLc7pvadsIrUxmI3t50dJY8KHYxp/cRYcDYmq2/AmrnurOQswYxcWCN7OZ5
+         AzKQ==
+X-Gm-Message-State: AOAM530OcXc+wpfTeLyV543HJxcCJUGJAZHDB6o5aLYwxH4tlWRjkHO+
+        bNVvbvk3gO9mAqNEs7VsS/nd0ehiKj/nZQ==
+X-Google-Smtp-Source: ABdhPJxbabFA4DADWT1CJdD3y7B1vI3pA8HJkIlx7ApabLXXGcXjj/s1qzF+rkVOJN6CyV4aj717yg==
+X-Received: by 2002:a17:907:6d1e:b0:6f9:ffbd:477a with SMTP id sa30-20020a1709076d1e00b006f9ffbd477amr1410718ejc.104.1652385605026;
+        Thu, 12 May 2022 13:00:05 -0700 (PDT)
+Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
+        by smtp.gmail.com with ESMTPSA id h16-20020a1709066d9000b006f3ef214e73sm55712ejt.217.2022.05.12.13.00.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 12:55:18 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Thu, 12 May 2022 12:55:16 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        John Dias <joaodias@google.com>,
-        Tim Murray <timmurray@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Martin Liu <liumartin@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Subject: Re: [PATCH v4] mm: don't be stuck to rmap lock on reclaim path
-Message-ID: <Yn1mJEjP3LH8rl3t@google.com>
-References: <20220510215423.164547-1-minchan@kernel.org>
- <20220511153349.045ab3865f25920dce11ca16@linux-foundation.org>
- <Ynw/RRsEj33gq+Hf@google.com>
- <20220511190523.7d159b2e9caccbf13469e74e@linux-foundation.org>
+        Thu, 12 May 2022 13:00:04 -0700 (PDT)
+From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 3/3] arm64: dts: rockchip: Add Hantro encoder node to rk356x
+Date:   Thu, 12 May 2022 22:00:03 +0200
+Message-ID: <14624530.8YKtBhKLIE@archbook>
+In-Reply-To: <CAAEAJfAnbJoTLyYoKucy8GFJTJyBVFO=Fcne1EbUVOGa+yC3iA@mail.gmail.com>
+References: <20220508202544.501981-1-frattaroli.nicolas@gmail.com> <1959188.DQhRDO7MrQ@archbook> <CAAEAJfAnbJoTLyYoKucy8GFJTJyBVFO=Fcne1EbUVOGa+yC3iA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220511190523.7d159b2e9caccbf13469e74e@linux-foundation.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 07:05:23PM -0700, Andrew Morton wrote:
-> On Wed, 11 May 2022 15:57:09 -0700 Minchan Kim <minchan@kernel.org> wrote:
+On Donnerstag, 12. Mai 2022 16:16:52 CEST Ezequiel Garcia wrote:
+> On Tue, May 10, 2022 at 12:28 PM Nicolas Frattaroli
+> <frattaroli.nicolas@gmail.com> wrote:
+> >
+> > Hi Ezequiel,
+> >
+> > On Montag, 9. Mai 2022 16:17:03 CEST Ezequiel Garcia wrote:
+> > > Hi Nicolas,
+> > >
+> > > On Sun, May 8, 2022 at 5:26 PM Nicolas Frattaroli
+> > > <frattaroli.nicolas@gmail.com> wrote:
+> > > >
+> > > > The RK3566 and RK3568 come with a dedicated Hantro instance solely for
+> > > > encoding. This patch adds a node for this to the device tree, along with
+> > > > a node for its MMU.
+> > > >
+> > > > Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+> > > > ---
+> > > >  arch/arm64/boot/dts/rockchip/rk356x.dtsi | 21 +++++++++++++++++++++
+> > > >  1 file changed, 21 insertions(+)
+> > > >
+> > > > diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> > > > index 7cdef800cb3c..2e3c9e1887e3 100644
+> > > > --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> > > > +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> > > > @@ -508,6 +508,27 @@ gpu: gpu@fde60000 {
+> > > >                 status = "disabled";
+> > > >         };
+> > > >
+> > > > +       vepu: video-codec@fdee0000 {
+> > > > +               compatible = "rockchip,rk3568-vepu";
+> > > > +               reg = <0x0 0xfdee0000 0x0 0x800>;
+> > > > +               interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
+> > > > +               interrupt-names = "vepu";
+> > >
+> > > It this block "encoder only" and if so, maybe we should remove the
+> > > "interrupt-names" [1]?
+> > >
+> > > The driver is able to handle it. See:
+> > >
+> > > https://elixir.bootlin.com/linux/latest/source/drivers/staging/media/hantro/hantro_drv.c#L962
+> > >
+> > > You might have to adjust the dt-bindings for this.
+> > >
+> > > [1] https://lore.kernel.org/linux-media/20210324151715.GA3070006@robh.at.kernel.org/
+> >
+> > What the Linux driver can handle should not matter to the device tree;
+> > device trees are independent of drivers and kernels.
+> >
 > 
-> > > 
-> > > Could we burn much CPU time pointlessly churning though the LRU?  Could
-> > > it mess up aging decisions enough to be performance-affecting in any
-> > > workload?
-> > 
-> > Yes, correct. However, we are already churning LRUs by several
-> > ways. For example, isolate and putback from LRU list for page
-> > migration from several sources(typical example is compaction)
-> > and trylock_page and sc->gfp_mask not allowing page to be
-> > reclaimed in shrink_page_list.
+> I guess my message wasn't clear, no need to lecture me on Device
+> Trees, although I appreciate
+> your friendly reminder of what a Device Tree is.
 > 
-> Well.  "we're already doing a risky thing so it's OK to do more of that
-> thing"?
+> Having said that, the binding is designed to support both decoders and encoders
+> for instance:
+> 
+>         vpu: video-codec@ff9a0000 {
+>                 compatible = "rockchip,rk3288-vpu";
+>                 reg = <0x0 0xff9a0000 0x0 0x800>;
+>                 interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
+>                              <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
+>                 interrupt-names = "vepu", "vdpu";
+>                 clocks = <&cru ACLK_VCODEC>, <&cru HCLK_VCODEC>;
+>                 clock-names = "aclk", "hclk";
+>                 iommus = <&vpu_mmu>;
+>                 power-domains = <&power RK3288_PD_VIDEO>;
+>         };
+> 
+> Hence the question is why do you splitted the encoder to its own node?
 
-I meant the aging is not rocket science.
+It has its own IOMMU and is in a different power domain than the decoder.
+I think I have mentioned this multiple times before, including in the
+cover letter.
 
+Assuming you do not believe me, feel free to check the TRM, of which I
+am sure you also have a copy: page 475 of Part 1 shows the VPU being in
+PD_VPU while the JPEG encoder is in PD_RGA. Pages 478 and 479 of Part 2,
+Section 10.5, shows that the JPEG encoder (VEPU121)'s base is not the
+same as the Hantro decoder (VDPU121)'s base, and their IOMMUs which are
+based relative to their base offset are therefore also not at the same
+address. If you think the TRM must be wrong then, consider the fact that
+I have actually run this patch set, presumably being the only person to
+do so, and found that it works, so no, the addresses and power domains
+are correct.
+
+I do not see any way in which it would make sense to put this into the
+same node as the decoder. It would not even be possible to do this in
+your bindings, as they specify a maxItems for power-domains and iommus
+of 1. Even if I modified them the driver wouldn't know which PD and
+IOMMU belongs to decoder and encoder.
+
+I think if we put this encoder in the same node as the decoder, we
+might as well take this to its natural conclusion and put the entire
+device tree into a single very large node. It's not the same hardware,
+it cannot be modelled as being the same hardware, just because the
+bindings lets people model some separate hardware as the same hardware
+doesn't mean this applies to this hardware.
+
+Long story short, why did I split the encoder to its own node? The
+answer is that I didn't. I simply refused to combine it into a node
+that it has nothing to do with.
+ 
+> If we have good reasons to have separated Device Tree nodes,
+> then having interrupt-names = "vepu" for its only interrupt line
+> doesn't make sense.
+
+How does it not make sense? The bindings allow for a vdpu only
+interrupt-names, which in my understanding makes the same amount
+of sense.
+
+Regards,
+Nicolas Frattaroli
 
 > 
-> > > 
-> > > Something else?
-> > 
-> > One thing I am worry about was the granularity of the churning.
-> > Example above was page granuarity churning so might be execuse
-> > but this one is address space's churning, especically for file LRU
-> > (i_mmap_rwsem) which might cause too many rotating and live-lock
-> > in the end(keey rotating in small LRU with heavy memory pressure).
-> > 
-> > If it could be a problem, maybe we use sc->priority to stop
-> > the skipping on a certain level of memory pressure.
-> > 
-> > Any thought? Do we really need it?
+> > What does matter though is to be consistent in the bindings.
+> > interrupt-names is a required property even if there's only a vdpu
+> > interrupt. I modelled my vepu-only binding after this case.
+> >
 > 
-> Are we able to think of a test which might demonstrate any worst case? 
-> Whip that up and see what the numbers say?
-
-Yeah, let me create a worst test case to see how it goes.
-
-A thread keep reading a file-backed vma with 2xRAM file but other threads
-keep changing other vmas mapped at the same file so heavy i_mmap_rwsem
-contention in aging path.
-
+> The current binding models the idea of decoder and encoder
+> being the same device. This has never been really really accurate,
+> as the encoder and decoders have always been more or less independent.
 > 
-> It's a bit of a drag, but if we don't do it, our users surely will ;)
+> The reason for having them on a single device are mostly historical,
+> some old devices shared some resource. I don't think this is the case anymore,
+> but the binding was still modeled to support that.
+> 
+> Hopefully this makes sense!
+> Thanks,
+> Ezequiel
+> 
+> 
+> > If robh thinks there is no value to having the interrupt show up
+> > as anything other than "default" in /proc/interrupts, then I respectfully
+> > disagree with that opinion and point out that this should have been brought
+> > up when the vdpu-only case in the bindings was made to require
+> > interrupt-names also.
+> >
+> > Changing the binding now that there theoretically could be drivers out
+> > in the wild (though I doubt it) that do require interrupt-names, because
+> > the binding told them that this is okay to do, seems unwise to me.
+> >
+> > Regards,
+> > Nicolas Frattaroli
+> >
+> > >
+> > > Thanks,
+> > > Ezequiel
+> > >
+> > > > +               clocks = <&cru ACLK_JENC>, <&cru HCLK_JENC>;
+> > > > +               clock-names = "aclk", "hclk";
+> > > > +               iommus = <&vepu_mmu>;
+> > > > +               power-domains = <&power RK3568_PD_RGA>;
+> > > > +       };
+> > > > +
+> > > > +       vepu_mmu: iommu@fdee0800 {
+> > > > +               compatible = "rockchip,rk3568-iommu";
+> > > > +               reg = <0x0 0xfdee0800 0x0 0x40>;
+> > > > +               interrupts = <GIC_SPI 63 IRQ_TYPE_LEVEL_HIGH>;
+> > > > +               clocks = <&cru ACLK_JENC>, <&cru HCLK_JENC>;
+> > > > +               clock-names = "aclk", "iface";
+> > > > +               power-domains = <&power RK3568_PD_RGA>;
+> > > > +               #iommu-cells = <0>;
+> > > > +       };
+> > > > +
+> > > >         sdmmc2: mmc@fe000000 {
+> > > >                 compatible = "rockchip,rk3568-dw-mshc", "rockchip,rk3288-dw-mshc";
+> > > >                 reg = <0x0 0xfe000000 0x0 0x4000>;
+> > > > --
+> > > > 2.36.0
+> > > >
+> > > >
+> > > > _______________________________________________
+> > > > Linux-rockchip mailing list
+> > > > Linux-rockchip@lists.infradead.org
+> > > > http://lists.infradead.org/mailman/listinfo/linux-rockchip
+> > >
+> >
+> >
+> >
+> >
+> 
+
+
+
+

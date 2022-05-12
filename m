@@ -2,154 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B66525584
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F5552558C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357953AbiELTOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 15:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
+        id S1355459AbiELTPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 15:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiELTOR (ORCPT
+        with ESMTP id S1357982AbiELTOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 15:14:17 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE4C277351;
-        Thu, 12 May 2022 12:13:57 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id m23so7751058ljc.0;
-        Thu, 12 May 2022 12:13:57 -0700 (PDT)
+        Thu, 12 May 2022 15:14:47 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E12F277354
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 12:14:45 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id s11so3607754edy.6
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 12:14:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=eqvqGq9Z82oEF1qEGh1yx9lmGGvEQADLPFEeVY8PIpY=;
-        b=Oj3EvGQ34k0DXRehSN9t1u1RTrvzp3dcB9qCIlXz1cW2niVqP5a63GgQF5/aNeqM5V
-         xoT6L/8vaOo4Lz3a1SsVe2anShZJQv9Z0SjEicTWN4EcRF2TLNpHGMEk7+2BP+gItAUo
-         Ub4tYlAWxCxhk0RHcpw1PJO15S4gAWkxDb080GUWzMoXIph/+ZoOCfJpTu7hRrF9TKvz
-         Zrn6dhFtELmFnOmpZ7mRwXCmrQQdg1TbCBuARRaqzjWXLxh91yeSuGp+D6TNOwXXtKuy
-         PeJaqC21aiOJN+Nw9W8MBuzjnkRSZZpqarH4MEvHfQPqBAdTMQysjPCeJptDMGvlW+d9
-         27ug==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eQl455nL/+t4GF7KFide8lwaMGt8O2+EUU3s2IHb/vo=;
+        b=LYDyEMm4xsLfBWSK5S607nWBmcd7sEliCz22UkCN2XL8UFcgz/HIXuwd8y8dSnGXP7
+         jcCm0WBYyR2vYJx8pKQSjQdMYeC/WnGRWEVbmxT/CNLqdP4baBWcOrTDTkhw591nsUQi
+         pRxMzvl40mP8CEsxjCdJzBNfA0tk3aAhWMiCDyKBEu+3iH9gCD9zpu6c5IewsTgRbkXh
+         Fl6Gf1eTnGO7saVpvyBPlrQ8NgVEJLcZYQtk5X1vMmiYOFFZTO19gE+JGb2BAS5UojKl
+         ilpYuI1CTzA3i+aP75YGXmNBoAy1huJh91vUsERjfH0sEgYHdMOZy96RSTPrLDVgJ8Hv
+         dXxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=eqvqGq9Z82oEF1qEGh1yx9lmGGvEQADLPFEeVY8PIpY=;
-        b=FGUlQaGuw7E8khxKMLW+0ZgAMYseptgyZK31bMkKngrZ5/j0jgL6WMx5yBvu0CZvmT
-         2vinrPifKMdfAJPc0bDpPgqhO8xvCHacB7zs1fo2yvMgrjNc6DNZ0M0arEu0a3Dczf1B
-         JdtUBo7N/zpRs4n/pey8PXGcI9FNY1pmmvF6h8L4MiZBgTYgF6tW8AOakt4h4vUQDHnz
-         qYNzpnytdJt5udNVOcCPq2tMMSDwFmb/xDq3G65ba6iecgOlvgddbHH96WORDw975gy6
-         ZWOsKpPHP/iwh771+jI288u8xttwARzhYOlZ/pUgQ68+OBN0XkYE4TnzUMyn9kw7NQTH
-         4FjA==
-X-Gm-Message-State: AOAM531prM26cwo/LFsKLnKm+a6zwSqyNwCQjFDYTzkR4NKNAjP2rLz1
-        ADVBxFvS1rT5f9GvuhwJxZLOUTbu+HPvOQ==
-X-Google-Smtp-Source: ABdhPJzbF9eSPF1hlns9LPLPwVQf7Gmlrayz0fVOYafs+7dUkKjowsD5O/7A4Gi3HIEVF0B5CkiAFQ==
-X-Received: by 2002:a2e:9188:0:b0:24f:1a0d:6bbd with SMTP id f8-20020a2e9188000000b0024f1a0d6bbdmr878261ljg.226.1652382836208;
-        Thu, 12 May 2022 12:13:56 -0700 (PDT)
-Received: from nergzd-desktop.localdomain ([194.39.226.133])
-        by smtp.gmail.com with ESMTPSA id y26-20020ac255ba000000b0047255d210f4sm62146lfg.35.2022.05.12.12.13.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 12:13:55 -0700 (PDT)
-From:   Markuss Broks <markuss.broks@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Markuss Broks <markuss.broks@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Song Qiang <songqiang1304521@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH v4 5/5] arm64: dts: qcom: msm8998-xperia: Introduce ToF sensor support
-Date:   Thu, 12 May 2022 22:13:33 +0300
-Message-Id: <20220512191334.61804-6-markuss.broks@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220512191334.61804-1-markuss.broks@gmail.com>
-References: <20220512191334.61804-1-markuss.broks@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eQl455nL/+t4GF7KFide8lwaMGt8O2+EUU3s2IHb/vo=;
+        b=z1f2jz3BFyJx62RQV/5KFd5BRXmY8qnlfrFNcNz2/VxlogyxKgkOfexBwgjVbO9FNj
+         ayl06GzpRVo+xuzn4ZJQbv6SeHRKb/mBCix/8SkE4UgBtw9bZ6xs2u/IDpg4ort33YCu
+         qENMWpTsNgWPAB4f+HTPTZLEqmmXpU57gljJ2gWpqRN0m4JBV9G2w2IBx0VSlSm8sL7U
+         V/HX+N0ObcZ2olSE9yAjoe8oAxAJHbwEkCHus65Ar2vgkID96ed6sokJGjxe6OAgtFWm
+         9yQQmxwX7lLi23uwN2rApWN9BujntXbegOEiKdyZipbh1sQTY8rZsLG3n729NEYlfvQV
+         IrVA==
+X-Gm-Message-State: AOAM5338o0DHirxPmOf61hOb3U/i1ZOHoyzaBs0mJwA4JYDVfO6kS3AE
+        opZILQLRviZWYRBw73qqBP2WoHh/46FqT3ZP70RwDw==
+X-Google-Smtp-Source: ABdhPJwBeC1Yop5olsPnHIZN8v1YqjWkMp3/7KdfX/JS1nfyh1kinC/sR/CGl7CW1dkBbcX6oqPyxUd0orVU6ZZ7wEE=
+X-Received: by 2002:a05:6402:90d:b0:428:bda9:3e6b with SMTP id
+ g13-20020a056402090d00b00428bda93e6bmr14000351edz.132.1652382883395; Thu, 12
+ May 2022 12:14:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220430045639.839186-1-davidgow@google.com> <CAGS_qxrVnDnUD=0f8vX5C2SWG2mxxXdAWU9A+P7h-K2Y1nm88A@mail.gmail.com>
+ <CABVgOS=W8ub72D2LWwDsbfNBO6mFpceZWm+r+8Ct53pUcFJ_4g@mail.gmail.com> <CAGS_qxpOFQ-ZpV2Jw1VEfggxKDqA57zRTY2LWZiK=iNMMo5QLA@mail.gmail.com>
+In-Reply-To: <CAGS_qxpOFQ-ZpV2Jw1VEfggxKDqA57zRTY2LWZiK=iNMMo5QLA@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Thu, 12 May 2022 15:14:32 -0400
+Message-ID: <CAFd5g46bP=ugO4O7TTcQ_szM=3L03a-k4NHgVwkAqxgQqVd5JA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: Add list of all valid test configs on UML
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds device tree support for the VL53L0X ToF sensor
-found on all Yoshino devices.
+On Tue, May 3, 2022 at 2:49 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> On Tue, May 3, 2022 at 1:37 AM David Gow <davidgow@google.com> wrote:
+> >
+> > On Tue, May 3, 2022 at 6:37 AM Daniel Latypov <dlatypov@google.com> wrote:
+> > >
+> > > On Fri, Apr 29, 2022 at 11:56 PM David Gow <davidgow@google.com> wrote:
+> > > >
+> > > > It's often desirable (particularly in test automation) to run as many
+> > > > tests as possible. This config enables all the tests which work as
+> > > > builtins under UML at present, increasing the total tests run from 156
+> > > > to 342 (not counting 36 'skipped' tests).
+> > >
+> > > Just to clear up potential confusion for others, I'll note that these
+> > > aren't counting test cases.
+> > > This is from kunit.py's output, so it counts each parameter from
+> > > parameterized tests as "subtests."
+> > >
+> > > Copying my command from
+> > > https://kunit-review.googlesource.com/c/linux/+/5249, one can use this
+> > > to count the # of test cases.
+> > > $ ./tools/testing/kunit/kunit.py run --kunitconfig=...
+> > > --raw_output=kunit --kernel_args=kunit.action=list | egrep
+> > > '^[a-z0-9_-]+\.[a-z0-9_-]+'
+> > >
+> > > I see this enabling a total of 260 test _cases_ (including skipped).
+> > >
+> > > The default (basically just CONFIG_KUNIT_ALL_TESTS=y) gives 192
+> > > (including skipped).
+> > >
+> >
+> > Yup, that's definitely the case. I guess I still was thinking in KTAP
+> > terms, where all subtests are effectively tests.
+> >
+> > That being said, I do think the total (sub)test (including parameters,
+> > etc) number is the one that's more visible: not only does kunit_tool
+> > print it, but it's also what we've been using as our go to "number of
+> > tests" generally.
+>
+> Yes, I agree it's the number to use here.
+> If there's a v2 of this patch, we could also reword the commit message
+> a bit to make it more explicit.
+> If not, this seems fine as-is. The only issue I saw was a minor typo.
 
-Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
----
- .../dts/qcom/msm8998-sony-xperia-yoshino.dtsi | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
+Agreed. Change is fine, but if you do a v2, please fix the wording.
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi b/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi
-index 47488a1aecae..4bd1039d983d 100644
---- a/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi
-@@ -245,6 +245,24 @@ &blsp2_uart1 {
- 	status = "okay";
- };
- 
-+&blsp2_i2c2 {
-+	status = "okay";
-+
-+	proximity@29 {
-+		compatible = "st,vl53l0x";
-+		reg = <0x29>;
-+
-+		interrupt-parent = <&tlmm>;
-+		interrupts = <22 IRQ_TYPE_EDGE_FALLING>;
-+
-+		reset-gpios = <&tlmm 27 GPIO_ACTIVE_LOW>;
-+		vdd-supply = <&cam_vio_vreg>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&tof_int &tof_reset>;
-+	};
-+};
-+
- &ibb {
- 	regulator-min-microamp = <800000>;
- 	regulator-max-microamp = <800000>;
-@@ -606,6 +624,14 @@ cam0_vdig_default: cam0-vdig-default {
- 		drive-strength = <2>;
- 	};
- 
-+	tof_int: tof-int {
-+		pins = "gpio22";
-+		function = "gpio";
-+		bias-pull-up;
-+		drive-strength = <2>;
-+		input-enable;
-+	};
-+
- 	cam1_vdig_default: cam1-vdig-default {
- 		pins = "gpio25";
- 		function = "gpio";
-@@ -613,6 +639,13 @@ cam1_vdig_default: cam1-vdig-default {
- 		drive-strength = <2>;
- 	};
- 
-+	tof_reset: tof-reset {
-+		pins = "gpio27";
-+		function = "gpio";
-+		bias-disable;
-+		drive-strength = <2>;
-+	};
-+
- 	hall_sensor0_default: acc-cover-open {
- 		pins = "gpio124";
- 		function = "gpio";
--- 
-2.36.1
-
+> Re goto for "number of tests."
+> Reminder, we've also been using this to count "# tests" :P
+> $ git grep 'KUNIT_CASE' | grep -Ev
+> '^Documentation/|get_metrics.sh|include/kunit/test.h' | wc -l
+> This avoids us having to figure out how to build all the tests,
+> sidesteps the problem that subtests can be dynamically generated via
+> parameterized testing, etc.
+>
+> >
+> > > >
+> > > > They can be run with:
+> > > > ./tools/testing/kunit/kunit.py run
+> > > > --kunitconfig=./tools/testing/kunit/configs/all_tests_uml.config
+> > > >
+> > > > This acts as an in-between point between the KUNIT_ALL_TESTS config
+> > > > (which enables only tests whose dependencies are already enabled), and
+> > > > the kunit_tool --alltests option, which tries to use allyesconfig,
+> > > > taking a very long time to build and breaking very often.
+> > > >
+> > > > Signed-off-by: David Gow <davidgow@google.com>
+> > >
+> > > Tested-by: Daniel Latypov <dlatypov@google.com>
+> > >
+> > > Looks good to me, some small comments below.
+> > >
+> > > > ---
+> > > >  .../kunit/configs/all_tests_uml.config        | 37 +++++++++++++++++++
+> > > >  1 file changed, 37 insertions(+)
+> > > >  create mode 100644 tools/testing/kunit/configs/all_tests_uml.config
+> > > >
+> > > > diff --git a/tools/testing/kunit/configs/all_tests_uml.config b/tools/testing/kunit/configs/all_tests_uml.config
+> > > > new file mode 100644
+> > > > index 000000000000..bdee36bef4a3
+> > > > --- /dev/null
+> > > > +++ b/tools/testing/kunit/configs/all_tests_uml.config
+> > > > @@ -0,0 +1,37 @@
+> > > > +# This config enables as many tests as possible under UML.
+> > > > +# It is intended for use in continuous integration systems and similar for
+> > > > +# automated testing of as much as possible.
+> > > > +# The config is manually maintained, though it uses KUNIT_ALL_TESTS=y to enable
+> > > > +# any tests whose dependencies are already satisfied. Please feel free to add
+> > > > +# more options if they any new tests.
+> > >
+> > > missing: "enable"?
+> > > "if they enable any new tests"
+> > >
+> > Whoops, I was switching from "there are any" to "if they enable any"
+> > and clearly got distracted halfway through. :-)
+> >
+> > > Hmm, should we state a preference for how heavy (time or
+> > > resource-wise) tests should be?
+> > > Because the comment says it's meant for automation, but I can imagine
+> > > humans wanting to run it.
+> > > (I'm completely fine with us not stating one, just throwing the idea
+> > > out there for discussion)
+> >
+> > I think we're probably okay with being a little bit lenient on test
+> > times. The time_test_cases.time64_to_tm_test_date_range and similar
+> > tests take quite a long time in some situations already (older hw,
+> > running under some emulators), but is generally pretty close to
+> > instant under most UML setups. Particularly given that not building
+> > with allyesconfig already saves us many, many minutes of time.
+>
+> Agreed on all points.
+> I personally think it's reasonable to leave things as-is.
+>
+> We don't have any problematic tests that work on UML yet.

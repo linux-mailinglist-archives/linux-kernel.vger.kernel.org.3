@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF305258AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 01:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3207C5258AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 01:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359623AbiELXpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 19:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45944 "EHLO
+        id S1359637AbiELXpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 19:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352431AbiELXpA (ORCPT
+        with ESMTP id S1352431AbiELXpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 19:45:00 -0400
+        Thu, 12 May 2022 19:45:07 -0400
 Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B17289BD0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 16:44:58 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id l18so13114602ejc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 16:44:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF36B289BE4
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 16:45:06 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id i27so13115415ejd.9
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 16:45:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=6tUe0F63ZYrn0Y1fh/u+GXJuGNWxIjIBVNzjlEOaooc=;
-        b=UcB1On1JxLd4Xr6oYtsXWZupWxYqMCZH1DBzRfH5Xtc4P7FFr1vR6KaXACJwSe1f/g
-         KvqeAf29DU3OTlhjJ5j9Hh/gjB7I2d4tZVR10BKtMkVIaQP0pXjgWy/sN2EtFKps8mL6
-         Y+T5mwgLwBToRztodmGegISZ3vYDIqtuHQ3is=
+        bh=V8uYgTXib/6BjhyAwPvyH9p+W39RRdBBH4HTP3NeUrE=;
+        b=NkK5kPK5fIrUVGWgs+G9GyiaTiTnt5AJgzEKT+dmRktub3KA9K295ltiHCVtsmJ/t/
+         x4Z76G4eFJ4PCnRDRHT4mBC/tPRg7JhJc5QIiBfjq8rb6o3pR4E8xPOCHPfXsVBXObaP
+         IJjabM2xCsvBa3UCWB37Mr/RUrFPgxrNSwGFg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6tUe0F63ZYrn0Y1fh/u+GXJuGNWxIjIBVNzjlEOaooc=;
-        b=HEyngs2V46HWimn6KLZCHt3w8LM/8Ux3PMfn3RyFNz9xGKYw18u13Xl6mONrR9SNCR
-         JpDsQCROheBE5B3ilBpUt/kpwbZ3H8tdRWABXk5p9P/UIXJFtGrh64wLgFmj9jCodiM5
-         TQ4QuEH30mQJL655nSLbVFCy4c8FlUmhIwnCGSC5dM6YqHo0EVpdRy4wDxohdyLy98M8
-         pI/dBxvuobooKkfsY4+Wclv+sY8P+sGx4m2IPL4urACLNzwt+vvymZofafp8O4ryiYEQ
-         zmO3xji0cANn3IRcGLgZ8E/MpBADPslOFpYr9VZMm1jkEeqecndTS0pfp6wkFTTETcHs
-         lGjA==
-X-Gm-Message-State: AOAM533bq1W96cYxlBr2czSqx8EP62nm8Y2Em8hP0vJkn34G7U0v0wu9
-        DunT0LfL60aob2uf7BsGnPWjfyo99T5BzZKuZNg=
-X-Google-Smtp-Source: ABdhPJy+3yKC03mIeXbMvjejyl93S1XEpaLo11PdlVXxp95Qo/nxBDG54wn02dsRZMeqK51UHOrPQg==
-X-Received: by 2002:a17:907:a042:b0:6f3:b4fc:be3d with SMTP id gz2-20020a170907a04200b006f3b4fcbe3dmr2005530ejc.318.1652399097104;
-        Thu, 12 May 2022 16:44:57 -0700 (PDT)
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
-        by smtp.gmail.com with ESMTPSA id hz15-20020a1709072cef00b006f3ef214e11sm208615ejc.119.2022.05.12.16.44.56
+        bh=V8uYgTXib/6BjhyAwPvyH9p+W39RRdBBH4HTP3NeUrE=;
+        b=kYO4pInaXw4tA38Xp0E7cZGflxVtzjBj/JbApGup3BzkFeantgdocEWkI75R5go1O9
+         8ApVOQlpeRgz6Or+37v1Oa0ZgErBQ/2t/MFAzyUvngzNhnd5KplSaq4G2dk9NF+gR0i4
+         QaJQlsoQrDyOGZlQz/+lc9L3fBgkJ/pr455EAUT5wa+/nW1/aF/pKMItm37PX9ynbjE+
+         Ep0p2Y6XrxeU92MKyCpPktczEUmF0YEXZXZqJSS9sezsTLi2jkoAqNMn/ml25FkQRpJ4
+         tgnqWa7JL8PjgFElFeqmt4Ysxw16T6cax3HjqJ/NcCi8IbqFWzLfdvHn4gfoUStIu42L
+         3nwg==
+X-Gm-Message-State: AOAM531dtDasXMPvtoeFf1amawJA5HQqS5fKmnwxyZdfsGfqlKjLmVp3
+        IcqfGWwmpGIxtPFtlg1nTpV8XMq8o5GZo+5ip4c=
+X-Google-Smtp-Source: ABdhPJx4m5qKom3xRVGrJaAM7L04az7kf0XKEtFbKbXQYbO3ko6Wy6SG2O93YDifQ8DmhtW3u3odyQ==
+X-Received: by 2002:a17:907:72c5:b0:6f4:678:8742 with SMTP id du5-20020a17090772c500b006f406788742mr1973459ejc.607.1652399105098;
+        Thu, 12 May 2022 16:45:05 -0700 (PDT)
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com. [209.85.128.50])
+        by smtp.gmail.com with ESMTPSA id z15-20020a17090674cf00b006f3ef214dd1sm219855ejl.55.2022.05.12.16.45.04
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 16:44:56 -0700 (PDT)
-Received: by mail-wm1-f48.google.com with SMTP id o12-20020a1c4d0c000000b00393fbe2973dso6032468wmh.2
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 16:44:56 -0700 (PDT)
-X-Received: by 2002:a7b:c4c8:0:b0:394:26c5:b79e with SMTP id
- g8-20020a7bc4c8000000b0039426c5b79emr1988820wmk.15.1652399096143; Thu, 12 May
- 2022 16:44:56 -0700 (PDT)
+        Thu, 12 May 2022 16:45:04 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id a14-20020a7bc1ce000000b00393fb52a386so6034323wmj.1
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 16:45:04 -0700 (PDT)
+X-Received: by 2002:a05:600c:3d8c:b0:394:6097:9994 with SMTP id
+ bi12-20020a05600c3d8c00b0039460979994mr12323884wmb.29.1652399103788; Thu, 12
+ May 2022 16:45:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220512013921.164637-1-swboyd@chromium.org> <20220512013921.164637-3-swboyd@chromium.org>
-In-Reply-To: <20220512013921.164637-3-swboyd@chromium.org>
+References: <20220512013921.164637-1-swboyd@chromium.org> <20220512013921.164637-4-swboyd@chromium.org>
+In-Reply-To: <20220512013921.164637-4-swboyd@chromium.org>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 12 May 2022 16:44:44 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XfmU1GhXZPvUMoh9dqs8iei6s+0gu6Mve-aQ33A+7m3g@mail.gmail.com>
-Message-ID: <CAD=FV=XfmU1GhXZPvUMoh9dqs8iei6s+0gu6Mve-aQ33A+7m3g@mail.gmail.com>
-Subject: Re: [PATCH v5 2/3] dt-bindings: cros-ec: Reorganize property availability
+Date:   Thu, 12 May 2022 16:44:51 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=W4k8-Ab+diBic5rbannRr1ZKB=cdHNEOC3Emr0nyzQjQ@mail.gmail.com>
+Message-ID: <CAD=FV=W4k8-Ab+diBic5rbannRr1ZKB=cdHNEOC3Emr0nyzQjQ@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] dt-bindings: cros-ec: Add ChromeOS fingerprint binding
 To:     Stephen Boyd <swboyd@chromium.org>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
@@ -89,82 +89,61 @@ Hi,
 
 On Wed, May 11, 2022 at 6:39 PM Stephen Boyd <swboyd@chromium.org> wrote:
 >
-> Various properties in the cros-ec binding only apply to different
-> compatible strings. For example, the interrupts and reg property are
-> required for all cros-ec devices except for the rpmsg version. Add some
-> conditions to update the availability of properties so that they can't
-> be used with compatibles that don't support them.
+> @@ -176,6 +189,37 @@ allOf:
+>          - reg
+>          - interrupts
 >
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: <devicetree@vger.kernel.org>
-> Cc: <chrome-platform@lists.linux.dev>
-> Cc: Guenter Roeck <groeck@chromium.org>
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Cc: Craig Hesling <hesling@chromium.org>
-> Cc: Tom Hughes <tomhughes@chromium.org>
-> Cc: Alexandru M Stan <amstan@chromium.org>
-> Cc: Tzung-Bi Shih <tzungbi@kernel.org>
-> Cc: Matthias Kaehlcke <mka@chromium.org>
-> Cc: Benson Leung <bleung@chromium.org>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
->  .../bindings/mfd/google,cros-ec.yaml          | 39 +++++++++++++------
->  1 file changed, 27 insertions(+), 12 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml b/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
-> index 99eda9ab0651..409ecef967ce 100644
-> --- a/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
-> @@ -148,18 +148,33 @@ patternProperties:
->  required:
->    - compatible
->
-> -if:
-> -  properties:
-> -    compatible:
-> -      contains:
-> -        enum:
-> -          - google,cros-ec-i2c
-> -          - google,cros-ec-rpmsg
-> -then:
-> -  properties:
-> -    google,cros-ec-spi-pre-delay: false
-> -    google,cros-ec-spi-msg-delay: false
-> -    spi-max-frequency: false
-> +allOf:
 > +  - if:
 > +      properties:
 > +        compatible:
-> +          not:
-> +            contains:
-> +              const: google,cros-ec-spi
+> +          contains:
+> +            const: google,cros-ec-fp
 > +    then:
 > +      properties:
-> +        controller-data: false
-> +        google,cros-ec-spi-pre-delay: false
-> +        google,cros-ec-spi-msg-delay: false
-> +        spi-max-frequency: false
+> +        '#address-cells': false
+> +        '#size-cells': false
+> +        typec: false
+> +        ec-pwm: false
+> +        keyboard-controller: false
+> +        proximity: false
+> +        codecs: false
+> +        cbas: false
 > +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          not:
-> +            contains:
-> +              const: google,cros-ec-rpmsg
-> +    then:
-> +      properties:
-> +        mediatek,rpmsg-name: false
+> +      patternProperties:
+> +        "^i2c-tunnel[0-9]*$": false
+> +        "^regulator@[0-9]+$": false
+> +        "^extcon[0-9]*$": false
 > +
 > +      required:
-> +        - reg
-> +        - interrupts
+> +        - reset-gpios
+> +        - boot0-gpios
+> +        - vdd-supply
+> +    else:
+> +      properties:
+> +        reset-gpios: false
+> +        boot0-gpios: false
+> +        vdd-supply: false
 
-Is it worth having an "else" clause here? to explicitly make
-"mediatek,rpmsg-name" required for mediatek?
+Wow, that's a huge pain to have to specify it this way, but I don't
+know of any other way to make things happy and still have the
+"google,cros-ec-spi" fallback that we decided on having in previous
+versions.
 
-In any case, this seems right from my (albeit) limited yaml knowledge
-and seems like an improvement.
+
+>  additionalProperties: false
+>
+>  examples:
+> @@ -231,4 +275,22 @@ examples:
+>              compatible = "google,cros-ec-rpmsg";
+>          };
+>      };
+> +
+> +  - |
+
+nit: all the other examples have a little "# For <blah>" comment
+before them. It's not really necessary, but do we want one here to
+match?
+
+In any case, it seems OK to me.
 
 Reviewed-by: Douglas Anderson <dianders@chromium.org>

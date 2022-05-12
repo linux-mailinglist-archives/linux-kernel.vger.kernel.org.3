@@ -2,132 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FBF15257AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 00:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A77E5257AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 00:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359104AbiELWTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 18:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
+        id S1359117AbiELWUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 18:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351294AbiELWTr (ORCPT
+        with ESMTP id S1359098AbiELWUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 18:19:47 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB572802F6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 15:19:45 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id ba17so7895616edb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 15:19:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=McSS2ps7lAda0B7Hjqm4GcEs6ir76cLprhYeL3EvtQM=;
-        b=FpKUMneT2lkBkxD8QufbxsbC3iS2M4kA4XRmF3F+SntKp7qqDK9yyAtfeOxgnr9a3j
-         wwP3HiFOGA9hJIaks57Co+DyFPOq1f1kjR1dq4QGVQ0NSV6f5vppoZjBxU3toP3xQccx
-         Z0uZZ9G3jvEjNFvB4TkXgwrYoNmR0Hgz+ts1M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=McSS2ps7lAda0B7Hjqm4GcEs6ir76cLprhYeL3EvtQM=;
-        b=AUiHTDLEMeDtzAmMqzZ/gr2NxMOdoyDJcY9q15k9gjx/rOI6oMp3KEOliTNfQ+IyUf
-         jqIVl49x7E+aPLwcNTALuGs2pFc5TWxvNIz7yaATjahWo+Sjz38Cw7vNh7wpDv6GHaV6
-         vXdwZQ3ViHMjy6ZFzDjED63S9rQAm/G/UEtd3haTuF5wCoNkc6cP6ZbZcka25X20g8aq
-         djoOKPZ1o6qFKiG5jZS4zqqMhiJezXBQ/scywo2xcxptScsKDThc1o6M24mJjH4Xgarj
-         2ZEN4SIOim0kOpyQX+FdOGLXkAsQx4Qg5m6SMrcsEfV9H3t6G6U3Ku8APa9EQF4OqoI8
-         fzmA==
-X-Gm-Message-State: AOAM533Zftj8XSeXtA7Jo8oV8KRGotVmDLEl2AU+rWcVDng6+7m6LKCM
-        dGZkX0JMScG+zK1bljzH5KuKqs1hANf6IM03
-X-Google-Smtp-Source: ABdhPJzpPtRNzGKF/DHv1wa+PJldCmzuIzHqdZaYIh0mCf7s0djJehFui/+E8yn8UiYbsM5tH0T/9w==
-X-Received: by 2002:a05:6402:3485:b0:427:cde4:2097 with SMTP id v5-20020a056402348500b00427cde42097mr36348855edc.264.1652393983875;
-        Thu, 12 May 2022 15:19:43 -0700 (PDT)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
-        by smtp.gmail.com with ESMTPSA id gx24-20020a1709068a5800b006f3ef214dc2sm176238ejc.40.2022.05.12.15.19.42
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 15:19:43 -0700 (PDT)
-Received: by mail-wr1-f43.google.com with SMTP id v12so9049278wrv.10
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 15:19:42 -0700 (PDT)
-X-Received: by 2002:a5d:6d09:0:b0:20c:53a9:cc30 with SMTP id
- e9-20020a5d6d09000000b0020c53a9cc30mr1382071wrq.513.1652393982520; Thu, 12
- May 2022 15:19:42 -0700 (PDT)
+        Thu, 12 May 2022 18:20:08 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C939A2802F8
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 15:20:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652394007; x=1683930007;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ndBCwqeq7YGl3P4/bA2nucn4xP9EenQsPVsPJbYSW84=;
+  b=j10AORGs1o7mI95rGHbouQDk/Oo21IC85QMoLUxCzqG6fjgox7Bv1jW+
+   Wj+nOHfpXnuhlrpWMzq6DjfCMvmh4D4wRl2XajeWgFvyuLsrhVrrni0TO
+   230kXems07iL+SwbKLz6o/hSA4E87Cqb1QmziU15/g97tsE4qUd7Hg91n
+   3LCZCxjzTn5SDuyNZPNbyE9KvdJO1oVhFfREPiyRSRisAAajBTsQnR3gc
+   8fizG5AsGoSb5NR9sm8ZIrWKdUrkgEjj+G46/NpXZdrLI2EoCqgMTTkXI
+   jYz817NcJ42jbXlopqLdW4cnWJKFFP3KJogySAyRTMQ00DyYeUTcuJQPp
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="257694992"
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="257694992"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 15:20:07 -0700
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="594904457"
+Received: from skothapa-mobl.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.209.67.107])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 15:20:06 -0700
+From:   Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/5] Add TDX Guest Attestation support
+Date:   Thu, 12 May 2022 15:19:47 -0700
+Message-Id: <20220512221952.3647598-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220510154406.v5.1.Id769ddc5dbf570ccb511db96da59f97d08f75a9c@changeid>
-In-Reply-To: <20220510154406.v5.1.Id769ddc5dbf570ccb511db96da59f97d08f75a9c@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 12 May 2022 15:19:30 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Vkiqxv5QRiEqCjZVSNUH=K1N+JuYEsXu=XtFNxRtvttw@mail.gmail.com>
-Message-ID: <CAD=FV=Vkiqxv5QRiEqCjZVSNUH=K1N+JuYEsXu=XtFNxRtvttw@mail.gmail.com>
-Subject: Re: [PATCH v5 1/5] arm64: dts: qcom: sc7180: Add wormdingler dts files
-To:     "Joseph S. Barrera III" <joebar@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi All,
 
-On Tue, May 10, 2022 at 3:46 PM Joseph S. Barrera III
-<joebar@chromium.org> wrote:
->
-> Wormdingler is a trogdor-based board, shipping to customers as the
-> Lenovo IdeaPad Chromebook Duet 3. These dts files are copies from
-> the downstream Chrome OS 5.4 kernel, but with the camera
-> (sc7180-trogdor-mipi-camera.dtsi) #include removed.
->
-> Signed-off-by: Joseph S. Barrera III <joebar@chromium.org>
->
-> ---
->
-> Changes in v5:
-> - Replaced _ in node name with -
-> - Ordered nodes by name
+Intel's Trust Domain Extensions (TDX) protect guest VMs from malicious
+hosts and some physical attacks. VM guest with TDX support is called
+as TD Guest.
 
-So it's a bit of a judgement call, but generally the rule is that if
-you didn't make very big changes from one version of a patch to the
-next that you should keep "Reviewed-by" tags that you've already
-received. In this case the changes you made from v4 to v5 were very
-small and also very non-controversial (it's hard to believe I would
-object to these changes). Thus, it would have been better to keep my
-Reviewed-by tag. Everyone understands that it's a judgement call so as
-long as it's within reason people won't be too upset at you for making
-your best guess. If you're unsure, you can always add a note "after
-the cut" (AKA "Commit-notes" in patman speak) explaining why you did
-or didn't choose to keep someone's tags.
+In TD Guest, the attestation process is used to verify the 
+trustworthiness of TD guest to the 3rd party servers. Such attestation
+process is required by 3rd party servers before sending sensitive
+information to TD guests. One usage example is to get encryption keys
+from the key server for mounting the encrypted rootfs or secondary drive.
+    
+Following patches add the attestation support to TDX guest which
+includes attestation user interface driver and related hypercall support.
 
-That being said, offline Stephen pointed out a problem with all of
-your v5 patches. Specifically, in the meantime while you were spinning
-your patches, Stephen's patch series landed in the upstream tree.
-Namely:
+Any distribution enabling TDX is also expected to need attestation. So
+enable it by default with TDX guest support. The compiled size is
+quite small (~500 bytes).
 
-19794489fa24 arm64: dts: qcom: Only include sc7180.dtsi in sc7180-trogdor.dtsi
-d277cab7afc7 arm64: dts: qcom: sc7180-trogdor: Simplify spi0/spi6 labeling
-51d30402be75 arm64: dts: qcom: sc7180-trogdor: Simplify trackpad enabling
+Changes since v5:
+ * Added support for parallel GetQuote requests.
+ * Add noalias variants of set_memory_*crypted() functions to
+   changes page attribute without touching direct map.
+ * Made set_memory_*crypted() functions vmalloc address compatible.
+ * Use vmap()/set_memory_*crypted() functions to share/unshare
+   memory without touching the direct map.
+ * Add support to let driver handle the memory cleanup for the
+   early termination of user requests.
+ * Removed unused headers in attest.c
+ * Fixed commit log and comments as per review comments.
 
-Since he won the race of getting the patches landed, that means it's
-on you to adjust. You should modify your patches to match what Stephen
-did in those 3. ...and, presumably, the changes Stephen is requesting
-here probably _are_ big enough that you'd want to remove my
-Reviewed-by tag for v6.
+Changes since v4:
+ * Removed platform driver model in attestation driver and used
+   miscdevice and initcall approach.
+ * Since dma_alloc*() APIs require a valid device reference,
+   replaced it with __get_free_pages() and set_memory_decrypted()
+   for quote memory allocation.
+ * Removed tdx_mcall_tdreport() and moved TDG.MR.REPORT TDCALL code
+   to tdx_get_report().
+ * Used kmalloc() for TDREPORT memory allocation instead of
+   get_zeroed_page().
+ * Returned -EINVAL in default case of tdx_attest_ioctl().
+ * Added struct tdx_report_req to explicitly mention the
+   TDX_CMD_GET_REPORT IOCTL argument.
+ * Removed tdx_get_quote_hypercall() and moved hypercall code to
+   attestation driver itself.
+ * Removed GetQuote timeout support (since it is not defined in
+   spec)
+ * Added support to check for spurious callback interrupt in GetQuote
+   request.
+ * Fixed commit log and comments as per review suggestions.
+   
 
-Speaking of Stephen, he reviewed your v4 patches, but you didn't copy
-him on v5. In general if someone responds to a patch in the series you
-should CC them on the next version.
+Changes since v3:
+ * Moved the attestation driver from platform/x86 to arch/x86/coco/tdx/ and
+   renamed intel_tdx_attest.c to attest.c.
+ * Dropped CONFIG_INTEL_TDX_ATTESTATION and added support to compile
+   attestation changes with CONFIG_INTEL_TDX_GUEST option.
+ * Merged patch titled "x86/tdx: Add tdx_mcall_tdreport() API support" and
+   "platform/x86: intel_tdx_attest: Add TDX Guest attestation interface" into
+   a single patch.
+ * Moved GetQuote IOCTL support changes from patch titled "platform/x86:
+   intel_tdx_attest: Add TDX Guest attestation interface driver" to a
+   separate patch.
+ * Removed 8K size restriction when requesting quote, and added support
+   to let userspace decide the quote size.
+ * Added support to allow attestation agent configure quote generation
+   timeout value.
+ * Fixed commit log and comments as per review comments.
 
--Doug
+Changes since v2:
+ * As per Han's suggestion, modified the attestation driver to use
+   platform device driver model.
+ * Modified tdx_hcall_get_quote() and tdx_mcall_tdreport() APIs to
+   return TDCALL error code instead of generic error info (like -EIO).
+ * Removed attestation test app patch from this series to simplify
+   the patchset and review process. Test app patches will be submitted
+   once attestation support patches are merged.
+ * Since patches titled "x86/tdx: Add SetupEventNotifyInterrupt TDX
+   hypercall support" and "x86/tdx: Add TDX Guest event notify
+   interrupt vector support" are related, combining them into a
+   single patch.
+
+Changes since v1:
+ * Moved test driver from "tools/tdx/attest/tdx-attest-test.c" to
+   "tools/arch/x86/tdx/attest/tdx-attest-test.c" as per Hans review
+   suggestion.
+ * Minor commit log and comment fixes in patches titled
+   "x86/tdx: Add tdx_mcall_tdreport() API support" and "x86/tdx:
+   Add tdx_hcall_get_quote() API support"
+ * Extended tdx_hcall_get_quote() API to accept GPA length as argument
+   to accomodate latest TDQUOTE TDVMCALL related specification update.
+ * Added support for tdx_setup_ev_notify_handler() and
+   tdx_remove_ev_notify_handler() in patch titled "x86/tdx: Add TDX
+   Guest event notify interrupt vector support"
+
+Kuppuswamy Sathyanarayanan (5):
+  x86/tdx: Add TDX Guest attestation interface driver
+  x86/tdx: Add TDX Guest event notify interrupt support
+  x86/mm: Make tdx_enc_status_changed() vmalloc address compatible
+  x86/mm: Add noalias variants of set_memory_*crypted() functions
+  x86/tdx: Add Quote generation support
+
+ arch/x86/coco/tdx/Makefile         |   2 +-
+ arch/x86/coco/tdx/attest.c         | 411 +++++++++++++++++++++++++++++
+ arch/x86/coco/tdx/tdx.c            |  84 +++++-
+ arch/x86/include/asm/hardirq.h     |   3 +
+ arch/x86/include/asm/idtentry.h    |   4 +
+ arch/x86/include/asm/irq_vectors.h |   7 +-
+ arch/x86/include/asm/set_memory.h  |   2 +
+ arch/x86/include/asm/tdx.h         |   4 +
+ arch/x86/include/uapi/asm/tdx.h    |  87 ++++++
+ arch/x86/kernel/irq.c              |   7 +
+ arch/x86/mm/pat/set_memory.c       |  26 +-
+ 11 files changed, 627 insertions(+), 10 deletions(-)
+ create mode 100644 arch/x86/coco/tdx/attest.c
+ create mode 100644 arch/x86/include/uapi/asm/tdx.h
+
+-- 
+2.25.1
+

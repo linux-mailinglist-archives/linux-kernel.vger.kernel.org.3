@@ -2,155 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 889BA5255F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:45:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B42E95255FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:46:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358171AbiELTpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 15:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50012 "EHLO
+        id S1358177AbiELTqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 15:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358086AbiELTpe (ORCPT
+        with ESMTP id S1358204AbiELTqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 15:45:34 -0400
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7990A2469C3;
-        Thu, 12 May 2022 12:45:32 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 89ADE3DFA1D;
-        Thu, 12 May 2022 15:45:31 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id sVTNgZs3ae88; Thu, 12 May 2022 15:45:31 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 2AE383DF7BE;
-        Thu, 12 May 2022 15:45:31 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 2AE383DF7BE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1652384731;
-        bh=pQy1aWAQMG7y5qg/kTHDnVubaGptoLGg9ixBjeC+QKU=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=Z7MbVmWoy9Cjnmg8wdKZbjqRMIqi/6KTxgSjA9JAgkSUYPssHpFrbZmw3WGumgW6q
-         ETM85DrBqgVgheYEx28rS/IzsEN0/2xmyRzsvNxRITNhLx0kDYGb8qBrm0GMXfoAHG
-         1lZSCWbVdTdIQWmDYknQFfTf6fqEfNU0AsQTL94s2f6II2CuXLNkk85PDyA9IbX3GW
-         QbHX6WKRT838v1dHqHdSNldosCg0LnYcv37pDmGY+xD/1xXzD0CgLdCCfrsW2nUMwC
-         4Nc5Bsjh7Gq0JPe4wFrVREOuZQHsRidHcwGbaFpKXJeR62fcmQHGq8Sa72bAWfTzDN
-         g7wuUJScQVWGg==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id HYdtroEhjJjF; Thu, 12 May 2022 15:45:31 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 1FEB63DF9A0;
-        Thu, 12 May 2022 15:45:31 -0400 (EDT)
-Date:   Thu, 12 May 2022 15:45:31 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Primiano Tucci <primiano@google.com>
-Message-ID: <680139213.54888.1652384731022.JavaMail.zimbra@efficios.com>
-In-Reply-To: <1651771383.54437.1652370439159.JavaMail.zimbra@efficios.com>
-References: <1651771383.54437.1652370439159.JavaMail.zimbra@efficios.com>
-Subject: Re: Feedback on user-events UAPI
+        Thu, 12 May 2022 15:46:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DA132057;
+        Thu, 12 May 2022 12:46:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A0F5361DA4;
+        Thu, 12 May 2022 19:46:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C200FC385B8;
+        Thu, 12 May 2022 19:46:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652384770;
+        bh=FphpY5pj+S7AOQXAISwaEryRE2ZR8UaKb+vNvWxe4ZI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BLS9DMOvOE5u60oBd0tsWixpD2hRuliwpVlP9Ha+TIeiKZ46qyIYOwK+ZGB03R3/P
+         y530u/U9qU2ebqDIAwNkF5yt6bNxPI5We2n4TWcWi4nw7Fxcx+BdDll9qY77GErCHe
+         y2a3Hs929xUMYAtnocKH4fb4JWOvv/ZReWJz9xqKqRfhj2anNivFeUkoUaV7gF3OL0
+         kc0RO9owdX8lXCoBpYq8vPmezTOeApvnc57v3xnNp8IZUtiNzf2f40LpQdvVWkzyGB
+         tpd0ZYyv4xMtXsximnZACUlvIh1PydRbp5+UajzWSg0reAWaQAUSgVcO0XKSQEgQTU
+         qpG68auOSXpog==
+Date:   Thu, 12 May 2022 12:46:08 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Joe Damato <jdamato@fastly.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: Re: [RFC,net-next,x86 0/6] Nontemporal copies in unix socket write
+ path
+Message-ID: <20220512124608.452d3300@kernel.org>
+In-Reply-To: <20220512010153.GA74055@fastly.com>
+References: <1652241268-46732-1-git-send-email-jdamato@fastly.com>
+        <20220511162520.6174f487@kernel.org>
+        <20220512010153.GA74055@fastly.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4257 (ZimbraWebClient - FF100 (Linux)/8.8.15_GA_4257)
-Thread-Topic: Feedback on user-events UAPI
-Thread-Index: o6f5mOT0knDiVDPdCZsAQKF6xvC6vRQON1is
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ On May 12, 2022, at 11:47 AM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+On Wed, 11 May 2022 18:01:54 -0700 Joe Damato wrote:
+> > Is there a practical use case?  
+> 
+> Yes; for us there seems to be - especially with AMD Zen2. I'll try to
+> describe such a setup and my synthetic HTTP benchmark results.
+> 
+> Imagine a program, call it storageD, which is responsible for storing and
+> retrieving data from a data store. Other programs can request data from
+> storageD via communicating with it on a Unix socket.
+> 
+> One such program that could request data via the Unix socket is an HTTP
+> daemon. For some client connections that the HTTP daemon receives, the
+> daemon may determine that responses can be sent in plain text.
+> 
+> In this case, the HTTP daemon can use splice to move data from the unix
+> socket connection with storageD directly to the client TCP socket via a
+> pipe. splice saves CPU cycles and avoids incurring any memory access
+> latency since the data itself is not accessed.
+> 
+> Because we'll use splice (instead of accessing the data and potentially
+> affecting the CPU cache) it is advantageous for storageD to use NT copies
+> when it writes to the Unix socket to avoid evicting hot data from the CPU
+> cache. After all, once the data is copied into the kernel on the unix
+> socket write path, it won't be touched again; only spliced.
+> 
+> In my synthetic HTTP benchmarks for this setup, we've been able to increase
+> network throughput of the the HTTP daemon by roughly 30% while reducing
+> the system time of storageD. We're still collecting data on production
+> workloads.
+> 
+> The motivation, IMHO, is very similar to the motivation for
+> NETIF_F_NOCACHE_COPY, as far I understand.
+> 
+> In some cases, when an application writes to a network socket the data
+> written to the socket won't be accessed again once it is copied into the
+> kernel. In these cases, NETIF_F_NOCACHE_COPY can improve performance and
+> helps to preserve the CPU cache and avoid evicting hot data.
+> 
+> We get a sizable benefit from this option, too, in situations where we
+> can't use splice and have to call write to transmit data to client
+> connections. We want to get the same benefit of NETIF_F_NOCACHE_COPY, but
+> when writing to Unix sockets as well.
+> 
+> Let me know if that makes it more clear.
 
-> Hi Beau,
-> 
-> I have queued a few questions I would like to discuss with respect to the
-> proposed
-> user events UAPI. I originally planned to expand further on them, but I now
-> think it's
-> best if I ask away right now and we clarify things through discussion:
-> 
-> First, I find it odd that the event enable bitmask and the event ID and payload
-> type registration must be combined. I can think of various use-cases where other
-> tracers would be interested to use the event-enable bitmask facility without
-> polluting the event ID/payload registration data structures with useless data.
-> Can those be split into two distinct independent ABIs ?
-> 
-> I can't help but notice that this new user-space instrumentation
-> infrastructure/ABI
-> can only be used for tracing user-space through kernel tracers. Considering that
-> ABIs dictated by the kernel usually end up being de facto standards, I am
-> concerned
-> that if it is unable to allow purely user-space tracers to use it, then all
-> applications
-> will end up being statically instrumented in ways that prevent user-space
-> tracers from
-> hooking efficiently on the static instrumentation. As I have replied in an
-> earlier
-> thread, purely user-space tracers are not just marginally faster than kernel
-> tracers
-> for tracing user-space. They are an order of magnitude faster as soon as all the
-> proper
-> configuration steps are taken to ensure there are no system calls on the tracer
-> fast path. Therefore, it would be sad to effectively dismiss efficient tracer
-> implementations for the sake of easiness of implementation of today's user-event
-> ABI. This will cause a precedent we will be stuck with later.
-> 
-> Linux kernel developers involved in implementation of instrumentation within
-> Linux
-> have spent a lot of effort to make sure the instrumentation is orthogonal to the
-> tracing technology (tracepoints, kprobe, kretprobe...). I understand that making
-> sure the user-space instrumentation ABI keeps this orthogonal is a lot more
-> work,
-> but nobody said that exposing ABIs to user-space was easy. ;-)
-> 
-> The other point I would like to raise is container awareness. I can't help but
-> notice that the user events ABI is exposed to trace all containers, with the
-> intent
-> to be used (consumed) from some privileged namespace (e.g. root pid namespace).
-> This works in use-cases where the user of the tracing data controls the entire
-> machine (all containers), but not so much if the user is a single tenant within
-> a multi-tenants systems. I would expect that a proper namespace-aware facility
-> would take care of making sure that a trace consumer could observe what is
-> instrumented within its own container, and within nested containers as well.
-> The fact that all container questions are entirely dismissed, thus keeping a
-> event-enable bitmask registry and event ID/type registry global to the entire
-> system, is not compatible with consuming traces from a non-privileged container,
-> and I suspect this may also be used as a side-channel to learn information about
-> what other containers are doing in a multi-tenant system.
+Makes sense, thanks for the explainer.
 
-One more thought: I may have simply missed it, but is there any user events code 
-which dynamically validates that the input from user-space writev() indeed match the
-event description layout ? I'm thinking about wrong size, too short strings, too long
-strings, missing null terminator and so on. Any user input that could make the trace
-unreadable should never reach the tracing buffers.
-
-Thanks,
-
-Mathieu
-
+> > The patches look like a lot of extra indirect calls.  
 > 
-> Thanks,
+> Yup. As I mentioned in the cover letter this was mostly a PoC that seems to
+> work and increases network throughput in a real world scenario.
 > 
-> Mathieu
-> 
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
+> If this general line of thinking (NT copies on write to a Unix socket) is
+> acceptable, I'm happy to refactor the code however you (and others) would
+> like to get it to an acceptable state.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+My only concern is that in post-spectre world the indirect calls are
+going to be more expensive than an branch would be. But I'm not really
+a mirco-optimization expert :)

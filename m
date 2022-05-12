@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C89C524AFB
+	by mail.lfdr.de (Postfix) with ESMTP id B3626524AFD
 	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352947AbiELLIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 07:08:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58658 "EHLO
+        id S1352969AbiELLI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 07:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352932AbiELLIN (ORCPT
+        with ESMTP id S1352949AbiELLIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 07:08:13 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B05D5909E;
-        Thu, 12 May 2022 04:08:12 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id bx33so5995070ljb.12;
-        Thu, 12 May 2022 04:08:12 -0700 (PDT)
+        Thu, 12 May 2022 07:08:16 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A125A149;
+        Thu, 12 May 2022 04:08:14 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id j4so8385883lfh.8;
+        Thu, 12 May 2022 04:08:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ot1LRa7lM+k3YsGeal4v34AufyNdy0MxZF/OmP8vaTY=;
-        b=c4V9o+Jxv+zOb/F7gW91hyqUvtudfaiPoXkKadxAX84vmRi1fbwpFL5snNXjF7Yqvl
-         pKauhetWIR4Ytczc8H1urVflXo8ZQycYZ+URx1cvCgv0liGoahgzwqWYPh56LwJG21QN
-         1xZSF0ZmkhI96gMkmZU2y7KHFYspnbLGhmcFEifKntdIdSeiADmlK4dbEjk3995mFtvd
-         9NQ6AigabDHU0n7XI0hjWXgi4YU0k/L7Q2eNWrDlhZbxaEyJ08OO3P1RNaP1vgsXMll6
-         m9AUAngt9bZZ77KgOYjGSOUqRnTbigQdViUK5sAD9fEbARvtFpLsG9c4Fbdyd5+3pyYH
-         t5nA==
+        bh=rHLHpItlazo+UaJMdlnAGs/zpbzJsdOOF257QRYRuhY=;
+        b=mPqiMrXeK4HnnnYLILMVdVz6G+KLueUOtuBBRc8khXWG+VWTgokg2wmRpxEonf7fXj
+         RaAO5LkIr3zSkwWZm/1NRClO29iKUaBiuPX8VqQ/nKB1rdDo3UZyBT/KUVL8OJ6SqeAO
+         ctR3fT9GnBPiISnLEjEklkrOMXPGX0NgfgGC/15I18HyE0Tz6cVeeeCNRZOu+h9sqzTu
+         8Nhh6Fxt8WkugIdGBr8x9EtlC6jfjRLvA9ZDYED+jMHVDnRmG3onW98keh4xWx4VAsva
+         YtlonFN5CfNNg0rnjzkZ4NWZ2wT/SBtaMLmBuGxABitF1imb1IzgTEfSV5iXh+y8/v5w
+         FTzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ot1LRa7lM+k3YsGeal4v34AufyNdy0MxZF/OmP8vaTY=;
-        b=CHQRnY+nFyy5+PzdAe4y757+K5SmpwamJi7moggD6uQhV1zz0a/dgYKkw+XyNdNEkd
-         NZdOlxsDBIXk28vYZXHY+ecOrdjLLj6RK8F30ubg8T1iRIXg0tUAVLGOg9r1Qo/oHVse
-         r6qooNukMnG49ZU3UA6pn9yTpNhuObTaPvrf0lcjfwU5P4X3VUjVbzyf3dhveBhbxVII
-         nRs3bCFMfetUQHuCLeQ9suWCjudqaCeKA9qnPbAAZ1G2eG+aC6IW5pMwBF8kP/sg+XhM
-         VvqX672XN3r8aSc/jQCahJoQqYERMRHiiSBq4jK7/0xCrkv6/R8kEcyFPAbH8t5bF8SC
-         a6uQ==
-X-Gm-Message-State: AOAM530gK7QbLAwMT8KWy2BwW7Ruk6tf5/2T7vsXf+f01LaBYx1Q0kQe
-        ztyRzLDQxO17vVQhIGmbrzwX/W7smIXZmQ==
-X-Google-Smtp-Source: ABdhPJy18TGMOg+yPftQxJW3NaDDQItQcGQToqnlWJYapGphiv325b7X9LdAqaINS7qGigPpAUC6Qg==
-X-Received: by 2002:a2e:a23b:0:b0:24f:b6f:6fe7 with SMTP id i27-20020a2ea23b000000b0024f0b6f6fe7mr19978763ljm.67.1652353690196;
-        Thu, 12 May 2022 04:08:10 -0700 (PDT)
+        bh=rHLHpItlazo+UaJMdlnAGs/zpbzJsdOOF257QRYRuhY=;
+        b=kWf3Dn+C6+sFXx6PmzPdclABJ01TEupCWmVzB+qc2SaGL0bf4iYvS9+VfLPfjbHRUS
+         N5vrQ9Kl7YJwyxD72/xMhDSwX3oclw3ETcPH8P51q2ukAErWm4F9Myj76VaJN/DZJvxZ
+         XTSYxgGLiOvb3z+x9LQSePfY5XYJ6WUyv60L3UeroCub9jnxrltO4bu+9/ytBJsywMbH
+         zLLMJJ+oHW2kMSyueaYV97+3fCF5uFe1lVnpzWrNkg5f68L05pRQaiabNI+2qh1BEpPM
+         r0x//pRNEy3BmG5nVG2TTIfnipyGgqJaZWJ+u8hQUyFoBcZIDNRmxHFD5QU+buRncPhF
+         TGFQ==
+X-Gm-Message-State: AOAM531gD9s7gj53GzfXNUqEhYHXLO4xrG8/IEHtnKbXmv5NthaoTIcy
+        KwWGuVAg4P8vz052BPWRSOtZaWZu2BkOEw==
+X-Google-Smtp-Source: ABdhPJxHj4PJYumxcThltMWUtADbZwvzyluCMLfWyn7BXJRkEDqHJ2KLchQwfXmhmSkcO4+2tSOK4A==
+X-Received: by 2002:a05:6512:33a7:b0:473:ea35:e1d6 with SMTP id i7-20020a05651233a700b00473ea35e1d6mr24496586lfg.369.1652353692831;
+        Thu, 12 May 2022 04:08:12 -0700 (PDT)
 Received: from nergzd-desktop.localdomain ([194.39.226.133])
-        by smtp.gmail.com with ESMTPSA id i25-20020a056512007900b004725b99d2fdsm734883lfo.164.2022.05.12.04.08.08
+        by smtp.gmail.com with ESMTPSA id i25-20020a056512007900b004725b99d2fdsm734883lfo.164.2022.05.12.04.08.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 04:08:09 -0700 (PDT)
+        Thu, 12 May 2022 04:08:12 -0700 (PDT)
 From:   Markuss Broks <markuss.broks@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
@@ -66,9 +66,9 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>, linux-iio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH v3 1/5] dt-bindings: proximity: vl53l0x: Document optional supply and GPIO properties
-Date:   Thu, 12 May 2022 14:07:53 +0300
-Message-Id: <20220512110757.5297-2-markuss.broks@gmail.com>
+Subject: [PATCH v3 2/5] proximity: vl53l0x: Prefer pre-initialized interrupt flags
+Date:   Thu, 12 May 2022 14:07:54 +0300
+Message-Id: <20220512110757.5297-3-markuss.broks@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220512110757.5297-1-markuss.broks@gmail.com>
 References: <20220512110757.5297-1-markuss.broks@gmail.com>
@@ -84,30 +84,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds the optional properties for the VL53L0X ToF sensor to the
-device-tree binding.
+On some boards interrupt type might be different than falling edge,
+like hardcoded in driver. Leave interrupt flags as they were pre-configured
+from the device-tree. If they're not provided, default to falling edge
+interrupts.
 
 Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
 ---
- .../devicetree/bindings/iio/proximity/st,vl53l0x.yaml        | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/iio/proximity/vl53l0x-i2c.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/iio/proximity/st,vl53l0x.yaml b/Documentation/devicetree/bindings/iio/proximity/st,vl53l0x.yaml
-index 656460d9d8c8..322befc41de6 100644
---- a/Documentation/devicetree/bindings/iio/proximity/st,vl53l0x.yaml
-+++ b/Documentation/devicetree/bindings/iio/proximity/st,vl53l0x.yaml
-@@ -19,6 +19,11 @@ properties:
-   interrupts:
-     maxItems: 1
+diff --git a/drivers/iio/proximity/vl53l0x-i2c.c b/drivers/iio/proximity/vl53l0x-i2c.c
+index 661a79ea200d..12a3e2eff464 100644
+--- a/drivers/iio/proximity/vl53l0x-i2c.c
++++ b/drivers/iio/proximity/vl53l0x-i2c.c
+@@ -16,6 +16,7 @@
  
-+  reset-gpios:
-+    maxItems: 1
+ #include <linux/delay.h>
+ #include <linux/i2c.h>
++#include <linux/irq.h>
+ #include <linux/interrupt.h>
+ #include <linux/module.h>
+ 
+@@ -57,11 +58,15 @@ static irqreturn_t vl53l0x_handle_irq(int irq, void *priv)
+ static int vl53l0x_configure_irq(struct i2c_client *client,
+ 				 struct iio_dev *indio_dev)
+ {
++	int irq_flags = irq_get_trigger_type(client->irq);
+ 	struct vl53l0x_data *data = iio_priv(indio_dev);
+ 	int ret;
+ 
++	if (!irq_flags)
++		irq_flags = IRQF_TRIGGER_FALLING;
 +
-+  vdd-supply: true
-+
- required:
-   - compatible
-   - reg
+ 	ret = devm_request_irq(&client->dev, client->irq, vl53l0x_handle_irq,
+-			IRQF_TRIGGER_FALLING, indio_dev->name, indio_dev);
++			irq_flags, indio_dev->name, indio_dev);
+ 	if (ret) {
+ 		dev_err(&client->dev, "devm_request_irq error: %d\n", ret);
+ 		return ret;
 -- 
 2.36.1
 

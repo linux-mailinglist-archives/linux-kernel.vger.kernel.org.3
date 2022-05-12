@@ -2,118 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66AE3524AB9
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA081524AC5
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:49:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352802AbiELKqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 06:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47172 "EHLO
+        id S1352831AbiELKt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 06:49:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352790AbiELKqt (ORCPT
+        with ESMTP id S1347359AbiELKtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 06:46:49 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A2A6CA87
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:46:47 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id gh6so9462775ejb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:46:46 -0700 (PDT)
+        Thu, 12 May 2022 06:49:10 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7075B2211FB;
+        Thu, 12 May 2022 03:49:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mUztazuSyDgxN4IJuGsokHY/xl1xmIQV403RgKJ0d1A=;
-        b=exBhr0feoHxv67tzko0LaAbgsRFgF+WeYOI16AQIEIEA+ahzVeV229CoWiQggBp59T
-         HEQyurCaR6bbN3aFuckPLTxXF4rXreefHMr4uH8ds8t+qctxW1Mtui6o3phQUsXB74j3
-         q4Oc66AA9bzAfEhIFg1tjII/FI/mqUvxxmDeM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mUztazuSyDgxN4IJuGsokHY/xl1xmIQV403RgKJ0d1A=;
-        b=0R8mkCC/kha3y8B2L/bThI+FCvxSV1u8JFBF73Y05MO6jw10rbR57yJw3KHrohcIZk
-         itnnbORV4/wpsqEdA+bnVBbFcWEpx+xhzRM2tFrwxMmO0bzfXw12LxxpfxBbpuGeQ2xe
-         EQe3GExLVW9TnXnQBBsN5bdNPfIlYyRXp8NQYdwzf2yCWU6oS/1A65GJ/VA7WitkmArA
-         tGr23SEsua4O5AU1Wf6+H1bBKyiD2rXwrrdHF206BVf3Ka86ouf4r9B4GrzQ9EvGJAWA
-         gOyuoQ+oik6zk9CA6OWshiFFzNOKrFkxtKLqL0PoTG76YqZWN/34t2aOu/Bv8RSESwc8
-         JJmw==
-X-Gm-Message-State: AOAM533+I4vTqSv+/tii+6onT8rGJoAqzdY8fk+vRym3+4/1zJ3h2tt6
-        tgz+vrkIxxw/tuW3rQECjs8+2Q==
-X-Google-Smtp-Source: ABdhPJysw+usrrjuAJ6WRTiu4TkZhjhOXkvdySgQAijN5gZxaVp50vUZYfUmATW2TmsDLvWo7vy+ww==
-X-Received: by 2002:a17:906:58d4:b0:6f4:cebd:c4b with SMTP id e20-20020a17090658d400b006f4cebd0c4bmr28988010ejs.492.1652352405476;
-        Thu, 12 May 2022 03:46:45 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-59-245.cust.vodafonedsl.it. [188.217.59.245])
-        by smtp.gmail.com with ESMTPSA id sa3-20020a170906eda300b006f3ef214ddasm1961028ejb.64.2022.05.12.03.46.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 03:46:45 -0700 (PDT)
-Date:   Thu, 12 May 2022 12:46:42 +0200
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-amarula@amarulasolutions.com, linuxfancy@googlegroups.com,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ASoC: max98088: add support for reg_4a_cfg_bypass reg
-Message-ID: <20220512104642.GD649073@tom-ThinkPad-T14s-Gen-2i>
-References: <20220512074359.446999-1-tommaso.merciai@amarulasolutions.com>
- <YnzdcubW7m+CwnvN@sirena.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnzdcubW7m+CwnvN@sirena.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652352549; x=1683888549;
+  h=from:to:cc:subject:date:message-id;
+  bh=WcVUNsWfezfMoMiExRpGvQZ7Be8GNzfYaitAOdo5P8g=;
+  b=p/51lHBYoABos3XW0NMqE4p1FnpOE2YtxmHn7/45HtY9lfjfaEc2Z26W
+   ee49sUT1YyVDbtt74wn22dLXzphLC9uO+Y2yhkqwYU6xZOZnACCNp0m5i
+   0pL8gnCqwXyPIjMmta/R9LdJ+Cp3Rrz/5vLXU0AwaEVq0AiZ+FAuXuNA7
+   U=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 12 May 2022 03:49:08 -0700
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 12 May 2022 03:49:06 -0700
+X-QCInternal: smtphost
+Received: from blr-ubuntu-435.qualcomm.com ([10.79.42.176])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 12 May 2022 16:18:48 +0530
+Received: by blr-ubuntu-435.qualcomm.com (Postfix, from userid 2327845)
+        id 685C19008B1; Thu, 12 May 2022 16:18:47 +0530 (IST)
+From:   Shreyas K K <quic_shrekk@quicinc.com>
+To:     Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Shreyas K K <quic_shrekk@quicinc.com>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Prasanna Kumar <quic_kprasan@quicinc.com>
+Subject: [PATCH V2] arm64: Enable repeat tlbi workaround on KRYO4XX gold CPUs
+Date:   Thu, 12 May 2022 16:18:30 +0530
+Message-Id: <20220512104830.4415-1-quic_shrekk@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 11:12:02AM +0100, Mark Brown wrote:
-> On Thu, May 12, 2022 at 09:43:58AM +0200, Tommaso Merciai wrote:
-> 
-> > Add mixer controls support for M98088_REG_4A_CFG_BYPASS register
-> 
-> > +++ b/sound/soc/codecs/max98088.c
-> > @@ -486,6 +486,11 @@ static const struct snd_kcontrol_new max98088_snd_controls[] = {
-> >         SOC_SINGLE("EQ1 Switch", M98088_REG_49_CFG_LEVEL, 0, 1, 0),
-> >         SOC_SINGLE("EQ2 Switch", M98088_REG_49_CFG_LEVEL, 1, 1, 0),
-> >  
-> > +       SOC_SINGLE("SPK Bypass Switch", M98088_REG_4A_CFG_BYPASS, 0, 1, 0),
-> > +       SOC_SINGLE("REC Bypass Switch", M98088_REG_4A_CFG_BYPASS, 1, 1, 0),
-> > +       SOC_SINGLE("MIC2 Bypass Switch", M98088_REG_4A_CFG_BYPASS, 4, 1, 0),
-> > +       SOC_SINGLE("INA Bypass Switch", M98088_REG_4A_CFG_BYPASS, 7, 1, 0),
-> 
-> These look like they should be DAPM controls since they're controlling
-> audio routing but they're being added as regular controls.
+Add KRYO4XX gold/big cores to the list of CPUs that need the
+repeat TLBI workaround. Apply this to the affected
+KRYO4XX cores (rcpe to rfpe).
 
-Hi Mark,
-Sorry again. You suggest to create a new structure for these entries,
-for example:
+The variant and revision bits are implementation defined and are
+different from the their Cortex CPU counterparts on which they are
+based on, i.e., (r0p0 to r3p0) is equivalent to (rcpe to rfpe).
 
-/* Out Bypass mixer switch */
-static const struct snd_kcontrol_new max98088_out_bypass_mixer_controls[] = {
-       SOC_DAPM_SINGLE("INA Switch", M98088_REG_4A_CFG_BYPASS, 7, 1, 0),
-       SOC_DAPM_SINGLE("MIC2 Switch", M98088_REG_4A_CFG_BYPASS, 4, 1, 0),
-       SOC_DAPM_SINGLE("REC Switch", M98088_REG_4A_CFG_BYPASS, 1, 1, 0),
-       SOC_DAPM_SINGLE("SPK Switch", M98088_REG_4A_CFG_BYPASS, 0, 1, 0),
-};
+Signed-off-by: Shreyas K K <quic_shrekk@quicinc.com>
+---
 
-Let me know.
+Changes in v2:
+ * r2p0 and r3p0 are also affected by this erratum.
+ * Add the corresponding cores (repe and rfpe) making the range rcpe to rfpe.
 
-Thanks in advance.
-Tommaso
+ Documentation/arm64/silicon-errata.rst | 3 +++
+ arch/arm64/kernel/cpu_errata.c         | 2 ++
+ 2 files changed, 5 insertions(+)
 
+diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
+index 466cb9e89047..d27db84d585e 100644
+--- a/Documentation/arm64/silicon-errata.rst
++++ b/Documentation/arm64/silicon-errata.rst
+@@ -189,6 +189,9 @@ stable kernels.
+ +----------------+-----------------+-----------------+-----------------------------+
+ | Qualcomm Tech. | Kryo4xx Silver  | N/A             | ARM64_ERRATUM_1024718       |
+ +----------------+-----------------+-----------------+-----------------------------+
++| Qualcomm Tech. | Kryo4xx Gold    | N/A             | ARM64_ERRATUM_1286807       |
+++----------------+-----------------+-----------------+-----------------------------+
++
+ +----------------+-----------------+-----------------+-----------------------------+
+ | Fujitsu        | A64FX           | E#010001        | FUJITSU_ERRATUM_010001      |
+ +----------------+-----------------+-----------------+-----------------------------+
+diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
+index 4c9b5b4b7a0b..9d2a3fc69066 100644
+--- a/arch/arm64/kernel/cpu_errata.c
++++ b/arch/arm64/kernel/cpu_errata.c
+@@ -208,6 +208,8 @@ static const struct arm64_cpu_capabilities arm64_repeat_tlbi_list[] = {
+ #ifdef CONFIG_ARM64_ERRATUM_1286807
+ 	{
+ 		ERRATA_MIDR_RANGE(MIDR_CORTEX_A76, 0, 0, 3, 0),
++		/* Kryo4xx Gold (rcpe to rfpe) => (r0p0 to r3p0) */
++		ERRATA_MIDR_RANGE(QCOM_CPU_PART_KRYO_4XX_GOLD, 0xc, 0xe, 0xf, 0xe),
+ 	},
+ #endif
+ 	{},
 -- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
+2.17.1
 
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com

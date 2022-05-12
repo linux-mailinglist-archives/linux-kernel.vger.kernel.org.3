@@ -2,152 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A74D524C44
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1915C524C49
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353476AbiELL7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 07:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41912 "EHLO
+        id S1353495AbiELMBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 08:01:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239193AbiELL7t (ORCPT
+        with ESMTP id S237852AbiELMBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 07:59:49 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF41217FCA
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 04:59:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652356787; x=1683892787;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2xpqBipggE9efSrMnAk1RxaKgm4Z25yOtIHM0l1ipSE=;
-  b=D0H5/tLr9KKVS0ruxCZKIYIMnIrKdAaeVJfuzVl9AbIlc1Hx0jbd0k87
-   3PJE3rNATfgzLWvHq/2BGFgRTccKz71gXhCnMC43Av5j4Pflwvo4nQ2Fl
-   ZJ8Ns4CklSy48Qw9KSDXLGgX+yS6/SdCHWByL7nxmQZt5VgghI4n2MIgt
-   5SNziVIlVl1N/XFamqwiOrJNwpOD/ffU2Hy8WECx5GSMcIxhIeGd7ZM9W
-   So9D+TgWQcbyrfhbJeQidpEjyvpZhOel6cpctEjeUx54Ti6wwTMSzK2wE
-   LoboHGZm4EnN28s23D/04e7RtsL+4MANGmac9VPtSoE5wfS5qXve2jLQC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="356404381"
-X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
-   d="scan'208";a="356404381"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 04:59:47 -0700
-X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
-   d="scan'208";a="594633931"
-Received: from hezhu1-mobl1.ccr.corp.intel.com (HELO [10.255.29.168]) ([10.255.29.168])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 04:59:43 -0700
-Message-ID: <1a78418a-8637-e8dd-d1de-5529f20058fd@linux.intel.com>
-Date:   Thu, 12 May 2022 19:59:41 +0800
+        Thu, 12 May 2022 08:01:10 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89AB377C1;
+        Thu, 12 May 2022 05:01:08 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id p10so8592802lfa.12;
+        Thu, 12 May 2022 05:01:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ki8Z7TUnUuDhm9/3QHrPzjbPsX1q3SF+4ubhMDYxBeQ=;
+        b=XG+YBrrDszCrRcy9TfNEI1fUYxCJmZCMNt+NFNc7v/XQhWueUHPInOjaZ6uD64K5fU
+         6EQ6cHtKvAquib+niNYFPYRY22uuzu7ok6rUTHNUMS8B2qdmroqk4eUAfWP54TBn25qf
+         Gg+j6zK1x6Ufq4ZaUhaQEQQKsgkFpUF+bk9TPOCfWJOdwhVOex1SF61g7Ct0RvOTixpZ
+         N09TyVXg9bCjHK3iMSWPQ5SC4pkVZA4xVBHZTHMgCB3Xx5m5evbB+k5xMKj0e2tJASfX
+         Gdapja7ZNe0ey7tiajTudxf5wGQ/x9VcQbj0UGG7afBYmnN/bsVtztTvBjYA8Lggo9xA
+         stSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ki8Z7TUnUuDhm9/3QHrPzjbPsX1q3SF+4ubhMDYxBeQ=;
+        b=Jf7iPhU9RgFLc9RfO6M0Un8x6I/oaKo7G+6SyJuz8/FnRN6xCthyIC5JhylBmVy0Ms
+         Ht6XYjSxpiQLIDYdwL0btMpYw2PBiroIRt0npP6kvpW3yghoHzeS7QlJqw8rNULlFJJC
+         fXu4fXMb6HPvFr3bRSQKG75uG03ixaDY5hGK4tIXTqOUzSfZ+2LkZC/HsbJYGrwm9Wj4
+         823/Y+5ZgTuSX7Wf8z5eL88306pEUNHfFhrREuAaOOTpXm2MJG7O3C/s2B4D6hK/XhdY
+         7G7kgTk/clFV5wEvKoFs9TFKCW9SSeSuR3ncDYcLQa7+C9s05hiPyqokjcIRkqbrfm9s
+         1icA==
+X-Gm-Message-State: AOAM531J3OYuU9MVd2M9n1rX/rqT/JZLDb49HxElriv/3hvrxwUTWokW
+        rW4ROYxLGjeQT5yH8JlnMDQ=
+X-Google-Smtp-Source: ABdhPJy2jPbbUaC1tbwx5RgY+9vJHyi7k0zFqm/NWacgyu/xNVJYR7Wvx29a/YZjbsyff47nDyUn5w==
+X-Received: by 2002:a05:6512:2514:b0:472:59b7:9523 with SMTP id be20-20020a056512251400b0047259b79523mr23217383lfb.147.1652356867068;
+        Thu, 12 May 2022 05:01:07 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id b23-20020a196717000000b0047255d211f9sm748589lfc.296.2022.05.12.05.01.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 05:01:06 -0700 (PDT)
+Date:   Thu, 12 May 2022 15:01:03 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 03/23] dt-bindings: ata: ahci-platform: Clarify common
+ AHCI props constraints
+Message-ID: <20220512120103.bybyg7e3f6wsd2wl@mobilestation>
+References: <20220511231810.4928-1-Sergey.Semin@baikalelectronics.ru>
+ <20220511231810.4928-4-Sergey.Semin@baikalelectronics.ru>
+ <d73f45d3-171f-a704-e479-411a54699d3b@suse.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Cc:     baolu.lu@linux.intel.com, "Tian, Kevin" <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 08/12] iommu/sva: Use attach/detach_pasid_dev in SVA
- interfaces
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-References: <20220510061738.2761430-1-baolu.lu@linux.intel.com>
- <20220510061738.2761430-9-baolu.lu@linux.intel.com>
- <20220510152330.GG49344@nvidia.com>
- <749a7d62-3e6c-ef5c-beaf-6b7add495740@linux.intel.com>
- <20220511145319.GZ49344@nvidia.com>
- <05a68e1e-8e18-5914-ebe7-d7b1a4aaa2ec@linux.intel.com>
- <BN9PR11MB5276C03134A898CA9EFEE9258CCB9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <64954f2d-2274-410e-269c-84efc0635633@linux.intel.com>
- <20220512114844.GT49344@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220512114844.GT49344@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d73f45d3-171f-a704-e479-411a54699d3b@suse.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/12 19:48, Jason Gunthorpe wrote:
-> On Thu, May 12, 2022 at 01:17:08PM +0800, Baolu Lu wrote:
->> On 2022/5/12 13:01, Tian, Kevin wrote:
->>>> From: Baolu Lu <baolu.lu@linux.intel.com>
->>>> Sent: Thursday, May 12, 2022 11:03 AM
->>>>
->>>> On 2022/5/11 22:53, Jason Gunthorpe wrote:
->>>>>>> Also, given the current arrangement it might make sense to have a
->>>>>>> struct iommu_domain_sva given that no driver is wrappering this in
->>>>>>> something else.
->>>>>> Fair enough. How about below wrapper?
->>>>>>
->>>>>> +struct iommu_sva_domain {
->>>>>> +       /*
->>>>>> +        * Common iommu domain header,*must*  be put at the top
->>>>>> +        * of the structure.
->>>>>> +        */
->>>>>> +       struct iommu_domain domain;
->>>>>> +       struct mm_struct *mm;
->>>>>> +       struct iommu_sva bond;
->>>>>> +}
->>>>>>
->>>>>> The refcount is wrapped in bond.
->>>>> I'm still not sure that bond is necessary
->>>>
->>>> "bond" is the sva handle that the device drivers get through calling
->>>> iommu_sva_bind().
->>>>
->>>
->>> 'bond' was required before because we didn't have a domain to wrap
->>> the page table at that time.
->>>
->>> Now we have a domain and it is 1:1 associated to bond. Probably
->>> make sense now by just returning the domain as the sva handle
->>> instead?
->>
->> It also includes the device information that the domain has been
->> attached. So the sva_unbind() looks like this:
->>
->> /**
->>   * iommu_sva_unbind_device() - Remove a bond created with
->> iommu_sva_bind_device
->>   * @handle: the handle returned by iommu_sva_bind_device()
->>   *
->>   * Put reference to a bond between device and address space. The device
->> should
->>   * not be issuing any more transaction for this PASID. All outstanding page
->>   * requests for this PASID must have been flushed to the IOMMU.
->>   */
->> void iommu_sva_unbind_device(struct iommu_sva *handle)
->>
->> It's fine to replace the iommu_sva with iommu_sva_domain for sva handle,
->> if we can include the device in the unbind() interface.
+On Thu, May 12, 2022 at 08:21:42AM +0200, Hannes Reinecke wrote:
+> On 5/12/22 01:17, Serge Semin wrote:
+> > Indeed in accordance with what is imeplemtned in the AHCI paltform driver
 > 
-> Why would we have a special unbind for SVA?
 
-It's about SVA kAPI for device drivers. The existing kAPIs include:
+> Spelling; 'imeplemtned' and 'paltform'
 
-struct iommu_sva *iommu_sva_bind_device(struct device *dev,
-                                         struct mm_struct *mm,
-                                         void *drvdata);
-void iommu_sva_unbind_device(struct iommu_sva *handle);
-u32 iommu_sva_get_pasid(struct iommu_sva *handle);
+Ok. I'll fix it in v3.
 
-> SVA should not different from normal domains it should use the normal
-> detach flow too.
+> 
+> > and the way the AHCI DT nodes are defined in the DT files we can add the
+> > next AHCI DT properties constraints: AHCI CSR ID is fixed to 'ahci', PHY
+> > name is fixed to 'sata-phy', AHCI controller can't have more than 32 ports
+> > by design.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > 
+> > Changelog v2:
+> > - This is a new patch created after rebasing v1 onto the 5.18-rc3 kernel.
+> > ---
+> >   .../devicetree/bindings/ata/ahci-common.yaml      | 15 ++++++++++-----
+> >   1 file changed, 10 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/ata/ahci-common.yaml b/Documentation/devicetree/bindings/ata/ahci-common.yaml
+> > index 620042ca12e7..a7d1a8353de3 100644
+> > --- a/Documentation/devicetree/bindings/ata/ahci-common.yaml
+> > +++ b/Documentation/devicetree/bindings/ata/ahci-common.yaml
+> > @@ -31,6 +31,8 @@ properties:
+> >     reg-names:
+> >       description: CSR space IDs
+> > +    contains:
+> > +      const: ahci
+> >     interrupts:
+> >       description:
+> > @@ -71,14 +73,13 @@ properties:
+> >       maxItems: 1
+> >     phy-names:
+> > -    maxItems: 1
+> > +    const: sata-phy
+> >     ports-implemented:
+> >       $ref: '/schemas/types.yaml#/definitions/uint32'
+> >       description:
+> >         Mask that indicates which ports the HBA supports. Useful if PI is not
+> >         programmed by the BIOS, which is true for some embedded SoC's.
+> > -    maximum: 0x1f
+> >   patternProperties:
+> >     "^sata-port@[0-9a-f]+$":
+> > @@ -89,8 +90,12 @@ patternProperties:
+> >       properties:
+> >         reg:
+> > -        description: AHCI SATA port identifier
+> > -        maxItems: 1
+> > +        description:
+> > +          AHCI SATA port identifier. By design AHCI controller can't have
+> > +          more than 32 ports due to the CAP.NP fields and PI register size
+> > +          constraints.
+> > +        minimum: 0
+> > +        maximum: 31
+> >         phys:
+> >           description: Individual AHCI SATA port PHY
+> > @@ -98,7 +103,7 @@ patternProperties:
+> >         phy-names:
+> >           description: AHCI SATA port PHY ID
+> > -        maxItems: 1
+> > +        const: sata-phy
+> >         target-supply:
+> >           description: Power regulator for SATA port target device
+> 
 
-Best regards,
-baolu
+> Other than that it looks okay.
+> 
+> Reviewed-by: Hannes Reinecke <hare@suse.de>
+
+Thanks.
+
+-Sergey
+
+> 
+> Cheers,
+> 
+> Hannes
+> -- 
+> Dr. Hannes Reinecke		           Kernel Storage Architect
+> hare@suse.de			                  +49 911 74053 688
+> SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
+> HRB 36809 (AG Nürnberg), GF: Felix Imendörffer

@@ -2,77 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F00B5244C5
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 07:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 498955244CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 07:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349515AbiELFRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 01:17:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
+        id S1349629AbiELFS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 01:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345698AbiELFRP (ORCPT
+        with ESMTP id S242790AbiELFSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 01:17:15 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491CA62A0B
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 22:17:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652332634; x=1683868634;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=JZD9ZoRZafokL8iPENWer3ntJWFW7GvCYTn95IARhRg=;
-  b=V8HR9PbwnClzeLU3EtR6ZAOIjkkRby6LftE4VWvH+h3tQLAeLgszN80s
-   CNWHyMa9GAUzgEVywJjVP+YDg6QQWUOw4En1QZO0e29Ati0WA5MPyzoaG
-   wwX8IfnEGtQBFv7auR/tsUGViyOER077eNNrOWBPzF8hlP4EkW40N9tDk
-   j1Zn8MlLuxig6skGAabgH+Ot2EQnTdRL8xQNYokm28x2BEMe7hrPz/q4h
-   9v4zsCACch0/+f7EEHyvI7LAQTKVI0KcL+RPp25cODgmaT3MytPkcT9PD
-   E1yJgydzVgmyAMp9gCltELlZXL4OYDMiR7Q67BxlQr6zp0GwPr7wuFsWv
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="295139587"
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="295139587"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 22:17:14 -0700
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="594492936"
-Received: from hezhu1-mobl1.ccr.corp.intel.com (HELO [10.255.29.168]) ([10.255.29.168])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 22:17:10 -0700
-Message-ID: <64954f2d-2274-410e-269c-84efc0635633@linux.intel.com>
-Date:   Thu, 12 May 2022 13:17:08 +0800
+        Thu, 12 May 2022 01:18:24 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7ED318C06D;
+        Wed, 11 May 2022 22:18:23 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so3900079pjq.2;
+        Wed, 11 May 2022 22:18:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1AQXk6YcsqGT6AZ+v5JCyurVPXvqkymIH55yTG/A3eU=;
+        b=c4XbLJExL24lVduVaKZbo3JXp16pMcuqHtm+S6s8epmqQBy+6+ronYZOvOHbS4+/ds
+         JUJmUFC1sZ0Az/UXjgllV9wcwhlAeXGx/4hBd6pbOtgn2veRZBDG2gGCteKtnveYn4Tp
+         OPlp6hSkcnWR5KwF/OGocWc4HckoPwcBdE88RACKV62nbbGbL+AeGLNJZ7+kdAE/D4WG
+         n+F3Hzztytq3MsZG6tDaXTq6nslw6FW+Bo5ODoSRj2Z3idf/9xv/S5XwUnq4W96k3Dch
+         G8tnCyRtoCSa1MIATCXZlRmimMbHzr4qrdfpb87sHbnSnY62bJseaLdiB1QTn9bN3+VF
+         d3zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1AQXk6YcsqGT6AZ+v5JCyurVPXvqkymIH55yTG/A3eU=;
+        b=4burRoblwZqTM7TYNbGGIMMIL1nAUVEyE5RK1qBwNh6ZIpSwOR5OdmwMIq+muZ0+RU
+         6y9/GIoF8o6XVRPPR7A3m8E3+JRh4EYabNWtzVpzp0un88oeU+9MwRlRCNLC9GB03pOf
+         z0k15L6LeJJKi5ujWVyGP44Z1exyhRXhdEbadBeiQ6d/cdn95BWKZhYxE7dR2b4WHdH0
+         igQiecRJ8i0Wzvt8o2r3OsXMEGbRhYgUPH2wrwa3f9iOPAZiySZ98tGISG8qBAcpU32h
+         XFoZ73RWfdw+H3XUO1CQdyzfIu4jSdNlGCMvhtXnGrpfOPdiFTR5V+w40xXXBkmaV4Xl
+         qlcg==
+X-Gm-Message-State: AOAM533Z8/VnL6JbDN1V2m5+T6zr45vw9AWNsIzwUsAKnrbO8NbKOqu4
+        H63QK0NzQ+wcB03d5DFuULVKGiJg4BhEsfisp4s=
+X-Google-Smtp-Source: ABdhPJy8usYAOKkyscc+PdxY19NHkSQ7NQZnqgW7jH9hOw/0P1A8c6rItZ0zRup4bEnRj2R/IPAjiw==
+X-Received: by 2002:a17:902:c14a:b0:15b:9c29:935a with SMTP id 10-20020a170902c14a00b0015b9c29935amr28603418plj.2.1652332702851;
+        Wed, 11 May 2022 22:18:22 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id c17-20020aa78811000000b0050dc7628135sm2786675pfo.15.2022.05.11.22.18.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 22:18:22 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] dmaengine: ti: Fix refcount leak in ti_dra7_xbar_route_allocate
+Date:   Thu, 12 May 2022 09:18:15 +0400
+Message-Id: <20220512051815.11946-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 08/12] iommu/sva: Use attach/detach_pasid_dev in SVA
- interfaces
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-References: <20220510061738.2761430-1-baolu.lu@linux.intel.com>
- <20220510061738.2761430-9-baolu.lu@linux.intel.com>
- <20220510152330.GG49344@nvidia.com>
- <749a7d62-3e6c-ef5c-beaf-6b7add495740@linux.intel.com>
- <20220511145319.GZ49344@nvidia.com>
- <05a68e1e-8e18-5914-ebe7-d7b1a4aaa2ec@linux.intel.com>
- <BN9PR11MB5276C03134A898CA9EFEE9258CCB9@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB5276C03134A898CA9EFEE9258CCB9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,64 +69,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/12 13:01, Tian, Kevin wrote:
->> From: Baolu Lu <baolu.lu@linux.intel.com>
->> Sent: Thursday, May 12, 2022 11:03 AM
->>
->> On 2022/5/11 22:53, Jason Gunthorpe wrote:
->>>>> Also, given the current arrangement it might make sense to have a
->>>>> struct iommu_domain_sva given that no driver is wrappering this in
->>>>> something else.
->>>> Fair enough. How about below wrapper?
->>>>
->>>> +struct iommu_sva_domain {
->>>> +       /*
->>>> +        * Common iommu domain header,*must*  be put at the top
->>>> +        * of the structure.
->>>> +        */
->>>> +       struct iommu_domain domain;
->>>> +       struct mm_struct *mm;
->>>> +       struct iommu_sva bond;
->>>> +}
->>>>
->>>> The refcount is wrapped in bond.
->>> I'm still not sure that bond is necessary
->>
->> "bond" is the sva handle that the device drivers get through calling
->> iommu_sva_bind().
->>
-> 
-> 'bond' was required before because we didn't have a domain to wrap
-> the page table at that time.
-> 
-> Now we have a domain and it is 1:1 associated to bond. Probably
-> make sense now by just returning the domain as the sva handle
-> instead?
+1. of_find_device_by_node() takes reference, we should use put_device()
+to release it when not need anymore.
+2. of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not needed anymore.
 
-It also includes the device information that the domain has been
-attached. So the sva_unbind() looks like this:
+Add put_device() and of_node_put() in some error paths to fix.
 
-/**
-  * iommu_sva_unbind_device() - Remove a bond created with 
-iommu_sva_bind_device
-  * @handle: the handle returned by iommu_sva_bind_device()
-  *
-  * Put reference to a bond between device and address space. The device 
-should
-  * not be issuing any more transaction for this PASID. All outstanding page
-  * requests for this PASID must have been flushed to the IOMMU.
-  */
-void iommu_sva_unbind_device(struct iommu_sva *handle)
+Fixes: ec9bfa1e1a79 ("dmaengine: ti-dma-crossbar: dra7: Use bitops instead of idr")
+Fixes: a074ae38f859 ("dmaengine: Add driver for TI DMA crossbar on DRA7x")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/dma/ti/dma-crossbar.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-It's fine to replace the iommu_sva with iommu_sva_domain for sva handle,
-if we can include the device in the unbind() interface.
+diff --git a/drivers/dma/ti/dma-crossbar.c b/drivers/dma/ti/dma-crossbar.c
+index 71d24fc07c00..f744ddbbbad7 100644
+--- a/drivers/dma/ti/dma-crossbar.c
++++ b/drivers/dma/ti/dma-crossbar.c
+@@ -245,6 +245,7 @@ static void *ti_dra7_xbar_route_allocate(struct of_phandle_args *dma_spec,
+ 	if (dma_spec->args[0] >= xbar->xbar_requests) {
+ 		dev_err(&pdev->dev, "Invalid XBAR request number: %d\n",
+ 			dma_spec->args[0]);
++		put_device(&pdev->dev);
+ 		return ERR_PTR(-EINVAL);
+ 	}
+ 
+@@ -252,12 +253,14 @@ static void *ti_dra7_xbar_route_allocate(struct of_phandle_args *dma_spec,
+ 	dma_spec->np = of_parse_phandle(ofdma->of_node, "dma-masters", 0);
+ 	if (!dma_spec->np) {
+ 		dev_err(&pdev->dev, "Can't get DMA master\n");
++		put_device(&pdev->dev);
+ 		return ERR_PTR(-EINVAL);
+ 	}
+ 
+ 	map = kzalloc(sizeof(*map), GFP_KERNEL);
+ 	if (!map) {
+ 		of_node_put(dma_spec->np);
++		put_device(&pdev->dev);
+ 		return ERR_PTR(-ENOMEM);
+ 	}
+ 
+@@ -268,6 +271,8 @@ static void *ti_dra7_xbar_route_allocate(struct of_phandle_args *dma_spec,
+ 		mutex_unlock(&xbar->mutex);
+ 		dev_err(&pdev->dev, "Run out of free DMA requests\n");
+ 		kfree(map);
++		of_node_put(dma_spec->np);
++		put_device(&pdev->dev);
+ 		return ERR_PTR(-ENOMEM);
+ 	}
+ 	set_bit(map->xbar_out, xbar->dma_inuse);
+-- 
+2.25.1
 
-Anyway, I'd expect to achieve all these in two steps:
-
-- sva and iopf refactoring, only iommu internal changes;
-- sva interface refactoring, only interface changes.
-
-Does above work?
-
-Best regards,
-baolu

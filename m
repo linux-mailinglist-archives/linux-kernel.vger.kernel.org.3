@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE36524ABC
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66AE3524AB9
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352809AbiELKrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 06:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
+        id S1352802AbiELKqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 06:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241206AbiELKrp (ORCPT
+        with ESMTP id S1352790AbiELKqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 06:47:45 -0400
-Received: from mx1.cqplus1.com (unknown [113.204.237.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED30C7A467
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:47:32 -0700 (PDT)
-X-MailGates: (flag:1,DYNAMIC,RELAY,NOHOST,LAN:PASS)(compute_score:DELIVE
-        R,40,3)
-Received: from 172.27.96.203
-        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(26396:0:AUTH_RELAY)
-        (envelope-from <qinjian@cqplus1.com>); Thu, 12 May 2022 18:45:58 +0800 (CST)
-Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
- CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.6; Thu, 12 May 2022 18:45:55 +0800
-Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
- ([::1]) with mapi id 15.01.2507.006; Thu, 12 May 2022 18:45:55 +0800
-From:   =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "sboyd@kernel.org" <sboyd@kernel.org>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
-Subject: RE: [PATCH v15 04/10] dt-bindings: clock: Add bindings for SP7021
- clock driver
-Thread-Topic: [PATCH v15 04/10] dt-bindings: clock: Add bindings for SP7021
- clock driver
-Thread-Index: AQHYZcsP5QfLdHxDWUuwmqTXvmezs60ag04AgACLAGA=
-Date:   Thu, 12 May 2022 10:45:54 +0000
-Message-ID: <8a9fa13f66ce4ef9a8f8c9200e1fac5f@cqplus1.com>
-References: <cover.1652329411.git.qinjian@cqplus1.com>
- <b5ca5d417be079a2a40a6e79ac1b246b6359a49e.1652329411.git.qinjian@cqplus1.com>
- <e9a39eb6-d8e2-bac6-27e2-f63ef8519917@linaro.org>
-In-Reply-To: <e9a39eb6-d8e2-bac6-27e2-f63ef8519917@linaro.org>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.28.110.18]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 12 May 2022 06:46:49 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A2A6CA87
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:46:47 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id gh6so9462775ejb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:46:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mUztazuSyDgxN4IJuGsokHY/xl1xmIQV403RgKJ0d1A=;
+        b=exBhr0feoHxv67tzko0LaAbgsRFgF+WeYOI16AQIEIEA+ahzVeV229CoWiQggBp59T
+         HEQyurCaR6bbN3aFuckPLTxXF4rXreefHMr4uH8ds8t+qctxW1Mtui6o3phQUsXB74j3
+         q4Oc66AA9bzAfEhIFg1tjII/FI/mqUvxxmDeM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mUztazuSyDgxN4IJuGsokHY/xl1xmIQV403RgKJ0d1A=;
+        b=0R8mkCC/kha3y8B2L/bThI+FCvxSV1u8JFBF73Y05MO6jw10rbR57yJw3KHrohcIZk
+         itnnbORV4/wpsqEdA+bnVBbFcWEpx+xhzRM2tFrwxMmO0bzfXw12LxxpfxBbpuGeQ2xe
+         EQe3GExLVW9TnXnQBBsN5bdNPfIlYyRXp8NQYdwzf2yCWU6oS/1A65GJ/VA7WitkmArA
+         tGr23SEsua4O5AU1Wf6+H1bBKyiD2rXwrrdHF206BVf3Ka86ouf4r9B4GrzQ9EvGJAWA
+         gOyuoQ+oik6zk9CA6OWshiFFzNOKrFkxtKLqL0PoTG76YqZWN/34t2aOu/Bv8RSESwc8
+         JJmw==
+X-Gm-Message-State: AOAM533+I4vTqSv+/tii+6onT8rGJoAqzdY8fk+vRym3+4/1zJ3h2tt6
+        tgz+vrkIxxw/tuW3rQECjs8+2Q==
+X-Google-Smtp-Source: ABdhPJysw+usrrjuAJ6WRTiu4TkZhjhOXkvdySgQAijN5gZxaVp50vUZYfUmATW2TmsDLvWo7vy+ww==
+X-Received: by 2002:a17:906:58d4:b0:6f4:cebd:c4b with SMTP id e20-20020a17090658d400b006f4cebd0c4bmr28988010ejs.492.1652352405476;
+        Thu, 12 May 2022 03:46:45 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-59-245.cust.vodafonedsl.it. [188.217.59.245])
+        by smtp.gmail.com with ESMTPSA id sa3-20020a170906eda300b006f3ef214ddasm1961028ejb.64.2022.05.12.03.46.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 03:46:45 -0700 (PDT)
+Date:   Thu, 12 May 2022 12:46:42 +0200
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-amarula@amarulasolutions.com, linuxfancy@googlegroups.com,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ASoC: max98088: add support for reg_4a_cfg_bypass reg
+Message-ID: <20220512104642.GD649073@tom-ThinkPad-T14s-Gen-2i>
+References: <20220512074359.446999-1-tommaso.merciai@amarulasolutions.com>
+ <YnzdcubW7m+CwnvN@sirena.org.uk>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnzdcubW7m+CwnvN@sirena.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,39 +71,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBPbiAxMi8wNS8yMDIyIDA4OjMwLCBRaW4gSmlhbiB3cm90ZToNCj4gPiBBZGQgZG9jdW1lbnRh
-dGlvbiB0byBkZXNjcmliZSBTdW5wbHVzIFNQNzAyMSBjbG9jayBkcml2ZXIgYmluZGluZ3MuDQo+
-ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBRaW4gSmlhbiA8cWluamlhbkBjcXBsdXMxLmNvbT4NCj4g
-PiAtLS0NCj4gPiBSZW1vdmUgIkJpbmRpbmciIGZyb20geWFtbCB0aXRsZQ0KPiA+IFJlbmFtZSBz
-cC1zcDcwMjEuaCB0byBzdW5wbHVzLHNwNzAyMS1jbGtjLmgNCj4gDQo+IFRoYW5rcy4NCj4gDQo+
-ID4gLS0tDQo+ID4gIC4uLi9iaW5kaW5ncy9jbG9jay9zdW5wbHVzLHNwNzAyMS1jbGtjLnlhbWwg
-ICB8IDUxICsrKysrKysrKysrDQo+ID4gIE1BSU5UQUlORVJTICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICB8ICAyICsNCj4gPiAgLi4uL2R0LWJpbmRpbmdzL2Nsb2NrL3N1bnBsdXMs
-c3A3MDIxLWNsa2MuaCAgIHwgODggKysrKysrKysrKysrKysrKysrKw0KPiA+ICAzIGZpbGVzIGNo
-YW5nZWQsIDE0MSBpbnNlcnRpb25zKCspDQo+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBEb2N1bWVu
-dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvY2xvY2svc3VucGx1cyxzcDcwMjEtY2xrYy55YW1s
-DQo+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBpbmNsdWRlL2R0LWJpbmRpbmdzL2Nsb2NrL3N1bnBs
-dXMsc3A3MDIxLWNsa2MuaA0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2
-aWNldHJlZS9iaW5kaW5ncy9jbG9jay9zdW5wbHVzLHNwNzAyMS1jbGtjLnlhbWwNCj4gYi9Eb2N1
-bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvY2xvY2svc3VucGx1cyxzcDcwMjEtY2xrYy55
-YW1sDQo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gPiBpbmRleCAwMDAwMDAwMDAuLjExOTk2
-MWExNw0KPiA+IC0tLSAvZGV2L251bGwNCj4gPiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRy
-ZWUvYmluZGluZ3MvY2xvY2svc3VucGx1cyxzcDcwMjEtY2xrYy55YW1sDQo+ID4gQEAgLTAsMCAr
-MSw1MSBAQA0KPiA+ICsjIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiAoR1BMLTIuMC1vbmx5IE9S
-IEJTRC0yLUNsYXVzZSkNCj4gPiArIyBDb3B5cmlnaHQgKEMpIFN1bnBsdXMgQ28uLCBMdGQuIDIw
-MjENCj4gPiArJVlBTUwgMS4yDQo+ID4gKy0tLQ0KPiA+ICskaWQ6IGh0dHA6Ly9kZXZpY2V0cmVl
-Lm9yZy9zY2hlbWFzL2Nsb2NrL3N1bnBsdXMsc3A3MDIxLWNsa2MueWFtbCMNCj4gPiArJHNjaGVt
-YTogaHR0cDovL2RldmljZXRyZWUub3JnL21ldGEtc2NoZW1hcy9jb3JlLnlhbWwjDQo+ID4gKw0K
-PiA+ICt0aXRsZTogU3VucGx1cyBTUDcwMjEgU29DIENsb2NrIENvbnRyb2xsZXINCj4gPiArDQo+
-ID4gK21haW50YWluZXJzOg0KPiA+ICsgIC0gUWluIEppYW4gPHFpbmppYW5AY3FwbHVzMS5jb20+
-DQo+ID4gKw0KPiA+ICtwcm9wZXJ0aWVzOg0KPiA+ICsgIGNvbXBhdGlibGU6DQo+ID4gKyAgICBj
-b25zdDogc3VucGx1cyxzcDcwMjEtY2xrYw0KPiA+ICsNCj4gPiArICByZWc6DQo+ID4gKyAgICBt
-YXhJdGVtczogMQ0KPiA+ICsNCj4gPiArICBjbG9ja3M6DQo+ID4gKyAgICBtYXhJdGVtczogMQ0K
-PiA+ICsNCj4gPiArICAiI2Nsb2NrLWNlbGxzIjoNCj4gPiArICAgIGNvbnN0OiAxDQo+ID4gKw0K
-PiA+ICtyZXF1aXJlZDoNCj4gPiArICAtIGNvbXBhdGlibGUNCj4gPiArICAtIHJlZw0KPiA+ICsg
-IC0gY2xvY2tzDQo+ID4gKyAgLSAiI2Nsb2NrLWNlbGxzIg0KPiA+ICsNCj4gPiArYWRkaXRpb25h
-bFByb3BlcnRpZXM6IGZhbHNlDQo+ID4gKw0KPiA+ICtleGFtcGxlczoNCj4gPiArICAtIHwNCj4g
-PiArDQo+IA0KPiBTYW1lIGFzIGluIHYxNC4gUGxlYXNlIGdvIHRocm91Z2ggdGhlIGNvbW1lbnRz
-IHRob3JvdWdobHkgc28gcmV2aWV3ZXJzDQo+IHdpbGwgbm90IHdhc3RlIHRpbWUgcmVwZWF0aW5n
-IHRoZSBzYW1lIHR3aWNlLg0KPiANCg0KU29ycnksIEkgZG9u4oCZdCB1bmRlcnN0YW5kIHlvdXIg
-bWVhbmluZy4NCkNvdWxkIHlvdSBleHBsYWluIG1vcmUsIHRoYW5rcy4NCg0KDQo=
+On Thu, May 12, 2022 at 11:12:02AM +0100, Mark Brown wrote:
+> On Thu, May 12, 2022 at 09:43:58AM +0200, Tommaso Merciai wrote:
+> 
+> > Add mixer controls support for M98088_REG_4A_CFG_BYPASS register
+> 
+> > +++ b/sound/soc/codecs/max98088.c
+> > @@ -486,6 +486,11 @@ static const struct snd_kcontrol_new max98088_snd_controls[] = {
+> >         SOC_SINGLE("EQ1 Switch", M98088_REG_49_CFG_LEVEL, 0, 1, 0),
+> >         SOC_SINGLE("EQ2 Switch", M98088_REG_49_CFG_LEVEL, 1, 1, 0),
+> >  
+> > +       SOC_SINGLE("SPK Bypass Switch", M98088_REG_4A_CFG_BYPASS, 0, 1, 0),
+> > +       SOC_SINGLE("REC Bypass Switch", M98088_REG_4A_CFG_BYPASS, 1, 1, 0),
+> > +       SOC_SINGLE("MIC2 Bypass Switch", M98088_REG_4A_CFG_BYPASS, 4, 1, 0),
+> > +       SOC_SINGLE("INA Bypass Switch", M98088_REG_4A_CFG_BYPASS, 7, 1, 0),
+> 
+> These look like they should be DAPM controls since they're controlling
+> audio routing but they're being added as regular controls.
+
+Hi Mark,
+Sorry again. You suggest to create a new structure for these entries,
+for example:
+
+/* Out Bypass mixer switch */
+static const struct snd_kcontrol_new max98088_out_bypass_mixer_controls[] = {
+       SOC_DAPM_SINGLE("INA Switch", M98088_REG_4A_CFG_BYPASS, 7, 1, 0),
+       SOC_DAPM_SINGLE("MIC2 Switch", M98088_REG_4A_CFG_BYPASS, 4, 1, 0),
+       SOC_DAPM_SINGLE("REC Switch", M98088_REG_4A_CFG_BYPASS, 1, 1, 0),
+       SOC_DAPM_SINGLE("SPK Switch", M98088_REG_4A_CFG_BYPASS, 0, 1, 0),
+};
+
+Let me know.
+
+Thanks in advance.
+Tommaso
+
+-- 
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
+
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com

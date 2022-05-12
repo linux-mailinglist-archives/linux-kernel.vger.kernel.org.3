@@ -2,295 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B8E5247B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 10:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 119ED5247B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 10:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351344AbiELIO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 04:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33636 "EHLO
+        id S1351356AbiELIPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 04:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349973AbiELIOX (ORCPT
+        with ESMTP id S238788AbiELIPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 04:14:23 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5757B5DBED
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 01:14:20 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id p18so5292796edr.7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 01:14:20 -0700 (PDT)
+        Thu, 12 May 2022 04:15:16 -0400
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9A55DBE5
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 01:15:15 -0700 (PDT)
+Received: by mail-vs1-xe33.google.com with SMTP id z144so4352799vsz.13
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 01:15:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=dKj3Wkk5G60lVyTD5qpq1NcTw9sWsRvLava+2G5nJbs=;
-        b=etNSNPWcfTj3Ga3QAPpZ99dN9/OxZpengwlNA+k1El504Pf3TOhGGS+VGx3NSKyx4B
-         DT+//kgDlbF17wpaOmvjiihu/ZsVyNB/o/fC+oXm4N14dv3riYtOHKrGwvn2TdZDLduJ
-         gVAiJffesApMhZvLIozNhGfyVgn37kNp+WhoxQt5pP1PrgWR8Xki/sw/UWCtY8tBSorj
-         x+HoeSklzYpg0BeZ7h7vnZDTu6e+pIhT4VYztwJgzukZRkT4SzgdA9WVO2FexrhD1dpZ
-         DO/+S+oEvmXnN1/A5YFo8aL2L2Yx5ihvDVKPt0EjoZejF2foomYWP0PiTRyFHwAMdE6N
-         CZHw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/kBci1W7ElbeGBHJ1hfhdl2XSbKvaGs7BroRgBbCQZo=;
+        b=Cd4mlvT0wAHMlu843hQ2fzttNtiSDYFX+5ywjAiSsqWPmY57usrCShYlfN7Mbvcdmt
+         +qeiNNzs5TbqihtFVYSQa4/oqgA+cdzNuCbcBTKqHXQiZB3VBzDEb0zyW5IP2hU8iUII
+         irzbNiNQIkxIRIKpkjbR1gPvZhqcX2dyMBKtxVQhObyyR0c36cSht3LXMNWgqNsc5FWU
+         UqNji9+7nuSdOIs5zagiM3WPA45ZOYxSUgBTQpYpfkI0xL0AGy71tTQX8WUQLexeLZaD
+         0Lsf9FtQcdudxyDWy/DDjg6H1OW0zJUmFJM4Wqw1qVDDA/R/bVlHQpm5EefWU6EGXkxI
+         0B6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dKj3Wkk5G60lVyTD5qpq1NcTw9sWsRvLava+2G5nJbs=;
-        b=qlP6duRo9eDefzHlz662sduO3c9oLevXHqQcGGqCHlefJ5MIDHu4bnlm125rpIqPNj
-         AZVRTZmX5TzPOVjKMsuDpZadiOv2aHBRTGe8vU7ovNpmkRAuJHPv10qQbOvzCsRufoPF
-         vhfDFbcxROfFZHqwTiRqCFsFGscIHvyTFWi6F7o2fv+ARml+PgRCOyELVXE69/HTazGX
-         tMDtvqALL2Ni1ODFodG1fqazSHnTxq7DIf7UMbUFKuGfkk0wcPqwyyKUYyj+jodo8rY/
-         KsBvUSlJv2J5SWvwoRmE8sjcSlLlGzFXukWTBu4y8lykMitlj4B2ZtZg+E2Zl/hnBAV3
-         +Msw==
-X-Gm-Message-State: AOAM530g0AXeT+hZn+yBEuOYfBWpqDn4j9u/JORj6EfC3ElIFeM4mAlY
-        U6Vfx9Ao3Fio6MbFk9Ctuh0uuQ==
-X-Google-Smtp-Source: ABdhPJzkxgOSxH40scNowpHv6e6D0YUfb9fvbfZ7RnSikZ9iUxIxoKqkCYnsmEcVrB2Pn0jmTUywIw==
-X-Received: by 2002:a05:6402:128b:b0:425:d1d7:b321 with SMTP id w11-20020a056402128b00b00425d1d7b321mr33309173edv.179.1652343258888;
-        Thu, 12 May 2022 01:14:18 -0700 (PDT)
-Received: from [192.168.0.156] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id h3-20020aa7c603000000b0042a41ad4688sm71edq.65.2022.05.12.01.14.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 01:14:18 -0700 (PDT)
-Message-ID: <a62822a4-a771-dfa9-f46d-586fdccedf66@linaro.org>
-Date:   Thu, 12 May 2022 10:14:17 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/kBci1W7ElbeGBHJ1hfhdl2XSbKvaGs7BroRgBbCQZo=;
+        b=KLQqunuxrh0cDPqrFZ6n9fp6NWDfEmKudeUKAbGw4Q8k6P4Q7+tctwd90J/vPPRe7s
+         s6vLHwGG6HTOF3uNF/SZZjpO5gW8kY6uzS3YL4yeVlbTkXrHY5kcwRSpRjZvFTPmuzvp
+         ieog6cPLoUyAp9kxsr9WvUWQ7Me3Vpxeu4Ike36Q4OxsZFadga1t0MndKteuSOXfguLF
+         +9EgCbApUMzvM2aj6IdSwbJbqvkl7Ew62QbZAAGe67gGTMkdqNtje7au2xZfWdpvQwIl
+         9PmV6dr/eNex6ugFjPTOg/1BJZWBA/tpmHTx2KKAcKokQqSld1r9NByaQnS8zyMJ1/ee
+         w3nQ==
+X-Gm-Message-State: AOAM532l0TudK5dBIEaISX376vA3BrLJs+lF7VYdMCsN+iMBxsTQ2/Vc
+        WlPvbdPw4QnJ628DyxPG0zP4Bom/iShgHipyke7erg==
+X-Google-Smtp-Source: ABdhPJzPzd2BDtAqiKjsVfbVTVxWDPHGxJVJh1u7ZlaNKMR+DgMc23NLeblIidUa31ZpEUGf+a+M1cWxPuob2yA73Ck=
+X-Received: by 2002:a67:f343:0:b0:32c:c4b7:e238 with SMTP id
+ p3-20020a67f343000000b0032cc4b7e238mr14522518vsm.77.1652343314311; Thu, 12
+ May 2022 01:15:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 4/9] dt-bindings: remoteproc: qcom: wcnss: Convert to YAML
-Content-Language: en-US
-To:     Sireesh Kodali <sireeshkodali1@gmail.com>,
-        linux-remoteproc@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, bjorn.andersson@linaro.org,
-        devicetree@vger.kernel.org, phone-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20220511161602.117772-1-sireeshkodali1@gmail.com>
- <20220511161602.117772-5-sireeshkodali1@gmail.com>
- <00234f36-9bae-31d5-5b83-ea238e7e3c11@linaro.org>
- <CJXL0SG2GHN1.1IO2JOR5ARNV8@skynet-linux>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CJXL0SG2GHN1.1IO2JOR5ARNV8@skynet-linux>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <CAAPL-u-DGLcKRVDnChN9ZhxPkfxQvz9Sb93kVoX_4J2oiJSkUw@mail.gmail.com>
+ <56b41ce6922ed5f640d9bd46a603fa27576532a9.camel@intel.com>
+ <c5d55131-76ff-7354-2954-7cfac365a9a5@linux.ibm.com> <CAAPL-u-g86QqHaHGGtVJMER8ENC2dpekK+2qOkxoRFmC0F_80g@mail.gmail.com>
+ <87y1z7jj85.fsf@linux.ibm.com>
+In-Reply-To: <87y1z7jj85.fsf@linux.ibm.com>
+From:   Wei Xu <weixugc@google.com>
+Date:   Thu, 12 May 2022 01:15:03 -0700
+Message-ID: <CAAPL-u90Gzrepbsdpc62FGRBYOx1LAVwZWHg1E7UyVD_CmcROw@mail.gmail.com>
+Subject: Re: RFC: Memory Tiering Kernel Interfaces (v2)
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc:     "ying.huang@intel.com" <ying.huang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Hesham Almatary <hesham.almatary@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2022 08:50, Sireesh Kodali wrote:
-> On Wed May 11, 2022 at 10:45 PM IST, Krzysztof Kozlowski wrote:
->> On 11/05/2022 18:15, Sireesh Kodali wrote:
->>> Convert the dt-bindings from txt to YAML. This is in preparation for
->>> including the relevant bindings for the MSM8953 platform's wcnss pil.
->>>
->>> Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
->>
->> Thank you for your patch. There is something to discuss/improve.
->>
->> Please use existing bindings or example-schema as a starting point. Half
->> of my review could be skipped if you just followed what we already have
->> in the tree.
->>
->> Some of these qcom specific properties already exist but you decided to
->> write them differently... please don't, rather reuse the code.
->>
-> 
-> Thank you for your review, I will make the chnages as appropriate in v2.
->> (...)
->>
->>> +
->>> +maintainers:
->>> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
->>> +
->>> +description:
->>> +  This document defines the binding for a component that loads and boots
->>> +  firmware on the Qualcomm WCNSS core.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    oneOf:
->>> +      - items:
->>> +          - enum:
->>> +              - qcom,pronto-v2-pil
->>> +          - enum:
->>> +              - qcom,pronto
->>
->> This does not look correct. The fallback compatible should not change.
->> What is more, it was not documented in original binding, so this should
->> be done in separate patch.
->>
-> 
-> This was not a change to the fallback compatible. 
+On Thu, May 12, 2022 at 12:36 AM Aneesh Kumar K.V
+<aneesh.kumar@linux.ibm.com> wrote:
+>
+> Wei Xu <weixugc@google.com> writes:
+>
+> > On Thu, May 12, 2022 at 12:12 AM Aneesh Kumar K V
+> > <aneesh.kumar@linux.ibm.com> wrote:
+> >>
+> >> On 5/12/22 12:33 PM, ying.huang@intel.com wrote:
+> >> > On Wed, 2022-05-11 at 23:22 -0700, Wei Xu wrote:
+> >> >> Sysfs Interfaces
+> >> >> ================
+> >> >>
+> >> >> * /sys/devices/system/memtier/memtierN/nodelist
+> >> >>
+> >> >>    where N = 0, 1, 2 (the kernel supports only 3 tiers for now).
+> >> >>
+> >> >>    Format: node_list
+> >> >>
+> >> >>    Read-only.  When read, list the memory nodes in the specified tier.
+> >> >>
+> >> >>    Tier 0 is the highest tier, while tier 2 is the lowest tier.
+> >> >>
+> >> >>    The absolute value of a tier id number has no specific meaning.
+> >> >>    What matters is the relative order of the tier id numbers.
+> >> >>
+> >> >>    When a memory tier has no nodes, the kernel can hide its memtier
+> >> >>    sysfs files.
+> >> >>
+> >> >> * /sys/devices/system/node/nodeN/memtier
+> >> >>
+> >> >>    where N = 0, 1, ...
+> >> >>
+> >> >>    Format: int or empty
+> >> >>
+> >> >>    When read, list the memory tier that the node belongs to.  Its value
+> >> >>    is empty for a CPU-only NUMA node.
+> >> >>
+> >> >>    When written, the kernel moves the node into the specified memory
+> >> >>    tier if the move is allowed.  The tier assignment of all other nodes
+> >> >>    are not affected.
+> >> >>
+> >> >>    Initially, we can make this interface read-only.
+> >> >
+> >> > It seems that "/sys/devices/system/node/nodeN/memtier" has all
+> >> > information we needed.  Do we really need
+> >> > "/sys/devices/system/memtier/memtierN/nodelist"?
+> >> >
+> >> > That can be gotten via a simple shell command line,
+> >> >
+> >> > $ grep . /sys/devices/system/node/nodeN/memtier | sort -n -k 2 -t ':'
+> >> >
+> >>
+> >> It will be really useful to fetch the memory tier node list in an easy
+> >> fashion rather than reading multiple sysfs directories. If we don't have
+> >> other attributes for memorytier, we could keep
+> >> "/sys/devices/system/memtier/memtierN" a NUMA node list there by
+> >> avoiding /sys/devices/system/memtier/memtierN/nodelist
+> >>
+> >> -aneesh
+> >
+> > It is harder to implement memtierN as just a file and doesn't follow
+> > the existing sysfs pattern, either.  Besides, it is extensible to have
+> > memtierN as a directory.
+>
+> diff --git a/drivers/base/node.c b/drivers/base/node.c
+> index 6248326f944d..251f38ec3816 100644
+> --- a/drivers/base/node.c
+> +++ b/drivers/base/node.c
+> @@ -1097,12 +1097,49 @@ static struct attribute *node_state_attrs[] = {
+>         NULL
+>  };
+>
+> +#define MAX_TIER 3
+> +nodemask_t memory_tier[MAX_TIER];
+> +
+> +#define _TIER_ATTR_RO(name, tier_index)                                        \
+> +       { __ATTR(name, 0444, show_tier, NULL), tier_index, NULL }
+> +
+> +struct memory_tier_attr {
+> +       struct device_attribute attr;
+> +       int tier_index;
+> +       int (*write)(nodemask_t nodes);
+> +};
+> +
+> +static ssize_t show_tier(struct device *dev,
+> +                        struct device_attribute *attr, char *buf)
+> +{
+> +       struct memory_tier_attr *mt = container_of(attr, struct memory_tier_attr, attr);
+> +
+> +       return sysfs_emit(buf, "%*pbl\n",
+> +                         nodemask_pr_args(&memory_tier[mt->tier_index]));
+> +}
+> +
+>  static const struct attribute_group memory_root_attr_group = {
+>         .attrs = node_state_attrs,
+>  };
+>
+> +
+> +#define TOP_TIER 0
+> +static struct memory_tier_attr memory_tiers[] = {
+> +       [0] = _TIER_ATTR_RO(memory_top_tier, TOP_TIER),
+> +};
+> +
+> +static struct attribute *memory_tier_attrs[] = {
+> +       &memory_tiers[0].attr.attr,
+> +       NULL
+> +};
+> +
+> +static const struct attribute_group memory_tier_attr_group = {
+> +       .attrs = memory_tier_attrs,
+> +};
+> +
+>  static const struct attribute_group *cpu_root_attr_groups[] = {
+>         &memory_root_attr_group,
+> +       &memory_tier_attr_group,
+>         NULL,
+>  };
+>
+>
+> As long as we have the ability to see the nodelist, I am good with the
+> proposal.
+>
+> -aneesh
 
-You made it an enum, so you expect it to use different fallback for
-different cases.
+I am OK with moving back the memory tier nodelist into node/.  When
+there are more memory tier attributes needed, we can then create the
+memory tier subtree and replace the tier nodelist in node/ with
+symlinks.
 
-> msm8916.dtsi's wcnss
-> node has "qcom,pronto" as the compatible string, which is why this was
-> added. It is however not documented in the txt file. Is it sufficient to
-> add a note in the commit message, or should it be split into a separate
-> commit?
+So the revised sysfs interfaces are:
 
-Please split it, assuming that fallback is correct. Maybe the fallback
-is wrong?
+* /sys/devices/system/node/memory_tierN (read-only)
 
-> 
->>> +      - items:
->>
->> No need for items, it's just one item.
->>
->>> +          - enum:
->>> +              - qcom,riva-pil
->>> +              - qcom,pronto-v1-pil
->>> +              - qcom,pronto-v2-pil
->>> +
->>> +  reg:
->>> +    description: must specify the base address and size of the CCU, DXE and PMU
->>> +      register blocks
->>
->> New line after "decription:", drop "must specify" and start with capital
->> letter.
->>
->> You need maxItems: 3
->>
-> 
-> Will fix in v2
->>
->>> +
->>> +  reg-names:
->>> +    items:
->>> +      - const: ccu
->>> +      - const: dxe
->>> +      - const: pmu
->>> +
->>> +  interrupts-extended:
->>> +    description:
->>> +      Interrupt lines
->>
->> Skip description, it's obvious.
->>
->> It should be only "interrupts", not extended.
->>
->>> +    minItems: 2
->>> +    maxItems: 5
->>> +
->>> +  interrupt-names:
->>> +    minItems: 2
->>> +    maxItems: 5
->>
->> Names should be clearly defined. They were BTW defined in original
->> bindings, so you should not remove them. This makes me wonder what else
->> did you remove from original bindings...
->>
->> Please document all deviations from pure conversion in the commit msg.
->> It's a second "hidden" difference.
->>
-> 
-> Sorry, this was meant to be a pure txt->YAML conversion. The missing
-> interrupt names was accidental, and will be fixed in v2.
->>> +
->>> +  firmware-name:
->>> +    $ref: /schemas/types.yaml#/definitions/string
->>> +    description: Relative firmware image path for the WCNSS core. Defaults to
->>> +      "wcnss.mdt".
->>
->>
->> Blank line after "description:". This applies to other places as well.
->>
->> Remove "Defailts to ..." and just add "default" schema.
->>
-> 
-> Will be fixed in v2
->>> +
->>> +  vddpx-supply:
->>> +    description: Reference to the PX regulator to be held on behalf of the
->>> +      booting of the WCNSS core
->>> +
->>> +  vddmx-supply:
->>> +    description: Reference to the MX regulator to be held on behalf of the
->>> +      booting of the WCNSS core.
->>> +
->>> +  vddcx-supply:
->>> +    description: Reference to the CX regulator to be held on behalf of the
->>> +      booting of the WCNSS core.
->>
->> s/Reference to the//
->>
->>> +
->>> +  power-domains:
->>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->>> +    description: References to the power domains that need to be held on
->>> +      behalf of the booting WCNSS core
->>
->> 1. Ditto.
->> 2. No need for ref
->> 3. maxItems
->>
->>> +
->>> +  power-domain-names:
->>> +    $ref: /schemas/types.yaml#/definitions/string-array
->>
->> No need for ref, skip description.
->>
->>> +    description: Names of the power domains
->>> +    items:
->>> +      - const: cx
->>> +      - const: mx
->>> +
->>> +  qcom,smem-states:
->>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->>> +    description: States used by the AP to signal the WCNSS core that it should
->>> +      shutdown
->>> +    items:
->>> +      - description: Stop the modem
->>> +
->>> +  qcom,smem-state-names:
->>> +    $ref: /schemas/types.yaml#/definitions/string-array
->>
->> No need for ref. Really, it does not appear in any of existing bindings
->> for smem-state-names, so how did you get it?
->>
-> 
-> The smem nodes were copied from /remoteproc/qcom,sdm845-adsp-pil.yaml
+  where N = 0, 1, 2
 
-Hm, indeed, you're right. There are few files having here ref. I'll fix
-these.
+  Format: node_list
 
-> 
->>> +    description: The names of the state bits used for SMP2P output
->>> +    items:
->>> +      - const: stop
->>> +
->>> +  memory-region:
->>> +    maxItems: 1
->>> +    description: Reference to the reserved-memory for the WCNSS core
->>> +
->>> +  smd-edge:
->>> +    type: object
->>> +    description:
->>> +      Qualcomm Shared Memory subnode which represents communication edge,
->>> +      channels and devices related to the ADSP.
->>
->> You should reference /schemas/soc/qcom/qcom,smd.yaml
-> 
-> Will be done in v2
->>
->>> +
->>> +  iris:
->>
->> Generic node name... what is "iris"?
->>
-> Iris is the RF module, I'll make the description better
+* /sys/devices/system/node/nodeN/memory_tier (read/write)
 
-RF like wifi? Then the property name should be "wifi".
+  where N = 0, 1, ...
 
-
-
-Best regards,
-Krzysztof
+  Format: int or empty

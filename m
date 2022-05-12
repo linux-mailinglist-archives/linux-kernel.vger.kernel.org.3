@@ -2,110 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 554BB524A2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3268524A2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:22:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352564AbiELKVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 06:21:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
+        id S1352574AbiELKWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 06:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352561AbiELKVX (ORCPT
+        with ESMTP id S1345059AbiELKWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 06:21:23 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2064956C05;
-        Thu, 12 May 2022 03:21:22 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="295207716"
-X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
-   d="scan'208";a="295207716"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 03:21:21 -0700
-X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
-   d="scan'208";a="624344471"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 03:21:16 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1np5wV-00FAGx-Ve;
-        Thu, 12 May 2022 13:21:11 +0300
-Date:   Thu, 12 May 2022 13:21:11 +0300
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        =?utf-8?Q?=C5=81ukasz?= Bartosik <lb@semihalf.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-edac@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>
-Subject: Re: [PATCH v5 0/8] platform/x86: introduce p2sb_bar() helper
-Message-ID: <Ynzfl9u4v6/JjwLM@smile.fi.intel.com>
-References: <20220510151451.85561-1-andriy.shevchenko@linux.intel.com>
- <eff9907f-e92b-9115-bea7-b1093d1dc28e@redhat.com>
- <CAHp75Vcnq=Ou6QNyPjwC+HR9wJ2BheonTqmkGvQU0qFtHO2BDw@mail.gmail.com>
- <YnzaxiNBU1awfLoG@google.com>
+        Thu, 12 May 2022 06:22:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073795B3D1;
+        Thu, 12 May 2022 03:22:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A114F61CE2;
+        Thu, 12 May 2022 10:22:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A62AC385CB;
+        Thu, 12 May 2022 10:22:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652350932;
+        bh=MwEdIPt8V7IcGJwcblLAwmE2i5Lh/8BkDawpPULT2II=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TaC4Ro+XrApotYdCJoxHvramF2ezR+O1E0eYlTMMjWtxZfspVKTMSqdhNgqa2PoSt
+         24TK/sqR8iJkV1q6I0626qlpJb2xtMk8LcDR2jwXRoIPlUkPMclaoNAQH7Jjk+nFcO
+         HeoQmg8OyKK0QDaOt+Sb8HlNE3Nh2sl5aDg+zH3s=
+Date:   Thu, 12 May 2022 12:22:05 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <eballetbo@gmail.com>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        groeck@chromium.org, dtor@chromium.org, gwendal@chromium.org,
+        vbendeb@chromium.org, andy@infradead.org,
+        Ayman Bagabas <ayman.bagabas@gmail.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        =?utf-8?B?Qmxhxb4=?= Hrastnik <blaz@mxxn.io>,
+        Darren Hart <dvhart@infradead.org>,
+        Jeremy Soller <jeremy@system76.com>,
+        Mattias Jacobsson <2pi@mok.nu>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Rajat Jain <rajatja@google.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        chrome-platform@lists.linux.dev
+Subject: Re: [PATCH v12] platform/chrome: Add ChromeOS ACPI device driver
+Message-ID: <YnzfzRhGwtO9RtNi@kroah.com>
+References: <YnycZaoBPF89t/qF@debian-BULLSEYE-live-builder-AMD64>
+ <YnzdDMPR3qZ1waJW@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YnzaxiNBU1awfLoG@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YnzdDMPR3qZ1waJW@google.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 11:00:38AM +0100, Lee Jones wrote:
-> On Wed, 11 May 2022, Andy Shevchenko wrote:
-> > On Wed, May 11, 2022 at 6:08 PM Hans de Goede <hdegoede@redhat.com> wrote:
-> > > On 5/10/22 17:14, Andy Shevchenko wrote:
-
-...
-
-> > > I must admit I have lost track of all the Ack-s / Reviewed-by-s a bit.
-> > >
-> > > So from the above I take it that the Ack-s resp. Reviewed-by-s on the
-> > > other non drivers/platform/x86 bits also signal an Ack to merge the entire
-> > > series through the pdx86 tree?
-> > >
-> > > Lee, any chance you can take a look at patches 3-5 and give your Ack
-> > > for merging these through the pdx86 tree together with the rest?
-> > 
-> > Actually I misinterpreted Lee's different tags again. Acked-by is
-> > normal for routing MFD code via other subsystems, while
-> > Acked-for-MFD-by is for Lee (scripts?) to route the code via MFD tree.
-> > Lee, is it the correct interpretation now?
+On Thu, May 12, 2022 at 03:10:20AM -0700, Dmitry Torokhov wrote:
+> Hi Muhammad,
 > 
-> Yes, that is correct.
+> On Thu, May 12, 2022 at 10:34:29AM +0500, Muhammad Usama Anjum wrote:
+> > +static int chromeos_acpi_device_probe(struct platform_device *pdev)
+> > +{
+> > +	chromeos_acpi_gpio_groups = get_gpio_pkg_num(&pdev->dev);
+> > +
+> > +	/*
+> > +	 * If the platform has more GPIO attribute groups than the number of
+> > +	 * groups this driver supports, give out a warning message.
+> > +	 */
+> > +	if (chromeos_acpi_gpio_groups > ARRAY_SIZE(chromeos_acpi_all_groups) - 2)
+> > +		dev_warn(&pdev->dev, "Only %zu GPIO attr groups supported by the driver out of total %u.\n",
+> > +			 ARRAY_SIZE(chromeos_acpi_all_groups) - 2, chromeos_acpi_gpio_groups);
+> 
+> I know that we can bikeshed this until dawn of time, but we are dealing
+> here with data coming from the system firmware and a singleton device,
+> so it should be all available pretty early in boot sequence. I
+> understand we want to solve the "race" even though it is purely
+> theoretical, but we should be able to figure out what gpios are
+> supported and construct the groups array(s) before registering the
+> platform driver. Or do we see that runtime costs of constricting groups
+> dynamically outweigh space wasted by unused groups?
 
-Thanks for clarification. I'm learning hard way :-)
+I really really do not like dynamically created groups as it's more
+complex and fragile.  This is much simpler code overall.
 
-> I just replied to your 0th patch (before I saw this, sorry).
+thanks,
 
-Thanks for the tag.
-
-So, it seems we all set to route this via MFD then. Do you think we can go?
-Or do need to postpone this to be after v5.19-rc1?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+greg k-h

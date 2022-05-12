@@ -2,104 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D10A052470B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F33852470A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351050AbiELHdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 03:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60636 "EHLO
+        id S1351039AbiELHdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 03:33:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347271AbiELHdI (ORCPT
+        with ESMTP id S229502AbiELHdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 12 May 2022 03:33:08 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6563437016;
-        Thu, 12 May 2022 00:33:07 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id h186so1212038pgc.3;
-        Thu, 12 May 2022 00:33:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yplM/Zeq0pEKF0U56fS8NRc7S0PAi8U3tlHusHHziow=;
-        b=BjS1pP17h9/VkM+P3SCwK4Q0gK0VlPq4dk+mL5DNDlg7eS0+LcZ5CRsJfjvawZOx6p
-         Oo+emYdFmuNnltVV/UT6s3y9vDQP0PGD4Gd43zSo3XWp/NVt9e50UOjzs4TpB1LnWDMJ
-         1dmGy/wzYwrY9yAYxLERlo1HxmYwCDNtaCKV+NMp3DcPrXZ+UQY7efE4YXsCnixvNGyS
-         GLxtnxJatwkb8fULHnsapr1FYnGp85jN3yeLr4iGAExenosLs0tg+I71BFj1B3AEG3/d
-         NVI/Sxe/nbfCKXN3/6AKZE/iaQQh0KpjXgMh5N/0DlLBK/LHPgoad77mvMNHI4KL6vLc
-         7QXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yplM/Zeq0pEKF0U56fS8NRc7S0PAi8U3tlHusHHziow=;
-        b=2TV3jBnwlnZZtboAwTevTidZmtEE1qsL/GwISHQlC1wJO9OG5WkXdLwdffGYje8x1z
-         d7AQmLuA5iCkl9wWaa3hZZTzvRVG+o5MZFDu9pBcdDSr/q/xCTPqMfwBu63w2/imxO9Y
-         U1xFmLzFxvI+RkhFOpzP2+sqlV6xpjexUBoWSwWlDx6LjKjlhYcWdvdWXTDKe+m1O4wS
-         ZGx8JfS1nzF0WaIey9xaRychL8tRgVIIa9QduVJ7DBIZTlIIT6ms6JFG6J3BXoFXT+LJ
-         wDaYzjFuDISmaePeOhhkUmLpvpMAUty9cemMbMlOhjxnYGEVGVTvxUXkNzc3QxPKEGh8
-         jtcg==
-X-Gm-Message-State: AOAM53231LKVEEwv1eCjZbDzeRiwLVBXVma0Bs+kxJvrqnX8bDwjhX7q
-        jExU4quZQC0ohbjXYtS+Kn2adqLbu9QjE0Kfay4=
-X-Google-Smtp-Source: ABdhPJwA7hXKO7tzzILJ/Si87B0V0C9/OF6fmLWqZ9vJYoR/FQUbQd79YV4b5U5rQI9VfrROoWGxsmz5cg0NAwAOW8M=
-X-Received: by 2002:a62:3881:0:b0:4b0:b1c:6fd9 with SMTP id
- f123-20020a623881000000b004b00b1c6fd9mr10088127pfa.27.1652340786960; Thu, 12
- May 2022 00:33:06 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA76036E1E;
+        Thu, 12 May 2022 00:33:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18DE561EAC;
+        Thu, 12 May 2022 07:33:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AF99C385B8;
+        Thu, 12 May 2022 07:33:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652340785;
+        bh=ddtYkLWi+bM8tkL0qc0h+qJ4uhi+fLy4+YkKK0LtHbg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wV27bUBQBIbBOYhuWHfMGmWDf7fuQPVKdZ14av7tNkdFYnl/u2lO8ebA0WaB2htok
+         RVGNf9JnIoMk73NIyBGm/6aWdJWmVPV8Le+xz/YmhGh3W+OLz5yrdEIamtGtpnEQLN
+         n+BkrZw/qyYzJok9jcempbZproDgzQU9LJ827Wi8=
+Date:   Thu, 12 May 2022 09:33:02 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Albert Wang <albertccwang@google.com>
+Cc:     balbi@kernel.org, quic_jackp@quicinc.com, badhri@google.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: dwc3: gadget: Move null pinter check after
+ window closed
+Message-ID: <Yny4LgeQ+r6w0vhJ@kroah.com>
+References: <20220512043739.1234857-1-albertccwang@google.com>
 MIME-Version: 1.0
-References: <20220510141753.3878390-1-Qing-wu.Li@leica-geosystems.com.cn> <20220510141753.3878390-7-Qing-wu.Li@leica-geosystems.com.cn>
-In-Reply-To: <20220510141753.3878390-7-Qing-wu.Li@leica-geosystems.com.cn>
-From:   Alexandru Ardelean <ardeleanalex@gmail.com>
-Date:   Thu, 12 May 2022 10:32:55 +0300
-Message-ID: <CA+U=DspAtKrDdgrzAyELDULQVjj6eFgMhsZjFCOXXYrxFAW6YQ@mail.gmail.com>
-Subject: Re: [PATCH V2 6/6] dt-bindings: iio: accel: Add bmi085 and bmi090l bindings
-To:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        mchehab+huawei@kernel.org, linux-iio <linux-iio@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mike Looijmans <mike.looijmans@topic.nl>,
-        devicetree <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220512043739.1234857-1-albertccwang@google.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 5:18 PM LI Qingwu
-<Qing-wu.Li@leica-geosystems.com.cn> wrote:
->
-> Adds the device-tree bindings for the Bosch
-> BMI085 and BMI090L IMU, the accelerometer part.
->
-
-I think some datasheet links could be added to this file for the new devices.
-
-The BMI088 has a link to its datasheet.
-
-> Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+On Thu, May 12, 2022 at 12:37:39PM +0800, Albert Wang wrote:
+> After inspecting further, we do see the locking is implicit, with the
+> main gotcha being the unlock/re-lock. That creates a window for a race
+> to happen. This change moves the NULL check to be adjacent to where
+> to it's used and after the window is "closed".
+> 
+> Fixes: 26288448120b ("usb: dwc3: gadget: Fix null pointer exception")
+> 
+> Signed-off-by: Albert Wang <albertccwang@google.com>
 > ---
->  Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml b/Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml
-> index 911a1ae9c83f..4290f5f88a8f 100644
-> --- a/Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml
-> +++ b/Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml
-> @@ -18,6 +18,8 @@ properties:
->    compatible:
->      enum:
->        - bosch,bmi088-accel
-> +      - bosch,bmi085-accel
-> +      - bosch,bmi090l-accel
->
->    reg:
->      maxItems: 1
-> --
-> 2.25.1
->
+>  drivers/usb/dwc3/gadget.c | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 19477f4bbf54..fda58951cf27 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -3366,14 +3366,19 @@ static bool dwc3_gadget_endpoint_trbs_complete(struct dwc3_ep *dep,
+>  	struct dwc3		*dwc = dep->dwc;
+>  	bool			no_started_trb = true;
+>  
+> -	if (!dep->endpoint.desc)
+> -		return no_started_trb;
+> -
+> +	/*
+> +	 * This function eventually leads to dwc3_giveback() which unlocks
+> +	 * the dwc->lock and relocks afterwards. This actually creates a
+> +	 * a window for a race to happen.
+> +	 */
+>  	dwc3_gadget_ep_cleanup_completed_requests(dep, event, status);
+>  
+>  	if (dep->flags & DWC3_EP_END_TRANSFER_PENDING)
+>  		goto out;
+>  
+> +	if (!dep->endpoint.desc)
+> +		return no_started_trb;
+> +
+>  	if (usb_endpoint_xfer_isoc(dep->endpoint.desc) &&
+>  		list_empty(&dep->started_list) &&
+>  		(list_empty(&dep->pending_list) || status == -EXDEV))
+> -- 
+> 2.36.0.550.gb090851708-goog
+> 
+
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot

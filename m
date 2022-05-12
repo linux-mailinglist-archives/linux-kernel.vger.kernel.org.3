@@ -2,77 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA46C5246C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3022B5246CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350928AbiELHVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 03:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47424 "EHLO
+        id S1350921AbiELHVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 03:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350929AbiELHVG (ORCPT
+        with ESMTP id S1350972AbiELHVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 03:21:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1A951AD8D
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:21:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652340063;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=v7bOQidy2XKacFQoEFC88TIIvZuaoizz8bbPSOsrMVU=;
-        b=WzhGOFw6tD0KNK+9t0klqE4vqt6BG6qI2OlDEvMisKxc+ovLPFJ6QBtFeJaZepcmzZ2I1F
-        kzy41H6xzshsxdQkf38DkS7yzdBN6uqCOVITGdWSqs/HIInq7yYo0DYW8GhqQZP8Z+rvof
-        zBIxBVjdjr2KDf3AceCS5Semm8HE8Xo=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-646-pkh5LATMP56FwyDqeZHFRQ-1; Thu, 12 May 2022 03:21:01 -0400
-X-MC-Unique: pkh5LATMP56FwyDqeZHFRQ-1
-Received: by mail-wm1-f72.google.com with SMTP id k5-20020a05600c0b4500b003941ca130f9so1293441wmr.0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:21:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=v7bOQidy2XKacFQoEFC88TIIvZuaoizz8bbPSOsrMVU=;
-        b=vdBcm7SRx+2oigB5n+5KZPxPXJYODm4TpvMubcKFr8wTCOEPrLP4/Jh98bH8ggRfWP
-         zQE0/rpZ4YzUDA1ATWTpK9/rV69YYnWUyCC57zzlP18yZySIOrF45tmxLd11LLihmpAQ
-         Ynb3tHOvqnxPP2kPTqWRJUziK2sdjHoUqpLxcJVBSOgCcmZuFjrGvY2/RaI8BOad1ah2
-         SYVoHQTbjSiHpMpk39MFZ87KTAvGqnEos2Xp85/Dm/q/rBIUWHGKZjYLUL/jIfnBeoKG
-         jR+l0Igd6YtEcPY9F9coQa71goAFBkaBdIEDI9kE0jxAXapZnOJN4fGpd7+Dt6KjwJv1
-         4Y9Q==
-X-Gm-Message-State: AOAM5326MYzV0rqzc1CGa7Xpepi+m7a9BULKSrnAxxTyfwoNUGG7jf5z
-        C+fYgYBtTHaQJZBldS3TTlzs3OhhnGsqcYQrjnhT02s4GBfisaFyrnrN7HsqMLoJrWmMzDKe4QQ
-        UaGQC7zBT43JkDmcNPoKC6DjF
-X-Received: by 2002:a05:600c:4ba1:b0:394:9ae3:ee98 with SMTP id e33-20020a05600c4ba100b003949ae3ee98mr8594972wmp.160.1652340060416;
-        Thu, 12 May 2022 00:21:00 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwkID2x3/1z0/wYtZX175tGSUkmgETVETXT7EhcZbVjxfbCqFPAOMIbsG17vOktA4lTMY16mg==
-X-Received: by 2002:a05:600c:4ba1:b0:394:9ae3:ee98 with SMTP id e33-20020a05600c4ba100b003949ae3ee98mr8594952wmp.160.1652340060137;
-        Thu, 12 May 2022 00:21:00 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-113-89.dyn.eolo.it. [146.241.113.89])
-        by smtp.gmail.com with ESMTPSA id l16-20020a5d4bd0000000b0020c5253d8d8sm4000061wrt.36.2022.05.12.00.20.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 00:20:59 -0700 (PDT)
-Message-ID: <87124d7a213f14eec98bbeb80836c20ea1a33352.camel@redhat.com>
-Subject: Re: [PATCH v2] drivers: net: vmxnet3: fix possible use-after-free
- bugs in vmxnet3_rq_alloc_rx_buf()
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Zixuan Fu <r33s3n6@gmail.com>, doshir@vmware.com,
-        pv-drivers@vmware.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        baijiaju1990@gmail.com, TOTE Robot <oslab@tsinghua.edu.cn>
-Date:   Thu, 12 May 2022 09:20:58 +0200
-In-Reply-To: <20220510131716.929387-1-r33s3n6@gmail.com>
-References: <20220510131716.929387-1-r33s3n6@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Thu, 12 May 2022 03:21:36 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030E42C10C;
+        Thu, 12 May 2022 00:21:33 -0700 (PDT)
+Received: from mail-yb1-f173.google.com ([209.85.219.173]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M2fDr-1nma1s3mxT-004CAf; Thu, 12 May 2022 09:21:32 +0200
+Received: by mail-yb1-f173.google.com with SMTP id v59so8108983ybi.12;
+        Thu, 12 May 2022 00:21:31 -0700 (PDT)
+X-Gm-Message-State: AOAM532m7bhsqYseq6xznso3H2LCu9NoI7jZNTium6OFgIlUc1uKAlzh
+        8EBUuGE/I+ym1RYNT6C2OEeWGFGN9qQIBgmT950=
+X-Google-Smtp-Source: ABdhPJx4WfEOUWv2L6bCmWT0mJB6dEDWkNIHboRAE66MHFC+PuQA7c4QPgkOpP2BhGDSQSBJfhNNN89Hg26ByytWHec=
+X-Received: by 2002:a25:cdc7:0:b0:648:f57d:c0ed with SMTP id
+ d190-20020a25cdc7000000b00648f57dc0edmr26571261ybf.480.1652340090303; Thu, 12
+ May 2022 00:21:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+References: <20220430090518.3127980-1-chenhuacai@loongson.cn>
+ <20220430090518.3127980-14-chenhuacai@loongson.cn> <CAK8P3a0A9dW4mwJ6JHDiJxizL7vWfr4r4c5KhbjtAY0sWbZJVA@mail.gmail.com>
+ <CAAhV-H4te_+AS69viO4eBz=abBUm5oQ6AfoY1Cb+nOCZyyeMdA@mail.gmail.com>
+ <CAK8P3a0DqQcApv8aa2dgBS5At=tEkN7cnaskoUeXDi2-Bu9Rnw@mail.gmail.com>
+ <20220507121104.7soocpgoqkvwv3gc@wittgenstein> <20220509100058.vmrgn5fkk3ayt63v@wittgenstein>
+ <CAK8P3a0zmPbMNsS11aUGiAADyjOEueNUXQ8QZtVxr48M3pwAkQ@mail.gmail.com> <20220511211231.GG7074@brightrain.aerifal.cx>
+In-Reply-To: <20220511211231.GG7074@brightrain.aerifal.cx>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 12 May 2022 09:21:13 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a05wSVu7M9kVMw5cSqx84YUCk1394Yfd_5tweEOc2P69g@mail.gmail.com>
+Message-ID: <CAK8P3a05wSVu7M9kVMw5cSqx84YUCk1394Yfd_5tweEOc2P69g@mail.gmail.com>
+Subject: Re: [musl] Re: [PATCH V9 13/24] LoongArch: Add system call support
+To:     musl@lists.openwall.com
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <brauner@kernel.org>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        GNU C Library <libc-alpha@sourceware.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:i280+8Sy6Wd4KatTn+RAGMJYY6bd4l+X6Q9g41wB0EzV5X30OO5
+ 4F/E9HIw9rH3XsYfsgDXkv8wVRdhceF7dTDTOWUf+b6zI7JZrCl1L2eHs24DhecUt0pCEbQ
+ ukUdWPXSgzAJX9qnvbH+D6DTGPfESuYxFs9qVcsdWMUjMnxleuzfZaG3jSfOI80dHooHwRL
+ ANBM/AtA2m0eggx/7I5iA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:YhzFAH8uXKs=:InJy6ZucBe+dh6L7ckj11f
+ WzhmjMZMraPlGFvP/YSsCywqfrtchUusNsSgyCdGxFrItN0vcro3UmkaEC68tugzAoBJBv9SV
+ buDkGAGUv9mHuod3qaSDHjtBNWOHkg32FiZshWt71YhZMHkZqs6t3tFddTUMo6GvkjHCa3B3p
+ 1NdQRyuHfL8sytpzGoni1yWoKkKf5AVF51+qQIwDrQuv/9KCTfIpChFshB19HptGnTNrt7gXc
+ qRF6RA3EItn8/4dxLLYOZYUss6273Io/sWYp+akYxRkpENMtboT26fZwZsIX1JgXVESnkCdE6
+ mZDiejsgESRTx/P8lVkMf3x1eLvVSTiHLidh1IDaH8FDauWiJIrGB3mqe7wP+BKQM+D1DcJ5m
+ aCcaTS88zzIQqnaX78s3QEA3IEozae65oXP0k882cEc4nyQPYaWEna6T6f0gbvEEMpN7LFO41
+ mhR43WsPBpVYS2G89k8l1Moq1+VJMvHOtVDCj6HG0hni8YSxoFkZfQzNfYUcagppRtFlDXfmj
+ o8eomH+CvzOpFhB21d13cNvMmcf/3E0XtK6ipRbWZgRfQ0b9HvBl+r4z3mp/gzUT7vd2Pmbmq
+ pjciDZRJlzngfCvuEXrfJVp6ojFbLOqaG91GZWqADrw4BKEoM2tOAsPBwVPV0fsovGHR9Gtjq
+ 9FTVn1vErqylEXHGPNKTlEvuxZRmJK4Z93J0KVZiVb/6hUQO794P0IyfuvnobVUnd7FBgDbW1
+ a0v5Ca15cWEg8+Fpvq2OwqZMtNa1rl5IgoSyRNW7EBH81aQdyXDET2v4IPGxsSfOg+/x/LQI8
+ tctzVxDP3o0Imqw+j6YmjuZmYAJ/t0FceQ03cxuBiBRK2MyNvuPobmlgwVE/uAxrqEmoNsgM8
+ Mp21AeuMcp/vIrPJm6QQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,70 +88,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, May 11, 2022 at 11:12 PM Rich Felker <dalias@libc.org> wrote:
+> On Wed, May 11, 2022 at 09:11:56AM +0200, Arnd Bergmann wrote:
+> > On Mon, May 9, 2022 at 12:00 PM Christian Brauner <brauner@kernel.org> wrote:
+> > .....
+> > > I can try and move a poc for this up the todo list.
+> > >
+> > > Without an approach like this certain sandboxes will fallback to
+> > > ENOSYSing system calls they can't filter. This is a generic problem
+> > > though with clone3() being one promiment example.
+> >
+> > Thank you for the detailed reply. It sounds to me like this will eventually have
+> > to get solved anyway, so we could move ahead without clone() on loongarch,
+> > and just not have support for Chrome until this is fully solved.
+> >
+> > As both the glibc and musl ports are being proposed for inclusion right
+> > now, we should try to come to a decision so the libc ports can adjust if
+> > necessary. Adding both mailing lists to Cc here, the discussion is archived
+> > at [1].
+> >
+> >          Arnd
+> >
+> > [1] https://lore.kernel.org/linux-arch/20220509100058.vmrgn5fkk3ayt63v@wittgenstein/
+>
+> Having read about the seccomp issue, I think it's a very strong
+> argument that __NR_clone should be kept permanently for all future
+> archs.
 
-On Tue, 2022-05-10 at 21:17 +0800, Zixuan Fu wrote:
-> In vmxnet3_rq_alloc_rx_buf(), when dma_map_single() fails, rbi->skb is
-> freed immediately. Similarly, in another branch, when dma_map_page() fails,
-> rbi->page is also freed. In the two cases, vmxnet3_rq_alloc_rx_buf()
-> returns an error to its callers vmxnet3_rq_init() -> vmxnet3_rq_init_all()
-> -> vmxnet3_activate_dev(). Then vmxnet3_activate_dev() calls
-> vmxnet3_rq_cleanup_all() in error handling code, and rbi->skb or rbi->page
-> are freed again in vmxnet3_rq_cleanup_all(), causing use-after-free bugs.
-> 
-> To fix these possible bugs, rbi->skb and rbi->page should be cleared after
-> they are freed.
-> 
-> The error log in our fault-injection testing is shown as follows:
-> 
-> [   14.319016] BUG: KASAN: use-after-free in consume_skb+0x2f/0x150
-> ...
-> [   14.321586] Call Trace:
-> ...
-> [   14.325357]  consume_skb+0x2f/0x150
-> [   14.325671]  vmxnet3_rq_cleanup_all+0x33a/0x4e0 [vmxnet3]
-> [   14.326150]  vmxnet3_activate_dev+0xb9d/0x2ca0 [vmxnet3]
-> [   14.326616]  vmxnet3_open+0x387/0x470 [vmxnet3]
-> ...
-> [   14.361675] Allocated by task 351:
-> ...
-> [   14.362688]  __netdev_alloc_skb+0x1b3/0x6f0
-> [   14.362960]  vmxnet3_rq_alloc_rx_buf+0x1b0/0x8d0 [vmxnet3]
-> [   14.363317]  vmxnet3_activate_dev+0x3e3/0x2ca0 [vmxnet3]
-> [   14.363661]  vmxnet3_open+0x387/0x470 [vmxnet3]
-> ...
-> [   14.367309] 
-> [   14.367412] Freed by task 351:
-> ...
-> [   14.368932]  __dev_kfree_skb_any+0xd2/0xe0
-> [   14.369193]  vmxnet3_rq_alloc_rx_buf+0x71e/0x8d0 [vmxnet3]
-> [   14.369544]  vmxnet3_activate_dev+0x3e3/0x2ca0 [vmxnet3]
-> [   14.369883]  vmxnet3_open+0x387/0x470 [vmxnet3]
-> [   14.370174]  __dev_open+0x28a/0x420
-> [   14.370399]  __dev_change_flags+0x192/0x590
-> [   14.370667]  dev_change_flags+0x7a/0x180
-> [   14.370919]  do_setlink+0xb28/0x3570
-> [   14.371150]  rtnl_newlink+0x1160/0x1740
-> [   14.371399]  rtnetlink_rcv_msg+0x5bf/0xa50
-> [   14.371661]  netlink_rcv_skb+0x1cd/0x3e0
-> [   14.371913]  netlink_unicast+0x5dc/0x840
-> [   14.372169]  netlink_sendmsg+0x856/0xc40
-> [   14.372420]  ____sys_sendmsg+0x8a7/0x8d0
-> [   14.372673]  __sys_sendmsg+0x1c2/0x270
-> [   14.372914]  do_syscall_64+0x41/0x90
-> [   14.373145]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> ...
-> 
-> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-> Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
+Ok, let's keep clone() around for all architectures then. We should probably
+just remove the __ARCH_WANT_SYS_CLONE macro and build the
+code into the kernel unconditionally, but at the moment there
+are still private versions for ia64 and sparc with the same name as
+the generic version. Both are also still lacking support for clone3() and
+don't have anyone actively working on them.
 
-This looks like targeting the 'net' tree. You should specify that in
-the patch subj. More importantly you should provide a 'Fixes' tag
-pointing to commit introducing the issue.
+In this case, we probably don't need to change clone3() to allow the
+zero-length stack after all, and the wrapper that was added to the
+musl port should get removed again.
 
-Please provide a new version addressing the above.
+For the other syscalls, I think the latest musl patches already dropped
+the old-style stat() implementation, but the glibc patches still have those
+and need to drop them as well to match what the kernel will get.
 
-Thanks,
-
-Paolo
-
+       Arnd

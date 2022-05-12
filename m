@@ -2,221 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3929524AAC
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE36524ABC
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352808AbiELKqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 06:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44690 "EHLO
+        id S1352809AbiELKrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 06:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352802AbiELKp7 (ORCPT
+        with ESMTP id S241206AbiELKrp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 06:45:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 955ABBE27
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:45:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652352350;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TCJLtBpkCpoNhytrPnBMMa+Df/U29oTQnuhtYLtN2Ho=;
-        b=Serh0A7BRRxe3aThqBtDQx8HZW2L6MTi6BUcITRn5MSdqq5sGfgKJs51qmNMJ6NvH2Q1fk
-        N7ugflFs9AejJ0PbHjXUivNSb7K7/0Rld8K2ZiFt5NceQGmEK5MuvhEd4pAkqNC1eMicYV
-        e/cMe8Q4ESrZU19YnqBQupF3c7Z+tmY=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-441-fMcKjyJnPyeL6IKzBHpwtQ-1; Thu, 12 May 2022 06:45:49 -0400
-X-MC-Unique: fMcKjyJnPyeL6IKzBHpwtQ-1
-Received: by mail-ed1-f71.google.com with SMTP id s24-20020a05640217d800b00425e19e7deaso2910227edy.3
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:45:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TCJLtBpkCpoNhytrPnBMMa+Df/U29oTQnuhtYLtN2Ho=;
-        b=icDh8LzedjLDBZ7n6hQVogOIeydfsGAK4pNG3Q2BxNbTaMj59OUtrBmpChI0iXnAHp
-         3NZ9+e1XsKCf8LamxBLWbVskjaZA7L0vyPcURxVpzNHo2XaBSjymfPg1oCfp23xY2+xP
-         8WEtipGNipyIF3ggh0AoEYQA/JNIZ4P7bsl1i5Cflh0HHH9dTT4rXrhYlGwgVztYDX2q
-         T2apXVvgewBnBQnnpkgf6SU74ipmFrgAALAABWM5JDGgyuXxsoiu+iMPT9Rz56JrLlA4
-         VIa6j2ev/HqBS3+u6ArE67AakZDkyMYvy8s7H5aSayS70uTY4IbNN6MjLRIxzTT+pjFJ
-         WH/A==
-X-Gm-Message-State: AOAM533LbK+s5KDN8KHplsjyhSDoNfiycxEnz93O83gm/YdA9+L1oMg9
-        +VyI3HMkpjTz+rOCxUI7vzypfndkvl7uMdtP7pLj/QsDGCKnqUx7pS2tg+cDhBZGk2EsStBCuEq
-        aHrrduwhpi1sfTVBWGxO8xFc7
-X-Received: by 2002:aa7:d916:0:b0:425:d75f:ae68 with SMTP id a22-20020aa7d916000000b00425d75fae68mr34154816edr.270.1652352347842;
-        Thu, 12 May 2022 03:45:47 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxECFOLs5RBdl3mHZa53gpKtF7VUFkt92t99kAnYQXrDSPfKSDLd1ZOUpb30VBwHJkpaK6kuQ==
-X-Received: by 2002:aa7:d916:0:b0:425:d75f:ae68 with SMTP id a22-20020aa7d916000000b00425d75fae68mr34154784edr.270.1652352347584;
-        Thu, 12 May 2022 03:45:47 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id bt10-20020a170906b14a00b006f3ef214e43sm1961957ejb.169.2022.05.12.03.45.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 03:45:47 -0700 (PDT)
-Message-ID: <196635f6-8215-d4e4-270e-7375af81136c@redhat.com>
-Date:   Thu, 12 May 2022 12:45:46 +0200
+        Thu, 12 May 2022 06:47:45 -0400
+Received: from mx1.cqplus1.com (unknown [113.204.237.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED30C7A467
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:47:32 -0700 (PDT)
+X-MailGates: (flag:1,DYNAMIC,RELAY,NOHOST,LAN:PASS)(compute_score:DELIVE
+        R,40,3)
+Received: from 172.27.96.203
+        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(26396:0:AUTH_RELAY)
+        (envelope-from <qinjian@cqplus1.com>); Thu, 12 May 2022 18:45:58 +0800 (CST)
+Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
+ CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.6; Thu, 12 May 2022 18:45:55 +0800
+Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
+ ([::1]) with mapi id 15.01.2507.006; Thu, 12 May 2022 18:45:55 +0800
+From:   =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
+Subject: RE: [PATCH v15 04/10] dt-bindings: clock: Add bindings for SP7021
+ clock driver
+Thread-Topic: [PATCH v15 04/10] dt-bindings: clock: Add bindings for SP7021
+ clock driver
+Thread-Index: AQHYZcsP5QfLdHxDWUuwmqTXvmezs60ag04AgACLAGA=
+Date:   Thu, 12 May 2022 10:45:54 +0000
+Message-ID: <8a9fa13f66ce4ef9a8f8c9200e1fac5f@cqplus1.com>
+References: <cover.1652329411.git.qinjian@cqplus1.com>
+ <b5ca5d417be079a2a40a6e79ac1b246b6359a49e.1652329411.git.qinjian@cqplus1.com>
+ <e9a39eb6-d8e2-bac6-27e2-f63ef8519917@linaro.org>
+In-Reply-To: <e9a39eb6-d8e2-bac6-27e2-f63ef8519917@linaro.org>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.28.110.18]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v5 0/8] platform/x86: introduce p2sb_bar() helper
-Content-Language: en-US
-To:     Lee Jones <lee.jones@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        =?UTF-8?Q?=c5=81ukasz_Bartosik?= <lb@semihalf.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>
-References: <20220510151451.85561-1-andriy.shevchenko@linux.intel.com>
- <YnzZpE4JOLlxsjVc@google.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <YnzZpE4JOLlxsjVc@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 5/12/22 11:55, Lee Jones wrote:
-> On Tue, 10 May 2022, Andy Shevchenko wrote:
-> 
->> There are a few users and at least one more is coming (*1) that would
->> like to utilize P2SB mechanism of hiding and unhiding a device from
->> the PCI configuration space.
->>
->> Here is the series to consolidate p2sb handling code for existing users
->> and provide a generic way for new comer(s).
->>
->> It also includes a patch to enable GPIO controllers on Apollo Lake
->> when it's used with ABL bootloader w/o ACPI support (*2).
->>
->> The patch that brings the helper ("platform/x86/intel: Add Primary to
->> Sideband (P2SB) bridge support") has a commit message that sheds a light
->> on what the P2SB is and why this is needed.
->>
->> The changes made in v5 do not change the main idea and the functionality
->> in a big scale. What we need is probably one more retest done by Henning
->> (*3). I hope to have it merged to v5.19-rc1 that Siemens can develop
->> their changes based on this series (*4).
->>
->> I have tested this on Apollo Lake platform (I'm able to see SPI NOR and
->> since we have an ACPI device for GPIO I do not see any attempts to recreate
->> one).
->>
->> *1) One in this series, and one is a recent merge of the Simatic IPC drivers
->> *2) This patch can be postponed as Lee hasn't given his tag yet.
->> *3) Henning gave his tag and I dared to used it even against changed patch 1
->> *4) The changes were posted in between of v4 and v5 of this series, but need
->>     more work.
->>
->> Taking into account the *2) the series is ready to be merged via PDx86 tree.
-> 
-> If that happens you need to do 2 things:
-> 
-> 1. Change all s/Acked-for-MFD-by/Acked-by/
-> 2. Submit a pull-request that we can all pull from
-> 
-> Alternatively, I can apply this via MFD and do the same.
-
-Applying this via MFD is fine with me and probably is the
-logical thing to do since only 1/8 patches in the set is
-a pdx86 patch and 3 patches are MFD patches.
-
-Patch 1/8 already has my Acked-by for merging it through
-the MFD tree.
-
-Regards,
-
-Hans
-
-
-> 
->> Changes in v5:
->> - rewritten patch 1 to use pci_scan_single_device() (Lukas, Bjorn)
->> - rebased patch 2 on top of the new Intel SPI NOR codebase
->> - fixed a potential bug and rewritten resource filling in patch 5 (Lee)
->> - added many different tags in a few patches (Jean, Wolfram, Henning)
->>
->> Changes in v4:
->> - added tag to the entire series (Hans)
->> - added tag to pin control patch (Mika)
->> - dropped PCI core changes (PCI core doesn't want modifications to be made)
->> - as a consequence of the above merged necessary bits into p2sb.c
->> - added a check that p2sb is really hidden (Hans)
->> - added EDAC patches (reviewed by maintainer internally)
->>
->> Changes in v3:
->> - resent with cover letter
->>
->> Changes in v2:
->> - added parentheses around bus in macros (Joe)
->> - added tag (Jean)
->> - fixed indentation and wrapping in the header (Christoph)
->> - moved out of PCI realm to PDx86 as the best common denominator (Bjorn)
->> - added a verbose commit message to explain P2SB thingy (Bjorn)
->> - converted first parameter from pci_dev to pci_bus
->> - made first two parameters (bus and devfn) optional (Henning, Lee)
->> - added Intel pin control patch to the series (Henning, Mika)
->> - fixed English style in the commit message of one of MFD patch (Lee)
->> - added tags to my MFD LPC ICH patches (Lee)
->> - used consistently (c) (Lee)
->> - made indexing for MFD cell and resource arrays (Lee)
->> - fixed the resource size in i801 (Jean)
->>
->> Andy Shevchenko (6):
->>   pinctrl: intel: Check against matching data instead of ACPI companion
->>   mfd: lpc_ich: Factor out lpc_ich_enable_spi_write()
->>   mfd: lpc_ich: Switch to generic p2sb_bar()
->>   i2c: i801: convert to use common P2SB accessor
->>   EDAC, pnd2: Use proper I/O accessors and address space annotation
->>   EDAC, pnd2: convert to use common P2SB accessor
->>
->> Jonathan Yong (1):
->>   platform/x86/intel: Add Primary to Sideband (P2SB) bridge support
->>
->> Tan Jui Nee (1):
->>   mfd: lpc_ich: Add support for pinctrl in non-ACPI system
->>
->>  drivers/edac/Kconfig                   |   1 +
->>  drivers/edac/pnd2_edac.c               |  62 +++-------
->>  drivers/i2c/busses/Kconfig             |   1 +
->>  drivers/i2c/busses/i2c-i801.c          |  39 ++----
->>  drivers/mfd/Kconfig                    |   1 +
->>  drivers/mfd/lpc_ich.c                  | 161 +++++++++++++++++++------
->>  drivers/pinctrl/intel/pinctrl-intel.c  |  14 +--
->>  drivers/platform/x86/intel/Kconfig     |  12 ++
->>  drivers/platform/x86/intel/Makefile    |   2 +
->>  drivers/platform/x86/intel/p2sb.c      | 133 ++++++++++++++++++++
->>  include/linux/platform_data/x86/p2sb.h |  28 +++++
->>  11 files changed, 338 insertions(+), 116 deletions(-)
->>  create mode 100644 drivers/platform/x86/intel/p2sb.c
->>  create mode 100644 include/linux/platform_data/x86/p2sb.h
->>
->>
->> base-commit: 3bf222d317a20170ee17f082626c1e0f83537e13
-> 
-
+PiBPbiAxMi8wNS8yMDIyIDA4OjMwLCBRaW4gSmlhbiB3cm90ZToNCj4gPiBBZGQgZG9jdW1lbnRh
+dGlvbiB0byBkZXNjcmliZSBTdW5wbHVzIFNQNzAyMSBjbG9jayBkcml2ZXIgYmluZGluZ3MuDQo+
+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBRaW4gSmlhbiA8cWluamlhbkBjcXBsdXMxLmNvbT4NCj4g
+PiAtLS0NCj4gPiBSZW1vdmUgIkJpbmRpbmciIGZyb20geWFtbCB0aXRsZQ0KPiA+IFJlbmFtZSBz
+cC1zcDcwMjEuaCB0byBzdW5wbHVzLHNwNzAyMS1jbGtjLmgNCj4gDQo+IFRoYW5rcy4NCj4gDQo+
+ID4gLS0tDQo+ID4gIC4uLi9iaW5kaW5ncy9jbG9jay9zdW5wbHVzLHNwNzAyMS1jbGtjLnlhbWwg
+ICB8IDUxICsrKysrKysrKysrDQo+ID4gIE1BSU5UQUlORVJTICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICB8ICAyICsNCj4gPiAgLi4uL2R0LWJpbmRpbmdzL2Nsb2NrL3N1bnBsdXMs
+c3A3MDIxLWNsa2MuaCAgIHwgODggKysrKysrKysrKysrKysrKysrKw0KPiA+ICAzIGZpbGVzIGNo
+YW5nZWQsIDE0MSBpbnNlcnRpb25zKCspDQo+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBEb2N1bWVu
+dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvY2xvY2svc3VucGx1cyxzcDcwMjEtY2xrYy55YW1s
+DQo+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBpbmNsdWRlL2R0LWJpbmRpbmdzL2Nsb2NrL3N1bnBs
+dXMsc3A3MDIxLWNsa2MuaA0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2
+aWNldHJlZS9iaW5kaW5ncy9jbG9jay9zdW5wbHVzLHNwNzAyMS1jbGtjLnlhbWwNCj4gYi9Eb2N1
+bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvY2xvY2svc3VucGx1cyxzcDcwMjEtY2xrYy55
+YW1sDQo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gPiBpbmRleCAwMDAwMDAwMDAuLjExOTk2
+MWExNw0KPiA+IC0tLSAvZGV2L251bGwNCj4gPiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRy
+ZWUvYmluZGluZ3MvY2xvY2svc3VucGx1cyxzcDcwMjEtY2xrYy55YW1sDQo+ID4gQEAgLTAsMCAr
+MSw1MSBAQA0KPiA+ICsjIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiAoR1BMLTIuMC1vbmx5IE9S
+IEJTRC0yLUNsYXVzZSkNCj4gPiArIyBDb3B5cmlnaHQgKEMpIFN1bnBsdXMgQ28uLCBMdGQuIDIw
+MjENCj4gPiArJVlBTUwgMS4yDQo+ID4gKy0tLQ0KPiA+ICskaWQ6IGh0dHA6Ly9kZXZpY2V0cmVl
+Lm9yZy9zY2hlbWFzL2Nsb2NrL3N1bnBsdXMsc3A3MDIxLWNsa2MueWFtbCMNCj4gPiArJHNjaGVt
+YTogaHR0cDovL2RldmljZXRyZWUub3JnL21ldGEtc2NoZW1hcy9jb3JlLnlhbWwjDQo+ID4gKw0K
+PiA+ICt0aXRsZTogU3VucGx1cyBTUDcwMjEgU29DIENsb2NrIENvbnRyb2xsZXINCj4gPiArDQo+
+ID4gK21haW50YWluZXJzOg0KPiA+ICsgIC0gUWluIEppYW4gPHFpbmppYW5AY3FwbHVzMS5jb20+
+DQo+ID4gKw0KPiA+ICtwcm9wZXJ0aWVzOg0KPiA+ICsgIGNvbXBhdGlibGU6DQo+ID4gKyAgICBj
+b25zdDogc3VucGx1cyxzcDcwMjEtY2xrYw0KPiA+ICsNCj4gPiArICByZWc6DQo+ID4gKyAgICBt
+YXhJdGVtczogMQ0KPiA+ICsNCj4gPiArICBjbG9ja3M6DQo+ID4gKyAgICBtYXhJdGVtczogMQ0K
+PiA+ICsNCj4gPiArICAiI2Nsb2NrLWNlbGxzIjoNCj4gPiArICAgIGNvbnN0OiAxDQo+ID4gKw0K
+PiA+ICtyZXF1aXJlZDoNCj4gPiArICAtIGNvbXBhdGlibGUNCj4gPiArICAtIHJlZw0KPiA+ICsg
+IC0gY2xvY2tzDQo+ID4gKyAgLSAiI2Nsb2NrLWNlbGxzIg0KPiA+ICsNCj4gPiArYWRkaXRpb25h
+bFByb3BlcnRpZXM6IGZhbHNlDQo+ID4gKw0KPiA+ICtleGFtcGxlczoNCj4gPiArICAtIHwNCj4g
+PiArDQo+IA0KPiBTYW1lIGFzIGluIHYxNC4gUGxlYXNlIGdvIHRocm91Z2ggdGhlIGNvbW1lbnRz
+IHRob3JvdWdobHkgc28gcmV2aWV3ZXJzDQo+IHdpbGwgbm90IHdhc3RlIHRpbWUgcmVwZWF0aW5n
+IHRoZSBzYW1lIHR3aWNlLg0KPiANCg0KU29ycnksIEkgZG9u4oCZdCB1bmRlcnN0YW5kIHlvdXIg
+bWVhbmluZy4NCkNvdWxkIHlvdSBleHBsYWluIG1vcmUsIHRoYW5rcy4NCg0KDQo=

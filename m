@@ -2,182 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C186524907
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E58A85248FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352111AbiELJdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 05:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45886 "EHLO
+        id S1346306AbiELJcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 05:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352008AbiELJcq (ORCPT
+        with ESMTP id S1352063AbiELJby (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 05:32:46 -0400
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 May 2022 02:32:43 PDT
-Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3889B62104
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:32:42 -0700 (PDT)
-X-KPN-MessageId: 4e6ffd54-d1d6-11ec-a9ff-005056994fde
-Received: from smtp.kpnmail.nl (unknown [10.31.155.8])
-        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-        id 4e6ffd54-d1d6-11ec-a9ff-005056994fde;
-        Thu, 12 May 2022 11:31:31 +0200 (CEST)
+        Thu, 12 May 2022 05:31:54 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05016129F
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:31:53 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2eb7d137101so40839057b3.12
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:31:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=xs4all.nl; s=xs4all01;
-        h=content-type:from:to:subject:mime-version:date:message-id;
-        bh=J5fVuHTorFO9vS+A8/3ndPu060HnZX6yzHxBET50rjw=;
-        b=mmZthCNB1ky7U/F/upi2LoOgPKYEzOY7d/njHyBbx+WPmmYjvGdY7i+V2MFGBvC1YZXV1sOKIYVFf
-         mhyhp6hoTYzk6ZeC8RcYunL2jb8VEc0YlGEbBywC+URbhmHmmjruJBsBfw/pB5aAi8Sj3RdNW5QxIz
-         OtoCDNGdFfCOjpllti5bs32/QCVk1p8yelQfhWbxVxX+4aepquKbuvjVOEYgeMrVy1YGpRvf7+CqAH
-         mGMPFZ+41/i0RFJOhzc2o289M75aCL4YOIsa/ADzA2Z5QsoNoxesvKXwh8not51IcRrPwFQg/0iVrX
-         FuJO/Gj2FFCXqXolh+fmDJgAdRz5Nzg==
-X-KPN-MID: 33|bmNIgalGIYJXpA7CRrWfasNg2BTj8AlOHOsTV3qYhtX4j/xmA4bPP+xrXkGSHxc
- avtd2wVqMgGpfLUuhlpISdg==
-X-KPN-VerifiedSender: Yes
-X-CMASSUN: 33|VG/RDjSU8Aq6zYZIftNGufBNEJo6kPBr8Ws9JbIXYGz1yKrLLPQYIHYeTTxKCbH
- DpxavEf2+O8HcZHgKJQqUhw==
-X-Originating-IP: 173.38.220.60
-Received: from [10.47.77.219] (unknown [173.38.220.60])
-        by smtp.xs4all.nl (Halon) with ESMTPSA
-        id 51ee21aa-d1d6-11ec-a066-00505699d6e5;
-        Thu, 12 May 2022 11:31:39 +0200 (CEST)
-Message-ID: <03e09da3-c068-a372-a3e5-dc0459f90682@xs4all.nl>
-Date:   Thu, 12 May 2022 11:31:36 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [DKIM] [PATCH v12, 13/17] media: mediatek: vcodec: Extract H264
- common code
-Content-Language: en-US
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-Cc:     Irui Wang <irui.wang@mediatek.com>,
-        George Sun <george.sun@mediatek.com>,
-        Steve Cho <stevecho@chromium.org>, devicetree@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-kernel@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        linux-mediatek@lists.infradead.org,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-References: <20220512021950.29087-1-yunfei.dong@mediatek.com>
- <20220512021950.29087-14-yunfei.dong@mediatek.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20220512021950.29087-14-yunfei.dong@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=NwDgfb40ABLeF/4wC4EwhuT4Q1PDTckj0pFciejqkLU=;
+        b=ec8MLKTMT2o+jDVzDjA87qLPemLf9Z+I4AQOrMY8QoGg7dRL05HEbTWYVdx6amvBJC
+         4lhlj6TAYbQbbo0qrQHVheFenbABa+C60YA4QIYGAJTBnf4jEzZUcvDD9eIYXdZO3WRU
+         blqLsxAvpVOoNIMlmI9vjeKooCgz98otGs8T4DaUUFR17T/iDvrjurp2ujOw1uVPH3b1
+         509JVTtAEMwZztSC1mv8KDGDyg905FHTZ+38H3kR5zeBA5EfqPfiUynscXI4H/4Hmqdp
+         nvaXhTOEz7m70CQhUMCNwf4JHKXgI7gZQw0Rc/K/PiJFOfBUWJh5+6RFt4V2mpUoa/vL
+         +e4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=NwDgfb40ABLeF/4wC4EwhuT4Q1PDTckj0pFciejqkLU=;
+        b=ynIg3kDgZ5Y5CVt9l047Ind0gnd+SD37geaZFvsC/T1M5KDlHaIUw3UbHEUetFP+w9
+         zPkWnb00XlRQErmWWqVaY3+agRnt8ctfpQAvaFHxmgpCZm7YrWpcuRYzlDqRjD6M6AiQ
+         2kNiJMX36nYKCVxgG+hwHDtqePkoVE4BUsKfyV8OzRr8GRNQtmrIGQLpzJe2EOJU7A1D
+         QupsQGO//6clGpb/8YION7B0EuGNxKm8Y3EIGYYZOurl/DZvf2q0Jq7IJPTqZPfyQ83O
+         hQbHSpZuaADsap5gQGdj1oTRgqP4tWuN4MS6wFS4A8FM6kwWMPssyIT7VsOockXSi4VB
+         vycQ==
+X-Gm-Message-State: AOAM531ovudN1+BwJ3HD2itNUgKX9fCB1/bE2r0DB1FRdtcqU3Zq09HX
+        XT1XugdFo8M+AqahPEW5EBpScOZ1bd1CR2QJK7Q=
+X-Google-Smtp-Source: ABdhPJzdglJecWxP6D2OZDCbt8U8bxbqo8komBdfAEQ2BpEYkFp8T8Lc0iAA1ROlyN1jw82ZrqK2VKM7K+4aZGv4HvI=
+X-Received: from albertccwang.ntc.corp.google.com ([2401:fa00:fc:202:8983:2d2c:f62b:626])
+ (user=albertccwang job=sendgmr) by 2002:a81:af59:0:b0:2f4:d869:b5df with SMTP
+ id x25-20020a81af59000000b002f4d869b5dfmr29984657ywj.367.1652347913055; Thu,
+ 12 May 2022 02:31:53 -0700 (PDT)
+Date:   Thu, 12 May 2022 17:31:46 +0800
+Message-Id: <20220512093146.1301669-1-albertccwang@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
+Subject: [PATCH v2] usb: dwc3: gadget: Move null pinter check after window closed
+From:   Albert Wang <albertccwang@google.com>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        quic_jackp@quicinc.com
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Albert Wang <albertccwang@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yunfei,
+After inspecting further, we do see the locking is implicit, with the
+main gotcha being the unlock/re-lock. That creates a window for a race
+to happen. This change moves the NULL check to be adjacent to where
+to it's used and after the window is "closed".
 
-On 5/12/22 04:19, Yunfei Dong wrote:
-> Mt8192 can use some of common code with mt8183. Moves them to
-> a new file in order to reuse.
-> 
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> ---
->  .../media/platform/mediatek/vcodec/Makefile   |   1 +
->  .../vcodec/vdec/vdec_h264_req_common.c        | 310 +++++++++++++
->  .../vcodec/vdec/vdec_h264_req_common.h        | 274 +++++++++++
->  .../mediatek/vcodec/vdec/vdec_h264_req_if.c   | 427 ++----------------
->  4 files changed, 629 insertions(+), 383 deletions(-)
->  create mode 100644 drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.c
->  create mode 100644 drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.h
-> 
-> diff --git a/drivers/media/platform/mediatek/vcodec/Makefile b/drivers/media/platform/mediatek/vcodec/Makefile
-> index 359619653a0e..3f41d748eee5 100644
-> --- a/drivers/media/platform/mediatek/vcodec/Makefile
-> +++ b/drivers/media/platform/mediatek/vcodec/Makefile
-> @@ -9,6 +9,7 @@ mtk-vcodec-dec-y := vdec/vdec_h264_if.o \
->  		vdec/vdec_vp8_if.o \
->  		vdec/vdec_vp9_if.o \
->  		vdec/vdec_h264_req_if.o \
-> +		vdec/vdec_h264_req_common.o \
->  		mtk_vcodec_dec_drv.o \
->  		vdec_drv_if.o \
->  		vdec_vpu_if.o \
-> diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.c
-> new file mode 100644
-> index 000000000000..4e7c9d47751d
-> --- /dev/null
-> +++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.c
-> @@ -0,0 +1,310 @@
+Fixes: 26288448120b ("usb: dwc3: gadget: Fix null pointer exception")
 
-<snip>
+Signed-off-by: Albert Wang <albertccwang@google.com>
+---
+ v2: Remove redundant 'else' and add additional comments and more
+     descriptive commit text
 
-Here there is still a cast to iomem:
+ drivers/usb/dwc3/gadget.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-> +void mtk_vdec_h264_copy_scaling_matrix(struct slice_api_h264_scaling_matrix *dst_matrix,
-> +				       const struct v4l2_ctrl_h264_scaling_matrix *src_matrix)
-> +{
-> +	memcpy_toio((void __iomem *)dst_matrix->scaling_list_4x4, src_matrix->scaling_list_4x4,
-> +		    sizeof(dst_matrix->scaling_list_4x4));
-> +
-> +	memcpy_toio((void __iomem *)dst_matrix->scaling_list_8x8, src_matrix->scaling_list_8x8,
-> +		    sizeof(dst_matrix->scaling_list_8x8));
-> +}
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 19477f4bbf54..fda58951cf27 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -3366,14 +3366,19 @@ static bool dwc3_gadget_endpoint_trbs_complete(struct dwc3_ep *dep,
+ 	struct dwc3		*dwc = dep->dwc;
+ 	bool			no_started_trb = true;
+ 
+-	if (!dep->endpoint.desc)
+-		return no_started_trb;
+-
++	/*
++	 * This function eventually leads to dwc3_giveback() which unlocks
++	 * the dwc->lock and relocks afterwards. This actually creates a
++	 * a window for a race to happen.
++	 */
+ 	dwc3_gadget_ep_cleanup_completed_requests(dep, event, status);
+ 
+ 	if (dep->flags & DWC3_EP_END_TRANSFER_PENDING)
+ 		goto out;
+ 
++	if (!dep->endpoint.desc)
++		return no_started_trb;
++
+ 	if (usb_endpoint_xfer_isoc(dep->endpoint.desc) &&
+ 		list_empty(&dep->started_list) &&
+ 		(list_empty(&dep->pending_list) || status == -EXDEV))
+-- 
+2.36.0.550.gb090851708-goog
 
-<snip>
-
-> diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c
-> index 27119aa31dd9..b055ceea481d 100644
-> --- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c
-> +++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c
-
-<snip>
-
-> -static void
-> -get_h264_scaling_matrix(struct slice_api_h264_scaling_matrix *dst_matrix,
-> -			const struct v4l2_ctrl_h264_scaling_matrix *src_matrix)
-> -{
-> -	memcpy(dst_matrix->scaling_list_4x4, src_matrix->scaling_list_4x4,
-> -	       sizeof(dst_matrix->scaling_list_4x4));
-> -
-> -	memcpy(dst_matrix->scaling_list_8x8, src_matrix->scaling_list_8x8,
-> -	       sizeof(dst_matrix->scaling_list_8x8));
-> -}
-
-but that function was moved (AFAICT) from vdec_h264_req_if.c where a regular memcpy was
-used.
-
-Did you miss one iomem case?
-
-Can I change mtk_vdec_h264_copy_scaling_matrix() to:
-
-void mtk_vdec_h264_copy_scaling_matrix(struct slice_api_h264_scaling_matrix *dst_matrix,
-				       const struct v4l2_ctrl_h264_scaling_matrix *src_matrix)
-{
-	memcpy(dst_matrix->scaling_list_4x4, src_matrix->scaling_list_4x4,
-	       sizeof(dst_matrix->scaling_list_4x4));
-
-	memcpy(dst_matrix->scaling_list_8x8, src_matrix->scaling_list_8x8,
-	       sizeof(dst_matrix->scaling_list_8x8));
-}
-
-If that's OK, then I'll do that manually, so no need to post a v13.
-
-Everything else looks fine, so this is the only issue that needs to be resolved.
-
-Regards,
-
-	Hans

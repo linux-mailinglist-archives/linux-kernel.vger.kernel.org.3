@@ -2,170 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE91524700
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 301F65246FE
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:30:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350212AbiELHaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 03:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
+        id S1351018AbiELH3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 03:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351041AbiELH3y (ORCPT
+        with ESMTP id S1350977AbiELH3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 03:29:54 -0400
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E670E13C4F2;
-        Thu, 12 May 2022 00:29:49 -0700 (PDT)
-Received: by mail-qv1-f45.google.com with SMTP id h13so3814182qvh.0;
-        Thu, 12 May 2022 00:29:49 -0700 (PDT)
+        Thu, 12 May 2022 03:29:42 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB37813B8EA
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:29:39 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id i27so8390402ejd.9
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:29:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=6pAZCGyP8MKNDHSnHkp9Vkj/nq2Rx3C2O79znDA1ohY=;
+        b=gxJRzrkmadF3F010BI/AMYnQC5Uyk0pnkL9ydptziONsEZn/T/Fbr536Bj0CqT43/F
+         OE8wBqNbrMI1khevv0mxyHVfbDzMZ0KwNdeo/bIpVHajTT+EF0oDYf7N0VNN3eIe2c0O
+         bJgEjttmuMaTQOa5J2uuTwyztqxfHYcUX2fk7ZNZB18NWHk4aV009x5qtgb8QqTLTAaS
+         8y1to59ZLt6vcN6xaJxMesvLgIVpZbaUxsHo0IzdyH1F+HGrknc0It+VZabYdtbKbDlG
+         oOIQGI+//4lh04gMHGLybH31m8u8DcH87bpUKK9AOmqcOMltr0HhDsM4I8CDWsx0WSDg
+         fO5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=r2Mjon8tDago0stqZjye2DqrZ9qBLDemw/CYSCXDVYo=;
-        b=GYbntmWUfjRS87Kpx8ZINI0JaZ9LaDt/5pJoG51qAllglwCFhtVkTOYpyNdUdJVl01
-         rlXeJHWP7olORRdWItj5hzsMrlJJQ1ioyBiy0AHpwnsxZdvnqT1GKJ3tZd1980jm9Olo
-         5yd2Y0o+o0Vii7mRWfGH/7QU7zMhyrWgtfPWCexU0+Wxx1GLIDR6T3PbXbjumfeLCsCd
-         o5joPSM0fY0/4epieB9ywGYud/ITtONVs01So0mSGjWEZ7sJaLkaf7ibUFau2YRdn9Gv
-         4NDmcfWjGbNv9FOAiQdtqCpaqwbGtKQj5IIwG64wwBqjm97Q5FVeNPkm+eWCjIktTzXc
-         v1Fw==
-X-Gm-Message-State: AOAM5332LrA3Cce7UOqDexd8urbCw8rrY5Rhshc+pQvPrPuaBWEwjShw
-        y1fsE4bfxD5m+FOLnqfm+FfpQO+pWz24ug==
-X-Google-Smtp-Source: ABdhPJxD4fdBBnAmA/pKo7J1uN7PFs0kfOKBHyUOMhXwi8gOV35ue7L1wCDtbj7mw4zO7vB6g6ajaw==
-X-Received: by 2002:a0c:aad7:0:b0:45a:9960:6097 with SMTP id g23-20020a0caad7000000b0045a99606097mr26345268qvb.55.1652340588840;
-        Thu, 12 May 2022 00:29:48 -0700 (PDT)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id e2-20020ac84e42000000b002f39b99f6c6sm2876638qtw.96.2022.05.12.00.29.46
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6pAZCGyP8MKNDHSnHkp9Vkj/nq2Rx3C2O79znDA1ohY=;
+        b=Giy++5fhCF5Y/uTqegJv8zxjBGuVBpIcmJZHShdsOXkS520Z4kwdrRpSV8maEdkU8i
+         3Xm+Vbx5swRG895Dr2/oUcYG3Xd09+llFS64sXRv+4tfPwtKYenU4MezcQU4mBTl9HWH
+         USTygtUqI0/TorgEFsJBdVyLKQqpSdIHNgUIrXKrGU7Xsan32RaQ8OTQ0AWvvqr3lSeU
+         lqMu0Md2qFfv0yObdzlYuwpG6vi6yoC6Qs0QGnLwEA/IgESeWD60k7GOh3ValS1Zkfwa
+         ytODOJfdFZSndZo3IuxgWXoYg2XkMX9/93Js+9Qnc0Hd5KPYtuqcGFRAzhVntW0bjNc6
+         wuBg==
+X-Gm-Message-State: AOAM5303FxiWbOmwCdvCkmep9jHHMuf5jyvOBxBQgJAebfAi8XuzOAk8
+        V20WLSG8UpZ9mXtifYxOy48=
+X-Google-Smtp-Source: ABdhPJzmYNUvkYEksV5JP3JbnVmzNZnB1l4WyXgWPZVb+mOEjX9GxlW5bDRlUp4xgoD9wQN+D9XfMw==
+X-Received: by 2002:a17:907:60d6:b0:6fa:95d3:d4e5 with SMTP id hv22-20020a17090760d600b006fa95d3d4e5mr13864164ejc.357.1652340578275;
+        Thu, 12 May 2022 00:29:38 -0700 (PDT)
+Received: from [192.168.178.21] (p5b0ea033.dip0.t-ipconnect.de. [91.14.160.51])
+        by smtp.gmail.com with ESMTPSA id da26-20020a056402177a00b0042617ba63a5sm2274053edb.47.2022.05.12.00.29.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 00:29:47 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id s30so8158880ybi.8;
-        Thu, 12 May 2022 00:29:46 -0700 (PDT)
-X-Received: by 2002:a25:448:0:b0:64a:94d6:e420 with SMTP id
- 69-20020a250448000000b0064a94d6e420mr22441804ybe.89.1652340586589; Thu, 12
- May 2022 00:29:46 -0700 (PDT)
+        Thu, 12 May 2022 00:29:37 -0700 (PDT)
+Message-ID: <f6e42cfb-0252-1273-2ba3-76af818e0799@gmail.com>
+Date:   Thu, 12 May 2022 09:29:35 +0200
 MIME-Version: 1.0
-References: <20220511183210.5248-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220511183210.5248-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220511183210.5248-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 12 May 2022 09:29:34 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUiq3svPa+OMmG70HP-3h4gKV6puoT8QUm3WgPw+e4i=A@mail.gmail.com>
-Message-ID: <CAMuHMdUiq3svPa+OMmG70HP-3h4gKV6puoT8QUm3WgPw+e4i=A@mail.gmail.com>
-Subject: Re: [PATCH v3 4/5] gpio: gpiolib: Add ngirq member to struct gpio_irq_chip
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 10/15] drm/shmem-helper: Take reservation lock instead
+ of drm_gem_shmem locks
+Content-Language: en-US
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Stone <daniel@fooishbar.org>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+References: <01506516-ab2f-cb6e-7507-f2a3295efb59@collabora.com>
+ <YnOHAh9I1ds4+1J+@phenom.ffwll.local>
+ <83e68918-68de-c0c6-6f9b-e94d34b19383@collabora.com>
+ <YnkaUk0mZNuPsZ5r@phenom.ffwll.local>
+ <4d08b382-0076-1ea2-b565-893d50b453cb@collabora.com>
+ <YnuziJDmXVR09UzP@phenom.ffwll.local>
+ <56787b70-fb64-64da-6006-d3aa3ed59d12@gmail.com>
+ <3a362c32-870c-1d73-bba6-bbdcd62dc326@collabora.com>
+ <YnvWUbh5QDDs6u2B@phenom.ffwll.local>
+ <ba2836d0-9a3a-b879-cb1e-a48aed31637d@collabora.com>
+ <YnwI5UX/zvmnAHvg@phenom.ffwll.local>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <YnwI5UX/zvmnAHvg@phenom.ffwll.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
-
-On Wed, May 11, 2022 at 8:32 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Supported GPIO IRQs by the chip is not always equal to the number of GPIO
-> pins. For example on Renesas RZ/G2L SoC where it has GPIO0-122 pins but at
-> a give point a maximum of only 32 GPIO pins can be used as IRQ lines in
-> the IRQC domain.
+Am 11.05.22 um 21:05 schrieb Daniel Vetter:
+> [SNIP]
+>>>> It's unclear to me which driver may ever want to do the mapping under
+>>>> the dma_resv_lock. But if we will ever have such a driver that will need
+>>>> to map imported buffer under dma_resv_lock, then we could always add the
+>>>> dma_buf_vmap_locked() variant of the function. In this case the locking
+>>>> rule will sound like this:
+>>>>
+>>>> "All dma-buf importers are responsible for holding the dma-reservation
+>>>> lock around the dmabuf->ops->mmap/vmap() calls."
+>> Are you okay with this rule?
+> Yeah I think long-term it's where we want to be, just trying to find
+> clever ways to get there.
 >
-> This patch adds ngirq member to struct gpio_irq_chip and passes this as a
-> size to irq_domain_create_hierarchy()/irq_domain_create_simple() if it is
-> being set in the driver otherwise fallbacks to using ngpio.
+> And I think Christian agrees with that?
+
+Yes, completely.
+
+A design where most DMA-buf functions are supposed to be called with the 
+reservation lock held is exactly what I have in mind for the long term.
+
+>>>>> It shouldn't be that hard to clean up. The last time I looked into it my
+>>>>> main problem was that we didn't had any easy unit test for it.
+>>>> Do we have any tests for dma-bufs at all? It's unclear to me what you
+>>>> are going to test in regards to the reservation locks, could you please
+>>>> clarify?
+>>> Unfortunately not really :-/ Only way really is to grab a driver which
+>>> needs vmap (those are mostly display drivers) on an imported buffer, and
+>>> see what happens.
+>>>
+>>> 2nd best is liberally sprinkling lockdep annotations all over the place
+>>> and throwing it at intel ci (not sure amd ci is accessible to the public)
+>>> and then hoping that's good enough. Stuff like might_lock and
+>>> dma_resv_assert_held.
+>> Alright
+> So throwing it at intel-gfx-ci can't hurt I think, but that only covers
+> i915 so doesn't really help with the bigger issue of catching all the
+> drivers.
+
+BTW: We have now somebody working on converting the existing 
+libdrm_amdgpu unit tests over to igt.
+
+Regards,
+Christian.
+
 >
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Cheers, Daniel
 
-Thanks for your patch!
-
-> --- a/drivers/gpio/gpiolib.c
-> +++ b/drivers/gpio/gpiolib.c
-> @@ -1221,7 +1221,7 @@ static int gpiochip_hierarchy_add_domain(struct gpio_chip *gc)
->         gc->irq.domain = irq_domain_create_hierarchy(
->                 gc->irq.parent_domain,
->                 0,
-> -               gc->ngpio,
-> +               gc->irq.ngirq ?: gc->ngpio,
->                 gc->irq.fwnode,
->                 &gc->irq.child_irq_domain_ops,
->                 gc);
-> @@ -1574,7 +1574,7 @@ static int gpiochip_add_irqchip(struct gpio_chip *gc,
->         } else {
->                 /* Some drivers provide custom irqdomain ops */
->                 gc->irq.domain = irq_domain_create_simple(fwnode,
-> -                       gc->ngpio,
-> +                       gc->irq.ngirq ?: gc->ngpio,
->                         gc->irq.first,
->                         gc->irq.domain_ops ?: &gpiochip_domain_ops,
->                         gc);
-
-OK.
-
-gpiochip_irqchip_remove() does:
-
-        /* Remove all IRQ mappings and delete the domain */
-        if (gc->irq.domain) {
-                unsigned int irq;
-
-                for (offset = 0; offset < gc->ngpio; offset++) {
-                       if (!gpiochip_irqchip_irq_valid(gc, offset))
-
-Hence it relies on gc->irq.valid_mask, which I think is OK in general.
-
-                                continue;
-
-                        irq = irq_find_mapping(gc->irq.domain, offset);
-                        irq_dispose_mapping(irq);
-                }
-
-                irq_domain_remove(gc->irq.domain);
-
-        }
-
-> --- a/include/linux/gpio/driver.h
-> +++ b/include/linux/gpio/driver.h
-> @@ -51,6 +51,14 @@ struct gpio_irq_chip {
->          */
->         const struct irq_domain_ops *domain_ops;
->
-> +       /**
-> +        * @ngirq:
-> +        *
-> +        * The number of GPIO IRQ's handled by this IRQ domain; usually is
-> +        * equal to ngpio.
-
-"If not set, ngpio will be used."
-
-> +        */
-> +       u16 ngirq;
-> +
->  #ifdef CONFIG_IRQ_DOMAIN_HIERARCHY
->         /**
->          * @fwnode:
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

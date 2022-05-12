@@ -2,52 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2666524F99
+	by mail.lfdr.de (Postfix) with ESMTP id 77088524F98
 	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355124AbiELONB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 10:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60528 "EHLO
+        id S1355120AbiELONF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 10:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355111AbiELOM5 (ORCPT
+        with ESMTP id S1355123AbiELOM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 10:12:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD976338B
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:12:51 -0700 (PDT)
+        Thu, 12 May 2022 10:12:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F6763BDD
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:12:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF7D061A01
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 14:12:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F089EC385B8;
-        Thu, 12 May 2022 14:12:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A0731B82860
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 14:12:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E693DC34117;
+        Thu, 12 May 2022 14:12:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652364770;
-        bh=0hh3VnoWdrScswPThoUAz7IHRdvYsSrWyfqva7PClQk=;
+        s=k20201202; t=1652364774;
+        bh=lG75f7u0FOqEgFZ07a5DYCoxWItDAZ8O3d88rmBiq6E=;
         h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=csshdifPDDyuUKSgp96tlCgn60qYxckukQoSlyWxGcwgKeeuti4z2ik9F9AnEWPCQ
-         isX4F+ZF4oFv6jtdWDMIwvW7h+mwk8AMvBzc17Q4186w43TgYeDmTf5G7VgxDDn3S0
-         RN9WdsvQ939yycBgwp05MFZzXm7q0mXcwul1Fs9wKvIPht9HmyUd5UZm2upwxUoOur
-         YZA9p0Q+EeWkWGKVit6GzIzoN/4hnfuv1cZBflk+uW5jReIYP+qTu9YR6WEODsaKfI
-         dEovtkWepZcuPx/1G0rjE+e+GeyWKsFYJZejW2RpRAuzMBaVLiFc8q95X30AlBWoxH
-         g74dxMGfow4Rw==
+        b=b5kJwuzD1lOZhBAXIcqO8oOT9HXbyUpXcSwfFc89H4yP4l4hnclrC3gTybPcExclI
+         t0KnaO48RSag9HkYSggtIEsjXjtCbVdZdPYevcRYqzWDhSPY0PlXrulVYce1rXw1o8
+         zZ1mBU00sjYdFFsVcRU29zxC32jTiYXCjWcNXfkGMGybHod6e3l3nluSOWKqEl8Nch
+         5M3YaGLOo5rbQIs0SHEswg73X7v0FQ2+OOSe53BNSZxHLFYhpAwZ3J9KVdqXT9ptrI
+         q4fsKRWlFaJa+nBuSqF+h+m9KOiygo2iZ3a+Q38a8akrjAR7wjbkYh234QjiIRqiTH
+         QBxQOD2IrYgug==
 From:   Mark Brown <broonie@kernel.org>
 To:     Fabio Estevam <festevam@gmail.com>, alsa-devel@alsa-project.org,
-        Takashi Iwai <tiwai@suse.com>, linuxppc-dev@lists.ozlabs.org,
-        shawnguo@kernel.org, Jaroslav Kysela <perex@perex.cz>,
-        linux-arm-kernel@lists.infradead.org,
-        Shengjiu Wang <shengjiu.wang@gmail.com>, kernel@pengutronix.de,
-        Nicolin Chen <nicoleotsuka@gmail.com>,
-        linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        linux-imx@nxp.com, linmq006@gmail.com, richard.zhao@linaro.org,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        linux-arm-kernel@lists.infradead.org, jiasheng@iscas.ac.cn,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>, linux-imx@nxp.com,
+        linmq006@gmail.com, shawnguo@kernel.org,
         Sascha Hauer <s.hauer@pengutronix.de>
-In-Reply-To: <20220511065803.3957-1-linmq006@gmail.com>
-References: <20220511065803.3957-1-linmq006@gmail.com>
-Subject: Re: [PATCH] ASoC: fsl: Fix refcount leak in imx_sgtl5000_probe
-Message-Id: <165236476669.1016627.799553310382817495.b4-ty@kernel.org>
-Date:   Thu, 12 May 2022 15:12:46 +0100
+In-Reply-To: <20220511133725.39039-1-linmq006@gmail.com>
+References: <20220511133725.39039-1-linmq006@gmail.com>
+Subject: Re: [PATCH] ASoC: mxs-saif: Fix refcount leak in mxs_saif_probe
+Message-Id: <165236477165.1016627.13757710006354879246.b4-ty@kernel.org>
+Date:   Thu, 12 May 2022 15:12:51 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -61,10 +59,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 May 2022 10:58:03 +0400, Miaoqian Lin wrote:
-> of_find_i2c_device_by_node() takes a reference,
-> In error paths, we should call put_device() to drop
-> the reference to aviod refount leak.
+On Wed, 11 May 2022 17:37:22 +0400, Miaoqian Lin wrote:
+> of_parse_phandle() returns a node pointer with refcount
+> incremented, we should use of_node_put() on it when done.
 > 
 > 
 
@@ -74,8 +71,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: fsl: Fix refcount leak in imx_sgtl5000_probe
-      commit: 41cd312dfe980af869c3503b4d38e62ed20dd3b7
+[1/1] ASoC: mxs-saif: Fix refcount leak in mxs_saif_probe
+      commit: 2be84f73785fa9ed6443e3c5b158730266f1c2ee
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

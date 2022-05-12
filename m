@@ -2,113 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8502525109
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF9E52510D
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355825AbiELPQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 11:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
+        id S1355828AbiELPQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 11:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355867AbiELPQO (ORCPT
+        with ESMTP id S1355826AbiELPQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 11:16:14 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D9C20F58
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:16:13 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652368572;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=grsC0w+E9Jfgx2nf3sde57yzh3ij8Mi1ObW9I0pQcXg=;
-        b=QP9d2vJHTocBeVJGSXckP+GiDE7SnKW6S8OcPZe9+uq845NpdBDnLqssIS2OsTgDSmHBxu
-        AM9gkU2DIL5w5tw42R/cVp6oWGGpHN7Y3//rkCDvlhoII9OBk25WB2mjb6hgVJhKFEavMv
-        estScOX8SotUNTYuZs2TsWMf6TMSblYYqjWkLQhxN0Wk2FL1qsrqNp8xz3bFrS/WjlwMc0
-        USLLNJTNsNGxf9qcoD930NiRt/dohlPDR462wfK+abm/5ZLP6Ft/dLWIbRG3TS0fgGCtJc
-        OYFtUFXKa+AOGS/3I7sLz8OjK2M4wb8iYnGqMT5nIo+8JiMOk+aI0riolxJyHA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652368572;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=grsC0w+E9Jfgx2nf3sde57yzh3ij8Mi1ObW9I0pQcXg=;
-        b=iuRZSkwtyMK+lJI9aS6Ba4q73+eZ+FZGunSKYXQB3nHdm4GEmHTNOE/mVJ/PcUpfsVKJac
-        V4fUVoxCgKjP7GAg==
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFCv2 05/10] x86/mm: Provide untagged_addr() helper
-In-Reply-To: <Yn0YdPNG/Q3lf+4G@hirez.programming.kicks-ass.net>
-References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
- <20220511022751.65540-7-kirill.shutemov@linux.intel.com>
- <87a6bmx5lt.ffs@tglx> <Yn0YdPNG/Q3lf+4G@hirez.programming.kicks-ass.net>
-Date:   Thu, 12 May 2022 17:16:11 +0200
-Message-ID: <87sfpevl1g.ffs@tglx>
+        Thu, 12 May 2022 11:16:22 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96952495E
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:16:20 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id n10so5441776pjh.5
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:16:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=uDcp7Fr6kVrbDckvqemxf1bjJUOb2sUHGZ/gB3g+T9Q=;
+        b=i7IDKf7c84d+to1uFHsDJd7dZ9+pzQmyk8p6VQgI19pCi+SOPT9lzMQaa1qbo1ei6r
+         je+bc6hntQYIf4MxN5Q8C2F/kPyNnOdoqjYlP2EG4mGlEUDvEB+z1vmuC01Ll0XjDYlX
+         KjQ6Td0YTl+u6iJMyWPIVbC5rYDCIXLOylsBXejXnVr8Z8E9if/bnGHzYnztn278UgCw
+         CrTuTiNeR9xAybfnOg6TCzvmAaN4y21yhM4hMZDCOrLhPko5YrvjD8WloCpsIEZIIikS
+         YT+Chpqj7lEbbxDfGLG7sLaVSGzZLU6qTkcwABSafQ5JOBvLBYJuawjRoHFhxaEIw/vL
+         cEsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=uDcp7Fr6kVrbDckvqemxf1bjJUOb2sUHGZ/gB3g+T9Q=;
+        b=dpUaipMirzsbZlJIR+zRCRyL+LY5QMB3REcIIymWRfdGtITVcDxl8eCdJpJpnFS9lL
+         a0eev4cA0NJvnDsynR72nNf9NES0A18l+6orI5n/gc03igETzxsic0Hn0LD84M+XNJYv
+         nFX7+CjTf5ssjIr81wj7iAFliPb6zhdGQ1gEiLkkS0Ix+1ZkC+g04KpboIND26Zq8m8q
+         V1NgB9Ya3Qn6kmwMFMQRTIeQaXLfhBrk6eurRwk3wTGTjXuiOPi8YWXooXEIJ9j58OI7
+         rzrHJxAhpEZaZb/NvXp4U2SYWrv92Qmms9bqX1tWQ/mVHiZethCqr63/M2aI9xXGJnc8
+         6Imw==
+X-Gm-Message-State: AOAM533BW7XRdUwr/FrczKUW58TfGgEZ2UIWt7pzM6T5zz2a8uEk60Dz
+        1iMkUSmfmbrJQ8JDwoApQcbCrFsao3M9WpY=
+X-Google-Smtp-Source: ABdhPJx9TY0e+Bz8FwfX0si04XSocPxFrp3V8rEkPklcxoR2ntfaEXu9MtW7iABywOeA2JKpwCpnmg==
+X-Received: by 2002:a17:903:1cd:b0:15e:8c4a:c543 with SMTP id e13-20020a17090301cd00b0015e8c4ac543mr423157plh.126.1652368580393;
+        Thu, 12 May 2022 08:16:20 -0700 (PDT)
+Received: from thinkpad ([117.202.184.202])
+        by smtp.gmail.com with ESMTPSA id ix3-20020a170902f80300b0015e8d4eb238sm28599plb.130.2022.05.12.08.16.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 08:16:19 -0700 (PDT)
+Date:   Thu, 12 May 2022 20:46:11 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 07/26] dmaengine: dw-edma: Fix invalid interleaved
+ xfers semantics
+Message-ID: <20220512151611.GJ35848@thinkpad>
+References: <20220503225104.12108-1-Sergey.Semin@baikalelectronics.ru>
+ <20220503225104.12108-8-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220503225104.12108-8-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12 2022 at 16:23, Peter Zijlstra wrote:
-> On Thu, May 12, 2022 at 03:06:38PM +0200, Thomas Gleixner wrote:
->
->> #define untagged_addr(addr)	({			\
->> 	u64 __addr = (__force u64)(addr);		\
->> 							\
->> 	__addr &= current->thread.lam_untag_mask;	\
->> 	(__force __typeof__(addr))__addr;		\
->> })
->> 
->> No conditionals, fast _and_ correct. Setting this untag mask up once
->> when LAM is enabled is not rocket science.
->
-> But that goes wrong if someone ever wants to untag a kernel address and
-> not use the result for access_ok().
->
-> I'd feel better about something like:
->
-> 	s64 __addr = (addr);
-> 	s64 __sign = __addr;
->
-> 	__sign >>= 63;
-> 	__sign &= lam_untag_mask;
+On Wed, May 04, 2022 at 01:50:45AM +0300, Serge Semin wrote:
+> The interleaved DMA transfer support added in commit 85e7518f42c8
+> ("dmaengine: dw-edma: Add device_prep_interleave_dma() support") seems
+> contradicting to what the DMA-engine defines. The next conditional
+> statements:
+> 	if (!xfer->xfer.il->numf)
+> 		return NULL;
+> 	if (xfer->xfer.il->numf > 0 && xfer->xfer.il->frame_size > 0)
+> 		return NULL;
+> basically mean that numf can't be zero and frame_size must always be zero,
+> otherwise the transfer won't be executed. But further the transfer
+> execution method takes the frames size from the
+> dma_interleaved_template.sgl[] array for each frame. That array in
+> accordance with [1] is supposed to be of
+> dma_interleaved_template.frame_size size, which as we discovered before
+> the code expects to be zero. So judging by the dw_edma_device_transfer()
+> implementation the method implies the dma_interleaved_template.sgl[] array
+> being of dma_interleaved_template.numf size, which is wrong. Since the
+> dw_edma_device_transfer() method doesn't permit
+> dma_interleaved_template.frame_size being non-zero then actual multi-chunk
+> interleaved transfer turns to be unsupported even though the code implies
+> having it supported.
+> 
+> Let's fix that by adding a fully functioning support of the interleaved
+> DMA transfers. First of all dma_interleaved_template.frame_size is
+> supposed to be greater or equal to one thus having at least simple linear
+> chunked frames. Secondly we can create a walk-through all over the chunks
+> and frames just by initializing the number of the eDMA burst transactios
+> as a multiple of dma_interleaved_template.numf and
+> dma_interleaved_template.frame_size and getting the frame_size-modulo of
+> the iteration step as an index of the dma_interleaved_template.sgl[]
+> array. The rest of the dw_edma_device_transfer() method code can be left
+> unchanged.
+> 
+> [1] include/linux/dmaengine.h: doc struct dma_interleaved_template
+> 
+> Fixes: 85e7518f42c8 ("dmaengine: dw-edma: Add device_prep_interleave_dma() support")
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-that needs to be
-
- 	__sign &= ~lam_untag_mask;
-
-> 	__addr &= lam_untag_mask;
-> 	__addr |= __sign;
->
-> 	__addr;
->
-> Which simply extends bit 63 downwards -- although possibly there's an
-> easier way to do that, this is pretty gross.
-
-For the price of a conditional:
-
-    __addr &= lam_untag_mask;
-    if (__addr & BIT(63))
-        __addr |= ~lam_untag_mask;
-
-Now you have the choice between gross and ugly.
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
 Thanks,
+Mani
 
-        tglx
+> ---
+>  drivers/dma/dw-edma/dw-edma-core.c | 18 +++++++-----------
+>  1 file changed, 7 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
+> index 225eab58acb7..ef49deb5a7f3 100644
+> --- a/drivers/dma/dw-edma/dw-edma-core.c
+> +++ b/drivers/dma/dw-edma/dw-edma-core.c
+> @@ -333,6 +333,7 @@ dw_edma_device_transfer(struct dw_edma_transfer *xfer)
+>  	struct dw_edma_chunk *chunk;
+>  	struct dw_edma_burst *burst;
+>  	struct dw_edma_desc *desc;
+> +	size_t fsz = 0;
+>  	u32 cnt = 0;
+>  	int i;
+>  
+> @@ -382,9 +383,7 @@ dw_edma_device_transfer(struct dw_edma_transfer *xfer)
+>  		if (xfer->xfer.sg.len < 1)
+>  			return NULL;
+>  	} else if (xfer->type == EDMA_XFER_INTERLEAVED) {
+> -		if (!xfer->xfer.il->numf)
+> -			return NULL;
+> -		if (xfer->xfer.il->numf > 0 && xfer->xfer.il->frame_size > 0)
+> +		if (!xfer->xfer.il->numf || xfer->xfer.il->frame_size < 1)
+>  			return NULL;
+>  		if (!xfer->xfer.il->src_inc || !xfer->xfer.il->dst_inc)
+>  			return NULL;
+> @@ -414,10 +413,8 @@ dw_edma_device_transfer(struct dw_edma_transfer *xfer)
+>  		cnt = xfer->xfer.sg.len;
+>  		sg = xfer->xfer.sg.sgl;
+>  	} else if (xfer->type == EDMA_XFER_INTERLEAVED) {
+> -		if (xfer->xfer.il->numf > 0)
+> -			cnt = xfer->xfer.il->numf;
+> -		else
+> -			cnt = xfer->xfer.il->frame_size;
+> +		cnt = xfer->xfer.il->numf * xfer->xfer.il->frame_size;
+> +		fsz = xfer->xfer.il->frame_size;
+>  	}
+>  
+>  	for (i = 0; i < cnt; i++) {
+> @@ -439,7 +436,7 @@ dw_edma_device_transfer(struct dw_edma_transfer *xfer)
+>  		else if (xfer->type == EDMA_XFER_SCATTER_GATHER)
+>  			burst->sz = sg_dma_len(sg);
+>  		else if (xfer->type == EDMA_XFER_INTERLEAVED)
+> -			burst->sz = xfer->xfer.il->sgl[i].size;
+> +			burst->sz = xfer->xfer.il->sgl[i % fsz].size;
+>  
+>  		chunk->ll_region.sz += burst->sz;
+>  		desc->alloc_sz += burst->sz;
+> @@ -482,10 +479,9 @@ dw_edma_device_transfer(struct dw_edma_transfer *xfer)
+>  
+>  		if (xfer->type == EDMA_XFER_SCATTER_GATHER) {
+>  			sg = sg_next(sg);
+> -		} else if (xfer->type == EDMA_XFER_INTERLEAVED &&
+> -			   xfer->xfer.il->frame_size > 0) {
+> +		} else if (xfer->type == EDMA_XFER_INTERLEAVED) {
+>  			struct dma_interleaved_template *il = xfer->xfer.il;
+> -			struct data_chunk *dc = &il->sgl[i];
+> +			struct data_chunk *dc = &il->sgl[i % fsz];
+>  
+>  			src_addr += burst->sz;
+>  			if (il->src_sgl)
+> -- 
+> 2.35.1
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்

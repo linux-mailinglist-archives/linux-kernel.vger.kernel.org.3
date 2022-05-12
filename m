@@ -2,66 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2108D52556F
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC3A9525573
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357936AbiELTN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 15:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52834 "EHLO
+        id S1357951AbiELTNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 15:13:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355356AbiELTN0 (ORCPT
+        with ESMTP id S1353107AbiELTNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 15:13:26 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E464B1D4
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 12:13:23 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id m20so12066070ejj.10
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 12:13:23 -0700 (PDT)
+        Thu, 12 May 2022 15:13:47 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EDBA1A0AF3;
+        Thu, 12 May 2022 12:13:46 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id j4so10770672lfh.8;
+        Thu, 12 May 2022 12:13:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vuedgba30Don+8g7BBmGtQ0hkDbxYA+az5+QnS6Qsjw=;
-        b=DIzeQRQ/qAVrXwyxtcFzM9hbNSXWZqhZgz8a4xI+O9mkJX+vTyKxnNMJUPkpBoQ6f7
-         YOIq9XnUqRC2POGGXaFpj70M5JdedD2tSoiphS6+F7nBA96io3unIm28PTlZH7nzTGjl
-         mkJwltZaE1d3AQcMRYkx+Y1xy/PwILa0wln1fl3kcjL7Bmg4ZtkiSadg0qi8ByZr2xOk
-         65VNbJPlII/G0nKnoHtz01hzp/jXY35sHBp71+O7xGQ3x3rB+aLkI9tY91siT7CbGgng
-         LeJ3pm9X//nj3QDci8Wtb6OhLjOqK9RWlJt4IejAEgF4vvrk8ZDeTzyS3RzIsEpf7Bx1
-         5yuQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VyhacgbGSHcXGDEruHjCBEZQJDTnm+E2dVyccxhfr+I=;
+        b=V+ZKHmrB3XgS4QXRdNl/khDE7X8CSh8yCTaxSwN1FEKAVom8pm74Z4kc4NlnwTtCsm
+         qeMyOXTSrz7ckDawSm1y3pIaP5aE9U9PtPphS6ssVTQcmTAOb9mw61+aan+YSKWvR4SQ
+         /jaXeZ2z7pRVH+qV7p/H+3l1qiqD//bfD97+KkD8+DpEymTAOQjgqOyAo4BBrXEdxywL
+         G1rYgCY/eyLJyJh1F5K6HEoNVFYHu2wuvdl/TaK4QGhcSOq1LmsTo+sgUlcw3t3v6Qu4
+         VvKLTztHU5ZVoejUPvWdqCqrzSEDkGgwUODmDsOnbafYVW/sM/wrrVeJCWpdW4ZRhBSH
+         1hiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vuedgba30Don+8g7BBmGtQ0hkDbxYA+az5+QnS6Qsjw=;
-        b=teHQ0wIqp4wuym+ft/ZynKGlhVa030UvpOA1gltXlnzIrzsPQwJVbOq6sqgnq7SVnA
-         rb6wngegCkXyDzEjTZ5iPUAvAACyZUJgVh4i5LRP8TxwLxb+S8mYpSWBpnd3t5t7jYjw
-         8ycW1HBxPWhQqCJfb+hgivYQr8qkAsvAoCELu/ABHku+JpeOv/mnUjSKtqLTBFLz+pB4
-         xu+pBuNlOOZdhHPv9wTAqbrA7krIzAPECrnPZoP6wEIukj+CwfGOvXOVKqjnxpiCHpw8
-         thLU1zj/0FxOhby7TKr9RW/t+XyL8Pg2Y1ifSHb6smZq71cTOmQ5AdtcO3BeYvEieOY4
-         zPXg==
-X-Gm-Message-State: AOAM533/soqkoq+9l0NUp5IMPIhAhw8euEymSgoC+MHMeGZZ1ddjr1Ii
-        4SOSuK9VGKoCMnk5Gjw+9x7jMW0QgCjivkQSsrAt8g==
-X-Google-Smtp-Source: ABdhPJxLlr+cjU4IkClCioRW6wr7jXKyxnOi1jUInafmHhiwdSd40Rhod3BBhzh/dPi3NbHLjUhRIaks4O0quULJlb4=
-X-Received: by 2002:a17:906:8696:b0:6f3:a043:6ea7 with SMTP id
- g22-20020a170906869600b006f3a0436ea7mr1197718ejx.387.1652382801441; Thu, 12
- May 2022 12:13:21 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VyhacgbGSHcXGDEruHjCBEZQJDTnm+E2dVyccxhfr+I=;
+        b=VIgwD+Bdr6826bZGSx8w9hpfxU80n/N/1JEGsRa4jSHkVJ93uZ93uLKuq5MzTJVltz
+         73x1SBEey3JVupUbTIIB6fBMjf3DUhaKM5HUiBg0aSzoz9Ypo/Gn/gADgHBQ2bA3PqwD
+         Xbz5jg8yXSAAvCOL92dy45CfsIPtT9Y8lvfLrcsw6WZB5V8FsdkwARgDdiYkh5bMRLRf
+         lC7fDe/qJ3kwl/8A3/ZkQ7D81vpRhZ5vLlXWaL8eCx2T0INjv8OW6/Ik4RONhoHPcM50
+         Se0wbsW7vtmQqaVPyive/8dAXaaijfv2kSgji1cCr19vs+j5nAMfNOImV9J1sY+QPXUv
+         JgKg==
+X-Gm-Message-State: AOAM5311BU14ncrpq6qfM/5obplHo3bCep1hKwsvGtjLbVIcWAAE/ivZ
+        QCelDjpBYstvx/vLXCw/kYa61qNjQ6EtwQ==
+X-Google-Smtp-Source: ABdhPJw4qAEJCsjFWqaF8N1y/ar8DNryN1nFdar92vrGry6T/7iN9XZNWnapcsX8xa77/KaWRSXMjA==
+X-Received: by 2002:a05:6512:2009:b0:471:ffee:6ee1 with SMTP id a9-20020a056512200900b00471ffee6ee1mr893466lfb.268.1652382824597;
+        Thu, 12 May 2022 12:13:44 -0700 (PDT)
+Received: from nergzd-desktop.localdomain ([194.39.226.133])
+        by smtp.gmail.com with ESMTPSA id y26-20020ac255ba000000b0047255d210f4sm62146lfg.35.2022.05.12.12.13.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 12:13:44 -0700 (PDT)
+From:   Markuss Broks <markuss.broks@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Markuss Broks <markuss.broks@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Song Qiang <songqiang1304521@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: [PATCH v4 0/5] Add support for ToF sensor on Yoshino platform
+Date:   Thu, 12 May 2022 22:13:28 +0300
+Message-Id: <20220512191334.61804-1-markuss.broks@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220430045639.839186-1-davidgow@google.com>
-In-Reply-To: <20220430045639.839186-1-davidgow@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 12 May 2022 15:13:10 -0400
-Message-ID: <CAFd5g47GNFwFVmWoYQ5Tv7YeSp2vETs9BqfS21bRUW4XOqyFaw@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: Add list of all valid test configs on UML
-To:     David Gow <davidgow@google.com>
-Cc:     Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,22 +82,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 30, 2022 at 12:56 AM David Gow <davidgow@google.com> wrote:
->
-> It's often desirable (particularly in test automation) to run as many
-> tests as possible. This config enables all the tests which work as
-> builtins under UML at present, increasing the total tests run from 156
-> to 342 (not counting 36 'skipped' tests).
->
-> They can be run with:
-> ./tools/testing/kunit/kunit.py run
-> --kunitconfig=./tools/testing/kunit/configs/all_tests_uml.config
->
-> This acts as an in-between point between the KUNIT_ALL_TESTS config
-> (which enables only tests whose dependencies are already enabled), and
-> the kunit_tool --alltests option, which tries to use allyesconfig,
-> taking a very long time to build and breaking very often.
->
-> Signed-off-by: David Gow <davidgow@google.com>
+This series adds support for the ToF proximity sensor installed on
+Yoshino devices. As part of this series, support handling the reset
+GPIO and VDD supply by the VL53L0X driver. Also stop hardcoding the
+interrupt type, since on Yoshino devices it seems that edge triggering
+doesn't work properly.
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Tested on Sony Xperia XZ1 (poplar).
+
+Cc: Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc: Marijn Suijten <marijn.suijten@somainline.org>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+
+v2:
+- Fix a nasty issue: turns out grouping the pinctrl makes it not apply,
+which was the main cause of edge interrupts not working correctly and
+having to use level interrupts, which caused a large amount of false
+detections.
+- handle the irq type more gracefully: if it's not provided, default
+to falling edge, but if it's provided, then use the provided one.
+v3:
+- add irq.h header (forgot to commit)
+- reword commit message (already initialized -> pre-initialized)
+v4:
+- reorder powering on and power off action (Jonathan)
+- sort pinctrls by GPIO number (Konrad)
+
+Markuss Broks (5):
+  dt-bindings: proximity: vl53l0x: Document optional supply and GPIO
+    properties
+  proximity: vl53l0x: Get interrupt type from DT
+  proximity: vl53l0x: Handle the VDD regulator
+  proximity: vl53l0x: Handle the reset GPIO
+  arm64: dts: qcom: msm8998-xperia: Introduce ToF sensor support
+
+ .../bindings/iio/proximity/st,vl53l0x.yaml    |  5 ++
+ .../dts/qcom/msm8998-sony-xperia-yoshino.dtsi | 34 +++++++++++++
+ drivers/iio/proximity/vl53l0x-i2c.c           | 50 ++++++++++++++++++-
+ 3 files changed, 88 insertions(+), 1 deletion(-)
+
+-- 
+2.35.1
+

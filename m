@@ -2,82 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB43525185
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E438525188
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356072AbiELPqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 11:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
+        id S1356080AbiELPr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 11:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355527AbiELPqf (ORCPT
+        with ESMTP id S1356075AbiELPrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 11:46:35 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05F34924B;
-        Thu, 12 May 2022 08:46:34 -0700 (PDT)
-Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0DA221EC064A;
-        Thu, 12 May 2022 17:46:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1652370389;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=5A+AEM/knJdEP/jzf7EnaLn5j0IOaFFZE+d42d3tpDw=;
-        b=jtkqKTBnGNw4G44BNIxcP7o9xZ0luxxsEL9u0jRWMnIwt6P/J3V32oBf5nbeNSbovpBj/9
-        MwnHf+V8d0W848NToWvaLvDcAsU9wr/rg9y87MCauBal+mH6udwM6Ij6uWY6goFCSKSQ/9
-        QPlDc2kq4Br5L9IROjDEAiAlRgAEgZs=
-Date:   Thu, 12 May 2022 17:46:32 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Greg Kroah-Hartman <gregkh@suse.de>,
-        Doug Thompson <dougthompson@xmission.com>,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] EDAC: Fix some refcount leaks
-Message-ID: <Yn0r2Dd7Pgr0DrMd@zn.tnic>
-References: <20220512075906.21915-1-linmq006@gmail.com>
+        Thu, 12 May 2022 11:47:24 -0400
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9FB50E39;
+        Thu, 12 May 2022 08:47:21 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id E6D623DD7FF;
+        Thu, 12 May 2022 11:47:19 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id zv6jl3wRXIH2; Thu, 12 May 2022 11:47:19 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 4CA1F3DD747;
+        Thu, 12 May 2022 11:47:19 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 4CA1F3DD747
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1652370439;
+        bh=b8yL8neDJhlV2sjQpyvNupaaXTDO2BcJvNnSgYVO3HE=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=PR6XAF8fpA4u4SkoAhpdVi3lX+oLTj1NYpqtmcQ0d/hSJsg3ge5JgXyEWaDms5oqd
+         Czjrd1tXO3IvbfsoP23U3bN4v8n8k6ClX+2TzeKiJ8puR8eb/zJoxVjNVrBQDoLjNg
+         DLIloGp0I1CpORwhaXNPbTQfwJqT/OWNwi9+VbC1v2Q0hta5p6viBKAeMCvT7l97tf
+         alxO8BkqRF0oftk2Rio5L27DLIw/zgcnPV7ZXy2djC0bEeSPRywgCmHNIE7nFEAC9V
+         Fa31Fh/zOBZ1dQuN/AXJb+Aeld0K39be+yjKFvdfIjDGkI5HKxOGNVRJPdIGWY1Zr/
+         NQC3FcNIrBnEw==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 5OO_J6WMzGUp; Thu, 12 May 2022 11:47:19 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 3F6473DD9B0;
+        Thu, 12 May 2022 11:47:19 -0400 (EDT)
+Date:   Thu, 12 May 2022 11:47:19 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Primiano Tucci <primiano@google.com>
+Message-ID: <1651771383.54437.1652370439159.JavaMail.zimbra@efficios.com>
+Subject: Feedback on user-events UAPI
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220512075906.21915-1-linmq006@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4257 (ZimbraWebClient - FF100 (Linux)/8.8.15_GA_4257)
+Thread-Index: o6f5mOT0knDiVDPdCZsAQKF6xvC6vQ==
+Thread-Topic: Feedback on user-events UAPI
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 11:59:06AM +0400, Miaoqian Lin wrote:
-> kobject_init_and_add() takes reference even when it fails.
-> According to the doc of kobject_init_and_add()
-> 
->    If this function returns an error, kobject_put() must be called to
->    properly clean up the memory associated with the object.
-> 
-> Fix this by calling kobject_put() when kobject_init_and_add() fails.
+Hi Beau,
 
-$ git grep -w kobject_init_and_add drivers/edac/
-drivers/edac/edac_device_sysfs.c:259:   err = kobject_init_and_add(&edac_dev->kobj, &ktype_device_ctrl,
-drivers/edac/edac_device_sysfs.c:538:   err = kobject_init_and_add(&block->kobj, &ktype_block_ctrl,
-drivers/edac/edac_device_sysfs.c:637:   err = kobject_init_and_add(&instance->kobj, &ktype_instance_ctrl,
-drivers/edac/edac_pci_sysfs.c:175:      err = kobject_init_and_add(&pci->kobj, &ktype_pci_instance,
-drivers/edac/edac_pci_sysfs.c:372:      err = kobject_init_and_add(edac_pci_top_main_kobj,
+I have queued a few questions I would like to discuss with respect to the proposed
+user events UAPI. I originally planned to expand further on them, but I now think it's
+best if I ask away right now and we clarify things through discussion:
 
-Wanna audit them all, make sure they all put the kobject properly and do
-a single patch fixing those which need fixing?
+First, I find it odd that the event enable bitmask and the event ID and payload
+type registration must be combined. I can think of various use-cases where other
+tracers would be interested to use the event-enable bitmask facility without
+polluting the event ID/payload registration data structures with useless data.
+Can those be split into two distinct independent ABIs ?
 
-Thx.
+I can't help but notice that this new user-space instrumentation infrastructure/ABI
+can only be used for tracing user-space through kernel tracers. Considering that
+ABIs dictated by the kernel usually end up being de facto standards, I am concerned
+that if it is unable to allow purely user-space tracers to use it, then all applications
+will end up being statically instrumented in ways that prevent user-space tracers from
+hooking efficiently on the static instrumentation. As I have replied in an earlier
+thread, purely user-space tracers are not just marginally faster than kernel tracers
+for tracing user-space. They are an order of magnitude faster as soon as all the proper
+configuration steps are taken to ensure there are no system calls on the tracer
+fast path. Therefore, it would be sad to effectively dismiss efficient tracer
+implementations for the sake of easiness of implementation of today's user-event
+ABI. This will cause a precedent we will be stuck with later.
+
+Linux kernel developers involved in implementation of instrumentation within Linux
+have spent a lot of effort to make sure the instrumentation is orthogonal to the
+tracing technology (tracepoints, kprobe, kretprobe...). I understand that making
+sure the user-space instrumentation ABI keeps this orthogonal is a lot more work,
+but nobody said that exposing ABIs to user-space was easy. ;-)
+
+The other point I would like to raise is container awareness. I can't help but
+notice that the user events ABI is exposed to trace all containers, with the intent
+to be used (consumed) from some privileged namespace (e.g. root pid namespace).
+This works in use-cases where the user of the tracing data controls the entire
+machine (all containers), but not so much if the user is a single tenant within
+a multi-tenants systems. I would expect that a proper namespace-aware facility
+would take care of making sure that a trace consumer could observe what is
+instrumented within its own container, and within nested containers as well.
+The fact that all container questions are entirely dismissed, thus keeping a
+event-enable bitmask registry and event ID/type registry global to the entire
+system, is not compatible with consuming traces from a non-privileged container,
+and I suspect this may also be used as a side-channel to learn information about
+what other containers are doing in a multi-tenant system.
+
+Thanks,
+
+Mathieu
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

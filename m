@@ -2,62 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8B3524FED
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6633F524FEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 16:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355260AbiELO0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 10:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53782 "EHLO
+        id S1355270AbiELO0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 10:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355284AbiELO0D (ORCPT
+        with ESMTP id S1354953AbiELO0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 10:26:03 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CC81AD87
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:26:02 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2eb7d137101so46825297b3.12
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 07:26:02 -0700 (PDT)
+        Thu, 12 May 2022 10:26:13 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386F7220F0;
+        Thu, 12 May 2022 07:26:12 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 4so6696804ljw.11;
+        Thu, 12 May 2022 07:26:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=j9bsN1b2L5uuxoi/IMspLNVh2Kizip/Mswp9v0VIKcw=;
-        b=Ox6W1FtyoROd3nJ1Rp+QL/upobk7KTTBCqQXmIvM043PL/su4Ku4ORBWOh2DQ8EGgS
-         wVMZTdtareDCyGrYmJYXosK8cn9JkaXeNy5yQmHFwV9KF/lZc3UOLClip20N421P0OEo
-         Lq/Bwrdldrsw8XJY0zNEHzrrxDB1RyAIGGVC7yfKYSsYJYy4wYm/0o3Ck14bHHzwgpaT
-         Gql0whJIxnuQPEMMCU493X0cVjbPKtK1DCgsw9y9/gqzSZZZrgkUNI9u0QCtXKg6YT2m
-         E0Z2GYQvbxGCvZZT3GV9MqwU7qxYfMtukZ6IuWlkmQoE+lKa9oF+rT2EKKiDhCyY8xwc
-         DWmw==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=TfDCVHRtgrPCtctsl2EaaUulg/1gPdaA0bbzv0CbTF4=;
+        b=fB+mgiTBS84Bwp+xHMfq0NKZ3fBFe/flDnHYXWZ+kv8LPyaY6zhcd62nSQIvceLorv
+         jRlleaRdnVjoNGj6DRLWpVt1YyI7/nJ4qqelKf+yBMlrrNieTEEmGHicnddbmcDCTp1/
+         s6xbzwjF4l3LeU4fY6wYD9PWbZkAEGM8aEEijnldR0bH9GyY2YNAUzDRr3aEB8H077W1
+         /lGrI5uwNicPF7EOle/9VpvR4NtXhTI3YnRcj7aSdZV2vV8CgPLeSCal+y4x9k9T+91K
+         xto2zzz/OzelrGGIaiISEcec1AqxCkm2gZAiIKzh6b3wZlTkHKFaVzZ3lL1ba+KG3TA2
+         nrHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=j9bsN1b2L5uuxoi/IMspLNVh2Kizip/Mswp9v0VIKcw=;
-        b=wXQZskJi84H3bRMZtJ/9pAH43L/5MxZwMbqlLukyn7LmRQ1WaxOLeF815BndwZDdH6
-         YAS3m59Ke/eLPE87GzmmdEC2ahJkPfuVcXWgZVDgsLLuJpnZmaTZ0M6JF0wsLI8FY6Wx
-         6oBo0dJb2RvC3bgt3H8H6MLyR3Vn6UKtXKCjhpkfz7XwxPCJBeY2At/pGkMmif9qyZAh
-         SIYixJ2QoEV5STeEEgbJrFwmYIgY3W+X8hBJMBXLCUSWd+UrNQlw/wgcLPTwl2oG+f1o
-         dX8O1Wi5modHHBYnGA/xueG0xI/A57IMPFid12PD9cAHxxz9BPu9UA5LWdjdlX/bomB1
-         7r9Q==
-X-Gm-Message-State: AOAM5315XKvgaFFqqXXL5uPKrZp391O7+zCFiBl9e81a12Z+Kf8Ib9Br
-        TW3cRZOw55uF5r6ATrzVCZ/cp2l/qj1tAA==
-X-Google-Smtp-Source: ABdhPJw0GoGFPNVWWBCxEeoIp+rSU/N13zEDo0TIfGPwSrDhaq+2gnfAjPBHvA2Q9FF277vlpQpqZvVwllDHiQ==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:bd59:7b9f:6863:5402])
- (user=dlatypov job=sendgmr) by 2002:a25:dccf:0:b0:648:a757:ad34 with SMTP id
- y198-20020a25dccf000000b00648a757ad34mr86537ybe.66.1652365561816; Thu, 12 May
- 2022 07:26:01 -0700 (PDT)
-Date:   Thu, 12 May 2022 07:25:55 -0700
-Message-Id: <20220512142555.3554396-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
-Subject: [PATCH v2] kunit: tool: stop using a shell to run kernel under QEMU
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=TfDCVHRtgrPCtctsl2EaaUulg/1gPdaA0bbzv0CbTF4=;
+        b=fvYWBKWbxpnNB385ncEdnpWF6iBOHvHil2A8sgDyiUKc4YgR3Ss+Tu13eX01sWysP9
+         81naCrDrrhBbmSppZ5aJtonZfdWH+LoYC7WhqWeCHQFUz/evpRxA4jxd5YES12NMkDm+
+         OQhK4uzoTdHNDFqtVfZDD2XGr3w1z1hd7bYL5zyfRUv6SKVRKn4hgYjNmE2p/6/AKIlP
+         rYYkxD0xIuIvmJwQOTms5h1CIdBU6xLbJyxdWN44/AiqnkplSyG9j//pnnhOh99nm7xe
+         ZwmKTMtCRv3KAyA39eaE7KfxkiW2VzKuXoXb+rjkkqRDum7X/RWauT8tCMzABjuilqp0
+         +lsA==
+X-Gm-Message-State: AOAM533S31ZGZL2VlxIfTqQ2g9x5uZqzP2oCfLY4IDbGVyPQr1xs6z2N
+        oWuIaXZB1zdv0ys6edxPGuhuRhgtu5JrpQ==
+X-Google-Smtp-Source: ABdhPJziSKzmfdfSYwT3FoP3fegLwMFcliuj82gmIzZ9/NR3VKY9dVP/M49ulboPnBLqiuA49DBm/A==
+X-Received: by 2002:a05:651c:160b:b0:247:f955:1b18 with SMTP id f11-20020a05651c160b00b00247f9551b18mr152728ljq.427.1652365570388;
+        Thu, 12 May 2022 07:26:10 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id y5-20020ac24465000000b0047255d21165sm807567lfl.148.2022.05.12.07.26.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 07:26:09 -0700 (PDT)
+Date:   Thu, 12 May 2022 17:26:07 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 08/23] ata: libahci_platform: Add function returning a
+ clock-handle by id
+Message-ID: <20220512142607.u2kls35pevnjsjjh@mobilestation>
+References: <20220511231810.4928-1-Sergey.Semin@baikalelectronics.ru>
+ <20220511231810.4928-9-Sergey.Semin@baikalelectronics.ru>
+ <0732a28c-579e-52f8-21ad-653fd9a10aa2@suse.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0732a28c-579e-52f8-21ad-653fd9a10aa2@suse.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,193 +81,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Note: this potentially breaks custom qemu_configs if people are using
-them! But the fix for them is simple, don't specify multiple arguments
-in one string and don't add on a redundant ''.
+On Thu, May 12, 2022 at 08:32:37AM +0200, Hannes Reinecke wrote:
+> On 5/12/22 01:17, Serge Semin wrote:
+> > Since all the clocks are retrieved by the method
+> > ahci_platform_get_resources() there is no need for the LLD (glue) drivers
+> > to be looking for some particular of them in the kernel clocks table
+> > again. Instead we suggest to add a simple method returning a
+> > device-specific clock with passed connection ID if it is managed to be
+> > found. Otherwise the function will return NULL. Thus the glue-drivers
+> > won't need to either manually touching the hpriv->clks array or calling
+> > clk_get()-friends. The AHCI platform drivers will be able to use the new
+> > function right after the ahci_platform_get_resources() method invocation
+> > and up to the device removal.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > 
+> > ---
+> > 
+> > Changelog v2:
+> > - Fix some grammar mistakes in the method description.
+> > ---
+> >   drivers/ata/libahci_platform.c | 27 +++++++++++++++++++++++++++
+> >   include/linux/ahci_platform.h  |  3 +++
+> >   2 files changed, 30 insertions(+)
+> > 
+> > diff --git a/drivers/ata/libahci_platform.c b/drivers/ata/libahci_platform.c
+> > index 3cff86c225fd..7ff6626fd569 100644
+> > --- a/drivers/ata/libahci_platform.c
+> > +++ b/drivers/ata/libahci_platform.c
+> > @@ -94,6 +94,33 @@ void ahci_platform_disable_phys(struct ahci_host_priv *hpriv)
+> >   }
+> >   EXPORT_SYMBOL_GPL(ahci_platform_disable_phys);
+> > +/**
+> > + * ahci_platform_find_clk - Find platform clock
+> > + * @hpriv: host private area to store config values
+> > + * @con_id: clock connection ID
+> > + *
+> > + * This function returns a pointer to the clock descriptor of the clock with
+> > + * the passed ID.
+> > + *
+> > + * RETURNS:
+> > + * Pointer to the clock descriptor on success otherwise NULL
+> > + */
+> > +struct clk *ahci_platform_find_clk(struct ahci_host_priv *hpriv, const char *con_id)
+> > +{
+> > +	struct clk *clk = NULL;
+> > +	int i;
+> > +
+> > +	for (i = 0; i < hpriv->n_clks; i++) {
+> > +		if (!strcmp(hpriv->clks[i].id, con_id)) {
+> > +			clk = hpriv->clks[i].clk;
+> > +			break;
+> > +		}
+> > +	}
+> > +
+> > +	return clk;
+> > +}
+> > +EXPORT_SYMBOL_GPL(ahci_platform_find_clk);
+> > +
+> >   /**
+> >    * ahci_platform_enable_clks - Enable platform clocks
+> >    * @hpriv: host private area to store config values
+> > diff --git a/include/linux/ahci_platform.h b/include/linux/ahci_platform.h
+> > index 49e5383d4222..fd964e6a68d6 100644
+> > --- a/include/linux/ahci_platform.h
+> > +++ b/include/linux/ahci_platform.h
+> > @@ -13,6 +13,7 @@
+> >   #include <linux/compiler.h>
+> > +struct clk;
+> >   struct device;
+> >   struct ata_port_info;
+> >   struct ahci_host_priv;
+> > @@ -21,6 +22,8 @@ struct scsi_host_template;
+> >   int ahci_platform_enable_phys(struct ahci_host_priv *hpriv);
+> >   void ahci_platform_disable_phys(struct ahci_host_priv *hpriv);
+> > +struct clk *
+> > +ahci_platform_find_clk(struct ahci_host_priv *hpriv, const char *con_id);
+> >   int ahci_platform_enable_clks(struct ahci_host_priv *hpriv);
+> >   void ahci_platform_disable_clks(struct ahci_host_priv *hpriv);
+> >   int ahci_platform_enable_regulators(struct ahci_host_priv *hpriv);
+> 
 
-It feels a bit iffy to be using a shell in the first place.
+> Where is this function being used?
 
-There's the usual shenanigans where people could pass in arbitrary shell
-commands via --kernel_arg (since we're just adding '' around the
-kernel_cmdline) or via a custom qemu_config.
-This isn't too much of a concern given the nature of this script (and
-the qemu_config file is in python, you can do w/e you want already).
+It will be used in the DWC AHCI SATA driver and can be utilized in the
+rest of the drivers to simplify the available clocks access.
+BTW Damien asked the same question in v1. My response was the same.
 
-But it does have some other drawbacks.
+-Sergey
 
-One example of a kunit-specific pain point:
-If the relevant qemu binary is missing, we get output like this:
-> /bin/sh: line 1: qemu-system-aarch64: command not found
-This in turn results in our KTAP parser complaining about
-missing/invalid KTAP, but we don't directly show the error!
-It's even more annoying to debug when you consider --raw_output only
-shows KUnit output by default, i.e. you need --raw_output=all to see it.
-
-Whereas directly invoking the binary, Python will raise a
-FileNotFoundError for us, which is a noisier but more clear.
-
-Making this change requires
-* splitting parameters like ['-m 256'] into ['-m', '256'] in
-  kunit/qemu_configs/*.py
-* change [''] to [] in kunit/qemu_configs/*.py since otherwise
-  QEMU fails w/ 'Device needs media, but drive is empty'
-* dropping explicit quoting of the kernel cmdline
-* using shlex.quote() when we print what command we're running
-  so the user can copy-paste and run it
-
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
----
-v1 -> v2: fix typo (' pseries' => 'pseries')
----
- tools/testing/kunit/kunit_kernel.py         | 18 ++++++++++--------
- tools/testing/kunit/qemu_configs/alpha.py   |  2 +-
- tools/testing/kunit/qemu_configs/arm.py     |  2 +-
- tools/testing/kunit/qemu_configs/arm64.py   |  2 +-
- tools/testing/kunit/qemu_configs/i386.py    |  2 +-
- tools/testing/kunit/qemu_configs/powerpc.py |  2 +-
- tools/testing/kunit/qemu_configs/riscv.py   |  6 +++---
- tools/testing/kunit/qemu_configs/s390.py    |  4 ++--
- tools/testing/kunit/qemu_configs/sparc.py   |  2 +-
- tools/testing/kunit/qemu_configs/x86_64.py  |  2 +-
- 10 files changed, 22 insertions(+), 20 deletions(-)
-
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 483f78e15ce9..1b9c4922a675 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -11,6 +11,7 @@ import importlib.util
- import logging
- import subprocess
- import os
-+import shlex
- import shutil
- import signal
- import threading
-@@ -118,16 +119,17 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
- 				'-nodefaults',
- 				'-m', '1024',
- 				'-kernel', kernel_path,
--				'-append', '\'' + ' '.join(params + [self._kernel_command_line]) + '\'',
-+				'-append', ' '.join(params + [self._kernel_command_line]),
- 				'-no-reboot',
- 				'-nographic',
--				'-serial stdio'] + self._extra_qemu_params
--		print('Running tests with:\n$', ' '.join(qemu_command))
--		return subprocess.Popen(' '.join(qemu_command),
--					   stdin=subprocess.PIPE,
--					   stdout=subprocess.PIPE,
--					   stderr=subprocess.STDOUT,
--					   text=True, shell=True, errors='backslashreplace')
-+				'-serial', 'stdio'] + self._extra_qemu_params
-+		# Note: shlex.join() does what we want, but requires python 3.8+.
-+		print('Running tests with:\n$', ' '.join(shlex.quote(arg) for arg in qemu_command))
-+		return subprocess.Popen(qemu_command,
-+					stdin=subprocess.PIPE,
-+					stdout=subprocess.PIPE,
-+					stderr=subprocess.STDOUT,
-+					text=True, errors='backslashreplace')
- 
- class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
- 	"""An abstraction over command line operations performed on a source tree."""
-diff --git a/tools/testing/kunit/qemu_configs/alpha.py b/tools/testing/kunit/qemu_configs/alpha.py
-index 5d0c0cff03bd..3ac846e03a6b 100644
---- a/tools/testing/kunit/qemu_configs/alpha.py
-+++ b/tools/testing/kunit/qemu_configs/alpha.py
-@@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
- 			   qemu_arch='alpha',
- 			   kernel_path='arch/alpha/boot/vmlinux',
- 			   kernel_command_line='console=ttyS0',
--			   extra_qemu_params=[''])
-+			   extra_qemu_params=[])
-diff --git a/tools/testing/kunit/qemu_configs/arm.py b/tools/testing/kunit/qemu_configs/arm.py
-index b9c2a35e0296..db2160200566 100644
---- a/tools/testing/kunit/qemu_configs/arm.py
-+++ b/tools/testing/kunit/qemu_configs/arm.py
-@@ -10,4 +10,4 @@ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y''',
- 			   qemu_arch='arm',
- 			   kernel_path='arch/arm/boot/zImage',
- 			   kernel_command_line='console=ttyAMA0',
--			   extra_qemu_params=['-machine virt'])
-+			   extra_qemu_params=['-machine', 'virt'])
-diff --git a/tools/testing/kunit/qemu_configs/arm64.py b/tools/testing/kunit/qemu_configs/arm64.py
-index 517c04459f47..67d04064f785 100644
---- a/tools/testing/kunit/qemu_configs/arm64.py
-+++ b/tools/testing/kunit/qemu_configs/arm64.py
-@@ -9,4 +9,4 @@ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y''',
- 			   qemu_arch='aarch64',
- 			   kernel_path='arch/arm64/boot/Image.gz',
- 			   kernel_command_line='console=ttyAMA0',
--			   extra_qemu_params=['-machine virt', '-cpu cortex-a57'])
-+			   extra_qemu_params=['-machine', 'virt', '-cpu', 'cortex-a57'])
-diff --git a/tools/testing/kunit/qemu_configs/i386.py b/tools/testing/kunit/qemu_configs/i386.py
-index aed3ffd3937d..52b80be40e4b 100644
---- a/tools/testing/kunit/qemu_configs/i386.py
-+++ b/tools/testing/kunit/qemu_configs/i386.py
-@@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
- 			   qemu_arch='x86_64',
- 			   kernel_path='arch/x86/boot/bzImage',
- 			   kernel_command_line='console=ttyS0',
--			   extra_qemu_params=[''])
-+			   extra_qemu_params=[])
-diff --git a/tools/testing/kunit/qemu_configs/powerpc.py b/tools/testing/kunit/qemu_configs/powerpc.py
-index 35e9de24f0db..7ec38d4131f7 100644
---- a/tools/testing/kunit/qemu_configs/powerpc.py
-+++ b/tools/testing/kunit/qemu_configs/powerpc.py
-@@ -9,4 +9,4 @@ CONFIG_HVC_CONSOLE=y''',
- 			   qemu_arch='ppc64',
- 			   kernel_path='vmlinux',
- 			   kernel_command_line='console=ttyS0',
--			   extra_qemu_params=['-M pseries', '-cpu power8'])
-+			   extra_qemu_params=['-M', 'pseries', '-cpu', 'power8'])
-diff --git a/tools/testing/kunit/qemu_configs/riscv.py b/tools/testing/kunit/qemu_configs/riscv.py
-index 9e528087cd7c..b882fde39435 100644
---- a/tools/testing/kunit/qemu_configs/riscv.py
-+++ b/tools/testing/kunit/qemu_configs/riscv.py
-@@ -26,6 +26,6 @@ CONFIG_SERIAL_EARLYCON_RISCV_SBI=y''',
- 			   kernel_path='arch/riscv/boot/Image',
- 			   kernel_command_line='console=ttyS0',
- 			   extra_qemu_params=[
--					   '-machine virt',
--					   '-cpu rv64',
--					   '-bios opensbi-riscv64-generic-fw_dynamic.bin'])
-+					   '-machine', 'virt',
-+					   '-cpu', 'rv64',
-+					   '-bios', 'opensbi-riscv64-generic-fw_dynamic.bin'])
-diff --git a/tools/testing/kunit/qemu_configs/s390.py b/tools/testing/kunit/qemu_configs/s390.py
-index e310bd521113..98fa4fb60c0a 100644
---- a/tools/testing/kunit/qemu_configs/s390.py
-+++ b/tools/testing/kunit/qemu_configs/s390.py
-@@ -10,5 +10,5 @@ CONFIG_MODULES=y''',
- 			   kernel_path='arch/s390/boot/bzImage',
- 			   kernel_command_line='console=ttyS0',
- 			   extra_qemu_params=[
--					   '-machine s390-ccw-virtio',
--					   '-cpu qemu',])
-+					   '-machine', 's390-ccw-virtio',
-+					   '-cpu', 'qemu',])
-diff --git a/tools/testing/kunit/qemu_configs/sparc.py b/tools/testing/kunit/qemu_configs/sparc.py
-index 27f474e7ad6e..e975c4331a7c 100644
---- a/tools/testing/kunit/qemu_configs/sparc.py
-+++ b/tools/testing/kunit/qemu_configs/sparc.py
-@@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
- 			   qemu_arch='sparc',
- 			   kernel_path='arch/sparc/boot/zImage',
- 			   kernel_command_line='console=ttyS0 mem=256M',
--			   extra_qemu_params=['-m 256'])
-+			   extra_qemu_params=['-m', '256'])
-diff --git a/tools/testing/kunit/qemu_configs/x86_64.py b/tools/testing/kunit/qemu_configs/x86_64.py
-index 77ab1aeee8a3..dc7949076863 100644
---- a/tools/testing/kunit/qemu_configs/x86_64.py
-+++ b/tools/testing/kunit/qemu_configs/x86_64.py
-@@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
- 			   qemu_arch='x86_64',
- 			   kernel_path='arch/x86/boot/bzImage',
- 			   kernel_command_line='console=ttyS0',
--			   extra_qemu_params=[''])
-+			   extra_qemu_params=[])
-
-base-commit: 38289a26e1b8a37755f3e07056ca416c1ee2a2e8
--- 
-2.36.0.512.ge40c2bad7a-goog
-
+> 
+> Cheers,
+> 
+> Hannes
+> -- 
+> Dr. Hannes Reinecke		           Kernel Storage Architect
+> hare@suse.de			                  +49 911 74053 688
+> SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
+> HRB 36809 (AG Nürnberg), GF: Felix Imendörffer

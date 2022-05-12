@@ -2,86 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2035C524981
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:54:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8590524980
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352315AbiELJxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 05:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33026 "EHLO
+        id S1352276AbiELJyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 05:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352347AbiELJxp (ORCPT
+        with ESMTP id S1351950AbiELJxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 05:53:45 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515BA41F8E;
-        Thu, 12 May 2022 02:53:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652349219; x=1683885219;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Y4TYar24BS8z9BAEdBn2NWcy025EmsZ82r5lezSySu8=;
-  b=gOhDad7JLC8IR+xec1QWxVlbnWv7InnjEcmEX67BwimGj6JT3o2+gwje
-   yoVnuaVuHAvHFDvorHdz3L0dvTf+b6E0vZyI1xv7GTGnDkkfYJDpmt96q
-   U+x+gtywUv6QvTLo/bqm01qTQQiqdQAYmkGR7Yi9lI9MYi8JOXHeCSCQ9
-   U8BKgn4exzFcMxvzmmwHbzqjTDhWGSYuHaG+jP/OtcPucsWK6C4DbmIu/
-   dS+AZJGO+lIyxfO8PNifROJjLvi4BQLIDUaOpKUV7gGQozsanru1hE/7A
-   aF8LRP3lcjs3M2FEce4O4reuINlHR1RvpTnYtNSCWL8kjFDwi65/Qau/8
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="267538153"
-X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
-   d="scan'208";a="267538153"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 02:53:39 -0700
-X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
-   d="scan'208";a="739621649"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 02:53:37 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1np5Vm-00F9k1-2I;
-        Thu, 12 May 2022 12:53:34 +0300
-Date:   Thu, 12 May 2022 12:53:33 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thu, 12 May 2022 05:53:47 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19CD41F96
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:53:45 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 125-20020a1c1983000000b003941f354c62so2686565wmz.0
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:53:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=36WnFUDNUVrLnebw8e2rXDDHxmNPW9lYWYZDRw2VWIc=;
+        b=wItM0zhGx7UzmwBKHTcTNSfo6Gq3orFWBR5BIn2yY69ledPGEX5cdPMw/CjKLUonw1
+         VW6ImWsa4Tgl6WMGhWiArwkcvEm+bubsIfJzl+XouMoj/ahYklsOtVjX2+kzBTMMZvVs
+         wI24LeMLt/Njzl5+4+MSimffTiYgguNRSwX4X2zewUOO83l3pFiwdFtjPAX9jNSDJDXL
+         zq5/NAY98iB7sljIHtDqmb03G+2P0Eqv94aZOQNUDtd5UFX+ntNlQs8uDgd4v57hd7OW
+         XAQb3WtzZNIg4cu9//2PIO+eQbn+NnwxgsxrVe2c2sJWrSiQ93pFX5DTFp9k0diNbzJ9
+         c+dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=36WnFUDNUVrLnebw8e2rXDDHxmNPW9lYWYZDRw2VWIc=;
+        b=0N1Z5lttt3eqFNR876rT/yAjjoMUSE1T/BpxIimhdcxNoxHJRpMucJyXF7j18SRdq6
+         0UMQrJppT1Hn1gWv+gDFG0GydOw8R2UTK8qXtrl1j20ARW4xeZDf3SSOKiRjPIErbdJZ
+         U1HZ3I1beoddfaGFHArwyAjDROyavHGEDPN9eQMv9xb7fuTOUxv2KLzIfYSfr6pxkQBq
+         f9ec5tqyvAbJc52wBKraQ18dtGrkEPi2tPaEZRw1ziTKjZFgoyvGLT+fsmG5KuOpM+WJ
+         Hvwu1cUD6KFRUtJL7K9N/9SzIMGc++TMUNWEHozIc+RWr6d0D1oOduRWVMAUro3IKK3H
+         3TDg==
+X-Gm-Message-State: AOAM531QfN5QTC/1zEodfaQVGq1S1s9/AVeTQtwlPPGeUKgd7wNw29sk
+        r+M63K/xpQDqLCThGDhXbwFcqQ==
+X-Google-Smtp-Source: ABdhPJyiH+vmHLZHTmxMQfShNBwbUwLOV82INmXxyFQwcXdIF90tUO/KPbJe4l2fiAUfICToHf26tg==
+X-Received: by 2002:a1c:5415:0:b0:394:2c89:4f2a with SMTP id i21-20020a1c5415000000b003942c894f2amr9282931wmb.144.1652349224349;
+        Thu, 12 May 2022 02:53:44 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id f15-20020a056000128f00b0020c5253d8dbsm3080302wrx.39.2022.05.12.02.53.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 02:53:43 -0700 (PDT)
+Date:   Thu, 12 May 2022 10:53:41 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
+        Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        =?utf-8?Q?=C5=81ukasz?= Bartosik <lb@semihalf.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v1 1/1] pinctrl: broxton: Add module alias for Intel
- Apollo Lake
-Message-ID: <YnzZHTNEOglqkiCh@smile.fi.intel.com>
-References: <20220511123421.88439-1-andriy.shevchenko@linux.intel.com>
- <Ynu3sbnWwQgOUK4H@lahna>
+        Mark Gross <markgross@kernel.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: Re: [PATCH v5 5/8] mfd: lpc_ich: Add support for pinctrl in non-ACPI
+ system
+Message-ID: <YnzZJaS+ZISAZfh5@google.com>
+References: <20220510151451.85561-1-andriy.shevchenko@linux.intel.com>
+ <20220510151451.85561-6-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Ynu3sbnWwQgOUK4H@lahna>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220510151451.85561-6-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 04:18:41PM +0300, Mika Westerberg wrote:
-> On Wed, May 11, 2022 at 03:34:21PM +0300, Andy Shevchenko wrote:
-> > We have platform device IDs for Broxton and Apollo Lake, but
-> > module alias is provided only for the former. Make it consistent
-> > by providing an alias for Apollo Lake.
-> > 
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Tue, 10 May 2022, Andy Shevchenko wrote:
+
+> From: Tan Jui Nee <jui.nee.tan@intel.com>
 > 
-> Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Add support for non-ACPI systems, such as system that uses
+> Advanced Boot Loader (ABL) whereby a platform device has to be created
+> in order to bind with pin control and GPIO.
+> 
+> At the moment, Intel Apollo Lake In-Vehicle Infotainment (IVI) system
+> requires a driver to hide and unhide P2SB to lookup P2SB BAR and pass
+> the PCI BAR address to GPIO.
+> 
+> Signed-off-by: Tan Jui Nee <jui.nee.tan@intel.com>
+> Co-developed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Tested-by: Henning Schild <henning.schild@siemens.com>
+> Acked-by: Hans de Goede <hdegoede@redhat.com>
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+>  drivers/mfd/lpc_ich.c | 105 +++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 104 insertions(+), 1 deletion(-)
 
-Pushed to my review and testing queue, thanks!
+For my own reference (apply this as-is to your sign-off block):
 
+  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

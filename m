@@ -2,38 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08415525818
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 01:06:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77AD552581A
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 01:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359343AbiELXGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 19:06:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
+        id S1354405AbiELXHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 19:07:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359345AbiELXG3 (ORCPT
+        with ESMTP id S1359345AbiELXHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 19:06:29 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CD93E0FD;
-        Thu, 12 May 2022 16:06:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6D28DCE2D00;
-        Thu, 12 May 2022 23:06:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A4B3C34113;
-        Thu, 12 May 2022 23:06:23 +0000 (UTC)
-From:   Greg Ungerer <gerg@linux-m68k.org>
-To:     linux-m68k@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, dalias@libc.org,
-        Greg Ungerer <gerg@linux-m68k.org>
-Subject: [PATCH v2 4/4] m68knommu: allow elf_fdpic loader to be selected
-Date:   Fri, 13 May 2022 09:06:02 +1000
-Message-Id: <20220512230602.1408871-1-gerg@linux-m68k.org>
-X-Mailer: git-send-email 2.25.1
+        Thu, 12 May 2022 19:07:08 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971255EDD3
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 16:07:06 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id k8so5919508qki.8
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 16:07:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cUck+cVE4Zxuay2oogDnSAcnKGvRjnTdnpV0Wo1py44=;
+        b=Dj1JULLJRgmUJGyzT66YmWR2bXmVOPWjKovt19K15mjhXg3HwFYBwEJuzTGwKaAq9s
+         UlYZ0/IUYcAg2aRR26LgYG0/HAiOUXbRTrjNR+Wc4SxPVT5MXbauCdL2/WDBI7QN0Gh0
+         c2v6RoCDtzZcEzCwRaxfIkuXKgKFQmfp7WteHFGn9yxB7UXbRpwFXrmu9mN6KLIniXYn
+         E6Ng4kcGK1aHvRPzZUSVA18lIbBd/twXGFM4i7KmkNJcxCIrUG0eta5gQ+Zhk4sMsbTs
+         bfvIMBQOMEqF/RWs5LYTgoZiIZ4OfdOx64M8r+ZkVp/WNmWSvYEJZ9cPVzcTwYawUn43
+         j07A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cUck+cVE4Zxuay2oogDnSAcnKGvRjnTdnpV0Wo1py44=;
+        b=BFSN7UUZPRYFQrYGOJC0pugUiCfY5dlbiygIkog7CMoo2NTbo9IIbgbiGlhbBogk53
+         qZ3WqZe9uRuTJ400BjrLg3tSM0i4uUzagEfd0k3ds6rrhDarjrMiw5terWKrcwe6PpRs
+         Q47tb3SCfT5cjofOEuZEqEPYBUHCf7WurSHfMnpH1yo8/dKyF3rOyKfBr1FENyJcO9jE
+         xDoQIs93aXnOkNwOEdNGD54oOs7lhjxORAer/MbvmUYLS5rzbGRjEvLC8GeIInWDugOU
+         RTJFXGxRJZYAjWtMnoux2yXp8s3E95Ai1UOdakeFSRs8jn/sYJPg7lUv3v359ofOWLrc
+         Ww4Q==
+X-Gm-Message-State: AOAM531SK/6+0z4KEY2uycEO7au3/NRxL2G69I5YLipAPgwXUuw3Npc6
+        Pt5e6fAmMTgrjotVSYbnk3JmmQ==
+X-Google-Smtp-Source: ABdhPJzPe/f2XnvNR7HBy1hfb2wAJ55PWzG5ke4OAfKWdYulxV6DryUEgezu1lF0L4l4p+1B2aoJOQ==
+X-Received: by 2002:a05:620a:4553:b0:6a0:5280:defd with SMTP id u19-20020a05620a455300b006a05280defdmr1763977qkp.165.1652396825764;
+        Thu, 12 May 2022 16:07:05 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::1:14fe])
+        by smtp.gmail.com with ESMTPSA id w13-20020ac86b0d000000b002f39b99f677sm545833qts.17.2022.05.12.16.07.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 16:07:05 -0700 (PDT)
+Date:   Thu, 12 May 2022 19:07:04 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Oliver Upton <oupton@google.com>, cgroups@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, Linux-MM <linux-mm@kvack.org>
+Subject: Re: [PATCH v4 1/4] mm: add NR_SECONDARY_PAGETABLE to count secondary
+ page table uses.
+Message-ID: <Yn2TGJ4vZ/fst+CY@cmpxchg.org>
+References: <20220429201131.3397875-1-yosryahmed@google.com>
+ <20220429201131.3397875-2-yosryahmed@google.com>
+ <87ilqoi77b.wl-maz@kernel.org>
+ <CAJD7tkY7JF25XXUFq2mGroetMkfo-2zGOaQC94pjZE3D42+oaw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJD7tkY7JF25XXUFq2mGroetMkfo-2zGOaQC94pjZE3D42+oaw@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,32 +90,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The m68k architecture code is capable of supporting the binfmt_elf_fdpic
-loader, so allow it to be configured. It is restricted to nommu
-configurations at this time due to the MMU context structures/code not
-supporting everything elf_fdpic needs when MMU is enabled.
+Hey Yosry,
 
-Link: https://lore.kernel.org/linux-m68k/20220428033319.239341-1-gerg@linux-m68k.org/
-Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
----
- fs/Kconfig.binfmt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, May 02, 2022 at 11:46:26AM -0700, Yosry Ahmed wrote:
+> On Mon, May 2, 2022 at 3:01 AM Marc Zyngier <maz@kernel.org> wrote:
+> > 115bae923ac8bb29ee635). You are saying that this is related to a
+> > 'workload', but given that the accounting is global, I fail to see how
+> > you can attribute these allocations on a particular VM.
+> 
+> The main motivation is having the memcg stats, which give attribution
+> to workloads. If you think it's more appropriate, we can add it as a
+> memcg-only stat, like MEMCG_VMALLOC (see 4e5aa1f4c2b4 ("memcg: add
+> per-memcg vmalloc stat")). The only reason I made this as a global
+> stat too is to be consistent with NR_PAGETABLE.
 
-v2: remove superfluous surrounding "(" ")"
+Please no memcg-specific stats if a regular vmstat item is possible
+and useful at the system level as well, like in this case. It's extra
+memcg code, extra callbacks, and it doesn't have NUMA node awareness.
 
-diff --git a/fs/Kconfig.binfmt b/fs/Kconfig.binfmt
-index 21c6332fa785..fb325b3aa4b0 100644
---- a/fs/Kconfig.binfmt
-+++ b/fs/Kconfig.binfmt
-@@ -58,7 +58,7 @@ config ARCH_USE_GNU_PROPERTY
- config BINFMT_ELF_FDPIC
- 	bool "Kernel support for FDPIC ELF binaries"
- 	default y if !BINFMT_ELF
--	depends on (ARM || (SUPERH && !MMU))
-+	depends on ARM || ((M68K || SUPERH) && !MMU)
- 	select ELFCORE
- 	help
- 	  ELF FDPIC binaries are based on ELF, but allow the individual load
--- 
-2.25.1
+> > What do you plan to do for IOMMU page tables? After all, they serve
+> > the exact same purpose, and I'd expect these to be handled the same
+> > way (i.e. why is this KVM specific?).
+> 
+> The reason this was named NR_SECONDARY_PAGTABLE instead of
+> NR_KVM_PAGETABLE is exactly that. To leave room to incrementally
+> account other types of secondary page tables to this stat. It is just
+> that we are currently interested in the KVM MMU usage.
 
+Do you actually care at the supervisor level that this memory is used
+for guest page tables?
+
+It seems to me you primarily care that it is reported *somewhere*
+(hence the piggybacking off of NR_PAGETABLE at first). And whether
+it's page tables or iommu tables or whatever else allocated for the
+purpose of virtualization, it doesn't make much of a difference to the
+host/cgroup that is tracking it, right?
+
+(The proximity to nr_pagetable could also be confusing. A high page
+table count can be a hint to userspace to enable THP. It seems
+actionable in a different way than a high number of kvm page tables or
+iommu page tables.)
+
+How about NR_VIRT? It's shorter, seems descriptive enough, less room
+for confusion, and is more easily extensible in the future.

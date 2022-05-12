@@ -2,49 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59874524B38
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84639524B3C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:16:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353074AbiELLPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 07:15:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
+        id S1353092AbiELLPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 07:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353146AbiELLPJ (ORCPT
+        with ESMTP id S1353101AbiELLPg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 07:15:09 -0400
+        Thu, 12 May 2022 07:15:36 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38DE213C35E;
-        Thu, 12 May 2022 04:14:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF661238D77;
+        Thu, 12 May 2022 04:15:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9D3E61E4B;
-        Thu, 12 May 2022 11:14:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27528C385B8;
-        Thu, 12 May 2022 11:14:36 +0000 (UTC)
-Message-ID: <b5e35985-c159-6b11-8752-d6dd29fc6a64@xs4all.nl>
-Date:   Thu, 12 May 2022 13:14:35 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 0/4] Add Toshiba Visconti DNN image processing accelerator
- driver
-Content-Language: en-US
-To:     Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5517161E4A;
+        Thu, 12 May 2022 11:15:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9141AC385B8;
+        Thu, 12 May 2022 11:15:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652354127;
+        bh=QVGA6CFQ2XAH/Rt96xt+ZWPweIAef+NyTKxO/CqfkhA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Jr8rlPccQyDhflCP4HnQG3KEGRVa9QqbyhwEUKVite7OV0wqdjEnN6MJbRsxYBg5x
+         IuQcfWv6pJG3LSnVVakSFlqwo16jS9TumrOg2fMQF8TWBcCPVKexW0fZ5mCJuJkgw0
+         8ZbtobfaIFugcfp6fTSMl1LUC/H58+vNVWAcXXfnXpFlvFovW5wjg9sxi4acdfECmL
+         h6ZXFoldZ+aS9gN75IgXpTJvSLDU/zSuU480XyiY7m+x/yiEB6a9Ab4vyZJlI7l+aB
+         4lqcaUk1NuxZbaeati3rzEQh64bc++MJRELbV6Bd6Fa+gDPO94H0zF01d+hUc1iCfy
+         7VutrDtXu6ieg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1np6my-00AqVh-T0; Thu, 12 May 2022 12:15:25 +0100
+Date:   Thu, 12 May 2022 12:15:24 +0100
+Message-ID: <87zgjn57eb.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-References: <20220428131128.5053-1-yuji2.ishikawa@toshiba.co.jp>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220428131128.5053-1-yuji2.ishikawa@toshiba.co.jp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH v3 5/5] pinctrl: renesas: pinctrl-rzg2l: Add IRQ domain to handle GPIO interrupt
+In-Reply-To: <20220511183210.5248-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220511183210.5248-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        <20220511183210.5248-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: prabhakar.mahadev-lad.rj@bp.renesas.com, geert+renesas@glider.be, linus.walleij@linaro.org, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, brgl@bgdev.pl, p.zabel@pengutronix.de, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org, phil.edworthy@renesas.com, biju.das.jz@bp.renesas.com, prabhakar.csengg@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,74 +76,319 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yuji,
-
-On 4/28/22 15:11, Yuji Ishikawa wrote:
-> This series is the DNN image processing accelerator driver for Toshiba's ARM SoC, Visconti[0].
-> This provides DT binding documentation, device driver, MAINTAINER files.
+On Wed, 11 May 2022 19:32:10 +0100,
+Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
 > 
-> The second patch "soc: visconti: Add Toshiba Visconti image processing accelerator common source"
-> and the fourth patch "MAINTAINERS: ..." are the same as the ones in the preceding post for affine driver.
-
-There appears to be no documentation whatsoever, unless I am missing something.
-
-How is the uAPI supposed to be used? What does it do? What formats does it accept
-or produce?
-
-If this processes images, then (as Laurent mentioned) this is more suitable as a
-V4L2 mem2mem driver.
-
-See https://linuxtv.org/downloads/v4l-dvb-apis-new/userspace-api/v4l/dev-mem2mem.html
-and the many drivers in drivers/media that use it (git grep v4l2-mem2mem.h).
-
-But without any explanation whatsoever I have no idea what does or does not make sense.
-
-Regards,
-
-	Hans
-
+> Add IRQ domian to RZ/G2L pinctrl driver to handle GPIO interrupt.
 > 
-> Best regards,
-> Yuji
+> GPIO0-GPIO122 pins can be used as IRQ lines but only 32 pins can be
+> used as IRQ lines at given time. Selection of pins as IRQ lines
+> is handled by IA55 (which is the IRQC block) which sits in between the
+> GPIO and GIC.
 > 
-> [0]: https://toshiba.semicon-storage.com/ap-en/semiconductor/product/image-recognition-processors-visconti.html
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  drivers/pinctrl/renesas/pinctrl-rzg2l.c | 202 ++++++++++++++++++++++++
+>  1 file changed, 202 insertions(+)
 > 
-> Yuji Ishikawa (4):
->   dt-bindings: soc: visconti: Add Toshiba Visconti DNN image processing
->     accelerator bindings
->   soc: visconti: Add Toshiba Visconti image processing accelerator
->     common source
->   soc: visconti: Add Toshiba Visconti DNN image processing accelerator
->   MAINTAINERS: Add entries for Toshiba Visconti DNN image processing
->     accelerator
+> diff --git a/drivers/pinctrl/renesas/pinctrl-rzg2l.c b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
+> index a48cac55152c..af2c739cdbaa 100644
+> --- a/drivers/pinctrl/renesas/pinctrl-rzg2l.c
+> +++ b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
+> @@ -9,8 +9,10 @@
+>  #include <linux/clk.h>
+>  #include <linux/gpio/driver.h>
+>  #include <linux/io.h>
+> +#include <linux/interrupt.h>
+>  #include <linux/module.h>
+>  #include <linux/of_device.h>
+> +#include <linux/of_irq.h>
+>  #include <linux/pinctrl/pinconf-generic.h>
+>  #include <linux/pinctrl/pinconf.h>
+>  #include <linux/pinctrl/pinctrl.h>
+> @@ -89,6 +91,7 @@
+>  #define PIN(n)			(0x0800 + 0x10 + (n))
+>  #define IOLH(n)			(0x1000 + (n) * 8)
+>  #define IEN(n)			(0x1800 + (n) * 8)
+> +#define ISEL(n)			(0x2c80 + (n) * 8)
+>  #define PWPR			(0x3014)
+>  #define SD_CH(n)		(0x3000 + (n) * 4)
+>  #define QSPI			(0x3008)
+> @@ -112,6 +115,10 @@
+>  #define RZG2L_PIN_ID_TO_PORT_OFFSET(id)	(RZG2L_PIN_ID_TO_PORT(id) + 0x10)
+>  #define RZG2L_PIN_ID_TO_PIN(id)		((id) % RZG2L_PINS_PER_PORT)
+>  
+> +#define RZG2L_TINT_MAX_INTERRUPT	32
+> +#define RZG2L_TINT_IRQ_START_INDEX	9
+> +#define RZG2L_PACK_HWIRQ(t, i)		(((t) << 16) | (i))
+> +
+>  struct rzg2l_dedicated_configs {
+>  	const char *name;
+>  	u32 config;
+> @@ -137,6 +144,9 @@ struct rzg2l_pinctrl {
+>  
+>  	struct gpio_chip		gpio_chip;
+>  	struct pinctrl_gpio_range	gpio_range;
+> +	DECLARE_BITMAP(tint_slot, RZG2L_TINT_MAX_INTERRUPT);
+> +	spinlock_t			bitmap_lock;
+> +	unsigned int			hwirq[RZG2L_TINT_MAX_INTERRUPT];
+>  
+>  	spinlock_t			lock;
+>  };
+> @@ -883,6 +893,8 @@ static int rzg2l_gpio_get(struct gpio_chip *chip, unsigned int offset)
+>  
+>  static void rzg2l_gpio_free(struct gpio_chip *chip, unsigned int offset)
+>  {
+> +	unsigned int virq;
+> +
+>  	pinctrl_gpio_free(chip->base + offset);
+>  
+>  	/*
+> @@ -890,6 +902,10 @@ static void rzg2l_gpio_free(struct gpio_chip *chip, unsigned int offset)
+>  	 * drive the GPIO pin as an output.
+>  	 */
+>  	rzg2l_gpio_direction_input(chip, offset);
+> +
+> +	virq = irq_find_mapping(chip->irq.domain, offset);
+> +	if (virq)
+> +		irq_dispose_mapping(virq);
+>  }
+>  
+>  static const char * const rzg2l_gpio_names[] = {
+> @@ -1104,14 +1120,190 @@ static struct {
+>  	}
+>  };
+>  
+> +static int rzg2l_gpio_get_gpioint(unsigned int virq)
+> +{
+> +	unsigned int gpioint;
+> +	unsigned int i;
+> +	u32 port, bit;
+> +
+> +	port = virq / 8;
+> +	bit = virq % 8;
+> +
+> +	if (port >= ARRAY_SIZE(rzg2l_gpio_configs) ||
+> +	    bit >= RZG2L_GPIO_PORT_GET_PINCNT(rzg2l_gpio_configs[port]))
+> +		return -EINVAL;
+> +
+> +	gpioint = bit;
+> +	for (i = 0; i < port; i++)
+> +		gpioint += RZG2L_GPIO_PORT_GET_PINCNT(rzg2l_gpio_configs[i]);
+> +
+> +	return gpioint;
+> +}
+> +
+> +static void rzg2l_gpio_irq_domain_free(struct irq_domain *domain, unsigned int virq,
+> +				       unsigned int nr_irqs)
+> +{
+> +	struct irq_data *d;
+> +
+> +	d = irq_domain_get_irq_data(domain, virq);
+> +	if (d) {
+> +		struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
+> +		struct rzg2l_pinctrl *pctrl = container_of(gc, struct rzg2l_pinctrl, gpio_chip);
+> +		irq_hw_number_t hwirq = irqd_to_hwirq(d);
+> +		unsigned long flags;
+> +		unsigned int i;
+> +
+> +		for (i = 0; i < RZG2L_TINT_MAX_INTERRUPT; i++) {
+> +			if (pctrl->hwirq[i] == hwirq) {
+> +				spin_lock_irqsave(&pctrl->bitmap_lock, flags);
+> +				bitmap_release_region(pctrl->tint_slot, i, get_order(1));
+> +				spin_unlock_irqrestore(&pctrl->bitmap_lock, flags);
+> +				pctrl->hwirq[i] = 0;
+> +				break;
+> +			}
+> +		}
+> +	}
+> +	irq_domain_free_irqs_common(domain, virq, nr_irqs);
+> +}
+> +
+> +static void rzg2l_gpio_irq_disable(struct irq_data *d)
+> +{
+> +	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
+> +	struct rzg2l_pinctrl *pctrl = container_of(gc, struct rzg2l_pinctrl, gpio_chip);
+> +	unsigned int hwirq = irqd_to_hwirq(d);
+> +	unsigned long flags;
+> +	void __iomem *addr;
+> +	u32 port;
+> +	u8 bit;
+> +
+> +	port = RZG2L_PIN_ID_TO_PORT(hwirq);
+> +	bit = RZG2L_PIN_ID_TO_PIN(hwirq);
+> +
+> +	addr = pctrl->base + ISEL(port);
+> +	if (bit >= 4) {
+> +		bit -= 4;
+> +		addr += 4;
+> +	}
+> +
+> +	spin_lock_irqsave(&pctrl->lock, flags);
+> +	writel(readl(addr) & ~BIT(bit * 8), addr);
+> +	spin_unlock_irqrestore(&pctrl->lock, flags);
+> +
+> +	irq_chip_disable_parent(d);
+> +}
+> +
+> +static void rzg2l_gpio_irq_enable(struct irq_data *d)
+> +{
+> +	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
+> +	struct rzg2l_pinctrl *pctrl = container_of(gc, struct rzg2l_pinctrl, gpio_chip);
+> +	unsigned int hwirq = irqd_to_hwirq(d);
+> +	unsigned long flags;
+> +	void __iomem *addr;
+> +	u32 port;
+> +	u8 bit;
+> +
+> +	port = RZG2L_PIN_ID_TO_PORT(hwirq);
+> +	bit = RZG2L_PIN_ID_TO_PIN(hwirq);
+> +
+> +	addr = pctrl->base + ISEL(port);
+> +	if (bit >= 4) {
+> +		bit -= 4;
+> +		addr += 4;
+> +	}
+> +
+> +	spin_lock_irqsave(&pctrl->lock, flags);
+> +	writel(readl(addr) | BIT(bit * 8), addr);
+> +	spin_unlock_irqrestore(&pctrl->lock, flags);
+> +
+> +	irq_chip_enable_parent(d);
+> +}
+> +
+> +static int rzg2l_gpio_irq_set_type(struct irq_data *d, unsigned int type)
+> +{
+> +	return irq_chip_set_type_parent(d, type);
+> +}
+> +
+> +static void rzg2l_gpio_irqc_eoi(struct irq_data *d)
+> +{
+> +	irq_chip_eoi_parent(d);
+> +}
+> +
+> +static struct irq_chip rzg2l_gpio_irqchip = {
+> +	.name = "rzg2l-gpio",
+> +	.irq_disable = rzg2l_gpio_irq_disable,
+> +	.irq_enable = rzg2l_gpio_irq_enable,
+> +	.irq_mask = irq_chip_mask_parent,
+> +	.irq_unmask = irq_chip_unmask_parent,
+> +	.irq_set_type = rzg2l_gpio_irq_set_type,
+> +	.irq_eoi = rzg2l_gpio_irqc_eoi,
+
+Please see the changes[1] that are queued in -next around immutable
+GPIO irqchips. This needs to be made const, the enable/disable methods
+have the right callbacks added, the resource management methods
+plumbed, and the correct flag exposed.
+
+> +};
+> +
+> +static int rzg2l_gpio_child_to_parent_hwirq(struct gpio_chip *gc,
+> +					    unsigned int child,
+> +					    unsigned int child_type,
+> +					    unsigned int *parent,
+> +					    unsigned int *parent_type)
+> +{
+> +	struct rzg2l_pinctrl *pctrl = gpiochip_get_data(gc);
+> +	unsigned long flags;
+> +	int gpioint, irq;
+> +
+> +	gpioint = rzg2l_gpio_get_gpioint(child);
+> +	if (gpioint < 0)
+> +		return gpioint;
+> +
+> +	spin_lock_irqsave(&pctrl->bitmap_lock, flags);
+> +	irq = bitmap_find_free_region(pctrl->tint_slot, RZG2L_TINT_MAX_INTERRUPT, get_order(1));
+> +	spin_unlock_irqrestore(&pctrl->bitmap_lock, flags);
+> +	if (irq < 0)
+> +		return -ENOSPC;
+> +	pctrl->hwirq[irq] = child;
+> +	irq += RZG2L_TINT_IRQ_START_INDEX;
+> +
+> +	/* All these interrupts are level high in the CPU */
+> +	*parent_type = IRQ_TYPE_LEVEL_HIGH;
+> +	*parent = RZG2L_PACK_HWIRQ(gpioint, irq);
+> +	return 0;
+> +}
+> +
+> +static void *rzg2l_gpio_populate_parent_fwspec(struct gpio_chip *chip,
+> +					       unsigned int parent_hwirq,
+> +					       unsigned int parent_type)
+> +{
+> +	struct irq_fwspec *fwspec;
+> +
+> +	fwspec = kzalloc(sizeof(*fwspec), GFP_KERNEL);
+> +	if (!fwspec)
+> +		return NULL;
+> +
+> +	fwspec->fwnode = chip->irq.parent_domain->fwnode;
+> +	fwspec->param_count = 2;
+> +	fwspec->param[0] = parent_hwirq;
+> +	fwspec->param[1] = parent_type;
+> +
+> +	return fwspec;
+> +}
+> +
+>  static int rzg2l_gpio_register(struct rzg2l_pinctrl *pctrl)
+>  {
+>  	struct device_node *np = pctrl->dev->of_node;
+>  	struct gpio_chip *chip = &pctrl->gpio_chip;
+>  	const char *name = dev_name(pctrl->dev);
+> +	struct irq_domain *parent_domain;
+>  	struct of_phandle_args of_args;
+> +	struct device_node *parent_np;
+> +	struct gpio_irq_chip *girq;
+>  	int ret;
+>  
+> +	parent_np = of_irq_find_parent(np);
+> +	if (!parent_np)
+> +		return -ENXIO;
+> +
+> +	parent_domain = irq_find_host(parent_np);
+> +	of_node_put(parent_np);
+> +	if (!parent_domain)
+> +		return -EPROBE_DEFER;
+> +
+>  	ret = of_parse_phandle_with_fixed_args(np, "gpio-ranges", 3, 0, &of_args);
+>  	if (ret) {
+>  		dev_err(pctrl->dev, "Unable to parse gpio-ranges\n");
+> @@ -1138,6 +1330,15 @@ static int rzg2l_gpio_register(struct rzg2l_pinctrl *pctrl)
+>  	chip->base = -1;
+>  	chip->ngpio = of_args.args[2];
+>  
+> +	girq = &chip->irq;
+
+Same thing, this needs to use the appropriate setter.
+
+> +	girq->chip = &rzg2l_gpio_irqchip;
+> +	girq->fwnode = of_node_to_fwnode(np);
+> +	girq->parent_domain = parent_domain;
+> +	girq->child_to_parent_hwirq = rzg2l_gpio_child_to_parent_hwirq;
+> +	girq->populate_parent_alloc_arg = rzg2l_gpio_populate_parent_fwspec;
+> +	girq->child_irq_domain_ops.free = rzg2l_gpio_irq_domain_free;
+> +	girq->ngirq = RZG2L_TINT_MAX_INTERRUPT;
+> +
+>  	pctrl->gpio_range.id = 0;
+>  	pctrl->gpio_range.pin_base = 0;
+>  	pctrl->gpio_range.base = 0;
+> @@ -1253,6 +1454,7 @@ static int rzg2l_pinctrl_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	spin_lock_init(&pctrl->lock);
+> +	spin_lock_init(&pctrl->bitmap_lock);
+>  
+>  	platform_set_drvdata(pdev, pctrl);
+>  
+> -- 
+> 2.25.1
 > 
->  .../soc/visconti/toshiba,visconti-dnn.yaml    |  54 ++
->  MAINTAINERS                                   |   2 +
->  drivers/soc/Kconfig                           |   1 +
->  drivers/soc/Makefile                          |   1 +
->  drivers/soc/visconti/Kconfig                  |   7 +
->  drivers/soc/visconti/Makefile                 |   8 +
->  drivers/soc/visconti/dnn/Makefile             |   6 +
->  drivers/soc/visconti/dnn/dnn.c                | 533 ++++++++++++++++++
->  drivers/soc/visconti/dnn/hwd_dnn.c            | 183 ++++++
->  drivers/soc/visconti/dnn/hwd_dnn.h            |  68 +++
->  drivers/soc/visconti/dnn/hwd_dnn_reg.h        | 228 ++++++++
->  drivers/soc/visconti/ipa_common.c             |  55 ++
->  drivers/soc/visconti/ipa_common.h             |  18 +
->  drivers/soc/visconti/uapi/dnn.h               |  77 +++
->  drivers/soc/visconti/uapi/ipa.h               |  88 +++
->  15 files changed, 1329 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/visconti/toshiba,visconti-dnn.yaml
->  create mode 100644 drivers/soc/visconti/Kconfig
->  create mode 100644 drivers/soc/visconti/Makefile
->  create mode 100644 drivers/soc/visconti/dnn/Makefile
->  create mode 100644 drivers/soc/visconti/dnn/dnn.c
->  create mode 100644 drivers/soc/visconti/dnn/hwd_dnn.c
->  create mode 100644 drivers/soc/visconti/dnn/hwd_dnn.h
->  create mode 100644 drivers/soc/visconti/dnn/hwd_dnn_reg.h
->  create mode 100644 drivers/soc/visconti/ipa_common.c
->  create mode 100644 drivers/soc/visconti/ipa_common.h
->  create mode 100644 drivers/soc/visconti/uapi/dnn.h
->  create mode 100644 drivers/soc/visconti/uapi/ipa.h
 > 
 
+Thanks,
+
+	M.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=irq/gpio-immutable
+
+-- 
+Without deviation from the norm, progress is not possible.

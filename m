@@ -2,43 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EBDE524AE6
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:59:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4BB524AE9
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352903AbiELK7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 06:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58534 "EHLO
+        id S1352909AbiELLBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 07:01:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238426AbiELK7J (ORCPT
+        with ESMTP id S238426AbiELLBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 06:59:09 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D71CCEABAB
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:59:07 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AE85C106F;
-        Thu, 12 May 2022 03:59:07 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B008A3F66F;
-        Thu, 12 May 2022 03:59:06 -0700 (PDT)
-Message-ID: <89525069-4fd5-2fd8-20eb-5af240a4bceb@arm.com>
-Date:   Thu, 12 May 2022 12:58:50 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH V2] arch_topology: support parsing cluster_id from DT
-Content-Language: en-US
-To:     Qing Wang <wangqing@vivo.com>, Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org
-References: <1652262776-3056-1-git-send-email-wangqing@vivo.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <1652262776-3056-1-git-send-email-wangqing@vivo.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Thu, 12 May 2022 07:01:47 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7761C2E697;
+        Thu, 12 May 2022 04:01:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652353306; x=1683889306;
+  h=from:to:cc:subject:date:message-id;
+  bh=XswWfruTz3bYVjoW5r66/vCbMkAhLTZ/FrO1QjUGPC8=;
+  b=F+6wJSaom6qbokT0FRZ5HLwepMcm/5WWQBt9gJ+AWMpQK4i0Sotkrwa9
+   SgFFsiQ/WWaraolV2tgCy3KNVGowz2hNeIAuDlwJexmY2uVwO5gj0j+aU
+   TF9E/+YtX7BX4ejicdv73EB43J5ReL1NKX3pnDwpws12olleCwKlhErxu
+   I=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 12 May 2022 04:01:46 -0700
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 12 May 2022 04:01:44 -0700
+X-QCInternal: smtphost
+Received: from blr-ubuntu-435.qualcomm.com ([10.79.42.176])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 12 May 2022 16:31:42 +0530
+Received: by blr-ubuntu-435.qualcomm.com (Postfix, from userid 2327845)
+        id 98C169008B1; Thu, 12 May 2022 16:31:41 +0530 (IST)
+From:   Shreyas K K <quic_shrekk@quicinc.com>
+To:     Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Shreyas K K <quic_shrekk@quicinc.com>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Prasanna Kumar <quic_kprasan@quicinc.com>
+Subject: [PATCH V3] arm64: Enable repeat tlbi workaround on KRYO4XX gold CPUs
+Date:   Thu, 12 May 2022 16:31:34 +0530
+Message-Id: <20220512110134.12179-1-quic_shrekk@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,70 +62,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/05/2022 11:52, Qing Wang wrote:
-> From: Wang Qing <wangqing@vivo.com>
+Add KRYO4XX gold/big cores to the list of CPUs that need the
+repeat TLBI workaround. Apply this to the affected
+KRYO4XX cores (rcpe to rfpe).
 
-[...]
+The variant and revision bits are implementation defined and are
+different from the their Cortex CPU counterparts on which they are
+based on, i.e., (r0p0 to r3p0) is equivalent to (rcpe to rfpe).
 
-> @@ -582,7 +594,8 @@ static int __init parse_cluster(struct device_node *cluster, int depth)
->  			}
->  
->  			if (leaf) {
-> -				ret = parse_core(c, package_id, core_id++);
-> +				ret = parse_core(c, package_id, (depth == 2)?cluster_id : -1,
-> +					       core_id++);
->  			} else {
->  				pr_err("%pOF: Non-leaf cluster with core %s\n",
->  				       cluster, name);
-> @@ -599,9 +612,6 @@ static int __init parse_cluster(struct device_node *cluster, int depth)
->  	if (leaf && !has_cores)
->  		pr_warn("%pOF: empty cluster\n", cluster);
->  
-> -	if (leaf)
-> -		package_id++;
-> -
->  	return 0;
->  }
+Signed-off-by: Shreyas K K <quic_shrekk@quicinc.com>
+---
 
-The issue I mentioned under
-https://lkml.kernel.org/r/bd746cf0-0fdd-1ee6-d394-67fffb5d9b58@arm.com
-still exists.
+Changes in v2:
+ * r2p0 and r3p0 are also affected by this erratum.
+ * Add the corresponding cores (repe and rfpe) making the range rcpe to rfpe.
 
-Btw, I recommend the following test strategy.
+Changes in v3:
+ * Fix the CPU model macro.
 
-(A) Create a set of dts files which represent today's topologies in DT:
+ Documentation/arm64/silicon-errata.rst | 3 +++
+ arch/arm64/kernel/cpu_errata.c         | 2 ++
+ 2 files changed, 5 insertions(+)
 
-  (1) 8 CPUs flat (Arm DynamIQ single DSU)
+diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
+index 466cb9e89047..d27db84d585e 100644
+--- a/Documentation/arm64/silicon-errata.rst
++++ b/Documentation/arm64/silicon-errata.rst
+@@ -189,6 +189,9 @@ stable kernels.
+ +----------------+-----------------+-----------------+-----------------------------+
+ | Qualcomm Tech. | Kryo4xx Silver  | N/A             | ARM64_ERRATUM_1024718       |
+ +----------------+-----------------+-----------------+-----------------------------+
++| Qualcomm Tech. | Kryo4xx Gold    | N/A             | ARM64_ERRATUM_1286807       |
+++----------------+-----------------+-----------------+-----------------------------+
++
+ +----------------+-----------------+-----------------+-----------------------------+
+ | Fujitsu        | A64FX           | E#010001        | FUJITSU_ERRATUM_010001      |
+ +----------------+-----------------+-----------------+-----------------------------+
+diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
+index 4c9b5b4b7a0b..a0f3d0aaa3c5 100644
+--- a/arch/arm64/kernel/cpu_errata.c
++++ b/arch/arm64/kernel/cpu_errata.c
+@@ -208,6 +208,8 @@ static const struct arm64_cpu_capabilities arm64_repeat_tlbi_list[] = {
+ #ifdef CONFIG_ARM64_ERRATUM_1286807
+ 	{
+ 		ERRATA_MIDR_RANGE(MIDR_CORTEX_A76, 0, 0, 3, 0),
++		/* Kryo4xx Gold (rcpe to rfpe) => (r0p0 to r3p0) */
++		ERRATA_MIDR_RANGE(MIDR_QCOM_KRYO_4XX_GOLD, 0xc, 0xe, 0xf, 0xe),
+ 	},
+ #endif
+ 	{},
+-- 
+2.17.1
 
-  (2) 2 groups of 4 CPUs (e.g. hikey 960) (which covers Phantom* domain)
-
-  (3) your QC SM8450 Armv9 tri-gear (4-3-1) DynamIQ single DSU w/ shared
-      L2 btwn CPU0-1 and CPU2-3.
-  ...
-
- * used in Android
-
-(B) Compile dtb's
-
-  dtc -I dts -O dtb -o foo.dtb foo.dts
-
-
-(C) Run them under qemu w/ and w/o CONFIG_SCHED_CLUSTER and check:
-
-  sudo qemu-system-aarch64 ... -dtb foo.dtb
-
-  (1) sched domains:
-
-      cat /sys/kernel/debug/sched/domains/cpu*/domain*/name
-
-  (2) sched flags:
-
-      cat /sys/kernel/debug/sched/domains/cpu*/domain*/flags
-
-  (3) cpumasks:
-
-      cat /proc/schedstat | awk '{print $1 " " $2 }' | grep ^[cd]
-
-You can even mention the test results in your patch so that people see
-that you already covered them. This will speed up the review-process
-enormously.

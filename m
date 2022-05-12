@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF27524BC0
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9893524BBD
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353363AbiELLdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 07:33:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
+        id S1353331AbiELLdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 07:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353256AbiELLdZ (ORCPT
+        with ESMTP id S1353220AbiELLd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 07:33:25 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850A21C9AF1
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 04:33:23 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id l19so6092476ljb.7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 04:33:23 -0700 (PDT)
+        Thu, 12 May 2022 07:33:26 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F851CD266
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 04:33:24 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id bu29so8597329lfb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 04:33:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=daynix-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dQ6Kj1AFx+WOgmL0iPWurV5hXCaWyWM8z6CScgnZ/mE=;
-        b=eZlrMjgNhGomXxclaICAouypvp3lRfwA6aZfhe3AuMITDC5aWokIMqIolhVdtaZYd2
-         8NkrnkmRYFE86hKFaKF3lR5XNcvz5vRIqWhpY7UjzJ/mRrdMw+kXRu1GxHv10+l/grGb
-         eYFVeRSPr0I/DORddBVbHRUdOebbrl2/EbqnfMeS2fLZbbyBLTu7lyPhSM71VKxO7p6E
-         8CgT4Mv+1vL2Es14NninGcjg/EPWQF6UwwbzBPbNrUr0zvPgDoNdT2tknD9NQiY/eh9P
-         Qdco9bi/vP/OBeQ+JDoSE+az1KTEBX8/LIkySJJCbfkibbj7YZuoDqCgwI0m1P8nAOEZ
-         JFvg==
+        bh=uEd6sKxlslOXYob+aYfGwuvE08ax3brjjZ3tUvtT5nY=;
+        b=mCHGtsjtThp07FRQVWEOYHDAwe2bBM2SDMWFzwOclYH/rUTFzeOEkDMmdNLQf39AT2
+         O2mNEgmOZg/cHw7jlv0Osi3mhNGYG0l8Xz49E+1YMT0zwPkbiMC1s3QXwWiOOzm0dn4X
+         2Tt81II75xQVgnFqgQ4NbIPn1AZm3tiuyTeEaqNvgHmAKCVh0lGRJrDT4/tSsVjAaDDv
+         qsFOHs+FzmaSvfyupxUNCNbI/vncTof4xDFmBCYbWV3Z3eudplwDwY4YBoYZgzUj00Ow
+         igGvTMUVJu/KWjf1Sm5CwmrI00a5XCneA5bhaUdYVtKeqDokXwPGjxLL6ljRGAZjKuv8
+         FF7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=dQ6Kj1AFx+WOgmL0iPWurV5hXCaWyWM8z6CScgnZ/mE=;
-        b=uICJzbsaS/MTFDcCtYUmP2Gk/Hc0Lh3jxiSSwf1Vf2g25s95wth8uVJShwDQLTvp9/
-         rkHODWxvsNBaOQucENA9QPw6EbBs9NFU2wxK13Q3J7+bm0YviWENb1hAGb+YMSHyRedK
-         1xleIy52s2Drb45IX2rol34yMEfxOQYama0JsouBn/lGH+JDsQRnGH3lhgykE9ENtDCx
-         gsbjPTaO3ON6qZFLBckpF4/A671cUiwW9K/sqZSng662aL3KO61531vkQjED1fzwdanZ
-         NDkbaLAady3ZxAvLTD/OeSQ9Y3wXQlzO/T3/KHjPRk2ggioAQm6XTW2KyxGNs/WKguJv
-         X+GQ==
-X-Gm-Message-State: AOAM5326lnBY24j0gvL7L4GObqpLJ66gt0cX7t9RYkqQUyDQydpVQtXn
-        LXU0SyjZhe48JXS4o0gbEtgmEg==
-X-Google-Smtp-Source: ABdhPJxBbnjmcbyqDTcs/WSaKg6jAB/MlcJZ2EYLz6uh2au/7rvOWL/6K4Gs9t4HeVQS/eC8xFyNYQ==
-X-Received: by 2002:a2e:8902:0:b0:24f:1446:3101 with SMTP id d2-20020a2e8902000000b0024f14463101mr19979362lji.266.1652355201900;
-        Thu, 12 May 2022 04:33:21 -0700 (PDT)
+        bh=uEd6sKxlslOXYob+aYfGwuvE08ax3brjjZ3tUvtT5nY=;
+        b=0Hoix+cqEi9UIpdVqjtlMjcCZLnCIa32MjC1mxQkyLUJR83X6z9FxzF41iHWlOdUeQ
+         ShF2iaMpZtGCgwJWXUUagREoG5j3IUR+J0FUsCmVM2EiE4oOhBklihCuJPEA7e+ateGM
+         q1CRvrOn2LRlQFcENRTRLVExteR7Dkb1SD1fE3IwFui9yFLi7bOWQti+i8nmKSDS+1Ph
+         289GLK+eEPUODdR0nD8j3dc4W+jqAkII3uWl4RRfmywey9KrFUDR6gD3zRtZdJ0VS5iB
+         yLg+2q10ihAPFIkAchjNh/Hv0OWeFiUWSsJUbwC0qB0ZtwJQ47MrZ4ljZxs3gNEamT8m
+         6/pg==
+X-Gm-Message-State: AOAM530H8UL6h3Dv3zLarm8jhruu4LHirX2Ok6SOlmKhB9j42L3Iekt7
+        XKY4Ye/nGploAUduAQRkrGIirw==
+X-Google-Smtp-Source: ABdhPJydZzsXkKuh6xmb+KoEHAkgMMM0h42G7A/Eo3hW5TLHRzkOvvI0WdKXGyQ3m/jp7y02DTwP9Q==
+X-Received: by 2002:a05:6512:4009:b0:46d:31b:e05a with SMTP id br9-20020a056512400900b0046d031be05amr24343108lfb.528.1652355203000;
+        Thu, 12 May 2022 04:33:23 -0700 (PDT)
 Received: from localhost.localdomain (host-188-190-49-235.la.net.ua. [188.190.49.235])
-        by smtp.gmail.com with ESMTPSA id r29-20020ac25a5d000000b0047255d211a6sm741758lfn.213.2022.05.12.04.33.20
+        by smtp.gmail.com with ESMTPSA id r29-20020ac25a5d000000b0047255d211a6sm741758lfn.213.2022.05.12.04.33.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 04:33:21 -0700 (PDT)
+        Thu, 12 May 2022 04:33:22 -0700 (PDT)
 From:   Andrew Melnychenko <andrew@daynix.com>
 To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com, mst@redhat.com, jasowang@redhat.com,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         virtualization@lists.linux-foundation.org
 Cc:     yan@daynix.com, yuri.benditovich@daynix.com
-Subject: [RFC PATCH v2 3/5] uapi/linux/virtio_net.h: Added USO types.
-Date:   Thu, 12 May 2022 14:23:45 +0300
-Message-Id: <20220512112347.18717-4-andrew@daynix.com>
+Subject: [RFC PATCH v2 4/5] linux/virtio_net.h: Support USO offload in vnet header.
+Date:   Thu, 12 May 2022 14:23:46 +0300
+Message-Id: <20220512112347.18717-5-andrew@daynix.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220512112347.18717-1-andrew@daynix.com>
 References: <20220512112347.18717-1-andrew@daynix.com>
@@ -64,46 +64,62 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added new GSO type for USO: VIRTIO_NET_HDR_GSO_UDP_L4.
-Feature VIRTIO_NET_F_HOST_USO allows to enable NETIF_F_GSO_UDP_L4.
-Separated VIRTIO_NET_F_GUEST_USO4 & VIRTIO_NET_F_GUEST_USO6 features
-required for Windows guests.
+Now, it's possible to convert USO vnet packets from/to skb.
+Added support for GSO_UDP_L4 offload.
 
 Signed-off-by: Andrew Melnychenko <andrew@daynix.com>
 ---
- include/uapi/linux/virtio_net.h | 4 ++++
- 1 file changed, 4 insertions(+)
+ include/linux/virtio_net.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/include/uapi/linux/virtio_net.h b/include/uapi/linux/virtio_net.h
-index 3f55a4215f11..c654feb1ed9b 100644
---- a/include/uapi/linux/virtio_net.h
-+++ b/include/uapi/linux/virtio_net.h
-@@ -56,6 +56,9 @@
- #define VIRTIO_NET_F_MQ	22	/* Device supports Receive Flow
- 					 * Steering */
- #define VIRTIO_NET_F_CTRL_MAC_ADDR 23	/* Set MAC address */
-+#define VIRTIO_NET_F_GUEST_USO4	54	/* Guest can handle USOv4 in. */
-+#define VIRTIO_NET_F_GUEST_USO6	55	/* Guest can handle USOv6 in. */
-+#define VIRTIO_NET_F_HOST_USO	56	/* Host can handle USO in. */
- 
- #define VIRTIO_NET_F_HASH_REPORT  57	/* Supports hash report */
- #define VIRTIO_NET_F_RSS	  60	/* Supports RSS RX steering */
-@@ -130,6 +133,7 @@ struct virtio_net_hdr_v1 {
- #define VIRTIO_NET_HDR_GSO_TCPV4	1	/* GSO frame, IPv4 TCP (TSO) */
- #define VIRTIO_NET_HDR_GSO_UDP		3	/* GSO frame, IPv4 UDP (UFO) */
- #define VIRTIO_NET_HDR_GSO_TCPV6	4	/* GSO frame, IPv6 TCP */
-+#define VIRTIO_NET_HDR_GSO_UDP_L4	5	/* GSO frame, IPv4& IPv6 UDP (USO) */
- #define VIRTIO_NET_HDR_GSO_ECN		0x80	/* TCP has ECN set */
- 	__u8 gso_type;
- 	__virtio16 hdr_len;	/* Ethernet + IP + tcp/udp hdrs */
+diff --git a/include/linux/virtio_net.h b/include/linux/virtio_net.h
+index a960de68ac69..bdf8de2cdd93 100644
+--- a/include/linux/virtio_net.h
++++ b/include/linux/virtio_net.h
+@@ -15,6 +15,7 @@ static inline bool virtio_net_hdr_match_proto(__be16 protocol, __u8 gso_type)
+ 	case VIRTIO_NET_HDR_GSO_TCPV6:
+ 		return protocol == cpu_to_be16(ETH_P_IPV6);
+ 	case VIRTIO_NET_HDR_GSO_UDP:
++	case VIRTIO_NET_HDR_GSO_UDP_L4:
+ 		return protocol == cpu_to_be16(ETH_P_IP) ||
+ 		       protocol == cpu_to_be16(ETH_P_IPV6);
+ 	default:
+@@ -31,6 +32,7 @@ static inline int virtio_net_hdr_set_proto(struct sk_buff *skb,
+ 	switch (hdr->gso_type & ~VIRTIO_NET_HDR_GSO_ECN) {
+ 	case VIRTIO_NET_HDR_GSO_TCPV4:
+ 	case VIRTIO_NET_HDR_GSO_UDP:
++	case VIRTIO_NET_HDR_GSO_UDP_L4:
+ 		skb->protocol = cpu_to_be16(ETH_P_IP);
+ 		break;
+ 	case VIRTIO_NET_HDR_GSO_TCPV6:
+@@ -69,6 +71,11 @@ static inline int virtio_net_hdr_to_skb(struct sk_buff *skb,
+ 			ip_proto = IPPROTO_UDP;
+ 			thlen = sizeof(struct udphdr);
+ 			break;
++		case VIRTIO_NET_HDR_GSO_UDP_L4:
++			gso_type = SKB_GSO_UDP_L4;
++			ip_proto = IPPROTO_UDP;
++			thlen = sizeof(struct udphdr);
++			break;
+ 		default:
+ 			return -EINVAL;
+ 		}
+@@ -182,6 +189,8 @@ static inline int virtio_net_hdr_from_skb(const struct sk_buff *skb,
+ 			hdr->gso_type = VIRTIO_NET_HDR_GSO_TCPV4;
+ 		else if (sinfo->gso_type & SKB_GSO_TCPV6)
+ 			hdr->gso_type = VIRTIO_NET_HDR_GSO_TCPV6;
++		else if (sinfo->gso_type & SKB_GSO_UDP_L4)
++			hdr->gso_type = VIRTIO_NET_HDR_GSO_UDP_L4;
+ 		else
+ 			return -EINVAL;
+ 		if (sinfo->gso_type & SKB_GSO_TCP_ECN)
 -- 
 2.35.1
 

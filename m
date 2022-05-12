@@ -2,94 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E82524A6C
+	by mail.lfdr.de (Postfix) with ESMTP id BEC21524A6D
 	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:38:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352697AbiELKiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 06:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46390 "EHLO
+        id S1352711AbiELKiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 06:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240318AbiELKh6 (ORCPT
+        with ESMTP id S1352683AbiELKiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 06:37:58 -0400
-Received: from outbound-smtp02.blacknight.com (outbound-smtp02.blacknight.com [81.17.249.8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADB75BE45
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:37:52 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
-        by outbound-smtp02.blacknight.com (Postfix) with ESMTPS id 85F1FBB1DC
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 11:37:51 +0100 (IST)
-Received: (qmail 9959 invoked from network); 12 May 2022 10:37:51 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 12 May 2022 10:37:51 -0000
-Date:   Thu, 12 May 2022 11:37:48 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, vbabka@suse.cz,
-        akpm@linux-foundation.org, willy@infradead.org
-Subject: Re: Is _PAGE_PROTNONE set only for user mappings?
-Message-ID: <20220512103748.GH3441@techsingularity.net>
-References: <20220506051940.156952-1-42.hyeyoo@gmail.com>
- <56f89895-601e-44c9-bda4-5fae6782e27e@amd.com>
- <YnpTHMvOO/pLJQ+l@hyeyoo>
- <5fe161cb-6c55-6c4d-c208-16c77e115d3f@amd.com>
- <8c2735ac-0335-6e2a-8341-8266d5d13c30@intel.com>
- <YntHrTX12TGp35aF@hyeyoo>
+        Thu, 12 May 2022 06:38:09 -0400
+Received: from mail-4317.proton.ch (mail-4317.proton.ch [185.70.43.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022D45DBF1
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:38:06 -0700 (PDT)
+Date:   Thu, 12 May 2022 10:37:54 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
+        s=protonmail2; t=1652351884;
+        bh=7NmTfOCxDVAfqJ/9f/2B3RstZoJLD303Bp1OuJZ4KeA=;
+        h=Date:To:From:Reply-To:Subject:Message-ID:Feedback-ID:From:To:Cc:
+         Date:Subject:Reply-To:Feedback-ID:Message-ID;
+        b=f02r2AQ9t/AYTiq+emcHSWiFf7xzC6rrO/toal82g03MsexLkvGgplJ0P5CKchR8S
+         g4eoOKwjW1BQR8oTTpIl47owvv8yGQCYGhmfVO9EnqRx5iHVzi0kZ7Vd6xopnD5UcZ
+         dmKBGRYEkFpP90/ZrWYsrJvwiQbUS8p2z4CAi0p7AlMvraDeer8W6IFjEYiz0wo5Nq
+         A1sDfALlDtQXUoeNAt+KeLNLtxDfqJ5MSh2K8o5ghWwJquNznQyhB4aWo0o9ftN49N
+         mFCs0jrkfBpCbz4eWI8b2x/aWtWhZA7OXni+hP52rheqU8StS77chUp8xhBxbmoEuP
+         Ccbjj/059/lcw==
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
+From:   Simon Ser <contact@emersion.fr>
+Reply-To: Simon Ser <contact@emersion.fr>
+Subject: procfs: open("/proc/self/fd/...") allows bypassing O_RDONLY
+Message-ID: <lGo7a4qQABKb-u_xsz6p-QtLIy2bzciBLTUJ7-ksv7ppK3mRrJhXqFmCFU4AtQf6EyrZUrYuSLDMBHEUMe5st_iT9VcRuyYPMU_jVpSzoWg=@emersion.fr>
+Feedback-ID: 1358184:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <YntHrTX12TGp35aF@hyeyoo>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_05,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 02:20:45PM +0900, Hyeonggon Yoo wrote:
-> > pgprot_t vm_get_page_prot(unsigned long vm_flags)
-> > {
-> >        pgprot_t ret = __pgprot(pgprot_val(protection_map[vm_flags &
-> >                                (VM_READ|VM_WRITE|VM_EXEC|VM_SHARED)]) |
-> >                        pgprot_val(arch_vm_get_page_prot(vm_flags)));
-> >
-> >        return arch_filter_pgprot(ret);
-> > }
-> > EXPORT_SYMBOL(vm_get_page_prot);
-> 
-> I guess it's only set for processes' VMA if no caller is abusing
-> vm_get_page_prot() for kernel mappings.
-> 
-> But yeah, just quick guessing does not make us convinced.
-> Let's Cc people working on mm.
-> 
-> If kernel never uses _PAGE_PROTNONE for kernel mappings, it's just okay
-> not to clear _PAGE_GLOBAL at first in __change_page_attr() if it's not user address,
-> because no user will confuse _PAGE_GLOBAL as _PAGE_PROTNONE if it's kernel
-> address. right?
-> 
+Hi all,
 
-I'm not aware of a case where _PAGE_BIT_PROTNONE is used for a kernel
-address expecting PROT_NONE semantics instead of the global bit. NUMA
-Balancing is not going to accidentally treat a kernel address as if it's
-a NUMA hinting fault. By the time a fault is determining if a PTE access
-is a numa hinting fault or accesssing a PROT_NONE region, it has been
-established that it is a userspace address backed by a valid VMA.
+I'm a user-space developer working on Wayland. Recently we've been
+discussing about security considerations related to FD passing between
+processes [1].
 
--- 
-Mel Gorman
-SUSE Labs
+A Wayland compositor often needs to share read-only data with its
+clients. Examples include a keyboard keymap, or a pixel format table.
+The clients might be untrusted. The data sharing can happen by having
+the compositor send a read-only FD (ie, a FD opened with O_RDONLY) to
+clients.
+
+It was assumed that passing such a FD wouldn't allow Wayland clients to
+write to the file. However, it was recently discovered that procfs
+allows to bypass this restriction. A process can open(2)
+"/proc/self/fd/<fd>" with O_RDWR, and that will return a FD suitable for
+writing. This also works when running the client inside a user namespace.
+A PoC is available at [2] and can be tested inside a compositor which
+uses this O_RDONLY strategy (e.g. wlroots compositors).
+
+Question: is this intended behavior, or is this an oversight? If this is
+intended behavior, what would be a good way to share a FD to another
+process without allowing it to write to the underlying file?
+
+Thanks,
+
+Simon
+
+[1]: https://gitlab.freedesktop.org/wayland/wayland-protocols/-/issues/92
+[2]: https://paste.sr.ht/~emersion/eac94b03f286e21f8362354b6af032291c00f8a7

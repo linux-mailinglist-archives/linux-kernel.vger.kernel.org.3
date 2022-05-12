@@ -2,223 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6ED85243BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 05:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E95B75243C2
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 05:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345209AbiELDwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 23:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54146 "EHLO
+        id S1345322AbiELD5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 23:57:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345010AbiELDwa (ORCPT
+        with ESMTP id S1345368AbiELD5g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 23:52:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9992436153
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 20:52:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652327548;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2SKwInTDfwSjGYjczGeCpjDqlYEJ6dRe4uToWw6mvPw=;
-        b=UDF1KfRNeGvrYoOD8wv7fmMcDRc1EtnO6AyKfqYixDbTy4CRYqBiXJd3BdKFiGOOm6VCqo
-        +Mq23A+YkJAqaWJe+acduxGQVCepZHdszMZIKv1XDjg6bQrjPnWftzIrcZ0iyZW7Ui/rhF
-        C2QNcwBT1B1+miFpow9/bLsbatV7xrA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-644-ZhHGqITBNHqD11DJywYAPA-1; Wed, 11 May 2022 23:52:23 -0400
-X-MC-Unique: ZhHGqITBNHqD11DJywYAPA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F2F173C01D99;
-        Thu, 12 May 2022 03:52:22 +0000 (UTC)
-Received: from localhost (ovpn-13-226.pek2.redhat.com [10.72.13.226])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id AE0491121314;
-        Thu, 12 May 2022 03:52:12 +0000 (UTC)
-Date:   Thu, 12 May 2022 11:52:09 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Coiby Xu <coxu@redhat.com>
-Cc:     kexec@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
-        Michal Suchanek <msuchanek@suse.de>,
-        Dave Young <dyoung@redhat.com>, Will Deacon <will@kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Mimi Zohar <zohar@linux.ibm.com>, Chun-Yi Lee <jlee@suse.com>,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v7 2/4] kexec, KEYS: make the code in
- bzImage64_verify_sig generic
-Message-ID: <YnyEafqEcSh/wRRN@MiWiFi-R3L-srv>
-References: <20220512023402.9913-1-coxu@redhat.com>
- <20220512023402.9913-3-coxu@redhat.com>
- <Ynx1DUvDTL1R4Pj5@MiWiFi-R3L-srv>
+        Wed, 11 May 2022 23:57:36 -0400
+Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE11D26544;
+        Wed, 11 May 2022 20:57:32 -0700 (PDT)
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1nozwj-00CmlI-4v; Thu, 12 May 2022 13:57:02 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Thu, 12 May 2022 11:57:01 +0800
+Date:   Thu, 12 May 2022 11:57:01 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, Will Deacon <will@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
+Subject: Re: [RFC PATCH 2/7] crypto: api - Add crypto_tfm_ctx_dma
+Message-ID: <YnyFjSrK2DMysrCY@gondor.apana.org.au>
+References: <YnpGnsr4k7yVUR54@gondor.apana.org.au>
+ <E1noNhu-00BzV4-4N@fornost.hmeau.com>
+ <Ynqciq2p8mtTg98n@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ynx1DUvDTL1R4Pj5@MiWiFi-R3L-srv>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Ynqciq2p8mtTg98n@arm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/12/22 at 10:46am, Baoquan He wrote:
-> On 05/12/22 at 10:34am, Coiby Xu wrote:
-> > commit 278311e417be ("kexec, KEYS: Make use of platform keyring for
-> > signature verify") adds platform keyring support on x86 kexec but not
-> > arm64.
-> > 
-> > The code in bzImage64_verify_sig makes use of system keyrings including
-> > .buitin_trusted_keys, .secondary_trusted_keys and .platform keyring to
-> > verify signed kernel image as PE file. Make it generic so both x86_64
-> > and arm64 can use it.
-> > 
-> > Note this patch is needed by a later patch so Cc it to the stable tree
-> > as well.
-> 
-> This note should not be added in log.
-> 
-> > 
-> > Cc: kexec@lists.infradead.org
-> > Cc: keyrings@vger.kernel.org
-> > Cc: linux-security-module@vger.kernel.org
-> > Cc: stable@vger.kernel.org # 34d5960af253: kexec: clean up arch_kexec_kernel_verify_sig
+On Tue, May 10, 2022 at 06:10:34PM +0100, Catalin Marinas wrote:
+>
+> Is there a case where a driver needs the minimum alignment between
+> ARCH_DMA_MINALIGN and crypto_tfm_alg_alignmask()+1? Maybe for platforms
+> where ARCH_DMA_MINALIGN is 8 (fully coherent) but the device's bus
+> master alignment requirements are higher.
 
-Hold on, should we CC stable when it's not fixing an issue?
+Yes, for example on x86 aesni requires 16-byte alignment.
 
-Hi Coiby,
-
-Just to make clear , is this patch fixing an issue, or it's just an
-preparation for later patch's use?
-
-Or I should ask in another way, any problem is solved with this patch?
-
-
-> > Reviewed-by: Michal Suchanek <msuchanek@suse.de>
-> > Signed-off-by: Coiby Xu <coxu@redhat.com>
-> > ---
+> My plan is to have ARCH_DMA_MINALIGN always defined but potentially
+> higher than ARCH_KMALLOC_MINALIGN on specific architectures. I think
+> crypto_tfm_ctx_dma() should use ARCH_KMALLOC_MINALIGN (and no #ifdefs)
+> until I get my patches sorted and I'll replace it with ARCH_DMA_MINALIGN
+> once it's defined globally (still no #ifdefs). Currently in mainline
+> it's ARCH_KMALLOC_MINALIGN that gives the static DMA alignment.
 > 
-> You can put the note here, it won't be added to commit log when merged.
-> Maybe it can be removed when merged.
-> 
-> Otherwise, LGTM
-> 
-> Acked-by: Baoquan He <bhe@redhat.com>
-> 
-> >  arch/x86/kernel/kexec-bzimage64.c | 20 +-------------------
-> >  include/linux/kexec.h             |  7 +++++++
-> >  kernel/kexec_file.c               | 17 +++++++++++++++++
-> >  3 files changed, 25 insertions(+), 19 deletions(-)
-> > 
-> > diff --git a/arch/x86/kernel/kexec-bzimage64.c b/arch/x86/kernel/kexec-bzimage64.c
-> > index 170d0fd68b1f..f299b48f9c9f 100644
-> > --- a/arch/x86/kernel/kexec-bzimage64.c
-> > +++ b/arch/x86/kernel/kexec-bzimage64.c
-> > @@ -17,7 +17,6 @@
-> >  #include <linux/kernel.h>
-> >  #include <linux/mm.h>
-> >  #include <linux/efi.h>
-> > -#include <linux/verification.h>
-> >  
-> >  #include <asm/bootparam.h>
-> >  #include <asm/setup.h>
-> > @@ -528,28 +527,11 @@ static int bzImage64_cleanup(void *loader_data)
-> >  	return 0;
-> >  }
-> >  
-> > -#ifdef CONFIG_KEXEC_BZIMAGE_VERIFY_SIG
-> > -static int bzImage64_verify_sig(const char *kernel, unsigned long kernel_len)
-> > -{
-> > -	int ret;
-> > -
-> > -	ret = verify_pefile_signature(kernel, kernel_len,
-> > -				      VERIFY_USE_SECONDARY_KEYRING,
-> > -				      VERIFYING_KEXEC_PE_SIGNATURE);
-> > -	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
-> > -		ret = verify_pefile_signature(kernel, kernel_len,
-> > -					      VERIFY_USE_PLATFORM_KEYRING,
-> > -					      VERIFYING_KEXEC_PE_SIGNATURE);
-> > -	}
-> > -	return ret;
-> > -}
-> > -#endif
-> > -
-> >  const struct kexec_file_ops kexec_bzImage64_ops = {
-> >  	.probe = bzImage64_probe,
-> >  	.load = bzImage64_load,
-> >  	.cleanup = bzImage64_cleanup,
-> >  #ifdef CONFIG_KEXEC_BZIMAGE_VERIFY_SIG
-> > -	.verify_sig = bzImage64_verify_sig,
-> > +	.verify_sig = kexec_kernel_verify_pe_sig,
-> >  #endif
-> >  };
-> > diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-> > index 413235c6c797..da83abfc628b 100644
-> > --- a/include/linux/kexec.h
-> > +++ b/include/linux/kexec.h
-> > @@ -19,6 +19,7 @@
-> >  #include <asm/io.h>
-> >  
-> >  #include <uapi/linux/kexec.h>
-> > +#include <linux/verification.h>
-> >  
-> >  /* Location of a reserved region to hold the crash kernel.
-> >   */
-> > @@ -202,6 +203,12 @@ int arch_kexec_apply_relocations(struct purgatory_info *pi,
-> >  				 const Elf_Shdr *relsec,
-> >  				 const Elf_Shdr *symtab);
-> >  int arch_kimage_file_post_load_cleanup(struct kimage *image);
-> > +#ifdef CONFIG_KEXEC_SIG
-> > +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
-> > +int kexec_kernel_verify_pe_sig(const char *kernel,
-> > +				    unsigned long kernel_len);
-> > +#endif
-> > +#endif
-> >  int arch_kexec_locate_mem_hole(struct kexec_buf *kbuf);
-> >  
-> >  extern int kexec_add_buffer(struct kexec_buf *kbuf);
-> > diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> > index 3720435807eb..754885b96aab 100644
-> > --- a/kernel/kexec_file.c
-> > +++ b/kernel/kexec_file.c
-> > @@ -165,6 +165,23 @@ void kimage_file_post_load_cleanup(struct kimage *image)
-> >  }
-> >  
-> >  #ifdef CONFIG_KEXEC_SIG
-> > +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
-> > +int kexec_kernel_verify_pe_sig(const char *kernel, unsigned long kernel_len)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret = verify_pefile_signature(kernel, kernel_len,
-> > +				      VERIFY_USE_SECONDARY_KEYRING,
-> > +				      VERIFYING_KEXEC_PE_SIGNATURE);
-> > +	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
-> > +		ret = verify_pefile_signature(kernel, kernel_len,
-> > +					      VERIFY_USE_PLATFORM_KEYRING,
-> > +					      VERIFYING_KEXEC_PE_SIGNATURE);
-> > +	}
-> > +	return ret;
-> > +}
-> > +#endif
-> > +
-> >  static int kexec_image_verify_sig(struct kimage *image, void *buf,
-> >  		unsigned long buf_len)
-> >  {
-> > -- 
-> > 2.35.3
-> > 
-> 
+> With the explicit crypto_tfm_ctx_dma(), can CRYPTO_MINALIGN_ATTR be
+> dropped entirely? This may be beneficial in reducing the structure size
+> when no DMA is required.
 
+We always need CRYPTO_MINALIGN to reflect what alignment kmalloc
+guarantees.  It is used to minimise the amount of extra padding
+for users such aesni.
+
+This shouldn't have any impact on your plans though as once the
+drivers in question switch over to the DMA helpers you can safely
+lower ARCH_KMALLOC_MINALIGN.
+
+Cheers,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

@@ -2,158 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF31525310
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9128525320
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356732AbiELQzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 12:55:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
+        id S1356789AbiELRBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 13:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356716AbiELQz3 (ORCPT
+        with ESMTP id S1356771AbiELRAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 12:55:29 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22156E8D9;
-        Thu, 12 May 2022 09:55:27 -0700 (PDT)
-Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Kzd985FVsz67lbv;
-        Fri, 13 May 2022 00:51:56 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 12 May 2022 18:55:25 +0200
-Received: from localhost (10.81.210.133) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 12 May
- 2022 17:55:24 +0100
-Date:   Thu, 12 May 2022 17:55:22 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Markuss Broks <markuss.broks@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Song Qiang <songqiang1304521@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        "Lars-Peter Clausen" <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Liam Girdwood" <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, <linux-iio@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH v3 3/5] proximity: vl53l0x: Handle the VDD regulator
-Message-ID: <20220512175522.000013cb@Huawei.com>
-In-Reply-To: <20220512110757.5297-4-markuss.broks@gmail.com>
-References: <20220512110757.5297-1-markuss.broks@gmail.com>
-        <20220512110757.5297-4-markuss.broks@gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Thu, 12 May 2022 13:00:47 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E812E9D1
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:00:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652374842; x=1683910842;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=apo30zA37N3jdlCWH2sDbDBKNYM+43W8+OjQdalfpgs=;
+  b=TkhwrMBe1efd5vcgmKGRzOBG4HJUs1Sl2n5rlPB8ZQaPxaIKR6P4wB73
+   AAvfANYYQgdRUkSVRw0iKfy+4n1q24cUmahvhJ2QN+7+1XBKuu2Ydz1tO
+   tcqcyr/RRp2QUEXz30cXgpXS+JAhSivYiiftgG21FPwv8E6Ar63MkOD3N
+   n5F5JjSpIvGVKnb0oU764naTJJm3MHkI7EK95edTY/K2aXqfKcMLofh6R
+   ewLm3tH1RONy1KMmZOro/awBJ5STpTqkRmf3526SkoDYXsbEI5+v16ZMh
+   oobrQjorhj66q9mB1QgUu6onlb3Pnvm1EOUBoeJEQCaCBdROCK43ylXdi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="250588890"
+X-IronPort-AV: E=Sophos;i="5.91,220,1647327600"; 
+   d="scan'208";a="250588890"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 09:56:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,220,1647327600"; 
+   d="scan'208";a="895869323"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 12 May 2022 09:56:13 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 54ED0CE; Thu, 12 May 2022 19:56:12 +0300 (EEST)
+Date:   Thu, 12 May 2022 19:56:12 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Dmitry Vyukov <dvyukov@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Alexander Potapenko <glider@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFCv2 00/10] Linear Address Masking enabling
+Message-ID: <20220512165612.gizedzgtpzbi7jbl@black.fi.intel.com>
+References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
+ <20220511064943.GR76023@worktop.programming.kicks-ass.net>
+ <87pmkivjst.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.81.210.133]
-X-ClientProxiedBy: lhreml720-chm.china.huawei.com (10.201.108.71) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87pmkivjst.ffs@tglx>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 May 2022 14:07:55 +0300
-Markuss Broks <markuss.broks@gmail.com> wrote:
-
-> Handle the regulator supplying the VDD pin of VL53L0X.
+On Thu, May 12, 2022 at 05:42:58PM +0200, Thomas Gleixner wrote:
+> On Wed, May 11 2022 at 08:49, Peter Zijlstra wrote:
+> > On Wed, May 11, 2022 at 05:27:40AM +0300, Kirill A. Shutemov wrote:
+> >> Hi all. Here's long overdue update on LAM enabling.
+> >> 
+> >> # Description #
+> >> 
+> >> Linear Address Masking[1] (LAM) modifies the checking that is applied to
+> >> 64-bit linear addresses, allowing software to use of the untranslated
+> >> address bits for metadata.
+> >> 
+> >> The patchset brings support for LAM for userspace addresses.
+> >> 
+> >> The most sensitive part of enabling is change in tlb.c, where CR3 flags
+> >> get set. Please take a look that what I'm doing makes sense.
+> >> 
+> >> The feature competes for bits with 5-level paging: LAM_U48 makes it
+> >> impossible to map anything about 47-bits. The patchset made these
+> >> capability mutually exclusive: whatever used first wins. LAM_U57 can be
+> >> combined with mappings above 47-bits.
+> >
+> > So aren't we creating a problem with LAM_U48 where programs relying on
+> > it are of limited sustainability?
+> >
+> > Any such program simply *cannot* run on 5 level pagetables. Why do we
+> > want to do this?
 > 
-> Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
-Hi Markuss,
-
-One ordering question inline.
-
-> ---
->  drivers/iio/proximity/vl53l0x-i2c.c | 37 +++++++++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
+> More bits are better :)
 > 
-> diff --git a/drivers/iio/proximity/vl53l0x-i2c.c b/drivers/iio/proximity/vl53l0x-i2c.c
-> index 12a3e2eff464..d8523e3981e8 100644
-> --- a/drivers/iio/proximity/vl53l0x-i2c.c
-> +++ b/drivers/iio/proximity/vl53l0x-i2c.c
-> @@ -43,6 +43,7 @@
->  struct vl53l0x_data {
->  	struct i2c_client *client;
->  	struct completion completion;
-> +	struct regulator *vdd_supply;
->  };
->  
->  static irqreturn_t vl53l0x_handle_irq(int irq, void *priv)
-> @@ -192,10 +193,31 @@ static const struct iio_info vl53l0x_info = {
->  	.read_raw = vl53l0x_read_raw,
->  };
->  
-> +static void vl53l0x_power_off(void *_data)
-> +{
-> +	struct vl53l0x_data *data = _data;
-> +
-> +	regulator_disable(data->vdd_supply);
-> +}
-> +
-> +static int vl53l0x_power_on(struct vl53l0x_data *data)
-> +{
-> +	int ret;
-> +
-> +	ret = regulator_enable(data->vdd_supply);
-> +	if (ret)
-> +		return ret;
-> +
-> +	usleep_range(3200, 5000);
-> +
-> +	return 0;
-> +}
-> +
->  static int vl53l0x_probe(struct i2c_client *client)
->  {
->  	struct vl53l0x_data *data;
->  	struct iio_dev *indio_dev;
-> +	int error;
->  
->  	indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*data));
->  	if (!indio_dev)
-> @@ -210,6 +232,21 @@ static int vl53l0x_probe(struct i2c_client *client)
->  				     I2C_FUNC_SMBUS_BYTE_DATA))
->  		return -EOPNOTSUPP;
->  
-> +	data->vdd_supply = devm_regulator_get_optional(&client->dev, "vdd");
-> +	if (IS_ERR(data->vdd_supply))
-> +		return dev_err_probe(&client->dev, PTR_ERR(data->vdd_supply),
-> +				     "Unable to get VDD regulator\n");
-> +
-> +	error = devm_add_action_or_reset(&client->dev, vl53l0x_power_off, data);
+> Seriously, I agree that restricting it to LAM57, which gives us 6 bits,
+> makes a lot of sense _and_ makes the whole thing way simpler.
+> 
+> So supporting both needs a truly good justification and a real world use
+> case.
 
-I don't follow why you have this before the power_on.  We haven't enabled the
-regulator yet so shouldn't be turning it off if we get an error whilst trying
-to enable it.  The or_reset part is to ensure that even if this call
-fails to register a devm action it will still call the callback thus allowing
-you safely do this after turning the power on.
+I asked the question before[1]. Basically, more bits more better:
 
-> +	if (error)
-> +		return dev_err_probe(&client->dev, error,
-> +				     "Failed to install poweroff action\n");
-> +
-> +	error = vl53l0x_power_on(data);
-> +	if (error)
-> +		return dev_err_probe(&client->dev, error,
-> +				     "Failed to power on the chip\n");
-> +
->  	indio_dev->name = "vl53l0x";
->  	indio_dev->info = &vl53l0x_info;
->  	indio_dev->channels = vl53l0x_channels;
+	For HWASAN #bits == detection probability.
+	For MarkUS #bits == exponential cost reduction
 
+I would really like to have only LAM_U57, but IIUC 6 bits is not always
+enough.
+
+Dmitry, could you elaborate?
+
+[1] https://mobile.twitter.com/dvyukov/status/1342019823400837120
+-- 
+ Kirill A. Shutemov

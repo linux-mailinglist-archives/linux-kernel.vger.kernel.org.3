@@ -2,185 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD7752565D
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 22:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9394752565F
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 22:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356244AbiELU1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 16:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41712 "EHLO
+        id S1358372AbiELUbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 16:31:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234715AbiELU1h (ORCPT
+        with ESMTP id S234715AbiELUb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 16:27:37 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C998351327
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 13:27:35 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id w130so7879857oig.0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 13:27:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=sGoOKvntmctjnTFpu4Xea6mgPsfoHZFHEqN6iO1ZtLc=;
-        b=JMDSojiExZcn87ffWKkeqGVQmX/krfAFVjMPpYkk7+FfjLTnA88RVyvcURfoPkpBRe
-         A6RclZi5OpkvLf8wo5kX68mOlDJYyTgsxNTGb4bPJpUy1kvmmuvdJxXr2ktjN5vBIlUP
-         uZ0IWS/Z3K7N4HafatfJ9/2In2VUmbgt5j6THdq/VvUfUiaHq+OC6rsufuhjRhuu1yDQ
-         UTj9uhobz63kSEvJEfF4yt/1wNDHO5bsknkSBs+QnRy9HGH2VaP9wUT7G6/6dzrqgvs2
-         DVuEKtSm0b+AuwVnHfmb8RXk1KEUBVkUIgF/LzZ4oTIB+QMbDU++6dylbTPaG/2Qg5y5
-         KARw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=sGoOKvntmctjnTFpu4Xea6mgPsfoHZFHEqN6iO1ZtLc=;
-        b=8O9ChwHxMkRCR4EUnznxd0FcqEw/c8tsJRTHGJn0SOHjxMA1suK1mnHtz+ZXuSIvuL
-         IbBInNZ3vbRCJnfzgG0kAVj08xe7YTQ9BGmqNT/yp81Dj3O3MOQFh1J/Ri5aCSLBwD3A
-         hUSmPHYA7i1oH5qx6xfcyCqzTU3tC8VFHrJ5QHfMnQoKeaFFGvnTZkVgQCle+XCZ5fCb
-         kaJ8xvrerZFYvCG3ullBg8fJwTWz5dnRPRK4gTrDRK3wFnR6bjnH7z60xWhx62+ad9kN
-         t748sJPQ9x8v0hJW2i7+t6v/avDCsWJltts0XSlE7rVx3R7xrOuPa1nTRqP7c/xQz7M1
-         UgIA==
-X-Gm-Message-State: AOAM532fI752UiUm7TDBGj+3leENYG+4OXPiePCneyInhg0q/ZUHFslV
-        qhof/kUhvpQlSCngtbbDyPMwkwmbX1xTsq/CbbyHEw==
-X-Google-Smtp-Source: ABdhPJzaXe0zNI37ouf0sN/+AvQlv6XXL4SayhKj2e7OKECO2cALUCPTzlEMUrAL2lWS+pZ8WPHClq2RqQwkm65lbxw=
-X-Received: by 2002:a05:6808:c2:b0:325:eb71:7266 with SMTP id
- t2-20020a05680800c200b00325eb717266mr6342516oic.269.1652387254885; Thu, 12
- May 2022 13:27:34 -0700 (PDT)
+        Thu, 12 May 2022 16:31:29 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB81C6D3BB
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 13:31:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=2vK6FnWBP1817oYqphdnfUUwzMIFm5rEKTDKuU0voEA=; b=l2izM9Zq3/HgabV9OeYkH4BXjS
+        PqNXfjf/Ripzli/6VJQGUdRUoQoPZvi/XmzOuRNKO6jR8gMIjhIY74P1tu36jWx3WYMEIGnwnGhrD
+        a9CytOf8gV+TvDXcvat4hlQ+Z9oNc8KepPMqivIdu59n3fWObbFXCxlazU4ZBNFBUeYI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1npFT3-002VDd-Bn; Thu, 12 May 2022 22:31:25 +0200
+Date:   Thu, 12 May 2022 22:31:25 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     "Modi, Geet" <geet.modi@ti.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Sharma, Vikram" <vikram.sharma@ti.com>,
+        "Lin, Hillman" <h-lin@ti.com>
+Subject: Re: [PATCH net-next 2/2] net: phy: dp83td510: Add support for the
+ DP83TD510 Ethernet PHY
+Message-ID: <Yn1unW4qbWGoW7kV@lunn.ch>
+References: <4721A09C-E025-461B-9A0B-B6799AD528C1@ti.com>
+ <84CCD666-B7E8-48F6-B3FA-3510C3FA913B@ti.com>
 MIME-Version: 1.0
-References: <20220512184514.15742-1-jon@nutanix.com> <Yn1fjAqFoszWz500@google.com>
- <Yn1hdHgMVuni/GEx@google.com> <07BEC8B1-469C-4E36-AE92-90BFDF93B2C4@nutanix.com>
- <Yn1o9ZfsQutXXdQS@google.com>
-In-Reply-To: <Yn1o9ZfsQutXXdQS@google.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Thu, 12 May 2022 13:27:23 -0700
-Message-ID: <CALMp9eRQv6owjfyf+UO=96Q1dkeSrJWy0i4O-=RPSaQwz0bjTQ@mail.gmail.com>
-Subject: Re: [PATCH v4] x86/speculation, KVM: remove IBPB on vCPU load
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Jon Kohler <jon@nutanix.com>, Jonathan Corbet <corbet@lwn.net>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ashok Raj <ashok.raj@intel.com>,
-        KarimAllah Ahmed <karahmed@amazon.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "kvm @ vger . kernel . org" <kvm@vger.kernel.org>,
-        Waiman Long <longman@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <84CCD666-B7E8-48F6-B3FA-3510C3FA913B@ti.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 1:07 PM Sean Christopherson <seanjc@google.com> wro=
-te:
->
-> On Thu, May 12, 2022, Jon Kohler wrote:
-> >
-> >
-> > > On May 12, 2022, at 3:35 PM, Sean Christopherson <seanjc@google.com> =
-wrote:
-> > >
-> > > On Thu, May 12, 2022, Sean Christopherson wrote:
-> > >> On Thu, May 12, 2022, Jon Kohler wrote:
-> > >>> Remove IBPB that is done on KVM vCPU load, as the guest-to-guest
-> > >>> attack surface is already covered by switch_mm_irqs_off() ->
-> > >>> cond_mitigation().
-> > >>>
-> > >>> The original commit 15d45071523d ("KVM/x86: Add IBPB support") was =
-simply
-> > >>> wrong in its guest-to-guest design intention. There are three scena=
-rios
-> > >>> at play here:
-> > >>
-> > >> Jim pointed offline that there's a case we didn't consider.  When sw=
-itching between
-> > >> vCPUs in the same VM, an IBPB may be warranted as the tasks in the V=
-M may be in
-> > >> different security domains.  E.g. the guest will not get a notificat=
-ion that vCPU0 is
-> > >> being swapped out for vCPU1 on a single pCPU.
-> > >>
-> > >> So, sadly, after all that, I think the IBPB needs to stay.  But the =
-documentation
-> > >> most definitely needs to be updated.
-> > >>
-> > >> A per-VM capability to skip the IBPB may be warranted, e.g. for cont=
-ainer-like
-> > >> use cases where a single VM is running a single workload.
-> > >
-> > > Ah, actually, the IBPB can be skipped if the vCPUs have different mm_=
-structs,
-> > > because then the IBPB is fully redundant with respect to any IBPB per=
-formed by
-> > > switch_mm_irqs_off().  Hrm, though it might need a KVM or per-VM knob=
-, e.g. just
-> > > because the VMM doesn't want IBPB doesn't mean the guest doesn't want=
- IBPB.
-> > >
-> > > That would also sidestep the largely theoretical question of whether =
-vCPUs from
-> > > different VMs but the same address space are in the same security dom=
-ain.  It doesn't
-> > > matter, because even if they are in the same domain, KVM still needs =
-to do IBPB.
-> >
-> > So should we go back to the earlier approach where we have it be only
-> > IBPB on always_ibpb? Or what?
-> >
-> > At minimum, we need to fix the unilateral-ness of all of this :) since =
-we=E2=80=99re
-> > IBPB=E2=80=99ing even when the user did not explicitly tell us to.
->
-> I think we need separate controls for the guest.  E.g. if the userspace V=
-MM is
-> sufficiently hardened then it can run without "do IBPB" flag, but that do=
-esn't
-> mean that the entire guest it's running is sufficiently hardened.
->
-> > That said, since I just re-read the documentation today, it does specif=
-ically
-> > suggest that if the guest wants to protect *itself* it should turn on I=
-BPB or
-> > STIBP (or other mitigations galore), so I think we end up having to thi=
-nk
-> > about what our =E2=80=9Ccontract=E2=80=9D is with users who host their =
-workloads on
-> > KVM - are they expecting us to protect them in any/all cases?
-> >
-> > Said another way, the internal guest areas of concern aren=E2=80=99t so=
-mething
-> > the kernel would always be able to A) identify far in advance and B)
-> > always solve on the users behalf. There is an argument to be made
-> > that the guest needs to deal with its own house, yea?
->
-> The issue is that the guest won't get a notification if vCPU0 is replaced=
- with
-> vCPU1 on the same physical CPU, thus the guest doesn't get an opportunity=
- to emit
-> IBPB.  Since the host doesn't know whether or not the guest wants IBPB, u=
-nless the
-> owner of the host is also the owner of the guest workload, the safe appro=
-ach is to
-> assume the guest is vulnerable.
+On Thu, May 12, 2022 at 08:19:05PM +0000, Modi, Geet wrote:
+> Hi Andrew,
+> 
+>  
+> 
+> Hope you are doing well. This patch was submitted back when Dan was part of TI.
+> It came to our notice recently that it is still pending approval.
+> 
+>  
+> 
+> Reaching out to check the information you need to approve this driver
+> submission ?
 
-Exactly. And if the guest has used taskset as its mitigation strategy,
-how is the host to know?
+Please post it again.
+
+       Andrew

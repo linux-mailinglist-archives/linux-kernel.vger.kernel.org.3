@@ -2,118 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E3F525566
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:11:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 735CA525569
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 21:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357920AbiELTLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 15:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43100 "EHLO
+        id S1357928AbiELTLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 15:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357906AbiELTLS (ORCPT
+        with ESMTP id S1357922AbiELTLb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 15:11:18 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECAE3915C
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 12:11:16 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id ch13so12037195ejb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 12:11:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SLT11SGZSlspM3ztqa+Z4xJFeyllWtbNbH4XI/ki7KQ=;
-        b=Akos8r1uW3mKq93eO2Gh+RThomTvKQVXEIPNJLgU4e/OsWiyliXUyDvXM1KCZowBG5
-         iB8r5GxgdwJONwg8JLTbxiugmdxYSNQ3UZHr+t/+uKRqH4lkyjc4uv95+s+5+nQlfzSG
-         6pdmK4AOO1sJl6dZGjA/eOhr2a7EqbPThcB8Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SLT11SGZSlspM3ztqa+Z4xJFeyllWtbNbH4XI/ki7KQ=;
-        b=3kg1p7Kn0vfiO7Ys+V1WPmTt4dsgL1M6Qwf6aMTTt2OL8bTcGsRbSi4nNUsZ3WOr2B
-         1rjM8vdd1LmKSgPjsxue+5gKbOmBT4ww1XJilCSLebxzSqJZnFTm66/Wv0ZMEEsM0JBi
-         +XHo9+BznWvomlCLM8AzcRB5vSOQMuST+ILj8CoCpDNchViM82yIqtV3rD0/Lwc29evF
-         5uIXPoKuum2RB9uyANx9IsBk9mtQfGfGE0J9AooSgF/2nvwPr04sDOdvRYAPcoEWDBTS
-         ixNPGxnffkrAn0EQzkWmtDRER0KOxIWQJ5I0Zd6k5/+HgT7WvDpVBs8r412t6FL1OVlS
-         AkUQ==
-X-Gm-Message-State: AOAM530oHRym90pWIECXqNi+xXMqvYfDZe0NUlFq+qETKxoW+xHUOVuG
-        7m3+VhfU+XURsiFONQutCqqjFsEFMBtDOlZTu/c=
-X-Google-Smtp-Source: ABdhPJwSbUSyhpB/7pv3MC68HiBaX8TYqh4f+VuEUlFhsFphHpZfuxcVfzfVW2TLqf30q8YCZmaQDw==
-X-Received: by 2002:a17:907:3f8c:b0:6fa:8b15:66fe with SMTP id hr12-20020a1709073f8c00b006fa8b1566femr1264444ejc.142.1652382674266;
-        Thu, 12 May 2022 12:11:14 -0700 (PDT)
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com. [209.85.128.52])
-        by smtp.gmail.com with ESMTPSA id p8-20020aa7cc88000000b0042617ba63d6sm33506edt.96.2022.05.12.12.11.12
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 12:11:12 -0700 (PDT)
-Received: by mail-wm1-f52.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso5709023wme.5
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 12:11:12 -0700 (PDT)
-X-Received: by 2002:a1c:4c06:0:b0:394:65c4:bd03 with SMTP id
- z6-20020a1c4c06000000b0039465c4bd03mr1229662wmf.8.1652382672075; Thu, 12 May
- 2022 12:11:12 -0700 (PDT)
+        Thu, 12 May 2022 15:11:31 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCFA83E0C8;
+        Thu, 12 May 2022 12:11:30 -0700 (PDT)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CIRWY9013204;
+        Thu, 12 May 2022 19:11:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=erGBUJ07wNUJV+sPUuGngCGtTCXo+k3qkrV4vWOiECc=;
+ b=NtTZRFqZFca0PWldtWwrZnnw6PSKA6IeSJWa5WxaOL29cn+bfUtYAWlPNhb187G9rzkw
+ Y1twkCN3GyuH/qcxWx4MZfZsbruRaW5smW/+pJ/iIRfjevjhIMMC5lmsacw05HQVlPSH
+ LiVuR0KlcroJg5R0dRjTKrn0AljJYOWUjaBIK0XOTFN1aTMy0lUHHR0Iaf85r/PnIrWH
+ R6WZFN+y8Ubxm4hVXT2/Fg45s7kEkwR+JzUPm+A7kNg/hYFqk/nJTYEdp0cH++C2t0Ze
+ ruuvdKioG75HVKv1AK19Nvm/apP0cNHEb5Nhmdn50TDpYlSRcAQNG8Y7ePc/nIc0Oq+m 9g== 
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g173b9f2a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 19:11:09 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24CIvDkX019581;
+        Thu, 12 May 2022 19:11:08 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma01dal.us.ibm.com with ESMTP id 3fwgdb6jqv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 19:11:08 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24CJB7wr23920930
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 May 2022 19:11:07 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9BD8E2805E;
+        Thu, 12 May 2022 19:11:07 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C72CF28059;
+        Thu, 12 May 2022 19:11:06 +0000 (GMT)
+Received: from [9.211.56.168] (unknown [9.211.56.168])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu, 12 May 2022 19:11:06 +0000 (GMT)
+Message-ID: <c2f7b09d-e046-409e-b65e-153157f84b03@linux.ibm.com>
+Date:   Thu, 12 May 2022 14:11:06 -0500
 MIME-Version: 1.0
-References: <CAOFRbGmGr2Z_sbYmE0SZT48CFkNAWVABnC_4V6x9PzZw-LJO4w@mail.gmail.com>
-In-Reply-To: <CAOFRbGmGr2Z_sbYmE0SZT48CFkNAWVABnC_4V6x9PzZw-LJO4w@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 12 May 2022 12:10:55 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh5E-xdc5P6SfN-ey6zvVri43rTj0g8kjUBWD3hhE-jiw@mail.gmail.com>
-Message-ID: <CAHk-=wh5E-xdc5P6SfN-ey6zvVri43rTj0g8kjUBWD3hhE-jiw@mail.gmail.com>
-Subject: Re: ERROR: drivers: iscsi: iscsi_target.c
-To:     Test Bot <zgrieee@gmail.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Mingzhe Zou <mingzhe.zou@easystack.cn>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        target-devel <target-devel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2 0/2] iio: humidity: si7020: Check device property for
+ skipping reset in probe
+Content-Language: en-US
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, lars@metafoo.de, jic23@kernel.org,
+        miltonm@us.ibm.com
+References: <20220512162020.33450-1-eajames@linux.ibm.com>
+ <20220512174859.000042b6@Huawei.com>
+From:   Eddie James <eajames@linux.ibm.com>
+In-Reply-To: <20220512174859.000042b6@Huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: h0MVSw3yJcPGbeM8LBRXqFnnQ43eC3Tx
+X-Proofpoint-GUID: h0MVSw3yJcPGbeM8LBRXqFnnQ43eC3Tx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-12_16,2022-05-12_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 phishscore=0 mlxlogscore=999 priorityscore=1501
+ clxscore=1015 impostorscore=0 spamscore=0 bulkscore=0 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205120083
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 11:42 AM Test Bot <zgrieee@gmail.com> wrote:
+
+On 5/12/22 11:48, Jonathan Cameron wrote:
+> On Thu, 12 May 2022 11:20:18 -0500
+> Eddie James <eajames@linux.ibm.com> wrote:
 >
-> void iscsit_thread_get_cpumask(struct iscsi_conn *conn)
-> {
->         int ord, cpu;
->         cpumask_t conn_allowed_cpumask;
+>> I2C commands issued after the SI7020 is starting up or after reset
+>> can potentially upset the startup sequence. Therefore, the host
+>> needs to wait for the startup sequence to finish before issuing
+>> further i2c commands. This is impractical in cases where the SI7020
+>> is on a shared bus or behind a mux, which may switch channels at
+>> any time (generating I2C traffic). Therefore, check for a device
+>> property that indicates that the driver should skip resetting the
+>> device when probing.
+> Why not lock the bus?  It's not ideal, but then not resetting and hence
+> potentially ending up in an unknown state isn't great either.
 
-Yeah, that's not how you are supposed to use 'cpumask_t'
 
-This is why we have CONFIG_CPUMASK_OFFSTACK and 'cpumask_var_t', so
-that the pattern is
+Also, I should mention that in our case we can rely on the power on 
+reset, so the device should be in a known state.
 
-        cpumask_var_t mask;
+Eddie
 
-        if (!alloc_cpumask_var(&mask, GFP_KERNEL))
-                return -ENOMEM;
-        ... use 'mask' here as a  ...
-        free_cpumask_var(mask);
 
-and if the cpumask is small, it's allocated on the stack (and that
-'alloc_cpumask_var()' becomes a no-op) and if it's huge, it has a real
-allocation so that the stack frame doesn't grow too big.
-
-The problem seems to have been introduced in this merge window by
-commit d72d827f2f26 ("scsi: target: Add iscsi/cpus_allowed_list in
-configfs"), but I didn't really look any closer than a plain "git
-blame", so it might have happened before that too.
-
-I also didn't check whether there was some explicit reason why the
-code couldn't allocate the cpumask this way.
-
-Btw, it's worth noting that 'cpumask_t' is always the full static
-compile-time NR_CPUS bits in size, but a dynamically allocated
-'cpumask_var_t' is only nr_cpumask_bits in size (ie the actual maximum
-on that machine, as opposed to the theoretical maximum size). So they
-are *not* exactly the same kind of 'cpumask_t' pointer in the end, but
-no sane code should care (ie you have to do something else wrong for
-the alloc_cpumask_var() pattern to not work).
-
-           Linus
+>
+> Jonathan
+>
+>> Changes since v1:
+>>   - Fix dt binding document
+>>
+>> Eddie James (2):
+>>    dt-bindings: iio: humidity: Add si7020 bindings
+>>    iio: humidity: si7020: Check device property for skipping reset in probe
+>>
+>>   .../bindings/iio/humidity/silabs,si7020.yaml  | 47 +++++++++++++++++++
+>>   .../devicetree/bindings/trivial-devices.yaml  |  2 -
+>>   drivers/iio/humidity/si7020.c                 | 14 +++---
+>>   3 files changed, 55 insertions(+), 8 deletions(-)
+>>   create mode 100644 Documentation/devicetree/bindings/iio/humidity/silabs,si7020.yaml
+>>

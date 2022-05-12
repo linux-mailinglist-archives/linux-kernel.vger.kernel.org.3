@@ -2,98 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9612152431F
+	by mail.lfdr.de (Postfix) with ESMTP id 4A6E052431E
 	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 05:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242826AbiELDNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 23:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38664 "EHLO
+        id S245258AbiELDOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 23:14:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231807AbiELDNK (ORCPT
+        with ESMTP id S244981AbiELDOA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 23:13:10 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B9966AEF
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 20:13:09 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d25so3599345pfo.10
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 20:13:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=awueREtst5v5/t4VnngT5Elxk/Ya6/NhiGCRe0UTBoU=;
-        b=jlaXssIcZdJBL4nrI4f5qoQkSPk4evc9Z3ZMYSIkANTEEWHFqoqBucZzb7zTzg+Sbw
-         Npn/t+qQ9orb9TrIYBvIW6ktC6gWC58UAil4GjM6ijq1wgyeLem+IcX5ZfhnK5Ord2Nm
-         RBvpKlI2p3dv0w320/gr2JnRxEtM9uVgGKa/gZh+UBajM0DOWMN7GRZ5q1/yS/6a2oTO
-         IuB3jhPTO9kwGErXEKCyNo77Zj6v2Rmg6IGyGb2nqOS/Kr0mCGNtsiriPHE5tVR8bzB1
-         C0pdbMRtlFOM0jTX5cBL2lqvZXmVr4JrKrQP6NbxOi9VMkeid6aPSbQg0Ox+dOofqJHQ
-         SZJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=awueREtst5v5/t4VnngT5Elxk/Ya6/NhiGCRe0UTBoU=;
-        b=1QT2fNYowmsIQ2tTDV1PwaosQWt4f+BRqftJXJzg7rh+fnKl6oNULyaO/wNlYqkvqM
-         aWB03QSzB4jRYFuAx8Zqg+qD6YNn9nqBFCqflYZjESBX2hVIfKKedPBji51rXQGtTlMi
-         KUx7+Htd+q4POK8j8w77UKZRhjzvyejg37r2FAnKB1cfe6q4yYIhj1JkFDrXyEBXrzqB
-         dmzZMRg+7jQGgXO8UIUppV7H/iBKkGY4LzXbe8y+VMN6f5ic3mEPMEc7bKQtXt59yeiY
-         2mpdh771+MGNmJ8TIRJaQ3bD7qHx9v3n0pX9n1M2791WXeF5kgP2scG+/7wmnrlyQ45H
-         VILw==
-X-Gm-Message-State: AOAM533ZS+9YBhnejKL4iT6hrbggfd0QGZVKyD1sRVdXpJuWanqIex9D
-        avPTKTYeI40d+76apydM7tQ=
-X-Google-Smtp-Source: ABdhPJzVndRIBoKoHgahvtkJmW9JfoS1gBrPEX8MirlKdiUGx0ZJqb5z6p4F7ww7lgJcc6276Qmxbg==
-X-Received: by 2002:a63:6b04:0:b0:3db:33c:497a with SMTP id g4-20020a636b04000000b003db033c497amr7812515pgc.346.1652325188602;
-        Wed, 11 May 2022 20:13:08 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id m2-20020a170902db0200b0015e8d4eb2bbsm2623000plx.261.2022.05.11.20.13.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 20:13:08 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Andre Przywara <andre.przywara@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Rob Herring <rob.herring@calxeda.com>,
-        Jamie Iles <jamie@jamieiles.com>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] ARM: highbank: Fix refcount leak in highbank_init
-Date:   Thu, 12 May 2022 07:12:58 +0400
-Message-Id: <20220512031259.56459-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 11 May 2022 23:14:00 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FA7210126
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 20:13:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652325239; x=1683861239;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=caZlbfjgZOant41JIEcgL5HRsSvgBxitC5oYYew431M=;
+  b=FN7gAjocReHemjL4E1b5uxFBgodRCDduBZWBMCMbLYyKJlvdV3z7jkP1
+   hg2UhgWbpgOHDfhCo0mo8tpEhr0PHbTPklNnqqzKiZyU/sNTvdNcTyF2Y
+   LIOZ1OPBJwc+jpz7bxmMYpPqM7WV5KHtA9jxPrcmUGXrghyK9jCU4e0oo
+   gUCi3+S+giVSHU4Kv/qmXdVJ/e/HrPxO1Q9fwWa7mUyVo9h81Mf1ZWuKA
+   YehQxNUraOqeJ+WN5iRsP6QcdqlcdGd5RVI8s1h+wAJi+Y517BIn79TJf
+   ccb5aXeW2mk84G7pPQBtJwOxD805W0JmHmzJzyQrC09c0ZXZIIqTiXel7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="269814285"
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="269814285"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 20:13:58 -0700
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="594453592"
+Received: from ruonanwa-mobl.ccr.corp.intel.com ([10.254.212.157])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 20:13:53 -0700
+Message-ID: <be3b9f239fa46e968b333291910b2afd3e38bcba.camel@intel.com>
+Subject: Re: RFC: Memory Tiering Kernel Interfaces
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     Wei Xu <weixugc@google.com>
+Cc:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Greg Thelen <gthelen@google.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Michal Hocko <mhocko@kernel.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>
+Date:   Thu, 12 May 2022 11:13:48 +0800
+In-Reply-To: <CAAPL-u_40Zxe2AtYbOedDXPBfDPDCqi-OS=yYXf2FcZQS-6v4g@mail.gmail.com>
+References: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
+         <CAHbLzkq1YXXLMiREpGnzhJjPssu4WpSsnkTmrLJ=hAEhZVUr9w@mail.gmail.com>
+         <CAAPL-u-r2Pc_MaHQmKKNH_icAa_fH1COWb5qSPpr8xffREQ_cQ@mail.gmail.com>
+         <87tua3h5r1.fsf@nvdebian.thelocal>
+         <CAAPL-u-0HwL6p1SA73LPfFyywG55QqE9O+q=83fhShoJAVVxyQ@mail.gmail.com>
+         <875ymerl81.fsf@nvdebian.thelocal> <87fslhhb2l.fsf@linux.ibm.com>
+         <CAAPL-u9FvCfgA7xsqStLNZ=W03iyWBmvHrpVzPKyitsGN2v_KQ@mail.gmail.com>
+         <68333b21a58604f3fd0e660f1a39921ae22849d8.camel@intel.com>
+         <CAAPL-u80BFYTKK=0HRBXOeDTULyPOtbgu5V3fEYDOczTMxgJ1g@mail.gmail.com>
+         <0a92d0040edb3b74ac259062d241b8cd28924edf.camel@intel.com>
+         <CAAPL-u_40Zxe2AtYbOedDXPBfDPDCqi-OS=yYXf2FcZQS-6v4g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_find_compatible_node() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
-Add missing of_node_put() to avoid refcount leak.
+On Wed, 2022-05-11 at 19:39 -0700, Wei Xu wrote:
+> On Wed, May 11, 2022 at 6:42 PM ying.huang@intel.com
+> <ying.huang@intel.com> wrote:
+> > 
+> > On Wed, 2022-05-11 at 10:07 -0700, Wei Xu wrote:
+> > > On Wed, May 11, 2022 at 12:49 AM ying.huang@intel.com
+> > > <ying.huang@intel.com> wrote:
+> > > > 
+> > > > On Tue, 2022-05-10 at 22:30 -0700, Wei Xu wrote:
+> > > > > On Tue, May 10, 2022 at 4:38 AM Aneesh Kumar K.V
+> > > > > <aneesh.kumar@linux.ibm.com> wrote:
+> > > > > > 
+> > > > > > Alistair Popple <apopple@nvidia.com> writes:
+> > > > > > 
+> > > > > > > Wei Xu <weixugc@google.com> writes:
+> > > > > > > 
+> > > > > > > > On Thu, May 5, 2022 at 5:19 PM Alistair Popple <apopple@nvidia.com> wrote:
+> > > > > > > > > 
+> > > > > > > > > Wei Xu <weixugc@google.com> writes:
+> > > > > > > > > 
+> > > > > > > > > [...]
+> > > > > > > > > 
+> > > > > > > > > > > > 
+> > > > > > > > > > > > 
+> > > > > > > > > > > > Tiering Hierarchy Initialization
+> > > > > > > > > > > > `=============================='
+> > > > > > > > > > > > 
+> > > > > > > > > > > > By default, all memory nodes are in the top tier (N_TOPTIER_MEMORY).
+> > > > > > > > > > > > 
+> > > > > > > > > > > > A device driver can remove its memory nodes from the top tier, e.g.
+> > > > > > > > > > > > a dax driver can remove PMEM nodes from the top tier.
+> > > > > > > > > > > 
+> > > > > > > > > > > With the topology built by firmware we should not need this.
+> > > > > > > > > 
+> > > > > > > > > I agree that in an ideal world the hierarchy should be built by firmware based
+> > > > > > > > > on something like the HMAT. But I also think being able to override this will be
+> > > > > > > > > useful in getting there. Therefore a way of overriding the generated hierarchy
+> > > > > > > > > would be good, either via sysfs or kernel boot parameter if we don't want to
+> > > > > > > > > commit to a particular user interface now.
+> > > > > > > > > 
+> > > > > > > > > However I'm less sure letting device-drivers override this is a good idea. How
+> > > > > > > > > for example would a GPU driver make sure it's node is in the top tier? By moving
+> > > > > > > > > every node that the driver does not know about out of N_TOPTIER_MEMORY? That
+> > > > > > > > > could get messy if say there were two drivers both of which wanted their node to
+> > > > > > > > > be in the top tier.
+> > > > > > > > 
+> > > > > > > > The suggestion is to allow a device driver to opt out its memory
+> > > > > > > > devices from the top-tier, not the other way around.
+> > > > > > > 
+> > > > > > > So how would demotion work in the case of accelerators then? In that
+> > > > > > > case we would want GPU memory to demote to DRAM, but that won't happen
+> > > > > > > if both DRAM and GPU memory are in N_TOPTIER_MEMORY and it seems the
+> > > > > > > only override available with this proposal would move GPU memory into a
+> > > > > > > lower tier, which is the opposite of what's needed there.
+> > > > > > 
+> > > > > > How about we do 3 tiers now. dax kmem devices can be registered to
+> > > > > > tier 3. By default all numa nodes can be registered at tier 2 and HBM or
+> > > > > > GPU can be enabled to register at tier 1. ?
+> > > > > 
+> > > > > This makes sense.  I will send an updated RFC based on the discussions so far.
+> > > > 
+> > > > Are these tier number fixed?  If so, it appears strange that the
+> > > > smallest tier number is 0 on some machines, but 1 on some other
+> > > > machines.
+> > > 
+> > > When the kernel is configured to allow 3 tiers, we can always show all
+> > > the 3 tiers. It is just that some tiers (e.g. tier 0) may be empty on
+> > > some machines.
+> > 
+> > I still think that it's better to have no empty tiers for auto-generated
+> > memory tiers by kernel.  Yes, the tier number will be not absolutely
+> > stable, but that only happens during system bootup in practice, so it's
+> > not a big issue IMHO.
+> 
+> It should not be hard to hide empty tiers (e.g. tier-0) if we prefer.
+> But even if tier-0 is empty, we should still keep this tier in the
+> kernel and not move DRAM nodes into this tier.  One reason is that a
+> HBM node might be hot-added into tier-0 at a later time.
+> 
 
-Fixes: 220e6cf7b793 ("ARM: add Highbank core platform support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- arch/arm/mach-highbank/highbank.c | 1 +
- 1 file changed, 1 insertion(+)
+Yes.  The in-kernel representation and the user space interface could be
+different.
 
-diff --git a/arch/arm/mach-highbank/highbank.c b/arch/arm/mach-highbank/highbank.c
-index db607955a7e4..af9488854fe3 100644
---- a/arch/arm/mach-highbank/highbank.c
-+++ b/arch/arm/mach-highbank/highbank.c
-@@ -142,6 +142,7 @@ static void __init highbank_init(void)
- 	np = of_find_compatible_node(NULL, NULL, "calxeda,hb-sregs");
- 	sregs_base = of_iomap(np, 0);
- 	WARN_ON(!sregs_base);
-+	of_node_put(np);
- 
- 	pm_power_off = highbank_power_off;
- 	highbank_pm_init();
--- 
-2.25.1
+I have thought something like below.  We always make the main memory
+(DRAM here, CPU local) as tier 0.  Then the slower memory will be
+positive, tier 1, 2, 3, ..., and the faster memory will be negative,
+tier -1, -2, -3, ....  Then, GPU driver can regesiter its memory as tier
+-1.  And the tier number could be more stable.  But I'm not sure whether
+users will be happy with negtive tier number.
+
+> > And, I still think it's better to make only N-1 tiers writable for
+> > totally N tiers (or even readable).  Considering "tier0" is written, how
+> > to deal with nodes in "tier0" before but not after writing?  One
+> > possible way is to put them into "tierN".  And during a user customize
+> > the tiers, the union of "N tiers" may be not complete.
+> 
+> The sysfs interfaces that I have in mind now are:
+> 
+> * /sys/devices/system/memtier/memtierN/nodelist (N=0, 1, 2)
+> 
+> This is read-only to list the memory nodes for a specific tier.
+> 
+> * /sys/devices/system/node/nodeN/memtier. (N=0, 1, ...,)
+> 
+> This is a read-write interface. When written, the kernel moves the
+> node into the user-specified tier.  No other nodes are affected.
+> 
+> This interface should be able to avoid the above issue.
+
+Yes.  This works too.
+
+Best Regards,
+Huang, Ying
+
+> > > BTW, the userspace should not assume a specific meaning of a
+> > > particular tier id because it can change depending on the number of
+> > > tiers that the kernel is configured with.  For example, the userspace
+> > > should not assume that tier-2 always means PMEM nodes.  In a system
+> > > with 4 tiers, PMEM nodes may be in tier-3, not tier-2.
+> > 
+> > Yes.  This sounds good.
+> > 
+> > Best Regards,
+> > Huang, Ying
+> > 
+
 

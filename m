@@ -2,121 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9639E52571F
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 23:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C98D52572F
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 23:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358784AbiELVib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 17:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49318 "EHLO
+        id S1358802AbiELVlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 17:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352940AbiELVi0 (ORCPT
+        with ESMTP id S1358786AbiELVlw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 17:38:26 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E803D5EBD2;
-        Thu, 12 May 2022 14:38:21 -0700 (PDT)
-X-UUID: 016fa5c96e98419f877bb90052be02b6-20220513
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:fe14b9b4-a1e1-4416-85f5-06ec09e0970b,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:-15
-X-CID-META: VersionHash:faefae9,CLOUDID:02cd04f2-ab23-4aed-a67b-f96514452486,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 016fa5c96e98419f877bb90052be02b6-20220513
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <sean.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 252383664; Fri, 13 May 2022 05:38:16 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 13 May 2022 05:38:15 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 13 May 2022 05:38:15 +0800
-From:   <sean.wang@mediatek.com>
-To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>
-CC:     <sean.wang@mediatek.com>, <Soul.Huang@mediatek.com>,
-        <YN.Chen@mediatek.com>, <Leon.Yen@mediatek.com>,
-        <Eric-SY.Chang@mediatek.com>, <Deren.Wu@mediatek.com>,
-        <km.lin@mediatek.com>, <robin.chiu@mediatek.com>,
-        <Eddie.Chen@mediatek.com>, <ch.yeh@mediatek.com>,
-        <posh.sun@mediatek.com>, <ted.huang@mediatek.com>,
-        <Eric.Liang@mediatek.com>, <Stella.Chang@mediatek.com>,
-        <Tom.Chou@mediatek.com>, <steve.lee@mediatek.com>,
-        <jsiuda@google.com>, <frankgor@google.com>,
-        <abhishekpandit@google.com>, <michaelfsun@google.com>,
-        <mcchou@chromium.org>, <shawnku@google.com>,
-        <linux-bluetooth@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Yake Yang <yake.yang@mediatek.com>
-Subject: [PATCH 2/2] Bluetooth: btmtksdio: fix possible FW initialization failure
-Date:   Fri, 13 May 2022 05:38:12 +0800
-Message-ID: <8ff7aed526e70f8cd05a019e94976d48992b4445.1652390894.git.objelf@gmail.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <e26167a3fcefdeae1151162e8676c9a467a8100d.1652390894.git.objelf@gmail.com>
-References: <e26167a3fcefdeae1151162e8676c9a467a8100d.1652390894.git.objelf@gmail.com>
+        Thu, 12 May 2022 17:41:52 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA9956FA10;
+        Thu, 12 May 2022 14:41:50 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 78550106F;
+        Thu, 12 May 2022 14:41:50 -0700 (PDT)
+Received: from lpieralisi (unknown [10.57.4.238])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 84BA23F66F;
+        Thu, 12 May 2022 14:41:48 -0700 (PDT)
+Date:   Thu, 12 May 2022 22:41:45 +0100
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 00/13] PCI: dwc: Various fixes and cleanups
+Message-ID: <Yn1/GRzXNCTJnMHj@lpieralisi>
+References: <20220503212300.30105-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220503212300.30105-1-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Wang <sean.wang@mediatek.com>
+On Wed, May 04, 2022 at 12:22:47AM +0300, Serge Semin wrote:
+> This patchset is a second one in the series created in the framework of
+> my Baikal-T1 PCIe/eDMA-related work:
+> 
+> [1: In-progress v3] clk: Baikal-T1 DDR/PCIe resets and some xGMAC fixes
+> Link: https://lore.kernel.org/linux-pci/20220503205722.24755-1-Sergey.Semin@baikalelectronics.ru/
+> [2: In-progress v2] PCI: dwc: Various fixes and cleanups
+> Link: https://lore.kernel.org/linux-pci/20220324012524.16784-1-Sergey.Semin@baikalelectronics.ru/
+> [3: In-progress v1] PCI: dwc: Add dma-ranges/YAML-schema/Baikal-T1 support
+> Link: https://lore.kernel.org/linux-pci/20220324013734.18234-1-Sergey.Semin@baikalelectronics.ru/
+> [4: In-progress v1] dmaengine: dw-edma: Add RP/EP local DMA controllers support
+> Link: https://lore.kernel.org/linux-pci/20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru/
+> 
+> Note it is very recommended to merge the patchsets in the same order as
+> they are placed in the list above in order to prevent possible merge/build
+> conflicts. Nothing prevents them from being reviewed synchronously though.
+> 
+> As it can be easily inferred from the patchset title, this series is about
+> the DW PCIe Root Port/End-point driver fixes and the code cleanups, where
+> fixes come before the cleanup patches. The patchset starts with adding the
+> stop_link() platform-specific method invocation in case of the PCIe host
+> probe procedure errors. It has been missing in the cleanup-on-error path
+> of the DW PCIe Host initialization method. After that there is a patch
+> which fixes the host own cfg-space accessors for the case of the
+> platform-specific DBI implementation. Third the unrolled CSRs layout is
+> added to the iATU disable procedure. Fourth the disable iATU procedure is
+> fixed to be called only for the internal ATU as being specific for the
+> internal ATU implementation. Last but no least the outbound iATU extended
+> region setup procedure is fixed to have the INCREASE_REGION_SIZE flag set
+> based on the limit-address - not the region size one.
+> 
+> Afterwards there is a series of cleanups. It concerns the changes like
+> adding braces to the multi-line if-else constructions, trailing new-lines
+> to the print format-string, dropping unnecessary version checking, and
+> various code simplifications and optimizations.
 
-According to FW advised sequence, mt7921s need to re-acquire privilege
-immediately after the firmware download is complete before normal running.
-Otherwise, it is still possible the bus may be stuck in an abnormal status
-that causes FW initialization failure in the current driver.
+Hi,
 
-Fixes: 752aea58489f ("Bluetooth: mt7921s: fix bus hang with wrong privilege")
-Co-developed-by: Yake Yang <yake.yang@mediatek.com>
-Signed-off-by: Yake Yang <yake.yang@mediatek.com>
-Signed-off-by: Sean Wang <sean.wang@mediatek.com>
----
- drivers/bluetooth/btmtksdio.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+I went through the series and I don't have any specific objections.
 
-diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
-index 26e27fd79a21..d6700efcfe8c 100644
---- a/drivers/bluetooth/btmtksdio.c
-+++ b/drivers/bluetooth/btmtksdio.c
-@@ -864,6 +864,14 @@ static int mt79xx_setup(struct hci_dev *hdev, const char *fwname)
- 		return err;
- 	}
- 
-+	err = btmtksdio_fw_pmctrl(bdev);
-+	if (err < 0)
-+		return err;
-+
-+	err = btmtksdio_drv_pmctrl(bdev);
-+	if (err < 0)
-+		return err;
-+
- 	/* Enable Bluetooth protocol */
- 	wmt_params.op = BTMTK_WMT_FUNC_CTRL;
- 	wmt_params.flag = 0;
-@@ -1109,14 +1117,6 @@ static int btmtksdio_setup(struct hci_dev *hdev)
- 		if (err < 0)
- 			return err;
- 
--		err = btmtksdio_fw_pmctrl(bdev);
--		if (err < 0)
--			return err;
--
--		err = btmtksdio_drv_pmctrl(bdev);
--		if (err < 0)
--			return err;
--
- 		/* Enable SCO over I2S/PCM */
- 		err = btmtksdio_sco_setting(hdev);
- 		if (err < 0) {
--- 
-2.25.1
+We can try to queue it for v5.19, with the caveat that the fixes
+_need_ testing on several DWC platforms (and I _strongly_ encourage
+DWC maintainers to chime in). To sum it up:
 
+- It is a mixture of clean-ups and fixes. I would prefer having the
+  cleanups earlier in the series and rebase (if there is a need, I
+  can try to reshuffle the patches myself) the fixes on top. That
+  because we may have to drop some of the fixes (and if we merge them
+  we may have to revert them as cleanly as we can), my concern is that
+  they require testing on a number of platforms you have not been
+  exposed to
+- Kbot complained about patch (3)
+- I will have comments about the commit logs but I can try to fix them
+  myself
+
+I have concerns especially about patches (2, 3, 4, 5, 8, 9), because
+they can affect DWC platforms other than the ones you are testing on.
+
+The cleanups we can definitely queue them up. As I said, and there
+is nothing I can do about it, I will be off the radar for two months
+from wednesday, please try to repost with the Kbot issue fixed and
+with the comments above in mind and I will do my best to queue as
+many patches from this series as possible for v5.19.
+
+Thanks,
+Lorenzo
+
+> New features like adding two-level DT bindings abstraction, adding better
+> structured IP-core version interface, adding iATU regions size detection
+> and the PCIe regions verification procedure, adding dma-ranges support,
+> introducing a set of generic platform clocks and resets and finally adding
+> Baikal-T1 PCIe interface support will be submitted in the next part of the
+> series.
+> 
+> Link: https://lore.kernel.org/linux-pci/20220324012524.16784-1-Sergey.Semin@baikalelectronics.ru/
+> Changelog v2:
+> - Fix the end address of the example in the patch log with
+>   the INCREASE_REGION_SIZE flag usage fixup. It should be
+>   0x1000FFFF and not 0x0000FFFF (@Manivannan).
+> - Add the cleanup-on-error path to the dw_pcie_ep_init() function.
+>   (@Manivannan)
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: "Krzysztof Wilczyński" <kw@linux.com>
+> Cc: Frank Li <Frank.Li@nxp.com>
+> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Cc: linux-pci@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> 
+> Serge Semin (13):
+>   PCI: dwc: Stop link in the host init error and de-initialization
+>   PCI: dwc: Don't use generic IO-ops for DBI-space access
+>   PCI: dwc: Add unroll iATU space support to the regions disable method
+>   PCI: dwc: Disable outbound windows for controllers with iATU
+>   PCI: dwc: Set INCREASE_REGION_SIZE flag based on limit address
+>   PCI: dwc: Add braces to the multi-line if-else statements
+>   PCI: dwc: Add trailing new-line literals to the log messages
+>   PCI: dwc: Discard IP-core version checking on unrolled iATU detection
+>   PCI: dwc: Convert Link-up status method to using dw_pcie_readl_dbi()
+>   PCI: dwc: Deallocate EPC memory on EP init error
+>   PCI: dwc-plat: Simplify the probe method return value handling
+>   PCI: dwc-plat: Discard unused regmap pointer
+>   PCI: dwc-plat: Drop dw_plat_pcie_of_match forward declaration
+> 
+>  .../pci/controller/dwc/pcie-designware-ep.c   | 22 +++++--
+>  .../pci/controller/dwc/pcie-designware-host.c | 66 +++++++++++++++----
+>  .../pci/controller/dwc/pcie-designware-plat.c | 13 ++--
+>  drivers/pci/controller/dwc/pcie-designware.c  | 48 +++++++++-----
+>  4 files changed, 109 insertions(+), 40 deletions(-)
+> 
+> -- 
+> 2.35.1
+> 

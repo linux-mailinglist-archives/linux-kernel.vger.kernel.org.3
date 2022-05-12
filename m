@@ -2,186 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B9B6524381
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 05:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C1DB524383
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 05:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344227AbiELDgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 23:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57332 "EHLO
+        id S1344598AbiELDhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 23:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343808AbiELDge (ORCPT
+        with ESMTP id S229539AbiELDh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 23:36:34 -0400
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A871193F4;
-        Wed, 11 May 2022 20:36:29 -0700 (PDT)
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 24C3aGkF002223;
-        Thu, 12 May 2022 12:36:16 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 24C3aGkF002223
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1652326576;
-        bh=VfPskzDmMntcl9mOqDJFkJyKAm5vxKV4Z3wLx5ippe8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=wczmTP5mRu9Q317XJvLADN30/rapQ66Vfla6MIyrp18RHxIaKFeAT4+xr4zeIISQq
-         oGFMJr+2+heyZtd3YgKLMEbPMOBkiN6nQptq+2B3WvQQdXRhulos+pFiuVp2N5HV0E
-         R/sGhpELffEpxbJfvkejvFoaD/raChJoWGo0ojHfZai5Tsx0alQMNhUZCLI9vkuxhk
-         bydVjwohwSrac2NzoG9lrJDJvopGWUxlLRNkQXkvddB2aMgya3T0WlRKIWXa4wDEI7
-         HZLJQi923Fv3P0XSIH3QQXAQURvpmPmIcLeK26RbFEIANAizUGnltOaGFZMtREQYCV
-         tvc17ZeCQB7zw==
-X-Nifty-SrcIP: [209.85.215.172]
-Received: by mail-pg1-f172.google.com with SMTP id l11so3438485pgt.13;
-        Wed, 11 May 2022 20:36:16 -0700 (PDT)
-X-Gm-Message-State: AOAM530ISyFLKiEC4x4j6zxlON80FgQvaIoNg56GGSx1q+KP084kHdRJ
-        69Vyscq3u/hIYCqdtq7u0jqNx+QutkNtKehwf18=
-X-Google-Smtp-Source: ABdhPJwUO93A4rM+aSh1Xly4NyDaW5KDkFVzu77d9cJuQFpEQOKPBQtyfzCWZaOT5taGjU3JP75XcJ9pj9AegKGofJA=
-X-Received: by 2002:a63:6989:0:b0:3c2:3c19:d661 with SMTP id
- e131-20020a636989000000b003c23c19d661mr23420542pgc.352.1652326575675; Wed, 11
- May 2022 20:36:15 -0700 (PDT)
+        Wed, 11 May 2022 23:37:28 -0400
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F614252AA
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 20:37:26 -0700 (PDT)
+Received: by mail-vs1-xe2d.google.com with SMTP id a127so3929809vsa.3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 20:37:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Yi/Z75PNHk1ys10Xd95MwCUa0CwRgya3lUvptT8pN84=;
+        b=EBzA3KZDwe8GWuCM37qaNGOlYoPBwCtZ6W3PJIIJva2D0X6crlO7eEtvvMJs3EZCrB
+         IqF7LSwqR3pxIqmepA0+SLCqqcEIzuwqWJqqqzwk5NCXaH5DTHLvwMC1tDH9W1oGhBin
+         VzpckuHvHJSAA6sYwiKem2g5KWFl8qwfSKO0s/jn8On6YMlxQ5ni/ln1abdvb/Ic+vwm
+         oxXoy0YXfpqutKwd7kJ/B5I5abiMZdOD9yiS2QBJ3A7TjO2mtZQPHo2YHpgfee6p6066
+         peycm4azgAW9nnie6GYiUesOQTkYytrH9sA4GnDWEPHAdk6k9GbqICEaD3aQZylpDXQ7
+         pKcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Yi/Z75PNHk1ys10Xd95MwCUa0CwRgya3lUvptT8pN84=;
+        b=Er4AxEOjlf5BWLwyxJ34pN+Fe0oVTlNr9h3Wdo9XH0vY9UnoQBv8ApaHrnzxBN8oNT
+         X/7Rp0QObcd+2faiQCrPfc7EqsZNtBRqohOr5YuFeYTO8SU8tdcFvNiTio5aXYghjxfx
+         hhI4D6YHcQW0QYRUxBCvK55lAKaecOjeLMRlS6YOUx9LJgK/HRf4CJCXT4WYtV/sftGy
+         YvHt+Jky5jUnQPZ2YefVFKYtn+ndBbBac1HqrYXzAmmcjricvBpeWklVkZthQT8NT7t8
+         vPcKLuWOpwwWpnD4OUpKqSlMp4dhpuPW3M8qsSviZWbAn5dRoFirEiDgV/zE/6SD//u+
+         vhBA==
+X-Gm-Message-State: AOAM533po1/RqD/SL+iqpg7DF8/ItPpi+f3KvqeYqNL7WOjraM8KGiHs
+        Te2nRHjck9mZsx9tzLFms+FNV/eMabbGTDM+9a+fIw==
+X-Google-Smtp-Source: ABdhPJxJAM6v9BkR77OE9dm6XqaSjp3t/bp9j6I2Wb6XgS/lK5UtdmARV40uKZLqOuIB+VgWTdvgEPyRhda+zklaZgo=
+X-Received: by 2002:a67:f343:0:b0:32c:c4b7:e238 with SMTP id
+ p3-20020a67f343000000b0032cc4b7e238mr14295223vsm.77.1652326645358; Wed, 11
+ May 2022 20:37:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220511164514.2741934-1-masahiroy@kernel.org>
- <20220511164514.2741934-2-masahiroy@kernel.org> <CAKwvOdkMqyssbZ9imYM8Re+NL4U1K2tYj37_1XUtmjj8LSt5GQ@mail.gmail.com>
-In-Reply-To: <CAKwvOdkMqyssbZ9imYM8Re+NL4U1K2tYj37_1XUtmjj8LSt5GQ@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 12 May 2022 12:35:03 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASToQxJsySjvpdkr_aHKBh1ZrECwswWpgCezDHcpRHVgQ@mail.gmail.com>
-Message-ID: <CAK7LNASToQxJsySjvpdkr_aHKBh1ZrECwswWpgCezDHcpRHVgQ@mail.gmail.com>
-Subject: Re: [PATCH v5 01/12] modpost: split the section mismatch checks into section-check.c
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+References: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
+ <CAHbLzkq1YXXLMiREpGnzhJjPssu4WpSsnkTmrLJ=hAEhZVUr9w@mail.gmail.com>
+ <CAAPL-u-r2Pc_MaHQmKKNH_icAa_fH1COWb5qSPpr8xffREQ_cQ@mail.gmail.com>
+ <87tua3h5r1.fsf@nvdebian.thelocal> <CAAPL-u-0HwL6p1SA73LPfFyywG55QqE9O+q=83fhShoJAVVxyQ@mail.gmail.com>
+ <875ymerl81.fsf@nvdebian.thelocal> <87fslhhb2l.fsf@linux.ibm.com>
+ <CAAPL-u9FvCfgA7xsqStLNZ=W03iyWBmvHrpVzPKyitsGN2v_KQ@mail.gmail.com>
+ <68333b21a58604f3fd0e660f1a39921ae22849d8.camel@intel.com>
+ <CAAPL-u80BFYTKK=0HRBXOeDTULyPOtbgu5V3fEYDOczTMxgJ1g@mail.gmail.com>
+ <0a92d0040edb3b74ac259062d241b8cd28924edf.camel@intel.com>
+ <CAAPL-u_40Zxe2AtYbOedDXPBfDPDCqi-OS=yYXf2FcZQS-6v4g@mail.gmail.com> <be3b9f239fa46e968b333291910b2afd3e38bcba.camel@intel.com>
+In-Reply-To: <be3b9f239fa46e968b333291910b2afd3e38bcba.camel@intel.com>
+From:   Wei Xu <weixugc@google.com>
+Date:   Wed, 11 May 2022 20:37:14 -0700
+Message-ID: <CAAPL-u9WUPfjWK4crT52Tq4yo376L-LO7Kw+5MoB0c8wR2C3hw@mail.gmail.com>
+Subject: Re: RFC: Memory Tiering Kernel Interfaces
+To:     "ying.huang@intel.com" <ying.huang@intel.com>
+Cc:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Greg Thelen <gthelen@google.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Michal Hocko <mhocko@kernel.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 7:31 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Wed, May 11, 2022 at 8:14 PM ying.huang@intel.com
+<ying.huang@intel.com> wrote:
 >
-> On Wed, May 11, 2022 at 9:49 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> On Wed, 2022-05-11 at 19:39 -0700, Wei Xu wrote:
+> > On Wed, May 11, 2022 at 6:42 PM ying.huang@intel.com
+> > <ying.huang@intel.com> wrote:
+> > >
+> > > On Wed, 2022-05-11 at 10:07 -0700, Wei Xu wrote:
+> > > > On Wed, May 11, 2022 at 12:49 AM ying.huang@intel.com
+> > > > <ying.huang@intel.com> wrote:
+> > > > >
+> > > > > On Tue, 2022-05-10 at 22:30 -0700, Wei Xu wrote:
+> > > > > > On Tue, May 10, 2022 at 4:38 AM Aneesh Kumar K.V
+> > > > > > <aneesh.kumar@linux.ibm.com> wrote:
+> > > > > > >
+> > > > > > > Alistair Popple <apopple@nvidia.com> writes:
+> > > > > > >
+> > > > > > > > Wei Xu <weixugc@google.com> writes:
+> > > > > > > >
+> > > > > > > > > On Thu, May 5, 2022 at 5:19 PM Alistair Popple <apopple@nvidia.com> wrote:
+> > > > > > > > > >
+> > > > > > > > > > Wei Xu <weixugc@google.com> writes:
+> > > > > > > > > >
+> > > > > > > > > > [...]
+> > > > > > > > > >
+> > > > > > > > > > > > >
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Tiering Hierarchy Initialization
+> > > > > > > > > > > > > `=============================='
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > By default, all memory nodes are in the top tier (N_TOPTIER_MEMORY).
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > A device driver can remove its memory nodes from the top tier, e.g.
+> > > > > > > > > > > > > a dax driver can remove PMEM nodes from the top tier.
+> > > > > > > > > > > >
+> > > > > > > > > > > > With the topology built by firmware we should not need this.
+> > > > > > > > > >
+> > > > > > > > > > I agree that in an ideal world the hierarchy should be built by firmware based
+> > > > > > > > > > on something like the HMAT. But I also think being able to override this will be
+> > > > > > > > > > useful in getting there. Therefore a way of overriding the generated hierarchy
+> > > > > > > > > > would be good, either via sysfs or kernel boot parameter if we don't want to
+> > > > > > > > > > commit to a particular user interface now.
+> > > > > > > > > >
+> > > > > > > > > > However I'm less sure letting device-drivers override this is a good idea. How
+> > > > > > > > > > for example would a GPU driver make sure it's node is in the top tier? By moving
+> > > > > > > > > > every node that the driver does not know about out of N_TOPTIER_MEMORY? That
+> > > > > > > > > > could get messy if say there were two drivers both of which wanted their node to
+> > > > > > > > > > be in the top tier.
+> > > > > > > > >
+> > > > > > > > > The suggestion is to allow a device driver to opt out its memory
+> > > > > > > > > devices from the top-tier, not the other way around.
+> > > > > > > >
+> > > > > > > > So how would demotion work in the case of accelerators then? In that
+> > > > > > > > case we would want GPU memory to demote to DRAM, but that won't happen
+> > > > > > > > if both DRAM and GPU memory are in N_TOPTIER_MEMORY and it seems the
+> > > > > > > > only override available with this proposal would move GPU memory into a
+> > > > > > > > lower tier, which is the opposite of what's needed there.
+> > > > > > >
+> > > > > > > How about we do 3 tiers now. dax kmem devices can be registered to
+> > > > > > > tier 3. By default all numa nodes can be registered at tier 2 and HBM or
+> > > > > > > GPU can be enabled to register at tier 1. ?
+> > > > > >
+> > > > > > This makes sense.  I will send an updated RFC based on the discussions so far.
+> > > > >
+> > > > > Are these tier number fixed?  If so, it appears strange that the
+> > > > > smallest tier number is 0 on some machines, but 1 on some other
+> > > > > machines.
+> > > >
+> > > > When the kernel is configured to allow 3 tiers, we can always show all
+> > > > the 3 tiers. It is just that some tiers (e.g. tier 0) may be empty on
+> > > > some machines.
+> > >
+> > > I still think that it's better to have no empty tiers for auto-generated
+> > > memory tiers by kernel.  Yes, the tier number will be not absolutely
+> > > stable, but that only happens during system bootup in practice, so it's
+> > > not a big issue IMHO.
 > >
-> > -/* sections that we do not want to do full section mismatch check on */
-> > -static const char *const section_white_list[] =
-> > -{
-> > -       ".comment*",
-> > -       ".debug*",
-> > -       ".cranges",             /* sh64 */
-> > -       ".zdebug*",             /* Compressed debug sections. */
-> > -       ".GCC.command.line",    /* record-gcc-switches */
-> > -       ".mdebug*",        /* alpha, score, mips etc. */
-> > -       ".pdr",            /* alpha, score, mips etc. */
-> > -       ".stab*",
-> > -       ".note*",
-> > -       ".got*",
-> > -       ".toc*",
-> > -       ".xt.prop",                              /* xtensa */
-> > -       ".xt.lit",         /* xtensa */
-> > -       ".arcextmap*",                  /* arc */
-> > -       ".gnu.linkonce.arcext*",        /* arc : modules */
-> > -       ".cmem*",                       /* EZchip */
-> > -       ".fmt_slot*",                   /* EZchip */
-> > -       ".gnu.lto*",
-> > -       ".discard.*",
-> > -       NULL
-> > -};
+> > It should not be hard to hide empty tiers (e.g. tier-0) if we prefer.
+> > But even if tier-0 is empty, we should still keep this tier in the
+> > kernel and not move DRAM nodes into this tier.  One reason is that a
+> > HBM node might be hot-added into tier-0 at a later time.
+> >
+>
+> Yes.  The in-kernel representation and the user space interface could be
+> different.
+>
+> I have thought something like below.  We always make the main memory
+> (DRAM here, CPU local) as tier 0.  Then the slower memory will be
+> positive, tier 1, 2, 3, ..., and the faster memory will be negative,
+> tier -1, -2, -3, ....  Then, GPU driver can regesiter its memory as tier
+> -1.  And the tier number could be more stable.  But I'm not sure whether
+> users will be happy with negtive tier number.
+
+Given that we have agreed that the tier id itself should not carry any
+specific meaning to the userspace and what matters is the relative
+tier order, I think it is better to avoid negative tier numbers.
+
+> > > And, I still think it's better to make only N-1 tiers writable for
+> > > totally N tiers (or even readable).  Considering "tier0" is written, how
+> > > to deal with nodes in "tier0" before but not after writing?  One
+> > > possible way is to put them into "tierN".  And during a user customize
+> > > the tiers, the union of "N tiers" may be not complete.
+> >
+> > The sysfs interfaces that I have in mind now are:
+> >
+> > * /sys/devices/system/memtier/memtierN/nodelist (N=0, 1, 2)
+> >
+> > This is read-only to list the memory nodes for a specific tier.
+> >
+> > * /sys/devices/system/node/nodeN/memtier. (N=0, 1, ...,)
+> >
+> > This is a read-write interface. When written, the kernel moves the
+> > node into the user-specified tier.  No other nodes are affected.
+> >
+> > This interface should be able to avoid the above issue.
+>
+> Yes.  This works too.
+>
+> Best Regards,
+> Huang, Ying
+>
+> > > > BTW, the userspace should not assume a specific meaning of a
+> > > > particular tier id because it can change depending on the number of
+> > > > tiers that the kernel is configured with.  For example, the userspace
+> > > > should not assume that tier-2 always means PMEM nodes.  In a system
+> > > > with 4 tiers, PMEM nodes may be in tier-3, not tier-2.
+> > >
+> > > Yes.  This sounds good.
+> > >
+> > > Best Regards,
+> > > Huang, Ying
+> > >
 >
 >
-> > -/**
-> > - * Whitelist to allow certain references to pass with no warning.
-> > - *
-> > - * Pattern 1:
-> > - *   If a module parameter is declared __initdata and permissions=0
-> > - *   then this is legal despite the warning generated.
-> > - *   We cannot see value of permissions here, so just ignore
-> > - *   this pattern.
-> > - *   The pattern is identified by:
-> > - *   tosec   = .init.data
-> > - *   fromsec = .data*
-> > - *   atsym   =__param*
-> > - *
-> > - * Pattern 1a:
-> > - *   module_param_call() ops can refer to __init set function if permissions=0
-> > - *   The pattern is identified by:
-> > - *   tosec   = .init.text
-> > - *   fromsec = .data*
-> > - *   atsym   = __param_ops_*
-> > - *
-> > - * Pattern 2:
-> > - *   Many drivers utilise a *driver container with references to
-> > - *   add, remove, probe functions etc.
-> > - *   the pattern is identified by:
-> > - *   tosec   = init or exit section
-> > - *   fromsec = data section
-> > - *   atsym = *driver, *_template, *_sht, *_ops, *_probe,
-> > - *           *probe_one, *_console, *_timer
-> > - *
-> > - * Pattern 3:
-> > - *   Whitelist all references from .head.text to any init section
-> > - *
-> > - * Pattern 4:
-> > - *   Some symbols belong to init section but still it is ok to reference
-> > - *   these from non-init sections as these symbols don't have any memory
-> > - *   allocated for them and symbol address and value are same. So even
-> > - *   if init section is freed, its ok to reference those symbols.
-> > - *   For ex. symbols marking the init section boundaries.
-> > - *   This pattern is identified by
-> > - *   refsymname = __init_begin, _sinittext, _einittext
-> > - *
-> > - * Pattern 5:
-> > - *   GCC may optimize static inlines when fed constant arg(s) resulting
-> > - *   in functions like cpumask_empty() -- generating an associated symbol
-> > - *   cpumask_empty.constprop.3 that appears in the audit.  If the const that
-> > - *   is passed in comes from __init, like say nmi_ipi_mask, we get a
-> > - *   meaningless section warning.  May need to add isra symbols too...
-> > - *   This pattern is identified by
-> > - *   tosec   = init section
-> > - *   fromsec = text section
-> > - *   refsymname = *.constprop.*
-> > - *
-> > - * Pattern 6:
-> > - *   Hide section mismatch warnings for ELF local symbols.  The goal
-> > - *   is to eliminate false positive modpost warnings caused by
-> > - *   compiler-generated ELF local symbol names such as ".LANCHOR1".
-> > - *   Autogenerated symbol names bypass modpost's "Pattern 2"
-> > - *   whitelisting, which relies on pattern-matching against symbol
-> > - *   names to work.  (One situation where gcc can autogenerate ELF
-> > - *   local symbols is when "-fsection-anchors" is used.)
-> > - **/
->
-> Losing the ability to git blame (from the top level) the above lines
-> does cause me grief and mental anguish though. It's not gone, just
-> buried a bit deeper.
-
-
-According to 'man git-blame', -C option is needed
-to follow the code move between files.
-
-git blame -C  scripts/mod/section-check.c
-
-showed me the origin commit of each line.
-
-
-
-
-
-> --
-> Thanks,
-> ~Nick Desaulniers
-
-
-
---
-Best Regards
-Masahiro Yamada

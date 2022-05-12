@@ -2,106 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFED6524DC4
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E97F1524DCF
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:07:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354135AbiELNGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 09:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44386 "EHLO
+        id S1354158AbiELNHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 09:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351021AbiELNGm (ORCPT
+        with ESMTP id S1343603AbiELNH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 09:06:42 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84FFF5DA4B
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:06:41 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652360799;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tU5R0oUSocyA3MxRM564LYiuixGd7K4ozSHlUmSLzHI=;
-        b=LbPNYrty+ztXBREIQ8dN9l2FL71M/k2cJyRdgBYL4uqjO2PaPlSjpIKuWVc2Af3b32yPe3
-        WRFj5MMmgkF8on2M902Bxg/EvvU+zLfMiLNcQ0BeYZIpiLUqU/v7qRLp7EXO7WubapDr5b
-        y+P1XeeWe9AoVBfcfMYRrORojtCQWQJkj/g5p67sROSDzmHaj6HFtAjJRM0vq3+kZ7S3A5
-        M0nSsI0Em0ZZMuZ3tmWMDMlyTgULNIEbIeN91M3ou4zi3bteUI9ClP4cBxbCkn7+FHN4dK
-        2mLpaLojfVPOOWdNPA8GxJTst9FKZphCsvFf6exYcajuzbJDdJLsUXyjeDPlOg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652360799;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tU5R0oUSocyA3MxRM564LYiuixGd7K4ozSHlUmSLzHI=;
-        b=BaBb+Mh9+cvyEdyShOUxJpim5uzRIvh9yvb0uSnm78y5U86So7HUzvOJLGjHgnnb4DKz3e
-        tZB4nYwgLwrk9fAQ==
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [RFCv2 05/10] x86/mm: Provide untagged_addr() helper
-In-Reply-To: <20220511022751.65540-7-kirill.shutemov@linux.intel.com>
-References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
- <20220511022751.65540-7-kirill.shutemov@linux.intel.com>
-Date:   Thu, 12 May 2022 15:06:38 +0200
-Message-ID: <87a6bmx5lt.ffs@tglx>
+        Thu, 12 May 2022 09:07:28 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E9D69CF8;
+        Thu, 12 May 2022 06:07:26 -0700 (PDT)
+X-UUID: 64c3217995a74c68b09e6628503771fd-20220512
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:3ecb6442-4c2b-423e-8fe3-32b3b4fa5c57,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:79be12a7-eab7-4b74-a74d-5359964535a9,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 64c3217995a74c68b09e6628503771fd-20220512
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <johnson.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1677234903; Thu, 12 May 2022 21:07:20 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 12 May 2022 21:07:19 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 12 May 2022 21:07:19 +0800
+From:   Johnson Wang <johnson.wang@mediatek.com>
+To:     <cw00.choi@samsung.com>, <krzk+dt@kernel.org>,
+        <robh+dt@kernel.org>, <kyungmin.park@samsung.com>
+CC:     <khilman@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <jia-wei.chang@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Johnson Wang <johnson.wang@mediatek.com>
+Subject: [PATCH v4 0/2] Introduce MediaTek CCI devfreq driver
+Date:   Thu, 12 May 2022 21:07:13 +0800
+Message-ID: <20220512130715.8165-1-johnson.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11 2022 at 05:27, Kirill A. Shutemov wrote:
-> +#define __untagged_addr(addr, n)	\
-> +	((__force __typeof__(addr))sign_extend64((__force u64)(addr), n))
+The Cache Coherent Interconnect (CCI) is the management of cache
+coherency by hardware. CCI DEVFREQ is DVFS driver for power saving by
+scaling clock frequency and supply voltage of CCI. CCI uses the same
+input clock source and power rail as LITTLE CPUs on Mediatek SoCs.
 
-How is this supposed to be correct? This sign extends based on bit 47
-resp. 56, i.e. the topmost bit of the userspace address space for the
-LAM mode.
+This series depends on:
+Chanwoo's repo: kernel/git/chanwoo/linux.git
+branch: devfreq-testing
+[1]: PM / devfreq: Export devfreq_get_freq_range symbol within devfreq
+[2]: PM / devfreq: Add cpu based scaling support to passive governor
+[3]: PM / devfreq: passive: Reduce duplicate code when passive_devfreq case
+[4]: PM / devfreq: passive: Update frequency when start governor
 
-So if that bit _is_ set, then the result has bit 48-63 resp. 57-63 set
-as well. Not really what you want, right?
+Changes in v4:
+- Add a maintainer in the binding document.
+- Modify clock description.
+- Add binding document into MAINTAINERS.
+- Replace format specifier %d with %ld.
 
-This has to mask out bit 48-62 resp. 57-62 and leave all other bits
-alone.
+Changes in v3:
+- Move binding document to 'interconnect' and rename it.
+- Add COMPILE_TEST dependence symbol.
+- Remove need_voltage_tracking variable.
+- Move mtk_ccifreq_voltage_tracking() code into mtk_ccifreq_set_voltage().
+- Add an interation limit in the while() loop.
+- Replace 'cci_dev' with 'dev'
+- Replace old_* with pre_*
+- Remove of_match_ptr()
+- Use module_platform_driver()
 
-> +#define untagged_addr(addr)	({					\
-> +	u64 __addr = (__force u64)(addr);				\
-> +	if (__addr >> 63 == 0) {					\
-> +		if (current->thread.features & X86_THREAD_LAM_U57)	\
-> +			__addr &= __untagged_addr(__addr, 56);		\
-> +		else if (current->thread.features & X86_THREAD_LAM_U48)	\
-> +			__addr &= __untagged_addr(__addr, 47);		\
-> +	}								\
-> +	(__force __typeof__(addr))__addr;				\
-> +})
+Changes in v2:
+- Take MT8183 as example in binding document.
+- Use dev_err() instead of pr_err().
+- Use 'goto' statement to handle error case.
+- Clean up driver code.
 
-So this wants something like this:
+Johnson Wang (2):
+  dt-bindings: interconnect: Add MediaTek CCI dt-bindings
+  PM / devfreq: mediatek: Introduce MediaTek CCI devfreq driver
 
-#define untagged_addr(addr)	({			\
-	u64 __addr = (__force u64)(addr);		\
-							\
-	__addr &= current->thread.lam_untag_mask;	\
-	(__force __typeof__(addr))__addr;		\
-})
+ .../bindings/interconnect/mediatek,cci.yaml   | 140 ++++++
+ MAINTAINERS                                   |   1 +
+ drivers/devfreq/Kconfig                       |  10 +
+ drivers/devfreq/Makefile                      |   1 +
+ drivers/devfreq/mtk-cci-devfreq.c             | 474 ++++++++++++++++++
+ 5 files changed, 626 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+ create mode 100644 drivers/devfreq/mtk-cci-devfreq.c
 
-No conditionals, fast _and_ correct. Setting this untag mask up once
-when LAM is enabled is not rocket science.
+-- 
+2.18.0
 
-Thanks,
-
-        tglx

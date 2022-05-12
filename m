@@ -2,131 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 794A45246F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30ECB5246F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350959AbiELH27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 03:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45836 "EHLO
+        id S1350995AbiELH31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 03:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239776AbiELH2q (ORCPT
+        with ESMTP id S1351021AbiELH3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 03:28:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD42B13B8C6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:28:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652340524;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QfstWGJUBLYX/+vki/Cy7YQudH1HsO0LES4kozBG1lU=;
-        b=F0VQSI0cyUE6Nufk4mVJzGJKvikmTO6uye+PjEV1YfCQ0X2bqbsvY/DqlnJvZ2LoeuSNZD
-        CzaGqxzTGHFzUwheRIqYhyEsUJ/yc8VxF3pGvgiMy3G0Aku1ncnQRRib9OQR2pStlw2/t8
-        5EeQwZi7WdiEzG9vgDOkEg3urZjiLfo=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-93-LT9iwnfFPDGgzSk8MxuNcg-1; Thu, 12 May 2022 03:28:43 -0400
-X-MC-Unique: LT9iwnfFPDGgzSk8MxuNcg-1
-Received: by mail-wr1-f71.google.com with SMTP id s16-20020adfeb10000000b0020cc4e5e683so1724996wrn.6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:28:43 -0700 (PDT)
+        Thu, 12 May 2022 03:29:24 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A279013C1F6
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:29:22 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d22so4085234plr.9
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:29:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=P5HUXEPOvBMLE8fEsuwCBiB+Q1qgQLDGbaTHhCwoMe8=;
+        b=o5Z5fV0XV36DZH9ayGrfnl8qVxiWuzspeT5gnxwUrHidCaa+tEthe7DF0xG8IhHRnH
+         jbDAxfFA+vFhlKs8TliSi7SNZQNw2cTItQSYVMabTBsOE6/aN6wtu6u+mpUqn1RUfgFS
+         979KmVpZazbdbBvOVinimrA1IoyyO+lowJnL5WpIoDN5cmF9z5vmc7Jz2eFRtDEzfp1t
+         L6pxr8VVt02arwTG33X8AwuJImwvj+620Bi8T9JcN48MEr0bxM6TEj/nyvTI7cyJECCb
+         HGuduVAUgYq1F7DQagX3YRgMoRXkXQdgYIQV7Tk+BeX4HJfnPiCxdaRg2lMuW7zN3U8C
+         Sl5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=QfstWGJUBLYX/+vki/Cy7YQudH1HsO0LES4kozBG1lU=;
-        b=E7Zx19z0ZHT/C5nW29KNhhKcBriII91ImJfZ7g7noeI/+gnAKDntB9hInOspK+Q64p
-         VAnKSLOc2hBgH6Mh0h017OKsG0hoolBUsTqSJcmmT75Eltk7zTdP9uAVQUKY1p/c1+/8
-         WYWnU9XtfJu9Uam6XGxX906XdKnkCrgrWKqrV+33fAUV0ucAvQNzANO6GbjNJ2e/7sQi
-         363wzIsegiYIEnff94f3BucJRgkQCTG30jCf7kgc1xnxb3kfOPXq6bULHmg88PcA0qVY
-         WXXqn+kP0sww5NYL1AE8ahc+hHGIZzwqA22lYZYmb0RWF3uNMVC95Bdtjk7tDPDl16n8
-         B54g==
-X-Gm-Message-State: AOAM530Bmks61pDDX3dLJ+xZe+HBcq33tJmhBEvKS5iS/u7awUL0wASS
-        uLAqm+47quPj/HX8yUT/tJlP/3Nq8V+/dy/LylvIDRB8XF6OkEPfqgfYZpzx5oyLZlXZ5LMHB2V
-        QDtJU33qWZ1B0cBmkfd5AyEyy
-X-Received: by 2002:a05:600c:3583:b0:394:804f:ecb2 with SMTP id p3-20020a05600c358300b00394804fecb2mr8858177wmq.10.1652340522087;
-        Thu, 12 May 2022 00:28:42 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyQpDPTggJKfya+MUlFlEpIuFmh0Zg+1wFOukWRLIMOVAz7TNkC4C6ofLd3Z14O0Stff2rccA==
-X-Received: by 2002:a05:600c:3583:b0:394:804f:ecb2 with SMTP id p3-20020a05600c358300b00394804fecb2mr8858161wmq.10.1652340521830;
-        Thu, 12 May 2022 00:28:41 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c701:d200:ee5d:1275:f171:136d? (p200300cbc701d200ee5d1275f171136d.dip0.t-ipconnect.de. [2003:cb:c701:d200:ee5d:1275:f171:136d])
-        by smtp.gmail.com with ESMTPSA id j12-20020a5d618c000000b0020c5253d8f2sm3383048wru.62.2022.05.12.00.28.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 00:28:41 -0700 (PDT)
-Message-ID: <c424e8a2-a771-e738-396c-24ac907b557f@redhat.com>
-Date:   Thu, 12 May 2022 09:28:40 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=P5HUXEPOvBMLE8fEsuwCBiB+Q1qgQLDGbaTHhCwoMe8=;
+        b=xExPROkHvIHGkA0h2HuLWNv8jPAhVW+l6h1lKPpSqwx9pXn7rG15k7T31Y0yXkdIY/
+         n34eMgnyaWTXEbYUnUm9rWkzGJu3SqpHeSH7kk+UZvDPthwo3iuUAMnIEyLwvQ0+LsmV
+         joByOE8Q1xXvD0jhHIURavXzOkiDs9A3oQSbUTsNPdsfY2D19ULSUjC0YfnhJ2UXTXUh
+         7EnfVHgjL81ExDX4Tb499WOqi5r1sbGul/y/BkpUxSoO+j7Pm8pVttFldeQcLgkMNfHA
+         l8LmDsC+fBDo6btLEqhanQZ6PUwTGADMCd5XuS16NLRJu+0QrM2EFXrpj78H9w68Vn1c
+         u25Q==
+X-Gm-Message-State: AOAM532Q8PDSAG56y0QBL/j94pjeBmw6SShB5bedoRVemO03GQP7TsVa
+        zhYhBEsOCvOpL0rfD3QrApdQpA==
+X-Google-Smtp-Source: ABdhPJypLn7YyngE6rmboJLB85iyymD1k6g9lMwHwVnR3EpfOxbp8POTUSTQMDHng1V/ia/kWWRoKA==
+X-Received: by 2002:a17:902:b189:b0:15f:3f5e:b61 with SMTP id s9-20020a170902b18900b0015f3f5e0b61mr3417397plr.49.1652340562190;
+        Thu, 12 May 2022 00:29:22 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id w6-20020a170902d3c600b0015e8d4eb2b0sm3139958plb.250.2022.05.12.00.29.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 00:29:21 -0700 (PDT)
+Date:   Thu, 12 May 2022 12:59:19 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     qianfanguijin@163.com
+Cc:     linux-sunxi@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] ARM: dts: sun8i-r40: add opp table for cpu
+Message-ID: <20220512072919.hkggxbqmovebdych@vireshk-i7>
+References: <20220512071858.10805-1-qianfanguijin@163.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [RFC PATCH v1 0/4] mm, hwpoison: improve handling workload
- related to hugetlb and memory_hotplug
-Content-Language: en-US
-To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>
-Cc:     Miaohe Lin <linmiaohe@huawei.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <54399815-10fe-9d43-7ada-7ddb55e798cb@redhat.com>
- <20220427122049.GA3918978@hori.linux.bs1.fc.nec.co.jp>
- <bb1caf48-7e9d-61bf-e0dc-72fcc0228f28@redhat.com>
- <20220509072902.GB123646@hori.linux.bs1.fc.nec.co.jp>
- <6a5d31a3-c27f-f6d9-78bb-d6bf69547887@huawei.com>
- <Ynjl4JmLXkA47U8T@localhost.localdomain>
- <465902dc-d3bf-7a93-da04-839faddcd699@huawei.com>
- <0389eac1-af68-56b5-696d-581bb56878b9@redhat.com>
- <20220511161052.GA224675@hori.linux.bs1.fc.nec.co.jp>
- <6986a8dd-7211-fb4d-1d66-5b203cad1aab@redhat.com>
- <20220512063558.GA249122@hori.linux.bs1.fc.nec.co.jp>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220512063558.GA249122@hori.linux.bs1.fc.nec.co.jp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220512071858.10805-1-qianfanguijin@163.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>>>
->>>> Once the problematic DIMM would actually get unplugged, the memory block devices
->>>> would get removed as well. So when hotplugging a new DIMM in the same
->>>> location, we could online that memory again.
->>>
->>> What about PG_hwpoison flags?  struct pages are also freed and reallocated
->>> in the actual DIMM replacement?
->>
->> Once memory is offline, the memmap is stale and is no longer
->> trustworthy. It gets reinitialize during memory onlining -- so any
->> previous PG_hwpoison is overridden at least there. In some setups, we
->> even poison the whole memmap via page_init_poison() during memory offlining.
->>
->> Apart from that, we should be freeing the memmap in all relevant cases
->> when removing memory. I remember there are a couple of corner cases, but
->> we don't really have to care about that.
+On 12-05-22, 15:18, qianfanguijin@163.com wrote:
+> From: qianfan Zhao <qianfanguijin@163.com>
 > 
-> OK, so there seems no need to manipulate struct pages for hwpoison in
-> all relevant cases.
+> OPP table value is get from allwinner lichee linux-3.10 kernel driver
+> 
+> Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
+> ---
+> Changes in v3:
+> - remove "allwinner-r40" compatible from allowlist.
+> - split dts in two part.
+> 
+>  arch/arm/boot/dts/sun8i-r40.dtsi | 47 ++++++++++++++++++++++++++++++++
+>  1 file changed, 47 insertions(+)
 
-Right. When offlining a memory block, all we have to do is remember if
-we stumbled over a hwpoisoned page and rememebr that inside the memory
-block. Rejecting to online is then easy.
+Both the patches can go via SoC tree now. I will not pick them. Thanks.
 
 -- 
-Thanks,
-
-David / dhildenb
-
+viresh

@@ -2,69 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 663D652570D
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 23:32:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0993E52570F
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 23:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358754AbiELVcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 17:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54116 "EHLO
+        id S1358744AbiELVcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 17:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358742AbiELVcC (ORCPT
+        with ESMTP id S1358745AbiELVcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 17:32:02 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D6F20F742
+        Thu, 12 May 2022 17:32:03 -0400
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 152B520F74F
         for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 14:32:01 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id g28so12095598ybj.10
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 14:32:00 -0700 (PDT)
+Received: by mail-ua1-x930.google.com with SMTP id q4so2523437uas.0
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 14:32:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=qP8x7MUO3Uu37I6lovdAXd3voCCKfRiLq82HFRhMPMs=;
-        b=Kplc09E4S/2dbuxcXjM62BKCcgoUDUa3W6vtuOLIK+pmB60FnSLrqgZFHHcXsrROHz
-         0ftSTKDMuLcwioiSk/jyrRtd3aYiH0CFysLg06dQS1x6v7XwC1QVBUmuYS4m/cCt2QGm
-         Z99AeZbhMuOeU3i4+v3+ETnSyv8MdvnZWxck8Ig1RAl7SSfsFoOScsMPeaZm9pTUoW0M
-         A0Qigywdfgl0/AlJEEPTKEUYjCWn8rjocrJo45QUFBdV0Vc6zxIbJiK4DMtVNxvEU0Xx
-         m1TP3ZzWFpl9tlk5z3USjv8ThN7ozhK8XhpqTHZJqgPPtBHS6F7geiDW6SoUkNj+ooB4
-         KL1Q==
+        bh=AAEvdTjpMiH02kk60TytbztnqV1ZmA0Yb2xj1ek1p2c=;
+        b=AQd8ugEBqMeVcQ3c+P4owmAOI3jptgmmv/yVY0Hzubgs1BBkmPok2U3o4M4aCk+f9G
+         bEmzXF7EAuns52hfOWdAIBe2eeGl6SJHg2wuaNag32vrrilFFSFqQw9E+vCOmlJuaYJL
+         znmmUGgr18xmZC9qrjprWUDXibliidJx8DxzkUX7xZfi1wajzi/WYEIikt9z8aUiT5cp
+         pMqJnOziS0on8jMnrq2brRt0OI3EtBN33RdO1PHJCzBAhjL7EjDjPEJmdwGSwheiA/tK
+         9cWCtEnahNxMgy0+sd0rvPJWcdzATvKC6vFKqbHb9wxLzNWiXts5Bx8pmjdUhPnDXY27
+         pdOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=qP8x7MUO3Uu37I6lovdAXd3voCCKfRiLq82HFRhMPMs=;
-        b=oVNgfpGXRE3NDeLGMHPC8OFGV7KHzr92c8tHxYqDwLCJf5k1X7264uDjUQ9r3lC4ge
-         QpqhM8zV5FKyHBZUZKGeMH2krkBBvMDbbPcgLLrQ5uEtfc5C+4qc0FN+5U/PNFeWSctP
-         klSTIZhD2x4Gr5nWx7gfwtnY3YpaabOzlMS6RJfPz8XZ/1mECIuzL9JcDTJBUKMSMntV
-         HbNdKZmxcyIWdjpCvvlS1EfZNFRVQGDiKo98zoL71zMTTclf9aSl70+Ap1eFuFAskyj7
-         3J+gLhccCu+AIbOZ68mkW1Pu2DsP5XcNM02NvIbtUQQ/VH87mi/WrTMo3yOlgR37HK33
-         tPxQ==
-X-Gm-Message-State: AOAM533ttfO7uM1cd7gTd+Ff1+jDfVYs2Z2oodq0osTB5E+HJT+AnvYq
-        ASVhz/pe73cczGh7jQPctWQ2+QtDg+G1LdckQmjhJw==
-X-Google-Smtp-Source: ABdhPJwC7glJ4rfuuAy9qZ2O1j2dwGqNFULn699DHOnGq4mz/2+NODz6siqEBR/m4hd8zL0aFMd//xboRFIMLbXNSCs=
-X-Received: by 2002:a05:6902:1007:b0:649:7745:d393 with SMTP id
- w7-20020a056902100700b006497745d393mr1846772ybt.407.1652391119968; Thu, 12
- May 2022 14:31:59 -0700 (PDT)
+        bh=AAEvdTjpMiH02kk60TytbztnqV1ZmA0Yb2xj1ek1p2c=;
+        b=37ot6hAoo7b/nolW/C/+XL0QHFLW5mOZX1RwGjnE8L6W5Nh5TT77qMMdbPRlaW/z6t
+         tUC9M8V/Ekap1dP66jUNbQNSneIiI9o+8A+gpmg+ukqlTQwvD6KlglKZkp1A4vzHFNaC
+         rJqf8WST9dvf/xkJ+DS96oCTWuobJPe2sAv48jKc/h06G5dZ2Ug0zOp0xChRnwUYESTa
+         cnZ2PxzSzXLKAKuoA7cssJ0OI8z6ed4gh7UGLu91RJMdFTya4Dig2zodCxal5yIa0E88
+         HCIsG5DfHb1QxrO1Ur2Wn24BYRC/zqjUZYYQeFjI0MF3U2v+ULKIbUyB2QrR3TqOcc0T
+         xGdg==
+X-Gm-Message-State: AOAM532mJiTc/shFTtRIDT6clBR9jYDRGU/FQ0ZNr6vW/e5KjP+xvquT
+        WQY0CvfvtLV/XJOeaXi/V53ftc4uXElZdvpbOBSvow==
+X-Google-Smtp-Source: ABdhPJzUBFca9v1LokdN/wm4ymV/l1Ks2bnzIIoADv2YZ78qVG92Y28zMfMniJ4L1epdqiiQt2gndkyf7XXgySKXvH8=
+X-Received: by 2002:ab0:e14:0:b0:360:e13:e5d7 with SMTP id g20-20020ab00e14000000b003600e13e5d7mr1229790uak.95.1652391120104;
+ Thu, 12 May 2022 14:32:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220512103322.380405-1-liujian56@huawei.com> <CANn89iJ7Lo7NNi4TrpKsaxzFrcVXdgbyopqTRQEveSzsDL7CFA@mail.gmail.com>
- <CANpmjNPRB-4f3tUZjycpFVsDBAK_GEW-vxDbTZti+gtJaEx2iw@mail.gmail.com>
-In-Reply-To: <CANpmjNPRB-4f3tUZjycpFVsDBAK_GEW-vxDbTZti+gtJaEx2iw@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 12 May 2022 14:31:48 -0700
-Message-ID: <CANn89iKJ+9=ug79V_bd8LSsLaSu0VLtzZdDLC87rcvQ6UYieHQ@mail.gmail.com>
-Subject: Re: [PATCH net] tcp: Add READ_ONCE() to read tcp_orphan_count
-To:     Marco Elver <elver@google.com>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Liu Jian <liujian56@huawei.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Neal Cardwell <ncardwell@google.com>,
-        netdev <netdev@vger.kernel.org>
+References: <CAAPL-u-DGLcKRVDnChN9ZhxPkfxQvz9Sb93kVoX_4J2oiJSkUw@mail.gmail.com>
+ <56b41ce6922ed5f640d9bd46a603fa27576532a9.camel@intel.com>
+ <c5d55131-76ff-7354-2954-7cfac365a9a5@linux.ibm.com> <CAAPL-u-g86QqHaHGGtVJMER8ENC2dpekK+2qOkxoRFmC0F_80g@mail.gmail.com>
+ <87y1z7jj85.fsf@linux.ibm.com> <CAAPL-u90Gzrepbsdpc62FGRBYOx1LAVwZWHg1E7UyVD_CmcROw@mail.gmail.com>
+ <333438929a8680317bdae02da921d1e50fb9b0b3.camel@linux.intel.com>
+In-Reply-To: <333438929a8680317bdae02da921d1e50fb9b0b3.camel@linux.intel.com>
+From:   Wei Xu <weixugc@google.com>
+Date:   Thu, 12 May 2022 14:31:49 -0700
+Message-ID: <CAAPL-u-nhj-JBH8xA1+BjuC3A_kfd5FSv2qKCL3g71h-cu0WLg@mail.gmail.com>
+Subject: Re: RFC: Memory Tiering Kernel Interfaces (v2)
+To:     Tim Chen <tim.c.chen@linux.intel.com>
+Cc:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        "ying.huang@intel.com" <ying.huang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Hesham Almatary <hesham.almatary@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -77,48 +88,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 2:18 PM Marco Elver <elver@google.com> wrote:
-
+On Thu, May 12, 2022 at 2:13 PM Tim Chen <tim.c.chen@linux.intel.com> wrote:
 >
-> I guess the question is, is it the norm that per_cpu() retrieves data
-> that can legally be modified concurrently, or not. If not, and in most
-> cases it's a bug, the annotations should be here.
+> On Thu, 2022-05-12 at 01:15 -0700, Wei Xu wrote:
+> >
+> > I am OK with moving back the memory tier nodelist into node/.  When
+> > there are more memory tier attributes needed, we can then create the
+> > memory tier subtree and replace the tier nodelist in node/ with
+> > symlinks.
+> >
+> > So the revised sysfs interfaces are:
+> >
+> > * /sys/devices/system/node/memory_tierN (read-only)
+> >
+> >   where N = 0, 1, 2
+> >
+> >   Format: node_list
+> >
+> > * /sys/devices/system/node/nodeN/memory_tier (read/write)
+> >
+> >   where N = 0, 1, ...
+> >
+> >   Format: int or empty
 >
-> Paul, was there any guidance/documentation on this, but I fail to find
-> it right now? (access-marking.txt doesn't say much about per-CPU
-> data.)
+> This looks good to me.  Just wonder if having just 1 tier
+> lower than DRAM is sufficient. We could have wide performance
+> range for such secondary memories and is one tier sufficient for them?
+>
+> Tim
 
-Normally, whenever we add a READ_ONCE(), we are supposed to add a comment.
-
-We could make an exception for per_cpu_once(), because the comment
-would be centralized
-at per_cpu_once() definition.
-
-We will be stuck with READ_ONCE() in places we are using
-per_cpu_ptr(), for example
-in dev_fetch_sw_netstats()
-
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 1461c2d9dec8099a9a2d43a704b4c6cb0375f480..b66470291d7b7e6c33161093d71e40587f9ed838
-100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -10381,10 +10381,13 @@ void dev_fetch_sw_netstats(struct
-rtnl_link_stats64 *s,
-                stats = per_cpu_ptr(netstats, cpu);
-                do {
-                        start = u64_stats_fetch_begin_irq(&stats->syncp);
--                       tmp.rx_packets = stats->rx_packets;
--                       tmp.rx_bytes   = stats->rx_bytes;
--                       tmp.tx_packets = stats->tx_packets;
--                       tmp.tx_bytes   = stats->tx_bytes;
-+                       /* These values can change under us.
-+                        * READ_ONCE() pair with too many write sides...
-+                        */
-+                       tmp.rx_packets = READ_ONCE(stats->rx_packets);
-+                       tmp.rx_bytes   = READ_ONCE(stats->rx_bytes);
-+                       tmp.tx_packets = READ_ONCE(stats->tx_packets);
-+                       tmp.tx_bytes   = READ_ONCE(stats->tx_bytes);
-                } while (u64_stats_fetch_retry_irq(&stats->syncp, start));
-
-                s->rx_packets += tmp.rx_packets;
+The tier design can be extended to more than 3 tiers (e.g. via
+CONFIG_MAX_MEMORY_TIERS).  MAX_MEMORY_TIERS is set to 3 for now
+because without enough memory device performance information provided
+by the firmware, it is difficult for the kernel to properly initialize
+the memory tier hierarchy beyond 3 tiers (GPU, DRAM, PMEM).  We will
+have to resort to the userspace override to set up such many-tier
+systems.

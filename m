@@ -2,64 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 942FC524B9A
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C17524BBE
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:34:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353162AbiELLYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 07:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49670 "EHLO
+        id S1353275AbiELLdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 07:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353389AbiELLY2 (ORCPT
+        with ESMTP id S1353244AbiELLdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 07:24:28 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D26246DB1
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 04:23:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652354601; x=1683890601;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JzFCeH6/9PxY/SD8fyT3PicTWBDSHnH16ews2+Zyo+U=;
-  b=IbkkgqcmUi8KF2CxHIghUoHWhQxtKDzRz9wK75cdZcJIX7XHlrrgPqLQ
-   nt5fC6paR2oZIS7UbeCdwtZE1jZSRH5k8RmA3PLBX+Lm+pMl7kwyUjB7L
-   2vXgJptjEsS5vqeUdhiVDarJ6hLlV/n/3OVDh4Te4cZIlMT5brxlc2m7o
-   vxD+YHFDrYXINkeKVDXeNirZ6TWv0ustl4t3iUBBW1ACQ+EdaGcO2gD5O
-   K+0T9/qzv/5e1ueqVlnH6DCqAioBj9nCk2HcDnNYvr3FgMXmYkXtpJv6f
-   TYnOnOLQCULnBTIN2KFTzXprL4j7FRzXzK/4UAC58BLQxl4NnuZLGM2ny
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="295220048"
-X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
-   d="scan'208";a="295220048"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 04:23:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
-   d="scan'208";a="895755253"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 12 May 2022 04:23:19 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1np6uX-000KLT-Ik;
-        Thu, 12 May 2022 11:23:13 +0000
-Date:   Thu, 12 May 2022 19:23:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     kbuild-all@lists.01.org,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: [cxl:preview 40/67] drivers/cxl/core/pci.c:137:21: error: implicit
- declaration of function 'readq'; did you mean 'readl'?
-Message-ID: <202205121947.4e1h4uZF-lkp@intel.com>
+        Thu, 12 May 2022 07:33:25 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECF41CEEDE
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 04:33:21 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id o22so5207479ljp.8
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 04:33:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tAEF+dbAnD48BnBbAU0BUAa+dO/2WAcVo20DYQ9S6dE=;
+        b=UECWek238lb5RAmbHwzkIpgTNSdQ11Yfb8ASl/tP0D+HQl0Nqfix/MsfOtRNoHmEoS
+         pYBiTFYwqDnkFF343Jlt3myrxbowelTAS5vAFp0X7RR2jW5QCI2kbGW96q+UKMSumJNJ
+         PEJfOawrzMY/t1idHbgtWH70hLVne5s81XWksgpHJcGY3C9FjeD67VdEw6HQFbr+WXH0
+         xSf6hh+TNj7Dn0ymg9FSV7zWtFdX4X4bqBplo0p+zej1/q35zQV5l9nrAfOLPIslbS8J
+         XNFEy2vMChSbY1nrUdDWMiOuZ/0wXzvOBejBKQ9CHEY++XqhZiqizqEV4u8BCPclfeW+
+         beMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tAEF+dbAnD48BnBbAU0BUAa+dO/2WAcVo20DYQ9S6dE=;
+        b=JxP2DJBlglEIoCMyzGWoNntaK1VvIFokK42U/IiBDk1ZeGczq3vArjtvSZThlwexWv
+         d6Tcgrdg0ys5uoR36Ejk/anLXDTHwaqsjGHkekGtnld22NYOfUsv2QYW3UjtMsGTWY0R
+         aEGXCkR7AR62pMrdMyzLqmd3ML1InRcaQ1VutuScK64lRqMPnW+47ytseX2Ed0kRYmXl
+         pf2ECfYl6Ro1H/OiEtdkhf2LRR9rL4MsZYryzx23yrVeQmWVsBBdSUWecg0yHArXVBZ2
+         zXdCXyEDBGRNqRQODh0VHZ949tNJDbdNQZieXPTUUre+bkkh4K8j9yyXw4yDUljSgGi2
+         LFcw==
+X-Gm-Message-State: AOAM531hVSMzDbgIi4lUHnvCJkpTNt/Tz5hKYpaT5dHHgYeLjAtw1Pj1
+        uOyUMS/fzAI73V7K6t7zB+9mZA==
+X-Google-Smtp-Source: ABdhPJxbMhTJ/x3wO6IIZjV3v1LV5Xd7J4V3uaASWzpb6lVcAwwLrn2oTVIUr8sq/9IvOQe5/iJWbQ==
+X-Received: by 2002:a2e:9645:0:b0:24f:2e6f:f931 with SMTP id z5-20020a2e9645000000b0024f2e6ff931mr20426742ljh.466.1652355198391;
+        Thu, 12 May 2022 04:33:18 -0700 (PDT)
+Received: from localhost.localdomain (host-188-190-49-235.la.net.ua. [188.190.49.235])
+        by smtp.gmail.com with ESMTPSA id r29-20020ac25a5d000000b0047255d211a6sm741758lfn.213.2022.05.12.04.33.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 04:33:17 -0700 (PDT)
+From:   Andrew Melnychenko <andrew@daynix.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, mst@redhat.com, jasowang@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Cc:     yan@daynix.com, yuri.benditovich@daynix.com
+Subject: [RFC PATCH v2 0/5] TUN/VirtioNet USO features support.
+Date:   Thu, 12 May 2022 14:23:42 +0300
+Message-Id: <20220512112347.18717-1-andrew@daynix.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,73 +69,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git preview
-head:   9c642abd8b31d895f34186bd72b7360083b58492
-commit: e7ed4a0688738b1f47a6b500444942d4dfa1035d [40/67] cxl/pci: Move cxl_await_media_ready() to the core
-config: powerpc-buildonly-randconfig-r003-20220509 (https://download.01.org/0day-ci/archive/20220512/202205121947.4e1h4uZF-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?id=e7ed4a0688738b1f47a6b500444942d4dfa1035d
-        git remote add cxl https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
-        git fetch --no-tags cxl preview
-        git checkout e7ed4a0688738b1f47a6b500444942d4dfa1035d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/cxl/core/
+Added new offloads for TUN devices TUN_F_USO4 and TUN_F_USO6.
+Technically they enable NETIF_F_GSO_UDP_L4
+(and only if USO4 & USO6 are set simultaneously).
+It allows to transmission of large UDP packets.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Different features USO4 and USO6 are required for qemu where Windows guests can
+enable disable USO receives for IPv4 and IPv6 separately.
+On the other side, Linux can't really differentiate USO4 and USO6, for now.
+For now, to enable USO for TUN it requires enabling USO4 and USO6 together.
+In the future, there would be a mechanism to control UDP_L4 GSO separately.
 
-All errors (new ones prefixed by >>):
+Test it WIP Qemu https://github.com/daynix/qemu/tree/Dev_USOv2
 
-   drivers/cxl/core/pci.c: In function 'cxl_await_media_ready':
->> drivers/cxl/core/pci.c:137:21: error: implicit declaration of function 'readq'; did you mean 'readl'? [-Werror=implicit-function-declaration]
-     137 |         md_status = readq(cxlds->regs.memdev + CXLMDEV_STATUS_OFFSET);
-         |                     ^~~~~
-         |                     readl
-   cc1: some warnings being treated as errors
+New types for VirtioNet already on mailing:
+https://lists.oasis-open.org/archives/virtio-comment/202110/msg00010.html
 
+Also, there is a known issue with transmitting packages between two guests.
+Without hacks with skb's GSO - packages are still segmented on the host's postrouting.
 
-vim +137 drivers/cxl/core/pci.c
+Andrew (5):
+  uapi/linux/if_tun.h: Added new offload types for USO4/6.
+  driver/net/tun: Added features for USO.
+  uapi/linux/virtio_net.h: Added USO types.
+  linux/virtio_net.h: Support USO offload in vnet header.
+  drivers/net/virtio_net.c: Added USO support.
 
-   103	
-   104	/*
-   105	 * Wait up to @media_ready_timeout for the device to report memory
-   106	 * active.
-   107	 */
-   108	int cxl_await_media_ready(struct cxl_dev_state *cxlds)
-   109	{
-   110		struct pci_dev *pdev = to_pci_dev(cxlds->dev);
-   111		int d = cxlds->cxl_dvsec;
-   112		bool active = false;
-   113		u64 md_status;
-   114		int rc, i;
-   115	
-   116		for (i = media_ready_timeout; i; i--) {
-   117			u32 temp;
-   118	
-   119			rc = pci_read_config_dword(
-   120				pdev, d + CXL_DVSEC_RANGE_SIZE_LOW(0), &temp);
-   121			if (rc)
-   122				return rc;
-   123	
-   124			active = FIELD_GET(CXL_DVSEC_MEM_ACTIVE, temp);
-   125			if (active)
-   126				break;
-   127			msleep(1000);
-   128		}
-   129	
-   130		if (!active) {
-   131			dev_err(&pdev->dev,
-   132				"timeout awaiting memory active after %d seconds\n",
-   133				media_ready_timeout);
-   134			return -ETIMEDOUT;
-   135		}
-   136	
- > 137		md_status = readq(cxlds->regs.memdev + CXLMDEV_STATUS_OFFSET);
+ drivers/net/tap.c               | 10 ++++++++--
+ drivers/net/tun.c               |  8 +++++++-
+ drivers/net/virtio_net.c        | 19 +++++++++++++++----
+ include/linux/virtio_net.h      |  9 +++++++++
+ include/uapi/linux/if_tun.h     |  2 ++
+ include/uapi/linux/virtio_net.h |  4 ++++
+ 6 files changed, 45 insertions(+), 7 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

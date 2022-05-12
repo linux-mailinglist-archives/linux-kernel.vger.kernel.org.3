@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 647CD5256A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 22:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA105256AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 22:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358509AbiELU4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 16:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55894 "EHLO
+        id S242972AbiELU41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 16:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343780AbiELU4P (ORCPT
+        with ESMTP id S1357898AbiELU4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 16:56:15 -0400
+        Thu, 12 May 2022 16:56:16 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B6236B65;
-        Thu, 12 May 2022 13:56:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89323B577;
+        Thu, 12 May 2022 13:56:15 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nfraprado)
-        with ESMTPSA id C65E51F4585A
+        with ESMTPSA id 88FDF1F4585F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652388972;
-        bh=voeNFipaVaDn/LgNQuPTER6uB6OG5ivBXpY5Y5avsJo=;
+        s=mail; t=1652388974;
+        bh=kTECtCnCJdyMoV3IS+2RVEgM65NrW1WbxMJuwruw03E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ibQT9H69p13pHw/SCdfFDl4IahMmjlK46esoyQ20qVmwLCyRt0pAj61h5goMuOnrs
-         xfW8CPDIOoSw72WSs63bolVyKJ/h0Byr+kWjjpeQI1KGDuJnO1hyHBkfzfNHPehFZ0
-         XUyNyBEju0tksLRRxOKHd4xft/UquyctJxThapJbEWuw43SFN/3tLeFZjy2zMf+VOV
-         PZ5lSO2wcc0nHv9BlnW+v7Gq66qgCmGGfkULttndqObITuIT/nlpuI8/sqIn0CTJ9o
-         t6qltg7vlvSR8MiROdqkYbEW0W6xNpluvMHmgGj3m79AcFKwJ6n1Czcglz7a7ITOTb
-         Q2Q1ZYWs8qWgw==
+        b=OXGD2zK3BE4xVxhQRivWQ0Itlq3pyAv1CSGziKJxycwm2Fb3SAnnBMOcrfMvJKvey
+         urb3gzBfaBXh/qD+brsNxa8idBkeEYaRhs5N/pGBg1XNxzjvDZU7E1VbdI7fTW5vZL
+         IcEp7H+Z9L62xLkAPhf+9tBC1YW/SO92xkB9rEHLNKkd3nYnXA1m/jBMmUudWMYK2W
+         9BnT44SeLsbn+AxV8YZQiVkxAZBpyggxXQ5iAMEwo3lhE7RJwdHNLXh0G4P+mcsaSz
+         egxU8BuvImVb0nm2YATqRnz8OwFfFcBdTPjwEnQqm5iNGMQGRl0rq3woqGstUNT3RM
+         Qyyed422g6UVQ==
 From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
         <nfraprado@collabora.com>
 To:     Matthias Brugger <matthias.bgg@gmail.com>
@@ -37,7 +37,6 @@ Cc:     Chen-Yu Tsai <wenst@chromium.org>,
         =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
         <nfraprado@collabora.com>,
         Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Fabien Parent <fparent@baylibre.com>,
         Hsin-Yi Wang <hsinyi@chromium.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Maxim Kutnij <gtk3@inbox.ru>, Rob Herring <robh+dt@kernel.org>,
@@ -45,9 +44,9 @@ Cc:     Chen-Yu Tsai <wenst@chromium.org>,
         Sean Wang <sean.wang@mediatek.com>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH v3 01/16] dt-bindings: arm64: dts: mediatek: Add mt8192-asurada-spherion
-Date:   Thu, 12 May 2022 16:55:47 -0400
-Message-Id: <20220512205602.158273-2-nfraprado@collabora.com>
+Subject: [PATCH v3 02/16] dt-bindings: arm64: dts: mediatek: Add mt8192-asurada-hayato
+Date:   Thu, 12 May 2022 16:55:48 -0400
+Message-Id: <20220512205602.158273-3-nfraprado@collabora.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220512205602.158273-1-nfraprado@collabora.com>
 References: <20220512205602.158273-1-nfraprado@collabora.com>
@@ -64,8 +63,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add binding for the Google Spherion board, which is used for Acer
-Chromebook 514 (CB514-2H).
+Add binding for the Google Hayato board.
 
 Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
@@ -79,28 +77,25 @@ Acked-by: Rob Herring <robh@kernel.org>
 Changes in v2:
 - Added this patch
 
- Documentation/devicetree/bindings/arm/mediatek.yaml | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ Documentation/devicetree/bindings/arm/mediatek.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/arm/mediatek.yaml b/Documentation/devicetree/bindings/arm/mediatek.yaml
-index 4a2bd9759c47..43fc3417e786 100644
+index 43fc3417e786..bbe475788479 100644
 --- a/Documentation/devicetree/bindings/arm/mediatek.yaml
 +++ b/Documentation/devicetree/bindings/arm/mediatek.yaml
-@@ -131,6 +131,14 @@ properties:
+@@ -131,6 +131,11 @@ properties:
            - enum:
                - mediatek,mt8183-evb
            - const: mediatek,mt8183
-+      - description: Google Spherion (Acer Chromebook 514)
++      - description: Google Hayato
 +        items:
-+          - const: google,spherion-rev3
-+          - const: google,spherion-rev2
-+          - const: google,spherion-rev1
-+          - const: google,spherion-rev0
-+          - const: google,spherion
++          - const: google,hayato-rev1
++          - const: google,hayato
 +          - const: mediatek,mt8192
-       - items:
-           - enum:
-               - mediatek,mt8192-evb
+       - description: Google Spherion (Acer Chromebook 514)
+         items:
+           - const: google,spherion-rev3
 -- 
 2.36.1
 

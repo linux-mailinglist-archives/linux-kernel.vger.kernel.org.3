@@ -2,47 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68BFF524D24
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BC29524D2C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353891AbiELMjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 08:39:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58044 "EHLO
+        id S1353907AbiELMjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 08:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353881AbiELMjB (ORCPT
+        with ESMTP id S1353908AbiELMjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 08:39:01 -0400
-Received: from mail-40136.proton.ch (mail-40136.proton.ch [185.70.40.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D5162216
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:38:59 -0700 (PDT)
-Date:   Thu, 12 May 2022 12:38:50 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
-        s=protonmail2; t=1652359137;
-        bh=1bDLbtT4qPpVkhxVZ9YG4YTO1unO0O6HGenM4HeSJ2w=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
-         Feedback-ID:Message-ID;
-        b=V/DCcifQUB+ddK2jWtHHqRxmowantA3oMaNHU+uKPhjqqLt6tXyrgZW4uvCwzGWGs
-         mcVXVzWdls/yeWPWw2De+EDnLCRZZrlIv08C+k6RhSoClPywTIj6cq8xmZduXGi5ve
-         mpp7X6yxALpSdESq4dF54JDghdDOstCFvQh7nPDlyKSMXmIL2B2OxoPO53I9n8QHEh
-         6TYcH6NNSVwP0iVt6jpeZpotvM1iYIhNDmmpX/HEHJjuKtIThAMldkSlTfHE5S8Gwm
-         Lj+dUjv2xBdSF2pJ4e/G8pjv1Gw0mjNFQCPAugKLUMDRQuBe2VDxPCRemFBfubUlFH
-         G7Dp3F3RJY2VQ==
-To:     Amir Goldstein <amir73il@gmail.com>
-From:   Simon Ser <contact@emersion.fr>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
-Reply-To: Simon Ser <contact@emersion.fr>
-Subject: Re: procfs: open("/proc/self/fd/...") allows bypassing O_RDONLY
-Message-ID: <Uc-5mYLV3EgTlSFyEEzmpLvNdXKVJSL9pOSCiNylGIONHoljlV9kKizN2bz6lHsTDPDR_4ugSxLYNCO7xjdSeF3daahq8_kvxWhpIvXcuHA=@emersion.fr>
-In-Reply-To: <CAOQ4uxjOOe0aouDYNdkVyk7Mu1jQ-eY-6XoW=FrVRtKyBd2KFg@mail.gmail.com>
-References: <lGo7a4qQABKb-u_xsz6p-QtLIy2bzciBLTUJ7-ksv7ppK3mRrJhXqFmCFU4AtQf6EyrZUrYuSLDMBHEUMe5st_iT9VcRuyYPMU_jVpSzoWg=@emersion.fr> <CAOQ4uxjOOe0aouDYNdkVyk7Mu1jQ-eY-6XoW=FrVRtKyBd2KFg@mail.gmail.com>
-Feedback-ID: 1358184:user:proton
+        Thu, 12 May 2022 08:39:32 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E95314CA12;
+        Thu, 12 May 2022 05:39:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=JDJLNxtzQmNv9ZM52zmyIFiZT5LJsi4aBhzMv6fNHmo=; b=jHvGd0Dw9Ky0KKv4tiTPpTLvRq
+        6Nrv82JqSu+/cX65x3e8B2HMj3jJ54HwHyKf2HyjZbsD0B+DrY8qtQDJ/SubeZAhKKc7Eo32KN4B/
+        UOSCwdM5E2d5cFG4EM7TcWJnPw19ZZqui8ZQulmJh+vrdA6LmwH10zKf9xRu5skS4lbE=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1np861-002Ryk-2D; Thu, 12 May 2022 14:39:09 +0200
+Date:   Thu, 12 May 2022 14:39:09 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Felix Fietkau <nbd@nbd.name>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: dsa: tag_mtk: add padding for tx packets
+Message-ID: <Ynz/7Wh6vDjR7ljs@lunn.ch>
+References: <20220510094014.68440-1-nbd@nbd.name>
+ <20220510123724.i2xqepc56z4eouh2@skbuf>
+ <5959946d-1d34-49b9-1abe-9f9299cc194e@nbd.name>
+ <20220510165233.yahsznxxb5yq6rai@skbuf>
+ <bc4bde22-c2d6-1ded-884a-69465b9d1dc7@nbd.name>
+ <20220510222101.od3n7gk3cofwhbks@skbuf>
+ <376b13ac-d90b-24e0-37ed-a96d8e5f80da@nbd.name>
+ <20220511093245.3266lqdze2b4odh5@skbuf>
+ <YnvJFmX+BRscJOtm@lunn.ch>
+ <0ef1e0c2-1623-070d-fbf5-e7f09fc199ca@nbd.name>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0ef1e0c2-1623-070d-fbf5-e7f09fc199ca@nbd.name>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,39 +67,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday, May 12th, 2022 at 14:30, Amir Goldstein <amir73il@gmail.com> w=
-rote:
+Hi Felix
 
-> Clients can also readlink("/proc/self/fd/<fd>") to get the path of the fi=
-le
-> and open it from its path (if path is accessible in their mount namespace=
-).
+Thanks for the additional testing.
 
-What the compositor does is:
+> I just ran some more tests, here's what I found:
+> The switch automatically pads all forwarded packets to 64 bytes.
+> When packets are forwarded from one external port to another, the padding is
+> all zero.
+> Only when packets are sent from a CPU port to an external port, the last 4
+> bytes contain garbage. The garbage bytes are different for every packet, and
+> I can't tell if it's leaking contents of previous packets or what else is in
+> there.
+> Based on that, I'm pretty sure that the hardware simply has a quirk where it
+> does not account for the special tag when generating its own padding
+> internally.
 
-- shm_open with O_RDWR
-- Write the kyeboard keymap
-- shm_open again the same file with O_RDONLY
-- shm_unlink
-- Send the O_RDONLY FD to clients
+This does not yet explain why your receiver is dropping the frame. As
+Vladimir pointed out, the contents of the pad should not matter.
 
-Thus, the file doesn't exist anymore when clients get the FD.
+Is it also getting the FCS wrong when it pads? That would cause the
+receiver to drop the frame.
 
-> Would the clients typically have write permission to those files?
-> Do they need to?
+Or do we have an issue in the receiver where it is looking at the
+contents of the pad?
 
-Compositors need to disallow clients from writing to the shared files.
-If a client gets write access to the shared file, they can corrupt the
-keyboard keymap (and other data) used by all other clients.
-
-> > intended behavior, what would be a good way to share a FD to another
-> > process without allowing it to write to the underlying file?
->
-> If wayland can use a read-only bind mount to the location of the files th=
-at it
-> needs to share, then re-open will get EROFS.
-
-Wayland just uses FD passing via Unix sockets to share memory. It
-doesn't (and can't) assume anything regarding the filesystem layout,
-because the clients might be running in a separate namespace with a
-completely different layout (e.g. Flatpak).
+	 Andrew

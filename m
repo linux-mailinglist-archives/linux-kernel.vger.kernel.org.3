@@ -2,83 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5BE5525170
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23ED8525179
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348319AbiELPk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 11:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33050 "EHLO
+        id S1356047AbiELPnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 11:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352406AbiELPky (ORCPT
+        with ESMTP id S229490AbiELPnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 11:40:54 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7E9193C1;
-        Thu, 12 May 2022 08:40:52 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id kq17so11049045ejb.4;
-        Thu, 12 May 2022 08:40:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UGcecE8BJ2FQvYEPbpshw8t/4GdCHo6m2IbbNvZmX18=;
-        b=YpP2HBriKH6aDqYSwuGrjGBgjvzePevL24cgOetsAZrrTa6lA3/NSsyOZFkfufw0lt
-         lJBFYiJw+y9js57P1EjojQUDGrQ1eKEIqYBFYriAc/TiIKkvwpOPevhyLHj0TzV3gjrS
-         HA08imVpavvzbT0kxF6Sg/HybSGDYvXvTNDZYU+krnbCrZmhcN3ba8Gv/9F8APLbp9NF
-         QKpeRYw8LN8BQ79b7yBceBvGkLFH5HkcgHpn17vt3z0Hsh3xQfC5onU4QQ50/NjzjYm8
-         pxfyDegPkWjW44FmHM97QE0avUGSFDiuELMvpINEJaH4w5rwMnc6VFiEILb14ZVOxH9N
-         XiVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UGcecE8BJ2FQvYEPbpshw8t/4GdCHo6m2IbbNvZmX18=;
-        b=c3bEwBuV7hQKNxg4+E/TnU3YVPoV2gKgaSEB8oH2m6f2f1O30l8rb1XolIX0+Fj2Y8
-         nF0Tl/a5pqwlhIumfu5WlIOToMnetY1NcPuGlErFV92/YBWJScNG0Dgnyfk2H4zc/Kxy
-         HtDL1ksbGEw5hRY2fdsr95uKgcghrOi2gYKl35YeONle68F4oXGU/YWyxEWadJxjSH9l
-         4hoVCqQYPDVdrFBp1gKURV/PJmRfdYFw6/q7EXGnUCrIzaylsoda1Ta4TSZfXCIAE3qD
-         tklWx2z8oMcEqZnrDAgd+6m2e0XIUA4m6heS9YtYtHM5/dFHJhi0nRm5d5U2eGM8840t
-         Fxwg==
-X-Gm-Message-State: AOAM531ZzlTwQLzTxFKGRTuHtqLKnoodnlXMhT46mlcxXc6bYUWXfiFj
-        y13r9MbMQsomFXy/rjWD6Z0L9aZuTv/pO7xA68w=
-X-Google-Smtp-Source: ABdhPJxGNhZlhRylD568whW5WraQanH+Vx3FH9d+5bihMvaQ1NHaargKlr/MxbBEjytQcdV3JECNwKU2N03kmrCkHts=
-X-Received: by 2002:a17:906:2e8d:b0:6f3:a30e:15c9 with SMTP id
- o13-20020a1709062e8d00b006f3a30e15c9mr441682eji.333.1652370051509; Thu, 12
- May 2022 08:40:51 -0700 (PDT)
+        Thu, 12 May 2022 11:43:04 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8659856231
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:43:01 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652370179;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rJMSQMAYOqjlOrVck6Lf44hI9r9y1hhTrqfXrgRag60=;
+        b=QBhnRH7Tzm0dBzZ6HfLY6zNXD//s9dyQbgL5e1jaXzPWiD9gSRgFkYXRfqjxsLmaWMY9bv
+        /dL93oCopwhZYNXCdlWriPW5m762gw5KvUmZmsvHstcYkmwyUqtXF1Dqp6VGvIWDBnRloR
+        n1GP0O/EuoDpWXbP+cBLe3ex/usG7X0g4K9S+XmCwDifTgw1k8M/CPwqzYjTFRvY8H1ncg
+        fpIMekaAHCyeVVNOrSdJLsH3HQBplMzinxcfScJQiew1lXe634mY8C/0Z3KHhYFu8dkKz/
+        nHIvyjfg6ImpEWdft28wbyUvrZHFULmj305Ajxbv3QKAGo17ZhuEtG9Cmg989g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652370179;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rJMSQMAYOqjlOrVck6Lf44hI9r9y1hhTrqfXrgRag60=;
+        b=lcmWtNHFzkfy+KNsR3x83IgX/lN1LP/vq/mkPgubu9aGgWC8sxJikIjATnmSSZlhXMEMzb
+        3u/K4K7ggNxJGEBw==
+To:     Peter Zijlstra <peterz@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFCv2 00/10] Linear Address Masking enabling
+In-Reply-To: <20220511064943.GR76023@worktop.programming.kicks-ass.net>
+References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
+ <20220511064943.GR76023@worktop.programming.kicks-ass.net>
+Date:   Thu, 12 May 2022 17:42:58 +0200
+Message-ID: <87pmkivjst.ffs@tglx>
 MIME-Version: 1.0
-References: <20220510130740.392653815@linuxfoundation.org> <YnuMDWIReGg6z0Al@debian>
-In-Reply-To: <YnuMDWIReGg6z0Al@debian>
-From:   Allen Pais <stable.kernel.dev@gmail.com>
-Date:   Thu, 12 May 2022 08:40:40 -0700
-Message-ID: <CAJq+SaC2kd1DRSjL=1t+PZrpTHrZmuOJ=Pfy7C4cBJHFnToN8A@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/135] 5.15.39-rc1 review
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > This is the start of the stable review cycle for the 5.15.39 release.
-> > There are 135 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
-> > Anything received after that time might be too late.
+On Wed, May 11 2022 at 08:49, Peter Zijlstra wrote:
+> On Wed, May 11, 2022 at 05:27:40AM +0300, Kirill A. Shutemov wrote:
+>> Hi all. Here's long overdue update on LAM enabling.
+>> 
+>> # Description #
+>> 
+>> Linear Address Masking[1] (LAM) modifies the checking that is applied to
+>> 64-bit linear addresses, allowing software to use of the untranslated
+>> address bits for metadata.
+>> 
+>> The patchset brings support for LAM for userspace addresses.
+>> 
+>> The most sensitive part of enabling is change in tlb.c, where CR3 flags
+>> get set. Please take a look that what I'm doing makes sense.
+>> 
+>> The feature competes for bits with 5-level paging: LAM_U48 makes it
+>> impossible to map anything about 47-bits. The patchset made these
+>> capability mutually exclusive: whatever used first wins. LAM_U57 can be
+>> combined with mappings above 47-bits.
 >
+> So aren't we creating a problem with LAM_U48 where programs relying on
+> it are of limited sustainability?
+>
+> Any such program simply *cannot* run on 5 level pagetables. Why do we
+> want to do this?
 
-Compiled and booted on x86 & arm64 systems. No dmesg regressions.
+More bits are better :)
 
-Tested-by: Allen Pais <apais@linux.microsoft.com>
+Seriously, I agree that restricting it to LAM57, which gives us 6 bits,
+makes a lot of sense _and_ makes the whole thing way simpler.
+
+So supporting both needs a truly good justification and a real world use
+case.
+
+Thanks,
+
+        tglx

@@ -2,112 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDCC252470E
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9449D524711
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351048AbiELHfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 03:35:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
+        id S1351059AbiELHgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 03:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237649AbiELHfV (ORCPT
+        with ESMTP id S1351066AbiELHgN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 03:35:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F22A13FD5E
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:35:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652340919;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+zsFil+xpvaoKN6a+jTI1zh8ma/r9ny4YN2UU7DGZeg=;
-        b=fllsoleq3ityokjbDJG60sOZc8GEBpybaiJMoIfOAuk9gQt4SqIs07YRbF3kygMKkReW0F
-        cphMFykVubLD9ChB3LkOED5eirtxTIlqmYhcwP7EbUDUcjQk/yOZQkZUOW104qnWD8RrhM
-        lQ4ssX5979ohc0fI5jm/CcIbuRSDYjs=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-108-MGcK5m8wOxSZdU_U5IS0Ag-1; Thu, 12 May 2022 03:35:17 -0400
-X-MC-Unique: MGcK5m8wOxSZdU_U5IS0Ag-1
-Received: by mail-wm1-f70.google.com with SMTP id 26-20020a05600c021a00b003940660c053so1302513wmi.2
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:35:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=+zsFil+xpvaoKN6a+jTI1zh8ma/r9ny4YN2UU7DGZeg=;
-        b=c/YXVYh5FIRsBjWHN+tnBjctsOhBSQiDbYo7/PzJSCisszbEOC3A6WtvqNY2saV0az
-         XM4BoU1oScA4XuvKeqooAXCDaBJ1QUCzz3VOxPGgH3/OuZ8+9Fwry86USkWzPlo/BHhA
-         29MKtPqzOEKm1r72RqhJDjxoMZ9evmZfjTA7COnpBgBh+EiUyXYB0WmxgoSDWgFhhB6k
-         d+Js0iq/fiCa/wwsiFBzeDigpak3NJq4WJDMGGctq9cZyPG+Nk+2oQ23YK6HinijOnXp
-         p36cJxmByV8TszIfJAJ4okHequ4pfwFtMaZ3TAAXyaI+7zqBwo6clvYRQ9zNdGle48G9
-         8zJw==
-X-Gm-Message-State: AOAM5334RqU7R8TzE9LrH5L8xzPla2+huEccv2vThjdh0PyQRtZw/mrg
-        YzKPkOn/XnoOaQ77ocZKD/rfej6vgK0gExX3Skxww49Sr2aNfRR99HXkvQaBzOrqh+JCEyi0uPO
-        CO12ZjQy8g2xPd9mq0g5/KK0Y
-X-Received: by 2002:a05:600c:a01:b0:395:c416:d82d with SMTP id z1-20020a05600c0a0100b00395c416d82dmr536194wmp.88.1652340916518;
-        Thu, 12 May 2022 00:35:16 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxxkHWUCG109V9dmEtXYn9ON6yKtJ2KB9KefS0ZtZFYwDhXPmkaHKz4k0WD7SYd3wb+b0eANA==
-X-Received: by 2002:a05:600c:a01:b0:395:c416:d82d with SMTP id z1-20020a05600c0a0100b00395c416d82dmr536163wmp.88.1652340916271;
-        Thu, 12 May 2022 00:35:16 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c701:d200:ee5d:1275:f171:136d? (p200300cbc701d200ee5d1275f171136d.dip0.t-ipconnect.de. [2003:cb:c701:d200:ee5d:1275:f171:136d])
-        by smtp.gmail.com with ESMTPSA id y12-20020adff6cc000000b0020c5253d920sm3973325wrp.108.2022.05.12.00.35.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 00:35:15 -0700 (PDT)
-Message-ID: <f9a45337-102a-6787-4cef-3ef799490f01@redhat.com>
-Date:   Thu, 12 May 2022 09:35:14 +0200
+        Thu, 12 May 2022 03:36:13 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5AB39FF0;
+        Thu, 12 May 2022 00:36:09 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KzNqp1SzYz4xLb;
+        Thu, 12 May 2022 17:36:06 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1652340967;
+        bh=5EuEaOPBOgTgQeLLGN9nkQYemAL9SDnOk2IHw2qGTj0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=OWma9deJBEfxE1EAijxBhozMREsSw6QEKSrSwCqqzY8+hi60VQfIp1+GTvPg44U47
+         WracVc12aEJdCGrrvqs2Ak59FGuvYFF8RROlKRq5dYj4eZPpkUaHP0S2jAK5AVUlni
+         7VTFB1YrC31keOmLYy8iqa9SZzXsetA56C5rxZgCY5tPP7itRvU6mVZfezmAt8yTXH
+         hk2cNaDXgeYTRD7/4PDhXYSUUECOfYJYyewprVKtqWfqak1zmLG1Ooksme7NM4bS10
+         czSCayMc/RCphRUYUFgXMDGETg8TBtaHd/Q4ws8wg6s7GsKg/Xf04wvbPe92vlRjJr
+         72K412eWqhU/w==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        fnovak@us.ibm.com, linuxppc-dev@ozlabs.org,
+        christophe.leroy@csgroup.eu
+Subject: Re: request_module DoS
+In-Reply-To: <Ynvl6wCQRFdYsHar@bombadil.infradead.org>
+References: <YnXiuhdZ49pKL/dK@gondor.apana.org.au>
+ <874k1zt0ec.fsf@mpe.ellerman.id.au>
+ <Ynk9j6DQmVGAA3Jf@bombadil.infradead.org>
+ <Ynvl6wCQRFdYsHar@bombadil.infradead.org>
+Date:   Thu, 12 May 2022 17:36:02 +1000
+Message-ID: <871qwz8aot.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v10 1/4] mm: hugetlb_vmemmap: disable
- hugetlb_optimize_vmemmap when struct page crosses page boundaries
-Content-Language: en-US
-To:     Muchun Song <songmuchun@bytedance.com>, corbet@lwn.net,
-        mike.kravetz@oracle.com, akpm@linux-foundation.org,
-        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        osalvador@suse.de, masahiroy@kernel.org
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, duanxiongchun@bytedance.com, smuchun@gmail.com
-References: <20220509062703.64249-1-songmuchun@bytedance.com>
- <20220509062703.64249-2-songmuchun@bytedance.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220509062703.64249-2-songmuchun@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.05.22 08:27, Muchun Song wrote:
-> If the size of "struct page" is not the power of two but with the feature
-> of minimizing overhead of struct page associated with each HugeTLB is
-> enabled, then the vmemmap pages of HugeTLB will be corrupted after
-> remapping (panic is about to happen in theory).  But this only exists when
-> !CONFIG_MEMCG && !CONFIG_SLUB on x86_64.  However, it is not a conventional
-> configuration nowadays.  So it is not a real word issue, just the result
-> of a code review.
-> 
-> But we cannot prevent anyone from configuring that combined configure.
-> This hugetlb_optimize_vmemmap should be disable in this case to fix this
-> issue.
-> 
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+Luis Chamberlain <mcgrof@kernel.org> writes:
+> On Mon, May 09, 2022 at 09:13:03AM -0700, Luis Chamberlain wrote:
+>> On Mon, May 09, 2022 at 09:23:39PM +1000, Michael Ellerman wrote:
+>> > Herbert Xu <herbert@gondor.apana.org.au> writes:
+>> > > Hi:
+>> > >
+>> > > There are some code paths in the kernel where you can reliably
+>> > > trigger a request_module of a non-existant module.  For example,
+>> > > if you attempt to load a non-existent crypto algorithm, or create
+>> > > a socket of a non-existent network family, it will result in a
+>> > > request_module call that is guaranteed to fail.
+>> > >
+>> > > As user-space can do this repeatedly, it can quickly overwhelm
+>> > > the concurrency limit in kmod.  This in itself is expected,
+>> > > however, at least on some platforms this appears to result in
+>> > > a live-lock.  Here is an example triggered by stress-ng on ppc64:
+>> > >
+>> > > [  529.853264] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128l, throttling...
+>> > ...
+>> > > [  580.414590] __request_module: 25 callbacks suppressed
+>> > > [  580.414597] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
+>> > > [  580.423082] watchdog: CPU 784 self-detected hard LOCKUP @ plpar_hcall_norets_notrace+0x18/0x2c
+>> > > [  580.423097] watchdog: CPU 784 TB:1297691958559475, last heartbeat TB:1297686321743840 (11009ms ago)
+>> > > [  580.423099] Modules linked in: cast6_generic cast5_generic cast_common camellia_generic blowfish_generic blowfish_common tun nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 rfkill bonding tls ip_set nf_tables nfnetlink pseries_rng binfmt_misc drm drm_panel_orientation_quirks xfs libcrc32c sd_mod t10_pi sg ibmvscsi ibmveth scsi_transport_srp vmx_crypto dm_mirror dm_region_hash dm_log dm_mod fuse
+>> > > [  580.423136] CPU: 784 PID: 77071 Comm: stress-ng Kdump: loaded Not tainted 5.14.0-55.el9.ppc64le #1
+>> > > [  580.423139] NIP:  c0000000000f8ff4 LR: c0000000001f7c38 CTR: 0000000000000000
+>> > > [  580.423140] REGS: c0000043fdd7bd60 TRAP: 0900   Not tainted  (5.14.0-55.el9.ppc64le)
+>> > > [  580.423142] MSR:  800000000280b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE>  CR: 28008202  XER: 20040000
+>> > > [  580.423148] CFAR: 0000000000000c00 IRQMASK: 1
+>> > >                GPR00: 0000000028008202 c0000044c46b3850 c000000002a46f00 0000000000000000
+>> > >                GPR04: ffffffffffffffff 0000000000000000 0000000000000010 c000000002a83060
+>> > >                GPR08: 0000000000000000 0000000000000001 0000000000000001 0000000000000000
+>> > >                GPR12: c0000000001b9530 c0000043ffe16700 0000000200000117 0000000010185ea8
+>> > >                GPR16: 0000000010212150 0000000010186198 00000000101863a0 000000001021b3c0
+>> > >                GPR20: 0000000000000001 0000000000000000 0000000000000001 00000000000000ff
+>> > >                GPR24: c0000043f4a00e14 c0000043fafe0e00 000000000c440000 0000000000000000
+>> > >                GPR28: c0000043f4a00e00 c0000043f4a00e00 c0000000021e0e00 c000000002561aa0
+>> > > [  580.423166] NIP [c0000000000f8ff4] plpar_hcall_norets_notrace+0x18/0x2c
+>> > > [  580.423168] LR [c0000000001f7c38] __pv_queued_spin_lock_slowpath+0x528/0x530
+>> > > [  580.423173] Call Trace:
+>> > > [  580.423174] [c0000044c46b3850] [0000000100006b60] 0x100006b60 (unreliable)
+>> > > [  580.423177] [c0000044c46b3910] [c000000000ea6948] _raw_spin_lock_irqsave+0xa8/0xc0
+>> > > [  580.423182] [c0000044c46b3940] [c0000000001dd7c0] prepare_to_wait_event+0x40/0x200
+>> > > [  580.423185] [c0000044c46b39a0] [c00000000019e9e0] __request_module+0x320/0x510
+>> > > [  580.423188] [c0000044c46b3ac0] [c0000000006f1a14] crypto_alg_mod_lookup+0x1e4/0x2e0
+>> > > [  580.423192] [c0000044c46b3b60] [c0000000006f2178] crypto_alloc_tfm_node+0xa8/0x1a0
+>> > > [  580.423194] [c0000044c46b3be0] [c0000000006f84f8] crypto_alloc_aead+0x38/0x50
+>> > > [  580.423196] [c0000044c46b3c00] [c00000000072cba0] aead_bind+0x70/0x140
+>> > > [  580.423199] [c0000044c46b3c40] [c000000000727824] alg_bind+0xb4/0x210
+>> > > [  580.423201] [c0000044c46b3cc0] [c000000000bc2ad4] __sys_bind+0x114/0x160
+>> > > [  580.423205] [c0000044c46b3d90] [c000000000bc2b48] sys_bind+0x28/0x40
+>> > > [  580.423207] [c0000044c46b3db0] [c000000000030880] system_call_exception+0x160/0x300
+>> > > [  580.423209] [c0000044c46b3e10] [c00000000000c168] system_call_vectored_common+0xe8/0x278
+>> > > [  580.423213] --- interrupt: 3000 at 0x7fff9b824464
+>> > > [  580.423214] NIP:  00007fff9b824464 LR: 0000000000000000 CTR: 0000000000000000
+>> > > [  580.423215] REGS: c0000044c46b3e80 TRAP: 3000   Not tainted  (5.14.0-55.el9.ppc64le)
+>> > > [  580.423216] MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 42004802  XER: 00000000
+>> > > [  580.423221] IRQMASK: 0
+>> > >                GPR00: 0000000000000147 00007fffdcff2780 00007fff9b917100 0000000000000004
+>> > >                GPR04: 00007fffdcff27e0 0000000000000058 0000000000000000 0000000000000000
+>> > >                GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
+>> > >                GPR12: 0000000000000000 00007fff9bc9efe0 0000000200000117 0000000010185ea8
+>> > >                GPR16: 0000000010212150 0000000010186198 00000000101863a0 000000001021b3c0
+>> > >                GPR20: 0000000000000004 00007fffdcff2a00 0000000300000117 00000000101862b8
+>> > >                GPR24: 0000000000000004 0000000046401570 0000000046401120 0000000046404650
+>> > >                GPR28: 0000000000000020 0000000000000020 0000000000000060 0000000046404bf0
+>> > > [  580.423236] NIP [00007fff9b824464] 0x7fff9b824464
+>> > > [  580.423237] LR [0000000000000000] 0x0
+>> > > [  580.423238] --- interrupt: 3000
+>> > > [  580.423239] Instruction dump:
+>> > > [  580.423241] e8690000 7c0803a6 3884fff8 78630100 78840020 4bfffeb8 3c4c0295 3842df24
+>> > > [  580.423244] 7c421378 7c000026 90010008 44000022 <38800000> 988d0931 80010008 7c0ff120
+>> > >
+>> > > Would it be possible to modify kmod so that in such cases that
+>> > > request_module calls fail more quickly rather than repeatedly
+>> > > obtaining a spinlock that appears to be under high contention?
+>> >
+>> > If you run stress-ng with a timeout does the system eventually recover?
+>>
+>> OK the respective stress-ng test should be something like:
+>>
+>> ./stress-ng --af-alg 8192
+>>
+>> I had left this running overnight on x86_64 without issues:
+>>
+>> sudo ./tools/testing/selftests/kmod/kmod.sh -t 0009
+>>
+>> Going to leave the above stress-ng call running in a loop to see
+>> if I can reproduce the live lock on x86_64.
+>
+> The following loop has been running on 5.18.0-rc5-next-20220506 since
+> May 9 without any issues on x86_64:
+>
+> while true; do sudo ./stress-ng --af-alg 8192; done
 
-Acked-by: David Hildenbrand <david@redhat.com>
+I ran the above on a ppc64le system here, no issues. But it's only a 32
+CPU machine.
 
+> Can someone try this on ppc64le system? At this point I am not convinced
+> this issue is generic.
 
--- 
-Thanks,
+Does your x86 system have at least 784 CPUs?
 
-David / dhildenb
+I don't know where the original report came from, but the trace shows
+"CPU 784", which would usually indicate a system with at least that many
+CPUs.
 
+I would hope we can handle that many CPUs banging on a spin lock without
+throwing traces, but maybe not. It could also be that the system is
+under load and the hypervisor has scheduled us off for too long.
+
+cheers

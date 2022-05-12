@@ -2,73 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2565244EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 07:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB5AB524509
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 07:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349923AbiELFal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 01:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42238 "EHLO
+        id S1349937AbiELFeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 01:34:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231895AbiELFad (ORCPT
+        with ESMTP id S237783AbiELFeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 01:30:33 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D650C2229EB;
-        Wed, 11 May 2022 22:30:29 -0700 (PDT)
-Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id D6E958027;
-        Thu, 12 May 2022 05:26:52 +0000 (UTC)
-From:   Tony Lindgren <tony@atomide.com>
-To:     linux-omap@vger.kernel.org
-Cc:     Dave Gerlach <d-gerlach@ti.com>, Faiz Abbas <faiz_abbas@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Keerthy <j-keerthy@ti.com>, Kevin Hilman <khilman@baylibre.com>,
-        Nishanth Menon <nm@ti.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Romain Naour <romain.naour@smile.fr>
-Subject: [PATCH] bus: ti-sysc: Fix warnings for unbind for serial
-Date:   Thu, 12 May 2022 08:30:21 +0300
-Message-Id: <20220512053021.61650-1-tony@atomide.com>
-X-Mailer: git-send-email 2.36.1
+        Thu, 12 May 2022 01:34:07 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577C51FB2CC;
+        Wed, 11 May 2022 22:34:06 -0700 (PDT)
+X-UUID: 25d8684258d9454790b221d62adb0dc5-20220512
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:970eb9bd-758d-4d25-bf98-8c9c24501934,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:bedd27f6-13a6-4067-b017-3b2864319134,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 25d8684258d9454790b221d62adb0dc5-20220512
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1000592384; Thu, 12 May 2022 13:34:01 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 12 May 2022 13:34:00 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 12 May 2022 13:33:59 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 12 May 2022 13:33:59 +0800
+Message-ID: <af82434adea0b648d74ed5ffd123e0faaaac6508.camel@mediatek.com>
+Subject: Re: [PATCH v6 00/10] cpufreq: mediatek: Cleanup and support MT8183
+ and MT8186
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     <rafael@kernel.org>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
+        <roger.lu@mediatek.com>, <hsinyi@google.com>,
+        <khilman@baylibre.com>, <angelogioacchino.delregno@collabora.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 12 May 2022 13:33:59 +0800
+In-Reply-To: <20220512052732.iqphgpveoyrqjlqg@vireshk-i7>
+References: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
+         <20220506042004.hqzpb66shak4y7rz@vireshk-i7>
+         <86851bd03128cc61082d516ebff929d3637063cb.camel@mediatek.com>
+         <20220512052732.iqphgpveoyrqjlqg@vireshk-i7>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We can get "failed to disable" clock_unprepare warnings on unbind at least
-for the serial console device if the unbind is done before the device has
-been idled.
+On Thu, 2022-05-12 at 10:57 +0530, Viresh Kumar wrote:
+> On 06-05-22, 14:32, Rex-BC Chen wrote:
+> > As for rest patch:
+> > The cci series [1] is still under reviewing and it depends on
+> > chanwoo's
+> > series [2].
+> > Therefore, I think it won't be so quick to be acked for these
+> > patches
+> > in my series.
+> 
+> I have applied 1, 6-7 now. I hope it is safe to apply them ? What
+> about other
+> three, can you get them acked now ?
+> 
 
-As some devices are using deferred idle, we must check the status for
-pending idle work to idle the device.
+Hello Viresh,
 
-Cc: Romain Naour <romain.naour@smile.fr>
-Fixes: 76f0f772e469 ("bus: ti-sysc: Improve handling for no-reset-on-init and no-idle-on-init")
-Signed-off-by: Tony Lindgren <tony@atomide.com>
----
- drivers/bus/ti-sysc.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Thanks for your help!
+Matthias is not the member of mediatek, so I think we still need his
+feedback for these three patches.
 
-diff --git a/drivers/bus/ti-sysc.c b/drivers/bus/ti-sysc.c
---- a/drivers/bus/ti-sysc.c
-+++ b/drivers/bus/ti-sysc.c
-@@ -3395,7 +3395,9 @@ static int sysc_remove(struct platform_device *pdev)
- 	struct sysc *ddata = platform_get_drvdata(pdev);
- 	int error;
- 
--	cancel_delayed_work_sync(&ddata->idle_work);
-+	/* Device can still be enabled, see deferred idle quirk in probe */
-+	if (cancel_delayed_work_sync(&ddata->idle_work))
-+		ti_sysc_idle(&ddata->idle_work.work);
- 
- 	error = pm_runtime_resume_and_get(ddata->dev);
- 	if (error < 0) {
--- 
-2.36.1
+BRs,
+Rex
+

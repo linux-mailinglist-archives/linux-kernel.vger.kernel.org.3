@@ -2,194 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDB1F52547C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 20:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C3C525481
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 20:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357492AbiELSKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 14:10:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
+        id S1352415AbiELSOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 14:14:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354531AbiELSKC (ORCPT
+        with ESMTP id S241392AbiELSN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 14:10:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5691B2689C6;
-        Thu, 12 May 2022 11:10:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D458D61682;
-        Thu, 12 May 2022 18:09:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72353C385B8;
-        Thu, 12 May 2022 18:09:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652378999;
-        bh=IPa84a0ExaTFb0Q/aAwP7vM1wEznpiYTW9cY/k40XB8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kgzFv+Yzg6w3p9oWbiNYgbRVrFr+a2wBBfrHCpr0gEKWvnEJYY2DbCOyq5MKneTp6
-         /1D5WZQCabvBh2Fl861WE2Pz04CCWmAlyCUZ9hRXFmd+MZ5FKXps08bdljNJ6Y6GsE
-         EAQl1O4Sh2GGRkGSPfDRsstUqaUgtyPCGdl3f+NWmow9OLv+vsVIpxBP4l32xWnClt
-         WQGQou2JxgtiEALq4/iQvfahVR/txrCSxiYOhJsbon2j6A8i+kXlDPfgf8beDZ0D4i
-         uKLT37oHaghKsaa/F+jfPjdBM0FRnLZisTOQ2fuUVpYa8/lx38IhiwASv2go6z44Wt
-         eRL4GYDm0vAFQ==
-Date:   Thu, 12 May 2022 21:11:37 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
-        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
-        x86@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
-        cedric.xing@intel.com, haitao.huang@intel.com,
-        mark.shanahan@intel.com, vijay.dhanraj@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V5 00/31] x86/sgx and selftests/sgx: Support SGX2
-Message-ID: <Yn1N2chUNs9EcnM3@iki.fi>
-References: <cover.1652137848.git.reinette.chatre@intel.com>
- <YnrllJ2OqmcqLUuv@kernel.org>
- <395657d1-b040-89e7-046f-3cbd358ed7c1@intel.com>
+        Thu, 12 May 2022 14:13:59 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343BE20D577
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 11:13:58 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id g28so11239365ybj.10
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 11:13:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cfuve+c5Cwa7UJ0vQNcacC+/40JGpfLbjA8g3t9eIqQ=;
+        b=NZHWcKJjdxGhGeikxnkOyvDffaXBl4vKuicdYIsXaTBG2teHtca2Fd1CjL4dr0p4r/
+         SvpxexJECOuPNbkgeXDSwdkXpodxbGttPU3Kaci3pcsdLf2jEwK61kGImtNXRXYPgqU3
+         WNUD+ic2R0CXvMB+k4ApzwMxZsPVGQ+uaEWtCAsgw40To+8srzWnDv3luZ+MYVEXJiAS
+         VtQrPHcUd0rrtZgelUdW8hafe8DlNNz9fEy1aKh5rJWDNceP9RwH/LBq2pLButUTjICb
+         WupTbkYqQRJdPAfNOjruetejDsm8NzIcHVZcPBy+3V7amKui0xMwNj4JxDG8TqcegZvp
+         Igiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cfuve+c5Cwa7UJ0vQNcacC+/40JGpfLbjA8g3t9eIqQ=;
+        b=ZqBC5KLUaMQ2ObGte7w/w75mADNT51KzPd2IeEF9ZuXpY+nGNyiVltAIudoLq+HzpY
+         DkPzPQdnhfjA29zb3yLi3JRgoBQ+ZclZhaN3gAJpdHnFVR1F/ECUH0ttGVagiHuCozye
+         Q/LLuakCvp4tTw5weuzdO1gLPb+Ez9y01ii7TxFtI6OWT4soTuoOD9MW/1wrzRdXe2Ni
+         H5XSuUYlcUYq06UNCs1Ns4Gveiwt39kdfV7/mGEwwQUnKDdqz+vb2lB8PYJwS+z6a86+
+         bKlunS9Auh2wV+rg/obbKadZEyXCvkFEhRCqWo3713JhbHyA6auPBoUB8d5MQwuVniOJ
+         LoHA==
+X-Gm-Message-State: AOAM53112dpT6WsUVwvIkjYoeetDybPaTL9kLudpq6nNEn+LDAabZ2pf
+        rkxU00GDjK6ucJpNC+LaktDgBiN6G304kM0H76NTVQ==
+X-Google-Smtp-Source: ABdhPJz5a/C03+Ye4a57gqvTMVgbBIihW4avWA5q3KyzdtF9EIDzbqQSeka3lH0aMt0bRVYWn7CcyUoK6mImJaYRlsU=
+X-Received: by 2002:a25:3157:0:b0:649:b216:bb4e with SMTP id
+ x84-20020a253157000000b00649b216bb4emr1062269ybx.387.1652379237164; Thu, 12
+ May 2022 11:13:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <395657d1-b040-89e7-046f-3cbd358ed7c1@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <93323bba-476e-f821-045c-9fe942143da9@gmail.com>
+In-Reply-To: <93323bba-476e-f821-045c-9fe942143da9@gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 12 May 2022 11:13:46 -0700
+Message-ID: <CANn89iKjt1wpGk1dqqnYYx3r9UzEc3rwNtvBQ1O2dVToY_7rBQ@mail.gmail.com>
+Subject: Re: BUG: TCP timewait sockets survive across namespace creation in net-next
+To:     Leonard Crestez <cdleonard@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 11:47:31AM -0700, Reinette Chatre wrote:
-> Hi Jarkko,
-> 
-> On 5/10/2022 3:22 PM, Jarkko Sakkinen wrote:
-> > If there is any patch that does not have my reviewed-by, please put it
-> > there. I was totally happy with v4 already. I went through these, and
-> > did not see anything worth of complaining about.
-> > 
-> > Great job, thank you for doing this.
-> > 
-> > I can also add my tag separely to each patch, which have not have it on
-> > request if that makes things easier in any possible way on request.
-> 
-> Thank you very much. I do appreciate all the feedback and testing.
-> 
-> All patches in this series have some tag from you, a few have "Acked-by"
-> instead of "Reviewed-by".
-> 
-> Patch 20/31 "x86/sgx: Free up EPC pages directly to support large
-> page ranges" is the only x86/sgx patch that has an "Acked-by" from you
-> instead of a "Reviewed-by". All selftests/sgx patches have an "Acked-by"
-> from you.
-> 
-> Here is a summary of your tags if you would like to make changes:
-> 
-> [PATCH V5 01/31] x86/sgx: Add short descriptions to ENCLS wrappers
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 02/31] x86/sgx: Add wrapper for SGX2 EMODPR function
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 03/31] x86/sgx: Add wrapper for SGX2 EMODT function
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 04/31] x86/sgx: Add wrapper for SGX2 EAUG function
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 05/31] x86/sgx: Support loading enclave page without VMA
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 06/31] x86/sgx: Export sgx_encl_ewb_cpumask()
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 07/31] x86/sgx: Rename sgx_encl_ewb_cpumask() as sgx_encl_cpumask()
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 08/31] x86/sgx: Move PTE zap code to new sgx_zap_enclave_ptes()
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 09/31] x86/sgx: Make sgx_ipi_cb() available internally
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 10/31] x86/sgx: Create utility to validate user provided offset and length
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 11/31] x86/sgx: Keep record of SGX page type
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 12/31] x86/sgx: Export sgx_encl_{grow,shrink}()
-> 	Suggested-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 13/31] x86/sgx: Export sgx_encl_page_alloc()
-> 	Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 14/31] x86/sgx: Support VA page allocation without reclaiming
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 15/31] x86/sgx: Support restricting of enclave page permissions
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 	Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 16/31] x86/sgx: Support adding of pages to an initialized enclave
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 	Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 17/31] x86/sgx: Tighten accessible memory range after enclave initialization
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 18/31] x86/sgx: Support modifying SGX page type
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 	Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 19/31] x86/sgx: Support complete page removal
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 	Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 20/31] x86/sgx: Free up EPC pages directly to support large page ranges
-> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 21/31] Documentation/x86: Introduce enclave runtime management section
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 22/31] selftests/sgx: Add test for EPCM permission changes
-> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 23/31] selftests/sgx: Add test for TCS page permission changes
-> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 24/31] selftests/sgx: Test two different SGX2 EAUG flows
-> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 25/31] selftests/sgx: Introduce dynamic entry point
-> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 26/31] selftests/sgx: Introduce TCS initialization enclave operation
-> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 27/31] selftests/sgx: Test complete changing of page type flow
-> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 28/31] selftests/sgx: Test faulty enclave behavior
-> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 29/31] selftests/sgx: Test invalid access to removed enclave page
-> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 30/31] selftests/sgx: Test reclaiming of untouched page
-> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 31/31] selftests/sgx: Page removal stress test
-> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>	
-> 
-> 
-> Reinette
+On Thu, May 12, 2022 at 11:01 AM Leonard Crestez <cdleonard@gmail.com> wrote:
+>
+> Hello,
+>
+> It appears that in recent net-next versions it is possible for sockets
+> in the timewait state to survive across namespace add/del. Timewait
+> sockets are inserted into a global hash and only the sock_net value is
+> compared when they are enumerated from interfaces like /proc/net/tcp and
+> inet_diag. Old TW sockets are not cleared after namespace delete and
+> namespaces are allocated from a slab and thus their pointers get reused
+> a lot, when that happens timewait sockets from an old namespace will
+> show up in the new one.
+>
+> This can be reproduced by establishing a TCP connection over a veth pair
+> between two namespaces, closing and then recreating those namespaces.
+> Old timewait sockets will be visible and it happens quite reliably,
+> often on the first iteration. I can try to provide a script for this.
+>
+> I can't point to specific bugs outside of tests that explicitly
+> enumerate timewait sockets but letting sk_net be a dangling pointer
+> seems very dangerous. It also violates the idea of network namespaces
+> being independent and isolated.
+>
+> This does not happen in 5.17, I bisected this behavior to commit
+> 0dad4087a86a ("tcp/dccp: get rid of inet_twsk_purge()")
+>
 
-It looks good. And yeah, I've been running different versions of this patch
-set since April with zero issues, about a month, in our platform. No high
-doubts that anything would wrong that could not be later fixed, if problems
-arise.
+Thanks for the report.
 
-BR, Jarkko
+I guess we will need to store the (struct net)->net_cookie to
+disambiguate the case
+where a new 'struct net' is reusing the same storage than an old one.

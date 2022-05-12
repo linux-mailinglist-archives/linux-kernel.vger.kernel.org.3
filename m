@@ -2,59 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2A2524243
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 04:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D904F524255
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 04:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235064AbiELCBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 May 2022 22:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
+        id S234973AbiELCIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 May 2022 22:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234264AbiELCBK (ORCPT
+        with ESMTP id S237383AbiELCIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 May 2022 22:01:10 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1166A326E2
-        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 19:01:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652320868; x=1683856868;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9a55DOVy8CO3HZ2treHs2bO09ZwYZN7EYj3vy0S3IuU=;
-  b=fgSFiH0LeDWw5ygWP+2z00r/AqrtPxu4Hx1kdzKr7K/sKu92VvFASAmZ
-   BR269wzya52cYNPSfP3ri4lFsOh0+DBWtUSg1qGLYsbHImdAxq3cJ1HLq
-   DRF/lq4ajZa6odeazJQzgp8XFIvSQdVsGmk+ywSntGk0uWyGl4IMfmlli
-   4988/tMT706tdF9XbPajiMqpi1XInNfaXzllyOIZjt0/fJw5CxW0A3QdL
-   SRzZLkJhXARC5rLPzznpQ9/+Nk5EI//QBPVr6UOFIUdSgf4cf1fyswO1c
-   /aE3/wCoivY4kQXaMntmXBZgcdbSXvlZtAqH2vgXh5xZ4X318ezwBeiHF
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="250389659"
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="250389659"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 19:01:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="814721000"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 11 May 2022 19:01:06 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1noy8X-000JpS-Jc;
-        Thu, 12 May 2022 02:01:05 +0000
-Date:   Thu, 12 May 2022 10:00:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <groeck@chromium.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Luigi Semenzato <semenzato@chromium.org>
-Subject: [jsarha:topic/cros-sof-v4.19 949/6555] mm/low-mem-notify.c:87:16:
- sparse: sparse: incorrect type in return expression (different base types)
-Message-ID: <202205120909.GVWyvFOU-lkp@intel.com>
+        Wed, 11 May 2022 22:08:17 -0400
+Received: from esa4.hc1455-7.c3s2.iphmx.com (esa4.hc1455-7.c3s2.iphmx.com [68.232.139.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80846D85E
+        for <linux-kernel@vger.kernel.org>; Wed, 11 May 2022 19:08:15 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="72336034"
+X-IronPort-AV: E=Sophos;i="5.91,218,1647270000"; 
+   d="scan'208";a="72336034"
+Received: from unknown (HELO yto-r4.gw.nic.fujitsu.com) ([218.44.52.220])
+  by esa4.hc1455-7.c3s2.iphmx.com with ESMTP; 12 May 2022 11:08:13 +0900
+Received: from yto-m2.gw.nic.fujitsu.com (yto-nat-yto-m2.gw.nic.fujitsu.com [192.168.83.65])
+        by yto-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id 7B5E0D3EB0
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 11:08:12 +0900 (JST)
+Received: from m3002.s.css.fujitsu.com (msm3.b.css.fujitsu.com [10.128.233.104])
+        by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id AF517F28A1
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 11:08:11 +0900 (JST)
+Received: from localhost.localdomain (unknown [10.125.5.220])
+        by m3002.s.css.fujitsu.com (Postfix) with ESMTP id 7629E200B383;
+        Thu, 12 May 2022 11:08:11 +0900 (JST)
+From:   Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
+To:     linmiaohe@huawei.com
+Cc:     akpm@linux-foundation.org, aquini@redhat.com, ddutile@redhat.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        mgorman@techsingularity.net, vvghjk1234@gmail.com,
+        yamamoto.rei@jp.fujitsu.com
+Subject: Re: [PATCH] mm, compaction: fast_find_migrateblock() should return pfn in the target zone
+Date:   Thu, 12 May 2022 10:47:36 +0900
+Message-Id: <20220512014736.16376-1-yamamoto.rei@jp.fujitsu.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <07e0ceb8-a637-b011-bbf6-ba760a0b12e4@huawei.com>
+References: <07e0ceb8-a637-b011-bbf6-ba760a0b12e4@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,56 +53,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jsarha/linux topic/cros-sof-v4.19
-head:   d7a3e91d8d16d1ef8653deec5a1fffc4de034a0c
-commit: b7ec7fb624dfc8d07e722cf2e0e72ff82ebaec7b [949/6555] CHROMIUM: low-mem: Fix return type of low_mem_notify_poll
-config: i386-randconfig-s001-20220509 (https://download.01.org/0day-ci/archive/20220512/202205120909.GVWyvFOU-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/jsarha/linux/commit/b7ec7fb624dfc8d07e722cf2e0e72ff82ebaec7b
-        git remote add jsarha https://github.com/jsarha/linux
-        git fetch --no-tags jsarha topic/cros-sof-v4.19
-        git checkout b7ec7fb624dfc8d07e722cf2e0e72ff82ebaec7b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
+On Wed, 11 May 2022 17:26:16 Miaohe Lin wrote:
+> On 2022/5/11 15:07, Rei Yamamoto wrote:
+>> On Wed, 11 May 2022 14:25:34 Miaohe Lin wrote:
+>>> On 2022/5/11 12:43, Rei Yamamoto wrote:
+>>>> Prevent returning a pfn outside the target zone in case that not
+>>>> aligned with pageblock boundary.
+>>>> Otherwise isolate_migratepages_block() would handle pages not in
+>>>> the target zone.
+>>>>
+>>>
+>>> IIUC, the sole caller isolate_migratepages will ensure the pfn won't outside
+>>> the target zone. So the below code change might not be necessary. Or am I miss
+>>> something ?
+>> 
+>> While block_start_pfn is ensured, this variable is not used as the argument for 
+>> isolate_migratepages_block():
+>>   -----
+>>   static isolate_migrate_t isolate_migratepages(struct compact_control *cc)
+>>   {
+>>   :
+>>           low_pfn = fast_find_migrateblock(cc);
+>>           block_start_pfn = pageblock_start_pfn(low_pfn);
+>>           if (block_start_pfn < cc->zone->zone_start_pfn)
+>>                   block_start_pfn = cc->zone->zone_start_pfn;  <--- block_start_pfn is ensured not outside 
+>>                                                                     the target zone
+>>   :
+>>           block_end_pfn = pageblock_end_pfn(low_pfn);
+>>   :
+>>           for (; block_end_pfn <= cc->free_pfn;
+>>                           fast_find_block = false,
+>>                           cc->migrate_pfn = low_pfn = block_end_pfn,
+>>                           block_start_pfn = block_end_pfn,
+>>                           block_end_pfn += pageblock_nr_pages) {
+>>   :
+>>                   if (isolate_migratepages_block(cc, low_pfn, block_end_pfn,  <--- low_pfn is passed as 
+>>                                                                                    the argument
+>
+> Sorry, I think you're right. And could you please add the runtime effect of this issue?
+>
+> Anyway, this patch looks good to me now. Thanks!
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thank you for your review.
+The runtime effect is that compaction become unintended behavior.
+For example, pages not in the target zone are added to cc->migratepages list in isolate_migratepages_block().
+As a result, pages migrate between nodes unintentionally.
 
-
-sparse warnings: (new ones prefixed by >>)
->> mm/low-mem-notify.c:87:16: sparse: sparse: incorrect type in return expression (different base types) @@     expected restricted __poll_t @@     got unsigned int [assigned] ret @@
-   mm/low-mem-notify.c:87:16: sparse:     expected restricted __poll_t
-   mm/low-mem-notify.c:87:16: sparse:     got unsigned int [assigned] ret
-
-vim +87 mm/low-mem-notify.c
-
-89587e9d1c30b5 Luigi Semenzato 2014-04-03  74  
-b7ec7fb624dfc8 Guenter Roeck   2018-11-01  75  static __poll_t low_mem_notify_poll(struct file *file, poll_table *wait)
-89587e9d1c30b5 Luigi Semenzato 2014-04-03  76  {
-89587e9d1c30b5 Luigi Semenzato 2014-04-03  77  	unsigned int ret = 0;
-89587e9d1c30b5 Luigi Semenzato 2014-04-03  78  
-89587e9d1c30b5 Luigi Semenzato 2014-04-03  79  	/* Update state to reflect any recent freeing. */
-89587e9d1c30b5 Luigi Semenzato 2014-04-03  80  	atomic_set(&low_mem_state, is_low_mem_situation());
-89587e9d1c30b5 Luigi Semenzato 2014-04-03  81  
-89587e9d1c30b5 Luigi Semenzato 2014-04-03  82  	poll_wait(file, &low_mem_wait, wait);
-89587e9d1c30b5 Luigi Semenzato 2014-04-03  83  
-1fa6b9516423e6 Luigi Semenzato 2012-04-18  84  	if (low_mem_margin_enabled && atomic_read(&low_mem_state) != 0)
-89587e9d1c30b5 Luigi Semenzato 2014-04-03  85  		ret = POLLIN;
-89587e9d1c30b5 Luigi Semenzato 2014-04-03  86  
-89587e9d1c30b5 Luigi Semenzato 2014-04-03 @87  	return ret;
-89587e9d1c30b5 Luigi Semenzato 2014-04-03  88  }
-89587e9d1c30b5 Luigi Semenzato 2014-04-03  89  
-
-:::::: The code at line 87 was first introduced by commit
-:::::: 89587e9d1c30b5f908d4bfe5f2ee0b920c156c14 CHROMIUM: Add /dev/low-mem device for low-memory notification.
-
-:::::: TO: Luigi Semenzato <semenzato@chromium.org>
-:::::: CC: Guenter Roeck <groeck@chromium.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Rei

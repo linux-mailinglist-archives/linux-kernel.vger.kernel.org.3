@@ -2,109 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723B9524BD1
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:38:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7C9524BD7
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 13:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239966AbiELLiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 07:38:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
+        id S1353346AbiELLkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 07:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239947AbiELLin (ORCPT
+        with ESMTP id S239947AbiELLkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 07:38:43 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235B3393C6;
-        Thu, 12 May 2022 04:38:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 81A77CE2859;
-        Thu, 12 May 2022 11:38:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68CDFC385B8;
-        Thu, 12 May 2022 11:38:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652355518;
-        bh=Y91zXput8gHSrrUajrSAKfMeVBw0dpergVzZ8Wdemnc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kBzHcQwInf/39qtW1OD37z+Rdmlm/Rxlz6e3uAjCqtuN0DBY8L1kg7NvIzKIF6QHd
-         JJ9haqR5sk3W40NdANoZ6ANSv8Y1lE6quRKw9RVCjN4xmjV658zs635QFbic5wHcIs
-         D8q5ISyk0BrlILFSYP2RsnoP1EwcU7U6e7paa8cc=
-Date:   Thu, 12 May 2022 13:38:36 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Eugeniu Rosca <erosca@de.adit-jv.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Rajat Jain <rajatja@google.com>, Andrew Lunn <andrew@lunn.ch>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Naveen kumar Sunkari <naveenkumar.sunkari@in.bosch.com>,
-        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
-        Eugeniu Rosca <rosca.eugeniu@gmail.com>
-Subject: Re: [PATCH] usb: hub: Simplify error and success path in
- port_over_current_notify
-Message-ID: <YnzxvJ7/LGpu92bK@kroah.com>
-References: <1652354127-3499-1-git-send-email-erosca@de.adit-jv.com>
+        Thu, 12 May 2022 07:40:08 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0501B6D4C8
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 04:40:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652355608; x=1683891608;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=334QfPsBhgD128XgXQmRYLsAEiLeQWJ3MXNBRTVpIsw=;
+  b=PDVUJz2h/Hlih36WLWOJqDG6cyrmk94I3IExIqWj4Y91CcDDVFFYN7FM
+   ZkBr2h/MxmL/yyYTPspKUEFgbU0LXHYrkCmbr4EnPRPZnESl3rGeVGMEQ
+   wPZPTpmQmUty5lTYPIV2pGbqZ0DBmBZ1jkb3c/zqteRvrW5annkxAhrxO
+   LOiA5rmV1B4zPPtwQI2Ep6hMbEmfrZttTTP2FlTJ5C5FYN1TDgkxeGNeD
+   Zq2/6VfGs22Y0Y2ddDr3NbELSxySjOVk3Ms+Xgd8VbP6DLz3Labysowc9
+   D5xHw8c7PihmV5c4T1GAP83PR0OhvwFXU0BPOGAxTjaTrItOrzeFpV6ju
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="257521551"
+X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
+   d="scan'208";a="257521551"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 04:40:07 -0700
+X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
+   d="scan'208";a="594628454"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.32.215])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 04:40:04 -0700
+Message-ID: <df9ead42-42d8-1547-6621-3e59f773266b@intel.com>
+Date:   Thu, 12 May 2022 14:40:00 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1652354127-3499-1-git-send-email-erosca@de.adit-jv.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.8.1
+Subject: Re: [PATCH V2 21/23] libperf evsel: Add comments for booleans
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
+References: <20220506122601.367589-1-adrian.hunter@intel.com>
+ <20220506122601.367589-22-adrian.hunter@intel.com>
+ <CAP-5=fWjpP8hhzPuS7tvGaPh9UFJ7Fdyg0B41B4100XbsqFUBA@mail.gmail.com>
+ <ec62edc2-f4fc-82db-c001-23d43137557c@intel.com>
+ <CAP-5=fW4k0A_iYPYq5pS59GmvUa8uUkzS2c2C5ruyKd40wjU8A@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CAP-5=fW4k0A_iYPYq5pS59GmvUa8uUkzS2c2C5ruyKd40wjU8A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 01:15:27PM +0200, Eugeniu Rosca wrote:
-> From: Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>
+On 12/05/22 08:34, Ian Rogers wrote:
+> On Wed, May 11, 2022 at 12:03 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>
+>> On 6/05/22 23:51, Ian Rogers wrote:
+>>> On Fri, May 6, 2022 at 5:26 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>>>
+>>>> Add comments for 'system_wide' and 'requires_cpu' booleans
+>>>>
+>>>> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+>>>> ---
+>>>>  tools/lib/perf/include/internal/evsel.h | 9 +++++++++
+>>>>  1 file changed, 9 insertions(+)
+>>>>
+>>>> diff --git a/tools/lib/perf/include/internal/evsel.h b/tools/lib/perf/include/internal/evsel.h
+>>>> index 77fbb8b97e5c..cc8f1ba790bd 100644
+>>>> --- a/tools/lib/perf/include/internal/evsel.h
+>>>> +++ b/tools/lib/perf/include/internal/evsel.h
+>>>> @@ -49,7 +49,16 @@ struct perf_evsel {
+>>>>
+>>>>         /* parse modifier helper */
+>>>>         int                      nr_members;
+>>>> +       /*
+>>>> +        * system_wide is for events that need to be on every CPU, irrespective
+>>>> +        * of user requested CPUs or threads. Map propagation will not override
+>>>> +        * this events own_cpus, which will contribute to evlist all_cpus.
+>>>
+>>> So this muddies my understanding of cpus and own_cpus (sigh, again
+>>> undocumented). I believe cpus to be the set of CPUs (or any CPU, aka
+>>> dummy) that perf_event_open happens on. all_cpus in evlist is the
+>>> union of all the evsels cpus (ie not related to own_cpus as described
+>>> here). Own_cpus I believe to be what's computed at parse-event time
+>>> from sysfs. Is this a typo in the comment or quite likely my error?
+>>
+>> A 'system_wide' event is not created by the parser, so own_cpus is set
+>> by the code adding the event.
 > 
-> kasprintf() returns NULL or valid pointer. Since kfree() can handle
-> NULL pointer condition, simplify error and success paths in function
-> port_over_current_notify() by removing multiple error path labels.
+> I think I may be misreading the comment. Perhaps it should read:
 > 
-> Signed-off-by: Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>
-> Signed-off-by: Eugeniu Rosca <erosca@de.adit-jv.com>
-> ---
->  drivers/usb/core/hub.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
+> system_wide is for events that need to be on every CPU, irrespective
+> of user requested CPUs or threads. Map propagation will not override
+> this event's own_cpus and own_cpus don't contribute to the evlist
+> all_cpus.
+
+For a system_wide evsel, evsel->cpus are set to own_cpus and the
+evsel->cpus contribute to all_cpus.
+
 > 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 1460857026e0..9ab8abf14790 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -5511,7 +5511,7 @@ static void hub_port_connect_change(struct usb_hub *hub, int port1,
->  /* Handle notifying userspace about hub over-current events */
->  static void port_over_current_notify(struct usb_port *port_dev)
->  {
-> -	char *envp[3];
-> +	char *envp[3] = { NULL, NULL, NULL };
->  	struct device *hub_dev;
->  	char *port_dev_path;
->  
-> @@ -5533,15 +5533,13 @@ static void port_over_current_notify(struct usb_port *port_dev)
->  	envp[1] = kasprintf(GFP_KERNEL, "OVER_CURRENT_COUNT=%u",
->  			port_dev->over_current_count);
->  	if (!envp[1])
-> -		goto exit;
-> +		goto exit_path;
+> It would be nice if there were a comment on own_cpus to explain its
+> relationship to cpus and more broadly when it is used. Fwiw, the parse
+> time copy is made here:
+> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/parse-events.c?h=perf/core#n367
+> 
+> I worry that if own_cpus should be used in place of cpus then
+> iterators like evlist__for_each_cpu may need to handle this, and so
+> they'd be broken currently.
 
-No need to rename this, right?
+No, evsel->own_cpus may be used to determine evsel->cpus, but that
+is where their influence stops.
 
->  
-> -	envp[2] = NULL;
->  	kobject_uevent_env(&hub_dev->kobj, KOBJ_CHANGE, envp);
->  
-> +exit_path:
->  	kfree(envp[1]);
-> -exit:
+> 
+> Thanks,
+> Ian
+> 
+>>>
+>>> Thanks,
+>>> Ian
+>>>
+>>>> +        */
+>>>>         bool                     system_wide;
+>>>> +       /*
+>>>> +        * Some events, for example uncore events, require a CPU.
+>>>> +        * i.e. it cannot be the 'any CPU' value of -1.
+>>>> +        */
+>>>>         bool                     requires_cpu;
+>>>>         int                      idx;
+>>>>  };
+>>>> --
+>>>> 2.25.1
+>>>>
+>>
 
-Move this up one line?
-
-thanks,
-
-greg k-h
